@@ -28,9 +28,14 @@ trait IncludedExcluded[T] {
 
 /**
  * specialization of the IncludedExcluded trait for string separated tags
+ *
+ * 2 tags t1, t2 separated by a "," means that t1 OR t2 must be included (/excluded)
+ * 2 tags t1, t2 separated by a "&&" means that t1 AND t2 must be included (/excluded)
  */
-case class SeparatedTags(included: String, excluded: String, separator: String = ",") extends IncludedExcluded[Seq[String]] {
-  val matchFunction = (n: Seq[String], tags: Seq[String]) => (n intersect tags).nonEmpty
-  val include = included.splitTrim(separator)
-  val exclude = excluded.splitTrim(separator)
+case class SeparatedTags(included: String, excluded: String, orSeparator: String = ",", andSeparator: String = "&&") extends IncludedExcluded[Seq[String]] {
+  val matchFunction = (n: Seq[String], tags: Seq[String]) => {
+    tags.exists(wanted => wanted.splitTrim(andSeparator).forall(n.contains))
+  }
+  val include = included.splitTrim(orSeparator)
+  val exclude = excluded.splitTrim(orSeparator)
 }

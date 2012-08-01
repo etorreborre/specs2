@@ -1402,7 +1402,7 @@ To make things more concrete here is a full example:
         }
       }
       """^
-"""
+    """
 ### How to?
 
 #### Declare arguments
@@ -1607,7 +1607,7 @@ Tags can be used in a Specification to include or exclude some examples or a com
       class TaggedSpecification extends Specification with Tags { def is =
         "this is some introductory text"                          ^
         "and the first group of examples"                         ^
-          "example 1"                                             ! success ^ tag("feature 1", "unit")^
+          "example 1"                                             ! success ^ tag("feature1", "unit")^
           "example 2"                                             ! success ^ tag("integration")^
                                                                   ^ p^
         "and the second group of examples"                        ^          section("checkin")^
@@ -1623,9 +1623,12 @@ In that specification we're defining several tags and sections:
 
 Armed with this, it is now easy to include or exclude portions of the specification at execution time:
 
- * `args(include="feature 1")` will only include `example 1`
+ * `args(include="feature1")` will only include `example 1`
  * `args(exclude="integration")` will include everything except `example 2`
- * `args(include="checkin,unit")` will include `example 1` and the second group of examples (`example 3` and `example 4`)
+ * `args(include="checkin,unit")` will include anything having either `checkin` OR `unit`: i.e. `example 1` and the second group of examples (`example 3` and `example 4`)
+ * `args(include="feature1 && unit")` will include anything having `feature1` AND `unit`: i.e. `example 1`
+ * `args(include="feature1 && unit, checkin")` will include anything having `feature1` AND `unit`, OR having `checkin`: i.e. `example 1`, `example 3`, `example4`
+
 
 ##### In a unit specification
 
@@ -1707,7 +1710,7 @@ An easy way to avoid this situation is to "deactivate" the specs2 implicits by m
  * `org.specs2.specification.mutable.NoFragmentsBuilder`: deactivate the implicit conversions from to remove `in`, <code class="prettyprint">></code><code class="prettyprint">></code>, `should` and `can` methods from `String`s
 
   - - -
-      """^
+    """^
                                                                                                                         br^
   include(xonly, new GivenWhenThenSpec)                                                                                 ^
   include(xonly, exampleTextIndentation)                                                                                ^
