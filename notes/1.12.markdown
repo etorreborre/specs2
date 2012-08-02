@@ -1,0 +1,37 @@
+For this release, I want to credit Daniel Sobral for his improvement ideas on Given/When/Then specifications, Naftoli Gugenheim for reporting several issues and improvement ideas when porting the Lift specifications to specs2 and Richard Legendi who noticed several small issues (with Locations for example) when working on the specs2-runner plugin for ScalaIDE.
+
+This version adds some small enhancements on top of 1.11:
+
+ * opened the [`Debug`](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Structure.html#Debug+statements) api to quickly log statements to the console. For example the `pp` method prints an object to the console and returns it: `"this string".pp must not beEmpty` prints `"this string"` to the console
+ * improved the Given/When/Then specifications by adding [factory methods](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Structure.html#Factory+methods) creating Given/When/Then steps just by providing regular expressions and functions so that `"${...}"` delimiters can be omitted: 
+
+         val number1: Given[Int] = groupAs("\\d+") and { (s: String) => s.toInt }
+         number1.extract("pay 100 now") === 100
+
+ * added automatic indentation for Given/When/Then specifications
+ * several consecutive `Given` steps can now be followed by a `When` step
+ * [XML matchers](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Matchers.html#Match+results) checking attribute values can now use regular expressions instead of having to pass the actual value
+ * added a [`NameSpace`](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Structure.html#For+fragments) trait to be able to scope variables in a mutable specification
+ * a `Step` now has a `stopOnFail` attribute to stop the execution if any previous example failed (default value = `false`)
+ * added an `inline` method to insert all the fragments of a specification inside another one (whereas `include` will create a sub-specification). See [issue 87](http://github.com/etorreborre/specs2/issues/87)
+ * the equality function can now be specified with the `haveTheSameElementsAs` matcher
+ * made the `aka` parameter lazy so that strings are only evaluated when there is an actual failure
+ * added another way of adapting a matcher for readability: 
+         // instead of: endWith(extension) ^^ ((_:File).getPath)
+         def haveExtension(extension: =>String) = ((_:File).getPath) ^^ endWith(extension)
+ * in mutable specifications `>>(u: =>Unit)` will create a block of fragments while `in(u: =>Unit)` creates an example. This allows to write: `"example" in { (1 to 5) foreach { i => i === i } }` without having to end the block with a `success` result
+ * tags can now be passed to the command line to form a boolean expression. For example: `include t1 && t2, t3` will keep the examples having the tags (`t1` AND `t2`) OR `t3`
+ 
+And some fixes:
+
+ * fixed the wrong execution times with the JUnit runner
+ * fixed the locations of all fragments for mutable specifications 
+ * fixed the `JsonMatchers` so that they accept `Any` values (`Double`, `Int`,...) and not only `String`s
+ * fixed the `isolated` mode with mutable specifications when the specification has several levels of indentation
+ * [issue 85](http://github.com/etorreborre/specs2/issues/85): make sure that a specification always have a title 
+ * [issue 88](http://github.com/etorreborre/specs2/issues/88): make the `ex` argument robust in presence of a malformed regular expression
+ * [issue 91](http://github.com/etorreborre/specs2/issues/91): fixed auto examples when extending `SpecificationWithJUnit`. Auto-examples spanning several lines in mutable specifications can now be recognised
+ * [issue 94](http://github.com/etorreborre/specs2/issues/94): using test-only on Index spec creates an incorrect index page
+ 
+ 
+ ==========================

@@ -333,7 +333,7 @@ There are some factory and implicit conversion methods to create Given/When/Then
 
         // if the Given step is only side-effecting we can omit the `and` call
         // this simplifies the use of Given steps in Unit Specifications
-        val number1: Given[Unit] = groupAs("\d+") and { (s: String) => value = s.toInt }
+        val number1: Given[Unit] = groupAs("\d+") { (s: String) => value = s.toInt }
 
  * convert a function `T => String... => S` to a `When[T, S]` step (*note the use of `and` after `readAs` and `groupAs`*)
 
