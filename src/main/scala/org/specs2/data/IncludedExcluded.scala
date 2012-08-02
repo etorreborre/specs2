@@ -34,7 +34,7 @@ trait IncludedExcluded[T] {
  */
 case class SeparatedTags(included: String, excluded: String, orSeparator: String = ",", andSeparator: String = "&&") extends IncludedExcluded[Seq[String]] {
   val matchFunction = (n: Seq[String], tags: Seq[String]) => {
-    tags.exists(wanted => wanted.splitTrim(andSeparator).forall(n.contains))
+    tags.exists(wanted => wanted.splitTrim(andSeparator).forall(n.map(_.trim).contains))
   }
   val include = included.splitTrim(orSeparator)
   val exclude = excluded.splitTrim(orSeparator)
