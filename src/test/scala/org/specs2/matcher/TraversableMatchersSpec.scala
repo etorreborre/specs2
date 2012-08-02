@@ -5,6 +5,7 @@ import specification._
 import java.util.Arrays._
 import scala.collection.JavaConversions.{ collectionAsScalaIterable }
 import scala.collection.parallel.ParSeq
+import execute.FailureDetails
 
 class TraversableMatchersSpec extends Specification with ResultMatchers with Tags { def is =
 
@@ -44,6 +45,9 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
     { List("Hello", "World") must contain("Hello", "World").inOrder.only }                                              ^
     { (List("Hello", "World") must not contain("World", "Hello")).only.inOrder }                                        ^
     "and show appropriate failure messages if one element doesn't match"                                                ! sameSeq().e1 ^
+                                                                                                                        p^
+  "we can check if 2 traversables are contained in each other"                                                          ^
+    { List("1", "2") must containTheSameElementsAs(Seq("2", "1")) }                                                     ^
                                                                                                                         p^
   "we can check the size of an traversable"                                                                             ^
     { Nil must beEmpty }                                                                                                ^
@@ -89,6 +93,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
     "with a user-defined equality method"                                                                               ^
     { List("Hello", "World") must haveTheSameElementsAs(List("World", "Hello"), lowerCaseEquality) }                    ^bt^
     "recursively"                                                                                                       ! sameElems().e1 ^
+    "with a detailed failure message"                                                                                   ! sameElems().e2 ^
                                                                                                                         bt^
     "with an adaptation"                                                                                                ^
     { List("Hello", "World") must haveTheSameElementsAs(List("W", "H")) ^^^ ((_:String).head) }                         ^
@@ -130,8 +135,14 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
   }
   
   case class sameElems() {
-    def e1 = List("Hello", List("Dear", "World"), "!") must 
-             haveTheSameElementsAs(List("!", "Hello", List("World", "Dear")))
+    def e1 = List("Hello", List("Dear", "World"), "!") must haveTheSameElementsAs(List("!", "Hello", List("World", "Dear")))
+
+    def e2 = {
+      val result = List("1", List("2", "4"), "3") must haveTheSameElementsAs(List("1", "2", List("5", "3")))
+      result must beLike {
+        case MatchFailure(_,_,_,FailureDetails(e,a)) => (e === "[1, 2, [5, 3]]") and (a === "[1, [2, 4], 3]")
+      }
+    }
   }
 
   case class sameSeq() {

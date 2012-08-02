@@ -11,7 +11,7 @@ object MatcherCards extends Cards {
     StringMatchers,
     NumericMatchers,
     ExceptionMatchers,
-    IterableMatchers,
+    TraversableMatchers,
     MapMatchers,
     XmlMatchers,
     JsonMatchers,
@@ -168,30 +168,33 @@ readability.
 """
 }
 
-object IterableMatchers extends Card {
-  def title = "Iterable"
+object TraversableMatchers extends Card {
+  def title = "Traversable"
   def text =  """
-Iterables can be checked with several matchers:
+Traversables can be checked with several matchers:
 
- * to check if the iterable is empty
+ * to check if a traversable is empty
  `Nil must be empty`
  `List(1, 2, 3) must not be empty`
 
- * to check if some elements are contained in the iterable
+ * to check if some elements are contained in the traversable
  `List(1, 2, 3) must contain(3, 2)`
 
- * to check if some elements are contained in the iterable in the same order
+ * to check if some elements are contained in the traversable in the same order
  `List(1, 2, 3, 4) must contain(2, 4).inOrder`
 
- * to check if only some elements are contained in the iterable
+ * to check if only some elements are contained in the traversable
  `List(4, 2) must contain(2, 4).only`
 
- * to check if only some elements are contained in the iterable and in the same order
+ * to check if only some elements are contained in the traversable and in the same order
  `List(2, 4) must contain(2, 4).only.inOrder`
 
  * to check if a sequence contains another one
  `List(2, 4) must containAllOf(List(4, 2))`
  `List(2, 4) must containAllOf(List(2, 4)).inOrder`
+
+ * to check if 2 sequences are contained in each other (like equality but with no order)
+ `List(2, 4, 1) must containTheSameElementsAs(List(1, 4, 2))`
 
  * to check if a sequence contains any element of another one
  `List(2, 4) must containAnyOf(List(4, 2))`
@@ -200,26 +203,26 @@ Iterables can be checked with several matchers:
  `List(1, 2) must have size(2)`
  `List(1, 2) must have length(2)` // equivalent to size
 
- * to check if an `Iterable[String]` contains matching strings
+ * to check if a `Traversable[String]` contains matching strings
  `List("Hello", "World") must containMatch("ll")        // matches with .*ll.*`
  `List("Hello", "World") must containPattern(".*llo")   // matches with .*llo`
 
- * to check if an `Iterable[String]` contains matching strings, but only once
+ * to check if a `Traversable[String]` contains matching strings, but only once
  `List("Hello", "World") must containMatch("ll").onlyOnce`
 
  * to check if one of the elements has a given property
  `List("Hello", "World") must have(_.size >= 5)`
 
- * to check if an iterable has the same elements as another one, regardless of the order
+ * to check if a traversable has the same elements as another one, regardless of the order, recursively (
  `List("Hello", "World") must haveTheSameElementsAs(List("World", "Hello"))`
  `List("Hello", "World") must haveTheSameElementsAs(List("World", "Hello"), equalArrays)` // with your own equality method
 
  * to check if a sequence is sorted (works with any type `T` which has an `Ordering`)
  `Seq(1, 2, 3) must beSorted`
 
-***Adapting Iterable matchers***
+***Adapting Traversable matchers***
 
-The `contain` and `haveTheSameElementsAs` matchers can be "adapted" to use a different notion of equality than `==` when checking for the existence of elements in an iterable.
+The `contain` and `haveTheSameElementsAs` matchers can be "adapted" to use a different notion of equality than `==` when checking for the existence of elements in a traversable.
 
 `^^ (f: (T, T) => Boolean)` can be used instead of `==`. For example:
 

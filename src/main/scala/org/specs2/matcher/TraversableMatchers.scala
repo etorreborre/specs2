@@ -8,6 +8,7 @@ import text.Plural._
 import collection.Iterablex._
 import MatchersImplicits._
 import scala.collection.{GenSeq, GenTraversableOnce, GenTraversable}
+import execute.Result
 
 /**
  * Matchers for traversables
@@ -39,6 +40,19 @@ trait TraversableBaseMatchers extends LazyParameters { outer =>
   /** match if traversable contains (x matches .*+t+.*) */
   def containMatch[T](t: =>String): ContainLikeMatcher[T] = containLike[T](".*"+t+".*", "match")
 
+  /** does a containAll comparison in both ways */
+  def containTheSameElementsAs[T](seq: Seq[T]): Matcher[Traversable[T]] = new Matcher[Traversable[T]] {
+    import internal.scalaz.Scalaz._
+    implicit val monoid = Result.ResultFailuresMonoid("\n")
+    def apply[S <: Traversable[T]](t: Expectable[S]) = {
+      val result1 = containAllOf(seq).apply(t)
+      val result2 = containAllOf(t.value.toSeq).apply(createExpectable(seq))
+      val combined = result1.toResult |+| result2.toResult
+      result(result1.isSuccess && result2.isSuccess,
+             combined.message, combined.message, t)
+    }
+  }
+
   /**
    * Matches if there is one element in the traversable verifying the <code>function</code> parameter: <code>(traversable.exists(function(_))</code>
    */
@@ -50,6 +64,7 @@ trait TraversableBaseMatchers extends LazyParameters { outer =>
              traversable)
     }
   }
+
   /**
    * Matches if there l contains the same elements as the Traversable <code>traversable</code>.<br>
    * This verification does not consider the order of the elements but checks the traversables recursively
@@ -259,7 +274,7 @@ class HaveTheSameElementsAs[T](l: =>Seq[T], equality: (T, T) => Boolean = (_:T) 
     result(traversable.value.toSeq.sameElementsAs(l.toSeq, equality),
            traversable.value.toSeq.toDeepString + " has the same elements as " + q(l.toSeq.toDeepString),
            traversable.value.toSeq.toDeepString + " doesn't have the same elements as " + q(l.toSeq.toDeepString),
-           traversable)
+           traversable, l.toSeq.toDeepString, traversable.value.toSeq.toDeepString)
   }
 
 }
