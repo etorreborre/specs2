@@ -48,7 +48,19 @@
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.specs2.specification.Action" data-isabs="false">
+              <ol><li visbl="pub" name="org.specs2.specification.AcceptanceCreationPath" data-isabs="false">
+      <a id="AcceptanceCreationPath:AcceptanceCreationPath"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="AcceptanceCreationPath.html"><span class="name">AcceptanceCreationPath</span></a><span class="params">(<span name="path">path: Seq[Int]</span>)</span><span class="result"> extends CreationPath with Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.specification.Action" data-isabs="false">
       <a id="Action:Action"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -406,6 +418,18 @@ to execute before and after an Example
       </span>
       </h4>
       <p class="comment cmt">This trait is only used when we wish to write after actions in unit specifications like this</p>
+    </li><li visbl="pub" name="org.specs2.specification.CreationPath" data-isabs="true">
+      <a id="CreationPath:CreationPath"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="CreationPath.html"><span class="name">CreationPath</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.specification.Example" data-isabs="false">
       <a id="Example:Example"></a>
       <h4 class="signature">
@@ -768,6 +792,18 @@ link elements.</p>
       </span>
       </h4>
       <p class="comment cmt">encapsulation of the linking behaviour</p>
+    </li><li visbl="pub" name="org.specs2.specification.MutableCreationPath" data-isabs="false">
+      <a id="MutableCreationPath:MutableCreationPath"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="MutableCreationPath.html"><span class="name">MutableCreationPath</span></a><span class="params">(<span name="path">path: Seq[Int]</span>)</span><span class="result"> extends CreationPath with Product with Serializable</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.specification.NoAutoExamples" data-isabs="true">
       <a id="NoAutoExamples:NoAutoExamples"></a>
       <h4 class="signature">
@@ -880,7 +916,7 @@ execute some code inside the outside method provided by the context.</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="PromisedExecutingFragment.html"><span class="name">PromisedExecutingFragment</span></a><span class="params">(<span name="promised">promised: Promise[ExecutedFragment]</span>)</span><span class="result"> extends ExecutingFragment with Product with Serializable</span>
+        <a href="PromisedExecutingFragment.html"><span class="name">PromisedExecutingFragment</span></a><span class="params">(<span name="promised">promised: Promise[ExecutedFragment]</span>, <span name="f">f: Fragment</span>)</span><span class="result"> extends ExecutingFragment with Product with Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">embed an executed Fragment into a promise
@@ -1010,6 +1046,18 @@ Specification
       </h4>
       <p class="comment cmt">additional methods to include other specifications or Fragments
 </p>
+    </li><li visbl="pub" name="org.specs2.specification.SpecificationNavigation" data-isabs="true">
+      <a id="SpecificationNavigation:SpecificationNavigation"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SpecificationNavigation.html"><span class="name">SpecificationNavigation</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait models &quot;what happens&quot; before a fragment is created in terms of side-effects.</p>
     </li><li visbl="pub" name="org.specs2.specification.SpecificationStructure" data-isabs="true">
       <a id="SpecificationStructure:SpecificationStructure"></a>
       <h4 class="signature">

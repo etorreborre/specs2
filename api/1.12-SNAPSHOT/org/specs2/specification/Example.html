@@ -31,7 +31,7 @@
       
       <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>A Example is:</p><p>- a description: some text, with possibly some markup annotations for rendering code fragments (used in AutoExamples)
 - a body: some executable code returning a Result
-</p></div><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a name="org.specs2.specification.Example" class="extype" href="">Example</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, <a name="org.specs2.execute.Isolable" class="extype" href="../execute/Isolable.html">Isolable</a>, <a name="org.specs2.execute.Executable" class="extype" href="../execute/Executable.html">Executable</a>, <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
@@ -299,18 +299,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.Example" class="extype" href="">Example</a> → <a name="org.specs2.execute.Isolable" class="extype" href="../execute/Isolable.html">Isolable</a></dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.specification.Fragment#linkedTo" data-isabs="false">
-      <a id="linkedTo:Option[SpecificationStructure]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">linkedTo</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.specs2.specification.SpecificationStructure" class="extype" href="SpecificationStructure.html">SpecificationStructure</a>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.specification.Fragment#location" data-isabs="false">
       <a id="location:Location"></a>
       <h4 class="signature">
@@ -346,7 +334,9 @@
         <span class="name">matches</span><span class="params">(<span name="s">s: String</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.Example" class="extype" href="">Example</a> → <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a></dd></dl></div>
+      <p class="shortcomment cmt">match the description of an example with a regular expression.</p><div class="fullcomment"><div class="comment cmt"><p>match the description of an example with a regular expression.</p><p>If the regexp doesn't compile, it is used literally by quoting it. However this regexp is usually passed as the
+Arguments.ex value, it is enclosed with '.*' characters, so they are removed and added back before quotation
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.Example" class="extype" href="">Example</a> → <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">

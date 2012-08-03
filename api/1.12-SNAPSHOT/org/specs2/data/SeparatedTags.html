@@ -25,11 +25,12 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">SeparatedTags</span><span class="params">(<span name="included">included: String</span>, <span name="excluded">excluded: String</span>, <span name="separator">separator: String</span>)</span><span class="result"> extends <a name="org.specs2.data.IncludedExcluded" class="extype" href="IncludedExcluded.html">IncludedExcluded</a>[Seq[String]] with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="name">SeparatedTags</span><span class="params">(<span name="included">included: String</span>, <span name="excluded">excluded: String</span>, <span name="orSeparator">orSeparator: String</span>, <span name="andSeparator">andSeparator: String</span>)</span><span class="result"> extends <a name="org.specs2.data.IncludedExcluded" class="extype" href="IncludedExcluded.html">IncludedExcluded</a>[Seq[String]] with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
-      <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>specialization of the IncludedExcluded trait for string separated tags
+      <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>specialization of the IncludedExcluded trait for string separated tags</p><p>2 tags t1, t2 separated by a &quot;,&quot; means that t1 OR t2 must be included (/excluded)
+2 tags t1, t2 separated by a &quot;&amp;&amp;&quot; means that t1 AND t2 must be included (/excluded)
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, <a name="org.specs2.data.IncludedExcluded" class="extype" href="IncludedExcluded.html">IncludedExcluded</a>[Seq[String]], AnyRef, <span name="scala.Any" class="extype">Any</span></div>
@@ -66,7 +67,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">SeparatedTags</span><span class="params">(<span name="included">included: String</span>, <span name="excluded">excluded: String</span>, <span name="separator">separator: String = <span class="symbol">&quot;,&quot;</span></span>)</span>
+        <span class="name">SeparatedTags</span><span class="params">(<span name="included">included: String</span>, <span name="excluded">excluded: String</span>, <span name="orSeparator">orSeparator: String = <span class="symbol">&quot;,&quot;</span></span>, <span name="andSeparator">andSeparator: String = <span class="symbol">&quot;&amp;&amp;&quot;</span></span>)</span>
       </span>
       </h4>
       
@@ -139,6 +140,18 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.data.SeparatedTags#andSeparator" data-isabs="false">
+      <a id="andSeparator:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">andSeparator</span><span class="result">: String</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -385,6 +398,18 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.data.SeparatedTags#orSeparator" data-isabs="false">
+      <a id="orSeparator:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">orSeparator</span><span class="result">: String</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.data.SeparatedTags#productArity" data-isabs="false">
       <a id="productArity:Int"></a>
       <h4 class="signature">
@@ -433,18 +458,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.data.SeparatedTags" class="extype" href="">SeparatedTags</a> → Product</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.data.SeparatedTags#separator" data-isabs="false">
-      <a id="separator:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">separator</span><span class="result">: String</span>
-      </span>
-      </h4>
-      
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">

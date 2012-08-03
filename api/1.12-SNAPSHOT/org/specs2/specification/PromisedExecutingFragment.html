@@ -25,7 +25,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">PromisedExecutingFragment</span><span class="params">(<span name="promised">promised: <span name="org.specs2.internal.scalaz.concurrent.Promise" class="extype">Promise</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a>]</span>)</span><span class="result"> extends <a name="org.specs2.specification.ExecutingFragment" class="extype" href="ExecutingFragment.html">ExecutingFragment</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="name">PromisedExecutingFragment</span><span class="params">(<span name="promised">promised: <span name="org.specs2.internal.scalaz.concurrent.Promise" class="extype">Promise</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a>]</span>, <span name="f">f: <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a></span>)</span><span class="result"> extends <a name="org.specs2.specification.ExecutingFragment" class="extype" href="ExecutingFragment.html">ExecutingFragment</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
@@ -66,7 +66,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">PromisedExecutingFragment</span><span class="params">(<span name="promised">promised: <span name="org.specs2.internal.scalaz.concurrent.Promise" class="extype">Promise</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a>]</span>)</span>
+        <span class="name">PromisedExecutingFragment</span><span class="params">(<span name="promised">promised: <span name="org.specs2.internal.scalaz.concurrent.Promise" class="extype">Promise</span>[<a name="org.specs2.specification.ExecutedFragment" class="extype" href="ExecutedFragment.html">ExecutedFragment</a>]</span>, <span name="f">f: <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a></span>)</span>
       </span>
       </h4>
       
@@ -202,6 +202,18 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.PromisedExecutingFragment" class="extype" href="">PromisedExecutingFragment</a> → Equals → AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.PromisedExecutingFragment#f" data-isabs="false">
+      <a id="f:Fragment"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">f</span><span class="result">: <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a></span>
+      </span>
+      </h4>
+      
     </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
       <a id="finalize():Unit"></a>
       <h4 class="signature">

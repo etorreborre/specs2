@@ -63,7 +63,19 @@
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.specs2.matcher.CanBeEqual.CanBeEqualExpectation" data-isabs="false">
+              <ol><li visbl="pub" name="org.specs2.matcher.MatchersImplicits.AdapterFunction" data-isabs="false">
+      <a id="AdapterFunction:AdapterFunction[T, S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="MatchersImplicits$AdapterFunction.html"><span class="name">AdapterFunction</span></a><span class="tparams">[<span name="T">T</span>, <span name="S">S</span>]</span><span class="params">(<span name="f">f: (T) ⇒ S</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.matcher.CanBeEqual.CanBeEqualExpectation" data-isabs="false">
       <a id="CanBeEqualExpectation:CanBeEqualExpectation[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -214,6 +226,21 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.MatchersImplicits#adapterFunction" data-isabs="false">
+      <a id="adapterFunction[T, S]((T) ⇒ S):AdapterFunction[T, S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">adapterFunction</span><span class="tparams">[<span name="T">T</span>, <span name="S">S</span>]</span><span class="params">(<span name="f">f: (T) ⇒ S</span>)</span><span class="result">: <a name="org.specs2.matcher.MatchersImplicits.AdapterFunction" class="extype" href="MatchersImplicits$AdapterFunction.html">AdapterFunction</a>[T, S]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">this implicit provides an inverted syntax to adapt matchers to make the adaptation more readable in some cases:
+- def haveExtension(extension: =&gt;String) = ((_:File).</p><div class="fullcomment"><div class="comment cmt"><p>this implicit provides an inverted syntax to adapt matchers to make the adaptation more readable in some cases:
+- def haveExtension(extension: =&gt;String) = ((_:File).getPath) ^^ endWith(extension)
+</p></div></div>
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -341,14 +368,14 @@ It is equivalent to writing a must_== b
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an Expectable with a description function</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Expectations" class="extype" href="Expectations.html">Expectations</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Expectations#createExpectable" data-isabs="false">
-      <a id="createExpectable[T](⇒ T,String):Expectable[T]"></a>
+      <a id="createExpectable[T](⇒ T,⇒ String):Expectable[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createExpectable</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: ⇒ T</span>, <span name="alias">alias: String</span>)</span><span class="result">: <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[T]</span>
+        <span class="name">createExpectable</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: ⇒ T</span>, <span name="alias">alias: ⇒ String</span>)</span><span class="result">: <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[T]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an Expectable with a description</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Expectations" class="extype" href="Expectations.html">Expectations</a></dd></dl></div>

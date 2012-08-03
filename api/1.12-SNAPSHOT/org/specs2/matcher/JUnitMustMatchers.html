@@ -63,7 +63,19 @@
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" name="org.specs2.matcher.AnyBeHaveMatchers.AnyBeHaveMatchers" data-isabs="false">
+              <ol><li visbl="pub" name="org.specs2.matcher.MatchersImplicits.AdapterFunction" data-isabs="false">
+      <a id="AdapterFunction:AdapterFunction[T, S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="MatchersImplicits$AdapterFunction.html"><span class="name">AdapterFunction</span></a><span class="tparams">[<span name="T">T</span>, <span name="S">S</span>]</span><span class="params">(<span name="f">f: (T) ⇒ S</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.matcher.AnyBeHaveMatchers.AnyBeHaveMatchers" data-isabs="false">
       <a id="AnyBeHaveMatchers:AnyBeHaveMatchers[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -311,14 +323,14 @@
       </h4>
       <p class="shortcomment cmt">match if the document contains the pair at any level</p><div class="fullcomment"><div class="comment cmt"><p>match if the document contains the pair at any level</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>JsonBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.JsonBaseMatchers#*/" data-isabs="false">
-      <a id="*/(String):JsonDeepValueMatcher"></a>
+      <a id="*/(Any):JsonDeepValueMatcher"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name" title="gt4s: $times$div">*/</span><span class="params">(<span name="value">value: String</span>)</span><span class="result">: <span name="org.specs2.matcher.JsonBaseMatchers.JsonDeepValueMatcher" class="extype">JsonDeepValueMatcher</span></span>
+        <span class="name" title="gt4s: $times$div">*/</span><span class="params">(<span name="value">value: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="org.specs2.matcher.JsonBaseMatchers.JsonDeepValueMatcher" class="extype">JsonDeepValueMatcher</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">match if the document contains the value at any level</p><div class="fullcomment"><div class="comment cmt"><p>match if the document contains the value at any level</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>JsonBaseMatchers</dd></dl></div>
@@ -335,14 +347,14 @@
       </h4>
       <p class="shortcomment cmt">match if the document contains the pair at the top level</p><div class="fullcomment"><div class="comment cmt"><p>match if the document contains the pair at the top level</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>JsonBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.JsonBaseMatchers#/" data-isabs="false">
-      <a id="/(String):JsonValueMatcher"></a>
+      <a id="/(Any):JsonValueMatcher"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name" title="gt4s: $div">/</span><span class="params">(<span name="value">value: String</span>)</span><span class="result">: <span name="org.specs2.matcher.JsonBaseMatchers.JsonValueMatcher" class="extype">JsonValueMatcher</span></span>
+        <span class="name" title="gt4s: $div">/</span><span class="params">(<span name="value">value: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="org.specs2.matcher.JsonBaseMatchers.JsonValueMatcher" class="extype">JsonValueMatcher</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">match if the document contains the value at the top-level</p><div class="fullcomment"><div class="comment cmt"><p>match if the document contains the value at the top-level</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>JsonBaseMatchers</dd></dl></div>
@@ -770,6 +782,21 @@ an exact match on is required on attributes
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileBeHaveMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.MatchersImplicits#adapterFunction" data-isabs="false">
+      <a id="adapterFunction[T, S]((T) ⇒ S):AdapterFunction[T, S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">adapterFunction</span><span class="tparams">[<span name="T">T</span>, <span name="S">S</span>]</span><span class="params">(<span name="f">f: (T) ⇒ S</span>)</span><span class="result">: <a name="org.specs2.matcher.MatchersImplicits.AdapterFunction" class="extype" href="MatchersImplicits$AdapterFunction.html">AdapterFunction</a>[T, S]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">this implicit provides an inverted syntax to adapt matchers to make the adaptation more readable in some cases:
+- def haveExtension(extension: =&gt;String) = ((_:File).</p><div class="fullcomment"><div class="comment cmt"><p>this implicit provides an inverted syntax to adapt matchers to make the adaptation more readable in some cases:
+- def haveExtension(extension: =&gt;String) = ((_:File).getPath) ^^ endWith(extension)
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.MatchersImplicits" class="extype" href="MatchersImplicits.html">MatchersImplicits</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.MustThrownExpectations#akaMust" data-isabs="false">
       <a id="akaMust[T](Expectable[T]):MustExpectable[T]"></a>
       <h4 class="signature">
@@ -1975,6 +2002,18 @@ avoid the implicit argThat method from Mockito to infer an improper matcher</p><
       </span>
       </h4>
       <p class="shortcomment cmt">match if traversable contains (x matches p)</p><div class="fullcomment"><div class="comment cmt"><p>match if traversable contains (x matches p)</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#containTheSameElementsAs" data-isabs="false">
+      <a id="containTheSameElementsAs[T](Seq[T]):Matcher[Traversable[T]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">containTheSameElementsAs</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="seq">seq: Seq[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[Traversable[T]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">does a containAll comparison in both ways</p><div class="fullcomment"><div class="comment cmt"><p>does a containAll comparison in both ways</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>TraversableBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.StringBeHaveMatchers#containing" data-isabs="false">
       <a id="containing(String):Matcher[String]"></a>
       <h4 class="signature">
@@ -2093,14 +2132,14 @@ avoid the implicit argThat method from Mockito to infer an improper matcher</p><
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an Expectable with a description function</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Expectations" class="extype" href="Expectations.html">Expectations</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.Expectations#createExpectable" data-isabs="false">
-      <a id="createExpectable[T](⇒ T,String):Expectable[T]"></a>
+      <a id="createExpectable[T](⇒ T,⇒ String):Expectable[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createExpectable</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: ⇒ T</span>, <span name="alias">alias: String</span>)</span><span class="result">: <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[T]</span>
+        <span class="name">createExpectable</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: ⇒ T</span>, <span name="alias">alias: ⇒ String</span>)</span><span class="result">: <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[T]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an Expectable with a description</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.Expectations" class="extype" href="Expectations.html">Expectations</a></dd></dl></div>
@@ -2990,14 +3029,14 @@ It is true if the MatchResult is not an Error or a Failure
       </h4>
       <p class="shortcomment cmt">matches if c.</p><div class="fullcomment"><div class="comment cmt"><p>matches if c.isAssignableFrom(v.getClass.getSuperclass)</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.TraversableBaseMatchers#haveTheSameElementsAs" data-isabs="false">
-      <a id="haveTheSameElementsAs[T](⇒ Traversable[T]):HaveTheSameElementsAs[T]"></a>
+      <a id="haveTheSameElementsAs[T](⇒ Traversable[T],(T, T) ⇒ Boolean):HaveTheSameElementsAs[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">haveTheSameElementsAs</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="l">l: ⇒ Traversable[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.HaveTheSameElementsAs" class="extype" href="HaveTheSameElementsAs.html">HaveTheSameElementsAs</a>[T]</span>
+        <span class="name">haveTheSameElementsAs</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="l">l: ⇒ Traversable[T]</span>, <span name="equality">equality: (T, T) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: <a name="org.specs2.matcher.HaveTheSameElementsAs" class="extype" href="HaveTheSameElementsAs.html">HaveTheSameElementsAs</a>[T]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Matches if there l contains the same elements as the Traversable <code>traversable</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Matches if there l contains the same elements as the Traversable <code>traversable</code>.<br>

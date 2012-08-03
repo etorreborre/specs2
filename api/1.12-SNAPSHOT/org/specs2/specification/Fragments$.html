@@ -265,6 +265,42 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#isABr" data-isabs="false">
+      <a id="isABr:PartialFunction[Fragment, Fragment]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isABr</span><span class="result">: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[<a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>, <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the step if the Fragment is a Br fragment</p></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#isASpecEnd" data-isabs="false">
+      <a id="isASpecEnd:PartialFunction[Fragment, Fragment]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isASpecEnd</span><span class="result">: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[<a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>, <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the spec end if the Fragment is a SpecEnd</p></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#isASpecStart" data-isabs="false">
+      <a id="isASpecStart:PartialFunction[Fragment, Fragment]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isASpecStart</span><span class="result">: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[<a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>, <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the spec start if the Fragment is a SpecStart</p></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.specification.Fragments#isAStep" data-isabs="false">
       <a id="isAStep:PartialFunction[Fragment, Step]"></a>
       <h4 class="signature">
@@ -277,6 +313,30 @@
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the step if the Fragment is a Step</p></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#isAnAction" data-isabs="false">
+      <a id="isAnAction:PartialFunction[Fragment, Action]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isAnAction</span><span class="result">: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[<a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>, <a name="org.specs2.specification.Action" class="extype" href="Action.html">Action</a>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the action if the Fragment is an Actino</p></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#isAnEnd" data-isabs="false">
+      <a id="isAnEnd:PartialFunction[Fragment, Fragment]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isAnEnd</span><span class="result">: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[<a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>, <a name="org.specs2.specification.Fragment" class="extype" href="Fragment.html">Fragment</a>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the step if the Fragment is an End fragment</p></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.specification.Fragments#isAnExample" data-isabs="false">
       <a id="isAnExample:PartialFunction[Fragment, Example]"></a>
       <h4 class="signature">
@@ -490,6 +550,19 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.specification.Fragments#withCreationPaths" data-isabs="false">
+      <a id="withCreationPaths(Fragments):Fragments"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">withCreationPaths</span><span class="params">(<span name="fragments">fragments: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="Fragments.html">Fragments</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Fragments object with creation paths set on Examples and Actions</p><p>The path of a Fragment is either:</p><ul><li>set at construction time when it comes from a mutable specification</li><li>its index in the sequence of fragments for an acceptance specification
+</li></ul></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.specification.Fragments#withSpecName" data-isabs="false">
       <a id="withSpecName(Fragments,SpecificationStructure):Fragments"></a>
       <h4 class="signature">
