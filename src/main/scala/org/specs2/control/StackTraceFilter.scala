@@ -19,9 +19,10 @@ trait StackTraceFilter {
  */
 case class IncludeExcludeStackTraceFilter(include: Seq[String], exclude: Seq[String]) extends StackTraceFilter { outer =>
   private val filter = new IncludedExcluded[StackTraceElement] {
-    val matchFunction = (st: StackTraceElement, patterns: Seq[String]) => patterns.exists(p => st.toString matches (".*"+p+".*"))
     val include = outer.include
     val exclude = outer.exclude
+
+    val keepFunction = (st: StackTraceElement, patterns: Seq[String]) => patterns.exists(p => st.toString matches (".*"+p+".*"))
   }
   /** add include patterns */
   def includeAlso(patterns: String*) = copy(include = this.include ++ patterns)

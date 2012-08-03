@@ -60,9 +60,10 @@ trait LayersAnalysis extends ClassycleDependencyFinder {
      * check if a class name should be included or excluded from the dependency analysis, based on include/exclude regular expressions
      */
     private def includedExcluded = new IncludedExcluded[String] {
-      val matchFunction = (n: String, tags: Seq[String]) => tags.exists(t => n.matches(prefixed(t)))
       val include = included
       val exclude = excluded
+
+      val keepFunction    = (n: String, tags: Seq[String]) => tags.exists(t => n.matches(prefixed(t)))
     }
 
     private def prefixed(n: String) = if (prefix.isEmpty) n else prefix+"."+n

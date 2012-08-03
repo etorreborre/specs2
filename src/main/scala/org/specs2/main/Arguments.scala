@@ -33,6 +33,7 @@ Arguments (
   def include: String                 = select.include
   def exclude: String                 = select.exclude
   def keep(tags: String*)             = select.keep(tags:_*)
+  def contain(tags: String*)          = select.contain(tags:_*)
   def wasIssue: Boolean               = select.wasIssue
   def was(s: String): Boolean         = select.was(s)
   def wasIsDefined: Boolean           = select.wasIsDefined
@@ -155,6 +156,7 @@ case class Select(
   def include: String               = _include.getOrElse("")
   def exclude: String               = _exclude.getOrElse("")
   def keep(tags: String*)           = SeparatedTags(include, exclude).keep(tags)
+  def contain(tags: String*)        = SeparatedTags(include, exclude).contain(tags)
   def wasIssue: Boolean             = was("x") || was("!")
   def was(s: String): Boolean       = hasFlags(s, _was)
   def wasIsDefined: Boolean         = _was.isDefined
