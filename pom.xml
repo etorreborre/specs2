@@ -5,7 +5,7 @@
     <artifactId>specs2_2.9.2</artifactId>
     <packaging>jar</packaging>
     <description>specs2</description>
-    <version>1.12</version>
+    <version>1.13-SNAPSHOT</version>
     <name>specs2</name>
     <dependencies>
         <dependency>
