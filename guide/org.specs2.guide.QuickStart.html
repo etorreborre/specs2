@@ -23,9 +23,9 @@
       function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
       function toggleImage(image) {
         if (image.src.endsWith('images/expanded.gif')) 
-          image.src = 'images/collapsed.gif';
+          image.src = image.src.replace('expanded', 'collapsed');
         else 
-          image.src = 'images/expanded.gif';
+          image.src = image.src.replace('collapsed', 'expanded');
       };
       function showHide(id) {
         element = document.getElementById(id);
@@ -62,8 +62,8 @@
       <script type="text/javascript" src="./../css/tabber.js"></script>
       <link type="text/css" media="screen" rel="stylesheet" href="./../css/tabber.css" />
     </head><body><div id="breadcrumbs"><a href="../guide/org.specs2.UserGuide.html">UserGuide</a><t> / </t><a href="../guide/org.specs2.guide.QuickStart.html">QuickStart</a></div><div id="leftcolumn"><div id="tree">
-      <ul><li id="2011756724"><a href="../guide/org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="980155567"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="2017055059"><a href="../guide/org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="2060194049"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -73,7 +73,7 @@
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="8113322"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="644315997"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -104,13 +104,17 @@
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Auto-Examples">Auto-Examples</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#G%2FW%2FT">G/W/T</a>
-            <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Multiple+steps">Multiple steps</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Sequencing">Sequencing</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Extract+methods">Extract methods</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#User+regexps">User regexps</a>
             
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Factory+methods">Factory methods</a>
+            
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#G%2FW%2FT+sequences">G/W/T sequences</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Multiple+steps">Multiple steps</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#ScalaCheck">ScalaCheck</a>
             
@@ -118,7 +122,7 @@
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Conversions">Conversions</a>
             
-          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Unit+specification">Unit specification</a>
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Unit+specification_1">Unit specification</a>
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#DataTables">DataTables</a>
@@ -126,7 +130,9 @@
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Links">Links</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Inclusion">Inclusion</a>
-            <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Html+link">Html link</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Inline">Inline</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Html+link">Html link</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Html+Link">Html Link</a>
             
           </li></ul>
@@ -166,7 +172,7 @@
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Composition">Composition</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Combinations">Combinations</a>
             
-          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Composition">Composition</a>
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Composition_1">Composition</a>
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Steps%2FActions">Steps/Actions</a>
@@ -176,6 +182,8 @@
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Template">Template</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#For+fragments">For fragments</a>
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Execution">Execution</a>
@@ -190,11 +198,11 @@
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Changing+the+indentation+level">Changing the indentation level</a>
             
-          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Combinations">Combinations</a>
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Combinations_1">Combinations</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Turning-off+the+automatic+layout">Turning-off the automatic layout</a>
             
-          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Unit+specification">Unit specification</a>
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Unit+specification_2">Unit specification</a>
             
           </li></ul>
           </li></ul>
@@ -227,7 +235,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="1846635654"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1884600070"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -283,7 +291,7 @@
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#DataTables">DataTables</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="131820405"><a href="../guide/org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="1932942229"><a href="../guide/org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -327,7 +335,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="800545323"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="179300302"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -391,7 +399,7 @@
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Via+IDEA">Via IDEA</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Via+JUnit">Via JUnit</a>
-            <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Arguments">Arguments</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Arguments_1">Arguments</a>
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Via+Eclipse">Via Eclipse</a>
@@ -406,12 +414,12 @@
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Exporter">Exporter</a>
-            <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#In+sbt">In sbt</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#In+sbt_1">In sbt</a>
             
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1349779854"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="799040129"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -455,7 +463,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="1429730848"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="785567585"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -475,8 +483,8 @@
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['2011756724','980155567'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
-    </div></div><div id="central"><title>Quick Start</title><a name="Quick+Start"><h2 specId="980155567">Quick Start</h2></a><status class="ok"><div class="level0" style="display: show"><p>There are 2 major styles of specifications with <strong><em>specs2</em></strong>:</p>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['2017055059','2060194049'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+    </div></div><div id="central"><title>Quick Start</title><a name="Quick+Start"><h2 specId="2060194049">Quick Start</h2></a><status class="ok"><div class="level0" style="display: show"><p>There are 2 major styles of specifications with <strong><em>specs2</em></strong>:</p>
 <ul>
   <li><p><em>unit</em> specifications where the specification text is interleaved with the specification code. It is generally used to<br /> specify a single class</p></li>
   <li><p><em>acceptance</em> specifications where all the specification text stands as one and the implementation code is elsewhere.<br /> It is generally used for acceptance or integration scenarios</p></li>
@@ -541,4 +549,8 @@
   <li>use Mockito or ScalaCheck</li>
   <li>use sbt/maven/junit to execute a specification</li>
   <li>export your specification as an html document (like this one!)</li>
-</ul></div></status></div><div id="rightcolumn"></div></body></html>
+</ul></div></status><status class="ok"><br /></status><table class="dataTable">
+        <tr><th colSpan="2">Total for specification QuickStart</th></tr>
+        <tr><td>Finished in</td><td class="info">236 ms</td></tr>
+        <tr><td>Results</td><td class="success">6 examples, 0 failure, 0 error</td></tr>
+      </table></div><div id="rightcolumn"></div></body></html>

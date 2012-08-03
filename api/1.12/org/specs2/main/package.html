@@ -1,0 +1,238 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>org.specs2.main</title>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+    
+        </head>
+        <body onload="sh_highlightDocument('../lib/', '.min.js');" class="value">
+      <div id="definition">
+        <img src="../../../lib/package_big.png" />
+        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a></p>
+        <h1>main</h1>
+      </div>
+
+      <h4 class="signature" id="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">main</span>
+      </span>
+      </h4>
+      
+      <div class="fullcommenttop" id="comment"></div>
+    
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" name="org.specs2.main.ArgProperties" data-isabs="true">
+      <a id="ArgProperties:ArgProperties"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ArgProperties.html"><span class="name">ArgProperties</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.main.ArgProperty" data-isabs="false">
+      <a id="ArgProperty:ArgProperty[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ArgProperty.html"><span class="name">ArgProperty</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="aProperty">aProperty: Property[T]</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.main.Arguments" data-isabs="false">
+      <a id="Arguments:Arguments"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Arguments.html"><span class="name">Arguments</span></a><span class="params">(<span name="select">select: Select</span>, <span name="execute">execute: Execute</span>, <span name="store">store: Store</span>, <span name="report">report: Report</span>, <span name="commandLine">commandLine: CommandLine</span>)</span><span class="result"> extends ShowArgs with Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This class holds all the options that are relevant for specs2 execution and reporting.</p>
+    </li><li visbl="pub" name="org.specs2.main.ArgumentsArgs" data-isabs="true">
+      <a id="ArgumentsArgs:ArgumentsArgs"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ArgumentsArgs.html"><span class="name">ArgumentsArgs</span></a><span class="result"> extends ArgProperties</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait provides shortcuts to create Arguments instances
+</p>
+    </li><li visbl="pub" name="org.specs2.main.ArgumentsShortcuts" data-isabs="true">
+      <a id="ArgumentsShortcuts:ArgumentsShortcuts"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ArgumentsShortcuts.html"><span class="name">ArgumentsShortcuts</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait provides shortcuts for frequently used arguments
+</p>
+    </li><li visbl="pub" name="org.specs2.main.CommandLineArguments" data-isabs="true">
+      <a id="CommandLineArguments:CommandLineArguments"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="CommandLineArguments.html"><span class="name">CommandLineArguments</span></a><span class="result"> extends DelayedInit</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait can be mixed in with a Specification to hold command line arguments when the specification is created.</p>
+    </li><li visbl="pub" name="org.specs2.main.Diffs" data-isabs="true">
+      <a id="Diffs:Diffs"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Diffs.html"><span class="name">Diffs</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">this trait is used to define and compute the differences between strings (used by the reporters)
+</p>
+    </li><li visbl="pub" name="org.specs2.main.NoArgProperties" data-isabs="true">
+      <a id="NoArgProperties:NoArgProperties"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NoArgProperties.html"><span class="name">NoArgProperties</span></a><span class="result"> extends ArgProperties</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait can be used to deactivate the conversion of any value to an ArgsProperty
+</p>
+    </li><li visbl="pub" name="org.specs2.main.SmartDiffs" data-isabs="false">
+      <a id="SmartDiffs:SmartDiffs"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SmartDiffs.html"><span class="name">SmartDiffs</span></a><span class="params">(<span name="show">show: Boolean</span>, <span name="separators">separators: String</span>, <span name="triggerSize">triggerSize: Int</span>, <span name="shortenSize">shortenSize: Int</span>, <span name="diffRatio">diffRatio: Int</span>, <span name="showFull">showFull: Boolean</span>)</span><span class="result"> extends Diffs with Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">The SmartDiffs class holds all the required parameters to show differences between 2 strings using the edit distance
+algorithm
+</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div class="values members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" name="org.specs2.main.ArgProperties" data-isabs="false">
+      <a id="ArgProperties:ArgProperties"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ArgProperties$.html"><span class="name">ArgProperties</span></a><span class="result"> extends ArgProperties</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.main.Arguments" data-isabs="false">
+      <a id="Arguments:Arguments"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Arguments$.html"><span class="name">Arguments</span></a><span class="result"> extends Extract with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.main.ArgumentsArgs" data-isabs="false">
+      <a id="ArgumentsArgs:ArgumentsArgs"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ArgumentsArgs$.html"><span class="name">ArgumentsArgs</span></a><span class="result"> extends ArgumentsArgs</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.main.ArgumentsShortcuts" data-isabs="false">
+      <a id="ArgumentsShortcuts:ArgumentsShortcuts"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ArgumentsShortcuts$.html"><span class="name">ArgumentsShortcuts</span></a><span class="result"> extends ArgumentsShortcuts with ArgumentsArgs</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
