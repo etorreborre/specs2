@@ -2,23 +2,27 @@
 2. test/cross publish the jars
 3. release on the sonatype website: http://oss.sonatype.org
 
-3. update the index.html and modify the versions (new version and next snapshot)
-4. create the user guide: `test-only *UserGuide* -- html`
-5. make the site: `make-site` (this creates the scaladoc)
-6. push the new github pages: `ghpages-push-site`
+4. create the ls metadata: ls-write-version
+5. change the version in the version.sbt file
+6. commit the src/notes/<version>.json file and the version.sbt file
+7. change the default branch on github
+8. push the ls information with lsync
 
-7. review the posterous notes and herald-publish them
+9. update the index.html and modify the versions (new version and next snapshot)
+10. create the user guide: `test-only *UserGuide* -- html`
+11. make the site: `make-site` (this creates the scaladoc)
+12. push the new github pages: `ghpages-push-site`
 
-8. tag the released version
-9. push the new version (check "include tags")
-10. create a new specs2 branch for the next SNAPSHOT
+13. tag the released version
+14. push the new version (check "include tags")
+15. create a new specs2 branch for the next SNAPSHOT
 
-11 set the specs2-test project version
-12. tag and push the new version (check "include tags")
-13. create a new snapshot branch
-14. download the test-project and test it
+17 set the specs2-test project version
+18. tag and push the new version (check "include tags")
+19. create a new snapshot branch
+20. download the test-project and test it
 
-15. close the milestone on github and create a new one
-16. change the default branch on github
+21. close the milestone on github and create a new one
 
-17. send a message on the twitter account
+13. review the posterous notes and herald-publish them
+22. send a message on the twitter account
