@@ -111,7 +111,7 @@ object Arguments extends Extract {
   /** @return new arguments from command-line arguments */
   def apply(implicit arguments: String*): Arguments = {
     if (arguments.isEmpty) new Arguments()
-    else                   extract(arguments.mkString(" ").splitQuoted, sysProperties)
+    else                   extract(CommandLine.splitValues(arguments.mkString(" ")), sysProperties)
   }
 
   private[specs2] def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Arguments = {
@@ -189,6 +189,7 @@ object Select extends Extract {
        _specName      = value("specname")
     )
   }
+  val allValueNames = Seq("ex", "include", "exclude", "was", "specname")
 }
 
 /**
@@ -248,6 +249,7 @@ object Execute extends Extract {
       _threadsNb     = int("threadsnb")
     )
   }
+  val allValueNames = Seq("plan", "skipall", "stoponfail", "stoponskip", "sequential", "isolated", "threadsnb")
 }
 
 /**
@@ -283,6 +285,8 @@ object Store extends Extract {
       _never       = bool("neverstore")
     )
   }
+
+  val allValueNames = Seq("resetstore", "neverstore")
 }
 
 /**
@@ -390,12 +394,15 @@ object Report extends Extract {
       _fromSource    = bool("fromsource"),
       _traceFilter   = bool("fullstacktrace").map(t=>NoStackTraceFilter).
                        orElse(value("tracefilter", IncludeExcludeStackTraceFilter.fromString(_))),
-      _checkUrls     = bool("checkUrls"),
+      _checkUrls     = bool("checkurls"),
       _notoc         = bool("notoc"),
       _notifier      = value("notifier"),
       _exporter      = value("exporter")
     )
   }
+
+  val allValueNames = Seq("showonly", "xonly", "failtrace", "color", "nocolor", "colors", "noindent", "offset", "markdown", "nomarkdown",
+                          "debugmarkdown", "streaming", "fromsource", "fullstacktrace", "tracefilter", "checkurls", "notoc", "notifier", "exporter")
 }
 /**
  * Command-line arguments
@@ -418,7 +425,11 @@ case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs {
 private[specs2]
 object CommandLine extends Extract {
   def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): CommandLine =
-    new CommandLine(_arguments = value("commandline").map(_.splitQuoted).getOrElse(Seq()) ++ arguments)
+    new CommandLine(_arguments = value("commandline").map(splitValues).getOrElse(Seq()) ++ arguments)
+
+  val allValueNames = Select.allValueNames ++ Store.allValueNames ++ Execute.allValueNames ++ Report.allValueNames
+
+  def splitValues(arguments: String): Seq[String] = arguments.splitDashed(allValueNames)
 }
 
 private[specs2]

@@ -235,6 +235,11 @@ On the command line you can pass the following arguments:
 
 _[`regexp` is a Java regular expression, csv a list of comma-separated values, map is a list of csv pairs key:value]_
 
+Note that any argument accepting values (like `include`) can be passed with a dash when those values contain spaces:
+
+    >test-only TaggedSpec -- -include issue 123 -- other arguments
+
+And as you can see above, `--` can be used to signal the end of some argument values
 
 #### System properties
 

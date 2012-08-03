@@ -11,6 +11,11 @@ class SeqxSpec extends mutable.Specification with ScalaCheck with DataTables {
     eg { Seq(1, 2).updateLast(i => i+1) must_== Seq(1, 3) }
     eg { Seq[Int]().updateLast(i => i+1) must_== Seq[Int]() };endp
 
+  "updateLastOr modifies the last element or starts a new sequence".txt;
+    eg { Seq(1).updateLastOr { case i => i+1 }(0) must_== Seq(2) };
+    eg { Seq(1, 2).updateLastOr { case i => i+1 }(0) must_== Seq(1, 3) }
+    eg { Seq[Int]().updateLastOr { case i => i+1 }(0) must_== Seq[Int](0) };endp
+
   "delta removes elements, leaving duplicates, and using a custom comparison function".txt
     "for example, comparing only the second element of a pair" >> {
       val compare = ((p: (Int, Symbol), o: Symbol) => p._2 == o)

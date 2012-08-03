@@ -27,9 +27,16 @@ trait Seqx { outer =>
 
     def reduceWith[S](reducer: Reducer[T, S]) = FoldlGenerator[Seq].reduce(reducer, seq)
 
+    /** update the last element if there is one */
     def updateLast(f: T => T) = seq match {
       case s :+ last => s :+ f(last)
       case other     => other
+    }
+
+    /** update the last element or start the sequence with a new init value */
+    def updateLastOr(f: PartialFunction[T, T])(initValue: =>T) = seq match {
+      case s :+ last => s :+ f(last)
+      case other     => seq :+ initValue
     }
 
     /**
