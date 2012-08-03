@@ -450,11 +450,11 @@ For example you can pass on the command line:
 
  to have the text colored in blue and the failures in Magenta.
 
-If the `colors` option contains `whitebg` then the default colors are considered to be [`InvertedColors`](http://etorreborre.github.com/specs2/api/index.html#org.specs2.text.Colors)
+If the `colors` option contains `whitebg` then the default colors are considered to be [`InvertedColors`](${SPECS2_API}index.html#org.specs2.text.Colors)
 
 *Through the API*
 
-Finally you can change the color scheme that's being used on the console by implementing your own [`org.specs2.text.Colors`](http://etorreborre.github.com/specs2/api/index.html#org.specs2.text.Colors) trait or override values in the existing `ConsoleColors` class. For example if you want to output magenta everywhere yellow is used you can write:
+Finally you can change the color scheme that's being used on the console by implementing your own [`org.specs2.text.Colors`](${SPECS2_API}index.html#org.specs2.text.Colors) trait or override values in the existing `ConsoleColors` class. For example if you want to output magenta everywhere yellow is used you can write:
 
       object MyColors = new org.specs2.text.ConsoleColors { override val failureColor = magenta }
 
