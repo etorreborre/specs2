@@ -98,16 +98,16 @@ Other elements
 
     def fragments = content.fragments
     def e1 = (fragments.head must haveClass[SpecStart]) and (fragments.last must haveClass[SpecEnd])
-    def e2 = content.start.arguments.xonly
-    def e3 = content.start.specName must beTheSameAs(content.end.specName)
-    def e4 = content.start.title must_== "title"
+    def e2 = content.specStart.arguments.xonly
+    def e3 = content.specStart.specName must beTheSameAs(content.specEnd.specName)
+    def e4 = content.specStart.title must_== "title"
     def e5 = content.fragments.map(_.toString) must contain(lazyfy("SpecStart(title)")).exactlyOnce
-    def e6 = content.start.arguments.xonly must beTrue
-    def e7 = (content2.start.title must_== "title") and (content2.start.arguments.xonly must beTrue)
-    def e8 = content6.start.title must not beEmpty
-    def e9 = (content3.start.arguments.xonly must beTrue) and (content3.start.arguments.include must_== "t1")
-    def e10 = content4.start.arguments.include must_== "t2"
-    def e11 = content5.start.arguments.sequential must beTrue
+    def e6 = content.specStart.arguments.xonly must beTrue
+    def e7 = (content2.specStart.title must_== "title") and (content2.specStart.arguments.xonly must beTrue)
+    def e8 =  content6.specStart.title must not beEmpty
+    def e9 = (content3.specStart.arguments.xonly must beTrue) and (content3.specStart.arguments.include must_== "t1")
+    def e10 = content4.specStart.arguments.include must_== "t2"
+    def e11 = content5.specStart.arguments.sequential must beTrue
 
     def e12 = parentSpec1.content.fragments.toList must
               beLike { case SpecStart(_,_,_) :: Text(_) :: SpecStart(_,_,Linked(Some(l), false, false)) :: rest => ok }
