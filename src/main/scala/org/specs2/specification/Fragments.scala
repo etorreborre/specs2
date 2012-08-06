@@ -14,7 +14,7 @@ import specification.StandardFragments.{End, Br}
 case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] = Vector(),
                      arguments: Arguments = Arguments(), linked: Linked = Linked()) {
 
-  def fragments: Seq[Fragment] = if (middle.isEmpty && !linked.isLink) Vector() else (start +: middle :+ end)
+  def fragments: Seq[Fragment] = if (middle.isEmpty && !linked.isLink) Vector() else (specStart +: middle :+ specEnd)
 
   def specTitleIs(name: SpecName): Fragments = copy(specTitle = specTitle.filterNot(_.title.isEmpty).map(_.overrideWith(name)).orElse(Some(name)))
 
@@ -45,12 +45,11 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
 
   override def toString = fragments.mkString("\n")
 
-  def specName = start.specName
-  def name = start.name
-  
-  lazy val start: SpecStart = SpecStart(specTitle.getOrElse(SpecName("")), arguments, linked)
-  lazy val end: SpecEnd = SpecEnd(start.specName)
+  def specName = specStart.specName
+  def name     = specStart.name
 
+  lazy val specStart: SpecStart = SpecStart(specTitle.getOrElse(SpecName("")), arguments, linked)
+  lazy val specEnd:   SpecEnd   = SpecEnd(specName)
 }
 
 /**

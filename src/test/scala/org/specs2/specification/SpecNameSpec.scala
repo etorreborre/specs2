@@ -45,8 +45,8 @@ class SpecNameSpec extends Spec {
   
   "A Fragments object can have both a name and title" >> {
     val spec = new Specification { def is = "title".title ^ "text" }
-    spec.content.start.title must_== "title"
-    spec.content.start.name must_== "Object"
+    spec.content.specStart.title must_== "title"
+    spec.content.specStart.name must_== "Object"
   }
 
   "A SpecName can define a url" >> {
