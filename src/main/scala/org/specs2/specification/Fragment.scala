@@ -154,7 +154,7 @@ case object Example {
  * @see the ContextSpec specification
  *
  */
-case class Step (step: LazyParameter[Result] = lazyfy(Success()), stopOnFail: Boolean = false) extends Fragment with Executable with Isolable {
+case class Step (step: LazyParameter[Result], stopOnFail: Boolean = false) extends Fragment with Executable with Isolable {
   val isolable = true
 
   def execute = step.value
@@ -182,7 +182,7 @@ case object Step {
   /** create a Step object from any value */
   def apply[T](r: =>T) = fromEither(trye(r)(Error(_)))
   /** create a Step object from a stopOnFail value */
-  def apply(stopOnFail: Boolean) = new Step(stopOnFail = stopOnFail)
+  def apply(stopOnFail: Boolean): Step = Step(step = lazyfy(Success()), stopOnFail = stopOnFail)
 }
 /**
  * An Action is similar to a Step but can be executed concurrently with other examples.

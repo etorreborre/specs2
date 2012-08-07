@@ -1,9 +1,8 @@
 package org.specs2
 package reporter
-import scala.collection.JavaConversions.asIterable
+
 import mock.Mockito
 import specification._
-import main.Arguments
 import execute._
 
 class NotifierSpec extends Specification with Mockito with Tags { def is = sequential ^

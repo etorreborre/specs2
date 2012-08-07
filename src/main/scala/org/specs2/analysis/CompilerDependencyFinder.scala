@@ -36,9 +36,8 @@ trait CompilerDependencyFinder extends DependencyFinder {
 
   /** @return all the dependencies of source files in a given source directory by compiling them */
   private def sourceDependencies(sourceDir: String) =
-    NullPrintStream.sinkingOutAndErr {
       buildManager(sourceDir).compiler.dependencyAnalysis.dependencies
-    }
+
   private lazy val managers: Map[String, SimpleBuildManager] = new HashMap[String, SimpleBuildManager].withDefault { sourceDir =>
     val manager = new SimpleBuildManager(newSettings)
     manager.addSourceFiles(selectFiles(sourceDir).map(f => new PlainFile(f)).toSet)
