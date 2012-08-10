@@ -48,7 +48,16 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
                                                                                                                         p^
   "we can check if 2 traversables are contained in each other"                                                          ^
     { List("1", "2") must containTheSameElementsAs(Seq("2", "1")) }                                                     ^
-                                                                                                                        p^
+    { { List("1", "2", "3") must containTheSameElementsAs(Seq("2", "4", "1")) } returns Seq(
+      "List(1, 2, 3)",
+      "  is missing: 4",
+      "  must not contain: 3").mkString("\n")
+    }                                                                                                                   ^
+    { { List("1", "2", "3") must containTheSameElementsAs(Seq("2", "3", "4", "1")) } returns Seq(
+      "List(1, 2, 3)",
+      "  is missing: 4").mkString("\n")
+    }                                                                                                                   ^
+    p^
   "we can check the size of an traversable"                                                                             ^
     { Nil must beEmpty }                                                                                                ^
     { Nil must be empty }                                                                                               ^
