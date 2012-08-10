@@ -146,6 +146,14 @@ Less often you need to do comparisons on Numerical values:
  * `beCloseTo` checks if 2 Numerics are close to each other
    `1.0 must beCloseTo(1, 0.5)`
    `4 must be ~(5 +/- 2)`
+
+ * `beBetween` checks if a value is between 2 others
+   `5 must beBetween(3, 6)`
+   `5 must beBetween(3, 6).excludingEnd`
+   `5 must beBetween(4, 6).excludingStart`
+   `5 must beBetween(4, 6).excludingBounds`
+   `// with brackets notation`
+   `5 must (`be[`(4, 7)`]`) `
 """
 }
 

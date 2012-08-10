@@ -60,6 +60,19 @@ types and more generally with Ordered types.
   { 2 must not be closeTo(4 +/- 1) }                                                                                    ^
   "and return a failure if the comparison fails"                                                                        ! e5^
   "and return a failure if the comparison fails - with aka"                                                             ! e5_1^
+                                                                                                                        p^
+  "beBetween tests if one value is between 2 other values"                                                              ^
+  { 5 must beBetween(3, 6) }                                                                                            ^
+  { 5 must beBetween(3, 5) }                                                                                            ^
+  { 5 must beBetween(3, 6).excludingEnd }                                                                               ^
+  { 5 must beBetween(4, 6).excludingStart }                                                                             ^
+  { 5 must beBetween(4, 6).excludingBounds }                                                                            ^
+  { 5 must not be between(2, 3) }                                                                                       ^
+  { 5 must not be between(7, 9) }                                                                                       ^
+  { 5 must not be between(3, 5).excludingEnd }                                                                          ^
+  { 5 must not be between(5, 7).excludingStart }                                                                        ^
+  { 5 must not be between(5, 5).excludingBounds }                                                                       ^
+  { 5 must (`be[`(4, 7)`]`) }                                                                                           ^
                                                                                                                         end
 
   def e1   = (2 must be_<=(1)) returns "2 is greater than 1"

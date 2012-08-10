@@ -62,7 +62,16 @@ trait NumericBaseMatchers {
   /** alias for beCloseTo */
   def ~[S : Numeric](delta: Delta[S]): Matcher[S] = beCloseTo(delta)
 
+  /** matches if a value is between 2 others according to an Ordering */
+  def beBetween[T <% Ordered[T]](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2)
+  def between[T <% Ordered[T]](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2)
+
+  /** alias for the adventurous: 5 must (`be[(2, 7)`[`) */
+  def `be[`[T <% Ordered[T]](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2)
+  /** alias for the adventurous: 5 must (`be](2, 7)`[`) */
+  def `be]`[T <% Ordered[T]](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2).excludingStart
 }
+
 /** transient class allowing the creation of a delta */
 private[specs2]
 case class CanHaveDelta[S : Numeric](n: S) {
@@ -95,6 +104,8 @@ trait NumericBeHaveMatchers { outer: NumericBaseMatchers =>
     def >(n: S) = result(outer.beGreaterThan(n))
     def greaterThan(n: S) = result(outer.beGreaterThan(n))
     def beGreaterThan(n: S) = result(outer.beGreaterThan(n))
+    def beBetween(s1: S, s2: S) = result(outer.beBetween(s1, s2))
+    def between(s1: S, s2: S) = result(outer.beBetween(s1, s2))
   }
   implicit def toNumericResultMatcher[S : Numeric](result: MatchResult[S]) = new NumericResultMatcher(result)
   class NumericResultMatcher[S : Numeric](result: MatchResult[S]) {
@@ -146,4 +157,26 @@ class BeCloseTo[T : Numeric](n: T, delta: T) extends Matcher[T] {
            description(x) + " is close to " + n.toString + " +/- " + delta,
            description(x) + " is not close to " + n.toString + " +/- " + delta, x)
   }
+}
+
+case class BetweenMatcher[T <% Ordered[T]](t1: T, t2: T, includeStart: Boolean = true, includeEnd: Boolean = true) extends Matcher[T] {
+  def apply[S <: T](s: Expectable[S]) = {
+    val value = s.value
+    val included = (includeStart && (value >= t1) || !includeStart && (value > t1)) &&
+                   (includeEnd   && (value <= t2) || !includeEnd   && (value < t2))
+
+    def bracket(b: Boolean) = if (b) "[" else "]"
+    val (start, end) = (bracket(includeStart), bracket(!includeEnd))
+
+    val (ok, ko) = (s.value+" is in "+start+t1+", "+t2+end,
+      s.value+" is not in "+start+t1+", "+t2+end)
+    result(included, ok, ko, s)
+  }
+
+  def `]` = copy(includeEnd = true)
+  def `[` = copy(includeEnd = false)
+
+  def excludingStart  = copy(includeStart = false)
+  def excludingEnd    = copy(includeEnd = false)
+  def excludingBounds = copy(includeStart = false, includeEnd = false)
 }
