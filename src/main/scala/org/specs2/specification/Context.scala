@@ -23,11 +23,17 @@ trait BeforeAfter extends Before with After { outer =>
   }
 
   /** sequence the actions of 2 BeforeAfter traits */
+  @deprecated("then might become a keyword in future Scala versions. Use andThen instead", since = "1.13")
   def then(b: BeforeAfter): BeforeAfter = new BeforeAfter {
     def before = { outer.before; b.before }
     def after = { outer.after; b.after}
   }
 
+  /** sequence the actions of 2 BeforeAfter traits */
+  def andThen(b: BeforeAfter): BeforeAfter = new BeforeAfter {
+    def before = { outer.before; b.before }
+    def after = { outer.after; b.after}
+  }
 }
 
 /**
@@ -53,7 +59,17 @@ trait BeforeAfterAround extends Before with After with Around { outer =>
   }
 
   /** sequence the actions of 2 BeforeAfterAround traits */
+  @deprecated("then might become a keyword in future Scala versions. Use andThen instead", since = "1.13")
   def then(a: BeforeAfterAround): BeforeAfterAround = new BeforeAfterAround {
+    def before = { outer.before; a.before }
+    def after = { outer.after; a.after }
+    def around[T <% Result](t: =>T): Result = {
+      outer.around(a.around(t))
+    }
+  }
+
+  /** sequence the actions of 2 BeforeAfterAround traits */
+  def andThen(a: BeforeAfterAround): BeforeAfterAround = new BeforeAfterAround {
     def before = { outer.before; a.before }
     def after = { outer.after; a.after }
     def around[T <% Result](t: =>T): Result = {

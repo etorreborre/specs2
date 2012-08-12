@@ -24,7 +24,15 @@ trait Around extends Context { outer =>
   }
 
   /** sequence the actions of 2 Around traits */
+  @deprecated("then might become a keyword in future Scala versions. Use andThen instead", since = "1.13")
   def then(a: Around): Around = new Around {
+    def around[T <% Result](t: =>T): Result = {
+      outer.around(a.around(t))
+    }
+  }
+
+  /** sequence the actions of 2 Around traits */
+  def andThen(a: Around): Around = new Around {
     def around[T <% Result](t: =>T): Result = {
       outer.around(a.around(t))
     }

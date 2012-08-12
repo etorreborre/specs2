@@ -39,7 +39,14 @@ trait Before extends Context { outer =>
   }
 
   /** sequence the actions of 2 Before traits */
+  @deprecated("then might become a keyword in future Scala versions. Use andThen instead", since = "1.13")
   def then(b: Before): Before = new Before {
     def before = { outer.before; b.before }
   }
+
+  /** sequence the actions of 2 Before traits */
+  def andThen(b: Before): Before = new Before {
+    def before = { outer.before; b.before }
+  }
+
 }

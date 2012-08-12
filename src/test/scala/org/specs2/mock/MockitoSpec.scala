@@ -323,7 +323,7 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
       list1.get(0)
       list2.get(0)
       implicit val order = inOrder(list1, list2)
-      (there was one(list1).get(0) then
+      (there was one(list1).get(0) andThen
                  one(list2).get(0)).message must_== "The mock was called as expected"
     }
 
@@ -336,7 +336,7 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
       list2.get(0)
 
       implicit val order = inOrder(ignoreStubs(list1, list2))
-      (there was one(list1).get(0) then
+      (there was one(list1).get(0) andThen
         one(list2).get(0)).message must_== "The mock was called as expected"
     }
 
@@ -344,7 +344,7 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
       list1.get(0)
       list2.get(0)
       implicit val order = inOrder(list1, list2)
-      (there was one(list2)(order).get(0) then
+      (there was one(list2)(order).get(0) andThen
                  one(list1)(order).get(0)).message must startWith("The mock was not called as expected")
     }
 
@@ -352,9 +352,9 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
       list1.get(0); list1.size; list1.get(0); list1.size;
 
       implicit val order = inOrder(list1)
-      val result = there was one(list1).get(0) then
-                             one(list1).size() then
-                             no(list1) .get(0) then
+      val result = there was one(list1).get(0) andThen
+                             one(list1).size() andThen
+                             no(list1) .get(0) andThen
                              one(list1).size()
 
       result.message must startWith("The mock was not called as expected")

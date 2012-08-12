@@ -14,7 +14,7 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables {
       "returning an object having the type S"                                                                           ! when^
                                                                                                                         p^
     "A Then[T] extractor extracts the text from the previous Text fragment, and combines it with the current State"     ^
-      "returning a Result"                                                                                              ! then^
+      "returning a Result"                                                                                              ! andThen^
                                                                                                                         p^
     "A Given[Y] extractor can be used as a Given[X] step if Y <: X, with an implicit conversion"                        ! convert1^
     "A Then[X] extractor can be used as a Then[Y] step if Y <: X, with an implicit conversion"                          ! convert2^
@@ -48,7 +48,7 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables {
 
   def when = number2.extractContext(Right(1), "And a second number: ${2}") must beRight((1, 2))
 
-  def then = equalToLast.extractContext(Right(1), "Then it is ${1}") must beRight.like { case (s, r) => r must beSuccessful }
+  def andThen = equalToLast.extractContext(Right(1), "Then it is ${1}") must beRight.like { case (s, r) => r must beSuccessful }
 
   def givens1 =
     "with number ${0}"   ^ number0 ^
@@ -128,11 +128,11 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables {
       number0.extract(1, "with one more number ${2}") must beSuccessful
     }
     def then2 = {
-      val number0 = readAs(".*?(\\d+).*(\\d+).*") then { n1: Int => (s1: String, s2: String) => n1 + s1.toInt + s2.toInt === 6 }
+      val number0 = readAs(".*?(\\d+).*(\\d+).*") andThen { n1: Int => (s1: String, s2: String) => n1 + s1.toInt + s2.toInt === 6 }
       number0.extract(1, "Two numbers 2 and 3") must beSuccessful
     }
     def then3 = {
-      val number0 = groupAs("\\d+") then { n1: Int => (s1: String, s2: String) => n1 + s1.toInt + s2.toInt === 4 }
+      val number0 = groupAs("\\d+") andThen { n1: Int => (s1: String, s2: String) => n1 + s1.toInt + s2.toInt === 4 }
       number0.extract(1, "Two numbers 1 and 2") must beSuccessful
     }
   }

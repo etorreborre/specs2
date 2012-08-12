@@ -356,11 +356,11 @@ There are some factory and implicit conversion methods to create Given/When/Then
         number3.extract((100, 10), "the result is ${90}") must beSuccessful
 
         // this uses a regular expression with capturing groups matching the full text
-        val number3: Then[(Int, Int)] = readAs(".*(\d+).*") then { (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt }
+        val number3: Then[(Int, Int)] = readAs(".*(\d+).*") andThen { (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt }
         number3.extract((100, 10), "the result is 90") must beSuccessful
 
         // this uses capturing groups directly
-        val number3: Then[(Int, Int)] = groupAs("\d+") then { (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt }
+        val number3: Then[(Int, Int)] = groupAs("\d+") andThen { (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt }
         number3.extract((100, 10), "the result is 90") must beSuccessful
 
         // if the Then step is only side-effecting we can omit the `then` call
@@ -1801,10 +1801,10 @@ An easy way to avoid this situation is to "deactivate" the specs2 implicits by m
       var number3: Then[(Int, Int)] = (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt
       number3.extract((100, 10), "the result is ${90}") must beSuccessful
 
-      number3 = readAs(".*?(\\d+).*") then { (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt }
+      number3 = readAs(".*?(\\d+).*") andThen { (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt }
       number3.extract((100, 10), "the result is 90") must beSuccessful
 
-      number3 = groupAs("\\d+") then { (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt }
+      number3 = groupAs("\\d+") andThen { (n: (Int, Int)) => (s: String) => discount(n._1, n._2) must_== s.toInt }
       number3.extract((100, 10), "the result is 90") must beSuccessful
 
     }

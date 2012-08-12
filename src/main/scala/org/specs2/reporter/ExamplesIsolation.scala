@@ -47,5 +47,4 @@ trait ExamplesIsolation { self: DefaultSelection =>
       }
     }.getOrElse(body)
   }
-2
-}
+  }

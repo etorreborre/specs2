@@ -8,7 +8,8 @@ class EventuallyResultsSpec extends Specification with Mockito {
   """
   `eventually` can be used to retry any result until a maximum number of times is reached
     or until it succeeds.
-  """
+  """.txt
+
   "A success succeeds right away with eventually" in {
     eventually(success)
   }
