@@ -17,7 +17,7 @@ class MarkupExportingSpec extends Specification {
   }
 
   "A link is translated as a bullet point" >> {
-    export(introduction) must contain("* <a tooltip=\"\" href=\"other.html\">a link to the rest</a>")
+    export(introduction) must contain("* <a href=\"other.html\" tooltip=\"\">a link to the rest</a>")
   }
 
   def export(spec: SpecificationStructure) = {

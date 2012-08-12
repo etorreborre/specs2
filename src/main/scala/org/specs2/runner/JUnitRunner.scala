@@ -69,7 +69,7 @@ object JUnitRunner {
         lazy val args = outer.args
         lazy val properties = outer.properties
         lazy val descriptions = outer.fragmentsDescriptions
-        override def exporters(accept: String => Boolean)(implicit arguments: Arguments): Seq[Exporting] = Seq(console, html)
+        override def exporters(accept: String => Boolean)(implicit arguments: Arguments): Seq[Exporting] = Seq(console: Exporting, html: Exporting)
       }
       reporter.report
     }

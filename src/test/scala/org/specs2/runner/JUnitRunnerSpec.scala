@@ -64,7 +64,7 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
     properties.getPropertyAs[Boolean](anyString)(any[FromString[Boolean]]) returns None
 
     val executeSpec = (s: ExecutingSpecification) => s.execute
-    Seq(console, html).foreach(e => e.export(any[Arguments]) returns executeSpec)
+    Seq(console: Exporting, html: Exporting).foreach(e => e.export(any[Arguments]) returns executeSpec)
 
     abstract class DummySpecification extends Specification
     def run(f: Fragments) = JUnitRunner.apply[DummySpecification](f, properties, console, html).run(notifier)
