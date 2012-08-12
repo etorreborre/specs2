@@ -48,6 +48,7 @@ trait MatchersImplicits extends Expectations {
    */
   implicit def matcherFunction[S, T](f: S => Matcher[T]) = new MatcherFunction(f)
   implicit def matcherFunction2[T](f: T => Matcher[T]) = new MatcherFunction2(f)
+  implicit def matcherFunction3[S, T](f: S => MatchResult[T]) = new MatcherFunction3(f)
 
   class MatcherFunction[S, T](f: S => Matcher[T]) {
   
@@ -91,6 +92,21 @@ trait MatchersImplicits extends Expectations {
      * check that the function is valid at least once
      */
     def atLeastOnce(values: Seq[T]): MatchResult[Seq[T]] = verifyFunction((t: T) => f(t).apply(Expectable(t))).atLeastOnce(values)
+  }
+
+  class MatcherFunction3[S, T](f: S => MatchResult[T]) {
+    /**
+     * check that the function is valid for all value, stopping after the first failure
+     */
+    def forall(values: Seq[S]): MatchResult[Seq[S]] = verifyFunction(f).forall(values)
+    /**
+     * check that the function is valid for each value, showing all the failures
+     */
+    def foreach(values: Seq[S]): MatchResult[Seq[S]] = verifyFunction(f).foreach(values)
+    /**
+     * check that the function is valid at least once
+     */
+    def atLeastOnce(values: Seq[S]): MatchResult[Seq[S]] = verifyFunction(f).atLeastOnce(values)
   }
 
   /**
