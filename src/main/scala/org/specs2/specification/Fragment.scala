@@ -166,7 +166,16 @@ case class Step (step: LazyParameter[Result] = lazyfy(Success()), stopOnFail: Bo
   def global = new Step(step) {
     override val isolable = false
   }
+
+  // we must override the case class equality to avoid evaluating the step
+  override def equals(any: Any) = any match {
+    case s: Step => s eq this
+    case _       => false
+  }
+  // we must override the case class hashCode to avoid evaluating the step
+  override def hashCode = super.hashCode
 }
+
 case object Step {
   /** create a Step object from either a previous result, or a value to evaluate */
   def fromEither[T](r: =>Either[Result, T]) = new Step(either(r))
@@ -214,7 +223,16 @@ case class Action (action: LazyParameter[Result] = lazyfy(Success())) extends Fr
     override val location     = outer.location
   }
 
+  // we must override the case class equality to avoid evaluating the action
+  override def equals(any: Any) = any match {
+    case a: Action => a eq this
+    case _         => false
+  }
+
+  // we must override the case class hashCode to avoid evaluating the action
+  override def hashCode = super.hashCode
 }
+
 case object Action {
   /** create an Action object from any value */
   def apply[T](r: =>T) = fromEither(trye(r)(Error(_)))

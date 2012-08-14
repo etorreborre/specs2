@@ -6,6 +6,9 @@ import _root_.org.junit.runner._
 import main.{SystemProperties, Arguments}
 import reporter._
 import specification._
+import java.io.{PrintStream, ByteArrayOutputStream}
+import org.junit.internal.TextListener
+import reflect.Classes
 
 /**
  * The JUnitRunner class is a JUnit Runner class meant to be used with the RunWith annotation
@@ -73,5 +76,34 @@ object JUnitRunner {
       }
       reporter.report
     }
+  }
+}
+
+/**
+ * Simple JUnitRunner to run specifications on the console for testing
+ */
+object textJUnitRunner {
+
+  def main(args: Array[String]) {
+    println(run(args))
+  }
+
+  def run(args: Array[String]): String =
+    if (args.isEmpty) "args must at least pass a class name"
+    else              run(Classes.loadClassOf(args(0)))
+
+  def run(klass: Class[_]): String = runSpec(klass)._2
+
+  def runSpec(klass: Class[_]): (SpecificationStructure, String) = {
+    val n = new RunNotifier
+    val o = new ByteArrayOutputStream
+    val r = new JUnitRunner(klass)
+    val result = new Result
+    val runListener = result.createListener
+    n.addFirstListener(runListener)
+    n.addListener(new TextListener(new PrintStream(o)))
+    r.run(n)
+    n.fireTestRunFinished(result)
+    (r.specification, o.toString)
   }
 }
