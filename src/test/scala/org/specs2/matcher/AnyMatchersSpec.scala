@@ -126,6 +126,10 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
                                                                                                                         p^
   "the === implicits can be deactivated with the NoCanBeEqual trait"                                                    ! e2^
   "the must implicits can be deactivated with the NoMustExpectations trait"                                             ! e3^
+                                                                                                                        p^
+  "the be_== matcher must be robust in face of"                                                                         ^
+    "a null object"                                                                                                     ! robust1^
+    "a non-traversable collection"                                                                                      ! robust2^
                                                                                                                         end
                                                                                           
   def e1 = (List(1, 2) must beLike { case List(a, b) => (a + b) must_== 2 }) returns 
@@ -165,6 +169,18 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
   def skipForeach =
     { foreach(Seq(0, 1, 2)) { case a => a must be_<(0).orSkip("todo") } } must beLike { case MatchSkip(_,_) => ok }
 
+  def robust1 = ((null: String) must_== "1") must not(throwAn[Exception])
+  def robust2 = {
+    def newTraversable = new TraversableWithNoDefinedForeach[Int] {}
+    val (t1, t2) = (newTraversable, newTraversable)
+    (t1 must_== t2) must not(throwAn[Exception])
+  }
+
 }
+
+trait TraversableWithNoDefinedForeach[T] extends Traversable[T] {
+  def foreach[U](f: T => U): Unit = sys.error("undefined")
+}
+
 trait Type1
 trait Type2

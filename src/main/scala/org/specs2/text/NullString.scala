@@ -19,14 +19,14 @@ trait NotNullStrings {
         a match {
           case ar: Array[_]           => ar.notNullMkString(", ", "Array(", ")")
           case it: TraversableOnce[_] => it.notNullMkString(", ")
-          case _                      => evaluate(a, "Exception when evaluating toString ")
+          case _                      => evaluate(a)
         }
       }
     }
   }
 
-  private def evaluate(value: =>Any, msg: String) = {
-    val string = tryOr(value.toString) { (e: Exception) => msg + e.getMessage }
+  private def evaluate(value: =>Any, msg: String = "Exception when evaluating toString: ") = {
+    val string = catchAllOr(value.toString) { (t: Throwable) => msg + t.getMessage }
     if (string == null) "null"
     else                string
   }
@@ -44,7 +44,7 @@ trait NotNullStrings {
   class NotNullTraversableOnce[T](a: =>TraversableOnce[T]) extends NotNullMkString {
     def notNullMkString(sep: String, start: String = "", end: String = ""): String = {
       if (a == null) "null"
-      else evaluate(a.mkString(start, sep, end), "Exception when evaluating mkString ")
+      else evaluate(catchAllOrElse(a.mkString(start, sep, end))(evaluate(a.toString)))
     }
   }
 
