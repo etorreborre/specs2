@@ -1,7 +1,7 @@
 package org.specs2
 package runner
 import mock._
-import specification.{FragmentsSamples, ExecutingSpecification, SpecificationStructure, Fragments}
+import specification._
 import reporter._
 import main._
 import _root_.org.junit.runner.notification.{ RunNotifier, Failure }
@@ -10,9 +10,11 @@ import _root_.org.junit.ComparisonFailure
 import text.FromString
 import _root_.examples.HelloWorldUnitIsolatedSpec
 import io.MockOutput
+import scala.Some
+import scala.collection.mutable.ListBuffer
 
 class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {  def is =
-  
+
                                                                                                                         """
   The JUnitRunner is meant to be used with the RunWith annotation.
   It takes a Specification, executes it and notifies a RunNotifier object of the possible
@@ -31,7 +33,8 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
     "1 skipped example, a test ignored must be reported"                                                                ! notified().e6^
     "1 pending example, a test ignored must be reported"                                                                ! notified().e7^
     "1 failing example with be_==, a ComparisonFailure message must be reported"                                        ! notified().e8^
-                                                                                                                        p^
+    "steps must be correctly sequenced with examples"                                                                   ! notified().e9^
+                                                                                                                          p^
   "If the console system property is specified"                                                                         ^
     "then the specification is also printed on the console"                                                             ! export().e1^
     "the commandline system property can be used to remove colors"                                                      ! export().e2^
@@ -44,6 +47,8 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
                                                                                                                         p^
   "If the sequential argument is specified"                                                                             ^
     "then the examples executions must be in sequence"                                                                  ! sequence().e1^
+                                                                                                                        p^
+  "Integration test with a full runner"                                                                                 ! integration ^
                                                                                                                         end
 
   trait WithNotifier {
@@ -116,6 +121,11 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
       there was one(notifier).fireTestFailure(c)
       c.value.getException must haveSuperclass[ComparisonFailure]
     }
+    def e9 = {
+      val messages = new ListBuffer[String]
+      run(Step { messages += "before" } ^ "ex1" ! { messages += "ex1"; ok } ^ Step { messages += "after" })
+      messages.toList === Seq("before", "ex1", "after")
+    }
   }
   case class export() extends WithNotifier {
 
@@ -157,11 +167,33 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
       ).inOrder
     }
   }
+
+  def integration = {
+    val (spec, messages) = textJUnitRunner.runSpec((new JUnitRunnerIntegrationSpecification).getClass)
+    messages.split("\n").toSeq must
+      contain(
+        "There was 1 failure:",
+        "1) ex2(org.specs2.runner.JUnitRunnerIntegrationSpecification)",
+        "java.lang.Exception: ko",
+        "FAILURES!!!",
+        "Tests run: 2,  Failures: 1")
+
+    spec.asInstanceOf[JUnitRunnerIntegrationSpecification].messages must contain("before", "ex1", "ex2", "after")
+  }
 }
 
-class TaggedSpecWithOneExcludedExample extends mutable.SpecificationWithJUnit with mutable.Tags {
+class TaggedSpecWithOneExcludedExample extends _root_.org.specs2.mutable.SpecificationWithJUnit with _root_.org.specs2.mutable.Tags {
   "this example is ok" >> ok
 
   tag("wontwork")
   "this example is not" >> ko
+}
+
+class JUnitRunnerIntegrationSpecification extends _root_.org.specs2.mutable.SpecificationWithJUnit { sequential
+  val messages = new ListBuffer[String]
+
+  step { messages += "before" }
+  "ex1" in { messages += "ex1"; ok }
+  "ex1" in { messages += "ex2"; ok }
+  step { messages += "after" }
 }

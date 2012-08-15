@@ -42,14 +42,17 @@ trait TraversableBaseMatchers extends LazyParameters { outer =>
 
   /** does a containAll comparison in both ways */
   def containTheSameElementsAs[T](seq: Seq[T]): Matcher[Traversable[T]] = new Matcher[Traversable[T]] {
-    import internal.scalaz.Scalaz._
-    implicit val monoid = Result.ResultFailuresMonoid("\n")
+
     def apply[S <: Traversable[T]](t: Expectable[S]) = {
-      val result1 = containAllOf(seq).apply(t)
-      val result2 = containAllOf(t.value.toSeq).apply(createExpectable(seq))
-      val combined = result1.toResult |+| result2.toResult
-      result(result1.isSuccess && result2.isSuccess,
-             combined.message, combined.message, t)
+      val missing = (seq.toSeq.diff(t.value.toSeq))
+      val added   = (t.value.toSeq.diff(seq.toSeq))
+      def message(diffs: Seq[_], msg: String) =
+        if (diffs.isEmpty) "" else diffs.mkString("\n  "+msg+": ", ", ", "")
+
+      result(missing.isEmpty && added.isEmpty,
+             t.value + "\n  contains the same elements as\n"+ seq,
+             t.value + message(missing, "is missing") + message(added, "must not contain"),
+             t)
     }
   }
 

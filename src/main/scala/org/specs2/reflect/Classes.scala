@@ -167,7 +167,7 @@ trait Classes extends Output {
   /**
    * Load a class, given the class name, without catching exceptions
    */
-  private[reflect] def loadClassOf[T <: AnyRef](className: String = "", loader: ClassLoader = Thread.currentThread.getContextClassLoader): Class[T] = {
+  private[specs2] def loadClassOf[T <: AnyRef](className: String = "", loader: ClassLoader = Thread.currentThread.getContextClassLoader): Class[T] = {
     loader.loadClass(className).asInstanceOf[Class[T]]
   }
 }

@@ -49,18 +49,18 @@ trait JUnitReporter extends ExecutionOrigin with DefaultReporter with Exporters 
     val desc = descriptions(fragment)
 
     fragment match {
-      case f@Example(_, _) => {
+      case f @ Example(_, _) => {
         notifier.fireTestStarted(desc)
         val result = execute(f)
         notifyResult(desc, result)
         notifier.fireTestFinished(desc)
         result
       }
-      case f@Step(_, _) => notifyResult(desc, execute(f))
-      case f@Action(_) => notifyResult(desc, execute(f))
-      case f@SpecStart(_, _, _) => notifier.fireTestRunStarted(desc); execute(f)
-      case f@SpecEnd(_, _) => notifier.fireTestRunFinished(new org.junit.runner.Result); execute(f)
-      case other => execute(other)
+      case f @ Step(_, _)         => notifyResult(desc, execute(f))
+      case f @ Action(_)          => notifyResult(desc, execute(f))
+      case f @ SpecStart(_, _, _) => notifier.fireTestRunStarted(desc); execute(f)
+      case f @ SpecEnd(_, _)      => notifier.fireTestRunFinished(new org.junit.runner.Result); execute(f)
+      case other                  => execute(other)
     }
   }
 
@@ -71,12 +71,12 @@ trait JUnitReporter extends ExecutionOrigin with DefaultReporter with Exporters 
     result match {
       case ExecutedResult(_, r, timer, _, _) => {
         r match {
-          case f@Failure(m, e, st, d) => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f)))
-          case e@Error(m, st) => notifier.fireTestFailure(new notification.Failure(desc, args.traceFilter(e.exception)))
+          case f@Failure(m, e, st, d)                     => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f)))
+          case e@Error(m, st)                             => notifier.fireTestFailure(new notification.Failure(desc, args.traceFilter(e.exception)))
           case DecoratedResult(_, f@Failure(m, e, st, d)) => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f)))
-          case DecoratedResult(_, e@Error(m, st)) => notifier.fireTestFailure(new notification.Failure(desc, args.traceFilter(e.exception)))
-          case Pending(_) | Skipped(_, _) => notifier.fireTestIgnored(desc)
-          case Success(_, _) | DecoratedResult(_, _) => ()
+          case DecoratedResult(_, e@Error(m, st))         => notifier.fireTestFailure(new notification.Failure(desc, args.traceFilter(e.exception)))
+          case Pending(_) | Skipped(_, _)                 => notifier.fireTestIgnored(desc)
+          case Success(_, _) | DecoratedResult(_, _)      => ()
         }
       }
       case other => ()

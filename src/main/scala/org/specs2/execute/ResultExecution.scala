@@ -5,9 +5,11 @@ import control.Exceptions._
 import control.Property
 import reflect.ClassName._
 import text.NotNullStrings._
+import java.util.regex.Pattern
+
 /**
- * This trait executes a Result and returns an appropriate value when a specs2 exception is thrown
- */
+* This trait executes a Result and returns an appropriate value when a specs2 exception is thrown
+*/
 trait ResultExecution { outer =>
   /** this implicit allows the execution of a Result with an `execute` method */
   implicit def resultIsExecutable(r: =>Result) = new ExecutableResult(r)
@@ -23,7 +25,8 @@ trait ResultExecution { outer =>
       case SkipException(f)                                                  => f
       case PendingException(f)                                               => f
       case e: Exception                                                      => Error(e)
-      case e: AssertionError                                                 => Failure(e.getMessage.notNull, "", e.getStackTrace.toList)
+      case e: AssertionError if (fromJUnit(e))                               => Failure(e.getMessage.notNull, "", e.getStackTrace.toList)
+      case e: AssertionError                                                 => Error(e)
       case e: java.lang.Error if simpleClassName(e) == "NotImplementedError" => Failure(e.getMessage.notNull, "", e.getStackTrace.toList)
       case other                                                             => throw other
     }
@@ -64,5 +67,10 @@ trait ResultExecution { outer =>
     case Right(None)    => Left(default)
     case Left(r)        => Left(r)
   }
+
+  /** determine if an AssertionError has been thrown from JUnit or not */
+  private def fromJUnit(e: AssertionError) = e.getStackTrace.exists((st: StackTraceElement) => JUNIT_ASSERT.matcher(st.getClassName).matches)
+
+  private lazy val JUNIT_ASSERT = Pattern.compile(".*junit.*Assert.*")
 }
 object ResultExecution extends ResultExecution
