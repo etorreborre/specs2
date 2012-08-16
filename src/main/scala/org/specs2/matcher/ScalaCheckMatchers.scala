@@ -9,7 +9,6 @@ import scala.collection.Map
 import io.ConsoleOutput
 import org.scalacheck._
 
-
 /**
  * The ScalaCheckMatchers trait provides matchers which allow to
  * assess properties multiple times with generated data.

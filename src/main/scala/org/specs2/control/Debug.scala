@@ -1,6 +1,7 @@
 package org.specs2
 package control
 
+
 /** 
  * This trait provides simple a way to print out any object to the console:
  * 

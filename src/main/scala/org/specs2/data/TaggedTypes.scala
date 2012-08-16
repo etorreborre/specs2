@@ -1,6 +1,7 @@
 package org.specs2
 package data
 
+
 trait TaggedTypes {
   // Unboxed newtypes, credit to @milessabin and @retronym
   type Tagged[U] = { type Tag = U }

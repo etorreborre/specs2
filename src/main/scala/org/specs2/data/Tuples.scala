@@ -1,6 +1,7 @@
 package org.specs2
 package data
 
+
 /**
  * Utility methods for tuples to flatten 3-tuples and 4-tuples
  */

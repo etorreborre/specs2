@@ -3,7 +3,6 @@ package matcher
 
 import text.Quote._
 import io._
-
 /**
  * The PathMatchers trait provides matchers which are applicable to strings representing paths
  */

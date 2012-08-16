@@ -6,7 +6,6 @@ import org.specs2.internal.scalaz._
 import Generator._
 import Seqx._
 
-
 /**
  * This trait provides additional methods on Iterable.
  *

@@ -1,7 +1,7 @@
 package org.specs2
 package reflect
 
-import scala.reflect.Manifest
+import scala.reflect.ClassTag
 import ClassName._
 import control.Exceptions._
 import control.Throwablex._
@@ -15,16 +15,16 @@ trait Classes extends Output {
 
   /** @return an instance of a given class, returning either the instance, or an exception */
   def create[T <: AnyRef](className: String = "", classLoader: ClassLoader = Thread.currentThread.getContextClassLoader)
-                         (implicit m: Manifest[T]): Either[Throwable, T] =
+                         (implicit m: ClassTag[T]): Either[Throwable, T] =
     trye(createInstanceFor(loadClassOf[T](className, loader = classLoader)))
 
   /** @return an instance of a given class */
-  def createObject[T <: AnyRef](className: String)(implicit m: Manifest[T]): Option[T] =
+  def createObject[T <: AnyRef](className: String)(implicit m: ClassTag[T]): Option[T] =
     createObject[T](className, false)(m)
   
   /** @return an instance of a given class and optionally print message if the class can't be loaded */
   def createObject[T <: AnyRef](className: String, printMessage: Boolean)
-                               (implicit m: Manifest[T]): Option[T] =
+                               (implicit m: ClassTag[T]): Option[T] =
     createObject(className, printMessage, false)(m)
 
   /**
@@ -34,8 +34,8 @@ trait Classes extends Output {
    * @return an instance of a given class and optionally print message and/or the stacktrace if the class can't be loaded.
    */
   def createObject[T <: AnyRef](className: String, printMessage: Boolean, printStackTrace: Boolean)
-                               (implicit m: Manifest[T]): Option[T] = {
-    tryo(createInstanceOf[T](loadClass[T](className, m.erasure.getClassLoader))) { (e: Exception) =>
+                               (implicit m: ClassTag[T]): Option[T] = {
+    tryo(createInstanceOf[T](loadClass[T](className, m.runtimeClass.getClassLoader))) { (e: Exception) =>
       val debugCreateObject = sys.props("debugCreateObject") != null
       val shouldPrintStackTrace = printStackTrace || debugCreateObject
       val shouldPrintMessage = printMessage || debugCreateObject
@@ -59,7 +59,7 @@ trait Classes extends Output {
                                      printStackTrace: Boolean = true,
                                      loader: ClassLoader = Thread.currentThread.getContextClassLoader,
                                      parameter: Option[AnyRef] = None)
-                                    (implicit m: Manifest[T]): Option[T] = {
+                                    (implicit m: ClassTag[T]): Option[T] = {
 
     lazy val canPrintMessage    = printMessage    || sys.props("debugCreateObject") != null
     lazy val canPrintStackTrace = printStackTrace || sys.props("debugCreateObject") != null
@@ -83,7 +83,7 @@ trait Classes extends Output {
   def tryToCreateObjectEither[T <: AnyRef](className: String,
                                            loader: ClassLoader = Thread.currentThread.getContextClassLoader,
                                            parameter: Option[AnyRef] = None)
-                                          (implicit m: Manifest[T]): Either[Throwable, T] = {
+                                          (implicit m: ClassTag[T]): Either[Throwable, T] = {
     loadClassEither(className, loader) match {
       case Left(e) => Left(e)
       case Right(c: Class[_]) => {
@@ -103,7 +103,7 @@ trait Classes extends Output {
             Left(new Exception("Can't find a suitable constructor for class "+c.getName))
           }
         } catch {
-          case e => Left(new Exception("Could not instantiate class " + className + ": " + e.getMessage, e))
+          case e: Throwable => Left(new Exception("Could not instantiate class " + className + ": " + e.getMessage, e))
         }
       }
     }
@@ -111,26 +111,26 @@ trait Classes extends Output {
   /**
    * @return an instance of a given class, checking that the created instance typechecks as expected
    */
-  private[reflect] def createInstanceOf[T <: AnyRef](c: Option[Class[T]])(implicit m: Manifest[T]): Option[T] = {
+  private[reflect] def createInstanceOf[T <: AnyRef](c: Option[Class[T]])(implicit m: ClassTag[T]): Option[T] = {
     c.map(createInstanceFor(_))
   }
   /**
    * @return an instance of a given class, checking that the created instance typechecks as expected
    */
-  private[reflect] def createInstanceOfEither[T <: AnyRef](c: Option[Class[T]])(implicit m: Manifest[T]): Either[Throwable, T] = {
+  private[reflect] def createInstanceOfEither[T <: AnyRef](c: Option[Class[T]])(implicit m: ClassTag[T]): Either[Throwable, T] = {
     try { c.map(createInstanceFor(_)).toRight(new Exception()) }
-    catch { case e => Left(e) }
+    catch { case e: Throwable => Left(e) }
   }
   /**
    * @return an instance of a given class, checking that the created instance typechecks as expected
    */
-  private[reflect] def createInstanceFor[T <: AnyRef](klass: Class[T])(implicit m: Manifest[T]): T = {
+  private[reflect] def createInstanceFor[T <: AnyRef](klass: Class[T])(implicit m: ClassTag[T]): T = {
     val constructor = klass.getDeclaredConstructors()(0)
     constructor.setAccessible(true)
   	try {
       var instance: AnyRef = constructor.newInstance().asInstanceOf[AnyRef]
-      if (!m.erasure.isInstance(instance)) {
-        error(instance + " is not an instance of " + m.erasure.getName)
+      if (!m.runtimeClass.isInstance(instance)) {
+        error(instance + " is not an instance of " + m.runtimeClass.getName)
       }
       instance.asInstanceOf[T]
   	} catch {

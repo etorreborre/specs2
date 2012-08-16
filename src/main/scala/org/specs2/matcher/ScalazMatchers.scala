@@ -4,7 +4,6 @@ package matcher
 import org.scalacheck.{ Arbitrary, Shrink, Prop }
 import org.specs2.internal._
 import scalaz._, Scalaz._
-
 /**
  * This trait provides matchers for some Scalaz (http://code.google.com/p/scalaz) datatypes.
  *

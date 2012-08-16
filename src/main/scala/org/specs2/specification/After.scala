@@ -28,11 +28,6 @@ trait After extends Context { outer =>
   }
 
   /** sequence the actions of 2 After traits */
-  @deprecated("then might become a keyword in future Scala versions. Use andThen instead", since = "1.13")
-  def then(a: After): After = new After {
-    def after = { outer.after; a.after }
-  }
-  /** sequence the actions of 2 After traits */
   def andThen(a: After): After = new After {
     def after = { outer.after; a.after }
   }

@@ -3,7 +3,6 @@ package mutable
 
 import specification.{FragmentsFragment, Fragments, Fragment}
 
-
 trait FormattingFragments extends specification.FormattingFragments { outer: FragmentsBuilder =>
   override def p          = { val f = super.p    ; addFragments(f); f }
   override def br         = { val f = super.br   ; addFragments(f); f }

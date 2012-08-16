@@ -53,7 +53,7 @@ class Invocation extends PrintableInvocation with InvocationOnMock with Printing
       else if (arg.isInstanceOf[Function0[_]]) {
         // evaluate the byname parameter to collect the argument matchers
         // if an exception is thrown we keep the value to compare it with the actual one (see "with Any" in the MockitoSpec and issue 82)
-        val value = try { arg.asInstanceOf[Function0[_]].apply() } catch { case e => e }
+        val value = try { arg.asInstanceOf[Function0[_]].apply() } catch { case e: Throwable => e }
         val argumentsMatchers = ThreadSafeMockingProgress2.pullMatchers
         // if there are no matchers, use the value directly with an equals matcher
         if (argumentsMatchers.isEmpty) matchers.add(new EqualsFunction0(value))

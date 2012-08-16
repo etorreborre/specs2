@@ -125,29 +125,6 @@ trait RegexStepsFactory extends ImplicitParameters {
     def apply[R <% Result](f: (String, String, String, String, String, String, String, String, String, String) => R) = andThen((u: Unit) => f)
     def apply[R](f: Seq[String] => R)(implicit r: R => Result, p: ImplicitParam) = andThen[R, Unit]((u: Unit) => f)(r, p)
 
-    @deprecated("then might become a keyword in future Scala versions. Use andThen instead", since = "1.13")
-    def then[R, T](f: T => String => R)(implicit r: R => Result) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t)(extract1(text)) }
-    @deprecated("then might become a keyword in future Scala versions. Use andThen instead", since = "1.13")
-    def then[R, T](f: T => (String, String) => R)(implicit r: R => Result, p: ImplicitParam2) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract2(text)) }
-    @deprecated("then might become a keyword in future Scala versions. Use andThen instead", since = "1.13")
-    def then[R, T](f: T => (String, String, String) => R)(implicit r: R => Result, p: ImplicitParam3) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract3(text)) }
-    @deprecated("then might become a keyword in future Scala versions. Use andThen instead", since = "1.13")
-    def then[R, T](f: T => (String, String, String, String) => R)(implicit r: R => Result, p: ImplicitParam4) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract4(text)) }
-    @deprecated("then might become a keyword in future Scala versions. Use andThen instead", since = "1.13")
-    def then[R, T](f: T => (String, String, String, String, String) => R)(implicit r: R => Result, p: ImplicitParam5) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract5(text)) }
-    @deprecated("then might become a keyword in future Scala versions. Use andThen instead", since = "1.13")
-    def then[R, T](f: T => (String, String, String, String, String, String) => R)(implicit r: R => Result, p: ImplicitParam6) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract6(text)) }
-    @deprecated("then might become a keyword in future Scala versions. Use andThen instead", since = "1.13")
-    def then[R, T](f: T => (String, String, String, String, String, String, String) => R)(implicit r: R => Result, p: ImplicitParam7) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract7(text)) }
-    @deprecated("then might become a keyword in future Scala versions. Use andThen instead", since = "1.13")
-    def then[R, T](f: T => (String, String, String, String, String, String, String, String) => R)(implicit r: R => Result, p: ImplicitParam8) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract8(text)) }
-    @deprecated("then might become a keyword in future Scala versions. Use andThen instead", since = "1.13")
-    def then[R, T](f: T => (String, String, String, String, String, String, String, String, String) => R)(implicit r: R => Result, p: ImplicitParam9) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract9(text)) }
-    @deprecated("then might become a keyword in future Scala versions. Use andThen instead", since = "1.13")
-    def then[R, T](f: T => (String, String, String, String, String, String, String, String, String, String) => R)(implicit r: R => Result, p: ImplicitParam10) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract10(text)) }
-    @deprecated("then might become a keyword in future Scala versions. Use andThen instead", since = "1.13")
-    def then[R, T](f: T => Seq[String] => R)(implicit r: R => Result, p: ImplicitParam) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t)(extractAll(text)) }
-
     def andThen[R, T](f: T => String => R)(implicit r: R => Result) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t)(extract1(text)) }
     def andThen[R, T](f: T => (String, String) => R)(implicit r: R => Result, p: ImplicitParam2) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract2(text)) }
     def andThen[R, T](f: T => (String, String, String) => R)(implicit r: R => Result, p: ImplicitParam3) = new Then[T](regex, groups) { def extract(t: T, text: String): Result = f(t).tupled(extract3(text)) }

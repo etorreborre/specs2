@@ -143,7 +143,7 @@ trait Htmlx { outer =>
         val ch = n.child
         val nch = applyTransformation(ch)
         if (ch eq nch) n
-        else           Elem(n.prefix, n.label, n.attributes, n.scope, nch: _*)
+        else           Elem(n.prefix, n.label, n.attributes, n.scope, true, nch: _*)
       }
     }
     def addTo(n: Node) = applyTransformation(n)

@@ -1,6 +1,7 @@
 package org.specs2
 package matcher
 
+
 /**
  * This trait provides implicit definitions to transform any value into a ShouldExpectable
  */

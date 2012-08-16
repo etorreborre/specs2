@@ -45,7 +45,7 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
       ExecutingSpecification(spec.name, spec.arguments, executing.fragments, executor)
     } catch {
       // just in case something bad happens, or if there's an InterruptedException, shutdown the executor
-      case e => executor.shutdown; throw e
+      case e: Throwable => executor.shutdown; throw e
     }
   }
 

@@ -134,24 +134,24 @@ case class HtmlResult(r: ExecutedResult, stats: Stats = Stats(), level: Int = 0,
     val outDesc = printDesc(desc, result)(out)
     implicit val doIt = !args.xonly
     result match {
-      case f: Failure                                 => printFailureDetails(f)(outDesc)
-      case e: Error                                   => printErrorDetails(e)(outDesc).printStack(e, indent + 1, args.traceFilter)
-      case Success(_, _)                              => outDesc
-      case Skipped(_, _)                              => outDesc ?> (_.printSkipped(NoMarkup(result.message), indent))
-      case Pending(_)                                 => outDesc ?> (_.printPending(NoMarkup(result.message), indent))
-      case DecoratedResult(table: DataTable, r)       => printDataTable(table)(outDesc)
-      case DecoratedResult(other, r)                  => printResult(desc, r)(out)
+      case f: Failure                           => printFailureDetails(f)(outDesc)
+      case e: Error                             => printErrorDetails(e)(outDesc).printStack(e, indent + 1, args.traceFilter)
+      case Success(_, _)                        => outDesc
+      case Skipped(_, _)                        => outDesc ?> (_.printSkipped(NoMarkup(result.message), indent))
+      case Pending(_)                           => outDesc ?> (_.printPending(NoMarkup(result.message), indent))
+      case DecoratedResult(table: DataTable, r) => printDataTable(table)(outDesc)
+      case DecoratedResult(other, r)            => printResult(desc, r)(out)
     }
   }
 
   def printDesc(desc: MarkupString, result: Result)(out: HtmlReportOutput): HtmlReportOutput = {
     result match {
-      case f: Failure                           => out.printFailure(desc, indent)
-      case e: Error                             => out.printError(desc, indent)
-      case Success(_, _)                        => out.when(!args.xonly)(_.printSuccess(desc, indent))
-      case Skipped(_, _)                        => out.printSkipped(desc, indent)
-      case Pending(_)                           => out.printPending(desc, indent)
-      case DecoratedResult(table: DataTable, r) => printDesc(desc, r)(out)
+      case f: Failure             => out.printFailure(desc, indent)
+      case e: Error               => out.printError(desc, indent)
+      case Success(_, _)          => out.when(!args.xonly)(_.printSuccess(desc, indent))
+      case Skipped(_, _)          => out.printSkipped(desc, indent)
+      case Pending(_)             => out.printPending(desc, indent)
+      case DecoratedResult(_, r)  => printDesc(desc, r)(out)
     }
   }
 

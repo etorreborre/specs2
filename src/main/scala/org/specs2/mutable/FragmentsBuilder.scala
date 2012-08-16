@@ -137,7 +137,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     def <<(f: Function10[String, String, String, String, String, String, String, String, String, String, Unit]): Fragments = createStep(s, f.tupled(extract10(s)))
     def <<(f: Seq[String] => Unit)(implicit p: ImplicitParam): Fragments = createStep(s, f(extractAll(s)))
 
-    def <<(then: Then[Unit]): Example = createExample(s, then.extract((), s))
+    def <<(andThen: Then[Unit]): Example = createExample(s, andThen.extract((), s))
     def <<[R <% Result](r: =>R): Example = createExample(s, r)
     def <<[R <% Result](f: Function[String, R]): Example = createExample(s, f(extract1(s)))
     def <<[R <% Result](f: Function2[String, String, R]): Example = createExample(s, f.tupled(extract2(s)))

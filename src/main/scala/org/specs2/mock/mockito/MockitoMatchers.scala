@@ -5,6 +5,7 @@ package mockito
 import org.mockito.Matchers
 import org.hamcrest.core.IsAnything
 import io.FileWriter
+import scala.reflect.ClassTag
 
 /**
  * Mockito Matchers for the most common types
@@ -20,7 +21,7 @@ trait MockitoMatchers extends ArgThat {
   def anyDouble = Matchers.anyDouble
   def anyFloat  = Matchers.anyFloat
 
-  def any[T : Manifest]: T = org.mockito.Matchers.any(implicitly[Manifest[T]].erasure).asInstanceOf[T]
+  def any[T : ClassTag]: T = org.mockito.Matchers.any(implicitly[ClassTag[T]].runtimeClass).asInstanceOf[T]
 
   def anyPartialFunction[T,R] = anArgThat(new IsAnything[PartialFunction[T,R]])
 

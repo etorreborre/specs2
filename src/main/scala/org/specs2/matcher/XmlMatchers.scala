@@ -282,6 +282,6 @@ case class PathFunction(val node: Node,
 }
 private[specs2] object StringToElem {
   implicit def toElement(s: String): ToElem = new ToElem(s)
-  class ToElem(s: String) { def toElem: Elem = Elem(null, s, Null, TopScope) }
-  implicit def toNode(s: String): Elem = Elem(null, s, Null, TopScope)
+  class ToElem(s: String) { def toElem: Elem = Elem(null, s, Null, TopScope, true) }
+  implicit def toNode(s: String): Elem = Elem(null, s, Null, TopScope, true)
 }

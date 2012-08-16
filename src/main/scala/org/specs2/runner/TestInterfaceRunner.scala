@@ -12,10 +12,12 @@ import specification.ExecutedSpecification
 import reflect.Classes
 import io.ConsoleOutput
 import internal.scalaz.Scalaz._
+import scala.reflect.ClassTag
+
 /**
- * Implementation of the Framework interface for the sbt tool.
- * It declares the classes which can be executed by the specs2 library.
- */
+* Implementation of the Framework interface for the sbt tool.
+* It declares the classes which can be executed by the specs2 library.
+*/
 class SpecsFramework extends Framework {
   def name = "specs2"
   def tests = Array[Fingerprint](fp1, fp2, fp3, fp4)
@@ -66,7 +68,7 @@ class TestInterfaceRunner(val loader: ClassLoader, val loggers: Array[Logger]) e
     }
   }
 
-  private def toRun[T <: AnyRef : Manifest](className: String, handler: EventHandler): Either[Throwable, T] = {
+  private def toRun[T <: AnyRef : ClassTag](className: String, handler: EventHandler): Either[Throwable, T] = {
     val runner: Either[Throwable, T] = create[T](className + "$", loader) match {
       case Right(s) => Right(s)
       case Left(e) => create[T](className, loader)

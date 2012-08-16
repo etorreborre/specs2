@@ -1,6 +1,7 @@
 package org.specs2
 package matcher
 
+
 /**
  * This trait adds some implicits to create expectations with the `===` sign
  */

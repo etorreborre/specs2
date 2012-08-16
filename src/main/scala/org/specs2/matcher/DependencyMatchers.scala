@@ -2,7 +2,6 @@ package org.specs2
 package matcher
 
 import analysis._
-
 /**
  * The dependency matchers trait provides a way to specify the dependencies that should be verified in your project
  * and then to check that there's no unwanted dependency in the code.

@@ -1,6 +1,7 @@
 package org.specs2
 package control
 
+
 /**
  * This class represents values which are evaluated lazily and which may even be missing.
  * 

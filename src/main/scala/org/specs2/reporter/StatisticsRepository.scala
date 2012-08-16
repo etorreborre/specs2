@@ -97,14 +97,14 @@ trait DefaultStatisticsRepository extends StatisticsRepository with OutputDir {
 
   private def statsToXml(specName: SpecName, stats: Stats): NodeSeq = {
     Elem(null, statsTag(specName),
-         new UnprefixedAttribute("timestamp", System.currentTimeMillis().toString, Null), TopScope, stats.toXml) ++ Text("\n")
+         new UnprefixedAttribute("timestamp", System.currentTimeMillis().toString, Null), TopScope, true, stats.toXml) ++ Text("\n")
   }
 
   private def resultsToXml(specName: SpecName, results: Seq[ExecutedResult]): NodeSeq = {
     val xmlResults = results reduceNodes resultToXml
     if (xmlResults.isEmpty)  xmlResults
     else                     Elem(null, resultsTag(specName),
-                               new UnprefixedAttribute("timestamp", System.currentTimeMillis().toString, Null), TopScope, xmlResults:_*) ++ Text("\n")
+                               new UnprefixedAttribute("timestamp", System.currentTimeMillis().toString, Null), TopScope, true, xmlResults:_*) ++ Text("\n")
   }
 
   /**

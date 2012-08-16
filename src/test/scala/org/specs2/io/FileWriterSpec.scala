@@ -26,12 +26,12 @@ class FileWriterSpec extends Specification {  def is =
     }
     def e2 = this {
       try { fw.write("filePath")(_ => error("bad")) }
-      catch { case e => () }
+      catch { case e: Throwable => () }
       out.closed must_== true
     }
     def e3 = this {
       try { fw.write("filePath")(_ => error("bad")); Failure("an exception must be thrown") }
-      catch { case e => { e.getMessage must_== "bad" }.toResult }
+      catch { case e: Throwable => { e.getMessage must_== "bad" }.toResult }
     }
     def e4 = this {
       fw.writeXmlFile("filePath", <hello/>)

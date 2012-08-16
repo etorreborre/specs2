@@ -2,7 +2,7 @@ package org.specs2
 package time
 
 import java.text.{ ParsePosition, SimpleDateFormat }
- 
+
 /**
  * This object provides functions to describe units of time
  *

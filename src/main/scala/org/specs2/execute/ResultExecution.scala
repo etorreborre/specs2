@@ -28,7 +28,7 @@ trait ResultExecution { outer =>
       case e: AssertionError if (fromJUnit(e))                               => Failure(e.getMessage.notNull, "", e.getStackTrace.toList)
       case e: AssertionError                                                 => Error(e)
       case e: java.lang.Error if simpleClassName(e) == "NotImplementedError" => Failure(e.getMessage.notNull, "", e.getStackTrace.toList)
-      case other                                                             => throw other
+      case other : Throwable                                                 => throw other
     }
 
   /**

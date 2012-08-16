@@ -2,6 +2,7 @@ package org.specs2
 package matcher
 
 import control.Exceptions._
+import scala.reflect.ClassTag
 
 /**
  * These matchers can be used to check if exceptions are thrown or not
@@ -13,11 +14,11 @@ trait ExceptionBaseMatchers extends Expectations {
   /**
    * @return a matcher checking the type of an Exception
    */
-  def throwA[E <: Throwable](implicit m: ClassManifest[E]): ExceptionClassMatcher = new ExceptionClassMatcher(m.erasure)
+  def throwA[E <: Throwable](implicit m: ClassTag[E]): ExceptionClassMatcher = new ExceptionClassMatcher(m.runtimeClass)
   /**
    * @return a matcher checking the type of an Exception and its message (as a regexp)
    */
-  def throwA[E <: Throwable](message: String = ".*")(implicit m: ClassManifest[E]): Matcher[Any] = {
+  def throwA[E <: Throwable](message: String = ".*")(implicit m: ClassTag[E]): Matcher[Any] = {
     throwA(m).like { case e => createExpectable(e.getMessage).applyMatcher(new BeMatching(".*"+message+".*")) }
   }
   /**
@@ -27,11 +28,11 @@ trait ExceptionBaseMatchers extends Expectations {
   /**
    * alias for throwA
    */
-  def throwAn[E <: Throwable](implicit m: ClassManifest[E]) = throwA[E](m)
+  def throwAn[E <: Throwable](implicit m: ClassTag[E]) = throwA[E](m)
   /**
    * alias for throwA
    */
-  def throwAn[E <: Throwable](message: String = ".*")(implicit m: ClassManifest[E]): Matcher[Any] = throwA(message)(m)
+  def throwAn[E <: Throwable](message: String = ".*")(implicit m: ClassTag[E]): Matcher[Any] = throwA(message)(m)
   /**
    * alias for throwA
    */
@@ -151,12 +152,12 @@ private[specs2]
 trait ExceptionBeHaveMatchers { outer: ExceptionBaseMatchers =>
   implicit def toExceptionMatcher[T](result: MatchResult[T]) = new ExceptionMatcherResult(result)
   class ExceptionMatcherResult[T](result: MatchResult[T]) {
-    def throwA[E <: Throwable](implicit m: ClassManifest[E]) = result(outer.throwA(m))
-    def throwA[E <: Throwable](message: String = ".*")(implicit m: ClassManifest[E]) = result(outer.throwA(message)(m))
+    def throwA[E <: Throwable](implicit m: ClassTag[E]) = result(outer.throwA(m))
+    def throwA[E <: Throwable](message: String = ".*")(implicit m: ClassTag[E]) = result(outer.throwA(message)(m))
     def throwA[E <: Throwable](e: E) = result(outer.throwA(e))
 
-    def throwAn[E <: Throwable](implicit m: ClassManifest[E]) = result(outer.throwA(m))
-    def throwAn[E <: Throwable](message: String = ".*")(implicit m: ClassManifest[E]) = result(outer.throwA(message)(m))
+    def throwAn[E <: Throwable](implicit m: ClassTag[E]) = result(outer.throwA(m))
+    def throwAn[E <: Throwable](message: String = ".*")(implicit m: ClassTag[E]) = result(outer.throwA(message)(m))
     def throwAn[E <: Throwable](e: E) = result(outer.throwA(e))
   }
 }

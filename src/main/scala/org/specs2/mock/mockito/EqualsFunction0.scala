@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.matchers
 
+
 /**
  * Ad-hoc implementation of the Equals matcher overriding the matching for byname values
  */
@@ -12,7 +13,7 @@ case class EqualsFunction0(wanted: scala.Any) extends Equals(wanted) {
   override def matches(actual: scala.Any) = {
     val value =
       if (actual.isInstanceOf[Function0[_]])
-        try { actual.asInstanceOf[Function0[_]].apply() } catch { case e => e }
+        try { actual.asInstanceOf[Function0[_]].apply() } catch { case e: Throwable => e }
       else
         actual
 

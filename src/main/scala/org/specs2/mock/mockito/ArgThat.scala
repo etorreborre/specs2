@@ -2,6 +2,7 @@ package org.specs2
 package mock
 package mockito
 
+
 trait ArgThat {
 
   /** allows to use a specs matcher to match parameters by encapsulating it as a Hamcrest matcher. */

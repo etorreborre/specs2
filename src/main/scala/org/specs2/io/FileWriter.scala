@@ -46,7 +46,7 @@ trait FileWriter {
       function(out)
     } finally {
       try { out.close() }
-      catch { case _ => }
+      catch { case _: Throwable => }
     }
   }
   /**

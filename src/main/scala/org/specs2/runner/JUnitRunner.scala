@@ -9,6 +9,7 @@ import specification._
 import java.io.{PrintStream, ByteArrayOutputStream}
 import org.junit.internal.TextListener
 import reflect.Classes
+import scala.reflect.ClassTag
 
 /**
  * The JUnitRunner class is a JUnit Runner class meant to be used with the RunWith annotation
@@ -54,15 +55,15 @@ class JUnitRunner(klass: Class[_]) extends Runner with DefaultSelection { outer 
  * Factory methods to help with testing
  */
 object JUnitRunner {
-  def apply[T <: SpecificationStructure](implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure)
-  def apply[T <: SpecificationStructure](s: T)(implicit m: ClassManifest[T], p: SystemProperties) = new JUnitRunner(m.erasure) {
+  def apply[T <: SpecificationStructure](implicit m: ClassTag[T]) = new JUnitRunner(m.runtimeClass)
+  def apply[T <: SpecificationStructure](s: T)(implicit m: ClassTag[T], p: SystemProperties) = new JUnitRunner(m.runtimeClass) {
     override lazy val specification = s
     override lazy val properties = p
   }
-  def apply[T <: SpecificationStructure](fs: Fragments)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
+  def apply[T <: SpecificationStructure](fs: Fragments)(implicit m: ClassTag[T]) = new JUnitRunner(m.runtimeClass) {
     override lazy val specification = new Specification { def is = fs }
   }
-  def apply[T <: SpecificationStructure](f: Fragments, props: SystemProperties, console: TextExporting, html: HtmlExporting)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) { outer =>
+  def apply[T <: SpecificationStructure](f: Fragments, props: SystemProperties, console: TextExporting, html: HtmlExporting)(implicit m: ClassTag[T]) = new JUnitRunner(m.runtimeClass) { outer =>
     override lazy val specification = new Specification { def is = f }
     override lazy val properties = props
     override def run(n: RunNotifier) = {

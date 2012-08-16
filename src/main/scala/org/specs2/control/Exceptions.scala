@@ -1,6 +1,7 @@
 package org.specs2
 package control
 
+
 /**
  * This trait provides methods to catch exceptions and transform them into values which can be passed to
  * further computations.

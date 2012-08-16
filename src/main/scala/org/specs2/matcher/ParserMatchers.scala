@@ -6,13 +6,15 @@ import util.parsing.input.{CharSequenceReader, Reader}
 import org.specs2.internal.scalaz.Scalaz._
 import text.Plural._
 import text.Quote._
+import scala.reflect.ClassTag
+
 /**
- * Matchers for parser combinators
- *
- * When this trait is inherited the parsers variable needs to be defined.
- *
- * by @alexey_r
- */
+* Matchers for parser combinators
+*
+* When this trait is inherited the parsers variable needs to be defined.
+*
+* by @alexey_r
+*/
 trait ParserMatchers extends ParserBaseMatchers with ParserBeHaveMatchers
 
 private[specs2]
@@ -108,9 +110,9 @@ trait ParserBaseMatchers {
 
   }
 
-  case class ParseNoSuccessMatcher[T, TMatchee, TNoSuccess <: NoSuccess : ClassManifest]
+  case class ParseNoSuccessMatcher[T, TMatchee, TNoSuccess <: NoSuccess : ClassTag]
       (parseResult: TMatchee => ParseResult[T]) extends ParseResultMatcher[T, TMatchee] {
-    val clazz = implicitly[ClassManifest[TNoSuccess]].erasure
+    val clazz = implicitly[ClassTag[TNoSuccess]].runtimeClass
 
     def apply0(s: Expectable[ParseResult[T]]) = {
       s.value match {

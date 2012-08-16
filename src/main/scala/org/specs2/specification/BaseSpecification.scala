@@ -6,7 +6,6 @@ import Scalaz._
 import Fragments._
 import reflect.Classes._
 import main.{CommandLineArguments, Arguments}
-
 /**
  * A Base specification contains the minimum elements for a Specification
  * 

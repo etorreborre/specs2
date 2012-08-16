@@ -5,6 +5,8 @@ package mockito
 import control.Property
 import reflect.ClassesOf
 import org.mockito.invocation._
+import scala.reflect.ClassTag
+
 /**
  * This trait provides methods to create mocks and spies.
  */
@@ -12,15 +14,15 @@ trait MocksCreation extends TheMockitoMocker with ClassesOf {
   /**
    * create a mock object: val m = mock[java.util.List[String]]
    */
-  def mock[T : ClassManifest]: T = mocker.mock(implicitly[ClassManifest[T]])
+  def mock[T : ClassTag]: T = mocker.mock(implicitly[ClassTag[T]])
   /**
    * create a mock object with a name: val m = mockAs[java.util.List[String]]("name")
    */
-  def mockAs[T : ClassManifest](name: String): T = Mocked[T]().as(name)
+  def mockAs[T : ClassTag](name: String): T = Mocked[T]().as(name)
   /**
    * create a mock object with some specific settings: val m = mock[java.util.List[String]](settings)
    */
-  def mock[T : ClassManifest](settings: org.mockito.MockSettings): T = Mocked[T](settings).done
+  def mock[T : ClassTag](settings: org.mockito.MockSettings): T = Mocked[T](settings).done
   /**
    * implicit allowing to define the mock settings with a nice syntax:
 	 *  - named mock: val m = mock[java.util.List[String]].as("name")
@@ -30,16 +32,16 @@ trait MocksCreation extends TheMockitoMocker with ClassesOf {
    *	                defaultReturn = 10, 
 	 *                  extraInterfaces = classesOf[Cloneable, Serializable])
    */
-  implicit def mocked[T : ClassManifest](t: =>T) = Mocked[T]()
+  implicit def mocked[T : ClassTag](t: =>T) = Mocked[T]()
 
   /** support class to create a mock object with specific settings */
   private[specs2]
-  case class Mocked[T : ClassManifest](mockitoSettings: org.mockito.MockSettings = org.mockito.Mockito.withSettings) {
+  case class Mocked[T : ClassTag](mockitoSettings: org.mockito.MockSettings = org.mockito.Mockito.withSettings) {
     def as(n: String) = settings(name = n)
     def smart = Mocked[T](mockitoSettings.defaultAnswer(org.mockito.Mockito.RETURNS_SMART_NULLS)).done 
     def defaultReturn(a: Any) = settings(defaultReturn = a)
     def defaultAnswer[S](answer: InvocationOnMock => S) = settings(defaultAnswer = (i: InvocationOnMock) => answer(i): Any)
-    def extraInterface[T : ClassManifest] = settings(extraInterface = implicitly[ClassManifest[T]].erasure)
+    def extraInterface[T : ClassTag] = settings(extraInterface = implicitly[ClassTag[T]].runtimeClass)
 
 		def settings(name            : MockProperty[String] = MockProperty[String](),
 		             smart           : MockProperty[Boolean] = MockProperty[Boolean](),
@@ -76,7 +78,7 @@ trait MocksCreation extends TheMockitoMocker with ClassesOf {
    * 
    * This is the equivalent of Mockito.mock(List.class, SMART_NULLVALUES) but testing shows that it is not working well with Scala.
    */
-  def smartMock[T : ClassManifest]: T = Mocked[T]().smart
+  def smartMock[T : ClassTag]: T = Mocked[T]().smart
   /**
    * create a spy on an object. 
    * 

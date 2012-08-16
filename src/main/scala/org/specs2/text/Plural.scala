@@ -1,6 +1,7 @@
 package org.specs2
 package text
 
+
 /**
  * This trait provides functions to transform nouns to
  * their plural form
