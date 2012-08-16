@@ -2,8 +2,8 @@ This version is mostly a maintenance release:
 
  * fixed a [step evaluation issue](http://bit.ly/NwiRxA) when working with JUnit
  * AssertionErrors are now considered as failures when coming from JUnit and real errors otherwise
- * PendingUntilFixed works with AssertionErrors ([issue 97](http://github.com/etorreborre/specs2/issues/97))
- * the messages for the `containTheSameElementsAs` matcher are more explicit
+ * PendingUntilFixed works with AssertionErrors ([issue 101](http://github.com/etorreborre/specs2/issues/101))
+ * the messages for the `containTheSameElementsAs` matcher are more explicit ([issue 97](http://github.com/etorreborre/specs2/issues/97))
  
 And there is one small feature:
 
