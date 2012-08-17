@@ -191,11 +191,11 @@ class BeTypedEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
     val (db, qa) = (b.description, q(a)) match {
       case (x, y) if (!equality && x == y) => {
 	      val aClass = className(a.getClass)
-	      val bClass = className(b.getClass)
+	      val bClass = className(b.value.getClass)
 	      if (aClass != bClass)
-          (y + ": " + bClass, x + ": " + aClass)
+          (x + ": " + bClass, y + ": " + aClass)
         else
-          (y, x + ". Values have the same string representation but possibly different types like List[Int] and List[String]")
+          (x, y + ". Values have the same string representation but possibly different types like List[Int] and List[String]")
 	    }
       case other @ _ => other
 	  }
