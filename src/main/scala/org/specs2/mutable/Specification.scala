@@ -7,6 +7,7 @@ import execute._
 import matcher._
 import main.ArgumentsShortcuts
 import specification._
+import control.Functions._
 
 trait Specification extends SpecificationStructure with SpecificationFeatures {
   def is = fragments
@@ -29,8 +30,11 @@ trait SpecificationFeatures extends FragmentsBuilder
    with Debug {
 
   /** transform a context to a result to allow the implicit passing of a context to each example */
-  implicit def contextToResult[T](t: MatchResult[T])(implicit context: Context = defaultContext): Result = context(asResult(t))
+  implicit def contextAsResult[T, M[_] <: MatchResult[_]](implicit context: Context = defaultContext): AsResult[M[T]] = new AsResult[M[T]] {
+    def asResult(t: =>M[T]) = context(t.toResult)
+  }
   /** use an available outside context to transform a function returning a value convertible to a result, into a result */
-  implicit def outsideFunctionToResult[T, R](implicit outside: Outside[T], conv: R => Result) : (T => R) => Result = (f: T => R) => outside((t: T) => conv(f(t)))
-
+  implicit def outsideFunctionToResult[T : Outside, R : AsResult]: AsResult[T => R] = new AsResult[T => R] {
+    def asResult(f: =>(T => R)) = implicitly[Outside[T]].apply((t: T) => AsResult(f(t)))
+  }
 }

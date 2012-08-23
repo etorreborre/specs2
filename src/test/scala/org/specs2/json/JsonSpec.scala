@@ -28,7 +28,7 @@ class JsonSpec extends Specification with ScalaCheck {
     (1 to 100).par.map(j => Json.parse("hello world")) must not(throwAn[Exception])
   }
 
-  implicit val jsonParams: Parameters = set(maxSize -> 3)
+  implicit lazy val jsonParams: Parameters = set(maxSize -> 3)
 
   def isTerminal(a: Any) = a match {
     case JSONArray(_)  => false

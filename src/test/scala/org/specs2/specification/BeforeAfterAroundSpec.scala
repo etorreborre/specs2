@@ -18,6 +18,8 @@ class BeforeAfterAroundSpec extends Specification { def is =
  "a spec can define an Around context that is used for each example"                                                    ! around ^
  "a spec can define a BeforeAfter context that is used for each example"                                                ! beforeAfter ^
  "a spec can define a BeforeAfterAround context that is used for each example"                                          ! beforeAfterAround ^
+ "a spec can define a implicit context that is used for each example"                                                   ! implicitContext ^
+ "a mutable spec can define a implicit context that is used for each example"                                           ! implicitContext2 ^
                                                                                                                         end
 
   def executeContains(s: SpecificationStructure with MockOutput, messages: String*) = {
@@ -80,4 +82,21 @@ class BeforeAfterAroundSpec extends Specification { def is =
       def around[R <% Result](r: =>R) = { println("around"); r }
       "ex1" ! success
     }, "before", "around", "after")
-}
+
+  def implicitContext = executeContains(
+    new Specification with MockOutput {
+      implicit val c: Context = new BeforeAfter {
+        def before = println("before")
+        def after = println("after")
+      }
+      def is = "ex1" ! { println("ex1"); ok }
+    }, "before", "ex1", "after")
+
+  def implicitContext2 = executeContains(
+    new Spec with MockOutput {
+      implicit val c: Context = new BeforeAfter {
+        def before = println("before")
+        def after = println("after")
+      }
+      "ex1" in { println("ex1"); ok }
+    }, "before", "ex1", "after")}

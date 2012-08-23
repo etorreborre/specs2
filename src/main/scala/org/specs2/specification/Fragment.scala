@@ -138,8 +138,8 @@ case class Example private[specification] (desc: MarkupString = NoMarkup(""), bo
 }
 
 case object Example {
-  def apply[T <% Result](desc: String, body: =>T) = new Example(NoMarkup(desc), () => body)
-  def apply[T <% Result](markup: MarkupString, body: =>T) = new Example(markup, () => body)
+  def apply[T : AsResult](desc: String, body: =>T) = new Example(NoMarkup(desc), () => AsResult(body))
+  def apply[T : AsResult](markup: MarkupString, body: =>T) = new Example(markup, () => AsResult(body))
 }
 
 /**

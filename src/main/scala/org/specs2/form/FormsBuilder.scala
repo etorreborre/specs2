@@ -32,6 +32,11 @@ trait FormsBuilder {
   implicit def formIsCell(t: =>Form): FormCell = new FormCell(t)
   /** a Form can be implicitly executed if necessary */
   implicit def formIsExecutable(f: Form): Result = f.execute
+  /** a Form can be implicitly transformed to results */
+  implicit def formAsResult: AsResult[Form] = new AsResult[Form] {
+    def asResult(f: =>Form): Result = formIsExecutable(f)
+  }
+
   /** a cell can be added lazily to a row. It will only be evaluated when necessary */
   def lazyfy(c: =>Cell) = new LazyCell(c)
 
