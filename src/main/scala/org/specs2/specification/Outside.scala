@@ -15,7 +15,7 @@ import execute._
 trait Outside[+T] { outer =>
   def outside: T
   def apply[R <% Result](a: T => R) = {
-    ResultExecution.execute(outside)(a)
+    ResultExecution.execute(outside)(a)(AsResult.asResult)
   }
 }
 
@@ -30,7 +30,7 @@ trait AroundOutside[+T] extends Around with Outside[T] { outer =>
   def around[R <% Result](a: =>R): Result
 
   override def apply[R <% Result](a: T => R) = {
-    around(ResultExecution.execute(outside)(a))
+    around(ResultExecution.execute(outside)(a)(AsResult.asResult))
   }
 }
 

@@ -8,6 +8,7 @@ import org.scalacheck.Pretty._
 import scala.collection.Map
 import io.ConsoleOutput
 import org.scalacheck._
+import execute.AsResult
 
 /**
  * The ScalaCheckMatchers trait provides matchers which allow to
@@ -18,8 +19,12 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
    with FunctionPropertyImplicits
    with ResultPropertyImplicits
    with ApplicableArbitraries
-   with Expectations { outer =>
+   with Expectations { outer: ScalaCheckMatchers =>
 
+  /** implicit typeclass instance to create examples from Props */
+  implicit def propAsResult(implicit p: Parameters): AsResult[Prop] = new AsResult[Prop] {
+    def asResult(prop: =>Prop): execute.Result = checkProp(prop)(p)
+  }
   /**
    * transform a Function returning a MatchResult (or anything which can be converted to a Prop) as a ScalaCheck property
    */

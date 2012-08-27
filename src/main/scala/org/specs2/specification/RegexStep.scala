@@ -166,27 +166,27 @@ abstract class Then[T](regex: String = "", val groupRegex: String = RegexStep.DE
 }
 /** implicit conversions to create Then objects */
 object Then extends ImplicitParameters {
-  implicit def function1ToThen[T, R <% Result](f: T => String => R): Then[T] = new Then[T] { def extract(t: T, text: String) = f(t)(extract1(text))  }
-  implicit def function2ToThen[T, R <% Result](f: T => (String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = f(t).tupled(extract2(text))  }
-  implicit def function3ToThen[T, R <% Result](f: T => (String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = f(t).tupled(extract3(text))  }
-  implicit def function4ToThen[T, R <% Result](f: T => (String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = f(t).tupled(extract4(text))  }
-  implicit def function5ToThen[T, R <% Result](f: T => (String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = f(t).tupled(extract5(text))  }
-  implicit def function6ToThen[T, R <% Result](f: T => (String, String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = f(t).tupled(extract6(text))  }
-  implicit def function7ToThen[T, R <% Result](f: T => (String, String, String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = f(t).tupled(extract7(text))  }
-  implicit def function8ToThen[T, R <% Result](f: T => (String, String, String, String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = f(t).tupled(extract8(text))  }
-  implicit def function9ToThen[T, R <% Result](f: T => (String, String, String, String, String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = f(t).tupled(extract9(text))  }
+  implicit def function1ToThen[T, R : AsResult](f: T => String => R): Then[T] = new Then[T] { def extract(t: T, text: String) = AsResult(f(t)(extract1(text)))  }
+  implicit def function2ToThen[T, R : AsResult](f: T => (String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = AsResult(f(t).tupled(extract2(text)))  }
+  implicit def function3ToThen[T, R : AsResult](f: T => (String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = AsResult(f(t).tupled(extract3(text)))  }
+  implicit def function4ToThen[T, R : AsResult](f: T => (String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = AsResult(f(t).tupled(extract4(text)))  }
+  implicit def function5ToThen[T, R : AsResult](f: T => (String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = AsResult(f(t).tupled(extract5(text)))  }
+  implicit def function6ToThen[T, R : AsResult](f: T => (String, String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = AsResult(f(t).tupled(extract6(text)))  }
+  implicit def function7ToThen[T, R : AsResult](f: T => (String, String, String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = AsResult(f(t).tupled(extract7(text)))  }
+  implicit def function8ToThen[T, R : AsResult](f: T => (String, String, String, String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = AsResult(f(t).tupled(extract8(text)))  }
+  implicit def function9ToThen[T, R : AsResult](f: T => (String, String, String, String, String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = AsResult(f(t).tupled(extract9(text)))  }
 
-  implicit def function10ToThen[T, R <% Result](f: T => (String, String, String, String, String, String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = f(t).tupled(extract10(text))  }
-  implicit def functionSeqToThen[T, R](f: T => Seq[String] => R)(implicit r: R => Result, p: ImplicitParam): Then[T] = new Then[T] { def extract(t: T, text: String) = f(t)(extractAll(text))  }
+  implicit def function10ToThen[T, R : AsResult](f: T => (String, String, String, String, String, String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = AsResult(f(t).tupled(extract10(text)))  }
+  implicit def functionSeqToThen[T, R](f: T => Seq[String] => R)(implicit r: AsResult[R], p: ImplicitParam): Then[T] = new Then[T] { def extract(t: T, text: String) = AsResult(f(t)(extractAll(text)))  }
 }
 
 abstract class GivenThen(regex: String= "") extends RegexStep[String, Result](regex) {
   def extract(text: String): Result
 }
 
-class GivenThenFunction[R](f: PartialFunction[Any, R], regex: String= "")(implicit conv: R => Result) extends GivenThen(regex) {
-  def extract(text: String): Result = RegexStep.extract(text, { case a => conv(f(a)) }, regexToUse)
+class GivenThenFunction[R : AsResult](f: PartialFunction[Any, R], regex: String= "") extends GivenThen(regex) {
+  def extract(text: String): Result = RegexStep.extract(text, { case a => AsResult(f(a)) }, regexToUse)
 }
 object so {
-  def apply[R <% Result](f: PartialFunction[Any, R]): GivenThen = new GivenThenFunction(f)
+  def apply[R : AsResult](f: PartialFunction[Any, R]): GivenThen = new GivenThenFunction(f)
 }

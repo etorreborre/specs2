@@ -11,12 +11,12 @@ import Scalaz._
  */
 trait ResultImplicits {
 
-  implicit def verifyResultFunction[T, R <% Result](t: T => R) = new ResultFunctionVerification(t)
+  implicit def verifyResultFunction[T, R : AsResult](t: T => R) = new ResultFunctionVerification(t)
 
-  class ResultFunctionVerification[T, R](t: T => R)(implicit toResult: R => Result) {
+  class ResultFunctionVerification[T, R : AsResult](t: T => R) {
 
     /** apply the function to the value and convert to a Result */
-    def apply(value: T) = toResult(t(value))
+    def apply(value: T) = AsResult(t(value))
 
     /** @return the "and" of all results, stopping after the first failure */
     def forall[S <: Traversable[T]](seq: S) = {

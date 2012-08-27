@@ -6,6 +6,7 @@ import specification.RegexStep._
 import specification.{FormattingFragments => FF, _}
 import StandardResults._
 import control.ImplicitParameters
+import control.Functions._
 
 /**
  * Adding new implicits to support specs-like naming: "the system" should "do this" in { ... }
@@ -50,14 +51,14 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
   implicit def inExample(s: String): InExample = new InExample(s)
   /** transient class to hold an example description before creating a full Example */
   class InExample(s: String) {
-    def in[T <% Result](r: =>T): Example         = exampleFactory.newExample(s, r)
-    def in[T <% Result](f: String => T): Example = exampleFactory.newExample(s, f(s))
-    def in(block: =>Unit): Example               = exampleFactory.newExample(s, {block; success})
+    def in[T : AsResult](r: =>T): Example         = exampleFactory.newExample(s, r)
+    def in[T : AsResult](f: String => T): Example = exampleFactory.newExample(s, f(s))
+    def in(block: =>Unit): Example                = exampleFactory.newExample(s, {block; success})
 
-    def >>[T <% Result](r: =>T): Example         = in(r)
-    def >>[T <% Result](f: String => T): Example = in(f)
-    def in(gt: GivenThen): Example               = exampleFactory.newExample(s, gt)
-    def >>(gt: GivenThen): Example               = exampleFactory.newExample(s, gt)
+    def >>[T : AsResult](r: =>T): Example         = in(r)
+    def >>[T : AsResult](f: String => T): Example = in(f)
+    def in(gt: GivenThen): Example                = exampleFactory.newExample(s, gt)
+    def >>(gt: GivenThen): Example                = exampleFactory.newExample(s, gt)
 
     def >>(block: =>Unit)                                      : Unit = { lazy val b = block; >>(new NameSpace { b }); b }
     def >>[T <: Fragment](e: =>T)(implicit p: ImplicitParam)   : Unit = in(e)(p)
@@ -82,7 +83,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
    */
   implicit def `***If you see this message this means that you've forgotten an operator after the description string: you should write "example" >> result ***`(s: String): WarningForgottenOperator = new WarningForgottenOperator(s)
   class WarningForgottenOperator(s: String) {
-    def apply[T <% Result](r: =>T): Example = sys.error("there should be a compilation error!")
+    def apply[T : AsResult](r: =>T): Example = sys.error("there should be a compilation error!")
   }
 
 
@@ -138,18 +139,18 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     def <<(f: Seq[String] => Unit)(implicit p: ImplicitParam): Fragments = createStep(s, f(extractAll(s)))
 
     def <<(andThen: Then[Unit]): Example = createExample(s, andThen.extract((), s))
-    def <<[R <% Result](r: =>R): Example = createExample(s, r)
-    def <<[R <% Result](f: Function[String, R]): Example = createExample(s, f(extract1(s)))
-    def <<[R <% Result](f: Function2[String, String, R]): Example = createExample(s, f.tupled(extract2(s)))
-    def <<[R <% Result](f: Function3[String, String, String, R]): Example = createExample(s, f.tupled(extract3(s)))
-    def <<[R <% Result](f: Function4[String, String, String, String, R]): Example = createExample(s, f.tupled(extract4(s)))
-    def <<[R <% Result](f: Function5[String, String, String, String, String, R]): Example = createExample(s, f.tupled(extract5(s)))
-    def <<[R <% Result](f: Function6[String, String, String, String, String, String, R]): Example = createExample(s, f.tupled(extract6(s)))
-    def <<[R <% Result](f: Function7[String, String, String, String, String, String, String, R]): Example = createExample(s, f.tupled(extract7(s)))
-    def <<[R <% Result](f: Function8[String, String, String, String, String, String, String, String, R]): Example = createExample(s, f.tupled(extract8(s)))
-    def <<[R <% Result](f: Function9[String, String, String, String, String, String, String, String, String, R]): Example = createExample(s, f.tupled(extract9(s)))
-    def <<[R <% Result](f: Function10[String, String, String, String, String, String, String, String, String, String, R]): Example = createExample(s, f.tupled(extract10(s)))
-    def <<[R](f: Seq[String] => R)(implicit r: R => Result, p: ImplicitParam): Example = createExample(s, f(extractAll(s)))
+    def <<[R : AsResult](r: =>R): Example = createExample(s, r)
+    def <<[R : AsResult](f: Function[String, R]): Example = createExample(s, f(extract1(s)))
+    def <<[R : AsResult](f: Function2[String, String, R]): Example = createExample(s, f.tupled(extract2(s)))
+    def <<[R : AsResult](f: Function3[String, String, String, R]): Example = createExample(s, f.tupled(extract3(s)))
+    def <<[R : AsResult](f: Function4[String, String, String, String, R]): Example = createExample(s, f.tupled(extract4(s)))
+    def <<[R : AsResult](f: Function5[String, String, String, String, String, R]): Example = createExample(s, f.tupled(extract5(s)))
+    def <<[R : AsResult](f: Function6[String, String, String, String, String, String, R]): Example = createExample(s, f.tupled(extract6(s)))
+    def <<[R : AsResult](f: Function7[String, String, String, String, String, String, String, R]): Example = createExample(s, f.tupled(extract7(s)))
+    def <<[R : AsResult](f: Function8[String, String, String, String, String, String, String, String, R]): Example = createExample(s, f.tupled(extract8(s)))
+    def <<[R : AsResult](f: Function9[String, String, String, String, String, String, String, String, String, R]): Example = createExample(s, f.tupled(extract9(s)))
+    def <<[R : AsResult](f: Function10[String, String, String, String, String, String, String, String, String, String, R]): Example = createExample(s, f.tupled(extract10(s)))
+    def <<[R](f: Seq[String] => R)(implicit r: AsResult[R], p: ImplicitParam): Example = createExample(s, f(extractAll(s)))
 
   }
 
@@ -158,9 +159,9 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     addFragments(FF.bt)
     step(u)
   }
-  private def createExample[R <% Result](s: String, r: =>R) = {
+  private def createExample[R : AsResult](s: String, r: =>R) = {
     addFragments(FF.t)
-    val e = forExample(strip(s)) ! r
+    val e = exampleFactory.newExample(strip(s), r)
     addFragments(FF.bt)
     e
   }
@@ -193,7 +194,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     effect(specFragments = f(specFragments))
   }
 
-  protected def addExample[T <% Result](ex: =>Example): Example = {
+  protected def addExample(ex: =>Example): Example = {
     val example = ex
     addFragments(Fragments.createList(example))
     example

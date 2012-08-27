@@ -7,7 +7,7 @@ import org.mockito.verification.{ VerificationMode }
 import control.Exceptions._
 import matcher._
 import org.mockito.InOrder
-import execute.Result
+import execute.{AsResult, Result}
 
 /**
  * This trait provides methods to declare expectations on mock calls:<code>
@@ -129,16 +129,15 @@ trait CalledMatchers extends NumberOfTimes with FunctionArguments with TheMockit
   def noMoreCallsTo[T <: AnyRef](stubbed: IgnoreStubs): Unit = noMoreCallsTo(stubbed.mocks:_*)
 
 	/** implicit def supporting calls in order */
-  implicit def toInOrderMode[T <% Result](calls: =>T): ToInOrderMode[T] = new ToInOrderMode(calls)
+  implicit def toInOrderMode[T : AsResult](calls: =>T): ToInOrderMode[T] = new ToInOrderMode(calls)
   /** 
    * class defining a then method to declare that calls must be made in a specific order.
    * 
    * The orderedBy method can be used to declare the mock order if there are several mocks
    */
-  class ToInOrderMode[T <% Result](calls: =>T) {
-    def andThen[U](otherCalls: =>U): Result = {
-      calls and createExpectable(otherCalls).applyMatcher(checkCalls).toResult
-    }
+  class ToInOrderMode[T : AsResult](calls: =>T) {
+    def andThen[U](otherCalls: =>U): Result =
+      AsResult(calls) and createExpectable(otherCalls).applyMatcher(checkCalls).toResult
   }
 }
 

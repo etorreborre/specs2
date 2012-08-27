@@ -214,6 +214,45 @@ object Result {
   }
 
 }
+
+trait Results {
+  /**
+   * implicit definition to accept any boolean value as a Result
+   * This avoids writing b must beTrue
+   */
+  implicit def toResult(b: Boolean): Result =
+    if (b) execute.Success("true") else execute.Failure("false")
+
+}
+
+object Results extends Results
+
+/**
+ * Typeclass trait for anything that can be transformed to a Result
+ */
+trait AsResult[T] {
+  def asResult(t: =>T): Result
+}
+
+object AsResult {
+  /** implicit typeclass instance to create examples from Results */
+  implicit def resultAsResult[R <: Result]: AsResult[R] = new AsResult[R] {
+    def asResult(t: =>R): Result = t
+  }
+  /** implicit typeclass instance to create examples from Booleans */
+  implicit def booleanAsResult: AsResult[Boolean] = new AsResult[Boolean] {
+    def asResult(t: =>Boolean): Result = Results.toResult(t)
+  }
+
+  /** nicer syntax to use the AsResult syntax: AsResult(r) */
+  def apply[R : AsResult](r: =>R): Result = implicitly[AsResult[R]].asResult(r)
+
+  /** typeclass instance for types which are convertible to Result */
+  implicit def asResult[R <% Result]: AsResult[R] = new AsResult[R] {
+    def asResult(r: =>R): Result = r
+  }
+}
+
 /**
  * This class represents the success of an execution
  */

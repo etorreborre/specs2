@@ -12,16 +12,14 @@ class ResultImplicitsSpec extends Specification { def is =
                                                                                                               end
 
   def e1 = {
-    ((i: Int) => check(i must be_<=(2))).forall(Seq(1, 2, 3, 4)).message must_== "In the sequence '1, 2, 3, 4',"+
+    ((i: Int) => i must be_<=(2)).forall(Seq(1, 2, 3, 4)).message must_== "In the sequence '1, 2, 3, 4',"+
       " the 3rd element is failing: 3 is greater than 2"
   }
   def e2 = {
-    ((i: Int) => check(i must be_<=(2))).foreach(Seq(1, 2, 3, 4)).message must_== "3 is greater than 2; 4 is greater than 2"
+    ((i: Int) => i must be_<=(2)).foreach(Seq(1, 2, 3, 4)).message must_== "3 is greater than 2; 4 is greater than 2"
   }
   def e3 = {
-    ((i: Int) => check(i must be_<=(2))).atLeastOnce(Seq(1, 2, 3, 4))
+    ((i: Int) => i must be_<=(2)).atLeastOnce(Seq(1, 2, 3, 4))
   }
 
-  /** this function is necessary to check that the type conversion to Result is indeed working and not conflicting with T => MatchResult[S] */
-  def check[T <% Result](t: =>T): Result = t
 }

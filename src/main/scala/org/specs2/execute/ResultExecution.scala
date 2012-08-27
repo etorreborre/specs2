@@ -38,9 +38,9 @@ trait ResultExecution { outer =>
    *  - if the code throws an Exception return an Error
    *  - if the code returns a value of type T, convert it to a result
    */
-  def execute[T, R <% Result](code: =>T)(convert: T => R): Result = executeEither(code)(convert) match {
-    case Left(r)  => r
-    case Right(r) => r
+  def execute[T, R : AsResult](code: =>T)(convert: T => R): Result = executeEither(code)(convert) match {
+    case Left(r)  => AsResult(r)
+    case Right(r) => AsResult(r)
   }
 
   /**

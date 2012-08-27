@@ -6,6 +6,7 @@ import time._
 import execute._
 import matcher._
 import specification._
+import Functions._
 
 /**
  * The Specification trait can be extended to create a specification.
@@ -56,7 +57,9 @@ trait SpecificationFeatures extends FragmentsBuilder
    *
    * @see examples.DefineContextsSpec#BeforeWithImplicitContextSpec
    */
-  implicit def contextToResult[T](t: MatchResult[T])(implicit context: Context = defaultContext): Result = context(asResult(t))
+  implicit def contextAsResult[T, M[_] <: MatchResult[_]](implicit context: Context = defaultContext): AsResult[M[T]] = new AsResult[M[T]] {
+    def asResult(t: =>M[T]) = context(t.toResult)
+  }
 
   /**
    * apply an implicit Outside context to a function returning anything convertible to a result
@@ -64,5 +67,7 @@ trait SpecificationFeatures extends FragmentsBuilder
    * @see examples.DefineContextsSpec#OutsideWithImplicitContextSpec
    */
   /** use an available outside context to transform a function returning a value convertible to a result, into a result */
-  implicit def outsideFunctionToResult[T, R](implicit outside: Outside[T], conv: R => Result) : (T => R) => Result = (f: T => R) => outside((t: T) => conv(f(t)))
+  implicit def outsideFunctionToResult[T : Outside, R : AsResult]: AsResult[T => R] = new AsResult[T => R] {
+    def asResult(f: =>(T => R)) = implicitly[Outside[T]].apply((t: T) => AsResult(f(t)))
+  }
 }

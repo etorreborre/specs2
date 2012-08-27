@@ -571,7 +571,6 @@ You can use a custom `Exporter` from inside sbt by passing the `exporter` argume
 
   // User guide examples can be added here
   val argumentsSpec = new Specification { def is =
-    { args.report(color=false).color must beFalse } ^
-                                                    end
+    { args.report(color=false).color must beFalse }
   }
 }

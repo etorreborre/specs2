@@ -4,6 +4,7 @@ package specification
 import execute._
 import main._
 import internal.scalaz.Scalaz._
+import control.Functions._
 
 /**
  * This trait provides function to create specification Fragments:
@@ -14,7 +15,7 @@ import internal.scalaz.Scalaz._
  * 
  */
 private[specs2]
-trait FragmentsBuilder extends RegexSteps with ExamplesFactory { outer =>
+trait FragmentsBuilder extends RegexSteps with ExamplesFactory with Results { outer =>
 
   /**
    * Methods for chaining fragments
@@ -49,12 +50,13 @@ trait FragmentsBuilder extends RegexSteps with ExamplesFactory { outer =>
    * @return an Example description from a string, to create a full Example once the body is defined
    */
   implicit def forExample(s: String): ExampleDesc = new ExampleDesc(s)
+
   /** transient class to hold an example description before creating a full Example */
   class ExampleDesc(s: String) {
     /** @return an Example, using anything that can be translated to a Result, e.g. a Boolean */
-	  def ![T <% Result](t: =>T): Example = exampleFactory.newExample(s, t)
+	  def ![T : AsResult](t: =>T): Example = exampleFactory.newExample(s, t)
     /** @return an Example, using the example description */
-	  def ![T <% Result](f: String => T): Example = exampleFactory.newExample(s, f(s))
+	  def ![T : AsResult](f: String => T): Example = exampleFactory.newExample(s, f(s))
     /** @return an Example which a function using values extracted from the text */
 	  def !(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
   }
@@ -127,6 +129,10 @@ trait FragmentsBuilder extends RegexSteps with ExamplesFactory { outer =>
 
   /** transform a scope to a success to be able to create traits containing any variables and usable in any Examples */
   implicit def inScope(s: Scope): Success = Success()
+  /** typeclass to transform a Scope to a Result */
+  implicit def scopeAsResult[S <: Scope]: AsResult[S] = new AsResult[S] {
+    def asResult(t: =>S) = inScope(t)
+  }
 }
 
 /**
