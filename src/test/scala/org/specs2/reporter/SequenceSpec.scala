@@ -26,7 +26,7 @@ class SequenceSpec extends Specification with ScalaCheck with ArbitraryFragments
                                                                                                                         end
 
   case class steps() extends ScalaCheck with WithSelection {
-    implicit val params = set(maxSize -> 3)
+    implicit val params = set(maxSize = 3)
 
     def e1 = check { (fs: Fragments) =>
       val selected = selectSequence(fs ^ step("1"))

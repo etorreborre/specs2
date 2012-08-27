@@ -35,7 +35,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
       "several specific arbitrary instances"                                                                            ^
         (positiveInts, positiveInts) { (i:Int, j: Int) => i+j must be_>(0) }                                            ^p^
       "specific generation parameters"                                                                                  ^
-      { check { (i:Int) => (i > 0) ==> (i > 0) } set (minTestsOk->50) }                                                 ^p^
+      { check { (i:Int) => (i > 0) ==> (i > 0) } set (minTestsOk = 50) }                                                ^p^
                                                                                                                         p^
     "if it is proved the execution will yield a Success"                                                                ! prop1^
     "if it is a function which is always true, it will yield a Success"                                                 ! prop2^
@@ -181,7 +181,7 @@ class MutableSpecWithContextAndScalaCheck extends mutable.Specification with Sca
   "check something with before code" ! new SC {
     check { (s: String) =>
       s.reverse must_== aString
-    }.set(minTestsOk -> 200)
+    }.set(minTestsOk = 200)
   }
 
   trait SC extends mutable.Before with MockOutput {

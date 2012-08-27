@@ -10,7 +10,7 @@ import collection.Seqx._
 import Levels._
 import specification.FragmentsShow._
 
-  class LevelsSpec extends Specification with ScalaCheck with ScalazMatchers with ArbitraryFragments with Tags { def is = sequential^
+class LevelsSpec extends Specification with ScalaCheck with ScalazMatchers with ArbitraryFragments with Tags { def is = sequential^
                                                                                                                         """
   The Levels class is used to compute the 'level' of Fragments in a list of Fragments.                                  """^
                                                                                                                         p^
@@ -132,7 +132,7 @@ import specification.FragmentsShow._
     }
   }
 
-  implicit def params = set(maxSize -> 5, minTestsOk -> 1000)
+  implicit def params = set(maxSize = 5, minTestsOk = 1000)
 
   import Arbitrary._
 

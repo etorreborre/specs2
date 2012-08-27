@@ -13,9 +13,9 @@ import execute.AsResult
 /**
  * The ScalaCheckMatchers trait provides matchers which allow to
  * assess properties multiple times with generated data.
- * @see the <a href="http://code.google.com/p/scalacheck/">ScalaCheck project</a>
+ * @see the <a href="https://github.com/rickynils/scalacheck">ScalaCheck project</a>
  */
-trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with ScalaCheckParameters
+trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
    with FunctionPropertyImplicits
    with ResultPropertyImplicits
    with ApplicableArbitraries
@@ -91,53 +91,26 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
   implicit def checkProp(prop: Prop)(implicit p: Parameters): execute.Result =
     checkResultFailure(checkProperty(prop)(p))
 
-  /** set specific execution parameters on a Property */
-  implicit def setProperty(p: Prop) = new SetProperty(p)
-  class SetProperty(prop: Prop) {
-    def set(p: (Symbol, Int)*) = check(prop)(outer.set(p:_*))
-    def display(p: (Symbol, Int)*) = check(prop)(outer.display(p:_*))
-  }
-  
   /**
    * checks if the property is true for each generated value, and with the specified
    * generation parameters <code>p</code>. <code>p</code> is transformed into a scalacheck parameters
-   * and indicates if the generation should be verbose or not
    */
   private[specs2] def checkProperty(prop: Prop)(implicit p: Parameters): execute.Result = {
-    checkScalaCheckProperty(prop)(Params(p(minTestsOk), p(maxDiscarded), p(minSize), p(maxSize), StdRand, p(workers)), p.verbose)
+    checkScalaCheckProperty(prop)(p.toScalaCheckParameters)
   }
 
   /**
    * checks if the property is true for each generated value, and with the specified
    * scalacheck parameters. If verbose is true, then print the results on the console
    */
-  private [matcher] def checkScalaCheckProperty(prop: =>Prop)(params: Params, verbose: Boolean): execute.Result = {
-    // will print the result of each test if verbose = true
-    val callback = new Test.TestCallback {
-      override def onPropEval(name: String, threadXdx: Int, succeeded: Int, discarded: Int): Unit = {
-        if (verbose) {
-          if (discarded == 0)
-            printf("\rPassed %d tests", succeeded)
-          else
-            printf("\rPassed %d tests; %d discarded", succeeded, discarded)
-          flush
-        }
-      }
-    }
-
+  private [matcher] def checkScalaCheckProperty(prop: =>Prop)(params: Test.Parameters): execute.Result = {
     // check the property with ScalaCheck
-    val results = checkProp(params, prop, callback)
-
-    // display the final result if verbose = true
-    if (verbose) {
-      val s = prettyTestRes(results)(defaultPrettyParams)
-      printf("\r%s %s%s\n", if (results.passed) "+" else "!", s, List.fill(70 - s.length)(" ").mkString(""))
-    }
+    val result = Test.check(params, prop)
 
     def counterExampleMessage(args: Prop.Args, n: Int, labels: Set[String]) =
       "A counter-example is "+counterExample(args)+" (" + afterNTries(n) + afterNShrinks(args) + ")" + failedLabels(labels)
 
-    results match {
+    result match {
       case Result(Proved(as), succeeded, discarded, fq, _) =>
         execute.Success(noCounterExample(succeeded), frequencies(fq), succeeded)
       case Result(Passed, succeeded, discarded, fq, _)     =>
@@ -306,59 +279,110 @@ trait ApplicableArbitraries { this: ScalaCheckMatchers =>
 
 }
 /**
- * This trait is used to facilitate testing by mocking ScalaCheck functionalities
- */
-trait ScalaCheckFunctions {
-  def checkProp(params: Params, prop: =>Prop, callback: Test.TestCallback) = Test.check(params.copy(testCallback = callback), prop)
-}
-/**
  * This trait provides generation parameters to use with the <code>ScalaCheckMatchers</code>
  */
-trait ScalaCheckParameters {
+trait ScalaCheckParameters { this: ScalaCheckMatchers =>
   /**
-   * Values which can be used as Symbol aliases to specify ScalaCheck parameters<br>
-   * The naming is a bit different, in order to keep short names for frequent use cases<ul>
-   *  <code><li>minTestsOk == minSuccessfulTests
-   *  <li>maxDiscarded == maxDiscardedTests
-   *  <li>minSize and maxSize keep their name <code><ul>
+   * default parameters. Uses ScalaCheck default values and doesn't print anything to the console
    */
-  val (minSize, maxSize, maxDiscarded, minTestsOk, workers) = ('minSize, 'maxSize, 'maxDiscarded, 'minTestsOk, 'workers)
-   /**
-    * default parameters. Uses ScalaCheck default values and doesn't print anything to the console
-    */
-   implicit def defaultParameters = new Parameters(setParams(Nil))
+  implicit def defaultParameters = new Parameters()
+  /** default parameters to display pretty messages */
+  implicit def defaultPrettyParams = Pretty.defaultParams
 
-   /** default parameters to display pretty messages */		   
-   implicit def defaultPrettyParams = Pretty.defaultParams
-   /**
-    * Default values for ScalaCheck parameters
-    */
-   def defaultValues = Map(minTestsOk->100, maxDiscarded ->500, minSize->0, maxSize->100, workers->1)
-
-   /** factory object to create parameters with verbose = false */
-   object set extends Parameters(setParams(Nil)) {
-     def apply(p: (Symbol, Int)*) = new Parameters(setParams(p))
-   }
-   /** factory object to create parameters with verbose = true */
-   object display  extends Parameters(setParams(Nil)) {
-     def apply(p: (Symbol, Int)*) = new Parameters(setParams(p)) { override def verbose = true }
-     override def verbose = true
-   }
-   private def setParams(p: Seq[(Symbol, Int)]): Map[Symbol, Int] = {
-     p.foldLeft(defaultValues) { (res: Map[Symbol, Int], pair: (Symbol, Int)) =>
-       //  this is a useful check in case of print(null) or set(null)
-       if (pair == null || pair._1 == null)
-         throw new RuntimeException("null values are not accepted in scalacheck parameters: '"+pair+"'")
-       res updated (pair._1, pair._2)
-     }
+  /** set specific execution parameters on a Property */
+  implicit def setProperty(p: Prop) = new SetProperty(p)
+  class SetProperty(prop: Prop) {
+    /** create parameters with verbose = false */
+    def set(minTestsOk: Int             = defaultParameters.minTestsOk,
+            minSize: Int                = defaultParameters.minSize,
+            maxDiscardRatio: Float      = defaultParameters.maxDiscardRatio,
+            maxSize: Int                = defaultParameters.maxSize,
+            workers: Int                = defaultParameters.workers,
+            rng: java.util.Random       = defaultParameters.rng,
+            callback: Test.TestCallback = defaultParameters.callback,
+            loader: Option[ClassLoader] = defaultParameters.loader): execute.Result =
+      check(prop)(new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = false))
   }
+
+  /** set specific execution parameters on a Property */
+  implicit def displayProperty(p: Prop) = new DisplayProperty(p)
+  class DisplayProperty(prop: Prop) {
+    /** create parameters with verbose = true */
+    def display(minTestsOk: Int             = defaultParameters.minTestsOk,
+                minSize: Int                = defaultParameters.minSize,
+                maxDiscardRatio: Float      = defaultParameters.maxDiscardRatio,
+                maxSize: Int                = defaultParameters.maxSize,
+                workers: Int                = defaultParameters.workers,
+                rng: java.util.Random       = defaultParameters.rng,
+                callback: Test.TestCallback = defaultParameters.callback,
+                loader: Option[ClassLoader] = defaultParameters.loader): execute.Result =
+      check(prop)(new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = true))
+  }
+
+  /** create parameters with verbose = false */
+  def set(minTestsOk: Int             = defaultParameters.minTestsOk,
+          minSize: Int                = defaultParameters.minSize,
+          maxDiscardRatio: Float      = defaultParameters.maxDiscardRatio,
+          maxSize: Int                = defaultParameters.maxSize,
+          workers: Int                = defaultParameters.workers,
+          rng: java.util.Random       = defaultParameters.rng,
+          callback: Test.TestCallback = defaultParameters.callback,
+          loader: Option[ClassLoader] = defaultParameters.loader): Parameters =
+    new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = false)
+
+  /** create parameters with verbose = true */
+  def display(minTestsOk: Int             = defaultParameters.minTestsOk,
+              minSize: Int                = defaultParameters.minSize,
+              maxDiscardRatio: Float      = defaultParameters.maxDiscardRatio,
+              maxSize: Int                = defaultParameters.maxSize,
+              workers: Int                = defaultParameters.workers,
+              rng: java.util.Random       = defaultParameters.rng,
+              callback: Test.TestCallback = defaultParameters.callback,
+              loader: Option[ClassLoader] = defaultParameters.loader): Parameters =
+    new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = true)
+
 }
+
 /**
- * This class is the base class for the display and set case classes.<br>
- * It contains a Map of generation parameters and indicates if the generation
- * must be verbose.
- */
-case class Parameters(params: Map[Symbol, Int]) {
-  def apply(s: Symbol) = params(s)
-  def verbose = false
+* This class is the base class for the display and set case classes.<br>
+* It contains a Map of generation parameters and indicates if the generation
+* must be verbose.
+*/
+case class Parameters(minTestsOk: Int             = Test.Parameters.default.minSuccessfulTests,
+                      minSize: Int                = Test.Parameters.default.minSize,
+                      maxDiscardRatio: Float      = Test.Parameters.default.maxDiscardRatio,
+                      maxSize: Int                = Test.Parameters.default.maxSize,
+                      workers: Int                = Test.Parameters.default.workers,
+                      rng: java.util.Random       = Test.Parameters.default.rng,
+                      callback: Test.TestCallback = Test.Parameters.default.testCallback,
+                      loader: Option[ClassLoader] = Test.Parameters.default.customClassLoader,
+                      verbose: Boolean            = false) { outer =>
+
+  def testCallback(implicit pretty: Pretty.Params) = if (verbose) callback.chain(verboseCallback) else callback
+
+  def toScalaCheckParameters(implicit pretty: Pretty.Params): Test.Parameters =
+    new Test.Parameters {
+      def minSuccessfulTests = outer.minTestsOk
+      def maxDiscardRatio    = outer.maxDiscardRatio
+      def maxSize            = outer.maxSize
+      def minSize            = outer.minSize
+      def workers            = outer.workers
+      def rng                = outer.rng
+      def testCallback       = outer.testCallback
+      def customClassLoader  = outer.loader
+    }
+
+  def verboseCallback(implicit pretty: Pretty.Params) = new Test.TestCallback {
+    override def onPropEval(name: String, threadXdx: Int, succeeded: Int, discarded: Int): Unit = {
+      if (discarded == 0) printf("\rPassed %d tests", succeeded)
+      else                printf("\rPassed %d tests; %d discarded", succeeded, discarded)
+    }
+    override def onTestResult(name: String, result: Test.Result) = {
+      val s = prettyTestRes(result)(pretty)
+      printf("\r%s %s%s\n", if (result.passed) "+" else "!", s, List.fill(70 - s.length)(" ").mkString(""))
+    }
+  }
+
 }
+
+

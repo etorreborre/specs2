@@ -253,21 +253,24 @@ ScalaCheck also allows to create `Prop`s directly with the `Prop.forAll` method 
 
 ScalaCheck test generation can be tuned with a few properties. If you want to change the default settings, you have to use implicit values:
 
-      implicit val params = set(minTestsOk -> 20) // use display instead of set to get additional console printing
+      implicit val params = Parameters(minTestsOk = 20) // add "verbose = true" to get additional console printing
 
 It is also possible to specifically set the execution parameters on a given property:
 
       "this is a specific property" ! prop { (a: Int, b: Int) =>
         (a + b) must_== (b + a)
-      }.set(minTestsOk -> 200, workers -> 3)
+      }.set(minTestsOk = 200, workers = 3) // use "display" instead of "set" for additional console printing
 
 The parameters you can modify are:
 
-  * `minTestsOk`: minimum of tests which must be ok before the property is ok (default=100)
-  * `maxDiscarded`: if the data generation discards too many values, then the property can't be proven (default=500)
-  * `minSize`: minimum size for the "sized" data generators, like list generators (default=0)
-  * `maxSize`: maximum size for the "sized" data generators (default=100)
-  * `workers`: number of threads checking the property (default=1)
+  * `minTestsOk`: minimum of tests which must be ok before the property is ok (default = 100)
+  * `maxDiscardRatio`: if the data generation discards too many values, then the property can't be proven (default =0 .2)
+  * `minSize`: minimum size for the "sized" data generators, like list generators (default = 0)
+  * `maxSize`: maximum size for the "sized" data generators (default = 100)
+  * `workers`: number of threads checking the property (default = 1)
+  * `rng`: the random number generator (default = `new java.util.Random`)
+  * `callback`: a ScalaCheck TestCallback (see the ScalaCheck documentation)
+  * `loader`: a custom classloader (see the ScalaCheck documentation)
 
 ### Mock expectations
 
@@ -616,7 +619,7 @@ In specs2, those 2 methods are defined by the `org.specs2.matcher.ThrownMessages
 
  lazy val scalaCheckExamples = new Specification with ScalaCheck {
     import org.scalacheck._
-    implicit val params = set(minTestsOk -> 20)
+    implicit val params = set(minTestsOk = 20)
 
     def is = "Scalacheck".title ^
     "addition and multiplication are related" ! Prop.forAll { (a: Int) => a + a == 2 * a }             ^
@@ -625,7 +628,7 @@ In specs2, those 2 methods are defined by the `org.specs2.matcher.ThrownMessages
     "addition and multiplication are related" ! prop { (a: Int) => (a > 0) ==> (a + a must_== 2 * a) } ^
     "this is a specific property" ! prop { (a: Int, b: Int) =>
       (a + b) must_== (b + a)
-    }.set(minTestsOk -> 200, workers -> 1)                                                             ^
+    }.set(minTestsOk = 200, workers = 1)                                                             ^
                                                                                                        end
   }
 

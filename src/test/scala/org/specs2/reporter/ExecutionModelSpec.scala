@@ -21,13 +21,13 @@ class ExecutionModelSpec extends Specification with ScalaCheck { def is =
       val reporter = newReporter
       reporter.report(simpleLabel(spec, reporter.textOutput))(arguments <| args(sequential=true))
       reporter.outputLabels must beSorted
-    }.set(minSize -> 3, maxSize -> 7, workers -> 4)
+    }.set(minSize = 3, maxSize = 7, workers = 4)
 
     def concurrent = check { spec: Specification =>
       val reporter = newReporter
       reporter.report(simpleLabel(spec, reporter.textOutput))
       reporter.outputLabels must beSorted
-    }.set(minSize -> 3, maxSize -> 7).not
+    }.set(minSize = 3, maxSize = 7).not
 
     def steps = check { spec: Specification =>
       val reporter = newReporter
@@ -41,7 +41,7 @@ class ExecutionModelSpec extends Specification with ScalaCheck { def is =
         }
         else ok
       }
-    }.set(minSize -> 3, maxSize -> 8, minTestsOk -> 50)
+    }.set(minSize = 3, maxSize = 8, minTestsOk = 50)
   }
 
   trait Report {
