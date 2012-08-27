@@ -130,6 +130,10 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
   "the be_== matcher must be robust in face of"                                                                         ^
     "a null object"                                                                                                     ! robust1^
     "a non-traversable collection"                                                                                      ! robust2^
+                                                                                                                        p^
+  "the be_== matcher must warn when comparing 2 objects with the same toString representation but not the same class"   ^
+    "with List[Int] and List[String]"                                                                                   ! robust3^
+    "with 'hello': String and 'hello': Hello"                                                                           ! robust4^
                                                                                                                         end
                                                                                           
   def e1 = (List(1, 2) must beLike { case List(a, b) => (a + b) must_== 2 }) returns 
@@ -175,7 +179,14 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
     val (t1, t2) = (newTraversable, newTraversable)
     (t1 must_== t2) must not(throwAn[Exception])
   }
-
+  def robust3 = {
+    (List(1, 2) must_== List("1", "2")) must beFailing(
+      "\\Q'1, 2' is not equal to '1, 2'. Values have the same string representation but possibly different types like List[Int] and List[String]\\E")
+  }
+  def robust4 = {
+    ("hello" must_== Hello()) must beFailing(
+      "\\Q'hello': java.lang.String is not equal to 'hello': org.specs2.matcher.Hello\\E")
+  }
 }
 
 trait TraversableWithNoDefinedForeach[T] extends Traversable[T] {
@@ -184,3 +195,5 @@ trait TraversableWithNoDefinedForeach[T] extends Traversable[T] {
 
 trait Type1
 trait Type2
+
+case class Hello() { override def toString = "hello" }
