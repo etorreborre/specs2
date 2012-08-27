@@ -99,7 +99,7 @@ trait NestedBlocks {
               res.updateLabel(_.update(st)).addChild(cur.update(en)).getParent
             }
           }
-        }.root.tree.flatten.map(_.value).toSeq
+        }.root.tree.flattenLeft.map(_.value).toSeq
       }
     }
   }
