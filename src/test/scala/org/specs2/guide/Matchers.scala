@@ -532,7 +532,12 @@ DataTables are a very effective way of grouping several similar examples into on
         }
       }
 
-Note that there may be implicit definition conflicts when the first parameter of a row is a String. In that case you can use the `!!` operator to disambiguate (and `||` in the header for good visual balance).
+#### Implicit !
+
+There may be an implicit definition conflict when the first parameter of a row is a String, because examples can also be created by using the `!` operator after a String. In that case, depending on which kind of specification you use, you can either:
+
+ * with an acceptance specification: use the `!!` operator to disambiguate (and `||` in the header for good visual balance)
+ * with a unit specification: use the `org.specs2.mutable.Tables` trait instead of `org.specs2.matcher.DataTables` trait. This will "deactivate" the implicit used to create examples with `!`
 
 ### Forms
 
