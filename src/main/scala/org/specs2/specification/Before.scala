@@ -7,13 +7,13 @@ import execute._
  * generic trait for Before, After, Around
  */
 trait Context extends Scope {
-  def apply[T <% Result](a: =>T): Result
+  def apply[T : AsResult](a: =>T): Result
 }
 /**
  * The Before trait can be inherited by classes representing a context
  * where an action must be executing before the main executable action
  * 
- * @see Example to understand why the type T must <% Result
+ * @see Example to understand why the type T must : AsResult
  */
 trait Before extends Context { outer =>
 
@@ -29,8 +29,8 @@ trait Before extends Context { outer =>
    * - with a non-Success result
    * - with a non-Success match result
    */
-  def apply[T <% Result](a: =>T): Result = {
-    ResultExecution.execute(before)((any: Any) => a)(AsResult.asResult)
+  def apply[T : AsResult](a: =>T): Result = {
+    ResultExecution.execute(before)((any: Any) => AsResult(a))
   }
   
   /** compose the actions of 2 Before traits */

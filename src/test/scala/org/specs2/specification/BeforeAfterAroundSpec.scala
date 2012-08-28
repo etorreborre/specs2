@@ -2,7 +2,7 @@ package org.specs2
 package specification
 
 import io.MockOutput
-import execute.Result
+import execute.{AsResult, Result}
 import _root_.org.specs2.mutable.{Specification => Spec}
 
 class BeforeAfterAroundSpec extends Specification { def is =
@@ -63,7 +63,7 @@ class BeforeAfterAroundSpec extends Specification { def is =
 
   def around = executeContains(
     new Spec with AroundExample with MockOutput {
-      def around[R <% Result](r: =>R) = { println("around"); r }
+      def around[R : AsResult](r: =>R) = { println("around"); AsResult(r) }
       "ex1" ! success
     },"around")
 
@@ -79,7 +79,7 @@ class BeforeAfterAroundSpec extends Specification { def is =
     new Spec with BeforeAfterAroundExample with MockOutput {
       def before = println("before")
       def after = println("after")
-      def around[R <% Result](r: =>R) = { println("around"); r }
+      def around[R : AsResult](r: =>R) = { println("around"); AsResult(r) }
       "ex1" ! success
     }, "before", "around", "after")
 

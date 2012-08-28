@@ -31,10 +31,10 @@ trait ExamplesTimeout extends AroundExample with MustMatchers with TerminationMa
 
   def timeout = commandLineTimeOut.getOrElse(100.millis)
 
-  def around[T <% Result](t: =>T) = {
+  def around[T : AsResult](t: =>T) = {
     lazy val result = t
     val termination = result must terminate[T](sleep = timeout).orSkip((ko: String) => "TIMEOUT: "+timeout)
-    termination.toResult and result
+    termination.toResult and AsResult(result)
   }
 
 }
