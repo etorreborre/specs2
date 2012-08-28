@@ -135,7 +135,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
     def before = clear()
     def executionMessages(prop: Prop) = { execute(prop); messages.mkString }
 
-    implicit def params = display(minTestsOk -> 20)
+    implicit def params = display(minTestsOk = 20)
     def e1 = execute(trueFunction.forAll).expectationsNb must_== 20
     def e2 = executionMessages(trueFunction.forAll) must contain("passed 20 tests")
     def e3 = executionMessages(falseFunction.forAll :| "my property") must contain("my property")

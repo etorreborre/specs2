@@ -10,12 +10,12 @@ import execute._
  * This can be used for example to execute some code inside a webapp session, using the session object to
  * create expectations
  * 
- * @see Example to understand why the type T must <% Result
+ * @see Example to understand why the type T must : AsResult
  */
 trait Outside[+T] { outer =>
   def outside: T
-  def apply[R <% Result](a: T => R) = {
-    ResultExecution.execute(outside)(a)(AsResult.asResult)
+  def apply[R : AsResult](a: T => R) = {
+    ResultExecution.execute(outside)(a)
   }
 }
 
@@ -23,14 +23,14 @@ trait Outside[+T] { outer =>
  * The AroundOutside trait can be inherited by classes which will execute some code inside a given context, with a
  * function using that context and actions before and after if necessary.
  *
- * @see Example to understand why the type T must <% Result
+ * @see Example to understand why the type T must : AsResult
  */
 trait AroundOutside[+T] extends Around with Outside[T] { outer =>
   /** something can be done before and after the whole execution */
-  def around[R <% Result](a: =>R): Result
+  def around[R : AsResult](a: =>R): Result
 
-  override def apply[R <% Result](a: T => R) = {
-    around(ResultExecution.execute(outside)(a)(AsResult.asResult))
+  override def apply[R : AsResult](a: T => R) = {
+    around(ResultExecution.execute(outside)(a))
   }
 }
 

@@ -837,7 +837,7 @@ Some examples need to be executed in a given context. For example you're testing
 In that case you can extend the `Around` trait and specify the `around` method:
 
       object http extends Around {
-        def around[T <% Result](t: =>T) = openHttpSession("test") {
+        def around[T : AsResult](t: =>T) = openHttpSession("test") {
           t  // execute t inside a http session
         }
       }
@@ -870,7 +870,7 @@ We can also combine both the `Around` and the `Outside` behaviors with the `Arou
 
       object http extends AroundOutside[HttpReq] {
         // create a context
-        def around[T <% Result](t: =>T) = {
+        def around[T : AsResult](t: =>T) = {
           createNewDatabase
           // execute the code inside a databaseSession
           inDatabaseSession { t }

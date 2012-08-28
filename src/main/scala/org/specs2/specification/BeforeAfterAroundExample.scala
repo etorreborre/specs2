@@ -1,7 +1,7 @@
 package org.specs2
 package specification
 
-import execute.Result
+import execute.{AsResult, Result}
 
 /**
  * For each created example use a given Before context
@@ -42,9 +42,9 @@ trait AroundContextExample[C <: Around] extends ExamplesFactory {
  * For each created example use a given around method
  */
 trait AroundExample extends AroundContextExample[Around] { outer =>
-  protected def around[T <% Result](t: =>T): Result
+  protected def around[T : AsResult](t: =>T): Result
   def aroundContext: Around = new Around {
-    def around[T <% Result](t: =>T) = outer.around(t)
+    def around[T : AsResult](t: =>T) = outer.around(t)
   }
 }
 /**
@@ -78,10 +78,10 @@ trait BeforeAfterAroundContextExample[C <: BeforeAfterAround] extends ExamplesFa
 trait BeforeAfterAroundExample extends BeforeAfterAroundContextExample[BeforeAfterAround] { outer =>
   protected def before: Any
   protected def after: Any
-  protected def around[T <% Result](t: =>T): Result
+  protected def around[T : AsResult](t: =>T): Result
   def beforeAfterAroundContext: BeforeAfterAround = new BeforeAfterAround {
     def before = outer.before
     def after = outer.after
-    def around[T <% Result](t: =>T): Result = outer.around(t)
+    def around[T : AsResult](t: =>T): Result = outer.around(t)
   }
 }

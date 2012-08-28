@@ -37,6 +37,6 @@ class DefaultExampleFactory extends ExampleFactory {
  */
 private[specs2]
 class DecoratedExampleFactory(factory: =>ExampleFactory, function: Context) extends ExampleFactory {
-  override def newExample[T : AsResult](s: String, t: =>T) = factory.newExample(s, function(t)(toStrictFunction1(AsResult(_))))
+  override def newExample[T : AsResult](s: String, t: =>T) = factory.newExample(s, function(t))
   def newExample(e: Example) = e
 }

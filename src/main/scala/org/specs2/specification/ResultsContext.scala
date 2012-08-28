@@ -1,7 +1,7 @@
 package org.specs2
 package specification
 
-import execute.Result
+import execute.{AsResult, Result}
 import execute.Result._
 import matcher.StoredExpectations
 
@@ -28,9 +28,9 @@ trait StoredExpectationsContext extends StoredExpectations with StoredResultsCon
  * and returns the 'storedResults' as the summary of all results
  */
 trait StoredResultsContext extends Context { this: { def storedResults: Seq[Result]} =>
-  def apply[T <% Result](r: =>T): Result = {
+  def apply[T : AsResult](r: =>T): Result = {
     // evaluate r, triggering side effects
-    r
+    AsResult(r)
     issues(storedResults, "\n")
   }
 }

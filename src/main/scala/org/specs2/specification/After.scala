@@ -7,7 +7,7 @@ import execute._
  * The After trait can be inherited by classes representing a context
  * where an action must be executing after the main executable action
  * 
- * @see Example to understand why the type T must <% Result
+ * @see Example to understand why the type T must : AsResult
  */
 trait After extends Context { outer =>
 
@@ -17,8 +17,8 @@ trait After extends Context { outer =>
    * execute an action returning a Result
    * and finally the after action 
    */
-  def apply[T <% Result](a: =>T): Result = {
-	  try { a }
+  def apply[T : AsResult](a: =>T): Result = {
+	  try { AsResult(a) }
 	  finally { after	}
   } 
   

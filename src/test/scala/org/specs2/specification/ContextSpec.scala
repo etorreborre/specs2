@@ -243,7 +243,7 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
     def after = println("after")
   }
   trait aroundContext extends Around {
-    def around[R <% Result](r: =>R) = { println("before"); try { r } finally { println("after") }}
+    def around[R : AsResult](r: =>R) = { println("before"); try { AsResult(r) } finally { println("after") }}
   }
   trait beforeMutableContext extends MBefore {
     def before = println("before")
@@ -252,7 +252,7 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
     def after = println("after")
   }
   trait aroundMutableContext extends MAround {
-    def around[R <% Result](r: =>R) = { println("before"); try { r } finally { println("after") }}
+    def around[R : AsResult](r: =>R) = { println("before"); try { AsResult(r) } finally { println("after") }}
   }
 
 
@@ -304,10 +304,10 @@ trait ContextsForFragments extends MockOutput {
 	  def after = error("error")
   }
   object around extends Around {
-	  def around[T <% Result](a: =>T) = { println("around"); a } 
+	  def around[T : AsResult](a: =>T) = { println("around"); AsResult(a) }
   }
   object around2 extends Around {
-    def around[T <% Result](a: =>T) = { println("around2"); a } 
+    def around[T : AsResult](a: =>T) = { println("around2"); AsResult(a) }
   }
   object outside extends Outside[String] {
 	  def outside = { println("outside"); "string" }
@@ -320,7 +320,7 @@ trait ContextsForFragments extends MockOutput {
   }
   object aroundOutside extends AroundOutside[String] {
 	  def outside = { println("outside"); "string" }
-    def around[T <% Result](a: =>T) = { println("around"); a }
+    def around[T : AsResult](a: =>T) = { println("around"); AsResult(a) }
   }
   object beforeAfter extends BeforeAfter {
 	  def before = println("before")
@@ -333,11 +333,11 @@ trait ContextsForFragments extends MockOutput {
   object beforeAfterAround extends BeforeAfterAround {
 	  def before = println("before")
 	  def after = println("after")
-	  def around[T <% Result](a: =>T) = { println("around"); a } 
+	  def around[T : AsResult](a: =>T) = { println("around"); AsResult(a) }
   }
   object before2After2Around2 extends BeforeAfterAround {
     def before = println("before2")
     def after = println("after2")
-    def around[T <% Result](a: =>T) = { println("around2"); a } 
+    def around[T : AsResult](a: =>T) = { println("around2"); AsResult(a) }
   }
 }
