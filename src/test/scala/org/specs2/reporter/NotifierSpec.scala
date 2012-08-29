@@ -1,9 +1,8 @@
 package org.specs2
 package reporter
-import scala.collection.JavaConversions.asIterable
+
 import mock.Mockito
 import specification._
-import main.Arguments
 import execute._
 
 class NotifierSpec extends Specification with Mockito with Tags { def is = sequential ^
@@ -37,6 +36,7 @@ A Notifier can be used to get a stream of events for the execution of a Specific
     "but only if it fails"                                                                                              ! step1^
                                                                                                                         endp^
   "The SpecEnd is notified"                                                                                             ! end1^
+  "Fragments should be printed in the right order"                                                                      ! order1^
                                                                                                                         end
 
 
@@ -62,6 +62,27 @@ A Notifier can be used to get a stream of events for the execution of a Specific
   def step1  = there was atLeastOne(notified).exampleFailure(anyString, matching("clean failed"), anyString, any[Throwable], any[Details], anyLong)
   def end1   = there was one(notified).specEnd(anyString, anyString)
 
+  def order1 = reportMessages(spec) === Seq(
+    "specStart:  NotifierSpecification",
+    "text:  intro",
+    "contextStart:  first group",
+    "exampleStarted:  ex1",
+    "exampleSuccess:  ex1",
+    "exampleStarted:  ex2",
+    "exampleFailure:  ex2",
+    "exampleStarted:  ex3",
+    "exampleError:  ex3",
+    "exampleStarted:  ex4",
+    "exampleSkipped:  ex4",
+    "exampleStarted:  ex5",
+    "examplePending:  ex5",
+    "exampleStarted:  ex6",
+    "exampleSuccess:  ex6",
+    "exampleStarted:  step failure",
+    "exampleFailure:  step failure",
+    "contextEnd:  first group",
+    "specEnd:  NotifierSpecification")
+
   def notified: Notifier = notified(spec)
   def notified(s: Specification): Notifier = {
     val r = reporter
@@ -73,6 +94,14 @@ A Notifier can be used to get a stream of events for the execution of a Specific
   def withXOnly = new Specification { def is  = xonly ^ "ex1" ! success ^ "ex2" ! failure }
   def reporter = new NotifierReporter {
     val notifier = mock[Notifier]
+  }
+
+  def reportMessages(s: Specification) = {
+    val messagesNotifier = MessagesNotifier
+    new NotifierReporter {
+      val notifier = messagesNotifier
+    }.report(s)(s.content.arguments)
+    messagesNotifier.messages.map(_.split("\\:").take(2).mkString(": "))
   }
 }
 
