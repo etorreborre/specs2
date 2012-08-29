@@ -42,7 +42,7 @@ trait AutoExamples extends AutoExamplesLowImplicits { this: FragmentsBuilder =>
     def eg = dataTableExample(expression)
   }
   /** explicit call */
-  def eg[T](expression: =>execute.DecoratedResult[T]): ToDataTableExample[T] = aDataTableExample(expression)
+  def eg[T](expression: =>execute.DecoratedResult[T])(implicit p: ImplicitParam): Example = dataTableExample(expression)
 
 }
 
