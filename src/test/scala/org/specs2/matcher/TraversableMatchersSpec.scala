@@ -21,6 +21,12 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
     { "abc" must contain('b') }                                                                                         ^
     { (List(1, 2) must contain(0)) returns "'1, 2' doesn't contain '0'" }                                               ^
     "with a subclass"                                                                                                   ! subclass().e1^
+    { Seq(1, 2, 3, 4) must have oneElementLike  { case i if i > 2 => (i % 2) must_== 0 } }                              ^
+    { Seq(1, 2, 3, 4) must have allElementsLike { case i if i > 2 => i must be_>=(1)   } }                              ^
+    { (Seq(1, 2, 3, 4) must have oneElementLike { case i if i > 3 => (i % 2) must_== 1 }) returns
+      "in '1, 2, 3, 4'\nno element is correct\n4: '0' is not equal to '1'" }                                            ^
+    { (Seq(1, 2, 3, 4) must have allElementsLike { case i if i > 2 => i must be_>=(4)   }) returns
+      "in '1, 2, 3, 4'\nsome elements are not correct\n3: 3 is less than 4" }                                           ^
                                                                                                                         bt^
     "with adapation"                                                                                                    ^
     { List(1, 2, 3) must contain(4, 3, 2) ^^ ((i: Int, j: Int) => i-j <= 1) }                                           ^

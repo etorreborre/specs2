@@ -221,6 +221,12 @@ Traversables can be checked with several matchers:
  * to check if one of the elements has a given property
  `List("Hello", "World") must have(_.size >= 5)`
 
+ * to check if one of the elements matching a partial function is ok
+ `List(1, 2, 3, 4) must haveOneElementLike { case i if i > 2 => (i % 2) must_== 0 }`
+
+ * to check if all elements matching a partial function are ok
+ `List(1, 2, 3, 4) must haveAllElementsLike { case i if i > 2 => i must be_<(10) }`
+
  * to check if a traversable has the same elements as another one, regardless of the order, recursively (
  `List("Hello", "World") must haveTheSameElementsAs(List("World", "Hello"))`
  `List("Hello", "World") must haveTheSameElementsAs(List("World", "Hello"), equalArrays)` // with your own equality method
