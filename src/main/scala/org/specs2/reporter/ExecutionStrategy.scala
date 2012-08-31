@@ -103,8 +103,8 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
     fs.fragments.map {
       case f: Example => PromisedExecutingFragment(promise(executeWithBarrier(f))(strategy), f)
       case f: Action  => PromisedExecutingFragment(promise(executeWithBarrier(f))(strategy), f)
-      case f: Step    => LazyExecutingFragment(() => executeWithBarrier(f), f)
-      case f: SpecEnd => LazyExecutingFragment(() => executeWithBarrier(f), f)
+      case f: Step    => FinishedExecutingFragment(executeWithBarrier(f), f)
+      case f: SpecEnd => FinishedExecutingFragment(executeWithBarrier(f), f)
       case f          => FinishedExecutingFragment(executeFragment(args)(f), f)
     }
   }

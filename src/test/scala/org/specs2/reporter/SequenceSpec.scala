@@ -23,6 +23,7 @@ class SequenceSpec extends Specification with ScalaCheck with ArbitraryFragments
   "if a specification contains the 'sequential' argument"                                                               ^
     "all examples must be executed in a sequence"                                                                       ! seq().e1^
     "with a Reporter"                                                                                                   ! seq().e2^
+    "included specifications must have their own arguments"                                                             ! seq().e3^
                                                                                                                         end
 
   case class steps() extends ScalaCheck with WithSelection {
@@ -51,13 +52,11 @@ class SequenceSpec extends Specification with ScalaCheck with ArbitraryFragments
     def e5 = {
       val fragments: Fragments = "intro" ^ step("1") ^ ex1 ^ ex2 ^ step("2") ^ step("3") ^ ex1 ^ ex2
       selectSequence(fragments).map((s: FragmentSeq) => s.fragments.toString) must contain(
-        "List(SpecStart(Object))",
-        "List(Text(intro), Step)",
+        "List(SpecStart(Object), Text(intro), Step)",
         "List(Example(ex1), Example(ex2))",
         "List(Step)",
         "List(Step)",
-        "List(Example(ex1), Example(ex2))",
-        "List(SpecEnd(Object))").inOrder
+        "List(Example(ex1), Example(ex2), SpecEnd(Object))").inOrder
     }
   }
 
@@ -70,6 +69,18 @@ class SequenceSpec extends Specification with ScalaCheck with ArbitraryFragments
       val spec = new Specification { def is = sequential ^ example("e1") ^ step("s1") ^ example("e2") }
       reporter.report(spec)(main.Arguments())
       reporter.messages must contain("e1", "s1", "e2").inOrder
+    }
+    def e3 = {
+      val inner = new Specification { def is = sequential ^ "i1" ! ok ^ "i2" ! ok}
+      val fragments: Fragments = "intro" ^ step("1") ^ ex1 ^ ex2 ^ step("2") ^ inner ^ step("3") ^ ex1 ^ ex2
+      selectSequence(fragments).map((s: FragmentSeq) => (s.fragments, s.arguments.sequential).toString) must contain(
+        "(List(SpecStart(Object), Text(intro), Step),false)",
+        "(List(Example(ex1), Example(ex2)),false)",
+        "(List(Step),false)",
+        "(List(SpecStart(Object), Example(i1), Example(i2), SpecEnd(Object)),true)",
+        "(List(Step),false)",
+        "(List(Example(ex1), Example(ex2), SpecEnd(Object)),false)").inOrder
+
     }
   }
 

@@ -89,6 +89,10 @@ object Fragments {
   def isASpecStart: PartialFunction[Fragment, Fragment] = { case s @ SpecStart(_,_,_) => s }
   /** @return the spec end if the Fragment is a SpecEnd */
   def isASpecEnd: PartialFunction[Fragment, Fragment] = { case s @ SpecEnd(_,_) => s }
+  /** @return true if the Fragment is a SpecStart */
+  def isSpecStart: Function[Fragment, Boolean] = { case s @ SpecStart(_,_,_) => true; case _ => false }
+  /** @return true if the Fragment is a SpecEnd */
+  def isSpecEnd: Function[Fragment, Boolean] = { case s @ SpecEnd(_,_) => true; case _ => false }
   /** @return true if the Fragment is an Example or a Step */
   def isExampleOrStep: Function[Fragment, Boolean] = (f: Fragment) => isExample(f) || isStep(f)
   /** @return the step if the Fragment is a Step */
