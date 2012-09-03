@@ -2,6 +2,9 @@ package org.specs2
 package json
 
 import util.parsing.json._
+import util.matching.Regex
+import text.Regexes._
+import text.NotNullStrings._
 
 /**
  * This trait provides utility functions for Json objects
@@ -43,12 +46,28 @@ trait Json {
    * @return all the JSON objects or values that are addressed by a key in the document.
    *         if there is only one it is returned directly, otherwise the elements are put in a JSONArray
    */
-  def findDeep(key: String, json: JSONType): Option[JSONType] = {
+  def findDeep(key: String, json: JSONType): Option[JSONType] = findDeep(json, (k: Any) => k == key)
+  /**
+   * @return findDeep with a Regex
+   */
+  def findDeep(key: Regex, json: JSONType): Option[JSONType] = findDeep(json, (k: Any) => key matches k.toString)
+  /**
+   * @return findDeep with a Regex or a String
+   */
+  def findDeep(key: Any, json: JSONType): Option[JSONType] = key match {
+    case k: Regex => findDeep(k, json)
+    case other    => findDeep(other.notNull, json)
+  }
+
+  /**
+   * @return findDeep with a key equality function
+   */
+  def findDeep(json: JSONType, targetKey: Any => Boolean): Option[JSONType] = {
     val seq = collect(json)( keyedValues = {
-      case (k, v) if (k == key) => Seq(v)
+      case (k, v) if targetKey(k) => Seq(v)
       case other                => Nil
     }, keyedObjects = {
-      case (k, o) if (k == key) => Seq(o)
+      case (k, o) if targetKey(k) => Seq(o)
       case other                => Nil
     })
     seq match {
@@ -64,6 +83,22 @@ trait Json {
   def find(key: String, json: JSONType): Option[JSONType] = json match {
     case JSONObject(map) => map.get(key) map { case (o: JSONType) => o }
     case other           => None
+  }
+
+  /**
+   * @return the JSON object that's addressed by a key if the document is a Map, and the key matches a regular expression
+   */
+  def find(keyRegex: Regex, json: JSONType): Option[JSONType] = json match {
+    case JSONObject(map) => map.iterator.toSeq.collect { case (k, v) if keyRegex matches k => v }.headOption map { case (o: JSONType) => o }
+    case other           => None
+  }
+
+  /**
+   * @return find with a Regex or a String
+   */
+  def find(key: Any, json: JSONType): Option[JSONType] = key match {
+    case k: Regex => find(k, json)
+    case other    => find(other.notNull, json)
   }
 
   /**
