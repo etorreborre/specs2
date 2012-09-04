@@ -10,10 +10,10 @@ import JsonGen._
 class JsonSpec extends Specification with ScalaCheck {
 
   "The pairs of a json document must only have values with a terminal type" ! prop { (json: JSONType) =>
-    Json.pairs(json) must haveTerminalValues
+    Json.terminalPairs(json) must haveTerminalValues
   }
   "The values of a json document must only have values with a terminal type" ! prop { (json: JSONType) =>
-    Json.values(json) must beTerminalValues
+    Json.terminalValues(json) must beTerminalValues
   }
 
   "Find methods".newp

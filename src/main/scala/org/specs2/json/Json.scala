@@ -29,7 +29,7 @@ trait Json {
   /**
    * @return the list of pairs in the json document where the value is a terminal type
    */
-  def pairs(json: JSONType): Seq[(Any, Any)] = collect(json)(keyedValues = {
+  def terminalPairs(json: JSONType): Seq[(Any, Any)] = collect(json)(keyedValues = {
     case (key, value) => Seq((key,value))
     case other        => Nil
   })
@@ -37,7 +37,7 @@ trait Json {
   /**
    * @return the list of values in the json document where the value is a terminal type
    */
-  def values(json: JSONType): Seq[Any] = collect(json)(keyedValues = {
+  def terminalValues(json: JSONType): Seq[Any] = collect(json)(keyedValues = {
     case (key, value) => Seq(value)
     case other        => Seq(other)
   })
@@ -104,8 +104,10 @@ trait Json {
   /**
    * generic collect operation to iterate through the JSON tree and get values and objects
    */
-  private def collect[T](json: JSONType)(values: Any => Seq[T] = vs, objects: JSONType => Seq[T] = os,
-                         keyedValues: (Any, Any)  => Seq[T] = kvs, keyedObjects: (Any, Any) => Seq[T] = kvs): Seq[T] = json match {
+  private def collect[T](json: JSONType)(values: Any => Seq[T] = vs,
+                                         objects: JSONType => Seq[T] = os,
+                                         keyedValues: (Any, Any)  => Seq[T] = kvs,
+                                         keyedObjects: (Any, Any) => Seq[T] = kvs): Seq[T] = json match {
     case JSONObject(map) => map.toList.flatMap { v => v match {
         case (k, (o: JSONType)) => objects(o) ++ keyedObjects(k, o) ++ collect(o)(values, objects, keyedValues, keyedObjects)
         case (k, v)             => values(v)  ++ keyedValues(k, v)

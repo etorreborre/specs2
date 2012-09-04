@@ -78,9 +78,11 @@ trait JsonBaseMatchers extends Expectations {
 
     def apply[S <: String](s: Expectable[S]) = {
       parse(s.value).map(navigate) match {
-        case Some(Some(o)) => result(havePair(o, pairs(o), key, value), s)
-        case Some(None)    => result(false, "ok", s.value+" is empty", s)
-        case None          => result(false, "ok", "Could not parse:\n"+s.value, s)
+        case Some(Some(JSONObject(o: Map[_,_]))) if havePair(o.toSeq, key, value) => result(true,
+                                                                                            havePairOkMessage(o, o.toSeq, key, value), havePairKoMessage(o, o.toSeq, key, value), s)
+        case Some(Some(o))                                                        => result(havePair(o, terminalPairs(o), key, value), s)
+        case Some(None)                                                           => result(false, "ok", s.value+" is empty", s)
+        case None                                                                 => result(false, "ok", "Could not parse:\n"+s.value, s)
       }
     }
 
@@ -93,7 +95,7 @@ trait JsonBaseMatchers extends Expectations {
 
     def apply[S <: Any](s: Expectable[S]) = {
       parse(s.value.notNull).map(navigate) match {
-        case Some(Some(o)) => result(containValue(values(o), value), s)
+        case Some(Some(o)) => result(containValue(terminalValues(o), value), s)
         case Some(None)    => result(false, "ok", s.value.notNull+" is empty", s)
         case None          => result(false, "ok", "Could not parse:\n"+s.value, s)
       }
@@ -125,10 +127,23 @@ trait JsonBaseMatchers extends Expectations {
    * @return true if there is one pair is matching the (k, v) pair where k and/or v can be a Regex +
    * an ok message and a ko message
    */
-  private def   havePair(o: Any, pairs: Seq[(Any, Any)], k: Any, v: Any): (Boolean, String, String) =
-    (pairs.collect { case (key, value) if regexOrEqualMatch(key, k) && regexOrEqualMatch(value, v)=> k }.nonEmpty,
-      mapString(o, pairs)+" contains "+stringOrRegex(k, v),
-      mapString(o, pairs)+" doesn't contain "+stringOrRegex(k, v))
+  private def havePair(o: Any, pairs: Seq[(Any, Any)], k: Any, v: Any): (Boolean, String, String) =
+    (havePair(pairs, k, v),
+     havePairOkMessage(o, pairs, k, v),
+     havePairKoMessage(o, pairs, k, v))
+
+  /** @return ok message for the presence of a pair in a map */
+  private def havePairOkMessage(o: Any, pairs: Seq[(Any, Any)], k: Any, v: Any) =
+    mapString(o)+" contains "+stringOrRegex(k, v)
+  /** @return ko message for the presence of a pair in a map */
+  private def havePairKoMessage(o: Any, pairs: Seq[(Any, Any)], k: Any, v: Any) =
+    mapString(o)+" doesn't contain "+stringOrRegex(k, v)
+
+  /**
+   * @return true if there is one pair is matching the (k, v) pair where k and/or v can be a Regex
+   */
+  private def havePair(pairs: Seq[(Any, Any)], k: Any, v: Any): Boolean =
+    pairs.collect { case (key, value) if regexOrEqualMatch(key, k) && regexOrEqualMatch(value, v) => k }.nonEmpty
 
   /**
    * @return true if there is one pair is matching the (k, v) pair where k and/or v can be a Regex +
@@ -160,9 +175,11 @@ trait JsonBaseMatchers extends Expectations {
     case other    => other == value
   }
 
-  private def mapString(o: Any, pairs: Seq[(Any, Any)]) =
-    if (pairs.isEmpty) o.notNull.remove("\"")
-    else pairs.map { case (k, v) => k+" : "+v }.mkString("{", ", ", "}")
+  private def mapString(o: Any) =
+    o match {
+      case m: Map[_,_] => m.iterator.map { case (k, v) => k+" : "+v}.mkString("{", ",", "}")
+      case other       => other.notNull.remove("\"")
+    }
 
   private def listString(values: Seq[Any]) =
     values.mkString("[", ", ", "]")
