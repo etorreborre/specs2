@@ -23,43 +23,61 @@ trait TerminationBaseMatchers {
   /**
    * this matchers will check if a block of code terminates within a given duration, and a given number of retries
    */
-  def terminate[T](retries: Int = 0, sleep: Duration = 100.millis) = new TerminationMatcher[T](retries, sleep)
+  def terminate[T](retries: Int = 1, sleep: Duration = 100.millis) = new TerminationMatcher[T](retries, sleep)
 }
 
 class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[() => Any] = None, whenDesc: Option[String] = None, onlyWhen: Boolean = false) extends Matcher[T] {
   def apply[S <: T](a: Expectable[S]) =
     retry(retries, retries, sleep, a, promise(a.value))
 
-  def retry[S <: T](originalRetries: Int, retries: Int, sleep: Duration, a: Expectable[S], promise: Promise[S]): MatchResult[S] = {
-    Thread.sleep(sleep.inMillis)
-    lazy val fulfilled = promise.fulfilled
-    if (fulfilled || retries <= 0) {
-      if (!fulfilled) promise.break
+  def retry[S <: T](originalRetries: Int, retries: Int, sleep: Duration, a: Expectable[S], promise: Promise[S], whenActionExecuted: Boolean = false): MatchResult[S] = {
 
-      val parameters = "with retries="+originalRetries+" and sleep="+sleep.inMillis
-      if (onlyWhen && originalRetries >= 1) {
-        val onlyWhenAction = whenDesc.getOrElse("the second action")
-        result(false, "the action terminates", "the action terminates before "+onlyWhenAction+" ("+parameters+")", a)
+    lazy val fulfilled = promise.fulfilled
+    val parameters = "with retries="+originalRetries+" and sleep="+sleep.inMillis
+    val evenWhenAction = whenDesc.map(w => " even when "+w).getOrElse("")
+    val onlyWhenAction = whenDesc.getOrElse("the second action")
+    def terminates = result(true, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a)
+    def blocks     = { promise.break; result(false, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a) }
+
+    if (whenAction.isDefined) {
+      if (fulfilled) {
+        if (onlyWhen) {
+          result(whenActionExecuted,
+                 "the action terminates only when "+onlyWhenAction+" terminates",
+                 "the action terminated before "+onlyWhenAction+" ("+parameters+")", a)
+        } else terminates
+      } else {
+        if (retries <= 0) blocks
+        else {
+          // leave the action a chance to finish
+          Thread.sleep(sleep.inMillis)
+          // if still not finished, try to execute the when action
+          if (!promise.fulfilled && !whenActionExecuted) {
+            whenAction.map(_())
+            // leave again the action a chance to finish
+            Thread.sleep(sleep.inMillis)
+            retry(originalRetries, retries - 1, sleep, a, promise, whenActionExecuted = true)
+          } else
+            retry(originalRetries, retries - 1, sleep, a, promise)
+        }
       }
+    } else {
+      if (fulfilled) terminates
       else {
-        val evenWhenAction = whenDesc.map(w => " even when "+w).getOrElse("")
-        result(fulfilled, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a)
+        if (retries <= 0) blocks
+        else {
+          Thread.sleep(sleep.inMillis)
+          retry(originalRetries, retries - 1, sleep, a, promise)
+        }
       }
     }
-    else if (retries == 1) {
-      // try the action if defined, as a way to unblock the tested thread
-      whenAction.map(_())
-      retry(originalRetries, retries - 1, sleep, a, promise)
-    } else
-      retry(originalRetries, retries - 1, sleep, a, promise)
   }
 
   private def withAWhenAction[S](whenAction: Option[() => S], whenDesc: =>Option[String], onlyWhen: Boolean) =
-    new TerminationMatcher(if (retries == 0) 1 else retries, sleep, whenAction, whenDesc, onlyWhen)
+    new TerminationMatcher(retries, sleep, whenAction, whenDesc, onlyWhen)
 
   def when[S](actionDescription: String, action: =>S): TerminationMatcher[T] =
     withAWhenAction(Some(() => action), Some(actionDescription), onlyWhen=false)
-
 
   def onlyWhen[S](actionDescription: String, action: =>S): TerminationMatcher[T] =
     withAWhenAction(Some(() => action), Some(actionDescription), onlyWhen=true)

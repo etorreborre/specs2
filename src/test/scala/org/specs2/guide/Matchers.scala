@@ -214,6 +214,8 @@ The function that is checked can either return:
 
 Note that if you pass functions using `MatchResult`s you will get better failure messages so you are encouraged to do so.
 
+By default the properties created with `prop` will be shrinking counter-examples. If you want to avoid this, you can use `propNoShrink` instead.
+
 #### Arbitrary instances
 
 By default ScalaCheck uses `Arbitrary` instances taken from the surrounding example scope. However you'll certainly need to generate your own data from time to time. In that case you can create an `Arbitrary` instance and make sure it is in the scope of the function you're testing:

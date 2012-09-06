@@ -44,6 +44,13 @@ trait Matcher[-T] { outer =>
 	  Matcher.result(test, okMessage, koMessage, value) 
   }
   /**
+   * This convenience method uses a triplet instead of separated arguments
+   * @return a MatchResult with an okMessage, a koMessage and the expectable value
+   */
+  protected def result[S <: T](triplet: =>(Boolean, String, String), value: Expectable[S]): MatchResult[S] = {
+    Matcher.result(triplet._1, triplet._2, triplet._3, value)
+  }
+  /**
    * This convenience method can be used to evaluate a boolean condition and return an appropriate MatchResult
    * @return a MatchResult with an okMessage, a koMessage, the expectable value and the expected/actual values as string
    *         to display a failure comparison if necessary

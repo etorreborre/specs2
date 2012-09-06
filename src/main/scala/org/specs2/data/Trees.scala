@@ -18,6 +18,7 @@ trait Trees { outer =>
     def prune[B](f: A => Option[B]): Option[Tree[B]] = outer.prune(t, f)
     def prune(f: Tree[A] => Option[A])(implicit initial: A): Tree[A] = outer.prune(t, f)(initial)
     def flattenSubForests = outer.flattenSubForests(t)
+    def flattenLeft       = outer.flattenLeft(t)
   }
 
   /**
@@ -56,7 +57,16 @@ trait Trees { outer =>
    */
   def prune[A](t: Tree[A], f: Tree[A] => Option[A])(implicit initial: A): Tree[A] = t.cobind(f).clean
 
-  def flattenSubForests[A](tree: Tree[A]): Tree[A] = node(tree.rootLabel, tree.flatten.drop(1).map(leaf(_)))
+  def flattenSubForests[A](tree: Tree[A]): Tree[A] = node(tree.rootLabel, tree.flattenLeft.drop(1).map(leaf(_)))
+
+  /**
+   * flatten the tree using a foldLeft to avoid SOF
+   */
+  def flattenLeft[A](tree: Tree[A]): Stream[A] = squishLeft(tree, Stream.Empty)
+
+  /** reimplementation of squish from scalaz, using a foldLeft */
+  private def squishLeft[A](tree: Tree[A], xs: Stream[A]): Stream[A] =
+    Stream.cons(tree.rootLabel, tree.subForest.reverse.foldl(xs)((s, t) => squishLeft(t, s)))
 
   /**
    * Implicit definition to add more functionalities to the TreeLoc class
@@ -68,6 +78,7 @@ trait Trees { outer =>
     def getParent = t.parent.getOrElse(t)
     def updateLabel(f: T => T) = t.setLabel(f(t.getLabel))
     def addChild(c: T) = t.insertDownLast(leaf(c)).getParent
+    def addFirstChild(c: T) = t.insertDownFirst(leaf(c)).getParent
   }
 
   /**
