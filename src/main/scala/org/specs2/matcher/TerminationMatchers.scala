@@ -36,6 +36,8 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
     val parameters = "with retries="+originalRetries+" and sleep="+sleep.inMillis
     val evenWhenAction = whenDesc.map(w => " even when "+w).getOrElse("")
     val onlyWhenAction = whenDesc.getOrElse("the second action")
+    def terminates = result(true, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a)
+    def blocks     = { promise.break; result(false, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a) }
 
     if (whenAction.isDefined) {
       if (fulfilled) {
@@ -43,14 +45,10 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
           result(whenActionExecuted,
                  "the action terminates only when "+onlyWhenAction+" terminates",
                  "the action terminated before "+onlyWhenAction+" ("+parameters+")", a)
-        } else {
-          result(true, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a)
-        }
+        } else terminates
       } else {
-        if (retries <= 0) {
-          promise.break
-          result(false, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a)
-        } else {
+        if (retries <= 0) blocks
+        else {
           // leave the action a chance to finish
           Thread.sleep(sleep.inMillis)
           // if still not finished, try to execute the when action
@@ -64,13 +62,10 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
         }
       }
     } else {
-      if (fulfilled) {
-        result(true, "the action terminates", "the action is blocking "+parameters, a)
-      } else {
-        if (retries <= 0) {
-          promise.break
-          result(false, "the action terminates", "the action is blocking "+parameters, a)
-        } else {
+      if (fulfilled) terminates
+      else {
+        if (retries <= 0) blocks
+        else {
           Thread.sleep(sleep.inMillis)
           retry(originalRetries, retries - 1, sleep, a, promise)
         }
