@@ -264,7 +264,7 @@ It is also possible to specifically set the execution parameters on a given prop
 The parameters you can modify are:
 
   * `minTestsOk`: minimum of tests which must be ok before the property is ok (default = 100)
-  * `maxDiscardRatio`: if the data generation discards too many values, then the property can't be proven (default =0 .2)
+  * `maxDiscardRatio`: if the data generation discards too many values, then the property can't be proven (default = 5)
   * `minSize`: minimum size for the "sized" data generators, like list generators (default = 0)
   * `maxSize`: maximum size for the "sized" data generators (default = 100)
   * `workers`: number of threads checking the property (default = 1)

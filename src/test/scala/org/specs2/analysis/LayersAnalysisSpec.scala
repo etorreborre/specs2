@@ -22,7 +22,7 @@ class LayersAnalysisSpec extends Specification with DependencyMatchers with Scal
 
 
   def d1 = forAll(okLayers) { (ls: Layers) => ls must beRespected }
-  def d2 = forAll(koLayers) { (ls: Layers) => ls must not beRespected }.set(maxDiscardRatio = 0.1f)
+  def d2 = forAll(koLayers) { (ls: Layers) => ls must not beRespected }.set(maxDiscardRatio = 100)
 
   /**
    * The data generation strategy is to create layers of packages represented by alphabetical letters from a to f.
