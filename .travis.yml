@@ -1,11 +1,11 @@
 language: scala
 
 scala:
-  - 2.9.2
+  - 2.10.0-M7
  
 branches:
   only:
-    - 1.12
+    - 1.13
 
 jdk:
   - oraclejdk7
