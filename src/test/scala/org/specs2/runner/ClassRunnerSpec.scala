@@ -3,8 +3,9 @@ package runner
 
 import reporter._
 import mock.Mockito
+import specification.ExecutedResult
 
-class ClassRunnerSpec extends Specification with Mockito { def is =
+class ClassRunnerSpec extends Specification { def is =
 
   "Exit codes" ^
     "When a run is finished the runner exits the system with an exit code" ^
@@ -18,18 +19,18 @@ class ClassRunnerSpec extends Specification with Mockito { def is =
   def e3 = runClass("ErrorSpecification") === 100
 
   def runClass(className: String) = {
-    val r = newRunner
+    val r = newRunner(className)
     r.main(Array("user.reporter."+className))
     r.status
   }
 
-  def newRunner = new ClassRunner {
-    override lazy val reporter: Reporter = new ConsoleReporter {
-      override def textOutput = new NoResultOutput
-    }
-    // if there's an error the statuses are going to be Seq(100, 0) because we don't really exit,...
-    val statuses = new scala.collection.mutable.ListBuffer[Int]
-    def status = statuses.head
-    override def exitWith(s: Int) { statuses += s }
+  def newRunner(className: String) = ExitRunner(className)
+}
+case class ExitRunner(name: String) extends ClassRunner {
+  override lazy val reporter: Reporter = new ConsoleReporter {
+    override def textOutput = new NoResultOutput
   }
+  var status = 0
+  var statusIsSet = false
+  override def exitWith(s: Int) { if (!statusIsSet) { status = s; statusIsSet = true } }
 }
