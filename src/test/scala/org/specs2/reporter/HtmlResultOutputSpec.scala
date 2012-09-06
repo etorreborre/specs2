@@ -17,12 +17,12 @@ class HtmlResultOutputSpec extends Specification with DataTables { def is =
 
   def descriptions = {
     val (out, desc) = (new HtmlResultOutput, NoMarkup("desc"))
-    "output"               | "xml"                                                      |>
-    out.printSuccess(desc) ! """<img src="./images/icon_success_sml.gif"></img> desc""" |
-    out.printFailure(desc) ! """<img src="./images/icon_failure_sml.gif"></img> desc""" |
-    out.printError(desc)   ! """<img src="./images/icon_error_sml.gif"></img> desc"""   |
-    out.printSkipped(desc) ! """<img src="./images/icon_skipped_sml.gif"></img> desc""" |
-    out.printPending(desc) ! """<img src="./images/icon_pending_sml.gif"></img> desc""" | { (output, xml) =>
+    "output"               | "xml"                                                 |>
+    out.printSuccess(desc) ! """<img src="./images/icon_success_sml.gif"/> desc""" |
+    out.printFailure(desc) ! """<img src="./images/icon_failure_sml.gif"/> desc""" |
+    out.printError(desc)   ! """<img src="./images/icon_error_sml.gif"/> desc"""   |
+    out.printSkipped(desc) ! """<img src="./images/icon_skipped_sml.gif"/> desc""" |
+    out.printPending(desc) ! """<img src="./images/icon_pending_sml.gif"/> desc""" | { (output, xml) =>
       output.xml.toString must contain(xml)
     }
   }
