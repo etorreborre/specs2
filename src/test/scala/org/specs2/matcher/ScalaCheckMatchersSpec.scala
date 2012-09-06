@@ -14,28 +14,28 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
   "A ScalaCheck property can be used in the body of an Example"                                                         ^
     "Here are some examples with"                                                                                       ^
       "a match result"                                                                                                  ^
-        check { (i:Int) => i must be_>(0) or be_<=(0) }                                                                 ^p^
+        prop { (i:Int) => i must be_>(0) or be_<=(0) }                                                                  ^p^
       "a boolean value"                                                                                                 ^
-        check { (i:Int) => i > 0 || i <=0 }                                                                             ^p^
+        prop { (i:Int) => i > 0 || i <= 0 }                                                                             ^p^
       "a Prop"                                                                                                          ^
-        forAll { (i:Int) => i > 0 || i <=0 }                                                                            ^p^
+        forAll { (i:Int) => i > 0 || i <= 0 }                                                                           ^p^
       "an implication and a match result"                                                                               ^
-        check { (i:Int) => (i > 0) ==> (i must be_>(0)) }                                                               ^p^
-        check { (i:Int, j: Int) => (i > j) ==> (i must be_>(j)) }                                                       ^p^
+        prop { (i:Int) => (i > 0) ==> (i must be_>(0)) }                                                                ^p^
+        prop { (i:Int, j: Int) => (i > j) ==> (i must be_>(j)) }                                                        ^p^
       "an implication and a boolean value"                                                                              ^
-        check { (i:Int) => (i > 0) ==> (i > 0) }                                                                        ^p^
+        prop { (i:Int) => (i > 0) ==> (i > 0) }                                                                         ^p^
       "a unit value with side-effects"                                                                                  ^
-        check { (i:Int) => { (1 to 5) foreach { n => n must_== n } } }                                                  ^p^
+        prop { (i:Int) => { (1 to 5) foreach { n => n must_== n } } }                                                   ^p^
       "a specific arbitrary instance in the enclosing scope"                                                            ^ {
         implicit val arbitrary = positiveInts
-        check { (i:Int) => i must be_>(0) }
+        prop { (i:Int) => i must be_>(0) }
       }                                                                                                                 ^p^
       "a specific arbitrary instance"                                                                                   ^
         positiveInts { (i:Int) => i must be_>(0) }                                                                      ^p^
       "several specific arbitrary instances"                                                                            ^
         (positiveInts, positiveInts) { (i:Int, j: Int) => i+j must be_>(0) }                                            ^p^
       "specific generation parameters"                                                                                  ^
-      { check { (i:Int) => (i > 0) ==> (i > 0) } set (minTestsOk->50) }                                                 ^p^
+      { prop { (i:Int) => (i > 0) ==> (i > 0) } set (minTestsOk->50) }                                                  ^p^
                                                                                                                         p^
     "if it is proved the execution will yield a Success"                                                                ! prop1^
     "if it is a function which is always true, it will yield a Success"                                                 ! prop2^
@@ -73,6 +73,10 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
   "It is possible to change the default parameters used for the test"                                                   ^
     "by setting up new implicit parameters locally"                                                                     ! config().e1^
                                                                                                                         p^
+  "Properties can be specified with no shrinking"                                                                       ^
+    propNoShrink { (i:Int) => i > 0 || i <= 0 }                                                                         ^p^
+    propNoShrink { (i:Int, j: Int) => (i > j) ==> (i must be_>(j)) }                                                    ^p^
+                                                                                                                        p^
   "It is possible to display"                                                                                           ^
     "the executed tests by setting up display parameters locally"                                                       ! config().e2^
     "the labels that are set on properties"                                                                             ! config().e3^
@@ -100,15 +104,15 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
   def prop7 = FragmentExecution.executeSpecificationResult(new MutableSpecWithContextAndScalaCheck).isFailure
 
   def fragment1 = {
-    val spec = new Specification { def is = check((i: Int) => i == i) ^ end }
+    val spec = new Specification { def is = prop((i: Int) => i == i) ^ end }
     FragmentExecution.executeSpecificationResult(spec).isSuccess
   }
 
   def partial1 = execute(partialFunction.forAll) must_== success100tries
-  def partial2 = execute { check { (s1: Boolean, s2: Boolean) => s1 && s2 must_== s2 && s1 } } must_== success100tries
-  def partial3 = execute { check { (s1: String, s2: String, s3: Int) => 1 must_== 1 } } must_== success100tries
-  def partial4 = execute { check { (s1: String, s2: String, s3: Int, s4: Boolean) => 1 must_== 1 } } must_== success100tries
-  def partial5 = execute { check { (s1: String, s2: String, s3: Int, s4: Boolean, s5: Double) => 1 must_== 1 } } must_== success100tries
+  def partial2 = execute { prop { (s1: Boolean, s2: Boolean) => s1 && s2 must_== s2 && s1 } } must_== success100tries
+  def partial3 = execute { prop { (s1: String, s2: String, s3: Int) => 1 must_== 1 } } must_== success100tries
+  def partial4 = execute { prop { (s1: String, s2: String, s3: Int, s4: Boolean) => 1 must_== 1 } } must_== success100tries
+  def partial5 = execute { prop { (s1: String, s2: String, s3: Int, s4: Boolean, s5: Double) => 1 must_== 1 } } must_== success100tries
 
   val positiveInts = Arbitrary(Gen.choose(1, 5))
 
@@ -126,10 +130,10 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties wit
     forAll(sides) { (s: Side) => s must be_==(Left()) or be_==(Right()) }
   }
 
-  def matcher1 = execute(check(alwaysTrueWithMatcher)) must_== success100tries
-  def matcher2 = execute(check(stringToBooleanMatcher)) must_== success100tries
-  def matcher3 = execute(check(stringToBooleanMatcher)) must_== success100tries
-  def result1 =  execute(check(trueFunction)).expectationsNb must_== 100
+  def matcher1 = execute(prop(alwaysTrueWithMatcher)) must_== success100tries
+  def matcher2 = execute(prop(stringToBooleanMatcher)) must_== success100tries
+  def matcher3 = execute(prop(stringToBooleanMatcher)) must_== success100tries
+  def result1 =  execute(prop(trueFunction)).expectationsNb must_== 100
 
   case class config() extends Before with ScalaCheckMatchers with MockOutput {
     def before = clear()
