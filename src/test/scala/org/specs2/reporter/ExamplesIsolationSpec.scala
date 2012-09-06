@@ -6,7 +6,7 @@ import main.Arguments
 
 class ExamplesIsolationSpec extends Specification with SilentConsoleReporter {
   "An isolated specification must have each example see a fresh state for every local variable in its scope" >> {
-    report(spec)(Arguments("isolated")).issues.map(i => (i.s, i.message)) must beEmpty
+    report(spec)(Arguments("isolated")).issues.view.force.map(i => (i.s, i.message)) must beEmpty
   }
 
   val spec = new SpecificationWithLocalVariables
