@@ -4,7 +4,6 @@ package io
 /**
  * This trait represents an output with standard print functions
  */
-private[specs2]
 trait Output {
   /**
    * print several objects according to a format string (see Console.printf)

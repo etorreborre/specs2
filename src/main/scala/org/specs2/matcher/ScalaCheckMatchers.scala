@@ -6,7 +6,7 @@ import org.scalacheck.Prop._
 import org.scalacheck.Test.{ Params, Proved, Passed, Failed, Exhausted, GenException, PropException, Result }
 import org.scalacheck.Pretty._
 import scala.collection.Map
-import io.ConsoleOutput
+import io.{Output, ConsoleOutput}
 import org.scalacheck._
 import execute.AsResult
 
@@ -281,7 +281,7 @@ trait ApplicableArbitraries { this: ScalaCheckMatchers =>
 /**
  * This trait provides generation parameters to use with the <code>ScalaCheckMatchers</code>
  */
-trait ScalaCheckParameters { this: ScalaCheckMatchers =>
+trait ScalaCheckParameters { outer: ScalaCheckMatchers with Output =>
   /**
    * default parameters. Uses ScalaCheck default values and doesn't print anything to the console
    */
@@ -301,7 +301,7 @@ trait ScalaCheckParameters { this: ScalaCheckMatchers =>
             rng: java.util.Random       = defaultParameters.rng,
             callback: Test.TestCallback = defaultParameters.callback,
             loader: Option[ClassLoader] = defaultParameters.loader): execute.Result =
-      check(prop)(new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = false))
+      check(prop)(new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = false, outer))
   }
 
   /** set specific execution parameters on a Property */
@@ -316,7 +316,7 @@ trait ScalaCheckParameters { this: ScalaCheckMatchers =>
                 rng: java.util.Random       = defaultParameters.rng,
                 callback: Test.TestCallback = defaultParameters.callback,
                 loader: Option[ClassLoader] = defaultParameters.loader): execute.Result =
-      check(prop)(new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = true))
+      check(prop)(new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = true, outer))
   }
 
   /** create parameters with verbose = false */
@@ -328,7 +328,7 @@ trait ScalaCheckParameters { this: ScalaCheckMatchers =>
           rng: java.util.Random       = defaultParameters.rng,
           callback: Test.TestCallback = defaultParameters.callback,
           loader: Option[ClassLoader] = defaultParameters.loader): Parameters =
-    new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = false)
+    new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = false, outer)
 
   /** create parameters with verbose = true */
   def display(minTestsOk: Int             = defaultParameters.minTestsOk,
@@ -339,7 +339,7 @@ trait ScalaCheckParameters { this: ScalaCheckMatchers =>
               rng: java.util.Random       = defaultParameters.rng,
               callback: Test.TestCallback = defaultParameters.callback,
               loader: Option[ClassLoader] = defaultParameters.loader): Parameters =
-    new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = true)
+    new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = true, outer)
 
 }
 
@@ -356,9 +356,10 @@ case class Parameters(minTestsOk: Int             = Test.Parameters.default.minS
                       rng: java.util.Random       = Test.Parameters.default.rng,
                       callback: Test.TestCallback = Test.Parameters.default.testCallback,
                       loader: Option[ClassLoader] = Test.Parameters.default.customClassLoader,
-                      verbose: Boolean            = false) { outer =>
+                      verbose: Boolean            = false,
+                      output: Output              = ConsoleOutput) { outer =>
 
-  def testCallback(implicit pretty: Pretty.Params) = if (verbose) callback.chain(verboseCallback) else callback
+  def testCallback(implicit pretty: Pretty.Params) = if (verbose) verboseCallback.chain(callback) else callback
 
   def toScalaCheckParameters(implicit pretty: Pretty.Params): Test.Parameters =
     new Test.Parameters {
@@ -374,12 +375,12 @@ case class Parameters(minTestsOk: Int             = Test.Parameters.default.minS
 
   def verboseCallback(implicit pretty: Pretty.Params) = new Test.TestCallback {
     override def onPropEval(name: String, threadXdx: Int, succeeded: Int, discarded: Int): Unit = {
-      if (discarded == 0) printf("\rPassed %d tests", succeeded)
-      else                printf("\rPassed %d tests; %d discarded", succeeded, discarded)
+      if (discarded == 0) output.printf("\rPassed %d tests", succeeded)
+      else                output.printf("\rPassed %d tests; %d discarded", succeeded, discarded)
     }
     override def onTestResult(name: String, result: Test.Result) = {
       val s = prettyTestRes(result)(pretty)
-      printf("\r%s %s%s\n", if (result.passed) "+" else "!", s, List.fill(70 - s.length)(" ").mkString(""))
+      output.printf("\r%s %s%s\n", if (result.passed) "+" else "!", s, List.fill(70 - s.length)(" ").mkString(""))
     }
   }
 
