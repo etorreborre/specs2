@@ -8,9 +8,11 @@ import execute.ResultLogicalCombinators
  * This trait provides logical operators to combine match results where potentially a MatchResult expression
  * throws an Exception
  */
-trait MatchResultCombinators extends MatchResultLogicalCombinators with MatchResultImplicits with ResultLogicalCombinators
+private [specs2]
+trait MatchResultCombinators extends MatchResultLogicalCombinators with ResultLogicalCombinators
+object MatchResultCombinators extends MatchResultCombinators
 
-
+private [specs2]
 trait MatchResultLogicalCombinators {
 
   implicit def combineMatchResult[T](m: =>MatchResult[T]): MatchResultCombinator[T] = new MatchResultCombinator[T](m)
@@ -35,11 +37,18 @@ trait MatchResultLogicalCombinators {
   }
 
 }
+
 object MatchResultLogicalCombinators extends MatchResultLogicalCombinators
 
+private [specs2]
 trait MatchResultExecution {
-  def executeEither[T](code: =>MatchResult[T]): Either[MatchResult[T], MatchResult[T]] = {
-    val executed = trye(code)(identity)
+
+  /**
+   * Get the value of a MatchResult expression which possibly throws a MatchResultException.
+   * @return either Left(result) if an exception was thrown, or Right(result) if no exception was thrown
+   */
+  def executeEither[T](result: =>MatchResult[T]): Either[MatchResult[T], MatchResult[T]] = {
+    val executed = trye(result)(identity)
     executed match {
       case Left(e: MatchResultException[_]) => Left(e.matchResult.asInstanceOf[MatchResult[T]])
       case Left(e)                          => throw e
@@ -47,4 +56,5 @@ trait MatchResultExecution {
     }
   }
 }
+
 object MatchResultExecution extends MatchResultExecution

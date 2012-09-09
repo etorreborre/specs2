@@ -20,7 +20,7 @@ import ResultLogicalCombinators._
 * - create matchers from functions
 * - create matchers for seqs and sets from single matchers
 */
-trait MatchersImplicits extends Expectations with MatchResultCombinators { outer =>
+trait MatchersImplicits extends Expectations with MatchResultCombinators with MatchResultImplicits { outer =>
   /**
    * Add functionalities to functions returning matchers so that they can be combined before taking a value and
    * returning actual matchers
@@ -255,6 +255,10 @@ trait MatchersImplicits extends Expectations with MatchResultCombinators { outer
 private[specs2]
 object MatchersImplicits extends MatchersImplicits
 
+/**
+ * Implicit conversions for MatchResults
+ */
+private[specs2]
 trait MatchResultImplicits { outer =>
   /**
   * implicit definition to transform a Seq of MatchResults to a Result

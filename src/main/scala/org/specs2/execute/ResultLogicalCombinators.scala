@@ -4,10 +4,19 @@ package execute
 import text.Message._
 import ResultLogicalCombinators._
 
+/**
+ * This trait provides logical combinators to Results: and, or, not
+ *
+ * A Result expression can throw an exception which will be changed into a failure or an error before being used
+ * with and/or/not
+ */
+private[specs2]
 trait ResultLogicalCombinators {
+
   implicit def combineResult(r: =>Result) = new ResultLogicalCombinator(r)
+
   class ResultLogicalCombinator(res: =>Result) {
-    private val r = res
+    private val r = ResultExecution.execute(res)
     /**
      * @return the logical and combination of 2 results
      */
@@ -86,7 +95,7 @@ trait ResultLogicalCombinators {
     def not: Result = r match {
       case Success(m,e)     => Failure(m, e)
       case Failure(m,e,_,_) => Success(m)
-      case other => other
+      case other            => other
     }
   }
 }
