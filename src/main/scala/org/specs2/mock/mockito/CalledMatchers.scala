@@ -7,7 +7,8 @@ import org.mockito.verification.{ VerificationMode }
 import control.Exceptions._
 import matcher._
 import org.mockito.InOrder
-import execute.{AsResult, Result}
+import execute.{ResultLogicalCombinators, AsResult, Result}
+import ResultLogicalCombinators._
 
 /**
  * This trait provides methods to declare expectations on mock calls:<code>

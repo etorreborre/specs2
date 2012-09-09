@@ -3,7 +3,8 @@ package matcher
 
 import org.specs2.internal.scalaz.{ Functor, Scalaz }, Scalaz._
 import execute._
-import Expectable._
+import MatchResultLogicalCombinators._
+import ResultLogicalCombinators._
 
 /**
  * Result of a Match.
@@ -48,24 +49,16 @@ import Expectable._
 trait MatchResult[+T] extends ResultLike {
   /** the value being matched */
   val expectable: Expectable[T]
-  
-  /** 
-   * apply a Matcher to the expectable contained in that MatchResult
-   * 
-   * Depending on the exact type of the MatchResult, that logic may vary
-   */
-  def apply(m: Matcher[T]): MatchResult[T]
 
+  /** 
+  * apply a Matcher to the expectable contained in that MatchResult
+  *
+  * Depending on the exact type of the MatchResult, that logic may vary
+  */
+  def apply(m: Matcher[T]): MatchResult[T]
   /** @return the negation of this result */
-  def not: MatchResult[T]
-  /** @return the logical or of two results */
-  def or[S >: T](m: =>MatchResult[S]): MatchResult[S] = new OrMatch(this, m).evaluate
-  /** @return the logical and of two results */
-  def and[S >: T](m: =>MatchResult[S]): MatchResult[S] = new AndMatch(this, m).evaluate
-  /** apply the matcher and return the logical or of two results */
-  def or(m: Matcher[T]): MatchResult[T] = or(expectable.applyMatcher(m))
-  /** apply the matcher and return the logical and of two results */
-  def and(m: Matcher[T]): MatchResult[T] = and(expectable.applyMatcher(m))
+  def negate: MatchResult[T]
+
   /** apply the matcher */
   def be(m: Matcher[T]) = {
     if (m == null) apply(new BeNull)
@@ -91,7 +84,7 @@ trait MatchResult[+T] extends ResultLike {
 }
 case class MatchSuccess[T] private[specs2](okMessage: String, koMessage: String, expectable: Expectable[T]) extends MatchResult[T] {
   override def toResult = Success(okMessage)
-  def not: MatchResult[T] = MatchFailure(koMessage, okMessage, expectable)
+  def negate: MatchResult[T] = MatchFailure(koMessage, okMessage, expectable)
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
   override def mute = MatchSuccess("", "", expectable)
 }
@@ -99,21 +92,21 @@ case class MatchFailure[T] private[specs2](okMessage: String, koMessage: String,
   /** an exception having the same stacktrace */
   val exception = new Exception(koMessage)
   override def toResult = Failure(koMessage, okMessage, exception.getStackTrace.toList, details)
-  def not: MatchResult[T] = MatchSuccess(koMessage, okMessage, expectable)
+  def negate: MatchResult[T] = MatchSuccess(koMessage, okMessage, expectable)
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
   override def mute = MatchFailure("", "", expectable, details)
   override def orThrow = { throw new FailureException(toResult); this }
   override def orSkip  = { throw new SkipException(toResult); this }
 }
 case class MatchSkip[T] private[specs2](override val message: String, expectable: Expectable[T]) extends MatchResult[T] {
-  def not: MatchResult[T] = this
+  def negate: MatchResult[T] = this
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
   override def toResult = Skipped(message)
   override def mute = MatchSkip("", expectable)
   override def orThrow = { throw new SkipException(toResult); this }
 }
 case class MatchPending[T] private[specs2](override val message: String, expectable: Expectable[T]) extends MatchResult[T] {
-  def not: MatchResult[T] = this
+  def negate: MatchResult[T] = this
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
   override def toResult = Pending(message)
   override def mute = MatchPending("", expectable)
@@ -122,13 +115,13 @@ case class MatchPending[T] private[specs2](override val message: String, expecta
 case class NotMatch[T] private[specs2](m: MatchResult[T]) extends MatchResult[T] {
   val expectable = m.expectable
   override def evaluate[S >: T] = m
-  def not: MatchResult[T] = NeutralMatch(m)
+  def negate: MatchResult[T] = NeutralMatch(m)
   def apply(matcher: Matcher[T]): MatchResult[T] = m(matcher.not)
 }
 case class NeutralMatch[T] private[specs2](m: MatchResult[T]) extends MatchResult[T] {
   val expectable = m.expectable
   override def evaluate[S >: T] = m
-  def not: MatchResult[T] = NotMatch(m)
+  def negate: MatchResult[T] = NotMatch(m)
   def apply(matcher: Matcher[T]): MatchResult[T] = m(matcher)
 }
 class AndMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T]) extends MatchResult[T] {
@@ -152,14 +145,14 @@ class AndMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T
         }
     }
   }
-  def not: MatchResult[T] = new OrMatch(m1.not, m2.not).evaluate
+  def negate: MatchResult[T] = new OrMatch(m1.negate, m2.negate).evaluate
   def apply(matcher: Matcher[T]): MatchResult[T] = m1 and m2(matcher)
   override def toResult = m1.toResult and m2.toResult
 }
 case class AndNotMatch[T] private[specs2](m1: MatchResult[T], m2: MatchResult[T]) extends MatchResult[T] {
   val expectable = m1.expectable
   override def evaluate[S >: T] = m1 and m2.not
-  def not: MatchResult[T] = new OrMatch(m1.not, m2).evaluate
+  def negate: MatchResult[T] = new OrMatch(m1.not, m2).evaluate
   def apply(matcher: Matcher[T]): MatchResult[T] = m1 and m2(matcher.not)
 }
 class OrMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T]) extends MatchResult[T] {
@@ -174,7 +167,7 @@ class OrMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T]
           case (_, NeutralMatch(_)) => new OrMatch(m1, MatchSkip("", expectable))
           case (NeutralMatch(_), _) => new OrMatch(m2, MatchSkip("", expectable))
           case (NotMatch(_), NotMatch(_)) => new OrNotMatch(m1.evaluate, m2)
-          case (_, NotMatch(_)) => new OrNotMatch(m1, m2) 
+          case (_, NotMatch(_)) => new OrNotMatch(m1, m2)
           case (NotMatch(_), _) => new OrMatch(m1.evaluate, m2).evaluate
           case (_, MatchSuccess(_, _, _)) => m2
           case (MatchFailure(ok,ko,e,d), MatchFailure(ok2,ko2,e2,d2)) => MatchFailure(ok+"; "+ok2,ko+"; "+ko2,e,d)
@@ -183,7 +176,7 @@ class OrMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T]
       }
     }
   }
-  def not: MatchResult[T] = new AndMatch(m1.not, m2.not).evaluate
+  def negate: MatchResult[T] = new AndMatch(m1.not, m2.not).evaluate
   def apply(matcher: Matcher[T]): MatchResult[T] = m1 or m2(matcher)
   override def toResult = m1.toResult or m2.toResult
 }
@@ -192,7 +185,7 @@ class OrNotMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult
   def m2 = second
   val expectable = m1.expectable
   override def evaluate[S >: T] = m1 or m2.not
-  def not: MatchResult[T] = new AndMatch(m1.not, m2).evaluate
+  def negate: MatchResult[T] = new AndMatch(m1.not, m2).evaluate
   def apply(matcher: Matcher[T]): MatchResult[T] = m1 or evaluate(matcher.not)
 }
 
@@ -218,14 +211,14 @@ object MatchResult {
       case or: OrMatch[_]           => or.map(f)
       case ornot: OrNotMatch[_]     => ornot.map(f)
     }
-  } 
+  }
   implicit val MatchSuccessFunctor: Functor[MatchSuccess] = new Functor[MatchSuccess] {
     def fmap[A, B](m: MatchSuccess[A], f: A => B) =
       new MatchSuccess(m.okMessage, m.koMessage, m.expectable.map(f))
-  } 
+  }
   implicit val MatchFailureFunctor: Functor[MatchFailure] = new Functor[MatchFailure] {
     def fmap[A, B](m: MatchFailure[A], f: A => B) = new MatchFailure(m.okMessage, m.koMessage, m.expectable.map(f))
-  } 
+  }
   implicit val MatchSkipFunctor: Functor[MatchSkip] = new Functor[MatchSkip] {
     def fmap[A, B](m: MatchSkip[A], f: A => B) = new MatchSkip(m.message, m.expectable.map(f))
   }
@@ -234,20 +227,21 @@ object MatchResult {
   }
   implicit val NotMatchFunctor: Functor[NotMatch] = new Functor[NotMatch] {
     def fmap[A, B](n: NotMatch[A], f: A => B) = new NotMatch(n.m.map(f))
-  } 
+  }
   implicit val NeutralMatchFunctor: Functor[NeutralMatch] = new Functor[NeutralMatch] {
     def fmap[A, B](n: NeutralMatch[A], f: A => B) = new NeutralMatch(n.m.map(f))
-  } 
+  }
   implicit val AndMatchFunctor: Functor[AndMatch] = new Functor[AndMatch] {
     def fmap[A, B](m: AndMatch[A], f: A => B) = new AndMatch(m.m1.map(f), m.m2.map(f))
-  } 
+  }
   implicit val AndNotMatchFunctor: Functor[AndNotMatch] = new Functor[AndNotMatch] {
     def fmap[A, B](m: AndNotMatch[A], f: A => B) = new AndNotMatch(m.m1.map(f), m.m2.map(f))
-  } 
+  }
   implicit val OrMatchFunctor: Functor[OrMatch] = new Functor[OrMatch] {
     def fmap[A, B](m: OrMatch[A], f: A => B) = new OrMatch(m.m1.map(f), m.m2.map(f))
-  } 
+  }
   implicit val OrNotMatchFunctor: Functor[OrNotMatch] = new Functor[OrNotMatch] {
     def fmap[A, B](m: OrNotMatch[A], f: A => B) = new OrNotMatch(m.m1.map(f), m.m2.map(f))
   }
 }
+

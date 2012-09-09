@@ -38,7 +38,7 @@ trait JsonBaseMatchers extends Expectations {
       }
     }
     override def not = new JsonPairMatcher(key, value) {
-      override def apply[S <: String](s: Expectable[S]) = super.apply(s).not
+      override def apply[S <: String](s: Expectable[S]) = super.apply(s).negate
     }
   }
   class JsonValueMatcher(value: Any) extends Matcher[Any] { outer =>
@@ -53,7 +53,7 @@ trait JsonBaseMatchers extends Expectations {
       }
     }
     override def not = new JsonValueMatcher(value) {
-      override def apply[S <: Any](s: Expectable[S]) = super.apply(s).not
+      override def apply[S <: Any](s: Expectable[S]) = super.apply(s).negate
     }
     /** in this case, interpret 'value' as the key and value1 as the expected value in the Array */
     def /(value1: Any) = new JsonValueMatcher(value1) {
@@ -87,7 +87,7 @@ trait JsonBaseMatchers extends Expectations {
     }
 
     override def not = new JsonDeepPairMatcher(key, value) {
-      override def apply[S <: String](s: Expectable[S]) = super.apply(s).not
+      override def apply[S <: String](s: Expectable[S]) = super.apply(s).negate
     }
   }
   class JsonDeepValueMatcher(value: Any) extends Matcher[Any] { outer =>
@@ -102,7 +102,7 @@ trait JsonBaseMatchers extends Expectations {
     }
 
     override def not = new JsonDeepValueMatcher(value) {
-      override def apply[S <: Any](s: Expectable[S]) = super.apply(s).not
+      override def apply[S <: Any](s: Expectable[S]) = super.apply(s).negate
     }
 
     /** in this case, interpret 'value' as the key and value1 as the expected value in the Array */

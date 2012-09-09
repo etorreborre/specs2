@@ -6,6 +6,7 @@ import ResultExecution._
 import text.{Trim, TextTable, NotNullStrings}
 import Trim._
 import NotNullStrings._
+import ResultLogicalCombinators._
 
 /**
  * This trait provides implicit definitions and types to create DataTables.

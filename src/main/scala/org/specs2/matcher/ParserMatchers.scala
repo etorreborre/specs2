@@ -6,6 +6,8 @@ import util.parsing.input.{CharSequenceReader, Reader}
 import org.specs2.internal.scalaz.Scalaz._
 import text.Plural._
 import text.Quote._
+import MatchResultLogicalCombinators._
+
 /**
  * Matchers for parser combinators
  *

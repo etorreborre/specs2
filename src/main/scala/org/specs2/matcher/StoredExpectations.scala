@@ -13,6 +13,10 @@ trait StoredExpectations extends Expectations {
     results.append(r)
     r
   }
+  override protected def checkMatchResultFailure[T](m: MatchResult[T]): MatchResult[T] = {
+    checkResultFailure(m.toResult)
+    m
+  }
 
   def storedResults: Seq[Result] = {
     val rs = results.toSeq

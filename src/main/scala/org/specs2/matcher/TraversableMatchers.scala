@@ -166,7 +166,7 @@ trait AbstractContainMatchResult[T] extends MatchResult[GenTraversableOnce[T]] {
   lazy val matchResult = s(matcher)
 
   override def toResult = matchResult.toResult
-  def not: MatchResult[GenTraversableOnce[T]] = matchResult.not
+  def negate: MatchResult[GenTraversableOnce[T]] = matchResult.negate
   def apply(matcher: Matcher[GenTraversableOnce[T]]): MatchResult[GenTraversableOnce[T]] = matchResult(matcher)
 }
 
