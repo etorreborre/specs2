@@ -5,6 +5,7 @@ import xml.Nodex._
 import main._
 import execute._
 import StandardResults._
+import ResultLogicalCombinators._
 
 /**
  * This class allows the creation of tabs to embed several forms at once on a limited html space

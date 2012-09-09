@@ -12,6 +12,8 @@ import StandardResults._
 import matcher.{DataTable, ResultMatchers}
 import DecoratedProperties._
 import language.existentials
+import ResultLogicalCombinators._
+
 /**
  * A Form is a container for Rows (@see Row) where each row contain some Cell (@see Cell).
  * It has an optional title and possibly no rows.

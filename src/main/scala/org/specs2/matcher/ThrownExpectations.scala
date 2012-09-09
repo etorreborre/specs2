@@ -52,6 +52,17 @@ trait ThrownExpectations extends Expectations {
     }
     r
   }
+  /** this method can be overriden to throw exceptions when checking the match result */
+  override protected def checkMatchResultFailure[T](m: MatchResult[T]) = {
+    m match {
+      case f @ MatchFailure(_,_,_,_) => throw new MatchFailureException(f)
+      case s @ MatchSkip(_,_)        => throw new MatchSkipException(s)
+      case p @ MatchPending(_,_)     => throw new MatchPendingException(p)
+      case _                         => ()
+    }
+    m
+  }
+
   protected def failure(m: String): Nothing = failure(Failure(m))
   protected def failure(f: Failure): Nothing = throw new FailureException(f)
   protected def skipped(m: String): Nothing = skipped(Skipped(m))
@@ -69,6 +80,7 @@ object ThrownExpectations extends ThrownExpectations
  */
 trait NoThrownExpectations extends Expectations {
   override protected def checkResultFailure(r: Result) = r
+  override protected def checkMatchResultFailure[T](m: MatchResult[T]): MatchResult[T] = m
 }
 
 /**
@@ -77,4 +89,35 @@ trait NoThrownExpectations extends Expectations {
 trait ThrownMessages { this: ThrownExpectations =>
   def fail(m: String): Nothing = failure(m)
   def skip(m: String): Nothing = skipped(m)
+}
+
+/** this class allows to throw a match failure result in an Exception */
+class MatchFailureException[T](val failure: MatchFailure[T]) extends FailureException(failure.toResult) with MatchResultException[T] {
+  lazy val matchResult = failure
+
+  override def getMessage = f.message
+  override def getCause = f.exception
+  override def getStackTrace = f.exception.getStackTrace
+}
+object MatchFailureException {
+  def unapply[T](m: MatchFailureException[T]): Option[MatchFailure[T]] = Some(m.failure)
+}
+/** this class allows to throw a skipped match result in an Exception */
+class MatchSkipException[T](val s: MatchSkip[T]) extends SkipException(s.toResult) with MatchResultException[T] {
+  lazy val matchResult = s
+}
+object MatchSkipException {
+  def unapply[T](m: MatchSkipException[T]): Option[MatchSkip[T]] = Some(m.s)
+}
+
+/** this class allows to throw a pending result in an Exception */
+class MatchPendingException[T](val p: MatchPending[T]) extends PendingException(p.toResult) with MatchResultException[T] {
+  lazy val matchResult = p
+}
+object MatchPendingException {
+  def unapply[T](m: MatchPendingException[T]): Option[MatchPending[T]] = Some(m.p)
+}
+
+trait MatchResultException[T] {
+  def matchResult: MatchResult[T]
 }

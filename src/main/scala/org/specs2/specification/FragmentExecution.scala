@@ -8,6 +8,7 @@ import time.SimpleTimer
 import StandardFragments._
 import execute._
 import io.Location
+import ResultLogicalCombinators._
 
 /**
  * This trait executes Fragments

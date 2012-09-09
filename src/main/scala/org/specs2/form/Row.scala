@@ -5,7 +5,7 @@ import org.specs2.internal.scalaz.{ NonEmptyList, Scalaz }
 import Scalaz.nel
 import execute._
 import StandardResults._
-
+import ResultLogicalCombinators._
 /**
  * A Row is a non-empty list of Cells
  * 

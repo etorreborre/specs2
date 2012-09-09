@@ -2,6 +2,7 @@ package org.specs2
 package matcher
 
 import execute._
+import MatchResultLogicalCombinators._
 
 /**
  * Matchers for Results

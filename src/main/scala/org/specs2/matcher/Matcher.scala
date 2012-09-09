@@ -10,6 +10,7 @@ import text.Plural._
 import reflect.ClassName._
 import MatchResultMessages._
 import time.Duration
+import MatchResultLogicalCombinators._
 
 /**
  * The `Matcher` trait is the base trait for any Matcher.
@@ -109,7 +110,7 @@ trait Matcher[-T] { outer =>
    * @see MatchResult.not
    */
   def not = new Matcher[T] {
-    def apply[U <: T](a: Expectable[U]) = outer(a).not
+    def apply[U <: T](a: Expectable[U]) = outer(a).negate
   }
   /**
    * the logical and between 2 matchers
