@@ -2,6 +2,7 @@ package org.specs2
 package matcher
 
 import mutable.Specification
+import execute.ResultExecution
 
 /**
  * all these examples works in a mutable specification which means that FailureExceptions are caught before being
@@ -20,6 +21,7 @@ class MatchResultLogicalCombinatorsSpec extends Specification with ResultMatcher
   "A match result can be negated" >> {
     (1 must_== 2).not
     (1 must_== 1).not must beFailing
+    (1 must_== 2).not must beSuccessful
   }
 
 }

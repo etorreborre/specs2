@@ -3,6 +3,7 @@ package matcher
 
 import execute._
 import MatchResultLogicalCombinators._
+import control.Exceptions._
 
 /**
  * Matchers for Results
@@ -15,7 +16,7 @@ trait ResultBaseMatchers {
   
   def beSuccessful[T : AsResult] = new Matcher[T] {
     def apply[S <: T](value: Expectable[S]) = {
-      result(AsResult[T](value.value).isSuccess,
+      result(ResultExecution.execute(AsResult[T](value.value)).isSuccess,
              value.description + " is a success",
              value.description + " is not a success",
              value)
@@ -26,15 +27,16 @@ trait ResultBaseMatchers {
   def beFailing[T : AsResult](message: String): Matcher[T] = beFailing(Some(message))
   def beFailing[T : AsResult](message: Option[String]): Matcher[T] = new Matcher[T] {
     def apply[S <: T](value: Expectable[S]) = {
-      val r = AsResult[T](value.value)
+      val r = ResultExecution.execute(AsResult[T](value.value))
+      def description = tryOrElse(value.description)(r.toString)
       result(r.isFailure,
-             value.description + " is a failure",
-             value.description + " is not a failure",
+             description + " is a failure",
+             description + " is not a failure",
              value) and
-      message.map(m=> result(r.message matches m,
-                             r.message + " matches " + m,
-                             r.message + " doesn't match " + m,
-                             value)).getOrElse(result(true, "ok", "ko", value))
+      message.map(m => result(r.message matches m,
+                              r.message + " matches " + m,
+                              r.message + " doesn't match " + m,
+                              value)).getOrElse(result(true, "ok", "ko", value))
     }
   }
 
@@ -42,15 +44,16 @@ trait ResultBaseMatchers {
   def beError[T : AsResult](message: String): Matcher[T] = beError(Some(message))
   def beError[T : AsResult](message: Option[String]): Matcher[T] = new Matcher[T] {
     def apply[S <: T](value: Expectable[S]) = {
-      val r = AsResult[T](value.value)
+      val r = ResultExecution.execute(AsResult[T](value.value))
+      def description = tryOrElse(value.description)(r.toString)
       result(r.isError,
-             value.description + " is an error",
-             value.description + " is not an error",
+             description + " is an error",
+             description + " is not an error",
              value) and
-      message.map(m=> result(r.message matches m,
-                             r.message + " matches " + m,
-                             r.message + " doesn't match " + m,
-                             value)).getOrElse(result(true, "ok", "ko", value))
+      message.map(m => result(r.message matches m,
+                              r.message + " matches " + m,
+                              r.message + " doesn't match " + m,
+                              value)).getOrElse(result(true, "ok", "ko", value))
     }
   }
 
@@ -58,15 +61,16 @@ trait ResultBaseMatchers {
   def beSkipped[T : AsResult](message: String): Matcher[T] = beSkipped(Some(message))
   def beSkipped[T : AsResult](message: Option[String]): Matcher[T] = new Matcher[T] {
     def apply[S <: T](value: Expectable[S]) = {
-      val r = AsResult[T](value.value)
+      val r = ResultExecution.execute(AsResult[T](value.value))
+      def description = tryOrElse(value.description)(r.toString)
       result(r.isSkipped,
-             value.description + " is skipped",
-             value.description + " is not skipped",
+             description + " is skipped",
+             description + " is not skipped",
              value) and
-      message.map(m=> result(r.message matches m,
-                             r.message + " matches " + m,
-                             r.message + " doesn't match " + m,
-                             value)).getOrElse(result(true, "ok", "ko", value))
+      message.map(m => result(r.message matches m,
+                              r.message + " matches " + m,
+                              r.message + " doesn't match " + m,
+                              value)).getOrElse(result(true, "ok", "ko", value))
     }
   }
 }
