@@ -9,7 +9,7 @@ import io._
 import sys.error
 import specification.{Before, FragmentExecution}
 
-class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties with ResultMatchers { def is =
+class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { def is =
 
   "A ScalaCheck property can be used in the body of an Example"                                                         ^
     "Here are some examples with"                                                                                       ^
