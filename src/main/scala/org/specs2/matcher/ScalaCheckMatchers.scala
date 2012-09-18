@@ -281,7 +281,7 @@ trait ResultPropertyImplicits {
   implicit def callByNameMatchResultToProp[T](m: =>MatchResult[T]): Prop = resultProp(m.toResult)
   implicit def matchResultToProp[T](m: MatchResult[T]): Prop = resultProp(m.toResult)
 
-  private def resultProp(r: =>execute.Result): Prop = {
+  implicit def resultProp(r: =>execute.Result): Prop = {
     new Prop {
       def apply(params: Prop.Params) = {
         lazy val result = execute.ResultExecution.execute(r)

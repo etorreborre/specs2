@@ -13,6 +13,8 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
 
   "A ScalaCheck property can be used in the body of an Example"                                                         ^
     "Here are some examples with"                                                                                       ^
+      "a result"                                                                                                        ^
+        prop { (i:Int) => success }                                                                                     ^p^
       "a match result"                                                                                                  ^
         prop { (i:Int) => i must be_>(0) or be_<=(0) }                                                                  ^p^
       "a boolean value"                                                                                                 ^
