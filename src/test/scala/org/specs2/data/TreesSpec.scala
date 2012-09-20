@@ -87,11 +87,8 @@ class TreesSpec extends Specification with DataTables { def is =
     tree.flattenLeft.toSeq aka "flattenLeft" must_== tree.flatten.toSeq
   }
 
-  def pruneAndDraw(tree: Tree[Int], f: Int => Option[Int]) = Option(tree).map(_.drawTree).getOrElse("None\n")
+  def pruneAndDraw(tree: Tree[Int], f: Int => Option[Int]) = tree.prune(f).map(_.drawTree).getOrElse("None\n")
   def beTree(s: String*) = be_==(s.mkString("", "\n", "\n"))
-
-//  def drawTree2[A](tree: Tree[A])(implicit sh: Show[A]): String =
-//    Foldable[Stream].foldMap(draw)((_: String) + "\n")
 
   implicit def anyToStream[A](a: A): Stream[A] = Stream(a)
   implicit def listToStream[A](a: List[A]): Stream[A] = a.toStream
