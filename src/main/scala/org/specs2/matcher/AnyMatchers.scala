@@ -183,9 +183,9 @@ class BeTypedEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
   def apply[S <: T](b: Expectable[S]): MatchResult[S] = {
     val a = t
     def equality =
-      (a, b.value) match {
+      (b.value, a) match {
         case (arr: Array[_], arr2: Array[_]) => arr.toSeq == arr2.toSeq
-        case other                           => a == b.value
+        case other                           => b.value == a
       }
 
     val (db, qa) = (b.description, q(a)) match {
