@@ -4,6 +4,8 @@ package reporter
 import org.specs2.internal.scalaz.{ Monoid, Reducer, Scalaz, Foldable, Applicative, State }
 import control.Throwablex._
 import Scalaz._
+import Foldable._
+import Monoid._
 import data.Reducerx._
 import collection.Seqx._
 import data.Tuples._
@@ -42,26 +44,23 @@ trait TextPrinter {
     (PrintReducer           &&&
      StatisticsReducer      &&&
      LevelsReducer          &&&
-     SpecsArgumentsReducer) >>> IOReducer(textOutput)(args)
+     SpecsArgumentsReducer) >>> printIO(textOutput)(args)
 
-  type ToPrint = (((Seq[Print], SpecsStatistics), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])
+  type ToPrint = (((Stream[Print], SpecsStatistics), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])
 
-  def IOReducer(output: ResultOutput)(implicit args: Arguments) =
-    new Reducer[ToPrint, ToPrint] {
-      override def unit(line: ToPrint) = {
-        line.flatten match {
-          case (p, s, l, a) => PrintLine(p.last, s.total, l.level, args <| a.last).print(output)
-        }
-        line
-      }
+  /** print a line to the output */
+  def printIO(output: ResultOutput)(implicit args: Arguments) = (line: ToPrint) => {
+    line.flatten match {
+      case (p, s, l, a) => PrintLine(p.last, s.total, l.level, args <| a.last).print(output)
     }
+    line
+  }
 
   case class PrintLine(text: Print, stats: Stats, level: Int, args: Arguments) {
     def print(implicit out: ResultOutput) = text.print(stats, level, args)
   }
   
-  implicit object PrintReducer extends Reducer[ExecutedFragment, Seq[Print]] {
-    implicit override def unit(fragment: ExecutedFragment) = Seq(print(fragment))
+  implicit val PrintReducer: Reducer[ExecutedFragment, Stream[Print]] = {
     /** print an ExecutedFragment and its associated statistics */
     def print: ExecutedFragment => Print = (fragment: ExecutedFragment) => fragment.get match {
       case start @ ExecutedSpecStart(_,_,_)    => PrintSpecStart(start)
@@ -71,6 +70,7 @@ trait TextPrinter {
       case end @ ExecutedSpecEnd(_,_, s)       => PrintSpecEnd(end, s)
       case f                                   => PrintOther(f)
     }
+    Reducer.unitReducer { fragment: ExecutedFragment => Stream(print(fragment)) }
   }
     
   sealed trait Print {

@@ -3,8 +3,9 @@ package html
 
 import scala.xml._
 import transform.{RuleTransformer, RewriteRule}
-import org.specs2.internal.scalaz.{ TreeLoc, Scalaz, Show }
+import org.specs2.internal.scalaz.{ Tree, TreeLoc, Scalaz, Show }
 import Scalaz._
+import Tree._
 import xml.Nodex._
 import java.net.URLDecoder
 import io.Paths._
@@ -113,7 +114,7 @@ trait Htmlx { outer =>
   }
 
   implicit object HeaderShow extends Show[Header] {
-    def show(h : Header) = h.name.toList
+    override def show(h : Header) = h.name
   }
 
   /** @return the text of the first child of a Node, removing notoc elements */

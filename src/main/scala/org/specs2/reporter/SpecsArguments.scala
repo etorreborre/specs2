@@ -3,6 +3,7 @@ package reporter
 
 import org.specs2.internal.scalaz._
 import Scalaz._
+import collection.Seqx._
 import main.Arguments
 import specification._
 /**
@@ -84,15 +85,15 @@ case object SpecsArguments {
   def foldAll[T](fs: Seq[T])(implicit reducer: Reducer[T, SpecsArguments[T]]): SpecsArguments[T] = { 
     fs.foldMap(reducer.unit)
   }
-  implicit object FragmentSpecsArgumentsReducer extends Reducer[Fragment, SpecsArguments[Fragment]] {
-    implicit override def unit(f: Fragment) = f match {
+  implicit val FragmentSpecsArgumentsReducer: Reducer[Fragment, SpecsArguments[Fragment]] = Reducer.unitReducer {
+    f: Fragment => f match {
       case s @ SpecStart(_,_,_) => SpecsArguments(StartOfArguments(f, s.specName, s.arguments))
       case e @ SpecEnd(_,_)     => SpecsArguments(EndOfArguments(f, e.specName))
       case _                    => SpecsArguments(NoStartOfArguments(f))
     }
   }
-  implicit object SpecsArgumentsReducer extends Reducer[ExecutedFragment, SpecsArguments[ExecutedFragment]] {
-    implicit override def unit(f: ExecutedFragment) = f match {
+  implicit val SpecsArgumentsReducer: Reducer[ExecutedFragment, SpecsArguments[ExecutedFragment]] = Reducer.unitReducer {
+    f: ExecutedFragment => f match {
       case s @ ExecutedSpecStart(_,_,_) => SpecsArguments(StartOfArguments(f, s.specName, s.args))
       case e @ ExecutedSpecEnd(_,_,_)   => SpecsArguments(EndOfArguments(f, e.specName))
       case _                            => SpecsArguments(NoStartOfArguments(f))

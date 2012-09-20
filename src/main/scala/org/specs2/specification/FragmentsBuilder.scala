@@ -4,6 +4,7 @@ package specification
 import execute._
 import main._
 import internal.scalaz.Scalaz._
+import collection.Seqx._
 import control.Functions._
 
 /**
@@ -105,7 +106,7 @@ trait FragmentsBuilder extends RegexSteps with ExamplesFactory with Results { ou
   def link(ss: Seq[SpecificationStructure], dummy: Int = 0): Fragments        = link(ss.map(_.content))
   def link(fs: Fragments): Fragments                                          = link(HtmlLink(fs), fs)
   def link(fs: Fragments, fss: Fragments*): Fragments                         = link(fs +: fss)
-  def link(fss: Seq[Fragments]): Fragments                                    = ma(fss.map(link)).sum
+  def link(fss: Seq[Fragments]): Fragments                                    = fss.map(link).sumr
   /** create a link directly on a specification, with a given link */
   def link(htmlLink: HtmlLink, s: SpecificationStructure): Fragments          = link(htmlLink, s.content)
   def link(htmlLink: HtmlLink, f: Fragments): Fragments                       = f.linkIs(htmlLink)
@@ -116,7 +117,7 @@ trait FragmentsBuilder extends RegexSteps with ExamplesFactory with Results { ou
   def see(s: SpecificationStructure): Fragments                               = see(s.content)
   def see(fs: Fragments): Fragments                                           = see(HtmlLink(fs), fs)
   def see(fs: Fragments, fss: Fragments*): Fragments                          = see(fs +: fss)
-  def see(fss: Seq[Fragments]): Fragments                                     = ma(fss.map(see)).sum
+  def see(fss: Seq[Fragments]): Fragments                                     = fss.map(see).sumr
   /** create a see-only link directly on a specification, with a given link */
   def see(htmlLink: HtmlLink, s: SpecificationStructure): Fragments            = see(htmlLink, s.content)
   def see(htmlLink: HtmlLink, fs: Fragments): Fragments                        = fs.seeIs(htmlLink)
@@ -192,7 +193,7 @@ import org.specs2.internal.scalaz._
 private[specs2]
 trait FragmentsShow {
   implicit object showFragments extends Show[Fragment] {
-	  def show(f: Fragment) = f.toString.toList
+	  override def shows(f: Fragment) = f.toString
   }
 }
 

@@ -3,6 +3,8 @@ package reporter
 
 import org.specs2.internal.scalaz._
 import Scalaz._
+import Tree._
+import collection.Seqx._
 import specification._
 import data.Trees._
 import StandardFragments._
@@ -122,37 +124,36 @@ case object Levels {
   /** fold a list of T to a Levels object */
   def foldAll[T](fs: Seq[T])(implicit reducer: Reducer[T, Levels[T]]) = fs.foldMap(reducer.unit)
 
-  implicit object LevelsReducer extends Reducer[ExecutedFragment, Levels[ExecutedFragment]] {
-    implicit override def unit(f: ExecutedFragment): Levels[ExecutedFragment] = Levels(LevelReducer.toLevel(f))
+  implicit val LevelsReducer: Reducer[ExecutedFragment, Levels[ExecutedFragment]] =
+    Reducer.unitReducer { f: ExecutedFragment => Levels(executedFragmentToLevel(f)) }
+
+  private implicit def executedFragmentToLevel: ExecutedFragment => Level[ExecutedFragment] = (f: ExecutedFragment) => f match {
+    case t @ ExecutedResult(_,_,_,_,_)     => Terminal(t)
+    case t @ ExecutedText(_, _)            => Indent(t)
+    case t @ ExecutedTab(n, _)             => Indent(t, n)
+    case t @ ExecutedBacktab(n, _)         => Unindent(t, n)
+    case t @ ExecutedSpecStart(_,_,_)      => Neutral(t)
+    case t @ ExecutedSpecEnd(_,_,_)        => Neutral(t)
+    case t @ ExecutedEnd( _)               => Reset(t)
+    case t                                 => Neutral(t)
   }
 
-  implicit object LevelReducer extends Reducer[ExecutedFragment, Level[ExecutedFragment]] {
-    implicit def toLevel: ExecutedFragment => Level[ExecutedFragment] = (f: ExecutedFragment) => f match {
-      case t @ ExecutedResult(_,_,_,_,_)     => Terminal(t)
-      case t @ ExecutedText(_, _)            => Indent(t)
-      case t @ ExecutedTab(n, _)             => Indent(t, n)
-      case t @ ExecutedBacktab(n, _)         => Unindent(t, n)
-      case t @ ExecutedSpecStart(_,_,_)      => Neutral(t)
-      case t @ ExecutedSpecEnd(_,_,_)        => Neutral(t)
-      case t @ ExecutedEnd( _)               => Reset(t)
-      case t                                 => Neutral(t)
-    } 
-    implicit override def unit(f: ExecutedFragment): Level[ExecutedFragment] = toLevel(f)
-    
+  implicit val LevelReducer: Reducer[ExecutedFragment, Level[ExecutedFragment]] =
+    Reducer.unitReducer { f: ExecutedFragment => executedFragmentToLevel(f) }
+
+  private implicit def fragmentToLevel: Fragment => Level[Fragment] = (f: Fragment) => f match {
+    case t @ Example(_, _)         => Terminal(t)
+    case t @ Tab(n)                => Indent(t, n)
+    case t @ Backtab(n)            => Unindent(t, n)
+    case t @ Text(_)               => Indent(t)
+    case t @ SpecStart(_,_,_)      => Neutral(t)
+    case t @ SpecEnd(_,_)          => Neutral(t)
+    case t @ End()                 => Reset(t)
+    case t                         => Neutral(t)
   }
-  implicit object FragmentLevelsReducer extends Reducer[Fragment, Levels[Fragment]] {
-    implicit def toLevel(f: Fragment): Level[Fragment] = f match {
-      case t @ Example(_, _)         => Terminal(t)     
-      case t @ Tab(n)                => Indent(t, n)
-      case t @ Backtab(n)            => Unindent(t, n)   
-      case t @ Text(_)               => Indent(t)       
-      case t @ SpecStart(_,_,_)      => Neutral(t)
-      case t @ SpecEnd(_,_)          => Neutral(t)
-      case t @ End()                 => Reset(t)        
-      case t                         => Neutral(t)        
-    }
-    implicit override def unit(f: Fragment): Levels[Fragment] = Levels(toLevel(f))
-  }
+
+  implicit val FragmentLevelsReducer: Reducer[Fragment, Levels[Fragment]] =
+    Reducer.unitReducer { f: Fragment => Levels(fragmentToLevel(f)) }
 }
 
 private[specs2]

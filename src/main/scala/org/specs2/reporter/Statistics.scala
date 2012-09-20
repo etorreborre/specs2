@@ -3,6 +3,7 @@ package reporter
 
 import org.specs2.internal.scalaz.{ Scalaz, Monoid, Reducer }
 import Scalaz._
+import collection.Seqx._
 import specification._
 import scala.collection.mutable.ArrayBuffer
 
@@ -30,8 +31,8 @@ trait Statistics {
 
   def foldAll(fs: Seq[ExecutedFragment]) = fs.foldMap(StatisticsReducer.unit)
   
-  object StatisticsReducer extends Reducer[ExecutedFragment, SpecsStatistics] {
-    override def unit(f: ExecutedFragment): SpecsStatistics = SpecsStatistics(f)
+  val StatisticsReducer: Reducer[ExecutedFragment, SpecsStatistics]  = Reducer.unitReducer {
+    f: ExecutedFragment => SpecsStatistics(f)
   }
 
   /**
@@ -72,8 +73,8 @@ trait Statistics {
     val zero = SpecStats()
   }
 
-  object StatsReducer extends Reducer[ExecutedFragment, SpecStats] {
-    override def unit(f: ExecutedFragment): SpecStats = SpecStats(ArrayBuffer(f.stats))
+  val StatsReducer: Reducer[ExecutedFragment, SpecStats] = Reducer.unitReducer {
+    f: ExecutedFragment => SpecStats(ArrayBuffer(f.stats))
   }
 
 }

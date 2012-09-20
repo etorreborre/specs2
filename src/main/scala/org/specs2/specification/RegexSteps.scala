@@ -4,7 +4,8 @@ package specification
 import execute._
 import main.Arguments
 import specification.StandardFragments.{Backtab, Tab, Br, End}
-import internal.scalaz.Scalaz._
+import internal.scalaz.Scalaz
+import Scalaz._
 import control.ImplicitParameters
 import data.TuplesToSeq
 
@@ -222,7 +223,7 @@ private[specs2] case class PreStep8[T1, T2, T3, T4, T5, T6, T7, T8](context: () 
 private[specs2] case class PreStepText[T](text: String, context: () => Either[Result, T], fs: Fragments) extends RegexFragment {
   type RegexType = PreStepText[T]
   def ^[R](step: Given[R]): PreStep2[T, R] = {
-    lazy val pair = (context() <**> step.extractContext(text))((_,_))
+    lazy val pair = eitherMonad(context(), step.extractContext(text))((_,_))
     new PreStep2(() => pair, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(pair)))
   }
   def ^[R](step: When[T, R]) = {
@@ -247,7 +248,7 @@ private[specs2] case class PreStepText[T](text: String, context: () => Either[Re
 private[specs2] case class PreStepText2[T1, T2](text: String, context: () => Either[Result, (T1, T2)], fs: Fragments) extends RegexFragment {
   type RegexType = PreStepText2[T1, T2]
   def ^[R](step: Given[R]): PreStep3[T1, T2, R] = {
-    lazy val tuple = (context() <**> step.extractContext(text))((t, r) => (t._1,t._2,r))
+    lazy val tuple = eitherMonad(context(), step.extractContext(text))((t, r) => (t._1,t._2,r))
     new PreStep3(() => tuple, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(tuple)))
   }
   def ^[R](step: When[(T1, T2), R]) = {
@@ -268,7 +269,7 @@ private[specs2] case class PreStepText2[T1, T2](text: String, context: () => Eit
 private[specs2] case class PreStepText3[T1, T2, T3](text: String, context: () => Either[Result, (T1, T2, T3)], fs: Fragments) extends RegexFragment with ImplicitParameters {
   type RegexType = PreStepText3[T1, T2, T3]
   def ^[R](step: Given[R]): PreStep4[T1, T2, T3, R] = {
-    lazy val tuple = (context() <**> step.extractContext(text))((t, r) => (t._1,t._2,t._3,r))
+    lazy val tuple = eitherMonad(context(), step.extractContext(text))((t, r) => (t._1,t._2,t._3,r))
     new PreStep4(() => tuple, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(tuple)))
   }
   def ^[R](step: When[(T1, T2, T3), R]) = {
@@ -289,7 +290,7 @@ private[specs2] case class PreStepText3[T1, T2, T3](text: String, context: () =>
 private[specs2] case class PreStepText4[T1, T2, T3, T4](text: String, context: () => Either[Result, (T1, T2, T3, T4)], fs: Fragments) extends RegexFragment {
   type RegexType = PreStepText4[T1, T2, T3, T4]
   def ^[R](step: Given[R]): PreStep5[T1, T2, T3, T4, R] = {
-    lazy val tuple = (context() <**> step.extractContext(text))((t, r) => (t._1,t._2,t._3,t._4,r))
+    lazy val tuple = eitherMonad(context(), step.extractContext(text))((t, r) => (t._1,t._2,t._3,t._4,r))
     new PreStep5(() => tuple, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(tuple)))
   }
   def ^[R](step: When[(T1, T2, T3, T4), R]) = {
@@ -310,7 +311,7 @@ private[specs2] case class PreStepText4[T1, T2, T3, T4](text: String, context: (
 private[specs2] case class PreStepText5[T1, T2, T3, T4, T5](text: String, context: () => Either[Result, (T1, T2, T3, T4, T5)], fs: Fragments) extends RegexFragment {
   type RegexType = PreStepText5[T1, T2, T3, T4, T5]
   def ^[R](step: Given[R]): PreStep6[T1, T2, T3, T4, T5, R] = {
-    lazy val tuple = (context() <**> step.extractContext(text))((t, r) => (t._1,t._2,t._3,t._4,t._5,r))
+    lazy val tuple = eitherMonad(context(), step.extractContext(text))((t, r) => (t._1,t._2,t._3,t._4,t._5,r))
     new PreStep6(() => tuple, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(tuple)))
   }
   def ^[R](step: When[(T1, T2, T3, T4, T5), R]) = {
@@ -331,7 +332,7 @@ private[specs2] case class PreStepText5[T1, T2, T3, T4, T5](text: String, contex
 private[specs2] case class PreStepText6[T1, T2, T3, T4, T5, T6](text: String, context: () => Either[Result, (T1, T2, T3, T4, T5, T6)], fs: Fragments) extends RegexFragment {
   type RegexType = PreStepText6[T1, T2, T3, T4, T5, T6]
   def ^[R](step: Given[R]): PreStep7[T1, T2, T3, T4, T5, T6, R] = {
-    lazy val tuple = (context() <**> step.extractContext(text))((t, r) => (t._1,t._2,t._3,t._4,t._5,t._6,r))
+    lazy val tuple = eitherMonad(context(), step.extractContext(text))((t, r) => (t._1,t._2,t._3,t._4,t._5,t._6,r))
     new PreStep7(() => tuple, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(tuple)))
   }
   def ^[R](step: When[(T1, T2, T3, T4, T5, T6), R]) = {
@@ -352,7 +353,7 @@ private[specs2] case class PreStepText6[T1, T2, T3, T4, T5, T6](text: String, co
 private[specs2] case class PreStepText7[T1, T2, T3, T4, T5, T6, T7](text: String, context: () => Either[Result, (T1, T2, T3, T4, T5, T6, T7)], fs: Fragments) extends RegexFragment {
   type RegexType = PreStepText7[T1, T2, T3, T4, T5, T6, T7]
   def ^[R](step: Given[R]): PreStep8[T1, T2, T3, T4, T5, T6, T7, R] = {
-    lazy val tuple = (context() <**> step.extractContext(text))((t, r) => (t._1,t._2,t._3,t._4,t._5,t._6,t._7,r))
+    lazy val tuple = eitherMonad(context(), step.extractContext(text))((t, r) => (t._1,t._2,t._3,t._4,t._5,t._6,t._7,r))
     new PreStep8(() => tuple, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(tuple)))
   }
   def ^[R](step: When[(T1, T2, T3, T4, T5, T6, T7), R]) = {
@@ -373,7 +374,7 @@ private[specs2] case class PreStepText7[T1, T2, T3, T4, T5, T6, T7](text: String
 private[specs2] case class PreStepText8[T1, T2, T3, T4, T5, T6, T7, T8](text: String, context: () => Either[Result, (T1, T2, T3, T4, T5, T6, T7, T8)], fs: Fragments) extends RegexFragment {
   type RegexType = PreStepText8[T1, T2, T3, T4, T5, T6, T7, T8]
   def ^[R](step: Given[R]): PreStep8[T1, T2, T3, T4, T5, T6, T7, (T8, R)] = {
-    lazy val tuple = (context() <**> step.extractContext(text))((t, r) => (t._1,t._2,t._3,t._4,t._5,t._6,t._7,(t._8,r)))
+    lazy val tuple = eitherMonad(context(), step.extractContext(text))((t, r) => (t._1,t._2,t._3,t._4,t._5,t._6,t._7,(t._8,r)))
     new PreStep8(() => tuple, fs.add(Backtab()).add(Text(step.strip(text))).add(Step.fromEither(tuple)))
   }
   def ^[R](step: When[(T1, T2, T3, T4, T5, T6, T7, T8), R]) = {

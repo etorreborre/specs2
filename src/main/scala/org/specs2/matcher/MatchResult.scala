@@ -199,7 +199,7 @@ object MatchResult {
   import Expectable._
 
   implicit val MatchResultFunctor: Functor[MatchResult] = new Functor[MatchResult] {
-    def fmap[A, B](m: MatchResult[A], f: A => B) = m match {
+    def map[A, B](m: MatchResult[A])(f: A => B) = m match {
       case success: MatchSuccess[_] => success.map(f)
       case failure: MatchFailure[_] => failure.map(f)
       case skip: MatchSkip[_]       => skip.map(f)
@@ -213,35 +213,35 @@ object MatchResult {
     }
   }
   implicit val MatchSuccessFunctor: Functor[MatchSuccess] = new Functor[MatchSuccess] {
-    def fmap[A, B](m: MatchSuccess[A], f: A => B) =
+    def map[A, B](m: MatchSuccess[A])(f: A => B) =
       new MatchSuccess(m.okMessage, m.koMessage, m.expectable.map(f))
   }
   implicit val MatchFailureFunctor: Functor[MatchFailure] = new Functor[MatchFailure] {
-    def fmap[A, B](m: MatchFailure[A], f: A => B) = new MatchFailure(m.okMessage, m.koMessage, m.expectable.map(f))
+    def map[A, B](m: MatchFailure[A])(f: A => B) = new MatchFailure(m.okMessage, m.koMessage, m.expectable.map(f))
   }
   implicit val MatchSkipFunctor: Functor[MatchSkip] = new Functor[MatchSkip] {
-    def fmap[A, B](m: MatchSkip[A], f: A => B) = new MatchSkip(m.message, m.expectable.map(f))
+    def map[A, B](m: MatchSkip[A])(f: A => B) = new MatchSkip(m.message, m.expectable.map(f))
   }
   implicit val MatchPendingFunctor: Functor[MatchPending] = new Functor[MatchPending] {
-    def fmap[A, B](m: MatchPending[A], f: A => B) = new MatchPending(m.message, m.expectable.map(f))
+    def map[A, B](m: MatchPending[A])(f: A => B) = new MatchPending(m.message, m.expectable.map(f))
   }
   implicit val NotMatchFunctor: Functor[NotMatch] = new Functor[NotMatch] {
-    def fmap[A, B](n: NotMatch[A], f: A => B) = new NotMatch(n.m.map(f))
+    def map[A, B](n: NotMatch[A])(f: A => B) = new NotMatch(n.m.map(f))
   }
   implicit val NeutralMatchFunctor: Functor[NeutralMatch] = new Functor[NeutralMatch] {
-    def fmap[A, B](n: NeutralMatch[A], f: A => B) = new NeutralMatch(n.m.map(f))
+    def map[A, B](n: NeutralMatch[A])(f: A => B) = new NeutralMatch(n.m.map(f))
   }
   implicit val AndMatchFunctor: Functor[AndMatch] = new Functor[AndMatch] {
-    def fmap[A, B](m: AndMatch[A], f: A => B) = new AndMatch(m.m1.map(f), m.m2.map(f))
+    def map[A, B](m: AndMatch[A])(f: A => B) = new AndMatch(m.m1.map(f), m.m2.map(f))
   }
   implicit val AndNotMatchFunctor: Functor[AndNotMatch] = new Functor[AndNotMatch] {
-    def fmap[A, B](m: AndNotMatch[A], f: A => B) = new AndNotMatch(m.m1.map(f), m.m2.map(f))
+    def map[A, B](m: AndNotMatch[A])(f: A => B) = new AndNotMatch(m.m1.map(f), m.m2.map(f))
   }
   implicit val OrMatchFunctor: Functor[OrMatch] = new Functor[OrMatch] {
-    def fmap[A, B](m: OrMatch[A], f: A => B) = new OrMatch(m.m1.map(f), m.m2.map(f))
+    def map[A, B](m: OrMatch[A])(f: A => B) = new OrMatch(m.m1.map(f), m.m2.map(f))
   }
   implicit val OrNotMatchFunctor: Functor[OrNotMatch] = new Functor[OrNotMatch] {
-    def fmap[A, B](m: OrNotMatch[A], f: A => B) = new OrNotMatch(m.m1.map(f), m.m2.map(f))
+    def map[A, B](m: OrNotMatch[A])(f: A => B) = new OrNotMatch(m.m1.map(f), m.m2.map(f))
   }
 }
 

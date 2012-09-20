@@ -2,6 +2,7 @@ package org.specs2
 package data
 import org.specs2.internal.scalaz.{Tree, TreeLoc, Scalaz}
 import Scalaz._
+import Tree._
 
 /**
  * Utility methods for scalaz Trees
@@ -66,7 +67,7 @@ trait Trees { outer =>
 
   /** reimplementation of squish from scalaz, using a foldLeft */
   private def squishLeft[A](tree: Tree[A], xs: Stream[A]): Stream[A] =
-    Stream.cons(tree.rootLabel, tree.subForest.reverse.foldl(xs)((s, t) => squishLeft(t, s)))
+    Stream.cons(tree.rootLabel, tree.subForest.reverse.foldl(xs)(s => t => squishLeft(t, s)))
 
   /**
    * Implicit definition to add more functionalities to the TreeLoc class

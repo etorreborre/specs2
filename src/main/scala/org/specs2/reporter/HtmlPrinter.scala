@@ -2,7 +2,9 @@ package org.specs2
 package reporter
 
 import org.specs2.internal.scalaz.{Tree, Reducer, Scalaz}
-import  Scalaz._
+import Scalaz._
+import Tree._
+import data.Reducerx._
 import collection.Iterablex._
 import html._
 import xml.Nodex._
@@ -125,8 +127,7 @@ trait HtmlPrinter {
     LevelsReducer  &&&
     SpecsArgumentsReducer
 
-  implicit object HtmlReducer extends Reducer[ExecutedFragment, Seq[HtmlLine]] {
-    implicit override def unit(fragment: ExecutedFragment): Seq[HtmlLine] = Seq(print(fragment))
+  implicit val HtmlReducer: Reducer[ExecutedFragment, Stream[HtmlLine]] = {
     /** print an ExecutedFragment and its associated statistics */
     def print(fragment: ExecutedFragment): HtmlLine = fragment match {
       case start @ ExecutedSpecStart(_,_,_)       => HtmlSpecStart(start)
@@ -136,6 +137,8 @@ trait HtmlPrinter {
       case end @ ExecutedSpecEnd(_,_,s)           => HtmlSpecEnd(end, s)
       case fragment                               => HtmlOther(fragment)
     }
+
+    Reducer.unitReducer { fragment: ExecutedFragment => Stream(print(fragment)) }
   }
 
 }

@@ -5,6 +5,7 @@ import java.util.concurrent.Executors
 import org.specs2.internal.scalaz._
 import Scalaz._
 import concurrent._
+import Promise._
 import Strategy._
 import specification._
 import control.NamedThreadFactory

@@ -3,6 +3,7 @@ package collection
 
 import internal.scalaz._
 import Generator._
+import std.iterable._
 
 /**
  * This trait provides additional methods on Seqs and nested Seqs
@@ -25,7 +26,7 @@ trait Seqx { outer =>
    */
   class ExtendedSeq[T](seq: Seq[T]) {
 
-    def reduceWith[S](reducer: Reducer[T, S]) = FoldlGenerator[Seq].reduce(reducer, seq)
+    def reduceWith[S](reducer: Reducer[T, S]) = FoldlGenerator[Seq](seqIsFoldable).reduce(reducer, seq)
 
     /** update the last element if there is one */
     def updateLast(f: T => T) = seq match {
@@ -78,6 +79,11 @@ trait Seqx { outer =>
     val filtered = xs.filter(_.nonEmpty)
     if (filtered.isEmpty) Seq()
     else filtered.map(_.head) +: transpose(filtered.map(_.tail))
+  }
+
+  implicit def seqIsFoldable: Foldable[Seq] = new Foldable[Seq] {
+    def foldRight[A, B](fa: Seq[A], z: => B)(f: (A, =>B) => B) = implicitly[Foldable[Stream]].foldRight(fa.toStream, z)(f)
+    def foldMap[A, B](fa: Seq[A])(f: (A) => B)(implicit F: Monoid[B]) = implicitly[Foldable[Stream]].foldMap(fa.toStream)(f)
   }
 }
 

@@ -3,6 +3,7 @@ package reporter
 
 import org.specs2.internal.scalaz._
 import  Scalaz._
+import Tree._
 import data.Trees._
 import specification.{SpecEnd, SpecStart, Fragment, ExecutedSpecEnd, ExecutedSpecStart, ExecutedFragment}
 

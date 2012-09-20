@@ -4,6 +4,7 @@ package matcher
 import execute._
 import org.specs2.internal.scalaz._, Scalaz._
 import Foldable._
+import collection.Seqx._
 import Generator._
 import text.Quote._
 import text.Plural._

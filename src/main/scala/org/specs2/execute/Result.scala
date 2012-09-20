@@ -6,6 +6,8 @@ import text.NotNullStrings._
 import main.Arguments
 import org.specs2.internal.scalaz.Scalaz._
 import internal.scalaz.{Foldable, Monoid}
+import Foldable._
+import collection.Seqx._
 import text.Message.concat
 
 /**
@@ -137,7 +139,7 @@ object Result {
    * @return the accumulation of all results, without success messages
    */
   def issues(results: Seq[Result], separator: String = "; ") =
-    results.foldMap(identity)(implicitly[Foldable[Seq]], ResultFailuresMonoid(separator)).addExpectationsNb(-1)
+    results.foldMap(identity)(ResultFailuresMonoid(separator)).addExpectationsNb(-1)
 
   implicit val ResultMonoid: Monoid[Result] = new Monoid[Result] {
     val zero = Success()

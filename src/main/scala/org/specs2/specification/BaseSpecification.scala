@@ -3,6 +3,7 @@ package specification
 
 import org.specs2.internal.scalaz._
 import Scalaz._
+import collection.Seqx._
 import Fragments._
 import reflect.Classes._
 import main.{CommandLineArguments, Arguments}
@@ -21,13 +22,13 @@ trait BaseSpecification extends SpecificationStructure with FragmentsBuilder wit
  */
 trait SpecificationInclusion { this: FragmentsBuilder =>
   def include(f: Fragments): FragmentsFragment = fragmentsFragments(f)
-  def include(f: Fragments, fs: Fragments*): FragmentsFragment = include(ma(f +: fs).sum)
+  def include(f: Fragments, fs: Fragments*): FragmentsFragment = include((f +: fs).sumr)
   implicit def include(s: SpecificationStructure): FragmentsFragment = include(s.content)
   def include(s: SpecificationStructure, ss: SpecificationStructure*): FragmentsFragment = include(s.content, ss.map(_.content):_*)
   def include(args: Arguments, s: SpecificationStructure): FragmentsFragment = include(args, s.content)
   def include(args: Arguments, s: SpecificationStructure, ss: SpecificationStructure*): FragmentsFragment = include(args, s.content, ss.map(_.content):_*)
   def include(args: Arguments, f: Fragments): FragmentsFragment = include(f.overrideArgs(args))
-  def include(args: Arguments, f: Fragments, fs: Fragments*): FragmentsFragment = include(ma(f +: fs).sum.overrideArgs(args))
+  def include(args: Arguments, f: Fragments, fs: Fragments*): FragmentsFragment = include((f +: fs).sumr.overrideArgs(args))
 
   /** add the fragments of another specification without start and end */
   def inline(specs: SpecificationStructure*): Fragments = Fragments.createList(specs.flatMap(s => s.map(s.is).middle):_*)

@@ -6,6 +6,7 @@ import TimeConversions._
 import internal.scalaz._
 import Scalaz._
 import concurrent.Promise
+import Promise._
 
 /**
  * This trait provides matchers to check if a block of code is terminating or not

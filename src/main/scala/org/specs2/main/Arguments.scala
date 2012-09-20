@@ -1,7 +1,7 @@
 package org.specs2
 package main
 
-import org.specs2.internal.scalaz.{ Monoid, Scalaz }
+import internal.scalaz.{Memo, Monoid, Scalaz}
 import Scalaz._
 import control._
 import Exceptions._
@@ -433,6 +433,8 @@ object CommandLine extends Extract {
 
   def splitValues(arguments: String): Seq[String] = arguments.splitDashed(allValueNames)
 }
+
+import Memo._
 
 private[specs2]
 trait Extract {

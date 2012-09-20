@@ -9,13 +9,13 @@ import org.specs2.internal.scalaz.{Monoid, Reducer}
 private[specs2]
 trait MatchResultMessages {
 
-  implicit def MatchResultMessageReducer[T] = new Reducer[MatchResult[T], MatchResultMessage] {
-    override def unit(r: MatchResult[T]) = r match {
+  implicit def MatchResultMessageReducer[T]: Reducer[MatchResult[T], MatchResultMessage] =
+    Reducer.unitReducer { r: MatchResult[T] => r match {
       case MatchSuccess(ok, ko, e)    => SuccessMessage(ok, ko)
       case MatchFailure(ok, ko, e, d) => FailureMessage(ok, ko)
       case _                          => NeutralMessage(r.message)
-    }
-  }
+    }}
+
   implicit val MatchResultMessageMonoid = new Monoid[MatchResultMessage] {
     val zero = new EmptySuccessMessage()
     def append(r1: MatchResultMessage, r2: =>MatchResultMessage) = r1 append r2

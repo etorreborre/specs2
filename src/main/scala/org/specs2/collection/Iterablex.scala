@@ -4,6 +4,7 @@ package collection
 import scala.collection.{GenSeq, GenIterable}
 import org.specs2.internal.scalaz._
 import Generator._
+import std.iterable._
 import Seqx._
 
 /**

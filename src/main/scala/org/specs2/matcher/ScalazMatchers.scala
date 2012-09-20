@@ -3,15 +3,16 @@ package matcher
 
 import org.scalacheck.{ Arbitrary, Shrink, Prop }
 import org.specs2.internal._
-import scalaz._, Scalaz._
+import scalaz.{Semigroup, Monoid, Validation, Success, Failure, Scalaz}
+import scalaz.syntax.monoid._
 import MatchResultLogicalCombinators._
 import execute.{Result, ResultLogicalCombinators}
 import ResultLogicalCombinators._
 
 /**
- * This trait provides matchers for some Scalaz (http://code.google.com/p/scalaz) datatypes.
+ * This trait provides matchers for some Scalaz (http://github.com/p/scalaz) datatypes.
  *
- * It uses Scalaz classes from the repackaged version of scalaz 6 so it can not be used outside of specs2
+ * It uses Scalaz classes from the repackaged version of scalaz 7 so it can not be used outside of specs2
  */
 private[specs2]
 trait ScalazMatchers extends ScalaCheckMatchers with Expectations { outer: AnyMatchers =>
