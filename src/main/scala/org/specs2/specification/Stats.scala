@@ -187,7 +187,7 @@ case object Stats {
         errors       = s1.errors          + s2.errors,
         pending      = s1.pending         + s2.pending,
         skipped      = s1.skipped         + s2.skipped,
-        trend        = (s1.trend <**> s2.trend)(_ |+| _),
+        trend        = ^(s1.trend, s2.trend)(_ |+| _),
         timer        = s1.timer           add s2.timer
       )
     }

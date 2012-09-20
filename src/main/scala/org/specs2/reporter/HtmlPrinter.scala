@@ -121,13 +121,13 @@ trait HtmlPrinter {
     }
   }  
   
-  private  val reducer = 
+  private lazy val reducer =
     HtmlReducer &&& 
     StatsReducer &&&
     LevelsReducer  &&&
     SpecsArgumentsReducer
 
-  implicit val HtmlReducer: Reducer[ExecutedFragment, Stream[HtmlLine]] = {
+  implicit lazy val HtmlReducer: Reducer[ExecutedFragment, Stream[HtmlLine]] = {
     /** print an ExecutedFragment and its associated statistics */
     def print(fragment: ExecutedFragment): HtmlLine = fragment match {
       case start @ ExecutedSpecStart(_,_,_)       => HtmlSpecStart(start)
