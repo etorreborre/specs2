@@ -29,23 +29,6 @@ While the formal type of output is Unit, the HtmlExporting trait actually transf
   }
 }
 
-//spec[ExecutedSpecification, Arguments, Unit](new HtmlExporting0Spec)
-//
-//def spec[A, B](spec: FunctionSpecification[A, B]): FunctionSpecification[A, B] = spec
-//def spec[A, B, C](spec: Function2Specification[A, B, C]): Function2Specification[A, B, C] = spec
-//
-//
-//trait HtmlExporting1 {
-//  import internal.scalaz.Scalaz._
-//  def fragmentsToLines: ExecutedSpecification  => Seq[HtmlLinesFile]
-//  def linesToHtml: Seq[HtmlLinesFile] => Seq[HtmlFile]
-//  def writeFiles: Seq[HtmlFile] => Unit
-//
-//  def export: (ExecutedSpecification, Arguments) => Unit = { case (spec, args) =>
-//    spec |> fragmentsToLines |> linesToHtml |> writeFiles
-//  }
-//}
-
 
 trait FunctionSpecification[A, B] extends Specification with Function[A, B] {
   def data: DataSpecificationStructure[A]

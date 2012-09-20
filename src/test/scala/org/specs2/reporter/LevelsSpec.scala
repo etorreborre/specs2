@@ -137,7 +137,7 @@ class LevelsSpec extends Specification with ScalaCheck with ScalazMatchers with 
   import Arbitrary._
 
   implicit val arbitraryLevel: Arbitrary[Level[Fragment]] = Arbitrary {
-    for (f <- arbitrary[Fragment]) yield FragmentLevelsReducer.toLevel(f)
+    for (f <- arbitrary[Fragment]) yield Levels.fragmentToLevel(f)
   }
   implicit val arbitraryLevels: Arbitrary[Levels[Fragment]] = Arbitrary {
 

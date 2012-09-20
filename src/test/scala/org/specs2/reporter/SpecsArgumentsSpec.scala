@@ -60,7 +60,7 @@ class SpecsArgumentsSpec extends Specification with ScalazMatchers with Arbitrar
   def names(fs: Fragments) = foldAll(fs.fragments).nestedSpecNames.map(_.title)
 
   implicit val arbitrarySpecsArguments: Arbitrary[SpecsArguments[Fragment]] = Arbitrary {
-    for (f <- arbitrary[Fragment]) yield f
+    for (f <- arbitrary[Fragment]) yield SpecsArguments(Seq(NoStartOfArguments(f)))
   }
   implicit val arbitrarySpecName: Arbitrary[SpecName] = Arbitrary {
     for (s <- arbitrary[String]) yield (SpecName(s): SpecName)

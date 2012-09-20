@@ -127,7 +127,7 @@ case object Levels {
   implicit val LevelsReducer: Reducer[ExecutedFragment, Levels[ExecutedFragment]] =
     Reducer.unitReducer { f: ExecutedFragment => Levels(executedFragmentToLevel(f)) }
 
-  private implicit def executedFragmentToLevel: ExecutedFragment => Level[ExecutedFragment] = (f: ExecutedFragment) => f match {
+  implicit def executedFragmentToLevel: ExecutedFragment => Level[ExecutedFragment] = (f: ExecutedFragment) => f match {
     case t @ ExecutedResult(_,_,_,_,_)     => Terminal(t)
     case t @ ExecutedText(_, _)            => Indent(t)
     case t @ ExecutedTab(n, _)             => Indent(t, n)
@@ -141,7 +141,7 @@ case object Levels {
   implicit val LevelReducer: Reducer[ExecutedFragment, Level[ExecutedFragment]] =
     Reducer.unitReducer { f: ExecutedFragment => executedFragmentToLevel(f) }
 
-  private implicit def fragmentToLevel: Fragment => Level[Fragment] = (f: Fragment) => f match {
+  implicit def fragmentToLevel: Fragment => Level[Fragment] = (f: Fragment) => f match {
     case t @ Example(_, _)         => Terminal(t)
     case t @ Tab(n)                => Indent(t, n)
     case t @ Backtab(n)            => Unindent(t, n)

@@ -186,10 +186,11 @@ class ContainMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T) ==
 }
 
 import data._
-import Monoidx._
 import internal.scalaz.{std, syntax}
 import std.stream._
 import std.anyVal._
+import intInstance._
+import std.map._
 import syntax.foldable._
 
 class ContainExactlyOnceMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)) extends AbstractContainMatcher(expected, equality) {
@@ -197,7 +198,7 @@ class ContainExactlyOnceMatcher[T](expected: Seq[T], equality: (T, T) => Boolean
   def create(seq: =>Seq[T], eq: (T, T) => Boolean) = new ContainExactlyOnceMatcher[T](seq, eq)
 
   def apply[S <: GenTraversableOnce[T]](actual: Expectable[S]) = {
-    val actualValues = actual.value.seq.toStream.map(e => (e, 1)).foldMap(Map(_))
+    val actualValues = actual.value.seq.toStream.map(e => (e, 1)).foldMap(Map(_))(mapMonoid[T, Int])
 
     result(expected.forall(e => actualValues.filter { case (k, v) => equality(k, e) }.values.sum == 1),
            actual.description + " contains exactly once " + q(expected.mkString(", ")),
