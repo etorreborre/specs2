@@ -7,6 +7,7 @@ import org.specs2.internal.scalaz.Scalaz._
 import text.Plural._
 import text.Quote._
 import scala.reflect.ClassTag
+import MatchResultLogicalCombinators._
 
 /**
 * Matchers for parser combinators

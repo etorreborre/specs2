@@ -1,12 +1,11 @@
 package org.specs2
 package matcher
 
-import execute._
 import io.MockOutput
-import scala.actors.Futures._
 import java.util.concurrent._
+import internal.scalaz.concurrent.Promise
 
-class   TerminationMatchersSpec extends Specification with TerminationMatchers { def is =
+class TerminationMatchersSpec extends Specification with TerminationMatchers { def is =
 
   "It is possible to check if a block of code terminates"                                          ^
     "with a default number of retries and default sleep time"                                      ^
@@ -23,13 +22,16 @@ class   TerminationMatchersSpec extends Specification with TerminationMatchers {
                                                                                                    p^
   "We should be able to observe that an action unblocks another"                                   ^
     "with a when clause"                                                                           ! e7^
-    "with an onlyWhen clause"                                                                      ! e8^
+    "with an onlyWhen clause"                                                                      ^
+      "if action1 terminates after action 2 -> success"                                            ! e8^
+      "if action1 terminates before action 2 -> failure"                                           ! e8_1^
+      "if action1 doesn't terminate after action 2 -> failure"                                     ! e8_2^
     "with a list of actions"                                                                       ! e9^
                                                                                                    end
 
-  def e1 = { Thread.sleep(50) must terminate.orSkip }
-  def e2 = { (Thread.sleep(150) must terminate) returns "the action is blocking with retries=0 and sleep=100" }
-  def e3 = { Thread.sleep(50) must terminate(retries=2, sleep=20.millis).orSkip }
+  def e1 = { Thread.sleep(50) must terminate }
+  def e2 = { (Thread.sleep(150) must terminate) returns "the action is blocking with retries=1 and sleep=100" }
+  def e3 = { Thread.sleep(50) must terminate(retries=3, sleep=20.millis) }
   def e4 = { (Thread.sleep(1000) must terminate(retries=3, sleep=20.millis)) returns "the action is blocking with retries=3 and sleep=20" }
   def e5 = {
     val out = new MockOutput { }
@@ -46,17 +48,30 @@ class   TerminationMatchersSpec extends Specification with TerminationMatchers {
 
   def e8 = {
     val queue1 = new ArrayBlockingQueue[Int](1)
-    val queue2 = new ArrayBlockingQueue[Int](1)
+    var stop = true
+    def action1 = Promise { while (stop) { Thread.sleep(10)}; queue1.add(1) }.get
+    def action2 = Promise { stop = false }.get
+    action1 must terminate.onlyWhen(action2)
+  }
 
-    val noMessage = (queue1.add(1) must terminate.onlyWhen(queue1.add(1))) returns "the action terminates before the second action"
-    val message = (queue2.add(1) must terminate.onlyWhen("adding an element", queue2.add(1))) returns "the action terminates before adding an element"
-    (noMessage and message) or Skipped("this example may fail")
+  def e8_1 = {
+    val queue1 = new ArrayBlockingQueue[Int](1)
+
+    ((queue1.add(1) must terminate.onlyWhen(queue1.size)) returns "the action terminated before the second action") and
+    ((queue1.add(1) must terminate.onlyWhen("taking the size", queue1.size)) returns "the action terminated before taking the size")
+  }
+
+  def e8_2 = {
+    val queue1 = new ArrayBlockingQueue[Int](1)
+    // we sleep first for 100, then trigger the action and wait again for 100. In that case, it's not enough waiting
+    // even after the action has been triggered
+    ({Thread.sleep(300); queue1.add(1)} must terminate.onlyWhen(queue1.add(1))) returns "the action is blocking with retries=1 and sleep=100"
   }
 
   def e9 = {
     val queue = new ArrayBlockingQueue[Int](1)
     val actions = Seq(() => { Thread.sleep(10); queue.take() }, () => { Thread.sleep(50); queue.add(1) }).par
-    actions.map(_()).seq must terminate(sleep=200.millis).orSkip
+    actions.map(_()).seq must terminate(sleep=200.millis)
   }
 
 }

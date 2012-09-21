@@ -46,7 +46,7 @@ The Throwablex trait provides extensions to regular throwables:
                containMatch("org.specs2.control")
   }
   object stack extends ThrowablexContext {
-    def e1 = e(3).toString aka e.getStackTrace().mkString("\n") must beMatching(".*apply.*")
+    def e1 = e(3).toString aka e.getStackTrace.mkString("\n") must beMatching(".*apply.*")
     def e2 = e.headOption.map(_.toString).toIterable must containMatch("ThrowablexContext")
   }
 }

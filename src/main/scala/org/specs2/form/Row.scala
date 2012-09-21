@@ -2,10 +2,10 @@ package org.specs2
 package form
 
 import org.specs2.internal.scalaz.{ NonEmptyList, Scalaz }
-import Scalaz.nel
+import NonEmptyList._
 import execute._
 import StandardResults._
-
+import ResultLogicalCombinators._
 /**
  * A Row is a non-empty list of Cells
  * 
@@ -63,5 +63,5 @@ case object Row {
   /**
    * create a row from cells
    */
-  def tr(c1: Cell, cs: Cell*) = Row(nel(c1, cs:_*))
+  def tr(c1: Cell, cs: Cell*) = Row(nel(c1, cs.toList))
 }

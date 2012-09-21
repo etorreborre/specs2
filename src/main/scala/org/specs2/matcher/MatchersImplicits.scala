@@ -4,13 +4,14 @@ package matcher
 import execute._
 import org.specs2.internal.scalaz._, Scalaz._
 import Foldable._
+import collection.Seqx._
 import Generator._
 import text.Quote._
 import text.Plural._
 import MatchResultMessages._
 import Result.ResultFailureMonoid
 import scala.collection.{GenTraversable, GenTraversableOnce}
-import control.Functions
+import ResultLogicalCombinators._
 
 /**
 * This trait provides implicit definitions from MatchResults and Booleans to Results.
@@ -20,33 +21,7 @@ import control.Functions
 * - create matchers from functions
 * - create matchers for seqs and sets from single matchers
 */
-trait MatchersImplicits extends Expectations { outer =>
-  /**
-  * implicit definition to transform a Seq of MatchResults to a Result
-  */
-  implicit def seqToResult[T](r: Seq[MatchResult[T]]): Result = r.foldLeft(StandardResults.success: Result)(_ and _.toResult)
-
-  /**
-  * implicit definition to transform any MatchResult to a Result
-  */
-  implicit def asResult[T, M[_] <: MatchResult[_]](r: M[T]): Result = r.toResult
-
-  /**
-   * implicit definition to accept any MatchResult as a Boolean value.
-   * It is true if the MatchResult is not an Error or a Failure
-   */
-  implicit def fromMatchResult(r: =>MatchResult[_]): Boolean = r.isSuccess || r.toResult.isSkipped || r.toResult.isPending
-
-  /** implicit typeclass instance to create examples from MatchResults */
-  implicit def matchResultAsResult[T, M[_] <: MatchResult[_]]: AsResult[M[T]] = new AsResult[M[T]] {
-    def asResult(t: =>M[T]): Result = outer.asResult(t)
-  }
-
-  /** implicit typeclass instance to create examples from a sequence of MatchResults */
-  implicit def matchResultSeqAsResult[T]: AsResult[Seq[MatchResult[T]]] = new AsResult[Seq[MatchResult[T]]] {
-    def asResult(t: =>Seq[MatchResult[T]]): Result = t.foldLeft(StandardResults.success: Result)(_ and _.toResult)
-  }
-
+trait MatchersImplicits extends Expectations with MatchResultCombinators with MatchResultImplicits { outer =>
   /**
    * Add functionalities to functions returning matchers so that they can be combined before taking a value and
    * returning actual matchers
@@ -224,7 +199,7 @@ trait MatchersImplicits extends Expectations { outer =>
    */
   implicit def matchResultFunctionToMatcher[T](f: T => MatchResult[_]): Matcher[T] = new Matcher[T] {
     def apply[S <: T](s: Expectable[S]) = {
-      val functionResult = f(s.value)
+      val functionResult = ResultExecution.execute(f(s.value).toResult)
       result(functionResult.isSuccess, functionResult.message, functionResult.message, s)
     }
   }
@@ -296,3 +271,35 @@ trait MatchersImplicits extends Expectations { outer =>
 
 private[specs2]
 object MatchersImplicits extends MatchersImplicits
+
+/**
+ * Implicit conversions for MatchResults
+ */
+private[specs2]
+trait MatchResultImplicits { outer =>
+  /**
+  * implicit definition to transform a Seq of MatchResults to a Result
+  */
+  implicit def seqToResult[T](r: Seq[MatchResult[T]]): Result = r.foldLeft(StandardResults.success: Result)(_ and _.toResult)
+
+  /**
+   * implicit definition to transform any MatchResult to a Result
+   */
+  implicit def asResult[T, M[_] <: MatchResult[_]](r: M[T]): Result = r.toResult
+
+  /**
+   * implicit definition to accept any MatchResult as a Boolean value.
+   * It is true if the MatchResult is not an Error or a Failure
+   */
+  implicit def fromMatchResult(r: =>MatchResult[_]): Boolean = r.isSuccess || r.toResult.isSkipped || r.toResult.isPending
+
+  /** implicit typeclass instance to create examples from MatchResults */
+  implicit def matchResultAsResult[T, M[_] <: MatchResult[_]]: AsResult[M[T]] = new AsResult[M[T]] {
+    def asResult(t: =>M[T]): Result = outer.asResult(t)
+  }
+
+  /** implicit typeclass instance to create examples from a sequence of MatchResults */
+  implicit def matchResultSeqAsResult[T]: AsResult[Seq[MatchResult[T]]] = new AsResult[Seq[MatchResult[T]]] {
+    def asResult(t: =>Seq[MatchResult[T]]): Result = t.foldLeft(StandardResults.success: Result)(_ and _.toResult)
+  }
+}

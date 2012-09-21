@@ -161,7 +161,7 @@ import org.specs2.internal.scalaz._
 private[specs2]
 trait ExecutedFragmentsShow {
   implicit object showExecutedFragments extends Show[ExecutedFragment] {
-	  def show(f: ExecutedFragment) = f.toString.toList
+	  override def shows(f: ExecutedFragment) = f.toString
   }
 }
 private[specs2]

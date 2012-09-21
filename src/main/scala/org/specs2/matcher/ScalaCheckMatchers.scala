@@ -6,7 +6,7 @@ import org.scalacheck.Prop._
 import org.scalacheck.Test.{ Params, Proved, Passed, Failed, Exhausted, GenException, PropException, Result }
 import org.scalacheck.Pretty._
 import scala.collection.Map
-import io.ConsoleOutput
+import io.{Output, ConsoleOutput}
 import org.scalacheck._
 import execute.AsResult
 
@@ -29,60 +29,86 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
    * transform a Function returning a MatchResult (or anything which can be converted to a Prop) as a ScalaCheck property
    */
   def prop[T, R](result: T => R)(implicit toProp: (=>R) => Prop, a: Arbitrary[T], s: Shrink[T]): Prop = check1(result)
+  def propNoShrink[T, R](result: T => R)(implicit toProp: (=>R) => Prop, a: Arbitrary[T]): Prop = check1NoShrink(result)
   /**
    * @deprecated use prop instead. The name "check" is misleading because it doesn't actually check anything but merely builds a Prop
    */
   def check[T, R](result: T => R)(implicit toProp: (=>R) => Prop, a: Arbitrary[T], s: Shrink[T]): Prop = check1(result)
   implicit def check1[T, R](result: T => R)(implicit toProp: (=>R) => Prop, a: Arbitrary[T], s: Shrink[T]): Prop = Prop.forAll((t: T) => toProp(result(t)))
+  def check1NoShrink[T, R](result: T => R)(implicit toProp: (=>R) => Prop, a: Arbitrary[T]): Prop = Prop.forAllNoShrink(a.arbitrary)((t: T) => toProp(result(t)))
 
   def prop[T1, T2, R](result: (T1, T2) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2]): Prop = check2(result)
+  def propNoShrink[T1, T2, R](result: (T1, T2) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], a2: Arbitrary[T2]): Prop = check2NoShrink(result)
   /** @deprecated use forAll instead */
   def check[T1, T2, R](result: (T1, T2) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2]): Prop = check2(result)
   implicit def check2[T1, T2, R](result: (T1, T2) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2]): Prop =
     Prop.forAll((t1: T1, t2: T2) => toProp(result(t1, t2)))
+  def check2NoShrink[T1, T2, R](result: (T1, T2) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], a2: Arbitrary[T2]): Prop =
+    Prop.forAllNoShrink(a1.arbitrary, a2.arbitrary)((t1: T1, t2: T2) => toProp(result(t1, t2)))
 
   def prop[T1, T2, T3, R](result: (T1, T2, T3) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3]): Prop = check3(result)
+  def propNoShrink[T1, T2, T3, R](result: (T1, T2, T3) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3]): Prop = check3NoShrink(result)
   /** @deprecated use prop instead */
   def check[T1, T2, T3, R](result: (T1, T2, T3) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3]): Prop = check3(result)
   implicit def check3[T1, T2, T3, R](result: (T1, T2, T3) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3]): Prop =
     Prop.forAll((t1: T1, t2: T2, t3: T3) => toProp(result(t1, t2, t3)))
+  def check3NoShrink[T1, T2, T3, R](result: (T1, T2, T3) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3]): Prop =
+    Prop.forAllNoShrink(a1.arbitrary, a2.arbitrary, a3.arbitrary)((t1: T1, t2: T2, t3: T3) => toProp(result(t1, t2, t3)))
 
   def prop[T1, T2, T3, T4, R](result: (T1, T2, T3, T4) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4]): Prop = check4(result)
+  def propNoShrink[T1, T2, T3, T4, R](result: (T1, T2, T3, T4) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4]): Prop = check4NoShrink(result)
   /** @deprecated use prop instead */
   def check[T1, T2, T3, T4, R](result: (T1, T2, T3, T4) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4]): Prop = check4(result)
   implicit def check4[T1, T2, T3, T4, R](result: (T1, T2, T3, T4) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4]): Prop =
     Prop.forAll((t1: T1, t2: T2, t3: T3, t4: T4) => toProp(result(t1, t2, t3, t4)))
+  def check4NoShrink[T1, T2, T3, T4, R](result: (T1, T2, T3, T4) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4]): Prop =
+    Prop.forAllNoShrink(a1.arbitrary, a2.arbitrary, a3.arbitrary, a4.arbitrary)((t1: T1, t2: T2, t3: T3, t4: T4) => toProp(result(t1, t2, t3, t4)))
 
   def prop[T1, T2, T3, T4, T5, R](result: (T1, T2, T3, T4, T5) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5]): Prop = check5(result)
+  def propNoShrink[T1, T2, T3, T4, T5, R](result: (T1, T2, T3, T4, T5) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4], a5: Arbitrary[T5]): Prop = check5NoShrink(result)
   /** @deprecated use prop instead */
   def check[T1, T2, T3, T4, T5, R](result: (T1, T2, T3, T4, T5) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5]): Prop = check5(result)
   implicit def check5[T1, T2, T3, T4, T5, R](result: (T1, T2, T3, T4, T5) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5]): Prop =
     Prop.forAll((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => toProp(result(t1, t2, t3, t4, t5)))
+  def check5NoShrink[T1, T2, T3, T4, T5, R](result: (T1, T2, T3, T4, T5) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4], a5: Arbitrary[T5]): Prop =
+    Prop.forAllNoShrink(a1.arbitrary, a2.arbitrary, a3.arbitrary, a4.arbitrary, a5.arbitrary)((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => toProp(result(t1, t2, t3, t4, t5)))
 
   def prop[T1, T2, T3, T4, T5, T6, R](result: (T1, T2, T3, T4, T5, T6) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1],a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6]): Prop = check6(result)
+  def propNoShrink[T1, T2, T3, T4, T5, T6, R](result: (T1, T2, T3, T4, T5, T6) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4], a5: Arbitrary[T5], a6: Arbitrary[T6]): Prop = check6NoShrink(result)
   /** @deprecated use prop instead */
   def check[T1, T2, T3, T4, T5, T6, R](result: (T1, T2, T3, T4, T5, T6) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1],a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6]): Prop = check6(result)
   implicit def check6[T1, T2, T3, T4, T5, T6, R](result: (T1, T2, T3, T4, T5, T6) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1],a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6]): Prop =
     Prop.forAll((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) => toProp(result(t1, t2, t3, t4, t5, t6)))
+  def check6NoShrink[T1, T2, T3, T4, T5, T6, R](result: (T1, T2, T3, T4, T5, T6) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4], a5: Arbitrary[T5], a6: Arbitrary[T6]): Prop =
+    Prop.forAllNoShrink(a1.arbitrary, a2.arbitrary, a3.arbitrary, a4.arbitrary, a5.arbitrary, a6.arbitrary)((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) => toProp(result(t1, t2, t3, t4, t5, t6)))
 
   def prop[T1, T2, T3, T4, T5, T6, T7, R](result: (T1, T2, T3, T4, T5, T6, T7) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2],a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6], a7: Arbitrary[T7], s7: Shrink[T7]): Prop = check7(result)
+  def propNoShrink[T1, T2, T3, T4, T5, T6, T7, R](result: (T1, T2, T3, T4, T5, T6, T7) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4], a5: Arbitrary[T5], a6: Arbitrary[T6], a7: Arbitrary[T7]): Prop = check7NoShrink(result)
   /** @deprecated use prop instead */
   def check[T1, T2, T3, T4, T5, T6, T7, R](result: (T1, T2, T3, T4, T5, T6, T7) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2],a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6], a7: Arbitrary[T7], s7: Shrink[T7]): Prop = check7(result)
   implicit def check7[T1, T2, T3, T4, T5, T6, T7, R](result: (T1, T2, T3, T4, T5, T6, T7) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2],a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6], a7: Arbitrary[T7], s7: Shrink[T7]): Prop =
     Prop.forAll((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7) => toProp(result(t1, t2, t3, t4, t5, t6, t7)))
+  def check7NoShrink[T1, T2, T3, T4, T5, T6, T7, R](result: (T1, T2, T3, T4, T5, T6, T7) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4], a5: Arbitrary[T5], a6: Arbitrary[T6], a7: Arbitrary[T7]): Prop =
+    Prop.forAllNoShrink(a1.arbitrary, a2.arbitrary, a3.arbitrary, a4.arbitrary, a5.arbitrary, a6.arbitrary, a7.arbitrary)((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7) => toProp(result(t1, t2, t3, t4, t5, t6, t7)))
 
   def prop[T1, T2, T3, T4, T5, T6, T7, T8, R](result: (T1, T2, T3, T4, T5, T6, T7, T8) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6], a7: Arbitrary[T7], s7: Shrink[T7], a8: Arbitrary[T8], s8: Shrink[T8]): Prop = check8(result)
+  def propNoShrink[T1, T2, T3, T4, T5, T6, T7, T8, R](result: (T1, T2, T3, T4, T5, T6, T7, T8) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4], a5: Arbitrary[T5], a6: Arbitrary[T6], a7: Arbitrary[T7], a8: Arbitrary[T8]): Prop = check8NoShrink(result)
   /** @deprecated use prop instead */
   def check[T1, T2, T3, T4, T5, T6, T7, T8, R](result: (T1, T2, T3, T4, T5, T6, T7, T8) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6], a7: Arbitrary[T7], s7: Shrink[T7], a8: Arbitrary[T8], s8: Shrink[T8]): Prop = check8(result)
   implicit def check8[T1, T2, T3, T4, T5, T6, T7, T8, R](result: (T1, T2, T3, T4, T5, T6, T7, T8) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], s1: Shrink[T1], a2: Arbitrary[T2], s2: Shrink[T2], a3: Arbitrary[T3], s3: Shrink[T3], a4: Arbitrary[T4], s4: Shrink[T4], a5: Arbitrary[T5], s5: Shrink[T5], a6: Arbitrary[T6], s6: Shrink[T6], a7: Arbitrary[T7], s7: Shrink[T7], a8: Arbitrary[T8], s8: Shrink[T8]): Prop =
     Prop.forAll((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) => toProp(result(t1, t2, t3, t4, t5, t6, t7, t8)))
-  
+  def check8NoShrink[T1, T2, T3, T4, T5, T6, T7, T8, R](result: (T1, T2, T3, T4, T5, T6, T7, T8) => R)(implicit toProp: (=>R) => Prop, a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4], a5: Arbitrary[T5], a6: Arbitrary[T6], a7: Arbitrary[T7], a8: Arbitrary[T8]): Prop =
+    Prop.forAllNoShrink(a1.arbitrary, a2.arbitrary, a3.arbitrary, a4.arbitrary, a5.arbitrary, a6.arbitrary, a7.arbitrary, a8.arbitrary)((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) => toProp(result(t1, t2, t3, t4, t5, t6, t7, t8)))
+
   /** execute a PartialFunction as a ScalaCheck property */
   def prop[T, S](f: PartialFunction[T, S])(implicit toProp: S => Prop, a: Arbitrary[T], s: Shrink[T]): Prop = checkPartial(f)
+  def propNoShrink[T, S](f: PartialFunction[T, S])(implicit toProp: S => Prop, a: Arbitrary[T]): Prop = checkPartialNoShrink(f)
   /** @deprecated use prop instead */
   def check[T, S](f: PartialFunction[T, S])(implicit toProp: S => Prop, a: Arbitrary[T], s: Shrink[T]): Prop = checkPartial(f)
   implicit def checkPartial[T, S](f: PartialFunction[T, S])(implicit toProp: S => Prop, a: Arbitrary[T], s: Shrink[T]): Prop =
     PartialFunctionPropertyImplicits.partialFunctionToProp(f).forAll
+  implicit def checkPartialNoShrink[T, S](f: PartialFunction[T, S])(implicit toProp: S => Prop, a: Arbitrary[T]): Prop =
+    PartialFunctionPropertyImplicits.partialFunctionToProp(f).forAllNoShrink
 
   /** execute a ScalaCheck property */
   def check(prop: Prop)(implicit p: Parameters): execute.Result = checkProp(prop)(p)
@@ -210,6 +236,7 @@ trait PartialFunctionPropertyImplicits {
   implicit def partialFunctionToProp[T, S](f: PartialFunction[T, S]): PartialFunctionForAll[T, S] = new PartialFunctionForAll(f)
   class PartialFunctionForAll[T, S](f: PartialFunction[T, S]) {
     def forAll(implicit toProp: S => Prop, a: Arbitrary[T], s: Shrink[T]): Prop = Prop.forAll(f)
+    def forAllNoShrink(implicit toProp: S => Prop, a: Arbitrary[T]): Prop = Prop.forAllNoShrink(a.arbitrary)(f)
   }
 }
 object PartialFunctionPropertyImplicits extends PartialFunctionPropertyImplicits
@@ -281,7 +308,7 @@ trait ApplicableArbitraries { this: ScalaCheckMatchers =>
 /**
  * This trait provides generation parameters to use with the <code>ScalaCheckMatchers</code>
  */
-trait ScalaCheckParameters { this: ScalaCheckMatchers =>
+trait ScalaCheckParameters { outer: ScalaCheckMatchers with Output =>
   /**
    * default parameters. Uses ScalaCheck default values and doesn't print anything to the console
    */
@@ -301,7 +328,7 @@ trait ScalaCheckParameters { this: ScalaCheckMatchers =>
             rng: java.util.Random       = defaultParameters.rng,
             callback: Test.TestCallback = defaultParameters.callback,
             loader: Option[ClassLoader] = defaultParameters.loader): execute.Result =
-      check(prop)(new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = false))
+      check(prop)(new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = false, outer))
   }
 
   /** set specific execution parameters on a Property */
@@ -316,7 +343,7 @@ trait ScalaCheckParameters { this: ScalaCheckMatchers =>
                 rng: java.util.Random       = defaultParameters.rng,
                 callback: Test.TestCallback = defaultParameters.callback,
                 loader: Option[ClassLoader] = defaultParameters.loader): execute.Result =
-      check(prop)(new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = true))
+      check(prop)(new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = true, outer))
   }
 
   /** create parameters with verbose = false */
@@ -328,7 +355,7 @@ trait ScalaCheckParameters { this: ScalaCheckMatchers =>
           rng: java.util.Random       = defaultParameters.rng,
           callback: Test.TestCallback = defaultParameters.callback,
           loader: Option[ClassLoader] = defaultParameters.loader): Parameters =
-    new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = false)
+    new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = false, outer)
 
   /** create parameters with verbose = true */
   def display(minTestsOk: Int             = defaultParameters.minTestsOk,
@@ -339,7 +366,7 @@ trait ScalaCheckParameters { this: ScalaCheckMatchers =>
               rng: java.util.Random       = defaultParameters.rng,
               callback: Test.TestCallback = defaultParameters.callback,
               loader: Option[ClassLoader] = defaultParameters.loader): Parameters =
-    new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = true)
+    new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = true, outer)
 
 }
 
@@ -356,9 +383,10 @@ case class Parameters(minTestsOk: Int             = Test.Parameters.default.minS
                       rng: java.util.Random       = Test.Parameters.default.rng,
                       callback: Test.TestCallback = Test.Parameters.default.testCallback,
                       loader: Option[ClassLoader] = Test.Parameters.default.customClassLoader,
-                      verbose: Boolean            = false) { outer =>
+                      verbose: Boolean            = false,
+                      output: Output              = ConsoleOutput) { outer =>
 
-  def testCallback(implicit pretty: Pretty.Params) = if (verbose) callback.chain(verboseCallback) else callback
+  def testCallback(implicit pretty: Pretty.Params) = if (verbose) verboseCallback.chain(callback) else callback
 
   def toScalaCheckParameters(implicit pretty: Pretty.Params): Test.Parameters =
     new Test.Parameters {
@@ -374,12 +402,12 @@ case class Parameters(minTestsOk: Int             = Test.Parameters.default.minS
 
   def verboseCallback(implicit pretty: Pretty.Params) = new Test.TestCallback {
     override def onPropEval(name: String, threadXdx: Int, succeeded: Int, discarded: Int): Unit = {
-      if (discarded == 0) printf("\rPassed %d tests", succeeded)
-      else                printf("\rPassed %d tests; %d discarded", succeeded, discarded)
+      if (discarded == 0) output.printf("\rPassed %d tests", succeeded)
+      else                output.printf("\rPassed %d tests; %d discarded", succeeded, discarded)
     }
     override def onTestResult(name: String, result: Test.Result) = {
       val s = prettyTestRes(result)(pretty)
-      printf("\r%s %s%s\n", if (result.passed) "+" else "!", s, List.fill(70 - s.length)(" ").mkString(""))
+      output.printf("\r%s %s%s\n", if (result.passed) "+" else "!", s, List.fill(70 - s.length)(" ").mkString(""))
     }
   }
 

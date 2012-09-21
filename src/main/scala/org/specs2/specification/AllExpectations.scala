@@ -22,11 +22,11 @@ trait AllExpectations extends StoredExpectations with ExamplesFactory with Speci
   /**
    * @return a Result having its location as part of its message
    */
-  override protected def matchResultToResult[T](m: MatchResult[T]): Result = {
-    m.toResult match {
-      case f@Failure(_, _, _, _) => f.copy(m = f.message + " [" + f.location + "]")
-      case e@Error(_, _) => e.copy(m = e.message + " [" + e.location + "]")
-      case other => other
+  override protected def mapMatchResult[T](m: MatchResult[T]): MatchResult[T] = {
+    def addLocation(message: String, location: String) = message + " [" + location + "]"
+    m match {
+      case f @ MatchFailure(_,_,_,_) => f.copy(okMessage = addLocation(f.okMessage, f.toResult.location), koMessage = addLocation(f.koMessage, f.toResult.location))
+      case other                     => other
     }
   }
 

@@ -3,7 +3,8 @@ package data
 
 import org.specs2.internal.scalaz._
 import Trees._
-import Scalaz.{node, leaf}
+import Scalaz._
+import Tree._
 import text.Trim._
 import matcher.DataTables
 
@@ -19,6 +20,8 @@ class TreesSpec extends Specification with DataTables { def is =
   "A TreeLoc can"                                                                                                       ^
     "return its size"                                                                                                   ! e5^
     "be added a new child"                                                                                              ! e6^
+                                                                                                                        p^
+  "A Tree can be flattenLeft to avoid SOF"                                                                              ! e7^
                                                                                                                         end
 
   /**
@@ -42,6 +45,7 @@ class TreesSpec extends Specification with DataTables { def is =
   def tree2 = node(0, node(2, leaf(1)))
   def tree3 = node(0, node(1, leaf(2)))
   def tree4 = node(1, node(2, leaf(1)))
+  def tree5 = node(0, Stream.cons(leaf(3), node(2, leaf(2))))
 
   val prune = (i: Int) => if (i % 2 == 0) Some(i) else None
 
@@ -78,9 +82,14 @@ class TreesSpec extends Specification with DataTables { def is =
   "|",
   "`- 3")
 
+  def e7 = {
+    val tree = tree3.loc.addChild(4).tree
+    tree.flattenLeft.toSeq aka "flattenLeft" must_== tree.flatten.toSeq
+  }
+
   def pruneAndDraw(tree: Tree[Int], f: Int => Option[Int]) = tree.prune(f).map(_.drawTree).getOrElse("None\n")
   def beTree(s: String*) = be_==(s.mkString("", "\n", "\n"))
-  
+
   implicit def anyToStream[A](a: A): Stream[A] = Stream(a)
   implicit def listToStream[A](a: List[A]): Stream[A] = a.toStream
 }

@@ -19,8 +19,10 @@ case class ExecutedSpecification(name: SpecName, fs: Seq[ExecutedFragment]) {
   /** @return true if there are errors */
   def hasErrors = fs.exists { case r: ExecutedResult if r.isError => true; case _ => false }
 
-  /** @return true if there are issues  */
-  def hasIssues = !issues.isEmpty
+  /** @return true if there are issues. We need to force the view otherwise we may return true even if the collection is empty
+   *  because of https://issues.scala-lang.org/browse/SI-6332
+   */
+  def hasIssues = issues.view.force.nonEmpty
 
   /** @return all issues  */
   def issues = fs.collect { case r: ExecutedResult if r.isIssue => r }

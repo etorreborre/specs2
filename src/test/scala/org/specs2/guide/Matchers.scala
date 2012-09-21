@@ -214,6 +214,8 @@ The function that is checked can either return:
 
 Note that if you pass functions using `MatchResult`s you will get better failure messages so you are encouraged to do so.
 
+By default the properties created with `prop` will be shrinking counter-examples. If you want to avoid this, you can use `propNoShrink` instead.
+
 #### Arbitrary instances
 
 By default ScalaCheck uses `Arbitrary` instances taken from the surrounding example scope. However you'll certainly need to generate your own data from time to time. In that case you can create an `Arbitrary` instance and make sure it is in the scope of the function you're testing:
@@ -264,7 +266,7 @@ It is also possible to specifically set the execution parameters on a given prop
 The parameters you can modify are:
 
   * `minTestsOk`: minimum of tests which must be ok before the property is ok (default = 100)
-  * `maxDiscardRatio`: if the data generation discards too many values, then the property can't be proven (default =0 .2)
+  * `maxDiscardRatio`: if the data generation discards too many values, then the property can't be proven (default = 5)
   * `minSize`: minimum size for the "sized" data generators, like list generators (default = 0)
   * `maxSize`: maximum size for the "sized" data generators (default = 100)
   * `workers`: number of threads checking the property (default = 1)

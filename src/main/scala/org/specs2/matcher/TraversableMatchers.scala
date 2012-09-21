@@ -8,7 +8,7 @@ import text.Plural._
 import collection.Iterablex._
 import MatchersImplicits._
 import scala.collection.{GenSeq, GenTraversableOnce, GenTraversable}
-import execute.Result
+import execute.{ResultExecution, Result}
 
 /**
  * Matchers for traversables
@@ -68,6 +68,14 @@ trait TraversableBaseMatchers extends LazyParameters { outer =>
     }
   }
 
+  /** Matches if there is at least one matching a "like" function */
+  def haveOneElementLike[T, S >: T](like: PartialFunction[T, MatchResult[S]]) = HaveOneElementLike(like)
+  def oneElementLike[T, S >: T](like: PartialFunction[T, MatchResult[S]]) = haveOneElementLike(like)
+
+  /** Matches if all the elements are matching a "like" function */
+  def haveAllElementsLike[T, S >: T](like: PartialFunction[T, MatchResult[S]]) = HaveAllElementsLike(like)
+  def allElementsLike[T, S >: T](like: PartialFunction[T, MatchResult[S]]) = haveAllElementsLike(like)
+
   /**
    * Matches if there l contains the same elements as the Traversable <code>traversable</code>.<br>
    * This verification does not consider the order of the elements but checks the traversables recursively
@@ -118,6 +126,8 @@ trait TraversableBeHaveMatchers extends LazyParameters { outer: TraversableMatch
     def containMatch(t: =>String) = s(outer.containMatch(t))
     def containPattern(t: =>String) = s(outer.containPattern(t))
     def have(f: T => Boolean) = s(outer.have(f))
+    def oneElementLike[U >: T](like: PartialFunction[T, MatchResult[U]]) = s(outer.haveOneElementLike(like))
+    def allElementsLike[U >: T](like: PartialFunction[T, MatchResult[U]]) = s(outer.haveAllElementsLike(like))
   }
 
   implicit def sized[T : Sized](s: MatchResult[T]) = new HasSize(s)
@@ -156,7 +166,7 @@ trait AbstractContainMatchResult[T] extends MatchResult[GenTraversableOnce[T]] {
   lazy val matchResult = s(matcher)
 
   override def toResult = matchResult.toResult
-  def not: MatchResult[GenTraversableOnce[T]] = matchResult.not
+  def negate: MatchResult[GenTraversableOnce[T]] = matchResult.negate
   def apply(matcher: Matcher[GenTraversableOnce[T]]): MatchResult[GenTraversableOnce[T]] = matchResult(matcher)
 }
 
@@ -176,15 +186,19 @@ class ContainMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T) ==
 }
 
 import data._
-import Traversex._
-import Monoidx._
+import internal.scalaz.{std, syntax}
+import std.stream._
+import std.anyVal._
+import intInstance._
+import std.map._
+import syntax.foldable._
 
 class ContainExactlyOnceMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)) extends AbstractContainMatcher(expected, equality) {
   type M[T] = ContainExactlyOnceMatcher[T]
   def create(seq: =>Seq[T], eq: (T, T) => Boolean) = new ContainExactlyOnceMatcher[T](seq, eq)
 
   def apply[S <: GenTraversableOnce[T]](actual: Expectable[S]) = {
-    val actualValues = actual.value.seq.toSeq.map(e => (e, 1)).reduceMonoid(Map(_))
+    val actualValues = actual.value.seq.toStream.map(e => (e, 1)).foldMap(Map(_))(mapMonoid[T, Int])
 
     result(expected.forall(e => actualValues.filter { case (k, v) => equality(k, e) }.values.sum == 1),
            actual.description + " contains exactly once " + q(expected.mkString(", ")),
@@ -313,5 +327,36 @@ class OrderingMatcher[T : Ordering] extends Matcher[Seq[T]] {
     result(traversable.value == traversable.value.sorted,
       traversable.description + " is sorted",
       traversable.description + " is not sorted", traversable)
+  }
+}
+
+
+case class HaveOneElementLike[T, U >: T](like: PartialFunction[T, MatchResult[U]]) extends Matcher[GenTraversableOnce[T]] {
+  def apply[S <: GenTraversableOnce[T]](traversable: Expectable[S]) = {
+    val results = traversable.value.toSeq.collect {
+      case v if like.isDefinedAt(v) => (v, ResultExecution.execute(like(v).toResult))
+    }
+    val inTraversable = "in "+traversable.description+"\n"
+    val (successes, failures) = results.partition(_._2.isSuccess)
+    val failureMessages = failures.map { case (t, r) => t+": "+r }.mkString("\n", "\n", "")
+    result(successes.nonEmpty,
+           "some elements are not correct"+failureMessages,
+           inTraversable+"no element is correct"+failureMessages,
+           traversable)
+  }
+}
+
+case class HaveAllElementsLike[T, U >: T](like: PartialFunction[T, MatchResult[U]]) extends Matcher[GenTraversableOnce[T]] {
+  def apply[S <: GenTraversableOnce[T]](traversable: Expectable[S]) = {
+    val results = traversable.value.toSeq.collect {
+      case v if like.isDefinedAt(v) => (v, ResultExecution.execute(like(v).toResult))
+    }
+    val inTraversable = "in "+traversable.description+"\n"
+    val (successes, failures) = results.partition(_._2.isSuccess)
+    val failureMessages = failures.map { case (t, r) => t+": "+r }.mkString("\n", "\n", "")
+    result(failures.isEmpty,
+           inTraversable+"all elements are correct",
+           inTraversable+"some elements are not correct"+failureMessages,
+           traversable)
   }
 }

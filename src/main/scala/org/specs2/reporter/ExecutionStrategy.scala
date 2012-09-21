@@ -5,6 +5,7 @@ import java.util.concurrent.Executors
 import org.specs2.internal.scalaz._
 import Scalaz._
 import concurrent._
+import Promise._
 import Strategy._
 import specification._
 import control.NamedThreadFactory
@@ -103,8 +104,8 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
     fs.fragments.map {
       case f: Example => PromisedExecutingFragment(promise(executeWithBarrier(f))(strategy), f)
       case f: Action  => PromisedExecutingFragment(promise(executeWithBarrier(f))(strategy), f)
-      case f: Step    => LazyExecutingFragment(() => executeWithBarrier(f), f)
-      case f: SpecEnd => LazyExecutingFragment(() => executeWithBarrier(f), f)
+      case f: Step    => FinishedExecutingFragment(executeWithBarrier(f), f)
+      case f: SpecEnd => FinishedExecutingFragment(executeWithBarrier(f), f)
       case f          => FinishedExecutingFragment(executeFragment(args)(f), f)
     }
   }

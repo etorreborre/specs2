@@ -6,6 +6,7 @@ import scala.xml.NodeSeq
 import java.net.{HttpURLConnection, URL}
 import internal.scalaz.Scalaz
 import Scalaz._
+import collection.Seqx._
 import control.Exceptions._
 import io.Paths._
 import text.Trim._

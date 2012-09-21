@@ -9,6 +9,7 @@ import java.util.concurrent.Executors
 import internal.scalaz._
 import Scalaz._
 import concurrent._
+import Promise._
 import Strategy._
 import control.NamedThreadFactory
 import main.Arguments

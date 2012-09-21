@@ -96,7 +96,7 @@ object Expectable {
 
   /** Expectable is a Functor and can use the fmap function to modify its value */
   implicit val ExpectableFunctor: Functor[Expectable] = new Functor[Expectable] {
-    def fmap[A, B](r: Expectable[A], f: A => B) = r.map(f)
+    def map[A, B](r: Expectable[A])(f: A => B) = r.map(f)
   }
 
   /** @return the description of the matched value, quoted. */

@@ -1,5 +1,6 @@
 package org.specs2
 package mutable
+
 import execute._
 import main._
 import specification.RegexStep._
@@ -212,8 +213,9 @@ trait NoFragmentsBuilder extends FragmentsBuilder {
   override def text(s: String)                 = super.text(s)
 }
 
-import internal.scalaz.{TreeLoc, Scalaz}
+import internal.scalaz.{TreeLoc, Scalaz, Tree}
 import Scalaz._
+import Tree._
 import data.Trees._
 trait SideEffectingCreationPaths extends SpecificationNavigation {
 
@@ -230,7 +232,7 @@ trait SideEffectingCreationPaths extends SpecificationNavigation {
   * run a specification in the "isolation" mode were the changes in local variables belonging to blocks are not seen by
   * other examples
   */
-  private[mutable] var blocksTree: TreeLoc[(Int, Any)] = leaf((0, Text("root"))).loc
+  private[mutable] var blocksTree: TreeLoc[(Int, Any)] = leaf((0, Text("root"): Any)).loc
 
   /** when a target path is specified we might limit the creation of fragments to only the fragments on the desired path */
   private[mutable] var targetPath: Option[CreationPath] = None

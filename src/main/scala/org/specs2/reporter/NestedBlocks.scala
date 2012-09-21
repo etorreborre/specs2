@@ -3,6 +3,7 @@ package reporter
 
 import org.specs2.internal.scalaz._
 import  Scalaz._
+import Tree._
 import data.Trees._
 import specification.{SpecEnd, SpecStart, Fragment, ExecutedSpecEnd, ExecutedSpecStart, ExecutedFragment}
 
@@ -99,7 +100,7 @@ trait NestedBlocks {
               res.updateLabel(_.update(st)).addChild(cur.update(en)).getParent
             }
           }
-        }.root.tree.flatten.map(_.value).toSeq
+        }.root.tree.flattenLeft.map(_.value).toSeq
       }
     }
   }

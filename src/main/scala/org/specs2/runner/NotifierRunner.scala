@@ -10,7 +10,7 @@ import specification.{ExecutedSpecification, ExecutingSpecification}
  */
 case class NotifierRunner(notifier: Notifier) { outer =>
 
-  def main(arguments: Array[String]) = new ClassRunner {
+  def classRunner = new ClassRunner {
     override lazy val reporter: Reporter = new NotifierReporter {
       val notifier = outer.notifier
       override def export(implicit arguments: Arguments): ExecutingSpecification => ExecutedSpecification = (spec: ExecutingSpecification) => {
@@ -18,8 +18,9 @@ case class NotifierRunner(notifier: Notifier) { outer =>
         exportToOthers(arguments)(spec)
         spec.executed
       }
-
     }
-  }.main(Array(arguments:_*))
+  }
 
+  def main(arguments: Array[String])  = classRunner.main(Array(arguments:_*))
+  def start(arguments: Array[String]) = classRunner.start(arguments:_*)
 }

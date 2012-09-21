@@ -76,8 +76,8 @@ Other elements
                                                                                                                         end
 
   case class startEnd() {
-    lazy val spec1 = new Specification { def is = "title".title ^ xonly ^ "text" }
-    lazy val spec2 = new Specification { def is = xonly ^ "title".title ^ "text" }
+    lazy val spec1 = new Specification { def is = "title1".title ^ xonly ^ "text1" }
+    lazy val spec2 = new Specification { def is = xonly ^ "title2".title ^ "text2" }
     lazy val content = spec1.content
     lazy val content2 = spec2.content
     lazy val content3 = new Specification { def is = xonly ^ args(include="t1") ^ "title".title ^ "text" }.content
@@ -100,10 +100,10 @@ Other elements
     def e1 = (fragments.head must haveClass[SpecStart]) and (fragments.last must haveClass[SpecEnd])
     def e2 = content.specStart.arguments.xonly
     def e3 = content.specStart.specName must beTheSameAs(content.specEnd.specName)
-    def e4 = content.specStart.title must_== "title"
-    def e5 = content.fragments.map(_.toString) must contain(lazyfy("SpecStart(title)")).exactlyOnce
+    def e4 = content.specStart.title must_== "title1"
+    def e5 = content.fragments.map(_.toString) must contain(lazyfy("SpecStart(title1)")).exactlyOnce
     def e6 = content.specStart.arguments.xonly must beTrue
-    def e7 = (content2.specStart.title must_== "title") and (content2.specStart.arguments.xonly must beTrue)
+    def e7 = (content2.specStart.title must_== "title2") and (content2.specStart.arguments.xonly must beTrue)
     def e8 =  content6.specStart.title must not beEmpty
     def e9 = (content3.specStart.arguments.xonly must beTrue) and (content3.specStart.arguments.include must_== "t1")
     def e10 = content4.specStart.arguments.include must_== "t2"

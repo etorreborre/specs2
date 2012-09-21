@@ -3,11 +3,16 @@ package matcher
 
 import org.scalacheck.{ Arbitrary, Shrink, Prop }
 import org.specs2.internal._
-import scalaz._, Scalaz._
+import scalaz.{Semigroup, Monoid, Validation, Success, Failure, Scalaz}
+import scalaz.syntax.monoid._
+import MatchResultLogicalCombinators._
+import execute.{Result, ResultLogicalCombinators}
+import ResultLogicalCombinators._
+
 /**
- * This trait provides matchers for some Scalaz (http://code.google.com/p/scalaz) datatypes.
+ * This trait provides matchers for some Scalaz (http://github.com/p/scalaz) datatypes.
  *
- * It uses Scalaz classes from the repackaged version of scalaz 6 so it can not be used outside of specs2
+ * It uses Scalaz classes from the repackaged version of scalaz 7 so it can not be used outside of specs2
  */
 private[specs2]
 trait ScalazMatchers extends ScalaCheckMatchers with Expectations { outer: AnyMatchers =>
@@ -18,9 +23,8 @@ trait ScalazMatchers extends ScalaCheckMatchers with Expectations { outer: AnyMa
     def isSemigroup(implicit a: Arbitrary[T], s: Shrink[T]) = outer.isAssociative
   }
 
-  def isAssociative[T](implicit sg: Semigroup[T], a: Arbitrary[T], s: Shrink[T]): Prop = {
-    check { (b1: T, b2: T, b3: T) => be_==(b1 |+| (b2 |+| b3)).apply(createExpectable((b1 |+| b2) |+| b3)) }
-  }
+  def isAssociative[T](implicit sg: Semigroup[T], a: Arbitrary[T], s: Shrink[T]): Prop =
+    prop { (b1: T, b2: T, b3: T) => be_==(b1 |+| (b2 |+| b3)).apply(createExpectable((b1 |+| b2) |+| b3)) }
 
   implicit def monoidProperty[T](m: Monoid[T]): MonoidProperty[T] = new MonoidProperty[T]()(m)
   class MonoidProperty[T]()(implicit m: Monoid[T]) extends SemigroupProperty()(m) {
@@ -28,13 +32,12 @@ trait ScalazMatchers extends ScalaCheckMatchers with Expectations { outer: AnyMa
     def hasNeutralElement(implicit a: Arbitrary[T], s: Shrink[T]) = outer.hasNeutralElement
   }
 
-  def hasNeutralElement[T](implicit m: Monoid[T], a: Arbitrary[T], s: Shrink[T]): Prop = {
-    check { (t: T) =>
+  def hasNeutralElement[T](implicit m: Monoid[T], a: Arbitrary[T], s: Shrink[T]): Prop =
+    prop { (t: T) =>
       be_==(t |+| m.zero).apply(createExpectable(t)) and be_==(m.zero |+| t).apply(createExpectable(t))
     }
-  }
 
-  def isMonoid[T](implicit m: Monoid[T], a: Arbitrary[T], s: Shrink[T]) = isAssociative and hasNeutralElement
+  def isMonoid[T](implicit m: Monoid[T], a: Arbitrary[T], s: Shrink[T]) = isAssociative && hasNeutralElement
 
   import MatchersImplicits._
 

@@ -10,6 +10,7 @@ import text.Plural._
 import reflect.ClassName._
 import MatchResultMessages._
 import time.Duration
+import MatchResultLogicalCombinators._
 
 /**
  * The `Matcher` trait is the base trait for any Matcher.
@@ -42,6 +43,13 @@ trait Matcher[-T] { outer =>
    */
   protected def result[S <: T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[S]): MatchResult[S] = {
 	  Matcher.result(test, okMessage, koMessage, value) 
+  }
+  /**
+   * This convenience method uses a triplet instead of separated arguments
+   * @return a MatchResult with an okMessage, a koMessage and the expectable value
+   */
+  protected def result[S <: T](triplet: =>(Boolean, String, String), value: Expectable[S]): MatchResult[S] = {
+    Matcher.result(triplet._1, triplet._2, triplet._3, value)
   }
   /**
    * This convenience method can be used to evaluate a boolean condition and return an appropriate MatchResult
@@ -102,7 +110,7 @@ trait Matcher[-T] { outer =>
    * @see MatchResult.not
    */
   def not = new Matcher[T] {
-    def apply[U <: T](a: Expectable[U]) = outer(a).not
+    def apply[U <: T](a: Expectable[U]) = outer(a).negate
   }
   /**
    * the logical and between 2 matchers

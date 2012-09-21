@@ -11,25 +11,25 @@ class FragmentsBuilderSpec extends Specification with AllExpectations {
     spec1.content
     spec1.blocksTree.toTree.map(b => (b._1, b._2.toString)).drawTree.trimNewLines ====
       """
-      |(0, Text(root))
+      |(0,"Text(root)")
       ||
-      |+- (0, Text(a))
+      |+- (0,"Text(a)")
       ||  |
-      ||  +- (0, Text(b))
+      ||  +- (0,"Text(b)")
       ||  |  |
-      ||  |  `- (0, Example(c))
+      ||  |  `- (0,"Example(c)")
       ||  |
-      ||  +- (1, Backtab(1))
+      ||  +- (1,"Backtab(1)")
       ||  |
-      ||  `- (2, Example(d))
+      ||  `- (2,"Example(d)")
       ||
-      |+- (1, Backtab(1))
+      |+- (1,"Backtab(1)")
       ||
-      |+- (2, Text(e))
+      |+- (2,"Text(e)")
       ||  |
-      ||  `- (0, Example(f))
+      ||  `- (0,"Example(f)")
       ||
-      |`- (3, Backtab(1))
+      |`- (3,"Backtab(1)")
       """.stripMargin.trimNewLines
   }
   "Examples must be created with their 'blockCreationPath'" >> {

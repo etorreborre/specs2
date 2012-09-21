@@ -10,7 +10,7 @@ object Specs2Variables {
   lazy val branch = if (isSnapshot) "master" else version
 
   lazy val guideOfficialDir = "guide/"
-  lazy val guideSnapshotDir = guideOfficialDir + "-SNAPSHOT/guide/"
+  lazy val guideSnapshotDir = "guide-SNAPSHOT/"+guideOfficialDir
   lazy val guideDir         = (if (isSnapshot) guideSnapshotDir else guideOfficialDir)
 
   lazy val apiOfficialDir = "http://etorreborre.github.com/specs2/api/" + version + "/"

@@ -4,6 +4,7 @@ package reporter
 import main.Arguments
 import specification._
 import Fragments._
+import internal.scalaz.Digit._0
 
 /**
  * The Sequence trait implements the logic for the fragments to execute according to their dependencies
@@ -37,30 +38,29 @@ trait DefaultSequence {
    * If the arguments specify that the specification is sequential, then each fragment will be executed individually
    */
   def sequence(specName: SpecName, fragments: Seq[Fragment])(implicit arguments: Arguments = Arguments()): Seq[FragmentSeq] = {
-    if (arguments.sequential) fragments.map(f => FragmentSeq.create(f))
+    if (arguments.sequential) fragments.map(f => FragmentSeq.create(f, arguments))
     else                      isolateSteps(fragments)(arguments).reverse
   }
 
   protected def isolateSteps(fragments: Seq[Fragment])(implicit arguments: Arguments): Seq[FragmentSeq] = {
-    fragments.foldLeft(Vector(): Seq[FragmentSeq]) { (res, f) =>
+    SpecsArguments.foldAll(fragments).fragmentAndApplicableArguments.foldLeft(Vector(): Seq[FragmentSeq]) { case (res, (f, a)) =>
       res.toList match {
-        case Nil => Vector(FragmentSeq.create(f))
+        case Nil => Vector(FragmentSeq.create(f, a))
         case last :: rest => f match {
-          case SpecStart(_,_,_) | SpecEnd(_,_)                     => FragmentSeq.create(f) +: res
-          case Step(_,_) if last.fragments.exists(isExampleOrStep) => FragmentSeq.create(f) +: res
-          case Example(_, _) if last.fragments.exists(isStep)      => FragmentSeq.create(f) +: res
-          case any if last.fragments.exists(isSpecStartOrEnd)      => FragmentSeq.create(f) +: res
-          case _                                                   => FragmentSeq(last.fragments :+ f) +: rest.toSeq
+          case SpecStart(_,_,_)                                                  => FragmentSeq.create(f, a) +: res
+          case Step(_,_) if last.fragments.exists(isExampleOrStep)               => FragmentSeq.create(f, a) +: res
+          case Example(_, _) if last.fragments.exists(isStep)                    => FragmentSeq.create(f, a) +: res
+          case any if last.fragments.lastOption.map(isSpecEnd).getOrElse(false)  => FragmentSeq.create(f, a) +: res
+          case _                                                                 => last.add(f) +: rest.toSeq
         }
       }
     }
   }
 }
-case class FragmentSeq(fragments: Seq[Fragment]) {
-  def arguments = Fragments.create(fragments:_*).arguments
-
+case class FragmentSeq(fragments: Seq[Fragment], arguments: Arguments) {
+  def add(f: Fragment) = copy(fragments :+ f)
   def map(f: Fragment => Fragment) = copy(fragments = fragments map f)
 }
 case object FragmentSeq {
-  def create(f: Fragment) = FragmentSeq(Seq(f))
+  def create(f: Fragment, a: Arguments) = FragmentSeq(Seq(f), a)
 }

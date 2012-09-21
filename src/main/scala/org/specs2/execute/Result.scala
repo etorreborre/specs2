@@ -6,6 +6,8 @@ import text.NotNullStrings._
 import main.Arguments
 import org.specs2.internal.scalaz.Scalaz._
 import internal.scalaz.{Foldable, Monoid}
+import Foldable._
+import collection.Seqx._
 import text.Message.concat
 
 /**
@@ -100,15 +102,7 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
    * set the number of expectations
    */
   def setExpectationsNb(n: Int): Result
-  /**
-   * @return the logical and combination of 2 results
-   */
-  def and(r: =>Result): Result = this.addExpectationsNb(r.expectationsNb).mapExpected((e: String) => concat(e, r.expected))
-  /**
-   * @return the logical or combination of 2 results
-   */
-  def or(r: =>Result) = this.addExpectationsNb(r.expectationsNb)
-   
+
   /**
    * @return true if the result is a Success instance
    */
@@ -138,11 +132,6 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
    */
   def mute: Result
 
-  /**
-   * @return Success if it is a failure and vice-versa
-   */
-  def not: Result = this
-
 }
 object Result {
 
@@ -150,7 +139,7 @@ object Result {
    * @return the accumulation of all results, without success messages
    */
   def issues(results: Seq[Result], separator: String = "; ") =
-    results.foldMap(identity)(implicitly[Foldable[Seq]], ResultFailuresMonoid(separator)).addExpectationsNb(-1)
+    results.foldMap(identity)(ResultFailuresMonoid(separator)).addExpectationsNb(-1)
 
   implicit val ResultMonoid: Monoid[Result] = new Monoid[Result] {
     val zero = Success()
@@ -257,29 +246,12 @@ object AsResult {
  * This class represents the success of an execution
  */
 case class Success(m: String = "", exp: String = "")  extends Result(m, exp) {
-  override def and(res: =>Result): Result = {
-    val r = res
-    r match {
-      case Success(m, e)          => if (message == m || message.isEmpty) Success(m, concat(exp, e),
-                                                                                  expectationsNb + r.expectationsNb)
-                                     else                                 Success(message+" and "+m, concat(exp, e),
-                                                                                  expectationsNb + r.expectationsNb)
-      case e @ Error(_, _)        => r.addExpectationsNb(expectationsNb).mapExpected((e: String) => concat(expected, e))
-      case Failure(_, _, _, _)    => r.addExpectationsNb(expectationsNb).mapExpected((e: String) => concat(expected, e))
-      case DecoratedResult(d, r1) => DecoratedResult(d, and(r1))
-      case _                      => super.and(r)
-    }
-  }
   override def isSuccess = true
 
   def setExpectationsNb(n: Int): Result = Success(m, expected, n)
 
   def mute = Success()
 
-  /**
-   * @return Success if it is a failure and vice-versa
-   */
-  override def not: Result = Failure(m)
 }
 /**
  * Companion object to the Success class providing 
@@ -302,19 +274,6 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
   /** @return an exception created from the message and the stackTraceElements */
   def exception = Throwablex.exception(m, stackTrace)
 
-  override def and(res: =>Result): Result = this
-
-  override def or(res: =>Result): Result = {
-    val r = res
-    r match {
-      case s @ Success(m, exp)    => if (message == m) r.addExpectationsNb(expectationsNb)
-                                     else Success(message+" and "+m, exp, expectationsNb + s.expectationsNb)
-      case Failure(m, e, st, d)   => Failure(message+" and "+m, e, stackTrace ::: st, d).addExpectationsNb(expectationsNb)
-      case DecoratedResult(d, r1) => DecoratedResult(d, or(r1))
-      case _                      => super.or(r)
-    }
-  }
-
   def setExpectationsNb(n: Int): Result = new Failure(m, e, stackTrace, details) {
     override val expectationsNb = n
   }
@@ -330,13 +289,6 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
   override def hashCode = m.hashCode + e.hashCode
   override def isFailure: Boolean = true
 
-  /**
-   * @return a Success
-   */
-  override def not: Result = Success(m)
-  /**
-   * @return a
-   */
   def skip: Skipped = Skipped(m, e)
 }
 
@@ -353,8 +305,6 @@ case class Error(m: String, e: Exception) extends Result(m) with ResultStackTrac
   /** @return an exception created from the message and the stackTraceElements */
   def exception = e
   def stackTrace = e.getFullStackTrace.toList
-
-  override def and(res: =>Result): Result = this
 
   override def equals(o: Any) = {
     o match {
@@ -391,27 +341,6 @@ case class Pending(m: String = "")  extends Result(m) { outer =>
     override val expectationsNb = n
   }
 
-  override def and(res: =>Result): Result = {
-    val r = res
-    r match {
-      case s @ Success(m, exp)    => s
-      case f @ Failure(_,_,_,_)   => f
-      case e @ Error(_,_)         => e
-      case DecoratedResult(d, r1) => DecoratedResult(d, and(r1))
-      case _                      => super.and(r)
-    }
-  }
-
-  override def or(res: =>Result): Result = {
-    val r = res
-    r match {
-      case s @ Success(m, exp)      => s
-      case f @ Failure(m, e, st, d) => f
-      case DecoratedResult(d, r1)   => DecoratedResult(d, or(r1))
-      case _                        => super.or(r)
-    }
-  }
-
   override def isPending: Boolean = true
 }
 /** 
@@ -423,27 +352,6 @@ case class Skipped(m: String = "", e: String = "")  extends Result(m, e) { outer
   def mute = Skipped()
   def setExpectationsNb(n: Int): Result = new Skipped(m) {
     override val expectationsNb = n
-  }
-
-  override def and(res: =>Result): Result = {
-    val r = res
-    r match {
-      case s @ Success(m, exp)    => s
-      case f @ Failure(_,_,_,_)   => f
-      case e @ Error(_,_)         => e
-      case DecoratedResult(d, r1) => DecoratedResult(d, and(r1))
-      case _                      => super.and(r)
-    }
-  }
-
-  override def or(res: =>Result): Result = {
-    val r = res
-    r match {
-      case s @ Success(m, exp)    => s
-      case f @ Failure(_,_,_,_)   => f
-      case DecoratedResult(d, r1) => DecoratedResult(d, or(r1))
-      case _                      => super.or(r)
-    }
   }
 
   override def isSkipped: Boolean = true
@@ -460,27 +368,6 @@ case class DecoratedResult[+T](decorator: T, result: Result) extends Result(resu
     override val expectationsNb = n
   }
     
-  override def and(r: =>Result): Result = {
-    r match {
-      case DecoratedResult(d2, r2) => {
-        val andResult = (result and r2)
-        if (andResult.isSuccess) DecoratedResult(decorator, andResult)
-        else                     DecoratedResult(d2, andResult)
-      }
-      case other                   => DecoratedResult(decorator, result and r)
-    }
-  }
-
-  override def or(r: =>Result): Result = {
-    r match {
-      case DecoratedResult(d2, r2) => {
-        val orResult = (result or r2)
-        if (result.isSuccess)  DecoratedResult(d2, orResult)
-        else                   DecoratedResult(decorator, orResult)
-      }
-      case other                   => DecoratedResult(decorator, result or r)
-    }
-  }
   override def isSuccess: Boolean       = result.isSuccess
   override def isError: Boolean         = result.isError
   override def isSkipped: Boolean       = result.isSkipped
