@@ -5,7 +5,7 @@ import org.specs2.io.fs
 import scala.collection.mutable.{Map, HashMap}
 import scala.tools.nsc._
 import interactive._
-import scala.reflect.io._
+import io._
 import java.net.URLClassLoader
 import java.net.URLDecoder
 import reflect.PackageName._
