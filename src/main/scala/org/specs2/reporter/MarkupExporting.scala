@@ -58,6 +58,8 @@ case class MarkupResultOutput(
   def printSpecStart(name: SpecName, stats: Stats)                                              = println("## "+name.title)
   def printIssueWithIcon(message: MarkupString, iconName: String, level: Int = 0)               = MarkupResultOutput(output.printIssueWithIcon(message, iconName, level))
   def printTextWithIcon(message: MarkupString, iconName: String, level: Int = 0)                = MarkupResultOutput(output.printTextWithIcon(message, iconName, level))
+  def printOkXmlWithIcon(xml: NodeSeq, iconName: String, level: Int = 0)                        = MarkupResultOutput(output.printOkXmlWithIcon(xml, iconName, level))
+  def printKoXmlWithIcon(xml: NodeSeq, iconName: String, level: Int = 0)                        = MarkupResultOutput(output.printKoXmlWithIcon(xml, iconName, level))
   def printExceptionMessage(e: Result with ResultStackTrace, level: Int)                        = MarkupResultOutput(output.printExceptionMessage(e, level))
   def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, level: Int)             = MarkupResultOutput(output.printCollapsibleExceptionMessage(e, level))
   def printDetailedFailure(details: Details, level: Int, diffs: Diffs)                          = MarkupResultOutput(output.printDetailedFailure(details, level, diffs))

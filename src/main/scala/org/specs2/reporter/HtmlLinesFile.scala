@@ -128,19 +128,31 @@ case class HtmlResult(r: ExecutedResult, stats: Stats = Stats(), level: Int = 0,
     }
   }
 	
-  def printFormResult(form: Form)(out: HtmlReportOutput): HtmlReportOutput = out.printForm(form.toXml(args))
+  private def printFormResult(form: Form)(out: HtmlReportOutput): HtmlReportOutput = out.printForm(form.toXml(args))
+  private def printFormResultWithIcon(form: Form, r: Result)(out: HtmlReportOutput): HtmlReportOutput = {
+    val xml = form.toXml(args)
+    r match {
+      case f: Failure    => out.printFailureXml(xml, indent)
+      case e: Error      => out.printErrorXml  (xml, indent)
+      case Skipped(_, _) => out.printSkippedXml(xml, indent)
+      case Pending(_)    => out.printPendingXml(xml, indent)
+      case _             => out.printSuccessXml(xml, indent)
+    }
+  }
 
-  def printResult(desc: MarkupString, result: Result)(implicit out: HtmlReportOutput): HtmlReportOutput = {
+  private def printResult(desc: MarkupString, result: Result)(implicit out: HtmlReportOutput): HtmlReportOutput = {
     val outDesc = printDesc(desc, result)(out)
     implicit val doIt = !args.xonly
     result match {
-      case f: Failure                                 => printFailureDetails(f)(outDesc)
-      case e: Error                                   => printErrorDetails(e)(outDesc).printStack(e, indent + 1, args.traceFilter)
-      case Success(_, _)                              => outDesc
-      case Skipped(_, _)                              => outDesc ?> (_.printSkipped(NoMarkup(result.message), indent))
-      case Pending(_)                                 => outDesc ?> (_.printPending(NoMarkup(result.message), indent))
-      case DecoratedResult(table: DataTable, r)       => printDataTable(table)(outDesc)
-      case DecoratedResult(other, r)                  => printResult(desc, r)(out)
+      case f: Failure                                                    => printFailureDetails(f)(outDesc)
+      case e: Error                                                      => printErrorDetails(e)(outDesc).printStack(e, indent + 1, args.traceFilter)
+      case Success(_, _)                                                 => outDesc
+      case Skipped(_, _)                                                 => outDesc ?> (_.printSkipped(NoMarkup(result.message), indent))
+      case Pending(_)                                                    => outDesc ?> (_.printPending(NoMarkup(result.message), indent))
+      case DecoratedResult(table: DataTable, r) if (desc.toHtml.isEmpty) => printDataTableExample(table, r)(out)
+      case DecoratedResult(table: DataTable, r) if (r.isSuccess)         => outDesc
+      case DecoratedResult(table: DataTable, r)                          => printDataTable(table)(outDesc)
+      case DecoratedResult(other, r)                                     => printResult(desc, r)(out)
     }
   }
 
@@ -151,7 +163,7 @@ case class HtmlResult(r: ExecutedResult, stats: Stats = Stats(), level: Int = 0,
       case Success(_, _)                        => out.when(!args.xonly)(_.printSuccess(desc, indent))
       case Skipped(_, _)                        => out.printSkipped(desc, indent)
       case Pending(_)                           => out.printPending(desc, indent)
-      case DecoratedResult(table: DataTable, r) => printDesc(desc, r)(out)
+      case DecoratedResult(_, r)                => printDesc(desc, r)(out)
     }
   }
 
@@ -167,7 +179,9 @@ case class HtmlResult(r: ExecutedResult, stats: Stats = Stats(), level: Int = 0,
     out.printCollapsibleExceptionMessage(f, indent + 1)
 
   def printDataTable(table: DataTable)(out: HtmlReportOutput) = printFormResult(Form(table))(out)
-   
+  /** print a DataTable without description */
+  def printDataTableExample(table: DataTable, r: Result)(out: HtmlReportOutput) = printFormResultWithIcon(Form(table), r)(out)
+
   def set(stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) = copy(stats = stats, level = level, args = args)
   override def toString = r.toString
    

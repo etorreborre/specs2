@@ -211,6 +211,18 @@ table td.navTitle {
   text-align: center;
   font-size: large;
 }
+
+/* this style is used to display DataTables when they are used as examples */
+table.exampleTable  {
+  border: none;
+}
+table.exampleTable tr {
+  border: none;
+}
+.exampleTable td {
+  border: none;
+}
+
 .source {
   border: 1px solid #999;
 }

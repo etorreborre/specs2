@@ -54,6 +54,10 @@ trait HtmlReportOutput {
   def printTextWithIcon(message: MarkupString, iconName: String, level: Int = 0): HtmlReportOutput
   /** print an issue with an icon */
   def printIssueWithIcon(message: MarkupString, iconName: String, level: Int = 0): HtmlReportOutput
+  /** print some ok xml with an icon */
+  def printOkXmlWithIcon(xml: NodeSeq, iconName: String, level: Int = 0): HtmlReportOutput
+  /** print some ok xml with an icon */
+  def printKoXmlWithIcon(xml: NodeSeq, iconName: String, level: Int = 0): HtmlReportOutput
   /** print a success with an icon */
   def printSuccess(message: MarkupString, level: Int = 0) = printTextWithIcon(message, "success",  level)
   /** print a failure with an icon */
@@ -64,6 +68,16 @@ trait HtmlReportOutput {
   def printSkipped(message: MarkupString, level: Int = 0) = printTextWithIcon(message, "skipped",  level)
   /** print a pending fragment with an icon */
   def printPending(message: MarkupString, level: Int = 0) = printTextWithIcon(message, "pending",  level)
+  /** print a success with an icon */
+  def printSuccessXml(xml: NodeSeq, level: Int = 0) = printOkXmlWithIcon(xml, "success",  level)
+  /** print a failure with an icon */
+  def printFailureXml(xml: NodeSeq, level: Int = 0) = printKoXmlWithIcon(xml, "failure", level)
+  /** print an error with an icon */
+  def printErrorXml(xml: NodeSeq, level: Int = 0) = printKoXmlWithIcon(xml, "error",   level)
+  /** print a skipped fragment with an icon */
+  def printSkippedXml(xml: NodeSeq, level: Int = 0) = printOkXmlWithIcon(xml, "skipped",  level)
+  /** print a pending fragment with an icon */
+  def printPendingXml(xml: NodeSeq, level: Int = 0) = printOkXmlWithIcon(xml, "pending",  level)
   /** print an exception message */
   def printExceptionMessage(e: Result with ResultStackTrace, level: Int): HtmlReportOutput
   /** print an exception message which can be expended/collapsed */

@@ -1,8 +1,9 @@
 package org.specs2
 package reporter
 import specification._
-import matcher.DataTables
+import matcher.{DataTable, DataTables}
 import text.NoMarkup
+import execute.DecoratedResult
 
 class HtmlResultOutputSpec extends Specification with DataTables { def is =
                                                                                                                         """
@@ -13,6 +14,10 @@ class HtmlResultOutputSpec extends Specification with DataTables { def is =
   "A link to another specification is displayed as an html link"                                                        ^
     "with a subtoc element having the specification id"                                                                 ! links().e1^
     "with a link relative to the filePath"                                                                              ! links().e2^
+  "DataTables" ^
+    "A datatable must not be shown if the example is successful"                                                        ! dataTables().e1^
+    "A datatable must be displayed if there is a failure"                                                               ! dataTables().e2^
+    "A datatable used as an auto-example must be displayed"                                                             ! dataTables().e3^
                                                                                                                         end
 
   def descriptions = {
@@ -35,6 +40,18 @@ class HtmlResultOutputSpec extends Specification with DataTables { def is =
     def e1 = htmlSpecLink.xml must \\("subtoc", "specId")
     def e2 = new HtmlResultOutput(filePath = "guide/MySpec.html").printLink(specLink, 0).xml must \\("a", "href" -> "../name.html")
   }
+
+  case class dataTables() extends DataTables {
+    val okTable = "a" |> 1 | { a => ok }
+    val koTable = "a" |> 1 | { a => ko }
+
+    val out = new HtmlResultOutput
+
+    def e1 = new HtmlResult(ExecutedResult("description", okTable)).print(out).xml must not(\\("table"))
+    def e2 = new HtmlResult(ExecutedResult("description", koTable)).print(out).xml must \\("table")
+    def e3 = new HtmlResult(ExecutedResult("", okTable)).print(out).xml must \\("table")
+  }
+
 
   type Out = HtmlReportOutput
 
