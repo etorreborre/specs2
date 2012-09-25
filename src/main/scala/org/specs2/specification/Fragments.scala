@@ -14,7 +14,8 @@ import specification.StandardFragments.{End, Br}
 case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] = Vector(),
                      arguments: Arguments = Arguments(), linked: Linked = Linked()) {
 
-  def fragments: Seq[Fragment] = if (middle.isEmpty && !linked.isLink) Vector() else (specStart +: middle :+ specEnd)
+  def fragments: Seq[Fragment] = if (isZero) Vector() else (specStart +: middle :+ specEnd)
+  def isZero = this == Fragments()
 
   def specTitleIs(name: SpecName): Fragments = copy(specTitle = specTitle.filterNot(_.title.isEmpty).map(_.overrideWith(name)).orElse(Some(name)))
 
@@ -132,7 +133,11 @@ object Fragments {
    */
   implicit def fragmentsIsMonoid = new Monoid[Fragments] {
     val zero = new Fragments()
-    def append(s1: Fragments, s2: => Fragments) = s1 add s2
+    def append(s1: Fragments, s2: => Fragments) = {
+      if (s1.isZero)      s2
+      else if (s2.isZero) s1
+      else                Fragments.createList((s1.fragments ++ s2.fragments):_*)
+    }
   }
 }
 

@@ -5,6 +5,7 @@ import mutable.Specification
 import user.io.{LocationSpecification, LocationUnitSpecification}
 import specification.Fragments._
 import specification.{SpecificationStructure, Fragment}
+import scala.io.Source
 
 class LocationSpec extends Specification {
   "A unit specification must have correct locations for its fragments" >> {
@@ -59,6 +60,14 @@ class LocationSpec extends Specification {
     }
     "for the end element" >> {
       endAt(index = 0) === 16
+    }
+  }
+
+  "The FragmentsFragment::def ^(t: String) = fs add Text(t) method must be at line 157" >> {
+    val lines = Source.fromFile("src/main/scala/org/specs2/specification/FragmentsBuilder.scala").getLines.toSeq
+    // line 157 is index 156
+    lines.zipWithIndex.collect { case (line, 156) => line }.headOption must beSome.which { line: String =>
+      line must contain("def ^(t: String) = fs add Text(t)")
     }
   }
 
