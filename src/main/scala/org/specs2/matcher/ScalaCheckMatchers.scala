@@ -126,7 +126,7 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
    * generation parameters <code>p</code>. <code>p</code> is transformed into a scalacheck parameters
    */
   private[specs2] def checkProperty(prop: Prop)(implicit p: Parameters): execute.Result = {
-    checkScalaCheckProperty(prop)(p.toScalaCheckParameters)
+    checkScalaCheckProperty(prop)(p.toScalaCheckParameters(defaultPrettyParams))
   }
 
   /**
@@ -142,9 +142,9 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
 
     result match {
       case Result(Proved(as), succeeded, discarded, fq, _) =>
-        execute.Success(noCounterExample(succeeded), frequencies(fq), succeeded)
+        execute.Success(noCounterExample(succeeded), frequencies(fq)(defaultPrettyParams), succeeded)
       case Result(Passed, succeeded, discarded, fq, _)     =>
-        execute.Success(noCounterExample(succeeded), frequencies(fq), succeeded)
+        execute.Success(noCounterExample(succeeded), frequencies(fq)(defaultPrettyParams), succeeded)
       case r @ Result(GenException(execute.FailureException(f)), n, _, fq, _) => f
       case r @ Result(GenException(e), n, _, fq, _)        =>
         execute.Failure(prettyTestRes(r)(defaultPrettyParams) + frequencies(fq), e.getMessage(), e.getStackTrace().toList)
