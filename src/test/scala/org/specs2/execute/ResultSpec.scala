@@ -1,9 +1,9 @@
 package org.specs2
 package execute
 
-import matcher.DataTables
+import matcher.{ResultMatchers, DataTables}
 
-class ResultSpec extends Specification with DataTables { def is =
+class ResultSpec extends Specification with DataTables with ResultMatchers { def is =
                                                                                                                         """
 Results are the outcome of some execution. There are several kinds of Results, all having a message describing them
 more precisely:
@@ -74,6 +74,11 @@ more precisely:
   "A result expected can be updated or mapped"                                                                          ^
   { success1.updateExpected("ok").expected must_== "ok" }                                                               ^
   { Success("s1", "s1").mapExpected(_.capitalize).expected must_== "S1" }                                               ^
+                                                                                                                        end^
+  "Boolean values can also be combined as if they were results"                                                         ^
+  { (true: Result) }                                                                                                    ^
+  { true and true }                                                                                                     ^
+  { (true and false) must beFailing }                                                                                   ^
                                                                                                                         end
 
   def statuses =

@@ -11,9 +11,10 @@ import ResultLogicalCombinators._
  * with and/or/not
  */
 private[specs2]
-trait ResultLogicalCombinators {
+trait ResultLogicalCombinators extends Results {
 
-  implicit def combineResult(r: =>Result) = new ResultLogicalCombinator(r)
+  implicit def combineBoolean(b: =>Boolean): ResultLogicalCombinator = new ResultLogicalCombinator(b)
+  implicit def combineResult(r: =>Result)  : ResultLogicalCombinator = new ResultLogicalCombinator(r)
 
   class ResultLogicalCombinator(res: =>Result) {
     private val r = ResultExecution.execute(res)

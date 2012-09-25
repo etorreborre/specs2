@@ -69,12 +69,12 @@ trait TraversableBaseMatchers extends LazyParameters { outer =>
   }
 
   /** Matches if there is at least one matching a "like" function */
-  def haveOneElementLike[T, S >: T](like: PartialFunction[T, MatchResult[S]]) = HaveOneElementLike(like)
-  def oneElementLike[T, S >: T](like: PartialFunction[T, MatchResult[S]]) = haveOneElementLike(like)
+  def haveOneElementLike[T, S](like: PartialFunction[T, MatchResult[S]]) = HaveOneElementLike(like)
+  def oneElementLike[T, S](like: PartialFunction[T, MatchResult[S]]) = haveOneElementLike(like)
 
   /** Matches if all the elements are matching a "like" function */
-  def haveAllElementsLike[T, S >: T](like: PartialFunction[T, MatchResult[S]]) = HaveAllElementsLike(like)
-  def allElementsLike[T, S >: T](like: PartialFunction[T, MatchResult[S]]) = haveAllElementsLike(like)
+  def haveAllElementsLike[T, S](like: PartialFunction[T, MatchResult[S]]) = HaveAllElementsLike(like)
+  def allElementsLike[T, S](like: PartialFunction[T, MatchResult[S]]) = haveAllElementsLike(like)
 
   /**
    * Matches if there l contains the same elements as the Traversable <code>traversable</code>.<br>
@@ -126,8 +126,8 @@ trait TraversableBeHaveMatchers extends LazyParameters { outer: TraversableMatch
     def containMatch(t: =>String) = s(outer.containMatch(t))
     def containPattern(t: =>String) = s(outer.containPattern(t))
     def have(f: T => Boolean) = s(outer.have(f))
-    def oneElementLike[U >: T](like: PartialFunction[T, MatchResult[U]]) = s(outer.haveOneElementLike(like))
-    def allElementsLike[U >: T](like: PartialFunction[T, MatchResult[U]]) = s(outer.haveAllElementsLike(like))
+    def oneElementLike[U](like: PartialFunction[T, MatchResult[U]]) = s(outer.haveOneElementLike(like))
+    def allElementsLike[U](like: PartialFunction[T, MatchResult[U]]) = s(outer.haveAllElementsLike(like))
   }
 
   implicit def sized[T : Sized](s: MatchResult[T]) = new HasSize(s)
@@ -331,7 +331,7 @@ class OrderingMatcher[T : Ordering] extends Matcher[Seq[T]] {
 }
 
 
-case class HaveOneElementLike[T, U >: T](like: PartialFunction[T, MatchResult[U]]) extends Matcher[GenTraversableOnce[T]] {
+case class HaveOneElementLike[T, U](like: PartialFunction[T, MatchResult[U]]) extends Matcher[GenTraversableOnce[T]] {
   def apply[S <: GenTraversableOnce[T]](traversable: Expectable[S]) = {
     val results = traversable.value.toSeq.collect {
       case v if like.isDefinedAt(v) => (v, ResultExecution.execute(like(v).toResult))
@@ -346,7 +346,7 @@ case class HaveOneElementLike[T, U >: T](like: PartialFunction[T, MatchResult[U]
   }
 }
 
-case class HaveAllElementsLike[T, U >: T](like: PartialFunction[T, MatchResult[U]]) extends Matcher[GenTraversableOnce[T]] {
+case class HaveAllElementsLike[T, U](like: PartialFunction[T, MatchResult[U]]) extends Matcher[GenTraversableOnce[T]] {
   def apply[S <: GenTraversableOnce[T]](traversable: Expectable[S]) = {
     val results = traversable.value.toSeq.collect {
       case v if like.isDefinedAt(v) => (v, ResultExecution.execute(like(v).toResult))

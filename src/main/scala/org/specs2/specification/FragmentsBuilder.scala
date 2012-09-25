@@ -16,7 +16,7 @@ import control.Functions._
  * 
  */
 private[specs2]
-trait FragmentsBuilder extends RegexSteps with ExamplesFactory with Results { outer =>
+trait FragmentsBuilder extends RegexSteps with ExamplesFactory { outer =>
 
   /**
    * Methods for chaining fragments

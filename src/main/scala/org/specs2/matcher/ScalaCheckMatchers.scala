@@ -8,7 +8,7 @@ import org.scalacheck.Pretty._
 import scala.collection.Map
 import io.{Output, ConsoleOutput}
 import org.scalacheck._
-import execute.AsResult
+import execute.{ResultLogicalCombinators, AsResult}
 
 /**
  * The ScalaCheckMatchers trait provides matchers which allow to
@@ -18,6 +18,7 @@ import execute.AsResult
 trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
    with FunctionPropertyImplicits
    with ResultPropertyImplicits
+   with ResultLogicalCombinators
    with ApplicableArbitraries
    with Expectations { outer: ScalaCheckMatchers =>
 
@@ -25,6 +26,9 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
   implicit def propAsResult(implicit p: Parameters): AsResult[Prop] = new AsResult[Prop] {
     def asResult(prop: =>Prop): execute.Result = checkProp(prop)(p)
   }
+  /** allow to combine properties as if they were results */
+  implicit def combineProp(prop: =>Prop)(implicit p: Parameters): ResultLogicalCombinator = combineResult(propAsResult(p).asResult(prop))
+
   /**
    * transform a Function returning a MatchResult (or anything which can be converted to a Prop) as a ScalaCheck property
    */
@@ -249,7 +253,7 @@ trait ResultPropertyImplicits {
   implicit def callByNameMatchResultToProp[T](m: =>MatchResult[T]): Prop = resultProp(m.toResult)
   implicit def matchResultToProp[T](m: MatchResult[T]): Prop = resultProp(m.toResult)
 
-  private def resultProp(r: =>execute.Result): Prop = {
+  implicit def resultProp(r: =>execute.Result): Prop = {
     new Prop {
       def apply(params: Prop.Params) = {
         lazy val result = execute.ResultExecution.execute(r)

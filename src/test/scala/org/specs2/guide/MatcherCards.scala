@@ -305,6 +305,9 @@ It is very useful to have literal Xml in Scala, it is even more useful to have m
  * `beEqualToIgnoringSpace` can also do an ordered comparison
  <code class="prettyprint"><a><c/> <b/></a> must ==/(<a> <c/><b/></a>).ordered</code>
 
+ * on the other hand `beEqualToIgnoringSpace` will not check attributes order
+ <code class="prettyprint"><n a="1" b="2"/> must ==/(<n b="2" a="1"/>)</code>
+
  * <code class="prettyprint">\</code> is an XPath-like matcher matching if a node is a direct child of another
  <code class="prettyprint"><a><b/></a> must \("b")</code>
 

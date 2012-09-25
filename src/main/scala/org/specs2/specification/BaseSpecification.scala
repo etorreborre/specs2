@@ -25,8 +25,8 @@ trait SpecificationInclusion { this: FragmentsBuilder =>
   def include(f: Fragments, fs: Fragments*): FragmentsFragment = include((f +: fs).sumr)
   implicit def include(s: SpecificationStructure): FragmentsFragment = include(s.content)
   def include(s: SpecificationStructure, ss: SpecificationStructure*): FragmentsFragment = include(s.content, ss.map(_.content):_*)
-  def include(args: Arguments, s: SpecificationStructure): FragmentsFragment = include(args, s.content)
-  def include(args: Arguments, s: SpecificationStructure, ss: SpecificationStructure*): FragmentsFragment = include(args, s.content, ss.map(_.content):_*)
+  def include(args: Arguments, s: SpecificationStructure): FragmentsFragment = include(args, s.applyArguments(args).content)
+  def include(args: Arguments, s: SpecificationStructure, ss: SpecificationStructure*): FragmentsFragment = include(args, s.applyArguments(args).content, ss.map(_.applyArguments(args).content):_*)
   def include(args: Arguments, f: Fragments): FragmentsFragment = include(f.overrideArgs(args))
   def include(args: Arguments, f: Fragments, fs: Fragments*): FragmentsFragment = include((f +: fs).sumr.overrideArgs(args))
 
@@ -53,6 +53,14 @@ trait SpecificationStructure {
    * A creation path is possibly set on Examples and Actions if they haven't any
    */
   private[specs2] lazy val content: Fragments = map(Fragments.withCreationPaths(Fragments.withSpecName(is, this)))
+
+  /** apply command-line arguments if there are any */
+  private[specs2] def applyArguments(implicit args: Arguments) =
+    this match {
+      case withCommandLineArguments : CommandLineArguments => withCommandLineArguments.set(args); this
+      case other                                           => this
+    }
+
 }
 
 /**
@@ -124,10 +132,5 @@ object SpecificationStructure {
   /**
    * store the command-line arguments in the CommandLineArguments trait if necessary
    */
-  private def applyCommandLineArguments(implicit args: Arguments) = (spec: SpecificationStructure) => {
-    spec match {
-      case withCommandLineArguments : CommandLineArguments => withCommandLineArguments.set(args); spec
-      case other                                           => spec
-    }
-  }
+  private def applyCommandLineArguments(implicit args: Arguments) = (spec: SpecificationStructure) => spec.applyArguments(args)
 }

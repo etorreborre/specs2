@@ -32,6 +32,7 @@ class XmlMatchersSpec extends Specification { def is =
     "provide be + matchers forms"                                                                                       ^
     { <a><b/></a> must be equalToIgnoringSpace(<a> <b/></a>) }                                                          ^
     { <a><b/></a> must be ==/(<a> <b/></a>) }                                                                           ^
+    { <n a="1" b="2"/> must be ==/(<n b="2" a="1"/>) }                                                                  ^
     { <a><b/></a> must not be ==/(<b></b>) }                                                                            ^
                                                                                                                         endp^
   "A \\ matcher should match if a node is a direct child of another"                                                    ^
