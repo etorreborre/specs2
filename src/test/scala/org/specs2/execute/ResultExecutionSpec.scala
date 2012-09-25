@@ -9,6 +9,9 @@ class ResultExecutionSpec extends Specification { def is =
                                                                                                                         p^
     "a failure exception must return a Failure"                                                                         ^
     { execute { throw new FailureException(Failure("failed")); success } === Failure("failed") }                        ^
+    "a decorated result exception must return a DecoratedResult"                                                        ^
+    { execute { throw new DecoratedResultException(DecoratedResult("", Failure("failed"))); success } ===
+      DecoratedResult("", Failure("failed")) }                                                                          ^
     "an exception must return an Error"                                                                                 ^
     { execute { throw new IllegalArgumentException("exception"); success } === Error("exception") }                     ^
     "an exception must return an Error"                                                                                 ^

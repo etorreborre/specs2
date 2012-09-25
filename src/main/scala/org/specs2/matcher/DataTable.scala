@@ -59,7 +59,7 @@ trait DataTables extends Expectations {
         DecoratedResult(DataTable(titles, results), result.updateMessage {
       	   TextTable("" +: titles :+ "", results.map { case (line, r) => resultLine(line, AsResult(r)) }:_*).show
       	})
-      checkResultFailure(decorated.result)
+      checkResultFailure(decorated)
       decorated
 	  }
 	  /** @return the logical and combination of all the results */

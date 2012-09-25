@@ -3,6 +3,7 @@ import org.specs2.matcher._
 import org.specs2.specification._
 import org.specs2.execute.StandardResults._
 import ThrownExpectationsSpecData._
+import org.specs2.execute.{DecoratedResult, Failure}
 
 class ThrownExpectationsSpec extends Specification with ResultMatchers {
   implicit val arguments = args()
@@ -21,6 +22,9 @@ class ThrownExpectationsSpec extends Specification with ResultMatchers {
       FragmentExecution.executeBody(body4) must beFailing
     }
   }
+  "If a DataTable fails it must throw a DecoratedResultException containing the table data" in {
+    FragmentExecution.executeBody(body5) must beLike { case DecoratedResult(_, Failure(_,_,_,_)) => ok }
+  }
 }
 object ThrownExpectationsSpecData {
   def body1 = new MustExpectations with ThrownExpectations with Scope {
@@ -34,5 +38,10 @@ object ThrownExpectationsSpecData {
   }
   def body4 = new ShouldThrownExpectations with Scope {
     1 should_== 2; success
+  }
+  def body5 = new MustMatchers with ThrownExpectations with Scope with DataTables {
+    "a" | "b" | "c" |>
+    1   ! 1   ! 2   |
+    1   ! 1   ! 3   | { (a, b, c) => (a+b) must_== c }
   }
 }
