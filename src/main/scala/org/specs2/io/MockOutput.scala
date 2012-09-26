@@ -20,15 +20,18 @@ trait MockOutput extends Output {
   override def printf(s: String, args: Any*): Unit = {
 	  val formatted = s format (args : _*)
 	  if (formatted.endsWith("\n"))
-	    msgs += formatted.dropRight(1)
+	    append(formatted.dropRight(1))
 	  else if (msgs.isEmpty)
-	    msgs += formatted
+	    append(formatted)
 	  else {
 	    val last = msgs.last 
 	    msgs.dropRight(1)
-	    msgs += (last + formatted)
+	    append(last + formatted)
 	  }
   }
+
+  protected def append(msg: String) =
+    msgs += msg
   
   def clear() = msgs.clear()
 }
