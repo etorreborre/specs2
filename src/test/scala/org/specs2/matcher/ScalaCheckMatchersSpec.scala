@@ -8,6 +8,7 @@ import org.scalacheck.Prop.{ forAll, proved }
 import io._
 import sys.error
 import specification.{Before, FragmentExecution}
+import java.util
 
 class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { def is =
 
@@ -187,7 +188,7 @@ class MutableSpecWithContextAndScalaCheck extends mutable.Specification with Sca
   "check something with before code" ! new SC {
     check { (s: String) =>
       s.reverse must_== aString
-    }.set(minTestsOk -> 200)
+    }.set(new util.Random, minTestsOk -> 200)
   }
 
   trait SC extends mutable.Before with MockOutput {

@@ -126,7 +126,10 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
   implicit def setProperty(p: Prop) = new SetProperty(p)
   class SetProperty(prop: Prop) {
     def set(p: (Symbol, Int)*) = check(prop)(outer.set(p:_*))
+    def set(rng: java.util.Random, p: (Symbol, Int)*) = check(prop)(outer.set(rng, p:_*))
+
     def display(p: (Symbol, Int)*) = check(prop)(outer.display(p:_*))
+    def display(rng: java.util.Random, p: (Symbol, Int)*) = check(prop)(outer.display(rng, p:_*))
   }
   
   /**
@@ -135,7 +138,7 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckFunctions with Sca
    * and indicates if the generation should be verbose or not
    */
   private[specs2] def checkProperty(prop: Prop)(implicit p: Parameters): execute.Result = {
-    checkScalaCheckProperty(prop)(Params(p(minTestsOk), p(maxDiscarded), p(minSize), p(maxSize), StdRand, p(workers)), p.verbose)
+    checkScalaCheckProperty(prop)(Params(p(minTestsOk), p(maxDiscarded), p(minSize), p(maxSize), p.rng, p(workers)), p.verbose)
   }
 
   /**
@@ -370,15 +373,17 @@ trait ScalaCheckParameters {
    /** factory object to create parameters with verbose = false */
    object set extends Parameters(setParams(Nil)) {
      def apply(p: (Symbol, Int)*) = new Parameters(setParams(p))
+     def apply(rng: java.util.Random, p: (Symbol, Int)*) = new Parameters(setParams(p), rng)
    }
    /** factory object to create parameters with verbose = true */
    object display  extends Parameters(setParams(Nil)) {
      def apply(p: (Symbol, Int)*) = new Parameters(setParams(p)) { override def verbose = true }
+     def apply(rng: java.util.Random, p: (Symbol, Int)*) = new Parameters(setParams(p), rng) { override def verbose = true }
      override def verbose = true
    }
    private def setParams(p: Seq[(Symbol, Int)]): Map[Symbol, Int] = {
      p.foldLeft(defaultValues) { (res: Map[Symbol, Int], pair: (Symbol, Int)) =>
-       //  this is a useful check in case of print(null) or set(null)
+       //  this is a useful check in case of display(null) or set(null)
        if (pair == null || pair._1 == null)
          throw new RuntimeException("null values are not accepted in scalacheck parameters: '"+pair+"'")
        res updated (pair._1, pair._2)
@@ -390,7 +395,7 @@ trait ScalaCheckParameters {
  * It contains a Map of generation parameters and indicates if the generation
  * must be verbose.
  */
-case class Parameters(params: Map[Symbol, Int]) {
+case class Parameters(params: Map[Symbol, Int] = Map(), rng: java.util.Random = StdRand) {
   def apply(s: Symbol) = params(s)
   def verbose = false
 }

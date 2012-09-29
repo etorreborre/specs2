@@ -271,6 +271,17 @@ The parameters you can modify are:
   * `maxSize`: maximum size for the "sized" data generators (default=100)
   * `workers`: number of threads checking the property (default=1)
 
+You can also set the random generator that is used in all the ScalaCheck generators:
+
+      case class MyRandomGenerator() extends java.util.Random {
+        // implement a deterministic generator for example
+      }
+
+      "this is a specific property" ! prop { (a: Int, b: Int) =>
+        (a + b) must_== (b + a)
+      }.set(MyRandomGenerator(), minTestsOk -> 200, workers -> 3)
+
+
 ### Mock expectations
 
 At the moment only the [Mockito](http://mockito.org) library is supported.
