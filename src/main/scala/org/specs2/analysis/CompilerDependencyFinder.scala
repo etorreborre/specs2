@@ -18,7 +18,7 @@ trait CompilerDependencyFinder extends DependencyFinder {
   /**
    * @return the class depending on the classes of a given package
    */
-  def getPackageDependents(packageName: String, sourceDir: String, targetDir: String): Seq[Dependency] = {
+  override def getPackageDependents(packageName: String, sourceDir: String, targetDir: String): Seq[Dependency] = {
     // load all dependencies for this source directory (compiles all files)
     val dependencies = sourceDependencies(sourceDir)
     // for each file in the package directory, get its dependencies

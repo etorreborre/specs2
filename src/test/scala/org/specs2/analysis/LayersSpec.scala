@@ -27,3 +27,5 @@ class LayersSpec extends mutable.Specification with Analysis {
     l.exclude("SpecificationWithJUnit").inThisLayer(Dependency("p3.A", "com.p1.SpecificationWithJUnit")) === false
   }
 }
+
+class LayersWithCompilerSpec extends LayersSpec with CompilerDependencyFinder
