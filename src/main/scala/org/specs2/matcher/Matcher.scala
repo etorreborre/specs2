@@ -141,15 +141,9 @@ trait Matcher[-T] { outer =>
    */
   def orSkip(message: String => String): Matcher[T] = new Matcher[T] {
     def apply[U <: T](a: Expectable[U]) = {
-      val result = tryOr(outer(a)) { (e: Exception) => e match {
-          case FailureException(r) => MatchFailure(r.message, r.message, a)
-          case SkipException(r)    => MatchSkip(r.message, a)
-          case _                   => throw e
-        }
-      }
-      result match {
-    	  case MatchFailure(_, ko, _, d) => MatchSkip(message(ko), a)
-    	  case other => other
+      tryOr(outer(a)) { (e: Exception) => MatchSkip(message(e.getMessage), a) } match {
+        case MatchFailure(_,ko,_,_) => MatchSkip(message(ko), a)
+        case other                  => other
       }
     }
   }
@@ -168,15 +162,9 @@ trait Matcher[-T] { outer =>
    */
   def orPending(message: String => String): Matcher[T] = new Matcher[T] {
     def apply[U <: T](a: Expectable[U]) = {
-      val result = tryOr(outer(a)) { (e: Exception) => e match {
-        case FailureException(r) => MatchFailure(r.message, r.message, a)
-        case PendingException(r) => MatchPending(r.message, a)
-        case _                   => throw e
-      }
-      }
-      result match {
-        case MatchFailure(_, ko, _, d) => MatchPending(message(ko), a)
-        case other => other
+      tryOr(outer(a)) { (e: Exception) => MatchPending(message(e.getMessage), a) } match {
+        case MatchFailure(_,ko,_,_) => MatchPending(message(ko), a)
+        case other                  => other
       }
     }
   }
