@@ -35,13 +35,11 @@ trait TagSelection {
    */
   def tags(fragments: Seq[Fragment]): Seq[TaggingFragment] = {
 
-    def removeTags(taggingToApply: Seq[TaggingFragment], tf: TaggingFragment) = taggingToApply.map { t =>
-      t match {
-        case s @ Section(_)   => Section((s.names diff tf.names):_*)
-        case s @ AsSection(_) => AsSection((s.names diff tf.names):_*)
-        case other            => t
-      }
-    }
+    def removeTags(taggingToApply: Seq[TaggingFragment], tf: TaggingFragment) = taggingToApply.collect {
+      case s @ Section(_*)   => Section((s.names diff tf.names):_*)
+      case s @ AsSection(_*) => AsSection((s.names diff tf.names):_*)
+      case other             => other
+    }.filterNot(_.isEmpty)
 
     fragments.foldLeft((Vector(), Vector()): (Seq[TaggingFragment], Seq[TaggingFragment])) { (res, cur) =>
       val (tagged, taggingToApply) = res
