@@ -64,7 +64,7 @@ trait FileReader {
     result
   }(e => report(e, filePath)).getOrElse(NodeSeq.Empty)
 
-  private def parse(source: Source, sourceErrors: Boolean = true) = {
+  private[this] def parse(source: Source, sourceErrors: Boolean = true) = {
     if (sourceErrors) XhtmlParser(source)
     else new XhtmlParser(source) {
       override def reportSyntaxError(pos: Int, str: String): Unit = ()
@@ -72,7 +72,7 @@ trait FileReader {
   }
 
   def silentLoadXhtmlFileReport          = (e: Exception, filePath: String) => ()
-  private def defaultLoadXhtmlFileReport = (e: Exception, filePath: String) => { scala.Console.println("trying to load: "+filePath+"\n"); e.printStackTrace }
+  private[this] def defaultLoadXhtmlFileReport = (e: Exception, filePath: String) => { scala.Console.println("trying to load: "+filePath+"\n"); e.printStackTrace }
 
 }
 private[specs2]
