@@ -6,7 +6,7 @@ This version adds a few features:
  * refactored the `NotifierRunner` so that [all the specifications of a package can be executed in Intellij](https://groups.google.com/d/msg/specs2-users/1_mBukI2Xfo/oZnTGHUuxcgJ)
  * added a `propNoShrink` method to create ScalaCheck properties which will not shrink counter-examples
  * any function returning a `Result` can be converted implicitly to a ScalaCheck `Prop`
- * added the possibility to [specify the random generator](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Matchers.html#Test+properties) that is used for ScalaCheck
+ * added the possibility to [specify the random generator](http://stackoverflow.com/questions/12639454/make-scalacheck-tests-deterministic) that is used for ScalaCheck
 
 And lots of small fixes:
 
