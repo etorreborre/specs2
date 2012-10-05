@@ -231,6 +231,17 @@ trait Matcher[-T] { outer =>
   }
 
   /**
+   * @return update the failure message of a matcher
+   */
+  def updateMessage(f: String => String) = new Matcher[T] {
+    def apply[S <: T](s: Expectable[S]) = outer.apply(s).updateMessage(f)
+  }
+  /**
+   * @return set a new failure message of a matcher
+   */
+  def setMessage(message: String) = updateMessage((s: String) => message)
+
+  /**
    * @return a test function corresponding to this matcher
    */
   def test = (t: T) => apply(Expectable(t)).isSuccess

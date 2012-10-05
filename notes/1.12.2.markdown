@@ -7,6 +7,7 @@ This version adds a few features:
  * added a `propNoShrink` method to create ScalaCheck properties which will not shrink counter-examples
  * any function returning a `Result` can be converted implicitly to a ScalaCheck `Prop`
  * added the possibility to [specify the random generator](http://stackoverflow.com/questions/12639454/make-scalacheck-tests-deterministic) that is used for ScalaCheck
+ * added the possibility to set a custom failure message on a matcher
 
 And lots of small fixes:
 
