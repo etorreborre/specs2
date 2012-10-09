@@ -24,6 +24,7 @@ trait ResultExecution { outer =>
       case FailureException(f)                                               => f
       case SkipException(f)                                                  => f
       case PendingException(f)                                               => f
+      case DecoratedResultException(f)                                       => f
       case e: Exception                                                      => Error(e)
       case e: AssertionError if (fromJUnit(e))                               => Failure(e.getMessage.notNull, "", e.getStackTrace.toList)
       case e: AssertionError                                                 => Error(e)

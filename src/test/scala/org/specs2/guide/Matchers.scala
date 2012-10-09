@@ -139,6 +139,8 @@ There are many ways to create matchers for your specific usage. The simplest way
  * using `mute` to change a Matcher so that it returns MatchResults with no messages. This is used in Forms to create
    properties showing no messages when they fail
 
+ * using `updateMessage(f: String => String)` or `setMessage(m: String)` to change the failure message
+
 Another easy way to create matchers, is to use some implicit conversions from functions to Matchers:
 
        val m: Matcher[String]  = ((_: String).startsWith("hello"), "doesn't start with hello")
@@ -273,6 +275,17 @@ The parameters you can modify are:
   * `rng`: the random number generator (default = `new java.util.Random`)
   * `callback`: a ScalaCheck TestCallback (see the ScalaCheck documentation)
   * `loader`: a custom classloader (see the ScalaCheck documentation)
+
+You can also set the random generator that is used in all the ScalaCheck generators:
+
+      case class MyRandomGenerator() extends java.util.Random {
+        // implement a deterministic generator for example
+      }
+
+      "this is a specific property" ! prop { (a: Int, b: Int) =>
+        (a + b) must_== (b + a)
+      }.set(MyRandomGenerator(), minTestsOk -> 200, workers -> 3)
+
 
 ### Mock expectations
 

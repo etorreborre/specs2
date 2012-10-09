@@ -24,6 +24,7 @@ class MatcherSpec extends Specification with ResultMatchers { def is =
     "meaning that the first failure will fail all"                                                                      ! e8^
   "a matcher for a seq of values can be defined by a function returning a MatchResult and used foreach values"+
     "meaning that all failures will be collected"                                                                       ! e9^
+  "a matcher can have a different failure message"                                                                      ! e10^
                                                                                                                         end
 
   def e1 = new Exception("message")  must be_==("message") ^^ ((_:Exception).getMessage)
@@ -85,6 +86,11 @@ class MatcherSpec extends Specification with ResultMatchers { def is =
   def e9 = {
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i+" is even", (i: Int) => i+" is odd")
     ((i: Int) => beEven).foreach(Seq(1, 2, 3)) returns "1 is odd; 3 is odd"
+  }
+
+  def e10 = {
+    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i+" is even", (i: Int) => i+" is odd")
+    (3 must beEven.setMessage("is not even")).message === "is not even"
   }
 
 }

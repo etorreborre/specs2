@@ -1,7 +1,14 @@
 package org.specs2
 package matcher
 
-import execute.{FailureException, SkipException, Pending, PendingException, Failure, Skipped, Result}
+import execute._
+import execute.Skipped
+import execute.Pending
+import execute.Failure
+import scala.Some
+import execute.PendingException
+import execute.SkipException
+import execute.FailureException
 
 /**
  * Thrown expectations will throw a FailureException if a match fails
@@ -45,10 +52,11 @@ trait ThrownExpectations extends Expectations {
 
   override protected def checkResultFailure(r: Result) = {
     r match {
-      case f @ Failure(_,_,_,_) => throw new FailureException(f)
-      case s @ Skipped(_,_)     => throw new SkipException(s)
-      case s @ Pending(_)       => throw new PendingException(s)
-      case _                    => ()
+      case f @ Failure(_,_,_,_)     => throw new FailureException(f)
+      case s @ Skipped(_,_)         => throw new SkipException(s)
+      case s @ Pending(_)           => throw new PendingException(s)
+      case d @ DecoratedResult(_,_) => throw new DecoratedResultException(d)
+      case _                        => ()
     }
     r
   }

@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 import sys._
-import execute.FailureException
+import execute.{DecoratedResultException, FailureException}
 
 class DataTablesSpec extends Specification with DataTables with ResultMatchers { def is =
                                                                                                                         """
@@ -65,7 +65,7 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
 	  0           ! "0"       |
 	  List("a")   ! "List(a)" | { (a, b) =>  a.toString must_== b }
 
-  def e8 = (new InAMutableContext).result must throwA[FailureException]
+  def e8 = (new InAMutableContext).result must throwA[DecoratedResultException]
 
   def e9 = {
     val table =

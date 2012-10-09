@@ -16,3 +16,6 @@ case class SkipException(f: Skipped) extends Exception {
 /** this class allows to throw a pending result in an Exception */
 case class PendingException(f: Pending) extends Exception
 
+/** this class allows to throw a result that's decorated with additional information in an Exception */
+case class DecoratedResultException(result: DecoratedResult[_]) extends Exception
+

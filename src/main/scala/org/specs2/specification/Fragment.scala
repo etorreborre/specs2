@@ -266,6 +266,8 @@ object TagsFragments {
     def keep(args: Arguments): Boolean = SeparatedTags(args.include, args.exclude).keep(names)
     /** @return true if this tagging fragment is a section */
     def isSection: Boolean
+    /** @return true if this fragment has no names */
+    def isEmpty = names.isEmpty
   }
   /** tags the next fragment */
   case class Tag(names: String*) extends TaggingFragment {

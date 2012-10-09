@@ -74,10 +74,13 @@ trait MatchResult[+T] extends ResultLike {
   def message = toResult.message
   def orThrow = this
   def orSkip = this
-  /**
-   * @return the MatchResult with no messages
-   */
+
+  /** @return the MatchResult with no messages */
   def mute: MatchResult[T] = this
+  /** update the failure message of this match result */
+  def updateMessage(f: String => String) = this
+  /** set a new failure message on this match result */
+  def setMessage(message: String) = updateMessage((s: String) => message)
 
   /** the value being matched */
   protected[specs2] def evaluate[S >: T]: MatchResult[S] = this
@@ -87,6 +90,7 @@ case class MatchSuccess[T] private[specs2](okMessage: String, koMessage: String,
   def negate: MatchResult[T] = MatchFailure(koMessage, okMessage, expectable)
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
   override def mute = MatchSuccess("", "", expectable)
+  override def updateMessage(f: String => String) = MatchSuccess(okMessage, f(koMessage), expectable)
 }
 case class MatchFailure[T] private[specs2](okMessage: String, koMessage: String, expectable: Expectable[T], details: Details = NoDetails()) extends MatchResult[T] {
   /** an exception having the same stacktrace */
@@ -95,6 +99,7 @@ case class MatchFailure[T] private[specs2](okMessage: String, koMessage: String,
   def negate: MatchResult[T] = MatchSuccess(koMessage, okMessage, expectable)
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
   override def mute = MatchFailure("", "", expectable, details)
+  override def updateMessage(f: String => String) = MatchFailure(okMessage, f(koMessage), expectable)
   override def orThrow = { throw new FailureException(toResult); this }
   override def orSkip  = { throw new SkipException(toResult); this }
 }
@@ -103,6 +108,7 @@ case class MatchSkip[T] private[specs2](override val message: String, expectable
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
   override def toResult = Skipped(message)
   override def mute = MatchSkip("", expectable)
+  override def updateMessage(f: String => String) = MatchSkip(f(message), expectable)
   override def orThrow = { throw new SkipException(toResult); this }
 }
 case class MatchPending[T] private[specs2](override val message: String, expectable: Expectable[T]) extends MatchResult[T] {
@@ -110,6 +116,7 @@ case class MatchPending[T] private[specs2](override val message: String, expecta
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
   override def toResult = Pending(message)
   override def mute = MatchPending("", expectable)
+  override def updateMessage(f: String => String) = MatchPending(message, expectable)
   override def orThrow = { throw new PendingException(toResult); this }
 }
 case class NotMatch[T] private[specs2](m: MatchResult[T]) extends MatchResult[T] {

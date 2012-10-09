@@ -31,7 +31,14 @@ class LogicalMatcherSpec extends Specification with ResultMatchers { def is =
   "a matcher can be ok or be skipped"                                                                                   ^
     "if it is ok, it returns a MatchSuccess result"                                                                     ! skip1^
     "if it is ko, it returns a MatchSkip result"                                                                        ! skip2^
-    "a skipped message can also be added in front of the failure message"                                               ! skip3^
+    "if it throws an exception, it returns a MatchSkip result"                                                          ! skip3^
+    "a skipped message can also be added in front of the failure message"                                               ! skip4^
+                                                                                                                        p^
+    "a matcher can be ok or be pending"                                                                                 ^
+    "if it is ok, it returns a MatchSuccess result"                                                                     ! pending1^
+    "if it is ko, it returns a MatchPending result"                                                                     ! pending2^
+    "if it throws an exception, it returns a MatchPending result"                                                       ! pending3^
+    "a pending message can also be added in front of the failure message"                                               ! pending4^
                                                                                                                         p^
   "a matcher can applied only if a boolean condition is true"                                                           ^
     "if the condition is true, it is applied"                                                                           ! when1^
@@ -78,8 +85,13 @@ class LogicalMatcherSpec extends Specification with ResultMatchers { def is =
 
   def skip1 = 1 must be_==(1).orSkip
   def skip2 = (1 must be_==(2).orSkip).toResult must_== Skipped("'1' is not equal to '2'")
-  def skip3 = (1 must be_==(2).orSkip("precondition failed")).toResult must_==
-              Skipped("precondition failed: '1' is not equal to '2'")
+  def skip3 = (1 must be_==({sys.error("boom");2}).orSkip("skip this")).toResult must_== Skipped("skip this: boom")
+  def skip4 = (1 must be_==(2).orSkip("precondition failed")).toResult must_== Skipped("precondition failed: '1' is not equal to '2'")
+
+  def pending1 = 1 must be_==(1).orPending
+  def pending2 = (1 must be_==(2).orPending).toResult must_== Pending("'1' is not equal to '2'")
+  def pending3 = (1 must be_==({sys.error("boom");2}).orPending("todo")).toResult must_== Pending("todo: boom")
+  def pending4 = (1 must be_==(2).orPending("precondition failed")).toResult must_== Pending("precondition failed: '1' is not equal to '2'")
 
   def when1 = (1 must be_==(1).when(true)).toResult must beSuccessful
   def when2 = (1 must be_==(2).when(false)).toResult must beSuccessful
