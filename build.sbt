@@ -6,7 +6,7 @@ import com.jsuereth.ghpages.GhPages.ghpages._
 /** Project */
 name := "specs2"
 
-version := "1.12.2-SNAPSHOT"
+version := "1.12.2"
 
 organization := "org.specs2"
 
