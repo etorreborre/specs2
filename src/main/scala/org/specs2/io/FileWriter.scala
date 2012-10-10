@@ -71,7 +71,7 @@ trait FileWriter {
   /** creates a new directory */
   def mkdirs(path: String) = {
     println("trying to create directory "+path)
-    println("the current dir is "+new File(".").getPath)
+    println("the current dir is "+new File(".").getAbsolutePath)
     new File(path).mkdirs
   }
   /** delete a file */
