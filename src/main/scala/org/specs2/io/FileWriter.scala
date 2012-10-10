@@ -53,15 +53,27 @@ trait FileWriter {
    * creates a file for a given path. Create the parent directory if necessary.
    */
   def createFile(path: String) = {
-    if (new File(path).getParentFile != null && !new File(path).getParentFile.exists) 
-      mkdirs(new File(path).getParent) 
+
+    if (!parentDirExists(path))
+      mkdirs(new File(path).getParent)
+
+    if (!parentDirExists(path))
+      sys.error("could not create directory "+new File(path).getParentFile)
+
     if (!exists(path))
       new File(path).createNewFile
   }
+
+  /** @return true if the parent of a file exists */
+  def parentDirExists(path: String) = Option(new File(path).getParentFile).map(_.exists).getOrElse(false)
   /** @return true if the file exists */
   def exists(path: String) = path != null && new File(path).exists
   /** creates a new directory */
-  def mkdirs(path: String) = new File(path).mkdirs
+  def mkdirs(path: String) = {
+    println("trying to create directory "+path)
+    println("the current dir is "+new File(".").getPath)
+    new File(path).mkdirs
+  }
   /** delete a file */
   def delete(path: String) = new File(path).delete
   /**
