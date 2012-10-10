@@ -17,20 +17,19 @@ trait MatchResultLogicalCombinators {
 
   implicit def combineMatchResult[T](m: =>MatchResult[T]): MatchResultCombinator[T] = new MatchResultCombinator[T](m)
   class MatchResultCombinator[T](mr: =>MatchResult[T]) {
-    lazy val m = mr
-    lazy val result = MatchResultExecution.executeEither(m)
+    lazy val result = MatchResultExecution.executeEither(mr)
 
     /** @return the logical or of two results */
     def or[S >: T](other: =>MatchResult[S]): MatchResult[S] = result.fold(m1 => other, m1 => new OrMatch(m1, other).evaluate)
     /** @return the logical and of two results */
-    def and[S >: T](other: =>MatchResult[S]): MatchResult[S] = result.fold(m1 => m, m1 => new AndMatch(m1, other).evaluate)
+    def and[S >: T](other: =>MatchResult[S]): MatchResult[S] = result.fold(m1 => m1, m1 => new AndMatch(m1, other).evaluate)
     /** apply the matcher and return the logical or of two results */
     def or(other: Matcher[T]): MatchResult[T] =
       result.fold(m1 => m1.expectable.applyMatcher(other),
                   m1 => combineMatchResult(m1).or(m1.expectable.applyMatcher(other)))
     /** apply the matcher and return the logical and of two results */
     def and(other: Matcher[T]): MatchResult[T] =
-      result.fold(m1 => m,
+      result.fold(m1 => m1,
                   m1 => combineMatchResult(m1).and(m1.expectable.applyMatcher(other)))
     /** @return the negation of this result */
     def not: MatchResult[T] = result.fold(m1 => m1.negate, m1 => m1.negate)

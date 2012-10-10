@@ -24,6 +24,8 @@ class ResultExecutionSpec extends Specification { def is =
     { execute { throw new AssertionError("false"); success } === Error(new AssertionError("false")) }                   ^
     "a NotImplementedError must return a Failure"                                                                       ^
     { execute { throw NotImplementedError("???"); success } === Failure("???") }                                        ^
+    "any other Throwable must return an Error"                                                                          ^
+    { execute { throw new OutOfMemoryError("oome"); success } === Error(new OutOfMemoryError("oome")) }                 ^
     "any other type of Result must return itself"                                                                       ^
     { execute(success) === success }                                                                                    ^
     { execute(failure) === failure }                                                                                    ^
