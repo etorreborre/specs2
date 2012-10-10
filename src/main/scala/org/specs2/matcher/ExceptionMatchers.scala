@@ -14,7 +14,12 @@ trait ExceptionBaseMatchers extends Expectations {
   /**
    * @return a matcher checking the type of an Exception
    */
-  def throwA[E <: Throwable](implicit m: ClassTag[E]): ExceptionClassMatcher = new ExceptionClassMatcher(m.runtimeClass)
+  def throwA[E <: Throwable](implicit m: ClassTag[E]): ExceptionClassMatcher =
+    m.toString match {
+      case "ClassTag[Nothing]" => new ExceptionClassMatcher(classOf[Throwable])
+      case _                   => new ExceptionClassMatcher(m.runtimeClass)
+    }
+
   /**
    * @return a matcher checking the type of an Exception and its message (as a regexp)
    */
@@ -57,9 +62,9 @@ trait ExceptionBaseMatchers extends Expectations {
     }
     private def asString(exception: Any) = {
       exception match {
-        case e: Class[_] => e.getName
+        case e: Class[_]   => e.getName
         case ex: Throwable => ex.getClass.getName + ": " + ex.getMessage
-        case other => other.toString
+        case other         => other.toString
       }
     }
   }
