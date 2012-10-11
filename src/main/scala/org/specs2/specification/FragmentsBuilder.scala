@@ -150,7 +150,6 @@ trait NoFragmentsBuilder extends FragmentsBuilder {
 /**
  * Fragments can be chained with the ^ method
  */
-private[specs2]
 class FragmentsFragment(fs: =>Fragments) {
   def fragments = fs
   def ^(t: String) = fs add Text(t)

@@ -57,8 +57,8 @@ How to create an Example
   "An example can use a partial function to extract values from its text"                                               ! ex().e4^
     "the description must be stripped out of value markers"                                                             ! ex().e5^
                                                                                                                         p^
-  "An Error in the Example body will fail the example creation"                                                         ! ex().e6^
-     "except if it is an AssertionError"                                                                                ! ex().e7^
+  "An Error in the Example body will not fail the example creation"                                                     ! ex().e6^
+    "even if it is an AssertionError"                                                                                   ! ex().e7^
                                                                                                                         p^
   "An example has a `matches` method to match its description against a regexp"                                         ^
     "it returns true if there is a match"                                                                               ! ex().matches1^
@@ -135,7 +135,7 @@ Other elements
     def e5 = soExample.desc.toString must_== "given the name: eric, then the age is 18"
 
     def execute = FragmentExecution.executeFragment(args())
-    def e6 = execute("example" ! { throw new NoSuchMethodError("flushBuffer"); success }).toString must beMatching(".*Fragment evaluation error.*NoSuchMethodError\\: flushBuffer.*")
+    def e6 = execute("example" ! { throw new NoSuchMethodError("flushBuffer"); success }).toString must beMatching(".*ThrowableException.*NoSuchMethodError\\: flushBuffer.*")
     def e7 = execute("example" ! { throw new AssertionError(); success }).toString must not contain("Fragment evaluation error")
 
     def matches1 = ("Eric" ! success).matches("E.*")

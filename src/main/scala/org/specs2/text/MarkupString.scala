@@ -6,7 +6,6 @@ package text
  *
  * It is primarily used for the html rendering of code in Example descriptions
  */
-private[specs2]
 trait MarkupString {
   def toXml: scala.xml.Elem
   def toHtml: String = toXml.toString

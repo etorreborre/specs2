@@ -29,7 +29,6 @@ trait SpecIdentification {
 /**
  * Name declaration for a specification
  */
-private[specs2]
 sealed trait SpecName extends SpecIdentification {
   /** the human readable name of the specification */
   def title: String

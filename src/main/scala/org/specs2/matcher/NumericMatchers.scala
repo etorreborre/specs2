@@ -78,7 +78,6 @@ case class CanHaveDelta[S : Numeric](n: S) {
   def +/-(delta: S) = Delta(n, delta)
 }
 /** class representing a numeric range */
-private[specs2]
 case class Delta[S](n: S, delta: S)
 
 private[specs2]

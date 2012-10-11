@@ -156,7 +156,6 @@ object RegexSteps extends RegexSteps {
 }
 import RegexSteps._
 
-private[specs2]
 trait RegexFragment {
   type RegexType <: RegexFragment
   def fs: Fragments
