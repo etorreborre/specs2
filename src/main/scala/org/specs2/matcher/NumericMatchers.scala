@@ -108,6 +108,8 @@ trait NumericBeHaveMatchers { outer: NumericBaseMatchers =>
   }
   implicit def toNumericResultMatcher[S : Numeric](result: MatchResult[S]) = new NumericResultMatcher(result)
   class NumericResultMatcher[S : Numeric](result: MatchResult[S]) {
+    def beCloseTo(n: S, delta: S) = result(outer.beCloseTo(n, delta))
+    def beCloseTo(delta: Delta[S]) = result(outer.beCloseTo(delta))
     def closeTo(n: S, delta: S) = result(outer.beCloseTo(n, delta))
     def closeTo(delta: Delta[S]) = result(outer.beCloseTo(delta))
     def ~(n: S, delta: S) = result(outer.beCloseTo(n, delta))

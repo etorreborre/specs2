@@ -58,6 +58,7 @@ types and more generally with Ordered types.
   { 1.0 must beCloseTo(1, 0.5) }                                                                                        ^
   { 4 must be ~(5 +/- 2) }                                                                                              ^
   { 2 must not be closeTo(4 +/- 1) }                                                                                    ^
+  { 2 must not beCloseTo(4 +/- 1) }                                                                                     ^
   "and return a failure if the comparison fails"                                                                        ! e5^
   "and return a failure if the comparison fails - with aka"                                                             ! e5_1^
                                                                                                                         p^
