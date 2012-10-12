@@ -29,7 +29,7 @@ trait ResultLogicalCombinators extends Results {
                                                    else                                     Success(r.message+" and "+m, concat(s.exp, e), r.expectationsNb + o.expectationsNb)
             case DecoratedResult(d, r1)         => DecoratedResult(d, r.and(r1))
             case Failure(_,_,_,_) | Error(_,_)  => o.addExpectationsNb(r.expectationsNb).mapExpected((e: String) => concat(r.expected, e))
-            case _                              => r.addExpectationsNb(o.expectationsNb).mapExpected((e: String) => concat(o.expected, e))
+            case _                              => r.addExpectationsNb(o.expectationsNb).mapExpected((e: String) => concat(e, o.expected))
           }
       }
       case Pending(_) | Skipped(_,_)     => {
@@ -65,7 +65,7 @@ trait ResultLogicalCombinators extends Results {
                                          else Success(r.message+" and "+m, exp, r.expectationsNb + s.expectationsNb)
           case Failure(m, e, st, d)   => Failure(r.message+" and "+m, e, f.stackTrace ::: st, d).addExpectationsNb(r.expectationsNb)
           case DecoratedResult(d, r1) => DecoratedResult(d, r.or(r1))
-          case _                      => r.addExpectationsNb(o.expectationsNb).mapExpected((e: String) => concat(o.expected, e))
+          case _                      => r.addExpectationsNb(o.expectationsNb).mapExpected((e: String) => concat(e, o.expected))
         }
       }
       case Pending(_) | Skipped(_,_)     => {
