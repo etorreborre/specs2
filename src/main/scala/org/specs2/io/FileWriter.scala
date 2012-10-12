@@ -69,9 +69,12 @@ trait FileWriter {
   /** @return true if the file exists */
   def exists(path: String) = path != null && new File(path).exists
   /** creates a new directory */
-  def mkdirs(path: String) = {
-    println("trying to create directory "+path)
-    println("the current dir is "+new File(".").getAbsolutePath)
+  def mkdirs(path: String):Boolean = {
+    // Recursive fix
+    val file = new File(path)
+    val parentFile = file.getParentFile
+    if(!parentFile.exists())
+      mkdirs(parentFile.getAbsolutePath)
     new File(path).mkdirs
   }
   /** delete a file */
