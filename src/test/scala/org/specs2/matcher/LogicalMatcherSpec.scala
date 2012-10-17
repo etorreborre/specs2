@@ -54,6 +54,8 @@ class LogicalMatcherSpec extends Specification with ResultMatchers { def is =
     "if the condition is false, it is applied"                                                                          ^
       "the result is true if the application is false"                                                                  ! iff3^
       "the result is false if the application is true"                                                                  ! iff4^
+                                                                                                                        p^
+  "a customer matcher can be negated, or used with be/have"                                                             ! custom1^
                                                                                                                         end
 
   def or1 = "eric" must (beMatching("e.*") or beMatching(".*c"))
@@ -102,4 +104,25 @@ class LogicalMatcherSpec extends Specification with ResultMatchers { def is =
   def iff2 = (1 must be_==(2).iff(true)).toResult must beFailing
   def iff3 = (1 must be_==(2).iff(false)).toResult must beSuccessful
   def iff4 = (1 must be_==(1).iff(false)).toResult must beFailing
+
+  /** custom matcher */
+  def bePositive[T : Numeric] = CustomMatcher[T]()
+  /** this allows to write "a must not be positive" */
+  def positive[T : Numeric] = bePositive
+
+  case class CustomMatcher[T : Numeric]() extends Matcher[T] {
+    def apply[S <: T](e: Expectable[S]) =
+      result(implicitly[Numeric[T]].abs(e.value) == e.value, e.value+" is positive", e.value+" is negative", e)
+  }
+  /** this allows to write "a must not bePositive" or "a must be positive" */
+  val outer = this
+  implicit def anyBePositive[T : Numeric](result: MatchResult[T]) = new AnyBePositive(result)
+  class AnyBePositive[T : Numeric](result: MatchResult[T]) {
+    def bePositive = result(outer.bePositive)
+    def positive = result(outer.bePositive)
+  }
+  def custom1 = (12 must bePositive) and
+                (12 must be positive)
+                (-12 must not bePositive) and
+                (-12 must not be positive)
 }
