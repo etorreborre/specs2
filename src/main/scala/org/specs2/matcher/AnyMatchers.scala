@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import reflect.ClassName._
+import text.Trim._
 import text.Quote._
 import text.NotNullStrings._
 import execute._
@@ -194,7 +194,8 @@ class BeTypedEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
         case other                           => other
 	    }
 
-    result(equality, ok(db + " is equal to " + qa), ko(db + " is not equal to " + qa), b, a.notNull, b.value.notNull)
+    def print(b: String, msg: String, a: String) = Seq(b, msg, a).mkString("\n".unless((Seq(a, b).exists(_.size <= 40))))
+    result(equality, ok(print(db, " is equal to ", qa)), ko(print(db, " is not equal to ", qa)), b, a.notNull, b.value.notNull)
   }
 }
 

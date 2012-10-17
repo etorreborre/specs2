@@ -131,7 +131,7 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
     "a null object"                                                                                                     ! robust1^
     "a non-traversable collection"                                                                                      ! robust2^
                                                                                                                         p^
-  "the be_== matcher must warn when comparing 2 objects with the same toString representation but not the same class"   ^
+  "the be_== matcher must warn when comparing 2 objects with the same toString representation but not the same type"    ^
     "with List[Int] and List[String]"                                                                                   ! robust3^
     "with 'hello': String and 'hello': Hello"                                                                           ! robust4^
     """"with List("1, 2") and List("1", "2")"""                                                                         ! robust5^
@@ -182,7 +182,7 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
   }
   def robust3 = {
     (List(1, 2) must_== List("1", "2")) must beFailing(
-      "\\Q'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.Integer]' is not equal to 'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.String]'\\E")
+      "\\Q'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.Integer]'\n is not equal to \n'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.String]'\\E")
   }
   def robust4 = {
     ("hello" must_== Hello()) must beFailing(
@@ -190,7 +190,7 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
   }
   def robust5 = {
     (List("1, 2") must_== List("1", "2")) must beFailing(
-      "\\Q'List('1, 2'): scala.collection.immutable.$colon$colon[java.lang.String]' is not equal to 'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.String]'\\E")
+      "\\Q'List('1, 2'): scala.collection.immutable.$colon$colon[java.lang.String]'\n is not equal to \n'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.String]'\\E")
   }
 }
 
