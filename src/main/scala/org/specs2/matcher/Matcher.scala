@@ -253,7 +253,7 @@ object Matcher {
    */
   def result[T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T]): MatchResult[T] = {
 	  if (test) new MatchSuccess(okMessage, koMessage, value) 
-	  else new MatchFailure(okMessage, koMessage, value)
+	  else      new MatchFailure(okMessage, koMessage, value)
   }
   /**
    * Utility method for creating a MatchResult[T], with the actual and expected strings to enable better failure
@@ -261,6 +261,6 @@ object Matcher {
    */
   def result[T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T], expected: String, actual: String): MatchResult[T] = {
 	  if (test) new MatchSuccess(okMessage, koMessage, value)
-	  else new MatchFailure(okMessage, koMessage, value, FailureDetails(expected, actual))
+	  else      new MatchFailure(okMessage, koMessage, value, FailureDetails(expected, actual))
   }
 }

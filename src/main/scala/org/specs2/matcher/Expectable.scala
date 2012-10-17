@@ -32,7 +32,11 @@ class Expectable[+T] private[specs2] (t: () => T) { outer =>
    * @return a description of the value provided by the user
    *         a combination of the value show by specs2 and an optional description
    */
-  def description = showValueAs.map(_()).getOrElse(d(value, desc))
+  def description    = describe(value)
+  /**
+   * @return a description of any value with the custom description
+   */
+  def describe(v: Any) = showValueAs.map(_()).getOrElse(d(v, desc))
   /** @return the optional description function */
   def optionalDescription: Option[String => String] = desc
 
@@ -100,14 +104,13 @@ object Expectable {
   }
 
   /** @return the description of the matched value, quoted. */
-  private[specs2] def d[T](value: =>T, desc: Option[String => String]) = {
-    val valueAsString = value.notNull
+  private[specs2] def d(value: =>Any, desc: Option[String => String]) = {
     desc match {
       case None => value match {
         case b: Boolean   => "the value"
-        case _            => q(valueAsString)
+        case _            => q(value)
       }
-      case Some(de)       => de(valueAsString)
+      case Some(de)       => de(value.notNull)
     }
   }
 

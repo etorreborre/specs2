@@ -96,12 +96,14 @@ case class MatchFailure[T] private[specs2](okMessage: String, koMessage: String,
   /** an exception having the same stacktrace */
   val exception = new Exception(koMessage)
   override def toResult = Failure(koMessage, okMessage, exception.getStackTrace.toList, details)
+
   def negate: MatchResult[T] = MatchSuccess(koMessage, okMessage, expectable)
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
-  override def mute = MatchFailure("", "", expectable, details)
-  override def updateMessage(f: String => String) = MatchFailure(okMessage, f(koMessage), expectable)
-  override def orThrow: MatchFailure[T] =throw new FailureException(toResult)
-  override def orSkip: MatchFailure[T]  = throw new SkipException(toResult)
+
+  override def mute                               = MatchFailure("", "", expectable, details)
+  override def updateMessage(f: String => String) = copy(koMessage = f(koMessage))
+  override def orThrow: MatchFailure[T]           = throw new FailureException(toResult)
+  override def orSkip: MatchFailure[T]            = throw new SkipException(toResult)
 }
 case class MatchSkip[T] private[specs2](override val message: String, expectable: Expectable[T]) extends MatchResult[T] {
   def negate: MatchResult[T] = this

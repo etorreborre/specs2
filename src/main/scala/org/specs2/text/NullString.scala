@@ -2,6 +2,7 @@ package org.specs2
 package text
 
 import control.Exceptions._
+import Quote._
 
 /**
  * Utility methods to replace a null String with "null"
@@ -11,6 +12,13 @@ import control.Exceptions._
 private[specs2]
 trait NotNullStrings {
 
+  /**
+   * @return the string evaluation of an object
+   *
+   * - if it is null => null
+   * - if this is an Array or a collection => it tries the toString method of the collection or evaluate each element separately (because they could be null too)
+   * - if this is another type of object   => calls the toString method
+   */
   implicit def anyToNotNull(a: Any) = new NotNullAny(a)
   class NotNullAny(a: Any) {
     def  notNull: String = {
@@ -18,9 +26,36 @@ trait NotNullStrings {
       else {
         a match {
           case ar: Array[_]           => ar.notNullMkString(", ", "Array(", ")")
-          case it: TraversableOnce[_] => it.notNullMkString(", ")
+          case it: TraversableOnce[_] => it.notNullMkStringWith(addQuotes = false)
           case _                      => evaluate(a)
         }
+      }
+    }
+
+    /**
+     * @return the string evaluation of an object + its class name
+     *
+     * - if it is null => null
+     * - if this is an Array or a collection => it prints the class name of the full collection if each element has the same type: List[Int] for example
+     *                                          other it prints each element with its class name
+     * - if this is another type of object   => calls the toString method + getClass.getName
+     */
+    def  notNullWithClass: String = {
+      if (a == null) "null"
+      else {
+        def sameElementTypes(ts: TraversableOnce[_]) =
+          ts.nonEmpty && (ts.toSeq.collect { case t if !(t == null) => t.getClass.getName }.size == ts.size)
+        tryOrElse {
+          a match {
+            case ar: Array[_]           =>
+              if (sameElementTypes(ar)) ar.map(a => quote(a.notNull)).mkString(", ", "Array(", "): Array["+ar(0).getClass.getName+"]")
+              else                      ar.map(_.notNullWithClass).mkString(", ", "Array(", ")")
+            case it: TraversableOnce[_] =>
+              if (sameElementTypes(it)) it.toSeq.notNullMkStringWith(addQuotes = true)+": "+it.getClass.getName+"["+it.toSeq(0).getClass.getName+"]"
+              else                      it.toSeq.map(_.notNullWithClass)+": "+it.getClass.getName
+            case _                      => evaluate(a)+": "+a.getClass.getName
+          }
+        }(evaluate(a)+": "+a.getClass.getName) // in case the collection throws an exception during its traversal
       }
     }
   }
@@ -41,13 +76,20 @@ trait NotNullStrings {
   }
 
   implicit def traversableOnceToNotNull[T](a: =>TraversableOnce[T]): NotNullTraversableOnce[T] = new NotNullTraversableOnce(a)
-  class NotNullTraversableOnce[T](a: =>TraversableOnce[T]) extends NotNullMkString {
+  class NotNullTraversableOnce[T](values: =>TraversableOnce[T]) extends NotNullMkString {
     def notNullMkString(sep: String, start: String = "", end: String = ""): String = {
-      if (a == null) "null"
-      else evaluate(catchAllOrElse(a.mkString(start, sep, end))(evaluate(a.toString)))
+      if (values == null) "null"
+      else                evaluate(catchAllOrElse(values.mkString(start, sep, end))(evaluate(values.toString)))
+    }
+    def notNullMkStringWith(addQuotes: Boolean = false): String = {
+      def traversableWithQuotedElements = values.toSeq.map(v => quote(evaluate(v), addQuotes)).toString
+      def quotedTraversable             = quote(evaluate(values.toString))
+
+      if (values == null) quote("null", addQuotes)
+      else if (addQuotes) evaluate(catchAllOrElse(traversableWithQuotedElements)(quotedTraversable))
+      else                evaluate(catchAllOrElse(evaluate(values.toString))(values.toSeq.map(v => evaluate(v)).toString))
     }
   }
-
 
 }
 private[specs2]

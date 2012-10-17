@@ -12,23 +12,23 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
   "we can check if one or several elements are present in a traversable"                                                ^
     { List(1, 2) must contain(1) }                                                                                      ^
     { List(1, 2, 3) must contain(3, 2) }                                                                                ^
-    { (List(1, 2, 3) must contain(3, 4)) returns "'1, 2, 3' doesn't contain '4'" }                                      ^
+    { (List(1, 2, 3) must contain(3, 4)) returns "List(1, 2, 3) doesn't contain '4'" }                                  ^
     { List(1, 2, 3) must containAllOf(List(1, 3)).inOrder }                                                             ^
     { List(1, 2, 3, 4, 5) must containAllOf(List(2, 4)).inOrder }                                                       ^
     { List(1, 2, 3) must contain(3) and  contain(2) }                                                                   ^
     // corner case with type inference. If not specified 'Any', the contain 'String' Matcher is selected
     { List("1", "2", "3") must contain("3") and contain("2":Any) }                                                      ^
     { "abc" must contain('b') }                                                                                         ^
-    { (List(1, 2) must contain(0)) returns "'1, 2' doesn't contain '0'" }                                               ^
+    { (List(1, 2) must contain(0)) returns "List(1, 2) doesn't contain '0'" }                                           ^
     "with a subclass"                                                                                                   ! subclass().e1^
     { Seq(1, 2, 3, 4) must have oneElementLike  { case i if i > 2 => (i % 2) must_== 0 } }                              ^
     { Seq(1, 2, 3, 4) must have oneElementLike  { case i if i > 2 => i.toString must haveSize(1) } }                    ^
     { Seq(1, 2, 3, 4) must have allElementsLike { case i if i > 2 => i must be_>=(1)   } }                              ^
     { Seq(1, 2, 3, 4) must have allElementsLike  { case i if i > 2 => i.toString must haveSize(1) } }                   ^
     { (Seq(1, 2, 3, 4) must have oneElementLike { case i if i > 3 => (i % 2) must_== 1 }) returns
-      "in '1, 2, 3, 4'\nno element is correct\n4: '0' is not equal to '1'" }                                            ^
+      "in List(1, 2, 3, 4)\nno element is correct\n4: '0' is not equal to '1'" }                                        ^
     { (Seq(1, 2, 3, 4) must have allElementsLike { case i if i > 2 => i must be_>=(4)   }) returns
-      "in '1, 2, 3, 4'\nsome elements are not correct\n3: 3 is less than 4" }                                           ^
+      "in List(1, 2, 3, 4)\nsome elements are not correct\n3: 3 is less than 4" }                                       ^
                                                                                                                         bt^
     "with adapation"                                                                                                    ^
     { List(1, 2, 3) must contain(4, 3, 2) ^^ ((i: Int, j: Int) => i-j <= 1) }                                           ^
@@ -82,12 +82,12 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
     { Seq(1, 2, 3) must be sorted }                                                                                     ^
     { Seq(2, 1, 3) must not beSorted }                                                                                  ^
     // this doesn't compile because of 'diverging implicit'
-    //{ Seq(2, 1, 3) must not be sorted }                                                                                 ^
-    { (Seq(2, 1, 3) must beSorted) returns "'2, 1, 3' is not sorted" }                                                  ^
+    //{ Seq(2, 1, 3) must not be sorted }                                                                               ^
+    { (Seq(2, 1, 3) must beSorted) returns "List(2, 1, 3) is not sorted" }                                              ^
                                                                                                                         p^
   "we can check the size of an Array"                                                                                   ^
     { Array(1, 2) must have size(2) }                                                                                   ^
-    { (Array(1, 2) must have size(1)).message must_== "'Array(1, 2)' doesn't have size 1 but size 2" }                  ^
+    { (Array(1, 2) must have size(1)).message must_== "Array(1, 2) doesn't have size 1 but size 2" }                    ^
                                                                                                                         p^
   "we can check if a traversable contains elements following a given pattern"                                           ^
     { List("Hello", "World") must containMatch("ll") }                                                                  ^
@@ -139,16 +139,16 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
   }
   case class order() {
     def fail1 = (List(1, 2, 3, 4) must contain(2, 5).inOrder) returns 
-                "'1, 2, 3, 4' doesn't contain in order '2, 5'"
+                "List(1, 2, 3, 4) doesn't contain in order '2, 5'"
     def fail2 = (List(1, 2, 3, 4) must contain(4, 2).inOrder) returns  
-                 "'1, 2, 3, 4' doesn't contain in order '4, 2'"
+                 "List(1, 2, 3, 4) doesn't contain in order '4, 2'"
   }
 
   case class patternMatch() {
     def fail1 = (List("Hey", "World") must containMatch("llo").onlyOnce) returns
-                 "'Hey, World' doesn't contain match '.*llo.*'"
+                 "List(Hey, World) doesn't contain match '.*llo.*'"
     def fail2 = (List("Hello", "Bella") must containMatch("ll").onlyOnce) returns
-                 "'Hello, Bella' contains match '.*ll.*' 2 times"
+                 "List(Hello, Bella) contains match '.*ll.*' 2 times"
   }
   
   case class sameElems() {
@@ -164,7 +164,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
 
   case class sameSeq() {
     def e1 = (List("Hello", "World") must contain("Hello2", "World2").inOrder.only) returns
-             "'Hello, World' doesn't contain in order 'Hello2, World2'"
+             "List(Hello, World) doesn't contain in order 'Hello2, World2'"
   }
 
   def lowerCaseEquality = (_:String).toLowerCase == (_:String).toLowerCase

@@ -291,7 +291,7 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
 }
 
 /**
- * Trait to model detailled information for failures so that smart differences can be computed
+ * Trait to model detailed information for failures so that smart differences can be computed
  */
 sealed trait Details
 case class FailureDetails(expected: String, actual: String) extends Details

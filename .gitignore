@@ -3,6 +3,7 @@ build/
 .cache
 .history
 .target/
+.jvmopts
 pgp.sbt
 project-old/lib_managed/
 project-old/boot/

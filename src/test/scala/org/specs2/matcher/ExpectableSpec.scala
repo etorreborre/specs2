@@ -39,20 +39,12 @@ class ExpectableSpec extends Specification with ResultMatchers with org.specs2.m
     NullString() must_== NullString()
   }
   "A Traversable expectable can be described if" >> {
-    "it has a valid mkString method" >> {
+    "if it has a valid toString method" >> {
       trait Trav[T] extends Traversable[T] {
-        override def mkString(start: String, rep: String, end: String) = "trav"
-        def foreach[U](f: T => U): Unit = ()
-      }
-      theValue(new Trav[Int] {}).description === "'trav'"
-    }
-    "otherwise if it has a valid toString method" >> {
-      trait Trav[T] extends Traversable[T] {
-        override def mkString(start: String, rep: String, end: String) = throw new AssertionError("undefined")
         override def toString = "trav"
         def foreach[U](f: T => U): Unit = ()
       }
-      theValue(new Trav[Int] {}).description === "'trav'"
+      theValue(new Trav[Int] {}).description === "trav"
     }
   }
   "An expectable must match without an exception on a mock" in {
