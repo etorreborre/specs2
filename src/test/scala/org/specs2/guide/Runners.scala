@@ -13,6 +13,7 @@ There are many ways to execute ***specs2*** specifications:
  * using [Intellij IDEA](http://confluence.jetbrains.net/display/SCA/Scala+Plugin+for+IntelliJ+IDEA)
  * using [sbt](http://www.scala-sbt.org)
  * using [JUnit](http://www.junit.org)
+ * using [Maven](http://maven.apache.org)
  * using your own reporting tool implementing the `Notifier` interface (simple) or the `Exporter` interface (with a full access to the executed specification)
 
 ### Dependencies
@@ -278,10 +279,17 @@ The `specs2.files` object will, by default, select and execute Specifications fo
  * the source directory is defined as `src/test/scala` but can be changed by adjusting the system property `specs2.srcTestDir`
  * the specifications files are selected as classes or object which names match `.*Spec`. This value can be changed by
    passing a different `specName` value as a command-line argument
- * `console` or `html` has to be passed on the command-line to specify which kind of output you want
+ * `console`, `html`, `junitxml`, `markup` has to be passed on the command-line to specify which kind of output you want
 
 You can also extend the `org.specs2.runner.FilesRunner` trait and override its behavior to implement something more appropriate
 to your environment if necessary.
+
+Additionally you can use the following arguments to modify the behavior of the `FilesRunner` object:
+
+ * `filesrunner.verbose`: display information messages about which classes are found and being instantiated to be executed (false by default)
+ * `filesrunner.basePath`: source directory containing the specifications (src/test/scala by default)
+ * `filesrunner.path`: glob pattern used to find specification source files (**/*.scala by default)
+ * `filesrunner.pattern`: regular expression for locating specification names inside a source file (.*Spec by default)
 
 ### In the console
 
@@ -382,7 +390,7 @@ If you want to get a console output as well, don't forget to add the `console` a
 
 ##### Files runner
 
-Any `FilesRunner` object can also be invoked by sbt, but you need to specify `console` or `html` (or both) on the command line:
+Any `FilesRunner` object can also be invoked by sbt, but you need to specify `console`, `html`, `junitxml`, `markup` on the command line:
 
       > test-only allSpecs -- console
 
@@ -516,7 +524,7 @@ There is unfortunately no specific Eclipse plugin at the moment and specificatio
 You can either:
 
  - execute specifications as [JUnit test cases](#Via JUnit).
- - use the [Maven specs2 plugin](https://github.com/mmakowski/maven-specs2-plugin) to generate JUnit XML reports and HTML reports
+ - use the [Maven specs2 plugin](https://github.com/mmakowski/maven-specs2-plugin) to generate JUnit XML reports, HTML or Markup reports
 
 ### With your own
 

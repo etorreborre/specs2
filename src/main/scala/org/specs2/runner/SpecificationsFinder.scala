@@ -22,7 +22,7 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
   def specifications(path: String = "**/*.scala",
                      pattern: String = ".*Spec",
                      filter: String => Boolean = { (name: String) => true },
-                     basePath: String = FromSource.srcDir,
+                     basePath: String = FromSource.srcTestDir,
                      verbose: Boolean = false)
                     (implicit args: Arguments = Arguments()): Seq[SpecificationStructure] =
     specificationNames(path, pattern, basePath, verbose).view.filter(filter).flatMap(n => createSpecification(n, verbose))
@@ -33,7 +33,7 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
    */
   def specificationNames(path: String = "**/*.scala",
                          pattern: String = ".*Spec",
-                         basePath: String = FromSource.srcDir,
+                         basePath: String = FromSource.srcTestDir,
                          verbose: Boolean = false) : Seq[String] = {
     lazy val specClassPattern = {
       val p = specPattern("class", pattern)

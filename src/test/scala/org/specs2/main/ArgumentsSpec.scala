@@ -12,7 +12,7 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
    e.g. `xonly` to show only failures and errors
 
  * string arguments which have a specific value
-   e.g. `srcDir src/test` to specify the directory holding the source files
+   e.g. `srcTestDir src/test` to specify the directory holding the source files
                                                                                                                         """^
                                                                                                                         p^
   "If an argument is specified, its value is returned"                                                                  ^

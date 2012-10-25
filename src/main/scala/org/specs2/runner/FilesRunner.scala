@@ -27,7 +27,7 @@ trait FilesRunner extends SpecificationsFinder with SystemExit {
 
     val specs = specifications(path     = args.commandLine.value("filesrunner.path").getOrElse("**/*.scala"),
                                pattern  = args.commandLine.value("filesrunner.pattern").getOrElse(".*Spec"),
-                               basePath = args.commandLine.value("filesrunner.basepath").getOrElse(FromSource.srcDir),
+                               basePath = args.commandLine.value("filesrunner.basepath").getOrElse(FromSource.srcTestDir),
                                verbose  = isVerbose)
 
     val executed = specs.toList.map(reporter.report)
@@ -42,7 +42,7 @@ trait FilesRunner extends SpecificationsFinder with SystemExit {
   /** print a message before the execution */
   protected def beforeExecution(implicit args: Arguments) {
     if (isVerbose) {
-      println("\nExecuting specifications matching " + args.specName + " in " + FromSource.srcDir)
+      println("\nExecuting specifications matching " + args.specName + " in " + FromSource.srcTestDir)
       println("exporters are "+reporter(args).exporters(args).map(_.getClass.getName).mkString(","))
     }
   }
@@ -50,7 +50,7 @@ trait FilesRunner extends SpecificationsFinder with SystemExit {
   /** print a message after the execution based on the number of specifications */
   protected def afterExecution(specs: Seq[SpecificationStructure])(implicit args: Arguments) {
     if (isVerbose) {
-      if (specs.isEmpty) println("No specification found matching "+args.specName+" in "+FromSource.srcDir+"\n")
+      if (specs.isEmpty) println("No specification found matching "+args.specName+" in "+FromSource.srcTestDir+"\n")
       else               println("Finished the execution of "+specs.size+" specifications\n")
     }
   }
@@ -63,7 +63,7 @@ trait FilesRunner extends SpecificationsFinder with SystemExit {
     specificationClassNames(args).flatMap(name => createSpecification(name, verbose = args.commandLine.contains("verbose")))
 
   /** @return the specifications class names to execute */
-  protected def specificationClassNames(implicit args: Arguments) = specificationNames(FromSource.srcDir, args.specName, verbose = args.commandLine.contains("verbose"))
+  protected def specificationClassNames(implicit args: Arguments) = specificationNames(FromSource.srcTestDir, args.specName, verbose = args.commandLine.contains("verbose"))
 
 }
 

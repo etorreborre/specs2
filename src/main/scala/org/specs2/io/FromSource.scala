@@ -21,7 +21,7 @@ import control.TraceLocation
 private[specs2]
 trait FromSource {
   
-  private[specs2] lazy val srcDir: String = SystemProperties.getOrElse("srcTestDir", "src/test/scala").dirPath
+  private[specs2] lazy val srcTestDir: String = SystemProperties.getOrElse("srcTestDir", "src/test/scala").dirPath
 
   /**
    * get some source code by:
@@ -45,7 +45,7 @@ trait FromSource {
     val (startTrace, endTrace) = (TraceLocation(stackTrace.apply(start)), TraceLocation(stackTrace.apply(end)))
 
     if (startTrace.fileName != endTrace.fileName)
-      Left("No source file found at "+srcDir+startTrace.path)
+      Left("No source file found at "+srcTestDir+startTrace.path)
     else {
       val (startLine, endLine) = (startTrace.lineNumber+startLineOffset, endTrace.lineNumber+endLineOffset)
       getCodeFromToWithLocation(startLine, endLine, startTrace)
@@ -81,7 +81,7 @@ trait FromSource {
    * @return lines of code specified by a start line and an end line in a file given by a TraceLocation
    */
   private def getCodeFromToWithLocation(startLine: Int, endLine: Int = 9, location: TraceLocation): Either[String, String] = {
-    val path = srcDir+location.path
+    val path = srcTestDir+location.path
 
     if (endLine < startLine) {
       Left[String, String]("No source file found at "+path)
@@ -102,7 +102,7 @@ trait FromSource {
    * The end of the method call is given by the first '}' character that is encountered
    */
   private def getCodeFromMethodCall(location: TraceLocation): Either[String, String] = {
-    val (path, line) = (srcDir+location.path, location.lineNumber - 1)
+    val (path, line) = (srcTestDir+location.path, location.lineNumber - 1)
 
     tryOr {
       val content = readLines(path)
@@ -119,7 +119,7 @@ trait FromSource {
    * The beginning of the call is given by the first '{' character that is encountered
    */
   private def getCodeToMethodCall(location: TraceLocation): Either[String, String] = {
-    val (path, line) = (srcDir+location.path, location.lineNumber - 1)
+    val (path, line) = (srcTestDir+location.path, location.lineNumber - 1)
 
     tryOr {
       val content = readLines(path)

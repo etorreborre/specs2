@@ -22,7 +22,7 @@ import matcher._
  * -In some cases, like the case where there is no text beginning the specification, the example code must fit on one line only*
  * 
  * The source dir is assumed to be "src/test/scala/" by default but this can be modified
- * by setting the "specs2.srcDir" System property
+ * by setting the "specs2.srcTestDir" System property
  *
  * This trait provides implicit definitions to create examples from:
  *  - boolean expressions

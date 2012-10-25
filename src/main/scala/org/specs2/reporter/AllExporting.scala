@@ -5,6 +5,10 @@ import specification.{ExecutingSpecification, ExecutedSpecification, Specificati
 import main.Arguments
 import internal.scalaz.Scalaz._
 
+/**
+ * This trait can be mixed in a reporter to allow the exporting of an executed specification to many different formats:
+ * html, junit xml, markup, custom,...
+ */
 trait AllExporting extends Reporter with Exporters {
 
   override def report(spec: SpecificationStructure)(implicit arguments: Arguments): ExecutedSpecification =
