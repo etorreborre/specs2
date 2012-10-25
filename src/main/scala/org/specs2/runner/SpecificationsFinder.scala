@@ -97,7 +97,10 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
    */
   def createSpecification(className: String, verbose: Boolean = false)(implicit args: Arguments): Option[SpecificationStructure] = {
     SpecificationStructure.createSpecificationEither(className) match {
-      case Right(s) => Some(s)
+      case Right(s) => {
+        if (verbose) { println("created specification instance for "+className) }
+        Some(s)
+      }
       case Left(e)  => {
         if (verbose) { println(e.getMessage); e.printStackTrace }
         None

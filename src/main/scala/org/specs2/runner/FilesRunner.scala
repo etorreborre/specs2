@@ -25,45 +25,45 @@ trait FilesRunner extends SpecificationsFinder with SystemExit {
     implicit val args = createArguments(arguments)
     beforeExecution
 
-    val specs = specifications
-    if (reporters.isEmpty)
-      println("No file to run because the arguments don't contain 'console' or 'html'\n")
+    val specs = specifications(path     = args.commandLine.value("filesrunner.path").getOrElse("**/*.scala"),
+                               pattern  = args.commandLine.value("filesrunner.pattern").getOrElse(".*Spec"),
+                               basePath = args.commandLine.value("filesrunner.basepath").getOrElse(FromSource.srcDir),
+                               verbose  = isVerbose)
 
-    reporters flatMap  { r =>
-      val executed = specs.map(execute(_, r))
-      afterExecution(specs)
-      executed
-    }
+    val executed = specs.toList.map(reporter.report)
+    afterExecution(specs)
+    executed
   }
+
+  def reporter(implicit args: Arguments) = new DefaultReporter with AllExporting {}
+
+  def isVerbose(implicit args: Arguments) = args.commandLine.contains("filesrunner.verbose")
 
   /** print a message before the execution */
   protected def beforeExecution(implicit args: Arguments) {
-    println("\nExecuting specifications matching " + args.specName + " in " + FromSource.srcDir + "\n")
+    if (isVerbose) {
+      println("\nExecuting specifications matching " + args.specName + " in " + FromSource.srcDir)
+      println("exporters are "+reporter(args).exporters(args).map(_.getClass.getName).mkString(","))
+    }
   }
-  /** report a specification */
-  protected def execute(s: SpecificationStructure, r: Reporter)(implicit args: Arguments) = r.report(s)
+
   /** print a message after the execution based on the number of specifications */
   protected def afterExecution(specs: Seq[SpecificationStructure])(implicit args: Arguments) {
-    if (specs.size > 1)
-      println("Finished the execution of "+specs.size+" specifications\n")
-    else
-      println("No specification found matching "+args.specName+" in "+FromSource.srcDir+"\n")
+    if (isVerbose) {
+      if (specs.isEmpty) println("No specification found matching "+args.specName+" in "+FromSource.srcDir+"\n")
+      else               println("Finished the execution of "+specs.size+" specifications\n")
+    }
   }
 
   /** @return the Arguments object depending on the command-line options */
   protected def createArguments(arguments: Array[String]) = Arguments(arguments:_*) <| ArgumentsArgs.args.report(offset=2)
 
-  /** @return a reporter depending on the provided arguments */
-  protected def reporters(implicit arguments: Arguments): List[Reporter] =
-      List((arguments.contains("html"), new HtmlReporter {}),
-           (arguments.contains("console"), new ConsoleReporter {})).collect { case (true, r) => r }
-
   /** @return the specifications to execute */
   protected def specifications(implicit args: Arguments): Seq[SpecificationStructure] =
-    specificationClassNames(args).flatMap(name => createSpecification(name))
+    specificationClassNames(args).flatMap(name => createSpecification(name, verbose = args.commandLine.contains("verbose")))
 
   /** @return the specifications class names to execute */
-  protected def specificationClassNames(implicit args: Arguments) = specificationNames(FromSource.srcDir, args.specName)
+  protected def specificationClassNames(implicit args: Arguments) = specificationNames(FromSource.srcDir, args.specName, verbose = args.commandLine.contains("verbose"))
 
 }
 

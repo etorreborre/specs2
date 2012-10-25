@@ -9,17 +9,21 @@ private [specs2]
 trait Exporters {
   type EE = ExecutingSpecification => ExecutedSpecification
 
-  def exportToOthers(arguments: Arguments): EE = exportToOthers(arguments, (s: String) => arguments.commandLine.contains(s))
+  def isConsole(args: Arguments) = !Seq("html", "junitxml", "markup").exists(args.contains) || args.contains("console")
 
-  def exportToOthers(args: Arguments, accept: String => Boolean): EE = (spec: ExecutingSpecification) => {
-    exportToOthers(exporters(accept)(args))(args)(spec)
+  def exportAll(arguments: Arguments): EE = exportAll(arguments, (s: String) => arguments.commandLine.contains(s))
+
+  def exportAll(args: Arguments, accept: String => Boolean): EE = (spec: ExecutingSpecification) => {
+    exportAll(exporters(accept)(args))(args)(spec)
   }
 
-  def exportToOthers(exporters: Seq[Exporting])(implicit arguments: Arguments): EE = (spec: ExecutingSpecification) => {
+  def exportAll(exporters: Seq[Exporting])(implicit arguments: Arguments): EE = (spec: ExecutingSpecification) => {
     val args = arguments.commandLineFilterNot("html", "markup", "junitxml", "console", "notifier", "exporter")
     exporters.foreach(_.export(args)(spec))
     spec.executed
   }
+
+  def exporters(implicit arguments: Arguments): Seq[Exporting] = exporters(arguments.contains _)
 
   def exporters(accept: String => Boolean)(implicit arguments: Arguments): Seq[Exporting] =
     Seq(exportHtml(accept),
