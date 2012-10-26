@@ -141,6 +141,16 @@ There are many ways to create matchers for your specific usage. The simplest way
 
  * using `updateMessage(f: String => String)` or `setMessage(m: String)` to change the failure message
 
+ * using `<==>` or `==>` to provide a meaning for the expectation when the failure message would not be clear
+
+        // when failing, this displays:
+        // The byname function has not become a strict one because 'evaluated' is not equal to 'not evaluated'
+        "The byname function has become a strict one" <==> (parameter === "evaluated")
+
+   Note that the sentence describing the expectation is negated when there is a failure. This functionality is provided by the `org.specs2.text.Sentences::negateSentence` trait. You can override this method if you want/need to provide a better behavior for this feature.
+
+##### From functions
+
 Another easy way to create matchers, is to use some implicit conversions from functions to Matchers:
 
        val m: Matcher[String]  = ((_: String).startsWith("hello"), "doesn't start with hello")

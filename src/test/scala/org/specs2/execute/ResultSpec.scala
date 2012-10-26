@@ -80,6 +80,13 @@ more precisely:
   { (true: Result) }                                                                                                    ^
   { true and true }                                                                                                     ^
   { (true and false) must beFailing }                                                                                   ^
+  "A match result can be evaluated only when a boolean condition is satisfied"                                          ^
+  { ((1 must_== 2): Result).when(false) }                                                                               ^
+  "A match result can be evaluated only unless a boolean condition is satisfied"                                        ^
+  { ((1 must_== 2): Result).unless(true) }                                                                              ^
+  "A match result can be evaluated if and only if a boolean condition is satisfied"                                     ^
+  { ((1 must_== 2): Result).iff(false) }                                                                                ^
+  { ((1 must_== 1): Result).iff(true) }                                                                                 ^
                                                                                                                         end
 
   def statuses =

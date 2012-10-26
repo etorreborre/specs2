@@ -11,6 +11,7 @@ import MatchResultMessages._
 import Result.ResultFailureMonoid
 import scala.collection.{GenTraversable, GenTraversableOnce}
 import ResultLogicalCombinators._
+import text.Sentences
 
 /**
 * This trait provides implicit definitions from MatchResults and Booleans to Results.
@@ -20,7 +21,7 @@ import ResultLogicalCombinators._
 * - create matchers from functions
 * - create matchers for seqs and sets from single matchers
 */
-trait MatchersImplicits extends Expectations with MatchResultCombinators with MatchResultImplicits { outer =>
+trait MatchersImplicits extends Expectations with MatchResultCombinators with MatchResultImplicits with ExpectationsDescription { outer =>
   /**
    * Add functionalities to functions returning matchers so that they can be combined before taking a value and
    * returning actual matchers
@@ -139,7 +140,7 @@ trait MatchersImplicits extends Expectations with MatchResultCombinators with Ma
    * This method transform a function to a Matcher
    */
   implicit def functionToMatcher[T](f: (T => Boolean, String)): Matcher[T] =
-    functionAndMessagesToMatcher[T]((f._1, (t:T) => "not ("+q(t)+" "+f._2+")", (t:T) => q(t)+" "+f._2))
+    functionAndMessagesToMatcher[T]((f._1, (t:T) => negateSentence(q(t)+" "+f._2), (t:T) => q(t)+" "+f._2))
   /**
    * This method transform a function to a Matcher
    */
@@ -149,7 +150,7 @@ trait MatchersImplicits extends Expectations with MatchResultCombinators with Ma
    * This method transform a function to a Matcher
    */
   implicit def functionAndKoMessageToMatcher[T](f: (T => Boolean, T => String)): Matcher[T] =
-    functionAndMessagesToMatcher[T]((f._1, (t:T) => "not ("+f._2(t)+")", f._2))
+    functionAndMessagesToMatcher[T]((f._1, (t:T) => negateSentence(f._2(t)), f._2))
   /**
    * This method transform a function, with function descriptors to a Matcher
    */
@@ -165,7 +166,7 @@ trait MatchersImplicits extends Expectations with MatchResultCombinators with Ma
   implicit def pairFunctionToMatcher[T](f: T =>(Boolean, String)): Matcher[T] = new Matcher[T] {
     def apply[S <: T](s: Expectable[S]) = {
       val functionResult = f(s.value)
-      result(functionResult._1, "not ("+functionResult._2+")", functionResult._2, s)
+      result(functionResult._1, negateSentence(functionResult._2), functionResult._2, s)
     }
   }
   /**
