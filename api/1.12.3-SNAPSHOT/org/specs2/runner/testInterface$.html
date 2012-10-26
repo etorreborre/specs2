@@ -32,7 +32,7 @@
       <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This object can be used to debug the behavior of the TestInterfaceRunner
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span name="org.specs2.io.ConsoleOutput" class="extype">ConsoleOutput</span>, <a name="org.specs2.runner.SystemExit" class="extype" href="SystemExit.html">SystemExit</a>, <span name="org.specs2.reflect.Classes" class="extype">Classes</span>, <span name="org.specs2.io.Output" class="extype">Output</span>, <a name="org.specs2.runner.TestInterfaceRunner" class="extype" href="TestInterfaceRunner.html">TestInterfaceRunner</a>, <span name="org.specs2.reporter.Exporters" class="extype">Exporters</span>, <a name="org.specs2.reporter.TestLoggers" class="extype" href="../reporter/TestLoggers.html">TestLoggers</a>, <a name="org.specs2.reporter.HandlerEvents" class="extype" href="../reporter/HandlerEvents.html">HandlerEvents</a>, <span name="org.scalatools.testing.Runner" class="extype">Runner</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><span name="org.specs2.io.ConsoleOutput" class="extype">ConsoleOutput</span>, <a name="org.specs2.runner.SystemExit" class="extype" href="SystemExit.html">SystemExit</a>, <span name="org.specs2.reflect.Classes" class="extype">Classes</span>, <a name="org.specs2.io.Output" class="extype" href="../io/Output.html">Output</a>, <a name="org.specs2.runner.TestInterfaceRunner" class="extype" href="TestInterfaceRunner.html">TestInterfaceRunner</a>, <span name="org.specs2.reporter.Exporters" class="extype">Exporters</span>, <a name="org.specs2.reporter.TestLoggers" class="extype" href="../reporter/TestLoggers.html">TestLoggers</a>, <a name="org.specs2.reporter.HandlerEvents" class="extype" href="../reporter/HandlerEvents.html">HandlerEvents</a>, <span name="org.scalatools.testing.Runner" class="extype">Runner</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
     
 
@@ -347,6 +347,42 @@ so that the exception message and stacktrace are printed when the object can't b
       <p class="shortcomment cmt">this method can be overriden for testing
 </p><div class="fullcomment"><div class="comment cmt"><p>this method can be overriden for testing
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a name="org.specs2.runner.SystemExit" class="extype" href="SystemExit.html">SystemExit</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportAll" data-isabs="false">
+      <a id="exportAll(Seq[Exporting])(Arguments):(ExecutingSpecification) ⇒ ExecutedSpecification"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">exportAll</span><span class="params">(<span name="exporters">exporters: Seq[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportAll" data-isabs="false">
+      <a id="exportAll(Arguments,(String) ⇒ Boolean):(ExecutingSpecification) ⇒ ExecutedSpecification"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">exportAll</span><span class="params">(<span name="args">args: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>, <span name="accept">accept: (String) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportAll" data-isabs="false">
+      <a id="exportAll(Arguments):(ExecutingSpecification) ⇒ ExecutedSpecification"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">exportAll</span><span class="params">(<span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportConsole" data-isabs="false">
       <a id="exportConsole((String) ⇒ Boolean)(Arguments):Option[Exporting]"></a>
       <h4 class="signature">
@@ -419,42 +455,6 @@ so that the exception message and stacktrace are printed when the object can't b
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportToOthers" data-isabs="false">
-      <a id="exportToOthers(Seq[Exporting])(Arguments):(ExecutingSpecification) ⇒ ExecutedSpecification"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">exportToOthers</span><span class="params">(<span name="exporters">exporters: Seq[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportToOthers" data-isabs="false">
-      <a id="exportToOthers(Arguments,(String) ⇒ Boolean):(ExecutingSpecification) ⇒ ExecutedSpecification"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">exportToOthers</span><span class="params">(<span name="args">args: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>, <span name="accept">accept: (String) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exportToOthers" data-isabs="false">
-      <a id="exportToOthers(Arguments):(ExecutingSpecification) ⇒ ExecutedSpecification"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">exportToOthers</span><span class="params">(<span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: (<a name="org.specs2.specification.ExecutingSpecification" class="extype" href="../specification/ExecutingSpecification.html">ExecutingSpecification</a>) ⇒ <a name="org.specs2.specification.ExecutedSpecification" class="extype" href="../specification/ExecutedSpecification.html">ExecutedSpecification</a></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
     </li><li visbl="prt" name="org.specs2.reporter.Exporters#exporter" data-isabs="false">
       <a id="exporter(Boolean)(⇒ Exporting):Option[Exporting]"></a>
       <h4 class="signature">
@@ -488,6 +488,18 @@ so that the exception message and stacktrace are printed when the object can't b
       </span>
       <span class="symbol">
         <span class="name">exporters</span><span class="params">(<span name="accept">accept: (String) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: Seq[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.Exporters#exporters" data-isabs="false">
+      <a id="exporters(Arguments):Seq[Exporting]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">exporters</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: Seq[<span name="org.specs2.reporter.Exporting" class="extype">Exporting</span>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
@@ -543,7 +555,7 @@ so that the exception message and stacktrace are printed when the object can't b
       </h4>
       <p class="shortcomment cmt">flush the content if necessary
 </p><div class="fullcomment"><div class="comment cmt"><p>flush the content if necessary
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConsoleOutput → Output</dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConsoleOutput → <a name="org.specs2.io.Output" class="extype" href="../io/Output.html">Output</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
       <a id="getClass():java.lang.Class[_]"></a>
       <h4 class="signature">
@@ -568,6 +580,18 @@ so that the exception message and stacktrace are printed when the object can't b
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.reporter.Exporters#isConsole" data-isabs="false">
+      <a id="isConsole(Arguments):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isConsole</span><span class="params">(<span name="args">args: <a name="org.specs2.main.Arguments" class="extype" href="../main/Arguments.html">Arguments</a></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Exporters</dd></dl></div>
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -737,7 +761,7 @@ so that the exception message and stacktrace are printed when the object can't b
       </h4>
       <p class="shortcomment cmt">print an object with no newline
 </p><div class="fullcomment"><div class="comment cmt"><p>print an object with no newline
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>Output</dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.io.Output" class="extype" href="../io/Output.html">Output</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.io.Output#printStackTrace" data-isabs="false">
       <a id="printStackTrace(Throwable):Unit"></a>
       <h4 class="signature">
@@ -751,7 +775,7 @@ so that the exception message and stacktrace are printed when the object can't b
       </h4>
       <p class="shortcomment cmt">print stacktraces
 </p><div class="fullcomment"><div class="comment cmt"><p>print stacktraces
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>Output</dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.io.Output" class="extype" href="../io/Output.html">Output</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.io.ConsoleOutput#printf" data-isabs="false">
       <a id="printf(String,Any*):Unit"></a>
       <h4 class="signature">
@@ -764,7 +788,7 @@ so that the exception message and stacktrace are printed when the object can't b
       </span>
       </h4>
       <p class="shortcomment cmt">print several objects according to a format string (see Console.</p><div class="fullcomment"><div class="comment cmt"><p>print several objects according to a format string (see Console.printf)
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConsoleOutput → Output</dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ConsoleOutput → <a name="org.specs2.io.Output" class="extype" href="../io/Output.html">Output</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.io.Output#println" data-isabs="false">
       <a id="println(Any):Unit"></a>
       <h4 class="signature">
@@ -778,7 +802,7 @@ so that the exception message and stacktrace are printed when the object can't b
       </h4>
       <p class="shortcomment cmt">print an object with a newline
 </p><div class="fullcomment"><div class="comment cmt"><p>print an object with a newline
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>Output</dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.io.Output" class="extype" href="../io/Output.html">Output</a></dd></dl></div>
     </li><li visbl="prt" name="org.specs2.runner.TestInterfaceRunner#reporter" data-isabs="false">
       <a id="reporter(EventHandler)(Array[String]):Reporter"></a>
       <h4 class="signature">
@@ -988,7 +1012,7 @@ and trying to instantiate the first parameter recursively if there is a paramete
             </div><div name="org.specs2.reflect.Classes" class="parent">
               <h3>Inherited from <span name="org.specs2.reflect.Classes" class="extype">Classes</span></h3>
             </div><div name="org.specs2.io.Output" class="parent">
-              <h3>Inherited from <span name="org.specs2.io.Output" class="extype">Output</span></h3>
+              <h3>Inherited from <a name="org.specs2.io.Output" class="extype" href="../io/Output.html">Output</a></h3>
             </div><div name="org.specs2.runner.TestInterfaceRunner" class="parent">
               <h3>Inherited from <a name="org.specs2.runner.TestInterfaceRunner" class="extype" href="TestInterfaceRunner.html">TestInterfaceRunner</a></h3>
             </div><div name="org.specs2.reporter.Exporters" class="parent">

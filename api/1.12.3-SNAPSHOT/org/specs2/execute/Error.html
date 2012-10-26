@@ -25,14 +25,14 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Error</span><span class="params">(<span name="m">m: String</span>, <span name="e">e: Exception</span>)</span><span class="result"> extends <a name="org.specs2.execute.Result" class="extype" href="Result.html">Result</a> with <span name="org.specs2.execute.ResultStackTrace" class="extype">ResultStackTrace</span> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="name">Error</span><span class="params">(<span name="m">m: String</span>, <span name="e">e: Exception</span>)</span><span class="result"> extends <a name="org.specs2.execute.Result" class="extype" href="Result.html">Result</a> with <a name="org.specs2.execute.ResultStackTrace" class="extype" href="ResultStackTrace.html">ResultStackTrace</a> with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
       <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This class represents an exception occurring during an execution.
 </p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a name="org.specs2.execute.Error" class="extype" href="">Error</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, <span name="org.specs2.execute.ResultStackTrace" class="extype">ResultStackTrace</span>, <span name="org.specs2.control.HasStackTrace" class="extype">HasStackTrace</span>, <a name="org.specs2.execute.Result" class="extype" href="Result.html">Result</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, <a name="org.specs2.execute.ResultStackTrace" class="extype" href="ResultStackTrace.html">ResultStackTrace</a>, <span name="org.specs2.control.HasStackTrace" class="extype">HasStackTrace</span>, <a name="org.specs2.execute.Result" class="extype" href="Result.html">Result</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
     
 
@@ -252,7 +252,7 @@
         <span class="name">exception</span><span class="result">: Exception</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an exception created from the message and the stackTraceElements</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.execute.Error" class="extype" href="">Error</a> → ResultStackTrace</dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an exception created from the message and the stackTraceElements</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.execute.Error" class="extype" href="">Error</a> → <a name="org.specs2.execute.ResultStackTrace" class="extype" href="ResultStackTrace.html">ResultStackTrace</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.execute.Result#expectationsNb" data-isabs="false">
       <a id="expectationsNb:Int"></a>
       <h4 class="signature">
@@ -417,7 +417,7 @@
         <span class="name">location</span><span class="result">: String</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the location (file and line number) of the topmost stackTraceElement</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>ResultStackTrace → HasStackTrace</dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the location (file and line number) of the topmost stackTraceElement</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.execute.ResultStackTrace" class="extype" href="ResultStackTrace.html">ResultStackTrace</a> → HasStackTrace</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.execute.Error#m" data-isabs="false">
       <a id="m:String"></a>
       <h4 class="signature">
@@ -741,7 +741,7 @@
             </div><div name="scala.Equals" class="parent">
               <h3>Inherited from <span name="scala.Equals" class="extype">Equals</span></h3>
             </div><div name="org.specs2.execute.ResultStackTrace" class="parent">
-              <h3>Inherited from <span name="org.specs2.execute.ResultStackTrace" class="extype">ResultStackTrace</span></h3>
+              <h3>Inherited from <a name="org.specs2.execute.ResultStackTrace" class="extype" href="ResultStackTrace.html">ResultStackTrace</a></h3>
             </div><div name="org.specs2.control.HasStackTrace" class="parent">
               <h3>Inherited from <span name="org.specs2.control.HasStackTrace" class="extype">HasStackTrace</span></h3>
             </div><div name="org.specs2.execute.Result" class="parent">

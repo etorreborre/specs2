@@ -751,7 +751,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">RegexFragmentToFragments</span><span class="params">(<span name="r">r: <span name="org.specs2.specification.RegexFragment" class="extype">RegexFragment</span></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a></span>
+        <span class="name">RegexFragmentToFragments</span><span class="params">(<span name="r">r: <a name="org.specs2.specification.RegexFragment" class="extype" href="specification/RegexFragment.html">RegexFragment</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">at any point in time a regex sequence can be transformed as a sequence of Fragments</p><div class="fullcomment"><div class="comment cmt"><p>at any point in time a regex sequence can be transformed as a sequence of Fragments</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.RegexSteps" class="extype" href="specification/RegexSteps.html">RegexSteps</a></dd></dl></div>
@@ -1269,7 +1269,7 @@ write("./dir/hello.txt") { out =>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">argumentsFragment</span><span class="params">(<span name="a">a: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>
+        <span class="name">argumentsFragment</span><span class="params">(<span name="a">a: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>)</span><span class="result">: <a name="org.specs2.specification.FragmentsFragment" class="extype" href="specification/FragmentsFragment.html">FragmentsFragment</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Arguments creation</p><div class="fullcomment"><div class="comment cmt"><p>Arguments creation</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Fragments object which can be chained with other fragments
@@ -1596,7 +1596,7 @@ write("./dir/hello.txt") { out =>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">beCloseTo</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="delta">delta: <span name="org.specs2.matcher.Delta" class="extype">Delta</span>[S]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: Numeric[S]</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="matcher/Matcher.html">Matcher</a>[S]</span>
+        <span class="name">beCloseTo</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="delta">delta: <a name="org.specs2.matcher.Delta" class="extype" href="matcher/Delta.html">Delta</a>[S]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: Numeric[S]</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="matcher/Matcher.html">Matcher</a>[S]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">matches if x = n +/- delta</p><div class="fullcomment"><div class="comment cmt"><p>matches if x = n +/- delta</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
@@ -2369,7 +2369,7 @@ It is equivalent to writing a must_== b
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">closeTo</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="delta">delta: <span name="org.specs2.matcher.Delta" class="extype">Delta</span>[S]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: Numeric[S]</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="matcher/Matcher.html">Matcher</a>[S]</span>
+        <span class="name">closeTo</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="delta">delta: <a name="org.specs2.matcher.Delta" class="extype" href="matcher/Delta.html">Delta</a>[S]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: Numeric[S]</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="matcher/Matcher.html">Matcher</a>[S]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
@@ -3438,7 +3438,7 @@ The result type is different from the eg method to create examples in order to a
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">fragmentFragments</span><span class="params">(<span name="f">f: ⇒ <a name="org.specs2.specification.Fragment" class="extype" href="specification/Fragment.html">Fragment</a></span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>
+        <span class="name">fragmentFragments</span><span class="params">(<span name="f">f: ⇒ <a name="org.specs2.specification.Fragment" class="extype" href="specification/Fragment.html">Fragment</a></span>)</span><span class="result">: <a name="org.specs2.specification.FragmentsFragment" class="extype" href="specification/FragmentsFragment.html">FragmentsFragment</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
@@ -3462,7 +3462,7 @@ The result type is different from the eg method to create examples in order to a
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">fragmentsFragmentToFragments</span><span class="params">(<span name="fs">fs: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a></span>
+        <span class="name">fragmentsFragmentToFragments</span><span class="params">(<span name="fs">fs: <a name="org.specs2.specification.FragmentsFragment" class="extype" href="specification/FragmentsFragment.html">FragmentsFragment</a></span>)</span><span class="result">: <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">reverse conversion from a Fragment containing a Fragments object to the Fragments object</p><div class="fullcomment"><div class="comment cmt"><p>reverse conversion from a Fragment containing a Fragments object to the Fragments object</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
@@ -3474,7 +3474,7 @@ The result type is different from the eg method to create examples in order to a
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">fragmentsFragments</span><span class="params">(<span name="fs">fs: ⇒ <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a></span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>
+        <span class="name">fragmentsFragments</span><span class="params">(<span name="fs">fs: ⇒ <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a></span>)</span><span class="result">: <a name="org.specs2.specification.FragmentsFragment" class="extype" href="specification/FragmentsFragment.html">FragmentsFragment</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
@@ -4216,7 +4216,7 @@ This verification does not consider the order of the elements but checks the tra
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">include</span><span class="params">(<span name="args">args: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>, <span name="f">f: <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a></span>, <span name="fs">fs: <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a>*</span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>
+        <span class="name">include</span><span class="params">(<span name="args">args: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>, <span name="f">f: <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a></span>, <span name="fs">fs: <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a>*</span>)</span><span class="result">: <a name="org.specs2.specification.FragmentsFragment" class="extype" href="specification/FragmentsFragment.html">FragmentsFragment</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.SpecificationInclusion" class="extype" href="specification/SpecificationInclusion.html">SpecificationInclusion</a></dd></dl></div>
@@ -4228,7 +4228,7 @@ This verification does not consider the order of the elements but checks the tra
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">include</span><span class="params">(<span name="args">args: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>, <span name="f">f: <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a></span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>
+        <span class="name">include</span><span class="params">(<span name="args">args: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>, <span name="f">f: <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a></span>)</span><span class="result">: <a name="org.specs2.specification.FragmentsFragment" class="extype" href="specification/FragmentsFragment.html">FragmentsFragment</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.SpecificationInclusion" class="extype" href="specification/SpecificationInclusion.html">SpecificationInclusion</a></dd></dl></div>
@@ -4240,7 +4240,7 @@ This verification does not consider the order of the elements but checks the tra
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">include</span><span class="params">(<span name="args">args: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>, <span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="specification/SpecificationStructure.html">SpecificationStructure</a></span>, <span name="ss">ss: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="specification/SpecificationStructure.html">SpecificationStructure</a>*</span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>
+        <span class="name">include</span><span class="params">(<span name="args">args: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>, <span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="specification/SpecificationStructure.html">SpecificationStructure</a></span>, <span name="ss">ss: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="specification/SpecificationStructure.html">SpecificationStructure</a>*</span>)</span><span class="result">: <a name="org.specs2.specification.FragmentsFragment" class="extype" href="specification/FragmentsFragment.html">FragmentsFragment</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.SpecificationInclusion" class="extype" href="specification/SpecificationInclusion.html">SpecificationInclusion</a></dd></dl></div>
@@ -4252,7 +4252,7 @@ This verification does not consider the order of the elements but checks the tra
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">include</span><span class="params">(<span name="args">args: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>, <span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="specification/SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>
+        <span class="name">include</span><span class="params">(<span name="args">args: <a name="org.specs2.main.Arguments" class="extype" href="main/Arguments.html">Arguments</a></span>, <span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="specification/SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="result">: <a name="org.specs2.specification.FragmentsFragment" class="extype" href="specification/FragmentsFragment.html">FragmentsFragment</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.SpecificationInclusion" class="extype" href="specification/SpecificationInclusion.html">SpecificationInclusion</a></dd></dl></div>
@@ -4264,7 +4264,7 @@ This verification does not consider the order of the elements but checks the tra
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">include</span><span class="params">(<span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="specification/SpecificationStructure.html">SpecificationStructure</a></span>, <span name="ss">ss: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="specification/SpecificationStructure.html">SpecificationStructure</a>*</span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>
+        <span class="name">include</span><span class="params">(<span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="specification/SpecificationStructure.html">SpecificationStructure</a></span>, <span name="ss">ss: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="specification/SpecificationStructure.html">SpecificationStructure</a>*</span>)</span><span class="result">: <a name="org.specs2.specification.FragmentsFragment" class="extype" href="specification/FragmentsFragment.html">FragmentsFragment</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.SpecificationInclusion" class="extype" href="specification/SpecificationInclusion.html">SpecificationInclusion</a></dd></dl></div>
@@ -4276,7 +4276,7 @@ This verification does not consider the order of the elements but checks the tra
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">include</span><span class="params">(<span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="specification/SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>
+        <span class="name">include</span><span class="params">(<span name="s">s: <a name="org.specs2.specification.SpecificationStructure" class="extype" href="specification/SpecificationStructure.html">SpecificationStructure</a></span>)</span><span class="result">: <a name="org.specs2.specification.FragmentsFragment" class="extype" href="specification/FragmentsFragment.html">FragmentsFragment</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.SpecificationInclusion" class="extype" href="specification/SpecificationInclusion.html">SpecificationInclusion</a></dd></dl></div>
@@ -4288,7 +4288,7 @@ This verification does not consider the order of the elements but checks the tra
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">include</span><span class="params">(<span name="f">f: <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a></span>, <span name="fs">fs: <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a>*</span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>
+        <span class="name">include</span><span class="params">(<span name="f">f: <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a></span>, <span name="fs">fs: <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a>*</span>)</span><span class="result">: <a name="org.specs2.specification.FragmentsFragment" class="extype" href="specification/FragmentsFragment.html">FragmentsFragment</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.SpecificationInclusion" class="extype" href="specification/SpecificationInclusion.html">SpecificationInclusion</a></dd></dl></div>
@@ -4300,7 +4300,7 @@ This verification does not consider the order of the elements but checks the tra
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">include</span><span class="params">(<span name="f">f: <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a></span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>
+        <span class="name">include</span><span class="params">(<span name="f">f: <a name="org.specs2.specification.Fragments" class="extype" href="specification/Fragments.html">Fragments</a></span>)</span><span class="result">: <a name="org.specs2.specification.FragmentsFragment" class="extype" href="specification/FragmentsFragment.html">FragmentsFragment</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.specification.SpecificationInclusion" class="extype" href="specification/SpecificationInclusion.html">SpecificationInclusion</a></dd></dl></div>
@@ -5948,7 +5948,7 @@ all the examples are skipped
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">textFragment</span><span class="params">(<span name="s">s: String</span>)</span><span class="result">: <span name="org.specs2.specification.FragmentsFragment" class="extype">FragmentsFragment</span></span>
+        <span class="name">textFragment</span><span class="params">(<span name="s">s: String</span>)</span><span class="result">: <a name="org.specs2.specification.FragmentsFragment" class="extype" href="specification/FragmentsFragment.html">FragmentsFragment</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>create a Text Fragment from a string and allow it to be chained to other fragments</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>FragmentsBuilder</dd></dl></div>
@@ -6879,7 +6879,7 @@ write("./dir/hello.txt") { out =>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name" title="gt4s: $tilde">~</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="delta">delta: <span name="org.specs2.matcher.Delta" class="extype">Delta</span>[S]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: Numeric[S]</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="matcher/Matcher.html">Matcher</a>[S]</span>
+        <span class="name" title="gt4s: $tilde">~</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="delta">delta: <a name="org.specs2.matcher.Delta" class="extype" href="matcher/Delta.html">Delta</a>[S]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: Numeric[S]</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="matcher/Matcher.html">Matcher</a>[S]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">alias for beCloseTo</p><div class="fullcomment"><div class="comment cmt"><p>alias for beCloseTo</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
