@@ -339,7 +339,11 @@ If you don't want the specifications to be executed in parallel:
 
 If you want to pass arguments available for all specifications:
 
+      // equivalent to `test-only -- nocolor neverstore` on the command line
       testOptions in Test += Tests.Argument("nocolor", "neverstore")
+
+      // equivalent to `test-only -- exclude integration` on the command line
+      testOptions in Test += Tests.Argument("exclude", "integration")
 
 If you want the examples results to be displayed as soon as they've been executed you need to add:
 
