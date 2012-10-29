@@ -79,11 +79,11 @@ more precisely:
   "Boolean values can also be combined as if they were results"                                                         ^
   { (true: Result) }                                                                                                    ^
   { true and true }                                                                                                     ^
-  { (true and false) must beFailing }                                                                                   ^
+  { (true and false) must beFailing }                                                                                   ^ end^
   "A match result can be evaluated only when a boolean condition is satisfied"                                          ^
-  { ((1 must_== 2): Result).when(false) }                                                                               ^
+  { ((1 must_== 2): Result).when(false) }                                                                               ^ end^
   "A match result can be evaluated only unless a boolean condition is satisfied"                                        ^
-  { ((1 must_== 2): Result).unless(true) }                                                                              ^
+  { ((1 must_== 2): Result).unless(true) }                                                                              ^ end^
   "A match result can be evaluated if and only if a boolean condition is satisfied"                                     ^
   { ((1 must_== 2): Result).iff(false) }                                                                                ^
   { ((1 must_== 1): Result).iff(true) }                                                                                 ^
