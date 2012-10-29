@@ -11,7 +11,7 @@ import control.Debug.Debuggable
 
 class DebugSpec extends Specification {
 
-  "It is possible to insert some method call to print values" >> {
+  "It is possible to insert some method calls to print values on the console" >> {
     "pp prints a value and returns it" >> new output {
       (Value(1).pp === Value(1)) prints "Value(1)"
     }
@@ -19,14 +19,14 @@ class DebugSpec extends Specification {
       Value(1).pp(condition = false) prints nothing
       Value(1).pp(condition = true) prints "Value(1)"
     }
-    "pp(condition function) prints a value but only if a condition on the value is true" >> new output {
+    "pp(condition function) prints a value but only if a condition on that value is true" >> new output {
       Value(1).pp((v: Value) => v.i == 2) prints nothing
       Value(1).pp((v: Value) => v.i == 1) prints "Value(1)"
     }
     "pp(show) prints a value with a specific show function" >> new output {
       Value(1).pp((v: Value) => "v = "+v.i) prints "v = 1"
     }
-    "pp(pre) prints a value with a message before" >> new output {
+    "pp(pre) prints a value with a prepended message" >> new output {
       Value(1).pp("the value is") prints "the value is Value(1)"
     }
   }

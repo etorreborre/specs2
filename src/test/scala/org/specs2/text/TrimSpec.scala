@@ -17,20 +17,20 @@ class TrimSpec extends Specification { def is =
   { " (hello world)  ".trimEnclosing("(", ")") === "hello world" }                                                      ^
   { " ( (hello world) )  ".trimEnclosing("(", ")") === "(hello world)" }                                                ^
   "but not if they're not enclosing"                                                                                    ^
-    { "hello world)".trimEnclosing("(", ")") === "hello world)" }                                                       ^
+  { "hello world)".trimEnclosing("(", ")") === "hello world)" }                                                         ^
                                                                                                                         endp^
   "Trim enclosing xml tags"                                                                                             ^
   { "<p>hello</p>".trimEnclosingXmlTag("p") === "hello" }                                                               ^
   { "<p a=\"2\">hello</p>".trimEnclosingXmlTag("p") === "hello" }                                                       ^
                                                                                                                         p^
-  "Remove some groups"                                                                                                  !e1^
+  "Remove some groups"                                                                                                  ! e1^
                                                                                                                         p^
   "Remove empty lines"                                                                                                  ^
   { "hello\n    \nworld".removeEmptyLines === "hello\nworld" }                                                          ^
                                                                                                                         p^
   "Remove the first match"                                                                                              ^
-  { "hello world".removeFirst("(l)*o") === "he world" }                                                                   ^
-  "Remove the last match"                                                                                              ^
+  { "hello world".removeFirst("(l)*o") === "he world" }                                                                 ^
+  "Remove the last match"                                                                                               ^
   { "hello world".removeLast("o.ld") === "hello w" }                                                                    ^
                                                                                                                         p^
   "Remove new lines"                                                                                                    ^

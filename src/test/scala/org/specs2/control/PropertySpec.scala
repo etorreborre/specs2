@@ -1,9 +1,10 @@
 package org.specs2
 package control
+
 import io._
 import specification._
 
-class PropertySpec extends Specification { def is =
+class PropertySpec extends Specification with Groups { def is =
                                                                                                                         """
 A Property is used to store values which can be lazily accessed when required.
 
@@ -11,64 +12,64 @@ It has an Option-like structure, supporting the same kind of operations and can 
                                                                                                                         """^
                                                                                                                         p^
   "A property"                                                                                                          ^
-    "can be created from any value"                                                                                     ! creation1^
-    "can be empty "                                                                                                     ! creation2^
-    "can be updated with another value"                                                                                 ! creation3^
-    "can be updated with an option"                                                                                     ! creation4^
-    "has a toString method returning the option value toString"                                                         ! creation5^
+    "can be empty "                                                                                                     ! g1().e1^
+    "can be created from any value"                                                                                     ! g1().e2^
+    "can be updated with another value"                                                                                 ! g1().e3^
+    "can be updated with an option"                                                                                     ! g1().e4^
+    "has a toString method returning the option value toString"                                                         ! g1().e5^
                                                                                                                         p^
   "A property can be executed"                                                                                          ^
-    "and return its contained value"                                                                                    ! exec().e1^
-    "it is only executed once"                                                                                          ! exec().e2^
+    "and return its contained value"                                                                                    ! g2().e1^
+    "it is only executed once"                                                                                          ! g2().e2^
                                                                                                                         p^
   "A property behaves like an Option"                                                                                   ^
-    "with map"                                                                                                          ! option().e1^
-    "with flatMap"                                                                                                      ! option().e2^
-    "with filter"                                                                                                       ! option().e3^
-    "with foreach"                                                                                                      ! option().e4^
-    "with getOrElse"                                                                                                    ! option().e5^
-    "with isDefined"                                                                                                    ! option().e6^
-    "with isEmpty"                                                                                                      ! option().e7^
-    "with orElse"                                                                                                       ! option().e8^
+    "with map"                                                                                                          ! g3().e1^
+    "with flatMap"                                                                                                      ! g3().e2^
+    "with filter"                                                                                                       ! g3().e3^
+    "with foreach"                                                                                                      ! g3().e4^
+    "with getOrElse"                                                                                                    ! g3().e5^
+    "with isDefined"                                                                                                    ! g3().e6^
+    "with isEmpty"                                                                                                      ! g3().e7^
+    "with orElse"                                                                                                       ! g3().e8^
                                                                                                                         p^
   "A property can be transformed to an Either instance"                                                                 ^
-    "with toLeft"                                                                                                       ! either().e1^
-    "with toRight"                                                                                                      ! either().e2^
+    "with toLeft"                                                                                                       ! g4().e1^
+    "with toRight"                                                                                                      ! g4().e2^
                                                                                                                         end
 
-  def creation1 = Property(1).get must_== 1
-  def creation2 = Property().isEmpty must beTrue
-  def creation3 = Property(1).update(2).optionalValue must_== Some(2)
-  def creation4 = Property(1).updateValue(Some(2)).optionalValue must_== Some(2)
-  def creation5 = Property(1).toString must_== "Some(1)"
+  "creation" - new g1 with prop {
+    e1 = Property().isEmpty
+    e2 = p1.get must_== 1
+    e3 = p1.update(2).optionalValue must_== Some(2)
+    e4 = p1.updateValue(Some(2)).optionalValue must_== Some(2)
+    e5 = p1.toString must_== "Some(1)"
+  }
 
-  case class exec() extends Before with MockOutput { 
-    def before = clear()
-    def e1 = Property(1).toOption.get must_== 1
-    def e2 = {  
-      val p = Property({print("one"); 1}).toOption
-      p.get
+  "execution"  - new g2 with prop {
+    e1 = p1.toOption.get must_== 1
+    e2 = {
+      Property { print("one"); 1 }.toOption.get
       messages.size must_== 1
     }
   }
 
-  case class option() extends Before with MockOutput {
-    def before = clear()
-    val p = Property(1)
-    def e1 = p.map(_.toString).get must_== "1"
-    def e2 = p.flatMap(i => Some(i.toString)).get must_== "1"
-    def e3 = p.filter(_ >= 0).get must_== 1
-    def e4 = { p.foreach(i => print("1")); messages.size must_== 1 }
-    def e5 = p.getOrElse(0) must_== 1
-    def e6 = p.isDefined must beTrue
-    def e7 = p.isEmpty must beFalse
-    def e8 = p.orElse(Property(2)) must_== Property(1)
+  "option" - new g3 with prop {
+    e1 = p1.map(_.toString).get must_== "1"
+    e2 = p1.flatMap(i => Some(i.toString)).get must_== "1"
+    e3 = p1.filter(_ >= 0).get must_== 1
+    e4 = { p1.foreach(i => print("1")); messages.size must_== 1 }
+    e5 = p1.getOrElse(0) must_== 1
+    e6 = p1.isDefined must beTrue
+    e7 = p1.isEmpty must beFalse
+    e8 = p1.orElse(Property(2)) must_== Property(1)
   }
 
-  case class either() {
-    val p = Property(1)
-    def e1 = p.toLeft(2) must_== Left(1)
-    def e2 = p.toRight(2) must_== Right(1)
+  "either" - new g4 with prop {
+    e1 = p1.toLeft(2) must_== Left(1)
+    e2 = p1.toRight(2) must_== Right(1)
   }
 
+  trait prop extends MockOutput {
+    lazy val p1 = Property(1)
+  }
 }

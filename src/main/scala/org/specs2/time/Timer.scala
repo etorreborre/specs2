@@ -32,10 +32,9 @@ trait HmsTimer[T <: HmsTimer[T]] {
   def stop = copy((getTime - lastTimestamp) :: elapsedTimes, startedTimestamps.drop(1))
 
   /** add 2 timers together */
-  def add(t: HmsTimer[T]) = {
+  def add(t: HmsTimer[T]) =
     copy((elapsedTimes ++ t.elapsedTimes).filterNot(_ == 0), startedTimestamps ++ t.startedTimestamps)
-  }
-  
+
   /** @return true if this timer has been started */
   def isStarted = !startedTimestamps.isEmpty
   /** @return true if this timer has never been started */
