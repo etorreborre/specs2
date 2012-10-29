@@ -27,11 +27,11 @@ class SeqxSpec extends mutable.Specification with ScalaCheck with DataTables {
   "A removeFirst function" should {
     "remove the first element satisfying a predicate" in {
 
-      "Seq"          | "Element to remove" | "Result"        |>
-      (Nil:Seq[Int]) ! 2                   ! (Nil:Seq[Int])  |
-       Seq(2, 3, 4)  ! 2                   ! Seq(3, 4)       |
-       Seq(1, 2, 2)  ! 2                   ! Seq(1, 2)       |
-       Seq(1, 2, 3)  ! 2                   ! Seq(1, 3)       | { (l, a, r) =>
+      "Seq"           | "Element to remove"  | "Result"        |>
+      (Nil:Seq[Int])  ! 2                    ! (Nil:Seq[Int])  |
+       Seq(2, 3, 4)   ! 2                    ! Seq(3, 4)       |
+       Seq(1, 2, 2)   ! 2                    ! Seq(1, 2)       |
+       Seq(1, 2, 3)   ! 2                    ! Seq(1, 3)       | { (l, a, r) =>
         l.removeFirst(_ == a) must_== r
       }
     }

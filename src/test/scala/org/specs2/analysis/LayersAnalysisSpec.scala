@@ -7,23 +7,30 @@ import org.scalacheck._
 import Prop._
 import collection.SeqGenerators._
 import collection.Iterablex._
+import specification.Grouped
 
-class LayersAnalysisSpec extends Specification with DependencyMatchers with ScalaCheck { def is =
+class LayersAnalysisSpec extends Specification with DataLayers with Grouped { def is =
 
-                                                                                                                                            """
-  It is possible to specify dependencies between packages as 'layers'. A `Layers` object is an ordered sequence of other `Layer`s
+                                                                                                                        """
+  It is possible to specify dependencies between packages as 'layers'. A `Layers` object is an ordered sequence of
+  other `Layer`s.
+
   A `Layer` is simply a list of package names, with possibly a prefix to factor out their common package
-  by default all the packages are supposed to have corresponding class files in the src/main/scala directory, but it is possible to
-  specify another directory.                                                                                                                """^
-                                                                                                                                            p^
-  "If all dependencies are respected between any 2 packages of different layers, there must be no unsatisfied dependencies"                 ! d1^
-  "otherwise, it must display the failing dependencies"                                                                                     ! d2^
-                                                                                                                                            end
+  by default all the packages are supposed to have corresponding class files in the src/main/scala directory, but it is
+  possible to specify another directory.
+                                                                                                                        """^ p^
+  "If all dependencies are respected between any 2 packages of different layers,"+
+     "there must be no unsatisfied dependencies"                                                                        ! g1.e1^
+  "otherwise, it must display the failing dependencies"                                                                 ! g1.e2^
+                                                                                                                        end
 
+  "dependencies" - new g1 {
+    e1 = forAll(okLayers) { (ls: Layers) => ls must beRespected }
+    e2 = forAll(koLayers) { (ls: Layers) => ls must not beRespected }.set(maxDiscarded -> 1000)
+  }
+}
 
-  def d1 = forAll(okLayers) { (ls: Layers) => ls must beRespected }
-  def d2 = forAll(koLayers) { (ls: Layers) => ls must not beRespected }.set(maxDiscarded -> 1000)
-
+trait DataLayers extends DependencyMatchers with Specification with ScalaCheck {
   /**
    * The data generation strategy is to create layers of packages represented by alphabetical letters from a to f.
    *
