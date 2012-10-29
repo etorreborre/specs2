@@ -625,6 +625,18 @@ and then to check that there's no unwanted dependency in the code.</p>
       </h4>
       <p class="comment cmt">This trait provides implicit definitions to transform any value into an Expectable
 </p>
+    </li><li visbl="pub" name="org.specs2.matcher.ExpectationsDescription" data-isabs="true">
+      <a id="ExpectationsDescription:ExpectationsDescription"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ExpectationsDescription.html"><span class="name">ExpectationsDescription</span></a><span class="result"> extends Sentences with Expectations</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.matcher.ExpectedParsedResult" data-isabs="false">
       <a id="ExpectedParsedResult:ExpectedParsedResult[T]"></a>
       <h4 class="signature">
@@ -931,7 +943,7 @@ to properties by appending forAll
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="MatchersImplicits.html"><span class="name">MatchersImplicits</span></a><span class="result"> extends Expectations with MatchResultCombinators with MatchResultImplicits</span>
+        <a href="MatchersImplicits.html"><span class="name">MatchersImplicits</span></a><span class="result"> extends Expectations with MatchResultCombinators with MatchResultImplicits with ExpectationsDescription</span>
       </span>
       </h4>
       <p class="comment cmt">This trait provides implicit definitions from MatchResults and Booleans to Results.</p>
@@ -1049,6 +1061,18 @@ a match fails
       </h4>
       <p class="comment cmt">This trait can be used to suppress the CanBeEqual implicits
 </p>
+    </li><li visbl="pub" name="org.specs2.matcher.NoExpectationsDescription" data-isabs="true">
+      <a id="NoExpectationsDescription:NoExpectationsDescription"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NoExpectationsDescription.html"><span class="name">NoExpectationsDescription</span></a><span class="result"> extends ExpectationsDescription</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.matcher.NoMustExpectations" data-isabs="true">
       <a id="NoMustExpectations:NoMustExpectations"></a>
       <h4 class="signature">
