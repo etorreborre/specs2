@@ -557,6 +557,68 @@ This specification will be rendered as:
          2 | 2 | 4 |
          1 | 1 | 2 |
 
+#### Example groups
+
+When you create acceptance specifications, you have to find names to reference your examples, which can sometimes be a bit tedious. You can then get some support from the `org.specs2.specification.Grouped` trait. This trait provides group traits, named `g1` to `g22` to define groups of examples. Each group trait defines 22 variables named `e1` to `e22`, to define examples bodies. The specification below shows how to use the `Grouped` trait:
+
+      class MySpecification extends Examples { def is =
+        "first example in first group"                       ! g1.e1 ^
+        "second example in first group"                      ! g1.e2 ^
+                                                                     p^
+        "first example in second group"                      ! g2.e1 ^
+        "second example in second group"                     ! g2.e2
+        "third example in second group, not yet implemented" ! g2.e3
+      }
+
+      trait Examples extends Grouped with Matchers {
+        // group of examples with no description
+        new g1 {
+          e1 = ok
+          e2 = ok
+        }
+        // group of examples with a description for the group
+        "second group of examples" - new g2 {
+          e1 = ok
+          e2 = ok
+        }
+      }
+
+Note that, if you use groups, you can use the example names right away, like `g2.e3`, without providing an implementation, the example will be marked as `Pending`.
+
+##### Isolation
+
+You can define additional variables in your group traits:
+
+       trait Local {
+         def service: Service = new LocalService
+       }
+       "a group of examples" - new g1 with Local {
+         e1 = ok
+         e2 = ok
+       }
+       "another group of examples" - new g2 with Local {
+         e1 = ok
+         e2 = ok
+       }
+
+However, the `service` variable will be shared by all the examples of each group, which can be potentially troublesome if that variable is mutated. If you want to provide complete isolation for each example, you should instead use the `org.specs2.specification.Groups` trait and call each group as a function:
+
+       class MySpecification extends Examples { def is =
+         "first example in first group"                       ! g1().e1 ^
+         "second example in first group"                      ! g1().e2
+       }
+
+       trait Examples extends Groups with Matchers {
+         trait Local {
+           def service: Service = new LocalService
+         }
+         "a group of examples" - new g1 with Local {
+           // each example will have its own instance of Service
+           e1 = ok
+           e2 = ok
+         }
+       }
+
 ### Links
 
 There are 2 ways to "link" specifications:
