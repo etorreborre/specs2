@@ -45,7 +45,8 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
   }
 
   private lazy val nocolor = Arguments("nocolor")
-  /**Skipped
+
+  /**
    * @return the uncolored textual status of the result
    */
   def status: String = coloredStatus(nocolor)

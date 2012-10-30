@@ -187,7 +187,7 @@ trait Grouped { outer =>
   }
 }
 
-case class Group(name: String = "") extends BeforeAfterAround {
+case class Group(private val name: String = "") extends BeforeAfterAround {
   private lazy val pending = StandardResults.pending
 
   val e1:  AnyAsResult = pending

@@ -90,14 +90,14 @@ more precisely:
                                                                                                                         end
 
   def statuses =
-  "result" | "isSuccess" | "isFailure" | "isError" | "isSkipped" | "isPending" |>
-  success1 ! true        ! false       ! false     ! false       ! false       |
-  failure1 ! false       ! true        ! false     ! false       ! false       |
-  error1   ! false       ! false       ! true      ! false       ! false       |
-  skipped1 ! false       ! false       ! false     ! true        ! false       |
-  pending1 ! false       ! false       ! false     ! false       ! true        | { (r, s, f, e, sk, p) =>
-    (r.isSuccess, r.isFailure, r.isError, r.isSkipped, r.isPending) must_== (s, f, e, sk, p)
-  }
+    "result" | "isSuccess" | "isFailure" | "isError" | "isSkipped" | "isPending" |>
+    success1 ! true        ! false       ! false     ! false       ! false       |
+    failure1 ! false       ! true        ! false     ! false       ! false       |
+    error1   ! false       ! false       ! true      ! false       ! false       |
+    skipped1 ! false       ! false       ! false     ! true        ! false       |
+    pending1 ! false       ! false       ! false     ! false       ! true        | { (r, s, f, e, sk, p) =>
+      (r.isSuccess, r.isFailure, r.isError, r.isSkipped, r.isPending) must_== (s, f, e, sk, p)
+    }
 
   val success1: Result = Success("s1")
   val success2 = Success("s2")                                                                                          

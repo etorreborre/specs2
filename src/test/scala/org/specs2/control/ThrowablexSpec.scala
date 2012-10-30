@@ -42,8 +42,8 @@ The Throwablex trait provides extensions to regular throwables:
     e1 := e.filter("org.specs2.control").getStackTrace.toList.map(_.toString) must containMatch("org.specs2.control")
     e2 := e.filterNot("org.specs2.control").getStackTrace.toList.map(_.toString) must not containMatch("org.specs2.control")
   }
-  "stack" - new g5 with ThrowablexContext {
-    e1 := e(3).toString must beMatching(".*apply.*")
+  "stack" - new g4 with ThrowablexContext {
+    e1 := e(2).toString aka e.getStackTraceString must beMatching(".*org.specs2.control.ThrowablexSpec.<init>.*")
     e2 := e.headOption.map(_.toString).toIterable must containMatch("ThrowablexContext")
   }
 }

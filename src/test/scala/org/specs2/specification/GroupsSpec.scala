@@ -9,7 +9,7 @@ class GroupsSpec extends Specification {
   "The examples of a group must only be evaluated when the example is evaluated" >> {
     val g = new Group {}
     var evaluated = false
-    g.e1 := { evaluated = true; ok.pp }
+    g.e1 := { evaluated = true; ok }
 
     "the example is not evaluated" ==> { evaluated === false }
 
