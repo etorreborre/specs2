@@ -37,12 +37,12 @@
   &quot;second example in second group&quot; ! g2.e2
 }</p><p>trait Examples extends Grouped with Matchers {
   &quot;first group of examples&quot; - new g1 {
-    e1 = ok
-    e2 = ok
+    e1 - ok
+    e2 - ok
   }
   &quot;second group of examples&quot; - new g2 {
-    e1 = ok
-    e2 = ok
+    e1 - ok
+    e2 - ok
   }
 }</p><p>It is important to notice that the examples must be called with <code>g1().e1</code> so as to create a new <code>g1</code> trait instance
 with new local variables for the example <code>e1</code>. If this is not required, the <code>Grouped</code> trait can be used instead</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a name="org.specs2.specification.Grouped" class="extype" href="">Grouped</a></dd></dl><div class="toggleContainer block">
