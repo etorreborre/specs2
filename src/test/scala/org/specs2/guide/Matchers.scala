@@ -204,7 +204,7 @@ If you have Hamcrest matchers in your project and you want to reuse them as spec
         def matches(item: Object): Boolean       = item.toString.toInt % 2 == 0
         def describeTo(description: Description) { description.appendText(" is odd") }
       }
-   
+
     }
 
 
