@@ -16,12 +16,12 @@ import execute._
  *
  * trait Examples extends Groups with Matchers {
  *   "first group of examples" - new g1 {
- *     e1 = ok
- *     e2 = ok
+ *     e1 - ok
+ *     e2 - ok
  *   }
  *   "second group of examples" - new g2 {
- *     e1 = ok
- *     e2 = ok
+ *     e1 - ok
+ *     e2 - ok
  *   }
  * }
  *
@@ -119,12 +119,12 @@ trait Groups { outer =>
  *
  * trait Examples extends Grouped with Matchers {
  *   "first group of examples" - new g1 {
- *     e1 = ok
- *     e2 = ok
+ *     e1 - ok
+ *     e2 - ok
  *   }
  *   "second group of examples" - new g2 {
- *     e1 = ok
- *     e2 = ok
+ *     e1 - ok
+ *     e2 - ok
  *   }
  * }
  *
@@ -188,30 +188,30 @@ trait Grouped { outer =>
 }
 
 case class Group(name: String = "") extends BeforeAfterAround {
-  private val pending = StandardResults.success
+  private lazy val pending = StandardResults.pending
 
-  var e1:  AnyAsResult = pending
-  var e2:  AnyAsResult = pending
-  var e3:  AnyAsResult = pending
-  var e4:  AnyAsResult = pending
-  var e5:  AnyAsResult = pending
-  var e6:  AnyAsResult = pending
-  var e7:  AnyAsResult = pending
-  var e8:  AnyAsResult = pending
-  var e9:  AnyAsResult = pending
-  var e10: AnyAsResult = pending
-  var e11: AnyAsResult = pending
-  var e12: AnyAsResult = pending
-  var e13: AnyAsResult = pending
-  var e14: AnyAsResult = pending
-  var e15: AnyAsResult = pending
-  var e16: AnyAsResult = pending
-  var e17: AnyAsResult = pending
-  var e18: AnyAsResult = pending
-  var e19: AnyAsResult = pending
-  var e20: AnyAsResult = pending
-  var e21: AnyAsResult = pending
-  var e22: AnyAsResult = pending
+  val e1:  AnyAsResult = pending
+  val e2:  AnyAsResult = pending
+  val e3:  AnyAsResult = pending
+  val e4:  AnyAsResult = pending
+  val e5:  AnyAsResult = pending
+  val e6:  AnyAsResult = pending
+  val e7:  AnyAsResult = pending
+  val e8:  AnyAsResult = pending
+  val e9:  AnyAsResult = pending
+  val e10: AnyAsResult = pending
+  val e11: AnyAsResult = pending
+  val e12: AnyAsResult = pending
+  val e13: AnyAsResult = pending
+  val e14: AnyAsResult = pending
+  val e15: AnyAsResult = pending
+  val e16: AnyAsResult = pending
+  val e17: AnyAsResult = pending
+  val e18: AnyAsResult = pending
+  val e19: AnyAsResult = pending
+  val e20: AnyAsResult = pending
+  val e21: AnyAsResult = pending
+  val e22: AnyAsResult = pending
 
   def before {}
   def after {}
