@@ -183,6 +183,31 @@ In the code above you have to:
  * you can use the `description` method on the `Expectable` class to return the full description of the expectable including
    the optional description you setup using the `aka` method
 
+##### From Hamcrest
+
+If you have Hamcrest matchers in your project and you want to reuse them as specs2 matchers, you can mix-in the `org.specs2.matcher.Hamcrest` trait:
+
+    class HamcrestSpec extends Specification with Grouped with Hamcrest { def is =
+
+      "Hamcrest matchers can be used as specs2 matchers by mixing in the Hamcrest trait"      ^
+      "for example a beEven Hamcrest matcher can be used in a 'must' expression"              ! g1.e1 ^
+        "the failure message must contain the matched value and the Hamcrest failure message" ! g1.e2
+
+
+      new g1 {
+        e1 := 2 must beEven
+        e2 := (3 must beEven).message === "<3> is odd"
+      }
+
+      // a Hamcrest matcher for even numbers
+      object beEven extends BaseMatcher[Int] {
+        def matches(item: Object): Boolean       = item.toString.toInt % 2 == 0
+        def describeTo(description: Description) { description.appendText(" is odd") }
+      }
+   
+    }
+
+
 #### With sequences
 
 If you have the same "MatchResult" expression that you'd like to verify for different values you can write one of the following:
