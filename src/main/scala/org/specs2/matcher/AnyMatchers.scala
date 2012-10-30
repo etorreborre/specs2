@@ -188,7 +188,7 @@ class BeTypedEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
         case other                           => b.value == a
       }
 
-    val (db, qa) =
+    lazy val (db, qa) =
       (b.description, q(a)) match {
         case (x, y) if (!equality && x == y) => (b.describe(b.value.notNullWithClass), q(a.notNullWithClass))
         case other                           => other

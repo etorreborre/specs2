@@ -8,6 +8,13 @@ class ExpectableSpec extends Specification with ResultMatchers with org.specs2.m
   "An expectable can have a precise description with aka(description)" in {
     ("a" aka "the string").description must_== "the string 'a'"
   }
+  "An expectable described with aka will only evaluate the description in case of a failure" in {
+    var evaluated = false
+    ("a" aka {
+      evaluated = true;
+      "the string" }) must_== "a"
+    "the aka description is not evaluated on a success" <==> { evaluated === false }
+  }
   "If it is a boolean its value is not displayed, only the description" in {
     (true aka "my boolean").description must_== "my boolean"
   }
