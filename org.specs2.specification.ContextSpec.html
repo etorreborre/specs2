@@ -1,0 +1,80 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <style type="text/css" media="all">
+        @import url('./css/maven-base.css');
+        @import url('./css/maven-theme.css');
+      </style>
+      <link type="text/css" rel="stylesheet" href="./css/prettify.css" />
+      <script type="text/javascript" src="./css/prettify.js"></script>
+      <link type="text/css" media="print" rel="stylesheet" href="./css/print.css" />
+      <link type="text/css" rel="stylesheet" href="./css/tooltip.css" />
+      <link type="text/css" rel="stylesheet" href="./css/specs2-user.css" />
+
+      <script type="text/javascript" src="./css/jquery.js"></script>
+      <script type="text/javascript" src="./css/jquery.cookie.js"></script>
+      <script type="text/javascript" src="./css/jquery.hotkeys.js"></script>
+      <script type="text/javascript" src="./css/jquery.jstree.js"></script>
+      <script type="text/javascript" src="./css/tooltip.js"></script>
+      <script language="javascript">
+      function init() {  prettyPrint(); };
+      /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
+      String.prototype.endsWith = function(str) { return (this.match(str+'$') == str) };
+      function changeWidth(id,width) {  document.getElementById(id).style.width = width; };
+      function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
+      function toggleImage(image) {
+        if (image.src.endsWith('images/expanded.gif')) 
+          image.src = image.src.replace('expanded', 'collapsed');
+        else 
+          image.src = image.src.replace('collapsed', 'expanded');
+      };
+      function showHide(id) {
+        element = document.getElementById(id);
+        element.style.display = (element.style.display == 'block')? 'none' : 'block';
+      };
+      function showHideByClass(name) {
+		    var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+		      elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
+        }
+      };
+      function showByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'block';
+        }
+      };
+      function hideByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'none';
+        }
+      };
+      function showById(id) {
+        document.getElementById(id).style.display = ''
+      };
+      function hideById(id) {
+        document.getElementById(id).style.display = 'none'
+      };
+    </script>
+      <script language="javascript">window.onload=init;</script>
+      <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
+           tabber code, then the init code -->
+      <script type="text/javascript" src="./css/tabber.js"></script>
+      <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" />
+    </head><body><div id="leftcolumn"><div id="tree">
+      <ul><li id="1671632850"><a href="org.specs2.specification.ContextSpec.html#ContextSpec">ContextSpec</a>
+            
+          </li></ul>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1671632850','1671632850'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+    </div></div><div id="central"><title>ContextSpec</title><a name="ContextSpec"><h2 specId="1671632850">ContextSpec</h2></a><status class="ok"><div class="level0" style="display: show"><p>It is sometimes necessary to provide functions to &quot;prepare&quot; the specification before executing the Fragments<br /> and clean it up afterwards. This may be for example:</p>
+<pre><code class="prettyprint"> * opening a database connection
+ * inserting some data
+ * executing the example
+ * closing the connection after each example
+</code></pre><p>It may also be very convenient to have each example executed &quot;inside&quot; a specific context, like a web application<br /> session. Finally, some setups or cleanups are very expensive so one might want to add arbitrary actions that will<br /> be executed only once, at the beginning of the specification or the end.</p><p>All of this can be achieved in specs2 by using case classes which extend the following traits:</p>
+<pre><code class="prettyprint"> * Before
+ * After
+ * Around
+ * Outside
+ * BeforeAfter or BeforeAfterAround or AroundOutside for combined functionality
+</code></pre></div></status><status class="ok"><div class="level1" style="display: show">The Before trait can be used to execute methods before Fragments</div></status><status class="ok"><p></p></status><status class="ok"><div class="level1" style="display: show">If the before method throws an exception</div></status><status class="ok"><p></p></status><status class="ok"><div class="level1" style="display: show">If the before method returns Skipped</div></status><status class="ok"><p></p></status><status class="ok"><div class="level1" style="display: show">If the before method throws a SkippedException</div></status><status class="ok"><p></p></status><status class="ok"><div class="level1" style="display: show">If the before method returns a MatchFailure</div></status><status class="ok"><p></p></status><status class="ok"><div class="level1" style="display: show">If the before method returns a MatchFailure</div></status><status class="ok"><p></p></status><status class="ok"><div class="level1" style="display: show">The After trait can be used to execute methods after Fragments</div></status><status class="ok"><p></p></status><status class="ok"><div class="level1" style="display: show">If the after method throws an exception</div></status><status class="ok"><p></p></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">The Around trait can be used to</div></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">The Outside trait can be used to</div></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">The AroundOutside trait can be used to</div></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">The BeforeAfter trait can be used to</div></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">The BeforeAfterAround trait can be used to</div></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">The Before After Around traits can be composed to create more complex setups</div></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">An Action can be used to create Step fragments containing an action to execute:</div></status><status class="ok"><div class="level1" style="display: show">val beforeSpec = new Action</div></status><status class="ok"><div class="level2" style="display: show">def is = beforeSpec(c.println('beforeSpec')) ^ ex1</div></status><status class="ok"><p></p></status><status class="ok"><p></p></status><status class="ok"><div class="level1" style="display: show">A context can be passed applied to many fragments</div></status><status class="ok"><p></p></status><status class="ok"><div class="level1" style="display: show">In a mutable spec</div></status></div><div id="rightcolumn"></div></body></html>

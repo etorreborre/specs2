@@ -1,0 +1,69 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <style type="text/css" media="all">
+        @import url('./css/maven-base.css');
+        @import url('./css/maven-theme.css');
+      </style>
+      <link type="text/css" rel="stylesheet" href="./css/prettify.css" />
+      <script type="text/javascript" src="./css/prettify.js"></script>
+      <link type="text/css" media="print" rel="stylesheet" href="./css/print.css" />
+      <link type="text/css" rel="stylesheet" href="./css/tooltip.css" />
+      <link type="text/css" rel="stylesheet" href="./css/specs2-user.css" />
+
+      <script type="text/javascript" src="./css/jquery.js"></script>
+      <script type="text/javascript" src="./css/jquery.cookie.js"></script>
+      <script type="text/javascript" src="./css/jquery.hotkeys.js"></script>
+      <script type="text/javascript" src="./css/jquery.jstree.js"></script>
+      <script type="text/javascript" src="./css/tooltip.js"></script>
+      <script language="javascript">
+      function init() {  prettyPrint(); };
+      /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
+      String.prototype.endsWith = function(str) { return (this.match(str+'$') == str) };
+      function changeWidth(id,width) {  document.getElementById(id).style.width = width; };
+      function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
+      function toggleImage(image) {
+        if (image.src.endsWith('images/expanded.gif')) 
+          image.src = image.src.replace('expanded', 'collapsed');
+        else 
+          image.src = image.src.replace('collapsed', 'expanded');
+      };
+      function showHide(id) {
+        element = document.getElementById(id);
+        element.style.display = (element.style.display == 'block')? 'none' : 'block';
+      };
+      function showHideByClass(name) {
+		    var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+		      elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
+        }
+      };
+      function showByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'block';
+        }
+      };
+      function hideByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'none';
+        }
+      };
+      function showById(id) {
+        document.getElementById(id).style.display = ''
+      };
+      function hideById(id) {
+        document.getElementById(id).style.display = 'none'
+      };
+    </script>
+      <script language="javascript">window.onload=init;</script>
+      <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
+           tabber code, then the init code -->
+      <script type="text/javascript" src="./css/tabber.js"></script>
+      <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" />
+    </head><body><div id="leftcolumn"><div id="tree">
+      <ul><li id="364024062"><a href="org.specs2.matcher.ExceptionMatchersSpec.html#ExceptionMatchersSpec">ExceptionMatchersSpec</a>
+            
+          </li></ul>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['364024062','364024062'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+    </div></div><div id="central"><title>ExceptionMatchersSpec</title><a name="ExceptionMatchersSpec"><h2 specId="364024062">ExceptionMatchersSpec</h2></a><status class="ok"><div class="level0" style="display: show">Exception matchers allow to check that exceptions are thrown</div></status><status class="ok"><div class="level1" style="display: show">by specifying the expected type of exception: 'value must throwAn[Error]'</div></status><status class="ok"><p></p></status><status class="ok"><div class="level1" style="display: show">it is also possible to specify that the thrown exception is ok according to a PartialFunction</div></status><status class="ok"><p></p></status><status class="ok"><div class="level1" style="display: show">more simply the exception message can be specified with a regular expression</div></status><status class="ok"><p></p></status><status class="ok"><div class="level1" style="display: show">by specifying the expected exception: 'value must throwA(new java.lang.RuntimeException('wrong')'</div></status><status class="ok"><div class="level2" style="display: show">it can be refined with a 'like' expression</div></status><status class="ok"><p></p></status></div><div id="rightcolumn"></div></body></html>

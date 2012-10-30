@@ -14,9 +14,9 @@
         </head>
         <body onload="sh_highlightDocument('../lib/', '.min.js');" class="type">
       <div id="definition">
-        <img src="../../../lib/class_big.png" />
+        <a title="Go to companion" href="MatchSuccess$.html"><img src="../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.matcher" class="extype" href="package.html">matcher</a></p>
-        <h1>MatchSuccess</h1>
+        <h1><a title="Go to companion" href="MatchSuccess$.html">MatchSuccess</a></h1>
       </div>
 
       <h4 class="signature" id="signature">
@@ -25,11 +25,12 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">MatchSuccess</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="okMessage">okMessage: String</span>, <span name="koMessage">koMessage: String</span>, <span name="expectable">expectable: <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[T]</span>)</span><span class="result"> extends <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[T] with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+        <span class="name">MatchSuccess</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="ok">ok: () ⇒ String</span>, <span name="ko">ko: () ⇒ String</span>, <span name="expectable">expectable: <a name="org.specs2.matcher.Expectable" class="extype" href="Expectable.html">Expectable</a>[T]</span>, <span name="p">p: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result"> extends <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[T] with <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
       </span>
       </h4>
       
-      <div class="fullcommenttop" id="comment"><div class="toggleContainer block">
+      <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>The signature of this class constructor is unusual, with a useless implicit parameter.</p><p>This is actually here to avoid overloading conflicts with the apply method in the companion object
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[T], <a name="org.specs2.execute.ResultLike" class="extype" href="../execute/ResultLike.html">ResultLike</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
@@ -322,12 +323,24 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.MatchSuccess#ko" data-isabs="false">
+      <a id="ko:() ⇒ String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ko</span><span class="result">: () ⇒ String</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.matcher.MatchSuccess#koMessage" data-isabs="false">
       <a id="koMessage:String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
         <span class="name">koMessage</span><span class="result">: String</span>
@@ -406,12 +419,24 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.MatchSuccess#ok" data-isabs="false">
+      <a id="ok:() ⇒ String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ok</span><span class="result">: () ⇒ String</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.matcher.MatchSuccess#okMessage" data-isabs="false">
       <a id="okMessage:String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
         <span class="name">okMessage</span><span class="result">: String</span>

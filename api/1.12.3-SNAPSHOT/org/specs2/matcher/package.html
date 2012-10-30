@@ -676,6 +676,18 @@ and then to check that there's no unwanted dependency in the code.</p>
       <p class="comment cmt">This trait adds some syntactic sugar to transform function
 to properties by appending forAll
 </p>
+    </li><li visbl="pub" name="org.specs2.matcher.Hamcrest" data-isabs="true">
+      <a id="Hamcrest:Hamcrest"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Hamcrest.html"><span class="name">Hamcrest</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait adds implicit conversions to be able to use [Hamcrest matchers](http://code.</p>
     </li><li visbl="pub" name="org.specs2.matcher.HaveAllElementsLike" data-isabs="false">
       <a id="HaveAllElementsLike:HaveAllElementsLike[T, U]"></a>
       <h4 class="signature">
@@ -810,7 +822,7 @@ to properties by appending forAll
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="MatchFailure.html"><span class="name">MatchFailure</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="okMessage">okMessage: String</span>, <span name="koMessage">koMessage: String</span>, <span name="expectable">expectable: Expectable[T]</span>, <span name="details">details: Details</span>)</span><span class="result"> extends MatchResult[T] with Product with Serializable</span>
+        <a href="MatchFailure.html"><span class="name">MatchFailure</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="ok">ok: () ⇒ String</span>, <span name="ko">ko: () ⇒ String</span>, <span name="expectable">expectable: Expectable[T]</span>, <span name="details">details: Details</span>)</span><span class="result"> extends MatchResult[T] with Product with Serializable</span>
       </span>
       </h4>
       
@@ -906,10 +918,10 @@ to properties by appending forAll
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="MatchSuccess.html"><span class="name">MatchSuccess</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="okMessage">okMessage: String</span>, <span name="koMessage">koMessage: String</span>, <span name="expectable">expectable: Expectable[T]</span>)</span><span class="result"> extends MatchResult[T] with Product with Serializable</span>
+        <a href="MatchSuccess.html"><span class="name">MatchSuccess</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="ok">ok: () ⇒ String</span>, <span name="ko">ko: () ⇒ String</span>, <span name="expectable">expectable: Expectable[T]</span>, <span name="p">p: Int</span>)</span><span class="result"> extends MatchResult[T] with Product with Serializable</span>
       </span>
       </h4>
-      
+      <p class="comment cmt">The signature of this class constructor is unusual, with a useless implicit parameter.</p>
     </li><li visbl="pub" name="org.specs2.matcher.Matcher" data-isabs="true">
       <a id="Matcher:Matcher[T]"></a>
       <h4 class="signature">
@@ -1666,6 +1678,18 @@ a match fails
       </span>
       </h4>
       
+    </li><li visbl="pub" name="org.specs2.matcher.Hamcrest" data-isabs="false">
+      <a id="Hamcrest:Hamcrest"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Hamcrest$.html"><span class="name">Hamcrest</span></a><span class="result"> extends Hamcrest</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="org.specs2.matcher.JUnitMustExpectations" data-isabs="false">
       <a id="JUnitMustExpectations:JUnitMustExpectations"></a>
       <h4 class="signature">
@@ -1723,6 +1747,18 @@ a match fails
       </span>
       <span class="symbol">
         <a href="MapMatchers$.html"><span class="name">MapMatchers</span></a><span class="result"> extends MapMatchers</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.matcher.MatchFailure" data-isabs="false">
+      <a id="MatchFailure:MatchFailure"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="MatchFailure$.html"><span class="name">MatchFailure</span></a><span class="result"> extends Serializable</span>
       </span>
       </h4>
       
@@ -1795,6 +1831,18 @@ a match fails
       </span>
       <span class="symbol">
         <a href="MatchSkipException$.html"><span class="name">MatchSkipException</span></a><span class="result"> extends Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.matcher.MatchSuccess" data-isabs="false">
+      <a id="MatchSuccess:MatchSuccess"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="MatchSuccess$.html"><span class="name">MatchSuccess</span></a><span class="result"> extends Serializable</span>
       </span>
       </h4>
       

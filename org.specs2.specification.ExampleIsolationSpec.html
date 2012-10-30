@@ -1,0 +1,74 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <style type="text/css" media="all">
+        @import url('./css/maven-base.css');
+        @import url('./css/maven-theme.css');
+      </style>
+      <link type="text/css" rel="stylesheet" href="./css/prettify.css" />
+      <script type="text/javascript" src="./css/prettify.js"></script>
+      <link type="text/css" media="print" rel="stylesheet" href="./css/print.css" />
+      <link type="text/css" rel="stylesheet" href="./css/tooltip.css" />
+      <link type="text/css" rel="stylesheet" href="./css/specs2-user.css" />
+
+      <script type="text/javascript" src="./css/jquery.js"></script>
+      <script type="text/javascript" src="./css/jquery.cookie.js"></script>
+      <script type="text/javascript" src="./css/jquery.hotkeys.js"></script>
+      <script type="text/javascript" src="./css/jquery.jstree.js"></script>
+      <script type="text/javascript" src="./css/tooltip.js"></script>
+      <script language="javascript">
+      function init() {  prettyPrint(); };
+      /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
+      String.prototype.endsWith = function(str) { return (this.match(str+'$') == str) };
+      function changeWidth(id,width) {  document.getElementById(id).style.width = width; };
+      function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
+      function toggleImage(image) {
+        if (image.src.endsWith('images/expanded.gif')) 
+          image.src = image.src.replace('expanded', 'collapsed');
+        else 
+          image.src = image.src.replace('collapsed', 'expanded');
+      };
+      function showHide(id) {
+        element = document.getElementById(id);
+        element.style.display = (element.style.display == 'block')? 'none' : 'block';
+      };
+      function showHideByClass(name) {
+		    var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+		      elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
+        }
+      };
+      function showByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'block';
+        }
+      };
+      function hideByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'none';
+        }
+      };
+      function showById(id) {
+        document.getElementById(id).style.display = ''
+      };
+      function hideById(id) {
+        document.getElementById(id).style.display = 'none'
+      };
+    </script>
+      <script language="javascript">window.onload=init;</script>
+      <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
+           tabber code, then the init code -->
+      <script type="text/javascript" src="./css/tabber.js"></script>
+      <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" />
+    </head><body><div id="leftcolumn"><div id="tree">
+      <ul><li id="917290280"><a href="org.specs2.specification.ExampleIsolationSpec.html#ExampleIsolationSpec">ExampleIsolationSpec</a>
+            
+          </li></ul>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['917290280','917290280'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+    </div></div><div id="central"><title>ExampleIsolationSpec</title><a name="ExampleIsolationSpec"><h2 specId="917290280">ExampleIsolationSpec</h2></a><status class="ok"><div class="level0" style="display: show">
+This specification shows how to use case classes to ensure Fragments isolation.
+
+The main idea is to create a inheritance tree of classes to model nested contexts where variables are renitialized
+for each example by the sheer virtue of creating a fresh context object
+                                                                                                                        </div></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">Those 2 first Fragments show that they are not sharing variables</div></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">The next 2 Fragments show that it is possible to 'nest' context by inheriting them</div></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">Now these Fragments model a fictive customer interaction</div></status><status class="ok"><div class="level1" style="display: show">When the user logs in</div></status><status class="ok"><div class="level2" style="display: show">if he selects tickets</div></status><status class="ok"><div class="level3" style="display: show">if he buys tickets</div></status></div><div id="rightcolumn"></div></body></html>

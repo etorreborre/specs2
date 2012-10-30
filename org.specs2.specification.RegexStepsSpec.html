@@ -1,0 +1,69 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <style type="text/css" media="all">
+        @import url('./css/maven-base.css');
+        @import url('./css/maven-theme.css');
+      </style>
+      <link type="text/css" rel="stylesheet" href="./css/prettify.css" />
+      <script type="text/javascript" src="./css/prettify.js"></script>
+      <link type="text/css" media="print" rel="stylesheet" href="./css/print.css" />
+      <link type="text/css" rel="stylesheet" href="./css/tooltip.css" />
+      <link type="text/css" rel="stylesheet" href="./css/specs2-user.css" />
+
+      <script type="text/javascript" src="./css/jquery.js"></script>
+      <script type="text/javascript" src="./css/jquery.cookie.js"></script>
+      <script type="text/javascript" src="./css/jquery.hotkeys.js"></script>
+      <script type="text/javascript" src="./css/jquery.jstree.js"></script>
+      <script type="text/javascript" src="./css/tooltip.js"></script>
+      <script language="javascript">
+      function init() {  prettyPrint(); };
+      /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
+      String.prototype.endsWith = function(str) { return (this.match(str+'$') == str) };
+      function changeWidth(id,width) {  document.getElementById(id).style.width = width; };
+      function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
+      function toggleImage(image) {
+        if (image.src.endsWith('images/expanded.gif')) 
+          image.src = image.src.replace('expanded', 'collapsed');
+        else 
+          image.src = image.src.replace('collapsed', 'expanded');
+      };
+      function showHide(id) {
+        element = document.getElementById(id);
+        element.style.display = (element.style.display == 'block')? 'none' : 'block';
+      };
+      function showHideByClass(name) {
+		    var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+		      elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
+        }
+      };
+      function showByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'block';
+        }
+      };
+      function hideByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'none';
+        }
+      };
+      function showById(id) {
+        document.getElementById(id).style.display = ''
+      };
+      function hideById(id) {
+        document.getElementById(id).style.display = 'none'
+      };
+    </script>
+      <script language="javascript">window.onload=init;</script>
+      <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
+           tabber code, then the init code -->
+      <script type="text/javascript" src="./css/tabber.js"></script>
+      <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" />
+    </head><body><div id="leftcolumn"><div id="tree">
+      <ul><li id="765445589"><a href="org.specs2.specification.RegexStepsSpec.html#RegexStepsSpec">RegexStepsSpec</a>
+            
+          </li></ul>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['765445589','765445589'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+    </div></div><div id="central"><title>RegexStepsSpec</title><a name="RegexStepsSpec"><h2 specId="765445589">RegexStepsSpec</h2></a><status class="ok"><div class="level0" style="display: show">Given/When/Then specifications can be written by adding extractors after Text fragments</div></status><status class="ok"><div class="level1" style="display: show">A Given[T] extractor extracts the text from the previous Text fragment</div></status><status class="ok"><p></p></status><status class="ok"><div class="level1" style="display: show">A When[T,S] extractor extracts the text from the previous Text fragment, combines it with the current State</div></status><status class="ok"><p></p></status><status class="ok"><div class="level1" style="display: show">A Then[T] extractor extracts the text from the previous Text fragment, and combines it with the current State</div></status><status class="ok"><p></p></status><status class="ok"><p></p></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">Two Given steps can be followed by a When step where the input of the When step pairs the Given outputs</div></status><status class="ok"><div class="level1" style="display: show">with number 0</div></status><status class="ok"><div class="level1" style="display: show">and number 1</div></status><status class="ok"><div class="level1" style="display: show">when adding</div></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">Two Given steps can be followed by a Then step where the input of the Then step pairs the Given outputs</div></status><status class="ok"><div class="level1" style="display: show">with number 0</div></status><status class="ok"><div class="level1" style="display: show">and number 1</div></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">Several Given steps can be followed by a When step where the input of the When step tuples the Given outputs</div></status><status class="ok"><div class="level1" style="display: show">with number 0</div></status><status class="ok"><div class="level1" style="display: show">and number 1</div></status><status class="ok"><div class="level1" style="display: show">and number 2</div></status><status class="ok"><div class="level1" style="display: show">and number 3</div></status><status class="ok"><div class="level1" style="display: show">when adding</div></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">Factory methods can be used to create Given/When/Then steps from simple functions</div></status><status class="ok"><div class="level1" style="display: show">Given</div></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">When</div></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">Then</div></status><status class="ok"><p></p></status></div><div id="rightcolumn"></div></body></html>

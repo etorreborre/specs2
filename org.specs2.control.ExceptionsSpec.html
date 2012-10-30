@@ -1,0 +1,79 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <style type="text/css" media="all">
+        @import url('./css/maven-base.css');
+        @import url('./css/maven-theme.css');
+      </style>
+      <link type="text/css" rel="stylesheet" href="./css/prettify.css" />
+      <script type="text/javascript" src="./css/prettify.js"></script>
+      <link type="text/css" media="print" rel="stylesheet" href="./css/print.css" />
+      <link type="text/css" rel="stylesheet" href="./css/tooltip.css" />
+      <link type="text/css" rel="stylesheet" href="./css/specs2-user.css" />
+
+      <script type="text/javascript" src="./css/jquery.js"></script>
+      <script type="text/javascript" src="./css/jquery.cookie.js"></script>
+      <script type="text/javascript" src="./css/jquery.hotkeys.js"></script>
+      <script type="text/javascript" src="./css/jquery.jstree.js"></script>
+      <script type="text/javascript" src="./css/tooltip.js"></script>
+      <script language="javascript">
+      function init() {  prettyPrint(); };
+      /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
+      String.prototype.endsWith = function(str) { return (this.match(str+'$') == str) };
+      function changeWidth(id,width) {  document.getElementById(id).style.width = width; };
+      function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
+      function toggleImage(image) {
+        if (image.src.endsWith('images/expanded.gif')) 
+          image.src = image.src.replace('expanded', 'collapsed');
+        else 
+          image.src = image.src.replace('collapsed', 'expanded');
+      };
+      function showHide(id) {
+        element = document.getElementById(id);
+        element.style.display = (element.style.display == 'block')? 'none' : 'block';
+      };
+      function showHideByClass(name) {
+		    var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+		      elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
+        }
+      };
+      function showByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'block';
+        }
+      };
+      function hideByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'none';
+        }
+      };
+      function showById(id) {
+        document.getElementById(id).style.display = ''
+      };
+      function hideById(id) {
+        document.getElementById(id).style.display = 'none'
+      };
+    </script>
+      <script language="javascript">window.onload=init;</script>
+      <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
+           tabber code, then the init code -->
+      <script type="text/javascript" src="./css/tabber.js"></script>
+      <link type="text/css" media="screen" rel="stylesheet" href="./css/tabber.css" />
+    </head><body><div id="leftcolumn"><div id="tree">
+      <ul><li id="2091001526"><a href="org.specs2.control.ExceptionsSpec.html#ExceptionsSpec">ExceptionsSpec</a>
+            
+          </li></ul>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['2091001526','2091001526'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+    </div></div><div id="central"><title>ExceptionsSpec</title><a name="ExceptionsSpec"><h2 specId="2091001526">ExceptionsSpec</h2></a><status class="ok"><div class="level0" style="display: show"><p>The Exceptions trait provides functional ways to catch exceptions and deal with them:</p>
+<ul>
+  <li>tryo returns the result in an Option</li>
+  <li>trye returns the result in an Either with the Left value being a function of the exception</li>
+  <li>catchAll is similar to trye but even catches Throwables</li>
+  <li>tryOr returns the result or a value built from the thrown exception</li>
+  <li>catchAllOr is similar to tryOr but even catches Throwables</li>
+  <li>tryOrElse returns the result or a default value</li>
+  <li>tryMap returns different values depending on the success of the expression</li>
+  <li>tryOk returns true iff the expression doesn't throw an Exception</li>
+</ul></div></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">tryo executes an expression and returns an Option</div></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">tryOr executes an expression and returns the result or a default value. It returns</div></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">tryOrElse executes an expression and returns the result or another value. It returns</div></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">tryMap executes an expression and returns</div></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">tryOk executes an expression and returns a Boolean</div></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">trye executes an expression and returns an Either value</div></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">catchAll executes an expression and returns an Either value</div></status><status class="ok"><p></p></status><status class="ok"><div class="level0" style="display: show">tryOr executes an expression and returns the result or a default value. It returns</div></status></div><div id="rightcolumn"></div></body></html>
