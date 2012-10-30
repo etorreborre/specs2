@@ -26,15 +26,15 @@ class NodeFunctionsSpec extends Specification with Grouped { def is =
                                                                                                                         end
 
   "matchNode" - new g1 {
-    e1 = <a/>.matchNode(<a/>)
-    e2 = <a n="v" n2="v2"/>.matchNode(<a/>, List("n"))
-    e3 = <a n="v" n2="v2"/>.matchNode(<a/>, List("n", "n2"))
-    e4 = <a n="v" n2="v2"/>.matchNode(<a/>, attributeValues = Map("n" -> "v"))
+    e1 := <a/>.matchNode(<a/>)
+    e2 := <a n="v" n2="v2"/>.matchNode(<a/>, List("n"))
+    e3 := <a n="v" n2="v2"/>.matchNode(<a/>, List("n", "n2"))
+    e4 := <a n="v" n2="v2"/>.matchNode(<a/>, attributeValues = Map("n" -> "v"))
   }
 
   "exactMatch" - new g2 {
-    e1 = <a/>.matchNode(<a/>, exactMatch = true)
-    e2 = <a n="v" n2="v2"/>.matchNode(<a/>, List("n", "n2"), exactMatch = true)
-    e3 = <a n="v" n2="v2"/>.matchNode(<a/>, attributeValues = Map("n" -> "v", "n2" -> "v2"), exactMatch = true)
+    e1 := <a/>.matchNode(<a/>, exactMatch = true)
+    e2 := <a n="v" n2="v2"/>.matchNode(<a/>, List("n", "n2"), exactMatch = true)
+    e3 := <a n="v" n2="v2"/>.matchNode(<a/>, attributeValues = Map("n" -> "v", "n2" -> "v2"), exactMatch = true)
   }
 }

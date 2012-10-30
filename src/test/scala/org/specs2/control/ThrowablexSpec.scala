@@ -28,22 +28,22 @@ The Throwablex trait provides extensions to regular throwables:
                                                                                                                         end
 
   "chained" - new g1 with ThrowablexContext {
-	  e1 = e.chainedExceptions      === List(e.getCause)
-	  e2 = e.getFullStackTrace.size === e.getStackTrace.size + e.getCause.getStackTrace.size
-    e3 = e.messageAndCause        === "message. Cause: cause"
+	  e1 := e.chainedExceptions      === List(e.getCause)
+	  e2 := e.getFullStackTrace.size === e.getStackTrace.size + e.getCause.getStackTrace.size
+    e3 := e.messageAndCause        === "message. Cause: cause"
   }
   "location" - new g2 with ThrowablexContext {
-    e1 = e.location                === "ThrowablexContext.scala:6"
-    e2 = e.classLocation           === "org.specs2.control.ThrowablexContext:6"
-    e3 = e.fullLocation            === "org.specs2.control.ThrowablexContext (ThrowablexContext.scala:6)"
-    e4 = TraceLocation(trace).path === "org/specs2/control/ThrowablexContext.scala"
+    e1 := e.location                === "ThrowablexContext.scala:6"
+    e2 := e.classLocation           === "org.specs2.control.ThrowablexContext:6"
+    e3 := e.fullLocation            === "org.specs2.control.ThrowablexContext (ThrowablexContext.scala:6)"
+    e4 := TraceLocation(trace).path === "org/specs2/control/ThrowablexContext.scala"
   }
   "filter" - new g3 with ThrowablexContext {
-    e1 = e.filter("org.specs2.control").getStackTrace.toList.map(_.toString) must containMatch("org.specs2.control")
-    e2 = e.filterNot("org.specs2.control").getStackTrace.toList.map(_.toString) must not containMatch("org.specs2.control")
+    e1 := e.filter("org.specs2.control").getStackTrace.toList.map(_.toString) must containMatch("org.specs2.control")
+    e2 := e.filterNot("org.specs2.control").getStackTrace.toList.map(_.toString) must not containMatch("org.specs2.control")
   }
   "stack" - new g5 with ThrowablexContext {
-    e1 = e(3).toString must beMatching(".*apply.*")
-    e2 = e.headOption.map(_.toString).toIterable must containMatch("ThrowablexContext")
+    e1 := e(3).toString must beMatching(".*apply.*")
+    e2 := e.headOption.map(_.toString).toIterable must containMatch("ThrowablexContext")
   }
 }

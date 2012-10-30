@@ -17,14 +17,14 @@ class AnsiColorsSpec extends Specification with Grouped { def is =
                                                                                                                         end
 
   new g1 {
-    e1 = removeColors("hello" + AnsiColors.red) === "hello"
+    e1 := removeColors("hello" + AnsiColors.red) === "hello"
 
-    e2 = color("\nhello\n", "*")        === "\n*hello"+reset+"\n"
-    e3 = color("\nhello", "*")          === "\n*hello"+reset
-    e4 = color("hello\n", "*")          === "*hello"+reset+"\n"
-    e5 = color("hello", "*")            === "*hello"+reset
-    e6 = color("", "*")                 === ""
-    e7 = color("\nhello\nworld\n", "*") === "\n*hello"+reset+"\n*world"+reset+"\n"
+    e2 := color("\nhello\n", "*")        === "\n*hello"+reset+"\n"
+    e3 := color("\nhello", "*")          === "\n*hello"+reset
+    e4 := color("hello\n", "*")          === "*hello"+reset+"\n"
+    e5 := color("hello", "*")            === "*hello"+reset
+    e6 := color("", "*")                 === ""
+    e7 := color("\nhello\nworld\n", "*") === "\n*hello"+reset+"\n*world"+reset+"\n"
   }
 
 }

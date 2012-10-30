@@ -573,13 +573,13 @@ When you create acceptance specifications, you have to find names to reference y
       trait Examples extends Grouped with Matchers {
         // group of examples with no description
         new g1 {
-          e1 = ok
-          e2 = ok
+          e1 := ok
+          e2 := ok
         }
         // group of examples with a description for the group
         "second group of examples" - new g2 {
-          e1 = ok
-          e2 = ok
+          e1 := ok
+          e2 := ok
         }
       }
 
@@ -593,12 +593,12 @@ You can define additional variables in your group traits:
          def service: Service = new LocalService
        }
        "a group of examples" - new g1 with Local {
-         e1 = ok
-         e2 = ok
+         e1 := ok
+         e2 := ok
        }
        "another group of examples" - new g2 with Local {
-         e1 = ok
-         e2 = ok
+         e1 := ok
+         e2 := ok
        }
 
 However, the `service` variable will be shared by all the examples of each group, which can be potentially troublesome if that variable is mutated. If you want to provide complete isolation for each example, you should instead use the `org.specs2.specification.Groups` trait and call each group as a function:
@@ -614,8 +614,8 @@ However, the `service` variable will be shared by all the examples of each group
          }
          "a group of examples" - new g1 with Local {
            // each example will have its own instance of Service
-           e1 = ok
-           e2 = ok
+           e1 := ok
+           e2 := ok
          }
        }
 

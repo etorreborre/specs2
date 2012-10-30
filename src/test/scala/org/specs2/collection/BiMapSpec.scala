@@ -19,10 +19,10 @@ trait BiMapExamples extends Grouped with MustMatchers {
   val bimap = Seq("one" <-> 1, "two" <-> 2, "three" <-> 3)
 
   "BiMap api" - new g1 {
-    e1 = bimap.values === Seq(1, 2, 3)
-    e2 = bimap.fromKey("one") === Some(1)
-    e3 = bimap.fromValue(2) === Some("two")
-    e4 = bimap.containsValue(3)
-    e5 = bimap.containsKey("three")
+    e1 := bimap.values === Seq(1, 2, 3)
+    e2 := bimap.fromKey("one") === Some(1)
+    e3 := bimap.fromValue(2) === Some("two")
+    e4 := bimap.containsValue(3)
+    e5 := bimap.containsKey("three")
   }
 }

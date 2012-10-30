@@ -36,47 +36,47 @@ class TimerSpec extends Specification with Grouped {  def is =
   "timer is not started" - new g1 {
     val timer = TestTimer()
 
-    e1 = timer.neverStarted must beTrue
-  	e2 = timer.isStarted must beFalse
-  	e3 = timer.hms must_== "0 second"
-  	e4 = timer.time must_== "0 ms"
+    e1 := timer.neverStarted must beTrue
+  	e2 := timer.isStarted must beFalse
+  	e3 := timer.hms must_== "0 second"
+  	e4 := timer.time must_== "0 ms"
   }	
   
   "timer is started" - new g2 {
     val timer = TestTimer().start
 
-    e1 = timer.neverStarted must beFalse
-	  e2 = timer.isStarted must beTrue
-	  e3 = timer.time must_== "0 ms"
+    e1 := timer.neverStarted must beFalse
+	  e2 := timer.isStarted must beTrue
+	  e3 := timer.time must_== "0 ms"
   }	
 
   "timer is stopped" - new g3  {
     val timer = TestTimer().set(currentTime = 0L).start.
                             set(currentTime = 500L).stop
 							
-    e1 = timer.neverStarted must beFalse
-	  e2 = timer.isStarted must beFalse
+    e1 := timer.neverStarted must beFalse
+	  e2 := timer.isStarted must beFalse
 	
-    e3 = TestTimer().set(currentTime = 1000L).start.
-                     set(currentTime = 2000L).stop.hms must_== "1 second"
+    e3 := TestTimer().set(currentTime = 1000L).start.
+                      set(currentTime = 2000L).stop.hms must_== "1 second"
   
-    e4 = TestTimer().set(currentTime = 1000L).start.
-                     set(currentTime = 2500L).stop.time must beMatching("1 second, 500 ms")
+    e4 := TestTimer().set(currentTime = 1000L).start.
+                      set(currentTime = 2500L).stop.time must beMatching("1 second, 500 ms")
                                                                                          
-    e5 = TestTimer().set(currentTime = 0L).start.
-                     set(currentTime = 3800010L).stop.time must beMatching("1 hour 3 minutes 20 seconds, 10 ms")
+    e5 := TestTimer().set(currentTime = 0L).start.
+                      set(currentTime = 3800010L).stop.time must beMatching("1 hour 3 minutes 20 seconds, 10 ms")
   }	
 
   "nested starts" - new g4 {
-    e1 = TestTimer().set(currentTime = 1000L).start.
-                     set(currentTime = 2000L).start.
-                     set(currentTime = 3000L).stop.
-                     set(currentTime = 4000L).stop.time must beMatching("3 seconds, 0 ms")
+    e1 := TestTimer().set(currentTime = 1000L).start.
+                      set(currentTime = 2000L).start.
+                      set(currentTime = 3000L).stop.
+                      set(currentTime = 4000L).stop.time must beMatching("3 seconds, 0 ms")
   }
     
   "times addition" - new g5 {
-    e1 = (TestTimer().runFor(100L) add TestTimer().runFor(200L)).time === "200 ms"
-    e2 = (TestTimer().set(currentTime = 300L).start add TestTimer().set(currentTime = 100L).start).time === "200 ms"
+    e1 := (TestTimer().runFor(100L) add TestTimer().runFor(200L)).time === "200 ms"
+    e2 := (TestTimer().set(currentTime = 300L).start add TestTimer().set(currentTime = 100L).start).time === "200 ms"
   }
 
 	

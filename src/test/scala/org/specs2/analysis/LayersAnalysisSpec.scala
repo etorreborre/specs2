@@ -25,8 +25,8 @@ class LayersAnalysisSpec extends Specification with DataLayers with Grouped { de
                                                                                                                         end
 
   "dependencies" - new g1 {
-    e1 = forAll(okLayers) { (ls: Layers) => ls must beRespected }
-    e2 = forAll(koLayers) { (ls: Layers) => ls must not beRespected }.set(maxDiscarded -> 1000)
+    e1 := forAll(okLayers) { (ls: Layers) => ls must beRespected }
+    e2 := forAll(koLayers) { (ls: Layers) => ls must not beRespected }.set(maxDiscarded -> 1000)
   }
 }
 

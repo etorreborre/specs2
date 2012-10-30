@@ -10,7 +10,7 @@ class QuoteSpec extends Specification with Grouped { def is =
   "but if it is empty the separator will not be displayed"                                                              ! g2.e2
 
   new g1 {
-    e1 = "Warning".prefix(": ", "dangerous") === "Warning: dangerous"
-    e2 = "".prefix(": ", "dangerous")        === "dangerous"
+    e1 := "Warning".prefix(": ", "dangerous") === "Warning: dangerous"
+    e2 := "".prefix(": ", "dangerous")        === "dangerous"
   }
 }
