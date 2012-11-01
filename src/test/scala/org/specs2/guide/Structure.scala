@@ -1646,8 +1646,8 @@ Here's something you can do to automatically create an index page for your speci
 
         examplesLinks("Example specifications")
 
-		// see the SpecificationsFinder trait for the parameters of the 'specifications' method
-        def examplesLinks(t: String) = specifications().foldLeft(t.title) { (res, cur) => res ^ see(cur) }
+		    // see the SpecificationsFinder trait for the parameters of the 'specifications' method
+        def examplesLinks(t: String) = t.title ^ specifications().map(see)
       }
 
 The specification above creates an index.html file in the `target/specs2-reports` directory. The specifications method

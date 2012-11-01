@@ -11,10 +11,10 @@ import specification.StandardFragments.{End, Br}
 /**
  * A Fragments object is a list of fragments with a SpecStart and a SpecEnd
  */
-case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] = Vector(),
+case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] = Vector().view,
                      arguments: Arguments = Arguments(), linked: Linked = Linked()) {
 
-  def fragments: Seq[Fragment] = if (middle.isEmpty && !linked.isLink) Vector() else (specStart +: middle :+ specEnd)
+  def fragments: Seq[Fragment] = if (middle.isEmpty && !linked.isLink) Vector().view else (specStart +: middle :+ specEnd)
 
   def specTitleIs(name: SpecName): Fragments = copy(specTitle = specTitle.filterNot(_.title.isEmpty).map(_.overrideWith(name)).orElse(Some(name)))
 
@@ -34,7 +34,7 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   def baseDirIs(dir: String)     = copy(specTitle = specTitle.map(_.baseDirIs(dir)), linked = linked.baseDirIs(dir))
 
   def linkIs(htmlLink: HtmlLink) = copy(linked = linked.linkIs(htmlLink))
-  def seeIs(htmlLink: HtmlLink)  = copy(middle = Vector(), linked = linked.seeIs(htmlLink))
+  def seeIs(htmlLink: HtmlLink)  = copy(middle = Vector().view, linked = linked.seeIs(htmlLink))
   def hide                       = copy(linked = linked.linkIs(HtmlLink(this)).hide)
 
   def executables: Seq[Executable] = fragments.collect { case e: Executable => e }

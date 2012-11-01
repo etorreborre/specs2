@@ -111,15 +111,15 @@ trait FragmentsBuilder extends RegexSteps with ExamplesFactory { outer =>
   def link(htmlLink: HtmlLink, f: Fragments): Fragments                       = f.linkIs(htmlLink)
 
   /** create a html link without including the other specification fragments */
-  def see(s: SpecificationStructure, ss: SpecificationStructure*): Fragments  = see(s.content, ss.map(_.content):_*)
-  def see(ss: Seq[SpecificationStructure], dummy: Int = 0): Fragments         = see(ss.map(_.content))
-  def see(s: SpecificationStructure): Fragments                               = see(s.content)
-  def see(fs: Fragments): Fragments                                           = see(HtmlLink(fs), fs)
-  def see(fs: Fragments, fss: Fragments*): Fragments                          = see(fs +: fss)
-  def see(fss: Seq[Fragments]): Fragments                                     = ma(fss.map(see)).sum
+  def see(s: SpecificationStructure, ss: SpecificationStructure*): Fragments       = see(s.emptyContent, ss.map(_.emptyContent):_*)
+  def see(ss: Seq[SpecificationStructure])(implicit p1: ImplicitParam1): Fragments = see(ss.map(_.emptyContent))
+  def see(s: SpecificationStructure): Fragments                                    = see(s.emptyContent)
+  def see(fs: Fragments): Fragments                                                = see(HtmlLink(fs), fs)
+  def see(fs: Fragments, fss: Fragments*): Fragments                               = see(fs +: fss)
+  def see(fss: Seq[Fragments]): Fragments                                          = ma(fss.map(see)).sum
   /** create a see-only link directly on a specification, with a given link */
-  def see(htmlLink: HtmlLink, s: SpecificationStructure): Fragments            = see(htmlLink, s.content)
-  def see(htmlLink: HtmlLink, fs: Fragments): Fragments                        = fs.seeIs(htmlLink)
+  def see(htmlLink: HtmlLink, s: SpecificationStructure): Fragments                = see(htmlLink, s.emptyContent)
+  def see(htmlLink: HtmlLink, fs: Fragments): Fragments                            = fs.seeIs(htmlLink)
 
   /** create markdown links from string + spec identification */
   implicit def specIdentificationMarkdownLink(s: String): SpecIdentificationMarkdownLink = new SpecIdentificationMarkdownLink(s)
@@ -158,6 +158,7 @@ class FragmentsFragment(fs: =>Fragments) {
     case _                    => fs add f
   }
   def ^(other: Seq[Fragment]) = fs add other
+  def ^(other: Seq[Fragments], dummy: Int = 0) = fs add other.flatMap(_.fragments)
 
   def ^(other: Fragments) = {
     other match {

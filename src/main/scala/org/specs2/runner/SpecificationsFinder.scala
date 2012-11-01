@@ -6,6 +6,7 @@ import io._
 import reflect.Classes
 import specification.SpecificationStructure
 import main.Arguments
+import control.Stacktraces
 
 /**
  * This trait loads specifications found on a given source directory based
@@ -24,8 +25,10 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput {
                      filter: String => Boolean = { (name: String) => true },
                      basePath: String = FromSource.srcTestDir,
                      verbose: Boolean = false)
-                    (implicit args: Arguments = Arguments()): Seq[SpecificationStructure] =
-    specificationNames(path, pattern, basePath, verbose).view.filter(filter).flatMap(n => createSpecification(n, verbose))
+                    (implicit args: Arguments = Arguments()): Seq[SpecificationStructure] = {
+    specificationNames(path, pattern, basePath, verbose).view.filter(filter).
+      flatMap(n => createSpecification(n, verbose))
+  }
   /**
    * @param path a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
    * @param pattern a regular expression which is supposed to match an object name extending a Specification
