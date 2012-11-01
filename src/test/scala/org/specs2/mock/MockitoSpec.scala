@@ -59,7 +59,8 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     "a value can be returned when a parameter of the method matches" 			                                              ^
       "a hamcrest matcher" 													                                                                    ! g3().e3^
       "a specs2 matcher" 														                                                                    ! g3().e4^
-                                                                                                                        endp^
+      "a set"           														                                                                    ! g3().e5^
+                                                                                                                          endp^
   "It is also possible to throw an exception from a mocked method"                                                      ^
     "then when the mocked method is called, the exception will be thrown" 		                                          ! g4().e1^
     "different successive exceptions can even be thrown" 						                                                    ! g4().e2^
@@ -213,6 +214,11 @@ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
     e4 := {
       list.contains(argThat(beMatching(".*o"))) returns true
       list.contains("o") must_== true
+    }
+    e5 := {
+      list.contains(Set(1)) returns true
+      list.contains(Set(1)) must_== true
+      list.contains(Set(2)) must_== false
     }
   }
   "thrown exceptions" - new g4 with list {

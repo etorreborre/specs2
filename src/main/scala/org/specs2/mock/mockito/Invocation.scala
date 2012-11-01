@@ -25,6 +25,7 @@ import org.mockito.internal.progress.ThreadSafeMockingProgress2
 
 import Invocation.{expandVarArgs, MAX_LINE_LENGTH}
 import org.mockito.internal.matchers.{EqualsFunction0, EqualsFunction1, ArrayEquals, Equals, MatchersPrinter}
+import collection.GenSetLike
 
 /**
  * This class redefines Mockito Invocation behavior class when evaluating byname arguments.
@@ -61,6 +62,10 @@ class Invocation extends PrintableInvocation with InvocationOnMock with Printing
       }
       else if (arg.isInstanceOf[org.specs2.matcher.Matcher[_]]) {
         matchers.add(new org.specs2.mock.HamcrestMatcherAdapter(arg.asInstanceOf[org.specs2.matcher.Matcher[_]]))
+      }
+      // special case for sets because they also are functions but we can match with equals with them
+      else if (arg.isInstanceOf[GenSetLike[_,_]]) {
+        matchers.add(new Equals(arg))
       }
       else if (arg.isInstanceOf[Function1[_,_]]) {
         matchers.add(new EqualsFunction1(arg))
