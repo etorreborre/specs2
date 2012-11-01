@@ -9,6 +9,7 @@ class SentencesSpec extends Specification with Tables with Sentences {
     "sentence"             | "negated"               | "reversible" |>
     "it has a"             ! "it does not have a"    ! true         |
     "it is a"              ! "it is not a"           ! true         |
+    "it is a\n"            ! "it is not a\n"         ! true         |
     "they are a"           ! "they are not a"        ! true         |
     "it does a"            ! "it does not a"         ! true         |
     "it has changed"       ! "it has not changed"    ! true         |
@@ -20,6 +21,7 @@ class SentencesSpec extends Specification with Tables with Sentences {
     "it must do"           ! "it must not do"        ! true         |
     "it should do"         ! "it should not do"      ! true         |
     "they have a"          ! "they do not have a"    ! true         |
+    "they have been"       ! "they have not been"    ! true         |
     "it isn't a"           ! "it is a"               ! false        |
     "they aren't a"        ! "they are a"            ! false        |
     "it does a"            ! "it does not a"         ! true         |

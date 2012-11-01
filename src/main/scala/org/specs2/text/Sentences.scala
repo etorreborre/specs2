@@ -33,7 +33,7 @@ trait Sentences {
       "has "+pr   <-> "does not have "+pr,
       "have "+pr  <-> "do not have "+pr,
       "has"       <-> "has not",
-      "have"      <-> "do not have",
+      "have"      <-> "have not",
       "has"       <-> "doesn't have",
       "does"      <-> "does not",
       "does"      <-> "doesn't",
@@ -59,11 +59,11 @@ trait Sentences {
     def removeRegex(s: String) = s.replaceAll("\\[.+\\]", "")
 
     // try to match the negations first
-    negationsTable.values.find(v => sentence.matches(".*"+v+".*")).flatMap { negationToReplace =>
+    negationsTable.values.find(v => sentence.matches("(?s).*"+v+".*")).flatMap { negationToReplace =>
       negationsTable.fromValue(negationToReplace).map(key => sentence.replace(removeRegex(negationToReplace), removeRegex(key)))
     }.orElse {
     // then the positive affirmations
-    negationsTable.keys.find(k =>sentence.matches(".*"+k+".*")).flatMap { toReplace =>
+    negationsTable.keys.find(k =>sentence.matches("(?s).*"+k+".*")).flatMap { toReplace =>
      negationsTable.fromKey(toReplace).map(value => sentence.replace(removeRegex(toReplace), removeRegex(value)))
     }}.
     // default to not(sentence)
@@ -71,3 +71,4 @@ trait Sentences {
   }
 }
 
+object Sentences extends Sentences
