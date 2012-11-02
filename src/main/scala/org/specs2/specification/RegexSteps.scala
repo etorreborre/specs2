@@ -7,6 +7,7 @@ import specification.StandardFragments.{Backtab, Tab, Br, End}
 import internal.scalaz.Scalaz._
 import control.ImplicitParameters
 import data.TuplesToSeq
+import matcher.MatchResult
 
 /**
  * This trait provides building blocks to create steps and examples from regular expression.
@@ -100,6 +101,7 @@ trait RegexStepsFactory extends ImplicitParameters {
     def and[T](f: (String, String, String, String, String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract9(text)) } }
     def and[T](f: (String, String, String, String, String, String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract10(text)) } }
     def and[T](f: Seq[String] => T)(implicit p: ImplicitParam, p1: ImplicitParam1) = new Given[T](regex, groups) { def extract(text: String)  = f(extractAll(text)) }
+
 
     def and[T, S](f: T => String => S) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t)(extract1(text)) } }
     def and[T, S](f: T => (String, String) => S)(implicit p: ImplicitParam2) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).tupled(extract2(text)) } }

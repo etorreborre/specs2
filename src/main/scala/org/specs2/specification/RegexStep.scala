@@ -76,17 +76,21 @@ object RegexStep {
     if (full.toString.isEmpty) group.replaceAllIn(text, (_:Regex.Match) match { case Regex.Groups(v) => v.replace("\\", "\\\\") })
     else                       text
 
-  def extract1(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = (extractAll(t, full, group): @unchecked) match { case s1::_ => s1 }
-  def extract2(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = (extractAll(t, full, group): @unchecked) match { case s1::s2::_ => (s1,s2) }
-  def extract3(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::_ => (s1,s2,s3) }
-  def extract4(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::_ => (s1,s2,s3,s4) }
-  def extract5(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::_ => (s1,s2,s3,s4,s5) }
-  def extract6(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::_ => (s1,s2,s3,s4,s5,s6) }
-  def extract7(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::_ => (s1,s2,s3,s4,s5,s6,s7) }
-  def extract8(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::_ => (s1,s2,s3,s4,s5,s6,s7,s8) }
-  def extract9(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::s9::_ => (s1,s2,s3,s4,s5,s6,s7,s8,s9) }
-  def extract10(t: String, full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::s9::s10::_ => (s1,s2,s3,s4,s5,s6,s7,s8,s9,s10) }
+  def extract1(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(t, (extractAll(t, full, group): @unchecked) match { case s1::_ => s1 }                                                                   )
+  def extract2(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(t, (extractAll(t, full, group): @unchecked) match { case s1::s2::_ => (s1,s2) }                                                          )
+  def extract3(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::_ => (s1,s2,s3) }                                                   )
+  def extract4(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::_ => (s1,s2,s3,s4) }                                            )
+  def extract5(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::_ => (s1,s2,s3,s4,s5) }                                     )
+  def extract6(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::_ => (s1,s2,s3,s4,s5,s6) }                              )
+  def extract7(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::_ => (s1,s2,s3,s4,s5,s6,s7) }                       )
+  def extract8(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::_ => (s1,s2,s3,s4,s5,s6,s7,s8) }                )
+  def extract9(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::s9::_ => (s1,s2,s3,s4,s5,s6,s7,s8,s9) }         )
+  def extract10(t: String, full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::s9::s10::_ => (s1,s2,s3,s4,s5,s6,s7,s8,s9,s10) })
 
+  private def check[T](string: String, extract: =>T) = tryOr(extract) {
+    case e: MatchError => throw new FailureException(Failure("couldn't extract variables from: "+string))
+    case other         => throw other
+  }
 }
 
 /**
@@ -96,7 +100,7 @@ object RegexStep {
  */
 abstract class Given[T](val regex: String = "", val groupRegex: String = RegexStep.DEFAULT_REGEX) extends RegexStep[Unit, T](regex, groupRegex) {
   /** if the extraction goes wrong, then an Error is propagated */
-  private[specs2] def extractContext(text: String): Either[Result, T] = trye(extract(text))((e:Exception) => Error(e))
+  private[specs2] def extractContext(text: String): Either[Result, T] = ResultExecution.executeEither(extract(text))(identity)
 
   def extract(text: String): T
 }
