@@ -107,7 +107,7 @@ abstract class Given[T](val regex: String = "", val groupRegex: String = RegexSt
 
 /** implicit conversions to create Given objects */
 object Given extends ImplicitParameters {
-  implicit def function1ToGiven[T](f: String => T): Given[T] = new Given[T] { def extract(text: String) = f(extract1(text))  }
+  implicit def function1ToGiven[T](f: String => T): Given[T] = new Given[T] { def extract(text: String) = f(tryOrElse(extract1(text))(text))  }
   implicit def function2ToGiven[T](f: (String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract2(text))  }
   implicit def function3ToGiven[T](f: (String, String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract3(text))  }
   implicit def function4ToGiven[T](f: (String, String, String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract4(text))  }

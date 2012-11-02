@@ -31,8 +31,9 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables w
     "Factory methods can be used to create Given/When/Then steps from simple functions"                                 ^
       "Given"                                                                                                           ^
         "with a function"                                                                                               ! g7.e1^
-        "with a regular expression for parsing the whole text and a function"                                           ! g7.e2^
-        "with a regular expression for grouping elements and a function"                                                ! g7.e3^
+        "with a function, using the full string when there's no delimited variable"                                     ! g7.e2^
+        "with a regular expression for parsing the whole text and a function"                                           ! g7.e3^
+        "with a regular expression for grouping elements and a function"                                                ! g7.e4^
                                                                                                                         endp^
       "When"                                                                                                            ^
         "with a function"                                                                                               ! g8.e1^
@@ -128,10 +129,14 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables w
       number0.extract("Two numbers ${1} and ${2}") === 3
     }
     e2 := {
+      val number0: Given[Int] = { (s1: String) => s1.size }
+      number0.extract("hello") === 5
+    }
+    e3 := {
       val number0 = readAs(".*?(\\d+).*(\\d+).*") and { (s1: String, s2: String) => s1.toInt + s2.toInt }
       number0.extract("Two numbers 1 and 2") === 3
     }
-    e3 := {
+    e4 := {
       val number0 = groupAs("\\d+") and { (s1: String, s2: String) => s1.toInt + s2.toInt }
       number0.extract("Two numbers 1 and 2") === 3
     }
