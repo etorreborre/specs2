@@ -34,6 +34,7 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables w
         "with a function, using the full string when there's no delimited variable"                                     ! g7.e2^
         "with a regular expression for parsing the whole text and a function"                                           ! g7.e3^
         "with a regular expression for grouping elements and a function"                                                ! g7.e4^
+        "with a function returning a MatchResult[T]"                                                                    ! g7.e5^
                                                                                                                         endp^
       "When"                                                                                                            ^
         "with a function"                                                                                               ! g8.e1^
@@ -139,6 +140,11 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables w
     e4 := {
       val number0 = groupAs("\\d+") and { (s1: String, s2: String) => s1.toInt + s2.toInt }
       number0.extract("Two numbers 1 and 2") === 3
+    }
+    e5 := {
+      //val number0: Given[Int] = { (s1: String) => s1.size === 5 }
+      //number0.extract("hello") === 5
+      pending
     }
   }
   "factory methods for When" - new g8 {

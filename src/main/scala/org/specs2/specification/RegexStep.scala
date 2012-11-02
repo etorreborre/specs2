@@ -76,19 +76,19 @@ object RegexStep {
     if (full.toString.isEmpty) group.replaceAllIn(text, (_:Regex.Match) match { case Regex.Groups(v) => v.replace("\\", "\\\\") })
     else                       text
 
-  def extract1(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(t, (extractAll(t, full, group): @unchecked) match { case s1::_ => s1 }                                                                   )
-  def extract2(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(t, (extractAll(t, full, group): @unchecked) match { case s1::s2::_ => (s1,s2) }                                                          )
-  def extract3(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::_ => (s1,s2,s3) }                                                   )
-  def extract4(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::_ => (s1,s2,s3,s4) }                                            )
-  def extract5(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::_ => (s1,s2,s3,s4,s5) }                                     )
-  def extract6(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::_ => (s1,s2,s3,s4,s5,s6) }                              )
-  def extract7(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::_ => (s1,s2,s3,s4,s5,s6,s7) }                       )
-  def extract8(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::_ => (s1,s2,s3,s4,s5,s6,s7,s8) }                )
-  def extract9(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::s9::_ => (s1,s2,s3,s4,s5,s6,s7,s8,s9) }         )
-  def extract10(t: String, full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::s9::s10::_ => (s1,s2,s3,s4,s5,s6,s7,s8,s9,s10) })
+  def extract1(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(1, t, (extractAll(t, full, group): @unchecked) match { case s1::_ => s1 }                                                                   )
+  def extract2(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(2, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::_ => (s1,s2) }                                                          )
+  def extract3(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(3, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::_ => (s1,s2,s3) }                                                   )
+  def extract4(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(4, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::_ => (s1,s2,s3,s4) }                                            )
+  def extract5(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(5, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::_ => (s1,s2,s3,s4,s5) }                                     )
+  def extract6(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(6, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::_ => (s1,s2,s3,s4,s5,s6) }                              )
+  def extract7(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(7, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::_ => (s1,s2,s3,s4,s5,s6,s7) }                       )
+  def extract8(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(8, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::_ => (s1,s2,s3,s4,s5,s6,s7,s8) }                )
+  def extract9(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(9, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::s9::_ => (s1,s2,s3,s4,s5,s6,s7,s8,s9) }         )
+  def extract10(t: String, full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(10, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::s9::s10::_ => (s1,s2,s3,s4,s5,s6,s7,s8,s9,s10) })
 
-  private def check[T](string: String, extract: =>T) = tryOr(extract) {
-    case e: MatchError => throw new FailureException(Failure("couldn't extract variables from: "+string))
+  private def check[T](variablesNb: Int, string: String, extract: =>T) = tryOr(extract) {
+    case e: MatchError => if (variablesNb == 1) string else throw new FailureException(Failure("couldn't extract "+variablesNb+" variables from: "+string))
     case other         => throw other
   }
 }
@@ -107,7 +107,7 @@ abstract class Given[T](val regex: String = "", val groupRegex: String = RegexSt
 
 /** implicit conversions to create Given objects */
 object Given extends ImplicitParameters {
-  implicit def function1ToGiven[T](f: String => T): Given[T] = new Given[T] { def extract(text: String) = f(tryOrElse(extract1(text))(text))  }
+  implicit def function1ToGiven[T](f: String => T): Given[T] = new Given[T] { def extract(text: String) = f(extract1(text))  }
   implicit def function2ToGiven[T](f: (String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract2(text))  }
   implicit def function3ToGiven[T](f: (String, String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract3(text))  }
   implicit def function4ToGiven[T](f: (String, String, String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract4(text))  }
