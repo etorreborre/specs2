@@ -32,7 +32,7 @@
       <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This top-level object can be used to execute Specifications found in the source directory
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a name="org.specs2.runner.FilesRunner" class="extype" href="runner/FilesRunner.html">FilesRunner</a>, <a name="org.specs2.runner.SystemExit" class="extype" href="runner/SystemExit.html">SystemExit</a>, <a name="org.specs2.runner.SpecificationsFinder" class="extype" href="runner/SpecificationsFinder.html">SpecificationsFinder</a>, <span name="org.specs2.io.ConsoleOutput" class="extype">ConsoleOutput</span>, <span name="org.specs2.reflect.Classes" class="extype">Classes</span>, <a name="org.specs2.io.Output" class="extype" href="io/Output.html">Output</a>, <span name="org.specs2.io.FileSystem" class="extype">FileSystem</span>, <span name="org.specs2.io.FileWriter" class="extype">FileWriter</span>, <span name="org.specs2.io.FileReader" class="extype">FileReader</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><a name="org.specs2.runner.FilesRunner" class="extype" href="runner/FilesRunner.html">FilesRunner</a>, <a name="org.specs2.runner.SystemExit" class="extype" href="runner/SystemExit.html">SystemExit</a>, <a name="org.specs2.runner.SpecificationsFinder" class="extype" href="runner/SpecificationsFinder.html">SpecificationsFinder</a>, <span name="org.specs2.text.SourceFile" class="extype">SourceFile</span>, <span name="org.specs2.io.ConsoleOutput" class="extype">ConsoleOutput</span>, <span name="org.specs2.reflect.Classes" class="extype">Classes</span>, <a name="org.specs2.io.Output" class="extype" href="io/Output.html">Output</a>, <span name="org.specs2.io.FileSystem" class="extype">FileSystem</span>, <span name="org.specs2.io.FileWriter" class="extype">FileWriter</span>, <span name="org.specs2.io.FileReader" class="extype">FileReader</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
     
 
@@ -46,7 +46,7 @@
               <span class="filtertype">Inherited</span>
               <ol><li class="hideall out"><span>Hide All</span></li>
               <li class="showall in"><span>Show all</span></li></ol>
-              <ol id="linearization"><li name="org.specs2.files" class="in"><span>files</span></li><li name="org.specs2.runner.FilesRunner" class="in"><span>FilesRunner</span></li><li name="org.specs2.runner.SystemExit" class="in"><span>SystemExit</span></li><li name="org.specs2.runner.SpecificationsFinder" class="in"><span>SpecificationsFinder</span></li><li name="org.specs2.io.ConsoleOutput" class="in"><span>ConsoleOutput</span></li><li name="org.specs2.reflect.Classes" class="in"><span>Classes</span></li><li name="org.specs2.io.Output" class="in"><span>Output</span></li><li name="org.specs2.io.FileSystem" class="in"><span>FileSystem</span></li><li name="org.specs2.io.FileWriter" class="in"><span>FileWriter</span></li><li name="org.specs2.io.FileReader" class="in"><span>FileReader</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+              <ol id="linearization"><li name="org.specs2.files" class="in"><span>files</span></li><li name="org.specs2.runner.FilesRunner" class="in"><span>FilesRunner</span></li><li name="org.specs2.runner.SystemExit" class="in"><span>SystemExit</span></li><li name="org.specs2.runner.SpecificationsFinder" class="in"><span>SpecificationsFinder</span></li><li name="org.specs2.text.SourceFile" class="in"><span>SourceFile</span></li><li name="org.specs2.io.ConsoleOutput" class="in"><span>ConsoleOutput</span></li><li name="org.specs2.reflect.Classes" class="in"><span>Classes</span></li><li name="org.specs2.io.Output" class="in"><span>Output</span></li><li name="org.specs2.io.FileSystem" class="in"><span>FileSystem</span></li><li name="org.specs2.io.FileWriter" class="in"><span>FileWriter</span></li><li name="org.specs2.io.FileReader" class="in"><span>FileReader</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
             </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -227,7 +227,7 @@ write("./dir/hello.txt") { out =>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if the file can be written</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileSystem</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.runner.SpecificationsFinder#classNames" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.text.SourceFile#classNames" data-isabs="false">
       <a id="classNames(String,String,Pattern,String,Boolean):Seq[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -238,17 +238,10 @@ write("./dir/hello.txt") { out =>
         <span class="name">classNames</span><span class="params">(<span name="packageName">packageName: String</span>, <span name="content">content: String</span>, <span name="pattern">pattern: <span name="java.util.regex.Pattern" class="extype">Pattern</span></span>, <span name="suffix">suffix: String</span>, <span name="verbose">verbose: <span name="scala.Boolean" class="extype">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: Seq[String]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">adds possible specification class names found in the file <code>filePath</code><br>
-The specification pattern is: "\\s*object\\s*(" + pattern + ")\\s*extends\\s*.*Spec.*\\s*\\{"
-This may be later extended to support other arbitrary patterns
-</br>
-The specification pattern is: "\\s*object\\s*(" + pattern + ")\\s*extends\\s*.*Spec.*\\s*\\{"
-This may be later extended to support other arbitrary patterns
-</p><div class="fullcomment"><div class="comment cmt"><p>adds possible specification class names found in the file <code>filePath</code><br>
-The specification pattern is: "\\s*object\\s*(" + pattern + ")\\s*extends\\s*.*Spec.*\\s*\\{"
-This may be later extended to support other arbitrary patterns
-</p></div><dl class="paramcmts block"><dt class="param">packageName</dt><dd class="cmt"><p>the base package for the class names</p></dd><dt class="param">content</dt><dd class="cmt"><p>content of the file</p></dd><dt class="param">pattern</dt><dd class="cmt"><p>a regular expression which is supposed to match an object name extending a Specification
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.runner.SpecificationsFinder" class="extype" href="runner/SpecificationsFinder.html">SpecificationsFinder</a></dd></dl></div>
+      <p class="shortcomment cmt">extract the class names corresponding to a pattern found in a content
+</p><div class="fullcomment"><div class="comment cmt"><p>extract the class names corresponding to a pattern found in a content
+</p></div><dl class="paramcmts block"><dt class="param">packageName</dt><dd class="cmt"><p>the base package for the class names</p></dd><dt class="param">content</dt><dd class="cmt"><p>content of a source file</p></dd><dt class="param">pattern</dt><dd class="cmt"><p>a regular expression for a class name
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>SourceFile</dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
@@ -893,7 +886,7 @@ Tries to load the class name and cast it to a specification
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.runner.SpecificationsFinder#packageName" data-isabs="false">
+    </li><li visbl="pub" name="org.specs2.text.SourceFile#packageName" data-isabs="false">
       <a id="packageName(String):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -904,7 +897,7 @@ Tries to load the class name and cast it to a specification
         <span class="name">packageName</span><span class="params">(<span name="content">content: String</span>)</span><span class="result">: String</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the package declaration at the beginning of a file</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.runner.SpecificationsFinder" class="extype" href="runner/SpecificationsFinder.html">SpecificationsFinder</a></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the package name corresponding to the package declarations at the beginning of a file</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>SourceFile</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.io.Output#print" data-isabs="false">
       <a id="print(Any):Unit"></a>
       <h4 class="signature">
@@ -1293,6 +1286,8 @@ write("./dir/hello.txt") { out =>
               <h3>Inherited from <a name="org.specs2.runner.SystemExit" class="extype" href="runner/SystemExit.html">SystemExit</a></h3>
             </div><div name="org.specs2.runner.SpecificationsFinder" class="parent">
               <h3>Inherited from <a name="org.specs2.runner.SpecificationsFinder" class="extype" href="runner/SpecificationsFinder.html">SpecificationsFinder</a></h3>
+            </div><div name="org.specs2.text.SourceFile" class="parent">
+              <h3>Inherited from <span name="org.specs2.text.SourceFile" class="extype">SourceFile</span></h3>
             </div><div name="org.specs2.io.ConsoleOutput" class="parent">
               <h3>Inherited from <span name="org.specs2.io.ConsoleOutput" class="extype">ConsoleOutput</span></h3>
             </div><div name="org.specs2.reflect.Classes" class="parent">
