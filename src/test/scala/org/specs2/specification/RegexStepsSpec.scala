@@ -40,6 +40,7 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables w
         "with a function"                                                                                               ! g8.e1^
         "with a regular expression for parsing the whole text and a function"                                           ! g8.e2^
         "with a regular expression for grouping elements and a function"                                                ! g8.e3^
+        "with a function returning a MatchResult[T]"                                                                    ! g8.e4^
                                                                                                                         endp^
       "Then"                                                                                                            ^
         "with a function"                                                                                               ! g9.e1^
@@ -54,7 +55,7 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables w
     e1 := number1.extractContext("Given the following number: ${3}") must beRight(3)
     e2 := number1WithFailure.extractContext("") must beLeft.like { case e => e must beFailing }
     e3 := number1WithSkipped.extractContext("") must beLeft.like { case e => e must beSkipped }
-    e4 := number1.extractContext("1") must beLeft.like { case e => e must beFailing(message = "couldn't extract variables from: 1") }
+    e4 := number1WithMatchError.extractContext("${1} and 2") must beLeft.like { case e => e must beFailing(message = "\\Qcouldn't extract 2 variables from: ${1} and 2\\E") }
     e5 := number1.extractContext("Given the following number: ${x}") must beLeft.like { case e => e must beError }
   }
 
@@ -142,9 +143,8 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables w
       number0.extract("Two numbers 1 and 2") === 3
     }
     e5 := {
-      //val number0: Given[Int] = { (s1: String) => s1.size === 5 }
-      //number0.extract("hello") === 5
-      pending
+      val number0: Given[Int] = { (s1: String) => (s1.size ==== 5) }
+      number0.extract("hello") === 5
     }
   }
   "factory methods for When" - new g8 {
@@ -158,6 +158,10 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables w
     }
     e3 := {
       val number0 = groupAs("\\d+") and { n1: Int => (s1: String, s2: String) => (n1, s1.toInt + s2.toInt) }
+      number0.extract(1, "Two numbers 1 and 2") === (1, 3)
+    }
+    e4 := {
+      val number0 = groupAs("\\d+") and { n1: Int => (s1: String, s2: String) => (n1, s1.toInt + s2.toInt) must not(beNull) }
       number0.extract(1, "Two numbers 1 and 2") === (1, 3)
     }
   }
@@ -185,6 +189,9 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables w
   }
   object number1 extends Given[Int] {
     def extract(text: String): Int = extract1(text).toInt
+  }
+  object number1WithMatchError extends Given[Int] {
+    def extract(text: String): Int = { val (s1, s2) = extract2(text); s1.toInt+s2.toInt }
   }
   object number1WithFailure extends Given[Int] with ThrownExpectations {
     def extract(text: String): Int = { failure("xxx"); extract1(text).toInt }
