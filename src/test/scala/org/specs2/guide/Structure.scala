@@ -323,6 +323,10 @@ There are some factory and implicit conversion methods to create Given/When/Then
         val number1: Given[Int] = (s: String) => s.toInt
         number1.extract("pay ${100} now") === 100
 
+        // if no variable is present, the whole text is passed to the function
+        val number1: Given[Int] = (s: String) => s.size
+        number1.extract("all") === 3
+
         // this uses a regular expression with capturing groups matching the full text
         val number1: Given[Int] = readAs(".*(\d+).*") and { (s: String) => s.toInt }
         number1.extract("pay 100 now") === 100
@@ -334,6 +338,11 @@ There are some factory and implicit conversion methods to create Given/When/Then
         // if the Given step is only side-effecting we can omit the `and` call
         // this simplifies the use of Given steps in Unit Specifications
         val number1: Given[Unit] = groupAs("\d+") { (s: String) => value = s.toInt }
+
+ * convert a function `String... => MatchResult[T]` to a `Given[T]` step, passing the `Expectable` value to the next step
+
+        val number1: Given[Int] = (s: String) => s.toInt must be_>=(10)
+        number1.extract("pay ${100} now") === 100
 
  * convert a function `T => String... => S` to a `When[T, S]` step (*note the use of `and` after `readAs` and `groupAs`*)
 
@@ -348,6 +357,11 @@ There are some factory and implicit conversion methods to create Given/When/Then
         // this uses capturing groups directly
         val number2: When[Int, (Int, Int)] = groupAs("\d+") and { (n1: Int) => (s: String) => (n1, s.toInt) }
         number2.extract(100, "with a discount of 10%") === (100, 10)
+
+ * convert a function `T => String... => MatchResult[S]` to a `When[T, S]` step, passing the `Expectable` value to the next step
+
+        val number2: When[Int, Int] = (n1: Int) => (s: String) => (n1 + s.toInt) must be_>=(n1)
+        number2.extract(100, "and add ${10}") === 110
 
  * convert a function `T => String... => Result` to a `Then[T]` step (*note the use of `then` after `readAs` and `groupAs`*)
 
