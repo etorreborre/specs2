@@ -30,6 +30,17 @@ class ExecutionStrategySpec extends mutable.Specification {
         "+ ex4",
         "x ex5").inOrder
     }
+
+    "if the spec is sequential one example is ko, but not in the directly preceding block, then skip all examples" >> {
+      report(spec3) must contain(
+        "spec3",
+        "x ex1",
+        " ko",
+        "+ ex2",
+        "+ ex3",
+        "o ex4",
+        "o ex5").inOrder
+    }
   }
 
   def report(s: SpecificationStructure) = {
@@ -64,5 +75,15 @@ class ExecutionStrategySpec extends mutable.Specification {
     "ex5" ! ko ^ end
   }
 
+  val spec3 = new Specification { def is = sequential ^
+    "spec3".title ^
+      "ex1" ! ko ^
+      step() ^
+      "ex2" ! ok ^
+      "ex3" ! ok ^
+      Step(stopOnFail = true) ^
+      "ex4" ! ok ^
+      "ex5" ! ko ^ end
+  }
 
 }
