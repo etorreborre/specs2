@@ -8,6 +8,12 @@ class FeaturesSpec extends Specification { def is = literate ^
  of implementation!
 
                                                                                                                         """^
+  releases ^
+  preview  ^
+  low      ^
+  end
+
+ val releases =
  "1.3 features                                                                                                          "^
    "Package dependencies specification                                                                                  "! todo^
    "Reporters                                                                                                           "^
@@ -46,8 +52,9 @@ class FeaturesSpec extends Specification { def is = literate ^
      "Using a comparison failure for == mismatches                                                                      "! done^
    "Specs-like specification                                                                                            "! done^
    "Auto-examples by using the expectation ok message                                                                   "! done^
-   "review the contain matchers                                                                                         "! done^
-                                                                                                                        p^
+   "review the contain matchers                                                                                         "! done
+
+  val preview =
   "Preview features                                                                                                     "^
   "High priority                                                                                                        "^
     "A Console reporter                                                                                                 "^
@@ -96,8 +103,9 @@ class FeaturesSpec extends Specification { def is = literate ^
       "verification of the calls                                                                                        "! done^
       "returning stub values                                                                                            "! done^
       "order of method calls                                                                                            "! done^
-      "with argument capture                                                                                            "! done^
-                                                                                                                        p^
+      "with argument capture                                                                                            "! done
+
+ val low =
   "Low priority                                                                                                         "^
     "A Console reporter                                                                                                 "^
       "with a timer                                                                                                     "! done^
@@ -123,6 +131,5 @@ class FeaturesSpec extends Specification { def is = literate ^
       "Given/When/Then                                                                                                  "! done^
       "Arguments                                                                                                        "! done^
       "Runners                                                                                                          "! done^
-      "Expectations: boolean, matchers, properties                                                                      "! done^
-                                                                                                                        end
+      "Expectations: boolean, matchers, properties                                                                      "! done
 }
