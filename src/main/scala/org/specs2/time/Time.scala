@@ -10,7 +10,7 @@ import java.text.{ ParsePosition, SimpleDateFormat }
  */
 trait TimeConversions {
   
-  class RichLong(l: Long) {
+  implicit class longAsTime(l: Long) {
     def toLong = l
  
     def seconds = new Duration(toLong * 1000)
@@ -26,16 +26,15 @@ trait TimeConversions {
     def day = days
   }
  
-  implicit def intToRichLong(v: Int) = new RichLong(v.toLong)
-  implicit def longToRichLong(v: Long) = new RichLong(v)
+  implicit def intToRichLong(v: Int) = new longAsTime(v.toLong)
 }
 
 /**
  * This trait can be used to deactivate the time conversions (to avoid conflicts with Akka's conversions for example
  */
 trait NoTimeConversions extends TimeConversions {
-  override def intToRichLong(v: Int)   = super.intToRichLong(v)
-  override def longToRichLong(v: Long) = super.longToRichLong(v)
+  override def intToRichLong(v: Int) = super.intToRichLong(v)
+  override def longAsTime(v: Long)   = super.longAsTime(v)
 }
 
 object TimeConversions extends TimeConversions

@@ -7,9 +7,7 @@ package reflect
  */
 private[specs2]
 trait PackageName {
-  implicit def toPackageNameToDirectoryPath(name: String): PackageName = new PackageName(name)
-
-  case class PackageName(name: String) {
+  implicit class toPackageName(name: String) {
     /** return a directory path from a package name (dot-separated string with no final dot) */
     def toPath = name.replace(".", "/")+"/"
   }
