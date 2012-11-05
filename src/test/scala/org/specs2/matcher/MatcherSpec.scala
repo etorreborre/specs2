@@ -61,10 +61,12 @@ class MatcherSpec extends Specification with ResultMatchers { def is =
   def e3_3 = {
     def beEven: Matcher[Int] = (i: Int) => (i % 2 == 0, "'"+i+"' is odd")
     (3 must beEven) returns "'3' is odd"
+    (2 must beEven) returns "'2' is not odd"
   }
   def e4 = {
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i+" is odd")
     (3 must beEven) returns "3 is odd"
+    (2 must beEven) returns "2 is not odd"
   }
   def e5 = {
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i+" is even", (i: Int) => i+" is odd")

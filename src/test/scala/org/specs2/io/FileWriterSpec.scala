@@ -1,42 +1,43 @@
 package org.specs2
 package io
+
 import java.io.File
 import specification._
-import execute._
 import sys._
+import control.Exceptions._
 
-class FileWriterSpec extends Specification {  def is =
+class FileWriterSpec extends Specification with Groups {  def is =
 
   "A FileWriter should"                                                                                                 ^
-    "write inside a file"                                                                                               ! c().e1^
-    "close the file if an exception occurs"                                                                             ! c().e2^
-    "rethrow the exception if an exception occurs"                                                                      ! c().e3^
+    "write inside a file"                                                                                               ! g1().e1^
+    "close the file if an exception occurs"                                                                             ! g1().e2^
+    "rethrow the exception if an exception occurs"                                                                      ! g1().e3^
                                                                                                                         p^
   "A FileWriter can"                                                                                                    ^
-    "write a XML Node"                                                                                                  ! c().e4^
+    "write a XML Node"                                                                                                  ! g1().e4^
                                                                                                                         end
 
-  case class c() extends After {
+  "file writer" - new g1 {
     val out = new MockWriter {}
     val fw = new  FileWriter { override def getWriter(path: String, append: Boolean = false) = out  }
 
-    def e1 = this {
+    e1 := this {
       fw.write("filePath")(_.write("hello world"))
       out.messages must_== List("hello world")
     }
-    def e2 = this {
-      try { fw.write("filePath")(_ => error("bad")) }
-      catch { case e: Throwable => () }
+
+    e2 := this {
+      tryOk { fw.write("filePath")(_ => error("bad")) }
       out.closed must_== true
     }
-    def e3 = this {
-      try { fw.write("filePath")(_ => error("bad")); Failure("an exception must be thrown") }
-      catch { case e: Throwable => { e.getMessage must_== "bad" }.toResult }
-    }
-    def e4 = this {
+
+    e3 := this { fw.write("filePath")(_ => error("bad")) must throwAn[Exception](message = "bad") }
+
+    e4 := this {
       fw.writeXmlFile("filePath", <hello/>)
       out.messages must contain("<hello></hello>")
     }
-    def after = { new File("filePath").delete }
+
+    override def after { new File("filePath").delete }
   }
 }

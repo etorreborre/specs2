@@ -21,6 +21,7 @@ more precisely:
   { (success1 and failure1) must_== failure1 }                                                                          ^
   { (success1 and error1)   must_== error1 }                                                                            ^
   { (success1 and skipped1) must_== success1 }                                                                          ^
+  { (skipped1 and success1) must_== success1 }                                                                          ^
   { (failure1 and success1) must_== failure1 }                                                                          ^
   { (failure1 and failure2) must_== failure1 }                                                                          ^
   { (failure1 and error1)   must_== failure1 }                                                                          ^
@@ -78,18 +79,25 @@ more precisely:
   "Boolean values can also be combined as if they were results"                                                         ^
   { (true: Result) }                                                                                                    ^
   { true and true }                                                                                                     ^
-  { (true and false) must beFailing }                                                                                   ^
+  { (true and false) must beFailing }                                                                                   ^ end^
+  "A match result can be evaluated only when a boolean condition is satisfied"                                          ^
+  { ((1 must_== 2): Result).when(false) }                                                                               ^ end^
+  "A match result can be evaluated only unless a boolean condition is satisfied"                                        ^
+  { ((1 must_== 2): Result).unless(true) }                                                                              ^ end^
+  "A match result can be evaluated if and only if a boolean condition is satisfied"                                     ^
+  { ((1 must_== 2): Result).iff(false) }                                                                                ^
+  { ((1 must_== 1): Result).iff(true) }                                                                                 ^
                                                                                                                         end
 
   def statuses =
-  "result" | "isSuccess" | "isFailure" | "isError" | "isSkipped" | "isPending" |>
-  success1 ! true        ! false       ! false     ! false       ! false       |
-  failure1 ! false       ! true        ! false     ! false       ! false       |
-  error1   ! false       ! false       ! true      ! false       ! false       |
-  skipped1 ! false       ! false       ! false     ! true        ! false       |
-  pending1 ! false       ! false       ! false     ! false       ! true        | { (r, s, f, e, sk, p) =>
-    (r.isSuccess, r.isFailure, r.isError, r.isSkipped, r.isPending) must_== (s, f, e, sk, p)
-  }
+    "result" | "isSuccess" | "isFailure" | "isError" | "isSkipped" | "isPending" |>
+    success1 ! true        ! false       ! false     ! false       ! false       |
+    failure1 ! false       ! true        ! false     ! false       ! false       |
+    error1   ! false       ! false       ! true      ! false       ! false       |
+    skipped1 ! false       ! false       ! false     ! true        ! false       |
+    pending1 ! false       ! false       ! false     ! false       ! true        | { (r, s, f, e, sk, p) =>
+      (r.isSuccess, r.isFailure, r.isError, r.isSkipped, r.isPending) must_== (s, f, e, sk, p)
+    }
 
   val success1: Result = Success("s1")
   val success2 = Success("s2")                                                                                          

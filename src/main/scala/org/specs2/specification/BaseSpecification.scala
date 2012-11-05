@@ -54,6 +54,12 @@ trait SpecificationStructure {
    */
   private[specs2] lazy val content: Fragments = map(Fragments.withCreationPaths(Fragments.withSpecName(is, this)))
 
+  /**
+   * empty fragments with just the specification name (and without the possible title specified in the fragments).
+   * This is used to create 'see' links and avoid infinite loops of a specification referencing itself
+   */
+  private[specs2] lazy val emptyContent: Fragments = Fragments.withSpecName(Fragments.create(is.specStart), this)
+
   /** apply command-line arguments if there are any */
   private[specs2] def applyArguments(implicit args: Arguments) =
     this match {

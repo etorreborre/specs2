@@ -4,7 +4,8 @@ package specification
 import control.Exceptions._
 import execute._
 import util.matching.Regex
-import control.ImplicitParameters
+import control.{Functions, ImplicitParameters}
+import matcher.MatchResult
 
 /**
  * A Regular expression step which takes a text and extracts meaningful values according to
@@ -76,17 +77,25 @@ object RegexStep {
     if (full.toString.isEmpty) group.replaceAllIn(text, (_:Regex.Match) match { case Regex.Groups(v) => v.replace("\\", "\\\\") })
     else                       text
 
-  def extract1(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = (extractAll(t, full, group): @unchecked) match { case s1::_ => s1 }
-  def extract2(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = (extractAll(t, full, group): @unchecked) match { case s1::s2::_ => (s1,s2) }
-  def extract3(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::_ => (s1,s2,s3) }
-  def extract4(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::_ => (s1,s2,s3,s4) }
-  def extract5(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::_ => (s1,s2,s3,s4,s5) }
-  def extract6(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::_ => (s1,s2,s3,s4,s5,s6) }
-  def extract7(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::_ => (s1,s2,s3,s4,s5,s6,s7) }
-  def extract8(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::_ => (s1,s2,s3,s4,s5,s6,s7,s8) }
-  def extract9(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::s9::_ => (s1,s2,s3,s4,s5,s6,s7,s8,s9) }
-  def extract10(t: String, full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::s9::s10::_ => (s1,s2,s3,s4,s5,s6,s7,s8,s9,s10) }
+  def extract1(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(1, t, (extractAll(t, full, group): @unchecked) match { case s1::_ => s1 }                                                                   )
+  def extract2(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(2, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::_ => (s1,s2) }                                                          )
+  def extract3(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(3, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::_ => (s1,s2,s3) }                                                   )
+  def extract4(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(4, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::_ => (s1,s2,s3,s4) }                                            )
+  def extract5(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(5, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::_ => (s1,s2,s3,s4,s5) }                                     )
+  def extract6(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(6, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::_ => (s1,s2,s3,s4,s5,s6) }                              )
+  def extract7(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(7, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::_ => (s1,s2,s3,s4,s5,s6,s7) }                       )
+  def extract8(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(8, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::_ => (s1,s2,s3,s4,s5,s6,s7,s8) }                )
+  def extract9(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(9, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::s9::_ => (s1,s2,s3,s4,s5,s6,s7,s8,s9) }         )
+  def extract10(t: String, full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(10, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::s9::s10::_ => (s1,s2,s3,s4,s5,s6,s7,s8,s9,s10) })
 
+  /**
+   * check if the extraction was successful. If we were trying to extract one variable and if it was not found, return the full
+   * string. Otherwise return a Failure explaining how many variables we were trying to extract
+   */
+  private def check[T](variablesNb: Int, string: String, extract: =>T) = tryOr(extract) {
+    case e: MatchError => if (variablesNb == 1) string.asInstanceOf[T] else throw new FailureException(Failure("couldn't extract "+variablesNb+" variables from: "+string))
+    case other         => throw other
+  }
 }
 
 /**
@@ -96,7 +105,7 @@ object RegexStep {
  */
 abstract class Given[T](val regex: String = "", val groupRegex: String = RegexStep.DEFAULT_REGEX) extends RegexStep[Unit, T](regex, groupRegex) {
   /** if the extraction goes wrong, then an Error is propagated */
-  private[specs2] def extractContext(text: String): Either[Result, T] = trye(extract(text))((e:Exception) => Error(e))
+  private[specs2] def extractContext(text: String): Either[Result, T] = ResultExecution.executeEither(extract(text))(identity)
 
   def extract(text: String): T
 }
@@ -114,8 +123,20 @@ object Given extends ImplicitParameters {
   implicit def function9ToGiven[T](f: (String, String, String, String, String, String, String, String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract9(text))  }
   implicit def function10ToGiven[T](f:(String, String, String, String, String, String, String, String, String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract10(text))  }
   implicit def functionSeqToGiven[T](f: Seq[String] => T)(implicit p: ImplicitParam): Given[T] = new Given[T] { def extract(text: String) = f(extractAll(text))  }
-}
 
+  private def extractValue[T] = (_:MatchResult[T]).expectable.value
+  implicit def function1ResultToGiven[T](f: String => MatchResult[T])                                                                          : Given[T] = function1ToGiven (f andThen extractValue)
+  implicit def function2ResultToGiven[T](f: (String, String) => MatchResult[T])                                                                : Given[T] = function2ToGiven (Function.untupled(f.tupled andThen extractValue))
+  implicit def function3ResultToGiven[T](f: (String, String, String) => MatchResult[T])                                                        : Given[T] = function3ToGiven (Function.untupled(f.tupled andThen extractValue))
+  implicit def function4ResultToGiven[T](f: (String, String, String, String) => MatchResult[T])                                                : Given[T] = function4ToGiven (Function.untupled(f.tupled andThen extractValue))
+  implicit def function5ResultToGiven[T](f: (String, String, String, String, String) => MatchResult[T])                                        : Given[T] = function5ToGiven (Function.untupled(f.tupled andThen extractValue))
+  implicit def function6ResultToGiven[T](f: (String, String, String, String, String, String) => MatchResult[T])                                : Given[T] = function6ToGiven (Functions.untupled(f.tupled andThen extractValue))
+  implicit def function7ResultToGiven[T](f: (String, String, String, String, String, String, String) => MatchResult[T])                        : Given[T] = function7ToGiven (Functions.untupled(f.tupled andThen extractValue))
+  implicit def function8ResultToGiven[T](f: (String, String, String, String, String, String, String, String) => MatchResult[T])                : Given[T] = function8ToGiven (Functions.untupled(f.tupled andThen extractValue))
+  implicit def function9ResultToGiven[T](f: (String, String, String, String, String, String, String, String, String) => MatchResult[T])        : Given[T] = function9ToGiven (Functions.untupled(f.tupled andThen extractValue))
+  implicit def function10ResultToGiven[T](f:(String, String, String, String, String, String, String, String, String, String) => MatchResult[T]): Given[T] = function10ToGiven(Functions.untupled(f.tupled andThen extractValue))
+  implicit def functionSeqResultToGiven[T](f: Seq[String] => MatchResult[T])(implicit p: ImplicitParam)                                        : Given[T] = functionSeqToGiven(f andThen extractValue)(p)
+}
 /**
  * This step define conditions in a sequence of Given / When / Then.
  *
@@ -146,6 +167,20 @@ object When extends ImplicitParameters {
   implicit def function9ToWhen[T, S](f: T => (String, String, String, String, String, String, String, String, String) => S): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t).tupled(extract9(text)) }
   implicit def function10ToWhen[T, S](f: T => (String, String, String, String, String, String, String, String, String, String) => S): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t).tupled(extract10(text)) }
   implicit def functionSeqToWhen[T, S](f: T => Seq[String] => S)(implicit p: ImplicitParam): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t)(extractAll(text))  }
+
+  private def extractValue[T] = (_:MatchResult[T]).expectable.value
+  implicit def function1ResultToWhen[T,S]  (f: T => String => MatchResult[S]): When[T,S]                                                                            = function1ToWhen  ((t:T)=> f(t) andThen extractValue)
+  implicit def function2ResultToWhen[T, S] (f: T => (String, String) => MatchResult[S]): When[T, S]                                                                 = function2ToWhen  ((t:T)=>Function.untupled (f(t).tupled andThen extractValue))
+  implicit def function3ResultToWhen[T, S] (f: T => (String, String, String) => MatchResult[S]): When[T, S]                                                         = function3ToWhen  ((t:T)=>Function.untupled (f(t).tupled andThen extractValue))
+  implicit def function4ResultToWhen[T, S] (f: T => (String, String, String, String) => MatchResult[S]): When[T, S]                                                 = function4ToWhen  ((t:T)=>Function.untupled (f(t).tupled andThen extractValue))
+  implicit def function5ResultToWhen[T, S] (f: T => (String, String, String, String, String) => MatchResult[S]): When[T, S]                                         = function5ToWhen  ((t:T)=>Function.untupled (f(t).tupled andThen extractValue))
+  implicit def function6ResultToWhen[T, S] (f: T => (String, String, String, String, String, String) => MatchResult[S]): When[T, S]                                 = function6ToWhen  ((t:T)=>Functions.untupled(f(t).tupled andThen extractValue))
+  implicit def function7ResultToWhen[T, S] (f: T => (String, String, String, String, String, String, String) => MatchResult[S]): When[T, S]                         = function7ToWhen  ((t:T)=>Functions.untupled(f(t).tupled andThen extractValue))
+  implicit def function8ResultToWhen[T, S] (f: T => (String, String, String, String, String, String, String, String) => MatchResult[S]): When[T, S]                 = function8ToWhen  ((t:T)=>Functions.untupled(f(t).tupled andThen extractValue))
+  implicit def function9ResultToWhen[T, S] (f: T => (String, String, String, String, String, String, String, String, String) => MatchResult[S]): When[T, S]         = function9ToWhen  ((t:T)=>Functions.untupled(f(t).tupled andThen extractValue))
+  implicit def function10ResultToWhen[T, S](f: T => (String, String, String, String, String, String, String, String, String, String) => MatchResult[S]): When[T, S] = function10ToWhen ((t:T)=>Functions.untupled(f(t).tupled andThen extractValue))
+  implicit def functionSeqResultToWhen[T, S](f: T => Seq[String] => MatchResult[S])(implicit p: ImplicitParam): When[T, S]                                          = functionSeqToWhen  ((t:T)=> f(t) andThen extractValue)(p)
+
 }
 
 /**

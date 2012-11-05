@@ -147,14 +147,20 @@ trait Classes extends Output {
     loadClassEither(className, loader) match {
       case Right(c) => Some(c.asInstanceOf[Class[T]])
       case Left(e)  => {
-        if (sys.props("debugLoadClass") != null) {
-          println("Could not load class " + className + ": " + e.getMessage)
-          e.getStackTrace foreach (s => println(s.toString))
-        }
+        printError(className, loader, e)
         None
       }
     }
   }
+
+  private def printError(className: String, loader: ClassLoader, e: Throwable) {
+    if (sys.props("debugLoadClass") != null) {
+      println("loader is "+loader)
+      println("Could not load class " + className + ": " + e.getMessage)
+      e.getStackTrace foreach (s => println(s.toString))
+    }
+  }
+
   /**
    * Load a class, given the class name
    *
@@ -162,7 +168,10 @@ trait Classes extends Output {
    */
   private[reflect] def loadClassEither[T <: AnyRef](className: String, loader: ClassLoader = Thread.currentThread.getContextClassLoader):
     Either[Throwable, Class[T]] = {
-    trye(loadClassOf(className, loader).asInstanceOf[Class[T]])
+    trye(loadClassOf(className, loader).asInstanceOf[Class[T]]) { case e =>
+      printError(className, loader, e)
+      e
+    }
   }
   /**
    * Load a class, given the class name, without catching exceptions

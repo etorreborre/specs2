@@ -67,7 +67,7 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
 
     def addExecutingFragments(fs: Seq[ExecutingFragment], previousSequence: Seq[ExecutingFragment], arguments: Arguments) =
       copy(fragments = fragments ++ fs,
-           lastSequence = fs,
+           lastSequence = if (arguments.sequential) lastSequence ++ fs else fs,
            barrier = () => fs.map(_.get),
            nextMustSkip = nextMustSkip || nextSequenceMustSkipped(fs, arguments, previousSequence))
 

@@ -29,7 +29,7 @@ trait ResultLogicalCombinators extends Results {
                                                    else                                     Success(r.message+" and "+m, concat(s.exp, e), r.expectationsNb + o.expectationsNb)
             case DecoratedResult(d, r1)         => DecoratedResult(d, r.and(r1))
             case Failure(_,_,_,_) | Error(_,_)  => o.addExpectationsNb(r.expectationsNb).mapExpected((e: String) => concat(r.expected, e))
-            case _                              => r.addExpectationsNb(o.expectationsNb).mapExpected((e: String) => concat(o.expected, e))
+            case _                              => r.addExpectationsNb(o.expectationsNb).mapExpected((e: String) => concat(e, o.expected))
           }
       }
       case Pending(_) | Skipped(_,_)     => {
@@ -65,7 +65,7 @@ trait ResultLogicalCombinators extends Results {
                                          else Success(r.message+" and "+m, exp, r.expectationsNb + s.expectationsNb)
           case Failure(m, e, st, d)   => Failure(r.message+" and "+m, e, f.stackTrace ::: st, d).addExpectationsNb(r.expectationsNb)
           case DecoratedResult(d, r1) => DecoratedResult(d, r.or(r1))
-          case _                      => r.addExpectationsNb(o.expectationsNb).mapExpected((e: String) => concat(o.expected, e))
+          case _                      => r.addExpectationsNb(o.expectationsNb).mapExpected((e: String) => concat(e, o.expected))
         }
       }
       case Pending(_) | Skipped(_,_)     => {
@@ -82,7 +82,7 @@ trait ResultLogicalCombinators extends Results {
           case DecoratedResult(d2, r2) => {
             val orResult = (d.result or r2)
             if (orResult.isSuccess) DecoratedResult(d.decorator, orResult)
-            else                     DecoratedResult(d2, orResult)
+            else                    DecoratedResult(d2, orResult)
           }
           case o                   => DecoratedResult(d.decorator, d.result or o)
         }
@@ -98,6 +98,13 @@ trait ResultLogicalCombinators extends Results {
       case Failure(m,e,_,_) => Success(m)
       case other            => other
     }
+
+    /** only consider this result if the condition is true */
+    def when(b: Boolean, m: String= ""): Result= if (b) res else Success(m)
+    /** only consider this result if the condition is false */
+    def unless(b: Boolean, m: String= ""): Result = res.when(!b, m)
+    /** when the condition is true the result it taken as is, when it's false, take its negation */
+    def iff(b: Boolean): Result = if (b) res else res.not
   }
 }
 

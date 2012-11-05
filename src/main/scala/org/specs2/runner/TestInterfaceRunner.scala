@@ -100,7 +100,7 @@ class TestInterfaceRunner(val loader: ClassLoader, val loggers: Array[Logger]) e
 
   def otherExporters(args: Array[String], handler: EventHandler)(implicit arguments: Arguments): Seq[Exporting] = {
     val exportFinalStats = exporter(!isConsole(args))(finalExporter(handler))
-    super.exporters((args.filterNot(_ == "console")).contains) ++ exportFinalStats.toSeq
+    super.exporters(s  => args.filterNot(_ == "console").contains(s)) ++ exportFinalStats.toSeq
   }
 
   /** @return the list of all the exporters depending on the arguments passed on the command line */
@@ -122,27 +122,13 @@ case class FinalResultsReporter(override val handler: EventHandler,
   }
 }
 
-class TestInterfaceConsoleReporter(consoleExporter: Option[Exporting], otherExporters: Arguments => Seq[Exporting]) extends ConsoleReporter with Exporters {
-  override def report(spec: SpecificationStructure)(implicit arguments: Arguments): ExecutedSpecification = {
-    // if the results need to be exported to the console, we first do that making sure that the storing of statistics occurs in
-    // parallel to the export. This way, the results are displayed as soon as executed
-    // then we take the result of storing the stats, which sets up more information on the SpecStart/SpecEnd, and pass it
-    // to other exporters like the html exporter for example. This exporter needs this additional information to properly display
-    // index pages and total statistics
-    consoleExporter match {
-      case Some(e) => {
-        val storeAndExport = (spec: ExecutingSpecification) => Seq(store, e.export).par.map(_(spec)).head.asInstanceOf[ExecutingSpecification]
-        val executed = spec |> select |> sequence |> execute |> storeAndExport
-        val args = arguments <| executed.arguments
-        exportToOthers(otherExporters(args))(args).apply(executed)
-      }
-      case None => {
-        val executed = spec |> select |> sequence |> execute |> store
-        val args = arguments <| executed.arguments
-        exportToOthers(otherExporters(args))(args).apply(executed)
-      }
-    }
-  }
+class TestInterfaceConsoleReporter(consoleExporter: Option[Exporting], otherExporters: Arguments => Seq[Exporting]) extends ConsoleReporter with AllExporting {
+  override def exporters(accept: String => Boolean)(implicit arguments: Arguments): Seq[Exporting] =
+    otherExporters(arguments)
+
+  override def exportConsole(accept: String => Boolean) (implicit arguments: Arguments) =
+    consoleExporter
+
 }
 
 /**

@@ -323,6 +323,10 @@ There are some factory and implicit conversion methods to create Given/When/Then
         val number1: Given[Int] = (s: String) => s.toInt
         number1.extract("pay ${100} now") === 100
 
+        // if no variable is present, the whole text is passed to the function
+        val number1: Given[Int] = (s: String) => s.size
+        number1.extract("all") === 3
+
         // this uses a regular expression with capturing groups matching the full text
         val number1: Given[Int] = readAs(".*(\d+).*") and { (s: String) => s.toInt }
         number1.extract("pay 100 now") === 100
@@ -334,6 +338,11 @@ There are some factory and implicit conversion methods to create Given/When/Then
         // if the Given step is only side-effecting we can omit the `and` call
         // this simplifies the use of Given steps in Unit Specifications
         val number1: Given[Unit] = groupAs("\d+") { (s: String) => value = s.toInt }
+
+ * convert a function `String... => MatchResult[T]` to a `Given[T]` step, passing the `Expectable` value to the next step
+
+        val number1: Given[Int] = (s: String) => s.toInt must be_>=(10)
+        number1.extract("pay ${100} now") === 100
 
  * convert a function `T => String... => S` to a `When[T, S]` step (*note the use of `and` after `readAs` and `groupAs`*)
 
@@ -348,6 +357,11 @@ There are some factory and implicit conversion methods to create Given/When/Then
         // this uses capturing groups directly
         val number2: When[Int, (Int, Int)] = groupAs("\d+") and { (n1: Int) => (s: String) => (n1, s.toInt) }
         number2.extract(100, "with a discount of 10%") === (100, 10)
+
+ * convert a function `T => String... => MatchResult[S]` to a `When[T, S]` step, passing the `Expectable` value to the next step
+
+        val number2: When[Int, Int] = (n1: Int) => (s: String) => (n1 + s.toInt) must be_>=(n1)
+        number2.extract(100, "and add ${10}") === 110
 
  * convert a function `T => String... => Result` to a `Then[T]` step (*note the use of `then` after `readAs` and `groupAs`*)
 
@@ -556,6 +570,68 @@ This specification will be rendered as:
       +  a | b | c |
          2 | 2 | 4 |
          1 | 1 | 2 |
+
+#### Example groups
+
+When you create acceptance specifications, you have to find names to reference your examples, which can sometimes be a bit tedious. You can then get some support from the `org.specs2.specification.Grouped` trait. This trait provides group traits, named `g1` to `g22` to define groups of examples. Each group trait defines 22 variables named `e1` to `e22`, to define examples bodies. The specification below shows how to use the `Grouped` trait:
+
+      class MySpecification extends Examples { def is =
+        "first example in first group"                       ! g1.e1 ^
+        "second example in first group"                      ! g1.e2 ^
+                                                                     p^
+        "first example in second group"                      ! g2.e1 ^
+        "second example in second group"                     ! g2.e2
+        "third example in second group, not yet implemented" ! g2.e3
+      }
+
+      trait Examples extends Grouped with Matchers {
+        // group of examples with no description
+        new g1 {
+          e1 := ok
+          e2 := ok
+        }
+        // group of examples with a description for the group
+        "second group of examples" - new g2 {
+          e1 := ok
+          e2 := ok
+        }
+      }
+
+Note that, if you use groups, you can use the example names right away, like `g2.e3`, without providing an implementation, the example will be marked as `Pending`.
+
+##### Isolation
+
+You can define additional variables in your group traits:
+
+       trait Local {
+         def service: Service = new LocalService
+       }
+       "a group of examples" - new g1 with Local {
+         e1 := ok
+         e2 := ok
+       }
+       "another group of examples" - new g2 with Local {
+         e1 := ok
+         e2 := ok
+       }
+
+However, the `service` variable will be shared by all the examples of each group, which can be potentially troublesome if that variable is mutated. If you want to provide complete isolation for each example, you should instead use the `org.specs2.specification.Groups` trait and call each group as a function:
+
+       class MySpecification extends Examples { def is =
+         "first example in first group"                       ! g1().e1 ^
+         "second example in first group"                      ! g1().e2
+       }
+
+       trait Examples extends Groups with Matchers {
+         trait Local {
+           def service: Service = new LocalService
+         }
+         "a group of examples" - new g1 with Local {
+           // each example will have its own instance of Service
+           e1 := ok
+           e2 := ok
+         }
+       }
 
 ### Links
 
@@ -1584,8 +1660,8 @@ Here's something you can do to automatically create an index page for your speci
 
         examplesLinks("Example specifications")
 
-		// see the SpecificationsFinder trait for the parameters of the 'specifications' method
-        def examplesLinks(t: String) = specifications().foldLeft(t.title) { (res, cur) => res ^ see(cur) }
+		    // see the SpecificationsFinder trait for the parameters of the 'specifications' method
+        def examplesLinks(t: String) = t.title ^ specifications().map(see)
       }
 
 The specification above creates an index.html file in the `target/specs2-reports` directory. The specifications method
@@ -1705,6 +1781,7 @@ An easy way to avoid this situation is to "deactivate" the specs2 implicits by m
  * `org.specs2.matcher.NoCanBeEqual`: deactivate the `===` method on any type `T`
  * `org.specs2.matcher.NoMustExpectations`: deactivate the `must`, `must_==`,... methods on any value of type `T`
  * `org.specs2.matcher.NoShouldExpectations`: deactivate the `should`, `should_==`,... methods on any value of type `T`
+ * `org.specs2.matcher.NoExpectationsDescription`: deactivate the `<==>` and `==>` methods on Strings
  * `org.specs2.specification.NoAutoExamples`: deactivate the conversions from `Boolean/Result/MatchResult/DataTable` to `Fragment` or `Example`. Specific versions of this trait can be selectively used, on either `Boolean` or `Result` or `MatchResult` or `DataTable`. For example: `org.specs2.specification.NoBooleanAutoExamples` can be used to avoid the `^` method being used on booleans
  * `org.specs2.specification.NoFragmentsBuilder`: deactivate the implicit conversions from `String` to `Fragment`s
  * `org.specs2.specification.mutable.NoFragmentsBuilder`: deactivate the implicit conversions from to remove `in`, <code class="prettyprint">></code><code class="prettyprint">></code>, `should` and `can` methods from `String`s

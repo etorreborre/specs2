@@ -1,20 +1,22 @@
 package org.specs2
 package xml
+
 import NodeFunctions._
 import Nodex._
+import specification.Grouped
 
-class NodeFunctionsSpec extends Specification { def is =
+class NodeFunctionsSpec extends Specification with Grouped { def is =
   "Node functions".title                                                                                                ^
                                                                                                                         p^
   "The matchNode function must return true if"                                                                          ^
-    "there is a match on the node label"                                                                                ! e1^
-    "and a match on one attribute name"                                                                                 ! e2^
-    "and a match on a list of attribute names"                                                                          ! e3^
-    "and a match on some attribute names and values"                                                                    ! e4^
+    "there is a match on the node label"                                                                                ! g1.e1^
+    "and a match on one attribute name"                                                                                 ! g1.e2^
+    "and a match on a list of attribute names"                                                                          ! g1.e3^
+    "and a match on some attribute names and values"                                                                    ! g1.e4^
     "with exactMatch = true, it must return true if"                                                                    ^
-      "there is a match on the node label"                                                                              ! e5^
-      "and a match on all attribute names"                                                                              ! e6^
-      "and a match on all attribute names and values"                                                                   ! e7^
+      "there is a match on the node label"                                                                              ! g2.e1^
+      "and a match on all attribute names"                                                                              ! g2.e2^
+      "and a match on all attribute names and values"                                                                   ! g2.e3^
                                                                                                                         endp^
   "The equalIgnoreSpace function must"                                                                                  ^
     "return false if 2 nodes are not equal after evaluation"                                                            ^
@@ -23,12 +25,16 @@ class NodeFunctionsSpec extends Specification { def is =
     { <a>{"a"}</a> must ==/(<a>{" a "}</a>) }                                                                           ^
                                                                                                                         end
 
-  def e1 = <a/>.matchNode(<a/>)                                                                                          
-  def e2 = <a n="v" n2="v2"/>.matchNode(<a/>, List("n"))                                                                                          
-  def e3 = <a n="v" n2="v2"/>.matchNode(<a/>, List("n", "n2"))                                                                                          
-  def e4 = <a n="v" n2="v2"/>.matchNode(<a/>, attributeValues = Map("n" -> "v"))                                                                                          
-                                                                                          
-  def e5 = <a/>.matchNode(<a/>, exactMatch = true)                                                                                          
-  def e6 = <a n="v" n2="v2"/>.matchNode(<a/>, List("n", "n2"), exactMatch = true)                                                                                          
-  def e7 = <a n="v" n2="v2"/>.matchNode(<a/>, attributeValues = Map("n" -> "v", "n2" -> "v2"), exactMatch = true)                                                                                          
+  "matchNode" - new g1 {
+    e1 := <a/>.matchNode(<a/>)
+    e2 := <a n="v" n2="v2"/>.matchNode(<a/>, List("n"))
+    e3 := <a n="v" n2="v2"/>.matchNode(<a/>, List("n", "n2"))
+    e4 := <a n="v" n2="v2"/>.matchNode(<a/>, attributeValues = Map("n" -> "v"))
+  }
+
+  "exactMatch" - new g2 {
+    e1 := <a/>.matchNode(<a/>, exactMatch = true)
+    e2 := <a n="v" n2="v2"/>.matchNode(<a/>, List("n", "n2"), exactMatch = true)
+    e3 := <a n="v" n2="v2"/>.matchNode(<a/>, attributeValues = Map("n" -> "v", "n2" -> "v2"), exactMatch = true)
+  }
 }

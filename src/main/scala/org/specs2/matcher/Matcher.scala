@@ -64,9 +64,9 @@ trait Matcher[-T] { outer =>
    */
   protected def result[S <: T](other: MatchResult[_], value: Expectable[S]): MatchResult[S] = {
     other match {
-      case MatchSuccess(ok, ko, _)                                   => Matcher.result(true, ok, ko, value)
-      case MatchFailure(ok, ko, _, NoDetails())                      => Matcher.result(false, ok, ko, value)
-      case MatchFailure(ok, ko, _, FailureDetails(expected, actual)) => Matcher.result(false, ok, ko, value, expected, actual)
+      case MatchSuccess(ok, ko, _)                                   => Matcher.result(true,  ok(), ko(), value)
+      case MatchFailure(ok, ko, _, NoDetails())                      => Matcher.result(false, ok(), ko(), value)
+      case MatchFailure(ok, ko, _, FailureDetails(expected, actual)) => Matcher.result(false, ok(), ko(), value, expected, actual)
       case _                                                         => Matcher.result(other.isSuccess, other.message, other.message, value)
     }
   }
@@ -74,13 +74,13 @@ trait Matcher[-T] { outer =>
    * @return a MatchResult using the messages embedded in a MatchResultMessage (i.e. an accumulation of messages from other matches)
    */
   protected def result[S <: T](other: MatchResultMessage, value: Expectable[S]): MatchResult[S] = {
-    val (okMessage, koMessage) = other match {
-      case SuccessMessage(ok, ko)  => (ok, ko)
-      case FailureMessage(ok, ko)  => (ok, ko)
+    lazy val messages = other match {
+      case SuccessMessage(ok, ko)  => (ok(), ko())
+      case FailureMessage(ok, ko)  => (ok(), ko())
       case NeutralMessage(message) => (message, message)
-      case EmptySuccessMessage()          => ("", "")
+      case EmptySuccessMessage()   => ("", "")
     }
-    Matcher.result(other.isSuccess, okMessage, koMessage, value)
+    Matcher.result(other.isSuccess, messages._1, messages._2, value)
   }
  
   /**
@@ -142,8 +142,8 @@ trait Matcher[-T] { outer =>
   def orSkip(message: String => String): Matcher[T] = new Matcher[T] {
     def apply[U <: T](a: Expectable[U]) = {
       tryOr(outer(a)) { (e: Exception) => MatchSkip(message(e.getMessage), a) } match {
-        case MatchFailure(_,ko,_,_) => MatchSkip(message(ko), a)
-        case other                  => other
+        case MatchFailure(_,ko,_,_)    => MatchSkip(message(ko()), a)
+        case other                     => other
       }
     }
   }
@@ -163,8 +163,8 @@ trait Matcher[-T] { outer =>
   def orPending(message: String => String): Matcher[T] = new Matcher[T] {
     def apply[U <: T](a: Expectable[U]) = {
       tryOr(outer(a)) { (e: Exception) => MatchPending(message(e.getMessage), a) } match {
-        case MatchFailure(_,ko,_,_) => MatchPending(message(ko), a)
-        case other                  => other
+        case MatchFailure(_,ko,_,_)    => MatchPending(message(ko()), a)
+        case other                     => other
       }
     }
   }
@@ -176,7 +176,7 @@ trait Matcher[-T] { outer =>
   /** only apply this matcher if the condition is false */
   def unless(b: Boolean, m: String= ""): Matcher[T] = when(!b, m)
   /** when the condition is true the matcher is applied, when it's false, the matcher must fail */
-  def iff(b: Boolean, m: String= ""): Matcher[T] = new Matcher[T] {
+  def iff(b: Boolean): Matcher[T] = new Matcher[T] {
     def apply[U <: T](a: Expectable[U]) = if (b) outer(a) else outer(a).not
   }
   /**
@@ -252,15 +252,15 @@ object Matcher {
    *  Utility method for creating a MatchResult[T]
    */
   def result[T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T]): MatchResult[T] = {
-	  if (test) new MatchSuccess(okMessage, koMessage, value) 
-	  else new MatchFailure(okMessage, koMessage, value)
+	  if (test) MatchSuccess(okMessage, koMessage, value)
+	  else      MatchFailure(okMessage, koMessage, value)
   }
   /**
    * Utility method for creating a MatchResult[T], with the actual and expected strings to enable better failure
    * messages
    */
   def result[T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T], expected: String, actual: String): MatchResult[T] = {
-	  if (test) new MatchSuccess(okMessage, koMessage, value)
-	  else new MatchFailure(okMessage, koMessage, value, FailureDetails(expected, actual))
+	  if (test) MatchSuccess(okMessage, koMessage, value)
+	  else      MatchFailure.create(okMessage, koMessage, value, FailureDetails(expected, actual))
   }
 }

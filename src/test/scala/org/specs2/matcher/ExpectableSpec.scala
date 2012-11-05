@@ -8,6 +8,13 @@ class ExpectableSpec extends Specification with ResultMatchers with org.specs2.m
   "An expectable can have a precise description with aka(description)" in {
     ("a" aka "the string").description must_== "the string 'a'"
   }
+  "An expectable described with aka will only evaluate the description in case of a failure" in {
+    var evaluated = false
+    ("a" aka {
+      evaluated = true;
+      "the string" }) must_== "a"
+    "the aka description is not evaluated on a success" <==> { evaluated === false }
+  }
   "If it is a boolean its value is not displayed, only the description" in {
     (true aka "my boolean").description must_== "my boolean"
   }
@@ -39,20 +46,12 @@ class ExpectableSpec extends Specification with ResultMatchers with org.specs2.m
     NullString() must_== NullString()
   }
   "A Traversable expectable can be described if" >> {
-    "it has a valid mkString method" >> {
+    "if it has a valid toString method" >> {
       trait Trav[T] extends Traversable[T] {
-        override def mkString(start: String, rep: String, end: String) = "trav"
-        def foreach[U](f: T => U): Unit = ()
-      }
-      theValue(new Trav[Int] {}).description === "'trav'"
-    }
-    "otherwise if it has a valid toString method" >> {
-      trait Trav[T] extends Traversable[T] {
-        override def mkString(start: String, rep: String, end: String) = throw new AssertionError("undefined")
         override def toString = "trav"
         def foreach[U](f: T => U): Unit = ()
       }
-      theValue(new Trav[Int] {}).description === "'trav'"
+      theValue(new Trav[Int] {}).description === "trav"
     }
   }
   "An expectable must match without an exception on a mock" in {

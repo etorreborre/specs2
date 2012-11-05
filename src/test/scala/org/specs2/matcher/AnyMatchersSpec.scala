@@ -28,7 +28,7 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
   { Array(1, 3) must not be_==(Array(1, 2)) }                                                                           ^
   { Array(1, 2) must be_===(Array(1, 2)) }                                                                              ^
   { Array(1, 3) must not be_===(Array(1, 2)) }                                                                          ^
-  { (Array(1, 3) must not be_===(Array(1, 2))).message === "'Array(1, 3)' is not equal to 'Array(1, 2)'" }              ^
+  { (Array(1, 3) must not be_===(Array(1, 2))).message === "Array(1, 3) is not equal to Array(1, 2)" }                  ^
   { (1 must_== 2).toResult must beLike { case Failure(_,_,_,FailureDetails(e, a)) => e must_== "2" } }                  ^
                                                                                                                         p^
   "beTheSameAs checks if a value is eq to another one"                                                                  ^
@@ -131,9 +131,10 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
     "a null object"                                                                                                     ! robust1^
     "a non-traversable collection"                                                                                      ! robust2^
                                                                                                                         p^
-  "the be_== matcher must warn when comparing 2 objects with the same toString representation but not the same class"   ^
+  "the be_== matcher must warn when comparing 2 objects with the same toString representation but not the same type"    ^
     "with List[Int] and List[String]"                                                                                   ! robust3^
     "with 'hello': String and 'hello': Hello"                                                                           ! robust4^
+    """"with List("1, 2") and List("1", "2")"""                                                                         ! robust5^
                                                                                                                         end
                                                                                           
   def e1 = (List(1, 2) must beLike { case List(a, b) => (a + b) must_== 2 }) returns 
@@ -181,16 +182,20 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = noind
   }
   def robust3 = {
     (List(1, 2) must_== List("1", "2")) must beFailing(
-      "\\Q'1, 2' is not equal to '1, 2'. Values have the same string representation but possibly different types like List[Int] and List[String]\\E")
+      "\\Q'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.Integer]'\n is not equal to \n'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.String]'\\E")
   }
   def robust4 = {
     ("hello" must_== Hello()) must beFailing(
-      "\\Q'hello': java.lang.String is not equal to 'hello': org.specs2.matcher.Hello\\E")
+      "\\Q'hello: java.lang.String' is not equal to 'hello: org.specs2.matcher.Hello'\\E")
+  }
+  def robust5 = {
+    (List("1, 2") must_== List("1", "2")) must beFailing(
+      "\\Q'List('1, 2'): scala.collection.immutable.$colon$colon[java.lang.String]'\n is not equal to \n'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.String]'\\E")
   }
 }
 
 trait TraversableWithNoDefinedForeach[T] extends Traversable[T] {
-  def foreach[U](f: T => U): Unit = sys.error("undefined")
+  def foreach[U](f: T => U): Unit = sys.error("foreach is not defined on this traversable but toString is")
 }
 
 trait Type1

@@ -10,7 +10,7 @@ class IterablexSpec extends Specification with IterableData {
 
   "Specification for Iterables extensions".title
 
-  "A sameElementsAs function should return true" >> {
+  "The sameElementsAs function returns true" >> {
     "if 2 lists of lists contain the same elements in a different order" >> {
       List(List(1), List(2, 3)).sameElementsAs(List(List(3, 2), List(1)))
     }
@@ -33,7 +33,8 @@ class IterablexSpec extends Specification with IterableData {
       }
     }
   }
-  "A containsInOrder function" should {
+
+  "The containsInOrder function should" >> {
     "check that some values are contained inside an Iterable, in the same order" in {
       List(1, 2, 3).containsInOrder(1, 3)
     }
@@ -55,8 +56,10 @@ class IterablexSpec extends Specification with IterableData {
   { Seq(1, 2, 3) must beLike { case init :+ last => ok; case _ => ko } }
 
 }
-import org.scalacheck.{ Arbitrary, Gen }
+
+import org.scalacheck.Arbitrary
 import org.scalacheck.Gen._
+
 trait IterableData extends ScalaCheckMatchers {
   val sameIterables: Arbitrary[(Iterable[Any], Iterable[Any])] = Arbitrary {
     for {
@@ -66,8 +69,6 @@ trait IterableData extends ScalaCheckMatchers {
     } yield (i2, i2.scramble)
   }                           
   val sameIterablesOfDifferentTypes: Arbitrary[(Iterable[Any], Iterable[Any])] = Arbitrary {
-    for {
-      i1 <- listOf(oneOf(1, 2, 3, listOf(oneOf(1, 2, 3))))    
-    } yield (i1.toStream, i1.scramble.toList)
+    listOf(oneOf(1, 2, 3, listOf(oneOf(1, 2, 3)))).map(i1 => (i1.toStream, i1.scramble.toList))
   }
 }

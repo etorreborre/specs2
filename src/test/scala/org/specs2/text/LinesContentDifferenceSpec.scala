@@ -5,22 +5,22 @@ import mutable.Specification
 import specification.AllExpectations
 
 class LinesContentDifferenceSpec extends Specification with AllExpectations {
-"""
-The LinesContentDifference class checks 2 sequences of lines
+                                                                                                """
+ The LinesContentDifference class checks 2 sequences of lines
 
-It must display the differences if:
+ It must display the differences if:
 
- 1. partial = false, unordered = false <=> lines1 are exactly the same as lines2
- 2. partial = false, unordered = true  <=> lines1 contains lines2 and lines2 contains lines1
- 3. partial = true,  unordered = false <=> lines1 contains lines2 and index(l2.1 in lines2) > index(l2.2 in lines2) =>
-                                                                      index(l2.1 in lines1) > index(l2.2 in lines1)
- 4. partial = true,  unordered = true  <=> lines1 contains lines2
+  1. partial = false, unordered = false <=> lines1 are exactly the same as lines2
+  2. partial = false, unordered = true  <=> lines1 contains lines2 and lines2 contains lines1
+  3. partial = true,  unordered = false <=> lines1 contains lines2 and index(l2.1 in lines2) > index(l2.2 in lines2) =>
+                                                                       index(l2.1 in lines1) > index(l2.2 in lines1)
+  4. partial = true,  unordered = true  <=> lines1 contains lines2
 
-One difficulty of checking the differences is also that there can be duplicated lines, so:
+ One difficulty of checking the differences is also that there can be duplicated lines, so:
 
- * when unordered = true we must check that duplicated elements are all included
+  * when unordered = true we must check that duplicated elements are all included
 
-""".newp
+                                                                                                 """.newp
 
   val lines1 = Seq("a", "b", "c", "d")
   val lines2 = Seq("c", "d", "b", "a")

@@ -1,40 +1,38 @@
 package org.specs2
 package reflect
 
-import mutable.Specification
+import mutable.{Tables, Specification}
 import ClassName._
-import matcher.DataTables
 
-class ClassNameSpec extends Specification with DataTables {
+class ClassNameSpec extends Specification with Tables {
 
   "Class names must be decoded" in {
-    "name"                   || "decoded"                |>
-    "org.specs2.name"        !! "org.specs2.name"        |
-    "org.specs2.name$2"      !! "org.specs2.name"        |
-    "org.specs2.name"        !! "org.specs2.name"        |
-    { (name, decoded) => className(name) === decoded }
+    "name"                   | "decoded"                |>
+    "org.specs2.name"        ! "org.specs2.name"        |
+    "org.specs2.name$2"      ! "org.specs2.name"        |
+    "org.specs2.name"        ! "org.specs2.name"        | { (name, decoded) => className(name) === decoded }
   }
   "The class name of a fully qualified class must return only the last part" in {
-    simpleName(classOf[ClassNameSpec]) must_== "ClassNameSpec"
+    simpleName(classOf[ClassNameSpec]) === "ClassNameSpec"
   }
   "The class name of an internal class should only return the last name" in {
     class ThisClassName
-    simpleName(classOf[ThisClassName]) must_== "ThisClassName"
+    simpleName(classOf[ThisClassName]) === "ThisClassName"
   }                                                                                       
   "The class name of an Int should be Integer" in {
-    simpleName(1.asInstanceOf[Object].getClass) must_== "Integer"
+    simpleName(1.asInstanceOf[Object].getClass) === "Integer"
   }                                                                                       
   "The class name of a String should be String" in {
-    simpleName("1".getClass) must_== "String"
+    simpleName("1".getClass) === "String"
   }
   "The package name of a String should be java.lang" in {
-    packageName("1".getClass.getName) must_== "java.lang"
+    packageName("1".getClass.getName) === "java.lang"
   }
   "The human name of a class should uncamel case it" in {
-    humanName(classOf[ThisClass]) must_== "this class"
+    humanName(classOf[ThisClass]) === "this class"
   }                                                                                       
   "The human name of a class should get the parent if the class is an anonymous class" in {
-    humanName(anonymous.getClass) must_== "this class"
+    humanName(anonymous.getClass) === "this class"
   }                                                                                       
 
   trait MyTrait

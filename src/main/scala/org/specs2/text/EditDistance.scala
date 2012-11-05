@@ -144,7 +144,7 @@ trait EditDistance {
  * This object help shortening strings between differences when the strings are too long
  */
 private[specs2]
-object DiffShortener {
+trait DiffShortener {
   def shorten(s: String, firstSep: String = "[", secondSep: String = "]", size: Int = 5): String = {
     def shortenLeft(s: String) = if (s.size > size) ("..." + s.slice(s.size - size, s.size)) else s
     def shortenRight(s: String) = if (s.size > size) (s.slice(0, size) + "...") else s
@@ -183,6 +183,8 @@ object DiffShortener {
     }
   }
 }
+private[specs2]
+object DiffShortener extends DiffShortener
 
 private[specs2]
 object EditDistance extends EditDistance

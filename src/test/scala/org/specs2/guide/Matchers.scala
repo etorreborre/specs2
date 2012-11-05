@@ -141,6 +141,16 @@ There are many ways to create matchers for your specific usage. The simplest way
 
  * using `updateMessage(f: String => String)` or `setMessage(m: String)` to change the failure message
 
+ * using `<==>` or `==>` to provide a meaning for the expectation when the failure message would not be clear
+
+        // when failing, this displays:
+        // The byname function has not become a strict one because 'evaluated' is not equal to 'not evaluated'
+        "The byname function has become a strict one" <==> (parameter === "evaluated")
+
+   Note that the sentence describing the expectation is negated when there is a failure. This functionality is provided by the `org.specs2.text.Sentences::negateSentence` trait. You can override this method if you want/need to provide a better behavior for this feature.
+
+##### From functions
+
 Another easy way to create matchers, is to use some implicit conversions from functions to Matchers:
 
        val m: Matcher[String]  = ((_: String).startsWith("hello"), "doesn't start with hello")
@@ -172,6 +182,31 @@ In the code above you have to:
 
  * you can use the `description` method on the `Expectable` class to return the full description of the expectable including
    the optional description you setup using the `aka` method
+
+##### From Hamcrest
+
+If you have Hamcrest matchers in your project and you want to reuse them as specs2 matchers, you can mix-in the `org.specs2.matcher.Hamcrest` trait:
+
+    class HamcrestSpec extends Specification with Grouped with Hamcrest { def is =
+
+      "Hamcrest matchers can be used as specs2 matchers by mixing in the Hamcrest trait"      ^
+      "for example a beEven Hamcrest matcher can be used in a 'must' expression"              ! g1.e1 ^
+        "the failure message must contain the matched value and the Hamcrest failure message" ! g1.e2
+
+
+      new g1 {
+        e1 := 2 must beEven
+        e2 := (3 must beEven).message === "<3> is odd"
+      }
+
+      // a Hamcrest matcher for even numbers
+      object beEven extends BaseMatcher[Int] {
+        def matches(item: Object): Boolean       = item.toString.toInt % 2 == 0
+        def describeTo(description: Description) { description.appendText(" is odd") }
+      }
+
+    }
+
 
 #### With sequences
 

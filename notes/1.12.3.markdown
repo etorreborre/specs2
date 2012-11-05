@@ -1,0 +1,19 @@
+This version adds features and improvements:
+
+ * added better failure messages to spot faster the issue with `List("1, 2") === List("1", "2")`
+ * when the failure message for `be_==` is too long, split it on 2 lines
+ * added [more options](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Runners.html#Files+Runner) to the `FilesRunner` and the possibility to export all possible outputs from it: junitxml, console, html,...
+ * added the possibility to [describe an expectation with a sentence](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Matchers.html#Custom)(see `<==> or ==>`)
+ * added traits to standardize the creation of [groups of examples in an Acceptance specification](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Structure.html#Example+groups)
+ * [issue 114](https://github.com/etorreborre/specs2/issues/114): added a `Hamcrest` trait to [convert Hamcrest matchers to specs2 matchers](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Matchers.html#From+Hamcrest)
+ 
+ 
+And some fixes:
+
+ * fixed [issue 109](https://github.com/etorreborre/specs2/issues/109): failing results with `and` must not be re-evaluated
+ * fixed [issue 113](https://github.com/etorreborre/specs2/issues/113): added a [note in the User Guide](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Runners.html#with+sbt+%3E+0.9.x) showing how to pass arguments to sbt
+ * fixed [issue 115](https://github.com/etorreborre/specs2/issues/115): better parsing of package directives when looking for specifications with the `SpecificationsFinder` trait
+ * fixed [issue 116](https://github.com/etorreborre/specs2/issues/116): made sure that a specification referencing itself with the `see` fragment will not recurse forever
+ * fixed [the evaluation of `or` on combinations of values throwing an exception and matchers like `throwAn[Exception]`](http://bit.ly/Q7zKBQ)
+ 
+ ==========================

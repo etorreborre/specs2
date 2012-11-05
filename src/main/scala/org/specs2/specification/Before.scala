@@ -29,10 +29,9 @@ trait Before extends Context { outer =>
    * - with a non-Success result
    * - with a non-Success match result
    */
-  def apply[T : AsResult](a: =>T): Result = {
+  override def apply[T : AsResult](a: =>T): Result =
     ResultExecution.execute(before)((any: Any) => AsResult(a))
-  }
-  
+
   /** compose the actions of 2 Before traits */
   def compose(b: Before): Before = new Before {
     def before = { b.before; outer.before }

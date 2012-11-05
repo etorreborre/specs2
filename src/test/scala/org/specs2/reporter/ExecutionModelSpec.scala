@@ -5,31 +5,31 @@ import io._
 import specification._
 import execute.Executable
 
-class ExecutionModelSpec extends Specification with ScalaCheck { def is =
+class ExecutionModelSpec extends Specification with ScalaCheck with Groups { def is =
 
-  "A sequential specification must always be reported with a strict order of its fragments"                             ! ex().sequential^
-  "A concurrent specification must have at least one execution where the order is changed"                              ! ex().concurrent^
-  "A Step must always be executed after the preceding examples "                                                        ! ex().steps^
+  "A sequential specification must always be reported with a strict order of its fragments"                             ! g1().e1^
+  "A concurrent specification must have at least one execution where the order is changed"                              ! g1().e2^
+  "A Step must always be executed after the preceding examples "                                                        ! g1().e3^
                                                                                                                         end
 
   implicit val timedSpec = SpecificationData.arbTimedSpecification(50)
   implicit val arguments = args.store(never=true)
 
-  case class ex() extends Report {
+  "examples" - new g1 with Report {
 
-    def sequential = check { spec: Specification =>
+    e1 := prop { spec: Specification =>
       val reporter = newReporter
       reporter.report(simpleLabel(spec, reporter.textOutput))(arguments <| args(sequential=true))
       reporter.outputLabels must beSorted
     }.set(minSize = 3, maxSize = 7, workers = 4)
 
-    def concurrent = check { spec: Specification =>
+    e2 := prop { spec: Specification =>
       val reporter = newReporter
       reporter.report(simpleLabel(spec, reporter.textOutput))
       reporter.outputLabels must beSorted
     }.set(minSize = 3, maxSize = 7).not
 
-    def steps = check { spec: Specification =>
+    e3 := prop { spec: Specification =>
       val reporter = newReporter
       val s = exampleAndStepLabel(spec, reporter.textOutput)
       reporter.report(s)

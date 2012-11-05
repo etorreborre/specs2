@@ -87,7 +87,7 @@ trait JUnitReporter extends ExecutionOrigin with DefaultReporter with Exporters 
   def export(implicit args: Arguments) = (executing: ExecutingSpecification) => {
     def exportTo = (name: String) => properties.isDefined(name) || args.contains(name)
 
-    exportToOthers(args, exportTo)(executing)
+    exportAll(args, exportTo)(executing)
     executing.executed
   }
 

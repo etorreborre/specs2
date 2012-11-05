@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import reflect.ClassName._
+import text.Trim._
 import text.Quote._
 import text.NotNullStrings._
 import execute._
@@ -70,7 +70,7 @@ trait AnyBaseMatchers {
   /** matches if a is null when v is null and a is not null when v is not null */
   def beAsNullAs[T](a: =>T) = new Matcher[T](){
     def apply[S <: T](y: Expectable[S]) = {
-      val x = a;
+      val x = a
       result(x == null && y.value == null || x != null && y.value != null,
              "both values are null",
              if (x == null) y.description + " is not null" else q(x) + " is not null" + 
@@ -189,19 +189,14 @@ class BeTypedEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
         case other                           => b.value == a
       }
 
-    val (db, qa) = (b.description, q(a)) match {
-      case (x, y) if (!equality && x == y) => {
-	      val aClass = className(a.getClass)
-	      val bClass = className(b.value.getClass)
-	      if (aClass != bClass)
-          (x + ": " + bClass, y + ": " + aClass)
-        else
-          (x, y + ". Values have the same string representation but possibly different types like List[Int] and List[String]")
+    lazy val (db, qa) =
+      (b.description, q(a)) match {
+        case (x, y) if (!equality && x == y) => (b.describe(b.value.notNullWithClass), q(a.notNullWithClass))
+        case other                           => other
 	    }
-      case other @ _ => other
-	  }
 
-    result(equality, ok(db + " is equal to " + qa), ko(db + " is not equal to " + qa), b, a.notNull, b.value.notNull.toString)
+    def print(b: String, msg: String, a: String) = Seq(b, msg, a).mkString("\n".unless((Seq(a, b).exists(_.size <= 40))))
+    result(equality, ok(print(db, " is equal to ", qa)), ko(print(db, " is not equal to ", qa)), b, a.notNull, b.value.notNull)
   }
 }
 

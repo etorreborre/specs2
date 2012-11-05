@@ -1,5 +1,6 @@
 package org.specs2
 package text
+
 import mutable._
 import Markdown._
 

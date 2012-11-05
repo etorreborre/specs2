@@ -10,7 +10,7 @@ version := "1.13-SNAPSHOT"
 
 organization := "org.specs2"
 
-scalaVersion := "2.10.0-M7"
+scalaVersion := "2.10.0-RC2"
 
 /** Shell */
 shellPrompt := { state => System.getProperty("user.name") + "> " }
@@ -36,9 +36,9 @@ libraryDependencies <<= scalaVersion { scala_version => Seq(
 }
 
 /** Compilation */
-javacOptions ++= Seq("-Xmx1812m", "-Xms512m", "-Xss10m")
+javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss10m")
 
-javaOptions += "-Xmx2G"
+javaOptions += "-Xmx3G"
 
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-language:implicitConversions,reflectiveCalls,postfixOps,higherKinds,existentials")
 

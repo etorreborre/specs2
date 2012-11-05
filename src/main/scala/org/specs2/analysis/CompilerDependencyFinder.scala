@@ -9,6 +9,7 @@ import io._
 import java.net.URLClassLoader
 import java.net.URLDecoder
 import reflect.PackageName._
+import scala.reflect.io.PlainDirectory
 
 /**
  * Implementation of the DependencyFinder trait using the compiler dependency analysis

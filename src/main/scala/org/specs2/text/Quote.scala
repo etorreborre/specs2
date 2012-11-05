@@ -8,7 +8,21 @@ import NotNullStrings._
  */
 private[specs2] 
 trait Quote {
-  def q(a: Any) = "'"+a.notNull+"'"
+
+  /** quote a value, unless it is a collection of objects */
+  def q(a: Any) = {
+    if (a == null) quote("null")
+    else {
+      a match {
+        case ar: Array[_]           => ar.notNull
+        case it: TraversableOnce[_] => it.notNull
+        case _                      => quote(a.notNull)
+      }
+    }
+  }
+
+  /** quote a string */
+  def quote(s: String, addQuotes: Boolean = true) = if (addQuotes) "'"+s+"'" else s
 
   /** @return an object.toString() without quotes (used in messages creation) */
   def unq(a: Any)  = a.notNull

@@ -4,10 +4,10 @@ package specification
 import execute._
 import main.Arguments
 import specification.StandardFragments.{Backtab, Tab, Br, End}
-import internal.scalaz.Scalaz
-import Scalaz._
-import control.ImplicitParameters
+import internal.scalaz.Scalaz._
+import control.{Functions, ImplicitParameters}
 import data.TuplesToSeq
+import matcher.MatchResult
 
 /**
  * This trait provides building blocks to create steps and examples from regular expression.
@@ -88,7 +88,7 @@ trait RegexStepsFactory extends ImplicitParameters {
     def apply(f: (String, String, String, String, String, String, String, String) => Unit) = and[Unit](f)
     def apply(f: (String, String, String, String, String, String, String, String, String) => Unit) = and[Unit](f)
     def apply(f: (String, String, String, String, String, String, String, String, String, String) => Unit) = and[Unit](f)
-    def apply(f: Seq[String] => Unit)(implicit p: ImplicitParam) = and[Unit](f)(p, implicitParam1)
+    def apply(f: Seq[String] => Unit)(implicit p: ImplicitParam) = and[Unit](f)(p,p)
 
     def and[T](f: String => T) = new Given[T](regex, groups) { def extract(text: String) = { f(extract1(text)) } }
     def and[T](f: (String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract2(text)) } }
@@ -100,7 +100,21 @@ trait RegexStepsFactory extends ImplicitParameters {
     def and[T](f: (String, String, String, String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract8(text)) } }
     def and[T](f: (String, String, String, String, String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract9(text)) } }
     def and[T](f: (String, String, String, String, String, String, String, String, String, String) => T) = new Given[T](regex, groups) { def extract(text: String) = { f.tupled(extract10(text)) } }
-    def and[T](f: Seq[String] => T)(implicit p: ImplicitParam, p1: ImplicitParam1) = new Given[T](regex, groups) { def extract(text: String)  = f(extractAll(text)) }
+    def and[T](f: Seq[String] => T)(implicit p1: ImplicitParam, p2: ImplicitParam) = new Given[T](regex, groups) { def extract(text: String)  = f(extractAll(text)) }
+
+    private def extractValue[T] = (_:MatchResult[T]).expectable.value
+    def and[T](f: String => MatchResult[T])(implicit p: ImplicitParam, p1: ImplicitParam1)                                                                            : Given[T] = and(f andThen extractValue)
+    def and[T](f: (String, String) => MatchResult[T])(implicit p: ImplicitParam, p2: ImplicitParam2)                                                                  : Given[T] = and(Function.untupled(f.tupled andThen extractValue))
+    def and[T](f: (String, String, String) => MatchResult[T])(implicit p: ImplicitParam, p3: ImplicitParam3)                                                          : Given[T] = and(Function.untupled(f.tupled andThen extractValue))
+    def and[T](f: (String, String, String, String) => MatchResult[T])(implicit p: ImplicitParam, p4: ImplicitParam4)                                                  : Given[T] = and(Function.untupled(f.tupled andThen extractValue))
+    def and[T](f: (String, String, String, String, String) => MatchResult[T])(implicit p: ImplicitParam, p5: ImplicitParam5)                                          : Given[T] = and(Function.untupled(f.tupled andThen extractValue))
+    def and[T](f: (String, String, String, String, String, String) => MatchResult[T])(implicit p: ImplicitParam, p6: ImplicitParam6)                                  : Given[T] = and(Functions.untupled(f.tupled andThen extractValue))
+    def and[T](f: (String, String, String, String, String, String, String) => MatchResult[T])(implicit p: ImplicitParam, p7: ImplicitParam7)                          : Given[T] = and(Functions.untupled(f.tupled andThen extractValue))
+    def and[T](f: (String, String, String, String, String, String, String, String) => MatchResult[T])(implicit p: ImplicitParam, p8: ImplicitParam8)                  : Given[T] = and(Functions.untupled(f.tupled andThen extractValue))
+    def and[T](f: (String, String, String, String, String, String, String, String, String) => MatchResult[T])(implicit p: ImplicitParam, p9: ImplicitParam9)          : Given[T] = and(Functions.untupled(f.tupled andThen extractValue))
+    def and[T](f: (String, String, String, String, String, String, String, String, String, String) => MatchResult[T])(implicit p: ImplicitParam, p10: ImplicitParam10): Given[T] = and(Functions.untupled(f.tupled andThen extractValue))
+    def and[T](f: Seq[String] => MatchResult[T])(implicit p: ImplicitParam, p2: ImplicitParam2)                                                                       : Given[T] = and(f andThen extractValue)(p, p)
+
 
     def and[T, S](f: T => String => S) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t)(extract1(text)) } }
     def and[T, S](f: T => (String, String) => S)(implicit p: ImplicitParam2) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).tupled(extract2(text)) } }
@@ -113,6 +127,18 @@ trait RegexStepsFactory extends ImplicitParameters {
     def and[T, S](f: T => (String, String, String, String, String, String, String, String, String) => S)(implicit p: ImplicitParam9) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).tupled(extract9(text)) } }
     def and[T, S](f: T => (String, String, String, String, String, String, String, String, String, String) => S)(implicit p: ImplicitParam10) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).tupled(extract10(text)) } }
     def and[T, S](f: T => Seq[String] => S)(implicit p: ImplicitParam) = new When[T, S](regex, groups) { def extract(t: T, text: String) = { f(t).apply(extractAll(text)) } }
+
+    def and[T,S](f: T => String => MatchResult[S])(implicit p: ImplicitParam, p1: ImplicitParam1)                                                                            : When[T,S] = and((t:T) => f(t) andThen extractValue)
+    def and[T,S](f: T => (String, String) => MatchResult[S])(implicit p: ImplicitParam, p2: ImplicitParam2)                                                                  : When[T,S] = and((t:T) => Function.untupled (f(t).tupled andThen extractValue))(p2)
+    def and[T,S](f: T => (String, String, String) => MatchResult[S])(implicit p: ImplicitParam, p3: ImplicitParam3)                                                          : When[T,S] = and((t:T) => Function.untupled (f(t).tupled andThen extractValue))(p3)
+    def and[T,S](f: T => (String, String, String, String) => MatchResult[S])(implicit p: ImplicitParam, p4: ImplicitParam4)                                                  : When[T,S] = and((t:T) => Function.untupled (f(t).tupled andThen extractValue))(p4)
+    def and[T,S](f: T => (String, String, String, String, String) => MatchResult[S])(implicit p: ImplicitParam, p5: ImplicitParam5)                                          : When[T,S] = and((t:T) => Function.untupled (f(t).tupled andThen extractValue))(p5)
+    def and[T,S](f: T => (String, String, String, String, String, String) => MatchResult[S])(implicit p: ImplicitParam, p6: ImplicitParam6)                                  : When[T,S] = and((t:T) => Functions.untupled(f(t).tupled andThen extractValue))(p6)
+    def and[T,S](f: T => (String, String, String, String, String, String, String) => MatchResult[S])(implicit p: ImplicitParam, p7: ImplicitParam7)                          : When[T,S] = and((t:T) => Functions.untupled(f(t).tupled andThen extractValue))(p7)
+    def and[T,S](f: T => (String, String, String, String, String, String, String, String) => MatchResult[S])(implicit p: ImplicitParam, p8: ImplicitParam8)                  : When[T,S] = and((t:T) => Functions.untupled(f(t).tupled andThen extractValue))(p8)
+    def and[T,S](f: T => (String, String, String, String, String, String, String, String, String) => MatchResult[S])(implicit p: ImplicitParam, p9: ImplicitParam9)          : When[T,S] = and((t:T) => Functions.untupled(f(t).tupled andThen extractValue))(p9)
+    def and[T,S](f: T => (String, String, String, String, String, String, String, String, String, String) => MatchResult[S])(implicit p: ImplicitParam, p10: ImplicitParam10): When[T,S] = and((t:T) => Functions.untupled(f(t).tupled andThen extractValue))(p10)
+    def and[T,S](f: T => Seq[String] => MatchResult[S])(implicit p1: ImplicitParam1, p: ImplicitParam)                                                                   : When[T,S] = and((t:T) => f(t) andThen extractValue)(p)
 
     def apply[R : AsResult](f: String => R) = andThen[R, Unit]((u: Unit) => f)
     def apply[R : AsResult](f: (String, String) => R) = andThen[R, Unit]((u: Unit) => f)
@@ -158,7 +184,6 @@ object RegexSteps extends RegexSteps {
 }
 import RegexSteps._
 
-private[specs2]
 trait RegexFragment {
   type RegexType <: RegexFragment
   def fs: Fragments
