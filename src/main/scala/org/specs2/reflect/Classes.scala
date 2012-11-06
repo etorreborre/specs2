@@ -88,12 +88,12 @@ trait Classes extends Output {
       case Left(e) => Left(e)
       case Right(c: Class[_]) => {
         try {
-          val constructors = c.getDeclaredConstructors.toList
+          val constructors = c.getDeclaredConstructors.toList.sortBy(_.getParameterTypes.size)
           if (constructors.isEmpty)
             Left(new Exception("Can't find a constructor for class "+c.getName))
-          else if (constructors.toList(0).getParameterTypes.isEmpty)
+          else if (constructors(0).getParameterTypes.isEmpty)
             createInstanceOfEither[T](Some[Class[T]](c.asInstanceOf[Class[T]]))
-          else if (constructors.toList(0).getParameterTypes.size == 1) {
+          else if (constructors(0).getParameterTypes.size == 1) {
             // if the specification has a construction, it is either because it is a nested class
             // or if it has an Arguments parameter
             // or it might have a parameter that has a 0 args constructor
