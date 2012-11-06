@@ -96,8 +96,12 @@ trait Classes extends Output {
           else if (constructors.toList(0).getParameterTypes.size == 1) {
             // if the specification has a construction, it is either because it is a nested class
             // or if it has an Arguments parameter
+            // or it might have a parameter that has a 0 args constructor
             val outerClass = tryToCreateObject[T](getOuterClassName(c), false, false)
-            outerClass.orElse(parameter).map(constructors(0).newInstance(_).asInstanceOf[T]).toRight(new Exception("can't create an instance of "+className))
+            outerClass.
+              orElse(parameter).
+              orElse(tryToCreateObject[AnyRef](constructors(0).getParameterTypes.toSeq(0).getName)).
+              map(constructors(0).newInstance(_).asInstanceOf[T]).toRight(new Exception("can't create an instance of "+className))
           }
           else {
             Left(new Exception("Can't find a suitable constructor for class "+c.getName))
