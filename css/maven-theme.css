@@ -348,7 +348,7 @@ table td {
 
 #central {
   position: relative;
-  margin-left: 240px;
+  margin-left: 220px;
   width: 70%;
   margin-top:-15px;
 }
@@ -376,7 +376,7 @@ table td {
   border: solid #AAAAAA;
   border-width: 1px 1px 1px 8px;
   background-color: white;
-  width: 220px;
+  width: 200px;
   float: left;
   overflow: auto;
 }
