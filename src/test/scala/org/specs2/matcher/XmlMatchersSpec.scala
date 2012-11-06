@@ -94,7 +94,7 @@ class XmlMatchersSpec extends Specification { def is =
     def e2 = <a><b n1="n1" n2="n2"/></a> must ==/(<a><b n2="n2" n1="n1"/></a>)
 
     def fail1 = (<a><b/></a> must ==/(<a> <c/></a>)) returns
-                "<a><b></b></a> is not equal to <a> <c></c></a>"
+                "<a><b/></a> is not equal to <a> <c/></a>"
     def fail2 = (new Atom("hello").toSeq aka "the seq" must ==/(new Text("world").toSeq)) returns
                 "the seq 'hello' is not equal to world"
 

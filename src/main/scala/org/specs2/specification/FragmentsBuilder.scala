@@ -153,6 +153,7 @@ trait NoFragmentsBuilder extends FragmentsBuilder {
  */
 class FragmentsFragment(fs: =>Fragments) {
   def fragments = fs
+
   def ^(t: String) = fs add Text(t)
   def ^(f: Fragment) = f match {
     case s @ SpecStart(_,_,_) => (fs specTitleIs s.specName).overrideArgs(s.arguments)

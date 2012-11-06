@@ -36,7 +36,7 @@ libraryDependencies <<= scalaVersion { scala_version => Seq(
 }
 
 /** Compilation */
-javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss10m")
+javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m")
 
 javaOptions += "-Xmx3G"
 
