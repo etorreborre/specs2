@@ -12,6 +12,8 @@ organization := "org.specs2"
 
 scalaVersion := "2.10.0-RC2"
 
+crossVersion := CrossVersion.full
+
 /** Shell */
 shellPrompt := { state => System.getProperty("user.name") + "> " }
 
