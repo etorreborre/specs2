@@ -29,7 +29,15 @@ case class HtmlLinesFile(specName: SpecName, args: Arguments,
 		  output.printHead.
 		         printBody {
                breadcrumbs ++
-               <div id="leftcolumn">{toc.toTree(specId)}</div> ++ <div id="central">{printLines(output).xml}</div> ++ <div id="rightcolumn"/>
+                 <div class="colmask threecol">
+                   <div class="colmid">
+                     <div class="colleft">
+                       <div class="col1"><div id="central">{printLines(output).xml}</div></div>
+                       <div class="col2"><div id="leftcolumn">{toc.toTree(specId)}</div></div>
+                       <div class="col3"><div id="rightcolumn"/></div>
+                     </div>
+                   </div>
+                 </div>
              }.xml
       )
   }
