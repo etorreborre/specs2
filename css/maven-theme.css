@@ -348,8 +348,9 @@ table td {
 
 #central {
   position: relative;
-  margin-left: 220px;
+  left: 15%;
   width: 70%;
+  background-color: #ffffff;
   margin-top:-15px;
 }
 
@@ -372,16 +373,18 @@ table td {
 
 #tree {
   position: fixed;
-  margin-top: 3px;
+  margin-top:3px;
   border: solid #AAAAAA;
   border-width: 1px 1px 1px 8px;
-  background-color: white;
-  width: 200px;
-  float: left;
-  overflow: auto;
+  background-color:white;
+  width:13.5%;
+  float:left;
+  overflow:auto;
 }
 
 #tree a {
- white-space: normal !important;
+
+ white-space:normal !important;
  height: auto;
+	
 }
