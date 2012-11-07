@@ -353,8 +353,8 @@ table td {
 }
 
 #leftcolumn {
+  border:0px;
 }
-
 #tree {
   background-color: #ffffff;
   overflow: scroll;
