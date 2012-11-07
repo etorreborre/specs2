@@ -7,9 +7,12 @@ import control.Exceptions._
 import control.Throwablex._
 import io._
 import sys._
+import java.lang.reflect.Constructor
+import internal.scalaz.Digit._0
+
 /**
- * This trait provides utility functions for classes
- */
+* This trait provides utility functions for classes
+*/
 private[specs2]
 trait Classes extends Output {
 
@@ -55,7 +58,7 @@ trait Classes extends Output {
    * This is useful to instantiate nested classes which are referencing their outer class in their constructor
    */
   def tryToCreateObject[T <: AnyRef](className: String,
-                                     printMessage: Boolean= true,
+                                     printMessage: Boolean = true,
                                      printStackTrace: Boolean = true,
                                      loader: ClassLoader = Thread.currentThread.getContextClassLoader,
                                      parameter: Option[AnyRef] = None)
@@ -88,29 +91,48 @@ trait Classes extends Output {
       case Left(e) => Left(e)
       case Right(c: Class[_]) => {
         try {
-          val constructors = c.getDeclaredConstructors.toList.sortBy(_.getParameterTypes.size)
+          val constructors = c.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)
           if (constructors.isEmpty)
             Left(new Exception("Can't find a constructor for class "+c.getName))
-          else if (constructors(0).getParameterTypes.isEmpty)
-            createInstanceOfEither[T](Some[Class[T]](c.asInstanceOf[Class[T]]))
-          else if (constructors(0).getParameterTypes.size == 1) {
-            // if the specification has a construction, it is either because it is a nested class
-            // or if it has an Arguments parameter
-            // or it might have a parameter that has a 0 args constructor
-            val outerClass = tryToCreateObject[T](getOuterClassName(c), false, false)
-            outerClass.
-              orElse(parameter).
-              orElse(tryToCreateObject[AnyRef](constructors(0).getParameterTypes.toSeq(0).getName)).
-              map(constructors(0).newInstance(_).asInstanceOf[T]).toRight(new Exception("can't create an instance of "+className))
-          }
           else {
-            Left(new Exception("Can't find a suitable constructor for class "+c.getName))
+            val results = constructors.view.map(constructor => createInstanceForConstructor(c, constructor, parameter))
+            val (ok, ko) = (results.collect { case r @ Right(_) => r } , results.collect { case l @ Left(_) => l })
+            ok.headOption match {
+              case Some(r @ Right(_)) => r
+              case other              => {
+                val exception = ko(0).a
+                Left(new Exception("Could not instantiate class "+c.getName+": "+ko.collect { case Left(e) => e.getMessage}.mkString(", "), exception))
+              }
+            }
           }
         } catch {
-          case e => Left(new Exception("Could not instantiate class " + className + ": " + e.getMessage, e))
+          case e: Throwable => Left(new Exception("Could not instantiate class " + className + ": " + e.getMessage, e))
         }
       }
     }
+  }
+
+  /**
+   * Given a class, a zero or one-paramenter constructor, return an instance of that class
+   */
+  private def createInstanceForConstructor[T <: AnyRef : Manifest](c: Class[_], constructor: Constructor[_], parameter: Option[AnyRef] = None): Either[Throwable, T] = {
+    if (constructor.getParameterTypes.isEmpty)
+      createInstanceOfEither[T](Some[Class[T]](c.asInstanceOf[Class[T]]))
+    else if (constructor.getParameterTypes.size == 1) {
+      // if the specification has a construction, it is either because it is a nested class
+      // or if it has an Arguments parameter
+      // or it might have a parameter that has a 0 args constructor
+      val outerClass = tryToCreateObject[T](getOuterClassName(c), false, false)
+      val constructorParameter =
+        outerClass.
+        orElse(parameter).
+        orElse(tryToCreateObject[AnyRef](constructor.getParameterTypes.toSeq(0).getName, false, false))
+
+      constructorParameter.map(constructor.newInstance(_).asInstanceOf[T]).toRight {
+        new Exception("can't create an instance of "+c+" for a constructor with parameter "+constructorParameter)
+      }
+    }
+    else Left(new Exception("Can't find a suitable constructor for class "+c.getName))
   }
   /**
    * @return an instance of a given class, checking that the created instance typechecks as expected
