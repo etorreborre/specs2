@@ -6,7 +6,7 @@ import com.jsuereth.ghpages.GhPages.ghpages._
 /** Project */
 name := "specs2"
 
-version := "1.12.3-SNAPSHOT"
+version := "1.12.3"
 
 organization := "org.specs2"
 
@@ -53,10 +53,9 @@ logBuffered := false
 cancelable := true
 
 testOptions := Seq(Tests.Filter(s =>
-  Seq("Spec", "Suite", "Unit").exists(s.endsWith(_)) &&
-    !(s.endsWith("FeaturesSpec") || s.endsWith("SmellsSpec")) ||
+  Seq("Spec", "Suite", "Unit").exists(s.endsWith(_)) && !s.endsWith("FeaturesSpec") ||
     s.contains("UserGuide") || 
-  	s.contains("index") ||
+  	s.toLowerCase.contains("index") ||
     s.matches("org.specs2.guide.*")))
 
 /** Console */
