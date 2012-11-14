@@ -64,7 +64,7 @@
     </head><body><div id="breadcrumbs"><a href="../guide/org.specs2.UserGuide.html">UserGuide</a><t> / </t><a href="../guide/org.specs2.guide.Structure.html">Structure</a></div><div class="colmask threecol">
                    <div class="colmid">
                      <div class="colleft">
-                       <div class="col1"><div id="central"><title>Structure</title><a name="Structure"><h2 specId="1891071509">Structure</h2></a><status class="ok"><div class="level0" style="display: show"><a name="Presentation"><h3>Presentation</h3></a><p>In this page you will learn how to:</p>
+                       <div class="col1"><div id="central"><title>Structure</title><a name="Structure"><h2 specId="1256971381">Structure</h2></a><status class="ok"><div class="level0" style="display: show"><a name="Presentation"><h3>Presentation</h3></a><p>In this page you will learn how to:</p>
 <ul>
   <li>declare examples and expectations</li>
   <li>link specifications together</li>
@@ -260,6 +260,10 @@
 val number1: Given[Int] = (s: String) =&gt; s.toInt
 number1.extract(&quot;pay ${100} now&quot;) === 100
 
+// if no variable is present, the whole text is passed to the function
+val number1: Given[Int] = (s: String) =&gt; s.size
+number1.extract(&quot;all&quot;) === 3
+
 // this uses a regular expression with capturing groups matching the full text
 val number1: Given[Int] = readAs(&quot;.*(\\d+).*&quot;) and { (s: String) =&gt; s.toInt }
 number1.extract(&quot;pay 100 now&quot;) === 100
@@ -271,6 +275,10 @@ number1.extract(&quot;pay 100 now&quot;) === 100
 // if the Given step is only side-effecting we can omit the `and` call
 // this simplifies the use of Given steps in Unit Specifications
 val number1: Given[Unit] = groupAs(&quot;\\d+&quot;) { (s: String) =&gt; value = s.toInt }
+</code></pre></li>
+  <li><p>convert a function <code class="prettyprint">String... =&gt; MatchResult[T]</code> to a <code class="prettyprint">Given[T]</code> step, passing the <code class="prettyprint">Expectable</code> value to the next step</p>
+  <pre><code class="prettyprint">val number1: Given[Int] = (s: String) =&gt; s.toInt must be_&gt;=(10)
+number1.extract(&quot;pay ${100} now&quot;) === 100
 </code></pre></li>
   <li><p>convert a function <code class="prettyprint">T =&gt; String... =&gt; S</code> to a <code class="prettyprint">When[T, S]</code> step (<em>note the use of <code class="prettyprint">and</code> after <code class="prettyprint">readAs</code> and <code class="prettyprint">groupAs</code></em>)</p>
   <pre><code class="prettyprint">// this assumes that the Int to extract is delimited with ${}
@@ -284,6 +292,10 @@ number2.extract(100, &quot;with a discount of 10%&quot;) === (100, 10)
 // this uses capturing groups directly
 val number2: When[Int, (Int, Int)] = groupAs(&quot;\\d+&quot;) and { (n1: Int) =&gt; (s: String) =&gt; (n1, s.toInt) }
 number2.extract(100, &quot;with a discount of 10%&quot;) === (100, 10)
+</code></pre></li>
+  <li><p>convert a function <code class="prettyprint">T =&gt; String... =&gt; MatchResult[S]</code> to a <code class="prettyprint">When[T, S]</code> step, passing the <code class="prettyprint">Expectable</code> value to the next step</p>
+  <pre><code class="prettyprint">val number2: When[Int, Int] = (n1: Int) =&gt; (s: String) =&gt; (n1 + s.toInt) must be_&gt;=(n1)
+number2.extract(100, &quot;and add ${10}&quot;) === 110
 </code></pre></li>
   <li><p>convert a function <code class="prettyprint">T =&gt; String... =&gt; Result</code> to a <code class="prettyprint">Then[T]</code> step (<em>note the use of <code class="prettyprint">then</code> after <code class="prettyprint">readAs</code> and <code class="prettyprint">groupAs</code></em>)</p>
   <pre><code class="prettyprint">// this assumes that the Int to extract is delimited with ${}
@@ -452,6 +464,56 @@ val number3: Then[Unit] = groupAs(&quot;\\d+&quot;) { (s: String) =&gt; value mu
   +  a | b | c |
      2 | 2 | 4 |
      1 | 1 | 2 |
+</code></pre><a name="Example+groups"><h4>Example groups</h4></a><p>When you create acceptance specifications, you have to find names to reference your examples, which can sometimes be a bit tedious. You can then get some support from the <code class="prettyprint">org.specs2.specification.Grouped</code> trait. This trait provides group traits, named <code class="prettyprint">g1</code> to <code class="prettyprint">g22</code> to define groups of examples. Each group trait defines 22 variables named <code class="prettyprint">e1</code> to <code class="prettyprint">e22</code>, to define examples bodies. The specification below shows how to use the <code class="prettyprint">Grouped</code> trait:</p>
+<pre><code class="prettyprint">  class MySpecification extends Examples { def is =
+    &quot;first example in first group&quot;                       ! g1.e1 ^
+    &quot;second example in first group&quot;                      ! g1.e2 ^
+                                                                 p^
+    &quot;first example in second group&quot;                      ! g2.e1 ^
+    &quot;second example in second group&quot;                     ! g2.e2
+    &quot;third example in second group, not yet implemented&quot; ! g2.e3
+  }
+
+  trait Examples extends Grouped with Matchers {
+    // group of examples with no description
+    new g1 {
+      e1 := ok
+      e2 := ok
+    }
+    // group of examples with a description for the group
+    &quot;second group of examples&quot; - new g2 {
+      e1 := ok
+      e2 := ok
+    }
+  }
+</code></pre><p>Note that, if you use groups, you can use the example names right away, like <code class="prettyprint">g2.e3</code>, without providing an implementation, the example will be marked as <code class="prettyprint">Pending</code>.</p><a name="Isolation"><h5>Isolation</h5></a><p>You can define additional variables in your group traits:</p>
+<pre><code class="prettyprint">   trait Local {
+     def service: Service = new LocalService
+   }
+   &quot;a group of examples&quot; - new g1 with Local {
+     e1 := ok
+     e2 := ok
+   }
+   &quot;another group of examples&quot; - new g2 with Local {
+     e1 := ok
+     e2 := ok
+   }
+</code></pre><p>However, the <code class="prettyprint">service</code> variable will be shared by all the examples of each group, which can be potentially troublesome if that variable is mutated. If you want to provide complete isolation for each example, you should instead use the <code class="prettyprint">org.specs2.specification.Groups</code> trait and call each group as a function:</p>
+<pre><code class="prettyprint">   class MySpecification extends Examples { def is =
+     &quot;first example in first group&quot;                       ! g1().e1 ^
+     &quot;second example in first group&quot;                      ! g1().e2
+   }
+
+   trait Examples extends Groups with Matchers {
+     trait Local {
+       def service: Service = new LocalService
+     }
+     &quot;a group of examples&quot; - new g1 with Local {
+       // each example will have its own instance of Service
+       e1 := ok
+       e2 := ok
+     }
+   }
 </code></pre><a name="Links"><h3>Links</h3></a><p>There are 2 ways to &quot;link&quot; specifications:</p>
 <ul>
   <li>by including another specification, to create a parent-child relationship</li>
@@ -513,7 +575,7 @@ val number3: Then[Unit] = groupAs(&quot;\\d+&quot;) { (s: String) =&gt; value mu
   <li><em>Variables isolation</em>: for each test run a new class instance is created so that there are new &quot;fresh&quot; variables for the current test case</li>
   <li><em>Before/After code</em>: there are <code class="prettyprint">@Before</code> and <code class="prettyprint">@After</code> annotations to declare once the code that must be executed before or after each example</li>
   <li><em>Global setup/teardown code</em>: there are <code class="prettyprint">@BeforeClass</code> and <code class="prettyprint">@AfterClass</code> annotations dedicated to that kind of code</li>
-</ol><p>Now let's see how this can be achieved with <strong><em>specs2</em></strong>.</p><a name="Isolation"><h4>Isolation</h4></a><p><strong><em>specs2</em></strong> solves this issue in 2 ways:</p>
+</ol><p>Now let's see how this can be achieved with <strong><em>specs2</em></strong>.</p><a name="Isolation_1"><h4>Isolation</h4></a><p><strong><em>specs2</em></strong> solves this issue in 2 ways:</p>
 <ul>
   <li>simply by relying on Scala features, by creating a new trait or a case class to open a new <code class="prettyprint">Scope</code> with fresh variables</li>
   <li>by cloning the specification on each example execution when the <code class="prettyprint">isolated</code> argument is provided</li>
@@ -1175,8 +1237,8 @@ textFragment(&quot;this is a text fragment&quot;)
 
     examplesLinks(&quot;Example specifications&quot;)
 
-    // see the SpecificationsFinder trait for the parameters of the 'specifications' method
-    def examplesLinks(t: String) = specifications().foldLeft(t.title) { (res, cur) =&gt; res ^ see(cur) }
+        // see the SpecificationsFinder trait for the parameters of the 'specifications' method
+    def examplesLinks(t: String) = t.title ^ specifications().map(see)
   }
 </code></pre><p>The specification above creates an index.html file in the <code class="prettyprint">target/specs2-reports</code> directory. The specifications method<br />creates specifications using the following parameters:</p>
 <ul>
@@ -1262,18 +1324,19 @@ textFragment(&quot;this is a text fragment&quot;)
   <li><code class="prettyprint">org.specs2.matcher.NoCanBeEqual</code>: deactivate the <code class="prettyprint">===</code> method on any type <code class="prettyprint">T</code></li>
   <li><code class="prettyprint">org.specs2.matcher.NoMustExpectations</code>: deactivate the <code class="prettyprint">must</code>, <code class="prettyprint">must_==</code>,... methods on any value of type <code class="prettyprint">T</code></li>
   <li><code class="prettyprint">org.specs2.matcher.NoShouldExpectations</code>: deactivate the <code class="prettyprint">should</code>, <code class="prettyprint">should_==</code>,... methods on any value of type <code class="prettyprint">T</code></li>
+  <li><code class="prettyprint">org.specs2.matcher.NoExpectationsDescription</code>: deactivate the <code class="prettyprint">&lt;==&gt;</code> and <code class="prettyprint">==&gt;</code> methods on Strings</li>
   <li><code class="prettyprint">org.specs2.specification.NoAutoExamples</code>: deactivate the conversions from <code class="prettyprint">Boolean/Result/MatchResult/DataTable</code> to <code class="prettyprint">Fragment</code> or <code class="prettyprint">Example</code>. Specific versions of this trait can be selectively used, on either <code class="prettyprint">Boolean</code> or <code class="prettyprint">Result</code> or <code class="prettyprint">MatchResult</code> or <code class="prettyprint">DataTable</code>. For example: <code class="prettyprint">org.specs2.specification.NoBooleanAutoExamples</code> can be used to avoid the <code class="prettyprint">^</code> method being used on booleans</li>
   <li><code class="prettyprint">org.specs2.specification.NoFragmentsBuilder</code>: deactivate the implicit conversions from <code class="prettyprint">String</code> to <code class="prettyprint">Fragment</code>s</li>
   <li><code class="prettyprint">org.specs2.specification.mutable.NoFragmentsBuilder</code>: deactivate the implicit conversions from to remove <code class="prettyprint">in</code>, <code class="prettyprint">&gt;</code><code class="prettyprint">&gt;</code>, <code class="prettyprint">should</code> and <code class="prettyprint">can</code> methods from <code class="prettyprint">String</code>s</li>
 </ul>
 <hr /></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Structure</th></tr>
-        <tr><td>Finished in</td><td class="info">158 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">70 ms</td></tr>
         <tr><td>Results</td><td class="success">18 examples, 0 failure, 0 error</td></tr>
       </table></div></div>
                        <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="1327166824"><a href="../guide/org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1428177680"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1135209413"><a href="../guide/org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="1556743250"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -1283,7 +1346,7 @@ textFragment(&quot;this is a text fragment&quot;)
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1891071509"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1256971381"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -1337,6 +1400,10 @@ textFragment(&quot;this is a text fragment&quot;)
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#DataTables">DataTables</a>
             
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Example+groups">Example groups</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Isolation">Isolation</a>
+            
+          </li></ul>
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Links">Links</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Inclusion">Inclusion</a>
@@ -1353,7 +1420,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Contexts">Contexts</a>
-            <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Isolation">Isolation</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Isolation_1">Isolation</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Scope">Scope</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Isolated+variables">Isolated variables</a>
@@ -1445,7 +1512,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li></ul>
-          </li><li id="315428366"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1545500553"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1458,7 +1525,11 @@ textFragment(&quot;this is a text fragment&quot;)
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Optional">Optional</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Custom">Custom</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#From+functions">From functions</a>
             
+          </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#From+Hamcrest">From Hamcrest</a>
+            
+          </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#With+sequences">With sequences</a>
             
           </li></ul>
@@ -1503,7 +1574,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="94864591"><a href="../guide/org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="912505653"><a href="../guide/org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1547,7 +1618,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li></ul>
-          </li><li id="1822234898"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="948749994"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1631,7 +1702,7 @@ textFragment(&quot;this is a text fragment&quot;)
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1170997074"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="548916708"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1675,7 +1746,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li></ul>
-          </li><li id="775113170"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="2142905858"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1695,7 +1766,7 @@ textFragment(&quot;this is a text fragment&quot;)
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1327166824','1891071509'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1135209413','1256971381'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                        <div class="col3"><div id="rightcolumn"></div></div>
                      </div>

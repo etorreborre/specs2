@@ -64,7 +64,7 @@
     </head><body><div id="breadcrumbs"><a href="../guide/org.specs2.UserGuide.html">UserGuide</a><t> / </t><a href="../guide/org.specs2.guide.Matchers.html">Matchers</a></div><div class="colmask threecol">
                    <div class="colmid">
                      <div class="colleft">
-                       <div class="col1"><div id="central"><title>Matchers</title><a name="Matchers"><h2 specId="315428366">Matchers</h2></a><status class="ok"><div class="level0" style="display: show"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
+                       <div class="col1"><div id="central"><title>Matchers</title><a name="Matchers"><h2 specId="1545500553">Matchers</h2></a><status class="ok"><div class="level0" style="display: show"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
 <ul>
   <li>Boolean</li>
   <li>Standard result</li>
@@ -634,7 +634,12 @@ iterator.next must be_==(3).eventually
 </code></pre></li>
   <li><p>using <code class="prettyprint">mute</code> to change a Matcher so that it returns MatchResults with no messages. This is used in Forms to create<br /> properties showing no messages when they fail</p></li>
   <li><p>using <code class="prettyprint">updateMessage(f: String =&gt; String)</code> or <code class="prettyprint">setMessage(m: String)</code> to change the failure message</p></li>
-</ul><p>Another easy way to create matchers, is to use some implicit conversions from functions to Matchers:</p>
+  <li><p>using <code class="prettyprint">&lt;==&gt;</code> or <code class="prettyprint">==&gt;</code> to provide a meaning for the expectation when the failure message would not be clear</p>
+  <pre><code class="prettyprint">// when failing, this displays:
+// The byname function has not become a strict one because 'evaluated' is not equal to 'not evaluated'
+&quot;The byname function has become a strict one&quot; &lt;==&gt; (parameter === &quot;evaluated&quot;)
+</code></pre></li>
+</ul><p>Note that the sentence describing the expectation is negated when there is a failure. This functionality is provided by the <code class="prettyprint">org.specs2.text.Sentences::negateSentence</code> trait. You can override this method if you want/need to provide a better behavior for this feature.</p><a name="From+functions"><h5>From functions</h5></a><p>Another easy way to create matchers, is to use some implicit conversions from functions to Matchers:</p>
 <pre><code class="prettyprint">   val m: Matcher[String]  = ((_: String).startsWith(&quot;hello&quot;), &quot;doesn't start with hello&quot;)
    val m1: Matcher[String] = ((_: String).startsWith(&quot;hello&quot;), &quot;starts with hello&quot;, &quot;doesn't start with hello&quot;)
    val m2: Matcher[String] = ((_: String).startsWith(&quot;hello&quot;), (s:String) =&gt; s+ &quot; doesn't start with hello&quot;)
@@ -655,7 +660,27 @@ iterator.next must be_==(3).eventually
   <li><p>define the <code class="prettyprint">apply</code> method (and its somewhat complex signature)</p></li>
   <li><p>use the protected <code class="prettyprint">result</code> method to return: a Boolean condition, a message when the match is ok, a message when the<br /> match is not ok, the &quot;expectable&quot; value. Note that if you change the expectable value you need to use the <code class="prettyprint">map</code> method<br /> on the <code class="prettyprint">s</code> expectable (<code class="prettyprint">s.map(other)</code>). This way you preserve the ability of the Expectable to throw an Exception if<br /> a subsequent match fails</p></li>
   <li><p>you can use the <code class="prettyprint">description</code> method on the <code class="prettyprint">Expectable</code> class to return the full description of the expectable including<br /> the optional description you setup using the <code class="prettyprint">aka</code> method</p></li>
-</ul><a name="With+sequences"><h4>With sequences</h4></a><p>If you have the same &quot;MatchResult&quot; expression that you'd like to verify for different values you can write one of the following:</p>
+</ul><a name="From+Hamcrest"><h5>From Hamcrest</h5></a><p>If you have Hamcrest matchers in your project and you want to reuse them as specs2 matchers, you can mix-in the <code class="prettyprint">org.specs2.matcher.Hamcrest</code> trait:</p>
+<pre><code class="prettyprint">class HamcrestSpec extends Specification with Grouped with Hamcrest { def is =
+
+  &quot;Hamcrest matchers can be used as specs2 matchers by mixing in the Hamcrest trait&quot;      ^
+  &quot;for example a beEven Hamcrest matcher can be used in a 'must' expression&quot;              ! g1.e1 ^
+    &quot;the failure message must contain the matched value and the Hamcrest failure message&quot; ! g1.e2
+
+
+  new g1 {
+    e1 := 2 must beEven
+    e2 := (3 must beEven).message === &quot;&lt;3&gt; is odd&quot;
+  }
+
+  // a Hamcrest matcher for even numbers
+  object beEven extends BaseMatcher[Int] {
+    def matches(item: Object): Boolean       = item.toString.toInt % 2 == 0
+    def describeTo(description: Description) { description.appendText(&quot; is odd&quot;) }
+  }
+
+}
+</code></pre><a name="With+sequences"><h4>With sequences</h4></a><p>If you have the same &quot;MatchResult&quot; expression that you'd like to verify for different values you can write one of the following:</p>
 <pre><code class="prettyprint">    // stop after the first failure
     ((_:Int) must be_&gt;(2)).forall(Seq(3, 4, 5))
     forall(Seq(3, 4, 5)) ((_:Int) must be_&gt;(2))
@@ -885,7 +910,7 @@ iterator.next must be_==(3).eventually
 <ul>
   <li>with an acceptance specification: use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance)</li>
   <li>with a unit specification: use the <code class="prettyprint">org.specs2.mutable.Tables</code> trait instead of <code class="prettyprint">org.specs2.matcher.DataTables</code> trait. This will &quot;deactivate&quot; the implicit used to create examples with <code class="prettyprint">!</code></li>
-</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="94864591"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../images/icon_success_sml.gif" /> Here's <a tooltip="" href="../guide/org.specs2.guide.Forms.html">how to use Forms</a></div></status><status class="ok"><div class="level0" style="display: show"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
+</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="912505653"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../images/icon_success_sml.gif" /> Here's <a tooltip="" href="../guide/org.specs2.guide.Forms.html">how to use Forms</a></div></status><status class="ok"><div class="level0" style="display: show"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
 <ul>
   <li><p><code class="prettyprint">org.specs2.matcher.MustMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldMatchers</code>) to write anything like <code class="prettyprint">1 must be_==(1)</code> and<br /> get a <code class="prettyprint">Result</code> back</p></li>
   <li><p>You can also use the side-effecting version of that trait called <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code> (or <code class="prettyprint">ShouldThrownMatchers</code>).<br /> It throws a <code class="prettyprint">FailureException</code> as soon as an expectation is failing. Those traits can also be used in a regular<br /> Specification if you have several expectations per example and if you don't want to chain them with <code class="prettyprint">and</code>.</p></li>
@@ -902,12 +927,12 @@ iterator.next must be_==(3).eventually
 </code></pre>
 <hr /></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Matchers</th></tr>
-        <tr><td>Finished in</td><td class="info">1 second, 168 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">385 ms</td></tr>
         <tr><td>Results</td><td class="success">47 examples, 536 expectations, 0 failure, 0 error</td></tr>
       </table></div></div>
                        <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="1327166824"><a href="../guide/org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1428177680"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1135209413"><a href="../guide/org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="1556743250"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -917,7 +942,7 @@ iterator.next must be_==(3).eventually
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1891071509"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1256971381"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -971,6 +996,10 @@ iterator.next must be_==(3).eventually
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#DataTables">DataTables</a>
             
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Example+groups">Example groups</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Isolation">Isolation</a>
+            
+          </li></ul>
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Links">Links</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Inclusion">Inclusion</a>
@@ -987,7 +1016,7 @@ iterator.next must be_==(3).eventually
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Contexts">Contexts</a>
-            <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Isolation">Isolation</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Isolation_1">Isolation</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Scope">Scope</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Isolated+variables">Isolated variables</a>
@@ -1079,7 +1108,7 @@ iterator.next must be_==(3).eventually
             
           </li></ul>
           </li></ul>
-          </li><li id="315428366"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1545500553"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1092,7 +1121,11 @@ iterator.next must be_==(3).eventually
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Optional">Optional</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Custom">Custom</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#From+functions">From functions</a>
             
+          </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#From+Hamcrest">From Hamcrest</a>
+            
+          </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#With+sequences">With sequences</a>
             
           </li></ul>
@@ -1137,7 +1170,7 @@ iterator.next must be_==(3).eventually
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="94864591"><a href="../guide/org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="912505653"><a href="../guide/org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1181,7 +1214,7 @@ iterator.next must be_==(3).eventually
             
           </li></ul>
           </li></ul>
-          </li><li id="1822234898"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="948749994"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1265,7 +1298,7 @@ iterator.next must be_==(3).eventually
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1170997074"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="548916708"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1309,7 +1342,7 @@ iterator.next must be_==(3).eventually
             
           </li></ul>
           </li></ul>
-          </li><li id="775113170"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="2142905858"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1329,7 +1362,7 @@ iterator.next must be_==(3).eventually
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1327166824','315428366'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1135209413','1545500553'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                        <div class="col3"><div id="rightcolumn"></div></div>
                      </div>
