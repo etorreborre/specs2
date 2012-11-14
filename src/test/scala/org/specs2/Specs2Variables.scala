@@ -4,7 +4,19 @@ import scala.io.Source
 
 object Specs2Variables {
 
-  lazy val version = versionLine.flatMap(extractVersion).getOrElse("version not found")
+  lazy val version         = versionLine.flatMap(extractVersion).getOrElse("version not found")
+
+  lazy val snapshotVersion =
+    if (isSnapshot) version
+    else            nextVersion+"-SNAPSHOT"
+
+  lazy val nextVersion =
+    if (isSnapshot) version.replace("-SNAPSHOT", "")
+    else {
+      val major :: minor :: patch :: _ = version.split("\\.").toList
+      Seq(major, minor, patch.toInt+1).mkString(".")
+    }
+
   lazy val isSnapshot = version endsWith "SNAPSHOT"
 
   lazy val branch = if (isSnapshot) "master" else version
@@ -13,9 +25,10 @@ object Specs2Variables {
   lazy val guideSnapshotDir = "guide-SNAPSHOT/"+guideOfficialDir
   lazy val guideDir         = (if (isSnapshot) guideSnapshotDir else guideOfficialDir)
 
-  lazy val apiOfficialDir = "http://etorreborre.github.com/specs2/api/" + version + "/"
-  lazy val apiSnapshotDir = "http://etorreborre.github.com/specs2/api/latest/"
-  lazy val apiDir         = (if (isSnapshot) apiSnapshotDir else apiOfficialDir)
+  lazy val examplesOfficialDir = "https://github.com/etorreborre/specs2/tree/"+version+"/src/test/scala/examples"
+  lazy val apiOfficialDir      = "http://etorreborre.github.com/specs2/api/" + version + "/"
+  lazy val apiSnapshotDir      = "http://etorreborre.github.com/specs2/api/latest/"
+  lazy val apiDir              = (if (isSnapshot) apiSnapshotDir else apiOfficialDir)
 
   private lazy val versionLine = buildSbt.flatMap(_.getLines.find(line => line contains "version"))
   private def extractVersion(line: String) = "version\\s*\\:\\=\\s*\"(.*)\"".r.findFirstMatchIn(line).map(_.group(1))
@@ -27,14 +40,17 @@ object Specs2Variables {
      * set the version and branch tags in the pages
      */
     def replaceVariables = {
-      Seq("VERSION"        -> version,
-          "BRANCH"         -> branch,
-          "API"            -> apiDir,
-          "API_OFFICIAL"   -> apiOfficialDir,
-          "API_SNAPSHOT"   -> apiSnapshotDir,
-          "GUIDE"          -> guideDir,
-          "GUIDE_OFFICIAL" -> guideOfficialDir,
-          "GUIDE_SNAPSHOT" -> guideSnapshotDir).foldLeft(t) { case (res, (k, v)) => res.replaceAll("\\$\\{SPECS2_"+k+"\\}", v) }
+      Seq("VERSION"            -> version,
+          "SNAPSHOT_VERSION"   -> snapshotVersion,
+          "NEXT_VERSION"       -> nextVersion,
+          "BRANCH"             -> branch,
+          "API"                -> apiDir,
+          "API_OFFICIAL"       -> apiOfficialDir,
+          "API_SNAPSHOT"       -> apiSnapshotDir,
+          "EXAMPLES_OFFICIAL"  -> examplesOfficialDir,
+          "GUIDE"              -> guideDir,
+          "GUIDE_OFFICIAL"     -> guideOfficialDir,
+          "GUIDE_SNAPSHOT"     -> guideSnapshotDir).foldLeft(t) { case (res, (k, v)) => res.replaceAll("\\$\\{SPECS2_"+k+"\\}", v) }
     }
   }
 
