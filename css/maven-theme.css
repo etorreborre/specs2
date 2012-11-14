@@ -353,10 +353,13 @@ table td {
 }
 
 #leftcolumn {
+  border:0px;
 }
-
 #tree {
   background-color: #ffffff;
+  border-color: #bbbbbb;
+  border-style: solid;
+  border-width: 1px;
   overflow: scroll;
 }
 
