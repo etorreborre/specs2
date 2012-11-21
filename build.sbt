@@ -10,7 +10,7 @@ version := "1.13-SNAPSHOT"
 
 organization := "org.specs2"
 
-scalaVersion := "2.10.0-RC2"
+scalaVersion := "2.10.0-RC3"
 
 crossVersion := CrossVersion.full
 
@@ -24,8 +24,8 @@ resolvers ++= Seq("releases" at "http://oss.sonatype.org/content/repositories/re
                   "snapshots" at "http://oss.sonatype.org/content/repositories/snapshots")
 
 libraryDependencies <<= scalaVersion { scala_version => Seq(
-  "org.specs2" % "scalaz-core_2.10.0-RC2" % "7.0-SNAPSHOT",
-  "org.specs2" % "scalaz-concurrent_2.10.0-RC2" % "7.0-SNAPSHOT",
+  "org.specs2" % "scalaz-core_2.10.0-RC3" % "7.0-SNAPSHOT",
+  "org.specs2" % "scalaz-concurrent_2.10.0-RC3" % "7.0-SNAPSHOT",
   "org.scala-lang" % "scala-compiler" % scala_version % "optional",
   "org.scalacheck" % "scalacheck_2.10.0-RC2" % "1.10.0" % "optional",
   "org.scala-tools.testing" % "test-interface" % "0.5" % "optional",
