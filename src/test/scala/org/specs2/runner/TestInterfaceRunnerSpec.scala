@@ -8,6 +8,7 @@ import org.scalatools.testing._
 import main.{ArgumentsArgs, Arguments}
 import specification.{Groups, ExecutingSpecification}
 import execute.StandardResults
+import scala.collection.mutable.ListBuffer
 
 class TestInterfaceRunnerSpec extends Specification with Groups { def is =
                                                                                                                         """
@@ -123,7 +124,7 @@ class TestInterfaceRunnerSpec extends Specification with Groups { def is =
   "executing" - new g4 with  matcher.MustMatchers with ArgumentsArgs with StandardResults with MockOutput {
     val eventHandler = new EventHandler { def handle(event: Event) = println("console export") }
     val htmlExporter = new HtmlExporting { override def export(implicit args: Arguments) = (spec: ExecutingSpecification) =>
-    { println("html export"); spec.execute }
+      { println("html export"); spec.execute }
     }
 
     val reporter = new TestInterfaceConsoleReporter(Some(new TestInterfaceReporter(eventHandler, Array())), (a: Arguments) => Seq(htmlExporter)) {
@@ -132,14 +133,19 @@ class TestInterfaceRunnerSpec extends Specification with Groups { def is =
     }
 
     val spec = new Specification { def is = ok }
-
     e1 := {
-      reporter.report(spec)(Arguments("console"))
-      messages must contain("console export", "stored").inOrder
+      // out of 10 tries we should see the storing happening after the exporting
+      val results = new ListBuffer[Seq[String]]
+      (1 to 10).foreach { i =>
+        reporter.report(spec)(Arguments("console"))
+        results.append(messages)
+        clear()
+      }
+      atLeastOnce(results)((msgs: Seq[String]) => msgs aka results.mkString("\n") must contain("console export", "stored").inOrder)
     }
     e2 := {
-      reporter.report(spec)(Arguments("console", "html"))
-      messages must contain("console export", "stored", "html export").inOrder
+      reporter.report(spec)(Arguments("console html"))
+      messages must contain("stored", "html export").inOrder
     }
   }
 }
