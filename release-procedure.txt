@@ -1,28 +1,35 @@
+// prepare the release artifacts
 1. set build.sbt version to next number
-2. test/cross publish the jars
-3. release on the sonatype website: http://oss.sonatype.org
+2. change the version in the version.sbt file
 
-4. create the ls metadata: ls-write-version
-5. change the version in the version.sbt file
-6. commit the src/notes/<version>.json file and the version.sbt file
-7. change the default branch on github
-8. push the ls information with lsync
+3. create the ls metadata: ls-write-version
+4. review the src/notes/<version>.json file
+5. update the index.html page: `test-only org.specs2.Index`
+6. create the user guide: `test-only *UserGuide* -- html`
+7. make the site: `make-site` (this creates the scaladoc)
 
-9. update the index.html and modify the versions (new version and next snapshot)
-10. create the user guide: `test-only *UserGuide* -- html`
-11. make the site: `make-site` (this creates the scaladoc)
+// tag
+8. commit the modified files and tag the version SPECS2-X.Y.Z
+9. push the new version (check "include tags")
+
+// publish
+10. test/cross publish the jars
+11. release on the sonatype website: http://oss.sonatype.org
 12. push the new github pages: `ghpages-push-site`
+13. change the default branch on github to the latest one
+14. push the ls information with lsync
 
-13. tag the released version
-14. push the new version (check "include tags")
-15. create a new specs2 branch for the next SNAPSHOT
+// test
+15. set the specs2-test project version
+16. test the specs2-test with the latest specs2
+17. tag and push the new version (check "include tags")
+18. download the test-project from the link on the Welcome page and test it again
 
-17 set the specs2-test project version
-18. tag and push the new version (check "include tags")
-19. create a new snapshot branch
-20. download the test-project and test it
-
+// prepare the new release
+19. create a new specs2 branch for the next SNAPSHOT
+20. create a new specs2-test branch for the next SNAPSHOT
 21. close the milestone on github and create a new one
 
-13. review the posterous notes and herald-publish them
-22. send a message on the twitter account
+// notify
+22. herald-publish the posterous notes
+23. send a message on the twitter account

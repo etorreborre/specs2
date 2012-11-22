@@ -3,6 +3,8 @@ package matcher
 
 import mutable.Specification
 import execute._
+import io.MockOutput
+import specification.Scope
 
 /**
  * all these examples works in a mutable specification which means that FailureExceptions are caught before being
@@ -15,9 +17,19 @@ class MatchResultLogicalCombinatorsSpec extends Specification with ResultMatcher
     ((1 must_== 2) and (2 must_== 2)) must beFailing
   }
   "Match results must not be evaluated twice when failing with and" >> {
-    var evaluated = 0
-    ({evaluated += 1; 1 must_== 2} and (2 must_== 2))
-    evaluated === 1
+    "when the first match is failing" >> {
+      var evaluated = 0
+      ({evaluated += 1; 1 must_== 2} and (2 must_== 2))
+      evaluated === 1
+    }
+    "when the second match is failing" >> new MockOutput with Scope {
+      def printMsg(m: String) = println(m)
+      def beKo: Matcher[Int] = (i: Int) => ({printMsg("ko"); false}, "ko")
+      def beOk: Matcher[Int] = (i: Int) => ({printMsg("ok"); true}, "ok")
+
+      (1 must beOk and beKo)
+      messages === Seq("ok", "ko")
+    }
   }
   "Match results can be combined with or" >> {
     (1 must_== 2) or (2 must_== 2)

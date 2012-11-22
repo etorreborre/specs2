@@ -1,12 +1,21 @@
-This version adds features and improvements:
+This version adds 3 new features:
+
+ * added the possibility to [describe an expectation with a sentence](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Matchers.html#Custom)(see `<==> or ==>`)
+ * added traits to standardize the creation of [groups of examples in an Acceptance specification](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Structure.html#Example+groups)
+ * added a `Hamcrest` trait to [convert Hamcrest matchers to specs2 matchers](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Matchers.html#From+Hamcrest) ([issue 114](https://github.com/etorreborre/specs2/issues/114))
+
+And some improvements:
 
  * added better failure messages to spot faster the issue with `List("1, 2") === List("1", "2")`
  * when the failure message for `be_==` is too long, split it on 2 lines
  * added [more options](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Runners.html#Files+Runner) to the `FilesRunner` and the possibility to export all possible outputs from it: junitxml, console, html,...
- * added the possibility to [describe an expectation with a sentence](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Matchers.html#Custom)(see `<==> or ==>`)
- * added traits to standardize the creation of [groups of examples in an Acceptance specification](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Structure.html#Example+groups)
- * [issue 114](https://github.com/etorreborre/specs2/issues/114): added a `Hamcrest` trait to [convert Hamcrest matchers to specs2 matchers](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Matchers.html#From+Hamcrest)
- 
+ * matchers created from function returning a boolean and a failure message will get a proper english negated message when the matcher is negated.
+   If a matcher `m` returns `3 is not even`, then `m.not` returns `3 is even` (instead of `not(3 is even` before)
+ * definition of Given/When/Then steps: if no variable is present in the textual description, [the whole string is passed to the step](http://bit.ly/QFeSSS)
+ * a Given/When step can use thrown expectations to check intermediate behavior. If a `FailedException` is thrown, [the rest of the steps will not execute](http://bit.ly/QFeSSS)
+ * a Given/When step can [check a value before passing it to the next step](http://bit.ly/QFeSSS) (`"abc" must have size(3)` will pass the string `abc` to the next step)
+ * changed the `Step(stopOnFail=true)` behavior for a sequential specification so that [any previous failure will stop the rest of the specification](http://bit.ly/QFeSSS)
+ * [issue 117](https://github.com/etorreborre/specs2/issues/117): specifications with a 1-argument constructor can be instantiated if the argument has a 0-argument constructor or a 1-argument constructor subject to the same recursive rule
  
 And some fixes:
 
@@ -14,6 +23,8 @@ And some fixes:
  * fixed [issue 113](https://github.com/etorreborre/specs2/issues/113): added a [note in the User Guide](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Runners.html#with+sbt+%3E+0.9.x) showing how to pass arguments to sbt
  * fixed [issue 115](https://github.com/etorreborre/specs2/issues/115): better parsing of package directives when looking for specifications with the `SpecificationsFinder` trait
  * fixed [issue 116](https://github.com/etorreborre/specs2/issues/116): made sure that a specification referencing itself with the `see` fragment will not recurse forever
+ * fixed a Mockito stubbing issue [when the parameter is a Set](http://bit.ly/QFf5FB)
  * fixed [the evaluation of `or` on combinations of values throwing an exception and matchers like `throwAn[Exception]`](http://bit.ly/Q7zKBQ)
- 
+ * fixed [the xml matchers in the presence of `Group` nodes](http://bit.ly/ZFu56O)
+
  ==========================

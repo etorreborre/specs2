@@ -21,38 +21,39 @@ trait ResultLogicalCombinators extends Results {
     /**
      * @return the logical and combination of 2 results
      */
-    def and(other: =>Result): Result = r match {
-      case s @ Success(_,_) =>   {
-        val o = other
+    def and(other: =>Result): Result = {
+      lazy val o = ResultExecution.execute(other)
+      r match {
+        case s @ Success(_,_) =>   {
           o match {
             case Success(m, e)                  => if (r.message == m || r.message.isEmpty) Success(m, concat(s.exp, e), r.expectationsNb + o.expectationsNb)
-                                                   else                                     Success(r.message+" and "+m, concat(s.exp, e), r.expectationsNb + o.expectationsNb)
+            else                                     Success(r.message+" and "+m, concat(s.exp, e), r.expectationsNb + o.expectationsNb)
             case DecoratedResult(d, r1)         => DecoratedResult(d, r.and(r1))
             case Failure(_,_,_,_) | Error(_,_)  => o.addExpectationsNb(r.expectationsNb).mapExpected((e: String) => concat(r.expected, e))
             case _                              => r.addExpectationsNb(o.expectationsNb).mapExpected((e: String) => concat(e, o.expected))
           }
-      }
-      case Pending(_) | Skipped(_,_)     => {
-        val o = other
-        o match {
-          case s @ Success(_,_)       => s
-          case f @ Failure(_,_,_,_)   => f
-          case e @ Error(_,_)         => e
-          case DecoratedResult(d, r1) => DecoratedResult(d, r.and(r1))
-          case _                      => o
         }
-      }
-      case d @ DecoratedResult(_,_)     => {
-        other match {
-          case DecoratedResult(d2, r2) => {
-            val andResult = (d.result and r2)
-            if (andResult.isSuccess) DecoratedResult(d.decorator, andResult)
-            else                     DecoratedResult(d2, andResult)
+        case Pending(_) | Skipped(_,_)     => {
+          o match {
+            case s @ Success(_,_)       => s
+            case f @ Failure(_,_,_,_)   => f
+            case e @ Error(_,_)         => e
+            case DecoratedResult(d, r1) => DecoratedResult(d, r.and(r1))
+            case _                      => o
           }
-          case o                   => DecoratedResult(d.decorator, d.result and o)
         }
+        case d @ DecoratedResult(_,_)     => {
+          o match {
+            case DecoratedResult(d2, r2) => {
+              val andResult = (d.result and r2)
+              if (andResult.isSuccess) DecoratedResult(d.decorator, andResult)
+              else                     DecoratedResult(d2, andResult)
+            }
+            case another                 => DecoratedResult(d.decorator, d.result and another)
+          }
+        }
+        case _                          => r
       }
-      case _                          => r
     }
     /**
      * @return the logical or combination of 2 results
