@@ -9,6 +9,7 @@ import main.{ArgumentsArgs, Arguments}
 import specification.{Groups, ExecutingSpecification}
 import execute.StandardResults
 import scala.collection.mutable.ListBuffer
+import annotation.tailrec
 
 class TestInterfaceRunnerSpec extends Specification with Groups { def is =
                                                                                                                         """
@@ -85,10 +86,10 @@ class TestInterfaceRunnerSpec extends Specification with Groups { def is =
         Seq(export(c, "TestInterfaceReporter"), export(h, "HtmlExporting$"), export(m, "MarkupExporting$"), export(j, "JUnitXmlExporting$")).flatten
 
       "args"                                || "console" | "html" | "markup" | "junitxml" |
-        "junitxml"                            !! false     ! false  ! false    ! true       |
-        "junitxml,console"                    !! true      ! false  ! false    ! true       |
-        "junitxml,html,console"               !! true      ! true   ! false    ! true       |
-        "junitxml,markup,console"             !! true      ! false  ! true     ! true       |> { (arguments, c, h, m, j) =>
+      "junitxml"                            !! false     ! false  ! false    ! true       |
+      "junitxml,console"                    !! true      ! false  ! false    ! true       |
+      "junitxml,html,console"               !! true      ! true   ! false    ! true       |
+      "junitxml,markup,console"             !! true      ! false  ! true     ! true       |> { (arguments, c, h, m, j) =>
         runner.exporters(arguments.split(","), handler).map(_.getClass.getSimpleName) must containAllOf(selectedExporters(c, h, m, j))
       }
 
@@ -122,14 +123,25 @@ class TestInterfaceRunnerSpec extends Specification with Groups { def is =
   }
 
   "executing" - new g4 with  matcher.MustMatchers with ArgumentsArgs with StandardResults with MockOutput {
-    val eventHandler = new EventHandler { def handle(event: Event) = println("console export") }
     val htmlExporter = new HtmlExporting { override def export(implicit args: Arguments) = (spec: ExecutingSpecification) =>
       { println("html export"); spec.execute }
     }
+    val testInterfaceReporter = new TestInterfaceReporter(NullEventHandler , Array()) {
+      override def export(implicit args: Arguments) = (spec: ExecutingSpecification) => {
+        val executed = spec.execute
+        println("console export")
+        executed
+      }
+    }
 
-    val reporter = new TestInterfaceConsoleReporter(Some(new TestInterfaceReporter(eventHandler, Array())), (a: Arguments) => Seq(htmlExporter)) {
-      // the storage takes a bit more time to make sure it is actually done after the console export
-      override def store(implicit args: Arguments) = (spec: ExecutingSpecification) => { Thread.sleep(100); println("stored"); spec }
+    val reporter = new TestInterfaceConsoleReporter(Some(testInterfaceReporter), (a: Arguments) => Seq(htmlExporter)) {
+      override def store(implicit args: Arguments) = (spec: ExecutingSpecification) => {
+        // take some time to do the storing
+        @tailrec
+        def loop(i: Int): Unit = if (i == 0) () else loop(i - 1)
+        loop(100000)
+        println("stored"); spec
+      }
     }
 
     val spec = new Specification { def is = ok }
