@@ -33,7 +33,8 @@ libraryDependencies <<= scalaVersion { scala_version => Seq(
   "org.mockito" % "mockito-all" % "1.9.0" % "optional",
   "junit" % "junit" % "4.7" % "optional",
   "org.pegdown" % "pegdown" % "1.0.2" % "optional",
-  "org.specs2" % "classycle" % "1.4.1" % "optional"
+  "org.specs2" % "classycle" % "1.4.1" % "optional",
+  "org.scalaz" %% "scalaz-core" % "6.0.4" % "optional"
   )
 }
 
