@@ -23,10 +23,12 @@ object ValidationMatchersSpec extends Specification with ThrownExpectations {   
     1.success must beZSuccess
     1.right   must beRight
 
-    // 1.success must not beZFailure
+    1.success must not beZFailure //completely blank line next or it wont compile!
+
     1.right   must not beLeft
 
-    // 1.success must be zsuccess
+    1.success must be zsuccess //completely blank line next or it wont compile!
+
     1.right   must be right
 
     1.success must not be zfailure
@@ -55,10 +57,12 @@ object ValidationMatchersSpec extends Specification with ThrownExpectations {   
     1.fail must beZFailure
     1.left must beLeft
 
-    // 1.fail must not beZSuccess
+    1.fail must not beZSuccess //completely blank line next or it wont compile!
+
     1.left must not beRight
 
-    // 1.fail must be zfailure
+    1.fail must be zfailure //completely blank line next or it wont compile!
+
     1.left must be left
 
     1.fail must not be zsuccess
