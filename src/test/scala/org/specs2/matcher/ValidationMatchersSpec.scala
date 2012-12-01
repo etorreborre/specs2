@@ -1,7 +1,5 @@
-package com.example
-
-import org.specs2.Specification
-import org.specs2.matcher.ThrownExpectations
+package org.specs2
+package matcher
 
 import scalaz._
 import Scalaz._
