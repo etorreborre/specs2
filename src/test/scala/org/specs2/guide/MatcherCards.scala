@@ -91,13 +91,16 @@ object OptionEitherMatchers extends Card {
   There are several matchers to check Option and Either instances:
 
  * `beSome` checks if an element is Some(_)
+ * `beSome(exp)` checks if an element is Some(exp)
  * `beSome.which(function)` checks if an element is Some(_) and satisfies a function returning a boolean
  * `beSome.like(partial function)` checks if an element is Some(_) and satisfies a partial function returning a `MatchResult`
  * `beNone` checks if an element is None
  * `beAsNoneAs` checks if 2 values are equal to None at the same time
  * `beRight` checks if an element is Right(_)
+ * `beRight(exp)` checks if an element is Right(exp)
  * `beRight.like(partial function)` checks if an element is Right(_) and satisfies a partial function returning a `MatchResult`
  * `beLeft` checks if an element is Left(_)
+ * `beLeft(exp)` checks if an element is Left(exp)
  * `beLeft.like(partial function)` checks if an element is Left(_) and satisfies a partial function returning a `MatchResult`
   """
 }
