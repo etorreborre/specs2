@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.specs2.matcher.ScalaCheckMatchers</title>
+          <title>org.specs2.matcher.ScalazMatchers</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
@@ -14,9 +14,9 @@
         </head>
         <body onload="sh_highlightDocument('../lib/', '.min.js');" class="type">
       <div id="definition">
-        <a title="Go to companion" href="ScalaCheckMatchers$.html"><img src="../../../lib/trait_to_object_big.png" /></a>
+        <img src="../../../lib/trait_big.png" />
         <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.matcher" class="extype" href="package.html">matcher</a></p>
-        <h1><a title="Go to companion" href="ScalaCheckMatchers$.html">ScalaCheckMatchers</a></h1>
+        <h1>ScalazMatchers</h1>
       </div>
 
       <h4 class="signature" id="signature">
@@ -25,18 +25,14 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">ScalaCheckMatchers</span><span class="result"> extends <span name="org.specs2.io.ConsoleOutput" class="extype">ConsoleOutput</span> with <a name="org.specs2.matcher.ScalaCheckFunctions" class="extype" href="ScalaCheckFunctions.html">ScalaCheckFunctions</a> with <a name="org.specs2.matcher.ScalaCheckParameters" class="extype" href="ScalaCheckParameters.html">ScalaCheckParameters</a> with <a name="org.specs2.matcher.FunctionPropertyImplicits" class="extype" href="FunctionPropertyImplicits.html">FunctionPropertyImplicits</a> with <a name="org.specs2.matcher.ResultPropertyImplicits" class="extype" href="ResultPropertyImplicits.html">ResultPropertyImplicits</a> with <span name="org.specs2.execute.ResultLogicalCombinators" class="extype">ResultLogicalCombinators</span> with <a name="org.specs2.matcher.ApplicableArbitraries" class="extype" href="ApplicableArbitraries.html">ApplicableArbitraries</a> with <a name="org.specs2.matcher.Expectations" class="extype" href="Expectations.html">Expectations</a></span>
+        <span class="name">ScalazMatchers</span><span class="result"> extends <a name="org.specs2.matcher.ScalazBaseMatchers" class="extype" href="ScalazBaseMatchers.html">ScalazBaseMatchers</a> with <a name="org.specs2.matcher.ScalazBeHaveMatchers" class="extype" href="ScalazBeHaveMatchers.html">ScalazBeHaveMatchers</a></span>
       </span>
       </h4>
       
-      <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>The ScalaCheckMatchers trait provides matchers which allow to
-assess properties multiple times with generated data.</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="">ScalaCheckMatchers</a></dd><dt>See also</dt><dd><span class="cmt"><p>the <a href="http://code.google.com/p/scalacheck/">ScalaCheck project</a>
-</p></span></dd></dl><div class="toggleContainer block">
+      <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This trait provides matchers for some Scalaz (http://github.com/scalaz) types.
+</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a name="org.specs2.matcher.ScalazMatchers" class="extype" href="">ScalazMatchers</a> with <a name="org.specs2.matcher.AnyMatchers" class="extype" href="AnyMatchers.html">AnyMatchers</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a name="org.specs2.matcher.Expectations" class="extype" href="Expectations.html">Expectations</a>, <a name="org.specs2.matcher.CanBeEqual" class="extype" href="CanBeEqual.html">CanBeEqual</a>, <a name="org.specs2.matcher.ApplicableArbitraries" class="extype" href="ApplicableArbitraries.html">ApplicableArbitraries</a>, <span name="org.specs2.execute.ResultLogicalCombinators" class="extype">ResultLogicalCombinators</span>, <a name="org.specs2.execute.Results" class="extype" href="../execute/Results.html">Results</a>, <a name="org.specs2.matcher.ResultPropertyImplicits" class="extype" href="ResultPropertyImplicits.html">ResultPropertyImplicits</a>, <a name="org.specs2.matcher.FunctionPropertyImplicits" class="extype" href="FunctionPropertyImplicits.html">FunctionPropertyImplicits</a>, <a name="org.specs2.matcher.ScalaCheckParameters" class="extype" href="ScalaCheckParameters.html">ScalaCheckParameters</a>, <a name="org.specs2.matcher.ScalaCheckFunctions" class="extype" href="ScalaCheckFunctions.html">ScalaCheckFunctions</a>, <span name="org.specs2.io.ConsoleOutput" class="extype">ConsoleOutput</span>, <a name="org.specs2.io.Output" class="extype" href="../io/Output.html">Output</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
-        </div><div class="toggleContainer block">
-          <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a name="org.specs2.ScalaCheck" class="extype" href="../ScalaCheck.html">ScalaCheck</a>, <a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers$.html">ScalaCheckMatchers</a>, <a name="org.specs2.matcher.ScalazBaseMatchers" class="extype" href="ScalazBaseMatchers.html">ScalazBaseMatchers</a>, <a name="org.specs2.matcher.ScalazMatchers" class="extype" href="ScalazMatchers.html">ScalazMatchers</a></div>
+          <div class="superTypes hiddenContent"><a name="org.specs2.matcher.ScalazBeHaveMatchers" class="extype" href="ScalazBeHaveMatchers.html">ScalazBeHaveMatchers</a>, <a name="org.specs2.matcher.ScalazBaseMatchers" class="extype" href="ScalazBaseMatchers.html">ScalazBaseMatchers</a>, <a name="org.specs2.matcher.ValidationMatchers" class="extype" href="ValidationMatchers.html">ValidationMatchers</a>, <span name="org.specs2.matcher.ValidationBeHaveMatchers" class="extype">ValidationBeHaveMatchers</span>, <span name="org.specs2.matcher.ValidationBaseMatchers" class="extype">ValidationBaseMatchers</span>, <a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a>, <a name="org.specs2.matcher.Expectations" class="extype" href="Expectations.html">Expectations</a>, <a name="org.specs2.matcher.CanBeEqual" class="extype" href="CanBeEqual.html">CanBeEqual</a>, <a name="org.specs2.matcher.ApplicableArbitraries" class="extype" href="ApplicableArbitraries.html">ApplicableArbitraries</a>, <span name="org.specs2.execute.ResultLogicalCombinators" class="extype">ResultLogicalCombinators</span>, <a name="org.specs2.execute.Results" class="extype" href="../execute/Results.html">Results</a>, <a name="org.specs2.matcher.ResultPropertyImplicits" class="extype" href="ResultPropertyImplicits.html">ResultPropertyImplicits</a>, <a name="org.specs2.matcher.FunctionPropertyImplicits" class="extype" href="FunctionPropertyImplicits.html">FunctionPropertyImplicits</a>, <a name="org.specs2.matcher.ScalaCheckParameters" class="extype" href="ScalaCheckParameters.html">ScalaCheckParameters</a>, <a name="org.specs2.matcher.ScalaCheckFunctions" class="extype" href="ScalaCheckFunctions.html">ScalaCheckFunctions</a>, <span name="org.specs2.io.ConsoleOutput" class="extype">ConsoleOutput</span>, <a name="org.specs2.io.Output" class="extype" href="../io/Output.html">Output</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
     
 
@@ -50,7 +46,7 @@ assess properties multiple times with generated data.</p></div><dl class="attrib
               <span class="filtertype">Inherited</span>
               <ol><li class="hideall out"><span>Hide All</span></li>
               <li class="showall in"><span>Show all</span></li></ol>
-              <ol id="linearization"><li name="org.specs2.matcher.ScalaCheckMatchers" class="in"><span>ScalaCheckMatchers</span></li><li name="org.specs2.matcher.Expectations" class="in"><span>Expectations</span></li><li name="org.specs2.matcher.CanBeEqual" class="in"><span>CanBeEqual</span></li><li name="org.specs2.matcher.ApplicableArbitraries" class="in"><span>ApplicableArbitraries</span></li><li name="org.specs2.execute.ResultLogicalCombinators" class="in"><span>ResultLogicalCombinators</span></li><li name="org.specs2.execute.Results" class="in"><span>Results</span></li><li name="org.specs2.matcher.ResultPropertyImplicits" class="in"><span>ResultPropertyImplicits</span></li><li name="org.specs2.matcher.FunctionPropertyImplicits" class="in"><span>FunctionPropertyImplicits</span></li><li name="org.specs2.matcher.ScalaCheckParameters" class="in"><span>ScalaCheckParameters</span></li><li name="org.specs2.matcher.ScalaCheckFunctions" class="in"><span>ScalaCheckFunctions</span></li><li name="org.specs2.io.ConsoleOutput" class="in"><span>ConsoleOutput</span></li><li name="org.specs2.io.Output" class="in"><span>Output</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+              <ol id="linearization"><li name="org.specs2.matcher.ScalazMatchers" class="in"><span>ScalazMatchers</span></li><li name="org.specs2.matcher.ScalazBeHaveMatchers" class="in"><span>ScalazBeHaveMatchers</span></li><li name="org.specs2.matcher.ScalazBaseMatchers" class="in"><span>ScalazBaseMatchers</span></li><li name="org.specs2.matcher.ValidationMatchers" class="in"><span>ValidationMatchers</span></li><li name="org.specs2.matcher.ValidationBeHaveMatchers" class="in"><span>ValidationBeHaveMatchers</span></li><li name="org.specs2.matcher.ValidationBaseMatchers" class="in"><span>ValidationBaseMatchers</span></li><li name="org.specs2.matcher.ScalaCheckMatchers" class="in"><span>ScalaCheckMatchers</span></li><li name="org.specs2.matcher.Expectations" class="in"><span>Expectations</span></li><li name="org.specs2.matcher.CanBeEqual" class="in"><span>CanBeEqual</span></li><li name="org.specs2.matcher.ApplicableArbitraries" class="in"><span>ApplicableArbitraries</span></li><li name="org.specs2.execute.ResultLogicalCombinators" class="in"><span>ResultLogicalCombinators</span></li><li name="org.specs2.execute.Results" class="in"><span>Results</span></li><li name="org.specs2.matcher.ResultPropertyImplicits" class="in"><span>ResultPropertyImplicits</span></li><li name="org.specs2.matcher.FunctionPropertyImplicits" class="in"><span>FunctionPropertyImplicits</span></li><li name="org.specs2.matcher.ScalaCheckParameters" class="in"><span>ScalaCheckParameters</span></li><li name="org.specs2.matcher.ScalaCheckFunctions" class="in"><span>ScalaCheckFunctions</span></li><li name="org.specs2.io.ConsoleOutput" class="in"><span>ConsoleOutput</span></li><li name="org.specs2.io.Output" class="in"><span>Output</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
             </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -217,6 +213,42 @@ assess properties multiple times with generated data.</p></div><dl class="attrib
       </span>
       <span class="symbol">
         <a href="FunctionPropertyImplicits$FunctionForAll3.html"><span class="name">FunctionForAll3</span></a><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>]</span><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.matcher.ScalazBaseMatchers.MonoidProperty" data-isabs="false">
+      <a id="MonoidProperty:MonoidProperty[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ScalazBaseMatchers$MonoidProperty.html"><span class="name">MonoidProperty</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends SemigroupProperty[T]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.matcher.ScalazBeHaveMatchers.ScalazBeHaveMatchers" data-isabs="false">
+      <a id="ScalazBeHaveMatchers:ScalazBeHaveMatchers[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ScalazBeHaveMatchers$ScalazBeHaveMatchers.html"><span class="name">ScalazBeHaveMatchers</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.matcher.ScalazBaseMatchers.SemigroupProperty" data-isabs="false">
+      <a id="SemigroupProperty:SemigroupProperty[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ScalazBaseMatchers$SemigroupProperty.html"><span class="name">SemigroupProperty</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends AnyRef</span>
       </span>
       </h4>
       
@@ -407,6 +439,54 @@ assess properties multiple times with generated data.</p></div><dl class="attrib
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.ValidationBaseMatchers#beFailing" data-isabs="false">
+      <a id="beFailing[T]:FailureMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beFailing</span><span class="tparams">[<span name="T">T</span>]</span><span class="result">: <span name="org.specs2.matcher.ValidationBaseMatchers.FailureMatcher" class="extype">FailureMatcher</span>[T]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidationBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.ValidationBaseMatchers#beFailing" data-isabs="false">
+      <a id="beFailing[T](⇒ T):Matcher[scalaz.Validation[T, _]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beFailing</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: ⇒ T</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[scalaz.Validation[T, _]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidationBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.ValidationBaseMatchers#beSuccessful" data-isabs="false">
+      <a id="beSuccessful[T]:SuccessValidationMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beSuccessful</span><span class="tparams">[<span name="T">T</span>]</span><span class="result">: <span name="org.specs2.matcher.ValidationBaseMatchers.SuccessValidationMatcher" class="extype">SuccessValidationMatcher</span>[T]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidationBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.ValidationBaseMatchers#beSuccessful" data-isabs="false">
+      <a id="beSuccessful[T](⇒ T):Matcher[scalaz.Validation[_, T]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beSuccessful</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: ⇒ T</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[scalaz.Validation[_, T]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidationBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ResultPropertyImplicits#booleanToProp" data-isabs="false">
       <a id="booleanToProp(⇒ Boolean):Prop"></a>
       <h4 class="signature">
@@ -456,7 +536,7 @@ It is equivalent to writing a must_== b
         <span class="name">check</span><span class="params">(<span name="prop">prop: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="p">p: <a name="org.specs2.matcher.Parameters" class="extype" href="Parameters.html">Parameters</a></span>)</span><span class="result">: <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">execute a ScalaCheck property</p>
+      <p class="shortcomment cmt">execute a ScalaCheck property</p><div class="fullcomment"><div class="comment cmt"><p>execute a ScalaCheck property</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check1" data-isabs="false">
       <a id="check1[T, R]((T) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T],Shrink[T]):Prop"></a>
       <h4 class="signature">
@@ -468,7 +548,7 @@ It is equivalent to writing a must_== b
         <span class="name">check1</span><span class="tparams">[<span name="T">T</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a">a: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T]</span>, <span name="s">s: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check1NoShrink" data-isabs="false">
       <a id="check1NoShrink[T, R]((T) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T]):Prop"></a>
       <h4 class="signature">
@@ -480,7 +560,7 @@ It is equivalent to writing a must_== b
         <span class="name">check1NoShrink</span><span class="tparams">[<span name="T">T</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a">a: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check2" data-isabs="false">
       <a id="check2[T1, T2, R]((T1, T2) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Shrink[T1],Arbitrary[T2],Shrink[T2]):Prop"></a>
       <h4 class="signature">
@@ -492,7 +572,7 @@ It is equivalent to writing a must_== b
         <span class="name">check2</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="s1">s1: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="s2">s2: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T2]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check2NoShrink" data-isabs="false">
       <a id="check2NoShrink[T1, T2, R]((T1, T2) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Arbitrary[T2]):Prop"></a>
       <h4 class="signature">
@@ -504,7 +584,7 @@ It is equivalent to writing a must_== b
         <span class="name">check2NoShrink</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check3" data-isabs="false">
       <a id="check3[T1, T2, T3, R]((T1, T2, T3) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Shrink[T1],Arbitrary[T2],Shrink[T2],Arbitrary[T3],Shrink[T3]):Prop"></a>
       <h4 class="signature">
@@ -516,7 +596,7 @@ It is equivalent to writing a must_== b
         <span class="name">check3</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="s1">s1: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="s2">s2: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="s3">s3: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T3]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check3NoShrink" data-isabs="false">
       <a id="check3NoShrink[T1, T2, T3, R]((T1, T2, T3) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Arbitrary[T2],Arbitrary[T3]):Prop"></a>
       <h4 class="signature">
@@ -528,7 +608,7 @@ It is equivalent to writing a must_== b
         <span class="name">check3NoShrink</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check4" data-isabs="false">
       <a id="check4[T1, T2, T3, T4, R]((T1, T2, T3, T4) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Shrink[T1],Arbitrary[T2],Shrink[T2],Arbitrary[T3],Shrink[T3],Arbitrary[T4],Shrink[T4]):Prop"></a>
       <h4 class="signature">
@@ -540,7 +620,7 @@ It is equivalent to writing a must_== b
         <span class="name">check4</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="s1">s1: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="s2">s2: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="s3">s3: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="s4">s4: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T4]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check4NoShrink" data-isabs="false">
       <a id="check4NoShrink[T1, T2, T3, T4, R]((T1, T2, T3, T4) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Arbitrary[T2],Arbitrary[T3],Arbitrary[T4]):Prop"></a>
       <h4 class="signature">
@@ -552,7 +632,7 @@ It is equivalent to writing a must_== b
         <span class="name">check4NoShrink</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check5" data-isabs="false">
       <a id="check5[T1, T2, T3, T4, T5, R]((T1, T2, T3, T4, T5) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Shrink[T1],Arbitrary[T2],Shrink[T2],Arbitrary[T3],Shrink[T3],Arbitrary[T4],Shrink[T4],Arbitrary[T5],Shrink[T5]):Prop"></a>
       <h4 class="signature">
@@ -564,7 +644,7 @@ It is equivalent to writing a must_== b
         <span class="name">check5</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4, T5) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="s1">s1: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="s2">s2: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="s3">s3: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="s4">s4: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T4]</span>, <span name="a5">a5: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T5]</span>, <span name="s5">s5: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T5]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check5NoShrink" data-isabs="false">
       <a id="check5NoShrink[T1, T2, T3, T4, T5, R]((T1, T2, T3, T4, T5) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Arbitrary[T2],Arbitrary[T3],Arbitrary[T4],Arbitrary[T5]):Prop"></a>
       <h4 class="signature">
@@ -576,7 +656,7 @@ It is equivalent to writing a must_== b
         <span class="name">check5NoShrink</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4, T5) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="a5">a5: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T5]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check6" data-isabs="false">
       <a id="check6[T1, T2, T3, T4, T5, T6, R]((T1, T2, T3, T4, T5, T6) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Shrink[T1],Arbitrary[T2],Shrink[T2],Arbitrary[T3],Shrink[T3],Arbitrary[T4],Shrink[T4],Arbitrary[T5],Shrink[T5],Arbitrary[T6],Shrink[T6]):Prop"></a>
       <h4 class="signature">
@@ -588,7 +668,7 @@ It is equivalent to writing a must_== b
         <span class="name">check6</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4, T5, T6) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="s1">s1: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="s2">s2: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="s3">s3: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="s4">s4: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T4]</span>, <span name="a5">a5: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T5]</span>, <span name="s5">s5: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T5]</span>, <span name="a6">a6: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T6]</span>, <span name="s6">s6: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T6]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check6NoShrink" data-isabs="false">
       <a id="check6NoShrink[T1, T2, T3, T4, T5, T6, R]((T1, T2, T3, T4, T5, T6) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Arbitrary[T2],Arbitrary[T3],Arbitrary[T4],Arbitrary[T5],Arbitrary[T6]):Prop"></a>
       <h4 class="signature">
@@ -600,7 +680,7 @@ It is equivalent to writing a must_== b
         <span class="name">check6NoShrink</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4, T5, T6) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="a5">a5: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T5]</span>, <span name="a6">a6: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T6]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check7" data-isabs="false">
       <a id="check7[T1, T2, T3, T4, T5, T6, T7, R]((T1, T2, T3, T4, T5, T6, T7) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Shrink[T1],Arbitrary[T2],Shrink[T2],Arbitrary[T3],Shrink[T3],Arbitrary[T4],Shrink[T4],Arbitrary[T5],Shrink[T5],Arbitrary[T6],Shrink[T6],Arbitrary[T7],Shrink[T7]):Prop"></a>
       <h4 class="signature">
@@ -612,7 +692,7 @@ It is equivalent to writing a must_== b
         <span class="name">check7</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4, T5, T6, T7) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="s1">s1: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="s2">s2: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="s3">s3: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="s4">s4: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T4]</span>, <span name="a5">a5: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T5]</span>, <span name="s5">s5: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T5]</span>, <span name="a6">a6: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T6]</span>, <span name="s6">s6: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T6]</span>, <span name="a7">a7: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T7]</span>, <span name="s7">s7: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T7]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check7NoShrink" data-isabs="false">
       <a id="check7NoShrink[T1, T2, T3, T4, T5, T6, T7, R]((T1, T2, T3, T4, T5, T6, T7) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Arbitrary[T2],Arbitrary[T3],Arbitrary[T4],Arbitrary[T5],Arbitrary[T6],Arbitrary[T7]):Prop"></a>
       <h4 class="signature">
@@ -624,7 +704,7 @@ It is equivalent to writing a must_== b
         <span class="name">check7NoShrink</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4, T5, T6, T7) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="a5">a5: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T5]</span>, <span name="a6">a6: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T6]</span>, <span name="a7">a7: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T7]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check8" data-isabs="false">
       <a id="check8[T1, T2, T3, T4, T5, T6, T7, T8, R]((T1, T2, T3, T4, T5, T6, T7, T8) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Shrink[T1],Arbitrary[T2],Shrink[T2],Arbitrary[T3],Shrink[T3],Arbitrary[T4],Shrink[T4],Arbitrary[T5],Shrink[T5],Arbitrary[T6],Shrink[T6],Arbitrary[T7],Shrink[T7],Arbitrary[T8],Shrink[T8]):Prop"></a>
       <h4 class="signature">
@@ -636,7 +716,7 @@ It is equivalent to writing a must_== b
         <span class="name">check8</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>, <span name="T8">T8</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4, T5, T6, T7, T8) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="s1">s1: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="s2">s2: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="s3">s3: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="s4">s4: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T4]</span>, <span name="a5">a5: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T5]</span>, <span name="s5">s5: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T5]</span>, <span name="a6">a6: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T6]</span>, <span name="s6">s6: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T6]</span>, <span name="a7">a7: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T7]</span>, <span name="s7">s7: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T7]</span>, <span name="a8">a8: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T8]</span>, <span name="s8">s8: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T8]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check8NoShrink" data-isabs="false">
       <a id="check8NoShrink[T1, T2, T3, T4, T5, T6, T7, T8, R]((T1, T2, T3, T4, T5, T6, T7, T8) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Arbitrary[T2],Arbitrary[T3],Arbitrary[T4],Arbitrary[T5],Arbitrary[T6],Arbitrary[T7],Arbitrary[T8]):Prop"></a>
       <h4 class="signature">
@@ -648,7 +728,7 @@ It is equivalent to writing a must_== b
         <span class="name">check8NoShrink</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>, <span name="T8">T8</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4, T5, T6, T7, T8) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="a5">a5: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T5]</span>, <span name="a6">a6: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T6]</span>, <span name="a7">a7: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T7]</span>, <span name="a8">a8: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T8]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="prt" name="org.specs2.matcher.Expectations#checkFailure" data-isabs="false">
       <a id="checkFailure[T](MatchResult[T]):MatchResult[T]"></a>
       <h4 class="signature">
@@ -684,7 +764,7 @@ It is equivalent to writing a must_== b
         <span class="name">checkPartial</span><span class="tparams">[<span name="T">T</span>, <span name="S">S</span>]</span><span class="params">(<span name="f">f: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[T, S]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (S) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a">a: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T]</span>, <span name="s">s: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#checkPartialNoShrink" data-isabs="false">
       <a id="checkPartialNoShrink[T, S](PartialFunction[T, S])((S) ⇒ Prop,Arbitrary[T]):Prop"></a>
       <h4 class="signature">
@@ -696,7 +776,7 @@ It is equivalent to writing a must_== b
         <span class="name">checkPartialNoShrink</span><span class="tparams">[<span name="T">T</span>, <span name="S">S</span>]</span><span class="params">(<span name="f">f: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[T, S]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (S) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a">a: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#checkProp" data-isabs="false">
       <a id="checkProp(Prop)(Parameters):Result"></a>
       <h4 class="signature">
@@ -708,7 +788,7 @@ It is equivalent to writing a must_== b
         <span class="name">checkProp</span><span class="params">(<span name="prop">prop: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="p">p: <a name="org.specs2.matcher.Parameters" class="extype" href="Parameters.html">Parameters</a></span>)</span><span class="result">: <a name="org.specs2.execute.Result" class="extype" href="../execute/Result.html">Result</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">execute a ScalaCheck property</p>
+      <p class="shortcomment cmt">execute a ScalaCheck property</p><div class="fullcomment"><div class="comment cmt"><p>execute a ScalaCheck property</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckFunctions#checkProp" data-isabs="false">
       <a id="checkProp(Params,⇒ Prop,TestCallback):Result"></a>
       <h4 class="signature">
@@ -771,7 +851,7 @@ It is equivalent to writing a must_== b
         <span class="name">combineProp</span><span class="params">(<span name="prop">prop: ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="p">p: <a name="org.specs2.matcher.Parameters" class="extype" href="Parameters.html">Parameters</a></span>)</span><span class="result">: <span name="org.specs2.execute.ResultLogicalCombinators.ResultLogicalCombinator" class="extype">ResultLogicalCombinator</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">allow to combine properties as if they were results</p>
+      <p class="shortcomment cmt">allow to combine properties as if they were results</p><div class="fullcomment"><div class="comment cmt"><p>allow to combine properties as if they were results</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.execute.ResultLogicalCombinators#combineResult" data-isabs="false">
       <a id="combineResult(⇒ Result):ResultLogicalCombinator"></a>
       <h4 class="signature">
@@ -919,6 +999,18 @@ It is equivalent to writing a must_== b
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.ScalazBaseMatchers#equal" data-isabs="false">
+      <a id="equal[T](T)(Equal[T]):Matcher[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equal</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: T</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span name="scalaz.Equal" class="extype">Equal</span>[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">equality matcher with an Equal typeclass</p><div class="fullcomment"><div class="comment cmt"><p>equality matcher with an Equal typeclass</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalazBaseMatchers" class="extype" href="ScalazBaseMatchers.html">ScalazBaseMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#equals" data-isabs="false">
       <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
@@ -931,6 +1023,30 @@ It is equivalent to writing a must_== b
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.ValidationBaseMatchers#failing" data-isabs="false">
+      <a id="failing[T]:FailureMatcher[Nothing]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">failing</span><span class="tparams">[<span name="T">T</span>]</span><span class="result">: <span name="org.specs2.matcher.ValidationBaseMatchers.FailureMatcher" class="extype">FailureMatcher</span>[<span name="scala.Nothing" class="extype">Nothing</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidationBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.ValidationBaseMatchers#failing" data-isabs="false">
+      <a id="failing[T](⇒ T):Matcher[scalaz.Validation[T, _]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">failing</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: ⇒ T</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[scalaz.Validation[T, _]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidationBaseMatchers</dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
       <a id="finalize():Unit"></a>
       <h4 class="signature">
@@ -1020,6 +1136,18 @@ It is equivalent to writing a must_== b
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.ScalazBaseMatchers#hasZero" data-isabs="false">
+      <a id="hasZero[T](Monoid[T],Arbitrary[T],Shrink[T]):Prop"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hasZero</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scalaz.Monoid" class="extype">Monoid</span>[T]</span>, <span name="a">a: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T]</span>, <span name="s">s: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">this ScalaCheck property is valid if the monoid has a Zero element</p><div class="fullcomment"><div class="comment cmt"><p>this ScalaCheck property is valid if the monoid has a Zero element</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalazBaseMatchers" class="extype" href="ScalazBaseMatchers.html">ScalazBaseMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -1032,6 +1160,18 @@ It is equivalent to writing a must_== b
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.ScalazBaseMatchers#isAssociative" data-isabs="false">
+      <a id="isAssociative[T](Semigroup[T],Arbitrary[T],Shrink[T]):Prop"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isAssociative</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="sg">sg: <span name="scalaz.Semigroup" class="extype">Semigroup</span>[T]</span>, <span name="a">a: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T]</span>, <span name="s">s: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">this ScalaCheck property is valid if the semigroup is associative</p><div class="fullcomment"><div class="comment cmt"><p>this ScalaCheck property is valid if the semigroup is associative</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalazBaseMatchers" class="extype" href="ScalazBaseMatchers.html">ScalazBaseMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -1044,6 +1184,18 @@ It is equivalent to writing a must_== b
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.ScalazBaseMatchers#isMonoid" data-isabs="false">
+      <a id="isMonoid[T](Monoid[T],Arbitrary[T],Shrink[T]):Prop"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isMonoid</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span name="scalaz.Monoid" class="extype">Monoid</span>[T]</span>, <span name="a">a: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T]</span>, <span name="s">s: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">this ScalaCheck property is valid if the monoid verifies the monoid laws</p><div class="fullcomment"><div class="comment cmt"><p>this ScalaCheck property is valid if the monoid verifies the monoid laws</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalazBaseMatchers" class="extype" href="ScalazBaseMatchers.html">ScalazBaseMatchers</a></dd></dl></div>
     </li><li visbl="prt" name="org.specs2.matcher.Expectations#mapMatchResult" data-isabs="false">
       <a id="mapMatchResult[T](MatchResult[T]):MatchResult[T]"></a>
       <h4 class="signature">
@@ -1212,6 +1364,18 @@ The naming is a bit different, in order to keep short names for frequent use cas
 
  - minSize and maxSize keep their name <code>
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckParameters" class="extype" href="ScalaCheckParameters.html">ScalaCheckParameters</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.ScalazBaseMatchers#monoidProperty" data-isabs="false">
+      <a id="monoidProperty[T](Monoid[T]):MonoidProperty[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">monoidProperty</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="m">m: <span name="scalaz.Monoid" class="extype">Monoid</span>[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.ScalazBaseMatchers.MonoidProperty" class="extype" href="ScalazBaseMatchers$MonoidProperty.html">MonoidProperty</a>[T]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalazBaseMatchers" class="extype" href="ScalazBaseMatchers.html">ScalazBaseMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -1314,7 +1478,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name">prop</span><span class="tparams">[<span name="T">T</span>, <span name="S">S</span>]</span><span class="params">(<span name="f">f: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[T, S]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (S) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a">a: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T]</span>, <span name="s">s: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">execute a PartialFunction as a ScalaCheck property</p>
+      <p class="shortcomment cmt">execute a PartialFunction as a ScalaCheck property</p><div class="fullcomment"><div class="comment cmt"><p>execute a PartialFunction as a ScalaCheck property</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#prop" data-isabs="false">
       <a id="prop[T1, T2, T3, T4, T5, T6, T7, T8, R]((T1, T2, T3, T4, T5, T6, T7, T8) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Shrink[T1],Arbitrary[T2],Shrink[T2],Arbitrary[T3],Shrink[T3],Arbitrary[T4],Shrink[T4],Arbitrary[T5],Shrink[T5],Arbitrary[T6],Shrink[T6],Arbitrary[T7],Shrink[T7],Arbitrary[T8],Shrink[T8]):Prop"></a>
       <h4 class="signature">
@@ -1326,7 +1490,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name">prop</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>, <span name="T8">T8</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4, T5, T6, T7, T8) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="s1">s1: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="s2">s2: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="s3">s3: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="s4">s4: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T4]</span>, <span name="a5">a5: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T5]</span>, <span name="s5">s5: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T5]</span>, <span name="a6">a6: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T6]</span>, <span name="s6">s6: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T6]</span>, <span name="a7">a7: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T7]</span>, <span name="s7">s7: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T7]</span>, <span name="a8">a8: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T8]</span>, <span name="s8">s8: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T8]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#prop" data-isabs="false">
       <a id="prop[T1, T2, T3, T4, T5, T6, T7, R]((T1, T2, T3, T4, T5, T6, T7) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Shrink[T1],Arbitrary[T2],Shrink[T2],Arbitrary[T3],Shrink[T3],Arbitrary[T4],Shrink[T4],Arbitrary[T5],Shrink[T5],Arbitrary[T6],Shrink[T6],Arbitrary[T7],Shrink[T7]):Prop"></a>
       <h4 class="signature">
@@ -1338,7 +1502,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name">prop</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4, T5, T6, T7) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="s1">s1: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="s2">s2: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="s3">s3: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="s4">s4: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T4]</span>, <span name="a5">a5: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T5]</span>, <span name="s5">s5: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T5]</span>, <span name="a6">a6: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T6]</span>, <span name="s6">s6: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T6]</span>, <span name="a7">a7: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T7]</span>, <span name="s7">s7: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T7]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#prop" data-isabs="false">
       <a id="prop[T1, T2, T3, T4, T5, T6, R]((T1, T2, T3, T4, T5, T6) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Shrink[T1],Arbitrary[T2],Shrink[T2],Arbitrary[T3],Shrink[T3],Arbitrary[T4],Shrink[T4],Arbitrary[T5],Shrink[T5],Arbitrary[T6],Shrink[T6]):Prop"></a>
       <h4 class="signature">
@@ -1350,7 +1514,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name">prop</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4, T5, T6) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="s1">s1: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="s2">s2: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="s3">s3: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="s4">s4: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T4]</span>, <span name="a5">a5: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T5]</span>, <span name="s5">s5: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T5]</span>, <span name="a6">a6: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T6]</span>, <span name="s6">s6: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T6]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#prop" data-isabs="false">
       <a id="prop[T1, T2, T3, T4, T5, R]((T1, T2, T3, T4, T5) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Shrink[T1],Arbitrary[T2],Shrink[T2],Arbitrary[T3],Shrink[T3],Arbitrary[T4],Shrink[T4],Arbitrary[T5],Shrink[T5]):Prop"></a>
       <h4 class="signature">
@@ -1362,7 +1526,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name">prop</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4, T5) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="s1">s1: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="s2">s2: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="s3">s3: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="s4">s4: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T4]</span>, <span name="a5">a5: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T5]</span>, <span name="s5">s5: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T5]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#prop" data-isabs="false">
       <a id="prop[T1, T2, T3, T4, R]((T1, T2, T3, T4) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Shrink[T1],Arbitrary[T2],Shrink[T2],Arbitrary[T3],Shrink[T3],Arbitrary[T4],Shrink[T4]):Prop"></a>
       <h4 class="signature">
@@ -1374,7 +1538,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name">prop</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="s1">s1: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="s2">s2: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="s3">s3: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="s4">s4: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T4]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#prop" data-isabs="false">
       <a id="prop[T1, T2, T3, R]((T1, T2, T3) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Shrink[T1],Arbitrary[T2],Shrink[T2],Arbitrary[T3],Shrink[T3]):Prop"></a>
       <h4 class="signature">
@@ -1386,7 +1550,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name">prop</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="s1">s1: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="s2">s2: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="s3">s3: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T3]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#prop" data-isabs="false">
       <a id="prop[T1, T2, R]((T1, T2) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Shrink[T1],Arbitrary[T2],Shrink[T2]):Prop"></a>
       <h4 class="signature">
@@ -1398,7 +1562,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name">prop</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="s1">s1: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="s2">s2: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T2]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#prop" data-isabs="false">
       <a id="prop[T, R]((T) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T],Shrink[T]):Prop"></a>
       <h4 class="signature">
@@ -1411,7 +1575,8 @@ The naming is a bit different, in order to keep short names for frequent use cas
       </span>
       </h4>
       <p class="shortcomment cmt">transform a Function returning a MatchResult (or anything which can be converted to a Prop) as a ScalaCheck property
-</p>
+</p><div class="fullcomment"><div class="comment cmt"><p>transform a Function returning a MatchResult (or anything which can be converted to a Prop) as a ScalaCheck property
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#propAsResult" data-isabs="false">
       <a id="propAsResult(Parameters):AsResult[Prop]"></a>
       <h4 class="signature">
@@ -1423,7 +1588,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name">propAsResult</span><span class="params">(<span class="implicit">implicit </span><span name="p">p: <a name="org.specs2.matcher.Parameters" class="extype" href="Parameters.html">Parameters</a></span>)</span><span class="result">: <a name="org.specs2.execute.AsResult" class="extype" href="../execute/AsResult.html">AsResult</a>[<span name="org.scalacheck.Prop" class="extype">Prop</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">implicit typeclass instance to create examples from Props</p>
+      <p class="shortcomment cmt">implicit typeclass instance to create examples from Props</p><div class="fullcomment"><div class="comment cmt"><p>implicit typeclass instance to create examples from Props</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#propNoShrink" data-isabs="false">
       <a id="propNoShrink[T, S](PartialFunction[T, S])((S) ⇒ Prop,Arbitrary[T]):Prop"></a>
       <h4 class="signature">
@@ -1435,7 +1600,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name">propNoShrink</span><span class="tparams">[<span name="T">T</span>, <span name="S">S</span>]</span><span class="params">(<span name="f">f: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[T, S]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (S) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a">a: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#propNoShrink" data-isabs="false">
       <a id="propNoShrink[T1, T2, T3, T4, T5, T6, T7, T8, R]((T1, T2, T3, T4, T5, T6, T7, T8) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Arbitrary[T2],Arbitrary[T3],Arbitrary[T4],Arbitrary[T5],Arbitrary[T6],Arbitrary[T7],Arbitrary[T8]):Prop"></a>
       <h4 class="signature">
@@ -1447,7 +1612,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name">propNoShrink</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>, <span name="T8">T8</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4, T5, T6, T7, T8) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="a5">a5: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T5]</span>, <span name="a6">a6: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T6]</span>, <span name="a7">a7: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T7]</span>, <span name="a8">a8: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T8]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#propNoShrink" data-isabs="false">
       <a id="propNoShrink[T1, T2, T3, T4, T5, T6, T7, R]((T1, T2, T3, T4, T5, T6, T7) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Arbitrary[T2],Arbitrary[T3],Arbitrary[T4],Arbitrary[T5],Arbitrary[T6],Arbitrary[T7]):Prop"></a>
       <h4 class="signature">
@@ -1459,7 +1624,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name">propNoShrink</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4, T5, T6, T7) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="a5">a5: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T5]</span>, <span name="a6">a6: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T6]</span>, <span name="a7">a7: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T7]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#propNoShrink" data-isabs="false">
       <a id="propNoShrink[T1, T2, T3, T4, T5, T6, R]((T1, T2, T3, T4, T5, T6) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Arbitrary[T2],Arbitrary[T3],Arbitrary[T4],Arbitrary[T5],Arbitrary[T6]):Prop"></a>
       <h4 class="signature">
@@ -1471,7 +1636,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name">propNoShrink</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4, T5, T6) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="a5">a5: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T5]</span>, <span name="a6">a6: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T6]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#propNoShrink" data-isabs="false">
       <a id="propNoShrink[T1, T2, T3, T4, T5, R]((T1, T2, T3, T4, T5) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Arbitrary[T2],Arbitrary[T3],Arbitrary[T4],Arbitrary[T5]):Prop"></a>
       <h4 class="signature">
@@ -1483,7 +1648,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name">propNoShrink</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4, T5) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="a5">a5: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T5]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#propNoShrink" data-isabs="false">
       <a id="propNoShrink[T1, T2, T3, T4, R]((T1, T2, T3, T4) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Arbitrary[T2],Arbitrary[T3],Arbitrary[T4]):Prop"></a>
       <h4 class="signature">
@@ -1495,7 +1660,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name">propNoShrink</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#propNoShrink" data-isabs="false">
       <a id="propNoShrink[T1, T2, T3, R]((T1, T2, T3) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Arbitrary[T2],Arbitrary[T3]):Prop"></a>
       <h4 class="signature">
@@ -1507,7 +1672,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name">propNoShrink</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#propNoShrink" data-isabs="false">
       <a id="propNoShrink[T1, T2, R]((T1, T2) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Arbitrary[T2]):Prop"></a>
       <h4 class="signature">
@@ -1519,7 +1684,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name">propNoShrink</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#propNoShrink" data-isabs="false">
       <a id="propNoShrink[T, R]((T) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T]):Prop"></a>
       <h4 class="signature">
@@ -1531,7 +1696,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name">propNoShrink</span><span class="tparams">[<span name="T">T</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a">a: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ResultPropertyImplicits#propToProp" data-isabs="false">
       <a id="propToProp(⇒ Prop):Prop"></a>
       <h4 class="signature">
@@ -1556,6 +1721,30 @@ The naming is a bit different, in order to keep short names for frequent use cas
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ResultPropertyImplicits" class="extype" href="ResultPropertyImplicits.html">ResultPropertyImplicits</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.ScalazBeHaveMatchers#scalazBeHaveMatcher" data-isabs="false">
+      <a id="scalazBeHaveMatcher[T](MatchResult[T])(Equal[T]):ScalazBeHaveMatchers[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">scalazBeHaveMatcher</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="result">result: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[T]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span name="scalaz.Equal" class="extype">Equal</span>[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.ScalazBeHaveMatchers.ScalazBeHaveMatchers" class="extype" href="ScalazBeHaveMatchers$ScalazBeHaveMatchers.html">ScalazBeHaveMatchers</a>[T]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalazBeHaveMatchers" class="extype" href="ScalazBeHaveMatchers.html">ScalazBeHaveMatchers</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.ScalazBaseMatchers#semigroupProperty" data-isabs="false">
+      <a id="semigroupProperty[T](Semigroup[T]):SemigroupProperty[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">semigroupProperty</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="s">s: <span name="scalaz.Semigroup" class="extype">Semigroup</span>[T]</span>)</span><span class="result">: <a name="org.specs2.matcher.ScalazBaseMatchers.SemigroupProperty" class="extype" href="ScalazBaseMatchers$SemigroupProperty.html">SemigroupProperty</a>[T]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalazBaseMatchers" class="extype" href="ScalazBaseMatchers.html">ScalazBaseMatchers</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckParameters.set" data-isabs="false">
       <a id="set:set"></a>
       <h4 class="signature">
@@ -1579,7 +1768,31 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name">setProperty</span><span class="params">(<span name="p">p: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>)</span><span class="result">: <a name="org.specs2.matcher.ScalaCheckMatchers.SetProperty" class="extype" href="ScalaCheckMatchers$SetProperty.html">SetProperty</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">set specific execution parameters on a Property</p>
+      <p class="shortcomment cmt">set specific execution parameters on a Property</p><div class="fullcomment"><div class="comment cmt"><p>set specific execution parameters on a Property</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.ValidationBaseMatchers#successful" data-isabs="false">
+      <a id="successful[T]:SuccessValidationMatcher[Nothing]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">successful</span><span class="tparams">[<span name="T">T</span>]</span><span class="result">: <span name="org.specs2.matcher.ValidationBaseMatchers.SuccessValidationMatcher" class="extype">SuccessValidationMatcher</span>[<span name="scala.Nothing" class="extype">Nothing</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidationBaseMatchers</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.ValidationBaseMatchers#successful" data-isabs="false">
+      <a id="successful[T](⇒ T):Matcher[scalaz.Validation[_, T]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">successful</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: ⇒ T</span>)</span><span class="result">: <a name="org.specs2.matcher.Matcher" class="extype" href="Matcher.html">Matcher</a>[scalaz.Validation[_, T]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidationBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
@@ -1620,6 +1833,18 @@ This avoids writing b must beTrue
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.ValidationBeHaveMatchers#toValidationResultMatcher" data-isabs="false">
+      <a id="toValidationResultMatcher[F, S](MatchResult[Validation[F, S]]):ValidationResultMatcher[F, S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toValidationResultMatcher</span><span class="tparams">[<span name="F">F</span>, <span name="S">S</span>]</span><span class="params">(<span name="result">result: <a name="org.specs2.matcher.MatchResult" class="extype" href="MatchResult.html">MatchResult</a>[<span name="scalaz.Validation" class="extype">Validation</span>[F, S]]</span>)</span><span class="result">: <span name="org.specs2.matcher.ValidationBeHaveMatchers.ValidationResultMatcher" class="extype">ValidationResultMatcher</span>[F, S]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ValidationBeHaveMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ResultPropertyImplicits#unitToProp" data-isabs="false">
       <a id="unitToProp(⇒ Unit):Prop"></a>
       <h4 class="signature">
@@ -1729,7 +1954,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name deprecated" title="Deprecated: use prop instead">check</span><span class="tparams">[<span name="T">T</span>, <span name="S">S</span>]</span><span class="params">(<span name="f">f: <span name="scala.PartialFunction" class="extype">PartialFunction</span>[T, S]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (S) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a">a: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T]</span>, <span name="s">s: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Deprecated</dt><dd class="cmt"><p>use prop instead</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd><dt>Deprecated</dt><dd class="cmt"><p>use prop instead</p></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check" data-isabs="false">
       <a id="check[T1, T2, T3, T4, T5, T6, T7, T8, R]((T1, T2, T3, T4, T5, T6, T7, T8) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Shrink[T1],Arbitrary[T2],Shrink[T2],Arbitrary[T3],Shrink[T3],Arbitrary[T4],Shrink[T4],Arbitrary[T5],Shrink[T5],Arbitrary[T6],Shrink[T6],Arbitrary[T7],Shrink[T7],Arbitrary[T8],Shrink[T8]):Prop"></a>
       <h4 class="signature">
@@ -1741,7 +1966,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name deprecated" title="Deprecated: use prop instead">check</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>, <span name="T8">T8</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4, T5, T6, T7, T8) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="s1">s1: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="s2">s2: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="s3">s3: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="s4">s4: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T4]</span>, <span name="a5">a5: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T5]</span>, <span name="s5">s5: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T5]</span>, <span name="a6">a6: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T6]</span>, <span name="s6">s6: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T6]</span>, <span name="a7">a7: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T7]</span>, <span name="s7">s7: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T7]</span>, <span name="a8">a8: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T8]</span>, <span name="s8">s8: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T8]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Deprecated</dt><dd class="cmt"><p>use prop instead</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd><dt>Deprecated</dt><dd class="cmt"><p>use prop instead</p></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check" data-isabs="false">
       <a id="check[T1, T2, T3, T4, T5, T6, T7, R]((T1, T2, T3, T4, T5, T6, T7) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Shrink[T1],Arbitrary[T2],Shrink[T2],Arbitrary[T3],Shrink[T3],Arbitrary[T4],Shrink[T4],Arbitrary[T5],Shrink[T5],Arbitrary[T6],Shrink[T6],Arbitrary[T7],Shrink[T7]):Prop"></a>
       <h4 class="signature">
@@ -1753,7 +1978,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name deprecated" title="Deprecated: use prop instead">check</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="T7">T7</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4, T5, T6, T7) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="s1">s1: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="s2">s2: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="s3">s3: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="s4">s4: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T4]</span>, <span name="a5">a5: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T5]</span>, <span name="s5">s5: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T5]</span>, <span name="a6">a6: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T6]</span>, <span name="s6">s6: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T6]</span>, <span name="a7">a7: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T7]</span>, <span name="s7">s7: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T7]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Deprecated</dt><dd class="cmt"><p>use prop instead</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd><dt>Deprecated</dt><dd class="cmt"><p>use prop instead</p></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check" data-isabs="false">
       <a id="check[T1, T2, T3, T4, T5, T6, R]((T1, T2, T3, T4, T5, T6) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Shrink[T1],Arbitrary[T2],Shrink[T2],Arbitrary[T3],Shrink[T3],Arbitrary[T4],Shrink[T4],Arbitrary[T5],Shrink[T5],Arbitrary[T6],Shrink[T6]):Prop"></a>
       <h4 class="signature">
@@ -1765,7 +1990,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name deprecated" title="Deprecated: use prop instead">check</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="T6">T6</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4, T5, T6) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="s1">s1: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="s2">s2: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="s3">s3: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="s4">s4: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T4]</span>, <span name="a5">a5: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T5]</span>, <span name="s5">s5: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T5]</span>, <span name="a6">a6: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T6]</span>, <span name="s6">s6: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T6]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Deprecated</dt><dd class="cmt"><p>use prop instead</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd><dt>Deprecated</dt><dd class="cmt"><p>use prop instead</p></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check" data-isabs="false">
       <a id="check[T1, T2, T3, T4, T5, R]((T1, T2, T3, T4, T5) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Shrink[T1],Arbitrary[T2],Shrink[T2],Arbitrary[T3],Shrink[T3],Arbitrary[T4],Shrink[T4],Arbitrary[T5],Shrink[T5]):Prop"></a>
       <h4 class="signature">
@@ -1777,7 +2002,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name deprecated" title="Deprecated: use prop instead">check</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="T5">T5</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4, T5) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="s1">s1: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="s2">s2: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="s3">s3: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="s4">s4: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T4]</span>, <span name="a5">a5: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T5]</span>, <span name="s5">s5: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T5]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Deprecated</dt><dd class="cmt"><p>use prop instead</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd><dt>Deprecated</dt><dd class="cmt"><p>use prop instead</p></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check" data-isabs="false">
       <a id="check[T1, T2, T3, T4, R]((T1, T2, T3, T4) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Shrink[T1],Arbitrary[T2],Shrink[T2],Arbitrary[T3],Shrink[T3],Arbitrary[T4],Shrink[T4]):Prop"></a>
       <h4 class="signature">
@@ -1789,7 +2014,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name deprecated" title="Deprecated: use prop instead">check</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="T4">T4</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3, T4) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="s1">s1: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="s2">s2: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="s3">s3: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T3]</span>, <span name="a4">a4: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T4]</span>, <span name="s4">s4: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T4]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Deprecated</dt><dd class="cmt"><p>use prop instead</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd><dt>Deprecated</dt><dd class="cmt"><p>use prop instead</p></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check" data-isabs="false">
       <a id="check[T1, T2, T3, R]((T1, T2, T3) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Shrink[T1],Arbitrary[T2],Shrink[T2],Arbitrary[T3],Shrink[T3]):Prop"></a>
       <h4 class="signature">
@@ -1801,7 +2026,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name deprecated" title="Deprecated: use prop instead">check</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="T3">T3</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2, T3) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="s1">s1: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="s2">s2: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T2]</span>, <span name="a3">a3: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T3]</span>, <span name="s3">s3: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T3]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Deprecated</dt><dd class="cmt"><p>use prop instead</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd><dt>Deprecated</dt><dd class="cmt"><p>use prop instead</p></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check" data-isabs="false">
       <a id="check[T1, T2, R]((T1, T2) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T1],Shrink[T1],Arbitrary[T2],Shrink[T2]):Prop"></a>
       <h4 class="signature">
@@ -1813,7 +2038,7 @@ The naming is a bit different, in order to keep short names for frequent use cas
         <span class="name deprecated" title="Deprecated: use forAll instead">check</span><span class="tparams">[<span name="T1">T1</span>, <span name="T2">T2</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T1, T2) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a1">a1: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T1]</span>, <span name="s1">s1: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T1]</span>, <span name="a2">a2: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T2]</span>, <span name="s2">s2: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T2]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Deprecated</dt><dd class="cmt"><p>use forAll instead</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd><dt>Deprecated</dt><dd class="cmt"><p>use forAll instead</p></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckMatchers#check" data-isabs="false">
       <a id="check[T, R]((T) ⇒ R)((⇒ R) ⇒ Prop,Arbitrary[T],Shrink[T]):Prop"></a>
       <h4 class="signature">
@@ -1826,14 +2051,26 @@ The naming is a bit different, in order to keep short names for frequent use cas
 ">check</span><span class="tparams">[<span name="T">T</span>, <span name="R">R</span>]</span><span class="params">(<span name="result">result: (T) ⇒ R</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="toProp">toProp: (⇒ R) ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="a">a: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T]</span>, <span name="s">s: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Deprecated</dt><dd class="cmt"><p>use prop instead. The name &quot;check&quot; is misleading because it doesn't actually check anything but merely builds a Prop
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></dd><dt>Deprecated</dt><dd class="cmt"><p>use prop instead. The name &quot;check&quot; is misleading because it doesn't actually check anything but merely builds a Prop
 </p></dd></dl></div>
     </li></ol>
             </div>
         </div>
 
         <div id="inheritedMembers">
-        <div name="org.specs2.matcher.Expectations" class="parent">
+        <div name="org.specs2.matcher.ScalazBeHaveMatchers" class="parent">
+              <h3>Inherited from <a name="org.specs2.matcher.ScalazBeHaveMatchers" class="extype" href="ScalazBeHaveMatchers.html">ScalazBeHaveMatchers</a></h3>
+            </div><div name="org.specs2.matcher.ScalazBaseMatchers" class="parent">
+              <h3>Inherited from <a name="org.specs2.matcher.ScalazBaseMatchers" class="extype" href="ScalazBaseMatchers.html">ScalazBaseMatchers</a></h3>
+            </div><div name="org.specs2.matcher.ValidationMatchers" class="parent">
+              <h3>Inherited from <a name="org.specs2.matcher.ValidationMatchers" class="extype" href="ValidationMatchers.html">ValidationMatchers</a></h3>
+            </div><div name="org.specs2.matcher.ValidationBeHaveMatchers" class="parent">
+              <h3>Inherited from <span name="org.specs2.matcher.ValidationBeHaveMatchers" class="extype">ValidationBeHaveMatchers</span></h3>
+            </div><div name="org.specs2.matcher.ValidationBaseMatchers" class="parent">
+              <h3>Inherited from <span name="org.specs2.matcher.ValidationBaseMatchers" class="extype">ValidationBaseMatchers</span></h3>
+            </div><div name="org.specs2.matcher.ScalaCheckMatchers" class="parent">
+              <h3>Inherited from <a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a></h3>
+            </div><div name="org.specs2.matcher.Expectations" class="parent">
               <h3>Inherited from <a name="org.specs2.matcher.Expectations" class="extype" href="Expectations.html">Expectations</a></h3>
             </div><div name="org.specs2.matcher.CanBeEqual" class="parent">
               <h3>Inherited from <a name="org.specs2.matcher.CanBeEqual" class="extype" href="CanBeEqual.html">CanBeEqual</a></h3>

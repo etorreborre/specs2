@@ -2263,14 +2263,14 @@ write("./dir/hello.txt") { out =>
       </h4>
       <p class="shortcomment cmt">matches if a == true</p><div class="fullcomment"><div class="comment cmt"><p>matches if a == true</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyBaseMatchers</dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.AnyBaseMatchers#beTypedEqualTo" data-isabs="false">
-      <a id="beTypedEqualTo[T](⇒ T):BeTypedEqualTo[T]"></a>
+      <a id="beTypedEqualTo[T](⇒ T,(T, T) ⇒ Boolean):BeTypedEqualTo[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">beTypedEqualTo</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: ⇒ T</span>)</span><span class="result">: <a name="org.specs2.matcher.BeTypedEqualTo" class="extype" href="../matcher/BeTypedEqualTo.html">BeTypedEqualTo</a>[T]</span>
+        <span class="name">beTypedEqualTo</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: ⇒ T</span>, <span name="equality">equality: (T, T) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: <a name="org.specs2.matcher.BeTypedEqualTo" class="extype" href="../matcher/BeTypedEqualTo.html">BeTypedEqualTo</a>[T]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">matches if a == b</p><div class="fullcomment"><div class="comment cmt"><p>matches if a == b</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyBaseMatchers</dd></dl></div>
@@ -7185,14 +7185,14 @@ This avoids writing b must beTrue
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.specs2.data.TuplesToSeq" class="extype" href="../data/TuplesToSeq.html">TuplesToSeq</a></dd></dl></div>
     </li><li visbl="pub" name="org.specs2.matcher.AnyBaseMatchers#typedEqualTo" data-isabs="false">
-      <a id="typedEqualTo[T](⇒ T):BeTypedEqualTo[T]"></a>
+      <a id="typedEqualTo[T](⇒ T,(T, T) ⇒ Boolean):BeTypedEqualTo[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">typedEqualTo</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: ⇒ T</span>)</span><span class="result">: <a name="org.specs2.matcher.BeTypedEqualTo" class="extype" href="../matcher/BeTypedEqualTo.html">BeTypedEqualTo</a>[T]</span>
+        <span class="name">typedEqualTo</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: ⇒ T</span>, <span name="equality">equality: (T, T) ⇒ <span name="scala.Boolean" class="extype">Boolean</span></span>)</span><span class="result">: <a name="org.specs2.matcher.BeTypedEqualTo" class="extype" href="../matcher/BeTypedEqualTo.html">BeTypedEqualTo</a>[T]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">matches if a == b</p><div class="fullcomment"><div class="comment cmt"><p>matches if a == b</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyBaseMatchers</dd></dl></div>

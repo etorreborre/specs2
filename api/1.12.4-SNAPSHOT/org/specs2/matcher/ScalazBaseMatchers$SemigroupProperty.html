@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>org.specs2.matcher.ScalaCheckFunctions</title>
+          <title>org.specs2.matcher.ScalazBaseMatchers.SemigroupProperty</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
@@ -14,28 +14,27 @@
         </head>
         <body onload="sh_highlightDocument('../lib/', '.min.js');" class="type">
       <div id="definition">
-        <img src="../../../lib/trait_big.png" />
-        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.matcher" class="extype" href="package.html">matcher</a></p>
-        <h1>ScalaCheckFunctions</h1>
+        <img src="../../../lib/class_big.png" />
+        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a>.<a name="org.specs2.matcher" class="extype" href="package.html">matcher</a>.<a name="org.specs2.matcher.ScalazBaseMatchers" class="extype" href="ScalazBaseMatchers.html">ScalazBaseMatchers</a></p>
+        <h1>SemigroupProperty</h1>
       </div>
 
       <h4 class="signature" id="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">trait</span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">ScalaCheckFunctions</span><span class="result"> extends AnyRef</span>
+        <span class="name">SemigroupProperty</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends AnyRef</span>
       </span>
       </h4>
       
-      <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>This trait is used to facilitate testing by mocking ScalaCheck functionalities
-</p></div><div class="toggleContainer block">
+      <div class="fullcommenttop" id="comment"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a name="org.specs2.ScalaCheck" class="extype" href="../ScalaCheck.html">ScalaCheck</a>, <a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers.html">ScalaCheckMatchers</a>, <a name="org.specs2.matcher.ScalaCheckMatchers" class="extype" href="ScalaCheckMatchers$.html">ScalaCheckMatchers</a>, <a name="org.specs2.matcher.ScalazBaseMatchers" class="extype" href="ScalazBaseMatchers.html">ScalazBaseMatchers</a>, <a name="org.specs2.matcher.ScalazMatchers" class="extype" href="ScalazMatchers.html">ScalazMatchers</a></div>
+          <div class="subClasses hiddenContent"><a name="org.specs2.matcher.ScalazBaseMatchers.MonoidProperty" class="extype" href="ScalazBaseMatchers$MonoidProperty.html">MonoidProperty</a></div>
         </div></div>
     
 
@@ -49,7 +48,7 @@
               <span class="filtertype">Inherited</span>
               <ol><li class="hideall out"><span>Hide All</span></li>
               <li class="showall in"><span>Show all</span></li></ol>
-              <ol id="linearization"><li name="org.specs2.matcher.ScalaCheckFunctions" class="in"><span>ScalaCheckFunctions</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+              <ol id="linearization"><li name="org.specs2.matcher.ScalazBaseMatchers.SemigroupProperty" class="in"><span>SemigroupProperty</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
             </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -59,7 +58,22 @@
 
       <div id="template">
         <div id="allMembers">
-        
+        <div class="members" id="constructors">
+              <h3>Instance Constructors</h3>
+              <ol><li visbl="pub" name="org.specs2.matcher.ScalazBaseMatchers.SemigroupProperty#this" data-isabs="false">
+      <a id="this:SemigroupProperty[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">SemigroupProperty</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="sg">sg: <span name="scalaz.Semigroup" class="extype">Semigroup</span>[T]</span>)</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
 
         
 
@@ -139,18 +153,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="org.specs2.matcher.ScalaCheckFunctions#checkProp" data-isabs="false">
-      <a id="checkProp(Params,⇒ Prop,TestCallback):Result"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">checkProp</span><span class="params">(<span name="params">params: <span name="org.scalacheck.Test.Params" class="extype">Params</span></span>, <span name="prop">prop: ⇒ <span name="org.scalacheck.Prop" class="extype">Prop</span></span>, <span name="callback">callback: <span name="org.scalacheck.Test.TestCallback" class="extype">TestCallback</span></span>)</span><span class="result">: <span name="org.scalacheck.Test.Result" class="extype">Result</span></span>
-      </span>
-      </h4>
-      
     </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
@@ -229,6 +231,18 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.ScalazBaseMatchers.SemigroupProperty#isAssociative" data-isabs="false">
+      <a id="isAssociative(Arbitrary[T],Shrink[T]):Prop"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isAssociative</span><span class="params">(<span class="implicit">implicit </span><span name="a">a: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T]</span>, <span name="s">s: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
@@ -241,6 +255,18 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.specs2.matcher.ScalazBaseMatchers.SemigroupProperty#isSemigroup" data-isabs="false">
+      <a id="isSemigroup(Arbitrary[T],Shrink[T]):Prop"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isSemigroup</span><span class="params">(<span class="implicit">implicit </span><span name="a">a: <span name="org.scalacheck.Arbitrary" class="extype">Arbitrary</span>[T]</span>, <span name="s">s: <span name="org.scalacheck.Shrink" class="extype">Shrink</span>[T]</span>)</span><span class="result">: <span name="org.scalacheck.Prop" class="extype">Prop</span></span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
