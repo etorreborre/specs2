@@ -42,9 +42,11 @@ trait AnyBaseMatchers {
   /** matches if a == b */
   def equalTo[T](t: =>T) = beEqualTo(t)
   /** matches if a == b */
-  def beTypedEqualTo[T](t: =>T) = new BeTypedEqualTo(t)
+  def beTypedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1 == t2) =
+    new BeTypedEqualTo(t, equality)
   /** matches if a == b */
-  def typedEqualTo[T](t: =>T) = beTypedEqualTo(t)
+  def typedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1 == t2) =
+    beTypedEqualTo(t, equality)
   /** matches if a == b after an implicit conversion */
   def be_==~[T, S](s: =>S)(implicit convert: S => T): Matcher[T] = new BeTypedEqualTo(convert(s)).
     adapt(identity, (_:String)+" [original object is: "+q(s)+"]", (_:String)+" [original object is: "+q(s)+"]")
@@ -167,13 +169,13 @@ class BeTrueMatcher extends Matcher[Boolean] {
 /**
  * Typed equality Matcher
  */
-class BeTypedEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
+class BeTypedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1 == t2) extends AdaptableMatcher[T] { outer =>
   import AnyMatchers._
   protected val ok: String => String = identity
   protected val ko: String => String = identity
   
   def adapt(f: T => T, okFunction: String => String, koFunction: String => String) = {
-    val newMatcher = new BeTypedEqualTo(f(t)) {
+    val newMatcher = new BeTypedEqualTo(f(t), equality) {
       override protected val ok: String => String = okFunction compose outer.ok
       override protected val ko: String => String = koFunction compose outer.ko
     } 
@@ -182,20 +184,20 @@ class BeTypedEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
   
   def apply[S <: T](b: Expectable[S]): MatchResult[S] = {
     val a = t
-    def equality =
+    def isEqual =
       (b.value, a) match {
         case (arr: Array[_], arr2: Array[_]) => arr.toSeq == arr2.toSeq
-        case other                           => b.value == a
+        case other                           => equality(b.value, a)
       }
 
     lazy val (db, qa) =
       (b.description, q(a)) match {
-        case (x, y) if (!equality && x == y) => (b.describe(b.value.notNullWithClass), q(a.notNullWithClass))
+        case (x, y) if (!isEqual && x == y) => (b.describe(b.value.notNullWithClass), q(a.notNullWithClass))
         case other                           => other
 	    }
 
     def print(b: String, msg: String, a: String) = Seq(b, msg, a).mkString("\n".unless((Seq(a, b).exists(_.size <= 40))))
-    result(equality, ok(print(db, " is equal to ", qa)), ko(print(db, " is not equal to ", qa)), b, a.notNull, b.value.notNull)
+    result(isEqual, ok(print(db, " is equal to ", qa)), ko(print(db, " is not equal to ", qa)), b, a.notNull, b.value.notNull)
   }
 }
 

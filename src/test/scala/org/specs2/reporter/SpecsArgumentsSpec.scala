@@ -11,7 +11,7 @@ import specification._
 import SpecsArguments._
 import FragmentSpecsArgumentsReducer._
 
-class SpecsArgumentsSpec extends Specification with ScalazMatchers with ArbitraryFragments { def is =
+class SpecsArgumentsSpec extends Specification with InternalScalazMatchers with ArbitraryFragments { def is =
                                                                                                                         """
   Each Specification provides arguments which can be used to influence its execution and reporting.
   However the scope of the these arguments is restricted to the Fragments belonging to that Specification only.

@@ -26,7 +26,7 @@ object OptionalMatcherCards extends Cards {
     InterpreterMatchers,
     ParserMatchers,
     TerminationMatchers,
-    ValidationMatchers,
+    ScalazMatchers,
     DependencyMatchers)
 }
 
@@ -487,11 +487,27 @@ When a second action is specified like that, `action1` will be started and `acti
 """
 }
 
-object ValidationMatchers extends Card {
-  def title = "Validation"
+object ScalazMatchers extends Card {
+  def title = "Scalaz"
   def text =  """
 
-The `ValidationMatchers` trait provides simple matchers for Scalaz `Validation` instances. You can check if an object is successful or failing:
+The `ScalazMatchers` trait provides simple matchers for:
+
+ * Values with an `Equal` typeclass
+ * Scalaz `Semigroup` and `Monoid` instances
+ * Scalaz `Validation` instances
+
+With the `ScalazMatchers` trait you can use your `Equal[T]` typeclass instance to check the equality of 2 values:
+
+ * `a must beEqualTo(b)`
+
+With the `ScalazMatchers` trait you can use the following ScalaCheck properties:
+
+ * `semigroup.isAssociative` checks if a `Semigroup` respects the associativity law
+ * `monoid.hasZero` checks if a `Monoid` zero value is really a neutral element
+ * `monoid.isMonoid` checks if a `Monoid` has a zero element and respects the associativity rule
+
+Finally, you can check `Validation` instances for success or failure:
 
    * `1.success must beSuccessful                                    `
    * `1.fail must beFailing                                          `
@@ -508,20 +524,6 @@ You can also pattern match on this value
    * `List(1, 2).success must beSuccessful.like { case 1 :: _ => ok }`
    * `List(1, 2).fail must beFailing.like { case 1 :: _ => ok }      `
               """
-}
-
-object ScalazMatchers extends Card {
-  def title = "Scalaz"
-  def text =  """
-
-It was useful to check some Scalaz properties during the development of ***specs2*** so they are available as matchers:
-
-* `semigroup.isAssociative` checks if a `Semigroup` respect the associativity law
-* `monoid.hasNeutralElement` checks if a `Monoid` zero value is really a neutral element
-* `monoid.isMonoid` checks if a `Monoid` has a neutral element and respects the associativity rule
-
-However specs2 is not using a publicly available version of Scalaz but an "internal" one. This decision was taken to avoid potential clashes with people using a different version  of Scalaz, including the Scalaz project itself! So, you can have a look at the implementation of those matchers in the specs2 source code, to reuse them for your own specifications.
-"""
 }
 
 object ResultMatchers extends Card {
