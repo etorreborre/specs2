@@ -28,14 +28,14 @@ libraryDependencies <<= scalaVersion { scala_version => Seq(
   "org.scala-lang" % "scala-compiler" % scala_version % "optional",
   if (scala_version contains "-1") "org.scalacheck" % "scalacheck_2.9.1" % "1.9" % "optional"
   else                             "org.scalacheck" %% "scalacheck" % "1.9" % "optional",
+  if (scala_version contains "-1") "org.scalaz" % "scalaz-core_2.9.1" % "6.0.4" % "optional"
+  else                            "org.scalaz" %% "scalaz-core" % "6.0.4" % "optional",
   "org.scala-tools.testing" % "test-interface" % "0.5" % "optional",
   "org.hamcrest" % "hamcrest-all" % "1.1" % "optional",
   "org.mockito" % "mockito-all" % "1.9.0" % "optional",
   "junit" % "junit" % "4.7" % "optional",
   "org.pegdown" % "pegdown" % "1.0.2" % "optional",
-  "org.specs2" % "classycle" % "1.4.1" % "optional",
-  "org.scalaz" %% "scalaz-core" % "6.0.4" % "optional"
-  )
+  "org.specs2" % "classycle" % "1.4.1" % "optional")
 }
 
 /** Compilation */
