@@ -64,7 +64,7 @@
     </head><body><div id="breadcrumbs"><a href="../../guide-SNAPSHOT/guide/org.specs2.UserGuide.html">UserGuide</a><t> / </t><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html">Matchers</a></div><div class="colmask threecol">
                    <div class="colmid">
                      <div class="colleft">
-                       <div class="col1"><div id="central"><title>Matchers</title><a name="Matchers"><h2 specId="1780342941">Matchers</h2></a><status class="ok"><div class="level0" style="display: show"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
+                       <div class="col1"><div id="central"><title>Matchers</title><a name="Matchers"><h2 specId="814150579">Matchers</h2></a><status class="ok"><div class="level0" style="display: show"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
 <ul>
   <li>Boolean</li>
   <li>Standard result</li>
@@ -209,13 +209,16 @@
         <tr><td class="none" style="info"><p>There are several matchers to check Option and Either instances:</p>
 <ul>
   <li><code class="prettyprint">beSome</code> checks if an element is Some(_)</li>
+  <li><code class="prettyprint">beSome(exp)</code> checks if an element is Some(exp)</li>
   <li><code class="prettyprint">beSome.which(function)</code> checks if an element is Some(_) and satisfies a function returning a boolean</li>
   <li><code class="prettyprint">beSome.like(partial function)</code> checks if an element is Some(_) and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
   <li><code class="prettyprint">beNone</code> checks if an element is None</li>
   <li><code class="prettyprint">beAsNoneAs</code> checks if 2 values are equal to None at the same time</li>
   <li><code class="prettyprint">beRight</code> checks if an element is Right(_)</li>
+  <li><code class="prettyprint">beRight(exp)</code> checks if an element is Right(exp)</li>
   <li><code class="prettyprint">beRight.like(partial function)</code> checks if an element is Right(_) and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
   <li><code class="prettyprint">beLeft</code> checks if an element is Left(_)</li>
+  <li><code class="prettyprint">beLeft(exp)</code> checks if an element is Left(exp)</li>
   <li><code class="prettyprint">beLeft.like(partial function)</code> checks if an element is Left(_) and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
 </ul></td></tr>
       </table>
@@ -520,6 +523,25 @@
 </code></pre><p>When a second action is specified like that, <code class="prettyprint">action1</code> will be started and <code class="prettyprint">action2</code> will be started on the first retry. Otherwise, if you want to specify that <code class="prettyprint">action1</code> can <em>only</em> terminate when <code class="prettyprint">action2</code> is started, you write:</p>
 <pre><code class="prettyprint">  action1 must terminate.onlyWhen(action2)
 </code></pre></td></tr>
+      </table>
+      
+    </form></div><div class="tabbertab" title="Validation"><form>
+      <table class="dataTable">
+        <tr><td class="none" style="info"><p>The <code class="prettyprint">ValidationMatchers</code> trait provides simple matchers for Scalaz <code class="prettyprint">Validation</code> instances. You can check if an object is successful or failing:</p>
+<ul>
+  <li><code class="prettyprint">1.success must beSuccessful</code></li>
+  <li><code class="prettyprint">1.fail must beFailing</code></li>
+</ul><p>You can verify what's the validated value:</p>
+<ul>
+  <li><code class="prettyprint">1.success must beSuccessful (1)</code></li>
+  <li><code class="prettyprint">1.success must not be successful (2)</code></li>
+  <li><code class="prettyprint">1.fail must be failing (1)</code></li>
+  <li><code class="prettyprint">1.fail must not be failing (2)</code></li>
+</ul><p>You can also pattern match on this value</p>
+<ul>
+  <li><code class="prettyprint">List(1, 2).success must beSuccessful.like { case 1 :: _ =&gt; ok }</code></li>
+  <li><code class="prettyprint">List(1, 2).fail must beFailing.like { case 1 :: _ =&gt; ok }</code></li>
+</ul></td></tr>
       </table>
       
     </form></div><div class="tabbertab" title="Dependency Matchers"><form>
@@ -910,7 +932,7 @@ iterator.next must be_==(3).eventually
 <ul>
   <li>with an acceptance specification: use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance)</li>
   <li>with a unit specification: use the <code class="prettyprint">org.specs2.mutable.Tables</code> trait instead of <code class="prettyprint">org.specs2.matcher.DataTables</code> trait. This will &quot;deactivate&quot; the implicit used to create examples with <code class="prettyprint">!</code></li>
-</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="1560552933"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../../images/icon_success_sml.gif" /> Here's <a tooltip="" href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html">how to use Forms</a></div></status><status class="ok"><div class="level0" style="display: show"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
+</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="1171914024"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../../images/icon_success_sml.gif" /> Here's <a tooltip="" href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html">how to use Forms</a></div></status><status class="ok"><div class="level0" style="display: show"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
 <ul>
   <li><p><code class="prettyprint">org.specs2.matcher.MustMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldMatchers</code>) to write anything like <code class="prettyprint">1 must be_==(1)</code> and<br /> get a <code class="prettyprint">Result</code> back</p></li>
   <li><p>You can also use the side-effecting version of that trait called <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code> (or <code class="prettyprint">ShouldThrownMatchers</code>).<br /> It throws a <code class="prettyprint">FailureException</code> as soon as an expectation is failing. Those traits can also be used in a regular<br /> Specification if you have several expectations per example and if you don't want to chain them with <code class="prettyprint">and</code>.</p></li>
@@ -927,12 +949,12 @@ iterator.next must be_==(3).eventually
 </code></pre>
 <hr /></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Matchers</th></tr>
-        <tr><td>Finished in</td><td class="info">593 ms</td></tr>
-        <tr><td>Results</td><td class="success">47 examples, 536 expectations, 0 failure, 0 error</td></tr>
+        <tr><td>Finished in</td><td class="info">827 ms</td></tr>
+        <tr><td>Results</td><td class="success">47 examples, 539 expectations (+3), 0 failure, 0 error</td></tr>
       </table></div></div>
                        <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="201218548"><a href="../../guide-SNAPSHOT/guide/org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1466363159"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1710406949"><a href="../../guide-SNAPSHOT/guide/org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="213330514"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -942,7 +964,7 @@ iterator.next must be_==(3).eventually
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1424179666"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="81745667"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -1108,7 +1130,7 @@ iterator.next must be_==(3).eventually
             
           </li></ul>
           </li></ul>
-          </li><li id="1780342941"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="814150579"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1170,7 +1192,7 @@ iterator.next must be_==(3).eventually
             
           </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1560552933"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="1171914024"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1214,7 +1236,7 @@ iterator.next must be_==(3).eventually
             
           </li></ul>
           </li></ul>
-          </li><li id="1224225821"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="138020887"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1298,7 +1320,7 @@ iterator.next must be_==(3).eventually
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="2025642392"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="978254960"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1342,7 +1364,7 @@ iterator.next must be_==(3).eventually
             
           </li></ul>
           </li></ul>
-          </li><li id="326299460"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="1736980331"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1362,7 +1384,7 @@ iterator.next must be_==(3).eventually
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['201218548','1780342941'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1710406949','814150579'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                        <div class="col3"><div id="rightcolumn"></div></div>
                      </div>

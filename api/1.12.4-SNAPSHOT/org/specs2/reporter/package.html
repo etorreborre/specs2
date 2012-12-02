@@ -1,0 +1,812 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>org.specs2.reporter</title>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+    
+        </head>
+        <body onload="sh_highlightDocument('../lib/', '.min.js');" class="value">
+      <div id="definition">
+        <img src="../../../lib/package_big.png" />
+        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.specs2" class="extype" href="../package.html">specs2</a></p>
+        <h1>reporter</h1>
+      </div>
+
+      <h4 class="signature" id="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reporter</span>
+      </span>
+      </h4>
+      
+      <div class="fullcommenttop" id="comment"></div>
+    
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" name="org.specs2.reporter.AllExporting" data-isabs="true">
+      <a id="AllExporting:AllExporting"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="AllExporting.html"><span class="name">AllExporting</span></a><span class="result"> extends Reporter with Exporters</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait can be mixed in a reporter to allow the exporting of an executed specification to many different formats:
+html, junit xml, markup, custom,.</p>
+    </li><li visbl="pub" name="org.specs2.reporter.ConsoleNotifier" data-isabs="true">
+      <a id="ConsoleNotifier:ConsoleNotifier"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ConsoleNotifier.html"><span class="name">ConsoleNotifier</span></a><span class="result"> extends Notifier</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.ConsoleReporter" data-isabs="true">
+      <a id="ConsoleReporter:ConsoleReporter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ConsoleReporter.html"><span class="name">ConsoleReporter</span></a><span class="result"> extends DefaultReporter with TextExporting</span>
+      </span>
+      </h4>
+      <p class="comment cmt">The console reporter executes a Specification and exports the results to the Console
+Output:</p>
+    </li><li visbl="pub" name="org.specs2.reporter.DefaultReporter" data-isabs="true">
+      <a id="DefaultReporter:DefaultReporter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DefaultReporter.html"><span class="name">DefaultReporter</span></a><span class="result"> extends Reporter with DefaultSelection with DefaultSequence with DefaultExecutionStrategy with DefaultStoring</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.DefaultSelection" data-isabs="true">
+      <a id="DefaultSelection:DefaultSelection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DefaultSelection.html"><span class="name">DefaultSelection</span></a><span class="result"> extends ExamplesIsolation with TagSelection with StatusSelection with ExamplesSelection with Selection</span>
+      </span>
+      </h4>
+      <p class="comment cmt">The DefaultSelection trait filters the fragments to execute by filtering Examples:</p>
+    </li><li visbl="pub" name="org.specs2.reporter.DefaultSequence" data-isabs="true">
+      <a id="DefaultSequence:DefaultSequence"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DefaultSequence.html"><span class="name">DefaultSequence</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">The DefaultSequence trait sorts the Fragments by making sure Steps will be executed before Examples
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.DefaultStatisticsRepository" data-isabs="true">
+      <a id="DefaultStatisticsRepository:DefaultStatisticsRepository"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DefaultStatisticsRepository.html"><span class="name">DefaultStatisticsRepository</span></a><span class="result"> extends StatisticsRepository with OutputDir</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This repository store the results in one file per specification, in a special directory</p>
+    </li><li visbl="pub" name="org.specs2.reporter.DescriptionAndExamples" data-isabs="false">
+      <a id="DescriptionAndExamples:DescriptionAndExamples[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="DescriptionAndExamples.html"><span class="name">DescriptionAndExamples</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="description">description: Description</span>, <span name="descriptions">descriptions: Map[T, Description]</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Utility class grouping the total description + map of each fragment to its description
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.EndOfArguments" data-isabs="false">
+      <a id="EndOfArguments:EndOfArguments[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="EndOfArguments.html"><span class="name">EndOfArguments</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="value">value: T</span>, <span name="name">name: SpecName</span>)</span><span class="result"> extends ApplicableArguments[T] with Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.ExamplesIsolation" data-isabs="true">
+      <a id="ExamplesIsolation:ExamplesIsolation"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ExamplesIsolation.html"><span class="name">ExamplesIsolation</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait &quot;isolates&quot; examples by replacing their body with another one, created from a clone of the specification.</p>
+    </li><li visbl="pub" name="org.specs2.reporter.ExamplesSelection" data-isabs="true">
+      <a id="ExamplesSelection:ExamplesSelection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ExamplesSelection.html"><span class="name">ExamplesSelection</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait filters examples based on their description
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.ExecutableSpecification" data-isabs="false">
+      <a id="ExecutableSpecification:ExecutableSpecification"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ExecutableSpecification.html"><span class="name">ExecutableSpecification</span></a><span class="params">(<span name="name">name: SpecName</span>, <span name="arguments">arguments: Arguments</span>, <span name="fs">fs: Seq[FragmentSeq]</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">this case class transports the fragments to execute, grouped in sequences of examples which can be executed concurrently
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.Exporter" data-isabs="true">
+      <a id="Exporter:Exporter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Exporter.html"><span class="name">Exporter</span></a><span class="result"> extends Exporting</span>
+      </span>
+      </h4>
+      <p class="comment cmt">public trait to create a custom exporter
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.FragmentSeq" data-isabs="false">
+      <a id="FragmentSeq:FragmentSeq"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="FragmentSeq.html"><span class="name">FragmentSeq</span></a><span class="params">(<span name="fragments">fragments: Seq[Fragment]</span>, <span name="arguments">arguments: Arguments</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.HandlerEvents" data-isabs="true">
+      <a id="HandlerEvents:HandlerEvents"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="HandlerEvents.html"><span class="name">HandlerEvents</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Specific events which can be notified to sbt
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlExporting" data-isabs="true">
+      <a id="HtmlExporting:HtmlExporting"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="HtmlExporting.html"><span class="name">HtmlExporting</span></a><span class="result"> extends Exporting with HtmlPrinter with HtmlFileWriter</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Trait for exporting the specification as Html files
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlFile" data-isabs="false">
+      <a id="HtmlFile:HtmlFile"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="HtmlFile.html"><span class="name">HtmlFile</span></a><span class="params">(<span name="url">url: String</span>, <span name="xml">xml: NodeSeq</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlFileWriter" data-isabs="true">
+      <a id="HtmlFileWriter:HtmlFileWriter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="HtmlFileWriter.html"><span class="name">HtmlFileWriter</span></a><span class="result"> extends OutputDir</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlPrinter" data-isabs="true">
+      <a id="HtmlPrinter:HtmlPrinter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="HtmlPrinter.html"><span class="name">HtmlPrinter</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">The Html printer is used to create an Html report of an executed specification.</p>
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlReportOutput" data-isabs="true">
+      <a id="HtmlReportOutput:HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="HtmlReportOutput.html"><span class="name">HtmlReportOutput</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait defines how the specification elements should be translated as xhtml
+An implementation of that trait must accumulate the results and return the created xhmtl
+with the xml method
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlReporter" data-isabs="true">
+      <a id="HtmlReporter:HtmlReporter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="HtmlReporter.html"><span class="name">HtmlReporter</span></a><span class="result"> extends DefaultReporter with HtmlExporting with ConsoleOutput</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Reports a Specification as an Html page
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.JUnitDescriptionsFragments" data-isabs="false">
+      <a id="JUnitDescriptionsFragments:JUnitDescriptionsFragments"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="JUnitDescriptionsFragments.html"><span class="name">JUnitDescriptionsFragments</span></a><span class="result"> extends JUnitDescriptions[Fragment]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Descriptions for a seq of Fragments to execute
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.JUnitReporter" data-isabs="true">
+      <a id="JUnitReporter:JUnitReporter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="JUnitReporter.html"><span class="name">JUnitReporter</span></a><span class="result"> extends ExecutionOrigin with DefaultReporter with Exporters</span>
+      </span>
+      </h4>
+      <p class="comment cmt">The JUnitReporter reports a specification by using a JUnit RunNotifier</p>
+    </li><li visbl="pub" name="org.specs2.reporter.JUnitXmlExporting" data-isabs="true">
+      <a id="JUnitXmlExporting:JUnitXmlExporting"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="JUnitXmlExporting.html"><span class="name">JUnitXmlExporting</span></a><span class="result"> extends Exporting with JUnitXmlPrinter</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Trait for exporting the specification as JUnit xml files</p>
+    </li><li visbl="pub" name="org.specs2.reporter.JUnitXmlPrinter" data-isabs="true">
+      <a id="JUnitXmlPrinter:JUnitXmlPrinter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="JUnitXmlPrinter.html"><span class="name">JUnitXmlPrinter</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">The JUnitXml printer is used to create a JUnit xml report of an executed specification.</p>
+    </li><li visbl="pub" name="org.specs2.reporter.JUnitXmlReporter" data-isabs="true">
+      <a id="JUnitXmlReporter:JUnitXmlReporter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="JUnitXmlReporter.html"><span class="name">JUnitXmlReporter</span></a><span class="result"> extends DefaultReporter with JUnitXmlExporting with ConsoleOutput</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait execute specifications and exports them as JUnit xml files in the target/test-reports directory (by default).</p>
+    </li><li visbl="pub" name="org.specs2.reporter.MarkupExporting" data-isabs="true">
+      <a id="MarkupExporting:MarkupExporting"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="MarkupExporting.html"><span class="name">MarkupExporting</span></a><span class="result"> extends HtmlExporting</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Trait for exporting the specification as Markup files.</p>
+    </li><li visbl="pub" name="org.specs2.reporter.MessagesNotifier" data-isabs="true">
+      <a id="MessagesNotifier:MessagesNotifier"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="MessagesNotifier.html"><span class="name">MessagesNotifier</span></a><span class="result"> extends Notifier with MockOutput</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.NoResultOutput" data-isabs="false">
+      <a id="NoResultOutput:NoResultOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NoResultOutput.html"><span class="name">NoResultOutput</span></a><span class="result"> extends ResultOutput</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This output can be used for testing
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.NoStartOfArguments" data-isabs="false">
+      <a id="NoStartOfArguments:NoStartOfArguments[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NoStartOfArguments.html"><span class="name">NoStartOfArguments</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="value">value: T</span>)</span><span class="result"> extends ApplicableArguments[T] with Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.Notifier" data-isabs="true">
+      <a id="Notifier:Notifier"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Notifier.html"><span class="name">Notifier</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait can be used for any event concerning the execution of examples
+seen as a Tree of Fragments.</p>
+    </li><li visbl="pub" name="org.specs2.reporter.NotifierExporting" data-isabs="true">
+      <a id="NotifierExporting:NotifierExporting"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NotifierExporting.html"><span class="name">NotifierExporting</span></a><span class="result"> extends Exporting with Exporters</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.NotifierReporter" data-isabs="true">
+      <a id="NotifierReporter:NotifierReporter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NotifierReporter.html"><span class="name">NotifierReporter</span></a><span class="result"> extends DefaultReporter with NotifierExporting</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Report a Specification by notifying execution events to a Notifier
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.Reporter" data-isabs="true">
+      <a id="Reporter:Reporter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Reporter.html"><span class="name">Reporter</span></a><span class="result"> extends Selection with Sequence with ExecutionStrategy with Storing with Exporting</span>
+      </span>
+      </h4>
+      <p class="comment cmt">A Reporter will report the execution of a Specification following 3 steps:</p>
+    </li><li visbl="pub" name="org.specs2.reporter.ResultOutput" data-isabs="true">
+      <a id="ResultOutput:ResultOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ResultOutput.html"><span class="name">ResultOutput</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This traits provides specialised print methods for message representing
+different types of results.</p>
+    </li><li visbl="pub" name="org.specs2.reporter.Selection" data-isabs="true">
+      <a id="Selection:Selection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Selection.html"><span class="name">Selection</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">The Selection trait implements the logic for filtering the fragments to execute
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.Sequence" data-isabs="true">
+      <a id="Sequence:Sequence"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Sequence.html"><span class="name">Sequence</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">The Sequence trait implements the logic for the fragments to execute according to their dependencies
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.SpecFailureAssertionFailedError" data-isabs="false">
+      <a id="SpecFailureAssertionFailedError:SpecFailureAssertionFailedError"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SpecFailureAssertionFailedError.html"><span class="name">SpecFailureAssertionFailedError</span></a><span class="result"> extends AssertionFailedError</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This class refines the <code>AssertionFailedError</code> from junit
+and provides the stackTrace of an exception which occurred during the specification execution
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.StartOfArguments" data-isabs="false">
+      <a id="StartOfArguments:StartOfArguments[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="StartOfArguments.html"><span class="name">StartOfArguments</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="value">value: T</span>, <span name="name">name: SpecName</span>, <span name="args">args: Arguments</span>)</span><span class="result"> extends ApplicableArguments[T] with Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.StatisticsRepository" data-isabs="true">
+      <a id="StatisticsRepository:StatisticsRepository"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="StatisticsRepository.html"><span class="name">StatisticsRepository</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.StatusSelection" data-isabs="true">
+      <a id="StatusSelection:StatusSelection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="StatusSelection.html"><span class="name">StatusSelection</span></a><span class="result"> extends WithDefaultStatisticsRepository</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait selects examples based on their previous execution
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.TagSelection" data-isabs="true">
+      <a id="TagSelection:TagSelection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="TagSelection.html"><span class="name">TagSelection</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait selects fragments based on their tags
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.TestInterfaceReporter" data-isabs="false">
+      <a id="TestInterfaceReporter:TestInterfaceReporter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="TestInterfaceReporter.html"><span class="name">TestInterfaceReporter</span></a><span class="result"> extends ConsoleReporter with HandlerEvents</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Reporter for the test interface defined for sbt</p>
+    </li><li visbl="pub" name="org.specs2.reporter.TestInterfaceResultOutput" data-isabs="false">
+      <a id="TestInterfaceResultOutput:TestInterfaceResultOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="TestInterfaceResultOutput.html"><span class="name">TestInterfaceResultOutput</span></a><span class="result"> extends TextResultOutput with TestLoggers</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.TestLoggers" data-isabs="true">
+      <a id="TestLoggers:TestLoggers"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="TestLoggers.html"><span class="name">TestLoggers</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.TextExporting" data-isabs="true">
+      <a id="TextExporting:TextExporting"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="TextExporting.html"><span class="name">TextExporting</span></a><span class="result"> extends TextPrinter with Exporting</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait prints the executed fragments results and statistics
+at the end of the specification
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.TextPrinter" data-isabs="true">
+      <a id="TextPrinter:TextPrinter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="TextPrinter.html"><span class="name">TextPrinter</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait reduces a list of ExecutedFragments to a list of PrintLines.</p>
+    </li><li visbl="pub" name="org.specs2.reporter.TextResultOutput" data-isabs="false">
+      <a id="TextResultOutput:TextResultOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="TextResultOutput.html"><span class="name">TextResultOutput</span></a><span class="result"> extends ResultOutput with ConsoleOutput</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Implementation of the ResultOutput trait as Text
+</p>
+    </li><li visbl="pub" name="org.specs2.reporter.TreeToc" data-isabs="false">
+      <a id="TreeToc:TreeToc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="TreeToc.html"><span class="name">TreeToc</span></a><span class="params">(<span name="rootCode">rootCode: SpecId</span>, <span name="toc">toc: NodeSeq</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Table of contents, represented as a NodeSeq
+</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div class="values members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" name="org.specs2.reporter.ApplicableArguments" data-isabs="false">
+      <a id="ApplicableArguments:ApplicableArguments"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ApplicableArguments$.html"><span class="name">ApplicableArguments</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.ConsoleNotifier" data-isabs="false">
+      <a id="ConsoleNotifier:ConsoleNotifier"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ConsoleNotifier$.html"><span class="name">ConsoleNotifier</span></a><span class="result"> extends ConsoleNotifier</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.DefaultSelection" data-isabs="false">
+      <a id="DefaultSelection:DefaultSelection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DefaultSelection$.html"><span class="name">DefaultSelection</span></a><span class="result"> extends DefaultSelection</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.FragmentSeq" data-isabs="false">
+      <a id="FragmentSeq:FragmentSeq"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FragmentSeq$.html"><span class="name">FragmentSeq</span></a><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.HandlerEvents" data-isabs="false">
+      <a id="HandlerEvents:HandlerEvents"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="HandlerEvents$.html"><span class="name">HandlerEvents</span></a><span class="result"> extends HandlerEvents</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.HtmlExporting" data-isabs="false">
+      <a id="HtmlExporting:HtmlExporting"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="HtmlExporting$.html"><span class="name">HtmlExporting</span></a><span class="result"> extends HtmlExporting</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.JUnitXmlExporting" data-isabs="false">
+      <a id="JUnitXmlExporting:JUnitXmlExporting"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="JUnitXmlExporting$.html"><span class="name">JUnitXmlExporting</span></a><span class="result"> extends JUnitXmlExporting</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.MarkupExporting" data-isabs="false">
+      <a id="MarkupExporting:MarkupExporting"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="MarkupExporting$.html"><span class="name">MarkupExporting</span></a><span class="result"> extends MarkupExporting</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.MessagesNotifier" data-isabs="false">
+      <a id="MessagesNotifier:MessagesNotifier"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="MessagesNotifier$.html"><span class="name">MessagesNotifier</span></a><span class="result"> extends MessagesNotifier</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.specs2.reporter.TextExporting" data-isabs="false">
+      <a id="TextExporting:TextExporting"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="TextExporting$.html"><span class="name">TextExporting</span></a><span class="result"> extends TextExporting</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
