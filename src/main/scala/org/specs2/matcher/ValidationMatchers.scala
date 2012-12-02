@@ -8,22 +8,24 @@ import scalaz.{ Failure => ZFailure, Success => ZSuccess, Validation }
 trait ValidationMatchers extends ValidationBaseMatchers with ValidationBeHaveMatchers
 object ValidationMatchers extends ValidationMatchers
 
-private[specs2] trait ValidationBaseMatchers {
+private[specs2]
+trait ValidationBaseMatchers {
 
-  def beZSuccess[T](t: => T) = new Matcher[Validation[_, T]] {
-    def apply[S <: Validation[_, T]](value: Expectable[S]) = {
-      val expected = t
-      result(
-        value.value == ZSuccess(t),
-        value.description + " is Success with value" + q(expected),
-        value.description + " is not Success with value" + q(expected),
-        value
-      )
+  def beSuccessful[T](t: => T) =
+    new Matcher[Validation[_, T]] {
+      def apply[S <: Validation[_, T]](value: Expectable[S]) = {
+        val expected = t
+        result(
+          value.value == ZSuccess(t),
+          value.description + " is Success with value" + q(expected),
+          value.description + " is not Success with value" + q(expected),
+          value
+        )
+      }
     }
-  }
 
-  def beZSuccess[T] = new ZSuccessMatcher[T]
-  class ZSuccessMatcher[T] extends Matcher[Validation[_, T]] {
+  def beSuccessful[T] = new SuccessValidationMatcher[T]
+  class SuccessValidationMatcher[T] extends Matcher[Validation[_, T]] {
     def apply[S <: Validation[_, T]](value: Expectable[S]) = {
       result(
         value.value.isSuccess,
@@ -54,10 +56,10 @@ private[specs2] trait ValidationBaseMatchers {
     }
   }
 
-  def zsuccess[T](t: => T) = beZSuccess(t)
-  def zsuccess[T] = beZSuccess
+  def successful[T](t: => T) = beSuccessful(t)
+  def successful[T] = beSuccessful
 
-  def beZFailure[T](t: => T) = new Matcher[Validation[T, _]] {
+  def beFailing[T](t: => T) = new Matcher[Validation[T, _]] {
     def apply[S <: Validation[T, _]](value: Expectable[S]) = {
       val expected = t
       result(
@@ -69,8 +71,8 @@ private[specs2] trait ValidationBaseMatchers {
     }
   }
 
-  def beZFailure[T] = new ZFailureMatcher[T]
-  class ZFailureMatcher[T] extends Matcher[Validation[T, _]] {
+  def beFailing[T] = new FailureMatcher[T]
+  class FailureMatcher[T] extends Matcher[Validation[T, _]] {
     def apply[S <: Validation[T, _]](value: Expectable[S]) = {
       result(
         value.value.isFailure,
@@ -101,10 +103,9 @@ private[specs2] trait ValidationBaseMatchers {
     }
   }
 
-  def zfailure[T](t: => T) = beZFailure(t)
-  def zfailure[T] = beZFailure
+  def failing[T](t: => T) = beFailing(t)
+  def failing[T] = beFailing
 }
-
 
 private[specs2] trait ValidationBeHaveMatchers { outer: ValidationBaseMatchers =>
 
@@ -112,14 +113,14 @@ private[specs2] trait ValidationBeHaveMatchers { outer: ValidationBaseMatchers =
     new ValidationResultMatcher(result)
 
   class ValidationResultMatcher[F, S](result: MatchResult[Validation[F, S]]) {
-    def zfailure(f: => F) = result(outer beZFailure f)
-    def zsuccess(s: => S) = result(outer beZSuccess s)
-    def beZFailure(f: => F) = result(outer beZFailure f)
-    def beZSuccess(s: => S) = result(outer beZSuccess s)
+    def failing(f: => F) = result(outer beFailing f)
+    def beFailing(f: => F) = result(outer beFailing f)
+    def successful(s: => S) = result(outer beSuccessful s)
+    def beSuccessful(s: => S) = result(outer beSuccessful s)
 
-    def zfailure = result(outer.beZFailure)
-    def zsuccess = result(outer.beZSuccess)
-    def beZFailure = result(outer.beZFailure)
-    def beZSuccess = result(outer.beZSuccess)
+    def failing = result(outer.beFailing)
+    def beFailing = result(outer.beFailing)
+    def successful = result(outer.beSuccessful)
+    def beSuccessful = result(outer.beSuccessful)
   }
 }

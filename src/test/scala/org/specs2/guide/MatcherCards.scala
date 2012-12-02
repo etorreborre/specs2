@@ -26,6 +26,7 @@ object OptionalMatcherCards extends Cards {
     InterpreterMatchers,
     ParserMatchers,
     TerminationMatchers,
+    ValidationMatchers,
     DependencyMatchers)
 }
 
@@ -484,6 +485,29 @@ When a second action is specified like that, `action1` will be started and `acti
 
       action1 must terminate.onlyWhen(action2)
 """
+}
+
+object ValidationMatchers extends Card {
+  def title = "Validation"
+  def text =  """
+
+The `ValidationMatchers` trait provides simple matchers for Scalaz `Validation` instances. You can check if an object is successful or failing:
+
+   * `1.success must beSuccessful                                    `
+   * `1.fail must beFailing                                          `
+
+You can verify what's the validated value:
+
+   * `1.success must beSuccessful (1)                                `
+   * `1.success must not be successful (2)                           `
+   * `1.fail must be failing (1)                                     `
+   * `1.fail must not be failing (2)                                 `
+
+You can also pattern match on this value
+
+   * `List(1, 2).success must beSuccessful.like { case 1 :: _ => ok }`
+   * `List(1, 2).fail must beFailing.like { case 1 :: _ => ok }      `
+              """
 }
 
 object ScalazMatchers extends Card {
