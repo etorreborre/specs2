@@ -6,12 +6,12 @@ import matcher.DataTables
 import reporter._
 import org.scalatools.testing._
 import main.{ArgumentsArgs, Arguments}
-import specification.{Groups, ExecutingSpecification}
+import specification.{Tags, Groups, ExecutingSpecification}
 import execute.StandardResults
 import scala.collection.mutable.ListBuffer
 import annotation.tailrec
 
-class TestInterfaceRunnerSpec extends Specification with Groups { def is =
+class TestInterfaceRunnerSpec extends Specification with Groups with Tags { def is = tag("cloudbees") ^
                                                                                                                         """
   A TestInterfaceRunner is responsible for instantiating Specification classes found by
   sbt and executing them using a TestInterfaceReporter
@@ -126,7 +126,7 @@ class TestInterfaceRunnerSpec extends Specification with Groups { def is =
     val htmlExporter = new HtmlExporting { override def export(implicit args: Arguments) = (spec: ExecutingSpecification) =>
       { println("html export"); spec.execute }
     }
-    val testInterfaceReporter = new TestInterfaceReporter(NullEventHandler , Array()) {
+    val testInterfaceReporter = new TestInterfaceReporter(NullEventHandler, Array()) {
       override def export(implicit args: Arguments) = (spec: ExecutingSpecification) => {
         val executed = spec.execute
         println("console export")
