@@ -2,7 +2,7 @@ package org.specs2
 package reporter
 
 import org.scalacheck.{ Arbitrary, Gen }
-import matcher.ScalazMatchers
+import matcher.InternalScalazMatchers
 import org.specs2.internal.scalaz._
 import Scalaz._
 import specification._
@@ -10,7 +10,7 @@ import collection.Seqx._
 import Levels._
 import specification.FragmentsShow._
 
-class LevelsSpec extends Specification with ScalaCheck with ScalazMatchers with ArbitraryFragments with Tags { def is = sequential^
+class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatchers with ArbitraryFragments with Tags { def is = sequential^
                                                                                                                         """
   The Levels class is used to compute the 'level' of Fragments in a list of Fragments.                                  """^
                                                                                                                         p^

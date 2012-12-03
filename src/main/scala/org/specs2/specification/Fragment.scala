@@ -176,7 +176,7 @@ case class Step (step: LazyParameter[Result], stopOnFail: Boolean = false) exten
   override def hashCode = super.hashCode
 }
 
-case object Step {
+case object Step extends ImplicitParameters {
   /** create a Step object from either a previous result, or a value to evaluate */
   def fromEither[T](r: =>Either[Result, T]) = new Step(either(r))
 
@@ -189,9 +189,12 @@ case object Step {
     }
   }
   /** create a Step object from any value */
-  def apply[T](r: =>T) = fromEither(trye(r)(Error(_)))
-  /** create a Step object from a stopOnFail value */
-  def apply(stopOnFail: Boolean): Step = Step(step = lazyfy(Success()), stopOnFail = stopOnFail)
+  def apply[T](r: =>T) = fromEither(catchAll(r)(Error(_)))
+  /** create a Step object from a stopOnFail value. Make sure that the boolean evaluation doesn't fail */
+  def apply(stopOnFail: =>Boolean)(implicit p: ImplicitParam) = {
+    val stop = catchAll(stopOnFail)(Error(_))
+    fromEither(stop).copy(stopOnFail = stop.fold(_ => false, b => b))
+  }
 }
 /**
  * An Action is similar to a Step but can be executed concurrently with other examples.

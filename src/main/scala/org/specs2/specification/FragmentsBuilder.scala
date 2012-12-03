@@ -15,7 +15,6 @@ import control.Functions._
  *  - a group of fragments (when including another specification for example)
  * 
  */
-private[specs2]
 trait FragmentsBuilder extends RegexSteps with ExamplesFactory { outer =>
 
   /**

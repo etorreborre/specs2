@@ -70,12 +70,20 @@ How to create an Example
 Other elements
 ==============                                                                                                          """^
                                                                                                                         br^
-  "A Fragments object by appending fragment objects"                                                                    ! g4().e1^
+  "A Fragments object can be created by appending fragment objects"                                                     ! g4().e1^
   "Or simply by casting a String to a Fragments object"                                                                 ! g4().e2^
-                                                                                                                        br^
+                                                                                                                        endp^
   "A Step can be created from an Either[Result, T]"                                                                     ^
     "from a Left(Skipped())"                                                                                            ! g4().e3^
     "from a Right(value)"                                                                                               ! g4().e4^
+                                                                                                                        endp^
+  "A Step can be created with a stopOnFail value"                                                                       ^
+    "with a stopOnFail = true"                                                                                          ! g4().e5^
+    "with a stopOnFail value throwing an exception"                                                                     ! g4().e6^
+                                                                                                                        endp^
+  "A Step can be created with an action"                                                                                ^
+    "executing ok"                                                                                                      ! g4().e7^
+    "throwing an exception"                                                                                             ! g4().e8^
                                                                                                                         end
 
   "start and end" - new g1 with specifications {
@@ -133,6 +141,10 @@ Other elements
     e2 := ("t":Fragments).middle must have size(1)
     e3 := Step.fromEither(Left(Skipped())).execute must beSkipped
     e4 := Step.fromEither(Right("value")).execute must beSuccessful
+    e5 := Step(stopOnFail = true).execute must beSuccessful
+    e6 := Step(stopOnFail = {throw new Exception; true}).execute must beError
+    e7 := Step(1).execute must beSuccessful
+    e8 := Step({throw new Exception; 1}).execute must beError
   }
 
   trait specifications extends TerminationMatchers {

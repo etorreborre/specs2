@@ -2,60 +2,51 @@ package org.specs2
 package matcher
 
 import org.scalacheck.{ Arbitrary, Shrink, Prop }
-import org.specs2.internal._
-import scalaz.{Semigroup, Monoid, Validation, Success, Failure, Scalaz}
+import scalaz.{Semigroup, Monoid, Validation, Success, Failure, Scalaz, Equal}
 import scalaz.syntax.monoid._
 import MatchResultLogicalCombinators._
-import execute.{Result, ResultLogicalCombinators}
-import ResultLogicalCombinators._
+import execute.ResultLogicalCombinators._
 
 /**
- * This trait provides matchers for some Scalaz (http://github.com/p/scalaz) datatypes.
- *
- * It uses Scalaz classes from the repackaged version of scalaz 7 so it can not be used outside of specs2
+ * This trait provides matchers for some Scalaz (http://github.com/scalaz) types.
  */
-private[specs2]
-trait ScalazMatchers extends ScalaCheckMatchers with Expectations { outer: AnyMatchers =>
+trait ScalazMatchers extends ScalazBaseMatchers with ScalazBeHaveMatchers { outer: AnyMatchers => }
+
+trait ScalazBaseMatchers extends ScalaCheckMatchers with Expectations with ValidationMatchers { outer: AnyMatchers =>
 
   implicit def semigroupProperty[T](implicit s: Semigroup[T]): SemigroupProperty[T] = new SemigroupProperty[T]()(s)
   class SemigroupProperty[T]()(implicit sg: Semigroup[T]) {
     def isAssociative(implicit a: Arbitrary[T], s: Shrink[T]) = outer.isAssociative
-    def isSemigroup(implicit a: Arbitrary[T], s: Shrink[T]) = outer.isAssociative
+    def isSemigroup(implicit a: Arbitrary[T], s: Shrink[T])   = outer.isAssociative
   }
-
-  def isAssociative[T](implicit sg: Semigroup[T], a: Arbitrary[T], s: Shrink[T]): Prop =
-    prop { (b1: T, b2: T, b3: T) => be_==(b1 |+| (b2 |+| b3)).apply(createExpectable((b1 |+| b2) |+| b3)) }
 
   implicit def monoidProperty[T](m: Monoid[T]): MonoidProperty[T] = new MonoidProperty[T]()(m)
   class MonoidProperty[T]()(implicit m: Monoid[T]) extends SemigroupProperty()(m) {
     def isMonoid(implicit a: Arbitrary[T], s: Shrink[T]) = outer.isMonoid
-    def hasNeutralElement(implicit a: Arbitrary[T], s: Shrink[T]) = outer.hasNeutralElement
+    def hasNeutralElement(implicit a: Arbitrary[T], s: Shrink[T]) = outer.hasZero
   }
 
-  def hasNeutralElement[T](implicit m: Monoid[T], a: Arbitrary[T], s: Shrink[T]): Prop =
+  /** this ScalaCheck property is valid if the semigroup is associative */
+  def isAssociative[T](implicit sg: Semigroup[T], a: Arbitrary[T], s: Shrink[T]): Prop =
+    prop { (b1: T, b2: T, b3: T) => be_==(b1 |+| (b2 |+| b3)).apply(createExpectable((b1 |+| b2) |+| b3)) }
+
+  /** this ScalaCheck property is valid if the monoid has a Zero element */
+  def hasZero[T](implicit m: Monoid[T], a: Arbitrary[T], s: Shrink[T]): Prop =
     prop { (t: T) =>
       be_==(t |+| m.zero).apply(createExpectable(t)) and be_==(m.zero |+| t).apply(createExpectable(t))
     }
 
-  def isMonoid[T](implicit m: Monoid[T], a: Arbitrary[T], s: Shrink[T]) = isAssociative && hasNeutralElement
+  /** this ScalaCheck property is valid if the monoid verifies the monoid laws */
+  def isMonoid[T](implicit m: Monoid[T], a: Arbitrary[T], s: Shrink[T]) = isAssociative && hasZero
 
-  import MatchersImplicits._
+  /** equality matcher with an Equal typeclass */
+  def equal[T : Equal](t: T): Matcher[T] = beTypedEqualTo(t, implicitly[Equal[T]].equal(_:T,_:T))
 
-  /** success matcher for a Validation */
-  def beSuccessful[E, A]: Matcher[Validation[E, A]] = (v: Validation[E, A]) => (v.fold(_ => false, _ => true), v+" successful", v+" is not successfull")
+}
 
-  /** failure matcher for a Validation */
-  def beAFailure[E, A]: Matcher[Validation[E, A]] = (v: Validation[E, A]) => (v.fold(_ => true, _ => false), v+" is a failure", v+" is not a failure")
-
-  /** success matcher for a Validation with a specific value */
-  def succeedWith[E, A](a: =>A) = validationWith[E, A](Success(a))
-
-  /** failure matcher for a Validation with a specific value */
-  def failWith[E, A](e: =>E) = validationWith[E, A](Failure(e))
-
-  private def validationWith[E, A](f: =>Validation[E, A]): Matcher[Validation[E, A]] = (v: Validation[E, A]) => {
-    val expected = f
-    (expected == v, v+" is a "+expected, v+" is not a "+expected)
+trait ScalazBeHaveMatchers { outer: ScalazMatchers with AnyMatchers =>
+  implicit def scalazBeHaveMatcher[T : Equal](result: MatchResult[T]) = new ScalazBeHaveMatchers(result)
+  class ScalazBeHaveMatchers[T : Equal](result: MatchResult[T]) {
+    def equal(t: T) = result(outer.equal(t))
   }
-
 }

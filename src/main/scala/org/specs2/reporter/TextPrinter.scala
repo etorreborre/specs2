@@ -93,7 +93,7 @@ trait TextPrinter {
       if (!start.hidden) {
         if (start.name != start.title) out.printSpecStartTitle(leveledText(start.title, level)(args), stats)(args)
         else                           out.printSpecStartName(leveledText(start.name, level)(args), stats)(args)
-        out.printLine("")(args)
+        if (!args.xonly) out.printLine("")(args)
       }
     }
   }

@@ -4,10 +4,10 @@ package matcher
 import io.MockOutput
 import java.util.concurrent._
 import internal.scalaz.concurrent.Promise
-import specification.Grouped
+import specification.{Tags, Grouped}
 
-class TerminationMatchersSpec extends Specification with TerminationMatchers with Grouped { def is =
-
+class TerminationMatchersSpec extends Specification with TerminationMatchers with Grouped with Tags { def is = section("cloudbees")^
+                                                                                                   p^
   "It is possible to check if a block of code terminates"                                          ^
     "with a default number of retries and default sleep time"                                      ^
       "if it succeeds"                                                                             ! g1.e1^

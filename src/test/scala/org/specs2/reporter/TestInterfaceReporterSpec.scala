@@ -2,13 +2,13 @@ package org.specs2
 package reporter
 
 import mock._
-import specification.Fragments
+import specification.{Tags, Fragments}
 import main.Arguments
 import matcher.DataTables
 import org.scalatools.testing.{Event, Logger, EventHandler}
 
-class TestInterfaceReporterSpec extends Specification with DataTables { def is =
-
+class TestInterfaceReporterSpec extends Specification with DataTables with Tags { def is = section("cloudbees")^
+                                                                                                                        p^
   "A TestInterfaceReporter should"                                                                                      ^
     "print the specification title if defined"                                                                          ! report().e1^
     "report datatables ok"                                                                                              ! report().e2^
