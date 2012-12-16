@@ -28,7 +28,6 @@ libraryDependencies <<= scalaVersion { scala_version => Seq(
   "org.specs2" % "scalaz-concurrent_2.10.0-RC5" % "7.0.0-M2",
   "org.scala-lang" % "scala-compiler" % scala_version % "optional",
   "org.scalacheck" % "scalacheck_2.10.0-RC3" % "1.10.0" % "optional",
-  "org.scalaz" % "scalaz-core_2.10.0-RC3" % "7.0.0-M5" % "optional",
   "org.scala-tools.testing" % "test-interface" % "0.5" % "optional",
   "org.hamcrest" % "hamcrest-all" % "1.1" % "optional",
   "org.mockito" % "mockito-all" % "1.9.0" % "optional",
