@@ -6,13 +6,11 @@ import com.jsuereth.ghpages.GhPages.ghpages._
 /** Project */
 name := "specs2"
 
-version := "1.13-SNAPSHOT"
+version := "1.13"
 
 organization := "org.specs2"
 
-scalaVersion := "2.10.0-RC5"
-
-crossVersion := CrossVersion.full
+scalaVersion := "2.10.0"
 
 /** Shell */
 shellPrompt := { state => System.getProperty("user.name") + "> " }
@@ -24,10 +22,10 @@ resolvers ++= Seq("releases" at "http://oss.sonatype.org/content/repositories/re
                   "snapshots" at "http://oss.sonatype.org/content/repositories/snapshots")
 
 libraryDependencies <<= scalaVersion { scala_version => Seq(
-  "org.specs2" % "scalaz-core_2.10.0-RC5" % "7.0.0-M2",
-  "org.specs2" % "scalaz-concurrent_2.10.0-RC5" % "7.0.0-M2",
-  "org.scala-lang" % "scala-compiler" % scala_version % "optional",
-  "org.scalacheck" % "scalacheck_2.10.0-RC3" % "1.10.0" % "optional",
+  "org.specs2" %% "scalaz-core" % "7.0.0",
+  "org.specs2" %% "scalaz-concurrent_2.10.0" % "7.0.0",
+  "org.scala-lang" %% "scala-compiler"  % "optional",
+  "org.scalacheck" %% "scalacheck" % "1.10.0" % "optional",
   "org.scala-tools.testing" % "test-interface" % "0.5" % "optional",
   "org.hamcrest" % "hamcrest-all" % "1.1" % "optional",
   "org.mockito" % "mockito-all" % "1.9.0" % "optional",
@@ -54,7 +52,7 @@ cancelable := true
 testOptions := Seq(Tests.Filter(s =>
   Seq("Spec", "Suite", "Unit").exists(s.endsWith(_)) && !s.endsWith("FeaturesSpec") ||
     s.contains("UserGuide") || 
-  	s.toLowerCase.contains("index") ||
+    s.toLowerCase.contains("index") ||
     s.matches("org.specs2.guide.*")))
 
 /** Console */
