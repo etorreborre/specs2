@@ -1,0 +1,351 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>control - org.specs2.control</title>
+          <meta name="description" content="control - org.specs2.control" />
+          <meta name="keywords" content="control org.specs2.control" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'org.specs2.control.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../lib/package_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a></p>
+        <h1>control</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">control</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="org.specs2.control.Debug" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DebugextendsImplicitParameters"></a>
+      <a id="Debug:Debug"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Debug.html"><span class="name">Debug</span></a><span class="result"> extends <a href="ImplicitParameters.html" class="extype" name="org.specs2.control.ImplicitParameters">ImplicitParameters</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait provides simple a way to print out any object to the console:</p>
+    </li><li name="org.specs2.control.Functions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FunctionsextendsObject"></a>
+      <a id="Functions:Functions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Functions.html"><span class="name">Functions</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait provides utility methods for functions
+</p>
+    </li><li name="org.specs2.control.ImplicitParameters" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ImplicitParametersextendsObject"></a>
+      <a id="ImplicitParameters:ImplicitParameters"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ImplicitParameters.html"><span class="name">ImplicitParameters</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait can be used to overcome some limitations with method overloading due to type erasure
+</p>
+    </li><li name="org.specs2.control.IncludeExcludeStackTraceFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IncludeExcludeStackTraceFilterextendsStackTraceFilterwithProductwithSerializable"></a>
+      <a id="IncludeExcludeStackTraceFilter:IncludeExcludeStackTraceFilter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="IncludeExcludeStackTraceFilter.html"><span class="name">IncludeExcludeStackTraceFilter</span></a><span class="params">(<span name="include">include: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="exclude">exclude: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="StackTraceFilter.html" class="extype" name="org.specs2.control.StackTraceFilter">StackTraceFilter</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Implementation of the StackTraceFilter trait with a list of include/exclude patterns
+</p>
+    </li><li name="org.specs2.control.LanguageFeatures" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LanguageFeaturesextendsObject"></a>
+      <a id="LanguageFeatures:LanguageFeatures"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LanguageFeatures.html"><span class="name">LanguageFeatures</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.control.LazyParameter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LazyParameter[+T]extendsObject"></a>
+      <a id="LazyParameter[+T]:LazyParameter[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LazyParameter.html"><span class="name">LazyParameter</span></a><span class="tparams">[<span name="T">+T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">class holding a value to be evaluated lazily</p>
+    </li><li name="org.specs2.control.LazyParameters" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LazyParametersextendsObject"></a>
+      <a id="LazyParameters:LazyParameters"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LazyParameters.html"><span class="name">LazyParameters</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait can be used to allow some function to be called with varargs, with values being
+evaluated lazily:<code>
+
+  def method[T](values: LazyParameter[T]*) = {
+    values.toStream // use the toStream method to consume the values lazily
+  }
+  // usage
+  method(exp1, exp2, exp3)
+</code></p>
+    </li><li name="org.specs2.control.NoDebug" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NoDebugextendsDebug"></a>
+      <a id="NoDebug:NoDebug"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NoDebug.html"><span class="name">NoDebug</span></a><span class="result"> extends <a href="Debug.html" class="extype" name="org.specs2.control.Debug">Debug</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Use this trait to disable the <code>pp</code> method on objects
+</p>
+    </li><li name="org.specs2.control.NoLanguageFeatures" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NoLanguageFeaturesextendsLanguageFeatures"></a>
+      <a id="NoLanguageFeatures:NoLanguageFeatures"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NoLanguageFeatures.html"><span class="name">NoLanguageFeatures</span></a><span class="result"> extends <a href="LanguageFeatures.html" class="extype" name="org.specs2.control.LanguageFeatures">LanguageFeatures</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.control.Property" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Property[T]extendsProductwithSerializable"></a>
+      <a id="Property[T]:Property[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Property.html"><span class="name">Property</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="value">value: () ⇒ <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.specs2.control.Property.T">T</span>]</span>, <span name="evaluated">evaluated: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="evaluatedValue">evaluatedValue: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.specs2.control.Property.T">T</span>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">This class represents values which are evaluated lazily and which may even be missing.</p>
+    </li><li name="org.specs2.control.StackTraceFilter" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StackTraceFilterextendsObject"></a>
+      <a id="StackTraceFilter:StackTraceFilter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="StackTraceFilter.html"><span class="name">StackTraceFilter</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait filters an Exception stacktrace
+</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="org.specs2.control.Debug" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Debug"></a>
+      <a id="Debug:Debug"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Debug$.html"><span class="name">Debug</span></a><span class="result"> extends <a href="Debug.html" class="extype" name="org.specs2.control.Debug">Debug</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.control.DefaultStackTraceFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DefaultStackTraceFilter"></a>
+      <a id="DefaultStackTraceFilter:DefaultStackTraceFilter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DefaultStackTraceFilter$.html"><span class="name">DefaultStackTraceFilter</span></a><span class="result"> extends <a href="IncludeExcludeStackTraceFilter.html" class="extype" name="org.specs2.control.IncludeExcludeStackTraceFilter">IncludeExcludeStackTraceFilter</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">default filter for specs2 runs
+</p>
+    </li><li name="org.specs2.control.Functions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Functions"></a>
+      <a id="Functions:Functions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Functions$.html"><span class="name">Functions</span></a><span class="result"> extends <a href="Functions.html" class="extype" name="org.specs2.control.Functions">Functions</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.control.IncludeExcludeStackTraceFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IncludeExcludeStackTraceFilter"></a>
+      <a id="IncludeExcludeStackTraceFilter:IncludeExcludeStackTraceFilter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="IncludeExcludeStackTraceFilter$.html"><span class="name">IncludeExcludeStackTraceFilter</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Factory object to build a stack trace filter from include/exclude expressions:</p>
+    </li><li name="org.specs2.control.LazyParameters" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LazyParameters"></a>
+      <a id="LazyParameters:LazyParameters"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LazyParameters$.html"><span class="name">LazyParameters</span></a><span class="result"> extends <a href="LazyParameters.html" class="extype" name="org.specs2.control.LazyParameters">LazyParameters</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.control.NoStackTraceFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NoStackTraceFilter"></a>
+      <a id="NoStackTraceFilter:NoStackTraceFilter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NoStackTraceFilter$.html"><span class="name">NoStackTraceFilter</span></a><span class="result"> extends <a href="StackTraceFilter.html" class="extype" name="org.specs2.control.StackTraceFilter">StackTraceFilter</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">This filter doesn't do anything
+</p>
+    </li><li name="org.specs2.control.Property" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Property"></a>
+      <a id="Property:Property"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Property$.html"><span class="name">Property</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Companion object to create properties with possibly no initial value
+</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

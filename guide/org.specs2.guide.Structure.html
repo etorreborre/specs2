@@ -4,11 +4,11 @@
         @import url('./../css/maven-base.css');
         @import url('./../css/maven-theme.css');
       </style>
-      <link type="text/css" rel="stylesheet" href="./../css/prettify.css" />
+      <link href="./../css/prettify.css" type="text/css" rel="stylesheet" />
       <script type="text/javascript" src="./../css/prettify.js"></script>
-      <link type="text/css" media="print" rel="stylesheet" href="./../css/print.css" />
-      <link type="text/css" rel="stylesheet" href="./../css/tooltip.css" />
-      <link type="text/css" rel="stylesheet" href="./../css/specs2-user.css" />
+      <link rel="stylesheet" href="./../css/print.css" type="text/css" media="print" />
+      <link href="./../css/tooltip.css" rel="stylesheet" type="text/css" />
+      <link href="./../css/specs2-user.css" type="text/css" rel="stylesheet" />
 
       <script type="text/javascript" src="./../css/jquery.js"></script>
       <script type="text/javascript" src="./../css/jquery.cookie.js"></script>
@@ -60,11 +60,11 @@
       <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
            tabber code, then the init code -->
       <script type="text/javascript" src="./../css/tabber.js"></script>
-      <link type="text/css" media="screen" rel="stylesheet" href="./../css/tabber.css" />
+      <link rel="stylesheet" href="./../css/tabber.css" type="text/css" media="screen" />
     </head><body><div id="breadcrumbs"><a href="../guide/org.specs2.UserGuide.html">UserGuide</a><t> / </t><a href="../guide/org.specs2.guide.Structure.html">Structure</a></div><div class="colmask threecol">
                    <div class="colmid">
                      <div class="colleft">
-                       <div class="col1"><div id="central"><title>Structure</title><a name="Structure"><h2 specId="1256971381">Structure</h2></a><status class="ok"><div class="level0" style="display: show"><a name="Presentation"><h3>Presentation</h3></a><p>In this page you will learn how to:</p>
+                       <div class="col1"><div id="central"><title>Structure</title><a name="Structure"><h2 specId="1688464419">Structure</h2></a><status class="ok"><div class="level0" style="display: show"><a name="Presentation"><h3>Presentation</h3></a><p>In this page you will learn how to:</p>
 <ul>
   <li>declare examples and expectations</li>
   <li>link specifications together</li>
@@ -303,11 +303,11 @@ val number3: Then[(Int, Int)] = (n: (Int, Int)) =&gt; (s: String) =&gt; discount
 number3.extract((100, 10), &quot;the result is ${90}&quot;) must beSuccessful
 
 // this uses a regular expression with capturing groups matching the full text
-val number3: Then[(Int, Int)] = readAs(&quot;.*(\\d+).*&quot;) then { (n: (Int, Int)) =&gt; (s: String) =&gt; discount(n._1, n._2) must_== s.toInt }
+val number3: Then[(Int, Int)] = readAs(&quot;.*(\\d+).*&quot;) andThen { (n: (Int, Int)) =&gt; (s: String) =&gt; discount(n._1, n._2) must_== s.toInt }
 number3.extract((100, 10), &quot;the result is 90&quot;) must beSuccessful
 
 // this uses capturing groups directly
-val number3: Then[(Int, Int)] = groupAs(&quot;\\d+&quot;) then { (n: (Int, Int)) =&gt; (s: String) =&gt; discount(n._1, n._2) must_== s.toInt }
+val number3: Then[(Int, Int)] = groupAs(&quot;\\d+&quot;) andThen { (n: (Int, Int)) =&gt; (s: String) =&gt; discount(n._1, n._2) must_== s.toInt }
 number3.extract((100, 10), &quot;the result is 90&quot;) must beSuccessful
 
 // if the Then step is only side-effecting we can omit the `then` call
@@ -688,7 +688,7 @@ val number3: Then[Unit] = groupAs(&quot;\\d+&quot;) { (s: String) =&gt; value mu
   <li>create a new context object by combining existing ones</li>
 </ol><a name="Around"><h4>Around</h4></a><p>Some examples need to be executed in a given context. For example you're testing a web application and your specification code needs to have your example executed inside an Http session.</p><p>In that case you can extend the <code class="prettyprint">Around</code> trait and specify the <code class="prettyprint">around</code> method:</p>
 <pre><code class="prettyprint">  object http extends Around {
-    def around[T &lt;% Result](t: =&gt;T) = openHttpSession(&quot;test&quot;) {
+    def around[T : AsResult](t: =&gt;T) = openHttpSession(&quot;test&quot;) {
       t  // execute t inside a http session
     }
   }
@@ -711,7 +711,7 @@ val number3: Then[Unit] = groupAs(&quot;\\d+&quot;) { (s: String) =&gt; value mu
 </code></pre><a name="AroundOutside"><h5>AroundOutside</h5></a><p>We can also combine both the <code class="prettyprint">Around</code> and the <code class="prettyprint">Outside</code> behaviors with the <code class="prettyprint">AroundOutside</code> trait:</p>
 <pre><code class="prettyprint">  object http extends AroundOutside[HttpReq] {
     // create a context
-    def around[T &lt;% Result](t: =&gt;T) = {
+    def around[T : AsResult](t: =&gt;T) = {
       createNewDatabase
       // execute the code inside a databaseSession
       inDatabaseSession { t }
@@ -1331,12 +1331,12 @@ textFragment(&quot;this is a text fragment&quot;)
 </ul>
 <hr /></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Structure</th></tr>
-        <tr><td>Finished in</td><td class="info">70 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">511 ms</td></tr>
         <tr><td>Results</td><td class="success">18 examples, 0 failure, 0 error</td></tr>
       </table></div></div>
                        <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="1135209413"><a href="../guide/org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1556743250"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="2064368618"><a href="../guide/org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="968253273"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -1346,7 +1346,7 @@ textFragment(&quot;this is a text fragment&quot;)
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1256971381"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1688464419"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -1512,7 +1512,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li></ul>
-          </li><li id="1545500553"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1151893252"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1574,7 +1574,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="912505653"><a href="../guide/org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="884773850"><a href="../guide/org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1618,7 +1618,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li></ul>
-          </li><li id="948749994"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="780708310"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1702,7 +1702,7 @@ textFragment(&quot;this is a text fragment&quot;)
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="548916708"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="645273995"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1746,7 +1746,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li></ul>
-          </li><li id="2142905858"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="1910531086"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1766,7 +1766,7 @@ textFragment(&quot;this is a text fragment&quot;)
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1135209413','1256971381'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['2064368618','1688464419'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                        <div class="col3"><div id="rightcolumn"></div></div>
                      </div>
