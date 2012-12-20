@@ -13,8 +13,11 @@ object Specs2Variables {
   lazy val nextVersion =
     if (isSnapshot) version.replace("-SNAPSHOT", "")
     else {
-      val major :: minor :: patch :: _ = version.split("\\.").toList
-      Seq(major, minor, patch.toInt+1).mkString(".")
+      version.split("\\.").toList match {
+        case major :: minor :: patch :: _ => Seq(major, minor, patch.toInt+1).mkString(".")
+        case major :: minor :: _          => Seq(major, minor, 1).mkString(".")
+        case _                            => version+".1"
+      }
     }
 
   lazy val isSnapshot = version endsWith "SNAPSHOT"
