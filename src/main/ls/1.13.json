@@ -18,7 +18,7 @@
   }, {
     "organization" : "org.scalacheck",
     "name" : "scalacheck",
-    "version" : "1.10.1"
+    "version" : "1.10.0"
   }, {
     "organization" : "org.scala-tools.testing",
     "name" : "test-interface",
