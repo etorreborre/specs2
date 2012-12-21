@@ -117,26 +117,4 @@ trait Iterablex {
   }
 }
 
-object Iterablex extends Iterablex {
-  import scala.collection.SeqLike
-
-  /**
-   * extractor object to extract the first element of a sequence
-   *
-   * l match { case e +: rest => ok }
-   */
-  object +: {
-    def unapply[A, C <: SeqLike[A, C]](seq: C with SeqLike[A, C]) =
-      seq.headOption.map(h => (h, seq.tail))
-  }
-
-  /**
-   * extractor object to extract the last element of a sequence
-   *
-   * l match { case init :+ last => ok }
-   */
-  object :+ {
-    def unapply[A, C <: SeqLike[A, C]](seq: C with SeqLike[A, C]) =
-      seq.headOption.map(h => (seq.init, seq.last ))
-  }
-}
+object Iterablex extends Iterablex
