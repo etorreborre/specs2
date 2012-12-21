@@ -87,25 +87,5 @@ trait Seqx { outer =>
   }
 }
 
-/**
- * extrator for the first element of Seq[T]
- */
-object +: {
-  def unapply[T](l: Seq[T]): Option[(T, Seq[T])] = {
-    if(l.isEmpty) None
-    else          Some(l.head, l.tail)
-  }
-}
-
-/**
- * extrator for the last element of Seq[T]
- */
-object :+ {
-  def unapply[T](l: Seq[T]): Option[(Seq[T], T)] = {
-    if(l.isEmpty) None
-    else          Some(l.init, l.last)
-  }
-}
-
 private[specs2]
 object Seqx extends Seqx
