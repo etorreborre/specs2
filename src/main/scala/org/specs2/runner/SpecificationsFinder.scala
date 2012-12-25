@@ -62,7 +62,7 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput wi
   def specPattern(specType: String, pattern: String) = "\\s*"+specType+"\\s*(" + pattern + ")\\s*extends\\s*.*"
 
   /**
-   * @return a <code>SpecificationStructure</code> object from a className if that class is a <code>SpecificationStructure</code> class.<br>
+   * @return a `SpecificationStructure` object from a className if that class is a `SpecificationStructure` class.<br>
    * Tries to load the class name and cast it to a specification
    *         None in case of an exception.
    */
@@ -80,7 +80,7 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput wi
   }
 
   /**
-   * @return a <code>SpecificationStructure</code> object from a className if that class is a <code>SpecificationStructure</code> class.<br>
+   * @return a `SpecificationStructure` object from a className if that class is a `SpecificationStructure` class.<br>
    * Tries to load the class name and cast it to a specification
    *         None in case of an exception.
    */

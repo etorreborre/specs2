@@ -8,13 +8,13 @@ import java.util.zip._
 /**
  * The FileSystem trait abstracts file system operations to allow easier mocking of file system related functionalities.
  * <p>
- * It mixes the <code>FileReader</code> and <code>FileWriter</code> traits to provide easy read/write operations.  
+ * It mixes the `FileReader` and `FileWriter` traits to provide easy read/write operations.
  */
 private[specs2]
 trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter {
   /**
-   * @param path glob expression, for example: <code>./dir/**/*.xml</code>
-   * @return the list of paths represented by the "glob" definition <code>path</code>
+   * @param path glob expression, for example: `./dir/**/*.xml`
+   * @return the list of paths represented by the "glob" definition `path`
    */
   def filePaths(basePath: String = ".", path: String = "*", verbose: Boolean = false): Seq[String] = {
     val found = recurse(new File(basePath))

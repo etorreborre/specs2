@@ -57,7 +57,7 @@ trait TraversableBaseMatchers extends LazyParameters { outer =>
   }
 
   /**
-   * Matches if there is one element in the traversable verifying the <code>function</code> parameter: <code>(traversable.exists(function(_))</code>
+   * Matches if there is one element in the traversable verifying the `function` parameter: `(traversable.exists(function(_))`
    */
   def have[T](function: T => Boolean) = new Matcher[GenTraversableOnce[T]]{
     def apply[S <: GenTraversableOnce[T]](traversable: Expectable[S]) = {
@@ -77,7 +77,7 @@ trait TraversableBaseMatchers extends LazyParameters { outer =>
   def allElementsLike[T, S](like: PartialFunction[T, MatchResult[S]]) = haveAllElementsLike(like)
 
   /**
-   * Matches if there l contains the same elements as the Traversable <code>traversable</code>.<br>
+   * Matches if there l contains the same elements as the Traversable `traversable`.<br>
    * This verification does not consider the order of the elements but checks the traversables recursively
    */
   def haveTheSameElementsAs[T](l: =>Traversable[T], equality: (T, T) => Boolean = (_:T) == (_:T)) =

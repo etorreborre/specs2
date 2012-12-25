@@ -132,7 +132,7 @@ class JUnitDescriptionsFragments(className: String) extends JUnitDescriptions[Fr
     }
 }
 /**
- * This class refines the <code>AssertionFailedError</code> from junit
+ * This class refines the `AssertionFailedError` from junit
  * and provides the stackTrace of an exception which occurred during the specification execution
  */
 class SpecFailureAssertionFailedError(e: Exception) extends AssertionFailedError(e.getMessage) {
