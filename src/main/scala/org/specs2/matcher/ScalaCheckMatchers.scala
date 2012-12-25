@@ -123,7 +123,7 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
 
   /**
    * checks if the property is true for each generated value, and with the specified
-   * generation parameters <code>p</code>. <code>p</code> is transformed into a scalacheck parameters
+   * generation parameters `p`. `p` is transformed into a scalacheck parameters
    */
   private[specs2] def checkProperty(prop: Prop)(implicit p: Parameters): execute.Result = {
     checkScalaCheckProperty(prop)(p.toScalaCheckParameters(defaultPrettyParams))
@@ -310,7 +310,7 @@ trait ApplicableArbitraries { this: ScalaCheckMatchers =>
 
 }
 /**
- * This trait provides generation parameters to use with the <code>ScalaCheckMatchers</code>
+ * This trait provides generation parameters to use with the `ScalaCheckMatchers`
  */
 trait ScalaCheckParameters { outer: ScalaCheckMatchers with Output =>
   /**

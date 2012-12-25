@@ -100,8 +100,11 @@ trait MatchersImplicits extends Expectations with MatchResultCombinators with Ma
   }
 
   /**
-   * The <code>SeqMatcher</code> class is a matcher matching a sequence of objects with a matcher returned by a function.<p>
-   * Usage:<code>List(1, 2, 3) must ((beEqualTo(_:Int)).toSeq)(List(1, 2, 3)) </code>
+   * The `SeqMatcher` class is a matcher matching a sequence of objects with a matcher returned by a function.<p>
+   * Usage:
+   * {{{
+   * List(1, 2, 3) must ((beEqualTo(_:Int)).toSeq)(List(1, 2, 3))
+   * }}}
    */
   class SeqMatcher[S, T](s: Seq[S], f: S => Matcher[T]) extends Matcher[Seq[T]] {
     def apply[U <: Seq[T]](t: Expectable[U]) = {
@@ -118,8 +121,11 @@ trait MatchersImplicits extends Expectations with MatchResultCombinators with Ma
   }
 
   /**
-   * The <code>SetMatcher</code> class is a matcher matching a set of objects with a matcher returned by a function.<p>
-   * Usage:<code>List(1, 2, 3) must ((beEqualTo(_:Int)).toSet)(List(2, 1, 3)) </code>
+   * The `SetMatcher` class is a matcher matching a set of objects with a matcher returned by a function.<p>
+   * Usage:
+   * {{{
+   * List(1, 2, 3) must ((beEqualTo(_:Int)).toSet)(List(2, 1, 3))
+   * }}}
    */
   class SetMatcher[S, T](s: Set[S], f: S => Matcher[T]) extends Matcher[Set[T]] {
     def apply[U <: Set[T]](t: Expectable[U]) = {

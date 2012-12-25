@@ -15,11 +15,12 @@ trait FileWriter {
 
   /**
    * writes some content to a file and take care of closing the file.<p>
-   * Usage: <code>
+   * Usage:
+   * {{{
    * write("./dir/hello.txt") { out =>
    *   out.write("content")
    * }
-   * </code>
+   * }}}
    * @param path path of the file to write
    */
   def write(path: String)(function: Writer => Unit): Unit = {
@@ -28,11 +29,12 @@ trait FileWriter {
   }
   /**
    * append some content to a file and take care of closing the file.<p>
-   * Usage: <code>
+   * Usage:
+   * {{{
    * write("./dir/hello.txt") { out =>
    *   out.write("content")
    * }
-   * </code>
+   * }}}
    * @param path path of the file to write
    */
   def append(path: String)(function: Writer => Unit): Unit = {
@@ -91,7 +93,7 @@ trait FileWriter {
 
   /**
    * The getWriter function can be overriden to provide a mock writer writing to the console for example
-   * @return a Writer object opened on the file designated by <code>path</code>
+   * @return a Writer object opened on the file designated by `path`
    */
   def getWriter(path: String, append: Boolean = false): Writer =
     new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, append), Charset.forName(getOrElse("specs2.file.encoding", "UTF-8"))))

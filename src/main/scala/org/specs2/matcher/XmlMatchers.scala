@@ -22,44 +22,44 @@ private[specs2]
 trait XmlBaseMatchers { outer =>
   
   /** 
-   * match if <code>node</code> is contained anywhere inside the tested node
+   * match if `node` is contained anywhere inside the tested node
    * an exact match on is required on attributes 
    */   
   def \\(node: Node, attributes: String*): XmlMatcher = deepMatch(node, attributes.toList)
-  /** match if <code>node</code> is contained anywhere inside the tested node */   
+  /** match if `node` is contained anywhere inside the tested node */
   def \\(node: Node): XmlMatcher = deepMatch(node, Nil) 
-  /** alias for <code>\\(node)</code> with the node label only */
+  /** alias for `\\(node)` with the node label only */
   def \\(label: String, attributes: String*) = deepMatch(label, attributes.toList)
   /**
-   * match if <code>node</code> is contained anywhere inside the tested node and has exactly the <code>attributeValues</code> 
+   * match if `node` is contained anywhere inside the tested node and has exactly the `attributeValues`
    * as names and values for its attributes
    */   
   def \\(node: Node, attributeValues1: (String, String), attributeValues: (String, String)*) = 
     deepMatch(node, Map((attributeValues1 :: attributeValues.toList): _*))
-  /** alias for <code>\\(node, attributeValues)</code> with the node label only */
+  /** alias for `\\(node, attributeValues)` with the node label only */
   def \\(label: String, attributeValues1: (String, String), attributeValues: (String, String)*) =
     deepMatch(label, Map((attributeValues1 :: attributeValues.toList): _*))
 
   /** 
-   * match if <code>node</code> is the first node of the tested node
+   * match if `node` is the first node of the tested node
    * an exact match on is required on attributes 
    */   
   def \(node: Node, attributes: String*): XmlMatcher = firstMatch(node, attributes.toList)
-  /** match if <code>node</code> is the first node of the tested node */   
+  /** match if `node` is the first node of the tested node */
   def \(node: Node): XmlMatcher = firstMatch(node, Nil) 
-  /** alias for <code>\(node)</code> with the node label only */
+  /** alias for `\(node)` with the node label only */
   def \(label: String, attributes: String*) = firstMatch(label, attributes.toList)
   /**
-   * match if <code>node</code> is the first node of the tested node and has exactly the <code>attributeValues</code> 
+   * match if `node` is the first node of the tested node and has exactly the `attributeValues`
    * as names and values for its attributes
    */   
   def \(node: Node, attributeValues1: (String, String), attributeValues: (String, String)*) = 
     firstMatch(node, Map((attributeValues1 :: attributeValues.toList): _*))
-  /** alias for <code>\\(node, attributeValues)</code> with the node label only */
+  /** alias for `\\(node, attributeValues)` with the node label only */
   def \(label: String, attributeValues1: (String, String), attributeValues: (String, String)*) = 
     firstMatch(label, Map((attributeValues1 :: attributeValues.toList): _*))
 
-  /** match if <code>node</code> is equal to the tested node without testing empty text */   
+  /** match if `node` is equal to the tested node without testing empty text */
   def beEqualToIgnoringSpace(node: Seq[Node]) = new EqualIgnoringSpaceMatcher(node)
   /** alias for beEqualToIgnoringSpace */
   def be_==/(node: Seq[Node]): EqualIgnoringSpaceMatcher = beEqualToIgnoringSpace(node)
@@ -151,7 +151,7 @@ case class XmlMatcher(functions: Seq[PathFunction]) extends Matcher[Seq[Node]] {
   /** do an exact match on attributes and attributes values */
   def exactly = XmlMatcher(functions.map(_.exactly))
   /**
-   * checks that the <code>nodes</code> satisfy the <code>functions</code>
+   * checks that the `nodes` satisfy the `functions`
    */
   def apply[S <: Seq[Node]](n: Expectable[S]) = {
     val nodes = n
@@ -191,7 +191,7 @@ case class XmlMatcher(functions: Seq[PathFunction]) extends Matcher[Seq[Node]] {
   /** alias for textMatches */
   def \>~(t: String) = textMatches(t)
   /**
-   * checks that the <code>nodes</code> satisfy the <code>functions</code>
+   * checks that the `nodes` satisfy the `functions`
    * @return a MatcherResult
    */
   def checkFunctions(pathFunctions: Seq[PathFunction], nodes: Seq[Node], messages: (Boolean, String, String)): (Boolean, String, String) = {
@@ -234,7 +234,7 @@ trait XPathFunctions {
 
 /**
  * The PathFunction object encapsulate a search for a node and/or attributes or attributeValues with an XPath function
- * If <code>node</code> has some children, then they are searched using equality
+ * If `node` has some children, then they are searched using equality
  */
 case class PathFunction(val node: Node,
                         val function: XPathFunction,

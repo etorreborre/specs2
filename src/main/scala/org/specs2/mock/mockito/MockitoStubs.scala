@@ -9,20 +9,19 @@ import org.mockito.stubbing.{ OngoingStubbing, Stubber }
 /**
  * This trait provides functionalities to declare stub values on method calls.
  * 
- * Usage:<code>
- * 
+ * Usage:
+ * {{{
  * mockedList.get(0) returns "one"
  * mockedList.get(0) returns ("one", "two")
  * mockedList.get(0) throws new Exception("unexpected")
  * mockedList.get(0) answers ( i => "value " + i.toString )
+ * }}}
  * 
- * </code>
- * 
- * It is also possible to chain stubs like this: <code>
- * 
+ * It is also possible to chain stubs like this:
+ * {{{
  * mockedList.get(0) returns "one" thenReturns "two"
  * mockedList.get(0) returns "one" thenThrows new Exception("unexpected now")
- * </code>
+ * }}}
  */
 trait MockitoStubs extends MocksCreation with MockitoStubsLowerImplicits {
   /** delegate to MockitoMocker doAnswer with a MockAnswer object using the function f. */

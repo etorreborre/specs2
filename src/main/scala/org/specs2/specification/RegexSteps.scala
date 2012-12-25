@@ -15,18 +15,18 @@ import matcher.MatchResult
  * It is used to implement a Given-When-Then way of describing systems.
  *
  * Fragments are created by adding a `Given` step to a `Text`:
- *
- *  <code>"name: ${user}" ^ givenName</code>
- *
+ * {{{
+ *  "name: ${user}" ^ givenName
+ * }}}
  * This creates a PreStep object containing the current context (representing all the extracted values) and a list of
  * Fragments containing:
  *
- *  - the Text fragment: <code>Text("name: ${user}")</code>
- *  - a Step containing the extraction code to get the value delimited by <code>${}</code>
+ *  - the Text fragment: `Text("name: ${user}")`
+ *  - a Step containing the extraction code to get the value delimited by `${}`
  *
  * Then, this PreStep object can be followed by another piece of Text to create a PreStepText object. This object merely
  * stores the additional Text fragment so that values can be extracted from it when a `When` step is added:
- * <code>
+ * {{{
  *  // this creates a PreStepText object
  *  "name: ${user}" ^ givenName ^
  *  "age: ${38}"
@@ -34,7 +34,7 @@ import matcher.MatchResult
  *  // this creates a PreStep object
  *  "name: ${user}" ^ givenName ^
  *  "age: ${38}"    ^ thenAge ^
- * </code>
+ * }}}
  *
  * Eventually, when a `Then` step is added, a sequence of PostStep/PostStepText objects is created. Those objects use
  * the current context and the results returned by the `Then` objects to create Examples.
