@@ -83,12 +83,12 @@ trait MocksCreation extends TheMockitoMocker with ClassesOf {
    * create a spy on an object. 
    * 
    * A spy is a real object but can still have some of its methods stubbed. However the syntax for stubbing a spy is a bit different than 
-   * with a mock:<code>
-   * 
+   * with a mock:
+   * {{{
    * val s = spy(new LinkedList[String])
    * doReturn("one").when(s).get(0) // instead of s.get(0) returns "one" which would throw an exception
    * 
-   * </code>
+   * }}}
    */
   def spy[T](m: T): T = mocker.spy(m)
   /**

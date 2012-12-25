@@ -15,7 +15,7 @@ import MatchResultLogicalCombinators._
 /**
  * The `Matcher` trait is the base trait for any Matcher.
  * 
- * This trait can be extended to provide an appropriate <code>apply</code> method that
+ * This trait can be extended to provide an appropriate `apply` method that
  * will check an expectable value `a: Expectable[T]`.
  *
  * The result of a match is a MatchResult object (@see MatchResult).
@@ -180,7 +180,7 @@ trait Matcher[-T] { outer =>
     def apply[U <: T](a: Expectable[U]) = if (b) outer(a) else outer(a).not
   }
   /**
-   *  The <code>lazily</code> operator returns a Matcher which will match a function returning the expected value
+   *  The `lazily` operator returns a Matcher which will match a function returning the expected value
    */   
   def lazily = new Matcher[() => T]() {
     def apply[S <: () => T](function: Expectable[S]) = {

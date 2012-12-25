@@ -11,8 +11,8 @@ import execute.{ResultLogicalCombinators, AsResult, Result}
 import ResultLogicalCombinators._
 
 /**
- * This trait provides methods to declare expectations on mock calls:<code>
- * 
+ * This trait provides methods to declare expectations on mock calls:
+ * {{{
  * there was one(mockedList).get(0)
  * there was no(mockedList).get(0)
  * 
@@ -33,8 +33,7 @@ import ResultLogicalCombinators._
  * 
  * there were two(mockedList).get(0)
  * got { two(mockedList).get(0) }
- * 
- * </code>
+ * }}}
  */
 trait CalledMatchers extends NumberOfTimes with FunctionArguments with TheMockitoMocker with Expectations {
   /** this matcher evaluates an expression containing mockito calls verification */
