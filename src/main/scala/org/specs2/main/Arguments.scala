@@ -187,11 +187,11 @@ object Select extends Extract {
        _ex            = value("ex", ".*"+(_:String)+".*"),
        _include       = value("include"),
        _exclude       = value("exclude"),
-       _was           = value("was").orElse(bool("wasissue").map(v => "x!")),
-       _specName      = value("specname")
+       _was           = value("was").orElse(bool("wasIssue").map(v => "x!")),
+       _specName      = value("specName")
     )
   }
-  val allValueNames = Seq("ex", "include", "exclude", "was", "specname")
+  val allValueNames = Seq("ex", "include", "exclude", "was", "wasIssue", "specName")
 }
 
 /**
@@ -243,15 +243,15 @@ object Execute extends Extract {
   def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Execute = {
     new Execute (
       _plan          = bool("plan"),
-      _skipAll       = bool("skipall"),
-      _stopOnFail    = bool("stoponfail"),
-      _stopOnSkip    = bool("stoponskip"),
+      _skipAll       = bool("skipAll"),
+      _stopOnFail    = bool("stopOnFail"),
+      _stopOnSkip    = bool("stopOnSkip"),
       _sequential    = bool("sequential"),
       _isolated      = bool("isolated"),
-      _threadsNb     = int("threadsnb")
+      _threadsNb     = int("threadsNb")
     )
   }
-  val allValueNames = Seq("plan", "skipall", "stoponfail", "stoponskip", "sequential", "isolated", "threadsnb")
+  val allValueNames = Seq("plan", "skipAll", "stopOnFail", "stopOnSkip", "sequential", "isolated", "threadsNb")
 }
 
 /**
@@ -283,12 +283,12 @@ private[specs2]
 object Store extends Extract {
   def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Store = {
     new Store (
-      _reset       = bool("resetstore"),
-      _never       = bool("neverstore")
+      _reset       = bool("resetStore"),
+      _never       = bool("neverStore")
     )
   }
 
-  val allValueNames = Seq("resetstore", "neverstore")
+  val allValueNames = Seq("resetStore", "neverStore")
 }
 
 /**
@@ -383,28 +383,28 @@ private[specs2]
 object Report extends Extract {
   def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Report = {
     new Report (
-      _showOnly      = value("showonly").orElse(bool("xonly").map(v => "x!")),
-      _failtrace     = bool("failtrace"),
-      _color         = bool("color", "nocolor"),
+      _showOnly      = value("showOnly").orElse(bool("xOnly").map(v => "x!")),
+      _failtrace     = bool("failTrace"),
+      _color         = bool("color", "noColor"),
       _colors        = value("colors").map(SmartColors.fromArgs),
-      _noindent      = bool("noindent"),
-      _showtimes     = bool("showtimes"),
+      _noindent      = bool("noIndent"),
+      _showtimes     = bool("showTimes"),
       _offset        = int("offset"),
-      _markdown      = bool("markdown", "nomarkdown"),
-      _debugMarkdown = bool("debugmarkdown"),
+      _markdown      = bool("markdown", "noMarkdown"),
+      _debugMarkdown = bool("debugMarkdown"),
       _streaming     = bool("streaming"),
-      _fromSource    = bool("fromsource"),
-      _traceFilter   = bool("fullstacktrace").map(t=>NoStackTraceFilter).
-                       orElse(value("tracefilter", IncludeExcludeStackTraceFilter.fromString(_))),
-      _checkUrls     = bool("checkurls"),
-      _notoc         = bool("notoc"),
+      _fromSource    = bool("fromSource"),
+      _traceFilter   = bool("fullStackTrace").map(t=>NoStackTraceFilter).
+                       orElse(value("traceFilter", IncludeExcludeStackTraceFilter.fromString(_))),
+      _checkUrls     = bool("checkUrls"),
+      _notoc         = bool("noToc"),
       _notifier      = value("notifier"),
       _exporter      = value("exporter")
     )
   }
 
-  val allValueNames = Seq("showonly", "xonly", "failtrace", "color", "nocolor", "colors", "noindent", "offset", "markdown", "nomarkdown",
-                          "debugmarkdown", "streaming", "fromsource", "fullstacktrace", "tracefilter", "checkurls", "notoc", "notifier", "exporter")
+  val allValueNames = Seq("showOnly", "xOnly", "failTrace", "color", "noColor", "colors", "noIndent", "offset", "markdown", "noMarkdown", "showTimes",
+                          "debugMarkdown", "streaming", "fromSource", "fullStackTrace", "traceFilter", "checkUrls", "noToc", "notifier", "exporter")
 }
 /**
  * Command-line arguments
