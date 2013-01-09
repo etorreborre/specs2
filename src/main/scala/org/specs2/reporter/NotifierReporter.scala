@@ -52,14 +52,14 @@ trait NotifierExporting extends Exporting with Exporters {
       case f @ ExecutedSpecEnd(_,_,_)                                        => {
         notifier.specEnd(f.name, f.location.toString)
       }
-      case f @ ExecutedText(t, _)  if tree.subForest.isEmpty && !args.xonly => notifier.text(t, f.location.toString)
+      case f @ ExecutedText(t, _)  if tree.subForest.isEmpty => if (args.canShow("*")) notifier.text(t, f.location.toString)
       case f @ ExecutedText(t, _)                                           => {
-        notifier.contextStart(t, f.location.toString)
+        if (args.canShow("*")) notifier.contextStart(t, f.location.toString)
         tree.subForest.foreach(export)
-        notifier.contextEnd(t, f.location.toString)
+        if (args.canShow("*")) notifier.contextEnd(t, f.location.toString)
       }
       case f @ ExecutedResult(s, r, t, l, st)                               => {
-        notifier.exampleStarted(s.toString, l.toString)
+        if (args.canShow(r.status)) notifier.exampleStarted(s.toString, l.toString)
         def notifyResult(result: Result) {
           result match {
             case Success(_,_)            => notifier.exampleSuccess(s.toString, t.totalMillis)
@@ -69,7 +69,7 @@ trait NotifierExporting extends Exporting with Exporters {
                                                                                    args.traceFilter(err.exception), t.totalMillis)
             case Skipped(_,_)            => notifier.exampleSkipped(s.toString, args.removeColors(r.message), t.totalMillis)
             case Pending(_)              => notifier.examplePending(s.toString, args.removeColors(r.message), t.totalMillis)
-            case DecoratedResult(t, res) => notifyResult(res)
+            case DecoratedResult(_, res) => notifyResult(res)
           }
         }
         if (args.canShow(r.status)) notifyResult(r)

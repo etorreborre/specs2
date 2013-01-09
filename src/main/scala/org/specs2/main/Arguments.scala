@@ -383,7 +383,7 @@ private[specs2]
 object Report extends Extract {
   def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Report = {
     new Report (
-      _showOnly      = value("showOnly").orElse(bool("xonly").map(v => "x!")),
+      _showOnly      = value("showOnly").orElse(bool("xOnly").map(v => "x!")),
       _failtrace     = bool("failTrace"),
       _color         = bool("color", "noColor"),
       _colors        = value("colors").map(SmartColors.fromArgs),
