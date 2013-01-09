@@ -62,18 +62,17 @@ trait NotifierExporting extends Exporting with Exporters {
         notifier.exampleStarted(s.toString, l.toString)
         def notifyResult(result: Result) {
           result match {
-            case Success(_,_)            if !args.xonly    => notifier.exampleSuccess(s.toString, t.totalMillis)
-            case fail @ Failure(_,_,_,_)                   => notifier.exampleFailure(s.toString, args.removeColors(fail.message),
+            case Success(_,_)            => notifier.exampleSuccess(s.toString, t.totalMillis)
+            case fail @ Failure(_,_,_,_) => notifier.exampleFailure(s.toString, args.removeColors(fail.message),
                                                                                     fail.location, args.traceFilter(fail.exception), fail.details, t.totalMillis)
-            case err  @ Error(_,_)                         => notifier.exampleError(s.toString, args.removeColors(err.message), err.location,
+            case err  @ Error(_,_)       => notifier.exampleError(s.toString, args.removeColors(err.message), err.location,
                                                                                    args.traceFilter(err.exception), t.totalMillis)
-            case Skipped(_,_)            if !args.xonly    => notifier.exampleSkipped(s.toString, args.removeColors(r.message), t.totalMillis)
-            case Pending(_)              if !args.xonly    => notifier.examplePending(s.toString, args.removeColors(r.message), t.totalMillis)
-            case DecoratedResult(t, res)                   => notifyResult(res)
-            case Success(_,_) | Skipped(_, _) | Pending(_) => ()
+            case Skipped(_,_)            => notifier.exampleSkipped(s.toString, args.removeColors(r.message), t.totalMillis)
+            case Pending(_)              => notifier.examplePending(s.toString, args.removeColors(r.message), t.totalMillis)
+            case DecoratedResult(t, res) => notifyResult(res)
           }
         }
-        notifyResult(r)
+        if (args.canShow(r.status)) notifyResult(r)
       }
       case other                           => tree.subForest.foreach(export)
     }
