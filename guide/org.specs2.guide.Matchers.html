@@ -855,11 +855,11 @@ iterator.next must be_==(3).eventually
   m1.get(0)
   m2.get(0)
 
-  there was one(m1).get(0) then one(m1).get(1)
+  there was one(m1).get(0) andThen one(m1).get(1)
 
   // when several mocks are involved, the expected order must be specified as an implicit value
   implicit val order = inOrder(m1, m2)
-  there was one(m1).get(0) then one(m2).get(0)
+  there was one(m1).get(0) andThen one(m2).get(0)
 </code></pre><a name="Ignoring+stubs"><h6>Ignoring stubs</h6></a><p>When specifying the behavior of an object in relation to others you may want to verify that some mocks have been called as collaborators and you don't really want to specify what happens to other mocks because they are just playing the role of stubs.</p><p>In this case the <code class="prettyprint">ignoreStubs</code> method can be used:</p>
 <pre><code class="prettyprint">  val (stub1, stub2) = (mock[AStub], mock[AStub])
   ...
