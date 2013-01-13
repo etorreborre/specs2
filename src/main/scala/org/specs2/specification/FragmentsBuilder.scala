@@ -149,7 +149,7 @@ trait NoFragmentsBuilder extends FragmentsBuilder {
 /**
  * Fragments can be chained with the ^ method
  */
-class FragmentsFragment(fs: =>Fragments) {
+class FragmentsFragment(fs: =>Fragments)(implicit exampleFactory: ExampleFactory) {
   def fragments = fs
   def ^(t: String) = fs add Text(t)
   def ^(f: Fragment) = f match {

@@ -2,6 +2,9 @@ package org.specs2
 package specification
 import matcher._
 import control.ImplicitParameters
+import io.Output
+import reporter.SilentConsoleReporter
+import main.Arguments
 
 class RegexStepsSpec extends Specification with ResultMatchers with DataTables with Grouped { def is =
 
@@ -48,6 +51,8 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables w
         "with a regular expression for grouping elements and a function"                                                ! g9.e3^
                                                                                                                         endp^
     "A G/W/T specification must have a title"                                                                           ! g10.e1^
+    "A G/W/T specification can use Before/After Example traits"                                                         ! g11.e1^
+    "A G/W/T specification can use simple contexts"                                                                     ! g11.e2^
                                                                                                                         end
 
 
@@ -182,6 +187,26 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables w
 
   "title" - new g10 {
     e1 := { new Specification { def is = "a number ${0}" ^ number0 }.content.specName.title must not beEmpty }
+  }
+
+  "contexts" - new g11 {
+    e1 := {
+      val spec = new Specification with BeforeExample with io.MockOutput { def is =
+        "a number ${0}" ^ number0 ^ "then it is ${0}" ^ then0to3
+        def before { println("before") }
+      }
+      SilentConsoleReporter.report(spec)(Arguments())
+      spec.messages must contain("before")
+    }
+    e2 := {
+      val spec = new Specification with io.MockOutput { def is =
+        "a number ${0}" ^ number0 ^ "then it is ${0}" ^ then0
+        val then0: Then[Int] = (i: Int) => (s: String) => context { 0 === 0 }
+        val context = new Before { def before { println("before") } }
+      }
+      SilentConsoleReporter.report(spec)(Arguments())
+      spec.messages must contain("before")
+    }
   }
 
   object number0 extends Given[Int] {
