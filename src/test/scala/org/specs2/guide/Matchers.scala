@@ -479,7 +479,7 @@ It is also possible to add all verifications inside a block, when several mocks 
 
 ###### Order of calls
 
-The order of method calls can be checked by creating calls and chaining them with then:
+The order of method calls can be checked by creating calls and chaining them with `andThen`:
 
       val m1 = mock[List[String]]
       val m2 = mock[List[String]]
@@ -488,11 +488,11 @@ The order of method calls can be checked by creating calls and chaining them wit
       m1.get(0)
       m2.get(0)
 
-      there was one(m1).get(0) then one(m1).get(1)
+      there was one(m1).get(0) andThen one(m1).get(1)
 
       // when several mocks are involved, the expected order must be specified as an implicit value
       implicit val order = inOrder(m1, m2)
-      there was one(m1).get(0) then one(m2).get(0)
+      there was one(m1).get(0) andThen one(m2).get(0)
 
 ###### Ignoring stubs
 
