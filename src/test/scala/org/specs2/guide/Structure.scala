@@ -414,23 +414,23 @@ If there are lots of consecutive `When` steps collecting the same kind of argume
 
 There are 2 ways to create [contexts](#Contexts) for G/W/T specifications:
 
- * create a context object and apply it to the step definition, using a factory method
+ * create a context object (a `Before` for example) and apply it to the part of the `Then` definition returning a `Result`
 
-     val before = new Before { def before { println("code executed before the step") } }
-     val then1: Then[Int] = (i: Int) => (s: String) => before { s.toInt === i }
+         val before = new Before { def before { println("code executed before the step") } }
+         val then1: Then[Int] = (i: Int) => (s: String) => before { s.toInt === i }
 
  * use the `BeforeExample`, `AfterExample`,... traits
 
-     class MySpecification extends Specification with BeforeExample { def is =
-       "A given-when-then example for the addition"                 ^
-         "Given the following number: ${1}"                         ^ number1 ^
-         "And a second number: ${2}"                                ^ number2 ^
-         "And a third number: ${3}"                                 ^ number3
+         class MySpecification extends Specification with BeforeExample { def is =
+           "A given-when-then example for the addition"                 ^
+             "Given the following number: ${1}"                         ^ number1 ^
+             "And a second number: ${2}"                                ^ number2 ^
+             "And a third number: ${3}"                                 ^ number3
 
-       // and so on...
+           // and so on...
 
-       def before { resetCalculator }
-     }
+           def before { resetCalculator }
+         }
 
 ##### ScalaCheck
 
