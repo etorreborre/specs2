@@ -410,6 +410,28 @@ If there are lots of consecutive `When` steps collecting the same kind of argume
       val number2: When[Int, (Int, Int)]    = (n1: Int) => (s: String) => (n1, s.toInt)
       val number3: When[Seq[Int], Seq[Int]] = (numbers: Seq[Int]) => (s: String) => numbers :+ s.toInt
 
+##### Contexts
+
+There are 2 ways to create [contexts](#Contexts) for G/W/T specifications:
+
+ * create a context object and apply it to the step definition, using a factory method
+
+     val before = new Before { def before { println("code executed before the step") } }
+     val then1: Then[Int] = (i: Int) => (s: String) => before { s.toInt === i }
+
+ * use the `BeforeExample`, `AfterExample`,... traits
+
+     class MySpecification extends Specification with BeforeExample { def is =
+       "A given-when-then example for the addition"                 ^
+         "Given the following number: ${1}"                         ^ number1 ^
+         "And a second number: ${2}"                                ^ number2 ^
+         "And a third number: ${3}"                                 ^ number3
+
+       // and so on...
+
+       def before { resetCalculator }
+     }
+
 ##### ScalaCheck
 
 Once you've created a given G/W/T sequence, you can be tempted to copy and paste it in order to check the same scenario with different values. The trouble with this is the duplication of text which leads to more maintenance down the road.
