@@ -64,7 +64,7 @@
     </head><body><div id="breadcrumbs"><a href="../../guide-SNAPSHOT/guide/org.specs2.UserGuide.html">UserGuide</a><t> / </t><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html">Structure</a></div><div class="colmask threecol">
                    <div class="colmid">
                      <div class="colleft">
-                       <div class="col1"><div id="central"><title>Structure</title><a name="Structure"><h2 specId="1228396753">Structure</h2></a><status class="ok"><div class="level0" style="display: show"><a name="Presentation"><h3>Presentation</h3></a><p>In this page you will learn how to:</p>
+                       <div class="col1"><div id="central"><title>Structure</title><a name="Structure"><h2 specId="1755755463">Structure</h2></a><status class="ok"><div class="level0" style="display: show"><a name="Presentation"><h3>Presentation</h3></a><p>In this page you will learn how to:</p>
 <ul>
   <li>declare examples and expectations</li>
   <li>link specifications together</li>
@@ -336,8 +336,22 @@ val number3: Then[Unit] = groupAs(&quot;\\d+&quot;) { (s: String) =&gt; value mu
   val number3: When[Seq[Int], Seq[Int]] = (numbers: Seq[Int]) =&gt; (s: String) =&gt; numbers :+ s.toInt
 </code></pre><a name="Contexts"><h5>Contexts</h5></a><p>There are 2 ways to create <a href="#Contexts">contexts</a> for G/W/T specifications:</p>
 <ul>
-  <li><p>create a context object and apply it to the step definition, using a factory method</p><p>val before = new Before { def before { println(&quot;code executed before the step&quot;) } }<br /> val then1: Then[Int] = (i: Int) =&gt; (s: String) =&gt; before { s.toInt === i }</p></li>
-  <li><p>use the <code class="prettyprint">BeforeExample</code>, <code class="prettyprint">AfterExample</code>,... traits</p><p>class MySpecification extends Specification with BeforeExample { def is =<br /> &quot;A given-when-then example for the addition&quot; ^<br /> &quot;Given the following number: ${1}&quot; ^ number1 ^<br /> &quot;And a second number: ${2}&quot; ^ number2 ^<br /> &quot;And a third number: ${3}&quot; ^ number3</p><p>// and so on...</p><p>def before { resetCalculator }<br /> }</p></li>
+  <li><p>create a context object (a <code class="prettyprint">Before</code> for example) and apply it to the part of the <code class="prettyprint">Then</code> definition returning a <code class="prettyprint">Result</code></p>
+  <pre><code class="prettyprint"> val before = new Before { def before { println(&quot;code executed before the step&quot;) } }
+ val then1: Then[Int] = (i: Int) =&gt; (s: String) =&gt; before { s.toInt === i }
+</code></pre></li>
+  <li><p>use the <code class="prettyprint">BeforeExample</code>, <code class="prettyprint">AfterExample</code>,... traits</p>
+  <pre><code class="prettyprint"> class MySpecification extends Specification with BeforeExample { def is =
+   &quot;A given-when-then example for the addition&quot;                 ^
+     &quot;Given the following number: ${1}&quot;                         ^ number1 ^
+     &quot;And a second number: ${2}&quot;                                ^ number2 ^
+     &quot;And a third number: ${3}&quot;                                 ^ number3
+
+   // and so on...
+
+   def before { resetCalculator }
+ }
+</code></pre></li>
 </ul><a name="ScalaCheck"><h5>ScalaCheck</h5></a><p>Once you've created a given G/W/T sequence, you can be tempted to copy and paste it in order to check the same scenario with different values. The trouble with this is the duplication of text which leads to more maintenance down the road.</p><p>This can be avoided and even enhanced by using ScalaCheck to generate more values for the same scenario. For the calculator above you could write:</p>
 <pre><code class="prettyprint">  import org.scalacheck.Gen._
   import specification.gen._
@@ -1335,12 +1349,12 @@ textFragment(&quot;this is a text fragment&quot;)
 </ul>
 <hr /></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Structure</th></tr>
-        <tr><td>Finished in</td><td class="info">246 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">59 ms</td></tr>
         <tr><td>Results</td><td class="success">18 examples, 0 failure, 0 error</td></tr>
       </table></div></div>
                        <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="1634900526"><a href="../../guide-SNAPSHOT/guide/org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="883862429"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="178059747"><a href="../../guide-SNAPSHOT/guide/org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="1871812295"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -1350,7 +1364,7 @@ textFragment(&quot;this is a text fragment&quot;)
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1228396753"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1755755463"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -1518,7 +1532,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li></ul>
-          </li><li id="1789393690"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="24807390"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1580,7 +1594,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="167462342"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="1463246445"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1624,7 +1638,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li></ul>
-          </li><li id="284989600"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="1212248034"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1708,7 +1722,7 @@ textFragment(&quot;this is a text fragment&quot;)
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="706033562"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="171213061"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1752,7 +1766,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li></ul>
-          </li><li id="464859209"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="806934911"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1772,7 +1786,7 @@ textFragment(&quot;this is a text fragment&quot;)
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1634900526','1228396753'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['178059747','1755755463'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                        <div class="col3"><div id="rightcolumn"></div></div>
                      </div>
