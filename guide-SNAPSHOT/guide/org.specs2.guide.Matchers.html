@@ -4,11 +4,11 @@
         @import url('./../../css/maven-base.css');
         @import url('./../../css/maven-theme.css');
       </style>
-      <link type="text/css" rel="stylesheet" href="./../../css/prettify.css" />
+      <link href="./../../css/prettify.css" type="text/css" rel="stylesheet" />
       <script type="text/javascript" src="./../../css/prettify.js"></script>
-      <link type="text/css" media="print" rel="stylesheet" href="./../../css/print.css" />
-      <link type="text/css" rel="stylesheet" href="./../../css/tooltip.css" />
-      <link type="text/css" rel="stylesheet" href="./../../css/specs2-user.css" />
+      <link rel="stylesheet" href="./../../css/print.css" type="text/css" media="print" />
+      <link href="./../../css/tooltip.css" rel="stylesheet" type="text/css" />
+      <link href="./../../css/specs2-user.css" type="text/css" rel="stylesheet" />
 
       <script type="text/javascript" src="./../../css/jquery.js"></script>
       <script type="text/javascript" src="./../../css/jquery.cookie.js"></script>
@@ -60,11 +60,11 @@
       <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
            tabber code, then the init code -->
       <script type="text/javascript" src="./../../css/tabber.js"></script>
-      <link type="text/css" media="screen" rel="stylesheet" href="./../../css/tabber.css" />
+      <link rel="stylesheet" href="./../../css/tabber.css" type="text/css" media="screen" />
     </head><body><div id="breadcrumbs"><a href="../../guide-SNAPSHOT/guide/org.specs2.UserGuide.html">UserGuide</a><t> / </t><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html">Matchers</a></div><div class="colmask threecol">
                    <div class="colmid">
                      <div class="colleft">
-                       <div class="col1"><div id="central"><title>Matchers</title><a name="Matchers"><h2 specId="568521851">Matchers</h2></a><status class="ok"><div class="level0" style="display: show"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
+                       <div class="col1"><div id="central"><title>Matchers</title><a name="Matchers"><h2 specId="1789393690">Matchers</h2></a><status class="ok"><div class="level0" style="display: show"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
 <ul>
   <li>Boolean</li>
   <li>Standard result</li>
@@ -90,7 +90,7 @@
   <li><code class="prettyprint">todo</code>: a <code class="prettyprint">Pending</code> with the message &quot;TODO&quot;</li>
 </ul><a name="Combinators"><h4>Combinators</h4></a><p>Logical combinators like <code class="prettyprint">and</code>, <code class="prettyprint">or</code>, <code class="prettyprint">not</code> can be used to combine results. You can also use the <code class="prettyprint">eventually</code> method to retry a Result until it is ok (this will actually work with anything convertible to a Result).</p><a name="Match+results"><h3>Match results</h3></a><p>This is by far the largest category of Results in <strong><em>specs2</em></strong>. They cover many data types, can be composed and adapted to create new ones or be created from scratch by the user.</p><a name="Out+of+the+box"><h4>Out of the box</h4></a><p>The most common matchers are automatically available when extending the <code class="prettyprint">Specification</code> trait:</p></div></status><form>
       <table class="dataTable">
-        <tr><th colspan="101">Specification Matchers</th></tr><tr><td class="info" colspan="100"><div class="tabber"><div class="tabbertab" title="Equality"><form>
+        <tr><th colspan="101">Specification Matchers</th></tr><tr><td colspan="100" class="info"><div class="tabber"><div class="tabbertab" title="Equality"><form>
       <table class="dataTable">
         <tr><td class="none" style="info"><p>The most common type of matcher is <strong><em><code class="prettyprint">beEqualTo</code></em></strong> to test for equality. There are different ways to use this matcher:</p>
 <table>
@@ -434,7 +434,7 @@
   <li>you can as well negate a matcher by adding <code class="prettyprint">not</code> before it (or after it, as a method call)</li>
 </ul><a name="Optional"><h4>Optional</h4></a><p>These other matchers need to be selectively added to the specification by adding a new trait:</p></div></status><form>
       <table class="dataTable">
-        <tr><th colspan="101">Optional Matchers</th></tr><tr><td class="info" colspan="100"><div class="tabber"><div class="tabbertab" title="Result"><form>
+        <tr><th colspan="101">Optional Matchers</th></tr><tr><td colspan="100" class="info"><div class="tabber"><div class="tabbertab" title="Result"><form>
       <table class="dataTable">
         <tr><td class="none" style="info"><p>That's only if you want to match the result of other matchers!</p>
 <pre><code class="prettyprint">  // you need to extend the ResultMatchers trait
@@ -523,38 +523,6 @@
 </code></pre><p>When a second action is specified like that, <code class="prettyprint">action1</code> will be started and <code class="prettyprint">action2</code> will be started on the first retry. Otherwise, if you want to specify that <code class="prettyprint">action1</code> can <em>only</em> terminate when <code class="prettyprint">action2</code> is started, you write:</p>
 <pre><code class="prettyprint">  action1 must terminate.onlyWhen(action2)
 </code></pre></td></tr>
-      </table>
-      
-    </form></div><div class="tabbertab" title="Scalaz"><form>
-      <table class="dataTable">
-        <tr><td class="none" style="info"><p>The <code class="prettyprint">ScalazMatchers</code> trait provides simple matchers for:</p>
-<ul>
-  <li>Values with an <code class="prettyprint">Equal</code> typeclass</li>
-  <li>Scalaz <code class="prettyprint">Semigroup</code> and <code class="prettyprint">Monoid</code> instances</li>
-  <li>Scalaz <code class="prettyprint">Validation</code> instances</li>
-</ul><p>With the <code class="prettyprint">ScalazMatchers</code> trait you can use your <code class="prettyprint">Equal[T]</code> typeclass instance to check the equality of 2 values:</p>
-<ul>
-  <li><code class="prettyprint">a must beEqualTo(b)</code></li>
-</ul><p>With the <code class="prettyprint">ScalazMatchers</code> trait you can use the following ScalaCheck properties:</p>
-<ul>
-  <li><code class="prettyprint">semigroup.isAssociative</code> checks if a <code class="prettyprint">Semigroup</code> respects the associativity law</li>
-  <li><code class="prettyprint">monoid.hasZero</code> checks if a <code class="prettyprint">Monoid</code> zero value is really a neutral element</li>
-  <li><code class="prettyprint">monoid.isMonoid</code> checks if a <code class="prettyprint">Monoid</code> has a zero element and respects the associativity rule</li>
-</ul><p>Finally, you can check <code class="prettyprint">Validation</code> instances for success or failure:</p>
-<ul>
-  <li><code class="prettyprint">1.success must beSuccessful</code></li>
-  <li><code class="prettyprint">1.fail must beFailing</code></li>
-</ul><p>You can verify what's the validated value:</p>
-<ul>
-  <li><code class="prettyprint">1.success must beSuccessful (1)</code></li>
-  <li><code class="prettyprint">1.success must not be successful (2)</code></li>
-  <li><code class="prettyprint">1.fail must be failing (1)</code></li>
-  <li><code class="prettyprint">1.fail must not be failing (2)</code></li>
-</ul><p>You can also pattern match on this value</p>
-<ul>
-  <li><code class="prettyprint">List(1, 2).success must beSuccessful.like { case 1 :: _ =&gt; ok }</code></li>
-  <li><code class="prettyprint">List(1, 2).fail must beFailing.like { case 1 :: _ =&gt; ok }</code></li>
-</ul></td></tr>
       </table>
       
     </form></div><div class="tabbertab" title="Dependency Matchers"><form>
@@ -769,18 +737,21 @@ iterator.next must be_==(3).eventually
   def ex1 = forAll(abStrings) { (s: String) =&gt; s must contain(&quot;a&quot;) or contain(&quot;b&quot;) }
   def ex2 = forAll(abStrings, abStrings) { (s1: String, s2: String) =&gt; s must contain(&quot;a&quot;) or contain(&quot;b&quot;) }
 </code></pre><a name="Test+properties"><h4>Test properties</h4></a><p>ScalaCheck test generation can be tuned with a few properties. If you want to change the default settings, you have to use implicit values:</p>
-<pre><code class="prettyprint">  implicit val params = set(minTestsOk -&gt; 20) // use display instead of set to get additional console printing
+<pre><code class="prettyprint">  implicit val params = Parameters(minTestsOk = 20) // add &quot;verbose = true&quot; to get additional console printing
 </code></pre><p>It is also possible to specifically set the execution parameters on a given property:</p>
 <pre><code class="prettyprint">  &quot;this is a specific property&quot; ! prop { (a: Int, b: Int) =&gt;
     (a + b) must_== (b + a)
-  }.set(minTestsOk -&gt; 200, workers -&gt; 3)
+  }.set(minTestsOk = 200, workers = 3) // use &quot;display&quot; instead of &quot;set&quot; for additional console printing
 </code></pre><p>The parameters you can modify are:</p>
 <ul>
-  <li><code class="prettyprint">minTestsOk</code>: minimum of tests which must be ok before the property is ok (default=100)</li>
-  <li><code class="prettyprint">maxDiscarded</code>: if the data generation discards too many values, then the property can't be proven (default=500)</li>
-  <li><code class="prettyprint">minSize</code>: minimum size for the &quot;sized&quot; data generators, like list generators (default=0)</li>
-  <li><code class="prettyprint">maxSize</code>: maximum size for the &quot;sized&quot; data generators (default=100)</li>
-  <li><code class="prettyprint">workers</code>: number of threads checking the property (default=1)</li>
+  <li><code class="prettyprint">minTestsOk</code>: minimum of tests which must be ok before the property is ok (default = 100)</li>
+  <li><code class="prettyprint">maxDiscardRatio</code>: if the data generation discards too many values, then the property can't be proven (default = 5)</li>
+  <li><code class="prettyprint">minSize</code>: minimum size for the &quot;sized&quot; data generators, like list generators (default = 0)</li>
+  <li><code class="prettyprint">maxSize</code>: maximum size for the &quot;sized&quot; data generators (default = 100)</li>
+  <li><code class="prettyprint">workers</code>: number of threads checking the property (default = 1)</li>
+  <li><code class="prettyprint">rng</code>: the random number generator (default = <code class="prettyprint">new java.util.Random</code>)</li>
+  <li><code class="prettyprint">callback</code>: a ScalaCheck TestCallback (see the ScalaCheck documentation)</li>
+  <li><code class="prettyprint">loader</code>: a custom classloader (see the ScalaCheck documentation)</li>
 </ul><p>You can also set the random generator that is used in all the ScalaCheck generators:</p>
 <pre><code class="prettyprint">  case class MyRandomGenerator() extends java.util.Random {
     // implement a deterministic generator for example
@@ -876,7 +847,7 @@ iterator.next must be_==(3).eventually
     one(m).get(0)
     two(m).get(1)
   }
-</code></pre><a name="Order+of+calls"><h6>Order of calls</h6></a><p>The order of method calls can be checked by creating calls and chaining them with then:</p>
+</code></pre><a name="Order+of+calls"><h6>Order of calls</h6></a><p>The order of method calls can be checked by creating calls and chaining them with <code class="prettyprint">andThen</code>:</p>
 <pre><code class="prettyprint">  val m1 = mock[List[String]]
   val m2 = mock[List[String]]
 
@@ -884,11 +855,11 @@ iterator.next must be_==(3).eventually
   m1.get(0)
   m2.get(0)
 
-  there was one(m1).get(0) then one(m1).get(1)
+  there was one(m1).get(0) andThen one(m1).get(1)
 
   // when several mocks are involved, the expected order must be specified as an implicit value
   implicit val order = inOrder(m1, m2)
-  there was one(m1).get(0) then one(m2).get(0)
+  there was one(m1).get(0) andThen one(m2).get(0)
 </code></pre><a name="Ignoring+stubs"><h6>Ignoring stubs</h6></a><p>When specifying the behavior of an object in relation to others you may want to verify that some mocks have been called as collaborators and you don't really want to specify what happens to other mocks because they are just playing the role of stubs.</p><p>In this case the <code class="prettyprint">ignoreStubs</code> method can be used:</p>
 <pre><code class="prettyprint">  val (stub1, stub2) = (mock[AStub], mock[AStub])
   ...
@@ -945,7 +916,7 @@ iterator.next must be_==(3).eventually
 <ul>
   <li>with an acceptance specification: use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance)</li>
   <li>with a unit specification: use the <code class="prettyprint">org.specs2.mutable.Tables</code> trait instead of <code class="prettyprint">org.specs2.matcher.DataTables</code> trait. This will &quot;deactivate&quot; the implicit used to create examples with <code class="prettyprint">!</code></li>
-</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="990017852"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../../images/icon_success_sml.gif" /> Here's <a tooltip="" href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html">how to use Forms</a></div></status><status class="ok"><div class="level0" style="display: show"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
+</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="167462342"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../../images/icon_success_sml.gif" /> Here's <a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html" tooltip="">how to use Forms</a></div></status><status class="ok"><div class="level0" style="display: show"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
 <ul>
   <li><p><code class="prettyprint">org.specs2.matcher.MustMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldMatchers</code>) to write anything like <code class="prettyprint">1 must be_==(1)</code> and<br /> get a <code class="prettyprint">Result</code> back</p></li>
   <li><p>You can also use the side-effecting version of that trait called <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code> (or <code class="prettyprint">ShouldThrownMatchers</code>).<br /> It throws a <code class="prettyprint">FailureException</code> as soon as an expectation is failing. Those traits can also be used in a regular<br /> Specification if you have several expectations per example and if you don't want to chain them with <code class="prettyprint">and</code>.</p></li>
@@ -962,12 +933,12 @@ iterator.next must be_==(3).eventually
 </code></pre>
 <hr /></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Matchers</th></tr>
-        <tr><td>Finished in</td><td class="info">647 ms</td></tr>
-        <tr><td>Results</td><td class="success">47 examples, 539 expectations, 0 failure, 0 error</td></tr>
+        <tr><td>Finished in</td><td class="info">895 ms</td></tr>
+        <tr><td>Results</td><td class="success">47 examples, 536 expectations, 0 failure, 0 error</td></tr>
       </table></div></div>
                        <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="2146190090"><a href="../../guide-SNAPSHOT/guide/org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1427752793"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1634900526"><a href="../../guide-SNAPSHOT/guide/org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="883862429"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -977,7 +948,7 @@ iterator.next must be_==(3).eventually
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1686727163"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1228396753"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -1020,6 +991,8 @@ iterator.next must be_==(3).eventually
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Multiple+steps">Multiple steps</a>
             
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Contexts">Contexts</a>
+            
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#ScalaCheck">ScalaCheck</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Single+step">Single step</a>
@@ -1050,7 +1023,7 @@ iterator.next must be_==(3).eventually
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Markdown+url">Markdown url</a>
             
           </li></ul>
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Contexts">Contexts</a>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Contexts_1">Contexts</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Isolation_1">Isolation</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Scope">Scope</a>
             
@@ -1143,7 +1116,7 @@ iterator.next must be_==(3).eventually
             
           </li></ul>
           </li></ul>
-          </li><li id="568521851"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1789393690"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1205,7 +1178,7 @@ iterator.next must be_==(3).eventually
             
           </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="990017852"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="167462342"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1249,7 +1222,7 @@ iterator.next must be_==(3).eventually
             
           </li></ul>
           </li></ul>
-          </li><li id="212918105"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="284989600"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1333,7 +1306,7 @@ iterator.next must be_==(3).eventually
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="595218191"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="706033562"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1377,7 +1350,7 @@ iterator.next must be_==(3).eventually
             
           </li></ul>
           </li></ul>
-          </li><li id="1830640600"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="464859209"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1397,7 +1370,7 @@ iterator.next must be_==(3).eventually
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['2146190090','568521851'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1634900526','1789393690'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                        <div class="col3"><div id="rightcolumn"></div></div>
                      </div>
