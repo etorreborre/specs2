@@ -192,6 +192,8 @@ If this is not what you want, you can either:
  * use the `org.specs2.control.IncludeExcludeStackTraceFilter` class to define both include and exclude patterns
  * define your own logic by extending the `org.specs2.control.StackTraceFilter`
 
+Note that the default filter also truncates the stacktrace in the middle if it is bigger than 1000 lines to avoid reports being filled by out-of-control stacktraces. If you still want to see those lines you can re-run with the `fullstacktrace` argument.
+ 
 #### Command line
 
 On the command line you can pass the following arguments:

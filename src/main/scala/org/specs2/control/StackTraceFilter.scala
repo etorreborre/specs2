@@ -61,7 +61,24 @@ object DefaultStackTraceFilter extends
   IncludeExcludeStackTraceFilter(Seq(),
     Seq("org.specs2", "scalaz\\.",
         "java\\.", "scala\\.",
-        "sbt\\.", "com.intellij", "org.junit", "org.eclipse.jdt"))
+        "sbt\\.", "com.intellij", "org.junit", "org.eclipse.jdt")) {
+
+  override def apply(e: Seq[StackTraceElement]): Seq[StackTraceElement] = {
+    val filtered = super.apply(e)
+    if (filtered.size >= 1000) filtered.take(200) ++ truncated(filtered.size) ++ filtered.takeRight(200)
+    else filtered
+  }
+
+  private def truncated(size: Int): Seq[StackTraceElement] = {
+    def trace(message: String) = new StackTraceElement(message, " "*(70 - message.size), "", 0)
+    Seq(trace("="*70)) ++
+    Seq.fill(10)(trace("...")) ++
+    Seq(trace("....  TRUNCATED: the stacktrace is bigger than 1000 lines: "+size)) ++
+    Seq(trace("....    re-run with 'fullstacktrace' to see the complete stacktrace")) ++
+    Seq.fill(10)(trace("...")) ++
+    Seq(trace("="*70))
+  }
+}
 
 /**
  * This filter doesn't do anything
