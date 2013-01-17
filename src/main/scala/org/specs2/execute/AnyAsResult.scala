@@ -2,7 +2,7 @@ package org.specs2
 package execute
 
 /**
- * This class is used to delay the
+ * This class is used to delay the execution of a result
  */
 class AnyAsResult(var t: () => Result) {
   def :=[R : AsResult](r: =>R) = {
