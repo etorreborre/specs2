@@ -428,12 +428,12 @@ In some rare cases, it is necessary to have the return value depend on the param
 
       m.get(anyInt) answers { i => "The parameter is " + i.toString }
 
-The function passed to answers will be called with each parameter passed to the stubbed method:
+The function passed to `answers` will be called with each parameter passed to the stubbed method:
 
-      m.get(0)           // returns "The parameter is 0"
-      m.get(1)           // the second call returns a different value: "The parameter is 1"
+      m.get(0)    // returns "The parameter is 0"
+      m.get(1)    // the second call returns a different value: "The parameter is 1"
 
-###### Parameters for the answers function
+###### Parameters for the `answers` function
 
 Because of the use of reflection the function passed to answers will receive only instances of the `java.lang.Object` type.
 
