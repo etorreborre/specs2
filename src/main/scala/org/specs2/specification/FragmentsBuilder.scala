@@ -173,10 +173,10 @@ class FragmentsFragment(fs: =>Fragments)(implicit exampleFactory: ExampleFactory
 
   /** start a given-when-then block */
   def ^[T](step: Given[T]): PreStep[T] = {
-    val text = fs.fragments.collect { case t: Text => t.t }.lastOption.getOrElse("A Text must precede a Given object!")
+    val text = fragments.fragments.collect { case t: Text => t.t }.lastOption.getOrElse("A Text must precede a Given object!")
     lazy val extracted = step.extractContext(text)
-    def strip(fragments: Fragments) = fragments.map(step.strip)
-    new PreStep(() => extracted, new FragmentsFragment(strip(fs)) ^ Step.fromEither(extracted))
+    val stripped = new FragmentsFragment(Fragments.create(fragments.fragments.updateLast(step.strip):_*))
+    new PreStep(() => extracted, stripped ^ Step.fromEither(extracted))
   }
 
 }
