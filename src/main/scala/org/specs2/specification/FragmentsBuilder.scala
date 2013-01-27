@@ -5,6 +5,7 @@ import execute._
 import main._
 import internal.scalaz.Scalaz._
 import control.Functions._
+import collection.Seqx._
 
 /**
  * This trait provides function to create specification Fragments:
