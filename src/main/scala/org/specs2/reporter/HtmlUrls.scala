@@ -63,7 +63,7 @@ trait HtmlUrls extends FileSystem {
     tryo {
       val huc = new URL(url).openConnection.asInstanceOf[HttpURLConnection]
       huc.connect()
-      huc.getResponseCode == HttpURLConnection.HTTP_OK
+      Seq(HttpURLConnection.HTTP_OK, HttpURLConnection.HTTP_MOVED_TEMP).exists(huc.getResponseCode == _)
     } getOrElse false
   }
 
