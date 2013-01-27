@@ -20,13 +20,13 @@ class ExecutionModelSpec extends Specification with ScalaCheck with Groups { def
     e1 := prop { spec: Specification =>
       val reporter = newReporter
       reporter.report(simpleLabel(spec, reporter.textOutput))(arguments <| args(sequential=true))
-      reporter.outputLabels must beSorted
+      reporter.outputLabelIds must beSorted
     }.set(minSize = 3, maxSize = 7, workers = 4)
 
     e2 := prop { spec: Specification =>
       val reporter = newReporter
       reporter.report(simpleLabel(spec, reporter.textOutput))
-      reporter.outputLabels must beSorted
+      reporter.outputLabelIds must beSorted
     }.set(minSize = 3, maxSize = 7).not
 
     e3 := prop { spec: Specification =>
@@ -49,6 +49,7 @@ class ExecutionModelSpec extends Specification with ScalaCheck with Groups { def
       override lazy val textOutput = new TextResultOutput with MockOutput
       lazy val messages = textOutput.messages
       def outputLabels = messages.filter(_.startsWith("label")).map(_.replace("label ", ""))
+      def outputLabelIds = outputLabels.map(_.trim.toInt)
     }
 
     // print a label after each execution
