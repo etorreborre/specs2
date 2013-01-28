@@ -53,7 +53,10 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
     { List("Hello", "World") must contain("Hello", "World").inOrder.only }                                              ^
     { (List("Hello", "World") must not contain("World", "Hello")).only.inOrder }                                        ^
     "and show appropriate failure messages if one element doesn't match"                                                ! sameSeq().e1 ^
-                                                                                                                        p^
+    "with a specific equality function"                                                                                 ^
+    { List("Hello", "World") must contain("hello", "world").only ^^ ((s1, s2) => s1.toLowerCase == s2.toLowerCase) }    ^
+    { List("Hello") must not(contain("hello", "world").only ^^ ((s1, s2) => s1.toLowerCase == s2.toLowerCase)) }        ^
+                                                                                                                        endp^
   "we can check if 2 traversables are contained in each other"                                                          ^
     { List("1", "2") must containTheSameElementsAs(Seq("2", "1")) }                                                     ^
     { { List("1", "2", "3") must containTheSameElementsAs(Seq("2", "4", "1")) } returns Seq(
@@ -65,7 +68,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
       "List(1, 2, 3)",
       "  is missing: 4").mkString("\n")
     }                                                                                                                   ^
-    p^
+                                                                                                                        p^
   "we can check the size of an traversable"                                                                             ^
     { Nil must beEmpty }                                                                                                ^
     { Nil must be empty }                                                                                               ^
