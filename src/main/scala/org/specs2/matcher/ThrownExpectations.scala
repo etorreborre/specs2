@@ -25,7 +25,7 @@ import execute.FailureException
  *     }
  *   }
  */
-trait ThrownExpectations extends Expectations {
+trait ThrownExpectations extends Expectations with StandardResults {
   override def createExpectable[T](t: =>T, alias: Option[String => String]): Expectable[T] =
     new Expectable(() => t) {
       override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(super.applyMatcher(m))
@@ -55,6 +55,7 @@ trait ThrownExpectations extends Expectations {
       case f @ Failure(_,_,_,_)     => throw new FailureException(f)
       case s @ Skipped(_,_)         => throw new SkipException(s)
       case s @ Pending(_)           => throw new PendingException(s)
+      case e @ Error(_,_)           => throw new ErrorException(e)
       case d @ DecoratedResult(_,_) => throw new DecoratedResultException(d)
       case _                        => ()
     }
@@ -70,6 +71,11 @@ trait ThrownExpectations extends Expectations {
     }
     m
   }
+
+  override def failure: Failure = throw new FailureException(super.failure)
+  override def skipped: Skipped = throw new SkipException(super.skipped)
+  override def pending: Pending = throw new PendingException(super.pending)
+  override def anError: Error = throw new ErrorException(super.anError)
 
   protected def failure(m: String): Nothing = failure(Failure(m))
   protected def failure(f: Failure): Nothing = throw new FailureException(f)
