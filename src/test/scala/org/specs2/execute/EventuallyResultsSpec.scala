@@ -11,17 +11,17 @@ class EventuallyResultsSpec extends Specification with Mockito {
   """.txt
 
   "A success succeeds right away with eventually" in {
-    eventually(success)
+    eventually(Success())
   }
   "A failure will always fail" in {
-    eventually(failure).not
+    eventually(Failure()).not
   }
   "A result will be retried automatically until it succeeds" in {
-    val iterator = List(failure, failure, success).iterator
+    val iterator = List(Failure(), Failure(), Success()).iterator
     eventually(iterator.next)
   }
   "If all retries fail, the result will eventually fail" in {
-    lazy val failures: Stream[Result] = failure #:: failures
+    lazy val failures: Stream[Result] = Failure() #:: failures
     val iterator = failures.iterator
     eventually(iterator.next).not
   }
