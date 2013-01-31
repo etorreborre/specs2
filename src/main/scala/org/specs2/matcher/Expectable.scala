@@ -45,8 +45,10 @@ class Expectable[+T] private[specs2] (t: () => T) { outer =>
    */
   def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = {
     if (m == null) throw new IllegalArgumentException("You cannot use a null matcher on "+description)
-    m.apply(this)
+    check(m.apply(this))
   }
+  /** additional checks can be done on the result, such as throwing an exception */
+  def check[S >: T](result: MatchResult[S]) = result
 
   /** evaluate the value and return the same expectable */
   def evaluate = { value; this }

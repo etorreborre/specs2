@@ -4,7 +4,6 @@ package matcher
 import control.Exceptions._
 import execute.ResultLogicalCombinators
 import MatchResultExecution._
-
 /**
  * This trait provides logical operators to combine match results where potentially a MatchResult expression
  * throws an Exception
@@ -24,7 +23,7 @@ trait MatchResultLogicalCombinators {
     /** @return the logical or of two results */
     def or[S >: T](other: =>MatchResult[S]): MatchResult[S] = result.fold(m1 => other, m1 => new OrMatch(m1, other).evaluate)
     /** @return the logical and of two results */
-    def and[S >: T](other: =>MatchResult[S]): MatchResult[S] = result.fold(m1 => m1, m1 => new AndMatch(m1, other).evaluate)
+    def and[S >: T](other: =>MatchResult[S]): MatchResult[S] = result.fold(m1 => expectable.check(m1), m1 => new AndMatch(m1, other).evaluate)
     /** apply the matcher and return the logical or of two results */
     def or(other: Matcher[T]): MatchResult[T] =
       tryOr {
@@ -59,6 +58,7 @@ trait MatchResultExecution {
    * Get the value of a MatchResult expression which possibly throws a MatchResultException.
    * @return either Left(result) if an exception was thrown, or Right(result) if no exception was thrown
    */
+  private[specs2]
   def executeEither[T](result: =>MatchResult[T]): Either[MatchResult[T], MatchResult[T]] = {
     val executed = trye(result)(identity)
     executed match {
@@ -71,6 +71,7 @@ trait MatchResultExecution {
    * Get the value of a MatchResult expression which possibly throws a MatchResultException.
    * @return either the result in Left or the result in right
    */
+  private[specs2]
   def execute[T](result: =>MatchResult[T]): MatchResult[T] =
     executeEither(result).fold(m1 => m1, m1 => m1)
 }

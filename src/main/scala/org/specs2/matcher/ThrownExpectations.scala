@@ -28,7 +28,9 @@ import execute.FailureException
 trait ThrownExpectations extends Expectations with StandardResults {
   override def createExpectable[T](t: =>T, alias: Option[String => String]): Expectable[T] =
     new Expectable(() => t) {
-      override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(super.applyMatcher(m))
+      // overriding this method is necessary to include the ThrownExpectation trait into the stacktrace of the created match result
+      override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
+      override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
       override val desc = alias
       override def map[S](f: T => S): Expectable[S] = createExpectable(f(value), desc)
       override def mapDescription(d: Option[String => String]): Expectable[T] = createExpectable(value, d)
@@ -41,7 +43,9 @@ trait ThrownExpectations extends Expectations with StandardResults {
   override def createExpectableWithShowAs[T](t: =>T, show: =>String): Expectable[T] =
     new Expectable(() => t) {
       override val showValueAs = Some(() => show)
-      override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(super.applyMatcher(m))
+      // overriding this method is necessary to include the ThrownExpectation trait into the stacktrace of the created match result
+      override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
+      override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
       override def map[S](f: T => S): Expectable[S] = createExpectableWithShowAs(f(value), show)
       override def mapDescription(d: Option[String => String]): Expectable[T] = createExpectable(value, d)
       override def evaluateOnce = {
