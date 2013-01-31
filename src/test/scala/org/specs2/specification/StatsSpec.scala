@@ -1,7 +1,7 @@
 package org.specs2
 package specification
 
-import execute.Result
+import execute._
 import matcher.DataTables._
 import time.SimpleTimer
 import _root_.org.specs2.mutable.{Specification => Spec}
@@ -11,18 +11,18 @@ class StatsSpec extends Spec {
   "A Stats object can be resumed to a Result" >> {
     "if there are no failures or errors -> success"  >> {
 
-       "success" | "failure" | "error" | "pending" | "skipped" | "result"           |>
-       1         ! 0         ! 0       ! 0         ! 0         ! (success: Result)  |
-       0         ! 1         ! 0       ! 0         ! 0         ! failure            |
-       0         ! 0         ! 1       ! 0         ! 0         ! anError            |
-       0         ! 0         ! 0       ! 1         ! 0         ! pending            |
-       0         ! 0         ! 0       ! 0         ! 1         ! skipped            |
-       1         ! 1         ! 1       ! 1         ! 1         ! anError            |
-       1         ! 1         ! 0       ! 1         ! 1         ! failure            |
-       1         ! 0         ! 0       ! 1         ! 1         ! success            |
-       0         ! 0         ! 0       ! 2         ! 1         ! pending            |
-       0         ! 0         ! 0       ! 2         ! 2         ! skipped            |
-       0         ! 0         ! 0       ! 0         ! 0         ! success            | { (s, f, e, p, sk, r) =>
+       "success" | "failure" | "error" | "pending" | "skipped" | "result"                           |>
+       1         ! 0         ! 0       ! 0         ! 0         ! (success: Result)                  |
+       0         ! 1         ! 0       ! 0         ! 0         ! StandardResults.failure            |
+       0         ! 0         ! 1       ! 0         ! 0         ! StandardResults.anError            |
+       0         ! 0         ! 0       ! 1         ! 0         ! StandardResults.pending            |
+       0         ! 0         ! 0       ! 0         ! 1         ! StandardResults.skipped            |
+       1         ! 1         ! 1       ! 1         ! 1         ! StandardResults.anError            |
+       1         ! 1         ! 0       ! 1         ! 1         ! StandardResults.failure            |
+       1         ! 0         ! 0       ! 1         ! 1         ! StandardResults.success            |
+       0         ! 0         ! 0       ! 2         ! 1         ! StandardResults.pending            |
+       0         ! 0         ! 0       ! 2         ! 2         ! StandardResults.skipped            |
+       0         ! 0         ! 0       ! 0         ! 0         ! StandardResults.success            | { (s, f, e, p, sk, r) =>
          Stats(successes = s, failures = f, errors = e, pending = p, skipped = sk).result must_== r
        }
     }

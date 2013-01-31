@@ -14,12 +14,13 @@ class MatchResultLogicalCombinatorsSpec extends Specification with ResultMatcher
 
   "Match results can be combined with and" >> {
     (1 must_== 1) and (2 must_== 2)
+    ((1 must_== 2) and (2 must_== 2)) must throwA[MatchFailureException[_]]
     ((1 must_== 2) and (2 must_== 2)) must beFailing
   }
   "Match results must not be evaluated twice when failing with and" >> {
     "when the first match is failing" >> {
-      var evaluated = 0
-      ({evaluated += 1; 1 must_== 2} and (2 must_== 2))
+      var evaluated = 0;
+      {evaluated += 1; 1 must_== 2} must beFailing
       evaluated === 1
     }
     "when the second match is failing" >> new MockOutput with Scope {

@@ -9,13 +9,13 @@ trait MustExpectations extends Expectations {
   implicit def akaMust[T](tm: Expectable[T]) = new MustExpectable(() => tm.value) {
     override private[specs2] val desc = tm.desc
     override private[specs2] val showValueAs = tm.showValueAs
-    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(m.apply(this))
+    override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
   }
   implicit def theValue[T](t: =>T): MustExpectable[T] = createMustExpectable(t)
   implicit def theBlock(t: =>Nothing): MustExpectable[Nothing] = createMustExpectable(t)
 
   protected def createMustExpectable[T](t: =>T) = new MustExpectable(() => t) {
-    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(m.apply(this))
+    override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
   }
 }
 
@@ -38,10 +38,12 @@ trait MustThrownExpectations extends ThrownExpectations with MustExpectations {
   override implicit def akaMust[T](tm: Expectable[T]) = new MustExpectable(() => tm.value) {
     override private[specs2] val desc = tm.desc
     override private[specs2] val showValueAs = tm.showValueAs
-    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(super.applyMatcher(m))
+    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
+    override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
   }
   override protected def createMustExpectable[T](t: =>T) = new MustExpectable(() => t) {
-    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(super.applyMatcher(m))
+    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
+    override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
   }
 }
 object MustThrownExpectations extends MustThrownExpectations

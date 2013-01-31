@@ -9,12 +9,17 @@ trait ShouldExpectations extends Expectations {
   implicit def akaShould[T](tm: Expectable[T]) = new ShouldExpectable(() => tm.value) {
     override private[specs2] val desc = tm.desc
     override private[specs2] val showValueAs = tm.showValueAs
+    // overriding this method is necessary to include the ThrownExpectation trait into the stacktrace of the created match result
+    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
+    override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
   }
   implicit def thisValue[T](t: =>T): ShouldExpectable[T] = createShouldExpectable(t)
   implicit def thisBlock(t: =>Nothing): ShouldExpectable[Nothing] = createShouldExpectable(t)
 
   protected def createShouldExpectable[T](t: =>T) = new ShouldExpectable(() => t) {
-    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(m.apply(this))
+    // overriding this method is necessary to include the ThrownExpectation trait into the stacktrace of the created match result
+    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
+    override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
   }
 }
 /**
@@ -36,10 +41,14 @@ trait ShouldThrownExpectations extends ThrownExpectations with ShouldExpectation
   override implicit def akaShould[T](tm: Expectable[T]) = new ShouldExpectable(() => tm.value) {
     override private[specs2] val desc = tm.desc
     override private[specs2] val showValueAs = tm.showValueAs
-    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(super.applyMatcher(m))
+    // overriding this method is necessary to include the ThrownExpectation trait into the stacktrace of the created match result
+    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
+    override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
   }
   override protected def createShouldExpectable[T](t: =>T) = new ShouldExpectable(() => t) {
-    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = checkFailure(super.applyMatcher(m))
+    // overriding this method is necessary to include the ThrownExpectation trait into the stacktrace of the created match result
+    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
+    override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
   }
 }
 object ShouldThrownExpectations extends ShouldThrownExpectations
