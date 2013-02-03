@@ -1727,7 +1727,6 @@ Armed with this, it is now easy to include or exclude portions of the specificat
  * `args(include="feature1 && unit")` will include anything having `feature1` AND `unit`: i.e. `example 1`
  * `args(include="feature1 && unit, checkin")` will include anything having `feature1` AND `unit`, OR having `checkin`: i.e. `example 1`, `example 3`, `example4`
 
-
 ##### In a unit specification
 
 A _unit_ specification will accept the same `tag` and `section` methods but the behavior will be slightly different:
@@ -1807,6 +1806,44 @@ An easy way to avoid this situation is to "deactivate" the specs2 implicits by m
  * `org.specs2.specification.NoAutoExamples`: deactivate the conversions from `Boolean/Result/MatchResult/DataTable` to `Fragment` or `Example`. Specific versions of this trait can be selectively used, on either `Boolean` or `Result` or `MatchResult` or `DataTable`. For example: `org.specs2.specification.NoBooleanAutoExamples` can be used to avoid the `^` method being used on booleans
  * `org.specs2.specification.NoFragmentsBuilder`: deactivate the implicit conversions from `String` to `Fragment`s
  * `org.specs2.specification.mutable.NoFragmentsBuilder`: deactivate the implicit conversions from to remove `in`, <code class="prettyprint">></code><code class="prettyprint">></code>, `should` and `can` methods from `String`s
+
+#### Print execution data
+
+Knowing that an example passed is fine but sometimes you want to display more information, like the time spent executing the example for instance.
+
+This can be done by creating a `Context` object which will update the `Result` of the example execution with whatever you want to display:
+
+      import org.specs2._
+      import time._
+      import specification._
+      import execute._
+
+      trait Timed extends Around {
+        def around[T : AsResult](t: =>T): Result = {
+          // use `ResultExecution.execute` to catch possible exceptions
+          val (result, timer) = withTimer(ResultExecution.execute(AsResult(t)))
+
+          // update the result with a piece of text which will be displayed in the console
+          result.updateExpected("Execution time: "+timer.time)
+        }
+
+        /** mesure the execution time of a piece of code */
+        def withTimer[T](t: =>T): (T, SimpleTimer) = {
+          val timer = (new SimpleTimer).start
+          val result = t
+          (result, timer.stop)
+        }
+
+      }
+
+When you execute a specification where each example uses this `Around` context (by implementing the `AroundExampleContext` trait for example) you should see the timing of each example displayed in the console:
+
+      [info] TimedExecutionSpecification
+      [info]
+      [info] + example 1
+      [info] Execution time: 94 ms
+      [info] + example 2
+      [info] Execution time: 11 ms
 
   - - -
     """^
