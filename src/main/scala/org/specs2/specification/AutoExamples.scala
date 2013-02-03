@@ -51,16 +51,16 @@ trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
 
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def matchFragmentsFragment(expression: =>MatchResult[_]): MatchResultFragment = {
-    new MatchResultFragment(() => createExampleFragment(expression.toResult, 14, -2, -2))
+    new MatchResultFragment(() => createExampleFragment(expression.toResult, 15, -2, -2))
   }
 
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def booleanFragmentsFragment(expression: =>Boolean): BooleanResultFragment =
-    new BooleanResultFragment(() => createExampleFragment(toResult(expression), 14, -2, -2))
+    new BooleanResultFragment(() => createExampleFragment(toResult(expression), 15, -2, -2))
 
   /** this implicit def is necessary when the expression is at the start of the spec */
   def resultFragmentsFragment(expression: =>Result): ResultFragment =
-    new ResultFragment(() => createExampleFragment(expression, 14, -2, -2))
+    new ResultFragment(() => createExampleFragment(expression, 15, -2, -2))
 
   /**
    * this implicit def is necessary when the expression is at the start of the spec
@@ -79,7 +79,7 @@ trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
 
   /** get the description from the source file */
   private[specs2] def getDescription(depth: Int = 9, startOffset: Int = -1, endOffset: Int = -1) =
-    getSourceCode(startDepth = depth, endDepth= depth + 4, startLineOffset = startOffset, endLineOffset = endOffset)
+    getSourceCode(startDepth = depth, endDepth= depth + 5, startLineOffset = startOffset, endLineOffset = endOffset)
 
   private[specs2] lazy val exampleDepth = 10
 
@@ -159,7 +159,7 @@ trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
   trait ExampleFragment {
     def fs: () => Fragments
     def ^[T](result: =>T)(implicit toResult: T => Result) = {
-      new FragmentsFragment(fs().add(exampleFactory.newExample(CodeMarkup(getDescription(depth = 10)), toResult(result))))
+      new FragmentsFragment(fs().add(exampleFactory.newExample(CodeMarkup(getDescription(depth = 11)), toResult(result))))
     }
   }
 }
