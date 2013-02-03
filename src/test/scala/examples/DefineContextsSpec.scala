@@ -130,7 +130,7 @@ class DefineContextsSpec extends Specification {
     def aroundContext = new Timed {}
 
     trait Timed extends Around {
-      def around[T : AsResult](t: =>T): Result = {
+      def around[T <% Result](t: =>T): Result = {
         // use `ResultExecution.execute` to catch possible exceptions
         val (result, timer) = withTimer(ResultExecution.execute(AsResult(t)))
 

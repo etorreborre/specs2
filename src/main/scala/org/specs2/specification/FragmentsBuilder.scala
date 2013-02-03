@@ -151,26 +151,27 @@ trait NoFragmentsBuilder extends FragmentsBuilder {
  * Fragments can be chained with the ^ method
  */
 class FragmentsFragment(fs: =>Fragments)(implicit exampleFactory: ExampleFactory) {
-  def fragments = fs
-  def ^(t: String) = fs add Text(t)
+  lazy val fragments = fs
+
+  def ^(t: String) = fragments add Text(t)
   def ^(f: Fragment) = f match {
-    case s @ SpecStart(_,_,_) => (fs specTitleIs s.specName).overrideArgs(s.arguments)
-    case _                    => fs add f
+    case s @ SpecStart(_,_,_) => (fragments specTitleIs s.specName).overrideArgs(s.arguments)
+    case _                    => fragments add f
   }
-  def ^(other: Seq[Fragment]) = fs add other
-  def ^(other: Seq[Fragments], dummy: Int = 0) = fs add other.flatMap(_.fragments)
+  def ^(other: Seq[Fragment]) = fragments add other
+  def ^(other: Seq[Fragments], dummy: Int = 0) = fragments add other.flatMap(_.fragments)
 
   def ^(other: Fragments) = {
     other match {
-      case Fragments(t, m, a, Linked(Some(l), so, h))    => fs add other.fragments
-      case Fragments(Some(t), m, a, Linked(None, so, h)) => (fs add other.middle).specTitleIs(t).overrideArgs(a)
-      case Fragments(None, m, a, Linked(None, so, h))    => (fs add other.middle).overrideArgs(a)
-      case _                                             => fs add other.middle
+      case Fragments(t, m, a, Linked(Some(l), so, h))    => fragments add other.fragments
+      case Fragments(Some(t), m, a, Linked(None, so, h)) => (fragments add other.middle).specTitleIs(t).overrideArgs(a)
+      case Fragments(None, m, a, Linked(None, so, h))    => (fragments add other.middle).overrideArgs(a)
+      case _                                             =>  fragments add other.middle
     }
   }
 
-  def ^(other: FragmentsFragment) = fs add other.fragments
-  def ^(a: Arguments) = fs add a
+  def ^(other: FragmentsFragment) = fragments add other.fragments
+  def ^(a: Arguments)             = fragments add a
 
   /** start a given-when-then block */
   def ^[T](step: Given[T]): PreStep[T] = {

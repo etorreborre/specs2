@@ -5,6 +5,7 @@ import mutable.Specification
 import user.io.{LocationSpecification, LocationUnitSpecification}
 import specification.Fragments._
 import specification.{SpecificationStructure, Fragment}
+import scala.io.Source
 
 class LocationSpec extends Specification {
   "A unit specification must have correct locations for its fragments" >> {
@@ -60,6 +61,10 @@ class LocationSpec extends Specification {
     "for the end element" >> {
       endAt(index = 0) === 16
     }
+  }
+
+  "The FragmentsBuilder.^(String) method must be on line 156" >> {
+    Source.fromFile("src/main/scala/org/specs2/specification/FragmentsBuilder.scala").getLines.toSeq(156 - 1) must contain("def ^(t: String)")
   }
 
   def textAt(index: Int)(implicit spec: SpecificationStructure) = fragmentLine(isSomeText, index)
