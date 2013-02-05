@@ -936,7 +936,7 @@ In that case you can extend the `Around` trait and specify the `around` method:
 
       object http extends Around {
         def around[T : AsResult](t: =>T) = openHttpSession("test") {
-          t  // execute t inside a http session
+          AsResult(t)  // execute t inside a http session
         }
       }
 
@@ -971,7 +971,7 @@ We can also combine both the `Around` and the `Outside` behaviors with the `Arou
         def around[T : AsResult](t: =>T) = {
           createNewDatabase
           // execute the code inside a databaseSession
-          inDatabaseSession { t }
+          inDatabaseSession { AsResult(t) }
         }
         // prepare a valid HttpRequest
         def outside: HttpReq = createRequest
