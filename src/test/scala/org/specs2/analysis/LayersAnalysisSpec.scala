@@ -30,7 +30,7 @@ class LayersAnalysisSpec extends Specification with DataLayers with Grouped { de
   }
 }
 
-trait DataLayers extends DependencyMatchers with Specification with ScalaCheck {
+trait DataLayers extends Specification with DependencyMatchers with ScalaCheck {
   /**
    * The data generation strategy is to create layers of packages represented by alphabetical letters from a to f.
    *

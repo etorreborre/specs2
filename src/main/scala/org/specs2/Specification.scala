@@ -19,7 +19,8 @@ import Functions._
  *
  *  @see SpecificationFeatures for more details
  */
-trait Specification extends SpecificationStructure with SpecificationFeatures
+abstract class Specification extends SpecificationLike
+trait SpecificationLike extends SpecificationStructure with SpecificationFeatures
 
 /**
  * The SpecificationFeatures trait provides functionalities to build the specification fragments plus additional ones:
