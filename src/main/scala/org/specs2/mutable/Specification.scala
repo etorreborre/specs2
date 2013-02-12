@@ -9,7 +9,8 @@ import main.ArgumentsShortcuts
 import specification._
 import control.Functions._
 
-trait Specification extends SpecificationStructure with SpecificationFeatures {
+abstract class Specification extends SpecificationLike
+trait SpecificationLike extends SpecificationStructure with SpecificationFeatures {
   def is = fragments
 }
 
