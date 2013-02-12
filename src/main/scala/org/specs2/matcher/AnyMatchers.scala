@@ -95,7 +95,7 @@ trait AnyBaseMatchers {
   /** matches if the value returns a successful result when applied to a PartialFunction */
   def beLike[T](pattern: PartialFunction[T, MatchResult[_]]) = new Matcher[T] {
     def apply[S <: T](a: Expectable[S]) = {
-      val r = if (a.value != null && pattern.isDefinedAt(a.value)) pattern.apply(a.value) else MatchFailure("", "", a)
+      val r = if (pattern.isDefinedAt(a.value)) pattern.apply(a.value) else MatchFailure("", "", a)
       result(r.isSuccess,
              a.description + " matches the given pattern " + r.message,
              a.description + " doesn't match the expected pattern "  + r.message,
