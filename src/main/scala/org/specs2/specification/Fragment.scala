@@ -250,7 +250,6 @@ case object Action {
  *  - Tab() can be used to increment the indentation level
  *  - Backtab() can be used to decrement the indentation level
  */
-private[specs2]
 object StandardFragments {
   case class End() extends Fragment
   case class Br() extends Fragment
