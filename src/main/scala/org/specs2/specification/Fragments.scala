@@ -42,6 +42,7 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
 
   def overrideArgs(args: Arguments) = copy(arguments = arguments.overrideWith(args))
   def map(function: Fragment => Fragment) = Fragments.create(fragments.map(function):_*)
+  def flatMap(function: Fragment => Seq[Fragment]) = Fragments.create(fragments.flatMap(function):_*)
 
   override def toString = fragments.mkString("\n")
 

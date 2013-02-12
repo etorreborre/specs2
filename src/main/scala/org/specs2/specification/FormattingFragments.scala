@@ -15,6 +15,6 @@ trait FormattingFragments {
   def endp       = Fragments.createList(end, StandardFragments.Br())
   def endbr      = Fragments.createList(end, StandardFragments.Br())
 }
-private[specs2]
+
 object FormattingFragments extends FormattingFragments
 
