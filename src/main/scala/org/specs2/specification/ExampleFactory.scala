@@ -1,8 +1,7 @@
 package org.specs2
 package specification
 
-import execute.{AsResult, Result}
-import matcher.MatchResult
+import execute.AsResult
 import text.MarkupString
 import control.Functions._
 

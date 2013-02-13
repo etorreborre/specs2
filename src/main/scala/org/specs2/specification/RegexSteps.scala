@@ -3,7 +3,7 @@ package specification
 
 import execute._
 import main.Arguments
-import specification.StandardFragments.{Backtab, Tab, Br, End}
+import StandardFragments.{Backtab, Tab, Br, End}
 import internal.scalaz.Scalaz._
 import control.{Functions, ImplicitParameters}
 import data.TuplesToSeq

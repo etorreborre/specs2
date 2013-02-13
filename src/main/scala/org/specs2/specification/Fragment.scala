@@ -11,7 +11,7 @@ import Regexes._
 import org.specs2.internal.scalaz.Monoid
 import io.Location
 import scala.Either
-import data.{SeparatedTags, IncludedExcluded}
+import data.SeparatedTags
 
 /**
  * A Fragment is a piece of a specification. It can be a piece of text, an action or
