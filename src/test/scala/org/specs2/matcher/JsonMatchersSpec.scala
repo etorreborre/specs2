@@ -49,6 +49,17 @@ class JsonMatchersSpec extends Specification { def is =
                                                                                                                         endp^
  "The / matcher can be chained with */"                                                                                 ^
  { """{"person" : {"address" : {"street" : "here"}}}""" must /("person") */("street") /("here") }                       ^
+                                                                                                                        endp^
+ "The /#(i) matcher matches the i-th element in an Array"                                                               ^
+ { """["name", "Joe"]""" must /#(1) /("Joe") }                                                                          ^
+ { """{"person" : ["name", "Joe"] }""" must /("person") /#(1) /("Joe") }                                                ^
+ { """{"person" : ["name", ["Joe", "Moe"]] }""" must /("person") /#(1) /#(1) /("Moe") }                                 ^
+ { """{"house" : {"person" : ["name", "Joe"]}}""" must */("person") /#(1) /("Joe") }                                    ^
+                                                                                                                        endp^
+ "The /#(i) matcher matches the i-th element in a Map"                                                                  ^
+ { """{"name" : "Joe", "name2" : "Moe"}""" must /#(1) /("name2" -> "Moe") }                                             ^
+ { """{"person" : {"name": "Joe", "name2" : "Moe"} }""" must /("person") /#(1) /("name2", "Moe") }                      ^
+ { """{"house" : {"person" : {"name": "Joe", "name2" : "Moe"}}}""" must */("person") /#(1) /("name2", "Moe") }          ^
                                                                                                                         end
 
   // this example is taken from the liftweb project
