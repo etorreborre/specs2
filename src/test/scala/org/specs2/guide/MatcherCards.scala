@@ -335,6 +335,7 @@ object JsonMatchers extends Card {
  [Json](http://www.json.org) is a simple data format essentially modeling recursive key-values. There are 2 matchers which can be used to verify the presence of appropriate values in Strings representing Json documents:
 
  * `/(value)` checks if a value is present at the root of the document. This can only be the case if that document is an Array
+
  * `/(regex)` checks if a value matching the regex is present at the root of the document. This can only be the case if that document is an Array
 
  * `/(key -> value)` checks if a pair is present at the root of the document. This can only be the case if that document is a Map
@@ -342,6 +343,8 @@ object JsonMatchers extends Card {
  * `*/(value)` checks if a value is present anywhere in the document, either as an entry in an Array, or as the value for a key in a Map
 
  * `*/(key -> value)` checks if a pair is present anywhere in a Map of the document
+
+ * `/#(i)` selects the ith element in a 0-based indexed Array or a Map and allow further checks on that element
 
 Now the interesting part comes from the fact that those matchers can be chained to search specific paths in the Json document. For example, for the following document:
 
@@ -361,11 +364,15 @@ Now the interesting part comes from the fact that those matchers can be chained 
 
 You can use these combinations:
 
-      person must /("person") */("person") /("age" -> 33.0) // by default numbers are parsed as Doubles
+person must /("person") */("person") /("age" -> 33.0) // by default numbers are parsed as Doubles
 
 You can as well use regular expressions instead of values to verify the presence of keys or elements. For example:
 
- `person must /("p.*".r) */(".*on".r) /("age" -> "\\d+\\.\\d".r)`
+   `person must /("p.*".r) */(".*on".r) /("age" -> "\d+\.\d".r)`
+
+Finally you can access some records by their index:
+
+   `person must /("person") /#(2) /("person")`
 
               """
 }

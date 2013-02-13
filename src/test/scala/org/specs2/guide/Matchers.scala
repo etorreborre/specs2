@@ -771,6 +771,7 @@ class JsonExamples extends Specification {
 
     def is =
     "1" ! { person must /("person") */("person") /("age" -> 33.0) }
+    "2" ! { person must /("person") /#(2) /("person") }
 }
 
 import util.parsing.combinator.RegexParsers
