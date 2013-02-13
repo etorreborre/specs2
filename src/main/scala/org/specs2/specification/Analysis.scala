@@ -1,4 +1,5 @@
-package org.specs2.specification
+package org.specs2
+package specification
 
 import org.specs2.execute
 import execute.AsResult
