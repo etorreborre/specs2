@@ -53,7 +53,7 @@ class JsonMatchersSpec extends Specification { def is =
  "The /#(i) matcher matches the i-th element in an Array"                                                               ^
  { """["name", "Joe"]""" must /#(1) /("Joe") }                                                                          ^
  { """{"person" : ["name", "Joe"] }""" must /("person") /#(1) /("Joe") }                                                ^
- "xxx"!{ """{"person" : ["name", ["Joe", "Moe"]] }""" must /("person") /#(1) /#(1) /("Moe") }                                 ^
+ { """{"person" : ["name", ["Joe", "Moe"]] }""" must /("person") /#(1) /#(1) /("Moe") }                                 ^
  { """{"house" : {"person" : ["name", "Joe"]}}""" must */("person") /#(1) /("Joe") }                                    ^
                                                                                                                         endp^
  "The /#(i) matcher matches the i-th element in a Map"                                                                  ^
