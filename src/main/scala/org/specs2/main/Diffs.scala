@@ -16,8 +16,6 @@ trait Diffs {
   def showDiffs(expected: String, actual: String): (String, String)
   /** @return true if the full strings must also be shown */
   def showFull: Boolean
-  /** @return the separators to use*/
-  def separators: String
 }
 
 /**
