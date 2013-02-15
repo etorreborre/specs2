@@ -5,6 +5,8 @@ class JsonMatchersSpec extends Specification { def is =
 
  "The / matcher matches a name and a value if the input is a Map"                                                       ^
  { """{"name" : "Joe"}""" must /("name" -> "Joe") }                                                                     ^
+ { """{"name" : "Joe"}""" must /("name" -> contain("o")) }                                                              ^
+ { """{"age"  : "33" }""" must /("age" -> (be_>(30) ^^ ((_:String).toInt))) }                                           ^
  { """{"name" : "Joe"}""" must not /("name2" -> "Joe") }                                                                ^
  { ("""["name", "Joe"]""" must /("name" -> "Joe")) returns "[name, Joe] doesn't contain 'name' : 'Joe'" }               ^
  { ("garbage" must /("name" -> "joe")) returns "Could not parse:\ngarbage" }                                            ^
