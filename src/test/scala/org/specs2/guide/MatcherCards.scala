@@ -366,9 +366,11 @@ You can use these combinations:
 
 person must /("person") */("person") /("age" -> 33.0) // by default numbers are parsed as Doubles
 
-You can as well use regular expressions instead of values to verify the presence of keys or elements. For example:
+You can as well use regular expressions or String matchers instead of values to verify the presence of keys or elements. For example:
 
    `person must /("p.*".r) */(".*on".r) /("age" -> "\d+\.\d".r)`
+   `person must /("p.*".r) */(".*on".r) /("age" -> startWith("3"))`
+   `person must /("p.*".r) */(".*on".r) /("age" -> (be_>(30) ^^ ((_:String).toInt)))`
 
 Finally you can access some records by their index:
 

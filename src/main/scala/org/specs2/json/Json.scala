@@ -46,29 +46,22 @@ trait Json {
    * @return all the JSON objects or values that are addressed by a key in the document.
    *         if there is only one it is returned directly, otherwise the elements are put in a JSONArray
    */
-  def findDeep(key: String, json: JSONType): Option[JSONType] = findDeep(json, (k: Any) => k == key)
+  def findDeep(key: String, json: JSONType): Option[JSONType] = findDeep((k: Any) => k == key, json)
   /**
    * @return findDeep with a Regex
    */
-  def findDeep(key: Regex, json: JSONType): Option[JSONType] = findDeep(json, (k: Any) => key matches k.toString)
-  /**
-   * @return findDeep with a Regex or a String
-   */
-  def findDeep(key: Any, json: JSONType): Option[JSONType] = key match {
-    case k: Regex => findDeep(k, json)
-    case other    => findDeep(other.notNull, json)
-  }
+  def findDeep(key: Regex, json: JSONType): Option[JSONType] = findDeep((k: Any) => key matches k.toString, json)
 
   /**
    * @return findDeep with a key equality function
    */
-  def findDeep(json: JSONType, targetKey: Any => Boolean): Option[JSONType] = {
+  def findDeep(condition: Any => Boolean, json: JSONType): Option[JSONType] = {
     val seq = collect(json)( keyedValues = {
-      case (k, v) if targetKey(k) => Seq(v)
-      case other                => Nil
+      case (k, v) if condition(k) => Seq(v)
+      case other                  => Nil
     }, keyedObjects = {
-      case (k, o) if targetKey(k) => Seq(o)
-      case other                => Nil
+      case (k, o) if condition(k) => Seq(o)
+      case other                  => Nil
     })
     seq match {
       case Nil                   => None
@@ -80,25 +73,19 @@ trait Json {
   /**
    * @return the JSON object that's addressed by a key if the document is a Map
    */
-  def find(key: String, json: JSONType): Option[JSONType] = json match {
-    case JSONObject(map) => map.get(key) map { case (o: JSONType) => o }
-    case other           => None
-  }
+  def find(key: String, json: JSONType): Option[JSONType] = find((k: String) => k == key, json)
 
   /**
    * @return the JSON object that's addressed by a key if the document is a Map, and the key matches a regular expression
    */
-  def find(keyRegex: Regex, json: JSONType): Option[JSONType] = json match {
-    case JSONObject(map) => map.iterator.toSeq.collect { case (k, v) if keyRegex matches k => v }.headOption map { case (o: JSONType) => o }
-    case other           => None
-  }
+  def find(keyRegex: Regex, json: JSONType): Option[JSONType] = find((key: String) => keyRegex matches key, json)
 
   /**
-   * @return find with a Regex or a String
+   * @return the JSON object that's addressed by a key if the document is a Map, and the key matches a condition on the key
    */
-  def find(key: Any, json: JSONType): Option[JSONType] = key match {
-    case k: Regex => find(k, json)
-    case other    => find(other.notNull, json)
+  def find(condition: String => Boolean, json: JSONType): Option[JSONType] = json match {
+    case JSONObject(map) => map.iterator.toSeq.find { case (k, v) => condition(k) } map { case (_, o: JSONType) => o }
+    case other           => None
   }
 
   /**
