@@ -62,6 +62,18 @@ trait ResultExecution { outer =>
   }
 
   /**
+   * execute a result and return either as a Left(result) if something was thrown or a Right(result)
+   */
+  def executeThrowable(res: =>Result): Either[Result, Result] =
+    trye(res) { (e: Exception) => e match {
+      case FailureException(f) => f
+      case SkipException(f)    => f
+      case PendingException(f) => f
+      case ErrorException(f)   => f
+      case other               => Error(other)
+    }}
+
+  /**
    * execute a Property returning the value if it exists and a Success result otherwise
    */
   def executeProperty[T](prop: Property[T], default: Result = Success("no value")) = executeEither(prop.optionalValue) match {

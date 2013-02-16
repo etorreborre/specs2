@@ -50,7 +50,7 @@ class SelectionSpec extends Specification with Tags { def is =
 
     def e1 = {
       val fragments: Fragments = wasIssue ^ sequential ^ example("e1") ^ step("s1") ^ example("e2")
-      select(fragments).toString must_== "List(SpecStart(Object), Example(e1), Step, SpecEnd(Object))"
+      select(fragments).toString must_== "List(SpecStart(Specification), Example(e1), Step, SpecEnd(Specification))"
     }
   }
 

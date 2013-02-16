@@ -23,6 +23,7 @@ more precisely:
   { (success1 and skipped1) must_== success1 }                                                                          ^
   { (skipped1 and success1) must_== success1 }                                                                          ^
   { (failure1 and success1) must_== failure1 }                                                                          ^
+  { (thrownFailure1 and success1) must throwA[FailureException] }                                                       ^
   { (failure1 and failure2) must_== failure1 }                                                                          ^
   { (failure1 and error1)   must_== failure1 }                                                                          ^
   { (error1   and failure1) must_== error1 }                                                                            ^
@@ -101,7 +102,9 @@ more precisely:
 
   val success1: Result = Success("s1")
   val success2 = Success("s2")                                                                                          
-  val failure1 = Failure("f1")                                                                                          
+  val failure1 = Failure("f1")
+  def thrownFailure1: Result = { throw new FailureException(failure1); success }
+
   val failure2 = Failure("f2")
   val error1   = Error("e1")
   val skipped1 = Skipped("sk1")
