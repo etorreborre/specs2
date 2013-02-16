@@ -44,7 +44,7 @@ trait CalledMatchers extends NumberOfTimes with FunctionArguments with TheMockit
   private def checkCalls[T] = new Matcher[T] {
     def apply[S <: T](s: Expectable[S]) = {
       catchAll { s.value } { identity } match {
-        case Right(v) => MatchSuccess("The mock was called as expected", "The mock was not called as expected", Expectable(v))
+        case Right(v) => MatchSuccess("The mock was called as expected", "The mock was not called as expected", createExpectable(v))
         case Left(e: AssertionError) => {
           MatchFailure("The mock was called as expected",
                        "The mock was not called as expected: " + e.messageAndCause,

@@ -63,7 +63,7 @@ class SequenceSpec extends Specification with ScalaCheck with ArbitraryFragments
   case class seq() extends WithSelection {
     def e1 = {
       val fragments: Fragments = sequential ^ example("e1") ^ step("s1") ^ example("e2")
-      select(fragments).toString must_== "List(SpecStart(Object), Example(e1), Step, Example(e2), SpecEnd(Object))"
+      select(fragments).toString must_== "List(SpecStart(Specification), Example(e1), Step, Example(e2), SpecEnd(Specification))"
     }
     def e2 = {
       val spec = new Specification { def is = sequential ^ example("e1") ^ step("s1") ^ example("e2") }
@@ -77,7 +77,7 @@ class SequenceSpec extends Specification with ScalaCheck with ArbitraryFragments
         "(List(SpecStart(Object), Text(intro), Step),false)",
         "(List(Example(ex1), Example(ex2)),false)",
         "(List(Step),false)",
-        "(List(SpecStart(Object), Example(i1), Example(i2), SpecEnd(Object)),true)",
+        "(List(SpecStart(Specification), Example(i1), Example(i2), SpecEnd(Specification)),true)",
         "(List(Step),false)",
         "(List(Example(ex1), Example(ex2), SpecEnd(Object)),false)").inOrder
 
