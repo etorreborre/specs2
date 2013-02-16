@@ -64,7 +64,7 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersLowImplicits { oute
 
   /** allow to match on the i-th element of an Array or a Map (0-based) */
   def /#(i: Int) = new JsonSelector(i)
-  class JsonSelector(i: Int) { parentSelector =>
+  case class JsonSelector(i: Int, negate: Boolean = false) { parentSelector =>
     protected def select(json: JSONType): Option[JSONType] = json match {
       case JSONObject(map) if i >= 0 && i < map.size  => Some(JSONObject(Map(map.iterator.toSeq(i))))
       case JSONArray(list) if i >= 0 && i < list.size => list(i) match {
@@ -73,21 +73,24 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersLowImplicits { oute
       }
       case other         => None
     }
+    /** negate the next matcher */
+    def not: JsonSelector = copy(negate = true)
+
     def /#(j: Int) = new JsonSelector(j) {
       override def select(json: JSONType): Option[JSONType] = parentSelector.select(json).flatMap(super.select)
     }
     def /(value: JsonValueSpec): JsonValueMatcher = new JsonValueMatcher(value) {
       override def navigate(json: JSONType): Option[JSONType] = select(json)
-    }
+    }.not(when = negate)
     def */(value: JsonValueSpec): JsonDeepValueMatcher = new JsonDeepValueMatcher(value) {
       override def navigate(json: JSONType): Option[JSONType] = select(json)
-    }
+    }.not(when = negate)
     def /(pair: JsonPairSpec): JsonPairMatcher = new JsonPairMatcher(pair._1, pair._2) {
       override def navigate(json: JSONType): Option[JSONType] = select(json)
-    }
+    }.not(when = negate)
     def */(pair: JsonPairSpec): JsonDeepPairMatcher = new JsonDeepPairMatcher(pair._1, pair._2) {
       override def navigate(json: JSONType): Option[JSONType] = select(json)
-    }
+    }.not(when = negate)
   }
 
   class JsonPairMatcher(key: JsonValueSpec, value: JsonValueSpec) extends Matcher[String] {
@@ -101,9 +104,11 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersLowImplicits { oute
         case None                        => result(false, "ok", "Could not parse:\n"+s.value, s)
       }
     }
-    override def not = new JsonPairMatcher(key, value) {
+    override def not: JsonPairMatcher = new JsonPairMatcher(key, value) {
       override def apply[S <: String](s: Expectable[S]) = super.apply(s).negate
     }
+    private[specs2]
+    def not(when: Boolean): JsonPairMatcher = if (when) this.not else this
   }
 
   class JsonValueMatcher(value: JsonValueSpec) extends Matcher[Any] { parent =>
@@ -117,9 +122,11 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersLowImplicits { oute
         case None                        => result(false, "ok", "Could not parse:\n"+s.value, s)
       }
     }
-    override def not = new JsonValueMatcher(value) {
+    override def not: JsonValueMatcher = new JsonValueMatcher(value) {
       override def apply[S <: Any](s: Expectable[S]) = super.apply(s).negate
     }
+    private[specs2]
+    def not(when: Boolean): JsonValueMatcher = if (when) this.not else this
 
     /** select the i'th element after navigation */
     def /#(i: Int) = new JsonSelector(i) {
@@ -161,9 +168,12 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersLowImplicits { oute
       }
     }
 
-    override def not = new JsonDeepPairMatcher(key, value) {
+    override def not: JsonDeepPairMatcher = new JsonDeepPairMatcher(key, value) {
       override def apply[S <: String](s: Expectable[S]) = super.apply(s).negate
     }
+    private[specs2]
+    def not(when: Boolean): JsonDeepPairMatcher = if (when) this.not else this
+
   }
   class JsonDeepValueMatcher(value: JsonValueSpec) extends Matcher[Any] { parent =>
     def navigate(json: JSONType): Option[JSONType] = Some(json)
@@ -176,9 +186,12 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersLowImplicits { oute
       }
     }
 
-    override def not = new JsonDeepValueMatcher(value) {
+    override def not: JsonDeepValueMatcher = new JsonDeepValueMatcher(value) {
       override def apply[S <: Any](s: Expectable[S]) = super.apply(s).negate
     }
+    private[specs2]
+    def not(when: Boolean): JsonDeepValueMatcher = if (when) this.not else this
+
     /** select the i'th element after navigation */
     def /#(i: Int) = new JsonSelector(i) {
       override def select(json: JSONType): Option[JSONType] =
@@ -296,6 +309,7 @@ trait JsonBaseBeHaveMatchers { outer: JsonBaseMatchers =>
 
   implicit def toNotMatcherJson(result: NotMatcher[Any]) : NotMatcherJson = new NotMatcherJson(result)
   class NotMatcherJson(result: NotMatcher[Any]) {
+    def /#(i: Int): JsonSelector = outer./#(i).not
     def /(pair: JsonPairSpec): JsonPairMatcher = outer./(pair).not
     def */(pair: JsonPairSpec): JsonDeepPairMatcher = outer.*/(pair).not
     def /(value: JsonValueSpec): JsonValueMatcher = outer./(value).not
