@@ -54,6 +54,7 @@ class JsonMatchersSpec extends Specification { def is =
                                                                                                                         endp^
  "The /#(i) matcher matches the i-th element in an Array"                                                               ^
  { """["name", "Joe"]""" must /#(1) /("Joe") }                                                                          ^
+ { """["name", "Joe"]""" must not /#(1) /("M.*".r) }                                                                      ^
  { """{"person" : ["name", "Joe"] }""" must /("person") /#(1) /("Joe") }                                                ^
  { """{"person" : ["name", ["Joe", "Moe"]] }""" must /("person") /#(1) /#(1) /("Moe") }                                 ^
  { """{"house" : {"person" : ["name", "Joe"]}}""" must */("person") /#(1) /("Joe") }                                    ^
