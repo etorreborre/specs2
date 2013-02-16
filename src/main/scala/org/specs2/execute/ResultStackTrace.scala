@@ -10,10 +10,8 @@ import Throwablex._
 trait ResultStackTrace extends HasStackTrace {
   /** @return the location (file and line number) of the topmost stackTraceElement */
   def location = {
-    val isThrown = Throwablex.exception(stackTrace).exists("ThrownExpectations")
     val filtered = Throwablex.exception(stackTrace).filterNot("org.specs2").getStackTrace()
-    if (isThrown) Throwablex.exception(filtered).location
-    else          Throwablex.exception(filtered.drop(1)).location
+    Throwablex.exception(filtered).location
   }
   def exception: Throwable
 }
