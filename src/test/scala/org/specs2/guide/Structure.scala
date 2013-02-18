@@ -1132,6 +1132,22 @@ If that's the case you can define your own `Specification` trait doing the job:
 
 The `DatabaseSpec` above will insert, in each inherited specification, one `Step` executed before all the fragments, and one executed after all of them.
 
+#### Global setup/teardown
+
+The next similar thing you might want to do is to do some setup, like create a database schema, once and for all before *any* specification runs. The easiest way to do that is to use an object and a lazy variable:
+
+      object databaseSetup  {
+        lazy val createDB = { println("creating the database") }
+      }
+
+      // use the createDB lazy val to create the database once for every specification inheriting from
+      // the DatabaseSpec trait
+      trait DatabaseSpec extends Specification {
+        override def map(fs: =>Fragments) = Step(databaseSetup.createDB) ^ Step(startDb) ^ fs ^ Step(cleanDb)
+      }
+
+Note also that global setup and cleanup can be [done with sbt](http://www.scala-sbt.org/release/docs/Detailed-Topics/Testing#setup-and-cleanup).
+
 #### For fragments
 
 When using a Unit Specification, it can be useful to use variables which are only used for a given set of examples. This can be easily done by declaring local variables, but this might lead to duplication. One way to avoid that is to use the `org.specs2.mutable.NameSpace` trait:
