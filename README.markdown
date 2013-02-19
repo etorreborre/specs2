@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/etorreborre/specs2.png)](https://travis-ci.org/etorreborre/specs2)
+
 Installation instructions
 =========================
 
