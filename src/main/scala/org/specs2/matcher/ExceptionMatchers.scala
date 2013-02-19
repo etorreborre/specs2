@@ -47,7 +47,12 @@ trait ExceptionBaseMatchers extends Expectations {
     	  checkMatchResult(value, (e: Throwable) => classType(e), f)
       }
     }
-    private val classType = (e: Throwable) => klass.isAssignableFrom(e.getClass)
+    private val classType =
+      (e: Throwable) => {
+        errorMustBeThrownIfExceptionIsExpected(e, klass)
+        klass.isAssignableFrom(e.getClass)
+      }
+
     private def checkBoolean[T, R](expectable: Expectable[T], f: Throwable => Boolean) = {
       checkExceptionValue(expectable, f, asString(klass))
     }
@@ -62,6 +67,12 @@ trait ExceptionBaseMatchers extends Expectations {
       }
     }
   }
+
+  /** re-throw an Error if an Exception was expected */
+  private def errorMustBeThrownIfExceptionIsExpected(e: Throwable, klass: Class[_]) {
+    if (classOf[Exception].isAssignableFrom(klass) && classOf[Error].isAssignableFrom(e.getClass)) throw e
+  }
+
   /**
    * This matchers matches exception instances.
    * @see throwA
@@ -74,7 +85,11 @@ trait ExceptionBaseMatchers extends Expectations {
       def apply[S <: Any](value: Expectable[S]) =
     	  checkMatchResult(value, (e: Throwable) => classAndMessage(e), f)
     }
-    private val classAndMessage = (e: Throwable) => exception.getClass == e.getClass && exception.getMessage == e.getMessage
+    private val classAndMessage = (e: Throwable) => {
+      errorMustBeThrownIfExceptionIsExpected(e, exception.getClass)
+      exception.getClass == e.getClass && exception.getMessage == e.getMessage
+    }
+
     private def checkBoolean[T](expectable: Expectable[T], f: Throwable => Boolean) = {
       checkExceptionValue(expectable, f, exception.toString)
     }
@@ -124,15 +139,7 @@ trait ExceptionBaseMatchers extends Expectations {
     }
   }
 
-
-  private def message(exception: Any) = {
-    exception match {
-      case e: Class[_] => e.getName
-      case ex: Throwable => ex.getClass.getName + ": " + ex.getMessage
-      case other => other.toString
-    }
-  }
-  /** 
+  /**
    * Evaluates a value and return any exception that is thrown
    * In the case of the use of the like method (throwAn[Exception].like) the value
    * will be an Expectable encapsulating the real value which needs to be evaluated
