@@ -1,6 +1,5 @@
 package org.specs2
 package specification
-import execute._
 
 /**
  * Apply a Context to a sequence of fragments containing examples.

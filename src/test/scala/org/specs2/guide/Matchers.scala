@@ -1,10 +1,11 @@
 package org.specs2
 package guide
 
-class Matchers extends Specification { def is = literate ^ "Matchers guide".title ^
-"""
-There are many ways to define expectations in ***specs2***. You can define expectations with anything that returns
-a `Result`:
+import specification.Forms._
+
+class Matchers extends UserGuidePage { def is = literate ^
+  """
+There are many ways to define expectations in ***specs2***. You can define expectations with anything that returns a `Result`:
 
   * Boolean
   * Standard result
@@ -20,11 +21,11 @@ This is the simplest kind of result you can define for an expectation but also t
 
 Here's an example:
 
-    "This is hopefully true"         ! (1 != 2)
+      "This is hopefully true"         ! (1 != 2)
 
 This can be useful for simple expectations but a failure will give few information on what went wrong:
 
-    "This is hopefully true"         ! (2 != 2) // fails with 'the value is false',...
+      "This is hopefully true"         ! (2 != 2) // fails with 'the value is false',...
 
 ### Standard results
 
@@ -42,90 +43,35 @@ Two additional results are also available to track the progress of features:
   * `done`: a `Success` with the message "DONE"
   * `todo`: a `Pending` with the message "TODO"
 
+#### Combinators
+
+Logical combinators like `and`, `or`, `not` can be used to combine results. You can also use the `eventually` method to retry a Result until it is ok (this will actually work with anything convertible to a Result).
+
 ### Match results
 
-This is by far the largest category of Results in ***specs2***. They cover many data types, can be composed and adapted to
-create new ones or be created from scratch by the user. Let's have a look at some of them and refer the reader to the
-API for the complete list:
+This is by far the largest category of Results in ***specs2***. They cover many data types, can be composed and adapted to create new ones or be created from scratch by the user.
 
- * Matchers for Any
- * Option / Either matchers
- * String matchers
- * Numeric matchers
- * Exception matchers
- * Iterable matchers
- * Map matchers
- * Xml matchers
- * Json matchers
- * File matchers
- * Scalaz matchers
- * Result matchers
- * Interpreter matchers
- * Parsers matchers
+#### Out of the box
 
-#### Matchers for Any
+The most common matchers are automatically available when extending the `Specification` trait:
+  """^
+  MatcherCards.toTabs^p^
+  """
+The examples above show how to use matchers:
 
-The most common type of matcher is `beEqualTo` to test for equality. There are different ways to use this matcher:
+ * the general form for using a matcher is: `a must matcher`
+ * but can use `should` instead of `must` if you prefer
+ * for most matchers you can use a form where the ` be` word (or the `have` word) is detached
+ * you can as well negate a matcher by adding `not` before it (or after it, as a method call)
 
-       1 must beEqualTo(1)
-       1 must be_==(1)            // with a shorter matcher
-       1 must_== 1                // my favorite!
-       1 mustEqual 1              // if you dislike underscores
-       1 should_== 1              // for should lovers
-       1 === 1                    // the ultimate shortcut
-       1 must be equalTo(1)       // with a literate style
+#### Optional
 
-       1 must not be equalTo(2)   // with a negation
-       1 must_!= 2                // with a negation
-       1 mustNotEqual 2           // with a negation
-       1 must be_!=(2)            // with a negation
-       1 !== 2                    // with a negation
+These other matchers need to be selectively added to the specification by adding a new trait:
+  """^
+  OptionalMatcherCards.toTabs^p^
+  """
 
-
-You can see on the examples above several things which are applicable to all matchers:
-
- * the general form for using a matcher is `a must matcher`
- * you can use `should` instead of `must` if you prefer
- * there are only 2 shortcuts provided because the equality matcher is so ubiquitous `must_==` and `===`
- * for most of the matchers you can use a form where the ` be` word (or the `have` word) is detached
- * you can as well negate a matcher by adding not before it (or after it, as a method call)
-
-An non-exhaustive list of those matchers:
-
- * `beTheSameAs` for checking if `a eq b` (`a must be(b)` also works)
- * `beTrue, beFalse`
- * `beLike { case exp => ok }`: to check if an object is like a given pattern (`ok` is a predefined value, `ko` is the opposite)
- * `beLike { case exp => exp must beXXX }`: to check if an object is like a given pattern, and verifies a condition
- * `beNull`
- * `beAsNullAs`: when 2 objects must be null at the same time if one of them is null
- * `beOneOf(a, b, c)`: to check if an object is one of a given list
- * `haveClass`: to check the class of an object
- * `haveSuperclass`: to check if the class of an object as another class as one of its ancestors
- * `beAssignableFrom`: to check if a class is assignable from another
-
-#### With a better description
-
-Most of the time, the message displayed in the case of a matcher failure is clear enough. However a bit more information
-is sometimes necessary to get a better diagnostic on the value that's being checked. Let's say that you want to check a
-"ticket list":
-
-      // will fail with "List(ticket1, ticket2) doesn't have size 3" for example
-      machine.tickets must have size(3) // machine is a user-defined object
-
-If you wish to get a more precise failure message you can set an alias with the `aka` method (*also known as*):
-
-      // will fail with "the created tickets 'List(ticket1, ticket2)' doesn't have size 3"
-      machine.tickets aka "the created tickets" must haveSize(3)
-
-There is also a shortcut for `value aka value.toString` which is simply `value.aka`.
-
-And when you want to other ways to customize the description, you can use:
-
- * `post`: `"a" post " is the first letter"` prints `a is the first letter`
- * `as`: `"b" as ((s:String) => "a"+s+"c")` prints `abc`
-
-
-#### Matchers creation
+#### Custom
 
 There are many ways to create matchers for your specific usage. The simplest way is to reuse the existing ones:
 
@@ -138,9 +84,17 @@ There are many ways to create matchers for your specific usage. The simplest way
         def allBeGreaterThan3: Matcher[Seq[Int]]   = be_>=(2).foreach    // like forall but execute all matchers and collect the results
         def haveOneGreaterThan2: Matcher[Seq[Int]] = be_>=(2).atLeastOnce
 
- * adapting the actual value. This matcher adapts the existing `be_<=` matcher to a matcher applicable to `Any`
+ * adapting the actual value
 
+        // This matcher adapts the existing `be_<=` matcher to a matcher applicable to `Any`
         def beShort = be_<=(5) ^^ { (t: Any) => t.toString.size }
+        def beShort = be_<=(5) ^^ { (t: Any) => t.toString.size aka "the string size" }
+
+        // !!! use a BeTypedEqualTo matcher when using aka and equality !!!
+        def beFive = be_===(5) ^^ { (t: Any) => t.toString.size aka "the string size" }
+
+        // The adaptation can also be done the other way around when it's more readable
+        def haveExtension(extension: =>String) = ((_:File).getPath) ^^ endWith(extension)
 
  * adapting the actual and expected values. This matcher compares 2 `Human` objects but set their `wealth` field to 0
    so that the equals method will not fail on that field:
@@ -153,7 +107,7 @@ There are many ways to create matchers for your specific usage. The simplest way
 
         val iterator = List(1, 2, 3).iterator
         iterator.next must be_==(3).eventually
-         // Use eventually(retries, n.millis) to use another number of tries and waiting time
+        // Use eventually(retries, n.millis) to use another number of tries and waiting time
 
  * using `when` or `unless` to apply a matcher only if a condition is satisfied:
 
@@ -173,7 +127,29 @@ There are many ways to create matchers for your specific usage. The simplest way
  * using `orSkip` to return a `Skipped` result instead of a Failure if the condition is not met
 
         1 must be_==(2).orSkip
-        1 must be_==(2).orSkip("Precondition failed")  // prints "Precondition failed: '1' is not equal to '2'"
+        1 must be_==(2).orSkip("Precondition failed")    // prints "Precondition failed: '1' is not equal to '2'"
+        1 must be_==(2).orSkip((ko:String) => "BAD "+ko) // prints "BAD '1' is not equal to '2'"
+
+ * using `orPending` to return a `Pending` result instead of a Failure if the condition is not met
+
+        1 must be_==(2).orPending
+        1 must be_==(2).orPending("Precondition failed")    // prints "Precondition failed: '1' is not equal to '2'"
+        1 must be_==(2).orPending((ko:String) => "BAD "+ko) // prints "BAD '1' is not equal to '2'"
+
+ * using `mute` to change a Matcher so that it returns MatchResults with no messages. This is used in Forms to create
+   properties showing no messages when they fail
+
+ * using `updateMessage(f: String => String)` or `setMessage(m: String)` to change the failure message
+
+ * using `<==>` or `==>` to provide a meaning for the expectation when the failure message would not be clear
+
+        // when failing, this displays:
+        // The byname function has not become a strict one because 'evaluated' is not equal to 'not evaluated'
+        "The byname function has become a strict one" <==> (parameter === "evaluated")
+
+   Note that the sentence describing the expectation is negated when there is a failure. This functionality is provided by the `org.specs2.text.Sentences::negateSentence` trait. You can override this method if you want/need to provide a better behavior for this feature.
+
+##### From functions
 
 Another easy way to create matchers, is to use some implicit conversions from functions to Matchers:
 
@@ -207,426 +183,214 @@ In the code above you have to:
  * you can use the `description` method on the `Expectable` class to return the full description of the expectable including
    the optional description you setup using the `aka` method
 
-#### Matching with a sequence of values
+##### From Hamcrest
+
+If you have Hamcrest matchers in your project and you want to reuse them as specs2 matchers, you can mix-in the `org.specs2.matcher.Hamcrest` trait:
+
+    class HamcrestSpec extends Specification with Grouped with Hamcrest { def is =
+
+      "Hamcrest matchers can be used as specs2 matchers by mixing in the Hamcrest trait"      ^
+      "for example a beEven Hamcrest matcher can be used in a 'must' expression"              ! g1.e1 ^
+        "the failure message must contain the matched value and the Hamcrest failure message" ! g1.e2
+
+
+      new g1 {
+        e1 := 2 must beEven
+        e2 := (3 must beEven).message === "<3> is odd"
+      }
+
+      // a Hamcrest matcher for even numbers
+      object beEven extends BaseMatcher[Int] {
+        def matches(item: Object): Boolean       = item.toString.toInt % 2 == 0
+        def describeTo(description: Description) { description.appendText(" is odd") }
+      }
+
+    }
+
+
+#### With sequences
 
 If you have the same "MatchResult" expression that you'd like to verify for different values you can write one of the following:
 
         // stop after the first failure
         ((_:Int) must be_>(2)).forall(Seq(3, 4, 5))
+        forall(Seq(3, 4, 5)) ((_:Int) must be_>(2))
+        // check only the elements defined for the partial function
+        forallWhen(Seq(3, 10, 15)) { case a if a > 3 => a must be_>(5) }
 
         // try to match all values and collect the results
         ((_:Int) must be_>(2)).foreach(Seq(3, 4, 5))
+        foreach(Seq(3, 4, 5)) ((_:Int) must be_>(2))
+        // check only the elements defined for the partial function
+        foreachWhen(Seq(3, 10, 15)) { case a if a > 3 => a must be_>(5) }
 
         // succeeds after the first success
         ((_:Int) must be_>(2)).atLeastOnce(Seq(3, 4, 5))
-
-#### Matchers for Option / Either
-
-There are several matchers to check Option and Either instances:
-
- * `beSome` checks if an element is Some(_)
- * `beSome.which(function)` checks if an element is Some(_) and satisfies a function returning a boolean
- * `beSome.like(partial function)` checks if an element is Some(_) and satisfies a partial function returning a `MatchResult`
- * `beNone` checks if an element is None
- * `beAsNoneAs` checks if 2 values are equal to None at the same time
- * `beRight` checks if an element is Right(_)
- * `beRight.like(partial function)` checks if an element is Right(_) and satisfies a partial function returning a `MatchResult`
- * `beLeft` checks if an element is Left(_)
- * `beLeft.like(partial function)` checks if an element is Left(_) and satisfies a partial function returning a `MatchResult`
-
-#### String matchers
-
-Matching on strings is very common. Here are the matchers which can help you:
-
- * `beMatching` (or ` be matching`) checks if a string matches a regular expression
- * `=~(s)` is a shortcut for `beMatching(".*"+s+".*")`
- * `find(exp).withGroups(a, b, c)` checks if some groups are found in a string
- * `have length` checks the length of a string
- * `have size` checks the size of a string (seen as an `Iterable[Char]`)
- * `be empty` checks if a string is empty
- * `beEqualTo(b).ignoreCase` checks if 2 strings are equal regardless of casing
- * `beEqualTo(b).ignoreSpace` checks if 2 strings are equal when trimmed
- * `beEqualTo(b).ignoreSpace.ignoreCase` you can compose them
- * `contain(b)` checks if a string contains another one
- * `startWith(b)` checks if a string starts with another one
- * `endWith(b)` checks if a string ends with another one
-
-#### Numeric matchers
-
-Less often you need to do comparisons on Numerical values:
-
- * `beLessThanOrEqualTo` compares any Ordered type with `<=`
-    `1 must be_<=(2)`
-    `1 must beLessThanOrEqualTo(2)`
-
- * `beLessThan` compares any Ordered type with `<`
-    `1 must be_<(2)`
-    `1 must beLessThan(2)`
-
- * `beGreaterThanOrEqualTo` compares any Ordered type with `>=`
-    `2 must be_>=(1)`
-    `2 must beGreaterThanOrEqualTo(1)`
-
- * `beGreaterThan` compares any Ordered type with `>`
-    `2 must be_<(1)`
-    `2 must beGreaterThan(1)`
-
- * `beCloseTo` checks if 2 Numerics are close to each other
-    `1.0 must beCloseTo(1, 0.5)`
-    `4 must be ~(5 +/- 2)`
-
-#### Exception matchers
-
-***specs2*** offers very compact ways of checking that some exceptions are thrown:
-
- * `throwA[ExceptionType]` checks if a block of code throws an exception of the given type
- * `throwA[ExceptionType](message = "boom")` additionally checks if the exception message is as expected
- * `throwA(exception)` or `throwAn(exception)` checks if a block of code throws an exception of the same type, with the
-    same message
- * `throwA[ExceptionType].like { case e => e must matchSomething }` or
-   `throwA(exception).like { case e => e must matchSomething }` allow to verify that the thrown exception satisfies a property
- * `throwA[ExceptionType](me.like { case e => e must matchSomething }` or
-   `throwA(exception).like { case e => e must matchSomething }` allow to verify that the thrown exception satisfies a property
-
-For all the above matchers you can use `throwAn` instead of `throwA` if the exception name starts with a vowel for better
-readability.
-
-#### Iterable matchers
-
-Iterables can be checked with several matchers:
-
-  * to check if the iterable is empty
-    `Nil must be empty`
-    `List(1, 2, 3) must not be empty`
-
-  * to check if some elements are contained in the iterable
-    `List(1, 2, 3) must contain(3, 2)`
-
-  * to check if some elements are contained in the iterable in the same order
-    `List(1, 2, 3, 4) must contain(2, 4).inOrder`
-
-  * to check if only some elements are contained in the iterable
-    `List(4, 2) must contain(2, 4).only`
-
-  * to check if only some elements are contained in the iterable and in the same order
-    `List(2, 4) must contain(2, 4).only.inOrder`
-
-  * to check the size of an iterable
-    `List(1, 2) must have size(2)`
-
-  * to check if an `Iterable[String]` contains matching strings
-    `List("Hello", "World") must containMatch("ll")        // matches with .*ll.*`
-    `List("Hello", "World") must containPattern(".*llo")   // matches with .*llo`
-
-  * to check if an `Iterable[String]` contains matching strings, but only once
-    `List("Hello", "World") must containMatch("ll").onlyOnce`
-
-  * to check if one of the elements has a given property
-    `List("Hello", "World") must have(_.size >= 5)`
-
-  * to check if an iterable has the same elements as another one, regardless of the order
-    `List("Hello", "World") must haveTheSameElementsAs(List("World", "Hello"))`
-
-#### Map matchers
-
-Maps have their own matchers as well, to check keys and values:
-
-  * `haveKey` checks if a Map has a given key
-    `Map(1 -> "1") must haveKey(1)`
-
-  * `haveValue` checks if a Map has a given value
-     `Map(1 -> "1") must haveValue("1")`
-
-  * `havePair` checks if a Map has a given pair of values
-    `Map(1 -> "1") must havePair(1 -> "1")`
-
-  * `havePairs` checks if a Map has some pairs of values
-    `Map(1->"1", 2->"2", 3->"3") must havePairs(1->"1", 2->"2")`
-
-But Maps are also Partial Functions, so:
-
-  * `beDefinedAt` checks if a PartialFunction is defined for a given value
-    `partial must beDefinedAt(1)`
-
-  * `beDefinedBy` checks if a PartialFunction is defined for a given value
-    and returns another one
-    `partial` must beDefinedBy(1 -> true) 
-
-#### Xml matchers
-
-It is very useful to have literal Xml in Scala, it is even more useful to have matchers for it!
-
-  * `beEqualToIgnoringSpace` compares 2 Nodes, without considering spaces
-    `<a><b/></a> must ==/(<a> <b/></a>)`
-    `<a><b/></a> must beEqualToIgnoringSpace(<a> <b/></a>)`
-
-  * `beEqualToIgnoringSpace` can also do an ordered comparison
-    `<a><c/> <b/></a> must ==/(<a> <c/><b/></a>).ordered`
-
-  * `\` is an XPath-like matcher matching if a node is a direct child of another
-    `<a><b/></a> must \("b")`
-
-  * You can also check attribute names
-    `<a><b name="value"></b></a> must \("b", "name")`
-
-  * And attribute names and values as well
-    `<a><b n="v" n2="v2" n3="v3"></b></a> must \("b", "n"->"v", "n2"->"v2")`
-
-  * The equivalent of `\` for a "deep" match is simply `\\`
-    `<a><s><c></c></s></a> must \\("c")`
-
-#### Json matchers
-
-[Json](www.json.org) is a simple data format essentially modeling recursive key-values. There are 2 matchers which can be
-used to verify the presence of appropriate values in Strings representing Json documents:
-
-  * `/(value)` checks if a value is present at the root of the document. This can only be the case if that document is
-    an Array
-
-  * `/(key -> value)` checks if a pair is present at the root of the document. This can only be the case if that document is
-    a Map
-
-  * `*/(value)` checks if a value is present anywhere in the document, either as an entry in an Array, or as the value
-    for a key in a Map
-
-  * `*/(key -> value)` checks if a pair is present anywhere in a Map of thedocument
-
-Now the interesting part comes from the fact that those matchers can be chained to search specific paths in the Json document.
-For example, for the following document:
-
-        // taken from an example in the Lift project
-        val person = {
-          "person": {
-            "name": "Joe",
-            "age": 35,
-            "spouse": {
-              "person": {
-                "name": "Marilyn",
-                "age": 33
-              }
-            }
-          }
-        }
-
-You can use these combinations:
-
-       person must /("person") */("person") /("age" -> 33.0) // by default numbers are parsed as Doubles
-
-#### File matchers
-
-The Java api for files is more or less mimicked as matchers which can operate on strings denoting paths or on Files:
-
-  * `beEqualToIgnoringSep` checks if 2 paths are the same regardless of their separators
-    `"c:\\temp\\hello" must beEqualToIgnoringSep("c:/temp/hello")`
-  * `beAnExistingPath` checks if a path exists
-  * `beAReadablePath` checks if a path is readable
-  * `beAWritablePath` checks if a path is writable
-  * `beAnAbsolutePath` checks if a path is absolute
-  * `beAHiddenPath` checks if a path is hidden
-  * `beAFilePath` checks if a path is a file
-  * `beADirectoryPath` checks if a path is a directory
-  * `havePathName` checks if a path has a given name
-  * `haveAsAbsolutePath` checks if a path has a given absolute path
-  * `haveAsCanonicalPath` checks if a path has a given canonical path
-  * `haveParentPath` checks if a path has a given parent path
-  * `listPaths` checks if a path has a given list of children
-  * `exist` checks if a file exists
-  * `beReadable` checks if a file is readable
-  * `beWritable` checks if a file is writable
-  * `beAbsolute` checks if a file is absolute
-  * `beHidden` checks if a file is hidden
-  * `beAFile` checks if a file is a file
-  * `beADirectory` checks if a file is a directory
-  * `haveName` checks if a file has a given name
-  * `haveAbsolutePath` checks if a file has a given absolute path
-  * `haveCanonicalPath` checks if afile has a given canonical path
-  * `haveParent` checks if a file has a given parent path
-  * `haveList` checks if a file has a given list of children
-
-#### Scalaz matchers
-
-It was useful to check some Scalaz properties during the development of ***specs2*** so they are available as matchers:
-
- * `semigroup.isAssociative` checks if a `Semigroup` respect the associativity law
- * `monoid.hasNeutralElement` checks if a `Monoid` zero value is really a neutral element
- * `monoid.isMonoid` checks if a `Monoid` has a neutral element and respects the associativity rule
-
-Note that you need to extend the `ScalaCheck` trait if you want to use these matchers in a specification.
-
-#### Result matchers
-
-That's only if you want to match the result of other matchers!
-
-        // you need to extend the ResultMatchers trait
-        class MatchersSpec extends Specification with ResultMatchers { def is =
-          "beMatching is using a regexp" ! {
-            ("Hello" must beMatching("h.*")) must beSuccessful
-          }
-        }
-
-#### Scala Interpreter matchers
-
-This trait is not included in the default specification so you'll have to add it in the rare case where you want to use
-the Scala interpreter and execute a script:
-
-        class ScalaInterpreterMatchersSpec extends Specification with ScalaInterpreterMatchers {
-          def interpret(s: String): String = // you have to provide your own Scala interpreter here
-
-          "A script" can {
-            "be interpreted" in {
-               "1 + 1" >| "2"
-            }
-          }
-        }
-
-#### Parser matchers
-
-Scala provides a parsing library using [parser combinators](http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html).
-
-You can specify your own parsers by:
-
- * extending the `ParserMatchers` trait
- * defining the `val parsers` variable with your parsers definition
- * use the `beASuccess`, `beAFailure`, `successOn`, `failOn`, `errorOn` matchers to specify the results of parsing input
-   strings
- * use `haveSuccessResult` and `haveFailureMsg` to specify what happens *only* on success or failure. Those matchers accept
-   a String or a matcher so that
-   . `haveSuccessResult("r") <==> haveSuccessResult(beMatching(".*r.*") ^^ ((_:Any).toString)`
-   . `haveFailingMsg("m") <==> haveFailingMsg(beMatching(".*r.*"))`
-
-For example, specifying a Parser for numbers could look like this:   
-
-        import util.parsing.combinator.RegexParsers
-        import NumberParsers.{number, error}
-
-        class ParserSpec extends Specification with matcher.ParserMatchers {  def is =
-          "Parsers for numbers"                                                                   ^
-                                                                                                  p^
-          "beASuccess and succeedOn check if the parse succeeds"                                  ^
-          { number("1") must beASuccess }                                                         ^
-          { number must succeedOn("12") }                                                         ^
-          { number must succeedOn("12").withResult(12) }                                          ^
-          { number must succeedOn("12").withResult(equalTo(12)) }                                 ^
-          { number("1") must haveSuccessResult("1") }                                             ^
-                                                                                                  p^
-          "beAFailure and failOn check if the parse fails"                                        ^
-          { number must failOn("abc") }                                                           ^
-          { number must failOn("abc").withMsg("string matching regex.*expected") }                ^
-          { number must failOn("abc").withMsg(matching(".*string matching regex.*expected.*")) }  ^
-          { number("i") must beAFailure }                                                         ^
-          { number("i") must haveFailureMsg("i' found") }                                         ^
-                                                                                                  p^
-          "beAnError and errorOn check if the parser errors out completely"                       ^
-          { error must errorOn("") }                                                              ^
-          { error("") must beAnError }                                                            ^
-                                                                                                  end
-
-          val parsers = NumberParsers
-        }
-        object NumberParsers extends RegexParsers {
-          /** parse a number with any number of digits */
-          val number: Parser[Int] = "\\d+".r ^^ {_.toInt}
-          /** this parser returns an error */
-          val error: Parser[String] = err("Error")
-        }
-
-### ScalaCheck properties
+        atLeastOnce(Seq(3, 4, 5)) ((_:Int) must be_>(2))
+        // check only the elements defined for the partial function
+        atLeastOnceWhen(Seq(3, 4, 10)) { case a if a > 3 => a must be_>(5) }
+
+### ScalaCheck
 
 A clever way of creating expectations in ***specs2*** is to use the [ScalaCheck](http://code.google.com/p/scalacheck) library.
 
-To declare ScalaCheck properties you first need to extend the `ScalaCheck` trait. Then you can pass functions to the `check` method
-and use the resulting block as your example body:
+To declare ScalaCheck properties you first need to extend the `ScalaCheck` trait. Then you can pass functions returning any kind of `Result` (`Boolean`, `Result`, `MatchResult`) to the `prop` method and use the resulting `Prop` as your example body:
 
-      "addition and multiplication are related" ! check { (a: Int) => a + a == 2 * a }
+      "addition and multiplication are related" ! prop { (a: Int) => a + a == 2 * a }
 
 The function that is checked can either return:
 
       // a Boolean
-      "addition and multiplication are related" ! check { (a: Int) => a + a == 2 * a }
+      "addition and multiplication are related" ! prop { (a: Int) => a + a == 2 * a }
 
       // a MatchResult
-      "addition and multiplication are related" ! check { (a: Int) => a + a must_== 2 * a }
+      "addition and multiplication are related" ! prop { (a: Int) => a + a must_== 2 * a }
 
       // a Prop
-      "addition and multiplication are related" ! check { (a: Int) => (a > 0) ==> (a + a must_== 2 * a) }
+      "addition and multiplication are related" ! prop { (a: Int) => (a > 0) ==> (a + a must_== 2 * a) }
 
-Note that if you pass functions using MatchResults you will get better failure messages so you are encouraged to do so.
+Note that if you pass functions using `MatchResult`s you will get better failure messages so you are encouraged to do so.
+
+By default the properties created with `prop` will be shrinking counter-examples. If you want to avoid this, you can use `propNoShrink` instead.
 
 #### Arbitrary instances
 
-By default `Arbitrary` instances are taken from the surrounding example scope. However you'll certainly need to generate
-your own data from time to time. In that case you will create an Arbitrary instance and make sure it is in the scope
-of the function you're testing:
+By default ScalaCheck uses `Arbitrary` instances taken from the surrounding example scope. However you'll certainly need to generate your own data from time to time. In that case you can create an `Arbitrary` instance and make sure it is in the scope of the function you're testing:
 
-        // this arbitrary will be used for all the examples
-        implicit def a = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
+      // this arbitrary will be used for all the examples
+      implicit def a = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
 
-        "a simple property" ! ex1
+      "a simple property" ! ex1
 
-         def ex1 = check((s: String) => s must contain("a") or contain("b"))
+      def ex1 = check((s: String) => s must contain("a") or contain("b"))
 
-You can also be very specific if you want to use an `Arbitrary` instance only on one example. In that case, just replace the
-`check` method with the name of your `Arbitrary` instance:
+You can also be very specific if you want to use an `Arbitrary` instance only on one example. In that case, just replace the `check` method with the name of your `Arbitrary` instance:
 
-        "a simple property"       ! ex1
-        "a more complex property" ! ex2
+      "a simple property"       ! ex1
+      "a more complex property" ! ex2
 
-        implicit def abStrings = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
-        def ex1 = abStrings((s: String) => s must contain("a") or contain("b"))
+      implicit def abStrings = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
+      def ex1 = abStrings((s: String) => s must contain("a") or contain("b"))
 
-        // use a tuple if there are several parameters to your function
-        def ex2 = (abStrings, abStrings)((s1: String, s2: String) => s must contain("a") or contain("b"))
+      // use a tuple if there are several parameters to your function
+      def ex2 = (abStrings, abStrings)((s1: String, s2: String) => s must contain("a") or contain("b"))
 
-#### Setting the ScalaCheck properties
+#### With Generators
 
-ScalaCheck test generation can be tuned with a few properties. If you want to change the default settings, you have to use
-implicit values:
+ScalaCheck also allows to create `Prop`s directly with the `Prop.forAll` method accepting `Gen` instances:
 
-      implicit val params = set(minTestsOk -> 20) // use display instead of set to get additional console printing
+      "a simple property"       ! ex1
+      "a more complex property" ! ex2
+
+      def abStrings = for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b
+
+      def ex1 = forAll(abStrings) { (s: String) => s must contain("a") or contain("b") }
+      def ex2 = forAll(abStrings, abStrings) { (s1: String, s2: String) => s must contain("a") or contain("b") }
+
+
+#### Test properties
+
+ScalaCheck test generation can be tuned with a few properties. If you want to change the default settings, you have to use implicit values:
+
+      implicit val params = Parameters(minTestsOk = 20) // add "verbose = true" to get additional console printing
 
 It is also possible to specifically set the execution parameters on a given property:
 
-      "this is a specific property" ! check { (a: Int, b: Int) =>
+      "this is a specific property" ! prop { (a: Int, b: Int) =>
         (a + b) must_== (b + a)
-      }.set(minTestsOk -> 200, workers -> 3)
+      }.set(minTestsOk = 200, workers = 3) // use "display" instead of "set" for additional console printing
 
 The parameters you can modify are:
 
-  * `minTestsOk`: minimum of tests which must be ok before the property is ok (default=100)
-  * `maxDiscarded`: if the data generation discards too many values, then the property can't be proven (default=500)
-  * `minSize`: minimum size for the "sized" data generators, like list generators (default=0)
-  * `maxSize`: maximum size for the "sized" data generators (default=100)
-  * `workers`: number of threads checking the property (default=1)
+  * `minTestsOk`: minimum of tests which must be ok before the property is ok (default = 100)
+  * `maxDiscardRatio`: if the data generation discards too many values, then the property can't be proven (default = 5)
+  * `minSize`: minimum size for the "sized" data generators, like list generators (default = 0)
+  * `maxSize`: maximum size for the "sized" data generators (default = 100)
+  * `workers`: number of threads checking the property (default = 1)
+  * `rng`: the random number generator (default = `new java.util.Random`)
+  * `callback`: a ScalaCheck TestCallback (see the ScalaCheck documentation)
+  * `loader`: a custom classloader (see the ScalaCheck documentation)
+
+You can also set the random generator that is used in all the ScalaCheck generators:
+
+      case class MyRandomGenerator() extends java.util.Random {
+        // implement a deterministic generator for example
+      }
+
+      "this is a specific property" ! prop { (a: Int, b: Int) =>
+        (a + b) must_== (b + a)
+      }.set(MyRandomGenerator(), minTestsOk -> 200, workers -> 3)
+
 
 ### Mock expectations
 
 At the moment only the [Mockito](http://mockito.org) library is supported.
 
-Mockito allows to specify stubbed values and to verify that some calls are expected on your objects. In order to use those
-functionalities, you need to extend the `org.specs2.mock.Mockito` trait:
+Mockito allows to specify stubbed values and to verify that some calls are expected on your objects. In order to use those functionalities, you need to extend the `org.specs2.mock.Mockito` trait:
 
       import org.specs2.mock._
       class MockitoSpec extends Specification { def is =
 
-         "A java list can be mocked"                                                    ^
-           "You can make it return a stubbed value"                                     ! c().stub^
-           "You can verify that a method was called"                                    ! c().verify^
-           "You can verify that a method was not called"                                ! c().verify2^
-                                                                                        end
-         case class c() extends Mockito {
-           val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock(new java.util.LinkedList[String])
-           def stub = {
-             m.get(0) returns "one"             // stub a method call with a return value
-             m.get(0) must_== "one"             // call the method
-           }
-           def verify = {
-             m.get(0) returns "one"             // stub a method call with a return value
-             m.get(0)                           // call the method
-             there was one(m).get(0)            // verify that the call happened
-           }
-           def verify2 = there was no(m).get(0) // verify that the call never happened
-         }
-       }
+        "A java list can be mocked"                                                    ^
+          "You can make it return a stubbed value"                                     ! c().stub^
+          "You can verify that a method was called"                                    ! c().verify^
+          "You can verify that a method was not called"                                ! c().verify2^
+                                                                                       end
+        case class c() extends Mockito {
+          val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock[new java.util.LinkedList[String]]
+          def stub = {
+            m.get(0) returns "one"             // stub a method call with a return value
+            m.get(0) must_== "one"             // call the method
+          }
+          def verify = {
+            m.get(0) returns "one"             // stub a method call with a return value
+            m.get(0)                           // call the method
+            there was one(m).get(0)            // verify that the call happened
+          }
+          def verify2 = there was no(m).get(0) // verify that the call never happened
+        }
+      }
+
+##### Creation and settings
+
+Mockito offers the possibility to provide specific settings for the mock being created:
+
+ * its name
+
+      val m = mock[List[String]].as("list1")
+
+ * "smart" return values
+
+      val m = mock[List[String]].smart
+
+ * specific return values
+
+      val m = mock[List[String]].defaultReturn(10)
+
+ * specific answers
+
+      // a function InvocationOnMock => V is used in place of the org.mockito.stubbing.Answer type for better conciseness
+      val helloObject = (p1: InvocationOnMock) => "hello "+p1.toString
+      val m = mock[List[String]].defaultAnswer(helloObject)
+
+ * extra interfaces
+
+      val m = mock[List[String]].extraInterface[Cloneable]
+      val m = mock[List[String]].extraInterfaces(classesOf[Cloneable, Serializable])
+
+Now, if you want to combine several of those settings together you need to call the `settings` method:
+
+      val m = mock[List[String]].settings(name = "list1",
+                                          defaultReturn = 10,
+                                          extraInterfaces = classesOf[Cloneable, Serializable]))
+      // or
+      val m = mock[List[String]].settings(smart = true,
+                                          extraInterface = classeOf[Cloneable]))
+
+Finally, in case the Mockito library gets new settings, you can declare the following:
+
+      val settings = org.mockito.Mockito.withSettings
+      val m = mock[List[String]](settings)
 
 ##### Stubbing
 
@@ -640,7 +404,15 @@ You can specify different consecutive returned values by appending thenReturns o
       m.get(1) returns "one" thenReturns "two"
       m.get(2) throws new RuntimeException("forbidden") thenReturns "999"
 
-##### Argument matchers
+###### Mocking and Stubbing at the same time
+
+It is also possible to create a mock while stubbing one of its methods, provided that you declare the type of the expected mock:
+
+      val mocked: java.util.List[String] = mock[java.util.List[String]].contains("o") returns true
+      mocked.contains("o") must beTrue
+
+##### With matchers
+
 The built-in Mockito argument matchers can be used to specify the method arguments for stubbing:
 
       m.get(anyInt()) returns "element"
@@ -648,7 +420,7 @@ The built-in Mockito argument matchers can be used to specify the method argumen
 
 ***specs2*** matchers can also be passed directly as arguments:
 
-      m.get(be_==(123)) returns "one"      
+      m.get(===(123)) returns "one"
 
 ##### Callbacks
 
@@ -656,12 +428,12 @@ In some rare cases, it is necessary to have the return value depend on the param
 
       m.get(anyInt) answers { i => "The parameter is " + i.toString }
 
-The function passed to answers will be called with each parameter passed to the stubbed method:
+The function passed to `answers` will be called with each parameter passed to the stubbed method:
 
-     m.get(0)           // returns "The parameter is 0"
-     m.get(1)           // the second call returns a different value: "The parameter is 1"
+      m.get(0)    // returns "The parameter is 0"
+      m.get(1)    // the second call returns a different value: "The parameter is 1"
 
-###### Parameters for the answers function
+###### Parameters for the `answers` function
 
 Because of the use of reflection the function passed to answers will receive only instances of the `java.lang.Object` type.
 
@@ -670,26 +442,15 @@ More precisely, it will:
  * pass the mock object if both the method has no parameters and the function has one parameter:
    `mock.size answers { mock => mock.hashCode }`
  * pass the parameter if both the method and the function have one parameter:
-   `mock.get(0) answers ( i => i.toString )`
-  * pass the parameter and the mock object if the method has 1 parameter and the function has 2:
+   `mock.get(0) answers { i => i.toString }`
+ * pass the parameter and the mock object if the method has 1 parameter and the function has 2:
     `mock.get(0) answers { (i, mock) => i.toString + " for mock " + mock.toString }`
 
-In any other cases, if `f` is a function of 1 parameter, the array of the method parameters will be passed and if the
-function has 2 parameters, the second one will be the mock.
+In any other cases, if `f` is a function of 1 parameter, the array of the method parameters will be passed and if the function has 2 parameters, the second one will be the mock.
 
 ##### Verification
 
-By default Mockito doesn't expect any method to be called. However if your writing interaction-based specifications you
-want to specify that some methods are indeed called:
-
-       m.get(0)
-       m.get(0) was called
-       m.get(1) wasnt called
-       m.get(2) was notCalled
-
-###### Constraints on call expectations
-
-You can be even more precise when specifying the number of calls on a mock:
+By default Mockito doesn't expect any method to be called. However if your writing interaction-based specifications you want to specify that some methods are indeed called:
 
       there was one(m).get(0)              // one call only to get(0)
       there was no(m).get(0)               // no calls to get(0)
@@ -715,9 +476,10 @@ It is also possible to add all verifications inside a block, when several mocks 
         one(m).get(0)
         two(m).get(1)
       }
+
 ###### Order of calls
 
-The order of method calls can be checked by creating calls and chaining them with then:
+The order of method calls can be checked by creating calls and chaining them with `andThen`:
 
       val m1 = mock[List[String]]
       val m2 = mock[List[String]]
@@ -726,11 +488,28 @@ The order of method calls can be checked by creating calls and chaining them wit
       m1.get(0)
       m2.get(0)
 
-      there was one(m1).get(0) then one(m1).get(1)
+      there was one(m1).get(0) andThen one(m1).get(1)
 
       // when several mocks are involved, the expected order must be specified as an implicit value
-	    implicit val order = inOrder(m1, m2)
-      there was one(m1).get(0) then one(m2).get(0)
+      implicit val order = inOrder(m1, m2)
+      there was one(m1).get(0) andThen one(m2).get(0)
+
+###### Ignoring stubs
+
+When specifying the behavior of an object in relation to others you may want to verify that some mocks have been called as collaborators and you don't really want to specify what happens to other mocks because they are just playing the role of stubs.
+
+In this case the `ignoreStubs` method can be used:
+
+      val (stub1, stub2) = (mock[AStub], mock[AStub])
+      ...
+      ...
+      there were noMoreCallsTo(ignoreStubs(stub1, stub2))
+
+This method is also available with the `inOrder` method:
+
+      implicit val order = inOrder(ignoreStubs(list1, list2))
+
+For more documentation about this Mockito functionality, please read [here](http://docs.mockito.googlecode.com/hg/1.9.0/org/mockito/Mockito.html#25).
 
 ###### Spies
 
@@ -757,10 +536,43 @@ As advised in the Mockito documentation, doReturn must be used in that case:
 
      doReturn("one").when(spiedList).get(0)
 
+###### Functions/PartialFunctions
+
+It is possible to verify method calls where parameters are functions by specifying how the passed function will react to a given set of arguments.
+Given the following mock:
+
+      trait Amount {
+        // a method showing an amount precision
+        def show(display: Function2[Double, Int, String, String]) = ...
+      }
+      val amount = mock[Amount]
+
+If the mock is called with this function:
+
+      amount.show((amount: Double, precision: Int) => "%2."+precision+"f" format amount)
+
+Then it is possible to verify how the mock was called:
+
+      // with sample arguments for the function and the expected result
+      there was one(amount).show((32.4456, 2) -> "32.45")
+
+      // with a matcher for the result
+      there was one(amount).show((32.4456, 2) -> endWith("45"))
+
+      // with any Function2[A, B, R]
+      there was one(amount).show(anyFunction2)
+
+###### Auto-boxing
+
+Auto-boxing might interfere with the mocking of PartialFunctions. Please have a look at [this](https://groups.google.com/d/topic/specs2-users/_bK8lCCjZ4c/discussion) for a discussion.
+
+###### Byname
+
+Byname parameters can be verified but this will not work if the specs2 jar is not put first on the classpath, before the mockito jar. Indeed specs2 redefines a Mockito class for intercepting method calls so that byname parameters are properly handled.
+
 ### DataTables
 
-DataTables are a very effective way of grouping several similar examples into one. For example, here is how to specify the
-addition of integers by providing one example on each row of a table:
+DataTables are a very effective way of grouping several similar examples into one. For example, here is how to specify the addition of integers by providing one example on each row of a table:
 
       class DataTableSpec extends Specification with DataTables { def is =
         "adding integers should just work in scala"  ! e1
@@ -773,24 +585,26 @@ addition of integers by providing one example on each row of a table:
         }
       }
 
-Note that there may be implicit definition conflicts when the first parameter of a row is a String. In that case you
-can use the `!!` operator to disambiguate (and `||` in the header for good visual balance).
+#### Implicit !
+
+There may be an implicit definition conflict when the first parameter of a row is a String, because examples can also be created by using the `!` operator after a String. In that case, depending on which kind of specification you use, you can either:
+
+ * with an acceptance specification: use the `!!` operator to disambiguate (and `||` in the header for good visual balance)
+ * with a unit specification: use the `org.specs2.mutable.Tables` trait instead of `org.specs2.matcher.DataTables` trait. This will "deactivate" the implicit used to create examples with `!`
 
 ### Forms
 
-Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed
-to be used with the HtmlRunner to get human-readable documentation.
+Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.
 
 Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.
 
-""" ^
-  "Here's " ~ ("how to use Forms", new org.specs2.guide.Forms)                                                          ^
+  """ ^
+  "Here's " ~ ("how to use Forms", new org.specs2.guide.Forms) ^
 """
 
-### Reusing matchers outside of specs2
+### Outside specs2
 
-The ***specs2*** matchers are a well-delimited piece of functionality that you should be able to reuse in your own test
-framework. You can reuse the following traits:
+The ***specs2*** matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:
 
  * `org.specs2.matcher.MustMatchers` (or `org.specs2.matcher.ShouldMatchers`) to write anything like `1 must be_==(1)` and
    get a `Result` back
@@ -801,6 +615,20 @@ framework. You can reuse the following traits:
 
  * Finally, in a JUnit-like library you can use the `org.specs2.matcher.JUnitMustMatchers` trait which throws
    `AssertionFailureError`s
+
+#### Without any dependency on specs2
+
+The [Testing](https://github.com/spray/spray/wiki/Testing) page of the ***spray*** project explains how you can define a testing trait in your library which can be used with specs2 or scalatest or any framework defining the following methods:
+
+   * `fail(msg: String): Nothing`
+   * `skip(msg: String): Nothing`
+
+In specs2, those 2 methods are defined by the `org.specs2.matcher.ThrownMessages` trait
+
+      trait ThrownMessages { this: ThrownExpectations =>
+        def fail(m: String): Nothing = failure(m)
+        def skip(m: String): Nothing = skipped(m)
+      }
 
    - - -
 
@@ -841,17 +669,17 @@ framework. You can reuse the following traits:
 
  lazy val scalaCheckExamples = new Specification with ScalaCheck {
     import org.scalacheck._
-    implicit val params = set(minTestsOk -> 20)
+    implicit val params = set(minTestsOk = 20)
 
     def is = "Scalacheck".title ^
-    "addition and multiplication are related" ! Prop.forAll { (a: Int) => a + a == 2 * a }              ^
-    "addition and multiplication are related" ! check { (a: Int) => a + a == 2 * a }                    ^
-    "addition and multiplication are related" ! check { (a: Int) => a + a must_== 2 * a }               ^
-    "addition and multiplication are related" ! check { (a: Int) => (a > 0) ==> (a + a must_== 2 * a) } ^
-    "this is a specific property" ! check { (a: Int, b: Int) =>
+    "addition and multiplication are related" ! Prop.forAll { (a: Int) => a + a == 2 * a }             ^
+    "addition and multiplication are related" ! prop { (a: Int) => a + a == 2 * a }                    ^
+    "addition and multiplication are related" ! prop { (a: Int) => a + a must_== 2 * a }               ^
+    "addition and multiplication are related" ! prop { (a: Int) => (a > 0) ==> (a + a must_== 2 * a) } ^
+    "this is a specific property" ! prop { (a: Int, b: Int) =>
       (a + b) must_== (b + a)
-    }.set(minTestsOk -> 200, workers -> 1)                                                              ^
-                                                                                                        end
+    }.set(minTestsOk = 200, workers = 1)                                                             ^
+                                                                                                       end
   }
 
   import org.specs2.matcher._
@@ -874,7 +702,7 @@ framework. You can reuse the following traits:
        "You can verify that a method was not called"                                ! c().verify2^
                                                                                     end
      case class c() extends Mockito {
-       val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock(new java.util.LinkedList[String])
+       val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock[new java.util.LinkedList[String]]
        def stub = {
          m.get(0) returns "one"             // stub a method call with a return value
          m.get(0) must_== "one"             // call the method
@@ -909,7 +737,7 @@ framework. You can reuse the following traits:
        def e3 = {
          m.get(anyInt) returns "element"
          m.get(999) must_== "element"
-         m.get(be_==(123)) returns "one"
+         m.get(===(123)) returns "one"
          success
        }
      }
@@ -943,6 +771,7 @@ class JsonExamples extends Specification {
 
     def is =
     "1" ! { person must /("person") */("person") /("age" -> 33.0) }
+    "2" ! { person must /("person") /#(2) /("person") }
 }
 
 import util.parsing.combinator.RegexParsers

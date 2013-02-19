@@ -4,30 +4,25 @@ package reporter
 import execute._
 import specification._
 import Levels._
-import specification.SpecificationStructure
 import org.specs2.internal.scalaz.{Tree, Scalaz}
-import Scalaz._
 import data.Trees._
 import main.Arguments
-import io.Location
 
 /**
  * Report a Specification by notifying execution events to a Notifier
  */
-trait NotifierReporter extends Reporter
-    with DefaultSelection
-    with DefaultSequence
-    with DefaultExecutionStrategy
-    with NotifierExporting
+trait NotifierReporter extends DefaultReporter with NotifierExporting
 
-trait NotifierExporting extends Exporting {
-  type ExportType = Unit
+trait NotifierExporting extends Exporting with Exporters {
+
   val notifier: Notifier
   /** @return a function exporting ExecutedFragments */
-  def export(s: SpecificationStructure)(implicit args: Arguments): Seq[ExecutedFragment] => ExportType = (fs: Seq[ExecutedFragment]) => {
-    notifyExport(fs)
-    if (args.contains("html")) new HtmlExporting {}.export(s)(args)(fs)
+  def export(implicit args: Arguments): ExecutingSpecification => ExecutedSpecification = (spec: ExecutingSpecification) => {
+    val executed = spec.execute
+    notifyExport(executed.fragments)
+    executed
   }
+
   private def notifyExport(fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
     def notify(fs: Seq[ExecutedFragment]) = {
       val tree = Levels.foldAll(fs).toTree(mapper)
@@ -36,39 +31,48 @@ trait NotifierExporting extends Exporting {
     }
 
     if (fs.nonEmpty) notify(fs)
-    else             notify(Seq(ExecutedSpecStart(SpecName("empty specification"), Arguments(), new Location()),
-                                ExecutedSpecEnd(SpecName("empty specification"), new Location())))
+    else {             
+      val empty = Fragments().specTitleIs(SpecName("empty specification"))
+      Seq(ExecutedSpecStart(empty.specStart), ExecutedSpecEnd(empty.specEnd))
+    }
 
   }
+
   private val mapper = (f: ExecutedFragment, i: Int) => f match {
     case e: ExecutedStandardFragment => None
     case other                       => Some(other)
   }
+
   private def export(tree: Tree[ExecutedFragment])(implicit args: Arguments) {
     tree.rootLabel match {
-      case f @ ExecutedSpecStart(n, _, _)                                   => {
-        notifier.specStart(n.name, f.location.toString)
+      case f @ ExecutedSpecStart(_,_,_)                                      => {
+        notifier.specStart(f.name, f.location.toString)
         tree.subForest.foreach(export)
       }
-      case f @ ExecutedSpecEnd(n, _)                                        => {
-        notifier.specEnd(n.name, f.location.toString)
+      case f @ ExecutedSpecEnd(_,_,_)                                        => {
+        notifier.specEnd(f.name, f.location.toString)
       }
-      case f @ ExecutedText(t, _)  if tree.subForest.isEmpty && !args.xonly => notifier.text(t, f.location.toString)
+      case f @ ExecutedText(t, _)  if tree.subForest.isEmpty => if (args.canShow("*")) notifier.text(t, f.location.toString)
       case f @ ExecutedText(t, _)                                           => {
-        notifier.contextStart(t, f.location.toString)
+        if (args.canShow("*")) notifier.contextStart(t, f.location.toString)
         tree.subForest.foreach(export)
-        notifier.contextEnd(t, f.location.toString)
+        if (args.canShow("*")) notifier.contextEnd(t, f.location.toString)
       }
-      case f @ ExecutedResult(s, r, t, l)                                  => {
-        notifier.exampleStarted(s.toString, l.toString)
-        r match {
-          case Success(_)              if !args.xonly => notifier.exampleSuccess(s.toString, t.elapsed)
-          case fail @ Failure(_,_,_,_)                => notifier.exampleFailure(s.toString, fail.message, fail.location, args.traceFilter(fail.exception), fail.details, t.elapsed)
-          case err  @ Error(_,_)                      => notifier.exampleError(s.toString,   err.message, err.location, args.traceFilter(err.exception), t.elapsed)
-          case Skipped(_,_)            if !args.xonly => notifier.exampleSkipped(s.toString, r.message, t.elapsed)
-          case Pending(_)              if !args.xonly => notifier.examplePending(s.toString, r.message, t.elapsed)
-          case other                                  => ()
+      case f @ ExecutedResult(s, r, t, l, st)                               => {
+        if (args.canShow(r.status)) notifier.exampleStarted(s.toString, l.toString)
+        def notifyResult(result: Result) {
+          result match {
+            case Success(_,_)            => notifier.exampleSuccess(s.toString, t.totalMillis)
+            case fail @ Failure(_,_,_,_) => notifier.exampleFailure(s.toString, args.removeColors(fail.message),
+                                                                                    fail.location, args.traceFilter(fail.exception), fail.details, t.totalMillis)
+            case err  @ Error(_,_)       => notifier.exampleError(s.toString, args.removeColors(err.message), err.location,
+                                                                                   args.traceFilter(err.exception), t.totalMillis)
+            case Skipped(_,_)            => notifier.exampleSkipped(s.toString, args.removeColors(r.message), t.totalMillis)
+            case Pending(_)              => notifier.examplePending(s.toString, args.removeColors(r.message), t.totalMillis)
+            case DecoratedResult(_, res) => notifyResult(res)
+          }
         }
+        if (args.canShow(r.status)) notifyResult(r)
       }
       case other                           => tree.subForest.foreach(export)
     }
@@ -95,16 +99,3 @@ trait Notifier {
   def examplePending(name: String, message: String, duration: Long)
 }
 
-object ConsoleNotifier extends Notifier {
-  def specStart(title: String, location: String)                                                                      = Console.println(Seq("specStart"     ,title  ,location)                       .mkString("; "))
-  def specEnd(title: String, location: String)                                                                        = Console.println(Seq("specEnd"       ,title  ,location)                       .mkString("; "))
-  def contextStart(text: String, location: String)                                                                    = Console.println(Seq("contextStart"  ,text   ,location)                       .mkString("; "))
-  def contextEnd(text: String, location: String)                                                                      = Console.println(Seq("contextEnd"    ,text   ,location)                       .mkString("; "))
-  def text(text: String, location: String)                                                                            = Console.println(Seq("text"          ,text   ,location)                       .mkString("; "))
-  def exampleStarted(name: String, location: String)                                                                  = Console.println(Seq("exampleStarted",name   ,location)                       .mkString("; "))
-  def exampleSuccess(name: String, duration: Long)                                                                    = Console.println(Seq("exampleSuccess",name   ,duration)                       .mkString("; "))
-  def exampleFailure(name: String, message: String, location: String, f: Throwable, details: Details, duration: Long) = Console.println(Seq("exampleFailure",name   , message,location,f.getMessage, details, duration).mkString("; "))
-  def exampleError  (name: String, message: String, location: String, f: Throwable, duration: Long)                   = Console.println(Seq("exampleError"  ,name   , message,location,f.getMessage, duration).mkString("; "))
-  def exampleSkipped(name: String, message: String, duration: Long)                                                   = Console.println(Seq("exampleSkipped",name   , message,duration)                       .mkString("; "))
-  def examplePending(name: String, message: String, duration: Long)                                                   = Console.println(Seq("examplePending",name   , message,duration)                       .mkString("; "))
-}

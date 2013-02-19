@@ -1,7 +1,6 @@
 package org.specs2
 package specification
 
-import control.Exceptions._
 import execute._
 
 /**
@@ -11,11 +10,11 @@ import execute._
  * This can be used for example to execute some code inside a webapp session, using the session object to
  * create expectations
  * 
- * @see Example to understand why the type T must <% Result
+ * @see Example to understand why the type T must : AsResult
  */
-trait Outside[T] { outer =>
+trait Outside[+T] { outer =>
   def outside: T
-  def apply[R <% Result](a: T => R) = {
+  def apply[R : AsResult](a: T => R) = {
     ResultExecution.execute(outside)(a)
   }
 }
@@ -24,15 +23,13 @@ trait Outside[T] { outer =>
  * The AroundOutside trait can be inherited by classes which will execute some code inside a given context, with a
  * function using that context and actions before and after if necessary.
  *
- * @see Example to understand why the type T must <% Result
+ * @see Example to understand why the type T must : AsResult
  */
-trait AroundOutside[T] { outer =>
-  /** create a new context object */
-  def outside: T
+trait AroundOutside[+T] extends Around with Outside[T] { outer =>
   /** something can be done before and after the whole execution */
-  def around[R <% Result](a: =>R): Result
+  def around[R : AsResult](a: =>R): Result
 
-  def apply[R <% Result](a: T => R) = {
+  override def apply[R : AsResult](a: T => R) = {
     around(ResultExecution.execute(outside)(a))
   }
 }

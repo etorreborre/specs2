@@ -2,6 +2,7 @@ package org.specs2
 package specification
 
 import control.Exceptions._
+import execute.Success
 import form._
 import text._
 import NotNullStrings._
@@ -12,10 +13,10 @@ import NotNullStrings._
  */
 trait Forms extends FormsBuilder with DecoratedProperties {
   implicit def formsAreExamples(aForm: =>Form): Example = {
-    lazy val form = tryOr(aForm) { (e: Exception) =>
+    lazy val form = tryOr(aForm.executeForm) { (e: Exception) =>
       Form("Initialisation error").tr(PropCell(Prop("", e.getMessage.notNull, (s: String, t: String) => execute.Error(e))("message")))
     }
-    new Example(FormMarkup(form), () => form.execute) {
+    new Example(FormMarkup(form), () => form.result.getOrElse(Success(""))) {
       override def matches(s: String) = true
     }
   }

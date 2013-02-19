@@ -1,0 +1,23 @@
+This version adds new features on top of 1.6.1:
+
+ * Mockito settings (name, defaultAnswer, extraInterfaces) can be specified during mock creation
+ * issue #39: results are now printed to the console as soon as executed
+ * added an implicit function to allow the use of generators in ScalaCheck properties: `forAll(generator) { p => p must matchSomething }`
+ * added `forall/foreach/atLeastOnce` to check a function returning a `Result` several times: `((i: Int) => i must be_<=(2)).forall(Seq(1, 2, 3, 4))` or
+   `forall(Seq((1, 2), (3, 4))) { case (a, b) => a must be_<(b) } }`
+ * added `TerminationMatchers` to check if that a block of code terminates within a reasonable amount of time
+ * added `containAllOf/containAnyOf` collection matchers taking sequences as parameters (instead of varargs)
+ * added new matchers to allow Parser matchers to partially consume their input: `beAPartialSuccess` (issue #46)
+ 
+And fixes some issues:
+
+ * delayed a MatchResult evaluation when transforming it to a Prop avoid issues with properties implication
+ * display of Arrays in failures like `Array(1, 2) === Array(1, 3)`
+ * issue #40: incorrect line number for a failure in a mutable specification
+ * issue #41: missing specification title when using sbt
+ * issue #45: fixed the evaluation of `result1 and result2` so that `result2` doesn't get evaluated if `result1` succeeds
+ * issue #46: fixed the parser matchers which should consume all input 
+ * issue #47: proper display of DataTables in the console
+ * fixed the `find.withGroups` matcher (was not matching several groups)
+ 
+ ==========================

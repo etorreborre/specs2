@@ -3,45 +3,56 @@ package time
 
 import java.util.Calendar
 import text.Plural._
+import control.Exceptions._
 
 /**
  * This trait provides Timer functionalities based on the Java Calendar milliseconds
  */
 trait HmsTimer[T <: HmsTimer[T]] {
-  /** elapsed time since the last stop */
-  val elapsed: Long = 0L
-  /** current number of millis when instantiating the object using this Trait */
-  val millis: List[Long] = Nil
+  /** elapsed times since for each stop */
+  protected val elapsedTimes: List[Long] = Nil
+  /** each time the timer is started we add the current time to this list of times number of millis when instantiating the object using this Trait */
+  val startedTimestamps: List[Long] = Nil
 
-  def copy(time: Long, m: List[Long]): T
+  def copy(elapsed: List[Long], started: List[Long]): T
   /**
    * starts the with new elapsed time
    */
-  def start = copy(0L, getTime :: millis)
+  def start = copy(Nil, getTime :: startedTimestamps)
 
   /**
    * restarts the Timer with no elapsed time
    */
-  def restart = copy(0L, Nil)
+  def restart = copy(Nil, Nil)
 
   /**
    * Stop the timer, store the number of elapsed millis and return a String representing the time as hour/minute/second/ms
    * @return the elapsed time as a String
    */
-  def stop = {
-    val startMillis = millis.headOption.getOrElse(0L)
-    val newStack = if (!millis.isEmpty) millis.drop(1) else millis
-    copy(getTime - startMillis, newStack)
-  }
+  def stop = copy((getTime - lastTimestamp) :: elapsedTimes, startedTimestamps.drop(1))
 
+  /** add 2 timers together */
+  def add(t: HmsTimer[T]) =
+    copy((elapsedTimes ++ t.elapsedTimes).filterNot(_ == 0), startedTimestamps ++ t.startedTimestamps)
+
+  /** @return true if this timer has been started */
+  def isStarted = !startedTimestamps.isEmpty
+  /** @return true if this timer has never been started */
+  def neverStarted = !isStarted && elapsedTimes.isEmpty
+
+  def totalMillis =
+    if (isStarted) lastTimestamp - firstTimestamp
+    else           elapsedTimes.sorted.lastOption.getOrElse(0L)
+
+  private def lastTimestamp = startedTimestamps.sorted.lastOption.getOrElse(0L)
+  private def firstTimestamp = startedTimestamps.sorted.headOption.getOrElse(0L)
   /**
    * @return a tuple with the elapsed hours, minutes, seconds and millis
    */
   def hourMinutesSecondsMillis = {
-    val totalMillis = elapsed
     val hours = totalMillis / 1000 / 3600
     val totalMillis1 = totalMillis - hours * 3600 * 1000
-    val minutes = totalMillis / 1000 / 60
+    val minutes = totalMillis1 / 1000 / 60
     val totalMillis2 = totalMillis1 - minutes * 60 * 1000
     val seconds = totalMillis2 / 1000
     val millis = totalMillis2 - seconds * 1000
@@ -75,16 +86,22 @@ trait HmsTimer[T <: HmsTimer[T]] {
   protected def getTime = Calendar.getInstance.getTime.getTime
 }
 class SimpleTimer extends HmsTimer[SimpleTimer] {
-  def copy(e: Long = 0L, m: List[Long] = Nil) = 
+  def copy(e: List[Long] = Nil, m: List[Long] = Nil) =
     new SimpleTimer {
-      override val elapsed = e
-      override val millis = m
+      override protected val elapsedTimes = e
+      override val startedTimestamps = m
     }
-  def add(t: SimpleTimer) = copy(elapsed + t.elapsed, millis ++ t.millis)
+
   override def toString = hms
 
   override def equals(a: Any) = a match {
     case s: SimpleTimer => true
     case other          => false
+  }
+}
+
+object SimpleTimer {
+  def fromString(s: String) = new SimpleTimer {
+    override protected val elapsedTimes = tryOrElse(List(java.lang.Long.parseLong(s)))(Nil)
   }
 }

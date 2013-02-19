@@ -2,43 +2,53 @@ package org.specs2
 package xml
 
 import scala.xml._
-import collection.Iterablex._
 
 /**
  * Extension methods for NodeSeqs and Nodes
  */
 private[specs2]
-trait Nodex {
-  /** extend a NodeSeq */
-  implicit def extendNodeSeq(ns: NodeSeq): ExtendedNodeSeq = new ExtendedNodeSeq(ns)
+trait Nodex { outer =>
   /**
    * This class adds more methods to the NodeSeq class
    */
-  class ExtendedNodeSeq(ns: NodeSeq) {
+  implicit class extendNodeSeq(ns: NodeSeq) {
     def ==/(n: NodeSeq): Boolean = NodeFunctions.isEqualIgnoringSpace(ns, n)
     def isEqualIgnoringSpace(n: NodeSeq): Boolean = NodeFunctions.isEqualIgnoringSpace(ns, n)
     def isEqualIgnoringSpaceOrdered(n: NodeSeq): Boolean = NodeFunctions.isEqualIgnoringSpaceOrdered(ns, n)
+    def filterNodes(condition: Node => Boolean, recurse: Node => Boolean = (e: Node) => true) = NodeFunctions.filter(ns, condition, recurse)
   }
-  implicit def extendNode(n: Node): ExtendedNode = new ExtendedNode(n)
   /**
    * This class adds more methods to the Node class
    */
-  class ExtendedNode(n: Node) {
+  implicit class extendNode(n: Node) {
     /**
      * @return true if the Node represents some empty text (containing spaces or newlines)
      */
     def isSpaceNode: Boolean = NodeFunctions.isSpaceNode(n)
-    def matchNode(other: Node, attributes: List[String] = Nil, attributeValues: Map[String, String] = Map(), exactMatch: Boolean = false) =
-      NodeFunctions.matchNode(n, other, attributes, attributeValues, exactMatch)
+    def matchNode(other: Node,
+                  attributes: List[String] = Nil,
+                  attributeValues: Map[String, String] = Map(),
+                  exactMatch: Boolean = false,
+                  textTest: String => Boolean = (s:String) => true) =
+      NodeFunctions.matchNode(n, other, attributes, attributeValues, exactMatch, textTest)
   }
 
-  implicit def reducable(ns: Seq[NodeSeq]) = new Reducable(ns)
-  class Reducable(ns: Seq[NodeSeq]) {
+  implicit class reducable(ns: Seq[NodeSeq]) {
     def reduceNodes = ns.foldLeft(NodeSeq.Empty) { (res, cur) => res ++ cur }
   }
 
-  implicit def unless(ns: =>NodeSeq): UnlessEmpty = new UnlessEmpty(ns)
-  class UnlessEmpty(ns: =>NodeSeq) {
+  /**
+   * reduce a sequence of T's with a function transforming T's to NodeSeq
+   */
+  implicit class anyReducable[T](ns: Seq[T]) {
+    def reduceNodes(f: T => NodeSeq) = ns.foldLeft(NodeSeq.Empty) { (res, cur) => res ++ f(cur) }
+  }
+
+  /**
+   * this implicit definition adds an 'unless' method to a NodeSeq so that it is only evaluated if a condition is true.
+   * Otherwise NodeSeq.Empty is returned
+   */
+  implicit class unless(ns: =>NodeSeq) {
     def unless(b: Boolean) = if (b) NodeSeq.Empty else ns
   }
 

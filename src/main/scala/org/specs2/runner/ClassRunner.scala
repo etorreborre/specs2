@@ -7,7 +7,7 @@ import main.Arguments
 import control.Exceptions._
 import specification._
 import reporter._
-import sys._
+
 /**
  * This class can be used to executed a Specification in the Console
  * by specifying its name as the first argument on the command line
@@ -15,7 +15,7 @@ import sys._
  * @see specs2.run
  * @see org.specs2.main.Arguments for other command line options
  */
-class ClassRunner extends Classes with ConsoleOutput {
+class ClassRunner extends Classes with ConsoleOutput with SystemExit {
 	lazy val reporter: Reporter = new ConsoleReporter {}
 
   protected val errorHandler: PartialFunction[Throwable, Unit] = {  case e =>
@@ -24,13 +24,15 @@ class ClassRunner extends Classes with ConsoleOutput {
 	  e.printStackTrace
   }
 
-  def main(arguments: Array[String]) = start(arguments:_*)
-  
-  def start(arguments: String*) = {
+  def main(arguments: Array[String]) {
+    exitSystem(start(arguments:_*))
+  }
+
+  def start(arguments: String*): Option[ExecutedSpecification] = {
     if (arguments.length == 0)
       println("The first argument should at least be the specification class name")
-
-    apply(createSpecification(arguments(0)))(Arguments(arguments.drop(1):_*))
+    implicit val commandLineArgs = Arguments(arguments.drop(1):_*)
+    apply(createSpecification(arguments(0))).headOption
   }
 
   /**
@@ -51,18 +53,14 @@ class ClassRunner extends Classes with ConsoleOutput {
    *    > implicit val myargs = nocolor
    *    > specs2.run(spec1)
    */
-  def apply(specifications: SpecificationStructure*)(implicit args: Arguments = Arguments()): Either[Reporter, Unit] = {
-    specifications map { specification =>
-      trye(reporter.report(specification)(args.overrideWith(specification.content.arguments)))(errorHandler)
+  def apply(specifications: SpecificationStructure*)(implicit args: Arguments = Arguments()): Seq[ExecutedSpecification] = {
+    specifications flatMap { specification =>
+      tryo(reporter.report(specification)(args.overrideWith(specification.content.arguments)))(errorHandler)
     }
-    Right(reporter)
   }
 
-  protected def createSpecification(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader): SpecificationStructure = {
-    tryToCreateObject[SpecificationStructure](className, loader = classLoader) match {
-      case Some(s) => s
-      case None => error("can not create specification: "+className)
-    }
-  }
+  protected def createSpecification(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader)
+                                   (implicit args: Arguments = Arguments()) =
+    SpecificationStructure.createSpecification(className, classLoader)
 }
 

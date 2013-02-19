@@ -1,0 +1,26 @@
+This version adds lots of small fixes:
+
+ * fixed [implicit contexts](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Structure.html#Implicit+context) so that they can be properly applied to examples
+ * fixed a [stackoverflow error when using IntelliJ](https://groups.google.com/d/topic/specs2-users/1_mBukI2Xfo/discussion)
+ * made sure that included specifications use their own arguments for controlling concurrent execution
+ * fixed the [termination matchers](https://groups.google.com/d/topic/specs2-users/YhbEqoDWFaE/discussion)
+ * fixed the [logical combinators for match results so that they work ok with thrown expectations](https://groups.google.com/d/topic/specs2-users/HB6x1WCBHqU/discussion)
+ * included specification extending the `CommandLineArguments` trait get arguments passed correctly
+ * reordered the equality comparison in `BeEqualTo` so as to return the same results as an `equals` method which is not symmetric
+ * fixed [issue 106](https://github.com/etorreborre/specs2/issues/106): display of failing data tables in html reports
+ * fixed [issue 107](https://github.com/etorreborre/specs2/issues/107): tagged sections with multiple names
+ * `orSkip` and `orPending` methods on matchers are now [more robust in the face of exceptions](https://groups.google.com/d/topic/specs2-users/DB10WJHHIUM/discussion)
+
+ 
+And small improvements:
+
+ * the `org.specs2.mutable.Tables` trait can be used in mutable specifications in lieu of the `DataTables` trait. It lifts the implicit definition conflict with the `!` method when the type of the elements in the first column is String
+ * added `haveOneElementLike` and `haveAllElementsLike` to check if some elements in a collection are validated by a PartialFunction
+ * extended the [JSON matchers](http://etorreborre.github.com/specs2/guide/org.specs2.guide.Matchers.html#Out+of+the+box) to use regular expressions
+ * refactored the `NotifierRunner` so that [all the specifications of a package can be executed in Intellij](https://groups.google.com/d/msg/specs2-users/1_mBukI2Xfo/oZnTGHUuxcgJ)
+ * added a `propNoShrink` method to create ScalaCheck properties which will not shrink counter-examples
+ * any function returning a `Result` can be converted implicitly to a ScalaCheck `Prop`
+ * added the possibility to [specify the random generator](http://stackoverflow.com/questions/12639454/make-scalacheck-tests-deterministic) that is used for ScalaCheck
+ * added the possibility to set a custom failure message on a matcher
+
+ ==========================

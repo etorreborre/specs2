@@ -1,85 +1,40 @@
 package org.specs2
 package html
+
 import TableOfContents._
-import matcher.DataTables
+import scala.xml.NodeSeq
+import specification.Grouped
 
-class TableOfContentsSpec extends Specification with DataTables { def is =
+class TableOfContentsSpec extends Specification with HtmlDocuments with Grouped { def is =
 
-  "Creating a table of content for a body creates nothing when there are"                                               ^
-    `no toc elements`                                                                                                  ^
-    `no headers except the title`                                                                                       ^
-                                                                                                                        p^
-    "one h2 header"                                                                                                     ^
-      `creates one anchor`                                                                                              ^
-      `creates a link to the anchor in a <li/> element`                                                                 ^
-                                                                                                                        p^
-    "2 h4 headers"                                                                                                      ^
-      `create 2 anchors`                                                                                                ^
-      `create a link to the anchors in 2 <li/> elements`                                                                ^
-                                                                                                                        p^
-    "2 h3 headers with one h4 header each"                                                                              ^
-      `create links to the anchors with a nested <ul> element`                                                          ^
-                                                                                                                        endp^
-  "support functions"                                                                                                   ^
-    { isHeader(<h1/>) must beTrue }                                                                                     ^
-    { isHeader(<h2/>) must beTrue }                                                                                     ^
-    `headersToTree builds a Tree of headers`                                                                            ^
-    `headersToTree builds a Tree of headers - 2`                                                                        ^
-                                                                                                                        end
+  "Creating a table of content for a html document"                                               ^
+    "creates an unordered list from the html headers"                                             ^
+      "as nested <li/> lists corresponding to the hierarchy of the document headers"              ! g1.e1^
+      "each <li/> element has"                                                                    ^
+        "the header text as text"                                                                 ! g1.e2^
+        "an url+anchor referencing the header name"                                               ! g1.e3^
+        "an id attribute with the spec id. the id attribute is expected by jstree"                ! g1.e4^
+    "injects sub-table of contents where there are <subtoc/> tags in the original document"       ! g1.e5^
+                                                                                                  end
 
-  val aBodyWithHeadersButNoToc           = <body><h1>title</h1>text with <h2>a header</h2></body>
-  val aBodyWithNoHeaders                 = <body><h1>title</h1>text with <toc/><i>other nodes</i></body>
-  val aBodyWithH1HeadersOnly             = <body><h1>title</h1>text with <toc/><h1>a h1 header</h1></body>
-  val aBodyWithH2HeadersOnly             = <body><h1>title</h1>text with <toc/><h2>a h2 header</h2></body>
-  val aBodyWithOneH3Header               = <body><h1>title</h1>text with <toc/><h3>a h3 header</h3></body>
-  val aBodyWithTwoH3Headers              = <body><h1>title</h1>text with <toc/><h3>a h3 header</h3>other text<h3>another h3 header</h3></body>
-  val aBodyWithTwoH3HeadersAndOneH4Each  =
-    <h1>title</h1>             ++
-      <h3>a h3 header</h3>     ++
-      <h4>first h4</h4>        ++
-    <h3>another h3 header</h3> ++
-      <h4>second h4</h4>
+  "toc" - new g1 {
+    e1 := addToc(aBodyWithHeaders) must \\("li") \\ ("ul") \ ("li")
 
-  val aBodyWithAH3ThenAH2Header  =
-      <h3>a h3 header</h3>     ++
-      <h2>a h2 header</h2>
-
-  def `no toc elements` = addToc(aBodyWithHeadersButNoToc) must not \\(<li/>)
-  def `no headers except the title` = addToc(aBodyWithNoHeaders) must not \\(<li/>)
-
-  def `creates one anchor` = addToc(aBodyWithOneH3Header) must \\("a", "name"->"a+h3+header")
-  def `create 2 anchors` = addToc(aBodyWithTwoH3Headers) must \\("a", "name"->"another+h3+header")
-  def `creates a link to the anchor in a <li/> element` = addToc(aBodyWithOneH3Header) must \\("li")
-  def `create a link to the anchors in 2 <li/> elements` =
-    addToc(aBodyWithTwoH3Headers) must \\("li") \\ ("a", "href"->"#another+h3+header")
-
-  def `create links to the anchors with a nested <ul> element` =
-    addToc(<body><toc/>{aBodyWithTwoH3HeadersAndOneH4Each}</body>) must \\ {
-      <ul>
-        <li id="a h3 header"><a href="#a+h3+header">a h3 header</a>
-          <ul><li id="first h4"><a href="#first+h4">first h4</a></li></ul>
-        </li>
-        <li id="another h3 header"><a href="#another+h3+header">another h3 header</a>
-          <ul><li id="second h4"><a href="#second+h4">second h4</a></li></ul>
-        </li>
-      </ul>
+    //    <li><a href="http://specs2.org/#title_123456">title</a>
+    //      <ul><li><a href="http://specs2.org/#a+header_123456">a header</a></li>
+    //      </ul>
+    //    </li>
+    e2 := addToc(aBodyWithHeaders) must \\ ("li") \ ("a") \> "title"
+    e3 := addToc(aBodyWithHeaders) must \\ ("li") \ ("a", "href" -> "../guide/UserGuide.html#title.*")
+    e4 := addToc(aBodyWithHeaders) must \\ ("li", "id")
+    e5 := {
+      val subtoc = <a href="http://specs2.org/#other" />
+      addToc(aBodyWithHeadersAndASubtoc, Map(SpecId("123") -> subtoc)) must \\ ("li") \\ ("a", "href" -> "http://specs2.org/#other")
     }
 
-  def `headersToTree builds a Tree of headers` = headersToTree(aBodyWithTwoH3HeadersAndOneH4Each).toTree.drawTree.trim must_==
-    """.title
-       .|
-       .+- a h3 header
-       .|  |
-       .|  `- first h4
-       .|
-       .`- another h3 header
-       .   |
-       .   `- second h4""".stripMargin('.').replace("\r", "")
+  }
 
-  def `headersToTree builds a Tree of headers - 2` = headersToTree(aBodyWithAH3ThenAH2Header).toTree.drawTree.trim must_==
-    """.|
-       .+- a h3 header
-       .|
-       .`- a h2 header""".stripMargin('.').replace("\r", "")
+  def addToc(body: NodeSeq, subtocs: Map[SpecId, NodeSeq] = Map()) =
+    tocItemList(body, "guide/UserGuide.html", "guide/UserGuide.html", SpecId("specName"), subtocs)
 
 }

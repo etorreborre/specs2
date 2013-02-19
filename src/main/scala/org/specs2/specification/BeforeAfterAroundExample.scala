@@ -1,67 +1,63 @@
 package org.specs2
 package specification
 
-import execute.Result
+import execute.{AsResult, Result}
 
 /**
  * For each created example use a given Before context
  */
-trait BeforeContextExample extends FragmentsBuilder {
-  protected def beforeContext: Before
-
-  private[specs2] override def exampleFactory: ExampleFactory = new DecoratedExampleFactory(super.exampleFactory, beforeContext)
+trait BeforeContextExample[C <: Before] extends ExamplesFactory {
+  protected def beforeContext: C
+  override def exampleFactory: ExampleFactory = new DecoratedExampleFactory(super.exampleFactory, beforeContext)
 }
 /**
  * For each created example use a given after method
  */
-trait BeforeExample extends BeforeContextExample { outer =>
+trait BeforeExample extends BeforeContextExample[Before] { outer =>
   protected def before: Any
   def beforeContext: Before = new Before { def before = outer.before }
 }
 /**
  * For each created example use a given After context
  */
-trait AfterContextExample extends FragmentsBuilder {
-  protected def afterContext: After
-
-  private[specs2] override def exampleFactory: ExampleFactory = new DecoratedExampleFactory(super.exampleFactory, afterContext)
+trait AfterContextExample[C <: After] extends ExamplesFactory {
+  protected def afterContext: C
+  override def exampleFactory: ExampleFactory = new DecoratedExampleFactory(super.exampleFactory, afterContext)
 }
 /**
  * For each created example use a given after method
  */
-trait AfterExample extends AfterContextExample { outer =>
+trait AfterExample extends AfterContextExample[After] { outer =>
   protected def after: Any
   def afterContext: After = new After { def after = outer.after }
 }
 /**
  * For each created example use a given Around context
  */
-trait AroundContextExample extends FragmentsBuilder {
-  protected def aroundContext: Around
-
-  private[specs2] override def exampleFactory: ExampleFactory = new DecoratedExampleFactory(super.exampleFactory, aroundContext)
+trait AroundContextExample[C <: Around] extends ExamplesFactory {
+  protected def aroundContext: C
+  override def exampleFactory: ExampleFactory = new DecoratedExampleFactory(super.exampleFactory, aroundContext)
 }
 /**
  * For each created example use a given around method
  */
-trait AroundExample extends AroundContextExample { outer =>
-  protected def around[T <% Result](t: =>T): Result
+trait AroundExample extends AroundContextExample[Around] { outer =>
+  protected def around[T : AsResult](t: =>T): Result
   def aroundContext: Around = new Around {
-    def around[T <% Result](t: =>T) = outer.around(t)
+    def around[T : AsResult](t: =>T) = outer.around(t)
   }
 }
 /**
  * For each created example use a given BeforeAfter context
  */
-trait BeforeAfterContextExample extends FragmentsBuilder {
-  protected def beforeAfterContext: BeforeAfter
-
-  private[specs2] override def exampleFactory: ExampleFactory = new DecoratedExampleFactory(super.exampleFactory, beforeAfterContext)
+trait BeforeAfterContextExample[C <: BeforeAfter] extends ExamplesFactory {
+  protected def beforeAfterContext: C
+  override def exampleFactory: ExampleFactory = new DecoratedExampleFactory(super.exampleFactory, beforeAfterContext)
 }
 /**
  * For each created example use a given before/after method
  */
-trait BeforeAfterExample extends BeforeAfterContextExample { outer =>
+trait BeforeAfterExample extends BeforeAfterContextExample[BeforeAfter] { outer =>
   protected def before: Any
   protected def after: Any
   def beforeAfterContext: BeforeAfter = new BeforeAfter {
@@ -72,21 +68,20 @@ trait BeforeAfterExample extends BeforeAfterContextExample { outer =>
 /**
  * For each created example use a given BeforeAfterAround context
  */
-trait BeforeAfterAroundContextExample extends FragmentsBuilder {
-  protected def beforeAfterAroundContext: BeforeAfterAround
-
-  private[specs2] override def exampleFactory: ExampleFactory = new DecoratedExampleFactory(super.exampleFactory, beforeAfterAroundContext)
+trait BeforeAfterAroundContextExample[C <: BeforeAfterAround] extends ExamplesFactory {
+  protected def beforeAfterAroundContext: C
+  override def exampleFactory: ExampleFactory = new DecoratedExampleFactory(super.exampleFactory, beforeAfterAroundContext)
 }
 /**
  * For each created example use a given before/after method
  */
-trait BeforeAfterAroundExample extends BeforeAfterAroundContextExample { outer =>
+trait BeforeAfterAroundExample extends BeforeAfterAroundContextExample[BeforeAfterAround] { outer =>
   protected def before: Any
   protected def after: Any
-  protected def around[T <% Result](t: =>T): Result
+  protected def around[T : AsResult](t: =>T): Result
   def beforeAfterAroundContext: BeforeAfterAround = new BeforeAfterAround {
     def before = outer.before
     def after = outer.after
-    def around[T <% Result](t: =>T): Result = outer.around(t)
+    def around[T : AsResult](t: =>T): Result = outer.around(t)
   }
 }

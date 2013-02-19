@@ -1,52 +1,35 @@
 package org.specs2
 package matcher
 
-import control.Exceptions._
 import execute._
-import Expectable._
 import org.specs2.internal.scalaz._, Scalaz._
+import Foldable._
+import collection.Seqx._
 import Generator._
 import text.Quote._
 import text.Plural._
 import MatchResultMessages._
+import Result.ResultFailureMonoid
+import scala.collection.{GenTraversable, GenTraversableOnce}
+import ResultLogicalCombinators._
+import text.Sentences
 
 /**
- * This trait provides implicit definitions from MatchResults and Booleans to Results.
- *
- * It also allows to:
- *
- * * create matchers from functions
- * * create matchers for seqs and sets from single matchers
- */
-trait MatchersImplicits extends Expectations {
-  /** 
-   * implicit definition to transform a Seq of MatchResults to a Result
-   */ 
-  implicit def seqToResult[T](r: Seq[MatchResult[T]]): Result = r.reduceLeft(_ and _).toResult
-  /** 
-   * implicit definition to transform any MatchResult to a Result
-   */ 
-  implicit def asResult[T](r: MatchResult[T]): Result = r.toResult
-  
-  /** 
-   * implicit definition to accept any boolean value as a Result
-   * This avoids writing b must beTrue 
-   */ 
-  implicit def toResult(b: Boolean): Result = {
-    new BeTrueMatcher().apply(createExpectable(b)).toResult
-  }
-
-  /**
-   * implicit definition to accept any MatchResult as a Boolean value.
-   * It is true if the MatchResult is not an Error or a Failure
-   */
-  implicit def fromMatchResult(r: MatchResult[_]): Boolean = r.isSuccess || r.isSkipped || r.isPending
+* This trait provides implicit definitions from MatchResults and Booleans to Results.
+*
+* It also allows to:
+*
+* - create matchers from functions
+* - create matchers for seqs and sets from single matchers
+*/
+trait MatchersImplicits extends Expectations with MatchResultCombinators with MatchResultImplicits with ExpectationsDescription { outer =>
   /**
    * Add functionalities to functions returning matchers so that they can be combined before taking a value and
    * returning actual matchers
    */
   implicit def matcherFunction[S, T](f: S => Matcher[T]) = new MatcherFunction(f)
   implicit def matcherFunction2[T](f: T => Matcher[T]) = new MatcherFunction2(f)
+  implicit def matcherFunction3[S, T](f: S => MatchResult[T]) = new MatcherFunction3(f)
 
   class MatcherFunction[S, T](f: S => Matcher[T]) {
   
@@ -63,7 +46,9 @@ trait MatchersImplicits extends Expectations {
     def toSet = new Function1[Set[S], Matcher[Set[T]]] {
       def apply(s: Set[S]) = new SetMatcher(s, f)
     }
+
   }
+
   class MatcherFunction2[T](f: T => Matcher[T]) {
     /**
      * @return a function which will return the composition of a matcher and a function
@@ -75,11 +60,51 @@ trait MatchersImplicits extends Expectations {
           result(r, b)
         }
       }
+
+    /**
+     * check that the function is valid for all value, stopping after the first failure
+     */
+    def forall(values: Seq[T]): MatchResult[Seq[T]] = verifyFunction((t: T) => f(t).apply(Expectable(t))).forall(values)
+    /**
+     * check that the function is valid for each value, showing all the failures
+     */
+    def foreach(values: Seq[T]): MatchResult[Seq[T]] = verifyFunction((t: T) => f(t).apply(Expectable(t))).foreach(values)
+    /**
+     * check that the function is valid at least once
+     */
+    def atLeastOnce(values: Seq[T]): MatchResult[Seq[T]] = verifyFunction((t: T) => f(t).apply(Expectable(t))).atLeastOnce(values)
+  }
+
+  class MatcherFunction3[S, T](f: S => MatchResult[T]) {
+    /**
+     * check that the function is valid for all value, stopping after the first failure
+     */
+    def forall(values: Seq[S]): MatchResult[Seq[S]] = verifyFunction(f).forall(values)
+    /**
+     * check that the function is valid for each value, showing all the failures
+     */
+    def foreach(values: Seq[S]): MatchResult[Seq[S]] = verifyFunction(f).foreach(values)
+    /**
+     * check that the function is valid at least once
+     */
+    def atLeastOnce(values: Seq[S]): MatchResult[Seq[S]] = verifyFunction(f).atLeastOnce(values)
   }
 
   /**
-   * The <code>SeqMatcher</code> class is a matcher matching a sequence of objects with a matcher returned by a function.<p>
-   * Usage:<code>List(1, 2, 3) must ((beEqualTo(_:Int)).toSeq)(List(1, 2, 3)) </code>
+   * this implicit provides an inverted syntax to adapt matchers to make the adaptation more readable in some cases:
+   * - def haveExtension(extension: =>String) = ((_:File).getPath) ^^ endWith(extension)
+   */
+  implicit def adapterFunction[T, S](f: T => S) = new AdapterFunction(f)
+  case class AdapterFunction[T, S](f: T => S) {
+    def ^^(m: Matcher[S]): Matcher[T] = m ^^ f
+  }
+
+  /**
+   * The `SeqMatcher` class is a matcher matching a sequence of objects with a matcher returned by a function.<p>
+   * Usage:
+   * {{{
+   * List(1, 2, 3) must ((beEqualTo(_:Int)).toSeq)(List(1, 2, 3))
+   * }}}
    */
   class SeqMatcher[S, T](s: Seq[S], f: S => Matcher[T]) extends Matcher[Seq[T]] {
     def apply[U <: Seq[T]](t: Expectable[U]) = {
@@ -96,8 +121,11 @@ trait MatchersImplicits extends Expectations {
   }
 
   /**
-   * The <code>SetMatcher</code> class is a matcher matching a set of objects with a matcher returned by a function.<p>
-   * Usage:<code>List(1, 2, 3) must ((beEqualTo(_:Int)).toSet)(List(2, 1, 3)) </code>
+   * The `SetMatcher` class is a matcher matching a set of objects with a matcher returned by a function.<p>
+   * Usage:
+   * {{{
+   * List(1, 2, 3) must ((beEqualTo(_:Int)).toSet)(List(2, 1, 3))
+   * }}}
    */
   class SetMatcher[S, T](s: Set[S], f: S => Matcher[T]) extends Matcher[Set[T]] {
     def apply[U <: Set[T]](t: Expectable[U]) = {
@@ -119,11 +147,23 @@ trait MatchersImplicits extends Expectations {
     }
   }
 
+  /** verify the function f for all the values, stopping after the first failure */
+  def forall[T, U](values: GenTraversableOnce[T])(f: T => MatchResult[U])      = verifyFunction(f).forall(values.seq.toSeq)
+  /** verify the function f for all the values, stopping after the first failure, where the PartialFunction is defined */
+  def forallWhen[T, U](values: GenTraversable[T])(f: PartialFunction[T, MatchResult[U]]) = forall(values.filter(f.isDefinedAt))(f)
+  /** verify the function f for all the values, and collect all failures */
+  def foreach[T, U](values: GenTraversableOnce[T])(f: T => MatchResult[U])     = verifyFunction(f).foreach(values.seq.toSeq)
+  /** verify the function f for all the values, and collect all failures, where the PartialFunction is defined */
+  def foreachWhen[T, U](values: GenTraversable[T])(f: PartialFunction[T, MatchResult[U]]) = foreach(values.filter(f.isDefinedAt))(f)
+  /** verify the function f for at least one value */
+  def atLeastOnce[T, U](values: GenTraversableOnce[T])(f: T => MatchResult[U]) = verifyFunction(f).atLeastOnce(values.seq.toSeq)
+  /** verify the function f for at least one value, where the PartialFunction is defined */
+  def atLeastOnceWhen[T, U](values: GenTraversable[T])(f: PartialFunction[T, MatchResult[U]]) = atLeastOnce(values.filter(f.isDefinedAt))(f)
   /**
    * This method transform a function to a Matcher
    */
   implicit def functionToMatcher[T](f: (T => Boolean, String)): Matcher[T] =
-    functionAndMessagesToMatcher[T]((f._1, (t:T) => "not ("+q(t)+" "+f._2+")", (t:T) => q(t)+" "+f._2))
+    functionAndMessagesToMatcher[T]((f._1, (t:T) => negateSentence(q(t)+" "+f._2), (t:T) => q(t)+" "+f._2))
   /**
    * This method transform a function to a Matcher
    */
@@ -133,15 +173,14 @@ trait MatchersImplicits extends Expectations {
    * This method transform a function to a Matcher
    */
   implicit def functionAndKoMessageToMatcher[T](f: (T => Boolean, T => String)): Matcher[T] =
-    functionAndMessagesToMatcher[T]((f._1, (t:T) => "not ("+f._2(t)+")", f._2))
+    functionAndMessagesToMatcher[T]((f._1, (t:T) => negateSentence(f._2(t)), f._2))
   /**
    * This method transform a function, with function descriptors to a Matcher
    */
   implicit def functionAndMessagesToMatcher[T](f: (T => Boolean, T => String, T => String)): Matcher[T] = new Matcher[T] {
     def apply[S <: T](s: Expectable[S]) = {
-      val expectable = s
-      val functionResult = f._1(expectable.value)
-      result(functionResult,  f._2(s.value), f._3(s.value), expectable)
+      val functionResult = f._1(s.value)
+      result(functionResult,  f._2(s.value), f._3(s.value), s)
     }
   }
   /**
@@ -149,9 +188,8 @@ trait MatchersImplicits extends Expectations {
    */
   implicit def pairFunctionToMatcher[T](f: T =>(Boolean, String)): Matcher[T] = new Matcher[T] {
     def apply[S <: T](s: Expectable[S]) = {
-      val expectable = s
-      val functionResult = f(expectable.value)
-      result(functionResult._1, "not ("+functionResult._2+")", functionResult._2, expectable)
+      val functionResult = f(s.value)
+      result(functionResult._1, negateSentence(functionResult._2), functionResult._2, s)
     }
   }
   /**
@@ -159,66 +197,116 @@ trait MatchersImplicits extends Expectations {
    */
   implicit def tripletFunctionToMatcher[T](f: T =>(Boolean, String, String)): Matcher[T] = new Matcher[T] {
     def apply[S <: T](s: Expectable[S]) = {
-      val expectable = s
-      val functionResult = f(expectable.value)
-      result(functionResult._1, functionResult._2,  functionResult._3, expectable)
+      val functionResult = f(s.value)
+      result(functionResult._1, functionResult._2,  functionResult._3, s)
+    }
+  }
+  /**
+   * This method transform a function returning a MatchResult to a Matcher
+   */
+  implicit def matchResultFunctionToMatcher[T](f: T => MatchResult[_]): Matcher[T] = new Matcher[T] {
+    def apply[S <: T](s: Expectable[S]) = {
+      val functionResult = ResultExecution.execute(f(s.value).toResult)
+      result(functionResult.isSuccess, functionResult.message, functionResult.message, s)
     }
   }
 
   implicit def verifyFunction[U, T](t: U => MatchResult[T]) = new MatchResultFunctionVerification(t)
-  class MatchResultFunctionVerification[U, T](t: U => MatchResult[T]) {
+  class MatchResultFunctionVerification[U, T](function: U => MatchResult[T]) {
     def forall[S <: Traversable[U]](seq: S) = {
-      if (seq.isEmpty)
-        Matcher.result(true, "ok", "ko", createExpectable(seq))
-      else {
-        val r = seq.drop(1).foldLeft(t.apply(seq.head)) { (res, cur) =>
-          if (res.isSuccess) t.apply(cur)
-          else res
-        }
-        lazy val failingElementIndex = if (r.isSuccess) -1 else seq.toSeq.indexOf(r.expectable.value)
-        lazy val failingElementMessage =
-          if (failingElementIndex >= 0)
-            "In the sequence "+q(seq.mkString(", "))+", the "+(failingElementIndex+1).th+" element is failing: "+r.message
-          else
-            r.message
+      val expectable = createExpectable(seq)
+      val result =
+        if (seq.isEmpty)
+          Matcher.result(true, "ok", "ko", expectable)
+        else {
+          val (r, lastValueTried) = seq.drop(1).foldLeft(executeFunctionAndReturnValue(seq.head)) { (res, cur) =>
+            if (res._1.isSuccess) executeFunctionAndReturnValue(cur)
+            else                  res
+          }
+          lazy val failingElementIndex = if (r.isSuccess) -1 else seq.toSeq.indexOf(lastValueTried)
+          lazy val failingElementMessage =
+            if (failingElementIndex >= 0)
+              "In the sequence "+q(seq.mkString(", "))+", the "+(failingElementIndex+1).th+" element is failing: "+r.message
+            else
+              r.message
 
-        Matcher.result(r.isSuccess,
-                       "All elements of "+q(seq.mkString(", "))+" are matching ok",
-                       failingElementMessage,
-                       createExpectable(seq))
-      }
+          makeSeqResult(r, "All elements of "+q(seq.mkString(", "))+" are matching ok", failingElementMessage, expectable)
+        }
+      checkFailure(result)
     }
 
     def foreach[S <: Traversable[U]](seq: S) = {
-      if (seq.isEmpty)
-        Matcher.result(true, "ok", "ko", createExpectable(seq))
-      else {
-        val r = seq.drop(1).foldLeft(t.apply(seq.head).toResult) { (res, cur) =>
-          res |+| t.apply(cur).toResult
+      val expectable = createExpectable(seq)
+      val result =
+        if (seq.isEmpty)
+          Matcher.result(true, "ok", "ko", expectable)
+        else {
+          val r = seq.toSeq.foldMap(executeFunction(_))
+          makeSeqResult(r, "All elements of "+q(seq.mkString(", "))+" are successful", r.message, expectable)
         }
-        Matcher.result(r.isSuccess,
-                       "All elements of "+q(seq.mkString(", "))+" are matching ok",
-                       r.message,
-                       createExpectable(seq))
-
-      }
+      checkFailure(result)
     }
 
     def atLeastOnce[S <: Traversable[U]](seq: S) = {
-      if (seq.isEmpty)
-        Matcher.result(false, "ok", "ko", createExpectable(seq))
-      else {
-        val r = seq.drop(1).foldLeft(t.apply(seq.head)) { (res, cur) =>
-          if (res.isSuccess) res
-          else t.apply(cur)
+      val expectable = createExpectable(seq)
+      val result =
+        if (seq.isEmpty)
+          Matcher.result(false, "ok", "ko", expectable)
+        else {
+          val (r, lastTriedValue) = seq.drop(1).foldLeft(executeFunctionAndReturnValue(seq.head)) { (res, cur) =>
+            if (res._1.isSuccess) res
+            else                  executeFunctionAndReturnValue(cur)
+          }
+          makeSeqResult(r, "In the sequence "+q(seq.mkString(", "))+
+                           ", the "+(seq.toSeq.indexOf(lastTriedValue)+1).th+" element is matching: "+r.message,
+                           "No element of "+q(seq.mkString(", "))+" is matching ok",
+                           expectable)
         }
-        Matcher.result(r.isSuccess,
-          "In the sequence "+q(seq.mkString(", "))+", the "+(seq.toSeq.indexOf(r.expectable.value)+1).th+" element is matching: "+r.message,
-          "No element of "+q(seq.mkString(", "))+" is matching ok",
-          createExpectable(seq))
-      }
+      checkFailure(result)
     }
+
+    private def executeFunctionAndReturnValue(value: U): (Result, U) = (executeFunction(value), value)
+    private def executeFunction(value: U): Result = ResultExecution.execute(function(value).toResult)
+
+    private def makeSeqResult[T](r: Result, okMessage: String, koMessage: String, expectable: Expectable[T]): MatchResult[T] =
+      if (r.isSkipped)      MatchSkip(r.message, expectable)
+      else if (r.isPending) MatchPending(r.message, expectable)
+      else                  Matcher.result(r.isSuccess, okMessage, koMessage, expectable)
+
   }
 }
+
 private[specs2]
 object MatchersImplicits extends MatchersImplicits
+
+/**
+ * Implicit conversions for MatchResults
+ */
+private[specs2]
+trait MatchResultImplicits { outer =>
+  /**
+  * implicit definition to transform a Seq of MatchResults to a Result
+  */
+  implicit def seqToResult[T](r: Seq[MatchResult[T]]): Result = r.foldLeft(StandardResults.success: Result)(_ and _.toResult)
+
+  /**
+   * implicit definition to transform any MatchResult to a Result
+   */
+  implicit def asResult[T, M[_] <: MatchResult[_]](r: M[T]): Result = r.toResult
+
+  /**
+   * implicit definition to accept any MatchResult as a Boolean value.
+   * It is true if the MatchResult is not an Error or a Failure
+   */
+  implicit def fromMatchResult(r: =>MatchResult[_]): Boolean = r.isSuccess || r.toResult.isSkipped || r.toResult.isPending
+
+  /** implicit typeclass instance to create examples from MatchResults */
+  implicit def matchResultAsResult[T, M[_] <: MatchResult[_]]: AsResult[M[T]] = new AsResult[M[T]] {
+    def asResult(t: =>M[T]): Result = outer.asResult(t)
+  }
+
+  /** implicit typeclass instance to create examples from a sequence of MatchResults */
+  implicit def matchResultSeqAsResult[T]: AsResult[Seq[MatchResult[T]]] = new AsResult[Seq[MatchResult[T]]] {
+    def asResult(t: =>Seq[MatchResult[T]]): Result = t.foldLeft(StandardResults.success: Result)(_ and _.toResult)
+  }
+}

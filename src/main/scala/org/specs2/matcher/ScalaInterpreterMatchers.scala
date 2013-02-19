@@ -1,6 +1,7 @@
 package org.specs2
 package matcher
 
+
 trait ScalaInterpreterMatchers extends Expectations { outer =>
   /** use your own interpreter implementation to interpret a Scala script */
   def interpret(s: String): String

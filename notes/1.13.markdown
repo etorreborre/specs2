@@ -1,0 +1,12 @@
+This version is mostly a migration to Scala 2.10.0
+
+With one improvement:
+
+ * removed the unnecessary newline between specification names when running with `xonly`
+ 
+And 2 fixes:
+
+ * fixed [issue 120](https://github.com/etorreborre/specs2/issues/120): matchers evaluation with `and`
+ * fixed the creation of steps when the action throws an exception
+
+ ==========================

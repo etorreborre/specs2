@@ -1,10 +1,11 @@
 package org.specs2
 package specification
 
+import main._
 import reporter.DefaultSelection
 import matcher.ThrownExpectations
 
-class TagsSpec extends Specification with ThrownExpectations with Tags { def is =
+class TagsSpec extends Specification with ThrownExpectations with Tags { def is = 
                                                                                                                         """
 A specification can be tagged with some meaningful names like "integration" or "accounts". Creating tags amounts to
 adding new fragments in the specification. Then those fragments are used to determine which other fragments must be executed
@@ -43,11 +44,17 @@ during the specification execution. There are 2 types of tags for marking a sing
       "if the section is closed with another AsSection fragment containing the tag t1"                                  ^
         "the tagged fragments between the section tags are included"                                                    ! section7^
         "and the fragments outside the section are excluded"                                                            ! section8^
+    "then, when using several tags in the section"                                                                      ^
+      "opening and closing a section with the same tags"                                                                ! section9^
+      "opening and closing a section with different tags"                                                               ! section10^
                                                                                                                         endp^
   "Tags can also be used in a mutable specification"                                                                    ^
     "a tag call on the line before an example will mark it"                                                             ! mutabletags().e1^
     "a tag call on the same line as an example will mark it"                                                            ! mutabletags().e2^
     "a section call on the same line as a should block will mark all the examples"                                      ! mutabletags().e3^
+                                                                                                                        p^
+  "Tags can be specified from arguments"                                                                                ^
+    "from system properties"                                                                                            ! fromargs().e1^
                                                                                                                         end
 
   import DefaultSelection._
@@ -72,28 +79,45 @@ during the specification execution. There are 2 types of tags for marking a sing
       "e4" ! success ^ section("t1")^
       "e5" ! success ^ end
 
+  val sectionedMulti =
+    "text" ^
+      "e1" ! success ^
+      "e2" ! success ^ section("t1", "t2")^
+      "e3" ! success ^
+      "e4" ! success ^ section("t1", "t2")^
+      "e5" ! success ^ end
+
+  val sectionedMulti2 =
+    "text" ^
+      "e1" ! success ^
+      "e2" ! success ^ section("t1", "t2", "t3")^
+      "e3" ! success ^
+      "e4" ! success ^ section("t1", "t2")^
+      "e5" ! success ^ end
+
   def includeTag(fs: Fragments) = includeTags(fs, "t1")
   def excludeTag(fs: Fragments) = excludeTags(fs, "t1")
-  def includeTags(fs: Fragments, tags: String*) = select(args(include=tags.mkString(",")))(fs).map(_.toString)
-  def excludeTags(fs: Fragments, tags: String*) = select(args(exclude=tags.mkString(",")))(fs).map(_.toString)
+  def includeTags(fs: Fragments, tags: String*) = withTags(fs, args(include=tags.mkString(",")))
+  def excludeTags(fs: Fragments, tags: String*) = withTags(fs, args(exclude=tags.mkString(",")))
+  def withTags(fs: Fragments, args: Arguments) = select(args)(SpecificationStructure(fs)).content.fragments.map(_.toString)
 
-  def includeMatch(fs: Fragments, tag: String, names: String*) = {
-    (includeTags(fs, tag) must containMatch(_:String)).forall(names)
+  def includeMatch(fs: Fragments, tags: String, names: String*) = {
+    (includeTags(fs, tags.split(","):_*) must containMatch(_:String)).forall(names)
   }
-  def excludeMatch(fs: Fragments, tag: String, names: String*) = {
-    (excludeTags(fs, tag) must containMatch(_:String)).forall(names)
+  def excludeMatch(fs: Fragments, tags: String, names: String*) = {
+    (excludeTags(fs, tags.split(","):_*) must containMatch(_:String)).forall(names)
   }
-  def includeDoesntMatch(fs: Fragments, tag: String, names: String*) = {
-    (includeTags(fs, tag) must not containMatch(_:String)).forall(names)
+  def includeDoesntMatch(fs: Fragments, tags: String, names: String*) = {
+    (includeTags(fs, tags.split(","):_*) must not containMatch(_:String)).forall(names)
   }
-  def excludeDoesntMatch(fs: Fragments, tag: String, names: String*) = {
-    (excludeTags(fs, tag) must not containMatch(_:String)).forall(names)
+  def excludeDoesntMatch(fs: Fragments, tags: String, names: String*) = {
+    (excludeTags(fs, tags.split(","):_*) must not containMatch(_:String)).forall(names)
   }
-  def includeMustSelect(fs: Fragments, tag: String, included: String, excluded: String) = {
-    includeMatch(fs, tag, included) and includeDoesntMatch(fs, tag, excluded)
+  def includeMustSelect(fs: Fragments, tags: String, included: String, excluded: String) = {
+    includeMatch(fs, tags, included) and includeDoesntMatch(fs, tags, excluded)
   }
-  def excludeMustSelect(fs: Fragments, tag: String, included: String, excluded: String) = {
-    excludeMatch(fs, tag, included) and excludeDoesntMatch(fs, tag, excluded)
+  def excludeMustSelect(fs: Fragments, tags: String, included: String, excluded: String) = {
+    excludeMatch(fs, tags, included) and excludeDoesntMatch(fs, tags, excluded)
   }
 
   def tag1 = excludeDoesntMatch(tagged, "t1", "e1")
@@ -113,6 +137,12 @@ during the specification execution. There are 2 types of tags for marking a sing
   def section6 = includeMatch(sectioned, "t1", "e2")
   def section7 = includeMatch(sectioned, "t1", "e3")
   def section8 = includeDoesntMatch(sectioned, "t1", "e5")
+  def section9 = includeMatch(sectionedMulti, "t1", "e2", "e3", "e4") and
+                 includeDoesntMatch(sectionedMulti, "t1", "e1", "e5")
+
+  def section10 = includeMatch(sectionedMulti2, "t2", "e2", "e3", "e4") and
+                  includeDoesntMatch(sectionedMulti2, "t1", "e1") and
+                  includeMatch(sectionedMulti2, "t3", "e5")
 
   case class mutabletags() {
     val tagged = new org.specs2.mutable.Specification with org.specs2.mutable.Tags {
@@ -131,5 +161,13 @@ during the specification execution. There are 2 types of tags for marking a sing
     def e1 = includeMustSelect(tagged.content, "t1", "e1", "e2")
     def e2 = includeMustSelect(tagged.content, "t2", "e2", "e1")
     def e3 = includeMustSelect(tagged.content, "t3", "e4", "e3")
+  }
+
+  case class fromargs() {
+    def e1 = {
+      val properties = MapSystemProperties("specs2.include" -> "t1", "specs2.exclude" -> "")
+      val arguments = Arguments.extract(Seq(), properties)
+      select(arguments)(SpecificationStructure(tagged)).fragments.fragments.map(_.toString) must containMatch("e1")
+    }
   }
 }

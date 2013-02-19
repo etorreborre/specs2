@@ -1,10 +1,10 @@
 package org.specs2
 package form
 
-import control.Exceptions._
 import control.Property
 import execute._
 import DecoratedProperties._
+import text.NotNullStrings._
 
 /**
  * A Field is a property which is used only to display input values or output values.
@@ -31,14 +31,14 @@ case class Field[T](label: String, value: Property[T], decorator: Decorator = De
   def apply(v: =>T) = new Field(label, value(v), decorator)
   /** @return the field value */
   def apply(): T = value.get
-  /** @alias for apply() */
+  /** alias for apply() */
   def get: T = apply()
   /** @return "label: value" */
   override def toString = {
     val valueString = valueOrResult match {
-      case Left(Success(_)) => "_"
-      case Left(result)     => result.toString
-      case Right(v)         => v.toString
+      case Left(Success(_,_)) => "_"
+      case Left(result)       => result.toString
+      case Right(v)           => v.notNull
     }
     (if (label.nonEmpty) label + ": " else "") + valueString
   }

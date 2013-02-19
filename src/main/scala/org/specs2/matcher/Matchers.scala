@@ -1,6 +1,8 @@
 package org.specs2
 package matcher
 
+import control.LanguageFeatures
+
 /**
  * Trait aggregating all of specs2 matchers 
  */
@@ -17,7 +19,9 @@ trait Matchers extends AnyMatchers
                   with EitherMatchers
                   with EventuallyMatchers
                   with FileMatchers
+                  with ContentMatchers
                   with MatchersImplicits
+                  with LanguageFeatures
 
 object Matchers extends Matchers
 
@@ -31,3 +35,4 @@ object MustThrownMatchers extends MustThrownMatchers
 
 trait ShouldThrownMatchers extends Matchers with ShouldThrownExpectations
 object ShouldThrownMatchers extends ShouldThrownMatchers
+

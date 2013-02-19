@@ -4,7 +4,6 @@ package gen
 
 import execute.Result
 import org.scalacheck._
-import org.specs2.specification
 
 /**
  * Start a Given/When/Then sequence returning a generator to generate values of type T

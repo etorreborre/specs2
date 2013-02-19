@@ -13,6 +13,6 @@ And some fixes:
  * AssertionErrors are treated as Failures
  * `InOrder` calls bug in Mockito
  * The filtering of examples works ok now with `\r` characters
- * JUnit Description methods return expected values for `getTestClass`, `getDisplayName`,...
+ * JUnit Description methods return expected values for `getTestClass`, `getDisplayName`...
 
-------
+ ------

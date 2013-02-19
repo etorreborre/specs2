@@ -2,14 +2,17 @@ package org.specs2
 package form
 
 import scala.xml._
-import collection.Listx._
-import ::>._
+import collection.Seqx._
+import collection.Iterablex._
 import xml.Nodex._
 import text.Trim._
 import execute._
 import main.Arguments
 import StandardResults._
-import matcher.ResultMatchers
+import matcher.{DataTable, ResultMatchers}
+import DecoratedProperties._
+import language.existentials
+import ResultLogicalCombinators._
 
 /**
  * A Form is a container for Rows (@see Row) where each row contain some Cell (@see Cell).
@@ -17,16 +20,16 @@ import matcher.ResultMatchers
  * 
  * A Form can be executed by executing each row and collecting the results.
  */
-class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Row]),  val result: Option[Result] = None) extends Executable with Text {
+class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val result: Option[Result] = None) extends Executable with Text {
 
   /** @return all rows, including the header */
-  lazy val allRows = title.map(t => Row.tr(TextCell(t))).toList ::: rows
+  lazy val allRows = title.map(t => Row.tr(TextCell(t))).toSeq ++ rows
 
   /** @return the maximum cell size, column by column */
   lazy val maxSizes = allRows.map(_.cells).safeTranspose.map(l => l.map(_.width).max[Int])
 
   /** @return a new Form. This method can be overriden to return a more accurate subtype */
-  protected def newForm(title: Option[String] = None, rows: List[Row] = (Nil: List[Row]), result: Option[Result] = None) =
+  protected def newForm(title: Option[String] = None, rows: Seq[Row] = Vector(), result: Option[Result] = None) =
     new Form(title, rows, result)
   /** @return a Form where every Row is executed with a Success */
   def setSuccess = newForm(title, rows.map(_.setSuccess), Some(success))
@@ -34,18 +37,17 @@ class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Ro
   def setFailure = newForm(title, rows.map(_.setFailure), Some(failure))
 
   /** add a new Header, with at least one Field */
-  def th(h1: Field[_], hs: Field[_]*): Form = tr(FieldCell(h1.header), hs.map((f: Field[_]) => FieldCell(f.header)):_*)
+  def th(h1: Field[_], hs: Field[_]*): Form = tr(Row.tr(FieldCell(h1.header), hs.map((f: Field[_]) => FieldCell(f.header)):_*))
   /** add a new Header, with at least one Field */
   def th(h1: String, hs: String*): Form = th(Field(h1), hs.map(Field(_)):_*)
   /** add a new Row, with at least one Cell */
-  def tr(c1: Cell, cs: Cell*): Form = {
-    newForm(title, this.rows :+ Row.tr(c1, cs:_*), result)
-  }
-  /** add a new Row, with some cells */
-  def tr(cs: Seq[Cell]): Form = {
-    if (cs.isEmpty) this
-    else            newForm(title, this.rows :+ Row.tr(cs.head, cs.drop(1):_*), result)
-  }
+  def tr(c1: Cell, cs: Cell*): Form = tr(Row.tr(c1, cs:_*))
+  /** add a new Row */
+  def tr(row: Row): Form = newForm(title, this.rows :+ row, result)
+  /** create new tabs in the Form */
+  def tabs[T](values: Seq[T])(f: T => Tabs) = tr(values.foldLeft(Tabs()) { (res, cur) => res.tabs(f(cur)) })
+  /** create new rows in the Form */
+  def trs[T](values: Seq[T])(f: T => Row) = values.foldLeft(this) { (res, cur) => res.tr(f(cur)) }
 
   /** add the rows of a form */
   private def addRows(f: Form): Form = {
@@ -67,7 +69,7 @@ class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Ro
     if (result.isDefined) this
     else {
       val executedRows = executeRows
-      newForm(title, executedRows, Some(executedRows.foldLeft(success: Result) { (res, cur) => res and cur.execute }))
+      newForm(title, executedRows, Some(executedRows.map(_.execute).foldLeft(success: Result) { (res, cur) => res and cur }))
     }
   }
 
@@ -115,7 +117,7 @@ class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Ro
   def toProp(label: String) = {
     lazy val executed = executeForm
     lazy val executedResult = executed.execute match {
-      case s @ Success(_)   => s
+      case s @ Success(_,_) => s
       case Failure(_,_,_,_) => Failure("failed")
       case Error(_,_)       => Error("error")
       case other            => other
@@ -143,24 +145,43 @@ class Form(val title: Option[String] = None, val rows: List[Row] = (Nil: List[Ro
 
 /**
  *  Companion object of a Form to create:
- *   * an empty Form
- *   * a Form with no rows but a title
- *   * a Form with no title but one row
+ *   - an empty Form
+ *   - a Form with no rows but a title
+ *   - a Form with no title but one row
  *
  */
 case object Form {
   /** @return an empty form */
-  def apply() = new Form()
+  def apply(): Form = new Form()
   /** @return an empty form with a title */
-  def apply(title: String) = new Form(Some(title))
+  def apply(title: String): Form = new Form(Some(title))
+  /** create a Form from a DataTable */
+  def apply(table: DataTable): Form = {
+    def firstField[A](as: Seq[A]) = Field(as.headOption.getOrElse(""))
+    def otherFields[A](as: Seq[A]) = as.drop(1).map(Field(_))
+
+    val headerRest = otherFields(table.titles) ++ (if (table.isSuccess) Seq[Field[_]]() else Seq(Field("message")))
+    table.rows.foldLeft(th(firstField(table.titles), headerRest:_*)) { (res, cur) =>
+      val values = Row.tr(FieldCell(firstField(cur.cells)), otherFields(cur.cells).map(FieldCell(_)):_*)
+      res.tr {
+        if (cur.result.isSuccess)      values
+        else if (cur.result.isFailure) values.add(FieldCell(Field(cur.result.message)).setResult(cur.result))
+        else                           values.add(FieldCell(Field("error").bold).setResult(cur.result))
+      }
+    }
+  }
   /** @return a Form with one row */
-  def tr(c1: Cell, cs: Cell*) = new Form().tr(c1, cs:_*)
+  def tr(c1: Cell, cs: Cell*): Form = new Form().tr(c1, cs:_*)
   /** @return a Form with one row */
-  def tr(cs: Seq[Cell]) = new Form().tr(cs)
+  def tr(row: Row): Form = new Form().tr(row)
   /** @return a Form with one row and cells formatted as header cells */
-  def th(h1: Field[_], hs: Field[_]*) = new Form().th(h1, hs:_*)
+  def th(h1: Field[_], hs: Field[_]*): Form = new Form().th(h1, hs:_*)
   /** @return a Form with one row and cells formatted as header cells */
-  def th(h1: String, hs: String*) = new Form().th(h1, hs:_*)
+  def th(h1: String, hs: String*): Form = new Form().th(h1, hs:_*)
+  /** create new tabs in the Form */
+  def tabs[T](values: Seq[T])(f: T => Tabs) = new Form().tabs(values)(f)
+  /** create new rows in the Form */
+  def trs[T](values: Seq[T])(f: T => Row) = new Form().trs(values)(f)
 
   /**
    * This method creates an xml representation of a Form as an Html table
@@ -211,13 +232,12 @@ case object Form {
   private def cell(c: Cell, colnumber: Int = 0)(implicit args: Arguments) = {
     if (colnumber > 1) {
       c.xml(args).toList match {
-      case start ::> (e: Elem) => start ++ (e % ("colspan" -> colnumber.toString))
+      case start :+ (e: Elem) => start ++ (e % ("colspan" -> colnumber.toString))
         case other                         => other
       }
     } else
       c.xml(args).toList
   }
-  /** @return the stacktraces for a Form */
 
 }
 

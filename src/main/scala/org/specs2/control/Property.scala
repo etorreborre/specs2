@@ -1,6 +1,6 @@
 package org.specs2
 package control
-import Exceptions._
+
 
 /**
  * This class represents values which are evaluated lazily and which may even be missing.
@@ -14,11 +14,11 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
   def withValue(init: =>T) = Property(init)
   /** @return the option(value) */
   def optionalValue: Option[T] = execute.evaluatedValue
-  /** @alias for optionalValue */
+  /** alias for optionalValue */
   def toOption: Option[T] = optionalValue
   /** @return a value */
   def get: T = optionalValue.get
-  /** @alias for get */
+  /** alias for get */
   def apply(): T = get
   /** update the value */
   def update(newValue: =>T) = withValue(newValue)

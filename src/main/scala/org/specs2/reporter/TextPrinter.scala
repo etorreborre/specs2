@@ -1,12 +1,17 @@
 package org.specs2
 package reporter
 
-import org.specs2.internal.scalaz.{ Monoid, Reducer, Scalaz, Generator, Foldable }
-import Generator._
+import org.specs2.internal.scalaz.{ Monoid, Reducer, Scalaz, Foldable, Applicative, State }
 import control.Throwablex._
+import Scalaz._
+import Foldable._
+import Monoid._
+import data.Reducerx._
+import collection.Seqx._
 import data.Tuples._
 import time._
 import text._
+import Trim._
 import Plural._
 import AnsiColors._
 import NotNullStrings._
@@ -16,58 +21,56 @@ import specification._
 import Statistics._
 import Levels._
 import SpecsArguments._
+import matcher.DataTable
 
 /**
  * This trait reduces a list of ExecutedFragments to a list of PrintLines.
  * 
  * Each line contains:
- * * A description (text or example description)
- * * A level, to work out the indenting
- * * Some statistics, to print on SpecEnd
- * * The current arguments, to control the conditional printing of text, statistics,...
+ * - A description (text or example description)
+ * - A level, to work out the indenting
+ * - Some statistics, to print on SpecEnd
+ * - The current arguments, to control the conditional printing of text, statistics,...
  *
  */
 trait TextPrinter {
-  val output: ResultOutput = new TextResultOutput
-  
-  def print(s: SpecificationStructure, fs: Seq[ExecutedFragment])(implicit args: Arguments) =
-    printLines(fs).print(output)
-  
-  def printLines(fs: Seq[ExecutedFragment]) = 
-    PrintLines(flatten(FoldrGenerator[Seq].reduce(reducer, fs)))
-  
-  private  val reducer = 
-    PrintReducer &&& 
-    StatisticsReducer &&&
-    LevelsReducer  &&&
-    SpecsArgumentsReducer
-  
-  case class PrintLine(text: Print = PrintBr(), stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) {
+  def textOutput: ResultOutput = new TextResultOutput
+
+  def print(name: SpecName, fs: Seq[ExecutedFragment])(implicit commandLineArgs: Arguments) = {
+    fs.reduceWith(reducer)
+  }
+
+  private def reducer(implicit args: Arguments) =
+    (PrintReducer           &&&
+     StatisticsReducer      &&&
+     LevelsReducer          &&&
+     SpecsArgumentsReducer) >>> printIO(textOutput)(args)
+
+  type ToPrint = (((Stream[Print], SpecsStatistics), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])
+
+  /** print a line to the output */
+  def printIO(output: ResultOutput)(implicit args: Arguments) = (line: ToPrint) => {
+    line.flatten match {
+      case (p, s, l, a) => PrintLine(p.last, s.total, l.level, args <| a.last).print(output)
+    }
+    line
+  }
+
+  case class PrintLine(text: Print, stats: Stats, level: Int, args: Arguments) {
     def print(implicit out: ResultOutput) = text.print(stats, level, args)
   }
   
-  case class PrintLines(lines : List[PrintLine] = Nil) {
-    def print(implicit out: ResultOutput) = lines foreach (_.print)
-  }
-  
-  def flatten(results: (((List[Print], SpecsStatistics), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])): List[PrintLine] = {
-    val (prints, statistics, levels, args) = results.flatten
-    (prints zip statistics.totals zip levels.levels zip args.toList) map {
-      case (((t, s), l), a) => PrintLine(t, s, l, a)
-    }
-  }  
-    
-  implicit object PrintReducer extends Reducer[ExecutedFragment, List[Print]] {
-    implicit override def unit(fragment: ExecutedFragment) = List(print(fragment)) 
+  implicit val PrintReducer: Reducer[ExecutedFragment, Stream[Print]] = {
     /** print an ExecutedFragment and its associated statistics */
-    def print(fragment: ExecutedFragment) = fragment match { 
-      case start @ ExecutedSpecStart(_, _, _)     => PrintSpecStart(start)
-      case result @ ExecutedResult(_, _, _, _)    => PrintResult(result)
-      case text @ ExecutedText(s, _)              => PrintText(text)
-      case par @ ExecutedBr(_)                    => PrintBr()
-      case end @ ExecutedSpecEnd(_, _)            => PrintSpecEnd(end)
-      case fragment                               => PrintOther(fragment)
+    def print: ExecutedFragment => Print = (fragment: ExecutedFragment) => fragment.get match {
+      case start @ ExecutedSpecStart(_,_,_)    => PrintSpecStart(start)
+      case result @ ExecutedResult(_,_,_,_,_)  => PrintResult(result)
+      case text @ ExecutedText(s, _)           => PrintText(text)
+      case par @ ExecutedBr(_)                 => PrintBr()
+      case end @ ExecutedSpecEnd(_,_, s)       => PrintSpecEnd(end, s)
+      case f                                   => PrintOther(f)
     }
+    Reducer.unitReducer { fragment: ExecutedFragment => Stream(print(fragment)) }
   }
     
   sealed trait Print {
@@ -81,50 +84,69 @@ trait TextPrinter {
       if (args.noindent) s 
       else {
         val indent = "  "*level
-        s.trim.split("\n").map(indent+_).mkString("\n") + (if (args.showlevel) " ("+level+")" else "")
+        s.trim.split("\n").map(indent+_).mkString("\n")
       }
     }
   }
   case class PrintSpecStart(start: ExecutedSpecStart) extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) = {
-      out.printSpecStart(leveledText(start.name.name, level)(args))(args)
-    } 
+      if (!start.hidden) {
+        if (start.name != start.title) out.printSpecStartTitle(leveledText(start.title, level)(args), stats)(args)
+        else                           out.printSpecStartName(leveledText(start.name, level)(args), stats)(args)
+        if (!args.xonly) out.printLine("")(args)
+      }
+    }
   }
   case class PrintResult(r: ExecutedResult)           extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
-      printResult(leveledText(r.text(args).toString, level)(args), r.result, r.timer)(args, out)
+      printResult(leveledText(r.text(args).toString, level)(args), r.hasDescription, r.result, r.timer)(args, out)
       
-    def printResult(desc: String, result: Result, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput): Unit = {
-      val description = statusAndDescription(desc, result, timer)(args, out)
-      result match {
-        case f @ Failure(m, e, st, d) => {
-          printFailure(desc, f, timer)
-          printFailureDetails(d)
-        }
-        case e: Error => {
-          printError(desc, e, timer)
-          args.traceFilter(e.stackTrace).foreach(t => out.printError(t.toString))
-          e.exception.chainedExceptions.foreach { (t: Throwable) =>
-            out.printError(t.getMessage.notNull)
-            args.traceFilter(t.getStackTrace.toSeq).foreach(st => out.printError(st.toString))
+    def printResult(desc: String, hasDescription: Boolean, result: Result, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput): Unit = {
+      def print(res: Result, desc: String, isDataTable: Boolean) {
+        def decoratedDescription(d: String) = statusAndDescription(d, result, timer, isDataTable)(args, out)
+
+        if (args.canShow(res.status)) {
+          res match {
+            case f @ Failure(m, e, st, d) => {
+              printFailure(desc, f, timer, isDataTable)
+              printFailureDetails(d)
+            }
+            case e: Error => {
+              printError(desc, e, timer, isDataTable)
+              args.traceFilter(e.stackTrace).foreach(t => out.printError(t.toString))
+              e.exception.chainedExceptions.foreach { (t: Throwable) =>
+                out.printError(t.getMessage.notNull)
+                args.traceFilter(t.getStackTrace.toSeq).foreach(st => out.printError(st.toString))
+              }
+            }
+            case s @ Success(_,_)  => out.printSuccess(decoratedDescription(desc) + (if(!s.exp.isEmpty) "\n"+s.exp else ""))
+            case Pending(_)        => out.printPending(decoratedDescription(desc) + " " + result.message)
+            case Skipped(_, _) => {
+              out.printText(decoratedDescription(desc))
+              if (!result.message.isEmpty)
+                out.printSkipped(result.message)
+            }
+            case DecoratedResult(dt: DataTable, r) if !hasDescription && r.isSuccess       => print(r, dt.show, isDataTable = true)
+            case DecoratedResult(dt: DataTable, r) if !hasDescription && !r.isSuccess      => print(r, "", isDataTable = true)
+            case DecoratedResult(dt, r)                                                    => print(r, desc, isDataTable = true)
           }
         }
-        case Success(_)    => if (!args.xonly) out.printSuccess(description)
-        case Pending(_)    => if (!args.xonly) out.printPending(description + " " + result.message)
-        case Skipped(_, _) => if (!args.xonly) {
-          out.printSkipped(description)
-          if (!result.message.isEmpty)
-            out.printSkipped(result.message)
-        }
       }
+      print(result, desc, false)
     }
-    def printFailure(desc: String, f: Result with ResultStackTrace, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput) = {
-      val description = statusAndDescription(desc, f, timer)
+    def printFailure(desc: String, f: Result with ResultStackTrace,
+                     timer: SimpleTimer, isDataTable: Boolean = false)(implicit args: Arguments, out: ResultOutput) = {
+      val description = statusAndDescription(desc, f, timer, isDataTable)(args, out)
       out.printFailure(description)
-      out.printFailure(desc.takeWhile(_ == ' ') + "  " + f.message + " ("+f.location+")")
+      val margin = desc.takeWhile(_ == ' ')+" "
+      out.printFailure((if (isDataTable) f.message else
+                                         f.message.split("\n").mkString(margin, "\n"+margin, "")) + location(f))
       if (args.failtrace)
         args.traceFilter(f.stackTrace).foreach(t => out.printFailure(t.toString))
     }
+
+    def location(r: ResultStackTrace) = " ("+r.location+")" unless r.location.isEmpty
+
     def printFailureDetails(d: Details)(implicit args: Arguments, out: ResultOutput) = {
       d match {
         case FailureDetails(expected, actual) if (args.diffs.show(expected, actual)) => {
@@ -140,63 +162,55 @@ trait TextPrinter {
         case _ => ()
       }
     }
-    def printError(desc: String, f: Result with ResultStackTrace, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput) = {
-      val description = statusAndDescription(desc, f, timer)
+    def printError(desc: String, f: Result with ResultStackTrace,
+                   timer: SimpleTimer, isDataTable: Boolean = false)(implicit args: Arguments, out: ResultOutput) = {
+      val description = statusAndDescription(desc, f, timer, isDataTable)(args, out)
       out.printError(description)
-      out.printError(desc.takeWhile(_ == ' ') + "  " + f.exception.getClass.getSimpleName + ": " + f.message + " ("+f.location+")")
+      val exceptionName = f.exception.getClass.getSimpleName
+      out.printError((if (isDataTable) "" else desc.takeWhile(_ == ' ')+"  "+exceptionName+": ") +
+                     f.message + location(f))
     }
     /**
      * add the status to the description
      * making sure that the description is still properly aligned, even with several lines
      */
-    def statusAndDescription(text: String, result: Result, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput) = {
+    def statusAndDescription(text: String, result: Result, timer: SimpleTimer, isDataTable: Boolean)(implicit args: Arguments, out: ResultOutput) = {
       val textLines = text.split("\n")
+      val firstLine = textLines.headOption.getOrElse("")
+      val indentation = firstLine.takeWhile(_ == ' ').dropRight(2)
       def time = if (args.showtimes) " ("+timer.time+")" else ""
-      val firstLine = textLines.take(1).map { s =>
-        s.takeWhile(_ == ' ').dropRight(2) +
-        out.status(result)(args) + s.dropWhile(_ == ' ') + time
-      }
-      val rest = textLines.drop(1)
-      (firstLine ++ rest).mkString("\n")
+
+      val decoratedFirstLine = indentation + out.status(result)(args) + firstLine.dropWhile(_ == ' ') + time
+      val rest = textLines.drop(1).map(l => indentation + (if (isDataTable) "  " else "") + l)
+      (decoratedFirstLine +: rest).mkString("\n")
     }
   }
+
   case class PrintText(t: ExecutedText)               extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
-      if (!args.xonly) 
-        out.printMessage(leveledText(t.text, level)(args))(args)
+      if (args.canShow("-"))
+        out.printText(leveledText(t.text, level)(args))(args)
   }        
   case class PrintBr()                               extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
-      if (!args.xonly) out.printLine(" ")(args)
+      if (args.canShow("-")) out.printLine(" ")(args)
   }
-  case class PrintSpecEnd(end: ExecutedSpecEnd)       extends Print {
+  case class PrintSpecEnd(end: ExecutedSpecEnd, endStats: Stats)       extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) = {
-      if (!stats.isEnd(end) && args.xonly && stats.hasFailuresOrErrors)
-        printEndStats(stats)(args, out)
-      if (stats.isEnd(end))
+      if ((args.xonly && stats.hasFailuresOrErrors || !args.xonly) && args.canShow("1"))
         printEndStats(stats)(args, out)
     }
     def printEndStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
-      val n = end.name
       out.printLine(" ")
-      out.printLine(color("Total for specification" + (if (n.name.isEmpty) n.name.trim else " "+n.name.trim), blue, args.color))
+      out.printStats("Total for specification" + (if (end.title.isEmpty) end.title.trim else " "+end.title.trim))
       printStats(stats)
-      out.printLine(" ")
+      out.printLine("")
     }
     def printStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
-      val Stats(examples, successes, expectations, failures, errors, pending, skipped, timer, specStart, specEnd) = stats
-      out.printLine(color("Finished in " + timer.time, blue, args.color))
-      out.printLine(color(
-          Seq(Some(examples qty "example"), 
-              if (expectations != examples) Some(expectations qty "expectation") else None,
-              Some(failures qty "failure"), 
-              Some(errors qty "error"),
-              pending optQty "pending", 
-              skipped optInvariantQty "skipped").flatten.mkString(", "), blue, args.color))
+      out.printLines(stats.display)
     }
   }
   case class PrintOther(fragment: ExecutedFragment)   extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) = {}
   }
- 
 }

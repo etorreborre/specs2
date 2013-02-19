@@ -1,5 +1,6 @@
 package org.specs2
 package text
+
 import org.pegdown.{ PegDownProcessor, Extensions }
 import scala.io.Source
 import scala.xml._
@@ -24,7 +25,7 @@ trait Markdown {
    * transformed to <br/> tags
    */
   def toHtml(text: String) = {
-    processor.markdownToHtml(text).
+    processor.markdownToHtml(text.replace("\\", "\\\\")).
       replaceAll("<code>" -> "<code class='prettyprint'>")
   }
 
@@ -33,20 +34,20 @@ trait Markdown {
    */
   def toHtmlNoPar(text: String) = {
     val html = toHtml(text)
-    if (html.removeNewLines.contains("\n")) html
+    if (html.trimNewLines.contains("\n")) html
     else html.removeEnclosingXmlTag("p")
   }
 
   /**
    * parse the markdown string and return xml (unless the arguments deactivate the markdown rendering)
    */
-  def toXhtml(text: String)(implicit args: Arguments = Arguments()) = {
-    if (!args.markdown) text
+  def toXhtml(text: String)(implicit args: Arguments = Arguments()): NodeSeq = {
+    if (!args.markdown) scala.xml.Text(text)
     else {
       val html = toHtmlNoPar(text)
       parse(html) match {
         case Some(f) => f
-        case None => if (args.debugMarkdown) html else text
+        case None => scala.xml.Text(if (args.debugMarkdown) html else text)
       }
     }
   }

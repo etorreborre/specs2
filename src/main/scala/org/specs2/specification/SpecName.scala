@@ -2,59 +2,152 @@ package org.specs2
 package specification
 
 import reflect.ClassName._
+import internal.scalaz.Monoid
+import io.Paths._
+import html.MarkdownLink
+
+/**
+ * Identification information for a specification
+ */
+trait SpecIdentification {
+  /** the human readable name of the specification */
+  def title: String
+  /** the formal name of the specification */
+  def name: String
+  /** the formal name of the specification, including its package */
+  def fullName: String
+  /** the full class name of the specification without embellishment */
+  def javaClassName: String
+  /** a unique url for the specification */
+  def url: String
+  /** a markdown link for the specification url */
+  def markdownLink: MarkdownLink
+  /** a markdown link for the specification url, with a specific name */
+  def markdownLink(name: String): MarkdownLink
+}
 
 /**
  * Name declaration for a specification
  */
-private[specs2]
-sealed trait SpecName {
+sealed trait SpecName extends SpecIdentification {
+  /** the human readable name of the specification */
+  def title: String
+  /** the formal name of the specification */
   def name: String
+  /** the formal name of the specification, including its package */
+  def fullName: String
+  /** the full class name of the specification without embellishment */
+  def javaClassName: String
+  /** a unique url for the specification */
   def url: String
+  /** a markdown link for the specification url */
+  def markdownLink = markdownLink(title)
+  /** a markdown link for the specification url, with a specific name */
+  def markdownLink(name: String) = MarkdownLink(name, url)
+  /** @return true if name matches p */
   def matches(p: String) = name matches p
-  def show = name+"("+id+")"
+  override def toString = title
 
-  override def toString = name
-  override def equals(o: Any) = {
-    o match {
-      case s: SpecName => s.id == this.id
-      case _ => false
-    }
-  }
+  def show = name+"("+id+")"
   def id = System.identityHashCode(this)
+
+  override def equals(o: Any) = o match {
+    case s: SpecName => s.name == this.name
+    case other       => false
+  }
+
+  def is(s: SpecName) = s.id == this.id
   def overrideWith(n: SpecName): SpecName
+  def urlIs(u: String): SpecName
+  def baseDirIs(dir: String): SpecName
 }
+
 private[specs2]
 object SpecName {
   def apply(s: SpecificationStructure): SpecName = SpecificationName(s)
-  def apply(s: String): SpecificationTitle = SpecificationTitle(s)
+  def apply(s: String): SpecificationTitle       = SpecificationTitle(s)
+
+  implicit def SpecNameMonoid: Monoid[SpecName] = new Monoid[SpecName] {
+    def append(a1: SpecName, a2: =>SpecName) = if (a2.name.isEmpty) a1 else a2
+    val zero = SpecName("")
+  }
 }
+
 private[specs2]
-case class SpecificationName(s: SpecificationStructure) extends SpecName {
+case class SpecificationName(s: SpecificationStructure) extends SpecName { outer =>
+  def title = name
   def name =  simpleClassName(s)
-  def url = s.getClass.getName + ".html"
+  def fullName = className(s)
+  def javaClassName = s.getClass.getName
+
+  def url = className(s) + ".html"
 
   def overrideWith(n: SpecName) = n match {
-    case SpecificationName(s)  => n
+    case SpecificationName(_)  => this
     case SpecificationTitle(t) => new SpecificationName(s) {
-      override def name =  t
+      override def id = n.id
+      override def title = t
+      override def name = outer.name
+      override def fullName = outer.fullName
+      override def javaClassName = outer.javaClassName
+      override def url = n.url
     }
   }
   override def equals(a: Any) = a match {
     case s: SpecificationName => s.name == this.name
     case other                => false
   }
+
+  def urlIs(u: String) = new SpecificationName(s) {
+    override def id = outer.id
+    override def title = outer.title
+    override def name  = outer.name
+    override def fullName = outer.fullName
+    override def javaClassName = outer.javaClassName
+    override def url = u
+  }
+  def baseDirIs(dir: String) = new SpecificationName(s) {
+    override def id = outer.id
+    override def title = outer.title
+    override def name  = outer.name
+    override def fullName = outer.fullName
+    override def javaClassName = outer.javaClassName
+    override def url = outer.url.rebase(dir)
+  }
 }
 private[specs2]
-case class SpecificationTitle(t: String) extends SpecName {
-  def name = t
+case class SpecificationTitle(t: String) extends SpecName { outer =>
+  def title = t
+  def name = title
+  def fullName = name
+  def javaClassName = fullName
   def url = t + ".html"
 
   def overrideWith(n: SpecName) = n match {
-    case SpecificationTitle(t)  => n
-    case SpecificationName(s) => new SpecificationName(s) {
+    case SpecificationTitle(_) => this
+    case SpecificationName(s)  => new SpecificationName(s) {
       override def id = n.id
-      override def name = if (t.isEmpty) n.name else t
+      override def title = t
+      override def name = n.name
+      override def fullName = n.fullName
+      override def javaClassName = n.javaClassName
+      override def url = outer.url
     }
   }
-
+  def urlIs(u: String) = new SpecificationTitle(t) {
+    override def id = outer.id
+    override def title = outer.title
+    override def name  = outer.name
+    override def fullName = outer.fullName
+    override def javaClassName = outer.javaClassName
+    override def url = u
+  }
+  def baseDirIs(dir: String) = new SpecificationTitle(t) {
+    override def id = outer.id
+    override def title = outer.title
+    override def name  = outer.name
+    override def fullName = outer.fullName
+    override def javaClassName = outer.javaClassName
+    override def url = outer.url.rebase(dir)
+  }
 }

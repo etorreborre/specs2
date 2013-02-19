@@ -2,111 +2,109 @@ package org.specs2
 package runner
 
 import _root_.org.junit.runner.notification.RunNotifier
-import _root_.org.junit.runners._
-import _root_.org.junit._
 import _root_.org.junit.runner._
-import junit.framework.AssertionFailedError
-import main.Arguments
-import io._
-import reflect.Classes._
-import execute._
+import main.{SystemProperties, Arguments}
 import reporter._
-import JUnitDescriptionMaker._
 import specification._
-import text.AnsiColors
-import control.{ExecutionOrigin, Throwablex}
+import java.io.{PrintStream, ByteArrayOutputStream}
+import org.junit.internal.TextListener
+import reflect.Classes
+import scala.reflect.ClassTag
 
 /**
- * The JUnitRunner class is a junit Runner class meant to be used with the RunWith annotation
+ * The JUnitRunner class is a JUnit Runner class meant to be used with the RunWith annotation
  * to execute a specification as a JUnit suite.
  * 
  * The implementation is using a description Fold to fold the fragments into a tree
  * of Description objects and a Map relating each Description to a Fragment to execute. 
  *
  */
-class JUnitRunner(klass: Class[_]) extends Runner with ExecutionOrigin {
+class JUnitRunner(klass: Class[_]) extends Runner with DefaultSelection { outer =>
 
-  private val executor = new FragmentExecution {}
-  
   /** specification to execute */
-  protected lazy val specification = tryToCreateObject[SpecificationStructure](klass.getName).get
-
-  protected lazy val content = specification.content
-  /** arguments for the specification */
-  implicit lazy val args: Arguments = content.arguments
-  /** fold object used to create descriptions */
-  private val descriptions = new JUnitDescriptions(klass)
+  lazy val specification = SpecificationStructure.createSpecification(klass.getName)(propertiesArgs)
+  /** selected fragments to execute */
+  lazy val selected = select(args)(specification)
+  /** descriptions for this specification */
+  lazy val descriptions = new JUnitDescriptionsFragments(klass.getName)
   /** extract the root Description object and the examples to execute */
-  private lazy val DescriptionAndExamples(desc, executions) = descriptions.foldAll(content.fragments)
+  lazy val DescriptionAndExamples(desc, fragmentsDescriptions) = descriptions.foldAll(selected.content.fragments)
+  /** system properties */
+  lazy val properties: SystemProperties = SystemProperties
+  /** command line arguments, extracted from the system properties */
+  lazy val propertiesArgs: Arguments = Arguments.extract(Seq(), properties)
+  /** arguments for this specification */
+  implicit lazy val args: Arguments = propertiesArgs <| specification.content.arguments
+
   /** @return a Description for the TestSuite */
   def getDescription = desc
 
-  /** 
-   * run the suite by executing each fragment related to a description:
-   * * execute all fragments (including Steps which are reported as steps)
-   * * for each result, report the failure/error/skipped or pending message as a
-   *   junit failure or ignored event on the RunNotifier
-   */
-  def run(notifier: RunNotifier) {
-    executions.collect {
-      case (desc, f @ SpecStart(_, _)) => (desc, executor.executeFragment(args)(f))
-      case (desc, f @ Example(_, _))   => (desc, executor.executeFragment(args)(f))
-      case (desc, f @ Text(_))         => (desc, executor.executeFragment(args)(f))
-      case (desc, f @ Step(_))         => (desc, executor.executeFragment(args)(f))
-      case (desc, f @ Action(_))       => (desc, executor.executeFragment(args)(f))
-      case (desc, f @ SpecEnd(_))      => (desc, executor.executeFragment(args)(f))
-    }.
-      foreach {
-        case (desc, ExecutedResult(_, result, timer, _)) => {
-          notifier.fireTestStarted(desc)
-          result match {
-            case f @ Failure(m, e, st, d)    => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f)))
-            case e @ Error(m, st)            => notifier.fireTestFailure(new notification.Failure(desc, args.traceFilter(e.exception)))
-            case Pending(_) | Skipped(_, _)  => notifier.fireTestIgnored(desc)
-            case _ => ()
-          }
-          notifier.fireTestFinished(desc)
-        }
-        case (desc, ExecutedSpecStart(_, _, _))  => notifier.fireTestRunStarted(desc)
-        case (desc, ExecutedSpecEnd(_, _))       => notifier.fireTestRunFinished(new org.junit.runner.Result)
-        case (desc, _)                           => // don't do anything otherwise too many tests will be counted
-      }
-  }
-  /** @return a Throwable expected by JUnit Failure object */
-  private def junitFailure(f: Failure)(implicit args: Arguments): Throwable = f match {
-    case Failure(m, e, st, NoDetails()) =>
-      new SpecFailureAssertionFailedError(Throwablex.exception(AnsiColors.removeColors(m), args.traceFilter(st)))
-
-    case Failure(m, e, st, FailureDetails(expected, actual)) => new ComparisonFailure(AnsiColors.removeColors(m), expected, actual) {
-        private val e = args.traceFilter(f.exception)
-        override def getStackTrace = e.getStackTrace
-        override def getCause = e.getCause
-        override def printStackTrace = e.printStackTrace
-        override def printStackTrace(w: java.io.PrintStream) = e.printStackTrace(w)
-        override def printStackTrace(w: java.io.PrintWriter) = e.printStackTrace(w)
-      }
+  def run(n: RunNotifier) {
+    val reporter = new JUnitReporter {
+      lazy val notifier = n
+      lazy val selected = outer.selected
+      lazy val args = outer.args
+      lazy val properties = outer.properties
+      lazy val descriptions = outer.fragmentsDescriptions
+    }
+    reporter.report
   }
 }
+
 /**
  * Factory methods to help with testing
  */
 object JUnitRunner {
-  def apply[T <: SpecificationStructure](implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure)
-  def apply[T <: SpecificationStructure](s: T)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
-    override protected lazy val specification = s	  
+  def apply[T <: SpecificationStructure](implicit m: ClassTag[T]) = new JUnitRunner(m.runtimeClass)
+  def apply[T <: SpecificationStructure](s: T)(implicit m: ClassTag[T], p: SystemProperties) = new JUnitRunner(m.runtimeClass) {
+    override lazy val specification = s
+    override lazy val properties = p
   }
-  def apply[T <: SpecificationStructure](fragments: Fragments)(implicit m: ClassManifest[T]) = new JUnitRunner(m.erasure) {
-    override protected lazy val content = fragments	  
+  def apply[T <: SpecificationStructure](fs: Fragments)(implicit m: ClassTag[T]) = new JUnitRunner(m.runtimeClass) {
+    override lazy val specification = new Specification { def is = fs }
+  }
+  def apply[T <: SpecificationStructure](f: Fragments, props: SystemProperties, console: TextExporting, html: HtmlExporting)(implicit m: ClassTag[T]) = new JUnitRunner(m.runtimeClass) { outer =>
+    override lazy val specification = new Specification { def is = f }
+    override lazy val properties = props
+    override def run(n: RunNotifier) = {
+      val reporter = new JUnitReporter {
+        lazy val notifier = n
+        lazy val selected = outer.selected
+        lazy val args = outer.args
+        lazy val properties = outer.properties
+        lazy val descriptions = outer.fragmentsDescriptions
+        override def exporters(accept: String => Boolean)(implicit arguments: Arguments): Seq[Exporting] = Seq(console: Exporting, html: Exporting)
+      }
+      reporter.report
+    }
   }
 }
+
 /**
- * This class refines the <code>AssertionFailedError</code> from junit
- * and provides the stackTrace of an exception which occurred during the specification execution
+ * Simple JUnitRunner to run specifications on the console for testing
  */
-class SpecFailureAssertionFailedError(e: Exception) extends AssertionFailedError(e.getMessage) {
-  override def getStackTrace = e.getStackTrace
-  override def getCause = e.getCause
-  override def printStackTrace = e.printStackTrace
-  override def printStackTrace(w: java.io.PrintStream) = e.printStackTrace(w)
-  override def printStackTrace(w: java.io.PrintWriter) = e.printStackTrace(w)
+object textJUnitRunner {
+
+  def main(args: Array[String]) {
+    println(run(args))
+  }
+
+  def run(args: Array[String]): String =
+    if (args.isEmpty) "args must at least pass a class name"
+    else              run(Classes.loadClassOf(args(0)))
+
+  def run(klass: Class[_]): String = runSpec(klass)._2
+
+  def runSpec(klass: Class[_]): (SpecificationStructure, String) = {
+    val n = new RunNotifier
+    val o = new ByteArrayOutputStream
+    val r = new JUnitRunner(klass)
+    val result = new Result
+    val runListener = result.createListener
+    n.addFirstListener(runListener)
+    n.addListener(new TextListener(new PrintStream(o)))
+    r.run(n)
+    n.fireTestRunFinished(result)
+    (r.specification, o.toString)
+  }
 }

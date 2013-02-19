@@ -27,13 +27,20 @@ trait ClassName {
     val decoded = NameTransformer.decode(name)
     val remainingDollarNames = decoded.split("\\$")
     val result = if (remainingDollarNames.size > 1) {
-      if (remainingDollarNames(remainingDollarNames.size - 1).matches("\\d"))
+      val lastName = remainingDollarNames(remainingDollarNames.size - 1)
+      if (lastName.matches("\\d") || lastName == "class")
         remainingDollarNames(remainingDollarNames.size - 2)
       else
-        remainingDollarNames(remainingDollarNames.size - 1)
+        lastName
     } else remainingDollarNames(0)
     result
   }
+
+  /**
+   * @return the package name from the decoded class name
+   */
+  def packageName(name: String): String = className(name).split("\\.").dropRight(1).mkString(".")
+
   /**
    * @return the class name
    */
@@ -42,7 +49,8 @@ trait ClassName {
    * @return the class name without the package name
    */
   def simpleName(klass: Class[_]): String = {
-    val result = className(klass.getSimpleName)
+    // klass.getSimpleName can throw an error in the REPL
+    val result = catchAllOrElse(className(klass.getSimpleName))("specification")
     if (result.contains("anon") && klass.getSuperclass != null) simpleName(klass.getSuperclass)
     else result
   }

@@ -125,6 +125,9 @@ table.dataTable tr.error {
 table.dataTable tr.skipped {
   background-color: #DDDDDD;
 }
+table.dataTable tr.none {
+  background-color: #FFFFFF;
+}
 table.dataTable th.success {
   background-color: #CCFFCC;
 }
@@ -136,6 +139,9 @@ table.dataTable th.error {
 }
 table.dataTable th.skipped {
   background-color: #DDDDDD;
+}
+table.dataTable tr.none {
+  background-color: #FFFFFF;
 }
 
 
@@ -177,7 +183,9 @@ table.dataTable td.error {
 table.dataTable td.skipped {
   background-color: #DDDDDD;
 }
-
+table.dataTable td.none {
+  background-color: #FFFFFF;
+}
 
 table.bodyTable tr.a {
   background-color: #ddd;
@@ -203,6 +211,18 @@ table td.navTitle {
   text-align: center;
   font-size: large;
 }
+
+/* this style is used to display DataTables when they are used as examples */
+table.exampleTable  {
+  border: none;
+}
+table.exampleTable tr {
+  border: none;
+}
+.exampleTable td {
+  border: none;
+}
+
 .source {
   border: 1px solid #999;
 }
@@ -313,42 +333,82 @@ table td {
 .formstacktrace {
   display: none;
 }
+
 #breadcrumbs {
-  position: fixed;
-  width: 15.7%;
+  position: static;
+  display: none;
+  width: 83.7%;
   border-top: 1px dashed #aaa;
   border-bottom: 1px dashed #aaa;
+  margin-left: 5px;
   background-color: #eee;
   font-size: 12px;
   font-style: italic;
 }
 
-#container {
-      
-  width: 83%;
-
-  margin-top:-18px;
-  float:right;
-    
+#central {
 }
 
+#rightcolumn {
+}
+
+#leftcolumn {
+  border:0px;
+}
 #tree {
-	  
-  position: fixed;
-  margin-top:2px;
-  border: solid #AAAAAA;
-  border-width: 1px 1px 1px 8px;
-  background-color:white;
-
-  width:15%;
-
-  float:left;
-
-  overflow:auto;
+  background-color: #ffffff;
+  border-color: #bbbbbb;
+  border-style: solid;
+  border-width: 1px;
+  overflow: scroll;
 }
-#tree a {
 
+#tree a {
  white-space:normal !important;
  height: auto;
-	
+}
+
+/* common column settings */
+.colright,
+.colmid,
+.colleft {
+  float:left;
+  width:100%;     /* width of page */
+  position:relative;
+}
+.col1,
+.col2,
+.col3 {
+  float:left;
+  position:relative;
+  padding:0 0 1em 0;  /* no left and right padding on columns, we just make them narrower instead
+          only padding top and bottom is included here, make it whatever value you need */
+  overflow:hidden;
+}
+/* 3 Column settings */
+.threecol {
+  background:#ffffff;    /* right column background colour */
+}
+.threecol .colmid {
+  right:25%;      /* width of the right column */
+  background:#ffffff;    /* center column background colour */
+}
+.threecol .colleft {
+  right:50%;      /* width of the middle column */
+  background:#ffffff /* left column background colour */
+}
+.threecol .col1 {
+  margin-top: -10px;
+  width:70%;      /* width of center column content (column width minus padding on either side) */
+  left:90%;      /* 100% plus left padding of center column */
+}
+.threecol .col2 {
+  position: fixed;
+  width:14%;      /* Width of left column content (column width minus padding on either side) */
+  left:1%;     /* width of (right column) plus (center column left and right padding) plus (left column left padding) */
+}
+.threecol .col3 {
+  width:18%;      /* Width of right column content (column width minus padding on either side) */
+  left:85%;     /* Please make note of the brackets here:
+          (100% - left column width) plus (center column left and right padding) plus (left column left and right padding) plus (right column left padding) */
 }

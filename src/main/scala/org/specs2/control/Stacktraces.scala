@@ -13,4 +13,8 @@ trait Stacktraces {
    * @return true if the this current piece of code contains name in its stacktrace.
    */
   def isExecutedFrom(name: String) = new Exception().getStackTrace().exists(_.toString contains name)
+
 }
+
+private[specs2]
+object Stacktraces extends Stacktraces

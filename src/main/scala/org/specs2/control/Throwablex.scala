@@ -16,7 +16,7 @@ trait Throwablex {
    * See the ExtendedExceptions object description
    */
   class ExtendedThrowable[T <: Throwable](t: T) {
-    private val topTrace = new TraceLocation(if (t.getStackTrace().isEmpty) stackTraceElement("specs2") else t.getStackTrace()(0))
+    private val topTrace = TraceLocation(if (t.getStackTrace().isEmpty) stackTraceElement("specs2") else t.getStackTrace()(0))
     /** @return the file name and the line number where the Throwable was created */
     def location = topTrace.location
     /** @return the class name and the line number where the Throwable was created */
@@ -31,13 +31,28 @@ trait Throwablex {
      * Select all traces of this exception matching a given pattern
      */
     def filter(pattern: String) = {
-      setStackTrace(t.getStackTrace.toList.filter(_.toString matches (".*"+pattern+".*")))
+      setStackTrace(t.getStackTrace.toList.filter(patternMatches(pattern)))
     }
+    /**
+     * Select all traces of this exception according to filtering function
+     * WARNING: this mutates the exception to be able to retain its type!
+     */
+    def filter(f: Seq[StackTraceElement] => Seq[StackTraceElement]): T = {
+      chainedExceptions.foreach(_.filter(f))
+      setStackTrace(f(t.getStackTrace.toList))
+    }
+
+    /** match a stacktrace element with a pattern */
+    private def patternMatches(p: String) = (_:StackTraceElement).toString matches (".*"+p+".*")
     /**
      * Select all traces of this exception not matching a given pattern
      */
     def filterNot(pattern: String) = {
-      setStackTrace(t.getStackTrace.toList.filterNot(_.toString matches (".*"+pattern+".*")))
+      setStackTrace(t.getStackTrace.toList.filterNot(patternMatches(pattern)))
+    }
+    /** @return true if the pattern exists in one of the traces */
+    def exists(pattern: String) = {
+      t.getStackTrace.toList.exists(patternMatches(pattern))
     }
     /** @return the list of chained exceptions */
     def chainedExceptions: List[Throwable] = {
@@ -65,32 +80,44 @@ trait Throwablex {
       t
     }
 
+    /** @return the exception message and its cause if any */
+    def messageAndCause = t.getMessage + (if (t.getCause != null) ". Cause: "+t.getCause.getMessage else "")
   }
   /** utility method to create a default stacktrace element */
   def stackTraceElement(m: String, className: String = "internals", fileName: String = "file", lineNumber: Int = 1) = 
 	   new StackTraceElement(m, className, fileName, lineNumber)
   /** @return an exception with the given message and stacktrace */
-  def exception(m: String, st: Seq[StackTraceElement]): Exception = {
-	  val exception = new Exception(m)
+  def exception(m: String, st: Seq[StackTraceElement], cause: Throwable = null): Exception = {
+	  val exception = new Exception(m, cause)
 	  exception.setStackTrace(st.toArray)
 	  exception
   }
   /** @return an exception with the given stacktrace */
   def exception(st: Seq[StackTraceElement]): Exception = exception("", st)
   /** location information from a stackTrace element */
-  class TraceLocation(t: StackTraceElement) {
+}
+
+private[specs2]
+case class TraceLocation(path: String, fileName: String, className: String, lineNumber: Int) {
+  lazy val location: String = fileName + ":" + lineNumber
+  /** the class name and the line number where the Throwable was created */
+  lazy val classLocation: String = className + ":" + lineNumber
+  /** the class name, file Name and the line number where the Throwable was created */
+  lazy val fullLocation: String = className + " (" + location + ")"
+}
+
+private[specs2]
+object TraceLocation {
+  def apply(t: StackTraceElement): TraceLocation = {
     /** path corresponding to the class name. This is an approximation corresponding to the
      *  simple case of a top-level class in a file having the same name */
-    lazy val path = className.replace(".", "/")+".scala"
+    lazy val path = className.split("\\.").dropRight(1).mkString("", "/", "/"+fileName)
     lazy val fileName = t.getFileName
     lazy val className = t.getClassName.split('$')(0)
     lazy val lineNumber = t.getLineNumber
-    lazy val location: String = fileName + ":" + lineNumber
-    /** the class name and the line number where the Throwable was created */
-    lazy val classLocation: String = className + ":" + lineNumber
-    /** the class name, file Name and the line number where the Throwable was created */
-    lazy val fullLocation: String = className + " (" + location + ")"
+    TraceLocation(path, fileName, className, lineNumber)
   }
 }
+
 private [specs2]
 object Throwablex extends Throwablex

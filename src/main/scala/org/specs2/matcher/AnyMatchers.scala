@@ -1,10 +1,11 @@
 package org.specs2
 package matcher
 
-import reflect.ClassName._
+import text.Trim._
 import text.Quote._
 import text.NotNullStrings._
 import execute._
+import scala.reflect.ClassTag
 
 /**
  * This trait provides matchers which are applicable to any type of value
@@ -22,7 +23,7 @@ trait AnyBaseMatchers {
 
   /** matches if a eq b */
   def beTheSameAs[T <: AnyRef](t: =>T) = new BeTheSameAs(t)
-  /** @alias for beTheSameAs */
+  /** alias for beTheSameAs */
   def be[T <: AnyRef](t: =>T) = beTheSameAs(t)
 
   /** matches if a == b */
@@ -31,12 +32,28 @@ trait AnyBaseMatchers {
   def be_!=[T](t: =>T) = be_==(t).not
   /** matches if a == b */
   def be_===[T](t: =>T) = beTypedEqualTo(t)
+  /** matches if a == b */
+  def ===[T](t: =>T) = be_===(t)
   /** matches if a != b */
   def be_!==[T](t: =>T) = be_===(t).not
+  /** matches if a != b */
+  def !==[T](t: =>T) = be_!==(t)
   /** matches if a == b */
   def beEqualTo[T](t: =>T) = new BeEqualTo(t)
   /** matches if a == b */
-  def beTypedEqualTo[T](t: =>T) = new BeTypedEqualTo(t)
+  def equalTo[T](t: =>T) = beEqualTo(t)
+  /** matches if a == b */
+  def beTypedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1 == t2) =
+    new BeTypedEqualTo(t, equality)
+  /** matches if a == b */
+  def typedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1 == t2) =
+    beTypedEqualTo(t, equality)
+  /** matches if a == b after an implicit conversion */
+  def be_==~[T, S](s: =>S)(implicit convert: S => T): Matcher[T] = new BeTypedEqualTo(convert(s)).
+    adapt(identity, (_:String)+" [original object is: "+q(s)+"]", (_:String)+" [original object is: "+q(s)+"]")
+  /** matches if a == b after an implicit conversion */
+  def ==~[T, S](s: =>S)(implicit convert: S => T): Matcher[T] = be_==~(s)(convert)
+
   /** negate a matcher */
   def not[T](m: Matcher[T]) = m.not
   
@@ -55,7 +72,7 @@ trait AnyBaseMatchers {
   /** matches if a is null when v is null and a is not null when v is not null */
   def beAsNullAs[T](a: =>T) = new Matcher[T](){
     def apply[S <: T](y: Expectable[S]) = {
-      val x = a;
+      val x = a
       result(x == null && y.value == null || x != null && y.value != null,
              "both values are null",
              if (x == null) y.description + " is not null" else q(x) + " is not null" + 
@@ -78,7 +95,7 @@ trait AnyBaseMatchers {
   /** matches if the value returns a successful result when applied to a PartialFunction */
   def beLike[T](pattern: PartialFunction[T, MatchResult[_]]) = new Matcher[T] {
     def apply[S <: T](a: Expectable[S]) = {
-      val r = if (a.value != null && pattern.isDefinedAt(a.value)) pattern.apply(a.value) else MatchFailure("", "", a)
+      val r = if (pattern.isDefinedAt(a.value)) pattern.apply(a.value) else MatchFailure("", "", a)
       result(r.isSuccess,
              a.description + " matches the given pattern " + r.message,
              a.description + " doesn't match the expected pattern "  + r.message,
@@ -86,34 +103,58 @@ trait AnyBaseMatchers {
     }
   }
   /** matches if v.getClass == c */
-  def haveClass[T : ClassManifest] = new Matcher[Any] {
+  def haveClass[T : ClassTag] = new Matcher[Any] {
     def apply[S <: Any](x: Expectable[S]) = {
-      val c = implicitly[ClassManifest[T]].erasure
+      val c = implicitly[ClassTag[T]].runtimeClass
       val xClass = x.value.asInstanceOf[java.lang.Object].getClass
       result(xClass == c,
-             x.description + " has class" + q(c.getName), 
+             x.description + " has class " + q(c.getName),
              x.description + " doesn't have class " + q(c.getName) + " but " + q(xClass.getName),
              x)
     }
   }
   /** matches if c.isAssignableFrom(v.getClass.getSuperclass) */
-  def haveSuperclass[T : ClassManifest] = new Matcher[Any] {
+  def haveSuperclass[T : ClassTag] = new Matcher[Any] {
     def apply[S <: Any](x: Expectable[S]) = {
-      val c = implicitly[ClassManifest[T]].erasure
+      val c = implicitly[ClassTag[T]].runtimeClass
       val xClass = x.value.asInstanceOf[java.lang.Object].getClass
       result(c.isAssignableFrom(xClass.getSuperclass),
-             x.description + " has super class" + q(c.getName),
+             x.description + " has super class " + q(c.getName),
              x.description + " doesn't have super class " + q(c.getName) + " but " + q(xClass.getSuperclass.getName),
              x)
     }
   }
+	
+  /** matches if x.getClass.getInterfaces.contains(T) */
+  def haveInterface[T : ClassTag] = new Matcher[Any] {
+    def apply[S <: Any](x: Expectable[S]) = {
+      val c = implicitly[ClassTag[T]].runtimeClass
+      val xClass = x.value.asInstanceOf[java.lang.Object].getClass
+      result(xClass.getInterfaces.contains(c),
+             x.description + " has interface " + q(c.getName),
+             x.description + " doesn't have interface " + q(c.getName) + " but " + xClass.getInterfaces.mkString(", "),
+             x)
+    }
+	}
+	
   /** matches if v.isAssignableFrom(c) */
-  def beAssignableFrom[T : ClassManifest] = new Matcher[Class[_]] {
+  def beAssignableFrom[T : ClassTag] = new Matcher[Class[_]] {
     def apply[S <: Class[_]](x: Expectable[S]) = {
-      val c = implicitly[ClassManifest[T]].erasure
+      val c = implicitly[ClassTag[T]].runtimeClass
       result(x.value.isAssignableFrom(c), 
              x.description + " is assignable from " + q(c.getName), 
              x.description + " is not assignable from " + q(c.getName), 
+             x)
+    }
+  }
+
+  def beAnInstanceOf[T: ClassTag] = new Matcher[Any] {
+    def apply[S <: Any](x: Expectable[S]) = {
+      val c = implicitly[ClassTag[T]].runtimeClass
+      val xClass = x.value.asInstanceOf[java.lang.Object].getClass
+      result(c.isAssignableFrom(xClass),
+             x.description + " is an instance of " + q(c.getName),
+             x.description + " is not an instance of " + q(c.getName),
              x)
     }
   }
@@ -129,33 +170,35 @@ class BeTrueMatcher extends Matcher[Boolean] {
 /**
  * Typed equality Matcher
  */
-class BeTypedEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
+class BeTypedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1 == t2) extends AdaptableMatcher[T] { outer =>
   import AnyMatchers._
   protected val ok: String => String = identity
   protected val ko: String => String = identity
   
   def adapt(f: T => T, okFunction: String => String, koFunction: String => String) = {
-    val newMatcher = new BeTypedEqualTo(f(t)) {
+    val newMatcher = new BeTypedEqualTo(f(t), equality) {
       override protected val ok: String => String = okFunction compose outer.ok
       override protected val ko: String => String = koFunction compose outer.ko
     } 
     newMatcher.^^((t: T) => f(t))
   }
   
-  def apply[S <: T](b: Expectable[S]) = {
+  def apply[S <: T](b: Expectable[S]): MatchResult[S] = {
     val a = t
-    val (db, qa) = (b.description, q(a)) match {
-      case (x, y) if (a != b && q(a) == q(b)) => {
-	      val aClass = className(x)
-	      val bClass = className(y)
-	      if (aClass != bClass)
-          (y + ": " + bClass, x + ": " + aClass)
-        else
-          (y, x + ". Values have the same string representation but possibly different types like List[Int] and List[String]")
+    def isEqual =
+      (b.value, a) match {
+        case (arr: Array[_], arr2: Array[_]) => arr.toSeq == arr2.toSeq
+        case other                           => equality(b.value, a)
+      }
+
+    lazy val (db, qa) =
+      (b.description, q(a)) match {
+        case (x, y) if (!isEqual && x == y) => (b.describe(b.value.notNullWithClass), q(a.notNullWithClass))
+        case other                           => other
 	    }
-      case other @ _ => other 
-	  }
-    result(a == b.value, ok(db + " is equal to " + qa), ko(db + " is not equal to " + qa), b, a.notNull, b.value.notNull.toString)
+
+    def print(b: String, msg: String, a: String) = Seq(b, msg, a).mkString("\n".unless((Seq(a, b).exists(_.size <= 40))))
+    result(isEqual, ok(print(db, " is equal to ", qa)), ko(print(db, " is not equal to ", qa)), b, a.notNull, b.value.notNull)
   }
 }
 
@@ -163,6 +206,18 @@ class BeTypedEqualTo[T](t: =>T) extends AdaptableMatcher[T] { outer =>
  * Equality Matcher
  */
 class BeEqualTo(t: =>Any) extends BeTypedEqualTo(t)
+/**
+ * This matcher always matches any value of type T
+ */
+case class AlwaysMatcher[T]() extends Matcher[T] {
+  def apply[S <: T](e: Expectable[S]) = result(true, "ok", "ko", e)
+}
+/**
+ * This matcher never matches any value of type T
+ */
+case class NeverMatcher[T]() extends Matcher[T] {
+  def apply[S <: T](e: Expectable[S]) = result(false, "ok", "ko", e)
+}
 /**
  * This trait allows to write expressions like
  * 
@@ -175,10 +230,12 @@ trait AnyBeHaveMatchers { outer: AnyMatchers =>
     def be_!=(t: T) = result(outer.be_!=(t))
     def be_===(t: T) = result(outer.be_===(t))
     def be_!==(t: T) = result(outer.be_!==(t))
+    def be_==~[S](s: =>S)(implicit convert: S => T) = result(outer.be_==~[T, S](s))
     def equalTo(t: T) = result(outer.be_==(t))
     def asNullAs[T](a: =>T) = result(outer.beAsNullAs(a))
     def oneOf(t: T*) = result(beOneOf(t:_*))
     def beNull = result(outer.beNull)
+    def anInstanceOf[T : ClassTag] = result(beAnInstanceOf[T])
   }
 
   implicit def toAnyRefMatcherResult[T <: AnyRef](result: MatchResult[T]) = new AnyRefMatcherResult(result)
@@ -188,7 +245,7 @@ trait AnyBeHaveMatchers { outer: AnyMatchers =>
 
   implicit def toAnyMatcherResult(result: MatchResult[Any]) = new AnyMatcherResult(result)
   class AnyMatcherResult(result: MatchResult[Any]) {
-    def haveClass[T : ClassManifest] = result(outer.haveClass[T])
+    def haveClass[T : ClassTag] = result(outer.haveClass[T])
   }
 
   implicit def toClassMatcherResult(result: MatchResult[Class[_]]) = new ClassMatcherResult(result)
@@ -213,11 +270,12 @@ trait AnyBeHaveMatchers { outer: AnyMatchers =>
   def beLikeA[T](pattern: =>PartialFunction[T, MatchResult[_]]) = beLike(pattern)
   def likeA[T](pattern: =>PartialFunction[T, MatchResult[_]]) = beLike(pattern)
   def empty[T <: Any { def isEmpty: Boolean }] = beEmpty[T]
-  def equalTo[T](t: =>T) = beEqualTo(t)
   def oneOf[T](t: T*) = (beOneOf(t:_*))
-  def klass[T : ClassManifest]: Matcher[Any] = outer.haveClass[T]
-  def superClass[T : ClassManifest]: Matcher[Any] = outer.haveSuperclass[T]
-  def assignableFrom[T : ClassManifest] = outer.beAssignableFrom[T]
+  def klass[T : ClassTag]: Matcher[Any] = outer.haveClass[T]
+  def superClass[T : ClassTag]: Matcher[Any] = outer.haveSuperclass[T]
+  def interface[T : ClassTag]: Matcher[Any] = outer.haveInterface[T]
+  def assignableFrom[T : ClassTag] = outer.beAssignableFrom[T]
+  def anInstanceOf[T : ClassTag] = outer.beAnInstanceOf[T]
 }
 class BeTheSameAs[T <: AnyRef](t: =>T) extends Matcher[T] {
   def apply[S <: T](a: Expectable[S]) = {

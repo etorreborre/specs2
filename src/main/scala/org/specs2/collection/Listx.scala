@@ -1,7 +1,6 @@
 package org.specs2
 package collection
 
-import matcher.MustExpectable._
 import scala.collection.immutable.List._
 
 /**
@@ -26,14 +25,6 @@ trait Listx { outer =>
    */
   class ExtendedList[T](list: List[T]) {
     /**
-     * remove the first element satisfying the predicate
-     * @return a list minus the first element satisfying the predicate
-     */
-    def removeFirst(predicate: T => Boolean): List[T] = {
-      val (withoutElement, startWithElement) = list span (x => !predicate(x))
-      withoutElement ++ startWithElement.drop(1)
-    }
-    /**
      * @return a randomly mixed list
      */
     def scramble = list.sortWith((a, b) => (new java.util.Random).nextInt(1) > 0)
@@ -54,17 +45,6 @@ trait Listx { outer =>
     if (filtered.isEmpty) Nil
     else filtered.map(_.head) :: transpose(filtered.map(_.tail))
   }
-
-  /**
-   * This object allows to extract the last element of a List
-   */
-  object ::> {
-    def unapply[A] (l: List[A]) = l match {
-      case Nil => None
-      case _ => Some( (l.init, l.last) )
-    }
-  }
-
 }
 private[specs2]
 object Listx extends Listx

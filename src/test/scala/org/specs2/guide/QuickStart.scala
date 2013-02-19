@@ -1,8 +1,10 @@
 package org.specs2
 package guide
 
-class QuickStart extends Specification { def is = literate                                                              ^
-"Quick Start".title ^
+import _root_.examples._
+
+class QuickStart extends UserGuidePage { def is = literate                                                              ^
+"Quick Start".title.urlIs("org.specs2.guide.QuickStart.html") ^
 """
 There are 2 major styles of specifications with ***specs2***:
 
@@ -12,7 +14,7 @@ There are 2 major styles of specifications with ***specs2***:
  * _acceptance_ specifications where all the specification text stands as one and the implementation code is elsewhere.
    It is generally used for acceptance or integration scenarios
 
-#### Unit specification
+#### Unit
 
 Unit specifications extend the `org.specs2.mutable.Specification` trait and are using the `should/in` format:
 
@@ -33,7 +35,7 @@ Unit specifications extend the `org.specs2.mutable.Specification` trait and are 
         }
       }
 
-#### Acceptance specification
+#### Acceptance
 
 Acceptance specifications extend the `org.specs2.Specification` trait and must define a method called `is`:
 
@@ -54,9 +56,9 @@ Acceptance specifications extend the `org.specs2.Specification` trait and must d
       }
 
 
-The `is` method lists *specification fragments* which can be:
+The `is` method lists [*specification fragments*](org.specs2.guide.Structure.html#Declare+examples) which can be:
 
-* simple text, to describe in the system you're specifying
+* some text, to describe the system you're specifying
 * an example: a description and some executable code returning a result
 * formatting fragments: `p` adds a blank line and starts a new block of examples
 
@@ -64,7 +66,7 @@ Fragments are separated by the `^` character in order to build a list of them.
 
 #### Execution
 
-And this is it! Now to execute your specification, you use a *runner* which will display the results:
+And this is it! Now to execute your specification, you use a [*runner*](org.specs2.guide.Runners.html#Presentation) which will display the results:
 
       > scala -cp ... specs2.run HelloWorldSpec
 
@@ -78,10 +80,10 @@ And this is it! Now to execute your specification, you use a *runner* which will
       + end with 'world'
 
       Total for specification HelloWorldSpec
-      Finished in 0 second, 78 ms
+      Finished in 0 second, 58 ms
       3 examples, 0 failure, 0 error
 
-#### Where to go from here
+#### And much more!
 
 You can explore the rest of this [User Guide](org.specs2.UserGuide.html "Guide") to learn how to:
 
@@ -92,7 +94,7 @@ You can explore the rest of this [User Guide](org.specs2.UserGuide.html "Guide")
  * use sbt/maven/junit to execute a specification
  * export your specification as an html document (like this one!)
                                                                                                                         """^
-  include(xonly, new examples.HelloWorldSpec)                                                                           ^
-  include(xonly, new examples.HelloWorldUnitSpec)                                                                       ^
+  include(xonly, new HelloWorldSpec)                                                                                    ^
+  include(xonly, new HelloWorldUnitSpec)                                                                                ^
                                                                                                                         end
 }

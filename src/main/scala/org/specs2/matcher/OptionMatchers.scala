@@ -2,7 +2,6 @@ package org.specs2
 package matcher
 import text.Quote._
 import execute.{Result, Failure}
-
 /**
  * Matchers for Options
  */
@@ -16,8 +15,8 @@ trait OptionBaseMatchers {
     def apply[S <: Option[T]](value: Expectable[S]) = {
       val expected = t
       result(value.value == Some(t), 
-             value.description + " is Some with value" + q(expected),
-             value.description + " is not Some with value" + q(expected),
+             value.description + " is Some with value " + q(expected),
+             value.description + " is not Some with value " + q(expected),
              value)
     }
   }

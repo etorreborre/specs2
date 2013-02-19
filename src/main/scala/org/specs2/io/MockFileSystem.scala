@@ -1,6 +1,12 @@
 package org.specs2
 package io
-import scala.collection.mutable. { ListBuffer, Queue, HashMap }
+import scala.collection.mutable. { ListBuffer, HashMap }
+import control.Exceptions._
+import scala.xml.NodeSeq
+import scala.io.Source._
+import scala.xml.parsing.XhtmlParser
+import xml.Nodex._
+import java.io.File
 
 /**
  * The MockFileSystem trait mocks the FileSystem by storing a Map[path, content] representing the content of the FileSystem
@@ -24,6 +30,9 @@ trait MockFileSystem extends FileSystem {
 
   /** this list stores writable files */
   var writableFiles = List[String]()
+
+  /** @return the content of a file corresponding to a given path */
+  override def readLines(path: String) = readFile(path).split("\n").toIndexedSeq
 
   /** @return the content of a file corresponding to a given path */
   override def readFile(path: String) = files(path)
@@ -88,13 +97,16 @@ trait MockFileSystem extends FileSystem {
   /** creates a file with the specified path but an empty content */
   override def createFile(path: String) = {files += (path -> ""); true}
 
+  /** delete a file with the specified path */
+  override def delete(path: String) = {files -= path; true}
+
   /** create a new directory */
   override def mkdirs(path: String) = { createdDirs = path :: createdDirs; true }
   /** create a new directory */
   override def createDir(path: String) = mkdirs(path)
 
   /** @return a mock FileWriter for a specific path */
-  override def getWriter(path: String) = MockFileWriter(path)
+  override def getWriter(path: String, append: Boolean = false) = MockFileWriter(path)
 
   case class MockFileWriter(path: String) extends MockWriter {
     override def write(m: String): Unit = files(path) = files.getOrElse(path, "") + m
@@ -108,10 +120,18 @@ trait MockFileSystem extends FileSystem {
     this
   }
   
-  override def exists(path: String) = files.contains(path)
+  override def exists(path: String) = files.keys.exists(f => samePath(f, path))
   
   override def inputStream(filePath: String) = new java.io.InputStream {
     val reader = new java.io.StringReader(readFile(filePath))
     def read() = reader.read()
   }
+
+  override def loadXmlFile(filePath: String)(report: Exception => Unit = (e:Exception) => e.printStackTrace) = {
+    tryo {
+      val xhtml = fromString("<e>"+readFile(filePath)+"</e>")
+      (XhtmlParser(xhtml)\\"e")(0).child.reduceNodes
+    }.getOrElse(NodeSeq.Empty)
+  }
+
 }

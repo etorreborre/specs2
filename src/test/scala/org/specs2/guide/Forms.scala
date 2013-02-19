@@ -2,8 +2,9 @@ package org.specs2
 package guide
 import sys._
 import form._
+import _root_.examples.Address
 
-class Forms extends Specification with specification.Forms { def is = literate^
+class Forms extends UserGuidePage with specification.Forms { def is = literate^
   """
 
 Forms are a way to represent domain objects or services, and declare expected values in a tabular format. Forms can be designed
@@ -77,6 +78,8 @@ executing the property, both values are compared to get a result. You can create
 
          `prop("label", Some(1), beSome)
 
+      If the matcher is `mute`d then no message will be displayed in case of a failure.
+
 If the expected value is not provided when building the property, it can be given with the `apply` method:
 
         // apply "sets" the expected value
@@ -94,8 +97,10 @@ Let's look at a few examples:
     tr(field("""prop("label", "expected")("expected")""").code, prop("label", "expected")("expected")).
     tr(field("""prop("label", "actual")("expected")""").code, prop("label", "actual")("expected")).
     tr(field("""prop("label", { error("but got an error"); "actual" })("expected")""").code, prop("label", { error("but got an error"); "actual" })("expected")).
-    tr(field("""prop("label", "expected", (a: String, b: String) => (a === b).toResult)("expected")""").code, prop("label", "expected", (a: String, b: String) => (a === b).toResult)("expected")).
-    tr(field("""prop("label", "expected", (s: String) => beEqualTo(s))("expected")""").code, prop("label", "expected", (s: String) => beEqualTo(s))("expected")).executeForm.toXml.toString^
+    tr(field("""prop("label", "actual", (a: String, b: String) => (a === b).toResult)("expected")""").code, prop("label", "expected", (a: String, b: String) => (a === b).toResult)("expected")).
+    tr(field("""prop("label", "actual", (s: String) => beEqualTo(s))("expected")""").code, prop("label", "expected", (s: String) => beEqualTo(s))("expected")).
+    tr(field("""prop("label", "actual", beEqualTo("expected"))""").code, prop("label", "actual", beEqualTo("expected"))).
+    tr(field("""prop("label", "actual", beEqualTo("expected").mute)""").code, prop("label", "actual", beEqualTo("expected").mute)).executeForm.toXml.toString^
 """
 
 ### Styles
@@ -186,6 +191,17 @@ And then you can use it like this:
                retrieve(123)                                /** actual address id */           ^
                                                                                                end
          }
+
+##### Adding several rows at once
+
+A very practical way to add rows programmatically is to start from a seq of values and have a function creating a Row object
+for each value:
+
+        Form("a new Form").trs(addresses) { a: Address => Row.tr(field(a.number), field(a.street)) }
+
+"""^
+  Form("a new Form").trs(addresses) { a: Address => Row.tr(field(a.number), field(a.street)) }^
+"""
 
 #### Nesting a Form into another Form
 
@@ -289,6 +305,11 @@ as its content. Then every subsequent `tab` calls on the `Tabs` object will crea
                   tr(prop("street", "Rose Cr.")("Rose Cr.")).
                   tr(prop("number", 2)(2))))^
 """
+
+Tabs can also be created from a seq of values. Let's pretend we have a list of `Address` objects with a name and a Form
+displaying the `Address` values. You can write:
+
+      Form("Addresses").tabs(adresses) { address: Address => tab(address.name, address.form) }
 
 ### Aggregating forms
 Now that we've defined a form for a simple entity, let's see how we can reuse it with a larger entity:
@@ -616,6 +637,8 @@ specification.
   object WrongCalculator {
     def th(title1: String, titles: String*) = WrongCalculator(Form.th(title1, titles:_*))
   }
+
+  lazy val addresses = Seq(Address("Rose Crescent", 3), Address("Oxfort St", 4))
 
   val address = Form("Address").
                   tr(field("street", "Rose Crescent")).

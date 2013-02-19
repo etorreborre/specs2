@@ -9,23 +9,36 @@ import JsonGen._
 
 class JsonSpec extends Specification with ScalaCheck {
 
-  "The pairs of a json document must only have values with a terminal type" ! check { (json: JSONType) =>
-    Json.pairs(json) must haveTerminalValues
+  "The pairs of a json document must only have values with a terminal type" ! prop { (json: JSONType) =>
+    Json.terminalPairs(json) must haveTerminalValues
   }
-  "The values of a json document must only have values with a terminal type" ! check { (json: JSONType) =>
-    Json.values(json) must beTerminalValues
-  }
-  "The find method returns None if a key is not present at the first level of a document" ! check { (json: JSONType) =>
-    Json.find("xx", json) must beNone
-  }
-  "The find method returns Some(value) if a key is present at the first level of a document" ! check { (json: JSONType) =>
-    Json.find("key", new JSONObject(Map("key"->json))) must beSome(json)
-  }
-  "The findDeep method returns Some(value) if a key is present somewhere in a document and points to a JSON object" ! check { (json: JSONType) =>
-    Json.findDeep("a", json) must beSome.iff(json.toString.contains(""""a" : """))
+  "The values of a json document must only have values with a terminal type" ! prop { (json: JSONType) =>
+    Json.terminalValues(json) must beTerminalValues
   }
 
-  implicit val jsonParams: Parameters = set(maxSize -> 3)
+  "Find methods".newp
+  "The find method returns None if a key is not present at the first level of a document" ! prop { (json: JSONType) =>
+    Json.find("xx", json) must beNone
+  }
+  "The find method returns Some(value) if a key is present at the first level of a document" ! prop { (json: JSONType) =>
+    Json.find("key", new JSONObject(Map("key"->json))) must beSome(json)
+  }
+  "The find method can find elements with a regular expression" ! prop { (json: JSONType) =>
+    Json.find("(?i)KEY".r, new JSONObject(Map("key"->json))) must beSome(json)
+  }
+
+  "FindDeep methods".newp
+  "The findDeep method returns Some(value) if a key is present somewhere in a document and points to a JSON object" ! prop { (json: JSONType) =>
+    Json.findDeep("a", json) must beSome.iff(json.toString.contains(""""a" : """))
+  }
+  "The findDeep method can use a Regex to find a key" ! prop { (json: JSONType) =>
+    Json.findDeep("(?i)A".r, json) must beSome.iff(json.toString.contains(""""a" : """))
+  }
+  "The parser must be threadsafe" >> prop { i: Int =>
+    (1 to 100).par.map(j => Json.parse("hello world")) must not(throwAn[Exception])
+  }
+
+  implicit lazy val jsonParams: Parameters = set(maxSize = 3)
 
   def isTerminal(a: Any) = a match {
     case JSONArray(_)  => false

@@ -1,27 +1,33 @@
 package org.specs2
 package collection
-import Listx._
+
+import scala.collection.{GenSeq, GenIterable}
+import org.specs2.internal.scalaz._
+import Generator._
+import std.iterable._
+import Seqx._
 
 /**
- * This trait provides additional methods on Iterable
+ * This trait provides additional methods on Iterable.
+ *
+ * It is made public so that user can reuse the sameElementsAsMethod
  */
-private[specs2]
 trait Iterablex {
   /**
-   * implicit definition to transform an iterable to an ExtendedIterable
+   * implicit definition to transform an Iterable to an ExtendedIterable
    */
-  implicit def extendIterable[T](xs : Iterable[T]): ExtendedIterable[T] = new ExtendedIterable(xs)
+  implicit def extendIterable[T](xs : GenIterable[T]): ExtendedIterable[T] = new ExtendedIterable(xs)
 
   /**
-   * See the description of the ExtendedIterable object
+   * Additional methods for Iterable objects
    */
-  class ExtendedIterable[T](xs:Iterable[T]) {
+  class ExtendedIterable[T](xs: GenIterable[T]) {
 
     /**
      * @return true if the 2 iterables contain the same elements, in the same order, 
      *         according to a function f
      */
-    def isSimilar[S >: T](that: Iterable[S], f: Function2[T, S, Boolean]): Boolean = {
+    def isSimilar[S >: T](that: GenIterable[S], f: Function2[T, S, Boolean]): Boolean = {
       val it1 = xs.iterator
       val it2 = that.iterator
       var res = true
@@ -33,32 +39,30 @@ trait Iterablex {
     /**
      * @return true if the 2 iterables contain the same elements recursively, in any order
      */
-    def sameElementsAs(that: Iterable[T]): Boolean = sameElementsAs(that, (x, y) => x == y)
+    def sameElementsAs(that: GenIterable[T]): Boolean = sameElementsAs(that, (x, y) => x == y)
     /**
      * @return true if the 2 iterables contain the same elements (according to a comparison function f) recursively, in any order
      */
-    def sameElementsAs(that: Iterable[T], f: (T, T) => Boolean): Boolean = {
-      def isNotItsOwnIterable(a: Iterable[_]) = a.isEmpty || a.iterator.next != a
+    def sameElementsAs(that: GenIterable[T], f: (T, T) => Boolean): Boolean = {
+      def isNotItsOwnIterable(a: GenIterable[_]) = a.isEmpty || a.iterator.next != a
       def matchTwo(x: T, y: T): Boolean = {
         (x, y) match {
-          case (a: Iterable[_], b:Iterable[_]) if (isNotItsOwnIterable(a)) => x.asInstanceOf[Iterable[T]].sameElementsAs(y.asInstanceOf[Iterable[T]], f)
+          case (a: GenIterable[_], b: GenIterable[_]) if (isNotItsOwnIterable(a)) =>
+            x.asInstanceOf[GenIterable[T]].sameElementsAs(y.asInstanceOf[GenIterable[T]], f)
           case _ => f(x, y)
         }
       }
       val ita = xs.iterator.toList
       val itb = that.iterator.toList
-      var res = true
       (ita, itb) match {
         case (Nil, Nil) => true
-        case (a: Iterable[_], b: Iterable[_]) => {
-          if (a.headOption.isDefined && b.headOption.isDefined) {
+        case (a: GenIterable[_], b: GenIterable[_]) => {
+           (a.headOption.isDefined && b.headOption.isDefined) && {
             val (x, y, resta, restb) = (a.head, b.head, a.drop(1), b.drop(1))
             matchTwo(x, y) && resta.sameElementsAs(restb, f) ||
-            resta.exists(matchTwo(_, y)) && restb.exists(matchTwo(_, x)) &&
-              resta.removeFirst(matchTwo(_, y)).sameElementsAs(restb.removeFirst(matchTwo(_, x)), f)
+            resta.exists(matchTwo(_, y)) && restb.exists(matchTwo(x, _)) &&
+              resta.removeFirst(matchTwo(_, y)).sameElementsAs(restb.removeFirst(matchTwo(x, _)), f)
           }
-          else
-            false
         }
         case _ => ita == itb
       }
@@ -90,16 +94,27 @@ trait Iterablex {
       else
         "[" + xs.toList.map { x => 
           x match {
-            case i: Iterable[_] => i.toDeepString
+            case i: GenIterable[_] => i.toDeepString
             case _ => x.toString
           }
        }.mkString(", ") + "]"
     }
     /** map the first element with a function */
-    def mapFirst(f: T => T): Seq[T] = (xs.take(1).map(f) ++ xs.drop(1)).toSeq
+    def mapFirst(f: T => T): GenSeq[T] = (xs.take(1).map(f) ++ xs.drop(1)).toSeq
     /** map the last element with a function */
-    def mapLast(f: T => T): Seq[T] = (xs.dropRight(1) ++ xs.takeRight(1).map(f)).toSeq
+    def mapLast(f: T => T): Seq[T] = (xs.seq.dropRight(1) ++ xs.seq.takeRight(1).map(f)).toSeq
+    /** reduce a list from left to right */
+    def reduceWith[S](reducer: Reducer[T, S]) = FoldlGenerator[Iterable].reduce(reducer, xs.seq)
+    /** @return a sequence rotated of a number of elements */
+    def rotate(n: Int) = xs.slice(n, xs.size) ++ xs.slice(0, n)
+    /** @return a randomly mixed sequence */
+    def scramble = {
+      val random = new java.util.Random
+      // rotate arbitrarily the sequence first then sort randomly
+      xs.rotate(random.nextInt(xs.size+1)).seq.toSeq.sortWith((_,_) => random.nextInt(2) > 0)
+    }
+
   }
 }
-private[specs2]
+
 object Iterablex extends Iterablex

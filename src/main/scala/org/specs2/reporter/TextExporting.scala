@@ -1,7 +1,6 @@
 package org.specs2
 package reporter
 
-import io.Output
 import main.Arguments
 import specification._
 
@@ -11,9 +10,11 @@ import specification._
  */
 trait TextExporting extends TextPrinter with Exporting { outer =>
 
-  type ExportType = Unit
-  
-  def export(s: SpecificationStructure)(implicit args: Arguments) = (fragments: Seq[ExecutedFragment]) => {
-    print(s, fragments)
+  def export(implicit args: Arguments): ExecutingSpecification => ExecutedSpecification = (spec: ExecutingSpecification) => {
+    spec.foreach { (name, fragments) => print(name, fragments) }
+    spec.executed
   }
+
 } 
+object TextExporting extends TextExporting
+

@@ -19,3 +19,5 @@ trait ExecutionOrigin extends Stacktraces {
   /** return true if the current test is executed from an IDE */
   lazy val isExecutedFromAnIDE = isExecutedFromIntellij || isExecutedFromEclipse
 }
+
+

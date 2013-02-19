@@ -1,5 +1,6 @@
 package org.specs2
 package specification
+
 import TagsFragments._
 
 /**

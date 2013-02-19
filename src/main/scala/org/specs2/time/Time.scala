@@ -2,7 +2,7 @@ package org.specs2
 package time
 
 import java.text.{ ParsePosition, SimpleDateFormat }
- 
+
 /**
  * This object provides functions to describe units of time
  *
@@ -10,7 +10,7 @@ import java.text.{ ParsePosition, SimpleDateFormat }
  */
 trait TimeConversions {
   
-  class RichLong(l: Long) {
+  implicit class longAsTime(l: Long) {
     def toLong = l
  
     def seconds = new Duration(toLong * 1000)
@@ -26,16 +26,23 @@ trait TimeConversions {
     def day = days
   }
  
-  implicit def intToRichLong(v: Int) = new RichLong(v.toLong)
-  implicit def longToRichLong(v: Long) = new RichLong(v)
+  implicit def intToRichLong(v: Int) = new longAsTime(v.toLong)
 }
+
+/**
+ * This trait can be used to deactivate the time conversions (to avoid conflicts with Akka's conversions for example
+ */
+trait NoTimeConversions extends TimeConversions {
+  override def intToRichLong(v: Int) = super.intToRichLong(v)
+  override def longAsTime(v: Long)   = super.longAsTime(v)
+}
+
 object TimeConversions extends TimeConversions
  
 /**
  * Time duration. Along with the conversions provided by the TimeConversions object.
  * Durations can be created by adding the time unit to a number: 1.minute
  */
-private[specs2]
 class Duration(val at: Long) {
   def inDays = (inHours / 24)
   def inHours = (inMinutes / 60)
@@ -50,7 +57,7 @@ class Duration(val at: Long) {
   def fromNow = Time(Time.now + this)
   def ago = Time(Time.now - this)
  
-  override def toString = inSeconds.toString
+  override def toString = SimpleTimer.fromString(inMillis.toString).time
  
   override def equals(other: Any) = {
     other match {
@@ -65,7 +72,6 @@ class Duration(val at: Long) {
   def <=(other: Duration) = at <= other.at
 }
 
-private[specs2]
 class Time(at: Long) extends Duration(at) {
   override def +(delta: Duration) = new Time(at + delta.inMillis)
   override def -(delta: Duration) = new Time(at - delta.inMillis)

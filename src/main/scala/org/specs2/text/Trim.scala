@@ -1,8 +1,11 @@
 package org.specs2
 package text
-import scala.util.matching.Regex
-import Regex.Match
+
+import collection._
 import java.io.StringWriter
+import java.util.regex.Pattern
+import util.matching.Regex
+import util.matching.Regex.Match
 
 /**
  * Utility methods for trimming text
@@ -23,8 +26,10 @@ trait Trim extends control.Debug {
 	  
     def trimEnd(end: String) =
       if (s.trim.endsWith(end)) s.trim.dropRight(end.size)  else s.trim
-    
-	  def trimEnclosing(start: String, end: String) = if (s.trim.startsWith(start) && s.trim.endsWith(end)) {
+
+    def trimEnclosing(start: String): String = trimEnclosing(start, start)
+
+	  def trimEnclosing(start: String, end: String): String = if (s.trim.startsWith(start) && s.trim.endsWith(end)) {
       trimStart(start).trimEnd(end).trim
     } else s
 	  
@@ -36,21 +41,36 @@ trait Trim extends control.Debug {
     def removeEnd(end: String) =
       if (s.endsWith(end)) s.dropRight(end.size)  else s
 
-    def removeEnclosing(toRemove: String) = removeStart(toRemove).removeEnd(toRemove)
-	  def removeEnclosing(start: String, end: String) = removeStart(start).removeEnd(end)
+    def removeEnclosing(toRemove: String):String = removeEnclosing(toRemove, toRemove)
 
-	  def removeEnclosingXmlTag(t: String) = removeFirst("<"+t+".*?>").trimEnd("</"+t+">")
+	  def removeEnclosing(start: String, end: String):String =
+      if (isEnclosing(start, end)) removeStart(start).removeEnd(end)
+      else                                 s
+
+	  def removeEnclosingXmlTag(t: String) =
+      if (isEnclosing("<"+t, "</"+t+">")) removeFirst("<"+t+".*?>").trimEnd("</"+t+">")
+      else                                s
+
+    def isEnclosing(start: String, end: String) = s.startsWith(start) && s.endsWith(end)
 
     def trimNewLines = Seq("\r", "\n").foldLeft(s) { (res, cur) =>
       res.trimStart(cur).trimEnd(cur)
     }
 	
     def removeNewLines = Seq("\r", "\n").foldLeft(s) { (res, cur) =>
-      res.removeStart(cur).removeEnd(cur)
+      res.replaceAll(cur, "")
     }
 
     def trimFirst(exp: String) = new Regex(exp).replaceFirstIn(s.trim, "")
+
     def removeFirst(exp: String) = new Regex(exp).replaceFirstIn(s, "")
+
+    def removeLast(exp: String) = {
+      exp.r.findAllIn(s).toSeq match {
+        case something :+ last => s.removeEnd(last)
+        case _                 => s
+      }
+    }
 
     def trimReplace(pairs: Pair[String, String]*) = pairs.foldLeft(s.trim) { (res, cur) =>
       res.replace(cur._1, cur._2)
@@ -73,7 +93,7 @@ trait Trim extends control.Debug {
 
     /** replace each group with something else */
     def replaceAll(exp: String, f: String => String) = {
-      new Regex(exp).replaceAllIn(s, (m: Match) => f(m.group(0)))
+      new Regex(exp).replaceAllIn(s, (m: Match) => f(m.group(0).replace("\\", "\\\\")))
     }
 
     /** @return a sequence of lines by splitting on newlines */
@@ -88,12 +108,14 @@ trait Trim extends control.Debug {
     def isTrimEmpty = s.trim.isEmpty
 
     def remove(toRemove: String*) = toRemove.foldLeft(s) { (res, cur) => res.replace(cur, "") }
-    def removeAll(remove: String) = s.replaceAll(toReplace(remove), "")
+    def removeAll(remove: String) = s.replaceAll(Pattern.quote(remove), "")
 
     /** split and trim each, removing empty strings */
     def splitTrim(separator: String): Seq[String] = (s.split(separator).collect { case t if !t.trim.isEmpty => t.trim }).toSeq
 
-    private def toReplace(c: String) = c.map { letter => if ("()[]{}+-\\^$|?.*".contains(letter)) ("\\" + letter) else letter }.mkString("")
+    /** @return the string or empty if the condition is true */
+    def unless(condition: Boolean) = if (condition) "" else s
+
   }
 }
 private[specs2]

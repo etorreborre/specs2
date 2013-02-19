@@ -2,17 +2,24 @@ package org.specs2
 package reporter
 
 import main.Arguments
-import control.LazyParameters._
 import specification._
 import Fragments._
-import SpecsArguments._
+import internal.scalaz.Digit._0
 
 /**
  * The Sequence trait implements the logic for the fragments to execute according to their dependencies
  */
 trait Sequence {
   /** select function returning a filtered and ordered seq of seq of Fragments */
-  def sequence(implicit arguments: Arguments): Seq[Fragment] => Seq[FragmentSeq]
+  def sequence(implicit arguments: Arguments): SpecificationStructure => ExecutableSpecification
+}
+
+/**
+ * this case class transports the fragments to execute, grouped in sequences of examples which can be executed concurrently
+ */
+case class ExecutableSpecification(name: SpecName, arguments: Arguments, fs: Seq[FragmentSeq]) {
+  def map(f: Fragment => Fragment) = copy(fs = fs.map(seq => seq map f))
+  def fragments = fs.flatMap(fseq => fseq.fragments)
 }
 
 /**
@@ -20,8 +27,8 @@ trait Sequence {
  */
 trait DefaultSequence {
   /** sequence function returning an ordered seq of seq of Fragments */
-  def sequence(implicit arguments: Arguments): Seq[Fragment] => Seq[FragmentSeq] =
-    (fragments: Seq[Fragment]) => sequence(fragments)(arguments)
+  def sequence(implicit arguments: Arguments): SpecificationStructure => ExecutableSpecification = (spec: SpecificationStructure) =>
+    ExecutableSpecification(spec.content.specName, spec.content.arguments, sequence(spec.content.specName, spec.content.fragments)(arguments))
 
   /**
    * the sequence method returns sequences of fragments which can be executed concurrently.
@@ -30,28 +37,30 @@ trait DefaultSequence {
    *
    * If the arguments specify that the specification is sequential, then each fragment will be executed individually
    */
-  def sequence(fragments: Seq[Fragment])(implicit arguments: Arguments = Arguments()): Seq[FragmentSeq] = {
-    if (arguments.sequential) fragments.map(f => FragmentSeq.create(f))
-    else isolateSteps(fragments)(arguments).reverse
+  def sequence(specName: SpecName, fragments: Seq[Fragment])(implicit arguments: Arguments = Arguments()): Seq[FragmentSeq] = {
+    if (arguments.sequential) fragments.map(f => FragmentSeq.create(f, arguments))
+    else                      isolateSteps(fragments)(arguments).reverse
   }
-  
+
   protected def isolateSteps(fragments: Seq[Fragment])(implicit arguments: Arguments): Seq[FragmentSeq] = {
-    fragments.foldLeft(Nil: List[FragmentSeq]) { (res, f) =>
-      res match {
-        case Nil => List(FragmentSeq.create(f))
+    SpecsArguments.foldAll(fragments).fragmentAndApplicableArguments.foldLeft(Vector(): Seq[FragmentSeq]) { case (res, (f, a)) =>
+      res.toList match {
+        case Nil => Vector(FragmentSeq.create(f, a))
         case last :: rest => f match {
-          case Step(_) if last.fragments.exists(isExample) => FragmentSeq.create(f) :: last :: rest
-          case Example(_, _) if last.fragments.exists(isStep) => FragmentSeq.create(f) :: last :: rest
-          case _ => FragmentSeq(last.fragments :+ f) :: rest
+          case SpecStart(_,_,_)                                                  => FragmentSeq.create(f, a) +: res
+          case Step(_,_) if last.fragments.exists(isExampleOrStep)               => FragmentSeq.create(f, a) +: res
+          case Example(_, _) if last.fragments.exists(isStep)                    => FragmentSeq.create(f, a) +: res
+          case any if last.fragments.lastOption.map(isSpecEnd).getOrElse(false)  => FragmentSeq.create(f, a) +: res
+          case _                                                                 => last.add(f) +: rest.toSeq
         }
       }
     }
   }
-
 }
-case class FragmentSeq(fragments: Seq[Fragment]) {
-  def arguments = Fragments.create(fragments:_*).arguments
+case class FragmentSeq(fragments: Seq[Fragment], arguments: Arguments) {
+  def add(f: Fragment) = copy(fragments :+ f)
+  def map(f: Fragment => Fragment) = copy(fragments = fragments map f)
 }
 case object FragmentSeq {
-  def create(f: Fragment) = FragmentSeq(Seq(f))
+  def create(f: Fragment, a: Arguments) = FragmentSeq(Seq(f), a)
 }

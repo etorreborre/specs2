@@ -17,19 +17,26 @@ trait FormsBuilder {
   /** anything can be added on a Form row as a Field */
   implicit def anyIsField[T](t: =>T): Field[T] = Field(t)
   /** anything can be added on a Form row as a TextCell */
-  implicit def anyIsFieldCell[T](t: =>T): FieldCell = fieldIsTextCell(Field(t))
+  implicit def anyIsFieldCell(t: =>Any): FieldCell = fieldIsTextCell(Field(t))
+  /** any seq of object convertible to cells */
+  implicit def anyCellableSeq[T <% Cell](seq: Seq[T]): Seq[Cell] = seq.map(s => implicitly[T=>Cell].apply(s))
   /** any xml can be injected as a cell */
   implicit def xmlIsACell[T](xml: =>NodeSeq): XmlCell = new XmlCell(xml)
   /** a Field can be added on a Form row as a FieldCell */
-  implicit def fieldIsTextCell[T](t: Field[T]) = new FieldCell(t)
+  implicit def fieldIsTextCell(t: Field[_]): FieldCell = new FieldCell(t)
   /** a Effect can be added on a Form row as a EffectCell */
-  implicit def effectIsTextCell[T](t: Effect[T]): EffectCell = new EffectCell(t)
-  /** a Prop can be added on a Form row as a PropCell */
+  implicit def effectIsTextCell(t: Effect[_]): EffectCell = new EffectCell(t)
+  /** a Prop can be adde d on a Form row as a PropCell */
   implicit def propIsCell(t: Prop[_, _]): PropCell = new PropCell(t)
   /** a Form can be added on a Form row as a FormCell */
   implicit def formIsCell(t: =>Form): FormCell = new FormCell(t)
   /** a Form can be implicitly executed if necessary */
   implicit def formIsExecutable(f: Form): Result = f.execute
+  /** a Form can be implicitly transformed to results */
+  implicit def formAsResult: AsResult[Form] = new AsResult[Form] {
+    def asResult(f: =>Form): Result = formIsExecutable(f)
+  }
+
   /** a cell can be added lazily to a row. It will only be evaluated when necessary */
   def lazyfy(c: =>Cell) = new LazyCell(c)
 
@@ -62,16 +69,23 @@ trait FormsBuilder {
   def prop[T, S](label: String, actual: =>T, c: (T, S) => Result) = Prop(label, actual, c)
 
   /** @return a new Prop with a label, an actual value and a matcher to apply to values */
-  def prop[T, S](label: String, actual: =>T, c: (S) => Matcher[T]) = Prop(label, actual, c)
+  def prop[T, S](label: String, actual: =>T, c: (S) => Matcher[T]) = Prop[T, S](label, actual, c)
 
   /** @return a new Prop with a label, an actual value and a matcher to apply to the actual value */
-  def prop[T, S](label: String, actual: =>T, c: Matcher[T]) = Prop(label, actual, c)
+  def prop[T](label: String, actual: =>T, c: Matcher[T]) = Prop[T](label, actual, c)
+
+  /** @return a new Prop with no label, an actual value and a matcher to apply to the actual value */
+  def prop[T](actual: =>T, c: Matcher[T]) = Prop[T]("", actual, c)
+
+  /** @return a new Prop with a label, an actual value and a matcher to apply to the actual value */
+  def prop[T, S](label: String, actual: =>T, expected: => S, c: Matcher[T]) = Prop[T, S](label, actual, expected, c)
 
   /** @return a new Tabs object */
   def tabs = new Tabs()
 
   /** @return a new Tabs object with a first tab */
   def tab(label: String, form: Form) = tabs.tab(label, form)
+
 }
 private[specs2]
 object FormsBuilder extends FormsBuilder

@@ -11,7 +11,7 @@ import execute._
  * @see After
  */
 trait BeforeAfter extends Before with After { outer =>
-  override def apply[T <% Result](a: =>T): Result = {
+  override def apply[T : AsResult](a: =>T): Result = {
 	  lazy val result = super[Before].apply(a)
 	  super[After].apply(result)
   }
@@ -23,11 +23,10 @@ trait BeforeAfter extends Before with After { outer =>
   }
 
   /** sequence the actions of 2 BeforeAfter traits */
-  def then(b: BeforeAfter): BeforeAfter = new BeforeAfter {
+  def andThen(b: BeforeAfter): BeforeAfter = new BeforeAfter {
     def before = { outer.before; b.before }
     def after = { outer.after; b.after}
   }
-
 }
 
 /**
@@ -38,7 +37,7 @@ trait BeforeAfter extends Before with After { outer =>
  * @see Around
  */
 trait BeforeAfterAround extends Before with After with Around { outer =>
-  override def apply[T <% Result](a: =>T): Result = {
+  override def apply[T : AsResult](a: =>T): Result = {
 	  lazy val result = super[Around].apply(a)
 	  lazy val resultWithBefore = super[Before].apply(result)
 	  super[After].apply(resultWithBefore)
@@ -47,16 +46,16 @@ trait BeforeAfterAround extends Before with After with Around { outer =>
   def compose(a: BeforeAfterAround): BeforeAfterAround = new BeforeAfterAround {
     def before = { a.before; outer.before }
     def after = { a.after; outer.after }
-    def around[T <% Result](t: =>T): Result = {
+    def around[T : AsResult](t: =>T): Result = {
       a.around(outer.around(t))
     }
   }
 
   /** sequence the actions of 2 BeforeAfterAround traits */
-  def then(a: BeforeAfterAround): BeforeAfterAround = new BeforeAfterAround {
+  def andThen(a: BeforeAfterAround): BeforeAfterAround = new BeforeAfterAround {
     def before = { outer.before; a.before }
     def after = { outer.after; a.after }
-    def around[T <% Result](t: =>T): Result = {
+    def around[T : AsResult](t: =>T): Result = {
       outer.around(a.around(t))
     }
   }

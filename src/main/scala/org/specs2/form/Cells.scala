@@ -7,12 +7,13 @@ import text.NotNullStrings._
 import main.Arguments
 import execute._
 import StandardResults._
-
+import text.Markdown
+import language.existentials
 /**
  * A Cell is the Textual or Xml representation of a Form element: Field, Prop or Form.
  * A more general XmlCell is also available to be able to input any kind of Xml inside a Form
  * 
- * A Cell can be executed by executing the underlying element but also set to a specific result (success or failure).
+ * A Cell can be executed by executing the underlying element but also by setting the cell to a specific result (success or failure).
  * This feature is used to display rows of values with were expected and found ok in Forms.
  *
  */
@@ -49,10 +50,11 @@ trait Xml {
 object Xml {
   /** @return the stacktraces of a Cell depending on its type and execution result */
   def stacktraces(cell: Cell)(implicit args: Arguments): NodeSeq = cell match {
-    case FormCell(f: Form)                          => f.rows.map(stacktraces(_)).reduceNodes
-    case PropCell(_, Some(e @ Error(_, _)))         => stacktraces(e)
-    case PropCell(_, Some(f @ Failure(_, _, _, _))) => stacktraces(f)
-    case other                                      => NodeSeq.Empty
+    case FormCell(f: Form)                           => f.rows.map(stacktraces(_)).reduceNodes
+    case PropCell(_, Some(e @ Error(_, _)))          => stacktraces(e)
+    case PropCell(_, Some(f @ Failure(_, _, _, _)))  => stacktraces(f)
+    case FieldCell(_, Some(e @ Error(_, _)))         => stacktraces(e)
+    case other                                       => NodeSeq.Empty
   }
 
   private def stacktraces(row: Row)(implicit args: Arguments): NodeSeq = row.cells.map(stacktraces(_)).reduceNodes
@@ -65,7 +67,7 @@ object Xml {
 
   /** @return  the number of columns for a given cell */
   def colnumber(cell: Cell): Int = cell match {
-    case TextCell(_, _)   => 1 // just the string
+    case TextCell(_,_,_)  => 1 // just the string
     case FieldCell(_, _)  => 3 // label + value + optional error
     case PropCell(_, _)   => 3 // label + value + optional error/failure
     case EffectCell(_, _) => 2 // label + optional error
@@ -78,16 +80,31 @@ object Xml {
 /**
  * Simple Cell embedding an arbitrary String
  */
-case class TextCell(s: String, result: Result = skipped) extends Cell {
+case class TextCell(s: String, result: Option[Result] = None, decorator: Decorator = Decorator()) extends Cell with DecoratedProperty[TextCell] {
 
   def text = s
 
-  def xml(implicit args: Arguments) = <td class={execute.statusName}>{s}</td>
+  def xml(implicit args: Arguments) = <td class={result.map(_.statusName).getOrElse("none")} style="info">{decorateValue(Markdown.toXhtml(text))}</td>
 
-  def execute = result
+  def execute = result.getOrElse(Skipped())
   def setSuccess = TextCell(s, success)
   def setFailure = TextCell(s, failure)
   def executeCell = this
+
+  /** set a new Decorator */
+  def decoratorIs(d: Decorator) = copy(decorator = d)
+
+  override def equals(other: Any) = {
+    other match {
+      case TextCell(s1, result1, _) => s == s1 && result == result1
+      case _                        => false
+    }
+  }
+
+}
+
+object TextCell {
+  def apply(s: String, result: Result): TextCell = new TextCell(s, Some(result))
 }
 /**
  * Cell embedding a Field
@@ -96,13 +113,13 @@ case class FieldCell(f: Field[_], result: Option[Result] = None) extends Cell {
   def text = f.toString
 
   def xml(implicit args: Arguments) = {
-    val executed = f.valueOrResult match {
+    val executedValue = f.valueOrResult match {
       case Left(e)  => e
       case Right(e) => e
     }
     val executedResult = execute
     (<td style={f.labelStyles}>{f.decorateLabel(f.label)}</td> unless f.label.isEmpty) ++
-     <td class={statusName(executedResult)} style={f.valueStyles}>{f.decorateValue(executed)}</td> ++
+     <td class={statusName(executedResult)} style={f.valueStyles}>{f.decorateValue(executedValue)}</td> ++
     (<td class={executedResult.statusName} onclick={"showHide("+System.identityHashCode(executedResult).toString+")"}>{executedResult.message}</td> unless
       !executedResult.isError)
   }
@@ -113,8 +130,9 @@ case class FieldCell(f: Field[_], result: Option[Result] = None) extends Cell {
   }
 
   def execute = result.getOrElse(f.execute)
-  def setSuccess = FieldCell(f, Some(success))
-  def setFailure = FieldCell(f, Some(failure))
+  def setSuccess = setResult(success)
+  def setFailure = setResult(failure)
+  def setResult(r: Result) = FieldCell(f, Some(r))
   def executeCell = FieldCell(f, result.orElse(Some(f.execute)))
 
 }
@@ -136,7 +154,7 @@ case class EffectCell(e: Effect[_], result: Option[Result] = None) extends Cell 
 
   private def statusName(r: Result) = r match {
     case Skipped(_, _) => "info"
-    case Success(_)    => "info"
+    case Success(_, _) => "info"
     case _             => r.statusName
   }
 
@@ -161,25 +179,27 @@ case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell {
   def xml(implicit args: Arguments): NodeSeq = {
     val executed = result.getOrElse(skipped)
     (<td style={p.labelStyles}>{p.decorateLabel(p.label)}</td> unless p.label.isEmpty) ++
-    (<td class={executed.statusName}>{p.decorateValue(p.expected.getOrElse(""))}</td> unless !p.expected.isDefined) ++
-    (<td class={executed.statusName} onclick={"showHide("+System.identityHashCode(executed).toString+")"}>{executed.message}</td> unless executed.isSuccess)
+    (<td class={executed.statusName}>{p.decorateValue(p.expectedValue.right.toOption.getOrElse(""))}</td> unless !p.expectedValue.right.toOption.isDefined) ++
+    (<td class={executed.statusName} onclick={"showHide("+System.identityHashCode(executed).toString+")"}>{executed.message}</td> unless (executed.isSuccess || executed.message.isEmpty))
   }
 }
 /**
  * Cell embedding a Form
  */
-class FormCell(_form: =>Form) extends Cell {
+class FormCell(_form: =>Form, result: Option[Result] = None) extends Cell {
   lazy val form = _form
 
   def text: String = form.text
 
   def xml(implicit args: Arguments) = form.toCellXml(args)
 
-  def execute = form.execute
-  def executeCell = new FormCell(form.executeForm)
-
-  def setSuccess = new FormCell(form.setSuccess)
-  def setFailure = new FormCell(form.setFailure)
+  def execute = result.getOrElse(form.execute)
+  def executeCell = {
+    lazy val executed = result.map(r => form).getOrElse(form.executeForm)
+    new FormCell(executed, result.orElse(Some(executed.execute)))
+  }
+  def setSuccess = new FormCell(form.setSuccess, Some(success))
+  def setFailure = new FormCell(form.setFailure, Some(failure))
 
   /**
    * @return the width of a form when inlined.

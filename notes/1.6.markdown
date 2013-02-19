@@ -1,0 +1,27 @@
+This version adds new features on top of 1.5. The first set of features rely on the storage of execution results for each run (in the `specs2-report/stats` directory by default):
+
+ * executing an index page with `see` links referencing other specifications now displays their status correctly
+ * it is possible to execute only previously failed/error examples with the `wasIssue` argument
+ * it is possible to display only pending, or skipped examples with a status flag. For example `show("!o")` will only show errors and skipped examples
+ * reports now show the differences with the previous execution: `3 examples, 1 failure (-1), 1 error (+1)`
+ * storing results can be completely deactivated with the `neverStore` argument
+ * the arguments api has evolved a bit because the number of arguments exceeds the maximum number of function parameters (see the Runners guide for the complete description of the Arguments api and new arguments)
+
+The other features are:
+ 
+ * html reports with issues have a link to display only the failed examples
+ * DataTables are now [contravariant](https://github.com/etorreborre/specs2/commit/38f684f7747dda3e1ac05271e8f25fe7848f7e39)
+ * an exception is thrown if a null matcher is passed to an expectable
+ * new `ThrownMessages` trait for [generic integration with other libraries](https://groups.google.com/d/topic/specs2-users/tskUhL5G4jE/discussion)
+ * new `haveInterface` matcher
+ * new mutable `BeforeAfter` trait (was missing,...)
+  
+And some fixes:
+
+ * fixed the issue with -Dcolor=false not being recognized
+ * reworked the Given/When/Then specifications indentation so that formatting fragments can now be used to adjust the display
+ * fixed a [typechecking issue](https://groups.google.com/d/topic/specs2-users/mYyGuvBYMwI/discussion) with Mockito specifications
+ * fixed auto-examples [when no 'end' fragment is used](https://groups.google.com/d/topic/specs2-users/mEpVvVSSqHA/discussion) at the end of the specification 
+ * fixed [issue 30](https://github.com/etorreborre/specs2/issues/30): IndexOutOfBoundsException with auto-examples
+ 
+ ==========================

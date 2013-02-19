@@ -1,6 +1,7 @@
 package org.specs2
 package control
 
+
 /**
  * This trait provides methods to catch exceptions and transform them into values which can be passed to
  * further computations.
@@ -12,7 +13,9 @@ package control
  */
 private[specs2]
 trait Exceptions {
-  /** this implicit avoids having to pass a function when no effect is desired on the Exception being thrown */
+  /**
+   * this implicit avoids having to pass a function when no effect is desired on the Exception being thrown (on the tryo method for example)
+   */
   implicit def implicitUnit[T](t: T): Unit = ()
   
   /**
@@ -52,12 +55,22 @@ trait Exceptions {
 	  catch { case e: Throwable => f(e) }
   }
   /**
+   * try to evaluate an expression, returning a value T
+   *
+   * If the expression throws a Throwable, then return a default value
+   */
+  def catchAllOrElse[T](a: =>T)(ko: =>T): T = catchAllOr(a)((e: Throwable) => ko)
+  /**
    * try to evaluate an expression and return it if nothing fails.
    * return ko otherwise
    */
-  def tryOrElse[T](a: =>T)(ko: T): T = {
-    tryo(a).map(identity).getOrElse(ko)
-  }
+  def tryOrElse[T](a: =>T)(ko: T): T = tryo(a).map(identity).getOrElse(ko)
+  /**
+   * try to evaluate an expression and return it in an Option if nothing fails.
+   * return None otherwise
+   */
+  def tryOrNone[T](a: =>T): Option[T] = tryo(a).orElse(None)
+
   /**
    * try to evaluate an expression and return ok if nothing fails.
    * return ko otherwise

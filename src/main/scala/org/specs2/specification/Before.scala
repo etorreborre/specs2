@@ -1,23 +1,22 @@
 package org.specs2
 package specification
 
-import control.Exceptions._
 import execute._
-import matcher._
 
 /**
  * generic trait for Before, After, Around
  */
-trait Context {
-  def apply[T <% Result](a: =>T): Result
+trait Context extends Scope {
+  def apply[T : AsResult](a: =>T): Result
 }
 /**
  * The Before trait can be inherited by classes representing a context
  * where an action must be executing before the main executable action
  * 
- * @see Example to understand why the type T must <% Result
+ * @see Example to understand why the type T must : AsResult
  */
 trait Before extends Context { outer =>
+
   /** override this method to provide the before behavior */
   def before: Any
   /** 
@@ -26,21 +25,21 @@ trait Before extends Context { outer =>
    * 
    * The action will be aborted if the before block fails:
    *
-   * * with an exception
-   * * with a non-Success result
-   * * with a non-Success match result
+   * - with an exception
+   * - with a non-Success result
+   * - with a non-Success match result
    */
-  def apply[T <% Result](a: =>T): Result = {
-    ResultExecution.execute(before)((any: Any) => a)
-  }
-  
+  override def apply[T : AsResult](a: =>T): Result =
+    ResultExecution.execute(before)((any: Any) => AsResult(a))
+
   /** compose the actions of 2 Before traits */
   def compose(b: Before): Before = new Before {
     def before = { b.before; outer.before }
   }
 
   /** sequence the actions of 2 Before traits */
-  def then(b: Before): Before = new Before {
+  def andThen(b: Before): Before = new Before {
     def before = { outer.before; b.before }
   }
+
 }

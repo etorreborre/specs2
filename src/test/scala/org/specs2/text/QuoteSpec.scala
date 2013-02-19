@@ -1,12 +1,16 @@
 package org.specs2
 package text
+
 import Quote._
+import specification.Grouped
 
-class QuoteSpec extends Specification { def is =
+class QuoteSpec extends Specification with Grouped { def is =
 
-  "A string can be added as a prefix to another with a separator"                                                       ! prefix1
-  "but if it is empty the separator will not be displayed"                                                              ! prefix2
+  "A string can be added as a prefix to another with a separator"                                                       ! g1.e1^
+  "but if it is empty the separator will not be displayed"                                                              ! g1.e2
 
-  def prefix1 = "Warning" prefix(": ", "dangerous") must_== "Warning: dangerous"
-  def prefix2 = "" prefix(": ", "dangerous") must_== "dangerous"
+  new g1 {
+    e1 := "Warning".prefix(": ", "dangerous") === "Warning: dangerous"
+    e2 := "".prefix(": ", "dangerous")        === "dangerous"
+  }
 }

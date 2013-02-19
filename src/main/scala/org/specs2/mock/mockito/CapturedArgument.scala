@@ -3,6 +3,7 @@ package mock
 package mockito
 
 import org.mockito.ArgumentCaptor
+import scala.reflect.ClassTag
 
 /**
  * Syntactic sugar on top of the ArgumentCaptor API
@@ -10,14 +11,17 @@ import org.mockito.ArgumentCaptor
  */
 trait CapturedArgument {
   /** capture an argument of type T */
-  def capture[T : ClassManifest]: ArgumentCapture[T] = new ArgumentCapture[T]
+  def capture[T : ClassTag]: ArgumentCapture[T] = new ArgumentCapture[T]
 
-  /** This class encapsulates an ArgumentCaptor */
-  class ArgumentCapture[T](implicit m: ClassManifest[T]) {
-    lazy private val captor: ArgumentCaptor[T] = ArgumentCaptor.forClass(m.erasure).asInstanceOf[ArgumentCaptor[T]]
-    def value = captor.getValue
-    def capture = captor.capture()
-  }
   /** this conversion allows to capture the parameter is a mocked call */
   implicit def captured[T](c: ArgumentCapture[T]): T = c.capture
 }
+
+/** This class encapsulates an ArgumentCaptor */
+class ArgumentCapture[T](implicit m: ClassTag[T]) {
+  lazy private val captor: ArgumentCaptor[T] = ArgumentCaptor.forClass(m.runtimeClass).asInstanceOf[ArgumentCaptor[T]]
+  def value = captor.getValue
+  def values = captor.getAllValues
+  def capture = captor.capture()
+}
+

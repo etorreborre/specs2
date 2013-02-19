@@ -1,0 +1,35 @@
+// prepare the release artifacts
+1. set build.sbt version to next number
+2. change the version in the version.sbt file
+
+3. create the ls metadata: ls-write-version
+4. review the src/notes/<version>.json file
+5. update the index.html page: `test-only org.specs2.Index`
+6. create the user guide: `test-only *UserGuide* -- html`
+7. make the site: `make-site` (this creates the scaladoc)
+
+// tag
+8. commit the modified files and tag the version SPECS2-X.Y.Z
+9. push the new version (check "include tags")
+
+// publish
+10. test/cross publish the jars
+11. release on the sonatype website: http://oss.sonatype.org
+12. push the new github pages: `ghpages-push-site`
+13. change the default branch on github to the latest one
+14. push the ls information with lsync
+
+// test
+15. set the specs2-test project version
+16. test the specs2-test with the latest specs2
+17. tag and push the new version (check "include tags")
+18. download the test-project from the link on the Welcome page and test it again
+
+// prepare the new release
+19. create a new specs2 branch for the next SNAPSHOT
+20. create a new specs2-test branch for the next SNAPSHOT
+21. close the milestone on github and create a new one
+
+// notify
+22. herald-publish the posterous notes
+23. send a message on the twitter account

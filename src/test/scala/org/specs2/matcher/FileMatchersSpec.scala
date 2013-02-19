@@ -1,8 +1,6 @@
 package org.specs2
 package matcher
 import java.io.File
-import specification._
-import text._
 import io._
 
 class FileMatchersSpec extends Specification with TestFiles with MockFileSystem { def is =
@@ -11,10 +9,9 @@ class FileMatchersSpec extends Specification with TestFiles with MockFileSystem 
 
   In the following, okPath references a path which actually exists and missingPath, a path
   which doesn't.
-
                                                                                                                         """^
                                                                                                                         p^
-  "The PathMatchers trait provide matchers for paths"                                                                   ^
+  "The PathMatchers trait provides matchers for paths"                                                                  ^
     "beEqualToIgnoringSep checks if 2 paths are the same regardless of"                                                 ^bt^
     "their separators"                                                                                                  ^
     { "c:\\temp\\hello" must beEqualToIgnoringSep("c:/temp/hello") }                                                    ^
@@ -94,6 +91,7 @@ class FileMatchersSpec extends Specification with TestFiles with MockFileSystem 
     "haveList checks if a file has a given list of children"                                                            ! fs().e11^
                                                                                                                         end
 }
+
 case class fs() extends MustMatchers with MockFileSystem with TestFiles {
   addFile(okPath, "")
 
@@ -110,8 +108,8 @@ case class fs() extends MustMatchers with MockFileSystem with TestFiles {
   def e10 = file(setWritable(okPath)) must beWritable
   def e11 = { addChild("c:/t", "c:/t/tst.txt");
               file("c:/t/") must haveList("c:/t/tst.txt") }
-
 }
+
 
 trait TestFiles {
   val okPath = "path"

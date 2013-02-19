@@ -1,8 +1,10 @@
 package org.specs2
+
 import guide._
 
-class UserGuide extends Specification { def is = 
-  "User Guide".title                                                                             ^
+class UserGuide extends UserGuidePage { def is =
+
+  "User Guide".title.urlIs("org.specs2.UserGuide.html")                                          ^
                                                                                                  """
   ***specs2*** is a library for writing executable software specifications in Scala.
 
@@ -11,11 +13,10 @@ class UserGuide extends Specification { def is =
   * specifications for simple classes (*unit* specifications)
   * specifications for full features (*acceptance* specifications)
 
-  In the following user guide, you will find:
-                                                                                                 """^
+  In this user guide, you will find:                                                             """^
                                                                                                  p^
   "a " ~ ("quick start guide", new QuickStart)                                                   ^
-  "how to " ~ ("structure your specification", new SpecStructure)                                ^
+  "how to " ~ ("structure your specification", new Structure)                                    ^
   "how to use " ~ ("matchers", new Matchers)                                                     ^
   "how to " ~ ("execute a specification", new Runners)                                           ^
   "the ***specs2*** " ~ ("philosophy", new Philosophy)                                           ^

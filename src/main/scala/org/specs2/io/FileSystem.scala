@@ -2,22 +2,19 @@ package org.specs2
 package io
 
 import java.io._
-import java.util.regex._
 import java.net.URL
 import java.util.zip._
-import scala.collection.JavaConversions._
-import java.lang.String._
 
 /**
  * The FileSystem trait abstracts file system operations to allow easier mocking of file system related functionalities.
  * <p>
- * It mixes the <code>FileReader</code> and <code>FileWriter</code> traits to provide easy read/write operations.  
+ * It mixes the `FileReader` and `FileWriter` traits to provide easy read/write operations.
  */
 private[specs2]
-trait FileSystem extends FileReader with FileWriter {
+trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter {
   /**
-   * @param path glob expression, for example: <code>./dir/**/*.xml</code>
-   * @return the list of paths represented by the "glob" definition <code>path</path>  
+   * @param path glob expression, for example: `./dir/**/*.xml`
+   * @return the list of paths represented by the "glob" definition `path`
    */
   def filePaths(basePath: String = ".", path: String = "*", verbose: Boolean = false): Seq[String] = {
     val found = recurse(new File(basePath))
@@ -91,9 +88,6 @@ trait FileSystem extends FileReader with FileWriter {
     }
     dir.getParent
   }
-  /** @return true if the file exists */
-  def exists(path: String) = path != null && new File(path).exists  
-
   /** @return true if the file can be read */
   def canRead(path: String) = path != null && new File(path).canRead  
 
@@ -219,29 +213,32 @@ trait FileSystem extends FileReader with FileWriter {
   }
 
   /** 
-   * Copy specs resources found either in the specs jar or in the classpath directories to an output directory.
+   * Copy specs resources found either in the specs jar or in the classpath directories to an output directory
+   * 
    * @param src name of the resource directory to copy
    * @param outputDir output directory where to copy the files to
    */
   def copySpecResourcesDir(src: String, outputDir: String) {
     val jarUrl = Thread.currentThread.getContextClassLoader.getResource(getClass.getName.replace(".", "/")+".class")
+    for (url <- Option(jarUrl) if url.toString.startsWith("jar"))
+      unjar(getPath(url).takeWhile(_ != '!').mkString, outputDir, ".*" + src + "/.*")
+
     val folderUrl = Thread.currentThread.getContextClassLoader.getResource(src)
-    val srcUrl = Option(if(folderUrl == null) jarUrl else folderUrl)
-    for (url <- srcUrl) {
-      if (url.toString.startsWith("jar"))
-        unjar(getPath(url).takeWhile(_ != '!').mkString, outputDir, ".*" + src + "/.*")
-      else
-        copyDir(url, outputDir + src)
-    }
+    for (url <- Option(folderUrl) if !folderUrl.toString.startsWith("jar"))
+      copyDir(url, outputDir + src)
   }
+
+  /** @return true if 2 paths are the same according to their canonical representation */
+  def samePath(p1: String, p2: String) = new File(p1).getCanonicalPath == new File(p2).getCanonicalPath
+
   /**
-   * @return a path that should be valid on all plateforms (@see issue 148)
+   * @return a path that should be valid on all plateforms (@see issue 148 of the specs project)
    */
   private def getPath(url: URL) = {
-    if (System.getProperty("file.separator") == "\\") 
-		  url.getPath.replace("\\", "/").replace("file:/", "")
-	  else
-		  url.getPath.replace("file:", "")
+    val path = if (sys.props("file.separator") == "\\") url.getPath.replace("\\", "/").replace("file:/", "")
+	             else                                     url.getPath.replace("file:", "")
+
+    path.replace("%20", " ")
   }
 }
 /**

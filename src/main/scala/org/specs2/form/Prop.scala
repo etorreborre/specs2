@@ -2,15 +2,15 @@ package org.specs2
 package form
 
 import control.{ Property }
-import control.Exceptions._
 import execute._
 import matcher._
+import text.NotNullStrings._
 
 /**
  * The Prop class is a named property which holds:
- *   * an expected value
- *   * an actual value
- *   * a constraint to check if the actual value conforms to the expected one
+ *   - an expected value
+ *   - an actual value
+ *   - a constraint to check if the actual value conforms to the expected one
  * 
  * This property can be executed and can be inserted in a Form.
  *
@@ -68,26 +68,30 @@ case class Prop[T, S](
    */
   def resultIs(r: =>Result): Prop[T, S] = copy(constraint = (t: T, s: S) => r)
   /**
+   * set a specific constraint on the property
+   */
+  def matchWith(c: (T, S) => Result): Prop[T, S] = copy(constraint = c)
+
+  /**
    * Display the property:
    * 
    * label: "this" (actual: "that")
    */
   override def toString = {
     (if (label.isEmpty) "" else (label + ": ")) + 
-    valueToString(expected, expectedValue) +
-    (if (expectedValue.right.toOption == actualValue.right.toOption) "" else (" (actual: " + valueToString(actual, actualValue) + ")"))
+    valueToString(expectedValue) +
+    (if (expectedValue.right.toOption == actualValue.right.toOption) "" else (" (actual: " + valueToString(actualValue) + ")"))
   }
 
   /**
    * @return the string for the expected/actual value depending on its existence and execution result
    */
-  private def valueToString(value: Property[_], executed: Either[Result, _]) = {
-    val result = value.toOption.map(v => executed).map { v => v match {
-       case Right(r) => r.toString
-       case Left(r)  => r.toString
-     }
+  private def valueToString(executed: Either[Result, _]) = {
+    executed match {
+      case Right(r)          => r.notNull
+      case Left(Pending(_))  => "_"
+      case Left(r)           => r.toString
     }
-    result getOrElse ("_")
   }
   /** set a new Decorator */
   def decoratorIs(d: Decorator) = copy(decorator = d)
@@ -115,16 +119,16 @@ object Prop {
     new Prop[T, S](label, actual = Property(act), constraint = (t: T, s: S) => c(s).apply(Expectable(t)).toResult)
   }
   /** create a Prop with a label, an actual value, and a matcher on the actual value */
-  def apply[T](label: String, act: =>T, c: Matcher[T]): Prop[T, String] = Prop(label, act, "success", c)
+  def apply[T](label: String, act: =>T, c: Matcher[T]): Prop[T, T] = {
+    lazy val a = act
+    Prop[T, T](label, a, a, c)
+  }
   /** create a Prop with a label, an actual value, an expected value, and a constraint on the actual value*/
   def apply[T, S](label: String, act: =>T, exp: =>S, c: Matcher[T]): Prop[T, S] = {
     new Prop[T, S](label, actual = Property(act), expected = Property(exp), constraint = (t: T, s: S) => c(Expectable(t)).toResult)
   }
   /** create a Prop with an empty label and an actual value */
-  def apply[T](act: =>T): Prop[T, T] = {
-    new Prop[T, T](actual = Property(act))
-  }
-  
+  def apply[T](act: =>T): Prop[T, T] = new Prop[T, T](actual = Property(act))
   /** default constraint function */
   private[Prop] def checkProp[T, S]: (T, T) => Result = (t: T, s: T) => (new BeTypedEqualTo(s).apply(Expectable(t))).toResult
 }

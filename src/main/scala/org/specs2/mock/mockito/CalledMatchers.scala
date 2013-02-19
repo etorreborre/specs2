@@ -2,16 +2,17 @@ package org.specs2
 package mock
 package mockito
 
-import org.mockito.InOrder
+import control.Throwablex._
 import org.mockito.verification.{ VerificationMode }
 import control.Exceptions._
 import matcher._
 import org.mockito.InOrder
-import execute.Result
+import execute.{ResultLogicalCombinators, AsResult, Result}
+import ResultLogicalCombinators._
 
 /**
- * This trait provides methods to declare expectations on mock calls:<code>
- * 
+ * This trait provides methods to declare expectations on mock calls:
+ * {{{
  * there was one(mockedList).get(0)
  * there was no(mockedList).get(0)
  * 
@@ -32,10 +33,9 @@ import execute.Result
  * 
  * there were two(mockedList).get(0)
  * got { two(mockedList).get(0) }
- * 
- * </code>
+ * }}}
  */
-trait CalledMatchers extends NumberOfTimes with TheMockitoMocker with Expectations {
+trait CalledMatchers extends NumberOfTimes with FunctionArguments with TheMockitoMocker with Expectations {
   /** this matcher evaluates an expression containing mockito calls verification */
   private class CallsMatcher extends Matcher[Any] {
     def apply[S <: Any](calls: Expectable[S]) = checkCalls[S](calls)
@@ -44,12 +44,14 @@ trait CalledMatchers extends NumberOfTimes with TheMockitoMocker with Expectatio
   private def checkCalls[T] = new Matcher[T] {
     def apply[S <: T](s: Expectable[S]) = {
       catchAll { s.value } { identity } match {
-        case Right(v) => new MatchSuccess("The mock was called as expected", "The mock was not called as expected", Expectable(v))
-        case Left(e) => {
-          new MatchFailure("The mock was called as expected",
-                           "The mock was not called as expected: " + e.getMessage,
-                           createExpectable(s.value, e.getMessage))
+        case Right(v) => MatchSuccess("The mock was called as expected", "The mock was not called as expected", createExpectable(v))
+        case Left(e: AssertionError) => {
+          MatchFailure("The mock was called as expected",
+                       "The mock was not called as expected: " + e.messageAndCause,
+                       createExpectable(s.value, e.messageAndCause))
         }
+        // unexpected error from inside Mockito itself
+        case Left(e) => throw e
       }
     }
   }
@@ -92,43 +94,50 @@ trait CalledMatchers extends NumberOfTimes with TheMockitoMocker with Expectatio
   def inOrder(mocks: AnyRef*): Option[InOrder] =
     if (mocks.isEmpty) None
     else               Some(new org.mockito.internal.InOrderImpl(java.util.Arrays.asList(mocks:_*)))
-  
+
+  def inOrder(stubbed: IgnoreStubs): Option[InOrder] = inOrder(stubbed.mocks:_*)
+
+  /** no calls made to the mock */
+  def noCallsTo[T <: AnyRef](mocks: T*) = mocker.verifyZeroInteractions(mocks:_*)
   /** no call made to the mock */
-  def no[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.never())(anOrder)
+  def no[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.never())(anOrder)
   /** one call only made to the mock */
-  def one[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.times(1))(anOrder)
+  def one[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.times(1))(anOrder)
   /** two calls only made to the mock */
-  def two[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.times(2))(anOrder)
+  def two[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.times(2))(anOrder)
   /** three calls only made to the mock */
-  def three[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.times(3))(anOrder)
+  def three[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.times(3))(anOrder)
   /** at least n calls made to the mock */
-  def atLeast[T <: AnyRef](i: Int)(mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.atLeast(i))(anOrder)
+  def atLeast[T <: AnyRef](i: Int)(mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.atLeast(i))(anOrder)
   /** at least 1 call made to the mock */
-  def atLeastOne[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.atLeast(1))(anOrder)
+  def atLeastOne[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.atLeast(1))(anOrder)
   /** at least 2 calls made to the mock */
-  def atLeastTwo[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.atLeast(2))(anOrder)
+  def atLeastTwo[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.atLeast(2))(anOrder)
   /** at least 3 calls made to the mock */
-  def atLeastThree[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.atLeast(3))(anOrder)
+  def atLeastThree[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.atLeast(3))(anOrder)
   /** at most n calls made to the mock */
-  def atMost[T <: AnyRef](i: Int)(mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.atMost(i))(anOrder)
+  def atMost[T <: AnyRef](i: Int)(mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.atMost(i))(anOrder)
   /** at most 1 call made to the mock */
-  def atMostOne[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.atMost(1))(anOrder)
+  def atMostOne[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.atMost(1))(anOrder)
   /** at most 2 calls made to the mock */
-  def atMostTwo[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.atMost(2))(anOrder)
+  def atMostTwo[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.atMost(2))(anOrder)
   /** at most 3 calls made to the mock */
-  def atMostThree[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()) = verify(mock, org.mockito.Mockito.atMost(3))(anOrder)
+  def atMostThree[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.atMost(3))(anOrder)
   /** no more calls made to the mock */
-  def noMoreCallsTo[T <: AnyRef](mock: T) = mocker.verifyNoMoreInteractions(mock)
-  /** implicit def supporting calls in order */
-  implicit def toInOrderMode[T <% Result](calls: =>T): ToInOrderMode[T] = new ToInOrderMode(calls)
+  def noMoreCallsTo[T <: AnyRef](mocks: T*): Unit = mocker.verifyNoMoreInteractions(mocks:_*)
+  /** no more calls made to the mock */
+  def noMoreCallsTo[T <: AnyRef](stubbed: IgnoreStubs): Unit = noMoreCallsTo(stubbed.mocks:_*)
+
+	/** implicit def supporting calls in order */
+  implicit def toInOrderMode[T : AsResult](calls: =>T): ToInOrderMode[T] = new ToInOrderMode(calls)
   /** 
    * class defining a then method to declare that calls must be made in a specific order.
    * 
    * The orderedBy method can be used to declare the mock order if there are several mocks
    */
-  class ToInOrderMode[T <% Result](calls: =>T) {
-    def then[U](otherCalls: =>U): Result = {
-      calls and createExpectable(otherCalls).applyMatcher(checkCalls).toResult
-    }
+  class ToInOrderMode[T : AsResult](calls: =>T) {
+    def andThen[U](otherCalls: =>U): Result =
+      AsResult(calls) and createExpectable(otherCalls).applyMatcher(checkCalls).toResult
   }
 }
+

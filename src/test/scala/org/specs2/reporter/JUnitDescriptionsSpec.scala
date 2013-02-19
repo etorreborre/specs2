@@ -19,6 +19,7 @@ class JUnitDescriptionsSpec extends Specification with FragmentsSamples {  def i
     "2 groups of examples separated by a paragraph are folded as 2 nodes and with their own children descriptions"      ! e5^
     "2 groups of examples and a separate one are folded as 2 suites and one test case"                                  ! e6^
     "An example then a text grouping 2 examples are folded as 1 suite, with one test and 1 suite with 2 test cases"     ! e7^
+    "An example description must not have newlines if executed from an IDE"                                             ! e8^
                                                                                                                         p^
   "The Descriptions objects must have proper details"                                                                   ^
     "For as single Example"                                                                                             ^
@@ -124,27 +125,29 @@ class JUnitDescriptionsSpec extends Specification with FragmentsSamples {  def i
          "   |",
          "   `- t1::ex2(org.specs2.reporter.JUnitDescriptionsSpec)\n")
 
-  def e8 = descriptionIs(ex1 ^ ex1)(
+  def e8 = descriptionIs("hello \nworld" ! success, descriptionsMakerIDE)(
          "JUnitDescriptionsSpec",
          "|",
-         "+- ex1(org.specs2.reporter.JUnitDescriptionsSpec)",
-         "|",
-         "`- ex1(org.specs2.reporter.JUnitDescriptionsSpec)\n")
+         "`- hello world(1)\n")
 
-  def descriptionIs(f: Fragments)(tree: String*) = 
-	  showDescriptionTree("JUnitDescriptionsSpec".title ^ f) must_== tree.toList.mkString("\n")
+  def descriptionIs(f: Fragments, descMaker: JUnitDescriptionsFragments = descriptionsMaker)(tree: String*) =
+    showDescriptionTree("JUnitDescriptionsSpec".title ^ f)(descMaker) must_== tree.toList.mkString("\n")
   
-  def showDescriptionTree(fragments: Fragments): String = 
-    toDescription(fragments).drawTree
+  def showDescriptionTree(fragments: Fragments)(implicit descMaker: JUnitDescriptionsFragments): String = toDescription(fragments)(descMaker).drawTree
   
-  def toDescription(fragments: Fragments): Description = toDescription(fragments.fragments:_*)
-  def toDescription(fragments: Fragment*): Description = {
+  def toDescription(fragments: Fragments)(implicit descMaker: JUnitDescriptionsFragments): Description = toDescription(fragments.fragments:_*)(descMaker)
+  def toDescription(fragments: Fragment*)(implicit descMaker: JUnitDescriptionsFragments): Description = {
     import Levels._
-    val descriptionTree = foldAll(fragments).toTree(descriptionsMaker.mapper(classOf[JUnitDescriptionsSpec]))
-    descriptionsMaker.asOneDescription(descriptionTree)
+    val descriptionTree = foldAll(fragments).toTree(descMaker.mapper(classOf[JUnitDescriptionsSpec].getName))
+    descMaker.asOneDescription(descriptionTree)
   }
-  val descriptionsMaker = new JUnitDescriptionMaker {
+
+  implicit val descriptionsMaker = new JUnitDescriptionsFragments(getClass.getName) {
     override lazy val isExecutedFromAnIDE = false
+  }
+
+  val descriptionsMakerIDE = new JUnitDescriptionsFragments(getClass.getName) {
+    override lazy val isExecutedFromAnIDE = true
   }
 
   def details(description: Description, className: String, methodName: String, testClass: Class[_], displayName: String, isTest: Boolean) = {

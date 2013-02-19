@@ -2,12 +2,15 @@ package org.specs2
 package matcher
 import execute._
 import specification._
+import java.util.regex.Pattern
 
 class StringMatchersSpec extends Specification {  def is =
   
   "A string can be matched against a pattern using"                                                                     ^
     "beMatching"                                                                                                        ^
     { "eric" must beMatching("e.*") }                                                                                   ^
+    { "eric" must beMatching(Pattern.compile("e.*")) }                                                                  ^
+    { "eric" must beMatching("e.*".r) }                                                                                 ^
                                                                                                                         p^
     "or 'be matching'"                                                                                                  ^
     { "eric" aka "ETO" must be matching("e.*") }                                                                        ^
@@ -15,15 +18,19 @@ class StringMatchersSpec extends Specification {  def is =
                                                                                                                         p^
     "find ... withGroups, to check for groups"                                                                          ^
     { "erirec" must find("(e|i).").withGroups("e", "i", "e") }                                                          ^
+    { "abcd" must find("(a.)(c.)").withGroups("ab", "cd") }                                                             ^
+    { "abcd" must find("(a.)(c.)".r).withGroups("ab", "cd") }                                                           ^
                                                                                                                         endp^
   "The length of a string can be checked"                                                                               ^
     "with have length"                                                                                                  ^
     { "Eric" must haveLength(4) }                                                                                       ^
     { "Eric" must have length(4) }                                                                                      ^
+    { "Eric" must not have length(3) }                                                                                   ^
                                                                                                                         p^
     "or with haveSize because a String is also an Iterable[Char]"                                                       ^
     { "Eric" must haveSize(4) }                                                                                         ^
     { "Eric" must have size(4) }                                                                                        ^
+    { "Eric" must not have size(3) }                                                                                    ^
                                                                                                                         p^
     "or with beEmpty because a String is also an Iterable[Char]"                                                        ^
     { "" must beEmpty }                                                                                                 ^

@@ -5,13 +5,13 @@ import data.IncludedExcluded
 import text.Trim._
 
 /**
- * This trait Filters an Exception stacktrace
+ * This trait filters an Exception stacktrace
  */
 trait StackTraceFilter {
   /** @return the filtered stacktrace */
   def apply(e: Seq[StackTraceElement]): Seq[StackTraceElement]
   /** @return an exception with a filtered stacktrace */
-  def apply(e: Exception): Exception = exception(e.getMessage, apply(e.getFullStackTrace))
+  def apply[T <: Exception](e: T): T = e.filter((st: Seq[StackTraceElement]) => apply(st))
 }
 
 /**
@@ -19,9 +19,10 @@ trait StackTraceFilter {
  */
 case class IncludeExcludeStackTraceFilter(include: Seq[String], exclude: Seq[String]) extends StackTraceFilter { outer =>
   private val filter = new IncludedExcluded[StackTraceElement] {
-    val matchFunction = (st: StackTraceElement, patterns: Seq[String]) => patterns.exists(p => st.toString matches (".*"+p+".*"))
     val include = outer.include
     val exclude = outer.exclude
+
+    val keepFunction = (st: StackTraceElement, patterns: Seq[String]) => patterns.exists(p => st.toString matches (".*"+p+".*"))
   }
   /** add include patterns */
   def includeAlso(patterns: String*) = copy(include = this.include ++ patterns)
@@ -33,7 +34,12 @@ case class IncludeExcludeStackTraceFilter(include: Seq[String], exclude: Seq[Str
 }
 
 /**
- * Factory object to build a stack trace filter
+ * Factory object to build a stack trace filter from include/exclude expressions:
+ *
+ * .*specs2                       ==> include .*specs2 traces
+ * .*specs2/scala.*               ==> include .*specs2 traces, exclude scala.* traces
+ * .*specs2,scala/scalaz,eclipse  ==> include .*specs2,scala traces, exclude scalaz and eclipse traces
+ *
  */
 object IncludeExcludeStackTraceFilter {
   def fromString(s: String): StackTraceFilter = {
@@ -55,7 +61,24 @@ object DefaultStackTraceFilter extends
   IncludeExcludeStackTraceFilter(Seq(),
     Seq("org.specs2", "scalaz\\.",
         "java\\.", "scala\\.",
-        "sbt\\.", "com.intellij", "org.junit", "org.eclipse.jdt"))
+        "sbt\\.", "com.intellij", "org.junit", "org.eclipse.jdt")) {
+
+  override def apply(e: Seq[StackTraceElement]): Seq[StackTraceElement] = {
+    val filtered = super.apply(e)
+    if (filtered.size >= 1000) filtered.take(200) ++ truncated(filtered.size) ++ filtered.takeRight(200)
+    else filtered
+  }
+
+  private def truncated(size: Int): Seq[StackTraceElement] = {
+    def trace(message: String) = new StackTraceElement(message, " "*(70 - message.size), "", 0)
+    Seq(trace("="*70)) ++
+    Seq.fill(10)(trace("...")) ++
+    Seq(trace("....  TRUNCATED: the stacktrace is bigger than 1000 lines: "+size)) ++
+    Seq(trace("....    re-run with 'fullstacktrace' to see the complete stacktrace")) ++
+    Seq.fill(10)(trace("...")) ++
+    Seq(trace("="*70))
+  }
+}
 
 /**
  * This filter doesn't do anything

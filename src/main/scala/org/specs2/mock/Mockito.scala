@@ -12,5 +12,6 @@ trait Mockito extends MocksCreation
   with MockitoStubs 
   with CapturedArgument 
   with MockitoMatchers
+  with ArgThat
   with Expectations
 

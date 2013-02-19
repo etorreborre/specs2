@@ -1,5 +1,6 @@
 package org.specs2.reflect
 
+
 /**
  * Utility methods which are useful when the type of the object is not known at compile time
  */

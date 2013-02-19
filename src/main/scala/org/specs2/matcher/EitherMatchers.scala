@@ -1,9 +1,7 @@
 package org.specs2
 package matcher
 import text.Quote._
-import execute.Failure._
 import execute.{Failure, Result}
-import matcher.Matcher._
 
 /**
  * Matchers for the Either datatype
