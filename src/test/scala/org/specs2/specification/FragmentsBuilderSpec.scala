@@ -110,7 +110,7 @@ Other elements
                          SpecStart(_,_,Linked(Some(_), false, false)) :: Text(_) :: SpecEnd(_,_) ::
                          SpecStart(_,_,Linked(Some(_), false, false)) :: Text(_) :: SpecEnd(_,_) :: rest => ok }
 
-    e16 := selfReferencing.content must terminate
+    e16 := selfReferencing.content must terminate(retries = 3, sleep = 100.millis)
   }
 
   "examples" - new g2 {
