@@ -43,8 +43,8 @@ object build extends Build {
 
   lazy val dependenciesSettings: Seq[Settings] = Seq(
     libraryDependencies <<= scalaVersion { scalaVersion => Seq(
-      "org.specs2" %% "scalaz-core" % "7.0.0",
-      "org.specs2" %% "scalaz-concurrent" % "7.0.0",
+      "org.specs2" %% "specs2-scalaz-core" % "7.0.0",
+      "org.specs2" %% "specs2-scalaz-concurrent" % "7.0.0",
       "org.scala-lang" % "scala-compiler" % scalaVersion  % "optional",
       "org.scalacheck" % "scalacheck_2.10.0" % "1.10.0" % "optional",
       "org.scala-tools.testing" % "test-interface" % "0.5" % "optional",
@@ -54,7 +54,8 @@ object build extends Build {
       "org.pegdown" % "pegdown" % "1.0.2" % "optional",
       "org.specs2" % "classycle" % "1.4.1" % "optional")
     },
-    resolvers ++= Seq("sonatype" at "http://oss.sonatype.org/content/repositories/snapshots")
+    resolvers ++= Seq("sonatype-releases" at "http://oss.sonatype.org/content/repositories/releases",
+                      "sonatype-snapshots" at "http://oss.sonatype.org/content/repositories/snapshots")
   )
 
   lazy val compilationSettings: Seq[Settings] = Seq(
@@ -146,7 +147,6 @@ object build extends Build {
       setReleaseVersion,
       commitReleaseVersion,
       generateUserGuide,
-      generateReadMe,
       publishSite,
       publishSignedArtifacts,
       notifyLs,
@@ -164,20 +164,12 @@ object build extends Build {
    */
   lazy val documentationSettings =
     testTaskDefinition(generateUserGuideTask, Seq(Tests.Filter(_.endsWith("Index")), Tests.Argument("html"))) ++
-    testTaskDefinition(generateReadMeTask, Seq(Tests.Filter(_.endsWith("ReadMe")), Tests.Argument("markup"))) ++
     testTaskDefinition(checkUrlsTask, Seq(Tests.Filter(_.endsWith("Index")), Tests.Argument("html", "checkurls")))
 
   lazy val generateUserGuideTask = TaskKey[Tests.Output]("generate-user-guide", "generate the user guide")
   lazy val generateUserGuide     = ReleaseStep { st: State =>
     val st2 = executeStepTask(generateUserGuideTask, "Generating the User Guide", Test)(st)
     commitCurrent("updated the UserGuide")(st2)
-  }
-
-  lazy val generateReadMeTask = TaskKey[Tests.Output]("generate-readme", "generate the README")
-  lazy val generateReadMe     = ReleaseStep { st: State =>
-    val st2 = executeStepTask(generateReadMeTask, "Generating the README file", Test)(st)
-    IO.copyFile(file("target/specs2-reports/README.md"), file("README.md"))
-    commitCurrent("updated the README file")(st2)
   }
 
   lazy val checkUrlsTask = TaskKey[Tests.Output]("check-urls", "check the User Guide urls")
