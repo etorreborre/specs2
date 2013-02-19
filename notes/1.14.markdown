@@ -1,0 +1,21 @@
+This version adds a few enhancements to 1.13
+
+ * added the possibility to use `Before/After` context with G/W/T specifications
+ * stacktraces which are bigger than 1000 lines are truncated in the middle with a visible message explaining that `fullstacktrace` can be used to get the full trace 
+ * when using the `ThrownExpectation` trait the `failure` method now throws an exception (for consistency)
+ * added an example in the User Guide to show how to add execution information to an example in the console (to show execution times for example)
+ * changed the `Specification` trait to an abstract class and introduced a `SpecificationLike` trait instead. This should speed-up compilation times of about 0.5 seconds per specification
+ * *breaking change*: removed the `separators` method on the `Diffs` trait because it is unused
+ * added a selection operator for JSON matchers
+ * added the possibility to use String matchers to match key and values in JSON matchers
+ 
+And some fixes:
+
+ * clients of the `Notifier` interface are not notified of successful examples when the `showOnly` flag is set
+ * updated the documentation to show that `andThen` must be used with Mockito
+ * fixed auto-examples when using the ScalaCheck trait
+ * fixed the exponential execution time with G/W/T
+ * fixed the use of the `contain.only` matcher with a custom equality relationship
+ * fixed the re-throwing of thrown failures with the `and` combinator
+
+ ==========================
