@@ -325,7 +325,7 @@ Then, depending on the naming of your specification, you have to specify which c
 
 #### with sbt > 0.9.x
 
-In this case you don't need to do much because ***specs2*** will be recognized out-of-the-box. However, if you want to filter some specifications you need to add this to your `build.sbt` file (see [here](https://github.com/harrah/xsbt/wiki/Testing) for more information):
+In this case you don't need to do much because ***specs2*** will be recognized out-of-the-box. However, if you want to filter some specifications you need to add this to your `build.sbt` file (see [here](http://www.scala-sbt.org/release/docs/Detailed-Topics/Testing.html) for more information):
 
       // keep only specifications ending with Spec or Unit
       testOptions := Seq(Tests.Filter(s => Seq("Spec", "Unit").exists(s.endsWith(_))))
