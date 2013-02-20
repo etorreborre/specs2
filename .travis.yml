@@ -6,4 +6,4 @@ scala:
 jdk:
   - oraclejdk7
 
-script: sbt 'test-only -- xonly'
+script: sbt 'test-only -- -exclude unstable -xonly'
