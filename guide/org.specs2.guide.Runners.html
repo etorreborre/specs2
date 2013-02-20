@@ -64,7 +64,7 @@
     </head><body><div id="breadcrumbs"><a href="../guide/org.specs2.UserGuide.html">UserGuide</a><t> / </t><a href="../guide/org.specs2.guide.Runners.html">Runners</a></div><div class="colmask threecol">
                    <div class="colmid">
                      <div class="colleft">
-                       <div class="col1"><div id="central"><title>Runners</title><a name="Runners"><h2 specId="780708310">Runners</h2></a><status class="ok"><div class="level0" style="display: show"><a name="Presentation"><h3>Presentation</h3></a><p>There are many ways to execute <strong><em>specs2</em></strong> specifications:</p>
+                       <div class="col1"><div id="central"><title>Runners</title><a name="Runners"><h2 specId="2016679735">Runners</h2></a><status class="ok"><div class="level0" style="display: show"><a name="Presentation"><h3>Presentation</h3></a><p>There are many ways to execute <strong><em>specs2</em></strong> specifications:</p>
 <ul>
   <li>on the command line, with a console output, and the <code class="prettyprint">specs2.run</code> runner</li>
   <li>on the command line, with a html output, and the <code class="prettyprint">specs2.html</code> runner</li>
@@ -433,8 +433,6 @@
       def showDiffs(expected: String, actual: String): (String, String)
       /** @return true if the full strings must also be shown */
       def showFull: Boolean
-      /** @return the separators to use */
-      def separators: String
     }
 </code></pre><a name="StackTraceFilter"><h5>StackTraceFilter</h5></a><p>The <code class="prettyprint">traceFilter</code> argument takes an instance of the <code class="prettyprint">org.specs2.control.StackTraceFilter</code> trait to define how stacktraces should be filtered in a report. By default the <code class="prettyprint">DefaultStackTraceFilter</code> filter will exclude lines matching the following packages:</p>
 <ul>
@@ -450,7 +448,7 @@
   <li>use <code class="prettyprint">excludeAlsoTrace(patterns: String*)</code> to add new exclude patterns to the <code class="prettyprint">DefaultStackTraceFilter</code></li>
   <li>use the <code class="prettyprint">org.specs2.control.IncludeExcludeStackTraceFilter</code> class to define both include and exclude patterns</li>
   <li>define your own logic by extending the <code class="prettyprint">org.specs2.control.StackTraceFilter</code></li>
-</ul><a name="Command+line"><h4>Command line</h4></a><p>On the command line you can pass the following arguments:</p>
+</ul><p>Note that the default filter also truncates the stacktrace in the middle if it is bigger than 1000 lines to avoid reports being filled by out-of-control stacktraces. If you still want to see those lines you can re-run with the <code class="prettyprint">fullstacktrace</code> argument.</p><a name="Command+line"><h4>Command line</h4></a><p>On the command line you can pass the following arguments:</p>
 <table>
   <thead>
     <tr>
@@ -654,7 +652,7 @@
   override def testFrameworks = super.testFrameworks ++ Seq(specs2Framework)
 </code></pre><p>Then, depending on the naming of your specification, you have to specify which classes you want to include for reporting:</p>
 <pre><code class="prettyprint">  override def includeTest(s: String) = { s.endsWith(&quot;Spec&quot;) || s.contains(&quot;UserGuide&quot;) }
-</code></pre><a name="with+sbt+%3E+0.9.x"><h4>with sbt &gt; 0.9.x</h4></a><p>In this case you don't need to do much because <strong><em>specs2</em></strong> will be recognized out-of-the-box. However, if you want to filter some specifications you need to add this to your <code class="prettyprint">build.sbt</code> file (see <a href="https://github.com/harrah/xsbt/wiki/Testing">here</a> for more information):</p>
+</code></pre><a name="with+sbt+%3E+0.9.x"><h4>with sbt &gt; 0.9.x</h4></a><p>In this case you don't need to do much because <strong><em>specs2</em></strong> will be recognized out-of-the-box. However, if you want to filter some specifications you need to add this to your <code class="prettyprint">build.sbt</code> file (see <a href="http://www.scala-sbt.org/release/docs/Detailed-Topics/Testing.html">here</a> for more information):</p>
 <pre><code class="prettyprint">  // keep only specifications ending with Spec or Unit
   testOptions := Seq(Tests.Filter(s =&gt; Seq(&quot;Spec&quot;, &quot;Unit&quot;).exists(s.endsWith(_))))
 </code></pre><p>If you don't want the specifications to be executed in parallel:</p>
@@ -810,7 +808,7 @@
       <td>m </td>
     </tr>
   </tbody>
-</table><p><em>From command-line arguments</em></p><p>It is also possible to set colors by passing the <code class="prettyprint">colors</code> argument. This argument must be a list of <code class="prettyprint">key:value</code> pairs (comma-separated) where keys are taken from the property names above without the <code class="prettyprint">color.</code> prefix and values from the abbreviated color names.</p><p>For example you can pass on the command line:</p><p><code class="prettyprint">colors text:blue,failure:magenta</code></p><p>to have the text colored in blue and the failures in Magenta.</p><p>If the <code class="prettyprint">colors</code> option contains <code class="prettyprint">whitebg</code> then the default colors are considered to be <a href="http://etorreborre.github.com/specs2/api/1.13/index.html#org.specs2.text.Colors"><code class="prettyprint">InvertedColors</code></a></p><p><em>Through the API</em></p><p>Finally you can change the color scheme that's being used on the console by implementing your own <a href="http://etorreborre.github.com/specs2/api/1.13/index.html#org.specs2.text.Colors"><code class="prettyprint">org.specs2.text.Colors</code></a> trait or override values in the existing <code class="prettyprint">ConsoleColors</code> class. For example if you want to output magenta everywhere yellow is used you can write:</p>
+</table><p><em>From command-line arguments</em></p><p>It is also possible to set colors by passing the <code class="prettyprint">colors</code> argument. This argument must be a list of <code class="prettyprint">key:value</code> pairs (comma-separated) where keys are taken from the property names above without the <code class="prettyprint">color.</code> prefix and values from the abbreviated color names.</p><p>For example you can pass on the command line:</p><p><code class="prettyprint">colors text:blue,failure:magenta</code></p><p>to have the text colored in blue and the failures in Magenta.</p><p>If the <code class="prettyprint">colors</code> option contains <code class="prettyprint">whitebg</code> then the default colors are considered to be <a href="http://etorreborre.github.com/specs2/api/1.14/index.html#org.specs2.text.Colors"><code class="prettyprint">InvertedColors</code></a></p><p><em>Through the API</em></p><p>Finally you can change the color scheme that's being used on the console by implementing your own <a href="http://etorreborre.github.com/specs2/api/1.14/index.html#org.specs2.text.Colors"><code class="prettyprint">org.specs2.text.Colors</code></a> trait or override values in the existing <code class="prettyprint">ConsoleColors</code> class. For example if you want to output magenta everywhere yellow is used you can write:</p>
 <pre><code class="prettyprint">  object MyColors = new org.specs2.text.ConsoleColors { override val failureColor = magenta }
 
   class MyColoredSpecification extends Specification { def is = colors(MyColors) ^
@@ -866,12 +864,12 @@
 </code></pre>
 <hr /></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Runners</th></tr>
-        <tr><td>Finished in</td><td class="info">17 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">5 ms</td></tr>
         <tr><td>Results</td><td class="success">1 example, 0 failure, 0 error</td></tr>
       </table></div></div>
                        <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="2064368618"><a href="../guide/org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="968253273"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="2002116805"><a href="../guide/org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="776159372"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -881,7 +879,7 @@
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1688464419"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1247464151"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -924,6 +922,8 @@
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Multiple+steps">Multiple steps</a>
             
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Contexts">Contexts</a>
+            
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#ScalaCheck">ScalaCheck</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Single+step">Single step</a>
@@ -954,7 +954,7 @@
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Markdown+url">Markdown url</a>
             
           </li></ul>
-          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Contexts">Contexts</a>
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Contexts_1">Contexts</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Isolation_1">Isolation</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Scope">Scope</a>
             
@@ -994,6 +994,8 @@
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Template">Template</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Global+setup%2Fteardown">Global setup/teardown</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#For+fragments">For fragments</a>
             
@@ -1045,9 +1047,11 @@
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Remove+implicits">Remove implicits</a>
             
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Print+execution+data">Print execution data</a>
+            
           </li></ul>
           </li></ul>
-          </li><li id="1151893252"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="775380665"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1109,7 +1113,7 @@
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="884773850"><a href="../guide/org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="290049077"><a href="../guide/org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1153,7 +1157,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="780708310"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="2016679735"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1237,7 +1241,7 @@
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="645273995"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="373058070"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1281,7 +1285,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="1910531086"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="65752635"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1301,7 +1305,7 @@
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['2064368618','780708310'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['2002116805','2016679735'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                        <div class="col3"><div id="rightcolumn"></div></div>
                      </div>
