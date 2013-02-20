@@ -1,21 +1,23 @@
 This version adds a few enhancements to 1.13
 
- * added the possibility to use `Before/After` context with G/W/T specifications
- * stacktraces which are bigger than 1000 lines are truncated in the middle with a visible message explaining that `fullstacktrace` can be used to get the full trace 
- * when using the `ThrownExpectation` trait the `failure` method now throws an exception (for consistency)
- * added an example in the User Guide to show how to add execution information to an example in the console (to show execution times for example)
- * changed the `Specification` trait to an abstract class and introduced a `SpecificationLike` trait instead. This should speed-up compilation times of about 0.5 seconds per specification
- * *breaking change*: removed the `separators` method on the `Diffs` trait because it is unused
- * added a selection operator for JSON matchers
- * added the possibility to use String matchers to match key and values in JSON matchers
+ * added the possibility to use `Before/After` contexts with G/W/T specifications [c106108](https://github.com/etorreborre/specs2/commit/c10610847f1b0c1ea73dee28cebf58b684f19f23)
+ * stacktraces which are bigger than 1000 lines are truncated in the middle with a visible message explaining that `fullstacktrace` can be used to get the full trace [e6a502f](https://github.com/etorreborre/specs2/commit/e6a502fafb1b8e20a6886b9a24a8ae3e76589128)
+ * when using the `ThrownExpectation` trait, the `failure` method now throws an exception (for consistency) ([f999b17](https://github.com/etorreborre/specs2/commit/f999b1781ead0dd636e655a4a7d02f476836767d))
+ * added an example in the User Guide to show how to add execution information to an example in the console (to show execution times for example) [44aa99e](https://github.com/etorreborre/specs2/commit/44aa99e399decfbd16c693c72309e59e652ba2e4)
+ * changed the `Specification` trait to an abstract class and introduced a `SpecificationLike` trait instead. [This should speed-up compilation times of about 0.5 seconds per specification](http://www.artima.com/articles/compile_time.html)
+ * added a selection operator for JSON matchers [#133](https://github.com/etorreborre/specs2/issues/133)
+ * added the possibility to use String matchers to match key and values in JSON matchers ([StackOverflow question](http://stackoverflow.com/questions/14837866/is-it-possible-to-use-string-matchers-in-combination-with-specs2-json-matchers))
+ * *breaking change*: removed the `separators` method on the `Diffs` trait because it is unused [58b55b4](https://github.com/etorreborre/specs2/commit/58b55b4b592b7ad431cf00026d94161bc25fc84c)
  
-And some fixes:
+And some fixes
 
- * clients of the `Notifier` interface are not notified of successful examples when the `showOnly` flag is set
- * updated the documentation to show that `andThen` must be used with Mockito
- * fixed auto-examples when using the ScalaCheck trait
- * fixed the exponential execution time with G/W/T
- * fixed the use of the `contain.only` matcher with a custom equality relationship
- * fixed the re-throwing of thrown failures with the `and` combinator
+ * clients of the `Notifier` interface must not notified of successful examples when the `showOnly` flag is set [c251588](https://github.com/etorreborre/specs2/commit/c251588cc353654d058a3c945e3dc2a9345dab7f)
+ * updated the documentation to show that `andThen` must be used with Mockito [4671536](https://github.com/etorreborre/specs2/commit/4671536f600b49fb0367c760e13f68fab4e080c6)
+ * auto-examples must be displayed when using the ScalaCheck trait [#127](https://github.com/etorreborre/specs2/issues/127)
+ * fixed the exponential execution time with G/W/T specifications [#129](https://github.com/etorreborre/specs2/issues/129)
+ * fixed the `contain.only` matcher with a custom equality relationship [73aafae](https://github.com/etorreborre/specs2/commit/73aafaefd8de1851fe07d031ea6060d5816e9345)
+ * fixed the re-throwing of thrown failures with the `and` combinator [beef2be](https://github.com/etorreborre/specs2/commit/beef2be4147ed57717bbba294d370f04e697a972)
+ * fixed the `and` combinator for `Results` [#132](https://github.com/etorreborre/specs2/issues/132)
+ * fixed the exception matchers when an `Exception` is expected and an `Error` is thrown [#134](https://github.com/etorreborre/specs2/issues/134)
 
  ==========================
