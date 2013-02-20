@@ -14,7 +14,7 @@ class TerminationMatchersSpec extends Specification with TerminationMatchers wit
       "if it fails"                                                                                ! g1.e2^
                                                                                                    p^
     "with a specified number of retries and sleep time"                                            ^
-      "if it succeeds"                                                                             ! g1.e3^
+      "if it succeeds after 50 ms"                                                                 ! g1.e3^
       "if it fails"                                                                                ! g1.e4^
                                                                                                    p^
     "if the termination fails, the computation is stopped"                                         ! g1.e5^
@@ -30,7 +30,7 @@ class TerminationMatchersSpec extends Specification with TerminationMatchers wit
                                                                                                    end
 
   "termination" - new g1 {
-    e1 := { Thread.sleep(50) must terminate }
+    e1 := { Thread.sleep(50) must terminate(sleep = 100.millis) }
     e2 := { (Thread.sleep(150) must terminate) returns "the action is blocking with retries=1 and sleep=100" }
     e3 := { Thread.sleep(50) must terminate(retries=3, sleep=20.millis) }
     e4 := { (Thread.sleep(1000) must terminate(retries=3, sleep=20.millis)) returns "the action is blocking with retries=3 and sleep=20" }
