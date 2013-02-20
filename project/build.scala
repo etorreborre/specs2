@@ -147,6 +147,7 @@ object build extends Build {
       setReleaseVersion,
       commitReleaseVersion,
       generateUserGuide,
+      generateIndexPage,
       publishSite,
       publishSignedArtifacts,
       notifyLs,
@@ -163,8 +164,8 @@ object build extends Build {
    * DOCUMENTATION
    */
   lazy val documentationSettings =
-    testTaskDefinition(generateUserGuideTask, Seq(Tests.Filter(_.endsWith("Index")), Tests.Argument("html"))) ++
-    testTaskDefinition(checkUrlsTask, Seq(Tests.Filter(_.endsWith("Index")), Tests.Argument("html", "checkurls")))
+    testTaskDefinition(generateUserGuideTask, Seq(Tests.Filter(_.endsWith("UserGuide")), Tests.Argument("html"))) ++
+    testTaskDefinition(generateIndexPageTask, Seq(Tests.Filter(_.endsWith("Index")), Tests.Argument("html")))
 
   lazy val generateUserGuideTask = TaskKey[Tests.Output]("generate-user-guide", "generate the user guide")
   lazy val generateUserGuide     = ReleaseStep { st: State =>
@@ -172,8 +173,8 @@ object build extends Build {
     commitCurrent("updated the UserGuide")(st2)
   }
 
-  lazy val checkUrlsTask = TaskKey[Tests.Output]("check-urls", "check the User Guide urls")
-  lazy val checkUrls     = executeStepTask(checkUrlsTask, "Checking the urls of the User Guide", Test)
+  lazy val generateIndexPageTask = TaskKey[Tests.Output]("generate-index-page", "generate the index page")
+  lazy val generateIndexPage     = executeStepTask(generateIndexPageTask, "Generating the Index page", Test)
 
   lazy val publishSite = ReleaseStep { st: State =>
     val st2 = executeStepTask(makeSite, "Making the site")(st)

@@ -34,7 +34,7 @@ object Specs2Variables {
   lazy val apiDir              = (if (isSnapshot) apiSnapshotDir else apiOfficialDir)
 
   private lazy val versionLine = buildSbt.flatMap(_.getLines.find(line => line contains "version"))
-  private def extractVersion(line: String) = "version\\s*\\:\\=\\s*\"(.*)\"".r.findFirstMatchIn(line).map(_.group(1))
+  private def extractVersion(line: String) = "\\s*version.*\\:\\=\\s*\"(.*)\"".r.findFirstMatchIn(line).map(_.group(1))
   private lazy val buildSbt = tryo(Source.fromFile("version.sbt"))((e:Exception) => println("can't find the version.sbt file "+e.getMessage))
 
   implicit def toVersionedText(t: String): VersionedText = VersionedText(t)
