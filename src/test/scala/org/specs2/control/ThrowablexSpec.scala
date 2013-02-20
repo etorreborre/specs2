@@ -1,9 +1,9 @@
 package org.specs2
 package control
 
-import specification.Grouped
+import specification.{ Grouped, Tags }
 
-class ThrowablexSpec extends Specification with Throwablex with Grouped { def is = section("unstable") ^
+class ThrowablexSpec extends Specification with Throwablex with Grouped with Tags { def is = section("unstable") ^
                                                                                                                         """
 The Throwablex trait provides extensions to regular throwables:
                                                                                                                         """^
