@@ -1,8 +1,11 @@
 import sbt._
+import complete.DefaultParsers._
 import Keys._
 import com.typesafe.sbt._
 import pgp.PgpKeys._
+import sbt.Configuration
 import SbtSite._
+import scala.Some
 import SiteKeys._
 import SbtGit._
 import GitKeys._
@@ -156,9 +159,35 @@ object build extends Build {
       setNextVersion,
       commitNextVersion,
       pushChanges
-    )
-  ) ++
+    ),
+    releaseSnapshotProcess := Seq[ReleaseStep](
+      generateUserGuide,
+      publishSite,
+      publishSignedArtifacts),
+    commands += releaseSnapshotCommand
+    ) ++
   documentationSettings
+
+  lazy val releaseSnapshotProcess = SettingKey[Seq[ReleaseStep]]("release-snapshot-process")
+  private lazy val releaseSnapshotCommandKey = "release-snapshot"
+  private val WithDefaults = "with-defaults"
+  private val SkipTests = "skip-tests"
+  private val releaseSnapshotParser = (Space ~> WithDefaults | Space ~> SkipTests).*
+
+  val releaseSnapshotCommand: Command = Command(releaseSnapshotCommandKey)(_ => releaseSnapshotParser) { (st, args) =>
+    val extracted = Project.extract(st)
+    val releaseParts = extracted.get(releaseSnapshotProcess)
+
+    val startState = st
+      .put(useDefaults, args.contains(WithDefaults))
+      .put(skipTests, args.contains(SkipTests))
+
+    val initialChecks = releaseParts.map(_.check)
+    val process = releaseParts.map(_.action)
+
+    initialChecks.foreach(_(startState))
+    Function.chain(process)(startState)
+  }
 
   /**
    * DOCUMENTATION
