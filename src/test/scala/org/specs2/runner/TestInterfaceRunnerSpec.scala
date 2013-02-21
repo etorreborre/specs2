@@ -11,7 +11,7 @@ import execute.StandardResults
 import scala.collection.mutable.ListBuffer
 import annotation.tailrec
 
-class TestInterfaceRunnerSpec extends Specification with Groups with Tags { def is = tag("cloudbees") ^
+class TestInterfaceRunnerSpec extends Specification with Groups with Tags { def is = tag("unstable") ^
                                                                                                                         """
   A TestInterfaceRunner is responsible for instantiating Specification classes found by
   sbt and executing them using a TestInterfaceReporter
