@@ -1861,7 +1861,7 @@ When you execute a specification where each example uses this `Around` context (
       [info] + example 2
       [info] Execution time: 11 ms
 
-#### Example factory
+##### With example description
 
 More generally, you can both use the example description and the example body to display custom messages, by creating a new `ExampleFactory`:
 
