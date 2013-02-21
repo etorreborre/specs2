@@ -7,8 +7,8 @@ trait ExamplesFactory extends specification.ExamplesFactory { this: FragmentsBui
 
   override implicit def exampleFactory: ExampleFactory = new MutableExampleFactory
 
-  private[specs2] class MutableExampleFactory extends DefaultExampleFactory {
+  class MutableExampleFactory extends DefaultExampleFactory {
     override def newExample(e: Example): Example = addExample(e)
   }
-
 }
+

@@ -149,6 +149,51 @@ class DefineContextsSpec extends Specification {
 
   }
 
+  // a trait to create an Around context using the example description
+  trait TimedContext {
+    def context(exampleDescription: String) = new Timed(exampleDescription)
+
+    case class Timed(exampleDescription: String) extends Around {
+      def around[T : AsResult](t: =>T): Result = {
+        val (result, timer) = withTimer(ResultExecution.execute(AsResult(t)))
+        result.updateExpected(s"Execution time for example $exampleDescription: ${timer.time}")
+      }
+
+      /** mesure the execution time of a piece of code */
+      def withTimer[T](t: =>T): (T, SimpleTimer) = {
+        val timer = (new SimpleTimer).start
+        val result = t
+        (result, timer.stop)
+      }
+    }
+  }
+
+  class MutableTimedDescribedSpecification extends org.specs2.mutable.Specification with TimedContext {
+
+    "Example 1" in ok
+    "Example 2" in ok
+
+    // create a new MutableExampleFactory where the body of the example uses
+    // the current example description
+    override lazy val exampleFactory = new MutableExampleFactory {
+      override def newExample[T : AsResult](description: String, t: =>T): Example =
+        super.newExample(description, context(description)(AsResult(t)))
+    }
+  }
+
+  class TimedDescribedSpecification extends Specification with TimedContext { def is =
+    "Example 1" ! ok ^
+    "Example 2" ! ok
+
+    // create a new DefaultExampleFactory where the body of the example uses
+    // the current example description
+    override lazy val exampleFactory = new DefaultExampleFactory {
+      override def newExample[T : AsResult](description: String, t: =>T): Example =
+        super.newExample(description, context(description)(AsResult(t)))
+    }
+
+  }
+
   def println(s: String) = s // change this definition to see messages in the console
 
   def is = sequential^
@@ -159,5 +204,7 @@ class DefineContextsSpec extends Specification {
            new BeforeMutableSpecification ^
            new BeforeExampleMutableSpecification ^
            new BeforeExampleSpecification ^
-           new TimedExecutionSpecification
+           new TimedExecutionSpecification ^
+           new MutableTimedDescribedSpecification ^
+           new TimedDescribedSpecification
 }

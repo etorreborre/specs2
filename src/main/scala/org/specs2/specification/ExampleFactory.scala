@@ -8,7 +8,6 @@ import control.Functions._
 /**
  * this trait defines methods for creating Examples
  */
-private[specs2]
 trait ExampleFactory {
   /** @return an Example, using a function taking the example description as an input */
   def newExample[T : AsResult](s: String, function: String => T): Example = newExample(s, function(s))
@@ -25,7 +24,6 @@ trait ExampleFactory {
 /**
  * Default implementation for the example factory trait just creating an Example object
  */
-private[specs2]
 class DefaultExampleFactory extends ExampleFactory {
   def newExample(e: Example): Example = e
 }
@@ -34,7 +32,6 @@ class DefaultExampleFactory extends ExampleFactory {
  * Decorated creation where the body of the example can be surrounded with a given context if necessary
  * @see mutable.BeforeExample
  */
-private[specs2]
 class DecoratedExampleFactory(factory: =>ExampleFactory, function: Context) extends ExampleFactory {
   override def newExample[T : AsResult](s: String, t: =>T) = factory.newExample(s, function(t))
   def newExample(e: Example) = e
