@@ -36,8 +36,12 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
   /** @return a Form where every Row is executed with a Failure */
   def setFailure = newForm(title, rows.map(_.setFailure), Some(failure))
 
+  /** add a new Header with some fields */
+  def th(hs: Seq[Field[_]]): Form = tr(Row.tr(hs.map((f: Field[_]) => FieldCell(f.header))))
   /** add a new Header, with at least one Field */
   def th(h1: Field[_], hs: Field[_]*): Form = tr(Row.tr(FieldCell(h1.header), hs.map((f: Field[_]) => FieldCell(f.header)):_*))
+  /** add a new Header */
+  def th(hs: Seq[String])(implicit p: ImplicitParam): Form = th(hs.map(Field(_)))
   /** add a new Header, with at least one Field */
   def th(h1: String, hs: String*): Form = th(Field(h1), hs.map(Field(_)):_*)
   /** add a new Row, with at least one Cell */

@@ -64,4 +64,8 @@ case object Row {
    * create a row from cells
    */
   def tr(c1: Cell, cs: Cell*) = Row(nel(c1, cs.toList))
+  /**
+   * create a row from cells
+   */
+  def tr(cs: Seq[Cell]) = Row(nel(cs.head, cs.drop(1).toList))
 }

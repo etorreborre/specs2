@@ -130,7 +130,8 @@ object build extends Build {
           </developer>
         </developers>
     ),
-    credentials := Seq(Credentials(Path.userHome / ".sbt" / "specs2.credentials"))
+    credentials := Seq(Credentials(Path.userHome / ".sbt" / "specs2.credentials")),
+    publishArtifact in publishLocal in Compile in packageDoc := false
   )
 
   /**
