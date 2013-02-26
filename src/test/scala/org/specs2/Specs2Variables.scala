@@ -29,8 +29,8 @@ object Specs2Variables {
   lazy val guideDir         = (if (isSnapshot) guideSnapshotDir else guideOfficialDir)
 
   lazy val examplesOfficialDir = "https://github.com/etorreborre/specs2/tree/"+version+"/src/test/scala/examples"
-  lazy val apiOfficialDir      = "http://etorreborre.github.com/specs2/api/" + version + "/"
-  lazy val apiSnapshotDir      = "http://etorreborre.github.com/specs2/api/latest/"
+  lazy val apiOfficialDir      = "http://etorreborre.github.com/specs2/api/SPECS2-" + version + "/"
+  lazy val apiSnapshotDir      = "http://etorreborre.github.com/specs2/api/master/"
   lazy val apiDir              = (if (isSnapshot) apiSnapshotDir else apiOfficialDir)
 
   private lazy val versionLine = buildSbt.flatMap(_.getLines.find(line => line contains "version"))
