@@ -64,7 +64,7 @@
     </head><body><div id="breadcrumbs"><a href="../guide/org.specs2.UserGuide.html">UserGuide</a><t> / </t><a href="../guide/org.specs2.guide.Structure.html">Structure</a></div><div class="colmask threecol">
                    <div class="colmid">
                      <div class="colleft">
-                       <div class="col1"><div id="central"><title>Structure</title><a name="Structure"><h2 specId="1688464419">Structure</h2></a><status class="ok"><div class="level0" style="display: show"><a name="Presentation"><h3>Presentation</h3></a><p>In this page you will learn how to:</p>
+                       <div class="col1"><div id="central"><title>Structure</title><a name="Structure"><h2 specId="1247464151">Structure</h2></a><status class="ok"><div class="level0" style="display: show"><a name="Presentation"><h3>Presentation</h3></a><p>In this page you will learn how to:</p>
 <ul>
   <li>declare examples and expectations</li>
   <li>link specifications together</li>
@@ -334,7 +334,25 @@ val number3: Then[Unit] = groupAs(&quot;\\d+&quot;) { (s: String) =&gt; value mu
   val number1: Given[Int]               = (_:String).toInt
   val number2: When[Int, (Int, Int)]    = (n1: Int) =&gt; (s: String) =&gt; (n1, s.toInt)
   val number3: When[Seq[Int], Seq[Int]] = (numbers: Seq[Int]) =&gt; (s: String) =&gt; numbers :+ s.toInt
-</code></pre><a name="ScalaCheck"><h5>ScalaCheck</h5></a><p>Once you've created a given G/W/T sequence, you can be tempted to copy and paste it in order to check the same scenario with different values. The trouble with this is the duplication of text which leads to more maintenance down the road.</p><p>This can be avoided and even enhanced by using ScalaCheck to generate more values for the same scenario. For the calculator above you could write:</p>
+</code></pre><a name="Contexts"><h5>Contexts</h5></a><p>There are 2 ways to create <a href="#Contexts">contexts</a> for G/W/T specifications:</p>
+<ul>
+  <li><p>create a context object (a <code class="prettyprint">Before</code> for example) and apply it to the part of the <code class="prettyprint">Then</code> definition returning a <code class="prettyprint">Result</code></p>
+  <pre><code class="prettyprint"> val before = new Before { def before { println(&quot;code executed before the step&quot;) } }
+ val then1: Then[Int] = (i: Int) =&gt; (s: String) =&gt; before { s.toInt === i }
+</code></pre></li>
+  <li><p>use the <code class="prettyprint">BeforeExample</code>, <code class="prettyprint">AfterExample</code>,... traits</p>
+  <pre><code class="prettyprint"> class MySpecification extends Specification with BeforeExample { def is =
+   &quot;A given-when-then example for the addition&quot;                 ^
+     &quot;Given the following number: ${1}&quot;                         ^ number1 ^
+     &quot;And a second number: ${2}&quot;                                ^ number2 ^
+     &quot;And a third number: ${3}&quot;                                 ^ number3
+
+   // and so on...
+
+   def before { resetCalculator }
+ }
+</code></pre></li>
+</ul><a name="ScalaCheck"><h5>ScalaCheck</h5></a><p>Once you've created a given G/W/T sequence, you can be tempted to copy and paste it in order to check the same scenario with different values. The trouble with this is the duplication of text which leads to more maintenance down the road.</p><p>This can be avoided and even enhanced by using ScalaCheck to generate more values for the same scenario. For the calculator above you could write:</p>
 <pre><code class="prettyprint">  import org.scalacheck.Gen._
   import specification.gen._
 
@@ -561,7 +579,7 @@ val number3: Then[Unit] = groupAs(&quot;\\d+&quot;) { (s: String) =&gt; value mu
   &quot;For more information you can read &quot;+DetailedSpec.markdownUrl(&quot;the detailed specification&quot;)
   // or
   &quot;For more information you can read &quot;+&quot;the detailed specification&quot;.markdownUrl(DetailedSpec)
-</code></pre><a name="Contexts"><h3>Contexts</h3></a><p>In a specification some examples are very simple and just check that a function is behaving as expected. However other examples can be more complex and require a more elaborate set-up of data to:</p>
+</code></pre><a name="Contexts_1"><h3>Contexts</h3></a><p>In a specification some examples are very simple and just check that a function is behaving as expected. However other examples can be more complex and require a more elaborate set-up of data to:</p>
 <ul>
   <li>to create inter-related domain objects</li>
   <li>to put the environment (database, filesystem, external system) in the appropriate state</li>
@@ -689,7 +707,7 @@ val number3: Then[Unit] = groupAs(&quot;\\d+&quot;) { (s: String) =&gt; value mu
 </ol><a name="Around"><h4>Around</h4></a><p>Some examples need to be executed in a given context. For example you're testing a web application and your specification code needs to have your example executed inside an Http session.</p><p>In that case you can extend the <code class="prettyprint">Around</code> trait and specify the <code class="prettyprint">around</code> method:</p>
 <pre><code class="prettyprint">  object http extends Around {
     def around[T : AsResult](t: =&gt;T) = openHttpSession(&quot;test&quot;) {
-      t  // execute t inside a http session
+      AsResult(t)  // execute t inside a http session
     }
   }
 
@@ -714,7 +732,7 @@ val number3: Then[Unit] = groupAs(&quot;\\d+&quot;) { (s: String) =&gt; value mu
     def around[T : AsResult](t: =&gt;T) = {
       createNewDatabase
       // execute the code inside a databaseSession
-      inDatabaseSession { t }
+      inDatabaseSession { AsResult(t) }
     }
     // prepare a valid HttpRequest
     def outside: HttpReq = createRequest
@@ -819,7 +837,17 @@ val number3: Then[Unit] = groupAs(&quot;\\d+&quot;) { (s: String) =&gt; value mu
     /** the map method allows to &quot;post-process&quot; the fragments after their creation */
     override def map(fs: =&gt;Fragments) = Step(startDb) ^ fs ^ Step(cleanDb)
   }
-</code></pre><p>The <code class="prettyprint">DatabaseSpec</code> above will insert, in each inherited specification, one <code class="prettyprint">Step</code> executed before all the fragments, and one executed after all of them.</p><a name="For+fragments"><h4>For fragments</h4></a><p>When using a Unit Specification, it can be useful to use variables which are only used for a given set of examples. This can be easily done by declaring local variables, but this might lead to duplication. One way to avoid that is to use the <code class="prettyprint">org.specs2.mutable.NameSpace</code> trait:</p>
+</code></pre><p>The <code class="prettyprint">DatabaseSpec</code> above will insert, in each inherited specification, one <code class="prettyprint">Step</code> executed before all the fragments, and one executed after all of them.</p><a name="Global+setup%2Fteardown"><h4>Global setup/teardown</h4></a><p>The next similar thing you might want to do is to do some setup, like create a database schema, once and for all before <em>any</em> specification runs. The easiest way to do that is to use an object and a lazy variable:</p>
+<pre><code class="prettyprint">  object databaseSetup  {
+    lazy val createDB = { println(&quot;creating the database&quot;) }
+  }
+
+  // use the createDB lazy val to create the database once for every specification inheriting from
+  // the DatabaseSpec trait
+  trait DatabaseSpec extends Specification {
+    override def map(fs: =&gt;Fragments) = Step(databaseSetup.createDB) ^ Step(startDb) ^ fs ^ Step(cleanDb)
+  }
+</code></pre><p>Note also that global setup and cleanup can be <a href="http://www.scala-sbt.org/release/docs/Detailed-Topics/Testing#setup-and-cleanup">done with sbt</a>.</p><a name="For+fragments"><h4>For fragments</h4></a><p>When using a Unit Specification, it can be useful to use variables which are only used for a given set of examples. This can be easily done by declaring local variables, but this might lead to duplication. One way to avoid that is to use the <code class="prettyprint">org.specs2.mutable.NameSpace</code> trait:</p>
 <pre><code class="prettyprint">  trait context extends mutable.NameSpace {
     var variable1 = 1
     var variable2 = 2
@@ -1328,15 +1356,45 @@ textFragment(&quot;this is a text fragment&quot;)
   <li><code class="prettyprint">org.specs2.specification.NoAutoExamples</code>: deactivate the conversions from <code class="prettyprint">Boolean/Result/MatchResult/DataTable</code> to <code class="prettyprint">Fragment</code> or <code class="prettyprint">Example</code>. Specific versions of this trait can be selectively used, on either <code class="prettyprint">Boolean</code> or <code class="prettyprint">Result</code> or <code class="prettyprint">MatchResult</code> or <code class="prettyprint">DataTable</code>. For example: <code class="prettyprint">org.specs2.specification.NoBooleanAutoExamples</code> can be used to avoid the <code class="prettyprint">^</code> method being used on booleans</li>
   <li><code class="prettyprint">org.specs2.specification.NoFragmentsBuilder</code>: deactivate the implicit conversions from <code class="prettyprint">String</code> to <code class="prettyprint">Fragment</code>s</li>
   <li><code class="prettyprint">org.specs2.specification.mutable.NoFragmentsBuilder</code>: deactivate the implicit conversions from to remove <code class="prettyprint">in</code>, <code class="prettyprint">&gt;</code><code class="prettyprint">&gt;</code>, <code class="prettyprint">should</code> and <code class="prettyprint">can</code> methods from <code class="prettyprint">String</code>s</li>
-</ul>
+</ul><a name="Print+execution+data"><h4>Print execution data</h4></a><p>Knowing that an example passed is fine but sometimes you want to display more information, like the time spent executing the example for instance.</p><p>This can be done by creating a <code class="prettyprint">Context</code> object which will update the <code class="prettyprint">Result</code> of the example execution with whatever you want to display:</p>
+<pre><code class="prettyprint">  import org.specs2._
+  import time._
+  import specification._
+  import execute._
+
+  trait Timed extends Around {
+    def around[T : AsResult](t: =&gt;T): Result = {
+      // use `ResultExecution.execute` to catch possible exceptions
+      val (result, timer) = withTimer(ResultExecution.execute(AsResult(t)))
+
+      // update the result with a piece of text which will be displayed in the console
+      result.updateExpected(&quot;Execution time: &quot;+timer.time)
+    }
+
+    /** mesure the execution time of a piece of code */
+    def withTimer[T](t: =&gt;T): (T, SimpleTimer) = {
+      val timer = (new SimpleTimer).start
+      val result = t
+      (result, timer.stop)
+    }
+
+  }
+</code></pre><p>When you execute a specification where each example uses this <code class="prettyprint">Around</code> context (by implementing the <code class="prettyprint">AroundExampleContext</code> trait for example) you should see the timing of each example displayed in the console:</p>
+<pre><code class="prettyprint">  [info] TimedExecutionSpecification
+  [info]
+  [info] + example 1
+  [info] Execution time: 94 ms
+  [info] + example 2
+  [info] Execution time: 11 ms
+</code></pre>
 <hr /></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Structure</th></tr>
-        <tr><td>Finished in</td><td class="info">511 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">72 ms</td></tr>
         <tr><td>Results</td><td class="success">18 examples, 0 failure, 0 error</td></tr>
       </table></div></div>
                        <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="2064368618"><a href="../guide/org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="968253273"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="2002116805"><a href="../guide/org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="776159372"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -1346,7 +1404,7 @@ textFragment(&quot;this is a text fragment&quot;)
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1688464419"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1247464151"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -1389,6 +1447,8 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Multiple+steps">Multiple steps</a>
             
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Contexts">Contexts</a>
+            
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#ScalaCheck">ScalaCheck</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Single+step">Single step</a>
@@ -1419,7 +1479,7 @@ textFragment(&quot;this is a text fragment&quot;)
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Markdown+url">Markdown url</a>
             
           </li></ul>
-          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Contexts">Contexts</a>
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Contexts_1">Contexts</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Isolation_1">Isolation</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Scope">Scope</a>
             
@@ -1459,6 +1519,8 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Template">Template</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Global+setup%2Fteardown">Global setup/teardown</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#For+fragments">For fragments</a>
             
@@ -1510,9 +1572,11 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Remove+implicits">Remove implicits</a>
             
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Print+execution+data">Print execution data</a>
+            
           </li></ul>
           </li></ul>
-          </li><li id="1151893252"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="775380665"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1574,7 +1638,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="884773850"><a href="../guide/org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="290049077"><a href="../guide/org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1618,7 +1682,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li></ul>
-          </li><li id="780708310"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="2016679735"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1702,7 +1766,7 @@ textFragment(&quot;this is a text fragment&quot;)
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="645273995"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="373058070"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1746,7 +1810,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li></ul>
-          </li><li id="1910531086"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="65752635"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1766,7 +1830,7 @@ textFragment(&quot;this is a text fragment&quot;)
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['2064368618','1688464419'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['2002116805','1247464151'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                        <div class="col3"><div id="rightcolumn"></div></div>
                      </div>

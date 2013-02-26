@@ -64,7 +64,7 @@
     </head><body><div id="breadcrumbs"><a href="../../guide-SNAPSHOT/guide/org.specs2.UserGuide.html">UserGuide</a><t> / </t><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html">Structure</a></div><div class="colmask threecol">
                    <div class="colmid">
                      <div class="colleft">
-                       <div class="col1"><div id="central"><title>Structure</title><a name="Structure"><h2 specId="2016255558">Structure</h2></a><status class="ok"><div class="level0" style="display: show"><a name="Presentation"><h3>Presentation</h3></a><p>In this page you will learn how to:</p>
+                       <div class="col1"><div id="central"><title>Structure</title><a name="Structure"><h2 specId="1421390520">Structure</h2></a><status class="ok"><div class="level0" style="display: show"><a name="Presentation"><h3>Presentation</h3></a><p>In this page you will learn how to:</p>
 <ul>
   <li>declare examples and expectations</li>
   <li>link specifications together</li>
@@ -707,7 +707,7 @@ val number3: Then[Unit] = groupAs(&quot;\\d+&quot;) { (s: String) =&gt; value mu
 </ol><a name="Around"><h4>Around</h4></a><p>Some examples need to be executed in a given context. For example you're testing a web application and your specification code needs to have your example executed inside an Http session.</p><p>In that case you can extend the <code class="prettyprint">Around</code> trait and specify the <code class="prettyprint">around</code> method:</p>
 <pre><code class="prettyprint">  object http extends Around {
     def around[T : AsResult](t: =&gt;T) = openHttpSession(&quot;test&quot;) {
-      t  // execute t inside a http session
+      AsResult(t)  // execute t inside a http session
     }
   }
 
@@ -732,7 +732,7 @@ val number3: Then[Unit] = groupAs(&quot;\\d+&quot;) { (s: String) =&gt; value mu
     def around[T : AsResult](t: =&gt;T) = {
       createNewDatabase
       // execute the code inside a databaseSession
-      inDatabaseSession { t }
+      inDatabaseSession { AsResult(t) }
     }
     // prepare a valid HttpRequest
     def outside: HttpReq = createRequest
@@ -837,7 +837,17 @@ val number3: Then[Unit] = groupAs(&quot;\\d+&quot;) { (s: String) =&gt; value mu
     /** the map method allows to &quot;post-process&quot; the fragments after their creation */
     override def map(fs: =&gt;Fragments) = Step(startDb) ^ fs ^ Step(cleanDb)
   }
-</code></pre><p>The <code class="prettyprint">DatabaseSpec</code> above will insert, in each inherited specification, one <code class="prettyprint">Step</code> executed before all the fragments, and one executed after all of them.</p><a name="For+fragments"><h4>For fragments</h4></a><p>When using a Unit Specification, it can be useful to use variables which are only used for a given set of examples. This can be easily done by declaring local variables, but this might lead to duplication. One way to avoid that is to use the <code class="prettyprint">org.specs2.mutable.NameSpace</code> trait:</p>
+</code></pre><p>The <code class="prettyprint">DatabaseSpec</code> above will insert, in each inherited specification, one <code class="prettyprint">Step</code> executed before all the fragments, and one executed after all of them.</p><a name="Global+setup%2Fteardown"><h4>Global setup/teardown</h4></a><p>The next similar thing you might want to do is to do some setup, like create a database schema, once and for all before <em>any</em> specification runs. The easiest way to do that is to use an object and a lazy variable:</p>
+<pre><code class="prettyprint">  object databaseSetup  {
+    lazy val createDB = { println(&quot;creating the database&quot;) }
+  }
+
+  // use the createDB lazy val to create the database once for every specification inheriting from
+  // the DatabaseSpec trait
+  trait DatabaseSpec extends Specification {
+    override def map(fs: =&gt;Fragments) = Step(databaseSetup.createDB) ^ Step(startDb) ^ fs ^ Step(cleanDb)
+  }
+</code></pre><p>Note also that global setup and cleanup can be <a href="http://www.scala-sbt.org/release/docs/Detailed-Topics/Testing#setup-and-cleanup">done with sbt</a>.</p><a name="For+fragments"><h4>For fragments</h4></a><p>When using a Unit Specification, it can be useful to use variables which are only used for a given set of examples. This can be easily done by declaring local variables, but this might lead to duplication. One way to avoid that is to use the <code class="prettyprint">org.specs2.mutable.NameSpace</code> trait:</p>
 <pre><code class="prettyprint">  trait context extends mutable.NameSpace {
     var variable1 = 1
     var variable2 = 2
@@ -1376,15 +1386,60 @@ textFragment(&quot;this is a text fragment&quot;)
   [info] Execution time: 94 ms
   [info] + example 2
   [info] Execution time: 11 ms
+</code></pre><a name="Example+factory"><h4>Example factory</h4></a><p>More generally, you can both use the example description and the example body to display custom messages, by creating a new <code class="prettyprint">ExampleFactory</code>:</p>
+<pre><code class="prettyprint">  // a trait to create an Around context using the example description
+  trait TimedContext {
+    def context(exampleDescription: String) = new Timed(exampleDescription)
+
+    case class Timed(exampleDescription: String) extends Around {
+      def around[T : AsResult](t: =&gt;T): Result = {
+        val (result, timer) = withTimer(ResultExecution.execute(AsResult(t)))
+        result.updateExpected(s&quot;Execution time for example $exampleDescription: $timer.time&quot;)
+      }
+
+      def withTimer[T](t: =&gt;T): (T, SimpleTimer) = {
+        val timer = (new SimpleTimer).start
+        val result = t
+        (result, timer.stop)
+      }
+    }
+  }
+
+  class MutableTimedSpecification extends mutable.Specification with TimedContext {
+
+    &quot;Example 1&quot; in ok
+    &quot;Example 2&quot; in ok
+
+    // create a new MutableExampleFactory where the body of the example uses
+    // the current example description
+    override lazy val exampleFactory = new MutableExampleFactory {
+      override def newExample[T : AsResult](description: String, t: =&gt;T): Example =
+        super.newExample(description, context(description)(AsResult(t)))
+    }
+
+  }
+
+  class TimedSpecification extends Specification with TimedContext { def is =
+    &quot;Example 1&quot; ! ok ^
+    &quot;Example 2&quot; ! ok
+
+    // create a new DefaultExampleFactory where the body of the example uses
+    // the current example description
+    override lazy val exampleFactory = new DefaultExampleFactory {
+      override def newExample[T : AsResult](description: String, t: =&gt;T): Example =
+        super.newExample(description, context(description)(AsResult(t)))
+    }
+
+  }
 </code></pre>
 <hr /></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Structure</th></tr>
-        <tr><td>Finished in</td><td class="info">100 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">146 ms</td></tr>
         <tr><td>Results</td><td class="success">18 examples, 0 failure, 0 error</td></tr>
       </table></div></div>
                        <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="1122026123"><a href="../../guide-SNAPSHOT/guide/org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1650269880"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1928453021"><a href="../../guide-SNAPSHOT/guide/org.specs2.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="1218380483"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -1394,7 +1449,7 @@ textFragment(&quot;this is a text fragment&quot;)
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="2016255558"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1421390520"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -1510,6 +1565,8 @@ textFragment(&quot;this is a text fragment&quot;)
           </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Template">Template</a>
             
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Global+setup%2Fteardown">Global setup/teardown</a>
+            
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#For+fragments">For fragments</a>
             
           </li></ul>
@@ -1562,9 +1619,11 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Print+execution+data">Print execution data</a>
             
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Example+factory">Example factory</a>
+            
           </li></ul>
           </li></ul>
-          </li><li id="374697675"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1841868848"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1626,7 +1685,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1317388114"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Forms">Forms</a>
+            <ul><li id="1537490582"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Forms">Forms</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Fields">Fields</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Effects">Effects</a>
@@ -1670,7 +1729,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li></ul>
-          </li><li id="1003457016"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="1639142761"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1754,7 +1813,7 @@ textFragment(&quot;this is a text fragment&quot;)
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1331162421"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="1017668"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1798,7 +1857,7 @@ textFragment(&quot;this is a text fragment&quot;)
             
           </li></ul>
           </li></ul>
-          </li><li id="927351303"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="1454240434"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1818,7 +1877,7 @@ textFragment(&quot;this is a text fragment&quot;)
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1122026123','2016255558'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1928453021','1421390520'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                        <div class="col3"><div id="rightcolumn"></div></div>
                      </div>
