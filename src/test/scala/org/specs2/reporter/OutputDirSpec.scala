@@ -16,7 +16,7 @@ The OutputDir trait is responsible for managing the output files location.
   implicit val argument = args()
 
   case class filepath() {
-    def e1 = outputDir.reportPath("") must startWith("target/specs2-reports")
+    def e1 = outputDir.reportPath("") must endWith("target/specs2-reports/")
     def e2 = new OutputDir { override lazy val outputDir = "output/" }.reportPath("") must
              startWith("output/")
   }

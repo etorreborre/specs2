@@ -49,10 +49,10 @@ is formatted for JUnit reporting tools.
   object outputDir {
     val reporter = new JUnitXmlReporter {}
 
-    def e1 = reporter.outputDir must_== "target/test-reports/"
+    def e1 = reporter.outputDir must endWith("target/test-reports/")
     def e2 = {
       System.setProperty("specs2.junit.outDir", "target/reports/junit")
-      reporter.outputDir must_== "target/reports/junit/"
+      reporter.outputDir must endWith("target/reports/junit/")
     }
   }
 
