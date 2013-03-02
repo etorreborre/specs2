@@ -27,7 +27,7 @@ trait JUnitXmlExporting extends Exporting with JUnitXmlPrinter {
    * the output directory is either defined by a specs2 system variable
    * or chosen as a reports directory in the standard maven "target" directory
    */
-  private[specs2] lazy val outputDir: String = SystemProperties.getOrElse("junit.outDir", "target/test-reports/").dirPath
+  private[specs2] lazy val outputDir: String = SystemProperties.getOrElse("junit.outDir", "target/test-reports/").absoluteDirPath
 
   /**
    * print a sequence of executed fragments for a given specification class into a html

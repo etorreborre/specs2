@@ -12,6 +12,8 @@ import text.Trim._
 private[specs2]
 trait Paths { outer =>
   implicit def toPath(s: String) = Path(s)
+
+  def absoluteDirPath(s: String) = new File(s).getAbsolutePath.dirPath
   def dirPath(s: String) = {
     val normalized = s.normalize
     if (normalized.endsWith("/")) normalized
@@ -31,6 +33,7 @@ trait Paths { outer =>
 }
 
 case class Path(s: String) {
+  def absoluteDirPath = Paths.absoluteDirPath(s)
   def dirPath = Paths.dirPath(s)
   def fileName = Paths.fileName(s)
   def parentDir = Paths.parentDir(s)

@@ -16,13 +16,13 @@ trait OutputDir {
    * the output directory is either defined by a specs2 system variable
    * or chosen as a reports directory in the standard maven "target" directory
    */
-  private[specs2] lazy val outputDir: String = SystemProperties.getOrElse("outDir", "target/specs2-reports/").dirPath
+  private[specs2] lazy val outputDir: String = SystemProperties.getOrElse("outDir", "target/specs2-reports/").absoluteDirPath
 
   /**
    * the statistics directory is either defined by a specs2 system variable
    * or defined as a subdirectory of the output directory
    */
-  private[specs2] lazy val statsDirPath: String = SystemProperties.getOrElse("statsDir", outputDir + statsDirName).dirPath
+  private[specs2] lazy val statsDirPath: String = SystemProperties.getOrElse("statsDir", outputDir + statsDirName).absoluteDirPath
 
   private[specs2] lazy val statsDirName: String = "stats/"
 
