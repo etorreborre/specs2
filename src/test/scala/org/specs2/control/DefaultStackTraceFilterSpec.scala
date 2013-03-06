@@ -9,7 +9,6 @@ import execute.{AsResult, AnyAsResult}
 class DefaultStackTraceFilterSpec extends Specification with ThrownExpectations { def is =  s2"""
 
  the default stacktrace filter should
- ${specification.Step("hey")}
    remove specs2 traces                       ${e1}
    truncate the stack trace if it is too long ${e2}
 
