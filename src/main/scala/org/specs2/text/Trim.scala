@@ -66,9 +66,11 @@ trait Trim extends control.Debug {
     def removeFirst(exp: String) = new Regex(exp).replaceFirstIn(s, "")
 
     def removeLast(exp: String) = {
-      exp.r.findAllIn(s).toSeq match {
-        case something :+ last => s.removeEnd(last)
-        case _                 => s
+      val matches = exp.r.findAllIn(s).matchData.toSeq
+      if (matches.isEmpty) s
+      else {
+        val last = matches.last
+        (s.substring(0, last.start) + s.substring(last.end - 1, s.size - 1))
       }
     }
 

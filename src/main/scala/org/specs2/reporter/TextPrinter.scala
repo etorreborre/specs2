@@ -84,7 +84,7 @@ trait TextPrinter {
       if (args.noindent) s 
       else {
         val indent = "  "*level
-        s.trim.split("\n").map(indent+_).mkString("\n")
+        s.split("\n").map(indent+_).mkString("\n")
       }
     }
   }

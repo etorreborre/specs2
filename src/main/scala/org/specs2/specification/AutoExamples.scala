@@ -96,7 +96,7 @@ trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
     def eg = createExample(expression.toResult, 11)
   }
   /** explicit call */
-  def eg(expression: =>MatchResult[_]): Example = createExample(expression.toResult, 12)
+  def eg(expression: =>MatchResult[_]): Example = createExample(expression.toResult, 10)
 
   implicit def aBooleanExample(expression: =>Boolean): ToBooleanExample = new ToBooleanExample(expression)
   class ToBooleanExample(expression: =>Boolean) {
@@ -106,7 +106,7 @@ trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
    * explicit call.
    * The result type is different from the eg method to create examples in order to avoid an overloading error
    */
-  def eg(expression: =>Boolean): Fragments = createExample(toResult(expression), 12)
+  def eg(expression: =>Boolean): Fragments = createExample(toResult(expression), 10)
 
   implicit def aResultExample(expression: =>execute.Result): ToResultExample = new ToResultExample(expression)
   class ToResultExample(expression: =>execute.Result) {
@@ -116,7 +116,7 @@ trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
    * explicit call
    * The result type is different from the eg method to create examples in order to avoid an overloading error
    */
-  def eg(expression: =>execute.Result): Fragment = createExample(expression, 12)
+  def eg(expression: =>execute.Result): Fragment = createExample(expression, 10)
 
   private[specs2] def getSourceCode(startDepth: Int = 9, endDepth: Int = 12, startLineOffset: Int = -1, endLineOffset: Int = -1): String = {
     val firstTry = getCodeFromTo(startDepth, endDepth, startLineOffset, endLineOffset)
@@ -133,6 +133,8 @@ trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
 
   private[specs2] def trimCode(code: String) = {
     List("^", "bt", "t", "endp", "br", "end", "p", "^").foldLeft(code)(_.trim trimEnd _).
+    trimEnclosing("${", "}").
+    trimStart("eg").
     trimEnclosing("{", "}").
     trimEnclosing("`", "`").
     removeFirst("`\\(.*\\)").trimFirst("`")

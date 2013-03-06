@@ -5,9 +5,9 @@ import org.pegdown.{ PegDownProcessor, Extensions }
 import scala.io.Source
 import scala.xml._
 import parsing.XhtmlParser
-import Trim._
 import main.Arguments
 import control.Exceptions._
+import Trim._
 
 /**
  * This trait can process strings formatted using the Markdown syntax and output html
@@ -34,7 +34,8 @@ trait Markdown {
    */
   def toHtmlNoPar(text: String) = {
     val html = toHtml(text)
-    if (html.trimNewLines.contains("\n")) html
+
+    if (text.contains("\n")) s"<p>$html</p>"
     else html.removeEnclosingXmlTag("p")
   }
 

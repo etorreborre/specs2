@@ -94,14 +94,15 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
 
     /** shorthand method to create an Arguments object */
     override def report(
-      xonly:        ArgProperty[Boolean]            = ArgProperty[Boolean](),
-      showOnly:    ArgProperty[String]            = ArgProperty[String](),
+      xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
+      showOnly:      ArgProperty[String]            = ArgProperty[String](),
       failtrace:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
       color:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
       colors:        ArgProperty[Colors]            = ArgProperty[Colors](),
       noindent:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
       showtimes:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
       offset:        ArgProperty[Int]               = ArgProperty[Int](),
+      flow:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
       markdown:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
       debugMarkdown: ArgProperty[Boolean]           = ArgProperty[Boolean](),
       streaming:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
@@ -120,6 +121,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
         noindent,
         showtimes,
         offset,
+        flow,
         markdown,
         debugMarkdown,
         streaming,

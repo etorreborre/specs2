@@ -35,7 +35,7 @@ class TextResultOutput extends ResultOutput with ConsoleOutput {
   /**
    * print one line
    */
-  def printLine(message: String)(implicit args: Arguments) = 
+  def printLine(message: String)(implicit args: Arguments) =
     println((" "*args.offset) + message)
   
 }

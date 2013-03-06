@@ -49,14 +49,40 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
 }
 
 class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOutput with TestLoggers {
-  override def printSpecStartName(message: String, stats: Stats)(implicit args: Arguments)  = logInfo(message)
-  override def printSpecStartTitle(message: String, stats: Stats)(implicit args: Arguments) = logInfo(message)
-  override def printFailure(message: String)(implicit args: Arguments)                      = logFailure(message)
-  override def printError(message: String)(implicit args: Arguments)                        = logError(message)
-  override def printSuccess(message: String)(implicit args: Arguments)                      = logInfo(message)
-  override def printStats(message: String)(implicit args: Arguments)                        = logInfo(message)
-  override def printLine(message: String)(implicit args: Arguments)                         = logInfo(message)
-  override def printText(message: String)(implicit args: Arguments)                         = logInfo(message)
+  private val buffer = new StringBuilder
+
+  private def info(message: String)(implicit args: Arguments) {
+    if (args.report.flow) buffer.append(message)
+    else                  logInfo(message)
+  }
+
+  private def flushInfo(implicit args: Arguments) = if (args.report.flow) {
+    if (!buffer.isEmpty) logInfo(buffer.toString)
+    buffer.clear
+  }
+
+  override def printSpecStartName(message: String, stats: Stats)(implicit args: Arguments)  =
+    if (args.report.flow) info(message+"\n") else info(message)
+  override def printSpecStartTitle(message: String, stats: Stats)(implicit args: Arguments) =
+  if (args.report.flow) info(message) else info(message)
+  override def printFailure(message: String)(implicit args: Arguments)                      = {
+    flushInfo
+    logFailure(message)
+  }
+  override def printError(message: String)(implicit args: Arguments)                        = {
+    flushInfo
+    logError(message)
+  }
+  override def printSuccess(message: String)(implicit args: Arguments)                      = info(message)
+  override def printStats(message: String)(implicit args: Arguments)                        = {
+    flushInfo
+    if (args.report.flow) info(message) else info(message)
+  }
+  override def printLine(message: String)(implicit args: Arguments)                         = {
+    flushInfo
+    info(message)
+  }
+  override def printText(message: String)(implicit args: Arguments)                         = info(message)
 }
 
 /**

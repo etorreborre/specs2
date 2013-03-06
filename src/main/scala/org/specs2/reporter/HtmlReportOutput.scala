@@ -87,8 +87,10 @@ trait HtmlReportOutput {
   /** print a stacktrace of a failure or an exception */
   def printStack(e: ResultStackTrace, level: Int, traceFilter: StackTraceFilter): HtmlReportOutput
 
-  /** print the html for a Form */
-	def printForm(form: NodeSeq): HtmlReportOutput
+  /** print the html for a Form that succeeded */
+	def printOkForm(form: NodeSeq): HtmlReportOutput
+  /** print the html for a Form that failed */
+  def printKoForm(form: NodeSeq): HtmlReportOutput
   /** print the statistics of a specification */
   def printStats(name: SpecName, stats: Stats): HtmlReportOutput
 }

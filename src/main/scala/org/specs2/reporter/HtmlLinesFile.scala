@@ -136,7 +136,10 @@ case class HtmlResult(r: ExecutedResult, stats: Stats = Stats(), level: Int = 0,
     }
   }
 	
-  private def printFormResult(form: Form)(out: HtmlReportOutput): HtmlReportOutput = out.printForm(form.toXml(args))
+  private def printFormResult(form: Form)(out: HtmlReportOutput): HtmlReportOutput =
+    if (form.execute.isSuccess) out.printOkForm(form.toXml(args))
+    else                        out.printKoForm(form.toXml(args))
+
   private def printFormResultWithIcon(form: Form, r: Result)(out: HtmlReportOutput): HtmlReportOutput = {
     val xml = form.toXml(args)
     r match {

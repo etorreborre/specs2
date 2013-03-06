@@ -303,6 +303,7 @@ case class Report(
   _noindent:      Option[Boolean]          = None,
   _showtimes:     Option[Boolean]          = None,
   _offset:        Option[Int]              = None,
+  _flow:          Option[Boolean]          = None,
   _markdown:      Option[Boolean]          = None,
   _debugMarkdown: Option[Boolean]          = None,
   _streaming:     Option[Boolean]          = None,
@@ -324,6 +325,7 @@ case class Report(
   def noindent: Boolean             = _noindent.getOrElse(false)
   def showtimes: Boolean            = _showtimes.getOrElse(false)
   def offset: Int                   = _offset.getOrElse(0)
+  def flow: Boolean                 = _flow.getOrElse(false)
   def markdown: Boolean             = _markdown.getOrElse(true)
   def debugMarkdown: Boolean        = _debugMarkdown.getOrElse(false)
   def streaming: Boolean            = _streaming.getOrElse(false)
@@ -345,6 +347,7 @@ case class Report(
       other._noindent        .orElse(_noindent),
       other._showtimes       .orElse(_showtimes),
       other._offset          .orElse(_offset),
+      other._flow            .orElse(_flow),
       other._markdown        .orElse(_markdown),
       other._debugMarkdown   .orElse(_debugMarkdown),
       other._streaming       .orElse(_streaming),
@@ -366,6 +369,7 @@ case class Report(
     "noindent"       -> _noindent     ,
     "showtimes"      -> _showtimes    ,
     "offset"         -> _offset       ,
+    "flow"         -> _flow       ,
     "markdown"       -> _markdown     ,
     "debugMarkdown"  -> _debugMarkdown,
     "streaming"      -> _streaming,
@@ -390,6 +394,7 @@ object Report extends Extract {
       _noindent      = bool("noIndent"),
       _showtimes     = bool("showTimes"),
       _offset        = int("offset"),
+      _flow          = bool("flow"),
       _markdown      = bool("markdown", "noMarkdown"),
       _debugMarkdown = bool("debugMarkdown"),
       _streaming     = bool("streaming"),
@@ -403,7 +408,7 @@ object Report extends Extract {
     )
   }
 
-  val allValueNames = Seq("showOnly", "xOnly", "failTrace", "color", "noColor", "colors", "noIndent", "offset", "markdown", "noMarkdown", "showTimes",
+  val allValueNames = Seq("showOnly", "xOnly", "failTrace", "color", "noColor", "colors", "noIndent", "offset", "flow", "markdown", "noMarkdown", "showTimes",
                           "debugMarkdown", "streaming", "fromSource", "fullStackTrace", "traceFilter", "checkUrls", "noToc", "notifier", "exporter")
 }
 /**

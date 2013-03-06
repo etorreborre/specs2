@@ -163,7 +163,8 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
   /**
    * print the html for a Form, by just adding the corresponding xml to the current output
    */
-	def printForm(form: NodeSeq) = print(form)
+	def printOkForm(form: NodeSeq) = print(okStatus(form))
+  def printKoForm(form: NodeSeq) = print(koStatus(form))
 
   protected def printOkStatus(n: NodeSeq) = print(okStatus(n))
 	protected def printKoStatus(n: NodeSeq) = print(koStatus(n))

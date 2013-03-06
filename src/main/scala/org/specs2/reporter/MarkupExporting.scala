@@ -64,7 +64,8 @@ case class MarkupResultOutput(
   def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, level: Int)             = MarkupResultOutput(output.printCollapsibleExceptionMessage(e, level))
   def printDetailedFailure(details: Details, level: Int, diffs: Diffs)                          = MarkupResultOutput(output.printDetailedFailure(details, level, diffs))
   def printStack(e: ResultStackTrace, level: Int, traceFilter: StackTraceFilter)                = MarkupResultOutput(output.printStack(e, level, traceFilter))
-  def printForm(form: NodeSeq)                                                                  = MarkupResultOutput(output.printForm(form))
+  def printOkForm(form: NodeSeq)                                                                = MarkupResultOutput(output.printOkForm(form))
+  def printKoForm(form: NodeSeq)                                                                = MarkupResultOutput(output.printKoForm(form))
   def printStats(name: SpecName, stats: Stats)                                                  = MarkupResultOutput(output.printStats(name, stats))
   def printLink(link: HtmlLink)                                                                 = MarkupResultOutput(output.printLink(link))
   def printLink(link: HtmlLink, level: Int, stats: Stats = Stats(), hidden: Boolean = false)    = {

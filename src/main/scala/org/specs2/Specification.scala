@@ -37,7 +37,7 @@ trait SpecificationLike extends SpecificationStructure with SpecificationFeature
  *  - Debug: to allow the insertion of .pp to print any expression to the Console and pass
  *           it to the rest of the program
  */
-trait SpecificationFeatures extends FragmentsBuilder
+trait SpecificationFeatures extends FragmentsBuilder with SpecificationStringContext
    with AutoExamples
    with SpecificationInclusion
    with ArgumentsArgs
