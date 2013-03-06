@@ -19,7 +19,10 @@ class TextResultOutput extends ResultOutput with ConsoleOutput {
   def printSkipped(message: String)(implicit args: Arguments)                      = printLines(args.skippedColor(message))
   def printPending(message: String)(implicit args: Arguments)                      = printLines(args.pendingColor(message))
   def printText(message: String)(implicit args: Arguments)                         = printLines(args.textColor(message))
-  def printStats(message: String)(implicit args: Arguments)                        = printLines(args.statsColor(message))
+  def printStats(message: String)(implicit args: Arguments)                        = {
+    if (args.report.flow) println("\n\n"+args.statsColor(message))
+    else                  printLines(message)
+  }
   def status(result: Result)(implicit args: Arguments): String                     = result.coloredStatus(args) + " "
   
   /**
@@ -36,7 +39,8 @@ class TextResultOutput extends ResultOutput with ConsoleOutput {
    * print one line
    */
   def printLine(message: String)(implicit args: Arguments) =
-    println((" "*args.offset) + message)
+    if (args.report.flow) print((" "*args.offset) + message)
+    else                  println((" "*args.offset) + message)
   
 }
 
