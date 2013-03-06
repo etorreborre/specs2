@@ -1,13 +1,13 @@
 package examples
 
-import org.specs2.mutable.{NameSpace, Specification}
+import org.specs2.mutable.{NameSpace, Specification, GivenWhenThen}
 import org.specs2.specification._
 import org.specs2.execute.Result
 
 /**
  * This specification shows how to use the Given/When/Then style for a unit specifications.
  */
-class MutableGivenWhenThenSpec extends Specification {
+class MutableGivenWhenThenSpec extends Specification with GivenWhenThen {
 
   "A given-when-then example for a calculator" >> new operations {
 

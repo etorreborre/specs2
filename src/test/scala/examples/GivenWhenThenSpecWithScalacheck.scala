@@ -5,11 +5,12 @@ import org.scalacheck._
 import Gen._
 import Prop._
 import specification.gen._
+import specification.GivenWhenThen
 
 /**
  * This specification is an acceptance specification written
  */
-class GivenWhenThenSpecWithScalacheck extends Specification with ScalaCheck { def is =
+class GivenWhenThenSpecWithScalacheck extends Specification with ScalaCheck with GivenWhenThen { def is =
 
   "A given-when-then example for a calculator"                                   ^ br^
     "Given a first number n1"                                                    ^ number1^

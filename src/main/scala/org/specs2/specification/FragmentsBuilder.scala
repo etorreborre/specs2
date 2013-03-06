@@ -6,6 +6,7 @@ import main._
 import internal.scalaz.Scalaz._
 import collection.Seqx._
 import control.Functions._
+import control.ImplicitParameters
 
 /**
  * This trait provides function to create specification Fragments:
@@ -15,7 +16,7 @@ import control.Functions._
  *  - a group of fragments (when including another specification for example)
  * 
  */
-trait FragmentsBuilder extends RegexSteps with ExamplesFactory { outer =>
+trait FragmentsBuilder extends ExamplesFactory with ImplicitParameters { outer =>
 
   /**
    * Methods for chaining fragments
@@ -57,8 +58,8 @@ trait FragmentsBuilder extends RegexSteps with ExamplesFactory { outer =>
 	  def ![T : AsResult](t: =>T): Example = exampleFactory.newExample(s, t)
     /** @return an Example, using the example description */
 	  def ![T : AsResult](f: String => T): Example = exampleFactory.newExample(s, f(s))
-    /** @return an Example which a function using values extracted from the text */
-	  def !(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
+    /** @return an Example, using the given then step */
+    def !(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
   }
 
   /**

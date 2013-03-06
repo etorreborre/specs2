@@ -17,5 +17,6 @@ object AnyAsResult {
   }
   implicit def anyToAnyResult[T : AsResult](t: =>T): AnyAsResult =
     new AnyAsResult(() => AsResult(t))
+
 }
 

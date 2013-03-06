@@ -46,7 +46,7 @@ import matcher.MatchResult
  *  - Examples
  *
  */
-trait RegexSteps extends RegexStepsFactory with TuplesToSeq {
+trait GivenWhenThen extends RegexStepsFactory with TuplesToSeq with FragmentsBuilder {
   /** at any point in time a regex sequence can be transformed as a sequence of Fragments */
   implicit def RegexFragmentToFragments(r: RegexFragment): Fragments = r.fs
 
@@ -168,7 +168,7 @@ trait RegexStepsFactory extends ImplicitParameters {
 }
 
 private[specs2]
-object RegexSteps extends RegexSteps {
+object GivenWhenThen extends GivenWhenThen {
   def toResult[T](context: =>Either[Result, (T, Result)]) = {
     context match {
       case Left(l)  => l
@@ -182,7 +182,7 @@ object RegexSteps extends RegexSteps {
     }
   }
 }
-import RegexSteps._
+import GivenWhenThen._
 
 trait RegexFragment {
   type RegexType <: RegexFragment

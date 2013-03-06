@@ -12,7 +12,7 @@ import org.specs2.specification.AllExpectations
  * - the `<<` operator to create some text followed by a step (see the MutableGivenWhenThenSpec)
  * - formatting fragments operator to transform any string to a Text fragment followed by a formatting fragment
  */
-class MutableStackIsolatedSpec extends Specification { isolated
+class MutableStackIsolatedSpec extends Specification with GivenWhenThen { isolated
   "A Stack with limited capacity can either be:".txt
 
   "1. Empty".newp
@@ -79,7 +79,7 @@ class MutableStackIsolated2Spec extends Specification { isolated
  * The StackSpec with a mutable specification, isolated variables, no autoexamples and no postfix operations
  * The AllExpectations trait is mixed in so that all expectations are verified in an Example
  */
-class MutableStackIsolated3Spec extends Specification with AllExpectations { isolated
+class MutableStackIsolated3Spec extends Specification with AllExpectations with GivenWhenThen { isolated
   "A Stack with limited capacity can either be:".p
 
   "1. Empty".br

@@ -6,7 +6,7 @@ import io.Output
 import reporter.SilentConsoleReporter
 import main.Arguments
 
-class RegexStepsSpec extends Specification with ResultMatchers with DataTables with Grouped { def is =
+class RegexStepsSpec extends Specification with ResultMatchers with DataTables with Grouped with GivenWhenThen { def is =
 
   "Given/When/Then specifications can be written by adding extractors after Text fragments"                             ^
     "A Given[T] extractor extracts the text from the previous Text fragment"                                            ^

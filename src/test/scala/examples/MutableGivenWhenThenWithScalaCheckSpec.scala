@@ -1,11 +1,11 @@
 package examples
 
-import org.specs2.mutable.Specification
+import org.specs2.mutable.{Specification, GivenWhenThen}
 import org.specs2.ScalaCheck
 import org.scalacheck._
 import Gen._
 
-class MutableGivenWhenThenWithScalaCheckSpec extends Specification with ScalaCheck { noindent
+class MutableGivenWhenThenWithScalaCheckSpec extends Specification with ScalaCheck with GivenWhenThen { noindent
 
   "A given-when-then example for a calculator".br
 

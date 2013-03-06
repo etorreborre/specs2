@@ -46,8 +46,8 @@ object build extends Build {
 
   lazy val dependenciesSettings: Seq[Settings] = Seq(
     libraryDependencies <<= scalaVersion { scalaVersion => Seq(
-      "org.specs2" %% "specs2-scalaz-core" % "7.0.0",
-      "org.specs2" %% "specs2-scalaz-concurrent" % "7.0.0",
+      "org.specs2" %% "scalaz-core" % "7.0.0",
+      "org.specs2" %% "scalaz-concurrent" % "7.0.0",
       "org.scala-lang" % "scala-compiler" % scalaVersion  % "optional",
       "org.scalacheck" % "scalacheck_2.10.0" % "1.10.0" % "optional",
       "org.scala-tools.testing" % "test-interface" % "0.5" % "optional",

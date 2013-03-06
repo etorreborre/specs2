@@ -8,7 +8,7 @@ import specification._
  *
  * Meaningful values are extracted from the example descriptions and used to define expectations.
  */
-class GivenWhenThenSpec extends Specification { def is =
+class GivenWhenThenSpec extends Specification with GivenWhenThen { def is =
 
   "A given-when-then example for a calculator"                 ^ br^
     "Given the following number: ${1}"                         ^ aNumber^
@@ -29,6 +29,65 @@ class GivenWhenThenSpec extends Specification { def is =
                                                                end
 
 
+  val aNumber: Given[Int] = (_:String).toInt
+
+  // when there are too many Given[T, S] consecutive steps, it is possible to follow them with a When[Seq[T], S]
+  val operator: When[Seq[Int], Operation] = (numbers: Seq[Int]) => (s: String) => Operation(numbers, s)
+
+  val result: Then[Operation]      = (operation: Operation) => (s: String) => { operation.calculate  must_== s.toInt }
+  val greaterThan: Then[Operation] = (operation: Operation) => (s: String) => { operation.calculate  must be_>= (s.toInt) }
+  val lowerThan: Then[Operation]   = (operation: Operation) => (s: String) => { operation.calculate  must be_<= (s.toInt) }
+
+  case class Operation(numbers: Seq[Int], operator: String) {
+    def calculate: Int = if (operator == "+") numbers.sum else numbers.product
+  }
+}
+
+class GivenWhenThenInterpolatedSpec extends Specification with GivenWhenThen { def is = s2"""
+
+ A given-when-then example for a calculator
+   Given the following number: #{1}                         ${aNumber}
+   And a second number: #{2}                                ${aNumber}
+   And a third number: #{6}                                 ${aNumber}
+   When I use this operator: #{"+"}                         ${operator}
+   Then I should get: #{9}                                  ${result}
+   And it should be >: #{0}                                 ${greaterThan}
+
+   Now with the multiplication
+   Given the following number: #{4}                         ${aNumber}
+   And a second number: #{5}                                ${aNumber}
+   And a third number: #{6}                                 ${aNumber}
+   When I use this operator: #{*}                           ${operator}
+   Then I should get: #{120}                                ${result}
+   And it should be >: #{10}                                ${greaterThan}
+   But not should be >: #{500}                              ${lowerThan}
+
+    """
+  private var gwt: Seq[Any] = Seq()
+  private var thenSequence = false
+  private final val INTERPOLATED_REGEX = """\#\{([^}]+)\}"""
+
+  implicit def givenIsSpecPart[T](g: Given[T]): SpecPart = new SpecPart {
+    def appendTo(text: String) = {
+      gwt = (if (thenSequence) Seq() else gwt) :+ g.extract(text)
+      if (thenSequence) thenSequence = false
+      g.strip(text)
+    }
+  }
+  implicit def whenIsSpecPart[T, U](w: When[T, U]): SpecPart = new SpecPart {
+    def appendTo(text: String) = {
+      gwt = if (gwt.size > 1) Seq(w.extract(gwt.asInstanceOf[T], text))
+            else              gwt.headOption.map(g => w.extract(g.asInstanceOf[T], text)).toSeq
+      w.strip(text)
+    }
+  }
+  implicit def thenIsSpecPart[T](t: Then[T]): SpecPart = new SpecPart {
+    def appendTo(text: String) = {
+      val result = gwt.lastOption.map(w => t.extract(w.asInstanceOf[T], text))
+      thenSequence = true
+      t.strip(text) ! result.getOrElse(failure)
+    }
+  }
   val aNumber: Given[Int] = (_:String).toInt
 
   // when there are too many Given[T, S] consecutive steps, it is possible to follow them with a When[Seq[T], S]

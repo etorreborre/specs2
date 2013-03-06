@@ -4,6 +4,7 @@ package guide
 import _root_.examples._
 import matcher.{ ResultMatchers => RM }
 import specification.{Step, Given, When, Then}
+import mutable.GivenWhenThen
 
 class Structure extends UserGuidePage { def is =
   """
@@ -1976,7 +1977,7 @@ More generally, you can both use the example description and the example body to
     end
   }
 
-  val factoryMethodsSpec = new mutable.Specification with RM {
+  val factoryMethodsSpec = new mutable.Specification with RM with GivenWhenThen {
     def discount(n: Int, p: Int) = (n - n / p)
 
     "all methods should compile and work as expected" >> {

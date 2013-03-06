@@ -6,7 +6,7 @@ import specification._
 /**
  * This specification shows that it is possible to write a Given/When/Then specification and omit the When step
  */
-class GivenThenSpec extends Specification { def is =
+class GivenThenSpec extends Specification with GivenWhenThen { def is =
 
   "A given-then example for a calculator"                      ^ br^
     "Given the following number: ${1}"                         ^ number1^

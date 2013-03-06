@@ -5,86 +5,85 @@ import text._
 import execute.Skipped
 import matcher._
 
-class FragmentsBuilderSpec extends Specification with ResultMatchers with Groups {  def is =
-                                                                                                                        """
-  In a Specification, the `contents` variable stores an instance of the Fragments class,
-  which is merely a list of fragments. Those fragments are:
+class FragmentsBuilderSpec extends Specification with ResultMatchers with Groups with GivenWhenThen {  def is =
+                                                                                                                        s2"""
+ In a Specification, the `contents` variable stores an instance of the Fragments class,
+ which is merely a list of fragments. Those fragments are:
 
-   * `SpecStart` / `SpecEnd` elements. A `SpecStart` contains the arguments applicable to all the specification
-     fragments, and an identifier for the Specification:`SpecName`. The corresponding `SpecEnd` fragment must have the
-     same name
+  * `SpecStart` / `SpecEnd` elements. A `SpecStart` contains the arguments applicable to all the specification
+    fragments, and an identifier for the Specification:`SpecName`. The corresponding `SpecEnd` fragment must have the
+    same name
 
-   * `Text` elements which are simply embedding a String
+  * `Text` elements which are simply embedding a String
 
-   * `Example` elements. An Example has:
-      + a description which can contain some markup tags to render it as code for example
-      + an executable block returning a `Result`: a `Success`, a `Failure`
+  * `Example` elements. An Example has:
+     + a description which can contain some markup tags to render it as code for example
+     + an executable block returning a `Result`: a `Success`, a `Failure`
 
-   * `Step` fragments which are not reported but execute an action
+  * `Step` fragments which are not reported but execute an action
 
-                                                                                                                        """^p^
-                                                                                                                        """
 SpecStart/SpecEnd
-=================                                                                                                       """^
-                                                                                                                        br^
-  "In a specification SpecStart and end fragments are automatically added"                                              ^
-    "SpecStart is always the first fragment and SpecEnd the last"                                                       ! g1().e1^
-    "the SpecStart object contains the specification arguments"                                                         ! g1().e2^
-    "SpecStart and SpecEnd have the same name"                                                                          ! g1().e3^
-    "The SpecStart element can be created by adding a title to the specification"                                       ! g1().e4^
-    "When a title is created there is only one SpecStart in the specification"                                          ! g1().e5^
-    "A title can be added before arguments are declared"                                                                ! g1().e6^
-    "A title can be added after arguments are declared"                                                                 ! g1().e7^
-    "A title can not be empty"                                                                                          ! g1().e8^
-    "Arguments can be added in different place in the spec"                                                             ^
-      "new Arguments values are added to the existing ones"                                                             ! g1().e9^
-      "and override them if already declared"                                                                           ! g1().e10^
-      "it also works with the map method in BaseSpecification"                                                          ! g1().e11^
-                                                                                                                        endp^
-    "A specification can be linked"                                                                                     ^
-      "and included"                                                                                                    ! g1().e12^
-      "or just referenced"                                                                                              ! g1().e13^
-      "and hidden, it'll be executed but not reported"                                                                  ! g1().e14^
-                                                                                                                        p^
-    "Several specifications can be linked at once"                                                                      ! g1().e15^
-    "A specification can reference itself without creating a loop"                                                      ! g1().e16^
-                                                                                                                        endp^
-                                                                                                                        """
+=================
+
+ In a specification SpecStart and end fragments are automatically added
+   SpecStart is always the first fragment and SpecEnd the last                                              ${g1().e1}
+   the SpecStart object contains the specification arguments                                                ${g1().e2}
+   SpecStart and SpecEnd have the same name                                                                 ${g1().e3}
+   The SpecStart element can be created by adding a title to the specification                              ${g1().e4}
+   When a title is created there is only one SpecStart in the specification                                 ${g1().e5}
+   A title can be added before arguments are declared                                                       ${g1().e6}
+   A title can be added after arguments are declared                                                        ${g1().e7}
+   A title can not be empty                                                                                 ${g1().e8}
+   Arguments can be added in different place in the spec
+     new Arguments values are added to the existing ones                                                    ${g1().e9}
+     and override them if already declared                                                                  ${g1().e10}
+     it also works with the map method in BaseSpecification                                                 ${g1().e11}
+
+   A specification can be linked
+     and included                                                                                           ${g1().e12}
+     or just referenced                                                                                     ${g1().e13}
+     and hidden, it'll be executed but not reported                                                         ${g1().e14}
+
+   Several specifications can be linked at once                                                             ${g1().e15}
+   A specification can reference itself without creating a loop                                             ${g1().e16}
+
+
 How to create an Example
-========================                                                                                                """^
-                                                                                                                        br^
-  "An example is simply created with `string ! e1` where e1 returns a `Result`"                                         ! g2().e1^
-  "An example can have its description marked as `code` for nice html rendering"                                        ! g2().e2^
-  "An example can use its own description"                                                                              ! g2().e3^
-  "An example can use a partial function to extract values from its text"                                               ! g2().e4^
-    "the description must be stripped out of value markers"                                                             ! g2().e5^
-                                                                                                                        p^
-  "An Error in the Example body will not fail the example creation"                                                     ! g2().e6^
-    "even if it is an AssertionError"                                                                                   ! g2().e7^
-                                                                                                                        p^
-  "An example has a `matches` method to match its description against a regexp"                                         ^
-    "it returns true if there is a match"                                                                               ! g3().e1^
-    "it works even if there are newlines in the description"                                                            ! g3().e2^
-                                                                                                                        endp^
-                                                                                                                        """
+========================
+
+ An example is simply created with `string ! e1` where e1 returns a `Result`                                ${g2().e1}
+ An example can have its description marked as `code` for nice html rendering                               ${g2().e2}
+ An example can use its own description                                                                     ${g2().e3}
+ An example can use a partial function to extract values from its text                                      ${g2().e4}
+   the description must be stripped out of value markers                                                    ${g2().e5}
+
+ An Error in the Example body will not fail the example creation                                            ${g2().e6}
+   even if it is an AssertionError                                                                          ${g2().e7}
+
+ An example has a `matches` method to match its description against a regexp
+   it returns true if there is a match                                                                      ${g3().e1}
+   it works even if there are newlines in the description                                                   ${g3().e2}
+
+
 Other elements
-==============                                                                                                          """^
-                                                                                                                        br^
-  "A Fragments object can be created by appending fragment objects"                                                     ! g4().e1^
-  "Or simply by casting a String to a Fragments object"                                                                 ! g4().e2^
-                                                                                                                        endp^
-  "A Step can be created from an Either[Result, T]"                                                                     ^
-    "from a Left(Skipped())"                                                                                            ! g4().e3^
-    "from a Right(value)"                                                                                               ! g4().e4^
-                                                                                                                        endp^
-  "A Step can be created with a stopOnFail value"                                                                       ^
-    "with a stopOnFail = true"                                                                                          ! g4().e5^
-    "with a stopOnFail value throwing an exception"                                                                     ! g4().e6^
-                                                                                                                        endp^
-  "A Step can be created with an action"                                                                                ^
-    "executing ok"                                                                                                      ! g4().e7^
-    "throwing an exception"                                                                                             ! g4().e8^
-                                                                                                                        end
+==============
+
+ A Fragments object can be created by appending fragment objects                                           ${g4().e1}
+ Or simply by casting a String to a Fragments object                                                       ${g4().e2}
+
+ A Step can be created from an Either[Result, T]
+   from a Left(Skipped())                                                                                  ${g4().e3}
+   from a Right(value)                                                                                     ${g4().e4}
+
+ A Step can be created with a stopOnFail value
+   with a stopOnFail = true                                                                                ${g4().e5}
+   with a stopOnFail value throwing an exception                                                           ${g4().e6}
+
+ A Step can be created with an action
+   executing ok                                                                                            ${g4().e7}
+   throwing an exception                                                                                   ${g4().e8}
+
+                                                                                                           """
 
   "start and end" - new g1 with specifications {
     e1  := (fragments.head must haveClass[SpecStart]) and (fragments.last must haveClass[SpecEnd])
