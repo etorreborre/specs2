@@ -17,12 +17,19 @@ import matcher.MatchResult
  * It provides methods to extract either all the groups as a list, or a number of values as a tuple
  *
  */
-abstract class RegexStep[P, T](fullRegex: String = "", groupRegex: String = RegexStep.DEFAULT_REGEX) {
-  private lazy val full: Regex = fullRegex.r
-  private lazy val group: Regex = groupRegex.r
-  /** regex to use for a step with a partial function */
-  protected lazy val regexToUse = if (full.toString.isEmpty) group else full
+abstract class RegexStep[P, T](private var fullRegex: String = "", private var groupRegex: String = RegexStep.DEFAULT_REGEX) {
 
+  private def full: Regex = fullRegex.r
+  private def group: Regex = groupRegex.r
+  /** regex to use for a step with a partial function */
+  protected def regexToUse = if (full.toString.isEmpty) group else full
+
+  /** change the regexps */
+  def withRegex(full: String = "", group: String = RegexStep.DEFAULT_REGEX): this.type = {
+    fullRegex = full
+    groupRegex = group
+    this
+  }
   /** remove value markers `${}` from the text */
   def strip(text: String): String = RegexStep.strip(text, full, group)
 
@@ -103,7 +110,7 @@ object RegexStep {
  *
  * It must define the extract function creating a value of type T from the extracted values
  */
-abstract class Given[T](val regex: String = "", val groupRegex: String = RegexStep.DEFAULT_REGEX) extends RegexStep[Unit, T](regex, groupRegex) {
+abstract class Given[T](var regex: String = "", var groupRegex: String = RegexStep.DEFAULT_REGEX) extends RegexStep[Unit, T](regex, groupRegex) {
   /** if the extraction goes wrong, then an Error is propagated */
   private[specs2] def extractContext(text: String): Either[Result, T] = ResultExecution.executeEither(extract(text))(identity)
 

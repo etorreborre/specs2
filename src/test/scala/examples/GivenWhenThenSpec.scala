@@ -49,11 +49,11 @@ class GivenWhenThenInterpolatedSpec extends Specification with GivenWhenThen { d
    Given the following number: #{1}                         ${aNumber}
    And a second number: #{2}                                ${aNumber}
    And a third number: #{6}                                 ${aNumber}
-   When I use this operator: #{"+"}                         ${operator}
+   When I use this operator: #{+}                           ${operator}
    Then I should get: #{9}                                  ${result}
    And it should be >: #{0}                                 ${greaterThan}
 
-   Now with the multiplication
+ Now with the multiplication
    Given the following number: #{4}                         ${aNumber}
    And a second number: #{5}                                ${aNumber}
    And a third number: #{6}                                 ${aNumber}
@@ -63,31 +63,6 @@ class GivenWhenThenInterpolatedSpec extends Specification with GivenWhenThen { d
    But not should be >: #{500}                              ${lowerThan}
 
     """
-  private var gwt: Seq[Any] = Seq()
-  private var thenSequence = false
-  private final val INTERPOLATED_REGEX = """\#\{([^}]+)\}"""
-
-  implicit def givenIsSpecPart[T](g: Given[T]): SpecPart = new SpecPart {
-    def appendTo(text: String) = {
-      gwt = (if (thenSequence) Seq() else gwt) :+ g.extract(text)
-      if (thenSequence) thenSequence = false
-      g.strip(text)
-    }
-  }
-  implicit def whenIsSpecPart[T, U](w: When[T, U]): SpecPart = new SpecPart {
-    def appendTo(text: String) = {
-      gwt = if (gwt.size > 1) Seq(w.extract(gwt.asInstanceOf[T], text))
-            else              gwt.headOption.map(g => w.extract(g.asInstanceOf[T], text)).toSeq
-      w.strip(text)
-    }
-  }
-  implicit def thenIsSpecPart[T](t: Then[T]): SpecPart = new SpecPart {
-    def appendTo(text: String) = {
-      val result = gwt.lastOption.map(w => t.extract(w.asInstanceOf[T], text))
-      thenSequence = true
-      t.strip(text) ! result.getOrElse(failure)
-    }
-  }
   val aNumber: Given[Int] = (_:String).toInt
 
   // when there are too many Given[T, S] consecutive steps, it is possible to follow them with a When[Seq[T], S]
