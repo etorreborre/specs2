@@ -40,7 +40,7 @@ trait AllExpectations extends StoredExpectations with ExamplesFactory with Speci
    *
    * This method could be overriden to filter the captured results and remove the skipped results for example
    */
-  def resultsContext(results: => Seq[Result]): Context = new ResultsContext(results)
+  def resultsContext(results: Seq[Result]): Context = new ResultsContext(results)
 
   /**
    * we force the specification to be isolated if it's not sequential or already isolated.

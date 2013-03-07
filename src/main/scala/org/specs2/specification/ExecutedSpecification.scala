@@ -28,7 +28,7 @@ case class ExecutedSpecification(name: SpecName, fs: Seq[ExecutedFragment]) {
   def issues = fs.collect { case r: ExecutedResult if r.isIssue => r }
 
   /** @return all suspended  */
-  def suspended = fs.collect { case r: ExecutedResult if r.isSuspended=> r }
+  def suspended = fs.collect { case r: ExecutedResult if r.isSuspended => r }
 
   /** @return the end statistics */
   def stats = fs.filter(isExecutedSpecEnd).lastOption.collect { case ExecutedSpecEnd(_,_,s) => s }.getOrElse(Stats())
