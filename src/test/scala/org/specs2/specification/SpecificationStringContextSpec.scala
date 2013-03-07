@@ -10,38 +10,25 @@ import reporter.{ConsoleReporter, TextResultOutput}
 class SpecificationStringContextSpec extends Specification { def is = s2"""
 
  A user specification can use string interpolation to write the specification fragments ${
-     MockClassRunner().run(new UserInterpolatedSpec).mkString("\n") ===
-       """
-         |user specification
-         |
-         |This is an introduction.
-         |
-         |And some text
-         |
-         |     with some code
-         |
-         | + One example
-         | x Another example with a failure
-         |   ko (IndexedSeqOptimized.scala:51)
-         |
-         | ! A third example with an error
-         |   RuntimeException: boom (package.scala:27)
-         |   A normal interpolated value: 100
-         |   A normal interpolated string: hello
-         | ! An interpolated value with an error
-         |   RuntimeException: undefined (package.scala:27)
-         |
-         |
-         | Total for specification user specification
-         | Finished in 4 ms
-         | 4 examples, 1 failure, 2 errors
-       """.stripMargin
+   val lines = MockClassRunner().run(new UserInterpolatedSpecification)
+   val expected = Seq(
+     "user specification",
+     "This is an introduction",
+     "\\+ One example",
+     "x Another example with a failure",
+     "ko",
+     "! A third example with an error",
+     "A normal interpolated value: 100",
+     "A normal interpolated string: hello",
+     "Total for specification user specification"
+   )
+   forall(expected) { line => lines.map(_.replace("\n", "")) must containMatch(line) }
  }
 
 """
 }
 
-class UserInterpolatedSpec extends Specification { def is = s2""" $sequential ${"user specification".title}
+class UserInterpolatedSpecification extends Specification { def is = s2""" $nocolor ${"user specification".title}
  This is an introduction.
 
  And some text

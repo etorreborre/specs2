@@ -22,7 +22,7 @@ trait SpecificationStringContext { this: FragmentsBuilder with ArgumentsArgs =>
       val first = texts.dropRight(1).mkString("", "\n", "\n")
       AsResult(r) match {
         case DecoratedResult(t, e: Error) => first ^ texts.last ! e
-        case DecoratedResult(t, _)        => text ^ t.notNull
+        case DecoratedResult(t, _)        => textStart(text + t.notNull)
         case other                        => first ^ texts.last ! other
       }
     }

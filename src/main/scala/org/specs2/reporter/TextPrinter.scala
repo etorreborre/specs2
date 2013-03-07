@@ -137,7 +137,7 @@ trait TextPrinter {
     def printFailure(desc: String, f: Result with ResultStackTrace,
                      timer: SimpleTimer, isDataTable: Boolean = false)(implicit args: Arguments, out: ResultOutput) = {
       val description = statusAndDescription(desc, f, timer, isDataTable)(args, out)
-      out.printFailure(description)
+      out.printText(description)
       val margin = desc.takeWhile(_ == ' ')+" "
       out.printFailure((if (isDataTable) f.message else
                                          f.message.split("\n").mkString(margin, "\n"+margin, "")) + location(f))
@@ -165,7 +165,7 @@ trait TextPrinter {
     def printError(desc: String, f: Result with ResultStackTrace,
                    timer: SimpleTimer, isDataTable: Boolean = false)(implicit args: Arguments, out: ResultOutput) = {
       val description = statusAndDescription(desc, f, timer, isDataTable)(args, out)
-      out.printError(description)
+      out.printText(description)
       val exceptionName = f.exception.getClass.getSimpleName
       out.printError((if (isDataTable) "" else desc.takeWhile(_ == ' ')+"  "+exceptionName+": ") +
                      f.message + location(f))
