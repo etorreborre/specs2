@@ -59,7 +59,7 @@ trait SpecificationFeatures extends FragmentsBuilder with SpecificationStringCon
    * @see examples.DefineContextsSpec#BeforeWithImplicitContextSpec
    */
   implicit def contextAsResult[T, M[_] <: MatchResult[_]](implicit context: Context = defaultContext): AsResult[M[T]] = new AsResult[M[T]] {
-    def asResult(t: =>M[T]) = context(t.toResult)
+    def asResult(t: =>M[T]) = context.apply(t.toResult)
   }
 
   /**

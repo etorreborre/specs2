@@ -224,10 +224,10 @@ trait AsResult[T] {
   def asResult(t: =>T): Result
 }
 
-object AsResult {
+object AsResult extends AsResultLowerImplicits {
   /** implicit typeclass instance to create examples from Results */
   implicit def resultAsResult[R <: Result]: AsResult[R] = new AsResult[R] {
-    def asResult(t: =>R): Result = t
+    def asResult(t: =>R): Result = ResultExecution.execute(t)
   }
   /** implicit typeclass instance to create examples from Booleans */
   implicit def booleanAsResult: AsResult[Boolean] = new AsResult[Boolean] {
@@ -239,7 +239,19 @@ object AsResult {
 
   /** typeclass instance for types which are convertible to Result */
   implicit def asResult[R <% Result]: AsResult[R] = new AsResult[R] {
-    def asResult(r: =>R): Result = r
+    def asResult(r: =>R): Result = ResultExecution.execute(r)
+  }
+}
+
+trait AsResultLowerImplicits {
+  import org.specs2.execute.ResultExecution._
+  implicit def anyToAsResult[T]: AsResult[T] = new AsResult[T] {
+    def asResult(t: =>T) = {
+      executeEither(t)(_.toString) match {
+        case Left(e)  => new DecoratedResult((), e)
+        case Right(v) => new DecoratedResult(v, Success())
+      }
+    }
   }
 }
 

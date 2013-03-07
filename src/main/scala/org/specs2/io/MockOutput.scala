@@ -25,7 +25,7 @@ trait MockOutput extends Output {
 	    append(formatted)
 	  else {
 	    val last = msgs.last 
-	    msgs.dropRight(1)
+	    msgs.remove(msgs.size - 1)
 	    append(last + formatted)
 	  }
   }

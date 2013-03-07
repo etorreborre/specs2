@@ -2,9 +2,9 @@ package org.specs2
 package specification
 
 import form.Form
-import main.ArgumentsArgs
+import main.{Arguments, ArgumentsArgs}
 import execute._
-
+import text.NotNullStrings._
 /**
  * Allow to use fragments inside interpolated strings starting with s2 in order to build the specification content
  */
@@ -19,7 +19,12 @@ trait SpecificationStringContext { this: FragmentsBuilder with ArgumentsArgs =>
   implicit def asResultIsSpecPart[R : AsResult](r: =>R): SpecPart = new SpecPart {
     def appendTo(text: String) = {
       val texts = text.split("\n")
-      texts.dropRight(1).mkString("", "\n", "\n") ^ texts.last ! r
+      val first = texts.dropRight(1).mkString("", "\n", "\n")
+      AsResult(r) match {
+        case DecoratedResult(t, e: Error) => first ^ texts.last ! e
+        case DecoratedResult(t, _)        => text ^ t.notNull
+        case other                        => first ^ texts.last ! other
+      }
     }
   }
   implicit def anyAsResultIsSpecPart(r: AnyAsResult): SpecPart = new SpecPart {
@@ -36,6 +41,9 @@ trait SpecificationStringContext { this: FragmentsBuilder with ArgumentsArgs =>
   }
   implicit def fragmentsIsSpecPart(fs: Fragments): SpecPart = new SpecPart {
     def appendTo(text: String) = text ^ fs
+  }
+  implicit def argumentsIsSpecPart(a: Arguments): SpecPart = new SpecPart {
+    def appendTo(text: String) = text ^ a
   }
 
   implicit class specificationContext(sc: StringContext) {
