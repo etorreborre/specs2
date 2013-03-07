@@ -10,7 +10,7 @@ import reporter.{ConsoleReporter, TextResultOutput}
 class SpecificationStringContextSpec extends Specification { def is = s2"""
 
  A user specification can use string interpolation to write the specification fragments ${
-   val lines = MockClassRunner().run(new UserInterpolatedSpec)
+   val lines = MockClassRunner().run(new UserInterpolatedSpecification)
    val expected = Seq(
      "user specification",
      "This is an introduction",
@@ -28,7 +28,7 @@ class SpecificationStringContextSpec extends Specification { def is = s2"""
 """
 }
 
-class UserInterpolatedSpec extends Specification { def is = s2"""  ${"user specification".title}
+class UserInterpolatedSpecification extends Specification { def is = s2"""  ${"user specification".title}
  This is an introduction.
 
  And some text
