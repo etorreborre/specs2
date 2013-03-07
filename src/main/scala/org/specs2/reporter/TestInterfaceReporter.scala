@@ -64,7 +64,7 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOu
   override def printSpecStartName(message: String, stats: Stats)(implicit args: Arguments)  =
     if (args.report.flow) info(message+"\n") else info(message)
   override def printSpecStartTitle(message: String, stats: Stats)(implicit args: Arguments) =
-  if (args.report.flow) info(message) else info(message)
+    if (args.report.flow) info(message) else info(message)
   override def printFailure(message: String)(implicit args: Arguments)                      = {
     flushInfo
     logFailure(message)
@@ -76,7 +76,7 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOu
   override def printSuccess(message: String)(implicit args: Arguments)                      = info(message)
   override def printStats(message: String)(implicit args: Arguments)                        = {
     flushInfo
-    if (args.report.flow) info(message) else info(message)
+    logInfo(message)
   }
   override def printLine(message: String)(implicit args: Arguments)                         = {
     flushInfo

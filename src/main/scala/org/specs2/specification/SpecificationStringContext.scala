@@ -30,7 +30,7 @@ trait SpecificationStringContext { this: FragmentsBuilder with ArgumentsArgs =>
   implicit def anyAsResultIsSpecPart(r: AnyAsResult): SpecPart = new SpecPart {
     def appendTo(text: String) = asResultIsSpecPart(r.t()).appendTo(text)
   }
-  implicit def formIsSpecPart(f: Form): SpecPart = new SpecPart {
+  implicit def formIsSpecPart(f: =>Form): SpecPart = new SpecPart {
     def appendTo(text: String) = text ^ Fragments.createList(Forms.formsAreExamples(f))
   }
   implicit def toFormIsSpecPart(f: { def form: Form}): SpecPart = new SpecPart {
@@ -51,7 +51,14 @@ trait SpecificationStringContext { this: FragmentsBuilder with ArgumentsArgs =>
     def s2(variables: SpecPart*) = {
       sc.parts.zip(variables).foldLeft(Fragments.createList() ^ args.report(noindent = true) ^ args.report(flow = true)) { (res, cur) =>
         val (text, extracted) = cur
-        res ^ extracted.appendTo(text)
+        val appended = extracted.appendTo(text)
+
+        // try to keep contiguous text fragments as one so that they can be properly rendered as Markdown
+        // like numbered lists for example
+        (res.middle, appended.middle) match {
+          case (begin :+ Text(t1), Text(t2) +: rest) => (res ^ appended).copy(middle = begin ++ (Text(t1+t2) +: rest))
+          case _                                     => res ^ appended
+        }
       }
     }
   }
