@@ -142,7 +142,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     a
   }
 
-  private def updateSpecFragments(f: Fragments => Fragments) = {
+  protected def updateSpecFragments(f: Fragments => Fragments) = {
     effect(specFragments = f(specFragments))
   }
 

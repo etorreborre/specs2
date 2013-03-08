@@ -16,6 +16,7 @@ trait SpecificationStringContext { this: FragmentsBuilder with ArgumentsArgs =>
   implicit def exampleIsSpecPart(e: Example): SpecPart = new SpecPart {
     def appendTo(text: String) = text ^ e
   }
+
   implicit def asResultIsSpecPart[R : AsResult](r: =>R): SpecPart = new SpecPart {
     def appendTo(text: String) = {
       val texts = text.split("\n")
@@ -27,8 +28,12 @@ trait SpecificationStringContext { this: FragmentsBuilder with ArgumentsArgs =>
       }
     }
   }
-  implicit def anyAsResultIsSpecPart(r: AnyAsResult): SpecPart = new SpecPart {
-    def appendTo(text: String) = asResultIsSpecPart(r.t()).appendTo(text)
+  implicit def anyAsResultIsSpecPart(r: =>Function0Result): SpecPart = new SpecPart {
+    def appendTo(text: String) = {
+      val texts = text.split("\n")
+      val first = texts.dropRight(1).mkString("", "\n", "\n")
+      first ^ texts.last ! AsResult(r)
+    }
   }
   implicit def formIsSpecPart(f: =>Form): SpecPart = new SpecPart {
     def appendTo(text: String) = text ^ Fragments.createList(Forms.formsAreExamples(f))
@@ -46,7 +51,8 @@ trait SpecificationStringContext { this: FragmentsBuilder with ArgumentsArgs =>
     def appendTo(text: String) = text ^ a
   }
 
-  implicit class specificationContext(sc: StringContext) {
+  implicit def specificationInStringContext(sc: StringContext): SpecificationInStringContext = new SpecificationInStringContext(sc)
+  class SpecificationInStringContext(sc: StringContext) {
 
     def s2(variables: SpecPart*) = {
       sc.parts.zip(variables).foldLeft(Fragments.createList() ^ args.report(noindent = true) ^ args.report(flow = true)) { (res, cur) =>

@@ -3,10 +3,7 @@ package examples
 import org.specs2._
 import matcher.DataTables
 
-/**
- *
- */
-class DataTableSpec extends Specification with DataTables { def is =
+class DataTablesSpec extends Specification with DataTables { def is =
 
   "adding integers should just work in scala"  ! addition
 

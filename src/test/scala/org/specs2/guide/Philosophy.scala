@@ -2,7 +2,7 @@ package org.specs2
 package guide
 
 class Philosophy extends UserGuidePage { def is =
-"""
+  """
 ### The origins
 
 ***specs2*** has been created as an evolution of the [***specs***](http://code.google.com/p/specs) project.
@@ -22,8 +22,8 @@ Among the very first objectives of specs were:
 
  * **great user support**: it's not because something is free that it should be buggy! Moreover this is also a good test on the design. A good design should be easy to fix and evolve
 
-                                                                                                                        """^
-                                                                                                                        """
+  """^
+  raw"""
 ### The score
 
 After a few years of use, let's have a look at what worked and what didn't.
@@ -42,7 +42,7 @@ This objective was achieved thanks to the incredible power of implicits in Scala
 
 The readability of a specification written with ***specs*** largely depends on the writer of the specification. Since a specification is created by interleaving text and code, if the amount of code is too large then the textual content of the specification is largely lost and the developer cannot read it with just one glance.
 
-Something was prototyped in ***specs*** to alleviate this issue: [LiterateSpecifications](http://code.google.com/p/specs/wiki/LiterateSpecifications#A_short_example). The idea was to use Scala support for XML literal to allow the writer to write pure text and insert, at the right places, some executable examples. It turns out that the implementation of this approach is fairly different from what was done for "regular" examples and cluttered the overall design.
+Something was prototyped in ***specs*** to alleviate this issue: [LiterateSpecifications](http://code.google.com/p/specs/wiki/LiterateSpecifications#A_short_example). The idea was to use Scala support for XML literals in order to allow the writer to write pure text and insert, at the right places, some executable examples. It turns out that the implementation of this approach is fairly different from what was done for "regular" examples and cluttered the overall design.
 
 ###### Extensibility
 
@@ -302,15 +302,38 @@ This way, if there is any conflict when inheriting from the `Specification` trai
  + downgrade to the `BaseSpecification` and add the non-conflicting traits
  + mix-in specific traits to remove the problematic implicit definitions
 
+##### Enter Scala 2.10
+
+Scala 2.10 brings a new feature to the language, String interpolation. But the big difference with most languages is that it is possible to create your own interpolator! This removes one really annoying issue of specs2 < Scala 2.10: the omni-presence of `^` operators in acceptance specifications. Thanks to String interpolation the canonical "Hello World" example becomes:
+
+      class HelloWorldSpec extends Specification { def is = s2$triple
+
+        This is a specification to check the 'Hello world' string
+
+        The 'Hello world' string should
+          contain 11 characters              $e1
+          start with 'Hello'                 $e2
+          end with 'world'                   $e3
+                                                            $triple
+
+        def e1 = "Hello world" must have size(11)
+        def e2 = "Hello world" must startWith("Hello")
+        def e3 = "Hello world" must endWith("world")
+
+      }
+
+
  - - -
 
 <br/>
 
-                                                                                                                        """^
+    """^
   include(xonly, chaining)                                                                                                 ^
   include(xonly, context)                                                                                                  ^
                                                                                                                            end
 
+  val triple = "\"\"\""
+  val (e1, e2, e3) = ("$e1", "$e2", "$e3")
 
   val chaining = new Specification { def is =  args(color=false) ^
     "my example on strings" ! e1             // will fail

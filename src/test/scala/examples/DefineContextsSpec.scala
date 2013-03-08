@@ -15,11 +15,12 @@ class DefineContextsSpec extends Specification {
    * This specification uses a context class extending the `Before` trait.
    * It is also creating "fresh" variables for each example
    */
-  class BeforeSpecification extends Specification { def is =
-    "This is a list of examples"                                     ^
-      "example1"                                                     ! clean().e1^
-      "example2"                                                     ! clean().e2^
-                                                                     end
+  class BeforeSpecification extends Specification { def is = s2"""
+
+    This is a list of examples
+      example1                                  ${clean().e1}
+      example2                                  ${clean().e2}
+                                                               """
 
     case class clean() extends Before {
       val aNewSystem = "a fresh value"
@@ -33,13 +34,17 @@ class DefineContextsSpec extends Specification {
   /**
    * This specification uses an implicit context for each example
    */
-  class BeforeWithImplicitContextSpecification extends Specification { def is = sequential^
-    "This is a list of examples" ^
-      "example1" ! { i += 1; i must_== 1 } ^
-      "example2" ! { i += 1; i must_== 1 } ^
-                                           end
+  class BeforeWithImplicitContextSpecification extends Specification { def is =
+    s2""" $sequential
+
+    This is a list of examples
+    ${ "example1"                     ! e }
+    ${ "example2"                     ! e }
+
+    """
 
     var i = 0
+    def e = { i += 1; i must_== 1 }
     implicit val before: Context = new Before { def before = i = 0 }
   }
 
@@ -47,12 +52,11 @@ class DefineContextsSpec extends Specification {
    * This specification uses an implicit Outside context for each example
    */
   class OutsideWithImplicitContextSpecification extends Specification { def is =
-
-    "This is a list of examples"                                     ^
-      "example1"                                                     ! e1^
-      "example2"                                                     ! e2^
-                                                                     end
-
+                                                             s2"""
+    This is a list of examples
+      example1                                  $e1
+      example2                                  $e2
+                                                               """
     implicit val outside: Outside[Int] = new Outside[Int] { def outside = 1 }
 
     def e1 = (i: Int) => i must_== 1
@@ -63,11 +67,11 @@ class DefineContextsSpec extends Specification {
    * This specification uses an implicit Outside context for each example and ScalaCheck properties
    */
   class OutsideWithImplicitScalaCheckContextSpecification extends Specification with ScalaCheck { def is =
-
-    "This is a list of examples"                                     ^
-      "example1"                                                     ! e1^
-      "example2"                                                     ! e2^
-      end
+                                                             s2"""
+    This is a list of examples
+      example1                                  $e1
+      example2                                  $e2
+                                                               """
 
     implicit val outside: Outside[Int] = new Outside[Int] { def outside = 1 }
 
@@ -98,11 +102,12 @@ class DefineContextsSpec extends Specification {
    * This specification uses the `BeforeExample` trait to execute some code before each example
    * by simply defining a `before` method
    */
-  class BeforeExampleSpecification extends Specification with BeforeExample { def is =
-    "This is a list of examples"                                     ^
-      "example1"                                                     ! success^
-      "example2"                                                     ! success^
-                                                                     end
+  class BeforeExampleSpecification extends Specification with BeforeExample { def is = s2"""
+
+    This is a list of examples
+      example1                                  $ok
+      example2                                  $ok
+                                                               """
     def before = println("clean up before each example")
   }
 

@@ -3,8 +3,8 @@ package control
 
 import specification.Grouped
 import matcher.ThrownExpectations
-import execute.AnyAsResult._
-import execute.{AsResult, AnyAsResult}
+import execute.Function0Result._
+import execute.{AsResult, Function0Result}
 
 class DefaultStackTraceFilterSpec extends Specification with ThrownExpectations { def is =  s2"""
 

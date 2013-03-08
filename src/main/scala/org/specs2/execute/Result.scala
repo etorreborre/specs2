@@ -1,5 +1,6 @@
 package org.specs2
 package execute
+
 import control.Throwablex
 import control.Throwablex._
 import text.NotNullStrings._
@@ -9,6 +10,8 @@ import internal.scalaz.{Foldable, Monoid}
 import Foldable._
 import collection.Seqx._
 import text.Message.concat
+import execute.ResultExecution._
+
 
 /**
  * The result of an execution, either:
@@ -211,7 +214,7 @@ trait Results {
    * This avoids writing b must beTrue
    */
   implicit def toResult(b: Boolean): Result =
-    if (b) execute.Success("true") else execute.Failure("false")
+    if (b) org.specs2.execute.Success("true") else org.specs2.execute.Failure("false")
 
 }
 
@@ -244,16 +247,24 @@ object AsResult extends AsResultLowerImplicits {
 }
 
 trait AsResultLowerImplicits {
-  import org.specs2.execute.ResultExecution._
-  implicit def anyToAsResult[T]: AsResult[T] = new AsResult[T] {
-    def asResult(t: =>T) = {
-      executeEither(t)(_.toString) match {
-        case Left(e)  => new DecoratedResult((), e)
-        case Right(v) => new DecoratedResult(v, Success())
-      }
+  // even a String can be evaluated as a Result
+  // in that case this will succeed only if the expression doesn't throw an exception
+  // then the value will go to the "Decorator" part of a decorated result
+  implicit def anyToAsResult[T]: AsResult[T] = new AnyValueAsResult[T]
+}
+
+/**
+ * Type class to transform any value to a Result
+ */
+class AnyValueAsResult[T] extends AsResult[T] {
+  def asResult(t: =>T) = {
+    executeEither(t)(_.toString) match {
+      case Left(e)  => new DecoratedResult((), e)
+      case Right(v) => new DecoratedResult(v, Success())
     }
   }
 }
+
 
 /**
  * This class represents the success of an execution

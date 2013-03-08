@@ -14,7 +14,8 @@ trait SpecificationLike extends SpecificationStructure with SpecificationFeature
   def is = fragments
 }
 
-trait SpecificationFeatures extends FragmentsBuilder
+trait SpecificationFeatures extends mutable.FragmentsBuilder
+   with SpecificationStringContext
    with mutable.SpecificationInclusion
    with ArgumentsArgs
    with ArgumentsShortcuts
