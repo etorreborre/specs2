@@ -8,43 +8,44 @@ import main._
 import specification._
 
 class JUnitXmlReporterSpec extends Specification { def is =
-                                                                                                                        """
+                                                                                                                        s2"""
 The JUnit xml reporter allows to execute specifications and output xml files in a test-reports directory where each xml
 is formatted for JUnit reporting tools.
-                                                                                                                        """^
- "The output directory"                                                                                                 ^
-   "is target/test-reports by default"                                                                                  ! outputDir.e1^
-   "can be changed to a user defined directory with -Dspecs2.junit.outputDir"                                           ! outputDir.e1^
-                                                                                                                        p^
- "The xml file"                                                                                                         ^
-   "must have an outer <testsuite> tag with"                                                                            ^
-     "the hostname of the executing machine"                                                                            ! suite().e1^
-     "the name of the suite"                                                                                            ! suite().e2^
-     "the number of tests"                                                                                              ! suite().e3^
-     "the number of errors"                                                                                             ! suite().e4^
-     "the number of failures"                                                                                           ! suite().e5^
-     "the number of skipped"                                                                                            ! suite().e6^
-     "the total time (in seconds)"                                                                                      ! suite().e7^
-                                                                                                                        p^
-   "must have a <system-out> tag"                                                                                       ! suite().e8^
-   "must have a <system-err> tag"                                                                                       ! suite().e9^
-                                                                                                                        p^
-  "Inside the <testsuite> there is"                                                                                     ^
-    "a <properties> tag for all system properties"                                                                      ! suite().e10^
-    "a <testcase> tag with"                                                                                             ^
-      "the class name"                                                                                                  ! test().e1^
-      "the test name"                                                                                                   ! test().e2^
-      "the test duration"                                                                                               ! test().e3^
-                                                                                                                        p^
-  "Inside the <testcase> tag there is"                                                                                  ^
-    "the error message"                                                                                                 ! test().e4^
-    "the error type"                                                                                                    ! test().e5^
-    "the error trace"                                                                                                   ! test().e6^
-    "the failure message"                                                                                               ! test().e7^
-    "the failure type"                                                                                                  ! test().e8^
-    "the failure trace"                                                                                                 ! test().e9^
-    "the skipped tag"                                                                                                   ! test().e10^
-                                                                                                                        end
+
+ The output directory
+   is target/test-reports by default                                                                                    ${outputDir.e1}
+   can be changed to a user defined directory with -Dspecs2.junit.outputDir                                             ${outputDir.e1}
+
+ The xml file
+   must have an outer <testsuite> tag with
+     the hostname of the executing machine                                                                              ${suite().e1}
+     the name of the suite                                                                                              ${suite().e2}
+     the number of tests                                                                                                ${suite().e3}
+     the number of errors                                                                                               ${suite().e4}
+     the number of failures                                                                                             ${suite().e5}
+     the number of skipped                                                                                              ${suite().e6}
+     the total time (in seconds)                                                                                        ${suite().e7}
+
+   must have a <system-out> tag                                                                                         ${suite().e8}
+   must have a <system-err> tag                                                                                         ${suite().e9}
+
+  Inside the <testsuite> there is
+    a <properties> tag for all system properties                                                                        ${suite().e10}
+    a <testcase> tag with
+      the class name                                                                                                    ${test().e1}
+      the test name                                                                                                     ${test().e2}
+      the test duration                                                                                                 ${test().e3}
+
+  Inside the <testcase> tag there is
+    the error message                                                                                                   ${message().e1}
+    the error type                                                                                                      ${message().e2}
+    the error trace                                                                                                     ${message().e3}
+    the failure message                                                                                                 ${message().e4}
+    the failure type                                                                                                    ${message().e5}
+    the failure trace                                                                                                   ${message().e6}
+    the skipped tag                                                                                                     ${message().e7}
+
+                                                                                                                        """
 
   object outputDir {
     val reporter = new JUnitXmlReporter {}
@@ -79,16 +80,17 @@ is formatted for JUnit reporting tools.
     def e1 = xml("t1" ^ "e1" ! success) must \\("testcase", "classname" -> "org.specs2.reporter.JUnitXmlSpecification")
     def e2 = xml("t1" ^ "e1" ! success) must \\("testcase", "name" -> "t1::e1")
     def e3 = xml("t1" ^ "e1" ! success) must \\("testcase", "time")
+  }
+  case class message() extends WithReporter {
+    def e1 = xml("t1" ^ "e2" ! anError) must \\("error", "message" -> anError.message)
+    def e2 = xml("t1" ^ "e2" ! anError) must \\("error", "type" -> anError.exception.getClass.getName)
+    def e3 = xml("t1" ^ "e2" ! anError).toString must contain("JUnitXmlReporterSpec.scala")
 
-    def e4 = xml("t1" ^ "e2" ! anError) must \\("error", "message" -> anError.message)
-    def e5 = xml("t1" ^ "e2" ! anError) must \\("error", "type" -> anError.exception.getClass.getName)
-    def e6 = xml("t1" ^ "e2" ! anError).toString must contain("JUnitXmlReporterSpec.scala")
+    def e4 = xml("t1" ^ "e3" ! failure) must \\("failure", "message" -> failure.message)
+    def e5 = xml("t1" ^ "e3" ! failure) must \\("failure", "type" -> failure.exception.getClass.getName)
+    def e6 = xml("t1" ^ "e3" ! failure).toString must contain("JUnitXmlReporterSpec.scala")
 
-    def e7 = xml("t1" ^ "e3" ! failure) must \\("failure", "message" -> failure.message)
-    def e8 = xml("t1" ^ "e3" ! failure) must \\("failure", "type" -> failure.exception.getClass.getName)
-    def e9 = xml("t1" ^ "e3" ! failure).toString must contain("JUnitXmlReporterSpec.scala")
-
-    def e10 = xml("t1" ^ "e2" ! skipped) must \\("skipped")
+    def e7 = xml("t1" ^ "e2" ! skipped) must \\("skipped")
   }
 
   trait WithReporter {
