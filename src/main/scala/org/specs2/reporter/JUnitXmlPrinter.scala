@@ -40,8 +40,12 @@ trait JUnitXmlPrinter {
 
     executions.foldLeft(start) { (suite, de) =>
       val (f, d) = de
-      if (d.isTest) suite.addTest(TestCase(d, f))
-      else          suite
+
+      // temporary fix for http://bit.ly/WDGAT8 where a pending text might be defined as a test case
+      // in that case the method name is null which triggers a parse error for bamboo because the name attribute is
+      // missing
+      if (d.isTest && Option(d.getMethodName).isDefined) suite.addTest(TestCase(d, f))
+      else                                               suite
     }
   }
 
