@@ -79,21 +79,21 @@ trait GivenWhenThen extends RegexStepsFactory with TuplesToSeq with FragmentsBui
   protected val INTERPOLATED_REGEX = """\#\{([^}]+)\}"""
 
   implicit def givenIsSpecPart[T](g: Given[T]): SpecPart = new SpecPart {
-    def appendTo(text: String) =  {
+    def appendTo(text: String, expression: String = "") =  {
       gwt = (if (thenSequence) Seq() else gwt) :+ g.withRegex(group = INTERPOLATED_REGEX).extract(text)
       if (thenSequence) thenSequence = false
       g.strip(text)
     }
   }
   implicit def whenIsSpecPart[T, U](w: When[T, U]): SpecPart = new SpecPart {
-    def appendTo(text: String) =  {
+    def appendTo(text: String, expression: String = "") =  {
       gwt = if (gwt.size > 1) Seq(w.withRegex(group = INTERPOLATED_REGEX).extract(gwt.asInstanceOf[T], text))
       else              gwt.headOption.map(g => w.withRegex(group = INTERPOLATED_REGEX).extract(g.asInstanceOf[T], text)).toSeq
       w.strip(text)
     }
   }
   implicit def thenIsSpecPart[T](t: Then[T]): SpecPart = new SpecPart {
-    def appendTo(text: String) =  {
+    def appendTo(text: String, expression: String = "") =  {
       val result = gwt.lastOption.map(w => t.withRegex(group = INTERPOLATED_REGEX).extract(w.asInstanceOf[T], text))
       thenSequence = true
       "\n " ^ t.strip(text.trim) ! result.getOrElse(Failure("Can not call a Then step if there is no preceding Given step"))

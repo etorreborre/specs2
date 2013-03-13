@@ -48,6 +48,7 @@ object build extends Build {
     libraryDependencies <<= scalaVersion { scalaVersion => Seq(
       "org.specs2" %% "scalaz-core" % "7.0.0",
       "org.specs2" %% "scalaz-concurrent" % "7.0.0",
+      "org.scala-lang" % "scala-reflect" % scalaVersion  % "optional",
       "org.scala-lang" % "scala-compiler" % scalaVersion  % "optional",
       "org.scalacheck" % "scalacheck_2.10.0" % "1.10.0" % "optional",
       "org.scala-tools.testing" % "test-interface" % "0.5" % "optional",
@@ -64,7 +65,7 @@ object build extends Build {
   lazy val compilationSettings: Seq[Settings] = Seq(
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
     maxErrors := 20,
-    scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-language:implicitConversions,reflectiveCalls,postfixOps,higherKinds,existentials")
+    scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature", "-language:implicitConversions,reflectiveCalls,postfixOps,higherKinds,existentials,experimental.macros")
   )
 
   lazy val testingSettings: Seq[Settings] = Seq(

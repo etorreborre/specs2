@@ -292,7 +292,7 @@ trait MatchResultImplicits { outer =>
   /**
    * implicit definition to transform any MatchResult to a Result
    */
-  implicit def asResult[T, M[_] <: MatchResult[_]](r: M[T]): Result = r.toResult
+  implicit def asResult[M[_] <: MatchResult[_]](r: M[_]): Result = r.toResult
 
   /**
    * implicit definition to accept any MatchResult as a Boolean value.
@@ -301,8 +301,8 @@ trait MatchResultImplicits { outer =>
   implicit def fromMatchResult(r: =>MatchResult[_]): Boolean = r.isSuccess || r.toResult.isSkipped || r.toResult.isPending
 
   /** implicit typeclass instance to create examples from MatchResults */
-  implicit def matchResultAsResult[T, M[_] <: MatchResult[_]]: AsResult[M[T]] = new AsResult[M[T]] {
-    def asResult(t: =>M[T]): Result = outer.asResult(t)
+  implicit def matchResultAsResult[M[_] <: MatchResult[_]]: AsResult[M[_]] = new AsResult[M[_]] {
+    def asResult(t: =>M[_]): Result = outer.asResult(t)
   }
 
   /** implicit typeclass instance to create examples from a sequence of MatchResults */
