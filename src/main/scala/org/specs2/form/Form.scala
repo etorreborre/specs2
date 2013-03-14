@@ -32,9 +32,16 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
   protected def newForm(title: Option[String] = None, rows: Seq[Row] = Vector(), result: Option[Result] = None) =
     new Form(title, rows, result)
   /** @return a Form where every Row is executed with a Success */
-  def setSuccess = newForm(title, rows.map(_.setSuccess), Some(success))
+  def setSuccess = setResult(success)
   /** @return a Form where every Row is executed with a Failure */
-  def setFailure = newForm(title, rows.map(_.setFailure), Some(failure))
+  def setFailure = setResult(failure)
+  /** @return a Form where every Row is executed with a Skipped */
+  def setSkipped = setResult(skipped)
+  /** @return a Form where every Row is executed with a Pending */
+  def setPending = setResult(pending)
+  /** @return a Form where every Row is executed with a given Result */
+  def setResult(r: Result) = newForm(title, rows.map(_.setResult(r)), Some(r))
+
 
   /** add a new Header with some fields */
   def th(hs: Seq[Field[_]]): Form = tr(Row.tr(hs.map((f: Field[_]) => FieldCell(f.header))))

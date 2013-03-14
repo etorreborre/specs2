@@ -15,8 +15,7 @@ case class Tabs(tabs: Seq[Tab] = Vector(), result: Option[Result] = None) extend
   def tab(t: String, form: Form) = Tabs(tabs :+ Tab(t, form))
   def tabs(ts: Tabs): Tabs = Tabs(tabs ++ ts.tabs)
 
-  def setSuccess = copy(result = Some(success))
-  def setFailure = copy(result = Some(failure))
+  def setResult(r: Result) = copy(result = Some(r))
   def execute = result.getOrElse(executeTabs)
   def executeCell = copy(result = result.orElse(Some(executeTabs)))
 
@@ -31,9 +30,7 @@ case class Tabs(tabs: Seq[Tab] = Vector(), result: Option[Result] = None) extend
  * Class representing an individual tab
  */
 case class Tab(title: String, form: Form, result: Option[Result] = None) extends Cell {
-  def setSuccess = copy(result = Some(success))
-  def setFailure = copy(result = Some(failure))
-  
+  def setResult(r: Result) = copy(result = Some(r))
   def execute = result.getOrElse(form.execute)
   def executeCell = copy(result = result.orElse(Some(form.execute)))
 

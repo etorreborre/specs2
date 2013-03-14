@@ -16,10 +16,16 @@ case class Row(private val cellList: NonEmptyList[Cell]) extends Executable {
   def cells = cellList.list.toSeq
   
   /** @return a Row where every cell is executed with a Success */
-  def setSuccess = new Row(cellList.map(_.setSuccess))
+  def setSuccess = setResult(success)
   /** @return a Row where every cell is executed with a Failure */
-  def setFailure = new Row(cellList.map(_.setFailure))
-  
+  def setFailure = setResult(failure)
+  /** @return a Row where every cell is executed with a Skipped */
+  def setSkipped = setResult(skipped)
+  /** @return a Row where every cell is executed with a Pending */
+  def setPending = setResult(pending)
+  /** @return a Row where every cell is executed with a specified Result */
+  def setResult(r: Result) = new Row(cellList.map(_.setResult(r)))
+
   /** 
    * execute all cells
    * @return a logical `and` on all results

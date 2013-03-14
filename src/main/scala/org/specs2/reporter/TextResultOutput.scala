@@ -13,6 +13,7 @@ class TextResultOutput extends ResultOutput with ConsoleOutput {
 
   def printSpecStartName(message: String, stats: Stats)(implicit args: Arguments)  = printLines(args.textColor(message))
   def printSpecStartTitle(message: String, stats: Stats)(implicit args: Arguments) = printLines(args.textColor(message))
+  def printSeeLink       (message: String, stats: Stats)(implicit args: Arguments) = printLines(status(stats.result)+args.textColor(message))
   def printSuccess(message: String)(implicit args: Arguments)                      = printLines(args.successColor(message))
   def printFailure(message: String)(implicit args: Arguments)                      = {
     if (args.report.flow) printLines("\n"+message)

@@ -18,8 +18,11 @@ import language.existentials
  *
  */
 trait Cell extends Text with Xml with Executable {
-  def setSuccess: Cell
-  def setFailure: Cell
+  def setSuccess: Cell = setResult(success)
+  def setFailure: Cell = setResult(failure)
+  def setSkipped: Cell = setResult(skipped)
+  def setPending: Cell = setResult(pending)
+  def setResult(r: Result): Cell
 
   /**
    * execute the Cell and returns it
@@ -87,8 +90,7 @@ case class TextCell(s: String, result: Option[Result] = None, decorator: Decorat
   def xml(implicit args: Arguments) = <td class={result.map(_.statusName).getOrElse("none")} style="info">{decorateValue(Markdown.toXhtml(text))}</td>
 
   def execute = result.getOrElse(Skipped())
-  def setSuccess = TextCell(s, success)
-  def setFailure = TextCell(s, failure)
+  def setResult(r: Result) = TextCell(s, result)
   def executeCell = this
 
   /** set a new Decorator */
@@ -130,8 +132,6 @@ case class FieldCell(f: Field[_], result: Option[Result] = None) extends Cell {
   }
 
   def execute = result.getOrElse(f.execute)
-  def setSuccess = setResult(success)
-  def setFailure = setResult(failure)
   def setResult(r: Result) = FieldCell(f, Some(r))
   def executeCell = FieldCell(f, result.orElse(Some(f.execute)))
 
@@ -159,8 +159,7 @@ case class EffectCell(e: Effect[_], result: Option[Result] = None) extends Cell 
   }
 
   def execute = result.getOrElse(e.execute)
-  def setSuccess = EffectCell(e, Some(success))
-  def setFailure = EffectCell(e, Some(failure))
+  def setResult(r: Result) = EffectCell(e, Some(r))
   def executeCell = EffectCell(e, result.orElse(Some(e.execute)))
 
 }
@@ -173,8 +172,7 @@ case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell {
 
   def execute = result.getOrElse(p.execute)
   def executeCell = PropCell(p, result.orElse(Some(p.execute)))
-  def setSuccess = PropCell(p, Some(success))
-  def setFailure = PropCell(p, Some(failure))
+  def setResult(r: Result) = PropCell(p, Some(r))
 
   def xml(implicit args: Arguments): NodeSeq = {
     val executed = result.getOrElse(skipped)
@@ -198,8 +196,7 @@ class FormCell(_form: =>Form, result: Option[Result] = None) extends Cell {
     lazy val executed = result.map(r => form).getOrElse(form.executeForm)
     new FormCell(executed, result.orElse(Some(executed.execute)))
   }
-  def setSuccess = new FormCell(form.setSuccess, Some(success))
-  def setFailure = new FormCell(form.setFailure, Some(failure))
+  def setResult(r: Result) = new FormCell(form.setResult(r), Some(r))
 
   /**
    * @return the width of a form when inlined.
@@ -217,8 +214,7 @@ class LazyCell(_cell: =>Cell) extends Cell {
   def xml(implicit args: Arguments) = cell.xml(args)
   def execute = cell.execute
   def executeCell = cell.executeCell
-  def setSuccess = cell.setSuccess
-  def setFailure = cell.setFailure
+  def setResult(r: Result) = cell.setResult(r)
 }
 object LazyCell {
   def unapply(cell: LazyCell): Option[Cell] = Some(cell.cell)
@@ -230,8 +226,7 @@ class XmlCell(_theXml: =>NodeSeq) extends Cell {
   def xml(implicit args: Arguments) = theXml
   def execute = success
   def executeCell = this
-  def setSuccess = this
-  def setFailure = this
+  def setResult(r: Result) = this
 }
 object XmlCell {
   def unapply(cell: XmlCell): Option[NodeSeq] = Some(cell.theXml)

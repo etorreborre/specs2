@@ -65,6 +65,9 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOu
     if (args.report.flow) info(message+"\n") else info(message)
   override def printSpecStartTitle(message: String, stats: Stats)(implicit args: Arguments) =
     if (args.report.flow) info(message) else info(message)
+  override def printSeeLink(message: String, stats: Stats)(implicit args: Arguments) =
+    info(status(stats.result)+args.textColor(message))
+
   override def printFailure(message: String)(implicit args: Arguments)                      = {
     flushInfo
     logFailure(message)

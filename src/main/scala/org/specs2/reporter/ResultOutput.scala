@@ -12,6 +12,7 @@ import specification.Stats
 trait ResultOutput {
   def printSpecStartName(message: String, stats: Stats)(implicit args: Arguments)
   def printSpecStartTitle(message: String, stats: Stats)(implicit args: Arguments)
+  def printSeeLink       (message: String, stats: Stats)(implicit args: Arguments)
   def printSuccess(message: String)                     (implicit args: Arguments)
   def printFailure(message: String)                     (implicit args: Arguments)
   def printError(message: String)                       (implicit args: Arguments)
@@ -33,6 +34,7 @@ trait ResultOutput {
 class NoResultOutput extends ResultOutput {
   def printSpecStartName(message: String, stats: Stats)(implicit args: Arguments)   {}
   def printSpecStartTitle(message: String, stats: Stats)(implicit args: Arguments)  {}
+  def printSeeLink       (message: String, stats: Stats)(implicit args: Arguments)  {}
   def printSuccess(message: String)                     (implicit args: Arguments)  {}
   def printFailure(message: String)                     (implicit args: Arguments)  {}
   def printError(message: String)                       (implicit args: Arguments)  {}

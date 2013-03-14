@@ -117,6 +117,7 @@ case class ExecutedSpecEnd(end: SpecEnd, location: Location = new Location, stat
   def specName = end.specName
   def name = end.name
   def title = end.title
+  def isSeeOnlyLink = end.isSeeOnlyLink
   
   override def toString = "ExecutedSpecEnd("+name+")"
 }

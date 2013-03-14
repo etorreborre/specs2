@@ -91,8 +91,10 @@ trait TextPrinter {
   case class PrintSpecStart(start: ExecutedSpecStart) extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) = {
       if (!start.hidden) {
-        if (start.name != start.title) out.printSpecStartTitle(leveledText(start.title, level)(args), stats)(args)
-        else                           out.printSpecStartName(leveledText(start.name, level)(args), stats)(args)
+        if (start.isSeeOnlyLink)         out.printSeeLink(leveledText(start.name, level)(args), stats)(args)
+        else
+          if (start.name != start.title) out.printSpecStartTitle(leveledText(start.title, level)(args), stats)(args)
+          else                           out.printSpecStartName(leveledText(start.name, level)(args), stats)(args)
         if (!args.xonly) out.printLine("")(args)
       }
     }
@@ -120,7 +122,7 @@ trait TextPrinter {
               }
             }
             case s @ Success(_,_)  => out.printSuccess(decoratedDescription(desc) + (if(!s.exp.isEmpty) "\n"+s.exp else ""))
-            case Pending(_)        => out.printPending(decoratedDescription(desc) + " " + result.message)
+            case Pending(_)        => out.printPending(decoratedDescription(desc) + " " + (if (result.message.isEmpty) "PENDING" else result.message))
             case Skipped(_, _) => {
               out.printText(decoratedDescription(desc))
               if (!result.message.isEmpty)
@@ -197,7 +199,7 @@ trait TextPrinter {
   }
   case class PrintSpecEnd(end: ExecutedSpecEnd, endStats: Stats)       extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) = {
-      if ((args.xonly && stats.hasFailuresOrErrors || !args.xonly) && args.canShow("1"))
+      if (!end.isSeeOnlyLink && (args.xonly && stats.hasFailuresOrErrors || !args.xonly) && args.canShow("1"))
         printEndStats(stats)(args, out)
     }
     def printEndStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
