@@ -6,44 +6,44 @@ import execute._
 import sys._
 import specification.Grouped
 
-class PropSpec extends Specification with Grouped {  def is =
-                                                                                                                        """
+class PropSpec extends Specification with Grouped {  def is = s2"""
+                                                                    
 A Prop is a Field defining an expected and an actual value.
 
 It embeddeds an optional constraint which allows to execute the Prop and see (by default) if
 the actual value is equal to the expected value.
-                                                                                                                        """^
-  "A Prop can be created"                                                                                               ^
-    "with a single label"                                                                                               ! g1.e1^
-    "with a single value (the actual one)"                                                                              ! g1.e2^
-    "with a label and actual value"                                                                                     ! g1.e3^
-    "with a label, the actual value and a binary function returning a result"                                           ! g1.e4^
-    "with a label, the actual value and a matcher"                                                                      ! g1.e5^
-    "with the actual value and a muted matcher"                                                                         ! g1.e6^
-    "with the actual value, the expected value and a muted matcher"                                                     ! g1.e7^
-                                                                                                                        p^
-  "A Prop can be displayed"                                                                                             ^
-    "with only the expected value"                                                                                      ! g2.e1^
-    "with only the actual value"                                                                                        ! g2.e2^
-    "with only one value when expected == actual"                                                                       ! g2.e3^
-                                                                                                                        p^
-  "A Prop can be updated"                                                                                               ^
-    "with the expected value"                                                                                           ! g3.e1^
-                                                                                                                        p^
-  "A Prop can be executed"                                                                                               ^
-    "it returns pending if it has no values at all"                                                                     ! g4.e1^
-    "it returns pending if it only has an actual value"                                                                 ! g4.e2^
-    "it returns pending if it only has an expected value"                                                               ! g4.e3^
-    "it returns success if expected == actual"                                                                          ! g4.e4^
-    "it returns a failure if expected != actual"                                                                        ! g4.e5^
-    "it returns an error if there's an exception"                                                                       ! g4.e6^
-    "it works with a general constraint"                                                                                ^
-      "and returns a success if constraint(actual, expected) == success"                                                ! g4.e7^
-      "and returns a failure if constraint(actual, expected) fails"                                                     ! g4.e8^
-    "it works with a matcher constraint"                                                                                ^p^
-      "and returns a success if (actual matcher expected) == success"                                                   ! g4.e9^
-      "and returns a failure if (actual matcher expected) fails"                                                        ! g4.e10^
-                                                                                                                        end
+                                                                                                                        
+ A Prop can be created
+   with a single label                                                                    ${g1.e1}
+   with a single value (the actual one)                                                   ${g1.e2}
+   with a label and actual value                                                          ${g1.e3}
+   with a label, the actual value and a binary function returning a result                ${g1.e4}
+   with a label, the actual value and a matcher                                           ${g1.e5}
+   with the actual value and a muted matcher                                              ${g1.e6}
+   with the actual value, the expected value and a muted matcher                          ${g1.e7}
+
+ A Prop can be displayed
+   with only the expected value                                                           ${g2.e1}
+   with only the actual value                                                             ${g2.e2}
+   with only one value when expected == actual                                            ${g2.e3}
+
+ A Prop can be updated
+   with the expected value                                                                ${g3.e1}
+
+ A Prop can be executed
+   it returns pending if it has no values at all                                          ${g4.e1}
+   it returns pending if it only has an actual value                                      ${g4.e2}
+   it returns pending if it only has an expected value                                    ${g4.e3}
+   it returns success if expected == actual                                               ${g4.e4}
+   it returns a failure if expected != actual                                             ${g4.e5}
+   it returns an error if there's an exception                                            ${g4.e6}
+   it works with a general constraint
+     and returns a success if constraint(actual, expected) == success                     ${g4.e7}
+     and returns a failure if constraint(actual, expected) fails                          ${g4.e8}
+   it works with a matcher constraint
+     and returns a success if (actual matcher expected) == success                        ${g4.e9}
+     and returns a failure if (actual matcher expected) fails                             ${g4.e10}
+                                                                                          """
 
   val nameProp = Prop("name", "eric")
   val noValues = new Prop("name")

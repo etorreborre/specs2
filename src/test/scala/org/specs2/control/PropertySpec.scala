@@ -4,38 +4,38 @@ package control
 import io._
 import specification._
 
-class PropertySpec extends Specification with Groups { def is =
-                                                                                                                        """
+class PropertySpec extends Specification with Groups { def is = s2"""
+
 A Property is used to store values which can be lazily accessed when required.
 
 It has an Option-like structure, supporting the same kind of operations and can be empty like an Option.
-                                                                                                                        """^
-                                                                                                                        p^
-  "A property"                                                                                                          ^
-    "can be empty "                                                                                                     ! g1().e1^
-    "can be created from any value"                                                                                     ! g1().e2^
-    "can be updated with another value"                                                                                 ! g1().e3^
-    "can be updated with an option"                                                                                     ! g1().e4^
-    "has a toString method returning the option value toString"                                                         ! g1().e5^
-                                                                                                                        p^
-  "A property can be executed"                                                                                          ^
-    "and return its contained value"                                                                                    ! g2().e1^
-    "it is only executed once"                                                                                          ! g2().e2^
-                                                                                                                        p^
-  "A property behaves like an Option"                                                                                   ^
-    "with map"                                                                                                          ! g3().e1^
-    "with flatMap"                                                                                                      ! g3().e2^
-    "with filter"                                                                                                       ! g3().e3^
-    "with foreach"                                                                                                      ! g3().e4^
-    "with getOrElse"                                                                                                    ! g3().e5^
-    "with isDefined"                                                                                                    ! g3().e6^
-    "with isEmpty"                                                                                                      ! g3().e7^
-    "with orElse"                                                                                                       ! g3().e8^
-                                                                                                                        p^
-  "A property can be transformed to an Either instance"                                                                 ^
-    "with toLeft"                                                                                                       ! g4().e1^
-    "with toRight"                                                                                                      ! g4().e2^
-                                                                                                                        end
+
+
+ A property
+   can be empty                                                            ${g1().e1}
+   can be created from any value                                           ${g1().e2}
+   can be updated with another value                                       ${g1().e3}
+   can be updated with an option                                           ${g1().e4}
+   has a toString method returning the option value toString               ${g1().e5}
+
+ A property can be executed
+   and return its contained value                                          ${g2().e1}
+   it is only executed once                                                ${g2().e2}
+
+ A property behaves like an Option
+   with map                                                                ${g3().e1}
+   with flatMap                                                            ${g3().e2}
+   with filter                                                             ${g3().e3}
+   with foreach                                                            ${g3().e4}
+   with getOrElse                                                          ${g3().e5}
+   with isDefined                                                          ${g3().e6}
+   with isEmpty                                                            ${g3().e7}
+   with orElse                                                             ${g3().e8}
+
+ A property can be transformed to an Either instance
+   with toLeft                                                             ${g4().e1}
+   with toRight                                                            ${g4().e2}
+                                                                           """
 
   "creation" - new g1 with prop {
     e1 := Property().isEmpty

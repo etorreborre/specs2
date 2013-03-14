@@ -5,72 +5,72 @@ import specification._
 import Forms._
 import matcher._
 
-class FormSpec extends Specification with ResultMatchers with Grouped { def is =
-                                                                                                                        """
+class FormSpec extends Specification with ResultMatchers with Grouped { def is = s2"""
+
 A Form is a generic table which has an optional title and rows. Each row contains cells which can be created from
 Fields, Props or other Forms.
 
 A Form is usually created in a specification with expected values so that it can be displayed with the rest of the text
 (whereas a DataTable is only displayed when there are failures. It is then "implemented" with actual values in an example.
 Upon execution a Form will return a Result value summarizing the execution of each Prop it embeds.
-                                                                                                                        """^
-                                                                                                                        p^
-"A Form can be created"                                                                                                 ^
-  "with a title"                                                                                                        ! g1.e1 ^
-  "with one field on one row"                                                                                           ! g1.e2 ^
-  "with two fields on one row"                                                                                          ! g1.e3 ^
-  "with a title and one field on each row"                                                                              ! g1.e4 ^
-  "with a property on one row"                                                                                          ! g1.e5 ^
-  "with another Form on one row"                                                                                        ! g1.e6 ^
-  "with a seq of fields on one row"                                                                                     ! g1.e7 ^
-  "with a seq of fields on one row - and no title"                                                                      ! g1.e8 ^
-  "with tabs"                                                                                                           ! g1.e9 ^
-  "with a seq of Rows"                                                                                                  ! g1.e10^
-  "from a DataTable"                                                                                                    ^
-    "the Form header is the DataTable header"                                                                           ! g1.e11 ^
-    "with an additional column for failure messages"                                                                    ! g1.e12 ^
-    "the form rows are the DataTable rows"                                                                              ! g1.e13 ^
-                                                                                                                        endp^
-"A Form can be displayed, showing expected values"                                                                      ^
-  "with its title"                                                                                                      ^
-    "if present: | title |"                                                                                             ! g2.e1 ^
-    "if absent: the text is empty"                                                                                      ! g2.e2 ^
-                                                                                                                        p^
-  "the columns must be aligned for"                                                                                     ^
-    "a simple form with 2 fields" + address1                                                                            ! g2.e3 ^
-    "a simple form with 3 fields, 2 on one row and one on the second row\n"+address2                                    ! g2.e4 ^
-    "a form with more fields and rows" + address3                                                                       ! g2.e5 ^
-    "a form with an inlined form" + address4                                                                            ! g2.e6 ^
-                                                                                                                        p^
-  "with one row only"                                                                                                   ^
-    "and one cell"                                                                                                      ! g2.e7 ^
-    "and 2 cells"                                                                                                       ! g2.e8 ^
-                                                                                                                        p^
-  "with a title and one row"                                                                                            ^
-    "and one cell"                                                                                                      ! g2.e9 ^
-    "and 2 cells"                                                                                                       ! g2.e10 ^
-                                                                                                                        endp^
-"A Form can be executed as a success"                                                                                   ^
-  "then its rows are a success"                                                                                         ! g3.e1^
-  "and row cells are a success"                                                                                         ! g3.e2^
-                                                                                                                        p^
-"A Form can be executed as a failure"                                                                                   ^
-  "then its rows are a failure"                                                                                         ! g3.e3^
-  "and row cells are a failure"                                                                                         ! g3.e4^
-                                                                                                                        p^
- "A Form can be executed"                                                                                               ^
-   "then all its rows are executed"                                                                                     ! g3.e5^
-                                                                                                                        p^
-"Forms rows and cells have equals/hashcode methods"                                                                     ^
-  "row1 == row1"                                                                                                        ! g4.e1^
-  "cell1 == cell1"                                                                                                      ! g4.e2^
-                                                                                                                        p^
-"Forms can be displayed as xhtml"                                                                                       ^
-  "the title must span all columns"                                                                                     ! g5.e1^
-                                                                                                                        p^
-"A form can be added to another"                                                                                        ^
-    "inlined"                                                                                                           ! g6.e1^
-                                                                                                                        end
+                                                                                                                        
+                                                                                                                        
+A Form can be created                                                                                                 
+  with a title                                                                                              ${g1.e1}
+  with one field on one row                                                                                 ${g1.e2}
+  with two fields on one row                                                                                ${g1.e3}
+  with a title and one field on each row                                                                    ${g1.e4}
+  with a property on one row                                                                                ${g1.e5}
+  with another Form on one row                                                                              ${g1.e6}
+  with a seq of fields on one row                                                                           ${g1.e7}
+  with a seq of fields on one row - and no title                                                            ${g1.e8}
+  with tabs                                                                                                 ${g1.e9}
+  with a seq of Rows                                                                                        ${g1.e10}
+  from a DataTable
+    the Form header is the DataTable header                                                                 ${g1.e11}
+    with an additional column for failure messages                                                          ${g1.e12}
+    the form rows are the DataTable rows                                                                    ${g1.e13}
+
+A Form can be displayed, showing expected values
+  with its title
+    if present: | title |                                                                                   ${g2.e1}
+    if absent: the text is empty                                                                            ${g2.e2}
+
+  the columns must be aligned for
+    a simple form with 2 fields $address1                                                                   ${g2.e3}
+    a simple form with 3 fields, 2 on one row and one on the second row $address2                           ${g2.e4}
+    a form with more fields and rows $address3                                                              ${g2.e5}
+    a form with an inlined form $address4                                                                   ${g2.e6}
+
+  with one row only
+    and one cell                                                                                            ${g2.e7}
+    and 2 cells                                                                                             ${g2.e8}
+
+  with a title and one row
+    and one cell                                                                                            ${g2.e9}
+    and 2 cells                                                                                             ${g2.e1}
+
+A Form can be executed as a success
+  then its rows are a success                                                                               ${g3.e1}
+  and row cells are a success                                                                               ${g3.e2}
+
+A Form can be executed as a failure
+  then its rows are a failure                                                                               ${g3.e3}
+  and row cells are a failure                                                                               ${g3.e4}
+
+ A Form can be executed
+   then all its rows are executed                                                                           ${g3.e5}
+
+Forms rows and cells have equals/hashcode methods
+  row1 == row1                                                                                              ${g4.e1}
+  cell1 == cell1                                                                                            ${g4.e2}
+
+Forms can be displayed as xhtml
+  the title must span all columns                                                                           ${g5.e1}
+
+A form can be added to another
+    inlined                                                                                                 ${g6.e1}
+                                                                                                            """
 
   "creation" - new g1 with datatables {
     e1 := Form("title").title must_== Some("title")

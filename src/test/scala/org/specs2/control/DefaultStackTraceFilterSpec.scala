@@ -9,10 +9,11 @@ import execute.{AsResult, Function0Result}
 class DefaultStackTraceFilterSpec extends Specification with ThrownExpectations { def is =  s2"""
 
  the default stacktrace filter should
-   remove specs2 traces                       ${e1}
-   truncate the stack trace if it is too long ${e2}
+   remove specs2 traces                       $e1
+   truncate the stack trace if it is too long $e2
 
-"""
+                                                                                              """
+
   val e1 = { DefaultStackTraceFilter.apply(new Exception).getStackTrace.map(_.toString).toSeq must not containMatch(".*specs2.*") }
 
   val e2 = {

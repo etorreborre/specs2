@@ -4,13 +4,13 @@ package execute
 import ResultImplicits._
 import specification.Grouped
 
-class ResultImplicitsSpec extends Specification with Grouped { def is =
+class ResultImplicitsSpec extends Specification with Grouped { def is = s2"""
 
-  "It is possible to test some values against a function returning results"                                   ^
-    "with forall, stopping after the first failure"                                                           ! g1.e1^
-    "with foreach, collecting all failures"                                                                   ! g1.e2^
-    "with atLeastOnce, collecting all failures"                                                               ! g1.e3^
-                                                                                                              end
+ It is possible to test some values against a function returning results
+   with forall, stopping after the first failure                                              ${g1.e1}
+   with foreach, collecting all failures                                                      ${g1.e2}
+   with atLeastOnce, collecting all failures                                                  ${g1.e3}
+                                                                                              """
 
   "Collections of results" - new g1 {
     e1 := ((i: Int) => i must be_<=(2)).forall(Seq(1, 2, 3, 4)).message ===
