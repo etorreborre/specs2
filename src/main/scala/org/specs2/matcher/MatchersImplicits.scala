@@ -292,7 +292,7 @@ trait MatchResultImplicits { outer =>
   /**
    * implicit definition to transform any MatchResult to a Result
    */
-  implicit def asResult[M[_] <: MatchResult[_]](r: M[_]): Result = r.toResult
+  implicit def asResult[M[_] <: MatchResult[_]](r: M[_]): Result = ResultExecution.execute(r.toResult)
 
   /**
    * implicit definition to accept any MatchResult as a Boolean value.
