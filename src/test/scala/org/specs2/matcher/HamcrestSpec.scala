@@ -4,12 +4,12 @@ package matcher
 import org.hamcrest._
 import specification.Grouped
 
-class HamcrestSpec extends Specification with Grouped with Hamcrest { def is =
+class HamcrestSpec extends Specification with Grouped with Hamcrest { def is = s2"""
 
-  "Hamcrest matchers can be used as specs2 matchers by mixing in the Hamcrest trait"      ^
-  "for example a beEven hamcrest matcher can be used in a 'must' expression"              ! g1.e1 ^
-    "the failure message must contain the matched value and the hamcrest failure message" ! g1.e2
-
+  Hamcrest matchers can be used as specs2 matchers by mixing in the Hamcrest trait      
+  for example a beEven hamcrest matcher can be used in a 'must' expression                 ${g1.e1}
+    the failure message must contain the matched value and the hamcrest failure message    ${g1.e2}
+                                                                                           """
 
   new g1 {
     e1 := 2 must beEven

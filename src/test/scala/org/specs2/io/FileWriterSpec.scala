@@ -6,16 +6,16 @@ import specification._
 import sys._
 import control.Exceptions._
 
-class FileWriterSpec extends Specification with Groups {  def is =
+class FileWriterSpec extends Specification with Groups { def is = s2"""
 
-  "A FileWriter should"                                                                                                 ^
-    "write inside a file"                                                                                               ! g1().e1^
-    "close the file if an exception occurs"                                                                             ! g1().e2^
-    "rethrow the exception if an exception occurs"                                                                      ! g1().e3^
-                                                                                                                        p^
-  "A FileWriter can"                                                                                                    ^
-    "write a XML Node"                                                                                                  ! g1().e4^
-                                                                                                                        end
+  A FileWriter should                                                                                                 
+    write inside a file                                                                                 ${g1().e1}
+    close the file if an exception occurs                                                               ${g1().e2}
+    rethrow the exception if an exception occurs                                                        ${g1().e3}
+
+  A FileWriter can
+    write a XML Node                                                                                    ${g1().e4}
+                                                                                                        """
 
   "file writer" - new g1 {
     val out = new MockWriter {}

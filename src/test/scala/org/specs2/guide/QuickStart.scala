@@ -46,10 +46,10 @@ Acceptance specifications extend the `org.specs2.Specification` trait and must d
        This is a specification to check the 'Hello world' string
 
        The 'Hello world' string should
-         contain 11 characters                                             ${dollar}e1
-         start with 'Hello'                                                ${dollar}e2
-         end with 'world'                                                  ${dollar}e3
-                                                                           $triple
+         contain 11 characters                                         ${dollar}e1
+         start with 'Hello'                                            ${dollar}e2
+         end with 'world'                                              ${dollar}e3
+                                                                       $triple
 
         def e1 = "Hello world" must have size(11)
         def e2 = "Hello world" must startWith("Hello")
@@ -62,7 +62,7 @@ The `is` method lists [*specification fragments*](org.specs2.guide.Structure.htm
 * examples: some executable code returning a `Result`
 * ScalaCheck properties
 * Forms
-* regular interpolated values
+* normal values
 
 
 #### Execution

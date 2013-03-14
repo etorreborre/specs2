@@ -5,29 +5,29 @@ import Htmlx._
 import scala.xml.NodeSeq
 import specification.Grouped
 
-class HtmlxSpec extends Specification with HtmlDocuments with Grouped { def is =
+class HtmlxSpec extends Specification with HtmlDocuments with Grouped { def is = s2"""
 
-  "headers functions"                                                                                                   ^
-    { isHeader(<h1/>) must beTrue }                                                                                     ^
-    { isHeader(<h2/>) must beTrue }                                                                                     ^
-    `headersToTree builds a Tree of headers from a html document`                                                       ^
-    `headersToTree builds a Tree of headers - 2`                                                                        ^
-    { (<h2 id="1"/> ++ <h3/>).updateHeadAttribute("id", 3) === (<h2 id="3"/> ++ <h3/>) }                                ^
-    { <h2>hello</h2>.addHeadersAnchors.toString must beMatching("""<a name="hello"><h2>hello</h2></a>""") }             ^
-                                                                                                                        p^
-  "the headers methods"                                                                                                 ^
-    "collects all headers of a document"                                                                                ! g1.e1^
-    "filters out notoc elements"                                                                                        ! g1.e2^
-                                                                                                                        p^
-  "nodeText extracts the text from a Node"                                                                              ^
-    { nodeText(<h2>Hello</h2>) must_== "Hello"}                                                                         ^
-    { nodeText(<h2>Hello<notoc>world</notoc></h2>) must_== "Hello" }                                                    ^
-                                                                                                                        p^
-  "urls extracts all urls from <a/> nodes"                                                                              ^
-    { urls(<a href="www.google.com">hi</a>) must_== Seq("www.google.com") }                                             ^
-                                                                                                                        p^
-  "Anchor names which are build for headers must be unique and the same in the header tree"                             ! g2.e1^
-                                                                                                                        end
+  headers functions
+  ${ isHeader(<h1/>) must beTrue }
+  ${ isHeader(<h2/>) must beTrue }
+  ${`headersToTree builds a Tree of headers from a html document`}
+  ${`headersToTree builds a Tree of headers - 2`}
+  ${ (<h2 id="1"/> ++ <h3/>).updateHeadAttribute("id", 3) === (<h2 id='3'/> ++ <h3/>) }
+  ${ <h2>hello</h2>.addHeadersAnchors.toString must beMatching("<a name=\"hello\"><h2>hello</h2></a>") }
+
+  the headers methods
+    collects all headers of a document  ${g1.e1}
+    filters out notoc elements          ${g1.e2}
+
+  nodeText extracts the text from a Node
+  ${ nodeText(<h2>Hello</h2>) must_== "Hello"}
+  ${ nodeText(<h2>Hello<notoc>world</notoc></h2>) must_== "Hello" }
+
+  urls extracts all urls from <a/> nodes
+  ${ urls(<a href="www.google.com">hi</a>) must_== Seq("www.google.com") }
+
+  Anchor names which are build for headers must be unique and the same in the header tree ${g2.e1}
+                                                                                                               """
 
   def `headersToTree builds a Tree of headers from a html document` =
     aBodyWithTwoH3HeadersAndOneH4Each.headersTree.drawTree.trim must_==

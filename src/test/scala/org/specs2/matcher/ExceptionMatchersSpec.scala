@@ -4,35 +4,35 @@ package matcher
 import sys._
 import execute.ResultExecution
  
-class ExceptionMatchersSpec extends Specification with ResultMatchers { def is =
+class ExceptionMatchersSpec extends Specification with ResultMatchers { def is = s2"""
 
-  "Exception matchers allow to check that exceptions are thrown"                          				                      ^
-    "by specifying the expected type of exception: 'value must throwAn[Exception]'"							                        ^
-      "it must fail if the exception is not thrown" 													                                          ! e1^
-      "it must succeed if the exception is thrown with the expected type" 								                              ! e2^
-      "it must fail if the exception is thrown with the wrong type" 									                                  ! e3^
-      "it must not fail if the exception is not thrown and the matcher is negated" 									                    ! e3_1^
-      "it must not fail when the exception type is not specified"               									                      ! e3_2^
-      "it must return an Error when an Exception is expected and a java.lang.Error is thrown"               				    ! e3_3^
-                                                                                                                        p^
-    "it is also possible to specify that the thrown exception is ok according to a PartialFunction"	                    ^
-      "'error(boom) must throwA[RuntimeException].like(e => e.getMessage(0) === 'b')"					                          ! e4^
-      "'error(boom) must throwA[RuntimeException].like(e => e.getMessage(0) === 'a') will fail" 		                    ! e5^
-                                                                                                                         p^
-    "more simply the exception message can be specified with a regular expression"	                                    ^
-      "'error(boom) must throwA[RuntimeException](message = 'boo')"                                                     ! e4_1^
-  																									                                                                    p^
-    "by specifying the expected exception: 'value must throwA(new java.lang.RuntimeException('wrong')'"	                ^
-      "it must fail if the exception is not thrown at all" 												                                      ! e6^
-      "it must succeed if an exception of same class and message is thrown" 							                              ! e7^
-      "it must fail if an exception of a different class and same message is thrown" 			                              ! e8^
-      "it must fail if an exception of a same class and different message is thrown" 			                              ! e9^
-      "it can be refined with a 'like' expression"														                                          ^
-        "failing if the catched expression doesn't satisfy the partial function" 					                              ! e10^
-        "succeeding otherwise" 																			                                                    ! e11^
-                                                                                                                        p^
-    "negating a throw matcher must return the proper success message"	                                                  !e12^
-																										                                                                    end
+ Exception matchers allow to check that exceptions are thrown
+   by specifying the expected type of exception: 'value must throwAn[Exception]'
+     it must fail if the exception is not thrown 													                                    ${e1}
+     it must succeed if the exception is thrown with the expected type 								                        ${e2}
+     it must fail if the exception is thrown with the wrong type 									                            ${e3}
+     it must not fail if the exception is not thrown and the matcher is negated 									            ${e3_1}
+     it must not fail when the exception type is not specified               									                ${e3_2}
+     it must return an Error when an Exception is expected and a java.lang.Error is thrown               	    ${e3_3}
+
+   it is also possible to specify that the thrown exception is ok according to a PartialFunction
+     'error(boom) must throwA[RuntimeException].like(e => e.getMessage(0) === 'b')					                  ${e4}
+     'error(boom) must throwA[RuntimeException].like(e => e.getMessage(0) === 'a') will fail 		              ${e5}
+
+   more simply the exception message can be specified with a regular expression
+     'error(boom) must throwA[RuntimeException](message = 'boo')                                              ${e4_1}
+
+   by specifying the expected exception: 'value must throwA(new java.lang.RuntimeException('wrong')'
+     it must fail if the exception is not thrown at all 												                              ${e6}
+     it must succeed if an exception of same class and message is thrown 							                        ${e7}
+     it must fail if an exception of a different class and same message is thrown 			                      ${e8}
+     it must fail if an exception of a same class and different message is thrown 			                      ${e9}
+     it can be refined with a 'like' expression
+       failing if the catched expression doesn't satisfy the partial function 					                      ${e10}
+       succeeding otherwise 																			                                            ${e11}
+
+   negating a throw matcher must return the proper success message	                                          ${e12}
+																										                                                                    """
 
   def e1 = ("hello" must throwAn[Error]).message must_== "Expected: java.lang.Error. Got nothing"
 

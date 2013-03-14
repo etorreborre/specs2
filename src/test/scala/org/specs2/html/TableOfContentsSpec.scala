@@ -5,17 +5,17 @@ import TableOfContents._
 import scala.xml.NodeSeq
 import specification.Grouped
 
-class TableOfContentsSpec extends Specification with HtmlDocuments with Grouped { def is =
+class TableOfContentsSpec extends Specification with HtmlDocuments with Grouped { def is = s2"""
 
-  "Creating a table of content for a html document"                                               ^
-    "creates an unordered list from the html headers"                                             ^
-      "as nested <li/> lists corresponding to the hierarchy of the document headers"              ! g1.e1^
-      "each <li/> element has"                                                                    ^
-        "the header text as text"                                                                 ! g1.e2^
-        "an url+anchor referencing the header name"                                               ! g1.e3^
-        "an id attribute with the spec id. the id attribute is expected by jstree"                ! g1.e4^
-    "injects sub-table of contents where there are <subtoc/> tags in the original document"       ! g1.e5^
-                                                                                                  end
+  Creating a table of content for a html document                                               
+    creates an unordered list from the html headers                                             
+      as nested <li/> lists corresponding to the hierarchy of the document headers                ${g1.e1}
+      each <li/> element has
+        the header text as text                                                                   ${g1.e2}
+        an url+anchor referencing the header name                                                 ${g1.e3}
+        an id attribute with the spec id. the id attribute is expected by jstree                  ${g1.e4}
+    injects sub-table of contents where there are <subtoc/> tags in the original document         ${g1.e5}
+                                                                                                  """
 
   "toc" - new g1 {
     e1 := addToc(aBodyWithHeaders) must \\("li") \\ ("ul") \ ("li")

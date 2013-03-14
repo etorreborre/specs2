@@ -5,17 +5,18 @@ import io.MockFileSystem
 import text.LinesContent
 import java.io.File
 
-class ContentMatchersSpec extends Specification { def is =
+class ContentMatchersSpec extends Specification { def is = s2"""
 
-  "haveSameLinesAs checks if a file has the same lines as another file"                                                 ! comp().e1^
-    "it is possible to write (f1, f2) must haveSameLines as well"                                                       ! comp().e2^
-    "the comparison can be unordered"                                                                                   ! comp().e3^
-                                                                                                                        endp^
-  "containLines checks if a file has the contains the lines of another file"                                            ! comp().e4^
-    "the comparison can be unordered"                                                                                   ! comp().e5^
-    "we can show only a given number of differences"                                                                    ! comp().e6^
-    "we can compare against a Seq of lines instead"                                                                     ! comp().e7^
-                                                                                                                        end
+ haveSameLinesAs checks if a file has the same lines as another file                                     ${comp().e1}
+   it is possible to write (f1, f2) must haveSameLines as well                                           ${comp().e2}
+   the comparison can be unordered                                                                       ${comp().e3}
+
+ containLines checks if a file has the contains the lines of another file                                ${comp().e4}
+   the comparison can be unordered                                                                       ${comp().e5}
+   we can show only a given number of differences                                                        ${comp().e6}
+   we can compare against a Seq of lines instead                                                         ${comp().e7}
+                                                                                                                        """
+      
   def e8 = (new File("f1.txt"), new File("f2.txt")) must haveSameLines.unordered
 
 }
