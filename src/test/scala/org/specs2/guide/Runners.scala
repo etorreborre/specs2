@@ -2,7 +2,7 @@ package org.specs2
 package guide
 
 class Runners extends UserGuidePage { def is =
-  """
+  s"""
 ### Presentation
 
 There are many ways to execute ***specs2*** specifications:
@@ -25,10 +25,10 @@ There are many ways to execute ***specs2*** specifications:
 
 You can specify arguments which will control the execution and reporting. They can be passed on the command line, or declared inside the specification, using the `args(name=value)` syntax:
 
-      class MySpec extends Specification { def is = args(xonly=true)    ^
-        "Clever spec title"                                             ^
-        "this will not be indented"                                     ^
-        "brilliant expectation"                                         ! success
+      class MySpec extends Specification { def is = args(xonly=true)    ^ s2$triple
+        Clever spec title
+        And some intro text
+        brilliant expectation $success                                    $triple
       }
 
 #### API
@@ -459,11 +459,11 @@ For example you can pass on the command line:
 
  to have the text colored in blue and the failures in Magenta.
 
-If the `colors` option contains `whitebg` then the default colors are considered to be [`InvertedColors`](${SPECS2_API}index.html#org.specs2.text.Colors)
+If the `colors` option contains `whitebg` then the default colors are considered to be [`InvertedColors`](#{SPECS2_API}index.html#org.specs2.text.Colors)
 
 *Through the API*
 
-Finally you can change the color scheme that's being used on the console by implementing your own [`org.specs2.text.Colors`](${SPECS2_API}index.html#org.specs2.text.Colors) trait or override values in the existing `ConsoleColors` class. For example if you want to output magenta everywhere yellow is used you can write:
+Finally you can change the color scheme that's being used on the console by implementing your own [`org.specs2.text.Colors`](#{SPECS2_API}index.html#org.specs2.text.Colors) trait or override values in the existing `ConsoleColors` class. For example if you want to output magenta everywhere yellow is used you can write:
 
       object MyColors = new org.specs2.text.ConsoleColors { override val failureColor = magenta }
 
@@ -573,9 +573,9 @@ You can use a custom `Exporter` from inside sbt by passing the `exporter` argume
 
    - - -
 
-  	                                                                                                            """ ^
-    br ^
-  include(xonly, argumentsSpec)                                                                                          ^
+                                                                                                                        """ ^
+                                                                                                                        br ^
+  include(xonly, argumentsSpec)                                                                                         ^
                                                                                                                         end
 
   // User guide examples can be added here

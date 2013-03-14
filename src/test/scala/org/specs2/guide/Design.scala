@@ -123,6 +123,5 @@ The following package dependencies should be always verified, from low-level pac
 
 
 
-                                                                                                                        """^
-                                                                                                                        end
+                                                                                                                        """
 }

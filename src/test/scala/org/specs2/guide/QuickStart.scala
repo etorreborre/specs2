@@ -3,14 +3,14 @@ package guide
 
 import _root_.examples._
 
-class QuickStart extends UserGuidePage { def is = literate                                                              ^
-"Quick Start".title.urlIs("org.specs2.guide.QuickStart.html") ^
-"""
+class QuickStart extends UserGuidePage { def is = literate ^
+  "Quick Start".title.urlIs("org.specs2.guide.QuickStart.html") ^
+  s"""
 There are 2 major styles of specifications with ***specs2***:
 
  * _unit_ specifications where the specification text is interleaved with the specification code. It is generally used to
    specify a single class
- 
+
  * _acceptance_ specifications where all the specification text stands as one and the implementation code is elsewhere.
    It is generally used for acceptance or integration scenarios
 
@@ -41,28 +41,29 @@ Acceptance specifications extend the `org.specs2.Specification` trait and must d
 
       import org.specs2._
 
-      class HelloWorldSpec extends Specification { def is =
+      class HelloWorldSpec extends Specification { def is = s2$triple
 
-        "This is a specification to check the 'Hello world' string"                 ^
-                                                                                    p^
-        "The 'Hello world' string should"                                           ^
-          "contain 11 characters"                                                   ! e1^
-          "start with 'Hello'"                                                      ! e2^
-          "end with 'world'"                                                        ! e3^
-                                                                                    end
+       This is a specification to check the 'Hello world' string
+
+       The 'Hello world' string should
+         contain 11 characters                                             ${dollar}e1
+         start with 'Hello'                                                ${dollar}e2
+         end with 'world'                                                  ${dollar}e3
+                                                                           $triple
+
         def e1 = "Hello world" must have size(11)
         def e2 = "Hello world" must startWith("Hello")
         def e3 = "Hello world" must endWith("world")
       }
 
 
-The `is` method lists [*specification fragments*](org.specs2.guide.Structure.html#Declare+examples) which can be:
+The `is` method lists [*specification fragments*](org.specs2.guide.Structure.html#Declare+examples) which can be interpolated from an `s2` String where you can inject:
 
-* some text, to describe the system you're specifying
-* an example: a description and some executable code returning a result
-* formatting fragments: `p` adds a blank line and starts a new block of examples
+* examples: some executable code returning a `Result`
+* ScalaCheck properties
+* Forms
+* regular interpolated values
 
-Fragments are separated by the `^` character in order to build a list of them.
 
 #### Execution
 
@@ -93,8 +94,9 @@ You can explore the rest of this [User Guide](org.specs2.UserGuide.html "Guide")
  * use Mockito or ScalaCheck
  * use sbt/maven/junit to execute a specification
  * export your specification as an html document (like this one!)
-                                                                                                                        """^
+  """^
   include(xonly, new HelloWorldSpec)                                                                                    ^
   include(xonly, new HelloWorldUnitSpec)                                                                                ^
                                                                                                                         end
+
 }

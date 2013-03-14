@@ -332,7 +332,7 @@ Scala 2.10 brings a new feature to the language, String interpolation. But the b
   include(xonly, context)                                                                                                  ^
                                                                                                                            end
 
-  val triple = "\"\"\""
+
   val (e1, e2, e3) = ("$e1", "$e2", "$e3")
 
   val chaining = new Specification { def is =  args(color=false) ^

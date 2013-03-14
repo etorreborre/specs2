@@ -4,14 +4,11 @@ import sys._
 import form._
 import _root_.examples.Address
 
-class Forms extends UserGuidePage with specification.Forms { def is = literate^
-  """
+class Forms extends UserGuidePage with specification.Forms { def is = s2"""
 
-Forms are a way to represent domain objects or services, and declare expected values in a tabular format. Forms can be designed
-as reusable pieces of specification where complex forms can be built out of simple ones.
+Forms are a way to represent domain objects or services, and declare expected values in a tabular format. Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.
 
-Forms are built by creating `Fields` or `Props` and placing them on rows.
-The following examples show, by order of complexity, the creation of:
+Forms are built by creating `Fields` or `Props` and placing them on rows. The following examples show, by order of complexity, the creation of:
 
   1. fields
   1. effects
@@ -26,8 +23,7 @@ The following examples show, by order of complexity, the creation of:
 
 ### Fields
 
-A `Field` is simply a label and a value. It is used in forms to display regular information. You can create a `Field` with
-these methods:
+A `Field` is simply a label and a value. It is used in forms to display regular information. You can create a `Field` with these methods:
 
   * `field(value)`: creates a field for a value, where the label is empty
   * `field(label, value)`: creates a field with a label and a value
@@ -35,22 +31,18 @@ these methods:
 
  When the form is displayed, here's how the fields are displayed:
 
-""" ^
-  form("Fields").
-    tr(field("code").bold.center, field("is displayed as").bold.center).
-    tr(field("""field("value")""").code, field("value")).
-    tr(field("""field("label", "value")""").code, field("label", "value")).
-    tr(field("""field("label", field("value1"), field("value2"))""").code, field("label", field("value1"), field("value2"))) ^
-"""
 
-In terms of execution, the value is only evaluated when the `Field` is executed (when executing the parent Form for example).
-If an exception is thrown during that evaluation, the exception message will be displayed in place of the value.
+  ${form("Fields").
+     tr(field("code").bold.center, field("is displayed as").bold.center).
+     tr(field("field(\"value\")").code, field("value")).
+     tr(field("field(\"label\", \"value\")").code, field("label", "value")).
+     tr(field("field(\"label\", field(\"value1\"), field(\"value2\"))").code, field("label", field("value1"), field("value2")))}
+
+In terms of execution, the value is only evaluated when the `Field` is executed (when executing the parent Form for example). If an exception is thrown during that evaluation, the exception message will be displayed in place of the value.
 
 ### Effects
 
-An `Effect` is almost like a `Field` but it never shows its value, unless there's an exception when executed. The value of
-an `Effect` is supposed to have some kind of side-effect, like clicking on a webpage, and only the effect label will be displayed
-(except when there is an exception, in that case the exception message is added). You can create an `Effect` with these methods:
+An `Effect` is almost like a `Field` but it never shows its value, unless there's an exception when executed. The value of an `Effect` is supposed to have some kind of side-effect, like clicking on a webpage, and only the effect label will be displayed (except when there is an exception, in that case the exception message is added). You can create an `Effect` with these methods:
 
   * `effect(value)`: creates an effect with no label
   * `effect(label, value)`: creates an effect with a label and a value that will be evaluated when the `Effect` is executed
@@ -58,8 +50,7 @@ an `Effect` is supposed to have some kind of side-effect, like clicking on a web
 
 ### Properties
 
-A `Prop` is like a `Field`, it has a label. But you can give it 2 values, an "actual" one and an "expected" one. When
-executing the property, both values are compared to get a result. You can create a `Prop` with the following functions:
+A `Prop` is like a `Field`, it has a label. But you can give it 2 values, an "actual" one and an "expected" one. When executing the property, both values are compared to get a result. You can create a `Prop` with the following functions:
 
    * `prop(value)`: a property with no label
    * `prop(label, actual)`: a property with a label and an actual value
@@ -89,57 +80,49 @@ If the expected value is not provided when building the property, it can be give
 
 Let's look at a few examples:
 
-""" ^
-  form("Properties").
+ ${form("Properties").
     tr(field("code").bold.center, field("is displayed as").bold.center).
-    tr(field("""prop("expected")("expected")""").code, prop("expected")("expected")).
-    tr(field("""prop("label", "expected", "expected")""").code, prop("label", "expected", "expected")).
-    tr(field("""prop("label", "expected")("expected")""").code, prop("label", "expected")("expected")).
-    tr(field("""prop("label", "actual")("expected")""").code, prop("label", "actual")("expected")).
-    tr(field("""prop("label", { error("but got an error"); "actual" })("expected")""").code, prop("label", { error("but got an error"); "actual" })("expected")).
-    tr(field("""prop("label", "actual", (a: String, b: String) => (a === b).toResult)("expected")""").code, prop("label", "expected", (a: String, b: String) => (a === b).toResult)("expected")).
-    tr(field("""prop("label", "actual", (s: String) => beEqualTo(s))("expected")""").code, prop("label", "expected", (s: String) => beEqualTo(s))("expected")).
-    tr(field("""prop("label", "actual", beEqualTo("expected"))""").code, prop("label", "actual", beEqualTo("expected"))).
-    tr(field("""prop("label", "actual", beEqualTo("expected").mute)""").code, prop("label", "actual", beEqualTo("expected").mute)).executeForm.toXml.toString^
-"""
+    tr(field("prop(\"expected\")(\"expected\")").code, prop("expected")("expected")).
+    tr(field("prop(\"label\", \"expected\", \"expected\")").code, prop("label", "expected", "expected")).
+    tr(field("prop(\"label\", \"expected\")(\"expected\")").code, prop("label", "expected")("expected")).
+    tr(field("prop(\"label\", \"actual\")(\"expected\")").code, prop("label", "actual")("expected")).
+    tr(field("prop(\"label\", { error(\"but got an error\"); \"actual\" })(\"expected\")").code, prop("label", { error("but got an error"); "actual" })("expected")).
+    tr(field("prop(\"label\", \"actual\", (a: String, b: String) => (a === b).toResult)(\"expected\")").code, prop("label", "expected", (a: String, b: String) => (a === b).toResult)("expected")).
+    tr(field("prop(\"label\", \"actual\", (s: String) => beEqualTo(s))(\"expected\")").code, prop("label", "expected", (s: String) => beEqualTo(s))("expected")).
+    tr(field("prop(\"label\", \"actual\", beEqualTo(\"expected\"))").code, prop("label", "actual", beEqualTo("expected"))).
+    tr(field("prop(\"label\", \"actual\", beEqualTo(\"expected\").mute)").code, prop("label", "actual", beEqualTo("expected").mute)).executeForm.toXml.toString }
 
 ### Styles
 
-Most of the time, the display of Fields and Properties can be left as it is but sometimes you want to style the output
-of labels and values. You can do this by using `decorateWith` and `styleWith` methods, or some equivalent shortcuts:
+Most of the time, the display of Fields and Properties can be left as it is but sometimes you want to style the output of labels and values. You can do this by using `decorateWith` and `styleWith` methods, or some equivalent shortcuts:
 
- """ ^
-  form("Style").
+ ${form("Style").
     tr(field("code").bold.center, field("is displayed as").bold.center).
     tr(field("decorate with").bkGrey.bold).
-    tr(field("""field("label", "value").decorateWith(f: Any => <em>{f}</em>)""").code, field("label", "value").decorateWith((ns: Any) => <em>{ns}</em>)).
-    tr(field("""field("label", "value").bold""").code, field("label", "value").bold).
-    tr(field("""field("label", "value").boldLabel""").code, field("label", "value").boldLabel).
-    tr(field("""field("label", "value").boldValue""").code, field("label", "value").boldValue).
-    tr(field("""field("label", "value").italics""").code,      field("label", "value").italics).
-    tr(field("""field("label", "value").italics.bold""").code,      field("label", "value").italics.bold).
-    tr(field("""field("1 must_== 1").code""").code, field("1 must_== 1").code).
+    tr(field("field(\"label\", \"value\").decorateWith(f: Any => <em>{f}</em>)").code, field("label", "value").decorateWith((ns: Any) => <em>{ns}</em>)).
+    tr(field("field(\"label\", \"value\").bold").code, field("label", "value").bold).
+    tr(field("field(\"label\", \"value\").boldLabel").code, field("label", "value").boldLabel).
+    tr(field("field(\"label\", \"value\").boldValue").code, field("label", "value").boldValue).
+    tr(field("field(\"label\", \"value\").italics").code,      field("label", "value").italics).
+    tr(field("field(\"label\", \"value\").italics.bold").code,      field("label", "value").italics.bold).
+    tr(field("field(\"1 must_== 1\").code").code, field("1 must_== 1").code).
     tr(field("style with").bkGrey.bold).
-    tr(field("""field("label", "value").styleWith("color"->"#FF1493")""").code, field("label", "value").styleWith("color"->"#FF1493")).
-    tr(field("""field("label", "value").color("#FF1493")""").code, field("label", "value").color("#FF1493")).
-    tr(field("""field("label", "value").bkColor("#FF1493")""").code, field("label", "value").bkColor("#FF1493")).
-    tr(field("""field("label", "value").green""").code, field("label", "value").green).
-    tr(field("""field("label", "value").bkGreen""").code, field("label", "value").bkGreen)^
-"""
+    tr(field("field(\"label\", \"value\").styleWith(\"color\"->\"#FF1493\")").code, field("label", "value").styleWith("color"->"#FF1493")).
+    tr(field("field(\"label\", \"value\").color(\"#FF1493\")").code, field("label", "value").color("#FF1493")).
+    tr(field("field(\"label\", \"value\").bkColor(\"#FF1493\")").code, field("label", "value").bkColor("#FF1493")).
+    tr(field("field(\"label\", \"value\").green").code, field("label", "value").green).
+    tr(field("field(\"label\", \"value\").bkGreen").code, field("label", "value").bkGreen) }
 
- All the methods above, when named `xxx` are available as `xxxLabel` and `xxxValue` to do the formatting for the label or
-the value only. The available colors are:
+ All the methods above, when named `xxx` are available as `xxxLabel` and `xxxValue` to do the formatting for the label or the value only. The available colors are:
 
-""" ^
-  form("Colors").
+ ${form("Colors").
     tr(field("name").bold.center, field("code").bold.center, field("color").bold.center).
     tr(field("white"), field("#FFFFFF"), field("").bkWhite).
     tr(field("blue"), field("#1E90FF"), field("").bkBlue).
     tr(field("red"), field("#FF9999"), field("").bkRed).
     tr(field("green"), field("#CCFFCC"), field("").bkGreen).
     tr(field("yellow"), field("#FFFF99"), field("").bkYellow).
-    tr(field("grey"), field("#EEEEEE"), field("").bkGrey)^
-"""
+    tr(field("grey"), field("#EEEEEE"), field("").bkGrey) }
 
 ### Simple form
 
@@ -199,9 +182,7 @@ for each value:
 
         Form("a new Form").trs(addresses) { a: Address => Row.tr(field(a.number), field(a.street)) }
 
-"""^
-  Form("a new Form").trs(addresses) { a: Address => Row.tr(field(a.number), field(a.street)) }^
-"""
+ ${ Form("a new Form").trs(addresses) { a: Address => Row.tr(field(a.number), field(a.street)) }  }
 
 #### Nesting a Form into another Form
 
@@ -214,10 +195,9 @@ Forms can be composed of other Forms to display composite information:
         val person = Form("Person").
                        tr(field("name", "Eric")).
                        tr(address)
-"""^
-  Form("Person").
-    tr(field("name", "Eric"))^
-"""
+
+ ${ Form("Person").
+    tr(field("name", "Eric")) }
 
 This will be displayed with the address as a nested table inside the main one on the last row. However in some case, it's
 preferable to have the rows of that Form to be included directly in the outer table. This can be done by *inlining* the
@@ -228,12 +208,10 @@ nesting Form:
                        tr(address.inline)            // address is inlined
 
 And the result is:
-"""^
-  Form("Person").
-    tr(field("name", "Eric")).
-    tr(address.inline)^
-  """
 
+ ${ Form("Person").
+     tr(field("name", "Eric")).
+     tr(address.inline) }
 
 #### Nesting a Form into an Effect or a Prop
 
@@ -246,9 +224,8 @@ page:
                             tr(effect("enter name",     enter("name", "me"))).
                             tr(effect("enter password", enter("password", "pw"))).
                             tr(effect("submit", submit))
-"""^
-  loginForm^
-"""
+
+ ${loginForm}
 
 However in a "purchase" scenario we want all the steps above to represent the login actions as just one step. One way to
 do this is to transform the login Form to an Effect or a Prop:
@@ -259,25 +236,21 @@ do this is to transform the login Form to an Effect or a Prop:
             tr(checkTotalForm.toProp("the total must be computed ok").bkWhiteLabel)
 
 If everything goes fine, the detailed nested form is not shown:
-"""^
-  Form("purchase").
-    tr(loginForm.toEffect("login")).
-    tr(selectForm.toEffect("select goods")).
-    tr(checkTotalForm.toProp("the total must be computed ok").bkWhiteLabel)^
-"""
+
+ ${ Form("purchase").
+     tr(loginForm.toEffect("login")).
+     tr(selectForm.toEffect("select goods")).
+     tr(checkTotalForm.toProp("the total must be computed ok").bkWhiteLabel) }
 
 Otherwise:
 
   * if the Form is embedded into an Effect, Errors will be reported
   * if the Form is embedded into a Prop, Failures will be reported, like that
 
-"""^
-  Form("purchase").
+${ Form("purchase").
     tr(loginForm.toEffect("login")).
     tr(selectForm.toEffect("select goods")).
-    tr(checkKoTotalForm.toProp("the total must be computed ok").bkWhiteLabel).executeForm.toXml.toString^
-"""
-
+    tr(checkKoTotalForm.toProp("the total must be computed ok").bkWhiteLabel).executeForm.toXml.toString }
 
 #### Using tabs
 
@@ -296,15 +269,14 @@ If there are too many fields to be displayed on a Form you can use tabs:
 The first `tab` call will create a `Tabs` object containing the a first tab with "home" as the title and an Address form
 as its content. Then every subsequent `tab` calls on the `Tabs` object will create new tabs:
 
-"""^
-  Form("Addresses").tr(
+
+ ${ Form("Addresses").tr(
     tab("home", Form("Address").
                   tr(prop("street", "Oxford St")("Oxford St")).
                   tr(prop("number", 12)(12))).
     tab("work", Form("Address").
                   tr(prop("street", "Rose Cr.")("Rose Cr.")).
-                  tr(prop("number", 2)(2))))^
-"""
+                  tr(prop("number", 2)(2)))) }
 
 Tabs can also be created from a seq of values. Let's pretend we have a list of `Address` objects with a name and a Form
 displaying the `Address` values. You can write:
@@ -312,6 +284,7 @@ displaying the `Address` values. You can write:
       Form("Addresses").tabs(adresses) { address: Address => tab(address.name, address.form) }
 
 ### Aggregating forms
+
 Now that we've defined a form for a simple entity, let's see how we can reuse it with a larger entity:
 
  * the Customer form defines a name attribute and embeds an instance of the Address form
@@ -422,13 +395,11 @@ depending on the kind of comparison that we want to do.
 
 This form returns:
 
-""" ^
-  Order(123).hasSubset (
+${ Order(123).hasSubset (
     OrderLine("BS", 3),
     OrderLine("PIS", 1),
     OrderLine("TDGL", 5)
-  ).executeForm.toXml.toString ^
-"""
+   ).executeForm.toXml.toString }
 
 #### Subsequence
 
@@ -448,14 +419,12 @@ This form returns:
 
 This form returns:
 
-""" ^
-  Order(123).hasSubsequence (
-    OrderLine("PS", 2),
-    OrderLine("BS", 3),
-    OrderLine("PIS", 1),
-    OrderLine("TDGL", 5)
-  ).executeForm.toXml.toString ^
-"""
+${ Order(123).hasSubsequence (
+     OrderLine("PS", 2),
+     OrderLine("BS", 3),
+     OrderLine("PIS", 1),
+     OrderLine("TDGL", 5)
+   ).executeForm.toXml.toString }
 
 #### Set
 
@@ -473,13 +442,11 @@ This form returns:
 
 This form returns:
 
-""" ^
-  Order(123).hasSet (
-    OrderLine("BS", 3),
-    OrderLine("PIS", 1),
-    OrderLine("TDGL", 5)
-  ).executeForm.toXml.toString ^
-"""
+${ Order(123).hasSet (
+     OrderLine("BS", 3),
+     OrderLine("PIS", 1),
+     OrderLine("TDGL", 5)
+   ).executeForm.toXml.toString }
 
 #### Sequence
 
@@ -498,14 +465,12 @@ This form returns:
 
 This form returns:
 
-""" ^
-  Order(123).hasSequence (
-    OrderLine("PS", 2),
-    OrderLine("BS", 3),
-    OrderLine("PIS", 1),
-    OrderLine("TDGL", 5)
-  ).executeForm.toXml.toString ^
-"""
+${ Order(123).hasSequence (
+     OrderLine("PS", 2),
+     OrderLine("BS", 3),
+     OrderLine("PIS", 1),
+     OrderLine("TDGL", 5)
+   ).executeForm.toXml.toString }
 
 ### Decision tables
 
@@ -551,30 +516,24 @@ And you use the `Calculator` Form like this:
 
  Here is the output:
 
-""" ^
-  Calculator.
-    th("a", "b", "a + b", "a - b").
-    tr(1, 2, 3, -1).
-    tr(2, 2, 4, 0) ^
-"""
+${ Calculator.
+     th("a", "b", "a + b", "a - b").
+     tr(1, 2, 3, -1).
+     tr(2, 2, 4, 0) }
 
 And if something goes wrong:
 
-""" ^
-  Calculator.
-    th("a", "b", "a + b", "a - b").
-    tr(1, 2, 3, -1).
-    tr(2, 2, 4, 2).form.executeForm.toXml.toString ^
-"""
+${ Calculator.
+     th("a", "b", "a + b", "a - b").
+     tr(1, 2, 3, -1).
+     tr(2, 2, 4, 2).form.executeForm.toXml.toString }
 
 And when it goes *very* wrong (like throwing an `error("very wrong")`), there will be red cells and stacktraces:
 
-""" ^
-  WrongCalculator.
-    th("a", "b", "a + b", "a - b").
-    tr(1, 2, 3, -1).
-    tr(2, 2, 4, 2).form.executeForm.toXml.toString ^
-"""
+${ WrongCalculator.
+     th("a", "b", "a + b", "a - b").
+     tr(1, 2, 3, -1).
+     tr(2, 2, 4, 2).form.executeForm.toXml.toString }
 
 Note that the Calculator class is not, in itself an Example. But there is an implicit definition automatically transforming
 `Any { def form: Form }` to `Example` so that an explicit call to `.form` is not necessary in order to include the Form in the

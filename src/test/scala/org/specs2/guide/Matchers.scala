@@ -3,8 +3,7 @@ package guide
 
 import specification.Forms._
 
-class Matchers extends UserGuidePage { def is = literate ^
-  """
+class Matchers extends UserGuidePage { def is = s2"""
 There are many ways to define expectations in ***specs2***. You can define expectations with anything that returns a `Result`:
 
   * Boolean
@@ -54,9 +53,9 @@ This is by far the largest category of Results in ***specs2***. They cover many 
 #### Out of the box
 
 The most common matchers are automatically available when extending the `Specification` trait:
-  """^
-  MatcherCards.toTabs^p^
-  """
+
+  ${ MatcherCards.toTabs }
+
 The examples above show how to use matchers:
 
  * the general form for using a matcher is: `a must matcher`
@@ -67,9 +66,8 @@ The examples above show how to use matchers:
 #### Optional
 
 These other matchers need to be selectively added to the specification by adding a new trait:
-  """^
-  OptionalMatcherCards.toTabs^p^
-  """
+
+  ${ OptionalMatcherCards.toTabs }
 
 #### Custom
 

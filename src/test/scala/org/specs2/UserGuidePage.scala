@@ -13,10 +13,13 @@ trait UserGuidePage extends Specification {
   override def map(fs: =>Fragments) =
     noindent ^ fs.map {
       case start @ SpecStart(_,_,_) if isIndex(start) => start.urlIs("index.html")
-      case start @ SpecStart(_,_,_)                   => start.baseDirIs("./${SPECS2_GUIDE}".replaceVariables)
+      case start @ SpecStart(_,_,_)                   => start.baseDirIs("./#{SPECS2_GUIDE}".replaceVariables)
       case Text(t)                                    => Text(t.replaceVariables)
       case other                                      => other
     }
 
   private def isIndex(start: SpecStart) = start.specName.javaClassName endsWith "Index"
+
+  val triple = "\"\"\""
+  val dollar = "$"
 }

@@ -53,7 +53,7 @@ object Specs2Variables {
           "EXAMPLES_OFFICIAL"  -> examplesOfficialDir,
           "GUIDE"              -> guideDir,
           "GUIDE_OFFICIAL"     -> guideOfficialDir,
-          "GUIDE_SNAPSHOT"     -> guideSnapshotDir).foldLeft(t) { case (res, (k, v)) => res.replaceAll("\\$\\{SPECS2_"+k+"\\}", v) }
+          "GUIDE_SNAPSHOT"     -> guideSnapshotDir).foldLeft(t) { case (res, (k, v)) => res.replaceAll("\\#\\{SPECS2_"+k+"\\}", v) }
     }
   }
 
