@@ -8,11 +8,12 @@ import text.NotNullStrings._
 import text.Trim._
 import control.Exceptions._
 import scala.reflect.macros.{Context => MContext}
+import text.{CodeMarkup, NoMarkup}
 
 /**
  * Allow to use fragments inside interpolated strings starting with s2 in order to build the specification content
  */
-trait   SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
+trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
 
   implicit def exampleIsSpecPart(e: Example): SpecPart = new SpecPart {
     def appendTo(text: String, expression: String = "") = text ^ e
@@ -22,11 +23,18 @@ trait   SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs 
     def appendTo(text: String, expression: String = "") = {
       val texts = text.split("\n")
       val first = texts.dropRight(1).mkString("", "\n", "\n")
-      val description = if (texts.last.trim.isEmpty) (texts.last + expression) else texts.last
-      AsResult(r) match {
-        case DecoratedResult(t, e: Error) => first ^ description ! e
-        case DecoratedResult(t, _)        => textStart(text + t.notNull)
-        case other                        => first ^ description ! other
+      val autoExample = texts.last.trim.isEmpty
+      val indent = texts.last.takeWhile(Seq(' ', '\n').contains).mkString
+
+      val description = if (autoExample) CodeMarkup(indent+expression) else NoMarkup(texts.last)
+      val before = if (autoExample) first else (first + indent)
+
+      implicitly[AsResult[R]] match {
+        case v : AnyValueAsResult[_] => AsResult(r) match {
+          case DecoratedResult(t, e: Error) => before ^ exampleFactory.newExample(description, e)
+          case DecoratedResult(t, _)        => textStart(text + t.notNull)
+        }
+        case other                        => before ^ exampleFactory.newExample(description, AsResult(r))
       }
     }
   }
@@ -34,14 +42,15 @@ trait   SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs 
     def appendTo(text: String, expression: String = "") = {
       val texts = text.split("\n")
       val first = texts.dropRight(1).mkString("", "\n", "\n")
-      first ^ texts.last ! AsResult(r)
+
+      first ^ exampleFactory.newExample(texts.last, AsResult(r))
     }
   }
   implicit def formIsSpecPart(f: =>Form): SpecPart = new SpecPart {
-    def appendTo(text: String, expression: String = "") = text ^ Fragments.createList(Forms.formsAreExamples(f))
+    def appendTo(text: String, expression: String = "") = text ^ Fragments.createList(Forms.formsAreExamples(f.executeForm))
   }
   implicit def toFormIsSpecPart(f: { def form: Form}): SpecPart = new SpecPart {
-    def appendTo(text: String, expression: String = "") = text ^ Fragments.createList(Forms.formsAreExamples(f.form))
+    def appendTo(text: String, expression: String = "") = formIsSpecPart(f.form).appendTo(text, expression)
   }
   implicit def fragmentIsSpecPart(f: Fragment): SpecPart = new SpecPart {
     def appendTo(text: String, expression: String = "") = text ^ f
