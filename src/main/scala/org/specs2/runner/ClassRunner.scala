@@ -19,8 +19,8 @@ class ClassRunner extends Classes with ConsoleOutput with SystemExit {
 	lazy val reporter: Reporter = new ConsoleReporter {}
 
   protected val errorHandler: PartialFunction[Throwable, Unit] = {  case e =>
-	  println("\nAn error occurred. " +
-            "Please create an issue on the http://specs2.org website with the stacktrace below. Thanks.")
+	  println(s"""\nAn error occurred: ${e.getMessage}
+                Please create an issue on the http://specs2.org website with the stacktrace below. Thanks.""")
 	  e.printStackTrace
   }
 
