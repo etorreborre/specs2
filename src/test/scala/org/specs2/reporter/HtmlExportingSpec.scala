@@ -4,8 +4,8 @@ import specification._
 import main._
 import ExecutedSpecificationData._
 
-class HtmlExportingSpec extends Specification with ScalaCheck { def is = noindent^
-                                                                                                                                            """
+class HtmlExportingSpec extends Specification with ScalaCheck { def is = s2"""
+
 The HtmlExporting trait is responsible for exporting the executed specification:
 
   ExecutedSpecification => Unit
@@ -17,11 +17,11 @@ While the formal type of output is Unit, the HtmlExporting trait actually transf
   `ExecutedSpecification   =>    Seq[HtmlFile]      =>       Unit`
 
   where `HtmlFile  = (Url, NodeSeq)`
-                                                                                                                                            """^
-  "The number of created HtmlFiles must be 1 + number of linked specifications"                                                             ! e1^
-  "The HtmlPrinter trait creates the `HtmlFiles`" ~/ new HtmlPrinterSpec                                                                    ^
-  "The HtmlFileWriter trait writes the `HtmlFiles` to disk" ~/ new HtmlFileWriterSpec                                                       ^
-                                                                                                                                            end
+
+  The number of created HtmlFiles must be 1 + number of linked specifications $e1
+  The HtmlPrinter trait creates the ${"`HtmlFiles`" ~/ new HtmlPrinterSpec}
+  The HtmlFileWriter trait writes the ${"`HtmlFiles` to disk" ~/ new HtmlFileWriterSpec}
+                                                                                                                        """
   def exporter = new HtmlExporting {}
   
   def e1 = check { (spec: ExecutedSpecification) =>

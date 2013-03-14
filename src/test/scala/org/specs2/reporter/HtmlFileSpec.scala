@@ -6,18 +6,18 @@ import io._
 import mock._
 import main.Arguments
 
-class HtmlFileSpec extends Specification with Mockito { def is =
+class HtmlFileSpec extends Specification with Mockito { def is = s2"""
 
-  "A linked specification"                                                                                              ^
-    "must get an icon representing its status"                                                                          ^
-      "success if everything succeeds"                                                                                  ! included().e1^
-      "failure if there is a failure"                                                                                   ! included().e2^
-                                                                                                                        endp^
-  "A see specification"                                                                                                 ^
-    "must get an icon representing its status"                                                                          ^
-      "success if everything succeeds"                                                                                  ! seeIt().e1^
-      "failure if there is a failure"                                                                                   ! seeIt().e2^
-                                                                                                                        end
+  A linked specification                                                                                              
+    must get an icon representing its status                                                                          
+      success if everything succeeds                                                   ${included().e1}
+      failure if there is a failure                                                    ${included().e2}
+
+  A see specification
+    must get an icon representing its status
+      success if everything succeeds                                                   ${seeIt().e1}
+      failure if there is a failure                                                    ${seeIt().e2}
+                                                                                                                        """
 
   implicit val argument = args()
 

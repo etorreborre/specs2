@@ -7,8 +7,7 @@ import io._
 import main._
 import specification._
 
-class JUnitXmlReporterSpec extends Specification { def is =
-                                                                                                                        s2"""
+class JUnitXmlReporterSpec extends Specification { def is = s2"""
 The JUnit xml reporter allows to execute specifications and output xml files in a test-reports directory where each xml
 is formatted for JUnit reporting tools.
 

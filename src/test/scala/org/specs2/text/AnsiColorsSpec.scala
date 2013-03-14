@@ -4,17 +4,17 @@ package text
 import specification.Grouped
 import AnsiColors._
 
-class AnsiColorsSpec extends Specification with Grouped { def is =
+class AnsiColorsSpec extends Specification with Grouped { def is = s2"""
 
-  "it is possible to remove the colors from a string"                                                                   ! g1.e1^
-  "coloring a string must keep newlines"                                                                                ^
-	  "if start and end with newline"                                                                                     ! g1.e2^
-	  "if start with newline"                                                                                             ! g1.e3^
-	  "if end with newline"                                                                                               ! g1.e4^
-	  "if no newline"                                                                                                     ! g1.e5^
-	  "if empty"                                                                                                          ! g1.e6^
-    "if multiline"                                                                                                      ! g1.e7^
-                                                                                                                        end
+ it is possible to remove the colors from a string                                                 ${g1.e1}
+ coloring a string must keep newlines
+  if start and end with newline                                                                    ${g1.e2}
+  if start with newline                                                                            ${g1.e3}
+  if end with newline                                                                              ${g1.e4}
+  if no newline                                                                                    ${g1.e5}
+  if empty                                                                                         ${g1.e6}
+   if multiline                                                                                    ${g1.e7}
+                                                                                                   """
 
   new g1 {
     e1 := removeColors("hello" + AnsiColors.red) === "hello"

@@ -4,14 +4,14 @@ package reflect
 import specification.Grouped
 import Classes._
 
-class ClassesSpec extends Specification with Grouped { def is =
+class ClassesSpec extends Specification with Grouped { def is = s2"""
 
-  "it is possible to instantiate a Specification" ^
-    "from a class name" ! g1.e1^
-    "from a class having a parameter having at least a no-args constructor that's instantiable" ! g1.e2^
-    "from a nested class" ! g1.e3^
-    "from an object name" ! g1.e4^
-  end
+  it is possible to instantiate a Specification 
+    from a class name ${g1.e1}
+    from a class having a parameter having at least a no-args constructor that's instantiable ${g1.e2}
+    from a nested class ${g1.e3}
+    from an object name ${g1.e4}
+                                                                                                                        """
 
   "instantiations" - new g1 {
 

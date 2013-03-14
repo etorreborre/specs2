@@ -5,42 +5,42 @@ import mock.Mockito
 import specification._
 import execute._
 
-class NotifierSpec extends Specification with Mockito with Tags with Grouped { def is = sequential ^
-                                                                                                                        """
+class NotifierSpec extends Specification with Mockito with Tags with Grouped { def is = sequential ^ s2"""
+
 A Notifier can be used to get a stream of events for the execution of a Specification
-                                                                                                                        """^
-  "The SpecStart is notified"                                                                                           ! g1.e1^
-  "A Text is notified"                                                                                                  ! g2.e1^
-    "with its location"                                                                                                 ! g2.e2^
-  "Going up a level is notified"                                                                                        ! g3.e1^
-  "Going down a level is notified"                                                                                      ! g3.e2^
-  "If there are 2 'contexts' they are both notified"                                                                    ! g3.e3^
-                                                                                                                        p^
-  "An example is notified"                                                                                              ^
-    "when starting"                                                                                                     ^
-      "with its description"                                                                                            ! g4.e1^
-      "with its location"                                                                                               ! g4.e2^
-                                                                                                                        p^
-    "when completing"                                                                                                   ^
-      "with its description"                                                                                            ! g4.e3^
-      "with its result"                                                                                                 ^
-        "when Failure"                                                                                                  ! g4.e4^
-        "when Error"                                                                                                    ! g4.e5^
-        "when Skipped"                                                                                                  ! g4.e6^
-        "when Pending"                                                                                                  ! g4.e7^
-        "and a filtered stacktrace"                                                                                     ! g4.e8^
-        "when a DataTable"                                                                                              ! g4.e9^
-                                                                                                                        endp^
-  "A step is notified"                                                                                                  ^
-    "but only if it fails"                                                                                              ! g5.e1^
-                                                                                                                        endp^
-  "The SpecEnd is notified"                                                                                             ! g6.e1^
-  "Fragments should be printed in the right order"                                                                      ! g7.e1^
-                                                                                                                        endp^
-  "Arguments must be satisfied"                                                                                         ^
-    "xonly only notifies of the failed and error examples"                                                              ! g8.e1^
-    "showOnly only notifies of the examples with the correct statuses"                                                  ! g8.e2^
-                                                                                                                        end
+
+ The SpecStart is notified                                                                                  ${g1.e1}
+ A Text is notified                                                                                         ${g2.e1}
+   with its location                                                                                        ${g2.e2}
+ Going up a level is notified                                                                               ${g3.e1}
+ Going down a level is notified                                                                             ${g3.e2}
+ If there are 2 'contexts' they are both notified                                                           ${g3.e3}
+
+ An example is notified
+   when starting
+     with its description                                                                                   ${g4.e1}
+     with its location                                                                                      ${g4.e2}
+
+   when completing
+     with its description                                                                                   ${g4.e3}
+     with its result
+       when Failure                                                                                         ${g4.e4}
+       when Error                                                                                           ${g4.e5}
+       when Skipped                                                                                         ${g4.e6}
+       when Pending                                                                                         ${g4.e7}
+       and a filtered stacktrace                                                                            ${g4.e8}
+       when a DataTable                                                                                     ${g4.e9}
+
+ A step is notified
+   but only if it fails                                                                                     ${g5.e1}
+
+ The SpecEnd is notified                                                                                    ${g6.e1}
+ Fragments should be printed in the right order                                                             ${g7.e1}
+
+ Arguments must be satisfied
+   xonly only notifies of the failed and error examples                                                     ${g8.e1}
+   showOnly only notifies of the examples with the correct statuses                                         ${g8.e2}
+                                                                                                                        """
 
 
   "start" - new g1 {

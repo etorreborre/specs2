@@ -7,12 +7,12 @@ import main.Arguments
 import matcher.DataTables
 import org.scalatools.testing.{Event, Logger, EventHandler}
 
-class TestInterfaceReporterSpec extends Specification with DataTables with Tags { def is = section("cloudbees")^
-                                                                                                                        p^
-  "A TestInterfaceReporter should"                                                                                      ^
-    "print the specification title if defined"                                                                          ! report().e1^
-    "report datatables ok"                                                                                              ! report().e2^
-                                                                                                                        end
+class TestInterfaceReporterSpec extends Specification with DataTables with Tags { def is = section("unstable")^ s2"""
+                                                                                                                        
+  A TestInterfaceReporter should                                                                                      
+    print the specification title if defined                                   ${report().e1}
+    report datatables ok                                                       ${report().e2}
+                                                                               """
 
   case class report() extends Mockito {
     val logger = mock[Logger]

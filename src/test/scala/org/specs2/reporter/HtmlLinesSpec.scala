@@ -3,17 +3,18 @@ package reporter
 
 import ExecutedSpecificationData._
 
-class HtmlLinesSpec extends Specification { def is =
-                                                                                                                                             """
-The HtmlPrinter can reduce executed fragments to HtmlLine objects. Each fragment creates a specific HtmlLine, with the applicable level, arguments and Statistics.
-                                                                                                                                            """^
-  "An ExecutedSpecStart is translated to a HtmlSpecStart"                                                                                   ! e1^
-  "An ExecutedSpecEnd is translated to a HtmlSpecEnd"                                                                                       ! e2^
-  "An ExecutedText is translated to a HtmlText"                                                                                             ! e3^
-  "An ExecutedResult is translated to a HtmlResult"                                                                                         ! e4^
-  "An ExecutedBr is translated to a HtmlBr"                                                                                                 ! e5^
-  "Everything else is translated to HtmlOther, meaning that those fragments will not be printed out"                                        ! e6^
-                                                                                                                                            end
+class HtmlLinesSpec extends Specification { def is = s2"""
+                                                                                                                                           
+The HtmlPrinter can reduce executed fragments to HtmlLine objects. Each fragment creates a specific HtmlLine,
+with the applicable level, arguments and Statistics.
+                                                                                                                                            
+  An ExecutedSpecStart is translated to a HtmlSpecStart                                                $e1
+  An ExecutedSpecEnd is translated to a HtmlSpecEnd                                                    $e2
+  An ExecutedText is translated to a HtmlText                                                          $e3
+  An ExecutedResult is translated to a HtmlResult                                                      $e4
+  An ExecutedBr is translated to a HtmlBr                                                              $e5
+  Everything else is translated to HtmlOther, meaning that those fragments will not be printed out     $e6
+                                                                                                                        """
 
   lazy val spec = execute("text" ^ { 1 === 1 } ^ br ^ t(2) ^ end)
   lazy val lines = printer.reduce(spec)

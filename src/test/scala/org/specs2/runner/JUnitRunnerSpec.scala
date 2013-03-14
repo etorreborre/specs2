@@ -13,43 +13,42 @@ import io.MockOutput
 import scala.Some
 import scala.collection.mutable.ListBuffer
 
-class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {  def is =
+class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {  def is = s2"""
 
-                                                                                                                        """
-  The JUnitRunner is meant to be used with the RunWith annotation.
-  It takes a Specification, executes it and notifies a RunNotifier object of the possible
-  failures.
+ The JUnitRunner is meant to be used with the RunWith annotation.
+ It takes a Specification, executes it and notifies a RunNotifier object of the possible
+ failures.
 
-  The following examples show the result of running a Specification with different
-  successes or failures:
-                                                                                                                        """^
-                                                                                                                        p^
-  "If the specification has"                                                                                            ^
-    "1 ok example, there must be a testStarted/testFinished notification"                                               ! notified().e1^
-    "2 ok examples, there must be a testStarted/testFinished notification for each"                                     ! notified().e2^
-    "1 failing example, there must be a testStarted/testFailure notification"                                           ! notified().e3^
-    "1 failing example, the failure message must be reported"                                                           ! notified().e4^
-    "1 example with an error, the error message must be reported"                                                       ! notified().e5^
-    "1 skipped example, a test ignored must be reported"                                                                ! notified().e6^
-    "1 pending example, a test ignored must be reported"                                                                ! notified().e7^
-    "1 failing example with be_==, a ComparisonFailure message must be reported"                                        ! notified().e8^
-    "steps must be correctly sequenced with examples"                                                                   ! notified().e9^
-                                                                                                                          p^
-  "If the console system property is specified"                                                                         ^
-    "then the specification is also printed on the console"                                                             ! export().e1^
-    "the commandline system property can be used to remove colors"                                                      ! export().e2^
-                                                                                                                        p^
-  "If an exclude tag is passed as a system property"                                                                    ^
-    "then the corresponding examples must be excluded"                                                                  ! excluded().e1^
-                                                                                                                        p^
-  "If the isolated argument is specified"                                                                               ^
-    "then the examples executions must be isolated"                                                                     ! isolate().e1^
-                                                                                                                        p^
-  "If the sequential argument is specified"                                                                             ^
-    "then the examples executions must be in sequence"                                                                  ! sequence().e1^
-                                                                                                                        p^
-  "Integration test with a full runner"                                                                                 ! integration ^
-                                                                                                                        end
+ The following examples show the result of running a Specification with different
+ successes or failures:
+                                                                                                                       
+                                                                                                                       
+ If the specification has                                                                                            
+   1 ok example, there must be a testStarted/testFinished notification                                ${notified().e1}
+   2 ok examples, there must be a testStarted/testFinished notification for each                      ${notified().e2}
+   1 failing example, there must be a testStarted/testFailure notification                            ${notified().e3}
+   1 failing example, the failure message must be reported                                            ${notified().e4}
+   1 example with an error, the error message must be reported                                        ${notified().e5}
+   1 skipped example, a test ignored must be reported                                                 ${notified().e6}
+   1 pending example, a test ignored must be reported                                                 ${notified().e7}
+   1 failing example with be_==, a ComparisonFailure message must be reported                         ${notified().e8}
+   steps must be correctly sequenced with examples                                                    ${notified().e9}
+
+ If the console system property is specified
+   then the specification is also printed on the console                                              ${export().e1}
+   the commandline system property can be used to remove colors                                       ${export().e2}
+
+ If an exclude tag is passed as a system property
+   then the corresponding examples must be excluded                                                   ${excluded().e1}
+
+ If the isolated argument is specified
+   then the examples executions must be isolated                                                      ${isolate().e1}
+
+ If the sequential argument is specified
+   then the examples executions must be in sequence                                                   ${sequence().e1}
+
+ Integration test with a full runner                                                                  $integration
+                                                                                                      """
 
   trait WithNotifier {
     lazy val notifier   = mock[RunNotifier]

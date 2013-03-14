@@ -5,15 +5,15 @@ import io._
 import mock._
 import specification._
 
-class HtmlFileWriterSpec extends Specification with Mockito { outer => def is =
-                                                                                                                        """
+class HtmlFileWriterSpec extends Specification with Mockito { outer => def is = s2"""
+                                                                                     
 The HtmlFileWriter class is responsible for writing a html reports to disk.
-                                                                                                                        """^p^
-  "Resources"                                                                                                           ^
-    "there must be a directory for css files"                                                                           ! resources().css^
-    "there must be a directory for images files"                                                                        ! resources().images^
-    "there must be a directory for the js tree theme files"                                                             ! resources().jstheme^
-                                                                                                                        end
+                                                                                     
+  Resources                                                                                                           
+    there must be a directory for css files                                                     ${resources().css}
+    there must be a directory for images files                                                  ${resources().images}
+    there must be a directory for the js tree theme files                                       ${resources().jstheme}
+                                                                                                                        """
                                                                                           
   implicit val arguments = args()
 

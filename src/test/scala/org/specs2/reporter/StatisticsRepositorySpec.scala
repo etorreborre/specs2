@@ -2,15 +2,15 @@ package org.specs2
 package reporter
 import specification._
 
-class StatisticsRepositorySpec extends Specification { def is = sequential ^
-                                                                                                            p^
-  "A statistics repository can"                                                                             ^
-    "store / retrieve statistics per specification name"                                                    ! repo().e1^
-    "store statistics with a new timestamp so that the retrieval gets the latest statistics"                ! repo().e2^
-    "store / retrieve a list of results associated to a spec name"                                          ! repo().e3^
-                                                                                                            p^
-  "findStats must retrieve the statistics of an Example in the stored xml"                                  ! xml.e1^
-                                                                                                            end
+class StatisticsRepositorySpec extends Specification { def is = sequential ^ s2"""
+
+  A statistics repository can
+    store / retrieve statistics per specification name                                                   ${repo().e1}
+    store statistics with a new timestamp so that the retrieval gets the latest statistics               ${repo().e2}
+    store / retrieve a list of results associated to a spec name                                         ${repo().e3}
+
+  findStats must retrieve the statistics of an Example in the stored xml                                 ${xml.e1}
+                                                                                                                        """
 
 
   case class repo() extends DefaultStatisticsRepository with BeforeAfter {

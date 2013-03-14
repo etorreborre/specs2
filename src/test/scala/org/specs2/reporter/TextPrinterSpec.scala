@@ -11,105 +11,105 @@ import execute._
 import specification.{Example, SpecificationStructure, ExecutedFragment, Fragments, ExecutingSpecification}
 import matcher.DataTables
 
-class TextPrinterSpec extends Specification with DataTables { def is =
-                                                                                                                        """
-  The `TextPrinter` trait transforms a Seq of Executed Fragments to `PrintLines`
-  and outputs them using a `TextResultOutput`.
+class TextPrinterSpec extends Specification with DataTables { def is = s2"""
+                                                                            
+ The `TextPrinter` trait transforms a Seq of Executed Fragments to `PrintLines`
+ and outputs them using a `TextResultOutput`.
 
-  In the following examples the TextResultOutput is mocked so that the results are saved in
-  a buffer of Strings.
+ In the following examples the TextResultOutput is mocked so that the results are saved in
+ a buffer of Strings.
 
-  Arguments
-  =========                                                                                                             """^
-																						                                                                            p^
-  "Several arguments can be used to modify the text presentation"                                                       ^
-    "by default the Text and the examples are automatically indented"                                                   ! prez().e1^
-    "if noindent = true then there is no automatic indenting"                                                           ! prez().e2^
-    "if xonly = true"                                                                                                   ^
-      "text is not shown"                                                                                               ! xonlyargs().e1^
-      "successful examples are not shown"                                                                               ! xonlyargs().e2^
-      "skipped examples are not shown"                                                                                  ! xonlyargs().e3^
-      "pending examples are not shown"                                                                                  ! xonlyargs().e4^
-      "failure examples are shown"                                                                                      ! xonlyargs().e5^
-      "error examples are shown"                                                                                        ! xonlyargs().e6^
-      "statistics are not shown"                                                                                        ! xonlyargs().e7^
-                                                                                                                        p^
-    "if showOnly = o"                                                                                                   ^
-      "text is not shown"                                                                                               ! skippedonlyargs().e1^
-      "successful examples are not shown"                                                                               ! skippedonlyargs().e2^
-      "skipped examples are shown"                                                                                      ! skippedonlyargs().e3^
-      "pending examples are shown"                                                                                      ! skippedonlyargs().e4^
-      "failure examples are not shown"                                                                                  ! skippedonlyargs().e5^
-      "error examples are not shown"                                                                                    ! skippedonlyargs().e6^
-      "statistics are not shown"                                                                                        ! skippedonlyargs().e7^
-                                                                                                                        p^
-    "if showOnly = 1"                                                                                                   ^
-       "statistics are shown"                                                                                           ! statsonlyargs().e1^
-                                                                                                                        p^
-    "if failtrace = false, only the location of a failure is shown"                                                     ^
-      "with an acceptance spec"                                                                                         ! failtrace().e1^
-      "with a mutable spec"                                                                                             ! failtrace().e2_1^
-      "with a ScalaCheck mutable spec"                                                                                  ! failtrace().e2_2^
-      "with a Mockito mutable spec"                                                                                     ! failtrace().e2_3^
-    "if failtrace = true, failures stacktraces are shown"                                                               ! failtrace().e3^
-    "if fullStacktrace = true, all error stacktraces are shown"                                                         ! traces().e1^
-    "if plan = true, nothing is executed"                                                                               ! planargs().e1^
-    "if sequential = false examples are executed concurrently"                                                          ! seq().e1^
-    "if sequential = true examples are executed sequentially"                                                           ! seq().e2^
-    "if isolated = false examples are sharing variables"                                                                ! isolate().e1^
-    "if isolated = true examples are not sharing variables"                                                             ! isolate().e2^
-    "if stopOnFail = true everything is skipped after the first failure"                                                ! stopOnFailargs().e1^
-    "if skipAll = true, everything is skipped"                                                                          ! skipAllargs().e1^
-                                                                                                                        p^
-    "if color = true, the text output is colorized"                                                                     ^
-      "text is white"                                                                                                   ! color().e1^
-      "success status is green"                                                                                         ! color().e2^
-      "failures status is yellow"                                                                                       ! color().e3^
-      "errors status are red"                                                                                           ! color().e4^
-      "pending status is blue"                                                                                          ! color().e5^
-      "skipped status is cyan"                                                                                          ! color().e6^
-      "stats are blue"                                                                                                  ! color().e7^
-      "colors can be redefined by passing a Colors object"                                                              ! color().e8^
-      "colors can be redefined by passing system properties"                                                            ! color().e9^
-      "colors can be redefined by passing command-line args"                                                            ! color().e10^
-      "the background color can be specified as being white"                                                            ^
-        "then the color scheme is inverted"                                                                             ! color().e11^
-                                                                                                                        p^bt^
-    "when doing equals comparisons, differences are shown"                                                              ^
-      "the differences show up after the failure message"                                                               ! diffs().e1^
-      "the separators can be modified with diffs(separators='<>')"                                                      ! diffs().e2^
-      "the trigger size can be modified with diffs(triggerSize=30)"                                                     ! diffs().e3^
-      "the shorten size can be modified with diffs(shortenSize=10)"                                                     ! diffs().e4^
-      "the full strings can be shown on 2 lines with line numbers with diffs(full=true)"                                ! diffs().e5^
-      "they can be disabled with diffs(show = false)"                                                                   ! diffs().e6^
-      "unless there are too many of them diffs(diffRatio=30)"                                                           ! diffs().e7^
-                                                                                                                        endp^
-                                                                                                                        """
-  Examples presentation
-  =====================                                                                                                 """^
-                                                                                                                        p^
-  "regular text must have no status"                                                                                    ! status().e1^
-  "a successful example must be displayed with a +"                                                                     ! status().e2^
-  "a failed example must be displayed with a x"                                                                         ! status().e3^
-  "an error example must be displayed with a !"                                                                         ! status().e4^
-  "a skipped example must be displayed with a o"                                                                        ! status().e5^
-  "a pending example must be displayed with a *"                                                                        ! status().e6^
-  "a multi-line description must be indented ok"                                                                        ! status().e7^
-  "if showtimes is true, each individual time must be shown"                                                            ! status().e8^
-  "a datatable must"                                                                                                    ^
-    "be used as a description if the example description is empty (meaning it's an auto-example)"                       ! status().e9^
-    "have no description if failing/in error (because the result shows all)"                                            ! status().e10^
-    "be properly aligned"                                                                                               ^
-      "when successful"                                                                                                 ! status().e11^
-      "when failing"                                                                                                    ! status().e12^
-      "when in error"                                                                                                   ! status().e13^
-                                                                                                                        endp^
-                                                                                                                        """
-  Title
-  =====================                                                                                                 """^
-                                                                                                                        p^
-  "the title of a specification is displayed if it is different from the name"                                          ! specTitle().e1^
-                                                                                                                        end
+ Arguments
+ =========
+
+ Several arguments can be used to modify the text presentation
+   by default the Text and the examples are automatically indented                                ${prez().e1}
+   if noindent = true then there is no automatic indenting                                        ${prez().e2}
+   if xonly = true
+     text is not shown                                                                            ${xonlyargs().e1}
+     successful examples are not shown                                                            ${xonlyargs().e2}
+     skipped examples are not shown                                                               ${xonlyargs().e3}
+     pending examples are not shown                                                               ${xonlyargs().e4}
+     failure examples are shown                                                                   ${xonlyargs().e5}
+     error examples are shown                                                                     ${xonlyargs().e6}
+     statistics are not shown                                                                     ${xonlyargs().e7}
+
+   if showOnly = o
+     text is not shown                                                                            ${skippedonlyargs().e1}
+     successful examples are not shown                                                            ${skippedonlyargs().e2}
+     skipped examples are shown                                                                   ${skippedonlyargs().e3}
+     pending examples are shown                                                                   ${skippedonlyargs().e4}
+     failure examples are not shown                                                               ${skippedonlyargs().e5}
+     error examples are not shown                                                                 ${skippedonlyargs().e6}
+     statistics are not shown                                                                     ${skippedonlyargs().e7}
+
+   if showOnly = 1
+      statistics are shown                                                                        ${statsonlyargs().e1}
+
+   if failtrace = false, only the location of a failure is shown
+     with an acceptance spec                                                                      ${failtrace().e1}
+     with a mutable spec                                                                          ${failtrace().e2_1}
+     with a ScalaCheck mutable spec                                                               ${failtrace().e2_2}
+     with a Mockito mutable spec                                                                  ${failtrace().e2_3}
+   if failtrace = true, failures stacktraces are shown                                            ${failtrace().e3}
+   if fullStacktrace = true, all error stacktraces are shown                                      ${traces().e1}
+   if plan = true, nothing is executed                                                            ${planargs().e1}
+   if sequential = false examples are executed concurrently                                       ${seq().e1}
+   if sequential = true examples are executed sequentially                                        ${seq().e2}
+   if isolated = false examples are sharing variables                                             ${isolate().e1}
+   if isolated = true examples are not sharing variables                                          ${isolate().e2}
+   if stopOnFail = true everything is skipped after the first failure                             ${stopOnFailargs().e1}
+   if skipAll = true, everything is skipped                                                       ${skipAllargs().e1}
+
+   if color = true, the text output is colorized
+     text is white                                                                                ${color().e1}
+     success status is green                                                                      ${color().e2}
+     failures status is yellow                                                                    ${color().e3}
+     errors status are red                                                                        ${color().e4}
+     pending status is blue                                                                       ${color().e5}
+     skipped status is cyan                                                                       ${color().e6}
+     stats are blue                                                                               ${color().e7}
+     colors can be redefined by passing a Colors object                                           ${color().e8}
+     colors can be redefined by passing system properties                                         ${color().e9}
+     colors can be redefined by passing command-line args                                         ${color().e10}
+     the background color can be specified as being white
+       then the color scheme is inverted                                                          ${color().e11}
+
+   when doing equals comparisons, differences are shown
+     the differences show up after the failure message                                            ${diffs().e1}
+     the separators can be modified with diffs(separators='<>')                                   ${diffs().e2}
+     the trigger size can be modified with diffs(triggerSize=30)                                  ${diffs().e3}
+     the shorten size can be modified with diffs(shortenSize=10)                                  ${diffs().e4}
+     the full strings can be shown on 2 lines with line numbers with diffs(full=true)             ${diffs().e5}
+     they can be disabled with diffs(show = false)                                                ${diffs().e6}
+     unless there are too many of them diffs(diffRatio=30)                                        ${diffs().e7}
+
+
+ Examples presentation
+ =====================
+
+ regular text must have no status                                                                 ${status().e1}
+ a successful example must be displayed with a +                                                  ${status().e2}
+ a failed example must be displayed with a x                                                      ${status().e3}
+ an error example must be displayed with a !                                                      ${status().e4}
+ a skipped example must be displayed with a o                                                     ${status().e5}
+ a pending example must be displayed with a *                                                     ${status().e6}
+ a multi-line description must be indented ok                                                     ${status().e7}
+ if showtimes is true, each individual time must be shown                                         ${status().e8}
+ a datatable must
+   be used as a description if the example description is empty (meaning it's an auto-example)    ${status().e9}
+   have no description if failing/in error (because the result shows all)                         ${status().e10}
+   be properly aligned
+     when successful                                                                              ${status().e11}
+     when failing                                                                                 ${status().e12}
+     when in error                                                                                ${status().e13}
+
+
+ Title
+ =====================
+
+ the title of a specification is displayed if it is different from the name                       ${specTitle().e1}
+                                                                                                  """
 
   implicit val default = Arguments()
   val t1         = "t1"

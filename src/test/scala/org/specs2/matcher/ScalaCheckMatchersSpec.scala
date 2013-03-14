@@ -10,82 +10,82 @@ import sys.error
 import specification.{Before, FragmentExecution}
 import java.util
 
-class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { def is =
+class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { def is = s2"""
 
-  "A ScalaCheck property can be used in the body of an Example"                                                         ^
-    "Here are some examples with"                                                                                       ^
-      "a result"                                                                                                        ^
-        prop { (i:Int) => success }                                                                                     ^p^
-      "a match result"                                                                                                  ^
-        prop { (i:Int) => i must be_>(0) or be_<=(0) }                                                                  ^p^
-      "a boolean value"                                                                                                 ^
-        prop { (i:Int) => i > 0 || i <= 0 }                                                                             ^p^
-      "a Prop"                                                                                                          ^
-        forAll { (i:Int) => i > 0 || i <= 0 }                                                                           ^p^
-      "an implication and a match result"                                                                               ^
-        prop { (i:Int) => (i > 0) ==> (i must be_>(0)) }                                                                ^p^
-        prop { (i:Int, j: Int) => (i > j) ==> (i must be_>(j)) }                                                        ^p^
-      "an implication and a boolean value"                                                                              ^
-        prop { (i:Int) => (i > 0) ==> (i > 0) }                                                                         ^p^
-      "a unit value with side-effects"                                                                                  ^
-        prop { (i:Int) => { (1 to 5) foreach { n => n must_== n } } }                                                   ^p^
-      "a specific arbitrary instance in the enclosing scope"                                                            ^ {
-        implicit val arbitrary = positiveInts
-        prop { (i:Int) => i must be_>(0) }
-      }                                                                                                                 ^p^
-      "a specific arbitrary instance"                                                                                   ^
-        positiveInts { (i:Int) => i must be_>(0) }                                                                      ^p^
-      "several specific arbitrary instances"                                                                            ^
-        (positiveInts, positiveInts) { (i:Int, j: Int) => i+j must be_>(0) }                                            ^p^
-      "specific generation parameters"                                                                                  ^
-      { prop { (i:Int) => (i > 0) ==> (i > 0) } set (minTestsOk = 50) }                                                 ^p^
-                                                                                                                        p^
-    "if it is proved the execution will yield a Success"                                                                ! prop1^
-    "if it is a function which is always true, it will yield a Success"                                                 ! prop2^
-    "if it is a function which is always false, it will yield a Failure"                                                ! prop3^
-                                                                                                                        p^
-    "if it is a property throwing an exception"                                                                         ^
-      "it will yield an Error"                                                                                          ! prop4^
-      "showing the exception type if the message is null"                                                               ! prop4_1^
-      "showing the cause"                                                                                               ! prop4_2^
-      "showing the stacktrace"                                                                                          ! prop4_3^
-    "a Property can be used with check"                                                                                 ! prop5^
-    "a FailureException can be thrown from a Prop"                                                                      ! prop6^
-    "in the Context of a mutable specification"                                                                         ! prop7^
-                                                                                                                        end^
-  "It can also be used at the beginning of a specification"                                                             ! fragment1^
-                                                                                                                        p^
-  "A specs2 matcher can be returned by a function to be checked with ScalaCheck"                                        ^
-    "if it is a MatchSuccess the execution will yield a Success"                                                        ! matcher1^
-    "if the type of the input parameter is not the same as the MatchResult type"                                        ^
-      "it should still work"                                                                                            ! matcher2^
-      "another way is to transform it as a property with .forAll"                                                       ! matcher3^
-                                                                                                                        p^
-  "A partial function can also be used in the body of the Example"                                                      ! partial1^
-  "A function with 2 parameters, returning a MatchResult be used in the body of the Example"                            ! partial2^
-  "A function with 3 parameters, returning a MatchResult be used in the body of the Example"                            ! partial3^
-  "A function with 4 parameters, returning a MatchResult be used in the body of the Example"                            ! partial4^
-  "A function with 5 parameters, returning a MatchResult be used in the body of the Example"                            ! partial5^
-                                                                                                                        p^
-  "Arbitrary instances can be specified for a given property"                                                           ! check(arb1)^
-  "Gen instances can be used to define a property using matchers"                                                       ! gen1^
-                                                                                                                        p^
-  "A ScalaCheck property will create a Result"                                                                          ^
-    "with a number of expectations that is equal to the minTestsOk"                                                     ! result1^
-                                                                                                                        p^
-  "It is possible to change the default parameters used for the test"                                                   ^
-    "by setting up new implicit parameters locally"                                                                     ! config().e1^
-                                                                                                                        p^
-  "Properties can be specified with no shrinking"                                                                       ^
-    propNoShrink { (i:Int) => i > 0 || i <= 0 }                                                                         ^p^
-    propNoShrink { (i:Int, j: Int) => (i > j) ==> (i must be_>(j)) }                                                    ^p^
-                                                                                                                        p^
-  "It is possible to display"                                                                                           ^
-    "the executed tests by setting up display parameters locally"                                                       ! config().e2^
-    "the labels that are set on properties"                                                                             ! config().e3^
-    "the exceptions that happen on generation"                                                                          ! config().e4^
-    "the collected frequencies"                                                                                         ! config().e5^
-                                                                                                                        end
+ A ScalaCheck property can be used in the body of an Example
+   Here are some examples with
+     a result
+       prop { (i:Int) => success }
+     a match result
+       prop { (i:Int) => i must be_>(0) or be_<=(0) }
+     a boolean value
+       prop { (i:Int) => i > 0 || i <= 0 }
+     a Prop
+       forAll { (i:Int) => i > 0 || i <= 0 }
+     an implication and a match result
+       prop { (i:Int) => (i > 0) ==> (i must be_>(0)) }
+       prop { (i:Int, j: Int) => (i > j) ==> (i must be_>(j)) }
+     an implication and a boolean value
+       prop { (i:Int) => (i > 0) ==> (i > 0) }
+     a unit value with side-effects
+       prop { (i:Int) => { (1 to 5) foreach { n => n must_== n } } }
+     a specific arbitrary instance in the enclosing scope ${
+       implicit val arbitrary = positiveInts
+       prop { (i:Int) => i must be_>(0) }
+     }
+     a specific arbitrary instance
+       positiveInts { (i:Int) => i must be_>(0) }
+     several specific arbitrary instances
+       (positiveInts, positiveInts) { (i:Int, j: Int) => i+j must be_>(0) }
+     specific generation parameters
+     { prop { (i:Int) => (i > 0) ==> (i > 0) } set (minTestsOk = 50) }
+
+   if it is proved the execution will yield a Success                                                    $prop1
+   if it is a function which is always true, it will yield a Success                                     $prop2
+   if it is a function which is always false, it will yield a Failure                                    $prop3
+
+   if it is a property throwing an exception
+     it will yield an Error                                                                              $prop4
+     showing the exception type if the message is null                                                   $prop4_1
+     showing the cause                                                                                   $prop4_2
+     showing the stacktrace                                                                              $prop4_3
+   a Property can be used with check                                                                     $prop5
+   a FailureException can be thrown from a Prop                                                          $prop6
+   in the Context of a mutable specification                                                             $prop7
+
+ It can also be used at the beginning of a specification                                                 $fragment1
+
+ A specs2 matcher can be returned by a function to be checked with ScalaCheck
+   if it is a MatchSuccess the execution will yield a Success                                            $matcher1
+   if the type of the input parameter is not the same as the MatchResult type
+     it should still work                                                                                $matcher2
+     another way is to transform it as a property with .forAll                                           $matcher3
+
+ A partial function can also be used in the body of the Example                                          $partial1
+ A function with 2 parameters, returning a MatchResult be used in the body of the Example                $partial2
+ A function with 3 parameters, returning a MatchResult be used in the body of the Example                $partial3
+ A function with 4 parameters, returning a MatchResult be used in the body of the Example                $partial4
+ A function with 5 parameters, returning a MatchResult be used in the body of the Example                $partial5
+
+ Arbitrary instances can be specified for a given property                                               $arb1
+ Gen instances can be used to define a property using matchers                                           $gen1
+
+ A ScalaCheck property will create a Result
+   with a number of expectations that is equal to the minTestsOk                                         $result1
+
+ It is possible to change the default parameters used for the test
+   by setting up new implicit parameters locally                                                         ${config().e1}
+
+ Properties can be specified with no shrinking
+  ${ propNoShrink { (i:Int) => i > 0 || i <= 0 } }
+  ${ propNoShrink { (i:Int, j: Int) => (i > j) ==> (i must be_>(j)) } }
+
+ It is possible to display
+   the executed tests by setting up display parameters locally                                           ${config().e2}
+   the labels that are set on properties                                                                 ${config().e3}
+   the exceptions that happen on generation                                                              ${config().e4}
+   the collected frequencies                                                                             ${config().e5}
+                                                                                                                        """
 
   
   val success100tries = Success("The property passed without any counter-example after 100 tries")

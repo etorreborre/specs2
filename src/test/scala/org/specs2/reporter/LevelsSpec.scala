@@ -10,56 +10,55 @@ import collection.Seqx._
 import Levels._
 import specification.FragmentsShow._
 
-class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatchers with ArbitraryFragments with Tags { def is = sequential^
-                                                                                                                        """
-  The Levels class is used to compute the 'level' of Fragments in a list of Fragments.                                  """^
-                                                                                                                        p^
-  "A simple piece of text has level 0"                                                                                  ^
-  { level(t1) must_== List(0) }                                                                                         ^
-                                                                                                                        p^
-  "A new piece of text must be indented by 1"                                                                           ^
-  { level(t1 ^ t2) must_== List(0, 1) }                                                                                 ^
-                                                                                                                        p^
-  "Examples or text following text must be indented by 1"                                                               ^
-  { level(t1 ^ ex1 ^ t2 ^ t3) must_== List(0, 1, 1, 2) }                                                                ^
-  { level(t1 ^ ex1 ^ ex2 ^ t2 ^ t3) must_== List(0, 1, 1, 1, 2) }                                                       ^
-                                                                                                                        p^
-  "Consecutive examples must have the same indentation"                                                                 ^
-  { level(t1 ^ ex1) must_== List(0, 1) }                                                                                ^
-  { level(t1 ^ ex1 ^ ex2) must_== List(0, 1, 1) }                                                                       ^
-  { level(t1 ^ ex1 ^ ex2 ^ t2) must_== List(0, 1, 1, 1) }                                                               ^
-  { level(t1 ^ ex1 ^ t2 ^ ex2) must_== List(0, 1, 1, 2) }                                                               ^
-                                                                                                                        p^
-  "Tabs can be used to further indent a fragment"                                                                       ^
-  { level(t1 ^ ex1 ^ t ^ t2 ^ ex2) must_== List(0, 1, 1, 2, 3) }                                                        ^
-  { level(ex1 ^ t ^ ex2) must_== List(0, 0, 1) }                                                                        ^
-  { level(t1 ^ ex1 ^ t(2) ^ t2 ^ ex2) must_== List(0, 1, 1, 3, 4) }                                                     ^
-                                                                                                                        p^
-  "Backtabs can be used to further unindent a fragment"                                                                 ^
-  { level(t1 ^ ex1 ^ bt ^ t2 ^ ex2) must_== List(0, 1, 1, 0, 1) }                                                       ^
-  { level(t1 ^ t2 ^ ex1 ^ bt(2) ^ t2 ^ ex2) must_== List(0, 1, 2, 2, 0, 1) }                                            ^
-                                                                                                                        p^
-  "A paragraph unindents the following fragments by 1"                                                                  ^
-  { level(t1 ^ ex1 ^ p ^ t2 ^ ex2) must_== List(0, 1, 1, 1, 0, 1) }                                                     ^
-  { level(t1 ^ ex1 ^ p ^ p ^ t2 ^ ex2 ^ p ^ ex1) must_== List(0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0) }                        ^
-  { level(ex1 ^ p ^ ex2 ^ p) must_== List(0, 0, 0, 0, 0, 0) }                                                           ^
-  { level(ex1 ^ p ^ ex2 ^ p ^ p ^ ex3) must_== List(0, 0, 0, 0, 0, 0, 0, 0, 0) }                                        ^
-  { level(t1 ^ p ^ ex1 ^ p ^ ex2 ^ end) must_== List(0, 1, 1, 0, 0, 0, 0, 0) }                                          ^
-                                                                                                                        p^
-  "A end resets the following fragment to zero"                                                                         ^
-  { level(t1 ^ ex1 ^ end ^ t2 ^ ex2) must_== List(0, 1, 1, 0, 1) }                                                      ^
-  { level(t1 ^ ex1 ^ end ^ t1 ^ t2 ^ ex2) must_== List(0, 1, 1, 0, 1, 2) }                                              ^
-  { level("s".title ^ t1 ^ ex1 ^ end ^ t1) must_== List(0, 1, 1, 0) }                                                   ^
-                                                                                                                        p^
-  "The LevelMonoid monoid must respect the Monoid laws"                                                                 !
-    LevelMonoid[Fragment].isMonoid ^
-                                                                                                                        p^
-  "A tree of fragments can be created from the leveled blocks"                                                          ^
-    "for start ^ t1 ^ ex1 ^ ex2"                                                                                        ! tree().e1^
-    "for start ^ t1 ^ ex1 ^ end ^ t2 ^ ex2"                                                                             ! tree().e2^
-    "for start ^ t1 ^ ex1 ^ p ^ t2 ^ ex2"                                                                               ! tree().e3^
-    "for start ^ t1 ^ ex1 ^ ex2 ^ p ^ t2 ^ ex1 ^ ex2"                                                                   ! tree().e4^
-                                                                                                                        end
+class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatchers with ArbitraryFragments with Tags { def is = sequential^ s2"""
+  The Levels class is used to compute the 'level' of Fragments in a list of Fragments.                                  
+                                                                                                                        
+  A simple piece of text has level 0                                                                                  
+  ${ level(t1) must_== List(0) }
+                                                                                                                        
+  A new piece of text must be indented by 1                                                                           
+  ${ level(t1 ^ t2) must_== List(0, 1) }
+                                                                                                                        
+  Examples or text following text must be indented by 1                                                               
+  ${ level(t1 ^ ex1 ^ t2 ^ t3) must_== List(0, 1, 1, 2) }
+  ${ level(t1 ^ ex1 ^ ex2 ^ t2 ^ t3) must_== List(0, 1, 1, 1, 2) }
+                                                                                                                        
+  Consecutive examples must have the same indentation                                                                 
+  ${ level(t1 ^ ex1) must_== List(0, 1) }
+  ${ level(t1 ^ ex1 ^ ex2) must_== List(0, 1, 1) }
+  ${ level(t1 ^ ex1 ^ ex2 ^ t2) must_== List(0, 1, 1, 1) }
+  ${ level(t1 ^ ex1 ^ t2 ^ ex2) must_== List(0, 1, 1, 2) }
+                                                                                                                        
+  Tabs can be used to further indent a fragment                                                                       
+  ${ level(t1 ^ ex1 ^ t ^ t2 ^ ex2) must_== List(0, 1, 1, 2, 3) }
+  ${ level(ex1 ^ t ^ ex2) must_== List(0, 0, 1) }
+  ${ level(t1 ^ ex1 ^ t(2) ^ t2 ^ ex2) must_== List(0, 1, 1, 3, 4) }
+                                                                                                                        
+  Backtabs can be used to further unindent a fragment                                                                 
+  ${ level(t1 ^ ex1 ^ bt ^ t2 ^ ex2) must_== List(0, 1, 1, 0, 1) }
+  ${ level(t1 ^ t2 ^ ex1 ^ bt(2) ^ t2 ^ ex2) must_== List(0, 1, 2, 2, 0, 1) }
+                                                                                                                        
+  A paragraph unindents the following fragments by 1                                                                  
+  ${ level(t1 ^ ex1 ^ p ^ t2 ^ ex2) must_== List(0, 1, 1, 1, 0, 1) }
+  ${ level(t1 ^ ex1 ^ p ^ p ^ t2 ^ ex2 ^ p ^ ex1) must_== List(0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0) }
+  ${ level(ex1 ^ p ^ ex2 ^ p) must_== List(0, 0, 0, 0, 0, 0) }
+  ${ level(ex1 ^ p ^ ex2 ^ p ^ p ^ ex3) must_== List(0, 0, 0, 0, 0, 0, 0, 0, 0) }
+  ${ level(t1 ^ p ^ ex1 ^ p ^ ex2 ^ end) must_== List(0, 1, 1, 0, 0, 0, 0, 0) }
+                                                                                                                        
+  A end resets the following fragment to zero                                                                         
+  ${ level(t1 ^ ex1 ^ end ^ t2 ^ ex2) must_== List(0, 1, 1, 0, 1) }
+  ${ level(t1 ^ ex1 ^ end ^ t1 ^ t2 ^ ex2) must_== List(0, 1, 1, 0, 1, 2) }
+  ${ level("s".title ^ t1 ^ ex1 ^ end ^ t1) must_== List(0, 1, 1, 0) }
+                                                                                                                        
+  The LevelMonoid monoid must respect the Monoid laws                                                                 
+  ${LevelMonoid[Fragment].isMonoid}
+                                                                                                                        
+  A tree of fragments can be created from the leveled blocks                                                          
+    for start ^ t1 ^ ex1 ^ ex2                                                               ${tree().e1}
+    for start ^ t1 ^ ex1 ^ end ^ t2 ^ ex2                                                    ${tree().e2}
+    for start ^ t1 ^ ex1 ^ p ^ t2 ^ ex2                                                      ${tree().e3}
+    for start ^ t1 ^ ex1 ^ ex2 ^ p ^ t2 ^ ex1 ^ ex2                                          ${tree().e4}
+                                                                                             """
 
 
   case class tree() {

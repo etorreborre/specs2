@@ -3,28 +3,28 @@ package reporter
 
 import specification._
 
-class SequenceSpec extends Specification with ScalaCheck with ArbitraryFragments { def is =
-                                                                                                                       """
+class SequenceSpec extends Specification with ScalaCheck with ArbitraryFragments { def is = s2"""
+
  Before executing and reporting a specification, the fragments must be arranged for execution:
 
   * steps must be executed before examples as specified
   * the 'sequential' argument forces the each fragment to be sequenced
   * if the 'isolated' argument is present then Examples/Steps/Actions bodies must be copied
     so that they'll be executed in a separate Specification instance
-                                                                                                                        """^
-                                                                                                                        p^
-  "if a specification contains steps they must be grouped before the examples"                                          ^
-    "2 consecutive steps must not be in the same list"                                                                  ! steps().e1^
-    "2 consecutive examples must be in the same list"                                                                   ! steps().e2^
-    "an example followed by a step must not be in the same list"                                                        ! steps().e3^
-    "a step followed by an example must not be in the same list"                                                        ! steps().e4^
-    "in any specification steps and examples are always separated"                                                      ! steps().e5^
-                                                                                                                        p^
-  "if a specification contains the 'sequential' argument"                                                               ^
-    "all examples must be executed in a sequence"                                                                       ! seq().e1^
-    "with a Reporter"                                                                                                   ! seq().e2^
-    "included specifications must have their own arguments"                                                             ! seq().e3^
-                                                                                                                        end
+                                                                                                                       
+                                                                                                                       
+  if a specification contains steps they must be grouped before the examples                                         
+    2 consecutive steps must not be in the same list                                              ${steps().e1}
+    2 consecutive examples must be in the same list                                               ${steps().e2}
+    an example followed by a step must not be in the same list                                    ${steps().e3}
+    a step followed by an example must not be in the same list                                    ${steps().e4}
+    in any specification steps and examples are always separated                                  ${steps().e5}
+
+  if a specification contains the 'sequential' argument
+    all examples must be executed in a sequence                                                   ${seq().e1}
+    with a Reporter                                                                               ${seq().e2}
+    included specifications must have their own arguments                                         ${seq().e3}
+                                                                                                                        """
 
   case class steps() extends ScalaCheck with WithSelection {
     implicit val params = set(maxSize = 3)

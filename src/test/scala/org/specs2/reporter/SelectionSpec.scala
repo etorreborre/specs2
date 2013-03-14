@@ -6,32 +6,32 @@ import main._
 import io._
 import execute.Success
 
-class SelectionSpec extends Specification with Tags { def is =
-                                                                                                                        """
+class SelectionSpec extends Specification with Tags { def is = s2"""
+
  Before executing and reporting a specification, the fragments must be selected:
 
  * with the ex argument
- * with tags                                                                                                            """^
-                                                                                                                        p ^
- "First of all examples are filtered"                                                                                   ^
-   "when the user specifies a regular expression: ex = ex1.*"                                                           ^
-     "in the spec"                                                                                                      ! filter().e1^
-     "on the command line"                                                                                              ! filter().e2^
-     "if the regexp is invalid, it is quoted"                                                                           ! filter().e3^
-   "if no filter is specified, nothing must be filtered out"                                                            ! filter().e4^
-                                                                                                                        p^
- "It is possible to select only some previously executed fragments"                                                     ^
-   "wasIssue selects only the fragments which were failed or in error"                                                  ! rerun().e1^
-                                                                                                                        p^
- "if a specification contains the 'isolated' argument"                                                                  ^
-   "examples bodies must be copied"                                                                                     ! isolate().e1^
-   "along with all the previous steps"                                                                                  ! isolate().e2^
-   "steps bodies must not be copied"                                                                                    ! isolate().e3^
-   "actions bodies must be copied"                                                                                      ! isolate().e4^
-   "if the examples, steps or actions are marked as global, they are never copied"                                      ! isolate().e5^t^
-     "with a global step before an example"                                                                             ! isolate().e6^
-   "tags can be used"                                                                                                   ! isolate().e7^
-                                                                                                                        end
+ * with tags                                                                                                            
+                                                                                                                        
+ First of all examples are filtered                                                                                   
+   when the user specifies a regular expression: ex = ex1.*                                                           
+     in the spec                                                                                       ${filter().e1}
+     on the command line                                                                               ${filter().e2}
+     if the regexp is invalid, it is quoted                                                            ${filter().e3}
+   if no filter is specified, nothing must be filtered out                                             ${filter().e4}
+
+ It is possible to select only some previously executed fragments
+   wasIssue selects only the fragments which were failed or in error                                   ${rerun().e1}
+
+ if a specification contains the 'isolated' argument
+   examples bodies must be copied                                                                      ${isolate().e1}
+   along with all the previous steps                                                                   ${isolate().e2}
+   steps bodies must not be copied                                                                     ${isolate().e3}
+   actions bodies must be copied                                                                       ${isolate().e4}
+   if the examples, steps or actions are marked as global, they are never copied                       ${isolate().e5}
+     with a global step before an example                                                              ${isolate().e6}
+   tags can be used                                                                                    ${isolate().e7}
+                                                                                                                        """
   
   case class filter() extends WithSelection {
     def e1 = select(args(ex = "ex1") ^ ex1 ^ ex2).toString must not contain("ex2")

@@ -4,8 +4,7 @@ package text
 import mutable.Specification
 import specification.AllExpectations
 
-class LinesContentDifferenceSpec extends Specification with AllExpectations {
-                                                                                                """
+class LinesContentDifferenceSpec extends Specification with AllExpectations { s2"""
  The LinesContentDifference class checks 2 sequences of lines
 
  It must display the differences if:
@@ -20,7 +19,7 @@ class LinesContentDifferenceSpec extends Specification with AllExpectations {
 
   * when unordered = true we must check that duplicated elements are all included
 
-                                                                                                 """.newp
+                                                                                                 """
 
   val lines1 = Seq("a", "b", "c", "d")
   val lines2 = Seq("c", "d", "b", "a")

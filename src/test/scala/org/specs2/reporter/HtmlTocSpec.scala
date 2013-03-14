@@ -6,11 +6,11 @@ import main.Arguments
 import specification.{ExecutedText, HtmlLink, SpecName}
 
 
-class HtmlTocSpec extends Specification { def is =
+class HtmlTocSpec extends Specification { def is = s2"""
 
-  "if the notoc argument is used from the command-line, then no toc must be included"                                   ! notoc1^
-  "the root file specifies can specify 'notoc' but children files can have their own"                                   ! notoc2^
-                                                                                                                        end
+  if the notoc argument is used from the command-line, then no toc must be included $notoc1
+  the root file specifies can specify 'notoc' but children files can have their own $notoc2
+                                                                                                                        """
 
 
   def notoc1 = printer.addToc(args.report(notoc=true))(singleFile).head.toc.toc must beEmpty

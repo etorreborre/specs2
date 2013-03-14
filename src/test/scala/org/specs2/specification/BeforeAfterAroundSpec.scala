@@ -5,22 +5,22 @@ import io.MockOutput
 import execute.{AsResult, Result}
 import _root_.org.specs2.mutable.{Specification => Spec}
 
-class BeforeAfterAroundSpec extends Specification with Grouped { def is =
+class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
 
- "The `Before/After/Around Example` traits are used to automatically insert contexts around examples bodies"            ^
- "a spec can define a Before context that is used for each example"                                                     ^
-   "in a mutable spec"                                                                                                  ! g1.e1 ^
-   "also in an acceptance spec"                                                                                         ! g1.e2 ^
-   "defined on several fragments"                                                                                       ! g1.e3 ^
-   "even for a mutable spec"                                                                                            ! g1.e4 ^
-                                                                                                                        p^
- "a spec can define an After context that is used for each example"                                                     ! g2.e1 ^
- "a spec can define an Around context that is used for each example"                                                    ! g2.e2 ^
- "a spec can define a BeforeAfter context that is used for each example"                                                ! g2.e3 ^
- "a spec can define a BeforeAfterAround context that is used for each example"                                          ! g2.e4 ^
- "a spec can define a implicit context that is used for each example"                                                   ! g2.e5 ^
- "a mutable spec can define a implicit context that is used for each example"                                           ! g2.e6 ^
-                                                                                                                        end
+ The `Before/After/Around Example` traits are used to automatically insert contexts around examples bodies            
+ a spec can define a Before context that is used for each example                                                     
+   in a mutable spec                                                                                          ${g1.e1}
+   also in an acceptance spec                                                                                 ${g1.e2}
+   defined on several fragments                                                                               ${g1.e3}
+   even for a mutable spec                                                                                    ${g1.e4}
+
+ a spec can define an After context that is used for each example                                             ${g2.e1}
+ a spec can define an Around context that is used for each example                                            ${g2.e2}
+ a spec can define a BeforeAfter context that is used for each example                                        ${g2.e3}
+ a spec can define a BeforeAfterAround context that is used for each example                                  ${g2.e4}
+ a spec can define a implicit context that is used for each example                                           ${g2.e5}
+ a mutable spec can define a implicit context that is used for each example                                   ${g2.e6}
+                                                                                                              """
 
   "before" - new g1 {
     e1 := executeContains(

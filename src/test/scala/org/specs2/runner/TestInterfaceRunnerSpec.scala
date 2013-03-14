@@ -11,33 +11,33 @@ import execute.StandardResults
 import scala.collection.mutable.ListBuffer
 import annotation.tailrec
 
-class TestInterfaceRunnerSpec extends Specification with Groups with Tags { def is = section("unstable") ^
-                                                                                                                        """
-  A TestInterfaceRunner is responsible for instantiating Specification classes found by
-  sbt and executing them using a TestInterfaceReporter
+class TestInterfaceRunnerSpec extends Specification with Groups with Tags { def is = section("unstable") ^ s2"""
+                                                                                                                
+ A TestInterfaceRunner is responsible for instantiating Specification classes found by
+ sbt and executing them using a TestInterfaceReporter
 
-                                                                                                                        """^
-  "if the specification class is missing"                                                                               ^
-    "there must be an error logged"                                                                                     ! g1().e1^
-    "a stacktrace must be logged"                                                                                       ! g1().e2^
-                                                                                                                        p^
-  "if the specification instance cannot be created"                                                                     ^
-    "a stacktrace for the exception must be logged"                                                                     ! g2().e1^
-    "the cause stacktrace must also be logged if there is one"                                                          ! g2().e2^
-    "the cause stacktrace must be nicely separated from the top exception"                                              ! g2().e3^
-                                                                                                                        end^
-  "if the specification instance can be created it must be passed to TestInterfaceReporter"                             ! g3().e1^
-  "Additional report types can be passed on the command line"                                                           ! g3().e2^
-  "A custom notifier can be specified on the command line with 'notifier <class name>'"                                 ! g3().e3^
-  "A custom exporter can be specified on the command line with 'exporter <class name>'"                                 ! g3().e4^
-  "A custom notifier can be specified in the specification with 'args.report(exporter=<class name>)'"                   ! g3().e5^
-  "A custom exporter can be specified in the specification with 'args.report(exporter=<class name>)'"                   ! g3().e6^
-                                                                                                                        p^
-  "Execution"                                                                                                           ^
-    "if the results are displayed on the console"                                                                       ^
-      "the storing must be done in parallel to the exporting (to get results asap on the console)"                      ! g4().e1^
-      "the other exporters must use the result of the storing"                                                          ! g4().e2^
-                                                                                                                        end
+
+ if the specification class is missing
+   there must be an error logged                                                                              ${g1().e1}
+   a stacktrace must be logged                                                                                ${g1().e2}
+
+ if the specification instance cannot be created
+   a stacktrace for the exception must be logged                                                              ${g2().e1}
+   the cause stacktrace must also be logged if there is one                                                   ${g2().e2}
+   the cause stacktrace must be nicely separated from the top exception                                       ${g2().e3}
+
+ if the specification instance can be created it must be passed to TestInterfaceReporter                      ${g3().e1}
+ Additional report types can be passed on the command line                                                    ${g3().e2}
+ A custom notifier can be specified on the command line with 'notifier <class name>'                          ${g3().e3}
+ A custom exporter can be specified on the command line with 'exporter <class name>'                          ${g3().e4}
+ A custom notifier can be specified in the specification with 'args.report(exporter=<class name>)'            ${g3().e5}
+ A custom exporter can be specified in the specification with 'args.report(exporter=<class name>)'            ${g3().e6}
+
+ Execution
+   if the results are displayed on the console
+     the storing must be done in parallel to the exporting (to get results asap on the console)               ${g4().e1}
+     the other exporters must use the result of the storing                                                   ${g4().e2}
+                                                                                                              """
 
   "missing" - new g1 {
     object run extends MockLogger {

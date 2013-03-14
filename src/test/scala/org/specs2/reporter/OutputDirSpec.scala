@@ -4,14 +4,14 @@ package reporter
 import specification.SpecName._
 
 
-class OutputDirSpec extends Specification { def is =
-                                                                                                                                            """
+class OutputDirSpec extends Specification { def is = s2"""
+                                                                                                                                            
 The OutputDir trait is responsible for managing the output files location.
-                                                                                                                                            """^p^
-  "The report path must"                                                                                                                      ^
-    "be target/specs-reports as a default value"                                                                                            ! filepath().e1^
-    "use the `outDir` system variable if set"                                                                                               ! filepath().e2^
-                                                                                                                                            end
+                                                                                                                                            
+  The report path must                                                                                                                    
+    be target/specs-reports as a default value            ${filepath().e1}
+    use the `outDir` system variable if set               ${filepath().e2}
+                                                                                                                        """
 
   implicit val argument = args()
 

@@ -5,25 +5,25 @@ import main._
 import ExecutedFragment._
 import mock.Mockito
 
-class StoringSpec extends SpecificationWithJUnit { def is =
+class StoringSpec extends SpecificationWithJUnit { def is = s2"""
 
-   "The statistics of a specification must"                                                        ^
-     "be computed after execution"                                                                 ^
-       "a Text fragment must have stats = 0"                                                       ! stats().e1^
-       "a failed example must have a stats = 1 failure"                                            ! stats().e2^
-       "the end of a specification must sum up all the results"                                    ! stats().e3^
-                                                                                                   p^
-     "be stored"                                                                                   ^
-       "stored per specification name"                                                             ! stored().e1^
-       "each result also"                                                                          ! stored().e2^
-       "and retrieved per specification name"                                                      ! stored().e3^
-       "except if the specification is see-only"                                                   ! stored().e4^
-                                                                                                   endp^
-   "It is possible to compute the trends of the statistics"                                        ^
-     "between 2 runs"                                                                              ! trends().e1^
-     "the trends can be resetted"                                                                  ! trends().e2^
-     "but only if the store.never argument = false"                                                ! trends().e3^
-                                                                                                   end
+   The statistics of a specification must                                                        
+     be computed after execution                                                                 
+       a Text fragment must have stats = 0                                                       ${stats().e1}
+       a failed example must have a stats = 1 failure                                            ${stats().e2}
+       the end of a specification must sum up all the results                                    ${stats().e3}
+                                                                                                  
+     be stored                                                                                  
+       stored per specification name                                                             ${stored().e1}
+       each result also                                                                          ${stored().e2}
+       and retrieved per specification name                                                      ${stored().e3}
+       except if the specification is see-only                                                   ${stored().e4}
+                                                                                                   
+   It is possible to compute the trends of the statistics                                        
+     between 2 runs                                                                              ${trends().e1}
+     the trends can be resetted                                                                  ${trends().e2}
+     but only if the store.never argument = false                                                ${trends().e3}
+                                                                                                 """
 
    
   trait StoringContext extends FragmentExecution with Mockito { outer =>

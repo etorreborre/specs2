@@ -3,35 +3,35 @@ package time
 
 import specification.Grouped
 
-class TimerSpec extends Specification with Grouped {  def is =
+class TimerSpec extends Specification with Grouped {  def is = s2"""
 
-  "A timer can be created and not started"                                   ^
-    "neverStarted returns true"                                              ! g1.e1^
-    "isStarted returns false"                                                ! g1.e2^
-    "it displays no elapsed time"                                            ^
-      "in hms"                                                               ! g1.e3^
-	  "in hms and millis"                                                      ! g1.e4^
-	                                                                           endbr^
-  "When started"                                                             ^
-    "neverStarted returns false"                                             ! g2.e1^
-    "isStarted returns true"                                                 ! g2.e2^
-    "it displays no elapsed time"                                            ! g2.e3^
-                                                                             p^
-  "When stopped"                                                             ^
-    "neverStarted returns false"                                             ! g3.e1^
-    "isStarted returns false"                                                ! g3.e2^
-	"it can"                                                                   ^
-      "display the elapsed time in hour-minute-second"                       ! g3.e3^
-      "display the elapsed time in hms and millis"                           ! g3.e4^
-      "display the correct time when it is more than 1 hour"                 ! g3.e5^
-                                                                             endbr^
-  "A Timer can also have nested starts and stops"                            ^
-    "it will then return cumulated times"                                    ! g4.e1^
-                                                                             p^
-  "2 Timers can be added together"                                           ^
-    "if they both have elapsed times we take the maximum"                    ! g5.e1^
-    "if they both have started timestamps we take the greatest difference"   ! g5.e2^
-                                                                             end
+  A timer can be created and not started                                   
+    neverStarted returns true                                              ${g1.e1}
+    isStarted returns false                                                ${g1.e2}
+    it displays no elapsed time                                            
+      in hms                                                               ${g1.e3}
+	  in hms and millis                                                      ${g1.e4}
+	                                                                           
+  When started                                                             
+    neverStarted returns false                                             ${g2.e1}
+    isStarted returns true                                                 ${g2.e2}
+    it displays no elapsed time                                            ${g2.e3}
+                                                                             
+  When stopped                                                             
+    neverStarted returns false                                             ${g3.e1}
+    isStarted returns false                                                ${g3.e2}
+	it can                                                                   
+      display the elapsed time in hour-minute-second                       ${g3.e3}
+      display the elapsed time in hms and millis                           ${g3.e4}
+      display the correct time when it is more than 1 hour                 ${g3.e5}
+                                                                             
+  A Timer can also have nested starts and stops                            
+    it will then return cumulated times                                    ${g4.e1}
+                                                                             
+  2 Timers can be added together                                           
+    if they both have elapsed times we take the maximum                    ${g5.e1}
+    if they both have started timestamps we take the greatest difference   ${g5.e2}
+                                                                           """
     
   "timer is not started" - new g1 {
     val timer = TestTimer()

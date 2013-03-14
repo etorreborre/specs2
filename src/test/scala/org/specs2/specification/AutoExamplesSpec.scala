@@ -4,20 +4,20 @@ package specification
 import matcher._
 import _root_.org.specs2.mutable.{Specification => Spec}
 
-class AutoExamplesSpec extends Specification with DataTables { def is =
+class AutoExamplesSpec extends Specification with DataTables { def is = s2"""
 
-  "The trimCode function should"                                                                ^
-    "remove formatting fragments"                                                               ! e1^
-    "remove backticks"                                                                          ^
-      "with no parameter list"                                                                  ! e2^
-      "with a parameter list - one param"                                                       ! e3^
-      "with a parameter list - 2 params"                                                        ! e4^
-                                                                                                endp^
-  "DataTables can be used as examples directly"                                                 ^
-    "their description must be left empty, since the result contains the full description"      ! dt1^
-                                                                                                p^
-  "Autoexamples can also be used in mutable specifications"                                     ! m1^
-                                                                                                end
+ The trimCode function should
+   remove formatting fragments                                                               $e1
+   remove backticks
+     with no parameter list                                                                  $e2
+     with a parameter list - one param                                                       $e3
+     with a parameter list - 2 params                                                        $e4
+
+ DataTables can be used as examples directly
+   their description must be left empty, since the result contains the full description      $dt1
+
+ Autoexamples can also be used in mutable specifications                                     $m1
+                                                                                             """
 
   def e1 = "code"                     || "result"                  |>
            "success ^"                !! "success"                 |

@@ -3,12 +3,13 @@ package text
 
 import specification.Grouped
 
-class SourceFileSpec extends Specification with Grouped with SourceFile { def is =
+class SourceFileSpec extends Specification with Grouped with SourceFile { def is = s2"""
 
-  "the package name of a source file can be extracted"  ^
-    "for a simple name"            ! g1.e1^
-    "with a following semi-column" ! g1.e2^
-    "with several declarations"    ! g1.e3
+ the package name of a source file can be extracted
+   for a simple name"                                 ${g1.e1}
+   with a following semi-column"                      ${g1.e2}
+   with several declarations"                         ${g1.e3}
+                                                      """
 
 
   "packages" - new g1 {

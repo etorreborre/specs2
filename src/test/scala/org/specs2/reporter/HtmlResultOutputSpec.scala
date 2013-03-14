@@ -1,24 +1,26 @@
 package org.specs2
 package reporter
+
 import specification._
 import matcher.{DataTable, DataTables}
 import text.NoMarkup
 import execute.DecoratedResult
 
-class HtmlResultOutputSpec extends Specification with DataTables { def is =
-                                                                                                                        """
+class HtmlResultOutputSpec extends Specification with DataTables { def is = s2"""
+                                                                                                                        
   The HtmlResultOutput class build xml fragments according to the HtmlReportOutput interface.
-                                                                                                                        """ ^
-  "There are functions to display a description with the corresponding icon"                                            !  descriptions^
-                                                                                                                        p^
-  "A link to another specification is displayed as an html link"                                                        ^
-    "with a subtoc element having the specification id"                                                                 ! links().e1^
-    "with a link relative to the filePath"                                                                              ! links().e2^
-  "DataTables" ^
-    "A datatable must not be shown if the example is successful"                                                        ! dataTables().e1^
-    "A datatable must be displayed if there is a failure"                                                               ! dataTables().e2^
-    "A datatable used as an auto-example must be displayed"                                                             ! dataTables().e3^
-                                                                                                                        end
+                                                                                                                        
+  There are functions to display a description with the corresponding icon                           $descriptions
+
+  A link to another specification is displayed as an html link
+    with a subtoc element having the specification id                                                ${links().e1}
+    with a link relative to the filePath                                                             ${links().e2}
+
+  DataTables
+    A datatable must not be shown if the example is successful                                       ${dataTables().e1}
+    A datatable must be displayed if there is a failure                                              ${dataTables().e2}
+    A datatable used as an auto-example must be displayed                                            ${dataTables().e3}
+                                                                                                                        """
 
   def descriptions = {
     val (out, desc) = (new HtmlResultOutput, NoMarkup("desc"))

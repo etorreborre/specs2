@@ -6,28 +6,28 @@ import java.util.concurrent._
 import internal.scalaz.concurrent.Promise
 import specification.{Tags, Grouped}
 
-class TerminationMatchersSpec extends Specification with TerminationMatchers with Grouped with Tags { def is = section("unstable")^
-                                                                                                   p^
-  "It is possible to check if a block of code terminates"                                          ^
-    "with a default number of retries and default sleep time"                                      ^
-      "if it succeeds"                                                                             ! g1.e1^
-      "if it fails"                                                                                ! g1.e2^
-                                                                                                   p^
-    "with a specified number of retries and sleep time"                                            ^
-      "if it succeeds after 50 ms"                                                                 ! g1.e3^
-      "if it fails"                                                                                ! g1.e4^
-                                                                                                   p^
-    "if the termination fails, the computation is stopped"                                         ! g1.e5^
-                                                                                                   p^
-    "We can write 'action must not terminate'"                                                     ! g1.e6^
-                                                                                                   p^
-  "We should be able to observe that an action unblocks another"                                   ^
-    "with a when clause"                                                                           ! g2.e1^
-    "with an onlyWhen clause"                                                                      ^
-      "if action1 terminates after action 2 -> success"                                            ! g2.e2^
-      "if action1 terminates before action 2 -> failure"                                           ! g2.e3^
-      "if action1 doesn't terminate after action 2 -> failure"                                     ! g2.e4^
-                                                                                                   end
+class TerminationMatchersSpec extends Specification with TerminationMatchers with Grouped with Tags { def is = section("unstable")^ s2"""
+                                                                                                   
+ It is possible to check if a block of code terminates
+   with a default number of retries and default sleep time
+     if it succeeds                                                                             ${g1.e1}
+     if it fails                                                                                ${g1.e2}
+
+   with a specified number of retries and sleep time
+     if it succeeds after 50 ms                                                                 ${g1.e3}
+     if it fails                                                                                ${g1.e4}
+
+   if the termination fails, the computation is stopped                                         ${g1.e5}
+
+   We can write 'action must not terminate'                                                     ${g1.e6}
+
+ We should be able to observe that an action unblocks another
+   with a when clause                                                                           ${g2.e1}
+   with an onlyWhen clause
+     if action1 terminates after action 2 -> success                                            ${g2.e2}
+     if action1 terminates before action 2 -> failure                                           ${g2.e3}
+     if action1 doesn't terminate after action 2 -> failure                                     ${g2.e4}
+                                                                                                """
 
   "termination" - new g1 {
     e1 := { Thread.sleep(50) must terminate(sleep = 100.millis) }

@@ -4,13 +4,13 @@ package reporter
 import specification._
 import ExecutedSpecificationData._
 
-class HtmlFileLinesSpec extends Specification { def is =
+class HtmlFileLinesSpec extends Specification { def is = s2"""
 
-  "A linked specification must create a new file"                                                                       ! e1^
-    "that file must be linked to the parent file"                                                                       ! e2^
-  "A see specification must not create a new file but just a link"                                                      ! e3^
-  "The user can specify a different path for the html file"                                                             ! e4^
-                                                                                                                        end
+  A linked specification must create a new file                                                    $e1
+    that file must be linked to the parent file                                                    $e2
+  A see specification must not create a new file but just a link                                   $e3
+  The user can specify a different path for the html file                                          $e4
+                                                                                                                        """
 
   lazy val spec1: Fragments = "ex1" ! failure ^ "a " ~  ("successfull spec", successfulSubSpec) ^ end
   lazy val spec2: Fragments = "ex1" ! failure ^ "a " ~/ ("successfull spec", successfulSubSpec) ^ end

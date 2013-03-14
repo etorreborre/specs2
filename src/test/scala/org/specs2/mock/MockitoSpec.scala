@@ -9,95 +9,94 @@ import org.mockito.invocation._
 import matcher._
 import junit.framework.AssertionFailedError
 
-class MockitoSpec extends Specification with Mockito with ResultMatchers with Groups {  def is =
-                                                                                                                        """
-Mockito is a Java library for mocking.
+class MockitoSpec extends Specification with Mockito with ResultMatchers with Groups {  def is = s2"""
+ Mockito is a Java library for mocking.
 
-The following samples are taken from the main documentation which can be found here:
-http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
-                                                                                                                        """^p^
-  "CREATION"                                                                                                            ^
-  "Mocks can be created"                                                                                                ^
-    "with a name" 								                                                                                      ! g1().e1^
-    "with a default return value"                            					                                                  ! g1().e2^
-    "with a name and default return value"                            					                                        ! g1().e3^
-    "with a default answer"                                           					                                        ! g1().e4^
-    "with settings"                                                   					                                        ! g1().e5^
-																																																												p^
-  "VERIFICATION"                                                                                                        ^
-  "When a mock is created with the mock method"                                                                         ^
-    "it is possible to call methods on the mock" 								                                                        ! g2().e1^
-    "it is possible to verify that a method has been called" 					                                                  ! g2().e2^
-    "if one method has not been called on a mock there will be a failure" 		                                          ! g2().e3^
-    "it is possible to check that no calls have been made" 		                                                          ! g2().e4^
-    "it is possible to pass byname parameters"          		                                                            ! g2().e5^
-    "it is possible to check byname parameters"          		                                                            ! g2().e7^
-    "it is possible to check a function parameter"          		                                                        ^
-      "with one argument"                                                                                               ! g2().e7^
-      "with one argument and a matcher for the return value"                                                            ! g2().e8^
-      "with n arguments"                                                                                                ! g2().e9^
-      "with n arguments and a matcher for the return value"                                                             ! g2().e10^
-      "as being anything"                                                                                               ! g2().e11^
-      "with Nothing as the return type"                                                                                 ! g2().e12^
-      "with Any as the return type"                                                                                     ! g2().e13^
-                                                                                                                        p^
-    "it is possible to check a partial function parameter"          		                                                ^
-      "with n arguments"                                                                                                ! g2().e14^
-      "with n arguments and a matcher for the return value"                                                             ! g2().e15^
-      "as being anything"                                                                                               ! g2().e16^
-      "when the argument is not defined"                                                                                ! g2().e17^
-                                                                                                                        p^
-    "it is possible to verify a function with implicit conversions"          		                                        ^
-      "with a single converted parameter"                                                                               ! g2().e18^
-      "with a single converted parameter, using a matcher"                                                              ! g2().e19^
-                                                                                                                        p^
-    "it is possible to verify a function with repeated parameters"          		                                        ! g2().e20^
-                                                                                                                        endp^
-  "It is also possible to return a specific value from a mocked method"                                                 ^
-    "then when the mocked method is called, the same values will be returned" 	                                        ! g3().e1^
-    "different successive values can even be returned" 						                                                      ! g3().e2^
-    "a value can be returned when a parameter of the method matches" 			                                              ^
-      "a hamcrest matcher" 													                                                                    ! g3().e3^
-      "a specs2 matcher" 														                                                                    ! g3().e4^
-      "a Set"           														                                                                    ! g3().e5^
-      "a List"           														                                                                    ! g3().e6^
-                                                                                                                          endp^
-  "It is also possible to throw an exception from a mocked method"                                                      ^
-    "then when the mocked method is called, the exception will be thrown" 		                                          ! g4().e1^
-    "different successive exceptions can even be thrown" 						                                                    ! g4().e2^
-                                                                                                                        p^
-  "A mock can be created and stubbed at the same time"                        	                                        ! g5().e1^
-                                                                                                                        p^
-  "NUMBER OF CALLS"                                                                                                     ^
-  "The number of calls to a mocked method can be checked"                                                               ^
-    "if the mocked method has been called once"                                                                         ! g6().e1^
-    "if the mocked method has been called twice"                                                                        ! g6().e2^
-    "if the mocked method has been called atLeast n times"                                                              ! g6().e3^
-    "if the mocked method has been called atMost n times"                                                               ! g6().e4^
-    "if the mocked method has never been called"                                                                        ! g6().e5^
-    "if the verification throws an exception, it will be reported as an Error"                                          ! g6().e6^
-    "if the mocked method has not been called after some calls"                                                         ! g6().e7^
-    "if the mocked method has not been called after some calls - ignoring stubs"                                        ! g6().e8^
-                                                                                                                        p^
-  "ORDER OF CALLS"                                                                                                      ^
-  "The order of calls to a mocked method can be checked"                                                                ^
-    "with 2 calls that were indeed in order"                                                                            ! g7().e1^
-    "with 2 calls that were indeed in order - ignoring stubbed methods"                                                 ! g7().e2^
-    "with 2 calls that were indeed not in order"                                                                        ! g7().e3^
-    "with 3 calls that were indeed not in order"                                                                        ! g7().e4^
-                                                                                                                        p^
-  "ANSWERS & PARAMETERS CAPTURE"                                                                                        ^
-  "Answers can be created to control the returned a value"                                                              ! g8().e1^
-  "Answers can use the mock instance as the second parameter"                                                           ! g8().e2^
-  "Answers can use the mock instance, even when the method has 0 parameters"                                            ! g8().e3^
-                                                                                                                        p^
-  "A parameter can be captured in order to check its value"                                                             ! g9().e1^
-  "A parameter can be captured in order to check its successive values"                                                 ! g9().e2^
-                                                                                                                        p^
-  "The Mockito trait is reusable in other contexts"                                                                     ^
-    "in mutable specs"                                                                                                  ! g10().e1^
-    "in JUnit"                                                                                                          ! g10().e2^
-                                                                                                                        end
+ The following samples are taken from the main documentation which can be found here:
+ http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
+                                                                                                                       
+ CREATION
+ Mocks can be created
+   with a name 								                                                                             ${g1().e1}
+   with a default return value                            					                                       ${g1().e2}
+   with a name and default return value                            					                               ${g1().e3}
+   with a default answer                                           					                               ${g1().e4}
+   with settings                                                   					                               ${g1().e5}
+
+ VERIFICATION
+ When a mock is created with the mock method
+   it is possible to call methods on the mock 								                                             ${g2().e1}
+   it is possible to verify that a method has been called 					                                       ${g2().e2}
+   if one method has not been called on a mock there will be a failure 		                                 ${g2().e3}
+   it is possible to check that no calls have been made 		                                               ${g2().e4}
+   it is possible to pass byname parameters          		                                                   ${g2().e5}
+   it is possible to check byname parameters          		                                                 ${g2().e7}
+   it is possible to check a function parameter
+     with one argument                                                                                     ${g2().e7}
+     with one argument and a matcher for the return value                                                  ${g2().e8}
+     with n arguments                                                                                      ${g2().e9}
+     with n arguments and a matcher for the return value                                                   ${g2().e10}
+     as being anything                                                                                     ${g2().e11}
+     with Nothing as the return type                                                                       ${g2().e12}
+     with Any as the return type                                                                           ${g2().e13}
+
+   it is possible to check a partial function parameter
+     with n arguments                                                                                      ${g2().e14}
+     with n arguments and a matcher for the return value                                                   ${g2().e15}
+     as being anything                                                                                     ${g2().e16}
+     when the argument is not defined                                                                      ${g2().e17}
+
+   it is possible to verify a function with implicit conversions
+     with a single converted parameter                                                                     ${g2().e18}
+     with a single converted parameter, using a matcher                                                    ${g2().e19}
+
+   it is possible to verify a function with repeated parameters          		                               ${g2().e20}
+
+ It is also possible to return a specific value from a mocked method
+   then when the mocked method is called, the same values will be returned 	                               ${g3().e1}
+   different successive values can even be returned 						                                           ${g3().e2}
+   a value can be returned when a parameter of the method matches
+     a hamcrest matcher 													                                                         ${g3().e3}
+     a specs2 matcher 														                                                         ${g3().e4}
+     a Set           														                                                           ${g3().e5}
+     a List           														                                                         ${g3().e6}
+
+ It is also possible to throw an exception from a mocked method
+   then when the mocked method is called, the exception will be thrown 		                                 ${g4().e1}
+   different successive exceptions can even be thrown 						                                         ${g4().e2}
+
+ A mock can be created and stubbed at the same time                        	                               ${g5().e1}
+
+ NUMBER OF CALLS
+ The number of calls to a mocked method can be checked
+   if the mocked method has been called once                                                               ${g6().e1}
+   if the mocked method has been called twice                                                              ${g6().e2}
+   if the mocked method has been called atLeast n times                                                    ${g6().e3}
+   if the mocked method has been called atMost n times                                                     ${g6().e4}
+   if the mocked method has never been called                                                              ${g6().e5}
+   if the verification throws an exception, it will be reported as an Error                                ${g6().e6}
+   if the mocked method has not been called after some calls                                               ${g6().e7}
+   if the mocked method has not been called after some calls - ignoring stubs                              ${g6().e8}
+
+ ORDER OF CALLS
+ The order of calls to a mocked method can be checked
+   with 2 calls that were indeed in order                                                                  ${g7().e1}
+   with 2 calls that were indeed in order - ignoring stubbed methods                                       ${g7().e2}
+   with 2 calls that were indeed not in order                                                              ${g7().e3}
+   with 3 calls that were indeed not in order                                                              ${g7().e4}
+
+ ANSWERS & PARAMETERS CAPTURE
+ Answers can be created to control the returned a value                                                    ${g8().e1}
+ Answers can use the mock instance as the second parameter                                                 ${g8().e2}
+ Answers can use the mock instance, even when the method has 0 parameters                                  ${g8().e3}
+
+ A parameter can be captured in order to check its value                                                   ${g9().e1}
+ A parameter can be captured in order to check its successive values                                       ${g9().e2}
+
+ The Mockito trait is reusable in other contexts
+   in mutable specs                                                                                        ${g10().e1}
+   in JUnit                                                                                                ${g10().e2}
+                                                                                                                        """
     
   "creation" - new g1 {
     e1 := {

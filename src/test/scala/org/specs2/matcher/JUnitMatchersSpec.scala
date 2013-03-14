@@ -2,15 +2,15 @@ package org.specs2
 package matcher
 import java.lang._
 
-class JUnitMatchersSpec extends Specification { def is =
-                                                                                                                        """
+class JUnitMatchersSpec extends Specification { def is = s2"""
+                                                                                                                        
 The specs2 matchers can be reused in JUnit test cases
-                                                                                                                        """^
-                                                                                                                        p^
-  "MatchResults must be thrown as AssertionFailedErrors if failing"                                                     ^
-    "if there is a MatchSuccess no exception is thrown"                                                                 ! c.e1^
-    "if there is a MatchFailure then an AssertionError is thrown"                                                       ! c.e2^
-                                                                                                                        end
+                                                                                                                        
+                                                                                                                        
+ MatchResults must be thrown as AssertionFailedErrors if failing
+   if there is a MatchSuccess no exception is thrown                                                ${c.e1}
+   if there is a MatchFailure then an AssertionError is thrown                                      ${c.e2}
+                                                                                                    """
 
   trait expectations extends JUnitMustMatchers {
     def successExpectation = 1 must_== 1

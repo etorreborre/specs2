@@ -3,29 +3,28 @@ package matcher
 
 import java.io.File
 
-class MatcherSpec extends Specification with ResultMatchers { def is =
+class MatcherSpec extends Specification with ResultMatchers { def is = s2"""
+  Matchers can be created in different way
+  
+  a matcher can be adapted with a function                                                                       $e1
+  a matcher can be adapted with a function and a description function for the expectable                         $e1_1
+  if the matcher is for equality, it has to be the typed equality matcher be_===                                 $e1_2
+  a matcher can be adapted with a function for both expected and actual values                                   $e2
+  a function can be adapted with a matcher to create a matcher                                                   $e2_1
+  a matcher can be defined by a function with 1 message                                                          $e3
+  a matcher can be defined by a function with 2 messages                                                         $e3_1
+  a matcher can be defined by a function returning a triplet                                                     $e3_2
+  a matcher can be defined by a function returning a pair                                                        $e3_3
+  a matcher can be defined by a function with a function for the ko message                                      $e4
+  a matcher can be defined by a function with 2 functions for the messages                                       $e5
+  a matcher can be muted and will output no message                                                              $e6
+  a matcher can be defined by a function returning a MatchResult                                                 $e7
+  a matcher for a seq of values can be defined by a function returning a MatchResult and used forall values+
+    meaning that the first failure will fail all                                                                 $e8
+  a matcher for a seq of values can be defined by a function returning a MatchResult and used foreach values+
+    meaning that all failures will be collected                                                                  $e9
+  a matcher can have a different failure message                                                                 $e10
                                                                                                                         """
-  Matchers can be created in different ways
-                                                                                                                        """^
-  "a matcher can be adapted with a function"                                                                            ! e1^
-  "a matcher can be adapted with a function and a description function for the expectable"                              ! e1_1^
-  "if the matcher is for equality, it has to be the typed equality matcher be_==="                                      ! e1_2^
-  "a matcher can be adapted with a function for both expected and actual values"                                        ! e2^
-  "a function can be adapted with a matcher to create a matcher"                                                        ! e2_1^
-  "a matcher can be defined by a function with 1 message"                                                               ! e3^
-  "a matcher can be defined by a function with 2 messages"                                                              ! e3_1^
-  "a matcher can be defined by a function returning a triplet"                                                          ! e3_2^
-  "a matcher can be defined by a function returning a pair"                                                             ! e3_3^
-  "a matcher can be defined by a function with a function for the ko message"                                           ! e4^
-  "a matcher can be defined by a function with 2 functions for the messages"                                            ! e5^
-  "a matcher can be muted and will output no message"                                                                   ! e6^
-  "a matcher can be defined by a function returning a MatchResult"                                                      ! e7^
-  "a matcher for a seq of values can be defined by a function returning a MatchResult and used forall values"+
-    "meaning that the first failure will fail all"                                                                      ! e8^
-  "a matcher for a seq of values can be defined by a function returning a MatchResult and used foreach values"+
-    "meaning that all failures will be collected"                                                                       ! e9^
-  "a matcher can have a different failure message"                                                                      ! e10^
-                                                                                                                        end
 
   def e1 = new Exception("message")  must be_==("message") ^^ ((_:Exception).getMessage)
   def e1_1 = {

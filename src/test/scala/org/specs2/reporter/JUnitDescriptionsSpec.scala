@@ -4,53 +4,54 @@ import specification._
 import org.junit.runner._
 import ShowDescription._
 
-class JUnitDescriptionsSpec extends Specification with FragmentsSamples {  def is =
+class JUnitDescriptionsSpec extends Specification with FragmentsSamples {  def is = s2"""
+                                                                                         
+ A list of Fragments can be 'folded' into a tree of JUnit descriptions so that there is
+ a root Description object (the top 'suite') and children objects representing either
+ nested suites or Tests.
+                                                                                        
+ The list must be properly folded to a Descriptions tree                                                             
+                                                                                                                       
+   An example is folded into a root description for the spec class and a description of the example                 $e1
+   Two examples are folded as 2 children descriptions                                                               $e2
+   A text and two subordinates examples are folded as a node and 2 children descriptions                            $e3
+   2 texts and two subordinates examples each are folded as 2 nodes and with their own children descriptions        $e4
+   2 groups of examples separated by a paragraph are folded as 2 nodes and with their own children descriptions     $e5
+   2 groups of examples and a separate one are folded as 2 suites and one test case                                 $e6
+   An example then a text grouping 2 examples are folded as 1 suite, with one test and 1 suite with 2 test cases    $e7
+   An example description must not have newlines if executed from an IDE                                            $e8
+                                                                                                                       
+ The Descriptions objects must have proper details                                                                   
+   For as single Example                                                                                             
+     ${details (
+       description   = toDescription("e1" ! success),
+       className     = "org.specs2.reporter.JUnitDescriptionsSpec",
+       methodName    = "e1",
+       testClass     = classOf[JUnitDescriptionsSpec],
+       displayName   = "e1(org.specs2.reporter.JUnitDescriptionsSpec)",
+       isTest        = true
+     )}
+
+   For a Text followed by examples                                                                                 
+     For the text                                                                                                  
+       ${details (
+         description   = toDescription("t1" ^ "e1" ! success).getChildren.get(0),
+         className     = "t1",
+         methodName    = null,
+         testClass     = null,
+         displayName   = "t1",
+         isTest        = false
+       )}
+     For the first example                                                                                         
+       ${details (
+         description   = toDescription("t1" ^ "e1" ! success).getChildren.get(0).getChildren.get(0),
+         className     = "org.specs2.reporter.JUnitDescriptionsSpec",
+         methodName    = "t1::e1",
+         testClass     = classOf[JUnitDescriptionsSpec],
+         displayName   = "t1::e1(org.specs2.reporter.JUnitDescriptionsSpec)",
+         isTest        = true
+       )}
                                                                                                                         """
-  A list of Fragments can be 'folded' into a tree of JUnit descriptions so that there is
-  a root Description object (the top 'suite') and children objects representing either
-  nested suites or Tests.
-                                                                                                                        """^
-  "The list must be properly folded to a Descriptions tree"                                                             ^
-                                                                                                                        p^
-    "An example is folded into a root description for the spec class and a description of the example"                  ! e1^
-    "Two examples are folded as 2 children descriptions"                                                                ! e2^
-    "A text and two subordinates examples are folded as a node and 2 children descriptions"                             ! e3^
-    "2 texts and two subordinates examples each are folded as 2 nodes and with their own children descriptions"         ! e4^
-    "2 groups of examples separated by a paragraph are folded as 2 nodes and with their own children descriptions"      ! e5^
-    "2 groups of examples and a separate one are folded as 2 suites and one test case"                                  ! e6^
-    "An example then a text grouping 2 examples are folded as 1 suite, with one test and 1 suite with 2 test cases"     ! e7^
-    "An example description must not have newlines if executed from an IDE"                                             ! e8^
-                                                                                                                        p^
-  "The Descriptions objects must have proper details"                                                                   ^
-    "For as single Example"                                                                                             ^
-      details (
-        description   = toDescription("e1"! success),
-        className     = "org.specs2.reporter.JUnitDescriptionsSpec",
-        methodName    = "e1",
-        testClass     = classOf[JUnitDescriptionsSpec],
-        displayName   = "e1(org.specs2.reporter.JUnitDescriptionsSpec)",
-        isTest        = true
-      )                                                                                                                 ^p^
-    "For a Text followed by examples"                                                                                   ^
-      "For the text"                                                                                                    ^
-        details (
-          description   = toDescription("t1" ^ "e1"! success).getChildren.get(0),
-          className     = "t1",
-          methodName    = null,
-          testClass     = null,
-          displayName   = "t1",
-          isTest        = false
-        )                                                                                                               ^p^
-      "For the first example"                                                                                           ^
-        details (
-          description   = toDescription("t1" ^ "e1"! success).getChildren.get(0).getChildren.get(0),
-          className     = "org.specs2.reporter.JUnitDescriptionsSpec",
-          methodName    = "t1::e1",
-          testClass     = classOf[JUnitDescriptionsSpec],
-          displayName   = "t1::e1(org.specs2.reporter.JUnitDescriptionsSpec)",
-          isTest        = true
-        )                                                                                                               ^p^
-                                                                                                                        end
 
   def e1 = descriptionIs(ex1)(
   		   "JUnitDescriptionsSpec",

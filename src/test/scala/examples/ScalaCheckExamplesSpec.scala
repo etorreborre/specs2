@@ -11,11 +11,11 @@ import org.scalacheck._
  *
  * (`===` is an alias for `must_==`)
  */
-class ScalaCheckExamplesSpec extends Specification with ScalaCheck { def is =
+class ScalaCheckExamplesSpec extends Specification with ScalaCheck { def is = s2"""
 
-  "startsWith" ! prop { (a: String, b: String) => (a+b) must startWith(a) }                                             ^
-  "endsWith"   ! prop { (a: String, b: String) => (a+b) must endWith(b) }                                               ^
-  "substring"  ! prop { (a: String, b: String) => (a+b).substring(a.length) must_== b }                                 ^
-  "substring"  ! prop { (a: String, b: String, c: String) => (a+b+c).substring(a.length, a.length+b.length) === b }     ^
-                                                                                                                        end
+  startsWith ${ prop { (a: String, b: String) => (a+b) must startWith(a) } }
+  endsWith   ${ prop { (a: String, b: String) => (a+b) must endWith(b) } }
+  substring  ${ prop { (a: String, b: String) => (a+b).substring(a.length) must_== b } }
+  substring  ${ prop { (a: String, b: String, c: String) => (a+b+c).substring(a.length, a.length+b.length) === b } }
+                                                                                                                        """
 }

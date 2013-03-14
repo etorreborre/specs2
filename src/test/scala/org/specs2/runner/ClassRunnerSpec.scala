@@ -2,17 +2,15 @@ package org.specs2
 package runner
 
 import reporter._
-import mock.Mockito
-import specification.ExecutedResult
 
-class ClassRunnerSpec extends Specification { def is =
+class ClassRunnerSpec extends Specification { def is = s2"""
 
-  "Exit codes" ^
-    "When a run is finished the runner exits the system with an exit code" ^
-      "0 for a success"  ! e1^
-      "1 for a failure"  ! e2^
-      "100 for an error" ! e3^
-                          end
+  Exit codes
+    When a run is finished the runner exits the system with an exit code
+      0 for a success                                                          $e1
+      1 for a failure                                                          $e2
+      100 for an error                                                         $e3
+                                                                               """
 
   def e1 = runClass("OkSpecification") === 0
   def e2 = runClass("KoSpecification") === 1

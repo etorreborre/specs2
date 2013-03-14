@@ -5,8 +5,8 @@ import main._
 import reporter.DefaultSelection
 import matcher.ThrownExpectations
 
-class TagsSpec extends Specification with ThrownExpectations with Tags { def is = 
-                                                                                                                        """
+class TagsSpec extends Specification with ThrownExpectations with Tags { def is = s2"""
+
 A specification can be tagged with some meaningful names like "integration" or "accounts". Creating tags amounts to
 adding new fragments in the specification. Then those fragments are used to determine which other fragments must be executed
 during the specification execution. There are 2 types of tags for marking a single fragment or a full range of fragments:
@@ -18,44 +18,44 @@ during the specification execution. There are 2 types of tags for marking a sing
     until the next `Section(name1, name2)` tag
  * `Section(name1, name2,...)` marks the next fragments as tagged with the given names, until the next `Section(name1, name2)` tag
 
-                                                                                                                        """^
-                                                                                                                        p^
-  "A TaggedAs(t1) fragment can be created using the tag method in an Acceptance specification"                          ^
-    "then, when using exclude='t1'"                                                                                     ^
-      "the tagged fragment is excluded from the selection"                                                              ! tag1^
-       "and other fragments are kept"                                                                                   ! tag2^
-    "then, when using include='t1'"                                                                                     ^
-      "the tagged fragment is included in the selection"                                                                ! tag3^
-      "and other fragments are excluded"                                                                                ! tag4^
-      "a fragment with several names is also included"                                                                  ! tag5^
-      "a SpecStart is not excluded"                                                                                     ! tag6^
-      "a SpecEnd is not excluded"                                                                                       ! tag7^
-                                                                                                                        endp^
-  "A AsSection(t1) fragment can be created using the section method in an Acceptance specification"                     ^
-    "then, when using exclude='t1'"                                                                                     ^
-      "the tagged fragments just before and after the section tag are excluded from the selection"                      ! section1^
-      "and the fragments before the section are kept"                                                                   ! section2^
-      "if the section is closed with another AsSection fragment containing the tag t1"                                  ^
-        "the tagged fragments between the section tags are excluded"                                                    ! section3^
-        "and the fragments outside the section are kept"                                                                ! section4^ bt(2)^
-    "then, when using include='t1'"                                                                                     ^
-      "the tagged fragments just before and after the section tag are included in the selection"                        ! section5^
-      "and the fragments before the section are excluded"                                                               ! section6^
-      "if the section is closed with another AsSection fragment containing the tag t1"                                  ^
-        "the tagged fragments between the section tags are included"                                                    ! section7^
-        "and the fragments outside the section are excluded"                                                            ! section8^
-    "then, when using several tags in the section"                                                                      ^
-      "opening and closing a section with the same tags"                                                                ! section9^
-      "opening and closing a section with different tags"                                                               ! section10^
-                                                                                                                        endp^
-  "Tags can also be used in a mutable specification"                                                                    ^
-    "a tag call on the line before an example will mark it"                                                             ! mutabletags().e1^
-    "a tag call on the same line as an example will mark it"                                                            ! mutabletags().e2^
-    "a section call on the same line as a should block will mark all the examples"                                      ! mutabletags().e3^
-                                                                                                                        p^
-  "Tags can be specified from arguments"                                                                                ^
-    "from system properties"                                                                                            ! fromargs().e1^
-                                                                                                                        end
+                                                                                                                        
+                                                                                                                        
+ A TaggedAs(t1) fragment can be created using the tag method in an Acceptance specification
+   then, when using exclude='t1'
+     the tagged fragment is excluded from the selection                                             ${tag1}
+      and other fragments are kept                                                                  ${tag2}
+   then, when using include='t1'
+     the tagged fragment is included in the selection                                               ${tag3}
+     and other fragments are excluded                                                               ${tag4}
+     a fragment with several names is also included                                                 ${tag5}
+     a SpecStart is not excluded                                                                    ${tag6}
+     a SpecEnd is not excluded                                                                      ${tag7}
+
+ A AsSection(t1) fragment can be created using the section method in an Acceptance specification
+   then, when using exclude='t1'
+     the tagged fragments just before and after the section tag are excluded from the selection     ${section1}
+     and the fragments before the section are kept                                                  ${section2}
+     if the section is closed with another AsSection fragment containing the tag t1
+       the tagged fragments between the section tags are excluded                                   ${section3}
+       and the fragments outside the section are kept                                               ${section4}
+   then, when using include='t1'
+     the tagged fragments just before and after the section tag are included in the selection       ${section5}
+     and the fragments before the section are excluded                                              ${section6}
+     if the section is closed with another AsSection fragment containing the tag t1
+       the tagged fragments between the section tags are included                                   ${section7}
+       and the fragments outside the section are excluded                                           ${section8}
+   then, when using several tags in the section
+     opening and closing a section with the same tags                                               ${section9}
+     opening and closing a section with different tags                                              ${section10}
+
+ Tags can also be used in a mutable specification
+   a tag call on the line before an example will mark it                                            ${mutabletags().e1}
+   a tag call on the same line as an example will mark it                                           ${mutabletags().e2}
+   a section call on the same line as a should block will mark all the examples                     ${mutabletags().e3}
+
+ Tags can be specified from arguments
+   from system properties                                                                           ${fromargs().e1}
+                                                                                                    """
 
   import DefaultSelection._
   import Tags._

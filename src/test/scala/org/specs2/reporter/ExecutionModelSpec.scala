@@ -5,12 +5,12 @@ import io._
 import specification._
 import execute.Executable
 
-class ExecutionModelSpec extends Specification with ScalaCheck with Groups { def is =
+class ExecutionModelSpec extends Specification with ScalaCheck with Groups { def is = s2"""
 
-  "A sequential specification must always be reported with a strict order of its fragments"                             ! g1().e1^
-  "A concurrent specification must have at least one execution where the order is changed"                              ! g1().e2^
-  "A Step must always be executed after the preceding examples "                                                        ! g1().e3^
-                                                                                                                        end
+  A sequential specification must always be reported with a strict order of its fragments                   ${g1().e1}
+  A concurrent specification must have at least one execution where the order is changed                    ${g1().e2}
+  A Step must always be executed after the preceding examples                                               ${g1().e3}
+                                                                                                                        """
 
   implicit val timedSpec = SpecificationData.arbTimedSpecification(50)
   implicit val arguments = args.store(never=true)

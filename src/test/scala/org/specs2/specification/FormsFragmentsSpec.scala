@@ -2,16 +2,16 @@ package org.specs2
 package specification
 import form._
 
-class FormsFragmentsSpec extends Specification with Forms { def is =
+class FormsFragmentsSpec extends Specification with Forms { def is = s2"""
   
-  "A form can be added as a Fragment in a specification"                                                                ^
-    "creating a new Text Fragment"                                                                                      ! frags.e1_1^
-    "showing all expected values"                                                                                       ! frags.e1_2^
-                                                                                                                        p^
-  "It can also be added as the body of an example"                                                                      ^
-    "returning success if the form is a success"                                                                        ! frags.e2 ^
-    "returning a failure if one property in the  form fails"                                                            ! frags.e3 ^
-                                                                                                                        end
+ A form can be added as a Fragment in a specification
+   creating a new Text Fragment                                                      ${frags.e1_1}
+   showing all expected values                                                       ${frags.e1_2}
+
+ It can also be added as the body of an example
+   returning success if the form is a success                                        ${frags.e2}
+   returning a failure if one property in the  form fails                            ${frags.e3}
+                                                                                     """
                                                                                
   object frags {
     trait Customer {

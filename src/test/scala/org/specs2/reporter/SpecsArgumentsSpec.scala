@@ -11,8 +11,7 @@ import specification._
 import SpecsArguments._
 import FragmentSpecsArgumentsReducer._
 
-class SpecsArgumentsSpec extends Specification with InternalScalazMatchers with ArbitraryFragments { def is =
-                                                                                                                        """
+class SpecsArgumentsSpec extends Specification with InternalScalazMatchers with ArbitraryFragments { def is = s2"""
   Each Specification provides arguments which can be used to influence its execution and reporting.
   However the scope of the these arguments is restricted to the Fragments belonging to that Specification only.
   Knowing that it is possible to include Specifications into one another, it is necessary to be able to compute
@@ -26,18 +25,18 @@ class SpecsArgumentsSpec extends Specification with InternalScalazMatchers with 
   fragments get the "parent" arguments overriden with their own arguments values, until the included specification
   ends.
 
-  Let's see a few examples                                                                                              """^
-                                                                                                                        p^
- "On a simple specification the arguments must be propagated to each fragment"                                          ! simple().e1^
- "The arguments of a parent specification must be propagated to a nested one"                                           ! nested().e1^
- "The arguments of the nested specification must override the parent ones"                                              ! nested().e2^
- "The specification name of the nested specification must override the parent one"                                      ! nested().e3^
-                                                                                                                        p^
- "The SpecsArguments monoid must respect the Monoid laws"                                                               !
-    SpecsArgumentsMonoid[Fragment].isMonoid                                                                             ^
- "The SpecName monoid must respect the Monoid laws"                                                                     !
-   SpecName.SpecNameMonoid.isMonoid                                                                                     ^
-                                                                                                                        end
+  Let's see a few examples                                                                                              
+                                                                                                                        
+ On a simple specification the arguments must be propagated to each fragment                                            ${simple().e1}
+ The arguments of a parent specification must be propagated to a nested one                                             ${nested().e1}
+ The arguments of the nested specification must override the parent ones                                                ${nested().e2}
+ The specification name of the nested specification must override the parent one                                        ${nested().e3}
+                                                                                                                        
+ The SpecsArguments monoid must respect the Monoid laws                                                               
+   ${SpecsArgumentsMonoid[Fragment].isMonoid}
+ The SpecName monoid must respect the Monoid laws                                                                     
+   ${SpecName.SpecNameMonoid.isMonoid}
+                                                                                                                        """
 
   case class simple() {
     val parent = spec(xonly ^ "parent".title ^ "t1" ^ "e1" ! success)

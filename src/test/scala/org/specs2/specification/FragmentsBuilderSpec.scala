@@ -5,8 +5,8 @@ import text._
 import execute.Skipped
 import matcher._
 
-class FragmentsBuilderSpec extends Specification with ResultMatchers with Groups with GivenWhenThen {  def is =
-                                                                                                                        s2"""
+class FragmentsBuilderSpec extends Specification with ResultMatchers with Groups with GivenWhenThen {  def is = s2"""
+
  In a Specification, the `contents` variable stores an instance of the Fragments class,
  which is merely a list of fragments. Those fragments are:
 
@@ -82,7 +82,6 @@ Other elements
  A Step can be created with an action
    executing ok                                                                                            ${g4().e7}
    throwing an exception                                                                                   ${g4().e8}
-
                                                                                                            """
 
   "start and end" - new g1 with specifications {

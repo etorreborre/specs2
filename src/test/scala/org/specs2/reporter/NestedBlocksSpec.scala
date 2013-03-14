@@ -4,17 +4,16 @@ import NestedBlocks._
 import specification._
 import Fragments._
 
-class NestedBlocksSpec extends Specification { def is =
-                                                                                                          """
+class NestedBlocksSpec extends Specification { def is = s2"""
   associateStartEnd takes a seq of blocks and associating start and end blocks with a function:
      f: (start, end) => (updatedStart, updatedEnd)
   
   It is used to copy the computed statistics on ExecutedSpecEnd fragments to the corresponding 
   ExecutedSpecStart fragments.
-                                                                                                          """ ! e1^
-  "It works also when several specs are included in a parent one"                                             ! e2^
-  "It works also when several specs are included in a parent one"                                             ! e3^
-                                                                                                              end
+                                                                                                         $e1
+  It works also when several specs are included in a parent one                                          $e2
+  It works also when several specs are included in a parent one                                          $e3
+                                                                                                                        """
 
   val subspec  = new Specification { def is = "sub1".title ^ "e1-1" ! success }
   val subspec2 = new Specification { def is = "sub2".title ^ "e2-1" ! success }

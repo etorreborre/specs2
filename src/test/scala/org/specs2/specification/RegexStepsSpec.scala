@@ -6,54 +6,54 @@ import io.Output
 import reporter.SilentConsoleReporter
 import main.Arguments
 
-class RegexStepsSpec extends Specification with ResultMatchers with DataTables with Grouped with GivenWhenThen { def is =
+class RegexStepsSpec extends Specification with ResultMatchers with DataTables with Grouped with GivenWhenThen { def is = s2"""
 
-  "Given/When/Then specifications can be written by adding extractors after Text fragments"                             ^
-    "A Given[T] extractor extracts the text from the previous Text fragment"                                            ^
-      "returning an object having the type T"                                                                           ! g1.e1^
-      "or a Failure if any expectation fails"                                                                           ! g1.e2^
-      "or a Skipped if any Skipped is thrown"                                                                           ! g1.e3^
-      "or a Failure if the values could not be extracted"                                                               ! g1.e4^
-      "or an Error if any exception occurred"                                                                           ! g1.e5^
-                                                                                                                        p^
-    "A When[T,S] extractor extracts the text from the previous Text fragment, combines it with the current State"       ^
-      "returning an object having the type S"                                                                           ! g2.e1^
-                                                                                                                        p^
-    "A Then[T] extractor extracts the text from the previous Text fragment, and combines it with the current State"     ^
-      "returning a Result"                                                                                              ! g3.e1^
-                                                                                                                        p^
-    "A Given[Y] extractor can be used as a Given[X] step if Y <: X, with an implicit conversion"                        ! g4.e1^
-    "A Then[X] extractor can be used as a Then[Y] step if Y <: X, with an implicit conversion"                          ! g4.e2^
-    "A When[P, Q] extractor can be used as a When[R, S] step if P <: R and Q >: S, with an implicit conversion"         ! g4.e3^
-                                                                                                                        endp^
-    "Variables delimiters must be removed from descriptions"                                                            ! g5.e1^ endp^
-    "Two Given steps can be followed by a When step where the input of the When step pairs the Given outputs"           ! g6.e1^ endp^
-    "Two Given steps can be followed by a Then step where the input of the Then step pairs the Given outputs"           ! g6.e2^ endp^
-    "Several Given steps can be followed by a When step where the input of the When step tuples the Given outputs"      ! g6.e3^
-                                                                                                                        endp^
-    "Factory methods can be used to create Given/When/Then steps from simple functions"                                 ^
-      "Given"                                                                                                           ^
-        "with a function"                                                                                               ! g7.e1^
-        "with a function, using the full string when there's no delimited variable"                                     ! g7.e2^
-        "with a regular expression for parsing the whole text and a function"                                           ! g7.e3^
-        "with a regular expression for grouping elements and a function"                                                ! g7.e4^
-        "with a function returning a MatchResult[T]"                                                                    ! g7.e5^
-                                                                                                                        endp^
-      "When"                                                                                                            ^
-        "with a function"                                                                                               ! g8.e1^
-        "with a regular expression for parsing the whole text and a function"                                           ! g8.e2^
-        "with a regular expression for grouping elements and a function"                                                ! g8.e3^
-        "with a function returning a MatchResult[T]"                                                                    ! g8.e4^
-                                                                                                                        endp^
-      "Then"                                                                                                            ^
-        "with a function"                                                                                               ! g9.e1^
-        "with a regular expression for parsing the whole text and a function"                                           ! g9.e2^
-        "with a regular expression for grouping elements and a function"                                                ! g9.e3^
-                                                                                                                        endp^
-    "A G/W/T specification must have a title"                                                                           ! g10.e1^
-    "A G/W/T specification can use Before/After Example traits"                                                         ! g11.e1^
-    "A G/W/T specification can use simple contexts"                                                                     ! g11.e2^
-                                                                                                                        end
+ Given/When/Then specifications can be written by adding extractors after Text fragments
+   A Given[T] extractor extracts the text from the previous Text fragment
+     returning an object having the type T                                                                              ${g1.e1}
+     or a Failure if any expectation fails                                                                              ${g1.e2}
+     or a Skipped if any Skipped is thrown                                                                              ${g1.e3}
+     or a Failure if the values could not be extracted                                                                  ${g1.e4}
+     or an Error if any exception occurred                                                                              ${g1.e5}
+
+   A When[T,S] extractor extracts the text from the previous Text fragment, combines it with the current State
+     returning an object having the type S                                                                              ${g2.e1}
+
+   A Then[T] extractor extracts the text from the previous Text fragment, and combines it with the current State
+     returning a Result                                                                                                 ${g3.e1}
+
+   A Given[Y] extractor can be used as a Given[X] step if Y <: X, with an implicit conversion                           ${g4.e1}
+   A Then[X] extractor can be used as a Then[Y] step if Y <: X, with an implicit conversion                             ${g4.e2}
+   A When[P, Q] extractor can be used as a When[R, S] step if P <: R and Q >: S, with an implicit conversion            ${g4.e3}
+
+   Variables delimiters must be removed from descriptions                                                               ${g5.e1}
+   Two Given steps can be followed by a When step where the input of the When step pairs the Given outputs              ${g6.e1}
+   Two Given steps can be followed by a Then step where the input of the Then step pairs the Given outputs              ${g6.e2}
+   Several Given steps can be followed by a When step where the input of the When step tuples the Given outputs         ${g6.e3}
+
+   Factory methods can be used to create Given/When/Then steps from simple functions
+     Given
+       with a function                                                                                                  ${g7.e1}
+       with a function, using the full string when there's no delimited variable                                        ${g7.e2}
+       with a regular expression for parsing the whole text and a function                                              ${g7.e3}
+       with a regular expression for grouping elements and a function                                                   ${g7.e4}
+       with a function returning a MatchResult[T]                                                                       ${g7.e5}
+
+     When
+       with a function                                                                                                  ${g8.e1}
+       with a regular expression for parsing the whole text and a function                                              ${g8.e2}
+       with a regular expression for grouping elements and a function                                                   ${g8.e3}
+       with a function returning a MatchResult[T]                                                                       ${g8.e4}
+
+     Then
+       with a function                                                                                                  ${g9.e1}
+       with a regular expression for parsing the whole text and a function                                              ${g9.e2}
+       with a regular expression for grouping elements and a function                                                   ${g9.e3}
+
+   A G/W/T specification must have a title                                                                              ${g10.e1}
+   A G/W/T specification can use Before/After Example traits                                                            ${g11.e1}
+   A G/W/T specification can use simple contexts                                                                        ${g11.e2}
+                                                                                                                        """
 
 
   "given" - new g1 {
