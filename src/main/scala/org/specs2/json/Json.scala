@@ -17,14 +17,17 @@ trait Json {
    * otherwise it will not be thread (see issue #70)
    * @return Some(json) if the string is parsable as a JSON document
    */
-  def parse(s: String): Option[JSONType] =
-    new Parser {
-    def parseRaw(input : String) : Option[JSONType] =
-      phrase(root)(new lexical.Scanner(input)) match {
-        case Success(result, _) => Some(result)
-        case _ => None
+  def parse(s: String): Option[JSONType] = {
+    val parser = new Parser {
+      def parseRaw(input : String) : Option[JSONType] =
+        phrase(root)(new lexical.Scanner(input)) match {
+          case Success(result, _) => Some(result)
+          case _ => None
       }
-  }.parseRaw(s)
+    }
+    // give the parser a chance to parse singly-quoted json
+    parser.parseRaw(s).orElse(if (s.contains("'")) parser.parseRaw(s.replace("'", "\"")) else None)
+  }
 
   /**
    * @return the list of pairs in the json document where the value is a terminal type
