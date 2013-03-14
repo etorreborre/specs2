@@ -39,12 +39,7 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
     }
   }
   implicit def anyAsResultIsSpecPart(r: =>Function0Result): SpecPart = new SpecPart {
-    def appendTo(text: String, expression: String = "") = {
-      val texts = text.split("\n")
-      val first = texts.dropRight(1).mkString("", "\n", "\n")
-
-      first ^ exampleFactory.newExample(texts.last, AsResult(r))
-    }
+    def appendTo(text: String, expression: String = "") = asResultIsSpecPart(AsResult(r)).appendTo(text, expression)
   }
   implicit def formIsSpecPart(f: =>Form): SpecPart = new SpecPart {
     def appendTo(text: String, expression: String = "") = text ^ Fragments.createList(Forms.formsAreExamples(f.executeForm))
