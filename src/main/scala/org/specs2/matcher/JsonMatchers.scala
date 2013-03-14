@@ -31,10 +31,10 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersLowImplicits { oute
   trait ToJsonValueSpec[T] {
     def toJsonValueSpec(t: T): JsonValueSpec
   }
-  implicit val regexToJSonValueSpec: ToJsonValueSpec[Regex] = new ToJsonValueSpec[Regex] {
+  implicit def regexToJSonValueSpec: ToJsonValueSpec[Regex] = new ToJsonValueSpec[Regex] {
     def toJsonValueSpec(r: Regex): JsonValueSpec = r
   }
-  implicit val stringMatcherToJSonValueSpec: ToJsonValueSpec[Matcher[String]] = new ToJsonValueSpec[Matcher[String]] {
+  implicit def stringMatcherToJSonValueSpec: ToJsonValueSpec[Matcher[String]] = new ToJsonValueSpec[Matcher[String]] {
     def toJsonValueSpec(m: Matcher[String]): JsonValueSpec = m
   }
   object ToJsonValueSpec {
