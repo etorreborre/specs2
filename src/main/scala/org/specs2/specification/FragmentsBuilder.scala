@@ -178,10 +178,12 @@ class FragmentsFragment(fs: =>Fragments)(implicit exampleFactory: ExampleFactory
   def ^[T](step: Given[T]): PreStep[T] = {
     val text = fragments.fragments.collect { case t: Text => t.t }.lastOption.getOrElse("A Text must precede a Given object!")
     lazy val extracted = step.extractContext(text)
-    val stripped = new FragmentsFragment(Fragments.create(fragments.fragments.updateLast(step.strip):_*))
+    val stripped = start(fragments.specStart +: fragments.middle.updateLast(step.strip) :+ fragments.specEnd:_*)
+
     new PreStep(() => extracted, stripped ^ Step.fromEither(extracted))
   }
 
+  private def start(fs: Fragment*) = new FragmentsFragment(Fragments.create(fs:_*))
 }
 
 

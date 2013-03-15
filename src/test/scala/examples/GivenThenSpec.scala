@@ -14,15 +14,12 @@ class GivenThenSpec extends Specification with GivenWhenThen { def is =
     "And it should be >: ${0}"                                 ^ greaterThan^
                                                                end
 
-  object number1 extends Given[Addition] {
-    def extract(text: String): Addition = Addition(extract1(text).toInt, 2)
-  }
-  object adding2 extends Then[Addition] {
-    def extract(addition: Addition, text: String) = addition.calculate must_== extract1(text).toInt
-  }
-  object greaterThan extends Then[Addition] {
-    def extract(addition: Addition, text: String) = addition.calculate must be_>=(extract1(text).toInt)
-  }
+  import RegexStep._
+
+  val number1: Given[Addition]    = (text: String) => Addition(extract1(text).toInt, 2)
+  val adding2: Then[Addition]     = (addition: Addition) => (text: String) => { addition.calculate must_== extract1(text).toInt }
+  val greaterThan: Then[Addition] = (addition: Addition) => (text: String) => { addition.calculate must be_>=(extract1(text).toInt) }
+
   case class Addition(n1: Int, n2: Int) {
     def calculate: Int = n1 + n2
   }
