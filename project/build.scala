@@ -42,7 +42,7 @@ object build extends Build {
     name := "specs2",
     organization := "org.specs2",
     specs2Version in GlobalScope <<= version,
-    scalaVersion := "2.10.0")
+    scalaVersion := "2.10.1")
 
   lazy val dependenciesSettings: Seq[Settings] = Seq(
     libraryDependencies <<= scalaVersion { scalaVersion => Seq(
