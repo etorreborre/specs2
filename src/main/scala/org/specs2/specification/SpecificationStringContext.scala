@@ -24,10 +24,12 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
       val texts = text.split("\n")
       val first = texts.dropRight(1).mkString("", "\n", "\n")
       val autoExample = texts.last.trim.isEmpty
-      val indent = texts.last.takeWhile(Seq(' ', '\n').contains).mkString
+      val spaces = texts.last.takeWhile(Seq(' ', '\n').contains)
+      // drop the last 2 whitespace to compensate for the status sign on the example
+      val indent = if (autoExample) spaces.mkString else spaces.dropRight(2).mkString
 
-      val description = if (autoExample) CodeMarkup(indent+expression) else NoMarkup(texts.last)
-      val before = if (autoExample) first else (first + indent)
+      val description = if (autoExample) CodeMarkup(expression.trim) else NoMarkup(texts.last.trim)
+      val before = first + indent
 
       implicitly[AsResult[R]] match {
         case v : AnyValueAsResult[_] => AsResult(r) match {

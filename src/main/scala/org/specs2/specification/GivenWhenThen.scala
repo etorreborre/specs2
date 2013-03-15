@@ -6,8 +6,9 @@ import main.{ArgumentsArgs, Arguments}
 import StandardFragments.{Backtab, Tab, Br, End}
 import internal.scalaz.Scalaz._
 import control.{Functions, ImplicitParameters}
+import control.Exceptions._
 import data.TuplesToSeq
-import matcher.{Expectations, MatchResult}
+import matcher.MatchResult
 
 /**
  * This trait provides building blocks to create steps and examples from regular expression.
@@ -72,31 +73,45 @@ trait GivenWhenThen extends RegexStepsFactory with TuplesToSeq with FragmentsBui
    *
    *  - the type safety between steps is lost
    *  - the restrictions on the order of given/when/then is lost
-   *  - the regex that is used to capture the parameters is #{...}
    */
-  private var gwt: Seq[Any] = Seq()
+  private var gwt: Seq[Either[Result, Any]] = Seq()
   private var thenSequence = false
-  protected val INTERPOLATED_REGEX = """\#\{([^}]+)\}"""
+  private def makeError: PartialFunction[Throwable, Result] = { case e: Throwable => Error(e) }
+  private def executionIsOk = gwt.headOption.forall(_.isRight)
 
   implicit def givenIsSpecPart[T](g: Given[T]): SpecPart = new SpecPart {
     def appendTo(text: String, expression: String = "") =  {
-      gwt = (if (thenSequence) Seq() else gwt) :+ g.withRegex(group = INTERPOLATED_REGEX).extract(text)
-      if (thenSequence) thenSequence = false
-      g.strip(text)
+      g.strip(text) ^
+        Step {
+          gwt = (if (thenSequence) Seq() else gwt) :+ trye(g.extract(text))(makeError)
+        if (thenSequence) thenSequence = false
+      }
     }
   }
   implicit def whenIsSpecPart[T, U](w: When[T, U]): SpecPart = new SpecPart {
-    def appendTo(text: String, expression: String = "") =  {
-      gwt = if (gwt.size > 1) Seq(w.withRegex(group = INTERPOLATED_REGEX).extract(gwt.asInstanceOf[T], text))
-      else              gwt.headOption.map(g => w.withRegex(group = INTERPOLATED_REGEX).extract(g.asInstanceOf[T], text)).toSeq
-      w.strip(text)
+    def appendTo(text: String, expression: String = "") = {
+      w.strip(text) ^
+      Step {
+        gwt = if (executionIsOk) {
+          if (gwt.size > 1) Seq(trye(w.extract(gwt.map(_.right.toOption.get).asInstanceOf[T], text))(makeError))
+          else              gwt.headOption.flatMap(_.right.toOption.map(v => trye(w.extract(v.asInstanceOf[T], text))(makeError))).toSeq
+        } else gwt
+      }
     }
   }
   implicit def thenIsSpecPart[T](t: Then[T]): SpecPart = new SpecPart {
     def appendTo(text: String, expression: String = "") =  {
-      val result = gwt.lastOption.map(w => t.withRegex(group = INTERPOLATED_REGEX).extract(w.asInstanceOf[T], text))
+      lazy val result =
+        if (executionIsOk) gwt.lastOption.map(w => trye(t.extract(w.asInstanceOf[T], text))(makeError))
+        else               gwt.lastOption.map(_.left)
       thenSequence = true
-      "\n " ^ t.strip(text.trim) ! result.getOrElse(Failure("Can not call a Then step if there is no preceding Given step"))
+      val texts = text.split("\n")
+      val first = texts.dropRight(1).mkString("", "\n", "\n")
+      val spaces = texts.last.takeWhile(Seq(' ', '\n').contains)
+      val indent = spaces.dropRight(2).mkString
+      val before = first + indent
+
+      before ^ t.strip(text.trim) ! result.getOrElse(Failure("Can not call a Then step if there is no preceding Given step"))
     }
   }
 
