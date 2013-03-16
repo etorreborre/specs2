@@ -118,23 +118,31 @@ trait XmlBeHaveMatchers { outer: XmlBaseMatchers =>
 /**
  * Matcher for equalIgnoreSpace comparison, ignoring the nodes order
  */   
-class EqualIgnoringSpaceMatcher(node: Seq[Node]) extends Matcher[Seq[Node]]  { 
+class EqualIgnoringSpaceMatcher(node: Seq[Node]) extends Matcher[Seq[Node]] with XmlMatcherKoMessage {
   def apply[S <: Seq[Node]](n: Expectable[S]) = {
+
     result(isEqualIgnoringSpace(node.toList, n.value.toList),
            n.description + " is equal to " + q(node),
-           n.description + " is not equal to " + q(node), n)
+           koMessage(n, node), n)
   }
   def ordered = new EqualIgnoringSpaceMatcherOrdered(node)
 }
 /**
  * Matcher for equalIgnoreSpace comparison, considering the node order
  */   
-class EqualIgnoringSpaceMatcherOrdered(node: Seq[Node]) extends Matcher[Seq[Node]]  { 
+class EqualIgnoringSpaceMatcherOrdered(node: Seq[Node]) extends Matcher[Seq[Node]] with XmlMatcherKoMessage {
   def apply[S <: Seq[Node]](n: Expectable[S]) = {
     result(isEqualIgnoringSpaceOrdered(node.toList, n.value.toList),
            n.description + " is equal to " + q(node),
-           n.description + " is not equal to " + q(node), n)
+           koMessage(n, node), n)
   }
+}
+
+trait XmlMatcherKoMessage {
+  def koMessage[S <: Seq[Node]](n: Expectable[S], node: Seq[Node]) =
+    (n.description + " is not equal to " + q(node)) +
+      (if (n.value.toString() == node.toString)
+        "\nThe nodes have the same representation but contain different elements like <n>{\"a\"} b</n> (which is <n>Text(\"a\") b</n>) and <n>a b</n>" else "")
 }
 
 /**
