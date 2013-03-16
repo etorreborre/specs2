@@ -102,8 +102,8 @@ trait GivenWhenThen extends RegexStepsFactory with TuplesToSeq with FragmentsBui
   implicit def thenIsSpecPart[T](t: Then[T]): SpecPart = new SpecPart {
     def appendTo(text: String, expression: String = "") =  {
       lazy val result =
-        if (executionIsOk) gwt.lastOption.map(w => trye(t.extract(w.asInstanceOf[T], text))(makeError))
-        else               gwt.lastOption.map(_.left)
+        if (executionIsOk) gwt.lastOption.map(w => trye(t.extract(w.right.toOption.get.asInstanceOf[T], text))(makeError))
+        else               gwt.lastOption
       thenSequence = true
       val texts = text.split("\n")
       val first = texts.dropRight(1).mkString("", "\n", "\n")
@@ -111,7 +111,12 @@ trait GivenWhenThen extends RegexStepsFactory with TuplesToSeq with FragmentsBui
       val indent = spaces.dropRight(2).mkString
       val before = first + indent
 
-      before ^ t.strip(text.trim) ! result.getOrElse(Failure("Can not call a Then step if there is no preceding Given step"))
+      before ^ t.strip(text.trim) ! {
+        result.getOrElse(Left(Failure("Can not call a Then step if there is no preceding Given step"))) match {
+          case Right(r) => r
+          case Left(e)  => e
+        }
+      }
     }
   }
 

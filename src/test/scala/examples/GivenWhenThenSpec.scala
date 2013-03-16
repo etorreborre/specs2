@@ -46,23 +46,23 @@ class GivenWhenThenSpec extends Specification with GivenWhenThen { def is =
 class GivenWhenThenInterpolatedSpec extends Specification with GivenWhenThen { def is = s2"""
 
  A given-when-then example for a calculator
-   Given the following number: #{1}                         ${aNumber}
-   And a second number: #{2}                                ${aNumber}
-   And a third number: #{6}                                 ${aNumber}
-   When I use this operator: #{+}                           ${operator}
-   Then I should get: #{9}                                  ${result}
-   And it should be >: #{0}                                 ${greaterThan}
+   Given the following number: #{1}                                       $aNumber
+   And a second number: #{2}                                              $aNumber
+   And a third number: #{6}                                               $aNumber
+   When I use this operator: #{+}                                         $operator
+   Then I should get: #{9}                                                $result
+   And it should be >: #{0}                                               $greaterThan
 
  Now with the multiplication
-   Given the following number: #{4}                         ${aNumber}
-   And a second number: #{5}                                ${aNumber}
-   And a third number: #{6}                                 ${aNumber}
-   When I use this operator: #{*}                           ${operator}
-   Then I should get: #{120}                                ${result}
-   And it should be >: #{10}                                ${greaterThan}
-   But not should be >: #{500}                              ${lowerThan}
+   Given the following number: #{4}                                       $aNumber
+   And a second number: #{5}                                              $aNumber
+   And a third number: #{6}                                               $aNumber
+   When I use this operator: #{*}                                         $operator
+   Then I should get: #{120}                                              $result
+   And it should be >: #{10}                                              $greaterThan
+   But not should be >: #{500}                                            $lowerThan
+                                                                          """
 
-    """
   val aNumber: Given[Int] = (_:String).toInt
 
   // when there are too many Given[T, S] consecutive steps, it is possible to follow them with a When[Seq[T], S]
