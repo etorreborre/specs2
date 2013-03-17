@@ -101,10 +101,11 @@ trait GivenWhenThen extends RegexStepsFactory with TuplesToSeq with FragmentsBui
   }
   implicit def thenIsSpecPart[T](t: Then[T]): SpecPart = new SpecPart {
     def appendTo(text: String, expression: String = "") =  {
-      lazy val result =
+      lazy val result = {
+        thenSequence = true
         if (executionIsOk) gwt.lastOption.map(w => trye(t.extract(w.right.get.asInstanceOf[T], text))(makeError))
         else               gwt.lastOption
-      thenSequence = true
+      }
       val texts = text.split("\n")
       val first = texts.dropRight(1).mkString("", "\n", "\n")
       val spaces = texts.last.takeWhile(Seq(' ', '\n').contains)

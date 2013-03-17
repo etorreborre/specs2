@@ -15,7 +15,7 @@ import text.{CodeMarkup, NoMarkup}
  */
 trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
 
-  implicit def stringIsSpecPart(s: String): SpecPart = new SpecPart {
+  implicit def stringIsSpecPart(s: =>String): SpecPart = new SpecPart {
     def appendTo(text: String, expression: String = "") =
       asResultIsSpecPart(s)(new AnyValueAsResult[String]).appendTo(text, expression)
   }

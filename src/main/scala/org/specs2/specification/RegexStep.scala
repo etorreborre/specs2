@@ -73,8 +73,8 @@ object RegexStep {
 
   /** extract all groups and return a list of strings */
   def extractAll(text: String, full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) =
-    if (full.toString.isEmpty) group.findAllIn(text).matchData.collect { case Regex.Groups(g) => g }.toList
-    else                       full.unapplySeq(text).get
+    if (full.toString.isEmpty) group.findAllIn(text.trim).matchData.collect { case Regex.Groups(g) => g }.toList
+    else                       full.unapplySeq(text.trim).getOrElse(throw new FailureException(Failure(s"could not extract '$full' from $text")))
 
   def strip(text: String): String = strip(text, "".r, DEFAULT_REGEX.r)
   /**

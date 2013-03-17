@@ -43,7 +43,7 @@ class GivenWhenThenSpec extends Specification with GivenWhenThen { def is =
   }
 }
 
-class GivenWhenThenInterpolatedSpec extends Specification with GivenWhenThen { def is = s2"""
+class GivenWhenThenInterpolatedSpec extends Specification with GivenWhenThen { def is = sequential ^ s2"""
 
  A given-when-then example for a calculator
    Given the following number: 1                                       $aNumber
@@ -60,10 +60,10 @@ class GivenWhenThenInterpolatedSpec extends Specification with GivenWhenThen { d
    When I use this operator: *                                         $operator
    Then I should get: 120                                              $result
    And it should be >: 10                                              $greaterThan
-   But not should be >: 50                                             $lowerThan
+   But not should be >: 150                                            $lowerThan
                                                                        """
 
-  val readInt = groupAs("\\d")
+  val readInt = groupAs("\\d+")
   val readOperator = readAs(".*: (.)$")
   val aNumber: Given[Int] = readInt and { s: String => s.toInt }
 
@@ -83,4 +83,5 @@ class GivenWhenThenInterpolatedSpec extends Specification with GivenWhenThen { d
   case class Operation(numbers: Seq[Int], operator: String) {
     def calculate: Int = if (operator == "+") numbers.sum else numbers.product
   }
+
 }
