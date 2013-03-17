@@ -206,6 +206,8 @@ object Result {
     }.setExpectationsNb(m1.expectationsNb + m2.expectationsNb)
   }
 
+  /** the result of a side-effecting block */
+  def unit(u: =>Unit) = ResultExecution.execute(u)(_ => Success())
 }
 
 trait Results {
@@ -227,7 +229,7 @@ trait AsResult[T] {
   def asResult(t: =>T): Result
 }
 
-object AsResult extends AsResultLowerImplicits {
+object AsResult {
   /** implicit typeclass instance to create examples from Results */
   implicit def resultAsResult[R <: Result]: AsResult[R] = new AsResult[R] {
     def asResult(t: =>R): Result = ResultExecution.execute(t)
@@ -244,13 +246,6 @@ object AsResult extends AsResultLowerImplicits {
   implicit def asResult[R <% Result]: AsResult[R] = new AsResult[R] {
     def asResult(r: =>R): Result = ResultExecution.execute(r)
   }
-}
-
-trait AsResultLowerImplicits {
-  // even a String can be evaluated as a Result
-  // in that case this will succeed only if the expression doesn't throw an exception
-  // then the value will go to the "Decorator" part of a decorated result
-  implicit def anyToAsResult[T]: AsResult[T] = new AnyValueAsResult[T]
 }
 
 /**

@@ -30,9 +30,6 @@ class FromSourceSpec extends Specification with FromSource with Tags {
   "If the specification doesn't end with an end fragment, the last example description should be found" in {
     checkExamples(spec3)
   }
-  "If the mutable specification has a single expectation in a should block" in {
-    checkExamples(spec4)
-  }
   "If there is a function call to a ScalaCheck example, the example description should be found" in {
     examples(scalaCheckSpec)(0).desc.toString must contain("a call to an example")
   }
@@ -61,7 +58,6 @@ class FromSourceSpec extends Specification with FromSource with Tags {
   lazy val spec                = new UserFromSourceSpecification
   lazy val spec2               = new SpecificationWithNoStartingText
   lazy val spec3               = new SpecificationWithNoStartingTextAndNoEnd
-  lazy val spec4               = new SpecificationWithAShouldBlockAndExamples
   lazy val scalaCheckSpec      = new UserFromSourceScalaCheckSpecification
   lazy val mutableSpec         = new MutableSpecificationAutoExamples
   lazy val acceptanceJUnitSpec = new AcceptanceSpecificationWithJUnit

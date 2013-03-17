@@ -16,7 +16,11 @@ import control.Functions._
  * is created.
  *
  */
-trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFactory with SideEffectingCreationPaths with ImplicitParameters {
+trait FragmentsBuilder extends specification.FragmentsBuilder
+  with ExamplesFactory
+  with SideEffectingCreationPaths
+  with ImplicitParameters {
+
   /** local mutable contents of the specification */
   protected[mutable] var specFragments: Fragments = new Fragments()
   protected[specs2] def fragments: Fragments = { replay; specFragments }
@@ -43,8 +47,8 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
     def should(fs: =>Fragment) = addFragments(s, fs, "should")
     def can(fs: =>Fragment)    = addFragments(s, fs, "can")
 
-    def should(fs: =>Unit)(implicit p: ImplicitParam) = addFragments(s, fs, "should")
-    def can(fs: =>Unit)(implicit p: ImplicitParam)    = addFragments(s, fs, "can")
+    def should(fs: =>Fragments)(implicit p: ImplicitParam) = addFragments(s, fs, "should")
+    def can(fs: =>Fragments)(implicit p: ImplicitParam)    = addFragments(s, fs, "can")
   }
   /**
    * add a new example using 'in' or '>>' or '!'
@@ -52,31 +56,35 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
   implicit def inExample(s: String): InExample = new InExample(s)
   /** transient class to hold an example description before creating a full Example */
   class InExample(s: String) {
-    def in[T : AsResult](r: =>T): Example         = exampleFactory.newExample(s, r)
-    def in[T : AsResult](f: String => T): Example = exampleFactory.newExample(s, f(s))
-    def in(block: =>Unit): Example                = exampleFactory.newExample(s, {block; success})
+    def in[T : AsResult](r: =>T): Example = exampleFactory.newExample(s, r)
+    def >>[T : AsResult](r: =>T): Example = in(r)
 
-    def >>[T : AsResult](r: =>T): Example         = in(r)
+    def in[T : AsResult](f: String => T): Example = exampleFactory.newExample(s, f(s))
     def >>[T : AsResult](f: String => T): Example = in(f)
 
-    def >>(block: =>Unit)                                      : Unit = { lazy val b = block; >>(new NameSpace { b }); b }
-    def >>[T <: Fragment](e: =>T)(implicit p: ImplicitParam)   : Unit = in(e)(p)
-    def >>(block: =>NameSpace)   (implicit p1: ImplicitParam1,
-                                           p2: ImplicitParam2): Unit = in(block)(p1, p2)
-
-    def in[T <: Fragment](block: =>T)(implicit p: ImplicitParam): Unit  = addSideEffectingBlock(block)
     def in(block: =>NameSpace)(implicit p1: ImplicitParam1,
-                                        p2: ImplicitParam2)    : Unit  = addSideEffectingBlock(block)
+                                        p2: ImplicitParam2): Fragments  = addSideEffectingBlock(block)
+    def >>(block: =>NameSpace)(implicit p1: ImplicitParam1,
+                                        p2: ImplicitParam2): Fragments = in(block)(p1, p2)
 
-    private def addSideEffectingBlock[T](block: =>T) {
+    def in[T <: Fragment](block: =>T)(implicit p: ImplicitParam): Fragments = addSideEffectingBlock(block)
+    def >>[T <: Fragment](block: =>T)(implicit p: ImplicitParam): Fragments = in(block)(p)
+
+    def in(fs: =>Fragments): Fragments = fs
+    def >>(fs: =>Fragments): Fragments = fs
+
+    private def addSideEffectingBlock[T](block: =>T) = {
       addFragments(s)
       executeBlock(block)
       addFragments(FF.p)
     }
-    def in(fs: =>Fragments): Fragments = fs
-    def >>(fs: =>Fragments): Fragments = fs
   }
 
+  /** add a block of examples */
+  def examplesBlock(u: =>Unit) = {
+    executeBlock(u)
+    addFragments(FF.t(0))
+  }
   /**
    * adding a conflicting implicit to warn the user when a `>>` was forgotten
    */
@@ -154,6 +162,30 @@ trait FragmentsBuilder extends specification.FragmentsBuilder with ExamplesFacto
 
 }
 
+/**
+ * allow to write "this example has several expectations" in { Seq(1, 2, 3).foreach(i => i must be_>(0)) }
+ */
+trait ExpectationsBlock { this: FragmentsBuilder =>
+  /**
+   * add a new example using 'in' but ending with a Unit block
+   */
+  implicit class expectationsUnit(s: String) {
+    def in(block: =>Unit): Example = exampleFactory.newExample(s, {block; success})
+    def >>(block: =>Unit): Example = in(block)
+  }
+}
+/**
+ * allow to write "this block has several examples" in { Seq(1, 2, 3).foreach(i => "example"+i >> ok) }
+ */
+trait ExamplesBlock { this: FragmentsBuilder =>
+  /**
+   * add a new example using 'in' but ending with a Unit block
+   */
+  implicit class examplesUnit(s: String) {
+    def in(block: =>Unit) : Unit = { lazy val b = block; >>(new NameSpace { b }); b }
+    def >>(block: =>Unit) : Unit = in(block)
+  }
+}
 /**
  * This trait can be used to deactivate implicits for building fragments
  */

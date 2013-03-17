@@ -15,6 +15,11 @@ import text.{CodeMarkup, NoMarkup}
  */
 trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
 
+  implicit def stringIsSpecPart(s: String): SpecPart = new SpecPart {
+    def appendTo(text: String, expression: String = "") =
+      asResultIsSpecPart(s)(new AnyValueAsResult[String]).appendTo(text, expression)
+  }
+
   implicit def exampleIsSpecPart(e: Example): SpecPart = new SpecPart {
     def appendTo(text: String, expression: String = "") = text ^ e
   }
@@ -58,7 +63,6 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
   implicit def argumentsIsSpecPart(a: Arguments): SpecPart = new SpecPart {
     def appendTo(text: String, expression: String = "") = text ^ a
   }
-
   implicit class specificationInStringContext(sc: StringContext) {
     def s2(variables: SpecPart*) = macro S2Macro.s2Implementation
   }

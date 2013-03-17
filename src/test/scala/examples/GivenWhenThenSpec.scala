@@ -46,31 +46,39 @@ class GivenWhenThenSpec extends Specification with GivenWhenThen { def is =
 class GivenWhenThenInterpolatedSpec extends Specification with GivenWhenThen { def is = s2"""
 
  A given-when-then example for a calculator
-   Given the following number: #{1}                                       $aNumber
-   And a second number: #{2}                                              $aNumber
-   And a third number: #{6}                                               $aNumber
-   When I use this operator: #{+}                                         $operator
-   Then I should get: #{9}                                                $result
-   And it should be >: #{0}                                               $greaterThan
+   Given the following number: 1                                       $aNumber
+   And a second number: 2                                              $aNumber
+   And a third number: 6                                               $aNumber
+   When I use this operator: +                                         $operator
+   Then I should get: 9                                                $result
+   And it should be >: 0                                               $greaterThan
 
  Now with the multiplication
-   Given the following number: #{4}                                       $aNumber
-   And a second number: #{5}                                              $aNumber
-   And a third number: #{6}                                               $aNumber
-   When I use this operator: #{*}                                         $operator
-   Then I should get: #{120}                                              $result
-   And it should be >: #{10}                                              $greaterThan
-   But not should be >: #{500}                                            $lowerThan
-                                                                          """
+   Given the following number: 4                                       $aNumber
+   And a second number: 5                                              $aNumber
+   And a third number: 6                                               $aNumber
+   When I use this operator: *                                         $operator
+   Then I should get: 120                                              $result
+   And it should be >: 10                                              $greaterThan
+   But not should be >: 50                                             $lowerThan
+                                                                       """
 
-  val aNumber: Given[Int] = (_:String).toInt
+  val readInt = groupAs("\\d")
+  val readOperator = readAs(".*: (.)$")
+  val aNumber: Given[Int] = readInt and { s: String => s.toInt }
 
   // when there are too many Given[T, S] consecutive steps, it is possible to follow them with a When[Seq[T], S]
-  val operator: When[Seq[Int], Operation] = (numbers: Seq[Int]) => (s: String) => Operation(numbers, s)
+  val operator: When[Seq[Int], Operation] = readOperator and { (numbers: Seq[Int]) => (s: String) => Operation(numbers, s) }
 
-  val result: Then[Operation]      = (operation: Operation) => (s: String) => { operation.calculate  must_== s.toInt }
-  val greaterThan: Then[Operation] = (operation: Operation) => (s: String) => { operation.calculate  must be_>= (s.toInt) }
-  val lowerThan: Then[Operation]   = (operation: Operation) => (s: String) => { operation.calculate  must be_<= (s.toInt) }
+  val result: Then[Operation] = readInt andThen { (operation: Operation) => (s: String) =>
+    operation.calculate  must_== s.toInt
+  }
+  val greaterThan: Then[Operation] = readInt andThen { (operation: Operation) => (s: String) =>
+    operation.calculate  must be_>= (s.toInt)
+  }
+  val lowerThan: Then[Operation] = readInt andThen { (operation: Operation) => (s: String) =>
+    operation.calculate  must be_<= (s.toInt)
+  }
 
   case class Operation(numbers: Seq[Int], operator: String) {
     def calculate: Int = if (operator == "+") numbers.sum else numbers.product

@@ -34,7 +34,7 @@ class UserInterpolatedSpecification extends Specification { def is = s2"""  ${"u
  And some text
       with some code
 
- 1. one $i
+ 1. one ${i.toString}
  1. two
  1. three
 
@@ -43,7 +43,7 @@ class UserInterpolatedSpecification extends Specification { def is = s2"""  ${"u
 
  A third example with an error $e3
 
- A normal interpolated value: $i
+ A normal interpolated value: ${i.toString}
  A normal interpolated string: $s
  An interpolated value with an error $errorValue
 
@@ -58,4 +58,3 @@ class UserInterpolatedSpecification extends Specification { def is = s2"""  ${"u
   def e3 = { sys.error("boom"); ok }
 
 }
-

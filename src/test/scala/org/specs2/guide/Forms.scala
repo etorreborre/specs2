@@ -90,7 +90,7 @@ Let's look at a few examples:
     tr(field("prop(\"label\", \"actual\", (a: String, b: String) => (a === b).toResult)(\"expected\")").code, prop("label", "expected", (a: String, b: String) => (a === b).toResult)("expected")).
     tr(field("prop(\"label\", \"actual\", (s: String) => beEqualTo(s))(\"expected\")").code, prop("label", "expected", (s: String) => beEqualTo(s))("expected")).
     tr(field("prop(\"label\", \"actual\", beEqualTo(\"expected\"))").code, prop("label", "actual", beEqualTo("expected"))).
-    tr(field("prop(\"label\", \"actual\", beEqualTo(\"expected\").mute)").code, prop("label", "actual", beEqualTo("expected").mute)).executeForm.toXml.toString }
+    tr(field("prop(\"label\", \"actual\", beEqualTo(\"expected\").mute)").code, prop("label", "actual", beEqualTo("expected").mute)).executeForm.toXml.toString}
 
 ### Styles
 

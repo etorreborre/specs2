@@ -2,8 +2,8 @@ package org.specs2
 package mutable
 
 import io._
-import specification.{Groups, SpecStart, FragmentExecution}
-import execute.FailureException
+import specification.{Example, Groups, SpecStart, FragmentExecution}
+import execute.{Result, AsResult, FailureException}
 
 class MutableSpecificationSpec extends Specification with Groups { s2"""
 
@@ -20,7 +20,8 @@ The following examples specify the functionalities for such a mutable specificat
     examples can be nested                                                                           ${g1().e5}
     should expectations can be used                                                                  ${g1().e6}
     a text fragment can start a block with                                                           ${g1().e7}
-    foreach can be used to create a block of examples                                                ${g1().e8}
+    foreach can be used to create a block of examples with the `examplesBlock` method                ${g1().e8}
+    foreach can be used inside an example with the `Result.unit` method                              ${g1().e9}
 
   Execution
     the first failing expectation stops an Example execution                                         ${g2().e1}
@@ -39,6 +40,7 @@ The following examples specify the functionalities for such a mutable specificat
     e6 := { contentString must contain("should expectation") }
     e7 := { contentString must contain("should also") }
     e8 := { contentList must contain("Example(example 1)", "Example(example 2)") }
+    e9 := { contentList must contain("Example(several expectations)") }
   }
 
   "execution" - new g2 with FragmentExecution with HasAMutableSpec {
@@ -94,13 +96,14 @@ The following examples specify the functionalities for such a mutable specificat
         "have another example" ! success
 
       "a block of examples" >> {
-        Seq(1, 2) foreach { i =>
-          "example "+i >> success
-        }
+        examplesBlock(Seq(1, 2).foreach(i => "example "+i >> success))
+      }
+      "several expectations" in {
+        Result.unit(Seq(1, 2, 3).foreach(i => i must be_>(0)))
       }
     }
     def fragments = spec.content.fragments
-    def contentList = fragments.map(_.toString)
+    def contentList = fragments.map(_.toString).view.force.toList
     def contentString = contentList.mkString("\n")
   }
 

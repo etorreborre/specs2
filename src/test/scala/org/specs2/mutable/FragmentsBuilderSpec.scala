@@ -4,6 +4,7 @@ package mutable
 import text.Trim._
 import specification.{AcceptanceCreationPath, MutableCreationPath, AllExpectations}
 import internal.scalaz.Scalaz._
+import execute.Result
 
 class FragmentsBuilderSpec extends Specification with AllExpectations {
 
@@ -50,15 +51,15 @@ class FragmentsBuilderSpec extends Specification with AllExpectations {
   }
 
   "Fragments creation with Unit" >> {
-    "if a block returning Unit is created with '>>', then it is interpreted as a block of fragments" >> {
+    "a block returning Unit is interpreted as a block of fragments when the examplesBlock method is used" >> {
       val s = new Specification {
-        "this system has 3 examples" >> { (1 to 3) foreach { i => "example "+i >> ok } }
+        "this system has 3 examples" >> { examplesBlock((1 to 3) foreach { i => "example "+i >> ok }) }
       }
      s.content.examples must have size(3)
     }
-    "if a block returning Unit is created with 'in', then it is interpreted as a block of expectations and creates an Example" >> {
+    "a block returning Unit is interpreted as a block of expectations when the Result.unit method is used" >> {
       val s = new Specification {
-        "this system has 1 example" >> { "example" in { (1 to 3) foreach { i => i ==== i } } }
+        "this system has 1 example" >> { "example" in { Result.unit((1 to 3) foreach { i => i ==== i }) } }
       }
       s.content.examples must have size(1)
     }

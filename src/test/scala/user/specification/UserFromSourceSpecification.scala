@@ -59,12 +59,6 @@ class MutableSpecificationAutoExamples extends org.specs2.mutable.Specification 
   def `an example` = 4 === 4
 }
 
-class SpecificationWithAShouldBlockAndExamples extends org.specs2.mutable.Specification {
-  "this" should {
-    1 must_== 1
-  }
-}
-
 class AcceptanceSpecificationWithJUnit extends SpecificationWithJUnit { def is =
   "this is a one-liner"    ^
   { 1 must_== 1 }          ^

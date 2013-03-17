@@ -77,7 +77,7 @@ trait GivenWhenThen extends RegexStepsFactory with TuplesToSeq with FragmentsBui
   private var gwt: Seq[Either[Result, Any]] = Seq()
   private var thenSequence = false
   private def makeError: PartialFunction[Throwable, Result] = { case e: Throwable => Error(e) }
-  private def executionIsOk = gwt.headOption.forall(_.isRight)
+  private def executionIsOk = gwt.forall(_.isRight)
 
   implicit def givenIsSpecPart[T](g: Given[T]): SpecPart = new SpecPart {
     def appendTo(text: String, expression: String = "") =  {
@@ -93,7 +93,7 @@ trait GivenWhenThen extends RegexStepsFactory with TuplesToSeq with FragmentsBui
       w.strip(text) ^
       Step {
         gwt = if (executionIsOk) {
-          if (gwt.size > 1) Seq(trye(w.extract(gwt.map(_.right.toOption.get).asInstanceOf[T], text))(makeError))
+          if (gwt.size > 1) Seq(trye(w.extract(gwt.map(_.right.get).asInstanceOf[T], text))(makeError))
           else              gwt.headOption.flatMap(_.right.toOption.map(v => trye(w.extract(v.asInstanceOf[T], text))(makeError))).toSeq
         } else gwt
       }
@@ -102,7 +102,7 @@ trait GivenWhenThen extends RegexStepsFactory with TuplesToSeq with FragmentsBui
   implicit def thenIsSpecPart[T](t: Then[T]): SpecPart = new SpecPart {
     def appendTo(text: String, expression: String = "") =  {
       lazy val result =
-        if (executionIsOk) gwt.lastOption.map(w => trye(t.extract(w.right.toOption.get.asInstanceOf[T], text))(makeError))
+        if (executionIsOk) gwt.lastOption.map(w => trye(t.extract(w.right.get.asInstanceOf[T], text))(makeError))
         else               gwt.lastOption
       thenSequence = true
       val texts = text.split("\n")
@@ -113,7 +113,7 @@ trait GivenWhenThen extends RegexStepsFactory with TuplesToSeq with FragmentsBui
 
       before ^ t.strip(text.trim) ! {
         result.getOrElse(Left(Failure("Can not call a Then step if there is no preceding Given step"))) match {
-          case Right(r) => r
+          case Right(r) => r.asInstanceOf[Result]
           case Left(e)  => e
         }
       }
