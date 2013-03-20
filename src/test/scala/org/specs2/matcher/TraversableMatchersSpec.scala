@@ -5,9 +5,9 @@ import specification._
 import java.util.Arrays._
 import scala.collection.JavaConversions.{ collectionAsScalaIterable }
 import scala.collection.parallel.ParSeq
-import execute.FailureDetails
+import execute.{FailureException, FailureDetails}
 
-class TraversableMatchersSpec extends Specification with ResultMatchers with Tags { def is = s2"""
+class TraversableMatchersSpec extends Specification with ResultMatchers with Tags with Grouped { def is = s2"""
 
   we can check if one or several elements are present in a traversable
    ${ List(1, 2) must contain(1) }
@@ -51,7 +51,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
     ${ List("Hello", "World") must contain("Hello", "World").only.inOrder }
     ${ List("Hello", 1) must contain("Hello", 1) }
     ${ List("Hello", "World") must contain("Hello", "World").inOrder.only }
-    ${ (List("Hello", "World") must not contain("World", "Hello")).only.inOrder }
+    ${ List("Hello", "World") must not (contain("World", "Hello").only.inOrder) }
     and show appropriate failure messages if one element doesn't match ${sameSeq().e1}
     with a specific equality function
     ${ List("Hello", "World") must contain("hello", "world").only ^^ ((s1, s2) => s1.toLowerCase == s2.toLowerCase) }
@@ -68,6 +68,8 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
        "List(1, 2, 3)",
        "  is missing: 4").mkString("\n")
     }
+
+  we can use `not contain(1)` in a mutable Scope ${g1.e1}
 
   we can check the size of an traversable
     ${ Nil must beEmpty }
@@ -132,6 +134,17 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
   Parallel collections work with any matcher
     ${ ParSeq(1, 2, 3) must contain(1, 2, 3) }
                                                                                                                         """
+
+  "edge cases" - new g1 {
+    e1 := {
+      val spec = new org.specs2.mutable.Specification {
+        "ex1" >> new Scope {
+          Seq(1) must not contain(1)
+        }
+      }
+      FragmentExecution.executeExamples(spec.content)(args()).head.result must beFailing
+    }
+  }
 
   case class subclass() {
     class Food

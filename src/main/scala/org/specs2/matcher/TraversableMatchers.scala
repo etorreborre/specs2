@@ -122,7 +122,10 @@ private[specs2]
 trait TraversableBeHaveMatchers extends LazyParameters { outer: TraversableMatchers =>
   implicit def traversable[T](s: MatchResult[GenTraversableOnce[T]]) = new TraversableBeHaveMatchers(s)
   class TraversableBeHaveMatchers[T](s: MatchResult[GenTraversableOnce[T]]) {
-    def contain(t: LazyParameter[T], ts: LazyParameter[T]*) = new ContainMatchResult(s, outer.contain((t +: ts):_*))
+    def contain(t: LazyParameter[T], ts: LazyParameter[T]*) = s match {
+      case NotMatch(r) => new ContainNotMatchResult(s(outer.contain((t +: ts):_*)), outer.contain((t +: ts):_*))
+      case other       => new ContainMatchResult(s, outer.contain((t +: ts):_*))
+    }
     def containMatch(t: =>String) = s(outer.containMatch(t))
     def containPattern(t: =>String) = s(outer.containPattern(t))
     def have(f: T => Boolean) = s(outer.have(f))
@@ -143,10 +146,16 @@ trait TraversableBeHaveMatchers extends LazyParameters { outer: TraversableMatch
   }
 
 }
-class ContainMatchResult[T]  private[specs2](val s: MatchResult[GenTraversableOnce[T]], containMatcher: ContainMatcher[T]) extends AbstractContainMatchResult[T] { outer =>
+class ContainMatchResult[T] private[specs2](val s: MatchResult[GenTraversableOnce[T]], containMatcher: ContainMatcher[T]) extends AbstractContainMatchResult[T] { outer =>
   val matcher = containMatcher
   def only = new ContainOnlyMatchResult(s, containMatcher.only)
   def inOrder = new ContainInOrderMatchResult(s, containMatcher.inOrder)
+}
+class ContainNotMatchResult[T] private[specs2](override val s: MatchResult[GenTraversableOnce[T]], containMatcher: ContainMatcher[T]) extends ContainMatchResult[T](s, containMatcher) { outer =>
+  override val matcher = containMatcher
+  override lazy val matchResult = s(matcher.not)
+  override def only = new ContainOnlyMatchResult(s, containMatcher.only.not)
+  override def inOrder = new ContainInOrderMatchResult(s, containMatcher.inOrder.not)
 }
 class ContainOnlyMatchResult[T] private[specs2](val s: MatchResult[GenTraversableOnce[T]], containMatcher: ContainOnlyMatcher[T]) extends AbstractContainMatchResult[T] { outer =>
   val matcher = containMatcher
@@ -238,6 +247,9 @@ class ContainInOrderMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (
   }
 
   def only: Matcher[GenTraversableOnce[T]] = (this and new ContainOnlyMatcher(expected))
+  override def not = new ContainInOrderMatcher(expected, equality) {
+    override def apply[S <: GenTraversableOnce[T]](actual: Expectable[S]) = super.apply(actual).not
+  }
 }
 
 class ContainOnlyMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)) extends AbstractContainMatcher(expected, equality) {
@@ -251,6 +263,9 @@ class ContainOnlyMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T
            traversable.description + " doesn't contain only " + q(expected.mkString(", ")), traversable)
   }
   def inOrder: Matcher[GenTraversableOnce[T]] = (this and new ContainInOrderMatcher(expected))
+  override def not = new ContainOnlyMatcher(expected, equality) {
+    override def apply[S <: GenTraversableOnce[T]](actual: Expectable[S]) = super.apply(actual).not
+  }
 }
 
 class ContainLikeMatcher[T](pattern: =>String, matchType: String) extends Matcher[GenTraversableOnce[T]] {
