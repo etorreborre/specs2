@@ -1,0 +1,159 @@
+package org.specs2
+package specification
+
+import util.parsing.combinator.RegexParsers
+import util.parsing.input.CharSequenceReader
+import execute._
+import control.ImplicitParameters
+
+/**
+ * Fragment parsers can be used in interpolated specifications to extract values from the preceding text and
+ * create Steps or Examples
+ */
+trait FragmentParsers extends FragmentParserApply with FragmentParserExtract { outer: Specification =>
+
+  /** a previously extracted value can be used in another Extract definition */
+  implicit def extractedValue[T](fp: FragmentParser[T]): T = fp.get
+
+  /** an extracted value can be transformed as a Step or an Example if it has a check function */
+  implicit def extractedIsSpecPart[T](fp: FragmentParser[T]): SpecPart = new SpecPart {
+    def appendTo(text: String, expression: String = "") = {
+      val splitted = text.split("\n")
+      val previousText = splitted.mkString.trim
+      val strippedText = splitted.map(fp.strip).mkString("\n")
+
+      if (fp.isChecked) asResultIsSpecPart(fp.checkResult(previousText)).appendTo(strippedText, expression)
+      else              fragmentIsSpecPart(Step(fp.extract(previousText))).appendTo(strippedText, expression)
+    }
+  }
+}
+
+/**
+ * a Fragment parser is responsible for extracting a value from some previous text and, if equipped with a verification
+ * function, to check that this value is ok. The value might be a tuple or a sequence
+ */
+trait FragmentParser[T] { outer =>
+  /** parse some text and extract some well-type value T */
+  def parse(text: String): T
+  /** if the original text contains delimiters to indicate the values to extract, remove them */
+  def strip(text: String) = text
+
+  protected def copy(check: Option[T => Result] = None, name: Option[String] = None): FragmentParser[T]
+
+  protected def extractor: Extractor[T]
+
+  def isChecked = extractor.check.isDefined
+  def checkResult(text: String): Result = extractor.check.map(_ { extract(text); get }).getOrElse(Success())
+  def extract(text: String): Result = extractor.extract(parse(text))
+  def get = extractor.get
+  def apply[S : AsResult](check: T => S): FragmentParser[T] = copy(check = Some((t: T) => ResultExecution.execute(t)((t1: T) => AsResult(check(t1)))))
+  def andThen[S : AsResult](check: T => S) = apply(check)
+  def withName(n: String) = copy(name = Some(n))
+}
+
+case class Extractor[T](check: Option[T => Result] = None, name: Option[String] = None, var field: Either[Result, T] = Left(Pending())) {
+  private val failureMessage = s"${name.map(n => s"the variable $n was").getOrElse("variable")} not set"
+
+  def extract(parsed: =>T): Result = {
+    field = ResultExecution.executeEither(parsed)(identity)
+    field match {
+      case Left(r)  => r
+      case Right(_) => execute.Success()
+    }
+  }
+  def set(c: Option[T => Result] = None, n: Option[String] = None) = Extractor(check.orElse(c), name.orElse(n), field)
+  def get = field.right.getOrElse(throw new FailureException(execute.Failure(failureMessage)))
+  def apply[S : AsResult](check: T => S) = copy(check = Some((t: T) => ResultExecution.execute(t)((t1: T) => AsResult(check(t1)))))
+  def andThen[S : AsResult](check: T => S) = apply(check)
+  def withName(n: String) = copy(name = Some(n))
+}
+
+
+abstract class DelimitedVariablesParser[T](val extractor: Extractor[T] = Extractor[T]()) extends FragmentParser[T] { parent =>
+  protected val regex = """#\{([^}]+)\}""".r
+  def parse(text: String): T
+  override def strip(text: String) = RegexStep.strip(text, "".r, regex)
+  protected def copy(check: Option[T => Result] = None, name: Option[String] = None): FragmentParser[T] =
+    new DelimitedVariablesParser[T](extractor.set(check, name)) {
+      def parse(text: String): T = parent.parse(text)
+      override def strip(text: String) = parent.strip(text)
+    }
+}
+class DelimitedVariablesParser1[T](f: String => T) extends DelimitedVariablesParser[T] {
+  def parse(text: String) = f(RegexStep.extract1(text, "".r, regex))
+}
+class DelimitedVariablesParser2[T](f: (String, String) => T) extends DelimitedVariablesParser[T] {
+  def parse(text: String) = f.tupled(RegexStep.extract2(text, "".r, regex))
+}
+class DelimitedVariablesParser3[T](f: (String, String, String) => T) extends DelimitedVariablesParser[T] {
+  def parse(text: String) = f.tupled(RegexStep.extract3(text, "".r, regex))
+}
+class DelimitedVariablesParser4[T](f: (String, String, String, String) => T) extends DelimitedVariablesParser[T] {
+  def parse(text: String) = f.tupled(RegexStep.extract4(text, "".r, regex))
+}
+class DelimitedVariablesParser5[T](f: (String, String, String, String, String) => T) extends DelimitedVariablesParser[T] {
+  def parse(text: String) = f.tupled(RegexStep.extract5(text, "".r, regex))
+}
+class DelimitedVariablesParser6[T](f: (String, String, String, String, String, String) => T) extends DelimitedVariablesParser[T] {
+  def parse(text: String) = f.tupled(RegexStep.extract6(text, "".r, regex))
+}
+class DelimitedVariablesParser7[T](f: (String, String, String, String, String, String, String) => T) extends DelimitedVariablesParser[T] {
+  def parse(text: String) = f.tupled(RegexStep.extract7(text, "".r, regex))
+}
+class DelimitedVariablesParser8[T](f: (String, String, String, String, String, String, String, String) => T) extends DelimitedVariablesParser[T] {
+  def parse(text: String) = f.tupled(RegexStep.extract8(text, "".r, regex))
+}
+class DelimitedVariablesParser9[T](f: (String, String, String, String, String, String, String, String, String) => T) extends DelimitedVariablesParser[T] {
+  def parse(text: String) = f.tupled(RegexStep.extract9(text, "".r, regex))
+}
+class DelimitedVariablesParser10[T](f: (String, String, String, String, String, String, String, String, String, String) => T) extends DelimitedVariablesParser[T] {
+  def parse(text: String) = f.tupled(RegexStep.extract10(text, "".r, regex))
+}
+class DelimitedVariablesParserSeq[T](f: Seq[String] => T) extends DelimitedVariablesParser[T] {
+  def parse(text: String) = f(RegexStep.extractAll(text, "".r, regex))
+}
+
+trait RegexFragmentParser extends RegexParsers {
+  case class RegexFragmentParser[T](p: Parser[T], extractor: Extractor[T] = Extractor[T]()) extends FragmentParser[T] { parent =>
+    def parse(text: String) = p.apply(new CharSequenceReader(text, 0)).get
+
+    protected def copy(check: Option[T => Result] = None, name: Option[String] = None): FragmentParser[T] =
+      new RegexFragmentParser[T](p, extractor.set(check, name))
+  }
+}
+
+object FragmentParser extends FragmentParserApply with FragmentParserExtract
+trait FragmentParserApply extends RegexFragmentParser with ImplicitParameters {
+  def apply[T](f: String => T): FragmentParser[T] = new DelimitedVariablesParser1[T](f)
+  def apply[T](f: (String, String) => T): FragmentParser[T] = new DelimitedVariablesParser2[T](f)
+  def apply[T](f: (String, String, String) => T): FragmentParser[T] = new DelimitedVariablesParser3[T](f)
+  def apply[T](f: (String, String, String, String) => T): FragmentParser[T] = new DelimitedVariablesParser4[T](f)
+  def apply[T](f: (String, String, String, String, String) => T): FragmentParser[T] = new DelimitedVariablesParser5[T](f)
+  def apply[T](f: (String, String, String, String, String, String) => T): FragmentParser[T] = new DelimitedVariablesParser6[T](f)
+  def apply[T](f: (String, String, String, String, String, String, String) => T): FragmentParser[T] = new DelimitedVariablesParser7[T](f)
+  def apply[T](f: (String, String, String, String, String, String, String, String) => T): FragmentParser[T] = new DelimitedVariablesParser8[T](f)
+  def apply[T](f: (String, String, String, String, String, String, String, String, String) => T): FragmentParser[T] = new DelimitedVariablesParser9[T](f)
+  def apply[T](f:(String, String, String, String, String, String, String, String, String, String) => T): FragmentParser[T] = new DelimitedVariablesParser10[T](f)
+  def apply[T](f: Seq[String] => T)(implicit p: ImplicitParam): FragmentParser[T] = new DelimitedVariablesParserSeq[T](f)
+  def apply[T](p: Parser[T]): FragmentParser[T] = new RegexFragmentParser[T](p)
+}
+trait FragmentParserExtract extends RegexFragmentParser with ImplicitParameters {
+  def extract[T](f: String => T): FragmentParser[T] = new DelimitedVariablesParser1[T](f)
+  def extract[T](f: (String, String) => T): FragmentParser[T] = new DelimitedVariablesParser2[T](f)
+  def extract[T](f: (String, String, String) => T): FragmentParser[T] = new DelimitedVariablesParser3[T](f)
+  def extract[T](f: (String, String, String, String) => T): FragmentParser[T] = new DelimitedVariablesParser4[T](f)
+  def extract[T](f: (String, String, String, String, String) => T): FragmentParser[T] = new DelimitedVariablesParser5[T](f)
+  def extract[T](f: (String, String, String, String, String, String) => T): FragmentParser[T] = new DelimitedVariablesParser6[T](f)
+  def extract[T](f: (String, String, String, String, String, String, String) => T): FragmentParser[T] = new DelimitedVariablesParser7[T](f)
+  def extract[T](f: (String, String, String, String, String, String, String, String) => T): FragmentParser[T] = new DelimitedVariablesParser8[T](f)
+  def extract[T](f: (String, String, String, String, String, String, String, String, String) => T): FragmentParser[T] = new DelimitedVariablesParser9[T](f)
+  def extract[T](f:(String, String, String, String, String, String, String, String, String, String) => T): FragmentParser[T] = new DelimitedVariablesParser10[T](f)
+  def extract[T](f: Seq[String] => T)(implicit p: ImplicitParam): FragmentParser[T] = new DelimitedVariablesParserSeq[T](f)
+  def extract[T](p: Parser[T]): FragmentParser[T] = new RegexFragmentParser[T](p)
+}
+
+/**
+ * Fragment parsers using Scala regex parser combinators
+ */
+trait RegexFragmentParsers extends FragmentParsers with RegexParsers { this: Specification =>
+}
