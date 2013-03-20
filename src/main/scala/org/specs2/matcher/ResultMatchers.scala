@@ -73,6 +73,23 @@ trait ResultBaseMatchers {
                               value)).getOrElse(result(true, "ok", "ko", value))
     }
   }
+
+  def bePending[T : AsResult]: Matcher[T] = bePending(None)
+  def bePending[T : AsResult](message: String): Matcher[T] = bePending(Some(message))
+  def bePending[T : AsResult](message: Option[String]): Matcher[T] = new Matcher[T] {
+    def apply[S <: T](value: Expectable[S]) = {
+      val r = ResultExecution.execute(AsResult[T](value.value))
+      def description = tryOrElse(value.description)(r.toString)
+      result(r.isPending,
+        description + " is pending",
+        description + " is not pending",
+        value) and
+        message.map(m => result(r.message matches m,
+          r.message + " matches " + m,
+          r.message + " doesn't match " + m,
+          value)).getOrElse(result(true, "ok", "ko", value))
+    }
+  }
 }
 private[specs2]
 trait ResultBeHaveMatchers { outer: ResultBaseMatchers =>

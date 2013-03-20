@@ -161,6 +161,8 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
             new execute.Failure(counterExampleMessage(args, n, labels+f.message) + frequencies(fq)) {
               override def location = f.location
             }
+          case execute.SkipException(s)    => s
+          case execute.PendingException(p) => p
           case e: java.lang.Exception      =>
             execute.Error("A counter-example is "+counterExample(args)+": " + ex + getCause(e) +
                                                 " ("+afterNTries(n)+")"+ failedLabels(labels) + frequencies(fq), e)
@@ -259,8 +261,9 @@ trait ResultPropertyImplicits {
         lazy val result = execute.ResultExecution.execute(r)
         val prop = 
         result match {
-          case f : execute.Failure => Prop.falsified              :| (f.message+" ("+f.location+")")
-          case s : execute.Skipped => Prop.undecided              :| s.message
+          case f : execute.Failure => Prop.falsified :| (f.message+" ("+f.location+")")
+          case s : execute.Skipped => Prop.exception(new execute.SkipException(s))
+          case p : execute.Pending => Prop.exception(new execute.PendingException(p))
           case e : execute.Error   => Prop.exception(e.exception)
           case other               => Prop.passed
         }

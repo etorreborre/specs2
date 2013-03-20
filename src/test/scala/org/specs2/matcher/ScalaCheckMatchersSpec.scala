@@ -15,30 +15,40 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
  A ScalaCheck property can be used in the body of an Example
    Here are some examples with
      a result
-       prop { (i:Int) => success }
+     ${ prop { (i:Int) => success } }
+
      a match result
-       prop { (i:Int) => i must be_>(0) or be_<=(0) }
+     ${ prop { (i:Int) => i must be_>(0) or be_<=(0) } }
+
      a boolean value
-       prop { (i:Int) => i > 0 || i <= 0 }
+     ${ prop { (i:Int) => i > 0 || i <= 0 } }
+
      a Prop
-       forAll { (i:Int) => i > 0 || i <= 0 }
+     ${ forAll { (i:Int) => i > 0 || i <= 0 } }
+
      an implication and a match result
-       prop { (i:Int) => (i > 0) ==> (i must be_>(0)) }
-       prop { (i:Int, j: Int) => (i > j) ==> (i must be_>(j)) }
+     ${ prop { (i:Int) => (i > 0) ==> (i must be_>(0)) } }
+     ${ prop { (i:Int, j: Int) => (i > j) ==> (i must be_>(j)) } }
+
      an implication and a boolean value
-       prop { (i:Int) => (i > 0) ==> (i > 0) }
+     ${ prop { (i:Int) => (i > 0) ==> (i > 0) } }
+
      a unit value with side-effects
-       prop { (i:Int) => { (1 to 5) foreach { n => n must_== n } } }
+     ${ prop { (i:Int) => { (1 to 5) foreach { n => n must_== n } } } }
+
      a specific arbitrary instance in the enclosing scope ${
        implicit val arbitrary = positiveInts
        prop { (i:Int) => i must be_>(0) }
      }
+
      a specific arbitrary instance
-       positiveInts { (i:Int) => i must be_>(0) }
+     ${ positiveInts { (i:Int) => i must be_>(0) } }
+
      several specific arbitrary instances
-       (positiveInts, positiveInts) { (i:Int, j: Int) => i+j must be_>(0) }
+     ${ (positiveInts, positiveInts) { (i:Int, j: Int) => i+j must be_>(0) } }
+
      specific generation parameters
-     { prop { (i:Int) => (i > 0) ==> (i > 0) } set (minTestsOk = 50) }
+     ${ prop { (i:Int) => (i > 0) ==> (i > 0) } set (minTestsOk = 50) }
 
    if it is proved the execution will yield a Success                                                    $prop1
    if it is a function which is always true, it will yield a Success                                     $prop2
@@ -52,6 +62,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
    a Property can be used with check                                                                     $prop5
    a FailureException can be thrown from a Prop                                                          $prop6
    in the Context of a mutable specification                                                             $prop7
+   with a Pending or Skipped result the Prop is undecided                                                $prop8
 
  It can also be used at the beginning of a specification                                                 $fragment1
 
@@ -85,7 +96,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
    the labels that are set on properties                                                                 ${config().e3}
    the exceptions that happen on generation                                                              ${config().e4}
    the collected frequencies                                                                             ${config().e5}
-                                                                                                                        """
+                                                                                                         """
 
   
   val success100tries = Success("The property passed without any counter-example after 100 tries")
@@ -105,6 +116,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
   def prop6 = execute(failureExceptionProp).toString must startWith("A counter-example is")
 
   def prop7 = FragmentExecution.executeSpecificationResult(new MutableSpecWithContextAndScalaCheck).isFailure
+  def prop8 = execute(check(pendingProp)) must bePending
 
   def fragment1 = {
     val spec = new Specification { def is = prop((i: Int) => i == i) ^ end }
@@ -182,6 +194,7 @@ trait ScalaCheckProperties extends ScalaCheck with ResultMatchers {  this: Speci
   def exceptionProp(msg: String = "boom") = forAll((b: Boolean) => {throw exceptionWithCause(msg); true})
 
   def failureExceptionProp = forAll((b: Boolean) => {throw new execute.FailureException(failure); true})
+  def pendingProp = forAll((b: Boolean) => b must beTrue.orPending)
 }
 
 class MutableSpecWithContextAndScalaCheck extends mutable.Specification with ScalaCheck {
