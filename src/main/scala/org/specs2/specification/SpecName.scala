@@ -39,7 +39,7 @@ sealed trait SpecName extends SpecIdentification {
   /** the full class name of the specification without embellishment */
   def javaClassName: String
   /** a unique url for the specification */
-  def url: String
+  def url = className(fullName) + ".html"
   /** a markdown link for the specification url */
   def markdownLink = markdownLink(title)
   /** a markdown link for the specification url, with a specific name */
@@ -80,8 +80,6 @@ case class SpecificationName(s: SpecificationStructure) extends SpecName { outer
   def fullName = className(s)
   def javaClassName = s.getClass.getName
 
-  def url = className(s) + ".html"
-
   def overrideWith(n: SpecName) = n match {
     case SpecificationName(_)  => this
     case SpecificationTitle(t) => new SpecificationName(s) {
@@ -121,7 +119,6 @@ case class SpecificationTitle(t: String) extends SpecName { outer =>
   def name = title
   def fullName = name
   def javaClassName = fullName
-  def url = t + ".html"
 
   def overrideWith(n: SpecName) = n match {
     case SpecificationTitle(_) => this
@@ -131,7 +128,6 @@ case class SpecificationTitle(t: String) extends SpecName { outer =>
       override def name = n.name
       override def fullName = n.fullName
       override def javaClassName = n.javaClassName
-      override def url = outer.url
     }
   }
   def urlIs(u: String) = new SpecificationTitle(t) {
@@ -140,7 +136,6 @@ case class SpecificationTitle(t: String) extends SpecName { outer =>
     override def name  = outer.name
     override def fullName = outer.fullName
     override def javaClassName = outer.javaClassName
-    override def url = u
   }
   def baseDirIs(dir: String) = new SpecificationTitle(t) {
     override def id = outer.id
