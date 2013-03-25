@@ -10,11 +10,11 @@ class HtmlFileLinesSpec extends Specification { def is = s2"""
     that file must be linked to the parent file                                                    $e2
   A see specification must not create a new file but just a link                                   $e3
   The user can specify a different path for the html file                                          $e4
-                                                                                                                        """
+                                                                                                   """
 
-  lazy val spec1: Fragments = "ex1" ! failure ^ "a " ~  ("successfull spec", successfulSubSpec) ^ end
-  lazy val spec2: Fragments = "ex1" ! failure ^ "a " ~/ ("successfull spec", successfulSubSpec) ^ end
-  lazy val spec3: Fragments = "title".title.urlIs("different.html") ^ "ex1" ! ok
+  lazy val spec1 = "ex1" ! failure ^ "a " ~  ("successfull spec", successfulSubSpec) ^ end
+  lazy val spec2 = "ex1" ! failure ^ "a " ~/ ("successfull spec", successfulSubSpec) ^ end
+  lazy val spec3 = "title".title.urlIs("different.html") ^ "ex1" ! ok
 
   lazy val successfulSubSpec = new Specification { def is = "ex1" ! success }
 

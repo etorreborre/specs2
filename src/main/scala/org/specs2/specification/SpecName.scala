@@ -128,6 +128,7 @@ case class SpecificationTitle(t: String) extends SpecName { outer =>
       override def name = n.name
       override def fullName = n.fullName
       override def javaClassName = n.javaClassName
+      override def url = outer.url
     }
   }
   def urlIs(u: String) = new SpecificationTitle(t) {
@@ -136,6 +137,7 @@ case class SpecificationTitle(t: String) extends SpecName { outer =>
     override def name  = outer.name
     override def fullName = outer.fullName
     override def javaClassName = outer.javaClassName
+    override def url = u
   }
   def baseDirIs(dir: String) = new SpecificationTitle(t) {
     override def id = outer.id
