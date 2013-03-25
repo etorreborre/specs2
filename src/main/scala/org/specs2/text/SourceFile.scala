@@ -40,8 +40,7 @@ trait SourceFile extends ConsoleOutput {
     val pattern = "\\s*package\\s*(.+)\\s*"
 
     // extract the packages section at the beginning of the file
-    val packages = content.split("\n").filterNot(_.isEmpty).map(_.trim).takeWhile(_.startsWith("package")).mkString("\n")
-
+    val packages = content.split("\n").filter(_.trim.startsWith("package")).mkString("\n")
     result(Pattern.compile(pattern).matcher(packages)).mkString(".")
   }
 
