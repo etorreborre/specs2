@@ -50,7 +50,7 @@ case class MarkupResultOutput(
   def filePathIs(path: String)                                                                  = MarkupResultOutput(output.filePathIs(path))
   def printHtml(n: =>NodeSeq)                                                                   = print(n.map(_.text).mkString("\n"))
   def printBody(n: =>NodeSeq)                                                                   = print(n.map(_.text).mkString("\n"))
-  def printHead                                                                                 = MarkupResultOutput(output)
+  def printHead(title: String)                                                                  = MarkupResultOutput(output)
   def printBr                                                                                   = println()
   def printPar(text: String = "")                                                               = println("\n"+text)
   def printText(text: String = "", level: Int = 0)                                              = MarkupResultOutput(output.printText(text, level))

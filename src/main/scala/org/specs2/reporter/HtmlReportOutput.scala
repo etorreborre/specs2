@@ -32,7 +32,7 @@ trait HtmlReportOutput {
   /** enclose the nodes inside <body/> tags */
   def printBody(n: =>NodeSeq): HtmlReportOutput
   /** provide the <head/> section */
-  def printHead: HtmlReportOutput
+  def printHead(title: String): HtmlReportOutput
 
   /** print a Br fragment */
 	def printBr: HtmlReportOutput

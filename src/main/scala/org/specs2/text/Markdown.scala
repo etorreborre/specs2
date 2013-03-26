@@ -33,10 +33,13 @@ trait Markdown {
    * parse the markdown string and return html without the enclosing paragraph
    */
   def toHtmlNoPar(text: String) = {
-    val html = toHtml(text)
+    if (text.trim.isEmpty) ""
+    else {
+      val html = toHtml(text)
 
-    if (text.contains("\n")) s"<p>$html</p>"
-    else html.removeEnclosingXmlTag("p")
+      if (text.contains("\n")) s"<p>$html</p>"
+      else html.removeEnclosingXmlTag("p")
+    }
   }
 
   /**

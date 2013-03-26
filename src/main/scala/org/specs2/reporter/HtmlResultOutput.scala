@@ -37,7 +37,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
   /** print the NodeSeq inside the body tags, with anchors for header tags */
   def printBody(n: =>NodeSeq) = print((<body>{n}</body>).addHeadersAnchors)
   /** print the head of the document */
-  def printHead = print(xml ++ head)
+  def printHead(title: String) = print(xml ++ head(title))
 
   /** print a br tag */
   def printBr                                         = printOkStatus(<br></br>)
@@ -170,7 +170,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
 	protected def printKoStatus(n: NodeSeq) = print(koStatus(n))
 	protected def printStatus(n: NodeSeq, st: String) = print(status(n, st))
 
-  protected def textWithIcon(message: MarkupString, iconName: String, level: Int = 0) = div(<img src={icon(iconName)}/> ++ t(" ") ++ wiki(message.toHtml), level)
+  protected def textWithIcon(message: MarkupString, iconName: String, level: Int = 0) = div(<img src={icon(iconName)}/> ++ t(" ") ++ wiki(message.toHtml) ++ <br/>, level)
   protected def xmlWithIcon(xml: NodeSeq, iconName: String, level: Int = 0) = div(<table class="exampleTable"><td><img src={icon(iconName)}/></td><td>{xml}</td></table>, level)
   protected def icon(t: String) = baseDir+"images/icon_"+t+"_sml.gif"
 
@@ -199,7 +199,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
    *  - tabber css and scripts to display tabs
    *  - show and hide functions
    */
-  def head =
+  def head(title: String) =
     <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
       <style type="text/css" media="all">
@@ -223,6 +223,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
            tabber code, then the init code -->
       <script type="text/javascript" src={baseDir+"css/tabber.js"}></script>
       <link rel="stylesheet" href={baseDir+"css/tabber.css"} type="text/css" media="screen"/>
+      <title>{title}</title>
     </head>
 
   /**

@@ -6,27 +6,26 @@ import execute.FailureException
 class FragmentParsersSpec extends Specification with RegexFragmentParsers with Grouped { def is =
                                                                                                     s2"""
 
- Delimited parsers can be used to extract values from specifications and create Steps
+ Delimited parsers can be used to extract values from specifications and create Steps.
 
-   The default delimiters are `{}`
-     - extract one value ${g1.e1}
-     - extract 2 values ${g1.e2}
-     - extract a Seq of values ${g1.e3}
-     - extracting more values than the converting function is ok ${g1.e4}
-     - extracting less values than the converting function is an error ${g1.e5}
+ The defaul delimiters are `{}`
+   extract one value ${g1.e1}
+   extract 2 values ${g1.e2}
+   extract a Seq of values ${g1.e3}
+   extracting more values than the converting function is ok ${g1.e4}
+   extracting less values than the converting function is an error ${g1.e5}
 
-   It is possible to use other delimiters like `[]`
-     - by passing a new regular expression directly to the parser ${g1.e1}
-     - by specifying another implicit regular expression ${g2.e2}
+ It is possible to use other delimiters like `[]`
+   by passing a new regular expression directly to the parser ${g1.e1}
+   by specifying another implicit regular expression ${g2.e2}
 
  Regular expression can also be used to extract values ${g3.e1}
 
  Extracted values
-   - lead to the creation of `Steps` ${g4.e1}
-   - if they are used to create expectations this creates `Examples` ${g4.e2}
+   lead to the creation of `Steps` ${g4.e1}
+   if they are used to create expectations this creates `Examples` ${g4.e2}
 
                                                                                                      """
-
   "{} delimiters" - new g1 {
    e1 := FragmentParser((_:String).toInt).parse("a value {1}") === 1
    e2 := FragmentParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("2 values {1} and {2}") === (1, 2)
