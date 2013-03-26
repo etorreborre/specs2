@@ -3,17 +3,17 @@ package specification
 
 import execute.FailureException
 
-class FragmentParsersSpec extends Specification with RegexFragmentParsers with Grouped { def is =
-                                                                                                    s2"""
+class FragmentParsersSpec extends Specification with RegexFragmentParsers with Grouped { def is = "Fragment parsers".title^
+                                                                                                  s2"""
 
  Delimited parsers can be used to extract values from specifications and create Steps.
 
  The defaul delimiters are `{}`
-   extract one value ${g1.e1}
-   extract 2 values ${g1.e2}
-   extract a Seq of values ${g1.e3}
-   extracting more values than the converting function is ok ${g1.e4}
-   extracting less values than the converting function is an error ${g1.e5}
+   one value can be extracted with a function with one argument ${g1.e1}
+   two values can be extracted with a function with two arguments ${g1.e2}
+   a sequence of values can be extracted with a function taking a Seq of values ${g1.e3}
+   it is possible to extract more values than the converting function ${g1.e4}
+   however extracting less values than the converting function returns an error ${g1.e5}
 
  It is possible to use other delimiters like `[]`
    by passing a new regular expression directly to the parser ${g1.e1}
@@ -25,7 +25,8 @@ class FragmentParsersSpec extends Specification with RegexFragmentParsers with G
    lead to the creation of `Steps` ${g4.e1}
    if they are used to create expectations this creates `Examples` ${g4.e2}
 
-                                                                                                     """
+                                                                                                    """
+
   "{} delimiters" - new g1 {
    e1 := FragmentParser((_:String).toInt).parse("a value {1}") === 1
    e2 := FragmentParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("2 values {1} and {2}") === (1, 2)
