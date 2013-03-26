@@ -71,37 +71,38 @@ trait ResultLogicalCombinators extends Results {
     /**
      * @return the logical or combination of 2 results
      */
-    def or(other: =>Result): Result = r match {
-      case f @ Failure(_,_,_,_) => {
-        val o = other
-        o match {
-          case s @ Success(m, exp)    => if (r.message == m) r.addExpectationsNb(s.expectationsNb)
-                                         else Success(r.message+" and "+m, exp, r.expectationsNb + s.expectationsNb)
-          case Failure(m, e, st, d)   => Failure(r.message+" and "+m, e, f.stackTrace ::: st, d).addExpectationsNb(r.expectationsNb)
-          case DecoratedResult(d, r1) => DecoratedResult(d, r.or(r1))
-          case _                      => r.addExpectationsNb(o.expectationsNb).mapExpected((e: String) => concat(e, o.expected))
-        }
-      }
-      case Pending(_) | Skipped(_,_)     => {
-        val o = other
-        o match {
-          case s @ Success(_,_)       => s
-          case f @ Failure(_,_,_,_)   => f
-          case DecoratedResult(d, r1) => DecoratedResult(d, r.or(r1))
-          case _                      => o
-        }
-      }
-      case d @ DecoratedResult(_,_)     => {
-        other match {
-          case DecoratedResult(d2, r2) => {
-            val orResult = (d.result or r2)
-            if (orResult.isSuccess) DecoratedResult(d.decorator, orResult)
-            else                    DecoratedResult(d2, orResult)
+    def or(other: =>Result): Result = {
+      lazy val o = ResultExecution.execute(other)
+      r match {
+        case f @ Failure(_,_,_,_) => {
+          o match {
+            case s @ Success(m, exp)    => if (r.message == m) r.addExpectationsNb(s.expectationsNb)
+            else Success(r.message+" and "+m, exp, r.expectationsNb + s.expectationsNb)
+            case Failure(m, e, st, d)   => Failure(r.message+" and "+m, e, f.stackTrace ::: st, d).addExpectationsNb(r.expectationsNb)
+            case DecoratedResult(d, r1) => DecoratedResult(d, r.or(r1))
+            case _                      => r.addExpectationsNb(o.expectationsNb).mapExpected((e: String) => concat(e, o.expected))
           }
-          case o                   => DecoratedResult(d.decorator, d.result or o)
         }
+        case Pending(_) | Skipped(_,_)     => {
+          o match {
+            case s @ Success(_,_)       => s
+            case f @ Failure(_,_,_,_)   => f
+            case DecoratedResult(d, r1) => DecoratedResult(d, r.or(r1))
+            case _                      => o
+          }
+        }
+        case d @ DecoratedResult(_,_)     => {
+          o match {
+            case DecoratedResult(d2, r2) => {
+              val orResult = (d.result or r2)
+              if (orResult.isSuccess) DecoratedResult(d.decorator, orResult)
+              else                    DecoratedResult(d2, orResult)
+            }
+            case other1                   => DecoratedResult(d.decorator, d.result or other1)
+          }
+        }
+        case _ => r
       }
-      case _ => r.addExpectationsNb(other.expectationsNb)
     }
 
     /**
