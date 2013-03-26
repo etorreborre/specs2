@@ -39,7 +39,9 @@ sealed trait SpecName extends SpecIdentification {
   /** the full class name of the specification without embellishment */
   def javaClassName: String
   /** a unique url for the specification */
-  def url = className(fullName) + ".html"
+  def url = userUrl.getOrElse(className(fullName) + ".html")
+  /** a user-defined url */
+  private[specs2] def userUrl: Option[String]
   /** a markdown link for the specification url */
   def markdownLink = markdownLink(title)
   /** a markdown link for the specification url, with a specific name */
@@ -74,21 +76,20 @@ object SpecName {
 }
 
 private[specs2]
-case class SpecificationName(s: SpecificationStructure) extends SpecName { outer =>
+case class SpecificationName(s: SpecificationStructure, userUrl: Option[String] = None) extends SpecName { outer =>
   def title = name
   def name =  simpleClassName(s)
   def fullName = className(s)
   def javaClassName = s.getClass.getName
 
   def overrideWith(n: SpecName) = n match {
-    case SpecificationName(_)  => this
-    case SpecificationTitle(t) => new SpecificationName(s) {
+    case SpecificationName(_,_)  => this
+    case SpecificationTitle(t,_) => new SpecificationName(s, userUrl.orElse(n.userUrl)) {
       override def id = n.id
       override def title = t
       override def name = outer.name
       override def fullName = outer.fullName
       override def javaClassName = outer.javaClassName
-      override def url = n.url
     }
   }
   override def equals(a: Any) = a match {
@@ -96,15 +97,9 @@ case class SpecificationName(s: SpecificationStructure) extends SpecName { outer
     case other                => false
   }
 
-  def urlIs(u: String) = new SpecificationName(s) {
-    override def id = outer.id
-    override def title = outer.title
-    override def name  = outer.name
-    override def fullName = outer.fullName
-    override def javaClassName = outer.javaClassName
-    override def url = u
-  }
-  def baseDirIs(dir: String) = new SpecificationName(s) {
+  def urlIs(u: String) = copy(userUrl = Some(u))
+
+  def baseDirIs(dir: String) = new SpecificationName(s, userUrl) {
     override def id = outer.id
     override def title = outer.title
     override def name  = outer.name
@@ -114,32 +109,26 @@ case class SpecificationName(s: SpecificationStructure) extends SpecName { outer
   }
 }
 private[specs2]
-case class SpecificationTitle(t: String) extends SpecName { outer =>
+case class SpecificationTitle(t: String, userUrl: Option[String] = None) extends SpecName { outer =>
   def title = t
   def name = title
   def fullName = name
   def javaClassName = fullName
 
   def overrideWith(n: SpecName) = n match {
-    case SpecificationTitle(_) => this
-    case SpecificationName(s)  => new SpecificationName(s) {
+    case SpecificationTitle(_,_) => this
+    case SpecificationName(s,_)  => new SpecificationName(s, userUrl.orElse(n.userUrl)) {
       override def id = n.id
       override def title = t
       override def name = n.name
       override def fullName = n.fullName
       override def javaClassName = n.javaClassName
-      override def url = outer.url
     }
   }
-  def urlIs(u: String) = new SpecificationTitle(t) {
-    override def id = outer.id
-    override def title = outer.title
-    override def name  = outer.name
-    override def fullName = outer.fullName
-    override def javaClassName = outer.javaClassName
-    override def url = u
-  }
-  def baseDirIs(dir: String) = new SpecificationTitle(t) {
+
+  def urlIs(u: String) = copy(userUrl = Some(u))
+
+  def baseDirIs(dir: String) = new SpecificationTitle(t, userUrl) {
     override def id = outer.id
     override def title = outer.title
     override def name  = outer.name
