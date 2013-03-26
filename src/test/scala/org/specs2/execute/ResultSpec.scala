@@ -48,7 +48,7 @@ more precisely:
    ${ (failure1_1 and success1_1).expected must_== "exp1" }
    ${ (failure1_1 and failure2_1).expected must_== "exp1" }
    ${ (failure1_1 and error1)    .expected must_== "exp1" }
-   ${ (error1   and success1_1)  .expected must_== "" }
+   ${ (error1 and success1_1)    .expected must_== "" }
 
  Results can be combined with or
  ${ (success1 or success2) must_== Success("s1") }
@@ -61,11 +61,11 @@ more precisely:
  ${ (failure1 or error1)   must_== failure1 }
  ${ (skipped1 or failure1) must_== failure1 }
    the expectationsNb must be ok
-  ${ (success1 or success2).expectationsNb must_== 2 }
-  ${ (success1 or failure1).expectationsNb must_== 2 }
-  ${ (success1 or skipped1).expectationsNb must_== 2 }
+  ${ (success1 or success2).expectationsNb must_== 1 }
+  ${ (success1 or failure1).expectationsNb must_== 1 }
+  ${ (success1 or skipped1).expectationsNb must_== 1 }
   ${ (failure1 or success1).expectationsNb must_== 2 }
-  ${ (success1 or failure1).expectationsNb must_== 2 }
+  ${ (success1 or failure1).expectationsNb must_== 1 }
   ${ (skipped1 or success1).expectationsNb must_== 1 }
   ${ (skipped1 or failure1).expectationsNb must_== 1 }
   ${ (failure1 or failure2).expectationsNb must_== 2 }
