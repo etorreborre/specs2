@@ -77,6 +77,8 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOu
     logError(message)
   }
   override def printSuccess(message: String)(implicit args: Arguments)                      = info(message)
+  override def printSkipped(message: String)(implicit args: Arguments)                      = info(message)
+  override def printPending(message: String)(implicit args: Arguments)                      = info(message)
   override def printStats(message: String)(implicit args: Arguments)                        = {
     flushInfo
     logInfo(message)

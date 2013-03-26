@@ -1,81 +1,60 @@
 package org.specs2
 package specification
 
-import matcher.ResultMatchers
-import main.Arguments
+import execute.FailureException
 
-class FragmentParsersSpec extends Specification with RegexFragmentParsers with SpecificationExecution with Snippets { def is =
-"Fragment parsers".title ^ s2"""
+class FragmentParsersSpec extends Specification with RegexFragmentParsers with Grouped { def is =
+                                                                                                    s2"""
 
-It is possible to write a specification in the Given/When/Then format by using the `FragmentParsers` trait. For example: ${ snippet {
+ Delimited parsers can be used to extract values from specifications and create Steps
 
-  // 8<---
-  class example extends Specification with FragmentParsers { def is = s2"""
+   The default delimiters are `{}`
+     - extract one value ${g1.e1}
+     - extract 2 values ${g1.e2}
+     - extract a Seq of values ${g1.e3}
+     - extracting more values than the converting function is ok ${g1.e4}
+     - extracting less values than the converting function is an error ${g1.e5}
 
-    Given a number {1}              $a1
-    If I add another number {2}     $a2
-    Then I get {3}                  $result
-                                    """
+   It is possible to use other delimiters like `[]`
+     - by passing a new regular expression directly to the parser ${g1.e1}
+     - by specifying another implicit regular expression ${g2.e2}
 
-    def anInt    = extract[Int]((_: String).toInt)
-    val (a1, a2) = (anInt, anInt)
-    val result   = anInt((r: Int) => a1 + a2 === r)
+ Regular expression can also be used to extract values ${g3.e1}
+
+ Extracted values
+   - lead to the creation of `Steps` ${g4.e1}
+   - if they are used to create expectations this creates `Examples` ${g4.e2}
+
+                                                                                                     """
+
+  "{} delimiters" - new g1 {
+   e1 := FragmentParser((_:String).toInt).parse("a value {1}") === 1
+   e2 := FragmentParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("2 values {1} and {2}") === (1, 2)
+   e3 := FragmentParser((seq: Seq[String]) => seq.map(_.toInt).sum).parse("values {1}, {2}, {3}") === 6
+   e4 := FragmentParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("3 values {1} and {2} and {3}") === (1, 2)
+   e5 := FragmentParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("1 value {1}") must throwA[FailureException]
   }
-  // 8<---
-  executeSpec(new example)
-}.check(r => r must beSuccessful)}
+  "[] delimiters" - new g2 {
+    e1 := extract((_:String).toInt).withRegex("""\[([^\]]+)\]""".r).parse("a value [1]") === 1
+    e2 := {
+      implicit val fragmentParserRegex = """\[([^\]]+)\]""".r
+      extract((_:String).toInt).parse("a value {1}") === 1
+    }
+  }
+  "Regular expressions" - new g3 {
+    e1 := {
+      val parser = ("abc".r ~> "\\d+".r <~ "rest") ^^ { case digits => digits.toInt }
+      extract(parser).parse("abc 12345 rest") === 12345
+    }
+  }
 
-Let's dissect the specification above. First we import the `FragmentParsers` trait which gives us access to the `extract` method. The `extract` method extracts String values from the preceding text. It finds them by looking at strings enclosed by `{}` (we'll see how to avoid using delimiters later). Then it applies a function, from `String` to `Int` to create the "Given" values or "When" actions.
+  val anInt = extract((_:String).toInt)
+  val fs1 = (s2""" text {1} $anInt """)
+  val fs2 = (s2""" text {1} ${anInt { i => i must be_>(0) }} """)
 
-Effectively the values `a1` and `a2` above serve as a variables which will hold `Int` values once the text is parsed. Those variable can then be used, with other variables, to create "Then" verifications like `result`. For instance, on the line `Then I get...`, `result` parses the preceding text to extract `3` and uses this value to create an expectation `a1 + a2 === r` so that the whole line is finally transformed to an `Example` fragment in the final Specification.
+  "Fragments creation" - new g4 {
+    e1 := fs1.fragments.map(_.toString) must containMatch("Step")
+    e2 := fs2.fragments.map(_.toString) must containMatch("Example")
+  }
 
-We can now see a few variations on this general pattern:
-
-#### Parsing
-
-##### Delimiters
-
-When you use delimiters it is possible to extract several values at once, simply by passing a function which will use all of them: ${ snippet {
-  def anInt   = extract[Int]((_:String).toInt)                                           // 8<----
-  def twoInts = extract[(Int, Int)]((s1: String, s2: String) => (s1.toInt, s2.toInt))  // 8<----
-  val result  = anInt((r: Int) => twoInts._1 + twoInts._2 === r)                        // 8<----
-
-  s2"""
-    Adding 2 numbers {1} and {2}      $twoInts
-    Should return {3}                 $result
-  """
-                                                                                       // 8<----
-}}
-
-##### Default
-
-The `{}` delimiters are being used as the default delimiters but you can change them via another regular expression if you prefer: ${ snippet {
-  // you need to define a group that will capture values
-  implicit val fragmentParserRegex = """\[([^\]]+)\]""".r
-
-  def anInt   = extract[Int]((_:String).toInt)
-  def twoInts = extract[(Int, Int)]((s1: String, s2: String) => (s1.toInt, s2.toInt))
-  val result  = anInt((r: Int) => twoInts._1 + twoInts._2 === r)
-
-  s2"""
-    The maximum of [1] and [2]      $twoInts
-    Should return [3]               $result
-  """
-}}
-
- * import
-
- * Write sentences where the variables to extract are delimited with specific markers
- * Write sentences where the variables to extract and the
-
-
-                                                                                  """
-}
-
-/**
- * execute a Specification and check the results
- */
-trait SpecificationExecution extends ResultMatchers { this: Specification =>
-  def executeSpec(s: SpecificationStructure)       = FragmentExecution.executeExamplesResult(s.content)(Arguments())
-  def executionMustBeOk(s: SpecificationStructure) = executeSpec(s) must beSuccessful
 }

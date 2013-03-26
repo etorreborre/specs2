@@ -215,7 +215,7 @@ In that case, the text of the example will be extracted from the source file and
      + Some(1) must not be none
 
 #### G / W /T
-"""^ "The Given/When/Then style for writing specifications is described" ~ ("here", new GivenWhenThenPage)^
+"""^ "The Given/When/Then style for writing specifications is described" ~ ("here", new GivenWhenThenDeprecatedPage)^
 """
 
 #### DataTables

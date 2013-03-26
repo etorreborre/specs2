@@ -4,7 +4,7 @@ package specification
 import control.Exceptions._
 import text.NotNullStrings._
 import text.Trim._
-import execute.AsResult
+import execute.{Result, AsResult}
 import matcher.ResultMatchers
 import main.{ArgumentsArgs, Arguments}
 
@@ -76,6 +76,7 @@ case class CodeSnippet[T](code: () => T, isMuted: Boolean = false) extends Snipp
   type ST = CodeSnippet[T]
   def set(muted: Boolean = true): ST = copy(isMuted = muted)
   def check[R : AsResult](verification: T => R) = CheckedSnippet[T, R](code, verification)
+  def checkOk(implicit asResult: AsResult[T]) = CheckedSnippet[T, Result](code, (t: T) => AsResult(t))
 }
 
 case class CheckedSnippet[T, R : AsResult](code: () => T, verification: T => R, isMuted: Boolean = false) extends Snippet[T] {

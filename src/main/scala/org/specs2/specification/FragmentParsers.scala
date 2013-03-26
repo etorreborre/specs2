@@ -126,7 +126,6 @@ class DelimitedVariablesParserSeq[T](f: Seq[String] => T) extends DelimitedVaria
 }
 
 trait RegexFragmentParser extends RegexParsers {
-  implicit lazy val fragmentParserRegex = """\{([^}]+)\}""".r
 
   case class RegexFragmentParser[T](p: Parser[T], extractor: Extractor[T] = Extractor[T]()) extends FragmentParser[T] { parent =>
     def parse(text: String) = p.apply(new CharSequenceReader(text, 0)).get
@@ -138,6 +137,8 @@ trait RegexFragmentParser extends RegexParsers {
 
 object FragmentParser extends FragmentParserApply with FragmentParserExtract
 trait FragmentParserApply extends RegexFragmentParser with ImplicitParameters {
+  implicit lazy val fragmentParserRegex = """\{([^}]+)\}""".r
+
   def apply[T](f: String => T)(implicit fpr: Regex): DelimitedVariablesParser[T] = new DelimitedVariablesParser1[T](f).withRegex(fpr)
   def apply[T](f: (String, String) => T)(implicit fpr: Regex): DelimitedVariablesParser[T] = new DelimitedVariablesParser2[T](f).withRegex(fpr)
   def apply[T](f: (String, String, String) => T)(implicit fpr: Regex): DelimitedVariablesParser[T] = new DelimitedVariablesParser3[T](f).withRegex(fpr)
@@ -149,7 +150,6 @@ trait FragmentParserApply extends RegexFragmentParser with ImplicitParameters {
   def apply[T](f: (String, String, String, String, String, String, String, String, String) => T)(implicit fpr: Regex): DelimitedVariablesParser[T] = new DelimitedVariablesParser9[T](f).withRegex(fpr)
   def apply[T](f:(String, String, String, String, String, String, String, String, String, String) => T)(implicit fpr: Regex): DelimitedVariablesParser[T] = new DelimitedVariablesParser10[T](f).withRegex(fpr)
   def apply[T](f: Seq[String] => T)(implicit fpr: Regex, p: ImplicitParam): DelimitedVariablesParser[T] = new DelimitedVariablesParserSeq[T](f).withRegex(fpr)
-  def apply[T](p: Parser[T]): FragmentParser[T] = new RegexFragmentParser[T](p)
 }
 trait FragmentParserExtract extends RegexFragmentParser with ImplicitParameters {
   def extract[T](f: String => T)(implicit fpr: Regex): DelimitedVariablesParser[T] = new DelimitedVariablesParser1[T](f).withRegex(fpr)
@@ -163,11 +163,12 @@ trait FragmentParserExtract extends RegexFragmentParser with ImplicitParameters 
   def extract[T](f: (String, String, String, String, String, String, String, String, String) => T)(implicit fpr: Regex): DelimitedVariablesParser[T] = new DelimitedVariablesParser9[T](f).withRegex(fpr)
   def extract[T](f:(String, String, String, String, String, String, String, String, String, String) => T)(implicit fpr: Regex): DelimitedVariablesParser[T] = new DelimitedVariablesParser10[T](f).withRegex(fpr)
   def extract[T](f: Seq[String] => T)(implicit fpr: Regex, p: ImplicitParam): DelimitedVariablesParser[T] = new DelimitedVariablesParserSeq[T](f).withRegex(fpr)
-  def extract[T](p: Parser[T]): FragmentParser[T] = new RegexFragmentParser[T](p)
 }
 
 /**
  * Fragment parsers using Scala regex parser combinators
  */
 trait RegexFragmentParsers extends FragmentParsers with RegexParsers { this: Specification =>
+  def extract[T](p: Parser[T]): FragmentParser[T] = new RegexFragmentParser[T](p)
+  def apply[T](p: Parser[T]): FragmentParser[T] = new RegexFragmentParser[T](p)
 }
