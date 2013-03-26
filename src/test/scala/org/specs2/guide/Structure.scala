@@ -202,7 +202,7 @@ The example above will be reported as `Pending` until it succeeds. Then it is ma
 
 #### Auto-Examples
 
-If your specification is about showing the use of a DSL or of an API, you can elid a description for the Example. This functionality is used in ***specs2*** to specify matchers:
+If your specification is about showing the use of a DSL or of an API, you can elide a description for the Example. This functionality is used in ***specs2*** to specify matchers:
 
      beNone checks if an element is None
      ${ None must beNone }
