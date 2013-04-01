@@ -46,17 +46,17 @@ object build extends Build {
 
   lazy val dependenciesSettings: Seq[Settings] = Seq(
     libraryDependencies <<= scalaVersion { scalaVersion => Seq(
-      "org.specs2" %% "scalaz-core" % "7.0.0",
-      "org.specs2" %% "scalaz-concurrent" % "7.0.0",
-      "org.scala-lang" % "scala-reflect" % scalaVersion  % "optional",
-      "org.scala-lang" % "scala-compiler" % scalaVersion  % "optional",
-      "org.scalacheck" % "scalacheck_2.10.0" % "1.10.0" % "optional",
-      "org.scala-tools.testing" % "test-interface" % "0.5" % "optional",
-      "org.hamcrest" % "hamcrest-all" % "1.1" % "optional",
-      "org.mockito" % "mockito-all" % "1.9.0" % "optional",
-      "junit" % "junit" % "4.7" % "optional",
-      "org.pegdown" % "pegdown" % "1.0.2" % "optional",
-      "org.specs2" % "classycle" % "1.4.1" % "optional")
+      "org.specs2"              %% "scalaz-core"       % "7.0.0",
+      "org.specs2"              %% "scalaz-concurrent" % "7.0.0",
+      "org.scala-lang"          % "scala-reflect"      % scalaVersion  % "optional",
+      "org.scala-lang"          % "scala-compiler"     % scalaVersion  % "optional",
+      "org.scalacheck"          % "scalacheck_2.10.0"  % "1.10.0"      % "optional",
+      "org.scala-tools.testing" % "test-interface"     % "0.5"         % "optional",
+      "org.hamcrest"            % "hamcrest-all"       % "1.1"         % "optional",
+      "org.mockito"             % "mockito-all"        % "1.9.0"       % "optional",
+      "junit"                   % "junit"              % "4.7"         % "optional",
+      "org.pegdown"             % "pegdown"            % "1.0.2"       % "optional",
+      "org.specs2"              % "classycle"          % "1.4.1"       % "optional")
     },
     resolvers ++= Seq("sonatype-releases" at "http://oss.sonatype.org/content/repositories/releases",
                       "sonatype-snapshots" at "http://oss.sonatype.org/content/repositories/snapshots")

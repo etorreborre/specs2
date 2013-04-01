@@ -1,7 +1,7 @@
 package org.specs2
 package guide
 
-class GivenWhenThenDeprecatedPage extends UserGuidePage { def is = """
+class GivenWhenThenDeprecatedPage extends UserGuidePage { def is = "Given When Then".title ^ """
 ### Given When Then
 
 _This is the original way of writing Given/When/Then specifications in specs2. While this approach has nice properties: no variables, type-safety, it also has performance issues, so it is recommended to use [this one](org.specs2.guide.GivenWhenThenPage.html) instead._

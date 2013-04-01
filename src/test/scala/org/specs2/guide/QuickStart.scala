@@ -3,9 +3,7 @@ package guide
 
 import _root_.examples._
 
-class QuickStart extends UserGuidePage { def is = literate ^
-  "Quick Start".title.urlIs("org.specs2.guide.QuickStart.html") ^
-  s"""
+class QuickStart extends UserGuidePage { def is = literate ^ "Quick Start".title ^ s"""
 There are 2 major styles of specifications with ***specs2***:
 
  * _unit_ specifications where the specification text is interleaved with the specification code. It is generally used to
@@ -57,12 +55,12 @@ Acceptance specifications extend the `org.specs2.Specification` trait and must d
       }
 
 
-The `is` method lists [*specification fragments*](org.specs2.guide.Structure.html#Declare+examples) which can be interpolated from an `s2` String where you can inject:
+The **`is`** method lists [*specification fragments*](org.specs2.guide.Structure.html#Declare+examples) which can be interpolated from an **`s2`** String where you can inject:
 
-* examples: some executable code returning a `Result`
-* ScalaCheck properties
-* Forms
-* normal values
+* examples: some executable code returning a [`Result`](org.specs2.guide.Matchers.html)
+* [ScalaCheck](org.specs2.guide.Matchers.html#ScalaCheck) properties
+* [Forms](org.specs2.guide.Forms.html)
+* normal strings
 
 
 #### Execution

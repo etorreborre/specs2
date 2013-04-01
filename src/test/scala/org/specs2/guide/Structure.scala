@@ -10,7 +10,7 @@ class Structure extends UserGuidePage { def is = s"""
 
 ### Presentation
 
-In this page you will learn how to:
+In this section you will learn how to:
 
  * declare examples and expectations
  * link specifications together
@@ -26,18 +26,7 @@ The [Quick Start](org.specs2.guide.QuickStart.html) guide describes 2 styles of 
 
 ##### _Acceptance_ specification
 
-In an _acceptance_ specification you build a list of _fragments_ joined with the `^` operator:
-
-      "this is my specification"                          ^
-        "and example 1"                                   ! e1^
-        "and example 2"                                   ! e2
-
-      def e1 = success
-      def e2 = success
-
-What we have here is a list of 3 fragments, a Text fragment and 2 Example fragments. The examples are declared using the format `"description" ! body`. Their "bodies" are provided by 2 methods returning a `Result`, separated from the specification text.
-
-However, as we've seen in the QuickStart, it is way easier to use the `s2` string interpolator to do the same:
+In an _acceptance_ specification you build a list of _Fragments_ which are interpolated from a **`s2`** string:
 
       s2$triple
       this is my specification
@@ -48,13 +37,15 @@ However, as we've seen in the QuickStart, it is way easier to use the `s2` strin
       def e1 = success
       def e2 = success
 
-In this case the "body" of the first example is defined by the method e1 and its description is the text that precedes the example on the same line.
+This specification builds 1 piece of `Text` and 2 `Examples` which are `Fragment` objects. Another way to define an Example, outside the interpolated specification would be to write:
 
-The [Interpolated](#Interpolated) section shows how to use the `s2` interpolator to display the examples as you wish.
+      "Example description" ! { /* example body */ }
+
+Please read the [Fragments API](org.specs2.guide.FragmentsApi.html) page you want to know more about the low-level operators to create and chain Specification Fragments.
 
 ##### _Unit_ specification
 
-A _unit_ specification uses `should/in` blocks which build the Fragments by adding them to a mutable protected variable:
+A _unit_ specification uses `should/in` blocks which build Fragments by adding them to a mutable protected variable:
 
       "The 'Hello world' string" should {
         "contain 11 characters" in {
@@ -70,33 +61,35 @@ A _unit_ specification uses `should/in` blocks which build the Fragments by addi
 
 In that specification the following methods are used:
 
- * `in` to create an Example containing a `Result`
- * `should` to create a group of Examples, with a the preceding Text fragment appended with `should`
+ * `in` to create an `Example` containing a `Result`
+ * `should` to create a group of Examples, where `should` is appended to the preceding Text fragment
 
 It is completely equivalent to writing this in an `org.specs2.Specification`:
 
-      def is =
+      def is = s2$triple
 
-      "The 'Hello world' string should" ^
-        "contain 11 characters" ! {
-          "Hello world" must have size(11)
-        }^
-        "start with 'Hello'" ! {
-          "Hello world" must startWith("Hello")
-        }^
-        "end with 'world'" ! {
-          "Hello world" must endWith("world")
-        }
+        The 'Hello world' string should
+          contain 11 characters ${dollar}{
+            "Hello world" must have size(11)
+          }
+          start with 'Hello' ${dollar}{
+            "Hello world" must startWith("Hello")
+          }
+          end with 'world'" ${dollar} ' {
+            Hello world must endWith("world")
+          }
+               $triple
 
 The [Unit specifications](#Unit+specifications) section shows all the methods which can be used to build unit specifications fragments.
 
 #### Results
 
-An Example is created by following a piece of text with `!` and providing anything convertible to an `org.specs2.execute.Result`:
+An `Example` is a piece of text followed by anything which can be converted to an `org.specs2.execute.Result` (via the `org.specs2.execute.AsResult` typeclass):
 
- * a standard result
+ * a standard result (success, failure, pending,...)
  * a Matcher result
  * a boolean value
+ * a ScalaCheck property
 
 ##### Standard
 
@@ -120,13 +113,13 @@ Usually the body of an example is made of *expectations* using matchers:
 
      def e1 = 1 must_== 1
 
-You can refer to the [Matchers](org.specs2.guide.Matchers.html)  guide to learn all about matchers and how to create expectations.
+You can refer to the [Matchers](org.specs2.guide.Matchers.html) guide to learn all about matchers and how to create expectations.
 
 #### Expectations
 
 ##### Functional
 
-The default `Specification` trait in ***specs2*** is functional: the Result of an example is always given by the last statement of its body. This example will never fail because the first expectation is "lost":
+The default `Specification` trait in ***specs2*** is functional: the `Result` of an example is always given by the last statement of its body. For instance, this example will never fail because the first expectation is "lost":
 
       "my example on strings" ! e1                // will never fail!
 
@@ -152,7 +145,7 @@ Note that the `ThrownExpectations` traits is mixed in the `mutable.Specification
 
 ##### All
 
-The `org.specs2.specification.AllExpectations` trait goes further and gives you the possibility to have all the failures of an Example to be reported without stopping at the first one. This enables a type of specification where it is possible to define lots of expectations inside the body of an example and get a maximum of information on what fails and what passes:
+The `org.specs2.specification.AllExpectations` trait goes further and gives you the possibility to report all the failures of an Example without stopping at the first one. This enables a type of specification where it is possible to define lots of expectations inside the body of an example and get a maximum of information on what fails and what passes:
 
       import org.specs2._
       import specification._
@@ -177,36 +170,20 @@ The second example above hints at a restriction for this kind of Specification. 
 Ultimately, you may want to stop the execution of an example if one expectation is not verified. This is possible with `orThrow`:
 
       "In this example all the expectations are evaluated" >> {
-        1 === 1           // this is ok
-       (1 === 3).orThrow  // this fails but is never executed
+        1 === 1            // this is ok
+        (1 === 3).orThrow  // this fails but is never executed
         1 === 4
       }
 
 Alternatively, `orSkip` will skip the rest of the example in case of a failure.
-
-#### Pending until fixed
-
-Some examples may be temporarily failing but you may not want the entire test suite to fail just for those examples. Instead of commenting them out and then forgetting about those examples when the code is fixed, you can append `pendingUntilFixed` to the Example body:
-
-      "this example fails for now" ! {
-        1 must_== 2
-      }.pendingUntilFixed
-
-      // or, with a more specific message
-      "this example fails for now" ! {
-        1 must_== 2
-      }.pendingUntilFixed("ISSUE-123")
-
-
-The example above will be reported as `Pending` until it succeeds. Then it is marked as a failure so that you can remember to remove the `pendingUntilFixed` marker.
 
 #### Auto-Examples
 
 If your specification is about showing the use of a DSL or of an API, you can elide a description for the Example. This functionality is used in ***specs2*** to specify matchers:
 
      beNone checks if an element is None
-     ${ None must beNone }
-     ${ Some(1) must not be none }
+     ${dollar}{ None must beNone }
+     ${dollar}{ Some(1) must not be none }
 
 In that case, the text of the example will be extracted from the source file and the output will be:
 
@@ -215,8 +192,7 @@ In that case, the text of the example will be extracted from the source file and
      + Some(1) must not be none
 
 #### G / W /T
-"""^ "The Given/When/Then style for writing specifications is described" ~ ("here", new GivenWhenThenDeprecatedPage)^
-"""
+The Given/When/Then style for writing specifications is described ${"here" ~ new GivenWhenThenDeprecatedPage}
 
 #### DataTables
 
@@ -243,13 +219,14 @@ This specification will be rendered as:
 
 When you create acceptance specifications, you have to find names to reference your examples, which can sometimes be a bit tedious. You can then get some support from the `org.specs2.specification.Grouped` trait. This trait provides group traits, named `g1` to `g22` to define groups of examples. Each group trait defines 22 variables named `e1` to `e22`, to define examples bodies. The specification below shows how to use the `Grouped` trait:
 
-      class MySpecification extends Examples { def is =
-        "first example in first group"                       ! g1.e1 ^
-        "second example in first group"                      ! g1.e2 ^
-                                                                     p^
-        "first example in second group"                      ! g2.e1 ^
-        "second example in second group"                     ! g2.e2
-        "third example in second group, not yet implemented" ! g2.e3
+      class MySpecification extends Examples { def is =      s2$triple
+        first example in first group                         ${dollar}{g1.e1}
+        second example in first group                        ${dollar}{g1.e2}
+
+        first example in second group                        ${dollar}{g2.e1}
+        second example in second group                       ${dollar}{g2.e2}
+        third example in second group, not yet implemented   ${dollar}{g2.e3}
+                                                             $triple
       }
 
       trait Examples extends Grouped with Matchers {
@@ -285,9 +262,11 @@ You can define additional variables in your group traits:
 
 However, the `service` variable will be shared by all the examples of each group, which can be potentially troublesome if that variable is mutated. If you want to provide complete isolation for each example, you should instead use the `org.specs2.specification.Groups` trait and call each group as a function:
 
-       class MySpecification extends Examples { def is =
-         "first example in first group"                       ! g1().e1 ^
-         "second example in first group"                      ! g1().e2
+       class MySpecification extends Examples { def is = s2$triple
+
+        first example in first group                     ${dollar}{g1().e1}
+        second example in first group                    ${dollar}{g1().e2}
+                                                         $triple
        }
 
        trait Examples extends Groups with Matchers {
@@ -1164,8 +1143,8 @@ To make things more concrete here is a full example:
           def e1 = string must have size(7)
         }
       }
-                                                                                                                                                                        """^
-    """
+  """^
+  """
 ### How to?
 
 #### Declare arguments
@@ -1226,6 +1205,23 @@ The title can be defined either:
 The description of an Example can be used to create an expectation in the example body:
 
       "This is a long, long, long description" ! ((s: String) => s.size must be_>(10))
+
+#### Pending until fixed
+
+Some examples may be temporarily failing but you may not want the entire test suite to fail just for those examples. Instead of commenting them out and then forgetting about those examples when the code is fixed, you can append `pendingUntilFixed` to the Example body:
+
+      "this example fails for now" ! {
+        1 must_== 2
+      }.pendingUntilFixed
+
+      // or, with a more specific message
+      "this example fails for now" ! {
+        1 must_== 2
+      }.pendingUntilFixed("ISSUE-123")
+
+
+The example above will be reported as `Pending` until it succeeds. Then it is marked as a failure so that you can remember to remove the `pendingUntilFixed` marker.
+
 
 #### Enhance failures
 
@@ -1560,7 +1556,7 @@ More generally, you can both use the example description and the example body to
       }
 
   - - -
-    """^
+  """^
                                                                                                                         br^
   include(xonly, new GivenWhenThenSpec)                                                                                 ^
   include(xonly, exampleTextIndentation)                                                                                ^
