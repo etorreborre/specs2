@@ -2,8 +2,9 @@ package org.specs2
 package guide
 
 import specification.Forms._
+import specification.Snippets
 
-class Matchers extends UserGuidePage { def is = s2"""
+class Matchers extends UserGuidePage with Snippets { def is = s2"""
 There are many ways to define expectations in ***specs2***. You can define expectations with anything that returns a `Result`:
 
   * Boolean
@@ -324,30 +325,31 @@ You can also set the random generator that is used in all the ScalaCheck generat
 
 At the moment only the [Mockito](http://mockito.org) library is supported.
 
-Mockito allows to specify stubbed values and to verify that some calls are expected on your objects. In order to use those functionalities, you need to extend the `org.specs2.mock.Mockito` trait:
+Mockito allows to specify stubbed values and to verify that some calls are expected on your objects. In order to use those functionalities, you need to extend the `org.specs2.mock.Mockito` trait: ${ snippet {
 
-    import org.specs2.mock._
-    class MockitoSpec extends Specification { def is = s2$triple
+import org.specs2.mock._
+class MockitoSpec extends Specification { def is = s2"""
 
-      A java list can be mocked
-        You can make it return a stubbed value                                     ${dollar}{c().stub}
-        You can verify that a method was called                                    ${dollar}{c().verify}
-        You can verify that a method was not called                                ${dollar}{c().verify2}
-                                                                                   $triple
-      case class c() extends Mockito {
-        val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock[new java.util.LinkedList[String]]
-        def stub = {
-          m.get(0) returns "one"             // stub a method call with a return value
-          m.get(0) must_== "one"             // call the method
-        }
-        def verify = {
-          m.get(0) returns "one"             // stub a method call with a return value
-          m.get(0)                           // call the method
-          there was one(m).get(0)            // verify that the call happened
-        }
-        def verify2 = there was no(m).get(0) // verify that the call never happened
-      }
+  A java list can be mocked
+    You can make it return a stubbed value                                     ${c().stub}
+    You can verify that a method was called                                    ${c().verify}
+    You can verify that a method was not called                                ${c().verify2}
+                                                                               """
+  case class c() extends Mockito {
+    val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock[new java.util.LinkedList[String]]
+    def stub = {
+      m.get(0) returns "one"             // stub a method call with a return value
+      m.get(0) must_== "one"             // call the method
     }
+    def verify = {
+      m.get(0) returns "one"             // stub a method call with a return value
+      m.get(0)                           // call the method
+      there was one(m).get(0)            // verify that the call happened
+    }
+    def verify2 = there was no(m).get(0) // verify that the call never happened
+  }
+}
+}}
 
 ##### Creation and settings
 
@@ -360,6 +362,10 @@ Mockito offers the possibility to provide specific settings for the mock being c
  * "smart" return values
 
    `val m = mock[List[String]].smart`
+
+ * "verbose" enables Mockito's verbose logging
+
+   `val m = mock[List[String]].verbose`
 
  * specific return values
 

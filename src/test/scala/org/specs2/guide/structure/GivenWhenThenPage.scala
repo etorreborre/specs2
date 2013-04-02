@@ -11,7 +11,7 @@ The Given/When/Then style of writing specifications is supported by the use of t
 
 Here is a simple example of a Given/When/Then specification using the `FragmentParsers` trait: ${ snippet {
 
-  // 8<---
+// 8<---
 class example extends Specification with FragmentParsers { def is = s2"""
 
   Given a number {1}              $a1
@@ -23,9 +23,8 @@ class example extends Specification with FragmentParsers { def is = s2"""
   val (a1, a2) = (anInt, anInt)
   val result   = anInt((r: Int) => a1 + a2 === r)
 
-}
-  // 8<---
-  executeSpec(new example)
+} // 8<---
+executeSpec(new example)
 }.checkOk}
 
 The first thing you can notice is that in specs2 you are not forced to use "Given"/"When"/"Then" as keywords. Those words are only guidelines to structure your scenario along the "Arrange/Act/Assert" way of testing. Actually *how* values are extracted and *how* results are checked entirely depends on the `FragmentParsers` which you insert after the pieces of text.
