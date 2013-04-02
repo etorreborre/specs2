@@ -1,6 +1,7 @@
-package org.specs2
-import control.Exceptions._
+package org.specs2.guide
+
 import scala.io.Source
+import org.specs2.control.Exceptions._
 
 object Specs2Variables {
 
@@ -28,6 +29,10 @@ object Specs2Variables {
   lazy val guideSnapshotDir = "guide-SNAPSHOT/"+guideOfficialDir
   lazy val guideDir         = (if (isSnapshot) guideSnapshotDir else guideOfficialDir)
 
+  lazy val imagesOfficialDir = "images/"
+  lazy val imagesSnapshotDir = "../../"+imagesOfficialDir
+  lazy val imagesDir         = (if (isSnapshot) imagesSnapshotDir else imagesOfficialDir)
+
   lazy val examplesOfficialDir = "https://github.com/etorreborre/specs2/tree/"+version+"/src/test/scala/examples"
   lazy val apiOfficialDir      = "http://etorreborre.github.com/specs2/api/SPECS2-" + version + "/"
   lazy val apiSnapshotDir      = "http://etorreborre.github.com/specs2/api/master/"
@@ -51,6 +56,7 @@ object Specs2Variables {
           "API_OFFICIAL"       -> apiOfficialDir,
           "API_SNAPSHOT"       -> apiSnapshotDir,
           "EXAMPLES_OFFICIAL"  -> examplesOfficialDir,
+          "IMAGES"             -> imagesDir,
           "GUIDE"              -> guideDir,
           "GUIDE_OFFICIAL"     -> guideOfficialDir,
           "GUIDE_SNAPSHOT"     -> guideSnapshotDir).foldLeft(t) { case (res, (k, v)) => res.replaceAll("\\#\\{SPECS2_"+k+"\\}", v) }

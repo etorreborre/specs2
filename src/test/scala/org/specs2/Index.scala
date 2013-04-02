@@ -1,5 +1,6 @@
 package org.specs2
 
+import guide.Specs2Variables
 import io.FileSystem
 import scala.io.Source
 import Specs2Variables._

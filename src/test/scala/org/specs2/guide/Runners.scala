@@ -1,8 +1,7 @@
 package org.specs2
 package guide
 
-class Runners extends UserGuidePage { def is =
-  s"""
+class Runners extends UserGuidePage { def is = s"""
 ### Presentation
 
 There are many ways to execute ***specs2*** specifications:
@@ -20,17 +19,19 @@ There are many ways to execute ***specs2*** specifications:
 
  ***specs2*** is available for Scala 2.10 onwards and uses the following libraries, as specified using the [sbt dsl](http://www.scala-sbt.org/release/docs/Getting-Started/Library-Dependencies.html):
 
- <table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info">`"org.specs2" % "scalaz-core" % "7.0.0"`</td><td class="info">mandatory. This jar bundles the scalaz core classes but renamed as `org.specs2.internal.scalaz._`.</td></tr><tr><td class="info">`"org.specs2" % "scalaz-concurrent" % "7.0.0"`</td><td class="info">mandatory. This jar bundles the scalaz concurrent classes but renamed as `org.specs2.internal.scalaz._`.</td></tr><tr><td class="info"> `"org.scalacheck" %% "scalacheck" % "1.10.0"`</td><td class="info">if using ScalaCheck</td></tr><tr><td class="info">`"org.mockito" % "mockito-all" % "1.9.0"`</td><td class="info">if using Mockito. Note: specs2.jar must be placed before mockito.jar on the classpath</td></tr><tr><td class="info">`"org.hamcrest" % "hamcrest-all" % "1.1"`</td><td class="info">if using Hamcrest matchers with Mockito</td></tr><tr><td class="info">`"junit" % "junit" % "4.7"`</td><td class="info">if using JUnit</td></tr><tr><td class="info">`"org.scala-tools.testing" % "test-interface" % "0.5"`</td><td class="info">provided by sbt when using it</td></tr><tr><td class="info">`"org.pegdown" % "pegdown" % "1.0.2"`</td><td class="info">if using the html runner</td></tr><tr><td class="info">`"org.specs2" % "classycle" % "1.4.1"`</td><td class="info">if using the `org.specs2.specification.Analysis` trait</td></tr><tr><td class="info">`"org.scala-lang" % "scala-compiler" % "2.10.1"`</td><td class="info">if using the `org.specs2.specification.Analysis` trait with the `CompilerDependencyFinder` trait</td></tr>tr><td class="info">`"org.scala-lang" % "scala-reflect" % "2.10.1"`</td><td class="info">if using interpolated specifications</td></tr></table>
+ <table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info">`"org.specs2" % "scalaz-core" % "7.0.0"`</td><td class="info">mandatory. This jar bundles the scalaz core classes but renamed as `org.specs2.internal.scalaz._`.</td></tr><tr><td class="info">`"org.specs2" % "scalaz-concurrent" % "7.0.0"`</td><td class="info">mandatory. This jar bundles the scalaz concurrent classes but renamed as `org.specs2.internal.scalaz._`.</td></tr><tr><td class="info"> `"org.scalacheck" %% "scalacheck" % "1.10.0"`</td><td class="info">if using ScalaCheck</td></tr><tr><td class="info">`"org.mockito" % "mockito-all" % "1.9.0"`</td><td class="info">if using Mockito. Note: specs2.jar must be placed before mockito.jar on the classpath</td></tr><tr><td class="info">`"org.hamcrest" % "hamcrest-all" % "1.1"`</td><td class="info">if using Hamcrest matchers with Mockito</td></tr><tr><td class="info">`"junit" % "junit" % "4.7"`</td><td class="info">if using JUnit</td></tr><tr><td class="info">`"org.scala-tools.testing" % "test-interface" % "0.5"`</td><td class="info">provided by sbt when using it</td></tr><tr><td class="info">`"org.pegdown" % "pegdown" % "1.0.2"`</td><td class="info">if using the html runner</td></tr><tr><td class="info">`"org.specs2" % "classycle" % "1.4.1"`</td><td class="info">if using the `org.specs2.specification.Analysis` trait</td></tr><tr><td class="info">`"org.scala-lang" % "scala-compiler" % "2.10.1"`</td><td class="info">if using the `org.specs2.specification.Analysis` trait with the `CompilerDependencyFinder` trait</td></tr><tr><td class="info">`"org.scala-lang" % "scala-reflect" % "2.10.1"`</td><td class="info">if using interpolated specifications</td></tr></table>
 
 ### Arguments
 
 You can specify arguments which will control the execution and reporting. They can be passed on the command line, or declared inside the specification, using the `args(name=value)` syntax:
 
-      class MySpec extends Specification { def is = args(xonly=true)    ^ s2$triple
-        Clever spec title
-        And some intro text
-        brilliant expectation $success                                    $triple
-      }
+```
+class MySpec extends Specification { def is = args(xonly=true)    ^ s2$triple
+  Clever spec title
+  And some intro text
+  brilliant expectation $success                                    $triple
+}
+```
 
 #### API
 
@@ -79,10 +80,11 @@ From inside a specification, the available arguments are the following:
 Most of the arguments above can be set in a specification with `args(name=value)`. However Scala would not allow the `args` method to accept *all* the possible
 arguments as parameters (because a method can only have up to 22 parameters). This is why the least frequently used arguments (not in italics) can be set with an object called `args`, having separate methods for setting all the parameters, by "category". For example:
 
-      args.select(specName = ".*Test", include="slow")
-      args.execute(threadsNb = 2)
-      args.report(showtimes = true, xonly = true)
-
+```
+args.select(specName = ".*Test", include="slow")
+args.execute(threadsNb = 2)
+args.report(showtimes = true, xonly = true)
+```
 
 ##### Shortcuts
 
@@ -158,17 +160,18 @@ For the diffs arguments the values you can specify are:
 
 You can also specify your own enhanced algorithm for displaying difference by providing an instance of the `org.specs2.main.Diffs` trait:
 
-        trait Diffs {
-          /** @return true if the differences must be shown */
-          def show: Boolean
-          /** @return true if the differences must be shown for 2 different strings */
-          def show(expected: String, actual: String): Boolean
-          /** @return the diffs */
-          def showDiffs(expected: String, actual: String): (String, String)
-          /** @return true if the full strings must also be shown */
-          def showFull: Boolean
-        }
-
+```
+trait Diffs {
+  /** @return true if the differences must be shown */
+  def show: Boolean
+  /** @return true if the differences must be shown for 2 different strings */
+  def show(expected: String, actual: String): Boolean
+  /** @return the diffs */
+  def showDiffs(expected: String, actual: String): (String, String)
+  /** @return true if the full strings must also be shown */
+  def showFull: Boolean
+}
+```
 
 ##### StackTraceFilter
 
@@ -255,20 +258,26 @@ While the format `-Dname=value` can be convenient, `-Dspecs2.name=value` is reco
 
 Executing a specification `com.company.SpecName` in the console is very easy:
 
-`scala -cp ... specs2.run com.company.SpecName [argument1 argument2 ...]`
+```
+scala -cp ... specs2.run com.company.SpecName [argument1 argument2 ...]
+```
 
 #### Html output
 
 If you want html pages to be produced for your specification you'll need to execute:
 
-`scala -cp ... specs2.html com.company.SpecName [argument1 argument2 ...]`
+```
+scala -cp ... specs2.html com.company.SpecName [argument1 argument2 ...]
+```
 
 #### JUnit XML output
 
 Many Continuous Integration systems rely on JUnit XML reports to display build and test results. It is possible to produce
 those result by using the `specs2.junitxml` object:
 
-`scala -cp ... specs2.junitxml com.company.SpecName [argument1 argument2 ...]`
+```
+scala -cp ... specs2.junitxml com.company.SpecName [argument1 argument2 ...]
+```
 
 #### Files Runner
 
@@ -293,23 +302,25 @@ Additionally you can use the following arguments to modify the behavior of the `
 
 The `specs2.run` object has an `apply` method to execute specifications from the Scala console:
 
-      scala> specs2.run(spec1, spec2)
+    scala> specs2.run(spec1, spec2)
 
-      scala> import specs2._  // same thing, importing the run object
-      scala> run(spec1, spec2)
+    scala> import specs2._  // same thing, importing the run object
+    scala> run(spec1, spec2)
 
 If you want to pass specific arguments you can import the `specs2.arguments` object member functions:
 
-      scala> import specs2.arguments._
+    scala> import specs2.arguments._
 
-      scala> specs2.run(spec1)(nocolor)
+    scala> specs2.run(spec1)(nocolor)
 
 Or you can set implicit arguments which will be used for any specification execution:
 
-      scala> import specs2.arguments._
-      scala> implicit val myargs = nocolor
+```
+scala> import specs2.arguments._
+scala> implicit val myargs = nocolor
 
-      scala> specs2.run(spec1)
+scala> specs2.run(spec1)
+```
 
 ### Via SBT
 
@@ -317,41 +328,47 @@ Or you can set implicit arguments which will be used for any specification execu
 
 In order to use ***specs2*** with sbt 0.7.x you need first to add the following lines to your sbt project:
 
-      def specs2Framework = new TestFramework("org.specs2.runner.SpecsFramework")
-      override def testFrameworks = super.testFrameworks ++ Seq(specs2Framework)
+    def specs2Framework = new TestFramework("org.specs2.runner.SpecsFramework")
+    override def testFrameworks = super.testFrameworks ++ Seq(specs2Framework)
 
 Then, depending on the naming of your specification, you have to specify which classes you want to include for reporting:
 
-      override def includeTest(s: String) = { s.endsWith("Spec") || s.contains("UserGuide") }
+```
+override def includeTest(s: String) = { s.endsWith("Spec") || s.contains("UserGuide") }
+```
 
 #### with sbt > 0.9.x
 
 In this case you don't need to do much because ***specs2*** will be recognized out-of-the-box. However, if you want to filter some specifications you need to add this to your `build.sbt` file (see [here](http://www.scala-sbt.org/release/docs/Detailed-Topics/Testing.html) for more information):
 
-      // keep only specifications ending with Spec or Unit
-      testOptions := Seq(Tests.Filter(s => Seq("Spec", "Unit").exists(s.endsWith(_))))
+    // keep only specifications ending with Spec or Unit
+    testOptions := Seq(Tests.Filter(s => Seq("Spec", "Unit").exists(s.endsWith(_))))
 
 If you don't want the specifications to be executed in parallel:
 
-      parallelExecution in Test := false
+    parallelExecution in Test := false
 
 If you want to pass arguments available for all specifications:
 
-      // equivalent to `test-only -- nocolor neverstore` on the command line
-      testOptions in Test += Tests.Argument("nocolor", "neverstore")
+    // equivalent to `test-only -- nocolor neverstore` on the command line
+    testOptions in Test += Tests.Argument("nocolor", "neverstore")
 
-      // equivalent to `test-only -- exclude integration` on the command line
-      testOptions in Test += Tests.Argument("exclude", "integration")
+    // equivalent to `test-only -- exclude integration` on the command line
+    testOptions in Test += Tests.Argument("exclude", "integration")
 
 If you want the examples results to be displayed as soon as they've been executed you need to add:
 
-      logBuffered := false
+```
+logBuffered := false
+```
 
 ##### Test-only arguments
 
 When you execute one test only, you can pass the arguments on the command line:
 
-      > test-only org.specs2.UserGuide -- xonly
+```
+> test-only org.specs2.UserGuide -- xonly
+```
 
 ##### Output formats
 
@@ -359,16 +376,18 @@ When you execute one test only, you can pass the arguments on the command line:
 
 The `html` argument is available with sbt to allow the creation of the html report from the command line.
 
-      > test-only org.specs2.UserGuide -- html
+```
+> test-only org.specs2.UserGuide -- html
 
-      // in your build.sbt file
-      testOptions in Test += Tests.Argument("html")
+// in your build.sbt file
+testOptions in Test += Tests.Argument("html")
+```
 
 ###### Markdown
 
 The `markup` argument can be used to create ".md" files (to use with websites like GitHub):
 
-      > test-only org.specs2.UserGuide -- markup
+    > test-only org.specs2.UserGuide -- markup
 
 In this case the markup text in the Specifications is not interpreted.
 
@@ -376,25 +395,31 @@ In this case the markup text in the Specifications is not interpreted.
 
 Similarly, JUnit xml output files can be created by passing the `junitxml` option:
 
-      > test-only org.specs2.examples.HelloWorldUnitSpec -- junitxml
+```
+> test-only org.specs2.examples.HelloWorldUnitSpec -- junitxml
 
-      // in your build.sbt file
-      testOptions in Test += Tests.Argument("junitxml")
+// in your build.sbt file
+testOptions in Test += Tests.Argument("junitxml")
+```
 
 ###### Console
 
 If you want to get a console output as well, don't forget to add the `console` argument:
 
-      > test-only org.specs2.UserGuide -- html console
+```
+> test-only org.specs2.UserGuide -- html console
 
-      // in your build.sbt file
-      testOptions in Test += Tests.Argument("html", "console")
+// in your build.sbt file
+testOptions in Test += Tests.Argument("html", "console")
+```
 
 ##### Files runner
 
 Any `FilesRunner` object can also be invoked by sbt, but you need to specify `console`, `html`, `junitxml`, `markup` on the command line:
 
-      > test-only allSpecs -- console
+```
+> test-only allSpecs -- console
+```
 
 ##### Colors
 
@@ -466,16 +491,18 @@ If the `colors` option contains `whitebg` then the default colors are considered
 
 Finally you can change the color scheme that's being used on the console by implementing your own [`org.specs2.text.Colors`](#{SPECS2_API}index.html#org.specs2.text.Colors) trait or override values in the existing `ConsoleColors` class. For example if you want to output magenta everywhere yellow is used you can write:
 
-      object MyColors = new org.specs2.text.ConsoleColors { override val failureColor = magenta }
+    object MyColors = new org.specs2.text.ConsoleColors { override val failureColor = magenta }
 
-      class MyColoredSpecification extends Specification { def is = colors(MyColors) ^
-         // the failure message will be magenta
-         "this is a failing example" ! failure
-      }
+    class MyColoredSpecification extends Specification { def is = colors(MyColors) ^
+       // the failure message will be magenta
+       "this is a failing example" ! failure
+    }
 
 Note also that the the color support for sbt on Windows is a bit tricky. You need to follow the instructions [here](http://www.marioawad.com/2010/11/16/ansi-command-line-colors-under-windows) then add to your script launching sbt:
 
-        -Djline.terminal=jline.UnsupportedTerminal
+```
+-Djline.terminal=jline.UnsupportedTerminal
+```
 
 ### Via IDEA
 
@@ -484,7 +511,7 @@ IntelliJ offers a nice integration with ***specs2***. You can:
  * Execute a specification by selecting its name and pressing CTRL+SHIFT+F10
  * Execute a single example by selecting its description and pressing CTRL+SHIFT+F10
 
- ![specs2 in Intellij](images/intellij.png)
+ ![specs2 in Intellij](#{SPECS2_IMAGES}/intellij.png)
 
 But also:
 
@@ -497,19 +524,19 @@ It is possible to have ***specs2*** specifications executed as JUnit tests. This
 
 There are 2 ways of enabling a Specification to be executed as a JUnit test: the verbose one and the simpler one. The simplest one is to extend `SpecificationWithJUnit`:
 
-       class MySpecification extends SpecificationWithJUnit {
-         def is = // as usual....
-       }
+     class MySpecification extends SpecificationWithJUnit {
+       def is = // as usual....
+     }
 
 You can use the second one if your IDE doesn't work with the first one:
 
-      import org.junit.runner._
-      import runner._
+    import org.junit.runner._
+    import runner._
 
-      @RunWith(classOf[JUnitRunner])
-      class MySpecification extends Specification {
-         def is = // as usual....
-      }
+    @RunWith(classOf[JUnitRunner])
+    class MySpecification extends Specification {
+       def is = // as usual....
+    }
 
 [*some [tricks](http://code.google.com/p/specs/wiki/RunningSpecs#Run_your_specification_with_JUnit4_in_Eclipse) described on the specs website can still be useful there*]
 
@@ -552,13 +579,15 @@ The `NotifierRunner` class can be instantiated with a custom `Notifier` and used
 
 You can also use a custom `Notifier` from inside sbt by passing the `notifier` argument with a `Notifier` implementation class name:
 
-      sbt>test-only *BinarySpec* -- notifier com.mycompany.reporting.FtpNotifier
+```
+sbt> test-only *BinarySpec* -- notifier com.mycompany.reporting.FtpNotifier
+```
 
 #### Exporter
 
 The `org.specs2.reporter.Exporter` trait can be used to collect `ExecutedFragments` and report them as desired. The only method to implement is:
 
-      def export(implicit args: Arguments): ExecutingSpecification => ExecutedSpecification
+    def export(implicit args: Arguments): ExecutingSpecification => ExecutedSpecification
 
  * `args` is an `Arguments` object created from command line options
  * `ExecutingSpecification` is a list of fragments which might or might not have finished their execution
@@ -570,7 +599,7 @@ Please see the API of each class to see how to use them.
 
 You can use a custom `Exporter` from inside sbt by passing the `exporter` argument with a `Exporter` implementation class name:
 
-      sbt>test-only *BinarySpec* -- exporter com.mycompany.reporting.FtpExporter
+    sbt> test-only *BinarySpec* -- exporter com.mycompany.reporting.FtpExporter
 
    - - -
 

@@ -243,19 +243,19 @@ The `contain` and `haveTheSameElementsAs` matchers can be "adapted" to use a dif
 
 `^^ (f: (T, T) => Boolean)` can be used instead of `==`. For example:
 
-         Seq(1, 2, 3) must contain(4, 3, 2) ^^ ((i: Int, j: Int) => i-j <= 1)
+       Seq(1, 2, 3) must contain(4, 3, 2) ^^ ((i: Int, j: Int) => i-j <= 1)
 
 will check if each value in the first list is contained in the second list with possibly an error margin of 1.
 
 `^^ (f: T => Matcher[T])` can be used to compare values with a matcher. For example:
 
-         val equalIgnoreCase = (s: String) => be_==(s.toLowerCase)
-         Seq("Eric", "Bob") must contain("bob", "eric") ^^ equalIgnoreCase
+       val equalIgnoreCase = (s: String) => be_==(s.toLowerCase)
+       Seq("Eric", "Bob") must contain("bob", "eric") ^^ equalIgnoreCase
 
 `^^^ (f: T => S)` can be used to compare values with a function. For example:
 
-         val usersFromDb = Seq(User(id=1, name="eric"), User(id=2, name="Bob"))
-         usersFromDb must contain(User(id=0, name="eric"), User(id=0, name="Bob") ^^^ ((_:User).copy(id=0))
+       val usersFromDb = Seq(User(id=1, name="eric"), User(id=2, name="Bob"))
+       usersFromDb must contain(User(id=0, name="eric"), User(id=0, name="Bob") ^^^ ((_:User).copy(id=0))
 
 _Note_: the last operator used here is slightly different. It is `^^^` instead of simply `^^` because the same function is used to "adapt" both values at the same time. On the other hand the first 2 operators are more or less using a function taking 2 parameters.
 
@@ -348,19 +348,19 @@ object JsonMatchers extends Card {
 
 Now the interesting part comes from the fact that those matchers can be chained to search specific paths in the Json document. For example, for the following document:
 
-      // taken from an example in the Lift project
-      val person = {
-        "person": {
-          "name": "Joe",
-          "age": 35,
-          "spouse": {
-            "person": {
-              "name": "Marilyn",
-              "age": 33
-            }
+    // taken from an example in the Lift project
+    val person = {
+      "person": {
+        "name": "Joe",
+        "age": 35,
+        "spouse": {
+          "person": {
+            "name": "Marilyn",
+            "age": 33
           }
         }
       }
+    }
 
 You can use these combinations:
 
@@ -440,10 +440,10 @@ This is because those 2 types implement the `org.specs2.text.LinesContent` trait
 
 So if you have a specific type `T` which you can represent as a `Seq[String]`, you can create an implicit `LinesContent` and then you'll be able to use the `ContentMatchers`:
 
-      implicit val linesforMyType: LinesContent[T] = new LinesContent[T] {
-        def name(t: T) = "My list of lines"
-        def lines(t: T): Seq[String] = ... // your implementation goes here
-      }
+    implicit val linesforMyType: LinesContent[T] = new LinesContent[T] {
+      def name(t: T) = "My list of lines"
+      def lines(t: T): Seq[String] = ... // your implementation goes here
+    }
 
 ***Order***
 
@@ -476,18 +476,18 @@ object TerminationMatchers extends Card {
 
 Sometimes you just want to specify that a block of code is going to terminate. The `TerminationMatchers` trait is here to help. If you mix in that trait, you can write:
 
-      Thread.sleep(100) must terminate
+    Thread.sleep(100) must terminate
 
-      // the default is retries=0, sleep=100.millis
-      Thread.sleep(100) must terminate(retries=1, sleep=60.millis)
+    // the default is retries=0, sleep=100.millis
+    Thread.sleep(100) must terminate(retries=1, sleep=60.millis)
 
 Note that the behaviour of this matcher is a bit different from the `eventually` operator. In this case, we let the current Thread sleep during the given `sleep` time and then we check if the computation is finished, then, we retry for the given number of `retries`.
 
 In a further scenario, we might want to check that triggering another action is able to unblock the first one:
 
-      action1 must terminate.when(action2)
-      action1 must terminate.when("starting the second action", action2)
-      action1 must terminate(retries=3, sleep=100.millis).when(action2)
+    action1 must terminate.when(action2)
+    action1 must terminate.when("starting the second action", action2)
+    action1 must terminate(retries=3, sleep=100.millis).when(action2)
 
 When a second action is specified like that, `action1` will be started and `action2` will be started on the first retry. Otherwise, if you want to specify that `action1` can *only* terminate when `action2` is started, you write:
 
@@ -500,12 +500,12 @@ object ResultMatchers extends Card {
   def text =  """
 That's only if you want to match the result of other matchers!
 
-      // you need to extend the ResultMatchers trait
-      class MatchersSpec extends Specification with ResultMatchers { def is =
-        "beMatching is using a regexp" ! {
-          ("Hello" must beMatching("h.*")) must beSuccessful
-        }
+    // you need to extend the ResultMatchers trait
+    class MatchersSpec extends Specification with ResultMatchers { def is =
+      "beMatching is using a regexp" ! {
+        ("Hello" must beMatching("h.*")) must beSuccessful
       }
+    }
 """
 }
 
@@ -514,21 +514,21 @@ object InterpreterMatchers extends Card {
   def text =  """
 In the rare case where you want to use the Scala interpreter and execute a script:
 
-      class ScalaInterpreterMatchersSpec extends Specification with ScalaInterpreterMatchers {
-        def interpret(s: String): String = // you have to provide your own Scala interpreter here
+    class ScalaInterpreterMatchersSpec extends Specification with ScalaInterpreterMatchers {
+      def interpret(s: String): String = // you have to provide your own Scala interpreter here
 
-          "A script" can {
-            "be interpreted" in {
-              "1 + 1" >| "2"
-            }
+        "A script" can {
+          "be interpreted" in {
+            "1 + 1" >| "2"
           }
-      }
+        }
+    }
 """
 }
 
-object ParserMatchers extends Card {
+object ParserMatchers extends Card with UserGuideVariables {
   def title = "Parser"
-  def text =  """
+  def text =  s"""
 Scala provides a parsing library using [parser combinators](http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html).
 
 You can specify your own parsers by:
@@ -544,42 +544,42 @@ You can specify your own parsers by:
 
 For example, specifying a Parser for numbers could look like this:
 
-      import util.parsing.combinator.RegexParsers
-      import NumberParsers.{number, error}
+    import util.parsing.combinator.RegexParsers
+    import NumberParsers.{number, error}
 
-      class ParserSpec extends Specification with matcher.ParserMatchers {  def is =
-        "Parsers for numbers"                                                                     ^
-                                                                                                  p^
-          "beASuccess and succeedOn check if the parse succeeds"                                  ^
-          { number("1") must beASuccess }                                                         ^
-          { number("1i") must beAPartialSuccess }                                                 ^
-          { number must succeedOn("12") }                                                         ^
-          { number must succeedOn("12ab").partially }                                             ^
-          { number must succeedOn("12").withResult(12) }                                          ^
-          { number must succeedOn("12").withResult(equalTo(12)) }                                 ^
-          { number("1") must haveSuccessResult("1") }                                             ^
-                                                                                                  p^
-          "beAFailure and failOn check if the parse fails"                                        ^
-          { number must failOn("abc") }                                                           ^
-          { number must failOn("abc").withMsg("string matching regex.*expected") }                ^
-          { number must failOn("abc").withMsg(matching(".*string matching regex.*expected.*")) }  ^
-          { number("i") must beAFailure }                                                         ^
-          { number("i") must haveFailureMsg("i' found") }                                         ^
-                                                                                                  p^
-          "beAnError and errorOn check if the parser errors out completely"                       ^
-          { error must errorOn("") }                                                              ^
-          { error("") must beAnError }                                                            ^
-                                                                                                  end
+    class ParserSpec extends Specification with matcher.ParserMatchers {  def is = s2$triple
+      Parsers for numbers
 
-        val parsers = NumberParsers
-      }
+        beASuccess and succeedOn check if the parse succeeds
+        ${dollar}{ number("1") must beASuccess }
+        ${dollar}{ number("1i") must beAPartialSuccess }
+        ${dollar}{ number must succeedOn("12") }
+        ${dollar}{ number must succeedOn("12ab").partially }
+        ${dollar}{ number must succeedOn("12").withResult(12) }
+        ${dollar}{ number must succeedOn("12").withResult(equalTo(12)) }
+        ${dollar}{ number("1") must haveSuccessResult("1") }
 
-      object NumberParsers extends RegexParsers {
-        /** parse a number with any number of digits */
-        val number: Parser[Int] = "\\d+".r ^^ {_.toInt}
-        /** this parser returns an error */
-        val error: Parser[String] = err("Error")
-      }
+        beAFailure and failOn check if the parse fails
+        ${dollar}{ number must failOn("abc") }
+        ${dollar}{ number must failOn("abc").withMsg("string matching regex.*expected") }
+        ${dollar}{ number must failOn("abc").withMsg(matching(".*string matching regex.*expected.*")) }
+        ${dollar}{ number("i") must beAFailure }
+        ${dollar}{ number("i") must haveFailureMsg("i' found") }
+
+        beAnError and errorOn check if the parser errors out completely
+        ${dollar}{ error must errorOn("") }
+        ${dollar}{ error("") must beAnError }
+                                                                                   $triple
+
+      val parsers = NumberParsers
+    }
+
+    object NumberParsers extends RegexParsers {
+      /** parse a number with any number of digits */
+      val number: Parser[Int] = "\\d+".r ^^ {_.toInt}
+      /** this parser returns an error */
+      val error: Parser[String] = err("Error")
+    }
 """
 }
 
@@ -592,35 +592,35 @@ It is highly desirable to have acyclic dependencies between the packages of a pr
 
 First you need to define the packages and their expected dependencies. Mix-in the `org.specs2.specification.Analysis` trait and define, (taking ***specs2*** as an example):
 
-      layers (
-        "runner",
-        "reporter",
-        "specification mutable",
-        "mock      form",
-        "matcher",
-        "execute",
-        "reflect    xml  time html",
-        "collection control io text main data").withPrefix("org.specs2")
+    layers (
+      "runner",
+      "reporter",
+      "specification mutable",
+      "mock      form",
+      "matcher",
+      "execute",
+      "reflect    xml  time html",
+      "collection control io text main data").withPrefix("org.specs2")
 
 The above expression defines layers as an ordered list of `String`s containing space-separated package names. It is supplemented by a `withPrefix` declaration to factor out the common package prefix between all these packages.
 
 By default, the packages are supposed to correspond to directories in the `src/target/scala-<version>/classes` directory. If your project has a different layout you can declare another target directory:
 
-      layers(...).inTargetDir("out/classes")
+    layers(...).inTargetDir("out/classes")
 
 **Inclusion/Exclusion**
 
 Every rule has exceptions :-). In some rare cases, it might be desirable to exclude a class from being checked on a given layer. To do this, you can use the `include/exclude` methods on the `Layer` class:
 
-      layers (
-        "runner",
-        "reporter",
-        "specification mutable".exclude("mutable.SpecificationWithJUnit"),
-        "mock      form",
-        "matcher",
-        "execute",
-        "reflect  xml  time html",
-        "collection control io text main data").withPrefix("org.specs2")
+    layers (
+      "runner",
+      "reporter",
+      "specification mutable".exclude("mutable.SpecificationWithJUnit"),
+      "mock      form",
+      "matcher",
+      "execute",
+      "reflect  xml  time html",
+      "collection control io text main data").withPrefix("org.specs2")
 
 The `include/exclude` methods accept a list of regular expressions to:
 
@@ -631,27 +631,27 @@ The `include/exclude` methods accept a list of regular expressions to:
 
 Now you've defined layers, you can use the `beRespected` matcher to check if all the dependencies are verified:
 
-     val design = layers(...)
-     design must beRespected
+    val design = layers(...)
+    design must beRespected
 
 If some dependencies are not respected:
 
-      those dependencies are not satisfied:
-      org.specs2.main x-> org.specs2.io because org.specs2.io.FileSystem -> org.specs2.main.Arguments
-      org.specs2.main x-> org.specs2.io because org.specs2.io.FileSystem -> org.specs2.main.ArgumentsArgs
+    those dependencies are not satisfied:
+    org.specs2.main x-> org.specs2.io because org.specs2.io.FileSystem -> org.specs2.main.Arguments
+    org.specs2.main x-> org.specs2.io because org.specs2.io.FileSystem -> org.specs2.main.ArgumentsArgs
 
 ***Layers as an `Example`***
 
 The `Analysis` trait allows to directly embed the layers definition in a `Specification` and turn it into an `Example`:
 
-      class DependenciesSpec extends Specification with Analysis { def is =
-        "this is the application design" ^
-          layers(
-            "gui commandline",
-            "controller",
-            "backend"
-          )
-      }
+    class DependenciesSpec extends Specification with Analysis { def is =
+      "this is the application design" ^
+        layers(
+          "gui commandline",
+          "controller",
+          "backend"
+        )
+    }
 
 ***Alternative implementation***
 
@@ -663,10 +663,10 @@ While this implementation is slower than the Classycle one, it might retrieve mo
 
 Note: since this functionality relies on the scala compiler library, so you need to add it to your build file:
 
-      // use sbt's scalaVersion Setting to define the scala-compiler library version
-      libraryDependencies <<= scalaVersion { scala_version => Seq(
-        "org.specs2" %% "specs2" % "1.10" % "test",
-        "org.scala-lang" % "scala-compiler" % scala_version % "test")
-      }
+    // use sbt's scalaVersion Setting to define the scala-compiler library version
+    libraryDependencies <<= scalaVersion { scala_version => Seq(
+      "org.specs2" %% "specs2" % "1.10" % "test",
+      "org.scala-lang" % "scala-compiler" % scala_version % "test")
+    }
 """
 }

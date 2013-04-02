@@ -87,31 +87,31 @@ As we will see in the paragraphs below, this is a compromise in the sense that t
 
 Mutable variables were the subject of enough grief, I decided it was high time to do without them. This decision has a big impact on the way a user writes a specification. A specification can not anymore be a set of unrelated "blocks" where each block is added to the parent specification through a side effect:
 
-      "my example is ok" in { 1 must_== 1 }        // those examples are added to the specification by mutating a
-      "my other example is ok" in { 2 must_== 2 }  // variable
+    "my example is ok" in { 1 must_== 1 }        // those examples are added to the specification by mutating a
+    "my other example is ok" in { 2 must_== 2 }  // variable
 
 Now the "blocks" have to form a sequence:
 
-      "my example is ok"       ! e1^               // notice the ^ operator here
-      "my other example is ok" ! e2
+    "my example is ok"       ! e1^               // notice the ^ operator here
+    "my other example is ok" ! e2
 
-      def e1 = { 1 must_== 1 }
-      def e2 = { 2 must_== 2 }
+    def e1 = { 1 must_== 1 }
+    def e2 = { 2 must_== 2 }
 
 This is clearly a drawback of not having side-effects. The presence of `^` everywhere produces unwanted syntactic noise in the specification. One way of minimizing that noise is to make good use of an editor with column editing and align those symbols on the print margin of the screen. The specification can then be read as having 2 columns, one with the text, one with the implementation and the formatting directives.
 
 The same principle applies to the Examples bodies and has a major consequence: you have to explicitly chain expectations!
 
-      "my example on strings" ! e1                // will never fail!
-      def e1 = {
-        "hello" must have size(10000)             // because this expectation will not be returned,...
-        "hello" must startWith("hell")
-      }
+    "my example on strings" ! e1                // will never fail!
+    def e1 = {
+      "hello" must have size(10000)             // because this expectation will not be returned,...
+      "hello" must startWith("hell")
+    }
 
-      // the correct way of writing the example is
-      "my example on strings" ! e1               // will fail
-      def e1 = "hello" must have size(10000) and
-                            startWith("hell")
+    // the correct way of writing the example is
+    "my example on strings" ! e1               // will fail
+    def e1 = "hello" must have size(10000) and
+                          startWith("hell")
 
 This can be seen as a limitation as well but also as an opportunity for writing better specifications. It's been indeed advocated in several places that there should be only one expectation per example, now the design of ***specs2*** actually encourages it!
 
@@ -125,15 +125,19 @@ The "local configuration" of a Specification in ***specs*** is realized with sid
 
 This is not possible anymore in specs2, so you have to explicitly pass arguments at the top of your specification and chain them with the rest:
 
-      new Specification { def is =  args(color=false)   ^ // will not output colors
-        "the rest of the specs"                         ^ end
-      }
+```
+new Specification { def is =  args(color=false)   ^ // will not output colors
+  "the rest of the specs"                         ^ end
+}
+```
 
 ###### Concurrency is a breeze
 
 This is one of the expected advantages of using functional programming techniques and thanks to Scalaz awesomeness the concurrent execution of examples is just one line of code!
 
-      fs.fragments.map(f => promise(executeFragment(arguments <| fs.arguments)(f))).sequence.get
+```
+fs.fragments.map(f => promise(executeFragment(arguments <| fs.arguments)(f))).sequence.get
+```
 
 ##### A simple structure
 
@@ -155,32 +159,32 @@ Setting up a proper context for an example, with "fresh" variables, which can be
 
 We simply use case class instances for each Example. Here is a demonstration:
 
-      "When the user logs in"                      ^
-        "his past history must be shown"           ! history().isShown^
-        "if he selects tickets"                    ^
-          "the list must be displayed"             ! tickets().list^
-          "the total amount must be displayed"     ! tickets().total^
-          "if he buys tickets"                     ^
-            "his favorite payment type is shown"   ! buy().favorite
+    "When the user logs in"                      ^
+      "his past history must be shown"           ! history().isShown^
+      "if he selects tickets"                    ^
+        "the list must be displayed"             ! tickets().list^
+        "the total amount must be displayed"     ! tickets().total^
+        "if he buys tickets"                     ^
+          "his favorite payment type is shown"   ! buy().favorite
 
-      trait Login {
-        var loggedIn = false
-        def login = loggedIn = true
-        def logout = loggedIn = false
-      }
-      case class history() extends Login {
-        login
-        def isShown = loggedIn must beTrue
-      }
-      case class tickets() extends Login {
-        login
-        def list = pending
-        def total = pending
-      }
-      case class buy() extends Login {
-        val tickets = new tickets()
-        def favorite = pending
-      }
+    trait Login {
+      var loggedIn = false
+      def login = loggedIn = true
+      def logout = loggedIn = false
+    }
+    case class history() extends Login {
+      login
+      def isShown = loggedIn must beTrue
+    }
+    case class tickets() extends Login {
+      login
+      def list = pending
+      def total = pending
+    }
+    case class buy() extends Login {
+      val tickets = new tickets()
+      def favorite = pending
+    }
 
 
 In the specification above, each example is using its own instance of a case class, having its own local variables which will never be overwritten by another example. Parent context is inherited by means of delegation. For example, in the "buy" context, there is an available `tickets` instance placing the system in the desired context.
@@ -193,13 +197,13 @@ Moreover in the "simple structure" above, there is no need for adding curly brac
 
 In specs2, indentation is a feature but it doesn't have to be. For example you could just write the specification above as:
 
-      "When the user logs in"                      ^
-      "  his past history must be shown"           ! history().isShown^
-      "  if he selects tickets"                    ^
-      "    the list must be displayed"             ! tickets().list^
-      "    the total amount must be displayed"     ! tickets().total^
-      "    if he buys tickets"                     ^
-      "      his favorite payment type is shown"   ! buy().favorite
+    "When the user logs in"                      ^
+    "  his past history must be shown"           ! history().isShown^
+    "  if he selects tickets"                    ^
+    "    the list must be displayed"             ! tickets().list^
+    "    the total amount must be displayed"     ! tickets().total^
+    "    if he buys tickets"                     ^
+    "      his favorite payment type is shown"   ! buy().favorite
 
 Or you can leave ***specs2*** compute something reasonable for the indentation along the following rules:
 
@@ -246,18 +250,18 @@ Well, Scala is not a black-or-white language and mutation is definitely part of 
 
 Thus, in ***specs2*** it is possible to create specifications which look almost like the ones which can be created with ***specs***, with a bit less functionalities:
 
-        import org.specs2.mutable._   // similar to the mutable package for Scala collections
+    import org.specs2.mutable._   // similar to the mutable package for Scala collections
 
-        class MyMutableSpecification extends Specification {
-          "This specification" should {
-            "build examples with side-effects" in { success }
-            "even use side-effects to avoid chaining expectations" in {
-               1 must_== 2
-               // the rest won't be executed
-               success
-            }
-          }
+    class MyMutableSpecification extends Specification {
+      "This specification" should {
+        "build examples with side-effects" in { success }
+        "even use side-effects to avoid chaining expectations" in {
+           1 must_== 2
+           // the rest won't be executed
+           success
         }
+      }
+    }
 
 The important things to know are:
 
@@ -306,21 +310,21 @@ This way, if there is any conflict when inheriting from the `Specification` trai
 
 Scala 2.10 brings a new feature to the language, String interpolation. But the big difference with most languages is that it is possible to create your own interpolator! This removes one really annoying issue of specs2 < Scala 2.10: the omni-presence of `^` operators in acceptance specifications. Thanks to String interpolation the canonical "Hello World" example becomes:
 
-      class HelloWorldSpec extends Specification { def is = s2$triple
+    class HelloWorldSpec extends Specification { def is = s2$triple
 
-        This is a specification to check the 'Hello world' string
+      This is a specification to check the 'Hello world' string
 
-        The 'Hello world' string should
-          contain 11 characters              $e1
-          start with 'Hello'                 $e2
-          end with 'world'                   $e3
-                                                            $triple
+      The 'Hello world' string should
+        contain 11 characters              $e1
+        start with 'Hello'                 $e2
+        end with 'world'                   $e3
+                                                          $triple
 
-        def e1 = "Hello world" must have size(11)
-        def e2 = "Hello world" must startWith("Hello")
-        def e3 = "Hello world" must endWith("world")
+      def e1 = "Hello world" must have size(11)
+      def e2 = "Hello world" must startWith("Hello")
+      def e3 = "Hello world" must endWith("world")
 
-      }
+    }
 
 
  - - -

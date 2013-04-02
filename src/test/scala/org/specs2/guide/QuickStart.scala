@@ -16,46 +16,46 @@ There are 2 major styles of specifications with ***specs2***:
 
 Unit specifications extend the `org.specs2.mutable.Specification` trait and are using the `should/in` format:
 
-      import org.specs2.mutable._
+    import org.specs2.mutable._
 
-      class HelloWorldSpec extends Specification {
+    class HelloWorldSpec extends Specification {
 
-        "The 'Hello world' string" should {
-          "contain 11 characters" in {
-            "Hello world" must have size(11)
-          }
-          "start with 'Hello'" in {
-            "Hello world" must startWith("Hello")
-          }
-          "end with 'world'" in {
-            "Hello world" must endWith("world")
-          }
+      "The 'Hello world' string" should {
+        "contain 11 characters" in {
+          "Hello world" must have size(11)
+        }
+        "start with 'Hello'" in {
+          "Hello world" must startWith("Hello")
+        }
+        "end with 'world'" in {
+          "Hello world" must endWith("world")
         }
       }
+    }
 
 #### Acceptance
 
 Acceptance specifications extend the `org.specs2.Specification` trait and must define a method called `is`:
 
-      import org.specs2._
+    import org.specs2._
 
-      class HelloWorldSpec extends Specification { def is = s2$triple
+    class HelloWorldSpec extends Specification { def is = s2$triple
 
-       This is a specification to check the 'Hello world' string
+     This is a specification to check the 'Hello world' string
 
-       The 'Hello world' string should
-         contain 11 characters                                         ${dollar}e1
-         start with 'Hello'                                            ${dollar}e2
-         end with 'world'                                              ${dollar}e3
-                                                                       $triple
+     The 'Hello world' string should
+       contain 11 characters                                         ${dollar}e1
+       start with 'Hello'                                            ${dollar}e2
+       end with 'world'                                              ${dollar}e3
+                                                                     $triple
 
-        def e1 = "Hello world" must have size(11)
-        def e2 = "Hello world" must startWith("Hello")
-        def e3 = "Hello world" must endWith("world")
-      }
+      def e1 = "Hello world" must have size(11)
+      def e2 = "Hello world" must startWith("Hello")
+      def e3 = "Hello world" must endWith("world")
+    }
 
 
-The **`is`** method lists [*specification fragments*](org.specs2.guide.Structure.html#Declare+examples) which can be interpolated from an **`s2`** String where you can inject:
+The **`is`** method lists [*specification fragments*](org.specs2.guide.Structure.html#Declare+examples) which can be interpolated from a **`s2`** String where you can inject:
 
 * examples: some executable code returning a [`Result`](org.specs2.guide.Matchers.html)
 * [ScalaCheck](org.specs2.guide.Matchers.html#ScalaCheck) properties
@@ -67,20 +67,20 @@ The **`is`** method lists [*specification fragments*](org.specs2.guide.Structure
 
 And this is it! Now to execute your specification, you use a [*runner*](org.specs2.guide.Runners.html#Presentation) which will display the results:
 
-      > scala -cp ... specs2.run HelloWorldSpec
+    > scala -cp ... specs2.run HelloWorldSpec
 
-      HelloWorldSpec
+    HelloWorldSpec
 
-      This is a specification to check the 'Hello world' string
+    This is a specification to check the 'Hello world' string
 
-      The 'Hello world' string should
-      + contain 11 characters
-      + start with 'Hello'
-      + end with 'world'
+    The 'Hello world' string should
+    + contain 11 characters
+    + start with 'Hello'
+    + end with 'world'
 
-      Total for specification HelloWorldSpec
-      Finished in 0 second, 58 ms
-      3 examples, 0 failure, 0 error
+    Total for specification HelloWorldSpec
+    Finished in 0 second, 58 ms
+    3 examples, 0 failure, 0 error
 
 #### And much more!
 

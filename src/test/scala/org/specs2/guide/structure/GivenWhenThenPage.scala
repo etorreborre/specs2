@@ -1,12 +1,13 @@
 package org.specs2
 package guide
+package structure
 
-import specification.{Snippets, SpecificationExecution, FragmentParsers}
+import specification._
 
 class GivenWhenThenPage extends UserGuidePage with GivenWhenThenPageImplementation { def is = s2"""
 ### Given When Then
 
-The Given/When/Then style of writing specifications is supported by the use of `FragmentParsers` (there is also [another way](org.specs2.guide.GivenWhenThenPage.html) but it is not recommened because it leads to performance issues at compile-time).
+The Given/When/Then style of writing specifications is supported by the use of `FragmentParsers` (there is also [another way](org.specs2.guide.structure.GivenWhenThenDeprecatedPage.html) but it is not recommened because it leads to performance issues at compile-time).
 
 Here is a simple example of a Given/When/Then specification using the `FragmentParsers` trait: ${ snippet {
 
@@ -80,7 +81,8 @@ The `{}` delimiters are being used as the default delimiters but you can change 
   }}
 
 
-                                                                                  """
+                                                                                  """ ^
+  include(xonly, new GivenWhenThenDeprecatedPage)
 }
 
 trait GivenWhenThenPageImplementation extends FragmentParsers with SpecificationExecution with Snippets { this: Specification =>

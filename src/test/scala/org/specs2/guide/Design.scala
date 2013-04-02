@@ -20,16 +20,16 @@ _note_: some details might not be completely up to date as the code base evolves
 The structure of a specification is very simple, it is just a list of `Fragments` provided by the `is` method of the
 `SpecificationStructure` trait:
 
-      +---------------+                     1..n  +-----------+
-      | Specification | ------------------------> | Fragment  |
-      +---------------+                           +-----------+
-                                                        ^
-                                                        |
-                    +----------+-----------+-----------+-------------+-------------+---------------+
-                    |          |           |           |             |             |               |
-                +------+  +---------+  +-------+  +---------+  +-----------+  +---------+  +-----------------+
-                | Text |  | Example |  | Step  |  | Action  |  | SpecStart |  | SpecEnd |  | TaggingFragment |
-                +------+  +---------+  +-------+  +---------+  +-----------+  +---------+  +-----------------+
+    +---------------+                     1..n  +-----------+
+    | Specification | ------------------------> | Fragment  |
+    +---------------+                           +-----------+
+                                                      ^
+                                                      |
+                  +----------+-----------+-----------+-------------+-------------+---------------+
+                  |          |           |           |             |             |               |
+              +------+  +---------+  +-------+  +---------+  +-----------+  +---------+  +-----------------+
+              | Text |  | Example |  | Step  |  | Action  |  | SpecStart |  | SpecEnd |  | TaggingFragment |
+              +------+  +---------+  +-------+  +---------+  +-----------+  +---------+  +-----------------+
 
 
 Here's a short description of all the Fragments:
@@ -53,9 +53,9 @@ There are implicits to create Fragments (found in the `org.specs2.specification.
 
 Once built, these Fragments can be "linked" with `^`, creating a `Fragments` object, containing a `Seq[Fragment]`:
 
-        val fragments: Fragments =
-          "this text" ^
-          "is related to this Example" ! success
+      val fragments: Fragments =
+        "this text" ^
+        "is related to this Example" ! success
 
 The `Fragments` object is used to hold temporarily a sequence of Fragments as it is built and it makes sure that when the building is done, the Fragments passed for execution will start and end with proper SpecStart and SpecEnd fragments.
 
@@ -63,9 +63,9 @@ The `Fragments` object is used to hold temporarily a sequence of Fragments as it
 
 In a mutable Specification there is no visible "link" between Fragments, they're all created and linked through side-effects (thanks to an enhanced version of the `FragmentsBuilder` trait in the `org.specs2.mutable` package):
 
-        // build an Example and add it to the specFragments variable
-        "this example must succeed" in { success }
-        "same thing here" in { success }
+      // build an Example and add it to the specFragments variable
+      "this example must succeed" in { success }
+      "same thing here" in { success }
 
 Of course this there is mutation involved here, it's not advised to do anything concurrent at that point.
 
@@ -73,8 +73,8 @@ Of course this there is mutation involved here, it's not advised to do anything 
 
 The execution is triggered by the various reporters and goes through 5 steps:
 
-        // code from the Reporter trait
-        spec.content |> select |> sequence |> execute |> store |> export(spec)
+      // code from the Reporter trait
+      spec.content |> select |> sequence |> execute |> store |> export(spec)
 
  1. <u>Selection</u>: the Fragments are filtered according to the Arguments object. In that phase all examples but a few can be filtered if the `only("this example")` option is used for instance. Another way to select fragments is to insert `TaggingFragment`s inside the specification.
     If the `isolated` argument is true, each example body is replaced with the same body executing in a cloned Specification to avoid seeing side-effects on local variables.
@@ -112,14 +112,14 @@ Then, each fragment and associated data (level, statistics, arguments,...) is tr
 
 The following package dependencies should be always verified, from low-level packages to high-level ones, where no package on a low layer can depend on a package on a higher layer:
 
-      + runner
-      + reporter
-      + mutable    specification
-      + mock form
-      + matcher
-      + execute
-      + analysis reflect  xml html  time json
-      + collection control  io  text  main data
+    + runner
+    + reporter
+    + mutable    specification
+    + mock form
+    + matcher
+    + execute
+    + analysis reflect  xml html  time json
+    + collection control  io  text  main data
 
 
 

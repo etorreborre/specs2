@@ -1,5 +1,6 @@
-package org.specs2
-package guide
+package org.specs2.guide.structure
+
+import org.specs2.guide.UserGuidePage
 
 class GivenWhenThenDeprecatedPage extends UserGuidePage { def is = "Given When Then".title ^ """
 ### Given When Then
