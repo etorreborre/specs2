@@ -258,7 +258,7 @@ class ContainOnlyMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T
 
   def apply[S <: GenTraversableOnce[T]](traversable: Expectable[S]) = {
     val actual = traversable.value
-    result(actual.toSeq.filter(a => expected.exists(e => equality(a, e))).size == expected.size,
+    result(actual.toSeq.filter(a => expected.exists(e => equality(a, e))).size == expected.size && expected.size == actual.size,
            traversable.description + " contains only " + q(expected.mkString(", ")),
            traversable.description + " doesn't contain only " + q(expected.mkString(", ")), traversable)
   }

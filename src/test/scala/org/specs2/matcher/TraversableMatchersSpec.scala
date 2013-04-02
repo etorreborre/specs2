@@ -51,6 +51,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
     ${ List("Hello", "World") must contain("Hello", "World").only.inOrder }
     ${ List("Hello", 1) must contain("Hello", 1) }
     ${ List("Hello", "World") must contain("Hello", "World").inOrder.only }
+    ${ List("Hello", "World", "!") must not(contain("Hello", "World").only) }
     ${ List("Hello", "World") must not (contain("World", "Hello").only.inOrder) }
     and show appropriate failure messages if one element doesn't match ${sameSeq().e1}
     with a specific equality function
