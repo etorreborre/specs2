@@ -6,6 +6,7 @@ import control.Property
 import reflect.ClassesOf
 import org.mockito.invocation._
 import scala.reflect.ClassTag
+import org.mockito.internal.debugging.VerboseMockInvocationLogger
 
 /**
  * This trait provides methods to create mocks and spies.
@@ -38,19 +39,22 @@ trait MocksCreation extends TheMockitoMocker with ClassesOf {
   private[specs2]
   case class Mocked[T : ClassTag](mockitoSettings: org.mockito.MockSettings = org.mockito.Mockito.withSettings) {
     def as(n: String) = settings(name = n)
-    def smart = Mocked[T](mockitoSettings.defaultAnswer(org.mockito.Mockito.RETURNS_SMART_NULLS)).done 
+    def verbose = Mocked[T](mockitoSettings.invocationListeners(new VerboseMockInvocationLogger())).done
+    def smart = Mocked[T](mockitoSettings.defaultAnswer(org.mockito.Mockito.RETURNS_SMART_NULLS)).done
     def defaultReturn(a: Any) = settings(defaultReturn = a)
     def defaultAnswer[S](answer: InvocationOnMock => S) = settings(defaultAnswer = (i: InvocationOnMock) => answer(i): Any)
     def extraInterface[T : ClassTag] = settings(extraInterface = implicitly[ClassTag[T]].runtimeClass)
 
 		def settings(name            : MockProperty[String] = MockProperty[String](),
 		             smart           : MockProperty[Boolean] = MockProperty[Boolean](),
+                 verbose         : MockProperty[Boolean] = MockProperty[Boolean](),
 						     defaultAnswer   : MockProperty[InvocationOnMock => Any] = MockProperty[InvocationOnMock => Any](),
 						     defaultReturn   : MockProperty[Any] = MockProperty[Any](),
 						     extraInterface  : MockProperty[Class[_]] = MockProperty[Class[_]](),
 		             extraInterfaces : MockProperty[Seq[Class[_]]] = MockProperty[Seq[Class[_]]]()) = {
 			update(name)(n => mockitoSettings.name(n)).
 			update(smart)(s => if (s) mockitoSettings.defaultAnswer(org.mockito.Mockito.RETURNS_SMART_NULLS) else mockitoSettings).
+      update(verbose)(v => if (v) mockitoSettings.invocationListeners(new VerboseMockInvocationLogger()) else mockitoSettings).
       update(defaultAnswer)(a => mockitoSettings.defaultAnswer(mocker.answer(a))).
       update(defaultReturn)(r => mockitoSettings.defaultAnswer(mocker.answer(r))).
       update(extraInterface)(i => mockitoSettings.extraInterfaces(i)).
