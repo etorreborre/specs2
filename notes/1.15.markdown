@@ -19,7 +19,7 @@ Fixes
  * made the Json matchers more tolerant against single quoted Json for testing
  * when a title is specified on a Specification the url of the html file should not be changed
  * when parsing for package names it must be possible to have a license header at the beginning of a file [#143](https://github.com/etorreborre/specs2/issues/143)
-
+ * fixed the contain.only matcher when negated [#148](https://github.com/etorreborre/specs2/issues/148)
 
  ==========================
 
