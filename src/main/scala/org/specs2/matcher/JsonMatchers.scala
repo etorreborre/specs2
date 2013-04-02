@@ -111,10 +111,10 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersLowImplicits { oute
     def not(when: Boolean): JsonPairMatcher = if (when) this.not else this
   }
 
-  class JsonValueMatcher(value: JsonValueSpec) extends Matcher[Any] { parent =>
+  class JsonValueMatcher(value: JsonValueSpec) extends Matcher[String] { parent =>
     def navigate(json: JSONType): Option[JSONType] = Some(json)
 
-    def apply[S <: Any](s: Expectable[S]) = {
+    def apply[S <: String](s: Expectable[S]) = {
       parse(s.value.notNull).map(navigate) match {
         case Some(Some(JSONObject(obj))) => result(false, "ok", obj.map(p => p._1+" : "+p._2).mkString("{", ", ", "}")+" doesn't contain "+stringOrRegex(value), s)
         case Some(Some(JSONArray(list))) => result(containValue(list, value), s)
@@ -123,7 +123,7 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersLowImplicits { oute
       }
     }
     override def not: JsonValueMatcher = new JsonValueMatcher(value) {
-      override def apply[S <: Any](s: Expectable[S]) = super.apply(s).negate
+      override def apply[S <: String](s: Expectable[S]) = super.apply(s).negate
     }
     private[specs2]
     def not(when: Boolean): JsonValueMatcher = if (when) this.not else this
@@ -175,10 +175,10 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersLowImplicits { oute
     def not(when: Boolean): JsonDeepPairMatcher = if (when) this.not else this
 
   }
-  class JsonDeepValueMatcher(value: JsonValueSpec) extends Matcher[Any] { parent =>
+  class JsonDeepValueMatcher(value: JsonValueSpec) extends Matcher[String] { parent =>
     def navigate(json: JSONType): Option[JSONType] = Some(json)
 
-    def apply[S <: Any](s: Expectable[S]) = {
+    def apply[S <: String](s: Expectable[S]) = {
       parse(s.value.notNull).map(navigate) match {
         case Some(Some(o)) => result(containValue(terminalValues(o), value), s)
         case Some(None)    => result(false, "ok", s.value.notNull+" is empty", s)
@@ -187,7 +187,7 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersLowImplicits { oute
     }
 
     override def not: JsonDeepValueMatcher = new JsonDeepValueMatcher(value) {
-      override def apply[S <: Any](s: Expectable[S]) = super.apply(s).negate
+      override def apply[S <: String](s: Expectable[S]) = super.apply(s).negate
     }
     private[specs2]
     def not(when: Boolean): JsonDeepValueMatcher = if (when) this.not else this
