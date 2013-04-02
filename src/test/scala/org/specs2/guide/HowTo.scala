@@ -416,6 +416,11 @@ More generally, you can both use the example description and the example body to
       }
 
     }
+
+### Capture snippets
+
+
+
   """
 
 

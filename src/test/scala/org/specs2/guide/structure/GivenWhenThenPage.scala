@@ -58,8 +58,7 @@ def twoInts = extract[(Int, Int)]((s1: String, s2: String) => (s1.toInt, s2.toIn
                                   s2"""
 Adding 2 numbers {1} and {2}      $twoInts
 Should return {3}                 $result
-                                  """
-    // 8<----
+                                  """ // 8<----
 }}
 You can also pass a function taking in `Seq[String]` as a parameter and get all the extracted values as a sequence.
 
