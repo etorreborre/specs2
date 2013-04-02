@@ -5,10 +5,8 @@ import form.Form
 import main.{Arguments, ArgumentsArgs}
 import execute._
 import text.NotNullStrings._
-import text.Trim._
-import control.Exceptions._
 import scala.reflect.macros.{Context => MContext}
-import text.{CodeMarkup, NoMarkup}
+import text.{CodeMarkup, NoMarkup, Interpolated}
 
 /**
  * Allow to use fragments inside interpolated strings starting with s2 in order to build the specification content
@@ -68,41 +66,15 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
   }
 
   def s2(fileContent: String, texts: Seq[String], variables: Seq[SpecPart]) = {
-
-    def addFragments(fs1: Fragments, fs2: Fragments) =
-      (fs1.middle, fs2.middle) match {
-        case (begin :+ Text(t1), Text(t2) +: rest) => (fs1 ^ fs2).copy(middle = begin ++ (Text(t1+t2) +: rest))
-        case _                                     => fs1 ^ fs2
-      }
-
-    def textOffsets(ts: Seq[String]) = {
-      ts.foldLeft(((fileContent, ""), Seq[Int]())) { (res, cur) =>
-        val ((remaining, passed), result) = res
-        val i = remaining.indexOf(cur)
-        ((remaining.substring(i + cur.size), passed + remaining.substring(0, i + cur.size)), result :+ (passed.size + i))
-      }._2
-    }
-    // start offsets for text elements in the full content
-    def textStartOffsets = textOffsets(texts)
-    // end offsets for text elements in the full content
-    def textEndOffsets = (textStartOffsets zip texts).map { case (start, t) => start + t.size - 1 }
-
-    val trimExpression = (e: String) => e.removeFirst("\\Q${\\E").removeFirst("\\Q$\\E").removeLast("\\Q}\\E")
-    val expressions = (textEndOffsets.dropRight(1) zip textStartOffsets.drop(1)).map { case (start, end) =>
-      tryo(fileContent.substring(start, end)).getOrElse("failed to retrieve text between: "+(start, end))
-    }.map(trimExpression)
-
-    val fragments = (texts zip variables zip expressions).foldLeft(Fragments.createList() ^ args.report(noindent = true) ^ args.report(flow = true)) { (res, cur) =>
+    val expressions = new Interpolated(fileContent, texts).expressions
+    val fragments = (texts zip variables zip expressions).foldLeft(Fragments() ^ interpolatedArguments) { (res, cur) =>
       val ((text, variable), expression) = cur
-      val appended = variable.appendTo(text, expression)
-    
-      // try to keep contiguous text fragments as one so that they can be properly rendered as Markdown
-      // like numbered lists for example
-      addFragments(res, appended)
+      res append variable.appendTo(text, expression)
     }
     texts.lastOption.map(t => fragments.add(Text(t))).getOrElse(fragments)
   }
 
+  def interpolatedArguments = args.report(noindent = true, flow = true)
 }
 
 object S2Macro {

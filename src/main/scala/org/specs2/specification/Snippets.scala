@@ -13,7 +13,7 @@ import main.{ArgumentsArgs, Arguments}
  *
  * When you want to specify that a piece of code must be included in the specification output, you can use the `snippet`
  * method to execute a this code and use the text in the output. If you just want to output part of the code you need to
- * delimit it with some comments `// 8<-------` (with as many dashes as you want
+ * delimit it with some comments `// 8<-------` (with as many dashes as you want)
  *
  * Generally the last value of a snippet will be displayed separately but it is possible to avoid this by using the `mute`
  * method on a Snippet.
@@ -39,7 +39,7 @@ trait Snippet[T] {
 
   protected val code: () => T
   protected lazy val execute = code()
-  protected  def asCode(s: String) = "```scala\n"+s+"\n```"
+  protected  def asCode(s: String) = "```\n"+s+"\n```"
 
   def mute: ST = set(muted = true)
   def eval: ST = set(muted = false)

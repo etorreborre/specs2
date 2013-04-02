@@ -24,6 +24,13 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   def add(fs: Fragments): Fragments = add(fs.fragments)
   def add(a: Arguments): Fragments = copy(arguments = arguments.overrideWith(a))
 
+  /** append the fragments from fs, appending the text fragments if this object ends with Text and fs starts with Text */
+  def append(fs: Fragments)(implicit exampleFactory: ExampleFactory) =
+    (middle, fs.middle) match {
+      case (begin :+ Text(t1), Text(t2) +: rest) => ((new FragmentsFragment(this)) ^ fs).copy(middle = begin ++ (Text(t1+t2) +: rest))
+      case _                                     => (new FragmentsFragment(this)) ^ fs
+    }
+
   def insert(e: Fragment): Fragments = prepend(e)
   def insert(fs: Seq[Fragment]): Fragments = copy(middle = fs ++ middle)
   def insert(fs: Fragments): Fragments = insert(fs.fragments)
