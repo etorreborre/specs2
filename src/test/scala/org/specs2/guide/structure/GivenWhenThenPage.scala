@@ -7,23 +7,23 @@ import specification._
 class GivenWhenThenPage extends UserGuidePage with GivenWhenThenPageImplementation { def is = s2"""
 ### Given When Then
 
-The Given/When/Then style of writing specifications is supported by the use of `FragmentParsers` (there is also [another way](org.specs2.guide.structure.GivenWhenThenDeprecatedPage.html) but it is not recommened because it leads to performance issues at compile-time).
+The Given/When/Then style of writing specifications is supported by the use of the `FragmentParsers` trait (there is also [another way](org.specs2.guide.structure.GivenWhenThenDeprecatedPage.html) but it is not recommended because it leads to performance issues at compile-time).
 
 Here is a simple example of a Given/When/Then specification using the `FragmentParsers` trait: ${ snippet {
 
   // 8<---
-  class example extends Specification with FragmentParsers { def is = s2"""
+class example extends Specification with FragmentParsers { def is = s2"""
 
-    Given a number {1}              $a1
-    If I add another number {2}     $a2
-    Then I get {3}                  $result
-                                    """
+  Given a number {1}              $a1
+  If I add another number {2}     $a2
+  Then I get {3}                  $result
+                                  """
 
-    def anInt    = extract[Int]((_: String).toInt)
-    val (a1, a2) = (anInt, anInt)
-    val result   = anInt((r: Int) => a1 + a2 === r)
+  def anInt    = extract[Int]((_: String).toInt)
+  val (a1, a2) = (anInt, anInt)
+  val result   = anInt((r: Int) => a1 + a2 === r)
 
-  }
+}
   // 8<---
   executeSpec(new example)
 }.checkOk}
@@ -34,7 +34,7 @@ Let's dissect the specification above. First we import the `FragmentParsers` tra
 
 The values `a1` and `a2` above effectively serve as variables which will hold `Int` values once the text is parsed. Those variable can then be used, with other variables, to create "Then" verifications like `result`. Indeed, on the line `Then I get...`, `result` parses the preceding text to extract `3` and uses this value to create an expectation `a1 + a2 === r` so that the whole line is finally transformed to an `Example` fragment in the final Specification.
 
-There are a few variations you can write from this general pattern.
+From this general pattern we can derive a few variations
 
 #### Parsing
 
@@ -42,49 +42,57 @@ There are a few variations you can write from this general pattern.
 
 The `extract` method can be used to create a `FragmentParser` with a function but you can also be more explicit and use the `FragmentParser` constructor:
 
-    `val a1 = FragmentParser((_: String).toInt)`
+```
+val a1 = FragmentParser((_: String).toInt)
+```
 
 ##### Parameters
 
 When you use delimiters it is possible to extract several values at once, simply by passing a function which will use all of them: ${ snippet {
     def anInt   = extract[Int]((_:String).toInt)
     // 8<----
-    def twoInts = extract[(Int, Int)]((s1: String, s2: String) => (s1.toInt, s2.toInt))
+def twoInts = extract[(Int, Int)]((s1: String, s2: String) => (s1.toInt, s2.toInt))
     // 8<----
     val result  = anInt((r: Int) => twoInts._1 + twoInts._2 === r)
     // 8<----
-                                      s2"""
-    Adding 2 numbers {1} and {2}      $twoInts
-    Should return {3}                 $result
-                                      """
+                                  s2"""
+Adding 2 numbers {1} and {2}      $twoInts
+Should return {3}                 $result
+                                  """
     // 8<----
-  }}
-
+}}
 You can also pass a function taking in `Seq[String]` as a parameter and get all the extracted values as a sequence.
 
 Note that you will get a runtime exception if you provide a function having more parameters than extracted values (on the other hand if you pass a function having less parameters than extracted values it will only use the first ones).
 
-##### Default
+##### Default delimiters
 
 The `{}` delimiters are being used as the default delimiters but you can change them via another regular expression if you prefer: ${ snippet {
-    // you need to define a group that will capture values
-    implicit val fragmentParserRegex = """\[([^\]]+)\]""".r
+// you need to define a group that will capture values
+implicit val fragmentParserRegex = """\[([^\]]+)\]""".r
 
-    def anInt   = extract[Int]((_:String).toInt)
-    def twoInts = extract[(Int, Int)]((s1: String, s2: String) => (s1.toInt, s2.toInt))
-    val result  = anInt((r: Int) => twoInts._1 + twoInts._2 === r)
+def anInt   = extract[Int]((_:String).toInt)
+def twoInts = extract[(Int, Int)]((s1: String, s2: String) => (s1.toInt, s2.toInt))
+val result  = anInt((r: Int) => twoInts._1 + twoInts._2 === r)
 
-                                    s2"""
-    The maximum of [1] and [2]      $twoInts
-    Should return [3]               $result
-                                    """
-  }}
+                                s2"""
+The maximum of [1] and [2]      $twoInts
+Should return [3]               $result
+                                """
+}}
 
+##### Regex parsers
+
+Text parsing is done by default with regular expressions but it is also possible to use Scala's parser combinators to parse the steps text: ${ snippet {
+
+val parser = ("abc".r ~> "\\d+".r <~ "rest") ^^ { case digits => digits.toInt }
+extract(parser).parse("abc 12345 rest") === 12345
+}}
 
                                                                                   """ ^
   include(xonly, new GivenWhenThenDeprecatedPage)
 }
 
-trait GivenWhenThenPageImplementation extends FragmentParsers with SpecificationExecution with Snippets { this: Specification =>
+trait GivenWhenThenPageImplementation extends RegexFragmentParsers with SpecificationExecution with Snippets { this: Specification =>
 
 }
