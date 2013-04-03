@@ -26,9 +26,9 @@ trait ResultImplicits {
           if (res.isSuccess) (i + 1, apply(cur))
           else               (i, res)
         }
-        lazy val failingElementMessage = "In the sequence "+q(seq.mkString(", "))+", the "+(index+1).th+" element is failing: "+r.message
+        lazy val failingElementMessage = "In the sequence "+qseq(seq)+" the "+(index+1).th+" element is failing: "+r.message
 
-        if (r.isSuccess) Success("All elements of "+q(seq.mkString(", "))+" are successful")
+        if (r.isSuccess) Success("All elements of "+qseq(seq)+" are successful")
         else             Failure(failingElementMessage)
       }
     }

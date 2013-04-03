@@ -10,7 +10,7 @@ private[specs2]
 trait Quote {
 
   /** quote a value, unless it is a collection of objects */
-  def q(a: Any) = {
+  def q(a: Any): String = {
     if (a == null) quote("null")
     else {
       a match {
@@ -19,6 +19,13 @@ trait Quote {
         case _                      => quote(a.notNull)
       }
     }
+  }
+
+  /** quote a sequence, with commas if short, with newlines otherwise */
+  def qseq(seq: TraversableOnce[_]): String = {
+    val withCommas = q(seq.mkString(", "))
+    if (withCommas.size < 30) withCommas
+    else seq.mkString("\n", "\n  ", "\n")
   }
 
   /** quote a string */

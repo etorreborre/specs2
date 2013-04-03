@@ -226,7 +226,7 @@ trait MatchersImplicits extends Expectations with MatchResultCombinators with Ma
           lazy val failingElementIndex = if (r.isSuccess) -1 else seq.toSeq.indexOf(lastValueTried)
           lazy val failingElementMessage =
             if (failingElementIndex >= 0)
-              "In the sequence "+q(seq.mkString(", "))+", the "+(failingElementIndex+1).th+" element is failing: "+r.message
+              "In the sequence "+qseq(seq)+", the "+(failingElementIndex+1).th+" element is failing: "+r.message
             else
               r.message
 
@@ -257,7 +257,7 @@ trait MatchersImplicits extends Expectations with MatchResultCombinators with Ma
             if (res._1.isSuccess) res
             else                  executeFunctionAndReturnValue(cur)
           }
-          makeSeqResult(r, "In the sequence "+q(seq.mkString(", "))+
+          makeSeqResult(r, "In the sequence "+qseq(seq)+
                            ", the "+(seq.toSeq.indexOf(lastTriedValue)+1).th+" element is matching: "+r.message,
                            "No element of "+q(seq.mkString(", "))+" is matching ok",
                            expectable)

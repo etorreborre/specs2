@@ -186,8 +186,8 @@ class ContainMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T) ==
   def apply[S <: GenTraversableOnce[T]](actual: Expectable[S]) = {
     val missing = expected.filterNot(e => actual.value.toList.exists(a => equality(a, e)))
     result(missing.isEmpty,
-           actual.description + " contains " + q(expected.mkString(", ")),
-           actual.description + " doesn't contain " + q(missing.mkString(", ")), actual)
+           actual.description + " contains " + qseq(expected),
+           actual.description + " doesn't contain " + qseq(missing), actual)
   }
   def inOrder = new ContainInOrderMatcher(expected, equality)
   def only = new ContainOnlyMatcher(expected, equality)
@@ -210,8 +210,8 @@ class ContainExactlyOnceMatcher[T](expected: Seq[T], equality: (T, T) => Boolean
     val actualValues = actual.value.seq.toStream.map(e => (e, 1)).foldMap(Map(_))(mapMonoid[T, Int])
 
     result(expected.forall(e => actualValues.filter { case (k, v) => equality(k, e) }.values.sum == 1),
-           actual.description + " contains exactly once " + q(expected.mkString(", ")),
-           actual.description + " doesn't contain exactly once " + q(expected.mkString(", ")), actual)
+           actual.description + " contains exactly once " + qseq(expected),
+           actual.description + " doesn't contain exactly once " + qseq(expected), actual)
   }
 }
 
@@ -221,8 +221,8 @@ class ContainAnyOfMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:
 
   def apply[S <: GenTraversableOnce[T]](actual: Expectable[S]) = {
     result(actual.value.toList.exists((a: T) => expected.exists((e: T) => equality(a, e))),
-           actual.description + " contains at least one of " + q(expected.mkString(", ")),
-           actual.description + " doesn't contain any of " + q(expected.mkString(", ")), actual)
+           actual.description + " contains at least one of " + qseq(expected),
+           actual.description + " doesn't contain any of " + qseq(expected), actual)
   }
 }
 
@@ -232,8 +232,8 @@ class ContainInOrderMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (
 
   def apply[S <: GenTraversableOnce[T]](actual: Expectable[S]) = {
     result(inOrder(actual.value.toList, expected, equality),
-           actual.description + " contains in order " + q(expected.mkString(", ")),
-           actual.description + " doesn't contain in order " + q(expected.mkString(", ")), actual)
+           actual.description + " contains in order " + qseq(expected),
+           actual.description + " doesn't contain in order " + qseq(expected), actual)
   }
   
   private def inOrder[T](l1: Seq[T], l2: Seq[T], equality: (T, T) => Boolean): Boolean = {
@@ -259,8 +259,8 @@ class ContainOnlyMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T
   def apply[S <: GenTraversableOnce[T]](traversable: Expectable[S]) = {
     val actual = traversable.value
     result(actual.toSeq.filter(a => expected.exists(e => equality(a, e))).size == expected.size && expected.size == actual.size,
-           traversable.description + " contains only " + q(expected.mkString(", ")),
-           traversable.description + " doesn't contain only " + q(expected.mkString(", ")), traversable)
+           traversable.description + " contains only " + qseq(expected),
+           traversable.description + " doesn't contain only " + qseq(expected), traversable)
   }
   def inOrder: Matcher[GenTraversableOnce[T]] = (this and new ContainInOrderMatcher(expected))
   override def not = new ContainOnlyMatcher(expected, equality) {

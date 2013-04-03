@@ -123,9 +123,10 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
     ${ List("Hello", "World") must
        haveTheSameElementsAs(List("ello", "orld")) ^^ ((t1:String, t2: String) => t1.last == t2.last) }
     ${ val beEqualIgnoreCase = be_===(_:String) ^^^ ((_:String).toLowerCase)
-      List("Hello", "World") must haveTheSameElementsAs(List("world", "hello")) ^^ beEqualIgnoreCase }
+       List("Hello", "World") must haveTheSameElementsAs(List("world", "hello")) ^^ beEqualIgnoreCase }
+   
     ${ val startsWitha = (s: String) => be_==("a"+s)
-      List("Hello", "World") must haveTheSameElementsAs(List("aWorld", "aHello")) ^^ startsWitha }
+       List("Hello", "World") must haveTheSameElementsAs(List("aWorld", "aHello")) ^^ startsWitha }
 
   Java collections can also be used with Traversable matchers
   But generally require explicit conversion
