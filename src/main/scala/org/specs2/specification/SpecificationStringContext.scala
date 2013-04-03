@@ -7,6 +7,7 @@ import execute._
 import text.NotNullStrings._
 import scala.reflect.macros.{Context => MContext}
 import text.{CodeMarkup, NoMarkup, Interpolated}
+import control.Exceptions._
 
 /**
  * Allow to use fragments inside interpolated strings starting with s2 in order to build the specification content
@@ -14,8 +15,10 @@ import text.{CodeMarkup, NoMarkup, Interpolated}
 trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
 
   implicit def stringIsSpecPart(s: =>String): SpecPart = new SpecPart {
-    def appendTo(text: String, expression: String = "") =
-      asResultIsSpecPart(s)(new AnyValueAsResult[String]).appendTo(text, expression)
+    def appendTo(text: String, expression: String = "") = {
+      val s1 = tryOr(s)(e => s"[${e.getMessage}]")
+      Fragments.createList(Text(text+s1))
+    }
   }
 
   implicit def exampleIsSpecPart(e: Example): SpecPart = new SpecPart {
@@ -69,7 +72,12 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
     val expressions = new Interpolated(fileContent, texts).expressions
     val fragments = (texts zip variables zip expressions).foldLeft(Fragments() ^ interpolatedArguments) { (res, cur) =>
       val ((text, variable), expression) = cur
-      res append variable.appendTo(text, expression)
+
+      // always provide the latest full piece of text to the spec part for the append method
+      val (res1, text1) = res.middle.lastOption.collect { case t @ Text(_) =>
+        (res.middleDropRight(1), t.t+text)
+      }.getOrElse((res, text))
+      res1 append variable.appendTo(text1, expression)
     }
     texts.lastOption.map(t => fragments.add(Text(t))).getOrElse(fragments)
   }
@@ -78,8 +86,9 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
 }
 
 object S2Macro {
-  def s2Implementation(c : MContext)(variables: c.Expr[SpecPart]*) : c.Expr[Fragments] = {
+  def s2Implementation(c: MContext)(variables: c.Expr[SpecPart]*) : c.Expr[Fragments] = {
     import c.{universe => u}; import u.{ Position => _, _ }
+
     def toAST[A : TypeTag](xs: Tree*): Tree =
       Apply(Select(Ident(typeOf[A].typeSymbol.companionSymbol), newTermName("apply")), xs.toList)
 

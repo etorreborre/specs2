@@ -31,6 +31,10 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
       case _                                     => (new FragmentsFragment(this)) ^ fs
     }
 
+  def middleDrop(n: Int) = copy(middle = Vector(middle:_*).drop(n).view)
+  def middleDropRight(n: Int) = copy(middle = Vector(middle:_*).dropRight(n).view)
+  def middleDropWhile(p: Fragment => Boolean) = copy(middle = Vector(middle:_*).dropWhile(p).view)
+
   def insert(e: Fragment): Fragments = prepend(e)
   def insert(fs: Seq[Fragment]): Fragments = copy(middle = fs ++ middle)
   def insert(fs: Fragments): Fragments = insert(fs.fragments)

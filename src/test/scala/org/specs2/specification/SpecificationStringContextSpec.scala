@@ -1,11 +1,7 @@
 package org.specs2
 package specification
 
-import runner.{MockClassRunner, ClassRunner}
-import io._
-import execute.{DecoratedResult, Success, AsResult}
-import execute.ResultExecution._
-import reporter.{ConsoleReporter, TextResultOutput}
+import runner.MockClassRunner
 
 class SpecificationStringContextSpec extends Specification { def is = s2"""
 
@@ -20,9 +16,12 @@ class SpecificationStringContextSpec extends Specification { def is = s2"""
      "! A third example with an error",
      "A normal interpolated value: 100",
      "A normal interpolated string: hello",
+     "A string hello followed by a Result",
+     "o A skipped result ",
+     "An interpolated value with an error \\[undefined\\]",
      "Total for specification user specification"
    )
-   forall(expected) { line => lines.map(_.replace("\n", "")) must containMatch(line) }
+   forall(expected) { line => lines.map(_.replace("\n", "")) showAs (ls => ls.mkString("\n")) must containMatch(line) }
  }
 
 """
@@ -45,6 +44,8 @@ class UserInterpolatedSpecification extends Specification { def is = s2"""  ${"u
 
  A normal interpolated value: ${i.toString}
  A normal interpolated string: $s
+ A string $s followed by a Result $ok
+ A skipped result $skipped
  An interpolated value with an error $errorValue
 
 """
@@ -58,3 +59,4 @@ class UserInterpolatedSpecification extends Specification { def is = s2"""  ${"u
   def e3 = { sys.error("boom"); ok }
 
 }
+
