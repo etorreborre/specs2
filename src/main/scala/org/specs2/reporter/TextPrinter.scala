@@ -125,8 +125,10 @@ trait TextPrinter {
             case Pending(_)        => out.printPending(decoratedDescription(desc) + " " + (if (result.message.isEmpty) "PENDING" else result.message))
             case Skipped(_, _) => {
               out.printText(decoratedDescription(desc))
-              if (!result.message.isEmpty)
-                out.printSkipped(result.message)
+              if (result.message != StandardResults.skipped.message) {
+                if (result.message.isEmpty) out.printSkipped(" SKIPPED")
+                else                        out.printSkipped(" "+result.message)
+              }
             }
             case DecoratedResult(dt: DataTable, r) if !hasDescription && r.isSuccess       => print(r, dt.show, isDataTable = true)
             case DecoratedResult(dt: DataTable, r) if !hasDescription && !r.isSuccess      => print(r, "", isDataTable = true)
