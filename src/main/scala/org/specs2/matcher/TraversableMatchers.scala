@@ -246,7 +246,7 @@ class ContainInOrderMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (
      }
   }
 
-  def only: Matcher[GenTraversableOnce[T]] = (this and new ContainOnlyMatcher(expected))
+  def only: Matcher[GenTraversableOnce[T]] = (this and new ContainOnlyMatcher(expected, equality))
   override def not = new ContainInOrderMatcher(expected, equality) {
     override def apply[S <: GenTraversableOnce[T]](actual: Expectable[S]) = super.apply(actual).not
   }
@@ -262,7 +262,7 @@ class ContainOnlyMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T
            traversable.description + " contains only " + qseq(expected),
            traversable.description + " doesn't contain only " + qseq(expected), traversable)
   }
-  def inOrder: Matcher[GenTraversableOnce[T]] = (this and new ContainInOrderMatcher(expected))
+  def inOrder: Matcher[GenTraversableOnce[T]] = (this and new ContainInOrderMatcher(expected, equality))
   override def not = new ContainOnlyMatcher(expected, equality) {
     override def apply[S <: GenTraversableOnce[T]](actual: Expectable[S]) = super.apply(actual).not
   }
