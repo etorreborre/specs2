@@ -62,9 +62,9 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOu
   }
 
   override def printSpecStartName(message: String, stats: Stats)(implicit args: Arguments)  =
-    if (args.report.flow) info(message+"\n") else info(message)
+    info(message)
   override def printSpecStartTitle(message: String, stats: Stats)(implicit args: Arguments) =
-    if (args.report.flow) info(message) else info(message)
+    info(message)
   override def printSeeLink(message: String, stats: Stats)(implicit args: Arguments) =
     info(status(stats.result)+args.textColor(message))
 
