@@ -51,6 +51,7 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
 
   def executables: Seq[Executable] = fragments.collect { case e: Executable => e }
   def examples: Seq[Example] = fragments.collect(isAnExample)
+  def texts: Seq[Text] = fragments.collect(isSomeText)
 
   def overrideArgs(args: Arguments) = copy(arguments = arguments.overrideWith(args))
   def map(function: Fragment => Fragment) = Fragments.create(fragments.map(function):_*)

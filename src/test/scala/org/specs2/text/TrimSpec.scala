@@ -48,6 +48,20 @@ class TrimSpec extends Specification { def is = s2"""
 
   ${"Last block returns the last block when lines are separated by empty lines"  ! e2}
 
+  With the Trim trait it is also possible to offset a multi-line string
+    with a positive offset ${
+      """hello
+        |world""".stripMargin.offset(n = 2) ===
+        """  hello
+          |  world""".stripMargin
+    }
+    with a negative offset ${
+      """   hello
+        |   world""".stripMargin.offset(n = -2) ===
+        """ hello
+          | world""".stripMargin
+    }
+
 """
 
   def e1 = "<li><p>hello\ndear\nworld</p></li>".

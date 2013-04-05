@@ -419,7 +419,27 @@ More generally, you can both use the example description and the example body to
 
 ### Capture snippets
 
+It is possible to include pieces of code in your documentation with the `Snippets` trait. This works by either:
 
+ 1. using the `snippet` method to capture a block code with marker comments to delimit the parts you want to show
+ 2. using the `8<--` method to delimitate the parts which you want to show
+
+The first method must be used if the code that you're evaluating potentially throws an exception when executed otherwise it will not be possible to create the whole interpolated string and indeed the whole specification.
+
+What does this look like?
+
+#### `snippet`
+
+Here is an example of using the `snippet` method:
+
+```
+s2$triple
+ This is a multi-line string with a snippet of code: ${dollar}{ snippet {
+   def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
+   factorial(3) == 6
+ } }
+$triple
+```
 
   """
 

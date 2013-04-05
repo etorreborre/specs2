@@ -119,6 +119,17 @@ trait Trim extends control.Debug {
     def unless(condition: Boolean) = if (condition) "" else s
 
   }
+
+  implicit class offSettable(s: String) {
+    def offset(n: Int) =
+      if (n == 0) s
+      else        s.split("\n").map(l => offsetLine(l, n)).mkString("\n")
+
+    private def offsetLine(l: String, n: Int) =
+      if (n > 0 ) (" "*n + l)
+      else        l.removeStart(" "*(-n))
+  }
+
 }
 private[specs2]
 object Trim extends Trim

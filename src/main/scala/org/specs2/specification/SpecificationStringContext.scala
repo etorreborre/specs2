@@ -95,8 +95,10 @@ object S2Macro {
     def methodCall(name: String, xs: Tree*): Tree =
       Apply(Select(This(tpnme.EMPTY), newTermName(name)), xs.toList)
 
-    val content = c.macroApplication.pos.source.content.mkString
     val texts = c.prefix.tree match { case Apply(_, List(Apply(_, ts))) => ts }
+    val macroPos = c.macroApplication.pos
+    val fileContent = macroPos.source.content.mkString
+    val content = fileContent.split("\n").drop(macroPos.line - 1).mkString("\n").drop(macroPos.column-1)
     val vs = variables.map(_.tree)
     c.Expr(methodCall("s2", c.literal(content).tree, toAST[List[_]](texts:_*), toAST[List[_]](vs:_*)))
   }

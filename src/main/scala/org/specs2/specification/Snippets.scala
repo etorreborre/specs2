@@ -22,6 +22,35 @@ import main.{ArgumentsArgs, Arguments}
  *
  */
 trait Snippets { this: SpecificationStringContext with FragmentsBuilder with ArgumentsArgs =>
+
+  def `8<--`(offset: Int = 0) = {
+    val o = offset
+    new CodeSnippet(() => ()) {
+      override lazy val cutMarker = "`8<--`"
+      override lazy val cutMarkerFormat = "`8\\<\\-\\-`(\\([^\\)]+\\))*"
+      override val offset = o
+    }
+  }
+
+  def `8<--` = new CodeSnippet(() => ()) {
+    override lazy val cutMarker = "`8<--`"
+    override lazy val cutMarkerFormat = "\\Q`8<--`\\E"
+  }
+
+  def cutHere = new CodeSnippet(() => ()) {
+    override lazy val cutMarker = "cutHere"
+    override lazy val cutMarkerFormat = cutMarker
+  }
+
+  def cutHere(offset: Int = 0) = {
+    val o = offset
+    new CodeSnippet(() => ()) {
+      override lazy val cutMarker = "cutHere"
+      override lazy val cutMarkerFormat = cutMarker+"(\\([^\\)]+\\))*"
+      override val offset = o
+    }
+  }
+
   def snippet[T](code: =>T) = CodeSnippet(() => code).mute
 
   implicit def snippetIsSpecPart[T](snippet: Snippet[T]): SpecPart = new SpecPart {
@@ -32,18 +61,22 @@ trait Snippets { this: SpecificationStringContext with FragmentsBuilder with Arg
 trait Snippet[T] {
   type ST <: Snippet[T]
 
-  lazy val cutComment = "// 8<\\-+"
+  lazy val cutMarker = "// 8<--"
+  lazy val cutMarkerFormat = "// 8<\\-+"
 
   def fragments(expression: String) =
     Fragments.createList(Text(asCode(cut(expression)))).add(resultFragments)
 
   protected val code: () => T
   protected lazy val execute = code()
-  protected  def asCode(s: String) = "```\n"+s+"\n```"
+  protected  def asCode(s: String) =
+    "```\n"+s.offset(offset)+"\n```"
 
   def mute: ST = set(muted = true)
   def eval: ST = set(muted = false)
   def set(muted: Boolean = true): ST
+  def offsetIs(n: Int = 0): ST
+  def offset: Int
   def isMuted: Boolean
 
   protected def resultFragments = {
@@ -52,12 +85,15 @@ trait Snippet[T] {
   }
 
   protected def cut(expression: String) = {
-    val text = if (expression.contains("// 8<-")) expression else ("// 8<--" + trimSnippet(expression) + "// 8<--")
-    val splitted = text.split(cutComment)
+    val text =
+      if (expression.split("\n").exists(_.matches(".*"+cutMarkerFormat+".*"))) expression
+      else                                                                     (cutMarker + trimSnippet(expression) + cutMarker)
+
+    val splitted = text.split(cutMarkerFormat)
     splitted.zipWithIndex.
            collect { case (s, i) if i % 2 == 1 => s }.
            filter(_.nonEmpty).mkString.
-           removeStart("\n")
+           removeStart("\n").removeLast("\n\\s*")
   }
 
   private def trimSnippet(expression: String) =
@@ -72,17 +108,19 @@ trait Snippet[T] {
   }
 }
 
-case class CodeSnippet[T](code: () => T, isMuted: Boolean = false) extends Snippet[T] {
+case class CodeSnippet[T](code: () => T, isMuted: Boolean = false, offset: Int = 0) extends Snippet[T] {
   type ST = CodeSnippet[T]
   def set(muted: Boolean = true): ST = copy(isMuted = muted)
+  def offsetIs(n: Int = 0): ST = copy(offset = n)
   def check[R : AsResult](verification: T => R) = CheckedSnippet[T, R](code, verification)
   def checkOk(implicit asResult: AsResult[T]) = CheckedSnippet[T, Result](code, (t: T) => AsResult(t))
 }
 
-case class CheckedSnippet[T, R : AsResult](code: () => T, verification: T => R, isMuted: Boolean = false) extends Snippet[T] {
+case class CheckedSnippet[T, R : AsResult](code: () => T, verification: T => R, isMuted: Boolean = false,  offset: Int = 0) extends Snippet[T] {
   type ST = CheckedSnippet[T, R]
 
   def set(muted: Boolean = true): ST = copy(isMuted = muted)
+  def offsetIs(n: Int = 0): ST = copy(offset = n)
 
   override def fragments(expression: String) =
     Fragments.createList(Text(asCode(cut(expression))), Step(AsResult(verification(execute)).mapMessage("Snippet failure: "+_)))
