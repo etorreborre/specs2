@@ -60,7 +60,7 @@ trait FileReader {
   def loadXhtmlFile(filePath: String, report: (Exception, String) => Unit = defaultLoadXhtmlFileReport, sourceErrors: Boolean = true) = tryo {
     val fileContent = readFile(filePath)
     val xhtml = fromString("<e>"+fileContent+"</e>")
-    val result = NodeSeq.fromSeq((parse(xhtml, sourceErrors)\\"e")(0).child)
+    val result = (parse(xhtml, sourceErrors)\\"e")(0).child.reduceNodes
     result
   }(e => report(e, filePath)).getOrElse(NodeSeq.Empty)
 

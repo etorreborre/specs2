@@ -33,15 +33,19 @@ trait Nodex { outer =>
       NodeFunctions.matchNode(n, other, attributes, attributeValues, exactMatch, textTest)
   }
 
-  implicit class reducable(ns: Seq[NodeSeq]) {
-    def reduceNodes = ns.foldLeft(NodeSeq.Empty) { (res, cur) => res ++ cur }
+  implicit class reducable(ns: Seq[Node]) {
+    def reduceNodes = NodeSeq.fromSeq(ns)
+  }
+
+  implicit class reducableSeq(ns: Seq[NodeSeq]) {
+    def reduceNodes = reducable(ns.flatMap(_.theSeq)).reduceNodes
   }
 
   /**
    * reduce a sequence of T's with a function transforming T's to NodeSeq
    */
   implicit class anyReducable[T](ns: Seq[T]) {
-    def reduceNodes(f: T => NodeSeq) = ns.foldLeft(NodeSeq.Empty) { (res, cur) => res ++ f(cur) }
+    def reduceNodesWith(f: T => NodeSeq) = ns.foldLeft(NodeSeq.Empty) { (res, cur) => res ++ f(cur) }
   }
 
   /**

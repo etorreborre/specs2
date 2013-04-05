@@ -101,7 +101,7 @@ trait DefaultStatisticsRepository extends StatisticsRepository with OutputDir {
   }
 
   private def resultsToXml(specName: SpecName, results: Seq[ExecutedResult]): NodeSeq = {
-    val xmlResults = results reduceNodes resultToXml
+    val xmlResults = results reduceNodesWith resultToXml
     if (xmlResults.isEmpty)  xmlResults
     else                     Elem(null, resultsTag(specName),
                                new UnprefixedAttribute("timestamp", System.currentTimeMillis().toString, Null), TopScope, true, xmlResults:_*) ++ Text("\n")
