@@ -184,21 +184,21 @@ class BeTypedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1
   }
   
   def apply[S <: T](b: Expectable[S]): MatchResult[S] = {
-    val a = t
+    val (actual, expected) = (b.value, t)
     def isEqual =
-      (b.value, a) match {
+      (actual, expected) match {
         case (arr: Array[_], arr2: Array[_]) => arr.toSeq == arr2.toSeq
-        case other                           => equality(b.value, a)
+        case other                           => equality(actual, expected)
       }
 
     lazy val (db, qa) =
-      (b.description, q(a)) match {
-        case (x, y) if (!isEqual && x == y) => (b.describe(b.value.notNullWithClass), q(a.notNullWithClass))
+      (b.description, q(expected)) match {
+        case (x, y) if (!isEqual && x == y) => (b.describe(actual.notNullWithClass), q(expected.notNullWithClass))
         case other                           => other
 	    }
 
     def print(b: String, msg: String, a: String) = Seq(b, msg, a).mkString("\n".unless((Seq(a, b).exists(_.size <= 40))))
-    result(isEqual, ok(print(db, " is equal to ", qa)), ko(print(db, " is not equal to ", qa)), b, a.notNull, b.value.notNull)
+    result(isEqual, ok(print(db, " is equal to ", qa)), ko(print(db, " is not equal to ", qa)), b, expected.notNull, actual.notNull)
   }
 }
 

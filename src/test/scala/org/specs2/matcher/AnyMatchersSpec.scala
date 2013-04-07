@@ -31,6 +31,11 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = s2"""
   ${ Array(1, 3) must not be_===(Array(1, 2)) }
   ${ (Array(1, 3) must not be_===(Array(1, 2))).message === "Array(1, 3) is not equal to Array(1, 2)" }
   ${ (1 must_== 2).toResult must beLike { case Failure(_,_,_,FailureDetails(e, a)) => e must_== "2" } }
+  the actual value must be evaluated before the expected one
+  ${ var result = "";
+     {{ result = result + "a" }; 1} must_== {{ result = result + "b" }; 1}
+     result must_== "ab"
+   }
 
   beTheSameAs checks if a value is eq to another one
   ${ aValue must beTheSameAs(aValue) }
