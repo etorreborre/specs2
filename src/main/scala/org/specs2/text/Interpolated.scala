@@ -1,8 +1,6 @@
 package org.specs2
 package text
 
-import control.Exceptions._
-import text.Trim._
 import util.parsing.combinator._
 
 /**
