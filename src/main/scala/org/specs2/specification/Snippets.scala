@@ -7,7 +7,7 @@ import text.Trim._
 import execute.{Result, AsResult}
 import matcher.ResultMatchers
 import main.{ArgumentsArgs, Arguments}
-
+import Snippet._
 /**
  * Snippets of code can be extracted from interpolated specification strings.
  *
@@ -21,7 +21,7 @@ import main.{ArgumentsArgs, Arguments}
  * It is also possible to check that the result value is equal to a specific value by using the `check[R : AsResult](f: T => R)` method.
  *
  */
-trait Snippets { this: SpecificationStringContext with FragmentsBuilder with ArgumentsArgs =>
+trait Snippets { outer: SpecificationStringContext with FragmentsBuilder with ArgumentsArgs =>
 
   def `8<--`(offset: Int = 0): CodeSnippet[Unit] =
     CodeSnippet(code = () => (), cutMarker = "`8<--`", cutMarkerFormat = "`8\\<\\-\\-`(\\([^\\)]+\\))*").offsetIs(offset)
@@ -33,6 +33,10 @@ trait Snippets { this: SpecificationStringContext with FragmentsBuilder with Arg
   def cutHere: CodeSnippet[Unit]                  =
     CodeSnippet(code = () => (), cutMarker = "cutHere", cutMarkerFormat = "cutHere(\\([^\\)]+\\))*")
 
+  implicit class cutResult[T](t: =>T) {
+    def eval[S](snippet: CodeSnippet[S]) = snippet.copy(code = () => t, trimExpression = snippet.trimExpression andThen trimEval).eval
+    private def trimEval = (s: String) => s.removeLast("(\\.)?\\s*eval\\s*")
+  }
   def snippet[T](code: =>T) = CodeSnippet(() => code).mute
 
   implicit def snippetIsSpecPart[T](snippet: Snippet[T]): SpecPart = new SpecPart {
@@ -73,17 +77,14 @@ trait Snippet[T] {
 
     val splitted = text.split(cutMarkerFormat)
 
-    trimSnippet {
+    trimExpression {
       splitted.zipWithIndex.
         collect { case (s, i) if i % 2 == 1 => s.removeStart("\n") }.
         filter(_.nonEmpty).mkString.removeLast("\n\\s*")
     }
   }
 
-  private def trimSnippet(expression: String) =
-    expression.trimStart("snippet").
-      removeFirst("\\s*\\{\\s*\n*").
-      removeLast("\\s*\\}\\s*")
+  def trimExpression: String => String
 
   protected def result: String = {
     val resultAsString = tryOr(execute.notNull)(e => e.getMessage)
@@ -92,18 +93,28 @@ trait Snippet[T] {
   }
 }
 
+object Snippet {
+
+  def trimSnippet = (expression: String) =>
+    expression.trimStart("snippet").
+      removeFirst("\\s*\\{\\s*\n*").
+      removeLast("\\s*\\}.*$")
+}
+
 case class CodeSnippet[T](code: () => T,
                           cutMarker: String = "// 8<--", cutMarkerFormat: String = "// 8<\\-+",
+                          trimExpression: String => String = trimSnippet,
                           isMuted: Boolean = false, offset: Int = 0) extends Snippet[T] {
   type ST = CodeSnippet[T]
   def set(muted: Boolean = true): ST = copy(isMuted = muted)
   def offsetIs(n: Int = 0): ST = copy(offset = n)
-  def check[R : AsResult](verification: T => R) = CheckedSnippet[T, R](code, verification, cutMarker, cutMarkerFormat, isMuted, offset)
-  def checkOk(implicit asResult: AsResult[T]) = CheckedSnippet[T, Result](code, (t: T) => AsResult(t), cutMarker, cutMarkerFormat, isMuted, offset)
+  def check[R : AsResult](verification: T => R) = CheckedSnippet[T, R](code, verification, cutMarker, cutMarkerFormat, trimExpression, isMuted, offset)
+  def checkOk(implicit asResult: AsResult[T]) = CheckedSnippet[T, Result](code, (t: T) => AsResult(t), cutMarker, cutMarkerFormat, trimExpression, isMuted, offset)
 }
 
 case class CheckedSnippet[T, R : AsResult](code: () => T, verification: T => R,
                                            cutMarker: String = "// 8<--", cutMarkerFormat: String = "// 8<\\-+",
+                                           trimExpression: String => String = trimSnippet,
                                            isMuted: Boolean = false,  offset: Int = 0) extends Snippet[T] {
   type ST = CheckedSnippet[T, R]
 
