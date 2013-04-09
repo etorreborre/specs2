@@ -441,6 +441,74 @@ s2$triple
 $triple
 ```
 
+#### cuts
+
+Since snippets are compiled code, it might be necessary for you to add many declarations for this code to be valid even if you don't want to show them (imports or variables definitions). You can effectively delimit the code to show with some comments of the form `// 8<--`:
+
+```
+s2$triple
+ This is a snippet of code with one relevant line: ${dollar}{ snippet {
+   def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
+   // 8<--
+   factorial(3) == 6
+   // 8<--
+ } }
+$triple
+```
+
+The snippet above will only show `factorial(3) == 6`. You can actually repeat this pattern several times:
+
+```
+s2$triple
+ This is a snippet of code with 2 relevant lines: ${dollar}{ snippet {
+   def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
+   // 8<--
+   factorial(3) == 6
+   // 8<--
+   val n = 4
+   // 8<--
+   factorial(n) == 24
+ } }
+$triple
+```
+
+This just displays:
+
+```
+   factorial(3) == 6
+   factorial(n) == 24
+```
+
+A similar way to do a "cut" is to use the `8<--` (or `cutHere`) method:
+
+```
+s2$triple
+ This is a snippet of code with one relevant line: ${dollar}{
+   def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
+   `8<--`
+   factorial(3) == 6
+   `8<--`
+ }
+$triple
+```
+
+
+```
+s2$triple
+ This is a snippet of code with 2 relevant lines: ${dollar}{
+   def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
+   `8<--`
+   factorial(3) == 6
+   `8<--`
+   val n = 4
+   `8<--`
+   factorial(n) == 24
+   `8<--`
+ }
+$triple
+```
+
+
   """
 
 
