@@ -35,11 +35,21 @@ trait Snippets { this: SpecificationStringContext with FragmentsBuilder with Arg
   def `8<--` = new CodeSnippet(() => ()) {
     override lazy val cutMarker = "`8<--`"
     override lazy val cutMarkerFormat = "\\Q`8<--`\\E"
+    override def offsetIs(n: Int = 0): ST = new CodeSnippet(() => ()) {
+      override lazy val cutMarker = "`8<--`"
+      override lazy val cutMarkerFormat = "\\Q`8<--`\\E"
+      override val offset = n
+    }
   }
 
   def cutHere = new CodeSnippet(() => ()) {
     override lazy val cutMarker = "cutHere"
     override lazy val cutMarkerFormat = cutMarker
+    override def offsetIs(n: Int = 0): ST = new CodeSnippet(() => ()) {
+      override lazy val cutMarker = "cutHere"
+      override lazy val cutMarkerFormat = cutMarker
+      override val offset = n
+    }
   }
 
   def cutHere(offset: Int = 0) = {
@@ -87,19 +97,21 @@ trait Snippet[T] {
   protected def cut(expression: String) = {
     val text =
       if (expression.split("\n").exists(_.matches(".*"+cutMarkerFormat+".*"))) expression
-      else                                                                     (cutMarker + trimSnippet(expression) + cutMarker)
+      else                                                                     (cutMarker + expression + cutMarker)
 
     val splitted = text.split(cutMarkerFormat)
-    splitted.zipWithIndex.
-           collect { case (s, i) if i % 2 == 1 => s }.
-           filter(_.nonEmpty).mkString.
-           removeStart("\n").removeLast("\n\\s*")
+
+    trimSnippet {
+      splitted.zipWithIndex.
+        collect { case (s, i) if i % 2 == 1 => s.removeStart("\n") }.
+        filter(_.nonEmpty).mkString.removeLast("\n\\s*")
+    }
   }
 
   private def trimSnippet(expression: String) =
     expression.trimStart("snippet").
-      removeFirst("\\s*\\{\n*").
-      removeLast("\\}")
+      removeFirst("\\s*\\{\\s*\n*").
+      removeLast("\\s*\\}\\s*")
 
   protected def result: String = {
     val resultAsString = tryOr(execute.notNull)(e => e.getMessage)

@@ -3,41 +3,32 @@ package text
 
 import control.Exceptions._
 import text.Trim._
+import util.parsing.combinator._
 
 /**
  * this class extracts interpolated expressions from an interpolated string, given the string content and the text
  * pieces in between the interpolated expressions
  */
-class Interpolated(stringContent: String, texts: Seq[String]) {
+class Interpolated(stringContent: String, texts: Seq[String]) extends InterpolatedParsers {
 
-  def expressions = (textEndOffsets.dropRight(1) zip textStartOffsets.drop(1)).map { case (start, end) =>
-      tryo(stringContent.substring(start, end)).getOrElse("failed to retrieve text between: "+(start, end))
-    }.map(trimExpression)
-
-  /**
-   * collect the start index of each piece of text in the stringContent
-   */
-  private def textOffsets(ts: Seq[String]) = {
-    ts.foldLeft(((stringContent, ""), Seq[Int]())) { (res, cur) =>
-      val ((remaining, passed), result) = res
-
-      // if the current piece of text is empty we need to know if it was the first one of the list
-      // otherwise it means that all the remaining string must be consumed
-      val i =
-        if (cur.isEmpty && ts.head != cur) remaining.size
-        else                               remaining.indexOf(cur)
-
-      ((remaining.substring(i + cur.size), passed + remaining.substring(0, i + cur.size)), result :+ (passed.size + i))
-    }._2
+  def expressions = {
+   val parsed = parse(interpolatedString, stringContent).get
+   if (parsed.size <= texts.size) parsed
+   else                           parsed.take(texts.size - 1)
   }
-  // start offsets for text elements in the full content
-  private def textStartOffsets = textOffsets(texts)
-  // end offsets for text elements in the full content
-  private def textEndOffsets = (textStartOffsets zip texts).map { case (start, t) => start + t.size }
-
-  private val trimExpression = (e: String) => {
-    if (e.trim.startsWith("${")) e.removeFirst("\\Q${\\E").removeLast("\\Q}\\E")
-    else                         e.removeFirst("\\Q$\\E").removeLast("\\Q}\\E")
-  }
-
 }
+
+trait InterpolatedParsers extends JavaTokenParsers {
+  override def skipWhitespace = false
+  lazy val interpolatedString: Parser[Seq[String]] = ((interpolatedVariable | noVariable)+) ^^ { _.filter(_.nonEmpty) }
+  lazy val noVariable: Parser[String]              = "[^$]+".r ^^ { s => "" }
+  lazy val interpolatedVariable: Parser[String]    = "$" ~> (ident | "{" ~> accoladeInsideExpression <~ "}")
+  lazy val noAccolade: Parser[String]              = "[^\\{\\}]*".r
+  lazy val accoladeInsideExpression: Parser[String]= { noAccolade ~ (accoladeExpression?) ~ noAccolade } ^^ {
+    case n1 ~ accExp ~ n2 => n1+accExp.getOrElse("")+n2
+  }
+  lazy val accoladeExpression: Parser[String]      = { "{" ~ accoladeInsideExpression ~ "}" } ^^ {
+    case start ~ accExp ~ end => start+accExp+end
+  }
+}
+object InterpolatedParsers extends InterpolatedParsers

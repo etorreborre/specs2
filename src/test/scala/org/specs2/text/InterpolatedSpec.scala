@@ -1,13 +1,21 @@
 package org.specs2
 package text
 
-class InterpolatedSpec extends Specification { def is = s2"""
+import matcher.ParserMatchers
+
+class InterpolatedSpec extends Specification with ParserMatchers { def is = s2"""
 
  It is possible to retrieve, from an interpolated string, the expressions code, given the intermediate pieces of text
 
    when there is non-empty text surrounding all expressions       $e1
    when there is an starting empty text                           $e2
    when there is an ending empty text                             $e3
+   when there are several variables separated by spaces           $e4
+
+ Interpolated expressions can be parsed
+   when just using an identifier                                  $e5
+   when using accolades                                           $e6
+   when using nested accolades                                    $e7
                                                                   """
 
   def e1 = {
@@ -45,4 +53,18 @@ class InterpolatedSpec extends Specification { def is = s2"""
           "")).expressions === Seq("e1", "e2")
   }
 
+  def e4 = {
+    val string =
+      """|start $e1 $e2 """.stripMargin
+
+    new Interpolated(string,
+      Seq("start ", " ", " ")).expressions === Seq("e1", "e2")
+  }
+
+  lazy val parsers = InterpolatedParsers
+
+  def e5 = parsers.interpolatedVariable("$hello") must beASuccess
+  def e6 = parsers.interpolatedVariable("${hello}") must beASuccess
+  def e7 = parsers.interpolatedVariable("${ exp { other } }") must beASuccess.withResult("\\Q exp { other } \\E")
+  def e8 = parsers.interpolatedString("start $e1 and $e2 end") must beASuccess.withResult(Seq("e1", "e2"))
 }
