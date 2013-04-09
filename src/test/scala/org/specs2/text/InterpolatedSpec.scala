@@ -16,6 +16,7 @@ class InterpolatedSpec extends Specification with ParserMatchers { def is = s2""
    when just using an identifier                                  $e5
    when using accolades                                           $e6
    when using nested accolades                                    $e7
+   when using a quoted identifier                                 $e8
                                                                   """
 
   def e1 = {
@@ -66,5 +67,6 @@ class InterpolatedSpec extends Specification with ParserMatchers { def is = s2""
   def e5 = parsers.interpolatedVariable("$hello") must beASuccess
   def e6 = parsers.interpolatedVariable("${hello}") must beASuccess
   def e7 = parsers.interpolatedVariable("${ exp { other } }") must beASuccess.withResult("\\Q exp { other } \\E")
-  def e8 = parsers.interpolatedString("start $e1 and $e2 end") must beASuccess.withResult(Seq("e1", "e2"))
+  def e8 = parsers.interpolatedVariable("${`hello world`}") must beASuccess.withResult("^hello world$")
+
 }

@@ -2,6 +2,7 @@ package org.specs2
 package text
 
 import util.parsing.combinator._
+import Trim._
 
 /**
  * this class extracts interpolated expressions from an interpolated string, given the string content and the text
@@ -20,11 +21,12 @@ trait InterpolatedParsers extends JavaTokenParsers {
   override def skipWhitespace = false
   lazy val interpolatedString: Parser[Seq[String]] = ((interpolatedVariable | noVariable)+) ^^ { _.filter(_.nonEmpty) }
   lazy val noVariable: Parser[String]              = "[^$]+".r ^^ { s => "" }
-  lazy val interpolatedVariable: Parser[String]    = "$" ~> (ident | "{" ~> accoladeInsideExpression <~ "}")
+  lazy val interpolatedVariable: Parser[String]    = "$" ~> (ident | "{" ~> (quotedExpression | accoladeInsideExpression) <~ "}")
   lazy val noAccolade: Parser[String]              = "[^\\{\\}]*".r
   lazy val accoladeInsideExpression: Parser[String]= { noAccolade ~ (accoladeExpression?) ~ noAccolade } ^^ {
     case n1 ~ accExp ~ n2 => n1+accExp.getOrElse("")+n2
   }
+  lazy val quotedExpression = "`" ~> "[^`]+".r <~ "`"
   lazy val accoladeExpression: Parser[String]      = { "{" ~ accoladeInsideExpression ~ "}" } ^^ {
     case start ~ accExp ~ end => start+accExp+end
   }
