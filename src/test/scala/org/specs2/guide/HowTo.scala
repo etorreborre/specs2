@@ -443,11 +443,12 @@ $triple
 
 #### cuts
 
-Since snippets are compiled code, it might be necessary for you to add many declarations for this code to be valid even if you don't want to show them (imports or variables definitions). You can effectively delimit the code to show with some comments of the form `// 8<--`:
+Since snippets are compiled code, it might be necessary for you to add many declarations for this code, like imports or variables definitions, to be valid even if you don't want to show them. One way to do this is to delimit the code to show with some comments of the form `// 8<--`:
 
 ```
 s2$triple
  This is a snippet of code with one relevant line: ${dollar}{ snippet {
+   // 8<--
    def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
    // 8<--
    factorial(3) == 6
@@ -461,6 +462,7 @@ The snippet above will only show `factorial(3) == 6`. You can actually repeat th
 ```
 s2$triple
  This is a snippet of code with 2 relevant lines: ${dollar}{ snippet {
+   // 8<--
    def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
    // 8<--
    factorial(3) == 6
@@ -484,6 +486,7 @@ A similar way to do a "cut" is to use the `8<--` (or `cutHere`) method:
 ```
 s2$triple
  This is a snippet of code with one relevant line: ${dollar}{
+   `8<--`
    def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
    `8<--`
    factorial(3) == 6
@@ -492,10 +495,10 @@ s2$triple
 $triple
 ```
 
-
 ```
 s2$triple
  This is a snippet of code with 2 relevant lines: ${dollar}{
+   `8<--`
    def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
    `8<--`
    factorial(3) == 6
@@ -508,8 +511,72 @@ s2$triple
 $triple
 ```
 
+#### evaluation
+
+By default the last value of a Snippet is not shown but you can display it with the `eval` method:
+
+```
+s2$triple
+ This is a snippet of code with a result: ${dollar}{ snippet {
+   factorial(3)
+ }.eval }
+$triple
+```
+
+This displays:
+
+```
+   factorial(3)
+```
+```
+> 6
+```
+
+And with the `8<--` method you will write:
+
+```
+s2$triple
+ This is a snippet of code with a result: ${dollar}{
+   factorial(3) eval
+   `8<--`
+ }
+$triple
+```
+
+#### offsets
+
+It is possible to adjust the margin of captured source code by adding or removing whitespace:
+
+```
+s2$triple
+ This is a snippet of code with a negative offset to align the code to the border of the screen: ${dollar}{ snippet {
+   def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
+   factorial(3)
+ }.offsetIs(-3) }
+$triple
+```
+This displays:
+
+```
+factorial(3)
+```
+
+And with the `8<--` method:
+
+```
+s2$triple
+ This is a snippet of code with a negative offset to align the code to the border of the screen: ${dollar}{
+   `8<--`
+   def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
+   `8<--`
+   factorial(3)
+   `8<--`(offset = -3)
+ }
+$triple
+```
 
   """
+
 
 
 }

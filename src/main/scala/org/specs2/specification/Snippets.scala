@@ -24,18 +24,18 @@ import Snippet._
 trait Snippets { outer: SpecificationStringContext with FragmentsBuilder with ArgumentsArgs =>
 
   def `8<--`(offset: Int = 0): CodeSnippet[Unit] =
-    CodeSnippet(code = () => (), cutMarker = "`8<--`", cutMarkerFormat = "`8\\<\\-\\-`(\\([^\\)]+\\))*").offsetIs(offset)
-  def `8<--`: CodeSnippet[Unit]                  =
-    CodeSnippet(code = () => (), cutMarker = "`8<--`", cutMarkerFormat = "\\Q`8<--`\\E")
+    CodeSnippet(code = () => (), cutMarker = "\n`8<--`\n", cutMarkerFormat = s"\n.*`8\\<\\-\\-`$parameters.*\n").offsetIs(offset)
+  def `8<--`: CodeSnippet[Unit] =
+    CodeSnippet(code = () => (), cutMarker = "\n`8<--`\n", cutMarkerFormat = "\n.*`8\\<\\-\\-`.*\n")
 
   def cutHere(offset: Int = 0): CodeSnippet[Unit] =
-    CodeSnippet(code = () => (), cutMarker = "cutHere", cutMarkerFormat = "cutHere").offsetIs(offset)
-  def cutHere: CodeSnippet[Unit]                  =
-    CodeSnippet(code = () => (), cutMarker = "cutHere", cutMarkerFormat = "cutHere(\\([^\\)]+\\))*")
+    CodeSnippet(code = () => (), cutMarker = "\ncutHere\n", cutMarkerFormat = "\n.*cutHere.*\n").offsetIs(offset)
+  def cutHere: CodeSnippet[Unit] =
+    CodeSnippet(code = () => (), cutMarker = "\ncutHere\n", cutMarkerFormat = s"\n.*cutHere$parameters.*\n")
 
   implicit class cutResult[T](t: =>T) {
-    def eval[S](snippet: CodeSnippet[S]) = snippet.copy(code = () => t, trimExpression = snippet.trimExpression andThen trimEval).eval
-    private def trimEval = (s: String) => s.removeLast("(\\.)?\\s*eval\\s*")
+    def eval[S](snippet: CodeSnippet[S]) =
+      snippet.copy(code = () => t, trimExpression = snippet.trimExpression andThen trimEval).eval
   }
   def snippet[T](code: =>T) = CodeSnippet(() => code).mute
 
@@ -58,12 +58,12 @@ trait Snippet[T] {
   protected  def asCode(s: String) =
     "```\n"+s.offset(offset)+"\n```"
 
-  def mute: ST = set(muted = true)
-  def eval: ST = set(muted = false)
-  def set(muted: Boolean = true): ST
+  def mute: ST
+  def eval: ST
   def offsetIs(n: Int = 0): ST
-  def offset: Int
+
   def isMuted: Boolean
+  def offset: Int
 
   protected def resultFragments = {
     if (result.isEmpty || isMuted) Fragments.createList()
@@ -71,17 +71,13 @@ trait Snippet[T] {
   }
 
   protected def cut(expression: String) = {
-    val text =
-      if (expression.split("\n").exists(_.matches(".*"+cutMarkerFormat+".*"))) expression
-      else                                                                     (cutMarker + expression + cutMarker)
+    val text = trimExpression(expression)
 
     val splitted = text.split(cutMarkerFormat)
 
-    trimExpression {
-      splitted.zipWithIndex.
-        collect { case (s, i) if i % 2 == 1 => s.removeStart("\n") }.
-        filter(_.nonEmpty).mkString.removeLast("\n\\s*")
-    }
+    splitted.zipWithIndex.
+      collect { case (s, i) if i % 2 == 0 => s.removeStart("\n").removeEnd("\n") }.
+      filter(_.trim.nonEmpty).mkString("\n")
   }
 
   def trimExpression: String => String
@@ -96,30 +92,39 @@ trait Snippet[T] {
 object Snippet {
 
   def trimSnippet = (expression: String) =>
-    expression.trimStart("snippet").
-      removeFirst("\\s*\\{\\s*\n*").
-      removeLast("\\s*\\}.*$")
+    expression.removeFirst(s"\\s*snippet$ls*\\{$ls*\n").
+      removeLast("\\s*\\}\\s*")
+
+  def trimEval = (s: String) => s.removeLast(s"(\\.)?$ls*eval$ls*")
+  def trimOffsetIs = (s: String) => s.removeLast(s"\\s*\\}?(\\.)?$ls*offsetIs$parameters\\s*")
+
+  val ls = "[ \t\\x0B\f]"
+  val parameters = "(\\([^\\)]+\\))*"
 }
 
 case class CodeSnippet[T](code: () => T,
-                          cutMarker: String = "// 8<--", cutMarkerFormat: String = "// 8<\\-+",
+                          cutMarker: String = "\n// 8<--\n", cutMarkerFormat: String = s"$ls*// 8<\\-+.*\n",
                           trimExpression: String => String = trimSnippet,
                           isMuted: Boolean = false, offset: Int = 0) extends Snippet[T] {
   type ST = CodeSnippet[T]
-  def set(muted: Boolean = true): ST = copy(isMuted = muted)
-  def offsetIs(n: Int = 0): ST = copy(offset = n)
+
+  def mute: ST = copy(isMuted = true)
+  def eval: ST = copy(isMuted = false, trimExpression = trimEval andThen trimExpression)
+  def offsetIs(n: Int = 0): ST = copy(offset = n, trimExpression = trimOffsetIs andThen trimExpression)
+
   def check[R : AsResult](verification: T => R) = CheckedSnippet[T, R](code, verification, cutMarker, cutMarkerFormat, trimExpression, isMuted, offset)
   def checkOk(implicit asResult: AsResult[T]) = CheckedSnippet[T, Result](code, (t: T) => AsResult(t), cutMarker, cutMarkerFormat, trimExpression, isMuted, offset)
 }
 
 case class CheckedSnippet[T, R : AsResult](code: () => T, verification: T => R,
-                                           cutMarker: String = "// 8<--", cutMarkerFormat: String = "// 8<\\-+",
+                                           cutMarker: String = "\n// 8<--\n", cutMarkerFormat: String = s"\n$ls*// 8<\\-+.*\n",
                                            trimExpression: String => String = trimSnippet,
                                            isMuted: Boolean = false,  offset: Int = 0) extends Snippet[T] {
   type ST = CheckedSnippet[T, R]
 
-  def set(muted: Boolean = true): ST = copy(isMuted = muted)
-  def offsetIs(n: Int = 0): ST = copy(offset = n)
+  def mute: ST = copy(isMuted = true)
+  def eval: ST = copy(isMuted = false, trimExpression = trimEval andThen trimExpression)
+  def offsetIs(n: Int = 0): ST = copy(offset = n, trimExpression = trimOffsetIs andThen trimExpression)
 
   override def fragments(expression: String) =
     Fragments.createList(Text(asCode(cut(expression))), Step(AsResult(verification(execute)).mapMessage("Snippet failure: "+_)))

@@ -38,6 +38,7 @@ n = 1
 
 
   def e2 = s2""" code: ${ snippet {
+// 8<--
 var n = 0
 // 8<--
 n = 1
@@ -49,6 +50,7 @@ n = 0
        |```""".stripMargin
 
   def e3 = s2""" code: ${ snippet {
+// 8<--
 var n = 0
 // 8<--
 n = 1
@@ -64,6 +66,7 @@ var i = 0
       |```""".stripMargin
 
   def e4 = s2""" code: ${
+`8<--`
 var n = 0
 `8<--`
 n = 1
@@ -76,6 +79,7 @@ n = 0
        |```""".stripMargin
 
   def e5 = s2""" code: ${
+`8<--`
 var n = 0
 `8<--`
 n = 1
@@ -91,6 +95,7 @@ var i = 0
        |```""".stripMargin
 
   def e6 = s2""" code: ${ snippet {
+// 8<--
 var n = 0
 // 8<--
 n = 1
@@ -102,6 +107,7 @@ n = 0
        |```""".stripMargin
 
   def e7 = s2""" code: ${ snippet {
+  // 8<--
   var n = 0
   // 8<--
   n = 1
@@ -113,6 +119,7 @@ n = 0
        |```""".stripMargin
 
   def e8 = s2""" code: ${
+`8<--`
 var n = 0
 `8<--`
 n = 1
@@ -125,6 +132,7 @@ n = 0
        |```""".stripMargin
 
   def e9 = s2""" code: ${
+  `8<--`
   var n = 0
   `8<--`
   n = 1
@@ -149,7 +157,6 @@ n = 0
        |```""".stripMargin
 
   def e11 = s2""" code: ${
-`8<--`
 var n = 1
 (1 + n) eval
 `8<--`

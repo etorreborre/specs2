@@ -70,7 +70,7 @@ trait Trim extends control.Debug {
       if (matches.isEmpty) s
       else {
         val last = matches.last
-        (s.substring(0, last.start) + s.substring(last.end - 1, s.size - 1))
+        (s.substring(0, last.start) + s.substring(last.end, s.size))
       }
     }
 
@@ -127,7 +127,7 @@ trait Trim extends control.Debug {
 
     private def offsetLine(l: String, n: Int) =
       if (n > 0 ) (" "*n + l)
-      else        l.removeStart(" "*(-n))
+      else        l.takeWhile(_ == ' ').drop(-n).mkString + l.dropWhile(_ == ' ').mkString
   }
 
 }

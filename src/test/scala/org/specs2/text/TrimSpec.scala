@@ -61,6 +61,12 @@ class TrimSpec extends Specification { def is = s2"""
         """ hello
           | world""".stripMargin
     }
+    with a negative offset which is more than existing${
+      """   hello
+        |   world""".stripMargin.offset(n = -20) ===
+        """hello
+          |world""".stripMargin
+    }
 
 """
 
