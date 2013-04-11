@@ -14,7 +14,7 @@ class Interpolated(stringContent: String, texts: Seq[String]) extends Interpolat
   def expressions = {
     texts.zip(texts.drop(1)).foldLeft((stringContent, Seq[String]())) { case ((content, exps), (text, next)) =>
       val minusText = new String(content.drop(text.size).mkString)
-      val textToParse = new String(if (minusText.lastIndexOf(next) > 0) minusText.substring(0, minusText.lastIndexOf(next)) else minusText)
+      val textToParse = new String(if (minusText.indexOf(next) > 0) minusText.substring(0, minusText.indexOf(next)) else minusText)
       val expression = interpolatedString(new CharSequenceReader(textToParse)) match {
         case Success(e, _) => e
         case Failure(m, _) => m
