@@ -1,7 +1,7 @@
 package org.specs2
 package guide
 
-class HowTo extends UserGuidePage{ def is = s"""
+class HowTo extends UserGuidePage { def is = s2"""
 
 ### Declare arguments
 
@@ -44,12 +44,14 @@ Note that the `arguments` instance gives you access to all the specs2 arguments 
 
 Usually the title of a specification is derived from the specification class name. However if you want to give a more readable name to your specification report you can do the following:
 
-   class MySpec extends Specification { def is = s2$triple
-      ${dollar}{"My beautiful specifications".title}
+```
+class MySpec extends Specification { def is = s2$triple
+  ${dollar}{"My beautiful specifications".title}
 
-      <...The rest of the spec goes here...>
-                                                   $triple
-   }
+  <...The rest of the spec goes here...>
+                                                $triple
+}
+```
 
 The title can be defined either:
 
@@ -103,91 +105,114 @@ And when you want other ways to customize the description, you can use:
 ### Share examples
 
 In a given specification some examples may look similar enough that you would like to "factor" them out and share them between
-different parts of your specification. The best example of this situation is a specification for a Stack of limited size:
+different parts of your specification. The best example of this situation is a specification for a Stack of limited size: ${
 
-    class StackSpec extends Specification { def is =
+class StackSpec extends Specification { def is = s2"""
 
-      "Specification for a Stack with a limited capacity".title                   ^
-                                                                                  p^
-      "A Stack with limited capacity can either be:"                              ^ endp^
-        "1. Empty"                                                                ^ anEmptyStack^
-        "2. Normal (i.e. not empty but not full)"                                 ^ aNormalStack^
-        "3. Full"                                                                 ^ aFullStack^end
+  ${"Specification for a Stack with a limited capacity".title}
 
-      def anEmptyStack =                                                          p^
-        "An empty stack should"                                                   ^
-          "have a size == 0"                                                      ! empty().e1^
-          "throw an exception when sent #top"                                     ! empty().e2^
-          "throw an exception when sent #pop"                                     ! empty().e3^endbr
+  A Stack with limited capacity can either be:                             $endp
+    1. Empty                                                               $anEmptyStack
+    2. Normal (i.e. not empty but not full)                                $aNormalStack
+    3. Full                                                                $aFullStack
+                                                                           """
 
-      def aNormalStack =                                                          p^
-        "A normal stack should"                                                   ^
-          "behave like a non-empty stack"                                         ^ nonEmptyStack(newNormalStack)^
-          "add to the top when sent #push"                                        ! nonFullStack().e1^endbr
+  def anEmptyStack =                                                       s2"""
+    An empty stack should
+      have a size == 0                                                     ${empty().e1}
+      throw an exception when sent #top                                    ${empty().e2}
+      throw an exception when sent #pop                                    ${empty().e3}
+                                                                           """
 
-      def aFullStack =                                                            p^
-        "A full stack should"                                                     ^
-          "behave like a non-empty stack"                                         ^ nonEmptyStack(newFullStack)^
-          "throw an exception when sent #push"                                    ! fullStack().e1
+  def aNormalStack =                                                       p^s2"""
+    A normal stack should
+      behave like a non-empty stack                                        ${nonEmptyStack(newNormalStack)}
+      add to the top when sent #push                                       ${nonFullStack().e1}
+                                                                           """
 
-      def nonEmptyStack(stack: =>SizedStack) = {                                  t^
-        "have a size > 0"                                                         ! nonEmpty(stack).size^
-        "return the top item when sent #top"                                      ! nonEmpty(stack).top1^
-        "not remove the top item when sent #top"                                  ! nonEmpty(stack).top2^
-        "return the top item when sent #pop"                                      ! nonEmpty(stack).pop1^
-        "remove the top item when sent #pop"                                      ! nonEmpty(stack).pop2^bt
-      }
+  def aFullStack =                                                         p^s2"""
+    A full stack should
+      behave like a non-empty stack                                        ${nonEmptyStack(newFullStack)}
+      throw an exception when sent #push                                   ${fullStack().e1}
+                                                                           """
 
-      /** stacks creation */
-      def newEmptyStack  = SizedStack(maxCapacity = 10, size = 0)
-      def newNormalStack = SizedStack(maxCapacity = 10, size = 2)
-      def newFullStack   = SizedStack(maxCapacity = 10, size = 10)
+  def nonEmptyStack(stack: =>SizedStack) =                                 t^s2"""
+    have a size > 0                                                        ${nonEmpty(stack).size}
+    return the top item when sent #top                                     ${nonEmpty(stack).top1}
+    not remove the top item when sent #top                                 ${nonEmpty(stack).top2}
+    return the top item when sent #pop                                     ${nonEmpty(stack).pop1}
+    remove the top item when sent #pop                                     ${nonEmpty(stack).pop2}
+                                                                           """
+  /** stacks creation */
+  def newEmptyStack  = SizedStack(maxCapacity = 10, size = 0)
+  def newNormalStack = SizedStack(maxCapacity = 10, size = 2)
+  def newFullStack   = SizedStack(maxCapacity = 10, size = 10)
 
-      /** stacks examples */
-      case class empty() {
-        val stack = newEmptyStack
+  /** stacks examples */
+  case class empty() {
+    val stack = newEmptyStack
 
-        def e1 = stack.size must_== 0
-        def e2 = stack.top must throwA[NoSuchElementException]
-        def e3 = stack.pop must throwA[NoSuchElementException]
-      }
+    def e1 = stack.size must_== 0
+    def e2 = stack.top must throwA[NoSuchElementException]
+    def e3 = stack.pop must throwA[NoSuchElementException]
+  }
 
-      def nonEmpty(createStack: =>SizedStack) = new {
-        val stack = createStack
+  def nonEmpty(createStack: =>SizedStack) = new {
+    val stack = createStack
 
-        def size = stack.size > 0
+    def size = stack.size > 0
 
-        def top1 = stack.top must_== stack.size
-        def top2 = {
-          stack.top
-          stack.top must_== stack.size
-        }
-
-        def pop1 = {
-          val topElement = stack.size
-          stack.pop must_== topElement
-        }
-
-        def pop2 = {
-          stack.pop
-          stack.top must_== stack.size
-        }
-      }
-
-      case class nonFullStack() {
-        val stack = newNormalStack
-
-        def e1 = {
-          stack push (stack.size + 1)
-          stack.top must_== stack.size
-        }
-      }
-      case class fullStack() {
-        val stack = newFullStack
-
-        def e1 = stack push (stack.size + 1) must throwAn[Error]
-      }
+    def top1 = stack.top must_== stack.size
+    def top2 = {
+      stack.top
+      stack.top must_== stack.size
     }
+
+    def pop1 = {
+      val topElement = stack.size
+      stack.pop must_== topElement
+    }
+
+    def pop2 = {
+      stack.pop
+      stack.top must_== stack.size
+    }
+  }
+
+  case class nonFullStack() {
+    val stack = newNormalStack
+
+    def e1 = {
+      stack push (stack.size + 1)
+      stack.top must_== stack.size
+    }
+  }
+  case class fullStack() {
+    val stack = newFullStack
+
+    def e1 = stack push (stack.size + 1) must throwAn[Error]
+  }
+}
+  `8<--`
+  /**
+   * SizedStack definition
+   */
+  object SizedStack {
+    def apply(maxCapacity: Int, size: Int) = new SizedStack(maxCapacity).fill(1 to size)
+  }
+
+  class SizedStack(val capacity: Int) extends scala.collection.mutable.Stack[Int] {
+    override def push(a: Int) = {
+      if (size == capacity) throw new Error("full stack")
+      super.push(a)
+    }
+    def fill(range: Range) = {
+      range.foreach(push(_))
+      this
+    }
+  }
+  `8<--`
+}
 
 ### Create an index
 
@@ -428,19 +453,26 @@ The first method must be used if the code that you're evaluating potentially thr
 
 What does this look like?
 
-#### `snippet`
+#### snippet
 
 Here is an example of using the `snippet` method:
 
 ```
 s2$triple
  This is a multi-line string with a snippet of code: ${dollar}{ snippet {
-   def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
-   factorial(3) == 6
+def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
+factorial(3) == 6
  } }
 $triple
 ```
 
+When you use the `snippet` method, the reports will show:
+
+ This is a multi-line string with a snippet of code:
+```
+def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
+factorial(3) == 6
+```
 #### cuts
 
 Since snippets are compiled code, it might be necessary for you to add many declarations for this code, like imports or variables definitions, to be valid even if you don't want to show them. One way to do this is to delimit the code to show with some comments of the form `// 8<--`:
@@ -448,11 +480,11 @@ Since snippets are compiled code, it might be necessary for you to add many decl
 ```
 s2$triple
  This is a snippet of code with one relevant line: ${dollar}{ snippet {
-   // 8<--
-   def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
-   // 8<--
-   factorial(3) == 6
-   // 8<--
+// 8<--
+def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
+// 8<--
+factorial(3) == 6
+// 8<--
  } }
 $triple
 ```
@@ -462,14 +494,14 @@ The snippet above will only show `factorial(3) == 6`. You can actually repeat th
 ```
 s2$triple
  This is a snippet of code with 2 relevant lines: ${dollar}{ snippet {
-   // 8<--
-   def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
-   // 8<--
-   factorial(3) == 6
-   // 8<--
-   val n = 4
-   // 8<--
-   factorial(n) == 24
+// 8<--
+def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
+// 8<--
+factorial(3) == 6
+// 8<--
+val n = 4
+// 8<--
+factorial(n) == 24
  } }
 $triple
 ```
@@ -477,8 +509,8 @@ $triple
 This just displays:
 
 ```
-   factorial(3) == 6
-   factorial(n) == 24
+factorial(3) == 6
+factorial(n) == 24
 ```
 
 A similar way to do a "cut" is to use the `8<--` (or `cutHere`) method:
@@ -486,11 +518,11 @@ A similar way to do a "cut" is to use the `8<--` (or `cutHere`) method:
 ```
 s2$triple
  This is a snippet of code with one relevant line: ${dollar}{
-   `8<--`
-   def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
-   `8<--`
-   factorial(3) == 6
-   `8<--`
+`8<--`
+def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
+`8<--`
+factorial(3) == 6
+`8<--`
  }
 $triple
 ```
@@ -498,15 +530,15 @@ $triple
 ```
 s2$triple
  This is a snippet of code with 2 relevant lines: ${dollar}{
-   `8<--`
-   def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
-   `8<--`
-   factorial(3) == 6
-   `8<--`
-   val n = 4
-   `8<--`
-   factorial(n) == 24
-   `8<--`
+`8<--`
+def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
+`8<--`
+factorial(3) == 6
+`8<--`
+val n = 4
+`8<--`
+factorial(n) == 24
+`8<--`
  }
 $triple
 ```
@@ -518,7 +550,7 @@ By default the last value of a Snippet is not shown but you can display it with 
 ```
 s2$triple
  This is a snippet of code with a result: ${dollar}{ snippet {
-   factorial(3)
+factorial(3)
  }.eval }
 $triple
 ```
@@ -526,7 +558,7 @@ $triple
 This displays:
 
 ```
-   factorial(3)
+factorial(3)
 ```
 ```
 > 6
@@ -537,8 +569,8 @@ And with the `8<--` method you will write:
 ```
 s2$triple
  This is a snippet of code with a result: ${dollar}{
-   factorial(3) eval
-   `8<--`
+factorial(3) eval
+`8<--`
  }
 $triple
 ```
