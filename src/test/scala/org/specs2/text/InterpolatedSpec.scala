@@ -6,30 +6,34 @@ import specification.Snippets
 
 class InterpolatedSpec extends Specification with ParserMatchers with Snippets { def is = s2"""
 
- It is possible to retrieve, from an interpolated string, the expressions code, given the intermediate pieces of text
+ It is possible to retrieve, from an interpolated string, the expressions code,
+ given the intermediate pieces of text
 
-  when there is non-empty text surrounding all expressions       $e1
-    when there is an starting empty text                         $e2
-    when there is an ending empty text                           $e3
-    when there are several variables separated by spaces         $e4
+ Expressions can be collected
+  normal case                                                    $e1
+  when there is an starting empty text                           $e2
+  when there is an ending empty text                             $e3
+  when there are several variables separated by spaces           $e4
 
-  Interpolated expressions can be parsed
-    when just using an identifier                                $e5
-      when using accolades                                       $e6
-      when using nested accolades                                $e7
-    when using a quoted identifier                               $e8
+ Interpolated expressions can be parsed
+  when just using an identifier                                  $e5
+  when using accolades                                           $e6
+  when using nested accolades                                    $e7
+  when using a quoted identifier                                 $e8
+  when there is non-empty text surrounding all expressions       $e9
+  with a snippet $e10
                                                                  """
 
   def e1 = {
     val string =
       """|This is an interpolated string with one variable $e1
-         |and another variable ${new BigTrait{}}
+         |and another variable ${ new BigTrait {} }
          |Then some other text""".stripMargin
 
     new Interpolated(string,
       Seq("This is an interpolated string with one variable ",
           "\nand another variable ",
-          "\nThen some other text")).expressions === Seq("e1", "new BigTrait{}")
+          "\nThen some other text")).expressions === Seq("e1", " new BigTrait {} ")
   }
 
   def e2 = {
@@ -68,6 +72,14 @@ class InterpolatedSpec extends Specification with ParserMatchers with Snippets {
   def e5 = parsers.interpolatedVariable("$hello") must beASuccess
   def e6 = parsers.interpolatedVariable("${hello}") must beASuccess
   def e7 = parsers.interpolatedVariable("${ exp { other } }") must beASuccess.withResult("\\Q exp { other } \\E")
-  def e8 = parsers.interpolatedVariable("${`hello world`}") must beASuccess.withResult("^hello world$")
+  def e8 = parsers.interpolatedVariable("${`hello world`}") must beASuccess.withResult("`hello world`")
+  def e9 = parsers.interpolatedVariable("${ exp ${ o1 } ${ o2 } end}") must beASuccess.withResult("\\Q exp ${ o1 } ${ o2 } end\\E")
+  def e10 = {
+    val snippet =
+      """${
+block  }""".stripMargin
+
+    parsers.interpolatedVariable(snippet) must beASuccess
+  }
 
 }

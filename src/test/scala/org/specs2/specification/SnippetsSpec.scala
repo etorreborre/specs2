@@ -30,7 +30,8 @@ class SnippetsSpec extends Specification with Snippets { def is = s2"""
   def e1 = s2""" code: ${ snippet {
 var n = 0
 n = 1
-} } """.texts(1).t ===
+} }
+e01""".texts(1).t.trim ===
   """|```
      |var n = 0
      |n = 1
@@ -44,7 +45,8 @@ var n = 0
 n = 1
 // 8<--
 n = 0
-} } """.texts(1).t ===
+} }
+e02""".texts(1).t.trim ===
     """|```
        |n = 1
        |```""".stripMargin
@@ -59,7 +61,7 @@ n = 0
 // 8<--
 var i = 0
   } }
-  """.texts(1).t ===
+e03""".texts(1).t.trim ===
     """```
       |n = 1
       |var i = 0
@@ -73,7 +75,8 @@ n = 1
 `8<--`
 n = 0
 `8<--`
-} """.texts(1).t ===
+}
+e04""".texts(1).t.trim ===
     """|```
        |n = 1
        |```""".stripMargin
@@ -88,7 +91,8 @@ n = 0
 `8<--`
 var i = 0
 `8<--`
-} """.texts(1).t ===
+}
+e05""".texts(1).t.trim ===
     """|```
        |n = 1
        |var i = 0
@@ -101,7 +105,8 @@ var n = 0
 n = 1
 // 8<--
 n = 0
-  }.offsetIs(2) } """.texts(1).t ===
+  }.offsetIs(2) }
+e06""".texts(1).t.trim ===
     """|```
        |  n = 1
        |```""".stripMargin
@@ -113,7 +118,7 @@ n = 0
   n = 1
   // 8<--
   n = 0
-  }.offsetIs(-2) } """.texts(1).t ===
+  }.offsetIs(-2) } """.texts(1).t.trim ===
     """|```
        |n = 1
        |```""".stripMargin
@@ -126,7 +131,8 @@ n = 1
 `8<--`
 n = 0
 `8<--`(offset = 2)
-  } """.texts(1).t ===
+  }
+e08""".texts(1).t.trim ===
     """|```
        |  n = 1
        |```""".stripMargin
@@ -139,7 +145,8 @@ n = 0
   `8<--`
   n = 0
   `8<--`(offset = -2)
-  } """.texts(1).t ===
+  }
+e09""".texts(1).t.trim ===
     """|```
        |n = 1
        |```""".stripMargin
@@ -147,7 +154,8 @@ n = 0
   def e10 = s2""" code: ${ snippet {
   var n = 1
   1 + n
-  }.eval.offsetIs(-2) } """.texts.drop(1).take(2).map(_.t).mkString("\n") ===
+  }.eval.offsetIs(-2) }
+e10""".texts.drop(1).take(2).map(_.t.trim).mkString("\n") ===
     """|```
        |var n = 1
        |1 + n
@@ -160,7 +168,8 @@ n = 0
 var n = 1
 (1 + n) eval
 `8<--`
-  } """.texts.drop(1).take(2).map(_.t).mkString("\n") ===
+  }
+e11""".texts.drop(1).take(2).map(_.t.trim).mkString("\n") ===
     """|```
        |var n = 1
        |(1 + n)

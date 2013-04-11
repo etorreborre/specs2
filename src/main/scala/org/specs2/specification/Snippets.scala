@@ -50,8 +50,11 @@ trait Snippet[T] {
   def cutMarker: String
   def cutMarkerFormat: String
 
-  def fragments(expression: String) =
-    Fragments.createList(Text(asCode(cut(expression)))).add(resultFragments)
+  def fragments(expression: String) = {
+    val asCut = cut(expression)
+    val code = if (asCut.startsWith("\n")) ("\n\n"+asCode(asCut.removeStart("\n"))) else ("\n\n"+asCode(asCut))
+    Fragments.createList(Text(code)).add(resultFragments)
+  }
 
   protected val code: () => T
   protected lazy val execute = code()

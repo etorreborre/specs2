@@ -3,6 +3,7 @@ package text
 
 import util.parsing.combinator._
 import Trim._
+import util.parsing.input.{CharSequenceReader, Reader}
 
 /**
  * this class extracts interpolated expressions from an interpolated string, given the string content and the text
@@ -11,24 +12,42 @@ import Trim._
 class Interpolated(stringContent: String, texts: Seq[String]) extends InterpolatedParsers {
 
   def expressions = {
-   val parsed = parse(interpolatedString, stringContent).get
-   if (parsed.size <= texts.size) parsed
-   else                           parsed.take(texts.size - 1)
+    texts.zip(texts.drop(1)).foldLeft((stringContent, Seq[String]())) { case ((content, exps), (text, next)) =>
+      val minusText = new String(content.drop(text.size).mkString)
+      val textToParse = new String(if (minusText.lastIndexOf(next) > 0) minusText.substring(0, minusText.lastIndexOf(next)) else minusText)
+      val expression = interpolatedString(new CharSequenceReader(textToParse)) match {
+        case Success(e, _) => e
+        case Failure(m, _) => m
+        case Error(m, _)   => m
+      }
+      (new String(minusText.drop(expression.size)), exps :+ trimVariableDeclaration(expression))
+    }._2
   }
+
+  private def trimVariableDeclaration = (_:String).removeStart("$").removeStart("{").removeEnd("}").removeStart("`").removeEnd("`")
 }
 
 trait InterpolatedParsers extends JavaTokenParsers {
   override def skipWhitespace = false
-  lazy val interpolatedString: Parser[Seq[String]] = ((interpolatedVariable | noVariable)+) ^^ { _.filter(_.nonEmpty) }
-  lazy val noVariable: Parser[String]              = "[^$]+".r ^^ { s => "" }
-  lazy val interpolatedVariable: Parser[String]    = "$" ~> (ident | "{" ~> (quotedExpression | accoladeInsideExpression) <~ "}")
-  lazy val noAccolade: Parser[String]              = "[^\\{\\}]*".r
-  lazy val accoladeInsideExpression: Parser[String]= { noAccolade ~ (accoladeExpression?) ~ noAccolade } ^^ {
-    case n1 ~ accExp ~ n2 => n1+accExp.getOrElse("")+n2
-  }
-  lazy val quotedExpression = "`" ~> "[^`]+".r <~ "`"
-  lazy val accoladeExpression: Parser[String]      = { "{" ~ accoladeInsideExpression ~ "}" } ^^ {
-    case start ~ accExp ~ end => start+accExp+end
-  }
+
+  def empty(p: Parser[String]) = p ^^ (_ => "")
+
+  lazy val noVariable: Parser[String] = ("[^${}]+".r).named("no variable")
+
+  lazy val interpolatedString: Parser[String] =
+    interpolatedVariable |
+    empty(noVariable)
+
+  lazy val interpolatedVariable: Parser[String] =
+    (("${" ~ interpolatedVariable ~ rep(interpolatedVariable) ~ "}") ^^ { case a~vv~b => a+vv.mkString+b }) |
+    (("${" ~ noVariable ~ rep(interpolatedVariable) ~ "}") ^^ { case a~vv~b => a+vv.mkString+b }) |
+    (("${" ~ quotedExpression ~ "}") ^^ { case a~vv~b => a+vv.toString+b }) |
+    (("$" ~ ident) ^^ { case a~b => a+b }) |
+    multiline
+
+  lazy val multiline: Parser[String] =
+    (".+".r ~ "\\s*".r ~ rep(multiline)) ^^ { case l~s~rest => l+s+rest.mkString }
+
+  lazy val quotedExpression: Parser[String] = (("`" ~ "[^`]+".r ~ "`") ^^ { case a~b~c => a+b+c }).named("quotedExpression")
 }
 object InterpolatedParsers extends InterpolatedParsers
