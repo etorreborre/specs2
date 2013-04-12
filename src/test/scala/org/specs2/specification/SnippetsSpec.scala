@@ -118,7 +118,8 @@ e06""".texts(1).t.trim ===
   n = 1
   // 8<--
   n = 0
-  }.offsetIs(-2) } """.texts(1).t.trim ===
+  }.offsetIs(-2) }
+e07""".texts(1).t.trim ===
     """|```
        |n = 1
        |```""".stripMargin
