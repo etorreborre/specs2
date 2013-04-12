@@ -105,7 +105,7 @@ And when you want other ways to customize the description, you can use:
 ### Share examples
 
 In a given specification some examples may look similar enough that you would like to "factor" them out and share them between
-different parts of your specification. The best example of this situation is a specification for a Stack of limited size: ${
+different parts of your specification. The best example of this situation is a specification for a Stack of limited size: ${ snippet {
 
 class StackSpec extends Specification { def is = s2"""
 
@@ -193,7 +193,7 @@ class StackSpec extends Specification { def is = s2"""
     def e1 = stack push (stack.size + 1) must throwAn[Error]
   }
 }
-  `8<--`
+  // 8<--
   /**
    * SizedStack definition
    */
@@ -211,8 +211,8 @@ class StackSpec extends Specification { def is = s2"""
       this
     }
   }
-  `8<--`
-}
+  // 8<--
+}}
 
 ### Create an index
 
@@ -444,12 +444,7 @@ More generally, you can both use the example description and the example body to
 
 ### Capture snippets
 
-It is possible to include pieces of code in your documentation with the `Snippets` trait. This works by either:
-
- 1. using the `snippet` method to capture a block code with marker comments to delimit the parts you want to show
- 2. using the `8<--` method to delimitate the parts which you want to show
-
-The first method must be used if the code that you're evaluating potentially throws an exception when executed otherwise it will not be possible to create the whole interpolated string and indeed the whole specification.
+It is possible to include pieces of code in your documentation with the `Snippets` trait using the `snippet` method to capture a block code with marker comments to delimit the parts you want to show.
 
 What does this look like?
 
@@ -513,36 +508,6 @@ factorial(3) == 6
 factorial(n) == 24
 ```
 
-A similar way to do a "cut" is to use the `8<--` (or `cutHere`) method:
-
-```
-s2$triple
- This is a snippet of code with one relevant line: ${dollar}{
-`8<--`
-def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
-`8<--`
-factorial(3) == 6
-`8<--`
- }
-$triple
-```
-
-```
-s2$triple
- This is a snippet of code with 2 relevant lines: ${dollar}{
-`8<--`
-def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
-`8<--`
-factorial(3) == 6
-`8<--`
-val n = 4
-`8<--`
-factorial(n) == 24
-`8<--`
- }
-$triple
-```
-
 #### evaluation
 
 By default the last value of a Snippet is not shown but you can display it with the `eval` method:
@@ -564,17 +529,6 @@ factorial(3)
 > 6
 ```
 
-And with the `8<--` method you will write:
-
-```
-s2$triple
- This is a snippet of code with a result: ${dollar}{
-factorial(3) eval
-`8<--`
- }
-$triple
-```
-
 #### offsets
 
 It is possible to adjust the margin of captured source code by adding or removing whitespace:
@@ -591,20 +545,6 @@ This displays:
 
 ```
 factorial(3)
-```
-
-And with the `8<--` method:
-
-```
-s2$triple
- This is a snippet of code with a negative offset to align the code to the border of the screen: ${dollar}{
-   `8<--`
-   def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
-   `8<--`
-   factorial(3)
-   `8<--`(offset = -3)
- }
-$triple
 ```
 
   """

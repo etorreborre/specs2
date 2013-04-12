@@ -68,8 +68,7 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
     def s2(variables: SpecPart*) = macro S2Macro.s2Implementation
   }
 
-  def s2(fileContent: String, texts: Seq[String], variables: Seq[SpecPart]) = {
-    val expressions = new Interpolated(fileContent, texts).expressions
+  def s2(texts: Seq[String], variables: Seq[SpecPart], expressions: Seq[String]) = {
     val fragments = (texts zip variables zip expressions).foldLeft(Fragments() ^ interpolatedArguments) { (res, cur) =>
       val ((text, variable), expression) = cur
 
@@ -95,12 +94,26 @@ object S2Macro {
     def methodCall(name: String, xs: Tree*): Tree =
       Apply(Select(This(tpnme.EMPTY), newTermName(name)), xs.toList)
 
-    val macroPos    = c.macroApplication.pos
-    val fileContent = macroPos.source.content.mkString
-    val content     = fileContent.split("\n").drop(macroPos.line - 1).mkString("\n").drop(macroPos.column-1).drop("s2\"\"\"".size)
-    val texts       = c.prefix.tree match { case Apply(_, List(Apply(_, ts))) => ts }
+    def stringExpr(variable: c.Expr[Any]): Tree =
+      c.literal(sourceOf(variable)).tree
 
-    c.Expr(methodCall("s2", c.literal(content).tree, toAST[List[_]](texts:_*), toAST[List[_]](variables.map(_.tree):_*)))
+    def sourceOf(expr: c.Expr[_]): String = {
+      val p = expr.tree.pos
+      val source = new String(p.source.content)
+      if (p.isRange) source.substring(p.start, p.end)
+      else p.lineContent.substring(p.point - p.source.lineToOffset(p.source.offsetToLine(p.point)))
+    }
+
+    val texts = c.prefix.tree match { case Apply(_, List(Apply(_, ts))) => ts }
+
+    val result =
+      c.Expr(methodCall("s2",
+        toAST[List[_]](texts:_*),
+        toAST[List[_]](variables.map(_.tree):_*),
+        toAST[List[_]](variables.map(stringExpr(_)):_*)))
+
+    c.Expr(atPos(c.prefix.tree.pos)(result.tree))
+
   }
 
 }

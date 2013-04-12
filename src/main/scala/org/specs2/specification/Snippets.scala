@@ -23,20 +23,6 @@ import Snippet._
  */
 trait Snippets { outer: SpecificationStringContext with FragmentsBuilder with ArgumentsArgs =>
 
-  def `8<--`(offset: Int = 0): CodeSnippet[Unit] =
-    CodeSnippet(code = () => (), cutMarker = "\n`8<--`\n", cutMarkerFormat = s"\n.*`8\\<\\-\\-`$parameters.*\n").offsetIs(offset)
-  def `8<--`: CodeSnippet[Unit] =
-    CodeSnippet(code = () => (), cutMarker = "\n`8<--`\n", cutMarkerFormat = "\n.*`8\\<\\-\\-`.*\n")
-
-  def cutHere(offset: Int = 0): CodeSnippet[Unit] =
-    CodeSnippet(code = () => (), cutMarker = "\ncutHere\n", cutMarkerFormat = "\n.*cutHere.*\n").offsetIs(offset)
-  def cutHere: CodeSnippet[Unit] =
-    CodeSnippet(code = () => (), cutMarker = "\ncutHere\n", cutMarkerFormat = s"\n.*cutHere$parameters.*\n")
-
-  implicit class cutResult[T](t: =>T) {
-    def eval[S](snippet: CodeSnippet[S]) =
-      snippet.copy(code = () => t, trimExpression = snippet.trimExpression andThen trimEval).eval
-  }
   def snippet[T](code: =>T) = CodeSnippet(() => code).mute
 
   implicit def snippetIsSpecPart[T](snippet: Snippet[T]): SpecPart = new SpecPart {
@@ -95,8 +81,8 @@ trait Snippet[T] {
 object Snippet {
 
   def trimSnippet = (expression: String) =>
-    expression.removeFirst(s"\\s*snippet$ls*\\{$ls*\n").
-      removeLast("\\s*\\}\\s*")
+    expression.removeFirst(s"$ls*snippet$ls*\\{$ls*\n").
+      removeLast(s"\\s*\\}$ls*")
 
   def trimEval = (s: String) => s.removeLast(s"(\\.)?$ls*eval$ls*")
   def trimOffsetIs = (s: String) => s.removeLast(s"\\s*\\}?(\\.)?$ls*offsetIs$parameters\\s*")
