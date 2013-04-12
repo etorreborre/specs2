@@ -37,6 +37,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
 
   we can check if at least one or several elements are present in a traversable
    ${ List(1, 2) must containAnyOf(Seq(1, 4)) }
+   ${ { List(1, 2, 3) must not(containAnyOf(Seq(1, 2, 4))) } returns "List(1, 2, 3) contains '1, 2'"}
 
   we can check the traversable contains another element exactly once
    ${ List(1, 2) must contain(1).exactlyOnce }

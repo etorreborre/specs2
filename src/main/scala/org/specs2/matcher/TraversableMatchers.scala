@@ -220,8 +220,9 @@ class ContainAnyOfMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:
   def create(seq: =>Seq[T], eq: (T, T) => Boolean) = new ContainAnyOfMatcher[T](seq, eq)
 
   def apply[S <: GenTraversableOnce[T]](actual: Expectable[S]) = {
-    result(actual.value.toList.exists((a: T) => expected.exists((e: T) => equality(a, e))),
-           actual.description + " contains at least one of " + qseq(expected),
+    val contained = actual.value.toList.filter((a: T) => expected.exists((e: T) => equality(a, e)))
+    result(contained.nonEmpty,
+           actual.description + " contains " + qseq(contained),
            actual.description + " doesn't contain any of " + qseq(expected), actual)
   }
 }
