@@ -27,7 +27,7 @@ class DebugSpec extends Specification { def is = s2"""
     pp(pre) prints a value with a prepended message ${new output {
       Value(1).pp("the value is") prints "the value is Value(1)"
     }}
-  }
+
   """
   case class Value(i: Int)
 }

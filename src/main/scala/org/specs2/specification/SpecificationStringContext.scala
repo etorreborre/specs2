@@ -6,6 +6,7 @@ import main.{Arguments, ArgumentsArgs}
 import execute._
 import text.NotNullStrings._
 import scala.reflect.macros.{Context => MContext}
+import reflect.Macros._
 import text.{CodeMarkup, NoMarkup, Interpolated}
 import control.Exceptions._
 
@@ -28,11 +29,11 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
   implicit def asResultIsSpecPart[R : AsResult](r: =>R): SpecPart = new SpecPart {
     def appendTo(text: String, expression: String = "") = {
       val texts = text.split("\n")
+      val spaces = texts.last.takeWhile(Seq(' ', '\n').contains)
+      val indent = spaces.mkString
+
       val first = texts.dropRight(1).mkString("", "\n", "\n")
       val autoExample = texts.last.trim.isEmpty
-      val spaces = texts.last.takeWhile(Seq(' ', '\n').contains)
-      // drop the last 2 whitespace to compensate for the status sign on the example
-      val indent = if (autoExample) spaces.mkString else spaces.dropRight(2).mkString
 
       val description = if (autoExample) CodeMarkup(expression.trim) else NoMarkup(texts.last.trim)
       val before = first + indent
@@ -88,29 +89,13 @@ object S2Macro {
   def s2Implementation(c: MContext)(variables: c.Expr[SpecPart]*) : c.Expr[Fragments] = {
     import c.{universe => u}; import u.{ Position => _, _ }
 
-    def toAST[A : TypeTag](xs: Tree*): Tree =
-      Apply(Select(Ident(typeOf[A].typeSymbol.companionSymbol), newTermName("apply")), xs.toList)
-
-    def methodCall(name: String, xs: Tree*): Tree =
-      Apply(Select(This(tpnme.EMPTY), newTermName(name)), xs.toList)
-
-    def stringExpr(variable: c.Expr[Any]): Tree =
-      c.literal(sourceOf(variable)).tree
-
-    def sourceOf(expr: c.Expr[_]): String = {
-      val p = expr.tree.pos
-      val source = new String(p.source.content)
-      if (p.isRange) source.substring(p.start, p.end)
-      else p.lineContent.substring(p.point - p.source.lineToOffset(p.source.offsetToLine(p.point)))
-    }
-
     val texts = c.prefix.tree match { case Apply(_, List(Apply(_, ts))) => ts }
 
     val result =
-      c.Expr(methodCall("s2",
-        toAST[List[_]](texts:_*),
-        toAST[List[_]](variables.map(_.tree):_*),
-        toAST[List[_]](variables.map(stringExpr(_)):_*)))
+      c.Expr(methodCall(c)("s2",
+        toAST[List[_]](c)(texts:_*),
+        toAST[List[_]](c)(variables.map(_.tree):_*),
+        toAST[List[_]](c)(variables.map(stringExpr(c)(_)):_*)))
 
     c.Expr(atPos(c.prefix.tree.pos)(result.tree))
 
