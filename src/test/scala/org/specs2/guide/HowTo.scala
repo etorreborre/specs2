@@ -1,40 +1,52 @@
 package org.specs2
 package guide
 
-import org.specs2.specification.Snippets
+import specification.{Snippets, Around, Example, DefaultExampleFactory, ExampleFactory}
+import execute.{AsResult, Result, ResultExecution}
+import main.{CommandLineArguments, Arguments}
+import matcher.Matcher
+import time.SimpleTimer
 
 class HowTo extends UserGuidePage { def is = s2"""
 
 ### Declare arguments
 
 Arguments are usually passed on the command line but you can also declare them at the beginning of the specification, to be applied only to that specification.
-For example, you can turn off the concurrent execution of examples with the `args(sequential = true)` call (or the shorter alias `sequential`):
+For example, you can turn off the concurrent execution of examples with the `args(sequential = true)` call (or the shorter alias `sequential`): ${snippet{
 
-    class ExamplesOneByOne extends Specification { def is = s2$triple $$sequential
+class ExamplesOneByOne extends Specification { def is = s2""" $sequential
 
-      first example        $$e1
-      the the second one   $$e2
-                           $triple
-    }
+  first example        $e1
+  the the second one   $e2
+                       """
+}
+// 8<--
+lazy val (e1, e2) = (ok, ok)
+}}
 
 For the complete list of arguments and shortcut methods read the [Runners](org.specs2.guide.Runners.html) page.
 
 ### Use command-line arguments
 
-Some specifications can depend on the arguments passed on the command line, for example to fine-tune the behaviour of some Context objects. If you need to do this, you can add an `Arguments` parameter to the Specification class. This parameter will be setup when the specification is instantiated:
+Some specifications can depend on the arguments passed on the command line, for example to fine-tune the behaviour of some Context objects. If you need to do this, you can add an `Arguments` parameter to the Specification class. This parameter will be setup when the specification is instantiated: ${snippet{
 
-    class DependOnCommandLine(args: Arguments) extends mutable.Specification {
-      skipAllUnless(!args.commandLine.contains("DB"))
+class DependOnCommandLine(args: Arguments) extends mutable.Specification {
+  skipAllUnless(!args.commandLine.contains("DB"))
 
-      "database access" >> { dbAccess must beOk }
-    }
+  "database access" >> { dbAccess must beOk }
+}
+// 8<--
+def dbAccess = ok
 
-Alternatively, if you need to keep your specification as a trait, you can mix-in the `org.specs2.main.CommandLineArguments` trait. This trait has an `arguments` variable which will contain the command-line arguments:
+}}
 
-    class CommandedSpecification extends mutable.Specification with CommandLineArguments {
-      if (arguments.sequential) "this is" >> ok
-      else                      "this is" >> ko
-    }
+Alternatively, if you need to keep your specification as a trait, you can mix-in the `org.specs2.main.CommandLineArguments` trait. This trait has an `arguments` variable which will contain the command-line arguments: ${snippet{
+
+class CommandedSpecification extends mutable.Specification with CommandLineArguments {
+  if (arguments.sequential) "this is" >> ok
+  else                      "this is" >> ko
+}
+}}
 
 Note that the `arguments` instance gives you access to all the specs2 arguments values like `sequential` but also to any of your own command line argument values:
 
@@ -44,65 +56,59 @@ Note that the `arguments` instance gives you access to all the specs2 arguments 
 
 ### Add a title
 
-Usually the title of a specification is derived from the specification class name. However if you want to give a more readable name to your specification report you can do the following:
+Usually the title of a specification is derived from the specification class name. However if you want to give a more readable name to your specification report you can do the following: ${snippet{
 
-```
-class MySpec extends Specification { def is = s2$triple
-  $${"My beautiful specifications".title}
+class MySpec extends Specification { def is = s2"""
+  ${"My beautiful specifications".title}
 
-  <...The rest of the spec goes here...>
-                                                $triple
+  // The rest of the spec goes here
+  """
 }
-```
-
-The title can be defined either:
-
- * at the beginning of the specification
- * just after the arguments of the specification
+}}
 
 ### Use descriptions
 
 The description of an Example can be used to create an expectation in the example body:
 
-```
-"This is a long, long, long description" ! ((s: String) => s.size must be_>(10))
-```
+${snippet {"This is a long, long, long description" ! ((s: String) => s.size must be_>(10)) }}
 
 ### Pending until fixed
 
-Some examples may be temporarily failing but you may not want the entire test suite to fail just for those examples. Instead of commenting them out and then forgetting about those examples when the code is fixed, you can append `pendingUntilFixed` to the Example body:
+Some examples may be temporarily failing but you may not want the entire test suite to fail just for those examples. Instead of commenting them out and then forgetting about those examples when the code is fixed, you can append `pendingUntilFixed` to the Example body: ${snippet{
 
-    "this example fails for now" ! {
-      1 must_== 2
-    }.pendingUntilFixed
+"this example fails for now" ! {
+1 must_== 2
+}.pendingUntilFixed
 
-    // or, with a more specific message
-    "this example fails for now" ! {
-      1 must_== 2
-    }.pendingUntilFixed("ISSUE-123")
-
+// or, with a more specific message
+"this example fails for now" ! {
+1 must_== 2
+}.pendingUntilFixed("ISSUE-123")
+}}
 
 The example above will be reported as `Pending` until it succeeds. Then it is marked as a failure so that you can remember to remove the `pendingUntilFixed` marker.
 
 ### Enhance failures
 
-Most of the time, the message displayed in the case of a matcher failure is clear enough. However a bit more information is sometimes necessary to get a better diagnostic on the value that's being checked. Let's say that you want to check a "ticket list":
+Most of the time, the message displayed in the case of a matcher failure is clear enough. However a bit more information is sometimes necessary to get a better diagnostic on the value that's being checked. Let's say that you want to check a "ticket list": ${snippet{
 
-    // will fail with "List(ticket1, ticket2) doesn't have size 3" for example
-    machine.tickets must have size(3) // machine is a user-defined object
+// will fail with "List(ticket1, ticket2) doesn't have size 3" for example
+machine.tickets must have size(3) // machine is a user-defined object
+}}
 
-If you wish to get a more precise failure message you can set an alias with the `aka` method (*also known as*):
+If you wish to get a more precise failure message you can set an alias with the `aka` method (*also known as*): ${snippet{
 
-    // will fail with "the created tickets 'List(ticket1, ticket2)' doesn't have size 3"
-    machine.tickets aka "the created tickets" must haveSize(3)
+// will fail with "the created tickets 'List(ticket1, ticket2)' doesn't have size 3"
+machine.tickets aka "the created tickets" must haveSize(3)
+}}
 
 There is also a shortcut for `value aka value.toString` which is simply `value.aka`.
 
 And when you want other ways to customize the description, you can use:
 
- * `post`: `"a" post "is the first letter"` prints `a is the first letter`
- * `as`: `"b" as ((s:String) => "a"+s+"c")` prints `abc`
- * `showAs`: `Seq(1, 2, 3, 4).showAs((_:Seq[Int]).filter(isEven).mkString("|"))` prints `2|4`. This one is especially useful to filter out big data structures (lists, maps, xml...) before the failure display
+* `post`: `"a" post "is the first letter"` prints `a is the first letter`
+* `as`: `"b" as ((s:String) => "a"+s+"c")` prints `abc`
+* `showAs`: `Seq(1, 2, 3, 4).showAs((_:Seq[Int]).filter(isEven).mkString("|"))` prints `2|4`. This one is especially useful to filter out big data structures (lists, maps, xml...) before the failure display
 
 ### Share examples
 
@@ -144,92 +150,93 @@ class StackSpec extends Specification { def is = s2"""
     not remove the top item when sent #top                                 ${nonEmpty(stack).top2}
     return the top item when sent #pop                                     ${nonEmpty(stack).pop1}
     remove the top item when sent #pop                                     ${nonEmpty(stack).pop2}
-  """
-/** stacks creation */
-def newEmptyStack  = SizedStack(maxCapacity = 10, size = 0)
-def newNormalStack = SizedStack(maxCapacity = 10, size = 2)
-def newFullStack   = SizedStack(maxCapacity = 10, size = 10)
+                                                                           """
+  /** stacks creation */
+  def newEmptyStack  = SizedStack(maxCapacity = 10, size = 0)
+  def newNormalStack = SizedStack(maxCapacity = 10, size = 2)
+  def newFullStack   = SizedStack(maxCapacity = 10, size = 10)
 
-/** stacks examples */
-case class empty() {
-val stack = newEmptyStack
+  /** stacks examples */
+  case class empty() {
+    val stack = newEmptyStack
 
-def e1 = stack.size must_== 0
-def e2 = stack.top must throwA[NoSuchElementException]
-def e3 = stack.pop must throwA[NoSuchElementException]
-}
+    def e1 = stack.size must_== 0
+    def e2 = stack.top must throwA[NoSuchElementException]
+    def e3 = stack.pop must throwA[NoSuchElementException]
+  }
 
-def nonEmpty(createStack: =>SizedStack) = new {
-val stack = createStack
+  case class nonFullStack() {
+    val stack = newNormalStack
 
-def size = stack.size > 0
+    def e1 = {
+      stack push (stack.size + 1)
+      stack.top must_== stack.size
+    }
+  }
 
-def top1 = stack.top must_== stack.size
-def top2 = {
-stack.top
-stack.top must_== stack.size
-}
+  case class fullStack() {
+    val stack = newFullStack
 
-def pop1 = {
-val topElement = stack.size
-stack.pop must_== topElement
-}
+    def e1 = stack push (stack.size + 1) must throwAn[Error]
+  }
+  
+  def nonEmpty(createStack: =>SizedStack) = new {
+    val stack = createStack
+    def size = stack.size > 0
 
-def pop2 = {
-stack.pop
-stack.top must_== stack.size
-}
-}
+    def top1 = stack.top must_== stack.size
+    def top2 = {
+      stack.top
+      stack.top must_== stack.size
+    }
 
-case class nonFullStack() {
-val stack = newNormalStack
+    def pop1 = {
+      val topElement = stack.size
+      stack.pop must_== topElement
+    }
 
-def e1 = {
-stack push (stack.size + 1)
-stack.top must_== stack.size
+    def pop2 = {
+      stack.pop
+      stack.top must_== stack.size
+    }
+  }
 }
-}
-case class fullStack() {
-val stack = newFullStack
+  // 8<--
+  /**
+   * SizedStack definition
+   */
+  object SizedStack {
+    def apply(maxCapacity: Int, size: Int) = new SizedStack(maxCapacity).fill(1 to size)
+  }
 
-def e1 = stack push (stack.size + 1) must throwAn[Error]
-}
-}
-// 8<--
-/**
-* SizedStack definition
-*/
-object SizedStack {
-def apply(maxCapacity: Int, size: Int) = new SizedStack(maxCapacity).fill(1 to size)
-}
-
-class SizedStack(val capacity: Int) extends scala.collection.mutable.Stack[Int] {
-override def push(a: Int) = {
-if (size == capacity) throw new Error("full stack")
-super.push(a)
-}
-def fill(range: Range) = {
-range.foreach(push(_))
-this
-}
-}
-// 8<--
+  class SizedStack(val capacity: Int) extends scala.collection.mutable.Stack[Int] {
+    override def push(a: Int) = {
+      if (size == capacity) throw new Error("full stack")
+        super.push(a)
+    }
+    def fill(range: Range) = {
+      range.foreach(push(_))
+      this
+    }
+  }
+  // 8<--
 }}
 
 ### Create an index
 
-Here's something you can do to automatically create an index page for your specifications:
+Here's something you can do to automatically create an index page for your specifications: ${snippet{
 
 import org.specs2._
 import runner.SpecificationsFinder._
 
 class index extends Specification { def is =
 
-examplesLinks("Example specifications")
+  examplesLinks("Example specifications")
 
-// see the SpecificationsFinder trait for the parameters of the 'specifications' method
-def examplesLinks(t: String) = t.title ^ specifications().map(see)
+  // see the SpecificationsFinder trait for the parameters of the 'specifications' method
+  def examplesLinks(t: String) = t.title ^ specifications().map(see)
 }
+}}
 
 The specification above creates an index.html file in the `target/specs2-reports` directory. The specifications method
 creates specifications using the following parameters:
@@ -242,22 +249,23 @@ creates specifications using the following parameters:
 
 ### Tag examples
 
-Tags can be used in a Specification to include or exclude some examples or a complete section of fragments from the execution. Let's have a look at one example:
+Tags can be used in a Specification to include or exclude some examples or a complete section of fragments from the execution. Let's have a look at one example: ${snippet{
 
 /**
-* use the org.specs2.specification.Tags trait to define tags and sections
-*/
-class TaggedSpecification extends Specification with Tags { def is = s2$triple
-this is some introductory text
-and the first group of examples
-example 1 $$success                        $${tag("feature1", "unit")}
-example 2 $$success                        $${tag("integration")}
+ * use the org.specs2.specification.Tags trait to define tags and sections
+ */
+class TaggedSpecification extends Specification with specification.Tags { def is = s2"""
+  this is some introductory text
+  and the first group of examples
+  example 1 $success                         ${tag("feature1", "unit")}
+  example 2 $success                         ${tag("integration")}
 
-and the second group of examples            $${section("checkin")}
-example 3 $$success
-example 4 $$success                        $${section("checkin")}
-$triple
+  and the second group of examples           ${section("checkin")}
+  example 3 $success
+  example 4 $success                         ${section("checkin")}
+                                             """
 }
+}}
 
 In that specification we're defining several tags and sections:
 
@@ -275,34 +283,34 @@ Armed with this, it is now easy to include or exclude portions of the specificat
 
 #### In a unit specification
 
-A _unit_ specification will accept the same `tag` and `section` methods but the behavior will be slightly different:
+A _unit_ specification will accept the same `tag` and `section` methods but the behavior will be slightly different: ${snippet{
 
 import org.specs2.mutable._
 
 /**
-* use the org.specs2.mutable.Tags trait to define tags and sections
-*/
+ * use the org.specs2.mutable.Tags trait to define tags and sections
+ */
 class TaggedSpecification extends Specification with Tags {
-"this is some introductory text" >> {
-"and the first group of examples" >> {
-tag("feature 1", "unit")
-"example 1" in success
-"example 2" in success tag("integration")
+  "this is some introductory text" >> {
+    "and the first group of examples" >> {
+      tag("feature 1", "unit")
+      "example 1" in success
+      "example 2" in success tag("integration")
+    }
+  }
+  section("checkin")
+  "and the second group of examples" >> {
+    "example 3" in success
+    "example 4" in success
+  }
+  section("checkin")
 
+  "and the last group of examples" >> {
+    "example 5" in success
+    "example 6" in success
+  } section("slow")
 }
-}
-section("checkin")
-"and the second group of examples" >> {
-"example 3" in success
-"example 4" in success
-}
-section("checkin")
-
-"and the last group of examples" >> {
-"example 5" in success
-"example 6" in success
-} section("slow")
-}
+}}
 
 For that specification above:
 
@@ -320,14 +328,16 @@ the section: `example 5` and `example 6` are tagged with `slow`
 
 #### Skip examples
 
-You can skip all the examples of a specification by using the `skipAllIf` or `skipAllUnless` methods:
+You can skip all the examples of a specification by using the `skipAllIf` or `skipAllUnless` methods: ${snippet{
 
-```
 class EmailSpecification extends mutable.Specification {
-skipAllIf(serverIsOffLine)
-"test email" >> { sendEmail must beOk }
+  skipAllIf(serverIsOffline)
+  "test email" >> { sendEmail must beOk }
 }
-```
+// 8<--
+def serverIsOffline = false
+def sendEmail = "ok"
+}}
 
 #### Debug statements
 
@@ -358,7 +368,7 @@ An easy way to avoid this situation is to "deactivate" the specs2 implicits by m
 
 Knowing that an example passed is fine but sometimes you want to display more information, like the time spent executing the example for instance.
 
-This can be done by creating a `Context` object which will update the `Result` of the example execution with whatever you want to display:
+This can be done by creating a `Context` object which will update the `Result` of the example execution with whatever you want to display: ${snippet{
 
 import org.specs2._
 import time._
@@ -366,22 +376,22 @@ import specification._
 import execute._
 
 trait Timed extends Around {
-def around[T : AsResult](t: =>T): Result = {
-// use `ResultExecution.execute` to catch possible exceptions
-val (result, timer) = withTimer(ResultExecution.execute(AsResult(t)))
+  def around[T : AsResult](t: =>T): Result = {
+    // use `ResultExecution.execute` to catch possible exceptions
+    val (result, timer) = withTimer(ResultExecution.execute(AsResult(t)))
 
-// update the result with a piece of text which will be displayed in the console
-result.updateExpected("Execution time: "+timer.time)
-}
+    // update the result with a piece of text which will be displayed in the console
+    result.updateExpected("Execution time: "+timer.time)
+  }
 
-/** mesure the execution time of a piece of code */
-def withTimer[T](t: =>T): (T, SimpleTimer) = {
-val timer = (new SimpleTimer).start
-val result = t
-(result, timer.stop)
+  /** mesure the execution time of a piece of code */
+  def withTimer[T](t: =>T): (T, SimpleTimer) = {
+    val timer = (new SimpleTimer).start
+    val result = t
+    (result, timer.stop)
+  }
 }
-
-}
+}}
 
 When you execute a specification where each example uses this `Around` context (by implementing the `AroundExampleContext` trait for example) you should see the timing of each example displayed in the console:
 
@@ -396,53 +406,52 @@ When you execute a specification where each example uses this `Around` context (
 
 #### With example description
 
-More generally, you can both use the example description and the example body to display custom messages, by creating a new `ExampleFactory`:
+More generally, you can both use the example description and the example body to display custom messages, by creating a new `ExampleFactory`: ${snippet{
 
 // a trait to create an Around context using the example description
 trait TimedContext {
-def context(exampleDescription: String) = new Timed(exampleDescription)
+  def context(exampleDescription: String) = new Timed(exampleDescription)
 
-case class Timed(exampleDescription: String) extends Around {
-def around[T : AsResult](t: =>T): Result = {
-val (result, timer) = withTimer(ResultExecution.execute(AsResult(t)))
-result.updateExpected(s"Execution time for example $$exampleDescription: $${timer.time}")
-}
+  case class Timed(exampleDescription: String) extends Around {
+    def around[T : AsResult](t: =>T): Result = {
+      val (result, timer) = withTimer(ResultExecution.execute(AsResult(t)))
+      result.updateExpected(s"Execution time for example $$exampleDescription: $${timer.time}")
+    }
 
-def withTimer[T](t: =>T): (T, SimpleTimer) = {
-val timer = (new SimpleTimer).start
-val result = t
-(result, timer.stop)
-}
-}
+    def withTimer[T](t: =>T): (T, SimpleTimer) = {
+      val timer = (new SimpleTimer).start
+      val result = t
+      (result, timer.stop)
+    }
+  }
 }
 
 class MutableTimedSpecification extends mutable.Specification with TimedContext {
 
-"Example 1" in ok
-"Example 2" in ok
+  "Example 1" in ok
+  "Example 2" in ok
 
-// create a new MutableExampleFactory where the body of the example uses
-// the current example description
-override lazy val exampleFactory = new MutableExampleFactory {
-override def newExample[T : AsResult](description: String, t: =>T): Example =
-super.newExample(description, context(description)(AsResult(t)))
+  // create a new MutableExampleFactory where the body of the example uses
+  // the current example description
+  override lazy val exampleFactory = new MutableExampleFactory {
+    override def newExample[T : AsResult](description: String, t: =>T): Example =
+      super.newExample(description, context(description)(AsResult(t)))
+  }
 }
 
-}
+class TimedSpecification extends Specification with TimedContext { def is = s2"""
+  Example 1 $ok
+  Example 2 $ok
+            """
 
-class TimedSpecification extends Specification with TimedContext { def is = s2$triple
-Example 1 $$ok
-Example 2 $$ok
-       $triple
-
-// create a new DefaultExampleFactory where the body of the example uses
-// the current example description
-override lazy val exampleFactory = new DefaultExampleFactory {
-override def newExample[T : AsResult](description: String, t: =>T): Example =
-super.newExample(description, context(description)(AsResult(t)))
+  // create a new DefaultExampleFactory where the body of the example uses
+  // the current example description
+  override lazy val exampleFactory = new DefaultExampleFactory {
+    override def newExample[T : AsResult](description: String, t: =>T): Example =
+     super.newExample(description, context(description)(AsResult(t)))
+  }
 }
-
-}
+}}
 
 ### Capture snippets
 
@@ -567,6 +576,7 @@ These functionalities are accessible outside of specs2 by importing the `${fullN
 
 """
 
-
-
+  def machine = Machine()
+  case class Machine() { def tickets = Seq() }
+  def beOk: Matcher[Any] = (a: Any) => (true, "")
 }

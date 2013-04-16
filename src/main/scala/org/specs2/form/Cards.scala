@@ -1,6 +1,8 @@
 package org.specs2
 package form
+
 import DecoratedProperties._
+import specification.{Fragments, Snippets}
 
 /**
  * A set of tabs with a title, where each tab simply contains some text
@@ -16,8 +18,8 @@ trait Cards {
  *
  * The text will be interpreted as Markdown text when rendered as html
  */
-trait Card {
+trait Card extends Specification with Snippets { def is = ""
   def title: String
-  def text: String
-  def toTab: Tab = Tab(title, Form.tr(TextCell(text).bkWhite))
+  def text: Fragments
+  def toTab: Tab = Tab(title, Form.tr(TextCell(text.texts.map(_.t).mkString).bkWhite))
 }

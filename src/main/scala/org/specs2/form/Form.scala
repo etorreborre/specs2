@@ -202,12 +202,7 @@ case object Form {
    * @return the xml representation of a Form
    */
   def toXml(form: Form)(implicit args: Arguments) = {
-    <form>
-      <table  class="dataTable">
-        {titleAndRows(form)}
-      </table>
-      {formStacktraces(form)}
-    </form>
+    <form><table  class="dataTable">{titleAndRows(form)}</table>{formStacktraces(form)}</form>
   }
   /**
    * This method creates an xml representation of a Form as an Html table rows,

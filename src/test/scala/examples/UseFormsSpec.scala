@@ -43,10 +43,14 @@ This will create a html file in the target/specs2-reports directory
 
 import specification.Forms._
 
-case class Address(street: String, number: Int) {
+case class Address(street: String = "", number: Int = 0) {
+  def address = number+", "+street
+  def retrieve(i: Int) = this
+  def actualIs(a: Address) = this
   def form = fill(street, number)
   def fill(s: String, n: Int) =
     Form("Address").
         tr(prop("street", s)(street)).
         tr(prop("number", n)(number))
+
 }

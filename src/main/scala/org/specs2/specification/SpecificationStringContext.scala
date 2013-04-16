@@ -9,6 +9,7 @@ import scala.reflect.macros.{Context => MContext}
 import reflect.Macros._
 import text.{CodeMarkup, NoMarkup, Interpolated}
 import control.Exceptions._
+import scala.xml.Elem
 
 /**
  * Allow to use fragments inside interpolated strings starting with s2 in order to build the specification content

@@ -116,45 +116,45 @@ Fourth example: 1-n relationship
                              
     def e3 = initialsTable.form.execute.message must_== "'H.W.' is not equal to 'H.Wo.'"
     def e4 = {
-      order.fillSubset(
+      order.hasSubset(
         OrderLine("PIS", 1),
         OrderLine("PS", 2)
       ).execute must_== success
     }
     def e5 = {
-      order.fillSubset( 
+      order.hasSubset( 
         OrderLine("PS", 2),
         OrderLine("BS", 3)
       ).execute.isSuccess must beFalse
     }
-    def e6 = order.fillSubsequence(
+    def e6 = order.hasSubsequence(
         OrderLine("PS", 2),
         OrderLine("Beginning Scala", 3)
       ).execute must_== success
 
-    def e7 = order.fillSubsequence(
+    def e7 = order.hasSubsequence(
         OrderLine("Beginning Scala", 3),
         OrderLine("PIS", 1),
         OrderLine("PS", 2)
       ).execute.isSuccess must beFalse
       
-    def e8 = order.fillSet(
+    def e8 = order.hasSet(
         OrderLine("Beginning Scala", 3),
         OrderLine("PS", 2),
         OrderLine("PIS", 1)
       ).execute.isSuccess must beTrue
       
-    def e9 = order.fillSet(
+    def e9 = order.hasSet(
         OrderLine("Beginning Scala", 3),
         OrderLine("PS", 2)
       ).execute.isSuccess must beFalse
       
-    def e10 = order.fillSequence(
+    def e10 = order.hasSequence(
         OrderLine("Beginning Scala", 3),
         OrderLine("PIS", 1)
       ).execute.isSuccess must beFalse
       
-    def e11 = order.fillSequence(
+    def e11 = order.hasSequence(
         OrderLine("Beginning Scala", 3),
         OrderLine("PS", 2)
       ).execute.isSuccess must beFalse

@@ -230,5 +230,6 @@ class XmlCell(_theXml: =>NodeSeq) extends Cell {
 }
 object XmlCell {
   def unapply(cell: XmlCell): Option[NodeSeq] = Some(cell.theXml)
+  def apply(xml: =>NodeSeq) = new XmlCell(xml)
 }
 
