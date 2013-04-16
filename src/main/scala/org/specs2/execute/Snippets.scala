@@ -25,9 +25,9 @@ import control.LazyParameter
  */
 trait Snippets {
 
-  def snippet[T](code: LazyParameter[T]): CodeSnippet[T] = macro Snippets.create[T]
+  def snippet[T](code: =>T): CodeSnippet[T] = macro Snippets.create[T]
 
-  def createSnippet[T](expression: String, code: LazyParameter[T]): CodeSnippet[T] = new CodeSnippet[T](() => code.value, codeExpression = Some(expression)).mute
+  def createSnippet[T](expression: String, code: =>T): CodeSnippet[T] = new CodeSnippet[T](() => code.value, codeExpression = Some(expression)).mute
 
   def simpleName[T : WeakTypeTag]: String = implicitly[WeakTypeTag[T]].tpe.typeSymbol.name.toString.trim
   def fullName[T : WeakTypeTag]: String   = implicitly[WeakTypeTag[T]].tpe.typeSymbol.fullName.trim
@@ -35,7 +35,7 @@ trait Snippets {
 }
 
 object Snippets extends Snippets {
-  def create[T](c: MContext)(code: c.Expr[LazyParameter[T]]): c.Expr[CodeSnippet[T]] = {
+  def create[T](c: MContext)(code: c.Expr[T]): c.Expr[CodeSnippet[T]] = {
     import c.{universe => u}; import u._
     import Macros._
     val result = c.Expr(methodCall(c)("createSnippet", stringExpr(c)(code), code.tree.duplicate))
@@ -57,12 +57,14 @@ trait Snippet[T] {
   def offsetIs(n: Int = 0): ST
 
   def isMuted: Boolean
-  def asCode: String => String
+  /** use the full snippet version + the cut one to determine what to display */
+  def asCode: (String, String) => String
   def trimExpression: String => String
 
   def markdown(expression: String) = {
-    val asCut = cut(codeExpression.getOrElse(expression))
-    if (asCut.startsWith("\n")) ("\n\n"+asCode(asCut.removeStart("\n"))) else ("\n\n"+asCode(asCut))
+    val exp = codeExpression.getOrElse(expression)
+    val asCut = cut(exp)
+    if (asCut.startsWith("\n")) ("\n\n"+asCode(exp, asCut.removeStart("\n"))) else ("\n\n"+asCode(exp, asCut))
   }
 
   protected def cut(expression: String) = {
@@ -85,7 +87,7 @@ trait Snippet[T] {
 
   def resultMarkdown =
     if (result.isEmpty || isMuted) ""
-    else                           asCode(result)
+    else                           asCode(result, result)
 
 }
 
@@ -98,11 +100,11 @@ object Snippet {
   def trimEval = (s: String) => s.removeLast(s"(\\.)?$ls*eval$ls*")
   def trimOffsetIs = (s: String) => s.removeLast(s"\\s*\\}?(\\.)?$ls*offsetIs$parameters\\s*")
 
-  def markdownCode(offset: Int = 0) = (s: String) =>
-    if (s.contains("\n")) paragraphedCode(offset)(s)
-    else                  inlinedCode(s)
+  def markdownCode(offset: Int = 0) = (original: String, cut: String) =>
+    if (original.contains("\n")) paragraphedCode(offset)(original, cut)
+    else                         inlinedCode(cut)
 
-  def paragraphedCode(offset: Int = 0) = (s: String) => "```\n"+s.offset(offset)+"\n```"
+  def paragraphedCode(offset: Int = 0) = (original: String, cut: String) => "```\n"+cut.offset(offset)+"\n```"
   def inlinedCode = (s: String) => "`"+s+"`"
 
   val ls = "[ \t\\x0B\f]"
@@ -111,7 +113,7 @@ object Snippet {
 
 case class CodeSnippet[T](code: () => T,
                           cutMarker: String = "\n// 8<--\n", cutMarkerFormat: String = s"$ls*// 8<\\-+.*\n",
-                          trimExpression: String => String = trimSnippet, asCode: String => String = markdownCode(0),
+                          trimExpression: String => String = trimSnippet, asCode: (String, String) => String = markdownCode(0),
                           codeExpression: Option[String] = None,
                           isMuted: Boolean = false) extends Snippet[T] {
   type ST = CodeSnippet[T]
@@ -126,7 +128,7 @@ case class CodeSnippet[T](code: () => T,
 
 case class CheckedSnippet[T, R : AsResult](code: () => T, verification: T => R,
                                            cutMarker: String = "\n// 8<--\n", cutMarkerFormat: String = s"\n$ls*// 8<\\-+.*\n",
-                                           trimExpression: String => String = trimSnippet, asCode: String => String = markdownCode(0),
+                                           trimExpression: String => String = trimSnippet, asCode: (String, String) => String = markdownCode(0),
                                            codeExpression: Option[String] = None,
                                            isMuted: Boolean = false) extends Snippet[T] {
   type ST = CheckedSnippet[T, R]

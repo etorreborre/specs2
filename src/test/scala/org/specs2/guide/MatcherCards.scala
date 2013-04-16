@@ -339,7 +339,7 @@ It is very useful to have literal Xml in Scala, it is even more useful to have m
 
 object JsonMatchers extends Card {
   def title = "Json"
-  def text =  s"""
+  def text =  s2"""
  [Json](http://www.json.org) is a simple data format essentially modeling recursive key-values. There are 2 matchers which can be used to verify the presence of appropriate values in Strings representing Json documents:
 
  * `/(value)` checks if a value is present at the root of the document. This can only be the case if that document is an Array
@@ -403,7 +403,7 @@ object FileMatchers extends Card {
 The Java api for files is more or less mimicked as matchers which can operate on strings denoting paths or on Files:
 
  * `beEqualToIgnoringSep` checks if 2 paths are the same regardless of their separators
- `"c:\\temp\\hello" must beEqualToIgnoringSep("c:/temp/hello")`
+ `"c:\temp\hello" must beEqualToIgnoringSep("c:/temp/hello")`
  * `beAnExistingPath` checks if a path exists
  * `beAReadablePath` checks if a path is readable
  * `beAWritablePath` checks if a path is writable

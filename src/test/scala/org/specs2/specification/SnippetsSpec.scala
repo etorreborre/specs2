@@ -25,12 +25,11 @@ class SnippetsSpec extends Specification with Snippets with DataTables { def is 
      with a fully qualified name                             $e9
    for method names                                          $e10
    for attribute names                                       $e11
+
+ A snippet must not fail if the code throws an exception     $e12
                                                              """
 
-  def e1 = s2""" code: ${ snippet { 1 + 1 } } """.texts(1).t.trim ===
-    """|```
-       |1 + 1
-       |```""".stripMargin
+  def e1 = s2""" code: ${ snippet { 1 + 1 } } """.texts(1).t.trim === "`1 + 1`"
 
 
   def e2 = s2""" code: ${ snippet {
@@ -102,9 +101,7 @@ n = 0
        |var n = 1
        |1 + n
        |```
-       |```
-       |> 2
-       |```""".stripMargin
+       |`> 2`""".stripMargin
 
   def e8 = {
     "code"                                         || "markdown"                 |>
@@ -124,14 +121,17 @@ n = 0
       { (code, markdown) => texts(code)(0) === markdown}
   }
 
+
   def e11 = {
-    "code"                                         || "markdown"                  |>
+    "code"                                         || "markdown"                   |>
     s"""the attribute `${termName(attribute1)}`""" !! "the attribute `attribute1`" |
       { (code, markdown) => texts(code)(0) === markdown}
   }
-  val attribute1 = 1
+
+  def e12 = snippet[Unit](sys.error("boom")) must not(throwAn[Exception])
 
 
   def texts(fs: Fragments) = fs.texts.map(_.t).toIndexedSeq
+  val attribute1 = 1
 }
 
