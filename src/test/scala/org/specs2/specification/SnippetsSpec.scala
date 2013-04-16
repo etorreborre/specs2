@@ -1,7 +1,9 @@
 package org.specs2
 package specification
 
-class SnippetsSpec extends Specification with Snippets { def is = s2"""
+import matcher.DataTables
+
+class SnippetsSpec extends Specification with Snippets with DataTables { def is = s2"""
 
  These are examples on how to use the various snippet methods
 
@@ -17,6 +19,12 @@ class SnippetsSpec extends Specification with Snippets { def is = s2"""
 
  Results can be displayed by using the `eval` method
    when using the `snippet` method                           $e7
+
+ It is also possible to capture code names
+   for types (trait, classes,...)                            $e8
+     with a fully qualified name                             $e9
+   for method names                                          $e10
+   for attribute names                                       $e11
                                                              """
 
   def e1 = s2""" code: ${ snippet { 1 + 1 } } """.texts(1).t.trim ===
@@ -97,5 +105,33 @@ n = 0
        |```
        |> 2
        |```""".stripMargin
+
+  def e8 = {
+    "code"                                         || "markdown"                 |>
+    s"""the trait `${simpleName[Snippets]}`"""     !! "the trait `Snippets`"     |
+    { (code, markdown) => texts(code)(0) === markdown}
+  }
+
+  def e9 = {
+    "code"                                   || "markdown"                                      |>
+    s"""the trait `${fullName[Snippets]}`""" !! "the trait `org.specs2.specification.Snippets`" |
+    { (code, markdown) => texts(code)(0) === markdown}
+  }
+
+  def e10 = {
+    "code"                              || "markdown"                                      |>
+    s"""the method `${termName(is)}`""" !! "the method `is`"                               |
+      { (code, markdown) => texts(code)(0) === markdown}
+  }
+
+  def e11 = {
+    "code"                                         || "markdown"                  |>
+    s"""the attribute `${termName(attribute1)}`""" !! "the attribute `attribute1`" |
+      { (code, markdown) => texts(code)(0) === markdown}
+  }
+  val attribute1 = 1
+
+
+  def texts(fs: Fragments) = fs.texts.map(_.t).toIndexedSeq
 }
 

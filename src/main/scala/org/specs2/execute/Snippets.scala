@@ -5,7 +5,8 @@ import control.Exceptions._
 import text.NotNullStrings._
 import text.Trim._
 import scala.reflect.macros.{Context => MContext}
-import reflect.Macros._
+import scala.reflect.runtime.universe._
+import reflect.Macros
 import Snippet._
 import control.LazyParameter
 
@@ -27,16 +28,21 @@ trait Snippets {
   def snippet[T](code: LazyParameter[T]) = macro Snippets.create[T]
 
   def createSnippet[T](expression: String, code: LazyParameter[T]) = new CodeSnippet[T](() => code.value, codeExpression = Some(expression))
+
+  def simpleName[T : WeakTypeTag]: String = implicitly[WeakTypeTag[T]].tpe.typeSymbol.name.toString.trim
+  def fullName[T : WeakTypeTag]: String   = implicitly[WeakTypeTag[T]].tpe.typeSymbol.fullName.trim
+  def termName(m: Any): String            = macro Macros.termName
 }
 
-object Snippets {
+object Snippets extends Snippets {
   def create[T](c: MContext)(code: c.Expr[LazyParameter[T]]): c.Expr[CodeSnippet[T]] = {
     import c.{universe => u}; import u._
+    import Macros._
 
     val result = c.Expr(methodCall(c)("createSnippet", stringExpr(c)(code), code.tree.duplicate))
     c.Expr(atPos(c.prefix.tree.pos)(result.tree))
-
   }
+
 }
 
 trait Snippet[T] {
