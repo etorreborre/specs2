@@ -148,11 +148,11 @@ trait MatchersImplicits extends Expectations with MatchResultCombinators with Ma
   }
 
   /** verify the function f for all the values, stopping after the first failure */
-  def forall[T, U](values: GenTraversableOnce[T])(f: T => MatchResult[U])      = verifyFunction(f).forall(values.seq.toSeq)
+  def forall[T, U](values: GenTraversableOnce[T])(f: T => MatchResult[U]) = verifyFunction(f).forall(values.seq.toSeq)
   /** verify the function f for all the values, stopping after the first failure, where the PartialFunction is defined */
   def forallWhen[T, U](values: GenTraversable[T])(f: PartialFunction[T, MatchResult[U]]) = forall(values.filter(f.isDefinedAt))(f)
   /** verify the function f for all the values, and collect all failures */
-  def foreach[T, U](values: GenTraversableOnce[T])(f: T => MatchResult[U])     = verifyFunction(f).foreach(values.seq.toSeq)
+  def foreach[T, U](values: GenTraversableOnce[T])(f: T => MatchResult[U]) = verifyFunction(f).foreach(values.seq.toSeq)
   /** verify the function f for all the values, and collect all failures, where the PartialFunction is defined */
   def foreachWhen[T, U](values: GenTraversable[T])(f: PartialFunction[T, MatchResult[U]]) = foreach(values.filter(f.isDefinedAt))(f)
   /** verify the function f for at least one value */

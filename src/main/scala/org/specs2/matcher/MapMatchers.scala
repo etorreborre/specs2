@@ -16,56 +16,77 @@ private[specs2]
 trait MapBaseMatchers {
   
   /** matches if map.contains(k) */   
-  def haveKey[K](k: K) = new Matcher[Iterable[(K, Any)]] {
-    def apply[S <: Iterable[(K, Any)]](map: Expectable[S]) = {
-      result(map.value.exists(_._1 == k),
-             map.description + " has the key " + q(k),
-             map.description + " doesn't have the key " + q(k),
-             map)
-    }
-  }
+  def haveKey[K](k: K) = haveKeys(k)
 
     /** matches if map.contains(k) forall key k */
   def haveKeys[K](keys: K*) = new Matcher[Iterable[(K, Any)]] {
-    def apply[S <: Iterable[(K, Any)]](map: Expectable[S]) = {
-      MatchersImplicits.forall(keys)(k => haveKey(k).apply(map)).map(m => map.value)
-    }
+      def apply[S <: Iterable[(K, Any)]](map: Expectable[S]) = {
+        lazy val missing = keys.filterNot(map.value.map(_._1).toSeq.contains)
+
+        result(missing.isEmpty,
+               map.description+s" has the ${"key".plural(keys)} "+q(keys.mkString(", ")),
+               map.description+s" doesn't have the ${"key".plural(missing)} "+q(missing.mkString(", ")),
+               map)
+      }
+      override def not = new Matcher[Iterable[(K, Any)]] {
+        def apply[S <: Iterable[(K, Any)]](map: Expectable[S]) = {
+          lazy val existing = map.value.map(_._1).filter(keys.contains)
+
+          result(existing.isEmpty,
+                 map.description+s" doesn't have the ${"key".plural(keys)}"+q(keys),
+                 map.description+s" has the ${"key".plural(existing)} "+q(existing.mkString(", ")),
+                 map)
+        }
+      }
   }
 
   /** matches if map contains a pair (key, value) with value == v */   
-  def haveValue[V](v: V) = new Matcher[Iterable[(Any, V)]] { 
-    def apply[S <: Iterable[(Any, V)]](map: Expectable[S]) = {
-      result(map.value.exists(_._2 == v),
-             map.description + " has the value " + q(v), 
-             map.description + " doesn't have the value " + q(v),
-             map)
-    } 
-  }
+  def haveValue[V](v: V) = haveValues(v)
 
   /** matches if map contains a pair (key, value) with value == v  for all value v*/
   def haveValues[V](values: V*) = new Matcher[Iterable[(Any, V)]] {
+
     def apply[S <: Iterable[(Any, V)]](map: Expectable[S]) = {
-      MatchersImplicits.forall(values)(v => haveValue(v).apply(map)).map(m => map.value)
+      lazy val missing = values.filterNot(map.value.map(_._2).toSeq.contains)
+
+      result(missing.isEmpty,
+             map.description+s" has the ${"value".plural(values)} "+q(values.mkString(", ")),
+             map.description+s" doesn't have the ${"value".plural(missing)} "+q(missing.mkString(", ")),
+             map)
+    }
+    override def not = new Matcher[Iterable[(Any, V)]] {
+      def apply[S <: Iterable[(Any, V)]](map: Expectable[S]) = {
+        lazy val existing = map.value.map(_._2).filter(values.contains)
+
+        result(existing.isEmpty,
+               map.description+s" doesn't have the ${"value".plural(values)} "+q(values.mkString(", ")),
+               map.description+s" has the ${"value".plural(existing)} "+q(existing.mkString(", ")),
+               map)
+      }
     }
   }
 
   /** matches if map contains a pair (key, value) == (k, v) */   
-  def havePair[K, V](p: (K, V)) = new Matcher[Iterable[(K, V)]] {
-    def apply[S <: Iterable[(K, V)]](map: Expectable[S]) = {
-       result(map.value.exists(_ == p),
-              map.description + " has the pair " + q(p), 
-              map.description + " doesn't have the pair " + q(p),
-              map)
-     }
-  }
+  def havePair[K, V](p: (K, V)) = havePairs(p)
+  
   /** matches if map contains all the specified pairs */   
   def havePairs[K, V](pairs: (K, V)*) = new Matcher[Iterable[(K, V)]] {
     def apply[S <: Iterable[(K, V)]](map: Expectable[S]) = {
-       result(pairs.forall(pair => map.value.exists(_ == pair)),
-              map.description + " has the pairs " + q(pairs.mkString(", ")), 
-              map.description + " doesn't have the pairs " + q(pairs.mkString(", ")),
-              map)
-     }
+      lazy val missing = pairs.filterNot(map.value.toSeq.contains)
+      result(missing.isEmpty,
+             map.description+s" has the ${"pair".plural(pairs)} "+q(pairs.mkString(", ")),
+             map.description+s" doesn't have the ${"pair".plural(missing)} "+q(missing.mkString(", ")),
+             map)
+    }
+    override def not = new Matcher[Iterable[(K, V)]] {
+      def apply[S <: Iterable[(K, V)]](map: Expectable[S]) = {
+        lazy val existing = map.value.filter(pairs.contains)
+        result(existing.isEmpty,
+               map.description+s" doesn't have the ${"pair".plural(pairs)} "+q(pairs.mkString(", ")),
+               map.description+s" has the ${"pair".plural(existing)} "+q(existing.mkString(", ")),
+               map)
+      }
+    }
   }
 
   /** matches if the partial function is defined at those values */   

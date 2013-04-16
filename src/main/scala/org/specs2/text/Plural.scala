@@ -13,8 +13,10 @@ trait Plural {
   /** @return a Noun object which can be pluralized */
   implicit def noun(s: String) = Noun(s)
   case class Noun(s: String) {
-    def plural(v: Int) = if (v > 1) s+"s" else s    
-    def plural(v: Long) = if (v > 1) s+"s" else s
+    def plural(vs: Iterable[Any]): String = s.plural(vs.size)
+    def plural(v: Int): String     = if (v > 1) s+"s" else s
+    def plural(v: Long): String    = if (v > 1) s+"s" else s
+
     def bePlural(v: Int) = if (v > 1) s+"are" else s+"is"
     def bePlural(v: Long) = if (v > 1) s+"are" else s+"is"
   }
