@@ -2,9 +2,9 @@ package org.specs2
 package matcher
 
 import util.parsing.combinator.RegexParsers
-import ParsersUnderTest.{ number, anyNumber, error }
+import ParsersUnderTest.{ numbers, number, anyNumber, error }
 
-class ParserMatcherSpec extends Specification with ParserMatchers { def is = s2"""
+class ParserMatchersSpec extends Specification with ParserMatchers { def is = s2"""
 
 The ParserMatchers trait provides matchers for Parser and ParseResult instances.
 
@@ -17,6 +17,7 @@ The ParserMatchers trait provides matchers for Parser and ParseResult instances.
   ${ anyNumber must succeedOn("12").withResult(12) }
   ${ number must succeedOn("12ab").partially.withResult(12) }
   ${ number must succeedOn("12").withResult(equalTo(12)) }
+  ${ numbers must succeedOn("12,13").withResult(contain(12)) }
   ${ number must not succeedOn("abc") }
   ${ number must not(succeedOn("abc").withResult(equalTo(13))) }
 
@@ -58,12 +59,15 @@ The ParserMatchers trait provides matchers for Parser and ParseResult instances.
 }
 
 object ParsersUnderTest extends RegexParsers {
+  /** parse a list of numbers */
+  lazy val numbers: Parser[List[Int]] = rep1sep(number, ",")
+
   /** parse a number with any number of digits */
-  val number: Parser[Int] = """\d+""".r ^^ {_.toInt}
+  lazy val number: Parser[Int] = """\d+""".r ^^ {_.toInt}
 
   /** parse a number as Any - see issue 63 */
-  val anyNumber: Parser[Any] = """\d+""".r ^^ {_.toInt}
+  lazy val anyNumber: Parser[Any] = """\d+""".r ^^ {_.toInt}
 
   /** this parser returns an error */
-  val error: Parser[String] = err("Error")
+  lazy val error: Parser[String] = err("Error")
 }
