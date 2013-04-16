@@ -17,7 +17,7 @@ class SpecificationStringContextSpec extends Specification { def is = s2"""
      "A normal interpolated value: 100",
      "A normal interpolated string: hello",
      "A string hello followed by a Result",
-     "o A skipped result ",
+     "o A skipped result",
      "An interpolated value with an error \\[undefined\\]",
      "Total for specification user specification"
    )
