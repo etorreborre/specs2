@@ -485,11 +485,11 @@ For example you can pass on the command line:
 
  to have the text colored in blue and the failures in Magenta.
 
-If the `colors` option contains `whitebg` then the default colors are considered to be [`InvertedColors`](#{SPECS2_API}index.html#org.specs2.text.Colors)
+If the `colors` option contains `whitebg` then the default colors are considered to be [`InvertedColors`](${API_DIR}index.html#org.specs2.text.Colors)
 
 *Through the API*
 
-Finally you can change the color scheme that's being used on the console by implementing your own [`org.specs2.text.Colors`](#{SPECS2_API}index.html#org.specs2.text.Colors) trait or override values in the existing `ConsoleColors` class. For example if you want to output magenta everywhere yellow is used you can write:
+Finally you can change the color scheme that's being used on the console by implementing your own [`org.specs2.text.Colors`](${API_DIR}index.html#org.specs2.text.Colors) trait or override values in the existing `ConsoleColors` class. For example if you want to output magenta everywhere yellow is used you can write:
 
     object MyColors = new org.specs2.text.ConsoleColors { override val failureColor = magenta }
 
@@ -511,7 +511,7 @@ IntelliJ offers a nice integration with ***specs2***. You can:
  * Execute a specification by selecting its name and pressing CTRL+SHIFT+F10
  * Execute a single example by selecting its description and pressing CTRL+SHIFT+F10
 
- ![specs2 in Intellij](#{SPECS2_IMAGES}/intellij.png)
+ ![specs2 in Intellij](${IMAGES_DIR}intellij.png)
 
 But also:
 

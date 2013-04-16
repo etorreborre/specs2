@@ -16,8 +16,8 @@ In an _acceptance_ specification you build a list of _Fragments_ which are inter
 
     s2$triple
     this is my specification
-      and example 1            ${dollar}e1
-      and example 2            ${dollar}e2
+      and example 1            $$e1
+      and example 2            $$e2
     $triple
 
     def e1 = success
@@ -55,13 +55,13 @@ It is completely equivalent to writing this in an `org.specs2.Specification`:
     def is = s2$triple
 
       The 'Hello world' string should
-        contain 11 characters ${dollar}{
+        contain 11 characters $${
           "Hello world" must have size(11)
         }
-        start with 'Hello' ${dollar}{
+        start with 'Hello' $${
           "Hello world" must startWith("Hello")
         }
-        end with 'world'" ${dollar}{
+        end with 'world'" $${
           Hello world must endWith("world")
         }
              $triple
@@ -168,8 +168,8 @@ Alternatively, `orSkip` will skip the rest of the example in case of a failure.
 If your specification is about showing the use of a DSL or of an API, you can elide a description for the Example. This functionality is used in ***specs2*** to specify matchers:
 
     beNone checks if an element is None
-    ${dollar}{ None must beNone }
-    ${dollar}{ Some(1) must not be none }
+    $${ None must beNone }
+    $${ Some(1) must not be none }
 
 In that case, the text of the example will be extracted from the source file and the output will be:
 
@@ -207,12 +207,12 @@ This specification will be rendered as:
 When you create acceptance specifications, you have to find names to reference your examples, which can sometimes be a bit tedious. You can then get some support from the `org.specs2.specification.Grouped` trait. This trait provides group traits, named `g1` to `g22` to define groups of examples. Each group trait defines 22 variables named `e1` to `e22`, to define examples bodies. The specification below shows how to use the `Grouped` trait:
 
     class MySpecification extends Examples { def is =      s2$triple
-      first example in first group                         ${dollar}{g1.e1}
-      second example in first group                        ${dollar}{g1.e2}
+      first example in first group                         $${g1.e1}
+      second example in first group                        $${g1.e2}
 
-      first example in second group                        ${dollar}{g2.e1}
-      second example in second group                       ${dollar}{g2.e2}
-      third example in second group, not yet implemented   ${dollar}{g2.e3}
+      first example in second group                        $${g2.e1}
+      second example in second group                       $${g2.e2}
+      third example in second group, not yet implemented   $${g2.e3}
                                                            $triple
     }
 
@@ -251,8 +251,8 @@ However, the `service` variable will be shared by all the examples of each group
 
     class MySpecification extends Examples { def is = s2$triple
 
-     first example in first group                     ${dollar}{g1().e1}
-     second example in first group                    ${dollar}{g1().e2}
+     first example in first group                     $${g1().e1}
+     second example in first group                    $${g1().e2}
                                                       $triple
     }
 

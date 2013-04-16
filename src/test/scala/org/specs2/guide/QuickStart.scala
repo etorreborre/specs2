@@ -44,9 +44,9 @@ Acceptance specifications extend the `org.specs2.Specification` trait and must d
      This is a specification to check the 'Hello world' string
 
      The 'Hello world' string should
-       contain 11 characters                                         ${dollar}e1
-       start with 'Hello'                                            ${dollar}e2
-       end with 'world'                                              ${dollar}e3
+       contain 11 characters                                         $$e1
+       start with 'Hello'                                            $$e2
+       end with 'world'                                              $$e3
                                                                      $triple
 
       def e1 = "Hello world" must have size(11)

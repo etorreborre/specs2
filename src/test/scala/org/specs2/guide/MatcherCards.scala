@@ -551,24 +551,24 @@ For example, specifying a Parser for numbers could look like this:
       Parsers for numbers
 
         beASuccess and succeedOn check if the parse succeeds
-        ${dollar}{ number("1") must beASuccess }
-        ${dollar}{ number("1i") must beAPartialSuccess }
-        ${dollar}{ number must succeedOn("12") }
-        ${dollar}{ number must succeedOn("12ab").partially }
-        ${dollar}{ number must succeedOn("12").withResult(12) }
-        ${dollar}{ number must succeedOn("12").withResult(equalTo(12)) }
-        ${dollar}{ number("1") must haveSuccessResult("1") }
+        $${ number("1") must beASuccess }
+        $${ number("1i") must beAPartialSuccess }
+        $${ number must succeedOn("12") }
+        $${ number must succeedOn("12ab").partially }
+        $${ number must succeedOn("12").withResult(12) }
+        $${ number must succeedOn("12").withResult(equalTo(12)) }
+        $${ number("1") must haveSuccessResult("1") }
 
         beAFailure and failOn check if the parse fails
-        ${dollar}{ number must failOn("abc") }
-        ${dollar}{ number must failOn("abc").withMsg("string matching regex.*expected") }
-        ${dollar}{ number must failOn("abc").withMsg(matching(".*string matching regex.*expected.*")) }
-        ${dollar}{ number("i") must beAFailure }
-        ${dollar}{ number("i") must haveFailureMsg("i' found") }
+        $${ number must failOn("abc") }
+        $${ number must failOn("abc").withMsg("string matching regex.*expected") }
+        $${ number must failOn("abc").withMsg(matching(".*string matching regex.*expected.*")) }
+        $${ number("i") must beAFailure }
+        $${ number("i") must haveFailureMsg("i' found") }
 
         beAnError and errorOn check if the parser errors out completely
-        ${dollar}{ error must errorOn("") }
-        ${dollar}{ error("") must beAnError }
+        $${ error must errorOn("") }
+        $${ error("") must beAnError }
                                                                                    $triple
 
       val parsers = NumberParsers

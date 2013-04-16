@@ -11,7 +11,7 @@ class Index extends Specification with FileSystem { def is =
 
   def createPage(template: String, resourcesDir: String = "src/main/resources/", outputDir: String = "target/specs2-reports/") = {
     writeFile(outputDir+template,
-      Source.fromFile(resourcesDir+template).getLines().map(_.replaceVariables).mkString("\n"))
+      Source.fromFile(resourcesDir+template).getLines().mkString("\n"))
     ok
   }
 }

@@ -92,8 +92,8 @@ _Note_: this technique will not work if the Specification is defined with a cons
 The same kind of variable isolation can be achieved in acceptance specifications by using case classes:
 
     class ContextSpec extends Specification { def is = s2$triple
-      this is the first example  ${dollar}{trees().e1}
-      this is the second example ${dollar}{trees().e2}
+      this is the first example  $${trees().e1}
+      this is the second example $${trees().e2}
                                                        $triple
     }
 
@@ -168,8 +168,8 @@ In this case, the clean-up code defined in the `after` method will be executed a
 In that case you would extend the `specification.After` trait and use the `apply` method:
 
     class ContextSpec extends Specification { def is = s2$triple
-      this is the first example  ${dollar}{trees().e1}
-      this is the second example ${dollar}{trees().e2}
+      this is the first example  $${trees().e1}
+      this is the second example $${trees().e2}
                                                        $triple
       case class trees() extends specification.After {
         lazy val tree = getATreeWith4NodesFromTheDatabase
@@ -339,10 +339,10 @@ Some set-up actions are very time-consuming and should be executed only once for
 
     class DatabaseSpec extends Specification { def is = s2$triple
 
-      This specification opens a database and execute some tests       ${dollar}{ Step(openDatabase) }
-        example 1                                                      ${dollar}success
-        example 2                                                      ${dollar}success
-                                                                       ${dollar}{ Step(closeDatabase) }
+      This specification opens a database and execute some tests       $${ Step(openDatabase) }
+        example 1                                                      $$success
+        example 2                                                      $$success
+                                                                       $${ Step(closeDatabase) }
                                                                        $triple
     }
 
@@ -354,11 +354,11 @@ The examples are (by default) executed concurrently between the 2 steps and the 
 
     class DatabaseSpec extends Specification { def is = s2$triple
 
-      This specification opens a database and execute some tests"     ${dollar}{ Step(openDatabase) }
-        example 1                                                     ${dollar}success
-        add 1 to the number of specification executions"              ${dollar}{ Action(db.executionsNb += 1) }
-        example 2                                                     ${dollar}success
-                                                                      ${dollar}{ Step(closeDatabase) }
+      This specification opens a database and execute some tests"     $${ Step(openDatabase) }
+        example 1                                                     $$success
+        add 1 to the number of specification executions"              $${ Action(db.executionsNb += 1) }
+        example 2                                                     $$success
+                                                                      $${ Step(closeDatabase) }
                                                                       $triple
     }
 

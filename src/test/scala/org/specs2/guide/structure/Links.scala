@@ -19,7 +19,7 @@ There is a simple mechanism for including a "children" specification in a given 
 ```
 s2$triple
 This is an included specification
-  ${dollar}childSpec
+  $$childSpec
 $triple
 ```
 Otherwise, if you want to include several specifications at once you can use the `include` method:
@@ -27,7 +27,7 @@ Otherwise, if you want to include several specifications at once you can use the
 ```
 s2$triple
     These are the included specifications
-      ${dollar}{include(childSpec1, childSpec2, childSpec3)}
+      $${include(childSpec1, childSpec2, childSpec3)}
 $triple
 ```
 
@@ -35,9 +35,9 @@ The effect of doing so is that all the fragments of the children specification w
 
 ```
 s2$triple
-  ${dollar}{include(xonly, new GivenWhenThenSpec) }
-  ${dollar}{include(xonly, exampleTextIndentation)}
-  ${dollar}{include(xonly, resetTextIndentation)  }
+  $${include(xonly, new GivenWhenThenSpec) }
+  $${include(xonly, exampleTextIndentation)}
+  $${include(xonly, resetTextIndentation)  }
 $triple
 ```
 
@@ -47,23 +47,23 @@ In the code above there are specific arguments to the included specifications so
 
 When you include a specification in another one the console will display the beginning and end statistics of the included specification. If you just want to insert the "middle" fragments of the included specification you can use `inline`:
 
-    ${dollar}{inline(otherSpecification)}
+    $${inline(otherSpecification)}
 
 ##### Html link
 
 In order to create a User Guide such as this one, you might want the included specification to be written to another html file. In this case, you need a "Link":
 
-    ${dollar}{link(new QuickStart)}
+    $${link(new QuickStart)}
 
 This declaration will include the child specification so it is executed when the parent specification is executed. However during the reporting, only a Html link will be created in the parent file, referencing a separate file for the children specification. On the other hand if you "hide" the specification, the link will not be printed out:
 
-    ${dollar}{link((new QuickStart).hide)}
+    $${link((new QuickStart).hide)}
 
 ###### Html Link
 
 It is possible to customize the generated Html link with the following syntax:
 
-    ${dollar}{"a " ~ ("quick start guide", new QuickStart)}
+    $${"a " ~ ("quick start guide", new QuickStart)}
 
 The `~` operator is used to create a `HtmlLink` where:
 
@@ -73,35 +73,35 @@ The `~` operator is used to create a `HtmlLink` where:
 
 Several variations are possible on this pattern, depending which part of the link you want to be highlighted:
 
-    ${dollar}{"before text" ~ ("text to highlight", specification, "after text")           }
-    ${dollar}{"before text" ~ ("text to highlight", specification, "after text", "tooltip")}
-    ${dollar}{"text to highlight" ~ specification                                          }
-    ${dollar}{"text to highlight" ~ (specification, "after text")                          }
-    ${dollar}{"text to highlight" ~ (specification, "after text", "tooltip")               }
+    $${"before text" ~ ("text to highlight", specification, "after text")           }
+    $${"before text" ~ ("text to highlight", specification, "after text", "tooltip")}
+    $${"text to highlight" ~ specification                                          }
+    $${"text to highlight" ~ (specification, "after text")                          }
+    $${"text to highlight" ~ (specification, "after text", "tooltip")               }
 
 #### Reference
 
 Sometimes you just want to reference another specification without triggering its execution. For example when [creating an index page](#Create+an+index):
 
-    ${dollar}{see(new MailSenderSpec)}
+    $${see(new MailSenderSpec)}
 
 This will generate a html link in the main specification based on the referenced specification name. If you want to customize that link you can use the following syntax:
 
-    ${dollar}{"before text" ~/ ("text to highlight", specification, "after text")           }
-    ${dollar}{"before text" ~/ ("text to highlight", specification, "after text", "tooltip")}
-    ${dollar}{"text to highlight" ~/ specification                                          }
-    ${dollar}{"text to highlight" ~/ (specification, "after text")                          }
-    ${dollar}{"text to highlight" ~/ (specification, "after text", "tooltip")               }
+    $${"before text" ~/ ("text to highlight", specification, "after text")           }
+    $${"before text" ~/ ("text to highlight", specification, "after text", "tooltip")}
+    $${"text to highlight" ~/ specification                                          }
+    $${"text to highlight" ~/ (specification, "after text")                          }
+    $${"text to highlight" ~/ (specification, "after text", "tooltip")               }
 
 #### Markdown url
 
 If you just want to reference the url of the html page that's being generated for a given specification in a paragraph of text, you can use the `markdownUrl` method:
 
-    For more information you can read ${dollar}{DetailedSpec.markdownUrl}
+    For more information you can read $${DetailedSpec.markdownUrl}
     // or
-    For more information you can read ${dollar}{DetailedSpec.markdownUrl("the detailed specification")}
+    For more information you can read $${DetailedSpec.markdownUrl("the detailed specification")}
     // or
-    For more information you can read ${dollar}{"the detailed specification".markdownUrl(DetailedSpec)}
+    For more information you can read $${"the detailed specification".markdownUrl(DetailedSpec)}
 
   """
 

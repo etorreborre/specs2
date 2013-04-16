@@ -189,8 +189,8 @@ If you have Hamcrest matchers in your project and you want to reuse them as spec
     class HamcrestSpec extends Specification with Grouped with Hamcrest { def is = s2$triple
 
       Hamcrest matchers can be used as specs2 matchers by mixing in the Hamcrest trait
-      for example a beEven Hamcrest matcher can be used in a 'must' expression              ${dollar}{g1.e1}
-        the failure message must contain the matched value and the Hamcrest failure message ${dollar}{g1.e2}
+      for example a beEven Hamcrest matcher can be used in a 'must' expression              $${g1.e1}
+        the failure message must contain the matched value and the Hamcrest failure message $${g1.e2}
                                                                                             $triple
 
       new g1 {
