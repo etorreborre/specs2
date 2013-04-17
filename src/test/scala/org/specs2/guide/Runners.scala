@@ -1,7 +1,9 @@
 package org.specs2
 package guide
 
-class Runners extends UserGuidePage { def is = s"""
+import main.Diffs
+
+class Runners extends UserGuidePage { def is = s2"""
 ### Presentation
 
 There are many ways to execute ***specs2*** specifications:
@@ -23,15 +25,14 @@ There are many ways to execute ***specs2*** specifications:
 
 ### Arguments
 
-You can specify arguments which will control the execution and reporting. They can be passed on the command line, or declared inside the specification, using the `args(name=value)` syntax:
+You can specify arguments which will control the execution and reporting. They can be passed on the command line, or declared inside the specification, using the `args(name=value)` syntax: ${snippet {
 
-```
-class MySpec extends Specification { def is = args(xonly=true)    ^ s2$triple
+class MySpec extends Specification { def is = args(xonly=true) ^ s2"""
   Clever spec title
   And some intro text
-  brilliant expectation $success                                    $triple
+  brilliant expectation $success                                   """
 }
-```
+}}
 
 #### API
 
@@ -78,13 +79,12 @@ From inside a specification, the available arguments are the following:
 ##### Most/Least frequently used arguments
 
 Most of the arguments above can be set in a specification with `args(name=value)`. However Scala would not allow the `args` method to accept *all* the possible
-arguments as parameters (because a method can only have up to 22 parameters). This is why the least frequently used arguments (not in italics) can be set with an object called `args`, having separate methods for setting all the parameters, by "category". For example:
+arguments as parameters (because a method can only have up to 22 parameters). This is why the least frequently used arguments (not in italics) can be set with an object called `args`, having separate methods for setting all the parameters, by "category". For example: ${snippet{
 
-```
 args.select(specName = ".*Test", include="slow")
 args.execute(threadsNb = 2)
 args.report(showtimes = true, xonly = true)
-```
+}}
 
 ##### Shortcuts
 
@@ -95,16 +95,16 @@ There are some available shortcuts for some arguments
  `include(tags: String)`                                               | `args(include=tags)`                                                                  |                                                                                                  |
  `exclude(tags: String)`                                               | `args(exclude=tags)`                                                                  |                                                                                                  |
  `only(examples: String)`                                              | `args(ex=examples)`                                                                   |                                                                                                  |
- `wasIssue`                                                            | `args(wasIssue=true)`                                                                   |                                                                                                  |
- `was(status: String)`                                                 | `args(was=status)`                                                                      |                                                                                                  |
+ `wasIssue`                                                            | `args(wasIssue=true)`                                                                 |                                                                                                  |
+ `was(status: String)`                                                 | `args(was=status)`                                                                    |                                                                                                  |
  `plan`                                                                | `args(plan=true)`                                                                     |                                                                                                  |
  `skipAll`                                                             | `args(skipAll=true)`                                                                  |                                                                                                  |
  `stopOnFail`                                                          | `args(stopOnFail=true)`                                                               |                                                                                                  |
  `stopOnSkip`                                                          | `args(stopOnSkip=true)`                                                               |                                                                                                  |
  `sequential`                                                          | `args(sequential=true)`                                                               |                                                                                                  |
- `isolated`                                                            | `args(isolated=true)`                                                               |                                                                                                  |
+ `isolated`                                                            | `args(isolated=true)`                                                                 |                                                                                                    |
  `xonly`                                                               | `args(xonly=true)`                                                                    |                                                                                                  |
- `showOnly(status: String)`                                            | `args(showOnly=status)`                                                                 |                                                                                                  |
+ `showOnly(status: String)`                                            | `args(showOnly=status)`                                                               |                                                                                                |
  `noindent`                                                            | `args(noindent=true)`                                                                 |                                                                                                  |
  `literate`                                                            | `args(noindent=true, sequential=true)`                                                | for specifications where text must not be indented and examples be executed in order             |
  `freetext`                                                            | `args(plan=true, noindent=true)`                                                      | for specifications with no examples at all and free display of text                              |
@@ -158,7 +158,7 @@ For the diffs arguments the values you can specify are:
   * `diffRatio` percentage of differences above which the differences must not be shown (default is 30)
   * `full` displays the full original expected and actual strings
 
-You can also specify your own enhanced algorithm for displaying difference by providing an instance of the `org.specs2.main.Diffs` trait:
+You can also specify your own enhanced algorithm for displaying difference by providing an instance of the `${fullName[Diffs]}` trait:
 
 ```
 trait Diffs {
@@ -524,9 +524,9 @@ It is possible to have ***specs2*** specifications executed as JUnit tests. This
 
 There are 2 ways of enabling a Specification to be executed as a JUnit test: the verbose one and the simpler one. The simplest one is to extend `SpecificationWithJUnit`:
 
-     class MySpecification extends SpecificationWithJUnit {
-       def is = // as usual....
-     }
+    class MySpecification extends SpecificationWithJUnit {
+      def is = // as usual....
+    }
 
 You can use the second one if your IDE doesn't work with the first one:
 

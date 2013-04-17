@@ -308,7 +308,7 @@ This way, if there is any conflict when inheriting from the `Specification` trai
 
 ##### Enter Scala 2.10
 
-Scala 2.10 brings a new feature to the language, String interpolation. But the big difference with most languages is that it is possible to create your own interpolator! This removes one really annoying issue of specs2 < Scala 2.10: the omni-presence of `^` operators in acceptance specifications. Thanks to String interpolation the canonical "Hello World" example becomes:
+Scala 2.10 brings a new feature to the language: String interpolation. But the big difference with most languages is that it is possible to create your own interpolator! This removes one really annoying issue of specs2 < Scala 2.10: the omni-presence of `^` operators in acceptance specifications. Thanks to String interpolation the canonical "Hello World" example becomes:
 
     class HelloWorldSpec extends Specification { def is = s2$triple
 
@@ -318,14 +318,13 @@ Scala 2.10 brings a new feature to the language, String interpolation. But the b
         contain 11 characters              $e1
         start with 'Hello'                 $e2
         end with 'world'                   $e3
-                                                          $triple
+                                           $triple
 
       def e1 = "Hello world" must have size(11)
       def e2 = "Hello world" must startWith("Hello")
       def e3 = "Hello world" must endWith("world")
 
     }
-
 
  - - -
 

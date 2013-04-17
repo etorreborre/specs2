@@ -2,8 +2,12 @@ package org.specs2
 package guide
 package structure
 
-object Contexts extends UserGuideVariables {
-  val section = s"""
+import specification.{Step, Action, Around, Before, After, Outside, AroundOutside, BeforeExample, AfterExample, BeforeAfter, Fragments, Scope}
+import mutable.NameSpace
+import execute._
+
+object Contexts extends UserGuidePage { def is = ""
+  val section = s2"""
 
 ### Contexts
 
@@ -35,23 +39,24 @@ Now let's see how this can be achieved with ***specs2***.
 
 ##### Scope
 
-Let's see an example of using a `Scope` with a mutable specification:
+Let's see an example of using a `Scope` with a mutable specification: ${snippet{
 
-    import org.specs2.specification.Scope
+import org.specs2.specification.Scope
 
-    class ContextSpec extends mutable.Specification {
-      "this is the first example" in new trees {
-        tree.removeNodes(2, 3) must have size(2)
-      }
-      "this is the first example" in new trees {
-        tree.removeNodes(2, 3, 4) must have size(1)
-      }
-    }
+class ContextSpec extends mutable.Specification {
+  "this is the first example" in new trees {
+    tree.removeNodes(2, 3) must have size(2)
+  }
+  "this is the first example" in new trees {
+    tree.removeNodes(2, 3, 4) must have size(1)
+  }
+}
 
-    /** the `trees` context */
-    trait trees extends Scope {
-      val tree = new Tree(1, 2, 3, 4)
-    }
+/** the `trees` context */
+trait trees extends Scope {
+  val tree = new Tree(1, 2, 3, 4)
+}
+}}
 
 Each example of that specification gets a new instance of the `trees` trait. So it will have a brand new `tree` variable and even if this data is mutated by an example, other examples will be isolated from these changes.
 
@@ -66,22 +71,23 @@ However, sometimes, we wish to go for a more concise way of getting fresh variab
 
 ##### Isolated variables
 
-The `isolated` argument changes the execution method so that each example is executed in a brand new instance of the Specification:
+The `isolated` argument changes the execution method so that each example is executed in a brand new instance of the Specification: ${snippet{
 
-    class IsolatedSpec extends mutable.Specification {
-      isolated
+class IsolatedSpec extends mutable.Specification {
+  isolated
 
-      "Each example should be executed in isolation" >> {
+  "Each example should be executed in isolation" >> {
 
-        val tree = new Tree(1, 2, 3, 4)
-        "the first example modifies the tree" >> {
-          tree.removeNodes(2, 3) must have size(2)
-        }
-        "the second example gets an unmodified version of the tree" >> {
-          tree.removeNodes(2, 3, 4) must have size(1)
-        }
-      }
+    val tree = new Tree(1, 2, 3, 4)
+    "the first example modifies the tree" >> {
+      tree.removeNodes(2, 3) must have size(2)
     }
+    "the second example gets an unmodified version of the tree" >> {
+      tree.removeNodes(2, 3, 4) must have size(1)
+    }
+  }
+}
+}}
 
 Since there is a new Specification for each example, then all the variables accessible to the example will be seen as new.
 
@@ -89,75 +95,78 @@ _Note_: this technique will not work if the Specification is defined with a cons
 
 ##### Case classes
 
-The same kind of variable isolation can be achieved in acceptance specifications by using case classes:
+The same kind of variable isolation can be achieved in acceptance specifications by using case classes: ${snippet{
+class ContextSpec extends Specification { def is = s2"""
+  this is the first example                          ${trees().e1}
+  this is the second example                         ${trees().e2}
+  """
+}
 
-    class ContextSpec extends Specification { def is = s2$triple
-      this is the first example  $${trees().e1}
-      this is the second example $${trees().e2}
-                                                       $triple
-    }
+case class trees() {
+  val tree = createATreeWith4Nodes
 
-    case class trees() {
-      val tree = createATreeWith4Nodes
-
-      def e1 = tree.removeNodes(2, 3) must have size(2)
-      def e2 = tree.removeNodes(2, 3, 4) must have size(1)
-    }
+  def e1 = tree.removeNodes(2, 3) must have size(2)
+  def e2 = tree.removeNodes(2, 3, 4) must have size(1)
+}
+}}
 
 In this case we don't need to extend the `Scope` trait because the examples `e1` and `e2` already return `Result`s.
 
 ##### Contexts inheritance
 
-One very cool property of using traits to define context variables is that we can use inheritance to describe more and more specific contexts:
+One very cool property of using traits to define context variables is that we can use inheritance to describe more and more specific contexts: ${snippet{
+def logInUser = User()
+def pendingOrder = Order()
+// 8<--
+trait LoggedIn extends Scope {
+  val user = logInUser
+  // do something with the user
+}
 
-    trait LoggedIn extends Scope {
-      val user = logInUser
-      // do something with the user
-    }
-
-    trait HasAPendingOrder extends LoggedIn {
-      val order = createPendingOrder
-      // the user is logged in
-      // now do something with the user and his order
-    }
+trait HasAPendingOrder extends LoggedIn {
+  val order = createPendingOrder
+  // the user is logged in
+  // now do something with the user and his order
+}
+}}
 
 #### Before/After
 
-If you want to run some code before or after each example, the `Before` and `After` traits are there to help you (they both extend the `Scope` trait). In the following examples we'll only show the use of `After` because `Before` most of the time unnecessary:
+If you want to run some code before or after each example, the `Before` and `After` traits are there to help you (they both extend the `Scope` trait). In the following examples we'll only show the use of `After` because `Before` most of the time unnecessary: ${snippet{
+class ContextSpec extends mutable.Specification {
+  "this is the first example" in new trees {
+    tree.removeNodes(2, 3) must have size(2)
+  }
+  "this is the first example" in new trees {
+    tree.removeNodes(2, 3, 4) must have size(1)
+  }
+}
 
-    class ContextSpec extends mutable.Specification {
-      "this is the first example" in new trees {
-        tree.removeNodes(2, 3) must have size(2)
-      }
-      "this is the first example" in new trees {
-        tree.removeNodes(2, 3, 4) must have size(1)
-      }
-    }
-
-    trait trees extends Scope {
-      setupDB
-      lazy val tree = getATreeWith4NodesFromTheDatabase
-    }
+trait trees extends Scope {
+  setupDB
+  lazy val tree = getATreeWith4NodesFromTheDatabase
+}
+}}
 
 Indeed when you have setup code you can do anything you want in the body of your context trait and this will be executed before the example body. However this wouldn't work with teardown code, so let's see how to use the `After` trait.
 
 ##### In a mutable specification
 
-You make your context trait extend the `mutable.After` trait:
+You make your context trait extend the `${fullName[mutable.After]}` trait: ${snippet{
+class ContextSpec extends mutable.Specification {
+  "this is the first example" in new trees {
+    tree.removeNodes(2, 3) must have size(2)
+  }
+  "this is the first example" in new trees {
+    tree.removeNodes(2, 3, 4) must have size(1)
+  }
+}
 
-    class ContextSpec extends mutable.Specification {
-      "this is the first example" in new trees {
-        tree.removeNodes(2, 3) must have size(2)
-      }
-      "this is the first example" in new trees {
-        tree.removeNodes(2, 3, 4) must have size(1)
-      }
-    }
-
-    trait trees extends mutable.After {
-      lazy val tree = getATreeWith4NodesFromTheDatabase
-      def after = cleanupDB
-    }
+trait trees extends mutable.After {
+  lazy val tree = getATreeWith4NodesFromTheDatabase
+  def after = cleanupDB
+}
+}}
 
 In this case, the clean-up code defined in the `after` method will be executed after each example. This is possible because the `mutable.After` trait extends the Scala `DelayedInit` trait allowing to insert code around the execution of the body of an object.
 
@@ -165,135 +174,150 @@ In this case, the clean-up code defined in the `after` method will be executed a
 
 ##### In an acceptance specification
 
-In that case you would extend the `specification.After` trait and use the `apply` method:
+In that case you would extend the `specification.After` trait and use the `apply` method: ${snippet{
 
-    class ContextSpec extends Specification { def is = s2$triple
-      this is the first example  $${trees().e1}
-      this is the second example $${trees().e2}
-                                                       $triple
-      case class trees() extends specification.After {
-        lazy val tree = getATreeWith4NodesFromTheDatabase
-        def after = cleanupDB
+class ContextSpec extends Specification { def is = s2"""
+  this is the first example                          ${trees().e1}
+  this is the second example                         ${trees().e2}
+  """
+  case class trees() extends specification.After {
+    lazy val tree = getATreeWith4NodesFromTheDatabase
+    def after = cleanupDB
 
-        // this is equivalent to: def e1 = this.apply { ... }
-        def e1 = this { tree.removeNodes(2, 3) must have size(2) }
-        def e2 = this { tree.removeNodes(2, 3, 4) must have size(1) }
-      }
-    }
+    // this is equivalent to: def e1 = this.apply { ... }
+    def e1 = this { tree.removeNodes(2, 3) must have size(2) }
+    def e2 = this { tree.removeNodes(2, 3, 4) must have size(1) }
+  }
+}
+}}
 
 Now we have both variable isolation and non-duplication of set-up code!
 
 But there is more to it. The next paragraphs will show how to:
 
- 1. execute the body of each example inside a specific context: `Around`
- 1. set-up a context object (say a http query) and pass it to each example: `Outside`
- 1. declare a `before` method for all the examples of a Specification without even having to create a context object
- 1. use an implicit context to avoid duplication
- 1. create a new context object by combining existing ones
+1. execute the body of each example inside a specific context: `Around`
+1. set-up a context object (say a http query) and pass it to each example: `Outside`
+1. declare a `before` method for all the examples of a Specification without even having to create a context object
+1. use an implicit context to avoid duplication
+1. create a new context object by combining existing ones
 
 #### Around
 
 Some examples need to be executed in a given context. For example you're testing a web application and your specification code needs to have your example executed inside an Http session.
 
-In that case you can extend the `Around` trait and specify the `around` method:
+In that case you can extend the `Around` trait and specify the `around` method: ${snippet{
+// 8<--
+lazy val (e1, e2) = (ok, ok)
+// 8<--
+object http extends Around {
+  def around[T : AsResult](t: =>T) = openHttpSession("test") {
+    AsResult(t)  // execute t inside a http session
+  }
+}
 
-    object http extends Around {
-      def around[T : AsResult](t: =>T) = openHttpSession("test") {
-        AsResult(t)  // execute t inside a http session
-      }
-    }
-
-    "this is a first example where the code executes inside a http session" ! http(e1)
-    "and another one"                                                       ! http(e2)
+"this is a first example where the code executes inside a http session" ! http(e1)
+"and another one"                                                       ! http(e2)
+}}
 
 Note that the context here is an object instead of a trait or case class instance because in this specification we don't need any variable isolation. We also take the advantage that objects extending `Context` traits (like `Before` / `After` / `Around`,...) have an `apply` method so we can directly write `http(e1)` meaning `http.apply(e1)`.
 
 #### Outside
 
-`Outside` is bit like `Around` except that you can get access to the application state that you're setting in your Context object. Let's see that with an example (with a mutable Specification for a change):
+`Outside` is bit like `Around` except that you can get access to the application state that you're setting in your Context object. Let's see that with an example (with a mutable Specification for a change): ${snippet{
+// 8<--
+class s extends mutable.Specification {
+// 8<--
+object http extends Outside[HttpReq] with Scope {
+  // prepare a valid HttpRequest
+  def outside: HttpReq = createRequest
+}
 
-    object http extends Outside[HttpReq] with Scope {
-      // prepare a valid HttpRequest
-      def outside: HttpReq = createRequest
-    }
-
-    // use the http request in each example
-    "this is a first example where the code executes uses a http request" in http { (request: HttpReq) =>
-      success
-    }
-    "and another one" in http { (request: HttpReq) =>
-      success
-    }
+// use the http request in each example
+"this is a first example where the code executes uses a http request" in http { (request: HttpReq) =>
+  success
+}
+"and another one" in http { (request: HttpReq) =>
+  success
+}
+// 8<--
+}
+// 8<--
+}}
 
 ##### AroundOutside
 
-We can also combine both the `Around` and the `Outside` behaviors with the `AroundOutside` trait:
+We can also combine both the `Around` and the `Outside` behaviors with the `AroundOutside` trait: ${snippet{
 
-    object http extends AroundOutside[HttpReq] {
-      // create a context
-      def around[T : AsResult](t: =>T) = {
-        createNewDatabase
-        // execute the code inside a databaseSession
-        inDatabaseSession { AsResult(t) }
-      }
-      // prepare a valid HttpRequest
-      def outside: HttpReq = createRequest
-    }
+object http extends AroundOutside[HttpReq] {
+  // create a context
+  def around[T : AsResult](t: =>T) = {
+    createNewDatabase
+    // execute the code inside a databaseSession
+    inDatabaseSession { AsResult(t) }
+  }
+  // prepare a valid HttpRequest
+  def outside: HttpReq = createRequest
+}
 
-    "this is a first example where the code executes uses a http request" ! http((request: HttpReq) => success)
-    "and another one"                                                     ! http((request: HttpReq) => success)
+"this is a first example where the code executes uses a http request" ! http((request: HttpReq) => success)
+"and another one"                                                     ! http((request: HttpReq) => success)
+}}
 
 #### BeforeExample
 
-When you just need to have set-up code executed before each example and if you don't need to have variable isolation, you can simply use the `BeforeExample` trait.
+When you just need to have set-up code executed before each example and if you don't need to have variable isolation, you can simply use the `${fullName[BeforeExample]}` trait.
 
-The `BeforeExample` trait allows you to define a `before` method exactly like the one you define in the `Before` trait and apply it to all the examples of the specification:
+The `${fullName[BeforeExample]}` trait allows you to define a `before` method exactly like the one you define in the `Before` trait and apply it to all the examples of the specification: ${snippet{
 
-    class MySpecification extends mutable.Specification with BeforeExample {
-      def before = cleanDatabase
+class MySpecification extends mutable.Specification with BeforeExample {
+  def before = cleanDatabase
 
-      "This is a specification where the database is cleaned up before each example" >> {
-        "first example" in { success }
-        "second example" in { success }
-      }
-    }
+  "This is a specification where the database is cleaned up before each example" >> {
+    "first example" in { success }
+    "second example" in { success }
+  }
+}
+}}
 
 As you can guess, the `AfterExample`, `AroundExample`,... traits work similarly by requiring the corresponding `after`, `around`,... methods to be defined.
 
 #### Implicit context
 
-The `BeforeExample` trait is a nice shortcut to avoid the creation of a context object, but there is another possibility to avoid the repetition of the context name for each example. If your specification is:
+The `BeforeExample` trait is a nice shortcut to avoid the creation of a context object, but there is another possibility to avoid the repetition of the context name for each example. If your specification is: ${snippet{
 
-    class ContextSpec extends mutable.Specification {
-      object myContext = new Before { def before = cleanUp }
+class ContextSpec extends mutable.Specification {
+  val myContext = new Before { def before = cleanUp }
 
-      "This is a specification where the database is cleaned up before each example" >> {
-        "first example" in myContext { 1 must_== 1 }
-        "second example" in myContext { 1 must_== 1 }
-      }
-    }
+  "This is a specification where the database is cleaned up before each example" >> {
+    "first example" in myContext { 1 must_== 1 }
+    "second example" in myContext { 1 must_== 1 }
+  }
+}
+}}
 
-You can simply mark your context object as `implicit` and it will be automatically passed to each example:
+You can simply mark your context object as `implicit` and it will be automatically passed to each example: ${snippet{
 
-    class ContextSpec extends mutable.Specification {
-      implicit object myContext = new Before { def before = cleanUp }
+class ContextSpec extends mutable.Specification {
+  implicit val myContext = new Before { def before = cleanUp }
 
-      "This is a specification where the database is cleaned up before each example" >> {
-        "first example"  in { 1 must_== 1 }
-        "second example" in { 1 must_== 1 }
-      }
-    }
+  "This is a specification where the database is cleaned up before each example" >> {
+    "first example"  in { 1 must_== 1 }
+    "second example" in { 1 must_== 1 }
+  }
+}
+}}
 
-There is just one gotcha that you need to be aware of. If your implicit context is an `Outside[String]` context this will not work:
+There is just one gotcha that you need to be aware of. If your implicit context is an `Outside[String]` context this will not work: ${snippet{
 
-    class ContextSpec extends mutable.Specification {
-      implicit object myContext = new Outside[String] { def outside = "hello" }
+class ContextSpec extends mutable.Specification {
+  implicit val myContext = new Outside[String] { def outside = "hello" }
 
-      "This is a specification uses a new String in each example" >> {
-        "first example"  in { (s: String) => s must_== s }
-        "second example" in { (s: String) => s must_== s }
-      }
-    }
+  "This is a specification uses a new String in each example" >> {
+    "first example"  in { (s: String) => s must_== s }
+    "second example" in { (s: String) => s must_== s }
+  }
+}
+}}
 
 Indeed in both examples above the `s` string that will be passed is the Example description as specified [here](#Use+descriptions).
 
@@ -301,133 +325,165 @@ Indeed in both examples above the `s` string that will be passed is the Example 
 
 ##### Combinations
 
-***specs2*** contexts can be combined in several ways. When you want to define both `Before` and `After` behavior, you can do it by simply extending those 2 traits:
+***specs2*** contexts can be combined in several ways. When you want to define both `Before` and `After` behavior, you can do it by extending the `${simpleName[BeforeAfter]}` trait: ${snippet{
 
-    case class withFile extends Before with After {
-      def before = createFile("test")
-      def after  = deleteFile("test")
-    }
-
-But, as we've seen with the `AroundOutside` example, ***specs2*** likes to help save keystrokes so you can directly extend the `BeforeAfter` trait:
-
-    case class withFile extends BeforeAfter {
-      def before = createFile("test")
-      def after  = deleteFile("test")
-    }
+case class withFile() extends BeforeAfter {
+  def before = createFile("test")
+  def after  = deleteFile("test")
+}
+}}
 
 Similarly you can use `BeforeAfterAround` instead of `Before with After with Around`.
 
 ##### Composition
 
-Contexts can be also be _composed_ but only if they are of the same type, `Before` with `Before`, `After` with `After`,...
+Contexts can be also be _composed_ but only if they are of the same type, `Before` with `Before`, `After` with `After`,... ${snippet{
 
-    case class withFile extends Before {
-      def before = createFile("test")
-    }
-    case class withDatabase extends Before {
-      def before = openDatabase("test")
-    }
-    val init = withFile() compose withDatabase()
+case class withFile() extends Before {
+  def before = createFile("test")
+}
+case class withDatabase() extends Before {
+  def before = openDatabase("test")
+}
+val init = withFile() compose withDatabase()
 
-    "Do something on the full system" ! init(success)
+"Do something on the full system" ! init(success)
+}}
 
 #### Steps/Actions
 
 ##### Steps
 
-Some set-up actions are very time-consuming and should be executed only once for the whole specification. This can be achieved by inserting some silent `Step`s in between fragments:
+Some set-up actions are very time-consuming and should be executed only once for the whole specification. This can be achieved by inserting some silent `Step`s in between fragments: ${snippet{
 
-    class DatabaseSpec extends Specification { def is = s2$triple
+class DatabaseSpec extends Specification { def is = s2"""
 
-      This specification opens a database and execute some tests       $${ Step(openDatabase) }
-        example 1                                                      $$success
-        example 2                                                      $$success
-                                                                       $${ Step(closeDatabase) }
-                                                                       $triple
-    }
+This specification opens a database and execute some tests       ${ Step(openDatabase("test")) }
+  example 1                                                      $success
+  example 2                                                      $success
+                                                                 ${ Step(closeDatabase("test")) }
+  """
+}
+}}
 
 The examples are (by default) executed concurrently between the 2 steps and the "result" of those steps will never be reported unless if there is a failure.
 
 ##### Actions
 
-`Step`s are very useful because they will really be executed sequentially, before anything else, but if you need to execute some actions which are completely independent of the rest of the specification, there is an equivalent to `Step` adequately called `Action`:
+`Step`s are very useful because they will really be executed sequentially, before anything else, but if you need to execute some actions which are completely independent of the rest of the specification, there is an equivalent to `Step` adequately called `Action`: ${snippet{
+class DatabaseSpec extends Specification { def is = s2"""
 
-    class DatabaseSpec extends Specification { def is = s2$triple
+  This specification opens a database and execute some tests"     ${ Step(openDatabase("test")) }
+    example 1                                                     $success
+    add 1 to the number of specification executions"              ${ Action(db.executionsNb += 1) }
+    example 2                                                     $success
+                                                                  ${ Step(closeDatabase("test")) }
+                                                                  """
+}
+}}
 
-      This specification opens a database and execute some tests"     $${ Step(openDatabase) }
-        example 1                                                     $$success
-        add 1 to the number of specification executions"              $${ Action(db.executionsNb += 1) }
-        example 2                                                     $$success
-                                                                      $${ Step(closeDatabase) }
-                                                                      $triple
-    }
+Of course, `Step`s and `Action`s are not the privilege of acceptance specifications: ${snippet{
 
-Of course, `Step`s and `Action`s are not the privilege of acceptance specifications:
+class DatabaseSpec extends mutable.Specification {
 
-    class DatabaseSpec extends mutable.Specification {
+  textFragment("This specification opens a database and execute some tests")
+  step(openDatabase("test"))
 
-      textFragment("This specification opens a database and execute some tests")
-      step(openDatabase)
+  "example 1" in success
 
-      "example 1" in success
+  textFragment("add 1 to the number of specification executions")
+  action(db.executionsNb += 1)
 
-      textFragment("add 1 to the number of specification executions")
-      action(db.executionsNb += 1)
-
-      "example 2" in success
-      step(closeDatabase)
-    }
-
+  "example 2" in success
+  step(closeDatabase("test"))
+}
+}}
 
 #### Template
 
 There may still be some duplication of code if you have to use the same kind of set-up procedure for several specifications.
 
-If that's the case you can define your own `Specification` trait doing the job:
+If that's the case you can define your own `Specification` trait doing the job: ${snippet{
 
-    import org.specs2._
-    import specification._
+import org.specs2._
+import specification._
 
-    trait DatabaseSpec extends Specification {
-      /** the map method allows to "post-process" the fragments after their creation */
-      override def map(fs: =>Fragments) = Step(startDb) ^ fs ^ Step(cleanDb)
-    }
+trait DatabaseSpec extends Specification {
+  /** the map method allows to "post-process" the fragments after their creation */
+  override def map(fs: =>Fragments) = Step(startDb) ^ fs ^ Step(cleanDb)
+}
+}}
 
 The `DatabaseSpec` above will insert, in each inherited specification, one `Step` executed before all the fragments, and one executed after all of them.
 
 #### Global setup/teardown
 
-The next similar thing you might want to do is to do some setup, like create a database schema, once and for all before *any* specification runs. The easiest way to do that is to use an object and a lazy variable:
+The next similar thing you might want to do is to do some setup, like create a database schema, once and for all before *any* specification runs. The easiest way to do that is to use an object and a lazy variable: ${snippet{
 
-    object databaseSetup  {
-      lazy val createDB = { println("creating the database") }
-    }
+object databaseSetup  {
+  lazy val createDb = { println("creating the database") }
+}
 
-    // use the createDB lazy val to create the database once for every specification inheriting from
-    // the DatabaseSpec trait
-    trait DatabaseSpec extends Specification {
-      override def map(fs: =>Fragments) = Step(databaseSetup.createDB) ^ Step(startDb) ^ fs ^ Step(cleanDb)
-    }
+// use the createDB lazy val to create the database once for every specification inheriting from
+// the DatabaseSpec trait
+trait DatabaseSpec extends Specification {
+  lazy val dbSetup = databaseSetup
+  override def map(fs: =>Fragments) = Step(dbSetup.createDb) ^ Step(startDb) ^ fs ^ Step(cleanDb)
+}
+}}
 
 Note also that global setup and cleanup can be [done with sbt](http://www.scala-sbt.org/release/docs/Detailed-Topics/Testing#setup-and-cleanup).
 
 #### For fragments
 
-When using a Unit Specification, it can be useful to use variables which are only used for a given set of examples. This can be easily done by declaring local variables, but this might lead to duplication. One way to avoid that is to use the `org.specs2.mutable.NameSpace` trait:
-
-    trait context extends mutable.NameSpace {
-      var variable1 = 1
-      var variable2 = 2
-    }
-
-    "this is the first block" >> new context {
-      "using one variable"      >> { variable1 === 1 }
-      "using a second variable" >> { variable2 === 2 }
-    }
-    "this is the second block" >> new context {
-      "using one variable"      >> { variable1 === 1 }
-      "using a second variable" >> { variable2 === 2 }
-    }
-  """
-
+When using a Unit Specification, it can be useful to use variables which are only used for a given set of examples. This can be easily done by declaring local variables, but this might lead to duplication. One way to avoid that is to use the `${fullName[NameSpace]}` trait: ${snippet{
+// 8<--
+class s extends mutable.Specification {
+// 8<--
+trait context extends mutable.NameSpace {
+  var variable1 = 1
+  var variable2 = 2
 }
+
+"this is the first block" >> new context {
+  "using one variable"      >> { variable1 === 1 }
+  "using a second variable" >> { variable2 === 2 }
+}
+"this is the second block" >> new context {
+  "using one variable"      >> { variable1 === 1 }
+  "using a second variable" >> { variable2 === 2 }
+}
+// 8<--
+}
+// 8<--
+}}
+"""
+  case class User()
+  case class Order()
+  def createPendingOrder = Order()
+
+  case class Tree[T](ts: T*) {
+    def removeNodes(n: Int*) = Seq[Int]()
+  }
+  def cleanupDB = ()
+  def createATreeWith4Nodes = new Tree()
+  def getATreeWith4NodesFromTheDatabase = new Tree()
+  def setupDB = ()
+
+  def openHttpSession[T](name: String)(r: Result) = r
+  case class HttpReq()
+  def createRequest = HttpReq()
+
+  def createNewDatabase = ()
+  def openDatabase(name: String) = ()
+  def closeDatabase(name: String) = ()
+  case class DB(var executionsNb: Int = 0)
+  lazy val db = DB()
+  def cleanDatabase = ()
+  def cleanUp = ()
+  def startDb = ()
+  def cleanDb = ()
+  def deleteFile(name: String) = ()
+  def inDatabaseSession[T](r: Result) = r
+}
+
