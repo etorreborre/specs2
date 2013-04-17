@@ -28,18 +28,22 @@ class SnippetsSpec extends Specification with Snippets with DataTables { def is 
 
  A snippet must not fail if the code throws an exception     $e12
                                                              """
-
-  def e1 = s2""" code: ${ snippet { 1 + 1 } } """.texts(1).t.trim === "`1 + 1`"
+  def e1 = s2""" code: ${ snippet { got {1 + 1} } } """.texts(1).t.trim === "`got {1 + 1}`"
+  def got[T](t: T) = t
 
 
   def e2 = s2""" code: ${ snippet {
-var n = 0
-n = 1
+got {
+  var n = 0
+  n = 1
+}
 } } """.texts(1).t.trim ===
-  """|```
-     |var n = 0
-     |n = 1
-     |```""".stripMargin
+    """|```
+       |got {
+       |  var n = 0
+       |  n = 1
+       |}
+       |```""".stripMargin
 
   def e3 = s2""" code: ${ snippet {
 // 8<--

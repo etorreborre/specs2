@@ -94,8 +94,8 @@ trait Snippet[T] {
 object Snippet {
 
   def trimSnippet = (expression: String) =>
-    expression.removeFirst(s"$ls*\\{$ls*\n").
-      removeLast(s"\\s*\\}$ls*")
+    if (s"$ls*\\{$ls*\n.*".r.findPrefixOf(expression).isDefined) expression.removeFirst(s"$ls*\\{$ls*").removeLast(s"\n$ls*}")
+    else                                                         expression
 
   def trimEval = (s: String) => s.removeLast(s"(\\.)?$ls*eval$ls*")
   def trimOffsetIs = (s: String) => s.removeLast(s"\\s*\\}?(\\.)?$ls*offsetIs$parameters\\s*")
