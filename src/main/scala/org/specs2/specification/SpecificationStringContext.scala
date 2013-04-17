@@ -66,9 +66,16 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
   implicit def fragmentsIsSpecPart(fs: Fragments): SpecPart = new SpecPart {
     def appendTo(text: String, expression: String = "") = text ^ fs
   }
+  implicit def fragmentsFragmentIsSpecPart(fs: FragmentsFragment): SpecPart = new SpecPart {
+    def appendTo(text: String, expression: String = "") = text ^ fs
+  }
   implicit def argumentsIsSpecPart(a: Arguments): SpecPart = new SpecPart {
     def appendTo(text: String, expression: String = "") = text ^ a
   }
+  implicit def specStructureIsSpecPart(s: SpecificationStructure): SpecPart = new SpecPart {
+    def appendTo(text: String, expression: String = "") = text ^ s.content
+  }
+
   implicit class specificationInStringContext(sc: StringContext) {
     def s2(variables: SpecPart*) = macro S2Macro.s2Implementation
   }
