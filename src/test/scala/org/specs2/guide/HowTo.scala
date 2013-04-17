@@ -442,14 +442,14 @@ class MutableTimedSpecification extends mutable.Specification with TimedContext 
 class TimedSpecification extends Specification with TimedContext { def is = s2"""
   Example 1 $ok
   Example 2 $ok
-            """
+  """
 
-  // create a new DefaultExampleFactory where the body of the example uses
-  // the current example description
-  override lazy val exampleFactory = new DefaultExampleFactory {
-    override def newExample[T : AsResult](description: String, t: =>T): Example =
-     super.newExample(description, context(description)(AsResult(t)))
-  }
+// create a new DefaultExampleFactory where the body of the example uses
+// the current example description
+override lazy val exampleFactory = new DefaultExampleFactory {
+override def newExample[T : AsResult](description: String, t: =>T): Example =
+super.newExample(description, context(description)(AsResult(t)))
+}
 }
 }}
 
@@ -475,10 +475,12 @@ $triple
 When you use the `snippet` method, the reports will show:
 
 This is a multi-line string with a snippet of code:
+
 ```
 def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
 factorial(3) == 6
 ```
+
 #### cuts
 
 Since snippets are compiled code, it might be necessary for you to add many declarations for this code, like imports or variables definitions, to be valid even if you don't want to show them. One way to do this is to delimit the code to show with some comments of the form `// 8<--`:
