@@ -578,6 +578,7 @@ there was one(spiedList).add("one")
 }}
 
 However, working with spies can be tricky: ${snippet{
+// 8<--
 val spiedList = spy(new LinkedList[String])
 // 8<--
 // if the list is empty, this will throws an IndexOutOfBoundsException
@@ -585,6 +586,7 @@ spiedList.get(0) returns "one"
 }}
   
 As advised in the Mockito documentation, doReturn must be used in that case: ${snippet{
+// 8<--
 val spiedList = spy(new LinkedList[String])
 // 8<--
 org.mockito.Mockito.doReturn("one").when(spiedList).get(0)
@@ -595,20 +597,22 @@ org.mockito.Mockito.doReturn("one").when(spiedList).get(0)
 It is possible to verify method calls where parameters are functions by specifying how the passed function will react to a given set of arguments. Given the following mock:
 
 ```
-    trait Amount {
-      // a method showing an amount precision
-      def show(display: Function2[Double, Int, String]) = ???
-    }
-    val amount = mock[Amount]
+trait Amount {
+  // a method showing an amount precision
+  def show(display: Function2[Double, Int, String]) = ???
+}
+val amount = mock[Amount]
 ```
   
 If the mock is called with this function: ${snippet{
+// 8<--
 val amount = mock[Amount]
 // 8<--
 amount.show((amount: Double, precision: Int) => "%2."+precision+"f" format amount)
 }}
   
 Then it is possible to verify how the mock was called: ${snippet{
+// 8<--
 val amount = mock[Amount]
 // 8<--
 // with sample arguments for the function and the expected result

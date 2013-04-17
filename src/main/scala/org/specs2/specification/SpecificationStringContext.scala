@@ -10,6 +10,7 @@ import reflect.Macros._
 import text.{CodeMarkup, NoMarkup, Interpolated}
 import control.Exceptions._
 import scala.xml.Elem
+import html.MarkdownLink
 
 /**
  * Allow to use fragments inside interpolated strings starting with s2 in order to build the specification content
@@ -26,6 +27,8 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
   implicit def exampleIsSpecPart(e: Example): SpecPart = new SpecPart {
     def appendTo(text: String, expression: String = "") = text ^ e
   }
+
+  implicit def markdownLinkIsSpecPart(link: MarkdownLink): SpecPart = stringIsSpecPart(link.toString)
 
   implicit def asResultIsSpecPart[R : AsResult](r: =>R): SpecPart = new SpecPart {
     def appendTo(text: String, expression: String = "") = {

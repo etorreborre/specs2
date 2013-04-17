@@ -11,7 +11,6 @@ The Given/When/Then style of writing specifications is supported by the use of t
 
 Here is a simple example of a Given/When/Then specification using the `FragmentParsers` trait: ${ snippet {
 
-// 8<---
 class example extends Specification with FragmentParsers { def is = s2"""
 
   Given a number {1}              $a1
@@ -48,16 +47,17 @@ val a1 = FragmentParser((_: String).toInt)
 ##### Parameters
 
 When you use delimiters it is possible to extract several values at once, simply by passing a function which will use all of them: ${ snippet {
-    def anInt   = extract[Int]((_:String).toInt)
-    // 8<----
+// 8<----
+def anInt   = extract[Int]((_:String).toInt)
+// 8<----
 def twoInts = extract[(Int, Int)]((s1: String, s2: String) => (s1.toInt, s2.toInt))
-    // 8<----
-    val result  = anInt((r: Int) => twoInts._1 + twoInts._2 === r)
-    // 8<----
+// 8<----
+val result  = anInt((r: Int) => twoInts._1 + twoInts._2 === r)
+// 8<----
                                   s2"""
 Adding 2 numbers {1} and {2}      $twoInts
 Should return {3}                 $result
-                                  """ // 8<----
+                                  """
 }}
 You can also pass a function taking in `Seq[String]` as a parameter and get all the extracted values as a sequence.
 

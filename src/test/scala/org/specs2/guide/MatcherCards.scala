@@ -259,6 +259,7 @@ Seq("Eric", "Bob") must contain("bob", "eric") ^^ equalIgnoreCase
 }}
 
 `^^^ (f: T => S)` can be used to compare values with a function. For example: ${snippet{
+// 8<--
 case class User(id: Int, name: String)
 // 8<--
 val usersFromDb = Seq(User(id=1, name="eric"), User(id=2, name="Bob"))

@@ -115,6 +115,7 @@ In this case we don't need to extend the `Scope` trait because the examples `e1`
 ##### Contexts inheritance
 
 One very cool property of using traits to define context variables is that we can use inheritance to describe more and more specific contexts: ${snippet{
+// 8<--
 def logInUser = User()
 def pendingOrder = Order()
 // 8<--
