@@ -80,7 +80,14 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
     def s2(variables: SpecPart*) = macro S2Macro.s2Implementation
   }
 
-  def s2(texts: Seq[String], variables: Seq[SpecPart], expressions: Seq[String]) = {
+  /**
+   * based on the interpolated variables and the expressions captured with the macro, create the appropriate fragments
+   *
+   * if the Yrangepos scalac option is not set then we use an approximated method to find the expressions texts
+   */
+  def s2(content: String, Yrangepos: Boolean, texts: Seq[String], variables: Seq[SpecPart], rangeExpressions: Seq[String]) = {
+    val expressions = if (Yrangepos) rangeExpressions else new Interpolated(content, texts).expressions
+
     val fragments = (texts zip variables zip expressions).foldLeft(Fragments() ^ interpolatedArguments) { (res, cur) =>
       val ((text, variable), expression) = cur
 
@@ -102,8 +109,17 @@ object S2Macro {
 
     val texts = c.prefix.tree match { case Apply(_, List(Apply(_, ts))) => ts }
 
+    val macroPos = c.macroApplication.pos
+    val fileContent = macroPos.source.content.mkString
+
+    def contentFrom(pos: c.Position) = fileContent.split("\n").drop(pos.line - 1).mkString("\n").drop(pos.column-1)
+    val content = contentFrom(macroPos).drop("s2\"\"\"".size)
+    val Yrangepos = macroPos.isRange
+
     val result =
       c.Expr(methodCall(c)("s2",
+        c.literal(content).tree,
+        c.literal(Yrangepos).tree,
         toAST[List[_]](c)(texts:_*),
         toAST[List[_]](c)(variables.map(_.tree):_*),
         toAST[List[_]](c)(variables.map(stringExpr(c)(_)):_*)))
