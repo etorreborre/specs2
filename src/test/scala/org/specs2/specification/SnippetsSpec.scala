@@ -27,7 +27,9 @@ class SnippetsSpec extends Specification with Snippets with DataTables { def is 
    for attribute names                                       $e11
 
  A snippet must not fail if the code throws an exception     $e12
+ An interpolated snippet code must not be executed           $e13
                                                              """
+
   def e1 = s2""" code: ${ snippet { got {1 + 1} } } """.texts(1).t.trim === "`got {1 + 1}`"
   def got[T](t: T) = t
 
@@ -134,6 +136,11 @@ n = 0
 
   def e12 = snippet[Unit](sys.error("boom")) must not(throwAn[Exception])
 
+  def e13 = {
+    var i = 0
+    s2""" start ${snippet { i = 1; i }} end """
+    i === 0
+  }
 
   def texts(fs: Fragments) = fs.texts.map(_.t).toIndexedSeq
   val attribute1 = 1

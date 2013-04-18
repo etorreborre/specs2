@@ -86,7 +86,7 @@ trait Snippet[T] {
   }
 
   def resultMarkdown =
-    if (result.isEmpty || isMuted) ""
+    if (isMuted || result.isEmpty) ""
     else                           asCode(result, result)
 
 }
