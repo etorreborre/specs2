@@ -20,6 +20,7 @@ In an _acceptance_ specification you build a list of _Fragments_ which are inter
 class s extends Specification {
 // 8<--
 def is =                     s2"""
+
   this is my specification
     and example 1            $e1
     and example 2            $e2
@@ -33,7 +34,7 @@ def e2 = success
 
 This specification builds 1 piece of `Text` and 2 `Examples` which are `Fragment` objects. Another way to define an Example, outside the interpolated specification would be to write: ${snippet{
 
-"Example description" ! { /* example body */ ok }
+"Example description" ! { /* example body */ ok } /**/;1/**/
 
 }}
 

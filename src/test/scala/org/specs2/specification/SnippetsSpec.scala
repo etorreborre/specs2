@@ -11,6 +11,7 @@ class SnippetsSpec extends Specification with Snippets with DataTables with Grou
    with the `snippet` method and 2 lines                     ${g1.e2}
    with the `snippet` method and cut comments                ${g1.e3}
    with the `snippet` method and cut comments - 2 blocks     ${g1.e4}
+   with some code having accolades                           ${g1.e5}
 
  It is possible to specify an offset to the snippet
    with the `snippet` method
@@ -75,7 +76,9 @@ var i = 0
       |n = 1
       |var i = 0
       |```""".stripMargin
-  }
+
+   e5 := s2""" code ${snippet { "e1" ! { ok } /**/;1/**/} }""".texts(1).t.trim === """`"e1" ! { ok }`"""
+ }
 
   "offsets" - new g2 {
     e1 := s2""" code: ${ snippet {

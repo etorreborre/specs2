@@ -93,9 +93,19 @@ trait Snippet[T] {
 
 object Snippet {
 
-  def trimSnippet = (expression: String) =>
-    if (s"$ls*\\{$ls*\n.*".r.findPrefixOf(expression).isDefined) expression.removeFirst(s"$ls*\\{$ls*").removeLast(s"\n$ls*}")
-    else                                                         expression
+  /**
+   * trim the expression from start and end accolades if it is a multiline expression
+   * + in some case it is necessary to add a dummy expression so that the range position of the captured snippet is
+   * correct. /**/;1/**/ is the smallest such expression
+   */
+  def trimSnippet = (expression: String) => {
+
+    val firstTrim =
+      if (s"$ls*\\{$ls*.*".r.findPrefixOf(expression).isDefined) expression.removeFirst(s"\\{").removeLast(s"\\}")
+      else                                                       expression
+
+    firstTrim.removeAll("/**/;1/**/").trim
+  }
 
   def trimEval = (s: String) => s.removeLast(s"(\\.)?$ls*eval$ls*")
   def trimOffsetIs = (s: String) => s.removeLast(s"\\s*\\}?(\\.)?$ls*offsetIs$parameters\\s*")
