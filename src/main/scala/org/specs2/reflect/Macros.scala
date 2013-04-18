@@ -12,7 +12,7 @@ object Macros {
 
   def methodCall(c: Context)(name: String, xs: c.Tree*): c.Tree = {
     import c.universe._
-    Apply(Select(This(tpnme.EMPTY), newTermName(name)), xs.toList)
+    Apply(Ident(newTermName(name)), xs.toList)
   }
 
   def stringExpr(c: Context)(variable: c.Expr[Any]): c.Tree =
@@ -28,10 +28,16 @@ object Macros {
   def termName(c: Context)(m: c.Expr[Any]): c.Expr[String] = {
     import c.universe._
     val name = m.tree match {
-      case Select(_, termName)                        => termName
-      case Apply(Select(_, termName), _)              => termName
-      case Function(_, Apply(Select(_, termName), _)) => termName
-      case other                                      => c.abort(m.tree.pos, "The code must be a member selection, or a function application:\n"+showRaw(m.tree))
+      case Ident(termName)                                       => termName
+      case Select(_, termName)                                   => termName
+      case Apply(Select(_, termName), _)                         => termName
+      case Apply(Ident(termName), _)                             => termName
+      case Apply(TypeApply(Ident(termName), _), _)               => termName
+      case Apply(TypeApply(Select(_, termName), _), _)           => termName
+      case Apply(Apply(TypeApply(Ident(termName), _), _), _)     => termName
+      case Apply(Apply(TypeApply(Select(_, termName), _), _), _) => termName
+      case Function(_, Apply(Select(_, termName), _))            => termName
+      case other                                                 => c.abort(m.tree.pos, "The code must be a member selection, or a function application:\n"+showRaw(m.tree))
     }
     c.literal(name.toString.trim)
   }
