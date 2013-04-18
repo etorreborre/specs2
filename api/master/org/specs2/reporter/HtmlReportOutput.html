@@ -195,29 +195,16 @@ with the xml method
       </span>
       </h4>
       <p class="shortcomment cmt">print an exception message</p>
-    </li><li name="org.specs2.reporter.HtmlReportOutput#printForm" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="printForm(form:scala.xml.NodeSeq):org.specs2.reporter.HtmlReportOutput"></a>
-      <a id="printForm(NodeSeq):HtmlReportOutput"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">printForm</span><span class="params">(<span name="form">form: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">print the html for a Form</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printHead" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="printHead:org.specs2.reporter.HtmlReportOutput"></a>
-      <a id="printHead:HtmlReportOutput"></a>
+      <a id="printHead(title:String):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printHead(String):HtmlReportOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printHead</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+        <span class="name">printHead</span><span class="params">(<span name="title">title: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">provide the &lt;head/&gt; section</p>
@@ -247,6 +234,19 @@ with the xml method
       </span>
       </h4>
       <p class="shortcomment cmt">print an issue with an icon</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printKoForm" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printKoForm(form:scala.xml.NodeSeq):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printKoForm(NodeSeq):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printKoForm</span><span class="params">(<span name="form">form: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">print the html for a Form that failed</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printKoXmlWithIcon" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="printKoXmlWithIcon(xml:scala.xml.NodeSeq,iconName:String,level:Int):org.specs2.reporter.HtmlReportOutput"></a>
       <a id="printKoXmlWithIcon(NodeSeq,String,Int):HtmlReportOutput"></a>
@@ -286,6 +286,19 @@ with the xml method
       </span>
       </h4>
       <p class="shortcomment cmt">print a link to another specification</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printOkForm" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printOkForm(form:scala.xml.NodeSeq):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printOkForm(NodeSeq):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printOkForm</span><span class="params">(<span name="form">form: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">print the html for a Form that succeeded</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printOkXmlWithIcon" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="printOkXmlWithIcon(xml:scala.xml.NodeSeq,iconName:String,level:Int):org.specs2.reporter.HtmlReportOutput"></a>
       <a id="printOkXmlWithIcon(NodeSeq,String,Int):HtmlReportOutput"></a>
@@ -498,7 +511,7 @@ with the xml method
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -540,7 +553,7 @@ with the xml method
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>

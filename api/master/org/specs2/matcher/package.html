@@ -143,7 +143,7 @@
       </h4>
       
     </li><li name="org.specs2.matcher.AnyBeHaveMatchers" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="AnyBeHaveMatchersextendsObject"></a>
+      <a id="AnyBeHaveMatchersextendsAnyRef"></a>
       <a id="AnyBeHaveMatchers:AnyBeHaveMatchers"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -170,7 +170,7 @@
       <p class="comment cmt">This trait provides matchers which are applicable to any type of value
 </p>
     </li><li name="org.specs2.matcher.ApplicableArbitraries" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ApplicableArbitrariesextendsObject"></a>
+      <a id="ApplicableArbitrariesextendsAnyRef"></a>
       <a id="ApplicableArbitraries:ApplicableArbitraries"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -343,7 +343,7 @@
       </h4>
       
     </li><li name="org.specs2.matcher.CanBeEqual" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="CanBeEqualextendsObject"></a>
+      <a id="CanBeEqualextendsAnyRef"></a>
       <a id="CanBeEqual:CanBeEqual"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -460,6 +460,19 @@
       </span>
       </h4>
       
+    </li><li name="org.specs2.matcher.ContainNotMatchResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ContainNotMatchResult[T]extendsContainMatchResult[T]"></a>
+      <a id="ContainNotMatchResult[T]:ContainNotMatchResult[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ContainNotMatchResult.html"><span class="name">ContainNotMatchResult</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="ContainMatchResult.html" class="extype" name="org.specs2.matcher.ContainMatchResult">ContainMatchResult</a>[<span class="extype" name="org.specs2.matcher.ContainNotMatchResult.T">T</span>]</span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.matcher.ContainOnlyInOrderMatchResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ContainOnlyInOrderMatchResult[T]extendsAbstractContainMatchResult[T]"></a>
       <a id="ContainOnlyInOrderMatchResult[T]:ContainOnlyInOrderMatchResult[T]"></a>
@@ -565,7 +578,7 @@
       </h4>
       <p class="comment cmt">class representing a numeric range</p>
     </li><li name="org.specs2.matcher.DependencyBeHaveMatchers" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="DependencyBeHaveMatchersextendsObject"></a>
+      <a id="DependencyBeHaveMatchersextendsAnyRef"></a>
       <a id="DependencyBeHaveMatchers:DependencyBeHaveMatchers"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -606,7 +619,7 @@ and then to check that there's no unwanted dependency in the code.</p>
       <p class="comment cmt">Matchers for the Either datatype
 </p>
     </li><li name="org.specs2.matcher.EqualIgnoringSpaceMatcher" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="EqualIgnoringSpaceMatcherextendsMatcher[Seq[scala.xml.Node]]"></a>
+      <a id="EqualIgnoringSpaceMatcherextendsMatcher[Seq[scala.xml.Node]]withXmlMatcherKoMessage"></a>
       <a id="EqualIgnoringSpaceMatcher:EqualIgnoringSpaceMatcher"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -614,13 +627,13 @@ and then to check that there's no unwanted dependency in the code.</p>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="EqualIgnoringSpaceMatcher.html"><span class="name">EqualIgnoringSpaceMatcher</span></a><span class="result"> extends <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.xml.Node">Node</span>]]</span>
+        <a href="EqualIgnoringSpaceMatcher.html"><span class="name">EqualIgnoringSpaceMatcher</span></a><span class="result"> extends <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.xml.Node">Node</span>]] with <a href="XmlMatcherKoMessage.html" class="extype" name="org.specs2.matcher.XmlMatcherKoMessage">XmlMatcherKoMessage</a></span>
       </span>
       </h4>
       <p class="comment cmt">Matcher for equalIgnoreSpace comparison, ignoring the nodes order
 </p>
     </li><li name="org.specs2.matcher.EqualIgnoringSpaceMatcherOrdered" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="EqualIgnoringSpaceMatcherOrderedextendsMatcher[Seq[scala.xml.Node]]"></a>
+      <a id="EqualIgnoringSpaceMatcherOrderedextendsMatcher[Seq[scala.xml.Node]]withXmlMatcherKoMessage"></a>
       <a id="EqualIgnoringSpaceMatcherOrdered:EqualIgnoringSpaceMatcherOrdered"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -628,7 +641,7 @@ and then to check that there's no unwanted dependency in the code.</p>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="EqualIgnoringSpaceMatcherOrdered.html"><span class="name">EqualIgnoringSpaceMatcherOrdered</span></a><span class="result"> extends <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.xml.Node">Node</span>]]</span>
+        <a href="EqualIgnoringSpaceMatcherOrdered.html"><span class="name">EqualIgnoringSpaceMatcherOrdered</span></a><span class="result"> extends <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.xml.Node">Node</span>]] with <a href="XmlMatcherKoMessage.html" class="extype" name="org.specs2.matcher.XmlMatcherKoMessage">XmlMatcherKoMessage</a></span>
       </span>
       </h4>
       <p class="comment cmt">Matcher for equalIgnoreSpace comparison, considering the node order
@@ -661,7 +674,7 @@ and then to check that there's no unwanted dependency in the code.</p>
       <p class="comment cmt">These matchers can be used to check if exceptions are thrown or not
 </p>
     </li><li name="org.specs2.matcher.Expectable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Expectable[+T]extendsObject"></a>
+      <a id="Expectable[+T]extendsAnyRef"></a>
       <a id="Expectable[+T]:Expectable[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -728,7 +741,7 @@ and then to check that there's no unwanted dependency in the code.</p>
       <p class="comment cmt">The FileMatchers trait provides matchers which are applicable to files
 </p>
     </li><li name="org.specs2.matcher.FunctionPropertyImplicits" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="FunctionPropertyImplicitsextendsObject"></a>
+      <a id="FunctionPropertyImplicitsextendsAnyRef"></a>
       <a id="FunctionPropertyImplicits:FunctionPropertyImplicits"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -743,7 +756,7 @@ and then to check that there's no unwanted dependency in the code.</p>
 to properties by appending forAll
 </p>
     </li><li name="org.specs2.matcher.Hamcrest" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="HamcrestextendsObject"></a>
+      <a id="HamcrestextendsAnyRef"></a>
       <a id="Hamcrest:Hamcrest"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -957,7 +970,7 @@ to properties by appending forAll
       </h4>
       <p class="comment cmt">Result of a Match.</p>
     </li><li name="org.specs2.matcher.MatchResultException" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="MatchResultException[T]extendsObject"></a>
+      <a id="MatchResultException[T]extendsAnyRef"></a>
       <a id="MatchResultException[T]:MatchResultException[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1009,7 +1022,7 @@ to properties by appending forAll
       </h4>
       <p class="comment cmt">The signature of this class constructor is unusual, with a useless implicit parameter.</p>
     </li><li name="org.specs2.matcher.Matcher" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Matcher[-T]extendsObject"></a>
+      <a id="Matcher[-T]extendsAnyRef"></a>
       <a id="Matcher[-T]:Matcher[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1345,7 +1358,7 @@ a match fails
       </h4>
       <p class="comment cmt">Matchers for parser combinators</p>
     </li><li name="org.specs2.matcher.PartialFunctionPropertyImplicits" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="PartialFunctionPropertyImplicitsextendsObject"></a>
+      <a id="PartialFunctionPropertyImplicitsextendsAnyRef"></a>
       <a id="PartialFunctionPropertyImplicits:PartialFunctionPropertyImplicits"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1402,7 +1415,7 @@ If <code>node</code> has some children, then they are searched using equality
       <p class="comment cmt">Matchers for Results
 </p>
     </li><li name="org.specs2.matcher.ResultPropertyImplicits" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ResultPropertyImplicitsextendsObject"></a>
+      <a id="ResultPropertyImplicitsextendsAnyRef"></a>
       <a id="ResultPropertyImplicits:ResultPropertyImplicits"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1429,7 +1442,7 @@ If <code>node</code> has some children, then they are searched using equality
       <p class="comment cmt">The ScalaCheckMatchers trait provides matchers which allow to
 assess properties multiple times with generated data.</p>
     </li><li name="org.specs2.matcher.ScalaCheckParameters" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ScalaCheckParametersextendsObject"></a>
+      <a id="ScalaCheckParametersextendsAnyRef"></a>
       <a id="ScalaCheckParameters:ScalaCheckParameters"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1618,7 +1631,7 @@ a match fails
       </h4>
       <p class="comment cmt">Thrown expectations will throw a FailureException if a match fails</p>
     </li><li name="org.specs2.matcher.ThrownMessages" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ThrownMessagesextendsObject"></a>
+      <a id="ThrownMessagesextendsAnyRef"></a>
       <a id="ThrownMessages:ThrownMessages"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1646,7 +1659,7 @@ a match fails
       <p class="comment cmt">Matchers for traversables
 </p>
     </li><li name="org.specs2.matcher.XPathFunctions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="XPathFunctionsextendsObject"></a>
+      <a id="XPathFunctionsextendsAnyRef"></a>
       <a id="XPathFunctions:XPathFunctions"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1671,6 +1684,19 @@ a match fails
       </span>
       </h4>
       <p class="comment cmt">The XmlMatcher class matches an xml Node, or a list of Nodes against a list of search functions, which can either search for:</p>
+    </li><li name="org.specs2.matcher.XmlMatcherKoMessage" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="XmlMatcherKoMessageextendsAnyRef"></a>
+      <a id="XmlMatcherKoMessage:XmlMatcherKoMessage"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="XmlMatcherKoMessage.html"><span class="name">XmlMatcherKoMessage</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.matcher.XmlMatchers" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="XmlMatchersextendsXmlBaseMatcherswithXmlBeHaveMatchers"></a>
       <a id="XmlMatchers:XmlMatchers"></a>

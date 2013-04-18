@@ -64,7 +64,7 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="org.specs2.text.AnsiColors" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="AnsiColorsextendsObject"></a>
+      <a id="AnsiColorsextendsAnyRef"></a>
       <a id="AnsiColors:AnsiColors"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -90,7 +90,7 @@
       </h4>
       
     </li><li name="org.specs2.text.Colors" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ColorsextendsObject"></a>
+      <a id="ColorsextendsAnyRef"></a>
       <a id="Colors:Colors"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -117,7 +117,7 @@
       </h4>
       
     </li><li name="org.specs2.text.ColorsMap" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ColorsMapextendsObject"></a>
+      <a id="ColorsMapextendsAnyRef"></a>
       <a id="ColorsMap:ColorsMap"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -145,7 +145,7 @@
       <p class="comment cmt">This class defines the colors to use to print out text on the Console
 with defaults as AnsiColors for a dark background console</p>
     </li><li name="org.specs2.text.ContentDifference" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ContentDifferenceextendsObject"></a>
+      <a id="ContentDifferenceextendsAnyRef"></a>
       <a id="ContentDifference:ContentDifference"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -173,7 +173,7 @@ with defaults as AnsiColors for a dark background console</p>
       <p class="comment cmt">A trait to filter results of a difference check
 </p>
     </li><li name="org.specs2.text.DifferenceFilters" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="DifferenceFiltersextendsObject"></a>
+      <a id="DifferenceFiltersextendsAnyRef"></a>
       <a id="DifferenceFilters:DifferenceFilters"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -186,7 +186,7 @@ with defaults as AnsiColors for a dark background console</p>
       </h4>
       <p class="comment cmt">This trait provides some syntactic sugar to create a DifferenceFilter to take only the first n differences:</p>
     </li><li name="org.specs2.text.DifferentLine" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="DifferentLineextendsObject"></a>
+      <a id="DifferentLineextendsAnyRef"></a>
       <a id="DifferentLine:DifferentLine"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -227,7 +227,7 @@ with defaults as AnsiColors for a dark background console</p>
       <p class="comment cmt">return the first n differences
 </p>
     </li><li name="org.specs2.text.FromString" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="FromString[T]extendsObject"></a>
+      <a id="FromString[T]extendsAnyRef"></a>
       <a id="FromString[T]:FromString[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -240,6 +240,34 @@ with defaults as AnsiColors for a dark background console</p>
       </h4>
       <p class="comment cmt">This typeclass is used to describe any instance which can be decoded from a String
 </p>
+    </li><li name="org.specs2.text.Interpolated" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="InterpolatedextendsInterpolatedParsers"></a>
+      <a id="Interpolated:Interpolated"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Interpolated.html"><span class="name">Interpolated</span></a><span class="result"> extends <a href="InterpolatedParsers.html" class="extype" name="org.specs2.text.InterpolatedParsers">InterpolatedParsers</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">this class extracts interpolated expressions from an interpolated string, given the string content and the text
+pieces in between the interpolated expressions
+</p>
+    </li><li name="org.specs2.text.InterpolatedParsers" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="InterpolatedParsersextendsJavaTokenParsers"></a>
+      <a id="InterpolatedParsers:InterpolatedParsers"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="InterpolatedParsers.html"><span class="name">InterpolatedParsers</span></a><span class="result"> extends <span class="extype" name="scala.util.parsing.combinator.JavaTokenParsers">JavaTokenParsers</span></span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.text.InvertedColors" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="InvertedColorsextendsConsoleColors"></a>
       <a id="InvertedColors:InvertedColors"></a>
@@ -255,7 +283,7 @@ with defaults as AnsiColors for a dark background console</p>
       <p class="comment cmt">This color scheme can be used with a white background
 </p>
     </li><li name="org.specs2.text.LinesContent" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="LinesContent[L1]extendsObject"></a>
+      <a id="LinesContent[L1]extendsAnyRef"></a>
       <a id="LinesContent[L1]:LinesContent[L1]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -282,7 +310,7 @@ with defaults as AnsiColors for a dark background console</p>
       </h4>
       <p class="comment cmt">This class shows the differences between 2 sequence of lines.</p>
     </li><li name="org.specs2.text.MarkupString" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="MarkupStringextendsObject"></a>
+      <a id="MarkupStringextendsAnyRef"></a>
       <a id="MarkupString:MarkupString"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -361,7 +389,7 @@ with defaults as AnsiColors for a dark background console</p>
       </h4>
       
     </li><li name="org.specs2.text.Sentences" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="SentencesextendsObject"></a>
+      <a id="SentencesextendsAnyRef"></a>
       <a id="Sentences:Sentences"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -472,6 +500,19 @@ with defaults as AnsiColors for a dark background console</p>
       </span>
       <span class="symbol">
         <a href="FromString$.html"><span class="name">FromString</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.text.InterpolatedParsers" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="InterpolatedParsers"></a>
+      <a id="InterpolatedParsers:InterpolatedParsers"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="InterpolatedParsers$.html"><span class="name">InterpolatedParsers</span></a><span class="result"> extends <a href="InterpolatedParsers.html" class="extype" name="org.specs2.text.InterpolatedParsers">InterpolatedParsers</a></span>
       </span>
       </h4>
       

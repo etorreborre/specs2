@@ -40,14 +40,14 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">EqualIgnoringSpaceMatcher</span><span class="result"> extends <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.xml.Node">Node</span>]]</span>
+        <span class="name">EqualIgnoringSpaceMatcher</span><span class="result"> extends <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.xml.Node">Node</span>]] with <a href="XmlMatcherKoMessage.html" class="extype" name="org.specs2.matcher.XmlMatcherKoMessage">XmlMatcherKoMessage</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Matcher for equalIgnoreSpace comparison, ignoring the nodes order
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.xml.Node">Node</span>]], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="XmlMatcherKoMessage.html" class="extype" name="org.specs2.matcher.XmlMatcherKoMessage">XmlMatcherKoMessage</a>, <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.xml.Node">Node</span>]], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -65,7 +65,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="org.specs2.matcher.EqualIgnoringSpaceMatcher"><span>EqualIgnoringSpaceMatcher</span></li><li class="in" name="org.specs2.matcher.Matcher"><span>Matcher</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="org.specs2.matcher.EqualIgnoringSpaceMatcher"><span>EqualIgnoringSpaceMatcher</span></li><li class="in" name="org.specs2.matcher.XmlMatcherKoMessage"><span>XmlMatcherKoMessage</span></li><li class="in" name="org.specs2.matcher.Matcher"><span>Matcher</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -181,7 +181,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $up$up" class="name">^^</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="org.specs2.matcher.Matcher.^^.S">S</span>) ⇒ <a href="Expectable.html" class="extype" name="org.specs2.matcher.Expectable">Expectable</a>[<span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.xml.Node">Node</span>]]</span>, <span name="dummy">dummy: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.Matcher.^^.S">S</span>]</span>
+        <span title="gt4s: $up$up" class="name">^^</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="org.specs2.matcher.Matcher.^^.S">S</span>) ⇒ <a href="Expectable.html" class="extype" name="org.specs2.matcher.Expectable">Expectable</a>[<span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.xml.Node">Node</span>]]</span>, <span name="dummy">dummy: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.Matcher.^^.S">S</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Adapt a matcher to another.</p><div class="fullcomment"><div class="comment cmt"><p>Adapt a matcher to another.
@@ -269,7 +269,7 @@ ex: <code>be_==(&quot;message&quot;) ^^ (_.getMessage)<code> can be applied to a
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -341,7 +341,7 @@ of 100 milliseconds
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -426,6 +426,19 @@ failure
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.specs2.matcher.XmlMatcherKoMessage#koMessage" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="koMessage[S&lt;:Seq[scala.xml.Node]](n:org.specs2.matcher.Expectable[S],node:Seq[scala.xml.Node]):String"></a>
+      <a id="koMessage[S&lt;:Seq[Node]](Expectable[S],Seq[Node]):String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">koMessage</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.xml.Node">Node</span>]</span>]</span><span class="params">(<span name="n">n: <a href="Expectable.html" class="extype" name="org.specs2.matcher.Expectable">Expectable</a>[<span class="extype" name="org.specs2.matcher.XmlMatcherKoMessage.koMessage.S">S</span>]</span>, <span name="node">node: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.xml.Node">Node</span>]</span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="XmlMatcherKoMessage.html" class="extype" name="org.specs2.matcher.XmlMatcherKoMessage">XmlMatcherKoMessage</a></dd></dl></div>
     </li><li name="org.specs2.matcher.Matcher#lazily" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="lazily:org.specs2.matcher.Matcher[()=&gt;T]"></a>
       <a id="lazily:Matcher[()⇒Seq[Node]]"></a>
@@ -843,7 +856,9 @@ If the skip message is empty, only the failure message is printed
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="org.specs2.matcher.Matcher">
+        <div class="parent" name="org.specs2.matcher.XmlMatcherKoMessage">
+              <h3>Inherited from <a href="XmlMatcherKoMessage.html" class="extype" name="org.specs2.matcher.XmlMatcherKoMessage">XmlMatcherKoMessage</a></h3>
+            </div><div class="parent" name="org.specs2.matcher.Matcher">
               <h3>Inherited from <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.xml.Node">Node</span>]]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>

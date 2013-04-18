@@ -120,29 +120,16 @@ This feature is used to display rows of values with were expected and found ok i
       </h4>
       <p class="shortcomment cmt">execute the Cell and returns it
 </p>
-    </li><li name="org.specs2.form.Cell#setFailure" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="setFailure:org.specs2.form.Cell"></a>
-      <a id="setFailure:Cell"></a>
+    </li><li name="org.specs2.form.Cell#setResult" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="setResult(r:org.specs2.execute.Result):org.specs2.form.Cell"></a>
+      <a id="setResult(Result):Cell"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setFailure</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Cell">Cell</a></span>
-      </span>
-      </h4>
-      
-    </li><li name="org.specs2.form.Cell#setSuccess" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="setSuccess:org.specs2.form.Cell"></a>
-      <a id="setSuccess:Cell"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">setSuccess</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Cell">Cell</a></span>
+        <span class="name">setResult</span><span class="params">(<span name="r">r: <a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Cell">Cell</a></span>
       </span>
       </h4>
       
@@ -267,7 +254,7 @@ This feature is used to display rows of values with were expected and found ok i
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -309,7 +296,7 @@ This feature is used to display rows of values with were expected and found ok i
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -404,6 +391,58 @@ This feature is used to display rows of values with were expected and found ok i
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.specs2.form.Cell#setFailure" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="setFailure:org.specs2.form.Cell"></a>
+      <a id="setFailure:Cell"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setFailure</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Cell">Cell</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.form.Cell#setPending" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="setPending:org.specs2.form.Cell"></a>
+      <a id="setPending:Cell"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setPending</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Cell">Cell</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.form.Cell#setSkipped" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="setSkipped:org.specs2.form.Cell"></a>
+      <a id="setSkipped:Cell"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setSkipped</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Cell">Cell</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.form.Cell#setSuccess" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="setSuccess:org.specs2.form.Cell"></a>
+      <a id="setSuccess:Cell"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setSuccess</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Cell">Cell</a></span>
+      </span>
+      </h4>
+      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

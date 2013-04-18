@@ -63,22 +63,22 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="org.specs2.execute.AnyAsResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="AnyAsResultextendsObject"></a>
-      <a id="AnyAsResult:AnyAsResult"></a>
+              <ol><li name="org.specs2.execute.AnyValueAsResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AnyValueAsResult[T]extendsAsResult[T]"></a>
+      <a id="AnyValueAsResult[T]:AnyValueAsResult[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="AnyAsResult.html"><span class="name">AnyAsResult</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="AnyValueAsResult.html"><span class="name">AnyValueAsResult</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="AsResult.html" class="extype" name="org.specs2.execute.AsResult">AsResult</a>[<span class="extype" name="org.specs2.execute.AnyValueAsResult.T">T</span>]</span>
       </span>
       </h4>
-      <p class="comment cmt">This class is used to delay the execution of a result
+      <p class="comment cmt">Type class to transform any value to a Result
 </p>
     </li><li name="org.specs2.execute.AsResult" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="AsResult[T]extendsObject"></a>
+      <a id="AsResult[T]extendsAnyRef"></a>
       <a id="AsResult[T]:AsResult[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -91,6 +91,32 @@
       </h4>
       <p class="comment cmt">Typeclass trait for anything that can be transformed to a Result
 </p>
+    </li><li name="org.specs2.execute.CheckedSnippet" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CheckedSnippet[T,R]extendsSnippet[T]withProductwithSerializable"></a>
+      <a id="CheckedSnippet[T,R]:CheckedSnippet[T,R]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="CheckedSnippet.html"><span class="name">CheckedSnippet</span></a><span class="tparams">[<span name="T">T</span>, <span name="R">R</span>]</span><span class="params">(<span name="code">code: () ⇒ <span class="extype" name="org.specs2.execute.CheckedSnippet.T">T</span></span>, <span name="verification">verification: (<span class="extype" name="org.specs2.execute.CheckedSnippet.T">T</span>) ⇒ <span class="extype" name="org.specs2.execute.CheckedSnippet.R">R</span></span>, <span name="cutMarker">cutMarker: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;\n// 8&lt;--\n&quot;</span></span>, <span name="cutMarkerFormat">cutMarkerFormat: <span class="extype" name="scala.Predef.String">String</span> = <span class="defval" name="scala.StringContext.apply(&quot;\\n&quot;, &quot;*// 8&lt;\\\\-+.*\\n&quot;).s(Snippet.ls)">...</span></span>, <span name="trimExpression">trimExpression: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">Snippet.trimSnippet</span></span>, <span name="asCode">asCode: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">Snippet.markdownCode(0)</span></span>, <span name="codeExpression">codeExpression: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="isMuted">isMuted: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="evidence$4">evidence$4: <a href="AsResult.html" class="extype" name="org.specs2.execute.AsResult">AsResult</a>[<span class="extype" name="org.specs2.execute.CheckedSnippet.R">R</span>]</span>)</span><span class="result"> extends <a href="Snippet.html" class="extype" name="org.specs2.execute.Snippet">Snippet</a>[<span class="extype" name="org.specs2.execute.CheckedSnippet.T">T</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.execute.CodeSnippet" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CodeSnippet[T]extendsSnippet[T]withProductwithSerializable"></a>
+      <a id="CodeSnippet[T]:CodeSnippet[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="CodeSnippet.html"><span class="name">CodeSnippet</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="code">code: () ⇒ <span class="extype" name="org.specs2.execute.CodeSnippet.T">T</span></span>, <span name="cutMarker">cutMarker: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;\n// 8&lt;--\n&quot;</span></span>, <span name="cutMarkerFormat">cutMarkerFormat: <span class="extype" name="scala.Predef.String">String</span> = <span class="defval" name="scala.StringContext.apply(&quot;&quot;, &quot;*// 8&lt;\\\\-+.*\\n&quot;).s(Snippet.ls)">...</span></span>, <span name="trimExpression">trimExpression: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">Snippet.trimSnippet</span></span>, <span name="asCode">asCode: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">Snippet.markdownCode(0)</span></span>, <span name="codeExpression">codeExpression: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="isMuted">isMuted: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result"> extends <a href="Snippet.html" class="extype" name="org.specs2.execute.Snippet">Snippet</a>[<span class="extype" name="org.specs2.execute.CodeSnippet.T">T</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.execute.DecoratedResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="DecoratedResult[+T]extendsResultwithProductwithSerializable"></a>
       <a id="DecoratedResult[+T]:DecoratedResult[T]"></a>
@@ -113,12 +139,12 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="DecoratedResultException.html"><span class="name">DecoratedResultException</span></a><span class="params">(<span name="result">result: <a href="DecoratedResult.html" class="extype" name="org.specs2.execute.DecoratedResult">DecoratedResult</a>[_]</span>)</span><span class="result"> extends <span class="extype" name="java.lang.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="DecoratedResultException.html"><span class="name">DecoratedResultException</span></a><span class="params">(<span name="result">result: <a href="DecoratedResult.html" class="extype" name="org.specs2.execute.DecoratedResult">DecoratedResult</a>[_]</span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">this class allows to throw a result that's decorated with additional information in an Exception</p>
     </li><li name="org.specs2.execute.Details" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="DetailsextendsObject"></a>
+      <a id="DetailsextendsAnyRef"></a>
       <a id="Details:Details"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -153,12 +179,12 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="ErrorException.html"><span class="name">ErrorException</span></a><span class="params">(<span name="f">f: <a href="Error.html" class="extype" name="org.specs2.execute.Error">Error</a></span>)</span><span class="result"> extends <span class="extype" name="java.lang.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="ErrorException.html"><span class="name">ErrorException</span></a><span class="params">(<span name="f">f: <a href="Error.html" class="extype" name="org.specs2.execute.Error">Error</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">this class allows to throw an Error result in an Exception</p>
     </li><li name="org.specs2.execute.EventuallyResults" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="EventuallyResultsextendsObject"></a>
+      <a id="EventuallyResultsextendsAnyRef"></a>
       <a id="EventuallyResults:EventuallyResults"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -171,7 +197,7 @@
       </h4>
       <p class="comment cmt">This trait adds the possibility to retry a given value, convertible to a result, until it succeeds.</p>
     </li><li name="org.specs2.execute.Executable" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ExecutableextendsObject"></a>
+      <a id="ExecutableextendsAnyRef"></a>
       <a id="Executable:Executable"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -219,12 +245,26 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="FailureException.html"><span class="name">FailureException</span></a><span class="params">(<span name="f">f: <a href="Failure.html" class="extype" name="org.specs2.execute.Failure">Failure</a></span>)</span><span class="result"> extends <span class="extype" name="java.lang.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="FailureException.html"><span class="name">FailureException</span></a><span class="params">(<span name="f">f: <a href="Failure.html" class="extype" name="org.specs2.execute.Failure">Failure</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">this class allows to throw a failure result in an Exception</p>
+    </li><li name="org.specs2.execute.Function0Result" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Function0ResultextendsAnyRef"></a>
+      <a id="Function0Result:Function0Result"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Function0Result.html"><span class="name">Function0Result</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">This class is used to delay the execution of a result
+</p>
     </li><li name="org.specs2.execute.Isolable" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="IsolableextendsObject"></a>
+      <a id="IsolableextendsAnyRef"></a>
       <a id="Isolable:Isolable"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -287,12 +327,12 @@ It is used to execute examples in a new specification when needed
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="PendingException.html"><span class="name">PendingException</span></a><span class="params">(<span name="f">f: <a href="Pending.html" class="extype" name="org.specs2.execute.Pending">Pending</a></span>)</span><span class="result"> extends <span class="extype" name="java.lang.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="PendingException.html"><span class="name">PendingException</span></a><span class="params">(<span name="f">f: <a href="Pending.html" class="extype" name="org.specs2.execute.Pending">Pending</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">this class allows to throw a pending result in an Exception</p>
     </li><li name="org.specs2.execute.PendingUntilFixed" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="PendingUntilFixedextendsObject"></a>
+      <a id="PendingUntilFixedextendsAnyRef"></a>
       <a id="PendingUntilFixed:PendingUntilFixed"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -305,7 +345,7 @@ It is used to execute examples in a new specification when needed
       </h4>
       <p class="comment cmt">This function allows to mark the body of an example as pending until it is fixed.</p>
     </li><li name="org.specs2.execute.Result" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ResultextendsObject"></a>
+      <a id="ResultextendsAnyRef"></a>
       <a id="Result:Result"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -318,7 +358,7 @@ It is used to execute examples in a new specification when needed
       </h4>
       <p class="comment cmt">The result of an execution, either:</p>
     </li><li name="org.specs2.execute.ResultExecution" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ResultExecutionextendsObject"></a>
+      <a id="ResultExecutionextendsAnyRef"></a>
       <a id="ResultExecution:ResultExecution"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -331,7 +371,7 @@ It is used to execute examples in a new specification when needed
       </h4>
       <p class="comment cmt">This trait executes a Result and returns an appropriate value when a specs2 exception is thrown</p>
     </li><li name="org.specs2.execute.ResultImplicits" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ResultImplicitsextendsObject"></a>
+      <a id="ResultImplicitsextendsAnyRef"></a>
       <a id="ResultImplicits:ResultImplicits"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -345,7 +385,7 @@ It is used to execute examples in a new specification when needed
       <p class="comment cmt">This trait adds some implicits to easily fold sequences of results
 </p>
     </li><li name="org.specs2.execute.ResultLike" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ResultLikeextendsObject"></a>
+      <a id="ResultLikeextendsAnyRef"></a>
       <a id="ResultLike:ResultLike"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -372,7 +412,7 @@ It is used to execute examples in a new specification when needed
       <p class="comment cmt">The stacktrace for a Result
 </p>
     </li><li name="org.specs2.execute.Results" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ResultsextendsObject"></a>
+      <a id="ResultsextendsAnyRef"></a>
       <a id="Results:Results"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -393,7 +433,7 @@ It is used to execute examples in a new specification when needed
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="SkipException.html"><span class="name">SkipException</span></a><span class="params">(<span name="f">f: <a href="Skipped.html" class="extype" name="org.specs2.execute.Skipped">Skipped</a></span>)</span><span class="result"> extends <span class="extype" name="java.lang.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="SkipException.html"><span class="name">SkipException</span></a><span class="params">(<span name="f">f: <a href="Skipped.html" class="extype" name="org.specs2.execute.Skipped">Skipped</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">this class allows to throw a skipped result in an Exception</p>
@@ -410,8 +450,34 @@ It is used to execute examples in a new specification when needed
       </span>
       </h4>
       <p class="comment cmt">Skipped result</p>
+    </li><li name="org.specs2.execute.Snippet" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Snippet[T]extendsAnyRef"></a>
+      <a id="Snippet[T]:Snippet[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Snippet.html"><span class="name">Snippet</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.execute.Snippets" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SnippetsextendsAnyRef"></a>
+      <a id="Snippets:Snippets"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Snippets.html"><span class="name">Snippets</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Snippets of code can be extracted from interpolated specification strings.</p>
     </li><li name="org.specs2.execute.StandardResults" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="StandardResultsextendsObject"></a>
+      <a id="StandardResultsextendsAnyRef"></a>
       <a id="StandardResults:StandardResults"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -445,20 +511,7 @@ It is used to execute examples in a new specification when needed
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="org.specs2.execute.AnyAsResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="AnyAsResult"></a>
-      <a id="AnyAsResult:AnyAsResult"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="AnyAsResult$.html"><span class="name">AnyAsResult</span></a>
-      </span>
-      </h4>
-      
-    </li><li name="org.specs2.execute.AsResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="org.specs2.execute.AsResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="AsResult"></a>
       <a id="AsResult:AsResult"></a>
       <h4 class="signature">
@@ -495,6 +548,19 @@ It is used to execute examples in a new specification when needed
       </span>
       <span class="symbol">
         <a href="EventuallyResults$.html"><span class="name">EventuallyResults</span></a><span class="result"> extends <a href="EventuallyResults.html" class="extype" name="org.specs2.execute.EventuallyResults">EventuallyResults</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.execute.Function0Result" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Function0Result"></a>
+      <a id="Function0Result:Function0Result"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Function0Result$.html"><span class="name">Function0Result</span></a>
       </span>
       </h4>
       
@@ -573,6 +639,32 @@ It is used to execute examples in a new specification when needed
       </span>
       <span class="symbol">
         <a href="Results$.html"><span class="name">Results</span></a><span class="result"> extends <a href="Results.html" class="extype" name="org.specs2.execute.Results">Results</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.execute.Snippet" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Snippet"></a>
+      <a id="Snippet:Snippet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Snippet$.html"><span class="name">Snippet</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.execute.Snippets" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Snippets"></a>
+      <a id="Snippets:Snippets"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Snippets$.html"><span class="name">Snippets</span></a><span class="result"> extends <a href="Snippets.html" class="extype" name="org.specs2.execute.Snippets">Snippets</a></span>
       </span>
       </h4>
       
