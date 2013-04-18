@@ -21,7 +21,7 @@ class InterpolatedSpec extends Specification with ParserMatchers with Snippets {
   when using nested accolades                                    $e7
   when using a quoted identifier                                 $e8
   when there is non-empty text surrounding all expressions       $e9
-  with a snippet $e10
+  with a snippet                                                 $e10
                                                                  """
 
   def e1 = {
