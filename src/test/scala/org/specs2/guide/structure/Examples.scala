@@ -17,13 +17,13 @@ The [Quick Start](org.specs2.guide.QuickStart.html) guide describes 2 styles of 
 
 In an _acceptance_ specification you build a list of _Fragments_ which are interpolated from a **`s2`** string: ${snippet{
 // 8<--
-class s extends Specification { def is =
+class s extends Specification {
 // 8<--
-                           s2"""
-this is my specification
-  and example 1            $e1
-  and example 2            $e2
-                           """
+def is =                     s2"""
+  this is my specification
+    and example 1            $e1
+    and example 2            $e2
+                             """
 
 def e1 = success
 def e2 = success
