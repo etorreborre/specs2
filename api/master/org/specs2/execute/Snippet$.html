@@ -421,7 +421,7 @@
       </span>
       </h4>
       
-    </li><li name="org.specs2.execute.Snippet#trimSnippet" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="org.specs2.execute.Snippet#trimSnippet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="trimSnippet:String=&gt;String"></a>
       <a id="trimSnippet:(String)⇒String"></a>
       <h4 class="signature">
@@ -430,10 +430,15 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">trimSnippet</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">trimSnippet</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">trim the expression from start and end accolades if it is a multiline expression
++ in some case it is necessary to add a dummy expression so that the range position of the captured snippet is
+correct.</p><div class="fullcomment"><div class="comment cmt"><p>trim the expression from start and end accolades if it is a multiline expression
++ in some case it is necessary to add a dummy expression so that the range position of the captured snippet is
+correct. /**/1/**/is the smallest such expression
+</p></div></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
