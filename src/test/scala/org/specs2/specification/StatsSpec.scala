@@ -5,8 +5,9 @@ import execute._
 import matcher.DataTables._
 import time.SimpleTimer
 import _root_.org.specs2.mutable.{Specification => Spec}
+import matcher.XmlMatchers
 
-class StatsSpec extends Spec {
+class StatsSpec extends Spec with XmlMatchers {
 
   "A Stats object can be resumed to a Result" >> {
     "if there are no failures or errors -> success"  >> {

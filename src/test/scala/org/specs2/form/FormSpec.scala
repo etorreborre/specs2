@@ -7,7 +7,7 @@ import matcher._
 import execute._
 import main.ArgumentsArgs
 
-class FormSpec extends Specification with ResultMatchers with Grouped { def is = s2"""
+class FormSpec extends Specification with ResultMatchers with Grouped with XmlMatchers { def is = s2"""
 
 A Form is a generic table which has an optional title and rows. Each row contains cells which can be created from
 Fields, Props or other Forms.

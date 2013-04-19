@@ -1,7 +1,9 @@
 package org.specs2
 package matcher
+
 import text.Quote._
 import execute.{Result, Failure}
+
 /**
  * Matchers for Options
  */

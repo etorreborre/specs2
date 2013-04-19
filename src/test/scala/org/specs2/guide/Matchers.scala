@@ -1,15 +1,15 @@
 package org.specs2
 package guide
 
-import specification.Forms._
-import org.hamcrest.{BaseMatcher, Description}
-import specification.{Grouped, Snippets}
-import org.scalacheck.{Arbitrary, Gen, Prop, Test}
-import matcher.{Hamcrest, Expectable, Matcher, Parameters}
 import java.io.File
 import java.util.LinkedList
 import mock.Mockito
 import org.mockito.invocation.InvocationOnMock
+import org.hamcrest.{BaseMatcher, Description}
+import specification.Forms._
+import specification.{Grouped, Snippets}
+import org.scalacheck.{Arbitrary, Gen, Prop, Test}
+import matcher.{Hamcrest, Expectable, Matcher, Parameters}
 
 class Matchers extends UserGuidePage with Snippets with ScalaCheck with Mockito { def is =
   generalSection ^
@@ -824,7 +824,7 @@ In specs2, those 2 methods are defined by the `${fullName[matcher.ThrownMessages
 }
 
 
-class JsonExamples extends Specification {
+class JsonExamples extends Specification with matcher.JsonMatchers {
     val person = """{
       "person": {
         "name": "Joe",

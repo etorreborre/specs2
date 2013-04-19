@@ -5,8 +5,9 @@ package structure
 import specification.{Step, Action, Around, Before, After, Outside, AroundOutside, BeforeExample, AfterExample, BeforeAfter, Fragments, Scope}
 import mutable.NameSpace
 import execute._
+import matcher.FileMatchers
 
-object Contexts extends UserGuidePage { def is = ""
+object Contexts extends UserGuidePage with FileMatchers { def is = ""
   val section = s2"""
 
 ### Contexts

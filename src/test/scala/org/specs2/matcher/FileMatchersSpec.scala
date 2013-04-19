@@ -3,7 +3,7 @@ package matcher
 import java.io.File
 import io._
 
-class FileMatchersSpec extends Specification with TestFiles with MockFileSystem { def is = s2"""
+class FileMatchersSpec extends Specification with TestFiles with MockFileSystem with FileMatchers { def is = s2"""
 
  The FileMatchers trait provides matchers to check files and paths.
 
@@ -91,7 +91,7 @@ class FileMatchersSpec extends Specification with TestFiles with MockFileSystem 
                                                                                                                         """
 }
 
-case class fs() extends MustMatchers with MockFileSystem with TestFiles {
+case class fs() extends MustMatchers with MockFileSystem with TestFiles with FileMatchers {
   addFile(okPath, "")
 
   def e1 = okPath must beAnExistingPath
@@ -100,12 +100,12 @@ case class fs() extends MustMatchers with MockFileSystem with TestFiles {
   def e4 = setNotReadable(okPath) must not be aReadablePath
   def e5 = setWritable(okPath) must beAWritablePath
   def e6 = setNotWritable(okPath) must not be aWritablePath
-  def e7 = { addChild("c:/t/", "c:/t/test.txt");
+  def e7 = { addChild("c:/t/", "c:/t/test.txt")
              "c:/t/" must listPaths("c:/t/test.txt") }
   def e8 = file(okPath) must exist
   def e9 = file(setReadable(okPath)) must beReadable
   def e10 = file(setWritable(okPath)) must beWritable
-  def e11 = { addChild("c:/t", "c:/t/tst.txt");
+  def e11 = { addChild("c:/t", "c:/t/tst.txt")
               file("c:/t/") must haveList("c:/t/tst.txt") }
 }
 

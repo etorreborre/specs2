@@ -2,11 +2,11 @@ package org.specs2
 package reporter
 
 import specification._
-import matcher.{DataTable, DataTables}
+import matcher.{XmlMatchers, DataTable, DataTables}
 import text.NoMarkup
 import execute.DecoratedResult
 
-class HtmlResultOutputSpec extends Specification with DataTables { def is = s2"""
+class HtmlResultOutputSpec extends Specification with DataTables with XmlMatchers { def is = s2"""
                                                                                                                         
   The HtmlResultOutput class build xml fragments according to the HtmlReportOutput interface.
                                                                                                                         
@@ -20,7 +20,7 @@ class HtmlResultOutputSpec extends Specification with DataTables { def is = s2""
     A datatable must not be shown if the example is successful                                       ${dataTables().e1}
     A datatable must be displayed if there is a failure                                              ${dataTables().e2}
     A datatable used as an auto-example must be displayed                                            ${dataTables().e3}
-                                                                                                                        """
+                                                                                                     """
 
   def descriptions = {
     val (out, desc) = (new HtmlResultOutput, NoMarkup("desc"))

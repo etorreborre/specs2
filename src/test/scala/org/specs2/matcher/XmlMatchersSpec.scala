@@ -4,7 +4,7 @@ package matcher
 import scala.xml._
 import specification.Groups
 
-class XmlMatchersSpec extends Specification with Groups { def is = s2"""
+class XmlMatchersSpec extends Specification with Groups with XmlMatchers { def is = s2"""
 
  A equals ignore spaces matcher should
    match nodes, even if there are spaces

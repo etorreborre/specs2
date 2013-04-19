@@ -13,21 +13,22 @@ object MatcherCards extends Cards {
     EqualityMatchers,
     AnyMatchers,
     OptionEitherMatchers,
+    TryMatchers,
     StringMatchers,
     NumericMatchers,
     ExceptionMatchers,
     TraversableMatchers,
-    MapMatchers,
-    XmlMatchers,
-    JsonMatchers,
-    FileMatchers,
-    ContentMatchers)
+    MapMatchers)
 }
 
 object OptionalMatcherCards extends Cards {
   def title = "Optional Matchers"
   def cards = Seq(
     ResultMatchers,
+    XmlMatchers,
+    JsonMatchers,
+    FileMatchers,
+    ContentMatchers,
     InterpreterMatchers,
     ParserMatchers,
     TerminationMatchers,
@@ -107,6 +108,21 @@ object OptionEitherMatchers extends Card {
  * `beLeft` checks if an element is Left(_)
  * `beLeft(exp)` checks if an element is Left(exp)
  * `beLeft.like(partial function)` checks if an element is Left(_) and satisfies a partial function returning a `MatchResult`
+  """
+}
+
+object TryMatchers extends Card {
+  def title = "Try"
+  def text = s2"""
+  There are several matchers to check Try instances:
+
+ * `beSuccessfulTry` checks if an element is Success(_)
+ * `beSuccessfulTry.withValue(exp)` checks if an element is Success(exp)
+ * `beSuccessfulTry.which(function)` checks if an element is Some(_) and satisfies a function returning a boolean
+ * `beSuccessfulTry.like(partial function)` checks if an element is Some(_) and satisfies a partial function returning a `MatchResult`
+ * `beFailedTry` checks if an element is `Failure(_)`
+ * `beFailedTry.withThrowable[T]` checks if an element is `Failure(t: T)`
+ * `beFailedTry.withThrowable[T](message)` checks if an element is `Failure(t: T)` and `t.getMessage` matches `message`
   """
 }
 
@@ -338,7 +354,7 @@ It is very useful to have literal Xml in Scala, it is even more useful to have m
 """
 }
 
-object JsonMatchers extends Card {
+object JsonMatchers extends Card with matcher.JsonMatchers {
   def title = "Json"
   def text =  s2"""
  [Json](http://www.json.org) is a simple data format essentially modeling recursive key-values. There are 2 matchers which can be used to verify the presence of appropriate values in Strings representing Json documents:

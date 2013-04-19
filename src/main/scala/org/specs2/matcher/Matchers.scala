@@ -4,22 +4,19 @@ package matcher
 import control.LanguageFeatures
 
 /**
- * Trait aggregating all of specs2 matchers 
+ * Trait aggregating the most common specs2 matchers
  */
-trait Matchers extends AnyMatchers 
+trait Matchers extends AnyMatchers
+                  with BeHaveMatchers
                   with TraversableMatchers
                   with MapMatchers
                   with StringMatchers
-                  with XmlMatchers
-                  with JsonMatchers
-                  with BeHaveMatchers
                   with ExceptionMatchers
                   with NumericMatchers
                   with OptionMatchers
                   with EitherMatchers
+                  with TryMatchers
                   with EventuallyMatchers
-                  with FileMatchers
-                  with ContentMatchers
                   with MatchersImplicits
                   with LanguageFeatures
 

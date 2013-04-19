@@ -5,7 +5,7 @@ import io.MockFileSystem
 import text.LinesContent
 import java.io.File
 
-class ContentMatchersSpec extends Specification { def is = s2"""
+class ContentMatchersSpec extends Specification with ContentMatchers { def is = s2"""
 
  haveSameLinesAs checks if a file has the same lines as another file                                     ${comp().e1}
    it is possible to write (f1, f2) must haveSameLines as well                                           ${comp().e2}
@@ -15,13 +15,13 @@ class ContentMatchersSpec extends Specification { def is = s2"""
    the comparison can be unordered                                                                       ${comp().e5}
    we can show only a given number of differences                                                        ${comp().e6}
    we can compare against a Seq of lines instead                                                         ${comp().e7}
-                                                                                                                        """
+                                                                                                         """
       
   def e8 = (new File("f1.txt"), new File("f2.txt")) must haveSameLines.unordered
 
 }
 
-case class comp() extends MustMatchers with MockFileSystem with TestFiles {
+case class comp() extends MustMatchers with MockFileSystem with TestFiles with ContentMatchers {
 
   addFile("f1", "hello\nbeautiful\nworld")
   addFile("f2", "hello\nbeautiful\nworld")

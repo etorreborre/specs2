@@ -4,8 +4,9 @@ package xml
 import NodeFunctions._
 import Nodex._
 import specification.{Group, Grouped}
+import matcher.XmlMatchers
 
-class NodeFunctionsSpec extends Specification with Grouped { def is = s2"""
+class NodeFunctionsSpec extends Specification with Grouped with XmlMatchers { def is = s2"""
   ${"node functions".title}                                                                                              
                                                                                                                         
   The matchNode function must return true if

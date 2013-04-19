@@ -5,8 +5,9 @@ import specification._
 import io._
 import mock._
 import main.Arguments
+import matcher.XmlMatchers
 
-class HtmlFileSpec extends Specification with Mockito { def is = s2"""
+class HtmlFileSpec extends Specification with Mockito with XmlMatchers { def is = s2"""
 
   A linked specification                                                                                              
     must get an icon representing its status                                                                          
@@ -17,7 +18,7 @@ class HtmlFileSpec extends Specification with Mockito { def is = s2"""
     must get an icon representing its status
       success if everything succeeds                                                   ${seeIt().e1}
       failure if there is a failure                                                    ${seeIt().e2}
-                                                                                                                        """
+                                                                                       """
 
   implicit val argument = args()
 

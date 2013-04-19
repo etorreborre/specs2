@@ -4,8 +4,9 @@ package html
 import TableOfContents._
 import scala.xml.NodeSeq
 import specification.Grouped
+import matcher.XmlMatchers
 
-class TableOfContentsSpec extends Specification with HtmlDocuments with Grouped { def is = s2"""
+class TableOfContentsSpec extends Specification with HtmlDocuments with Grouped with XmlMatchers { def is = s2"""
 
   Creating a table of content for a html document                                               
     creates an unordered list from the html headers                                             
