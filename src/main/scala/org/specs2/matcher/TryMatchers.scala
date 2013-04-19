@@ -6,7 +6,8 @@ import util.{Try, Success => Succeeded, Failure => Failed}
 import scala.reflect.ClassTag
 import AnyMatchers.beEqualTo
 import MatchersImplicits._
-
+import text.Regexes._
+import text.Quote._
 /**
  * Matchers for util.Try instances
  */
@@ -24,13 +25,22 @@ trait TryBaseMatchers extends ExceptionMatchers {
   case class SuccessTryMatcher[T]() extends  Matcher[Try[T]] { outer =>
     def apply[S <: Try[T]](value: Expectable[S]) =
       result(value.value.isSuccess,
-             value.description + " is a Success",
-             value.description + " is not a Success",
+             s"${value.description} is a Success",
+             s"${value.description} is not a Success",
              value)
 
     def withValue(t: =>T) = new Matcher[Try[T]] {
       def apply[S <: Try[T]](value: Expectable[S]) =
-        outer(value) and result(beEqualTo(t)(value.map((_:Try[T]).get)), value)
+        value.value match {
+          case Succeeded(v) => {
+            val expected = t
+            val koEqual = beEqualTo(expected).apply(Expectable(v)).message
+            result(v == expected,
+                   s"${value.description} is a Success with value ${q(expected)}",
+                   s"${value.description} is a Success but the value is incorrect:\n  $koEqual", value)
+          }
+          case Failed(_) => result(false, s"${value.description} is a Success", s"${value.description} is not a Success", value)
+        }
     }
 
     def which(f: T => Boolean) = this ^^ { (t: Try[T]) => t filter f }
@@ -40,12 +50,12 @@ trait TryBaseMatchers extends ExceptionMatchers {
       def apply[S <: Try[T]](value: Expectable[S]) = {
         val res: Result = value.value match {
           case Succeeded(t) if f.isDefinedAt(t)  => f(t).toResult
-          case Succeeded(t) if !f.isDefinedAt(t) => Failure("function undefined")
+          case Succeeded(t) if !f.isDefinedAt(t) => Failure("the function is undefined on this value")
           case Failed(_)                         => Failure("no match")
         }
         result(res.isSuccess,
-               value.description+" is a Success and "+res.message,
-               value.description+" is a Success but "+res.message,
+               s"${value.description} is a Success and ${res.message}",
+               s"${value.description} is a Success but ${res.message}",
                value)
       }
     }
@@ -59,39 +69,37 @@ trait TryBaseMatchers extends ExceptionMatchers {
   case class FailedTryMatcher[T]() extends Matcher[Try[T]] { outer =>
     def apply[S <: Try[T]](value: Expectable[S]) = {
       result(value.value.isFailure,
-        value.description + " is a Failure",
-        value.description + " is not a Failure",
-        value)
+             s"${value.description} is a Failure",
+             s"${value.description} is not a Failure",
+             value)
     }
     def withThrowable[E <: Throwable : ClassTag] = new Matcher[Try[T]] {
-      def apply[S <: Try[T]](value: Expectable[S]) =
-        outer(value) and haveThrowable[T, E].apply(value)
+      def apply[S <: Try[T]](value: Expectable[S]) = {
+        val expected = implicitly[ClassTag[E]].runtimeClass
+        value.value match {
+          case Succeeded(_) => result(false, value.description + " is a Failure", value.description + " is not a Failure", value)
+          case Failed(e)    => result(expected.isAssignableFrom(e.getClass),
+                                      s"${value.description} is a Failure and '${e.getClass.getName}' has a correct type",
+                                      s"${value.description} is a Failure but '${e.getClass.getName}' is not of type '${expected.getName}'",
+                                      value)
+        }
+      }
     }
     def withThrowable[E <: Throwable : ClassTag](message: String) = new Matcher[Try[T]] {
-      def apply[S <: Try[T]](value: Expectable[S]) =
-        outer(value) and haveThrowable[T, E](message).apply(value)
-    }
-  }
-
-  private def haveThrowable[T, E <: Throwable : ClassTag] = new Matcher[Try[T]] {
-    def apply[S <: Try[T]](value: Expectable[S]) =
-      value.value match {
-        case Succeeded(_) => result(false, "ok", "no throwable", value)
-        case Failed(e)    => result(throwA[E].apply(thrownExpectable[T, S](value)), value)
+      def apply[S <: Try[T]](value: Expectable[S]) = {
+        val expected = implicitly[ClassTag[E]].runtimeClass
+        value.value match {
+          case Succeeded(_) => result(false, value.description + " is a Failure", value.description + " is not a Failure", value)
+          case Failed(e)    => {
+            val (assignable, matches) = (expected.isAssignableFrom(e.getClass), e.getMessage.matchesSafely(message))
+            result(assignable && matches,
+                   s"${value.description} is a Failure and ${e.getClass.getName} has a correct type",
+                   if (!assignable) (s"${value.description} is a Failure but '${e.getClass.getName}' is not of type '${expected.getName}'")
+                   else             (s"${value.description} is a Failure but '${e.getMessage}' doesn't match '$message'") ,
+                   value)
+          }
+        }
       }
-  }
-  private def haveThrowable[T, E <: Throwable : ClassTag](message: String) = new Matcher[Try[T]] {
-    def apply[S <: Try[T]](value: Expectable[S]) = {
-      value.value match {
-        case Succeeded(_) => result(false, "ok", "no throwable", value)
-        case Failed(e)    => result(throwA[E](message).apply(thrownExpectable[T, S](value)), value)
-      }
-    }
-  }
-  private def thrownExpectable[T, S <: Try[T]](value: Expectable[S]) = value.map { (v: Try[T]) =>
-    v match {
-      case Failed(t) => throw t; t
-      case _ => v
     }
   }
 

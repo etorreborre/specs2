@@ -3,7 +3,7 @@ package matcher
 
 import util.{Success => Succeeded, Failure => Failed}
 
-class TryMatchersSpec extends Specification { def is = s2"""
+class TryMatchersSpec extends Specification with ResultMatchers { def is = s2"""
 
  The TryMatchers trait provides matchers to check Try instances.
 
@@ -15,20 +15,27 @@ class TryMatchersSpec extends Specification { def is = s2"""
   ${ Succeeded(1) must not be aSuccessfulTry.withValue(2) }
   ${ Failed[I](e) must not be successfulTry }
   ${ Failed[I](e) must not be successfulTry.withValue(2) }
+  ${ (Failed[I](e) must beSuccessfulTry) returns "'Failure(boom)' is not a Success" }
+  ${ (Succeeded(1) must beSuccessfulTry.withValue(2)) returns "'Success(1)' is a Success but the value is incorrect:\n  '1' is not equal to '2'" }
 
   beAFailure checks if an element is Failure(_)
   ${ Failed[I](e) must beFailedTry }
   ${ Succeeded(1) must not be failedTry }
+  ${ (Succeeded(1) must be failedTry) returns "'Success(1)' is not a Failure" }
   ${ Failed[I](e) must be aFailedTry }
   ${ Failed[I](e) must beFailedTry.withThrowable[MyException] }
+  ${ (Failed[I](e) must beFailedTry.withThrowable[OtherException]) returns s"'Failure(boom)' is a Failure but '${classOf[MyException].getName}' is not of type '${classOf[OtherException].getName}'" }
   ${ Failed[I](e) must beAFailedTry.withThrowable[MyException](".*oo.*") }
   ${ Failed[I](e) must not be aFailedTry.withThrowable[MyException]("bang") }
+  ${ (Failed[I](e) must beAFailedTry.withThrowable[MyException]("bang")) returns "'Failure(boom)' is a Failure but 'boom' doesn't match 'bang'" }
   ${ Failed[I](e) must not be aFailedTry.withThrowable[OtherException] }
 
   """
 
   def e = new MyException("boom")
-  class MyException(m: String) extends Exception(m)
+  class MyException(m: String) extends Exception(m) {
+    override def toString = m
+  }
   class OtherException extends Exception
   type I = Int
 }
