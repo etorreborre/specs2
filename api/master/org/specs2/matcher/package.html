@@ -1035,7 +1035,7 @@ to properties by appending forAll
       </h4>
       <p class="comment cmt">The <code>Matcher</code> trait is the base trait for any Matcher.</p>
     </li><li name="org.specs2.matcher.Matchers" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="MatchersextendsAnyMatcherswithTraversableMatcherswithMapMatcherswithStringMatcherswithXmlMatcherswithJsonMatcherswithBeHaveMatcherswithExceptionMatcherswithNumericMatcherswithOptionMatcherswithEitherMatcherswithEventuallyMatcherswithFileMatcherswithContentMatcherswithMatchersImplicitswithLanguageFeatures"></a>
+      <a id="MatchersextendsAnyMatcherswithBeHaveMatcherswithTraversableMatcherswithMapMatcherswithStringMatcherswithExceptionMatcherswithNumericMatcherswithOptionMatcherswithEitherMatcherswithTryMatcherswithEventuallyMatcherswithMatchersImplicitswithLanguageFeatures"></a>
       <a id="Matchers:Matchers"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1043,10 +1043,10 @@ to properties by appending forAll
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Matchers.html"><span class="name">Matchers</span></a><span class="result"> extends <a href="AnyMatchers.html" class="extype" name="org.specs2.matcher.AnyMatchers">AnyMatchers</a> with <a href="TraversableMatchers.html" class="extype" name="org.specs2.matcher.TraversableMatchers">TraversableMatchers</a> with <a href="MapMatchers.html" class="extype" name="org.specs2.matcher.MapMatchers">MapMatchers</a> with <a href="StringMatchers.html" class="extype" name="org.specs2.matcher.StringMatchers">StringMatchers</a> with <a href="XmlMatchers.html" class="extype" name="org.specs2.matcher.XmlMatchers">XmlMatchers</a> with <a href="JsonMatchers.html" class="extype" name="org.specs2.matcher.JsonMatchers">JsonMatchers</a> with <span class="extype" name="org.specs2.matcher.BeHaveMatchers">BeHaveMatchers</span> with <a href="ExceptionMatchers.html" class="extype" name="org.specs2.matcher.ExceptionMatchers">ExceptionMatchers</a> with <a href="NumericMatchers.html" class="extype" name="org.specs2.matcher.NumericMatchers">NumericMatchers</a> with <a href="OptionMatchers.html" class="extype" name="org.specs2.matcher.OptionMatchers">OptionMatchers</a> with <a href="EitherMatchers.html" class="extype" name="org.specs2.matcher.EitherMatchers">EitherMatchers</a> with <a href="EventuallyMatchers.html" class="extype" name="org.specs2.matcher.EventuallyMatchers">EventuallyMatchers</a> with <a href="FileMatchers.html" class="extype" name="org.specs2.matcher.FileMatchers">FileMatchers</a> with <a href="ContentMatchers.html" class="extype" name="org.specs2.matcher.ContentMatchers">ContentMatchers</a> with <a href="MatchersImplicits.html" class="extype" name="org.specs2.matcher.MatchersImplicits">MatchersImplicits</a> with <a href="../control/LanguageFeatures.html" class="extype" name="org.specs2.control.LanguageFeatures">LanguageFeatures</a></span>
+        <a href="Matchers.html"><span class="name">Matchers</span></a><span class="result"> extends <a href="AnyMatchers.html" class="extype" name="org.specs2.matcher.AnyMatchers">AnyMatchers</a> with <span class="extype" name="org.specs2.matcher.BeHaveMatchers">BeHaveMatchers</span> with <a href="TraversableMatchers.html" class="extype" name="org.specs2.matcher.TraversableMatchers">TraversableMatchers</a> with <a href="MapMatchers.html" class="extype" name="org.specs2.matcher.MapMatchers">MapMatchers</a> with <a href="StringMatchers.html" class="extype" name="org.specs2.matcher.StringMatchers">StringMatchers</a> with <a href="ExceptionMatchers.html" class="extype" name="org.specs2.matcher.ExceptionMatchers">ExceptionMatchers</a> with <a href="NumericMatchers.html" class="extype" name="org.specs2.matcher.NumericMatchers">NumericMatchers</a> with <a href="OptionMatchers.html" class="extype" name="org.specs2.matcher.OptionMatchers">OptionMatchers</a> with <a href="EitherMatchers.html" class="extype" name="org.specs2.matcher.EitherMatchers">EitherMatchers</a> with <a href="TryMatchers.html" class="extype" name="org.specs2.matcher.TryMatchers">TryMatchers</a> with <a href="EventuallyMatchers.html" class="extype" name="org.specs2.matcher.EventuallyMatchers">EventuallyMatchers</a> with <a href="MatchersImplicits.html" class="extype" name="org.specs2.matcher.MatchersImplicits">MatchersImplicits</a> with <a href="../control/LanguageFeatures.html" class="extype" name="org.specs2.control.LanguageFeatures">LanguageFeatures</a></span>
       </span>
       </h4>
-      <p class="comment cmt">Trait aggregating all of specs2 matchers
+      <p class="comment cmt">Trait aggregating the most common specs2 matchers
 </p>
     </li><li name="org.specs2.matcher.MatchersImplicits" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="MatchersImplicitsextendsExpectationswithMatchResultCombinatorswithMatchResultImplicitswithExpectationsDescription"></a>
@@ -1658,6 +1658,19 @@ a match fails
       </h4>
       <p class="comment cmt">Matchers for traversables
 </p>
+    </li><li name="org.specs2.matcher.TryMatchers" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="TryMatchersextendsTryBaseMatcherswithTryBeHaveMatchers"></a>
+      <a id="TryMatchers:TryMatchers"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="TryMatchers.html"><span class="name">TryMatchers</span></a><span class="result"> extends <span class="extype" name="org.specs2.matcher.TryBaseMatchers">TryBaseMatchers</span> with <span class="extype" name="org.specs2.matcher.TryBeHaveMatchers">TryBeHaveMatchers</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Matchers for util.</p>
     </li><li name="org.specs2.matcher.XPathFunctions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="XPathFunctionsextendsAnyRef"></a>
       <a id="XPathFunctions:XPathFunctions"></a>
@@ -2288,6 +2301,19 @@ a match fails
       </span>
       <span class="symbol">
         <a href="TraversableMatchers$.html"><span class="name">TraversableMatchers</span></a><span class="result"> extends <a href="TraversableMatchers.html" class="extype" name="org.specs2.matcher.TraversableMatchers">TraversableMatchers</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.matcher.TryMatchers" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TryMatchers"></a>
+      <a id="TryMatchers:TryMatchers"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="TryMatchers$.html"><span class="name">TryMatchers</span></a><span class="result"> extends <a href="TryMatchers.html" class="extype" name="org.specs2.matcher.TryMatchers">TryMatchers</a></span>
       </span>
       </h4>
       

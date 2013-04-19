@@ -65,7 +65,7 @@
     </head><body><div id="breadcrumbs"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html">Matchers</a></div><div class="colmask threecol">
                    <div class="colmid">
                      <div class="colleft">
-                       <div class="col1"><div id="central"><title>Matchers</title><a name="Matchers"><h2 specId="61388899">Matchers</h2></a><status class="ok"><div class="level0" style="display: show"><p><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
+                       <div class="col1"><div id="central"><title>Matchers</title><a name="Matchers"><h2 specId="1984152220">Matchers</h2></a><status class="ok"><div class="level0" style="display: show"><p><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
 <ul>
   <li>Boolean</li>
   <li>Standard result</li>
@@ -203,6 +203,15 @@
   <li><code class="prettyprint">beLeft</code> checks if an element is Left(_)</li>
   <li><code class="prettyprint">beLeft(exp)</code> checks if an element is Left(exp)</li>
   <li><code class="prettyprint">beLeft.like(partial function)</code> checks if an element is Left(_) and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
+</ul></p></td></tr></table></form></div><div class="tabbertab" title="Try"><form><table class="dataTable"><tr><td class="none" style="info"><p><p>There are several matchers to check Try instances:</p>
+<ul>
+  <li><code class="prettyprint">beSuccessfulTry</code> checks if an element is Success(_)</li>
+  <li><code class="prettyprint">beSuccessfulTry.withValue(exp)</code> checks if an element is Success(exp)</li>
+  <li><code class="prettyprint">beSuccessfulTry.which(function)</code> checks if an element is Some(_) and satisfies a function returning a boolean</li>
+  <li><code class="prettyprint">beSuccessfulTry.like(partial function)</code> checks if an element is Some(_) and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
+  <li><code class="prettyprint">beFailedTry</code> checks if an element is <code class="prettyprint">Failure(_)</code></li>
+  <li><code class="prettyprint">beFailedTry.withThrowable[T]</code> checks if an element is <code class="prettyprint">Failure(t: T)</code></li>
+  <li><code class="prettyprint">beFailedTry.withThrowable[T](message)</code> checks if an element is <code class="prettyprint">Failure(t: T)</code> and <code class="prettyprint">t.getMessage</code> matches <code class="prettyprint">message</code></li>
 </ul></p></td></tr></table></form></div><div class="tabbertab" title="String"><form><table class="dataTable"><tr><td class="none" style="info"><p><p>Matching on strings is very common. Here are the matchers which can help you:</p>
 <ul>
   <li><code class="prettyprint">beMatching</code> (or <code class="prettyprint">be matching</code>) checks if a string matches a regular expression</li>
@@ -268,7 +277,20 @@ usersFromDb must contain(User(id=0, name=&quot;eric&quot;), User(id=0, name=&quo
 <ul>
   <li><p><code class="prettyprint">beDefinedAt</code> checks if a PartialFunction is defined for a given value<br /> <code class="prettyprint">partial must beDefinedAt(1)</code></p></li>
   <li><p><code class="prettyprint">beDefinedBy</code> checks if a PartialFunction is defined for a given value<br /> and returns another one<br /> <code class="prettyprint">partial</code> must beDefinedBy(1 -&gt; true)</p></li>
-</ul></p></td></tr></table></form></div><div class="tabbertab" title="Xml"><form><table class="dataTable"><tr><td class="none" style="info"><p><p>It is very useful to have literal Xml in Scala, it is even more useful to have matchers for it!</p>
+</ul></p></td></tr></table></form></div></div></td></tr></table></form></status><status class="ok"><div class="level0" style="display: show"><p><p>The examples above show how to use matchers:</p>
+<ul>
+  <li>the general form for using a matcher is: <code class="prettyprint">a must matcher</code></li>
+  <li>but can use <code class="prettyprint">should</code> instead of <code class="prettyprint">must</code> if you prefer</li>
+  <li>for most matchers you can use a form where the <code class="prettyprint">be</code> word (or the <code class="prettyprint">have</code> word) is detached</li>
+  <li>you can as well negate a matcher by adding <code class="prettyprint">not</code> before it (or after it, as a method call)</li>
+</ul><a name="Optional"><h4>Optional</h4></a><p>These other matchers need to be selectively added to the specification by adding a new trait:</p></p></div></status><status class="ok"><form><table class="dataTable"><tr><th colspan="101">Optional Matchers</th></tr><tr><td colspan="100" class="info"><div class="tabber"><div class="tabbertab" title="Result"><form><table class="dataTable"><tr><td class="none" style="info"><p><p>That's only if you want to match the result of other matchers! </p>
+<pre><code class="prettyprint">// you need to extend the ResultMatchers trait
+class MatchersSpec extends Specification with matcher.ResultMatchers { def is =
+  &quot;beMatching is using a regexp&quot; ! {
+    (&quot;Hello&quot; must beMatching(&quot;h.*&quot;)) must beSuccessful
+  }
+}
+</code></pre></p></td></tr></table></form></div><div class="tabbertab" title="Xml"><form><table class="dataTable"><tr><td class="none" style="info"><p><p>It is very useful to have literal Xml in Scala, it is even more useful to have matchers for it!</p>
 <ul>
   <li><p><code class="prettyprint">beEqualToIgnoringSpace</code> compares 2 Nodes, without considering spaces<br /> <code class="prettyprint">&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must ==/(&lt;a&gt; &lt;b/&gt;&lt;/a&gt;)</code><br /> <code class="prettyprint">&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must beEqualToIgnoringSpace(&lt;a&gt; &lt;b/&gt;&lt;/a&gt;)</code></p></li>
   <li><p><code class="prettyprint">beEqualToIgnoringSpace</code> can also do an ordered comparison<br /> <code class="prettyprint"><a><c></c> <b></b></a> must ==/(<a> <c></c><b></b></a>).ordered</code></p></li>
@@ -348,20 +370,7 @@ file1 must haveSameLinesAs(file2)
 <pre><code class="prettyprint">(file1, file2) must haveSameLines.unordered
 file1 must haveSameLinesAs(file2).unordered
 file1 must containLines(file2).unordered
-</code></pre><p><strong><em>Missing only</em></strong></p><p>By default, <code class="prettyprint">(file1, file2) must haveSameLines</code> will report misplaced lines if any, that is, lines of <code class="prettyprint">f1</code> which appear in <code class="prettyprint">f2</code> but not at the right position. However if <code class="prettyprint">file2</code> is big, this search might degrade the performances. In that case you can turn it off with <code class="prettyprint">missingOnly</code>: </p><p><code class="prettyprint">(file1, file2) must haveSameLines.missingOnly</code></p><p><strong><em>Show less differences</em></strong></p><p>If there are too many differences, you can specify that you only want the first 10: </p><p><code class="prettyprint">(file1, file2) must haveSameLines.showOnly(10.differences).unordered</code></p><p>In the code above <code class="prettyprint">10.differences</code> builds a <code class="prettyprint">DifferenceFilter</code> which is merely a filtering function: <code class="prettyprint">(lines1: Seq[String], lines2: Seq[String]) =&gt; (Seq[String], Seq[String])</code>. The parameter <code class="prettyprint">lines1</code> is the sequence of lines not found in the second content while <code class="prettyprint">lines2</code> is the sequence of lines not found in the first content.</p></p></td></tr></table></form></div></div></td></tr></table></form></status><status class="ok"><div class="level0" style="display: show"><p><p>The examples above show how to use matchers:</p>
-<ul>
-  <li>the general form for using a matcher is: <code class="prettyprint">a must matcher</code></li>
-  <li>but can use <code class="prettyprint">should</code> instead of <code class="prettyprint">must</code> if you prefer</li>
-  <li>for most matchers you can use a form where the <code class="prettyprint">be</code> word (or the <code class="prettyprint">have</code> word) is detached</li>
-  <li>you can as well negate a matcher by adding <code class="prettyprint">not</code> before it (or after it, as a method call)</li>
-</ul><a name="Optional"><h4>Optional</h4></a><p>These other matchers need to be selectively added to the specification by adding a new trait:</p></p></div></status><status class="ok"><form><table class="dataTable"><tr><th colspan="101">Optional Matchers</th></tr><tr><td colspan="100" class="info"><div class="tabber"><div class="tabbertab" title="Result"><form><table class="dataTable"><tr><td class="none" style="info"><p><p>That's only if you want to match the result of other matchers! </p>
-<pre><code class="prettyprint">// you need to extend the ResultMatchers trait
-class MatchersSpec extends Specification with matcher.ResultMatchers { def is =
-  &quot;beMatching is using a regexp&quot; ! {
-    (&quot;Hello&quot; must beMatching(&quot;h.*&quot;)) must beSuccessful
-  }
-}
-</code></pre></p></td></tr></table></form></div><div class="tabbertab" title="Scala Interpreter"><form><table class="dataTable"><tr><td class="none" style="info"><p><p>In the rare case where you want to use the Scala interpreter and execute a script: </p>
+</code></pre><p><strong><em>Missing only</em></strong></p><p>By default, <code class="prettyprint">(file1, file2) must haveSameLines</code> will report misplaced lines if any, that is, lines of <code class="prettyprint">f1</code> which appear in <code class="prettyprint">f2</code> but not at the right position. However if <code class="prettyprint">file2</code> is big, this search might degrade the performances. In that case you can turn it off with <code class="prettyprint">missingOnly</code>: </p><p><code class="prettyprint">(file1, file2) must haveSameLines.missingOnly</code></p><p><strong><em>Show less differences</em></strong></p><p>If there are too many differences, you can specify that you only want the first 10: </p><p><code class="prettyprint">(file1, file2) must haveSameLines.showOnly(10.differences).unordered</code></p><p>In the code above <code class="prettyprint">10.differences</code> builds a <code class="prettyprint">DifferenceFilter</code> which is merely a filtering function: <code class="prettyprint">(lines1: Seq[String], lines2: Seq[String]) =&gt; (Seq[String], Seq[String])</code>. The parameter <code class="prettyprint">lines1</code> is the sequence of lines not found in the second content while <code class="prettyprint">lines2</code> is the sequence of lines not found in the first content.</p></p></td></tr></table></form></div><div class="tabbertab" title="Scala Interpreter"><form><table class="dataTable"><tr><td class="none" style="info"><p><p>In the rare case where you want to use the Scala interpreter and execute a script: </p>
 <pre><code class="prettyprint">class ScalaInterpreterMatchersSpec extends mutable.Specification with ScalaInterpreterMatchers {
   def interpret(s: String): String = &quot;&quot; // you have to provide your own Scala interpreter here
 
@@ -827,7 +836,7 @@ there was one(amount).show(anyFunction2)
 <ul>
   <li>with an acceptance specification: use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance)</li>
   <li>with a unit specification: use the <code class="prettyprint">org.specs2.mutable.Tables</code> trait instead of <code class="prettyprint">org.specs2.matcher.DataTables</code> trait. This will &quot;deactivate&quot; the implicit used to create examples with <code class="prettyprint">!</code></li>
-</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></p></div></status><subtoc specId="1678003714"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../../images/icon_success_sml.gif" /> Here's <a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html" tooltip="">how to use Forms</a></div></status><status class="ok"><div class="level0" style="display: show"><p><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
+</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></p></div></status><subtoc specId="1793006146"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../../images/icon_success_sml.gif" /> Here's <a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html" tooltip="">how to use Forms</a></div></status><status class="ok"><div class="level0" style="display: show"><p><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
 <ul>
   <li><p><code class="prettyprint">org.specs2.matcher.MustMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldMatchers</code>) to write anything like <code class="prettyprint">1 must be_==(1)</code> and<br /> get a <code class="prettyprint">Result</code> back</p></li>
   <li><p>You can also use the side-effecting version of that trait called <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldThrownMatchers</code>).<br /> It throws a <code class="prettyprint">FailureException</code> as soon as an expectation is failing. Those traits can also be used in a regular<br /> Specification if you have several expectations per example and if you don't want to chain them with <code class="prettyprint">and</code>.</p></li>
@@ -844,12 +853,12 @@ there was one(amount).show(anyFunction2)
 </code></pre>
 <hr /></p></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Matchers</th></tr>
-        <tr><td>Finished in</td><td class="info">663 ms</td></tr>
-        <tr><td>Results</td><td class="success">47 examples, 536 expectations, 0 failure, 0 error</td></tr>
+        <tr><td>Finished in</td><td class="info">1 second, 75 ms</td></tr>
+        <tr><td>Results</td><td class="success">47 examples, 539 expectations, 0 failure, 0 error</td></tr>
       </table></div></div>
                        <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="504284620"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="948204247"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="2896750"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="1936387883"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -859,7 +868,7 @@ there was one(amount).show(anyFunction2)
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="687818736"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1669272878"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -962,7 +971,7 @@ there was one(amount).show(anyFunction2)
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Methods">Methods</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Full+example">Full example</a>
-            <ul><li id="960563550"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
+            <ul><li id="342223436"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Rules">Rules</a>
@@ -982,7 +991,7 @@ there was one(amount).show(anyFunction2)
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Unit+specification">Unit specification</a>
             
           </li></ul>
-          </li><li id="473585688"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#GivenWhenThenPage">GivenWhenThenPage</a>
+          </li><li id="839139654"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#GivenWhenThenPage">GivenWhenThenPage</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then">Given When Then</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Parsing">Parsing</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Constructor">Constructor</a>
@@ -999,7 +1008,7 @@ there was one(amount).show(anyFunction2)
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="61388899"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1984152220"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1061,7 +1070,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1678003714"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="1793006146"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
@@ -1105,7 +1114,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li></ul>
-          </li><li id="2067050788"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="1313340133"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1189,7 +1198,7 @@ there was one(amount).show(anyFunction2)
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1889067957"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="849157128"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -1235,7 +1244,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li></ul>
-          </li><li id="527571977"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="1983527575"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1281,7 +1290,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li></ul>
-          </li><li id="410387634"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="741922488"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1301,7 +1310,7 @@ there was one(amount).show(anyFunction2)
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['504284620','61388899'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['2896750','1984152220'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                        <div class="col3"><div id="rightcolumn"></div></div>
                      </div>
