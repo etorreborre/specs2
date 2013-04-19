@@ -7,6 +7,7 @@ import main.Arguments
 import org.specs2.internal.scalaz.Monoid
 import Fragments._
 import specification.StandardFragments.{End, Br}
+import io.Paths._
 
 /**
  * A Fragments object is a list of fragments with a SpecStart and a SpecEnd
@@ -52,6 +53,9 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   def executables: Seq[Executable] = fragments.collect { case e: Executable => e }
   def examples: Seq[Example] = fragments.collect(isAnExample)
   def texts: Seq[Text] = fragments.collect(isSomeText)
+
+  def linkMarkdown = linked.markdown
+  def linkHtml     = linked.html
 
   def overrideArgs(args: Arguments) = copy(arguments = arguments.overrideWith(args))
   def map(function: Fragment => Fragment) = Fragments.create(fragments.map(function):_*)
@@ -168,5 +172,7 @@ case class Linked(link: Option[HtmlLink] = None, seeOnly: Boolean = false, hidde
   def hide                       = copy(hidden = true)
 
   def linkToString = link.map(l => ", link:"+l.toString+", seeOnly:"+seeOnly).getOrElse("")
+  def html = link.map(l => s"""${l.beforeText} <a href='${l.url.fromTop}'${if (l.tip.isEmpty) "" else s" tip='${l.tip}'"}>${l.linkText}</a> ${l.afterText}""".trim).getOrElse("")
+  def markdown = link.map(l => s"""${l.beforeText} [${l.linkText}](${l.url.fromTop}${if (l.tip.isEmpty) "" else (" "+l.tip)}) ${l.afterText}""".trim).getOrElse("")
 }
 
