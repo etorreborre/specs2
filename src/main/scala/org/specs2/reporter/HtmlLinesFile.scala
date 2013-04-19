@@ -103,9 +103,11 @@ case class HtmlSpecStart(start: ExecutedSpecStart, stats: Stats = Stats(), level
   def unlink        = HtmlSpecStart(start.unlink)
 
   def print(out: HtmlReportOutput) = {
-    out.when(!args.xonly) { output =>
-      start.link.map(l => output.printLink(l, indent, stats, hidden)).getOrElse(output.printSpecStart(start.specName, stats))
-    } 
+    if (hidden) start.link.map(l => out.printLink(l, indent, stats, hidden)).getOrElse(out)
+    else
+      out.when(!args.xonly) { output =>
+        start.link.map(l => output.printLink(l, indent, stats, hidden)).getOrElse(output.printSpecStart(start.specName, stats))
+      }
   }
   def set(stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) = copy(stats = stats, level = level, args = args)
 

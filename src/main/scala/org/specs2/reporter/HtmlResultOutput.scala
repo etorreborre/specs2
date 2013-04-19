@@ -82,17 +82,22 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
    */
   def printLink(link: HtmlLink, level: Int, stats: Stats = Stats(), hidden: Boolean = false) = {
     val linkStatus = if (stats.hasIssues) "ko" else "ok"
-    val htmlLink = outer.copy(xml = NodeSeq.Empty).printLink(link).xml
+    val htmlLink = if (hidden) NodeSeq.Empty else outer.copy(xml = NodeSeq.Empty).printLink(link).xml
     link match {
       case slink @ SpecHtmlLink(name, before, l, after, tip) => {
-        print(<subtoc specId={name.id.toString}/>).
-        printStatus(div(<img src={icon(stats.result.statusName)}/> ++ t(" ") ++ htmlLink, level, hidden), linkStatus)
+        val subtoc = print(<subtoc specId={name.id.toString}/>)
+        if (hidden) subtoc
+        else        subtoc.printStatus(div(<img src={icon(stats.result.statusName)}/> ++ t(" ") ++ htmlLink, level), linkStatus)
       }
-      case UrlHtmlLink(url, before, l, after, tip) => printStatus(div(htmlLink, level, hidden), linkStatus)
+      case UrlHtmlLink(url, before, l, after, tip) if !hidden => printStatus(div(htmlLink, level), linkStatus)
+      case _                                                  => this
     }
   }
 
-  def printLink(link: HtmlLink) = print(wiki(link.beforeText) ++ <a href={link.url.relativeTo(filePath)} tooltip={link.tip}>{wiki(link.linkText)}</a> ++ wiki(link.afterText))
+  def printLink(link: HtmlLink) =
+    print(wiki(if (link.beforeText.isEmpty) "" else (link.beforeText+" ")) ++
+          <a href={link.url.relativeTo(filePath)} tooltip={link.tip}>{wiki(link.linkText)}</a> ++
+          wiki(if (link.afterText.isEmpty) "" else (" " +link.afterText+" ")))
 
   /** print some text with a status icon (with an ok class) */
   def printTextWithIcon(message: MarkupString, iconName: String, level: Int = 0)  = printOkStatus(textWithIcon(message, iconName, level))
