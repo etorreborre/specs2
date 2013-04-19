@@ -169,6 +169,7 @@ object build extends Build {
       publishSignedArtifacts),
     commands += releaseSnapshotCommand
     ) ++
+  Seq(publishUserGuideTask <<= pushSite.dependsOn(makeSite).dependsOn(generateUserGuideTask)) ++
   documentationSettings
 
   lazy val releaseSnapshotProcess = SettingKey[Seq[ReleaseStep]]("release-snapshot-process")
@@ -207,6 +208,8 @@ object build extends Build {
 
   lazy val generateIndexPageTask = TaskKey[Tests.Output]("generate-index-page", "generate the index page")
   lazy val generateIndexPage     = executeStepTask(generateIndexPageTask, "Generating the Index page", Test)
+
+  lazy val publishUserGuideTask = TaskKey[Unit]("publish-user-guide", "publish the user guide")
 
   lazy val publishSite = ReleaseStep { st: State =>
     val st2 = executeStepTask(makeSite, "Making the site")(st)
