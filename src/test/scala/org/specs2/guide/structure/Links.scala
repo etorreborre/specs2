@@ -67,7 +67,7 @@ s2"""
 It is possible to customize the generated Html link with the following syntax: ${snippet{
 // 8<--
 class s extends Specification { def is = s2""" // 8<--
-${"a " ~ ("quick start guide", new QuickStart)}
+${"a " ~ (new QuickStart, "for you")}
 // 8<--
 """
 }
@@ -76,17 +76,17 @@ ${"a " ~ ("quick start guide", new QuickStart)}
 The `~` operator is used to create a `HtmlLink` where:
 
 * "a" is the beginning of the text
-* "quick start guide" is the text that will be highlighted as a url link
-* `new QuickStart` is the specification to include, the url being derived from the specification class name
+* the `QuickStart` specification title is the text that will be highlighted as a html link
+* `new QuickStart` is the specification to include, the url being derived from the specification class name (or user-defined if you defined the specification title with an additional `urlIs`)
 
 Several variations are possible on this pattern, depending which part of the link you want to be highlighted: ${snippet{
 // 8<--
 class s extends Specification { def is = s2""" // 8<--
-  ${"before text" ~ ("text to highlight", specification, "after text")           }
-  ${"before text" ~ ("text to highlight", specification, "after text", "tooltip")}
-  ${"text to highlight" ~ specification                                          }
-  ${"text to highlight" ~ (specification, "after text")                          }
-  ${"text to highlight" ~ (specification, "after text", "tooltip")               }
+  ${"before text" ~ (specification, "after text")                                      }
+  ${"before text" ~ ("other text to highlight", specification, "after text", "tooltip")}
+  ${"text to highlight" ~ specification                                                }
+  ${"text to highlight" ~ (specification, "after text")                                }
+  ${"text to highlight" ~ (specification, "after text", "tooltip")                     }
 // 8<--
   """
 }
