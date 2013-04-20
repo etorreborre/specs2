@@ -26,7 +26,7 @@ trait Snippets extends execute.Snippets { outer: SpecificationStringContext with
 
     private def snippetFragments(snippet: Snippet[T], expression: String) = {
       snippet match {
-        case cs: CodeSnippet[_]      => Fragments.createList(Text(snippet.markdown(expression))).add(resultFragments(snippet))
+        case cs: CodeSnippet[_]      => Fragments.createList((Text(snippet.markdown(expression)) +: resultFragments(snippet).middle):_*)
         case cc: CheckedSnippet[_,_] => Fragments.createList(Text(snippet.markdown(expression)), Step(cc.verify.mapMessage("Snippet failure: "+_)))
       }
     }
