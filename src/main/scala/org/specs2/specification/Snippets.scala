@@ -33,7 +33,7 @@ trait Snippets extends execute.Snippets { outer: SpecificationStringContext with
 
     private def resultFragments(snippet: Snippet[T]) = {
       if (snippet.resultMarkdown.isEmpty) Fragments.createList()
-      else                                Fragments.createList(Text(snippet.resultMarkdown))
+      else                                Fragments.createList(Text("\n"+snippet.resultMarkdown))
     }
 
 
