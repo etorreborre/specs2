@@ -1,39 +1,42 @@
+
 <!DOCTYPE html>
 <html>
+ 
 <head>
   <meta charset='utf-8'>
-  <title>Sponsors</title>
-      <style type="text/css" media="all"> 
+  <!-- PLEASE DEAR READER PARDON MY LACK OF HTML/CSS SKILLS :-) Any contribution will be gladly accepted! -->
+  <title>etorreborre/specs2 @ GitHub</title>
+      <style type="text/css" media="all">
         @import url('./css/maven-base.css');
         @import url('./css/maven-theme.css');
-      </style> 
-      <link href="./css/prettify.css" rel="stylesheet" type="text/css" /> 
-      <script type="text/javascript" src="./css/prettify.js"></script> 
-      <link href="./css/print.css" type="text/css" rel="stylesheet" media="print" /> 
-      <link href="./css/tooltip.css" type="text/css" rel="stylesheet" /> 
-      <script type="text/javascript" src="./css/tooltip.js"></script> 
-      <script language="javascript"> 
-      function init() {  prettyPrint(); };   
+      </style>
+      <link href="./css/prettify.css" rel="stylesheet" type="text/css" />
+      <script type="text/javascript" src="./css/prettify.js"></script>
+      <link href="./css/print.css" type="text/css" rel="stylesheet" media="print" />
+      <link href="./css/tooltip.css" type="text/css" rel="stylesheet" />
+      <script type="text/javascript" src="./css/tooltip.js"></script>
+      <script language="javascript">
+      function init() {  prettyPrint(); };
       /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
       String.prototype.endsWith = function(str) { return (this.match(str+'$') == str) };
       function changeWidth(id,width) {  document.getElementById(id).style.width = width; };
       function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
       function toggleImage(image) {
-        if (image.src.endsWith('./images/expanded.gif')) 
+        if (image.src.endsWith('./images/expanded.gif'))
           image.src = './images/collapsed.gif';
-        else 
+        else
           image.src = './images/expanded.gif';
       };
       function showHide(id) {
         element = document.getElementById(id);
         element.style.display = (element.style.display == 'block')? 'none' : 'block';
       };
-    </script> 
-      <script language="javascript">window.onload=init;</script> 
+    </script>
+      <script language="javascript">window.onload=init;</script>
       <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
-           tabber code, then the init code --> 
-      <script type="text/javascript" src="./css/tabber.js"></script> 
-      <link href="./css/tabber.css" type="text/css" rel="stylesheet" media="screen" />   
+           tabber code, then the init code -->
+      <script type="text/javascript" src="./css/tabber.js"></script>
+      <link href="./css/tabber.css" type="text/css" rel="stylesheet" media="screen" />
     <style type="text/css">
 	#top {
       margin-left: 150px;
@@ -72,34 +75,37 @@
   </head>
 
 <body>
+
   <div id="top">
       <a href="http://github.com/etorreborre/specs2"><img style="position: right; border: 0; width: 17%" src="./images/specs2.png" alt="specs2" /></a>
       <div class="description">Software Specifications for Scala</div>
   </div>
 
-  <div id="sidebar">
-      <h3 style="margin-top: 0; margin-bottom: 0;">Try it!</h3>
-      <div class="sidelink" style="margin-top: 10px;"><a href="http://github.com/etorreborre/specs2-test">Sample project</a> (<a href="http://github.com/etorreborre/specs2-test/tarball/SPECS2-1.14">tar</a>, <a href="http://github.com/etorreborre/specs2-test/zipball/SPECS2-1.14">zip</a>)<br/>
-      </div>
-      <a class="sidelink" href="./index.html/#Dependencies">Dependencies</a><br/>
-      <a class="sidelink" href="./index.html/#Downloads">Downloads</a><br/>
-      <h3 style="margin-bottom: 0;">Learn it!</h3>
-      <div class="sidelink" style="margin-top: 10px;"><a href="guide/org.specs2.guide.QuickStart.html">Quick Start</a><br/>
-      </div>
-      <a class="sidelink" href="guide/org.specs2.UserGuide.html">User Guide</a><br/>
-      <a class="sidelink" href="https://github.com/etorreborre/specs2/tree/1.14/src/test/scala/examples">Examples</a><br/>
-      <a class="sidelink" href="http://etorreborre.github.com/specs2/api/1.14/index.html">Scaladoc</a><br/>
-      <h3 style="margin-bottom: 0;">Get involved!</h3>
-      <div style="margin-top: 10px;"><a class="sidelink" href="http://github.com/etorreborre/specs2">Github project</a>
-      </div>
-      <a class="sidelink" 	href="http://groups.google.com/group/specs2-users">User group</a><br/>
-      <a class="sidelink" href="http://github.com/etorreborre/specs2/issues">Issues</a><br/>
-      <a class="sidelink" href="http://etorreborre.blogspot.com/search/label/specs2">Blog</a><br/>
-      <a class="sidelink" href="sponsors.html">Sponsors</a><br/>
-      <a class="sidelink" href="http://www.twitter.com/specs2org"><img style="margin-top: 10px;" src="http://twitter-badges.s3.amazonaws.com/twitter-a.png" alt="Follow specs2 on Twitter"/></a>
+
+   <div id="sidebar">
+   <h3 style="margin-top: 0; margin-bottom: 0;">Try it!</h3>
+   <div class="sidelink" style="margin-top: 10px;"><a href="http://github.com/etorreborre/specs2-test">Sample project</a> (<a href="http://github.com/etorreborre/specs2-test/tarball/SPECS2-1.15-SNAPSHOT">tar</a>, <a href="http://github.com/etorreborre/specs2-test/zipball/SPECS2-1.15-SNAPSHOT">zip</a>)<br/>
+   </div>
+   <a class="sidelink" href="#Dependencies">Dependencies</a><br/>
+   <a class="sidelink" href="#Downloads">Downloads</a><br/>
+   <h3 style="margin-bottom: 0;">Learn it!</h3>
+   <div class="sidelink" style="margin-top: 10px;"><a href="guide/org.specs2.guide.QuickStart.html">Quick Start</a><br/>
+   </div>
+   <a class="sidelink" href="guide/org.specs2.UserGuide.html">User Guide</a><br/>
+   <a class="sidelink" href="https://github.com/etorreborre/specs2/tree/1.15-SNAPSHOT/src/test/scala/examples">Examples</a><br/>
+   <a class="sidelink" href="http://etorreborre.github.com/specs2/api/SPECS2-1.15-SNAPSHOT/index.html">Scaladoc</a><br/>
+   <h3 style="margin-bottom: 0;">Get involved!</h3>
+   <div style="margin-top: 10px;"><a class="sidelink" href="http://github.com/etorreborre/specs2">Github project</a>
+   </div>
+   <a class="sidelink" 	href="http://groups.google.com/group/specs2-users">User group</a><br/>
+   <a class="sidelink" href="http://github.com/etorreborre/specs2/issues">Issues</a><br/>
+   <a class="sidelink" href="http://etorreborre.blogspot.com/search/label/specs2">Blog</a><br/>
+   <a class="sidelink" href="sponsors.html">Sponsors</a><br/>
+   <a class="sidelink" href="http://www.twitter.com/specs2org"><img style="margin-top: 10px;" src="http://twitter-badges.s3.amazonaws.com/twitter-a.png" alt="Follow specs2 on Twitter"/></a>
   </div>
 
-	<div id="container">
+
+   <div id="container">
     <h3 style="margin-top:0;">Sponsors</h3>
 
     <s2>specs2</s2> development is supported by:
@@ -118,8 +124,13 @@
        <p/>
 	   <img src="./images/BuiltOnDEV.png"></img>
 	   <p/>
-	
+
   </div>
   
+
+<div class="footer">
+  get the source code on GitHub : <a href="http://github.com/etorreborre/specs2">etorreborre/specs2</a>
+</div>
+
 </body>
 </html>

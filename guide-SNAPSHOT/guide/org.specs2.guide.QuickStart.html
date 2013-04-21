@@ -61,66 +61,68 @@
            tabber code, then the init code -->
       <script type="text/javascript" src="./../../css/tabber.js"></script>
       <link rel="stylesheet" href="./../../css/tabber.css" type="text/css" media="screen" />
-    </head><body><div id="breadcrumbs"><a href="../../guide-SNAPSHOT/guide/org.specs2.UserGuide.html">UserGuide</a><t> / </t><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html">QuickStart</a></div><div class="colmask threecol">
+      <title>Quick Start</title>
+    </head><body><div id="breadcrumbs"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html">QuickStart</a></div><div class="colmask threecol">
                    <div class="colmid">
                      <div class="colleft">
-                       <div class="col1"><div id="central"><title>Quick Start</title><a name="Quick+Start"><h2 specId="1218380483">Quick Start</h2></a><status class="ok"><div class="level0" style="display: show"><p>There are 2 major styles of specifications with <strong><em>specs2</em></strong>:</p>
+                       <div class="col1"><div id="central"><title>Quick Start</title><a name="Quick+Start"><h2 specId="858250433">Quick Start</h2></a><status class="ok"><div class="level0" style="display: show"><p><p>There are 2 major styles of specifications with <strong><em>specs2</em></strong>:</p>
 <ul>
   <li><p><em>unit</em> specifications where the specification text is interleaved with the specification code. It is generally used to<br /> specify a single class</p></li>
   <li><p><em>acceptance</em> specifications where all the specification text stands as one and the implementation code is elsewhere.<br /> It is generally used for acceptance or integration scenarios</p></li>
-</ul><a name="Unit"><h4>Unit</h4></a><p>Unit specifications extend the <code class="prettyprint">org.specs2.mutable.Specification</code> trait and are using the <code class="prettyprint">should/in</code> format:</p>
-<pre><code class="prettyprint">  import org.specs2.mutable._
+</ul><a name="Unit"><h4>Unit</h4></a><p>Unit specifications extend the <code class="prettyprint">org.specs2.mutable.Specification</code> trait and are using the <code class="prettyprint">should/in</code> format: </p>
+<pre><code class="prettyprint">import org.specs2.mutable._
 
-  class HelloWorldSpec extends Specification {
+class HelloWorldSpec extends Specification {
 
-    &quot;The 'Hello world' string&quot; should {
-      &quot;contain 11 characters&quot; in {
-        &quot;Hello world&quot; must have size(11)
-      }
-      &quot;start with 'Hello'&quot; in {
-        &quot;Hello world&quot; must startWith(&quot;Hello&quot;)
-      }
-      &quot;end with 'world'&quot; in {
-        &quot;Hello world&quot; must endWith(&quot;world&quot;)
-      }
+  &quot;The 'Hello world' string&quot; should {
+    &quot;contain 11 characters&quot; in {
+      &quot;Hello world&quot; must have size(11)
+    }
+    &quot;start with 'Hello'&quot; in {
+      &quot;Hello world&quot; must startWith(&quot;Hello&quot;)
+    }
+    &quot;end with 'world'&quot; in {
+      &quot;Hello world&quot; must endWith(&quot;world&quot;)
     }
   }
-</code></pre><a name="Acceptance"><h4>Acceptance</h4></a><p>Acceptance specifications extend the <code class="prettyprint">org.specs2.Specification</code> trait and must define a method called <code class="prettyprint">is</code>:</p>
-<pre><code class="prettyprint">  import org.specs2._
+}
+</code></pre><a name="Acceptance"><h4>Acceptance</h4></a><p>Acceptance specifications extend the <code class="prettyprint">org.specs2.Specification</code> trait and must define a method called <code class="prettyprint">is</code>: </p></p></div></status><status class="ok"><div class="level0" style="display: show"><p><pre><code class="prettyprint">import org.specs2._
 
-  class HelloWorldSpec extends Specification { def is =
+class HelloWorldSpec extends Specification { def is = s2&quot;&quot;&quot;
 
-    &quot;This is a specification to check the 'Hello world' string&quot;                 ^
-                                                                                p^
-    &quot;The 'Hello world' string should&quot;                                           ^
-      &quot;contain 11 characters&quot;                                                   ! e1^
-      &quot;start with 'Hello'&quot;                                                      ! e2^
-      &quot;end with 'world'&quot;                                                        ! e3^
-                                                                                end
-    def e1 = &quot;Hello world&quot; must have size(11)
-    def e2 = &quot;Hello world&quot; must startWith(&quot;Hello&quot;)
-    def e3 = &quot;Hello world&quot; must endWith(&quot;world&quot;)
-  }
-</code></pre><p>The <code class="prettyprint">is</code> method lists <a href="org.specs2.guide.Structure.html#Declare+examples"><em>specification fragments</em></a> which can be:</p>
+ This is a specification to check the 'Hello world' string
+
+ The 'Hello world' string should
+   contain 11 characters                                         $e1
+   start with 'Hello'                                            $e2
+   end with 'world'                                              $e3
+                                                                 &quot;&quot;&quot;
+
+  def e1 = &quot;Hello world&quot; must have size(11)
+  def e2 = &quot;Hello world&quot; must startWith(&quot;Hello&quot;)
+  def e3 = &quot;Hello world&quot; must endWith(&quot;world&quot;)
+}
+</code></pre><p>The <strong><code class="prettyprint">is</code></strong> method lists <a href="org.specs2.guide.Structure.html#Declare+examples"><em>specification fragments</em></a> which can be interpolated from a <strong><code class="prettyprint">s2</code></strong> String where you can inject:</p>
 <ul>
-  <li>some text, to describe the system you're specifying</li>
-  <li>an example: a description and some executable code returning a result</li>
-  <li>formatting fragments: <code class="prettyprint">p</code> adds a blank line and starts a new block of examples</li>
-</ul><p>Fragments are separated by the <code class="prettyprint">^</code> character in order to build a list of them.</p><a name="Execution"><h4>Execution</h4></a><p>And this is it! Now to execute your specification, you use a <a href="org.specs2.guide.Runners.html#Presentation"><em>runner</em></a> which will display the results:</p>
-<pre><code class="prettyprint">  &gt; scala -cp ... specs2.run HelloWorldSpec
+  <li>examples: some executable code returning a <a href="org.specs2.guide.Matchers.html"><code class="prettyprint">Result</code></a></li>
+  <li><a href="org.specs2.guide.Matchers.html#ScalaCheck">ScalaCheck</a> properties</li>
+  <li><a href="org.specs2.guide.Forms.html">Forms</a></li>
+  <li>normal strings</li>
+</ul><a name="Execution"><h4>Execution</h4></a><p>And this is it! Now to execute your specification, you use a <a href="org.specs2.guide.Runners.html#Presentation"><em>runner</em></a> which will display the results:</p>
+<pre><code class="prettyprint">&gt; scala -cp ... specs2.run HelloWorldSpec
 
-  HelloWorldSpec
+HelloWorldSpec
 
-  This is a specification to check the 'Hello world' string
+This is a specification to check the 'Hello world' string
 
-  The 'Hello world' string should
-  + contain 11 characters
-  + start with 'Hello'
-  + end with 'world'
+The 'Hello world' string should
++ contain 11 characters
++ start with 'Hello'
++ end with 'world'
 
-  Total for specification HelloWorldSpec
-  Finished in 0 second, 58 ms
-  3 examples, 0 failure, 0 error
+Total for specification HelloWorldSpec
+Finished in 0 second, 58 ms
+3 examples, 0 failure, 0 error
 </code></pre><a name="And+much+more%21"><h4>And much more!</h4></a><p>You can explore the rest of this <a title="Guide" href="org.specs2.UserGuide.html">User Guide</a> to learn how to:</p>
 <ul>
   <li>use the many <strong><em>specs2</em></strong> matchers to specify precise expectations</li>
@@ -129,14 +131,14 @@
   <li>use Mockito or ScalaCheck</li>
   <li>use sbt/maven/junit to execute a specification</li>
   <li>export your specification as an html document (like this one!)</li>
-</ul></div></status><status class="ok"><br /></status><table class="dataTable">
+</ul></p></div></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification QuickStart</th></tr>
-        <tr><td>Finished in</td><td class="info">37 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">73 ms</td></tr>
         <tr><td>Results</td><td class="success">6 examples, 0 failure, 0 error</td></tr>
       </table></div></div>
                        <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="1928453021"><a href="../../guide-SNAPSHOT/guide/org.specs2.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1218380483"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1864422093"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="858250433"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -146,7 +148,7 @@
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1421390520"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="82391146"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -172,34 +174,10 @@
             
           </li></ul>
           </li></ul>
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Pending+until+fixed">Pending until fixed</a>
-            
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Auto-Examples">Auto-Examples</a>
             
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#G%2FW%2FT">G/W/T</a>
-            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Sequencing">Sequencing</a>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#G+%2F+W+%2FT">G / W /T</a>
             
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Extract+methods">Extract methods</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#User+regexps">User regexps</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Factory+methods">Factory methods</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#G%2FW%2FT+sequences">G/W/T sequences</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Multiple+steps">Multiple steps</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Contexts">Contexts</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#ScalaCheck">ScalaCheck</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Single+step">Single step</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Conversions">Conversions</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Unit+specification_1">Unit specification</a>
-            
-          </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#DataTables">DataTables</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Example+groups">Example groups</a>
@@ -207,21 +185,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Links">Links</a>
-            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Inclusion">Inclusion</a>
-            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Inline">Inline</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Html+link">Html link</a>
-            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Html+Link">Html Link</a>
-            
-          </li></ul>
-          </li></ul>
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Reference">Reference</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Markdown+url">Markdown url</a>
-            
-          </li></ul>
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Contexts_1">Contexts</a>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Contexts">Contexts</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Isolation_1">Isolation</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Scope">Scope</a>
             
@@ -267,60 +231,64 @@
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#For+fragments">For fragments</a>
             
           </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Links">Links</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Inclusion">Inclusion</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Inline">Inline</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Html+link">Html link</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Html+Link">Html Link</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Reference">Reference</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Markdown+url">Markdown url</a>
+            
+          </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Execution">Execution</a>
             
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Layout">Layout</a>
-            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Rules">Rules</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Formatting+fragments">Formatting fragments</a>
-            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Separating+groups+of+examples">Separating groups of examples</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Reset+the+levels">Reset the levels</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Changing+the+indentation+level">Changing the indentation level</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Combinations_1">Combinations</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Turning-off+the+automatic+layout">Turning-off the automatic layout</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Unit+specification_2">Unit specification</a>
-            
-          </li></ul>
-          </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Unit+specifications">Unit specifications</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Methods">Methods</a>
             
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#How+to%3F">How to?</a>
-            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Declare+arguments">Declare arguments</a>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Full+example">Full example</a>
+            <ul><li id="1741726328"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Presentation">Presentation</a>
             
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Pass+arguments">Pass arguments</a>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Rules">Rules</a>
             
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Add+a+title">Add a title</a>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Formatting+fragments">Formatting fragments</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Separating+groups+of+examples">Separating groups of examples</a>
             
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Use+descriptions">Use descriptions</a>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Reset+the+levels">Reset the levels</a>
             
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Enhance+failures">Enhance failures</a>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Changing+the+indentation+level">Changing the indentation level</a>
             
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Share+examples">Share examples</a>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Combinations">Combinations</a>
             
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Create+an+index">Create an index</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Tag+examples">Tag examples</a>
-            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#In+a+unit+specification">In a unit specification</a>
-            
-          </li></ul>
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Skip+examples">Skip examples</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Debug+statements">Debug statements</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Remove+implicits">Remove implicits</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Print+execution+data">Print execution data</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Example+factory">Example factory</a>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Turning-off+the+automatic+layout">Turning-off the automatic layout</a>
             
           </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Unit+specification">Unit specification</a>
+            
           </li></ul>
-          </li><li id="1841868848"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1889659807"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#GivenWhenThenPage">GivenWhenThenPage</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then">Given When Then</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Parsing">Parsing</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Constructor">Constructor</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Parameters">Parameters</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Default+delimiters">Default delimiters</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Regex+parsers">Regex parsers</a>
+            
+          </li></ul>
+          </li></ul>
+          </li></ul>
+          </li></ul>
+          </li></ul>
+          </li></ul>
+          </li><li id="1606868482"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -382,43 +350,43 @@
             
           </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1537490582"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Forms">Forms</a>
-            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Fields">Fields</a>
+            <ul><li id="2072242925"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Effects">Effects</a>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
             
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Properties">Properties</a>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Properties">Properties</a>
             
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Styles">Styles</a>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Styles">Styles</a>
             
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Simple+form">Simple form</a>
-            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Adding+several+rows+at+once">Adding several rows at once</a>
-            
-          </li></ul>
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Nesting+a+Form+into+another+Form">Nesting a Form into another Form</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Nesting+a+Form+into+an+Effect+or+a+Prop">Nesting a Form into an Effect or a Prop</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Using+tabs">Using tabs</a>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Simple+form">Simple form</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Adding+several+rows+at+once">Adding several rows at once</a>
             
           </li></ul>
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Aggregating+forms">Aggregating forms</a>
-            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Lazy+cells">Lazy cells</a>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Nesting+into+another+Form">Nesting into another Form</a>
             
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Xml+cells">Xml cells</a>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Nesting+into+an+Effect+or+a+Prop">Nesting into an Effect or a Prop</a>
             
-          </li></ul>
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#1-n+relationships">1-n relationships</a>
-            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Subset">Subset</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Subsequence">Subsequence</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Set">Set</a>
-            
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Sequence">Sequence</a>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Using+tabs">Using tabs</a>
             
           </li></ul>
-          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Forms.html#Decision+tables">Decision tables</a>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Aggregating+forms">Aggregating forms</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Lazy+cells">Lazy cells</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Xml+cells">Xml cells</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#1-n+relationships">1-n relationships</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Subset">Subset</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Subsequence">Subsequence</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Set">Set</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Sequence">Sequence</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Decision+tables">Decision tables</a>
             
           </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Outside+specs2">Outside specs2</a>
@@ -426,7 +394,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="1639142761"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="507963389"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -510,7 +478,53 @@
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1017668"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="658792535"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Add+a+title">Add a title</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Use+descriptions">Use descriptions</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Pending+until+fixed">Pending until fixed</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Enhance+failures">Enhance failures</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Share+examples">Share examples</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Create+an+index">Create an index</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Tag+examples">Tag examples</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#In+a+unit+specification">In a unit specification</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Skip+examples">Skip examples</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Debug+statements">Debug statements</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Remove+implicits">Remove implicits</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Print+execution+data">Print execution data</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#With+example+description">With example description</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Capture+snippets">Capture snippets</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#snippet">snippet</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#cuts">cuts</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#evaluation">evaluation</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#offsets">offsets</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#names">names</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#outside+specs2">outside specs2</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id="1213691744"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -552,9 +566,11 @@
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Implicit+definitions+control">Implicit definitions control</a>
             
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Enter+Scala+2.10">Enter Scala 2.10</a>
+            
           </li></ul>
           </li></ul>
-          </li><li id="1454240434"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="752312750"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -574,7 +590,7 @@
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1928453021','1218380483'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1864422093','858250433'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                        <div class="col3"><div id="rightcolumn"></div></div>
                      </div>

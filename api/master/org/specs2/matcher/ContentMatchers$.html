@@ -87,7 +87,7 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="org.specs2.matcher.CanBeEqual.CanBeEqualExpectation" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="CanBeEqualExpectation[T]extendsObject"></a>
+      <a id="CanBeEqualExpectation[T]extendsAnyRef"></a>
       <a id="CanBeEqualExpectation[T]:Expectations.CanBeEqualExpectation[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -100,7 +100,7 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="CanBeEqual.html" class="extype" name="org.specs2.matcher.CanBeEqual">CanBeEqual</a></dd></dl></div>
     </li><li name="org.specs2.matcher.Expectations.Descriptible" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="Descriptible[T]extendsObject"></a>
+      <a id="Descriptible[T]extendsAnyRef"></a>
       <a id="Descriptible[T]:Descriptible[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -141,7 +141,7 @@
 </p><div class="fullcomment"><div class="comment cmt"><p>Matcher to compare the contents of line contents
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ContentBaseMatchers</dd></dl></div>
     </li><li name="org.specs2.matcher.ContentBeHaveMatchers.LinesContentResultMatcher" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="LinesContentResultMatcher[L1]extendsObject"></a>
+      <a id="LinesContentResultMatcher[L1]extendsAnyRef"></a>
       <a id="LinesContentResultMatcher[L1]:(ContentBeHaveMatchers.this)#LinesContentResultMatcher[L1]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -260,7 +260,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">canBeEqual</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: ⇒ <span class="extype" name="org.specs2.matcher.CanBeEqual.canBeEqual.T">T</span></span>)</span><span class="result">: <a href="#CanBeEqualExpectation[T]extendsObject" class="extmbr" name="org.specs2.matcher.CanBeEqual.CanBeEqualExpectation">CanBeEqualExpectation</a>[<span class="extype" name="org.specs2.matcher.CanBeEqual.canBeEqual.T">T</span>]</span>
+        <span class="name">canBeEqual</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: ⇒ <span class="extype" name="org.specs2.matcher.CanBeEqual.canBeEqual.T">T</span></span>)</span><span class="result">: <a href="#CanBeEqualExpectation[T]extendsAnyRef" class="extmbr" name="org.specs2.matcher.CanBeEqual.CanBeEqualExpectation">CanBeEqualExpectation</a>[<span class="extype" name="org.specs2.matcher.CanBeEqual.canBeEqual.T">T</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">A value can be tested against another with the === operator.</p><div class="fullcomment"><div class="comment cmt"><p>A value can be tested against another with the === operator.
@@ -317,7 +317,7 @@ It is equivalent to writing a must_== b
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -408,7 +408,7 @@ It is equivalent to writing a must_== b
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">describe</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: ⇒ <span class="extype" name="org.specs2.matcher.Expectations.describe.T">T</span></span>)</span><span class="result">: <a href="#Descriptible[T]extendsObject" class="extmbr" name="org.specs2.matcher.Expectations.Descriptible">Descriptible</a>[<span class="extype" name="org.specs2.matcher.Expectations.describe.T">T</span>]</span>
+        <span class="name">describe</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: ⇒ <span class="extype" name="org.specs2.matcher.Expectations.describe.T">T</span></span>)</span><span class="result">: <a href="#Descriptible[T]extendsAnyRef" class="extmbr" name="org.specs2.matcher.Expectations.Descriptible">Descriptible</a>[<span class="extype" name="org.specs2.matcher.Expectations.describe.T">T</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">describe a value with the aka method</p><div class="fullcomment"><div class="comment cmt"><p>describe a value with the aka method</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Expectations.html" class="extype" name="org.specs2.matcher.Expectations">Expectations</a></dd></dl></div>
@@ -463,7 +463,7 @@ It is equivalent to writing a must_== b
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -645,7 +645,7 @@ It is equivalent to writing a must_== b
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toLinesContentResultMatcher</span><span class="tparams">[<span name="L1">L1</span>]</span><span class="params">(<span name="result">result: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[<span class="extype" name="org.specs2.matcher.ContentBeHaveMatchers.toLinesContentResultMatcher.L1">L1</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../text/LinesContent.html" class="extype" name="org.specs2.text.LinesContent">LinesContent</a>[<span class="extype" name="org.specs2.matcher.ContentBeHaveMatchers.toLinesContentResultMatcher.L1">L1</span>]</span>)</span><span class="result">: <a href="#LinesContentResultMatcher[L1]extendsObject" class="extmbr" name="org.specs2.matcher.ContentMatchers.LinesContentResultMatcher">LinesContentResultMatcher</a>[<span class="extype" name="org.specs2.matcher.ContentBeHaveMatchers.toLinesContentResultMatcher.L1">L1</span>]</span>
+        <span class="name">toLinesContentResultMatcher</span><span class="tparams">[<span name="L1">L1</span>]</span><span class="params">(<span name="result">result: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[<span class="extype" name="org.specs2.matcher.ContentBeHaveMatchers.toLinesContentResultMatcher.L1">L1</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../text/LinesContent.html" class="extype" name="org.specs2.text.LinesContent">LinesContent</a>[<span class="extype" name="org.specs2.matcher.ContentBeHaveMatchers.toLinesContentResultMatcher.L1">L1</span>]</span>)</span><span class="result">: <a href="#LinesContentResultMatcher[L1]extendsAnyRef" class="extmbr" name="org.specs2.matcher.ContentMatchers.LinesContentResultMatcher">LinesContentResultMatcher</a>[<span class="extype" name="org.specs2.matcher.ContentBeHaveMatchers.toLinesContentResultMatcher.L1">L1</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">matcher aliases and implicits to use with BeVerb and HaveVerb

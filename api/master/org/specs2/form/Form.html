@@ -214,7 +214,7 @@ It has an optional title and possibly no rows.</p><p>A Form can be executed by e
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -297,7 +297,7 @@ It has an optional title and possibly no rows.</p><p>A Form can be executed by e
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -525,6 +525,45 @@ It has an optional title and possibly no rows.</p><p>A Form can be executed by e
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Form where every Row is executed with a Failure</p></dd></dl></div>
+    </li><li name="org.specs2.form.Form#setPending" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setPending:org.specs2.form.Form"></a>
+      <a id="setPending:Form"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setPending</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Form">Form</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Form where every Row is executed with a Pending</p></dd></dl></div>
+    </li><li name="org.specs2.form.Form#setResult" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setResult(r:org.specs2.execute.Result):org.specs2.form.Form"></a>
+      <a id="setResult(Result):Form"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setResult</span><span class="params">(<span name="r">r: <a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Form">Form</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Form where every Row is executed with a given Result</p></dd></dl></div>
+    </li><li name="org.specs2.form.Form#setSkipped" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setSkipped:org.specs2.form.Form"></a>
+      <a id="setSkipped:Form"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setSkipped</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Form">Form</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Form where every Row is executed with a Skipped</p></dd></dl></div>
     </li><li name="org.specs2.form.Form#setSuccess" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setSuccess:org.specs2.form.Form"></a>
       <a id="setSuccess:Form"></a>
@@ -643,6 +682,19 @@ It has an optional title and possibly no rows.</p><p>A Form can be executed by e
       </h4>
       <p class="shortcomment cmt">add a new Header, with at least one Field</p>
     </li><li name="org.specs2.form.Form#th" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="th(hs:Seq[String])(implicitp:org.specs2.text.Trim.ImplicitParam):org.specs2.form.Form"></a>
+      <a id="th(Seq[String])(text.Trim.ImplicitParam):Form"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">th</span><span class="params">(<span name="hs">hs: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="p">p: <span class="extype" name="org.specs2.control.ImplicitParameters.ImplicitParam">text.Trim.ImplicitParam</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Form">Form</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">add a new Header</p>
+    </li><li name="org.specs2.form.Form#th" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="th(h1:org.specs2.form.Field[_],hs:org.specs2.form.Field[_]*):org.specs2.form.Form"></a>
       <a id="th(Field[_],Field[_]*):Form"></a>
       <h4 class="signature">
@@ -655,6 +707,19 @@ It has an optional title and possibly no rows.</p><p>A Form can be executed by e
       </span>
       </h4>
       <p class="shortcomment cmt">add a new Header, with at least one Field</p>
+    </li><li name="org.specs2.form.Form#th" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="th(hs:Seq[org.specs2.form.Field[_]]):org.specs2.form.Form"></a>
+      <a id="th(Seq[Field[_]]):Form"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">th</span><span class="params">(<span name="hs">hs: <span class="extype" name="scala.Seq">Seq</span>[<a href="Field.html" class="extype" name="org.specs2.form.Field">Field</a>[_]]</span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.form.Form">Form</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">add a new Header with some fields</p>
     </li><li name="org.specs2.form.Form#title" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="title:Option[String]"></a>
       <a id="title:Option[String]"></a>
