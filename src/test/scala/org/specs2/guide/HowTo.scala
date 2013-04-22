@@ -447,9 +447,9 @@ class TimedSpecification extends Specification with TimedContext { def is = s2""
 // create a new DefaultExampleFactory where the body of the example uses
 // the current example description
 override lazy val exampleFactory = new DefaultExampleFactory {
-override def newExample[T : AsResult](description: String, t: =>T): Example =
-super.newExample(description, context(description)(AsResult(t)))
-}
+  override def newExample[T : AsResult](description: String, t: =>T): Example =
+    super.newExample(description, context(description)(AsResult(t)))
+  }
 }
 }}
 
@@ -468,7 +468,7 @@ s2$triple
 This is a multi-line string with a snippet of code: $${ snippet {
 def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
 factorial(3) == 6
-} }
+}}
 $triple
 ```
 
@@ -493,7 +493,7 @@ def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
 // 8<--
 factorial(3) == 6
 // 8<--
-} }
+}}
 $triple
 ```
 
@@ -510,7 +510,7 @@ factorial(3) == 6
 val n = 4
 // 8<--
 factorial(n) == 24
-} }
+}}
 $triple
 ```
 
@@ -529,7 +529,7 @@ By default the last value of a Snippet is not shown but you can display it with 
 s2$triple
 This is a snippet of code with a result: $${ snippet {
 factorial(3)
-}.eval }
+}.eval}
 $triple
 ```
 
@@ -551,7 +551,7 @@ s2$triple
 This is a snippet of code with a negative offset to align the code to the border of the screen: $${ snippet {
 def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
 factorial(3)
-}.offsetIs(-3) }
+}.offsetIs(-3)}
 $triple
 ```
 
