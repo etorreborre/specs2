@@ -14,4 +14,14 @@ class MatchersImplicitsSpec extends Specification with ResultMatchers {
     val beZero: Matcher[Int] = (i: Int) => { i must_== 0 }
     1 must not(beZero)
   }
+
+  "2 nested foralls must throw an Error if the inner one throws an Error" >> {
+    def nested =
+      forall(Seq(1)) { i =>
+        forall(Seq(2)) { j =>
+          sys.error("boom")
+        }
+      }
+    nested must throwAn[ErrorException]("boom")
+  }
 }

@@ -268,11 +268,13 @@ trait MatchersImplicits extends Expectations with MatchResultCombinators with Ma
     private def executeFunctionAndReturnValue(value: U): (Result, U) = (executeFunction(value), value)
     private def executeFunction(value: U): Result = ResultExecution.execute(function(value).toResult)
 
-    private def makeSeqResult[T](r: Result, okMessage: String, koMessage: String, expectable: Expectable[T]): MatchResult[T] =
-      if (r.isSkipped)      MatchSkip(r.message, expectable)
-      else if (r.isPending) MatchPending(r.message, expectable)
-      else                  Matcher.result(r.isSuccess, okMessage, koMessage, expectable)
-
+    private def makeSeqResult[V](r: Result, okMessage: String, koMessage: String, expectable: Expectable[V]): MatchResult[V] =
+      r match {
+        case s: Skipped => MatchSkip(r.message, expectable)
+        case p: Pending => MatchPending(r.message, expectable)
+        case e: Error   => throw ErrorException(e)
+        case _          => Matcher.result(r.isSuccess, okMessage, koMessage, expectable)
+      }
   }
 }
 
