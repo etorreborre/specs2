@@ -69,7 +69,7 @@ It has an Option-like structure, supporting the same kind of operations and can 
     e2 := p1.toRight(2) must_== Right(1)
   }
 
-  trait prop extends MockOutput {
+  trait prop extends StringOutput {
     lazy val p1 = Property(1)
   }
 }

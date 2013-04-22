@@ -60,7 +60,7 @@ The following examples specify the functionalities for such a mutable specificat
   }
 
   trait HasAMutableSpec {
-    val output = new MockOutput {}
+    val output = new StringOutput {}
     def spec = new Specification {
       xonly
       step(output.println("hello"))

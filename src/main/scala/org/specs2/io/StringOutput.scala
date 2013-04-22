@@ -8,16 +8,20 @@ import scala.collection.mutable.ListBuffer
  *
  * !! This implementation is mutable, so it is not thread-safe !!
  */
-private[specs2]
-trait MockOutput extends Output {
+trait StringOutput extends Output {
+
   private val msgs: ListBuffer[String] = new ListBuffer
+
   /**  @return the list of stored messages */
   def messages = msgs.toList
+  /** @return the output as one string */
+  def output = messages.mkString("\n")
+
   /**
    * if a message is printed with a newline it is considered as being a new message
    * otherwise it is added to the last message
    */
-  override def printf(s: String, args: Any*): Unit = {
+  override def printf(s: String, args: Any*) {
 	  val formatted = s format (args : _*)
 	  if (formatted.endsWith("\n"))
 	    append(formatted.dropRight(1))
@@ -30,8 +34,7 @@ trait MockOutput extends Output {
 	  }
   }
 
-  protected def append(msg: String) =
-    msgs += msg
+  protected def append(msg: String) = msgs += msg
   
-  def clear() = msgs.clear()
+  def clear() { msgs.clear() }
 }

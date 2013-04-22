@@ -4,7 +4,7 @@ package matcher
 import execute._
 import specification._
 import sys._
-import io.MockOutput
+import io.StringOutput
 
 class LogicalMatcherSpec extends Specification with ResultMatchers with Grouped { def is = s2"""
 
@@ -76,7 +76,7 @@ class LogicalMatcherSpec extends Specification with ResultMatchers with Grouped 
     e6 := new Scope with MustThrownMatchers { "eric" must (beMatching("a.*") or beMatching("e.*"))  }
     e7 := ("eric" must be matching("e.*")) or ("eric" must be matching(".*d"))
     e8 := {
-      val out = new MockOutput {}
+      val out = new StringOutput {}
       ("eric" must be matching("e.*")) or { out.println("DONT"); "torreborre" must be matching(".*tor.*") }
       out.messages must not contain("DONT")
     }
@@ -87,7 +87,7 @@ class LogicalMatcherSpec extends Specification with ResultMatchers with Grouped 
     e1 := "eric" must be matching("e.*") and be matching(".*c")
     e2 := ("eric" must be matching("e.*")) and ("torreborre" must be matching(".*tor.*"))
     e3 := {
-      val out = new MockOutput {}
+      val out = new StringOutput {}
       ("eric" must be matching("x.*")) and { out.println("DONT"); "torreborre" must be matching(".*tor.*") }
       out.messages must not contain("DONT")
     }

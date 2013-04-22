@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import io.MockOutput
+import io.StringOutput
 import java.util.concurrent._
 import internal.scalaz.concurrent.Promise
 import specification.{Tags, Grouped}
@@ -35,7 +35,7 @@ class TerminationMatchersSpec extends Specification with TerminationMatchers wit
     e3 := { Thread.sleep(50) must terminate(retries=3, sleep=20.millis) }
     e4 := { (Thread.sleep(1000) must terminate(retries=3, sleep=20.millis)) returns "the action is blocking with retries=3 and sleep=20" }
     e5 := {
-      val out = new MockOutput { }
+      val out = new StringOutput { }
       val terminated = (1 to 5).foreach (i => {Thread.sleep(50); out.println(i) }) must not terminate(retries=5, sleep=20.millis)
       Thread.sleep(300) // wait until all the messages are possibly written to out if the action was not terminated
       terminated and (out.messages must not contain("3"))

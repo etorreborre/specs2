@@ -55,11 +55,14 @@ trait Snippet[T] {
   def mute: ST
   def eval: ST
   def offsetIs(n: Int = 0): ST
+  def promptIs(p: String => String): ST
+  def noPrompt = promptIs(emptyPrompt)
 
   def isMuted: Boolean
   /** use the full snippet version + the cut one to determine what to display */
   def asCode: (String, String) => String
   def trimExpression: String => String
+  def prompt: String => String
 
   def markdown(expression: String) = {
     val exp = codeExpression.getOrElse(expression)
@@ -82,7 +85,7 @@ trait Snippet[T] {
   def result: String = {
     val resultAsString = tryOr(execute.notNull)(e => e.getMessage)
     if (resultAsString == "()") ""
-    else                        "> "+resultAsString
+    else                        prompt(resultAsString)
   }
 
   def resultMarkdown =
@@ -110,6 +113,9 @@ object Snippet {
   def trimEval = (s: String) => s.removeLast(s"(\\.)?$ls*eval$ls*")
   def trimOffsetIs = (s: String) => s.removeLast(s"\\s*\\}?(\\.)?$ls*offsetIs$parameters\\s*")
 
+  def simplePrompt = (s: String) => ("> "+s)
+  def emptyPrompt  = (s: String) => s
+
   def markdownCode(offset: Int = 0) = (original: String, cut: String) =>
     if (original.contains("\n")) paragraphedCode(offset)(original, cut)
     else                         inlinedCode(cut)
@@ -125,26 +131,30 @@ case class CodeSnippet[T](code: () => T,
                           cutMarker: String = "\n// 8<--\n", cutMarkerFormat: String = s"$ls*// 8<\\-+.*\n",
                           trimExpression: String => String = trimSnippet, asCode: (String, String) => String = markdownCode(0),
                           codeExpression: Option[String] = None,
+                          prompt: String => String = simplePrompt,
                           isMuted: Boolean = false) extends Snippet[T] {
   type ST = CodeSnippet[T]
 
   def mute: ST = copy(isMuted = true)
   def eval: ST = copy(isMuted = false, trimExpression = trimEval andThen trimExpression)
   def offsetIs(n: Int = 0): ST = copy(trimExpression = trimOffsetIs andThen trimExpression, asCode = markdownCode(n))
+  def promptIs(p: String => String): ST = copy(prompt = p)
 
-  def check[R : AsResult](verification: T => R) = CheckedSnippet[T, R](code, verification, cutMarker, cutMarkerFormat, trimExpression, asCode, codeExpression, isMuted)
-  def checkOk(implicit asResult: AsResult[T]) = CheckedSnippet[T, Result](code, (t: T) => AsResult(t), cutMarker, cutMarkerFormat, trimExpression, asCode, codeExpression, isMuted)
+  def check[R : AsResult](verification: T => R) = CheckedSnippet[T, R](code, verification, cutMarker, cutMarkerFormat, trimExpression, asCode, codeExpression, prompt, isMuted)
+  def checkOk(implicit asResult: AsResult[T]) = CheckedSnippet[T, Result](code, (t: T) => AsResult(t), cutMarker, cutMarkerFormat, trimExpression, asCode, codeExpression, prompt, isMuted)
 }
 
 case class CheckedSnippet[T, R : AsResult](code: () => T, verification: T => R,
                                            cutMarker: String = "\n// 8<--\n", cutMarkerFormat: String = s"\n$ls*// 8<\\-+.*\n",
                                            trimExpression: String => String = trimSnippet, asCode: (String, String) => String = markdownCode(0),
                                            codeExpression: Option[String] = None,
+                                           prompt: String => String = simplePrompt,
                                            isMuted: Boolean = false) extends Snippet[T] {
   type ST = CheckedSnippet[T, R]
 
   def mute: ST = copy(isMuted = true)
   def eval: ST = copy(isMuted = false, trimExpression = trimEval andThen trimExpression)
   def offsetIs(n: Int = 0): ST = copy(trimExpression = trimOffsetIs andThen trimExpression, asCode = paragraphedCode(n))
+  def promptIs(p: String => String): ST = copy(prompt = p)
   def verify = AsResult(verification(execute))
 }

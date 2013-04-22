@@ -202,7 +202,7 @@ class ContextSpec extends Specification with ResultMatchers with Groups with Fra
     e3 := executing("e1" ! new aroundMutableContext { println("body"); 1 must_== 1 }).prints("before", "body", "after")
   }
 
-  trait FragmentsExecution extends MockOutput with ContextData {
+  trait FragmentsExecution extends StringOutput with ContextData {
     def executing(exs: Fragments): Executed = Executed(executeBodies(exs).view.force)
     case class Executed(r: Seq[Result]) {
       def prints(ms: String*): Result = {
@@ -276,7 +276,7 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
   def silentFirstThenEx1 = Step("first") ^ ex1
   def failingFirstThenEx1 = Step { error("error"); 1 } ^ ex1
 }
-trait ContextsForFragments extends MockOutput {
+trait ContextsForFragments extends StringOutput {
   object before1 extends Before with Apply {
 	  def before = println("before")
   }
@@ -286,19 +286,19 @@ trait ContextsForFragments extends MockOutput {
   object before2 extends Before {
     def before = println("before2")
   }
-  object beforeWithError extends Before with MockOutput {
+  object beforeWithError extends Before with StringOutput {
 	  def before = error("error")
   }
-  object beforeWithSkipped extends Before with MockOutput {
+  object beforeWithSkipped extends Before with StringOutput {
 	  def before = Skipped("skipped")
   }
-  object beforeWithSkippedThrown extends Before with MockOutput with MustThrownMatchers {
+  object beforeWithSkippedThrown extends Before with StringOutput with MustThrownMatchers {
 	  def before = skipped("skipped")
   }
-  object beforeWithMatchFailed extends Before with MockOutput with MustMatchers {
+  object beforeWithMatchFailed extends Before with StringOutput with MustMatchers {
 	  def before = 1 must_== 2
   }
-  object beforeWithMatchFailedThrown extends Before with MockOutput with MustThrownMatchers {
+  object beforeWithMatchFailedThrown extends Before with StringOutput with MustThrownMatchers {
 	  def before = 1 must_== 2
   }
   object after1 extends After {
@@ -322,7 +322,7 @@ trait ContextsForFragments extends MockOutput {
   object outsideInt extends Outside[Int] {
 	  def outside = { println("outside"); 1 }
   }
-  object outsideWithError extends Outside[String] with MockOutput {
+  object outsideWithError extends Outside[String] with StringOutput {
 	  def outside = { error("error"); "ok" }
   }
   object aroundOutside extends AroundOutside[String] {

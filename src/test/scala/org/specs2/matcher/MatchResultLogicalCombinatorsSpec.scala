@@ -3,7 +3,7 @@ package matcher
 
 import mutable.Specification
 import execute._
-import io.MockOutput
+import io.StringOutput
 import specification.Scope
 
 /**
@@ -23,7 +23,7 @@ class MatchResultLogicalCombinatorsSpec extends Specification with ResultMatcher
       {evaluated += 1; 1 must_== 2} must beFailing
       evaluated === 1
     }
-    "when the second match is failing" >> new MockOutput with Scope {
+    "when the second match is failing" >> new StringOutput with Scope {
       def printMsg(m: String) = println(m)
       def beKo: Matcher[Int] = (i: Int) => ({printMsg("ko"); false}, "ko")
       def beOk: Matcher[Int] = (i: Int) => ({printMsg("ok"); true}, "ok")

@@ -5,7 +5,7 @@ package io
  * The MockWriter writes all the content written with the Writer interface to a list of messages
  */
 private[specs2]
-trait MockWriter extends java.io.Writer with MockOutput {
+trait MockWriter extends java.io.Writer with StringOutput {
   /** is the Writer closed? */
   var closed = false
   override def write(m: String) : Unit = print(m)

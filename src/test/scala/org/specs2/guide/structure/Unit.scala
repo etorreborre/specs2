@@ -21,7 +21,7 @@ Those are all the methods which you can use to create fragments in a unit specif
 }
 }}
 
- * &gt;&gt;: create an Example or a group of Examples (with no appended text) ${snippet{
+ * <code class="prettyprint">&#62;&#62;</code>: create an Example or a group of Examples (with no appended text) ${snippet{
 
 "a configuration may" >> {
   "have a name" in { ok }

@@ -150,7 +150,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
   def matcher3 = execute(prop(stringToBooleanMatcher)) must_== success100tries
   def result1 =  execute(prop(trueFunction)).expectationsNb must_== 100
 
-  case class config() extends Before with ScalaCheckMatchers with MockOutput {
+  case class config() extends Before with ScalaCheckMatchers with StringOutput {
     def before = clear()
     def executionMessages(prop: Prop) = { execute(prop); messages.mkString }
 
@@ -204,7 +204,7 @@ class MutableSpecWithContextAndScalaCheck extends mutable.Specification with Sca
     }.set(rng = new util.Random, minTestsOk = 200)
   }
 
-  trait SC extends mutable.Before with MockOutput {
+  trait SC extends mutable.Before with StringOutput {
     val aString = "xxx"
     def before { println("before") }
   }

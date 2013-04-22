@@ -3,7 +3,7 @@ package reporter
 
 import org.specs2.mutable
 import specification.{SpecificationStructure, Step}
-import io.MockOutput
+import io.StringOutput
 import text.AnsiColors._
 
 class ExecutionStrategySpec extends mutable.Specification {
@@ -50,7 +50,7 @@ class ExecutionStrategySpec extends mutable.Specification {
   }
 
   def newReporter = new ConsoleReporter {
-    override lazy val textOutput = new TextResultOutput with MockOutput
+    override lazy val textOutput = new TextResultOutput with StringOutput
     lazy val messages = textOutput.messages
   }
 

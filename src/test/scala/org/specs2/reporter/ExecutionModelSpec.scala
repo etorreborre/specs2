@@ -46,7 +46,7 @@ class ExecutionModelSpec extends Specification with ScalaCheck with Groups { def
 
   trait Report {
     def newReporter = new ConsoleReporter {
-      override lazy val textOutput = new TextResultOutput with MockOutput
+      override lazy val textOutput = new TextResultOutput with StringOutput
       lazy val messages = textOutput.messages
       def outputLabels = messages.filter(_.startsWith("label")).map(_.replace("label ", ""))
       def outputLabelIds = outputLabels.map(_.trim.toInt)

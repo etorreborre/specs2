@@ -1,7 +1,7 @@
 package org.specs2
 package control
 
-import io.MockOutput
+import io.StringOutput
 import specification.Scope
 import scala.collection.mutable.ListBuffer
 import matcher.MustMatchers
@@ -38,7 +38,7 @@ trait output extends Scope with MustMatchers {
 
   // this implicit intercepts appended messages from the calls to 'pp'
   implicit def debug[T](t: =>T): Debuggable[T] = new DebuggableMock(t)
-  class DebuggableMock[T](t: =>T) extends Debuggable(t) with MockOutput {
+  class DebuggableMock[T](t: =>T) extends Debuggable(t) with StringOutput {
     override def append(msg: String) = msgs += msg
   }
 

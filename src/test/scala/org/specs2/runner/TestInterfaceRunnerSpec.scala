@@ -122,7 +122,7 @@ class TestInterfaceRunnerSpec extends Specification with Groups with Tags { def 
     }
   }
 
-  "executing" - new g4 with  matcher.MustMatchers with ArgumentsArgs with StandardResults with MockOutput {
+  "executing" - new g4 with  matcher.MustMatchers with ArgumentsArgs with StandardResults with StringOutput {
     val htmlExporter = new HtmlExporting { override def export(implicit args: Arguments) = (spec: ExecutingSpecification) =>
       { println("html export"); spec.execute }
     }
@@ -163,7 +163,7 @@ class TestInterfaceRunnerSpec extends Specification with Groups with Tags { def 
 }
 
 trait MockLogger extends matcher.MustExpectations with Mockito {
-  val logger = new Logger with MockOutput {
+  val logger = new Logger with StringOutput {
 	  override def ansiCodesSupported = false
 	  override def error(message: String) = println("error: " + message)
 	  override def info(message: String)  = println("info: " + message)

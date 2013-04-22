@@ -44,7 +44,7 @@ class SelectionSpec extends Specification with Tags { def is = s2"""
     /**
      * The storing trait 'decides' to keep only the example 1 because of a previous run
      */
-    override val selection = new DefaultSelection with DefaultSequence with DefaultStoring with MockOutput {
+    override val selection = new DefaultSelection with DefaultSequence with DefaultStoring with StringOutput {
       override def includePrevious(specName: SpecName, e: Example, args: Arguments) = e.desc.toString == "e1"
     }
 
@@ -91,7 +91,7 @@ class SelectionSpec extends Specification with Tags { def is = s2"""
 }
 
 trait WithSelection extends FragmentsBuilder {
-  val selection = new DefaultSelection with DefaultSequence with MockOutput
+  val selection = new DefaultSelection with DefaultSequence with StringOutput
 
   def selectSequence(fs: Fragments): Seq[FragmentSeq] = {
     selection.sequence(fs.specName, selection.select(fs.arguments)(SpecificationStructure(fs)).is.fragments)(fs.arguments).toList
@@ -102,7 +102,7 @@ trait WithSelection extends FragmentsBuilder {
   }
   def step(message: String) = Step({selection.println(message); reporter.println(message)})
   def example(message: String) = message ! { selection.println(message); reporter.println(message); Success() }
-  val reporter = new DefaultReporter with Exporting with MockOutput {
+  val reporter = new DefaultReporter with Exporting with StringOutput {
     def export(implicit args: Arguments): ExecutingSpecification => ExecutedSpecification = (spec: ExecutingSpecification) => spec.executed
   }
 }

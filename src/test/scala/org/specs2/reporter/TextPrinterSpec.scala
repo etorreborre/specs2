@@ -5,7 +5,7 @@ import org.specs2.internal.scalaz.Scalaz
 import Scalaz._
 import text._
 import AnsiColors._
-import io.MockOutput
+import io.StringOutput
 import main.Arguments
 import execute._
 import specification.{Example, SpecificationStructure, ExecutedFragment, Fragments, ExecutingSpecification}
@@ -235,7 +235,7 @@ class TextPrinterSpec extends Specification with DataTables { def is = s2"""
   }
 
   case class seq() {
-    val messages = new MockOutput {}
+    val messages = new StringOutput {}
     val slowex1 = "e1" ! { Thread.sleep(500); messages.println("e1"); success }
     val fastex2 = "e2" ! { Thread.sleep(10); messages.println("e2"); success }
     val fastex3 = "e3" ! { Thread.sleep(10); messages.println("e3"); success }
@@ -304,7 +304,7 @@ class TextPrinterSpec extends Specification with DataTables { def is = s2"""
 
   val outer = this
   def printer = new TextPrinter {
-    override lazy val textOutput = new TextResultOutput with MockOutput
+    override lazy val textOutput = new TextResultOutput with StringOutput
     def print(fs: Seq[ExecutedFragment]) = {
       super.print(outer.content.specName, fs)
       textOutput.messages

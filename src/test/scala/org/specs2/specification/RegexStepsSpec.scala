@@ -191,7 +191,7 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables w
 
   "contexts" - new g11 {
     e1 := {
-      val spec = new Specification with BeforeExample with io.MockOutput { def is =
+      val spec = new Specification with BeforeExample with io.StringOutput { def is =
         "a number ${0}" ^ number0 ^ "then it is ${0}" ^ then0to3
         def before { println("before") }
       }
@@ -199,7 +199,7 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables w
       spec.messages must contain("before")
     }
     e2 := {
-      val spec = new Specification with io.MockOutput { def is =
+      val spec = new Specification with io.StringOutput { def is =
         "a number ${0}" ^ number0 ^ "then it is ${0}" ^ then0
         val then0: Then[Int] = (i: Int) => (s: String) => context { 0 === 0 }
         val context = new Before { def before { println("before") } }

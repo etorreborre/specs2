@@ -9,7 +9,7 @@ import _root_.org.junit.runner.Description
 import _root_.org.junit.ComparisonFailure
 import text.FromString
 import _root_.examples.HelloWorldUnitIsolatedSpec
-import io.MockOutput
+import io.StringOutput
 import scala.Some
 import scala.collection.mutable.ListBuffer
 
@@ -56,7 +56,7 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
     lazy val html       = mock[HtmlExporting]
     implicit lazy val properties = mock[SystemProperties]
 
-    lazy val messagesNotifier = new RunNotifier with MockOutput {
+    lazy val messagesNotifier = new RunNotifier with StringOutput {
       override def fireTestRunStarted(desc: Description) { println("run started "+desc) }
       override def fireTestRunFinished(result: org.junit.runner.Result) { println("run finished "+result) }
       override def fireTestStarted(desc: Description) { println("test started "+desc) }

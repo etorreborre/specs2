@@ -2,7 +2,7 @@ package org.specs2
 package reporter
 
 import execute.Details
-import io.MockOutput
+import io.StringOutput
 
 trait ConsoleNotifier extends Notifier {
   def specStart(title: String, location: String)                                                                      = Console.println(Seq("specStart"     ,title  ,location)                       .mkString(": "))
@@ -19,7 +19,7 @@ trait ConsoleNotifier extends Notifier {
 }
 object ConsoleNotifier extends ConsoleNotifier
 
-trait MessagesNotifier extends Notifier with MockOutput {
+trait MessagesNotifier extends Notifier with StringOutput {
   def specStart(title: String, location: String)                                                                      = println(Seq("specStart"     ,title  ,location)                       .mkString(": "))
   def specEnd(title: String, location: String)                                                                        = println(Seq("specEnd"       ,title  ,location)                       .mkString(": "))
   def contextStart(text: String, location: String)                                                                    = println(Seq("contextStart"  ,text   ,location)                       .mkString(": "))

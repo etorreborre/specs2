@@ -3,7 +3,7 @@ package runner
 
 import specification.SpecificationStructure
 import reporter.{TextResultOutput, ConsoleReporter}
-import io.MockOutput
+import io.StringOutput
 import main.Arguments
 import Arguments._
 
@@ -15,7 +15,7 @@ case class MockClassRunner(arguments: Arguments = Arguments()) extends ClassRunn
   }
 
   def newReporter = new ConsoleReporter {
-    override lazy val textOutput = new TextResultOutput with MockOutput
+    override lazy val textOutput = new TextResultOutput with StringOutput
     def messages = textOutput.messages
   }
 

@@ -1,7 +1,7 @@
 package org.specs2
 package specification
 
-import io.MockOutput
+import io.StringOutput
 import execute.{AsResult, Result}
 import _root_.org.specs2.mutable.{Specification => Spec}
 
@@ -24,19 +24,19 @@ class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
 
   "before" - new g1 {
     e1 := executeContains(
-      new Spec with BeforeExample with MockOutput {
+      new Spec with BeforeExample with StringOutput {
         def before { println("before") }
         "ex1" ! success
       }, "before")
 
     e2 := executeContains(
-      new Specification with BeforeExample with MockOutput {
+      new Specification with BeforeExample with StringOutput {
         def before { println("before") }
         def is = "ex1" ! success
       }, "before")
 
     e3 := executeContains(
-      new Specification with MockOutput {
+      new Specification with StringOutput {
         object withBefore extends BeforeEach { def before { println("before") } }
         def is = withBefore(spec)
         def spec =
@@ -46,7 +46,7 @@ class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
       }, "before", "before")
 
     e4 := executeContains(
-      new Spec with MockOutput {
+      new Spec with StringOutput {
         object withBefore extends BeforeEach { def before { println("before") } }
         override def is = withBefore(super.is)
         "ex1" ! { 1 must_== 2 }
@@ -55,19 +55,19 @@ class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
 
   "other" - new g2 {
     e1 := executeContains(
-    new Spec with AfterExample with MockOutput {
+    new Spec with AfterExample with StringOutput {
       def after { println("after") }
       "ex1" ! success
     },"after")
 
     e2 := executeContains(
-      new Spec with AroundExample with MockOutput {
+      new Spec with AroundExample with StringOutput {
         def around[R : AsResult](r: =>R) = { println("around"); AsResult(r) }
         "ex1" ! success
       },"around")
 
     e3 := executeContains(
-      new Spec with BeforeAfterExample with MockOutput {
+      new Spec with BeforeAfterExample with StringOutput {
         def before { println("before") }
         def after { println("after") }
         "ex1" ! success
@@ -75,7 +75,7 @@ class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
 
 
     e4 := executeContains(
-      new Spec with BeforeAfterAroundExample with MockOutput {
+      new Spec with BeforeAfterAroundExample with StringOutput {
         def before { println("before") }
         def after { println("after") }
         def around[R : AsResult](r: =>R) = { println("around"); AsResult(r) }
@@ -83,7 +83,7 @@ class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
       }, "before", "around", "after")
 
     e5 := executeContains(
-      new Specification with MockOutput {
+      new Specification with StringOutput {
         implicit val c: Context = new BeforeAfter {
           def before { println("before") }
           def after { println("after") }
@@ -92,7 +92,7 @@ class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
       }, "before", "ex1", "after")
 
     e6 := executeContains(
-      new Spec with MockOutput {
+      new Spec with StringOutput {
         implicit val c: Context = new BeforeAfter {
           def before { println("before") }
           def after { println("after") }
@@ -101,7 +101,7 @@ class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
       }, "before", "ex1", "after")
   }
 
-  def executeContains(s: SpecificationStructure with MockOutput, messages: String*) = {
+  def executeContains(s: SpecificationStructure with StringOutput, messages: String*) = {
     FragmentExecution.executeBodies(s.content).view.force
     s.messages must contain(messages.map(lazyfy(_)):_*).inOrder
   }
