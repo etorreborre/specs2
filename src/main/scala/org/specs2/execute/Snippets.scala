@@ -8,26 +8,49 @@ import scala.reflect.macros.{Context => MContext}
 import scala.reflect.runtime.universe._
 import reflect.Macros
 import Snippet._
-import control.LazyParameter
 
 /**
  * Snippets of code can be extracted from interpolated specification strings.
  *
  * When you want to specify that a piece of code must be included in the specification output, you can use the `snippet`
  * method to execute a this code and use the text in the output. If you just want to output part of the code you need to
- * delimit it with some comments `// 8<-------` (with as many dashes as you want)
+ * delimit it with some comments `// 8<-------` (with as many dashes >= 2 as you want)
  *
- * Generally the last value of a snippet will be displayed separately but it is possible to avoid this by using the `mute`
+ * Generally the value of a snippet will not be evaluated nor displayed but it is possible to show it using the `eval`
  * method on a Snippet.
  *
- * It is also possible to check that the result value is equal to a specific value by using the `check[R : AsResult](f: T => R)` method.
+ * It is also possible to check that the result value is correct by using the `check` method.
  *
  */
 trait Snippets {
+  /** implicit parameters selected for the creation of Snippets */
+  implicit def defaultSnippetParameters[T] = Snippet.defaultParams[T]
 
-  def snippet[T](code: =>T): CodeSnippet[T] = macro Snippets.create[T]
+  /** implicit function modify the Snippet parameters */
+  implicit class SettableSnippet[T](s: Snippet[T]) {
+    def set(
+       trimExpression: String => String   = defaultParams.trimExpression,
+       cutter: String => String           = defaultParams.cutter,
+       asCode: (String, String) => String = defaultParams.asCode,
+       prompt: String => String           = defaultParams.prompt) =
+      s.copy(params = s.params.copy(trimExpression = trimExpression,
+                                    cutter = cutter,
+                                    asCode = asCode,
+                                    prompt = prompt))
 
-  def createSnippet[T](expression: String, code: =>T): CodeSnippet[T] = new CodeSnippet[T](() => code.value, codeExpression = Some(expression)).mute
+    def promptIs(p: String) = s.copy(params = s.params.copy(prompt = simplePrompt(p)))
+    def offsetIs(offset: Int) = s.copy(params = s.params.copy(asCode = markdownCode(offset)))
+    def eval = s.copy(params = s.params.copy(eval = true))
+    def check[R : AsResult](f: T => R) = s.copy(params = s.params.copy(verify = Some((t: T) => AsResult(f(t)))))
+  }
+
+  implicit class SettableSnippet1[T : AsResult](s: Snippet[T]) {
+    def checkOk = s.copy(params = s.params.copy(verify = Some((t: T) => AsResult(t))))
+  }
+
+  def snippet[T](code: =>T)(implicit params: SnippetParams[T]): Snippet[T] = macro Snippets.create[T]
+
+  def createSnippet[T](expression: String, code: =>T, params: SnippetParams[T]): Snippet[T] = new Snippet[T](() => code.value, codeExpression = Some(expression), params)
 
   def simpleName[T : WeakTypeTag]: String = implicitly[WeakTypeTag[T]].tpe.typeSymbol.name.toString.trim
   def fullName[T : WeakTypeTag]: String   = implicitly[WeakTypeTag[T]].tpe.typeSymbol.fullName.trim
@@ -35,66 +58,90 @@ trait Snippets {
 }
 
 object Snippets extends Snippets {
-  def create[T](c: MContext)(code: c.Expr[T]): c.Expr[CodeSnippet[T]] = {
+  def create[T](c: MContext)(code: c.Expr[T])(params: c.Expr[SnippetParams[T]]): c.Expr[Snippet[T]] = {
     import c.{universe => u}; import u._
     import Macros._
-    val result = c.Expr(methodCall(c)("createSnippet", stringExpr(c)(code), code.tree.duplicate))
+    val result = c.Expr(methodCall(c)("createSnippet", stringExpr(c)(code), code.tree.duplicate, params.tree))
     c.Expr(atPos(c.prefix.tree.pos)(result.tree))
   }
 }
 
-trait Snippet[T] {
-  type ST <: Snippet[T]
+/**
+ * Captured snippet of code with: a value of type T, a string representing the expression, captured by a macro,
+ * some evaluation and display parameters
+ */
+case class Snippet[T](code: () => T,
+                      codeExpression: Option[String] = None,
+                      params: SnippetParams[T] = SnippetParams[T]()) {
 
-  def cutMarker: String
-  def cutMarkerFormat: String
-
-  protected val code: () => T
   lazy val execute = code()
 
-  def mute: ST
-  def eval: ST
-  def offsetIs(n: Int = 0): ST
-  def promptIs(p: String => String): ST
-  def noPrompt = promptIs(emptyPrompt)
+  def mustBeVerified = params.verify.isDefined
 
-  def isMuted: Boolean
-  /** use the full snippet version + the cut one to determine what to display */
-  def asCode: (String, String) => String
-  def trimExpression: String => String
-  def prompt: String => String
-
-  def markdown(expression: String) = {
-    val exp = codeExpression.getOrElse(expression)
-    val asCut = cut(exp)
-    if (asCut.startsWith("\n")) ("\n\n"+asCode(exp, asCut.removeStart("\n"))) else ("\n\n"+asCode(exp, asCut))
+  /**
+   * show the snippet either taking the expression captured by the macro or another expression passed by the caller
+   * (for example in an interpolated s2 string when -Yrangepos is disabled)
+   */
+  def show(expression: String = "") = {
+    val exp     = codeExpression.getOrElse(expression)
+    val trimmed = params.trimExpression(exp)
+    val cut     = params.cutter(trimmed)
+    params.asCode(exp, cut)
   }
 
-  protected def cut(expression: String) = {
-    val text = trimExpression(expression)
+  lazy val result: String = {
+    val resultAsString = tryOr(execute.notNull)(e => e.getMessage)
+    if (resultAsString == "()") ""
+    else                        params.prompt(resultAsString)
+  }
 
+  lazy val showResult =
+    if (!params.eval || result.isEmpty) ""
+    else                                params.asCode(result, result)
+
+  def verify = ResultExecution.execute(params.verify.map(f => f(execute)).getOrElse(Success()))
+}
+
+/**
+ * Evaluation and display parameters for a Snippet.
+ *
+ * It is possible to change:
+ *
+ *  - the function that's trimming the expression from newlines or accolades
+ *  - the `cutter` function to remove part which must not be shown
+ *  - the `asCode` function to render the resulting text
+ *  - the `prompt` function to possibly display the evaluated result with a prompt
+ *  - the `eval` boolean indicating if a snippet must be evaluated
+ *  - the `verify` function checking the result
+ */
+case class SnippetParams[T]( 
+  trimExpression: String => String   = trimSnippet,
+  cutter: String => String           = ScissorsCutter(),
+  asCode: (String, String) => String = markdownCode(0),
+  prompt: String => String           = greaterThanPrompt,
+  eval: Boolean                  = false,
+  verify: Option[T => Result]        = None)
+
+/**
+ * Implementation of a function to cut pieces of code by using some comments as markers
+ */
+case class ScissorsCutter(cutMarker: String       = scissorsMarker,
+                          cutMarkerFormat: String = scissorsMarkerFormat) extends (String => String) {
+  def apply(text: String) = {
     val splitted = text.split(cutMarkerFormat)
 
     splitted.zipWithIndex.
       collect { case (s, i) if i % 2 == 0 => s.removeStart("\n").removeEnd("\n") }.
       filter(_.trim.nonEmpty).mkString("\n")
   }
-
-  protected def codeExpression: Option[String]
-
-  def result: String = {
-    val resultAsString = tryOr(execute.notNull)(e => e.getMessage)
-    if (resultAsString == "()") ""
-    else                        prompt(resultAsString)
-  }
-
-  def resultMarkdown =
-    if (isMuted || result.isEmpty) ""
-    else                           asCode(result, result)
-
 }
 
 object Snippet {
+
+  def defaultParams[T] = SnippetParams[T]()
+
+  lazy val scissorsMarker       = "\n// 8<--\n"
+  lazy val scissorsMarkerFormat = s"$ls*// 8<\\-+.*\n"
 
   /**
    * trim the expression from start and end accolades if it is a multiline expression
@@ -102,59 +149,26 @@ object Snippet {
    * correct. /**/;1/**/ is the smallest such expression
    */
   def trimSnippet = (expression: String) => {
-
     val firstTrim =
       if (s"$ls*\\{$ls*.*".r.findPrefixOf(expression).isDefined) expression.removeFirst(s"\\{").removeLast(s"\\}")
       else                                                       expression
 
-    firstTrim.removeAll("/**/;1/**/").trim
+    val parametersTrim = firstTrim.removeLast(".set"+parameters)
+    parametersTrim.removeAll("/**/;1/**/").trim
+  }
+ 
+  /** display a cut piece of code as markdown depending on the existence of newlines in the original piece */ 
+  def markdownCode(offset: Int = 0) = (original: String, cut: String) => {
+    if (cut.startsWith("\n"))         "\n\n"+"```\n"+cut.removeStart("\n").offset(offset)+"\n```"
+    else if (original.contains("\n")) "```\n"+cut.offset(offset)+"\n```"
+    else                              "`"+cut+"`"
   }
 
-  def trimEval = (s: String) => s.removeLast(s"(\\.)?$ls*eval$ls*")
-  def trimOffsetIs = (s: String) => s.removeLast(s"\\s*\\}?(\\.)?$ls*offsetIs$parameters\\s*")
-
-  def simplePrompt = (s: String) => ("> "+s)
+  def greaterThanPrompt = simplePrompt("> ")
+  def simplePrompt(p: String) = (s: String) => p+s
   def emptyPrompt  = (s: String) => s
 
-  def markdownCode(offset: Int = 0) = (original: String, cut: String) =>
-    if (original.contains("\n")) paragraphedCode(offset)(original, cut)
-    else                         inlinedCode(cut)
-
-  def paragraphedCode(offset: Int = 0) = (original: String, cut: String) => "```\n"+cut.offset(offset)+"\n```"
-  def inlinedCode = (s: String) => "`"+s+"`"
-
-  val ls = "[ \t\\x0B\f]"
-  val parameters = "(\\([^\\)]+\\))*"
+  lazy val ls = "[ \t\\x0B\f]"
+  lazy val parameters = "(\\([^\\)]+\\))*"
 }
 
-case class CodeSnippet[T](code: () => T,
-                          cutMarker: String = "\n// 8<--\n", cutMarkerFormat: String = s"$ls*// 8<\\-+.*\n",
-                          trimExpression: String => String = trimSnippet, asCode: (String, String) => String = markdownCode(0),
-                          codeExpression: Option[String] = None,
-                          prompt: String => String = simplePrompt,
-                          isMuted: Boolean = false) extends Snippet[T] {
-  type ST = CodeSnippet[T]
-
-  def mute: ST = copy(isMuted = true)
-  def eval: ST = copy(isMuted = false, trimExpression = trimEval andThen trimExpression)
-  def offsetIs(n: Int = 0): ST = copy(trimExpression = trimOffsetIs andThen trimExpression, asCode = markdownCode(n))
-  def promptIs(p: String => String): ST = copy(prompt = p)
-
-  def check[R : AsResult](verification: T => R) = CheckedSnippet[T, R](code, verification, cutMarker, cutMarkerFormat, trimExpression, asCode, codeExpression, prompt, isMuted)
-  def checkOk(implicit asResult: AsResult[T]) = CheckedSnippet[T, Result](code, (t: T) => AsResult(t), cutMarker, cutMarkerFormat, trimExpression, asCode, codeExpression, prompt, isMuted)
-}
-
-case class CheckedSnippet[T, R : AsResult](code: () => T, verification: T => R,
-                                           cutMarker: String = "\n// 8<--\n", cutMarkerFormat: String = s"\n$ls*// 8<\\-+.*\n",
-                                           trimExpression: String => String = trimSnippet, asCode: (String, String) => String = markdownCode(0),
-                                           codeExpression: Option[String] = None,
-                                           prompt: String => String = simplePrompt,
-                                           isMuted: Boolean = false) extends Snippet[T] {
-  type ST = CheckedSnippet[T, R]
-
-  def mute: ST = copy(isMuted = true)
-  def eval: ST = copy(isMuted = false, trimExpression = trimEval andThen trimExpression)
-  def offsetIs(n: Int = 0): ST = copy(trimExpression = trimOffsetIs andThen trimExpression, asCode = paragraphedCode(n))
-  def promptIs(p: String => String): ST = copy(prompt = p)
-  def verify = AsResult(verification(execute))
-}

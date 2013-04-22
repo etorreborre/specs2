@@ -25,15 +25,13 @@ trait Snippets extends execute.Snippets { outer: SpecificationStringContext with
       text ^ snippetFragments(snippet, expression)
 
     private def snippetFragments(snippet: Snippet[T], expression: String) = {
-      snippet match {
-        case cs: CodeSnippet[_]      => Fragments.createList((Text(snippet.markdown(expression)) +: resultFragments(snippet).middle):_*)
-        case cc: CheckedSnippet[_,_] => Fragments.createList(Text(snippet.markdown(expression)), Step(cc.verify.mapMessage("Snippet failure: "+_)))
-      }
+      if (snippet.mustBeVerified) Fragments.createList(Text(snippet.show(expression)), Step(snippet.verify.mapMessage("Snippet failure: "+_)))
+      else                        Fragments.createList((Text(snippet.show(expression)) +: resultFragments(snippet).middle):_*)
     }
 
     private def resultFragments(snippet: Snippet[T]) = {
-      if (snippet.resultMarkdown.isEmpty) Fragments.createList()
-      else                                Fragments.createList(Text("\n"+snippet.resultMarkdown))
+      if (snippet.showResult.isEmpty) Fragments.createList()
+      else                                Fragments.createList(Text("\n"+snippet.showResult))
     }
 
 
