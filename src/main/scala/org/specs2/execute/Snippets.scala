@@ -159,8 +159,8 @@ object Snippet {
  
   /** display a cut piece of code as markdown depending on the existence of newlines in the original piece */ 
   def markdownCode(offset: Int = 0) = (original: String, cut: String) => {
-    if (cut.startsWith("\n"))         "\n\n"+"```\n"+cut.removeStart("\n").offset(offset)+"\n```"
-    else if (original.contains("\n")) "```\n"+cut.offset(offset)+"\n```"
+    if (original.startsWith("\n"))    "\n\n"+"```\n"+cut.removeStart("\n").offset(offset)+"\n```"
+    else if (original.contains("\n")) "\n\n```\n"+cut.offset(offset)+"\n```\n"
     else                              "`"+cut+"`"
   }
 
