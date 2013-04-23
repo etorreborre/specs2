@@ -74,6 +74,9 @@ trait Trim extends control.Debug {
       }
     }
 
+    /** trim the string of everything that is before the start substring if there is one */
+    def startFrom(start: String) = if (s.startsWith(start)) s else new String(s.substring(s.indexOf(start)))
+
     def trimReplace(pairs: Pair[String, String]*) = pairs.foldLeft(s.trim) { (res, cur) =>
       res.replace(cur._1, cur._2)
     } 
