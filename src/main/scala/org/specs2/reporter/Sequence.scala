@@ -4,7 +4,7 @@ package reporter
 import main.Arguments
 import specification._
 import Fragments._
-import internal.scalaz.Digit._0
+import scalaz.Digit._0
 
 /**
  * The Sequence trait implements the logic for the fragments to execute according to their dependencies

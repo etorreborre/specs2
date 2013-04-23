@@ -4,7 +4,7 @@ package reporter
 import main.Arguments
 import specification.TagsFragments._
 import specification.{SpecEnd, SpecStart, SpecName, Fragment}
-import org.specs2.internal.scalaz.{syntax, Foldable, Scalaz}
+import scalaz.{syntax, Foldable, Scalaz}
 import Scalaz._
 import collection.Iterablex._
 import collection.Seqx._

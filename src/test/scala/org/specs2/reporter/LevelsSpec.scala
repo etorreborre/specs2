@@ -3,7 +3,7 @@ package reporter
 
 import org.scalacheck.{ Arbitrary, Gen }
 import matcher.InternalScalazMatchers
-import org.specs2.internal.scalaz._
+import scalaz._
 import Scalaz._
 import specification._
 import collection.Seqx._

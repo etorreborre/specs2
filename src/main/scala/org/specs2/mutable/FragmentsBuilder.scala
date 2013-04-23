@@ -196,7 +196,7 @@ trait NoFragmentsBuilder extends FragmentsBuilder {
   override def text(s: String)                 = super.text(s)
 }
 
-import internal.scalaz.{TreeLoc, Scalaz, Tree}
+import scalaz.{TreeLoc, Scalaz, Tree}
 import Scalaz._
 import Tree._
 import data.Trees._

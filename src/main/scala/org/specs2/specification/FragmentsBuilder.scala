@@ -3,7 +3,7 @@ package specification
 
 import execute._
 import main._
-import internal.scalaz.Scalaz._
+import scalaz.Scalaz._
 import collection.Seqx._
 import control.Functions._
 import control.ImplicitParameters
@@ -197,7 +197,7 @@ class FragmentsFragment(fs: =>Fragments)(implicit exampleFactory: ExampleFactory
 
 object FragmentsBuilder extends FragmentsBuilder
 
-import org.specs2.internal.scalaz._
+import scalaz._
 /**
  * Implementation of the Show trait to display Fragments
  */

@@ -3,7 +3,7 @@ package mutable
 
 import text.Trim._
 import specification.{AcceptanceCreationPath, MutableCreationPath, AllExpectations}
-import internal.scalaz.Scalaz._
+import scalaz.Scalaz._
 import execute.Result
 
 class FragmentsBuilderSpec extends Specification with AllExpectations {

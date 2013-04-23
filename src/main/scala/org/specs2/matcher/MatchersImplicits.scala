@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import execute._
-import org.specs2.internal.scalaz._, Scalaz._
+import scalaz._, Scalaz._
 import Foldable._
 import collection.Seqx._
 import Generator._

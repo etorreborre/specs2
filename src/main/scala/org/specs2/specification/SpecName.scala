@@ -2,7 +2,7 @@ package org.specs2
 package specification
 
 import reflect.ClassName._
-import internal.scalaz.Monoid
+import scalaz.Monoid
 import io.Paths._
 import html.MarkdownLink
 

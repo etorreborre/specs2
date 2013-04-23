@@ -3,7 +3,7 @@ package specification
 
 import main.Arguments
 import execute._
-import org.specs2.internal.scalaz.{ Scalaz, Monoid }
+import scalaz.{ Scalaz, Monoid }
 import Scalaz._
 import org.specs2.execute.StandardResults
 import text._

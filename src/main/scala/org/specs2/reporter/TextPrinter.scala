@@ -1,7 +1,7 @@
 package org.specs2
 package reporter
 
-import org.specs2.internal.scalaz.{ Monoid, Reducer, Scalaz, Foldable, Applicative, State }
+import scalaz.{ Monoid, Reducer, Scalaz, Foldable, Applicative, State }
 import control.Throwablex._
 import Scalaz._
 import Foldable._

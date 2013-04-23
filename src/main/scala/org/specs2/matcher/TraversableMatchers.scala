@@ -195,7 +195,7 @@ class ContainMatcher[T](expected: Seq[T], equality: (T, T) => Boolean = (_:T) ==
 }
 
 import data._
-import internal.scalaz.{std, syntax}
+import scalaz.{std, syntax}
 import std.stream._
 import std.anyVal._
 import intInstance._

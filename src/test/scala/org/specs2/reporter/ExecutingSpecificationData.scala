@@ -6,7 +6,7 @@ import ExecutedSpecificationData._
 import org.scalacheck.{Gen, Arbitrary}
 import text.TextData._
 import java.util.concurrent.Executors
-import internal.scalaz._
+import scalaz._
 import Scalaz._
 import concurrent._
 import Promise._

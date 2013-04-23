@@ -4,7 +4,7 @@ package reporter
 import io.FileSystem
 import scala.xml.NodeSeq
 import java.net.{HttpURLConnection, URL}
-import internal.scalaz.Scalaz
+import scalaz.Scalaz
 import Scalaz._
 import collection.Seqx._
 import control.Exceptions._

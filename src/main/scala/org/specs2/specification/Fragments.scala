@@ -4,7 +4,7 @@ package specification
 import collection.Iterablex._
 import execute.Executable
 import main.Arguments
-import org.specs2.internal.scalaz.Monoid
+import scalaz.Monoid
 import Fragments._
 import specification.StandardFragments.{End, Br}
 import io.Paths._

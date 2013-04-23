@@ -4,7 +4,7 @@ package reporter
 import _root_.org.junit.runner.notification.RunNotifier
 import _root_.org.junit._
 import _root_.org.junit.runner._
-import org.specs2.internal.scalaz.Scalaz
+import scalaz.Scalaz
 import Scalaz._
 import main.{SystemProperties, Arguments}
 import execute._

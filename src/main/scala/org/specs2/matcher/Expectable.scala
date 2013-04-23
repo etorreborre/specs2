@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import org.specs2.internal.scalaz._
+import scalaz._
 import reflect.Anyx._
 import execute._
 import text.Quote._

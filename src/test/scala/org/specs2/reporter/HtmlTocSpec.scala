@@ -1,7 +1,7 @@
 package org.specs2
 package reporter
 
-import internal.scalaz.Scalaz._
+import scalaz.Scalaz._
 import main.Arguments
 import specification.{ExecutedText, HtmlLink, SpecName}
 

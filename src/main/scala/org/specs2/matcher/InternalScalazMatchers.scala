@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import org.scalacheck.{ Arbitrary, Shrink, Prop }
-import org.specs2.internal._
+
 import scalaz._, Scalaz._
 import MatchResultLogicalCombinators._
 import execute.{Result, ResultLogicalCombinators}

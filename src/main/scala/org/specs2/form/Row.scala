@@ -1,7 +1,7 @@
 package org.specs2
 package form
 
-import org.specs2.internal.scalaz.{ NonEmptyList, Scalaz }
+import scalaz.{ NonEmptyList, Scalaz }
 import NonEmptyList._
 import execute._
 import StandardResults._

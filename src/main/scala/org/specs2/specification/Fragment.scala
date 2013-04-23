@@ -8,7 +8,7 @@ import main.Arguments
 import execute._
 import text._
 import Regexes._
-import org.specs2.internal.scalaz.Monoid
+import scalaz.Monoid
 import io.Location
 import scala.Either
 import data.SeparatedTags

@@ -3,7 +3,7 @@ package matcher
 
 import io.StringOutput
 import java.util.concurrent._
-import internal.scalaz.concurrent.Promise
+import scalaz.concurrent.Promise
 import specification.{Tags, Grouped}
 
 class TerminationMatchersSpec extends Specification with TerminationMatchers with Grouped with Tags { def is = section("unstable")^ s2"""

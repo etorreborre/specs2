@@ -1,7 +1,7 @@
 package org.specs2
 package data
 
-import org.specs2.internal.scalaz._
+import scalaz._
 import Trees._
 import Scalaz._
 import Tree._

@@ -3,7 +3,7 @@ package data
 
 import mutable.Specification
 import matcher.InternalScalazMatchers
-import internal.scalaz._
+import scalaz._
 import Scalaz._
 
 class MonoidxSpec extends Specification with InternalScalazMatchers {

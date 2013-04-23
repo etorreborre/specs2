@@ -4,7 +4,7 @@ package reporter
 import execute._
 import specification._
 import Levels._
-import org.specs2.internal.scalaz.{Tree, Scalaz}
+import scalaz.{Tree, Scalaz}
 import data.Trees._
 import main.Arguments
 

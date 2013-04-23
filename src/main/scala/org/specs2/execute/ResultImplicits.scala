@@ -4,7 +4,7 @@ package execute
 import Result.ResultFailureMonoid
 import text.Quote._
 import text.Plural._
-import internal.scalaz._
+import scalaz._
 import Scalaz._
 /**
  * This trait adds some implicits to easily fold sequences of results

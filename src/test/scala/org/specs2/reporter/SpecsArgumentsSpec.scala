@@ -3,7 +3,7 @@ package reporter
 
 import org.scalacheck.{ Arbitrary, Gen, Prop }
 import org.scalacheck.Arbitrary._
-import org.specs2.internal.scalaz._
+import scalaz._
 import Scalaz._
 import main.Arguments
 import matcher._

@@ -8,7 +8,7 @@ import collection.Iterablex._
 import SpecificationData._
 import main.Arguments
 import reporter._
-import internal.scalaz._
+import scalaz._
 import concurrent.Promise._
 import Scalaz._
 

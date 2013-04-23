@@ -4,7 +4,7 @@ package specification
 import execute._
 import main.{ArgumentsArgs, Arguments}
 import StandardFragments.{Backtab, Tab, Br, End}
-import internal.scalaz.Scalaz._
+import scalaz.Scalaz._
 import control.{Functions, ImplicitParameters}
 import control.Exceptions._
 import data.TuplesToSeq

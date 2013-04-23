@@ -11,7 +11,7 @@ import runner.Fingerprints._
 import specification.ExecutedSpecification
 import reflect.Classes
 import io.ConsoleOutput
-import internal.scalaz.Scalaz._
+import scalaz.Scalaz._
 import scala.reflect.ClassTag
 
 /**

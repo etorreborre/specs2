@@ -1,7 +1,7 @@
 package org.specs2
 package data
 
-import internal.scalaz._
+import scalaz._
 import Scalaz._
 
 private [specs2]

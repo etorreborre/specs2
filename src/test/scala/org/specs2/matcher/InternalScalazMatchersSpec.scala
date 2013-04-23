@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import internal.scalaz._
+import scalaz._
 
 class InternalScalazMatchersSpec extends Specification with InternalScalazMatchers { def is = s2"""
 

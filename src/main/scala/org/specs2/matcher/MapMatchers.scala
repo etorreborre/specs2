@@ -4,7 +4,7 @@ package matcher
 import text.Quote._
 import text.Plural._
 import MatchResult._
-import internal.scalaz._
+import scalaz._
 import Scalaz._
 /**
  * Matchers for Maps

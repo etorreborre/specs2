@@ -2,7 +2,7 @@ package org.specs2
 package reporter
 
 import java.util.concurrent.Executors
-import org.specs2.internal.scalaz._
+import scalaz._
 import Scalaz._
 import concurrent._
 import Promise._

@@ -1,7 +1,7 @@
 package org.specs2
 package reporter
 
-import org.specs2.internal.scalaz.{ Scalaz, Monoid, Reducer }
+import scalaz.{ Scalaz, Monoid, Reducer }
 import Scalaz._
 import collection.Seqx._
 import specification._

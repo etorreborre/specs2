@@ -1,7 +1,7 @@
 package org.specs2
 package main
 
-import internal.scalaz.{Memo, Monoid, Scalaz}
+import scalaz.{Memo, Monoid, Scalaz}
 import Scalaz._
 import control._
 import Exceptions._

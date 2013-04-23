@@ -1,7 +1,7 @@
 package org.specs2
 package collection
 
-import internal.scalaz._
+import scalaz._
 import Generator._
 import std.iterable._
 

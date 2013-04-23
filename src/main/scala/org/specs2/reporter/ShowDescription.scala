@@ -3,7 +3,7 @@ package reporter
 
 import scala.collection.JavaConversions._
 import org.junit.runner.Description
-import org.specs2.internal.scalaz._
+import scalaz._
 import Scalaz._
 import Tree._
 

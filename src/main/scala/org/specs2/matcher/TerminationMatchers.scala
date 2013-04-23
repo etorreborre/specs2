@@ -3,7 +3,7 @@ package matcher
 
 import time._
 import TimeConversions._
-import internal.scalaz._
+import scalaz._
 import Scalaz._
 import concurrent.Promise
 import Promise._

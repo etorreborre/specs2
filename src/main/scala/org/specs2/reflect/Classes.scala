@@ -8,7 +8,7 @@ import control.Throwablex._
 import io._
 import sys._
 import java.lang.reflect.Constructor
-import internal.scalaz.Digit._0
+import scalaz.Digit._0
 
 /**
 * This trait provides utility functions for classes

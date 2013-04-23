@@ -3,7 +3,7 @@ package reporter
 
 import main.Arguments
 import specification._
-import internal.scalaz.Scalaz._
+import scalaz.Scalaz._
 
 /**
  * Trait for exporting the specification as Html files

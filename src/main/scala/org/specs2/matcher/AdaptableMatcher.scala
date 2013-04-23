@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import org.specs2.internal.scalaz._, Scalaz._
+import scalaz._, Scalaz._
 
 /**
  * Inherit this trait to provide a Matcher where both the actual and the expected values can be adapted with a function.

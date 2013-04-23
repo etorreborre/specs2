@@ -1,6 +1,7 @@
 package org.specs2
 package reporter
-import org.specs2.internal.scalaz.Scalaz
+
+import scalaz.Scalaz
 import Scalaz._
 import main.Arguments
 import time._

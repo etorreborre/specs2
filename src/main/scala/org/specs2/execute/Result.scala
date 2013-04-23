@@ -5,8 +5,8 @@ import control.Throwablex
 import control.Throwablex._
 import text.NotNullStrings._
 import main.Arguments
-import org.specs2.internal.scalaz.Scalaz._
-import internal.scalaz.{Foldable, Monoid}
+import scalaz.Scalaz._
+import scalaz.{Foldable, Monoid}
 import Foldable._
 import collection.Seqx._
 import text.Message.concat

@@ -4,7 +4,7 @@ package reporter
 import specification.{ExecutedSpecification, SpecificationStructure}
 import main.Arguments
 import io.StringOutput
-import org.specs2.internal.scalaz._
+import scalaz._
 import Scalaz._
 
 /**

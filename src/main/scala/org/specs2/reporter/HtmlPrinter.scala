@@ -1,7 +1,7 @@
 package org.specs2
 package reporter
 
-import org.specs2.internal.scalaz.{Tree, Reducer, Scalaz}
+import scalaz.{Tree, Reducer, Scalaz}
 import Scalaz._
 import Tree._
 import data.Reducerx._

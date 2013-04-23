@@ -6,7 +6,7 @@ import time.SimpleTimer
 import execute._
 import main._
 import io.Location
-import internal.scalaz.concurrent.Promise
+import scalaz.concurrent.Promise
 
 /**
  * The Executing Fragment trait represent a Fragment being executed.
@@ -158,7 +158,7 @@ case class LazyExecutingFragment(f: ()=>ExecutedFragment, original: Fragment) ex
 }
 
 
-import org.specs2.internal.scalaz._
+import scalaz._
 private[specs2]
 trait ExecutedFragmentsShow {
   implicit object showExecutedFragments extends Show[ExecutedFragment] {

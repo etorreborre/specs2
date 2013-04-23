@@ -3,7 +3,7 @@ package reporter
 
 import specification.{ExecutingSpecification, ExecutedSpecification, SpecificationStructure}
 import main.Arguments
-import internal.scalaz.Scalaz._
+import scalaz.Scalaz._
 
 /**
  * This trait can be mixed in a reporter to allow the exporting of an executed specification to many different formats:
