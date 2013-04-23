@@ -15,6 +15,7 @@ class Interpolated(stringContent: String, texts: Seq[String]) extends Interpolat
     texts.zip(texts.drop(1)).foldLeft((stringContent, Seq[String]())) { case ((content, exps), (text, next)) =>
       val minusText = new String(content.drop(text.size).mkString)
       val textToParse = new String(if (minusText.indexOf(next) > 0) minusText.substring(0, minusText.indexOf(next)) else minusText)
+      val fromDollar = textToParse.startFrom("$")
       val expression = interpolatedString(new CharSequenceReader(textToParse)) match {
         case Success(e, _) => e
         case Failure(m, _) => m

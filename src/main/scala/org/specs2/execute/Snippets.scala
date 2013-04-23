@@ -50,7 +50,10 @@ trait Snippets {
 
   def snippet[T](code: =>T)(implicit params: SnippetParams[T]): Snippet[T] = macro Snippets.create[T]
 
-  def createSnippet[T](expression: String, code: =>T, params: SnippetParams[T]): Snippet[T] = new Snippet[T](() => code.value, codeExpression = Some(expression), params)
+  def createSnippet[T](rangepos: Boolean, expression: String, code: =>T, params: SnippetParams[T]): Snippet[T] = {
+    if (rangepos) new Snippet[T](() => code, codeExpression = Some(expression), params.copy(trimExpression = trimRangePosSnippet))
+    else          new Snippet[T](() => code, codeExpression = None, params)
+  }
 
   def simpleName[T : WeakTypeTag]: String = implicitly[WeakTypeTag[T]].tpe.typeSymbol.name.toString.trim
   def fullName[T : WeakTypeTag]: String   = implicitly[WeakTypeTag[T]].tpe.typeSymbol.fullName.trim
@@ -61,7 +64,7 @@ object Snippets extends Snippets {
   def create[T](c: MContext)(code: c.Expr[T])(params: c.Expr[SnippetParams[T]]): c.Expr[Snippet[T]] = {
     import c.{universe => u}; import u._
     import Macros._
-    val result = c.Expr(methodCall(c)("createSnippet", stringExpr(c)(code), code.tree.duplicate, params.tree))
+    val result = c.Expr(methodCall(c)("createSnippet", c.literal(c.macroApplication.pos.isRange).tree, stringExpr(c)(code), code.tree.duplicate, params.tree))
     c.Expr(atPos(c.prefix.tree.pos)(result.tree))
   }
 }
@@ -115,7 +118,7 @@ case class Snippet[T](code: () => T,
  *  - the `verify` function checking the result
  */
 case class SnippetParams[T]( 
-  trimExpression: String => String   = trimSnippet,
+  trimExpression: String => String   = trimApproximatedSnippet,
   cutter: String => String           = ScissorsCutter(),
   asCode: (String, String) => String = markdownCode(0),
   prompt: String => String           = greaterThanPrompt,
@@ -148,16 +151,24 @@ object Snippet {
    * + in some case it is necessary to add a dummy expression so that the range position of the captured snippet is
    * correct. /**/;1/**/ is the smallest such expression
    */
-  def trimSnippet = (expression: String) => {
+  def trimRangePosSnippet = (expression: String) => {
+    expression.removeAll("/**/;1/**/").trim
+  }
+
+  /**
+   * trim the expression from start and end accolades if it is a multiline expression
+   * + in some case it is necessary to add a dummy expression so that the range position of the captured snippet is
+   * correct. /**/;1/**/ is the smallest such expression
+   */
+  def trimApproximatedSnippet = (expression: String) => {
     val firstTrim =
       if (s"$ls*\\{$ls*.*".r.findPrefixOf(expression).isDefined) expression.removeFirst(s"\\{").removeLast(s"\\}")
       else                                                       expression
 
-    val parametersTrim = firstTrim.removeLast(".set"+parameters)
-    parametersTrim.removeAll("/**/;1/**/").trim
+    firstTrim.removeLast(".set"+parameters)
   }
- 
-  /** display a cut piece of code as markdown depending on the existence of newlines in the original piece */ 
+
+  /** display a cut piece of code as markdown depending on the existence of newlines in the original piece */
   def markdownCode(offset: Int = 0) = (original: String, cut: String) => {
     if (original.startsWith("\n"))    "\n\n"+"```\n"+cut.removeStart("\n").offset(offset)+"\n```"
     else if (original.contains("\n")) "\n\n```\n"+cut.offset(offset)+"\n```\n"
