@@ -152,7 +152,11 @@ object Snippet {
    * correct. /**/;1/**/ is the smallest such expression
    */
   def trimRangePosSnippet = (expression: String) => {
-    expression.removeAll("/**/;1/**/").trim
+    val trimmed =
+      if (s"$ls*\\{$ls*.*".r.findPrefixOf(expression).isDefined) Trimmed(Trimmed(expression).removeFirst(s"\\{")).removeLast(s"\\}")
+      else                                                       expression
+
+    Trimmed(trimmed).removeAll("/**/;1/**/").trim
   }
 
   /**
@@ -161,11 +165,10 @@ object Snippet {
    * correct. /**/;1/**/ is the smallest such expression
    */
   def trimApproximatedSnippet = (expression: String) => {
-    val firstTrim =
-      if (s"$ls*\\{$ls*.*".r.findPrefixOf(expression).isDefined) expression.removeFirst(s"\\{").removeLast(s"\\}")
-      else                                                       expression
-
-    firstTrim.removeLast(".set"+parameters)
+    expression.removeFirst(s"snippet\\s*\\{").removeLast(s"\\}").
+      removeLast("(\\.(offsetIs|promptIs|set)"+parameters+")+").
+      removeLast("(\\.(eval|check|checkOk))+").
+      trim
   }
 
   /** display a cut piece of code as markdown depending on the existence of newlines in the original piece */

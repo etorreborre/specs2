@@ -22,6 +22,7 @@ class InterpolatedSpec extends Specification with ParserMatchers with Snippets {
   when using a quoted identifier                                 $e8
   when there is non-empty text surrounding all expressions       $e9
   with a snippet                                                 $e10
+  with a $$                                                      $e11
                                                                  """
 
   def e1 = {
@@ -81,5 +82,7 @@ block  }""".stripMargin
 
     parsers.interpolatedVariable(snippet) must beASuccess
   }
+
+  def e11 = parsers.interpolatedVariable("$$") must beASuccess
 
 }

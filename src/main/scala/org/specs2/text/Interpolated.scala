@@ -13,7 +13,8 @@ class Interpolated(stringContent: String, texts: Seq[String]) extends Interpolat
 
   def expressions = {
     texts.zip(texts.drop(1)).foldLeft((stringContent, Seq[String]())) { case ((content, exps), (text, next)) =>
-      val minusText = new String(content.drop(text.size).mkString)
+      val minusText = new String(content.drop(text.size).mkString).
+                        replace("$$", "$") // in next, this replacement has already been done
       val textToParse = new String(if (minusText.indexOf(next) > 0) minusText.substring(0, minusText.indexOf(next)) else minusText)
       val fromDollar = textToParse.startFrom("$")
       val expression = interpolatedString(new CharSequenceReader(textToParse)) match {
@@ -43,6 +44,7 @@ trait InterpolatedParsers extends JavaTokenParsers {
     (("${" ~ interpolatedVariable ~ rep(interpolatedVariable) ~ "}") ^^ { case a~vv~b => a+vv.mkString+b }) |
     (("${" ~ noVariable ~ rep(interpolatedVariable) ~ "}") ^^ { case a~vv~b => a+vv.mkString+b }) |
     (("${" ~ quotedExpression ~ "}") ^^ { case a~vv~b => a+vv.toString+b }) |
+      "$$" |
     (("$" ~ ident) ^^ { case a~b => a+b }) |
     multiline
 

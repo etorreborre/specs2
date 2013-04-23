@@ -2,6 +2,7 @@ package org.specs2
 package specification
 
 import matcher.DataTables
+import execute.Snippet._
 
 class SnippetsSpec extends Specification with Snippets with DataTables with Grouped { def is = s2"""
 
@@ -13,14 +14,26 @@ class SnippetsSpec extends Specification with Snippets with DataTables with Grou
    with the `snippet` method and cut comments - 2 blocks     ${g1.e4}
    with some code having accolades                           ${g1.e5}
 
+Offsets
+=======
  It is possible to specify an offset to the snippet
    with the `snippet` method
      a positive offset                                       ${g2.e1}
      a negative offset                                       ${g2.e2}
 
+Trimming
+========
+ An approximated expression must
+   not include the `snippet` call                            ${g6.e1}
+   not have parameter setting calls                          ${g6.e2}
+
+Results
+=======
  Results can be displayed by using the `eval` method
    when using the `snippet` method                           ${g3.e1}
 
+Names
+=====
  It is also possible to capture code names
    for types (trait, classes,...)                            ${g4.e1}
      with a fully qualified name                             ${g4.e2}
@@ -28,9 +41,14 @@ class SnippetsSpec extends Specification with Snippets with DataTables with Grou
    for method names with type parameters                     ${g4.e4}
    for attribute names                                       ${g4.e5}
 
+Robustness
+==========
  A snippet must not fail if the code throws an exception     ${g5.e1}
  An interpolated snippet code must not be executed           ${g5.e2}
+
                                                              """
+
+
  "snippets capture" - new g1 {
 
   e1 := { s2""" code: ${ snippet { got {1 + 1} } } """.texts(1).t.trim === "`got {1 + 1}`" }
@@ -161,6 +179,27 @@ n = 0
       var i = 0
       s2""" start ${snippet { i = 1; i }} end """
       i === 0
+    }
+  }
+
+  "trimming" - new g6 {
+    e1 := {
+      "code"                   || "result" |>
+      "snippet{ hello }"       !! "hello"  |
+      " snippet{ hello }"      !! "hello"  |
+      " snippet { hello }"     !! "hello"  |
+      " snippet{ hello } "     !! "hello"  |
+      " snippet{\n hello \n} " !! "hello"  |
+      " snippet{ hello \n} "   !! "hello"  |
+      { (c, r) => trimApproximatedSnippet(c) === r }
+    }
+
+    e2 := {
+      "code"                                      || "result" |>
+      " snippet{ hello \n}.set(eval = true) "     !! "hello"  |
+      " snippet{ hello \n}.eval "                 !! "hello"  |
+      " snippet{ hello \n}.offsetIs(2) "          !! "hello"  |
+        { (c, r) => trimApproximatedSnippet(c) === r }
     }
   }
 
