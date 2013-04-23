@@ -246,6 +246,9 @@ object AsResult {
   implicit def asResult[R <% Result]: AsResult[R] = new AsResult[R] {
     def asResult(r: =>R): Result = ResultExecution.execute(r)
   }
+
+  /** transform a function returning a type R having an AsResult instance to a function returning a Result */
+  def lift[T, R : AsResult](f: T => R): T => Result = (t: T) => AsResult(f(t))
 }
 
 /**
