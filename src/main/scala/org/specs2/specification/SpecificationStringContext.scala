@@ -65,8 +65,8 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
   implicit def fragmentIsSpecPart(f: Fragment): SpecPart = new SpecPart {
     def append(fs: Fragments, text: String, expression: String = "") = fs append { text ^ f }
   }
-  implicit def fragmentsIsSpecPart(fs: Fragments): SpecPart = new SpecPart {
-    def append(fs: Fragments, text: String, expression: String = "") = fs append { text ^ fs }
+  implicit def fragmentsIsSpecPart(fragments: Fragments): SpecPart = new SpecPart {
+    def append(fs: Fragments, text: String, expression: String = "") = fs append { text ^ fragments }
   }
   implicit def fragmentsFragmentIsSpecPart(fs: FragmentsFragment): SpecPart = new SpecPart {
     def append(fs: Fragments, text: String, expression: String = "") = fs append { text ^ fs }
