@@ -18,7 +18,7 @@ trait FragmentParsers extends FragmentParserApply with FragmentParserExtract { o
 
   /** an extracted value can be transformed as a Step or an Example if it has a check function */
   implicit def extractedIsSpecPart[T](fp: FragmentParser[T]): SpecPart = new SpecPart {
-    def appendTo(text: String, expression: String = "") = {
+    def append(fs: Fragments, text: String, expression: String = "") = {
       val splitted = text.split("\n")
       val previousText = splitted.mkString.trim
 
@@ -27,8 +27,11 @@ trait FragmentParsers extends FragmentParserApply with FragmentParserExtract { o
         (if (fp.isChecked) (splitted.dropRight(1) :+ ("  "+splitted.last)) else splitted).
          map(fp.strip).mkString("\n")
 
-      if (fp.isChecked) asResultIsSpecPart(fp.checkResult(previousText)).appendTo(strippedText, expression)
-      else              fragmentIsSpecPart(Step(fp.extract(previousText))).appendTo(strippedText, expression)
+      val result =
+        if (fp.isChecked) asResultIsSpecPart(fp.checkResult(previousText)).append(strippedText, expression)
+        else              fragmentIsSpecPart(Step(fp.extract(previousText))).append(strippedText, expression)
+
+      fs append result
     }
   }
 }

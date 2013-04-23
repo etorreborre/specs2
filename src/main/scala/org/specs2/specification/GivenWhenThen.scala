@@ -80,27 +80,31 @@ trait GivenWhenThen extends RegexStepsFactory with TuplesToSeq with FragmentsBui
   private def executionIsOk = gwt.forall(_.isRight)
 
   implicit def givenIsSpecPart[T](g: Given[T]): SpecPart = new SpecPart {
-    def appendTo(text: String, expression: String = "") =  {
-      g.strip(text) ^
-        Step {
-          gwt = (if (thenSequence) Seq() else gwt) :+ trye(g.extract(text))(makeError)
-        if (thenSequence) thenSequence = false
+    def append(fs: Fragments, text: String, expression: String = "") = {
+      fs append {
+        g.strip(text) ^
+          Step {
+            gwt = (if (thenSequence) Seq() else gwt) :+ trye(g.extract(text))(makeError)
+            if (thenSequence) thenSequence = false
+          }
       }
     }
   }
   implicit def whenIsSpecPart[T, U](w: When[T, U]): SpecPart = new SpecPart {
-    def appendTo(text: String, expression: String = "") = {
-      w.strip(text) ^
-      Step {
-        gwt = if (executionIsOk) {
-          if (gwt.size > 1) Seq(trye(w.extract(gwt.map(_.right.get).asInstanceOf[T], text))(makeError))
-          else              gwt.headOption.flatMap(_.right.toOption.map(v => trye(w.extract(v.asInstanceOf[T], text))(makeError))).toSeq
-        } else gwt
+    def append(fs: Fragments, text: String, expression: String = "") = {
+      fs append {
+        w.strip(text) ^
+        Step {
+          gwt = if (executionIsOk) {
+            if (gwt.size > 1) Seq(trye(w.extract(gwt.map(_.right.get).asInstanceOf[T], text))(makeError))
+            else              gwt.headOption.flatMap(_.right.toOption.map(v => trye(w.extract(v.asInstanceOf[T], text))(makeError))).toSeq
+          } else gwt
+        }
       }
     }
   }
   implicit def thenIsSpecPart[T](t: Then[T]): SpecPart = new SpecPart {
-    def appendTo(text: String, expression: String = "") =  {
+    def append(fs: Fragments, text: String, expression: String = "") =  {
       lazy val result = {
         thenSequence = true
         if (executionIsOk) gwt.lastOption.map(w => trye(t.extract(w.right.get.asInstanceOf[T], text))(makeError))
@@ -112,10 +116,12 @@ trait GivenWhenThen extends RegexStepsFactory with TuplesToSeq with FragmentsBui
       val indent = spaces.dropRight(2).mkString
       val before = first + indent
 
-      before ^ t.strip(text.trim) ! {
-        result.getOrElse(Left(Failure("Can not call a Then step if there is no preceding Given step"))) match {
-          case Right(r) => r.asInstanceOf[Result]
-          case Left(e)  => e
+      fs append {
+        before ^ t.strip(text.trim) ! {
+          result.getOrElse(Left(Failure("Can not call a Then step if there is no preceding Given step"))) match {
+            case Right(r) => r.asInstanceOf[Result]
+            case Left(e)  => e
+          }
         }
       }
     }

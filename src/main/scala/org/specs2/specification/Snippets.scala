@@ -21,8 +21,8 @@ import Snippet._
 trait Snippets extends execute.Snippets { outer: SpecificationStringContext with FragmentsBuilder with ArgumentsArgs =>
 
   implicit def snippetIsSpecPart[T](snippet: Snippet[T]): SpecPart = new SpecPart {
-    def appendTo(text: String, expression: String = "") =
-      text ^ snippetFragments(snippet, expression)
+    def append(fs: Fragments, text: String, expression: String = "") =
+      fs append { text ^ snippetFragments(snippet, expression) }
 
     private def snippetFragments(snippet: Snippet[T], expression: String) = {
       if (snippet.mustBeVerified) Fragments.createList(Text(snippet.show(expression)), Step(snippet.verify.mapMessage("Snippet failure: "+_)))
