@@ -1,0 +1,39 @@
+body {
+  background-color: #1d1f21;
+  color: #c5c8c6;
+  font-family: 'Open Sans', sans-serif;
+  font-size:20px;
+  font-weight:300;
+}
+
+h1 {
+  font-family: 'Open Sans', sans-serif;
+  color: #b5bd68;
+  font-size:46px;
+  font-weight: 700;
+  letter-spacing: -0.08em;
+  margin-top:45px;
+  margin-bottom:30px;
+}
+
+h2 {
+  color:#81a2be;
+  margin-top:30px;
+}
+
+#logo {
+  font-size:42px;
+}
+
+p {
+  line-height: 120%;
+}
+
+p + p {
+  margin-top:30px;
+}
+
+li {
+  line-height: 150%;
+  margin-left:30px;
+}
