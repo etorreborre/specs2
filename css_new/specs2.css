@@ -1,0 +1,22 @@
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size:20px;
+  font-weight:300;
+}
+
+h1 {
+  font-family: 'Open Sans', sans-serif;
+}
+
+p {
+  line-height: 120%;
+}
+
+p + p {
+  margin-top:30px;
+}
+
+li {
+  line-height: 150%;
+  margin-left:30px;
+}
