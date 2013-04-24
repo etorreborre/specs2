@@ -5,41 +5,17 @@
   <!-- PLEASE DEAR READER PARDON MY LACK OF HTML/CSS SKILLS :-) Any contribution will be gladly accepted! -->
   <title>etorreborre/specs2 @ GitHub</title>
 
-      <script type="text/javascript" src="./css/prettify.js"></script>
-      <script type="text/javascript" src="./css/tooltip.js"></script>
-      <script language="javascript">
-      function init() {  prettyPrint(); };
-      /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
-      String.prototype.endsWith = function(str) { return (this.match(str+'$') == str) };
-      function changeWidth(id,width) {  document.getElementById(id).style.width = width; };
-      function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
-      function toggleImage(image) {
-        if (image.src.endsWith('./images/expanded.gif'))
-          image.src = './images/collapsed.gif';
-        else
-          image.src = './images/expanded.gif';
-      };
-      function showHide(id) {
-        element = document.getElementById(id);
-        element.style.display = (element.style.display == 'block')? 'none' : 'block';
-      };
-    </script>
-      <script language="javascript">window.onload=init;</script>
-      <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
-           tabber code, then the init code -->
-
-  <script src="http://code.jquery.com/jquery.js"></script>
-  <script type="text/javascript" src="js/bootstrap.js"></script>
-
-
-  <!-- New bootstrap -->
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700' rel='stylesheet' type='text/css'>
   <link href="./css/prettify.css" rel="stylesheet" type="text/css" />
   <link href="css_new/bootstrap.min.css" rel="stylesheet" media="screen">
   <link rel="stylesheet" href="css_new/font-awesome.min.css">
   <link rel="stylesheet" href="css_new/specs2.css">
 
-
+  <script src="http://code.jquery.com/jquery.js"></script>
+  <script type="text/javascript" src="js/bootstrap.js"></script>
+  <script type="text/javascript" src="js/prettify.js"></script>
+  <script type="text/javascript" src="js/specs2.js"></script>
+  <script language="javascript">window.onload=init;</script>
   <script type="text/javascript">
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-965071-4']);
@@ -51,8 +27,7 @@
       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
   </script>
-
-  </head>
+</head>
 <body>
   <div class="container">
     <div class="row">
