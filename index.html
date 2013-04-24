@@ -4,21 +4,8 @@
   <meta charset='utf-8'>
   <!-- PLEASE DEAR READER PARDON MY LACK OF HTML/CSS SKILLS :-) Any contribution will be gladly accepted! -->
   <title>etorreborre/specs2 @ GitHub</title>
-      <!-- New bootstrap -->
-      <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700' rel='stylesheet' type='text/css'>
-      <link href="css_new/bootstrap.min.css" rel="stylesheet" media="screen">
-      <link rel="stylesheet" href="css_new/font-awesome.min.css">
-      <link rel="stylesheet" href="css_new/specs2.css">
 
-      <style type="text/css" media="all">
-        @import url('./css/maven-base.css');
-        @import url('./css/maven-theme.css');
-      </style>
-      <link href="./css/prettify.css" rel="stylesheet" type="text/css" />
       <script type="text/javascript" src="./css/prettify.js"></script>
-      <link href="./css/print.css" type="text/css" rel="stylesheet" media="print" />
-      <link href="./css/tooltip.css" type="text/css" rel="stylesheet" />
-
       <script type="text/javascript" src="./css/tooltip.js"></script>
       <script language="javascript">
       function init() {  prettyPrint(); };
@@ -40,30 +27,18 @@
       <script language="javascript">window.onload=init;</script>
       <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
            tabber code, then the init code -->
-      <script type="text/javascript" src="./css/tabber.js"></script>
-      <link href="./css/tabber.css" type="text/css" rel="stylesheet" media="screen" />
-    <style type="text/css">
-	#top {
-      margin-left: 150px;
-      width: 60%;
-    }
-    #container {
-      margin-left: 150px;
-      width: 74%;
-	  float: left;
-    }
-	#sidebar {
-      width:13%;
-      float:right;
-    }
-	.console { font-family:Courier; color: #CCCCCC; background: #000000; border: 1px #CCCCCC; padding: 10px; }
-    .description { font-size: 1.1em; margin-bottom: 30px; margin-top: 0px; font-style: italic;}
-    .footer { text-align:center; padding-top:30px; font-style: italic; }
-    .download { float: right; }
-	s2 { font-style: italic; }
-	.sidelink { margin-left: 8px; }
-    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-  </style>
+
+  <script src="http://code.jquery.com/jquery.js"></script>
+  <script type="text/javascript" src="js/bootstrap.js"></script>
+
+
+  <!-- New bootstrap -->
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700' rel='stylesheet' type='text/css'>
+  <link href="./css/prettify.css" rel="stylesheet" type="text/css" />
+  <link href="css_new/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link rel="stylesheet" href="css_new/font-awesome.min.css">
+  <link rel="stylesheet" href="css_new/specs2.css">
+
 
   <script type="text/javascript">
     var _gaq = _gaq || [];
@@ -82,10 +57,55 @@
   <div class="container">
     <div class="row">
       <div class="span12">
+        <h2>Presentation</h2>
         <p><s2>specs2</s2> is a library for writing executable software specifications.</p>
         <p>
           With <s2>specs2</s2> you can write software specifications for one class (<i>unit</i> specifications) or a full system (<i>acceptance</i> specifications):
         </p>
+
+        <ul class="nav nav-tabs" id="test-categories">
+          <li class="active"><a href="#unit" data-toggle="tab">Unit</a></li>
+          <li><a href="#acceptance" data-toggle="tab">Acceptance</a></li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="unit">
+            <code class="prettyprint">import org.specs2.mutable._
+
+              class HelloWorldSpec extends Specification {
+
+                "The 'Hello world' string" should {
+                  "contain 11 characters" in {
+                    "Hello world" must have size(11)
+                  }
+                  "start with 'Hello'" in {
+                    "Hello world" must startWith("Hello")
+                  }
+                  "end with 'world'" in {
+                    "Hello world" must endWith("world")
+                  }
+                }
+              }
+            </code>
+          </div>
+          <div class="tab-pane" id="acceptance">
+            <code class="prettyprint">import org.specs2._
+              class HelloWorldSpec extends Specification { def is =
+
+                "This is a specification to check the 'Hello world' string"                 ^
+                                                                                            p^
+                "The 'Hello world' string should"                                           ^
+                  "contain 11 characters"                                                   ! e1^
+                  "start with 'Hello'"                                                      ! e2^
+                  "end with 'world'"                                                        ! e3^
+                                                                                            end
+
+                def e1 = "Hello world" must have size(11)
+                def e2 = "Hello world" must startWith("Hello")
+                def e3 = "Hello world" must endWith("world")
+              }
+            </code>
+          </div>
+        </div>
       </div>
     </div>
 
