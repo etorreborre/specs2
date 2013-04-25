@@ -20,4 +20,13 @@ class FragmentsExecutionSpec extends Spec {
     FragmentExecution.execute("e1" ! failure).stats.failures must_== 1
   }
 
+  "An executed Step must return a Result" >> {
+    "which is a Result if the step evaluates a value of type Result" >> {
+      Step(success).execute === success
+    }
+    "which is a DecoratedResult[T] if the step evaluates a value of type T" >> {
+      Step(1).execute === DecoratedResult(1, Success())
+    }
+   }
+
 }
