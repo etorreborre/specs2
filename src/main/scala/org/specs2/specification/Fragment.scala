@@ -193,7 +193,7 @@ case object Step extends ImplicitParameters {
   def apply[T](r: =>T) = fromEither(catchAll {
     r match {
       case r1: Result => r1
-      case other      => DecoratedResult(r, Success())
+      case other      => DecoratedResult(other, Success())
     }
   }((e: Throwable) => Error(e)))
 
