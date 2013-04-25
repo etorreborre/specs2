@@ -154,12 +154,6 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
     output.close
     input.close
   }  
-  /** 
-   * Unjar the jar (or zip file) specified by "path" to the "dest" directory.
-   * @param path path of the jar file
-   * @param dest destination directory path
-   */
-  def unjar(path: String, dest: String) { unjar(path, dest, ".*") }
   
   /** 
    * Unjar the jar (or zip file) specified by "path" to the "dest" directory.
@@ -168,31 +162,32 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
    * @param dest destination directory path
    * @param regexFilter regular expression filtering files which shouldn't be extracted
    */
-  def unjar(path: String, dirPath: String, regexFilter: String) {
-	 mkdirs(dirPath)
-   val fis = new FileInputStream(path)
-   val zis = new ZipInputStream(new BufferedInputStream(fis))
-   var entry: ZipEntry = null
-   def extractEntry(entry: ZipEntry) {
-     if (entry != null) {
-       if (entry.getName.matches(regexFilter)) {
-		     if (entry.isDirectory()){
-		       createDir(dirPath + "/" + entry.getName)
-		     } else {
-		       createFile(dirPath + "/" + entry.getName)
-		       val fos = new FileOutputStream(dirPath + "/" + entry.getName)
-		       val dest = new BufferedOutputStream(fos, 2048)
-		       copy(zis, dest)
-             dest.flush
-		       dest.close
-		     }
-         
-       }
-       extractEntry(zis.getNextEntry)
-     }
-   } 
-   extractEntry(zis.getNextEntry)
-   zis.close
+  private def unjar(jarUrl: URL, dirPath: String, regexFilter: String) {
+    mkdirs(dirPath)
+    val uis = jarUrl.openStream()
+    val zis = new ZipInputStream(new BufferedInputStream(uis))
+
+    @annotation.tailrec
+    def extractEntry(entry: ZipEntry) {
+      if (entry != null) {
+        if (entry.getName.matches(regexFilter)) {
+          if (entry.isDirectory()){
+            createDir(dirPath + "/" + entry.getName)
+          } else {
+            createFile(dirPath + "/" + entry.getName)
+            val fos = new FileOutputStream(dirPath + "/" + entry.getName)
+            val dest = new BufferedOutputStream(fos, 2048)
+            copy(zis, dest)
+            dest.flush
+            dest.close
+          }
+
+        }
+        extractEntry(zis.getNextEntry)
+      }
+    }
+    extractEntry(zis.getNextEntry)
+    zis.close
   }
   
   /** 
@@ -219,27 +214,19 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
    * @param outputDir output directory where to copy the files to
    */
   def copySpecResourcesDir(src: String, outputDir: String) {
-    val jarUrl = Thread.currentThread.getContextClassLoader.getResource(getClass.getName.replace(".", "/")+".class")
-    for (url <- Option(jarUrl) if url.toString.startsWith("jar"))
-      unjar(getPath(url).takeWhile(_ != '!').mkString, outputDir, ".*" + src + "/.*")
+    val selfUrl = Thread.currentThread.getContextClassLoader.getResource(getClass.getName.replace(".", "/")+".class")
+    for (url <- Option(selfUrl) if url.getProtocol == "jar") {
+      val jarUrl = new URL(url.getPath.takeWhile(_ != '!').mkString)
+      unjar(jarUrl, outputDir, ".*" + src + "/.*")
+    }
 
     val folderUrl = Thread.currentThread.getContextClassLoader.getResource(src)
-    for (url <- Option(folderUrl) if !folderUrl.toString.startsWith("jar"))
+    for (url <- Option(folderUrl) if folderUrl.getProtocol != "jar")
       copyDir(url, outputDir + src)
   }
 
   /** @return true if 2 paths are the same according to their canonical representation */
   def samePath(p1: String, p2: String) = new File(p1).getCanonicalPath == new File(p2).getCanonicalPath
-
-  /**
-   * @return a path that should be valid on all plateforms (@see issue 148 of the specs project)
-   */
-  private def getPath(url: URL) = {
-    val path = if (sys.props("file.separator") == "\\") url.getPath.replace("\\", "/").replace("file:/", "")
-	             else                                     url.getPath.replace("file:", "")
-
-    path.replace("%20", " ")
-  }
 }
 /**
  * The fs object offers a simple interface to the file system (see the description of the FileSystem trait)
