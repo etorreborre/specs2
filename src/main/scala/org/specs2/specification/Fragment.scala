@@ -189,7 +189,12 @@ case object Step extends ImplicitParameters {
     }
   }
   /** create a Step object from any value */
-  def apply[T](r: =>T) = fromEither(catchAll(DecoratedResult(r, Success()))((e: Throwable) => DecoratedResult((), Error(e))))
+  def apply[T](r: =>T) = fromEither(catchAll {
+    r match {
+      case r1: Result => r1
+      case other      => DecoratedResult(r, Success())  
+    }
+  }((e: Throwable) => Error(e)))
   /** create a Step object from a stopOnFail value. Make sure that the boolean evaluation doesn't fail */
   def apply(stopOnFail: =>Boolean)(implicit p: ImplicitParam) = {
     val stop = catchAll(stopOnFail)(Error(_))
