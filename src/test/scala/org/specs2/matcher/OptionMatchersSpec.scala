@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-class OptionMatchersSpec extends Specification { def is = s2"""
+class OptionMatchersSpec extends Specification with ResultMatchers { def is = s2"""
 
  The OptionMatchers trait provides matchers to check Option instances.
 
@@ -10,6 +10,7 @@ class OptionMatchersSpec extends Specification { def is = s2"""
   ${ Some(1) must beSome(1) }
   ${ Some(1) must beSome.which(_ > 0) }
   ${ Some(1) must beSome.like { case a if a > 0 => ok } }
+  ${ (Some(1) must not(beSome.like { case a => a must be_>=(0) })) returns "'Some(1)' is Some[T] and 1 is not less than 0" }
   ${ Some(1) must not be some(2) }
   ${ None must not be some }
   ${ None must not be some(2) }
@@ -21,5 +22,5 @@ class OptionMatchersSpec extends Specification { def is = s2"""
   beAsNoneAs checks if 2 values are None at the same time
   ${ None must beAsNoneAs(None) }
   ${ Some(1) must beAsNoneAs(Some(2)) }
-                                                                                                                        """
+  """
 }

@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import text.Quote._
-import execute.{Result, Failure}
+import execute.{Success, Result, Failure}
 
 /**
  * Matchers for Options
@@ -61,13 +61,13 @@ trait OptionBeHaveMatchers { outer: OptionBaseMatchers =>
 private[specs2]
 class SomeMatcher[T] extends Matcher[Option[T]] {
   def apply[S <: Option[T]](value: Expectable[S]) = {
-    result(value.value.map(t => true).getOrElse(false),
+    result(value.value.isDefined,
            value.description + " is Some[T]",
            value.description + " is not Some[T]",
            value)
   }
   def which(f: T => Boolean) = this ^^ { (t: Option[T]) => t filter f }
-  def like(f: PartialFunction[T, MatchResult[_]]) = this and partialMatcher(f)
+  def like(f: PartialFunction[T, MatchResult[_]]) = partialMatcher(f)
 
   private def partialMatcher(f: PartialFunction[T, MatchResult[_]]) = new Matcher[Option[T]] {
     def apply[S <: Option[T]](value: Expectable[S]) = {
