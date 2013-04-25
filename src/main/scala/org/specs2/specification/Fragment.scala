@@ -157,7 +157,7 @@ case object Example {
 case class Step (step: LazyParameter[Result], stopOnFail: Boolean = false) extends Fragment with Executable with Isolable {
   val isolable = true
 
-  def execute = step.value
+  val execute = step.value
   override def toString = "Step"
 
   override def map(f: Result => Result) = Step(step map f)

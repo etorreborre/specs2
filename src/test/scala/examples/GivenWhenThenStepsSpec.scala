@@ -11,17 +11,39 @@ import scalaz.syntax.foldable._
 class GivenWhenThenStepsSpec extends Specification with GivenWhenThenSteps { def is = s2"""
 
   A given-when-then example for a calculator
-                                                  $${addition.start}
+                                                  ${addition.start}
    Given the first number: {1}
    Given the second number: {2}
    With the addition operator {+}
    Then I should get: {3}
-                                                  $${addition.end}
-"""
+                                                  ${addition.end}
+
+   TODO:
+
+ * test all combinations
+ * test with RegexParsers
+ * strip the delimiters
+ * change the extraction type to String => (T, String)
+ * remove the FragmentsParsers with variable stuff
+ * document
+ * provide default DelimitedFragmentParsers anInt, twoInts, threeInts, aString, twoStrings,
+   threeStrings, aDouble, twoDoubles, threeDoubles and combination thereof (+ dates, sequences, times?)
+ * use only regexparsers with delimiters or not?
+
+ """
 
 }
 
 trait GivenWhenThenSteps extends FragmentParsers with Tags { this: Specification =>
+
+  val addition = GWTSteps("addition").
+    given(anInt).
+    given(anInt).
+    when(aString) { case operator :: a :: b:: HNil => a + b }.
+    andThen(anInt) { case expected :: sum :: HNil => sum === expected }
+
+  def anInt = FragmentParser((_:String).toInt)
+  def aString = FragmentParser((s:String) => s)
 
   implicit def gwtStepsIsSpecPart(gwt: GWTSteps): SpecPart = new SpecPart {
     def append(fs: Fragments, text: String, expression: String) = {
@@ -105,26 +127,45 @@ trait GivenWhenThenSteps extends FragmentParsers with Tags { this: Specification
           case _            => List[Any]()
         }
       }
+      def value(r: Result) = r match { case DecoratedResult(v, _) => v; case _ => r }
 
       val givenExtractorsList = givens.givenExtractors.toList(toListAny)
       val whenExtractorsList  = whens.whenExtractors.toList(toListAny)
       val thenExtractorsList  = thenExtractors.toList(toListAny)
 
-      val (givenLines, whenLines, thenLines) =
-        (lines.dropRight(whenExtractorsList.size + thenExtractorsList.size).takeRight(givenExtractorsList.size),
+      val (intro, givenLines, whenLines, thenLines) =
+        (lines.dropRight(whenExtractorsList.size + thenExtractorsList.size + givenExtractorsList.size),
+         lines.dropRight(whenExtractorsList.size + thenExtractorsList.size).takeRight(givenExtractorsList.size),
          lines.dropRight(thenExtractorsList.size).takeRight(whenExtractorsList.size),
          lines.takeRight(thenExtractorsList.size))
 
-      val givenSteps = (givenExtractorsList zip givenLines).map { case (extractor, line) => Text(line) ^ Step(extractor.asInstanceOf[String => Any](line)) }
-      val stepResults = HNil
+      val introFragments: Seq[Fragment] = intro.map(l => Text(l+"\n"))
+
+      val givenSteps: Seq[Step] = (givenExtractorsList zip givenLines).view.map { case (extractor, line) => Step(extractor.asInstanceOf[String => Any](line)) }
+      val givenFragments: Seq[Fragment] = (givenLines zip givenSteps).map { case (l: String, s: Step) => Text(l+"\n") ^ s }.flatMap(_.middle)
+
+      lazy val givenStepsResults = givenSteps.foldRight(HNil: HList) { (cur, res) => value(cur.execute) :: res }
       val whenSteps =  (whenExtractorsList zip whenLines zip whens.mappers.toList(toListAny)).map { case ((extractor, line), mapper) =>
-        Text(line) ^ Step {
+        Step {
           val extracted = extractor.asInstanceOf[String => Any](line)
-          val values = extracted :: stepResults
+          val values = extracted :: givenStepsResults
           mapper.asInstanceOf[Any => Any](values)
         }
       }
-      Fragments.createList((givenSteps.sumr.middle ++ whenSteps.sumr.middle):_*)
+
+      val whenFragments: Seq[Fragment] = (whenLines zip whenSteps).map { case (l: String, s: Step) => Text(l+"\n") ^ s }.flatMap(_.middle)
+      lazy val whenStepsResults = whenSteps.foldRight(HNil: HList) { (cur, res) => value(cur.execute) :: res }
+
+      val thenExamples = (thenExtractorsList zip thenLines zip verifications.toList(toListAny)).map { case ((extractor, line), verify) =>
+        Example(line,
+        {
+          val extracted = extractor.asInstanceOf[String => Any](line)
+          val values = extracted :: whenStepsResults
+          verify.asInstanceOf[Any => Any](values).asInstanceOf[Result]
+        })
+      }
+
+      Fragments.createList((introFragments ++ givenFragments ++ whenFragments ++ thenExamples) :_*)
     }
 
     def start = copy(isStart = true)
@@ -136,16 +177,8 @@ trait GivenWhenThenSteps extends FragmentParsers with Tags { this: Specification
     thenExtractors: TTE, verifications: VE) {
 
     def apply[R : AsResult](verify: (T :: WTR) => R) =
-      GWTThens[GT, GTE, WT, WTR, WTE, WM, TTE, ((T :: WTR) => R) :: VE](whens, thenExtractors, verify :: verifications)
+      GWTThens[GT, GTE, WT, WTR, WTE, WM, TTE, ((T :: WTR) => Result) :: VE](whens, thenExtractors, AsResult.lift(verify) :: verifications)
   }
 
 
-  val addition = GWTSteps("addition").
-                   given(anInt).
-                   given(anInt).
-                   when(aString) { case operator :: a :: b:: HNil => a + b }.
-                   andThen(anInt) { case expected :: sum :: HNil => sum === expected }
-
-  def anInt = FragmentParser((_:String).toInt)
-  def aString = FragmentParser((s:String) => s)
 }
