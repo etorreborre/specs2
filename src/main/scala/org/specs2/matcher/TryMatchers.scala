@@ -44,7 +44,7 @@ trait TryBaseMatchers extends ExceptionMatchers {
     }
 
     def which(f: T => Boolean) = this ^^ { (t: Try[T]) => t filter f }
-    def like(f: PartialFunction[T, MatchResult[_]]) = this and partialMatcher(f)
+    def like(f: PartialFunction[T, MatchResult[_]]) = partialMatcher(f)
 
     private def partialMatcher(f: PartialFunction[T, MatchResult[_]]) = new Matcher[Try[T]] {
       def apply[S <: Try[T]](value: Expectable[S]) = {
