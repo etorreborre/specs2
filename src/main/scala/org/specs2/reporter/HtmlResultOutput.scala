@@ -22,12 +22,14 @@ import html.Htmlx._
  *
  */
 private[specs2]
-case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "", textPrinter: String => NodeSeq = toXhtml(_)) extends HtmlReportOutput { outer =>
+case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "", customTextPrinter: Option[String => NodeSeq] = None)(implicit args: Arguments) extends HtmlReportOutput { outer =>
 
+  protected lazy val textPrinter = customTextPrinter getOrElse ((s: String) => toXhtml(s)(args)) 
+  
   /**
    * start of the output
    */
-  private[specs2] lazy val blank = new HtmlResultOutput(NodeSeq.Empty, outer.filePath)
+  private[specs2] lazy val blank = new HtmlResultOutput(NodeSeq.Empty, outer.filePath, None)
   /** set the file path of the file being written */
   def filePathIs(path: String) = copy(filePath = path)
   /** base directory for this file path */
