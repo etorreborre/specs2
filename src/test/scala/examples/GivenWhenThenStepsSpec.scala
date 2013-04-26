@@ -22,6 +22,7 @@ class GivenWhenThenStepsSpec extends Specification with GivenWhenThenSteps { def
 
  * test all combinations
  * test with RegexParsers
+ * test with normal interpolated variables in the middle
  * strip the delimiters
  * change the extraction type to String => (T, String)
  * remove the FragmentsParsers with variable stuff
@@ -29,6 +30,7 @@ class GivenWhenThenStepsSpec extends Specification with GivenWhenThenSteps { def
  * provide default DelimitedFragmentParsers anInt, twoInts, threeInts, aString, twoStrings,
    threeStrings, aDouble, twoDoubles, threeDoubles and combination thereof (+ dates, sequences, times?)
  * use only regexparsers with delimiters or not?
+ * skip some lines?
 
  """
 
