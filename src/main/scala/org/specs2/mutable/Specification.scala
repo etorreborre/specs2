@@ -37,6 +37,6 @@ trait SpecificationFeatures extends mutable.FragmentsBuilder
   }
   /** use an available outside context to transform a function returning a value convertible to a result, into a result */
   implicit def outsideFunctionToResult[T : Outside, R : AsResult]: AsResult[T => R] = new AsResult[T => R] {
-    def asResult(f: =>(T => R)) = implicitly[Outside[T]].apply((t: T) => AsResult(f(t)))
+    def asResult(f: =>(T => R)) = implicitly[Outside[T]].applyOutside(f)
   }
 }

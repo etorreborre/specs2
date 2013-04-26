@@ -105,6 +105,7 @@ class ContextSpec extends Specification with ResultMatchers with Groups with Fra
    for a mutable spec                                                                                      ${g5().e2}
    for an outside context and an acceptance spec                                                           ${g5().e3}
    for an outside context and a mutable spec                                                               ${g5().e4}
+   for an aroundOutside context and an acceptance spec                                                     ${g5().e5}
 
  In a mutable spec
    the before code must be called before the body code                                                     ${g6().e1}
@@ -194,6 +195,13 @@ class ContextSpec extends Specification with ResultMatchers with Groups with Fra
       }
       executing(spec.content).prints("outside")
     }
+    e5 := {
+      val spec = new Spec {
+        implicit def outside1 = aroundOutside
+        "e1" in { s: Int => s must_== s }
+      }
+      executing(spec.content).prints("around", "outside")
+    }
   }
 
   "mutable contexts" - new g6 with FragmentsExecution {
@@ -268,7 +276,7 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
   def ex1Around = "ex1" ! around1(ok1)
   def ex1Outside = "ex1" ! outside((s:String) => ok1)
   def ex1OutsideFail = "ex1" ! outsideWithError((s:String) => ok1)
-  def ex1AroundOutside = "ex1" ! aroundOutside((s:String) => ok1)
+  def ex1AroundOutside = "ex1" ! aroundOutside((s:Int) => ok1)
   def ex1BeforeAfter = "ex1" ! beforeAfter(ok1)
   def ex1BeforeAfterAround = "ex1" ! beforeAfterAround(ok1)
   
@@ -325,9 +333,12 @@ trait ContextsForFragments extends StringOutput {
   object outsideWithError extends Outside[String] with StringOutput {
 	  def outside = { error("error"); "ok" }
   }
-  object aroundOutside extends AroundOutside[String] {
-	  def outside = { println("outside"); "string" }
-    def around[T : AsResult](a: =>T) = { println("around"); AsResult(a) }
+  object aroundOutside extends AroundOutside[Int] {
+	  def outside = { println("outside"); 1 }
+    def around[T : AsResult](a: =>T) = {
+      println("around");
+      AsResult(a)
+    }
   }
   object beforeAfter extends BeforeAfter {
 	  def before = println("before")
