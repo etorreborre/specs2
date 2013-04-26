@@ -59,7 +59,7 @@ trait HtmlPrinter {
   }
 
   /** @return a new HtmlReportOutput object creating html elements */
-  def output: HtmlReportOutput = new HtmlResultOutput
+  def output(implicit args: Arguments): HtmlReportOutput = new HtmlResultOutput
 
   /**
    * @return add a toc to each HtmlFile where relevant

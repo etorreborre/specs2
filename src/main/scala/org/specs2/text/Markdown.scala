@@ -18,13 +18,14 @@ trait Markdown {
    * @return a Markdown processor
    *         for now QUOTES and SMARTS are not rendered to avoid  <?> characters to appear on html pages
    */
-  def processor = new PegDownProcessor(Extensions.ALL & ~Extensions.QUOTES & ~Extensions.SMARTS)
+  def processor(implicit args: Arguments) = new PegDownProcessor(args.report.pegdownExtensions & ~Extensions.QUOTES & ~Extensions.SMARTS)
+  
   /**
    * parse the markdown string and return html.
    * code tags are prettified and newlines in paragraphs are
    * transformed to <br/> tags
    */
-  def toHtml(text: String) = {
+  def toHtml(text: String)(implicit args: Arguments) = {
     processor.markdownToHtml(text.replace("\\", "\\\\").replace("\\\\n", "\n")).
       replaceAll("<code>" -> "<code class='prettyprint'>")
   }
@@ -32,7 +33,7 @@ trait Markdown {
   /**
    * parse the markdown string and return html without the enclosing paragraph
    */
-  def toHtmlNoPar(text: String) = {
+  def toHtmlNoPar(text: String)(implicit args: Arguments) = {
     if (text.trim.isEmpty) ""
     else {
       val html = toHtml(text)
@@ -45,7 +46,7 @@ trait Markdown {
   /**
    * parse the markdown string and return xml (unless the arguments deactivate the markdown rendering)
    */
-  def toXhtml(text: String)(implicit args: Arguments = Arguments()): NodeSeq = {
+  def toXhtml(text: String)(implicit args: Arguments): NodeSeq = {
     if (!args.markdown) scala.xml.Text(text)
     else {
       val html = toHtmlNoPar(text)

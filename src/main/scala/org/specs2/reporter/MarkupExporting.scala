@@ -31,7 +31,8 @@ trait MarkupExporting extends HtmlExporting {
   def markupExtension = ".md"
 
   /** @return a new ReportOutput object creating markup elements */
-  override def output: HtmlReportOutput = new MarkupResultOutput
+  override def output(implicit args: Arguments): HtmlReportOutput = new MarkupResultOutput(
+    HtmlResultOutput(customTextPrinter = Some((t: String) => scala.xml.Text(t))))
 }
 object MarkupExporting extends MarkupExporting
 
@@ -41,9 +42,7 @@ object MarkupExporting extends MarkupExporting
  * @param output
  */
 private[specs2]
-case class MarkupResultOutput(
-  output: HtmlReportOutput = HtmlResultOutput(textPrinter = (t: String) => scala.xml.Text(t))) extends HtmlReportOutput {
-
+case class MarkupResultOutput(output: HtmlReportOutput)(implicit args: Arguments) extends HtmlReportOutput {
   def xml: NodeSeq                                                                              = output.xml
   def print(xml: NodeSeq): MarkupResultOutput                                                   = MarkupResultOutput(output.print(xml))
   def print(xml: Elem)   : MarkupResultOutput                                                   = MarkupResultOutput(output.print(xml))

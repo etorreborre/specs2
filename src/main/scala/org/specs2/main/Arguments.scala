@@ -9,6 +9,7 @@ import text._
 import Split._
 import data.SeparatedTags
 import scala.Predef._
+import org.pegdown.Extensions
 
 /**
  * This class holds all the options that are relevant for specs2 execution and reporting.
@@ -59,6 +60,7 @@ Arguments (
   def offset: Int                     = report.offset
   def markdown: Boolean               = report.markdown
   def debugMarkdown: Boolean          = report.debugMarkdown
+  def pegdownExtensions: Int          = report.pegdownExtensions
   def diffs: Diffs                    = report.diffs
   def fromSource: Boolean             = report.fromSource
   def traceFilter: StackTraceFilter   = report.traceFilter
@@ -296,90 +298,94 @@ object Store extends Extract {
  */
 private[specs2]
 case class Report(
-  _showOnly:      Option[String]           = None,
-  _failtrace:     Option[Boolean]          = None,
-  _color:         Option[Boolean]          = None,
-  _colors:        Option[Colors]           = None,
-  _noindent:      Option[Boolean]          = None,
-  _showtimes:     Option[Boolean]          = None,
-  _offset:        Option[Int]              = None,
-  _flow:          Option[Boolean]          = None,
-  _markdown:      Option[Boolean]          = None,
-  _debugMarkdown: Option[Boolean]          = None,
-  _streaming:     Option[Boolean]          = None,
-  _diffs:         Option[Diffs]            = None,
-  _fromSource:    Option[Boolean]          = None,
-  _traceFilter:   Option[StackTraceFilter] = None,
-  _checkUrls :    Option[Boolean]          = None,
-  _notoc:         Option[Boolean]          = None,
-  _notifier:      Option[String]           = None,
-  _exporter:      Option[String]           = None) extends ShowArgs {
+  _showOnly:          Option[String]           = None,
+  _failtrace:         Option[Boolean]          = None,
+  _color:             Option[Boolean]          = None,
+  _colors:            Option[Colors]           = None,
+  _noindent:          Option[Boolean]          = None,
+  _showtimes:         Option[Boolean]          = None,
+  _offset:            Option[Int]              = None,
+  _flow:              Option[Boolean]          = None,
+  _markdown:          Option[Boolean]          = None,
+  _debugMarkdown:     Option[Boolean]          = None,
+  _pegdownExtensions: Option[Int]              = None,
+  _streaming:         Option[Boolean]          = None,
+  _diffs:             Option[Diffs]            = None,
+  _fromSource:        Option[Boolean]          = None,
+  _traceFilter:       Option[StackTraceFilter] = None,
+  _checkUrls :        Option[Boolean]          = None,
+  _notoc:             Option[Boolean]          = None,
+  _notifier:          Option[String]           = None,
+  _exporter:          Option[String]           = None) extends ShowArgs {
 
   import Arguments._
   
-  def xonly: Boolean                = canShow("x") && canShow("!") && !canShow("o*+")
-  def canShow(s: String)            = hasFlags(s, _showOnly)
-  def failtrace: Boolean            = _failtrace.getOrElse(false)
-  def color: Boolean                = _color.getOrElse(true)
-  def colors: Colors                = _colors.getOrElse(new SmartColors())
-  def noindent: Boolean             = _noindent.getOrElse(false)
-  def showtimes: Boolean            = _showtimes.getOrElse(false)
-  def offset: Int                   = _offset.getOrElse(0)
-  def flow: Boolean                 = _flow.getOrElse(false)
-  def markdown: Boolean             = _markdown.getOrElse(true)
-  def debugMarkdown: Boolean        = _debugMarkdown.getOrElse(false)
-  def streaming: Boolean            = _streaming.getOrElse(false)
-  def diffs: Diffs                  = _diffs.getOrElse(SmartDiffs())
-  def fromSource: Boolean           = _fromSource.getOrElse(true)
-  def traceFilter: StackTraceFilter = _traceFilter.getOrElse(DefaultStackTraceFilter)
-  def checkUrls: Boolean            = _checkUrls.getOrElse(false)
-  def notoc: Boolean                = _notoc.getOrElse(false)
-  def hasToc: Boolean               = !notoc
-  def notifier: String              = _notifier.getOrElse("")
-  def exporter: String              = _exporter.getOrElse("")
+  def xonly: Boolean                 = canShow("x") && canShow("!") && !canShow("o*+")
+  def canShow(s: String)             = hasFlags(s, _showOnly)
+  def failtrace: Boolean             = _failtrace.getOrElse(false)
+  def color: Boolean                 = _color.getOrElse(true)
+  def colors: Colors                 = _colors.getOrElse(new SmartColors())
+  def noindent: Boolean              = _noindent.getOrElse(false)
+  def showtimes: Boolean             = _showtimes.getOrElse(false)
+  def offset: Int                    = _offset.getOrElse(0)
+  def flow: Boolean                  = _flow.getOrElse(false)
+  def markdown: Boolean              = _markdown.getOrElse(true)
+  def debugMarkdown: Boolean         = _debugMarkdown.getOrElse(false)
+  def pegdownExtensions: Int         = _pegdownExtensions.getOrElse(Extensions.ALL)
+  def streaming: Boolean             = _streaming.getOrElse(false)
+  def diffs: Diffs                   = _diffs.getOrElse(SmartDiffs())
+  def fromSource: Boolean            = _fromSource.getOrElse(true)
+  def traceFilter: StackTraceFilter  = _traceFilter.getOrElse(DefaultStackTraceFilter)
+  def checkUrls: Boolean             = _checkUrls.getOrElse(false)
+  def notoc: Boolean                 = _notoc.getOrElse(false)
+  def hasToc: Boolean                = !notoc
+  def notifier: String               = _notifier.getOrElse("")
+  def exporter: String               = _exporter.getOrElse("")
 
   def overrideWith(other: Report) = {
     new Report(
-      other._showOnly        .orElse(_showOnly),
-      other._failtrace       .orElse(_failtrace),
-      other._color           .orElse(_color),
-      other._colors          .orElse(_colors),
-      other._noindent        .orElse(_noindent),
-      other._showtimes       .orElse(_showtimes),
-      other._offset          .orElse(_offset),
-      other._flow            .orElse(_flow),
-      other._markdown        .orElse(_markdown),
-      other._debugMarkdown   .orElse(_debugMarkdown),
-      other._streaming       .orElse(_streaming),
-      other._diffs           .orElse(_diffs),
-      other._fromSource      .orElse(_fromSource),
-      other._traceFilter     .orElse(_traceFilter),
-      other._checkUrls       .orElse(_checkUrls),
-      other._notoc           .orElse(_notoc),
-      other._notifier        .orElse(_notifier),
-      other._exporter        .orElse(_exporter)
+      other._showOnly         .orElse(_showOnly),
+      other._failtrace        .orElse(_failtrace),
+      other._color            .orElse(_color),
+      other._colors           .orElse(_colors),
+      other._noindent         .orElse(_noindent),
+      other._showtimes        .orElse(_showtimes),
+      other._offset           .orElse(_offset),
+      other._flow             .orElse(_flow),
+      other._markdown         .orElse(_markdown),
+      other._debugMarkdown    .orElse(_debugMarkdown),
+      other._pegdownExtensions.orElse(_pegdownExtensions),
+      other._streaming        .orElse(_streaming),
+      other._diffs            .orElse(_diffs),
+      other._fromSource       .orElse(_fromSource),
+      other._traceFilter      .orElse(_traceFilter),
+      other._checkUrls        .orElse(_checkUrls),
+      other._notoc            .orElse(_notoc),
+      other._notifier         .orElse(_notifier),
+      other._exporter         .orElse(_exporter)
     )
   }
 
   override def toString = List(
-    "showOnly"       -> _showOnly   ,
-    "failtrace"      -> _failtrace    ,
-    "color"          -> _color        ,
-    "colors"         -> _colors       ,
-    "noindent"       -> _noindent     ,
-    "showtimes"      -> _showtimes    ,
-    "offset"         -> _offset       ,
-    "flow"         -> _flow       ,
-    "markdown"       -> _markdown     ,
-    "debugMarkdown"  -> _debugMarkdown,
-    "streaming"      -> _streaming,
-    "diffs"          -> _diffs,
-    "fromSource"     -> _fromSource,
-    "traceFilter"    -> _traceFilter,
-    "checkUrls"      -> _checkUrls,
-    "notoc"          -> _notoc,
-    "notifier"       -> _notifier,
-    "exporter"       -> _exporter).flatMap(showArg).mkString("Report(", ", ", ")")
+    "showOnly"          -> _showOnly,
+    "failtrace"         -> _failtrace,
+    "color"             -> _color,
+    "colors"            -> _colors,
+    "noindent"          -> _noindent,
+    "showtimes"         -> _showtimes,
+    "offset"            -> _offset,
+    "flow"              -> _flow,
+    "markdown"          -> _markdown,
+    "debugMarkdown"     -> _debugMarkdown,
+    "pegdownExtensions" -> _pegdownExtensions,
+    "streaming"         -> _streaming,
+    "diffs"             -> _diffs,
+    "fromSource"        -> _fromSource,
+    "traceFilter"       -> _traceFilter,
+    "checkUrls"         -> _checkUrls,
+    "notoc"             -> _notoc,
+    "notifier"          -> _notifier,
+    "exporter"          -> _exporter).flatMap(showArg).mkString("Report(", ", ", ")")
 
 }
 
@@ -387,29 +393,30 @@ private[specs2]
 object Report extends Extract {
   def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Report = {
     new Report (
-      _showOnly      = value("showOnly").orElse(bool("xOnly").map(v => "x!")),
-      _failtrace     = bool("failTrace"),
-      _color         = bool("color", "noColor"),
-      _colors        = value("colors").map(SmartColors.fromArgs),
-      _noindent      = bool("noIndent"),
-      _showtimes     = bool("showTimes"),
-      _offset        = int("offset"),
-      _flow          = bool("flow"),
-      _markdown      = bool("markdown", "noMarkdown"),
-      _debugMarkdown = bool("debugMarkdown"),
-      _streaming     = bool("streaming"),
-      _fromSource    = bool("fromSource"),
-      _traceFilter   = bool("fullStackTrace").map(t=>NoStackTraceFilter).
-                       orElse(value("traceFilter", IncludeExcludeStackTraceFilter.fromString(_))),
-      _checkUrls     = bool("checkUrls"),
-      _notoc         = bool("noToc"),
-      _notifier      = value("notifier"),
-      _exporter      = value("exporter")
+      _showOnly          = value("showOnly").orElse(bool("xOnly").map(v => "x!")),
+      _failtrace         = bool("failTrace"),
+      _color             = bool("color", "noColor"),
+      _colors            = value("colors").map(SmartColors.fromArgs),
+      _noindent          = bool("noIndent"),
+      _showtimes         = bool("showTimes"),
+      _offset            = int("offset"),
+      _flow              = bool("flow"),
+      _markdown          = bool("markdown", "noMarkdown"),
+      _debugMarkdown     = bool("debugMarkdown"),
+      _pegdownExtensions = int("pegdownExtensions"),
+      _streaming         = bool("streaming"),
+      _fromSource        = bool("fromSource"),
+      _traceFilter       = bool("fullStackTrace").map(t=>NoStackTraceFilter).
+                           orElse(value("traceFilter", IncludeExcludeStackTraceFilter.fromString(_))),
+      _checkUrls         = bool("checkUrls"),
+      _notoc             = bool("noToc"),
+      _notifier          = value("notifier"),
+      _exporter          = value("exporter")
     )
   }
 
   val allValueNames = Seq("showOnly", "xOnly", "failTrace", "color", "noColor", "colors", "noIndent", "offset", "flow", "markdown", "noMarkdown", "showTimes",
-                          "debugMarkdown", "streaming", "fromSource", "fullStackTrace", "traceFilter", "checkUrls", "noToc", "notifier", "exporter")
+                          "debugMarkdown", "pegdownExtensions", "streaming", "fromSource", "fullStackTrace", "traceFilter", "checkUrls", "noToc", "notifier", "exporter")
 }
 /**
  * Command-line arguments

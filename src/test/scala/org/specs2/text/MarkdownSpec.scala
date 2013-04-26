@@ -3,8 +3,10 @@ package text
 
 import mutable._
 import Markdown._
+import org.specs2.main.Arguments
 
 class MarkdownSpec extends Specification {
+  implicit val defaultArgs = Arguments()
 
   "Emphasized text" >>
   { toHtmlNoPar("_hello_") must_== "<em>hello</em>" }

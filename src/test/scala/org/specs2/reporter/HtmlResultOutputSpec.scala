@@ -5,6 +5,7 @@ import specification._
 import matcher.{XmlMatchers, DataTable, DataTables}
 import text.NoMarkup
 import execute.DecoratedResult
+import org.specs2.main.Arguments
 
 class HtmlResultOutputSpec extends Specification with DataTables with XmlMatchers { def is = s2"""
                                                                                                                         
@@ -21,7 +22,8 @@ class HtmlResultOutputSpec extends Specification with DataTables with XmlMatcher
     A datatable must be displayed if there is a failure                                              ${dataTables().e2}
     A datatable used as an auto-example must be displayed                                            ${dataTables().e3}
                                                                                                      """
-
+  implicit val defaultArgs = Arguments()
+    
   def descriptions = {
     val (out, desc) = (new HtmlResultOutput, NoMarkup("desc"))
     "output"               | "xml"                                                 |>

@@ -38,43 +38,44 @@ class MySpec extends Specification { def is = args(xonly=true) ^ s2"""
 
 From inside a specification, the available arguments are the following:
 
-  Name           | Default value                            | Description
- --------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
- ***Selection*** |||
- *`ex`        *  | .*                                       | regular expression specifying the examples to execute. Use `ex .*brilliant.*` on the command line
- *`include`   *  | ""                                       | execute only the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
- *`exclude`   *  | ""                                       | do not execute the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
- *`wasIssue`  *  | false                                    | select only previously failed/error examples
- *`was`       *  | ""                                       | select only some previously executed examples based on their status
- `specName`      | ".*Spec"                                 | regular expression to use when executing specifications with the FilesRunner
- ***Execution*** |||
- *`plan`      *  | false                                    | only report the text of the specification without executing anything
- *`skipAll`   *  | false                                    | skip all the examples
- *`stopOnFail`*  | false                                    | skip all examples after the first failure or error
- *`stopOnSkip`*  | false                                    | skip all examples after the first skipped result
- *`sequential`*  | false                                    | don't execute examples concurrently
- *`isolated`*    | false                                    | execute each example in its own specification to get "fresh" local variables
- `threadsNb`     | `Runtime.getRuntime.availableProcessors` | number of threads to use for concurrent execution
- ***Storing***   |||
- `never`         | false                                    | never store statistics
- `reset`         | false                                    | remove previously stored statistics
- ***Reporting*** |||
- *`xonly`   *    | false                                    | only report failures and errors
- *`showOnly`*    | ""                                       | only report some examples based on their status
- *`color`   *    | true                                     | use colors in the output (`nocolor` can also be used on the command line)
- *`noindent`*    | false                                    | don't indent automatically text and examples
- *`markdown`*    | true                                     | interpret text as Markdown in the html reporter
- `failtrace`     | false                                    | report the stacktrace for failures
- `colors`        | `org.specs2.text.SmartColors`            | define alternative colors (replace failureColor from being yellow to magenta for example)
- `showtimes`     | false                                    | show individual execution times
- `debugMarkdown` | false                                    | print more information when Markdown formatting fails
- `diffs`         | `SmartDiffs`                             | use a specific algorithm to display differences
- `fromSource`    | true                                     | true takes an AutoExample description from the file, false from the expectation ok message
- `traceFilter`   | `DefaultStackTraceFilter`                | use a StackTraceFilter instance for filtering the reported stacktrace elements
- `checkUrls`     | false                                    | if true, will parse the html files and check that local or http hrefs can be accessed
- `notoc`         | false                                    | if true, will not create a table of contents on the generated html page
- `notifier`      | String                                   | name of a class extending the `org.specs2.reporter.Notifier` trait
- `exporter`      | String                                   | name of a class extending the `org.specs2.reporter.Exporter` trait
+  Name               | Default value                            | Description
+ ------------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
+ ***Selection***     |||
+ *`ex`        *      | .*                                       | regular expression specifying the examples to execute. Use `ex .*brilliant.*` on the command line
+ *`include`   *      | ""                                       | execute only the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
+ *`exclude`   *      | ""                                       | do not execute the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
+ *`wasIssue`  *      | false                                    | select only previously failed/error examples
+ *`was`       *      | ""                                       | select only some previously executed examples based on their status
+ `specName`          | ".*Spec"                                 | regular expression to use when executing specifications with the FilesRunner
+ ***Execution***     |||
+ *`plan`      *      | false                                    | only report the text of the specification without executing anything
+ *`skipAll`   *      | false                                    | skip all the examples
+ *`stopOnFail`*      | false                                    | skip all examples after the first failure or error
+ *`stopOnSkip`*      | false                                    | skip all examples after the first skipped result
+ *`sequential`*      | false                                    | don't execute examples concurrently
+ *`isolated`*        | false                                    | execute each example in its own specification to get "fresh" local variables
+ `threadsNb`         | `Runtime.getRuntime.availableProcessors` | number of threads to use for concurrent execution
+ ***Storing***       |||
+ `never`             | false                                    | never store statistics
+ `reset`             | false                                    | remove previously stored statistics
+ ***Reporting***     |||
+ *`xonly`   *        | false                                    | only report failures and errors
+ *`showOnly`*        | ""                                       | only report some examples based on their status
+ *`color`   *        | true                                     | use colors in the output (`nocolor` can also be used on the command line)
+ *`noindent`*        | false                                    | don't indent automatically text and examples
+ *`markdown`*        | true                                     | interpret text as Markdown in the html reporter
+ `pegdownExtensions` | `org.pegdown.Extensions.ALL`             | specifies the extensions used when processing Markdown content with the pegdown library; the value is an `Int` that is determinded by combining the possible values from `org.pegdown.Extensions` with a logical `AND`; note that SMARTS and QUOTES are always disabled for now
+ `failtrace`         | false                                    | report the stacktrace for failures
+ `colors`            | `org.specs2.text.SmartColors`            | define alternative colors (replace failureColor from being yellow to magenta for example)
+ `showtimes`         | false                                    | show individual execution times
+ `debugMarkdown`     | false                                    | print more information when Markdown formatting fails
+ `diffs`             | `SmartDiffs`                             | use a specific algorithm to display differences
+ `fromSource`        | true                                     | true takes an AutoExample description from the file, false from the expectation ok message
+ `traceFilter`       | `DefaultStackTraceFilter`                | use a StackTraceFilter instance for filtering the reported stacktrace elements
+ `checkUrls`         | false                                    | if true, will parse the html files and check that local or http hrefs can be accessed
+ `notoc`             | false                                    | if true, will not create a table of contents on the generated html page
+ `notifier`          | String                                   | name of a class extending the `org.specs2.reporter.Notifier` trait
+ `exporter`          | String                                   | name of a class extending the `org.specs2.reporter.Exporter` trait
 
 ##### Most/Least frequently used arguments
 
@@ -199,41 +200,42 @@ Note that the default filter also truncates the stacktrace in the middle if it i
 
 On the command line you can pass the following arguments:
 
-  Name            | Value format            | Comments
- ---------------- | ----------------------- | ------------------------------------------------------------------------
- ***Selection***  |||
- `ex`             | regexp                  |                                                                         |
- `include`        | csv                     |                                                                         |
- `exclude`        | csv                     |                                                                         |
- `wasIssue`       | boolean                 |                                                                         |
- `was`            | String                  | see: Status flags                                                       |
- `specname`       | regexp                  |                                                                         |
- ***Execution***  |||
- `plan`           | boolean                 |                                                                         |
- `skipall`        | boolean                 |                                                                         |
- `sequential`     | boolean                 |                                                                         |
- `isolated`       | boolean                 |                                                                         |
- `threadsnb`      | int                     |                                                                         |
- ***Storing***    |||
- `resetstore`     | boolean                 |                                                                         |
- `neverstore`     | boolean                 |                                                                         |
- ***Reporting***  |||
- `xonly`          | boolean                 |                                                                         |
- `showonly`       | String                  | see: Status flags                                                       |
- `failtrace`      | boolean                 |                                                                         |
- `color`          | boolean                 |                                                                         |
- `colors`         | map                     | e.g. text:be, failure:m (see the Colors section)                        |
- `noindent`       | boolean                 |                                                                         |
- `showtimes`      | boolean                 |                                                                         |
- `markdown`       | boolean                 |                                                                         |
- `debugmarkdown`  | boolean                 |                                                                         |
- `fromsource`     | boolean                 |                                                                         |
- `fullstacktrace` | boolean                 |                                                                         |
- `checkurls`      | boolean                 |                                                                         |
- `notoc`          | boolean                 |                                                                         |
- `tracefilter`    | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns |
- `notifier`       | String                  | name of a class extending the `org.specs2.reporter.Notifier` trait      |
- `exporter`       | String                  | name of a class extending the `org.specs2.reporter.Exporter` trait      |
+  Name               | Value format            | Comments
+ ------------------- | ----------------------- | ------------------------------------------------------------------------
+ ***Selection***     |||
+ `ex`                | regexp                  |                                                                         |
+ `include`           | csv                     |                                                                         |
+ `exclude`           | csv                     |                                                                         |
+ `wasIssue`          | boolean                 |                                                                         |
+ `was`               | String                  | see: Status flags                                                       |
+ `specname`          | regexp                  |                                                                         |
+ ***Execution***     |||
+ `plan`              | boolean                 |                                                                         |
+ `skipall`           | boolean                 |                                                                         |
+ `sequential`        | boolean                 |                                                                         |
+ `isolated`          | boolean                 |                                                                         |
+ `threadsnb`         | int                     |                                                                         |
+ ***Storing***       |||
+ `resetstore`        | boolean                 |                                                                         |
+ `neverstore`        | boolean                 |                                                                         |
+ ***Reporting***     |||
+ `xonly`             | boolean                 |                                                                         |
+ `showonly`          | String                  | see: Status flags                                                       |
+ `failtrace`         | boolean                 |                                                                         |
+ `color`             | boolean                 |                                                                         |
+ `colors`            | map                     | e.g. text:be, failure:m (see the Colors section)                        |
+ `noindent`          | boolean                 |                                                                         |
+ `showtimes`         | boolean                 |                                                                         |
+ `markdown`          | boolean                 |                                                                         |
+ `debugmarkdown`     | boolean                 |                                                                         |
+ `pegdownExtensions` | int                     | flags from `org.pegdown.Extensions` combined with logical `AND`         | 
+ `fromsource`        | boolean                 |                                                                         |
+ `fullstacktrace`    | boolean                 |                                                                         |
+ `checkurls`         | boolean                 |                                                                         |
+ `notoc`             | boolean                 |                                                                         |
+ `tracefilter`       | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns |
+ `notifier`          | String                  | name of a class extending the `org.specs2.reporter.Notifier` trait      |
+ `exporter`          | String                  | name of a class extending the `org.specs2.reporter.Exporter` trait      |
 
 _[`regexp` is a Java regular expression, csv a list of comma-separated values, map is a list of csv pairs key:value]_
 
