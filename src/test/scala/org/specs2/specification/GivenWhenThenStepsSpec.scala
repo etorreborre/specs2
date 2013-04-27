@@ -27,23 +27,23 @@ class GivenWhenThenStepsSpec extends Specification with GivenWhenThenSteps with 
 
    TODO:
 
- * strip the delimiters
- * change the extraction type to String => (T, String)
- * test all combinations
+ * test failures during: extraction, mapping, examples
  * test with RegexParsers
  * test with normal interpolated variables in the middle
  * remove the FragmentsParsers with variable stuff
  * document
  * provide default DelimitedFragmentParsers anInt, twoInts, threeInts, aString, twoStrings,
    threeStrings, aDouble, twoDoubles, threeDoubles and combination thereof (+ dates, sequences, times?)
- * use only regexparsers with delimiters or not?
- * skip some lines?
+ * use a template to define which lines must be mapped to extractors (how to skip some lines?)
 
  """
 
   "combinations" - new g1 {
     e1 := {
-      val steps = GWTSteps("e1").given(anInt).when(aString) { case op :: i :: HNil => -i }.andThen(anInt) { case e :: a :: HNil => a === e }
+      val steps = GWTSteps("e1").
+        given(anInt).
+        when(aString) { case op :: i :: _ => -i }.
+        andThen(anInt) { case e :: a :: _ => a === e }
 
       executeExamplesResult {
         s2""" ${steps.start}
@@ -55,7 +55,11 @@ class GivenWhenThenStepsSpec extends Specification with GivenWhenThenSteps with 
     }
 
     e2 := {
-      val steps = GWTSteps("e2").given(anInt).given(anInt).when(aString) { case op :: i :: j :: HNil => i + j }.andThen(anInt) { case e :: a :: HNil => a === e }
+      val steps = GWTSteps("e2").
+        given(anInt).
+        given(anInt).
+        when(aString) { case op :: i :: j :: _ => i + j }.
+        andThen(anInt) { case e :: a :: _ => a === e }
 
       executeExamplesResult {
         s2""" ${steps.start}
@@ -68,7 +72,9 @@ class GivenWhenThenStepsSpec extends Specification with GivenWhenThenSteps with 
     }
 
     e3 := {
-      val steps = GWTSteps("e3").given(anInt).given(anInt).
+      val steps = GWTSteps("e3").
+        given(anInt).
+        given(anInt).
         when(aString) { case op :: i :: j :: _ => i + j }.
         when(aString) { case op :: _           => ((i:Int) => -i) }.
         andThen(anInt) { case e :: f :: a :: _ => f(a) === e }
@@ -85,9 +91,11 @@ class GivenWhenThenStepsSpec extends Specification with GivenWhenThenSteps with 
     }
 
     e4 := {
-      val steps = GWTSteps("e4").given(anInt).when(aString) { case op :: i :: HNil => -i }.
-        andThen(anInt) { case e :: a :: HNil => a === e }.
-        andThen(anInt) { case e :: a :: HNil => a must be_>(e) }
+      val steps = GWTSteps("e4").
+        given(anInt).
+        when(aString) { case op :: i :: _ => -i }.
+        andThen(anInt) { case e :: a :: _ => a === e }.
+        andThen(anInt) { case e :: a :: _ => a must be_>(e) }
 
       executeExamplesResult {
         s2""" ${steps.start}
@@ -102,7 +110,10 @@ class GivenWhenThenStepsSpec extends Specification with GivenWhenThenSteps with 
 
   "extractors" - new g2 {
     e1 := {
-      val steps = GWTSteps("e1").given(anInt).when(aString) { case op :: i :: HNil => -i }.andThen(anInt) { case e :: a :: HNil => a === e }
+      val steps = GWTSteps("e1").
+        given(anInt).
+        when(aString) { case op :: i :: _ => -i }.
+        andThen(anInt) { case e :: a :: _ => a === e }
 
       specs2.text { nocolor ^
         s2""" ${steps.start}
