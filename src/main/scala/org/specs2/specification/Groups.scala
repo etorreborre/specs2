@@ -183,35 +183,35 @@ trait Grouped { outer =>
 
   implicit def namedGroup(s: String): NamedGroup = new NamedGroup(s)
   class NamedGroup(s: String) {
-    def -(g: Group) = g
+    def -(g: Group) = g.copy(name = s)
   }
 }
 
 case class Group(private val name: String = "") extends BeforeAfterAround {
   private lazy val pending = StandardResults.pending
 
-  val e1:  Function0Result = new execute.Pending(name + " - e1")
-  val e2:  Function0Result = new execute.Pending(name + " - e2")
-  val e3:  Function0Result = new execute.Pending(name + " - e3")
-  val e4:  Function0Result = new execute.Pending(name + " - e4")
-  val e5:  Function0Result = new execute.Pending(name + " - e5")
-  val e6:  Function0Result = new execute.Pending(name + " - e6")
-  val e7:  Function0Result = new execute.Pending(name + " - e7")
-  val e8:  Function0Result = new execute.Pending(name + " - e8")
-  val e9:  Function0Result = new execute.Pending(name + " - e9")
-  val e10: Function0Result = new execute.Pending(name + " - e10")
-  val e11: Function0Result = new execute.Pending(name + " - e11")
-  val e12: Function0Result = new execute.Pending(name + " - e12")
-  val e13: Function0Result = new execute.Pending(name + " - e13")
-  val e14: Function0Result = new execute.Pending(name + " - e14")
-  val e15: Function0Result = new execute.Pending(name + " - e15")
-  val e16: Function0Result = new execute.Pending(name + " - e16")
-  val e17: Function0Result = new execute.Pending(name + " - e17")
-  val e18: Function0Result = new execute.Pending(name + " - e18")
-  val e19: Function0Result = new execute.Pending(name + " - e19")
-  val e20: Function0Result = new execute.Pending(name + " - e20")
-  val e21: Function0Result = new execute.Pending(name + " - e21")
-  val e22: Function0Result = new execute.Pending(name + " - e22")
+  val e1:  Function0Result = new execute.Pending(s"PENDING $name - e1")
+  val e2:  Function0Result = new execute.Pending(s"PENDING $name - e2")
+  val e3:  Function0Result = new execute.Pending(s"PENDING $name - e3")
+  val e4:  Function0Result = new execute.Pending(s"PENDING $name - e4")
+  val e5:  Function0Result = new execute.Pending(s"PENDING $name - e5")
+  val e6:  Function0Result = new execute.Pending(s"PENDING $name - e6")
+  val e7:  Function0Result = new execute.Pending(s"PENDING $name - e7")
+  val e8:  Function0Result = new execute.Pending(s"PENDING $name - e8")
+  val e9:  Function0Result = new execute.Pending(s"PENDING $name - e9")
+  val e10: Function0Result = new execute.Pending(s"PENDING $name - e10")
+  val e11: Function0Result = new execute.Pending(s"PENDING $name - e11")
+  val e12: Function0Result = new execute.Pending(s"PENDING $name - e12")
+  val e13: Function0Result = new execute.Pending(s"PENDING $name - e13")
+  val e14: Function0Result = new execute.Pending(s"PENDING $name - e14")
+  val e15: Function0Result = new execute.Pending(s"PENDING $name - e15")
+  val e16: Function0Result = new execute.Pending(s"PENDING $name - e16")
+  val e17: Function0Result = new execute.Pending(s"PENDING $name - e17")
+  val e18: Function0Result = new execute.Pending(s"PENDING $name - e18")
+  val e19: Function0Result = new execute.Pending(s"PENDING $name - e19")
+  val e20: Function0Result = new execute.Pending(s"PENDING $name - e20")
+  val e21: Function0Result = new execute.Pending(s"PENDING $name - e21")
+  val e22: Function0Result = new execute.Pending(s"PENDING $name - e22")
 
   def before {}
   def after {}

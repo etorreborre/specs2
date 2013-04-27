@@ -36,17 +36,18 @@ trait FragmentParsers extends FragmentParserApply with FragmentParserExtract { o
   }
 }
 
-/**
- * a Fragment parser is responsible for extracting a value from some previous text and, if equipped with a verification
- * function, to check that this value is ok. The value might be a tuple or a sequence
- */
-trait FragmentParser[T] extends (String => T) { outer =>
+trait StepParser[T] {
   /** parse some text and extract some well-type value T */
   def parse(text: String): T
   /** if the original text contains delimiters to indicate the values to extract, remove them */
   def strip(text: String) = text
-  /** function definition */
-  def apply(text: String): T = parse(text)
+}
+
+/**
+ * a Fragment parser is responsible for extracting a value from some previous text and, if equipped with a verification
+ * function, to check that this value is ok. The value might be a tuple or a sequence
+ */
+trait FragmentParser[T] extends StepParser[T] { outer =>
 
   protected def copy(check: Option[T => Result] = None, name: Option[String] = None): FragmentParser[T]
 

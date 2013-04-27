@@ -1,30 +1,37 @@
-package examples
+package org.specs2
+package specification
 
-import org.specs2.Specification
-import org.specs2.specification._
-import org.specs2.execute._
+import execute._
 import AsResult._
 import shapeless._
 import scalaz.std.list._
 import scalaz.syntax.foldable._
+import FragmentExecution._
 
-class GivenWhenThenStepsSpec extends Specification with GivenWhenThenSteps { def is = s2"""
+class GivenWhenThenStepsSpec extends Specification with GivenWhenThenSteps with Grouped { def is = s2"""
 
-  A given-when-then example for a calculator
-                                                  ${addition.start}
-   Given the first number: {1}
-   Given the second number: {2}
-   With the addition operator {+}
-   Then I should get: {3}
-                                                  ${addition.end}
+ Given / When / Then is a style of specification where there are a number of steps setting up values to setup a context (given steps), then some steps to trigger some actions (when steps) and finally some checks (then steps).
+
+ Combinations with delimited extractors
+
+  given/when/then                                   ${g1.e1}
+  given/given/when/then                             ${g1.e2}
+  given/given/when/when/then                        ${g1.e3}
+  given/when/then/then                              ${g1.e4}
+
+ Extractors must extract values and return the resulting string
+
+  with delimited extractors                         ${g2.e1}
+  with regex extractors                             ${g2.e2}
+
 
    TODO:
 
+ * strip the delimiters
+ * change the extraction type to String => (T, String)
  * test all combinations
  * test with RegexParsers
  * test with normal interpolated variables in the middle
- * strip the delimiters
- * change the extraction type to String => (T, String)
  * remove the FragmentsParsers with variable stuff
  * document
  * provide default DelimitedFragmentParsers anInt, twoInts, threeInts, aString, twoStrings,
@@ -34,6 +41,78 @@ class GivenWhenThenStepsSpec extends Specification with GivenWhenThenSteps { def
 
  """
 
+  "combinations" - new g1 {
+    e1 := {
+      val steps = GWTSteps("e1").given(anInt).when(aString) { case op :: i :: HNil => -i }.andThen(anInt) { case e :: a :: HNil => a === e }
+
+      executeExamplesResult {
+        s2""" ${steps.start}
+          given {1}
+          when {-}
+          then {-1}       ${steps.end}
+        """
+      }
+    }
+
+    e2 := {
+      val steps = GWTSteps("e2").given(anInt).given(anInt).when(aString) { case op :: i :: j :: HNil => i + j }.andThen(anInt) { case e :: a :: HNil => a === e }
+
+      executeExamplesResult {
+        s2""" ${steps.start}
+          given {1}
+          given {2}
+          when {+}
+          then {3}       ${steps.end}
+        """
+      }
+    }
+
+    e3 := {
+      val steps = GWTSteps("e3").given(anInt).given(anInt).
+        when(aString) { case op :: i :: j :: _ => i + j }.
+        when(aString) { case op :: _           => ((i:Int) => -i) }.
+        andThen(anInt) { case e :: f :: a :: _ => f(a) === e }
+
+      executeExamplesResult {
+        s2""" ${steps.start}
+          given {1}
+          given {2}
+          when {+}
+          when {-}
+          then {-3}       ${steps.end}
+        """
+      }
+    }
+
+    e4 := {
+      val steps = GWTSteps("e4").given(anInt).when(aString) { case op :: i :: HNil => -i }.
+        andThen(anInt) { case e :: a :: HNil => a === e }.
+        andThen(anInt) { case e :: a :: HNil => a must be_>(e) }
+
+      executeExamplesResult {
+        s2""" ${steps.start}
+          given {1}
+          when {-}
+          then {-1}
+          then {-10}       ${steps.end}
+        """
+      }
+    }
+  }
+
+  "extractors" - new g2 {
+    e1 := {
+      val steps = GWTSteps("e1").given(anInt).when(aString) { case op :: i :: HNil => -i }.andThen(anInt) { case e :: a :: HNil => a === e }
+
+      specs2.text { nocolor ^
+        s2""" ${steps.start}
+          given {1}
+          when {-}
+          then {-1}       ${steps.end}
+        """
+      }.replace("\n", "") must contain("given 1") and contain("when -") and contain("+ then -1")
+    }
+  }
 }
 
 trait GivenWhenThenSteps extends FragmentParsers with Tags { this: Specification =>
@@ -67,7 +146,7 @@ trait GivenWhenThenSteps extends FragmentParsers with Tags { this: Specification
   }
 
   case class GWTStart(title: String, isStart: Boolean = true) extends GWTSteps {
-    def given[T](f: String => T) = GWTGivens[T :: HNil, (String => T) :: HNil](title, f :: HNil)
+    def given[T](f: StepParser[T]) = GWTGivens[T :: HNil, (StepParser[T]) :: HNil](title, f :: HNil)
     def fragments(text: String): Fragments = Fragments.createList(Text(text))
     def start: GWTSteps = this
     def end: GWTSteps = this
@@ -84,8 +163,8 @@ trait GivenWhenThenSteps extends FragmentParsers with Tags { this: Specification
    * VE =  verification types for then steps
    */
   case class GWTGivens[GT <: HList, GTE <: HList](title: String, givenExtractors: GTE = HNil, isStart: Boolean = true) extends GWTSteps {
-    def given[T](f: String => T) = GWTGivens[T :: GT, (String => T) :: GTE](title, f :: givenExtractors)
-    def when[T](f: String => T) = GWTWhensApply[T, GT, GTE, T :: HNil, HNil, (String => T) :: HNil, HNil](this, f :: HNil, HNil)
+    def given[T](f: StepParser[T]) = GWTGivens[T :: GT, (StepParser[T]) :: GTE](title, f :: givenExtractors)
+    def when[T](f: StepParser[T]) = GWTWhensApply[T, GT, GTE, T :: HNil, HNil, (StepParser[T]) :: HNil, HNil](this, f :: HNil, HNil)
 
     def fragments(text: String): Fragments = Fragments.createList(Text(text))
 
@@ -94,8 +173,8 @@ trait GivenWhenThenSteps extends FragmentParsers with Tags { this: Specification
   }
 
   case class GWTWhens[GT <: HList, GTE <: HList, WT <: HList, WTR <: HList, WTE <: HList, WM <: HList](givens: GWTGivens[GT, GTE], whenExtractors: WTE, mappers: WM, isStart: Boolean = true) extends GWTSteps {
-    def when[T](f: String => T)    = GWTWhensApply[T, GT, GTE, T :: WT, WTR, (String => T) :: WTE, WM](givens, f :: whenExtractors, mappers)
-    def andThen[T](f: String => T) = GWTThensApply[T, GT, GTE, WT, WTR, WTE, WM, (String => T) :: HNil, HNil](GWTWhens(givens, whenExtractors, mappers), f :: HNil, HNil)
+    def when[T](f: StepParser[T])    = GWTWhensApply[T, GT, GTE, T :: WT, WTR, (StepParser[T]) :: WTE, WM](givens, f :: whenExtractors, mappers)
+    def andThen[T](f: StepParser[T]) = GWTThensApply[T, GT, GTE, WT, WTR, WTE, WM, (StepParser[T]) :: HNil, HNil](GWTWhens(givens, whenExtractors, mappers), f :: HNil, HNil)
 
     def title = givens.title
     def fragments(text: String): Fragments = Fragments.createList(Text(text))
@@ -113,8 +192,8 @@ trait GivenWhenThenSteps extends FragmentParsers with Tags { this: Specification
       whens: GWTWhens[GT, GTE, WT, WTR, WTE, WM],
       thenExtractors: TTE, verifications: VE, isStart: Boolean = true) extends GWTSteps {
 
-    def andThen[T](f: String => T) =
-      GWTThensApply[T, GT, GTE, WT, WTR, WTE, WM, (String =>T) :: TTE, VE](GWTWhens(whens.givens, whens.whenExtractors, whens.mappers), f :: thenExtractors, verifications)
+    def andThen[T](f: StepParser[T]) =
+      GWTThensApply[T, GT, GTE, WT, WTR, WTE, WM, StepParser[T] :: TTE, VE](GWTWhens(whens.givens, whens.whenExtractors, whens.mappers), f :: thenExtractors, verifications)
 
     def title = whens.title
     def givens = whens.givens
@@ -131,9 +210,10 @@ trait GivenWhenThenSteps extends FragmentParsers with Tags { this: Specification
       }
       def value(r: Result) = r match { case DecoratedResult(v, _) => v; case _ => r }
 
-      val givenExtractorsList = givens.givenExtractors.toList(toListAny)
-      val whenExtractorsList  = whens.whenExtractors.toList(toListAny)
-      val thenExtractorsList  = thenExtractors.toList(toListAny)
+      val givenExtractorsList = givens.givenExtractors.toList(toListAny).reverse
+      val whenExtractorsList  = whens.whenExtractors.toList(toListAny).reverse
+      val thenExtractorsList  = thenExtractors.toList(toListAny).reverse
+      val verificationsList   = verifications.toList(toListAny).reverse
 
       val (intro, givenLines, whenLines, thenLines) =
         (lines.dropRight(whenExtractorsList.size + thenExtractorsList.size + givenExtractorsList.size),
@@ -143,25 +223,28 @@ trait GivenWhenThenSteps extends FragmentParsers with Tags { this: Specification
 
       val introFragments: Seq[Fragment] = intro.map(l => Text(l+"\n"))
 
-      val givenSteps: Seq[Step] = (givenExtractorsList zip givenLines).view.map { case (extractor, line) => Step(extractor.asInstanceOf[String => Any](line)) }
-      val givenFragments: Seq[Fragment] = (givenLines zip givenSteps).map { case (l: String, s: Step) => Text(l+"\n") ^ s }.flatMap(_.middle)
+      val givenSteps: Seq[Step] = (givenExtractorsList zip givenLines).view.map { case (extractor, line) => Step(extractor.asInstanceOf[StepParser[Any]].parse(line)) }
+      val givenFragments: Seq[Fragment] = (givenExtractorsList zip givenLines zip givenSteps).
+        map { case ((extractor: StepParser[_], l: String), s: Step) => Text(extractor.strip(l)+"\n") ^ s }.flatMap(_.middle)
 
       lazy val givenStepsResults = givenSteps.foldRight(HNil: HList) { (cur, res) => value(cur.execute) :: res }
       val whenSteps =  (whenExtractorsList zip whenLines zip whens.mappers.toList(toListAny)).map { case ((extractor, line), mapper) =>
         Step {
-          val extracted = extractor.asInstanceOf[String => Any](line)
+          val extracted = extractor.asInstanceOf[StepParser[Any]].parse(line)
           val values = extracted :: givenStepsResults
           mapper.asInstanceOf[Any => Any](values)
         }
       }
 
-      val whenFragments: Seq[Fragment] = (whenLines zip whenSteps).map { case (l: String, s: Step) => Text(l+"\n") ^ s }.flatMap(_.middle)
+      val whenFragments: Seq[Fragment] = (whenExtractorsList zip whenLines zip whenSteps).
+        map { case ((extractor: StepParser[_], l: String), s: Step) => Text(extractor.strip(l)+"\n") ^ s }.flatMap(_.middle)
+
       lazy val whenStepsResults = whenSteps.foldRight(HNil: HList) { (cur, res) => value(cur.execute) :: res }
 
-      val thenExamples = (thenExtractorsList zip thenLines zip verifications.toList(toListAny)).map { case ((extractor, line), verify) =>
-        Example(line,
+      val thenExamples = (thenExtractorsList zip thenLines zip verificationsList).map { case ((extractor: StepParser[_], line), verify) =>
+        Example(extractor.strip(line),
         {
-          val extracted = extractor.asInstanceOf[String => Any](line)
+          val extracted = extractor.asInstanceOf[StepParser[Any]].parse(line)
           val values = extracted :: whenStepsResults
           verify.asInstanceOf[Any => Any](values).asInstanceOf[Result]
         })
