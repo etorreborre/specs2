@@ -51,11 +51,28 @@ trait MatchResult[+T] extends ResultLike {
   val expectable: Expectable[T]
 
   /** 
-  * apply a Matcher to the expectable contained in that MatchResult
-  *
-  * Depending on the exact type of the MatchResult, that logic may vary
-  */
+   * apply a Matcher to the expectable contained in that MatchResult. Depending on the exact type of the MatchResult,
+   * that logic may vary.
+   *
+   * Note: this method is marked as "private" to give a clue to the user when semi-column inference fails to apply.
+   *
+   * For example in that case:
+   *
+   *    "string" must not beNull
+   *    1 must_== 1
+   *
+   * There will be a compilation error as if the apply method was used between the first and second line:
+   *    ("string" must not beNull).apply(1)
+   *
+   * For a more detailed explanation, see: http://bit.ly/12STc95
+   *
+   */
+  private[specs2]
   def apply(m: Matcher[T]): MatchResult[T]
+
+  /** alias for the apply method, to be used outside specs2 */
+  def applyMatcher(m: Matcher[T]): MatchResult[T] = apply(m)
+
   /** @return the negation of this result */
   def negate: MatchResult[T]
 
