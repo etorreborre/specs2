@@ -28,23 +28,23 @@ class FragmentParsersSpec extends Specification with RegexFragmentParsers with G
                                                                                                     """
 
   "{} delimiters" - new g1 {
-   e1 := FragmentParser((_:String).toInt).parse("a value {1}") === 1
-   e2 := FragmentParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("2 values {1} and {2}") === (1, 2)
-   e3 := FragmentParser((seq: Seq[String]) => seq.map(_.toInt).sum).parse("values {1}, {2}, {3}") === 6
-   e4 := FragmentParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("3 values {1} and {2} and {3}") === (1, 2)
-   e5 := FragmentParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("1 value {1}") must throwA[FailureException]
+   e1 := FragmentParser((_:String).toInt).parse("a value {1}") === Right(1)
+   e2 := FragmentParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("2 values {1} and {2}") === Right((1, 2))
+   e3 := FragmentParser((seq: Seq[String]) => seq.map(_.toInt).sum).parse("values {1}, {2}, {3}") === Right(6)
+   e4 := FragmentParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("3 values {1} and {2} and {3}") === Right((1, 2))
+   e5 := FragmentParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("1 value {1}") must beLeft
   }
   "[] delimiters" - new g2 {
-    e1 := extract((_:String).toInt).withRegex("""\[([^\]]+)\]""".r).parse("a value [1]") === 1
+    e1 := extract((_:String).toInt).withRegex("""\[([^\]]+)\]""".r).parse("a value [1]") === Right(1)
     e2 := {
       implicit val fragmentParserRegex = """\[([^\]]+)\]""".r
-      extract((_:String).toInt).parse("a value {1}") === 1
+      extract((_:String).toInt).parse("a value {1}") === Right(1)
     }
   }
   "Regular expressions" - new g3 {
     e1 := {
       val parser = ("abc".r ~> "\\d+".r <~ "rest") ^^ { case digits => digits.toInt }
-      extract(parser).parse("abc 12345 rest") === 12345
+      extract(parser).parse("abc 12345 rest") === Right(12345)
     }
   }
 
