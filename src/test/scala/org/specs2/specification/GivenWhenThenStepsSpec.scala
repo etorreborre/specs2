@@ -7,6 +7,9 @@ import shapeless._
 import scalaz.std.list._
 import scalaz.syntax.foldable._
 import FragmentExecution._
+import control.Exceptions._
+import util.matching.Regex
+import runner.TextRunner
 
 class GivenWhenThenStepsSpec extends Specification with GivenWhenThenSteps with Grouped { def is = s2"""
 
@@ -115,15 +118,36 @@ class GivenWhenThenStepsSpec extends Specification with GivenWhenThenSteps with 
         when(aString) { case op :: i :: _ => -i }.
         andThen(anInt) { case e :: a :: _ => a === e }
 
-      specs2.text { nocolor ^
-        s2""" ${steps.start}
+      toText { nocolor ^
+        s2"""             ${steps.start}
           given {1}
           when {-}
           then {-1}       ${steps.end}
         """
       }.replace("\n", "") must contain("given 1") and contain("when -") and contain("+ then -1")
     }
+
+    e2 := {
+      val anInt = groupAs("\\-?\\d+").and((_:String).toInt)
+      val lastString = groupAs("\\w+").and((ss: Seq[String]) => ss.last)
+
+      val steps = GWTSteps("e2").
+        given(anInt).
+        when(lastString) { case op :: i :: _ => -i }.
+        andThen(anInt)   { case e :: a :: _ => a === e }
+
+      toText { nocolor ^
+        s2""" ${steps.start}
+          given 1
+          when -
+          then -1       ${steps.end}
+        """
+      }.replace("\n", "") must contain("given 1") and contain("when -") and contain("+ then -1")
+
+    }
   }
+  
+  def toText(fs: Fragments) = (new TextRunner)(fs)
 }
 
 trait GivenWhenThenSteps extends FragmentParsers with Tags { this: Specification =>
@@ -233,17 +257,22 @@ trait GivenWhenThenSteps extends FragmentParsers with Tags { this: Specification
          lines.takeRight(thenExtractorsList.size))
 
       val introFragments: Seq[Fragment] = intro.map(l => Text(l+"\n"))
+      def extractLine(extractor: Any, line: String) =
+        extractor.asInstanceOf[StepParser[Any]].parse(line).fold(s => org.specs2.execute.Error(s), t => DecoratedResult(t, org.specs2.execute.Success()))
 
-      val givenSteps: Seq[Step] = (givenExtractorsList zip givenLines).view.map { case (extractor, line) => Step(extractor.asInstanceOf[StepParser[Any]].parse(line)) }
+      val givenSteps: Seq[Step] = (givenExtractorsList zip givenLines).view.map { case (extractor, line) => Step(extractLine(extractor, line)) }
       val givenFragments: Seq[Fragment] = (givenExtractorsList zip givenLines zip givenSteps).
         map { case ((extractor: StepParser[_], l: String), s: Step) => Text(extractor.strip(l)+"\n") ^ s }.flatMap(_.middle)
 
       lazy val givenStepsResults = givenSteps.foldRight(HNil: HList) { (cur, res) => value(cur.execute) :: res }
+      lazy val givenStepsResult = givenSteps.foldRight(org.specs2.execute.Success(): Result) { (cur, res) => cur.execute and res }
       val whenSteps =  (whenExtractorsList zip whenLines zip whens.mappers.toList(toListAny)).map { case ((extractor, line), mapper) =>
         Step {
-          val extracted = extractor.asInstanceOf[StepParser[Any]].parse(line)
-          val values = extracted :: givenStepsResults
-          mapper.asInstanceOf[Any => Any](values)
+          if (givenStepsResult.isSuccess) {
+            val extracted = extractLine(extractor, line)
+            val values = extracted :: givenStepsResults
+            mapper.asInstanceOf[Any => Any](values)
+          } else Skipped("Given steps are failing")
         }
       }
 
@@ -251,13 +280,17 @@ trait GivenWhenThenSteps extends FragmentParsers with Tags { this: Specification
         map { case ((extractor: StepParser[_], l: String), s: Step) => Text(extractor.strip(l)+"\n") ^ s }.flatMap(_.middle)
 
       lazy val whenStepsResults = whenSteps.foldRight(HNil: HList) { (cur, res) => value(cur.execute) :: res }
+      lazy val whenStepsResult = whenSteps.foldRight(org.specs2.execute.Success(): Result) { (cur, res) => cur.execute and res }
 
       val thenExamples = (thenExtractorsList zip thenLines zip verificationsList).map { case ((extractor: StepParser[_], line), verify) =>
         Example(extractor.strip(line),
         {
-          val extracted = extractor.asInstanceOf[StepParser[Any]].parse(line)
-          val values = extracted :: whenStepsResults
-          verify.asInstanceOf[Any => Any](values).asInstanceOf[Result]
+          if (givenStepsResult.isSuccess && whenStepsResult.isSuccess) {
+            extractLine(extractor, line) match {
+              case DecoratedResult(t, _) => verify.asInstanceOf[Any => Any](t :: whenStepsResults).asInstanceOf[Result]
+              case other                 => other
+            }
+          } else Skipped("Previous steps are failing")
         })
       }
 
@@ -276,5 +309,62 @@ trait GivenWhenThenSteps extends FragmentParsers with Tags { this: Specification
       GWTThens[GT, GTE, WT, WTR, WTE, WM, TTE, ((T :: WTR) => Result) :: VE](whens, thenExtractors, AsResult.lift(verify) :: verifications)
   }
 
+  /** factory method to create a Given or a Then element from a regex */
+  def readAs(regex: String) = new ReadAs(regex.r)
+  /** factory method to create a Given or a Then element from a regex, using a regex denoting groups to extract */
+  def groupAs(groupRegex: String) = new ReadAs(groups = s"($groupRegex)".r)
 
+  import RegexStep._
+
+  /** This class creates Given or Then extractors from a regular expression and a function */
+  class ReadAs(regex: Regex = "".r, groups: Regex = """\{([^}]+)\}""".r) {
+    def apply(f: String => Unit) = and[Unit](f)
+
+    def apply(f: (String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String, String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String, String, String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String, String, String, String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String, String, String, String, String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String, String, String, String, String, String, String) => Unit) = and[Unit](f)
+    def apply(f: (String, String, String, String, String, String, String, String, String, String) => Unit) = and[Unit](f)
+    def apply(f: Seq[String] => Unit)(implicit p: ImplicitParam) = and[Unit](f)(p,p)
+
+    private def value[T](t: =>T) = trye(t)(_.getMessage)
+
+    def and[T](f: String => T) = new StepParser[T] {
+      def parse(text: String) = value(f(extract1(text, regex, groups)))
+    }
+    def and[T](f: (String, String) => T) = new StepParser[T] {
+      def parse(text: String) = value(f.tupled(extract2(text, regex, groups)))
+    }
+    def and[T](f: (String, String, String) => T) = new StepParser[T] {
+      def parse(text: String) = value(f.tupled(extract3(text, regex, groups)))
+    }
+    def and[T](f: (String, String, String, String) => T) = new StepParser[T] {
+      def parse(text: String) = value(f.tupled(extract4(text, regex, groups)))
+    }
+    def and[T](f: (String, String, String, String, String) => T) = new StepParser[T] {
+      def parse(text: String) = value(f.tupled(extract5(text, regex, groups)))
+    }
+    def and[T](f: (String, String, String, String, String, String) => T) = new StepParser[T] {
+      def parse(text: String) = value(f.tupled(extract6(text, regex, groups)))
+    }
+    def and[T](f: (String, String, String, String, String, String, String) => T) = new StepParser[T] {
+      def parse(text: String) = value(f.tupled(extract7(text, regex, groups)))
+    }
+    def and[T](f: (String, String, String, String, String, String, String, String) => T) = new StepParser[T] {
+      def parse(text: String) = value(f.tupled(extract8(text, regex, groups)))
+    }
+    def and[T](f: (String, String, String, String, String, String, String, String, String) => T) = new StepParser[T] {
+      def parse(text: String) = value(f.tupled(extract9(text, regex, groups)))
+    }
+    def and[T](f: (String, String, String, String, String, String, String, String, String, String) => T) = new StepParser[T] {
+      def parse(text: String) = value(f.tupled(extract10(text, regex, groups)))
+    }
+    def and[T](f: Seq[String] => T)(implicit p1: ImplicitParam, p2: ImplicitParam) = new StepParser[T] {
+      def parse(text: String)  = value(f(extractAll(text, regex, groups)))
+    }
+  }
 }
