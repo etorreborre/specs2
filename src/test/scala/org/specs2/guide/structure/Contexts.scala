@@ -2,7 +2,7 @@ package org.specs2
 package guide
 package structure
 
-import specification.{Step, Action, Around, Before, After, Outside, AroundOutside, BeforeExample, AfterExample, BeforeAfter, Fragments, Scope}
+import specification.{Step, Action, Around, Before, After, Outside, AroundOutside, BeforeExample, AfterExample, BeforeAfter, Fragments, Scope, Fixture}
 import mutable.NameSpace
 import execute._
 import matcher.FileMatchers
@@ -264,6 +264,22 @@ object http extends AroundOutside[HttpReq] {
 "this is a first example where the code executes uses a http request" ! http((request: HttpReq) => success)
 "and another one"                                                     ! http((request: HttpReq) => success)
 }}
+
+##### Fixture
+
+Finally, if you want complete control over the data that is passed to an example and how it is executed you can use a fixture. This is useful, for instance, when you want to run the same example with sligthly different data: ${snippet{
+
+object evens extends Fixture[Int] {
+  def apply[R : AsResult](f: Int => R) = {
+    // test f with 1, 2, 3
+    Seq(1, 2, 3).foldLeft(Success(): Result) { (res, i) =>
+      res and AsResult(f(i))
+    }
+  }
+}
+}}
+
+"even numbers can be divided by 2" ! evens { i: Int => i % 2 === 0 }
 
 #### BeforeExample
 
