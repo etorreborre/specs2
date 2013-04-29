@@ -39,4 +39,9 @@ trait SpecificationFeatures extends mutable.FragmentsBuilder
   implicit def outsideFunctionToResult[T : Outside, R : AsResult]: AsResult[T => R] = new AsResult[T => R] {
     def asResult(f: =>(T => R)) = AsResult(implicitly[Outside[T]].applyOutside(f))
   }
+  /** apply an implicit Fixture */
+  implicit def fixtureFunctionToResult[T : Fixture, R : AsResult]: AsResult[T => R] = new AsResult[T => R] {
+    def asResult(f: =>(T => R)) = AsResult(implicitly[Fixture[T]].fix(f))
+  }
+
 }
