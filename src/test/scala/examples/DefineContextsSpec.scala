@@ -1,7 +1,8 @@
 package examples
 
 import org.specs2._
-import specification.{Before, BeforeExample, Context, Outside}
+import execute.AsResult
+import specification.{Before, BeforeExample, Context, Outside, Fixture}
 import org.scalacheck.{Prop, Gen}
 
 /**
@@ -58,6 +59,20 @@ class DefineContextsSpec extends Specification {
       example2                                  $e2
                                                                """
     implicit val outside: Outside[Int] = new Outside[Int] { def outside = 1 }
+
+    def e1 = (i: Int) => i must_== 1
+    def e2 = (i: Int) => i must_== 1
+  }
+
+  /**
+   * This specification uses an implicit fixture for each example
+   */
+  class ImplicitFixtureSpecification extends Specification { def is = s2"""
+    This is a list of examples
+      example1                                  $e1
+      example2                                  $e2
+                                                               """
+    implicit val fixture: Fixture[Int] = new Fixture[Int] { def fix[R : AsResult](f: Int => R) = f(1) }
 
     def e1 = (i: Int) => i must_== 1
     def e2 = (i: Int) => i must_== 1

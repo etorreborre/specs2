@@ -34,4 +34,8 @@ trait AroundOutside[+T] extends Around with Outside[T] { outer =>
   }
 }
 
+trait Fixture[T] {
+  def fix[R : AsResult](f: T => R): R
+}
+
 
