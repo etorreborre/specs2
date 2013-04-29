@@ -59,7 +59,7 @@ trait SpecificationFeatures extends FragmentsBuilder with SpecificationStringCon
    * @see examples.DefineContextsSpec#BeforeWithImplicitContextSpec
    */
   implicit def contextAsResult[T, M[_] <: MatchResult[_]](implicit context: Context = defaultContext): AsResult[M[T]] = new AsResult[M[T]] {
-    def asResult(t: =>M[T]) = context.apply(t.toResult)
+    def asResult(t: =>M[T]) = context(t.toResult)
   }
 
   /**
@@ -69,6 +69,6 @@ trait SpecificationFeatures extends FragmentsBuilder with SpecificationStringCon
    */
   /** use an available outside context to transform a function returning a value convertible to a result, into a result */
   implicit def outsideFunctionToResult[T : Outside, R : AsResult]: AsResult[T => R] = new AsResult[T => R] {
-    def asResult(f: =>(T => R)) = implicitly[Outside[T]].apply((t: T) => AsResult(f(t)))
+    def asResult(f: =>(T => R)) = AsResult(implicitly[Outside[T]].applyOutside(f))
   }
 }

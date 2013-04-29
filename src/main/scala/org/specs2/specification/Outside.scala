@@ -14,10 +14,8 @@ import execute._
  */
 trait Outside[+T] { outer =>
   def outside: T
-  def apply[R : AsResult](a: T => R) = applyOutside(a)
-  def applyOutside[R : AsResult](a: T => R) = {
-    AsResult(a(outside))
-  }
+  def apply[R : AsResult](a: T => R) = AsResult(applyOutside(a))
+  def applyOutside[R : AsResult](a: T => R) = a(outside)
 }
 
 /**
