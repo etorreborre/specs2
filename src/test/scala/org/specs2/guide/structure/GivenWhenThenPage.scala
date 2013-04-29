@@ -3,7 +3,7 @@ package guide
 package structure
 
 import specification._
-import shapeless.::
+import shapeless._
 
 class GivenWhenThenPage extends UserGuidePage with GivenWhenThenPageImplementation { def is = s2"""
 ### Given When Then

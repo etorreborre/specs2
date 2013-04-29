@@ -133,9 +133,10 @@ trait GWT extends StepParsers with Tags { outer: Specification =>
       val whenSteps =  (whenExtractorsList zip whenLines zip whens.mappers.toList(toListAny)).map { case ((extractor, line), mapper) =>
         Step {
           if (givenStepsResult.isSuccess) {
-            val extracted = extractLine(extractor, line)
-            val values = extracted :: givenStepsResults
-            mapper.asInstanceOf[Any => Any](values)
+            extractLine(extractor, line) match {
+              case DecoratedResult(t, _) => mapper.asInstanceOf[Any => Any](t :: givenStepsResults)
+              case other                 => other
+            }
           } else Skipped("Given steps are failing")
         }
       }
