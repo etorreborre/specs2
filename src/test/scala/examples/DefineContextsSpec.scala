@@ -72,7 +72,7 @@ class DefineContextsSpec extends Specification {
       example1                                  $e1
       example2                                  $e2
                                                                """
-    implicit val fixture: Fixture[Int] = new Fixture[Int] { def fix[R : AsResult](f: Int => R) = f(1) }
+    implicit val fixture: Fixture[Int] = new Fixture[Int] { def apply[R : AsResult](f: Int => R) = AsResult(f(1)) }
 
     def e1 = (i: Int) => i must_== 1
     def e2 = (i: Int) => i must_== 1

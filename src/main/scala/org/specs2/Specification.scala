@@ -71,10 +71,8 @@ trait SpecificationFeatures extends FragmentsBuilder with SpecificationStringCon
     def asResult(f: =>(T => R)) = AsResult(implicitly[Outside[T]].applyOutside(f))
   }
 
-  /**
-   * apply an implicit Fixture
-   */
+  /** apply an implicit Fixture */
   implicit def fixtureFunctionToResult[T : Fixture, R : AsResult]: AsResult[T => R] = new AsResult[T => R] {
-    def asResult(f: =>(T => R)) = AsResult(implicitly[Fixture[T]].fix(f))
+    def asResult(f: =>(T => R)) = implicitly[Fixture[T]].apply(f)
   }
 }

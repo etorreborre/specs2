@@ -106,6 +106,7 @@ class ContextSpec extends Specification with ResultMatchers with Groups with Fra
    for an outside context and an acceptance spec                                                           ${g5().e3}
    for an outside context and a mutable spec                                                               ${g5().e4}
    for an aroundOutside context and an acceptance spec                                                     ${g5().e5}
+   for a fixture and an acceptance spec                                                                    ${g5().e6}
 
  In a mutable spec
    the before code must be called before the body code                                                     ${g6().e1}
@@ -201,6 +202,13 @@ class ContextSpec extends Specification with ResultMatchers with Groups with Fra
         "e1" in { s: Int => s must_== s }
       }
       executing(spec.content).prints("around", "outside")
+    }
+    e6 := {
+      val spec = new Spec {
+        implicit def fixture1 = fixtureInt
+        "e1" in { s: Int => s must_== s }
+      }
+      executing(spec.content).prints("fixture")
     }
   }
 
@@ -336,8 +344,14 @@ trait ContextsForFragments extends StringOutput {
   object aroundOutside extends AroundOutside[Int] {
 	  def outside = { println("outside"); 1 }
     def around[T : AsResult](a: =>T) = {
-      println("around");
+      println("around")
       AsResult(a)
+    }
+  }
+  object fixtureInt extends Fixture[Int] {
+    def apply[R : AsResult](f: Int => R) = {
+      println("fixture")
+      AsResult(f(1))
     }
   }
   object beforeAfter extends BeforeAfter {
