@@ -158,8 +158,4 @@ trait GivenWhenThenSteps extends GWT with Tags { this: Specification =>
     when(aString) { case operator :: a :: b:: HNil => a + b }.
     andThen(anInt) { case expected :: sum :: HNil => sum === expected }
 
-  def anInt = StepParser((_:String).toInt)
-  def aString = StepParser((s:String) => s)
-
-
 }

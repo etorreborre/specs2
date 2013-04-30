@@ -34,6 +34,4 @@ class StepParsersSpec extends Specification with GWT with Grouped { def is = s2"
     }
   }
 
-  lazy val anInt = StepParser((_:String).toInt)
-
 }

@@ -10,21 +10,19 @@ class GivenWhenThenPage extends UserGuidePage with GivenWhenThenPageImplementati
 
 The Given/When/Then style of writing specifications is supported by the use of the `GWT` trait (there is also [another way](org.specs2.guide.structure.GivenWhenThenDeprecatedPage.html) but it is not recommended because it leads to performance issues at compile-time).
 
-Here is a simple example of a Given/When/Then specification using the `StepParsers` trait: ${ snippet {
+Here is a simple example of a Given/When/Then specification using the `GWT` trait: ${ snippet {
 
 class example extends Specification with GWT { def is = s2"""
                                   ${addition.start}
   Given a number {1}
   If I add another number {2}
   Then I get {3}                  ${addition.end}
-                                  """
+  """
 
-  val addition = GWTSteps("addition").
-      given(anInt).
-      when(anInt) { case i :: j :: _ => i + j }.
-      andThen(anInt) { case expected :: sum :: _ => sum === expected }
-
-  def anInt    = StepParser((_: String).toInt)
+val addition = GWTSteps("addition").
+                 given(anInt).
+                 when(anInt) { case i :: j :: _ => i + j }.
+                 andThen(anInt) { case expected :: sum :: _ => sum === expected }
 
 } // 8<---
 executeSpec(new example)
@@ -32,11 +30,14 @@ executeSpec(new example)
 
 The first thing you can notice is that in specs2 you are not forced to use "Given"/"When"/"Then" as keywords. Those words are only guidelines to structure your scenario along the "Arrange/Act/Assert" way of testing. Actually *how* values are extracted and *how* results are checked entirely depends on the `StepParsers` which you insert after the pieces of text.
 
-Let's dissect the specification above. First we import the `StepParsers` trait which gives us access to the `extract` method. The `extract` method extracts String values from the preceding text. It finds them by looking at strings enclosed by `{}` (we'll see how to avoid using delimiters later). Then it applies a function, from `String` to `Int` to create well-typed "Given" values or "When" actions.
+Let's dissect the specification above, there are 3 parts:
 
-The values `a1` and `a2` above effectively serve as variables which will hold `Int` values once the text is parsed. Those variable can then be used, with other variables, to create "Then" verifications like `result`. Indeed, on the line `Then I get...`, `result` parses the preceding text to extract `3` and uses this value to create an expectation `a1 + a2 === r` so that the whole line is finally transformed to an `Example` fragment in the final Specification.
+ * a piece of ***`s2`*** text containing a scenario with some values delimited by `{}`
+ * a `GWTSteps` object defining what to do with values extracted from the text
+ * `StepParsers`, like `anInt`
 
 From this general pattern we can derive a few variations
+
 
 #### Parsing
 
@@ -58,10 +59,10 @@ def twoInts = extract[(Int, Int)]((s1: String, s2: String) => (s1.toInt, s2.toIn
 // 8<----
 val result  = anInt((r: Int) => twoInts._1 + twoInts._2 === r)
 // 8<----
-                                  s2""
+  s2""
 Adding 2 numbers {1} and {2}      twoInts
 Should return {3}                 result
-                                  ""
+  ""
 
 You can also pass a function taking in `Seq[String]` as a parameter and get all the extracted values as a sequence.
 
@@ -77,13 +78,13 @@ def anInt   = extract[Int]((_:String).toInt)
 def twoInts = extract[(Int, Int)]((s1: String, s2: String) => (s1.toInt, s2.toInt))
 val result  = anInt((r: Int) => twoInts._1 + twoInts._2 === r)
 
-                                s2""
+s2""
 The maximum of [1] and [2]      twoInts
 Should return [3]               result
-                                ""
+""
 
 
-                                                                                  """ ^
+                                                  """ ^
   include(xonly, new GivenWhenThenDeprecatedPage)
 }
 
