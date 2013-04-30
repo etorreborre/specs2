@@ -17,7 +17,7 @@ trait GWT extends StepParsers with Tags { outer: Specification =>
    *
    * The whole sequence also creates one tagged section with the title of the sequence
    */
-  implicit def gwtStepsIsSpecPart(gwt: GWTSteps): SpecPart = new SpecPart {
+  implicit def gwtStepsIsSpecPart(gwt: Scenario): SpecPart = new SpecPart {
     def append(fs: Fragments, text: String, expression: String) = {
       if (gwt.isStart) fs append section(gwt.title) append Text(text)
       else             fs append (gwt.fragments(text) append section(gwt.title))
@@ -27,27 +27,30 @@ trait GWT extends StepParsers with Tags { outer: Specification =>
   /**
    * start a sequence of GWT steps
    */
-  object GWTSteps {
+  object Scenario {
     def apply(title: String): GWTStart = GWTStart(title)
   }
 
   /**
    * A sequence of GWT steps.
    */
-  trait GWTSteps {
+  trait Scenario extends Script {
     def title: String
     /** create fragments corresponding on this sequence based on a piece of text */
     def fragments(text: String): Fragments
     def isStart: Boolean
-    def start: GWTSteps
-    def end: GWTSteps
+    def start: Scenario
+    def end: Scenario
+
+    def stepsNumbers: Seq[Int]
   }
 
-  case class GWTStart(title: String, isStart: Boolean = true) extends GWTSteps {
-    def given[T](f: StepParser[T]) = GWTGivens[T :: HNil, (StepParser[T]) :: HNil](title, f :: HNil)
+  case class GWTStart(title: String, template: LastLinesScriptTemplate = LastLinesScriptTemplate(), isStart: Boolean = true) extends Scenario {
+    def given[T](f: StepParser[T]) = GWTGivens[T :: HNil, (StepParser[T]) :: HNil](title, template, f :: HNil)
     def fragments(text: String): Fragments = Fragments.createList(Text(text))
-    def start: GWTSteps = this
-    def end: GWTSteps = this
+    def start: Scenario = this
+    def end: Scenario = this
+    def stepsNumbers = Seq()
   }
 
   /**
@@ -60,17 +63,18 @@ trait GWT extends StepParsers with Tags { outer: Specification =>
    * TTE = Then types extractors
    * VE =  verification types for then steps
    */
-  case class GWTGivens[GT <: HList, GTE <: HList](title: String, givenExtractors: GTE = HNil, isStart: Boolean = true) extends GWTSteps {
-    def given[T](f: StepParser[T]) = GWTGivens[T :: GT, (StepParser[T]) :: GTE](title, f :: givenExtractors)
+  case class GWTGivens[GT <: HList, GTE <: HList](title: String, template: LastLinesScriptTemplate = LastLinesScriptTemplate(), givenExtractors: GTE = HNil, isStart: Boolean = true) extends Scenario {
+    def given[T](f: StepParser[T]) = GWTGivens[T :: GT, (StepParser[T]) :: GTE](title, template, f :: givenExtractors)
     def when[T](f: StepParser[T]) = GWTWhensApply[T, GT, GTE, T :: HNil, HNil, (StepParser[T]) :: HNil, HNil](this, f :: HNil, HNil)
 
     def fragments(text: String): Fragments = Fragments.createList(Text(text))
 
     def start = copy(isStart = true)
     def end   = copy(isStart = false)
+    def stepsNumbers = Seq(givenExtractors.toList.size)
   }
 
-  case class GWTWhens[GT <: HList, GTE <: HList, WT <: HList, WTR <: HList, WTE <: HList, WM <: HList](givens: GWTGivens[GT, GTE], whenExtractors: WTE, mappers: WM, isStart: Boolean = true) extends GWTSteps {
+  case class GWTWhens[GT <: HList, GTE <: HList, WT <: HList, WTR <: HList, WTE <: HList, WM <: HList](givens: GWTGivens[GT, GTE], whenExtractors: WTE, mappers: WM, isStart: Boolean = true) extends Scenario {
     def when[T](f: StepParser[T])    = GWTWhensApply[T, GT, GTE, T :: WT, WTR, (StepParser[T]) :: WTE, WM](givens, f :: whenExtractors, mappers)
     def andThen[T](f: StepParser[T]) = GWTThensApply[T, GT, GTE, WT, WTR, WTE, WM, (StepParser[T]) :: HNil, HNil](GWTWhens(givens, whenExtractors, mappers), f :: HNil, HNil)
 
@@ -79,6 +83,7 @@ trait GWT extends StepParsers with Tags { outer: Specification =>
 
     def start = copy(isStart = true)
     def end   = copy(isStart = false)
+    def stepsNumbers = givens.stepsNumbers :+ whenExtractors.toList.size
   }
 
   case class GWTWhensApply[T, GT <: HList, GTE <: HList,
@@ -91,27 +96,23 @@ trait GWT extends StepParsers with Tags { outer: Specification =>
   case class GWTThens[GT <: HList, GTE <: HList,
                       WT <: HList, WTR <: HList, WTE <: HList, WM <: HList,
                       TTE <: HList, VE <: HList](whens: GWTWhens[GT, GTE, WT, WTR, WTE, WM],
-                                                 thenExtractors: TTE, verifications: VE, isStart: Boolean = true) extends GWTSteps {
+                                                 thenExtractors: TTE, verifications: VE, isStart: Boolean = true) extends Scenario {
 
     def andThen[T](f: StepParser[T]) =
       GWTThensApply[T, GT, GTE, WT, WTR, WTE, WM, StepParser[T] :: TTE, VE](GWTWhens(whens.givens, whens.whenExtractors, whens.mappers), f :: thenExtractors, verifications)
 
     def title = whens.title
     def givens = whens.givens
+    def template = givens.template
 
     def fragments(text: String): Fragments = {
-      val lines = text.split("\n").reverse.dropWhile(_.trim.isEmpty).reverse
+      val givenExtractorsList = givens.givenExtractors.toList.reverse
+      val whenExtractorsList  = whens.whenExtractors.toList.reverse
+      val thenExtractorsList  = thenExtractors.toList.reverse
+      val verificationsList   = verifications.toList.reverse
 
-      val givenExtractorsList = givens.givenExtractors.toList(toListAny).reverse
-      val whenExtractorsList  = whens.whenExtractors.toList(toListAny).reverse
-      val thenExtractorsList  = thenExtractors.toList(toListAny).reverse
-      val verificationsList   = verifications.toList(toListAny).reverse
-
-      val (intro, givenLines, whenLines, thenLines) =
-         (lines.dropRight(whenExtractorsList.size + thenExtractorsList.size + givenExtractorsList.size),
-          lines.dropRight(whenExtractorsList.size + thenExtractorsList.size).takeRight(givenExtractorsList.size),
-          lines.dropRight(thenExtractorsList.size).takeRight(whenExtractorsList.size),
-          lines.takeRight(thenExtractorsList.size))
+      val groupedLines = template.lines(text, this).lines
+      val (intro, givenLines, whenLines, thenLines) = (groupedLines(0).lines, groupedLines(1).lines, groupedLines(2).lines, groupedLines(3).lines)
 
       val introFragments: Seq[Fragment] = intro.map(l => Text(l+"\n"))
       def extractLine(extractor: Any, line: String) =
@@ -157,6 +158,7 @@ trait GWT extends StepParsers with Tags { outer: Specification =>
 
     def start = copy(isStart = true)
     def end   = copy(isStart = false)
+    def stepsNumbers = whens.stepsNumbers :+ thenExtractors.toList.size
   }
 
   case class GWTThensApply[T, GT <: HList, GTE <: HList,
@@ -168,8 +170,8 @@ trait GWT extends StepParsers with Tags { outer: Specification =>
       GWTThens[GT, GTE, WT, WTR, WTE, WM, TTE, ((T :: WTR) => Result) :: VE](whens, thenExtractors, AsResult.lift(verify) :: verifications)
   }
 
-  private implicit def toListAny: ToList[HList, Any] = new ToList[HList, Any] {
-    def apply(l: HList) = l match {
+  private implicit def toListAny[H <: HList]: ToList[H, Any] = new ToList[H, Any] {
+    def apply(l: H) = l match {
       case head :: HNil => List(head)
       case head :: tail => head :: tail.toList(toListAny)
       case _            => List[Any]()
@@ -178,4 +180,32 @@ trait GWT extends StepParsers with Tags { outer: Specification =>
 
   private def value(r: Result) = r match { case DecoratedResult(v, _) => v; case _ => r }
 
+  trait Script
+  trait ScriptLines {
+    def lines: Seq[Lines]
+  }
+  case class GivenWhenThenLines(lines: Seq[Lines] = Seq()) extends ScriptLines {
+    def prepend(ls: Seq[String]) = copy(lines = Lines(ls) +: lines)
+  }
+
+  case class Lines(lines: Seq[String])
+
+  trait ScriptTemplate[T <: Script, L <: ScriptLines] {
+    def lines(text: String, script: T): L
+  }
+
+  case class LastLinesScriptTemplate() extends ScriptTemplate[Scenario, GivenWhenThenLines] {
+    def lines(text: String, script: Scenario) = {
+      val ls = text.split("\n").reverse.dropWhile(_.trim.isEmpty).reverse
+
+      val grouped = script.stepsNumbers.reverse.foldLeft((GivenWhenThenLines(), ls)) { (res, cur) =>
+        val (gwtLines, remainingLines) = res
+        (gwtLines.prepend(remainingLines.takeRight(cur)), remainingLines.dropRight(cur))
+      }
+      // add the remaining lines at the beginning
+      grouped._1.prepend(grouped._2)
+    }
+  }
 }
+
+

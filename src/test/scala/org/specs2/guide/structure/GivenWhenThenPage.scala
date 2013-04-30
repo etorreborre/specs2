@@ -19,7 +19,7 @@ class example extends Specification with GWT { def is = s2"""
   Then I get {3}                  ${addition.end}
   """
 
-val addition = GWTSteps("addition").
+val addition = Scenario("addition").
                  given(anInt).
                  when(anInt) { case i :: j :: _ => i + j }.
                  andThen(anInt) { case expected :: sum :: _ => sum === expected }
@@ -33,7 +33,7 @@ The first thing you can notice is that in specs2 you are not forced to use "Give
 Let's dissect the specification above, there are 3 parts:
 
  * a piece of ***`s2`*** text containing a scenario with some values delimited by `{}`
- * a `GWTSteps` object defining what to do with values extracted from the text
+ * a `Scenario` object defining what to do with values extracted from the text
  * `StepParsers`, like `anInt`
 
 From this general pattern we can derive a few variations

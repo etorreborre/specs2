@@ -86,10 +86,13 @@ trait StandardStepParsers { this: StepParsers =>
   def twoInts   = StepParser((s1: String, s2: String) => (s1.toInt, s2.toInt))
   def threeInts = StepParser((s1: String, s2: String, s3: String) => (s1.toInt, s2.toInt, s3.toInt))
 
+  def aDouble      = StepParser((_: String).toDouble)
+  def twoDoubles   = StepParser((s1: String, s2: String) => (s1.toDouble, s2.toDouble))
+  def threeDoubles = StepParser((s1: String, s2: String, s3: String) => (s1.toDouble, s2.toDouble, s3.toDouble))
+
   def aString      = StepParser((s:String) => s)
   def twoStrings   = StepParser((s1:String, s2: String) => (s1, s2))
   def threeStrings = StepParser((s1:String, s2: String, s3: String) => (s1, s2, s3))
-
 }
 
 
