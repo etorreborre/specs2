@@ -3,6 +3,7 @@ package guide
 package structure
 
 import specification._
+import script.GWT
 import shapeless._
 
 class GivenWhenThenPage extends UserGuidePage with GivenWhenThenPageImplementation { def is = s2"""

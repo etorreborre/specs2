@@ -1,9 +1,10 @@
-package org.specs2.mutable
+package org.specs2
+package mutable
 
-import org.specs2.specification._
-import org.specs2.specification.RegexStep._
-import org.specs2.execute.AsResult
-import org.specs2.specification
+import specification.{Given, When, Then}
+import text.RegexExtractor
+import RegexExtractor._
+import execute.AsResult
 import specification.{FormattingFragments => FF, _}
 
 trait GivenWhenThen extends org.specs2.specification.GivenWhenThen { outer: FragmentsBuilder =>

@@ -7,7 +7,7 @@ class GivenWhenThenDeprecatedPage extends UserGuidePage { def is = "Given When T
 
 _This is the original way of writing Given/When/Then specifications in specs2. While this approach has nice properties: no variables, type-safety, it also has performance issues, so it is recommended to use [this one](org.specs2.guide.GivenWhenThenPage.html) instead._
 
-The Given/When/Then style of writing specifications is supported by interspersing Text fragments, with Given/When/Then `RegexSteps` which extract meaningful values from the text. Here's an example specification for a simple calculator:
+The Given/When/Then style of writing specifications is supported by interspersing Text fragments, with Given/When/Then `RegexExtractors` which extract meaningful values from the text. Here's an example specification for a simple calculator:
 
       "A given-when-then example for the addition"                 ^
         "Given the following number: ${1}"                         ^ number1 ^

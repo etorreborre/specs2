@@ -1,12 +1,14 @@
 package org.specs2
 package specification
+
 import matcher._
 import control.ImplicitParameters
 import io.Output
 import reporter.SilentConsoleReporter
 import main.Arguments
+import text.RegexExtractor
 
-class RegexStepsSpec extends Specification with ResultMatchers with DataTables with Grouped with GivenWhenThen { def is = s2"""
+class RegexExtractorsSpec extends Specification with ResultMatchers with DataTables with Grouped with GivenWhenThen { def is = s2"""
 
  Given/When/Then specifications can be written by adding extractors after Text fragments
    A Given[T] extractor extracts the text from the previous Text fragment
@@ -101,7 +103,7 @@ class RegexStepsSpec extends Specification with ResultMatchers with DataTables w
         "string"                       || "result"                           |>
         "${abc}"                       !! "abc"                              |
         "${abc\\def}"                  !! "abc\\def"                         |
-        { (toStrip, result) => RegexStep.strip(toStrip) === result }
+        { (toStrip, result) => RegexExtractor.strip(toStrip) === result }
     }
   }
 

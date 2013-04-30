@@ -2,7 +2,7 @@ package org.specs2
 package specification
 
 import execute.AsResult
-import text.MarkupString
+import text.{RegexExtractor, MarkupString}
 import control.Functions._
 
 /**
@@ -14,7 +14,7 @@ trait ExampleFactory {
   /** @return an Example, using anything that can be translated to a Result, e.g. a Boolean */
 	def newExample[T : AsResult](s: String, t: =>T): Example = newExample(Example(s, t))
   /** @return an Example, using a function taking the example description as an input */
-  def newExample(s: String, gt: GivenThen): Example = newExample(Example(RegexStep.strip(s), gt.extract(s)))
+  def newExample(s: String, gt: GivenThen): Example = newExample(Example(RegexExtractor.strip(s), gt.extract(s)))
   /** @return an Example, using anything that can be translated to a Result, e.g. a Boolean */
   def newExample[T : AsResult](s: MarkupString, t: =>T): Example = newExample(Example(s, t))
   /** @return an Example, using anything that can be translated to a Result, e.g. a Boolean */

@@ -3,6 +3,7 @@ package specification
 
 import execute._
 import AsResult._
+import script.GWT
 import shapeless._
 import scalaz.std.list._
 import scalaz.syntax.foldable._

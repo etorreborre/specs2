@@ -9,6 +9,7 @@ import control.{Functions, ImplicitParameters}
 import control.Exceptions._
 import data.TuplesToSeq
 import matcher.MatchResult
+import text.RegexExtractor
 
 /**
  * This trait provides building blocks to create steps and examples from regular expression.
@@ -492,4 +493,138 @@ private[specs2] case class PostStepText[T](text: String, context: () => Either[R
     new PostStep(() => toContext(extracted), fs.add(exampleFactory.newExample(step.strip(text), toResult(extracted))))
   }
   def add(f: Fragment): RegexType = new PostStepText(text, context, fs.add(f))
+}
+
+
+/**
+ * This step can start a sequence of Given / When / Then.
+ *
+ * It must define the extract function creating a value of type T from the extracted values
+ */
+abstract class Given[T](var regex: String = "", var groupRegex: String = RegexExtractor.DEFAULT_REGEX) extends RegexExtractor[Unit, T](regex, groupRegex) {
+  /** if the extraction goes wrong, then an Error is propagated */
+  private[specs2] def extractContext(text: String): Either[Result, T] = ResultExecution.executeEither(extract(text))(identity)
+
+  def extract(text: String): T
+
+  def strip(f: Fragment) = f match {
+    case Text(t) => Text(RegexExtractor.strip(t))
+    case other   => other
+  }
+}
+
+/** implicit conversions to create Given objects */
+object Given extends ImplicitParameters {
+  implicit def function1ToGiven[T](f: String => T): Given[T] = new Given[T] { def extract(text: String) = f(extract1(text))  }
+  implicit def function2ToGiven[T](f: (String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract2(text))  }
+  implicit def function3ToGiven[T](f: (String, String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract3(text))  }
+  implicit def function4ToGiven[T](f: (String, String, String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract4(text))  }
+  implicit def function5ToGiven[T](f: (String, String, String, String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract5(text))  }
+  implicit def function6ToGiven[T](f: (String, String, String, String, String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract6(text))  }
+  implicit def function7ToGiven[T](f: (String, String, String, String, String, String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract7(text))  }
+  implicit def function8ToGiven[T](f: (String, String, String, String, String, String, String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract8(text))  }
+  implicit def function9ToGiven[T](f: (String, String, String, String, String, String, String, String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract9(text))  }
+  implicit def function10ToGiven[T](f:(String, String, String, String, String, String, String, String, String, String) => T): Given[T] = new Given[T] { def extract(text: String) = f.tupled(extract10(text))  }
+  implicit def functionSeqToGiven[T](f: Seq[String] => T)(implicit p: ImplicitParam): Given[T] = new Given[T] { def extract(text: String) = f(extractAll(text))  }
+
+  private def extractValue[T] = (_:MatchResult[T]).expectable.value
+  implicit def function1ResultToGiven[T](f: String => MatchResult[T])                                                                          : Given[T] = function1ToGiven (f andThen extractValue)
+  implicit def function2ResultToGiven[T](f: (String, String) => MatchResult[T])                                                                : Given[T] = function2ToGiven (Function.untupled(f.tupled andThen extractValue))
+  implicit def function3ResultToGiven[T](f: (String, String, String) => MatchResult[T])                                                        : Given[T] = function3ToGiven (Function.untupled(f.tupled andThen extractValue))
+  implicit def function4ResultToGiven[T](f: (String, String, String, String) => MatchResult[T])                                                : Given[T] = function4ToGiven (Function.untupled(f.tupled andThen extractValue))
+  implicit def function5ResultToGiven[T](f: (String, String, String, String, String) => MatchResult[T])                                        : Given[T] = function5ToGiven (Function.untupled(f.tupled andThen extractValue))
+  implicit def function6ResultToGiven[T](f: (String, String, String, String, String, String) => MatchResult[T])                                : Given[T] = function6ToGiven (Functions.untupled(f.tupled andThen extractValue))
+  implicit def function7ResultToGiven[T](f: (String, String, String, String, String, String, String) => MatchResult[T])                        : Given[T] = function7ToGiven (Functions.untupled(f.tupled andThen extractValue))
+  implicit def function8ResultToGiven[T](f: (String, String, String, String, String, String, String, String) => MatchResult[T])                : Given[T] = function8ToGiven (Functions.untupled(f.tupled andThen extractValue))
+  implicit def function9ResultToGiven[T](f: (String, String, String, String, String, String, String, String, String) => MatchResult[T])        : Given[T] = function9ToGiven (Functions.untupled(f.tupled andThen extractValue))
+  implicit def function10ResultToGiven[T](f:(String, String, String, String, String, String, String, String, String, String) => MatchResult[T]): Given[T] = function10ToGiven(Functions.untupled(f.tupled andThen extractValue))
+  implicit def functionSeqResultToGiven[T](f: Seq[String] => MatchResult[T])(implicit p: ImplicitParam)                                        : Given[T] = functionSeqToGiven(f andThen extractValue)(p)
+}
+/**
+ * This step define conditions in a sequence of Given / When / Then.
+ *
+ * It must define the extract function taking the previous state of extracted values, P, and creating a new state
+ * of type T from the extracted values
+ */
+abstract class When[P, T](val regex: String = "", val groupRegex: String = RegexExtractor.DEFAULT_REGEX) extends RegexExtractor[P, T](regex, groupRegex) {
+  /**
+   * if the previous extraction went wrong, then a Skipped result is propagated.
+   * Otherwise if the current extraction goes wrong, then an Error is propagated
+   */
+  private[specs2] def extractContext(p: Either[Result, P], text: String): Either[Result, T] = p match {
+    case Left(l)  => Left(Skipped(l.message))
+    case Right(r) => trye(extract(r, text))((e:Exception) => Error(e))
+  }
+  def extract(p: P, text: String): T
+}
+/** implicit conversions to create When objects */
+object When extends ImplicitParameters {
+  implicit def function1ToWhen[T, S](f: T => String => S): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t)(extract1(text))  }
+  implicit def function2ToWhen[T, S](f: T => (String, String) => S): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t).tupled(extract2(text))  }
+  implicit def function3ToWhen[T, S](f: T => (String, String, String) => S): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t).tupled(extract3(text))  }
+  implicit def function4ToWhen[T, S](f: T => (String, String, String, String) => S): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t).tupled(extract4(text))  }
+  implicit def function5ToWhen[T, S](f: T => (String, String, String, String, String) => S): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t).tupled(extract5(text)) }
+  implicit def function6ToWhen[T, S](f: T => (String, String, String, String, String, String) => S): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t).tupled(extract6(text)) }
+  implicit def function7ToWhen[T, S](f: T => (String, String, String, String, String, String, String) => S): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t).tupled(extract7(text)) }
+  implicit def function8ToWhen[T, S](f: T => (String, String, String, String, String, String, String, String) => S): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t).tupled(extract8(text)) }
+  implicit def function9ToWhen[T, S](f: T => (String, String, String, String, String, String, String, String, String) => S): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t).tupled(extract9(text)) }
+  implicit def function10ToWhen[T, S](f: T => (String, String, String, String, String, String, String, String, String, String) => S): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t).tupled(extract10(text)) }
+  implicit def functionSeqToWhen[T, S](f: T => Seq[String] => S)(implicit p: ImplicitParam): When[T, S] = new When[T, S] { def extract(t: T, text: String) = f(t)(extractAll(text))  }
+
+  private def extractValue[T] = (_:MatchResult[T]).expectable.value
+  implicit def function1ResultToWhen[T,S]  (f: T => String => MatchResult[S]): When[T,S]                                                                            = function1ToWhen  ((t:T)=> f(t) andThen extractValue)
+  implicit def function2ResultToWhen[T, S] (f: T => (String, String) => MatchResult[S]): When[T, S]                                                                 = function2ToWhen  ((t:T)=>Function.untupled (f(t).tupled andThen extractValue))
+  implicit def function3ResultToWhen[T, S] (f: T => (String, String, String) => MatchResult[S]): When[T, S]                                                         = function3ToWhen  ((t:T)=>Function.untupled (f(t).tupled andThen extractValue))
+  implicit def function4ResultToWhen[T, S] (f: T => (String, String, String, String) => MatchResult[S]): When[T, S]                                                 = function4ToWhen  ((t:T)=>Function.untupled (f(t).tupled andThen extractValue))
+  implicit def function5ResultToWhen[T, S] (f: T => (String, String, String, String, String) => MatchResult[S]): When[T, S]                                         = function5ToWhen  ((t:T)=>Function.untupled (f(t).tupled andThen extractValue))
+  implicit def function6ResultToWhen[T, S] (f: T => (String, String, String, String, String, String) => MatchResult[S]): When[T, S]                                 = function6ToWhen  ((t:T)=>Functions.untupled(f(t).tupled andThen extractValue))
+  implicit def function7ResultToWhen[T, S] (f: T => (String, String, String, String, String, String, String) => MatchResult[S]): When[T, S]                         = function7ToWhen  ((t:T)=>Functions.untupled(f(t).tupled andThen extractValue))
+  implicit def function8ResultToWhen[T, S] (f: T => (String, String, String, String, String, String, String, String) => MatchResult[S]): When[T, S]                 = function8ToWhen  ((t:T)=>Functions.untupled(f(t).tupled andThen extractValue))
+  implicit def function9ResultToWhen[T, S] (f: T => (String, String, String, String, String, String, String, String, String) => MatchResult[S]): When[T, S]         = function9ToWhen  ((t:T)=>Functions.untupled(f(t).tupled andThen extractValue))
+  implicit def function10ResultToWhen[T, S](f: T => (String, String, String, String, String, String, String, String, String, String) => MatchResult[S]): When[T, S] = function10ToWhen ((t:T)=>Functions.untupled(f(t).tupled andThen extractValue))
+  implicit def functionSeqResultToWhen[T, S](f: T => Seq[String] => MatchResult[S])(implicit p: ImplicitParam): When[T, S]                                          = functionSeqToWhen  ((t:T)=> f(t) andThen extractValue)(p)
+
+}
+
+/**
+ * This step define checks in a sequence of Given / When / Then.
+ *
+ * It must define the extract function taking the state of extracted values, T, and return a `Result`
+ */
+abstract class Then[T](regex: String = "", val groupRegex: String = RegexExtractor.DEFAULT_REGEX) extends RegexExtractor[Either[Result, T], (T, Result)](regex, groupRegex) {
+  /**
+   * if the previous extraction went wrong, then a Skipped result is propagated.
+   * Otherwise if the current extraction goes wrong, then an Error is propagated
+   */
+  private[specs2] def extractContext(t: Either[Result, T], text: String): Either[Result, (T, Result)] = t match {
+    case Left(l)  => Left(Skipped(l.message))
+    case Right(r) => trye((r, extract(r, text)))((e:Exception) => Error(e))
+  }
+  def extract(t: T, text: String): Result
+}
+/** implicit conversions to create Then objects */
+object Then extends ImplicitParameters {
+  implicit def function1ToThen[T, R : AsResult](f: T => String => R): Then[T] = new Then[T] { def extract(t: T, text: String) = AsResult(f(t)(extract1(text)))  }
+  implicit def function2ToThen[T, R : AsResult](f: T => (String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = AsResult(f(t).tupled(extract2(text)))  }
+  implicit def function3ToThen[T, R : AsResult](f: T => (String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = AsResult(f(t).tupled(extract3(text)))  }
+  implicit def function4ToThen[T, R : AsResult](f: T => (String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = AsResult(f(t).tupled(extract4(text)))  }
+  implicit def function5ToThen[T, R : AsResult](f: T => (String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = AsResult(f(t).tupled(extract5(text)))  }
+  implicit def function6ToThen[T, R : AsResult](f: T => (String, String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = AsResult(f(t).tupled(extract6(text)))  }
+  implicit def function7ToThen[T, R : AsResult](f: T => (String, String, String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = AsResult(f(t).tupled(extract7(text)))  }
+  implicit def function8ToThen[T, R : AsResult](f: T => (String, String, String, String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = AsResult(f(t).tupled(extract8(text)))  }
+  implicit def function9ToThen[T, R : AsResult](f: T => (String, String, String, String, String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = AsResult(f(t).tupled(extract9(text)))  }
+
+  implicit def function10ToThen[T, R : AsResult](f: T => (String, String, String, String, String, String, String, String, String, String) => R): Then[T] = new Then[T] { def extract(t: T, text: String) = AsResult(f(t).tupled(extract10(text)))  }
+  implicit def functionSeqToThen[T, R](f: T => Seq[String] => R)(implicit r: AsResult[R], p: ImplicitParam): Then[T] = new Then[T] { def extract(t: T, text: String) = AsResult(f(t)(extractAll(text)))  }
+}
+
+abstract class GivenThen(regex: String= "") extends RegexExtractor[String, Result](regex) {
+  def extract(text: String): Result
+}
+
+class GivenThenFunction[R : AsResult](f: PartialFunction[Any, R], regex: String= "") extends GivenThen(regex) {
+  def extract(text: String): Result = RegexExtractor.extract(text, { case a => AsResult(f(a)) }, regexToUse)
+}
+object so {
+  def apply[R : AsResult](f: PartialFunction[Any, R]): GivenThen = new GivenThenFunction(f)
 }

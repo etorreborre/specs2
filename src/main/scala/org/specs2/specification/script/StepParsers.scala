@@ -1,9 +1,11 @@
-package org.specs2
-package specification
+package org.specs2.specification.script
 
-import control.ImplicitParameters
 import util.matching.Regex
-import control.Exceptions._
+import org.specs2.control.ImplicitParameters
+import org.specs2.control.Exceptions._
+import org.specs2.text.RegexExtractor
+import RegexExtractor._
+import org.specs2.text.RegexExtractor
 
 trait StepParsers extends ImplicitParameters with StandardStepParsers {
   implicit lazy val stepParserRegex = """\{([^}]+)\}""".r
@@ -25,7 +27,7 @@ trait StepParsers extends ImplicitParameters with StandardStepParsers {
   /** factory method to create a Given or a Then element from a regex, using a regex denoting groups to extract */
   def groupAs(groupRegex: String) = new ReadAs(groups = s"($groupRegex)".r)
 
-  import RegexStep._
+  import RegexExtractor._
 
   /** This class creates Given or Then extractors from a regular expression and a function */
   class ReadAs(regex: Regex = "".r, groups: Regex = """\{([^}]+)\}""".r) {

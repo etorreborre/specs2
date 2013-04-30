@@ -1,32 +1,17 @@
 package org.specs2
 package specification
+package script
 
-import util.matching._
-import control.Exceptions._
 import shapeless.{ToList, HList, HNil, ::}
-import execute.{AsResult, Skipped, DecoratedResult, Result}
+import execute._
 
 /**
  * The GWT trait can be used to associate a piece of text to Given/When/Then steps according to the [BDD](http://en.wikipedia.org/wiki/Behavior-driven_development)
  * way of describing acceptance criteria
  */
-trait GWT extends StepParsers with Tags { outer: Specification =>
-  /**
-   * a sequence of GWT steps can be inserted in a specification to delimit
-   * pieces of text to interpret. The "given/when" steps create execute.Step objects while the "then" steps create Examples
-   *
-   * The whole sequence also creates one tagged section with the title of the sequence
-   */
-  implicit def gwtStepsIsSpecPart(gwt: Scenario): SpecPart = new SpecPart {
-    def append(fs: Fragments, text: String, expression: String) = {
-      if (gwt.isStart) fs append section(gwt.title) append Text(text)
-      else             fs append (gwt.fragments(text) append section(gwt.title))
-    }
-  }
+trait GWT extends StepParsers with Scripts { outer: Specification =>
 
-  /**
-   * start a sequence of GWT steps
-   */
+  /** start a sequence of GWT steps */
   object Scenario {
     def apply(title: String): GWTStart = GWTStart(title)
   }
@@ -35,10 +20,6 @@ trait GWT extends StepParsers with Tags { outer: Specification =>
    * A sequence of GWT steps.
    */
   trait Scenario extends Script {
-    def title: String
-    /** create fragments corresponding on this sequence based on a piece of text */
-    def fragments(text: String): Fragments
-    def isStart: Boolean
     def start: Scenario
     def end: Scenario
 
@@ -179,20 +160,10 @@ trait GWT extends StepParsers with Tags { outer: Specification =>
   }
 
   private def value(r: Result) = r match { case DecoratedResult(v, _) => v; case _ => r }
-
-  trait Script
-  trait ScriptLines {
-    def lines: Seq[Lines]
-  }
   case class GivenWhenThenLines(lines: Seq[Lines] = Seq()) extends ScriptLines {
     def prepend(ls: Seq[String]) = copy(lines = Lines(ls) +: lines)
   }
 
-  case class Lines(lines: Seq[String])
-
-  trait ScriptTemplate[T <: Script, L <: ScriptLines] {
-    def lines(text: String, script: T): L
-  }
 
   case class LastLinesScriptTemplate() extends ScriptTemplate[Scenario, GivenWhenThenLines] {
     def lines(text: String, script: Scenario) = {

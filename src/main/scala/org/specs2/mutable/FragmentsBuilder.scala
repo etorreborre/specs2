@@ -3,7 +3,8 @@ package mutable
 
 import execute._
 import main._
-import specification.RegexStep._
+import text.RegexExtractor
+import RegexExtractor._
 import specification.{FormattingFragments => FF, _}
 import StandardResults._
 import control.ImplicitParameters
