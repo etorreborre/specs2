@@ -45,7 +45,7 @@ trait StepParsers extends ImplicitParameters {
     def apply(f: (String, String, String, String, String, String, String, String, String, String) => Unit) = and[Unit](f)
     def apply(f: Seq[String] => Unit)(implicit p: ImplicitParam) = and[Unit](f)(p,p)
 
-    private def value[T](t: =>T) = trye(t)(_.getMessage)
+    private def value[T](t: =>T) = trye(t)(identity)
 
     def and[T](f: String => T) = new StepParser[T] {
       def parse(text: String) = value(f(extract1(text, regex, groups)))

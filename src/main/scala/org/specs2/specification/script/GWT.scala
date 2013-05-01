@@ -143,12 +143,12 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
                     }
                     case other                 => other
                   }
-                } else Skipped("Given steps are failing")
+                } else Skipped(" ")
               }
             }
 
             val whenFragments: Seq[Fragment] = (whenExtractorsList zip ls zip whenSteps).
-              map { case ((extractor: StepParser[_], l: String), s: Step) => Text(extractor.strip(l)+"\n") ^ s }.flatMap(_.middle)
+              map { case ((extractor: StepParser[_], l: String), s: Step) => Text(extractor.strip(l)+"\n"+l.takeWhile(_ == ' ').mkString) ^ s ^ Text("\n") }.flatMap(_.middle)
 
             whenStepsResults = whenSteps.foldRight(HNil: HList) { (cur, res) => value(cur.execute) :: res }
             whenStepsResult = whenSteps.foldRight(Success(): Result) { (cur, res) => cur.execute and res }
@@ -167,7 +167,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
                     }
                     case other                 => other
                   }
-                } else Skipped("Previous steps are failing")
+                } else Skipped(" ")
               }) ^ Text("\n")).middle
             }
             fs append thenExamples
@@ -177,7 +177,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
     }
 
     private def extractLine(extractor: Any, line: String) =
-      extractor.asInstanceOf[StepParser[Any]].parse(line).fold(s => Error(s), t => DecoratedResult(t, Success()))
+      extractor.asInstanceOf[StepParser[Any]].parse(line).fold(e => Error(e), t => DecoratedResult(t, Success()))
 
 
     def start = copy(isStart = true)

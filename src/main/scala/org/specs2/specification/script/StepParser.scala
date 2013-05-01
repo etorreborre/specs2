@@ -8,7 +8,7 @@ import text._
 
 trait StepParser[T] {
   /** parse some text and extract some well-type value T */
-  def parse(text: String): Either[String, T]
+  def parse(text: String): Either[Exception, T]
   /** if the original text contains delimiters to indicate the values to extract, remove them */
   def strip(text: String) = text
 }
@@ -22,39 +22,42 @@ abstract class DelimitedStepParser[T](protected val regex: Regex = """\{([^}]+)\
       def parse(text: String) = parent.parse(text)
       override def strip(text: String) = parent.strip(text)
     }
+  
+  protected def value[T](t: =>T) = trye(t)(identity)
+
 }
 class DelimitedStepParser1[T](f: String => T) extends DelimitedStepParser[T] {
-  def parse(text: String) = trye(f(RegexExtractor.extract1(text, "".r, regex)))(_.getMessage)
+  def parse(text: String) = value(f(RegexExtractor.extract1(text, "".r, regex)))
 }
 class DelimitedStepParser2[T](f: (String, String) => T) extends DelimitedStepParser[T] {
-  def parse(text: String) = trye(f.tupled(RegexExtractor.extract2(text, "".r, regex)))(_.getMessage)
+  def parse(text: String) = value(f.tupled(RegexExtractor.extract2(text, "".r, regex)))
 }
 class DelimitedStepParser3[T](f: (String, String, String) => T) extends DelimitedStepParser[T] {
-  def parse(text: String) = trye(f.tupled(RegexExtractor.extract3(text, "".r, regex)))(_.getMessage)
+  def parse(text: String) = value(f.tupled(RegexExtractor.extract3(text, "".r, regex)))
 }
 class DelimitedStepParser4[T](f: (String, String, String, String) => T) extends DelimitedStepParser[T] {
-  def parse(text: String) = trye(f.tupled(RegexExtractor.extract4(text, "".r, regex)))(_.getMessage)
+  def parse(text: String) = value(f.tupled(RegexExtractor.extract4(text, "".r, regex)))
 }
 class DelimitedStepParser5[T](f: (String, String, String, String, String) => T) extends DelimitedStepParser[T] {
-  def parse(text: String) = trye(f.tupled(RegexExtractor.extract5(text, "".r, regex)))(_.getMessage)
+  def parse(text: String) = value(f.tupled(RegexExtractor.extract5(text, "".r, regex)))
 }
 class DelimitedStepParser6[T](f: (String, String, String, String, String, String) => T) extends DelimitedStepParser[T] {
-  def parse(text: String) = trye(f.tupled(RegexExtractor.extract6(text, "".r, regex)))(_.getMessage)
+  def parse(text: String) = value(f.tupled(RegexExtractor.extract6(text, "".r, regex)))
 }
 class DelimitedStepParser7[T](f: (String, String, String, String, String, String, String) => T) extends DelimitedStepParser[T] {
-  def parse(text: String) = trye(f.tupled(RegexExtractor.extract7(text, "".r, regex)))(_.getMessage)
+  def parse(text: String) = value(f.tupled(RegexExtractor.extract7(text, "".r, regex)))
 }
 class DelimitedStepParser8[T](f: (String, String, String, String, String, String, String, String) => T) extends DelimitedStepParser[T] {
-  def parse(text: String) = trye(f.tupled(RegexExtractor.extract8(text, "".r, regex)))(_.getMessage)
+  def parse(text: String) = value(f.tupled(RegexExtractor.extract8(text, "".r, regex)))
 }
 class DelimitedStepParser9[T](f: (String, String, String, String, String, String, String, String, String) => T) extends DelimitedStepParser[T] {
-  def parse(text: String) = trye(f.tupled(RegexExtractor.extract9(text, "".r, regex)))(_.getMessage)
+  def parse(text: String) = value(f.tupled(RegexExtractor.extract9(text, "".r, regex)))
 }
 class DelimitedStepParser10[T](f: (String, String, String, String, String, String, String, String, String, String) => T) extends DelimitedStepParser[T] {
-  def parse(text: String) = trye(f.tupled(RegexExtractor.extract10(text, "".r, regex)))(_.getMessage)
+  def parse(text: String) = value(f.tupled(RegexExtractor.extract10(text, "".r, regex)))
 }
 class DelimitedStepParserSeq[T](f: Seq[String] => T) extends DelimitedStepParser[T] {
-  def parse(text: String) = trye(f(RegexExtractor.extractAll(text, "".r, regex)))(_.getMessage)
+  def parse(text: String) = value(f(RegexExtractor.extractAll(text, "".r, regex)))
 }
 
 object StepParser extends StepParsers
