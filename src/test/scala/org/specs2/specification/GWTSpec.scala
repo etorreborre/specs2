@@ -279,9 +279,11 @@ class GWTSpec extends Specification with GWT with Grouped with StandardDelimited
     }
   }
 
-  "templates" - new g5 with StandardRegexStepParsers {
+  "templates" - new g5 with StandardRegexStepParsers with GWT with FragmentsBuilder {
+    override def defaultScenarioTemplate = super.defaultScenarioTemplate
+
     e1 := {
-      implicit val bulletTemplate = BulletTemplate
+      implicit val bulletTemplate: ScriptTemplate[Scenario, GivenWhenThenLines] = BulletTemplate()
       val steps = Scenario("e1").
         given(anInt).
         when(anInt)    { case i :: j :: _ => i + j }.
@@ -311,9 +313,11 @@ class GWTSpec extends Specification with GWT with Grouped with StandardDelimited
     def lines(text: String, script: Scenario): GivenWhenThenLines = {
       text.split("\n").foldLeft(GivenWhenThenLines()) { (res, line) =>
         val firstBulletWord = if (line.trim.startsWith(bullet)) line.trim.drop(1).trim.split(" ").headOption.getOrElse("") else ""
-        if (firstBulletWord.toLowerCase.startsWith("given")) res.append(GivenLines(line))
-        else if (firstBulletWord.toLowerCase.startsWith("when")) res.append(WhenLines(line))
-        else if (firstBulletWord.toLowerCase.startsWith("then")) res.append(ThenLines(line))
+
+        val newLine = line.replace(bullet+" ", "")
+        if (firstBulletWord.toLowerCase.startsWith("given")) res.append(GivenLines(newLine))
+        else if (firstBulletWord.toLowerCase.startsWith("when")) res.append(WhenLines(newLine))
+        else if (firstBulletWord.toLowerCase.startsWith("then")) res.append(ThenLines(newLine))
         else res.append(TextLines(line))
       }
     }

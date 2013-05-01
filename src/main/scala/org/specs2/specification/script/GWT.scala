@@ -4,28 +4,18 @@ package script
 
 import shapeless.{ToList, HList, HNil, ::}
 import execute._
-
+import ResultLogicalCombinators._
 /**
  * The GWT trait can be used to associate a piece of text to Given/When/Then steps according to the [BDD](http://en.wikipedia.org/wiki/Behavior-driven_development)
  * way of describing acceptance criteria
  */
-trait GWT extends StepParsers with Scripts { outer: Specification =>
+trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
 
   implicit def defaultScenarioTemplate: ScriptTemplate[Scenario, GivenWhenThenLines] = LastLinesScriptTemplate()
 
   /** start a sequence of GWT steps */
   object Scenario {
     def apply(title: String)(implicit template: ScriptTemplate[Scenario, GivenWhenThenLines] = defaultScenarioTemplate): GWTStart = GWTStart(title, template)
-  }
-
-  /**
-   * A sequence of GWT steps.
-   */
-  trait Scenario extends Script {
-    def start: Scenario
-    def end: Scenario
-
-    def stepsNumbers: Seq[Int]
   }
 
   case class GWTStart(title: String, template: ScriptTemplate[Scenario, GivenWhenThenLines], isStart: Boolean = true) extends Scenario {
@@ -178,38 +168,6 @@ trait GWT extends StepParsers with Scripts { outer: Specification =>
 
   private def value(r: Result) = r match { case DecoratedResult(v, _) => v; case _ => r }
 
-  case class GivenWhenThenLines(lines: Seq[GWTLines] = Seq()) extends ScriptLines {
-    def prepend(ls: GWTLines) = (ls, lines.headOption) match {
-      case (TextLines(l1), Some(TextLines(l2)))   => copy(lines = TextLines (l1 ++ l2) +: lines.drop(1))
-      case (GivenLines(l1), Some(GivenLines(l2))) => copy(lines = GivenLines(l1 ++ l2) +: lines.drop(1))
-      case (WhenLines(l1), Some(WhenLines(l2)))   => copy(lines = WhenLines (l1 ++ l2) +: lines.drop(1))
-      case (ThenLines(l1), Some(ThenLines(l2)))   => copy(lines = ThenLines (l1 ++ l2) +: lines.drop(1))
-      case _                                      => copy(lines = ls +: lines)
-    }
-
-    def append(ls: GWTLines) =
-      (ls, lines.lastOption) match {
-        case (TextLines(l1), Some(TextLines(l2)))   => copy(lines = lines.dropRight(1) :+ TextLines(l2 ++ l1))
-        case (GivenLines(l1), Some(GivenLines(l2))) => copy(lines = lines.dropRight(1) :+ GivenLines(l2 ++ l1))
-        case (WhenLines(l1), Some(WhenLines(l2)))   => copy(lines = lines.dropRight(1) :+ WhenLines(l2 ++ l1))
-        case (ThenLines(l1), Some(ThenLines(l2)))   => copy(lines = lines.dropRight(1) :+ ThenLines(l2 ++ l1))
-        case _                                      => copy(lines = lines :+ ls)
-      }
-  }
-
-  trait GWTLines
-  case class GivenLines(lines: Seq[String]) extends GWTLines
-  object GivenLines { def apply(line: String): GivenLines = GivenLines(Seq(line)) }
-
-  case class WhenLines(lines: Seq[String]) extends GWTLines
-  object WhenLines { def apply(line: String): WhenLines = WhenLines(Seq(line)) }
-
-  case class ThenLines(lines: Seq[String]) extends GWTLines
-  object ThenLines { def apply(line: String): ThenLines = ThenLines(Seq(line)) }
-
-  case class TextLines(lines: Seq[String]) extends GWTLines
-  object TextLines { def apply(line: String): TextLines = TextLines(Seq(line)) }
-
   case class LastLinesScriptTemplate() extends ScriptTemplate[Scenario, GivenWhenThenLines] {
     def lines(text: String, script: Scenario) = {
       val ls = text.split("\n").reverse.dropWhile(_.trim.isEmpty).reverse
@@ -226,5 +184,48 @@ trait GWT extends StepParsers with Scripts { outer: Specification =>
     }
   }
 }
+
+/**
+ * A sequence of GWT steps.
+ */
+trait Scenario extends Script {
+  def start: Scenario
+  def end: Scenario
+
+  def stepsNumbers: Seq[Int]
+}
+
+case class GivenWhenThenLines(lines: Seq[GWTLines] = Seq()) extends ScriptLines {
+  def prepend(ls: GWTLines) = (ls, lines.headOption) match {
+    case (TextLines(l1), Some(TextLines(l2)))   => copy(lines = TextLines (l1 ++ l2) +: lines.drop(1))
+    case (GivenLines(l1), Some(GivenLines(l2))) => copy(lines = GivenLines(l1 ++ l2) +: lines.drop(1))
+    case (WhenLines(l1), Some(WhenLines(l2)))   => copy(lines = WhenLines (l1 ++ l2) +: lines.drop(1))
+    case (ThenLines(l1), Some(ThenLines(l2)))   => copy(lines = ThenLines (l1 ++ l2) +: lines.drop(1))
+    case _                                      => copy(lines = ls +: lines)
+  }
+
+  def append(ls: GWTLines) =
+    (ls, lines.lastOption) match {
+      case (TextLines(l1), Some(TextLines(l2)))   => copy(lines = lines.dropRight(1) :+ TextLines(l2 ++ l1))
+      case (GivenLines(l1), Some(GivenLines(l2))) => copy(lines = lines.dropRight(1) :+ GivenLines(l2 ++ l1))
+      case (WhenLines(l1), Some(WhenLines(l2)))   => copy(lines = lines.dropRight(1) :+ WhenLines(l2 ++ l1))
+      case (ThenLines(l1), Some(ThenLines(l2)))   => copy(lines = lines.dropRight(1) :+ ThenLines(l2 ++ l1))
+      case _                                      => copy(lines = lines :+ ls)
+    }
+}
+
+trait GWTLines
+case class GivenLines(lines: Seq[String]) extends GWTLines
+object GivenLines { def apply(line: String): GivenLines = GivenLines(Seq(line)) }
+
+case class WhenLines(lines: Seq[String]) extends GWTLines
+object WhenLines { def apply(line: String): WhenLines = WhenLines(Seq(line)) }
+
+case class ThenLines(lines: Seq[String]) extends GWTLines
+object ThenLines { def apply(line: String): ThenLines = ThenLines(Seq(line)) }
+
+case class TextLines(lines: Seq[String]) extends GWTLines
+object TextLines { def apply(line: String): TextLines = TextLines(Seq(line)) }
+
 
 
