@@ -5,24 +5,32 @@ package script
 import shapeless.{ToList, HList, HNil, ::}
 import execute._
 import ResultLogicalCombinators._
+
 /**
  * The GWT trait can be used to associate a piece of text to Given/When/Then steps according to the [BDD](http://en.wikipedia.org/wiki/Behavior-driven_development)
  * way of describing acceptance criteria
  */
 trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
 
-  implicit def defaultScenarioTemplate: ScriptTemplate[Scenario, GivenWhenThenLines] = LastLinesScriptTemplate()
-
-  /** start a sequence of GWT steps */
+  /**
+   * start a sequence of GWT steps
+   * by default the scenario template that is used is considering the last lines before the scenario end
+   *  to form the given/when/then steps
+   */
   object Scenario {
-    def apply(title: String)(implicit template: ScriptTemplate[Scenario, GivenWhenThenLines] = defaultScenarioTemplate): GWTStart = GWTStart(title, template)
+    def apply(title: String)(implicit template: ScriptTemplate[Scenario, GivenWhenThenLines] = LastLinesScriptTemplate()): GWTStart = GWTStart(title, template)
   }
 
   case class GWTStart(title: String, template: ScriptTemplate[Scenario, GivenWhenThenLines], isStart: Boolean = true) extends Scenario {
-    def given[T](f: StepParser[T]) = GWTGivens[T :: HNil, (StepParser[T]) :: HNil](title, template, f :: HNil)
+    type S = GWTStart
+
+    def given[T](f: StepParser[T]) = GWTGivens[T :: HNil, (StepParser[T]) :: HNil, T](title, template, f :: HNil)
     def fragments(text: String): Fragments = Fragments.createList(Text(text))
+
     def start: Scenario = this
     def end: Scenario = this
+    def withTitle(t: String) = copy(title = t)
+
     def stepsNumbers = Seq()
   }
 
@@ -36,43 +44,63 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
    * TTE = Then types extractors
    * VE =  verification types for then steps
    */
-  case class GWTGivens[GT <: HList, GTE <: HList](title: String, template: ScriptTemplate[Scenario, GivenWhenThenLines], givenExtractors: GTE = HNil, isStart: Boolean = true) extends Scenario {
-    def given[T](f: StepParser[T]) = GWTGivens[T :: GT, (StepParser[T]) :: GTE](title, template, f :: givenExtractors)
-    def when[T](f: StepParser[T]) = GWTWhensApply[T, GT, GTE, T :: HNil, HNil, (StepParser[T]) :: HNil, HNil](this, f :: HNil, HNil)
+  case class GWTGivens[GT <: HList, GTE <: HList, GTU](title: String, template: ScriptTemplate[Scenario, GivenWhenThenLines], givenExtractors: GTE = HNil, isStart: Boolean = true) extends Scenario {
+    type S = GWTGivens[GT, GTE, GTU]
+
+    def given[T, U](f: StepParser[T])(implicit lub: ToList[T :: GT, U]) = GWTGivens[T :: GT, (StepParser[T]) :: GTE, U](title, template, f :: givenExtractors)
+    def when[T](f: StepParser[T]) = GWTWhensApply[T, GT, GTE, GTU, T :: HNil, HNil, (StepParser[T]) :: HNil, HNil, Any](this, f :: HNil, HNil)
 
     def fragments(text: String): Fragments = Fragments.createList(Text(text))
 
     def start = copy(isStart = true)
     def end   = copy(isStart = false)
+    def withTitle(t: String) = copy(title = t)
+
     def stepsNumbers = Seq(givenExtractors.toList.size)
   }
 
-  case class GWTWhens[GT <: HList, GTE <: HList, WT <: HList, WTR <: HList, WTE <: HList, WM <: HList](givens: GWTGivens[GT, GTE], whenExtractors: WTE, mappers: WM, isStart: Boolean = true) extends Scenario {
-    def when[T](f: StepParser[T])    = GWTWhensApply[T, GT, GTE, T :: WT, WTR, (StepParser[T]) :: WTE, WM](givens, f :: whenExtractors, mappers)
-    def andThen[T](f: StepParser[T]) = GWTThensApply[T, GT, GTE, WT, WTR, WTE, WM, (StepParser[T]) :: HNil, HNil](GWTWhens(givens, whenExtractors, mappers), f :: HNil, HNil)
+  case class GWTWhens[GT <: HList, GTE <: HList, GTU, WT <: HList, WTR <: HList, WTE <: HList, WM <: HList, WMU](givens: GWTGivens[GT, GTE, GTU], whenExtractors: WTE, mappers: WM, isStart: Boolean = true) extends Scenario {
+    type S = GWTWhens[GT, GTE, GTU, WT, WTR, WTE, WM, WMU]
+
+    def when[T](f: StepParser[T]) = GWTWhensApply[T, GT, GTE, GTU, T :: WT, WTR, (StepParser[T]) :: WTE, WM, WMU](givens, f :: whenExtractors, mappers)
+    def andThen[T](f: StepParser[T]) = GWTThensApply[T, GT, GTE, GTU, WT, WTR, WTE, WM, WMU, (StepParser[T]) :: HNil, HNil](GWTWhens(givens, whenExtractors, mappers), f :: HNil, HNil)
 
     def title = givens.title
     def fragments(text: String): Fragments = Fragments.createList(Text(text))
 
     def start = copy(isStart = true)
     def end   = copy(isStart = false)
+    def withTitle(t: String) = copy(givens = givens.withTitle(t))
+
     def stepsNumbers = givens.stepsNumbers :+ whenExtractors.toList.size
   }
 
-  case class GWTWhensApply[T, GT <: HList, GTE <: HList,
-                              WT <: HList, WTR <: HList, WTE <: HList, WM <: HList](givens: GWTGivens[GT, GTE], whenExtractors: WTE, mappers: WM) {
-
-    def apply[R](map: (T :: GT) => R) =
-      GWTWhens[GT, GTE, WT, R :: WTR, WTE, ((T :: GT) => R) :: WM](givens, whenExtractors, map :: mappers)
+  case class Mapper[T, P <: HList, U, R](f1: Option[(T :: P) => R] = None, f2: Option[(T, Seq[U]) => R] = None) {
+    def apply(t: T, p: Either[P, Seq[U]]): R = if (f1.isDefined) f1.get(t :: p.left.get) else f2.get(t, p.right.get)
   }
 
-  case class GWTThens[GT <: HList, GTE <: HList,
-                      WT <: HList, WTR <: HList, WTE <: HList, WM <: HList,
-                      TTE <: HList, VE <: HList](whens: GWTWhens[GT, GTE, WT, WTR, WTE, WM],
+  case class VerifyFunction[T, P <: HList, U, R : AsResult](f1: Option[(T :: P) => R] = None, f2: Option[(T, Seq[U]) => R] = None) {
+    def apply(t: T, p: Either[P, Seq[U]]): Result = AsResult(if (f1.isDefined) f1.get(t :: p.left.get) else f2.get(t, p.right.get))
+  }
+
+  case class GWTWhensApply[T, GT <: HList, GTE <: HList, GTU,
+                              WT <: HList, WTR <: HList, WTE <: HList, WM <: HList, WMU](givens: GWTGivens[GT, GTE, GTU], whenExtractors: WTE, mappers: WM) {
+
+    def apply[R, U](map: (T :: GT) => R)(implicit lub: ToList[R :: WTR, U]) =
+      GWTWhens[GT, GTE, GTU, WT, R :: WTR, WTE, Mapper[T, GT, Nothing, R] :: WM, U](givens, whenExtractors, Mapper[T, GT, Nothing, R](f1 = Some(map)) :: mappers)
+
+    def collect[R, U](map: (T, Seq[GTU]) => R)(implicit lub: ToList[R :: WTR, U]) =
+      GWTWhens[GT, GTE, GTU, WT, R :: WTR, WTE, Mapper[T, HNil, GTU, R] :: WM, U](givens, whenExtractors, Mapper[T, HNil, GTU, R](f2 = Some(map)) :: mappers)
+  }
+
+  case class GWTThens[GT <: HList, GTE <: HList, GTU,
+                      WT <: HList, WTR <: HList, WTE <: HList, WM <: HList, WTU,
+                      TTE <: HList, VE <: HList](whens: GWTWhens[GT, GTE, GTU, WT, WTR, WTE, WM, WTU],
                                                  thenExtractors: TTE, verifications: VE, isStart: Boolean = true) extends Scenario {
+    type S = GWTThens[GT, GTE, GTU, WT, WTR, WTE, WM, WTU, TTE, VE]
 
     def andThen[T](f: StepParser[T]) =
-      GWTThensApply[T, GT, GTE, WT, WTR, WTE, WM, StepParser[T] :: TTE, VE](GWTWhens(whens.givens, whens.whenExtractors, whens.mappers), f :: thenExtractors, verifications)
+      GWTThensApply[T, GT, GTE, GTU, WT, WTR, WTE, WM, WTU, StepParser[T] :: TTE, VE](GWTWhens(whens.givens, whens.whenExtractors, whens.mappers), f :: thenExtractors, verifications)
 
     def title = whens.title
     def givens = whens.givens
@@ -108,7 +136,11 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
               Step {
                 if (givenStepsResult.isSuccess) {
                   extractLine(extractor, line) match {
-                    case DecoratedResult(t, _) => mapper.asInstanceOf[Any => Any](t :: givenStepsResults)
+                    case DecoratedResult(t, _) => {
+                      val map = mapper.asInstanceOf[Mapper[Any, Any, Any, Any]]
+                      if (map.f1.isDefined) map(t, Left(givenStepsResults))
+                      else map(t, Right(givenStepsResults.toList))
+                    }
                     case other                 => other
                   }
                 } else Skipped("Given steps are failing")
@@ -124,15 +156,19 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
             fs append whenFragments
           }
           case ThenLines(ls) => {
-            val thenExamples = (thenExtractorsList zip ls zip verificationsList).map { case ((extractor: StepParser[_], line), verify) =>
-              Example(extractor.strip(line), {
+            val thenExamples = (thenExtractorsList zip ls zip verificationsList).flatMap { case ((extractor: StepParser[_], line), verify) =>
+              (Example(extractor.strip(line), {
                 if (givenStepsResult.isSuccess && whenStepsResult.isSuccess) {
                   extractLine(extractor, line) match {
-                    case DecoratedResult(t, _) => verify.asInstanceOf[Any => Any](t :: whenStepsResults).asInstanceOf[Result]
+                    case DecoratedResult(t, _) => {
+                      val verifyFunction = verify.asInstanceOf[VerifyFunction[Any, Any, Any, Any]]
+                      if (verifyFunction.f1.isDefined) verifyFunction(t, Left(whenStepsResults)).asInstanceOf[Result]
+                      else                             verifyFunction(t, Right(whenStepsResults.toList)).asInstanceOf[Result]
+                    }
                     case other                 => other
                   }
                 } else Skipped("Previous steps are failing")
-              })
+              }) ^ Text("\n")).middle
             }
             fs append thenExamples
           }
@@ -146,16 +182,22 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
 
     def start = copy(isStart = true)
     def end   = copy(isStart = false)
+    def withTitle(t: String) = copy(whens = whens.withTitle(t))
+
     def stepsNumbers = whens.stepsNumbers :+ thenExtractors.toList.size
   }
 
-  case class GWTThensApply[T, GT <: HList, GTE <: HList,
-                              WT <: HList, WTR <: HList, WTE <: HList, WM <: HList,
-                              TTE <: HList, VE <: HList](whens: GWTWhens[GT, GTE, WT, WTR, WTE, WM],
+  case class GWTThensApply[T, GT <: HList, GTE <: HList, GTU,
+                              WT <: HList, WTR <: HList, WTE <: HList, WM <: HList, WMU,
+                              TTE <: HList, VE <: HList](whens: GWTWhens[GT, GTE, GTU, WT, WTR, WTE, WM, WMU],
                                                          thenExtractors: TTE, verifications: VE) {
 
     def apply[R : AsResult](verify: (T :: WTR) => R) =
-      GWTThens[GT, GTE, WT, WTR, WTE, WM, TTE, ((T :: WTR) => Result) :: VE](whens, thenExtractors, AsResult.lift(verify) :: verifications)
+      GWTThens[GT, GTE, GTU, WT, WTR, WTE, WM, WMU, TTE, VerifyFunction[T, WTR, Nothing, R] :: VE](whens, thenExtractors, VerifyFunction[T, WTR, Nothing, R](f1 = Some(verify)) :: verifications)
+
+    def collect[R : AsResult](verify: (T, Seq[WMU]) => R) =
+      GWTThens[GT, GTE, GTU, WT, WTR, WTE, WM, WMU, TTE, VerifyFunction[T, HNil, WMU, R] :: VE](whens, thenExtractors, VerifyFunction[T, HNil, WMU, R](f2 = Some(verify)) :: verifications)
+
   }
 
   private implicit def toListAny[H <: HList]: ToList[H, Any] = new ToList[H, Any] {
@@ -183,18 +225,39 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
       grouped._1.prepend(TextLines(grouped._2.toList))
     }
   }
+
+  case class BulletTemplate(bullet: String = "*") extends ScriptTemplate[Scenario, GivenWhenThenLines] {
+    def lines(text: String, script: Scenario): GivenWhenThenLines = {
+      text.split("\n").foldLeft(GivenWhenThenLines()) { (res, line) =>
+        val firstBulletWord =
+          (if (line.trim.startsWith(bullet)) line.trim.drop(1).trim.split(" ").headOption.getOrElse("") else "").toLowerCase
+
+        val newLine = line.replace(bullet+" ", "")
+        if      (firstBulletWord.startsWith("given")) res.append(GivenLines(newLine))
+        else if (firstBulletWord.startsWith("when"))  res.append(WhenLines(newLine))
+        else if (firstBulletWord.startsWith("then"))  res.append(ThenLines(newLine))
+        else res.append(TextLines(line))
+      }
+    }
+  }
+
 }
 
 /**
  * A sequence of GWT steps.
  */
 trait Scenario extends Script {
+  type S <: Scenario
   def start: Scenario
   def end: Scenario
 
   def stepsNumbers: Seq[Int]
+  def withTitle(t: String): S
 }
 
+/**
+ * Set of extracted lines from some text which are either: simple text, given text, when text or then text
+ */
 case class GivenWhenThenLines(lines: Seq[GWTLines] = Seq()) extends ScriptLines {
   def prepend(ls: GWTLines) = (ls, lines.headOption) match {
     case (TextLines(l1), Some(TextLines(l2)))   => copy(lines = TextLines (l1 ++ l2) +: lines.drop(1))

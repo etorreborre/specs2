@@ -17,6 +17,8 @@ class GWTSpec extends Specification with GWT with Grouped with StandardDelimited
   given/given/when/then                                          ${g1.e2}
   given/given/when/when/then                                     ${g1.e3}
   given/when/then/then                                           ${g1.e4}
+  given/given/when/then and seq of given                         ${g1.e5}
+  given/when/when/then and seq of when                           ${g1.e6}
 
  Extractors must extract values and return the resulting string
 
@@ -38,13 +40,7 @@ class GWTSpec extends Specification with GWT with Grouped with StandardDelimited
   a simple variable                                              ${g4.e1}
 
  Templates can be used to define which lines should be used      ${g5.e1}
-
-   TODO:
-
- * document
- * use a template to define which lines must be mapped to extractors (how to skip some lines?)
-
- """
+                                                                 """
 
   "combinations" - new g1 {
     e1 := {
@@ -111,6 +107,39 @@ class GWTSpec extends Specification with GWT with Grouped with StandardDelimited
           when {-}
           then {-1}
           then {-10}       ${steps.end}
+        """
+      }
+    }
+
+    e5 := {
+      val steps = Scenario("e5").
+        given(anInt).
+        given(anInt).
+        when(aString).collect { case (op, numbers) => numbers.sum }.
+        andThen(anInt) { case e :: a :: _ => a === e }
+
+      executeExamplesResult {
+        s2""" ${steps.start}
+          given {1}
+          given {2}
+          when {+}
+          then {3}       ${steps.end}
+        """
+      }
+    }
+
+    e6 := {
+      val steps = Scenario("e6").
+        given(anInt).
+        when(aString) { case op :: i :: _ => i }.
+        when(aString) { case op :: j :: _ => j }.
+        andThen(anInt).collect { case (e, numbers) => numbers.sum === e }
+
+      executeExamplesResult { s2""" ${steps.start}
+          given {1}
+          when {+}
+          when {+}
+          then {2}                  ${steps.end}
         """
       }
     }
@@ -280,8 +309,6 @@ class GWTSpec extends Specification with GWT with Grouped with StandardDelimited
   }
 
   "templates" - new g5 with StandardRegexStepParsers with GWT with FragmentsBuilder {
-    override def defaultScenarioTemplate = super.defaultScenarioTemplate
-
     e1 := {
       implicit val bulletTemplate: ScriptTemplate[Scenario, GivenWhenThenLines] = BulletTemplate()
       val steps = Scenario("e1").
@@ -303,24 +330,10 @@ class GWTSpec extends Specification with GWT with Grouped with StandardDelimited
 
   def toText(fs: Fragments) = (new TextRunner)(fs).replace("\n", "")
 
-  val addition = Scenario("addition").
+  lazy val addition = Scenario("addition").
     given(anInt).
     given(anInt).
     when(aString) { case operator :: a :: b:: HNil => a + b }.
     andThen(anInt) { case expected :: sum :: HNil => sum === expected }
-
-  case class BulletTemplate(bullet: String = "*") extends ScriptTemplate[Scenario, GivenWhenThenLines] {
-    def lines(text: String, script: Scenario): GivenWhenThenLines = {
-      text.split("\n").foldLeft(GivenWhenThenLines()) { (res, line) =>
-        val firstBulletWord = if (line.trim.startsWith(bullet)) line.trim.drop(1).trim.split(" ").headOption.getOrElse("") else ""
-
-        val newLine = line.replace(bullet+" ", "")
-        if (firstBulletWord.toLowerCase.startsWith("given")) res.append(GivenLines(newLine))
-        else if (firstBulletWord.toLowerCase.startsWith("when")) res.append(WhenLines(newLine))
-        else if (firstBulletWord.toLowerCase.startsWith("then")) res.append(ThenLines(newLine))
-        else res.append(TextLines(line))
-      }
-    }
-  }
 
 }
