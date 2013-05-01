@@ -3,7 +3,7 @@ package guide
 package structure
 
 import specification._
-import script.GWT
+import script.{StandardDelimitedStepParsers, GWT}
 import shapeless._
 
 class GivenWhenThenPage extends UserGuidePage with GivenWhenThenPageImplementation { def is = s2"""
@@ -89,6 +89,6 @@ Should return [3]               result
   include(xonly, new GivenWhenThenDeprecatedPage)
 }
 
-trait GivenWhenThenPageImplementation extends GWT with SpecificationExecution with Snippets { this: Specification =>
+trait GivenWhenThenPageImplementation extends GWT with StandardDelimitedStepParsers with SpecificationExecution with Snippets { this: Specification =>
 
 }

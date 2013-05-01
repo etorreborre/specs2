@@ -70,6 +70,21 @@ trait GivenWhenThen extends RegexStepsFactory with TuplesToSeq with FragmentsBui
   implicit def upcastThen[X, Y <: X](th: Then[X]) = new Then[Y] { def extract(t: Y, s: String) = th.extract(t, s) }
 
   /**
+   * This implicit allows to use the "so" object:
+   *
+   * "given the name: ${eric}, then the age is ${18}" ! so {
+   *   case (name: String, age: String) => age.toInt must_== 18
+   * }
+   */
+  override implicit def forExample(s: String): GivenExampleDesc = new GivenExampleDesc(s)
+
+  /** transient class to hold an example description before creating a full Example */
+  class GivenExampleDesc(s: String) extends ExampleDesc(s) {
+    /** @return an Example, using the given then step */
+    def !(gt: GivenThen): Example = exampleFactory.newExample(Example(RegexExtractor.strip(s), gt.extract(s)))
+  }
+
+  /**
    * Given / When / Then steps can be used in interpolated specifications but:
    *
    *  - the type safety between steps is lost
@@ -118,12 +133,12 @@ trait GivenWhenThen extends RegexStepsFactory with TuplesToSeq with FragmentsBui
       val before = first + indent
 
       fs append {
-        before ^ t.strip(text.trim) ! {
+        before ^ exampleFactory.newExample(t.strip(text.trim), {
           result.getOrElse(Left(Failure("Can not call a Then step if there is no preceding Given step"))) match {
             case Right(r) => r.asInstanceOf[Result]
             case Left(e)  => e
           }
-        }
+        })
       }
     }
   }

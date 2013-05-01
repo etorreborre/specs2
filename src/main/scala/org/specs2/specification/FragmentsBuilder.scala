@@ -58,8 +58,6 @@ trait FragmentsBuilder extends ExamplesFactory with ImplicitParameters { outer =
 	  def ![T : AsResult](t: =>T): Example = exampleFactory.newExample(s, t)
     /** @return an Example, using the example description */
 	  def ![T : AsResult](f: String => T): Example = exampleFactory.newExample(s, f(s))
-    /** @return an Example, using the given then step */
-    def !(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
   }
 
   /**

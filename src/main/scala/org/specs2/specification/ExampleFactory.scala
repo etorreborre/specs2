@@ -13,8 +13,6 @@ trait ExampleFactory {
   def newExample[T : AsResult](s: String, function: String => T): Example = newExample(s, function(s))
   /** @return an Example, using anything that can be translated to a Result, e.g. a Boolean */
 	def newExample[T : AsResult](s: String, t: =>T): Example = newExample(Example(s, t))
-  /** @return an Example, using a function taking the example description as an input */
-  def newExample(s: String, gt: GivenThen): Example = newExample(Example(RegexExtractor.strip(s), gt.extract(s)))
   /** @return an Example, using anything that can be translated to a Result, e.g. a Boolean */
   def newExample[T : AsResult](s: MarkupString, t: =>T): Example = newExample(Example(s, t))
   /** @return an Example, using anything that can be translated to a Result, e.g. a Boolean */

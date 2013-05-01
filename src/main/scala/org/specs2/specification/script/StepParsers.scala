@@ -1,13 +1,14 @@
-package org.specs2.specification.script
+package org.specs2
+package specification
+package script
 
 import util.matching.Regex
-import org.specs2.control.ImplicitParameters
-import org.specs2.control.Exceptions._
-import org.specs2.text.RegexExtractor
+import control.ImplicitParameters
+import control.Exceptions._
+import text.RegexExtractor
 import RegexExtractor._
-import org.specs2.text.RegexExtractor
 
-trait StepParsers extends ImplicitParameters with StandardStepParsers {
+trait StepParsers extends ImplicitParameters {
   implicit lazy val stepParserRegex = """\{([^}]+)\}""".r
 
   def apply[T](f: String => T)(implicit fpr: Regex): DelimitedStepParser[T] = new DelimitedStepParser1[T](f).withRegex(fpr)
@@ -82,7 +83,7 @@ trait StepParsers extends ImplicitParameters with StandardStepParsers {
   }
 }
 
-trait StandardStepParsers { this: StepParsers =>
+trait StandardDelimitedStepParsers extends StepParsers {
 
   def anInt     = StepParser((_: String).toInt)
   def twoInts   = StepParser((s1: String, s2: String) => (s1.toInt, s2.toInt))
@@ -97,5 +98,23 @@ trait StandardStepParsers { this: StepParsers =>
   def threeStrings = StepParser((s1:String, s2: String, s3: String) => (s1, s2, s3))
 }
 
+trait StandardRegexStepParsers extends StepParsers {
+  // definitions taken from the JavaTokenParsers trait
+  private val wholeNumber = """-?\d+"""
+  private val decimalNumber = """(\d+(\.\d*)?|\d*\.\d+)"""
+  private val stringLiteral = ("\""+"""([^"\p{Cntrl}\\]|\\[\\'"bfnrt]|\\u[a-fA-F0-9]{4})*"""+"\"")
+
+  def anInt     = groupAs(wholeNumber).and((_: String).toInt)
+  def twoInts   = groupAs(wholeNumber).and((s1: String, s2: String) => (s1.toInt, s2.toInt))
+  def threeInts = groupAs(wholeNumber).and((s1: String, s2: String, s3: String) => (s1.toInt, s2.toInt, s3.toInt))
+
+  def aDouble      = groupAs("-?"+decimalNumber).and((_: String).toDouble)
+  def twoDoubles   = groupAs("-?"+decimalNumber).and((s1: String, s2: String) => (s1.toDouble, s2.toDouble))
+  def threeDoubles = groupAs("-?"+decimalNumber).and((s1: String, s2: String, s3: String) => (s1.toDouble, s2.toDouble, s3.toDouble))
+
+  def aString      = groupAs(stringLiteral).and((s:String) => s)
+  def twoStrings   = groupAs(stringLiteral).and((s1:String, s2: String) => (s1, s2))
+  def threeStrings = groupAs(stringLiteral).and((s1:String, s2: String, s3: String) => (s1, s2, s3))
+}
 
 

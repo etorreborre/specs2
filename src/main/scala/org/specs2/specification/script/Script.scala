@@ -13,13 +13,9 @@ trait Script {
   def isStart: Boolean
 }
 
-trait ScriptLines {
-  def lines: Seq[Lines]
-}
+trait ScriptLines
+
 trait ScriptTemplate[T <: Script, L <: ScriptLines] {
   def lines(text: String, script: T): L
 }
-
-case class Lines(lines: Seq[String])
-
 

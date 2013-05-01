@@ -15,8 +15,8 @@ trait GivenWhenThen extends org.specs2.specification.GivenWhenThen { outer: Frag
   implicit def givenThenInExample(s: String): GivenThenInExample = new GivenThenInExample(s)
   /** transient class to hold an example description before creating a full Example */
   class GivenThenInExample(s: String) {
-    def in(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
-    def >>(gt: GivenThen): Example = exampleFactory.newExample(s, gt)
+    def in(gt: GivenThen): Example = exampleFactory.newExample(Example(RegexExtractor.strip(s), gt.extract(s)))
+    def >>(gt: GivenThen): Example = exampleFactory.newExample(Example(RegexExtractor.strip(s), gt.extract(s)))
   }
 
   /**

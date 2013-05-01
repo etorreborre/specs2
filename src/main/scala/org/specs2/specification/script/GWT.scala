@@ -11,9 +11,11 @@ import execute._
  */
 trait GWT extends StepParsers with Scripts { outer: Specification =>
 
+  implicit def defaultScenarioTemplate: ScriptTemplate[Scenario, GivenWhenThenLines] = LastLinesScriptTemplate()
+
   /** start a sequence of GWT steps */
   object Scenario {
-    def apply(title: String): GWTStart = GWTStart(title)
+    def apply(title: String)(implicit template: ScriptTemplate[Scenario, GivenWhenThenLines] = defaultScenarioTemplate): GWTStart = GWTStart(title, template)
   }
 
   /**
@@ -26,7 +28,7 @@ trait GWT extends StepParsers with Scripts { outer: Specification =>
     def stepsNumbers: Seq[Int]
   }
 
-  case class GWTStart(title: String, template: LastLinesScriptTemplate = LastLinesScriptTemplate(), isStart: Boolean = true) extends Scenario {
+  case class GWTStart(title: String, template: ScriptTemplate[Scenario, GivenWhenThenLines], isStart: Boolean = true) extends Scenario {
     def given[T](f: StepParser[T]) = GWTGivens[T :: HNil, (StepParser[T]) :: HNil](title, template, f :: HNil)
     def fragments(text: String): Fragments = Fragments.createList(Text(text))
     def start: Scenario = this
@@ -44,7 +46,7 @@ trait GWT extends StepParsers with Scripts { outer: Specification =>
    * TTE = Then types extractors
    * VE =  verification types for then steps
    */
-  case class GWTGivens[GT <: HList, GTE <: HList](title: String, template: LastLinesScriptTemplate = LastLinesScriptTemplate(), givenExtractors: GTE = HNil, isStart: Boolean = true) extends Scenario {
+  case class GWTGivens[GT <: HList, GTE <: HList](title: String, template: ScriptTemplate[Scenario, GivenWhenThenLines], givenExtractors: GTE = HNil, isStart: Boolean = true) extends Scenario {
     def given[T](f: StepParser[T]) = GWTGivens[T :: GT, (StepParser[T]) :: GTE](title, template, f :: givenExtractors)
     def when[T](f: StepParser[T]) = GWTWhensApply[T, GT, GTE, T :: HNil, HNil, (StepParser[T]) :: HNil, HNil](this, f :: HNil, HNil)
 
@@ -92,50 +94,65 @@ trait GWT extends StepParsers with Scripts { outer: Specification =>
       val thenExtractorsList  = thenExtractors.toList.reverse
       val verificationsList   = verifications.toList.reverse
 
-      val groupedLines = template.lines(text, this).lines
-      val (intro, givenLines, whenLines, thenLines) = (groupedLines(0).lines, groupedLines(1).lines, groupedLines(2).lines, groupedLines(3).lines)
+      var givenStepsResults: HList = HNil
+      var givenStepsResult: Result = Success()
 
-      val introFragments: Seq[Fragment] = intro.map(l => Text(l+"\n"))
-      def extractLine(extractor: Any, line: String) =
-        extractor.asInstanceOf[StepParser[Any]].parse(line).fold(s => org.specs2.execute.Error(s), t => DecoratedResult(t, org.specs2.execute.Success()))
+      var whenStepsResults: HList = HNil
+      var whenStepsResult: Result = Success()
 
-      val givenSteps: Seq[Step] = (givenExtractorsList zip givenLines).view.map { case (extractor, line) => Step(extractLine(extractor, line)) }
-      val givenFragments: Seq[Fragment] = (givenExtractorsList zip givenLines zip givenSteps).
-        map { case ((extractor: StepParser[_], l: String), s: Step) => Text(extractor.strip(l)+"\n") ^ s }.flatMap(_.middle)
+      template.lines(text, this).lines.foldLeft(Fragments.createList()) { (fs, lines) =>
+        lines match {
+          case TextLines(ls) => fs append ls.map(l => Text(l+"\n"))
+          case GivenLines(ls) => {
+            val givenSteps: Seq[Step] = (givenExtractorsList zip ls).view.map { case (extractor, line) => Step(extractLine(extractor, line)) }
+            val givenFragments: Seq[Fragment] = (givenExtractorsList zip ls zip givenSteps).
+              map { case ((extractor: StepParser[_], l: String), s: Step) => Text(extractor.strip(l)+"\n") ^ s }.flatMap(_.middle)
 
-      lazy val givenStepsResults = givenSteps.foldRight(HNil: HList) { (cur, res) => value(cur.execute) :: res }
-      lazy val givenStepsResult = givenSteps.foldRight(org.specs2.execute.Success(): Result) { (cur, res) => cur.execute and res }
-      val whenSteps =  (whenExtractorsList zip whenLines zip whens.mappers.toList(toListAny)).map { case ((extractor, line), mapper) =>
-        Step {
-          if (givenStepsResult.isSuccess) {
-            extractLine(extractor, line) match {
-              case DecoratedResult(t, _) => mapper.asInstanceOf[Any => Any](t :: givenStepsResults)
-              case other                 => other
+            givenStepsResults = givenSteps.foldRight(HNil: HList) { (cur, res) => value(cur.execute) :: res }
+            givenStepsResult = givenSteps.foldRight(Success(): Result) { (cur, res) => cur.execute and res }
+
+            fs append givenFragments
+          }
+          case WhenLines(ls) => {
+            val whenSteps = (whenExtractorsList zip ls zip whens.mappers.toList).map { case ((extractor, line), mapper) =>
+              Step {
+                if (givenStepsResult.isSuccess) {
+                  extractLine(extractor, line) match {
+                    case DecoratedResult(t, _) => mapper.asInstanceOf[Any => Any](t :: givenStepsResults)
+                    case other                 => other
+                  }
+                } else Skipped("Given steps are failing")
+              }
             }
-          } else Skipped("Given steps are failing")
+
+            val whenFragments: Seq[Fragment] = (whenExtractorsList zip ls zip whenSteps).
+              map { case ((extractor: StepParser[_], l: String), s: Step) => Text(extractor.strip(l)+"\n") ^ s }.flatMap(_.middle)
+
+            whenStepsResults = whenSteps.foldRight(HNil: HList) { (cur, res) => value(cur.execute) :: res }
+            whenStepsResult = whenSteps.foldRight(Success(): Result) { (cur, res) => cur.execute and res }
+
+            fs append whenFragments
+          }
+          case ThenLines(ls) => {
+            val thenExamples = (thenExtractorsList zip ls zip verificationsList).map { case ((extractor: StepParser[_], line), verify) =>
+              Example(extractor.strip(line), {
+                if (givenStepsResult.isSuccess && whenStepsResult.isSuccess) {
+                  extractLine(extractor, line) match {
+                    case DecoratedResult(t, _) => verify.asInstanceOf[Any => Any](t :: whenStepsResults).asInstanceOf[Result]
+                    case other                 => other
+                  }
+                } else Skipped("Previous steps are failing")
+              })
+            }
+            fs append thenExamples
+          }
         }
       }
-
-      val whenFragments: Seq[Fragment] = (whenExtractorsList zip whenLines zip whenSteps).
-        map { case ((extractor: StepParser[_], l: String), s: Step) => Text(extractor.strip(l)+"\n") ^ s }.flatMap(_.middle)
-
-      lazy val whenStepsResults = whenSteps.foldRight(HNil: HList) { (cur, res) => value(cur.execute) :: res }
-      lazy val whenStepsResult = whenSteps.foldRight(org.specs2.execute.Success(): Result) { (cur, res) => cur.execute and res }
-
-      val thenExamples = (thenExtractorsList zip thenLines zip verificationsList).map { case ((extractor: StepParser[_], line), verify) =>
-        Example(extractor.strip(line),
-        {
-          if (givenStepsResult.isSuccess && whenStepsResult.isSuccess) {
-            extractLine(extractor, line) match {
-              case DecoratedResult(t, _) => verify.asInstanceOf[Any => Any](t :: whenStepsResults).asInstanceOf[Result]
-              case other                 => other
-            }
-          } else Skipped("Previous steps are failing")
-        })
-      }
-
-      Fragments.createList((introFragments ++ givenFragments ++ whenFragments ++ thenExamples) :_*)
     }
+
+    private def extractLine(extractor: Any, line: String) =
+      extractor.asInstanceOf[StepParser[Any]].parse(line).fold(s => Error(s), t => DecoratedResult(t, Success()))
+
 
     def start = copy(isStart = true)
     def end   = copy(isStart = false)
@@ -160,21 +177,52 @@ trait GWT extends StepParsers with Scripts { outer: Specification =>
   }
 
   private def value(r: Result) = r match { case DecoratedResult(v, _) => v; case _ => r }
-  case class GivenWhenThenLines(lines: Seq[Lines] = Seq()) extends ScriptLines {
-    def prepend(ls: Seq[String]) = copy(lines = Lines(ls) +: lines)
+
+  case class GivenWhenThenLines(lines: Seq[GWTLines] = Seq()) extends ScriptLines {
+    def prepend(ls: GWTLines) = (ls, lines.headOption) match {
+      case (TextLines(l1), Some(TextLines(l2)))   => copy(lines = TextLines (l1 ++ l2) +: lines.drop(1))
+      case (GivenLines(l1), Some(GivenLines(l2))) => copy(lines = GivenLines(l1 ++ l2) +: lines.drop(1))
+      case (WhenLines(l1), Some(WhenLines(l2)))   => copy(lines = WhenLines (l1 ++ l2) +: lines.drop(1))
+      case (ThenLines(l1), Some(ThenLines(l2)))   => copy(lines = ThenLines (l1 ++ l2) +: lines.drop(1))
+      case _                                      => copy(lines = ls +: lines)
+    }
+
+    def append(ls: GWTLines) =
+      (ls, lines.lastOption) match {
+        case (TextLines(l1), Some(TextLines(l2)))   => copy(lines = lines.dropRight(1) :+ TextLines(l2 ++ l1))
+        case (GivenLines(l1), Some(GivenLines(l2))) => copy(lines = lines.dropRight(1) :+ GivenLines(l2 ++ l1))
+        case (WhenLines(l1), Some(WhenLines(l2)))   => copy(lines = lines.dropRight(1) :+ WhenLines(l2 ++ l1))
+        case (ThenLines(l1), Some(ThenLines(l2)))   => copy(lines = lines.dropRight(1) :+ ThenLines(l2 ++ l1))
+        case _                                      => copy(lines = lines :+ ls)
+      }
   }
 
+  trait GWTLines
+  case class GivenLines(lines: Seq[String]) extends GWTLines
+  object GivenLines { def apply(line: String): GivenLines = GivenLines(Seq(line)) }
+
+  case class WhenLines(lines: Seq[String]) extends GWTLines
+  object WhenLines { def apply(line: String): WhenLines = WhenLines(Seq(line)) }
+
+  case class ThenLines(lines: Seq[String]) extends GWTLines
+  object ThenLines { def apply(line: String): ThenLines = ThenLines(Seq(line)) }
+
+  case class TextLines(lines: Seq[String]) extends GWTLines
+  object TextLines { def apply(line: String): TextLines = TextLines(Seq(line)) }
 
   case class LastLinesScriptTemplate() extends ScriptTemplate[Scenario, GivenWhenThenLines] {
     def lines(text: String, script: Scenario) = {
       val ls = text.split("\n").reverse.dropWhile(_.trim.isEmpty).reverse
 
-      val grouped = script.stepsNumbers.reverse.foldLeft((GivenWhenThenLines(), ls)) { (res, cur) =>
+      val linesBlocks = Seq((ls: Seq[String]) => GivenLines(ls), (ls: Seq[String]) => WhenLines(ls), (ls: Seq[String]) => ThenLines(ls))
+      val grouped = (script.stepsNumbers zip linesBlocks).reverse.foldLeft((GivenWhenThenLines(), ls)) { (res, cur) =>
         val (gwtLines, remainingLines) = res
-        (gwtLines.prepend(remainingLines.takeRight(cur)), remainingLines.dropRight(cur))
+        val (stepsNumber, linesBlock) = cur
+
+        (gwtLines.prepend(linesBlock(remainingLines.takeRight(stepsNumber))), remainingLines.dropRight(stepsNumber))
       }
       // add the remaining lines at the beginning
-      grouped._1.prepend(grouped._2)
+      grouped._1.prepend(TextLines(grouped._2.toList))
     }
   }
 }

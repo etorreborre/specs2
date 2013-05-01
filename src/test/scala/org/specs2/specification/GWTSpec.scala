@@ -2,17 +2,12 @@ package org.specs2
 package specification
 
 import execute._
-import AsResult._
-import script.GWT
+import script._
 import shapeless._
-import scalaz.std.list._
-import scalaz.syntax.foldable._
 import FragmentExecution._
-import control.Exceptions._
-import util.matching.Regex
 import runner.TextRunner
 
-class GivenWhenThenStepsSpec extends Specification with GivenWhenThenSteps with Grouped { def is = s2"""
+class GWTSpec extends Specification with GWT with Grouped with StandardDelimitedStepParsers { def is = s2"""
 
  Given / When / Then is a style of specification where there are a number of steps setting up values to setup a context (given steps), then some steps to trigger some actions (when steps) and finally some checks (then steps).
 
@@ -42,6 +37,8 @@ class GivenWhenThenStepsSpec extends Specification with GivenWhenThenSteps with 
  It is possible to intercalate other variables in the gwt steps
   a simple variable                                              ${g4.e1}
 
+ Templates can be used to define which lines should be used      ${g5.e1}
+
    TODO:
 
  * document
@@ -52,7 +49,7 @@ class GivenWhenThenStepsSpec extends Specification with GivenWhenThenSteps with 
   "combinations" - new g1 {
     e1 := {
       val steps = Scenario("e1").
-        given(anInt).
+        given(groupAs("\\d").and((_:String).toInt)).
         when(aString) { case op :: i :: _ => -i }.
         andThen(anInt) { case e :: a :: _ => a === e }
 
@@ -281,15 +278,45 @@ class GivenWhenThenStepsSpec extends Specification with GivenWhenThenSteps with 
       } must contain("+ then")
     }
   }
-  def toText(fs: Fragments) = (new TextRunner)(fs).replace("\n", "")
-}
 
-trait GivenWhenThenSteps extends GWT with Tags { this: Specification =>
+  "templates" - new g5 with StandardRegexStepParsers {
+    e1 := {
+      implicit val bulletTemplate = BulletTemplate
+      val steps = Scenario("e1").
+        given(anInt).
+        when(anInt)    { case i :: j :: _ => i + j }.
+        andThen(anInt) { case e :: a :: _ => a === e }
+
+
+      toText { nocolor ^
+        s2"""                ${steps.start}
+          These are the steps for an addition
+           * given 1
+           * when 2
+           * then 3          ${steps.end}
+        """
+      } must contain("+ then")
+    }
+  }
+
+  def toText(fs: Fragments) = (new TextRunner)(fs).replace("\n", "")
 
   val addition = Scenario("addition").
     given(anInt).
     given(anInt).
     when(aString) { case operator :: a :: b:: HNil => a + b }.
     andThen(anInt) { case expected :: sum :: HNil => sum === expected }
+
+  case class BulletTemplate(bullet: String = "*") extends ScriptTemplate[Scenario, GivenWhenThenLines] {
+    def lines(text: String, script: Scenario): GivenWhenThenLines = {
+      text.split("\n").foldLeft(GivenWhenThenLines()) { (res, line) =>
+        val firstBulletWord = if (line.trim.startsWith(bullet)) line.trim.drop(1).trim.split(" ").headOption.getOrElse("") else ""
+        if (firstBulletWord.toLowerCase.startsWith("given")) res.append(GivenLines(line))
+        else if (firstBulletWord.toLowerCase.startsWith("when")) res.append(WhenLines(line))
+        else if (firstBulletWord.toLowerCase.startsWith("then")) res.append(ThenLines(line))
+        else res.append(TextLines(line))
+      }
+    }
+  }
 
 }
