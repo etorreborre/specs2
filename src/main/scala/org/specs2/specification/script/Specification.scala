@@ -53,7 +53,11 @@ trait SpecificationLike extends org.specs2.Specification with Scripts with Group
       def setBodies(fs: Seq[Fragment]): (Fragments, Int, Int) = {
         fs.foldLeft((Fragments.createList(), groupIndex, exampleIndex)) { (res, cur) =>
           val (fragments, i, j) = res
-          def groupTagsFor(i: Int) = Seq(Section(group(i).groupName))
+          def groupTagsFor(i: Int) = {
+            val name = group(i).groupName
+            if (name.matches("g\\d\\d?\\.e\\d\\d?")) Seq(Section(name))
+            else                                     Seq(Section(name), Section(s"g${i+1}"))
+          }
 
           def exampleName(i: Int, j: Int) = s"g${i+1}.e${j+1}"
           def createExample(line: String, i: Int, j: Int) =

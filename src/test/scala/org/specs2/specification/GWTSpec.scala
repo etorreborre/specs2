@@ -7,39 +7,39 @@ import shapeless._
 import FragmentExecution._
 import runner.TextRunner
 
-class GWTSpec extends org.specs2.Specification with GWT with Grouped with StandardDelimitedStepParsers { def is = s2"""
+class GWTSpec extends script.Specification with GWT with Grouped with StandardDelimitedStepParsers { def is = s2"""
 
  Given / When / Then is a style of specification where there are a number of steps setting up values to setup a context (given steps), then some steps to trigger some actions (when steps) and finally some checks (then steps).
 
  Combinations with delimited extractors
 
-  given/when/then                                                ${g1.e1}
-  given/given/when/then                                          ${g1.e2}
-  given/given/when/when/then                                     ${g1.e3}
-  given/when/then/then                                           ${g1.e4}
-  given/given/when/then and seq of given                         ${g1.e5}
-  given/when/when/then and seq of when                           ${g1.e6}
+  + given/when/then
+  + given/given/when/then
+  + given/given/when/when/then
+  + given/when/then/then
+  + given/given/when/then and seq of given
+  + given/when/when/then and seq of when
 
  Extractors must extract values and return the resulting string
 
-  with delimited extractors                                      ${g2.e1}
-  with regex extractors                                          ${g2.e2}
+  + with delimited extractors
+  + with regex extractors
 
  If there are errors, the rest of the sequence must be skipped,
  but if there is a failure in a then step, the other steps must still be executed
 
-  in a given step                                                ${g3.e1}
-  in a when step - extraction error                              ${g3.e2}
-  in a when step - mapping error                                 ${g3.e3}
-  in a then step - extraction error                              ${g3.e4}
-  in a then step - verification error                            ${g3.e5}
-  in a then step - verification failure                          ${g3.e6}
-  in a then step - verification failure in 2nd step              ${g3.e7}
+  + in a given step
+  + in a when step - extraction error
+  + in a when step - mapping error
+  + in a then step - extraction error
+  + in a then step - verification error
+  + in a then step - verification failure
+  + in a then step - verification failure in 2nd step
 
  It is possible to intercalate other variables in the gwt steps
-  a simple variable                                              ${g4.e1}
+  + with a simple variable
 
- Templates can be used to define which lines should be used      ${g5.e1}
+ + Templates can be used to define which lines should be used
                                                                  """
 
   "combinations" - new g1 {

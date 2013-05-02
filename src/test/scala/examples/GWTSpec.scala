@@ -21,7 +21,7 @@ class GWTSpec extends Specification with GWT with StandardRegexStepParsers { def
    When I use this operator: *
    Then I should get: 120
    And it should be >: 10
-   But not should be >: 150                                        ${calculator2.end}
+   But not should be >: 150                                       ${calculator2.end}
 
 """
   val anOperator = readAs(".*: (.)$").and((s: String) => s)
