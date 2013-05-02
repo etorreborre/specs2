@@ -1,21 +1,20 @@
 package org.specs2
 package collection
 
-import specification.Grouped
+import specification._
 import matcher._
 import BiMap._
 
-class BiMapSpec extends Specification with BiMapExamples { def is = s2"""
+class BiMapSpec extends script.Specification with BiMapExamples { def is = s2"""
 
  Bimaps define bijection relationships between values
 
- a BiMap can be defined with a sequence of keys and values     ${g1.e1}
- it is possible to get the value corresponding to a given key  ${g1.e2}
- it is possible to get the key corresponding to a given value  ${g1.e3}
- it is possible to know if a value exists                      ${g1.e4}
- it is possible to know if a key exists                        ${g1.e5}
-
-                                                                     """
+ + a BiMap can be defined with a sequence of keys and values
+ + it is possible to get the value corresponding to a given key
+ + it is possible to get the key corresponding to a given value
+ + it is possible to know if a value exists
+ + it is possible to know if a key exists
+                                                                           """
 }
 trait BiMapExamples extends Grouped with MustMatchers {
   val bimap = Seq("one" <-> 1, "two" <-> 2, "three" <-> 3)
