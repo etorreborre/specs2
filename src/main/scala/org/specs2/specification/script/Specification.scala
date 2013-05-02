@@ -56,7 +56,7 @@ trait SpecificationLike extends org.specs2.Specification with Scripts with Group
           def groupTagsFor(i: Int) = {
             val name = group(i).groupName
             if (name.matches("g\\d\\d?\\.e\\d\\d?")) Seq(Section(name))
-            else                                     Seq(Section(name), Section(s"g${i+1}"))
+            else                                     Seq(Section(name.removeEnclosing("'"), s"g${i+1}"))
           }
 
           def exampleName(i: Int, j: Int) = s"g${i+1}.e${j+1}"
