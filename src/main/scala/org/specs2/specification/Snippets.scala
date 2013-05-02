@@ -25,8 +25,8 @@ trait Snippets extends execute.Snippets { outer: SpecificationStringContext with
       fs append { text ^ snippetFragments(snippet, expression) }
 
     private def snippetFragments(snippet: Snippet[T], expression: String) = {
-      if (snippet.mustBeVerified) Fragments.createList(Text(snippet.show(expression).trim), Step(snippet.verify.mapMessage("Snippet failure: "+_)))
-      else                        Fragments.createList((Text(snippet.show(expression).trim) +: resultFragments(snippet).middle):_*)
+      if (snippet.mustBeVerified) Fragments.createList(Text(snippet.show(expression)), Step(snippet.verify.mapMessage("Snippet failure: "+_)))
+      else                        Fragments.createList((Text(snippet.show(expression)) +: resultFragments(snippet).middle):_*)
     }
 
     private def resultFragments(snippet: Snippet[T]) = {

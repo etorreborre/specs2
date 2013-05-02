@@ -122,7 +122,7 @@ case class SnippetParams[T](
   cutter: String => String           = ScissorsCutter(),
   asCode: (String, String) => String = markdownCode(0),
   prompt: String => String           = greaterThanPrompt,
-  eval: Boolean                  = false,
+  eval: Boolean                      = false,
   verify: Option[T => Result]        = None)
 
 /**
