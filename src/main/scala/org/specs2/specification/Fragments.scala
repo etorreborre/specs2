@@ -8,6 +8,7 @@ import scalaz.Monoid
 import Fragments._
 import specification.StandardFragments.{End, Br}
 import io.Paths._
+import specification.TagsFragments.TaggingFragment
 
 /**
  * A Fragments object is a list of fragments with a SpecStart and a SpecEnd
@@ -36,6 +37,9 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   def append(fs: Seq[Fragment])(implicit exampleFactory: ExampleFactory): Fragments =
     append(Fragments.createList(fs:_*))
 
+  /** recreate the Fragments so that 2 consecutive Text fragments are aggregated into one */
+  def compact = middle.foldLeft(copy(middle = Seq())) { (res, cur) => res append cur }
+
   def middleDrop(n: Int) = copy(middle = Vector(middle:_*).drop(n).view)
   def middleDropRight(n: Int) = copy(middle = Vector(middle:_*).dropRight(n).view)
   def middleDropWhile(p: Fragment => Boolean) = copy(middle = Vector(middle:_*).dropWhile(p).view)
@@ -57,6 +61,7 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   def executables: Seq[Executable] = fragments.collect { case e: Executable => e }
   def examples: Seq[Example] = fragments.collect(isAnExample)
   def texts: Seq[Text] = fragments.collect(isSomeText)
+  def tags: Seq[TaggingFragment] = fragments.collect(isSomeTag)
 
   def linkMarkdown = linked.markdown
   def linkHtml     = linked.html
@@ -125,6 +130,9 @@ object Fragments {
   def isABr: PartialFunction[Fragment, Fragment] = { case br @ Br() => br }
   /** @return the step if the Fragment is an End fragment */
   def isAnEnd: PartialFunction[Fragment, Fragment] = { case e @ End() => e }
+  /** @return the text if the Fragment is a TaggingFragment */
+  def isSomeTag: PartialFunction[Fragment, TaggingFragment] = { case t: TaggingFragment => t }
+
 
   /** @return a Fragments object with the appropriate name set on the SpecStart fragment */
   def withSpecName(fragments: Fragments, name: SpecName): Fragments = fragments.specTitleIs(name)

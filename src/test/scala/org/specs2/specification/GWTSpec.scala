@@ -7,7 +7,7 @@ import shapeless._
 import FragmentExecution._
 import runner.TextRunner
 
-class GWTSpec extends Specification with GWT with Grouped with StandardDelimitedStepParsers { def is = s2"""
+class GWTSpec extends org.specs2.Specification with GWT with Grouped with StandardDelimitedStepParsers { def is = s2"""
 
  Given / When / Then is a style of specification where there are a number of steps setting up values to setup a context (given steps), then some steps to trigger some actions (when steps) and finally some checks (then steps).
 
@@ -194,7 +194,7 @@ class GWTSpec extends Specification with GWT with Grouped with StandardDelimited
           when {-}
           then {-1}       ${steps.end}
         """
-      } must contain("given 1! step error") and contain("when -o skipped") and contain("o then")
+      } must contain("given 1! step error") and contain("when -          o skipped step") and contain("o then")
     }
 
     e2 := {
@@ -209,7 +209,7 @@ class GWTSpec extends Specification with GWT with Grouped with StandardDelimited
           when {-}
           then {-1}       ${steps.end}
         """
-      } must contain("given 1") and contain("when -! step error") and contain("o then")
+      } must contain("given 1") and contain("when -          ! step error") and contain("o then")
     }
 
     e3 := {
@@ -224,7 +224,7 @@ class GWTSpec extends Specification with GWT with Grouped with StandardDelimited
           when {-}
           then {-1}       ${steps.end}
         """
-      } must contain("given 1") and contain("when -! step error") and contain("o then")
+      } must contain("given 1") and contain("when -          ! step error") and contain("o then")
     }
 
     e4 := {

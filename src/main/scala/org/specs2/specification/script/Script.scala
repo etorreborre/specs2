@@ -16,6 +16,6 @@ trait Script {
 trait ScriptLines
 
 trait ScriptTemplate[T <: Script, L <: ScriptLines] {
-  def lines(text: String, script: T): L
+  def lines(fs: Fragments, script: T): L
 }
 

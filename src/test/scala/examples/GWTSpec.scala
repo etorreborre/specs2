@@ -1,8 +1,8 @@
 package examples
 
 import org.specs2._
-import specification.script._
-import shapeless.::
+import specification.script.{GWT, StandardRegexStepParsers}
+
 
 class GWTSpec extends Specification with GWT with StandardRegexStepParsers { def is = s2"""
                                                                   ${calculator1.start}
