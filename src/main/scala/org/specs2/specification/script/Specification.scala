@@ -2,6 +2,7 @@ package org.specs2
 package specification
 package script
 
+import collection.Seqx._
 import text.Trim._
 import TagsFragments.{Tag, Section}
 
@@ -45,11 +46,8 @@ trait SpecificationLike extends org.specs2.Specification with Scripts with Group
     }
 
     def examplify(text: String, groups: GroupsLike, groupIndex: Int, exampleIndex: Int): (Fragments, Int, Int) = {
-      val lines = text.split("\n")
-      val fragments = lines.foldLeft(Fragments.createList()) { (res, line) =>
-        res append Seq(if (isExample(line)) exampleFactory.newExample(line, execute.Pending()) else Text(line+"\n"))
-      }.compact
 
+      /** match input fragments and group examples */
       def setBodies(fs: Seq[Fragment]): (Fragments, Int, Int) = {
         fs.foldLeft((Fragments.createList(), groupIndex, exampleIndex)) { (res, cur) =>
           val (fragments, i, j) = res
@@ -73,6 +71,11 @@ trait SpecificationLike extends org.specs2.Specification with Scripts with Group
           (fragments append newFragments, newi, newj)
         }
       }
+      val lines = text.split("\n").toSeq
+      val linesWithNewLines = lines.map(_ + "\n").updateLast(_.removeLast("\n"))
+      val fragments = linesWithNewLines.foldLeft(Fragments.createList()) { (res, line) =>
+        res append Seq(if (isExample(line)) exampleFactory.newExample(line, execute.Pending()) else Text(line))
+      }.compact
 
       fragments.middle match {
         case Text(t) +: rest => {

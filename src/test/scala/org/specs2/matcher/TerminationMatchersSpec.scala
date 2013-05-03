@@ -4,29 +4,29 @@ package matcher
 import io.StringOutput
 import java.util.concurrent._
 import scalaz.concurrent.Promise
-import specification.{Tags, Grouped}
+import specification._
 
-class TerminationMatchersSpec extends Specification with TerminationMatchers with Grouped with Tags { def is = section("unstable")^ s2"""
+class TerminationMatchersSpec extends script.Specification with TerminationMatchers with Grouped { def is = section("unstable")^ s2"""
                                                                                                    
  It is possible to check if a block of code terminates
    with a default number of retries and default sleep time
-     if it succeeds                                                                             ${g1.e1}
-     if it fails                                                                                ${g1.e2}
+     + if it succeeds
+     + if it fails
 
    with a specified number of retries and sleep time
-     if it succeeds after 50 ms                                                                 ${g1.e3}
-     if it fails                                                                                ${g1.e4}
+     + if it succeeds after 50 ms
+     + if it fails
 
-   if the termination fails, the computation is stopped                                         ${g1.e5}
+   + if the termination fails, the computation is stopped
 
-   We can write 'action must not terminate'                                                     ${g1.e6}
+   + We can write 'action must not terminate'
 
  We should be able to observe that an action unblocks another
-   with a when clause                                                                           ${g2.e1}
+   + with a when clause
    with an onlyWhen clause
-     if action1 terminates after action 2 -> success                                            ${g2.e2}
-     if action1 terminates before action 2 -> failure                                           ${g2.e3}
-     if action1 doesn't terminate after action 2 -> failure                                     ${g2.e4}
+     + if action1 terminates after action 2 -> success
+     + if action1 terminates before action 2 -> failure
+     + if action1 doesn't terminate after action 2 -> failure
                                                                                                 """
 
   "termination" - new g1 {

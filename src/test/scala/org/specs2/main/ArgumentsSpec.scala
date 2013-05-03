@@ -3,9 +3,9 @@ package main
 
 import matcher.DataTables
 import execute.Result
-import specification.Grouped
+import specification._
 
-class ArgumentsSpec extends Specification with DataTables with Grouped { def is = s2"""
+class ArgumentsSpec extends script.Specification with DataTables with Grouped { def is = s2"""
 
 Arguments can be passed on the command line as an Array of Strings. There are 2 types of arguments:
 
@@ -17,39 +17,39 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
                                                                                                                         
                                                                                                                         
   If an argument is specified, its value is returned                                                                  
-    for a boolean argument like xonly the value is true                                                        ${g1.e1}
-    for a string argument, it is the 'next' value                                                              ${g1.e2}
+    + for a boolean argument like xonly the value is true
+    + for a string argument, it is the 'next' value
 
   If an argument is not specified, its default value is returned
-    for a boolean argument like xonly, it is false                                                             ${g1.e3}
-    for a string argument like specName, it is .*Spec                                                          ${g1.e4}
+    + for a boolean argument like xonly, it is false
+    + for a string argument like specName, it is .*Spec
 
   The argument names can be capitalized or not
-    for a boolean argument like xonly, xOnly is admissible                                                     ${g2.e1}
-    for a string argument like specName, specname is admissible                                                ${g2.e2}
-    but the name has to match exactly, 'exclude' must not be mistaken for 'ex'                                 ${g2.e3}
+    + for a boolean argument like xonly, xOnly is admissible
+    + for a string argument like specName, specname is admissible
+    + but the name has to match exactly, 'exclude' must not be mistaken for 'ex'
 
-  Some boolean arguments have negated names, like nocolor, meaning !color                                      ${g3.e1}
+  + Some boolean arguments have negated names, like nocolor, meaning !color
 
   An Arguments instance can be overriden by another with the `<|` operator: `a <| b`
-    if there's no corresponding value in b, the value in a stays                                               ${g4.e1}
-    there is a corresponding value in b, the value in a is overriden when there is one                         ${g4.e2}
-    there is a corresponding value in b, the value in b is kept                                                ${g4.e3}
+    + if there's no corresponding value in b, the value in a stays
+    + there is a corresponding value in b, the value in a is overriden when there is one
+    + there is a corresponding value in b, the value in b is kept
 
   Arguments can also be passed from system properties
-    a boolean value just have to exist as -Dname                                                               ${g5.e1}
-    a boolean value can be -Dname=true                                                                         ${g5.e2}
-    a boolean value can be -Dname=false                                                                        ${g5.e3}
-    a string value will be -Dname=value                                                                        ${g5.e4}
-    properties can also be passed as -Dspecs2.name to avoid conflicts with other properties                    ${g5.e5}
+    + a boolean value just have to exist as -Dname
+    + a boolean value can be -Dname=true
+    + a boolean value can be -Dname=false
+    + a string value will be -Dname=value
+    + properties can also be passed as -Dspecs2.name to avoid conflicts with other properties
 
   Arguments can decide if a result must be shown or not, depending on its status
-    xonly => canShow(x)                                                                                        ${g6.e1}
-    xonly => canShow(result.status)                                                                            ${g6.e2}
+    + xonly => canShow(x)
+    + xonly => canShow(result.status)
 
   Some values can be filtered from the command line
-    to include only some arguments                                                                             ${g7.e1}
-    to exclude some arguments                                                                                  ${g7.e2}
+    + to include only some arguments
+    + to exclude some arguments
                                                                                                                """
 
 

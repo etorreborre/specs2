@@ -6,63 +6,63 @@ import specification._
 import sys._
 import io.StringOutput
 
-class LogicalMatcherSpec extends Specification with ResultMatchers with Grouped { def is = s2"""
+class LogicalMatcherSpec extends script.Specification with ResultMatchers with Grouped { def is = s2"""
 
  a matcher can be or-ed with another one
-   if both matches are ok the result is ok                                                                      ${g1.e1}
-   if both matches are ko the result is ko                                                                      ${g1.e2}
-   if the first matcher is ok, the second one is not evaluated                                                  ${g1.e3}
-   if both matchers are ko the combination is ko                                                                ${g1.e4}
-   if the first matcher is ko, and the second ok, the combination is ok                                         ${g1.e5}
-   if the matchers throw exceptions the combination must be a success when 'failure' or 'success'               ${g1.e6}
+   + if both matches are ok the result is ok
+   + if both matches are ko the result is ko
+   + if the first matcher is ok, the second one is not evaluated
+   + if both matchers are ko the combination is ko
+   + if the first matcher is ko, and the second ok, the combination is ok
+   + if the matchers throw exceptions the combination must be a success when 'failure' or 'success'
 
  it is possible also to 'or' 2 match expressions
-   if the first is ok, the result is ok                                                                         ${g1.e7}
-   if the first is not ok, the second is not evaluated                                                          ${g1.e8}
-   ko and ok and ko is ok                                                                                       ${g1.e9}
+   + if the first is ok, the result is ok
+   + if the first is not ok, the second is not evaluated
+   + ko and ok and ko is ok
 
  a matcher can be and-ed with another one
-   if both matches are ok the result is ok                                                                      ${g2.e1}
+   + if both matches are ok the result is ok
 
  it is possible also to 'and' 2 match expressions
-   if both matches are ok the result is ok                                                                      ${g2.e2}
-   if the first is not ok, the second is not evaluated                                                          ${g2.e3}
-   ok and ko and ok is ko                                                                                       ${g2.e4}
+   + if both matches are ok the result is ok
+   + if the first is not ok, the second is not evaluated
+   + ok and ko and ok is ko
 
  a matcher can be ok or be skipped
-   if it is ok, it returns a MatchSuccess result                                                                ${g3.e1}
-   if it is ko, it returns a MatchSkip result                                                                   ${g3.e2}
-   if it throws an exception, it returns a MatchSkip result                                                     ${g3.e3}
-   a skipped message can also be added in front of the failure message                                          ${g3.e4}
+   + if it is ok, it returns a MatchSuccess result
+   + if it is ko, it returns a MatchSkip result
+   + if it throws an exception, it returns a MatchSkip result
+   + a skipped message can also be added in front of the failure message
 
    a matcher can be ok or be pending
-   if it is ok, it returns a MatchSuccess result                                                                ${g4.e1}
-   if it is ko, it returns a MatchPending result                                                                ${g4.e2}
-   if it throws an exception, it returns a MatchPending result                                                  ${g4.e3}
-   a pending message can also be added in front of the failure message                                          ${g4.e4}
+   + if it is ok, it returns a MatchSuccess result
+   + if it is ko, it returns a MatchPending result
+   + if it throws an exception, it returns a MatchPending result
+   + a pending message can also be added in front of the failure message
 
  a matcher can applied only if a boolean condition is true
-   if the condition is true, it is applied                                                                      ${g5.e1}
-   if the condition is false, it is not and a success is returned                                               ${g5.e2}
-   if the condition is false, a message can be added to the success result                                      ${g5.e3}
-   'unless' can also be used to avoid negating the condition                                                    ${g5.e4}
+   + if the condition is true, it is applied
+   + if the condition is false, it is not and a success is returned
+   + if the condition is false, a message can be added to the success result
+   + 'unless' can also be used to avoid negating the condition
 
  a matcher can applied if and only if a boolean condition is true
    if the condition is true, it is applied
-     the result is true if the application is true                                                              ${g6.e1}
-     the result is false if the application is false                                                            ${g6.e2}
+     + the result is true if the application is true
+     + the result is false if the application is false
 
    if the condition is false, it is applied
-     the result is true if the application is false                                                             ${g6.e3}
-     the result is false if the application is true                                                             ${g6.e4}
+     + the result is true if the application is false
+     + the result is false if the application is true
 
- a customer matcher can be negated, or used with be/have                                                        ${g7.e1}
+ + a customer matcher can be negated, or used with be/have
  with exceptions
-   { throw e; 1 } must m1 or throwAn[Exception]                                                                 ${g8.e1}
-   { throw e; 1 } must throwAn[Exception] or m1                                                                 ${g8.e2}
-   { 1          } must m1 or throwAn[Exception]                                                                 ${g8.e3}
-   { 1          } must throwAn[Exception] or m1                                                                 ${g8.e4}
-   { throw E2; 1 } must m1 or throwAn[E2] or throwAn[E1]                                                        ${g8.e5}
+   + { throw e; 1 } must m1 or throwAn[Exception]
+   + { throw e; 1 } must throwAn[Exception] or m1
+   + { 1          } must m1 or throwAn[Exception]
+   + { 1          } must throwAn[Exception] or m1
+   + { throw E2; 1 } must m1 or throwAn[E2] or throwAn[E1]
                                                                                                                 """
 
   "or" - new g1 {

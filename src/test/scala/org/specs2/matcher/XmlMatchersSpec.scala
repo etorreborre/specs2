@@ -2,9 +2,9 @@ package org.specs2
 package matcher
 
 import scala.xml._
-import specification.Groups
+import specification.{Text => _, script, Groups}
 
-class XmlMatchersSpec extends Specification with Groups with XmlMatchers { def is = s2"""
+class XmlMatchersSpec extends script.Specification with Groups with XmlMatchers { def is = s2"""
 
  A equals ignore spaces matcher should
    match nodes, even if there are spaces
@@ -25,10 +25,10 @@ class XmlMatchersSpec extends Specification with Groups with XmlMatchers { def i
    provide a way to specify that the comparison should be ordered
    ${ <a><c/> <b/></a> must ==/(<a> <c/><b/></a>).ordered }
 
-   match if there are newlines                                                                              ${g1().e1}
-   match if attributes are not in the right order                                                           ${g1().e2}
-   fail if 2 nodes are not equal, even ignoring spaces                                                      ${g1().e3}
-   fail if 2 nodes are a Text and an Atom with different data                                               ${g1().e4}
+   + match if there are newlines
+   + match if attributes are not in the right order
+   + fail if 2 nodes are not equal, even ignoring spaces
+   + fail if 2 nodes are a Text and an Atom with different data
 
    provide be + matchers forms
    ${ <a><b/></a> must be equalToIgnoringSpace(<a> <b/></a>) }
@@ -53,14 +53,14 @@ class XmlMatchersSpec extends Specification with Groups with XmlMatchers { def i
    ${ <a><b n="v" n2="v2" n3="v3"></b></a> must \("b", "n"->"v", "n2"->"v2") }
 
  A \\ matcher should not match a node
-   when the source has no children                                                                          ${g2().e1}
-   when the searched node is not a direct child                                                             ${g2().e2}
-   when an attribute name is missing                                                                        ${g2().e3}
-   when the attribute is ok, but the value is ko                                                            ${g2().e4}
-   when the attribute is ko, but the value is ok                                                            ${g2().e5}
-   when the attribute is ko, and the value is ko                                                            ${g2().e6}
-   when matching exactly and an attribute is missing                                                        ${g2().e7}
-   when the searched node contains unmatching nodes                                                         ${g2().e8}
+   + when the source has no children
+   + when the searched node is not a direct child
+   + when an attribute name is missing
+   + when the attribute is ok, but the value is ko
+   + when the attribute is ko, but the value is ok
+   + when the attribute is ko, and the value is ko
+   + when matching exactly and an attribute is missing
+   + when the searched node contains unmatching nodes
 
  A \\\\ matcher should match if a node is a nested child of another
    ${ <a></a> must \\("a") }
@@ -76,14 +76,14 @@ class XmlMatchersSpec extends Specification with Groups with XmlMatchers { def i
    ${ <a><b n="v" n2="v2" n3="v3"></b></a> must \\("b", "n"->"v", "n2"->"v2") }
 
  A \\\\ matcher should not match a node
-   when an attribute name is missing                                                                        ${g3().e1}
-   when the attribute is ok, but the value is ko                                                            ${g3().e2}
-   when the attribute is ko, but the value is ok                                                            ${g3().e3}
-   when the attribute is ko, and the value is ko                                                            ${g3().e4}
-   when matching exactly and an attribute is missing                                                        ${g3().e5}
-   when the searched node contains unmatching nodes                                                         ${g3().e6}
-   when it doesn't contain the same text                                                                    ${g3().e7}
-   when it doen't contain the same text even when one is an Atom and the other a Text                       ${g3().e8}
+   + when an attribute name is missing
+   + when the attribute is ok, but the value is ko
+   + when the attribute is ko, but the value is ok
+   + when the attribute is ko, and the value is ko
+   + when matching exactly and an attribute is missing
+   + when the searched node contains unmatching nodes
+   + when it doesn't contain the same text
+   + when it doen't contain the same text even when one is an Atom and the other a Text
                                                                                                                         """
 
   "eis" - new g1 {

@@ -2,13 +2,13 @@ package org.specs2
 package matcher
 
 import org.hamcrest._
-import specification.Grouped
+import specification._
 
-class HamcrestSpec extends Specification with Grouped with Hamcrest { def is = s2"""
+class HamcrestSpec extends script.Specification with Grouped with Hamcrest { def is = s2"""
 
   Hamcrest matchers can be used as specs2 matchers by mixing in the Hamcrest trait      
-  for example a beEven hamcrest matcher can be used in a 'must' expression                 ${g1.e1}
-    the failure message must contain the matched value and the hamcrest failure message    ${g1.e2}
+  + for example a beEven hamcrest matcher can be used in a 'must' expression
+    + the failure message must contain the matched value and the hamcrest failure message
                                                                                            """
 
   new g1 {
