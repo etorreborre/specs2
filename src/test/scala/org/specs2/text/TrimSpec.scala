@@ -40,6 +40,12 @@ class TrimSpec extends Specification { def is = s2"""
   ${eg{ "a, b , c".splitTrim(",").toSeq === Seq("a", "b", "c") }}
   ${eg{ "a,  ,c".splitTrim(",").toSeq === Seq("a", "c") }}
 
+  Start from trims the string of everything that is before the start substring
+    if the string starts with the specified substring
+    ${ "hello world".startFrom(" w") === " world" }
+    if the string doesn't start with the specified substring
+    ${ "hello world".startFrom(" x") === "hello world" }
+
   string unless condition
     returns the string if the condition is false
     ${eg{ "hello" unless false must_== "hello" }}
