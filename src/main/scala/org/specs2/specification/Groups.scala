@@ -30,7 +30,10 @@ import execute._
  *
  */
 trait Groups extends GroupsLike { outer =>
-  def group(i: Int): ExamplesGroup = allExampleGroups(i)()
+  def group(i: Int): ExamplesGroup = {
+    if (autoNumberedGroups.nonEmpty) autoNumberedGroups(i)()
+    else                             numberedExampleGroups(i)()
+  }
 
   trait g1  extends ExamplesGroup
   trait g2  extends ExamplesGroup
@@ -82,8 +85,6 @@ trait Groups extends GroupsLike { outer =>
   implicit def namedGroup(s: String): NamedGroup = new NamedGroup(s)
 
   class NamedGroup(s: String) {
-    totalNumberOfGroups = totalNumberOfGroups + 1
-
     def -(g: =>ExamplesGroup) = storeGroup(g)
   }
 
@@ -109,7 +110,7 @@ trait Groups extends GroupsLike { outer =>
     else if (g.isInstanceOf[g19])                { storeGroup(19, g) }
     else if (g.isInstanceOf[g20])                { storeGroup(20, g) }
     else if (g.isInstanceOf[g21])                { storeGroup(21, g) }
-    else if (g.isInstanceOf[AutoNumberedGroup])  { storeGroup(g.asInstanceOf[AutoNumberedGroup].index, g) }
+    else if (g.isInstanceOf[AutoNumberedGroup])  { autoNumberedGroups = autoNumberedGroups :+ (() => g) }
   }
 
   private def storeGroup(i: Int, g: =>ExamplesGroup): Unit = {
@@ -137,7 +138,8 @@ trait Groups extends GroupsLike { outer =>
     else if (i == 22) { g22 = () => g; g22 }
   }
 
-  private lazy val allExampleGroups = Seq(g1,g2,g3,g4,g5,g6,g7,g8,g9,g10,g11,g12,g13,g14,g15,g16,g17,g18,g19,g20,g21,g22)
+  private lazy val numberedExampleGroups = Seq(g1,g2,g3,g4,g5,g6,g7,g8,g9,g10,g11,g12,g13,g14,g15,g16,g17,g18,g19,g20,g21,g22)
+  private var autoNumberedGroups: Seq[() => ExamplesGroup] = Seq()
 }
 
 /**
@@ -167,7 +169,10 @@ trait Groups extends GroupsLike { outer =>
  *
  */
 trait Grouped extends GroupsLike { outer =>
-  def group(i: Int): ExamplesGroup = allExampleGroups(i)
+  def group(i: Int): ExamplesGroup = {
+    if (autoNumberedGroups.nonEmpty) autoNumberedGroups(i)
+    else                             numberedExampleGroups(i)
+  }
 
   trait g1  extends ExamplesGroup { outer.g1 = this }
   trait g2  extends ExamplesGroup { outer.g2 = this }
@@ -216,56 +221,36 @@ trait Grouped extends GroupsLike { outer =>
      (new g21 {}).copy("g21"): ExamplesGroup,
      (new g22 {}).copy("g22"): ExamplesGroup)
 
+
+
   implicit def namedGroup(s: String): NamedGroup = new NamedGroup(s)
   class NamedGroup(s: String) {
-    totalNumberOfGroups = totalNumberOfGroups + 1
 
     def -(g: =>ExamplesGroup) {
       val examplesGroup = g
       examplesGroup.nameIs(s)
-      if (examplesGroup.isInstanceOf[AutoNumberedGroup]) storeGroup(examplesGroup.asInstanceOf[AutoNumberedGroup].index, examplesGroup)
+      if (examplesGroup.isInstanceOf[AutoNumberedGroup]) {
+        autoNumberedGroups = autoNumberedGroups :+ g
+      }
     }
   }
 
-  private def storeGroup(i: Int, g: ExamplesGroup): Unit = {
-    if      (i == 1 ) { g1  = g; g1  }
-    else if (i == 2 ) { g2  = g; g2  }
-    else if (i == 3 ) { g3  = g; g3  }
-    else if (i == 4 ) { g4  = g; g4  }
-    else if (i == 5 ) { g5  = g; g5  }
-    else if (i == 6 ) { g6  = g; g6  }
-    else if (i == 7 ) { g7  = g; g7  }
-    else if (i == 8 ) { g8  = g; g8  }
-    else if (i == 9 ) { g9  = g; g9  }
-    else if (i == 10) { g10 = g; g10 }
-    else if (i == 11) { g11 = g; g11 }
-    else if (i == 12) { g12 = g; g12 }
-    else if (i == 13) { g13 = g; g13 }
-    else if (i == 14) { g14 = g; g14 }
-    else if (i == 15) { g15 = g; g15 }
-    else if (i == 16) { g16 = g; g16 }
-    else if (i == 17) { g17 = g; g17 }
-    else if (i == 18) { g18 = g; g18 }
-    else if (i == 19) { g19 = g; g19 }
-    else if (i == 20) { g20 = g; g20 }
-    else if (i == 21) { g21 = g; g21 }
-    else if (i == 22) { g22 = g; g22 }
-  }
-
-  lazy val allExampleGroups = Seq(g1,g2,g3,g4,g5,g6,g7,g8,g9,g10,g11,g12,g13,g14,g15,g16,g17,g18,g19,g20,g21,g22)
+  private lazy val numberedExampleGroups = Seq(g1,g2,g3,g4,g5,g6,g7,g8,g9,g10,g11,g12,g13,g14,g15,g16,g17,g18,g19,g20,g21,g22)
+  private var autoNumberedGroups: Seq[ExamplesGroup] = Seq()
 }
 
 trait GroupsLike {
-  protected[specs2] var totalNumberOfGroups = 0
-
   trait AutoNumberedGroup extends ExamplesGroup {
-    private var j = 0
-    val index = totalNumberOfGroups
+    private var autoNumberedExamples: Seq[Function0Result] = Seq()
+
+    override def example(i: Int) =
+      if (autoNumberedExamples.nonEmpty) autoNumberedExamples.applyOrElse(i, (index:Int) => Function0Result.anyToAnyResult(new execute.Pending(s" - PENDING ")))
+      else                               numberedExamples(i)
+
     def eg = this
 
     def :=[R: AsResult](r: =>R) {
-      j = j + 1
-      example(j - 1) := r
+      autoNumberedExamples = autoNumberedExamples :+ (Function0Result.anyToAnyResult(r))
     }
   }
   trait group extends AutoNumberedGroup
@@ -276,7 +261,6 @@ trait GroupsLike {
 case class ExamplesGroup(private var name: String = "") extends BeforeAfterAround {
   def groupName = name
 
-  private lazy val pending = StandardResults.pending
   def nameIs(n: String) = { name = s"'$n'"; this }
 
   val e1:  Function0Result = new execute.Pending(s" - PENDING ")
@@ -302,9 +286,9 @@ case class ExamplesGroup(private var name: String = "") extends BeforeAfterAroun
   val e21: Function0Result = new execute.Pending(s" - PENDING ")
   val e22: Function0Result = new execute.Pending(s" - PENDING ")
 
-  private lazy val allExamples = Seq(e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11,e12,e13,e14,e15,e16,e17,e18,e19,e20,e21,e22)
+  protected lazy val numberedExamples = Seq(e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11,e12,e13,e14,e15,e16,e17,e18,e19,e20,e21,e22)
 
-  def example(i: Int) = allExamples(i)
+  def example(i: Int) = numberedExamples(i)
   def before {}
   def after {}
   def around[T : AsResult](a: =>T): Result = AsResult(a)
