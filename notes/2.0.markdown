@@ -1,0 +1,40 @@
+Major release! Please read [this post](http://etorreborre.blogspot.com/interpolated.html) to get all the details.
+
+New features
+
+ * simplified the acceptance specifications with [interpolated strings](https://github.com/etorreborre/specs2/blob/master/src/test/scala/examples/HelloWorldSpec.scala) and [`Scripts`](https://github.com/etorreborre/specs2/blob/master/src/test/scala/examples/ScriptedHelloWorldSpec.scala)
+ * added a new way of declaring Given/When/Then specifications with the `GWT` trait (http://etorreborre.github.com/specs2/guide/org.specs2.structure.GivenWhenThenPage.html)
+ * added a `Snippets` trait to insert blocks of code in generated documentation
+ * added matchers for `scala.util.Try` instances
+ * using the official Scalaz 7 release
+ * refactored the generated html with [Bootstrap](http://twitter.github.io/bootstrap)
+ 
+Improvements
+ 
+ * when a result is Skipped or Pending in a ScalaCheck property the full property is skipped or pending
+ * restricted the JsonMatchers to strings instead of being `Matcher[Any]`
+ * update `copySpecResources/unjar` to support not alphanumerical paths (e.g. Windows path with accent, thanks @cchantep)
+ * added a `pegdownExtensions` argument to specify the Markdown extensions with pegdown (thanks @asflierl)
+ * added a `Fixture` trait to pass data to each `Example`
+ * added auto-numbered groups and examples for the `Groups` and `Grouped` traits
+
+Fixes
+
+ * errors must be re-thrown when exceptions are expected with ExceptionMatchers [#134](https://github.com/etorreborre/specs2/issues/134)
+ * fixed the directory names for the api [#136](https://github.com/etorreborre/specs2/issues/136)
+ * fixed a file creation issue when the parent directory is not an absolute path
+ * added a utf8 declaration for the junit xml outptut [#139](https://github.com/etorreborre/specs2/issues/139)
+ * modified the contained matchers so that not-expressions work ok with thrown expectations [#142](https://github.com/etorreborre/specs2/issues/142)
+ * made the Json matchers more tolerant against single quoted Json for testing
+ * when a title is specified on a Specification the url of the html file should not be changed
+ * when parsing for package names it must be possible to have a license header at the beginning of a file [#143](https://github.com/etorreborre/specs2/issues/143)
+ * fixed the contain.only matcher when negated [#148](https://github.com/etorreborre/specs2/issues/148)
+ * improved the performances of the `FileReader` [#149](https://github.com/etorreborre/specs2/issues/149)
+ * fixed the evaluation order of actual and expected values in the `BeEqualTo` matcher [#150](https://github.com/etorreborre/specs2/issues/150)
+ * fixed the behaviour of `map must not(haveKeys(k1, k2, k3))` to check for the absence of _all_ the keys
+ * throw an `ErrorException` when a nested `forall` throws an `Exception`
+ * set the `MatchResult[T].apply` method as private to specs2 to mitigate issues with semi-column inference. fixes [#154](https://github.com/etorreborre/specs2/issues/154)
+
+
+ ==========================
+
