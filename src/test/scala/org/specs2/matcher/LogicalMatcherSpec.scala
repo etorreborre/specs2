@@ -123,24 +123,8 @@ class LogicalMatcherSpec extends script.Specification with ResultMatchers with G
   }
 
   "with custom matchers" - new g7 {
-    /** custom matcher */
-    def bePositive[T : Numeric] = CustomMatcher[T]()
-    /** this allows to write "a must not be positive" */
-    def positive[T : Numeric] = bePositive
-
-    case class CustomMatcher[T : Numeric]() extends Matcher[T] {
-      def apply[S <: T](e: Expectable[S]) =
-        result(implicitly[Numeric[T]].abs(e.value) == e.value, e.value+" is positive", e.value+" is negative", e)
-    }
-    /** this allows to write "a must not bePositive" or "a must be positive" */
-    val outer = this
-    implicit def anyBePositive[T : Numeric](result: MatchResult[T]) = new AnyBePositive(result)
-    class AnyBePositive[T : Numeric](result: MatchResult[T]) {
-      def bePositive = result(outer.bePositive)
-      def positive = result(outer.bePositive)
-    }
     e1 := (12 must bePositive) and
-          (12 must be positive)
+          (12 must be positive) and
           (-12 must not bePositive) and
           (-12 must not be positive)
   }
@@ -152,4 +136,22 @@ class LogicalMatcherSpec extends script.Specification with ResultMatchers with G
     e4 := {                              1 } must be_==(1) or throwAn[Exception]
     e5 := { throw new Exception("ouch"); 1 } must be_==(1) or throwAn[Exception] or throwAn[Exception]
   }
+
+  case class CustomMatcher[T : Numeric]() extends Matcher[T] {
+    def apply[S <: T](e: Expectable[S]) =
+      result(implicitly[Numeric[T]].abs(e.value) == e.value, e.value+" is positive", e.value+" is negative", e)
+  }
+  /** this allows to write "a must not bePositive" or "a must be positive" */
+  lazy val outer = this
+  implicit def anyBePositive[T : Numeric](result: MatchResult[T]) = new AnyBePositive(result)
+  class AnyBePositive[T : Numeric](result: MatchResult[T]) {
+    def bePositive = result(outer.bePositive)
+    def positive = result(outer.bePositive)
+  }
+
+  /** custom matcher */
+  def bePositive[T : Numeric] = CustomMatcher[T]()
+  /** this allows to write "a must not be positive" */
+  def positive[T : Numeric] = bePositive
+
 }

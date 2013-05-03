@@ -16,14 +16,15 @@ class BiMapSpec extends script.Specification with BiMapExamples { def is = s2"""
  + it is possible to know if a key exists
                                                                            """
 }
-trait BiMapExamples extends Grouped with MustMatchers {
+
+trait BiMapExamples extends Groups with MustMatchers {
   val bimap = Seq("one" <-> 1, "two" <-> 2, "three" <-> 3)
 
-  "BiMap api" - new g1 {
-    e1 := bimap.values === Seq(1, 2, 3)
-    e2 := bimap.fromKey("one") === Some(1)
-    e3 := bimap.fromValue(2) === Some("two")
-    e4 := bimap.containsValue(3)
-    e5 := bimap.containsKey("three")
+  "BiMap api" - new group {
+    eg := bimap.values === Seq(1, 2, 3)
+    eg := bimap.fromKey("one") === Some(1)
+    eg := bimap.fromValue(2) === Some("two")
+    eg := bimap.containsValue(3)
+    eg := bimap.containsKey("three")
   }
 }

@@ -3,7 +3,7 @@ package xml
 
 import NodeFunctions._
 import Nodex._
-import specification.{Group, Grouped}
+import specification.{ExamplesGroup, Grouped}
 import matcher.XmlMatchers
 
 class NodeFunctionsSpec extends Specification with Grouped with XmlMatchers { def is = s2"""

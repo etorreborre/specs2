@@ -7,7 +7,7 @@ import execute.AsResult
 class GroupsSpec extends Specification {
 
   "The examples of a group must only be evaluated when the example is evaluated" >> {
-    val g = new Group {}
+    val g = new ExamplesGroup {}
     var evaluated = false
     g.e1 := { evaluated = true; ok }
 

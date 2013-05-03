@@ -62,7 +62,7 @@ class SpecificationSpec extends script.Specification with Grouped { def is = s2"
     }
   }
 
-  def run(text: String, groups: Group*)(implicit arguments: Arguments = Arguments()) = {
+  def run(text: String, groups: ExamplesGroup*)(implicit arguments: Arguments = Arguments()) = {
     (new TextRunner) { new script.Specification with Grouped { outer =>
       def is = arguments ^ nocolor ^ s2"""$text"""
       (0 until groups.size) foreach { i =>

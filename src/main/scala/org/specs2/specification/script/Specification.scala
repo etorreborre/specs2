@@ -5,6 +5,7 @@ package script
 import collection.Seqx._
 import text.Trim._
 import TagsFragments.{Tag, Section}
+import execute.AsResult
 
 abstract class Specification extends SpecificationLike
 
