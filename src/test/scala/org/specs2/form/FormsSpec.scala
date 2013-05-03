@@ -1,40 +1,41 @@
 package org.specs2
 package form
+
 import specification._
 
-class FormsSpec extends Specification with FormsBuilder with Grouped { def is = s2"""
+class FormsSpec extends script.Specification with FormsBuilder with Grouped { def is = s2"""
 
 The Forms object provides several utility functions for creating forms
                                                                                           
   The subset method allows to check if a list of forms is a subset of another one       
-    subset(l1 + l2, l1) == l1 + l2 - ok                                                 ${g1.e1}
-    subset(l1, l2) == l1 - ko                                                           ${g1.e2}
-    subset(l1 + l2, l1) == l1 - ok + l2 - ko                                            ${g1.e3}
+    + subset(l1 + l2, l1) == l1 + l2 - ok
+    + subset(l1, l2) == l1 - ko
+    + subset(l1 + l2, l1) == l1 - ok + l2 - ko
                                                                                           
   If the subset method fails, the form are shown as failed                              
-    subset(l1, l1 + l2) == l1 - ok                                                      ${g1.e4}
-    subset(l1, l2) == l1 - ko                                                           ${g1.e5}
-    subset(l1 + l2, l1) == l1 - ok + l2 - ko                                            ${g1.e6}
+    + subset(l1, l1 + l2) == l1 - ok
+    + subset(l1, l2) == l1 - ko
+    + subset(l1 + l2, l1) == l1 - ok + l2 - ko
                                                                                           
   The subsequence method allows to check if a list of forms is a subsequence            
   of another one                                                                        
-    subsequence(ab + cd, ab) == abcd - ok                                               ${g2.e1}
-    subsequence(bac + d, abc) == b - ko + a - ok + c - ko + d - ok                      ${g2.e2}
-    subsequence(cd, ab) == cd - ok + ab - ko                                            ${g2.e3}
-    subsequence(ab, ab + cd) == ab - ok + cd - ko                                       ${g2.e4}
-    subsequence(ab, ba + cd) == ax - ko + cd - ko                                       ${g2.e5}
+    + subsequence(ab + cd, ab) == abcd - ok
+    + subsequence(bac + d, abc) == b - ko + a - ok + c - ko + d - ok
+    + subsequence(cd, ab) == cd - ok + ab - ko
+    + subsequence(ab, ab + cd) == ab - ok + cd - ko
+    + subsequence(ab, ba + cd) == ax - ko + cd - ko
                                                                                           
   The set method allows to check if 2 lists of forms are the same, in no specific order 
-    set(l1, l1 + l2) == l1 - ok + l2 ko                                                 ${g3.e1}
-    set(l1 + l2, l2) == l1 - ko + l2 ok                                                 ${g3.e2}
-    set(l1, l2) == l1 - ko                                                              ${g3.e3}
-    set(l1, l1) == l1 - ok                                                              ${g3.e4}
+    + set(l1, l1 + l2) == l1 - ok + l2 ko
+    + set(l1 + l2, l2) == l1 - ko + l2 ok
+    + set(l1, l2) == l1 - ko
+    + set(l1, l1) == l1 - ok
                                                                                           
   The sequence method allows to check if 2 lists of forms are the same, in order        
-    sequence(ab, ab + cd) == ab - ok + cd - ko                                          ${g4.e1}
-    sequence(ab, ba) == ab - ko                                                         ${g4.e2}
-    sequence(ab, ba + c) == a - ok + bc - ko                                            ${g4.e3}
-    sequence(abc, ba) == a - ok + bc - ko                                               ${g4.e4}
+    + sequence(ab, ab + cd) == ab - ok + cd - ko
+    + sequence(ab, ba) == ab - ko
+    + sequence(ab, ba + c) == a - ok + bc - ko
+    + sequence(abc, ba) == a - ok + bc - ko
                                                                                         """
 
   "subset verification" - new g1 {

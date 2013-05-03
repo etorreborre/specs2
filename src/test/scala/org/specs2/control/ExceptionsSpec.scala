@@ -2,9 +2,9 @@ package org.specs2
 package control
 
 import sys._
-import specification.Grouped
+import specification._
 
-class ExceptionsSpec extends Specification with Exceptions with Grouped {  def is = s2"""
+class ExceptionsSpec extends script.Specification with Exceptions with Grouped {  def is = s2"""
                                                                                                                
 The Exceptions trait provides functional ways to catch exceptions and deal with them:
 
@@ -19,36 +19,36 @@ The Exceptions trait provides functional ways to catch exceptions and deal with 
                                                                                                                         
 
   tryo executes an expression and returns an Option
-    Some(result) if the expression doesn't throw an exception                                     ${g1.e1}
-    None if the expression failed                                                                 ${g1.e2}
+    + Some(result) if the expression doesn't throw an exception
+    + None if the expression failed
 
   tryOr executes an expression and returns the result or a default value. It returns
-    the result if the expression doesn't throw an exception                                       ${g2.e1}
-    a default value if the expression throws an exception                                         ${g2.e2}
+    + the result if the expression doesn't throw an exception
+    + a default value if the expression throws an exception
 
   tryOrElse executes an expression and returns the result or another value. It returns
-    the result if the expression doesn't throw an exception                                       ${g3.e1}
-    another value if the expression throws an exception                                           ${g3.e2}
+    + the result if the expression doesn't throw an exception
+    + another value if the expression throws an exception
 
   tryMap executes an expression and returns
-    a 'ok' value if the expression doesn't throw an exception                                     ${g4.e1}
-    a 'ko' value if the expression throws an exception                                            ${g4.e2}
+    + a 'ok' value if the expression doesn't throw an exception
+    + a 'ko' value if the expression throws an exception
 
   tryOk executes an expression and returns a Boolean
-    true if the expression doesn't throw an exception                                             ${g5.e1}
-    false if the expression throws an exception                                                   ${g5.e2}
+    + true if the expression doesn't throw an exception
+    + false if the expression throws an exception
 
   trye executes an expression and returns an Either value
-    Right(result) if the expression doesn't throw an exception                                    ${g6.e1}
-    Left(f(e)) if the expression failed, where f is a function of an exception                    ${g6.e2}
+    + Right(result) if the expression doesn't throw an exception
+    + Left(f(e)) if the expression failed, where f is a function of an exception
 
   catchAll executes an expression and returns an Either value
-    Right(result) if the expression doesn't throw a Throwable                                     ${g7.e1}
-    Left(f(e)) if the expression threw anything, even an error                                    ${g7.e2}
+    + Right(result) if the expression doesn't throw a Throwable
+    + Left(f(e)) if the expression threw anything, even an error
 
   tryOr executes an expression and returns the result or a default value. It returns
-    the result if the expression doesn't throw an exception                                       ${g8.e1}
-    a default value if the expression throws an exception                                         ${g8.e2}
+    + the result if the expression doesn't throw an exception
+    + a default value if the expression throws an exception
                                                                                                   """
     
   "tryo" - new g1 {

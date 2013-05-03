@@ -102,7 +102,7 @@ trait StandardRegexStepParsers extends StepParsers {
   // definitions taken from the JavaTokenParsers trait
   private val wholeNumber = """-?\d+"""
   private val decimalNumber = """(\d+(\.\d*)?|\d*\.\d+)"""
-  private val stringLiteral = ("\""+"""([^"\p{Cntrl}\\]|\\[\\'"bfnrt]|\\u[a-fA-F0-9]{4})*"""+"\"")
+  private val string = """"[^"]*""""
 
   def anInt     = groupAs(wholeNumber).and((_: String).toInt)
   def twoInts   = groupAs(wholeNumber).and((s1: String, s2: String) => (s1.toInt, s2.toInt))
@@ -112,9 +112,9 @@ trait StandardRegexStepParsers extends StepParsers {
   def twoDoubles   = groupAs("-?"+decimalNumber).and((s1: String, s2: String) => (s1.toDouble, s2.toDouble))
   def threeDoubles = groupAs("-?"+decimalNumber).and((s1: String, s2: String, s3: String) => (s1.toDouble, s2.toDouble, s3.toDouble))
 
-  def aString      = groupAs(stringLiteral).and((s:String) => s)
-  def twoStrings   = groupAs(stringLiteral).and((s1:String, s2: String) => (s1, s2))
-  def threeStrings = groupAs(stringLiteral).and((s1:String, s2: String, s3: String) => (s1, s2, s3))
+  def aString      = groupAs(string).and((s:String) => s)
+  def twoStrings   = groupAs(string).and((s1:String, s2: String) => (s1, s2))
+  def threeStrings = groupAs(string).and((s1:String, s2: String, s3: String) => (s1, s2, s3))
 }
 
 

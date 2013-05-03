@@ -8,23 +8,23 @@ class IncludeExcludeStackTraceFilterSpec extends IncludeExcludeStackTraceFilterE
 
   A stacktrace can be filtered
     by declaring 'exclude' patterns
-      leaving the elements not matching the patterns                                               ${g1.e1}
-      filtering out the elements matching the patterns                                             ${g1.e2}
+      + leaving the elements not matching the patterns
+      + filtering out the elements matching the patterns
 
     by declaring 'include' patterns
-      leaving the elements matching the patterns                                                   ${g1.e3}
-      filtering out the elements not matching the patterns                                         ${g1.e4}
+      + leaving the elements matching the patterns
+      + filtering out the elements not matching the patterns
 
   A IncludedExcludedStackTraceFilter can be created from a string
-    the default pattern is i1,i2/e1,e2 where i are include tags and e are exclude tags             ${g2.e1}
+    + the default pattern is i1,i2/e1,e2 where i are include tags and e are exclude tags
 
   From an existing IncludedExcludedStackTraceFilter
-    we can add more include patterns, using the includeAlso method                                 ${g3.e1}
-    we can add more exclude patterns, using the excludeAlso method                                 ${g3.e2}
+    + we can add more include patterns, using the includeAlso method
+    + we can add more exclude patterns, using the excludeAlso method
 
   A StackTraceFilter, when filtering an exception should
-    retain the exception cause                                                                     ${g4.e1}
-    retain the exception type                                                                      ${g4.e2}
+    + retain the exception cause
+    + retain the exception type
                                                                                                    """
 }
 
@@ -60,7 +60,7 @@ trait IncludeExcludeStackTraceFilterExamples extends IncludeExcludeStackTraceFil
   }
 }
 
-trait IncludeExcludeStackTraceFilterImplementation extends Specification {
+trait IncludeExcludeStackTraceFilterImplementation extends script.Specification {
   def stacktrace(st: String*) =  st.map(stackTraceElement(_))
 
   /** filter a stacktrace */

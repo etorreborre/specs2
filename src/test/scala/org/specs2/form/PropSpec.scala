@@ -4,9 +4,9 @@ package form
 import control.Property
 import execute._
 import sys._
-import specification.Grouped
+import specification._
 
-class PropSpec extends Specification with Grouped {  def is = s2"""
+class PropSpec extends script.Specification with Grouped {  def is = s2"""
                                                                     
 A Prop is a Field defining an expected and an actual value.
 
@@ -14,35 +14,35 @@ It embeddeds an optional constraint which allows to execute the Prop and see (by
 the actual value is equal to the expected value.
                                                                                                                         
  A Prop can be created
-   with a single label                                                                    ${g1.e1}
-   with a single value (the actual one)                                                   ${g1.e2}
-   with a label and actual value                                                          ${g1.e3}
-   with a label, the actual value and a binary function returning a result                ${g1.e4}
-   with a label, the actual value and a matcher                                           ${g1.e5}
-   with the actual value and a muted matcher                                              ${g1.e6}
-   with the actual value, the expected value and a muted matcher                          ${g1.e7}
+   + with a single label
+   + with a single value (the actual one)
+   + with a label and actual value
+   + with a label, the actual value and a binary function returning a result
+   + with a label, the actual value and a matcher
+   + with the actual value and a muted matcher
+   + with the actual value, the expected value and a muted matcher
 
  A Prop can be displayed
-   with only the expected value                                                           ${g2.e1}
-   with only the actual value                                                             ${g2.e2}
-   with only one value when expected == actual                                            ${g2.e3}
+   + with only the expected value
+   + with only the actual value
+   + with only one value when expected == actual
 
  A Prop can be updated
-   with the expected value                                                                ${g3.e1}
+   + with the expected value
 
  A Prop can be executed
-   it returns pending if it has no values at all                                          ${g4.e1}
-   it returns pending if it only has an actual value                                      ${g4.e2}
-   it returns pending if it only has an expected value                                    ${g4.e3}
-   it returns success if expected == actual                                               ${g4.e4}
-   it returns a failure if expected != actual                                             ${g4.e5}
-   it returns an error if there's an exception                                            ${g4.e6}
+   + it returns pending if it has no values at all
+   + it returns pending if it only has an actual value
+   + it returns pending if it only has an expected value
+   + it returns success if expected == actual
+   + it returns a failure if expected != actual
+   + it returns an error if there's an exception
    it works with a general constraint
-     and returns a success if constraint(actual, expected) == success                     ${g4.e7}
-     and returns a failure if constraint(actual, expected) fails                          ${g4.e8}
+     + and returns a success if constraint(actual, expected) == success
+     + and returns a failure if constraint(actual, expected) fails
    it works with a matcher constraint
-     and returns a success if (actual matcher expected) == success                        ${g4.e9}
-     and returns a failure if (actual matcher expected) fails                             ${g4.e10}
+     + and returns a success if (actual matcher expected) == success
+     + and returns a failure if (actual matcher expected) fails
                                                                                           """
 
   val nameProp = Prop("name", "eric")

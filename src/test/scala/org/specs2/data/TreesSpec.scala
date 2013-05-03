@@ -7,22 +7,22 @@ import Scalaz._
 import Tree._
 import text.Trim._
 import matcher.DataTables
-import specification.Grouped
+import specification._
 
-class TreesSpec extends Specification with DataTables with Grouped { def is = s2"""
+class TreesSpec extends script.Specification with DataTables with Grouped { def is = s2"""
 
   A tree can be pruned by providing a function mapping nodes to Option[Node]
-    if a node is mapped to Some(n), it stays in the tree                        ${g1.e1}
+    + if a node is mapped to Some(n), it stays in the tree
     if a node is mapped to None, it is removed from the tree
-      if it's a leaf                                                            ${g1.e2}
-      if it's a subtree                                                         ${g1.e3}
-      even the root of the tree                                                 ${g1.e4}
+      + if it's a leaf
+      + if it's a subtree
+      + even the root of the tree
 
   A TreeLoc can
-    return its size                                                             ${g2.e1}
-    be added a new child                                                        ${g2.e2}
+    + return its size
+    + be added a new child
 
-  A Tree can be flattenLeft to avoid SOF                                        ${g3.e1}
+  + A Tree can be flattenLeft to avoid SOF
                                                                                 """
 
   "pruning" - new g1 {

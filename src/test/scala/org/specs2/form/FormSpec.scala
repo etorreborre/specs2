@@ -7,7 +7,7 @@ import matcher._
 import execute._
 import main.ArgumentsArgs
 
-class FormSpec extends Specification with ResultMatchers with Grouped with XmlMatchers { def is = s2"""
+class FormSpec extends script.Specification with ResultMatchers with Grouped with XmlMatchers { def is = s2"""
 
 A Form is a generic table which has an optional title and rows. Each row contains cells which can be created from
 Fields, Props or other Forms.
@@ -18,60 +18,60 @@ Upon execution a Form will return a Result value summarizing the execution of ea
                                                                                                                         
                                                                                                                         
 A Form can be created                                                                                                 
-  with a title                                                                                              ${g1.e1}
-  with one field on one row                                                                                 ${g1.e2}
-  with two fields on one row                                                                                ${g1.e3}
-  with a title and one field on each row                                                                    ${g1.e4}
-  with a property on one row                                                                                ${g1.e5}
-  with another Form on one row                                                                              ${g1.e6}
-  with a seq of fields on one row                                                                           ${g1.e7}
-  with a seq of fields on one row - and no title                                                            ${g1.e8}
-  with tabs                                                                                                 ${g1.e9}
-  with a seq of Rows                                                                                        ${g1.e10}
+  + with a title
+  + with one field on one row
+  + with two fields on one row
+  + with a title and one field on each row
+  + with a property on one row
+  + with another Form on one row
+  + with a seq of fields on one row
+  + with a seq of fields on one row - and no title
+  + with tabs
+  + with a seq of Rows
   from a DataTable
-    the Form header is the DataTable header                                                                 ${g1.e11}
-    with an additional column for failure messages                                                          ${g1.e12}
-    the form rows are the DataTable rows                                                                    ${g1.e13}
+    + the Form header is the DataTable header
+    + with an additional column for failure messages
+    + the form rows are the DataTable rows
 
 A Form can be displayed, showing expected values
   with its title
-    if present: | title |                                                                                   ${g2.e1}
-    if absent: the text is empty                                                                            ${g2.e2}
+    + if present: | title |
+    + if absent: the text is empty
 
   the columns must be aligned for
-    a simple form with 2 fields $address1                                                                   ${g2.e3}
-    a simple form with 3 fields, 2 on one row and one on the second row $address2                           ${g2.e4}
-    a form with more fields and rows $address3                                                              ${g2.e5}
-    a form with an inlined form $address4                                                                   ${g2.e6}
+    + a simple form with 2 fields $address1
+    + a simple form with 3 fields, 2 on one row and one on the second row $address2
+    + a form with more fields and rows $address3
+    + a form with an inlined form $address4
 
   with one row only
-    and one cell                                                                                            ${g2.e7}
-    and 2 cells                                                                                             ${g2.e8}
+    + and one cell
+    + and 2 cells
 
   with a title and one row
-    and one cell                                                                                            ${g2.e9}
-    and 2 cells                                                                                             ${g2.e1}
+    + and one cell
+    + and 2 cells
 
 A Form can be executed as a success
-  then its rows are a success                                                                               ${g3.e1}
-  and row cells are a success                                                                               ${g3.e2}
+  + then its rows are a success
+  + and row cells are a success
 
 A Form can be executed as a failure
-  then its rows are a failure                                                                               ${g3.e3}
-  and row cells are a failure                                                                               ${g3.e4}
+  + then its rows are a failure
+  + and row cells are a failure
 
  A Form can be executed
-   then all its rows are executed                                                                           ${g3.e5}
+   + then all its rows are executed
 
 Forms rows and cells have equals/hashcode methods
-  row1 == row1                                                                                              ${g4.e1}
-  cell1 == cell1                                                                                            ${g4.e2}
+  + row1 == row1
+  + cell1 == cell1
 
 Forms can be displayed as xhtml
-  the title must span all columns                                                                           ${g5.e1}
+  + the title must span all columns
 
 A form can be added to another
-    inlined                                                                                                 ${g6.e1}
+  + inlined
                                                                                                             """
 
   "creation" - new g1 with datatables {

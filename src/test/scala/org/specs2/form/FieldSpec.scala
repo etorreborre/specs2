@@ -1,24 +1,25 @@
 package org.specs2
 package form
+
 import execute._
 import sys._
-import specification.Grouped
+import specification._
 
-class FieldSpec extends Specification with Grouped { def is = s2"""
+class FieldSpec extends script.Specification with Grouped { def is = s2"""
 
 A Field is a labelled property with can be embedded in a Form.                                                        
 
  A Field can be created
-   from just a value (then its name is empty)                               ${g1.e1}
-   from a name and a value                                                  ${g1.e2}
-   from existing fields, concatenating them                                 ${g1.e3}
+   + from just a value (then its name is empty)
+   + from a name and a value
+   + from existing fields, concatenating them
 
  A Field can be executed
-   it returns skipped if the value is ok                                    ${g2.e1}
-   it returns an error if the value throws an exception                     ${g2.e2}
+   + it returns skipped if the value is ok
+   + it returns an error if the value throws an exception
 
  A Field can be modified
-   to a string Field                                                        ${g3.e1}
+   + to a string Field
                                                                             """
 
   val name     = Field("name", "eric")

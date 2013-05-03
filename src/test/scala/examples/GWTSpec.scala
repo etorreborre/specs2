@@ -5,16 +5,16 @@ import specification.script.{GWT, StandardRegexStepParsers}
 
 
 class GWTSpec extends Specification with GWT with StandardRegexStepParsers { def is = s2"""
-                                                                  ${calculator1.start}
- A given-when-then example for a calculator
+
+ A given-when-then example for a calculator                       ${calculator1.start}
    Given the following number: 1
    And a second number: 2
    And a third number: 6
    When I use this operator: +
    Then I should get: 9
    And it should be >: 0                                          ${calculator1.end}
-                                                                  ${calculator2.start}
- Now with the multiplication
+
+ Now with the multiplication                                      ${calculator2.start}
    Given the following number: 4
    And a second number: 5
    And a third number: 6

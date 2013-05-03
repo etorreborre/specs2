@@ -4,37 +4,36 @@ package control
 import io._
 import specification._
 
-class PropertySpec extends Specification with Groups { def is = s2"""
+class PropertySpec extends script.Specification with Groups { def is = s2"""
 
 A Property is used to store values which can be lazily accessed when required.
 
 It has an Option-like structure, supporting the same kind of operations and can be empty like an Option.
 
-
  A property
-   can be empty                                                            ${g1().e1}
-   can be created from any value                                           ${g1().e2}
-   can be updated with another value                                       ${g1().e3}
-   can be updated with an option                                           ${g1().e4}
-   has a toString method returning the option value toString               ${g1().e5}
+   + can be empty
+   + can be created from any value
+   + can be updated with another value
+   + can be updated with an option
+   + has a toString method returning the option value toString
 
  A property can be executed
-   and return its contained value                                          ${g2().e1}
-   it is only executed once                                                ${g2().e2}
+   + and return its contained value
+   + it is only executed once
 
  A property behaves like an Option
-   with map                                                                ${g3().e1}
-   with flatMap                                                            ${g3().e2}
-   with filter                                                             ${g3().e3}
-   with foreach                                                            ${g3().e4}
-   with getOrElse                                                          ${g3().e5}
-   with isDefined                                                          ${g3().e6}
-   with isEmpty                                                            ${g3().e7}
-   with orElse                                                             ${g3().e8}
+   + with map
+   + with flatMap
+   + with filter
+   + with foreach
+   + with getOrElse
+   + with isDefined
+   + with isEmpty
+   + with orElse
 
  A property can be transformed to an Either instance
-   with toLeft                                                             ${g4().e1}
-   with toRight                                                            ${g4().e2}
+   + with toLeft
+   + with toRight
                                                                            """
 
   "creation" - new g1 with prop {

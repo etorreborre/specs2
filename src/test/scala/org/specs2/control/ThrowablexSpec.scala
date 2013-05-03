@@ -1,31 +1,31 @@
 package org.specs2
 package control
 
-import specification.{ Grouped, Tags }
+import specification._
 
-class ThrowablexSpec extends Specification with Throwablex with Grouped with Tags { def is = section("unstable") ^ s2"""
+class ThrowablexSpec extends script.Specification with Throwablex with Grouped { def is = section("unstable") ^ s2"""
 
 The Throwablex trait provides extensions to regular throwables:
 
  It provides methods to access nested exceptions
-   chainedExceptions returns a list of nested exceptions 			                           ${g1.e1}
-   getFullStackTrace returns a list of all nested stackTraceElements                     ${g1.e2}
-   messageAndCause returns the exception message and its cause if any                    ${g1.e3}
+   + chainedExceptions returns a list of nested exceptions
+   + getFullStackTrace returns a list of all nested stackTraceElements
+   + messageAndCause returns the exception message and its cause if any
 
  It has location methods
-   to get the name of the file and the line from an exception                            ${g2.e1}
-   to get the class name and line number of an exception                                 ${g2.e2}
-   to get the class name, file name and line number of an exception                      ${g2.e3}
-   to get the path of an exception                                                       ${g2.e4}
+   + to get the name of the file and the line from an exception
+   + to get the class name and line number of an exception
+   + to get the class name, file name and line number of an exception
+   + to get the path of an exception
 
  It allows to filter stacktraces
-   to filter all the lines matching a given pattern                                      ${g3.e1}
-   to filter all the lines not matching a given pattern                                  ${g3.e2}
+   + to filter all the lines matching a given pattern
+   + to filter all the lines not matching a given pattern
 
  It provides utility functions for stacktrace elements
-   apply returns the nth element                                                         ${g4.e1}
-   headOption returns the first element as an option                                     ${g4.e2}
-                                                                                         """
+   + apply returns the nth element
+   + headOption returns the first element as an option
+                                                                                                                 """
 
   "chained" - new g1 with ThrowablexContext {
 	  e1 := e.chainedExceptions      === List(e.getCause)

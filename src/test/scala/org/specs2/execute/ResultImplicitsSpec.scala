@@ -2,14 +2,14 @@ package org.specs2
 package execute
 
 import ResultImplicits._
-import specification.Grouped
+import specification._
 
-class ResultImplicitsSpec extends Specification with Grouped { def is = s2"""
+class ResultImplicitsSpec extends script.Specification with Grouped { def is = s2"""
 
  It is possible to test some values against a function returning results
-   with forall, stopping after the first failure                                              ${g1.e1}
-   with foreach, collecting all failures                                                      ${g1.e2}
-   with atLeastOnce, collecting all failures                                                  ${g1.e3}
+   + with forall, stopping after the first failure
+   + with foreach, collecting all failures
+   + with atLeastOnce, collecting all failures
                                                                                               """
 
   "Collections of results" - new g1 {
