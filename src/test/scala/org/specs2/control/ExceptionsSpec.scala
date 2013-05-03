@@ -51,37 +51,37 @@ The Exceptions trait provides functional ways to catch exceptions and deal with 
     + a default value if the expression throws an exception
                                                                                                   """
     
-  "tryo" - new g1 {
-    e1 := tryo("a") must_== Some("a")
-    e2 := tryo(boom) must_== None
+  "tryo" - new group {
+    eg := tryo("a") must_== Some("a")
+    eg := tryo(boom) must_== None
   }
-  "tryOr" - new g2 {
-    e1 := tryOr("a")((e:Exception) => e.getMessage) must_== "a"
-    e2 := tryOr(boom)((e:Exception) => "bang") must_== "bang"
+  "tryOr" - new group {
+    eg := tryOr("a")((e:Exception) => e.getMessage) must_== "a"
+    eg := tryOr(boom)((e:Exception) => "bang") must_== "bang"
   }
-  "tryOrElse" - new g3 {
-    e1 := tryOrElse("a")("b") must_== "a"
-    e2 := tryOrElse(boom)("bang") must_== "bang"
+  "tryOrElse" - new group {
+    eg := tryOrElse("a")("b") must_== "a"
+    eg := tryOrElse(boom)("bang") must_== "bang"
   }
-  "tryMap" - new g4 {
-    e1 := tryMap("a")(true)(false) must_== true
-    e2 := tryMap(boom)(true)(false) must_== false
+  "tryMap" - new group {
+    eg := tryMap("a")(true)(false) must_== true
+    eg := tryMap(boom)(true)(false) must_== false
   }
-  "tryOk" - new g5 {
-    e1 := tryOk("a") must_== true
-    e2 := tryOk(boom) must_== false
+  "tryOk" - new group {
+    eg := tryOk("a") must_== true
+    eg := tryOk(boom) must_== false
   }
-  "trye" - new g6 {
-    e1 := trye("a")((e:Exception) => e.getMessage) must_== Right("a")
-    e2 := trye(boom)((e:Exception) => e.getMessage) must_== Left("boom")
+  "trye" - new group {
+    eg := trye("a")((e:Exception) => e.getMessage) must_== Right("a")
+    eg := trye(boom)((e:Exception) => e.getMessage) must_== Left("boom")
   }
-  "catchAll" - new g7 {
-    e1 := catchAll("a")((e:Throwable) => e.getMessage) must_== Right("a")
-    e2 := catchAll({throw new Error("boom"); "a"})((e:Throwable) => e.getMessage) must_== Left("boom")
+  "catchAll" - new group {
+    eg := catchAll("a")((e:Throwable) => e.getMessage) must_== Right("a")
+    eg := catchAll({throw new Error("boom"); "a"})((e:Throwable) => e.getMessage) must_== Left("boom")
   }
-  "catchAllOr" - new g8 {
-    e1 := catchAllOr("a")((e:Throwable) => e.getMessage) must_== "a"
-    e2 := catchAllOr({throw new Error("boom"); "a"})((e:Throwable) => "bang") must_== "bang"
+  "catchAllOr" - new group {
+    eg := catchAllOr("a")((e:Throwable) => e.getMessage) must_== "a"
+    eg := catchAllOr({throw new Error("boom"); "a"})((e:Throwable) => "bang") must_== "bang"
   }
 
   def boom = { error("boom"); "a" }

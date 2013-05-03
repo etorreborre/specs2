@@ -25,27 +25,27 @@ class TreesSpec extends script.Specification with DataTables with Grouped { def 
   + A Tree can be flattenLeft to avoid SOF
                                                                                 """
 
-  "pruning" - new g1 {
+  "pruning" - new group {
     val prune = (i: Int) => if (i % 2 == 0) Some(i) else None
 
-    e1 := pruneAndDraw(tree1, prune) must beTree(
+    eg := pruneAndDraw(tree1, prune) must beTree(
       "0",
       "|",
       "`- 2",
       "   |",
       "   `- 2")
 
-    e2 := pruneAndDraw(tree2, prune) must beTree(
+    eg := pruneAndDraw(tree2, prune) must beTree(
       "0",
       "|",
       "`- 2")
 
-    e3 := pruneAndDraw(tree3, prune) must beTree("0")
-    e4 := pruneAndDraw(tree4, prune) must beTree("None")
+    eg := pruneAndDraw(tree3, prune) must beTree("0")
+    eg := pruneAndDraw(tree4, prune) must beTree("None")
   }
 
-  "TreeLoc functions" - new g2 {
-    e1 := {
+  "TreeLoc functions" - new group {
+    eg := {
      "tree"  | "size" |>
       tree   ! 6      |
       tree1  ! 3      |
@@ -53,7 +53,7 @@ class TreesSpec extends script.Specification with DataTables with Grouped { def 
       tree3  ! 3      | { (tree, size) => tree.loc.size must_== size }
     }
     // note that the TreeLoc stays at the root after the addition of the child node
-    e2 := tree1.loc.addChild(3).tree.drawTree must beTree(
+    eg := tree1.loc.addChild(3).tree.drawTree must beTree(
       "0",
       "|",
       "+- 2",
@@ -63,8 +63,8 @@ class TreesSpec extends script.Specification with DataTables with Grouped { def 
       "`- 3")
   }
 
-  "Robustness" - new g3 {
-    e1 := {
+  "Robustness" - new group {
+    eg := {
       val tree = tree3.loc.addChild(4).tree
       tree.flattenLeft.toSeq aka "flattenLeft" must_== tree.flatten.toSeq
     }

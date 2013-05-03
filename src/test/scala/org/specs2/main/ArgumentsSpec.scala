@@ -53,44 +53,44 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
                                                                                                                """
 
 
-  "values" - new g1 {
-    e1 := Arguments("xonly").xonly must beTrue
-    e2 := Arguments("specName", "spec").specName must_== "spec"
+  "values" - new group {
+    eg := Arguments("xonly").xonly must beTrue
+    eg := Arguments("specName", "spec").specName must_== "spec"
 
-    e3 := Arguments("").xonly must beFalse
-    e4 := Arguments("").specName must_== ".*Spec"
+    eg := Arguments("").xonly must beFalse
+    eg := Arguments("").specName must_== ".*Spec"
   }
 
-  "names" - new g2 {
-    e1 := Arguments("xOnly").xonly must beTrue
-    e2 := Arguments("specname", "spec").specName must_== "spec"
-    e3 := Arguments("exclude", "spec").ex must_== Arguments().ex
+  "names" - new group {
+    eg := Arguments("xOnly").xonly must beTrue
+    eg := Arguments("specname", "spec").specName must_== "spec"
+    eg := Arguments("exclude", "spec").ex must_== Arguments().ex
   }
 
-  "booleans" - new g3 {
-    e8 := Arguments("nocolor").color must beFalse
+  "booleans" - new group {
+    eg := Arguments("nocolor").color must beFalse
    }
 
-  "overriding" - new g4 {
-    e1 := (args(xonly = true) <| args(plan = false)).xonly must_== true
-    e2 := args(xonly = true).overrideWith(args(xonly = false)).xonly must_== false
-    e3 := (args(xonly = true) <| args(plan = true)).plan must_== true
+  "overriding" - new group {
+    eg := (args(xonly = true) <| args(plan = false)).xonly must_== true
+    eg := args(xonly = true).overrideWith(args(xonly = false)).xonly must_== false
+    eg := (args(xonly = true) <| args(plan = true)).plan must_== true
   }
 
-  "properties" - new g5 {
+  "properties" - new group {
      case class properties(map:(String, String)*) extends SystemProperties {
        override lazy val properties = Map(map:_*)
      }
 
-    e1 := Arguments.extract(Seq(""), properties("plan" -> "")).plan must_== true
-    e2 := Arguments.extract(Seq(""), properties("plan" -> "true")).plan must_== true
-    e3 := Arguments.extract(Seq(""), properties("plan" -> "false")).plan must_== false
-    e4 := Arguments.extract(Seq(""), properties("specname" -> "spec")).specName must_== "spec"
-    e5 := Arguments.extract(Seq(""), properties("specs2.specname" -> "spec")).specName must_== "spec"
+    eg := Arguments.extract(Seq(""), properties("plan" -> "")).plan must_== true
+    eg := Arguments.extract(Seq(""), properties("plan" -> "true")).plan must_== true
+    eg := Arguments.extract(Seq(""), properties("plan" -> "false")).plan must_== false
+    eg := Arguments.extract(Seq(""), properties("specname" -> "spec")).specName must_== "spec"
+    eg := Arguments.extract(Seq(""), properties("specs2.specname" -> "spec")).specName must_== "spec"
    }
 
-  "show" - new g6 {
-    e1 := "args"                      | "status" | "canShow"    |>
+  "show" - new group {
+    eg := "args"                      | "status" | "canShow"    |>
           xonly                       ! "x"      ! true         |
           xonly                       ! "!"      ! true         |
           xonly                       ! "o"      ! false        |
@@ -113,24 +113,24 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
           Arguments("showonly","o")   ! "-"      ! false        |
           { (a, s, r) =>  a.canShow(s) must_== r }
 
-     e2 := "args"                      | "status"            | "canShow"    |>
-           xonly                      ! (failure:Result)    ! true         |
-           xonly                      ! anError             ! true         |
-           xonly                      ! skipped             ! false        |
-           xonly                      ! success             ! false        |
-           showOnly("x!")             ! failure             ! true         |
-           showOnly("x!")             ! anError             ! true         |
-           showOnly("x!")             ! skipped             ! false        |
-           showOnly("x!")             ! success             ! false        |
-           showOnly("o")              ! failure             ! false        |
-           showOnly("o")              ! anError             ! false        |
-           showOnly("o")              ! skipped             ! true         |
-           showOnly("o")              ! success             ! false        |
-           { (a, s, r) =>  a.canShow(s.status) must_== r }
+     eg := "args"                      | "status"            | "canShow"    |>
+            xonly                      ! (failure:Result)    ! true         |
+            xonly                      ! anError             ! true         |
+            xonly                      ! skipped             ! false        |
+            xonly                      ! success             ! false        |
+            showOnly("x!")             ! failure             ! true         |
+            showOnly("x!")             ! anError             ! true         |
+            showOnly("x!")             ! skipped             ! false        |
+            showOnly("x!")             ! success             ! false        |
+            showOnly("o")              ! failure             ! false        |
+            showOnly("o")              ! anError             ! false        |
+            showOnly("o")              ! skipped             ! true         |
+            showOnly("o")              ! success             ! false        |
+            { (a, s, r) =>  a.canShow(s.status) must_== r }
   }
 
-  "filters" - new g7 {
-    e1 := Arguments("this", "is", "cool").commandLineFilter("this", "cool").commandLine.arguments === Seq("this", "cool")
-    e2 := Arguments("this", "is", "cool").commandLineFilterNot("this", "cool").commandLine.arguments === Seq("is")
+  "filters" - new group {
+    eg := Arguments("this", "is", "cool").commandLineFilter("this", "cool").commandLine.arguments === Seq("this", "cool")
+    eg := Arguments("this", "is", "cool").commandLineFilterNot("this", "cool").commandLine.arguments === Seq("is")
   }
 }

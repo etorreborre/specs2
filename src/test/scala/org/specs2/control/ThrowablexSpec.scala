@@ -27,23 +27,23 @@ The Throwablex trait provides extensions to regular throwables:
    + headOption returns the first element as an option
                                                                                                                  """
 
-  "chained" - new g1 with ThrowablexContext {
-	  e1 := e.chainedExceptions      === List(e.getCause)
-	  e2 := e.getFullStackTrace.size === e.getStackTrace.size + e.getCause.getStackTrace.size
-    e3 := e.messageAndCause        === "message. Cause: cause"
+  "chained" - new group with ThrowablexContext {
+	  eg := e.chainedExceptions      === List(e.getCause)
+	  eg := e.getFullStackTrace.size === e.getStackTrace.size + e.getCause.getStackTrace.size
+    eg := e.messageAndCause        === "message. Cause: cause"
   }
-  "location" - new g2 with ThrowablexContext {
-    e1 := e.location                === "ThrowablexContext.scala:6"
-    e2 := e.classLocation           === "org.specs2.control.ThrowablexContext:6"
-    e3 := e.fullLocation            === "org.specs2.control.ThrowablexContext (ThrowablexContext.scala:6)"
-    e4 := TraceLocation(trace).path === "org/specs2/control/ThrowablexContext.scala"
+  "location" - new group with ThrowablexContext {
+    eg := e.location                === "ThrowablexContext.scala:6"
+    eg := e.classLocation           === "org.specs2.control.ThrowablexContext:6"
+    eg := e.fullLocation            === "org.specs2.control.ThrowablexContext (ThrowablexContext.scala:6)"
+    eg := TraceLocation(trace).path === "org/specs2/control/ThrowablexContext.scala"
   }
-  "filter" - new g3 with ThrowablexContext {
-    e1 := e.filter("org.specs2.control").getStackTrace.toList.map(_.toString) must containMatch("org.specs2.control")
-    e2 := e.filterNot("org.specs2.control").getStackTrace.toList.map(_.toString) must not containMatch("org.specs2.control")
+  "filter" - new group with ThrowablexContext {
+    eg := e.filter("org.specs2.control").getStackTrace.toList.map(_.toString) must containMatch("org.specs2.control")
+    eg := e.filterNot("org.specs2.control").getStackTrace.toList.map(_.toString) must not containMatch("org.specs2.control")
   }
-  "stack" - new g4 with ThrowablexContext {
-    e1 := e(2).toString aka e.getStackTraceString must beMatching(".*org.specs2.control.ThrowablexSpec\\$.*")
-    e2 := e.headOption.map(_.toString).toIterable must containMatch("ThrowablexContext")
+  "stack" - new group with ThrowablexContext {
+    eg := e(2).toString aka e.getStackTraceString must beMatching(".*org.specs2.control.ThrowablexSpec\\$.*")
+    eg := e.headOption.map(_.toString).toIterable must containMatch("ThrowablexContext")
   }
 }

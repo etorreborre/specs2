@@ -26,31 +26,31 @@ class SystemPropertiesSpec extends script.Specification with Groups { def is = s
    + None if the property is not declared
                                                                                              """
 
-  "set" - new g1 with SystemProperties {
+  "set" - new group with SystemProperties {
     override lazy val properties = Map("specs2.outdir" -> "target/results")
 
-    e1 := getOrElse("outdir", "")                === "target/results"
-    e2 := getOrElse("outDir", "")                === "target/results"
-    e3 := getOrElse("specs2.outdir", "")         === "target/results"
-    e4 := getOrElse("specs2.missing", "default") === "default"
+    eg := getOrElse("outdir", "")                === "target/results"
+    eg := getOrElse("outDir", "")                === "target/results"
+    eg := getOrElse("specs2.outdir", "")         === "target/results"
+    eg := getOrElse("specs2.missing", "default") === "default"
   }
 
-  "getIf" - new g2 with SystemProperties {
+  "getIf" - new group with SystemProperties {
     override lazy val properties = Map("specs2.whitebg" -> "")
 
-    e1 := getIf("whitebg", 1)           must beSome(1)
-    e2 := getIf("whitebgxxx", 1)        must beNone
-    e3 := getIfElse("whitebg", 1)(2)    must_== 1
-    e4 := getIfElse("whitebgxxx", 1)(2) must_== 2
+    eg := getIf("whitebg", 1)           must beSome(1)
+    eg := getIf("whitebgxxx", 1)        must beNone
+    eg := getIfElse("whitebg", 1)(2)    must_== 1
+    eg := getIfElse("whitebgxxx", 1)(2) must_== 2
   }
 
-  "getAs" - new g3 {
+  "getAs" - new group {
     case class props(map:(String, String)*) extends SystemProperties {
       override lazy val properties = Map(map:_*)
     }
-    e1 := props("specs2.color" -> null).getPropertyAs[Boolean]("color")    must beNone
-    e2 := props("specs2.color" -> "true").getPropertyAs[Boolean]("color")  must beSome(true)
-    e3 := props("specs2.color" -> "false").getPropertyAs[Boolean]("color") must beSome(false)
-    e4 := props("specs2.other" -> "false").getPropertyAs[Boolean]("color") must beNone
+    eg := props("specs2.color" -> null).getPropertyAs[Boolean]("color")    must beNone
+    eg := props("specs2.color" -> "true").getPropertyAs[Boolean]("color")  must beSome(true)
+    eg := props("specs2.color" -> "false").getPropertyAs[Boolean]("color") must beSome(false)
+    eg := props("specs2.other" -> "false").getPropertyAs[Boolean]("color") must beNone
   }
 }

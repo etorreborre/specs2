@@ -2,15 +2,17 @@ package org.specs2
 package control
 
 import org.specs2.Specification
-import specification.Grouped
+import specification._
 import Stacktraces._
 
-class StacktracesSpec extends Specification with Grouped { def is =
+class StacktracesSpec extends script.Specification with Grouped { def is = s2"""
 
-  "it is possible to if a piece of code is executed from a given library by inspecting the stacktrace" ! g1.e1
+  + it is possible to if a piece of code is executed from a given library by inspecting the stacktrace
 
-  "executed" - new g1 {
-    e1 := "this code is executed from specs2" ==> { isExecutedFrom("specs2") === true }
+  """
+
+  "executed" - new group {
+    eg := "this code is executed from specs2" ==> { isExecutedFrom("specs2") === true }
   }
 
 

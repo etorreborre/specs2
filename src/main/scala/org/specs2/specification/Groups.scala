@@ -31,8 +31,8 @@ import execute._
  */
 trait Groups extends GroupsLike { outer =>
   def group(i: Int): ExamplesGroup = {
-    if (autoNumberedGroups.nonEmpty) autoNumberedGroups(i)()
-    else                             numberedExampleGroups(i)()
+    if (autoNumberedGroups.nonEmpty) autoNumberedGroups.applyOrElse(i, (n: Int) => g1)()
+    else                             numberedExampleGroups.applyOrElse(i, (n: Int) => g1)()
   }
 
   trait g1  extends ExamplesGroup
@@ -170,8 +170,8 @@ trait Groups extends GroupsLike { outer =>
  */
 trait Grouped extends GroupsLike { outer =>
   def group(i: Int): ExamplesGroup = {
-    if (autoNumberedGroups.nonEmpty) autoNumberedGroups(i)
-    else                             numberedExampleGroups(i)
+    if (autoNumberedGroups.nonEmpty) autoNumberedGroups.applyOrElse(i, (n: Int) => g1)
+    else                             numberedExampleGroups.applyOrElse(i, (n: Int) => g1)
   }
 
   trait g1  extends ExamplesGroup { outer.g1 = this }
