@@ -8,6 +8,7 @@ import AnyMatchers.beEqualTo
 import MatchersImplicits._
 import text.Regexes._
 import text.Quote._
+
 /**
  * Matchers for util.Try instances
  */
