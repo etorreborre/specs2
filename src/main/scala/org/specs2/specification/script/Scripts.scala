@@ -2,6 +2,13 @@ package org.specs2
 package specification
 package script
 
+/**
+ * The Scripts trait builds fragments based on Script objects.
+ *
+ * When the script starts, a section tag is inserted and when it ends another one as well.
+ * Also when the scripts ends, it is passed the previous text for analysis to extract new fragments
+ *
+ */
 trait Scripts extends Tags { outer: FragmentsBuilder =>
 
   /**

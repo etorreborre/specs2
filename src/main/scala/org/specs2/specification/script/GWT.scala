@@ -23,6 +23,9 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
     def apply(title: String)(implicit template: ScriptTemplate[Scenario, GivenWhenThenLines] = LastLinesScriptTemplate()): GWTStart = GWTStart(title, template)
   }
 
+  /**
+   * Start of a scenario
+   */
   case class GWTStart(title: String, template: ScriptTemplate[Scenario, GivenWhenThenLines], isStart: Boolean = true) extends Scenario {
     type S = GWTStart
 
@@ -120,7 +123,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
       var whenStepsResults: HList = HNil
       var whenStepsResult: Result = Success()
 
-      template.lines(Fragments.createList(Text(text)), this).lines.foldLeft(Fragments.createList()) { (fs, lines) =>
+      template.lines(text, this).lines.foldLeft(Fragments.createList()) { (fs, lines) =>
         lines match {
           case TextLines(ls) => fs append ls.map(l => Text(l+"\n"))
           case GivenLines(ls) => {
@@ -213,8 +216,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
   private def value(r: Result) = r match { case DecoratedResult(v, _) => v; case _ => r }
 
   case class LastLinesScriptTemplate() extends ScriptTemplate[Scenario, GivenWhenThenLines] {
-    def lines(fs: Fragments, script: Scenario) = {
-      val text = fs.texts.head.t
+    def lines(text: String, script: Scenario) = {
       val ls = text.split("\n").reverse.dropWhile(_.trim.isEmpty).reverse
 
       val linesBlocks = Seq((ls: Seq[String]) => GivenLines(ls), (ls: Seq[String]) => WhenLines(ls), (ls: Seq[String]) => ThenLines(ls))
@@ -230,9 +232,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
   }
 
   case class BulletTemplate(bullet: String = "*") extends ScriptTemplate[Scenario, GivenWhenThenLines] {
-    def lines(fs: Fragments, script: Scenario): GivenWhenThenLines = {
-      val text = fs.texts.head.t
-
+    def lines(text: String, script: Scenario): GivenWhenThenLines = {
       text.split("\n").foldLeft(GivenWhenThenLines()) { (res, line) =>
         val firstBulletWord =
           (if (line.trim.startsWith(bullet)) line.trim.drop(1).trim.split(" ").headOption.getOrElse("") else "").toLowerCase

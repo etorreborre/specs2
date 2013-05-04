@@ -11,56 +11,54 @@ abstract class Specification extends SpecificationLike
 
 trait SpecificationLike extends org.specs2.Specification with Scripts with GroupsLike { outer =>
 
-  override def map(fs: =>Fragments) = {
-    val script = GroupsScript()
-    script.groupTemplate.lines(super.map(fs.compact), script).fs
-  }
+  override def map(fs: =>Fragments) = GroupsScript().lines(super.map(fs.compact))
 
-  case class GroupsScript(title: String = "groups", isStart: Boolean = true, groups: GroupsLike = outer)
+  case class GroupsScript(title: String = "groups", isStart: Boolean = true, groups: GroupsLike = outer, groupIndex: Int = 0, exampleIndex: Int = 0)
                          (implicit template: ScriptTemplate[GroupsScript, FragmentsScriptLines] = BulletedExamplesTemplate()) extends Script {
 
     val groupTemplate = template
 
-    def fragments(text: String): Fragments = template.lines(Fragments.createList(Text(text)), this).fs
+    def fragments(text: String): Fragments = template.lines(text, this).fs
+
+    def lines(fs: Fragments) = {
+      fs.compact.middle.foldLeft(FragmentsScriptLines(fs.copy(middle = Seq()), 0, 0)) { (res, cur) =>
+        val FragmentsScriptLines(resultFragments, oldGroupIndex, oldExampleIndex) = res
+        val FragmentsScriptLines(fragments, newGroupIndex, newExampleIndex) =
+          cur match {
+            case Text(t) => groupTemplate.lines(t, copy(groupIndex = oldGroupIndex, exampleIndex = oldExampleIndex))
+            case other   => FragmentsScriptLines(Fragments.createList(other), oldGroupIndex, oldExampleIndex)
+          }
+        FragmentsScriptLines(resultFragments ^ fragments, newGroupIndex, newExampleIndex)
+      }.fs.compact
+    }
+
+    def group(i: Int) = groups.group(i)
 
     def start = this
     def end = copy(isStart = false)
   }
 
-  case class FragmentsScriptLines(fs: Fragments) extends ScriptLines
+  case class FragmentsScriptLines(fs: Fragments, groupIndex: Int, exampleIndex: Int) extends ScriptLines {
+    def appendText(t: String) = copy(fs = Fragments.createList((Text(t) +: fs.middle):_*))
+  }
 
   case class BulletedExamplesTemplate(marker: String = "+") extends ScriptTemplate[GroupsScript, FragmentsScriptLines] {
-    def lines(fs: Fragments, script: GroupsScript) = {
 
-      val result =
-        fs.compact.middle.foldLeft((fs.copy(middle = Seq()), 0, 0)) { (res, cur) =>
-          val (resultFragments, groupIndex, exampleIndex) = res
-          val (fragments, newGroupIndex, newExampleIndex) =
-            cur match {
-              case Text(t) => examplify(t, script.groups, groupIndex, exampleIndex)
-              case other   => (Fragments.createList(other), groupIndex, exampleIndex)
-            }
-          (resultFragments ^ fragments, newGroupIndex, newExampleIndex)
-      }._1.compact
-
-      FragmentsScriptLines(result)
-    }
-
-    def examplify(text: String, groups: GroupsLike, groupIndex: Int, exampleIndex: Int): (Fragments, Int, Int) = {
+    def lines(text: String, script: GroupsScript): FragmentsScriptLines = {
 
       /** match input fragments and group examples */
-      def setBodies(fs: Seq[Fragment]): (Fragments, Int, Int) = {
-        fs.foldLeft((Fragments.createList(), groupIndex, exampleIndex)) { (res, cur) =>
-          val (fragments, i, j) = res
+      def setBodies(fs: Seq[Fragment]) = {
+        fs.foldLeft(FragmentsScriptLines(Fragments.createList(), script.groupIndex, script.exampleIndex)) { (res, cur) =>
+          val FragmentsScriptLines(fragments, i, j) = res
           def groupTagsFor(i: Int) = {
-            val name = group(i).groupName
+            val name = script.group(i).groupName
             if (name.matches("g\\d\\d?\\.e\\d\\d?")) Seq(Section(name))
             else                                     Seq(Section(name.removeEnclosing("'"), s"g${i+1}"))
           }
 
           def exampleName(i: Int, j: Int) = s"g${i+1}.e${j+1}"
           def createExample(line: String, i: Int, j: Int) =
-            exampleFactory.newExample(strip(line), (groups.group(i).example(j).t()).mapMessage(_ + " - " + exampleName(i, j)))
+            exampleFactory.newExample(strip(line), (script.group(i).example(j).t()).mapMessage(_ + " - " + exampleName(i, j)))
 
           val (groupTags, exampleTags) = ((if (j == 0) groupTagsFor(i) else Seq()), Seq(Tag(exampleName(i, j))))
 
@@ -69,9 +67,10 @@ trait SpecificationLike extends org.specs2.Specification with Scripts with Group
               case Example(line,_) => (groupTags ++ (indentation(line.toString) +: exampleTags :+ createExample(line.toString, i, j) :+ Text("\n")), i, j+1)
               case other           => (groupTagsFor(i) :+ other, i + 1, 0)
             }
-          (fragments append newFragments, newi, newj)
+          FragmentsScriptLines(fragments append newFragments, newi, newj)
         }
       }
+
       val lines = text.split("\n").toSeq
       val linesWithNewLines = lines.map(_ + "\n").updateLast(_.removeLast("\n"))
       val fragments = linesWithNewLines.foldLeft(Fragments.createList()) { (res, line) =>
@@ -79,10 +78,7 @@ trait SpecificationLike extends org.specs2.Specification with Scripts with Group
       }.compact
 
       fragments.middle match {
-        case Text(t) +: rest => {
-          val (bodies, newGroupIndex, newExampleIndex) = setBodies(rest)
-          (Fragments.createList((Text(t) +: bodies.middle):_*), newGroupIndex, newExampleIndex)
-        }
+        case Text(t) +: rest => setBodies(rest).appendText(t)
         case other           => setBodies(other)
       }
 
