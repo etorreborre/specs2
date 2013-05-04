@@ -111,11 +111,12 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
     def givens = whens.givens
     def template = givens.template
 
+    private val givenExtractorsList = givens.givenExtractors.toList.reverse
+    private val whenExtractorsList  = whens.whenExtractors.toList.reverse
+    private val thenExtractorsList  = thenExtractors.toList.reverse
+    private val verificationsList   = verifications.toList.reverse
+
     def fragments(text: String): Fragments = {
-      val givenExtractorsList = givens.givenExtractors.toList.reverse
-      val whenExtractorsList  = whens.whenExtractors.toList.reverse
-      val thenExtractorsList  = thenExtractors.toList.reverse
-      val verificationsList   = verifications.toList.reverse
 
       var givenStepsResults: HList = HNil
       var givenStepsResult: Result = Success()
@@ -126,6 +127,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
       template.lines(text, this).lines.foldLeft(Fragments.createList()) { (fs, lines) =>
         lines match {
           case TextLines(ls) => fs append ls.map(l => Text(l+"\n"))
+
           case GivenLines(ls) => {
             val givenSteps: Seq[Step] = (givenExtractorsList zip ls).view.map { case (extractor, line) => Step(extractLine(extractor, line)) }
             val givenFragments: Seq[Fragment] = (givenExtractorsList zip ls zip givenSteps).
@@ -215,37 +217,6 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
 
   private def value(r: Result) = r match { case DecoratedResult(v, _) => v; case _ => r }
 
-  case class LastLinesScriptTemplate() extends ScriptTemplate[Scenario, GivenWhenThenLines] {
-    def lines(text: String, script: Scenario) = {
-      val ls = text.split("\n").reverse.dropWhile(_.trim.isEmpty).reverse
-
-      val linesBlocks = Seq((ls: Seq[String]) => GivenLines(ls), (ls: Seq[String]) => WhenLines(ls), (ls: Seq[String]) => ThenLines(ls))
-      val grouped = (script.stepsNumbers zip linesBlocks).reverse.foldLeft((GivenWhenThenLines(), ls)) { (res, cur) =>
-        val (gwtLines, remainingLines) = res
-        val (stepsNumber, linesBlock) = cur
-
-        (gwtLines.prepend(linesBlock(remainingLines.takeRight(stepsNumber))), remainingLines.dropRight(stepsNumber))
-      }
-      // add the remaining lines at the beginning
-      grouped._1.prepend(TextLines(grouped._2.toList))
-    }
-  }
-
-  case class BulletTemplate(bullet: String = "*") extends ScriptTemplate[Scenario, GivenWhenThenLines] {
-    def lines(text: String, script: Scenario): GivenWhenThenLines = {
-      text.split("\n").foldLeft(GivenWhenThenLines()) { (res, line) =>
-        val firstBulletWord =
-          (if (line.trim.startsWith(bullet)) line.trim.drop(1).trim.split(" ").headOption.getOrElse("") else "").toLowerCase
-
-        val newLine = line.replace(bullet+" ", "")
-        if      (firstBulletWord.startsWith("given")) res.append(GivenLines(newLine))
-        else if (firstBulletWord.startsWith("when"))  res.append(WhenLines(newLine))
-        else if (firstBulletWord.startsWith("then"))  res.append(ThenLines(newLine))
-        else res.append(TextLines(line))
-      }
-    }
-  }
-
 }
 
 /**
@@ -258,6 +229,47 @@ trait Scenario extends Script {
 
   def stepsNumbers: Seq[Int]
   def withTitle(t: String): S
+}
+
+/**
+ * The LastLines template takes the number of given / when / then steps of the scenario and associate the last (non-empty)
+ * lines of the text with them
+ */
+case class LastLinesScriptTemplate() extends ScriptTemplate[Scenario, GivenWhenThenLines] {
+  def lines(text: String, script: Scenario) = {
+    // reverse the text and remove the last empty lines
+    val ls = text.split("\n").reverse.dropWhile(_.trim.isEmpty).reverse
+
+    val linesBlocks = Seq(GivenLines(_), WhenLines(_), ThenLines(_))
+
+    val grouped = (script.stepsNumbers zip linesBlocks).reverse.foldLeft((GivenWhenThenLines(), ls)) { (res, cur) =>
+      val (gwtLines, remainingLines) = res
+      val (stepsNumber, block) = cur
+
+      (gwtLines.prepend(block(remainingLines.takeRight(stepsNumber))), remainingLines.dropRight(stepsNumber))
+    }
+    // add the remaining lines at the beginning
+    grouped._1.prepend(TextLines(grouped._2.toList))
+  }
+}
+
+/**
+ * The bullet template associates lines starting with `*` and a keyword `given` / `when` ou `then`
+ * to given / when / then steps
+ */
+case class BulletTemplate(bullet: String = "*") extends ScriptTemplate[Scenario, GivenWhenThenLines] {
+  def lines(text: String, script: Scenario): GivenWhenThenLines = {
+    text.split("\n").foldLeft(GivenWhenThenLines()) { (res, line) =>
+      val firstBulletWord =
+        (if (line.trim.startsWith(bullet)) line.trim.drop(1).trim.split(" ").headOption.getOrElse("") else "").toLowerCase
+
+      val newLine = line.replace(bullet+" ", "")
+      if      (firstBulletWord.startsWith("given")) res.append(GivenLines.create(newLine))
+      else if (firstBulletWord.startsWith("when"))  res.append(WhenLines.create(newLine))
+      else if (firstBulletWord.startsWith("then"))  res.append(ThenLines.create(newLine))
+      else                                          res.append(TextLines.create(line))
+    }
+  }
 }
 
 /**
@@ -284,16 +296,16 @@ case class GivenWhenThenLines(lines: Seq[GWTLines] = Seq()) extends ScriptLines 
 
 trait GWTLines
 case class GivenLines(lines: Seq[String]) extends GWTLines
-object GivenLines { def apply(line: String): GivenLines = GivenLines(Seq(line)) }
+object GivenLines { def create(line: String): GivenLines = GivenLines(Seq(line)) }
 
 case class WhenLines(lines: Seq[String]) extends GWTLines
-object WhenLines { def apply(line: String): WhenLines = WhenLines(Seq(line)) }
+object WhenLines { def create(line: String): WhenLines = WhenLines(Seq(line)) }
 
 case class ThenLines(lines: Seq[String]) extends GWTLines
-object ThenLines { def apply(line: String): ThenLines = ThenLines(Seq(line)) }
+object ThenLines { def create(line: String): ThenLines = ThenLines(Seq(line)) }
 
 case class TextLines(lines: Seq[String]) extends GWTLines
-object TextLines { def apply(line: String): TextLines = TextLines(Seq(line)) }
+object TextLines { def create(line: String): TextLines = TextLines(Seq(line)) }
 
 
 
