@@ -6,7 +6,11 @@ import text.{RegexExtractor, MarkupString}
 import control.Functions._
 
 /**
- * this trait defines methods for creating Examples
+ * This trait defines methods for creating Examples.
+ *
+ * You can subclass it and implement the `newExample(e: Example)` method to provide alternative behavior.
+ *
+ * The new factory can be passed to a Specification by overriding the `ExamplesFactory.exampleFactory` method
  */
 trait ExampleFactory {
   /** @return an Example, using a function taking the example description as an input */
