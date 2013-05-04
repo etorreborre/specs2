@@ -34,6 +34,11 @@ trait AroundOutside[+T] extends Around with Outside[T] { outer =>
   }
 }
 
+/**
+ * A Fixture can be implicitly passed to a set of examples taking a function as an input.
+ *
+ * It can effectively act as an Outside and an Around context
+ */
 trait Fixture[T] {
   def apply[R : AsResult](f: T => R): Result
 }
