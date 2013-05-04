@@ -6,28 +6,51 @@ import execute._
 /**
  * This trait can be used to standardize names for groups of examples in an acceptance specification.
  *
- * class MySpecification extends Examples { def is =
- *   "first example in first group"   ! g1().e1 ^
- *   "second example in first group"  ! g1().e2 ^
- *                                              p^
- *   "first example in second group"  ! g2().e1 ^
- *   "second example in second group" ! g2().e2
+ * class MySpecification extends Specification with Examples { def is = s2"""
+ *   first example in first group                                       ${g1().e1}
+ *   second example in first group                                      ${g1().e2}
+ *
+ *   first example in second group                                      ${g2().e1}
+ *   second example in second group                                     ${g2().e2}
+ *                                                                      """
  * }
  *
  * trait Examples extends Groups with Matchers {
  *   "first group of examples" - new g1 {
- *     e1 - ok
- *     e2 - ok
+ *     e1 := ok
+ *     e2 ;= ok
  *   }
  *   "second group of examples" - new g2 {
- *     e1 - ok
- *     e2 - ok
+ *     e1 := ok
+ *     e2 := ok
  *   }
  * }
  *
  * It is important to notice that the examples must be called with `g1().e1` so as to create a new `g1` trait instance
  * with new local variables for the example `e1`. If this is not required, the `Grouped` trait can be used instead
  *
+ * If you don't want to manage groups and examples numbers it is also possible to write the following (note the `script.Specification`):
+ *
+ * class MySpecification extends script.Specification with Examples { def is = s2"""
+ *   first example in first group
+ *   second example in first group
+ *
+ *   first example in second group
+ *   second example in second group
+ *                                                   """
+ * }
+ *
+ * trait Examples extends Groups with Matchers {
+ *   "first group of examples" - new group {
+ *     eg := ok
+ *     eg := ok
+ *   }
+ *   "second group of examples" - new group {
+ *     eg := ok
+ *     eg := ok
+ *   }
+ * }
+
  */
 trait Groups extends GroupsLike { outer =>
   def group(i: Int): ExamplesGroup = {
@@ -145,28 +168,47 @@ trait Groups extends GroupsLike { outer =>
 /**
  * This trait can be used to standardize names for groups of examples in an acceptance specification.
  *
- * class MySpecification extends Examples { def is =
- *   "first example in first group"   ! g1.e1 ^
- *   "second example in first group"  ! g1.e2 ^
- *                                            p^
- *   "first example in second group"  ! g2.e1 ^
- *   "second example in second group" ! g2.e2
+ * class MySpecification extends Specification with Examples { def is = s2"""
+ *   first example in first group                                       ${g1.e1}
+ *   second example in first group                                      ${g1.e2}
+ *
+ *   first example in second group                                      ${g2.e1}
+ *   second example in second group                                     ${g2.e2}
+ *                                                                      """
  * }
  *
  * trait Examples extends Grouped with Matchers {
  *   "first group of examples" - new g1 {
- *     e1 - ok
- *     e2 - ok
+ *     e1 := ok
+ *     e2 := ok
  *   }
  *   "second group of examples" - new g2 {
- *     e1 - ok
- *     e2 - ok
+ *     e1 := ok
+ *     e2 := ok
  *   }
  * }
  *
- * It is important to notice that the examples must be called with `g1().e1` so as to create a new `g1` trait instance
- * with new local variables for the example `e1`. If this is not required, the `Grouped` trait can be used instead
+ * If you don't want to manage groups and examples numbers it is also possible to write the following (note the `script.Specification`):
  *
+ * class MySpecification extends script.Specification with Examples { def is = s2"""
+ *   first example in first group
+ *   second example in first group
+ *
+ *   first example in second group
+ *   second example in second group
+ *                                                   """
+ * }
+ *
+ * trait Examples extends Grouped with Matchers {
+ *   "first group of examples" - new group {
+ *     eg := ok
+ *     eg := ok
+ *   }
+ *   "second group of examples" - new group {
+ *     eg := ok
+ *     eg := ok
+ *   }
+ * }
  */
 trait Grouped extends GroupsLike { outer =>
   def group(i: Int): ExamplesGroup = {
@@ -263,28 +305,28 @@ case class ExamplesGroup(private var name: String = "") extends BeforeAfterAroun
 
   def nameIs(n: String) = { name = s"'$n'"; this }
 
-  val e1:  Function0Result = new execute.Pending(s" - PENDING ")
-  val e2:  Function0Result = new execute.Pending(s" - PENDING ")
-  val e3:  Function0Result = new execute.Pending(s" - PENDING ")
-  val e4:  Function0Result = new execute.Pending(s" - PENDING ")
-  val e5:  Function0Result = new execute.Pending(s" - PENDING ")
-  val e6:  Function0Result = new execute.Pending(s" - PENDING ")
-  val e7:  Function0Result = new execute.Pending(s" - PENDING ")
-  val e8:  Function0Result = new execute.Pending(s" - PENDING ")
-  val e9:  Function0Result = new execute.Pending(s" - PENDING ")
-  val e10: Function0Result = new execute.Pending(s" - PENDING ")
-  val e11: Function0Result = new execute.Pending(s" - PENDING ")
-  val e12: Function0Result = new execute.Pending(s" - PENDING ")
-  val e13: Function0Result = new execute.Pending(s" - PENDING ")
-  val e14: Function0Result = new execute.Pending(s" - PENDING ")
-  val e15: Function0Result = new execute.Pending(s" - PENDING ")
-  val e16: Function0Result = new execute.Pending(s" - PENDING ")
-  val e17: Function0Result = new execute.Pending(s" - PENDING ")
-  val e18: Function0Result = new execute.Pending(s" - PENDING ")
-  val e19: Function0Result = new execute.Pending(s" - PENDING ")
-  val e20: Function0Result = new execute.Pending(s" - PENDING ")
-  val e21: Function0Result = new execute.Pending(s" - PENDING ")
-  val e22: Function0Result = new execute.Pending(s" - PENDING ")
+  val e1:  Function0Result = new execute.Pending(s" - PENDING")
+  val e2:  Function0Result = new execute.Pending(s" - PENDING")
+  val e3:  Function0Result = new execute.Pending(s" - PENDING")
+  val e4:  Function0Result = new execute.Pending(s" - PENDING")
+  val e5:  Function0Result = new execute.Pending(s" - PENDING")
+  val e6:  Function0Result = new execute.Pending(s" - PENDING")
+  val e7:  Function0Result = new execute.Pending(s" - PENDING")
+  val e8:  Function0Result = new execute.Pending(s" - PENDING")
+  val e9:  Function0Result = new execute.Pending(s" - PENDING")
+  val e10: Function0Result = new execute.Pending(s" - PENDING")
+  val e11: Function0Result = new execute.Pending(s" - PENDING")
+  val e12: Function0Result = new execute.Pending(s" - PENDING")
+  val e13: Function0Result = new execute.Pending(s" - PENDING")
+  val e14: Function0Result = new execute.Pending(s" - PENDING")
+  val e15: Function0Result = new execute.Pending(s" - PENDING")
+  val e16: Function0Result = new execute.Pending(s" - PENDING")
+  val e17: Function0Result = new execute.Pending(s" - PENDING")
+  val e18: Function0Result = new execute.Pending(s" - PENDING")
+  val e19: Function0Result = new execute.Pending(s" - PENDING")
+  val e20: Function0Result = new execute.Pending(s" - PENDING")
+  val e21: Function0Result = new execute.Pending(s" - PENDING")
+  val e22: Function0Result = new execute.Pending(s" - PENDING")
 
   protected lazy val numberedExamples = Seq(e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11,e12,e13,e14,e15,e16,e17,e18,e19,e20,e21,e22)
 
