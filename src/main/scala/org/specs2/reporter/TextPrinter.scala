@@ -206,7 +206,7 @@ trait TextPrinter {
         printEndStats(stats)(args, out)
     }
     def printEndStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
-      out.printLine(" ")
+      if (!args.report.flow) out.printLine(" ")
       val total = "Total for specification" + (if (end.title.isEmpty) end.title.trim else " "+end.title.trim)
       out.printStats(total)
       printStats(stats)
