@@ -300,7 +300,7 @@ trait GroupsLike {
   def group(i: Int): ExamplesGroup
 }
 
-case class ExamplesGroup(private var name: String = "") extends BeforeAfterAround {
+case class ExamplesGroup(private var name: String = "") {
   def groupName = name
 
   def nameIs(n: String) = { name = s"'$n'"; this }
@@ -331,8 +331,4 @@ case class ExamplesGroup(private var name: String = "") extends BeforeAfterAroun
   protected lazy val numberedExamples = Seq(e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11,e12,e13,e14,e15,e16,e17,e18,e19,e20,e21,e22)
 
   def example(i: Int) = numberedExamples(i)
-  def before {}
-  def after {}
-  def around[T : AsResult](a: =>T): Result = AsResult(a)
-
 }
