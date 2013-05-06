@@ -99,7 +99,7 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
       }.getOrElse((res, text))
       variable.append(res1, text1, expression)
     }
-    texts.lastOption.map(t => fragments.append(Fragments.createList(Text(t)))).getOrElse(fragments)
+    texts.lastOption.map(t => fragments.add(Text(t))).getOrElse(fragments)
   }
 
   def interpolatedArguments = args.report(noindent = true, flow = true)

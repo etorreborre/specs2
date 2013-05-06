@@ -57,7 +57,10 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOu
   }
 
   private def flushInfo(implicit args: Arguments) = if (args.report.flow) {
-    if (!buffer.isEmpty) logInfo(buffer.toString)
+    if (!buffer.isEmpty) {
+      buffer.toString.split("\n").foreach(logInfo)
+      if (buffer.endsWith("\n")) logInfo("")
+    }
     buffer.clear
   }
 

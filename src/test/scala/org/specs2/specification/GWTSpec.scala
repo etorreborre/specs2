@@ -26,7 +26,7 @@ class GWTSpec extends script.Specification with GWT with Grouped with StandardDe
   + with regex extractors
 
  If there are errors, the rest of the sequence must be skipped,
- but if there is a failure in a then step, the other steps must still be executed
+ but if there is a failure in a then step, the other then steps must still be executed
 
   + in a given step
   + in a when step - extraction error
@@ -194,7 +194,7 @@ class GWTSpec extends script.Specification with GWT with Grouped with StandardDe
           when {-}
           then {-1}       ${steps.end}
         """
-      } must contain("given 1! step error") and contain("when -          o skipped step") and contain("o then")
+      } must contain("given 1! step error") and contain("when -o skipped step") and contain("o then")
     }
 
     e2 := {
@@ -209,7 +209,7 @@ class GWTSpec extends script.Specification with GWT with Grouped with StandardDe
           when {-}
           then {-1}       ${steps.end}
         """
-      } must contain("given 1") and contain("when -          ! step error") and contain("o then")
+      } must contain("given 1") and contain("when -! step error") and contain("o then")
     }
 
     e3 := {
@@ -224,7 +224,7 @@ class GWTSpec extends script.Specification with GWT with Grouped with StandardDe
           when {-}
           then {-1}       ${steps.end}
         """
-      } must contain("given 1") and contain("when -          ! step error") and contain("o then")
+      } must contain("given 1") and contain("when -! step error") and contain("o then")
     }
 
     e4 := {
