@@ -18,7 +18,6 @@ class TerminationMatchersSpec extends script.Specification with TerminationMatch
      + if it fails
 
    + if the termination fails, the computation is stopped
-
    + We can write 'action must not terminate'
 
  We should be able to observe that an action unblocks another
@@ -29,28 +28,31 @@ class TerminationMatchersSpec extends script.Specification with TerminationMatch
      + if action1 doesn't terminate after action 2 -> failure
                                                                                                 """
 
-  "termination" - new g1 {
-    e1 := { Thread.sleep(50) must terminate(sleep = 100.millis) }
-    e2 := { (Thread.sleep(150) must terminate) returns "the action is blocking with retries=1 and sleep=100" }
-    e3 := { Thread.sleep(50) must terminate(retries=3, sleep=20.millis) }
-    e4 := { (Thread.sleep(1000) must terminate(retries=3, sleep=20.millis)) returns "the action is blocking with retries=3 and sleep=20" }
-    e5 := {
+  "termination" - new group {
+    eg := { Thread.sleep(50) must terminate(sleep = 100.millis) }
+    eg := { (Thread.sleep(150) must terminate) returns "the action is blocking with retries=1 and sleep=100" }
+  }
+  "termination" - new group {
+    eg := { Thread.sleep(50) must terminate(retries=3, sleep=20.millis) }
+    eg := { (Thread.sleep(1000) must terminate(retries=3, sleep=20.millis)) returns "the action is blocking with retries=3 and sleep=20" }
+  }
+  "termination" - new group {
+    eg := {
       val out = new StringOutput { }
       val terminated = (1 to 5).foreach (i => {Thread.sleep(50); out.println(i) }) must not terminate(retries=5, sleep=20.millis)
       Thread.sleep(300) // wait until all the messages are possibly written to out if the action was not terminated
       terminated and (out.messages must not contain("3"))
     }
-    e6 := { Thread.sleep(150) must not terminate }
-
+    eg := { Thread.sleep(150) must not terminate }
   }
-
-  "unblocking" - new g2 {
-    e1 := {
+  "unblocking" - new group {
+    eg := {
       val queue = new ArrayBlockingQueue[Int](1)
       queue.take() must terminate.when("adding an element", queue.add(1))
     }
-
-    e2 := {
+  }
+  "unblocking" - new group {
+    eg := {
       val queue1 = new ArrayBlockingQueue[Int](1)
       var stop = true
       def action1 = Promise { while (stop) { Thread.sleep(10)}; queue1.add(1) }.get
@@ -58,14 +60,14 @@ class TerminationMatchersSpec extends script.Specification with TerminationMatch
       action1 must terminate.onlyWhen(action2)
     }
 
-    e3 := {
+    eg := {
       val queue1 = new ArrayBlockingQueue[Int](1)
 
       ((queue1.add(1) must terminate.onlyWhen(queue1.size)) returns "the action terminated before the second action") and
       ((queue1.add(1) must terminate.onlyWhen("taking the size", queue1.size)) returns "the action terminated before taking the size")
     }
 
-    e4 := {
+    eg := {
       val queue1 = new ArrayBlockingQueue[Int](1)
       // we sleep first for 100, then trigger the action and wait again for 100. In that case, it's not enough waiting
       // even after the action has been triggered
