@@ -15,6 +15,7 @@ trait Quote {
     else {
       a match {
         case ar: Array[_]           => ar.notNull
+        case map: Map[_,_]          => map.notNull
         case it: TraversableOnce[_] => it.notNull
         case _                      => quote(a.notNull)
       }

@@ -2,16 +2,16 @@ package org.specs2
 package text
 
 import Quote._
-import specification.Grouped
+import specification._
 
-class QuoteSpec extends Specification with Grouped { def is = s2"""
+class QuoteSpec extends script.Specification with Groups { def is = s2"""
 
- A string can be added as a prefix to another with a separator          ${g1.e1}
- but if it is empty the separator will not be displayed                 ${g1.e2}
+ + A string can be added as a prefix to another with a separator
+ + but if it is empty the separator will not be displayed
                                                                         """
 
-  new g1 {
-    e1 := "Warning".prefix(": ", "dangerous") === "Warning: dangerous"
-    e2 := "".prefix(": ", "dangerous")        === "dangerous"
+  "quotes" - new group {
+    eg := { "Warning".prefix(": ", "dangerous") === "Warning: dangerous" }
+    eg := { "".prefix(": ", "dangerous")        === "dangerous"          }
   }
 }
