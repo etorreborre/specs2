@@ -4,6 +4,8 @@ package reporter
 import specification.{ExecutingSpecification, ExecutedSpecification, SpecificationStructure}
 import main.Arguments
 import scalaz.Scalaz._
+import scala.collection.parallel.ForkJoinTaskSupport
+import control.Specs2ForkJoin
 
 /**
  * This trait can be mixed in a reporter to allow the exporting of an executed specification to many different formats:
@@ -22,7 +24,11 @@ trait AllExporting extends Reporter with Exporters {
   override def export(implicit arguments: Arguments): ExecutingSpecification => ExecutedSpecification = (executing: ExecutingSpecification) => {
     exportConsole(arguments.contains) match {
       case Some(e) => {
-        val storeAndExport = (spec: ExecutingSpecification) => Seq(store, e.export).par.map(_(spec)).head.asInstanceOf[ExecutingSpecification]
+        val storeAndExport = (spec: ExecutingSpecification) => {
+          val todo = Seq(store, e.export).par
+          todo.tasksupport = new ForkJoinTaskSupport(Specs2ForkJoin.pool)
+          todo.map(_(spec)).head.asInstanceOf[ExecutingSpecification]
+        }
         val executed = executing |> storeAndExport
         val args = arguments <| executed.arguments
         exportAll(exporters(arguments).filterNot(_ == TextExporting))(args).apply(executed)

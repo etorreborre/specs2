@@ -5,6 +5,8 @@ import main.Arguments
 import scalaz._
 import Scalaz._
 import specification.{ExecutedSpecification, ExecutingSpecification, SpecificationStructure}
+import scala.collection.parallel.ForkJoinTaskSupport
+import control.Specs2ForkJoin
 
 /**
 * The console reporter executes a Specification and exports the results to the Console
@@ -21,7 +23,11 @@ trait ConsoleReporter extends DefaultReporter with TextExporting {
     // store the statistics and export the specification results in parallel to avoid
     // evaluating the whole execution sequence in the Storing trait before doing the printing
     // this allows to print the results as soon as executed
-    val storeAndExport = (spec: ExecutingSpecification) => Seq(store, export).par.map(_(spec))
+    val storeAndExport = (spec: ExecutingSpecification) => {
+      val todo = Seq(store, export).par
+      todo.tasksupport = new ForkJoinTaskSupport(Specs2ForkJoin.pool)
+      todo.map(_(spec))
+    }
     val toExecute = spec |> select |> sequence |> execute
     toExecute |> storeAndExport
     toExecute.executed
