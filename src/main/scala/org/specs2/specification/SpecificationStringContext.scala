@@ -37,7 +37,7 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
       val indent = spaces.mkString
 
       val first = texts.dropRight(1).mkString("", "\n", "\n")
-      val autoExample = texts.last.trim.isEmpty
+      val autoExample = texts.lastOption.map(_.trim.isEmpty).getOrElse(false)
 
       val description = if (autoExample) CodeMarkup(expression.trim) else NoMarkup(texts.last.trim)
       val before = first + indent
