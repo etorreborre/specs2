@@ -17,7 +17,7 @@ class FileWriterSpec extends script.Specification with Groups { def is = s2"""
     + write a XML Node
                                                                                                         """
 
-  "file writer" - new g1 {
+  "file writer" - new g1 with After {
     val out = new MockWriter {}
     val fw = new  FileWriter { override def getWriter(path: String, append: Boolean = false) = out  }
 
@@ -38,6 +38,6 @@ class FileWriterSpec extends script.Specification with Groups { def is = s2"""
       out.messages must contain("<hello></hello>")
     }
 
-    override def after { new File("filePath").delete }
+    def after { new File("filePath").delete }
   }
 }
