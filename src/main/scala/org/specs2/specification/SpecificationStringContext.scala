@@ -33,7 +33,7 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
   implicit def asResultIsSpecPart[R : AsResult](r: =>R): SpecPart = new SpecPart {
     def append(fs: Fragments, text: String, expression: String = "") = {
       val texts = text.split("\n")
-      val spaces = texts.last.takeWhile(Seq(' ', '\n').contains)
+      val spaces = texts.lastOption.map(_.takeWhile(Seq(' ', '\n').contains)).getOrElse("")
       val indent = spaces.mkString
 
       val first = texts.dropRight(1).mkString("", "\n", "\n")
