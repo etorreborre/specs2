@@ -4,6 +4,7 @@ package text
 import util.matching.Regex
 import control.Exceptions._
 import execute._
+import control.Exceptions
 
 /**
  * A Regular expression step which takes a text and extracts meaningful values according to
@@ -48,7 +49,7 @@ abstract class RegexExtractor[P, T](private var fullRegex: String = "", private 
 object RegexExtractor {
   val DEFAULT_REGEX = """\$\{([^}]+)\}"""
 
-  def extract[R](text: String, f: PartialFunction[Any, R], regexToUse: Regex = DEFAULT_REGEX.r): R =
+  def extract[R](text: String, f: PartialFunction[Any, R], regexToUse: =>Regex = DEFAULT_REGEX.r): R = tryWithRegex(text, regexToUse) {
     regexToUse.findAllIn(text).size match {
       case 1 => f(extract1(text))
       case 2 => f(extract2(text))
@@ -61,30 +62,33 @@ object RegexExtractor {
       case 9 => f(extract9(text))
       case 10 => f(extract10(text))
     }
-
+  }
   /** extract all groups and return a list of strings */
-  def extractAll(text: String, full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) =
+  def extractAll(text: String, full: =>Regex = "".r, group: =>Regex = DEFAULT_REGEX.r) = tryWithRegex(text, regexToUse(full, group)) {
     if (full.toString.isEmpty) group.findAllIn(text.trim).matchData.collect { case Regex.Groups(g) => g }.toList
     else                       full.unapplySeq(text.trim).getOrElse(throw new FailureException(Failure(s"could not extract '$full' from $text")))
+  }
+
+  private def regexToUse(full: =>Regex, group: =>Regex) = if (full.toString.isEmpty) group else full
 
   def strip(text: String): String = strip(text, "".r, DEFAULT_REGEX.r)
   /**
    * Apparently, the expression to replace can have any regex special character except '\'
    */
-  def strip(text: String, full: Regex, group: Regex): String =
+  def strip(text: String, full: =>Regex, group: =>Regex): String = tryWithRegex(text, regexToUse(full, group)) {
     if (full.toString.isEmpty) group.replaceAllIn(text, (_:Regex.Match) match { case Regex.Groups(v) => v.replace("\\", "\\\\") })
     else                       text
-
-  def extract1(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(1, t, (extractAll(t, full, group): @unchecked) match { case s1::_ => s1 }                                                                   )
-  def extract2(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(2, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::_ => (s1,s2) }                                                          )
-  def extract3(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(3, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::_ => (s1,s2,s3) }                                                   )
-  def extract4(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(4, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::_ => (s1,s2,s3,s4) }                                            )
-  def extract5(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(5, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::_ => (s1,s2,s3,s4,s5) }                                     )
-  def extract6(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(6, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::_ => (s1,s2,s3,s4,s5,s6) }                              )
-  def extract7(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(7, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::_ => (s1,s2,s3,s4,s5,s6,s7) }                       )
-  def extract8(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(8, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::_ => (s1,s2,s3,s4,s5,s6,s7,s8) }                )
-  def extract9(t: String , full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(9, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::s9::_ => (s1,s2,s3,s4,s5,s6,s7,s8,s9) }         )
-  def extract10(t: String, full: Regex = "".r, group: Regex = DEFAULT_REGEX.r) = check(10, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::s9::s10::_ => (s1,s2,s3,s4,s5,s6,s7,s8,s9,s10) })
+  }
+  def extract1(t: String , full: =>Regex = "".r, group: =>Regex = DEFAULT_REGEX.r) = check(1, t, (extractAll(t, full, group): @unchecked) match { case s1::_ => s1 }                                                                   )
+  def extract2(t: String , full: =>Regex = "".r, group: =>Regex = DEFAULT_REGEX.r) = check(2, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::_ => (s1,s2) }                                                          )
+  def extract3(t: String , full: =>Regex = "".r, group: =>Regex = DEFAULT_REGEX.r) = check(3, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::_ => (s1,s2,s3) }                                                   )
+  def extract4(t: String , full: =>Regex = "".r, group: =>Regex = DEFAULT_REGEX.r) = check(4, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::_ => (s1,s2,s3,s4) }                                            )
+  def extract5(t: String , full: =>Regex = "".r, group: =>Regex = DEFAULT_REGEX.r) = check(5, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::_ => (s1,s2,s3,s4,s5) }                                     )
+  def extract6(t: String , full: =>Regex = "".r, group: =>Regex = DEFAULT_REGEX.r) = check(6, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::_ => (s1,s2,s3,s4,s5,s6) }                              )
+  def extract7(t: String , full: =>Regex = "".r, group: =>Regex = DEFAULT_REGEX.r) = check(7, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::_ => (s1,s2,s3,s4,s5,s6,s7) }                       )
+  def extract8(t: String , full: =>Regex = "".r, group: =>Regex = DEFAULT_REGEX.r) = check(8, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::_ => (s1,s2,s3,s4,s5,s6,s7,s8) }                )
+  def extract9(t: String , full: =>Regex = "".r, group: =>Regex = DEFAULT_REGEX.r) = check(9, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::s9::_ => (s1,s2,s3,s4,s5,s6,s7,s8,s9) }         )
+  def extract10(t: String, full: =>Regex = "".r, group: =>Regex = DEFAULT_REGEX.r) = check(10, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::s3::s4::s5::s6::s7::s8::s9::s10::_ => (s1,s2,s3,s4,s5,s6,s7,s8,s9,s10) })
 
   /**
    * check if the extraction was successful. If we were trying to extract one variable and if it was not found, return the full
@@ -94,4 +98,11 @@ object RegexExtractor {
     case e: MatchError => if (variablesNb == 1) string.asInstanceOf[T] else throw new FailureException(Failure("couldn't extract "+variablesNb+" variables from: "+string))
     case other         => throw other
   }
+
+  private def tryWithRegex[T](text: String, regex: =>Regex)(code: =>T): T =
+    Exceptions.tryOr(code) {
+      case f: FailureException => throw f
+      case e: MatchError => throw e
+      case other         => throw new ErrorException(new Error(s"could not extract the regex from $text: ${other.getMessage}", other))
+    }
 }
