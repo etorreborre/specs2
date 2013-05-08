@@ -3,8 +3,9 @@ package matcher
 
 import java.io._
 import execute._
+import specification._
 
-class AnyMatchersSpec extends Specification with ResultMatchers { def is = s2"""
+class AnyMatchersSpec extends script.Specification with Groups with ResultMatchers { def is = s2"""
 
   be_== checks the equality of 2 objects
   ${ "a" must_== "a" }
@@ -61,7 +62,7 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = s2"""
   beLike matches objects against a pattern
   ${ List(1, 2) must beLike { case List(a, b) => ok } }
   ${ List(1, 2) must beLike { case List(a, b) => (a + b) must_== 3 } }
-  if the match succeeds but the condition after match fails, a precise failure message can be returned $e1
+  + if the match succeeds but the condition after match fails, a precise failure message can be returned
 
   toSeq allows to transform a single matcher to a matcher checking a Seq
   ${ List(1, 2, 3) must ((be_===(_:Int)).toSeq)(Seq(1, 2, 3)) }
@@ -130,74 +131,86 @@ class AnyMatchersSpec extends Specification with ResultMatchers { def is = s2"""
   ${ type1 must not be anInstanceOf[Type2] }
   ${ (type1 must beAnInstanceOf[Type2]).message must_== "'type1' is not an instance of 'org.specs2.matcher.Type2'" }
 
-  the === implicits can be deactivated with the NoCanBeEqual trait $e2
-  the must implicits can be deactivated with the NoMustExpectations trait $e3
+  + the === implicits can be deactivated with the NoCanBeEqual trait
+  + the must implicits can be deactivated with the NoMustExpectations trait
 
   the be_== matcher must be robust in face of
-    a null object                $robust1
-    a non-traversable collection $robust2
+   + a null object
+   + a non-traversable collection
 
   the be_== matcher must warn when comparing 2 objects with the same toString representation but not the same type"
-    with List[Int] and List[String]          $robust3
-    with 'hello': String and 'hello': Hello  $robust4
-    with List("1, 2") and List("1", "2")     $robust5
+   + with List[Int] and List[String]
+   + with 'hello': String and 'hello': Hello
+   + with List("1, 2") and List("1", "2")
+   + with Map(1 -> "2") and Map(1 -> 2)
                                                                                                                         """
-                                                                                          
-  def e1 = (List(1, 2) must beLike { case List(a, b) => (a + b) must_== 2 }) returns 
-           "'3' is not equal to '2'"
-
-  def e2 = {
-    // if this specification compiles and if result is ok, this means that the === implicit could be redefined
-    // thanks to the NoCanBeEqual trait
-    val spec = new Specification with NoCanBeEqual {
-      implicit def otherTripleEqualUse[T](t: =>T) = new {
-        def ===[S](other: S) = other
-      }
-      val result = (1 === 2) must_== 2
-      def is = result
-    }
-    spec.result
+  "be like" - new group {
+    eg := { (List(1, 2) must beLike { case List(a, b) => (a + b) must_== 2 }) returns "'3' is not equal to '2'" }
   }
 
-  def e3 = {
-    // if this specification compiles and if result is ok, this means that the must implicit could be redefined
-    // thanks to the NoMustExpectations trait
-    val spec = new mutable.Specification with NoMustExpectations {
-      implicit def aValue[T](t: =>T) = new {
-        def must(other: Int) = other
+  "must implicits" - new group {
+
+    eg := {
+      // if this specification compiles and if result is ok, this means that the === implicit could be redefined
+      // thanks to the NoCanBeEqual trait
+      val spec = new Specification with NoCanBeEqual {
+        implicit def otherTripleEqualUse[T](t: =>T) = new {
+          def ===[S](other: S) = other
+        }
+        val result = (1 === 2) must_== 2
+        def is = result
       }
-      val result = (1 must 2) === 2
-      "an example" >> result
+      spec.result
     }
-    spec.result
+
+    eg := {
+      // if this specification compiles and if result is ok, this means that the must implicit could be redefined
+      // thanks to the NoMustExpectations trait
+      val spec = new org.specs2.mutable.Specification with NoMustExpectations {
+        implicit def aValue[T](t: =>T) = new {
+          def must(other: Int) = other
+        }
+        val result = (1 must 2) === 2
+        "an example" >> result
+      }
+      spec.result
+    }
   }
+
+  "robustness" - new group {
+    eg := ((null: String) must_== "1") must not(throwAn[Exception])
+    eg := {
+      def newTraversable = new TraversableWithNoDefinedForeach[Int] {}
+      val (t1, t2) = (newTraversable, newTraversable)
+      (t1 must_== t2) must not(throwAn[Exception])
+    }
+  }
+
+  "robustness" - new group {
+    eg := {
+      (List(1, 2) must_== List("1", "2")) must beFailing(
+        "\\Q'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.Integer]'\n is not equal to \n'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.String]'\\E")
+    }
+    eg := {
+      ("hello" must_== Hello()) must beFailing(
+        "\\Q'hello: java.lang.String' is not equal to 'hello: org.specs2.matcher.Hello'\\E")
+    }
+    eg := {
+      (List("1, 2") must_== List("1", "2")) must beFailing(
+        "\\Q'List('1, 2'): scala.collection.immutable.$colon$colon[java.lang.String]'\n is not equal to \n'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.String]'\\E")
+    }
+    eg := {
+      (Map(1 -> "2") must_== Map(1 -> 2)) must beFailing(
+        "\\Q'Map(1: java.lang.Integer -> 2: java.lang.String): scala.collection.immutable.Map$Map1'\n is not equal to \n'Map(1: java.lang.Integer -> 2: java.lang.Integer): scala.collection.immutable.Map$Map1'\\E")
+    }
+  }
+
   val aValue: String = "a value"
 
-  val type1 = new Type1 {
-    override def toString = "type1"
-  }
+  val type1 = new Type1 { override def toString = "type1" }
 
   def skipForeach =
     { foreach(Seq(0, 1, 2)) { case a => a must be_<(0).orSkip("todo") } } must beLike { case MatchSkip(_,_) => ok }
-
-  def robust1 = ((null: String) must_== "1") must not(throwAn[Exception])
-  def robust2 = {
-    def newTraversable = new TraversableWithNoDefinedForeach[Int] {}
-    val (t1, t2) = (newTraversable, newTraversable)
-    (t1 must_== t2) must not(throwAn[Exception])
-  }
-  def robust3 = {
-    (List(1, 2) must_== List("1", "2")) must beFailing(
-      "\\Q'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.Integer]'\n is not equal to \n'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.String]'\\E")
-  }
-  def robust4 = {
-    ("hello" must_== Hello()) must beFailing(
-      "\\Q'hello: java.lang.String' is not equal to 'hello: org.specs2.matcher.Hello'\\E")
-  }
-  def robust5 = {
-    (List("1, 2") must_== List("1", "2")) must beFailing(
-      "\\Q'List('1, 2'): scala.collection.immutable.$colon$colon[java.lang.String]'\n is not equal to \n'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.String]'\\E")
-  }
 }
 
 trait TraversableWithNoDefinedForeach[T] extends Traversable[T] {

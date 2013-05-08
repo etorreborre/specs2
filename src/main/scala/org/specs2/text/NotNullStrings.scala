@@ -37,11 +37,13 @@ trait NotNullStrings {
      * @return the string evaluation of an object + its class name
      *
      * - if it is null => null
-     * - if this is an Array or a collection => it prints the class name of the full collection if each element has the same type: List[Int] for example
-     *                                          other it prints each element with its class name
+     * - if this is an Array or a traversable => it prints the class name of the full collection if each element has the same type: List[Int] for example
+     *                                          other it prints each element with its class name (with a special case for maps)
      * - if this is another type of object   => calls the toString method + getClass.getName
+     *
+     * The classes of nested values are not shown unless `showAll` is true
      */
-    def  notNullWithClass: String = {
+    def notNullWithClass(showAll: Boolean): String = {
       if (a == null) "null"
       else {
         def sameElementTypes(ts: TraversableOnce[_]) =
@@ -52,19 +54,21 @@ trait NotNullStrings {
         tryOrElse {
           a match {
             case ar: Array[_] =>
-              if (sameElementTypes(ar))   ar.map(a => quote(a.notNull)).mkString("Array(", ", ", "): Array["+ar(0).getClass.getName+"]")
-              else                        ar.map(_.notNullWithClass).mkString("Array(", ", ", ")")
+              if (!showAll && sameElementTypes(ar)) ar.map(a => quote(a.notNull)).mkString("Array(", ", ", "): Array["+ar(0).getClass.getName+"]")
+              else                                  ar.map(_.notNullWithClass(showAll)).mkString("Array(", ", ", ")")
             case map: Map[_,_] =>
-              if (sameKeyValueTypes(map)) map.notNullMkStringWith(addQuotes = true)+": "+map.getClass.getName+"["+map.toSeq(0).getClass.getName+"]"
-              else                        map.map { case (k, v) => (k.notNullWithClass, v.notNullWithClass) }+": "+map.getClass.getName
+              if (!showAll && sameKeyValueTypes(map)) map.notNullMkStringWith(addQuotes = true)+": "+map.getClass.getName+"["+map.toSeq(0).getClass.getName+"]"
+              else                                    map.map { case (k, v) => (k.notNullWithClass(showAll), v.notNullWithClass(showAll)) }+": "+map.getClass.getName
             case it: TraversableOnce[_] =>
-              if (sameElementTypes(it))   it.toSeq.notNullMkStringWith(addQuotes = true)+": "+it.getClass.getName+"["+it.toSeq(0).getClass.getName+"]"
-              else                        it.toSeq.map(_.notNullWithClass)+": "+it.getClass.getName
+              if (!showAll && sameElementTypes(it))   it.toSeq.notNullMkStringWith(addQuotes = true)+": "+it.getClass.getName+"["+it.toSeq(0).getClass.getName+"]"
+              else                                    it.toSeq.map(_.notNullWithClass(showAll))+": "+it.getClass.getName
             case _ =>                     evaluate(a)+": "+a.getClass.getName
           }
         }(evaluate(a)+": "+a.getClass.getName) // in case the collection throws an exception during its traversal
       }
     }
+    /** default case for the notNullWithClass method */
+    def notNullWithClass: String = notNullWithClass(showAll = false)
   }
 
   private def evaluate(value: =>Any, msg: String = "Exception when evaluating toString: ") = {

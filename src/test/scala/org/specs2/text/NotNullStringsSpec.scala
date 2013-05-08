@@ -7,17 +7,17 @@ import NotNullStrings._
 class NotNullStringsSpec extends script.Specification with Groups { def is = s2"""
 
  Several functions are available to display strings without evaluation errors for
- + a null string
- + a list where the toString method is undefined
- + a map
+  + a null string
+  + a list where the toString method is undefined
+  + a map
 
  It is also possible to display the class of elements in a collection
- + for an Array
- + for a Seq
- + for a Map
- the description must be extended if not all elements have the same class
-  + for a Vector
+  + for an Array
+  + for a Seq
   + for a Map
+   the description must be extended if not all elements have the same class
+    + for a Vector
+    + for a Map
 
 """
 
