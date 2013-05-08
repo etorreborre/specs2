@@ -8,6 +8,14 @@ h1 {
   font-family: 'Open Sans', sans-serif;
 }
 
+h4 {
+ font-family: 'Open Sans', sans-serif;
+ font-weight:500;
+ font-style:italic;
+ margin-top:-10px;
+ margin-bottom:30px;
+}
+
 p {
   line-height: 120%;
 }
