@@ -4,58 +4,58 @@ package specification
 import matcher.DataTables
 import execute.Snippet._
 
-class SnippetsSpec extends Specification with Snippets with DataTables with Grouped { def is = s2"""
+class SnippetsSpec extends script.Specification with Snippets with DataTables with Grouped { def is = s2""" $sequential
 
  These are examples on how to use the various snippet methods
 
-   with the `snippet` method                                 ${g1.e1}
-   with the `snippet` method and 2 lines                     ${g1.e2}
-   with the `snippet` method and cut comments                ${g1.e3}
-   with the `snippet` method and cut comments - 2 blocks     ${g1.e4}
-   with some code having accolades                           ${g1.e5}
+   + with the `snippet` method
+   + with the `snippet` method and 2 lines
+   + with the `snippet` method and cut comments
+   + with the `snippet` method and cut comments - 2 blocks
+   + with some code having accolades
 
 Offsets
 =======
  It is possible to specify an offset to the snippet
    with the `snippet` method
-     a positive offset                                       ${g2.e1}
-     a negative offset                                       ${g2.e2}
+     + a positive offset
+     + a negative offset
 
 Trimming
 ========
  An approximated expression must
-   not include the `snippet` call                            ${g6.e1}
-   not have parameter setting calls                          ${g6.e2}
+   + not include the `snippet` call
+   + not have parameter setting calls
 
 Results
 =======
  Results can be displayed by using the `eval` method
-   when using the `snippet` method                           ${g3.e1}
+   + when using the `snippet` method
 
 Names
 =====
  It is also possible to capture code names
-   for types (trait, classes,...)                            ${g4.e1}
-     with a fully qualified name                             ${g4.e2}
-   for method names                                          ${g4.e3}
-   for method names with type parameters                     ${g4.e4}
-   for attribute names                                       ${g4.e5}
+   + for types (trait, classes,...)
+     + with a fully qualified name
+   + for method names
+   + for method names with type parameters
+   + for attribute names
 
 Robustness
 ==========
- A snippet must not fail if the code throws an exception     ${g5.e1}
- An interpolated snippet code must not be executed           ${g5.e2}
+ + A snippet must not fail if the code throws an exception
+ + An interpolated snippet code must not be executed
 
                                                              """
 
 
- "snippets capture" - new g1 {
+  "snippets capture" - new group {
 
-  e1 := { s2""" code: ${ snippet { got {1 + 1} } } """.texts(1).t.trim === "`got {1 + 1}`" }
+  eg := { s2""" code: ${ snippet { got {1 + 1} } } """.texts(1).t.trim === "`got {1 + 1}`" }
   def got[T](t: T) = t
 
 
-  e2 := s2""" code: ${ snippet {
+  eg := s2""" code: ${ snippet {
 got {
   var n = 0
   n = 1
@@ -68,7 +68,7 @@ got {
        |}
        |```""".stripMargin
 
-  e3 := s2""" code: ${ snippet {
+  eg := s2""" code: ${ snippet {
 // 8<--
 var n = 0
 // 8<--
@@ -80,7 +80,7 @@ n = 0
        |n = 1
        |```""".stripMargin
 
-  e4 := s2""" code: ${ snippet {
+  eg := s2""" code: ${ snippet {
 // 8<--
 var n = 0
 // 8<--
@@ -95,11 +95,10 @@ var i = 0
       |var i = 0
       |```""".stripMargin
 
-   e5 := s2""" code ${snippet { "e1" ! { ok } /**/;1/**/} }""".texts(1).t.trim === """`"e1" ! { ok }`"""
+   eg := s2""" code ${snippet { "e1" ! { ok } /**/;1/**/} }""".texts(1).t.trim === """`"e1" ! { ok }`"""
  }
-
-  "offsets" - new g2 {
-    e1 := s2""" code: ${ snippet {
+  "offsets" - new group {
+    eg := s2""" code: ${ snippet {
 // 8<--
 var n = 0
 // 8<--
@@ -111,7 +110,7 @@ n = 0
        |  n = 1
        |```""".stripMargin
 
-    e2 := s2""" code: ${ snippet {
+    eg := s2""" code: ${ snippet {
   // 8<--
   var n = 0
   // 8<--
@@ -124,9 +123,28 @@ n = 0
        |```""".stripMargin
 
   }
+  "trimming" - new group {
+    eg := {
+      "code"                   || "result" |>
+        "snippet{ hello }"       !! "hello"  |
+        " snippet{ hello }"      !! "hello"  |
+        " snippet { hello }"     !! "hello"  |
+        " snippet{ hello } "     !! "hello"  |
+        " snippet{\n hello \n} " !! "hello"  |
+        " snippet{ hello \n} "   !! "hello"  |
+        { (c, r) => trimApproximatedSnippet(c) === r }
+    }
 
-  "results" - new g3 {
-    e1 := s2""" code: ${ snippet {
+    eg := {
+      "code"                                      || "result" |>
+        " snippet{ hello \n}.set(eval = true) "     !! "hello"  |
+        " snippet{ hello \n}.eval "                 !! "hello"  |
+        " snippet{ hello \n}.offsetIs(2) "          !! "hello"  |
+        { (c, r) => trimApproximatedSnippet(c) === r }
+    }
+  }
+  "results" - new group {
+    eg := s2""" code: ${ snippet {
   var n = 1
   1 + n
   }.eval.offsetIs(-2) }""".texts.drop(1).take(2).map(_.t.trim).mkString("\n") ===
@@ -136,28 +154,27 @@ n = 0
        |```
        |`> 2`""".stripMargin
   }
+  "names" - new group {
 
-  "names" - new g4 {
-
-    e1 := {
+    eg := {
       "code"                                         || "markdown"                 |>
       s"""the trait `${simpleName[Snippets]}`"""     !! "the trait `Snippets`"     |
       { (code, markdown) => texts(code)(0) === markdown}
     }
 
-    e2 := {
+    eg := {
       "code"                                   || "markdown"                                      |>
       s"""the trait `${fullName[Snippets]}`""" !! "the trait `org.specs2.specification.Snippets`" |
       { (code, markdown) => texts(code)(0) === markdown}
     }
 
-    e3 := {
+    eg := {
       "code"                              || "markdown"                                      |>
       s"""the method `${termName(is)}`""" !! "the method `is`"                               |
         { (code, markdown) => texts(code)(0) === markdown}
     }
 
-    e4 := {
+    eg := {
       def function[T, S](t: T, s: S) = ""
       "code"                                                        || "markdown"                                      |>
       s"""the method `${termName(function(1, ""))}`"""              !! "the method `function`"                         |
@@ -165,41 +182,19 @@ n = 0
       { (code, markdown) => texts(code)(0) === markdown}
     }
 
-    e5 := {
+    eg := {
       "code"                                         || "markdown"                   |>
       s"""the attribute `${termName(attribute1)}`""" !! "the attribute `attribute1`" |
         { (code, markdown) => texts(code)(0) === markdown}
     }
   }
+  "effects" - new group {
+    eg := snippet[Unit](sys.error("boom")) must not(throwAn[Exception])
 
-  "effects" - new g5 {
-    e1 := snippet[Unit](sys.error("boom")) must not(throwAn[Exception])
-
-    e2 := {
+    eg := {
       var i = 0
       s2""" start ${snippet { i = 1; i }} end """
       i === 0
-    }
-  }
-
-  "trimming" - new g6 {
-    e1 := {
-      "code"                   || "result" |>
-      "snippet{ hello }"       !! "hello"  |
-      " snippet{ hello }"      !! "hello"  |
-      " snippet { hello }"     !! "hello"  |
-      " snippet{ hello } "     !! "hello"  |
-      " snippet{\n hello \n} " !! "hello"  |
-      " snippet{ hello \n} "   !! "hello"  |
-      { (c, r) => trimApproximatedSnippet(c) === r }
-    }
-
-    e2 := {
-      "code"                                      || "result" |>
-      " snippet{ hello \n}.set(eval = true) "     !! "hello"  |
-      " snippet{ hello \n}.eval "                 !! "hello"  |
-      " snippet{ hello \n}.offsetIs(2) "          !! "hello"  |
-        { (c, r) => trimApproximatedSnippet(c) === r }
     }
   }
 
