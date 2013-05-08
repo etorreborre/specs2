@@ -3,7 +3,7 @@ import org.junit._
 import org.specs2.matcher._
 
 /**
- * This class shows how to use spec matchers in a JUnit specification
+ * This class shows how to use specs2 matchers in a JUnit specification
  */
 class JUnitTest extends JUnitMustMatchers {
 

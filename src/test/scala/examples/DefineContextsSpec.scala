@@ -1,9 +1,13 @@
 package examples
 
-import org.specs2._
-import execute.AsResult
-import specification.{Before, BeforeExample, Context, Outside, Fixture}
-import org.scalacheck.{Prop, Gen}
+import org.specs2.Specification
+import org.specs2.specification._
+import org.specs2.time._
+import org.specs2.execute._
+import org.specs2.matcher.{TerminationMatchers, MustMatchers}
+import org.specs2.main.CommandLineArguments
+import org.specs2.time.TimeConversions._
+
 
 /**
  * This specification shows various ways to setup contexts for examples.
@@ -79,24 +83,9 @@ class DefineContextsSpec extends Specification {
   }
 
   /**
-   * This specification uses an implicit Outside context for each example and ScalaCheck properties
+   * This specification shows how to use the mutable.Before trait in a mutable specification
    */
-  class OutsideWithImplicitScalaCheckContextSpecification extends Specification with ScalaCheck { def is =
-                                                             s2"""
-    This is a list of examples
-      example1                                  $e1
-      example2                                  $e2
-                                                               """
-
-    implicit val outside: Outside[Int] = new Outside[Int] { def outside = 1 }
-
-    def e1 = (i: Int) => Prop.forAll(Gen.choose(1, 10)) { (n: Int) => n must be_>=(i) }
-    def e2 = (i: Int) => Prop.forAll(Gen.choose(1, 10)) { (n: Int) => n must be_>=(i) }
-  }
-  /**
-   * Same thing as above for a mutable specification
-   */
-  class BeforeMutableSpecification extends mutable.Specification {
+  class BeforeMutableSpecification extends org.specs2.mutable.Specification {
     "This is a list of examples" >> {
       "example1" >> new clean {
         aNewSystem must_== "a fresh value"
@@ -107,7 +96,7 @@ class DefineContextsSpec extends Specification {
     }
 
     /** here we need a trait extending mutable.Before because the example body will be executed as a "delayed init"  section*/
-    trait clean extends mutable.Before {
+    trait clean extends org.specs2.mutable.Before {
       lazy val aNewSystem = "a fresh value"
       def before = println("clean up before each example")
     }
@@ -129,7 +118,7 @@ class DefineContextsSpec extends Specification {
   /**
    * This mutable specification also uses the `BeforeExample` trait
    */
-  class BeforeExampleMutableSpecification extends mutable.Specification with BeforeExample {
+  class BeforeExampleMutableSpecification extends org.specs2.mutable.Specification with BeforeExample {
     "This is a list of examples" >> {
       "example1"                 >> success
       "example2"                 >> success
@@ -138,14 +127,14 @@ class DefineContextsSpec extends Specification {
     def before = println("clean up before each example")
   }
 
-  import org.specs2._
-  import time._
-  import specification._
-  import execute._
-
-  class TimedExecutionSpecification extends Specification with AroundContextExample[Around] { def is =
-    "example 1" ! { Thread.sleep(90); ok }^
-    "example 2" ! { Thread.sleep(10); ok }
+  /**
+   * This specification shows how to create an Around context that will measure the execution time of
+   * each example and update the result message
+   */
+  class TimedExecutionSpecification extends Specification with AroundContextExample[Around] { def is = s2"""
+    example 1 ${ Thread.sleep(90); ok }
+    example 2 ${ Thread.sleep(10); ok }
+    """
 
     def aroundContext = new Timed {}
 
@@ -169,7 +158,42 @@ class DefineContextsSpec extends Specification {
 
   }
 
-  // a trait to create an Around context using the example description
+  /**
+   * This specification shows how to reuse a trait providing an Around context which is
+   * also going to use the example description. It is using an Example factory for this.
+   */
+  class TimedDescribedSpecification extends Specification with TimedContext { def is = s2"""
+      Example 1 $ok
+      Example 2 $ok
+    """
+    // create a new DefaultExampleFactory where the body of the example uses
+    // the current example description
+    override lazy val exampleFactory = new DefaultExampleFactory {
+      override def newExample[T : AsResult](description: String, t: =>T): Example =
+        super.newExample(description, context(description)(AsResult(t)))
+    }
+  }
+
+  /**
+   * This mutable specification shows how to reuse a trait providing an Around context which is
+   * also going to use the example description. It is using a mutable Example factory for this.
+   */
+  class MutableTimedDescribedSpecification extends org.specs2.mutable.Specification with TimedContext {
+
+    "Example 1" in ok
+    "Example 2" in ok
+
+    // create a new MutableExampleFactory where the body of the example uses
+    // the current example description
+    override lazy val exampleFactory = new MutableExampleFactory {
+      override def newExample[T : AsResult](description: String, t: =>T): Example =
+        super.newExample(description, context(description)(AsResult(t)))
+    }
+  }
+
+  /**
+   * This trait provides an Around context to a trait measure an example execution time
+   */
   trait TimedContext {
     def context(exampleDescription: String) = new Timed(exampleDescription)
 
@@ -188,31 +212,42 @@ class DefineContextsSpec extends Specification {
     }
   }
 
-  class MutableTimedDescribedSpecification extends org.specs2.mutable.Specification with TimedContext {
+  /**
+   * This specification shows how to create an "Around" context which will time out every example
+   */
+  class TimeoutContextSpec extends org.specs2.mutable.Specification with ExamplesTimeout {
 
-    "Example 1" in ok
-    "Example 2" in ok
-
-    // create a new MutableExampleFactory where the body of the example uses
-    // the current example description
-    override lazy val exampleFactory = new MutableExampleFactory {
-      override def newExample[T : AsResult](description: String, t: =>T): Example =
-        super.newExample(description, context(description)(AsResult(t)))
+    "This example should pass" >> {
+      { Thread.sleep(50); 1 } must_== 1
     }
+    //  "This example should timeout" >> {
+    //    def loop: Unit = loop;
+    //    { loop; 1 } must_== 1
+    //  }
+    //  "This example should fail" >> {
+    //    { Thread.sleep(50); 2 } must_== 1
+    //  }
+
   }
 
-  class TimedDescribedSpecification extends Specification with TimedContext { def is =
-    "Example 1" ! ok ^
-    "Example 2" ! ok
+  /**
+   * This shows how to create a context which will timeout any example that takes too long to execute
+   * It uses the `CommandLineArguments` trait to be able to set the timeout value from the command-line
+   */
+  trait ExamplesTimeout extends AroundExample with MustMatchers with TerminationMatchers with CommandLineArguments {
 
-    // create a new DefaultExampleFactory where the body of the example uses
-    // the current example description
-    override lazy val exampleFactory = new DefaultExampleFactory {
-      override def newExample[T : AsResult](description: String, t: =>T): Example =
-        super.newExample(description, context(description)(AsResult(t)))
+    lazy val commandLineTimeOut = arguments.commandLine.int("timeout").map(_.millis)
+
+    def timeout = commandLineTimeOut.getOrElse(100.millis)
+
+    def around[T : AsResult](t: =>T) = {
+      lazy val result = t
+      val termination = result must terminate[T](sleep = timeout).orSkip((ko: String) => "TIMEOUT: "+timeout)
+      termination.toResult and AsResult(result)
     }
 
   }
+
 
   def println(s: String) = s // change this definition to see messages in the console
 
@@ -220,7 +255,6 @@ class DefineContextsSpec extends Specification {
            new BeforeSpecification ^
            new BeforeWithImplicitContextSpecification ^
            new OutsideWithImplicitContextSpecification ^
-           new OutsideWithImplicitScalaCheckContextSpecification ^
            new BeforeMutableSpecification ^
            new BeforeExampleMutableSpecification ^
            new BeforeExampleSpecification ^

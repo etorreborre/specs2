@@ -18,11 +18,11 @@ class SelectExamplesSpec extends Specification {
    *
    * It only executes the first example
    */
-  class IncludeSpec extends Specification { def is = only("ex.*1")   ^
-    "This is a list of examples"                                     ^
-      "example1"                                                     ! success^
-      "example2"                                                     ! success^
-                                                                     end
+  class IncludeSpec extends Specification { def is = only("ex.*1") ^ s2"""
+    This is a list of examples
+      example1                                                     $success
+      example2                                                     $success
+                                                                   """
   }
 
   /**
@@ -40,11 +40,11 @@ class SelectExamplesSpec extends Specification {
    * This specification uses the `Tags` trait to tag the second example and the 'include' argument
    * to select it
    */
-  class TagsSpec extends Specification with Tags { def is =          include("unit")^
-    "This is a list of examples"                                     ^
-      "example1"                                                     ! success^
-      "example2"                                                     ! success^ tag("unit")
-                                                                     end
+  class TagsSpec extends Specification with Tags { def is = include("unit") ^  s2"""
+    This is a list of examples
+      example1                                                     $success
+      example2                                                     $success ${tag("unit")}
+                                                                   """
   }
 
 
@@ -65,14 +65,14 @@ class SelectExamplesSpec extends Specification {
   /**
    * This specification uses the `Tags` trait and the `section` method to tag the examples 2, 3 and 4
    */
-  class SectionSpec extends Specification with Tags { def is =          include("unit")^
-    "This is a list of examples"                                     ^
-      "example1"                                                     ! success^
-      "example2"                                                     ! success^ section("unit")^
-      "example3"                                                     ! success^
-      "example4"                                                     ! success^ section("unit")^
-      "example5"                                                     ! success^ tag("unit")
-                                                                     end
+  class SectionSpec extends Specification with Tags { def is = include("unit") ^ s2"""
+    This is a list of examples
+      example1                                                     $success
+      example2                                                     $success ${section("unit")}
+      example3                                                     $success
+      example4                                                     $success ${section("unit")}
+      example5                                                     $success ${tag("unit")}
+                                                                   """
   }
 
 
@@ -91,6 +91,10 @@ class SelectExamplesSpec extends Specification {
     }
   }
 
-  def is =
-  include(new IncludeSpec, new IncludeMutableSpec, new TagsSpec, new TagsMutableSpec, new SectionSpec, new SectionMutableSpec)
+  def is = include(new IncludeSpec,
+                   new IncludeMutableSpec,
+                   new TagsSpec,
+                   new TagsMutableSpec,
+                   new SectionSpec,
+                   new SectionMutableSpec)
 }

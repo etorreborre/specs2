@@ -2,7 +2,7 @@ package org.specs2
 package guide
 package structure
 
-import examples.{HelloWorldSpec, HelloWorldUnitSpec, GivenWhenThenSpec}
+import examples._
 
 object Links extends UserGuidePage { def is = ""
   def section = s2"""
@@ -37,7 +37,6 @@ The effect of doing so is that all the fragments of the children specification w
 s2"""
   ${include(xonly, new HelloWorldSpec) }
   ${include(xonly, new HelloWorldUnitSpec)}
-  ${include(xonly, new GivenWhenThenSpec)  }
 """
 }}
 

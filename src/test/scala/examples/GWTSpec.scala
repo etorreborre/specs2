@@ -3,7 +3,9 @@ package examples
 import org.specs2._
 import specification.script.{GWT, StandardRegexStepParsers}
 
-
+/**
+ * This specifications shows how to use the GWT trait to create Scenarios in the Given/When/Then style
+ */
 class GWTSpec extends Specification with GWT with StandardRegexStepParsers { def is = s2"""
 
  A given-when-then example for a calculator                       ${calculator1.start}

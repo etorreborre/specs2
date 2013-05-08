@@ -2,9 +2,19 @@ package examples
 
 import org.specs2._
 import specification.{Before, Scope}
+
 /**
  * This specification shows how to use the mutable.Specification trait to create a unit Specification
- * where the fragments are built using a mutable variable
+ *
+ * It shows most of the features of mutable specifications:
+ *
+ *  - how to create a title
+ *  - how to set arguments
+ *  - how to create Steps
+ *  - how to create examples
+ *  - how to use traits to provide vals to each example and set the context
+ *  - how create links to other specifications or include them
+ *
  */
 class UnitSpec extends mutable.Specification {
 
@@ -65,7 +75,7 @@ class UnitSpec extends mutable.Specification {
 
 
   object context extends Before {
-    def before = () // do something to setup the context
+    def before {} // do something to setup the context
   }
   // we need to extend Scope to be used as an Example body
   trait system extends Scope {

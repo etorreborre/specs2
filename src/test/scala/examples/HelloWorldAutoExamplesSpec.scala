@@ -11,9 +11,9 @@ class HelloWorldAutoExamplesSpec extends Specification { def is = s2"""
 
   The 'Hello world' string satisfies the following properties:
 
-   ${"Hello world" must have size(11)      }
-   ${"Hello world" must startWith("Hello") }
-   ${"Hello world" must endWith("world")   }
+   ${ "Hello world" must have size(11)      }
+   ${ "Hello world" must startWith("Hello") }
+   ${ "Hello world" must endWith("world")   }
 
                                                                   """
 
