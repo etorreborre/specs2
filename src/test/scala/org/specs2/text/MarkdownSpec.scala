@@ -14,8 +14,6 @@ class MarkdownSpec extends Specification {
   { toHtmlNoPar("***hello***") must_== "<strong><em>hello</em></strong>" }
   "Multi-line text must preserve newlines" >>
   { toHtmlNoPar("hello\nworld") must contain("hello<br/>world") }
-  "Backslashes must be preserved" >>
-  { toHtml("hello\\world") must contain("hello\\world") }
 
   "title and line break" >>
   { toXhtml("### Title\nline1\n\nline2").toString must not contain("### Title") }

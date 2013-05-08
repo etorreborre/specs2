@@ -26,7 +26,7 @@ trait Markdown {
    * transformed to <br/> tags
    */
   def toHtml(text: String)(implicit args: Arguments) = {
-    processor.markdownToHtml(text.replace("\\", "\\\\").replace("\\\\n", "\n")).
+    processor.markdownToHtml(text.replace("\\\\n", "\n")).
       replaceAll("<code>" -> "<code class='prettyprint'>")
   }
 
