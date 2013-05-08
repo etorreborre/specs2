@@ -6,15 +6,17 @@
   <title>etorreborre/specs2 @ GitHub</title>
 
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700' rel='stylesheet' type='text/css'>
-  <link href="./css/prettify.css" rel="stylesheet" type="text/css" />
-  <link href="css_new/bootstrap.min.css" rel="stylesheet" media="screen">
-  <link rel="stylesheet" href="css_new/font-awesome.min.css">
-  <link rel="stylesheet" href="css_new/specs2.css">
 
-  <script src="http://code.jquery.com/jquery.js"></script>
+  <link href="css_new/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="css_new/font-awesome.min.css" rel="stylesheet">
+  <link href="css_new/specs2.css" rel="stylesheet">
+
+
+  <script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
   <script type="text/javascript" src="js/bootstrap.js"></script>
-  <script type="text/javascript" src="js/prettify.js"></script>
+  <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
   <script type="text/javascript" src="js/specs2.js"></script>
+
   <script language="javascript">window.onload=init;</script>
   <script type="text/javascript">
     var _gaq = _gaq || [];
@@ -48,41 +50,40 @@
         </ul>
         <div class="tab-content">
           <div class="tab-pane active" id="unit">
-            <code class="prettyprint">import org.specs2.mutable._
+            <pre class="prettyprint"><code class="language-scala">import org.specs2.mutable._
 
-              class HelloWorldSpec extends Specification {
-
-                "The 'Hello world' string" should {
-                  "contain 11 characters" in {
-                    "Hello world" must have size(11)
-                  }
-                  "start with 'Hello'" in {
-                    "Hello world" must startWith("Hello")
-                  }
-                  "end with 'world'" in {
-                    "Hello world" must endWith("world")
-                  }
-                }
-              }
-            </code>
+  class HelloWorldSpec extends Specification {
+    "The 'Hello world' string" should {
+      "contain 11 characters" in {
+        "Hello world" must have size(11)
+      }
+      "start with 'Hello'" in {
+        "Hello world" must startWith("Hello")
+      }
+      "end with 'world'" in {
+        "Hello world" must endWith("world")
+      }
+    }
+  }
+            </code></pre>
           </div>
           <div class="tab-pane" id="acceptance">
-            <code class="prettyprint">import org.specs2._
-              class HelloWorldSpec extends Specification { def is =
+            <pre class="prettyprint"><code class="language-scala">import org.specs2._
+  class HelloWorldSpec extends Specification { def is =
 
-                "This is a specification to check the 'Hello world' string"                 ^
-                                                                                            p^
-                "The 'Hello world' string should"                                           ^
-                  "contain 11 characters"                                                   ! e1^
-                  "start with 'Hello'"                                                      ! e2^
-                  "end with 'world'"                                                        ! e3^
-                                                                                            end
+    "This is a specification to check the 'Hello world' string"                 ^
+                                                                                p^
+    "The 'Hello world' string should"                                           ^
+      "contain 11 characters"                                                   ! e1^
+      "start with 'Hello'"                                                      ! e2^
+      "end with 'world'"                                                        ! e3^
+                                                                                end
 
-                def e1 = "Hello world" must have size(11)
-                def e2 = "Hello world" must startWith("Hello")
-                def e3 = "Hello world" must endWith("world")
-              }
-            </code>
+    def e1 = "Hello world" must have size(11)
+    def e2 = "Hello world" must startWith("Hello")
+    def e3 = "Hello world" must endWith("world")
+  }
+            </code></pre>
           </div>
         </div>
       </div>

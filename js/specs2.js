@@ -1,4 +1,4 @@
-function init() {  prettyPrint(); };
+
 
 /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
 String.prototype.endsWith = function(str) { return (this.match(str+'$') == str) };
