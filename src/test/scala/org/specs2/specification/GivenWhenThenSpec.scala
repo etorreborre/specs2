@@ -8,7 +8,7 @@ import reporter.SilentConsoleReporter
 import main.Arguments
 import text.RegexExtractor
 
-class RegexExtractorsSpec extends Specification with ResultMatchers with DataTables with Grouped with GivenWhenThen { def is = s2"""
+class GivenWhenThenSpec extends Specification with ResultMatchers with DataTables with Grouped with GivenWhenThen { def is = s2"""
 
  Given/When/Then specifications can be written by adding extractors after Text fragments
    A Given[T] extractor extracts the text from the previous Text fragment
@@ -188,12 +188,12 @@ class RegexExtractorsSpec extends Specification with ResultMatchers with DataTab
   }
 
   "title" - new g10 {
-    e1 := { new Specification { def is = "a number ${0}" ^ number0 }.content.specName.title must not beEmpty }
+    e1 := { new Specification with GivenWhenThen { def is = "a number ${0}" ^ number0 }.content.specName.title must not beEmpty }
   }
 
   "contexts" - new g11 {
     e1 := {
-      val spec = new Specification with BeforeExample with io.StringOutput { def is =
+      val spec = new Specification with BeforeExample with io.StringOutput with GivenWhenThen { def is =
         "a number ${0}" ^ number0 ^ "then it is ${0}" ^ then0to3
         def before { println("before") }
       }
@@ -201,7 +201,7 @@ class RegexExtractorsSpec extends Specification with ResultMatchers with DataTab
       spec.messages must contain("before")
     }
     e2 := {
-      val spec = new Specification with io.StringOutput { def is =
+      val spec = new Specification with io.StringOutput with GivenWhenThen { def is =
         "a number ${0}" ^ number0 ^ "then it is ${0}" ^ then0
         val then0: Then[Int] = (i: Int) => (s: String) => context { 0 === 0 }
         val context = new Before { def before { println("before") } }

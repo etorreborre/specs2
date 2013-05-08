@@ -27,14 +27,14 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   def add(a: Arguments): Fragments = copy(arguments = arguments.overrideWith(a))
 
   /** append the fragments from fs, appending the text fragments if this object ends with Text and fs starts with Text */
-  def append(fs: Fragments)(implicit exampleFactory: ExampleFactory): Fragments =
+  def append(fs: Fragments): Fragments =
     (middle, fs.middle) match {
       case (begin :+ Text(t1), Text(t2) +: rest) => ((new FragmentsFragment(this)) ^ fs).copy(middle = begin ++ (Text(t1+t2) +: rest))
       case _                                     => (new FragmentsFragment(this)) ^ fs
     }
 
   /** append the fragments from fs, appending the text fragments if this object ends with Text and fs starts with Text */
-  def append(fs: Seq[Fragment])(implicit exampleFactory: ExampleFactory): Fragments =
+  def append(fs: Seq[Fragment]): Fragments =
     append(Fragments.createList(fs:_*))
 
   /** recreate the Fragments so that 2 consecutive Text fragments are aggregated into one */

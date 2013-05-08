@@ -2,6 +2,7 @@ package org.specs2
 package specification
 
 import execute._
+import collection.Seqx._
 import main.{ArgumentsArgs, Arguments}
 import StandardFragments.{Backtab, Tab, Br, End}
 import scalaz.Scalaz._
@@ -52,6 +53,17 @@ trait GivenWhenThen extends RegexStepsFactory with TuplesToSeq with FragmentsBui
   /** at any point in time a regex sequence can be transformed as a sequence of Fragments */
   implicit def RegexFragmentToFragments(r: RegexFragment): Fragments = r.fs
 
+  override implicit def fragmentFragments(f: =>Fragment): GivenWhenThenFragmentsFragment =
+    new GivenWhenThenFragmentsFragment(fragments(f))
+
+  override implicit def fragmentsFragments(fs: =>Fragments): GivenWhenThenFragmentsFragment =
+    new GivenWhenThenFragmentsFragment(fs)
+
+  override implicit def textFragment(s: String): GivenWhenThenFragmentsFragment =
+    new GivenWhenThenFragmentsFragment(textStart(s))
+
+  override implicit def argumentsFragment(a: Arguments): GivenWhenThenFragmentsFragment =
+    new GivenWhenThenFragmentsFragment(new Fragments().overrideArgs(a))
 
   /**
    * implicit conversion to transform a Given[Y] to Given[X] when Y <: X
@@ -141,6 +153,18 @@ trait GivenWhenThen extends RegexStepsFactory with TuplesToSeq with FragmentsBui
         })
       }
     }
+  }
+
+  class GivenWhenThenFragmentsFragment(fs: =>Fragments)(implicit examplesFactory: ExampleFactory) extends FragmentsFragment(fs) {
+    /** start a given-when-then block */
+    def ^[T](step: Given[T]): PreStep[T] = {
+      val text = fragments.fragments.collect { case t: Text => t.t }.lastOption.getOrElse("A Text must precede a Given object!")
+      lazy val extracted = step.extractContext(text)
+      val stripped = start(fragments.specStart +: fragments.middle.updateLast(step.strip) :+ fragments.specEnd:_*)
+
+      new PreStep(() => extracted, stripped ^ Step.fromEither(extracted))(examplesFactory)
+    }
+    private def start(fs: Fragment*) = new FragmentsFragment(Fragments.create(fs:_*))
   }
 
 }

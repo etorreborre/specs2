@@ -157,7 +157,7 @@ trait NoFragmentsBuilder extends FragmentsBuilder {
 /**
  * Fragments can be chained with the ^ method
  */
-class FragmentsFragment(fs: =>Fragments)(implicit exampleFactory: ExampleFactory) {
+class FragmentsFragment(fs: =>Fragments) {
   lazy val fragments = fs
 
   def ^(t: String) = fragments add Text(t)
@@ -180,16 +180,6 @@ class FragmentsFragment(fs: =>Fragments)(implicit exampleFactory: ExampleFactory
   def ^(other: FragmentsFragment) = fragments add other.fragments
   def ^(a: Arguments)             = fragments add a
 
-  /** start a given-when-then block */
-  def ^[T](step: Given[T]): PreStep[T] = {
-    val text = fragments.fragments.collect { case t: Text => t.t }.lastOption.getOrElse("A Text must precede a Given object!")
-    lazy val extracted = step.extractContext(text)
-    val stripped = start(fragments.specStart +: fragments.middle.updateLast(step.strip) :+ fragments.specEnd:_*)
-
-    new PreStep(() => extracted, stripped ^ Step.fromEither(extracted))
-  }
-
-  private def start(fs: Fragment*) = new FragmentsFragment(Fragments.create(fs:_*))
 }
 
 

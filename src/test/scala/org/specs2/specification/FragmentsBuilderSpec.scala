@@ -176,7 +176,7 @@ Other elements
       override def map(fs: =>Fragments) = "title".title ^ fs ^ "end of the spec"
     }
     lazy val content5 = new CustomSpecification { def is = sequential ^ "text" }.content
-    lazy val content6 = new Specification {
+    lazy val content6 = new Specification with GivenWhenThen {
       val number: Given[Int] = (_:String).toInt
       def is = "a number ${0}" ^ number
     }.content

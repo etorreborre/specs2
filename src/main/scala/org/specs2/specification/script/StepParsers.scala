@@ -8,6 +8,10 @@ import control.Exceptions._
 import text.RegexExtractor
 import RegexExtractor._
 
+/**
+ * StepParsers are using delimiters or regular expressions with groups to extract values from a piece of text
+ * and possibly strip it from delimiters if necessary
+ */
 trait StepParsers extends ImplicitParameters {
   implicit lazy val stepParserRegex = """\{([^}]+)\}""".r
 
@@ -83,6 +87,9 @@ trait StepParsers extends ImplicitParameters {
   }
 }
 
+/**
+ * a few delimited parsers (with `{}`) to extract ints, doubles and strings
+ */
 trait StandardDelimitedStepParsers extends StepParsers {
 
   def anInt     = StepParser((_: String).toInt)
@@ -98,6 +105,9 @@ trait StandardDelimitedStepParsers extends StepParsers {
   def threeStrings = StepParser((s1:String, s2: String, s3: String) => (s1, s2, s3))
 }
 
+/**
+ * a few regular expression parsers to extract ints, doubles and strings (strings are delimited with `"`)
+ */
 trait StandardRegexStepParsers extends StepParsers {
   // definitions taken from the JavaTokenParsers trait
   private val wholeNumber = """-?\d+"""

@@ -26,7 +26,7 @@ class LayersAnalysisSpec extends script.Specification with DataLayers with Group
   }
 }
 
-trait DataLayers extends Specification with DependencyMatchers with ScalaCheck {
+trait DataLayers extends SpecificationLike with DependencyMatchers with ScalaCheck {
   /**
    * The data generation strategy is to create layers of packages represented by alphabetical letters from a to f.
    *

@@ -6,7 +6,7 @@ import specification.{AcceptanceCreationPath, MutableCreationPath, AllExpectatio
 import scalaz.Scalaz._
 import execute.Result
 
-class FragmentsBuilderSpec extends Specification with AllExpectations {
+class FragmentsBuilderSpec extends Specification with AllExpectations with GivenWhenThen {
 
   "Creating fragments must maintain a tree showing all the creation paths for each block" >> {
     spec1.content
