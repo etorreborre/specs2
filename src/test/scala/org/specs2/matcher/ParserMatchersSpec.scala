@@ -17,7 +17,7 @@ The ParserMatchers trait provides matchers for Parser and ParseResult instances.
   ${ anyNumber must succeedOn("12").withResult(12) }
   ${ number must succeedOn("12ab").partially.withResult(12) }
   ${ number must succeedOn("12").withResult(equalTo(12)) }
-  ${ numbers must succeedOn("12,13").withResult(contain(12)) }
+  ${ numbers must succeedOn("12,13").withResult((l: List[Int]) => l must contain(12)) }
   ${ number must not succeedOn("abc") }
   ${ number must not(succeedOn("abc").withResult(equalTo(13))) }
 

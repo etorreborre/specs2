@@ -8,6 +8,7 @@ import text.Plural._
 import text.Quote._
 import scala.reflect.ClassTag
 import MatchResultLogicalCombinators._
+import scala.collection.GenTraversableOnce
 
 /**
 * Matchers for parser combinators
@@ -19,7 +20,7 @@ import MatchResultLogicalCombinators._
 trait ParserMatchers extends ParserBaseMatchers with ParserBeHaveMatchers
 
 private[specs2]
-trait ParserBaseMatchers {
+trait ParserBaseMatchers extends TraversableMatchers {
   // can't extend Parsers because Parser/Elem types would be different from ones we are testing
   val parsers: Parsers
   import parsers.{Success => PSuccess, Failure => PFailure, Error => PError, _}
@@ -84,9 +85,22 @@ trait ParserBaseMatchers {
     def withResult(result: String): Matcher[TMatchee] = withResult(new BeMatching(".*"+result+".*") ^^ ((_:Any).toString))
     /** check if the parsed value is as expected */
     def withResult(result: ExpectedParsedResult[T]): Matcher[TMatchee] = withResult(new BeEqualTo(result.t))
-    
+
     /** check if the parsed value is as expected, using a matcher */
-    def withResult(resultMatcher: Matcher[T]): Matcher[TMatchee] = new Matcher[TMatchee] {
+    def withResult(check: T => MatchResult[_]): Matcher[TMatchee] = new Matcher[TMatchee] {
+      def apply[S <: TMatchee](s: Expectable[S]) = {
+        val pResult = parseResult(s.value)
+        lazy val resultMatcherResult: MatchResult[ParseResult[T]] = pResult match {
+          case PSuccess(result, _) => check(result).map(_ => pResult)
+          case _                   => MatchFailure("Parse succeeded", "Parse didn't succeed", s.map(pResult))
+        }
+
+        (apply0(Expectable(pResult)) and resultMatcherResult).map(_ => s.value)
+      }
+    }
+
+    /** check if the parsed value is as expected, using a matcher */
+    def withResult[U >: T](resultMatcher: Matcher[U]): Matcher[TMatchee] = new Matcher[TMatchee] {
       def apply[S <: TMatchee](s: Expectable[S]) = {
         val pResult = parseResult(s.value)
         lazy val resultMatcherResult: MatchResult[ParseResult[T]] = pResult match {
@@ -97,6 +111,7 @@ trait ParserBaseMatchers {
         (apply0(Expectable(pResult)) and resultMatcherResult).map(_ => s.value)
       }
     }
+
     protected[specs2]
     def andThenWithResult(resultMatcher: Matcher[T]): Matcher[TMatchee] = new Matcher[TMatchee] {
       def apply[S <: TMatchee](s: Expectable[S]) = {

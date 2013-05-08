@@ -6,95 +6,63 @@ import java.util.Arrays._
 import scala.collection.JavaConversions.{ collectionAsScalaIterable }
 import scala.collection.parallel.ParSeq
 import execute.{FailureException, FailureDetails}
+import control.NumberOfTimes
 
-class TraversableMatchersSpec extends Specification with ResultMatchers with Tags with Grouped { def is = s2"""
+class TraversableMatchersSpec extends Specification with ResultMatchers with Tags with Grouped with NumberOfTimes { def is = s2"""
 
-  we can check if one or several elements are present in a traversable
+ We can check the elements of a collection by using matchers
+   ${ Seq(1, 2, 3) must contain(be_>=(2)) }
+   ${ Seq(1, 2, 3) must not contain(be_>=(4)) }
+   ${ Seq(1, 2, 3) must not(contain(be_>=(4))) }
+   ${ Seq(1, 2, 3) must contain(be_>=(2)).atLeastOnce }
+   ${ Seq(1, 2, 3) must contain(be_>=(2)).exactly(2.times)          }
+   ${ Seq(1, 2, 3) must contain(be_>=(2)).atMost(2.times)           }
+   ${ Seq(1, 2, 3) must contain(be_>=(2)).atLeast(1.times)          }
+   ${ Seq(1, 2, 3) must contain(be_>=(2)).between(1.times, 2.times) }
+   ${ Seq(1, 2, 3) must contain(be_>=(0)).forall }
+   ${ Seq("hello", "world") must contain(matching(".*orld")) }
+
+   Failure messages
+   ${ (Seq(1, 2, 3) must contain(be_>=(4))                 ) returns "all elements are failing\n1 is less than 4\n2 is less than 4\n3 is less than 4\n" }
+   ${ (Seq(1, 2, 3) must not contain(be_>=(2))             ) returns "1 element is ok\n1 is less than 2\n" }
+   ${ (Seq(1, 2, 3) must contain(be_>=(3)).atLeast(2.times)) returns "2 elements are failing\n1 is less than 3\n2 is less than 3\n" }
+
+
+ We can compare a collection to another by using matchers
+
+   ${ Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(1), be_>=(2)))         }
+   ${ Seq(1, 2, 3) must contain(exactly(0, 1, 2))                              }
+   ${ Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(1), be_>=(2)).inOrder) }
+
+   ${ Seq(1, 2, 3) must contain(atLeast(be_>=(0), be_>=(1), be_>=(2)))         }
+   ${ Seq(1, 2, 3) must contain(atLeast(0, 1, 2))                              }
+
+   ${ Seq(1, 2, 3) must contain(atMost(be_>=(0), be_>=(1), be_>=(2)))          }
+   ${ Seq(1, 2, 3) must contain(atMost(0, 1, 2))                               }
+   ${ Seq(1, 2, 3) must contain(atMost(be_>=(0), be_>=(1), be_>=(2)).inOrder)  }
+
+   with the `contain` method
    ${ List(1, 2) must contain(1) }
    ${ List(1, 2, 3) must contain(3, 2) }
    ${ (List(1, 2, 3) must contain(3, 4)) returns "List(1, 2, 3) doesn't contain '4'" }
-   ${ List(1, 2, 3) must containAllOf(List(1, 3)).inOrder }
-   ${ List(1, 2, 3, 4, 5) must containAllOf(List(2, 4)).inOrder }
-   ${ List(1, 2, 3) must contain(3) and  contain(2) }
-    // corner case with type inference. If not specified 'Any', the contain 'String' Matcher is selected
-   ${ List("1", "2", "3") must contain("3") and contain("2":Any) }
+   ${ List(1, 2, 3) must contain(3) and contain(2) }
    ${ "abc" must contain('b') }
    ${ (List(1, 2) must contain(0)) returns "List(1, 2) doesn't contain '0'" }
-   with a subclass ${subclass().e1}
-   ${ Seq(1, 2, 3, 4) must have oneElementLike  { case i if i > 2 => (i % 2) must_== 0 } }
-   ${ Seq(1, 2, 3, 4) must have oneElementLike  { case i if i > 2 => i.toString must haveSize(1) } }
-   ${ Seq(1, 2, 3, 4) must have allElementsLike { case i if i > 2 => i must be_>=(1)   } }
-   ${ Seq(1, 2, 3, 4) must have allElementsLike  { case i if i > 2 => i.toString must haveSize(1) } }
-   ${ (Seq(1, 2, 3, 4) must have oneElementLike { case i if i > 3 => (i % 2) must_== 1 }) returns
-      "in List(1, 2, 3, 4)\nno element is correct\n4: '0' is not equal to '1'" }
-   ${ (Seq(1, 2, 3, 4) must have allElementsLike { case i if i > 2 => i must be_>=(4)   }) returns
-      "in List(1, 2, 3, 4)\nsome elements are not correct\n3: 3 is less than 4" }
 
-    with adapation
-    ${ List(1, 2, 3) must contain(4, 3, 2) ^^ ((i: Int, j: Int) => i-j <= 1) }
-    ${ List(1, 2, 3) must contain(3, 2, 1) ^^ ((i: Int) => be_<(10-i)) }
-    ${ List(1, 2, 3) must contain(3, 2, 1) ^^^ ((_:Int) - 1) }
+     Those are corner cases
+      - type inference. If not specified 'Any', the contain 'String' Matcher is selected
+        ${ List("1", "2", "3") must contain("3") and contain("2":Any) }
 
-  we can check if at least one or several elements are present in a traversable
-   ${ List(1, 2) must containAnyOf(Seq(1, 4)) }
-   ${ { List(1, 2, 3) must not(containAnyOf(Seq(1, 2, 4))) } returns "List(1, 2, 3) contains '1, 2'"}
+      - subclassed elements
+        ${ List(Pizza(), new Fruit()) must contain(Pizza()) }
 
-  we can check the traversable contains another element exactly once
-   ${ List(1, 2) must contain(1).exactlyOnce }
-   ${ List(1, 1) must contain(1).exactlyOnce.not }
+      - `not contain(1)` in a mutable Scope
+        ${g1.e1}
 
-  we can check if an traversable contains other elements in the same order
-    ${ List(1, 2, 3, 4) must contain(2, 4).inOrder }
-    and fails when one element is missing ${order().fail1}
-    or if the order is wrong              ${order().fail2}
-
-  we can check if an traversable has the same elements in the same order, and no more
-    ${ List("Hello", "World") must contain("Hello", "World").only.inOrder }
-    ${ List("Hello", 1) must contain("Hello", 1) }
-    ${ List("Hello", "World") must contain("Hello", "World").inOrder.only }
-    ${ List("Hello", "World", "!") must not(contain("Hello", "World").only) }
-    ${ List("Hello", "World") must not (contain("World", "Hello").only.inOrder) }
-    and show appropriate failure messages if one element doesn't match ${sameSeq().e1}
-    with a specific equality function
-    ${ List("Hello", "World") must contain("hello", "world").only ^^ ((s1, s2) => s1.toLowerCase == s2.toLowerCase) }
-    ${ List("Hello") must not(contain("hello", "world").only ^^ ((s1, s2) => s1.toLowerCase == s2.toLowerCase)) }
-
-  we can check if 2 traversables are contained in each other
-    ${ List("1", "2") must containTheSameElementsAs(Seq("2", "1")) }
-    ${ { List("1", "2", "3") must containTheSameElementsAs(Seq("2", "4", "1")) } returns Seq(
-       "List(1, 2, 3)",
-       "  is missing: 4",
-       "  must not contain: 3").mkString("\n")
-    }
-    ${ { List("1", "2", "3") must containTheSameElementsAs(Seq("2", "3", "4", "1")) } returns Seq(
-       "List(1, 2, 3)",
-       "  is missing: 4").mkString("\n")
-    }
-
-  we can use `not contain(1)` in a mutable Scope ${g1.e1}
-
-  we can check the size of an traversable
-    ${ Nil must beEmpty }
-    ${ Nil must be empty }
-    ${ (Nil must not be empty) must beFailing }
-    ${ List(1, 2) must haveSize(2) }
-    ${ List(1, 2) must have size(2) }
-    ${ List(1, 2) must not have size(1) }
-    ${ List(1, 2) must haveLength(2) }
-    ${ List(1, 2) must have length(2) }
-    ${ List(1, 2) must not have length(1) }
-
-  we can check if a sequence is sorted
-    ${ Seq(1, 2, 3) must beSorted }
-    ${ Seq(1, 2, 3) must be sorted }
-    ${ Seq(2, 1, 3) must not beSorted }
-    // this doesn't compile because of 'diverging implicit'
-    //{ Seq(2, 1, 3) must not be sorted }
-    ${ (Seq(2, 1, 3) must beSorted) returns "List(2, 1, 3) is not sorted" }
-
-  we can check the size of an Array
-    ${ Array(1, 2) must have size(2) }
-    ${ (Array(1, 2) must have size(1)).message must_== "Array(1, 2) doesn't have size 1 but size 2" }
+     It is possible to adapt the `contain` matcher
+     ${ List(1, 2, 3) must contain(4, 3, 2) ^^ ((i: Int, j: Int) => i-j <= 1) }
+     ${ List(1, 2, 3) must contain(3, 2, 1) ^^ ((i: Int) => be_<(10-i)) }
+     ${ List(1, 2, 3) must contain(3, 2, 1) ^^^ ((_:Int) - 1) }
 
   we can check if a traversable contains elements following a given pattern
     ${ List("Hello", "World") must containMatch("ll") }
@@ -109,6 +77,92 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
   we can check if a traversable contains an element with a given property
     ${ List("Hello", "World") must have(_.size >= 5) }
     ${ List("Hello", "World") must not have((_:String).size < 3) }
+
+   with the `containAllOf` method
+   ${ List(1, 2, 3) must containAllOf(List(1, 3)).inOrder }
+   ${ List(1, 2, 3, 4, 5) must containAllOf(List(2, 4)).inOrder }
+
+   with the `oneElementLike` method
+   ${ Seq(1, 2, 3, 4) must have oneElementLike  { case i if i > 2 => (i % 2) must_== 0 } }
+   ${ Seq(1, 2, 3, 4) must have oneElementLike  { case i if i > 2 => i.toString must haveSize(1) } }
+   ${ (Seq(1, 2, 3, 4) must have oneElementLike { case i if i > 3 => (i % 2) must_== 1 }) returns
+      "in List(1, 2, 3, 4)\nno element is correct\n4: '0' is not equal to '1'" }
+
+   with the `allElementsLike` method
+   ${ Seq(1, 2, 3, 4) must have allElementsLike { case i if i > 2 => i must be_>=(1)   } }
+   ${ Seq(1, 2, 3, 4) must have allElementsLike  { case i if i > 2 => i.toString must haveSize(1) } }
+   ${ (Seq(1, 2, 3, 4) must have allElementsLike { case i if i > 2 => i must be_>=(4)   }) returns
+      "in List(1, 2, 3, 4)\nsome elements are not correct\n3: 3 is less than 4" }
+
+ We can check if at least one or several elements are present in a traversable
+
+   with the `containAnyOf` method
+   ${ List(1, 2) must containAnyOf(Seq(1, 4)) }
+   ${ { List(1, 2, 3) must not(containAnyOf(Seq(1, 2, 4))) } returns "List(1, 2, 3) contains '1, 2'"}
+
+ We can check the traversable contains another element exactly once
+   List(1, 2) must contain(1).exactlyOnce
+   List(1, 1) must contain(1).exactlyOnce.not
+
+ We can check if a traversable contains other elements in the same order
+   ${ List(1, 2, 3, 4) must contain(2, 4).inOrder }
+   and fails when one element is missing ${order().fail1}
+   or if the order is wrong              ${order().fail2}
+
+ We can check if an traversable has the same elements in the same order, and no more
+   ${ List("Hello", "World") must contain("Hello", "World").only.inOrder }
+   ${ List("Hello", 1) must contain("Hello", 1) }
+   ${ List("Hello", "World") must contain("Hello", "World").inOrder.only }
+   ${ List("Hello", "World", "!") must not(contain("Hello", "World").only) }
+   ${ List("Hello", "World") must not (contain("World", "Hello").only.inOrder) }
+   and show appropriate failure messages if one element doesn't match ${sameSeq().e1}
+   with a specific equality function
+   ${ List("Hello", "World") must contain("hello", "world").only ^^ ((s1, s2) => s1.toLowerCase == s2.toLowerCase) }
+   ${ List("Hello") must not(contain("hello", "world").only ^^ ((s1, s2) => s1.toLowerCase == s2.toLowerCase)) }
+
+ Size
+ ====
+
+ We can check the size of an traversable
+    ${ Nil must beEmpty }
+    ${ Nil must be empty }
+    ${ (Nil must not be empty) must beFailing }
+    ${ List(1, 2) must haveSize(2) }
+    ${ List(1, 2) must have size(2) }
+    ${ List(1, 2) must not have size(1) }
+    ${ List(1, 2) must haveLength(2) }
+    ${ List(1, 2) must have length(2) }
+    ${ List(1, 2) must not have length(1) }
+
+ We can check the size of an Array
+    ${ Array(1, 2) must have size(2) }
+    ${ (Array(1, 2) must have size(1)).message must_== "Array(1, 2) doesn't have size 1 but size 2" }
+
+ Sorting
+ =======
+
+ We can check if a sequence is sorted
+    ${ Seq(1, 2, 3) must beSorted }
+    ${ Seq(1, 2, 3) must be sorted }
+    ${ Seq(2, 1, 3) must not beSorted }
+    // this doesn't compile because of 'diverging implicit'
+    //{ Seq(2, 1, 3) must not be sorted }
+    ${ (Seq(2, 1, 3) must beSorted) returns "List(2, 1, 3) is not sorted" }
+
+ Compare to another traversable
+ ==============================
+
+  We can check if 2 traversables are contained in each other
+   ${ List("1", "2") must containTheSameElementsAs(Seq("2", "1")) }
+   ${ { List("1", "2", "3") must containTheSameElementsAs(Seq("2", "4", "1")) } returns Seq(
+  "List(1, 2, 3)",
+  "  is missing: 4",
+  "  must not contain: 3").mkString("\n")
+   }
+   ${ { List("1", "2", "3") must containTheSameElementsAs(Seq("2", "3", "4", "1")) } returns Seq(
+  "List(1, 2, 3)",
+  "  is missing: 4").mkString("\n")
+   }
 
   we can check if a traversable has the same elements as another one
     ${ List("Hello", "World") must haveTheSameElementsAs(List("Hello", "World")) }
@@ -129,14 +183,23 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
     ${ val startsWitha = (s: String) => be_==("a"+s)
        List("Hello", "World") must haveTheSameElementsAs(List("aWorld", "aHello")) ^^ startsWitha }
 
-  Java collections can also be used with Traversable matchers
-  But generally require explicit conversion
-    ${ asList("Hello", "World") must haveSize(2) }
-    ${ collectionAsScalaIterable(asList("Hello", "World")) must containMatch("ll") }
+ With Java collections
+ =====================
 
-  Parallel collections work with any matcher
-    ${ ParSeq(1, 2, 3) must contain(1, 2, 3) }
+ Java collections can also be used with Traversable matchers but generally require explicit conversion
+   ${ asList("Hello", "World") must haveSize(2) }
+   ${ collectionAsScalaIterable(asList("Hello", "World")) must containMatch("ll") }
+
+ With Parallel collections
+ =========================
+
+ Parallel collections work with any matcher
+   ${ ParSeq(1, 2, 3) must contain(1, 2, 3) }
                                                                                                                         """
+
+  /**
+   * Examples
+   */
 
   "edge cases" - new g1 {
     e1 := {
@@ -149,13 +212,10 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
     }
   }
 
-  case class subclass() {
-    class Food
-    case class Pizza() extends Food
-    case class Fruit() extends Food
-    val diner = List(Pizza(), new Fruit())
-    def e1 = diner  must contain(Pizza())
-  }
+  class Food
+  case class Pizza() extends Food
+  case class Fruit() extends Food
+
   case class order() {
     def fail1 = (List(1, 2, 3, 4) must contain(2, 5).inOrder) returns 
                 "List(1, 2, 3, 4) doesn't contain in order '2, 5'"

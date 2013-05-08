@@ -11,6 +11,7 @@ import reflect.ClassName._
 import MatchResultMessages._
 import time.Duration
 import MatchResultLogicalCombinators._
+import scala.collection.GenTraversableOnce
 
 /**
  * The `Matcher` trait is the base trait for any Matcher.
@@ -218,9 +219,11 @@ trait Matcher[-T] { outer =>
   /**
    * @return a Matcher matching at least one element of a sequence against the current matcher
    */
-  def atLeastOnce = new Matcher[Traversable[T]] {
-    def apply[S <: Traversable[T]](seq: Expectable[S]) =
-      MatchersImplicits.verifyFunction((t: T) => outer.apply(Expectable(t))).atLeastOnce(seq.value)
+  def atLeastOnce = new Matcher[GenTraversableOnce[T]] {
+    def apply[S <: GenTraversableOnce[T]](seq: Expectable[S]) = {
+      val r = MatchersImplicits.verifyFunction((t: T) => outer.apply(Expectable(t))).atLeastOnce(seq.value)
+      result(r, seq)
+    }
   }
 
   /**

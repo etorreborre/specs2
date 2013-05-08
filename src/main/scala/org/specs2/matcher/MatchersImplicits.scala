@@ -149,14 +149,20 @@ trait MatchersImplicits extends Expectations with MatchResultCombinators with Ma
 
   /** verify the function f for all the values, stopping after the first failure */
   def forall[T, U](values: GenTraversableOnce[T])(f: T => MatchResult[U]) = verifyFunction(f).forall(values.seq.toSeq)
+  /** apply a matcher for all values */
+  def forall[T](matcher: Matcher[T]) = matcher.forall
   /** verify the function f for all the values, stopping after the first failure, where the PartialFunction is defined */
   def forallWhen[T, U](values: GenTraversable[T])(f: PartialFunction[T, MatchResult[U]]) = forall(values.filter(f.isDefinedAt))(f)
   /** verify the function f for all the values, and collect all failures */
   def foreach[T, U](values: GenTraversableOnce[T])(f: T => MatchResult[U]) = verifyFunction(f).foreach(values.seq.toSeq)
+  /** apply a matcher foreach value */
+  def foreach[T](matcher: Matcher[T]) = matcher.foreach
   /** verify the function f for all the values, and collect all failures, where the PartialFunction is defined */
   def foreachWhen[T, U](values: GenTraversable[T])(f: PartialFunction[T, MatchResult[U]]) = foreach(values.filter(f.isDefinedAt))(f)
   /** verify the function f for at least one value */
   def atLeastOnce[T, U](values: GenTraversableOnce[T])(f: T => MatchResult[U]) = verifyFunction(f).atLeastOnce(values.seq.toSeq)
+  /** apply a matcher atLeast one value */
+  def atLeastOnce[T](matcher: Matcher[T]) = matcher.atLeastOnce
   /** verify the function f for at least one value, where the PartialFunction is defined */
   def atLeastOnceWhen[T, U](values: GenTraversable[T])(f: PartialFunction[T, MatchResult[U]]) = atLeastOnce(values.filter(f.isDefinedAt))(f)
   /**
@@ -247,7 +253,8 @@ trait MatchersImplicits extends Expectations with MatchResultCombinators with Ma
       checkFailure(result)
     }
 
-    def atLeastOnce[S <: Traversable[U]](seq: S) = {
+    def atLeastOnce[S <: GenTraversableOnce[U]](ss: S) = {
+      val seq = ss.seq.toSeq
       val expectable = createExpectable(seq)
       val result =
         if (seq.isEmpty)

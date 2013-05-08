@@ -1,6 +1,7 @@
 package org.specs2.text
 
 import NotNullStrings._
+import collection.GenTraversableOnce
 
 /**
  * Quote and unquote strings
@@ -23,7 +24,7 @@ trait Quote {
   }
 
   /** quote a sequence, with commas if short, with newlines otherwise */
-  def qseq(seq: TraversableOnce[_]): String = {
+  def qseq(seq: GenTraversableOnce[_]): String = {
     val withCommas = q(seq.mkString(", "))
     if (withCommas.size < 30) withCommas
     else seq.mkString("\n", "\n  ", "\n")

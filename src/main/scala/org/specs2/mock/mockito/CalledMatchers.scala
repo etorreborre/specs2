@@ -3,12 +3,14 @@ package mock
 package mockito
 
 import control.Throwablex._
-import org.mockito.verification.{ VerificationMode }
+import org.mockito.verification.VerificationMode
 import control.Exceptions._
 import matcher._
 import org.mockito.InOrder
 import execute.{ResultLogicalCombinators, AsResult, Result}
 import ResultLogicalCombinators._
+import control.NumberOfTimes
+import control.Times
 
 /**
  * This trait provides methods to declare expectations on mock calls:
@@ -70,18 +72,12 @@ trait CalledMatchers extends NumberOfTimes with FunctionArguments with TheMockit
    */
   def got[T](t: =>T) = there was t
   /**
-   * implicit definition to be able to declare a number of calls 3.times(m).clear()
-   */
-  implicit def rangeIntToTimes(r: RangeInt): RangeIntToTimes = new RangeIntToTimes(r)
-  /**
    * class providing a apply method to be able to declare a number of calls:
    *   3.times(m).clear() is actually 3.times.apply(m).clear()
    */
-  class RangeIntToTimes(r: RangeInt) {
-    def apply[T <: AnyRef](mock: =>T) = verify(mock, org.mockito.Mockito.times(r.n))(inOrder())
+  implicit class TimesCall(t: Times) {
+    def apply[T <: AnyRef](mock: =>T) = verify(mock, org.mockito.Mockito.times(t.n))(inOrder())
   }
-  /** temporary InOrder object to accumulate mocks to verify in order */
-//  protected implicit val mockitoHasNoInOrderOrderdingByDefault: Option[InOrder] = None
   /**
    * verify that a mock has been called appropriately
    */
