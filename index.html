@@ -35,32 +35,26 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="span12">
-            <h1><a href="http://github.com/etorreborre/specs2"><img style="position: right; border: 0; width: 17%"
-                                                                    src="./images/specs2.png" alt="specs2"/></a></h1>
-            <h4>Software Specifications for Scala</h4>
+      <div class="span12">
+        <div class="hero-unit">
+          <h1><a href="http://github.com/etorreborre/specs2"><img style="position: right; border: 0; width: 17%" src="./images/specs2.png" alt="specs2" /></a></h1>
+          <h4>Software Specifications for Scala</h4>
+          <p><a class="btn btn-primary btn-large" href="#Downloads">Download</a></p>
+        </div>
 
-            <h1></h1>
+        <h2>Presentation</h2>
+        <hr/>
+        <p><s2>specs2</s2> is a library for writing executable software specifications.</p>
+        <p>
+          With <s2>specs2</s2> you can write software specifications for one class (<i>unit</i> specifications) or a full system (<i>acceptance</i> specifications):
+        </p>
 
-            <h2>Presentation</h2>
-            <hr/>
-            <p>
-                <s2>specs2</s2>
-                is a library for writing executable software specifications.
-            </p>
-            <p>
-                With
-                <s2>specs2</s2>
-                you can write software specifications for one class (<i>unit</i> specifications) or a full system (<i>acceptance</i>
-                specifications):
-            </p>
-
-            <ul class="nav nav-tabs" id="test-categories">
-                <li class="active"><a href="#unit" data-toggle="tab">Unit</a></li>
-                <li><a href="#acceptance" data-toggle="tab">Acceptance</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="unit">
+        <ul class="nav nav-tabs" id="test-categories">
+          <li class="active"><a href="#unit" data-toggle="tab">Unit</a></li>
+          <li><a href="#acceptance" data-toggle="tab">Acceptance</a></li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="unit">
             <pre class="prettyprint"><code class="language-scala">import org.specs2.mutable._
 
              class HelloWorldSpec extends Specification {
@@ -98,8 +92,28 @@
                 </div>
             </div>
         </div>
+
+        <h2>Features</h2>
+        <ul>
+          <li>Concurrent execution of examples by default</li>
+          <li><a href="http://code.google.com/p/scalacheck/">ScalaCheck</a> properties</li>
+          <li>Mocks with <a href="http://mockito.org/">Mockito</a></li>
+          <li>Data tables</li>
+          <li>AutoExamples, where the source code is extracted to describe the example</li>
+          <li>A rich library of matchers</li>
+          <ul>
+            <li>Easy to create and compose</li>
+            <li>Usable with <code>must</code> and <code>should</code></li>
+            <li>Returning "functional" results or throwing exceptions</li>
+            <li>Reusable outside of specs2 (in <a href="http://junit.org">JUnit</a> tests for example)</li>
+          </ul>
+          <li>Forms for writing <a href="http://fitnesse.org">Fitnesse</a>-like specifications (with Markdown markup)</li>
+          <li>Html reporting to create documentation for acceptance tests, to create a User Guide,...</li>
+          <li>Integration with <a href="http://code.google.com/p/simple-build-tool/">sbt</a> and JUnit tools (maven, IDEs,...)</li>
+        </ul>
+      </div>
     </div>
-</div>
+
 <div class="container">
     <div class="row">
         <div class="span12">
@@ -345,7 +359,7 @@
             <div class="footer">
                 get the source code on GitHub : <a href="http://github.com/etorreborre/specs2">etorreborre/specs2</a>
             </div>
-
+        </table>
 </div>
 
 </body>
