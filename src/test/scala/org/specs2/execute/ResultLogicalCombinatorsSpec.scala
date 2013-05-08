@@ -30,8 +30,11 @@ class ResultLogicalCombinatorsSpec extends Specification with ResultMatchers { d
  ${ (success or failure1 or success) must beSuccessful }
  ${ (failure1 or success or success) must beSuccessful }
 
-
-                                                                     """
+ And results
+ ${ (pending1 and pending2) === pending1 }
+ """
 
   def failure1 = { throw new FailureException(Failure("ko")); success }
+  def pending1 = Pending("1")
+  def pending2 = Pending("2")
 }

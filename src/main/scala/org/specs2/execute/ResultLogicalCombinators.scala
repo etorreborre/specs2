@@ -45,7 +45,7 @@ trait ResultLogicalCombinators extends Results {
               case f @ Failure(_,_,_,_)   => f
               case e @ Error(_,_)         => e
               case DecoratedResult(d, r1) => DecoratedResult(d, r.and(r1))
-              case _                      => o
+              case _                      => result
             }
           }
           case d @ DecoratedResult(_,_)     => {
