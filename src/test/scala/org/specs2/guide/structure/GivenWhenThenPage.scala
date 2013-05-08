@@ -94,6 +94,8 @@ More precisely, the functions passed to a `when` step must be of the form
  * `when(aStepParser) { case p1 :: p2 :: .. :: _ => w1 }`, where `p1` has the type extracted from `aStepParser` and `p2 .. pn` have the types of the values extracted by the previous `given` steps
  * `when(aStepParser).collect { case (p1, p2n: Seq[LUB]) => w1 }`, where `p1` has the type extracted from `aStepParser` and `p2n` is a `Seq[LUB]` where `LUB` is the least upper bound of the types of all the values extracted by the previous `given` steps
 
+`::` is the [Shapeless](https://github.com/milessabin/shapeless) `HCons` operator so don't forget at add the Shapeless dependency to your project if you are using the `GWT` trait!
+
 And similarly for `andThen` steps
 
  * `andThen(aStepParser) { case p1 :: p2 :: .. :: _ => r: R }`, where `p1` has the type extracted from `aStepParser` and `p2 .. pn` have the types of the values mapped by the previous `when` steps
