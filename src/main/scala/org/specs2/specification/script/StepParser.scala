@@ -6,6 +6,10 @@ import util.matching.Regex
 import control.Exceptions._
 import text._
 
+/**
+ * A StepParser is a function to extract a value of type `T` from a piece of text
+ * It can also strip the text from delimiters if any
+ */
 trait StepParser[T] {
   /** parse some text and extract some well-type value T */
   def parse(text: String): Either[Exception, T]
@@ -13,6 +17,9 @@ trait StepParser[T] {
   def strip(text: String) = text
 }
 
+/**
+ * A Delimited step parser uses a delimiter (`{}` by default) to know which string to extract from the text
+ */
 abstract class DelimitedStepParser[T](protected val regex: Regex = """\{([^}]+)\}""".r) extends StepParser[T] { parent =>
   override def strip(text: String) = RegexExtractor.strip(text, "".r, regex)
 
