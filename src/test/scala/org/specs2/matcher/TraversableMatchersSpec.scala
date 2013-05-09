@@ -10,6 +10,7 @@ import scala.collection.JavaConversions.collectionAsScalaIterable
 class TraversableMatchersSpec extends Specification with ResultMatchers with Tags with Grouped with NumberOfTimes { def is = s2"""
 
  We can check the elements of a collection by using matchers
+   ${ Seq(1, 2, 3) must contain(2) }
    ${ Seq(1, 2, 3) must contain(be_>=(2)) }
    ${ Seq(1, 2, 3) must not contain(be_>=(4)) }
    ${ Seq(1, 2, 3) must not(contain(be_>=(4))) }

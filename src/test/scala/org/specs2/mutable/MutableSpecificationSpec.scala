@@ -28,7 +28,6 @@ The following examples specify the functionalities for such a mutable specificat
     the first error stops an Example execution                                                       ${g2().e2}
     the first skipped expectation skips the Example execution                                        ${g2().e3}
     the failure method throws a FailureException                                                     ${g2().e4}
-
                                                                                                      """
 
   "fragments" - new g1 with HasAMutableSpec {

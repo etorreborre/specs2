@@ -51,7 +51,7 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
           }
           case other                        => textFragment(before).append(exampleFactory.newExample(description, AsResult(r)))
         }
-      fs append result.fragments
+      fs append result.middle
     }
   }
   implicit def anyAsResultIsSpecPart(r: =>Function0Result): SpecPart = new SpecPart {
@@ -96,7 +96,7 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
   def s2(content: String, Yrangepos: Boolean, texts: Seq[String], variables: Seq[SpecPart], rangeExpressions: Seq[String]) = {
     val expressions = if (Yrangepos) rangeExpressions else new Interpolated(content, texts).expressions
 
-    val fragments = (texts zip variables zip expressions).foldLeft(Fragments().overrideArgs(interpolatedArguments)) { (res, cur) =>
+    val fragments = (texts zip variables zip expressions).foldLeft(Fragments.createList()) { (res, cur) =>
       val ((text, variable), expression) = cur
 
       // always provide the latest full piece of text to the spec part for the append method
@@ -105,7 +105,7 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
       }.getOrElse((res, text))
       variable.append(res1, text1, expression)
     }
-    texts.lastOption.map(t => fragments append textFragment(t).fragments).getOrElse(fragments)
+    interpolatedArguments ^ texts.lastOption.map(t => fragments append textFragment(t).fragments).getOrElse(fragments)
   }
 
   def interpolatedArguments = args.report(noindent = true, flow = true)
