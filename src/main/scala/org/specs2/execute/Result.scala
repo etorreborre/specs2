@@ -135,11 +135,6 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
    * @return the result with no message
    */
   def mute: Result
-  /**
-   * @return the negation of this result
-   */
-  def not: Result = this
-
 }
 object Result {
 
@@ -222,6 +217,11 @@ trait Results {
   implicit def toResult(b: Boolean): Result =
     if (b) org.specs2.execute.Success("true") else org.specs2.execute.Failure("false")
 
+  def negate(r: Result) = {
+    if (r.isSuccess) Failure(negateSentence(r.message), r.expected).setExpectationsNb(r.expectationsNb)
+    else if (r.isFailure) Failure(negateSentence(r.message), r.expected).setExpectationsNb(r.expectationsNb)
+    else r
+  }
 }
 
 object Results extends Results
@@ -274,7 +274,6 @@ case class Success(m: String = "", exp: String = "")  extends Result(m, exp) {
   def setExpectationsNb(n: Int): Result = Success(m, expected, n)
 
   def mute = Success()
-  override def not = Failure(negateSentence(m), exp).setExpectationsNb(expectationsNb)
 }
 /**
  * Companion object to the Success class providing 
@@ -313,7 +312,6 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
   override def isFailure: Boolean = true
 
   def skip: Skipped = Skipped(m, e)
-  override def not = Success(negateSentence(m), e).setExpectationsNb(expectationsNb)
 }
 
 /**

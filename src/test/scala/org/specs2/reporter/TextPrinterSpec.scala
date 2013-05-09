@@ -8,10 +8,10 @@ import AnsiColors._
 import io.StringOutput
 import main.Arguments
 import execute._
-import specification.{Example, SpecificationStructure, ExecutedFragment, Fragments, ExecutingSpecification}
+import specification.{Example, SpecificationStructure, ExecutedFragment, Fragments, ExecutingSpecification, Tags}
 import matcher.DataTables
 
-class TextPrinterSpec extends Specification with DataTables { def is = s2"""
+class TextPrinterSpec extends Specification with DataTables with Tags { def is = s2"""
                                                                             
  The `TextPrinter` trait transforms a Seq of Executed Fragments to `PrintLines`
  and outputs them using a `TextResultOutput`.
@@ -104,9 +104,8 @@ class TextPrinterSpec extends Specification with DataTables { def is = s2"""
      when failing                                                                                 ${status().e12}
      when in error                                                                                ${status().e13}
 
-
  Title
- =====================
+ =====
 
  the title of a specification is displayed if it is different from the name                       ${specTitle().e1}
                                                                                                   """
@@ -134,12 +133,12 @@ class TextPrinterSpec extends Specification with DataTables { def is = s2"""
     val noindent = args(noindent = true)
     
     def e1 = print(t1 ^ ex1 ^ ex2) must 
-             containAllOf(Seq("t1",
+             contain(allOf("t1",
                      "+ e1",
                      "+ e2"))
     
     def e2 = print(noindent ^ t1 ^ "  e1"!success ^ " e2"! success) must 
-             containAllOf(Seq("t1",
+             contain(allOf("t1",
                      "+ e1",
                      "+ e2"))
   }
@@ -242,16 +241,17 @@ class TextPrinterSpec extends Specification with DataTables { def is = s2"""
 
     def e1 = {
       print(fastex3 ^ slowex1 ^ fastex2 ^ fastex3)
-      messages.messages must containAllOf(Seq("e3", "e1")).inOrder.orSkip("this example might fail sometimes")
+      messages.messages must contain(allOf("e3", "e1")).inOrder.orSkip("this example might fail sometimes")
     }
     def e2 = {
       print(args(sequential = true) ^ slowex1 ^ fastex2)
-      messages.messages must containAllOf(Seq("e1", "e2")).inOrder
+      messages.messages must contain(allOf("e1", "e2")).inOrder
     }
   }
   case class isolate() {
-    def e1 = print(new NonIsolatedSpecification) must containAllOf(Seq("+ e1", "x e2"))
-    def e2 = print(new IsolatedSpecification) must containAllOf(Seq("+ e1", "+ e2"))
+    def e1 = print(new NonIsolatedSpecification) must
+      contain(allOf("+ e1", "x e2"))
+    def e2 = print(new IsolatedSpecification) must contain(allOf("+ e1", "+ e2"))
   }
   case class stopOnFailargs() {
     def e1 = {
@@ -269,21 +269,22 @@ class TextPrinterSpec extends Specification with DataTables { def is = s2"""
     def e4 = print(t1 ^ error4) must contain("! error4") 
     def e5 = print(t1 ^ skipped5) must contain("o skip it") 
     def e6 = print(t1 ^ pending6) must containMatch("\\* todo") 
-    def e7 = print(t1 ^ "e1\nexample1" ! success) must containAllOf(Seq(
+    def e7 = print(t1 ^ "e1\nexample1" ! success) must contain(allOf(
         "+ e1",
         "  example1"))
     def e8 = print(args.report(showtimes=true) ^ t1 ! success) must containMatch("t1 \\(.*\\)")
 
     def e9 = print(t1 ^ tableOk) must contain("+ a | b")
     def e10 = print(t1 ^ tableKo) must contain("x ")
-    def e11 = print(t1 ^ tableOk) must containAllOf(Seq("+ a | b",
-                                               "  1 | 1"))
-    def e12 = print(t1 ^ tableKo) must containAllOf(Seq("x ",
-                                               "  | a | b |",
-                                               "x | 1 | 2 | '1' is not equal to '2'")) ^^ ((s1: String, s2: String) => s1.startsWith(s2))
-    def e13 = print(t1 ^ tableError) must containAllOf(Seq("! ",
-                                                  "  | a | b |",
-                                                  "! | 1 | 2 | boom")) ^^ ((s1: String, s2: String) => s1.startsWith(s2))
+    def e11 = print(t1 ^ tableOk) must contain(allOf(startWith("+ a | b"),
+                                                     startWith("  1 | 1")))
+    def e12 = print(t1 ^ tableKo) must contain(allOf(startWith("x "),
+                                                     startWith("  | a | b |"),
+                                                     startWith("x | 1 | 2 | '1' is not equal to '2'")))
+    def e13 = print(t1 ^ tableError) must contain(allOf(
+                                                  startWith("! "),
+                                                  startWith("  | a | b |"),
+                                                  startWith("! | 1 | 2 | boom")))
   }
 
   case class specTitle() {

@@ -8,7 +8,9 @@ trait NumberOfTimes {
    */
   implicit def timesFor(n: Int): Times = new Times(n)
 }
-
+trait NoNumberOfTimes extends NumberOfTimes {
+  override def timesFor(n: Int): Times = super.timesFor(n)
+}
 case class Times(n: Int) {
   def times = this
 }

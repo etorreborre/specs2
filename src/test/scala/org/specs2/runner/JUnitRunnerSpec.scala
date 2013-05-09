@@ -159,7 +159,7 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
   }
   case class sequence() extends WithNotifier {
     def e1 = {
-      messages(new Specification { def is = sequential ^ "ex1" ! ko ^ "ex2" ! ok ^ "ex3" ! ok }).map(_.split(" ").take(2).mkString(" ")) must containAllOf (Seq(
+      messages(new Specification { def is = sequential ^ "ex1" ! ko ^ "ex2" ! ok ^ "ex3" ! ok }).map(_.split(" ").take(2).mkString(" ")) must contain(allOf(
         "test started", "test failed", "test finished",
         "test started", "test finished",
         "test started", "test finished"
@@ -170,14 +170,14 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
   def integration = {
     val (spec, messages) = textJUnitRunner.runSpec((new JUnitRunnerIntegrationSpecification).getClass)
     messages.split("\n").toSeq must
-      containAllOf(Seq(
+      contain(allOf(
         "There was 1 failure:",
         "1) ex2(org.specs2.runner.JUnitRunnerIntegrationSpecification)",
         "java.lang.Exception: ko",
         "FAILURES!!!",
         "Tests run: 2,  Failures: 1"))
 
-    spec.asInstanceOf[JUnitRunnerIntegrationSpecification].messages must containAllOf(Seq("before", "ex1", "ex2", "after"))
+    spec.asInstanceOf[JUnitRunnerIntegrationSpecification].messages must contain(allOf("before", "ex1", "ex2", "after"))
   }
 }
 

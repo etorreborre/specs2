@@ -216,10 +216,10 @@ Traversables can be checked with several matchers:
  `List(1, 2, 3, 4) must containAllOf(2, 4).inOrder`
 
  * to check if only some elements are contained in the traversable
- `List(4, 2) must containAllOf(Seq(2, 4)).only`
+ `List(4, 2) must contain(allOf(2, 4)).only`
 
  * to check if only some elements are contained in the traversable and in the same order
- `List(2, 4) must containAllOf(Seq(2, 4)).only.inOrder`
+ `List(2, 4) must contain(allOf(2, 4)).only.inOrder`
 
  * to check if a sequence contains another one
  `List(2, 4) must containAllOf(List(4, 2))`
@@ -264,14 +264,16 @@ The `contain` and `haveTheSameElementsAs` matchers can be "adapted" to use a dif
 
 `^^ (f: (T, T) => Boolean)` can be used instead of `==`. For example:
 
-${snippet{ Seq(1, 2, 3) must containAllOf(Seq(4, 3, 2)) ^^ ((i: Int, j: Int) => i-j <= 1) }}
+${snippet{
+  //  Seq(1, 2, 3) must contain(allOf(4, 3, 2)) ^^ ((i: Int, j: Int) => i-j <= 1)
+  }}
 
 will check if each value in the first list is contained in the second list with possibly an error margin of 1.
 
 `^^ (f: T => Matcher[T])` can be used to compare values with a matcher. For example: ${snippet{
 
 val equalIgnoreCase = (s: String) => be_==(s.toLowerCase)
-Seq("Eric", "Bob") must containAllOf(Seq("bob", "eric")) ^^ equalIgnoreCase
+//Seq("Eric", "Bob") must contain(allOf("bob", "eric")) ^^ equalIgnoreCase
 }}
 
 `^^^ (f: T => S)` can be used to compare values with a function. For example: ${snippet{
@@ -279,7 +281,7 @@ Seq("Eric", "Bob") must containAllOf(Seq("bob", "eric")) ^^ equalIgnoreCase
 case class User(id: Int, name: String)
 // 8<--
 val usersFromDb = Seq(User(id=1, name="eric"), User(id=2, name="Bob"))
-usersFromDb must containAllOf(Seq(User(id=0, name="eric"), User(id=0, name="Bob"))) ^^^ ((_:User).copy(id=0))
+//usersFromDb must contain(allOf(User(id=0, name="eric"), User(id=0, name="Bob"))) ^^^ ((_:User).copy(id=0))
 }}
 
 _Note_: the last operator used here is slightly different. It is `^^^` instead of simply `^^` because the same function is used to "adapt" both values at the same time. On the other hand the first 2 operators are more or less using a function taking 2 parameters.

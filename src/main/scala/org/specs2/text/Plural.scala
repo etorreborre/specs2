@@ -17,9 +17,14 @@ trait Plural {
     def plural(v: Int): String     = if (v > 1) s+"s" else s
     def plural(v: Long): String    = if (v > 1) s+"s" else s
 
-    def bePlural(v: Int)  = s.plural(v) + (if (v > 1) " are" else " is")
-    def bePlural(v: Long) = s.plural(v) + (if (v > 1) " are" else " is")
+
+    def bePlural(v: Int)  = s.plural(v) + " " + beVerbPlural(v)
+    def bePlural(v: Long) = s.plural(v) + " " + beVerbPlural(v)
   }
+
+  def beVerbPlural(v: Int)  = (if (v > 1) "are" else "is")
+  def beVerbPlural(v: Long) = (if (v > 1) "are" else "is")
+
   /** @return a Quantity which can be applied to a string to pluralize it */
   implicit def quantity(i: Int) = Quantity(i)
   case class Quantity(i: Int) {

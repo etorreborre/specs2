@@ -103,7 +103,7 @@ class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
 
   def executeContains(s: SpecificationStructure with StringOutput, messages: String*) = {
     FragmentExecution.executeBodies(s.content).view.force
-    s.messages must containAllOf(messages).inOrder
+    s.messages must contain(allOf(messages:_*)).inOrder
   }
 
 }

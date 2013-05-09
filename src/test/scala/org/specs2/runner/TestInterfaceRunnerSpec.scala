@@ -90,7 +90,7 @@ class TestInterfaceRunnerSpec extends Specification with Groups with Tags { def 
       "junitxml,console"                    !! true      ! false  ! false    ! true       |
       "junitxml,html,console"               !! true      ! true   ! false    ! true       |
       "junitxml,markup,console"             !! true      ! false  ! true     ! true       |> { (arguments, c, h, m, j) =>
-        runner.exporters(arguments.split(","), handler).map(_.getClass.getSimpleName) must containAllOf(selectedExporters(c, h, m, j))
+        runner.exporters(arguments.split(","), handler).map(_.getClass.getSimpleName) must contain(allOf(selectedExporters(c, h, m, j):_*))
       }
 
     }
@@ -153,11 +153,11 @@ class TestInterfaceRunnerSpec extends Specification with Groups with Tags { def 
         results.append(messages)
         clear()
       }
-      atLeastOnce(results)((msgs: Seq[String]) => msgs aka results.mkString("\n") must containAllOf(Seq("console export", "stored")).inOrder)
+      atLeastOnce(results)((msgs: Seq[String]) => msgs aka results.mkString("\n") must contain(allOf("console export", "stored")).inOrder)
     }
     e2 := {
       reporter.report(spec)(Arguments("console html"))
-      messages must containAllOf(Seq("stored", "html export")).inOrder
+      messages must contain(allOf("stored", "html export")).inOrder
     }
   }
 }

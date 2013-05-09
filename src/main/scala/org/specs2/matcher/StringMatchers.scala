@@ -67,7 +67,7 @@ trait StringBaseMatchers { outer =>
   /** alias for beMatching but matching just a fragment of the string*/
   def =~(r: Regex) = new BeMatchingRegex((".*"+r.toString+".*").r)
   /** matches if b.startsWith(a) */
-  def startWith(t: =>String) = new Matcher[String] { 
+  def startWith(t: String) = new Matcher[String] {
     def apply[S <: String](b: Expectable[S]) = {
       val a = t
       result(b.value!= null && a!= null && b.value.startsWith(a),

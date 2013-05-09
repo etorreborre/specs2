@@ -39,7 +39,7 @@ class TerminationMatchersSpec extends script.Specification with TerminationMatch
   "termination" - new group {
     eg := {
       val out = new StringOutput { }
-      val terminated = (1 to 5).foreach (i => {Thread.sleep(50); out.println(i) }) must not terminate(retries=5, sleep=20.millis)
+      val terminated = (1 to 5).foreach (i => {Thread.sleep(80 * i); out.println(i) }) must not terminate(retries=5, sleep=20.millis)
       Thread.sleep(300) // wait until all the messages are possibly written to out if the action was not terminated
       terminated and (out.messages must not contain("3"))
     }

@@ -82,15 +82,18 @@ trait AnyBaseMatchers {
   }
 
   /** matches if t.toSeq.exists(_ == v) */
-  def beOneOf[T](t: T*): Matcher[T] = new Matcher[T] {
+  def beOneOf[T](t: T*): Matcher[T] = OneOf(t)
+  case class OneOf[T](t: Seq[T]) extends Matcher[T] {
     def apply[S <: T](y: Expectable[S]) = {
-      val x = t.toSeq
+      val x = t
       result(x.exists(_ == y.value), 
-             y.description + " is one of " + q(x.mkString(", ")), 
-             y.description + " is not one of " + q(x.mkString(", ")), 
+             y.description + s" is contained in " + q(x.mkString(", ")),
+             y.description + s" is not contained in " + q(x.mkString(", ")),
              y)
     }
   }
+  /** alias for beOneOf */
+  def beAnyOf[T](t: T*): Matcher[T] = OneOf(t)
 
   /** matches if the value returns a successful result when applied to a PartialFunction */
   def beLike[T](pattern: PartialFunction[T, MatchResult[_]]) = new Matcher[T] {
@@ -237,7 +240,10 @@ trait AnyBeHaveMatchers { outer: AnyMatchers =>
     def be_==~[S](s: =>S)(implicit convert: S => T) = result(outer.be_==~[T, S](s))
     def equalTo(t: T) = result(outer.be_==(t))
     def asNullAs[T](a: =>T) = result(outer.beAsNullAs(a))
-    def oneOf(t: T*) = result(beOneOf(t:_*))
+    def beAnyOf(t: T*) = result(outer.beAnyOf(t:_*))
+    def beOneOf(t: T*) = result(outer.beOneOf(t:_*))
+    def anyOf(t: T*) = result(outer.beAnyOf(t:_*))
+    def oneOf(t: T*) = result(outer.beOneOf(t:_*))
     def beNull = result(outer.beNull)
     def anInstanceOf[T : ClassTag] = result(beAnInstanceOf[T])
   }
@@ -274,7 +280,8 @@ trait AnyBeHaveMatchers { outer: AnyMatchers =>
   def beLikeA[T](pattern: =>PartialFunction[T, MatchResult[_]]) = beLike(pattern)
   def likeA[T](pattern: =>PartialFunction[T, MatchResult[_]]) = beLike(pattern)
   def empty[T <: Any { def isEmpty: Boolean }] = beEmpty[T]
-  def oneOf[T](t: T*) = (beOneOf(t:_*))
+  def oneOf[T](t: T*) = beOneOf(t:_*)
+  def anyOf[T](t: T*) = beAnyOf(t:_*)
   def klass[T : ClassTag]: Matcher[Any] = outer.haveClass[T]
   def superClass[T : ClassTag]: Matcher[Any] = outer.haveSuperclass[T]
   def interface[T : ClassTag]: Matcher[Any] = outer.haveInterface[T]
