@@ -21,12 +21,12 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
   implicit def stringIsSpecPart(s: =>String): SpecPart = new SpecPart {
     def append(fs: Fragments, text: String, expression: String = "") = {
       val s1 = tryOr(s)(e => s"[${e.getMessage}]")
-      fs append Fragments.createList(Text(text+s1))
+      fs append textFragment(text+s1).fragments
     }
   }
 
   implicit def exampleIsSpecPart(e: Example): SpecPart = new SpecPart {
-    def append(fs: Fragments, text: String, expression: String = "") = fs append { text ^ e }
+    def append(fs: Fragments, text: String, expression: String = "") = fs.append(textFragment(text)).append(e)
   }
 
   implicit def markdownLinkIsSpecPart(link: MarkdownLink): SpecPart = stringIsSpecPart(link.toString)
@@ -46,19 +46,19 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
       val result =
         implicitly[AsResult[R]] match {
           case v : AnyValueAsResult[_] => AsResult(r) match {
-            case DecoratedResult(t, e: Error) => before ^ exampleFactory.newExample(description, e)
-            case DecoratedResult(t, _)        => textStart(text + t.notNull)
+            case DecoratedResult(t, e: Error) => textFragment(before).append(exampleFactory.newExample(description, e))
+            case DecoratedResult(t, _)        => textFragment(text).append(textFragment(t.notNull).fragments)
           }
-          case other                        => before ^ exampleFactory.newExample(description, AsResult(r))
+          case other                        => textFragment(before).append(exampleFactory.newExample(description, AsResult(r)))
         }
-      fs append result
+      fs append result.fragments
     }
   }
   implicit def anyAsResultIsSpecPart(r: =>Function0Result): SpecPart = new SpecPart {
     def append(fs: Fragments, text: String, expression: String = "") = asResultIsSpecPart(AsResult(r)).append(fs, text, expression)
   }
   implicit def formIsSpecPart(f: =>Form): SpecPart = new SpecPart {
-    def append(fs: Fragments, text: String, expression: String = "") = fs append { text ^ Fragments.createList(Forms.formsAreExamples(f.executeForm)) }
+    def append(fs: Fragments, text: String, expression: String = "") = fs.append(textFragment(text)).append(Forms.formsAreExamples(f.executeForm))
   }
   implicit def toFormIsSpecPart(f: { def form: Form}): SpecPart = new SpecPart {
     def append(fs: Fragments, text: String, expression: String = "") = fs append { formIsSpecPart(f.form).append(text, expression) }
@@ -67,21 +67,21 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
     def append(fs: Fragments, text: String, expression: String = "") = f match {
       // in the case of a tag which applies to the example just before,
       // if the tag is just separated by some empty text, append the tag close to the example
-      case t: TaggedAs if text.trim.isEmpty => fs append { t ^ text }
-      case other                            => fs append { text ^ other }
+      case t: TaggedAs if text.trim.isEmpty => fs.append(t).append(textFragment(text))
+      case other                            => fs.append(textFragment(text)).add(other)
     }
   }
   implicit def fragmentsIsSpecPart(fragments: Fragments): SpecPart = new SpecPart {
-    def append(fs: Fragments, text: String, expression: String = "") = fs append { text ^ fragments }
+    def append(fs: Fragments, text: String, expression: String = "") = fs.append(textFragment(text)).append(fragments)
   }
-  implicit def fragmentsFragmentIsSpecPart(fs: FragmentsFragment): SpecPart = new SpecPart {
-    def append(fs: Fragments, text: String, expression: String = "") = fs append { text ^ fs }
+  implicit def fragmentsFragmentIsSpecPart(ffs: FragmentsFragment): SpecPart = new SpecPart {
+    def append(fs: Fragments, text: String, expression: String = "") = fs.append(textFragment(text)).append(ffs.fragments)
   }
   implicit def argumentsIsSpecPart(a: Arguments): SpecPart = new SpecPart {
-    def append(fs: Fragments, text: String, expression: String = "") = fs append { text ^ a }
+    def append(fs: Fragments, text: String, expression: String = "") = fs.append(textFragment(text)).add(a)
   }
   implicit def specStructureIsSpecPart(s: SpecificationStructure): SpecPart = new SpecPart {
-    def append(fs: Fragments, text: String, expression: String = "") = fs append { text ^ s.content }
+    def append(fs: Fragments, text: String, expression: String = "") = fs.append(textFragment(text)).append(s.content)
   }
 
   implicit class specificationInStringContext(sc: StringContext) {
@@ -96,7 +96,7 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
   def s2(content: String, Yrangepos: Boolean, texts: Seq[String], variables: Seq[SpecPart], rangeExpressions: Seq[String]) = {
     val expressions = if (Yrangepos) rangeExpressions else new Interpolated(content, texts).expressions
 
-    val fragments = (texts zip variables zip expressions).foldLeft(Fragments() ^ interpolatedArguments) { (res, cur) =>
+    val fragments = (texts zip variables zip expressions).foldLeft(Fragments().overrideArgs(interpolatedArguments)) { (res, cur) =>
       val ((text, variable), expression) = cur
 
       // always provide the latest full piece of text to the spec part for the append method
@@ -105,7 +105,7 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
       }.getOrElse((res, text))
       variable.append(res1, text1, expression)
     }
-    texts.lastOption.map(t => fragments.add(Text(t))).getOrElse(fragments)
+    texts.lastOption.map(t => fragments append textFragment(t).fragments).getOrElse(fragments)
   }
 
   def interpolatedArguments = args.report(noindent = true, flow = true)

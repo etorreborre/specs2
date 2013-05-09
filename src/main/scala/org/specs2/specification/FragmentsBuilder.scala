@@ -16,7 +16,7 @@ import control.ImplicitParameters
  *  - a group of fragments (when including another specification for example)
  * 
  */
-trait   FragmentsBuilder extends ExamplesFactory with ImplicitParameters { outer =>
+trait FragmentsBuilder extends ExamplesFactory with ImplicitParameters { outer =>
 
   /**
    * Methods for chaining fragments
