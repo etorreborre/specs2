@@ -33,13 +33,13 @@ The following examples specify the functionalities for such a mutable specificat
 
   "fragments" - new g1 with HasAMutableSpec {
     e1 := { contentString must contain("it should") }
-    e2 := { contentList must contain("Text(it should)", "Example(have one example)", "Example(have failing example)").inOrder }
-    e3 := { contentList must contain("Step", "Text(it should)").inOrder }
+    e2 := { contentList must containAllOf(Seq("Text(it should)", "Example(have one example)", "Example(have failing example)")).inOrder }
+    e3 := { contentList must containAllOf(Seq("Step", "Text(it should)")).inOrder }
     e4 := { fragments.toList must beLike { case SpecStart(_,a,_) :: other => a.xonly must beTrue } }
-    e5 := { contentList must contain("Text(examples can)", "Text(be nested)", "Example(at level 1)", "Example(at level 2)").inOrder }
+    e5 := { contentList must containAllOf(Seq("Text(examples can)", "Text(be nested)", "Example(at level 1)", "Example(at level 2)")).inOrder }
     e6 := { contentString must contain("should expectation") }
     e7 := { contentString must contain("should also") }
-    e8 := { contentList must contain("Example(example 1)", "Example(example 2)") }
+    e8 := { contentList must containAllOf(Seq("Example(example 1)", "Example(example 2)")) }
     e9 := { contentList must contain("Example(several expectations)") }
   }
 

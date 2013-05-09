@@ -74,7 +74,7 @@ trait MatchResult[+T] extends ResultLike {
   def applyMatcher(m: Matcher[T]): MatchResult[T] = apply(m)
 
   /** @return the negation of this result */
-  def negate: MatchResult[T]
+  def not: MatchResult[T]
 
   /** apply the matcher */
   def be(m: Matcher[T]) = {
@@ -113,7 +113,7 @@ case class MatchSuccess[T] private[specs2](ok: () => String, ko: () => String, e
   def koMessage = ko()
   override def toResult = Success(okMessage)
 
-  def negate: MatchResult[T] = MatchFailure(koMessage, okMessage, expectable)
+  def not: MatchResult[T] = MatchFailure(koMessage, okMessage, expectable)
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
   override def mute = MatchSuccess("", "", expectable)
   override def updateMessage(f: String => String) = copy(ko = () => f(koMessage))
@@ -130,7 +130,7 @@ case class MatchFailure[T] private[specs2](ok: () => String, ko: () => String, e
   val exception = new Exception(koMessage)
   override def toResult = Failure(koMessage, okMessage, exception.getStackTrace.toList, details)
 
-  def negate: MatchResult[T] = MatchSuccess(koMessage, okMessage, expectable)
+  def not: MatchResult[T] = MatchSuccess(koMessage, okMessage, expectable)
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
 
   override def mute                               = MatchFailure.create("", "", expectable, details)
@@ -147,7 +147,7 @@ object MatchFailure {
 }
 
 case class MatchSkip[T] private[specs2](override val message: String, expectable: Expectable[T]) extends MatchResult[T] {
-  def negate: MatchResult[T] = this
+  def not: MatchResult[T] = this
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
   override def toResult = Skipped(message)
   override def mute = MatchSkip("", expectable)
@@ -155,7 +155,7 @@ case class MatchSkip[T] private[specs2](override val message: String, expectable
   override def orThrow: MatchSkip[T] = throw new SkipException(toResult)
 }
 case class MatchPending[T] private[specs2](override val message: String, expectable: Expectable[T]) extends MatchResult[T] {
-  def negate: MatchResult[T] = this
+  def not: MatchResult[T] = this
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
   override def toResult = Pending(message)
   override def mute = MatchPending("", expectable)
@@ -165,13 +165,13 @@ case class MatchPending[T] private[specs2](override val message: String, expecta
 case class NotMatch[T] private[specs2](m: MatchResult[T]) extends MatchResult[T] {
   val expectable = m.expectable
   override def evaluate[S >: T] = m
-  def negate: MatchResult[T] = NeutralMatch(m)
+  def not: MatchResult[T] = NeutralMatch(m)
   def apply(matcher: Matcher[T]): MatchResult[T] = m(matcher.not)
 }
 case class NeutralMatch[T] private[specs2](m: MatchResult[T]) extends MatchResult[T] {
   val expectable = m.expectable
   override def evaluate[S >: T] = m
-  def negate: MatchResult[T] = NotMatch(m)
+  def not: MatchResult[T] = NotMatch(m)
   def apply(matcher: Matcher[T]): MatchResult[T] = m(matcher)
 }
 class AndMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T]) extends MatchResult[T] {
@@ -195,7 +195,7 @@ class AndMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T
         }
     }
   }
-  def negate: MatchResult[T] = new OrMatch(m1.negate, m2.negate).evaluate
+  def not: MatchResult[T] = new OrMatch(m1.not, m2.not).evaluate
   def apply(matcher: Matcher[T]): MatchResult[T] = m1 and m2(matcher)
   override def toResult = m1.toResult and m2.toResult
 }
@@ -205,7 +205,7 @@ class AndNotMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResul
   lazy val m2 = second
 
   override def evaluate[S >: T] = m1 and m2.not
-  def negate: MatchResult[T] = new OrMatch(m1.not, m2).evaluate
+  def not: MatchResult[T] = new OrMatch(m1.not, m2).evaluate
   def apply(matcher: Matcher[T]): MatchResult[T] = m1 and m2(matcher.not)
 }
 class OrMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T]) extends MatchResult[T] {
@@ -229,7 +229,7 @@ class OrMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T]
       }
     }
   }
-  def negate: MatchResult[T] = new AndMatch(m1.not, m2.not).evaluate
+  def not: MatchResult[T] = new AndMatch(m1.not, m2.not).evaluate
   def apply(matcher: Matcher[T]): MatchResult[T] = m1 or m2(matcher)
   override def toResult = m1.toResult or m2.toResult
 }
@@ -238,7 +238,7 @@ class OrNotMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult
   lazy val m2 = second
   val expectable = m1.expectable
   override def evaluate[S >: T] = m1 or m2.not
-  def negate: MatchResult[T] = new AndMatch(m1.not, m2).evaluate
+  def not: MatchResult[T] = new AndMatch(m1.not, m2).evaluate
   def apply(matcher: Matcher[T]): MatchResult[T] = m1 or evaluate(matcher.not)
 }
 

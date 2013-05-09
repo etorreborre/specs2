@@ -153,11 +153,11 @@ class TestInterfaceRunnerSpec extends Specification with Groups with Tags { def 
         results.append(messages)
         clear()
       }
-      atLeastOnce(results)((msgs: Seq[String]) => msgs aka results.mkString("\n") must contain("console export", "stored").inOrder)
+      atLeastOnce(results)((msgs: Seq[String]) => msgs aka results.mkString("\n") must containAllOf(Seq("console export", "stored")).inOrder)
     }
     e2 := {
       reporter.report(spec)(Arguments("console html"))
-      messages must contain("stored", "html export").inOrder
+      messages must containAllOf(Seq("stored", "html export")).inOrder
     }
   }
 }

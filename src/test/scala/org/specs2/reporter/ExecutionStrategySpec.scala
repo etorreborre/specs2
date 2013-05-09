@@ -10,36 +10,36 @@ class ExecutionStrategySpec extends mutable.Specification {
 
   "If there is a step with stopOnFail" >> {
     "if one example in the previous block was not ok, then skip all other examples" >> {
-      report(spec1) must contain(
+      report(spec1) must containAllOf(Seq(
         "spec1",
         "+ ex1",
         "+ ex2",
         "x ex3",
         " ko",
         "o ex4",
-        "o ex5").inOrder
+        "o ex5")).inOrder
     }
 
     "if one example is ko, but not in the directly preceding block, then skip no examples" >> {
-      report(spec2) must contain(
+      report(spec2) must containAllOf(Seq(
         "spec2",
         "x ex1",
         " ko",
         "+ ex2",
         "+ ex3",
         "+ ex4",
-        "x ex5").inOrder
+        "x ex5")).inOrder
     }
 
     "if the spec is sequential one example is ko, but not in the directly preceding block, then skip all examples" >> {
-      report(spec3) must contain(
+      report(spec3) must containAllOf(Seq(
         "spec3",
         "x ex1",
         " ko",
         "+ ex2",
         "+ ex3",
         "o ex4",
-        "o ex5").inOrder
+        "o ex5")).inOrder
     }
   }
 

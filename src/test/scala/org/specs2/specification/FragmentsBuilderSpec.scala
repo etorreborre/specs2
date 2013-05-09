@@ -89,7 +89,7 @@ Other elements
     eg  := content.specStart.arguments.xonly
     eg  := content.specStart.specName must beTheSameAs(content.specEnd.specName)
     eg  := content.specStart.title must_== "title"
-    eg  := content.fragments.map(_.toString) must contain(lazyfy("SpecStart(title)")).exactlyOnce
+    eg  := content.fragments.map(_.toString) must containAllOf(Seq("SpecStart(title)")).exactlyOnce
     eg  := content.specStart.arguments.xonly must beTrue
     eg  := (content2.specStart.title must_== "title") and (content2.specStart.arguments.xonly must beTrue)
     eg  :=  content6.specStart.title must not(beEmpty)

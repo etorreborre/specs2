@@ -36,7 +36,7 @@ trait MatchResultLogicalCombinators {
       result.fold(m1 => m1,
                   m1 => combineMatchResult(m1).and(execute(m1.expectable.applyMatcher(other))))
     /** @return the negation of this result */
-    def not: MatchResult[T] = result.fold(m1 => m1.negate, m1 => m1.negate)
+    def not: MatchResult[T] = result.fold(m1 => m1.not, m1 => m1.not)
 
     /** only consider this result if the condition is true */
     def when(b: Boolean, m: String= ""): MatchResult[T] = if (b) mr else MatchSuccess(m, m, expectable)

@@ -21,48 +21,46 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
    ${ Seq(1, 2, 3) must contain(be_>=(2)).between(1.times, 2.times) }
    ${ Seq(1, 2, 3) must contain(be_>=(0)).forall }
    ${ Seq("hello", "world") must contain(matching(".*orld")) }
+   ${ Seq("hello", "world") must contain((s: String) => s.size > 2) }
+   ${ Seq("1", "2", "3") must contain("3") and contain("2":Any) }
+   ${ Seq[Food](Pizza(), new Fruit()) must contain(equalTo(Pizza())) }
+   `not contain(1)` must work in a mutable Scope ${g1.e1}
+   a string inclusion must work as well  ${ "abc" must contain('b') }
+
 
    Failure messages
-   ${ (Seq(1, 2, 3) must contain(be_>=(4))                 ) returns "all elements are failing\n1 is less than 4\n2 is less than 4\n3 is less than 4\n" }
+   ${ (Seq(1, 2, 3) must contain(4)                        ) returns "List(1, 2, 3) does not contain 4"}
+   ${ (Seq(1, 2, 3) must contain(be_>=(4))                 ) returns "all elements are not ok\n1 is less than 4\n2 is less than 4\n3 is less than 4\n" }
    ${ (Seq(1, 2, 3) must not contain(be_>=(2))             ) returns "1 element is ok\n1 is less than 2\n" }
-   ${ (Seq(1, 2, 3) must contain(be_>=(3)).atLeast(2.times)) returns "2 elements are failing\n1 is less than 3\n2 is less than 3\n" }
+   ${ (Seq(1, 2, 3) must contain(be_>=(3)).atLeast(2.times)) returns "2 elements are not ok\n1 is less than 3\n2 is less than 3\n" }
 
 
  We can compare a collection to another by using matchers
 
+   ${ Seq(1, 2, 3) must contain(exactly(1, 2, 3))                              }
    ${ Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(1), be_>=(2)))         }
-   ${ Seq(1, 2, 3) must contain(exactly(0, 1, 2))                              }
    ${ Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(1), be_>=(2)).inOrder) }
 
+   ${ Seq(1, 2, 3) must contain(atLeast(3, 1))                                 }
    ${ Seq(1, 2, 3) must contain(atLeast(be_>=(0), be_>=(1), be_>=(2)))         }
-   ${ Seq(1, 2, 3) must contain(atLeast(0, 1, 2))                              }
 
+   ${ Seq(1, 2)    must contain(atMost(2, 1, 3))                               }
    ${ Seq(1, 2, 3) must contain(atMost(be_>=(0), be_>=(1), be_>=(2)))          }
-   ${ Seq(1, 2, 3) must contain(atMost(0, 1, 2))                               }
    ${ Seq(1, 2, 3) must contain(atMost(be_>=(0), be_>=(1), be_>=(2)).inOrder)  }
 
-   with the `contain` method
-   ${ List(1, 2) must contain(1) }
-   ${ List(1, 2, 3) must contain(3, 2) }
-   ${ (List(1, 2, 3) must contain(3, 4)) returns "List(1, 2, 3) doesn't contain '4'" }
-   ${ List(1, 2, 3) must contain(3) and contain(2) }
-   ${ "abc" must contain('b') }
-   ${ (List(1, 2) must contain(0)) returns "List(1, 2) doesn't contain '0'" }
+   Failure messages
+   ${ (Seq(1, 2, 3) must contain(exactly(1, 2))                                ) returns "List(1, 2, 3) does not have exactly 2 correct values\nthere are no more available checks for 3\n" }
+   ${ (Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(1), be_>=(5)))        ) returns "List(1, 2, 3) does not have exactly 3 correct values\n3 is less than 5 and there are no more available checks for 3\n" }
+   ${ (Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(2), be_<=(1)).inOrder)) returns "List(1, 2, 3) does not have exactly 3 correct values in order\n3 is greater than 1\n" }
 
-     Those are corner cases
-      - type inference. If not specified 'Any', the contain 'String' Matcher is selected
-        ${ List("1", "2", "3") must contain("3") and contain("2":Any) }
+   ${ (Seq(1, 2, 3) must contain(atLeast(4, 1))                                ) returns
+         "List(1, 2, 3) does not have at least 2 correct values\n'2' is not equal to '4' and there are no more available checks for 2\n'3' is not equal to '4' and there are no more available checks for 3\n" }
+   ${ (Seq(1, 2, 3) must contain(atLeast(be_>=(0), be_>=(1), be_<=(1)))        ) returns "List(1, 2, 3) does not have at least 3 correct values\n3 is greater than 1 and there are no more available checks for 3\n" }
 
-      - subclassed elements
-        ${ List(Pizza(), new Fruit()) must contain(Pizza()) }
+   ${ (Seq(1, 2)    must contain(atMost(1, 3))                                 ) returns "List(1, 2) has at most 2 correct values" }
+   ${ (Seq(1, 2)    must contain(atMost(1))                                    ) returns "List(1, 2) does not have at most 1 correct value\nthere are no more available checks for 2\n" }
 
-      - `not contain(1)` in a mutable Scope
-        ${g1.e1}
 
-     It is possible to adapt the `contain` matcher
-     ${ List(1, 2, 3) must contain(4, 3, 2) ^^ ((i: Int, j: Int) => i-j <= 1) }
-     ${ List(1, 2, 3) must contain(3, 2, 1) ^^ ((i: Int) => be_<(10-i)) }
-     ${ List(1, 2, 3) must contain(3, 2, 1) ^^^ ((_:Int) - 1) }
 
   we can check if a traversable contains elements following a given pattern
     ${ List("Hello", "World") must containMatch("ll") }
@@ -105,20 +103,20 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
    List(1, 1) must contain(1).exactlyOnce.not
 
  We can check if a traversable contains other elements in the same order
-   ${ List(1, 2, 3, 4) must contain(2, 4).inOrder }
+   ${ List(1, 2, 3, 4) must containAllOf(Seq(2, 4)).inOrder }
    and fails when one element is missing ${order().fail1}
    or if the order is wrong              ${order().fail2}
 
  We can check if an traversable has the same elements in the same order, and no more
-   ${ List("Hello", "World") must contain("Hello", "World").only.inOrder }
-   ${ List("Hello", 1) must contain("Hello", 1) }
-   ${ List("Hello", "World") must contain("Hello", "World").inOrder.only }
-   ${ List("Hello", "World", "!") must not(contain("Hello", "World").only) }
-   ${ List("Hello", "World") must not (contain("World", "Hello").only.inOrder) }
+   ${ List("Hello", "World") must containAllOf(Seq("Hello", "World")).only.inOrder }
+   ${ List("Hello", 1) must containAllOf(Seq("Hello", 1)) }
+   ${ List("Hello", "World") must containAllOf(Seq("Hello", "World")).inOrder.only }
+   ${ List("Hello", "World", "!") must not(containAllOf(Seq("Hello", "World")).only) }
+   ${ List("Hello", "World") must not (containAllOf(Seq("World", "Hello")).only.inOrder) }
    and show appropriate failure messages if one element doesn't match ${sameSeq().e1}
    with a specific equality function
-   ${ List("Hello", "World") must contain("hello", "world").only ^^ ((s1, s2) => s1.toLowerCase == s2.toLowerCase) }
-   ${ List("Hello") must not(contain("hello", "world").only ^^ ((s1, s2) => s1.toLowerCase == s2.toLowerCase)) }
+   ${ List("Hello", "World") must containAllOf(Seq("hello", "world")).only ^^ ((s1, s2) => s1.toLowerCase == s2.toLowerCase) }
+   ${ List("Hello") must not(containAllOf(Seq("hello", "world")).only ^^ ((s1, s2) => s1.toLowerCase == s2.toLowerCase)) }
 
  Size
  ====
@@ -194,7 +192,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
  =========================
 
  Parallel collections work with any matcher
-   ${ ParSeq(1, 2, 3) must contain(1, 2, 3) }
+   ${ ParSeq(1, 2, 3) must containAllOf(Seq(1, 2, 3)) }
                                                                                                                         """
 
   /**
@@ -217,9 +215,9 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
   case class Fruit() extends Food
 
   case class order() {
-    def fail1 = (List(1, 2, 3, 4) must contain(2, 5).inOrder) returns 
+    def fail1 = (List(1, 2, 3, 4) must containAllOf(Seq(2, 5)).inOrder) returns
                 "List(1, 2, 3, 4) doesn't contain in order '2, 5'"
-    def fail2 = (List(1, 2, 3, 4) must contain(4, 2).inOrder) returns  
+    def fail2 = (List(1, 2, 3, 4) must containAllOf(Seq(4, 2)).inOrder) returns
                  "List(1, 2, 3, 4) doesn't contain in order '4, 2'"
   }
 
@@ -242,9 +240,11 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
   }
 
   case class sameSeq() {
-    def e1 = (List("Hello", "World") must contain("Hello2", "World2").inOrder.only) returns
+    def e1 = (List("Hello", "World") must containAllOf(Seq("Hello2", "World2")).inOrder.only) returns
              "List(Hello, World) doesn't contain in order 'Hello2, World2'"
   }
 
   def lowerCaseEquality = (_:String).toLowerCase == (_:String).toLowerCase
+
+  val xtag = tag("x")
 }                                                                                          

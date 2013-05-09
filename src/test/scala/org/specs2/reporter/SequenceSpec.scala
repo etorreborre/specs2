@@ -51,12 +51,12 @@ class SequenceSpec extends Specification with ScalaCheck with ArbitraryFragments
     }
     def e5 = {
       val fragments: Fragments = "intro" ^ step("1") ^ ex1 ^ ex2 ^ step("2") ^ step("3") ^ ex1 ^ ex2
-      selectSequence(fragments).map((s: FragmentSeq) => s.fragments.toString) must contain(
+      selectSequence(fragments).map((s: FragmentSeq) => s.fragments.toString) must containAllOf(Seq(
         "List(SpecStart(Object), Text(intro), Step)",
         "List(Example(ex1), Example(ex2))",
         "List(Step)",
         "List(Step)",
-        "List(Example(ex1), Example(ex2), SpecEnd(Object))").inOrder
+        "List(Example(ex1), Example(ex2), SpecEnd(Object))")).inOrder
     }
   }
 
@@ -68,18 +68,18 @@ class SequenceSpec extends Specification with ScalaCheck with ArbitraryFragments
     def e2 = {
       val spec = new Specification { def is = sequential ^ example("e1") ^ step("s1") ^ example("e2") }
       reporter.report(spec)(main.Arguments())
-      reporter.messages must contain("e1", "s1", "e2").inOrder
+      reporter.messages must containAllOf(Seq("e1", "s1", "e2")).inOrder
     }
     def e3 = {
       val inner = new Specification { def is = sequential ^ "i1" ! ok ^ "i2" ! ok}
       val fragments: Fragments = "intro" ^ step("1") ^ ex1 ^ ex2 ^ step("2") ^ inner ^ step("3") ^ ex1 ^ ex2
-      selectSequence(fragments).map((s: FragmentSeq) => (s.fragments, s.arguments.sequential).toString) must contain(
+      selectSequence(fragments).map((s: FragmentSeq) => (s.fragments, s.arguments.sequential).toString) must containAllOf(Seq(
         "(List(SpecStart(Object), Text(intro), Step),false)",
         "(List(Example(ex1), Example(ex2)),false)",
         "(List(Step),false)",
         "(List(SpecStart(Specification), Example(i1), Example(i2), SpecEnd(Specification)),true)",
         "(List(Step),false)",
-        "(List(Example(ex1), Example(ex2), SpecEnd(Object)),false)").inOrder
+        "(List(Example(ex1), Example(ex2), SpecEnd(Object)),false)")).inOrder
 
     }
   }

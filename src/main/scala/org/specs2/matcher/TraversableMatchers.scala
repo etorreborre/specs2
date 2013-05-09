@@ -6,9 +6,11 @@ import data.Sized
 import text.Quote._
 import text.Plural._
 import collection.Iterablex._
+import collection.Seqx._
 import MatchersImplicits._
 import scala.collection.{GenSeq, GenTraversableOnce, GenTraversable}
-import execute.{ResultExecution, Result}
+import execute._
+import control.Times
 
 /**
  * Matchers for traversables
@@ -17,49 +19,63 @@ trait TraversableMatchers extends TraversableBaseMatchers with TraversableBeHave
 object TraversableMatchers extends TraversableMatchers
 
 private[specs2]
-trait TraversableBaseMatchers extends LazyParameters with ImplicitParameters { outer =>
+trait TraversableBaseMatchersLowImplicits { this: TraversableBaseMatchers =>
+
+  /** this allows the contain(string) matcher for StringMatchers to be used with a Traversable */
+  implicit def stringMatcherIsTraversableMatcher(m: Matcher[String]): Matcher[GenTraversableOnce[String]] =
+    containWithMatcherIsTraversableMatcher(contain(matcherIsContainCheck(m)))
+}
+
+private[specs2]
+trait TraversableBaseMatchers extends LazyParameters with ImplicitParameters with TraversableBaseMatchersLowImplicits { outer =>
   
   trait TraversableMatcher[T] extends Matcher[GenTraversableOnce[T]]
   private type IP = ImplicitParam
-  
-  /** match if a traversable contains at least one element matching m */
-  def contain[T](m: Matcher[T]): ContainWithMatcher[T] = new ContainWithMatcher(m)
-  def contain[T](cm: ContainWithMatcherSeq[T]): ContainWithMatcherSeq[T] = cm
-  /** match if a traversable contains at least one element matching t */
-  def contain[T](t: =>T) = new ContainMatcher(Seq(t))
 
-  def exactly[T](ms: Matcher[T]*)        : ContainWithMatcherSeq[T] = new ContainWithMatcherSeq(ms).exactly
-  def exactly[T](ts: T*)(implicit p: IP) : ContainWithMatcherSeq[T] = new ContainWithMatcherSeq(ts.map(t => new BeTypedEqualTo(t))).exactly
-
-  def allOf[T](ms: Matcher[T]*)        : ContainWithMatcherSeq[T] = new ContainWithMatcherSeq(ms).atLeast
-  def allOf[T](ts: T*)(implicit p: IP) : ContainWithMatcherSeq[T] = new ContainWithMatcherSeq(ts.map(t => new BeTypedEqualTo(t))).atLeast
-
-  def atLeast[T](ms: Matcher[T]*)        : ContainWithMatcherSeq[T] = new ContainWithMatcherSeq(ms).atLeast
-  def atLeast[T](ts: T*)(implicit p: IP) : ContainWithMatcherSeq[T] = new ContainWithMatcherSeq(ts.map(t => new BeTypedEqualTo(t))).atLeast
-
-  def atMost[T](ms: Matcher[T]*)        : ContainWithMatcherSeq[T] = new ContainWithMatcherSeq(ms).atMost
-  def atMost[T](ts: T*)(implicit p: IP) : ContainWithMatcherSeq[T] = new ContainWithMatcherSeq(ts.map(t => new BeTypedEqualTo(t))).atMost
-
-  implicit def containWithMatcherIsTraversableMatcher[T](cm: ContainWithMatcher[T]): Matcher[GenTraversableOnce[T]] = new Matcher[GenTraversableOnce[T]] {
-    def apply[S <: GenTraversableOnce[T]](t: Expectable[S]) = cm(t)
+  implicit def matcherIsContainCheck[T](m: Matcher[T]): ContainCheck[T] = new ContainCheck[T] {
+    def check    = (t: T) => AsResult(m(Expectable(t)))
+    def checkNot = (t: T) => AsResult(m.not(Expectable(t)))
+    def messages(expectable: String, successes: Seq[Result], failures: Seq[Result]) =
+      ContainCheck.genericMessages(expectable, successes, failures)
   }
 
-  implicit def containWithSingleValueIsContainWithMatcher[T](cv: ContainWithSingleValue[T]): ContainWithMatcher[T] = new ContainWithMatcher[T](new BeTypedEqualTo(cv.t()))
+  implicit def valueIsTypedContainCheck[T](expected: T): ContainCheck[T] = new ContainCheck[T] {
+    private lazy val matcher = new BeTypedEqualTo(expected)
+    def check    = (t: T) => AsResult(matcher(Expectable(t)))
+    def checkNot = (t: T) => AsResult(matcher.not(Expectable(t)))
+    def messages(expectable: String, successes: Seq[Result], failures: Seq[Result]) =
+      (s"$expectable contains $expected", s"$expectable does not contain $expected")
+  }
 
-  implicit def containWithSingleValueIsMatcher[T](cv: ContainWithSingleValue[T]): Matcher[GenTraversableOnce[T]] =
-    containWithSingleValueIsContainWithMatcher(cv)
+  implicit def functionIsContainCheck[T, R : AsResult](f: T => R): ContainCheck[T] = new ContainCheck[T] {
+    def check    = (t: T) => AsResult(f(t))
+    def checkNot = (t: T) => AsResult(f(t)).not
+    def messages(expectable: String, successes: Seq[Result], failures: Seq[Result]) =
+      ContainCheck.genericMessages(expectable, successes, failures)
+  }
 
-  /** match if a traversable contains (seq2). n is a dummy paramter to allow overloading */
-  def containAllOf[T](seq: Seq[T]): ContainMatcher[T] = new ContainMatcher(seq)
-  /** match if traversable contains (t1, t2) */
-  def contain[T](t: LazyParameter[T]*): ContainMatcher[T] = new ContainMatcher(t.map(_.value))
+  implicit def containWithMatcherIsTraversableMatcher[T, U <: T](cm: ContainWithResult[T]): Matcher[GenTraversableOnce[U]] = new Matcher[GenTraversableOnce[U]] {
+    def apply[S <: GenTraversableOnce[U]](t: Expectable[S]) = cm(t)
+  }
+
+  def contain[T](check: ContainCheck[T]): ContainWithResult[T] = new ContainWithResult(check)
+
+  def contain[T](cm: ContainWithMatcherSeq[T]): ContainWithMatcherSeq[T] = cm
+
+  def exactly[T](checks: ContainCheck[T]*) : ContainWithMatcherSeq[T] = new ContainWithMatcherSeq(checks).exactly
+  def allOf[T](checks: ContainCheck[T]*)   : ContainWithMatcherSeq[T] = new ContainWithMatcherSeq(checks).atLeast
+  def atLeast[T](checks: ContainCheck[T]*) : ContainWithMatcherSeq[T] = new ContainWithMatcherSeq(checks).atLeast
+  def atMost[T](checks: ContainCheck[T]*)  : ContainWithMatcherSeq[T] = new ContainWithMatcherSeq(checks).atMost
+
+  /** match if a traversable contains all the elements of seq (and maybe more) */
+  def containAllOf[T](seq: Seq[T]) = contain(atLeast(seq:_*))
   /** match if a traversable contains one of (t1, t2) */
-  def containAnyOf[T](seq: Seq[T]): ContainAnyOfMatcher[T] = new ContainAnyOfMatcher(seq)
+  def containAnyOf[T](seq: Seq[T]) = if (seq.isEmpty) beEmpty else contain(atLeast(seq.reduceLeft(_ or _)))
 
   /** match if traversable contains (x matches p) */
-  def containPattern[T](t: =>String): ContainLikeMatcher[T] = containLike[T](t, "pattern")
+  def containPattern[T](t: =>String) = containMatch[T](".*"+t+".*")
   /** match if traversable contains (x matches .*+t+.*) */
-  def containMatch[T](t: =>String): ContainLikeMatcher[T] = containLike[T](".*"+t+".*", "match")
+  def containMatch[T](t: =>String) = contain(new BeMatching(t))
 
   /** does a containAll comparison in both ways */
   def containTheSameElementsAs[T](seq: Seq[T]): Matcher[Traversable[T]] = new Matcher[Traversable[T]] {
@@ -78,7 +94,12 @@ trait TraversableBaseMatchers extends LazyParameters with ImplicitParameters { o
   }
 
   /**
+   * DEPRECATED MATCHERS
+   */
+
+  /**
    * Matches if there is one element in the traversable verifying the `function` parameter: `(traversable.exists(function(_))`
+   * @deprecated(message="use contain(function) instead", since="2.0")
    */
   def have[T](function: T => Boolean) = new Matcher[GenTraversableOnce[T]]{
     def apply[S <: GenTraversableOnce[T]](traversable: Expectable[S]) = {
@@ -89,17 +110,31 @@ trait TraversableBaseMatchers extends LazyParameters with ImplicitParameters { o
     }
   }
 
-  /** Matches if there is at least one matching a "like" function */
+  /**
+   * Matches if there is at least one matching a "like" function
+   * @deprecated(message="use contain(like(partialFunction))" instead, since="2.0")
+   */
   def haveOneElementLike[T, S](like: PartialFunction[T, MatchResult[S]]) = HaveOneElementLike(like)
+  /**
+   * Matches if there is at least one matching a "like" function
+   * @deprecated(message="use contain(like(partialFunction))" instead, since="2.0")
+   */
   def oneElementLike[T, S](like: PartialFunction[T, MatchResult[S]]) = haveOneElementLike(like)
 
-  /** Matches if all the elements are matching a "like" function */
+  /**
+   * Matches if all elements are matching a "like" function
+   * @deprecated(message="use contain(like(partialFunction)).forall" instead, since="2.0")
+   */
   def haveAllElementsLike[T, S](like: PartialFunction[T, MatchResult[S]]) = HaveAllElementsLike(like)
+  /**
+   * Matches if all elements are matching a "like" function
+   * @deprecated(message="use contain(like(partialFunction)).forall" instead, since="2.0")
+   */
   def allElementsLike[T, S](like: PartialFunction[T, MatchResult[S]]) = haveAllElementsLike(like)
 
   /**
    * Matches if there l contains the same elements as the Traversable `traversable`.<br>
-   * This verification does not consider the order of the elements but checks the traversables recursively
+   * @deprecated(message="use contain(atLeast(seq.mappartialFunction)).forall" instead, since="2.0")
    */
   def haveTheSameElementsAs[T](l: =>Traversable[T], equality: (T, T) => Boolean = (_:T) == (_:T)) =
     new HaveTheSameElementsAs(l.toSeq, equality)
@@ -142,19 +177,12 @@ trait TraversableBaseMatchers extends LazyParameters with ImplicitParameters { o
 
 private[specs2]
 trait TraversableBeHaveMatchers extends LazyParameters { outer: TraversableMatchers =>
+
   implicit def traversable[T](s: MatchResult[GenTraversableOnce[T]]) = new TraversableBeHaveMatchers(s)
   class TraversableBeHaveMatchers[T](s: MatchResult[GenTraversableOnce[T]]) {
-    def contain(m: Matcher[T]) = s match {
-      case NotMatch(r) => (new ContainWithMatcher[T](m.not))(r.expectable)
-      case other       => (new ContainWithMatcher[T](m))(s.expectable)
-    }
-    def contain(cm: ContainWithMatcher[T]) = s match {
-      case NotMatch(r) => (cm.not)(r.expectable)
-      case other       => cm(s.expectable)
-    }
-    def contain(t: LazyParameter[T], ts: LazyParameter[T]*) = s match {
-      case NotMatch(r) => new ContainNotMatchResult(s(outer.contain((t +: ts):_*)), outer.contain((t +: ts):_*))
-      case other       => new ContainMatchResult(s, outer.contain((t +: ts):_*))
+    def contain(check: ContainCheck[T]) = s match {
+      case NotMatch(r) => r.expectable.applyMatcher(containWithMatcherIsTraversableMatcher(outer.contain(check.not)))
+      case other       => s.expectable.applyMatcher(containWithMatcherIsTraversableMatcher(outer.contain(check)))
     }
     def containMatch(t: =>String) = s(outer.containMatch(t))
     def containPattern(t: =>String) = s(outer.containPattern(t))
@@ -205,7 +233,7 @@ trait AbstractContainMatchResult[T] extends MatchResult[GenTraversableOnce[T]] {
   lazy val matchResult = s(matcher)
 
   override def toResult = matchResult.toResult
-  def negate: MatchResult[GenTraversableOnce[T]] = matchResult.negate
+  def not: MatchResult[GenTraversableOnce[T]] = matchResult.not
   def apply(matcher: Matcher[GenTraversableOnce[T]]): MatchResult[GenTraversableOnce[T]] = matchResult(matcher)
 }
 
@@ -410,14 +438,34 @@ case class HaveAllElementsLike[T, U](like: PartialFunction[T, MatchResult[U]]) e
 import control.NumberOfTimes._
 import text.Plural._
 
-case class ContainWithSingleValue[+T](t: () => T)
+trait ContainCheck[T] { outer =>
+  def check: T => Result
+  def checkNot: T => Result
 
-case class ContainWithMatcher[T](m: Matcher[T], timesMin: Option[Times] = Some(1.times), timesMax: Option[Times] = None) {
+  def messages(expectable: String, successes: Seq[Result], failures: Seq[Result]): (String, String)
+
+  def not = new ContainCheck[T] {
+    def check: T => Result = outer.checkNot
+    def checkNot: T => Result = outer.check
+    def messages(expectable: String, successes: Seq[Result], failures: Seq[Result]) = outer.messages(expectable, successes, failures)
+  }
+}
+
+object ContainCheck {
+  def genericMessages(expectable: String, successes: Seq[Result], failures: Seq[Result]) = {
+    def elementsAre(results: Seq[Result]) =
+      (if (results.size == (successes.size+failures.size)) "all elements are" else results.size.beQty("element"))+" ok"
+
+    (elementsAre(successes)+successes.map(_.message).mkString("\n", "\n", "\n"),
+     negateSentence(elementsAre(failures))+failures.map(_.message).mkString("\n", "\n", "\n"))
+  }
+}
+
+case class ContainWithResult[T](check: ContainCheck[T], timesMin: Option[Times] = Some(1.times), timesMax: Option[Times] = None) {
   def apply[S <: GenTraversableOnce[T]](t: Expectable[S]) = {
     val seq = t.value.seq.toSeq
-    val (successes, failures) = seq.map(e => m(Expectable(e))).partition(_.isSuccess)
-    val (okMessage, koMessage) = ((if (successes.size == seq.size) "all elements are" else successes.size.beQty("element"))+" ok"+successes.map(_.message).mkString("\n", "\n", "\n"),
-                                  (if (failures.size == seq.size) "all elements are" else failures.size.beQty("element"))+" failing"+failures.map(_.message).mkString("\n", "\n", "\n"))
+    val (successes, failures) = seq.map(check.check).partition(_.isSuccess)
+    val (okMessage, koMessage) = check.messages(t.description, successes, failures)
 
     (timesMin, timesMax) match {
       case (None,             None)             => Matcher.result(successes.size == seq.size,                     okMessage, koMessage, t)
@@ -438,30 +486,51 @@ case class ContainWithMatcher[T](m: Matcher[T], timesMin: Option[Times] = Some(1
 
   def forall = copy(timesMin = None, timesMax = None)
 
-  def not = copy(m = m.not, timesMin = timesMax, timesMax = timesMin)
+  def not = copy(check = check.not, timesMin = timesMax, timesMax = timesMin)
 }
 
-case class ContainWithMatcherSeq[T](ms: Seq[Matcher[T]], containsAtLeast: Option[Boolean] = None, containsAtMost: Option[Boolean] = None, checkOrder: Boolean = true) extends Matcher[GenTraversableOnce[T]] {
+case class ContainWithMatcherSeq[T](checks: Seq[ContainCheck[T]],
+                                    containsAtLeast: Boolean = true,
+                                    containsAtMost: Boolean = false,
+                                    checkOrder: Boolean = false) extends Matcher[GenTraversableOnce[T]] {
+
   def apply[S <: GenTraversableOnce[T]](t: Expectable[S]) = {
     val seq = t.value.seq.toSeq
-    Matcher.result(true,                     "", "", t)
-//    val (successes, failures) = seq.map(e => m(Expectable(e))).partition(_.isSuccess)
-//    val (okMessage, koMessage) = ((if (successes.size == seq.size) "all elements are" else successes.size.beQty("element"))+" ok"+successes.map(_.message).mkString("\n", "\n", "\n"),
-//      (if (failures.size == seq.size) "all elements are" else failures.size.beQty("element"))+" failing"+failures.map(_.message).mkString("\n", "\n", "\n"))
-//
-//    (timesMin, timesMax) match {
-//      case (None,             None)             => Matcher.result(successes.size == seq.size,                     okMessage, koMessage, t)
-//      case (Some(Times(min)), None)             => Matcher.result(successes.size >= min,                          okMessage, koMessage, t)
-//      case (None,             Some(Times(max))) => Matcher.result(successes.size <= max,                          okMessage, koMessage, t)
-//      case (Some(Times(min)), Some(Times(max))) => Matcher.result(successes.size >= min && successes.size <= max, okMessage, koMessage, t)
-//    }
+
+    // results for each element, either checked in order or greedily from the list of checks
+    val results: Seq[Result] =
+      if (checkOrder) (seq zip checks).map { case (s, c) => c.check(s) }
+      else            seq.foldLeft((Seq[Result](), checks)) { (res, cur) =>
+        val (results, remainingChecks) = res
+        val checksAgainstCurrentElement = remainingChecks.view.map(c => (c, c.check(cur)))
+        (results :+ checksAgainstCurrentElement.map(_._2).foldLeft(Failure("there are no more available checks for "+cur): Result) { (res, cur) => cur or res }, checksAgainstCurrentElement.removeFirst(_._2.isSuccess).map(_._1))
+      }._1
+
+    lazy val (successes, failures) = results.partition(_.isSuccess)
+
+    val qty =
+      if      (containsAtLeast && containsAtMost) s"exactly ${checks.size}"
+      else if (containsAtLeast)                   s"at least ${checks.size}"
+      else if (containsAtMost)                    s"at most ${checks.size}"
+      else                                        s"${checks.size}"
+
+    val order = if (checkOrder) " in order" else ""
+    val values = s"correct ${"value".plural(checks.size)}$order"
+    val okMessage = s"${t.description} has $qty $values"
+    val koMessage = negateSentence(okMessage) + (if (failures.isEmpty) "" else failures.mkString("\n", "\n", "\n"))
+
+    (containsAtLeast, containsAtMost) match {
+      case (true,  false) => Matcher.result(successes.size >= checks.size && checks.size <= seq.size, okMessage , koMessage, t)
+      case (false, true)  => Matcher.result(successes.size <= checks.size && checks.size >= seq.size, okMessage , koMessage, t)
+      case _              => Matcher.result(successes.size == seq.size,                               okMessage,  koMessage, t)
+    }
   }
 
-  def atLeast = copy(containsAtLeast = Some(true))
-  def atMost  = copy(containsAtMost = Some(true))
-  def exactly = atLeast.atMost
+  def atLeast = copy(containsAtLeast = true, containsAtMost = false)
+  def atMost  = copy(containsAtLeast = false, containsAtMost = true)
+  def exactly = copy(containsAtLeast = true, containsAtMost = true)
 
   def inOrder = copy(checkOrder = true)
 
-  override def not = copy(ms = ms.map(_.not), containsAtLeast = containsAtMost, containsAtMost = containsAtLeast)
+  override def not = copy(checks = checks.map(_.not), containsAtLeast = containsAtMost, containsAtMost = containsAtLeast)
 }

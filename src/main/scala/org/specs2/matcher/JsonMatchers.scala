@@ -105,7 +105,7 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersLowImplicits { oute
       }
     }
     override def not: JsonPairMatcher = new JsonPairMatcher(key, value) {
-      override def apply[S <: String](s: Expectable[S]) = super.apply(s).negate
+      override def apply[S <: String](s: Expectable[S]) = super.apply(s).not
     }
     private[specs2]
     def not(when: Boolean): JsonPairMatcher = if (when) this.not else this
@@ -123,7 +123,7 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersLowImplicits { oute
       }
     }
     override def not: JsonValueMatcher = new JsonValueMatcher(value) {
-      override def apply[S <: String](s: Expectable[S]) = super.apply(s).negate
+      override def apply[S <: String](s: Expectable[S]) = super.apply(s).not
     }
     private[specs2]
     def not(when: Boolean): JsonValueMatcher = if (when) this.not else this
@@ -169,7 +169,7 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersLowImplicits { oute
     }
 
     override def not: JsonDeepPairMatcher = new JsonDeepPairMatcher(key, value) {
-      override def apply[S <: String](s: Expectable[S]) = super.apply(s).negate
+      override def apply[S <: String](s: Expectable[S]) = super.apply(s).not
     }
     private[specs2]
     def not(when: Boolean): JsonDeepPairMatcher = if (when) this.not else this
@@ -187,7 +187,7 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersLowImplicits { oute
     }
 
     override def not: JsonDeepValueMatcher = new JsonDeepValueMatcher(value) {
-      override def apply[S <: String](s: Expectable[S]) = super.apply(s).negate
+      override def apply[S <: String](s: Expectable[S]) = super.apply(s).not
     }
     private[specs2]
     def not(when: Boolean): JsonDeepValueMatcher = if (when) this.not else this

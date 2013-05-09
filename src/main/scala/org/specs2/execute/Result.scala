@@ -10,8 +10,8 @@ import scalaz.{Foldable, Monoid}
 import Foldable._
 import collection.Seqx._
 import text.Message.concat
+import text.Sentences._
 import execute.ResultExecution._
-
 
 /**
  * The result of an execution, either:
@@ -135,6 +135,10 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
    * @return the result with no message
    */
   def mute: Result
+  /**
+   * @return the negation of this result
+   */
+  def not: Result = this
 
 }
 object Result {
@@ -270,7 +274,7 @@ case class Success(m: String = "", exp: String = "")  extends Result(m, exp) {
   def setExpectationsNb(n: Int): Result = Success(m, expected, n)
 
   def mute = Success()
-
+  override def not = Failure(negateSentence(m), exp).setExpectationsNb(expectationsNb)
 }
 /**
  * Companion object to the Success class providing 
@@ -309,6 +313,7 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
   override def isFailure: Boolean = true
 
   def skip: Skipped = Skipped(m, e)
+  override def not = Success(negateSentence(m), e).setExpectationsNb(expectationsNb)
 }
 
 /**

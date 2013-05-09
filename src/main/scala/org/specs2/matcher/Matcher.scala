@@ -111,7 +111,7 @@ trait Matcher[-T] { outer =>
    * @see MatchResult.not
    */
   def not = new Matcher[T] {
-    def apply[U <: T](a: Expectable[U]) = outer(a).negate
+    def apply[U <: T](a: Expectable[U]) = outer(a).not
   }
   /**
    * the logical and between 2 matchers

@@ -6,7 +6,7 @@ import specification.{AcceptanceCreationPath, MutableCreationPath, AllExpectatio
 import scalaz.Scalaz._
 import execute.Result
 
-class FragmentsBuilderSpec extends Specification with AllExpectations with GivenWhenThen {
+class FragmentsBuilderSpec extends Specification with AllExpectations {
 
   "Creating fragments must maintain a tree showing all the creation paths for each block" >> {
     spec1.content
@@ -47,7 +47,7 @@ class FragmentsBuilderSpec extends Specification with AllExpectations with Given
   }
   "It is possible to collect all the fragments which are created on a given 'path'" >> {
     val example = spec1.content.examples(2)
-    spec1.fragmentsTo(example) must contain(example)
+    spec1.fragmentsTo(example) must contain(be_==(example))
   }
 
   "Fragments creation with Unit" >> {

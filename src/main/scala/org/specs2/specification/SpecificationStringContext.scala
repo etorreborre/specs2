@@ -11,6 +11,7 @@ import text.{CodeMarkup, NoMarkup, Interpolated}
 import control.Exceptions._
 import scala.xml.Elem
 import html.MarkdownLink
+import specification.TagsFragments.{TaggedAs, AsSection, TaggingFragment}
 
 /**
  * Allow to use fragments inside interpolated strings starting with s2 in order to build the specification content
@@ -63,7 +64,12 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
     def append(fs: Fragments, text: String, expression: String = "") = fs append { formIsSpecPart(f.form).append(text, expression) }
   }
   implicit def fragmentIsSpecPart(f: Fragment): SpecPart = new SpecPart {
-    def append(fs: Fragments, text: String, expression: String = "") = fs append { text ^ f }
+    def append(fs: Fragments, text: String, expression: String = "") = f match {
+      // in the case of a tag which applies to the example just before,
+      // if the tag is just separated by some empty text, append the tag close to the example
+      case t: TaggedAs if text.trim.isEmpty => fs append { t ^ text }
+      case other                            => fs append { text ^ other }
+    }
   }
   implicit def fragmentsIsSpecPart(fragments: Fragments): SpecPart = new SpecPart {
     def append(fs: Fragments, text: String, expression: String = "") = fs append { text ^ fragments }
