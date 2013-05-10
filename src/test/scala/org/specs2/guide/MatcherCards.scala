@@ -203,11 +203,17 @@ readability.
 object TraversableMatchers extends Card {
   def title = "Traversable"
   def text = s2"""
-Traversables can be checked with several matchers:
+Traversables can be checked with several matchers.
 
- * to check if a traversable is empty
- `Nil must be empty`
- `List(1, 2, 3) must not be empty`
+If you want to check the size of a `Traversable`
+
+ * to check if it is empty
+ ${snippet{Seq() must be empty}}
+ ${snippet{Seq(1, 2, 3) must not be empty}}
+
+ * to check the size of an iterable
+ `List(1, 2) must have size(2)`
+ `List(1, 2) must have length(2)` // equivalent to size
 
  * to check if some elements are contained in the traversable
  `List(1, 2, 3) must contain(3, 2)`
@@ -230,10 +236,6 @@ Traversables can be checked with several matchers:
 
  * to check if a sequence contains any element of another one
  `List(2, 4) must containAnyOf(List(4, 2))`
-
- * to check the size of an iterable
- `List(1, 2) must have size(2)`
- `List(1, 2) must have length(2)` // equivalent to size
 
  * to check if a `Traversable[String]` contains matching strings
  `List("Hello", "World") must containMatch("ll")        // matches with .*ll.*`

@@ -19,7 +19,6 @@ class UserGuide extends UserGuidePage { def is = "User Guide".title ^ s2"""
   ${ "\"how to\" tips " ~ ("to improve your specifications", new HowTo) }
   ${ "the ***specs2*** " ~ ("philosophy", new Philosophy)               }
   ${ "the ***specs2*** " ~ ("design", new Design)                       }
-
-                                                                         """
+                                                                        """
 
 }
