@@ -19,7 +19,7 @@ class MatchersImplicitsSpec extends Specification with ResultMatchers {
     def nested =
       forall(Seq(1)) { i =>
         forall(Seq(2)) { j =>
-          sys.error("boom")
+          sys.error("boom"); true
         }
       }
     nested must throwAn[ErrorException]("boom")

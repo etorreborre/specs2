@@ -13,6 +13,7 @@ import Result.ResultFailureMonoid
 import scala.collection.{GenTraversable, GenTraversableOnce}
 import ResultLogicalCombinators._
 import text.Sentences
+import control.Times
 
 /**
 * This trait provides implicit definitions from MatchResults and Booleans to Results.
@@ -27,84 +28,86 @@ trait MatchersImplicits extends Expectations with MatchResultCombinators with Ma
    * Add functionalities to functions returning matchers so that they can be combined before taking a value and
    * returning actual matchers
    */
-  implicit def matcherFunction[S, T](f: S => Matcher[T]) = new MatcherFunction(f)
-  implicit def matcherFunction2[T](f: T => Matcher[T]) = new MatcherFunction2(f)
-  implicit def matcherFunction3[S, T](f: S => MatchResult[T]) = new MatcherFunction3(f)
+  implicit class resultFunction[T, R : AsResult](f: T => R) {
+    private val cc: ContainWithResult[T] = ContainWithResult(ContainChecks.functionIsContainCheck(f))
 
-  class MatcherFunction[S, T](f: S => Matcher[T]) {
-  
-    /**
-     * @return a function which will return a matcher checking a sequence of objects
-     */
-    def toSeq = new Function1[Seq[S], Matcher[Seq[T]]] {
-      def apply(s: Seq[S]) = new SeqMatcher(s, f)
-    }
+    def forall                          : ContainWithResult[T] = cc.forall
+    def foreach                         : ContainWithResult[T] = cc.foreach
+    def atLeastOnce                     : ContainWithResult[T] = cc.atLeastOnce
+    def atMostOnce                      : ContainWithResult[T] = cc.atMostOnce
+    def atLeast(n: Times)               : ContainWithResult[T] = cc.atLeast(n)
+    def atLeast(n: Int)                 : ContainWithResult[T] = cc.atLeast(n)
+    def atMost(n: Times)                : ContainWithResult[T] = cc.atMost(n)
+    def atMost(n: Int)                  : ContainWithResult[T] = cc.atMost(n)
+    def between(min: Times, max: Times) : ContainWithResult[T] = cc.between(min, max)
+    def between(min: Int, max: Int)     : ContainWithResult[T] = cc.between(min, max)
+    def exactly(n: Times)               : ContainWithResult[T] = cc.exactly(n)
+    def exactly(n: Int)                 : ContainWithResult[T] = cc.exactly(n)
 
-    /**
-     * @return a function which will return a matcher checking a set of objects
-     */
-    def toSet = new Function1[Set[S], Matcher[Set[T]]] {
-      def apply(s: Set[S]) = new SetMatcher(s, f)
-    }
+    def forall(values: GenTraversableOnce[T])      = cc.forall     (createExpectable(values))
+    def foreach(values: GenTraversableOnce[T])     = cc.foreach    (createExpectable(values))
+    def atLeastOnce(values: GenTraversableOnce[T]) = cc.atLeastOnce(createExpectable(values))
+    def atMostOnce(values: GenTraversableOnce[T])  = cc.atMostOnce (createExpectable(values))
+  }
+
+  implicit class matcherContainResult[T](m: Matcher[T]) { outer =>
+    private val cc: ContainWithResult[T] = ContainWithResult(ContainChecks.matcherIsContainCheck(m))
+
+    def forall                          : ContainWithResult[T] = cc.forall
+    def foreach                         : ContainWithResult[T] = cc.foreach
+    def atLeastOnce                     : ContainWithResult[T] = cc.atLeastOnce
+    def atMostOnce                      : ContainWithResult[T] = cc.atMostOnce
+    def atLeast(n: Times)               : ContainWithResult[T] = cc.atLeast(n)
+    def atLeast(n: Int)                 : ContainWithResult[T] = cc.atLeast(n)
+    def atMost(n: Times)                : ContainWithResult[T] = cc.atMost(n)
+    def atMost(n: Int)                  : ContainWithResult[T] = cc.atMost(n)
+    def between(min: Times, max: Times) : ContainWithResult[T] = cc.between(min, max)
+    def between(min: Int, max: Int)     : ContainWithResult[T] = cc.between(min, max)
+    def exactly(n: Times)               : ContainWithResult[T] = cc.exactly(n)
+    def exactly(n: Int)                 : ContainWithResult[T] = cc.exactly(n)
+
+    def forall(values: GenTraversableOnce[T])     : MatchResult[GenTraversableOnce[T]] = cc.forall     (createExpectable(values))
+    def foreach(values: GenTraversableOnce[T])    : MatchResult[GenTraversableOnce[T]] = cc.foreach    (createExpectable(values))
+    def atLeastOnce(values: GenTraversableOnce[T]): MatchResult[GenTraversableOnce[T]] = cc.atLeastOnce(createExpectable(values))
+    def atMostOnce(values: GenTraversableOnce[T]) : MatchResult[GenTraversableOnce[T]] = cc.atMostOnce (createExpectable(values))
+  }
+
+
+  implicit class MatcherFunction[S, T](f: S => Matcher[T]) {
+    /** @return a function which will return a matcher checking a sequence of objects  */
+    def toSeq = (s: Seq[S]) => new SeqMatcher(s, f)
+
+    /** @return a function which will return a matcher checking a set of objects */
+    def toSet = (s: Set[S]) => new SetMatcher(s, f)
 
   }
 
-  class MatcherFunction2[T](f: T => Matcher[T]) {
-    /**
-     * @return a function which will return the composition of a matcher and a function
-     */
+  implicit class InvariantMatcherFunction[T](f: T => Matcher[T]) {
+    /** @return a function which will return the composition of a matcher and a function */
     def ^^^[A](g: A => T) = (a: A) => 
       new Matcher[A] {
-        def apply[B <: A](b: Expectable[B]) = {
-          val r = f(g(a)).apply(b.map(g))
-          result(r, b)
-        }
+        def apply[B <: A](b: Expectable[B]) = { result(f(g(a)).apply(b.map(g)), b) }
       }
 
-    /**
-     * check that the function is valid for all value, stopping after the first failure
-     */
-    def forall(values: Seq[T]): MatchResult[Seq[T]] = verifyFunction((t: T) => f(t).apply(Expectable(t))).forall(values)
-    /**
-     * check that the function is valid for each value, showing all the failures
-     */
-    def foreach(values: Seq[T]): MatchResult[Seq[T]] = verifyFunction((t: T) => f(t).apply(Expectable(t))).foreach(values)
-    /**
-     * check that the function is valid at least once
-     */
-    def atLeastOnce(values: Seq[T]): MatchResult[Seq[T]] = verifyFunction((t: T) => f(t).apply(Expectable(t))).atLeastOnce(values)
-  }
+    private def applyMatcher = (t: T) => f(t)(createExpectable(t))
 
-  class MatcherFunction3[S, T](f: S => MatchResult[T]) {
-    /**
-     * check that the function is valid for all value, stopping after the first failure
-     */
-    def forall(values: Seq[S]): MatchResult[Seq[S]] = verifyFunction(f).forall(values)
-    /**
-     * check that the function is valid for each value, showing all the failures
-     */
-    def foreach(values: Seq[S]): MatchResult[Seq[S]] = verifyFunction(f).foreach(values)
-    /**
-     * check that the function is valid at least once
-     */
-    def atLeastOnce(values: Seq[S]): MatchResult[Seq[S]] = verifyFunction(f).atLeastOnce(values)
+    def forall(values: GenTraversable[T])      = outer.forall     (values)(applyMatcher)
+    def foreach(values: GenTraversable[T])     = outer.foreach    (values)(applyMatcher)
+    def atLeastOnce(values: GenTraversable[T]) = outer.atLeastOnce(values)(applyMatcher)
+    def atMostOnce(values: GenTraversable[T])  = outer.atMostOnce (values)(applyMatcher)
   }
 
   /**
    * this implicit provides an inverted syntax to adapt matchers to make the adaptation more readable in some cases:
    * - def haveExtension(extension: =>String) = ((_:File).getPath) ^^ endWith(extension)
    */
-  implicit def adapterFunction[T, S](f: T => S) = new AdapterFunction(f)
-  case class AdapterFunction[T, S](f: T => S) {
+  implicit class AdaptFunction[T, S](f: T => S) {
     def ^^(m: Matcher[S]): Matcher[T] = m ^^ f
   }
 
   /**
    * The `SeqMatcher` class is a matcher matching a sequence of objects with a matcher returned by a function.<p>
-   * Usage:
-   * {{{
-   * List(1, 2, 3) must ((beEqualTo(_:Int)).toSeq)(List(1, 2, 3))
-   * }}}
+   * Usage: List(1, 2, 3) must ((beEqualTo(_:Int)).toSeq)(List(1, 2, 3))
    */
   class SeqMatcher[S, T](s: Seq[S], f: S => Matcher[T]) extends Matcher[Seq[T]] {
     def apply[U <: Seq[T]](t: Expectable[U]) = {
@@ -122,10 +125,7 @@ trait MatchersImplicits extends Expectations with MatchResultCombinators with Ma
 
   /**
    * The `SetMatcher` class is a matcher matching a set of objects with a matcher returned by a function.<p>
-   * Usage:
-   * {{{
-   * List(1, 2, 3) must ((beEqualTo(_:Int)).toSet)(List(2, 1, 3))
-   * }}}
+   * Usage: List(1, 2, 3) must ((beEqualTo(_:Int)).toSet)(List(2, 1, 3)) }}}
    */
   class SetMatcher[S, T](s: Set[S], f: S => Matcher[T]) extends Matcher[Set[T]] {
     def apply[U <: Set[T]](t: Expectable[U]) = {
@@ -148,23 +148,29 @@ trait MatchersImplicits extends Expectations with MatchResultCombinators with Ma
   }
 
   /** verify the function f for all the values, stopping after the first failure */
-  def forall[T, U](values: GenTraversableOnce[T])(f: T => MatchResult[U]) = verifyFunction(f).forall(values.seq.toSeq)
+  def forall[T, R : AsResult](values: GenTraversableOnce[T])(f: T => R) = f.forall(values)
   /** apply a matcher for all values */
   def forall[T](matcher: Matcher[T]) = matcher.forall
   /** verify the function f for all the values, stopping after the first failure, where the PartialFunction is defined */
   def forallWhen[T, U](values: GenTraversable[T])(f: PartialFunction[T, MatchResult[U]]) = forall(values.filter(f.isDefinedAt))(f)
   /** verify the function f for all the values, and collect all failures */
-  def foreach[T, U](values: GenTraversableOnce[T])(f: T => MatchResult[U]) = verifyFunction(f).foreach(values.seq.toSeq)
+  def foreach[T, R : AsResult](values: GenTraversableOnce[T])(f: T => R) = f.foreach(values)
   /** apply a matcher foreach value */
   def foreach[T](matcher: Matcher[T]) = matcher.foreach
   /** verify the function f for all the values, and collect all failures, where the PartialFunction is defined */
-  def foreachWhen[T, U](values: GenTraversable[T])(f: PartialFunction[T, MatchResult[U]]) = foreach(values.filter(f.isDefinedAt))(f)
+  def foreachWhen[T, R : AsResult](values: GenTraversable[T])(f: PartialFunction[T, R]) = foreach(values.filter(f.isDefinedAt))(f)
   /** verify the function f for at least one value */
-  def atLeastOnce[T, U](values: GenTraversableOnce[T])(f: T => MatchResult[U]) = verifyFunction(f).atLeastOnce(values.seq.toSeq)
+  def atLeastOnce[T, R : AsResult](values: GenTraversableOnce[T])(f: T => R) = f.atLeastOnce(values)
+  /** verify the function f for at least one value */
+  def atMostOnce[T, R : AsResult](values: GenTraversableOnce[T])(f: T => R) = f.atMostOnce(values)
   /** apply a matcher atLeast one value */
   def atLeastOnce[T](matcher: Matcher[T]) = matcher.atLeastOnce
+  /** apply a matcher atLeast one value */
+  def atMostOnce[T](matcher: Matcher[T]) = matcher.atMostOnce
   /** verify the function f for at least one value, where the PartialFunction is defined */
-  def atLeastOnceWhen[T, U](values: GenTraversable[T])(f: PartialFunction[T, MatchResult[U]]) = atLeastOnce(values.filter(f.isDefinedAt))(f)
+  def atLeastOnceWhen[T, R : AsResult](values: GenTraversable[T])(f: PartialFunction[T, R]) = atLeastOnce(values.filter(f.isDefinedAt))(f)
+  /** verify the function f for at least one value, where the PartialFunction is defined */
+  def atMostOnceWhen[T, R : AsResult](values: GenTraversable[T])(f: PartialFunction[T, R]) = atMostOnce(values.filter(f.isDefinedAt))(f)
   /**
    * This method transform a function to a Matcher
    */
@@ -208,81 +214,15 @@ trait MatchersImplicits extends Expectations with MatchResultCombinators with Ma
     }
   }
   /**
-   * This method transform a function returning a MatchResult to a Matcher
+   * This method transform a function returning a Result to a Matcher
    */
-  implicit def matchResultFunctionToMatcher[T](f: T => MatchResult[_]): Matcher[T] = new Matcher[T] {
+  implicit def matchResultFunctionToMatcher[T, R : AsResult](f: T => R): Matcher[T] = new Matcher[T] {
     def apply[S <: T](s: Expectable[S]) = {
-      val functionResult = ResultExecution.execute(f(s.value).toResult)
-      result(functionResult.isSuccess, functionResult.message, functionResult.message, s)
+      val r = ResultExecution.execute(AsResult(f(s.value)))
+      result(r.isSuccess, r.message, r.message, s)
     }
   }
 
-  implicit def verifyFunction[U, T](t: U => MatchResult[T]) = new MatchResultFunctionVerification(t)
-  class MatchResultFunctionVerification[U, T](function: U => MatchResult[T]) {
-    def forall[S <: Traversable[U]](seq: S) = {
-      val expectable = createExpectable(seq)
-      val result =
-        if (seq.isEmpty)
-          Matcher.result(true, "ok", "ko", expectable)
-        else {
-          val (r, lastValueTried) = seq.drop(1).foldLeft(executeFunctionAndReturnValue(seq.head)) { (res, cur) =>
-            if (res._1.isSuccess) executeFunctionAndReturnValue(cur)
-            else                  res
-          }
-          lazy val failingElementIndex = if (r.isSuccess) -1 else seq.toSeq.indexOf(lastValueTried)
-          lazy val failingElementMessage =
-            if (failingElementIndex >= 0)
-              "In the sequence "+qseq(seq)+", the "+(failingElementIndex+1).th+" element is failing: "+r.message
-            else
-              r.message
-
-          makeSeqResult(r, "All elements of "+q(seq.mkString(", "))+" are matching ok", failingElementMessage, expectable)
-        }
-      checkFailure(result)
-    }
-
-    def foreach[S <: Traversable[U]](seq: S) = {
-      val expectable = createExpectable(seq)
-      val result =
-        if (seq.isEmpty)
-          Matcher.result(true, "ok", "ko", expectable)
-        else {
-          val r = seq.toSeq.foldMap(executeFunction(_))
-          makeSeqResult(r, "All elements of "+q(seq.mkString(", "))+" are successful", r.message, expectable)
-        }
-      checkFailure(result)
-    }
-
-    def atLeastOnce[S <: GenTraversableOnce[U]](ss: S) = {
-      val seq = ss.seq.toSeq
-      val expectable = createExpectable(seq)
-      val result =
-        if (seq.isEmpty)
-          Matcher.result(false, "ok", "ko", expectable)
-        else {
-          val (r, lastTriedValue) = seq.drop(1).foldLeft(executeFunctionAndReturnValue(seq.head)) { (res, cur) =>
-            if (res._1.isSuccess) res
-            else                  executeFunctionAndReturnValue(cur)
-          }
-          makeSeqResult(r, "In the sequence "+qseq(seq)+
-                           ", the "+(seq.toSeq.indexOf(lastTriedValue)+1).th+" element is matching: "+r.message,
-                           "No element of "+q(seq.mkString(", "))+" is matching ok",
-                           expectable)
-        }
-      checkFailure(result)
-    }
-
-    private def executeFunctionAndReturnValue(value: U): (Result, U) = (executeFunction(value), value)
-    private def executeFunction(value: U): Result = ResultExecution.execute(function(value).toResult)
-
-    private def makeSeqResult[V](r: Result, okMessage: String, koMessage: String, expectable: Expectable[V]): MatchResult[V] =
-      r match {
-        case s: Skipped => MatchSkip(r.message, expectable)
-        case p: Pending => MatchPending(r.message, expectable)
-        case e: Error   => throw ErrorException(e)
-        case _          => Matcher.result(r.isSuccess, okMessage, koMessage, expectable)
-      }
-  }
 }
 
 private[specs2]

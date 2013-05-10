@@ -201,32 +201,6 @@ trait Matcher[-T] { outer =>
   def eventually(retries: Int, sleep: Duration): Matcher[T] = EventuallyMatchers.eventually(retries, sleep)(this)
 
   /**
-   * @return a Matcher matching all the elements of a sequence against the current matcher, stopping after the first
-   * failure
-   */
-  def forall = new Matcher[Traversable[T]] {
-    def apply[S <: Traversable[T]](seq: Expectable[S]) =
-      MatchersImplicits.verifyFunction((t: T) => outer.apply(Expectable(t))).forall(seq.value)
-  }
-  /**
-   * @return a Matcher matching all the elements of a sequence against the current matcher, cumulating all failures
-   */
-  def foreach = new Matcher[Traversable[T]] {
-    def apply[S <: Traversable[T]](seq: Expectable[S]) =
-      MatchersImplicits.verifyFunction((t: T) => outer.apply(Expectable(t))).foreach(seq.value)
-  }
-
-  /**
-   * @return a Matcher matching at least one element of a sequence against the current matcher
-   */
-  def atLeastOnce = new Matcher[GenTraversableOnce[T]] {
-    def apply[S <: GenTraversableOnce[T]](seq: Expectable[S]) = {
-      val r = MatchersImplicits.verifyFunction((t: T) => outer.apply(Expectable(t))).atLeastOnce(seq.value)
-      result(r, seq)
-    }
-  }
-
-  /**
    * @return a Matcher with no messages
    */
   def mute = new Matcher[T] {

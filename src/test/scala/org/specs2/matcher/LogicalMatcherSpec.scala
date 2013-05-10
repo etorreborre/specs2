@@ -65,76 +65,79 @@ class LogicalMatcherSpec extends script.Specification with ResultMatchers with G
    + { throw E2; 1 } must m1 or throwAn[E2] or throwAn[E1]
                                                                                                                 """
 
-  "or" - new g1 {
-    e1 := "eric" must (beMatching("e.*") or beMatching(".*c"))
-    e2 := "eric" must (beMatching("a.*") or beMatching(".*z")).not
-    e3 := "eric" must (beMatching("e.*") or beMatching({error("boom");".*z"}))
-    e4 := "eric" must not (beMatching("a.*") or beMatching(".*z"))
-    e5 := ("eric" must (beMatching("a.*") or beMatching("z.*"))) returns
+  "or" - new group {
+    eg := "eric" must (beMatching("e.*") or beMatching(".*c"))
+    eg := "eric" must (beMatching("a.*") or beMatching(".*z")).not
+    eg := "eric" must (beMatching("e.*") or beMatching({error("boom");".*z"}))
+    eg := "eric" must not (beMatching("a.*") or beMatching(".*z"))
+    eg := ("eric" must (beMatching("a.*") or beMatching("z.*"))) returns
             "'eric' doesn't match 'a.*'; 'eric' doesn't match 'z.*'"
 
-    e6 := new Scope with MustThrownMatchers { "eric" must (beMatching("a.*") or beMatching("e.*"))  }
-    e7 := ("eric" must be matching("e.*")) or ("eric" must be matching(".*d"))
-    e8 := {
+    eg := new Scope with MustThrownMatchers { "eric" must (beMatching("a.*") or beMatching("e.*"))  }
+  }
+  "or" - new group {
+    eg := ("eric" must be matching("e.*")) or ("eric" must be matching(".*d"))
+    eg := {
       val out = new StringOutput {}
       ("eric" must be matching("e.*")) or { out.println("DONT"); "torreborre" must be matching(".*tor.*") }
       out.messages must not contain("DONT")
     }
-    e9 := ((true === false) or (true === true) or (true === false)) must beSuccessful
+    eg := ((true === false) or (true === true) or (true === false)) must beSuccessful
   }
-
-  "and" - new g2 {
-    e1 := "eric" must be matching("e.*") and be matching(".*c")
-    e2 := ("eric" must be matching("e.*")) and ("torreborre" must be matching(".*tor.*"))
-    e3 := {
+  "and" - new group {
+    eg := "eric" must be matching("e.*") and be matching(".*c")
+  }
+  "and" - new group {
+    eg := ("eric" must be matching("e.*")) and ("torreborre" must be matching(".*tor.*"))
+    eg := {
       val out = new StringOutput {}
       ("eric" must be matching("x.*")) and { out.println("DONT"); "torreborre" must be matching(".*tor.*") }
       out.messages must not contain("DONT")
     }
-    e4 := ((true === true) and (true === false) and (true === true)) must beFailing
+    eg := ((true === true) and (true === false) and (true === true)) must beFailing
   }
 
-  "skip" - new g3 {
-    e1 := 1 must be_==(1).orSkip
-    e2 := (1 must be_==(2).orSkip).toResult                                  must_== Skipped("'1' is not equal to '2'")
-    e3 := (1 must be_==({sys.error("boom");2}).orSkip("skip this")).toResult must_== Skipped("skip this: boom")
-    e4 := (1 must be_==(2).orSkip("precondition failed")).toResult           must_== Skipped("precondition failed: '1' is not equal to '2'")
+  "skip" - new group {
+    eg := 1 must be_==(1).orSkip
+    eg := (1 must be_==(2).orSkip).toResult                                  must_== Skipped("'1' is not equal to '2'")
+    eg := (1 must be_==({sys.error("boom");2}).orSkip("skip this")).toResult must_== Skipped("skip this: boom")
+    eg := (1 must be_==(2).orSkip("precondition failed")).toResult           must_== Skipped("precondition failed: '1' is not equal to '2'")
   }
 
-  "pending" - new g4 {
-    e1 := 1 must be_==(1).orPending
-    e2 := (1 must be_==(2).orPending).toResult                             must_== Pending("'1' is not equal to '2'")
-    e3 := (1 must be_==({sys.error("boom");2}).orPending("todo")).toResult must_== Pending("todo: boom")
-    e4 := (1 must be_==(2).orPending("precondition failed")).toResult      must_== Pending("precondition failed: '1' is not equal to '2'")
+  "pending" - new group {
+    eg := 1 must be_==(1).orPending
+    eg := (1 must be_==(2).orPending).toResult                             must_== Pending("'1' is not equal to '2'")
+    eg := (1 must be_==({sys.error("boom");2}).orPending("todo")).toResult must_== Pending("todo: boom")
+    eg := (1 must be_==(2).orPending("precondition failed")).toResult      must_== Pending("precondition failed: '1' is not equal to '2'")
+  }
+  "when" - new group {
+    eg := (1 must be_==(1).when(true)).toResult               must beSuccessful
+    eg := (1 must be_==(2).when(false)).toResult              must beSuccessful
+    eg := (1 must be_==(2).when(false, "no worries")).message must_== "no worries"
+    eg := (1 must be_==(2).unless(true)).toResult             must beSuccessful
+  }
+  "if and only if" - new group {
+    eg := (1 must be_==(1).iff(true)).toResult  must beSuccessful
+    eg := (1 must be_==(2).iff(true)).toResult  must beFailing
+  }
+  "if and only if" - new group {
+    eg := (1 must be_==(2).iff(false)).toResult must beSuccessful
+    eg := (1 must be_==(1).iff(false)).toResult must beFailing
   }
 
-  "when" - new g5 {
-    e1 := (1 must be_==(1).when(true)).toResult               must beSuccessful
-    e2 := (1 must be_==(2).when(false)).toResult              must beSuccessful
-    e3 := (1 must be_==(2).when(false, "no worries")).message must_== "no worries"
-    e4 := (1 must be_==(2).unless(true)).toResult             must beSuccessful
-  }
-
-  "if and only if" - new g6 {
-    e1 := (1 must be_==(1).iff(true)).toResult  must beSuccessful
-    e2 := (1 must be_==(2).iff(true)).toResult  must beFailing
-    e3 := (1 must be_==(2).iff(false)).toResult must beSuccessful
-    e4 := (1 must be_==(1).iff(false)).toResult must beFailing
-  }
-
-  "with custom matchers" - new g7 {
-    e1 := (12 must bePositive) and
+  "with custom matchers" - new group {
+    eg := (12 must bePositive) and
           (12 must be positive) and
           (-12 must not bePositive) and
           (-12 must not be positive)
   }
 
-  "with exceptions" - new g8 {
-    e1 := { throw new Exception("ouch"); 1 } must be_==(1) or throwAn[Exception]
-    e2 := { throw new Exception("ouch"); 1 } must throwAn[Exception] or be_==(1)
-    e3 := {                              1 } must throwAn[Exception] or be_==(1)
-    e4 := {                              1 } must be_==(1) or throwAn[Exception]
-    e5 := { throw new Exception("ouch"); 1 } must be_==(1) or throwAn[Exception] or throwAn[Exception]
+  "with exceptions" - new group {
+    eg := { throw new Exception("ouch"); 1 } must be_==(1) or throwAn[Exception]
+    eg := { throw new Exception("ouch"); 1 } must throwAn[Exception] or be_==(1)
+    eg := {                              1 } must throwAn[Exception] or be_==(1)
+    eg := {                              1 } must be_==(1) or throwAn[Exception]
+    eg := { throw new Exception("ouch"); 1 } must be_==(1) or throwAn[Exception] or throwAn[Exception]
   }
 
   case class CustomMatcher[T : Numeric]() extends Matcher[T] {

@@ -75,16 +75,13 @@ class AnyMatchersSpec extends script.Specification with Groups with ResultMatche
   ${ forall(Seq((1, 2), (3, 4))) { case (a, b) => a must be_<(b) } }
   ${ forallWhen(Seq((2, 1), (3, 4))) { case (a, b) if a > 2 => a must be_<(b) } }
   ${ (Seq(2, 3, 4) must contain(_:Int)).forall(Seq(2, 4)) }
-  ${ (Seq(2, 3, 4) must be_<=(2).forall) returns
-     "In the sequence '2, 3, 4', the 2nd element is failing: 3 is greater than 2" }
 
   foreach is like forall but will execute all matchers and collect the results
   ${ Seq(2, 3, 4) must be_>=(2).foreach }
   ${ foreach(Seq((1, 2), (3, 4))) { case (a, b) => a must be_<(b) } }
   ${ foreachWhen(Seq((2, 1), (3, 4))) { case (a, b) if a > 2 => a must be_<(b) } }
   ${ ((_:Int) must be_>=(2)).foreach(Seq(2, 3, 4)) }
-  ${ (Seq(2, 3, 4) must be_<=(2).foreach) returns "3 is greater than 2; 4 is greater than 2" }
-  if all expectactions throws are Skipped then the whole result must be skipped $skipForeach
+  if all expectations throws are Skipped then the whole result must be skipped $skipForeach
 
   atLeastOnce allows to transform a single matcher to a matcher checking that one element of a Seq is matching
   ${ Seq(2, 3, 4) must be_>(2).atLeastOnce }
@@ -93,7 +90,6 @@ class AnyMatchersSpec extends script.Specification with Groups with ResultMatche
   ${ atLeastOnce(Seq((4, 2), (3, 4))) { case (a, b) => a must be_<(b) } }
   ${ atLeastOnceWhen(Seq((2, 1), (3, 4))) { case (a, b) if a > 2 => a must be_<(b) } }
   ${ atLeastOnce(Seq(Some(1), None)) { _ must beSome(1) } }
-  ${ (Seq(2, 3, 4) must be_<=(1).atLeastOnce) returns "No element of '2, 3, 4' is matching ok" }
 
   beNull matches null values
   ${ (null:String) must beNull }

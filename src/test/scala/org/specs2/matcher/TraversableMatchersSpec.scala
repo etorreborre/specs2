@@ -20,12 +20,13 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
    ${ Seq(1, 2, 3) must contain(be_>=(2)).atLeast(1.times)          }
    ${ Seq(1, 2, 3) must contain(be_>=(2)).between(1.times, 2.times) }
    ${ Seq(1, 2, 3) must contain(be_>=(0)).forall }
+   ${ Seq(1, 2, 3) must contain(be_>=(0)).foreach }
    ${ Seq(1, 2) must contain(anyOf(1, 4)) }
    ${ (Seq(1, 2, 3) must not(contain(anyOf(1, 2, 4)))) returns "There are 2 matches\n'1' is contained in '1, 2, 4'\n'2' is contained in '1, 2, 4'\n" }
    ${ Seq("hello", "world") must contain(matching(".*orld")) }
    ${ Seq("hello", "world") must contain((s: String) => s.size > 2) }
    ${ Seq("1", "2", "3") must contain("3") and contain("2":Any) }
-   ${ Seq[Food](Pizza(), new Fruit()) must contain(equalTo(Pizza())) }
+   ${ Seq[Food](Pizza(), new Fruit()) must contain(Pizza()) }
    `not contain(1)` must work in a mutable Scope ${g1.e1}
    a string inclusion must work as well  ${ "abc" must contain('b') }
 

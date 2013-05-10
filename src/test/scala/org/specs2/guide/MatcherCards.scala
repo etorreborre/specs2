@@ -211,82 +211,58 @@ If you want to check the size of a `Traversable`
  ${snippet{Seq() must be empty}}
  ${snippet{Seq(1, 2, 3) must not be empty}}
 
- * to check the size of an iterable
- `List(1, 2) must have size(2)`
- `List(1, 2) must have length(2)` // equivalent to size
+ * to check its size
+ ${snippet{Seq(1, 2) must have size(2)}}
+ ${snippet{Seq(1, 2) must have length(2)}} // equivalent to size
 
- * to check if some elements are contained in the traversable
- `List(1, 2, 3) must contain(3, 2)`
+ * to check its ordering (works with any type `T` which has an `Ordering`)
+ ${snippet{Seq(1, 2, 3) must beSorted}}
 
- * to check if some elements are contained in the traversable in the same order
- `List(1, 2, 3, 4) must containAllOf(2, 4).inOrder`
+Then you can check the elements which are contained in the Traversable
+ 
+ * if a simple value is contained
+ ${snippet{Seq(1, 2, 3) must contain(2)}}
 
- * to check if only some elements are contained in the traversable
- `List(4, 2) must contain(allOf(2, 4)).only`
+ * if a value matching a specific matcher is contained
+ ${snippet{Seq(1, 2, 3) must contain(be_>=(2))}}
 
- * to check if only some elements are contained in the traversable and in the same order
- `List(2, 4) must contain(allOf(2, 4)).only.inOrder`
+ * if a value passing a function returning a `Result` is contained (`MatchResult`, ScalaCheck `Prop`,...)
+ ${snippet{Seq(1, 2, 3) must contain((i: Int) => i must be_>=(2))}}
 
- * to check if a sequence contains another one
- `List(2, 4) must containAllOf(List(4, 2))`
- `List(2, 4) must containAllOf(List(2, 4)).inOrder`
+ * there are also 2 specialized matchers to check the string representation of the elements
+ ${snippet{Seq(1234, 6237) must containMatch("23")     }}   `// matches with ".*23.*"`
+ ${snippet{Seq(1234, 6234) must containPattern(".*234")}}   `// matches with !.*234"`
 
- * to check if 2 sequences are contained in each other (like equality but with no order)
- `List(2, 4, 1) must containTheSameElementsAs(List(1, 4, 2))`
+For each of the checks above you can indicate how many times the check should be satisfied:
 
- * to check if a sequence contains any element of another one
- `List(2, 4) must containAnyOf(List(4, 2))`
+ * ${snippet{Seq(1, 2, 3) must contain(be_>(0)).forall}}  // this will stop after the first failure
+ * ${snippet{Seq(1, 2, 3) must contain(be_>(0)).foreach}} // this will report all failures
+ * ${snippet{Seq(1, 2, 3) must contain(be_>(0)).atLeastOnce}}
+ * ${snippet{Seq(1, 2, 3) must contain(be_>(2)).atMostOnce}}
+ * ${snippet{Seq(1, 2, 3) must contain(be_>(2)).exactly(1.times)}}
+ * ${snippet{Seq(1, 2, 3) must contain(be_>(2)).exactly(1)}}
+ * ${snippet{Seq(1, 2, 3) must contain(be_>(1)).between(1.times, 2.times)}}
+ * ${snippet{Seq(1, 2, 3) must contain(be_>(1)).between(1, 2)}}
 
- * to check if a `Traversable[String]` contains matching strings
- `List("Hello", "World") must containMatch("ll")        // matches with .*ll.*`
- `List("Hello", "World") must containPattern(".*llo")   // matches with .*llo`
+The other types of checks involve comparing the Traversable elements to other elements (values, matchers, function returning a `Result`)
+ 
+ * with a set of values
+ ${snippet{Seq(1, 2, 3, 4) must contain(allOf(2, 4))}}
 
- * to check if a `Traversable[String]` contains matching strings, but only once
- `List("Hello", "World") must containMatch("ll").onlyOnce`
+ * with a set of matchers
+ ${snippet{Seq(1, 2, 3, 4) must contain(allOf(be_>(0), be_>(1)))}}
 
- * to check if one of the elements has a given property
- `List("Hello", "World") must have(_.size >= 5)`
+ * checking that the order is satisfied
+ ${snippet{Seq(1, 2, 3, 4) must contain(allOf(be_>(0), be_>(1)).inOrder)}}
 
- * to check if one of the elements matching a partial function is ok
- `List(1, 2, 3, 4) must haveOneElementLike { case i if i > 2 => (i % 2) must_== 0 }`
+Note that when you use don't specify `inOrder`, `contain` is going to try the checks one by one, but will consume them greedily and not try all possible combinations of input value and check.
 
- * to check if all elements matching a partial function are ok
- `List(1, 2, 3, 4) must haveAllElementsLike { case i if i > 2 => i must be_<(10) }`
+The `allOf` method above can be replaced by `atLeast`, `atMost`, `exactly` to be more specific on the number of elements which you expect to be correctly checked.
 
- * to check if a traversable has the same elements as another one, regardless of the order, recursively (
- `List("Hello", "World") must haveTheSameElementsAs(List("World", "Hello"))`
- `List("Hello", "World") must haveTheSameElementsAs(List("World", "Hello"), equalArrays)` // with your own equality method
+Finally, if you want to get the differences between 2 traversables:
 
- * to check if a sequence is sorted (works with any type `T` which has an `Ordering`)
- `Seq(1, 2, 3) must beSorted`
+ ${snippet{Seq(2, 4, 1) must containTheSameElementsAs(Seq(1, 4, 2))}}
 
-***Adapting Traversable matchers***
-
-The `contain` and `haveTheSameElementsAs` matchers can be "adapted" to use a different notion of equality than `==` when checking for the existence of elements in a traversable.
-
-`^^ (f: (T, T) => Boolean)` can be used instead of `==`. For example:
-
-${snippet{
-  //  Seq(1, 2, 3) must contain(allOf(4, 3, 2)) ^^ ((i: Int, j: Int) => i-j <= 1)
-  }}
-
-will check if each value in the first list is contained in the second list with possibly an error margin of 1.
-
-`^^ (f: T => Matcher[T])` can be used to compare values with a matcher. For example: ${snippet{
-
-val equalIgnoreCase = (s: String) => be_==(s.toLowerCase)
-//Seq("Eric", "Bob") must contain(allOf("bob", "eric")) ^^ equalIgnoreCase
-}}
-
-`^^^ (f: T => S)` can be used to compare values with a function. For example: ${snippet{
-// 8<--
-case class User(id: Int, name: String)
-// 8<--
-val usersFromDb = Seq(User(id=1, name="eric"), User(id=2, name="Bob"))
-//usersFromDb must contain(allOf(User(id=0, name="eric"), User(id=0, name="Bob"))) ^^^ ((_:User).copy(id=0))
-}}
-
-_Note_: the last operator used here is slightly different. It is `^^^` instead of simply `^^` because the same function is used to "adapt" both values at the same time. On the other hand the first 2 operators are more or less using a function taking 2 parameters.
 
 """
 }
