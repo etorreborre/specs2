@@ -11,8 +11,8 @@ class FragmentsSpec extends org.specs2.mutable.script.Specification with Groups 
 
  it is possible to append other fragments to the middle section
  + if a piece text is added, it must be concatenated with the previous piece of text if any
- + if fragments with links are added, the links must be preserved
-
+ + if fragments with inside links are added, the links must be preserved
+ + if linked fragments are added, the texts must not be fused
  """
 
  "append" - new group {
@@ -20,12 +20,19 @@ class FragmentsSpec extends org.specs2.mutable.script.Specification with Groups 
 
    eg := {
      val fs = helloFragments.append(create(SpecStart(specName)).linkIs(UrlHtmlLink("a link")).add(Text(" world")).add(SpecEnd(specName)))
-     fs.starts.headOption must beSome
-     fs.starts.headOption.map(_.name) must beSome("name")
      fs.starts.headOption.flatMap(_.link.map(_.url)) must beSome("a link")
    }
+
+   eg := {
+     val fs = helloFragments.append(create(SpecStart(specName)).linkIs(UrlHtmlLink("a link")).add(Text(" world")).add(SpecEnd(specName)))
+     fs.texts must contain(=~("hello") ^^ fragmentToString)
+     fs.texts must not(contain(=~("hello world") ^^ fragmentToString))
+   }
+
+
  }
 
+  val fragmentToString = ((_:Fragment).toString)
   val helloFragments = createList(Text("hello"))
   val specName = SpecName("name")
 }

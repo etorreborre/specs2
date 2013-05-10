@@ -29,8 +29,8 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   /** append the fragments from fs, appending the text fragments if this object ends with Text and fs starts with Text */
   def append(fs: Fragments): Fragments =
     (middle, fs.middle) match {
-      case (begin :+ Text(t1), Text(t2) +: rest) => ((new FragmentsFragment(this.copy(middle = Seq())))) ^ fs.copy(middle = begin ++ (Text(t1+t2) +: rest))
-      case _                                     => (new FragmentsFragment(this)) ^ fs
+      case (begin :+ Text(t1), Text(t2) +: rest) if !fs.isLink => ((new FragmentsFragment(this.copy(middle = Seq())))) ^ fs.copy(middle = begin ++ (Text(t1+t2) +: rest))
+      case _                                                   => (new FragmentsFragment(this)) ^ fs
     }
 
   /** append the fragments from fs, appending the text fragments if this object ends with Text and fs starts with Text */
@@ -57,6 +57,7 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   def linkIs(htmlLink: HtmlLink) = copy(linked = linked.linkIs(htmlLink))
   def seeIs(htmlLink: HtmlLink)  = copy(middle = Vector().view, linked = linked.seeIs(htmlLink))
   def hide                       = copy(linked = linked.linkIs(HtmlLink(this)).hide)
+  def isLink                     = linked.isLink
 
   def executables: Seq[Executable] = middle.collect { case e: Executable => e }
   def examples: Seq[Example]       = middle.collect(isAnExample)

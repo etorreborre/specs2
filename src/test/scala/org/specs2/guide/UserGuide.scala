@@ -20,5 +20,4 @@ class UserGuide extends UserGuidePage { def is = "User Guide".title ^ s2"""
   ${ "the ***specs2*** " ~ ("philosophy", new Philosophy)               }
   ${ "the ***specs2*** " ~ ("design", new Design)                       }
                                                                         """
-
 }
