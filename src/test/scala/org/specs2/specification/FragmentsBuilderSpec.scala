@@ -34,6 +34,7 @@ SpecStart/SpecEnd
    + A title can be added before arguments are declared
    + A title can be added after arguments are declared
    + A title can not be empty
+
    Arguments can be added in different place in the spec
      + new Arguments values are added to the existing ones
      + and override them if already declared

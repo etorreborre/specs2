@@ -106,7 +106,7 @@ case class BulletedExamplesTemplate(marker: String = "+") extends ScriptTemplate
     FragmentsScriptLines(fragmentLines)
   }
 
-  private def mustCreateNewBlock(line: String, lastBlock: Option[Fragments]) = line.trim.isEmpty && lastBlock.flatMap(_.middle.lastOption).exists(Fragments.isExample)
+  private def mustCreateNewBlock(line: String, lastBlock: Option[Fragments]) = line.trim.isEmpty && lastBlock.map(_.middle.exists(Fragments.isExample)).getOrElse(false)
   private def createFragment(line: String) = if (isExample(line)) Example(strip(line), execute.Pending()) else Text(line)
   private def isExample(line: String) = line.trim.startsWith(marker)
   private def strip(line: String) = line.trim.removeFirst(s"\\Q$marker\\E")

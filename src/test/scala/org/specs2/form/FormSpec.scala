@@ -28,6 +28,7 @@ A Form can be created
   + with a seq of fields on one row - and no title
   + with tabs
   + with a seq of Rows
+
   from a DataTable
     + the Form header is the DataTable header
     + with an additional column for failure messages
@@ -74,97 +75,114 @@ A form can be added to another
   + inlined
                                                                                                             """
 
-  "creation" - new g1 with datatables {
-    e1 := Form("title").title must_== Some("title")
-    e2 := Form.tr(field("name", "eric")).rows.size must_== 1
-    e3 := Form.tr(field("name", "eric"), field("age", 18)).rows.size must_== 1
-    e4 := Form.tr(field("name", "eric")).
+  "creation" - new group with datatables {
+    eg := Form("title").title must_== Some("title")
+    eg := Form.tr(field("name", "eric")).rows.size must_== 1
+    eg := Form.tr(field("name", "eric"), field("age", 18)).rows.size must_== 1
+    eg := Form.tr(field("name", "eric")).
                   tr(field("age", 18)).rows.size must_== 2
-    e5  := Form("title").tr(prop("name", "eric")).rows.size must_== 1
-    e6  := Form("title").tr(form("title")).rows.size must_== 1
-    e7  := Form("title").tr(Row.tr(field(1), field(2))).rows(0).cells.size must_== 2
-    e8  := Form.tr(Row.tr(field(1), field(2))).rows(0).cells.size must_== 2
-    e9  := Form.tabs(Seq("name")) { (s: String) => tab(s, Form("title")) }.rows.size must_== 1
-    e10 := Form.trs(Seq("a", "b")) { (s: String) => Row.tr(field(s)) }.rows.size must_== 2
-
-    e11 := Form(okDataTable.decorator).text must startWith("| a | b |")
-    e12 := Form(koDataTable.decorator).text must contain("| a | b | message")
-    e13 := Form(okDataTable.decorator).text must contain("| 1 | 1 |")
-
+    eg := Form("title").tr(prop("name", "eric")).rows.size must_== 1
+    eg := Form("title").tr(form("title")).rows.size must_== 1
+    eg := Form("title").tr(Row.tr(field(1), field(2))).rows(0).cells.size must_== 2
+    eg := Form.tr(Row.tr(field(1), field(2))).rows(0).cells.size must_== 2
+    eg := Form.tabs(Seq("name")) { (s: String) => tab(s, Form("title")) }.rows.size must_== 1
+    eg := Form.trs(Seq("a", "b")) { (s: String) => Row.tr(field(s)) }.rows.size must_== 2
+  }
+  "creation" - new group with datatables {
+    eg := Form(okDataTable.decorator).text must startWith("| a | b |")
+    eg := Form(koDataTable.decorator).text must contain("| a | b | message")
+    eg := Form(okDataTable.decorator).text must contain("| 1 | 1 |")
   }
 
-  "display" - new g2 {
-    val name = field("name", "eric")
-    val age  = field("age", 18)
+  val name = field("name", "eric")
+  val age  = field("age", 18)
 
-    e1 := form("title").text must_== "| title |"
-    e2 := Form().text must_== ""
-    e3 := Form.tr(name).text must_== "| name: eric |"
-
-    e4 := Form.tr(name, age).text must_== "| name: eric | age: 18 |"
-    e5 := form("title").tr(name).text must_==
+  "display" - new group {
+    eg := form("title").text must_== "| title |"
+    eg := Form().text must_== ""
+  }
+  "display" - new group {
+    eg := Form.tr(name).text must_== "| name: eric |"
+  }
+  "display" - new group {
+    eg := Form.tr(name, age).text must_== "| name: eric | age: 18 |"
+  }
+  "display" - new group {
+    eg := form("title").tr(name).text must_==
           "| title      |\n" +
           "| name: eric |"
-
-    e6 := form("title").tr(name, age).text must_==
+  }
+  "display" - new group {
+    eg := form("title").tr(name, age).text must_==
              "| title                |\n" + 
              "| name: eric | age: 18 |"
 
-    e7 := compare(address1,
+  }
+  "display" - new group {
+    eg := compare(address1,
       "| Address               |",
       "| street: Rose Crescent |",
       "| number: 2             |")
 
-    e8 := compare(address2,
+    eg := compare(address2,
       "| Address                           |",
       "| street: Rose Crescent | number: 2 |",
       "| town: Mosman                      |")
 
-    e9 := compare(address3,
+  }
+  "display" - new group {
+    eg := compare(address3,
       "| street: Rose Crescent | number: 2                         |",
       "| town: Mosman          | street: Rose Crescent | number: 2 |",
       "| town: Mosman                                              |")
 
-    e10 := compare(address4,
+    eg := compare(address4,
       "| town: Mosman          |",
       "| Address               |",
       "| street: Rose Crescent |",
       "| number: 2             |")
 
-    def compare(form: String, expected: String*) = form must_== expected.mkString("\n", "\n", "\n")
   }
 
-  "execution" - new g3 {
-    e1 := Form.tr("a").setSuccess.execute must_== success
-    e2 := Form.tr("a").setSuccess.rows.forall(_.execute.isSuccess) must beTrue
-    e3 := Form.tr("a").setFailure.execute.message must_== failure.message
-    e4 := Form.tr("a").setFailure.rows.forall(_.execute.isSuccess) must beFalse
-    e5 := Form.tr(prop("a")("b")).
+  "execution" - new group {
+    eg := Form.tr("a").setSuccess.execute must_== success
+    eg := Form.tr("a").setSuccess.rows.forall(_.execute.isSuccess) must beTrue
+  }
+
+  "execution" - new group {
+    eg := Form.tr("a").setFailure.execute.message must_== failure.message
+    eg := Form.tr("a").setFailure.rows.forall(_.execute.isSuccess) must beFalse
+  }
+
+  "execution" - new group {
+    eg := Form.tr(prop("a")("b")).
                tr(prop("a")("a")).
                tr(prop("c")("d")).executeForm.rows.filter(_.execute.isFailure) must have size(2)
   }
 
-  "equality" - new g4 {
-    e1 := Row.tr(TextCell("a")) must_== Row.tr(TextCell("a"))
-    e2 := TextCell("a") must_== TextCell("a")
+  "equality" - new group {
+    eg := Row.tr(TextCell("a")) must_== Row.tr(TextCell("a"))
+    eg := TextCell("a") must_== TextCell("a")
  }
 
-  "xhtml" - new g5 {
+  "xhtml" - new group {
     // count 3 per prop or field
-    e1 := Xml.colnumber(new FormCell(Form.th("title").
+    eg := Xml.colnumber(new FormCell(Form.th("title").
             tr(field(1)).
             tr(field("n", "v"), field("n", "v")).
             tr(prop("p", 1)(2)))) must_== 6
   }
 
-  "nested forms" - new g6 {
-    e1 := Form("title").tr(Form.tr("hello").inline).toXml must ==/(
+  "nested forms" - new group {
+    eg := Form("title").tr(Form.tr("hello").inline).toXml must ==/(
              <form>
                <table class="dataTable">
                  <tr><th colspan="4">title</th></tr><tr><div colspan="3"><tr><td style="" class="info" colspan="3">hello</td></tr></div></tr>
                </table>
              </form>)
   }
+
+  def compare(form: String, expected: String*) = form must_== expected.mkString("\n", "\n", "\n")
 
   trait datatables extends DataTables {
     val okDataTable =
