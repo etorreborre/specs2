@@ -45,7 +45,11 @@ The Forms object provides several utility functions for creating forms
     e1 := FormDiffs.subset(set1 ++ set2, set2) must_== set1 ++ ok(set2)
     e2 := FormDiffs.subset(set1, set2) must_== set1 ++ ko(set2)
     e3 := FormDiffs.subset(set1, set1 ++ set2) must_== ok(set1) ++ ko(set2)
-    
+  }
+  "subset verification" - new g1 {
+    val set1 = List(Form.tr("a"), Form.tr("b"))
+    val set2 = List(Form.tr("c"), Form.tr("d"))
+
     e4 := FormDiffs.subset(set1 ++ set2, set1).forall(_.isSuccess) must beTrue
     e5 := FormDiffs.subset(set1, set2).forall(_.isSuccess)  must_== false
     e6 := FormDiffs.subset(set1, set1 ++ set2).exists(_.isSuccess) &&

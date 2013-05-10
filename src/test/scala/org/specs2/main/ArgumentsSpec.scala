@@ -56,7 +56,8 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
   "values" - new group {
     eg := Arguments("xonly").xonly must beTrue
     eg := Arguments("specName", "spec").specName must_== "spec"
-
+  }
+  "values" - new group {
     eg := Arguments("").xonly must beFalse
     eg := Arguments("").specName must_== ".*Spec"
   }

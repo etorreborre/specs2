@@ -15,29 +15,34 @@ class FileWriterSpec extends script.Specification with Groups { def is = s2"""
 
   A FileWriter can
     + write a XML Node
-                                                                                                        """
+                                                                           """
 
-  "file writer" - new g1 with After {
-    val out = new MockWriter {}
-    val fw = new  FileWriter { override def getWriter(path: String, append: Boolean = false) = out  }
+  "file writer" - new group with output {
 
-    e1 := this {
+    eg := this {
       fw.write("filePath")(_.write("hello world"))
       out.messages must_== List("hello world")
     }
 
-    e2 := this {
+    eg := this {
       tryOk { fw.write("filePath")(_ => error("bad")) }
       out.closed must_== true
     }
 
-    e3 := this { fw.write("filePath")(_ => error("bad")) must throwAn[Exception](message = "bad") }
+    eg := this { fw.write("filePath")(_ => error("bad")) must throwAn[Exception](message = "bad") }
+  }
+  "file writer" - new group with output {
 
-    e4 := this {
+    eg := this {
       fw.writeXmlFile("filePath", <hello/>)
       out.messages must contain("<hello></hello>")
     }
 
+  }
+  trait output extends After {
+    val out = new MockWriter {}
+    val fw = new  FileWriter { override def getWriter(path: String, append: Boolean = false) = out  }
     def after { new File("filePath").delete }
   }
+
 }

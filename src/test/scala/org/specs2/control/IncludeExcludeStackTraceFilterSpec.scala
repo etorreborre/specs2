@@ -10,7 +10,6 @@ class IncludeExcludeStackTraceFilterSpec extends IncludeExcludeStackTraceFilterE
     by declaring 'exclude' patterns
       + leaving the elements not matching the patterns
       + filtering out the elements matching the patterns
-
     by declaring 'include' patterns
       + leaving the elements matching the patterns
       + filtering out the elements not matching the patterns
