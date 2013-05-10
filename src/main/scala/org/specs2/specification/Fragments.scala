@@ -29,7 +29,7 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   /** append the fragments from fs, appending the text fragments if this object ends with Text and fs starts with Text */
   def append(fs: Fragments): Fragments =
     (middle, fs.middle) match {
-      case (begin :+ Text(t1), Text(t2) +: rest) => ((new FragmentsFragment(this)) ^ fs).copy(middle = begin ++ (Text(t1+t2) +: rest))
+      case (begin :+ Text(t1), Text(t2) +: rest) => ((new FragmentsFragment(this.copy(middle = Seq())))) ^ fs.copy(middle = begin ++ (Text(t1+t2) +: rest))
       case _                                     => (new FragmentsFragment(this)) ^ fs
     }
 
@@ -58,10 +58,11 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   def seeIs(htmlLink: HtmlLink)  = copy(middle = Vector().view, linked = linked.seeIs(htmlLink))
   def hide                       = copy(linked = linked.linkIs(HtmlLink(this)).hide)
 
-  def executables: Seq[Executable] = fragments.collect { case e: Executable => e }
-  def examples: Seq[Example] = fragments.collect(isAnExample)
-  def texts: Seq[Text] = fragments.collect(isSomeText)
-  def tags: Seq[TaggingFragment] = fragments.collect(isSomeTag)
+  def executables: Seq[Executable] = middle.collect { case e: Executable => e }
+  def examples: Seq[Example]       = middle.collect(isAnExample)
+  def texts: Seq[Text]             = middle.collect(isSomeText)
+  def starts: Seq[SpecStart]       = middle.collect(isASpecStart)
+  def tags: Seq[TaggingFragment]   = middle.collect(isSomeTag)
 
   def linkMarkdown = linked.markdown
   def linkHtml     = linked.html
@@ -113,7 +114,7 @@ object Fragments {
   /** @return true if the Fragment is a SpecStart or a SpecEnd */
   def isSpecStartOrEnd: Function[Fragment, Boolean] = { case SpecStart(_,_,_) | SpecEnd(_,_) => true; case _ => false }
   /** @return the spec start if the Fragment is a SpecStart */
-  def isASpecStart: PartialFunction[Fragment, Fragment] = { case s @ SpecStart(_,_,_) => s }
+  def isASpecStart: PartialFunction[Fragment, SpecStart] = { case s @ SpecStart(_,_,_) => s }
   /** @return the spec end if the Fragment is a SpecEnd */
   def isASpecEnd: PartialFunction[Fragment, Fragment] = { case s @ SpecEnd(_,_) => s }
   /** @return true if the Fragment is a SpecStart */

@@ -25,10 +25,10 @@ case class SpecHtmlLink(name: SpecName,
 }
 
 case class UrlHtmlLink(override val url: String,
-                       override val beforeText: String,
-                       override val linkText: String,
-                       override val afterText: String,
-                       override val tip: String) extends
+                       override val beforeText: String = "",
+                       override val linkText: String   = "",
+                       override val afterText: String  = "",
+                       override val tip: String        = "") extends
    HtmlLink(url, beforeText, linkText, afterText, tip) {
 
   def urlIs(u: String)       = copy(url = u)

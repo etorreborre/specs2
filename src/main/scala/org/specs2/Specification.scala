@@ -51,28 +51,5 @@ trait SpecificationFeatures extends FragmentsBuilder with SpecificationStringCon
    with PendingUntilFixed
    with Contexts
    with SpecificationNavigation
-   with Debug {
-
-  /**
-   * apply an implicit context to a MatchResult in order to allow the implicit passing of a context to each example
-   *
-   * @see examples.DefineContextsSpec#BeforeWithImplicitContextSpec
-   */
-  implicit def contextAsResult[T, M[_] <: MatchResult[_]](implicit context: Context = defaultContext): AsResult[M[T]] = new AsResult[M[T]] {
-    def asResult(t: =>M[T]) = context(t.toResult)
-  }
-
-  /**
-   * apply an implicit Outside context to a function returning anything convertible to a result
-   *
-   * @see examples.DefineContextsSpec#OutsideWithImplicitContextSpec
-   */
-  implicit def outsideFunctionToResult[T : Outside, R : AsResult]: AsResult[T => R] = new AsResult[T => R] {
-    def asResult(f: =>(T => R)) = AsResult(implicitly[Outside[T]].applyOutside(f))
-  }
-
-  /** apply an implicit Fixture */
-  implicit def fixtureFunctionToResult[T : Fixture, R : AsResult]: AsResult[T => R] = new AsResult[T => R] {
-    def asResult(f: =>(T => R)) = implicitly[Fixture[T]].apply(f)
-  }
-}
+   with ContextsInjection
+   with Debug
