@@ -4,6 +4,7 @@ package reporter
 import _root_.org.scalatools.testing.{ EventHandler, Logger, Event, Result }
 import main.Arguments
 import text._
+import Trim._
 import time._
 import AnsiColors._
 import execute.{ Success, Failure, Error, Skipped, Pending, DecoratedResult }
@@ -51,6 +52,9 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
 class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOutput with TestLoggers {
   private val buffer = new StringBuilder
 
+  /** unfortunate way of dealing with the fact that sbt will automatically print a newline after a failure */
+  private var removeNextNewLine = false
+
   private def info(message: String)(implicit args: Arguments) {
     if (args.report.flow) buffer.append(message)
     else                  logInfo(message)
@@ -58,8 +62,12 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOu
 
   private def flushInfo(implicit args: Arguments) = if (args.report.flow) {
     if (!buffer.isEmpty) {
-      buffer.toString.split("\n").foreach(logInfo)
-      if (buffer.endsWith("\n")) logInfo("")
+      val toFlush =
+        if (removeNextNewLine) { removeNextNewLine = false; buffer.toString.removeFirst("\n") }
+        else                     buffer.toString
+
+      toFlush.toString.split("\n").foreach(logInfo)
+      if (toFlush.endsWith("\n")) logInfo("")
     }
     buffer.clear
   }
@@ -73,10 +81,12 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOu
 
   override def printFailure(message: String)(implicit args: Arguments)                      = {
     flushInfo
+    removeNextNewLine = true
     logFailure(message)
   }
   override def printError(message: String)(implicit args: Arguments)                        = {
     flushInfo
+    removeNextNewLine = true
     logError(message)
   }
   override def printSuccess(message: String)(implicit args: Arguments)                      = info(message)
