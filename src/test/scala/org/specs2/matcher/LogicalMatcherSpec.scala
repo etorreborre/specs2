@@ -57,7 +57,8 @@ class LogicalMatcherSpec extends script.Specification with ResultMatchers with G
      + the result is false if the application is true
 
  + a customer matcher can be negated, or used with be/have
- with exceptions
+
+ `or` must deal with exceptions
    + { throw e; 1 } must m1 or throwAn[Exception]
    + { throw e; 1 } must throwAn[Exception] or m1
    + { 1          } must m1 or throwAn[Exception]

@@ -69,8 +69,8 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   def linkHtml     = linked.html
 
   def overrideArgs(args: Arguments) = copy(arguments = arguments.overrideWith(args))
-  def map(function: Fragment => Fragment) = Fragments.create(fragments.map(function):_*)
-  def flatMap(function: Fragment => Seq[Fragment]) = Fragments.create(fragments.flatMap(function):_*)
+  def map(function: Fragment => Fragment) = copy(middle = middle.map(function))
+  def flatMap(function: Fragment => Seq[Fragment]) = copy(middle = middle.flatMap(function))
 
   override def toString = fragments.mkString("\n")
 

@@ -9,7 +9,7 @@ class SpecificationSpec extends script.Specification with Grouped { def is = s2"
 
  A specification can just be written with some text and bullet points for the examples
  + one group, one example
- + when a new textual group of examples starts, a new `Group` should be used
+ + when a newline and a text starts then a new `Group` should be used
 
  Tags
  + each example must be tagged with its corresponding group index and example index
@@ -30,6 +30,7 @@ class SpecificationSpec extends script.Specification with Grouped { def is = s2"
       val result = run("""a first group
                             + ex1
                             + ex2
+
                           and a second one
                             + ex1
                             + ex2
@@ -52,6 +53,7 @@ class SpecificationSpec extends script.Specification with Grouped { def is = s2"
       val text = """This is a specification with 2 groups
                             + ex1
                             + ex2
+
                           second one
                             + fx1
                             + fx2

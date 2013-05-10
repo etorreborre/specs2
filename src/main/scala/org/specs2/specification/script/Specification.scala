@@ -20,7 +20,7 @@ abstract class Specification extends SpecificationLike
 trait SpecificationLike extends org.specs2.SpecificationLike with Scripts with GroupsLike { outer =>
 
   /** analyse the fragments and extract examples from pieces of text */
-  override def map(fs: =>Fragments) = GroupsScript(groups = outer)(BulletedExamplesTemplate()(exampleFactory)).lines(super.map(fs.compact))
+  override def map(fs: =>Fragments) = GroupsScript(groups = outer)(BulletedExamplesTemplate(), exampleFactory).lines(super.map(fs.compact))
 }
 
 /**
@@ -29,78 +29,85 @@ trait SpecificationLike extends org.specs2.SpecificationLike with Scripts with G
  * It can be called several times with a groupIndex and exampleIndex to know exactly which groups and examples it should
  * start associating
  */
-case class GroupsScript(title: String = "groups", isStart: Boolean = true, groups: GroupsLike, groupIndex: Int = 0, exampleIndex: Int = 0)
-                       (implicit template: ScriptTemplate[GroupsScript, FragmentsScriptLines]) extends Script {
+case class GroupsScript(title: String = "groups", isStart: Boolean = true, groups: GroupsLike)
+                       (implicit template: ScriptTemplate[GroupsScript, FragmentsScriptLines], exampleFactory: ExampleFactory) extends Script {
 
   val groupTemplate = template
 
-  def fragments(text: String): Fragments = template.lines(text, this).fs
+  def fragments(text: String): Fragments = createExamples(template.lines(text, this), 0, 0)._1
 
+  /**
+   * Go through the list of all fragments. For each piece of text, try to parse it with the template
+   * and replace it with new fragments containing examples by associating the marked text with groups examples
+   */
   def lines(fs: Fragments) = {
-    fs.compact.middle.foldLeft(FragmentsScriptLines(fs.copy(middle = Seq()), 0, 0)) { (res, cur) =>
-      val FragmentsScriptLines(resultFragments, oldGroupIndex, oldExampleIndex) = res
-      val FragmentsScriptLines(fragments, newGroupIndex, newExampleIndex) =
+    fs.compact.middle.foldLeft((fs.copy(middle = Seq()), 0, 0)) { (res, cur) =>
+      val (resultFragments, previousGroupIndex, previousExampleIndex) = res
+      val (fragments, newGroupIndex, newExampleIndex) =
         cur match {
-          case Text(t) => groupTemplate.lines(t, copy(groupIndex = oldGroupIndex, exampleIndex = oldExampleIndex))
-          case other   => FragmentsScriptLines(Fragments.createList(other), oldGroupIndex, oldExampleIndex)
+          case Text(t) => createExamples(groupTemplate.lines(t, this), previousGroupIndex, previousExampleIndex)
+          case other   => (Fragments.createList(other), previousGroupIndex, previousExampleIndex)
         }
-      FragmentsScriptLines(resultFragments append fragments, newGroupIndex, newExampleIndex)
-    }.fs.compact
+      (resultFragments append fragments, newGroupIndex, newExampleIndex)
+    }._1.compact
   }
 
-  def group(i: Int) = groups.group(i)
+  /** match input fragments and group examples */
+  private def createExamples(fragmentLines: FragmentsScriptLines, groupIndex: Int, exampleIndex: Int) = {
+    fragmentLines.blocks.foldLeft((Fragments.createList(), groupIndex, exampleIndex)) { (res, block) =>
+      val (fragments, g, e) = res
+      (fragments append createExamplesForBlock(block, g, e), if (block.middle.exists(Fragments.isExample)) g + 1 else g, 0)
+    }
+  }
+
+  private def createExamplesForBlock(block: Fragments, groupIndex: Int, exampleIndex: Int) = {
+    groupTagsFor(groupIndex) ++
+    block.middle.foldLeft((Seq[Fragment](), exampleIndex)) { (res, cur) =>
+      val (fragments, e) = res
+
+      cur match {
+        case Example(line,_) => (fragments ++ (indentation(line.toString) +: exampleTagsFor(groupIndex, e) :+ createExample(line.toString, groupIndex, e) :+ Text("\n")), e + 1)
+        case other           => (fragments :+ other, e)
+      }
+    }._1 ++
+    groupTagsFor(groupIndex)
+  }
+
+  private def group(i: Int) = groups.group(i)
+
+  private def exampleTagsFor(g: Int, e: Int) = Seq(Tag(exampleName(g, e)))
+
+  private def groupTagsFor(i: Int) = {
+    val name = group(i).groupName
+    if (name.matches("g\\d\\d?\\.e\\d\\d?")) Seq(Section(name))
+    else                                     Seq(Section(name.removeEnclosing("'"), s"g${i+1}"))
+  }
+
+  private def exampleName(i: Int, j: Int) = s"g${i+1}.e${j+1}"
+  private def createExample(line: String, i: Int, j: Int) = exampleFactory.newExample(line, (group(i).example(j).t()).mapMessage(_ + " - " + exampleName(i, j)))
+  private def indentation(line: String) = Text(line.takeWhile(_ == ' ').mkString)
 
   def start = this
   def end = copy(isStart = false)
 }
 
-case class FragmentsScriptLines(fs: Fragments, groupIndex: Int, exampleIndex: Int) extends ScriptLines {
-  def appendText(t: String) = copy(fs = Fragments.createList((Text(t) +: fs.middle):_*))
-}
+case class FragmentsScriptLines(blocks: Seq[Fragments]) extends ScriptLines
 
-case class BulletedExamplesTemplate(marker: String = "+")(implicit exampleFactory: ExampleFactory) extends ScriptTemplate[GroupsScript, FragmentsScriptLines] {
+case class BulletedExamplesTemplate(marker: String = "+") extends ScriptTemplate[GroupsScript, FragmentsScriptLines] {
 
   def lines(text: String, script: GroupsScript): FragmentsScriptLines = {
-
-    /** match input fragments and group examples */
-    def setBodies(fs: Seq[Fragment]) = {
-      fs.foldLeft(FragmentsScriptLines(Fragments.createList(), script.groupIndex, script.exampleIndex)) { (res, cur) =>
-        val FragmentsScriptLines(fragments, i, j) = res
-        def groupTagsFor(i: Int) = {
-          val name = script.group(i).groupName
-          if (name.matches("g\\d\\d?\\.e\\d\\d?")) Seq(Section(name))
-          else                                     Seq(Section(name.removeEnclosing("'"), s"g${i+1}"))
-        }
-
-        def exampleName(i: Int, j: Int) = s"g${i+1}.e${j+1}"
-        def createExample(line: String, i: Int, j: Int) =
-          exampleFactory.newExample(strip(line), (script.group(i).example(j).t()).mapMessage(_ + " - " + exampleName(i, j)))
-
-        val (groupTags, exampleTags) = ((if (j == 0) groupTagsFor(i) else Seq()), Seq(Tag(exampleName(i, j))))
-
-        val (newFragments, newi, newj) =
-          cur match {
-            case Example(line,_) => (groupTags ++ (indentation(line.toString) +: exampleTags :+ createExample(line.toString, i, j) :+ Text("\n")), i, j+1)
-            case other           => (groupTagsFor(i) :+ other, i + 1, 0)
-          }
-        FragmentsScriptLines(fragments append newFragments, newi, newj)
-      }
-    }
-
     val lines = text.split("\n").toSeq
     val linesWithNewLines = lines.map(_ + "\n").updateLast(_.removeLast("\n"))
-    val fragments = linesWithNewLines.foldLeft(Fragments.createList()) { (res, line) =>
-      res append Seq(if (isExample(line)) exampleFactory.newExample(line, execute.Pending()) else Text(line))
-    }.compact
 
-    fragments.middle match {
-      case Text(t) +: rest => setBodies(rest).appendText(t)
-      case other           => setBodies(other)
+    val fragmentLines = linesWithNewLines.foldLeft(Seq(Fragments.createList())) { (res, line) =>
+      val blocks = if (mustCreateNewBlock(line, res.lastOption)) (res :+ Fragments.createList()) else res
+      blocks.updateLast(fs => (fs add createFragment(line)).compact)
     }
-
+    FragmentsScriptLines(fragmentLines)
   }
 
-  def isExample(line: String) = line.trim.startsWith(marker)
-  def strip(line: String) = line.trim.removeFirst(s"\\Q$marker\\E")
-  def indentation(line: String) = Text(line.takeWhile(_ == ' ').mkString)
+  private def mustCreateNewBlock(line: String, lastBlock: Option[Fragments]) = line.trim.isEmpty && lastBlock.flatMap(_.middle.lastOption).exists(Fragments.isExample)
+  private def createFragment(line: String) = if (isExample(line)) Example(strip(line), execute.Pending()) else Text(line)
+  private def isExample(line: String) = line.trim.startsWith(marker)
+  private def strip(line: String) = line.trim.removeFirst(s"\\Q$marker\\E")
 }
