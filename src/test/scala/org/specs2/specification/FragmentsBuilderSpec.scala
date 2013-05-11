@@ -35,10 +35,16 @@ SpecStart/SpecEnd
    + A title can be added after arguments are declared
    + A title can not be empty
 
+Arguments
+=========
+
    Arguments can be added in different place in the spec
      + new Arguments values are added to the existing ones
      + and override them if already declared
      + it also works with the map method in BaseSpecification
+
+Links
+=====
 
    A specification can be linked
      + and included
@@ -95,13 +101,13 @@ Other elements
     eg  := (content2.specStart.title must_== "title") and (content2.specStart.arguments.xonly must beTrue)
     eg  :=  content6.specStart.title must not(beEmpty)
   }
-  "start and end" - new group with specifications {
+  "arguments" - new group with specifications {
     eg := (content3.specStart.arguments.xonly must beTrue) and (content3.specStart.arguments.include must_== "t1")
     
     eg := content4.specStart.arguments.include must_== "t2"
     eg := content5.specStart.arguments.sequential must beTrue
   }
-  "start and end" - new group with specifications {
+  "links" - new group with specifications {
 
     eg := parentSpec1.content.fragments.toList must
               beLike { case SpecStart(_,_,_) :: Text(_) :: SpecStart(_,_,Linked(Some(l), false, false)) :: rest => ok }
@@ -109,8 +115,6 @@ Other elements
               beLike { case SpecStart(_,_,_) :: Text(_) :: SpecStart(_,_,Linked(Some(l), true, false)) :: rest => ok }
     eg := parentSpec3.content.fragments.toList must
               beLike { case SpecStart(_,_,_) :: Text(_) :: SpecStart(_,_,Linked(Some(l), false, true)) :: rest => ok }
-  }
-  "start and end" - new group with specifications {
 
     eg := parentSpec4.content.fragments.toList must
               beLike { case SpecStart(_,_,_) :: Text(_) ::
@@ -131,31 +135,24 @@ Other elements
     }
     eg := soExample.body() must beSuccessful
     eg := soExample.desc.toString must_== "given the name: eric, then the age is 18"
-  }
-  "examples" - new group {
 
     def execute = FragmentExecution.executeFragment(args())
     eg := execute("example" ! { throw new NoSuchMethodError("flushBuffer"); success }).toString must beMatching(".*ThrowableException.*NoSuchMethodError\\: flushBuffer.*")
     eg := execute("example" ! { throw new AssertionError(); success }).toString must not contain("Fragment evaluation error")
-  }
 
-  "examples matches" - new group {
     eg := ("Eric" ! success).matches("E.*")
     eg := ("Eric\nT." ! success).matches("E.*T.*")
   }
   "other elements" - new group {
     eg := ("t" ^ "t2").middle must have size(2)
     eg := ("t":Fragments).middle must have size(1)
-  }
-  "other elements" - new group {
+
     eg := Step.fromEither(Left(Skipped())).execute must beSkipped
     eg := Step.fromEither(Right("value")).execute must beSuccessful
-  }
-  "other elements" - new group {
+
     eg := Step(stopOnFail = true).execute must beSuccessful
     eg := Step(stopOnFail = {throw new Exception; true}).execute must beError
-  }
-  "other elements" - new group {
+
     eg := Step(1).execute must beSuccessful
     eg := Step({throw new Exception; 1}).execute must beError
   }

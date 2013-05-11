@@ -46,17 +46,17 @@ The Forms object provides several utility functions for creating forms
     e2 := FormDiffs.subset(set1, set2) must_== set1 ++ ko(set2)
     e3 := FormDiffs.subset(set1, set1 ++ set2) must_== ok(set1) ++ ko(set2)
   }
-  "subset verification" - new g1 {
+  "subset verification" - new g2 {
     val set1 = List(Form.tr("a"), Form.tr("b"))
     val set2 = List(Form.tr("c"), Form.tr("d"))
 
-    e4 := FormDiffs.subset(set1 ++ set2, set1).forall(_.isSuccess) must beTrue
-    e5 := FormDiffs.subset(set1, set2).forall(_.isSuccess)  must_== false
-    e6 := FormDiffs.subset(set1, set1 ++ set2).exists(_.isSuccess) &&
+    e1 := FormDiffs.subset(set1 ++ set2, set1).forall(_.isSuccess) must beTrue
+    e2 := FormDiffs.subset(set1, set2).forall(_.isSuccess)  must_== false
+    e3 := FormDiffs.subset(set1, set1 ++ set2).exists(_.isSuccess) &&
           FormDiffs.subset(set1, set1 ++ set2).exists(!_.isSuccess) must beTrue
   }
 
-  "subsequence verification" - new g2 with forms {
+  "subsequence verification" - new g3 with forms {
     e1 := sameExecution(FormDiffs.subsequence(ab ++ cd, ab), ok(ab ++ cd))
     e2 := sameExecution(FormDiffs.subsequence(bac ++ d, abc), ko(b) ++ ok(a) ++ ko(c) ++ ok(d))
     e3 := sameExecution(FormDiffs.subsequence(cd, ab), cd ++ ko(ab))
@@ -65,7 +65,7 @@ The Forms object provides several utility functions for creating forms
     e5 := sameExecution(FormDiffs.subsequence(ab, ba ++ cd), ko(a) ++ ok(b) ++ ko(cd))
   }
 
-  "set verification" - new g3 {
+  "set verification" - new g4 {
     val set1 = List(Form.tr("a"), Form.tr("b"))
     val set2 = List(Form.tr("c"), Form.tr("d"))
     
@@ -75,7 +75,7 @@ The Forms object provides several utility functions for creating forms
     e4 := sameExecution(FormDiffs.set(set1, set1), ok(set1))
   }
   
-  "sequence verification" - new g4 with forms {
+  "sequence verification" - new g5 with forms {
     e1 := sameExecution(FormDiffs.sequence(ab, ab ++ cd), ok(ab) ++ ko(cd))
     e2 := sameExecution(FormDiffs.sequence(ab, ba), ko(a) ++ ok(b))
     e3 := sameExecution(FormDiffs.sequence(ab, ba ++ c), ko(a) ++ ok(b) ++ ko(c))

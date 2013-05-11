@@ -299,7 +299,7 @@ Templates
       } must contain("given 1") and contain("when -") and contain("x then") and contain ("+ then")
     }
 
-    e1 := {
+    e8 := {
       val steps = Scenario("e1").
         given(anInt).
         when(aString) { case op :: i :: _ => -i }.
@@ -316,7 +316,7 @@ Templates
     }
   }
 
-  "templates" - new g5 with StandardRegexStepParsers with GWT with FragmentsBuilder {
+  "templates" - new g4 with StandardRegexStepParsers with GWT with FragmentsBuilder {
     e1 := {
       implicit val bulletTemplate: ScriptTemplate[Scenario, GivenWhenThenLines] = BulletTemplate()
       val steps = Scenario("e1").

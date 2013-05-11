@@ -57,6 +57,9 @@ class MockitoSpec extends script.Specification with Mockito with ResultMatchers 
 
    + it is possible to verify a function with repeated parameters
 
+STUBS
+=====
+
  It is also possible to return a specific value from a mocked method
    + then when the mocked method is called, the same values will be returned
    + different successive values can even be returned

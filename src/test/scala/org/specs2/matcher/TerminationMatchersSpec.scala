@@ -31,12 +31,10 @@ class TerminationMatchersSpec extends script.Specification with TerminationMatch
   "termination" - new group {
     eg := { Thread.sleep(50) must terminate(sleep = 100.millis) }
     eg := { (Thread.sleep(150) must terminate) returns "the action is blocking with retries=1 and sleep=100" }
-  }
-  "termination" - new group {
+
     eg := { Thread.sleep(50) must terminate(retries=3, sleep=20.millis) }
     eg := { (Thread.sleep(1000) must terminate(retries=3, sleep=20.millis)) returns "the action is blocking with retries=3 and sleep=20" }
-  }
-  "termination" - new group {
+
     eg := {
       val out = new StringOutput { }
       val terminated = (1 to 5).foreach (i => {Thread.sleep(80 * i); out.println(i) }) must not terminate(retries=5, sleep=20.millis)
@@ -44,14 +42,12 @@ class TerminationMatchersSpec extends script.Specification with TerminationMatch
       terminated and (out.messages must not contain("3"))
     }
     eg := { Thread.sleep(150) must not terminate }
-  }
-  "unblocking" - new group {
+
     eg := {
       val queue = new ArrayBlockingQueue[Int](1)
       queue.take() must terminate.when("adding an element", queue.add(1))
     }
-  }
-  "unblocking" - new group {
+
     eg := {
       val queue1 = new ArrayBlockingQueue[Int](1)
       var stop = true
