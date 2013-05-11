@@ -93,21 +93,33 @@ case class GroupsScript(title: String = "groups", isStart: Boolean = true, group
 
 case class FragmentsScriptLines(blocks: Seq[Fragments]) extends ScriptLines
 
-case class BulletedExamplesTemplate(marker: String = "+") extends ScriptTemplate[GroupsScript, FragmentsScriptLines] {
+trait GroupTemplateParameters {
+  def isExample(line: String): Boolean
+  def isGroupStart(line: String): Boolean
+  def stripExample(line: String): String
+  def stripGroup(line: String): String
+}
+case class BulletedExamplesTemplateParameters() extends GroupTemplateParameters {
+  def isExample(line: String) = line.trim.startsWith("+")
+  def isGroupStart(line: String) = Seq("====", "----").exists(line.trim.startsWith) || line.trim.matches("^#+.*")
+  def stripExample(line: String) = line.trim.removeFirst(s"\\+")
+  def stripGroup(line: String) = line
+}
+
+case class BulletedExamplesTemplate(implicit params: GroupTemplateParameters = BulletedExamplesTemplateParameters()) extends ScriptTemplate[GroupsScript, FragmentsScriptLines] {
 
   def lines(text: String, script: GroupsScript): FragmentsScriptLines = {
     val lines = text.split("\n").toSeq
     val linesWithNewLines = lines.map(_ + "\n").updateLast(_.removeLast("\n"))
 
     val fragmentLines = linesWithNewLines.foldLeft(Seq(Fragments.createList())) { (res, line) =>
-      val blocks = if (mustCreateNewBlock(line, res.lastOption)) (res :+ Fragments.createList()) else res
+      val blocks = if (startNewBlock(line, res.lastOption)) (res :+ Fragments.createList()) else res
       blocks.updateLast(fs => (fs add createFragment(line)).compact)
     }
     FragmentsScriptLines(fragmentLines)
   }
 
-  private def mustCreateNewBlock(line: String, lastBlock: Option[Fragments]) = line.trim.isEmpty && lastBlock.map(_.middle.exists(Fragments.isExample)).getOrElse(false)
-  private def createFragment(line: String) = if (isExample(line)) Example(strip(line), execute.Pending()) else Text(line)
-  private def isExample(line: String) = line.trim.startsWith(marker)
-  private def strip(line: String) = line.trim.removeFirst(s"\\Q$marker\\E")
+  private def startNewBlock(line: String, lastBlock: Option[Fragments]) = params.isGroupStart(line) && lastBlock.map(_.middle.exists(Fragments.isExample)).getOrElse(false)
+
+  private def createFragment(line: String) = if (params.isExample(line)) Example(params.stripExample(line), execute.Pending()) else Text(params.stripGroup(line))
 }
