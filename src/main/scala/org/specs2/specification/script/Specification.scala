@@ -48,7 +48,7 @@ case class GroupsScript(title: String = "groups", isStart: Boolean = true, group
           case Text(t) => createExamples(groupTemplate.lines(t, this), previousGroupIndex, previousExampleIndex)
           case other   => (Fragments.createList(other), previousGroupIndex, previousExampleIndex)
         }
-      (resultFragments append fragments, newGroupIndex, newExampleIndex)
+      (resultFragments append fragments.compact, newGroupIndex, newExampleIndex)
     }._1.compact
   }
 
@@ -95,13 +95,13 @@ case class FragmentsScriptLines(blocks: Seq[Fragments]) extends ScriptLines
 
 trait GroupTemplateParameters {
   def isExample(line: String): Boolean
-  def isGroupStart(line: String): Boolean
+  def isGroupStart(line: String, nextLine: String): Boolean
   def stripExample(line: String): String
   def stripGroup(line: String): String
 }
 case class BulletedExamplesTemplateParameters() extends GroupTemplateParameters {
   def isExample(line: String) = line.trim.startsWith("+")
-  def isGroupStart(line: String) = Seq("====", "----").exists(line.trim.startsWith) || line.trim.matches("^#+.*")
+  def isGroupStart(line: String, nextLine: String) = Seq("====", "----").exists(nextLine.trim.startsWith) || line.trim.matches("^#+.*")
   def stripExample(line: String) = line.trim.removeFirst(s"\\+")
   def stripGroup(line: String) = line
 }
@@ -112,14 +112,17 @@ case class BulletedExamplesTemplate(implicit params: GroupTemplateParameters = B
     val lines = text.split("\n").toSeq
     val linesWithNewLines = lines.map(_ + "\n").updateLast(_.removeLast("\n"))
 
-    val fragmentLines = linesWithNewLines.foldLeft(Seq(Fragments.createList())) { (res, line) =>
-      val blocks = if (startNewBlock(line, res.lastOption)) (res :+ Fragments.createList()) else res
+    val fragmentLines = linesWithNewLines.zipWithIndex.foldLeft(Seq(Fragments.createList())) { (res, linei) =>
+      val (line, index) = linei
+      val nextLine = if (index + 1 < linesWithNewLines.size) linesWithNewLines(index + 1) else ""
+
+      val blocks = if (startNewBlock(line, nextLine, res.lastOption)) (res :+ Fragments.createList()) else res
       blocks.updateLast(fs => (fs add createFragment(line)).compact)
     }
     FragmentsScriptLines(fragmentLines)
   }
 
-  private def startNewBlock(line: String, lastBlock: Option[Fragments]) = params.isGroupStart(line) && lastBlock.map(_.middle.exists(Fragments.isExample)).getOrElse(false)
+  private def startNewBlock(line: String, nextLine: String, lastBlock: Option[Fragments]) = params.isGroupStart(line, nextLine) && lastBlock.map(_.middle.exists(Fragments.isExample)).getOrElse(false)
 
   private def createFragment(line: String) = if (params.isExample(line)) Example(params.stripExample(line), execute.Pending()) else Text(params.stripGroup(line))
 }

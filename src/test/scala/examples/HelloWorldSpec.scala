@@ -6,6 +6,11 @@ import org.specs2._
  * This specification shows how to create examples using the "acceptance" style
  */
 class HelloWorldSpec extends Specification { def is = s2"""
+hey aoseuth
+===========
+
+hey aoseuth
+-----------
 
  This is a specification to check the 'Hello world' string
 

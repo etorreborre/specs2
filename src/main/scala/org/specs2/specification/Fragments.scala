@@ -38,7 +38,7 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
     append(Fragments.createList(fs:_*))
 
   /** recreate the Fragments so that 2 consecutive Text fragments are aggregated into one */
-  def compact = middle.foldLeft(copy(middle = Seq())) { (res, cur) => res add cur }
+  def compact = middle.foldLeft(copy(middle = Seq())) { (res, cur) => res append (Seq(cur)) }
 
   def middleDrop(n: Int) = copy(middle = Vector(middle:_*).drop(n).view)
   def middleDropRight(n: Int) = copy(middle = Vector(middle:_*).dropRight(n).view)
