@@ -101,7 +101,13 @@ trait GroupTemplateParameters {
 }
 case class BulletedExamplesTemplateParameters() extends GroupTemplateParameters {
   def isExample(line: String) = line.trim.startsWith("+")
-  def isGroupStart(line: String, nextLine: String) = Seq("====", "----").exists(nextLine.trim.startsWith) || line.trim.matches("^#+.*")
+
+  def isGroupStart(line: String, nextLine: String) =
+    Seq("====", "----").exists(nextLine.trim.startsWith) ||
+    line.trim.matches("#+.*")                            ||
+    line.trim.matches("<h\\d/>.*")                       ||
+    line.trim.matches("<h\\d>.*?</h\\d>")
+
   def stripExample(line: String) = line.trim.removeFirst(s"\\+")
   def stripGroup(line: String) = line
 }
