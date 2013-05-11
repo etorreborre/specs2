@@ -9,16 +9,16 @@ class FieldSpec extends script.Specification with Grouped { def is = s2"""
 
 A Field is a labelled property with can be embedded in a Form.                                                        
 
- A Field can be created
+ # A Field can be created
    + from just a value (then its name is empty)
    + from a name and a value
    + from existing fields, concatenating them
 
- A Field can be executed
+ # A Field can be executed
    + it returns skipped if the value is ok
    + it returns an error if the value throws an exception
 
- A Field can be modified
+ # A Field can be modified
    + to a string Field
                                                                             """
 

@@ -10,18 +10,18 @@ A Property is used to store values which can be lazily accessed when required.
 
 It has an Option-like structure, supporting the same kind of operations and can be empty like an Option.
 
- A property
+ ## A property
    + can be empty
    + can be created from any value
    + can be updated with another value
    + can be updated with an option
    + has a toString method returning the option value toString
 
- A property can be executed
+ ## A property can be executed
    + and return its contained value
    + it is only executed once
 
- A property behaves like an Option
+ ## property behaves like an Option
    + with map
    + with flatMap
    + with filter
@@ -31,7 +31,7 @@ It has an Option-like structure, supporting the same kind of operations and can 
    + with isEmpty
    + with orElse
 
- A property can be transformed to an Either instance
+ ## A property can be transformed to an Either instance
    + with toLeft
    + with toRight
                                                                            """

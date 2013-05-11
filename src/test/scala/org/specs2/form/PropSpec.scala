@@ -12,7 +12,10 @@ A Prop is a Field defining an expected and an actual value.
 
 It embeddeds an optional constraint which allows to execute the Prop and see (by default) if
 the actual value is equal to the expected value.
-                                                                                                                        
+
+Creation
+========
+
  A Prop can be created
    + with a single label
    + with a single value (the actual one)
@@ -22,13 +25,22 @@ the actual value is equal to the expected value.
    + with the actual value and a muted matcher
    + with the actual value, the expected value and a muted matcher
 
+Display
+=======
+
  A Prop can be displayed
    + with only the expected value
    + with only the actual value
    + with only one value when expected == actual
 
+Update
+======
+
  A Prop can be updated
    + with the expected value
+
+Execution
+=========
 
  A Prop can be executed
    + it returns pending if it has no values at all

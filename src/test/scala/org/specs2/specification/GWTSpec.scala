@@ -11,6 +11,9 @@ class GWTSpec extends script.Specification with GWT with Grouped with StandardDe
 
  Given / When / Then is a style of specification where there are a number of steps setting up values to setup a context (given steps), then some steps to trigger some actions (when steps) and finally some checks (then steps).
 
+Extractors steps
+================
+
  Combinations with delimited extractors
 
   + given/when/then
@@ -20,10 +23,15 @@ class GWTSpec extends script.Specification with GWT with Grouped with StandardDe
   + given/given/when/then and seq of given
   + given/when/when/then and seq of when
 
+Stripping text
+==============
  Extractors must extract values and return the resulting string
 
   + with delimited extractors
   + with regex extractors
+
+Execution
+=========
 
  If there are errors, the rest of the sequence must be skipped,
  but if there is a failure in a then step, the other then steps must still be executed
@@ -39,10 +47,12 @@ class GWTSpec extends script.Specification with GWT with Grouped with StandardDe
  It is possible to intercalate other variables in the gwt steps
   + with a simple variable
 
+Templates
+=========
  + Templates can be used to define which lines should be used
                                                                  """
 
-  "combinations" - new g1 {
+  "extractors" - new g1 {
     e1 := {
       val steps = Scenario("e1").
         given(groupAs("\\d").and((_:String).toInt)).
@@ -288,9 +298,7 @@ class GWTSpec extends script.Specification with GWT with Grouped with StandardDe
         """
       } must contain("given 1") and contain("when -") and contain("x then") and contain ("+ then")
     }
-  }
 
-  "other variables" - new g4 {
     e1 := {
       val steps = Scenario("e1").
         given(anInt).

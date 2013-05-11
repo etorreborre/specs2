@@ -17,13 +17,17 @@ class GroupsSpec extends script.Specification with Grouped with ThrownExpectatio
 
  There is a limit of 22 groups of 22 examples each which are available in the `Groups` and `Grouped` traits but you can also use auto-numbering groups with no such limit.
 
- Examples execution
+Examples execution
+==================
 
  The examples of a group must only be evaluated when the example is evaluated
    + for a numbered `Groups` group
    + for a numbered `Grouped` group
    + for an auto-numbered `Groups` group
    + for an auto-numbered `Grouped` group
+
+Pending examples
+================
 
  If an example is not defined, then its result is PENDING with the name of the group+example
    + for a numbered `Groups` group

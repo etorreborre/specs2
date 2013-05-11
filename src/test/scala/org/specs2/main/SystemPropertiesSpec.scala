@@ -5,11 +5,17 @@ import specification._
 
 class SystemPropertiesSpec extends script.Specification with Groups { def is = s2"""
 
+Set
+===
+
  the getOrElse(name, defaultValue) method returns
    + the value of the 'specs2.name' property if found
      + even if capitalized differently
    + the value of the 'name' property if found
    + the default value if not found
+
+Get if
+======
 
  the getIf(name, value) method returns
    + Some(value) if the property is found
@@ -18,6 +24,9 @@ class SystemPropertiesSpec extends script.Specification with Groups { def is = s
  the getIfElse(name, v1)(v2) method returns
    + v1 if the property is found
    + v2 the property is not found
+
+Get as
+======
 
  the getPropertyAs method returns
    + None if the property is declared with just no value

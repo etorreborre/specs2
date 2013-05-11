@@ -8,7 +8,7 @@ import util.matching.Regex
 
 class RegexExtractorSpec extends script.Specification with Groups { def is = s2"""
 
- RegexExtractors can extract up to 10 distinct parameters from a piece of text
+ # RegexExtractors can extract up to 10 distinct parameters from a piece of text
  + one parameter
  + 2 parameters
  + the sequences of all parameters
@@ -16,7 +16,7 @@ class RegexExtractorSpec extends script.Specification with Groups { def is = s2"
  + it's ok if there is nothing to extract and only one string is expected
  + if the regular expression can't parse anything, the full string is returned
 
- Exceptions are thrown when the extraction doesn't work
+ # Exceptions are thrown when the extraction doesn't work
  + FailureException if there are not enough parameters
  + ErrorException if the regular expression is malformed
 """

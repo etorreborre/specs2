@@ -127,12 +127,21 @@ class AnyMatchersSpec extends script.Specification with Groups with ResultMatche
   ${ type1 must not be anInstanceOf[Type2] }
   ${ (type1 must beAnInstanceOf[Type2]).message must_== "'type1' is not an instance of 'org.specs2.matcher.Type2'" }
 
+Implicits
+=========
+
   + the === implicits can be deactivated with the NoCanBeEqual trait
   + the must implicits can be deactivated with the NoMustExpectations trait
+
+Robustness
+==========
 
   the be_== matcher must be robust in face of
    + a null object
    + a non-traversable collection
+
+Details
+=======
 
   the be_== matcher must warn when comparing 2 objects with the same toString representation but not the same type"
    + with List[Int] and List[String]
@@ -182,7 +191,7 @@ class AnyMatchersSpec extends script.Specification with Groups with ResultMatche
     }
   }
 
-  "robustness" - new group {
+  "details" - new group {
     eg := {
       (List(1, 2) must_== List("1", "2")) must beFailing(
         "\\Q'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.Integer]'\n is not equal to \n'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.String]'\\E")

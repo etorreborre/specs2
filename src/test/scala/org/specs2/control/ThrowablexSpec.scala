@@ -7,22 +7,22 @@ class ThrowablexSpec extends script.Specification with Throwablex with Grouped {
 
 The Throwablex trait provides extensions to regular throwables:
 
- It provides methods to access nested exceptions
+ # It provides methods to access nested exceptions
    + chainedExceptions returns a list of nested exceptions
    + getFullStackTrace returns a list of all nested stackTraceElements
    + messageAndCause returns the exception message and its cause if any
 
- It has location methods
+ # It has location methods
    + to get the name of the file and the line from an exception
    + to get the class name and line number of an exception
    + to get the class name, file name and line number of an exception
    + to get the path of an exception
 
- It allows to filter stacktraces
+ # It allows to filter stacktraces
    + to filter all the lines matching a given pattern
    + to filter all the lines not matching a given pattern
 
- It provides utility functions for stacktrace elements
+ # It provides utility functions for stacktrace elements
    + apply returns the nth element
    + headOption returns the first element as an option
                                                                                                                  """

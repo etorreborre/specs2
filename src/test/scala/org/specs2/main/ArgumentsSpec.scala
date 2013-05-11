@@ -15,7 +15,9 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
  * string arguments which have a specific value
    e.g. `srcTestDir src/test` to specify the directory holding the source files
                                                                                                                         
-                                                                                                                        
+Definition
+==========
+
   If an argument is specified, its value is returned                                                                  
     + for a boolean argument like xonly the value is true
     + for a string argument, it is the 'next' value
@@ -31,10 +33,16 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
 
   + Some boolean arguments have negated names, like nocolor, meaning !color
 
+Overriding
+==========
+
   An Arguments instance can be overriden by another with the `<|` operator: `a <| b`
     + if there's no corresponding value in b, the value in a stays
     + there is a corresponding value in b, the value in a is overriden when there is one
     + there is a corresponding value in b, the value in b is kept
+
+System props
+============
 
   Arguments can also be passed from system properties
     + a boolean value just have to exist as -Dname
@@ -42,6 +50,9 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
     + a boolean value can be -Dname=false
     + a string value will be -Dname=value
     + properties can also be passed as -Dspecs2.name to avoid conflicts with other properties
+
+Execution
+=========
 
   Arguments can decide if a result must be shown or not, depending on its status
     + xonly => canShow(x)
@@ -56,19 +67,14 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
   "values" - new group {
     eg := Arguments("xonly").xonly must beTrue
     eg := Arguments("specName", "spec").specName must_== "spec"
-  }
-  "values" - new group {
+
     eg := Arguments("").xonly must beFalse
     eg := Arguments("").specName must_== ".*Spec"
-  }
 
-  "names" - new group {
     eg := Arguments("xOnly").xonly must beTrue
     eg := Arguments("specname", "spec").specName must_== "spec"
     eg := Arguments("exclude", "spec").ex must_== Arguments().ex
-  }
 
-  "booleans" - new group {
     eg := Arguments("nocolor").color must beFalse
    }
 
@@ -90,7 +96,7 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
     eg := Arguments.extract(Seq(""), properties("specs2.specname" -> "spec")).specName must_== "spec"
    }
 
-  "show" - new group {
+  "execution" - new group {
     eg := "args"                      | "status" | "canShow"    |>
           xonly                       ! "x"      ! true         |
           xonly                       ! "!"      ! true         |
@@ -128,9 +134,7 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
             showOnly("o")              ! skipped             ! true         |
             showOnly("o")              ! success             ! false        |
             { (a, s, r) =>  a.canShow(s.status) must_== r }
-  }
 
-  "filters" - new group {
     eg := Arguments("this", "is", "cool").commandLineFilter("this", "cool").commandLine.arguments === Seq("this", "cool")
     eg := Arguments("this", "is", "cool").commandLineFilterNot("this", "cool").commandLine.arguments === Seq("is")
   }

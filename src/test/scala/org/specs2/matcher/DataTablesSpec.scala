@@ -7,20 +7,20 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
 
   DataTables are useful to specify lots of examples varying just by a few values.
 
-  A simple table can be declared to specify the addition on Integers                                         ${e1}
-  A table is not executed if there is no 'play' sign `|>` declared on it                                     ${e2}
-  If there are failures on rows they must be reported                                                        ${e3}
-  If there is an exception on any row, it will not stop the example                                          ${e4}
-  If the first value is a string, !! can be used as a cell separator                                         ${e5}
-  !! can be used as a cell separator with any type                                                           ${e5_1}
-  A table can be built with just one column                                                                  ${e6}
-  A table must work with values of different subtypes of the first row                                       ${e7}
-  A table must work ok in a mutable spec                                                                     ${e8}
+  A simple table can be declared to specify the addition on Integers                                         $e1
+  A table is not executed if there is no 'play' sign `|>` declared on it                                     $e2
+  If there are failures on rows they must be reported                                                        $e3
+  If there is an exception on any row, it will not stop the example                                          $e4
+  If the first value is a string, !! can be used as a cell separator                                         $e5
+  !! can be used as a cell separator with any type                                                           $e5_1
+  A table can be built with just one column                                                                  $e6
+  A table must work with values of different subtypes of the first row                                       $e7
+  A table must work ok in a mutable spec                                                                     $e8
   A table must be formatted with equal-length cells
-    when succeeding                                                                                          ${e9}
-    when failing                                                                                             ${e10}
-  2 tables results can be and-ed together                                                                    ${e11}
-  a cell can have null values                                                                                ${e12}
+    when succeeding                                                                                          $e9
+    when failing                                                                                             $e10
+  2 tables results can be and-ed together                                                                    $e11
+  a cell can have null values                                                                                $e12
                                                                                                                         """
 
   def boom = error("boom")

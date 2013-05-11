@@ -17,6 +17,8 @@ class MockitoSpec extends script.Specification with Mockito with ResultMatchers 
  http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
                                                                                                                        
  CREATION
+ ========
+
  Mocks can be created
    + with a name
    + with a default return value
@@ -25,6 +27,8 @@ class MockitoSpec extends script.Specification with Mockito with ResultMatchers 
    + with settings
 
  VERIFICATION
+ ============
+
  When a mock is created with the mock method
    + it is possible to call methods on the mock
    + it is possible to verify that a method has been called
@@ -69,6 +73,8 @@ class MockitoSpec extends script.Specification with Mockito with ResultMatchers 
  + A mock can be created and stubbed at the same time
 
  NUMBER OF CALLS
+ ===============
+
  The number of calls to a mocked method can be checked
    + if the mocked method has been called once
    + if the mocked method has been called twice
@@ -80,6 +86,8 @@ class MockitoSpec extends script.Specification with Mockito with ResultMatchers 
    + if the mocked method has not been called after some calls - ignoring stubs
 
  ORDER OF CALLS
+ ==============
+
  The order of calls to a mocked method can be checked
    + with 2 calls that were indeed in order
    + with 2 calls that were indeed in order - ignoring stubbed methods
@@ -87,6 +95,8 @@ class MockitoSpec extends script.Specification with Mockito with ResultMatchers 
    + with 3 calls that were indeed not in order
 
  ANSWERS & PARAMETERS CAPTURE
+ ============================
+
  + Answers can be created to control the returned a value
  + Answers can use the mock instance as the second parameter
  + Answers can use the mock instance, even when the method has 0 parameters
@@ -140,8 +150,7 @@ class MockitoSpec extends script.Specification with Mockito with ResultMatchers 
       byname.call(10)
       there was one(byname).call(be_>(5))
     }
-  }
-  "verification" - new group with list {
+
     eg := {
       function1.call((_:Int).toString)
       there was one(function1).call(1 -> "1")
@@ -171,8 +180,7 @@ class MockitoSpec extends script.Specification with Mockito with ResultMatchers 
       functionAny.call(() => throw new Exception)
       there was one(functionAny).call(any[() => Any])
     }
-  }
-  "verification" - new group with list {
+
     eg := {
       partial.call { case (i:Int, d: Double) => (i + d).toString }
       there was one(partial).call((1, 3.0) -> "4.0")
@@ -189,8 +197,7 @@ class MockitoSpec extends script.Specification with Mockito with ResultMatchers 
       partial.call { case (i:Int, d: Double) if i > 10 => (i + d).toString }
       there was one(partial).call((1, 3.0) -> "4.0") returns "a PartialFunction defined for (1,3.0)"
     }
-  }
-  "verification" - new group with list {
+
     eg := {
       converted.call("test")
       there was one(converted).call("test")
@@ -199,8 +206,7 @@ class MockitoSpec extends script.Specification with Mockito with ResultMatchers 
       converted.call("test")
       there was one(converted).call(startWith("t"))
     }
-  }
-  "verification" - new group with list {
+
     eg := {
       repeated.call(1, 2, 3)
       (there was one(repeated).call(1, 2, 3)) and
@@ -216,8 +222,7 @@ class MockitoSpec extends script.Specification with Mockito with ResultMatchers 
       list.add("one") returns (true, false, true)
       (list.add("one"), list.add("one"), list.add("one")) must_== (true, false, true)
     }
-  }
-  "stubs" - new group with list {
+
     eg := {
       list.contains(anArgThat(new IsNull[String])) returns true
       list.contains(null) must_== true
@@ -236,8 +241,6 @@ class MockitoSpec extends script.Specification with Mockito with ResultMatchers 
       list.contains(List(1)) must_== true
       list.contains(List(2)) must_== false
     }
-  }
-  "thrown exceptions" - new group with list {
     eg := {
       list.clear() throws new RuntimeException
       list.clear()
@@ -248,8 +251,6 @@ class MockitoSpec extends script.Specification with Mockito with ResultMatchers 
       tryo(list.clear())
       list.clear()
     } must throwAn[IllegalArgumentException]
-  }
-  "mockAndStub" - new group {
     eg := {
       val mocked: java.util.List[String] = mock[java.util.List[String]].contains("o") returns true
       mocked.contains("o") must beTrue
@@ -354,8 +355,6 @@ class MockitoSpec extends script.Specification with Mockito with ResultMatchers 
       list.size answers { m => m.toString.size }
       list.size must_== 4
     }
-  }
-  "arguments capture" - new group with list {
     eg := {
       list.get(1)
       val c = capture[Int]
@@ -370,8 +369,6 @@ class MockitoSpec extends script.Specification with Mockito with ResultMatchers 
       there was two(list).get(c)
       c.values.toString === "[1, 2]"
     }
-  }
-  "reuse" - new group {
     implicit val args = main.Arguments()
 
     eg := {

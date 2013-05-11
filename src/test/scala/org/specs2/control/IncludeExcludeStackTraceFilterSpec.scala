@@ -6,6 +6,8 @@ import specification._
 
 class IncludeExcludeStackTraceFilterSpec extends IncludeExcludeStackTraceFilterExamples { def is = s2"""
 
+Patterns
+========
   A stacktrace can be filtered
     by declaring 'exclude' patterns
       + leaving the elements not matching the patterns
@@ -14,12 +16,18 @@ class IncludeExcludeStackTraceFilterSpec extends IncludeExcludeStackTraceFilterE
       + leaving the elements matching the patterns
       + filtering out the elements not matching the patterns
 
+Creation
+========
+
   A IncludedExcludedStackTraceFilter can be created from a string
     + the default pattern is i1,i2/e1,e2 where i are include tags and e are exclude tags
 
   From an existing IncludedExcludedStackTraceFilter
     + we can add more include patterns, using the includeAlso method
     + we can add more exclude patterns, using the excludeAlso method
+
+Filtering
+=========
 
   A StackTraceFilter, when filtering an exception should
     + retain the exception cause
@@ -36,12 +44,10 @@ trait IncludeExcludeStackTraceFilterExamples extends IncludeExcludeStackTraceFil
     eg := filter(stacktrace("t1", "t3", "a", "com.t1.other"))(includeTrace("t1", "t2")) must not containMatch("t3")
   }
 
-  "from string" - new group {
+  "creation" - new group {
     eg := IncludeExcludeStackTraceFilter.fromString("i1,i2/e1,e2") must_==
           IncludeExcludeStackTraceFilter(Seq("i1", "i2"), Seq("e1", "e2"))
-  }
 
-  "from an existing filter" - new group {
     val defaultFilter = DefaultStackTraceFilter
 
     eg := filter(stacktrace("org.specs2", "t1"))(defaultFilter.includeAlso("t1", "t2")) must not containMatch("specs2")

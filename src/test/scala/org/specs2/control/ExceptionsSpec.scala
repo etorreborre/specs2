@@ -16,7 +16,6 @@ The Exceptions trait provides functional ways to catch exceptions and deal with 
   * tryOrElse returns the result or a default value
   * tryMap returns different values depending on the success of the expression
   * tryOk returns true iff the expression doesn't throw an Exception
-                                                                                                                        
 
   tryo executes an expression and returns an Option
     + Some(result) if the expression doesn't throw an exception
@@ -54,32 +53,25 @@ The Exceptions trait provides functional ways to catch exceptions and deal with 
   "tryo" - new group {
     eg := tryo("a") must_== Some("a")
     eg := tryo(boom) must_== None
-  }
-  "tryOr" - new group {
+
     eg := tryOr("a")((e:Exception) => e.getMessage) must_== "a"
     eg := tryOr(boom)((e:Exception) => "bang") must_== "bang"
-  }
-  "tryOrElse" - new group {
+
     eg := tryOrElse("a")("b") must_== "a"
     eg := tryOrElse(boom)("bang") must_== "bang"
-  }
-  "tryMap" - new group {
+
     eg := tryMap("a")(true)(false) must_== true
     eg := tryMap(boom)(true)(false) must_== false
-  }
-  "tryOk" - new group {
+
     eg := tryOk("a") must_== true
     eg := tryOk(boom) must_== false
-  }
-  "trye" - new group {
+
     eg := trye("a")((e:Exception) => e.getMessage) must_== Right("a")
     eg := trye(boom)((e:Exception) => e.getMessage) must_== Left("boom")
-  }
-  "catchAll" - new group {
+
     eg := catchAll("a")((e:Throwable) => e.getMessage) must_== Right("a")
     eg := catchAll({throw new Error("boom"); "a"})((e:Throwable) => e.getMessage) must_== Left("boom")
-  }
-  "catchAllOr" - new group {
+
     eg := catchAllOr("a")((e:Throwable) => e.getMessage) must_== "a"
     eg := catchAllOr({throw new Error("boom"); "a"})((e:Throwable) => "bang") must_== "bang"
   }

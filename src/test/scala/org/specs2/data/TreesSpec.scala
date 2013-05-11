@@ -11,14 +11,14 @@ import specification._
 
 class TreesSpec extends script.Specification with DataTables with Grouped { def is = s2"""
 
-  A tree can be pruned by providing a function mapping nodes to Option[Node]
+ # A tree can be pruned by providing a function mapping nodes to Option[Node]
     + if a node is mapped to Some(n), it stays in the tree
     if a node is mapped to None, it is removed from the tree
       + if it's a leaf
       + if it's a subtree
       + even the root of the tree
 
-  A TreeLoc can
+ # A TreeLoc can
     + return its size
     + be added a new child
 
@@ -61,9 +61,7 @@ class TreesSpec extends script.Specification with DataTables with Grouped { def 
       "|  `- 2",
       "|",
       "`- 3")
-  }
 
-  "Robustness" - new group {
     eg := {
       val tree = tree3.loc.addChild(4).tree
       tree.flattenLeft.toSeq aka "flattenLeft" must_== tree.flatten.toSeq

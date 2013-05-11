@@ -8,12 +8,12 @@ import control.Exceptions._
 
 class FileWriterSpec extends script.Specification with Groups { def is = s2"""
 
-  A FileWriter should                                                                                                 
+  # A FileWriter should
     + write inside a file
     + close the file if an exception occurs
     + rethrow the exception if an exception occurs
 
-  A FileWriter can
+  # A FileWriter can
     + write a XML Node
                                                                            """
 

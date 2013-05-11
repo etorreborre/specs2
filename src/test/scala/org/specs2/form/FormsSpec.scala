@@ -7,17 +7,17 @@ class FormsSpec extends script.Specification with FormsBuilder with Grouped { de
 
 The Forms object provides several utility functions for creating forms
                                                                                           
-  The subset method allows to check if a list of forms is a subset of another one       
+  # The subset method allows to check if a list of forms is a subset of another one
     + subset(l1 + l2, l1) == l1 + l2 - ok
     + subset(l1, l2) == l1 - ko
     + subset(l1 + l2, l1) == l1 - ok + l2 - ko
                                                                                           
-  If the subset method fails, the form are shown as failed                              
+  # If the subset method fails, the form are shown as failed
     + subset(l1, l1 + l2) == l1 - ok
     + subset(l1, l2) == l1 - ko
     + subset(l1 + l2, l1) == l1 - ok + l2 - ko
                                                                                           
-  The subsequence method allows to check if a list of forms is a subsequence            
+  # The subsequence method allows to check if a list of forms is a subsequence
   of another one                                                                        
     + subsequence(ab + cd, ab) == abcd - ok
     + subsequence(bac + d, abc) == b - ko + a - ok + c - ko + d - ok
@@ -25,13 +25,13 @@ The Forms object provides several utility functions for creating forms
     + subsequence(ab, ab + cd) == ab - ok + cd - ko
     + subsequence(ab, ba + cd) == ax - ko + cd - ko
                                                                                           
-  The set method allows to check if 2 lists of forms are the same, in no specific order 
+  # The set method allows to check if 2 lists of forms are the same, in no specific order
     + set(l1, l1 + l2) == l1 - ok + l2 ko
     + set(l1 + l2, l2) == l1 - ko + l2 ok
     + set(l1, l2) == l1 - ko
     + set(l1, l1) == l1 - ok
                                                                                           
-  The sequence method allows to check if 2 lists of forms are the same, in order        
+  # The sequence method allows to check if 2 lists of forms are the same, in order
     + sequence(ab, ab + cd) == ab - ok + cd - ko
     + sequence(ab, ba) == ab - ko
     + sequence(ab, ba + c) == a - ok + bc - ko

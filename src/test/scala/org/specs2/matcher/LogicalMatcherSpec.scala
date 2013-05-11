@@ -79,7 +79,6 @@ Custom
 ======
 
  + a custom match can be negated, or used with be/have
-
                                                                                                                 """
 
   "or matches" - new group {
