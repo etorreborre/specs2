@@ -35,5 +35,5 @@ class DefaultExampleFactory extends ExampleFactory {
  * @see mutable.BeforeExample
  */
 class DecoratedExampleFactory(factory: =>ExampleFactory, function: Context) extends ExampleFactory {
-  override def newExample(e: Example) = e.copy(body = () => function(e.body()))
+  override def newExample(e: Example) = factory.newExample(e.copy(body = () => function(e.body())))
 }
