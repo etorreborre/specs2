@@ -23,6 +23,8 @@ import Snippet._
  *
  */
 trait Snippets {
+  /** implicit parameters selected for the creation of Snippets */
+  implicit def defaultSnippetParameters[T] = Snippet.defaultParams[T]
 
   /** implicit function modify the Snippet parameters */
   implicit class SettableSnippet[T](s: Snippet[T]) {
@@ -37,18 +39,18 @@ trait Snippets {
                                     prompt = prompt))
 
     def promptIs(p: String) = s.copy(params = s.params.copy(prompt = simplePrompt(p)))
-    def offsetIs(offset: Int) = s.copy(params = s.params.copy(asCode = markdownCode(offset)))
-    def eval = s.copy(params = s.params.copy(eval = true))
-    def check[R : AsResult](f: T => R) = s.copy(params = s.params.copy(verify = Some((t: T) => AsResult(f(t)))))
+    def offsetIs(offset: Int) = s.copy(params = s.params.offsetIs(offset))
+    def eval = s.copy(params = s.params.eval)
+    def check[R : AsResult](f: T => R) = s.copy(params = s.params.check(f))
   }
 
   implicit class SettableSnippet1[T : AsResult](s: Snippet[T]) {
     def checkOk = s.copy(params = s.params.copy(verify = Some((t: T) => AsResult(t))))
   }
 
-  def snippet[T](code: =>T): Snippet[T] = macro Snippets.create[T]
+  def snippet[T](code: =>T)(implicit params: SnippetParams[T]): Snippet[T] = macro Snippets.create[T]
 
-  def createSnippet[T](rangepos: Boolean, expression: String, code: =>T)(implicit params: SnippetParams[T] = Snippet.defaultParams[T]): Snippet[T] = {
+  def createSnippet[T](rangepos: Boolean, expression: String, code: =>T, params: SnippetParams[T]): Snippet[T] = {
     if (rangepos) new Snippet[T](() => code, codeExpression = Some(expression), params.copy(trimExpression = trimRangePosSnippet))
     else          new Snippet[T](() => code, codeExpression = None, params)
   }
@@ -59,10 +61,10 @@ trait Snippets {
 }
 
 object Snippets extends Snippets {
-  def create[T](c: MContext)(code: c.Expr[T]): c.Expr[Snippet[T]] = {
+  def create[T](c: MContext)(code: c.Expr[T])(params: c.Expr[SnippetParams[T]]): c.Expr[Snippet[T]] = {
     import c.{universe => u}; import u._
     import Macros._
-    val result = c.Expr(methodCall(c)("createSnippet", c.literal(c.macroApplication.pos.isRange).tree, stringExpr(c)(code), code.tree.duplicate))
+    val result = c.Expr(methodCall(c)("createSnippet", c.literal(c.macroApplication.pos.isRange).tree, stringExpr(c)(code), code.tree.duplicate, params.tree))
     c.Expr(atPos(c.prefix.tree.pos)(result.tree))
   }
 }
@@ -97,8 +99,8 @@ case class Snippet[T](code: () => T,
   }
 
   lazy val showResult =
-    if (!params.eval || result.isEmpty) ""
-    else                                params.asCode(result, result)
+    if (!params.evalCode || result.isEmpty) ""
+    else                                    params.asCode(result, result)
 
   def verify = ResultExecution.execute(params.verify.map(f => f(execute)).getOrElse(Success()))
 }
@@ -120,9 +122,12 @@ case class SnippetParams[T](
   cutter: String => String           = ScissorsCutter(),
   asCode: (String, String) => String = markdownCode(0),
   prompt: String => String           = greaterThanPrompt,
-  eval: Boolean                      = false,
-  verify: Option[T => Result]        = None)
-
+  evalCode: Boolean                  = false,
+  verify: Option[T => Result]        = None) {
+  def offsetIs(offset: Int) = copy(asCode = markdownCode(offset))
+  def eval = copy(evalCode = true)
+  def check[R : AsResult](f: T => R) = copy(verify = Some((t: T) => AsResult(f(t))))
+}
 /**
  * Implementation of a function to cut pieces of code by using some comments as markers
  */
