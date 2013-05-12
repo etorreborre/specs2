@@ -104,7 +104,7 @@ trait StandardDelimitedStepParsers extends StepParsers {
   def twoStrings   = StepParser((s1:String, s2: String) => (s1, s2))
   def threeStrings = StepParser((s1:String, s2: String, s3: String) => (s1, s2, s3))
 }
-
+object StandardDelimitedStepParsers extends StandardDelimitedStepParsers
 /**
  * a few regular expression parsers to extract ints, doubles and strings (strings are delimited with `"`)
  */
@@ -126,5 +126,6 @@ trait StandardRegexStepParsers extends StepParsers {
   def twoStrings   = groupAs(string).and((s1:String, s2: String) => (s1, s2))
   def threeStrings = groupAs(string).and((s1:String, s2: String, s3: String) => (s1, s2, s3))
 }
+object StandardRegexStepParsers extends StandardRegexStepParsers
 
 
