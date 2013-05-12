@@ -82,18 +82,9 @@ trait AnyBaseMatchers {
   }
 
   /** matches if t.toSeq.exists(_ == v) */
-  def beOneOf[T](t: T*): Matcher[T] = OneOf(t)
-  case class OneOf[T](t: Seq[T]) extends Matcher[T] {
-    def apply[S <: T](y: Expectable[S]) = {
-      val x = t
-      result(x.exists(_ == y.value), 
-             y.description + s" is contained in " + q(x.mkString(", ")),
-             y.description + s" is not contained in " + q(x.mkString(", ")),
-             y)
-    }
-  }
+  def beOneOf[T](t: T*): Matcher[T] = BeOneOf(t)
   /** alias for beOneOf */
-  def beAnyOf[T](t: T*): Matcher[T] = OneOf(t)
+  def beAnyOf[T](t: T*): Matcher[T] = BeOneOf(t)
 
   /** matches if the value returns a successful result when applied to a PartialFunction */
   def beLike[T](pattern: PartialFunction[T, MatchResult[_]]) = new Matcher[T] {
@@ -299,5 +290,14 @@ class BeNull[T] extends Matcher[T] {
     result(value.value == null,
            value.description + " is null",
            value.description + " is not null", value)
+  }
+}
+case class BeOneOf[T](t: Seq[T]) extends Matcher[T] {
+  def apply[S <: T](y: Expectable[S]) = {
+    val x = t
+    result(x.exists(_ == y.value),
+      y.description + s" is contained in " + q(x.mkString(", ")),
+      y.description + s" is not contained in " + q(x.mkString(", ")),
+      y)
   }
 }

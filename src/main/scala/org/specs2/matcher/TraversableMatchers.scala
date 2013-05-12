@@ -44,13 +44,7 @@ trait TraversableBaseMatchers extends ContainChecks with TraversableBaseMatchers
   /** match if a traversable contains all the elements of seq (and maybe more) */
   def containAllOf[T](seq: Seq[T]) = contain(atLeast(seq.map(v => valueIsTypedContainCheck(v)):_*))
   /** match if a traversable contains one of (t1, t2) */
-  def containAnyOf[T](seq: Seq[T]) = contain(atLeast(seq.map(e => new BeTypedEqualTo(e): Matcher[T]).reduceLeftOption(_ or _).getOrElse(emptyTraversable)))
-  private def emptyTraversable[T] = new Matcher[GenTraversableOnce[T]] {
-    def apply[S <: GenTraversableOnce[T]](s: Expectable[S]) = {
-      result(s.value.isEmpty, s.description+" is empty", s.description+" is not empty", s)
-    }
-  }
-
+  def containAnyOf[T](seq: Seq[T]) = contain(new BeOneOf(seq))
   /** match if traversable contains (x matches .*+t+.*) */
   def containMatch[T](t: =>String) = containPattern[T](".*"+t+".*")
   /** match if traversable contains (x matches p) */
