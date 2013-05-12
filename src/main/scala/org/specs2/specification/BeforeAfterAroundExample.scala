@@ -85,3 +85,11 @@ trait BeforeAfterAroundExample extends BeforeAfterAroundContextExample[BeforeAft
     def around[T : AsResult](t: =>T): Result = outer.around(t)
   }
 }
+
+/**
+ * For each created example use a given after method
+ */
+trait FixtureExample[T] {
+  protected def fixture[R : AsResult](f: T => R): Result
+  implicit def fixtureContext = new Fixture[T] { def apply[R : AsResult](f: T => R) = fixture(f) }
+}
