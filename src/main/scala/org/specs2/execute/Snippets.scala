@@ -23,8 +23,6 @@ import Snippet._
  *
  */
 trait Snippets {
-  /** implicit parameters selected for the creation of Snippets */
-  implicit def defaultSnippetParameters[T] = Snippet.defaultParams[T]
 
   /** implicit function modify the Snippet parameters */
   implicit class SettableSnippet[T](s: Snippet[T]) {
@@ -48,9 +46,9 @@ trait Snippets {
     def checkOk = s.copy(params = s.params.copy(verify = Some((t: T) => AsResult(t))))
   }
 
-  def snippet[T](code: =>T)(implicit params: SnippetParams[T]): Snippet[T] = macro Snippets.create[T]
+  def snippet[T](code: =>T): Snippet[T] = macro Snippets.create[T]
 
-  def createSnippet[T](rangepos: Boolean, expression: String, code: =>T, params: SnippetParams[T]): Snippet[T] = {
+  def createSnippet[T](rangepos: Boolean, expression: String, code: =>T)(implicit params: SnippetParams[T] = Snippet.defaultParams[T]): Snippet[T] = {
     if (rangepos) new Snippet[T](() => code, codeExpression = Some(expression), params.copy(trimExpression = trimRangePosSnippet))
     else          new Snippet[T](() => code, codeExpression = None, params)
   }
@@ -61,10 +59,10 @@ trait Snippets {
 }
 
 object Snippets extends Snippets {
-  def create[T](c: MContext)(code: c.Expr[T])(params: c.Expr[SnippetParams[T]]): c.Expr[Snippet[T]] = {
+  def create[T](c: MContext)(code: c.Expr[T]): c.Expr[Snippet[T]] = {
     import c.{universe => u}; import u._
     import Macros._
-    val result = c.Expr(methodCall(c)("createSnippet", c.literal(c.macroApplication.pos.isRange).tree, stringExpr(c)(code), code.tree.duplicate, params.tree))
+    val result = c.Expr(methodCall(c)("createSnippet", c.literal(c.macroApplication.pos.isRange).tree, stringExpr(c)(code), code.tree.duplicate))
     c.Expr(atPos(c.prefix.tree.pos)(result.tree))
   }
 }
