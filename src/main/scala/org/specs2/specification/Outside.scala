@@ -2,6 +2,7 @@ package org.specs2
 package specification
 
 import execute._
+import scalaz.{Monad, Applicative, Bind, Functor}
 
 /**
  * The Outside trait can be inherited by classes which will
@@ -41,6 +42,17 @@ trait AroundOutside[+T] extends Around with Outside[T] { outer =>
  */
 trait Fixture[T] {
   def apply[R : AsResult](f: T => R): Result
+}
+
+object Fixture {
+  implicit def fixtureHasMonad: Monad[Fixture] = new Monad[Fixture] {
+    def point[A](a: =>A) = new Fixture[A] {
+      def apply[R : AsResult](f: A => R): Result = AsResult(f(a))
+    }
+    def bind[A, B](fixture: Fixture[A])(fa: A => Fixture[B]): Fixture[B] = new Fixture[B] {
+      def apply[R : AsResult](fb: B => R): Result = fixture((a: A) => fa(a)(fb))
+    }
+  }
 }
 
 
