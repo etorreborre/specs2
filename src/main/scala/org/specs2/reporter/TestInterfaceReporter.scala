@@ -56,6 +56,7 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOu
 
   private def info(message: String)(implicit args: Arguments) {
     if (args.report.flow) {
+      // if a newline has already been added by the logger, remove the first newline
       if (message.startsWith("\n") && loggerNewLines > 0) {
         buffer.append(message.removeFirst("\n"))
         loggerNewLines = 0
@@ -64,6 +65,9 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOu
         val all = buffer.toString + message
         val splitted = all.split("\n")
         buffer.clear
+
+        // if the characters after the last newline are only whitespace
+        // buffer them and only display what comes before
         splitted.lastOption.filter(_.forall(_ == ' ')).map { last =>
           if (splitted.dropRight(1).nonEmpty) {
             buffer.append(last)
@@ -77,6 +81,7 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOu
   }
 
   private def flushInfo(implicit args: Arguments) = if (args.report.flow) {
+    // only flush the buffer if it is non empty, otherwise that would create an unnecessary newline
     if (buffer.nonEmpty) logInfo(buffer.toString)
   }
 
