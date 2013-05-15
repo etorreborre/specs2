@@ -52,55 +52,72 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
 class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOutput with TestLoggers {
   private val buffer = new StringBuilder
 
-  /** unfortunate way of dealing with the fact that sbt will automatically print a newline after a failure */
-  private var removeNextNewLine = false
+  private var loggerNewLines = 0
 
   private def info(message: String)(implicit args: Arguments) {
-    if (args.report.flow) buffer.append(message)
-    else                  logInfo(message)
+    if (args.report.flow) {
+      if (message.startsWith("\n") && loggerNewLines > 0) {
+        buffer.append(message.removeFirst("\n"))
+        loggerNewLines = 0
+      }
+      else {
+        val all = buffer.toString + message
+        val splitted = all.split("\n")
+        buffer.clear
+        splitted.lastOption.filter(_.forall(_ == ' ')).map { last =>
+          if (splitted.dropRight(1).nonEmpty) {
+            buffer.append(last)
+            splitted.dropRight(1).foreach(logInfo)
+          } else logInfo(all)
+        }.getOrElse(logInfo(all))
+        loggerNewLines += 1
+      }
+    }
+    else logInfo(message)
   }
 
   private def flushInfo(implicit args: Arguments) = if (args.report.flow) {
-    if (!buffer.isEmpty) {
-      val toFlush =
-        if (removeNextNewLine) { removeNextNewLine = false; buffer.toString.removeFirst("\n") }
-        else                     buffer.toString
-
-      toFlush.toString.split("\n").foreach(logInfo)
-      if (toFlush.endsWith("\n")) logInfo("")
-    }
-    buffer.clear
+    if (buffer.nonEmpty) logInfo(buffer.toString)
   }
 
-  override def printSpecStartName(message: String, stats: Stats)(implicit args: Arguments)  =
+  override def printSpecStartName(message: String, stats: Stats)(implicit args: Arguments)  = {
     info(message)
-  override def printSpecStartTitle(message: String, stats: Stats)(implicit args: Arguments) =
+    flushInfo
+  }
+  override def printSpecStartTitle(message: String, stats: Stats)(implicit args: Arguments) = {
     info(message)
-  override def printSeeLink(message: String, stats: Stats)(implicit args: Arguments) =
+    flushInfo
+  }
+  override def printSeeLink(message: String, stats: Stats)(implicit args: Arguments) = {
     info(status(stats.result)+args.textColor(message))
+  }
 
   override def printFailure(message: String)(implicit args: Arguments)                      = {
-    flushInfo
-    removeNextNewLine = true
     logFailure(message)
   }
   override def printError(message: String)(implicit args: Arguments)                        = {
-    flushInfo
-    removeNextNewLine = true
     logError(message)
   }
-  override def printSuccess(message: String)(implicit args: Arguments)                      = info(message)
-  override def printSkipped(message: String)(implicit args: Arguments)                      = info(message)
-  override def printPending(message: String)(implicit args: Arguments)                      = info(message)
-  override def printStats(message: String)(implicit args: Arguments)                        = {
-    flushInfo
-    logInfo(message)
+  override def printSuccess(message: String)(implicit args: Arguments)                      = {
+    info(message)
   }
-  override def printLine(message: String)(implicit args: Arguments)                         = {
+  override def printSkipped(message: String)(implicit args: Arguments)                      = {
+    info(message)
+    flushInfo
+  }
+  override def printPending(message: String)(implicit args: Arguments)                      = {
+    info(message)
+  }
+  override def printStats(message: String)(implicit args: Arguments)                        = {
     flushInfo
     info(message)
   }
-  override def printText(message: String)(implicit args: Arguments)                         = info(message)
+  override def printLine(message: String)(implicit args: Arguments)                         = {
+    info(message)
+  }
+  override def printText(message: String)(implicit args: Arguments)                         = {
+    info(message)
+  }
 }
 
 /**

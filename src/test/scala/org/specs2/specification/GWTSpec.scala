@@ -1,9 +1,7 @@
 package org.specs2
 package specification
 
-import execute._
 import script._
-import shapeless._
 import FragmentExecution._
 import runner.TextRunner
 
@@ -341,7 +339,7 @@ Templates
   lazy val addition = Scenario("addition").
     given(anInt).
     given(anInt).
-    when(aString) { case operator :: a :: b:: HNil => a + b }.
-    andThen(anInt) { case expected :: sum :: HNil => sum === expected }
+    when(aString) { case operator :: a :: b:: _ => a + b }.
+    andThen(anInt) { case expected :: sum :: _ => sum === expected }
 
 }

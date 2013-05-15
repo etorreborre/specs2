@@ -164,9 +164,9 @@ object NullEventHandler extends EventHandler {
 }
 object ConsoleLogger extends Logger {
   def ansiCodesSupported = false
-  def error(message: String) = println("error: " + message)
-  def info(message: String)  = println("info: " + message)
-  def warn(message: String)  = println("warn: " + message)
-  def debug(message: String) = println("debug: " + message)
+  def error(message: String) = message.split("\n").foreach(m => println("error: " + m))
+  def info(message: String)  = message.split("\n").foreach(m => println("info: "  + m))
+  def warn(message: String)  = message.split("\n").foreach(m => println("warn: "  + m))
+  def debug(message: String) = message.split("\n").foreach(m => println("debug: " + m))
   def trace(t: Throwable)    = println("trace: " + t)
 }

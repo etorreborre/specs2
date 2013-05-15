@@ -206,17 +206,14 @@ trait TextPrinter {
         printEndStats(stats)(args, out)
     }
     def printEndStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
-      if (!args.report.flow) out.printLine(" ")
+      out.printLine(" ")
       val total = "Total for specification" + (if (end.title.isEmpty) end.title.trim else " "+end.title.trim)
       out.printStats(total)
       printStats(stats)
     }
     def printStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
-      if (args.report.flow) out.printStats(stats.display+"\n ")
-      else {
-        out.printStats(stats.display)
-        out.printLine("")
-      }
+      out.printStats(stats.display)
+      out.printLine("")
     }
   }
   case class PrintOther(fragment: ExecutedFragment)   extends Print {
