@@ -26,7 +26,9 @@ trait Seqx { outer =>
    */
   class ExtendedSeq[T](seq: Seq[T]) {
 
-    def reduceWith[S](reducer: Reducer[T, S]) = FoldlGenerator[Seq](seqIsFoldable).reduce(reducer, seq)
+    def reduceWith[S](reducer: Reducer[T, S]) = {
+      seq.foldLeft(reducer.zero) { (res, cur) => reducer.snoc(res, cur) }
+    }
 
     /** update the last element if there is one */
     def updateLast(f: T => T) = seq match {
