@@ -8,6 +8,7 @@ New features
  * added matchers for `scala.util.Try` instances
  * using the official Scalaz 7 release
  * refactored the generated html with [Bootstrap](http://twitter.github.io/bootstrap)
+ * reworked the `Traversable` matchers to make a more general use of `contain`
  
 Improvements
  
@@ -18,6 +19,7 @@ Improvements
  * added a `Fixture` trait to pass data to each `Example`
  * added auto-numbered groups and examples for the `Groups` and `Grouped` traits
  * restricted the JsonMatchers to string inputs
+ * added a `Tables` trait in the `specification` package to use `DataTables` without the `!` implicit creating examples
 
 Fixes
 
