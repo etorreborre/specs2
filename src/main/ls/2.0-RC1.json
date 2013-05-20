@@ -1,0 +1,54 @@
+{
+  "organization" : "org.specs2",
+  "name" : "specs2",
+  "version" : "2.0-RC1",
+  "description" : "specs2",
+  "site" : "",
+  "tags" : [ ],
+  "docs" : "",
+  "resolvers" : [ "https://oss.sonatype.org/content/repositories/releases" ],
+  "dependencies" : [ {
+    "organization" : "org.scalaz",
+    "name" : "scalaz-core",
+    "version" : "7.0.0"
+  }, {
+    "organization" : "org.scalaz",
+    "name" : "scalaz-concurrent",
+    "version" : "7.0.0"
+  }, {
+    "organization" : "com.chuusai",
+    "name" : "shapeless",
+    "version" : "1.2.3"
+  }, {
+    "organization" : "org.scalacheck",
+    "name" : "scalacheck_2.10.0",
+    "version" : "1.10.0"
+  }, {
+    "organization" : "org.scala-tools.testing",
+    "name" : "test-interface",
+    "version" : "0.5"
+  }, {
+    "organization" : "org.hamcrest",
+    "name" : "hamcrest-all",
+    "version" : "1.1"
+  }, {
+    "organization" : "org.mockito",
+    "name" : "mockito-all",
+    "version" : "1.9.0"
+  }, {
+    "organization" : "junit",
+    "name" : "junit",
+    "version" : "4.7"
+  }, {
+    "organization" : "org.pegdown",
+    "name" : "pegdown",
+    "version" : "1.0.2"
+  }, {
+    "organization" : "org.specs2",
+    "name" : "classycle",
+    "version" : "1.4.1"
+  } ],
+  "scalas" : [ "2.10.1" ],
+  "licenses" : [ ],
+  "sbt" : false
+}
