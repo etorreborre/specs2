@@ -203,7 +203,7 @@ s"""
     <div class="level2"><img src="./images/collapsed.gif">Reusable outside of specs2 (in <a href="http://junit.org">JUnit</a> tests for example)</img></div>
   <div class="level1"><img src="./images/collapsed.gif">Forms for writing <a href="http://fitnesse.org">Fitnesse</a>-like specifications (with Markdown markup)</img></div>
   <div class="level1"><img src="./images/collapsed.gif">Html reporting to create documentation for acceptance tests, to create a User Guide</img></div>
-  <div class="level1"><img src="./images/collapsed.gif"/><a href="http://etorreborre.github.com/specs2/guide/org.specs2.guide.HowTo.html#Capture+snippets">Snippets</a> for documenting APIs with always up-to-date code</div>
+  <div class="level1"><img src="./images/collapsed.gif"/><a href="http://etorreborre.github.io/specs2/guide/org.specs2.guide.HowTo.html#Capture+snippets">Snippets</a> for documenting APIs with always up-to-date code</div>
   <div class="level1"><img src="./images/collapsed.gif">Integration with <a href="http://scala-sbt.org/">sbt</a> and JUnit tools (maven, IDEs,...)</img></div>
 
     <h3><a name="Dependencies"></a>Dependencies</h3>
@@ -222,7 +222,7 @@ s"""
   scalacOptions in Test ++= Seq("-Yrangepos")
 
   // Read here for optional dependencies:
-  // <a href="http://etorreborre.github.com/specs2/guide/org.specs2.guide.Runners.html#Dependencies">http://etorreborre.github.com/specs2/guide/org.specs2.guide.Runners.html#Dependencies</a>
+  // <a href="http://etorreborre.github.io/specs2/guide/org.specs2.guide.Runners.html#Dependencies">http://etorreborre.github.io/specs2/guide/org.specs2.guide.Runners.html#Dependencies</a>
 
   resolvers ++= Seq("snapshots" at "http://oss.sonatype.org/content/repositories/snapshots",
                     "releases"  at "http://oss.sonatype.org/content/repositories/releases")
@@ -247,7 +247,7 @@ s"""
 
  &lt;!--
   Read here for optional dependencies:
-  <a href="http://etorreborre.github.com/specs2/guide/org.specs2.guide.Runners.html#Dependencies">http://etorreborre.github.com/specs2/guide/org.specs2.guide.Runners.html#Dependencies</a>
+  <a href="http://etorreborre.github.io/specs2/guide/org.specs2.guide.Runners.html#Dependencies">http://etorreborre.github.io/specs2/guide/org.specs2.guide.Runners.html#Dependencies</a>
  -->
 
  &lt;repository>
