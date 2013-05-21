@@ -61,18 +61,80 @@
            tabber code, then the init code -->
       <script type="text/javascript" src="./css/tabber.js"></script>
       <link rel="stylesheet" href="./css/tabber.css" type="text/css" media="screen" />
-      <title>User Guide</title>
-    </head><body><div class="colmask threecol">
+      <title>Quick Start</title>
+    </head><body><div id="breadcrumbs"><a href="org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="org.specs2.guide.QuickStart.html">QuickStart</a></div><div class="colmask threecol">
                    <div class="colmid">
                      <div class="colleft">
-                       <div class="col1"><div id="central"><title>User Guide</title><a name="User+Guide"><h2 specId="756835429">User Guide</h2></a><status class="ok"><div class="level0" style="display: show"><p><p><strong><em>specs2</em></strong> is a library for writing executable software specifications in Scala.</p><p>With <em>specs2</em> you can write:</p>
+                       <div class="col1"><div id="central"><title>Quick Start</title><a name="Quick+Start"><h2 specId="1314631672">Quick Start</h2></a><status class="ok"><div class="level0" style="display: show"><p><p>There are 2 major styles of specifications with <strong><em>specs2</em></strong>:</p>
 <ul>
-  <li>specifications for simple classes (<em>unit</em> specifications)</li>
-  <li>specifications for full features (<em>acceptance</em> specifications)</li>
-</ul><p>In this user guide, you will find:</p></p></div></status><subtoc specId="1314631672"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./images/icon_success_sml.gif" /> a <a href="org.specs2.guide.QuickStart.html" tooltip="">quick start guide</a></div></status><status class="ok"><div class="level0" style="display: show"></div></status><subtoc specId="1990056987"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./images/icon_success_sml.gif" /> how to <a href="org.specs2.guide.Structure.html" tooltip="">structure your specification</a></div></status><status class="ok"><div class="level0" style="display: show"></div></status><subtoc specId="817231737"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./images/icon_success_sml.gif" /> how to use <a href="org.specs2.guide.Matchers.html" tooltip="">matchers</a></div></status><status class="ok"><div class="level0" style="display: show"></div></status><subtoc specId="889120858"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./images/icon_success_sml.gif" /> how to <a href="org.specs2.guide.Runners.html" tooltip="">execute a specification</a></div></status><status class="ok"><div class="level0" style="display: show"></div></status><subtoc specId="2044752353"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./images/icon_success_sml.gif" /> &quot;how to&quot; tips <a href="org.specs2.guide.HowTo.html" tooltip="">to improve your specifications</a></div></status><status class="ok"><div class="level0" style="display: show"></div></status><subtoc specId="1693798655"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./images/icon_success_sml.gif" /> the <strong><em>specs2</em></strong> <a href="org.specs2.guide.Philosophy.html" tooltip="">philosophy</a></div></status><status class="ok"><div class="level0" style="display: show"></div></status><subtoc specId="1722135848"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./images/icon_success_sml.gif" /> the <strong><em>specs2</em></strong> <a href="org.specs2.guide.Design.html" tooltip="">design</a></div></status><status class="ok"><div class="level0" style="display: show"></div></status><status class="ok"><br /></status><table class="dataTable">
-        <tr><th colSpan="2">Total for specification UserGuide</th></tr>
-        <tr><td>Finished in</td><td class="info">380 ms</td></tr>
-        <tr><td>Results</td><td class="success">59 examples, 551 expectations, 0 failure, 0 error</td></tr>
+  <li><p><em>unit</em> specifications where the specification text is interleaved with the specification code. It is generally used to<br /> specify a single class</p></li>
+  <li><p><em>acceptance</em> specifications where all the specification text stands as one and the implementation code is elsewhere.<br /> It is generally used for acceptance or integration scenarios</p></li>
+</ul><a name="Unit"><h4>Unit</h4></a><p>Unit specifications extend the <code class="prettyprint">org.specs2.mutable.Specification</code> trait and are using the <code class="prettyprint">should/in</code> format: </p>
+<pre><code class="prettyprint">import org.specs2.mutable._
+
+class HelloWorldSpec extends Specification {
+
+  &quot;The 'Hello world' string&quot; should {
+    &quot;contain 11 characters&quot; in {
+      &quot;Hello world&quot; must have size(11)
+    }
+    &quot;start with 'Hello'&quot; in {
+      &quot;Hello world&quot; must startWith(&quot;Hello&quot;)
+    }
+    &quot;end with 'world'&quot; in {
+      &quot;Hello world&quot; must endWith(&quot;world&quot;)
+    }
+  }
+}
+</code></pre><a name="Acceptance"><h4>Acceptance</h4></a><p>Acceptance specifications extend the <code class="prettyprint">org.specs2.Specification</code> trait and must define a method called <code class="prettyprint">is</code>: </p></p></div></status><status class="ok"><div class="level0" style="display: show"><p><pre><code class="prettyprint">import org.specs2._
+
+class HelloWorldSpec extends Specification { def is = s2&quot;&quot;&quot;
+
+ This is a specification to check the 'Hello world' string
+
+ The 'Hello world' string should
+   contain 11 characters                                         $e1
+   start with 'Hello'                                            $e2
+   end with 'world'                                              $e3
+                                                                 &quot;&quot;&quot;
+
+  def e1 = &quot;Hello world&quot; must have size(11)
+  def e2 = &quot;Hello world&quot; must startWith(&quot;Hello&quot;)
+  def e3 = &quot;Hello world&quot; must endWith(&quot;world&quot;)
+}
+</code></pre><p>The <strong><code class="prettyprint">is</code></strong> method lists <a href="org.specs2.guide.Structure.html#Declare+examples"><em>specification fragments</em></a> which can be interpolated from a <strong><code class="prettyprint">s2</code></strong> String where you can inject:</p>
+<ul>
+  <li>examples: some executable code returning a <a href="org.specs2.guide.Matchers.html"><code class="prettyprint">Result</code></a></li>
+  <li><a href="org.specs2.guide.Matchers.html#ScalaCheck">ScalaCheck</a> properties</li>
+  <li><a href="org.specs2.guide.Forms.html">Forms</a></li>
+  <li>normal strings</li>
+</ul><a name="Execution"><h4>Execution</h4></a><p>And this is it! Now to execute your specification, you use a <a href="org.specs2.guide.Runners.html#Presentation"><em>runner</em></a> which will display the results:</p>
+<pre><code class="prettyprint">&gt; scala -cp ... specs2.run HelloWorldSpec
+
+HelloWorldSpec
+
+This is a specification to check the 'Hello world' string
+
+The 'Hello world' string should
++ contain 11 characters
++ start with 'Hello'
++ end with 'world'
+
+Total for specification HelloWorldSpec
+Finished in 0 second, 58 ms
+3 examples, 0 failure, 0 error
+</code></pre><a name="And+much+more%21"><h4>And much more!</h4></a><p>You can explore the rest of this <a title="Guide" href="org.specs2.UserGuide.html">User Guide</a> to learn how to:</p>
+<ul>
+  <li>use the many <strong><em>specs2</em></strong> matchers to specify precise expectations</li>
+  <li>define <em>contexts</em> to setup/teardown data for your examples</li>
+  <li>include / link specifications and reuse examples</li>
+  <li>use Mockito or ScalaCheck</li>
+  <li>use sbt/maven/junit to execute a specification</li>
+  <li>export your specification as an html document (like this one!)</li>
+</ul></p></div></status><status class="ok"><br /></status><table class="dataTable">
+        <tr><th colSpan="2">Total for specification QuickStart</th></tr>
+        <tr><td>Finished in</td><td class="info">31 ms</td></tr>
+        <tr><td>Results</td><td class="success">6 examples, 0 failure, 0 error</td></tr>
       </table></div></div>
                        <div class="col2"><div id="leftcolumn"><div id="tree">
       <ul><li id="756835429"><a href="org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
@@ -498,7 +560,7 @@
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['756835429','756835429'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['756835429','1314631672'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                        <div class="col3"><div id="rightcolumn"></div></div>
                      </div>
