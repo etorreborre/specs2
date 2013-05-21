@@ -106,21 +106,7 @@ English-like combination of Matchers:</p><p><code>1 must be equalTo(1) and not b
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="org.specs2.matcher.MatchResult#apply" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="apply(m:org.specs2.matcher.Matcher[T]):org.specs2.matcher.MatchResult[T]"></a>
-      <a id="apply(Matcher[T]):MatchResult[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="m">m: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.MatchResult.T">T</span>]</span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[<span class="extype" name="org.specs2.matcher.MatchResult.T">T</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">apply a Matcher to the expectable contained in that MatchResult</p><div class="fullcomment"><div class="comment cmt"><p>apply a Matcher to the expectable contained in that MatchResult</p><p>Depending on the exact type of the MatchResult, that logic may vary
-</p></div></div>
-    </li><li name="org.specs2.matcher.MatchResult#expectable" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="org.specs2.matcher.MatchResult#expectable" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="expectable:org.specs2.matcher.Expectable[T]"></a>
       <a id="expectable:Expectable[T]"></a>
       <h4 class="signature">
@@ -216,6 +202,19 @@ English-like combination of Matchers:</p><p><code>1 must be equalTo(1) and not b
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.specs2.matcher.MatchResult#applyMatcher" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="applyMatcher(m:org.specs2.matcher.Matcher[T]):org.specs2.matcher.MatchResult[T]"></a>
+      <a id="applyMatcher(Matcher[T]):MatchResult[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">applyMatcher</span><span class="params">(<span name="m">m: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.MatchResult.T">T</span>]</span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[<span class="extype" name="org.specs2.matcher.MatchResult.T">T</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">alias for the apply method, to be used outside specs2</p>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>

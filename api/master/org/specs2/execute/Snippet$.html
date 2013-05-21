@@ -29,7 +29,7 @@
         </head>
         <body class="value">
       <div id="definition">
-        <a href="Snippet.html" title="Go to companion"><img src="../../../lib/object_to_trait_big.png" /></a>
+        <a href="Snippet.html" title="Go to companion"><img src="../../../lib/object_to_class_big.png" /></a>
         <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a>.<a href="package.html" class="extype" name="org.specs2.execute">execute</a></p>
         <h1><a href="Snippet.html" title="Go to companion">Snippet</a></h1>
       </div>
@@ -40,13 +40,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Snippet</span>
+        <span class="name">Snippet</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -64,7 +64,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="org.specs2.execute.Snippet"><span>Snippet</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="org.specs2.execute.Snippet"><span>Snippet</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -184,6 +184,32 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="org.specs2.execute.Snippet#defaultParams" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="defaultParams[T]:org.specs2.execute.SnippetParams[T]"></a>
+      <a id="defaultParams[T]:SnippetParams[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">defaultParams</span><span class="tparams">[<span name="T">T</span>]</span><span class="result">: <a href="SnippetParams.html" class="extype" name="org.specs2.execute.SnippetParams">SnippetParams</a>[<span class="extype" name="org.specs2.execute.Snippet.defaultParams.T">T</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.execute.Snippet#emptyPrompt" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="emptyPrompt:String=&gt;String"></a>
+      <a id="emptyPrompt:(String)⇒String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">emptyPrompt</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4>
+      
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -239,6 +265,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.specs2.execute.Snippet#greaterThanPrompt" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="greaterThanPrompt:String=&gt;String"></a>
+      <a id="greaterThanPrompt:(String)⇒String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">greaterThanPrompt</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -252,19 +291,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="org.specs2.execute.Snippet#inlinedCode" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="inlinedCode:String=&gt;String"></a>
-      <a id="inlinedCode:(String)⇒String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">inlinedCode</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4>
-      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -284,7 +310,7 @@
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">lazy val</span>
       </span>
       <span class="symbol">
         <span class="name">ls</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
@@ -303,7 +329,7 @@
         <span class="name">markdownCode</span><span class="params">(<span name="offset">offset: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">display a cut piece of code as markdown depending on the existence of newlines in the original piece</p>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -343,29 +369,55 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="org.specs2.execute.Snippet#paragraphedCode" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="paragraphedCode(offset:Int):(String,String)=&gt;String"></a>
-      <a id="paragraphedCode(Int):(String,String)⇒String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">paragraphedCode</span><span class="params">(<span name="offset">offset: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4>
-      
     </li><li name="org.specs2.execute.Snippet#parameters" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="parameters:String"></a>
       <a id="parameters:String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">lazy val</span>
       </span>
       <span class="symbol">
         <span class="name">parameters</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.execute.Snippet#scissorsMarker" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="scissorsMarker:String"></a>
+      <a id="scissorsMarker:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">scissorsMarker</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.execute.Snippet#scissorsMarkerFormat" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="scissorsMarkerFormat:String"></a>
+      <a id="scissorsMarkerFormat:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">scissorsMarkerFormat</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.execute.Snippet#simplePrompt" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="simplePrompt(p:String):String=&gt;String"></a>
+      <a id="simplePrompt(String):(String)⇒String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">simplePrompt</span><span class="params">(<span name="p">p: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
@@ -395,42 +447,34 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="org.specs2.execute.Snippet#trimEval" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="trimEval:String=&gt;String"></a>
-      <a id="trimEval:(String)⇒String"></a>
+    </li><li name="org.specs2.execute.Snippet#trimApproximatedSnippet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="trimApproximatedSnippet:String=&gt;String"></a>
+      <a id="trimApproximatedSnippet:(String)⇒String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">trimEval</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">trimApproximatedSnippet</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
-      
-    </li><li name="org.specs2.execute.Snippet#trimOffsetIs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="trimOffsetIs:String=&gt;String"></a>
-      <a id="trimOffsetIs:(String)⇒String"></a>
+      <p class="shortcomment cmt">trim the expression from start and end accolades if it is a multiline expression
++ in some case it is necessary to add a dummy expression so that the range position of the captured snippet is
+correct.</p><div class="fullcomment"><div class="comment cmt"><p>trim the expression from start and end accolades if it is a multiline expression
++ in some case it is necessary to add a dummy expression so that the range position of the captured snippet is
+correct. /**/1/**/is the smallest such expression
+</p></div></div>
+    </li><li name="org.specs2.execute.Snippet#trimRangePosSnippet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="trimRangePosSnippet:String=&gt;String"></a>
+      <a id="trimRangePosSnippet:(String)⇒String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">trimOffsetIs</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4>
-      
-    </li><li name="org.specs2.execute.Snippet#trimSnippet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="trimSnippet:String=&gt;String"></a>
-      <a id="trimSnippet:(String)⇒String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">trimSnippet</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">trimRangePosSnippet</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">trim the expression from start and end accolades if it is a multiline expression
@@ -496,7 +540,11 @@ correct. /**/1/**/is the smallest such expression
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

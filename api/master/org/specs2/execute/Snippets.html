@@ -46,8 +46,8 @@
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Snippets of code can be extracted from interpolated specification strings.</p><p>When you want to specify that a piece of code must be included in the specification output, you can use the <code>snippet</code>
 method to execute a this code and use the text in the output. If you just want to output part of the code you need to
-delimit it with some comments <code>// 8&lt;-------</code> (with as many dashes as you want)</p><p>Generally the last value of a snippet will be displayed separately but it is possible to avoid this by using the <code>mute</code>
-method on a Snippet.</p><p>It is also possible to check that the result value is equal to a specific value by using the <code>check[R : AsResult](f: T =&gt; R)</code> method.</p></div><div class="toggleContainer block">
+delimit it with some comments <code>// 8&lt;-------</code> (with as many dashes &gt;= 2 as you want)</p><p>Generally the value of a snippet will not be evaluated nor displayed but it is possible to show it using the <code>eval</code>
+method on a Snippet.</p><p>It is also possible to check that the result value is correct by using the <code>check</code> method.</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
@@ -90,7 +90,36 @@ method on a Snippet.</p><p>It is also possible to check that the result value is
         <div id="allMembers">
         
 
-        
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="org.specs2.execute.Snippets.SettableSnippet" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SettableSnippet[T]extendsAnyRef"></a>
+      <a id="SettableSnippet[T]:SettableSnippet[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Snippets$SettableSnippet.html"><span class="name">SettableSnippet</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">implicit function modify the Snippet parameters</p>
+    </li><li name="org.specs2.execute.Snippets.SettableSnippet1" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SettableSnippet1[T]extendsAnyRef"></a>
+      <a id="SettableSnippet1[T]:SettableSnippet1[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Snippets$SettableSnippet1.html"><span class="name">SettableSnippet1</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
 
         
 
@@ -191,18 +220,31 @@ method on a Snippet.</p><p>It is also possible to check that the result value is
               
         </dd></dl></div>
     </li><li name="org.specs2.execute.Snippets#createSnippet" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="createSnippet[T](expression:String,code:=&gt;T):org.specs2.execute.CodeSnippet[T]"></a>
-      <a id="createSnippet[T](String,⇒T):CodeSnippet[T]"></a>
+      <a id="createSnippet[T](rangepos:Boolean,expression:String,code:=&gt;T,params:org.specs2.execute.SnippetParams[T]):org.specs2.execute.Snippet[T]"></a>
+      <a id="createSnippet[T](Boolean,String,⇒T,SnippetParams[T]):Snippet[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createSnippet</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="expression">expression: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="code">code: ⇒ <span class="extype" name="org.specs2.execute.Snippets.createSnippet.T">T</span></span>)</span><span class="result">: <a href="CodeSnippet.html" class="extype" name="org.specs2.execute.CodeSnippet">CodeSnippet</a>[<span class="extype" name="org.specs2.execute.Snippets.createSnippet.T">T</span>]</span>
+        <span class="name">createSnippet</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="rangepos">rangepos: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="expression">expression: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="code">code: ⇒ <span class="extype" name="org.specs2.execute.Snippets.createSnippet.T">T</span></span>, <span name="params">params: <a href="SnippetParams.html" class="extype" name="org.specs2.execute.SnippetParams">SnippetParams</a>[<span class="extype" name="org.specs2.execute.Snippets.createSnippet.T">T</span>]</span>)</span><span class="result">: <a href="Snippet.html" class="extype" name="org.specs2.execute.Snippet">Snippet</a>[<span class="extype" name="org.specs2.execute.Snippets.createSnippet.T">T</span>]</span>
       </span>
       </h4>
       
+    </li><li name="org.specs2.execute.Snippets#defaultSnippetParameters" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="defaultSnippetParameters[T]:org.specs2.execute.SnippetParams[T]"></a>
+      <a id="defaultSnippetParameters[T]:SnippetParams[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">defaultSnippetParameters</span><span class="tparams">[<span name="T">T</span>]</span><span class="result">: <a href="SnippetParams.html" class="extype" name="org.specs2.execute.SnippetParams">SnippetParams</a>[<span class="extype" name="org.specs2.execute.Snippets.defaultSnippetParameters.T">T</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">implicit parameters selected for the creation of Snippets</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -246,7 +288,7 @@ method on a Snippet.</p><p>It is also possible to check that the result value is
               
         </dd></dl></div>
     </li><li name="org.specs2.execute.Snippets#fullName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="fullName[T](implicitevidence$2:reflect.runtime.universe.WeakTypeTag[T]):String"></a>
+      <a id="fullName[T](implicitevidence$4:reflect.runtime.universe.WeakTypeTag[T]):String"></a>
       <a id="fullName[T](scala.reflect.api.JavaUniverse.WeakTypeTag[T]):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -337,7 +379,7 @@ method on a Snippet.</p><p>It is also possible to check that the result value is
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="org.specs2.execute.Snippets#simpleName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="simpleName[T](implicitevidence$1:reflect.runtime.universe.WeakTypeTag[T]):String"></a>
+      <a id="simpleName[T](implicitevidence$3:reflect.runtime.universe.WeakTypeTag[T]):String"></a>
       <a id="simpleName[T](scala.reflect.api.JavaUniverse.WeakTypeTag[T]):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -350,15 +392,15 @@ method on a Snippet.</p><p>It is also possible to check that the result value is
       </h4>
       
     </li><li name="org.specs2.execute.Snippets#snippet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="snippet[T](code:=&gt;T):org.specs2.execute.CodeSnippet[T]"></a>
-      <a id="snippet[T](⇒T):CodeSnippet[T]"></a>
+      <a id="snippet[T](code:=&gt;T)(implicitparams:org.specs2.execute.SnippetParams[T]):org.specs2.execute.Snippet[T]"></a>
+      <a id="snippet[T](⇒T)(SnippetParams[T]):Snippet[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">snippet</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="code">code: ⇒ <span class="extype" name="org.specs2.execute.Snippets.snippet.T">T</span></span>)</span><span class="result">: <a href="CodeSnippet.html" class="extype" name="org.specs2.execute.CodeSnippet">CodeSnippet</a>[<span class="extype" name="org.specs2.execute.Snippets.snippet.T">T</span>]</span>
+        <span class="name">snippet</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="code">code: ⇒ <span class="extype" name="org.specs2.execute.Snippets.snippet.T">T</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="params">params: <a href="SnippetParams.html" class="extype" name="org.specs2.execute.SnippetParams">SnippetParams</a>[<span class="extype" name="org.specs2.execute.Snippets.snippet.T">T</span>]</span>)</span><span class="result">: <a href="Snippet.html" class="extype" name="org.specs2.execute.Snippet">Snippet</a>[<span class="extype" name="org.specs2.execute.Snippets.snippet.T">T</span>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>

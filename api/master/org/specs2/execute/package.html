@@ -91,32 +91,6 @@
       </h4>
       <p class="comment cmt">Typeclass trait for anything that can be transformed to a Result
 </p>
-    </li><li name="org.specs2.execute.CheckedSnippet" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="CheckedSnippet[T,R]extendsSnippet[T]withProductwithSerializable"></a>
-      <a id="CheckedSnippet[T,R]:CheckedSnippet[T,R]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="CheckedSnippet.html"><span class="name">CheckedSnippet</span></a><span class="tparams">[<span name="T">T</span>, <span name="R">R</span>]</span><span class="params">(<span name="code">code: () ⇒ <span class="extype" name="org.specs2.execute.CheckedSnippet.T">T</span></span>, <span name="verification">verification: (<span class="extype" name="org.specs2.execute.CheckedSnippet.T">T</span>) ⇒ <span class="extype" name="org.specs2.execute.CheckedSnippet.R">R</span></span>, <span name="cutMarker">cutMarker: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;\n// 8&lt;--\n&quot;</span></span>, <span name="cutMarkerFormat">cutMarkerFormat: <span class="extype" name="scala.Predef.String">String</span> = <span class="defval" name="scala.StringContext.apply(&quot;\\n&quot;, &quot;*// 8&lt;\\\\-+.*\\n&quot;).s(Snippet.ls)">...</span></span>, <span name="trimExpression">trimExpression: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">Snippet.trimSnippet</span></span>, <span name="asCode">asCode: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">Snippet.markdownCode(0)</span></span>, <span name="codeExpression">codeExpression: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="isMuted">isMuted: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="evidence$4">evidence$4: <a href="AsResult.html" class="extype" name="org.specs2.execute.AsResult">AsResult</a>[<span class="extype" name="org.specs2.execute.CheckedSnippet.R">R</span>]</span>)</span><span class="result"> extends <a href="Snippet.html" class="extype" name="org.specs2.execute.Snippet">Snippet</a>[<span class="extype" name="org.specs2.execute.CheckedSnippet.T">T</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      
-    </li><li name="org.specs2.execute.CodeSnippet" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="CodeSnippet[T]extendsSnippet[T]withProductwithSerializable"></a>
-      <a id="CodeSnippet[T]:CodeSnippet[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="CodeSnippet.html"><span class="name">CodeSnippet</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="code">code: () ⇒ <span class="extype" name="org.specs2.execute.CodeSnippet.T">T</span></span>, <span name="cutMarker">cutMarker: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;\n// 8&lt;--\n&quot;</span></span>, <span name="cutMarkerFormat">cutMarkerFormat: <span class="extype" name="scala.Predef.String">String</span> = <span class="defval" name="scala.StringContext.apply(&quot;&quot;, &quot;*// 8&lt;\\\\-+.*\\n&quot;).s(Snippet.ls)">...</span></span>, <span name="trimExpression">trimExpression: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">Snippet.trimSnippet</span></span>, <span name="asCode">asCode: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">Snippet.markdownCode(0)</span></span>, <span name="codeExpression">codeExpression: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="isMuted">isMuted: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result"> extends <a href="Snippet.html" class="extype" name="org.specs2.execute.Snippet">Snippet</a>[<span class="extype" name="org.specs2.execute.CodeSnippet.T">T</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      
     </li><li name="org.specs2.execute.DecoratedResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="DecoratedResult[+T]extendsResultwithProductwithSerializable"></a>
       <a id="DecoratedResult[+T]:DecoratedResult[T]"></a>
@@ -424,6 +398,20 @@ It is used to execute examples in a new specification when needed
       </span>
       </h4>
       
+    </li><li name="org.specs2.execute.ScissorsCutter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ScissorsCutterextendsString=&gt;StringwithProductwithSerializable"></a>
+      <a id="ScissorsCutter:ScissorsCutter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ScissorsCutter.html"><span class="name">ScissorsCutter</span></a><span class="params">(<span name="cutMarker">cutMarker: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">Snippet.scissorsMarker</span></span>, <span name="cutMarkerFormat">cutMarkerFormat: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">Snippet.scissorsMarkerFormat</span></span>)</span><span class="result"> extends (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Implementation of a function to cut pieces of code by using some comments as markers
+</p>
     </li><li name="org.specs2.execute.SkipException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="SkipExceptionextendsExceptionwithProductwithSerializable"></a>
       <a id="SkipException:SkipException"></a>
@@ -450,19 +438,34 @@ It is used to execute examples in a new specification when needed
       </span>
       </h4>
       <p class="comment cmt">Skipped result</p>
-    </li><li name="org.specs2.execute.Snippet" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Snippet[T]extendsAnyRef"></a>
+    </li><li name="org.specs2.execute.Snippet" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Snippet[T]extendsProductwithSerializable"></a>
       <a id="Snippet[T]:Snippet[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">trait</span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Snippet.html"><span class="name">Snippet</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="Snippet.html"><span class="name">Snippet</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="code">code: () ⇒ <span class="extype" name="org.specs2.execute.Snippet.T">T</span></span>, <span name="codeExpression">codeExpression: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="params">params: <a href="SnippetParams.html" class="extype" name="org.specs2.execute.SnippetParams">SnippetParams</a>[<span class="extype" name="org.specs2.execute.Snippet.T">T</span>] = <span class="defval" name="SnippetParams.apply[T](SnippetParams.apply$default$1[T], SnippetParams.apply$default$2[T], SnippetParams.apply$default$3[T], SnippetParams.apply$default$4[T], SnippetParams.apply$default$5[T], SnippetParams.apply$default$6[T])">...</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
-      
+      <p class="comment cmt">Captured snippet of code with: a value of type T, a string representing the expression, captured by a macro,
+some evaluation and display parameters
+</p>
+    </li><li name="org.specs2.execute.SnippetParams" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SnippetParams[T]extendsProductwithSerializable"></a>
+      <a id="SnippetParams[T]:SnippetParams[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SnippetParams.html"><span class="name">SnippetParams</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="trimExpression">trimExpression: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">Snippet.trimApproximatedSnippet</span></span>, <span name="cutter">cutter: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="defval" name="ScissorsCutter.apply(ScissorsCutter.apply$default$1, ScissorsCutter.apply$default$2)">...</span></span>, <span name="asCode">asCode: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">Snippet.markdownCode(0)</span></span>, <span name="prompt">prompt: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">Snippet.greaterThanPrompt</span></span>, <span name="evalCode">evalCode: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="verify">verify: <span class="extype" name="scala.Option">Option</span>[(<span class="extype" name="org.specs2.execute.SnippetParams.T">T</span>) ⇒ <a href="Result.html" class="extype" name="org.specs2.execute.Result">Result</a>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Evaluation and display parameters for a Snippet.</p>
     </li><li name="org.specs2.execute.Snippets" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="SnippetsextendsAnyRef"></a>
       <a id="Snippets:Snippets"></a>
@@ -651,7 +654,7 @@ It is used to execute examples in a new specification when needed
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Snippet$.html"><span class="name">Snippet</span></a>
+        <a href="Snippet$.html"><span class="name">Snippet</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       

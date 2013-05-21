@@ -242,20 +242,6 @@ ex: <code>be_==(&quot;message&quot;) ^^ (_.getMessage)<code> can be applied to a
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="org.specs2.matcher.Matcher#atLeastOnce" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="atLeastOnce:org.specs2.matcher.Matcher[Traversable[T]]"></a>
-      <a id="atLeastOnce:Matcher[Traversable[T]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">atLeastOnce</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Traversable">Traversable</span>[<span class="extype" name="org.specs2.matcher.TerminationMatcher.T">T</span>]]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Matcher matching at least one element of a sequence against the current matcher
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -344,35 +330,6 @@ of 100 milliseconds
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="org.specs2.matcher.Matcher#forall" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="forall:org.specs2.matcher.Matcher[Traversable[T]]"></a>
-      <a id="forall:Matcher[Traversable[T]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">forall</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Traversable">Traversable</span>[<span class="extype" name="org.specs2.matcher.TerminationMatcher.T">T</span>]]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Matcher matching all the elements of a sequence against the current matcher, stopping after the first
-failure
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a></dd></dl></div>
-    </li><li name="org.specs2.matcher.Matcher#foreach" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="foreach:org.specs2.matcher.Matcher[Traversable[T]]"></a>
-      <a id="foreach:Matcher[Traversable[T]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">foreach</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Traversable">Traversable</span>[<span class="extype" name="org.specs2.matcher.TerminationMatcher.T">T</span>]]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Matcher matching all the elements of a sequence against the current matcher, cumulating all failures
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -705,7 +662,7 @@ If the skip message is empty, only the failure message is printed
       <p class="shortcomment cmt">This convenience method can be used to evaluate a boolean condition and return an appropriate MatchResult</p><div class="fullcomment"><div class="comment cmt"><p>This convenience method can be used to evaluate a boolean condition and return an appropriate MatchResult</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a MatchResult with an okMessage, a koMessage and the expectable value
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a></dd></dl></div>
     </li><li name="org.specs2.matcher.TerminationMatcher#retry" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="retry[S&lt;:T](originalRetries:Int,retries:Int,sleep:org.specs2.time.Duration,a:org.specs2.matcher.Expectable[S],promise:org.specs2.internal.scalaz.concurrent.Promise[S],whenActionExecuted:Boolean):org.specs2.matcher.MatchResult[S]"></a>
+      <a id="retry[S&lt;:T](originalRetries:Int,retries:Int,sleep:org.specs2.time.Duration,a:org.specs2.matcher.Expectable[S],promise:scalaz.concurrent.Promise[S],whenActionExecuted:Boolean):org.specs2.matcher.MatchResult[S]"></a>
       <a id="retry[S&lt;:T](Int,Int,Duration,Expectable[S],Promise[S],Boolean):MatchResult[S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -713,7 +670,7 @@ If the skip message is empty, only the failure message is printed
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">retry</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="org.specs2.matcher.TerminationMatcher.T">T</span></span>]</span><span class="params">(<span name="originalRetries">originalRetries: <span class="extype" name="scala.Int">Int</span></span>, <span name="retries">retries: <span class="extype" name="scala.Int">Int</span></span>, <span name="sleep">sleep: <a href="../time/Duration.html" class="extype" name="org.specs2.time.Duration">Duration</a></span>, <span name="a">a: <a href="Expectable.html" class="extype" name="org.specs2.matcher.Expectable">Expectable</a>[<span class="extype" name="org.specs2.matcher.TerminationMatcher.retry.S">S</span>]</span>, <span name="promise">promise: <span class="extype" name="org.specs2.internal.scalaz.concurrent.Promise">Promise</span>[<span class="extype" name="org.specs2.matcher.TerminationMatcher.retry.S">S</span>]</span>, <span name="whenActionExecuted">whenActionExecuted: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[<span class="extype" name="org.specs2.matcher.TerminationMatcher.retry.S">S</span>]</span>
+        <span class="name">retry</span><span class="tparams">[<span name="S">S &lt;: <span class="extype" name="org.specs2.matcher.TerminationMatcher.T">T</span></span>]</span><span class="params">(<span name="originalRetries">originalRetries: <span class="extype" name="scala.Int">Int</span></span>, <span name="retries">retries: <span class="extype" name="scala.Int">Int</span></span>, <span name="sleep">sleep: <a href="../time/Duration.html" class="extype" name="org.specs2.time.Duration">Duration</a></span>, <span name="a">a: <a href="Expectable.html" class="extype" name="org.specs2.matcher.Expectable">Expectable</a>[<span class="extype" name="org.specs2.matcher.TerminationMatcher.retry.S">S</span>]</span>, <span name="promise">promise: <span class="extype" name="scalaz.concurrent.Promise">Promise</span>[<span class="extype" name="org.specs2.matcher.TerminationMatcher.retry.S">S</span>]</span>, <span name="whenActionExecuted">whenActionExecuted: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[<span class="extype" name="org.specs2.matcher.TerminationMatcher.retry.S">S</span>]</span>
       </span>
       </h4>
       

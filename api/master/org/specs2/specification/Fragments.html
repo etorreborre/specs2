@@ -225,15 +225,28 @@
       </h4>
       
     </li><li name="org.specs2.specification.Fragments#append" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="append(fs:org.specs2.specification.Fragments)(implicitexampleFactory:org.specs2.specification.ExampleFactory):org.specs2.specification.Fragments"></a>
-      <a id="append(Fragments)(ExampleFactory):Fragments"></a>
+      <a id="append(fs:Seq[org.specs2.specification.Fragment]):org.specs2.specification.Fragments"></a>
+      <a id="append(Seq[Fragment]):Fragments"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">append</span><span class="params">(<span name="fs">fs: <a href="" class="extype" name="org.specs2.specification.Fragments">Fragments</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="exampleFactory">exampleFactory: <a href="ExampleFactory.html" class="extype" name="org.specs2.specification.ExampleFactory">ExampleFactory</a></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.specification.Fragments">Fragments</a></span>
+        <span class="name">append</span><span class="params">(<span name="fs">fs: <span class="extype" name="scala.Seq">Seq</span>[<a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>]</span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.specification.Fragments">Fragments</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">append the fragments from fs, appending the text fragments if this object ends with Text and fs starts with Text</p>
+    </li><li name="org.specs2.specification.Fragments#append" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="append(fs:org.specs2.specification.Fragments):org.specs2.specification.Fragments"></a>
+      <a id="append(Fragments):Fragments"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">append</span><span class="params">(<span name="fs">fs: <a href="" class="extype" name="org.specs2.specification.Fragments">Fragments</a></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.specification.Fragments">Fragments</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">append the fragments from fs, appending the text fragments if this object ends with Text and fs starts with Text</p>
@@ -292,6 +305,19 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="org.specs2.specification.Fragments#compact" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="compact:org.specs2.specification.Fragments"></a>
+      <a id="compact:Fragments"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compact</span><span class="result">: <a href="" class="extype" name="org.specs2.specification.Fragments">Fragments</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">recreate the Fragments so that 2 consecutive Text fragments are aggregated into one</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -451,6 +477,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.specs2.specification.Fragments#isLink" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="isLink:Boolean"></a>
+      <a id="isLink:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isLink</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.specification.Fragments#isZero" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="isZero:Boolean"></a>
       <a id="isZero:Boolean"></a>
@@ -464,6 +503,19 @@
       </span>
       </h4>
       
+    </li><li name="org.specs2.specification.Fragments#linkHtml" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="linkHtml:String"></a>
+      <a id="linkHtml:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">linkHtml</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.specification.Fragments#linkIs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="linkIs(htmlLink:org.specs2.specification.HtmlLink):org.specs2.specification.Fragments"></a>
       <a id="linkIs(HtmlLink):Fragments"></a>
@@ -474,6 +526,19 @@
       </span>
       <span class="symbol">
         <span class="name">linkIs</span><span class="params">(<span name="htmlLink">htmlLink: <a href="HtmlLink.html" class="extype" name="org.specs2.specification.HtmlLink">HtmlLink</a></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.specification.Fragments">Fragments</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.specification.Fragments#linkMarkdown" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="linkMarkdown:String"></a>
+      <a id="linkMarkdown:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">linkMarkdown</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
@@ -698,6 +763,19 @@
       </span>
       </h4>
       
+    </li><li name="org.specs2.specification.Fragments#starts" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="starts:Seq[org.specs2.specification.SpecStart]"></a>
+      <a id="starts:Seq[SpecStart]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">starts</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="SpecStart.html" class="extype" name="org.specs2.specification.SpecStart">SpecStart</a>]</span>
+      </span>
+      </h4>
+      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -711,6 +789,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.specs2.specification.Fragments#tags" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="tags:Seq[org.specs2.specification.TagsFragments.TaggingFragment]"></a>
+      <a id="tags:Seq[TaggingFragment]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tags</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="TagsFragments$$TaggingFragment.html" class="extype" name="org.specs2.specification.TagsFragments.TaggingFragment">TaggingFragment</a>]</span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.specification.Fragments#texts" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="texts:Seq[org.specs2.specification.Text]"></a>
       <a id="texts:Seq[Text]"></a>

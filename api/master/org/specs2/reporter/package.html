@@ -429,7 +429,7 @@ with the xml method
       </h4>
       <p class="comment cmt">Trait for exporting the specification as Markup files.</p>
     </li><li name="org.specs2.reporter.MessagesNotifier" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="MessagesNotifierextendsNotifierwithMockOutput"></a>
+      <a id="MessagesNotifierextendsNotifierwithStringOutput"></a>
       <a id="MessagesNotifier:MessagesNotifier"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -437,7 +437,7 @@ with the xml method
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="MessagesNotifier.html"><span class="name">MessagesNotifier</span></a><span class="result"> extends <a href="Notifier.html" class="extype" name="org.specs2.reporter.Notifier">Notifier</a> with <span class="extype" name="org.specs2.io.MockOutput">MockOutput</span></span>
+        <a href="MessagesNotifier.html"><span class="name">MessagesNotifier</span></a><span class="result"> extends <a href="Notifier.html" class="extype" name="org.specs2.reporter.Notifier">Notifier</a> with <a href="../io/StringOutput.html" class="extype" name="org.specs2.io.StringOutput">StringOutput</a></span>
       </span>
       </h4>
       
@@ -700,6 +700,20 @@ at the end of the specification
       </span>
       </h4>
       <p class="comment cmt">This trait reduces a list of ExecutedFragments to a list of PrintLines.</p>
+    </li><li name="org.specs2.reporter.TextReporter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TextReporterextendsDefaultReporterwithTextExporting"></a>
+      <a id="TextReporter:TextReporter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="TextReporter.html"><span class="name">TextReporter</span></a><span class="result"> extends <a href="DefaultReporter.html" class="extype" name="org.specs2.reporter.DefaultReporter">DefaultReporter</a> with <a href="TextExporting.html" class="extype" name="org.specs2.reporter.TextExporting">TextExporting</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">This reporter can be used to get the result of a specification execution as a String
+</p>
     </li><li name="org.specs2.reporter.TextResultOutput" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="TextResultOutputextendsResultOutputwithConsoleOutput"></a>
       <a id="TextResultOutput:TextResultOutput"></a>

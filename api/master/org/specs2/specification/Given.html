@@ -40,14 +40,14 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">Given</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="RegexStep.html" class="extype" name="org.specs2.specification.RegexStep">RegexStep</a>[<span class="extype" name="scala.Unit">Unit</span>, <span class="extype" name="org.specs2.specification.Given.T">T</span>]</span>
+        <span class="name">Given</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="../text/RegexExtractor.html" class="extype" name="org.specs2.text.RegexExtractor">RegexExtractor</a>[<span class="extype" name="scala.Unit">Unit</span>, <span class="extype" name="org.specs2.specification.Given.T">T</span>]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>This step can start a sequence of Given / When / Then.</p><p>It must define the extract function creating a value of type T from the extracted values
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="RegexStep.html" class="extype" name="org.specs2.specification.RegexStep">RegexStep</a>[<span class="extype" name="scala.Unit">Unit</span>, <span class="extype" name="org.specs2.specification.Given.T">T</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../text/RegexExtractor.html" class="extype" name="org.specs2.text.RegexExtractor">RegexExtractor</a>[<span class="extype" name="scala.Unit">Unit</span>, <span class="extype" name="org.specs2.specification.Given.T">T</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
           <div class="subClasses hiddenContent"><a href="gen/Given.html" class="extype" name="org.specs2.specification.gen.Given">Given</a></div>
@@ -68,7 +68,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="org.specs2.specification.Given"><span>Given</span></li><li class="in" name="org.specs2.specification.RegexStep"><span>RegexStep</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="org.specs2.specification.Given"><span>Given</span></li><li class="in" name="org.specs2.text.RegexExtractor"><span>RegexExtractor</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -97,7 +97,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Given</span><span class="params">(<span name="regex">regex: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="groupRegex">groupRegex: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">RegexStep.DEFAULT_REGEX</span></span>)</span>
+        <span class="name">Given</span><span class="params">(<span name="regex">regex: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="groupRegex">groupRegex: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">text.RegexExtractor.DEFAULT_REGEX</span></span>)</span>
       </span>
       </h4>
       
@@ -246,7 +246,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="org.specs2.specification.RegexStep#extract1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="org.specs2.text.RegexExtractor#extract1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="extract1(t:String):String"></a>
       <a id="extract1(String):String"></a>
       <h4 class="signature">
@@ -258,8 +258,8 @@
         <span class="name">extract1</span><span class="params">(<span name="t">t: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">extract the value contained in the first group</p><div class="fullcomment"><div class="comment cmt"><p>extract the value contained in the first group</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RegexStep.html" class="extype" name="org.specs2.specification.RegexStep">RegexStep</a></dd></dl></div>
-    </li><li name="org.specs2.specification.RegexStep#extract10" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <p class="shortcomment cmt">extract the value contained in the first group</p><div class="fullcomment"><div class="comment cmt"><p>extract the value contained in the first group</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../text/RegexExtractor.html" class="extype" name="org.specs2.text.RegexExtractor">RegexExtractor</a></dd></dl></div>
+    </li><li name="org.specs2.text.RegexExtractor#extract10" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="extract10(t:String):(String,String,String,String,String,String,String,String,String,String)"></a>
       <a id="extract10(String):(String,String,String,String,String,String,String,String,String,String)"></a>
       <h4 class="signature">
@@ -271,8 +271,8 @@
         <span class="name">extract10</span><span class="params">(<span name="t">t: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RegexStep.html" class="extype" name="org.specs2.specification.RegexStep">RegexStep</a></dd></dl></div>
-    </li><li name="org.specs2.specification.RegexStep#extract2" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../text/RegexExtractor.html" class="extype" name="org.specs2.text.RegexExtractor">RegexExtractor</a></dd></dl></div>
+    </li><li name="org.specs2.text.RegexExtractor#extract2" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="extract2(t:String):(String,String)"></a>
       <a id="extract2(String):(String,String)"></a>
       <h4 class="signature">
@@ -284,8 +284,8 @@
         <span class="name">extract2</span><span class="params">(<span name="t">t: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RegexStep.html" class="extype" name="org.specs2.specification.RegexStep">RegexStep</a></dd></dl></div>
-    </li><li name="org.specs2.specification.RegexStep#extract3" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../text/RegexExtractor.html" class="extype" name="org.specs2.text.RegexExtractor">RegexExtractor</a></dd></dl></div>
+    </li><li name="org.specs2.text.RegexExtractor#extract3" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="extract3(t:String):(String,String,String)"></a>
       <a id="extract3(String):(String,String,String)"></a>
       <h4 class="signature">
@@ -297,8 +297,8 @@
         <span class="name">extract3</span><span class="params">(<span name="t">t: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RegexStep.html" class="extype" name="org.specs2.specification.RegexStep">RegexStep</a></dd></dl></div>
-    </li><li name="org.specs2.specification.RegexStep#extract4" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../text/RegexExtractor.html" class="extype" name="org.specs2.text.RegexExtractor">RegexExtractor</a></dd></dl></div>
+    </li><li name="org.specs2.text.RegexExtractor#extract4" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="extract4(t:String):(String,String,String,String)"></a>
       <a id="extract4(String):(String,String,String,String)"></a>
       <h4 class="signature">
@@ -310,8 +310,8 @@
         <span class="name">extract4</span><span class="params">(<span name="t">t: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RegexStep.html" class="extype" name="org.specs2.specification.RegexStep">RegexStep</a></dd></dl></div>
-    </li><li name="org.specs2.specification.RegexStep#extract5" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../text/RegexExtractor.html" class="extype" name="org.specs2.text.RegexExtractor">RegexExtractor</a></dd></dl></div>
+    </li><li name="org.specs2.text.RegexExtractor#extract5" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="extract5(t:String):(String,String,String,String,String)"></a>
       <a id="extract5(String):(String,String,String,String,String)"></a>
       <h4 class="signature">
@@ -323,8 +323,8 @@
         <span class="name">extract5</span><span class="params">(<span name="t">t: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RegexStep.html" class="extype" name="org.specs2.specification.RegexStep">RegexStep</a></dd></dl></div>
-    </li><li name="org.specs2.specification.RegexStep#extract6" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../text/RegexExtractor.html" class="extype" name="org.specs2.text.RegexExtractor">RegexExtractor</a></dd></dl></div>
+    </li><li name="org.specs2.text.RegexExtractor#extract6" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="extract6(t:String):(String,String,String,String,String,String)"></a>
       <a id="extract6(String):(String,String,String,String,String,String)"></a>
       <h4 class="signature">
@@ -336,8 +336,8 @@
         <span class="name">extract6</span><span class="params">(<span name="t">t: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RegexStep.html" class="extype" name="org.specs2.specification.RegexStep">RegexStep</a></dd></dl></div>
-    </li><li name="org.specs2.specification.RegexStep#extract7" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../text/RegexExtractor.html" class="extype" name="org.specs2.text.RegexExtractor">RegexExtractor</a></dd></dl></div>
+    </li><li name="org.specs2.text.RegexExtractor#extract7" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="extract7(t:String):(String,String,String,String,String,String,String)"></a>
       <a id="extract7(String):(String,String,String,String,String,String,String)"></a>
       <h4 class="signature">
@@ -349,8 +349,8 @@
         <span class="name">extract7</span><span class="params">(<span name="t">t: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RegexStep.html" class="extype" name="org.specs2.specification.RegexStep">RegexStep</a></dd></dl></div>
-    </li><li name="org.specs2.specification.RegexStep#extract8" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../text/RegexExtractor.html" class="extype" name="org.specs2.text.RegexExtractor">RegexExtractor</a></dd></dl></div>
+    </li><li name="org.specs2.text.RegexExtractor#extract8" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="extract8(t:String):(String,String,String,String,String,String,String,String)"></a>
       <a id="extract8(String):(String,String,String,String,String,String,String,String)"></a>
       <h4 class="signature">
@@ -362,8 +362,8 @@
         <span class="name">extract8</span><span class="params">(<span name="t">t: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RegexStep.html" class="extype" name="org.specs2.specification.RegexStep">RegexStep</a></dd></dl></div>
-    </li><li name="org.specs2.specification.RegexStep#extract9" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../text/RegexExtractor.html" class="extype" name="org.specs2.text.RegexExtractor">RegexExtractor</a></dd></dl></div>
+    </li><li name="org.specs2.text.RegexExtractor#extract9" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="extract9(t:String):(String,String,String,String,String,String,String,String,String)"></a>
       <a id="extract9(String):(String,String,String,String,String,String,String,String,String)"></a>
       <h4 class="signature">
@@ -375,8 +375,8 @@
         <span class="name">extract9</span><span class="params">(<span name="t">t: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RegexStep.html" class="extype" name="org.specs2.specification.RegexStep">RegexStep</a></dd></dl></div>
-    </li><li name="org.specs2.specification.RegexStep#extractAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../text/RegexExtractor.html" class="extype" name="org.specs2.text.RegexExtractor">RegexExtractor</a></dd></dl></div>
+    </li><li name="org.specs2.text.RegexExtractor#extractAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="extractAll(t:String):List[String]"></a>
       <a id="extractAll(String):List[String]"></a>
       <h4 class="signature">
@@ -388,7 +388,7 @@
         <span class="name">extractAll</span><span class="params">(<span name="t">t: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RegexStep.html" class="extype" name="org.specs2.specification.RegexStep">RegexStep</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../text/RegexExtractor.html" class="extype" name="org.specs2.text.RegexExtractor">RegexExtractor</a></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -509,7 +509,7 @@
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.RegexStep#regexToUse" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="org.specs2.text.RegexExtractor#regexToUse" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="regexToUse:scala.util.matching.Regex"></a>
       <a id="regexToUse:Regex"></a>
       <h4 class="signature">
@@ -521,8 +521,8 @@
         <span class="name">regexToUse</span><span class="result">: <span class="extype" name="scala.util.matching.Regex">Regex</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">regex to use for a step with a partial function</p><div class="fullcomment"><div class="comment cmt"><p>regex to use for a step with a partial function</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="RegexStep.html" class="extype" name="org.specs2.specification.RegexStep">RegexStep</a></dd></dl></div>
-    </li><li name="org.specs2.specification.RegexStep#strip" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <p class="shortcomment cmt">regex to use for a step with a partial function</p><div class="fullcomment"><div class="comment cmt"><p>regex to use for a step with a partial function</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../text/RegexExtractor.html" class="extype" name="org.specs2.text.RegexExtractor">RegexExtractor</a></dd></dl></div>
+    </li><li name="org.specs2.specification.Given#strip" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="strip(f:org.specs2.specification.Fragment):org.specs2.specification.Fragment"></a>
       <a id="strip(Fragment):Fragment"></a>
       <h4 class="signature">
@@ -534,8 +534,8 @@
         <span class="name">strip</span><span class="params">(<span name="f">f: <a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a></span>)</span><span class="result">: <a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">remove value markers <code>${}</code> from a Text fragment</p><div class="fullcomment"><div class="comment cmt"><p>remove value markers <code>${}</code> from a Text fragment</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RegexStep.html" class="extype" name="org.specs2.specification.RegexStep">RegexStep</a></dd></dl></div>
-    </li><li name="org.specs2.specification.RegexStep#strip" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      
+    </li><li name="org.specs2.text.RegexExtractor#strip" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="strip(text:String):String"></a>
       <a id="strip(String):String"></a>
       <h4 class="signature">
@@ -547,7 +547,7 @@
         <span class="name">strip</span><span class="params">(<span name="text">text: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">remove value markers <code>${}</code> from the text</p><div class="fullcomment"><div class="comment cmt"><p>remove value markers <code>${}</code> from the text</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RegexStep.html" class="extype" name="org.specs2.specification.RegexStep">RegexStep</a></dd></dl></div>
+      <p class="shortcomment cmt">remove value markers <code>${}</code> from the text</p><div class="fullcomment"><div class="comment cmt"><p>remove value markers <code>${}</code> from the text</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../text/RegexExtractor.html" class="extype" name="org.specs2.text.RegexExtractor">RegexExtractor</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -622,8 +622,8 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="org.specs2.specification.RegexStep#withRegex" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="withRegex(full:String,group:String):RegexStep.this.type"></a>
+    </li><li name="org.specs2.text.RegexExtractor#withRegex" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="withRegex(full:String,group:String):RegexExtractor.this.type"></a>
       <a id="withRegex(String,String):Given.this.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -631,10 +631,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">withRegex</span><span class="params">(<span name="full">full: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="group">group: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol"><span class="name"><a href="RegexStep$.html">RegexStep.DEFAULT_REGEX</a></span></span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.specification.Given">Given</a>.this.type</span>
+        <span class="name">withRegex</span><span class="params">(<span name="full">full: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="group">group: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol"><span class="name"><a href="../text/RegexExtractor$.html">RegexExtractor.DEFAULT_REGEX</a></span></span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.specification.Given">Given</a>.this.type</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">change the regexps</p><div class="fullcomment"><div class="comment cmt"><p>change the regexps</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="RegexStep.html" class="extype" name="org.specs2.specification.RegexStep">RegexStep</a></dd></dl></div>
+      <p class="shortcomment cmt">change the regexps</p><div class="fullcomment"><div class="comment cmt"><p>change the regexps</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../text/RegexExtractor.html" class="extype" name="org.specs2.text.RegexExtractor">RegexExtractor</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -644,8 +644,8 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="org.specs2.specification.RegexStep">
-              <h3>Inherited from <a href="RegexStep.html" class="extype" name="org.specs2.specification.RegexStep">RegexStep</a>[<span class="extype" name="scala.Unit">Unit</span>, <span class="extype" name="org.specs2.specification.Given.T">T</span>]</h3>
+        <div class="parent" name="org.specs2.text.RegexExtractor">
+              <h3>Inherited from <a href="../text/RegexExtractor.html" class="extype" name="org.specs2.text.RegexExtractor">RegexExtractor</a>[<span class="extype" name="scala.Unit">Unit</span>, <span class="extype" name="org.specs2.specification.Given.T">T</span>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

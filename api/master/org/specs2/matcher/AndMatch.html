@@ -167,8 +167,23 @@
         <span class="name">apply</span><span class="params">(<span name="matcher">matcher: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.AndMatch.T">T</span>]</span>)</span><span class="result">: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[<span class="extype" name="org.specs2.matcher.AndMatch.T">T</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">apply a Matcher to the expectable contained in that MatchResult</p><div class="fullcomment"><div class="comment cmt"><p>apply a Matcher to the expectable contained in that MatchResult</p><p>Depending on the exact type of the MatchResult, that logic may vary
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.matcher.AndMatch">AndMatch</a> → <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a></dd></dl></div>
+      <p class="shortcomment cmt">apply a Matcher to the expectable contained in that MatchResult.</p><div class="fullcomment"><div class="comment cmt"><p>apply a Matcher to the expectable contained in that MatchResult. Depending on the exact type of the MatchResult,
+that logic may vary.</p><p>Note: this method is marked as &quot;private&quot; to give a clue to the user when semi-column inference fails to apply.</p><p>For example in that case:</p><p>   &quot;string&quot; must not beNull
+   1 must_== 1</p><p>There will be a compilation error as if the apply method was used between the first and second line:
+   (&quot;string&quot; must not beNull).apply(1)</p><p>For a more detailed explanation, see: http://bit.ly/12STc95</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.matcher.AndMatch">AndMatch</a> → <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a></dd></dl></div>
+    </li><li name="org.specs2.matcher.MatchResult#applyMatcher" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="applyMatcher(m:org.specs2.matcher.Matcher[T]):org.specs2.matcher.MatchResult[T]"></a>
+      <a id="applyMatcher(Matcher[T]):MatchResult[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">applyMatcher</span><span class="params">(<span name="m">m: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.AndMatch.T">T</span>]</span>)</span><span class="result">: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[<span class="extype" name="org.specs2.matcher.AndMatch.T">T</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">alias for the apply method, to be used outside specs2</p><div class="fullcomment"><div class="comment cmt"><p>alias for the apply method, to be used outside specs2</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>

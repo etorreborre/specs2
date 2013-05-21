@@ -40,29 +40,42 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Grouped</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">Grouped</span><span class="result"> extends <a href="GroupsLike.html" class="extype" name="org.specs2.specification.GroupsLike">GroupsLike</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>This trait can be used to standardize names for groups of examples in an acceptance specification.</p><p>class MySpecification extends Examples { def is =
-  &quot;first example in first group&quot;   ! g1.e1 <sup>
-  &quot;second example in first group&quot;  ! g1.e2 </sup>
-                                           p<sup>
-  &quot;first example in second group&quot;  ! g2.e1 </sup>
-  &quot;second example in second group&quot; ! g2.e2
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>This trait can be used to standardize names for groups of examples in an acceptance specification.</p><p>class MySpecification extends Specification with Examples { def is = s2&quot;&quot;&quot;
+  first example in first group                                       ${g1.e1}
+  second example in first group                                      ${g1.e2}</p><p>  first example in second group                                      ${g2.e1}
+  second example in second group                                     ${g2.e2}
+                                                                     &quot;&quot;&quot;
 }</p><p>trait Examples extends Grouped with Matchers {
   &quot;first group of examples&quot; - new g1 {
-    e1 - ok
-    e2 - ok
+    e1 := ok
+    e2 := ok
   }
   &quot;second group of examples&quot; - new g2 {
-    e1 - ok
-    e2 - ok
+    e1 := ok
+    e2 := ok
   }
-}</p><p>It is important to notice that the examples must be called with <code>g1().e1</code> so as to create a new <code>g1</code> trait instance
-with new local variables for the example <code>e1</code>. If this is not required, the <code>Grouped</code> trait can be used instead</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="org.specs2.specification.Grouped">Grouped</a></dd></dl><div class="toggleContainer block">
+}</p><p>If you don't want to manage groups and examples numbers it is also possible to write the following (note the <code>script.Specification</code>):</p><p>class MySpecification extends script.Specification with Examples { def is = s2&quot;&quot;&quot;
+  first example in first group
+  second example in first group</p><p>  first example in second group
+  second example in second group
+                                                  &quot;&quot;&quot;
+}</p><p>trait Examples extends Grouped with Matchers {
+  &quot;first group of examples&quot; - new group {
+    eg := ok
+    eg := ok
+  }
+  &quot;second group of examples&quot; - new group {
+    eg := ok
+    eg := ok
+  }
+}
+</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="org.specs2.specification.Grouped">Grouped</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="GroupsLike.html" class="extype" name="org.specs2.specification.GroupsLike">GroupsLike</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -80,7 +93,7 @@ with new local variables for the example <code>e1</code>. If this is not require
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="org.specs2.specification.Grouped"><span>Grouped</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="org.specs2.specification.Grouped"><span>Grouped</span></li><li class="in" name="org.specs2.specification.GroupsLike"><span>GroupsLike</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -102,7 +115,20 @@ with new local variables for the example <code>e1</code>. If this is not require
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="org.specs2.specification.Grouped.NamedGroup" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="org.specs2.specification.GroupsLike.AutoNumberedGroup" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="AutoNumberedGroupextendsExamplesGroup"></a>
+      <a id="AutoNumberedGroup:AutoNumberedGroup"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="GroupsLike$AutoNumberedGroup.html"><span class="name">AutoNumberedGroup</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GroupsLike.html" class="extype" name="org.specs2.specification.GroupsLike">GroupsLike</a></dd></dl></div>
+    </li><li name="org.specs2.specification.Grouped.NamedGroup" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="NamedGroupextendsAnyRef"></a>
       <a id="NamedGroup:NamedGroup"></a>
       <h4 class="signature">
@@ -116,7 +142,7 @@ with new local variables for the example <code>e1</code>. If this is not require
       </h4>
       
     </li><li name="org.specs2.specification.Grouped.g1" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="g1extendsGroup"></a>
+      <a id="g1extendsExamplesGroup"></a>
       <a id="g1:g1"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -124,12 +150,12 @@ with new local variables for the example <code>e1</code>. If this is not require
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grouped$g1.html"><span class="name">g1</span></a><span class="result"> extends <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <a href="Grouped$g1.html"><span class="name">g1</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped.g10" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="g10extendsGroup"></a>
+      <a id="g10extendsExamplesGroup"></a>
       <a id="g10:g10"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -137,12 +163,12 @@ with new local variables for the example <code>e1</code>. If this is not require
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grouped$g10.html"><span class="name">g10</span></a><span class="result"> extends <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <a href="Grouped$g10.html"><span class="name">g10</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped.g11" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="g11extendsGroup"></a>
+      <a id="g11extendsExamplesGroup"></a>
       <a id="g11:g11"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -150,12 +176,12 @@ with new local variables for the example <code>e1</code>. If this is not require
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grouped$g11.html"><span class="name">g11</span></a><span class="result"> extends <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <a href="Grouped$g11.html"><span class="name">g11</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped.g12" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="g12extendsGroup"></a>
+      <a id="g12extendsExamplesGroup"></a>
       <a id="g12:g12"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -163,12 +189,12 @@ with new local variables for the example <code>e1</code>. If this is not require
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grouped$g12.html"><span class="name">g12</span></a><span class="result"> extends <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <a href="Grouped$g12.html"><span class="name">g12</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped.g13" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="g13extendsGroup"></a>
+      <a id="g13extendsExamplesGroup"></a>
       <a id="g13:g13"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -176,12 +202,12 @@ with new local variables for the example <code>e1</code>. If this is not require
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grouped$g13.html"><span class="name">g13</span></a><span class="result"> extends <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <a href="Grouped$g13.html"><span class="name">g13</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped.g14" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="g14extendsGroup"></a>
+      <a id="g14extendsExamplesGroup"></a>
       <a id="g14:g14"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -189,12 +215,12 @@ with new local variables for the example <code>e1</code>. If this is not require
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grouped$g14.html"><span class="name">g14</span></a><span class="result"> extends <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <a href="Grouped$g14.html"><span class="name">g14</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped.g15" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="g15extendsGroup"></a>
+      <a id="g15extendsExamplesGroup"></a>
       <a id="g15:g15"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -202,12 +228,12 @@ with new local variables for the example <code>e1</code>. If this is not require
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grouped$g15.html"><span class="name">g15</span></a><span class="result"> extends <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <a href="Grouped$g15.html"><span class="name">g15</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped.g16" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="g16extendsGroup"></a>
+      <a id="g16extendsExamplesGroup"></a>
       <a id="g16:g16"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -215,12 +241,12 @@ with new local variables for the example <code>e1</code>. If this is not require
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grouped$g16.html"><span class="name">g16</span></a><span class="result"> extends <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <a href="Grouped$g16.html"><span class="name">g16</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped.g17" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="g17extendsGroup"></a>
+      <a id="g17extendsExamplesGroup"></a>
       <a id="g17:g17"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -228,12 +254,12 @@ with new local variables for the example <code>e1</code>. If this is not require
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grouped$g17.html"><span class="name">g17</span></a><span class="result"> extends <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <a href="Grouped$g17.html"><span class="name">g17</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped.g18" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="g18extendsGroup"></a>
+      <a id="g18extendsExamplesGroup"></a>
       <a id="g18:g18"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -241,12 +267,12 @@ with new local variables for the example <code>e1</code>. If this is not require
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grouped$g18.html"><span class="name">g18</span></a><span class="result"> extends <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <a href="Grouped$g18.html"><span class="name">g18</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped.g19" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="g19extendsGroup"></a>
+      <a id="g19extendsExamplesGroup"></a>
       <a id="g19:g19"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -254,12 +280,12 @@ with new local variables for the example <code>e1</code>. If this is not require
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grouped$g19.html"><span class="name">g19</span></a><span class="result"> extends <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <a href="Grouped$g19.html"><span class="name">g19</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped.g2" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="g2extendsGroup"></a>
+      <a id="g2extendsExamplesGroup"></a>
       <a id="g2:g2"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -267,12 +293,12 @@ with new local variables for the example <code>e1</code>. If this is not require
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grouped$g2.html"><span class="name">g2</span></a><span class="result"> extends <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <a href="Grouped$g2.html"><span class="name">g2</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped.g20" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="g20extendsGroup"></a>
+      <a id="g20extendsExamplesGroup"></a>
       <a id="g20:g20"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -280,12 +306,12 @@ with new local variables for the example <code>e1</code>. If this is not require
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grouped$g20.html"><span class="name">g20</span></a><span class="result"> extends <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <a href="Grouped$g20.html"><span class="name">g20</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped.g21" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="g21extendsGroup"></a>
+      <a id="g21extendsExamplesGroup"></a>
       <a id="g21:g21"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -293,12 +319,12 @@ with new local variables for the example <code>e1</code>. If this is not require
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grouped$g21.html"><span class="name">g21</span></a><span class="result"> extends <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <a href="Grouped$g21.html"><span class="name">g21</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped.g22" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="g22extendsGroup"></a>
+      <a id="g22extendsExamplesGroup"></a>
       <a id="g22:g22"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -306,12 +332,12 @@ with new local variables for the example <code>e1</code>. If this is not require
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grouped$g22.html"><span class="name">g22</span></a><span class="result"> extends <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <a href="Grouped$g22.html"><span class="name">g22</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped.g3" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="g3extendsGroup"></a>
+      <a id="g3extendsExamplesGroup"></a>
       <a id="g3:g3"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -319,12 +345,12 @@ with new local variables for the example <code>e1</code>. If this is not require
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grouped$g3.html"><span class="name">g3</span></a><span class="result"> extends <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <a href="Grouped$g3.html"><span class="name">g3</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped.g4" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="g4extendsGroup"></a>
+      <a id="g4extendsExamplesGroup"></a>
       <a id="g4:g4"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -332,12 +358,12 @@ with new local variables for the example <code>e1</code>. If this is not require
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grouped$g4.html"><span class="name">g4</span></a><span class="result"> extends <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <a href="Grouped$g4.html"><span class="name">g4</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped.g5" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="g5extendsGroup"></a>
+      <a id="g5extendsExamplesGroup"></a>
       <a id="g5:g5"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -345,12 +371,12 @@ with new local variables for the example <code>e1</code>. If this is not require
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grouped$g5.html"><span class="name">g5</span></a><span class="result"> extends <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <a href="Grouped$g5.html"><span class="name">g5</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped.g6" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="g6extendsGroup"></a>
+      <a id="g6extendsExamplesGroup"></a>
       <a id="g6:g6"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -358,12 +384,12 @@ with new local variables for the example <code>e1</code>. If this is not require
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grouped$g6.html"><span class="name">g6</span></a><span class="result"> extends <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <a href="Grouped$g6.html"><span class="name">g6</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped.g7" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="g7extendsGroup"></a>
+      <a id="g7extendsExamplesGroup"></a>
       <a id="g7:g7"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -371,12 +397,12 @@ with new local variables for the example <code>e1</code>. If this is not require
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grouped$g7.html"><span class="name">g7</span></a><span class="result"> extends <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <a href="Grouped$g7.html"><span class="name">g7</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped.g8" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="g8extendsGroup"></a>
+      <a id="g8extendsExamplesGroup"></a>
       <a id="g8:g8"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -384,12 +410,12 @@ with new local variables for the example <code>e1</code>. If this is not require
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grouped$g8.html"><span class="name">g8</span></a><span class="result"> extends <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <a href="Grouped$g8.html"><span class="name">g8</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped.g9" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="g9extendsGroup"></a>
+      <a id="g9extendsExamplesGroup"></a>
       <a id="g9:g9"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -397,10 +423,23 @@ with new local variables for the example <code>e1</code>. If this is not require
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Grouped$g9.html"><span class="name">g9</span></a><span class="result"> extends <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <a href="Grouped$g9.html"><span class="name">g9</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
+    </li><li name="org.specs2.specification.GroupsLike.group" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="groupextendsExamplesGroupwithGroupsLike.this.AutoNumberedGroup"></a>
+      <a id="group:group"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="GroupsLike$group.html"><span class="name">group</span></a><span class="result"> extends <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a> with <a href="GroupsLike$AutoNumberedGroup.html" class="extype" name="org.specs2.specification.GroupsLike.AutoNumberedGroup">AutoNumberedGroup</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="GroupsLike.html" class="extype" name="org.specs2.specification.GroupsLike">GroupsLike</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -545,288 +584,288 @@ with new local variables for the example <code>e1</code>. If this is not require
               
         </dd></dl></div>
     </li><li name="org.specs2.specification.Grouped#g1" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="g1:org.specs2.specification.Group"></a>
-      <a id="g1:Group"></a>
+      <a id="g1:org.specs2.specification.ExamplesGroup"></a>
+      <a id="g1:ExamplesGroup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">g1</span><span class="result">: <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <span class="name">g1</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped#g10" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="g10:org.specs2.specification.Group"></a>
-      <a id="g10:Group"></a>
+      <a id="g10:org.specs2.specification.ExamplesGroup"></a>
+      <a id="g10:ExamplesGroup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">g10</span><span class="result">: <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <span class="name">g10</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped#g11" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="g11:org.specs2.specification.Group"></a>
-      <a id="g11:Group"></a>
+      <a id="g11:org.specs2.specification.ExamplesGroup"></a>
+      <a id="g11:ExamplesGroup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">g11</span><span class="result">: <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <span class="name">g11</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped#g12" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="g12:org.specs2.specification.Group"></a>
-      <a id="g12:Group"></a>
+      <a id="g12:org.specs2.specification.ExamplesGroup"></a>
+      <a id="g12:ExamplesGroup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">g12</span><span class="result">: <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <span class="name">g12</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped#g13" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="g13:org.specs2.specification.Group"></a>
-      <a id="g13:Group"></a>
+      <a id="g13:org.specs2.specification.ExamplesGroup"></a>
+      <a id="g13:ExamplesGroup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">g13</span><span class="result">: <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <span class="name">g13</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped#g14" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="g14:org.specs2.specification.Group"></a>
-      <a id="g14:Group"></a>
+      <a id="g14:org.specs2.specification.ExamplesGroup"></a>
+      <a id="g14:ExamplesGroup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">g14</span><span class="result">: <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <span class="name">g14</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped#g15" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="g15:org.specs2.specification.Group"></a>
-      <a id="g15:Group"></a>
+      <a id="g15:org.specs2.specification.ExamplesGroup"></a>
+      <a id="g15:ExamplesGroup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">g15</span><span class="result">: <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <span class="name">g15</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped#g16" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="g16:org.specs2.specification.Group"></a>
-      <a id="g16:Group"></a>
+      <a id="g16:org.specs2.specification.ExamplesGroup"></a>
+      <a id="g16:ExamplesGroup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">g16</span><span class="result">: <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <span class="name">g16</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped#g17" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="g17:org.specs2.specification.Group"></a>
-      <a id="g17:Group"></a>
+      <a id="g17:org.specs2.specification.ExamplesGroup"></a>
+      <a id="g17:ExamplesGroup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">g17</span><span class="result">: <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <span class="name">g17</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped#g18" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="g18:org.specs2.specification.Group"></a>
-      <a id="g18:Group"></a>
+      <a id="g18:org.specs2.specification.ExamplesGroup"></a>
+      <a id="g18:ExamplesGroup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">g18</span><span class="result">: <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <span class="name">g18</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped#g19" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="g19:org.specs2.specification.Group"></a>
-      <a id="g19:Group"></a>
+      <a id="g19:org.specs2.specification.ExamplesGroup"></a>
+      <a id="g19:ExamplesGroup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">g19</span><span class="result">: <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <span class="name">g19</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped#g2" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="g2:org.specs2.specification.Group"></a>
-      <a id="g2:Group"></a>
+      <a id="g2:org.specs2.specification.ExamplesGroup"></a>
+      <a id="g2:ExamplesGroup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">g2</span><span class="result">: <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <span class="name">g2</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped#g20" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="g20:org.specs2.specification.Group"></a>
-      <a id="g20:Group"></a>
+      <a id="g20:org.specs2.specification.ExamplesGroup"></a>
+      <a id="g20:ExamplesGroup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">g20</span><span class="result">: <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <span class="name">g20</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped#g21" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="g21:org.specs2.specification.Group"></a>
-      <a id="g21:Group"></a>
+      <a id="g21:org.specs2.specification.ExamplesGroup"></a>
+      <a id="g21:ExamplesGroup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">g21</span><span class="result">: <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <span class="name">g21</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped#g22" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="g22:org.specs2.specification.Group"></a>
-      <a id="g22:Group"></a>
+      <a id="g22:org.specs2.specification.ExamplesGroup"></a>
+      <a id="g22:ExamplesGroup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">g22</span><span class="result">: <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <span class="name">g22</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped#g3" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="g3:org.specs2.specification.Group"></a>
-      <a id="g3:Group"></a>
+      <a id="g3:org.specs2.specification.ExamplesGroup"></a>
+      <a id="g3:ExamplesGroup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">g3</span><span class="result">: <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <span class="name">g3</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped#g4" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="g4:org.specs2.specification.Group"></a>
-      <a id="g4:Group"></a>
+      <a id="g4:org.specs2.specification.ExamplesGroup"></a>
+      <a id="g4:ExamplesGroup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">g4</span><span class="result">: <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <span class="name">g4</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped#g5" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="g5:org.specs2.specification.Group"></a>
-      <a id="g5:Group"></a>
+      <a id="g5:org.specs2.specification.ExamplesGroup"></a>
+      <a id="g5:ExamplesGroup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">g5</span><span class="result">: <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <span class="name">g5</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped#g6" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="g6:org.specs2.specification.Group"></a>
-      <a id="g6:Group"></a>
+      <a id="g6:org.specs2.specification.ExamplesGroup"></a>
+      <a id="g6:ExamplesGroup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">g6</span><span class="result">: <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <span class="name">g6</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped#g7" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="g7:org.specs2.specification.Group"></a>
-      <a id="g7:Group"></a>
+      <a id="g7:org.specs2.specification.ExamplesGroup"></a>
+      <a id="g7:ExamplesGroup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">g7</span><span class="result">: <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <span class="name">g7</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped#g8" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="g8:org.specs2.specification.Group"></a>
-      <a id="g8:Group"></a>
+      <a id="g8:org.specs2.specification.ExamplesGroup"></a>
+      <a id="g8:ExamplesGroup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">g8</span><span class="result">: <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <span class="name">g8</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
     </li><li name="org.specs2.specification.Grouped#g9" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="g9:org.specs2.specification.Group"></a>
-      <a id="g9:Group"></a>
+      <a id="g9:org.specs2.specification.ExamplesGroup"></a>
+      <a id="g9:ExamplesGroup"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">g9</span><span class="result">: <a href="Group.html" class="extype" name="org.specs2.specification.Group">Group</a></span>
+        <span class="name">g9</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
       </span>
       </h4>
       
@@ -843,6 +882,19 @@ with new local variables for the example <code>e1</code>. If this is not require
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.specs2.specification.Grouped#group" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="group(i:Int):org.specs2.specification.ExamplesGroup"></a>
+      <a id="group(Int):ExamplesGroup"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">group</span><span class="params">(<span name="i">i: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="ExamplesGroup.html" class="extype" name="org.specs2.specification.ExamplesGroup">ExamplesGroup</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.specification.Grouped">Grouped</a> → <a href="GroupsLike.html" class="extype" name="org.specs2.specification.GroupsLike">GroupsLike</a></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -1004,7 +1056,9 @@ with new local variables for the example <code>e1</code>. If this is not require
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="org.specs2.specification.GroupsLike">
+              <h3>Inherited from <a href="GroupsLike.html" class="extype" name="org.specs2.specification.GroupsLike">GroupsLike</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

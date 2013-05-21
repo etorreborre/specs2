@@ -269,7 +269,7 @@
               
         </dd></dl></div>
     </li><li name="org.specs2.specification.Fragments#fragmentsIsMonoid" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="fragmentsIsMonoid:org.specs2.internal.scalaz.Monoid[org.specs2.specification.Fragments]{valzero:org.specs2.specification.Fragments}"></a>
+      <a id="fragmentsIsMonoid:scalaz.Monoid[org.specs2.specification.Fragments]{valzero:org.specs2.specification.Fragments}"></a>
       <a id="fragmentsIsMonoid:Monoid[Fragments]{valzero:org.specs2.specification.Fragments}"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -277,7 +277,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">fragmentsIsMonoid</span><span class="result">: <span class="extype" name="org.specs2.internal.scalaz.Monoid">Monoid</span>[<a href="Fragments.html" class="extype" name="org.specs2.specification.Fragments">Fragments</a>] { val zero: org.specs2.specification.Fragments }</span>
+        <span class="name">fragmentsIsMonoid</span><span class="result">: <span class="extype" name="scalaz.Monoid">Monoid</span>[<a href="Fragments.html" class="extype" name="org.specs2.specification.Fragments">Fragments</a>] { val zero: org.specs2.specification.Fragments }</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Fragments can be added as a monoid
@@ -335,15 +335,15 @@
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the spec end if the Fragment is a SpecEnd</p></dd></dl></div>
     </li><li name="org.specs2.specification.Fragments#isASpecStart" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="isASpecStart:PartialFunction[org.specs2.specification.Fragment,org.specs2.specification.Fragment]"></a>
-      <a id="isASpecStart:PartialFunction[Fragment,Fragment]"></a>
+      <a id="isASpecStart:PartialFunction[org.specs2.specification.Fragment,org.specs2.specification.SpecStart]"></a>
+      <a id="isASpecStart:PartialFunction[Fragment,SpecStart]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isASpecStart</span><span class="result">: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>, <a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>]</span>
+        <span class="name">isASpecStart</span><span class="result">: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>, <a href="SpecStart.html" class="extype" name="org.specs2.specification.SpecStart">SpecStart</a>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the spec start if the Fragment is a SpecStart</p></dd></dl></div>
@@ -438,6 +438,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.specs2.specification.Fragments#isSomeTag" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isSomeTag:PartialFunction[org.specs2.specification.Fragment,org.specs2.specification.TagsFragments.TaggingFragment]"></a>
+      <a id="isSomeTag:PartialFunction[Fragment,TaggingFragment]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isSomeTag</span><span class="result">: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>, <a href="TagsFragments$$TaggingFragment.html" class="extype" name="org.specs2.specification.TagsFragments.TaggingFragment">TaggingFragment</a>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the text if the Fragment is a TaggingFragment</p></dd></dl></div>
     </li><li name="org.specs2.specification.Fragments#isSomeText" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isSomeText:PartialFunction[org.specs2.specification.Fragment,org.specs2.specification.Text]"></a>
       <a id="isSomeText:PartialFunction[Fragment,Text]"></a>

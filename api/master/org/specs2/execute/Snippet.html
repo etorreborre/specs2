@@ -29,7 +29,7 @@
         </head>
         <body class="type">
       <div id="definition">
-        <a href="Snippet$.html" title="Go to companion"><img src="../../../lib/trait_to_object_big.png" /></a>
+        <a href="Snippet$.html" title="Go to companion"><img src="../../../lib/class_to_object_big.png" /></a>
         <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a>.<a href="package.html" class="extype" name="org.specs2.execute">execute</a></p>
         <h1><a href="Snippet$.html" title="Go to companion">Snippet</a></h1>
       </div>
@@ -37,19 +37,18 @@
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">trait</span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">Snippet</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">Snippet</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="code">code: () ⇒ <span class="extype" name="org.specs2.execute.Snippet.T">T</span></span>, <span name="codeExpression">codeExpression: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="params">params: <a href="SnippetParams.html" class="extype" name="org.specs2.execute.SnippetParams">SnippetParams</a>[<span class="extype" name="org.specs2.execute.Snippet.T">T</span>] = <span class="defval" name="SnippetParams.apply[T](SnippetParams.apply$default$1[T], SnippetParams.apply$default$2[T], SnippetParams.apply$default$3[T], SnippetParams.apply$default$4[T], SnippetParams.apply$default$5[T], SnippetParams.apply$default$6[T])">...</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Captured snippet of code with: a value of type T, a string representing the expression, captured by a macro,
+some evaluation and display parameters
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
-        </div><div class="toggleContainer block">
-          <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a href="CheckedSnippet.html" class="extype" name="org.specs2.execute.CheckedSnippet">CheckedSnippet</a>, <a href="CodeSnippet.html" class="extype" name="org.specs2.execute.CodeSnippet">CodeSnippet</a></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -67,7 +66,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="org.specs2.execute.Snippet"><span>Snippet</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="org.specs2.execute.Snippet"><span>Snippet</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -85,163 +84,30 @@
 
       <div id="template">
         <div id="allMembers">
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="org.specs2.execute.Snippet#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(code:()=&gt;T,codeExpression:Option[String],params:org.specs2.execute.SnippetParams[T]):org.specs2.execute.Snippet[T]"></a>
+      <a id="&lt;init&gt;:Snippet[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Snippet</span><span class="params">(<span name="code">code: () ⇒ <span class="extype" name="org.specs2.execute.Snippet.T">T</span></span>, <span name="codeExpression">codeExpression: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">scala.None</span></span>, <span name="params">params: <a href="SnippetParams.html" class="extype" name="org.specs2.execute.SnippetParams">SnippetParams</a>[<span class="extype" name="org.specs2.execute.Snippet.T">T</span>] = <span class="defval" name="SnippetParams.apply[T](SnippetParams.apply$default$1[T], SnippetParams.apply$default$2[T], SnippetParams.apply$default$3[T], SnippetParams.apply$default$4[T], SnippetParams.apply$default$5[T], SnippetParams.apply$default$6[T])">...</span></span>)</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
         
 
-        <div id="types" class="types members">
-              <h3>Type Members</h3>
-              <ol><li name="org.specs2.execute.Snippet.ST" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ST&lt;:org.specs2.execute.Snippet[T]"></a>
-      <a id="ST:ST"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ST</span><span class="result"> &lt;: <a href="" class="extype" name="org.specs2.execute.Snippet">Snippet</a>[<span class="extype" name="org.specs2.execute.Snippet.T">T</span>]</span>
-      </span>
-      </h4>
-      
-    </li></ol>
-            </div>
+        
 
         <div id="values" class="values members">
-              <h3>Abstract Value Members</h3>
-              <ol><li name="org.specs2.execute.Snippet#asCode" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="asCode:(String,String)=&gt;String"></a>
-      <a id="asCode:(String,String)⇒String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">asCode</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">use the full snippet version + the cut one to determine what to display</p>
-    </li><li name="org.specs2.execute.Snippet#code" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="code:()=&gt;T"></a>
-      <a id="code:()⇒T"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">code</span><span class="result">: () ⇒ <span class="extype" name="org.specs2.execute.Snippet.T">T</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="org.specs2.execute.Snippet#codeExpression" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="codeExpression:Option[String]"></a>
-      <a id="codeExpression:Option[String]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">codeExpression</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="org.specs2.execute.Snippet#cutMarker" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="cutMarker:String"></a>
-      <a id="cutMarker:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">cutMarker</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4>
-      
-    </li><li name="org.specs2.execute.Snippet#cutMarkerFormat" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="cutMarkerFormat:String"></a>
-      <a id="cutMarkerFormat:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">cutMarkerFormat</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4>
-      
-    </li><li name="org.specs2.execute.Snippet#eval" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="eval:Snippet.this.ST"></a>
-      <a id="eval:ST"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">eval</span><span class="result">: <a href="#ST&lt;:org.specs2.execute.Snippet[T]" class="extmbr" name="org.specs2.execute.Snippet.ST">ST</a></span>
-      </span>
-      </h4>
-      
-    </li><li name="org.specs2.execute.Snippet#isMuted" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="isMuted:Boolean"></a>
-      <a id="isMuted:Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">isMuted</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      
-    </li><li name="org.specs2.execute.Snippet#mute" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="mute:Snippet.this.ST"></a>
-      <a id="mute:ST"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">mute</span><span class="result">: <a href="#ST&lt;:org.specs2.execute.Snippet[T]" class="extmbr" name="org.specs2.execute.Snippet.ST">ST</a></span>
-      </span>
-      </h4>
-      
-    </li><li name="org.specs2.execute.Snippet#offsetIs" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="offsetIs(n:Int):Snippet.this.ST"></a>
-      <a id="offsetIs(Int):ST"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">offsetIs</span><span class="params">(<span name="n">n: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="#ST&lt;:org.specs2.execute.Snippet[T]" class="extmbr" name="org.specs2.execute.Snippet.ST">ST</a></span>
-      </span>
-      </h4>
-      
-    </li><li name="org.specs2.execute.Snippet#trimExpression" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="trimExpression:String=&gt;String"></a>
-      <a id="trimExpression:(String)⇒String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">trimExpression</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4>
-      
-    </li></ol>
-            </div>
-
-        <div id="values" class="values members">
-              <h3>Concrete Value Members</h3>
+              <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
@@ -336,19 +202,32 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="org.specs2.execute.Snippet#cut" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="cut(expression:String):String"></a>
-      <a id="cut(String):String"></a>
+    </li><li name="org.specs2.execute.Snippet#code" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="code:()=&gt;T"></a>
+      <a id="code:()⇒T"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">def</span>
+        <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">cut</span><span class="params">(<span name="expression">expression: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">code</span><span class="result">: () ⇒ <span class="extype" name="org.specs2.execute.Snippet.T">T</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      
+    </li><li name="org.specs2.execute.Snippet#codeExpression" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="codeExpression:Option[String]"></a>
+      <a id="codeExpression:Option[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">codeExpression</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4>
+      
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -362,19 +241,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="equals(x$1:Any):Boolean"></a>
-      <a id="equals(Any):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="org.specs2.execute.Snippet#execute" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="execute:T"></a>
       <a id="execute:T"></a>
@@ -417,19 +283,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="hashCode():Int"></a>
-      <a id="hashCode():Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -443,16 +296,16 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="org.specs2.execute.Snippet#markdown" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="markdown(expression:String):String"></a>
-      <a id="markdown(String):String"></a>
+    </li><li name="org.specs2.execute.Snippet#mustBeVerified" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="mustBeVerified:Boolean"></a>
+      <a id="mustBeVerified:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">markdown</span><span class="params">(<span name="expression">expression: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">mustBeVerified</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       
@@ -495,29 +348,57 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.specs2.execute.Snippet#params" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="params:org.specs2.execute.SnippetParams[T]"></a>
+      <a id="params:SnippetParams[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">params</span><span class="result">: <a href="SnippetParams.html" class="extype" name="org.specs2.execute.SnippetParams">SnippetParams</a>[<span class="extype" name="org.specs2.execute.Snippet.T">T</span>]</span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.execute.Snippet#result" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="result:String"></a>
       <a id="result:String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">def</span>
+        <span class="kind">lazy val</span>
       </span>
       <span class="symbol">
         <span class="name">result</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4>
       
-    </li><li name="org.specs2.execute.Snippet#resultMarkdown" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="resultMarkdown:String"></a>
-      <a id="resultMarkdown:String"></a>
+    </li><li name="org.specs2.execute.Snippet#show" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="show(expression:String):String"></a>
+      <a id="show(String):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">resultMarkdown</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">show</span><span class="params">(<span name="expression">expression: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">show the snippet either taking the expression captured by the macro or another expression passed by the caller
+(for example in an interpolated s2 string when -Yrangepos is disabled)
+</p>
+    </li><li name="org.specs2.execute.Snippet#showResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="showResult:String"></a>
+      <a id="showResult:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">showResult</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       
@@ -534,19 +415,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toString():String"></a>
-      <a id="toString():String"></a>
+    </li><li name="org.specs2.execute.Snippet#verify" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="verify:org.specs2.execute.Result"></a>
+      <a id="verify:Result"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">verify</span><span class="result">: <a href="Result.html" class="extype" name="org.specs2.execute.Result">Result</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -604,7 +485,15 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.Product">
+              <h3>Inherited from <span class="extype" name="scala.Product">Product</span></h3>
+            </div><div class="parent" name="scala.Equals">
+              <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
