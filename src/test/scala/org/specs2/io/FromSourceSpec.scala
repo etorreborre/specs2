@@ -34,7 +34,7 @@ class FromSourceSpec extends Specification with FromSource with Tags {
     examples(scalaCheckSpec)(0).desc.toString must contain("a call to an example")
   }
   "A ScalaCheck expression can be read from a source file even if it spans several lines" in {
-    examples(scalaCheckSpec)(1).desc.toString must contain("check") and contain("a.size")
+    examples(scalaCheckSpec)(1).desc.toString must contain("prop") and contain("a.size")
   }
   "A normal auto example must be read ok in a ScalaCheck spec" in {
     examples(scalaCheckSpec)(2).desc.toString must contain("a normal example")
