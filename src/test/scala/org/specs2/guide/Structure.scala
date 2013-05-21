@@ -22,6 +22,6 @@ In this section you will learn how to:
  ${Unit.section      }
   ----
   """ ^
-  link(new FragmentsApi) ^
-  link(new GivenWhenThenPage)
+  see(new FragmentsApi) ^
+  see(new GivenWhenThenPage)
 }
