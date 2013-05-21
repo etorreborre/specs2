@@ -199,7 +199,7 @@ trait ScalaCheckProperties extends ScalaCheck with ResultMatchers {  this: Speci
 
 class MutableSpecWithContextAndScalaCheck extends mutable.Specification with ScalaCheck {
   "check something with before code" ! new SC {
-    check { (s: String) =>
+    prop { (s: String) =>
       s.reverse must_== aString
     }.set(rng = new util.Random, minTestsOk = 200)
   }
