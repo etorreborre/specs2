@@ -303,7 +303,7 @@ Maps have their own matchers as well, to check keys and values:
 
 object XmlMatchers extends Card {
   def title = "Xml"
-  def text = s2"""
+  def text = """
 It is very useful to have literal Xml in Scala, it is even more useful to have matchers for it!
 
  * `beEqualToIgnoringSpace` compares 2 Nodes, without considering spaces
@@ -316,7 +316,7 @@ It is very useful to have literal Xml in Scala, it is even more useful to have m
  * on the other hand `beEqualToIgnoringSpace` will not check attributes order
  <code class="prettyprint"><n a="1" b="2"/> must ==/(<n b="2" a="1"/>)</code>
 
- * <code class="prettyprint">\</code> is an XPath-like matcher matching if a node is a direct child of another
+ * `\` is an XPath-like matcher matching if a node is a direct child of another
  <code class="prettyprint"><a><b/></a> must \("b")</code>
 
  * You can also check attribute names
