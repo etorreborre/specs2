@@ -65,7 +65,7 @@
     </head><body><div id="breadcrumbs"><a href="../guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../guide/org.specs2.guide.Matchers.html">Matchers</a></div><div class="colmask threecol">
                    <div class="colmid">
                      <div class="colleft">
-                       <div class="col1"><div id="central"><title>Matchers</title><a name="Matchers"><h2 specId="4883929">Matchers</h2></a><status class="ok"><div class="level0" style="display: show"><p><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
+                       <div class="col1"><div id="central"><title>Matchers</title><a name="Matchers"><h2 specId="838638448">Matchers</h2></a><status class="ok"><div class="level0" style="display: show"><p><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
 <ul>
   <li>Boolean</li>
   <li>Standard result</li>
@@ -292,35 +292,17 @@ class MatchersSpec extends Specification with matcher.ResultMatchers { def is =
     (&quot;Hello&quot; must beMatching(&quot;h.*&quot;)) must beSuccessful
   }
 }
-</code></pre></p></td></tr></table></form></div><div class="tabbertab" title="Xml"><form><table class="dataTable"><tr><td class="none" style="info">
-It is very useful to have literal Xml in Scala, it is even more useful to have matchers for it!
-
- * `beEqualToIgnoringSpace` compares 2 Nodes, without considering spaces
- `&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must ==/(&lt;a&gt; &lt;b/&gt;&lt;/a&gt;)`
- `&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must beEqualToIgnoringSpace(&lt;a&gt; &lt;b/&gt;&lt;/a&gt;)`
-
- * `beEqualToIgnoringSpace` can also do an ordered comparison
- &lt;code class=&quot;prettyprint&quot;&gt;&lt;a&gt;&lt;c/&gt; &lt;b/&gt;&lt;/a&gt; must ==/(&lt;a&gt; &lt;c/&gt;&lt;b/&gt;&lt;/a&gt;).ordered&lt;/code&gt;
-
- * on the other hand `beEqualToIgnoringSpace` will not check attributes order
- &lt;code class=&quot;prettyprint&quot;&gt;&lt;n a=&quot;1&quot; b=&quot;2&quot;/&gt; must ==/(&lt;n b=&quot;2&quot; a=&quot;1&quot;/&gt;)&lt;/code&gt;
-
- * &lt;code class=&quot;prettyprint&quot;&gt;\&lt;/code&gt; is an XPath-like matcher matching if a node is a direct child of another
- &lt;code class=&quot;prettyprint&quot;&gt;&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must \(&quot;b&quot;)&lt;/code&gt;
-
- * You can also check attribute names
- &lt;code class=&quot;prettyprint&quot;&gt;&lt;a&gt;&lt;b name=&quot;value&quot;&gt;&lt;/b&gt;&lt;/a&gt; must \(&quot;b&quot;, &quot;name&quot;)&lt;/code&gt;
-
- * And attribute names and values as well (values are checked using a regular expression, use the &lt;a href=&quot;http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#quote(java.lang.String)&quot;&gt;quote method&lt;/a&gt;  if you want an exact match)
- &lt;code class=&quot;prettyprint&quot;&gt;&lt;a&gt;&lt;b n=&quot;v&quot; n2=&quot;v2&quot; n3=&quot;v3&quot;&gt;&lt;/b&gt;&lt;/a&gt; must \(&quot;b&quot;, &quot;n&quot;-&gt;&quot;v&quot;, &quot;n2&quot;-&gt;&quot;v\\d&quot;)&lt;/code&gt;
-
- * Or the content of a `Text` node
- &lt;code class=&quot;prettyprint&quot;&gt;&lt;a&gt;hello&lt;/a&gt; must \(&quot;a&quot;) \&gt; &quot;hello&quot;&lt;/code&gt; (alias `textIs`)
- &lt;code class=&quot;prettyprint&quot;&gt;&lt;a&gt;hello&lt;/a&gt; must \(&quot;a&quot;) \&gt;~ &quot;h.*&quot;&lt;/code&gt;  (alias `textMatches`)
-
- * The equivalent of `\` for a &quot;deep&quot; match is simply &lt;code class=&quot;prettyprint&quot;&gt;\\&lt;/code&gt;
- &lt;code class=&quot;prettyprint&quot;&gt;&lt;a&gt;&lt;s&gt;&lt;c&gt;&lt;/c&gt;&lt;/s&gt;&lt;/a&gt; must \\(&quot;c&quot;)&lt;/code&gt;
-</td></tr></table></form></div><div class="tabbertab" title="Json"><form><table class="dataTable"><tr><td class="none" style="info"><p><p><a href="http://www.json.org">Json</a> is a simple data format essentially modeling recursive key-values. There are 2 matchers which can be used to verify the presence of appropriate values in Strings representing Json documents:</p>
+</code></pre></p></td></tr></table></form></div><div class="tabbertab" title="Xml"><form><table class="dataTable"><tr><td class="none" style="info"><p><p>It is very useful to have literal Xml in Scala, it is even more useful to have matchers for it!</p>
+<ul>
+  <li><p><code class="prettyprint">beEqualToIgnoringSpace</code> compares 2 Nodes, without considering spaces<br /> <code class="prettyprint">&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must ==/(&lt;a&gt; &lt;b/&gt;&lt;/a&gt;)</code><br /> <code class="prettyprint">&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must beEqualToIgnoringSpace(&lt;a&gt; &lt;b/&gt;&lt;/a&gt;)</code></p></li>
+  <li><p><code class="prettyprint">beEqualToIgnoringSpace</code> can also do an ordered comparison<br /> <code class="prettyprint"><a><c></c> <b></b></a> must ==/(<a> <c></c><b></b></a>).ordered</code></p></li>
+  <li><p>on the other hand <code class="prettyprint">beEqualToIgnoringSpace</code> will not check attributes order<br /> <code class="prettyprint"><n b="2" a="1"></n> must ==/(<n a="1" b="2"></n>)</code></p></li>
+  <li><p><code class="prettyprint">\</code> is an XPath-like matcher matching if a node is a direct child of another<br /> <code class="prettyprint"><a><b></b></a> must (&quot;b&quot;)</code></p></li>
+  <li><p>You can also check attribute names<br /> <code class="prettyprint"><a><b name="value"></b></a> must (&quot;b&quot;, &quot;name&quot;)</code></p></li>
+  <li><p>And attribute names and values as well (values are checked using a regular expression, use the <a href="http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#quote(java.lang.String)">quote method</a> if you want an exact match)<br /> <code class="prettyprint"><a><b n3="v3" n2="v2" n="v"></b></a> must (&quot;b&quot;, &quot;n&quot;-&gt;&quot;v&quot;, &quot;n2&quot;-&gt;&quot;v\d&quot;)</code></p></li>
+  <li><p>Or the content of a <code class="prettyprint">Text</code> node<br /> <code class="prettyprint"><a>hello</a> must (&quot;a&quot;) &gt; &quot;hello&quot;</code> (alias <code class="prettyprint">textIs</code>)<br /> <code class="prettyprint"><a>hello</a> must (&quot;a&quot;) &gt;~ &quot;h.*&quot;</code> (alias <code class="prettyprint">textMatches</code>)</p></li>
+  <li><p>The equivalent of <code class="prettyprint">\</code> for a &quot;deep&quot; match is simply <code class="prettyprint">\</code><br /> <code class="prettyprint"><a><s><c></c></s></a> must \(&quot;c&quot;)</code></p></li>
+</ul></p></td></tr></table></form></div><div class="tabbertab" title="Json"><form><table class="dataTable"><tr><td class="none" style="info"><p><p><a href="http://www.json.org">Json</a> is a simple data format essentially modeling recursive key-values. There are 2 matchers which can be used to verify the presence of appropriate values in Strings representing Json documents:</p>
 <ul>
   <li><p><code class="prettyprint">/(value)</code> checks if a value is present at the root of the document. This can only be the case if that document is an Array</p></li>
   <li><p><code class="prettyprint">/(regex)</code> checks if a value matching the regex is present at the root of the document. This can only be the case if that document is an Array</p></li>
@@ -856,7 +838,7 @@ there was one(amount).show(anyFunction2)
 <ul>
   <li>with an acceptance specification: use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance)</li>
   <li>with a unit specification: use the <code class="prettyprint">org.specs2.mutable.Tables</code> trait instead of <code class="prettyprint">org.specs2.matcher.DataTables</code> trait. This will &quot;deactivate&quot; the implicit used to create examples with <code class="prettyprint">!</code></li>
-</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></p></div></status><subtoc specId="1043682028"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../images/icon_success_sml.gif" /> Here's <a href="../guide/org.specs2.guide.FormsPage.html" tooltip="">how to use Forms</a></div></status><status class="ok"><div class="level0" style="display: show"><p><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
+</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></p></div></status><subtoc specId="1629639249"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../images/icon_success_sml.gif" /> Here's <a href="../guide/org.specs2.guide.FormsPage.html" tooltip="">how to use Forms</a></div></status><status class="ok"><div class="level0" style="display: show"><p><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
 <ul>
   <li><p><code class="prettyprint">org.specs2.matcher.MustMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldMatchers</code>) to write anything like <code class="prettyprint">1 must be_==(1)</code> and<br /> get a <code class="prettyprint">Result</code> back</p></li>
   <li><p>You can also use the side-effecting version of that trait called <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldThrownMatchers</code>).<br /> It throws a <code class="prettyprint">FailureException</code> as soon as an expectation is failing. Those traits can also be used in a regular<br /> Specification if you have several expectations per example and if you don't want to chain them with <code class="prettyprint">and</code>.</p></li>
@@ -873,12 +855,12 @@ there was one(amount).show(anyFunction2)
 </code></pre>
 <hr /></p></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Matchers</th></tr>
-        <tr><td>Finished in</td><td class="info">504 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">341 ms</td></tr>
         <tr><td>Results</td><td class="success">47 examples, 539 expectations, 0 failure, 0 error</td></tr>
       </table></div></div>
                        <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="1038855857"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="809638762"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1347399160"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="1442108546"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -888,7 +870,7 @@ there was one(amount).show(anyFunction2)
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1085534125"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1065952154"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -996,7 +978,7 @@ there was one(amount).show(anyFunction2)
             <ul></ul>
           </li></ul>
           </li></ul>
-          </li><li id="4883929"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="838638448"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1058,7 +1040,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1043682028"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="1629639249"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
@@ -1102,7 +1084,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li></ul>
-          </li><li id="1097120799"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="446901024"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1186,7 +1168,7 @@ there was one(amount).show(anyFunction2)
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="954150337"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="1803639938"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -1234,7 +1216,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li></ul>
-          </li><li id="2141885575"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="1134779900"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1280,7 +1262,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li></ul>
-          </li><li id="1986964632"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="894327813"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1300,7 +1282,7 @@ there was one(amount).show(anyFunction2)
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1038855857','4883929'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1347399160','838638448'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                        <div class="col3"><div id="rightcolumn"></div></div>
                      </div>
