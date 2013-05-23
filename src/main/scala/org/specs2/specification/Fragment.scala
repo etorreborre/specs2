@@ -92,7 +92,7 @@ case class Text(t: String) extends Fragment {
 /**
  * A Example is:
  *
- * - a description: some text, with possibly some markup annotations for rendering code fragments (used in AutoExamples)
+ * - a description: some text, with possibly some markdown annotations for rendering code fragments (used in AutoExamples)
  * - a body: some executable code returning a Result
  */
 case class Example private[specification] (desc: MarkupString = NoMarkup(""), body: () => Result) extends Fragment with Executable with Isolable { outer =>

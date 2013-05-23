@@ -288,7 +288,7 @@ The `specs2.files` object will, by default, select and execute Specifications fo
  * the source directory is defined as `src/test/scala` but can be changed by adjusting the system property `specs2.srcTestDir`
  * the specifications files are selected as classes or object which names match `.*Spec`. This value can be changed by
    passing a different `specName` value as a command-line argument
- * `console`, `html`, `junitxml`, `markup` has to be passed on the command-line to specify which kind of output you want
+ * `console`, `html`, `junitxml`, `markdown` has to be passed on the command-line to specify which kind of output you want
 
 You can also extend the `org.specs2.runner.FilesRunner` trait and override its behavior to implement something more appropriate
 to your environment if necessary.
@@ -387,11 +387,11 @@ testOptions in Test += Tests.Argument("html")
 
 ###### Markdown
 
-The `markup` argument can be used to create ".md" files (to use with websites like GitHub):
+The `markdown` argument can be used to create ".md" files (to use with websites like GitHub):
 
-    > test-only org.specs2.UserGuide -- markup
+    > test-only org.specs2.UserGuide -- markdown
 
-In this case the markup text in the Specifications is not interpreted.
+In this case the markup text in the Specification is not interpreted.
 
 ###### JUnit
 
@@ -417,7 +417,7 @@ testOptions in Test += Tests.Argument("html", "console")
 
 ##### Files runner
 
-Any `FilesRunner` object can also be invoked by sbt, but you need to specify `console`, `html`, `junitxml`, `markup` on the command line:
+Any `FilesRunner` object can also be invoked by sbt, but you need to specify `console`, `html`, `junitxml`, `markdown` on the command line:
 
 ```
 > test-only allSpecs -- console
@@ -555,7 +555,7 @@ There is unfortunately no specific Eclipse plugin at the moment and specificatio
 You can either:
 
  - execute specifications as [JUnit test cases](#Via JUnit).
- - use the [Maven specs2 plugin](https://github.com/mmakowski/maven-specs2-plugin) to generate JUnit XML reports, HTML or Markup reports
+ - use the [Maven specs2 plugin](https://github.com/mmakowski/maven-specs2-plugin) to generate JUnit XML reports, HTML or Markdown reports
 
 ### With your own
 

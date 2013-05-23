@@ -6,9 +6,9 @@ import ExecutedSpecificationData._
 import io.MockWriter
 import specification.SpecificationStructure
 
-class MarkupExportingSpec extends Specification {
+class MarkdownExportingSpec extends Specification {
 
-  "A specification with markup text can be exported with no interpretation of the markup text" >> {
+  "A specification with markdown text can be exported with no interpretation of the markdown text" >> {
     export(introduction) must contain("this is a simple spec with some *markdown* text")
   }
 
@@ -36,7 +36,7 @@ class MarkupExportingSpec extends Specification {
 
   def exporter = new Exporter
 
-  class Exporter extends MarkupExporting {
+  class Exporter extends MarkdownExporting {
     val out = new MockWriter {}
     override protected def writeFile = (file: HtmlFile) => writeXml(file.xml)(out)
   }

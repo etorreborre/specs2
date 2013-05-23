@@ -9,7 +9,7 @@ private [specs2]
 trait Exporters {
   type EE = ExecutingSpecification => ExecutedSpecification
 
-  def isConsole(args: Arguments) = !Seq("html", "junitxml", "markup").exists(args.contains) || args.contains("console")
+  def isConsole(args: Arguments) = !Seq("html", "junitxml", "markdown").exists(args.contains) || args.contains("console")
 
   def exportAll(arguments: Arguments): EE = exportAll(arguments, (s: String) => arguments.commandLine.contains(s))
 
@@ -18,7 +18,7 @@ trait Exporters {
   }
 
   def exportAll(exporters: Seq[Exporting])(implicit arguments: Arguments): EE = (spec: ExecutingSpecification) => {
-    val args = arguments.commandLineFilterNot("html", "markup", "junitxml", "console", "notifier", "exporter")
+    val args = arguments.commandLineFilterNot("html", "markdown", "junitxml", "console", "notifier", "exporter")
     exporters.foreach(_.export(args)(spec))
     spec.executed
   }
@@ -27,7 +27,7 @@ trait Exporters {
 
   def exporters(accept: String => Boolean)(implicit arguments: Arguments): Seq[Exporting] =
     Seq(exportHtml(accept),
-        exportMarkup(accept),
+        exportMarkdown(accept),
         exportJUnitxml(accept),
         exportNotifier(accept),
         exportCustom(accept),
@@ -43,7 +43,7 @@ trait Exporters {
 
   def exportHtml(accept: String => Boolean)    (implicit arguments: Arguments) = exporter(accept("html"))(HtmlExporting)
 
-  def exportMarkup(accept: String => Boolean)  (implicit arguments: Arguments) = exporter(accept("markup"))(MarkupExporting)
+  def exportMarkdown(accept: String => Boolean)  (implicit arguments: Arguments) = exporter(accept("markdown"))(MarkdownExporting)
 
   def exportJUnitxml(accept: String => Boolean)(implicit arguments: Arguments) = exporter(accept("junitxml"))(JUnitXmlExporting)
 

@@ -83,13 +83,13 @@ class TestInterfaceRunnerSpec extends Specification with Groups with Tags { def 
 
       def export(condition: Boolean, e: String) = if (condition) Some(e) else None
       def selectedExporters(c: Boolean, h: Boolean, m: Boolean, j: Boolean) =
-        Seq(export(c, "TestInterfaceReporter"), export(h, "HtmlExporting$"), export(m, "MarkupExporting$"), export(j, "JUnitXmlExporting$")).flatten
+        Seq(export(c, "TestInterfaceReporter"), export(h, "HtmlExporting$"), export(m, "MarkdownExporting$"), export(j, "JUnitXmlExporting$")).flatten
 
-      "args"                                || "console" | "html" | "markup" | "junitxml" |
-      "junitxml"                            !! false     ! false  ! false    ! true       |
-      "junitxml,console"                    !! true      ! false  ! false    ! true       |
-      "junitxml,html,console"               !! true      ! true   ! false    ! true       |
-      "junitxml,markup,console"             !! true      ! false  ! true     ! true       |> { (arguments, c, h, m, j) =>
+      "args"                                  || "console" | "html" | "markdown"  | "junitxml" |
+      "junitxml"                              !! false     ! false  ! false       ! true       |
+      "junitxml,console"                      !! true      ! false  ! false       ! true       |
+      "junitxml,html,console"                 !! true      ! true   ! false       ! true       |
+      "junitxml,markdown,console"             !! true      ! false  ! true        ! true       |> { (arguments, c, h, m, j) =>
         runner.exporters(arguments.split(","), handler).map(_.getClass.getSimpleName) must contain(allOf(selectedExporters(c, h, m, j):_*))
       }
 

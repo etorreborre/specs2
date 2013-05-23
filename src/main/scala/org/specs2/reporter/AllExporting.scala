@@ -9,7 +9,7 @@ import control.Specs2ForkJoin
 
 /**
  * This trait can be mixed in a reporter to allow the exporting of an executed specification to many different formats:
- * html, junit xml, markup, custom,...
+ * html, junit xml, markdown, custom,...
  */
 trait AllExporting extends Reporter with Exporters {
 
