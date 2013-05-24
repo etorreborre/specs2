@@ -106,7 +106,7 @@
           <jvmArgs>
             <jvmArg>-Xss4m</jvmArg>
             <jvmArg>-Xms512m</jvmArg>
-            <jvmArg>-Xmx4g<jvmArg>
+            <jvmArg>-Xmx4g</jvmArg>
           </jvmArgs>
         </configuration>
       </plugin>
