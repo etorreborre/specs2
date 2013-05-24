@@ -9,6 +9,13 @@ import execute._
 trait Context extends Scope {
   def apply[T : AsResult](a: =>T): Result
 }
+
+object Context {
+  def compose(c1: Context, c2: Context): Context = new Context {
+    def apply[T : AsResult](a: =>T): Result = c1(c2(a))
+  }
+}
+
 /**
  * The Before trait can be inherited by classes representing a context
  * where an action must be executing before the main executable action
