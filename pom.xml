@@ -2,28 +2,46 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.specs2</groupId>
-    <artifactId>specs2_2.9.2</artifactId>
+    <artifactId>specs2_2.10.1</artifactId>
     <packaging>jar</packaging>
     <description>specs2</description>
-    <version>1.13-SNAPSHOT</version>
+    <version>2.0</version>
     <name>specs2</name>
     <dependencies>
         <dependency>
-            <groupId>org.specs2</groupId>
-            <artifactId>specs2-scalaz-core_2.9.2</artifactId>
-            <version>6.0.1</version>
+            <groupId>org.scalaz</groupId>
+            <artifactId>scalaz-core_2.10</artifactId>
+            <version>7.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.scalaz</groupId>
+            <artifactId>scalaz-concurrent_2.10</artifactId>
+            <version>7.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.scalaz</groupId>
+            <artifactId>scalaz-effect_2.10</artifactId>
+            <version>7.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.chuusai</groupId>
+            <artifactId>shapeless_2.10</artifactId>
+            <version>1.2.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-compiler</artifactId>
-            <version>2.9.2</version>
+            <version>2.10.1</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.scalacheck</groupId>
-            <artifactId>scalacheck_2.9.2</artifactId>
-            <version>1.9</version>
+            <artifactId>scalacheck_2.10</artifactId>
+            <version>1.10.0</version>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -68,7 +86,7 @@
       <plugin>
         <groupId>net.alchim31.maven</groupId>
         <artifactId>scala-maven-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>3.1.4</version>
         <executions>
           <execution>
             <goals>
@@ -78,10 +96,17 @@
           </execution>
         </executions>
         <configuration>
+          <recompileMode>incremental</recompileMode>
+          <args>
+            <arg>-Yrangepos</arg>
+            <arg>-unchecked</arg>
+            <arg>-feature</arg>
+            <arg>-language:_</arg>
+          </args>  
           <jvmArgs>
             <jvmArg>-Xss4m</jvmArg>
             <jvmArg>-Xms512m</jvmArg>
-            <jvmArg>-Xmx2024m</jvmArg>
+            <jvmArg>-Xmx4g<jvmArg>
           </jvmArgs>
         </configuration>
       </plugin>
