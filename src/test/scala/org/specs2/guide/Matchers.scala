@@ -370,20 +370,20 @@ class MockitoSpec extends Specification { def is = s2"""
     You can make it return a stubbed value                                     ${c().stub}
     You can verify that a method was called                                    ${c().verify}
     You can verify that a method was not called                                ${c().verify2}
-                                                                               """
-  case class c() extends Mockito {
-    val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock[new java.util.LinkedList[String]]
-    def stub = {
-      m.get(0) returns "one"             // stub a method call with a return value
-      m.get(0) must_== "one"             // call the method
-    }
-    def verify = {
-      m.get(0) returns "one"             // stub a method call with a return value
-      m.get(0)                           // call the method
-      there was one(m).get(0)            // verify that the call happened
-    }
-    def verify2 = there was no(m).get(0) // verify that the call never happened
-  }
+  """
+case class c() extends Mockito {
+val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock[new java.util.LinkedList[String]]
+def stub = {
+m.get(0) returns "one"             // stub a method call with a return value
+m.get(0) must_== "one"             // call the method
+}
+def verify = {
+m.get(0) returns "one"             // stub a method call with a return value
+m.get(0)                           // call the method
+there was one(m).get(0)            // verify that the call happened
+}
+def verify2 = there was no(m).get(0) // verify that the call never happened
+}
 }
 }}
 
@@ -391,30 +391,30 @@ class MockitoSpec extends Specification { def is = s2"""
 
 Mockito offers the possibility to provide specific settings for the mock being created:
 
- * its name
+* its name
 
-  ${snippet{ val m = mock[List[String]].as("list1") }}
+${snippet{ val m = mock[List[String]].as("list1") }}
 
- * "smart" return values
+* "smart" return values
 
-  ${snippet{ val m = mock[List[String]].smart }}
+${snippet{ val m = mock[List[String]].smart }}
 
- * "verbose" enables Mockito's verbose logging
+* "verbose" enables Mockito's verbose logging
 
-  ` val m = mock[List[String]].verbose `
+` val m = mock[List[String]].verbose `
 
- * specific return values
+* specific return values
 
-  ${snippet{ val m = mock[List[String]].defaultReturn(10) }}
+${snippet{ val m = mock[List[String]].defaultReturn(10) }}
 
- * specific answers ${snippet{
+* specific answers ${snippet{
 
 // a function InvocationOnMock => V is used in place of the org.mockito.stubbing.Answer type for better conciseness
 val helloObject = (p1: InvocationOnMock) => "hello "+p1.toString
 val m = mock[List[String]].defaultAnswer(helloObject)
 }}
-  
- * extra interfaces ${snippet{
+
+* extra interfaces ${snippet{
 
 val m1 = mock[List[String]].extraInterface[Cloneable]
 val m2 = mock[List[String]].extraInterfaces[Cloneable, Serializable]
@@ -423,13 +423,13 @@ val m2 = mock[List[String]].extraInterfaces[Cloneable, Serializable]
 Now, if you want to combine several of those settings together you need to call the `settings` method: ${snippet{
 
 val m1 = mock[List[String]].settings(name = "list1",
-                                     defaultReturn = 10,
-                                     extraInterfaces = classesOf[Cloneable, Serializable])
+defaultReturn = 10,
+extraInterfaces = classesOf[Cloneable, Serializable])
 // or
 val m2 = mock[List[String]].settings(smart = true,
-                                     extraInterface = classOf[Cloneable])
+extraInterface = classOf[Cloneable])
 }}
-  
+
 Finally, in case the Mockito library gets new settings, you can declare the following: ${snippet{
 
 val settings = org.mockito.Mockito.withSettings
@@ -443,7 +443,7 @@ Stubbing values is as simple as calling a method on the mock and declaring what 
 m.get(1) returns "one"
 m.get(2) throws new RuntimeException("forbidden")
 }}
-  
+
 You can specify different consecutive returned values by appending thenReturns or thenThrows: ${snippet{
 
 m.get(1) returns "one" thenReturns "two"
@@ -451,7 +451,7 @@ m.get(2) throws new RuntimeException("forbidden") thenReturns "999"
 }}
 
 ###### Mocking and Stubbing at the same time
-  
+
 It is also possible to create a mock while stubbing one of its methods, provided that you declare the type of the expected mock: ${snippet{
 
 val mocked: java.util.List[String] = mock[java.util.List[String]].contains("o") returns true
@@ -481,20 +481,20 @@ m.get(1)    // the second call returns a different value: "The parameter is 1"
 }}
 
 ###### Parameters for the `answers` function
-  
+
 Because of the use of reflection the function passed to answers will receive only instances of the `java.lang.Object` type.
 
 More precisely, it will:
 
- * pass the mock object if both the method has no parameters and the function has one parameter:
-   `mock.size answers { mock => mock.hashCode }`
- * pass the parameter if both the method and the function have one parameter:
-   `mock.get(0) answers { i => i.toString }`
- * pass the parameter and the mock object if the method has 1 parameter and the function has 2:
-    `mock.get(0) answers { (i, mock) => i.toString + " for mock " + mock.toString }`
+* pass the mock object if both the method has no parameters and the function has one parameter:
+`mock.size answers { mock => mock.hashCode }`
+* pass the parameter if both the method and the function have one parameter:
+`mock.get(0) answers { i => i.toString }`
+* pass the parameter and the mock object if the method has 1 parameter and the function has 2:
+`mock.get(0) answers { (i, mock) => i.toString + " for mock " + mock.toString }`
 
 In any other cases, if `f` is a function of 1 parameter, the array of the method parameters will be passed and if the function has 2 parameters, the second one will be the mock.
-  
+
 ##### Verification
 
 By default Mockito doesn't expect any method to be called. However if your writing interaction-based specifications you want to specify that some methods are indeed called: ${snippet{
@@ -516,12 +516,12 @@ there was atMostTwo(m).get(0)        // at most two calls to get(0)
 there was atMostThree(m).get(0)      // at most three calls to get(0)
 there was atMost(4)(m).get(0)        // at most four calls to get(0)
 }}
-  
+
 It is also possible to add all verifications inside a block, when several mocks are involved: ${snippet{
 
 got {
-  one(m).get(0)
-  two(m).get(1)
+one(m).get(0)
+two(m).get(1)
 }
 }}
 
@@ -536,12 +536,15 @@ m1.get(0)
 m2.get(0)
 
 there was one(m1).get(0) andThen one(m1).get(1)
-
-// when several mocks are involved, the expected order must be specified as an implicit value
+}}
+when several mocks are involved, the expected order must be specified as an implicit value: ${snippet{
+val m1 = mock[List[String]]
+val m2 = mock[List[String]]
+// 8<--
 implicit val order = inOrder(m1, m2)
 there was one(m1).get(0) andThen one(m2).get(0)
 }}
-  
+
 ###### Ignoring stubs
 
 When specifying the behavior of an object in relation to others you may want to verify that some mocks have been called as collaborators and you don't really want to specify what happens to other mocks because they are just playing the role of stubs.
@@ -559,7 +562,7 @@ implicit val order = inOrder(ignoreStubs(list1, list2))
 }}
 
 For more documentation about this Mockito functionality, please read [here](http://docs.mockito.googlecode.com/hg/1.9.0/org/mockito/Mockito.html#25).
-  
+
 ###### Spies
 
 Spies can be used in order to do some "partial mocking" of real objects: ${snippet{
@@ -584,7 +587,7 @@ val spiedList = spy(new LinkedList[String])
 // if the list is empty, this will throws an IndexOutOfBoundsException
 spiedList.get(0) returns "one"
 }}
-  
+
 As advised in the Mockito documentation, doReturn must be used in that case: ${snippet{
 // 8<--
 val spiedList = spy(new LinkedList[String])
@@ -593,24 +596,24 @@ org.mockito.Mockito.doReturn("one").when(spiedList).get(0)
 }}
 
 ###### Functions/PartialFunctions
-  
+
 It is possible to verify method calls where parameters are functions by specifying how the passed function will react to a given set of arguments. Given the following mock:
 
 ```
 trait Amount {
-  // a method showing an amount precision
-  def show(display: Function2[Double, Int, String]) = ???
+// a method showing an amount precision
+def show(display: Function2[Double, Int, String]) = ???
 }
 val amount = mock[Amount]
 ```
-  
+
 If the mock is called with this function: ${snippet{
 // 8<--
 val amount = mock[Amount]
 // 8<--
 amount.show((amount: Double, precision: Int) => "%2."+precision+"f" format amount)
 }}
-  
+
 Then it is possible to verify how the mock was called: ${snippet{
 // 8<--
 val amount = mock[Amount]
@@ -638,14 +641,14 @@ Byname parameters can be verified but this will not work if the specs2 jar is no
 DataTables are a very effective way of grouping several similar examples into one. For example, here is how to specify the addition of integers by providing one example on each row of a table: ${snippet{
 
 class DataTableSpec extends Specification with matcher.DataTables { def is =
-  "adding integers should just work in scala"  ! e1
+"adding integers should just work in scala"  ! e1
 
-  def e1 =
-    "a"   | "b" | "c" |                                   // the header of the table, with `|` separated strings
-     2    !  2  !  4  |                                   // an example row
-     1    !  1  !  2  |> {                                // the > operator to "execute" the table
-     (a, b, c) =>  a + b must_== c                        // the expectation to check on each row
-  }
+def e1 =
+"a"   | "b" | "c" |                                   // the header of the table, with `|` separated strings
+2    !  2  !  4  |                                   // an example row
+1    !  1  !  2  |> {                                // the > operator to "execute" the table
+(a, b, c) =>  a + b must_== c                        // the expectation to check on each row
+}
 }
 }}
 
@@ -653,8 +656,8 @@ class DataTableSpec extends Specification with matcher.DataTables { def is =
 
 There may be an implicit definition conflict when the first parameter of a row is a String, because examples can also be created by using the `!` operator after a String. In that case, depending on which kind of specification you use, you can either:
 
- * with an acceptance specification: use the `!!` operator to disambiguate (and `||` in the header for good visual balance)
- * with a unit specification: use the `org.specs2.mutable.Tables` trait instead of `org.specs2.matcher.DataTables` trait. This will "deactivate" the implicit used to create examples with `!`
+* with an acceptance specification: use the `!!` operator to disambiguate (and `||` in the header for good visual balance)
+* with a unit specification: use the `org.specs2.mutable.Tables` trait instead of `org.specs2.matcher.DataTables` trait. This will "deactivate" the implicit used to create examples with `!`
 
 ### Forms
 
@@ -662,7 +665,7 @@ Forms are a way to represent domain objects or service, and declare expected val
 
 Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.
 
-  """ ^
+""" ^
   "Here's " ~ ("how to use Forms", new org.specs2.guide.FormsPage) ^
 s2"""
 
