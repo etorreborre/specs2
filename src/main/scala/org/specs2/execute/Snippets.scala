@@ -120,11 +120,11 @@ case class Snippet[T](code: () => T,
 case class SnippetParams[T]( 
   trimExpression: String => String   = trimApproximatedSnippet,
   cutter: String => String           = ScissorsCutter(),
-  asCode: (String, String) => String = markdownCode(0),
+  asCode: (String, String) => String = markdownCode(offset = 0),
   prompt: String => String           = greaterThanPrompt,
   evalCode: Boolean                  = false,
   verify: Option[T => Result]        = None) {
-  def offsetIs(offset: Int) = copy(asCode = markdownCode(offset))
+  def offsetIs(offset: Int) = copy(asCode = markdownCode(offset = offset))
   def eval = copy(evalCode = true)
   def check[R : AsResult](f: T => R) = copy(verify = Some((t: T) => AsResult(f(t))))
 }
@@ -175,11 +175,15 @@ object Snippet {
   }
 
   /** display a cut piece of code as markdown depending on the existence of newlines in the original piece */
-  def markdownCode(offset: Int = 0) = (original: String, cut: String) => {
-    if (original.startsWith("\n"))    "\n\n"+"```\n"+cut.removeStart("\n").offset(offset)+"\n```"
-    else if (original.contains("\n")) "\n\n```\n"+cut.offset(offset)+"\n```\n"
-    else                              "`"+cut+"`"
+  def markdownCode(multilineQuotes: String => String = defaultMultilineMarkdownQuotes, singleLineQuotes: String => String = defaultSingleLineQuotes, offset: Int = 0) = (original: String, cut: String) => {
+    if (original.startsWith("\n"))    "\n\n"+multilineQuotes(cut.removeStart("\n").offset(offset))
+    else if (original.contains("\n")) "\n\n"+multilineQuotes(cut.offset(offset))+"\n"
+    else                              singleLineQuotes(cut)
   }
+
+  def defaultMultilineMarkdownQuotes = (s: String) => s"```\n$s\n```"
+  def githubMultilineMarkdownQuotes = (s: String) => s"```scala\n$s\n```"
+  def defaultSingleLineQuotes = (s: String) => s"`$s`"
 
   def greaterThanPrompt = simplePrompt("> ")
   def simplePrompt(p: String) = (s: String) => p+s
