@@ -10,14 +10,16 @@ class NotNullStringsSpec extends script.Specification with Groups { def is = s2"
   + a null string
   + a list where the toString method is undefined
   + a map
+  + an xml node (which is tricky because it is an infinite collection of the same element)
 
  # It is also possible to display the class of elements in a collection
   + for an Array
   + for a Seq
   + for a Map
-   the description must be extended if not all elements have the same class
-    + for a Vector
-    + for a Map
+
+  the description must be extended if not all elements have the same class
+   + for a Vector
+   + for a Map
 
 """
 
@@ -36,6 +38,8 @@ class NotNullStringsSpec extends script.Specification with Groups { def is = s2"
     }
 
     eg := Map(1 -> "2").notNull === "Map(1 -> 2)"
+
+    eg := <e>an element</e>.notNull === "<e>an element</e>"
   }
 
   "with class" - new group {

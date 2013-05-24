@@ -27,6 +27,7 @@ trait NotNullStrings {
         a match {
           case ar: Array[_]           => ar.notNullMkString(", ", "Array(", ")")
           case map: Map[_,_]          => new NotNullMap(map).notNullMkStringWith(addQuotes = false)
+          case n: scala.xml.Node      => evaluate(n)
           case it: TraversableOnce[_] => it.notNullMkStringWith(addQuotes = false)
           case _                      => evaluate(a)
         }
@@ -59,6 +60,7 @@ trait NotNullStrings {
             case map: Map[_,_] =>
               if (!showAll && sameKeyValueTypes(map)) map.notNullMkStringWith(addQuotes = true)+": "+map.getClass.getName+"["+map.toSeq(0).getClass.getName+"]"
               else                                    map.map { case (k, v) => (k.notNullWithClass(showAll), v.notNullWithClass(showAll)) }+": "+map.getClass.getName
+            case n: scala.xml.Node      =>    evaluate(n)+": "+n.getClass.getName
             case it: TraversableOnce[_] =>
               if (!showAll && sameElementTypes(it))   it.toSeq.notNullMkStringWith(addQuotes = true)+": "+it.getClass.getName+"["+it.toSeq(0).getClass.getName+"]"
               else                                    it.toSeq.map(_.notNullWithClass(showAll))+": "+it.getClass.getName
