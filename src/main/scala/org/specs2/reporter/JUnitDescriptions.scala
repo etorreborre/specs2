@@ -108,11 +108,11 @@ trait JUnitDescriptionMaker[F] extends ExecutionOrigin {
   import text.Trim._
 
   /** @return a seq containing the path of an example without the root name */
-  def parentPath(parentNodes: Seq[DescribedFragment]) = parentNodes.drop(1).map(_._2.getDisplayName)
+  def parentPath(parentNodes: Seq[DescribedFragment]) = Vector(parentNodes.drop(1).map(_._2.getDisplayName):_*)
 
   /** @return a test name with no newlines */
   def testName(s: String, parentNodes: Seq[String] = Seq()): String = {
-    (if (parentNodes.isEmpty || isExecutedFromAnIDE) "" else parentNodes.mkString("", "::", "::")) +
+    (if (parentNodes.isEmpty || isExecutedFromAnIDE) "" else parentNodes.flatMap(_.splitTrim("\n")).mkString("", "::", "::")) +
     (if (isExecutedFromAnIDE) Trimmed(s).removeNewLines else Trimmed(s).trimNewLines)
   }
 
