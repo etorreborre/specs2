@@ -36,7 +36,7 @@ abstract class JUnitDescriptions[F](className: String)(implicit reducer: Reducer
   private lazy val defaultDescription = (f: F) => Description.createSuiteDescription("fragment not found:" + f)
 
   def foldAll(fs: Seq[F])(implicit args: Arguments) = {
-    val leveledFragments = Levels.foldAll(fs)
+    val leveledFragments = Levels.foldAll(fs)(reducer)
 
     if (leveledFragments.isEmpty)
       DescriptionAndExamples(specificationDescription, Map(initial).withDefault(defaultDescription))
@@ -73,7 +73,7 @@ trait JUnitDescriptionMaker[F] extends ExecutionOrigin {
    *         from a Tree[Description]
    */
   def asOneDescription(descriptionTree: Tree[DescribedFragment])(implicit args: Arguments = Arguments()): Description = {
-    if (args.noindent)
+    if (args.noindent && !args.report.flow)
       descriptionTree.flatten.drop(1).foldLeft(descriptionTree.rootLabel)(flattenChildren)._2
     else
       descriptionTree.bottomUp(addChildren).rootLabel._2
@@ -112,7 +112,7 @@ trait JUnitDescriptionMaker[F] extends ExecutionOrigin {
 
   /** @return a test name with no newlines */
   def testName(s: String, parentNodes: Seq[String] = Seq()): String = {
-    (if (parentNodes.isEmpty || isExecutedFromAnIDE) "" else parentNodes.flatMap(_.splitTrim("\n")).mkString("", "::", "::")) +
+    (if (parentNodes.isEmpty || isExecutedFromAnIDE) "" else parentNodes.map(_.replace("\n", "")).mkString("", "::", "::")) +
     (if (isExecutedFromAnIDE) Trimmed(s).removeNewLines else Trimmed(s).trimNewLines)
   }
 

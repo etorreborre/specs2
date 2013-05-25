@@ -26,7 +26,7 @@ class JUnitRunner(klass: Class[_]) extends Runner with DefaultSelection { outer 
   /** selected fragments to execute */
   lazy val selected = select(args)(specification)
   /** descriptions for this specification */
-  lazy val descriptions = new JUnitDescriptionsFragments(klass.getName)
+  lazy val descriptions = new JUnitDescriptionsFragments(klass.getName)(fragmentLevelsReducer)
   /** extract the root Description object and the examples to execute */
   lazy val DescriptionAndExamples(desc, fragmentsDescriptions) = descriptions.foldAll(selected.content.fragments)
   /** system properties */
@@ -35,6 +35,9 @@ class JUnitRunner(klass: Class[_]) extends Runner with DefaultSelection { outer 
   lazy val propertiesArgs: Arguments = Arguments.extract(Seq(), properties)
   /** arguments for this specification */
   implicit lazy val args: Arguments = propertiesArgs <| specification.content.arguments
+
+  /** the definition of levels depends on the "flow" style of text and examples */
+  def fragmentLevelsReducer = if (args.report.flow) Levels.FragmentFlowLevelsReducer else Levels.FragmentLevelsReducer
 
   /** @return a Description for the TestSuite */
   def getDescription = desc

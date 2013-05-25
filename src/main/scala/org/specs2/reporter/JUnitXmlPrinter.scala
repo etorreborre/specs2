@@ -49,8 +49,11 @@ trait JUnitXmlPrinter {
     }
   }
 
+  /** the definition of levels depends on the "flow" style of text and examples */
+  def levelsReducer(implicit args: Arguments) = if (args.report.flow) Levels.FlowLevelsReducer else Levels.LevelsReducer
+
   /** fold object used to create descriptions */
-  def descriptions(name: SpecName)(implicit args: Arguments) = new JUnitDescriptions[ExecutedFragment](name.javaClassName) {
+  def descriptions(name: SpecName)(implicit args: Arguments) = new JUnitDescriptions[ExecutedFragment](name.javaClassName)(levelsReducer) {
     def initialFragment(className: String) = ExecutedText(className, new Location())
     /**
      * This function is used to map each node in a Tree[Fragment] to a pair of
@@ -62,8 +65,8 @@ trait JUnitXmlPrinter {
      */
     def mapper(className: String): (ExecutedFragment, Seq[DescribedFragment], Int) => Option[DescribedFragment] =
       (f: ExecutedFragment, parentNodes: Seq[DescribedFragment], nodeLabel: Int) => f match {
-        case s @ ExecutedSpecStart(_,_,_)  => Some(f -> createDescription(className, suiteName=testName(s.name)))
-        case ExecutedText(t, _)            => Some(f -> createDescription(className, suiteName=testName(t)))
+        case s @ ExecutedSpecStart(_,_,_)          => Some(f -> createDescription(className, suiteName=testName(s.name)))
+        case ExecutedText(t, _) if t.trim.nonEmpty => Some(f -> createDescription(className, suiteName=testName(t)))
         case r @ ExecutedResult(_,_,_,_,_) => Some(f -> createDescription(className, label=nodeLabel.toString, testName=testName(r.text.toString, parentPath(parentNodes))) )
         case other                         => None
       }
@@ -98,7 +101,7 @@ trait JUnitXmlPrinter {
   case class TestCase(desc: Description, fragment: ExecutedFragment)(implicit args: Arguments) {
     def xml =
       <testcase name={desc.getMethodName} classname={desc.getClassName} time={formatTime(time)}>
-        {testError}{testFailure}{testSkipped}
+        {testError}{testFailure}{testSkipped}{testPending}
       </testcase>
 
     def time = fragment match {
@@ -116,6 +119,11 @@ trait JUnitXmlPrinter {
       case ExecutedResult(_,f @ Failure(m, e, st, d),_,_,_) => <failure message={m}
                                                                       type={f.exception.getClass.getName}>{args.traceFilter(st).mkString("\n")}</failure>
       case other                                           => NodeSeq.Empty
+    }
+
+    def testPending = fragment match {
+      case ExecutedResult(_, Pending(m),_,_,_) => <skipped/>
+      case other                                  => NodeSeq.Empty
     }
 
     def testSkipped = fragment match {

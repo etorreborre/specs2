@@ -81,14 +81,19 @@ case class Levels[T](private val levelsSeq: Vector[Level[T]] = Vector[Level[T]](
    */
   def toTreeLoc[S](m: (T, Seq[S], Int) => Option[S]): TreeLoc[S] = {
     val initial = m(levels.head.t, Seq(), 0).get
-    levels.drop(1).foldLeft(leaf(initial).loc) { (treeLoc, cur) =>
+    levels.drop(1).foldLeft(leaf((initial, 0)).loc) { (res, cur) =>
+      val treeLoc = res
       val Level(block, level) = cur
-      val parent = treeLoc.parentLocs.drop(level).headOption.getOrElse(treeLoc)
-      m(block, parent.path.reverse.toSeq, treeLoc.size) match {
-        case Some(s) => parent.insertDownLast(leaf(s))
+      val parent = if (level == 0) treeLoc.root else (treeLoc.parentLocs :+ treeLoc).takeWhile(_.getLabel._2 < level).lastOption.getOrElse(treeLoc)
+      val parentTreeLocs = (treeLoc.parentLocs).map(_.getLabel).mkString(", ")
+      val treeLocLabel = treeLoc.getLabel
+      val parentLabel = parent.getLabel
+      val stop = true
+      m(block, parent.path.reverse.toSeq.map(_._1), treeLoc.size) match {
+        case Some(s) => parent.insertDownLast(leaf((s, level)))
         case None    => treeLoc
       }
-    }
+    }.map(_._1)
   }
 
   override def equals(a: Any) = {
@@ -108,6 +113,7 @@ case object Levels {
       (l1, l2) match {
         case (LevelZero(),    _) => l2
         case (_,    LevelZero()) => l1
+        case (Fixed(_, n),   _)  => l2.setLevel(n+1)
         case (Indent(_, n),   _) => l2.setLevel(l1.lv + n)
         case (Unindent(_, n), _) => l2.setLevel(l1.lv - n)
         case (Reset(_),       _) => l2.reset
@@ -127,9 +133,23 @@ case object Levels {
   implicit val LevelsReducer: Reducer[ExecutedFragment, Levels[ExecutedFragment]] =
     Reducer.unitReducer { f: ExecutedFragment => Levels(executedFragmentToLevel(f)) }
 
+  val FlowLevelsReducer: Reducer[ExecutedFragment, Levels[ExecutedFragment]] =
+    Reducer.unitReducer { f: ExecutedFragment => Levels(executedFragmentToFlowLevel(f)) }
+
   implicit def executedFragmentToLevel: ExecutedFragment => Level[ExecutedFragment] = (f: ExecutedFragment) => f match {
     case t @ ExecutedResult(_,_,_,_,_)     => Terminal(t)
     case t @ ExecutedText(_, _)            => Indent(t)
+    case t @ ExecutedTab(n, _)             => Indent(t, n)
+    case t @ ExecutedBacktab(n, _)         => Unindent(t, n)
+    case t @ ExecutedSpecStart(_,_,_)      => Neutral(t)
+    case t @ ExecutedSpecEnd(_,_,_)        => Neutral(t)
+    case t @ ExecutedEnd( _)               => Reset(t)
+    case t                                 => Neutral(t)
+  }
+
+  implicit def executedFragmentToFlowLevel: ExecutedFragment => Level[ExecutedFragment] = (f: ExecutedFragment) => f match {
+    case t @ ExecutedResult(_,_,_,_,_)     => Terminal(t)
+    case t @ ExecutedText(text, _)         => Fixed(t, indentation(text))
     case t @ ExecutedTab(n, _)             => Indent(t, n)
     case t @ ExecutedBacktab(n, _)         => Unindent(t, n)
     case t @ ExecutedSpecStart(_,_,_)      => Neutral(t)
@@ -152,8 +172,24 @@ case object Levels {
     case t                         => Neutral(t)
   }
 
+  implicit def fragmentToFlowLevel: Fragment => Level[Fragment] = (f: Fragment) => f match {
+    case t @ Example(_, _)         => Terminal(t)
+    case t @ Tab(n)                => Indent(t, n)
+    case t @ Backtab(n)            => Unindent(t, n)
+    case t @ Text(text)            => Fixed(t, indentation(text))
+    case t @ SpecStart(_,_,_)      => Neutral(t)
+    case t @ SpecEnd(_,_)          => Neutral(t)
+    case t @ End()                 => Reset(t)
+    case t                         => Neutral(t)
+  }
+
+  private def indentation(text: String) = text.split("\n").lastOption.getOrElse("").takeWhile(_ == ' ').size
+
   implicit val FragmentLevelsReducer: Reducer[Fragment, Levels[Fragment]] =
     Reducer.unitReducer { f: Fragment => Levels(fragmentToLevel(f)) }
+
+  val FragmentFlowLevelsReducer: Reducer[Fragment, Levels[Fragment]] =
+    Reducer.unitReducer { f: Fragment => Levels(fragmentToFlowLevel(f)) }
 }
 
 private[specs2]
@@ -178,6 +214,12 @@ case class Indent[T](value: T, n: Int = 1) extends Level(Some(value)) {
   def setLevel(l: Int) = new Indent(value, n) { override val lv = l }
 }
 private[specs2]
+case class Fixed[T](value: T, n: Int = 1) extends Level(Some(value)) {
+  type L = Fixed[T]
+  override def level: Int = n
+  def setLevel(l: Int) = new Fixed(value, n) { override val lv = l }
+}
+private[specs2]
 case class Unindent[T](value: T, n: Int = 1) extends Level(Some(value)) {
   type L = Unindent[T]
   def setLevel(l: Int) = new Unindent(value, n) { override val lv = l }
@@ -200,5 +242,5 @@ case class LevelZero[T]() extends Level[T](None) {
 
 private[specs2]
 object Level {
-  def unapply[T](l: Level[T]): Option[(T, Int)] = Some((l.t, l.lv))
+  def unapply[T](l: Level[T]): Option[(T, Int)] = Some((l.t, l.level))
 }

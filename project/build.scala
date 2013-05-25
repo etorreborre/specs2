@@ -48,7 +48,7 @@ object build extends Build {
     libraryDependencies <<= scalaVersion { scalaVersion => Seq(
       "org.scalaz"              %% "scalaz-core"       % "7.0.0",
       "org.scalaz"              %% "scalaz-concurrent" % "7.0.0",
-      "com.chuusai"             %% "shapeless"         % "1.2.3"       % "optional",
+      "com.chuusai"             %% "shapeless"         % "1.2.4"       % "optional",
       "org.scala-lang"          % "scala-reflect"      % scalaVersion  % "optional",
       "org.scala-lang"          % "scala-compiler"     % scalaVersion  % "optional",
       "org.scalacheck"          % "scalacheck_2.10.0"  % "1.10.0"      % "optional",

@@ -58,6 +58,7 @@ class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatche
     for start ^ t1 ^ ex1 ^ end ^ t2 ^ ex2                                                    ${tree().e2}
     for start ^ t1 ^ ex1 ^ p ^ t2 ^ ex2                                                      ${tree().e3}
     for start ^ t1 ^ ex1 ^ ex2 ^ p ^ t2 ^ ex1 ^ ex2                                          ${tree().e4}
+    for start\n t1 ex1 $$ok\n ex2 $$ok                                                       ${tree().e5} ${tag("e5")}
                                                                                              """
 
 
@@ -126,6 +127,31 @@ class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatche
       "   |",
       "   `- SpecEnd(start)")
 
+    def e5 = {
+      val interpolated = s2"""
+      t1
+        ex1 $ok
+        ex2 $ok
+      """
+      val mapper = (f: Fragment, parents: Seq[Fragment], level: Int) => {
+        f match {
+          case Text(t) if t.trim.isEmpty => None
+          case Text(t)                   => Some(Text(t.trim))
+          case _                         => Some(f)
+        }
+      }
+      treeMap(interpolated)(mapper)(Levels.FragmentFlowLevelsReducer) must beDrawnAs(
+        "SpecStart(start)",
+        "|",
+        "+- Text(t1)",
+        "|  |",
+        "|  +- Example(ex1)",
+        "|  |",
+        "|  `- Example(ex2)",
+        "|",
+        "`- SpecEnd(start)")
+    }
+
     def beDrawnAs(lines: String*) = be_==(lines.mkString("", "\n", "\n")) ^^ {
       tree: Tree[Fragment] => tree.drawTree
     }
@@ -151,9 +177,10 @@ class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatche
     Gen.sized(sz => sizedList(sz))
   }
 
-  def level(fs: Fragments)    = fold(fs.middle).levels.map(l => l.level)
-  def fold(fs: Seq[Fragment]) = fs.reduceWith(FragmentLevelsReducer)
-  def tree(fs: Fragments)     = fold(spec(fs).fragments).toTree
+  def level(fs: Fragments)   (implicit reducer: Reducer[Fragment, Levels[Fragment]] = Levels.FragmentLevelsReducer) = fold(fs.middle)(reducer).levels.map(l => l.level)
+  def fold(fs: Seq[Fragment])(implicit reducer: Reducer[Fragment, Levels[Fragment]] = Levels.FragmentLevelsReducer) = fs.reduceWith(reducer)
+  def tree(fs: Fragments)    (implicit reducer: Reducer[Fragment, Levels[Fragment]] = Levels.FragmentLevelsReducer) = fold(spec(fs).fragments)(reducer).toTree
+  def treeMap(fs: Fragments)(mapper: (Fragment, Seq[Fragment], Int) => Option[Fragment])(implicit reducer: Reducer[Fragment, Levels[Fragment]] = Levels.FragmentLevelsReducer) = fold(spec(fs).fragments)(reducer).toTreeLoc(mapper).toTree
   def spec(fs: Fragments)     = new Specification { def is = "start".title ^ fs }.content
 
   def t1 = "t1"

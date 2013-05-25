@@ -4,7 +4,7 @@ package reporter
 import _root_.org.junit.runner.notification.RunNotifier
 import _root_.org.junit._
 import _root_.org.junit.runner._
-import scalaz.Scalaz
+import scalaz.{Reducer, Scalaz}
 import Scalaz._
 import main.{SystemProperties, Arguments}
 import execute._
@@ -53,7 +53,6 @@ trait JUnitReporter extends ExecutionOrigin with DefaultReporter with Exporters 
         notifier.fireTestStarted(desc)
         val result = execute(f)
         notifyResult(desc, result)
-        notifier.fireTestFinished(desc)
         result
       }
       case f @ Step(_, _)         => notifyResult(desc, execute(f))
@@ -71,17 +70,22 @@ trait JUnitReporter extends ExecutionOrigin with DefaultReporter with Exporters 
     result match {
       case ExecutedResult(_, r, timer, _, _) => {
         r match {
-          case f@Failure(m, e, st, d)                     => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f)))
-          case e@Error(m, st)                             => notifier.fireTestFailure(new notification.Failure(desc, args.traceFilter(e.exception)))
-          case DecoratedResult(_, f@Failure(m, e, st, d)) => notifier.fireTestFailure(new notification.Failure(desc, junitFailure(f)))
-          case DecoratedResult(_, e@Error(m, st))         => notifier.fireTestFailure(new notification.Failure(desc, args.traceFilter(e.exception)))
-          case Pending(_) | Skipped(_, _)                 => notifier.fireTestIgnored(desc)
-          case Success(_, _) | DecoratedResult(_, _)      => ()
+          case f @ Failure(m, e, st, d)                     => failWith(desc, junitFailure(f))
+          case e @ Error(m, st)                             => failWith(desc, args.traceFilter(e.exception))
+          case DecoratedResult(_, f @ Failure(m, e, st, d)) => failWith(desc, junitFailure(f))
+          case DecoratedResult(_, e @ Error(m, st))         => failWith(desc, args.traceFilter(e.exception))
+          case Pending(_) | Skipped(_, _)                   => notifier.fireTestIgnored(desc)
+          case Success(_, _) | DecoratedResult(_, _)        => notifier.fireTestFinished(desc)
         }
       }
       case other => ()
     }
     result
+  }
+
+  private def failWith(desc: Description, failure: Throwable) = {
+    notifier.fireTestFailure(new notification.Failure(desc, failure))
+    notifier.fireTestFinished(desc)
   }
 
   def export(implicit args: Arguments) = (executing: ExecutingSpecification) => {
@@ -111,7 +115,7 @@ trait JUnitReporter extends ExecutionOrigin with DefaultReporter with Exporters 
 /**
  * Descriptions for a seq of Fragments to execute
  */
-class JUnitDescriptionsFragments(className: String) extends JUnitDescriptions[Fragment](className) {
+class JUnitDescriptionsFragments(className: String)(implicit reducer: Reducer[Fragment, Levels[Fragment]]) extends JUnitDescriptions[Fragment](className)(reducer) {
   def initialFragment(className: String) = Text(className)
   /**
   * This function is used to map each node in a Tree[Fragment] to a pair of
@@ -124,7 +128,8 @@ class JUnitDescriptionsFragments(className: String) extends JUnitDescriptions[Fr
   def mapper(className: String): (Fragment, Seq[DescribedFragment], Int) => Option[DescribedFragment] =
     (f: Fragment, parentNodes: Seq[DescribedFragment], nodeLabel: Int) => f match {
       case s @ SpecStart(_,_,_)       => Some(f -> createDescription(className, suiteName=testName(s.name)))
-      case Text(t)                    => Some(f -> createDescription(className, suiteName=testName(t)))
+      case Text(t) if t.trim.nonEmpty => Some(f -> createDescription(className, suiteName=testName(t)))
+      case Text(t)                    => None
       case Example(description, body) => Some(f -> createDescription(className, label=nodeLabel.toString, testName=testName(description.toString, parentPath(parentNodes))))
       case Step(action,_)             => Some(f -> createDescription(className, label=nodeLabel.toString, testName="step"))
       case Action(action)             => Some(f -> createDescription(className, label=nodeLabel.toString, testName="action"))
