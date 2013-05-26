@@ -35,8 +35,8 @@ class Location {
     else {
       val fragmentsMethods = Seq("org.specs2", ".textStart", ".textFragment", ".fragmentsFragments", ".p(", ".br(", ".t(", ".bt(", ".end(", ".endp(", ".endbr(")
       val (start, end) = st.span(s => fragmentsMethods.exists(s.toString.contains))
-      // 156 is the magic line number of the "FragmentsFragment::def ^(t: String) = fragments add Text(t)" method
-      if (lastContains(start, "$up(FragmentsBuilder.scala:163") && !isTextStart(start)) takeHead(end, st(0), lineOffset = 1)
+      // 170 is the magic line number of the "FragmentsFragment::def ^(t: String) = fragments add Text(t)" method
+      if (lastContains(start, "$up(FragmentsBuilder.scala:170") && !isTextStart(start)) takeHead(end, st(0), lineOffset = 1)
       else if (lastContains(start, "$up"))                                              takeHead(end, st(0))
       else                                                                              end
     }

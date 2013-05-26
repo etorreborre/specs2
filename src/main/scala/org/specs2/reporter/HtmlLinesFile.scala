@@ -88,7 +88,7 @@ sealed trait HtmlLine {
   def level: Int
   def args: Arguments
   def stats: Stats
-  lazy val indent = args.offset + (if (args.noindent) 0 else level)
+  lazy val indent = args.offset + (if (args.noindent && !args.report.flow) 0 else level)
   def print(out: HtmlReportOutput): HtmlReportOutput
   def set(stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()): HtmlLine
 }

@@ -29,8 +29,8 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   /** append the fragments from fs, appending the text fragments if this object ends with Text and fs starts with Text */
   def append(fs: Fragments): Fragments =
     (middle, fs.middle) match {
-      case (begin :+ Text(t1), Text(t2) +: rest) if !fs.isLink => ((new FragmentsFragment(this.copy(middle = Seq())))) ^ fs.copy(middle = begin ++ (Text(t1+t2) +: rest))
-      case _                                                   => (new FragmentsFragment(this)) ^ fs
+      case (begin :+ Text(t1), Text(t2) +: rest) if !fs.isLink && !t2.trim.isEmpty => ((new FragmentsFragment(this.copy(middle = Seq())))) ^ fs.copy(middle = begin ++ (Text(t1+t2) +: rest))
+      case _                                                                       => (new FragmentsFragment(this)) ^ fs
     }
 
   /** append the fragments from fs, appending the text fragments if this object ends with Text and fs starts with Text */

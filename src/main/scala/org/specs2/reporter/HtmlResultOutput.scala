@@ -185,11 +185,14 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
 	protected def koStatus(n: NodeSeq) = status(n, "ko")
   /** print a NodeSeq with a given status class */
 	protected def status(n: NodeSeq, st: String) = <status class={st}>{n}</status>
-  /** create a div around some markup text to be displayed at a certain level of identation */
+  /** create a div around some markup text to be displayed at a certain level of indentation */
 	protected def div(string: String, level: Int): NodeSeq  = div(t(string), level)
-  /** create a div around a NodeSeq to be displayed at a certain level of identation */
-	protected def div(n: NodeSeq, level: Int, hidden: Boolean = false): NodeSeq = <div class={"level"+level} style={"display: "+(if (hidden) "none" else "show")}>{n}</div>
-  /** create a paragraph around a NodeSeq to be displayed at a certain level of identation */
+  /** create a div around a NodeSeq to be displayed at a certain level of indentation */
+	protected def div(n: NodeSeq, level: Int, hidden: Boolean = false): NodeSeq =
+    if (args.report.flow) <div  style={"display: "+(if (hidden) "none" else "show")+s"; text-indent:${level*3}px;"}>{n}</div>
+    else                  <div class={"level"+level} style={"display: "+(if (hidden) "none" else "show")}>{n}</div>
+
+  /** create a paragraph around a NodeSeq to be displayed at a certain level of indentation */
 	protected def p(n: NodeSeq, level: Int) = <p class={"level"+level}>{n}</p>
   /** create a Text node */
 	protected def t(text: String): NodeSeq = scala.xml.Text(text)

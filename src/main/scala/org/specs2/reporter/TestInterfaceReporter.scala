@@ -61,7 +61,7 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOu
         buffer.append(message.removeFirst("\n"))
         loggerNewLines = 0
       }
-      else {
+      else if (!message.isEmpty) {
         val all = buffer.toString + message
         val splitted = all.split("\n")
         buffer.clear

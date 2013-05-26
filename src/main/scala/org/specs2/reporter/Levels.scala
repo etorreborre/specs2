@@ -6,6 +6,7 @@ import Scalaz._
 import Tree._
 import collection.Seqx._
 import specification._
+import text.Trim._
 import data.Trees._
 import StandardFragments._
 
@@ -85,10 +86,6 @@ case class Levels[T](private val levelsSeq: Vector[Level[T]] = Vector[Level[T]](
       val treeLoc = res
       val Level(block, level) = cur
       val parent = if (level == 0) treeLoc.root else (treeLoc.parentLocs :+ treeLoc).takeWhile(_.getLabel._2 < level).lastOption.getOrElse(treeLoc)
-      val parentTreeLocs = (treeLoc.parentLocs).map(_.getLabel).mkString(", ")
-      val treeLocLabel = treeLoc.getLabel
-      val parentLabel = parent.getLabel
-      val stop = true
       m(block, parent.path.reverse.toSeq.map(_._1), treeLoc.size) match {
         case Some(s) => parent.insertDownLast(leaf((s, level)))
         case None    => treeLoc
@@ -183,7 +180,9 @@ case object Levels {
     case t                         => Neutral(t)
   }
 
-  private def indentation(text: String) = text.split("\n").lastOption.getOrElse("").takeWhile(_ == ' ').size
+  private[specs2] def indentation(text: String) =
+    if (text.trim.isEmpty) text.split("\n").lastOption.getOrElse("").takeWhile(_ == ' ').size
+    else                   text.split("\n").filter(_.trim.nonEmpty).headOption.getOrElse("").takeWhile(_ == ' ').size
 
   implicit val FragmentLevelsReducer: Reducer[Fragment, Levels[Fragment]] =
     Reducer.unitReducer { f: Fragment => Levels(fragmentToLevel(f)) }

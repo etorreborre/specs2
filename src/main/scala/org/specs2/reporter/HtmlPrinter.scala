@@ -45,7 +45,7 @@ trait HtmlPrinter {
    *
    * @return a Tree of HtmlLinesFile where the root is the parent specification and children are the included specifications
    */
-  def createHtmlLinesFiles(spec: ExecutedSpecification): Tree[HtmlLinesFile] =
+  def createHtmlLinesFiles(spec: ExecutedSpecification)(implicit args: Arguments): Tree[HtmlLinesFile] =
     reduce(spec) |> sortByFile(spec.name, spec.arguments, parentLink = HtmlLink(spec.name, "", spec.name.name))
 
   /**
@@ -92,7 +92,7 @@ trait HtmlPrinter {
    *
    * @return the HtmlLines to print
    */
-  def reduce(spec: ExecutedSpecification): Seq[HtmlLine] = flatten(spec.fragments.reduceWith(reducer))
+  def reduce(spec: ExecutedSpecification)(implicit args: Arguments): Seq[HtmlLine] = flatten(spec.fragments.reduceWith(reducer))
 
   /**
    * Sort HtmlLines into a Tree of HtmlLinesFile object where the tree represents the tree of included specifications
@@ -121,11 +121,13 @@ trait HtmlPrinter {
     }
   }  
   
-  private lazy val reducer =
-    HtmlReducer &&& 
-    StatsReducer &&&
-    LevelsReducer  &&&
+  private def reducer(implicit args: Arguments) =
+    HtmlReducer           &&&
+    StatsReducer          &&&
+    levelsReducer         &&&
     SpecsArgumentsReducer
+
+  private def levelsReducer(implicit args: Arguments) = if (args.report.flow) FlowLevelsReducer else LevelsReducer
 
   implicit lazy val HtmlReducer: Reducer[ExecutedFragment, Stream[HtmlLine]] = {
     /** print an ExecutedFragment and its associated statistics */

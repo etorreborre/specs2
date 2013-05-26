@@ -58,7 +58,11 @@ class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatche
     for start ^ t1 ^ ex1 ^ end ^ t2 ^ ex2                                                    ${tree().e2}
     for start ^ t1 ^ ex1 ^ p ^ t2 ^ ex2                                                      ${tree().e3}
     for start ^ t1 ^ ex1 ^ ex2 ^ p ^ t2 ^ ex1 ^ ex2                                          ${tree().e4}
-    for start\n t1 ex1 $$ok\n ex2 $$ok                                                       ${tree().e5} ${tag("e5")}
+    for start\n t1 ex1 $$ok\n ex2 $$ok                                                       ${tree().e5}
+
+  The indentation of a piece of text is calculated as follows
+    if the text is "\n    " then it is the number of spaces after the newline                ${indentation().e1}
+    if the text is "\n   \n  hello" then it is the number of spaces starting the text        ${indentation().e2}
                                                                                              """
 
 
@@ -143,18 +147,23 @@ class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatche
       treeMap(interpolated)(mapper)(Levels.FragmentFlowLevelsReducer) must beDrawnAs(
         "SpecStart(start)",
         "|",
-        "+- Text(t1)",
-        "|  |",
-        "|  +- Example(ex1)",
-        "|  |",
-        "|  `- Example(ex2)",
-        "|",
-        "`- SpecEnd(start)")
+        "`- Text(t1)",
+        "   |",
+        "   +- Example(ex1)",
+        "   |",
+        "   +- Example(ex2)",
+        "   |",
+        "   `- SpecEnd(start)")
     }
 
     def beDrawnAs(lines: String*) = be_==(lines.mkString("", "\n", "\n")) ^^ {
       tree: Tree[Fragment] => tree.drawTree
     }
+  }
+
+  case class indentation() {
+    def e1 = Levels.indentation("\n    ") === 4
+    def e2 = Levels.indentation("    \n  hello") === 2
   }
 
   implicit def params = set(maxSize = 5, minTestsOk = 1000)
