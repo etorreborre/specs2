@@ -65,7 +65,7 @@
     </head><body><div id="breadcrumbs"><a href="../guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../guide/org.specs2.guide.Runners.html">Runners</a></div><div class="colmask threecol">
                    <div class="colmid">
                      <div class="colleft">
-                       <div class="col1"><div id="central"><title>Runners</title><a name="Runners"><h2 specId="446901024">Runners</h2></a><status class="ok"><div class="level0" style="display: show"><p><a name="Presentation"><h3>Presentation</h3></a><p>There are many ways to execute <strong><em>specs2</em></strong> specifications:</p>
+                       <div class="col1"><div id="central"><title>Runners</title><a name="Runners"><h2 specId="1121282607">Runners</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><p><a name="Presentation"><h3>Presentation</h3></a><p>There are many ways to execute <strong><em>specs2</em></strong> specifications:</p>
 <ul>
   <li>on the command line, with a console output, and the <code class="prettyprint">specs2.run</code> runner</li>
   <li>on the command line, with a html output, and the <code class="prettyprint">specs2.html</code> runner</li>
@@ -643,7 +643,7 @@ args.report(showtimes = true, xonly = true)
 <ul>
   <li>the source directory is defined as <code class="prettyprint">src/test/scala</code> but can be changed by adjusting the system property <code class="prettyprint">specs2.srcTestDir</code></li>
   <li>the specifications files are selected as classes or object which names match <code class="prettyprint">.*Spec</code>. This value can be changed by<br /> passing a different <code class="prettyprint">specName</code> value as a command-line argument</li>
-  <li><code class="prettyprint">console</code>, <code class="prettyprint">html</code>, <code class="prettyprint">junitxml</code>, <code class="prettyprint">markup</code> has to be passed on the command-line to specify which kind of output you want</li>
+  <li><code class="prettyprint">console</code>, <code class="prettyprint">html</code>, <code class="prettyprint">junitxml</code>, <code class="prettyprint">markdown</code> has to be passed on the command-line to specify which kind of output you want</li>
 </ul><p>You can also extend the <code class="prettyprint">org.specs2.runner.FilesRunner</code> trait and override its behavior to implement something more appropriate<br />to your environment if necessary.</p><p>Additionally you can use the following arguments to modify the behavior of the <code class="prettyprint">FilesRunner</code> object:</p>
 <ul>
   <li><code class="prettyprint">filesrunner.verbose</code>: display information messages about which classes are found and being instantiated to be executed (false by default)</li>
@@ -689,9 +689,9 @@ testOptions in Test += Tests.Argument(&quot;exclude&quot;, &quot;integration&quo
 
 // in your build.sbt file
 testOptions in Test += Tests.Argument(&quot;html&quot;)
-</code></pre><a name="Markdown"><h6>Markdown</h6></a><p>The <code class="prettyprint">markup</code> argument can be used to create &quot;.md&quot; files (to use with websites like GitHub):</p>
-<pre><code class="prettyprint">&gt; test-only org.specs2.UserGuide -- markup
-</code></pre><p>In this case the markup text in the Specifications is not interpreted.</p><a name="JUnit"><h6>JUnit</h6></a><p>Similarly, JUnit xml output files can be created by passing the <code class="prettyprint">junitxml</code> option:</p>
+</code></pre><a name="Markdown"><h6>Markdown</h6></a><p>The <code class="prettyprint">markdown</code> argument can be used to create &quot;.md&quot; files (to use with websites like GitHub):</p>
+<pre><code class="prettyprint">&gt; test-only org.specs2.UserGuide -- markdown
+</code></pre><p>In this case the markup text in the Specification is not interpreted.</p><a name="JUnit"><h6>JUnit</h6></a><p>Similarly, JUnit xml output files can be created by passing the <code class="prettyprint">junitxml</code> option:</p>
 <pre><code class="prettyprint">&gt; test-only org.specs2.examples.HelloWorldUnitSpec -- junitxml
 
 // in your build.sbt file
@@ -701,7 +701,7 @@ testOptions in Test += Tests.Argument(&quot;junitxml&quot;)
 
 // in your build.sbt file
 testOptions in Test += Tests.Argument(&quot;html&quot;, &quot;console&quot;)
-</code></pre><a name="Files+runner"><h5>Files runner</h5></a><p>Any <code class="prettyprint">FilesRunner</code> object can also be invoked by sbt, but you need to specify <code class="prettyprint">console</code>, <code class="prettyprint">html</code>, <code class="prettyprint">junitxml</code>, <code class="prettyprint">markup</code> on the command line:</p>
+</code></pre><a name="Files+runner"><h5>Files runner</h5></a><p>Any <code class="prettyprint">FilesRunner</code> object can also be invoked by sbt, but you need to specify <code class="prettyprint">console</code>, <code class="prettyprint">html</code>, <code class="prettyprint">junitxml</code>, <code class="prettyprint">markdown</code> on the command line:</p>
 <pre><code class="prettyprint">&gt; test-only allSpecs -- console
 </code></pre><a name="Colors"><h5>Colors</h5></a><p>By default, the reporting will output colors. If you're running on windows you might either:</p>
 <ul>
@@ -825,7 +825,7 @@ testOptions in Test += Tests.Argument(&quot;html&quot;, &quot;console&quot;)
       <td>m </td>
     </tr>
   </tbody>
-</table><p><em>From command-line arguments</em></p><p>It is also possible to set colors by passing the <code class="prettyprint">colors</code> argument. This argument must be a list of <code class="prettyprint">key:value</code> pairs (comma-separated) where keys are taken from the property names above without the <code class="prettyprint">color.</code> prefix and values from the abbreviated color names.</p><p>For example you can pass on the command line:</p><p><code class="prettyprint">colors text:blue,failure:magenta</code></p><p>to have the text colored in blue and the failures in Magenta.</p><p>If the <code class="prettyprint">colors</code> option contains <code class="prettyprint">whitebg</code> then the default colors are considered to be <a href="http://etorreborre.github.io/specs2/api/SPECS2-2.0-RC2/index.html#org.specs2.text.Colors"><code class="prettyprint">InvertedColors</code></a></p><p><em>Through the API</em></p><p>Finally you can change the color scheme that's being used on the console by implementing your own <a href="http://etorreborre.github.io/specs2/api/SPECS2-2.0-RC2/index.html#org.specs2.text.Colors"><code class="prettyprint">org.specs2.text.Colors</code></a> trait or override values in the existing <code class="prettyprint">ConsoleColors</code> class. For example if you want to output magenta everywhere yellow is used you can write:</p>
+</table><p><em>From command-line arguments</em></p><p>It is also possible to set colors by passing the <code class="prettyprint">colors</code> argument. This argument must be a list of <code class="prettyprint">key:value</code> pairs (comma-separated) where keys are taken from the property names above without the <code class="prettyprint">color.</code> prefix and values from the abbreviated color names.</p><p>For example you can pass on the command line:</p><p><code class="prettyprint">colors text:blue,failure:magenta</code></p><p>to have the text colored in blue and the failures in Magenta.</p><p>If the <code class="prettyprint">colors</code> option contains <code class="prettyprint">whitebg</code> then the default colors are considered to be <a href="http://etorreborre.github.io/specs2/api/SPECS2-2.0-RC1/index.html#org.specs2.text.Colors"><code class="prettyprint">InvertedColors</code></a></p><p><em>Through the API</em></p><p>Finally you can change the color scheme that's being used on the console by implementing your own <a href="http://etorreborre.github.io/specs2/api/SPECS2-2.0-RC1/index.html#org.specs2.text.Colors"><code class="prettyprint">org.specs2.text.Colors</code></a> trait or override values in the existing <code class="prettyprint">ConsoleColors</code> class. For example if you want to output magenta everywhere yellow is used you can write:</p>
 <pre><code class="prettyprint">object MyColors = new org.specs2.text.ConsoleColors { override val failureColor = magenta }
 
 class MyColoredSpecification extends Specification { def is = colors(MyColors) ^
@@ -857,7 +857,7 @@ class MySpecification extends Specification {
 </code></pre><p>[<em>some <a href="http://code.google.com/p/specs/wiki/RunningSpecs#Run_your_specification_with_JUnit4_in_Eclipse">tricks</a> described on the specs website can still be useful there</em>]</p><a name="Arguments_1"><h4>Arguments</h4></a><p>You can pass arguments to the <code class="prettyprint">JUnitRunner</code> for generating the html files for the specifications or for displaying the console output. To do that, you can use the <code class="prettyprint">-Dspecs2.commandline</code> property and pass it the <code class="prettyprint">html</code> or <code class="prettyprint">console</code> values.</p><a name="Via+Eclipse"><h3>Via Eclipse</h3></a><p>There is unfortunately no specific Eclipse plugin at the moment and specifications have to be executed as [JUnit test cases](#Via JUnit).</p><a name="Via+Maven"><h3>Via Maven</h3></a><p>You can either:</p>
 <ul>
   <li>execute specifications as [JUnit test cases](#Via JUnit).</li>
-  <li>use the <a href="https://github.com/mmakowski/maven-specs2-plugin">Maven specs2 plugin</a> to generate JUnit XML reports, HTML or Markup reports</li>
+  <li>use the <a href="https://github.com/mmakowski/maven-specs2-plugin">Maven specs2 plugin</a> to generate JUnit XML reports, HTML or Markdown reports</li>
 </ul><a name="With+your+own"><h3>With your own</h3></a><a name="Notifier"><h4>Notifier</h4></a><p>The <code class="prettyprint">org.specs2.reporter.Notifier</code> trait can be used to report execution events. It notifies of the following:</p>
 <ul>
   <li>specification start: the beginning of a specification, with its name</li>
@@ -879,14 +879,14 @@ class MySpecification extends Specification {
 </ul><p>Please see the API of each class to see how to use them.</p><a name="In+sbt_1"><h5>In sbt</h5></a><p>You can use a custom <code class="prettyprint">Exporter</code> from inside sbt by passing the <code class="prettyprint">exporter</code> argument with a <code class="prettyprint">Exporter</code> implementation class name:</p>
 <pre><code class="prettyprint">sbt&gt; test-only *BinarySpec* -- exporter com.mycompany.reporting.FtpExporter
 </code></pre>
-<hr /></p></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
+<hr /></p></div></status><status class="ok"><div style="display: show; text-indent:360px;"></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Runners</th></tr>
         <tr><td>Finished in</td><td class="info">3 ms</td></tr>
         <tr><td>Results</td><td class="success">1 example, 0 failure, 0 error</td></tr>
       </table></div></div>
                        <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="1347399160"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1442108546"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1801198340"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="934853266"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -896,7 +896,7 @@ class MySpecification extends Specification {
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1065952154"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="859583250"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -955,9 +955,9 @@ class MySpecification extends Specification {
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Outside">Outside</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#AroundOutside">AroundOutside</a>
             
+          </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Fixture">Fixture</a>
             
-          </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#BeforeExample">BeforeExample</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Implicit+context">Implicit context</a>
@@ -1004,7 +1004,7 @@ class MySpecification extends Specification {
             <ul></ul>
           </li></ul>
           </li></ul>
-          </li><li id="838638448"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1993732782"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1066,7 +1066,7 @@ class MySpecification extends Specification {
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1629639249"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="2064897441"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
@@ -1110,7 +1110,7 @@ class MySpecification extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="446901024"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="1121282607"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1194,7 +1194,7 @@ class MySpecification extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1803639938"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="388054586"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -1242,7 +1242,7 @@ class MySpecification extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="1134779900"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="1320390364"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1288,7 +1288,7 @@ class MySpecification extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="894327813"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="521462439"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1308,7 +1308,7 @@ class MySpecification extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1347399160','446901024'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1801198340','1121282607'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                        <div class="col3"><div id="rightcolumn"></div></div>
                      </div>
