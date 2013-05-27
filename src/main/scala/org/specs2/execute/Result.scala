@@ -250,6 +250,9 @@ object AsResult {
   implicit def asResult[R <% Result]: AsResult[R] = new AsResult[R] {
     def asResult(r: =>R): Result = ResultExecution.execute(r)
   }
+
+  /** @return a Result but throw exceptions if it is not a success */ 
+  def effectively[R : AsResult](r: =>R): Result = ResultExecution.effectively(AsResult(r))
 }
 
 /**

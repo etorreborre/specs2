@@ -32,6 +32,32 @@ trait ResultExecution { outer =>
       case e: Throwable                                                      => Error(e)
     }
 
+  /** execute a Result rethrow any exception or throws an exception if it is not a success */
+  def effectively(result: =>Result): Result =
+    try {
+      result match {
+        case e: Error   => throw new ErrorException(e)
+        case f: Failure => throw new FailureException(f)
+        case p: Pending => throw new PendingException(p)
+        case s: Skipped => throw new SkipException(s)
+        case r @ DecoratedResult(_, e: Error  ) => throw new DecoratedResultException(r)
+        case r @ DecoratedResult(_, e: Failure) => throw new DecoratedResultException(r)
+        case r @ DecoratedResult(_, e: Pending) => throw new DecoratedResultException(r)
+        case r @ DecoratedResult(_, e: Skipped) => throw new DecoratedResultException(r)
+        case other      => other
+      }
+    } catch {
+      case e: FailureException                                               => throw e
+      case e: SkipException                                                  => throw e
+      case e: PendingException                                               => throw e
+      case e: ErrorException                                                 => throw e
+      case e: DecoratedResultException                                       => throw e
+      case e: Exception                                                      => throw ErrorException(Error(e))
+      case e: AssertionError if (fromJUnit(e))                               => throw FailureException(Failure(e.getMessage.notNull, "", e.getStackTrace.toList))
+      case e: java.lang.Error if simpleClassName(e) == "NotImplementedError" => throw FailureException(Failure(e.getMessage.notNull, "", e.getStackTrace.toList))
+      case e: Throwable                                                      => throw ErrorException(Error(e))
+    }
+
   /**
    * execute a piece of code and return a result:
    *
