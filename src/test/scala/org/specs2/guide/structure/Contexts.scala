@@ -269,7 +269,7 @@ object http extends AroundOutside[HttpReq] {
 
 Finally, if you want complete control over the data that is passed to an example and how it is executed you can use a fixture. This is useful, for instance, when you want to run the same example with sligthly different data: ${snippet{
 
-object evens extends Fixture[Int] {
+implicit val evenNumbers = new Fixture[Int] {
   def apply[R : AsResult](f: Int => R) = {
     // test f with 1, 2, 3
     Seq(1, 2, 3).foldLeft(Success(): Result) { (res, i) =>
@@ -277,9 +277,12 @@ object evens extends Fixture[Int] {
     }
   }
 }
+
+"even numbers can be divided by 2" ! { i: Int => i % 2 === 0 }
 }}
 
-"even numbers can be divided by 2" ! evens { i: Int => i % 2 === 0 }
+There is also a `FixtureExample` trait where you just define the `def fixture[R : AsResult](f: T => R): Result` method and the fixture will be passed to each example.
+
 
 #### BeforeExample
 
