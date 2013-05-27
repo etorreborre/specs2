@@ -119,7 +119,7 @@ def sidebar = s"""
    <h3 style="margin-bottom: 0;">Learn it!</h3>
    <div class="sidelink" style="margin-top: 10px;"><a href="guide/org.specs2.guide.QuickStart.html">Quick Start</a><br/>
    </div>
-   <a class="sidelink" href="guide/org.specs2.UserGuide.html">User Guide</a><br/>
+   <a class="sidelink" href="guide/org.specs2.guide.UserGuide.html">User Guide</a><br/>
    <a class="sidelink" href="${EXAMPLES_OFFICIAL_DIR}">Examples</a><br/>
    <a class="sidelink" href="${API_OFFICIAL_DIR}index.html">Scaladoc</a><br/>
    <h3 style="margin-bottom: 0;">Get involved!</h3>
