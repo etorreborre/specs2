@@ -2,7 +2,7 @@ package org.specs2
 package guide
 package structure
 
-import specification.{Step, Action, Around, Before, After, Outside, AroundOutside, BeforeExample, AfterExample, BeforeAfter, Fragments, Scope, Fixture}
+import specification.{Step, Action, Around, Before, After, Outside, AroundOutside, BeforeExample, AfterExample, BeforeAfter, Fragments, Scope, Fixture, FixtureExample}
 import mutable.NameSpace
 import execute._
 import matcher.FileMatchers
@@ -265,11 +265,11 @@ object http extends AroundOutside[HttpReq] {
 "and another one"                                                     ! http((request: HttpReq) => success)
 }}
 
-##### Fixture
+#### Fixture
 
-Finally, if you want complete control over the data that is passed to an example and how it is executed you can use a fixture. This is useful, for instance, when you want to run the same example with sligthly different data: ${snippet{
+Finally, the way to get the most control on the data that is passed to each example and how it is executed is to use a `Fixture`: ${snippet{
 
-object evens extends Fixture[Int] {
+val evenNumbers = new Fixture[Int] {
   def apply[R : AsResult](f: Int => R) = {
     // test f with 1, 2, 3
     Seq(1, 2, 3).foldLeft(Success(): Result) { (res, i) =>
@@ -277,9 +277,27 @@ object evens extends Fixture[Int] {
     }
   }
 }
+
+"even numbers can be divided by 2" ! evenNumbers { i: Int => i % 2 === 0 }
 }}
 
-"even numbers can be divided by 2" ! evens { i: Int => i % 2 === 0 }
+The example above tests repeatedly the same code with different values (you could add before or after actions if you wanted to). As you can see, the fixture can be applied explicitly to the example body but you can as well declare it as an implicit context or use the `FixtureExample` trait to pass the fixture implicitly: ${snippet{
+
+// passing the fixture implicitly
+class MySpec1 extends Specification { def is = s2"""
+  even numbers can be divided by 2 ${ i: Int => i % 2 === 0 }
+                                                                          """
+  implicit val evenNumbers: Fixture[Int] = ???
+}
+
+// using the FixtureExample trait
+class MySpec2 extends Specification with FixtureExample[Int] { def is = s2"""
+  "even numbers can be divided by 2" ${ i: Int => i % 2 === 0 }
+  """
+
+  def fixture[R : AsResult](f: Int => R): Result = ???
+}
+}}
 
 #### BeforeExample
 
