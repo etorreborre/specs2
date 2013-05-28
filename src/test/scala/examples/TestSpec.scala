@@ -1,8 +1,10 @@
 package examples
 
 import org.specs2._
+import specification._
+import specification.Text
 
-class TestSpec extends SpecificationWithJUnit { def is = s2"""
+class TestSpec extends SpecificationWithJUnit { def is = s2""" ${section("specs2.format.markdown")}
 This is a simple, hierarchical specification
   if things are indented
         in the console                   $ok
@@ -13,11 +15,16 @@ This is a simple, hierarchical specification
     or if there's only text, indentation
     with more text
       should also work                   $ok
-      and not quote lines as code        $ok
+      and not quote lines as code        $ok  ${section("specs2.format.markdown")}
 
    ${link(new Test2Spec)}
 """
 
+  override def interpolatedArguments = args.report(noindent = false, flow = false)
+  override def map(fs: =>Fragments) = fs.map {
+    case Text(text) => Text(text.withMarkdown.withFlow)
+    case other    => other
+  }
 }
 
 class Test2Spec extends SpecificationWithJUnit { def is =

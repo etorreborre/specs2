@@ -124,10 +124,8 @@ trait HtmlPrinter {
   private def reducer(implicit args: Arguments) =
     HtmlReducer           &&&
     StatsReducer          &&&
-    levelsReducer         &&&
+    Levels.LevelsReducer  &&&
     SpecsArgumentsReducer
-
-  private def levelsReducer(implicit args: Arguments) = if (args.report.flow) FlowLevelsReducer else LevelsReducer
 
   implicit lazy val HtmlReducer: Reducer[ExecutedFragment, Stream[HtmlLine]] = {
     /** print an ExecutedFragment and its associated statistics */

@@ -80,12 +80,9 @@ trait TextPrinter {
      * indent the text to the wanted level.
      * If the text contains several lines, each line is indented
      */
-    protected def leveledText(s: String, level: Int)(implicit args: Arguments): String = { 
-      if (args.noindent) s 
-      else {
-        val indent = "  "*level
-        s.split("\n").map(indent+_).mkString("\n")
-      }
+    protected def leveledText(s: String, level: Int)(implicit args: Arguments): String = {
+      val indent = " "*level
+      s.split("\n").map(indent+_).mkString("\n")
     }
   }
   case class PrintSpecStart(start: ExecutedSpecStart) extends Print {
@@ -95,14 +92,14 @@ trait TextPrinter {
         else
           if (start.name != start.title) out.printSpecStartTitle(leveledText(start.title, level)(args), stats)(args)
           else                           out.printSpecStartName(leveledText(start.name, level)(args), stats)(args)
-        if (!args.xonly && !args.hasFilter && !args.report.flow) out.printLine("")(args)
-        if (!args.xonly && args.hasFilter && args.report.flow) out.printLine("\n")(args)
+        if (!args.xonly && !args.hasFilter) out.printLine("")(args)
+        if (!args.xonly && args.hasFilter) out.printLine("\n")(args)
       }
     }
   }
   case class PrintResult(r: ExecutedResult)           extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
-      printResult(leveledText(r.text(args).toString, level)(args), r.hasDescription, r.result, r.timer)(args, out)
+      printResult(if (r.flow) r.text(args).raw else leveledText(r.text(args).raw, level)(args), r.hasDescription, r.result, r.timer)(args, out)
       
     def printResult(desc: String, hasDescription: Boolean, result: Result, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput): Unit = {
       def print(res: Result, desc: String, isDataTable: Boolean) {
@@ -194,7 +191,8 @@ trait TextPrinter {
   case class PrintText(t: ExecutedText)               extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
       if (args.canShow("-"))
-        out.printText(leveledText(t.text, level)(args))(args)
+        if (t.flow) out.printText(t.text)(args)
+        else out.printText(leveledText(t.text, level)(args))(args)
   }        
   case class PrintBr()                               extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =

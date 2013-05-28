@@ -3,7 +3,6 @@ package reporter
 
 import specification._
 import matcher.{XmlMatchers, DataTable, DataTables}
-import text.NoMarkup
 import execute.DecoratedResult
 import org.specs2.main.Arguments
 
@@ -25,7 +24,7 @@ class HtmlResultOutputSpec extends Specification with DataTables with XmlMatcher
   implicit val defaultArgs = Arguments()
     
   def descriptions = {
-    val (out, desc) = (new HtmlResultOutput, NoMarkup("desc"))
+    val (out, desc) = (new HtmlResultOutput, FormattedString("desc"))
     "output"               | "xml"                                                 |>
     out.printSuccess(desc) ! """<img src="./images/icon_success_sml.gif"/> desc""" |
     out.printFailure(desc) ! """<img src="./images/icon_failure_sml.gif"/> desc""" |

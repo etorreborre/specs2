@@ -3,7 +3,7 @@ package reporter
 
 import scalaz.Scalaz._
 import main.Arguments
-import specification.{ExecutedText, HtmlLink, SpecName}
+import specification.{ExecutedText, HtmlLink, SpecName, Text}
 
 
 class HtmlTocSpec extends Specification { def is = s2"""
@@ -23,7 +23,7 @@ class HtmlTocSpec extends Specification { def is = s2"""
                             htmlLines("child", args.report(notoc=false))).toTree
 
   def htmlLines(name: String, arguments: Arguments = Arguments()) = new HtmlLinesFile(SpecName(name), arguments, HtmlLink(this)).add(headerLine).leaf
-  def headerLine = HtmlText(ExecutedText("### title"))
+  def headerLine = HtmlText(ExecutedText(Text("### title")))
 
   val printer = new HtmlPrinter {}
 }

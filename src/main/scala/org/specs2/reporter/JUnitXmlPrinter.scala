@@ -49,12 +49,9 @@ trait JUnitXmlPrinter {
     }
   }
 
-  /** the definition of levels depends on the "flow" style of text and examples */
-  def levelsReducer(implicit args: Arguments) = if (args.report.flow) Levels.FlowLevelsReducer else Levels.LevelsReducer
-
   /** fold object used to create descriptions */
-  def descriptions(name: SpecName)(implicit args: Arguments) = new JUnitDescriptions[ExecutedFragment](name.javaClassName)(levelsReducer) {
-    def initialFragment(className: String) = ExecutedText(className, new Location())
+  def descriptions(name: SpecName)(implicit args: Arguments) = new JUnitDescriptions[ExecutedFragment](name.javaClassName)(Levels.LevelsReducer) {
+    def initialFragment(className: String) = ExecutedText(Text(className), new Location())
     /**
      * This function is used to map each node in a Tree[Fragment] to a pair of
      * (Description, Fragment)
@@ -65,10 +62,10 @@ trait JUnitXmlPrinter {
      */
     def mapper(className: String): (ExecutedFragment, Seq[DescribedFragment], Int) => Option[DescribedFragment] =
       (f: ExecutedFragment, parentNodes: Seq[DescribedFragment], nodeLabel: Int) => f match {
-        case s @ ExecutedSpecStart(_,_,_)          => Some(f -> createDescription(className, suiteName=testName(s.name)))
-        case ExecutedText(t, _) if t.trim.nonEmpty => Some(f -> createDescription(className, suiteName=testName(t)))
-        case r @ ExecutedResult(_,_,_,_,_) => Some(f -> createDescription(className, label=nodeLabel.toString, testName=testName(r.text.toString, parentPath(parentNodes))) )
-        case other                         => None
+        case s @ ExecutedSpecStart(_,_,_)             => Some(f -> createDescription(className, suiteName=testName(s.name)))
+        case ExecutedText(t,_) if t.t.trim.nonEmpty   => Some(f -> createDescription(className, suiteName=testName(t.t)))
+        case r @ ExecutedResult(_,_,_,_,_)            => Some(f -> createDescription(className, label=nodeLabel.toString, testName=testName(r.text.toString, parentPath(parentNodes))) )
+        case other                                    => None
       }
   }
 

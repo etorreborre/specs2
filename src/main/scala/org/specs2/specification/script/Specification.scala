@@ -45,7 +45,7 @@ case class GroupsScript(title: String = "groups", isStart: Boolean = true, group
       val (resultFragments, previousGroupIndex, previousExampleIndex) = res
       val (fragments, newGroupIndex, newExampleIndex) =
         cur match {
-          case Text(t) => createExamples(groupTemplate.lines(t, this), previousGroupIndex, previousExampleIndex)
+          case Text(t) => createExamples(groupTemplate.lines(t.raw, this), previousGroupIndex, previousExampleIndex)
           case other   => (Fragments.createList(other), previousGroupIndex, previousExampleIndex)
         }
       (resultFragments append fragments.compact, newGroupIndex, newExampleIndex)

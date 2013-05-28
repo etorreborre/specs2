@@ -32,7 +32,7 @@ trait FragmentExecution {
    */
   def executeFragment(implicit arguments: Arguments): Function[Fragment, ExecutedFragment] = {
     val timer = new SimpleTimer().start
-    (f: Fragment) => catchAllOr(execute(f))((e: Throwable) => ExecutedResult(NoMarkup("Fragment evaluation error"), Error(e), timer.stop, f.location, Stats(Error(e))))
+    (f: Fragment) => catchAllOr(execute(f))((e: Throwable) => ExecutedResult(FormattedString("Fragment evaluation error"), Error(e), timer.stop, f.location, Stats(Error(e))))
   }
 
   /**
@@ -41,18 +41,18 @@ trait FragmentExecution {
    * A Form is executed separately by executing each row and cell, setting the results on each cell
    */
   def execute(f: Fragment)(implicit arguments: Arguments = Arguments()) = f match {
-    case Example(FormMarkup(form), _)     => {
+    case Example(FormFormattedString(form), _)     => {
       val timer = new SimpleTimer().start
       val executed = if (arguments.plan) form else form.executeForm
       val result = executed.execute
-      ExecutedResult(FormMarkup(executed), result, timer.stop, f.location, Stats(result).copy(timer = timer.stop))
+      ExecutedResult(FormFormattedString(executed), result, timer.stop, f.location, Stats(result).copy(timer = timer.stop))
     }
 	  case e @ Example(s, _)     => {
       val timer = new SimpleTimer().start
       val result = executeBody(e.execute)
       ExecutedResult(s, result, timer.stop, f.location, Stats(result).copy(timer = timer.stop))
     }
-	  case Text(s)                       => ExecutedText(s, f.location)
+	  case t @ Text(_)                   => ExecutedText(t, f.location)
 	  case Br()                          => ExecutedBr(f.location)
     case Tab(n)                        => ExecutedTab(n, f.location)
     case Backtab(n)                    => ExecutedBacktab(n, f.location)
@@ -67,9 +67,9 @@ trait FragmentExecution {
   private def executeStep(stepName: String, s: Executable, location: Location)(implicit args: Arguments) = {
     val timer = new SimpleTimer().start
     executeBody(s.execute) match {
-      case err if err.isError  => ExecutedResult(NoMarkup(stepName+" error"), err, timer.stop, location, Stats(err))
-      case f   if f.isFailure  => ExecutedResult(NoMarkup(stepName+" failure"), f, timer.stop, location, Stats(f))
-      case sk  @ Skipped(_, _) => ExecutedResult(NoMarkup("skipped "+stepName), sk, timer.stop, location, Stats(sk))
+      case err if err.isError  => ExecutedResult(FormattedString(stepName+" error"), err, timer.stop, location, Stats(err))
+      case f   if f.isFailure  => ExecutedResult(FormattedString(stepName+" failure"), f, timer.stop, location, Stats(f))
+      case sk  @ Skipped(_, _) => ExecutedResult(FormattedString("skipped "+stepName), sk, timer.stop, location, Stats(sk))
       case other               => ExecutedNoText(isAction = stepName == "action", new SimpleTimer, location)
     }
   }

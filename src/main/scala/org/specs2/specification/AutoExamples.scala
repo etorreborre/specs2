@@ -34,7 +34,7 @@ private[specs2]
 trait AutoExamples extends AutoExamplesLowImplicits { this: FragmentsBuilder =>
   /** specific implicits for datatables */
   implicit def dataTableFragments[T](result: =>DecoratedResult[T]): Fragments = Fragments.create(dataTableExample(result))
-  implicit def dataTableExample[T](result: =>execute.DecoratedResult[T]) = exampleFactory.newExample(EmptyMarkup(), result)
+  implicit def dataTableExample[T](result: =>execute.DecoratedResult[T]) = exampleFactory.newExample(FormattedString.empty, result)
 
   /** this syntax allows to declare auto examples with { ... }.eg in mutable specifications */
   implicit def aDataTableExample[T](expression: =>execute.DecoratedResult[T]): ToDataTableExample[T] = new ToDataTableExample(expression)
@@ -75,7 +75,7 @@ trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
   implicit def resultFragments(result: =>Result): Fragments = createExampleFragment(result)
 
   private[specs2] def createExampleFragment(result: =>Result, d: Int = 9, offset1: Int = -1,  offset2: Int = -1) =
-    Fragments.create(exampleFactory.newExample(CodeMarkup(getDescription(depth = d, startOffset = offset1, endOffset = offset2)), result))
+    Fragments.create(exampleFactory.newExample(FormattedString.code(getDescription(depth = d, startOffset = offset1, endOffset = offset2)), result))
 
   /** get the description from the source file */
   private[specs2] def getDescription(depth: Int = 9, startOffset: Int = -1, endOffset: Int = -1) =
@@ -88,7 +88,7 @@ trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
   implicit def resultExample(expression: =>execute.Result): Example = createExample(expression)
 
   private[specs2] def createExample(expression: =>execute.Result, depth: Int = exampleDepth): Example =
-    exampleFactory.newExample(CodeMarkup(getDescription(depth)), expression)
+    exampleFactory.newExample(FormattedString.code(getDescription(depth)), expression)
 
   implicit def aMatchResultExample(expression: =>MatchResult[_]): ToMatchResultExample = new ToMatchResultExample(expression)
   /** this syntax allows to declare auto examples with { ... }.eg in mutable specifications */
@@ -161,7 +161,7 @@ trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
   trait ExampleFragment {
     def fs: () => Fragments
     def ^[T](result: =>T)(implicit toResult: T => Result) = {
-      new FragmentsFragment(fs().add(exampleFactory.newExample(CodeMarkup(getDescription(depth = 11)), toResult(result))))
+      new FragmentsFragment(fs().add(exampleFactory.newExample(FormattedString.code(getDescription(depth = 11)), toResult(result))))
     }
   }
 }

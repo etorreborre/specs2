@@ -66,15 +66,22 @@ object ExecutedFragment {
 
 }
 
-case class ExecutedText(text: String, location: Location = new Location) extends ExecutedFragment {
+case class ExecutedText(textFragment: Text, location: Location = new Location) extends ExecutedFragment {
+  def text = textFragment.t
+  def flow = textFragment.flow
   def stats: Stats = Stats()
 }
-case class ExecutedResult(s: MarkupString, result: Result, timer: SimpleTimer, location: Location, statistics: Stats) extends ExecutedFragment { outer =>
-  def text(implicit args: Arguments) = s match {
-    case CodeMarkup(s) if (!result.expected.isEmpty && !args.fromSource) => CodeMarkup(result.expected)
-    case _                                                               => s
-  }
-  def hasDescription = s match { case EmptyMarkup() => false; case _ => true }
+object ExecutedText1 {
+  def unapply(executedText: ExecutedText) = Option(executedText.text)
+}
+case class ExecutedResult(s: FormattedString, result: Result, timer: SimpleTimer, location: Location, statistics: Stats) extends ExecutedFragment { outer =>
+  def text(implicit args: Arguments) =
+    if (s.formatting.markdown && !result.expected.isEmpty && !args.fromSource) s.copy(t = result.expected)
+    else s
+
+  def flow = s.flow
+  def hasDescription = s.isEmpty
+
   def stats = statistics.copy(timer = outer.timer)
   def message = result.message
 
@@ -86,7 +93,7 @@ case class ExecutedResult(s: MarkupString, result: Result, timer: SimpleTimer, l
 }
 private[specs2]
 object ExecutedResult {
-  def apply(desc: String, r: Result): ExecutedResult = ExecutedResult(NoMarkup(desc), r, new SimpleTimer, new Location, Stats())
+  def apply(desc: String, r: Result): ExecutedResult = ExecutedResult(FormattedString(desc), r, new SimpleTimer, new Location, Stats())
 }
 
 trait ExecutedStandardFragment extends ExecutedFragment {

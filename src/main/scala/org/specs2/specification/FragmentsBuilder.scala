@@ -33,14 +33,8 @@ trait FragmentsBuilder extends ExamplesFactory with ImplicitParameters { outer =
    * Methods for creating fragments
    */
   /** @return a Fragments object from a string */
-  implicit def textStart(s: String): Fragments = {
-    val lines = s.split("\n")
-    lines.lastOption match {
-      case Some(line) if line.trim.isEmpty => Fragments.createList(Text(lines.dropRight(1).mkString("\n")), Text("\n"+line))
-      case _                               => Fragments.createList(Text(s))
-    }
-
-  }
+  implicit def textStart(s: String): Fragments = Fragments.createList(Text(s))
+  
   /** @return create a Text Fragment from a string and allow it to be chained to other fragments */
   implicit def textFragment(s: String): FragmentsFragment = textStart(s)
   /**

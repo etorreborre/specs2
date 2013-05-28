@@ -102,13 +102,13 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
           wiki(if (link.afterText.isEmpty) "" else (" " +link.afterText+" ")))
 
   /** print some text with a status icon (with an ok class) */
-  def printTextWithIcon(message: MarkupString, iconName: String, level: Int = 0)  = printOkStatus(textWithIcon(message, iconName, level))
+  def printTextWithIcon(message: FormattedString, iconName: String, level: Int = 0)  = printOkStatus(textWithIcon(message, iconName, level))
   /** print some xml with a status icon (with an ok class) */
   def printOkXmlWithIcon(xml: NodeSeq, iconName: String, level: Int = 0)  = printOkStatus(xmlWithIcon(xml, iconName, level))
   /** print some xml with a status icon (with an ok class) */
   def printKoXmlWithIcon(xml: NodeSeq, iconName: String, level: Int = 0)  = printKoStatus(xmlWithIcon(xml, iconName, level))
   /** print an issue with a status icon (with a ko class) */
-  def printIssueWithIcon(message: MarkupString, iconName: String, level: Int = 0) = printKoStatus(textWithIcon(message, iconName, level))
+  def printIssueWithIcon(message: FormattedString, iconName: String, level: Int = 0) = printKoStatus(textWithIcon(message, iconName, level))
   /** print an exception message (with a ko class) */
   def printExceptionMessage(e: Result with ResultStackTrace, level: Int)          = printKoStatus(div("  "+e.message+" ("+e.location+")", level))
 
@@ -177,7 +177,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
 	protected def printKoStatus(n: NodeSeq) = print(koStatus(n))
 	protected def printStatus(n: NodeSeq, st: String) = print(status(n, st))
 
-  protected def textWithIcon(message: MarkupString, iconName: String, level: Int = 0) = div(<img src={icon(iconName)}/> ++ t(" ") ++ wiki(message.toHtml) ++ <br/>, level)
+  protected def textWithIcon(message: FormattedString, iconName: String, level: Int = 0) = div(<img src={icon(iconName)}/> ++ t(" ") ++ wiki(message) ++ <br/>, level)
   protected def xmlWithIcon(xml: NodeSeq, iconName: String, level: Int = 0) = div(<table class="exampleTable"><td><img src={icon(iconName)}/></td><td>{xml}</td></table>, level)
   protected def icon(t: String) = baseDir+"images/icon_"+t+"_sml.gif"
 
@@ -200,6 +200,8 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
   protected def id(a: Any) = System.identityHashCode(a).toString
   /** render some markup text as xhtml */
   protected def wiki(text: String) = textPrinter(text)
+  protected def wiki(text: FormattedString) =
+    if (text.formatting.markdown) textPrinter(text.raw) else text.toXml
 
   /**
    * Head of the html document. It contains:

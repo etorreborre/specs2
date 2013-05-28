@@ -52,11 +52,11 @@ trait NotifierExporting extends Exporting with Exporters {
       case f @ ExecutedSpecEnd(_,_,_)                                        => {
         notifier.specEnd(f.name, f.location.toString)
       }
-      case f @ ExecutedText(t, _)  if tree.subForest.isEmpty => if (args.canShow("*")) notifier.text(t, f.location.toString)
-      case f @ ExecutedText(t, _)                                           => {
-        if (args.canShow("*")) notifier.contextStart(t, f.location.toString)
+      case f @ ExecutedText(t,_)  if tree.subForest.isEmpty => if (args.canShow("*")) notifier.text(t.t, f.location.toString)
+      case f @ ExecutedText(t,_)                            => {
+        if (args.canShow("*")) notifier.contextStart(t.t, f.location.toString)
         tree.subForest.foreach(export)
-        if (args.canShow("*")) notifier.contextEnd(t, f.location.toString)
+        if (args.canShow("*")) notifier.contextEnd(t.t, f.location.toString)
       }
       case f @ ExecutedResult(s, r, t, l, st)                               => {
         if (args.canShow(r.status)) notifier.exampleStarted(s.toString, l.toString)

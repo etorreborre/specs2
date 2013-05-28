@@ -2,8 +2,7 @@ package org.specs2
 package reporter
 
 import scala.xml.{Elem, NodeSeq}
-import specification.{HtmlLink, Stats, SpecName}
-import text.MarkupString
+import specification.{HtmlLink, Stats, SpecName, FormattedString}
 import execute.{Details, ResultStackTrace, Result}
 import main.Diffs
 import control.StackTraceFilter
@@ -51,23 +50,23 @@ trait HtmlReportOutput {
   /** print a single link */
   def printLink(link: HtmlLink): HtmlReportOutput
   /** print some text with an icon */
-  def printTextWithIcon(message: MarkupString, iconName: String, level: Int = 0): HtmlReportOutput
+  def printTextWithIcon(message: FormattedString, iconName: String, level: Int = 0): HtmlReportOutput
   /** print an issue with an icon */
-  def printIssueWithIcon(message: MarkupString, iconName: String, level: Int = 0): HtmlReportOutput
+  def printIssueWithIcon(message: FormattedString, iconName: String, level: Int = 0): HtmlReportOutput
   /** print some ok xml with an icon */
   def printOkXmlWithIcon(xml: NodeSeq, iconName: String, level: Int = 0): HtmlReportOutput
   /** print some ok xml with an icon */
   def printKoXmlWithIcon(xml: NodeSeq, iconName: String, level: Int = 0): HtmlReportOutput
   /** print a success with an icon */
-  def printSuccess(message: MarkupString, level: Int = 0) = printTextWithIcon(message, "success",  level)
+  def printSuccess(message: FormattedString, level: Int = 0) = printTextWithIcon(message, "success",  level)
   /** print a failure with an icon */
-  def printFailure(message: MarkupString, level: Int = 0) = printIssueWithIcon(message, "failure", level)
+  def printFailure(message: FormattedString, level: Int = 0) = printIssueWithIcon(message, "failure", level)
   /** print an error with an icon */
-  def printError(message: MarkupString, level: Int = 0) = printIssueWithIcon(message, "error",   level)
+  def printError(message: FormattedString, level: Int = 0) = printIssueWithIcon(message, "error",   level)
   /** print a skipped fragment with an icon */
-  def printSkipped(message: MarkupString, level: Int = 0) = printTextWithIcon(message, "skipped",  level)
+  def printSkipped(message: FormattedString, level: Int = 0) = printTextWithIcon(message, "skipped",  level)
   /** print a pending fragment with an icon */
-  def printPending(message: MarkupString, level: Int = 0) = printTextWithIcon(message, "pending",  level)
+  def printPending(message: FormattedString, level: Int = 0) = printTextWithIcon(message, "pending",  level)
   /** print a success with an icon */
   def printSuccessXml(xml: NodeSeq, level: Int = 0) = printOkXmlWithIcon(xml, "success",  level)
   /** print a failure with an icon */

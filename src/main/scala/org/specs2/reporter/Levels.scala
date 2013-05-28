@@ -130,54 +130,29 @@ case object Levels {
   implicit val LevelsReducer: Reducer[ExecutedFragment, Levels[ExecutedFragment]] =
     Reducer.unitReducer { f: ExecutedFragment => Levels(executedFragmentToLevel(f)) }
 
-  val FlowLevelsReducer: Reducer[ExecutedFragment, Levels[ExecutedFragment]] =
-    Reducer.unitReducer { f: ExecutedFragment => Levels(executedFragmentToFlowLevel(f)) }
-
   implicit def executedFragmentToLevel: ExecutedFragment => Level[ExecutedFragment] = (f: ExecutedFragment) => f match {
-    case t @ ExecutedResult(_,_,_,_,_)     => Terminal(t)
-    case t @ ExecutedText(_, _)            => Indent(t)
-    case t @ ExecutedTab(n, _)             => Indent(t, n)
-    case t @ ExecutedBacktab(n, _)         => Unindent(t, n)
-    case t @ ExecutedSpecStart(_,_,_)      => Neutral(t)
-    case t @ ExecutedSpecEnd(_,_,_)        => Neutral(t)
-    case t @ ExecutedEnd( _)               => Reset(t)
-    case t                                 => Neutral(t)
-  }
-
-  implicit def executedFragmentToFlowLevel: ExecutedFragment => Level[ExecutedFragment] = (f: ExecutedFragment) => f match {
-    case t @ ExecutedResult(_,_,_,_,_)     => Terminal(t)
-    case t @ ExecutedText(text, _)         => Fixed(t, indentation(text))
-    case t @ ExecutedTab(n, _)             => Indent(t, n)
-    case t @ ExecutedBacktab(n, _)         => Unindent(t, n)
-    case t @ ExecutedSpecStart(_,_,_)      => Neutral(t)
-    case t @ ExecutedSpecEnd(_,_,_)        => Neutral(t)
-    case t @ ExecutedEnd( _)               => Reset(t)
-    case t                                 => Neutral(t)
+    case t @ ExecutedResult(_,_,_,_,_)                               => Terminal(t)
+    case t @ ExecutedText(Text(text), _)                             => if (text.flow) Fixed(t, indentation(text.raw)) else Indent(t)
+    case t @ ExecutedTab(n, _)                                       => Indent(t, n)
+    case t @ ExecutedBacktab(n, _)                                   => Unindent(t, n)
+    case t @ ExecutedSpecStart(_,_,_)                                => Neutral(t)
+    case t @ ExecutedSpecEnd(_,_,_)                                  => Neutral(t)
+    case t @ ExecutedEnd( _)                                         => Reset(t)
+    case t                                                           => Neutral(t)
   }
 
   implicit val LevelReducer: Reducer[ExecutedFragment, Level[ExecutedFragment]] =
     Reducer.unitReducer { f: ExecutedFragment => executedFragmentToLevel(f) }
 
   implicit def fragmentToLevel: Fragment => Level[Fragment] = (f: Fragment) => f match {
-    case t @ Example(_, _)         => Terminal(t)
-    case t @ Tab(n)                => Indent(t, n)
-    case t @ Backtab(n)            => Unindent(t, n)
-    case t @ Text(_)               => Indent(t)
-    case t @ SpecStart(_,_,_)      => Neutral(t)
-    case t @ SpecEnd(_,_)          => Neutral(t)
-    case t @ End()                 => Reset(t)
-    case t                         => Neutral(t)
-  }
-
-  implicit def fragmentToFlowLevel: Fragment => Level[Fragment] = (f: Fragment) => f match {
-    case t @ Example(_, _)         => Terminal(t)
-    case t @ Tab(n)                => Indent(t, n)
-    case t @ Backtab(n)            => Unindent(t, n)
-    case t @ Text(text)            => Fixed(t, indentation(text))
-    case t @ SpecStart(_,_,_)      => Neutral(t)
-    case t @ SpecEnd(_,_)          => Neutral(t)
-    case t @ End()                 => Reset(t)
-    case t                         => Neutral(t)
+    case t @ Example(_, _)                          => Terminal(t)
+    case t @ Tab(n)                                 => Indent(t, n)
+    case t @ Backtab(n)                             => Unindent(t, n)
+    case t @ Text(text)                             => if (text.flow) Fixed(t, indentation(text.raw))  else Indent(t)
+    case t @ SpecStart(_,_,_)                       => Neutral(t)
+    case t @ SpecEnd(_,_)                           => Neutral(t)
+    case t @ End()                                  => Reset(t)
+    case t                                          => Neutral(t)
   }
 
   private[specs2] def indentation(text: String) =
@@ -186,9 +161,6 @@ case object Levels {
 
   implicit val FragmentLevelsReducer: Reducer[Fragment, Levels[Fragment]] =
     Reducer.unitReducer { f: Fragment => Levels(fragmentToLevel(f)) }
-
-  val FragmentFlowLevelsReducer: Reducer[Fragment, Levels[Fragment]] =
-    Reducer.unitReducer { f: Fragment => Levels(fragmentToFlowLevel(f)) }
 }
 
 private[specs2]

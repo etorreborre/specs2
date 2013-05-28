@@ -16,7 +16,7 @@ trait Forms extends FormsBuilder with DecoratedProperties {
     lazy val form = tryOr(aForm.executeForm) { (e: Exception) =>
       Form("Initialisation error").tr(PropCell(Prop("", e.getMessage.notNull, (s: String, t: String) => execute.Error(e))("message")))
     }
-    new Example(FormMarkup(form), () => form.result.getOrElse(Success(""))) {
+    new Example(FormFormattedString(form), () => form.result.getOrElse(Success(""))) {
       override def matches(s: String) = true
     }
   }
@@ -25,14 +25,14 @@ trait Forms extends FormsBuilder with DecoratedProperties {
 object Forms extends Forms
 
 /**
- * The FormMarkup embeds the description of a form as text or as Xml
+ * The FormFormattedString embeds the description of a form as text or as Xml
  */
-class FormMarkup(val f: () => Form) extends MarkupString {
+class FormFormattedString(val f: () => Form) extends FormattedString {
   lazy val form = f()
-  def toXml = form.toXml
+  override def toXml = form.toXml
   override def toString = new FormCell(form).text
 }
-object FormMarkup {
-  def unapply(f: FormMarkup): Option[Form] = Some(f.form)
-  def apply(f: =>Form) = new FormMarkup(() => f)
+object FormFormattedString {
+  def unapply(f: FormFormattedString): Option[Form] = Some(f.form)
+  def apply(f: =>Form) = new FormFormattedString(() => f)
 }

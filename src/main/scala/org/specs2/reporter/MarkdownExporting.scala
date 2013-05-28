@@ -4,7 +4,6 @@ package reporter
 import main.{Diffs, Arguments}
 import specification._
 import scala.xml.{Elem, Xhtml, NodeSeq}
-import text.MarkupString
 import execute.{Details, ResultStackTrace, Result}
 import control.StackTraceFilter
 import java.io.Writer
@@ -55,8 +54,8 @@ case class MarkdownResultOutput(output: HtmlReportOutput)(implicit args: Argumen
   def printText(text: String = "", level: Int = 0)                                              = MarkdownResultOutput(output.printText(text, level))
   def printTextPar(text: String = "", level: Int = 0)                                           = print("\n").printText(text, level).print("\n")
   def printSpecStart(name: SpecName, stats: Stats)                                              = println("## "+name.title)
-  def printIssueWithIcon(message: MarkupString, iconName: String, level: Int = 0)               = MarkdownResultOutput(output.printIssueWithIcon(message, iconName, level))
-  def printTextWithIcon(message: MarkupString, iconName: String, level: Int = 0)                = MarkdownResultOutput(output.printTextWithIcon(message, iconName, level))
+  def printIssueWithIcon(message: FormattedString, iconName: String, level: Int = 0)            = MarkdownResultOutput(output.printIssueWithIcon(message, iconName, level))
+  def printTextWithIcon(message: FormattedString, iconName: String, level: Int = 0)             = MarkdownResultOutput(output.printTextWithIcon(message, iconName, level))
   def printOkXmlWithIcon(xml: NodeSeq, iconName: String, level: Int = 0)                        = MarkdownResultOutput(output.printOkXmlWithIcon(xml, iconName, level))
   def printKoXmlWithIcon(xml: NodeSeq, iconName: String, level: Int = 0)                        = MarkdownResultOutput(output.printKoXmlWithIcon(xml, iconName, level))
   def printExceptionMessage(e: Result with ResultStackTrace, level: Int)                        = MarkdownResultOutput(output.printExceptionMessage(e, level))

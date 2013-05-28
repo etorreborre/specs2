@@ -85,9 +85,29 @@ case class SpecEnd(specName: SpecName, isSeeOnlyLink: Boolean = false) extends F
 /**
  * Free text, describing the system to specify
  */
-case class Text(t: String) extends Fragment {
+case class Text(text: FormattedString) extends Fragment {
+  def t = text.raw
   override def matches(s: String) = t.matches(s)
+  def flow = text.flow
+  def add(other: Text) = copy(text.append(other.t))
 }
+object Text {
+  def apply(s: String): Text = new Text(FormattedString(s))
+}
+case class FormattedString(t: String = "", formatting: Formatting = Formatting(), isEmpty: Boolean = false) {
+  def raw: String = t
+  def append(s: String) = copy(t = t+s)
+  def withMarkdown = copy(formatting = formatting.copy(markdown = true))
+  def withFlow = copy(formatting = formatting.copy(flow = true))
+  def flow = formatting.flow
+  def toXml = if (formatting.markdown) <code class="prettyprint">{raw}</code> else if (isEmpty) <t></t> else <t>{raw}</t>
+}
+object FormattedString {
+  def code(t: String) = FormattedString(t).withMarkdown
+  def empty = FormattedString(isEmpty = true)
+}
+/** Formatting for Text fragments */
+case class Formatting(flow: Boolean = true, markdown: Boolean = false)
 
 /**
  * A Example is:
@@ -95,7 +115,7 @@ case class Text(t: String) extends Fragment {
  * - a description: some text, with possibly some markdown annotations for rendering code fragments (used in AutoExamples)
  * - a body: some executable code returning a Result
  */
-case class Example private[specification] (desc: MarkupString = NoMarkup(""), body: () => Result) extends Fragment with Executable with Isolable { outer =>
+case class Example private[specification] (desc: FormattedString = FormattedString(""), body: () => Result) extends Fragment with Executable with Isolable { outer =>
   val isolable = true
 
   /** internal specs2 variable to keep track of how an Example has been created */
@@ -138,8 +158,8 @@ case class Example private[specification] (desc: MarkupString = NoMarkup(""), bo
 }
 
 case object Example {
-  def apply[T : AsResult](desc: String, body: =>T) = new Example(NoMarkup(desc), () => AsResult(body))
-  def apply[T : AsResult](markup: MarkupString, body: =>T) = new Example(markup, () => AsResult(body))
+  def apply[T : AsResult](desc: String, body: =>T) = new Example(FormattedString(desc), () => AsResult(body))
+  def apply[T : AsResult](fs: FormattedString, body: =>T) = new Example(fs, () => AsResult(body))
 }
 
 /**

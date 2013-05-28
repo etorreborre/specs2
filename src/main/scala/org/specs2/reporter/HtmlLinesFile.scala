@@ -132,8 +132,8 @@ case class HtmlResult(r: ExecutedResult, stats: Stats = Stats(), level: Int = 0,
   def print(out: HtmlReportOutput) = {
     out.when(!args.xonly || !r.result.isSuccess) { output =>
       r match {
-        case ExecutedResult(FormMarkup(form),_,_,_,_) => printFormResult(form)(output)
-        case _                                        => printResult(r.text(args), r.result)(output)
+        case ExecutedResult(FormFormattedString(form),_,_,_,_) => printFormResult(form)(output)
+        case _                                                 => printResult(r.text(args), r.result)(output)
       }
     }
   }
@@ -153,23 +153,23 @@ case class HtmlResult(r: ExecutedResult, stats: Stats = Stats(), level: Int = 0,
     }
   }
 
-  private def printResult(desc: MarkupString, result: Result)(implicit out: HtmlReportOutput): HtmlReportOutput = {
+  private def printResult(desc: FormattedString, result: Result)(implicit out: HtmlReportOutput): HtmlReportOutput = {
     val outDesc = printDesc(desc, result)(out)
     implicit val doIt = !args.xonly
     result match {
       case f: Failure                                                    => printFailureDetails(f)(outDesc)
       case e: Error                                                      => printErrorDetails(e)(outDesc).printStack(e, indent + 1, args.traceFilter)
       case Success(_, _)                                                 => outDesc
-      case Skipped(_, _)                                                 => outDesc ?> (_.printSkipped(NoMarkup(result.message), indent))
-      case Pending(_)                                                    => outDesc ?> (_.printPending(NoMarkup(result.message), indent))
-      case DecoratedResult(table: DataTable, r) if (desc.toHtml.isEmpty) => printDataTableExample(table, r)(out)
+      case Skipped(_, _)                                                 => outDesc ?> (_.printSkipped(FormattedString(result.message), indent))
+      case Pending(_)                                                    => outDesc ?> (_.printPending(FormattedString(result.message), indent))
+      case DecoratedResult(table: DataTable, r) if (desc.isEmpty)        => printDataTableExample(table, r)(out)
       case DecoratedResult(table: DataTable, r) if (r.isSuccess)         => outDesc
       case DecoratedResult(table: DataTable, r)                          => printDataTable(table)(outDesc)
       case DecoratedResult(other, r)                                     => printResult(desc, r)(out)
     }
   }
 
-  def printDesc(desc: MarkupString, result: Result)(out: HtmlReportOutput): HtmlReportOutput = {
+  def printDesc(desc: FormattedString, result: Result)(out: HtmlReportOutput): HtmlReportOutput = {
     result match {
       case f: Failure                           => out.printFailure(desc, indent)
       case e: Error                             => out.printError(desc, indent)

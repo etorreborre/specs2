@@ -30,7 +30,7 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
 
   protected def handleFragment(implicit args: Arguments): ExecutedFragment => ExecutedFragment = (f: ExecutedFragment) => {
     f match {
-      case ExecutedResult(text: MarkupString, result: org.specs2.execute.Result, timer: SimpleTimer, _, _) => {
+      case ExecutedResult(text: FormattedString, result: org.specs2.execute.Result, timer: SimpleTimer, _, _) => {
         def handleResult(res: org.specs2.execute.Result) {
           res match {
             case Success(text,_)             => handler.handle(succeeded(text))
@@ -55,29 +55,26 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOu
   private var loggerNewLines = 0
 
   private def info(message: String)(implicit args: Arguments) {
-    if (args.report.flow) {
-      // if a newline has already been added by the logger, remove the first newline
-      if (message.startsWith("\n") && loggerNewLines > 0) {
-        buffer.append(message.removeFirst("\n"))
-        loggerNewLines = 0
-      }
-      else if (!message.isEmpty) {
-        val all = buffer.toString + message
-        val splitted = all.split("\n")
-        buffer.clear
-
-        // if the characters after the last newline are only whitespace
-        // buffer them and only display what comes before
-        splitted.lastOption.filter(_.forall(_ == ' ')).map { last =>
-          if (splitted.dropRight(1).nonEmpty) {
-            buffer.append(last)
-            splitted.dropRight(1).foreach(logInfo)
-          } else logInfo(all)
-        }.getOrElse(logInfo(all))
-        loggerNewLines += 1
-      }
+    // if a newline has already been added by the logger, remove the first newline
+    if (message.startsWith("\n") && loggerNewLines > 0) {
+      buffer.append(message.removeFirst("\n"))
+      loggerNewLines = 0
     }
-    else logInfo(message)
+    else if (!message.isEmpty) {
+      val all = buffer.toString + message
+      val splitted = all.split("\n")
+      buffer.clear
+
+      // if the characters after the last newline are only whitespace
+      // buffer them and only display what comes before
+      splitted.lastOption.filter(_.forall(_ == ' ')).map { last =>
+        if (splitted.dropRight(1).nonEmpty) {
+          buffer.append(last)
+          splitted.dropRight(1).foreach(logInfo)
+        } else logInfo(all)
+      }.getOrElse(logInfo(all))
+      loggerNewLines += 1
+    }
   }
 
   private def flushInfo(implicit args: Arguments) = if (args.report.flow) {

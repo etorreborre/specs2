@@ -129,7 +129,7 @@ Other elements
   "examples" - new group {
     eg := success
 
-    eg := Example(CodeMarkup("a == b"), success).desc.toHtml must startWith("<code")
+    eg := Example(FormattedString.code("a == b"), success).desc.toXml.toString must startWith("<code")
 
     eg := ("description" ! ((s: String) => s must_== "description")).body() must beSuccessful
 

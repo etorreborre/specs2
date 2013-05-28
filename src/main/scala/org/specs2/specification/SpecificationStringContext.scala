@@ -7,7 +7,7 @@ import execute._
 import text.NotNullStrings._
 import scala.reflect.macros.{Context => MContext}
 import reflect.Macros._
-import text.{CodeMarkup, NoMarkup, Interpolated}
+import text.Interpolated
 import control.Exceptions._
 import scala.xml.Elem
 import html.MarkdownLink
@@ -40,7 +40,7 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
       val first = texts.dropRight(1).mkString("", "\n", "\n")
       val autoExample = texts.lastOption.map(_.trim.isEmpty).getOrElse(false)
 
-      val description = if (autoExample) CodeMarkup(expression.trim) else NoMarkup(texts.lastOption.map(_.trim).getOrElse(""))
+      val description = if (autoExample) FormattedString(expression.trim, Formatting(flow = true, markdown = true)) else FormattedString(texts.lastOption.map(_.trim).getOrElse(""), Formatting(flow = true, markdown = false))
       val before = first + indent
 
       val result =

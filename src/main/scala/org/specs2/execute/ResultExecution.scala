@@ -32,7 +32,7 @@ trait ResultExecution { outer =>
       case e: Throwable                                                      => Error(e)
     }
 
-  /** execute a Result rethrow any exception or throws an exception if it is not a success */
+  /** execute a Result and rethrow any exception or throws an exception if it is not a success */
   def effectively(result: =>Result): Result =
     try {
       result match {

@@ -115,7 +115,7 @@ trait JUnitReporter extends ExecutionOrigin with DefaultReporter with Exporters 
 /**
  * Descriptions for a seq of Fragments to execute
  */
-class JUnitDescriptionsFragments(className: String)(implicit reducer: Reducer[Fragment, Levels[Fragment]]) extends JUnitDescriptions[Fragment](className)(reducer) {
+class JUnitDescriptionsFragments(className: String) extends JUnitDescriptions[Fragment](className)(Levels.FragmentLevelsReducer) {
   def initialFragment(className: String) = Text(className)
   /**
   * This function is used to map each node in a Tree[Fragment] to a pair of
@@ -127,13 +127,13 @@ class JUnitDescriptionsFragments(className: String)(implicit reducer: Reducer[Fr
   */
   def mapper(className: String): (Fragment, Seq[DescribedFragment], Int) => Option[DescribedFragment] =
     (f: Fragment, parentNodes: Seq[DescribedFragment], nodeLabel: Int) => f match {
-      case s @ SpecStart(_,_,_)       => Some(f -> createDescription(className, suiteName=testName(s.name)))
-      case Text(t) if t.trim.nonEmpty => Some(f -> createDescription(className, suiteName=testName(t)))
-      case Text(t)                    => None
-      case Example(description, body) => Some(f -> createDescription(className, label=nodeLabel.toString, testName=testName(description.toString, parentPath(parentNodes))))
-      case Step(action,_)             => Some(f -> createDescription(className, label=nodeLabel.toString, testName="step"))
-      case Action(action)             => Some(f -> createDescription(className, label=nodeLabel.toString, testName="action"))
-      case other                      => None
+      case s @ SpecStart(_,_,_)        => Some(f -> createDescription(className, suiteName=testName(s.name)))
+      case Text(t) if t.raw.trim.nonEmpty => Some(f -> createDescription(className, suiteName=testName(t.raw)))
+      case Text(t)                        => None
+      case Example(description, body)     => Some(f -> createDescription(className, label=nodeLabel.toString, testName=testName(description.toString, parentPath(parentNodes))))
+      case Step(action,_)                 => Some(f -> createDescription(className, label=nodeLabel.toString, testName="step"))
+      case Action(action)                 => Some(f -> createDescription(className, label=nodeLabel.toString, testName="action"))
+      case other                          => None
     }
 }
 /**

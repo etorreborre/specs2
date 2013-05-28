@@ -47,6 +47,7 @@ trait SpecificationFeatures extends FragmentsBuilder with SpecificationStringCon
    with FormattingFragments
    with StandardResults
    with StandardMatchResults
+   with Tags
    with TimeConversions
    with PendingUntilFixed
    with Contexts

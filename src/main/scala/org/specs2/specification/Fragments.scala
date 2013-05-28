@@ -29,7 +29,8 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   /** append the fragments from fs, appending the text fragments if this object ends with Text and fs starts with Text */
   def append(fs: Fragments): Fragments =
     (middle, fs.middle) match {
-      case (begin :+ Text(t1), Text(t2) +: rest) if !fs.isLink && !t2.trim.isEmpty => ((new FragmentsFragment(this.copy(middle = Seq())))) ^ fs.copy(middle = begin ++ (Text(t1+t2) +: rest))
+      case (begin :+ (txt1 @ Text(t1)), (txt2 @ Text(t2)) +: rest) if !fs.isLink && !t2.raw.trim.isEmpty && t1.formatting == t2.formatting =>
+        ((new FragmentsFragment(this.copy(middle = Seq())))) ^ fs.copy(middle = begin ++ (txt1.add(txt2) +: rest))
       case _                                                                       => (new FragmentsFragment(this)) ^ fs
     }
 
@@ -103,9 +104,9 @@ object Fragments {
   }
 
   /** @return true if the Fragment is a Text */
-  def isText: Function[Fragment, Boolean] = { case Text(_) => true; case _ => false }
+  def isText: Function[Fragment, Boolean] = { case t: Text => true; case _ => false }
   /** @return the text if the Fragment is a Text */
-  def isSomeText: PartialFunction[Fragment, Text] = { case t @ Text(_) => t }
+  def isSomeText: PartialFunction[Fragment, Text] = { case t: Text => t }
   /** @return true if the Fragment is an Example */
   def isExample: Function[Fragment, Boolean] = { case Example(_, _) => true; case _ => false }
   /** @return the example if the Fragment is an Example */
