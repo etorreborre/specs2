@@ -156,10 +156,10 @@ case object Levels {
   }
 
   private[specs2] def startIndentation(text: String) =
-    text.split("\n").filter(_.trim.nonEmpty).headOption.getOrElse("").takeWhile(_ == ' ').size
+    text.split("\n").filter(_.nonEmpty).headOption.getOrElse("").takeWhile(_ == ' ').size
 
   private[specs2] def endIndentation(text: String) =
-    text.split("\n").filter(_.trim.nonEmpty).lastOption.getOrElse("").takeWhile(_ == ' ').size
+    text.split("\n").lastOption.getOrElse("").takeWhile(_ == ' ').size
 
   implicit val FragmentLevelsReducer: Reducer[Fragment, Levels[Fragment]] =
     Reducer.unitReducer { f: Fragment => Levels(fragmentToLevel(f)) }

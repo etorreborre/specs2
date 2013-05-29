@@ -101,6 +101,7 @@ case class FormattedString(t: String = "", formatting: Formatting = Formatting()
   def withFlow = copy(formatting = formatting.copy(flow = true))
   def flow = formatting.flow
   def toXml = if (formatting.markdown) <code class="prettyprint">{raw}</code> else if (isEmpty) <t></t> else <t>{raw}</t>
+  override def toString = raw
 }
 object FormattedString {
   def code(t: String) = FormattedString(t).withMarkdown
