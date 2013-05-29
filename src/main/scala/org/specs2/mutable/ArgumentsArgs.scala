@@ -27,9 +27,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
     isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
     xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
     showOnly:      ArgProperty[String]            = ArgProperty[String](),
-    color:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    noindent:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    markdown:      ArgProperty[Boolean]           = ArgProperty[Boolean]()) =
+    color:         ArgProperty[Boolean]           = ArgProperty[Boolean]()) =
 
     addArguments(super.args(
       ex,
@@ -45,9 +43,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
       isolated,
       xonly,
       showOnly,
-      color,
-      noindent,
-      markdown))
+      color))
 
 
   private[specs2] class ArgumentsNamespaceMutable extends ArgumentsNamespace{
@@ -99,11 +95,8 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
       failtrace:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
       color:             ArgProperty[Boolean]           = ArgProperty[Boolean](),
       colors:            ArgProperty[Colors]            = ArgProperty[Colors](),
-      noindent:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
       showtimes:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
       offset:            ArgProperty[Int]               = ArgProperty[Int](),
-      flow:              ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      markdown:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
       debugMarkdown:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
       pegdownExtensions: ArgProperty[Int]               = ArgProperty[Int](),
       streaming:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
@@ -119,11 +112,8 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
         failtrace,
         color,
         colors,
-        noindent,
         showtimes,
         offset,
-        flow,
-        markdown,
         debugMarkdown,
         pegdownExtensions,
         streaming,

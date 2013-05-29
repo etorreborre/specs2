@@ -47,6 +47,8 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
   def printPar(text: String = "")                     = printOkStatus(<p>{wiki(text)}</p>)
   /** print some text */
   def printText(text: String = "", level: Int = 0)    = printOkStatus(div(wiki(text), level))
+  /** print some text */
+  def printText(text: FormattedString, level: Int)    = printOkStatus(div(wiki(text), level))
   /** print some text in a paragraph */
   def printTextPar(text: String = "", level: Int = 0) = printOkStatus(p(wiki(text), level))
 
@@ -189,8 +191,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
 	protected def div(string: String, level: Int): NodeSeq  = div(t(string), level)
   /** create a div around a NodeSeq to be displayed at a certain level of indentation */
 	protected def div(n: NodeSeq, level: Int, hidden: Boolean = false): NodeSeq =
-    if (args.report.flow) <div  style={"display: "+(if (hidden) "none" else "show")+s"; text-indent:${level*3}px;"}>{n}</div>
-    else                  <div class={"level"+level} style={"display: "+(if (hidden) "none" else "show")}>{n}</div>
+    <div  style={"display: "+(if (hidden) "none" else "show")+s"; text-indent:${level*5}px;"}>{n}</div>
 
   /** create a paragraph around a NodeSeq to be displayed at a certain level of indentation */
 	protected def p(n: NodeSeq, level: Int) = <p class={"level"+level}>{n}</p>
@@ -202,6 +203,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
   protected def wiki(text: String) = textPrinter(text)
   protected def wiki(text: FormattedString) =
     if (text.formatting.markdown) textPrinter(text.raw) else text.toXml
+
 
   /**
    * Head of the html document. It contains:

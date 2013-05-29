@@ -26,9 +26,7 @@ trait ArgumentsArgs extends ArgProperties {
     isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
     xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
     showOnly:      ArgProperty[String]            = ArgProperty[String](),
-    color:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    noindent:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    markdown:      ArgProperty[Boolean]           = ArgProperty[Boolean]()) =
+    color:         ArgProperty[Boolean]           = ArgProperty[Boolean]()) =
 
      (new ArgumentsNamespace).select(
             ex         = ex,
@@ -46,9 +44,7 @@ trait ArgumentsArgs extends ArgProperties {
      (new ArgumentsNamespace).report(
               xonly      = xonly,
               showOnly   = showOnly,
-              color      = color,
-              noindent   = noindent,
-              markdown   = markdown)
+              color      = color)
 
 
   private[specs2] class ArgumentsNamespace {
@@ -100,11 +96,8 @@ trait ArgumentsArgs extends ArgProperties {
       failtrace:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
       color:             ArgProperty[Boolean]           = ArgProperty[Boolean](),
       colors:            ArgProperty[Colors]            = ArgProperty[Colors](),
-      noindent:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
       showtimes:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
       offset:            ArgProperty[Int]               = ArgProperty[Int](),
-      flow:              ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      markdown:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
       debugMarkdown:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
       pegdownExtensions: ArgProperty[Int]               = ArgProperty[Int](),
       streaming:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
@@ -119,11 +112,8 @@ trait ArgumentsArgs extends ArgProperties {
                        failtrace.toOption,
                        color.toOption,
                        colors.toOption,
-                       noindent.toOption,
                        showtimes.toOption,
                        offset.toOption,
-                       flow.toOption,
-                       markdown.toOption,
                        debugMarkdown.toOption,
                        pegdownExtensions.toOption,
                        streaming.toOption,

@@ -14,7 +14,7 @@ import control.Specs2ForkJoin
 trait AllExporting extends Reporter with Exporters {
 
   override def report(spec: SpecificationStructure)(implicit arguments: Arguments): ExecutedSpecification =
-    spec |> select |> sequence |> execute |> export
+    spec |> format |> select |> sequence |> execute |> export
 
   // if the results need to be exported to the console, we first do that making sure that the storing of statistics occurs in
   // parallel to the export. This way, the results are displayed as soon as executed

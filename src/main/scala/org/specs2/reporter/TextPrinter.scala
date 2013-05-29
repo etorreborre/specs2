@@ -81,7 +81,7 @@ trait TextPrinter {
      * If the text contains several lines, each line is indented
      */
     protected def leveledText(s: String, level: Int)(implicit args: Arguments): String = {
-      val indent = " "*level
+      val indent = "  "*level
       s.split("\n").map(indent+_).mkString("\n")
     }
   }
@@ -179,7 +179,7 @@ trait TextPrinter {
     def statusAndDescription(text: String, result: Result, timer: SimpleTimer, isDataTable: Boolean)(implicit args: Arguments, out: ResultOutput) = {
       val textLines = text.split("\n")
       val firstLine = textLines.headOption.getOrElse("")
-      val indentation = firstLine.takeWhile(_ == ' ').dropRight(2)
+      val indentation = firstLine.takeWhile(_ == ' ').drop(2)
       def time = if (args.showtimes) " ("+timer.time+")" else ""
 
       val decoratedFirstLine = indentation + out.status(result)(args) + firstLine.dropWhile(_ == ' ') + time

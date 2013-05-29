@@ -23,8 +23,6 @@ class TextPrinterSpec extends Specification with DataTables with Tags { def is =
  =========
 
  Several arguments can be used to modify the text presentation
-   by default the Text and the examples are automatically indented                                ${prez().e1}
-   if noindent = true then there is no automatic indenting                                        ${prez().e2}
    if xonly = true
      text is not shown                                                                            ${xonlyargs().e1}
      successful examples are not shown                                                            ${xonlyargs().e2}
@@ -128,20 +126,6 @@ class TextPrinterSpec extends Specification with DataTables with Tags { def is =
   val tableOk: Example    = tOk
   val tableKo: Example    = tKo
   val tableError: Example = tError
-
-  case class prez() {
-    val noindent = args(noindent = true)
-    
-    def e1 = print(t1 ^ ex1 ^ ex2) must 
-             contain(allOf("t1",
-                     "+ e1",
-                     "+ e2"))
-    
-    def e2 = print(noindent ^ t1 ^ "  e1"!success ^ " e2"! success) must 
-             contain(allOf("t1",
-                     "+ e1",
-                     "+ e2"))
-  }
 
   case class xonlyargs() {
     val arguments: Arguments = xonly

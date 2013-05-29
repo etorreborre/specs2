@@ -108,13 +108,13 @@ case object Levels {
   implicit def LevelMonoid[T]: Monoid[Level[T]] = new Monoid[Level[T]] {
     def append(l1: Level[T], l2: =>Level[T]) = {
       (l1, l2) match {
-        case (LevelZero(),    _) => l2
-        case (_,    LevelZero()) => l1
-        case (Fixed(_, n),   _)  => l2.setLevel(n+1)
-        case (Indent(_, n),   _) => l2.setLevel(l1.lv + n)
-        case (Unindent(_, n), _) => l2.setLevel(l1.lv - n)
-        case (Reset(_),       _) => l2.reset
-        case (_,              _) => l2.setLevel(l1.lv)
+        case (LevelZero(),    _)   => l2
+        case (_,    LevelZero())   => l1
+        case (Fixed(_, _, end), _) => l2.setLevel(end)
+        case (Indent(_, n),   _)   => l2.setLevel(l1.lv + n)
+        case (Unindent(_, n), _)   => l2.setLevel(l1.lv - n)
+        case (Reset(_),       _)   => l2.reset
+        case (_,              _)   => l2.setLevel(l1.lv)
       }
     }
     val zero: Level[T] = LevelZero[T]()
@@ -132,7 +132,7 @@ case object Levels {
 
   implicit def executedFragmentToLevel: ExecutedFragment => Level[ExecutedFragment] = (f: ExecutedFragment) => f match {
     case t @ ExecutedResult(_,_,_,_,_)                               => Terminal(t)
-    case t @ ExecutedText(Text(text), _)                             => if (text.flow) Fixed(t, indentation(text.raw)) else Indent(t)
+    case t @ ExecutedText(Text(text), _)                             => if (text.flow) Fixed(t, startIndentation(text.raw), endIndentation(text.raw)) else Indent(t)
     case t @ ExecutedTab(n, _)                                       => Indent(t, n)
     case t @ ExecutedBacktab(n, _)                                   => Unindent(t, n)
     case t @ ExecutedSpecStart(_,_,_)                                => Neutral(t)
@@ -148,16 +148,18 @@ case object Levels {
     case t @ Example(_, _)                          => Terminal(t)
     case t @ Tab(n)                                 => Indent(t, n)
     case t @ Backtab(n)                             => Unindent(t, n)
-    case t @ Text(text)                             => if (text.flow) Fixed(t, indentation(text.raw))  else Indent(t)
+    case t @ Text(text)                             => if (text.flow) Fixed(t, startIndentation(text.raw), endIndentation(text.raw)) else Indent(t)
     case t @ SpecStart(_,_,_)                       => Neutral(t)
     case t @ SpecEnd(_,_)                           => Neutral(t)
     case t @ End()                                  => Reset(t)
     case t                                          => Neutral(t)
   }
 
-  private[specs2] def indentation(text: String) =
-    if (text.trim.isEmpty) text.split("\n").lastOption.getOrElse("").takeWhile(_ == ' ').size
-    else                   text.split("\n").filter(_.trim.nonEmpty).headOption.getOrElse("").takeWhile(_ == ' ').size
+  private[specs2] def startIndentation(text: String) =
+    text.split("\n").filter(_.trim.nonEmpty).headOption.getOrElse("").takeWhile(_ == ' ').size
+
+  private[specs2] def endIndentation(text: String) =
+    text.split("\n").filter(_.trim.nonEmpty).lastOption.getOrElse("").takeWhile(_ == ' ').size
 
   implicit val FragmentLevelsReducer: Reducer[Fragment, Levels[Fragment]] =
     Reducer.unitReducer { f: Fragment => Levels(fragmentToLevel(f)) }
@@ -185,10 +187,10 @@ case class Indent[T](value: T, n: Int = 1) extends Level(Some(value)) {
   def setLevel(l: Int) = new Indent(value, n) { override val lv = l }
 }
 private[specs2]
-case class Fixed[T](value: T, n: Int = 1) extends Level(Some(value)) {
+case class Fixed[T](value: T, start: Int = 0, end: Int = 0) extends Level(Some(value)) {
   type L = Fixed[T]
-  override def level: Int = n
-  def setLevel(l: Int) = new Fixed(value, n) { override val lv = l }
+  override def level: Int = start
+  def setLevel(l: Int) = new Fixed(value, start, end) { override val lv = l }
 }
 private[specs2]
 case class Unindent[T](value: T, n: Int = 1) extends Level(Some(value)) {

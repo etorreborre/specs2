@@ -9,12 +9,7 @@ import text._
  * This trait provides shortcuts for frequently used arguments
  */
 trait ArgumentsShortcuts { this: ArgumentsArgs =>
-  /**
-   * @return arguments for a literate specification: no auto indent and a sequential
-   *         execution
-   */
-  def literate: Arguments = sequential <| noindent
-  /**
+    /**
    * @return arguments for a specification where examples must be executed sequentially
    */
   def sequential: Arguments = args(sequential = true)
@@ -49,10 +44,6 @@ trait ArgumentsShortcuts { this: ArgumentsArgs =>
    */
   def stopOnSkip: Arguments = args(stopOnSkip = true)
   /**
-   * shortcut to avoid automatic indentation
-   */
-  def noindent: Arguments = args(noindent = true)
-  /**
    * shortcut to avoid colored output
    */
   def nocolor: Arguments = args(color = false)
@@ -60,10 +51,6 @@ trait ArgumentsShortcuts { this: ArgumentsArgs =>
    * shortcut to set new Colors
    */
   def colors(c: Colors): Arguments = args.report(colors = c)
-  /**
-   * shortcut to not executing the text and avoid automatic indentation
-   */
-  def freetext: Arguments = plan <| noindent
   /**
    * shortcut to print only failures and errors
    */

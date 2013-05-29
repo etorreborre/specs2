@@ -162,8 +162,8 @@ class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatche
   }
 
   case class indentation() {
-    def e1 = Levels.indentation("\n    ") === 4
-    def e2 = Levels.indentation("    \n  hello") === 2
+    def e1 = Levels.startIndentation("\n    ") === 4
+    def e2 = Levels.endIndentation("    \n  hello") === 2
   }
 
   implicit def params = set(maxSize = 5, minTestsOk = 1000)

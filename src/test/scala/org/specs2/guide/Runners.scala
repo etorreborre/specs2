@@ -62,8 +62,6 @@ From inside a specification, the available arguments are the following:
  *`xonly`   *        | false                                    | only report failures and errors
  *`showOnly`*        | ""                                       | only report some examples based on their status
  *`color`   *        | true                                     | use colors in the output (`nocolor` can also be used on the command line)
- *`noindent`*        | false                                    | don't indent automatically text and examples
- *`markdown`*        | true                                     | interpret text as Markdown in the html reporter
  `pegdownExtensions` | `org.pegdown.Extensions.ALL`             | specifies the extensions used when processing Markdown content with the pegdown library; the value is an `Int` that is determinded by combining the possible values from `org.pegdown.Extensions` with a logical `AND`; note that SMARTS and QUOTES are always disabled for now
  `failtrace`         | false                                    | report the stacktrace for failures
  `colors`            | `org.specs2.text.SmartColors`            | define alternative colors (replace failureColor from being yellow to magenta for example)
@@ -106,9 +104,6 @@ There are some available shortcuts for some arguments
  `isolated`                                                            | `args(isolated=true)`                                                                 |                                                                                                    |
  `xonly`                                                               | `args(xonly=true)`                                                                    |                                                                                                  |
  `showOnly(status: String)`                                            | `args(showOnly=status)`                                                               |                                                                                                |
- `noindent`                                                            | `args(noindent=true)`                                                                 |                                                                                                  |
- `literate`                                                            | `args(noindent=true, sequential=true)`                                                | for specifications where text must not be indented and examples be executed in order             |
- `freetext`                                                            | `args(plan=true, noindent=true)`                                                      | for specifications with no examples at all and free display of text                              |
  `descFromExpectations`                                                | `args.report(fromSource=false)`                                                              | create the example description for the ok message of the expectation instead of the source file  |
  `fullStackTrace`                                                      | `args.report(traceFilter=NoStackTraceFilter)`                                                | the stacktraces are not filtered                                                                 |
  `diffs(show, separators, triggerSize, shortenSize, diffRatio, full)`  | `args.report(diffs=SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full)`  | to display the differences when doing equality comparison                                        |
@@ -224,9 +219,7 @@ On the command line you can pass the following arguments:
  `failtrace`         | boolean                 |                                                                         |
  `color`             | boolean                 |                                                                         |
  `colors`            | map                     | e.g. text:be, failure:m (see the Colors section)                        |
- `noindent`          | boolean                 |                                                                         |
  `showtimes`         | boolean                 |                                                                         |
- `markdown`          | boolean                 |                                                                         |
  `debugmarkdown`     | boolean                 |                                                                         |
  `pegdownExtensions` | int                     | flags from `org.pegdown.Extensions` combined with logical `AND`         | 
  `fromsource`        | boolean                 |                                                                         |

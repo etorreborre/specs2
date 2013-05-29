@@ -9,14 +9,13 @@ import scala.reflect.macros.{Context => MContext}
 import reflect.Macros._
 import text.Interpolated
 import control.Exceptions._
-import scala.xml.Elem
 import html.MarkdownLink
-import specification.TagsFragments.{TaggedAs, AsSection, TaggingFragment}
+import specification.TagsFragments._
 
 /**
  * Allow to use fragments inside interpolated strings starting with s2 in order to build the specification content
  */
-trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
+trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs with FormattingTags =>
 
   implicit def stringIsSpecPart(s: =>String): SpecPart = new SpecPart {
     def append(fs: Fragments, text: String, expression: String = "") = {
@@ -105,10 +104,8 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs =>
       }.getOrElse((res, text))
       variable.append(res1, text1, expression)
     }
-    interpolatedArguments ^ texts.lastOption.map(t => fragments append textFragment(t).fragments).getOrElse(fragments)
+    flowSection ^ markdownSection ^ texts.lastOption.map(t => fragments append textFragment(t).fragments).getOrElse(fragments) ^ flowSection ^ markdownSection
   }
-
-  def interpolatedArguments = args.report(noindent = true, flow = true)
 }
 
 object S2Macro {

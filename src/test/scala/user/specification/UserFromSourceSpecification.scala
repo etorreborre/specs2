@@ -3,7 +3,7 @@ package specification
 
 import org.specs2.SpecificationWithJUnit
 
-class UserFromSourceSpecification extends org.specs2.Specification { def is = noindent^
+class UserFromSourceSpecification extends org.specs2.Specification { def is =
                                                                                       p^
   "this is a one-liner"                                                               ^
   { 1 must_== 1 }                                                                     ^
@@ -18,7 +18,7 @@ class UserFromSourceSpecification extends org.specs2.Specification { def is = no
   def `a call to an example` = success
 }
 
-class DifferentSpecification extends org.specs2.Specification { def is = noindent^
+class DifferentSpecification extends org.specs2.Specification { def is =
   "first example" ^
   { 1 must_== 1 } ^
                   end

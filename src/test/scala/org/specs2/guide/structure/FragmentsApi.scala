@@ -160,16 +160,6 @@ Some formatting elements can be combined:
  * `endbr` is `end ^ br`
  * `endp` is `end ^ p`  (same effect as `endbr` but shorter :-))
 
-#### Turning-off the automatic layout
-
-You can turn off that automatic layout by adding the `noindent` argument at the beginning of your specification: ${snippet{
-
-class MySpecWithNoIndent extends Specification {
-  def is = noindent ^ "..."
-}
-
-}}
-
 ### Unit specification
 
 Formatting fragments can be used in a unit specification as well. 2 forms are supported, either as a single declaration: ${snippet{

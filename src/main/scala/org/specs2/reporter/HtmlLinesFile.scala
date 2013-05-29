@@ -88,7 +88,7 @@ sealed trait HtmlLine {
   def level: Int
   def args: Arguments
   def stats: Stats
-  lazy val indent = args.offset + (if (args.noindent && !args.report.flow) 0 else level)
+  def indent: Int = level
   def print(out: HtmlReportOutput): HtmlReportOutput
   def set(stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()): HtmlLine
 }
@@ -116,7 +116,8 @@ case class HtmlSpecStart(start: ExecutedSpecStart, stats: Stats = Stats(), level
 
 private[specs2]
 case class HtmlText(t: ExecutedText, stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) extends HtmlLine {
-  def print(out: HtmlReportOutput) = out.when(!args.xonly)(_.printText(t.text, indent))
+  override def indent = if (t.flow) level else (level * 2)
+  def print(out: HtmlReportOutput) = out.when(!args.xonly)(_.printText(t.formattedString, indent))
   def set(stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) = copy(stats = stats, level = level, args = args)
   override def toString = t.toString
 }
@@ -137,7 +138,7 @@ case class HtmlResult(r: ExecutedResult, stats: Stats = Stats(), level: Int = 0,
       }
     }
   }
-	
+
   private def printFormResult(form: Form)(out: HtmlReportOutput): HtmlReportOutput =
     if (form.execute.isSuccess) out.printOkForm(form.toXml(args))
     else                        out.printKoForm(form.toXml(args))
@@ -197,7 +198,7 @@ case class HtmlResult(r: ExecutedResult, stats: Stats = Stats(), level: Int = 0,
 
   def set(stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) = copy(stats = stats, level = level, args = args)
   override def toString = r.toString
-   
+
 }
 
 private[specs2]
@@ -205,7 +206,7 @@ case class HtmlSpecEnd(end: ExecutedSpecEnd, stats: Stats = Stats(), level: Int 
   def print(out: HtmlReportOutput) = {
     implicit val doIt = (!args.xonly || stats.hasFailuresOrErrors) && stats.hasExpectations && (stats eq end.stats) && args.canShow("1")
     implicit val arguments = args
-    
+
     out ?> (_.printBr.printStats(end.specName, end.stats))
   }
   def set(stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) = copy(stats = stats, level = level, args = args)

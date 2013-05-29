@@ -42,5 +42,5 @@ object HtmlLink {
 
   def apply(s: SpecificationStructure): SpecHtmlLink = HtmlLink(s.content)
   def apply(f: Fragments): SpecHtmlLink              = HtmlLink(f.specName)
-  def apply(specName: SpecName)                      = SpecHtmlLink(specName, linkText = specName.name)
+  def apply(specName: SpecName)                      = SpecHtmlLink(specName, linkText = specName.title)
 }

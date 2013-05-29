@@ -67,6 +67,7 @@ object ExecutedFragment {
 }
 
 case class ExecutedText(textFragment: Text, location: Location = new Location) extends ExecutedFragment {
+  def formattedString = textFragment.text
   def text = textFragment.t
   def flow = textFragment.flow
   def stats: Stats = Stats()

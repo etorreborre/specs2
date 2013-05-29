@@ -37,54 +37,56 @@ trait HtmlReportOutput {
 	def printBr: HtmlReportOutput
   /** print a Text fragment inside a paragraph */
   def printPar(text: String = ""): HtmlReportOutput
-  /** print a Text fragment with a given level of indentation */
-  def printText(text: String = "", level: Int = 0): HtmlReportOutput
-  /** print a Text fragment with a given level of indentation, in a paragraph */
-  def printTextPar(text: String = "", level: Int = 0): HtmlReportOutput
+  /** print a Text fragment with a given indent of indentation */
+  def printText(text: FormattedString, indent: Int): HtmlReportOutput
+  /** print a Text fragment with a given indent of indentation */
+  def printText(text: String = "", indent: Int = 0): HtmlReportOutput
+  /** print a Text fragment with a given indent of indentation, in a paragraph */
+  def printTextPar(text: String = "", indent: Int = 0): HtmlReportOutput
 
   /** print the specification start fragment */
   def printSpecStart(name: SpecName, stats: Stats): HtmlReportOutput
 
   /** print a link to another specification */
-  def printLink(link: HtmlLink, level: Int, stats: Stats = Stats(), hidden: Boolean = false): HtmlReportOutput
+  def printLink(link: HtmlLink, indent: Int, stats: Stats = Stats(), hidden: Boolean = false): HtmlReportOutput
   /** print a single link */
   def printLink(link: HtmlLink): HtmlReportOutput
   /** print some text with an icon */
-  def printTextWithIcon(message: FormattedString, iconName: String, level: Int = 0): HtmlReportOutput
+  def printTextWithIcon(message: FormattedString, iconName: String, indent: Int = 0): HtmlReportOutput
   /** print an issue with an icon */
-  def printIssueWithIcon(message: FormattedString, iconName: String, level: Int = 0): HtmlReportOutput
+  def printIssueWithIcon(message: FormattedString, iconName: String, indent: Int = 0): HtmlReportOutput
   /** print some ok xml with an icon */
-  def printOkXmlWithIcon(xml: NodeSeq, iconName: String, level: Int = 0): HtmlReportOutput
+  def printOkXmlWithIcon(xml: NodeSeq, iconName: String, indent: Int = 0): HtmlReportOutput
   /** print some ok xml with an icon */
-  def printKoXmlWithIcon(xml: NodeSeq, iconName: String, level: Int = 0): HtmlReportOutput
+  def printKoXmlWithIcon(xml: NodeSeq, iconName: String, indent: Int = 0): HtmlReportOutput
   /** print a success with an icon */
-  def printSuccess(message: FormattedString, level: Int = 0) = printTextWithIcon(message, "success",  level)
+  def printSuccess(message: FormattedString, indent: Int = 0) = printTextWithIcon(message, "success",  indent)
   /** print a failure with an icon */
-  def printFailure(message: FormattedString, level: Int = 0) = printIssueWithIcon(message, "failure", level)
+  def printFailure(message: FormattedString, indent: Int = 0) = printIssueWithIcon(message, "failure", indent)
   /** print an error with an icon */
-  def printError(message: FormattedString, level: Int = 0) = printIssueWithIcon(message, "error",   level)
+  def printError(message: FormattedString, indent: Int = 0) = printIssueWithIcon(message, "error",   indent)
   /** print a skipped fragment with an icon */
-  def printSkipped(message: FormattedString, level: Int = 0) = printTextWithIcon(message, "skipped",  level)
+  def printSkipped(message: FormattedString, indent: Int = 0) = printTextWithIcon(message, "skipped",  indent)
   /** print a pending fragment with an icon */
-  def printPending(message: FormattedString, level: Int = 0) = printTextWithIcon(message, "pending",  level)
+  def printPending(message: FormattedString, indent: Int = 0) = printTextWithIcon(message, "pending",  indent)
   /** print a success with an icon */
-  def printSuccessXml(xml: NodeSeq, level: Int = 0) = printOkXmlWithIcon(xml, "success",  level)
+  def printSuccessXml(xml: NodeSeq, indent: Int = 0) = printOkXmlWithIcon(xml, "success",  indent)
   /** print a failure with an icon */
-  def printFailureXml(xml: NodeSeq, level: Int = 0) = printKoXmlWithIcon(xml, "failure", level)
+  def printFailureXml(xml: NodeSeq, indent: Int = 0) = printKoXmlWithIcon(xml, "failure", indent)
   /** print an error with an icon */
-  def printErrorXml(xml: NodeSeq, level: Int = 0) = printKoXmlWithIcon(xml, "error",   level)
+  def printErrorXml(xml: NodeSeq, indent: Int = 0) = printKoXmlWithIcon(xml, "error",   indent)
   /** print a skipped fragment with an icon */
-  def printSkippedXml(xml: NodeSeq, level: Int = 0) = printOkXmlWithIcon(xml, "skipped",  level)
+  def printSkippedXml(xml: NodeSeq, indent: Int = 0) = printOkXmlWithIcon(xml, "skipped",  indent)
   /** print a pending fragment with an icon */
-  def printPendingXml(xml: NodeSeq, level: Int = 0) = printOkXmlWithIcon(xml, "pending",  level)
+  def printPendingXml(xml: NodeSeq, indent: Int = 0) = printOkXmlWithIcon(xml, "pending",  indent)
   /** print an exception message */
-  def printExceptionMessage(e: Result with ResultStackTrace, level: Int): HtmlReportOutput
+  def printExceptionMessage(e: Result with ResultStackTrace, indent: Int): HtmlReportOutput
   /** print an exception message which can be expended/collapsed */
-  def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, level: Int): HtmlReportOutput
+  def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, indent: Int): HtmlReportOutput
   /** print the details of a failure. The diffs arguments provides the way to expose the differences between expected and actual values */
-  def printDetailedFailure(details: Details, level: Int, diffs: Diffs): HtmlReportOutput
+  def printDetailedFailure(details: Details, indent: Int, diffs: Diffs): HtmlReportOutput
   /** print a stacktrace of a failure or an exception */
-  def printStack(e: ResultStackTrace, level: Int, traceFilter: StackTraceFilter): HtmlReportOutput
+  def printStack(e: ResultStackTrace, indent: Int, traceFilter: StackTraceFilter): HtmlReportOutput
 
   /** print the html for a Form that succeeded */
 	def printOkForm(form: NodeSeq): HtmlReportOutput

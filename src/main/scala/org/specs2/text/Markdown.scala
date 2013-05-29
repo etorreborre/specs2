@@ -47,13 +47,10 @@ trait Markdown {
    * parse the markdown string and return xml (unless the arguments deactivate the markdown rendering)
    */
   def toXhtml(text: String)(implicit args: Arguments): NodeSeq = {
-    if (!args.markdown) scala.xml.Text(text)
-    else {
-      val html = toHtmlNoPar(text)
-      parse(html) match {
-        case Some(f) => f
-        case None => scala.xml.Text(if (args.debugMarkdown) html else text)
-      }
+    val html = toHtmlNoPar(text)
+    parse(html) match {
+      case Some(f) => f
+      case None => scala.xml.Text(if (args.debugMarkdown) html else text)
     }
   }
 

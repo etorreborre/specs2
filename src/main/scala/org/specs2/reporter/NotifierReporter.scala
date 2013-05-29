@@ -26,8 +26,7 @@ trait NotifierExporting extends Exporting with Exporters {
   private def notifyExport(fs: Seq[ExecutedFragment])(implicit args: Arguments) = {
     def notify(fs: Seq[ExecutedFragment]) = {
       val tree = Levels.foldAll(fs).toTree(mapper)
-      if (args.noindent) export(tree.flattenSubForests)
-      else               export(tree)
+      export(tree)
     }
 
     if (fs.nonEmpty) notify(fs)
@@ -59,16 +58,16 @@ trait NotifierExporting extends Exporting with Exporters {
         if (args.canShow("*")) notifier.contextEnd(t.t, f.location.toString)
       }
       case f @ ExecutedResult(s, r, t, l, st)                               => {
-        if (args.canShow(r.status)) notifier.exampleStarted(s.toString, l.toString)
+        if (args.canShow(r.status)) notifier.exampleStarted(s.raw, l.toString)
         def notifyResult(result: Result) {
           result match {
-            case Success(_,_)            => notifier.exampleSuccess(s.toString, t.totalMillis)
-            case fail @ Failure(_,_,_,_) => notifier.exampleFailure(s.toString, args.removeColors(fail.message),
+            case Success(_,_)            => notifier.exampleSuccess(s.raw, t.totalMillis)
+            case fail @ Failure(_,_,_,_) => notifier.exampleFailure(s.raw, args.removeColors(fail.message),
                                                                                     fail.location, args.traceFilter(fail.exception), fail.details, t.totalMillis)
-            case err  @ Error(_,_)       => notifier.exampleError(s.toString, args.removeColors(err.message), err.location,
+            case err  @ Error(_,_)       => notifier.exampleError(s.raw, args.removeColors(err.message), err.location,
                                                                                    args.traceFilter(err.exception), t.totalMillis)
-            case Skipped(_,_)            => notifier.exampleSkipped(s.toString, args.removeColors(r.message), t.totalMillis)
-            case Pending(_)              => notifier.examplePending(s.toString, args.removeColors(r.message), t.totalMillis)
+            case Skipped(_,_)            => notifier.exampleSkipped(s.raw, args.removeColors(r.message), t.totalMillis)
+            case Pending(_)              => notifier.examplePending(s.raw, args.removeColors(r.message), t.totalMillis)
             case DecoratedResult(_, res) => notifyResult(res)
           }
         }

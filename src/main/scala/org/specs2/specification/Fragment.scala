@@ -107,7 +107,7 @@ object FormattedString {
   def empty = FormattedString(isEmpty = true)
 }
 /** Formatting for Text fragments */
-case class Formatting(flow: Boolean = true, markdown: Boolean = false)
+case class Formatting(flow: Boolean = false, markdown: Boolean = false)
 
 /**
  * A Example is:

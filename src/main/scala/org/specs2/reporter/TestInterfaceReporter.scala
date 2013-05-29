@@ -54,7 +54,8 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOu
 
   private var loggerNewLines = 0
 
-  private def info(message: String)(implicit args: Arguments) {
+  private def info(msg: String)(implicit args: Arguments) {
+    val message = offset(msg)
     // if a newline has already been added by the logger, remove the first newline
     if (message.startsWith("\n") && loggerNewLines > 0) {
       buffer.append(message.removeFirst("\n"))
@@ -77,7 +78,7 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOu
     }
   }
 
-  private def flushInfo(implicit args: Arguments) = if (args.report.flow) {
+  private def flushInfo(implicit args: Arguments) = {
     // only flush the buffer if it is non empty, otherwise that would create an unnecessary newline
     if (buffer.nonEmpty) logInfo(buffer.toString)
   }
@@ -95,10 +96,10 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOu
   }
 
   override def printFailure(message: String)(implicit args: Arguments)                      = {
-    logFailure(message)
+    logFailure(offset(message))
   }
   override def printError(message: String)(implicit args: Arguments)                        = {
-    logError(message)
+    logError(offset(message))
   }
   override def printSuccess(message: String)(implicit args: Arguments)                      = {
     info(message)

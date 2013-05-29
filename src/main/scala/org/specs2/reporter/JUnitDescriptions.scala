@@ -73,10 +73,7 @@ trait JUnitDescriptionMaker[F] extends ExecutionOrigin {
    *         from a Tree[Description]
    */
   def asOneDescription(descriptionTree: Tree[DescribedFragment])(implicit args: Arguments = Arguments()): Description = {
-    if (args.noindent && !args.report.flow)
-      descriptionTree.flatten.drop(1).foldLeft(descriptionTree.rootLabel)(flattenChildren)._2
-    else
-      descriptionTree.bottomUp(addChildren).rootLabel._2
+    descriptionTree.bottomUp(addChildren).rootLabel._2
   }
   /** 
    * unfolding function attaching children descriptions their parent
