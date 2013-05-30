@@ -95,6 +95,7 @@ case class ExecutedResult(s: FormattedString, result: Result, timer: SimpleTimer
 private[specs2]
 object ExecutedResult {
   def apply(desc: String, r: Result): ExecutedResult = ExecutedResult(FormattedString(desc), r, new SimpleTimer, new Location, Stats())
+  def apply(r: Result): ExecutedResult = ExecutedResult(FormattedString.empty, r, new SimpleTimer, new Location, Stats())
 }
 
 trait ExecutedStandardFragment extends ExecutedFragment {
