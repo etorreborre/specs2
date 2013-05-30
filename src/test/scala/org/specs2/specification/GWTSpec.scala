@@ -202,7 +202,7 @@ Templates
           when {-}
           then {-1}       ${steps.end}
         """
-      } must contain("given 1! step error") and contain("when -o skipped step") and contain("o then")
+      } must contain("! step error") and contain("o skipped step") and contain("o then")
     }
 
     e2 := {
@@ -217,7 +217,7 @@ Templates
           when {-}
           then {-1}       ${steps.end}
         """
-      } must contain("given 1") and contain("when -! step error") and contain("o then")
+      } must contain("given 1") and contain("! step error") and contain("o then")
     }
 
     e3 := {
@@ -232,7 +232,7 @@ Templates
           when {-}
           then {-1}       ${steps.end}
         """
-      } must contain("given 1") and contain("when -! step error") and contain("o then")
+      } must contain("given 1") and contain("! step error") and contain("o then")
     }
 
     e4 := {
