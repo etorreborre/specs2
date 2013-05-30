@@ -28,12 +28,12 @@ class TextResultOutput extends ResultOutput with ConsoleOutput {
    */
   def printMessage(message: String)(implicit args: Arguments) = printLines(args.textColor(message))
   
-  def printLines(message: String)(implicit args: Arguments) = print(offset(message))
+  def printLines(message: String)(implicit args: Arguments) = printLine(offset(message))
 
   /**
    * print one line
    */
-  def printLine(message: String)(implicit args: Arguments) = print(offset(message))
+  def printLine(message: String)(implicit args: Arguments) = offset(message).split("\n").map(println)
 
   /** add an offset to the message */
   protected def offset(message: String)(implicit args: Arguments) =

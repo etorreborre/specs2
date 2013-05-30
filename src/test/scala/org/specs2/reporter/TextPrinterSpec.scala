@@ -95,7 +95,7 @@ class TextPrinterSpec extends Specification with DataTables with Tags { def is =
  a multi-line description must be indented ok                                                     ${status().e7}
  if showtimes is true, each individual time must be shown                                         ${status().e8}
  a datatable must
-   be used as a description if the example description is empty (meaning it's an auto-example)    ${status().e9}
+   be used as a description if the example description is empty (meaning it's an auto-example)    ${status().e9} $xtag
    have no description if failing/in error (because the result shows all)                         ${status().e10}
    be properly aligned
      when successful                                                                              ${status().e11}
@@ -247,18 +247,18 @@ class TextPrinterSpec extends Specification with DataTables with Tags { def is =
   }
 
   case class status() {
-    def e1 = print(t1 ^ ex1) must containMatch("^\\s*t1") 
+    def e1 = print(t1 ^ ex1) must containMatch(" t1")
     def e2 = print(t1 ^ ex1) must contain("+ e1") 
     def e3 = print(t1 ^ fail3) must contain("x fail3") 
     def e4 = print(t1 ^ error4) must contain("! error4") 
     def e5 = print(t1 ^ skipped5) must contain("o skip it") 
     def e6 = print(t1 ^ pending6) must containMatch("\\* todo") 
     def e7 = print(t1 ^ "e1\nexample1" ! success) must contain(allOf(
-        "+ e1",
-        "  example1"))
+        "  + e1",
+        "      example1"))
     def e8 = print(args.report(showtimes=true) ^ t1 ! success) must containMatch("t1 \\(.*\\)")
 
-    def e9 = print(t1 ^ tableOk) must contain("+ a | b")
+    def e9 = print(t1 ^ tableOk) must containMatch("\\+ a \\| b")
     def e10 = print(t1 ^ tableKo) must contain("x ")
     def e11 = print(t1 ^ tableOk) must contain(allOf(startWith("+ a | b"),
                                                      startWith("  1 | 1")))
@@ -282,7 +282,7 @@ class TextPrinterSpec extends Specification with DataTables with Tags { def is =
     printWithColors(fragments).map(removeColors(_))
 
   def printWithColors(fs: Fragments): Seq[String] =
-    preReporter.exec(fs).foreach((n, fs) => printer.print(fs))
+    preReporter.exec("\n" ^ fs).foreach((n, fs) => printer.print(fs))
 
   def printWithColors(specification: SpecificationStructure): Seq[String] =
     preReporter.exec(specification).foreach((n, fs) => printer.print(fs))
