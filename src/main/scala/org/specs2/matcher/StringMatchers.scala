@@ -207,7 +207,7 @@ class BeMatching(t: =>String) extends Matcher[String] {
 
   def apply[S <: String](b: Expectable[S]) = {
     val a = t
-    result(tryOr(pattern.matcher(b.value).matches){ (e: Exception) => false },
+    result(tryOr(b.value.split("\n").exists(line => pattern.matcher(line).matches)){ (e: Exception) => false },
            b.description + " matches " + q(a),
            b.description + " doesn't match " + q(a), b)
   }
