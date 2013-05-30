@@ -152,5 +152,4 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
   case class Pizza() extends Food
   case class Fruit() extends Food
 
-  val xtag = tag("x")
 }                                                                                          

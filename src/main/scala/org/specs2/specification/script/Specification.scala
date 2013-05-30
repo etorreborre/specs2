@@ -108,7 +108,7 @@ case class BulletedExamplesTemplateParameters() extends GroupTemplateParameters 
     line.trim.matches("<h\\d/>.*")                       ||
     line.trim.matches("<h\\d>.*?</h\\d>")
 
-  def stripExample(line: String) = line.trim.removeFirst(s"\\+")
+  def stripExample(line: String) = line.trim.removeFirst(s"\\s*\\+ ")
   def stripGroup(line: String) = line
 }
 
@@ -123,12 +123,14 @@ case class BulletedExamplesTemplate(implicit params: GroupTemplateParameters = B
       val nextLine = if (index + 1 < linesWithNewLines.size) linesWithNewLines(index + 1) else ""
 
       val blocks = if (startNewBlock(line, nextLine, res.lastOption)) (res :+ Fragments.createList()) else res
-      blocks.updateLast(fs => (fs add createFragment(line)).compact)
+      blocks.updateLast(fs => (fs append createFragments(line)).compact)
     }
     FragmentsScriptLines(fragmentLines)
   }
 
   private def startNewBlock(line: String, nextLine: String, lastBlock: Option[Fragments]) = params.isGroupStart(line, nextLine) && lastBlock.map(_.middle.exists(Fragments.isExample)).getOrElse(false)
 
-  private def createFragment(line: String) = if (params.isExample(line)) Example(params.stripExample(line), execute.Pending()) else Text(params.stripGroup(line))
+  private def createFragments(line: String) =
+    if (params.isExample(line)) Fragments.createList(Text(line.takeWhile(_ == ' ')), Example(params.stripExample(line), execute.Pending()))
+    else                        Fragments.createList(Text(params.stripGroup(line)))
 }

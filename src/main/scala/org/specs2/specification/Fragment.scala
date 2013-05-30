@@ -149,6 +149,9 @@ case class Example private[specification] (desc: FormattedString = FormattedStri
     override val location     = outer.location
   }
 
+  /** replace the current formatted string with another one, taking care of the existing creation path */
+  def formatWith(formatted: FormattedString) = withCreationPath(copy(desc = formatted), creationPath)
+
   /** set a creation path, if not already set, on this example to possibly isolate it during its execution */
   private[specs2]
   def creationPathIs(path: CreationPath) = new Example(desc, body) {
@@ -156,6 +159,9 @@ case class Example private[specification] (desc: FormattedString = FormattedStri
     override val isolable     = outer.isolable
     override val location     = outer.location
   }
+  private[specs2]
+  def withCreationPath(example: Example, path: Option[CreationPath]) = path.map(p => outer.creationPathIs(p)).getOrElse(example)
+
 }
 
 case object Example {

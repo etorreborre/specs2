@@ -90,8 +90,6 @@ Other elements
    + executing ok
    + throwing an exception
 
- + A piece of text can be added as a fragment but will always be split in 2 if the last line is empty
- (this is used to calculate the indentation of examples if any follows in 'flow' mode)
                                                                                                            """
 
   "start and end" - new group with specifications {
@@ -159,7 +157,6 @@ Other elements
     eg := Step(1).execute must beSuccessful
     eg := Step({throw new Exception; 1}).execute must beError
 
-    eg := textStart("bla\n    ").middle must haveSize(2)
   }
 
   trait specifications extends TerminationMatchers {

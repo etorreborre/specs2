@@ -28,7 +28,7 @@ trait ConsoleReporter extends DefaultReporter with TextExporting {
       todo.tasksupport = new ForkJoinTaskSupport(Specs2ForkJoin.pool)
       todo.map(_(spec))
     }
-    val toExecute = spec |> format |> select |> sequence |> execute
+    val toExecute = spec |> select |> sequence |> execute
     toExecute |> storeAndExport
     toExecute.executed
   }

@@ -11,6 +11,11 @@ trait Tags {
   def tag(names: String*): TaggingFragment = TaggedAs(names:_*)
   /** create a AsSection fragment */
   def section(names: String*): TaggingFragment = AsSection(names:_*)
+
+  /** shortcut to add tag more quickly when rerunning failed tests */
+  private[specs2] def xtag = tag("x")
+  /** shortcut to add section more quickly when rerunning failed tests */
+  private[specs2] def xsection = section("x")
 }
 object Tags extends Tags
 

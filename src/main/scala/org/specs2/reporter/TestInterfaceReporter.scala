@@ -57,7 +57,11 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOu
   private def info(msg: String)(implicit args: Arguments) {
     val message = offset(msg)
     // if a newline has already been added by the logger, remove the first newline
-    if (message.startsWith("\n") && loggerNewLines > 0) {
+    if (message.isEmpty) {
+      logInfo(" ")
+      loggerNewLines += 1
+    }
+    else if (message.startsWith("\n") && loggerNewLines > 0) {
       buffer.append(message.removeFirst("\n"))
       loggerNewLines = 0
     }

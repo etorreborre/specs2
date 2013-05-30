@@ -24,8 +24,7 @@ import specification._
  *
  */
 trait Reporter extends
-       FragmentsFormatting
-  with Selection
+       Selection
   with Sequence
   with ExecutionStrategy
   with Storing
@@ -42,12 +41,11 @@ trait Reporter extends
    * @return the reporter
    */
   def report(spec: SpecificationStructure)(implicit arguments: Arguments): ExecutedSpecification = {
-    spec |> format |> select |> sequence |> execute |> store |> export
+    spec |> select |> sequence |> execute |> store |> export
   }
 }
 
 trait DefaultReporter extends Reporter
-    with DefaultFragmentsFormatting
     with DefaultSelection
     with DefaultSequence
     with DefaultExecutionStrategy

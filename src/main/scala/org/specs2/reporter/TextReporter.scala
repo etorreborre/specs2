@@ -12,7 +12,7 @@ import Scalaz._
  */
 class TextReporter extends DefaultReporter with TextExporting {
   override def report(spec: SpecificationStructure)(implicit arguments: Arguments): ExecutedSpecification = {
-    spec |> format |> select |> sequence |> execute |> export
+    spec |> select |> sequence |> execute |> export
   }
   override lazy val textOutput: ResultOutput with StringOutput = new TextResultOutput with StringOutput
 }

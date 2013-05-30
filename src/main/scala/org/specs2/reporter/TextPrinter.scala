@@ -92,8 +92,6 @@ trait TextPrinter {
         else
           if (start.name != start.title) out.printSpecStartTitle(leveledText(start.title, level)(args), stats)(args)
           else                           out.printSpecStartName(leveledText(start.name, level)(args), stats)(args)
-        if (!args.xonly && !args.hasFilter) out.printLine("")(args)
-        if (!args.xonly && args.hasFilter) out.printLine("\n")(args)
       }
     }
   }

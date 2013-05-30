@@ -133,11 +133,12 @@ class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatche
       "   `- SpecEnd(start)")
 
     def e5 = {
-      val interpolated = s2"""
+      val interpolated = SpecificationStructure(s2"""
       t1
         ex1 $ok
         ex2 $ok
-      """
+      """).content
+
       val mapper = (f: Fragment, parents: Seq[Fragment], level: Int) => {
         f match {
           case Text(text) if text.raw.trim.isEmpty   => None
@@ -193,7 +194,7 @@ class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatche
   def tree(fs: Fragments)    (implicit reducer: Reducer[Fragment, Levels[Fragment]] = Levels.FragmentLevelsReducer) = fold(spec(fs))(reducer).toTree
   def treeMap(fs: Fragments)(mapper: (Fragment, Seq[Fragment], Int) => Option[Fragment])(implicit reducer: Reducer[Fragment, Levels[Fragment]] = Levels.FragmentLevelsReducer) =
     fold(spec(fs))(reducer).toTreeLoc(mapper).toTree
-  def spec(fs: Fragments) = DefaultFragmentsFormatting.format(("start".title ^ fs).fragments)
+  def spec(fs: Fragments) = ("start".title ^ fs).fragments
 
   def t1 = "t1"
   def t2 = "t2"

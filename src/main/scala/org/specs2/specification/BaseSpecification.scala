@@ -36,10 +36,10 @@ trait SpecificationInclusion { this: FragmentsBuilder =>
 /**
  * The structure of a Specification is simply defined as a sequence of fragments
  */
-trait SpecificationStructure { 
+trait SpecificationStructure extends DefaultFragmentsFormatting {
   /** declaration of Fragments from the user */
   def is: Fragments
-  /** this method can be overriden to map additional behavior in the user-defined fragments */
+  /** this method can be overridden to map additional behavior in the user-defined fragments */
   def map(fs: =>Fragments): Fragments = fs
   /** specName provides useful information identifying the specification: title, className, url... */
   def identification: SpecIdentification = content.specName
@@ -52,7 +52,7 @@ trait SpecificationStructure {
    *
    * A creation path is possibly set on Examples and Actions if they haven't any
    */
-  private[specs2] lazy val content: Fragments = map(Fragments.withCreationPaths(Fragments.withSpecName(is, this)))
+  private[specs2] lazy val content: Fragments = formatFragments(map(Fragments.withCreationPaths(Fragments.withSpecName(is, this))))
 
   /**
    * empty fragments with just the specification name (and without the possible title specified in the fragments).

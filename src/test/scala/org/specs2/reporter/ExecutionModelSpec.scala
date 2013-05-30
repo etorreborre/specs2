@@ -10,7 +10,7 @@ class ExecutionModelSpec extends Specification with ScalaCheck with Groups { def
   A sequential specification must always be reported with a strict order of its fragments                   ${g1().e1}
   A concurrent specification must have at least one execution where the order is changed                    ${g1().e2}
   A Step must always be executed after the preceding examples                                               ${g1().e3}
-                                                                                                                        """
+                                                                                                            """
 
   implicit val timedSpec = SpecificationData.arbTimedSpecification(50)
   implicit val arguments = args.store(never=true)
@@ -19,20 +19,20 @@ class ExecutionModelSpec extends Specification with ScalaCheck with Groups { def
 
     e1 := prop { spec: Specification =>
       val reporter = newReporter
-      reporter.report(simpleLabel(spec, reporter.textOutput))(arguments <| args(sequential=true))
+      reporter.report(simpleLabel(spec, reporter.textOutput))(arguments <| sequential <| nocolor)
       reporter.outputLabelIds must beSorted
     }.set(minSize = 3, maxSize = 7, workers = 4)
 
     e2 := prop { spec: Specification =>
       val reporter = newReporter
-      reporter.report(simpleLabel(spec, reporter.textOutput))
+      reporter.report(simpleLabel(spec, reporter.textOutput))(nocolor)
       reporter.outputLabelIds must beSorted
     }.set(minSize = 3, maxSize = 7).not
 
     e3 := prop { spec: Specification =>
       val reporter = newReporter
       val s = exampleAndStepLabel(spec, reporter.textOutput)
-      reporter.report(s)
+      reporter.report(s)(nocolor)
 
       forall(reporter.outputLabels.inits.toSeq.filterNot(_.isEmpty)) { labels =>
         if (labels.head.startsWith("step")) {
@@ -49,7 +49,7 @@ class ExecutionModelSpec extends Specification with ScalaCheck with Groups { def
       override lazy val textOutput = new TextResultOutput with StringOutput
       lazy val messages = textOutput.messages
       def outputLabels = messages.filter(_.startsWith("label")).map(_.replace("label ", ""))
-      def outputLabelIds = outputLabels.map(_.trim.toInt)
+      def outputLabelIds = outputLabels.map(_.trim.take(1).mkString.toInt)
     }
 
     // print a label after each execution
