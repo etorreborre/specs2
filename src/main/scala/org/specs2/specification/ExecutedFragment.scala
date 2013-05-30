@@ -81,7 +81,7 @@ case class ExecutedResult(s: FormattedString, result: Result, timer: SimpleTimer
     else s
 
   def flow = s.flow
-  def hasDescription = s.isEmpty
+  def hasDescription = !s.isEmpty
 
   def stats = statistics.copy(timer = outer.timer)
   def message = result.message

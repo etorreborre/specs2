@@ -1,6 +1,7 @@
 package examples
 
 import org.specs2._
+import org.specs2.matcher.Matcher
 
 class TestSpec extends SpecificationWithJUnit { def is = s2""" ${noMarkdown}
 This is a simple, hierarchical specification
@@ -17,8 +18,17 @@ This is a simple, hierarchical specification
         should also work                   $ok
         and not quote lines as code        $ok
 
+start with 2, 3, 4 ${ Seq("1", "2", "3", "4", "5", "6") must startWith(fromIndex = 2, "2", "3", "4") }
+start with 2, 3, 4 ${ Seq("1", "2", "3", "4") must startWith("2", "3", "4") }
+
 
 """ ^ link(new Test2Spec)
+
+  def startWith[T](fromIndex: Int, ts: T*): Matcher[Traversable[T]] =
+    startWith(ts:_*) ^^ ((_:Traversable[T]).drop(fromIndex))
+
+  def startWith[T](ts: T*): Matcher[Traversable[T]] =
+    contain(allOf(ts:_*)).exactly ^^ ((_:Traversable[T]).take(ts.size))
 
 }
 
