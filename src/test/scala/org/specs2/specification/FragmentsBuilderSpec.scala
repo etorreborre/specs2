@@ -111,16 +111,16 @@ Other elements
   "links" - new group with specifications {
 
     eg := parentSpec1.content.fragments.toList must
-              beLike { case SpecStart(_,_,_) :: Text(_) :: SpecStart(_,_,Linked(Some(l), false, false)) :: rest => ok }
+              beLike { case (s: SpecStart) :: (t: Text) :: SpecStart(_,_,Linked(Some(l), false, false),_) :: rest => ok }
     eg := parentSpec2.content.fragments.toList must
-              beLike { case SpecStart(_,_,_) :: Text(_) :: SpecStart(_,_,Linked(Some(l), true, false)) :: rest => ok }
+              beLike { case (s: SpecStart) :: (t: Text) :: SpecStart(_,_,Linked(Some(l), true, false),_) :: rest => ok }
     eg := parentSpec3.content.fragments.toList must
-              beLike { case SpecStart(_,_,_) :: Text(_) :: SpecStart(_,_,Linked(Some(l), false, true)) :: rest => ok }
+              beLike { case (s: SpecStart) :: (t: Text) :: SpecStart(_,_,Linked(Some(l), false, true),_) :: rest => ok }
 
     eg := parentSpec4.content.fragments.toList must
-              beLike { case SpecStart(_,_,_) :: Text(_) ::
-                         SpecStart(_,_,Linked(Some(_), false, false)) :: Text(_) :: SpecEnd(_,_) ::
-                         SpecStart(_,_,Linked(Some(_), false, false)) :: Text(_) :: SpecEnd(_,_) :: rest => ok }
+              beLike { case (s: SpecStart) :: (t1: Text) ::
+                         SpecStart(_,_,Linked(Some(_), false, false), _) :: (t2: Text) :: (e1: SpecEnd) ::
+                         SpecStart(_,_,Linked(Some(_), false, false), _) :: (t3: Text) :: (e2: SpecEnd) :: rest => ok }
 
     eg := selfReferencing.content must terminate(retries = 3, sleep = 100.millis)
   }

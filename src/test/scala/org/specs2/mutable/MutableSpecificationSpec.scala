@@ -34,7 +34,7 @@ The following examples specify the functionalities for such a mutable specificat
     e1 := { contentString must contain("it should") }
     e2 := { contentList must contain(allOf("Text(it should)", "Example(have one example)", "Example(have failing example)")).inOrder }
     e3 := { contentList must contain(allOf("Step", "Text(it should)")).inOrder }
-    e4 := { fragments.toList must beLike { case SpecStart(_,a,_) :: other => a.xonly must beTrue } }
+    e4 := { fragments.toList must beLike { case SpecStart(_,a,_,_) :: other => a.xonly must beTrue } }
     e5 := { contentList must contain(allOf("Text(examples can)", "Text(be nested)", "Example(at level 1)", "Example(at level 2)")).inOrder }
     e6 := { contentString must contain("should expectation") }
     e7 := { contentString must contain("should also") }

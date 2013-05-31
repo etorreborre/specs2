@@ -14,8 +14,8 @@ trait ExamplesSelection {
    */
   protected def filterExamples(implicit commandLineArgs: Arguments) = (fan: Seq[(Fragment, Arguments, SpecName)]) => {
     fan filter {
-      case (e @ Example(_, _), args, n) => e.matches(args.overrideWith(commandLineArgs).ex)
-      case (f, args, n)                 => true
+      case (e: Example, args, n) => e.matches(args.overrideWith(commandLineArgs).ex)
+      case (f, args, n)          => true
     } collect { case (f, a, n) => f }
   }
 

@@ -141,10 +141,10 @@ class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatche
 
       val mapper = (f: Fragment, parents: Seq[Fragment], level: Int) => {
         f match {
-          case Text(text) if text.raw.trim.isEmpty   => None
-          case Text(text)                            => Some(Text(text.raw.trim))
-          case t: TagsFragments.TaggingFragment      => None
-          case other                                 => Some(f)
+          case t: Text if t.text.raw.trim.isEmpty   => None
+          case t: Text                              => Some(Text(t.text.raw.trim))
+          case t: TagsFragments.TaggingFragment     => None
+          case other                                => Some(f)
         }
       }
       treeMap(interpolated)(mapper) must beDrawnAs(

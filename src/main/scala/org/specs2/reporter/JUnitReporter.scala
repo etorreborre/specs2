@@ -49,17 +49,17 @@ trait JUnitReporter extends ExecutionOrigin with DefaultReporter with Exporters 
     val desc = descriptions(fragment)
 
     fragment match {
-      case f @ Example(_, _) => {
+      case f: Example => {
         notifier.fireTestStarted(desc)
         val result = execute(f)
         notifyResult(desc, result)
         result
       }
-      case f @ Step(_, _)         => notifyResult(desc, execute(f))
-      case f @ Action(_)          => notifyResult(desc, execute(f))
-      case f @ SpecStart(_, _, _) => notifier.fireTestRunStarted(desc); execute(f)
-      case f @ SpecEnd(_, _)      => notifier.fireTestRunFinished(new org.junit.runner.Result); execute(f)
-      case other                  => execute(other)
+      case f: Step         => notifyResult(desc, execute(f))
+      case f: Action       => notifyResult(desc, execute(f))
+      case f: SpecStart    => notifier.fireTestRunStarted(desc); execute(f)
+      case f: SpecEnd      => notifier.fireTestRunFinished(new org.junit.runner.Result); execute(f)
+      case other           => execute(other)
     }
   }
 
@@ -127,13 +127,13 @@ class JUnitDescriptionsFragments(className: String) extends JUnitDescriptions[Fr
   */
   def mapper(className: String): (Fragment, Seq[DescribedFragment], Int) => Option[DescribedFragment] =
     (f: Fragment, parentNodes: Seq[DescribedFragment], nodeLabel: Int) => f match {
-      case s @ SpecStart(_,_,_)        => Some(f -> createDescription(className, suiteName=testName(s.name)))
-      case Text(t) if t.raw.trim.nonEmpty => Some(f -> createDescription(className, suiteName=testName(t.raw)))
-      case Text(t)                        => None
-      case Example(description, body)     => Some(f -> createDescription(className, label=nodeLabel.toString, testName=testName(description.toString, parentPath(parentNodes))))
-      case Step(action,_)                 => Some(f -> createDescription(className, label=nodeLabel.toString, testName="step"))
-      case Action(action)                 => Some(f -> createDescription(className, label=nodeLabel.toString, testName="action"))
-      case other                          => None
+      case s: SpecStart                        => Some(f -> createDescription(className, suiteName=testName(s.name)))
+      case t: Text if t.text.raw.trim.nonEmpty => Some(f -> createDescription(className, suiteName=testName(t.text.raw)))
+      case t: Text                             => None
+      case t: Example                          => Some(f -> createDescription(className, label=nodeLabel.toString, testName=testName(t.desc.toString, parentPath(parentNodes))))
+      case t: Step                             => Some(f -> createDescription(className, label=nodeLabel.toString, testName="step"))
+      case t: Action                           => Some(f -> createDescription(className, label=nodeLabel.toString, testName="action"))
+      case other                               => None
     }
 }
 /**

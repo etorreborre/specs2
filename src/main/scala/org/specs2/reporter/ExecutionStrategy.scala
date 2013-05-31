@@ -84,8 +84,8 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
 
     def skipAllAfterStopOnFailStep(fs: Seq[ExecutingFragment], previousSequence: Seq[ExecutingFragment]) =
       (fs.toList match {
-        case LazyExecutingFragment(_, Step(_, stopOnFail)) :: _     => stopOnFail
-        case FinishedExecutingFragment(_, Step(_, stopOnFail)) :: _ => stopOnFail
+        case LazyExecutingFragment(_, s: Step) :: _     => s.stopOnFail
+        case FinishedExecutingFragment(_, s: Step) :: _ => s.stopOnFail
         case other                                                  => false
       }) && previousSequence.exists(f => !isOk(f.get))
   }

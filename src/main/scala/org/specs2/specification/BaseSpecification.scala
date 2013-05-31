@@ -78,8 +78,8 @@ object SpecificationStructure {
   
   def apply(fs: Fragments): SpecificationStructure = new SpecificationStructure {
     def is = fs.fragments match {
-      case SpecStart(n,a,l) +: middle :+ SpecEnd(_,_) => Fragments(Some(n), middle, a, l)
-      case other                                      => fs
+      case SpecStart(n,a,l,_) +: middle :+ SpecEnd(_,_,_) => Fragments(Some(n), middle, a, l)
+      case other                                          => fs
     }
   }
   def apply(fs: Seq[Fragment]): SpecificationStructure = apply(Fragments.create(fs:_*))

@@ -87,16 +87,16 @@ case object SpecsArguments {
   }
   implicit val FragmentSpecsArgumentsReducer: Reducer[Fragment, SpecsArguments[Fragment]] = Reducer.unitReducer {
     f: Fragment => f match {
-      case s @ SpecStart(_,_,_) => SpecsArguments(StartOfArguments(f, s.specName, s.arguments))
-      case e @ SpecEnd(_,_)     => SpecsArguments(EndOfArguments(f, e.specName))
-      case _                    => SpecsArguments(NoStartOfArguments(f))
+      case s: SpecStart => SpecsArguments(StartOfArguments(f, s.specName, s.arguments))
+      case e: SpecEnd   => SpecsArguments(EndOfArguments(f, e.specName))
+      case _            => SpecsArguments(NoStartOfArguments(f))
     }
   }
   implicit val SpecsArgumentsReducer: Reducer[ExecutedFragment, SpecsArguments[ExecutedFragment]] = Reducer.unitReducer {
     f: ExecutedFragment => f match {
-      case s @ ExecutedSpecStart(_,_,_) => SpecsArguments(StartOfArguments(f, s.specName, s.args))
-      case e @ ExecutedSpecEnd(_,_,_)   => SpecsArguments(EndOfArguments(f, e.specName))
-      case _                            => SpecsArguments(NoStartOfArguments(f))
+      case s: ExecutedSpecStart => SpecsArguments(StartOfArguments(f, s.specName, s.args))
+      case s: ExecutedSpecEnd   => SpecsArguments(EndOfArguments(f, s.specName))
+      case _                    => SpecsArguments(NoStartOfArguments(f))
     }
   }
 

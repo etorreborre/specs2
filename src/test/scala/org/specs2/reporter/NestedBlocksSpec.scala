@@ -24,8 +24,8 @@ class NestedBlocksSpec extends Specification { def is = s2"""
   val spec3 = "spec".title ^ "text" ^ subspec ^ subspec2 ^ subspec3 ^ "e" ! success
 
   def swap = (start: Fragment, end: Fragment) => (start, end) match {
-    case (SpecStart(_,_,_), SpecEnd(en,_)) => (SpecStart(SpecName(en.title+"-swapped")), SpecEnd(en))
-    case other                             => other
+    case (s: SpecStart, e: SpecEnd) => (SpecStart(SpecName(e.title+"-swapped")), e)
+    case other                      => other
   }
   
   def e1 = associate(spec, List("spec-swapped", "sub1-swapped", "sub1", "spec"))
@@ -35,5 +35,5 @@ class NestedBlocksSpec extends Specification { def is = s2"""
   def e3 = associate(spec3, List("spec-swapped", "sub1-swapped", "sub1", "sub2-swapped", "sub2", "sub3-swapped", "sub3", "spec"))
 
   def associate(s: Fragments, expected: Seq[String]) = associateStartEnd(s.fragments map fragmentsToSpecBlock, swap) collect {
-    case SpecStart(n,_,_) => n.title; case SpecEnd(n,_) => n.title } must_== expected
+    case s: SpecStart => s.title; case e: SpecEnd => e.title } must_== expected
 }

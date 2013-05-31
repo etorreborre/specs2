@@ -21,9 +21,9 @@ trait SpecificationNavigation {
   private[specs2]
   def fragmentsTo(f: Fragment): Seq[Fragment] = {
     val path = f match {
-      case e @ Example(_,_) => e.creationPath
-      case a @ Action(_)    => a.creationPath
-      case other            => None
+      case e: Example => e.creationPath
+      case a: Action  => a.creationPath
+      case other      => None
     }
     val fragments = content.fragments
     fragments.take(path.flatMap(_.path.lastOption).getOrElse(0) + 1)

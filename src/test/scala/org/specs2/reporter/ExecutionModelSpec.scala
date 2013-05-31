@@ -61,8 +61,8 @@ class ExecutionModelSpec extends Specification with ScalaCheck with Groups { def
     // print a label after each execution for examples and steps
     def exampleAndStepLabel(spec: Specification, output: Output) =
       label(spec)((i: Int) => {
-        case f @ Example(_,_) => printAfterExecution("label example "+i, output)(f)
-        case f @ Step(_,_)    => printAfterExecution("label step "+i, output)(f)
+        case f: Example => printAfterExecution("label example "+i, output)(f)
+        case f: Step    => printAfterExecution("label step "+i, output)(f)
       })
 
     def printAfterExecution(s: String, output: Output) = (f: Executable) => {

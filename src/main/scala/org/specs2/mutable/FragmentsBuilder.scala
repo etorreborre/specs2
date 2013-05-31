@@ -137,9 +137,9 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
     val element = fs.middle.lastOption.getOrElse((Text("root")))
     addBlockElement(element)
     element match {
-      case e @ Example(_,_) => updateSpecFragments(fragments => new FragmentsFragment(fragments) ^ e.creationPathIs(creationPath))
-      case a @ Action(_)    => updateSpecFragments(fragments => new FragmentsFragment(fragments) ^ a.creationPathIs(creationPath))
-      case other            => updateSpecFragments(fragments => new FragmentsFragment(fragments) ^ fs)
+      case e: Example => updateSpecFragments(fragments => new FragmentsFragment(fragments) ^ e.creationPathIs(creationPath))
+      case a: Action  => updateSpecFragments(fragments => new FragmentsFragment(fragments) ^ a.creationPathIs(creationPath))
+      case other      => updateSpecFragments(fragments => new FragmentsFragment(fragments) ^ fs)
     }
     fs
   }
@@ -284,9 +284,9 @@ trait SideEffectingCreationPaths extends SpecificationNavigation {
   override def fragmentsTo(f: Fragment): Seq[Fragment] = {
     // set the target path
     targetPath = f match {
-      case e @ Example(_,_) => e.creationPath
-      case a @ Action(_)    => a.creationPath
-      case other            => None
+      case e: Example => e.creationPath
+      case a: Action  => a.creationPath
+      case other      => None
     }
     // return the fragments created till all path nodes have been created
     content.fragments

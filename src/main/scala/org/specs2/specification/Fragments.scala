@@ -29,7 +29,7 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   /** append the fragments from fs, appending the text fragments if this object ends with Text and fs starts with Text */
   def append(fs: Fragments): Fragments =
     (middle, fs.middle) match {
-      case (begin :+ (txt1 @ Text(t1)), (txt2 @ Text(t2)) +: rest) if !fs.isLink && t1.formatting == t2.formatting =>
+      case (begin :+ (txt1: Text), (txt2: Text) +: rest) if !fs.isLink && txt1.text.formatting == txt2.text.formatting =>
         ((new FragmentsFragment(this.copy(middle = Seq())))) ^ fs.copy(middle = begin ++ (txt1.add(txt2) +: rest))
       case _                                                                       => (new FragmentsFragment(this)) ^ fs
     }
@@ -97,9 +97,9 @@ object Fragments {
    */
   def create(fs: Fragment*) = {
     fs match {
-      case (s @ SpecStart(n, a, l)) +: rest :+ SpecEnd(_,_) => Fragments(Some(n), rest, a, l)
-      case (s @ SpecStart(n, a, l)) +: rest                 => Fragments(Some(n), rest, a, l)
-      case _                                                => createList(fs:_*)
+      case (s @ SpecStart(n, a, l, _)) +: rest :+ SpecEnd(_,_,_) => Fragments(Some(n), rest, a, l)
+      case (s @ SpecStart(n, a, l, _)) +: rest                   => Fragments(Some(n), rest, a, l)
+      case _                                                     => createList(fs:_*)
     }
   }
 
@@ -108,31 +108,31 @@ object Fragments {
   /** @return the text if the Fragment is a Text */
   def isSomeText: PartialFunction[Fragment, Text] = { case t: Text => t }
   /** @return true if the Fragment is an Example */
-  def isExample: Function[Fragment, Boolean] = { case Example(_, _) => true; case _ => false }
+  def isExample: Function[Fragment, Boolean] = { case e: Example => true; case _ => false }
   /** @return the example if the Fragment is an Example */
-  def isAnExample: PartialFunction[Fragment, Example] = { case e @ Example(_,_) => e }
+  def isAnExample: PartialFunction[Fragment, Example] = { case e: Example => e }
   /** @return true if the Fragment is a step */
-  def isStep: Function[Fragment, Boolean] = { case Step(_,_) => true; case _ => false }
+  def isStep: Function[Fragment, Boolean] = { case s: Step => true; case _ => false }
   /** @return true if the Fragment is a SpecStart or a SpecEnd */
-  def isSpecStartOrEnd: Function[Fragment, Boolean] = { case SpecStart(_,_,_) | SpecEnd(_,_) => true; case _ => false }
+  def isSpecStartOrEnd: Function[Fragment, Boolean] = { case s1: SpecStart => true; case s2: SpecEnd => true; case _ => false }
   /** @return the spec start if the Fragment is a SpecStart */
-  def isASpecStart: PartialFunction[Fragment, SpecStart] = { case s @ SpecStart(_,_,_) => s }
+  def isASpecStart: PartialFunction[Fragment, SpecStart] = { case s: SpecStart => s }
   /** @return the spec end if the Fragment is a SpecEnd */
-  def isASpecEnd: PartialFunction[Fragment, Fragment] = { case s @ SpecEnd(_,_) => s }
+  def isASpecEnd: PartialFunction[Fragment, Fragment] = { case s: SpecEnd => s }
   /** @return true if the Fragment is a SpecStart */
-  def isSpecStart: Function[Fragment, Boolean] = { case s @ SpecStart(_,_,_) => true; case _ => false }
+  def isSpecStart: Function[Fragment, Boolean] = { case s: SpecStart => true; case _ => false }
   /** @return true if the Fragment is a SpecEnd */
-  def isSpecEnd: Function[Fragment, Boolean] = { case s @ SpecEnd(_,_) => true; case _ => false }
+  def isSpecEnd: Function[Fragment, Boolean] = { case s: SpecEnd => true; case _ => false }
   /** @return true if the Fragment is an Example or a Step */
   def isExampleOrStep: Function[Fragment, Boolean] = (f: Fragment) => isExample(f) || isStep(f)
   /** @return the step if the Fragment is a Step */
-  def isAStep: PartialFunction[Fragment, Step] = { case s @ Step(_,_) => s }
+  def isAStep: PartialFunction[Fragment, Step] = { case s: Step => s }
   /** @return the action if the Fragment is an Actino */
-  def isAnAction: PartialFunction[Fragment, Action] = { case a @ Action(_) => a }
+  def isAnAction: PartialFunction[Fragment, Action] = { case a: Action => a }
   /** @return the step if the Fragment is a Br fragment */
-  def isABr: PartialFunction[Fragment, Fragment] = { case br @ Br() => br }
+  def isABr: PartialFunction[Fragment, Fragment] = { case br: Br => br }
   /** @return the step if the Fragment is an End fragment */
-  def isAnEnd: PartialFunction[Fragment, Fragment] = { case e @ End() => e }
+  def isAnEnd: PartialFunction[Fragment, Fragment] = { case e: End => e }
   /** @return the text if the Fragment is a TaggingFragment */
   def isSomeTag: PartialFunction[Fragment, TaggingFragment] = { case t: TaggingFragment => t }
 
@@ -155,9 +155,9 @@ object Fragments {
    *  - its index in the sequence of fragments for an acceptance specification
    */
   def withCreationPaths(fragments: Fragments): Fragments = fragments.copy(middle = fragments.middle.zipWithIndex.map {
-    case (e @ Example(_,_), i) => e.creationPathIs(AcceptanceCreationPath(Seq(i+1)))
-    case (a @ Action(_), i)    => a.creationPathIs(AcceptanceCreationPath(Seq(i+1)))
-    case (other, i)            => other
+    case (e: Example, i) => e.creationPathIs(AcceptanceCreationPath(Seq(i+1)))
+    case (a: Action, i)  => a.creationPathIs(AcceptanceCreationPath(Seq(i+1)))
+    case (other, i)      => other
   })
 
   /**

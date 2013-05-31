@@ -23,9 +23,9 @@ trait ExamplesIsolation { self: DefaultSelection =>
       val (fragment, args, name) = fan
       if ((arguments <| args).isolated) {
         fragment match {
-          case e @ Example(_,_) if e.isolable => e.copy(body = () => copyBody(name, e, e.body()))
-          case a @ Action(_)    if a.isolable => a.copy(action = lazyfy(copyBody(name, a, a.execute)))
-          case other                          => other
+          case e: Example if e.isolable => e.copy(body = () => copyBody(name, e, e.body()))
+          case a: Action  if a.isolable => a.copy(action = lazyfy(copyBody(name, a, a.execute)))
+          case other                    => other
         }
       } else fragment
     }
@@ -41,9 +41,9 @@ trait ExamplesIsolation { self: DefaultSelection =>
       def executeStepsBefore = fragments.collect(isAStep).filter(_.isolable).foreach(_.execute)
 
       fragments.collect(isAnExample.orElse(isAnAction)).lastOption match {
-        case Some(e @ Example(_, _)) => executeStepsBefore; e.execute
-        case Some(a @ Action(_))     => executeStepsBefore; a.execute
-        case other                   => body
+        case Some(e: Example) => executeStepsBefore; e.execute
+        case Some(a: Action)   => executeStepsBefore; a.execute
+        case other             => body
       }
     }.getOrElse(body)
   }

@@ -383,7 +383,7 @@ STUBS
           1 must_== 1 // to check if the previous expectation really fails
         }
       }
-      s.content.fragments.collect { case Example(d, r) => FragmentExecution.executeBody(r()).isSuccess } must contain (false)
+      s.content.fragments.collect { case e: Example => FragmentExecution.executeBody(e.execute).isSuccess } must contain (false)
     }
 
     eg := {

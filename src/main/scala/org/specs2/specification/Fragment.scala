@@ -18,7 +18,7 @@ import data.SeparatedTags
  * an Example
  */
 sealed trait Fragment {
-  val location: Location = new Location
+  def location: Location
   def matches(s: String) = true
 }
 
@@ -31,7 +31,7 @@ sealed trait Fragment {
  *    That name stores a unique id for the specification
  *  - the arguments for that specification
  */
-case class SpecStart(specName: SpecName, arguments: Arguments = Arguments(), linked: Linked = Linked()) extends Fragment {
+case class SpecStart(specName: SpecName, arguments: Arguments = Arguments(), linked: Linked = Linked(), location: Location = new Location) extends Fragment {
 
   def name = specName.name
   def title = specName.title
@@ -73,7 +73,7 @@ case class SpecStart(specName: SpecName, arguments: Arguments = Arguments(), lin
  * There is a Boolean flag on a SpecEnd indicating if the whole specification was just executed as a link (for an index page for example)
  * In this case we must not store statistics for this specification (see Storing.scala)
  */
-case class SpecEnd(specName: SpecName, isSeeOnlyLink: Boolean = false) extends Fragment {
+case class SpecEnd(specName: SpecName, isSeeOnlyLink: Boolean = false, location: Location = new Location) extends Fragment {
   def name = specName.name
   def title = specName.title
   def seeOnlyLinkIs(s: Boolean) = copy(isSeeOnlyLink = s)
@@ -85,11 +85,19 @@ case class SpecEnd(specName: SpecName, isSeeOnlyLink: Boolean = false) extends F
 /**
  * Free text, describing the system to specify
  */
-case class Text(text: FormattedString) extends Fragment {
+case class Text(text: FormattedString, location: Location = new Location) extends Fragment {
   def t = text.raw
   override def matches(s: String) = t.matches(s)
   def flow = text.flow
   def add(other: Text) = copy(text.append(other.t))
+
+  override def toString = s"Text($text)"
+
+  override def equals(a: Any) = a match {
+    case t: Text => text == t.text
+    case _       => false
+  }
+  override def hashCode = text.hashCode
 }
 object Text {
   def apply(s: String): Text = new Text(FormattedString(s))
@@ -116,12 +124,9 @@ case class Formatting(flow: Boolean = false, markdown: Boolean = false)
  * - a description: some text, with possibly some markdown annotations for rendering code fragments (used in AutoExamples)
  * - a body: some executable code returning a Result
  */
-case class Example private[specification] (desc: FormattedString = FormattedString(""), body: () => Result) extends Fragment with Executable with Isolable { outer =>
-  val isolable = true
-
-  /** internal specs2 variable to keep track of how an Example has been created */
-  private[specs2] val creationPath: Option[CreationPath] = None
-
+case class Example private[specification] (desc: FormattedString = FormattedString(""), body: () => Result,
+                                           location: Location = new Location,
+                                           isolable: Boolean = true, private[specs2] val creationPath: Option[CreationPath] = None) extends Fragment with Executable with Isolable { outer =>
   def execute = body()
 
   /**
@@ -143,24 +148,14 @@ case class Example private[specification] (desc: FormattedString = FormattedStri
   }
 
   /** this fragment can not be executed in a separate specification */
-  def global = new Example(desc, body) {
-    override val isolable     = false
-    override val creationPath = outer.creationPath
-    override val location     = outer.location
-  }
+  def global = copy(isolable = false)
 
-  /** replace the current formatted string with another one, taking care of the existing creation path */
-  def formatWith(formatted: FormattedString) = withCreationPath(copy(desc = formatted), creationPath)
+  /** replace the current formatted string with another one */
+  def formatWith(formatted: FormattedString) = copy(desc = formatted)
 
   /** set a creation path, if not already set, on this example to possibly isolate it during its execution */
   private[specs2]
-  def creationPathIs(path: CreationPath) = new Example(desc, body) {
-    override val creationPath = if (outer.creationPath.isDefined) outer.creationPath else Some(path)
-    override val isolable     = outer.isolable
-    override val location     = outer.location
-  }
-  private[specs2]
-  def withCreationPath(example: Example, path: Option[CreationPath]) = path.map(p => outer.creationPathIs(p)).getOrElse(example)
+  def creationPathIs(path: CreationPath) = copy(creationPath = if (outer.creationPath.isDefined) outer.creationPath else Some(path))
 
 }
 
@@ -181,8 +176,7 @@ case object Example {
  * @see the ContextSpec specification
  *
  */
-case class Step (step: LazyParameter[Result], stopOnFail: Boolean = false) extends Fragment with Executable with Isolable {
-  val isolable = true
+case class Step (step: LazyParameter[Result], stopOnFail: Boolean = false, location: Location = new Location, isolable: Boolean = true) extends Fragment with Executable with Isolable {
 
   def execute = step.value
   override def toString = "Step"
@@ -190,9 +184,7 @@ case class Step (step: LazyParameter[Result], stopOnFail: Boolean = false) exten
   override def map(f: Result => Result) = Step(step map f)
 
   /** this fragment can not be executed in a separate specification */
-  def global = new Step(step) {
-    override val isolable = false
-  }
+  def global = copy(isolable = false)
 
   // we must override the case class equality to avoid evaluating the step
   override def equals(any: Any) = any match {
@@ -235,11 +227,9 @@ case object Step extends ImplicitParameters {
  *
  * It is only reported in case of a failure
  */
-case class Action (action: LazyParameter[Result] = lazyfy(Success())) extends Fragment with Executable with Isolable { outer =>
-  val isolable = true
-
-  /** internal specs2 variable to keep track of how an Example has been created */
-  private[specs2] val creationPath: Option[CreationPath] = None
+case class Action (action: LazyParameter[Result] = lazyfy(Success()),
+                   location: Location = new Location,
+                   isolable: Boolean = true, private[specs2] val creationPath: Option[CreationPath] = None) extends Fragment with Executable with Isolable { outer =>
 
   def execute = action.value
   override def toString = "Action"
@@ -247,18 +237,10 @@ case class Action (action: LazyParameter[Result] = lazyfy(Success())) extends Fr
   override def map(f: Result => Result) = Action(action map f)
 
   /** this fragment can not be executed in a separate specification */
-  def global = new Action(action) {
-    override val isolable = false
-    override val creationPath = outer.creationPath
-    override val location     = outer.location
-  }
+  def global = copy(isolable = false)
 
   /** set a creation path, if not already set, on this action to possibly isolate it during its execution */
-  private[specs2] def creationPathIs(path: CreationPath) = new Action(action) {
-    override val creationPath = if (outer.creationPath.isDefined) outer.creationPath else Some(path)
-    override val isolable     = outer.isolable
-    override val location     = outer.location
-  }
+  private[specs2] def creationPathIs(path: CreationPath) = copy(creationPath = if (outer.creationPath.isDefined) outer.creationPath else Some(path))
 
   // we must override the case class equality to avoid evaluating the action
   override def equals(any: Any) = any match {
@@ -285,10 +267,10 @@ case object Action {
  *  - Backtab() can be used to decrement the indentation level
  */
 object StandardFragments {
-  case class End() extends Fragment
-  case class Br() extends Fragment
-  case class Tab(n: Int = 1) extends Fragment
-  case class Backtab(n: Int = 1) extends Fragment
+  case class End() extends Fragment               { val location = new Location() }
+  case class Br() extends Fragment                { val location = new Location() }
+  case class Tab(n: Int = 1) extends Fragment     { val location = new Location() }
+  case class Backtab(n: Int = 1) extends Fragment { val location = new Location() }
 }
 
 /**
@@ -296,6 +278,7 @@ object StandardFragments {
  */
 object TagsFragments {
   trait TaggingFragment extends Fragment {
+    val location = new Location()
     /** tagging names */
     def names: Seq[String]
     /** @return true if the fragment tagged with this must be kept */

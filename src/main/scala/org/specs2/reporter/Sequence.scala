@@ -47,11 +47,11 @@ trait DefaultSequence {
       res.toList match {
         case Nil => Vector(FragmentSeq.create(f, a))
         case last :: rest => f match {
-          case SpecStart(_,_,_)                                                  => FragmentSeq.create(f, a) +: res
-          case Step(_,_) if last.fragments.exists(isExampleOrStep)               => FragmentSeq.create(f, a) +: res
-          case Example(_, _) if last.fragments.exists(isStep)                    => FragmentSeq.create(f, a) +: res
-          case any if last.fragments.lastOption.map(isSpecEnd).getOrElse(false)  => FragmentSeq.create(f, a) +: res
-          case _                                                                 => last.add(f) +: rest.toSeq
+          case s: SpecStart                                                     => FragmentSeq.create(f, a) +: res
+          case s: Step if last.fragments.exists(isExampleOrStep)                => FragmentSeq.create(f, a) +: res
+          case e: Example if last.fragments.exists(isStep)                      => FragmentSeq.create(f, a) +: res
+          case any if last.fragments.lastOption.map(isSpecEnd).getOrElse(false) => FragmentSeq.create(f, a) +: res
+          case _                                                                => last.add(f) +: rest.toSeq
         }
       }
     }

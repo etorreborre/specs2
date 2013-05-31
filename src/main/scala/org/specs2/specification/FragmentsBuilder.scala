@@ -163,8 +163,8 @@ class FragmentsFragment(fs: =>Fragments) {
 
   def ^(t: String) = fragments add Text(t)
   def ^(f: Fragment) = f match {
-    case s @ SpecStart(_,_,_) => (fragments specTitleIs s.specName).overrideArgs(s.arguments)
-    case _                    => fragments add f
+    case s: SpecStart => (fragments specTitleIs s.specName).overrideArgs(s.arguments)
+    case _            => fragments add f
   }
   def ^(other: Seq[Fragment]) = fragments add other
   def ^(other: Seq[Fragments], dummy: Int = 0) = fragments add other.flatMap(_.fragments)

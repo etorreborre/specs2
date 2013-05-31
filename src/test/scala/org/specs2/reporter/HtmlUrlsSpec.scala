@@ -35,7 +35,6 @@ class HtmlUrlsSpec extends Specification with ResultMatchers with HtmlUrls with 
   "it is possible to check local links of a relative html document" >> {
     check(<html><a href="../guide/price.html"></a></html>, Map("guide/price.html" -> NodeSeq.Empty), filePath = "guide/user.html") must beSuccessful
   }
-  xtag
   "only the failure messages are kept" >> {
     check {
       <html>

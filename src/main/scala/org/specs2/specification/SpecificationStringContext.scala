@@ -99,7 +99,7 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
       val ((text, variable), expression) = cur
 
       // always provide the latest full piece of text to the spec part for the append method
-      val (res1, text1) = res.middle.lastOption.collect { case t @ Text(_) =>
+      val (res1, text1) = res.middle.lastOption.collect { case t: Text =>
         (res.middleDropRight(1), t.t+text)
       }.getOrElse((res, text))
       variable.append(res1, text1, expression)

@@ -41,26 +41,26 @@ trait FragmentExecution {
    * A Form is executed separately by executing each row and cell, setting the results on each cell
    */
   def execute(f: Fragment)(implicit arguments: Arguments = Arguments()) = f match {
-    case Example(FormFormattedString(form), _)     => {
+    case e @ Example(FormFormattedString(form), _,_,_,_)     => {
       val timer = new SimpleTimer().start
       val executed = if (arguments.plan) form else form.executeForm
       val result = executed.execute
       ExecutedResult(FormFormattedString(executed), result, timer.stop, f.location, Stats(result).copy(timer = timer.stop))
     }
-	  case e @ Example(s, _)     => {
+	  case e: Example     => {
       val timer = new SimpleTimer().start
       val result = executeBody(e.execute)
-      ExecutedResult(s, result, timer.stop, f.location, Stats(result).copy(timer = timer.stop))
+      ExecutedResult(e.desc, result, timer.stop, f.location, Stats(result).copy(timer = timer.stop))
     }
-	  case t @ Text(_)                   => ExecutedText(t, f.location)
+	  case t: Text                       => ExecutedText(t, f.location)
 	  case Br()                          => ExecutedBr(f.location)
     case Tab(n)                        => ExecutedTab(n, f.location)
     case Backtab(n)                    => ExecutedBacktab(n, f.location)
 	  case End()                         => ExecutedEnd(f.location)
-	  case s @ SpecStart(_,a,_)          => ExecutedSpecStart(s.withArgs(arguments.overrideWith(a)), f.location, Stats().startTimer)
-	  case e @ SpecEnd(_,_)              => ExecutedSpecEnd(e, f.location, Stats().startTimer)
-    case s @ Step(_,_)                 => executeStep("step", s, f.location)
-    case s @ Action(_)                 => executeStep("action", s, f.location)
+	  case s: SpecStart                  => ExecutedSpecStart(s.withArgs(arguments.overrideWith(s.arguments)), f.location, Stats().startTimer)
+	  case e: SpecEnd                    => ExecutedSpecEnd(e, f.location, Stats().startTimer)
+    case s: Step                       => executeStep("step", s, f.location)
+    case s: Action                     => executeStep("action", s, f.location)
     case _                             => ExecutedNoText(isAction = true, new SimpleTimer, f.location)
   }
 

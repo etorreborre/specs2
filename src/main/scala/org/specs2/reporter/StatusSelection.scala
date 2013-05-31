@@ -15,7 +15,7 @@ trait StatusSelection extends WithDefaultStatisticsRepository{
     if (commandLineArgs.store.never) fan
     else
       fan filter {
-        case (e @ Example(_, _), args, specName) => {
+        case (e: Example, args, specName) => {
           val currentArgs = args.overrideWith(commandLineArgs)
           !currentArgs.wasIsDefined || includePrevious(specName, e, currentArgs)
         }

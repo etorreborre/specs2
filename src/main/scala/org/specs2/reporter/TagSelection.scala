@@ -16,8 +16,8 @@ trait TagSelection extends TagsAssociation {
     val fragments = fan.map(_._1)
     fan.zip(tags(fragments)) collect {
       case ((f, a, n), t) if !isTag(f) && t.keep(a.overrideWith(commandLineArgs)) => (f, a, n)
-      case ((f @ SpecStart(_,_,_), a, n), t)                                      => (f, a, n)
-      case ((f @ SpecEnd(_,_), a, n), t)                                          => (f, a, n)
+      case ((f: SpecStart, a, n), t)                                              => (f, a, n)
+      case ((f: SpecEnd, a, n), t)                                                => (f, a, n)
     }
   }
 

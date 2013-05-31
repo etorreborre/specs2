@@ -34,11 +34,11 @@ case class Levels[T](private val levelsSeq: Vector[Level[T]] = Vector[Level[T]](
   lazy val levels = {
     import NestedBlocks._
     def toNestedBlock(bl: Level[T]): SpecBlock[Level[T]] = bl match {
-      case b @ Level(SpecStart(_,_,_), l)           => BlockStart(bl)
-      case b @ Level(ExecutedSpecStart(_,_,_), l)   => BlockStart(bl)
-      case b @ Level(SpecEnd(_,_), l)               => BlockEnd(bl)
-      case b @ Level(ExecutedSpecEnd(_,_,_), l)     => BlockEnd(bl)
-      case b                                        => BlockBit(bl)
+      case b @ Level(s: SpecStart, l)           => BlockStart(bl)
+      case b @ Level(s: ExecutedSpecStart, l)   => BlockStart(bl)
+      case b @ Level(s: SpecEnd, l)             => BlockEnd(bl)
+      case b @ Level(s: ExecutedSpecEnd, l)     => BlockEnd(bl)
+      case b                                    => BlockBit(bl)
     }
     sumContext(levelsSeq.map(toNestedBlock))(Levels.LevelMonoid[T])
   }
@@ -132,7 +132,7 @@ case object Levels {
 
   implicit def executedFragmentToLevel: ExecutedFragment => Level[ExecutedFragment] = (f: ExecutedFragment) => f match {
     case t @ ExecutedResult(_,_,_,_,_)                               => Terminal(t)
-    case t @ ExecutedText(Text(text), _)                             => if (text.flow) Fixed(t, startIndentation(text.raw), endIndentation(text.raw)) else Indent(t)
+    case t @ ExecutedText(Text(text, _), _)                          => if (text.flow) Fixed(t, startIndentation(text.raw), endIndentation(text.raw)) else Indent(t)
     case t @ ExecutedTab(n, _)                                       => Indent(t, n)
     case t @ ExecutedBacktab(n, _)                                   => Unindent(t, n)
     case t @ ExecutedSpecStart(_,_,_)                                => Neutral(t)
@@ -145,14 +145,14 @@ case object Levels {
     Reducer.unitReducer { f: ExecutedFragment => executedFragmentToLevel(f) }
 
   implicit def fragmentToLevel: Fragment => Level[Fragment] = (f: Fragment) => f match {
-    case t @ Example(_, _)                          => Terminal(t)
-    case t @ Tab(n)                                 => Indent(t, n)
-    case t @ Backtab(n)                             => Unindent(t, n)
-    case t @ Text(text)                             => if (text.flow) Fixed(t, startIndentation(text.raw), endIndentation(text.raw)) else Indent(t)
-    case t @ SpecStart(_,_,_)                       => Neutral(t)
-    case t @ SpecEnd(_,_)                           => Neutral(t)
-    case t @ End()                                  => Reset(t)
-    case t                                          => Neutral(t)
+    case t: Example                         => Terminal(t)
+    case t @ Tab(n)                         => Indent(t, n)
+    case t @ Backtab(n)                     => Unindent(t, n)
+    case t: Text                            => if (t.text.flow) Fixed(t, startIndentation(t.text.raw), endIndentation(t.text.raw)) else Indent(t)
+    case t: SpecStart                       => Neutral(t)
+    case t: SpecEnd                         => Neutral(t)
+    case t @ End()                          => Reset(t)
+    case t                                  => Neutral(t)
   }
 
   private[specs2] def startIndentation(text: String) =

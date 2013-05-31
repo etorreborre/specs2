@@ -547,8 +547,8 @@ abstract class Given[T](var regex: String = "", var groupRegex: String = RegexEx
   def extract(text: String): T
 
   def strip(f: Fragment) = f match {
-    case Text(t) => Text(RegexExtractor.strip(t.raw))
-    case other    => other
+    case t: Text => Text(RegexExtractor.strip(t.text.raw))
+    case other   => other
   }
 }
 

@@ -35,8 +35,8 @@ trait SpecificationData extends Data[Specification] {
   def arbLinkedSpecificationFragments(seeOnly: Boolean = false): Arbitrary[Seq[Fragment]] = Arbitrary {
     for (spec <- arbSpecification.arbitrary) yield {
       spec.content.fragments match {
-        case SpecStart(n,a,Linked(l,so,h)) +: rest => SpecStart(n,a,Linked(Some(HtmlLink(n)),seeOnly,h)) +: rest
-        case other                          => other
+        case SpecStart(n,a,Linked(l,so,h),loc) +: rest => SpecStart(n,a,Linked(Some(HtmlLink(n)),seeOnly,h), loc) +: rest
+        case other                                     => other
       }
     }
   }

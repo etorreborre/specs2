@@ -9,9 +9,9 @@ import org.specs2.specification.{Snippets, SpecStart, Fragments}
 trait UserGuidePage extends Specification with UserGuideVariables with Snippets {
   override def map(fs: =>Fragments) =
     Fragments.create(fs.fragments.map {
-      case start @ SpecStart(_,_,_) if isIndex(start) => start.urlIs("index.html")
-      case start @ SpecStart(_,_,_)                   => start.baseDirIs(s"./$GUIDE_DIR")
-      case other                                      => other
+      case start: SpecStart if isIndex(start) => start.urlIs("index.html")
+      case start: SpecStart                   => start.baseDirIs(s"./$GUIDE_DIR")
+      case other                              => other
     }:_*)
 
   private def isIndex(start: SpecStart) = start.specName.javaClassName endsWith "Index"

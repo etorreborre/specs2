@@ -44,8 +44,8 @@ abstract class JUnitDescriptions[F](className: String)(implicit reducer: Reducer
       val descriptionTree = leveledFragments.toTree[DescribedFragment](mapper(className))
       val removeDanglingText = (t: Tree[DescribedFragment]) => {
         t.rootLabel  match {
-          case (Text(_), desc) if t.subForest.isEmpty  => (None:Option[DescribedFragment])
-          case other                                   => Some(t.rootLabel)
+          case (txt: Text, desc) if t.subForest.isEmpty  => (None:Option[DescribedFragment])
+          case other                                     => Some(t.rootLabel)
         }
       }
       val prunedDescriptionTree = descriptionTree.prune(removeDanglingText)
