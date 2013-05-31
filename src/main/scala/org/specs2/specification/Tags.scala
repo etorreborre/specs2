@@ -2,6 +2,7 @@ package org.specs2
 package specification
 
 import TagsFragments._
+import FormattingTags._
 
 /**
  * The tags trait allows the creation of Tags fragments in a Specification
@@ -20,12 +21,18 @@ trait Tags {
 object Tags extends Tags
 
 trait FormattingTags extends Tags {
-  def markdownSection   = section("specs2.internal.markdown")
-  def noMarkdown        = noMarkdownSection
-  def noMarkdownSection = section("specs2.internal.nomarkdown")
-  def flowSection       = section("specs2.internal.flow")
-  def noFlowSection     = section("specs2.internal.noflow")
-  def noFlow            = noFlowSection
+  implicit def ToFormattingTagParameter(condition: Boolean): Option[FormattingTagParameter] = Some(FormattingTagParameter(condition))
+  case class FormattingTagParameter(condition: Boolean)
+  
+  def formatSection(markdown: Option[FormattingTagParameter] = None, flow: Option[FormattingTagParameter] = None, verbatim: Option[FormattingTagParameter] = None) =
+    section(markdown.map(p => doIt(p)+"markdown").toSeq ++
+            flow    .map(p => doIt(p)+"flow").toSeq ++
+            verbatim.map(p => doIt(p)+"verbatim").toSeq:_*)
+
+  private def doIt(p: FormattingTagParameter) = (if (p.condition) "" else "!")+internal
+
 }
 
-object FormattingTags extends FormattingTags
+object FormattingTags extends FormattingTags {
+  private[specs2] val internal = "specs2.internal."
+}

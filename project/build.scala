@@ -56,7 +56,7 @@ object build extends Build {
       "org.hamcrest"            % "hamcrest-all"       % "1.1"         % "optional",
       "org.mockito"             % "mockito-all"        % "1.9.0"       % "optional",
       "junit"                   % "junit"              % "4.7"         % "optional",
-      "org.pegdown"             % "pegdown"            % "1.0.2"       % "optional",
+      "org.pegdown"             % "pegdown"            % "1.2.1"       % "optional",
       "org.specs2"              % "classycle"          % "1.4.1"       % "optional")
     },
     resolvers ++= Seq("sonatype-releases" at "http://oss.sonatype.org/content/repositories/releases",

@@ -1,7 +1,8 @@
 package org.specs2
 package text
 
-import org.pegdown.{ PegDownProcessor, Extensions }
+import org.pegdown._
+import ast._
 import scala.io.Source
 import scala.xml._
 import parsing.XhtmlParser
@@ -25,18 +26,17 @@ trait Markdown {
    * code tags are prettified and newlines in paragraphs are
    * transformed to <br/> tags
    */
-  def toHtml(text: String)(implicit args: Arguments) = {
-    processor.markdownToHtml(text.replace("\\\\n", "\n")).
-      replaceAll("<code>" -> "<code class='prettyprint'>")
+  def toHtml(text: String, options: MarkdownOptions = MarkdownOptions())(implicit args: Arguments) = {
+    (new Specs2Visitor(options)).toHtml(processor.parseMarkdown(text.replace("\\\\n", "\n").toCharArray))
   }
 
   /**
    * parse the markdown string and return html without the enclosing paragraph
    */
-  def toHtmlNoPar(text: String)(implicit args: Arguments) = {
+  def toHtmlNoPar(text: String, options: MarkdownOptions = MarkdownOptions())(implicit args: Arguments) = {
     if (text.trim.isEmpty) ""
     else {
-      val html = toHtml(text)
+      val html = toHtml(text, options)
 
       if (text.contains("\n")) s"<p>$html</p>"
       else html.removeEnclosingXmlTag("p")
@@ -46,8 +46,8 @@ trait Markdown {
   /**
    * parse the markdown string and return xml (unless the arguments deactivate the markdown rendering)
    */
-  def toXhtml(text: String)(implicit args: Arguments): NodeSeq = {
-    val html = toHtmlNoPar(text)
+  def toXhtml(text: String, options: MarkdownOptions = MarkdownOptions())(implicit args: Arguments): NodeSeq = {
+    val html = toHtmlNoPar(text, options)
     parse(html) match {
       case Some(f) => f
       case None => scala.xml.Text(if (args.debugMarkdown) html else text)
@@ -61,3 +61,29 @@ trait Markdown {
 }
 private[specs2]
 object Markdown extends Markdown
+
+/**
+ * specialised pegdown visitor to control the rendering of code blocks
+ */
+case class Specs2Visitor(options: MarkdownOptions = MarkdownOptions()) extends org.pegdown.ToHtmlSerializer(new LinkRenderer) {
+  override def visit(node: CodeNode) {
+    printTagAndAttribute(node, "code", "class", "prettyprint")
+  }
+
+  override def visit(node: VerbatimNode) {
+    if (!options.verbatim && node.getType.isEmpty && node.getText.contains("\n")) {
+      super.visit(new TextNode(node.getText))
+    }
+    else super.visit(new VerbatimNode(node.getText, "prettyprint"))
+  }
+
+  private def printTagAndAttribute(node: TextNode, tag: String, attributeName: String, attributeValue: String) {
+    printer.print('<').print(tag)
+    printer.print(' ').print(attributeName).print('=').print('"').print(attributeValue).print('"')
+    printer.print('>')
+    printer.printEncoded(node.getText())
+    printer.print('<').print('/').print(tag).print('>')
+  }
+}
+
+case class MarkdownOptions(verbatim: Boolean = true)

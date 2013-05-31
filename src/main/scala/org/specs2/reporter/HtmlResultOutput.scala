@@ -22,9 +22,9 @@ import html.Htmlx._
  *
  */
 private[specs2]
-case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "", customTextPrinter: Option[String => NodeSeq] = None)(implicit args: Arguments) extends HtmlReportOutput { outer =>
+case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "", customTextPrinter: Option[(String, MarkdownOptions) => NodeSeq] = None)(implicit args: Arguments) extends HtmlReportOutput { outer =>
 
-  protected lazy val textPrinter = customTextPrinter getOrElse ((s: String) => toXhtml(s)(args)) 
+  protected lazy val textPrinter = customTextPrinter getOrElse ((s: String, options: MarkdownOptions) => toXhtml(s, options)(args))
   
   /**
    * start of the output
@@ -200,9 +200,9 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
   protected def toggleElement(a: Any) = "toggleImage(this); showHide('"+id(a)+"')"
   protected def id(a: Any) = System.identityHashCode(a).toString
   /** render some markup text as xhtml */
-  protected def wiki(text: String) = textPrinter(text)
+  protected def wiki(text: String) = textPrinter(text, MarkdownOptions())
   protected def wiki(text: FormattedString) =
-    if (text.formatting.markdown) textPrinter(text.raw) else text.toXml
+    if (text.formatting.markdown) textPrinter(text.raw, MarkdownOptions(verbatim = text.formatting.verbatim)) else text.toXml
 
 
   /**

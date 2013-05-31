@@ -20,15 +20,7 @@ trait DefaultFragmentsFormatting extends FragmentsFormatting with TagsAssociatio
   }
 
   private def formattedStringFor(tag: TaggingFragment) = (formatted: FormattedString) =>
-    formatted.copy(formatting = formatted.formatting.copy(flow = isFlow(tag, formatted.flow), markdown = isMarkdown(tag, formatted.formatting.markdown)))
-
-  private def isFlow(tag: TaggingFragment, currentValue: Boolean) =
-    if (tag.isEmpty) currentValue
-    else tag.names.exists(_ == FormattingTags.flowSection.names.head) && !tag.names.exists(_ == FormattingTags.noFlowSection.names.head)
-
-  private def isMarkdown(tag: TaggingFragment, currentValue: Boolean) =
-    if (tag.isEmpty) currentValue
-    else tag.names.exists(_ == FormattingTags.markdownSection.names.head) && !tag.names.exists(_ == FormattingTags.noMarkdownSection.names.head)
+    formatted.formatWithTagNames(tag.names)
 }
 
 object DefaultFragmentsFormatting extends DefaultFragmentsFormatting

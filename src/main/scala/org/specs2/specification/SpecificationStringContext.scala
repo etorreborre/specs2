@@ -104,7 +104,7 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
       }.getOrElse((res, text))
       variable.append(res1, text1, expression)
     }
-    flowSection ^ markdownSection ^ texts.lastOption.map(t => fragments append textFragment(t).fragments).getOrElse(fragments) ^ flowSection ^ markdownSection
+    formatSection(flow = true, markdown = true) ^ texts.lastOption.map(t => fragments append textFragment(t).fragments).getOrElse(fragments) ^ formatSection(flow = true, markdown = true)
   }
 }
 

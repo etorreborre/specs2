@@ -20,7 +20,7 @@ class MarkdownSpec extends Specification {
 
 
   "Embedded code" >>
-  { toHtmlNoPar(someCode) must contain("<code class='prettyprint'>") }
+  { toHtmlNoPar(someCode) must contain("""<code class="prettyprint">""") }
   "Code with newlines must be enclosed in one code tag only" >>
   { toHtmlNoPar(someCode).split(" ").filter(_.trim.contains("</code>")) must have size(1) }
 
@@ -29,6 +29,16 @@ class MarkdownSpec extends Specification {
   "the encoding must be ok with utf-8 characters" >>
   { toXhtml("⊛").toString must contain("⊛") }
 
+  "verbatim code blocks are activated by default" >> {
+    toHtml("""
+             |     this is some text
+           """.stripMargin, MarkdownOptions(verbatim = false)) must not contain("code")
+  }
+  "verbatim code blocks can alse be rendered as simple text" >> {
+    toHtml("""
+             |     this is some text
+           """.stripMargin, MarkdownOptions(verbatim = false)) must not contain("code")
+  }
 
   val someCode = """
 This is a paragraph presenting some code:

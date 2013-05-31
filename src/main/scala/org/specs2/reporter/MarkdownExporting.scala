@@ -7,6 +7,7 @@ import scala.xml.{Elem, Xhtml, NodeSeq}
 import execute.{Details, ResultStackTrace, Result}
 import control.StackTraceFilter
 import java.io.Writer
+import text.MarkdownOptions
 
 /**
  * Trait for exporting the specification as Markup files. It reuses most of the classes for writing html files but skips
@@ -31,7 +32,7 @@ trait MarkdownExporting extends HtmlExporting {
 
   /** @return a new ReportOutput object creating markup elements */
   override def output(implicit args: Arguments): HtmlReportOutput = new MarkdownResultOutput(
-    HtmlResultOutput(customTextPrinter = Some((t: String) => scala.xml.Text(t))))
+    HtmlResultOutput(customTextPrinter = Some((t: String, options: MarkdownOptions) => scala.xml.Text(t))))
 }
 object MarkdownExporting extends MarkdownExporting
 

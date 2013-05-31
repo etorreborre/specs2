@@ -162,7 +162,7 @@ case class HtmlResult(r: ExecutedResult, stats: Stats = Stats(), level: Int = 0,
       case e: Error                                                      => printErrorDetails(e)(outDesc).printStack(e, indent + 1, args.traceFilter)
       case Success(_, _)                                                 => outDesc
       case Skipped(_, _)                                                 => outDesc ?> (_.printSkipped(FormattedString(result.message), indent))
-      case Pending(_)                                                    => outDesc ?> (_.printPending(FormattedString(result.message), indent))
+      case Pending(_)                                                    => outDesc
       case DecoratedResult(table: DataTable, r) if (desc.isEmpty)        => printDataTableExample(table, r)(out)
       case DecoratedResult(table: DataTable, r) if (r.isSuccess)         => outDesc
       case DecoratedResult(table: DataTable, r)                          => printDataTable(table)(outDesc)
@@ -176,7 +176,7 @@ case class HtmlResult(r: ExecutedResult, stats: Stats = Stats(), level: Int = 0,
       case e: Error                             => out.printError(desc, indent)
       case Success(_, _)                        => out.when(!args.xonly)(_.printSuccess(desc, indent))
       case Skipped(_, _)                        => out.printSkipped(desc, indent)
-      case Pending(_)                           => out.printPending(desc, indent)
+      case Pending(_)                           => out.printPending(desc.map(_ +" "+result.message), indent)
       case DecoratedResult(_, r)                => printDesc(desc, r)(out)
     }
   }

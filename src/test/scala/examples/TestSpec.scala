@@ -3,15 +3,19 @@ package examples
 import org.specs2._
 import org.specs2.matcher.Matcher
 
-class TestSpec extends SpecificationWithJUnit { def is = s2""" ${noMarkdown}
+class TestSpec extends SpecificationWithJUnit { def is = s2""" ${formatSection(verbatim=false)}
 This is a simple, hierarchical specification
+
+```scala
+def startWith[T](fromIndex: Int, ts: T*): Matcher[Traversable[T]] = ???
+```
   if things are indented
     in the console                         $ok
-    as well as the HTML report             $ok
+    as `well` as the HTML report           $ok
 
   just as expected
-    by me                                  $ok
-    or maybe someone else                  $ok
+    by me                                  $todo
+    or ***maybe*** someone else            $ok
 
     or if there's only text, indentation
       with more text

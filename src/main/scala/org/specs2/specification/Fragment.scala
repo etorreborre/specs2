@@ -12,6 +12,7 @@ import scalaz.Monoid
 import io.Location
 import scala.Either
 import data.SeparatedTags
+import TagsFragments._
 
 /**
  * A Fragment is a piece of a specification. It can be a piece of text, an action or
@@ -105,10 +106,13 @@ object Text {
 case class FormattedString(t: String = "", formatting: Formatting = Formatting(), isEmpty: Boolean = false) {
   def raw: String = t
   def append(s: String) = copy(t = t+s)
+  def map(f: String => String) = copy(t = f(t))
   def withMarkdown = copy(formatting = formatting.copy(markdown = true))
   def withFlow = copy(formatting = formatting.copy(flow = true))
   def flow = formatting.flow
   def toXml = if (formatting.markdown) <code class="prettyprint">{raw}</code> else if (isEmpty) <t></t> else <t>{raw}</t>
+
+  def formatWithTagNames(names: Seq[String]) = copy(formatting = formatting.fromTagNames(names: Seq[String]))
   override def toString = raw
 }
 object FormattedString {
@@ -116,7 +120,19 @@ object FormattedString {
   def empty = FormattedString(isEmpty = true)
 }
 /** Formatting for Text fragments */
-case class Formatting(flow: Boolean = false, markdown: Boolean = false)
+case class Formatting(flow: Boolean = false, markdown: Boolean = true, verbatim: Boolean = true) {
+ def fromTagNames(names: Seq[String]) = copy(flow = tagValue(names, "flow", flow), markdown = tagValue(names, "markdown", markdown), verbatim = tagValue(names, "verbatim", verbatim))
+
+  private def tagValue(names: Seq[String], name: String, defaultValue: Boolean) = {
+    val nameFound         = names.exists(_ == FormattingTags.internal+name)
+    val negatedNameFound  = names.exists(_ == "!"+FormattingTags.internal+name)
+
+    if (nameFound && !negatedNameFound) true
+    else if (negatedNameFound)          false
+    else                                defaultValue
+  }
+
+}
 
 /**
  * A Example is:
