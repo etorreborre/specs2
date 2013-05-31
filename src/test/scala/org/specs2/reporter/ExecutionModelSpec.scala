@@ -49,7 +49,7 @@ class ExecutionModelSpec extends Specification with ScalaCheck with Groups { def
       override lazy val textOutput = new TextResultOutput with StringOutput
       lazy val messages = textOutput.messages
       def outputLabels = messages.filter(_.startsWith("label")).map(_.replace("label ", ""))
-      def outputLabelIds = outputLabels.map(_.trim.take(1).mkString.toInt)
+      def outputLabelIds = outputLabels.map(_.trim.takeWhile(Character.isDigit).mkString.toInt)
     }
 
     // print a label after each execution
