@@ -47,7 +47,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
    ${ Seq(1, 2, 3) must contain(allOf(Seq(1, 2).map(be_>=(_)):_*))             }
    ${ Seq(1, 2, 3) must contain(allOf(Seq(1, 2).map(be_>=(_)):_*)).inOrder     }
    ${ Seq(1, 2, 3) must not(contain(allOf(Seq(0, 0).map(be_<=(_)):_*)))        }
-   ${ Seq(1, 2, 3) must contain(allOf(1, 3).inOrder)                           } $xtag
+   ${ Seq(1, 2, 3) must contain(allOf(1, 3).inOrder)                           }
 
    ${ Seq(1, 2, 3) must contain(atLeast(3, 1))                                 }
    ${ Seq(1, 2, 3) must contain(atLeast(be_>=(0), be_>=(1), be_>=(2)))         }

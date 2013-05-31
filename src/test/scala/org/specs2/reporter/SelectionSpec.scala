@@ -28,7 +28,7 @@ class SelectionSpec extends Specification with Tags { def is = s2"""
    along with all the previous steps                                                                   ${isolate().e2}
    steps bodies must not be copied                                                                     ${isolate().e3}
    actions bodies must be copied                                                                       ${isolate().e4}
-   if the examples, steps or actions are marked as global, they are never copied                       ${isolate().e5} $xtag
+   if the examples, steps or actions are marked as global, they are never copied                       ${isolate().e5}
      with a global step before an example                                                              ${isolate().e6}
    tags can be used                                                                                    ${isolate().e7}
                                                                                                        """

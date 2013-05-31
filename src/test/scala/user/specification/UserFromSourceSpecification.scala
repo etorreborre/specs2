@@ -3,7 +3,7 @@ package specification
 
 import org.specs2.SpecificationWithJUnit
 
-class UserFromSourceSpecification extends org.specs2.Specification { def is =
+class UserFromSourceSpecification extends org.specs2.Specification { def is = nocolor ^
                                                                                       p^
   "this is a one-liner"                                                               ^
   { 1 must_== 1 }                                                                     ^

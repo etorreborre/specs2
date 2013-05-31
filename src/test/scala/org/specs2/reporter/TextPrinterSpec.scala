@@ -95,7 +95,7 @@ class TextPrinterSpec extends Specification with DataTables with Tags { def is =
  a multi-line description must be indented ok                                                     ${status().e7}
  if showtimes is true, each individual time must be shown                                         ${status().e8}
  a datatable must
-   be used as a description if the example description is empty (meaning it's an auto-example)    ${status().e9} $xtag
+   be used as a description if the example description is empty (meaning it's an auto-example)    ${status().e9}
    have no description if failing/in error (because the result shows all)                         ${status().e10}
    be properly aligned
      when successful                                                                              ${status().e11}
