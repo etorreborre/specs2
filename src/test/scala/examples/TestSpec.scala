@@ -7,20 +7,16 @@ class TestSpec extends SpecificationWithJUnit { def is = s2""" ${noMarkdown}
 This is a simple, hierarchical specification
   if things are indented
     in the console                         $ok
-    as well as the HTML report             $ko
+    as well as the HTML report             $ok
 
   just as expected
-    by me                                  $todo
+    by me                                  $ok
     or maybe someone else                  $ok
 
     or if there's only text, indentation
       with more text
         should also work                   $ok
         and not quote lines as code        $ok
-
-start with 2, 3, 4 ${ Seq("1", "2", "3", "4", "5", "6") must startWith(fromIndex = 2, "2", "3", "4") }
-start with 2, 3, 4 ${ Seq("1", "2", "3", "4") must startWith("2", "3", "4") }
-
 
 """ ^ link(new Test2Spec)
 

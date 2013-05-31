@@ -12,7 +12,7 @@ trait DefaultFragmentsFormatting extends FragmentsFormatting with TagsAssociatio
 
   def formatFragments: Fragments => Fragments = (fs: Fragments) => {
     val tagged = tagFragments(fs.fragments).map {
-      case (t: Text, tag)    => Text(formattedStringFor(tag)(t.text))
+      case (t: Text, tag)    => t.copy(text = formattedStringFor(tag)(t.text))
       case (e: Example, tag) => e.formatWith(formattedStringFor(tag)(e.desc))
       case (other, _)        => other
     }
