@@ -3,6 +3,12 @@ package specification
 
 import TagsFragments.TaggingFragment
 
+/**
+ * This trait post-process fragments.
+ *
+ * The default implementation looks for tags and sections to mark text and examples as
+ * "flowing" (no automatic indentation) or "markdown"
+ */
 trait FragmentsFormatting {
   /** format a list of fragments according to their formatting tags */
   def formatFragments: Fragments => Fragments
