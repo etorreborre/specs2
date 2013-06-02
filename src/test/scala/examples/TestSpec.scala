@@ -33,7 +33,7 @@ def startWith[T](fromIndex: Int, ts: T*): Matcher[Traversable[T]] = ???
 }
 
 class Test2Spec extends SpecificationWithJUnit { def is = "Test 2 Spec".title ^
-"This is a simple, hierarchical specification" ^p^
+"This is a simple specification2"              ^p^
   "If things are indented1"                    ^
   "a bit more"                                 ^
     "by me1"                                   ! ok^

@@ -4,6 +4,7 @@ package specification
 import Fragments._
 
 class FragmentsFormattingSpec extends script.Specification with Groups { def is = s2"""
+
  It is possible to use some tags to specify the formatting of text and example fragments
 
  When a section is tagged with a formatting tag, it must apply to all FormattedStrings of text and examples
