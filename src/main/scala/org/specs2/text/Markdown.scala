@@ -37,8 +37,9 @@ trait Markdown {
     if (text.trim.isEmpty) "<br/>"*(text.filter(_ == '\n').drop(1).size)
     else {
       val html = toHtml(text, options)
-      if (text.startsWith("\n")) html.replace("</p>", "<br/>").replace("<p>", "<br/>").replace("\n", "<br/>")
-      else html.removeEnclosingXmlTag("p").replace("</p>", "<br/>").replace("<p>", "<br/>").replace("\n", "<br/>")
+
+      if (text.contains("\n")) s"<p>$html</p>"
+      else html.removeEnclosingXmlTag("p")
     }
   }
 

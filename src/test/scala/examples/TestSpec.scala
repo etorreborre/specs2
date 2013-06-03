@@ -6,6 +6,11 @@ import org.specs2.matcher.Matcher
 class TestSpec extends SpecificationWithJUnit { def is = s2""" ${formatSection(verbatim=false)}
 This is a simple, hierarchical specification
 
+ * bullet 1
+ * bullet 2
+
+And some text
+
 ```scala
 def startWith[T](fromIndex: Int, ts: T*): Matcher[Traversable[T]] = ???
 ```
