@@ -251,10 +251,7 @@ creates specifications using the following parameters:
 
 Tags can be used in a Specification to include or exclude some examples or a complete section of fragments from the execution. Let's have a look at one example: ${snippet{
 
-/**
- * use the org.specs2.specification.Tags trait to define tags and sections
- */
-class TaggedSpecification extends Specification with specification.Tags { def is = s2"""
+class TaggedSpecification extends Specification { def is = s2"""
   this is some introductory text
   and the first group of examples
   example 1 $success                         ${tag("feature1", "unit")}
@@ -287,10 +284,7 @@ A _unit_ specification will accept the same `tag` and `section` methods but the 
 
 import org.specs2.mutable._
 
-/**
- * use the org.specs2.mutable.Tags trait to define tags and sections
- */
-class TaggedSpecification extends Specification with Tags {
+class TaggedSpecification extends Specification {
   "this is some introductory text" >> {
     "and the first group of examples" >> {
       tag("feature 1", "unit")
@@ -339,7 +333,7 @@ def serverIsOffline = false
 def sendEmail = "ok"
 }}
 
-#### Debug statements
+### Debug statements
 
 When quick and hacky `println` statements are what you want, the `Debug` trait, mixed in every `Specification`, provides useful methods:
 
@@ -347,7 +341,7 @@ When quick and hacky `println` statements are what you want, the `Debug` trait, 
 * `pp(condition)` prints a value if a condition holds
 * `pp(f: T => Boolean)` prints a value if a condition on that value holds
 
-#### Remove implicits
+### Remove implicits
 
 By default, the `Specification` trait imports quite a few implicit definitions (following a "batteries included" approach). However there might be some conflicts with implicits existing in your own user code. Among the usual examples of conflicts are conflicts with the `===` sign in Scalaz and the `Duration` methods in Akka.
 

@@ -310,6 +310,23 @@ trait Examples extends Groups with matcher.Matchers {
 }
 }}
 
+#### Tags
+
+Tags can be used for 2 purposes: example selection and formatting.
+
+##### Selection
+
+You can tag specific examples or entire sections of a specification and execute them selectively from the command line. See [HowTo](org.specs2.guide.HowTo.html#Tags) on how to use tags.
+
+##### Formatting
+
+You can use the `formatSection` or `formatTag` methods to specify the formatting of `Texts` and `Examples` fragments with the following parameters:
+
+ - `flow`: the fragment (`Text` or `Example`) shouldn't be reported with automatic indenting (default = `false`, set automatically to `true` when using `s2` interpolated strings)
+ - `markdown`: the fragment is using Markdown (default = `true`)
+ - `verbatim`: indented text with more than 4 spaces must be rendered as a code block (default = `true`)
+
+
 """
   trait Service
   class LocalService extends Service
