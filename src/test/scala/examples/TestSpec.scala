@@ -5,27 +5,18 @@ import org.specs2.matcher.Matcher
 
 class TestSpec extends SpecificationWithJUnit { def is = s2""" ${formatSection(verbatim=false)}
 This is a simple, hierarchical specification
-
- * bullet 1
- * bullet 2
-
-And some text
-
-```scala
-def startWith[T](fromIndex: Int, ts: T*): Matcher[Traversable[T]] = ???
-```
-  if things are indented
-    in the console                         $ok
-    as `well` as the HTML report           $ok
-
-  just as expected
-    by me                                  $todo
-    or ***maybe*** someone else            $ok
-
+  If things are indented
+    and examples are nested
+      this should be reflected
+        in the console                   $ok
+        as well as the HTML report       $ok
+      just as expected
+        by me                            $ok
+        or maybe someone else            $todo
     or if there's only text, indentation
-      with more text
-        should also work                   $ok
-        and not quote lines as code        $ok
+    possibly on multiple following lines
+      should also work                   $ok
+      and not quote lines as code        $ok
 
 """ ^ link(new Test2Spec)
 
