@@ -85,7 +85,7 @@ And this is it! Now to execute your specification, you use a [*runner*](org.spec
 
 #### And much more!
 
-You can explore the rest of this [User Guide](org.specs2.UserGuide.html "Guide") to learn how to:
+You can explore the rest of this [User Guide](org.specs2.guide.UserGuide.html "Guide") to learn how to:
 
  * use the many ***specs2*** matchers to specify precise expectations
  * define _contexts_ to setup/teardown data for your examples
