@@ -9,11 +9,6 @@
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
-      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
-      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
-      <script type="text/javascript" src="../../../lib/template.js"></script>
-      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
-      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../index.html';
@@ -40,7 +35,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">ExecutedText</span><span class="params">(<span name="text">text: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="location">location: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a> = <span class="symbol">new io.Location()</span></span>)</span><span class="result"> extends <a href="ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">ExecutedText</span><span class="params">(<span name="textFragment">textFragment: <a href="Text.html" class="extype" name="org.specs2.specification.Text">Text</a></span>, <span name="location">location: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a> = <span class="symbol">new io.Location()</span></span>)</span><span class="result"> extends <a href="ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -85,7 +80,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="org.specs2.specification.ExecutedText#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(text:String,location:org.specs2.io.Location):org.specs2.specification.ExecutedText"></a>
+      <a id="&lt;init&gt;(textFragment:org.specs2.specification.Text,location:org.specs2.io.Location):org.specs2.specification.ExecutedText"></a>
       <a id="&lt;init&gt;:ExecutedText"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -93,7 +88,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ExecutedText</span><span class="params">(<span name="text">text: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="location">location: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a> = <span class="symbol">new io.Location()</span></span>)</span>
+        <span class="name">ExecutedText</span><span class="params">(<span name="textFragment">textFragment: <a href="Text.html" class="extype" name="org.specs2.specification.Text">Text</a></span>, <span name="location">location: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a> = <span class="symbol">new io.Location()</span></span>)</span>
       </span>
       </h4>
       
@@ -197,7 +192,10 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -226,9 +224,38 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
               
         </dd></dl></div>
+    </li><li name="org.specs2.specification.ExecutedText#flow" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="flow:Boolean"></a>
+      <a id="flow:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">flow</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.specification.ExecutedText#formattedString" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="formattedString:org.specs2.specification.FormattedString"></a>
+      <a id="formattedString:FormattedString"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">formattedString</span><span class="result">: <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.specification.ExecutedFragment#get" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="get:org.specs2.specification.ExecutedFragment"></a>
       <a id="get:ExecutedFragment"></a>
@@ -352,10 +379,23 @@
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
         <span class="name">text</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.specification.ExecutedText#textFragment" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="textFragment:org.specs2.specification.Text"></a>
+      <a id="textFragment:Text"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">textFragment</span><span class="result">: <a href="Text.html" class="extype" name="org.specs2.specification.Text">Text</a></span>
       </span>
       </h4>
       
@@ -372,7 +412,10 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -388,7 +431,10 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -404,7 +450,10 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li></ol>
@@ -446,7 +495,6 @@
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-
-
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../lib/template.js"></script>
     </body>
       </html>

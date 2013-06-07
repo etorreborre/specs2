@@ -65,7 +65,7 @@
     </head><body><div id="breadcrumbs"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html">Matchers</a></div><div class="colmask threecol">
                    <div class="colmid">
                      <div class="colleft">
-                       <div class="col1"><div id="central"><title>Matchers</title><a name="Matchers"><h2 specId="1671435942">Matchers</h2></a><status class="ok"><div class="level0" style="display: show"><p><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
+                       <div class="col1"><div id="central"><title>Matchers</title><a name="Matchers"><h2 specId="782950911">Matchers</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><p><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
 <ul>
   <li>Boolean</li>
   <li>Standard result</li>
@@ -85,7 +85,7 @@
 <ul>
   <li><code class="prettyprint">done</code>: a <code class="prettyprint">Success</code> with the message &quot;DONE&quot;</li>
   <li><code class="prettyprint">todo</code>: a <code class="prettyprint">Pending</code> with the message &quot;TODO&quot;</li>
-</ul><a name="Combinators"><h4>Combinators</h4></a><p>Logical combinators like <code class="prettyprint">and</code>, <code class="prettyprint">or</code>, <code class="prettyprint">not</code> can be used to combine results. You can also use the <code class="prettyprint">eventually</code> method to retry a Result until it is ok (this will actually work with anything convertible to a Result).</p><a name="Match+results"><h3>Match results</h3></a><p>This is by far the largest category of Results in <strong><em>specs2</em></strong>. They cover many data types, can be composed and adapted to create new ones or be created from scratch by the user.</p><a name="Out+of+the+box"><h4>Out of the box</h4></a><p>The most common matchers are automatically available when extending the <code class="prettyprint">Specification</code> trait:</p></p></div></status><status class="ok"><form><table class="dataTable"><tr><th colspan="101">Specification Matchers</th></tr><tr><td colspan="100" class="info"><div class="tabber"><div class="tabbertab" title="Equality"><form><table class="dataTable"><tr><td class="none" style="info"><p><p>The most common type of matcher is <strong><em><code class="prettyprint">beEqualTo</code></em></strong> to test for equality. There are different ways to use this matcher:</p>
+</ul><a name="Combinators"><h4>Combinators</h4></a><p>Logical combinators like <code class="prettyprint">and</code>, <code class="prettyprint">or</code>, <code class="prettyprint">not</code> can be used to combine results. You can also use the <code class="prettyprint">eventually</code> method to retry a Result until it is ok (this will actually work with anything convertible to a Result).</p><a name="Match+results"><h3>Match results</h3></a><p>This is by far the largest category of Results in <strong><em>specs2</em></strong>. They cover many data types, can be composed and adapted to create new ones or be created from scratch by the user.</p><a name="Out+of+the+box"><h4>Out of the box</h4></a><p>The most common matchers are automatically available when extending the <code class="prettyprint">Specification</code> trait:</p></p></div></status><status class="ok"><div style="display: show; text-indent:6px;"></div></status><status class="ok"><form><table class="dataTable"><tr><th colspan="101">Specification Matchers</th></tr><tr><td colspan="100" class="info"><div class="tabber"><div class="tabbertab" title="Equality"><form><table class="dataTable"><tr><td class="none" style="info"><p><p>The most common type of matcher is <strong><em><code class="prettyprint">beEqualTo</code></em></strong> to test for equality. There are different ways to use this matcher:</p>
 <table>
   <thead>
     <tr>
@@ -279,48 +279,30 @@
 <ul>
   <li><p><code class="prettyprint">beDefinedAt</code> checks if a PartialFunction is defined for a given value<br /> <code class="prettyprint">partial must beDefinedAt(1)</code></p></li>
   <li><p><code class="prettyprint">beDefinedBy</code> checks if a PartialFunction is defined for a given value<br /> and returns another one<br /> <code class="prettyprint">partial</code> must beDefinedBy(1 -&gt; true)</p></li>
-</ul></p></td></tr></table></form></div></div></td></tr></table></form></status><status class="ok"><div class="level0" style="display: show"><p><p>The examples above show how to use matchers:</p>
+</ul></p></td></tr></table></form></div></div></td></tr></table></form></status><status class="ok"><div style="display: show; text-indent:0px;"><p><p>The examples above show how to use matchers:</p>
 <ul>
   <li>the general form for using a matcher is: <code class="prettyprint">a must matcher</code></li>
   <li>but can use <code class="prettyprint">should</code> instead of <code class="prettyprint">must</code> if you prefer</li>
   <li>for most matchers you can use a form where the <code class="prettyprint">be</code> word (or the <code class="prettyprint">have</code> word) is detached</li>
   <li>you can as well negate a matcher by adding <code class="prettyprint">not</code> before it (or after it, as a method call)</li>
-</ul><a name="Optional"><h4>Optional</h4></a><p>These other matchers need to be selectively added to the specification by adding a new trait:</p></p></div></status><status class="ok"><form><table class="dataTable"><tr><th colspan="101">Optional Matchers</th></tr><tr><td colspan="100" class="info"><div class="tabber"><div class="tabbertab" title="Result"><form><table class="dataTable"><tr><td class="none" style="info"><p><p>That's only if you want to match the result of other matchers! </p>
+</ul><a name="Optional"><h4>Optional</h4></a><p>These other matchers need to be selectively added to the specification by adding a new trait:</p></p></div></status><status class="ok"><div style="display: show; text-indent:6px;"></div></status><status class="ok"><form><table class="dataTable"><tr><th colspan="101">Optional Matchers</th></tr><tr><td colspan="100" class="info"><div class="tabber"><div class="tabbertab" title="Result"><form><table class="dataTable"><tr><td class="none" style="info"><p><p>That's only if you want to match the result of other matchers! </p>
 <pre><code class="prettyprint">// you need to extend the ResultMatchers trait
 class MatchersSpec extends Specification with matcher.ResultMatchers { def is =
   &quot;beMatching is using a regexp&quot; ! {
     (&quot;Hello&quot; must beMatching(&quot;h.*&quot;)) must beSuccessful
   }
 }
-</code></pre></p></td></tr></table></form></div><div class="tabbertab" title="Xml"><form><table class="dataTable"><tr><td class="none" style="info">
-It is very useful to have literal Xml in Scala, it is even more useful to have matchers for it!
-
- * `beEqualToIgnoringSpace` compares 2 Nodes, without considering spaces
- `&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must ==/(&lt;a&gt; &lt;b/&gt;&lt;/a&gt;)`
- `&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must beEqualToIgnoringSpace(&lt;a&gt; &lt;b/&gt;&lt;/a&gt;)`
-
- * `beEqualToIgnoringSpace` can also do an ordered comparison
- &lt;code class=&quot;prettyprint&quot;&gt;&lt;a&gt;&lt;c/&gt; &lt;b/&gt;&lt;/a&gt; must ==/(&lt;a&gt; &lt;c/&gt;&lt;b/&gt;&lt;/a&gt;).ordered&lt;/code&gt;
-
- * on the other hand `beEqualToIgnoringSpace` will not check attributes order
- &lt;code class=&quot;prettyprint&quot;&gt;&lt;n a=&quot;1&quot; b=&quot;2&quot;/&gt; must ==/(&lt;n b=&quot;2&quot; a=&quot;1&quot;/&gt;)&lt;/code&gt;
-
- * &lt;code class=&quot;prettyprint&quot;&gt;\&lt;/code&gt; is an XPath-like matcher matching if a node is a direct child of another
- &lt;code class=&quot;prettyprint&quot;&gt;&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must \(&quot;b&quot;)&lt;/code&gt;
-
- * You can also check attribute names
- &lt;code class=&quot;prettyprint&quot;&gt;&lt;a&gt;&lt;b name=&quot;value&quot;&gt;&lt;/b&gt;&lt;/a&gt; must \(&quot;b&quot;, &quot;name&quot;)&lt;/code&gt;
-
- * And attribute names and values as well (values are checked using a regular expression, use the &lt;a href=&quot;http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#quote(java.lang.String)&quot;&gt;quote method&lt;/a&gt;  if you want an exact match)
- &lt;code class=&quot;prettyprint&quot;&gt;&lt;a&gt;&lt;b n=&quot;v&quot; n2=&quot;v2&quot; n3=&quot;v3&quot;&gt;&lt;/b&gt;&lt;/a&gt; must \(&quot;b&quot;, &quot;n&quot;-&gt;&quot;v&quot;, &quot;n2&quot;-&gt;&quot;v\\d&quot;)&lt;/code&gt;
-
- * Or the content of a `Text` node
- &lt;code class=&quot;prettyprint&quot;&gt;&lt;a&gt;hello&lt;/a&gt; must \(&quot;a&quot;) \&gt; &quot;hello&quot;&lt;/code&gt; (alias `textIs`)
- &lt;code class=&quot;prettyprint&quot;&gt;&lt;a&gt;hello&lt;/a&gt; must \(&quot;a&quot;) \&gt;~ &quot;h.*&quot;&lt;/code&gt;  (alias `textMatches`)
-
- * The equivalent of `\` for a &quot;deep&quot; match is simply &lt;code class=&quot;prettyprint&quot;&gt;\\&lt;/code&gt;
- &lt;code class=&quot;prettyprint&quot;&gt;&lt;a&gt;&lt;s&gt;&lt;c&gt;&lt;/c&gt;&lt;/s&gt;&lt;/a&gt; must \\(&quot;c&quot;)&lt;/code&gt;
-</td></tr></table></form></div><div class="tabbertab" title="Json"><form><table class="dataTable"><tr><td class="none" style="info"><p><p><a href="http://www.json.org">Json</a> is a simple data format essentially modeling recursive key-values. There are 2 matchers which can be used to verify the presence of appropriate values in Strings representing Json documents:</p>
+</code></pre></p></td></tr></table></form></div><div class="tabbertab" title="Xml"><form><table class="dataTable"><tr><td class="none" style="info"><p><p>It is very useful to have literal Xml in Scala, it is even more useful to have matchers for it!</p>
+<ul>
+  <li><p><code class="prettyprint">beEqualToIgnoringSpace</code> compares 2 Nodes, without considering spaces<br /> <code class="prettyprint">&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must ==/(&lt;a&gt; &lt;b/&gt;&lt;/a&gt;)</code><br /> <code class="prettyprint">&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must beEqualToIgnoringSpace(&lt;a&gt; &lt;b/&gt;&lt;/a&gt;)</code></p></li>
+  <li><p><code class="prettyprint">beEqualToIgnoringSpace</code> can also do an ordered comparison<br /> <code class="prettyprint"><a><c></c> <b></b></a> must ==/(<a> <c></c><b></b></a>).ordered</code></p></li>
+  <li><p>on the other hand <code class="prettyprint">beEqualToIgnoringSpace</code> will not check attributes order<br /> <code class="prettyprint"><n b="2" a="1"></n> must ==/(<n a="1" b="2"></n>)</code></p></li>
+  <li><p><code class="prettyprint">\</code> is an XPath-like matcher matching if a node is a direct child of another<br /> <code class="prettyprint"><a><b></b></a> must (&quot;b&quot;)</code></p></li>
+  <li><p>You can also check attribute names<br /> <code class="prettyprint"><a><b name="value"></b></a> must (&quot;b&quot;, &quot;name&quot;)</code></p></li>
+  <li><p>And attribute names and values as well (values are checked using a regular expression, use the <a href="http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#quote(java.lang.String)">quote method</a> if you want an exact match)<br /> <code class="prettyprint"><a><b n3="v3" n2="v2" n="v"></b></a> must (&quot;b&quot;, &quot;n&quot;-&gt;&quot;v&quot;, &quot;n2&quot;-&gt;&quot;v\d&quot;)</code></p></li>
+  <li><p>Or the content of a <code class="prettyprint">Text</code> node<br /> <code class="prettyprint"><a>hello</a> must (&quot;a&quot;) &gt; &quot;hello&quot;</code> (alias <code class="prettyprint">textIs</code>)<br /> <code class="prettyprint"><a>hello</a> must (&quot;a&quot;) &gt;~ &quot;h.*&quot;</code> (alias <code class="prettyprint">textMatches</code>)</p></li>
+  <li><p>The equivalent of <code class="prettyprint">\</code> for a &quot;deep&quot; match is simply <code class="prettyprint">\</code><br /> <code class="prettyprint"><a><s><c></c></s></a> must \(&quot;c&quot;)</code></p></li>
+</ul></p></td></tr></table></form></div><div class="tabbertab" title="Json"><form><table class="dataTable"><tr><td class="none" style="info"><p><p><a href="http://www.json.org">Json</a> is a simple data format essentially modeling recursive key-values. There are 2 matchers which can be used to verify the presence of appropriate values in Strings representing Json documents:</p>
 <ul>
   <li><p><code class="prettyprint">/(value)</code> checks if a value is present at the root of the document. This can only be the case if that document is an Array</p></li>
   <li><p><code class="prettyprint">/(regex)</code> checks if a value matching the regex is present at the root of the document. This can only be the case if that document is an Array</p></li>
@@ -498,7 +480,7 @@ libraryDependencies &lt;&lt;= scalaVersion { scala_version =&gt; Seq(
   &quot;org.specs2&quot; %% &quot;specs2&quot; % 2.0-RC2-SNAPSHOT % &quot;test&quot;,
   &quot;org.scala-lang&quot; % &quot;scala-compiler&quot; % scala_version % &quot;test&quot;)
 }
-</code></pre></p></td></tr></table></form></div></div></td></tr></table></form></status><status class="ok"><div class="level0" style="display: show"><p><a name="Custom"><h4>Custom</h4></a><p>There are many ways to create matchers for your specific usage. The simplest way is to reuse the existing ones:</p>
+</code></pre></p></td></tr></table></form></div></div></td></tr></table></form></status><status class="ok"><div style="display: show; text-indent:0px;"><p><a name="Custom"><h4>Custom</h4></a><p>There are many ways to create matchers for your specific usage. The simplest way is to reuse the existing ones:</p>
 <ul>
   <li>using logical operators</li>
 </ul>
@@ -616,7 +598,7 @@ val m5: Matcher[String] = (s: String) =&gt; (s.startsWith(&quot;hello&quot;), s+
   }
 
 }
-</code></pre><a name="With+sequences"><h4>With sequences</h4></a><p>If you have the same &quot;MatchResult&quot; expression that you'd like to verify for different values you can write one of the following: </p></p></div></status><status class="ok"><div class="level0" style="display: show"><p><pre><code class="prettyprint">// stop after the first failure
+</code></pre><a name="With+sequences"><h4>With sequences</h4></a><p>If you have the same &quot;MatchResult&quot; expression that you'd like to verify for different values you can write one of the following: </p></p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><p><pre><code class="prettyprint">// stop after the first failure
 ((_:Int) must be_&gt;(2)).forall(Seq(3, 4, 5))
 forall(Seq(3, 4, 5)) ((_:Int) must be_&gt;(2))
 // check only the elements defined for the partial function
@@ -633,7 +615,7 @@ foreachWhen(Seq(3, 10, 15)) { case a if a &gt; 3 =&gt; a must be_&gt;(5) }
 atLeastOnce(Seq(3, 4, 5)) ((_:Int) must be_&gt;(2))
 // check only the elements defined for the partial function
 atLeastOnceWhen(Seq(3, 4, 10)) { case a if a &gt; 3 =&gt; a must be_&gt;(5) }
-</code></pre></p></div></status><status class="ok"><div class="level0" style="display: show"><p><a name="ScalaCheck"><h3>ScalaCheck</h3></a><p>A clever way of creating expectations in <strong><em>specs2</em></strong> is to use the <a href="http://code.google.com/p/scalacheck">ScalaCheck</a> library.</p><p>To declare ScalaCheck properties you first need to extend the <code class="prettyprint">ScalaCheck</code> trait. Then you can pass functions returning any kind of <code class="prettyprint">Result</code> (<code class="prettyprint">Boolean</code>, <code class="prettyprint">Result</code>, <code class="prettyprint">MatchResult</code>) to the <code class="prettyprint">prop</code> method and use the resulting <code class="prettyprint">Prop</code> as your example body: <code class="prettyprint">&quot;addition and multiplication are related&quot; ! prop { (a: Int) =&gt; a + a == 2 * a }</code></p><p>The function that is checked can either return: </p>
+</code></pre></p></div></status><status class="ok"><div style="display: show; text-indent:0px;"></div></status><status class="ok"><div style="display: show; text-indent:3px;"></div></status><status class="ok"><div style="display: show; text-indent:0px;"><p><a name="ScalaCheck"><h3>ScalaCheck</h3></a><p>A clever way of creating expectations in <strong><em>specs2</em></strong> is to use the <a href="http://code.google.com/p/scalacheck">ScalaCheck</a> library.</p><p>To declare ScalaCheck properties you first need to extend the <code class="prettyprint">ScalaCheck</code> trait. Then you can pass functions returning any kind of <code class="prettyprint">Result</code> (<code class="prettyprint">Boolean</code>, <code class="prettyprint">Result</code>, <code class="prettyprint">MatchResult</code>) to the <code class="prettyprint">prop</code> method and use the resulting <code class="prettyprint">Prop</code> as your example body: <code class="prettyprint">&quot;addition and multiplication are related&quot; ! prop { (a: Int) =&gt; a + a == 2 * a }</code></p><p>The function that is checked can either return: </p>
 <pre><code class="prettyprint">// a Boolean
 &quot;addition and multiplication are related&quot; ! prop { (a: Int) =&gt; a + a == 2 * a }
 
@@ -682,14 +664,14 @@ def ex2 = Prop.forAll(abStrings, abStrings) { (s1: String, s2: String) =&gt; (s1
   <li><code class="prettyprint">rng</code>: the random number generator (default = <code class="prettyprint">new java.util.Random</code>)</li>
   <li><code class="prettyprint">callback</code>: a ScalaCheck TestCallback (see the ScalaCheck documentation)</li>
   <li><code class="prettyprint">loader</code>: a custom classloader (see the ScalaCheck documentation)</li>
-</ul><p>You can also set the random generator that is used in all the ScalaCheck generators: </p></p></div></status><status class="ok"><div class="level0" style="display: show"><p><pre><code class="prettyprint">case class MyRandomGenerator() extends java.util.Random {
+</ul><p>You can also set the random generator that is used in all the ScalaCheck generators: </p></p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><p><pre><code class="prettyprint">case class MyRandomGenerator() extends java.util.Random {
   // implement a deterministic generator for example
 }
 
 &quot;this is a specific property&quot; ! prop { (a: Int, b: Int) =&gt;
   (a + b) must_== (b + a)
 }.set(rng = MyRandomGenerator(), minTestsOk = 200, workers = 3)
-</code></pre></p></div></status><status class="ok"><div class="level0" style="display: show"><p><a name="Mock+expectations"><h3>Mock expectations</h3></a><p>At the moment only the <a href="http://mockito.org">Mockito</a> library is supported.</p><p>Mockito allows to specify stubbed values and to verify that some calls are expected on your objects. In order to use those functionalities, you need to extend the <code class="prettyprint">org.specs2.mock.Mockito</code> trait: </p>
+</code></pre></p></div></status><status class="ok"><div style="display: show; text-indent:0px;"></div></status><status class="ok"><div style="display: show; text-indent:6px;"></div></status><status class="ok"><div style="display: show; text-indent:0px;"><p><a name="Mock+expectations"><h3>Mock expectations</h3></a><p>At the moment only the <a href="http://mockito.org">Mockito</a> library is supported.</p><p>Mockito allows to specify stubbed values and to verify that some calls are expected on your objects. In order to use those functionalities, you need to extend the <code class="prettyprint">org.specs2.mock.Mockito</code> trait: </p>
 <pre><code class="prettyprint">import org.specs2.mock._
 class MockitoSpec extends Specification { def is = s2&quot;&quot;&quot;
 
@@ -697,20 +679,20 @@ class MockitoSpec extends Specification { def is = s2&quot;&quot;&quot;
     You can make it return a stubbed value                                     ${c().stub}
     You can verify that a method was called                                    ${c().verify}
     You can verify that a method was not called                                ${c().verify2}
-                                                                               &quot;&quot;&quot;
-  case class c() extends Mockito {
-    val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock[new java.util.LinkedList[String]]
-    def stub = {
-      m.get(0) returns &quot;one&quot;             // stub a method call with a return value
-      m.get(0) must_== &quot;one&quot;             // call the method
-    }
-    def verify = {
-      m.get(0) returns &quot;one&quot;             // stub a method call with a return value
-      m.get(0)                           // call the method
-      there was one(m).get(0)            // verify that the call happened
-    }
-    def verify2 = there was no(m).get(0) // verify that the call never happened
-  }
+  &quot;&quot;&quot;
+case class c() extends Mockito {
+val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock[new java.util.LinkedList[String]]
+def stub = {
+m.get(0) returns &quot;one&quot;             // stub a method call with a return value
+m.get(0) must_== &quot;one&quot;             // call the method
+}
+def verify = {
+m.get(0) returns &quot;one&quot;             // stub a method call with a return value
+m.get(0)                           // call the method
+there was one(m).get(0)            // verify that the call happened
+}
+def verify2 = there was no(m).get(0) // verify that the call never happened
+}
 }
 </code></pre><a name="Creation+and+settings"><h5>Creation and settings</h5></a><p>Mockito offers the possibility to provide specific settings for the mock being created:</p>
 <ul>
@@ -739,11 +721,11 @@ val m = mock[List[String]].defaultAnswer(helloObject)
 val m2 = mock[List[String]].extraInterfaces[Cloneable, Serializable]
 </code></pre><p>Now, if you want to combine several of those settings together you need to call the <code class="prettyprint">settings</code> method: </p>
 <pre><code class="prettyprint">val m1 = mock[List[String]].settings(name = &quot;list1&quot;,
-                                     defaultReturn = 10,
-                                     extraInterfaces = classesOf[Cloneable, Serializable])
+defaultReturn = 10,
+extraInterfaces = classesOf[Cloneable, Serializable])
 // or
 val m2 = mock[List[String]].settings(smart = true,
-                                     extraInterface = classOf[Cloneable])
+extraInterface = classOf[Cloneable])
 </code></pre><p>Finally, in case the Mockito library gets new settings, you can declare the following: </p>
 <pre><code class="prettyprint">val settings = org.mockito.Mockito.withSettings
 val m = mock[List[String]](settings)
@@ -764,8 +746,8 @@ m.get(999) must_== &quot;element&quot;
 m.get(1)    // the second call returns a different value: &quot;The parameter is 1&quot;
 </code></pre><a name="Parameters+for+the+answers+function"><h6>Parameters for the <code class="prettyprint">answers</code> function</h6></a><p>Because of the use of reflection the function passed to answers will receive only instances of the <code class="prettyprint">java.lang.Object</code> type.</p><p>More precisely, it will:</p>
 <ul>
-  <li>pass the mock object if both the method has no parameters and the function has one parameter:<br /> <code class="prettyprint">mock.size answers { mock =&gt; mock.hashCode }</code></li>
-  <li>pass the parameter if both the method and the function have one parameter:<br /> <code class="prettyprint">mock.get(0) answers { i =&gt; i.toString }</code></li>
+  <li>pass the mock object if both the method has no parameters and the function has one parameter:<br /><code class="prettyprint">mock.size answers { mock =&gt; mock.hashCode }</code></li>
+  <li>pass the parameter if both the method and the function have one parameter:<br /><code class="prettyprint">mock.get(0) answers { i =&gt; i.toString }</code></li>
   <li>pass the parameter and the mock object if the method has 1 parameter and the function has 2:<br /><code class="prettyprint">mock.get(0) answers { (i, mock) =&gt; i.toString + &quot; for mock &quot; + mock.toString }</code></li>
 </ul><p>In any other cases, if <code class="prettyprint">f</code> is a function of 1 parameter, the array of the method parameters will be passed and if the function has 2 parameters, the second one will be the mock.</p><a name="Verification"><h5>Verification</h5></a><p>By default Mockito doesn't expect any method to be called. However if your writing interaction-based specifications you want to specify that some methods are indeed called: </p>
 <pre><code class="prettyprint">there was one(m).get(0)              // one call only to get(0)
@@ -787,8 +769,8 @@ there was atMostThree(m).get(0)      // at most three calls to get(0)
 there was atMost(4)(m).get(0)        // at most four calls to get(0)
 </code></pre><p>It is also possible to add all verifications inside a block, when several mocks are involved: </p>
 <pre><code class="prettyprint">got {
-  one(m).get(0)
-  two(m).get(1)
+one(m).get(0)
+two(m).get(1)
 }
 </code></pre><a name="Order+of+calls"><h6>Order of calls</h6></a><p>The order of method calls can be checked by creating calls and chaining them with <code class="prettyprint">andThen</code>: </p>
 <pre><code class="prettyprint">val m1 = mock[List[String]]
@@ -799,10 +781,9 @@ m1.get(0)
 m2.get(0)
 
 there was one(m1).get(0) andThen one(m1).get(1)
-
-// when several mocks are involved, the expected order must be specified as an implicit value
-implicit val order = inOrder(m1, m2)
-there was one(m1).get(0) andThen one(m2).get(0)
+</code></pre><p>when several mocks are involved, the expected order must be specified as an implicit value: </p>
+<pre><code class="prettyprint">val m1 = mock[List[String]]
+val m2 = mock[List[String]]
 </code></pre><a name="Ignoring+stubs"><h6>Ignoring stubs</h6></a><p>When specifying the behavior of an object in relation to others you may want to verify that some mocks have been called as collaborators and you don't really want to specify what happens to other mocks because they are just playing the role of stubs.</p><p>In this case the <code class="prettyprint">ignoreStubs</code> method can be used: </p>
 <pre><code class="prettyprint">val (stub1, stub2) = (mock[AStub], mock[AStub])
 there were noMoreCallsTo(ignoreStubs(stub1, stub2))
@@ -827,8 +808,8 @@ spiedList.get(0) returns &quot;one&quot;
 <pre><code class="prettyprint">org.mockito.Mockito.doReturn(&quot;one&quot;).when(spiedList).get(0)
 </code></pre><a name="Functions%2FPartialFunctions"><h6>Functions/PartialFunctions</h6></a><p>It is possible to verify method calls where parameters are functions by specifying how the passed function will react to a given set of arguments. Given the following mock:</p>
 <pre><code class="prettyprint">trait Amount {
-  // a method showing an amount precision
-  def show(display: Function2[Double, Int, String]) = ???
+// a method showing an amount precision
+def show(display: Function2[Double, Int, String]) = ???
 }
 val amount = mock[Amount]
 </code></pre><p>If the mock is called with this function: </p>
@@ -842,21 +823,21 @@ there was one(amount).show((32.4456, 2) -&gt; endWith(&quot;45&quot;))
 
 // with any Function2[A, B, R]
 there was one(amount).show(anyFunction2)
-</code></pre><a name="Auto-boxing"><h6>Auto-boxing</h6></a><p>Auto-boxing might interfere with the mocking of PartialFunctions. Please have a look at <a href="https://groups.google.com/d/topic/specs2-users/_bK8lCCjZ4c/discussion">this</a> for a discussion.</p><a name="Byname"><h6>Byname</h6></a><p>Byname parameters can be verified but this will not work if the specs2 jar is not put first on the classpath, before the mockito jar. Indeed specs2 redefines a Mockito class for intercepting method calls so that byname parameters are properly handled.</p><a name="DataTables"><h3>DataTables</h3></a><p>DataTables are a very effective way of grouping several similar examples into one. For example, here is how to specify the addition of integers by providing one example on each row of a table: </p></p></div></status><status class="ok"><div class="level0" style="display: show"><p><pre><code class="prettyprint">class DataTableSpec extends Specification with matcher.DataTables { def is =
-  &quot;adding integers should just work in scala&quot;  ! e1
+</code></pre><a name="Auto-boxing"><h6>Auto-boxing</h6></a><p>Auto-boxing might interfere with the mocking of PartialFunctions. Please have a look at <a href="https://groups.google.com/d/topic/specs2-users/_bK8lCCjZ4c/discussion">this</a> for a discussion.</p><a name="Byname"><h6>Byname</h6></a><p>Byname parameters can be verified but this will not work if the specs2 jar is not put first on the classpath, before the mockito jar. Indeed specs2 redefines a Mockito class for intercepting method calls so that byname parameters are properly handled.</p><a name="DataTables"><h3>DataTables</h3></a><p>DataTables are a very effective way of grouping several similar examples into one. For example, here is how to specify the addition of integers by providing one example on each row of a table: </p></p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><p><pre><code class="prettyprint">class DataTableSpec extends Specification with matcher.DataTables { def is =
+&quot;adding integers should just work in scala&quot;  ! e1
 
-  def e1 =
-    &quot;a&quot;   | &quot;b&quot; | &quot;c&quot; |                                   // the header of the table, with `|` separated strings
-     2    !  2  !  4  |                                   // an example row
-     1    !  1  !  2  |&gt; {                                // the &gt; operator to &quot;execute&quot; the table
-     (a, b, c) =&gt;  a + b must_== c                        // the expectation to check on each row
-  }
+def e1 =
+&quot;a&quot;   | &quot;b&quot; | &quot;c&quot; |                                   // the header of the table, with `|` separated strings
+2    !  2  !  4  |                                   // an example row
+1    !  1  !  2  |&gt; {                                // the &gt; operator to &quot;execute&quot; the table
+(a, b, c) =&gt;  a + b must_== c                        // the expectation to check on each row
+}
 }
 </code></pre><a name="Implicit+%21"><h4>Implicit !</h4></a><p>There may be an implicit definition conflict when the first parameter of a row is a String, because examples can also be created by using the <code class="prettyprint">!</code> operator after a String. In that case, depending on which kind of specification you use, you can either:</p>
 <ul>
   <li>with an acceptance specification: use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance)</li>
   <li>with a unit specification: use the <code class="prettyprint">org.specs2.mutable.Tables</code> trait instead of <code class="prettyprint">org.specs2.matcher.DataTables</code> trait. This will &quot;deactivate&quot; the implicit used to create examples with <code class="prettyprint">!</code></li>
-</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></p></div></status><subtoc specId="1586489536"></subtoc><status class="ok"><div class="level0" style="display: show"><img src="./../../images/icon_success_sml.gif" /> Here's <a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html" tooltip="">how to use Forms</a></div></status><status class="ok"><div class="level0" style="display: show"><p><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
+</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></p></div></status><subtoc specId="1317269466"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../../images/icon_success_sml.gif" /> Here's <a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html" tooltip="">how to use Forms</a></div></status><status class="ok"><div style="display: show; text-indent:0px;"><p><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
 <ul>
   <li><p><code class="prettyprint">org.specs2.matcher.MustMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldMatchers</code>) to write anything like <code class="prettyprint">1 must be_==(1)</code> and<br /> get a <code class="prettyprint">Result</code> back</p></li>
   <li><p>You can also use the side-effecting version of that trait called <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldThrownMatchers</code>).<br /> It throws a <code class="prettyprint">FailureException</code> as soon as an expectation is failing. Those traits can also be used in a regular<br /> Specification if you have several expectations per example and if you don't want to chain them with <code class="prettyprint">and</code>.</p></li>
@@ -871,14 +852,14 @@ there was one(amount).show(anyFunction2)
   def skip(m: String): Nothing = skipped(m)
 }
 </code></pre>
-<hr /></p></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
+<hr /></p></div></status><status class="ok"><div style="display: show; text-indent:33px;"></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Matchers</th></tr>
-        <tr><td>Finished in</td><td class="info">389 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">320 ms</td></tr>
         <tr><td>Results</td><td class="success">47 examples, 539 expectations, 0 failure, 0 error</td></tr>
       </table></div></div>
                        <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="1747719816"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="360524168"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1041908589"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="617928928"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -888,7 +869,7 @@ there was one(amount).show(anyFunction2)
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="115079197"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1220739027"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -947,9 +928,9 @@ there was one(amount).show(anyFunction2)
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Outside">Outside</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#AroundOutside">AroundOutside</a>
             
+          </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Fixture">Fixture</a>
             
-          </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#BeforeExample">BeforeExample</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Implicit+context">Implicit context</a>
@@ -996,7 +977,7 @@ there was one(amount).show(anyFunction2)
             <ul></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1671435942"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="782950911"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1058,7 +1039,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1586489536"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="1317269466"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
@@ -1102,7 +1083,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li></ul>
-          </li><li id="1324716199"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="831080569"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1186,7 +1167,7 @@ there was one(amount).show(anyFunction2)
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="730183163"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="919265589"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -1234,7 +1215,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li></ul>
-          </li><li id="302959532"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="2091684899"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1280,7 +1261,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li></ul>
-          </li><li id="2006651099"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="625471915"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1300,7 +1281,7 @@ there was one(amount).show(anyFunction2)
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1747719816','1671435942'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1041908589','782950911'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                        <div class="col3"><div id="rightcolumn"></div></div>
                      </div>

@@ -65,7 +65,7 @@
     </head><body><div id="breadcrumbs"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html">Philosophy</a></div><div class="colmask threecol">
                    <div class="colmid">
                      <div class="colleft">
-                       <div class="col1"><div id="central"><title>Philosophy</title><a name="Philosophy"><h2 specId="302959532">Philosophy</h2></a><status class="ok"><div class="level0" style="display: show"><p><a name="The+origins"><h3>The origins</h3></a><p><strong><em>specs2</em></strong> has been created as an evolution of the <a href="http://code.google.com/p/specs"><strong><em>specs</em></strong></a> project.</p><p><strong><em>specs</em></strong> started as learning project to explore Scala's DSL possibilities for doing Behaviour-Driven-Development (BDD).<br />Among the very first objectives of specs were:</p>
+                       <div class="col1"><div id="central"><title>Philosophy</title><a name="Philosophy"><h2 specId="2091684899">Philosophy</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><p><a name="The+origins"><h3>The origins</h3></a><p><strong><em>specs2</em></strong> has been created as an evolution of the <a href="http://code.google.com/p/specs"><strong><em>specs</em></strong></a> project.</p><p><strong><em>specs</em></strong> started as learning project to explore Scala's DSL possibilities for doing Behaviour-Driven-Development (BDD).<br />Among the very first objectives of specs were:</p>
 <ul>
   <li><p><strong>conciseness</strong>: it should be possible to express a software specification with the least amount of ceremony</p></li>
   <li><p><strong>readability</strong>: an <em>executable</em> specification should read like a purely textual one, by a non-programmer</p></li>
@@ -73,7 +73,7 @@
   <li><p><strong>configuration</strong>: there should sensible defaults and an easy way to override those values</p></li>
   <li><p><strong>clear implementation</strong>: since this is an open-source project with no business constraint, there's no excuse for not having a crystal clear implementation, right?</p></li>
   <li><p><strong>great user support</strong>: it's not because something is free that it should be buggy! Moreover this is also a good test on the design. A good design should be easy to fix and evolve</p></li>
-</ul></p></div></status><status class="ok"><div class="level0" style="display: show"><p><a name="The+score"><h3>The score</h3></a><p>After a few years of use, let's have a look at what worked and what didn't.</p><a name="Conciseness"><h6>Conciseness</h6></a><p>This objective was achieved thanks to the incredible power of implicits in Scala which provide lots of way to create an elegant syntax for specifying software. However, the implementation of that syntactic support has several drawbacks:</p>
+</ul></p></div></status><status class="ok"><div style="display: show; text-indent:6px;"></div></status><status class="ok"><div style="display: show; text-indent:0px;"><p><a name="The+score"><h3>The score</h3></a><p>After a few years of use, let's have a look at what worked and what didn't.</p><a name="Conciseness"><h6>Conciseness</h6></a><p>This objective was achieved thanks to the incredible power of implicits in Scala which provide lots of way to create an elegant syntax for specifying software. However, the implementation of that syntactic support has several drawbacks:</p>
 <ul>
   <li><p><strong><em>specs</em></strong> provides implicits by inheriting methods from the <code class="prettyprint">Specification</code> class. While this is very convenient this is also considerably polluting the namespace of the user code <em>inside</em> the specification. This pollution leads to possible bugs (an implicit conversion being applied when you don't expect it) and possible namespace conflicts</p></li>
   <li><p>some &quot;reserved&quot; words like <code class="prettyprint">should</code>, <code class="prettyprint">can</code>, <code class="prettyprint">in</code> come from previous BDD libraries like rspec. But they are not always convenient and sometimes one wants to write <code class="prettyprint">&quot;my example should provide&quot;</code> just to avoid having every example under &quot;<code class="prettyprint">&quot;my example&quot; should</code>&quot; start with <code class="prettyprint">&quot;provide...&quot;</code>. There is a way to do this in <strong><em>specs</em></strong> but this requires the creation of an ad-hoc method</p></li>
@@ -220,12 +220,12 @@ class MyMutableSpecification extends Specification {
 </code></pre>
 <hr /><p><br /></p></p></div></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Philosophy</th></tr>
-        <tr><td>Finished in</td><td class="info">10 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">6 ms</td></tr>
         <tr><td>Results</td><td class="success">5 examples, 0 failure, 0 error</td></tr>
       </table></div></div>
                        <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="1747719816"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="360524168"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1041908589"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="617928928"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -235,7 +235,7 @@ class MyMutableSpecification extends Specification {
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="115079197"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1220739027"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -294,9 +294,9 @@ class MyMutableSpecification extends Specification {
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Outside">Outside</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#AroundOutside">AroundOutside</a>
             
+          </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Fixture">Fixture</a>
             
-          </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#BeforeExample">BeforeExample</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Implicit+context">Implicit context</a>
@@ -343,7 +343,7 @@ class MyMutableSpecification extends Specification {
             <ul></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1671435942"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="782950911"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -405,7 +405,7 @@ class MyMutableSpecification extends Specification {
             
           </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1586489536"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="1317269466"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
@@ -449,7 +449,7 @@ class MyMutableSpecification extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="1324716199"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="831080569"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -533,7 +533,7 @@ class MyMutableSpecification extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="730183163"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="919265589"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -581,7 +581,7 @@ class MyMutableSpecification extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="302959532"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="2091684899"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -627,7 +627,7 @@ class MyMutableSpecification extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="2006651099"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="625471915"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -647,7 +647,7 @@ class MyMutableSpecification extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1747719816','302959532'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1041908589','2091684899'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                        <div class="col3"><div id="rightcolumn"></div></div>
                      </div>

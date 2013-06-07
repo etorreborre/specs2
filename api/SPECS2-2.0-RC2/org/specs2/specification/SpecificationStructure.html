@@ -9,11 +9,6 @@
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
-      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
-      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
-      <script type="text/javascript" src="../../../lib/template.js"></script>
-      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
-      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../index.html';
@@ -40,14 +35,14 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">SpecificationStructure</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">SpecificationStructure</span><span class="result"> extends <a href="DefaultFragmentsFormatting.html" class="extype" name="org.specs2.specification.DefaultFragmentsFormatting">DefaultFragmentsFormatting</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The structure of a Specification is simply defined as a sequence of fragments
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="DefaultFragmentsFormatting.html" class="extype" name="org.specs2.specification.DefaultFragmentsFormatting">DefaultFragmentsFormatting</a>, <a href="TagsAssociation.html" class="extype" name="org.specs2.specification.TagsAssociation">TagsAssociation</a>, <a href="FragmentsFormatting.html" class="extype" name="org.specs2.specification.FragmentsFormatting">FragmentsFormatting</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
           <div class="subClasses hiddenContent"><a href="AllExpectations.html" class="extype" name="org.specs2.specification.AllExpectations">AllExpectations</a>, <a href="BaseSpecification.html" class="extype" name="org.specs2.specification.BaseSpecification">BaseSpecification</a>, <a href="../form/Card.html" class="extype" name="org.specs2.form.Card">Card</a>, <a href="script/Specification.html" class="extype" name="org.specs2.specification.script.Specification">Specification</a>, <a href="../mutable/script/Specification.html" class="extype" name="org.specs2.mutable.script.Specification">Specification</a>, <a href="../mutable/Specification.html" class="extype" name="org.specs2.mutable.Specification">Specification</a>, <a href="../Specification.html" class="extype" name="org.specs2.Specification">Specification</a>, <a href="script/SpecificationLike.html" class="extype" name="org.specs2.specification.script.SpecificationLike">SpecificationLike</a>, <a href="../mutable/script/SpecificationLike.html" class="extype" name="org.specs2.mutable.script.SpecificationLike">SpecificationLike</a>, <a href="../mutable/SpecificationLike.html" class="extype" name="org.specs2.mutable.SpecificationLike">SpecificationLike</a>, <a href="../SpecificationLike.html" class="extype" name="org.specs2.SpecificationLike">SpecificationLike</a>, <a href="../mutable/SpecificationWithJUnit.html" class="extype" name="org.specs2.mutable.SpecificationWithJUnit">SpecificationWithJUnit</a>, <a href="../SpecificationWithJUnit.html" class="extype" name="org.specs2.SpecificationWithJUnit">SpecificationWithJUnit</a></div>
@@ -68,7 +63,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="org.specs2.specification.SpecificationStructure"><span>SpecificationStructure</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="org.specs2.specification.SpecificationStructure"><span>SpecificationStructure</span></li><li class="in" name="org.specs2.specification.DefaultFragmentsFormatting"><span>DefaultFragmentsFormatting</span></li><li class="in" name="org.specs2.specification.TagsAssociation"><span>TagsAssociation</span></li><li class="in" name="org.specs2.specification.FragmentsFormatting"><span>FragmentsFormatting</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -201,7 +196,10 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -243,9 +241,25 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
               
         </dd></dl></div>
+    </li><li name="org.specs2.specification.DefaultFragmentsFormatting#formatFragments" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="formatFragments:org.specs2.specification.Fragments=&gt;org.specs2.specification.Fragments"></a>
+      <a id="formatFragments:(Fragments)⇒Fragments"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">formatFragments</span><span class="result">: (<a href="Fragments.html" class="extype" name="org.specs2.specification.Fragments">Fragments</a>) ⇒ <a href="Fragments.html" class="extype" name="org.specs2.specification.Fragments">Fragments</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">format a list of fragments according to their formatting tags</p><div class="fullcomment"><div class="comment cmt"><p>format a list of fragments according to their formatting tags</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="DefaultFragmentsFormatting.html" class="extype" name="org.specs2.specification.DefaultFragmentsFormatting">DefaultFragmentsFormatting</a> → <a href="FragmentsFormatting.html" class="extype" name="org.specs2.specification.FragmentsFormatting">FragmentsFormatting</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -323,7 +337,7 @@
         <span class="name">map</span><span class="params">(<span name="fs">fs: ⇒ <a href="Fragments.html" class="extype" name="org.specs2.specification.Fragments">Fragments</a></span>)</span><span class="result">: <a href="Fragments.html" class="extype" name="org.specs2.specification.Fragments">Fragments</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">this method can be overriden to map additional behavior in the user-defined fragments</p>
+      <p class="shortcomment cmt">this method can be overridden to map additional behavior in the user-defined fragments</p>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -402,7 +416,10 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -418,7 +435,10 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -434,7 +454,10 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li></ol>
@@ -446,7 +469,13 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="org.specs2.specification.DefaultFragmentsFormatting">
+              <h3>Inherited from <a href="DefaultFragmentsFormatting.html" class="extype" name="org.specs2.specification.DefaultFragmentsFormatting">DefaultFragmentsFormatting</a></h3>
+            </div><div class="parent" name="org.specs2.specification.TagsAssociation">
+              <h3>Inherited from <a href="TagsAssociation.html" class="extype" name="org.specs2.specification.TagsAssociation">TagsAssociation</a></h3>
+            </div><div class="parent" name="org.specs2.specification.FragmentsFormatting">
+              <h3>Inherited from <a href="FragmentsFormatting.html" class="extype" name="org.specs2.specification.FragmentsFormatting">FragmentsFormatting</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
@@ -466,7 +495,6 @@
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-
-
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../lib/template.js"></script>
     </body>
       </html>

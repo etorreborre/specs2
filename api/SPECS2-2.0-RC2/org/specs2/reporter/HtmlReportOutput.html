@@ -9,11 +9,6 @@
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
-      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
-      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
-      <script type="text/javascript" src="../../../lib/template.js"></script>
-      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
-      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../index.html';
@@ -157,7 +152,7 @@ with the xml method
       </h4>
       <p class="shortcomment cmt">print a Br fragment</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printCollapsibleExceptionMessage" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="printCollapsibleExceptionMessage(e:org.specs2.execute.Resultwithorg.specs2.execute.ResultStackTrace,level:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printCollapsibleExceptionMessage(e:org.specs2.execute.Resultwithorg.specs2.execute.ResultStackTrace,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
       <a id="printCollapsibleExceptionMessage(ResultwithResultStackTrace,Int):HtmlReportOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -165,12 +160,12 @@ with the xml method
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printCollapsibleExceptionMessage</span><span class="params">(<span name="e">e: <a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a> with <a href="../execute/ResultStackTrace.html" class="extype" name="org.specs2.execute.ResultStackTrace">ResultStackTrace</a></span>, <span name="level">level: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+        <span class="name">printCollapsibleExceptionMessage</span><span class="params">(<span name="e">e: <a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a> with <a href="../execute/ResultStackTrace.html" class="extype" name="org.specs2.execute.ResultStackTrace">ResultStackTrace</a></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">print an exception message which can be expended/collapsed</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printDetailedFailure" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="printDetailedFailure(details:org.specs2.execute.Details,level:Int,diffs:org.specs2.main.Diffs):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printDetailedFailure(details:org.specs2.execute.Details,indent:Int,diffs:org.specs2.main.Diffs):org.specs2.reporter.HtmlReportOutput"></a>
       <a id="printDetailedFailure(Details,Int,Diffs):HtmlReportOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -178,12 +173,12 @@ with the xml method
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printDetailedFailure</span><span class="params">(<span name="details">details: <a href="../execute/Details.html" class="extype" name="org.specs2.execute.Details">Details</a></span>, <span name="level">level: <span class="extype" name="scala.Int">Int</span></span>, <span name="diffs">diffs: <a href="../main/Diffs.html" class="extype" name="org.specs2.main.Diffs">Diffs</a></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+        <span class="name">printDetailedFailure</span><span class="params">(<span name="details">details: <a href="../execute/Details.html" class="extype" name="org.specs2.execute.Details">Details</a></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span></span>, <span name="diffs">diffs: <a href="../main/Diffs.html" class="extype" name="org.specs2.main.Diffs">Diffs</a></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">print the details of a failure.</p><div class="fullcomment"><div class="comment cmt"><p>print the details of a failure. The diffs arguments provides the way to expose the differences between expected and actual values</p></div></div>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printExceptionMessage" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="printExceptionMessage(e:org.specs2.execute.Resultwithorg.specs2.execute.ResultStackTrace,level:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printExceptionMessage(e:org.specs2.execute.Resultwithorg.specs2.execute.ResultStackTrace,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
       <a id="printExceptionMessage(ResultwithResultStackTrace,Int):HtmlReportOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -191,7 +186,7 @@ with the xml method
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printExceptionMessage</span><span class="params">(<span name="e">e: <a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a> with <a href="../execute/ResultStackTrace.html" class="extype" name="org.specs2.execute.ResultStackTrace">ResultStackTrace</a></span>, <span name="level">level: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+        <span class="name">printExceptionMessage</span><span class="params">(<span name="e">e: <a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a> with <a href="../execute/ResultStackTrace.html" class="extype" name="org.specs2.execute.ResultStackTrace">ResultStackTrace</a></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">print an exception message</p>
@@ -222,15 +217,15 @@ with the xml method
       </h4>
       <p class="shortcomment cmt">enclose the nodes inside &lt;html/&gt; tags</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printIssueWithIcon" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="printIssueWithIcon(message:org.specs2.text.MarkupString,iconName:String,level:Int):org.specs2.reporter.HtmlReportOutput"></a>
-      <a id="printIssueWithIcon(MarkupString,String,Int):HtmlReportOutput"></a>
+      <a id="printIssueWithIcon(message:org.specs2.specification.FormattedString,iconName:String,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printIssueWithIcon(FormattedString,String,Int):HtmlReportOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printIssueWithIcon</span><span class="params">(<span name="message">message: <a href="../text/MarkupString.html" class="extype" name="org.specs2.text.MarkupString">MarkupString</a></span>, <span name="iconName">iconName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="level">level: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+        <span class="name">printIssueWithIcon</span><span class="params">(<span name="message">message: <a href="../specification/FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>, <span name="iconName">iconName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">print an issue with an icon</p>
@@ -248,7 +243,7 @@ with the xml method
       </h4>
       <p class="shortcomment cmt">print the html for a Form that failed</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printKoXmlWithIcon" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="printKoXmlWithIcon(xml:scala.xml.NodeSeq,iconName:String,level:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printKoXmlWithIcon(xml:scala.xml.NodeSeq,iconName:String,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
       <a id="printKoXmlWithIcon(NodeSeq,String,Int):HtmlReportOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -256,7 +251,7 @@ with the xml method
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printKoXmlWithIcon</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>, <span name="iconName">iconName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="level">level: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+        <span class="name">printKoXmlWithIcon</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>, <span name="iconName">iconName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">print some ok xml with an icon</p>
@@ -274,7 +269,7 @@ with the xml method
       </h4>
       <p class="shortcomment cmt">print a single link</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printLink" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="printLink(link:org.specs2.specification.HtmlLink,level:Int,stats:org.specs2.specification.Stats,hidden:Boolean):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printLink(link:org.specs2.specification.HtmlLink,indent:Int,stats:org.specs2.specification.Stats,hidden:Boolean):org.specs2.reporter.HtmlReportOutput"></a>
       <a id="printLink(HtmlLink,Int,Stats,Boolean):HtmlReportOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -282,7 +277,7 @@ with the xml method
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printLink</span><span class="params">(<span name="link">link: <a href="../specification/HtmlLink.html" class="extype" name="org.specs2.specification.HtmlLink">HtmlLink</a></span>, <span name="level">level: <span class="extype" name="scala.Int">Int</span></span>, <span name="stats">stats: <a href="../specification/Stats.html" class="extype" name="org.specs2.specification.Stats">Stats</a> = <span class="symbol"><span class="name"><a href="../specification/package.html">Stats()</a></span></span></span>, <span name="hidden">hidden: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+        <span class="name">printLink</span><span class="params">(<span name="link">link: <a href="../specification/HtmlLink.html" class="extype" name="org.specs2.specification.HtmlLink">HtmlLink</a></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span></span>, <span name="stats">stats: <a href="../specification/Stats.html" class="extype" name="org.specs2.specification.Stats">Stats</a> = <span class="symbol"><span class="name"><a href="../specification/package.html">Stats()</a></span></span></span>, <span name="hidden">hidden: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">print a link to another specification</p>
@@ -300,7 +295,7 @@ with the xml method
       </h4>
       <p class="shortcomment cmt">print the html for a Form that succeeded</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printOkXmlWithIcon" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="printOkXmlWithIcon(xml:scala.xml.NodeSeq,iconName:String,level:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printOkXmlWithIcon(xml:scala.xml.NodeSeq,iconName:String,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
       <a id="printOkXmlWithIcon(NodeSeq,String,Int):HtmlReportOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -308,7 +303,7 @@ with the xml method
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printOkXmlWithIcon</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>, <span name="iconName">iconName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="level">level: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+        <span class="name">printOkXmlWithIcon</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>, <span name="iconName">iconName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">print some ok xml with an icon</p>
@@ -339,7 +334,7 @@ with the xml method
       </h4>
       <p class="shortcomment cmt">print the specification start fragment</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printStack" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="printStack(e:org.specs2.execute.ResultStackTrace,level:Int,traceFilter:org.specs2.control.StackTraceFilter):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printStack(e:org.specs2.execute.ResultStackTrace,indent:Int,traceFilter:org.specs2.control.StackTraceFilter):org.specs2.reporter.HtmlReportOutput"></a>
       <a id="printStack(ResultStackTrace,Int,StackTraceFilter):HtmlReportOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -347,7 +342,7 @@ with the xml method
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printStack</span><span class="params">(<span name="e">e: <a href="../execute/ResultStackTrace.html" class="extype" name="org.specs2.execute.ResultStackTrace">ResultStackTrace</a></span>, <span name="level">level: <span class="extype" name="scala.Int">Int</span></span>, <span name="traceFilter">traceFilter: <a href="../control/StackTraceFilter.html" class="extype" name="org.specs2.control.StackTraceFilter">StackTraceFilter</a></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+        <span class="name">printStack</span><span class="params">(<span name="e">e: <a href="../execute/ResultStackTrace.html" class="extype" name="org.specs2.execute.ResultStackTrace">ResultStackTrace</a></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span></span>, <span name="traceFilter">traceFilter: <a href="../control/StackTraceFilter.html" class="extype" name="org.specs2.control.StackTraceFilter">StackTraceFilter</a></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">print a stacktrace of a failure or an exception</p>
@@ -365,7 +360,7 @@ with the xml method
       </h4>
       <p class="shortcomment cmt">print the statistics of a specification</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printText" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="printText(text:String,level:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printText(text:String,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
       <a id="printText(String,Int):HtmlReportOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -373,12 +368,25 @@ with the xml method
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printText</span><span class="params">(<span name="text">text: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="level">level: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+        <span class="name">printText</span><span class="params">(<span name="text">text: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">print a Text fragment with a given level of indentation</p>
+      <p class="shortcomment cmt">print a Text fragment with a given indent of indentation</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printText" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printText(text:org.specs2.specification.FormattedString,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printText(FormattedString,Int):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printText</span><span class="params">(<span name="text">text: <a href="../specification/FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">print a Text fragment with a given indent of indentation</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printTextPar" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="printTextPar(text:String,level:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printTextPar(text:String,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
       <a id="printTextPar(String,Int):HtmlReportOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -386,20 +394,20 @@ with the xml method
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printTextPar</span><span class="params">(<span name="text">text: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="level">level: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+        <span class="name">printTextPar</span><span class="params">(<span name="text">text: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">print a Text fragment with a given level of indentation, in a paragraph</p>
+      <p class="shortcomment cmt">print a Text fragment with a given indent of indentation, in a paragraph</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printTextWithIcon" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="printTextWithIcon(message:org.specs2.text.MarkupString,iconName:String,level:Int):org.specs2.reporter.HtmlReportOutput"></a>
-      <a id="printTextWithIcon(MarkupString,String,Int):HtmlReportOutput"></a>
+      <a id="printTextWithIcon(message:org.specs2.specification.FormattedString,iconName:String,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printTextWithIcon(FormattedString,String,Int):HtmlReportOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printTextWithIcon</span><span class="params">(<span name="message">message: <a href="../text/MarkupString.html" class="extype" name="org.specs2.text.MarkupString">MarkupString</a></span>, <span name="iconName">iconName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="level">level: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+        <span class="name">printTextWithIcon</span><span class="params">(<span name="message">message: <a href="../specification/FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>, <span name="iconName">iconName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">print some text with an icon</p>
@@ -512,7 +520,10 @@ with the xml method
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -554,7 +565,10 @@ with the xml method
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -649,20 +663,20 @@ with the xml method
       </h4>
       <p class="shortcomment cmt">print a Text Node</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="printError(message:org.specs2.text.MarkupString,level:Int):org.specs2.reporter.HtmlReportOutput"></a>
-      <a id="printError(MarkupString,Int):HtmlReportOutput"></a>
+      <a id="printError(message:org.specs2.specification.FormattedString,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printError(FormattedString,Int):HtmlReportOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printError</span><span class="params">(<span name="message">message: <a href="../text/MarkupString.html" class="extype" name="org.specs2.text.MarkupString">MarkupString</a></span>, <span name="level">level: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+        <span class="name">printError</span><span class="params">(<span name="message">message: <a href="../specification/FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">print an error with an icon</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printErrorXml" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="printErrorXml(xml:scala.xml.NodeSeq,level:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printErrorXml(xml:scala.xml.NodeSeq,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
       <a id="printErrorXml(NodeSeq,Int):HtmlReportOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -670,25 +684,25 @@ with the xml method
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printErrorXml</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>, <span name="level">level: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+        <span class="name">printErrorXml</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">print an error with an icon</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printFailure" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="printFailure(message:org.specs2.text.MarkupString,level:Int):org.specs2.reporter.HtmlReportOutput"></a>
-      <a id="printFailure(MarkupString,Int):HtmlReportOutput"></a>
+      <a id="printFailure(message:org.specs2.specification.FormattedString,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printFailure(FormattedString,Int):HtmlReportOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printFailure</span><span class="params">(<span name="message">message: <a href="../text/MarkupString.html" class="extype" name="org.specs2.text.MarkupString">MarkupString</a></span>, <span name="level">level: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+        <span class="name">printFailure</span><span class="params">(<span name="message">message: <a href="../specification/FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">print a failure with an icon</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printFailureXml" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="printFailureXml(xml:scala.xml.NodeSeq,level:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printFailureXml(xml:scala.xml.NodeSeq,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
       <a id="printFailureXml(NodeSeq,Int):HtmlReportOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -696,25 +710,25 @@ with the xml method
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printFailureXml</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>, <span name="level">level: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+        <span class="name">printFailureXml</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">print a failure with an icon</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printPending" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="printPending(message:org.specs2.text.MarkupString,level:Int):org.specs2.reporter.HtmlReportOutput"></a>
-      <a id="printPending(MarkupString,Int):HtmlReportOutput"></a>
+      <a id="printPending(message:org.specs2.specification.FormattedString,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printPending(FormattedString,Int):HtmlReportOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printPending</span><span class="params">(<span name="message">message: <a href="../text/MarkupString.html" class="extype" name="org.specs2.text.MarkupString">MarkupString</a></span>, <span name="level">level: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+        <span class="name">printPending</span><span class="params">(<span name="message">message: <a href="../specification/FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">print a pending fragment with an icon</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printPendingXml" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="printPendingXml(xml:scala.xml.NodeSeq,level:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printPendingXml(xml:scala.xml.NodeSeq,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
       <a id="printPendingXml(NodeSeq,Int):HtmlReportOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -722,25 +736,25 @@ with the xml method
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printPendingXml</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>, <span name="level">level: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+        <span class="name">printPendingXml</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">print a pending fragment with an icon</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printSkipped" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="printSkipped(message:org.specs2.text.MarkupString,level:Int):org.specs2.reporter.HtmlReportOutput"></a>
-      <a id="printSkipped(MarkupString,Int):HtmlReportOutput"></a>
+      <a id="printSkipped(message:org.specs2.specification.FormattedString,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printSkipped(FormattedString,Int):HtmlReportOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printSkipped</span><span class="params">(<span name="message">message: <a href="../text/MarkupString.html" class="extype" name="org.specs2.text.MarkupString">MarkupString</a></span>, <span name="level">level: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+        <span class="name">printSkipped</span><span class="params">(<span name="message">message: <a href="../specification/FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">print a skipped fragment with an icon</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printSkippedXml" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="printSkippedXml(xml:scala.xml.NodeSeq,level:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printSkippedXml(xml:scala.xml.NodeSeq,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
       <a id="printSkippedXml(NodeSeq,Int):HtmlReportOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -748,25 +762,25 @@ with the xml method
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printSkippedXml</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>, <span name="level">level: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+        <span class="name">printSkippedXml</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">print a skipped fragment with an icon</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printSuccess" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="printSuccess(message:org.specs2.text.MarkupString,level:Int):org.specs2.reporter.HtmlReportOutput"></a>
-      <a id="printSuccess(MarkupString,Int):HtmlReportOutput"></a>
+      <a id="printSuccess(message:org.specs2.specification.FormattedString,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printSuccess(FormattedString,Int):HtmlReportOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printSuccess</span><span class="params">(<span name="message">message: <a href="../text/MarkupString.html" class="extype" name="org.specs2.text.MarkupString">MarkupString</a></span>, <span name="level">level: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+        <span class="name">printSuccess</span><span class="params">(<span name="message">message: <a href="../specification/FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">print a success with an icon</p>
     </li><li name="org.specs2.reporter.HtmlReportOutput#printSuccessXml" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="printSuccessXml(xml:scala.xml.NodeSeq,level:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printSuccessXml(xml:scala.xml.NodeSeq,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
       <a id="printSuccessXml(NodeSeq,Int):HtmlReportOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -774,7 +788,7 @@ with the xml method
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printSuccessXml</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>, <span name="level">level: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+        <span class="name">printSuccessXml</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">print a success with an icon</p>
@@ -830,7 +844,10 @@ with the xml method
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -846,7 +863,10 @@ with the xml method
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -862,7 +882,10 @@ with the xml method
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li></ol>
@@ -894,7 +917,6 @@ with the xml method
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-
-
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../lib/template.js"></script>
     </body>
       </html>

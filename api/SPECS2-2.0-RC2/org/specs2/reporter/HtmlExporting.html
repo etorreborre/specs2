@@ -9,11 +9,6 @@
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
-      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
-      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
-      <script type="text/javascript" src="../../../lib/template.js"></script>
-      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
-      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../index.html';
@@ -50,7 +45,7 @@
           <div class="superTypes hiddenContent"><a href="HtmlFileWriter.html" class="extype" name="org.specs2.reporter.HtmlFileWriter">HtmlFileWriter</a>, <span class="extype" name="org.specs2.reporter.OutputDir">OutputDir</span>, <a href="HtmlPrinter.html" class="extype" name="org.specs2.reporter.HtmlPrinter">HtmlPrinter</a>, <span class="extype" name="org.specs2.reporter.Exporting">Exporting</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a href="HtmlExporting$.html" class="extype" name="org.specs2.reporter.HtmlExporting">HtmlExporting</a>, <a href="HtmlReporter.html" class="extype" name="org.specs2.reporter.HtmlReporter">HtmlReporter</a>, <a href="MarkupExporting$.html" class="extype" name="org.specs2.reporter.MarkupExporting">MarkupExporting</a>, <a href="MarkupExporting.html" class="extype" name="org.specs2.reporter.MarkupExporting">MarkupExporting</a></div>
+          <div class="subClasses hiddenContent"><a href="HtmlExporting$.html" class="extype" name="org.specs2.reporter.HtmlExporting">HtmlExporting</a>, <a href="HtmlReporter.html" class="extype" name="org.specs2.reporter.HtmlReporter">HtmlReporter</a>, <a href="MarkdownExporting$.html" class="extype" name="org.specs2.reporter.MarkdownExporting">MarkdownExporting</a>, <a href="MarkdownExporting.html" class="extype" name="org.specs2.reporter.MarkdownExporting">MarkdownExporting</a></div>
         </div></div>
         
 
@@ -225,7 +220,10 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="org.specs2.reporter.HtmlFileWriter#copyResources" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -242,15 +240,15 @@
       </h4>
       <p class="shortcomment cmt">copy css and images file to the output directory</p><div class="fullcomment"><div class="comment cmt"><p>copy css and images file to the output directory</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="HtmlFileWriter.html" class="extype" name="org.specs2.reporter.HtmlFileWriter">HtmlFileWriter</a></dd></dl></div>
     </li><li name="org.specs2.reporter.HtmlPrinter#createHtmlLinesFiles" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="createHtmlLinesFiles(spec:org.specs2.specification.ExecutedSpecification):scalaz.Tree[org.specs2.reporter.HtmlLinesFile]"></a>
-      <a id="createHtmlLinesFiles(ExecutedSpecification):Tree[HtmlLinesFile]"></a>
+      <a id="createHtmlLinesFiles(spec:org.specs2.specification.ExecutedSpecification)(implicitargs:org.specs2.main.Arguments):scalaz.Tree[org.specs2.reporter.HtmlLinesFile]"></a>
+      <a id="createHtmlLinesFiles(ExecutedSpecification)(Arguments):Tree[HtmlLinesFile]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createHtmlLinesFiles</span><span class="params">(<span name="spec">spec: <a href="../specification/ExecutedSpecification.html" class="extype" name="org.specs2.specification.ExecutedSpecification">ExecutedSpecification</a></span>)</span><span class="result">: <span class="extype" name="scalaz.Tree">Tree</span>[<span class="extype" name="org.specs2.reporter.HtmlLinesFile">HtmlLinesFile</span>]</span>
+        <span class="name">createHtmlLinesFiles</span><span class="params">(<span name="spec">spec: <a href="../specification/ExecutedSpecification.html" class="extype" name="org.specs2.specification.ExecutedSpecification">ExecutedSpecification</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scalaz.Tree">Tree</span>[<span class="extype" name="org.specs2.reporter.HtmlLinesFile">HtmlLinesFile</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">map the executed fragments to HtmlLines and sort them by destination file, one file per specification
@@ -309,7 +307,10 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -436,15 +437,15 @@ the name of the html file is the full class name
 - an output object responsible for printing each HtmlLine as xhtml
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="HtmlPrinter.html" class="extype" name="org.specs2.reporter.HtmlPrinter">HtmlPrinter</a></dd></dl></div>
     </li><li name="org.specs2.reporter.HtmlPrinter#reduce" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="reduce(spec:org.specs2.specification.ExecutedSpecification):Seq[org.specs2.reporter.HtmlLine]"></a>
-      <a id="reduce(ExecutedSpecification):Seq[HtmlLine]"></a>
+      <a id="reduce(spec:org.specs2.specification.ExecutedSpecification)(implicitargs:org.specs2.main.Arguments):Seq[org.specs2.reporter.HtmlLine]"></a>
+      <a id="reduce(ExecutedSpecification)(Arguments):Seq[HtmlLine]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">reduce</span><span class="params">(<span name="spec">spec: <a href="../specification/ExecutedSpecification.html" class="extype" name="org.specs2.specification.ExecutedSpecification">ExecutedSpecification</a></span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="org.specs2.reporter.HtmlLine">HtmlLine</span>]</span>
+        <span class="name">reduce</span><span class="params">(<span name="spec">spec: <a href="../specification/ExecutedSpecification.html" class="extype" name="org.specs2.specification.ExecutedSpecification">ExecutedSpecification</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="org.specs2.reporter.HtmlLine">HtmlLine</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Organize the fragments into blocks of html lines to print, grouping all the fragments found after a link
@@ -518,7 +519,10 @@ into a single block that will be reported on a different html page</p><p>This wo
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -534,7 +538,10 @@ into a single block that will be reported on a different html page</p><p>This wo
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -550,7 +557,10 @@ into a single block that will be reported on a different html page</p><p>This wo
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="org.specs2.reporter.HtmlFileWriter#writeFile" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -629,7 +639,6 @@ into a single block that will be reported on a different html page</p><p>This wo
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-
-
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../lib/template.js"></script>
     </body>
       </html>
