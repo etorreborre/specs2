@@ -106,15 +106,15 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
   /**
    * add a new step to the Fragments
    */
-  def step(a: =>Any) = {
-    val newStep = Step(a)
+  def step(a: =>Any, global: Boolean = false) = {
+    val newStep = Step(a).copy(isolable = !global)
     addFragments(newStep)
     newStep
   }
   /**
    * add a new stopOnFail step to the Fragments
    */
-  def step(stopOnFail: Boolean = false) = {
+  def step(stopOnFail: Boolean) = {
     val newStep = Step(stopOnFail = stopOnFail)
     addFragments(newStep)
     newStep

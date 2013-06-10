@@ -67,7 +67,7 @@ class ExecutionStrategySpec extends mutable.Specification {
   val spec2 = new Specification { def is =
     "spec2".title ^
     "ex1" ! ko ^
-    step() ^
+    Step(stopOnFail = false) ^
     "ex2" ! ok ^
     "ex3" ! ok ^
     Step(stopOnFail = true) ^
@@ -78,7 +78,7 @@ class ExecutionStrategySpec extends mutable.Specification {
   val spec3 = new Specification { def is = sequential ^
     "spec3".title ^
       "ex1" ! ko ^
-      step() ^
+      Step(stopOnFail = false) ^
       "ex2" ! ok ^
       "ex3" ! ok ^
       Step(stopOnFail = true) ^
