@@ -155,7 +155,7 @@ case class Stats(examples:     Int = 0,
               None,
             displayValue((_:Stats).failures, "failure"),
             displayValue((_:Stats).errors, "error"),
-            displayValue((_:Stats).pending, "pending", optional = true),
+            displayValue((_:Stats).pending, "pending", optional = true, invariant = true),
             displayValue((_:Stats).skipped, "skipped", optional = true, invariant = true)
 				).flatten.mkString(", "), args.color)
 

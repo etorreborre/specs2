@@ -39,7 +39,7 @@ class StatsSpec extends Spec with XmlMatchers {
     "Trends are shown if they exist" >> {
       Stats(1, 2, 3, 4, 5, 6, 7, Some(Stats(failures = -2, skipped = 4)), new SimpleTimer).display(nocolor) must_==
             "Finished in 0 ms\n" +
-            "1 example, 3 expectations, 4 failures (-2), 5 errors, 6 pendings, 7 skipped (+4)"
+            "1 example, 3 expectations, 4 failures (-2), 5 errors, 6 pending, 7 skipped (+4)"
     }
     "Expectations are shown if the trend has changed" >> {
       Stats(3, 2, 3, 0, 0, 0, 0, Some(Stats(expectations = -2)), new SimpleTimer).display(nocolor) must_==
