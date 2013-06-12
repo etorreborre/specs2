@@ -7,7 +7,7 @@ import control.Throwablex._
 import reporter._
 import specification._
 import control.Exceptions._
-import runner.Fingerprints._
+import runner.TestInterfaceFingerprints._
 import specification.ExecutedSpecification
 import reflect.Classes
 import io.ConsoleOutput
@@ -22,17 +22,17 @@ class SpecsFramework extends Framework {
   def testRunner(classLoader: ClassLoader, loggers: Array[Logger]) = new TestInterfaceRunner(classLoader, loggers)
 }
 
-object Fingerprints {
+object TestInterfaceFingerprints {
   val fp1 =  new Specs2Fingerprint { def isModule = false }
   val fp2 =  new Specs2Fingerprint { def isModule = true  }
-  val fp3 =  new FilesRunnerFingerprint { def isModule = false }
-  val fp4 =  new FilesRunnerFingerprint { def isModule = true  }
+  val fp3 =  new FilesFingerprint { def isModule = false }
+  val fp4 =  new FilesFingerprint { def isModule = true  }
 }
 
 trait Specs2Fingerprint extends TestFingerprint {
   def superClassName = "org.specs2.specification.SpecificationStructure"
 }
-trait FilesRunnerFingerprint extends TestFingerprint {
+trait FilesFingerprint extends TestFingerprint {
   def superClassName = "org.specs2.runner.FilesRunner"
 }
 
@@ -146,7 +146,7 @@ class TestInterfaceConsoleReporter(consoleExporter: Option[Exporting], otherExpo
 /**
  * This object can be used to debug the behavior of the TestInterfaceRunner
  */
-object testInterface extends TestInterfaceRunner(Thread.currentThread().getContextClassLoader, Array(ConsoleLogger)) with Classes with SystemExit with ConsoleOutput {
+object testInterface extends TestInterfaceRunner(Thread.currentThread().getContextClassLoader, Array(TestInterfaceConsoleLogger)) with Classes with SystemExit with ConsoleOutput {
   def main(arguments: Array[String]) {
     exitSystem(start(arguments:_*))
   }
@@ -174,7 +174,7 @@ object testInterface extends TestInterfaceRunner(Thread.currentThread().getConte
 object NullEventHandler extends EventHandler {
   def handle(event: Event) {}
 }
-object ConsoleLogger extends Logger {
+object TestInterfaceConsoleLogger extends Logger {
   def ansiCodesSupported = false
   def error(message: String) = println("error: " + message)
   def info(message: String)  = println("info: " + message)
