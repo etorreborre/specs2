@@ -8,7 +8,7 @@ import time._
 import AnsiColors._
 import org.specs2.execute.{ Success, Failure, Error, Skipped, Pending, DecoratedResult }
 import specification._
-import internal.scalaz.Scalaz._
+import scalaz.Scalaz._
 
 /**
  * Reporter for the test interface defined for sbt
@@ -16,30 +16,7 @@ import internal.scalaz.Scalaz._
  * It prints out the result to the output defined by the sbt loggers
  * and publishes events to sbt event handlers
  */
-class SbtConsoleReporter(consoleExporter: Option[Exporting], otherExporters: Arguments => Seq[Exporting]) extends ConsoleReporter with Exporters {
-
-  override def report(spec: SpecificationStructure)(implicit arguments: Arguments): ExecutedSpecification = {
-    // if the results need to be exported to the console, we first do that making sure that the storing of statistics occurs in
-    // parallel to the export. This way, the results are displayed as soon as executed
-    // then we take the result of storing the stats, which sets up more information on the SpecStart/SpecEnd, and pass it
-    // to other exporters like the html exporter for example. This exporter needs this additional information to properly display
-    // index pages and total statistics
-    consoleExporter match {
-      case Some(e) => {
-        val storeAndExport = (spec: ExecutingSpecification) => Seq(store, e.export).par.map(_(spec)).head.asInstanceOf[ExecutingSpecification]
-        val executed = spec |> select |> sequence |> execute |> storeAndExport
-        val args = arguments <| executed.arguments
-        exportToOthers(otherExporters(args))(args).apply(executed)
-      }
-      case None => {
-        val executed = spec |> select |> sequence |> execute |> store
-        val args = arguments <| executed.arguments
-        exportToOthers(otherExporters(args))(args).apply(executed)
-      }
-    }
-  }
-
-}
+class SbtConsoleReporter(consoleExporter: Option[Exporting], otherExporters: Arguments => Seq[Exporting]) extends ConsoleReporter with AllExporting
 
 /**
  * This reporter will just notify the test interface about test results for the end statistics
@@ -69,7 +46,7 @@ class SbtExporter(val className: String, handler: EventHandler, loggers: Array[L
 
   protected def handleFragment(implicit args: Arguments): ExecutedFragment => ExecutedFragment = (f: ExecutedFragment) => {
     f match {
-      case ExecutedResult(description: MarkupString, result: org.specs2.execute.Result, timer: SimpleTimer, _, _) => {
+      case ExecutedResult(description: FormattedString, result: org.specs2.execute.Result, timer: SimpleTimer, _, _) => {
         def handleResult(res: org.specs2.execute.Result) {
           res match {
             case Success(text,_)             => handler.handle(succeeded())

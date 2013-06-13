@@ -40,7 +40,7 @@ object build extends Build {
       "org.scala-lang"          % "scala-reflect"      % scalaVersion  % "optional",
       "org.scala-lang"          % "scala-compiler"     % scalaVersion  % "optional",
       "org.scalacheck"          % "scalacheck_2.10.0"  % "1.10.0"      % "optional",
-      "org.scala-tools.testing" % "test-interface"     % "0.5"         % "optional",
+      "org.scalasbt.testing"    % "test-interface"     % "0.6"         % "optional",
       "org.hamcrest"            % "hamcrest-all"       % "1.1"         % "optional",
       "org.mockito"             % "mockito-all"        % "1.9.0"       % "optional",
       "junit"                   % "junit"              % "4.7"         % "optional",

@@ -10,7 +10,7 @@ import control.Exceptions._
 import specification.ExecutedSpecification
 import reflect.Classes._
 import io.ConsoleOutput
-import internal.scalaz.Scalaz._
+import scalaz.Scalaz._
 import Fingerprints._
 
 /**
@@ -110,7 +110,7 @@ case class SbtRunner(args: Array[String],
 
   def otherExporters(className: String, args: Array[String], handler: EventHandler)(implicit arguments: Arguments): Seq[Exporting] = {
     val exportFinalStats = exporter(!isConsole(args))(finalExporter(className, handler))
-    super.exporters((args.filterNot(_ == "console")).contains)(arguments) ++ exportFinalStats.toSeq
+    super.exporters(args.filterNot(_ == "console").contains(_))(arguments) ++ exportFinalStats.toSeq
   }
 
   /** @return the list of all the exporters depending on the arguments passed on the command line */
