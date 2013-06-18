@@ -47,8 +47,6 @@ trait NotifierExporting extends Exporting with Exporters {
       case f @ ExecutedSpecStart(_,_,_)                                      => {
         notifier.specStart(f.name, f.location.toString)
         tree.subForest.foreach(export)
-      }
-      case f @ ExecutedSpecEnd(_,_,_)                                        => {
         notifier.specEnd(f.name, f.location.toString)
       }
       case f @ ExecutedText(t,_)  if tree.subForest.isEmpty => if (args.canShow("*")) notifier.text(t.t, f.location.toString)

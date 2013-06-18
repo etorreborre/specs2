@@ -40,7 +40,7 @@ A Notifier can be used to get a stream of events for the execution of a Specific
  Arguments must be satisfied
    xonly only notifies of the failed and error examples                                                     ${g8.e1}
    showOnly only notifies of the examples with the correct statuses                                         ${g8.e2}
-                                                                                                                        """
+                                                                                                            """
 
 
   "start" - new g1 {
