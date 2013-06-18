@@ -1,40 +1,42 @@
+
 <!DOCTYPE html>
 <html>
+ 
 <head>
   <meta charset='utf-8'>
   <!-- PLEASE DEAR READER PARDON MY LACK OF HTML/CSS SKILLS :-) Any contribution will be gladly accepted! -->
   <title>etorreborre/specs2 @ GitHub</title>
-      <style type="text/css" media="all"> 
+      <style type="text/css" media="all">
         @import url('./css/maven-base.css');
         @import url('./css/maven-theme.css');
-      </style> 
-      <link href="./css/prettify.css" rel="stylesheet" type="text/css" /> 
-      <script type="text/javascript" src="./css/prettify.js"></script> 
-      <link href="./css/print.css" type="text/css" rel="stylesheet" media="print" /> 
-      <link href="./css/tooltip.css" type="text/css" rel="stylesheet" /> 
-      <script type="text/javascript" src="./css/tooltip.js"></script> 
-      <script language="javascript"> 
-      function init() {  prettyPrint(); };   
+      </style>
+      <link href="./css/prettify.css" rel="stylesheet" type="text/css" />
+      <script type="text/javascript" src="./css/prettify.js"></script>
+      <link href="./css/print.css" type="text/css" rel="stylesheet" media="print" />
+      <link href="./css/tooltip.css" type="text/css" rel="stylesheet" />
+      <script type="text/javascript" src="./css/tooltip.js"></script>
+      <script language="javascript">
+      function init() {  prettyPrint(); };
       /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
       String.prototype.endsWith = function(str) { return (this.match(str+'$') == str) };
       function changeWidth(id,width) {  document.getElementById(id).style.width = width; };
       function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
       function toggleImage(image) {
-        if (image.src.endsWith('./images/expanded.gif')) 
+        if (image.src.endsWith('./images/expanded.gif'))
           image.src = './images/collapsed.gif';
-        else 
+        else
           image.src = './images/expanded.gif';
       };
       function showHide(id) {
         element = document.getElementById(id);
         element.style.display = (element.style.display == 'block')? 'none' : 'block';
       };
-    </script> 
-      <script language="javascript">window.onload=init;</script> 
+    </script>
+      <script language="javascript">window.onload=init;</script>
       <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
-           tabber code, then the init code --> 
-      <script type="text/javascript" src="./css/tabber.js"></script> 
-      <link href="./css/tabber.css" type="text/css" rel="stylesheet" media="screen" />   
+           tabber code, then the init code -->
+      <script type="text/javascript" src="./css/tabber.js"></script>
+      <link href="./css/tabber.css" type="text/css" rel="stylesheet" media="screen" />
     <style type="text/css">
 	#top {
       margin-left: 150px;
@@ -73,32 +75,35 @@
   </head>
 
 <body>
+
   <div id="top">
       <a href="http://github.com/etorreborre/specs2"><img style="position: right; border: 0; width: 17%" src="./images/specs2.png" alt="specs2" /></a>
       <div class="description">Software Specifications for Scala</div>
   </div>
 
-  <div id="sidebar">
+
+   <div id="sidebar">
    <h3 style="margin-top: 0; margin-bottom: 0;">Try it!</h3>
-   <div class="sidelink" style="margin-top: 10px;"><a href="http://github.com/etorreborre/specs2-test">Sample project</a> (<a href="http://github.com/etorreborre/specs2-test/tarball/SPECS2-1.14">tar</a>, <a href="http://github.com/etorreborre/specs2-test/zipball/SPECS2-1.14">zip</a>)<br/>
+   <div class="sidelink" style="margin-top: 10px;"><a href="http://github.com/etorreborre/specs2-test">Sample project</a> (<a href="http://github.com/etorreborre/specs2-test/tarball/SPECS2-2.0">tar</a>, <a href="http://github.com/etorreborre/specs2-test/zipball/SPECS2-2.0">zip</a>)<br/>
    </div>
-   <a class="sidelink" href="#Dependencies">Dependencies</a><br/> 
-   <a class="sidelink" href="#Downloads">Downloads</a><br/> 
+   <a class="sidelink" href="#Dependencies">Dependencies</a><br/>
+   <a class="sidelink" href="#Downloads">Downloads</a><br/>
    <h3 style="margin-bottom: 0;">Learn it!</h3>
-   <div class="sidelink" style="margin-top: 10px;"><a href="guide/org.specs2.guide.QuickStart.html">Quick Start</a><br/> 
+   <div class="sidelink" style="margin-top: 10px;"><a href="guide/org.specs2.guide.QuickStart.html">Quick Start</a><br/>
    </div>
-   <a class="sidelink" href="guide/org.specs2.guide.UserGuide.html">User Guide</a><br/> 
-   <a class="sidelink" href="https://github.com/etorreborre/specs2/tree/1.14/src/test/scala/examples">Examples</a><br/>
-   <a class="sidelink" href="http://etorreborre.github.com/specs2/api/1.14/index.html">Scaladoc</a><br/>
+   <a class="sidelink" href="guide/org.specs2.guide.UserGuide.html">User Guide</a><br/>
+   <a class="sidelink" href="https://github.com/etorreborre/specs2/tree/2.0/src/test/scala/examples">Examples</a><br/>
+   <a class="sidelink" href="http://etorreborre.github.io/specs2/api/SPECS2-2.0/index.html">Scaladoc</a><br/>
    <h3 style="margin-bottom: 0;">Get involved!</h3>
    <div style="margin-top: 10px;"><a class="sidelink" href="http://github.com/etorreborre/specs2">Github project</a>
    </div>
-   <a class="sidelink" 	href="http://groups.google.com/group/specs2-users">User group</a><br/> 
-   <a class="sidelink" href="http://github.com/etorreborre/specs2/issues">Issues</a><br/> 
-   <a class="sidelink" href="http://etorreborre.blogspot.com/search/label/specs2">Blog</a><br/> 
-   <a class="sidelink" href="sponsors.html">Sponsors</a><br/> 
+   <a class="sidelink" 	href="http://groups.google.com/group/specs2-users">User group</a><br/>
+   <a class="sidelink" href="http://github.com/etorreborre/specs2/issues">Issues</a><br/>
+   <a class="sidelink" href="http://etorreborre.blogspot.com/search/label/specs2">Blog</a><br/>
+   <a class="sidelink" href="sponsors.html">Sponsors</a><br/>
    <a class="sidelink" href="http://www.twitter.com/specs2org"><img style="margin-top: 10px;" src="http://twitter-badges.s3.amazonaws.com/twitter-a.png" alt="Follow specs2 on Twitter"/></a>
   </div>
+
 
 	<div id="container">
     <h3 style="margin-top:0;">Presentation</h3>
@@ -129,16 +134,16 @@
 	  <div class="tabbertab" title="Acceptance">
 	    <code class="prettyprint">   import org.specs2._
 
-  class HelloWorldSpec extends Specification { def is =
+  class HelloWorldSpec extends Specification { def is = s2"""
 
-    "This is a specification to check the 'Hello world' string"                 ^
-                                                                                p^
-    "The 'Hello world' string should"                                           ^
-      "contain 11 characters"                                                   ! e1^
-      "start with 'Hello'"                                                      ! e2^
-      "end with 'world'"                                                        ! e3^
-                                                                                end
-    
+    This is a specification to check the 'Hello world' string
+
+    The 'Hello world' string should
+      contain 11 characters                             $e1
+      start with 'Hello'                                $e2
+      end with 'world'                                  $e3
+                                                        """
+
     def e1 = "Hello world" must have size(11)
     def e2 = "Hello world" must startWith("Hello")
     def e3 = "Hello world" must endWith("world")
@@ -161,9 +166,10 @@
     <div class="level2"><img src="./images/collapsed.gif">Returning "functional" results or throwing exceptions</img></div>
     <div class="level2"><img src="./images/collapsed.gif">Reusable outside of specs2 (in <a href="http://junit.org">JUnit</a> tests for example)</img></div>
   <div class="level1"><img src="./images/collapsed.gif">Forms for writing <a href="http://fitnesse.org">Fitnesse</a>-like specifications (with Markdown markup)</img></div>
-  <div class="level1"><img src="./images/collapsed.gif">Html reporting to create documentation for acceptance tests, to create a User Guide,...</img></div>
-  <div class="level1"><img src="./images/collapsed.gif">Integration with <a href="http://code.google.com/p/simple-build-tool/">sbt</a> and JUnit tools (maven, IDEs,...)</img></div>
-  
+  <div class="level1"><img src="./images/collapsed.gif">Html reporting to create documentation for acceptance tests, to create a User Guide</img></div>
+  <div class="level1"><img src="./images/collapsed.gif"/><a href="http://etorreborre.github.io/specs2/guide/org.specs2.guide.HowTo.html#Capture+snippets">Snippets</a> for documenting APIs with always up-to-date code</div>
+  <div class="level1"><img src="./images/collapsed.gif">Integration with <a href="http://scala-sbt.org/">sbt</a> and JUnit tools (maven, IDEs,...)</img></div>
+
     <h3><a name="Dependencies"></a>Dependencies</h3>
     The <s2>specs2</s2> jar is available with both sbt and maven
 
@@ -171,14 +177,16 @@
 	  <div class="tabbertab" title="sbt">
   	    <code class="prettyprint">
   libraryDependencies ++= Seq(
-    "org.specs2" %% "specs2" % "1.14" % "test"
-	
+    "org.specs2" %% "specs2" % "2.0" % "test"
+
     // with Scala 2.9.2 (specs2 1.12.3 is the latest version for scala 2.9.2)
     // "org.specs2" %% "specs2" % "1.12.3" % "test",
   )
-  
-  // Read here for optional dependencies: 
-  // <a href="http://etorreborre.github.com/specs2/guide/org.specs2.guide.Runners.html#Dependencies">http://etorreborre.github.com/specs2/guide/org.specs2.guide.Runners.html#Dependencies</a>
+
+  scalacOptions in Test ++= Seq("-Yrangepos")
+
+  // Read here for optional dependencies:
+  // <a href="http://etorreborre.github.io/specs2/guide/org.specs2.guide.Runners.html#Dependencies">http://etorreborre.github.io/specs2/guide/org.specs2.guide.Runners.html#Dependencies</a>
 
   resolvers ++= Seq("snapshots" at "http://oss.sonatype.org/content/repositories/snapshots",
                     "releases"  at "http://oss.sonatype.org/content/repositories/releases")
@@ -186,71 +194,71 @@
       </div>
 	  <div class="tabbertab" title="maven">
   	    <code class="prettyprint">  &lt;dependency>
-   &lt;groupId>org.specs2&lt;/groupId> 
-   &lt;artifactId>specs2_2.10&lt;/artifactId> 
-   &lt;version>1.14&lt;/version>
-   &lt;scope>test&lt;/scope> 
+   &lt;groupId>org.specs2&lt;/groupId>
+   &lt;artifactId>specs2_2.10&lt;/artifactId>
+   &lt;version>2.0&lt;/version>
+   &lt;scope>test&lt;/scope>
  &lt;/dependency>
 
 
  &lt;!--
    with Scala 2.9.2, change the dependency to:
 
-   &lt;artifactId>specs2_2.9.2&lt;/artifactId> 
-   &lt;version>1.12.3&lt;/version> 
+   &lt;artifactId>specs2_2.9.2&lt;/artifactId>
+   &lt;version>1.12.3&lt;/version>
 
- --> 
+ -->
 
  &lt;!--
-  Read here for optional dependencies: 
-  <a href="http://etorreborre.github.com/specs2/guide/org.specs2.guide.Runners.html#Dependencies">http://etorreborre.github.com/specs2/guide/org.specs2.guide.Runners.html#Dependencies</a>
- --> 
+  Read here for optional dependencies:
+  <a href="http://etorreborre.github.io/specs2/guide/org.specs2.guide.Runners.html#Dependencies">http://etorreborre.github.io/specs2/guide/org.specs2.guide.Runners.html#Dependencies</a>
+ -->
 
  &lt;repository>
-   &lt;id>oss.sonatype.org&lt;/id> 
-   &lt;name>releases&lt;/name> 
-   &lt;url>http://oss.sonatype.org/content/repositories/releases&lt;/url> 
- &lt;/repository>
- 
- &lt;repository>
-   &lt;id>oss.sonatype.org&lt;/id> 
-   &lt;name>snapshots&lt;/name> 
-   &lt;url>http://oss.sonatype.org/content/repositories/snapshots&lt;/url> 
+   &lt;id>oss.sonatype.org&lt;/id>
+   &lt;name>releases&lt;/name>
+   &lt;url>http://oss.sonatype.org/content/repositories/releases&lt;/url>
  &lt;/repository>
 
  &lt;repository>
-   &lt;id>central&lt;/id> 
-   &lt;name>Maven repository&lt;/name> 
-   &lt;url>http://repo1.maven.org/maven2&lt;/url> 
+   &lt;id>oss.sonatype.org&lt;/id>
+   &lt;name>snapshots&lt;/name>
+   &lt;url>http://oss.sonatype.org/content/repositories/snapshots&lt;/url>
  &lt;/repository>
- 
+
+ &lt;repository>
+   &lt;id>central&lt;/id>
+   &lt;name>Maven repository&lt;/name>
+   &lt;url>http://repo1.maven.org/maven2&lt;/url>
+ &lt;/repository>
+
     </code>
       </div>
-	</div>  
-	
+	</div>
+
     <h3><a name="Downloads"></a>Downloads</h3>
-    
+
 	You can download the project here
 	<table width="850">
 	  <tr><th width="100">Version</th><th width="400">Files</th></tr>
 	  <tr>
 	      <td class="info">Snapshot</td>
 	      <td class="info">
-		    binaries (<a href="http://oss.sonatype.org/content/repositories/snapshots/org/specs2/specs2_2.10/1.14.1-SNAPSHOT/">specs2 jar</a>,
-			            <a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/specs2-scalaz-core_2.10/7.0.0/">scalaz core jar</a>,
-                  <a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/specs2-scalaz-concurrent_2.10/7.0.0/">scalaz concurrent jar</a>)<br/> 
-       project (<a href="http://github.com/etorreborre/specs2/zipball/1.14.1">zip</a>,
-                <a href="http://github.com/etorreborre/specs2/tarball/1.14.1">tar</a>)
+		    binaries (<a href="http://oss.sonatype.org/content/repositories/snapshots/org/specs2/specs2_2.10/2.0.1-SNAPSHOT/">specs2 jar</a>,
+			            <a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/scalaz-core_2.10/7.0.0/">scalaz core jar</a>,
+                  <a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/scalaz-concurrent_2.10/7.0.0/">scalaz concurrent jar</a>)<br/>
+       project (<a href="http://github.com/etorreborre/specs2/zipball/2.0.1">zip</a>,
+                <a href="http://github.com/etorreborre/specs2/tarball/2.0.1">tar</a>)
 		  </td>
 	  </tr>
 	  <tr>
 	      <td class="info">Released</td>
 	      <td class="info">
-		    binaries (<a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/specs2_2.10/1.14/">specs2 jar</a>,
-			            <a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/specs2-scalaz-core_2.10/7.0.0/">scalaz core jar</a>,
-                  <a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/specs2-scalaz-concurrent_2.10/7.0.0/">scalaz concurrent jar</a>)<br/>
-        project (<a href="http://github.com/etorreborre/specs2/zipball/SPECS2-1.14">zip</a>,
-                 <a href="http://github.com/etorreborre/specs2/tarball/SPECS2-1.14">tar</a>)
+		    binaries (<a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/specs2_2.10/2.0/">specs2 jar</a>,
+			            <a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/scalaz-core_2.10/7.0.0/">scalaz core jar</a>,
+                  <a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/scalaz-concurrent_2.10/7.0.0/">scalaz concurrent jar</a>)<br/>
+        project (<a href="http://github.com/etorreborre/specs2/zipball/SPECS2-2.0">zip</a>,
+                 <a href="http://github.com/etorreborre/specs2/tarball/SPECS2-2.0">tar</a>)
 		  </td>
 	  </tr>
 	<table>
@@ -259,11 +267,12 @@
       <div class="console">$ git clone git://github.com/etorreborre/specs2</div>
     </p>
 
-    <div class="footer">
-      get the source code on GitHub : <a href="http://github.com/etorreborre/specs2">etorreborre/specs2</a>
-    </div>
-
   </div>
-  
+
+
+<div class="footer">
+  get the source code on GitHub : <a href="http://github.com/etorreborre/specs2">etorreborre/specs2</a>
+</div>
+
 </body>
 </html>
