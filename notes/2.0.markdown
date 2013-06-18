@@ -1,13 +1,12 @@
-Major release! Please read [this post](http://etorreborre.blogspot.com/interpolated.html) to get all the details.
+Major release! Please read [this post](http://etorreborre.blogspot.com/interpolated.html) and [this one](http://etorreborre.blogspot.com.au/2013/06/specs2-20-interpolated-rc2.html) to get all the details.
 
 New features
 
  * simplified the acceptance specifications with [interpolated strings](https://github.com/etorreborre/specs2/blob/master/src/test/scala/examples/HelloWorldSpec.scala) and [`Scripts`](https://github.com/etorreborre/specs2/blob/master/src/test/scala/examples/ScriptedHelloWorldSpec.scala)
- * added a new way of declaring Given/When/Then specifications with the `GWT` trait (http://etorreborre.github.com/specs2/guide/org.specs2.structure.GivenWhenThenPage.html)
+ * added a new way of declaring Given/When/Then specifications with the [`GWT` trait](http://etorreborre.github.com/specs2/guide/org.specs2.structure.GivenWhenThenPage.html)
  * added a `Snippets` trait to insert blocks of code in generated documentation
  * added matchers for `scala.util.Try` instances
  * using the official Scalaz 7 release
- * refactored the generated html with [Bootstrap](http://twitter.github.io/bootstrap)
  * reworked the `Traversable` matchers to make a more general use of `contain`
  
 Improvements
@@ -20,6 +19,7 @@ Improvements
  * added auto-numbered groups and examples for the `Groups` and `Grouped` traits
  * restricted the JsonMatchers to string inputs
  * added a `Tables` trait in the `specification` package to use `DataTables` without the `!` implicit creating examples
+ * added the possibility to declare a step as global in a mutable / isolated specification
 
 Fixes
 
@@ -40,6 +40,8 @@ Fixes
  * set the `MatchResult[T].apply` method as private to specs2 to mitigate issues with semi-column inference [#154](https://github.com/etorreborre/specs2/issues/154)
  * fixed the use of a custom equality matcher for different combinations of `contain(...).inOrder` and `contain(...).only`
  * fixed the or combinator for results when there are `FailureExceptions`
+ * fixed the spelling mistake with pending [#165](https://github.com/etorreborre/specs2/issues/165)
+ * fixed the reporting of SpecEnds with the Notifier reporter, which fixes the display in Intellij
 
  ==========================
 
