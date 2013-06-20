@@ -44,7 +44,21 @@ trait TryBaseMatchers extends ExceptionMatchers {
         }
     }
 
-    def which(f: T => Boolean) = this ^^ { (t: Try[T]) => t filter f }
+    def which(f: T => Boolean) = new Matcher[Try[T]] {
+      def apply[S <: Try[T]](value: Expectable[S]) = {
+        val defaultMessage = s"${value.description} is not Success[T]"
+        val (isSuccess, failureMessage) = value.value match {
+          case util.Success(t) if !f(t) => (false, s"${value.description} is Success[T] but $t does not satisfy the given predicate")
+          case None                     => (false, defaultMessage)
+          case _                        => (true , defaultMessage)
+        }
+        result(isSuccess,
+          s"${value.description} is Success[T] and satisfies the given predicate",
+          failureMessage,
+          value)
+      }
+    }
+
     def like(f: PartialFunction[T, MatchResult[_]]) = partialMatcher(f)
 
     private def partialMatcher(f: PartialFunction[T, MatchResult[_]]) = new Matcher[Try[T]] {

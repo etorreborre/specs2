@@ -71,7 +71,7 @@ class SomeMatcher[T] extends Matcher[Option[T]] {
     def apply[S <: Option[T]](value: Expectable[S]) = {
       val defaultMessage = s"${value.description} is not Some[T]"
       val (isSuccess, failureMessage) = value.value match {
-        case Some(t) if !f(t) => (false, s"${value.description} is Some[T] but $t does not satisfies the given predicate")
+        case Some(t) if !f(t) => (false, s"${value.description} is Some[T] but $t does not satisfy the given predicate")
         case None             => (false, defaultMessage)
         case _                => (true , defaultMessage)
       }
