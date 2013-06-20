@@ -66,7 +66,22 @@ class SomeMatcher[T] extends Matcher[Option[T]] {
            value.description + " is not Some[T]",
            value)
   }
-  def which(f: T => Boolean) = this ^^ { (t: Option[T]) => t filter f }
+
+  def which(f: T => Boolean) = new Matcher[Option[T]] {
+    def apply[S <: Option[T]](value: Expectable[S]) = {
+      val defaultMessage = s"${value.description} is not Some[T]"
+      val (isSuccess, failureMessage) = value.value match {
+        case Some(t) if !f(t) => (false, s"${value.description} is Some[T] but $t does not satisfies the given predicate")
+        case None             => (false, defaultMessage)
+        case _                => (true , defaultMessage)
+      }
+      result(isSuccess,
+             s"${value.description} is Some[T] and satisfies the given predicate",
+             failureMessage,
+             value)
+    }
+  }
+
   def like(f: PartialFunction[T, MatchResult[_]]) = partialMatcher(f)
 
   private def partialMatcher(f: PartialFunction[T, MatchResult[_]]) = new Matcher[Option[T]] {
