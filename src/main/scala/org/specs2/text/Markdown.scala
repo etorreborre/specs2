@@ -45,13 +45,7 @@ trait Markdown {
    * parse the markdown string and return xml (unless the arguments deactivate the markdown rendering)
    */
   def toXhtml(text: String, options: MarkdownOptions = MarkdownOptions())(implicit args: Arguments): NodeSeq = {
-    val lines = if (text.trim.nonEmpty && text.contains("\n")) text.split("\n").map { line =>
-      val (start, end) = line.span(_ == ' ')
-      "&nbsp;"*start.size + end.mkString
-    }.mkString("\n") else text
-
-    val paragraph = if (!text.trim.isEmpty && text.filter(_ == '\n').size > 1 && text.reverse.dropWhile(_ == ' ').startsWith("\n")) lines.removeLast("\n") else lines
-    val html = toHtmlNoPar(paragraph, options)
+    val html = toHtmlNoPar(text, options)
     parse(html) match {
       case Some(f) => f
       case None => scala.xml.Text(if (args.debugMarkdown) html else text)
