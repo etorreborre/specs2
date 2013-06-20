@@ -412,3 +412,6 @@ table td {
   left:85%;     /* Please make note of the brackets here:
           (100% - left column width) plus (center column left and right padding) plus (left column left and right padding) plus (right column left padding) */
 }
+code {
+  white-space: pre-wrap;
+}
