@@ -34,11 +34,20 @@ trait Markdown {
    * parse the markdown string and return html without the enclosing paragraph
    */
   def toHtmlNoPar(text: String, options: MarkdownOptions = MarkdownOptions())(implicit args: Arguments) = {
-    if (text.trim.isEmpty) "<br/>"*(text.filter(_ == '\n').drop(1).size)
-    else {
-      val html = toHtml(text, options)
-      if (!text.contains("\n") || text.trim.isEmpty) html.removeEnclosingXmlTag("p") else html
-    }
+
+    /// to be investigated....
+//    val spaces = text.split("\n").filter(_.nonEmpty).map(line => line.takeWhile(_ == ' ').size)
+//    val html = toHtml(text, options)
+//    val result = if (!text.contains("\n") || text.trim.isEmpty) html.removeEnclosingXmlTag("p") else html
+//    if (result.trim.isEmpty) result else  {
+//    val lines = result.split("\n").zip(spaces)
+//    val finalr = lines.map { case (line, spNumber) =>
+//      "&nbsp;"*spNumber + line.dropWhile(_ == ' ').mkString
+//    }.mkString("<br/>")
+//    finalr
+    val html = toHtml(text, options)
+    if (!text.contains("\n") || text.trim.isEmpty) html.removeEnclosingXmlTag("p") else html
+
   }
 
   /**
