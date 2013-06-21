@@ -114,7 +114,7 @@ Messages
 
     eg := {
       def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i+" is even", (i: Int) => i+" is odd")
-      ((i: Int) => beEven).foreach(Seq(1, 2, 3)) returns "There are 2 matches\n1 is odd\n3 is odd\n"
+      ((i: Int) => beEven).foreach(Seq(1, 2, 3)) returns "There are 2 failures\n1 is odd\n3 is odd\n"
     }
   }
 

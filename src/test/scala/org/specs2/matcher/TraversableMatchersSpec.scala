@@ -22,7 +22,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
    ${ Seq(1, 2, 3) must contain(be_>=(0)).forall }
    ${ Seq(1, 2, 3) must contain(be_>=(0)).foreach }
    ${ Seq(1, 2) must contain(anyOf(1, 4)) }
-   ${ (Seq(1, 2, 3) must not(contain(anyOf(1, 2, 4)))) returns "There are 2 matches\n'1' is contained in '1, 2, 4'\n'2' is contained in '1, 2, 4'\n" }
+   ${ (Seq(1, 2, 3) must not(contain(anyOf(1, 2, 4)))) returns "There are 2 successes\n'1' is contained in '1, 2, 4'\n'2' is contained in '1, 2, 4'\n" }
    ${ Seq("hello", "world") must contain(matching(".*orld")) }
    ${ Seq("hello", "world") must contain((s: String) => s.size > 2) }
    ${ Seq("1", "2", "3") must contain("3") and contain("2":Any) }
@@ -33,9 +33,9 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
 
    Failure messages
    ${ (Seq(1, 2, 3) must contain(4)                        ) returns "List(1, 2, 3) does not contain 4"}
-   ${ (Seq(1, 2, 3) must contain(be_>=(4))                 ) returns "There are 3 matches\n1 is less than 4\n2 is less than 4\n3 is less than 4\n" }
-   ${ (Seq(1, 2, 3) must not contain(be_>=(2))             ) returns "There are 2 matches\n2 is not less than 2\n3 is not less than 2\n" }
-   ${ (Seq(1, 2, 3) must contain(be_>=(3)).atLeast(2.times)) returns "There are 2 matches\n1 is less than 3\n2 is less than 3\n" }
+   ${ (Seq(1, 2, 3) must contain(be_>=(4))                 ) returns "There are 3 failures\n1 is less than 4\n2 is less than 4\n3 is less than 4\n" }
+   ${ (Seq(1, 2, 3) must not contain(be_>=(2))             ) returns "There are 2 successes\n2 is not less than 2\n3 is not less than 2\n" }
+   ${ (Seq(1, 2, 3) must contain(be_>=(3)).atLeast(2.times)) returns "There are 2 failures\n1 is less than 3\n2 is less than 3\n" }
 
 
  We can compare a collection to another by using matchers
