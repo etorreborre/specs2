@@ -61,10 +61,13 @@ object DefaultStackTraceFilter extends
   IncludeExcludeStackTraceFilter(Seq(),
     Seq("org.specs2", "scalaz\\.",
         "java\\.", "scala\\.",
-        "sbt\\.", "com.intellij", "org.junit", "org.eclipse.jdt")) {
+        "sbt\\.", "com.intellij", "org.junit", "org.eclipse.jdt")) with ExecutionOrigin {
 
   override def apply(e: Seq[StackTraceElement]): Seq[StackTraceElement] = {
-    val filtered = super.apply(e)
+    val filtered =
+      if (isSpecificationFromSpecs2orScalaz(e)) e.dropWhile(t => !isSpecificationFromSpecs2orScalaz(Seq(t)))
+      else                                      super.apply(e)
+
     if (filtered.size >= 1000) filtered.take(200) ++ truncated(filtered.size) ++ filtered.takeRight(200)
     else filtered
   }
@@ -79,7 +82,6 @@ object DefaultStackTraceFilter extends
     Seq(trace("="*70))
   }
 }
-
 /**
  * This filter doesn't do anything
  */
