@@ -106,6 +106,7 @@ object Text {
 case class FormattedString(t: String = "", formatting: Formatting = Formatting(), isEmpty: Boolean = false) {
   def raw: String = t
   def append(s: String) = copy(t = t+s)
+  def prepend(s: String) = copy(t = s+t)
   def map(f: String => String) = copy(t = f(t))
   def withMarkdown = copy(formatting = formatting.copy(markdown = true))
   def withFlow = copy(formatting = formatting.copy(flow = true))

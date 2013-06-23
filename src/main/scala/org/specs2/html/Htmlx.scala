@@ -26,7 +26,7 @@ trait Htmlx { outer =>
 
   implicit def extendHtmlNode(n: Node) = ExtendedHtmlNode(n)
   case class ExtendedHtmlNode(n: Node) {
-    def addHeadersAnchors = outer.headersAnchors.rewrite(n)
+    def addHeadersAnchors = outer.headersAnchors.rewrite(n).headOption.getOrElse(NodeSeq.Empty)
   }
 
   implicit def extendHtmlSeqNode(ns: Seq[Node]) = ExtendedHtmlSeqNode(ns)

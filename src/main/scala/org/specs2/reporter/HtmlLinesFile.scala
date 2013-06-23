@@ -45,10 +45,7 @@ case class HtmlLinesFile(specName: SpecName, args: Arguments,
 
   def printLines(out: HtmlReportOutput)(implicit args: Arguments) = {
     val result = lines.foldLeft(out) { (res, cur) => cur.print(res) }
-    val markdowned = Htmlx.rewriteRule {
-      case a: Atom[_] => text.Markdown.toXhtml(a.data.toString)
-    }.rewrite(result.xml)
-    result.clear.printHtml(markdowned)
+    result.clear.printHtml(result.lines)
   }
 
   def add(line: HtmlLine) = copy(lines = lines :+ line)

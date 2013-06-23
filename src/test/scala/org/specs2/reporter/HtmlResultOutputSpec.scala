@@ -22,15 +22,16 @@ class HtmlResultOutputSpec extends Specification with DataTables with XmlMatcher
     A datatable used as an auto-example must be displayed                                            ${dataTables().e3}
                                                                                                      """
   implicit val defaultArgs = Arguments()
-    
+
+  // this example is tricky because the whitespace before 'desc' is ASCII 160: non-breaking whitespace (and not 32, regular whitespace)
   def descriptions = {
     val (out, desc) = (new HtmlResultOutput, FormattedString("desc"))
     "output"               | "xml"                                                 |>
-    out.printSuccess(desc) ! """<img src="./images/icon_success_sml.gif"/> desc""" |
-    out.printFailure(desc) ! """<img src="./images/icon_failure_sml.gif"/> desc""" |
-    out.printError(desc)   ! """<img src="./images/icon_error_sml.gif"/> desc"""   |
-    out.printSkipped(desc) ! """<img src="./images/icon_skipped_sml.gif"/> desc""" |
-    out.printPending(desc) ! """<img src="./images/icon_pending_sml.gif"/> desc""" | { (output, xml) =>
+    out.printSuccess(desc) ! """<img src="./images/icon_success_sml.gif"/> desc""" |
+    out.printFailure(desc) ! """<img src="./images/icon_failure_sml.gif"/> desc""" |
+    out.printError(desc)   ! """<img src="./images/icon_error_sml.gif"/> desc"""   |
+    out.printSkipped(desc) ! """<img src="./images/icon_skipped_sml.gif"/> desc""" |
+    out.printPending(desc) ! """<img src="./images/icon_pending_sml.gif"/> desc""" | { (output, xml) =>
       output.xml.toString must contain(xml)
     }
   }

@@ -13,6 +13,7 @@ import execute._
 import xml.Nodex._
 import specification._
 import html.Htmlx._
+import org.specs2.html.Htmlx
 
 /**
  * This class stores the html to print to a file (as a NodeSeq object)
@@ -23,6 +24,11 @@ import html.Htmlx._
  */
 private[specs2]
 case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "", customTextPrinter: Option[(String, MarkdownOptions) => NodeSeq] = None)(implicit args: Arguments) extends HtmlReportOutput { outer =>
+
+  /** post-process the xml as Markdown */
+  def lines = Htmlx.rewriteRule {
+    case a: Atom[_] => text.Markdown.toXhtml(a.data.toString)
+  }.rewrite(xml)
 
   protected lazy val textPrinter = customTextPrinter getOrElse ((s: String, options: MarkdownOptions) => toXhtml(s, options)(args))
   
@@ -181,7 +187,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
 	protected def printKoStatus(n: NodeSeq) = print(koStatus(n))
 	protected def printStatus(n: NodeSeq, st: String) = print(status(n, st))
 
-  protected def textWithIcon(message: FormattedString, iconName: String, level: Int = 0) = div(<img src={icon(iconName)}/> ++ t("&nbsp;") ++ wiki(message) ++ <br/>, level)
+  protected def textWithIcon(message: FormattedString, iconName: String, level: Int = 0) = div(<img src={icon(iconName)}/> ++ wiki(message.prepend("&nbsp;")) ++ <br/>, level)
   protected def xmlWithIcon(xml: NodeSeq, iconName: String, level: Int = 0) = div(<table class="exampleTable"><td><img src={icon(iconName)}/></td><td>{xml}</td></table>, level)
   protected def icon(t: String) = baseDir+"images/icon_"+t+"_sml.gif"
 
