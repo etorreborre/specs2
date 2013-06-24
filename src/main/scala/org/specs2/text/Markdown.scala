@@ -27,27 +27,15 @@ trait Markdown {
    * transformed to <br/> tags
    */
   def toHtml(text: String, options: MarkdownOptions = MarkdownOptions())(implicit args: Arguments) = {
-    (new Specs2Visitor(options)).toHtml(processor.parseMarkdown(text.replace("\\\\n", "\n").toCharArray))
+    (new Specs2Visitor(text, options)).toHtml(processor.parseMarkdown(text.replace("\\\\n", "\n").toCharArray))
   }
 
   /**
    * parse the markdown string and return html without the enclosing paragraph
    */
   def toHtmlNoPar(text: String, options: MarkdownOptions = MarkdownOptions())(implicit args: Arguments) = {
-
-    /// to be investigated....
-//    val spaces = text.split("\n").filter(_.nonEmpty).map(line => line.takeWhile(_ == ' ').size)
-//    val html = toHtml(text, options)
-//    val result = if (!text.contains("\n") || text.trim.isEmpty) html.removeEnclosingXmlTag("p") else html
-//    if (result.trim.isEmpty) result else  {
-//    val lines = result.split("\n").zip(spaces)
-//    val finalr = lines.map { case (line, spNumber) =>
-//      "&nbsp;"*spNumber + line.dropWhile(_ == ' ').mkString
-//    }.mkString("<br/>")
-//    finalr
     val html = toHtml(text, options)
     if (!text.contains("\n") || text.trim.isEmpty) html.removeEnclosingXmlTag("p") else html
-
   }
 
   /**
@@ -72,14 +60,30 @@ object Markdown extends Markdown
 /**
  * specialised pegdown visitor to control the rendering of code blocks
  */
-case class Specs2Visitor(options: MarkdownOptions = MarkdownOptions()) extends org.pegdown.ToHtmlSerializer(new LinkRenderer) {
+case class Specs2Visitor(text: String, options: MarkdownOptions = MarkdownOptions()) extends org.pegdown.ToHtmlSerializer(new LinkRenderer) {
   override def visit(node: CodeNode) {
     printTagAndAttribute(node, "code", "class", "prettyprint")
   }
+  override def visit(node: ParaNode) {
+    super.visit(node)
+  }
+  override def visit(node: TextNode) {
+    super.visit(node)
+  }
 
+  override def visit(node: SimpleNode) {
+    super.visit(node)
+    if (node.getType == SimpleNode.Type.Linebreak) {
+      val indent = text.drop(node.getEndIndex).takeWhile(_ == ' ').size
+      (1 to indent) foreach { i => super.visit(new SimpleNode(SimpleNode.Type.Nbsp)) }
+    }
+  }
   override def visit(node: VerbatimNode) {
     if (!options.verbatim && node.getType.isEmpty && node.getText.contains("\n")) {
-      super.visit(new TextNode(node.getText))
+      val indents = text.split("\n").filter(_.nonEmpty).map(line => line.takeWhile(_==' ').size)
+      val verbatim = node.getText.split("\n").map(line => line.trim)
+      val lines = (indents zip verbatim).map { case (indent, line) => "&nbsp;"*indent + line }.mkString("<br/>")
+      super.visit(new TextNode(lines))
     }
     else super.visit(new VerbatimNode(node.getText, "prettyprint"))
   }

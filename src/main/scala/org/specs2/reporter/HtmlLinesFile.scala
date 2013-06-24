@@ -45,7 +45,7 @@ case class HtmlLinesFile(specName: SpecName, args: Arguments,
 
   def printLines(out: HtmlReportOutput)(implicit args: Arguments) = {
     val result = lines.foldLeft(out) { (res, cur) => cur.print(res) }
-    result.clear.printHtml(result.lines)
+    result.clear.printHtml(result.xml)
   }
 
   def add(line: HtmlLine) = copy(lines = lines :+ line)

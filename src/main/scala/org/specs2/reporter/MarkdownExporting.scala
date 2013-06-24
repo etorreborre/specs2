@@ -45,7 +45,6 @@ private[specs2]
 case class MarkdownResultOutput(output: HtmlReportOutput)(implicit args: Arguments) extends HtmlReportOutput {
   def clear                                                                                     = MarkdownResultOutput(output.clear)
   def xml: NodeSeq                                                                              = output.xml
-  def lines: NodeSeq                                                                            = output.xml // don't post-process as Markdown
   def print(xml: NodeSeq): MarkdownResultOutput                                                 = MarkdownResultOutput(output.print(xml))
   def print(xml: Elem)   : MarkdownResultOutput                                                 = MarkdownResultOutput(output.print(xml))
   def filePathIs(path: String)                                                                  = MarkdownResultOutput(output.filePathIs(path))

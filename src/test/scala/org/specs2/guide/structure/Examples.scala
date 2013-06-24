@@ -198,21 +198,19 @@ Alternatively, `orSkip` will skip the rest of the example in case of a failure.
 #### Auto-Examples
 
 If your specification is about showing the use of a DSL or of an API, you can elide a description for the Example. This functionality is used in ***specs2*** to specify matchers: ${snippet{
-// 8<--
-s2""" // 8<--
+s2"""
 beNone checks if an element is None
 ${ None must beNone }
 ${ Some(1) must not be none }
-// 8<--
 """
 }}
 
 In that case, the text of the example will be extracted from the source file and the output will be:
-
-  beNone checks if an element is None
-  + None must beNone
-  + Some(1) must not be none
-
+```
+beNone checks if an element is None
++ None must beNone
++ Some(1) must not be none
+```
 #### G / W /T
 
 The Given/When/Then style for writing specifications is described ${(new GivenWhenThenPage).markdownLink("here").fromTop}.
@@ -232,12 +230,11 @@ class DataTableSpec extends Specification with matcher.DataTables { def is =
 }
 }}
 This specification will be rendered as:
-
-  adding integers should just work in scala
-  +  a | b | c |
-     2 | 2 | 4 |
-     1 | 1 | 2 |
-
+```adding integers should just work in scala
++  a | b | c |
+   2 | 2 | 4 |
+   1 | 1 | 2 |
+```
 #### Example groups
 
 When you create acceptance specifications, you have to find names to reference your examples, which can sometimes be a bit tedious. You can then get some support from the `${fullName[specification.Grouped]}` trait. This trait provides group traits, named `g1` to `g22` to define groups of examples. Each group trait defines 22 variables named `e1` to `e22`, to define examples bodies. The specification below shows how to use the `Grouped` trait: ${snippet{

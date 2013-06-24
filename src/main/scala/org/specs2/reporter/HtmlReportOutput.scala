@@ -15,8 +15,6 @@ import control.StackTraceFilter
 trait HtmlReportOutput {
   /** @return the build html code */
 	def xml: NodeSeq
-  /** @return the final result, possibly post-processed */
-  def lines: NodeSeq
   /** clear the current xml content */
   def clear: HtmlReportOutput
   /** print a NodeSeq */

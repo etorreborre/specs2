@@ -25,11 +25,6 @@ import org.specs2.html.Htmlx
 private[specs2]
 case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "", customTextPrinter: Option[(String, MarkdownOptions) => NodeSeq] = None)(implicit args: Arguments) extends HtmlReportOutput { outer =>
 
-  /** post-process the xml as Markdown */
-  def lines = Htmlx.rewriteRule {
-    case a: Atom[_] => text.Markdown.toXhtml(a.data.toString)
-  }.rewrite(xml)
-
   protected lazy val textPrinter = customTextPrinter getOrElse ((s: String, options: MarkdownOptions) => toXhtml(s, options)(args))
   
   /**
