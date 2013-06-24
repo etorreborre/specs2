@@ -35,7 +35,7 @@
 <body>
 <div class="container">
     <div class="row">
-      <div class="span12">
+      <div class="span9">
         <h1><a href="http://github.com/etorreborre/specs2"><img style="position: right; border: 0; width: 17%" src="./images/specs2.png" alt="specs2" /></a></h1>
         <h4>Software Specifications for Scala</h4>
 
@@ -65,8 +65,8 @@
         }
     }
             </code></pre>
-                </div>
-                <div class="tab-pane" id="acceptance">
+          </div>
+          <div class="tab-pane" id="acceptance">
             <pre class="prettyprint"><code class="language-scala">
     import org.specs2._
     class HelloWorldSpec extends Specification { def is =
@@ -84,9 +84,8 @@
         def e3 = "Hello world" must endWith("world")
     }
             </code></pre>
-                </div>
-            </div>
-        </div>
+          </div>
+        </div>        
 
         <h2>Features</h2>
         <hr/>
@@ -106,8 +105,7 @@
           <li>Forms for writing <a href="http://fitnesse.org">Fitnesse</a>-like specifications (with Markdown markup)</li>
           <li>Html reporting to create documentation for acceptance tests, to create a User Guide,...</li>
           <li>Integration with <a href="http://code.google.com/p/simple-build-tool/">sbt</a> and JUnit tools (maven, IDEs,...)</li>
-        </ul>
-      </div>
+        </ul>      
 
       <h2>Download</h2>
       <hr/>
@@ -196,57 +194,39 @@
         </tr>
       </tbody>
       </table>
-      <h3>
-      As a Git repository:
-      </h3>
+
+      <h3>As a Git repository:</h3>
       <pre class="prettyprint"><code class="language-bsh">
     $ git clone git://github.com/etorreborre/specs2
       </pre></code>
 
     </div>
-
-
-<div id="top">
-    <a href="http://github.com/etorreborre/specs2"><img style="position: right; border: 0; width: 17%"
-                                                        src="./images/specs2.png" alt="specs2"/></a>
-
-    <div class="description">Software Specifications for Scala</div>
-</div>
-
-<div id="sidebar">
-    <h3 style="margin-top: 0; margin-bottom: 0;">Try it!</h3>
-
-    <div class="sidelink" style="margin-top: 10px;"><a href="http://github.com/etorreborre/specs2-test">Sample
-        project</a> (<a href="http://github.com/etorreborre/specs2-test/tarball/SPECS2-1.14">tar</a>, <a
-            href="http://github.com/etorreborre/specs2-test/zipball/SPECS2-1.14">zip</a>)<br/>
+    <div class="offset1 span2">
+      <h3 class="navbar">Try it!</h3>
+      <ul class="links">
+        <li class="links"><a href="#test">Sample Project</a></li>
+        <li class="links"><a href="#test">Download</a></li>
+      </ul>
+      <h3>Learn it!</h3>
+      <ul class="links">
+        <li class="links"><a href="#test">Quick Start</a></li>
+        <li class="links"><a href="#test">User Guide</a></li>
+        <li class="links"><a href="#test">Examples</a></li>
+        <li class="links"><a href="#test">Scaladoc</a></li>
+      </ul>
+      <h3>Get involved!</h3>
+      <ul class="links">
+        <li class="links"><a href="#test">User group</a></li>
+        <li class="links"><a href="#test">Issues</a></li>
+        <li class="links"><a href="#test">Blog</a></li>
+        <li class="links"><a href="#test">Sponsors</a></li>
+        <li class="links">
+          <a href="http://www.twitter.com/specs2org"><img style="margin-top: 10px;"
+                                                          src="http://twitter-badges.s3.amazonaws.com/twitter-a.png"
+                                                          alt="Follow specs2 on Twitter"/></a>
+        </li>
+      </ul>
     </div>
-    <a class="sidelink" href="#Dependencies">Dependencies</a><br/>
-    <a class="sidelink" href="#Downloads">Downloads</a><br/>
-
-    <h3 style="margin-bottom: 0;">Learn it!</h3>
-
-    <div class="sidelink" style="margin-top: 10px;"><a href="guide/org.specs2.guide.QuickStart.html">Quick
-        Start</a><br/>
-
-    </div>
-    <a class="sidelink" href="guide/org.specs2.UserGuide.html">User Guide</a><br/>
-    <a class="sidelink" href="https://github.com/etorreborre/specs2/tree/1.14/src/test/scala/examples">Examples</a><br/>
-    <a class="sidelink" href="http://etorreborre.github.com/specs2/api/1.14/index.html">Scaladoc</a><br/>
-
-    <h3 style="margin-bottom: 0;">Get involved!</h3>
-
-    <div style="margin-top: 10px;"><a class="sidelink" href="http://github.com/etorreborre/specs2">Github project</a>
-    </div>
-    <a class="sidelink" href="http://groups.google.com/group/specs2-users">User group</a><br/>
-    <a class="sidelink" href="http://github.com/etorreborre/specs2/issues">Issues</a><br/>
-    <a class="sidelink" href="http://etorreborre.blogspot.com/search/label/specs2">Blog</a><br/>
-    <a class="sidelink" href="sponsors.html">Sponsors</a><br/>
-    <a class="sidelink" href="http://www.twitter.com/specs2org"><img style="margin-top: 10px;"
-                                                                     src="http://twitter-badges.s3.amazonaws.com/twitter-a.png"
-                                                                     alt="Follow specs2 on Twitter"/></a>
-</div>
-
-
-
+  </div>
 </body>
 </html>

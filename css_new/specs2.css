@@ -1,6 +1,6 @@
 body {
   font-family: 'Open Sans', sans-serif;
-  font-size:20px;
+  font-size:16px;
   font-weight:300;
 }
 
@@ -9,10 +9,16 @@ h1 {
 }
 
 h2 {
+  font-family: 'georgia', serif;
   margin-bottom: 5px;
 }
 
+ul + h2 {
+  margin-top: 30px;
+}
+
 h3 {
+  font-family: 'georgia', serif;
   margin-top:30px;
   font-size:20px;
   font-style: italic;
@@ -39,10 +45,20 @@ p + p {
 }
 
 li {
-  line-height: 150%;
+  line-height:150%;
   margin-left:30px;
 }
 
 s2 {
   font-style: italic;
+}
+
+.links {
+  list-style-type: none;
+  margin-left: 0px;
+  padding-left: 0px;
+}
+
+.navbar {
+  margin-top: 95px;
 }
