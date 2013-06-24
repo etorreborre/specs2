@@ -33,9 +33,8 @@ trait AutoExamples extends org.specs2.specification.AutoExamples { this: specifi
 
 
   override private[specs2] def trimCode(code: String) = {
-    List(";", "bt", "t", "endp", "br", "end", "p", ".", "eg", ".", ";").foldLeft(code.removeLast("\\(.*\\)"))(_.trim trimEnd _).
+    List(";", "bt", "t", "endp", "br", "end", "p", ".", "eg", ".", ";").foldLeft(code)(_.trim trimEnd _).
       trimFirst("eg").
-      removeLast("\\(.*\\)").
       trimEnclosing("{", "}").
       trimEnclosing("`", "`").
       removeFirst("`\\(.*\\)").trimFirst("`")
