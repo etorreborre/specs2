@@ -9,11 +9,6 @@
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
-      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
-      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
-      <script type="text/javascript" src="../../../lib/template.js"></script>
-      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
-      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../index.html';
@@ -76,7 +71,7 @@
       </span>
       </h4>
       <p class="comment cmt">This trait can be mixed in a reporter to allow the exporting of an executed specification to many different formats:
-html, junit xml, markup, custom,.</p>
+html, junit xml, markdown, custom,.</p>
     </li><li name="org.specs2.reporter.ConsoleNotifier" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ConsoleNotifierextendsNotifier"></a>
       <a id="ConsoleNotifier:ConsoleNotifier"></a>
@@ -415,16 +410,16 @@ with the xml method
       </span>
       </h4>
       <p class="comment cmt">This trait execute specifications and exports them as JUnit xml files in the target/test-reports directory (by default).</p>
-    </li><li name="org.specs2.reporter.MarkupExporting" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="MarkupExportingextendsHtmlExporting"></a>
-      <a id="MarkupExporting:MarkupExporting"></a>
+    </li><li name="org.specs2.reporter.MarkdownExporting" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="MarkdownExportingextendsHtmlExporting"></a>
+      <a id="MarkdownExporting:MarkdownExporting"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="MarkupExporting.html"><span class="name">MarkupExporting</span></a><span class="result"> extends <a href="HtmlExporting.html" class="extype" name="org.specs2.reporter.HtmlExporting">HtmlExporting</a></span>
+        <a href="MarkdownExporting.html"><span class="name">MarkdownExporting</span></a><span class="result"> extends <a href="HtmlExporting.html" class="extype" name="org.specs2.reporter.HtmlExporting">HtmlExporting</a></span>
       </span>
       </h4>
       <p class="comment cmt">Trait for exporting the specification as Markup files.</p>
@@ -620,7 +615,7 @@ and provides the stackTrace of an exception which occurred during the specificat
       <p class="comment cmt">This trait selects examples based on their previous execution
 </p>
     </li><li name="org.specs2.reporter.TagSelection" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="TagSelectionextendsAnyRef"></a>
+      <a id="TagSelectionextendsTagsAssociation"></a>
       <a id="TagSelection:TagSelection"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -628,7 +623,7 @@ and provides the stackTrace of an exception which occurred during the specificat
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="TagSelection.html"><span class="name">TagSelection</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="TagSelection.html"><span class="name">TagSelection</span></a><span class="result"> extends <a href="../specification/TagsAssociation.html" class="extype" name="org.specs2.specification.TagsAssociation">TagsAssociation</a></span>
       </span>
       </h4>
       <p class="comment cmt">This trait selects fragments based on their tags
@@ -840,16 +835,16 @@ at the end of the specification
       </span>
       </h4>
       
-    </li><li name="org.specs2.reporter.MarkupExporting" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="MarkupExporting"></a>
-      <a id="MarkupExporting:MarkupExporting"></a>
+    </li><li name="org.specs2.reporter.MarkdownExporting" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MarkdownExporting"></a>
+      <a id="MarkdownExporting:MarkdownExporting"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="MarkupExporting$.html"><span class="name">MarkupExporting</span></a><span class="result"> extends <a href="MarkupExporting.html" class="extype" name="org.specs2.reporter.MarkupExporting">MarkupExporting</a></span>
+        <a href="MarkdownExporting$.html"><span class="name">MarkdownExporting</span></a><span class="result"> extends <a href="MarkdownExporting.html" class="extype" name="org.specs2.reporter.MarkdownExporting">MarkdownExporting</a></span>
       </span>
       </h4>
       
@@ -904,7 +899,6 @@ at the end of the specification
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-
-
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../lib/template.js"></script>
     </body>
       </html>

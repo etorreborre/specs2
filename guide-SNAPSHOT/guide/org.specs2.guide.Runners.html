@@ -65,7 +65,7 @@
     </head><body><div id="breadcrumbs"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html">Runners</a></div><div class="colmask threecol">
                    <div class="colmid">
                      <div class="colleft">
-                       <div class="col1"><div id="central"><title>Runners</title><a name="Runners"><h2 specId="831080569">Runners</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><p><a name="Presentation"><h3>Presentation</h3></a><p>There are many ways to execute <strong><em>specs2</em></strong> specifications:</p>
+                       <div class="col1"><div id="central"><html><title>Runners</title><a name="Runners"><h2 specId="902571914">Runners</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Presentation"><h3>Presentation</h3></a><p>There are many ways to execute <strong><em>specs2</em></strong> specifications:</p>
 <ul>
   <li>on the command line, with a console output, and the <code class="prettyprint">specs2.run</code> runner</li>
   <li>on the command line, with a html output, and the <code class="prettyprint">specs2.html</code> runner</li>
@@ -121,11 +121,7 @@
     </tr>
     <tr>
       <td><code class="prettyprint">specName</code> </td>
-      <td>&quot;.*Spec&quot; </td>
-      <td>regular expression to use when executing specifications with the FilesRunner</td>
-    </tr>
-    <tr>
-      <td colspan="3"><strong><em>Execution</em></strong> </td>
+      <td colspan="3">&quot;.<em>Spec&quot; | regular expression to use when executing specifications with the FilesRunner<br /> </em><strong>Execution</strong>* </td>
     </tr>
     <tr>
       <td><em><code class="prettyprint">plan</code> </em> </td>
@@ -192,16 +188,6 @@
       <td><em><code class="prettyprint">color</code> </em> </td>
       <td>true </td>
       <td>use colors in the output (<code class="prettyprint">nocolor</code> can also be used on the command line)</td>
-    </tr>
-    <tr>
-      <td><em><code class="prettyprint">noindent</code></em> </td>
-      <td>false </td>
-      <td>don't indent automatically text and examples</td>
-    </tr>
-    <tr>
-      <td><em><code class="prettyprint">markdown</code></em> </td>
-      <td>true </td>
-      <td>interpret text as Markdown in the html reporter</td>
     </tr>
     <tr>
       <td><code class="prettyprint">pegdownExtensions</code> </td>
@@ -342,21 +328,6 @@ args.report(showtimes = true, xonly = true)
       <td><code class="prettyprint">showOnly(status: String)</code> </td>
       <td><code class="prettyprint">args(showOnly=status)</code> </td>
       <td> </td>
-    </tr>
-    <tr>
-      <td><code class="prettyprint">noindent</code> </td>
-      <td><code class="prettyprint">args(noindent=true)</code> </td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td><code class="prettyprint">literate</code> </td>
-      <td><code class="prettyprint">args(noindent=true, sequential=true)</code> </td>
-      <td>for specifications where text must not be indented and examples be executed in order </td>
-    </tr>
-    <tr>
-      <td><code class="prettyprint">freetext</code> </td>
-      <td><code class="prettyprint">args(plan=true, noindent=true)</code> </td>
-      <td>for specifications with no examples at all and free display of text </td>
     </tr>
     <tr>
       <td><code class="prettyprint">descFromExpectations</code> </td>
@@ -567,17 +538,7 @@ args.report(showtimes = true, xonly = true)
       <td>e.g. text:be, failure:m (see the Colors section) </td>
     </tr>
     <tr>
-      <td><code class="prettyprint">noindent</code> </td>
-      <td>boolean </td>
-      <td> </td>
-    </tr>
-    <tr>
       <td><code class="prettyprint">showtimes</code> </td>
-      <td>boolean </td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td><code class="prettyprint">markdown</code> </td>
       <td>boolean </td>
       <td> </td>
     </tr>
@@ -842,7 +803,7 @@ class MyColoredSpecification extends Specification { def is = colors(MyColors) ^
 <ul>
   <li>Provide command-line arguments in the &quot;Test options&quot;</li>
   <li>&quot;Jump to Test&quot; and &quot;Jump to Source&quot;</li>
-</ul><a name="Via+JUnit"><h3>Via JUnit</h3></a><p>It is possible to have <em><strong>specs2</strong></em> specifications executed as JUnit tests. This enables the integration of <strong><em>specs2</em></strong> with Maven and the JUnit runners of your IDE of choice.</p><p>There are 2 ways of enabling a Specification to be executed as a JUnit test: the verbose one and the simpler one. The simplest one is to extend <code class="prettyprint">SpecificationWithJUnit</code>:</p>
+</ul><a name="Via+JUnit"><h3>Via JUnit</h3></a><p>It is possible to have <strong><em>specs2</em></strong> specifications executed as JUnit tests. This enables the integration of <strong><em>specs2</em></strong> with Maven and the JUnit runners of your IDE of choice.</p><p>There are 2 ways of enabling a Specification to be executed as a JUnit test: the verbose one and the simpler one. The simplest one is to extend <code class="prettyprint">SpecificationWithJUnit</code>:</p>
 <pre><code class="prettyprint">class MySpecification extends SpecificationWithJUnit {
   def is = // as usual....
 }
@@ -879,14 +840,14 @@ class MySpecification extends Specification {
 </ul><p>Please see the API of each class to see how to use them.</p><a name="In+sbt_1"><h5>In sbt</h5></a><p>You can use a custom <code class="prettyprint">Exporter</code> from inside sbt by passing the <code class="prettyprint">exporter</code> argument with a <code class="prettyprint">Exporter</code> implementation class name:</p>
 <pre><code class="prettyprint">sbt&gt; test-only *BinarySpec* -- exporter com.mycompany.reporting.FtpExporter
 </code></pre>
-<hr /></p></div></status><status class="ok"><div style="display: show; text-indent:360px;"></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
+<hr /></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Runners</th></tr>
         <tr><td>Finished in</td><td class="info">3 ms</td></tr>
         <tr><td>Results</td><td class="success">1 example, 0 failure, 0 error</td></tr>
-      </table></div></div>
+      </table></html></div></div>
                        <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="1041908589"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="617928928"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="208919176"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="2091728835"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -896,7 +857,7 @@ class MySpecification extends Specification {
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1220739027"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1847543829"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -930,6 +891,12 @@ class MySpecification extends Specification {
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Example+groups">Example groups</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Isolation">Isolation</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Tags">Tags</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Selection">Selection</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Formatting">Formatting</a>
             
           </li></ul>
           </li></ul>
@@ -1004,7 +971,7 @@ class MySpecification extends Specification {
             <ul></ul>
           </li></ul>
           </li></ul>
-          </li><li id="782950911"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1601975631"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1066,7 +1033,7 @@ class MySpecification extends Specification {
             
           </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1317269466"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="2063495285"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
@@ -1110,7 +1077,7 @@ class MySpecification extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="831080569"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="902571914"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1194,7 +1161,7 @@ class MySpecification extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="919265589"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="1211153655"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -1216,11 +1183,11 @@ class MySpecification extends Specification {
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Skip+examples">Skip examples</a>
             
+          </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Debug+statements">Debug statements</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Remove+implicits">Remove implicits</a>
             
-          </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Print+execution+data">Print execution data</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#With+example+description">With example description</a>
             
@@ -1242,7 +1209,7 @@ class MySpecification extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="2091684899"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="1766271958"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1288,7 +1255,7 @@ class MySpecification extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="625471915"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="37370288"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1308,7 +1275,7 @@ class MySpecification extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1041908589','831080569'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['208919176','902571914'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                        <div class="col3"><div id="rightcolumn"></div></div>
                      </div>

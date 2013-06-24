@@ -9,11 +9,6 @@
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
-      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
-      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
-      <script type="text/javascript" src="../../../lib/template.js"></script>
-      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
-      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../index.html';
@@ -48,7 +43,7 @@
 - methods for creating Fragments from the FragmentsBuilder trait
 - methods to include other specifications</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="SpecificationInclusion.html" class="extype" name="org.specs2.specification.SpecificationInclusion">SpecificationInclusion</a>, <a href="FragmentsBuilder.html" class="extype" name="org.specs2.specification.FragmentsBuilder">FragmentsBuilder</a>, <a href="../control/ImplicitParameters.html" class="extype" name="org.specs2.control.ImplicitParameters">ImplicitParameters</a>, <a href="ExamplesFactory.html" class="extype" name="org.specs2.specification.ExamplesFactory">ExamplesFactory</a>, <a href="SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="SpecificationInclusion.html" class="extype" name="org.specs2.specification.SpecificationInclusion">SpecificationInclusion</a>, <a href="FragmentsBuilder.html" class="extype" name="org.specs2.specification.FragmentsBuilder">FragmentsBuilder</a>, <a href="FormattingTags.html" class="extype" name="org.specs2.specification.FormattingTags">FormattingTags</a>, <a href="Tags.html" class="extype" name="org.specs2.specification.Tags">Tags</a>, <a href="../control/ImplicitParameters.html" class="extype" name="org.specs2.control.ImplicitParameters">ImplicitParameters</a>, <a href="ExamplesFactory.html" class="extype" name="org.specs2.specification.ExamplesFactory">ExamplesFactory</a>, <a href="SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a>, <a href="DefaultFragmentsFormatting.html" class="extype" name="org.specs2.specification.DefaultFragmentsFormatting">DefaultFragmentsFormatting</a>, <a href="TagsAssociation.html" class="extype" name="org.specs2.specification.TagsAssociation">TagsAssociation</a>, <a href="FragmentsFormatting.html" class="extype" name="org.specs2.specification.FragmentsFormatting">FragmentsFormatting</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -66,7 +61,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="org.specs2.specification.BaseSpecification"><span>BaseSpecification</span></li><li class="in" name="org.specs2.specification.SpecificationInclusion"><span>SpecificationInclusion</span></li><li class="in" name="org.specs2.specification.FragmentsBuilder"><span>FragmentsBuilder</span></li><li class="in" name="org.specs2.control.ImplicitParameters"><span>ImplicitParameters</span></li><li class="in" name="org.specs2.specification.ExamplesFactory"><span>ExamplesFactory</span></li><li class="in" name="org.specs2.specification.SpecificationStructure"><span>SpecificationStructure</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="org.specs2.specification.BaseSpecification"><span>BaseSpecification</span></li><li class="in" name="org.specs2.specification.SpecificationInclusion"><span>SpecificationInclusion</span></li><li class="in" name="org.specs2.specification.FragmentsBuilder"><span>FragmentsBuilder</span></li><li class="in" name="org.specs2.specification.FormattingTags"><span>FormattingTags</span></li><li class="in" name="org.specs2.specification.Tags"><span>Tags</span></li><li class="in" name="org.specs2.control.ImplicitParameters"><span>ImplicitParameters</span></li><li class="in" name="org.specs2.specification.ExamplesFactory"><span>ExamplesFactory</span></li><li class="in" name="org.specs2.specification.SpecificationStructure"><span>SpecificationStructure</span></li><li class="in" name="org.specs2.specification.DefaultFragmentsFormatting"><span>DefaultFragmentsFormatting</span></li><li class="in" name="org.specs2.specification.TagsAssociation"><span>TagsAssociation</span></li><li class="in" name="org.specs2.specification.FragmentsFormatting"><span>FragmentsFormatting</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -114,6 +109,19 @@
       </span>
       </h4>
       <p class="comment cmt">transient class to hold an example description before creating a full Example</p>
+    </li><li name="org.specs2.specification.FormattingTags.FormattingTagParameter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="FormattingTagParameterextendsProductwithSerializable"></a>
+      <a id="FormattingTagParameter:FormattingTagParameter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="FormattingTags$FormattingTagParameter.html"><span class="name">FormattingTagParameter</span></a><span class="params">(<span name="condition">condition: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FormattingTags.html" class="extype" name="org.specs2.specification.FormattingTags">FormattingTags</a></dd></dl></div>
     </li><li name="org.specs2.specification.FragmentsBuilder.HtmlLinkFragments" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="HtmlLinkFragmentsextendsAnyRef"></a>
       <a id="HtmlLinkFragments:HtmlLinkFragments"></a>
@@ -397,6 +405,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.specs2.specification.FormattingTags#ToFormattingTagParameter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ToFormattingTagParameter(condition:Boolean):Option[FormattingTags.this.FormattingTagParameter]"></a>
+      <a id="ToFormattingTagParameter(Boolean):Option[FormattingTagParameter]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ToFormattingTagParameter</span><span class="params">(<span name="condition">condition: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<a href="#FormattingTagParameterextendsProductwithSerializable" class="extmbr" name="org.specs2.specification.FormattingTags.FormattingTagParameter">FormattingTagParameter</a>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FormattingTags.html" class="extype" name="org.specs2.specification.FormattingTags">FormattingTags</a></dd></dl></div>
     </li><li name="org.specs2.specification.FragmentsBuilder#argumentsFragment" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="argumentsFragment(a:org.specs2.main.Arguments):org.specs2.specification.FragmentsFragment"></a>
       <a id="argumentsFragment(Arguments):FragmentsFragment"></a>
@@ -437,7 +458,10 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -492,7 +516,10 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="org.specs2.specification.FragmentsBuilder#forExample" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -509,6 +536,49 @@
       </h4>
       <p class="shortcomment cmt">Example creation</p><div class="fullcomment"><div class="comment cmt"><p>Example creation</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an Example description from a string, to create a full Example once the body is defined
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FragmentsBuilder.html" class="extype" name="org.specs2.specification.FragmentsBuilder">FragmentsBuilder</a></dd></dl></div>
+    </li><li name="org.specs2.specification.DefaultFragmentsFormatting#formatFragments" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="formatFragments:org.specs2.specification.Fragments=&gt;org.specs2.specification.Fragments"></a>
+      <a id="formatFragments:(Fragments)⇒Fragments"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">formatFragments</span><span class="result">: (<a href="Fragments.html" class="extype" name="org.specs2.specification.Fragments">Fragments</a>) ⇒ <a href="Fragments.html" class="extype" name="org.specs2.specification.Fragments">Fragments</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">format a list of fragments according to their formatting tags</p><div class="fullcomment"><div class="comment cmt"><p>format a list of fragments according to their formatting tags</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="DefaultFragmentsFormatting.html" class="extype" name="org.specs2.specification.DefaultFragmentsFormatting">DefaultFragmentsFormatting</a> → <a href="FragmentsFormatting.html" class="extype" name="org.specs2.specification.FragmentsFormatting">FragmentsFormatting</a></dd></dl></div>
+    </li><li name="org.specs2.specification.FormattingTags#formatSection" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="formatSection(markdown:Option[FormattingTags.this.FormattingTagParameter],flow:Option[FormattingTags.this.FormattingTagParameter],verbatim:Option[FormattingTags.this.FormattingTagParameter]):org.specs2.specification.TagsFragments.TaggingFragment"></a>
+      <a id="formatSection(Option[FormattingTagParameter],Option[FormattingTagParameter],Option[FormattingTagParameter]):TaggingFragment"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">formatSection</span><span class="params">(<span name="markdown">markdown: <span class="extype" name="scala.Option">Option</span>[<a href="#FormattingTagParameterextendsProductwithSerializable" class="extmbr" name="org.specs2.specification.FormattingTags.FormattingTagParameter">FormattingTagParameter</a>] = <span class="symbol">None</span></span>, <span name="flow">flow: <span class="extype" name="scala.Option">Option</span>[<a href="#FormattingTagParameterextendsProductwithSerializable" class="extmbr" name="org.specs2.specification.FormattingTags.FormattingTagParameter">FormattingTagParameter</a>] = <span class="symbol">None</span></span>, <span name="verbatim">verbatim: <span class="extype" name="scala.Option">Option</span>[<a href="#FormattingTagParameterextendsProductwithSerializable" class="extmbr" name="org.specs2.specification.FormattingTags.FormattingTagParameter">FormattingTagParameter</a>] = <span class="symbol">None</span></span>)</span><span class="result">: <a href="TagsFragments$$TaggingFragment.html" class="extype" name="org.specs2.specification.TagsFragments.TaggingFragment">TaggingFragment</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">add a tagging section with special tag names specifying the formatting options
+</p><div class="fullcomment"><div class="comment cmt"><p>add a tagging section with special tag names specifying the formatting options
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FormattingTags.html" class="extype" name="org.specs2.specification.FormattingTags">FormattingTags</a></dd></dl></div>
+    </li><li name="org.specs2.specification.FormattingTags#formatTag" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="formatTag(markdown:Option[FormattingTags.this.FormattingTagParameter],flow:Option[FormattingTags.this.FormattingTagParameter],verbatim:Option[FormattingTags.this.FormattingTagParameter]):org.specs2.specification.TagsFragments.TaggingFragment"></a>
+      <a id="formatTag(Option[FormattingTagParameter],Option[FormattingTagParameter],Option[FormattingTagParameter]):TaggingFragment"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">formatTag</span><span class="params">(<span name="markdown">markdown: <span class="extype" name="scala.Option">Option</span>[<a href="#FormattingTagParameterextendsProductwithSerializable" class="extmbr" name="org.specs2.specification.FormattingTags.FormattingTagParameter">FormattingTagParameter</a>] = <span class="symbol">None</span></span>, <span name="flow">flow: <span class="extype" name="scala.Option">Option</span>[<a href="#FormattingTagParameterextendsProductwithSerializable" class="extmbr" name="org.specs2.specification.FormattingTags.FormattingTagParameter">FormattingTagParameter</a>] = <span class="symbol">None</span></span>, <span name="verbatim">verbatim: <span class="extype" name="scala.Option">Option</span>[<a href="#FormattingTagParameterextendsProductwithSerializable" class="extmbr" name="org.specs2.specification.FormattingTags.FormattingTagParameter">FormattingTagParameter</a>] = <span class="symbol">None</span></span>)</span><span class="result">: <a href="TagsFragments$$TaggingFragment.html" class="extype" name="org.specs2.specification.TagsFragments.TaggingFragment">TaggingFragment</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">add a tag with special tag names specifying the formatting options
+</p><div class="fullcomment"><div class="comment cmt"><p>add a tag with special tag names specifying the formatting options
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FormattingTags.html" class="extype" name="org.specs2.specification.FormattingTags">FormattingTags</a></dd></dl></div>
     </li><li name="org.specs2.specification.FragmentsBuilder#fragmentFragments" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fragmentFragments(f:=&gt;org.specs2.specification.Fragment):org.specs2.specification.FragmentsFragment"></a>
       <a id="fragmentFragments(⇒Fragment):FragmentsFragment"></a>
@@ -1015,7 +1085,7 @@
         <span class="name">map</span><span class="params">(<span name="fs">fs: ⇒ <a href="Fragments.html" class="extype" name="org.specs2.specification.Fragments">Fragments</a></span>)</span><span class="result">: <a href="Fragments.html" class="extype" name="org.specs2.specification.Fragments">Fragments</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">this method can be overriden to map additional behavior in the user-defined fragments</p><div class="fullcomment"><div class="comment cmt"><p>this method can be overriden to map additional behavior in the user-defined fragments</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a></dd></dl></div>
+      <p class="shortcomment cmt">this method can be overridden to map additional behavior in the user-defined fragments</p><div class="fullcomment"><div class="comment cmt"><p>this method can be overridden to map additional behavior in the user-defined fragments</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -1068,6 +1138,19 @@
       </span>
       </h4>
       <p class="shortcomment cmt">typeclass to transform a Scope to a Result</p><div class="fullcomment"><div class="comment cmt"><p>typeclass to transform a Scope to a Result</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FragmentsBuilder.html" class="extype" name="org.specs2.specification.FragmentsBuilder">FragmentsBuilder</a></dd></dl></div>
+    </li><li name="org.specs2.specification.Tags#section" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="section(names:String*):org.specs2.specification.TagsFragments.TaggingFragment"></a>
+      <a id="section(String*):TaggingFragment"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">section</span><span class="params">(<span name="names">names: <span class="extype" name="scala.Predef.String">String</span>*</span>)</span><span class="result">: <a href="TagsFragments$$TaggingFragment.html" class="extype" name="org.specs2.specification.TagsFragments.TaggingFragment">TaggingFragment</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">create a AsSection fragment</p><div class="fullcomment"><div class="comment cmt"><p>create a AsSection fragment</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Tags.html" class="extype" name="org.specs2.specification.Tags">Tags</a></dd></dl></div>
     </li><li name="org.specs2.specification.FragmentsBuilder#see" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="see(htmlLink:org.specs2.specification.HtmlLink,fs:org.specs2.specification.Fragments):org.specs2.specification.Fragments"></a>
       <a id="see(HtmlLink,Fragments):Fragments"></a>
@@ -1240,6 +1323,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.specs2.specification.Tags#tag" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tag(names:String*):org.specs2.specification.TagsFragments.TaggingFragment"></a>
+      <a id="tag(String*):TaggingFragment"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tag</span><span class="params">(<span name="names">names: <span class="extype" name="scala.Predef.String">String</span>*</span>)</span><span class="result">: <a href="TagsFragments$$TaggingFragment.html" class="extype" name="org.specs2.specification.TagsFragments.TaggingFragment">TaggingFragment</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">create a TaggedAs fragment</p><div class="fullcomment"><div class="comment cmt"><p>create a TaggedAs fragment</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Tags.html" class="extype" name="org.specs2.specification.Tags">Tags</a></dd></dl></div>
     </li><li name="org.specs2.specification.FragmentsBuilder#textFragment" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="textFragment(s:String):org.specs2.specification.FragmentsFragment"></a>
       <a id="textFragment(String):FragmentsFragment"></a>
@@ -1308,7 +1404,10 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1324,7 +1423,10 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1340,7 +1442,10 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li></ol>
@@ -1356,12 +1461,22 @@
               <h3>Inherited from <a href="SpecificationInclusion.html" class="extype" name="org.specs2.specification.SpecificationInclusion">SpecificationInclusion</a></h3>
             </div><div class="parent" name="org.specs2.specification.FragmentsBuilder">
               <h3>Inherited from <a href="FragmentsBuilder.html" class="extype" name="org.specs2.specification.FragmentsBuilder">FragmentsBuilder</a></h3>
+            </div><div class="parent" name="org.specs2.specification.FormattingTags">
+              <h3>Inherited from <a href="FormattingTags.html" class="extype" name="org.specs2.specification.FormattingTags">FormattingTags</a></h3>
+            </div><div class="parent" name="org.specs2.specification.Tags">
+              <h3>Inherited from <a href="Tags.html" class="extype" name="org.specs2.specification.Tags">Tags</a></h3>
             </div><div class="parent" name="org.specs2.control.ImplicitParameters">
               <h3>Inherited from <a href="../control/ImplicitParameters.html" class="extype" name="org.specs2.control.ImplicitParameters">ImplicitParameters</a></h3>
             </div><div class="parent" name="org.specs2.specification.ExamplesFactory">
               <h3>Inherited from <a href="ExamplesFactory.html" class="extype" name="org.specs2.specification.ExamplesFactory">ExamplesFactory</a></h3>
             </div><div class="parent" name="org.specs2.specification.SpecificationStructure">
               <h3>Inherited from <a href="SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a></h3>
+            </div><div class="parent" name="org.specs2.specification.DefaultFragmentsFormatting">
+              <h3>Inherited from <a href="DefaultFragmentsFormatting.html" class="extype" name="org.specs2.specification.DefaultFragmentsFormatting">DefaultFragmentsFormatting</a></h3>
+            </div><div class="parent" name="org.specs2.specification.TagsAssociation">
+              <h3>Inherited from <a href="TagsAssociation.html" class="extype" name="org.specs2.specification.TagsAssociation">TagsAssociation</a></h3>
+            </div><div class="parent" name="org.specs2.specification.FragmentsFormatting">
+              <h3>Inherited from <a href="FragmentsFormatting.html" class="extype" name="org.specs2.specification.FragmentsFormatting">FragmentsFormatting</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
@@ -1382,7 +1497,6 @@
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-
-
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../lib/template.js"></script>
     </body>
       </html>

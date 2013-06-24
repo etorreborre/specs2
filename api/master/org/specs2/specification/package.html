@@ -9,11 +9,6 @@
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
-      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
-      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
-      <script type="text/javascript" src="../../../lib/template.js"></script>
-      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
-      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../index.html';
@@ -85,7 +80,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Action.html"><span class="name">Action</span></a><span class="params">(<span name="action">action: <a href="../control/LazyParameter.html" class="extype" name="org.specs2.control.LazyParameter">LazyParameter</a>[<a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a>] = <span class="defval" name="control.LazyParameters.lazyfy[org.specs2.execute.Success](execute.Success.apply(execute.Success.apply$default$1, execute.Success.apply$default$2))">...</span></span>)</span><span class="result"> extends <a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a> with <a href="../execute/Executable.html" class="extype" name="org.specs2.execute.Executable">Executable</a> with <a href="../execute/Isolable.html" class="extype" name="org.specs2.execute.Isolable">Isolable</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Action.html"><span class="name">Action</span></a><span class="params">(<span name="action">action: <a href="../control/LazyParameter.html" class="extype" name="org.specs2.control.LazyParameter">LazyParameter</a>[<a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a>] = <span class="defval" name="control.LazyParameters.lazyfy[org.specs2.execute.Success](execute.Success.apply(execute.Success.apply$default$1, execute.Success.apply$default$2))">...</span></span>, <span name="location">location: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a> = <span class="symbol">new io.Location()</span></span>, <span name="isolable">isolable: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>, <span name="creationPath">creationPath: <span class="extype" name="scala.Option">Option</span>[<a href="CreationPath.html" class="extype" name="org.specs2.specification.CreationPath">CreationPath</a>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a> with <a href="../execute/Executable.html" class="extype" name="org.specs2.execute.Executable">Executable</a> with <a href="../execute/Isolable.html" class="extype" name="org.specs2.execute.Isolable">Isolable</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">An Action is similar to a Step but can be executed concurrently with other examples.</p>
@@ -515,6 +510,19 @@ to execute before and after an Example
       </h4>
       <p class="comment cmt">Default implementation for the example factory trait just creating an Example object
 </p>
+    </li><li name="org.specs2.specification.DefaultFragmentsFormatting" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DefaultFragmentsFormattingextendsFragmentsFormattingwithTagsAssociation"></a>
+      <a id="DefaultFragmentsFormatting:DefaultFragmentsFormatting"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DefaultFragmentsFormatting.html"><span class="name">DefaultFragmentsFormatting</span></a><span class="result"> extends <a href="FragmentsFormatting.html" class="extype" name="org.specs2.specification.FragmentsFormatting">FragmentsFormatting</a> with <a href="TagsAssociation.html" class="extype" name="org.specs2.specification.TagsAssociation">TagsAssociation</a></span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.specification.Example" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ExampleextendsFragmentwithExecutablewithIsolablewithProductwithSerializable"></a>
       <a id="Example:Example"></a>
@@ -645,7 +653,7 @@ execution of an Action for example)
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="ExecutedResult.html"><span class="name">ExecutedResult</span></a><span class="params">(<span name="s">s: <a href="../text/MarkupString.html" class="extype" name="org.specs2.text.MarkupString">MarkupString</a></span>, <span name="result">result: <a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a></span>, <span name="timer">timer: <a href="../time/SimpleTimer.html" class="extype" name="org.specs2.time.SimpleTimer">SimpleTimer</a></span>, <span name="location">location: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a></span>, <span name="statistics">statistics: <a href="Stats.html" class="extype" name="org.specs2.specification.Stats">Stats</a></span>)</span><span class="result"> extends <a href="ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="ExecutedResult.html"><span class="name">ExecutedResult</span></a><span class="params">(<span name="s">s: <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>, <span name="result">result: <a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a></span>, <span name="timer">timer: <a href="../time/SimpleTimer.html" class="extype" name="org.specs2.time.SimpleTimer">SimpleTimer</a></span>, <span name="location">location: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a></span>, <span name="statistics">statistics: <a href="Stats.html" class="extype" name="org.specs2.specification.Stats">Stats</a></span>)</span><span class="result"> extends <a href="ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -724,7 +732,7 @@ execution of an Action for example)
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="ExecutedText.html"><span class="name">ExecutedText</span></a><span class="params">(<span name="text">text: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="location">location: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a> = <span class="symbol">new io.Location()</span></span>)</span><span class="result"> extends <a href="ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="ExecutedText.html"><span class="name">ExecutedText</span></a><span class="params">(<span name="textFragment">textFragment: <a href="Text.html" class="extype" name="org.specs2.specification.Text">Text</a></span>, <span name="location">location: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a> = <span class="symbol">new io.Location()</span></span>)</span><span class="result"> extends <a href="ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -796,20 +804,46 @@ execution of an Action for example)
       </h4>
       <p class="comment cmt">For each created example use a given after method
 </p>
-    </li><li name="org.specs2.specification.FormMarkup" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="FormMarkupextendsMarkupString"></a>
-      <a id="FormMarkup:FormMarkup"></a>
+    </li><li name="org.specs2.specification.FormFormattedString" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FormFormattedStringextendsFormattedString"></a>
+      <a id="FormFormattedString:FormFormattedString"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="FormMarkup.html"><span class="name">FormMarkup</span></a><span class="result"> extends <a href="../text/MarkupString.html" class="extype" name="org.specs2.text.MarkupString">MarkupString</a></span>
+        <a href="FormFormattedString.html"><span class="name">FormFormattedString</span></a><span class="result"> extends <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>
       </span>
       </h4>
-      <p class="comment cmt">The FormMarkup embeds the description of a form as text or as Xml
+      <p class="comment cmt">The FormFormattedString embeds the description of a form as text or as Xml
 </p>
+    </li><li name="org.specs2.specification.FormattedString" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FormattedStringextendsProductwithSerializable"></a>
+      <a id="FormattedString:FormattedString"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="FormattedString.html"><span class="name">FormattedString</span></a><span class="params">(<span name="t">t: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="formatting">formatting: <a href="Formatting.html" class="extype" name="org.specs2.specification.Formatting">Formatting</a> = <span class="defval" name="Formatting.apply(Formatting.apply$default$1, Formatting.apply$default$2, Formatting.apply$default$3)">...</span></span>, <span name="isEmpty">isEmpty: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.specification.Formatting" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FormattingextendsProductwithSerializable"></a>
+      <a id="Formatting:Formatting"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Formatting.html"><span class="name">Formatting</span></a><span class="params">(<span name="flow">flow: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="markdown">markdown: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>, <span name="verbatim">verbatim: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Formatting for Text fragments</p>
     </li><li name="org.specs2.specification.FormattingFragments" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="FormattingFragmentsextendsAnyRef"></a>
       <a id="FormattingFragments:FormattingFragments"></a>
@@ -824,6 +858,19 @@ execution of an Action for example)
       </h4>
       <p class="comment cmt">Set of fragments which can be used for formatting
 </p>
+    </li><li name="org.specs2.specification.FormattingTags" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FormattingTagsextendsTags"></a>
+      <a id="FormattingTags:FormattingTags"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="FormattingTags.html"><span class="name">FormattingTags</span></a><span class="result"> extends <a href="Tags.html" class="extype" name="org.specs2.specification.Tags">Tags</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt"></p>
     </li><li name="org.specs2.specification.Forms" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="FormsextendsFormsBuilderwithDecoratedProperties"></a>
       <a id="Forms:Forms"></a>
@@ -880,7 +927,7 @@ Allow a Form to be used as an example body and return a Result automatically
       <p class="comment cmt">A Fragments object is a list of fragments with a SpecStart and a SpecEnd
 </p>
     </li><li name="org.specs2.specification.FragmentsBuilder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="FragmentsBuilderextendsExamplesFactorywithImplicitParameters"></a>
+      <a id="FragmentsBuilderextendsExamplesFactorywithImplicitParameterswithFormattingTags"></a>
       <a id="FragmentsBuilder:FragmentsBuilder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -888,10 +935,23 @@ Allow a Form to be used as an example body and return a Result automatically
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="FragmentsBuilder.html"><span class="name">FragmentsBuilder</span></a><span class="result"> extends <a href="ExamplesFactory.html" class="extype" name="org.specs2.specification.ExamplesFactory">ExamplesFactory</a> with <a href="../control/ImplicitParameters.html" class="extype" name="org.specs2.control.ImplicitParameters">ImplicitParameters</a></span>
+        <a href="FragmentsBuilder.html"><span class="name">FragmentsBuilder</span></a><span class="result"> extends <a href="ExamplesFactory.html" class="extype" name="org.specs2.specification.ExamplesFactory">ExamplesFactory</a> with <a href="../control/ImplicitParameters.html" class="extype" name="org.specs2.control.ImplicitParameters">ImplicitParameters</a> with <a href="FormattingTags.html" class="extype" name="org.specs2.specification.FormattingTags">FormattingTags</a></span>
       </span>
       </h4>
       <p class="comment cmt">This trait provides function to create specification Fragments:</p>
+    </li><li name="org.specs2.specification.FragmentsFormatting" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FragmentsFormattingextendsAnyRef"></a>
+      <a id="FragmentsFormatting:FragmentsFormatting"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="FragmentsFormatting.html"><span class="name">FragmentsFormatting</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait post-process fragments.</p>
     </li><li name="org.specs2.specification.FragmentsFragment" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="FragmentsFragmentextendsAnyRef"></a>
       <a id="FragmentsFragment:FragmentsFragment"></a>
@@ -1266,7 +1326,7 @@ Specification
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="SpecEnd.html"><span class="name">SpecEnd</span></a><span class="params">(<span name="specName">specName: <a href="SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a></span>, <span name="isSeeOnlyLink">isSeeOnlyLink: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result"> extends <a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="SpecEnd.html"><span class="name">SpecEnd</span></a><span class="params">(<span name="specName">specName: <a href="SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a></span>, <span name="isSeeOnlyLink">isSeeOnlyLink: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="location">location: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a> = <span class="symbol">new io.Location()</span></span>)</span><span class="result"> extends <a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">End of a specification.</p>
@@ -1333,7 +1393,7 @@ Specification
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="SpecStart.html"><span class="name">SpecStart</span></a><span class="params">(<span name="specName">specName: <a href="SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a></span>, <span name="arguments">arguments: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a> = <span class="symbol">main.Arguments.apply()</span></span>, <span name="linked">linked: <a href="Linked.html" class="extype" name="org.specs2.specification.Linked">Linked</a> = <span class="defval" name="Linked.apply(Linked.apply$default$1, Linked.apply$default$2, Linked.apply$default$3)">...</span></span>)</span><span class="result"> extends <a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="SpecStart.html"><span class="name">SpecStart</span></a><span class="params">(<span name="specName">specName: <a href="SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a></span>, <span name="arguments">arguments: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a> = <span class="symbol">main.Arguments.apply()</span></span>, <span name="linked">linked: <a href="Linked.html" class="extype" name="org.specs2.specification.Linked">Linked</a> = <span class="defval" name="Linked.apply(Linked.apply$default$1, Linked.apply$default$2, Linked.apply$default$3)">...</span></span>, <span name="location">location: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a> = <span class="symbol">new io.Location()</span></span>)</span><span class="result"> extends <a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">Start of a specification.</p>
@@ -1379,7 +1439,7 @@ Specification
       <p class="comment cmt">Allow to use fragments inside interpolated strings starting with s2 in order to build the specification content
 </p>
     </li><li name="org.specs2.specification.SpecificationStructure" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="SpecificationStructureextendsAnyRef"></a>
+      <a id="SpecificationStructureextendsDefaultFragmentsFormatting"></a>
       <a id="SpecificationStructure:SpecificationStructure"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1387,7 +1447,7 @@ Specification
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="SpecificationStructure.html"><span class="name">SpecificationStructure</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="SpecificationStructure.html"><span class="name">SpecificationStructure</span></a><span class="result"> extends <a href="DefaultFragmentsFormatting.html" class="extype" name="org.specs2.specification.DefaultFragmentsFormatting">DefaultFragmentsFormatting</a></span>
       </span>
       </h4>
       <p class="comment cmt">The structure of a Specification is simply defined as a sequence of fragments
@@ -1420,7 +1480,7 @@ Specification
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Step.html"><span class="name">Step</span></a><span class="params">(<span name="step">step: <a href="../control/LazyParameter.html" class="extype" name="org.specs2.control.LazyParameter">LazyParameter</a>[<a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a>]</span>, <span name="stopOnFail">stopOnFail: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result"> extends <a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a> with <a href="../execute/Executable.html" class="extype" name="org.specs2.execute.Executable">Executable</a> with <a href="../execute/Isolable.html" class="extype" name="org.specs2.execute.Isolable">Isolable</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Step.html"><span class="name">Step</span></a><span class="params">(<span name="step">step: <a href="../control/LazyParameter.html" class="extype" name="org.specs2.control.LazyParameter">LazyParameter</a>[<a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a>]</span>, <span name="stopOnFail">stopOnFail: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="location">location: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a> = <span class="symbol">new io.Location()</span></span>, <span name="isolable">isolable: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result"> extends <a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a> with <a href="../execute/Executable.html" class="extype" name="org.specs2.execute.Executable">Executable</a> with <a href="../execute/Isolable.html" class="extype" name="org.specs2.execute.Isolable">Isolable</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">An Step creates a fragment that will either return an
@@ -1479,6 +1539,19 @@ examples must be executed concurrently and not isolated.</p>
       </h4>
       <p class="comment cmt">The tags trait allows the creation of Tags fragments in a Specification
 </p>
+    </li><li name="org.specs2.specification.TagsAssociation" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="TagsAssociationextendsAnyRef"></a>
+      <a id="TagsAssociation:TagsAssociation"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="TagsAssociation.html"><span class="name">TagsAssociation</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.specification.Text" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="TextextendsFragmentwithProductwithSerializable"></a>
       <a id="Text:Text"></a>
@@ -1488,7 +1561,7 @@ examples must be executed concurrently and not isolated.</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Text.html"><span class="name">Text</span></a><span class="params">(<span name="t">t: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Text.html"><span class="name">Text</span></a><span class="params">(<span name="text">text: <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>, <span name="location">location: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a> = <span class="symbol">new io.Location()</span></span>)</span><span class="result"> extends <a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">Free text, describing the system to specify
@@ -1552,6 +1625,19 @@ examples must be executed concurrently and not isolated.</p>
       </span>
       </h4>
       
+    </li><li name="org.specs2.specification.Context" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Context"></a>
+      <a id="Context:Context"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Context$.html"><span class="name">Context</span></a>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.specification.Contexts" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Contexts"></a>
       <a id="Contexts:Contexts"></a>
@@ -1562,6 +1648,19 @@ examples must be executed concurrently and not isolated.</p>
       </span>
       <span class="symbol">
         <a href="Contexts$.html"><span class="name">Contexts</span></a><span class="result"> extends <a href="Contexts.html" class="extype" name="org.specs2.specification.Contexts">Contexts</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.specification.DefaultFragmentsFormatting" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DefaultFragmentsFormatting"></a>
+      <a id="DefaultFragmentsFormatting:DefaultFragmentsFormatting"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DefaultFragmentsFormatting$.html"><span class="name">DefaultFragmentsFormatting</span></a><span class="result"> extends <a href="DefaultFragmentsFormatting.html" class="extype" name="org.specs2.specification.DefaultFragmentsFormatting">DefaultFragmentsFormatting</a></span>
       </span>
       </h4>
       
@@ -1578,6 +1677,19 @@ examples must be executed concurrently and not isolated.</p>
       </span>
       </h4>
       
+    </li><li name="org.specs2.specification.ExecutedText1" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ExecutedText1"></a>
+      <a id="ExecutedText1:ExecutedText1"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ExecutedText1$.html"><span class="name">ExecutedText1</span></a>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.specification.Fixture" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Fixture"></a>
       <a id="Fixture:Fixture"></a>
@@ -1591,16 +1703,29 @@ examples must be executed concurrently and not isolated.</p>
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.FormMarkup" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="FormMarkup"></a>
-      <a id="FormMarkup:FormMarkup"></a>
+    </li><li name="org.specs2.specification.FormFormattedString" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FormFormattedString"></a>
+      <a id="FormFormattedString:FormFormattedString"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="FormMarkup$.html"><span class="name">FormMarkup</span></a>
+        <a href="FormFormattedString$.html"><span class="name">FormFormattedString</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.specification.FormattedString" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FormattedString"></a>
+      <a id="FormattedString:FormattedString"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FormattedString$.html"><span class="name">FormattedString</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -1614,6 +1739,19 @@ examples must be executed concurrently and not isolated.</p>
       </span>
       <span class="symbol">
         <a href="FormattingFragments$.html"><span class="name">FormattingFragments</span></a><span class="result"> extends <a href="FormattingFragments.html" class="extype" name="org.specs2.specification.FormattingFragments">FormattingFragments</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.specification.FormattingTags" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FormattingTags"></a>
+      <a id="FormattingTags:FormattingTags"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FormattingTags$.html"><span class="name">FormattingTags</span></a><span class="result"> extends <a href="FormattingTags.html" class="extype" name="org.specs2.specification.FormattingTags">FormattingTags</a></span>
       </span>
       </h4>
       
@@ -1768,6 +1906,19 @@ examples must be executed concurrently and not isolated.</p>
       </h4>
       <p class="comment cmt">Those fragments are used to tag other fragments in a specification\
 </p>
+    </li><li name="org.specs2.specification.Text" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Text"></a>
+      <a id="Text:Text"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Text$.html"><span class="name">Text</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.specification.Then" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Then"></a>
       <a id="Then:Then"></a>
@@ -1858,7 +2009,6 @@ examples must be executed concurrently and not isolated.</p>
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-
-
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../lib/template.js"></script>
     </body>
       </html>

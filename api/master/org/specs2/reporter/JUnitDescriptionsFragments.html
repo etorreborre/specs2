@@ -9,11 +9,6 @@
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
-      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
-      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
-      <script type="text/javascript" src="../../../lib/template.js"></script>
-      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
-      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../index.html';
@@ -229,7 +224,10 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="org.specs2.reporter.JUnitDescriptionMaker#createDescription" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -284,7 +282,10 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="org.specs2.reporter.JUnitDescriptions#foldAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -300,6 +301,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>JUnitDescriptions</dd></dl></div>
+    </li><li name="org.specs2.control.ExecutionOrigin#fromSpecs2orScalaz" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fromSpecs2orScalaz:String=&gt;Boolean"></a>
+      <a id="fromSpecs2orScalaz:(String)⇒Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fromSpecs2orScalaz</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ExecutionOrigin</dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -341,6 +355,19 @@
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>fragment that must be used as the root description if the specification is empty
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.reporter.JUnitDescriptionsFragments">JUnitDescriptionsFragments</a> → JUnitDescriptions</dd></dl></div>
     </li><li name="org.specs2.control.Stacktraces#isExecutedFrom" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isExecutedFrom(name:String,st:Seq[StackTraceElement]):Boolean"></a>
+      <a id="isExecutedFrom(String,Seq[StackTraceElement]):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isExecutedFrom</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="st">st: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="java.lang.StackTraceElement">StackTraceElement</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Stacktraces</dd></dl></div>
+    </li><li name="org.specs2.control.Stacktraces#isExecutedFrom" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isExecutedFrom(name:String):Boolean"></a>
       <a id="isExecutedFrom(String):Boolean"></a>
       <h4 class="signature">
@@ -354,7 +381,7 @@
       </h4>
       <p class="shortcomment cmt">This method is used to determine for example if the JUnit runner is executed from Maven or within Eclipse.</p><div class="fullcomment"><div class="comment cmt"><p>This method is used to determine for example if the JUnit runner is executed from Maven or within Eclipse.
 In the first the test case names don't need to have the hashcode example.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if the this current piece of code contains name in its stacktrace.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if this current piece of code contains name in its stacktrace.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>Stacktraces</dd></dl></div>
     </li><li name="org.specs2.control.ExecutionOrigin#isExecutedFromAnIDE" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isExecutedFromAnIDE:Boolean"></a>
@@ -434,6 +461,32 @@ In the first the test case names don't need to have the hashcode example.
       </span>
       </h4>
       <p class="shortcomment cmt">return true if the current test is executed with sbt</p><div class="fullcomment"><div class="comment cmt"><p>return true if the current test is executed with sbt</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ExecutionOrigin</dd></dl></div>
+    </li><li name="org.specs2.control.Stacktraces#isFromClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isFromClass(classNamePredicate:String=&gt;Boolean,st:Seq[StackTraceElement]):Boolean"></a>
+      <a id="isFromClass((String)⇒Boolean,Seq[StackTraceElement]):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isFromClass</span><span class="params">(<span name="classNamePredicate">classNamePredicate: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="st">st: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="java.lang.StackTraceElement">StackTraceElement</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if there is a stacktrace element satisfying the predicate</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>Stacktraces</dd></dl></div>
+    </li><li name="org.specs2.control.Stacktraces#isFromClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isFromClass(classNamePredicate:String=&gt;Boolean):Boolean"></a>
+      <a id="isFromClass((String)⇒Boolean):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isFromClass</span><span class="params">(<span name="classNamePredicate">classNamePredicate: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>true if there is a stacktrace element satisfying the predicate</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>Stacktraces</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -447,6 +500,19 @@ In the first the test case names don't need to have the hashcode example.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.specs2.control.ExecutionOrigin#isSpecificationFromSpecs2orScalaz" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isSpecificationFromSpecs2orScalaz(st:Seq[StackTraceElement]):Boolean"></a>
+      <a id="isSpecificationFromSpecs2orScalaz(Seq[StackTraceElement]):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isSpecificationFromSpecs2orScalaz</span><span class="params">(<span name="st">st: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="java.lang.StackTraceElement">StackTraceElement</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">try to approximate if a specification is a specs2 one or scalaz one by passing name = org.</p><div class="fullcomment"><div class="comment cmt"><p>try to approximate if a specification is a specs2 one or scalaz one by passing name = org.specs2 or name = scalaz</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>ExecutionOrigin</dd></dl></div>
     </li><li name="org.specs2.reporter.JUnitDescriptionsFragments#mapper" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="mapper(className:String):(org.specs2.specification.Fragment,Seq[(org.specs2.specification.Fragment,org.junit.runner.Description)],Int)=&gt;Option[(org.specs2.specification.Fragment,org.junit.runner.Description)]"></a>
       <a id="mapper(String):(Fragment,Seq[(Fragment,Description)],Int)⇒Option[(Fragment,Description)]"></a>
@@ -505,15 +571,15 @@ by JUnit
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="org.specs2.reporter.JUnitDescriptionMaker#parentPath" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="parentPath(parentNodes:Seq[(F,org.junit.runner.Description)]):Seq[String]"></a>
-      <a id="parentPath(Seq[(Fragment,Description)]):Seq[String]"></a>
+      <a id="parentPath(parentNodes:Seq[(F,org.junit.runner.Description)]):scala.collection.immutable.Vector[String]"></a>
+      <a id="parentPath(Seq[(Fragment,Description)]):Vector[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">parentPath</span><span class="params">(<span name="parentNodes">parentNodes: <span class="extype" name="scala.Seq">Seq</span>[(<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>, <span class="extype" name="org.junit.runner.Description">Description</span>)]</span>)</span><span class="result">: <span class="extype" name="scala.collection.Seq">Seq</span>[<span class="extype" name="java.lang.String">String</span>]</span>
+        <span class="name">parentPath</span><span class="params">(<span name="parentNodes">parentNodes: <span class="extype" name="scala.Seq">Seq</span>[(<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>, <span class="extype" name="org.junit.runner.Description">Description</span>)]</span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.Vector">Vector</span>[<span class="extype" name="java.lang.String">String</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a seq containing the path of an example without the root name</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>JUnitDescriptionMaker</dd></dl></div>
@@ -582,7 +648,10 @@ by JUnit
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -598,7 +667,10 @@ by JUnit
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -614,7 +686,10 @@ by JUnit
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li></ol>
@@ -654,7 +729,6 @@ by JUnit
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-
-
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../lib/template.js"></script>
     </body>
       </html>
