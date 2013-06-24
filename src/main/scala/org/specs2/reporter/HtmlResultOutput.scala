@@ -233,6 +233,8 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
       <script type="text/javascript" src={baseDir+"css/jquery.hotkeys.js"}></script>
       <script type="text/javascript" src={baseDir+"css/jquery.jstree.js"}></script>
       <script type="text/javascript" src={baseDir+"css/tooltip.js"}/>
+      <script type="text/javascript" src={baseDir+"js/specs2-user.js"}></script>
+      <script language="javascript">{scala.xml.Unparsed(s"""$$.getScript("${baseDir}js/specs2-user.js", initUserScript(document));""")}</script>
       {javascript}
       <script language="javascript">window.onload={"init;"}</script>
       <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
