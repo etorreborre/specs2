@@ -19,7 +19,7 @@ trait Markdown {
    * @return a Markdown processor
    *         for now QUOTES and SMARTS are not rendered to avoid  <?> characters to appear on html pages
    */
-  def processor(implicit args: Arguments) = new PegDownProcessor(args.report.pegdownExtensions & ~Extensions.QUOTES & ~Extensions.SMARTS)
+  def processor(implicit args: Arguments) = new PegDownProcessor(args.pegdownExtensions & ~Extensions.QUOTES & ~Extensions.SMARTS, args.pegdownTimeout)
   
   /**
    * parse the markdown string and return html.

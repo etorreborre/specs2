@@ -63,6 +63,7 @@ From inside a specification, the available arguments are the following:
  *`showOnly`*        | ""                                       | only report some examples based on their status
  *`color`   *        | true                                     | use colors in the output (`nocolor` can also be used on the command line)
  `pegdownExtensions` | `org.pegdown.Extensions.ALL`             | specifies the extensions used when processing Markdown content with the pegdown library; the value is an `Int` that is determinded by combining the possible values from `org.pegdown.Extensions` with a logical `AND`; note that SMARTS and QUOTES are always disabled for now
+ `pegdownTimeout`    | `2000`                                   | Timeout for parsing Markdown text with Pegdown in milliseconds
  `failtrace`         | false                                    | report the stacktrace for failures
  `colors`            | `org.specs2.text.SmartColors`            | define alternative colors (replace failureColor from being yellow to magenta for example)
  `showtimes`         | false                                    | show individual execution times
@@ -222,6 +223,7 @@ On the command line you can pass the following arguments:
  `showtimes`         | boolean                 |                                                                         |
  `debugmarkdown`     | boolean                 |                                                                         |
  `pegdownExtensions` | int                     | flags from `org.pegdown.Extensions` combined with logical `AND`         | 
+ `pegdownTimeout`    | long                    |                                                                         |
  `fromsource`        | boolean                 |                                                                         |
  `fullstacktrace`    | boolean                 |                                                                         |
  `checkurls`         | boolean                 |                                                                         |
