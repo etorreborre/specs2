@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import execute.{Failure, Result}
+import org.specs2.execute.{Success, Failure, Result}
 import util.{Try, Success => Succeeded, Failure => Failed}
 import scala.reflect.ClassTag
 import AnyMatchers.beEqualTo
@@ -64,13 +64,13 @@ trait TryBaseMatchers extends ExceptionMatchers {
     private def partialMatcher(f: PartialFunction[T, MatchResult[_]]) = new Matcher[Try[T]] {
       def apply[S <: Try[T]](value: Expectable[S]) = {
         val res: Result = value.value match {
-          case Succeeded(t) if f.isDefinedAt(t)  => f(t).toResult
-          case Succeeded(t) if !f.isDefinedAt(t) => Failure("the function is undefined on this value")
-          case Failed(_)                         => Failure("no match")
+          case Succeeded(t) if f.isDefinedAt(t)  => f(t).toResult.prependMessage("is a Success")
+          case Succeeded(t) if !f.isDefinedAt(t) => Failure("is a Success but the function is undefined on this value")
+          case Failed(e)                         => Failure("is not a Success: "+e.getMessage)
         }
         result(res.isSuccess,
-               s"${value.description} is a Success and ${res.message}",
-               s"${value.description} is a Success but ${res.message}",
+               s"${value.description} ${res.message}",
+               s"${value.description} ${res.message}",
                value)
       }
     }

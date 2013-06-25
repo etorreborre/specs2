@@ -1,7 +1,9 @@
 package org.specs2
 package matcher
+
+import text.NotNullStrings._
 import text.Quote._
-import execute.{Failure, Result}
+import org.specs2.execute.{Success, Failure, Result}
 
 /**
  * Matchers for the Either datatype
@@ -36,13 +38,13 @@ trait EitherBaseMatchers {
     private def partialMatcher(f: PartialFunction[T, MatchResult[_]]) = new Matcher[Either[_, T]] {
       def apply[S <: Either[_, T]](value: Expectable[S]) = {
         val res: Result = value.value match {
-          case Right(t) if f.isDefinedAt(t)  => f(t).toResult
-          case Right(t) if !f.isDefinedAt(t) => Failure("function undefined")
-          case other                         => Failure("no match")
+          case Right(t) if f.isDefinedAt(t)  => f(t).toResult.prependMessage("is Right")
+          case Right(t) if !f.isDefinedAt(t) => Failure("is Right but the function is undefined at "+t.notNull)
+          case other                         => Failure("is not Right")
         }
         result(res.isSuccess,
-               value.description+" is Right[T] and "+res.message,
-               value.description+" is Right[T] but "+res.message,
+               value.description+" "+res.message,
+               value.description+" "+res.message,
                value)
       }
     }
@@ -75,13 +77,13 @@ trait EitherBaseMatchers {
     private def partialMatcher(f: PartialFunction[T, MatchResult[_]]) = new Matcher[Either[T, _]] {
       def apply[S <: Either[T, _]](value: Expectable[S]) = {
         val res: Result = value.value match {
-          case Left(t) if f.isDefinedAt(t)  => f(t).toResult
-          case Left(t) if !f.isDefinedAt(t) => Failure("function undefined")
-          case other                        => Failure("no match")
+          case Left(t) if f.isDefinedAt(t)  => f(t).toResult.prependMessage("is Left")
+          case Left(t) if !f.isDefinedAt(t) => Failure("is Left but the function is undefined at "+t.notNull)
+          case other                        => Failure("is not Left")
         }
         result(res.isSuccess,
-               value.description+" is Left[T] and "+res.message,
-               value.description+" is Left[T] but "+res.message,
+               value.description+" "+res.message,
+               value.description+" "+res.message,
                value)
       }
     }

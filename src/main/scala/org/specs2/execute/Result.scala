@@ -85,6 +85,9 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
   /** change this result's message */
   def mapMessage(f: String => String): Result = updateMessage(f(message))
 
+  /** prepend another message and a conjunction depending on the status of this result */
+  def prependMessage(pre: String): Result = mapMessage(m => s"$pre ${if (isSuccess) "and" else "but"} "+m)
+
   /** update the expected of a result, keeping the subclass type */
   def updateExpected(exp: String): Result =
     this match {
