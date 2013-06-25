@@ -36,7 +36,7 @@ trait NoTimeConversions extends TimeConversions {
   override def intToRichLong(v: Int) = super.intToRichLong(v)
   override def longAsTime(v: Long)   = super.longAsTime(v)
 }
-
+object NoTimeConversions extends NoTimeConversions
 object TimeConversions extends TimeConversions
  
 /**
