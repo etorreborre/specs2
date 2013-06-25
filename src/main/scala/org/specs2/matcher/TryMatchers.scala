@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import execute.{Failure, Result}
+import org.specs2.execute.{Success, Failure, Result}
 import util.{Try, Success => Succeeded, Failure => Failed}
 import scala.reflect.ClassTag
 import AnyMatchers.beEqualTo
@@ -44,19 +44,33 @@ trait TryBaseMatchers extends ExceptionMatchers {
         }
     }
 
-    def which(f: T => Boolean) = this ^^ { (t: Try[T]) => t filter f }
+    def which(f: T => Boolean) = new Matcher[Try[T]] {
+      def apply[S <: Try[T]](value: Expectable[S]) = {
+        val defaultMessage = s"${value.description} is not Success[T]"
+        val (isSuccess, failureMessage) = value.value match {
+          case util.Success(t) if !f(t) => (false, s"${value.description} is Success[T] but $t does not satisfy the given predicate")
+          case None                     => (false, defaultMessage)
+          case _                        => (true , defaultMessage)
+        }
+        result(isSuccess,
+          s"${value.description} is Success[T] and satisfies the given predicate",
+          failureMessage,
+          value)
+      }
+    }
+
     def like(f: PartialFunction[T, MatchResult[_]]) = partialMatcher(f)
 
     private def partialMatcher(f: PartialFunction[T, MatchResult[_]]) = new Matcher[Try[T]] {
       def apply[S <: Try[T]](value: Expectable[S]) = {
         val res: Result = value.value match {
-          case Succeeded(t) if f.isDefinedAt(t)  => f(t).toResult
-          case Succeeded(t) if !f.isDefinedAt(t) => Failure("the function is undefined on this value")
-          case Failed(_)                         => Failure("no match")
+          case Succeeded(t) if f.isDefinedAt(t)  => f(t).toResult.prependMessage("is a Success")
+          case Succeeded(t) if !f.isDefinedAt(t) => Failure("is a Success but the function is undefined on this value")
+          case Failed(e)                         => Failure("is not a Success: "+e.getMessage)
         }
         result(res.isSuccess,
-               s"${value.description} is a Success and ${res.message}",
-               s"${value.description} is a Success but ${res.message}",
+               s"${value.description} ${res.message}",
+               s"${value.description} ${res.message}",
                value)
       }
     }

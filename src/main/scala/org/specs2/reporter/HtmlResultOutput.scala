@@ -13,6 +13,7 @@ import execute._
 import xml.Nodex._
 import specification._
 import html.Htmlx._
+import org.specs2.html.Htmlx
 
 /**
  * This class stores the html to print to a file (as a NodeSeq object)
@@ -30,6 +31,8 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
    * start of the output
    */
   private[specs2] lazy val blank = new HtmlResultOutput(NodeSeq.Empty, outer.filePath, None)
+  /** clear the current output */
+  def clear = copy(xml = NodeSeq.Empty)
   /** set the file path of the file being written */
   def filePathIs(path: String) = copy(filePath = path)
   /** base directory for this file path */
@@ -44,13 +47,13 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
   /** print a br tag */
   def printBr                                         = printOkStatus(<br></br>)
   /** print a paragraph for some text */
-  def printPar(text: String = "")                     = printOkStatus(<p>{wiki(text)}</p>)
+  def printPar(text: String = "")                     = printOkStatus(<p>{t(text)}</p>)
   /** print some text */
-  def printText(text: String = "", level: Int = 0)    = printOkStatus(div(wiki(text), level))
+  def printText(text: String = "", level: Int = 0)    = printOkStatus(div(t(text), level))
   /** print some text */
   def printText(text: FormattedString, level: Int)    = printOkStatus(div(wiki(text), level))
   /** print some text in a paragraph */
-  def printTextPar(text: String = "", level: Int = 0) = printOkStatus(p(wiki(text), level))
+  def printTextPar(text: String = "", level: Int = 0) = printOkStatus(p(t(text), level))
 
   /**
    * print the xhtml for a specification start:
@@ -99,9 +102,9 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
   }
 
   def printLink(link: HtmlLink) =
-    print(wiki(if (link.beforeText.isEmpty) "" else (link.beforeText+" ")) ++
-          <a href={link.url.relativeTo(filePath)} tooltip={link.tip}>{wiki(link.linkText)}</a> ++
-          wiki(if (link.afterText.isEmpty) "" else (" " +link.afterText+" ")))
+    print(t(if (link.beforeText.isEmpty) "" else (link.beforeText+" ")) ++
+          <a href={link.url.relativeTo(filePath)} tooltip={link.tip}>{link.linkText}</a> ++
+          t(if (link.afterText.isEmpty) "" else (" " +link.afterText+" ")))
 
   /** print some text with a status icon (with an ok class) */
   def printTextWithIcon(message: FormattedString, iconName: String, level: Int = 0)  = printOkStatus(textWithIcon(message, iconName, level))
@@ -179,7 +182,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
 	protected def printKoStatus(n: NodeSeq) = print(koStatus(n))
 	protected def printStatus(n: NodeSeq, st: String) = print(status(n, st))
 
-  protected def textWithIcon(message: FormattedString, iconName: String, level: Int = 0) = div(<img src={icon(iconName)}/> ++ t(" ") ++ wiki(message) ++ <br/>, level)
+  protected def textWithIcon(message: FormattedString, iconName: String, level: Int = 0) = div(<img src={icon(iconName)}/> ++ wiki(message.prepend("&nbsp;")) ++ <br/>, level)
   protected def xmlWithIcon(xml: NodeSeq, iconName: String, level: Int = 0) = div(<table class="exampleTable"><td><img src={icon(iconName)}/></td><td>{xml}</td></table>, level)
   protected def icon(t: String) = baseDir+"images/icon_"+t+"_sml.gif"
 
@@ -200,7 +203,6 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
   protected def toggleElement(a: Any) = "toggleImage(this); showHide('"+id(a)+"')"
   protected def id(a: Any) = System.identityHashCode(a).toString
   /** render some markup text as xhtml */
-  protected def wiki(text: String) = textPrinter(text, MarkdownOptions())
   protected def wiki(text: FormattedString) =
     if (text.formatting.markdown) textPrinter(text.raw, MarkdownOptions(verbatim = text.formatting.verbatim)) else text.toXml
 
@@ -231,6 +233,8 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
       <script type="text/javascript" src={baseDir+"css/jquery.hotkeys.js"}></script>
       <script type="text/javascript" src={baseDir+"css/jquery.jstree.js"}></script>
       <script type="text/javascript" src={baseDir+"css/tooltip.js"}/>
+      <script type="text/javascript" src={baseDir+"js/specs2-user.js"}></script>
+      <script language="javascript">{scala.xml.Unparsed(s"""$$.getScript("${baseDir}js/specs2-user.js", initUserScript(document));""")}</script>
       {javascript}
       <script language="javascript">window.onload={"init;"}</script>
       <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the

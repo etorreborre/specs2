@@ -6,6 +6,7 @@ import text.Quote._
 import text.NotNullStrings._
 import execute._
 import scala.reflect.ClassTag
+import org.specs2.control.DefaultStackTraceFilter
 
 /**
  * This trait provides matchers which are applicable to any type of value

@@ -44,10 +44,10 @@ trait MatchersImplicits extends Expectations with MatchResultCombinators with Ma
     def exactly(n: Times)               : ContainWithResult[T] = cc.exactly(n)
     def exactly(n: Int)                 : ContainWithResult[T] = cc.exactly(n)
 
-    def forall(values: GenTraversableOnce[T])      = cc.forall     (createExpectable(values))
-    def foreach(values: GenTraversableOnce[T])     = cc.foreach    (createExpectable(values))
-    def atLeastOnce(values: GenTraversableOnce[T]) = cc.atLeastOnce(createExpectable(values))
-    def atMostOnce(values: GenTraversableOnce[T])  = cc.atMostOnce (createExpectable(values))
+    def forall(values: GenTraversableOnce[T])      = createExpectable(values).applyMatcher(cc.forall)
+    def foreach(values: GenTraversableOnce[T])     = createExpectable(values).applyMatcher(cc.foreach)
+    def atLeastOnce(values: GenTraversableOnce[T]) = createExpectable(values).applyMatcher(cc.atLeastOnce)
+    def atMostOnce(values: GenTraversableOnce[T])  = createExpectable(values).applyMatcher(cc.atMostOnce)
   }
 
   implicit class matcherContainResult[T](m: Matcher[T]) { outer =>

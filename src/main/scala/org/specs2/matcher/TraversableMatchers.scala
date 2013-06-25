@@ -221,15 +221,15 @@ case class BeEqualContainCheck[T](expected: Any) extends ContainCheck[T] {
 
 object ContainCheck {
   def genericMessages(expectable: String, successes: Seq[Result], failures: Seq[Result]) = {
-    def elementsAre(results: Seq[Result]) =
+    def elementsAre(results: Seq[Result], success: Boolean) =
       if   (results.isEmpty)      s"There are no matches"
-      else if (results.size <= 1) s"There is ${results.size} match"
-      else                        s"There are ${results.size} matches"
+      else if (results.size <= 1) s"There is ${results.size} ${if (success) "success" else "failure"}"
+      else                        s"There are ${results.size} ${if (success) "successes" else "failures"}"
 
     def messages(results: Seq[Result]) = if (results.isEmpty) "" else results.map(_.message).mkString("\n", "\n", "\n")
 
-    (elementsAre(successes)+ messages(successes),
-     elementsAre(failures) + messages(failures))
+    (elementsAre(successes, success = true) + messages(successes),
+     elementsAre(failures, success = false) + messages(failures))
   }
 }
 

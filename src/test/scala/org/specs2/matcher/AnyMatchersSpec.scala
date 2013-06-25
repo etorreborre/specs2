@@ -90,6 +90,7 @@ class AnyMatchersSpec extends script.Specification with Groups with ResultMatche
   ${ atLeastOnce(Seq((4, 2), (3, 4))) { case (a, b) => a must be_<(b) } }
   ${ atLeastOnceWhen(Seq((2, 1), (3, 4))) { case (a, b) if a > 2 => a must be_<(b) } }
   ${ atLeastOnce(Seq(Some(1), None)) { _ must beSome(1) } }
+  ${ (new MatchersImplicits with ThrownExpectations).atLeastOnce(Seq(1))(_ must be_<(0)) must throwA[FailureException] } ${tag("issue #169")}
 
   beNull matches null values
   ${ (null:String) must beNull }

@@ -19,7 +19,7 @@ trait Markdown {
    * @return a Markdown processor
    *         for now QUOTES and SMARTS are not rendered to avoid  <?> characters to appear on html pages
    */
-  def processor(implicit args: Arguments) = new PegDownProcessor(args.report.pegdownExtensions & ~Extensions.QUOTES & ~Extensions.SMARTS)
+  def processor(implicit args: Arguments) = new PegDownProcessor(args.pegdownExtensions & ~Extensions.QUOTES & ~Extensions.SMARTS, args.pegdownTimeout)
   
   /**
    * parse the markdown string and return html.
@@ -27,31 +27,22 @@ trait Markdown {
    * transformed to <br/> tags
    */
   def toHtml(text: String, options: MarkdownOptions = MarkdownOptions())(implicit args: Arguments) = {
-    (new Specs2Visitor(options)).toHtml(processor.parseMarkdown(text.replace("\\\\n", "\n").toCharArray))
+    (new Specs2Visitor(text, options)).toHtml(processor.parseMarkdown(text.replace("\\\\n", "\n").toCharArray))
   }
 
   /**
    * parse the markdown string and return html without the enclosing paragraph
    */
   def toHtmlNoPar(text: String, options: MarkdownOptions = MarkdownOptions())(implicit args: Arguments) = {
-    if (text.trim.isEmpty) "<br/>"*(text.filter(_ == '\n').drop(1).size)
-    else {
-      val html = toHtml(text, options)
-      if (!text.contains("\n") || text.trim.isEmpty) html.removeEnclosingXmlTag("p") else html
-    }
+    val html = toHtml(text, options)
+    if (!text.contains("\n") || text.trim.isEmpty) html.removeEnclosingXmlTag("p") else html
   }
 
   /**
    * parse the markdown string and return xml (unless the arguments deactivate the markdown rendering)
    */
   def toXhtml(text: String, options: MarkdownOptions = MarkdownOptions())(implicit args: Arguments): NodeSeq = {
-    val lines = if (text.trim.nonEmpty && text.contains("\n")) text.split("\n").map { line =>
-      val (start, end) = line.span(_ == ' ')
-      "&nbsp;"*start.size + end.mkString
-    }.mkString("\n") else text
-
-    val paragraph = if (!text.trim.isEmpty && text.filter(_ == '\n').size > 1 && text.reverse.dropWhile(_ == ' ').startsWith("\n")) lines.removeLast("\n") else lines
-    val html = toHtmlNoPar(paragraph, options)
+    val html = toHtmlNoPar(text, options)
     parse(html) match {
       case Some(f) => f
       case None => scala.xml.Text(if (args.debugMarkdown) html else text)
@@ -69,14 +60,30 @@ object Markdown extends Markdown
 /**
  * specialised pegdown visitor to control the rendering of code blocks
  */
-case class Specs2Visitor(options: MarkdownOptions = MarkdownOptions()) extends org.pegdown.ToHtmlSerializer(new LinkRenderer) {
+case class Specs2Visitor(text: String, options: MarkdownOptions = MarkdownOptions()) extends org.pegdown.ToHtmlSerializer(new LinkRenderer) {
   override def visit(node: CodeNode) {
     printTagAndAttribute(node, "code", "class", "prettyprint")
   }
+  override def visit(node: ParaNode) {
+    super.visit(node)
+  }
+  override def visit(node: TextNode) {
+    super.visit(node)
+  }
 
+  override def visit(node: SimpleNode) {
+    super.visit(node)
+    if (node.getType == SimpleNode.Type.Linebreak) {
+      val indent = text.drop(node.getEndIndex).takeWhile(_ == ' ').size
+      (1 to indent) foreach { i => super.visit(new SimpleNode(SimpleNode.Type.Nbsp)) }
+    }
+  }
   override def visit(node: VerbatimNode) {
     if (!options.verbatim && node.getType.isEmpty && node.getText.contains("\n")) {
-      super.visit(new TextNode(node.getText))
+      val indents = text.split("\n").filter(_.nonEmpty).map(line => line.takeWhile(_==' ').size)
+      val verbatim = node.getText.split("\n").map(line => line.trim)
+      val lines = (indents zip verbatim).map { case (indent, line) => "&nbsp;"*indent + line }.mkString("<br/>")
+      super.visit(new TextNode(lines))
     }
     else super.visit(new VerbatimNode(node.getText, "prettyprint"))
   }

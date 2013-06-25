@@ -54,7 +54,7 @@ trait HtmlPrinter {
    * - the list of lines to print
    * - an output object responsible for printing each HtmlLine as xhtml
    */
-  def printHtml(output: =>HtmlReportOutput): HtmlLinesFile => HtmlFile = (file: HtmlLinesFile) => {
+  def printHtml(output: =>HtmlReportOutput)(implicit args: Arguments): HtmlLinesFile => HtmlFile = (file: HtmlLinesFile) => {
     HtmlFile(file.link.url, file.print(output).xml)
   }
 

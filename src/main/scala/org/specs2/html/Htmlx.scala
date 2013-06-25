@@ -26,7 +26,7 @@ trait Htmlx { outer =>
 
   implicit def extendHtmlNode(n: Node) = ExtendedHtmlNode(n)
   case class ExtendedHtmlNode(n: Node) {
-    def addHeadersAnchors = outer.headersAnchors.addTo(n)
+    def addHeadersAnchors = outer.headersAnchors.rewrite(n).headOption.getOrElse(NodeSeq.Empty)
   }
 
   implicit def extendHtmlSeqNode(ns: Seq[Node]) = ExtendedHtmlSeqNode(ns)
@@ -133,12 +133,18 @@ trait Htmlx { outer =>
   def isSubtoc(e: Node) = e.label.matches(SubtocTag.toString)
 
   /** This rule can be used to add anchors to header elements */
-  def headersAnchors = new RewriteRule {
+  def headersAnchors = {
     val namer = uniqueNamer
+    rewriteRule {
+      case e: Elem if isHeader(e) => <a name = {createAnchorNameForNode(nodeText(e).sanitize, namer)}>{e}</a>
+    }
+  }
 
+  /** @return a rewrite rule that will rewrite recursively each node based on a partial function */
+  def rewriteRule(pf: PartialFunction[Node, Seq[Node]]) = new RewriteRule {
     def applyTransformation(ns: Seq[Node]): Seq[Node] = if (ns.isEmpty) ns else (applyTransformation(ns.head) ++ applyTransformation(ns.tail))
     def applyTransformation(n: Node): Seq[Node] = n match {
-      case e: Elem if isHeader(e) => <a name = {createAnchorNameForNode(nodeText(e).sanitize, namer)}>{e}</a>
+      case e: Node if pf.isDefinedAt(e) => pf(e)
       case Group(xs)              => Group(applyTransformation(xs))
       case other                  => {
         val ch = n.child
@@ -147,7 +153,7 @@ trait Htmlx { outer =>
         else           Elem(n.prefix, n.label, n.attributes, n.scope, true, nch: _*)
       }
     }
-    def addTo(n: Node) = applyTransformation(n)
+    def rewrite(n: NodeSeq) = applyTransformation(n)
   }
 
   /** @return a unique anchor name for that node, so that 2 nodes having the same name will not direct to the same anchor in the same page */

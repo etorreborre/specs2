@@ -8,7 +8,7 @@ import java.text.{ ParsePosition, SimpleDateFormat }
  *
  * hat tip to @robey (http://robey.lag.net)
  */
-trait TimeConversions {
+trait TimeConversions extends DurationConversions {
   
   implicit class longAsTime(l: Long) {
     def toLong = l
@@ -29,6 +29,15 @@ trait TimeConversions {
   implicit def intToRichLong(v: Int) = new longAsTime(v.toLong)
 }
 
+trait DurationConversions {
+  implicit def concurrentToSpecs2(duration: scala.concurrent.duration.Duration): Duration =
+    new Duration(duration.toMillis)
+}
+trait NoDurationConversions extends DurationConversions {
+  override def concurrentToSpecs2(duration: scala.concurrent.duration.Duration): Duration =
+    super.concurrentToSpecs2(duration)
+}
+
 /**
  * This trait can be used to deactivate the time conversions (to avoid conflicts with Akka's conversions for example
  */
@@ -36,7 +45,7 @@ trait NoTimeConversions extends TimeConversions {
   override def intToRichLong(v: Int) = super.intToRichLong(v)
   override def longAsTime(v: Long)   = super.longAsTime(v)
 }
-
+object NoTimeConversions extends NoTimeConversions
 object TimeConversions extends TimeConversions
  
 /**

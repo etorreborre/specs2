@@ -12,6 +12,7 @@ import control.Identityx._
 import html._
 import xml.Nodex._
 import io.Paths._
+import scala.xml.transform.RewriteRule
 
 /**
 * The HtmlFile class groups a list of HtmlLine objects to print to an output file for a given specification (identified by specName)
@@ -32,7 +33,7 @@ case class HtmlLinesFile(specName: SpecName, args: Arguments,
                  <div class="colmask threecol">
                    <div class="colmid">
                      <div class="colleft">
-                       <div class="col1"><div id="central">{printLines(output).xml}</div></div>
+                       <div class="col1"><div id="central">{printLines(output)(args).xml}</div></div>
                        <div class="col2"><div id="leftcolumn">{toc.toTree(specId)}</div></div>
                        <div class="col3"><div id="rightcolumn"/></div>
                      </div>
@@ -42,8 +43,11 @@ case class HtmlLinesFile(specName: SpecName, args: Arguments,
       )
   }
 
-  def printLines(out: HtmlReportOutput) = lines.foldLeft(out) { (res, cur) => cur.print(res) }
-  
+  def printLines(out: HtmlReportOutput)(implicit args: Arguments) = {
+    val result = lines.foldLeft(out) { (res, cur) => cur.print(res) }
+    result.clear.printHtml(result.xml)
+  }
+
   def add(line: HtmlLine) = copy(lines = lines :+ line)
   def nonEmpty = !isEmpty
   def isEmpty = lines.isEmpty
@@ -133,8 +137,8 @@ case class HtmlResult(r: ExecutedResult, stats: Stats = Stats(), level: Int = 0,
   def print(out: HtmlReportOutput) = {
     out.when(!args.xonly || !r.result.isSuccess) { output =>
       r match {
-        case ExecutedResult(FormFormattedString(form),_,_,_,_) => printFormResult(form)(output)
-        case _                                                 => printResult(r.text(args), r.result)(output)
+        case ExecutedResult(f: FormFormattedString,_,_,_,_) => printFormResult(f.form)(output)
+        case _                                              => printResult(r.text(args), r.result)(output)
       }
     }
   }

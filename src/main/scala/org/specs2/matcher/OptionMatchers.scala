@@ -3,6 +3,7 @@ package matcher
 
 import text.Quote._
 import execute.{Success, Result, Failure}
+import text.NotNullStrings._
 
 /**
  * Matchers for Options
@@ -62,23 +63,38 @@ private[specs2]
 class SomeMatcher[T] extends Matcher[Option[T]] {
   def apply[S <: Option[T]](value: Expectable[S]) = {
     result(value.value.isDefined,
-           value.description + " is Some[T]",
-           value.description + " is not Some[T]",
+           value.description + " is Some",
+           value.description + " is not Some",
            value)
   }
-  def which(f: T => Boolean) = this ^^ { (t: Option[T]) => t filter f }
+
+  def which(f: T => Boolean) = new Matcher[Option[T]] {
+    def apply[S <: Option[T]](value: Expectable[S]) = {
+      val defaultMessage = s"${value.description} is not Some"
+      val (isSuccess, failureMessage) = value.value match {
+        case Some(t) if !f(t) => (false, s"${value.description} is Some but $t does not satisfy the given predicate")
+        case None             => (false, defaultMessage)
+        case _                => (true , defaultMessage)
+      }
+      result(isSuccess,
+             s"${value.description} is Some and satisfies the given predicate",
+             failureMessage,
+             value)
+    }
+  }
+
   def like(f: PartialFunction[T, MatchResult[_]]) = partialMatcher(f)
 
   private def partialMatcher(f: PartialFunction[T, MatchResult[_]]) = new Matcher[Option[T]] {
     def apply[S <: Option[T]](value: Expectable[S]) = {
       val res: Result = value.value match {
-        case Some(t) if f.isDefinedAt(t)  => f(t).toResult
-        case Some(t) if !f.isDefinedAt(t) => Failure("function undefined")
-        case None                         => Failure("no match")
+        case Some(t) if f.isDefinedAt(t)  => f(t).toResult.prependMessage("is Some")
+        case Some(t) if !f.isDefinedAt(t) => Failure("is Some but the function is undefined on "+t.notNull)
+        case None                         => Failure("is not Some")
       }
       result(res.isSuccess,
-             value.description+" is Some[T] and "+res.message,
-             value.description+" is Some[T] but "+res.message,
+             value.description+" "+res.message,
+             value.description+" "+res.message,
              value)
     }
   }

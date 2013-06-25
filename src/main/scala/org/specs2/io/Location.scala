@@ -13,6 +13,7 @@ class Location {
   private val location = FromSource.location(fragmentFilter)
   def file: String = location.fileName
   def lineNumber: Int = location.lineNumber
+  def classLocation: String = location.classLocation
   override def toString = location.fullLocation
   override def equals(a: Any) = a match {
     case l: Location => l.toString == this.toString
