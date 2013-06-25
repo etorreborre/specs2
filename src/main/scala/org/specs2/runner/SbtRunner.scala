@@ -1,7 +1,7 @@
 package org.specs2
 package runner
 
-import _root_.org.scalasbt.testing._
+import _root_.sbt.testing._
 import main.Arguments
 import control.Throwablex._
 import reporter._
@@ -20,7 +20,8 @@ import Fingerprints._
 class Specs2Framework extends Framework {
   def name = "specs2"
   def fingerprints = Array[Fingerprint](fp1, fp2)
-  def runner(args: Array[String], loader: ClassLoader, handler: EventHandler, loggers: Array[Logger]) = new SbtRunner(args, loader, handler, loggers)
+  def runner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader) =
+    new SbtRunner(args, remoteArgs, loader)
 }
 
 object Fingerprints {
@@ -31,98 +32,94 @@ object Fingerprints {
 trait SpecificationFingerprint extends SubclassFingerprint {
   def isModule = true
   def superclassName = "org.specs2.specification.SpecificationStructure"
+  def requireNoArgConstructor = false
 }
 trait FilesRunnerFingerprint extends SubclassFingerprint {
   def isModule = true
   def superclassName = "org.specs2.runner.FilesRunner"
+  def requireNoArgConstructor = false
 }
 
 case class SbtRunner(args: Array[String],
-                     loader: ClassLoader,
-                     handler: EventHandler,
-                     loggers: Array[Logger]) extends _root_.org.scalasbt.testing.Runner with Events with SbtLoggers with Exporters {
+                     remoteArgs: Array[String],
+                     loader: ClassLoader) extends _root_.sbt.testing.Runner with Events with SbtLoggers with Exporters {
 
   private implicit val commandLineArguments = Arguments(args:_*)
 
-  def task(className: String, fingerprint: Fingerprint) = new Task {
-    def tags = Array[String]()
-    def execute = {
-      fingerprint match {
-        case f: SpecificationFingerprint => specificationRun(className)
-        case f: FilesRunnerFingerprint   => filesRun(className)
-        case _                           => ()
+  def tasks(taskDefs: Array[TaskDef]): Array[Task] = taskDefs.map(newTask)
+
+  def newTask = (taskDef: TaskDef) =>
+    new Task {
+      def tags = Array[String]()
+      def execute(handler: EventHandler, loggers: Array[Logger]) = {
+        taskDef.fingerprint match {
+          case f: SpecificationFingerprint => specificationRun(taskDef, loader, handler, loggers)
+          case f: FilesRunnerFingerprint   => filesRun(taskDef, args, loader, handler, loggers)
+          case _                           => ()
+        }
+        // nothing more to execute
+        Array[Task]()
       }
-      Array[Task]()
-    }
-  }
-
-  def task(className: String, isModule: Boolean, selectors: Array[Selector]) = new Task {
-    def tags = Array[String]()
-    def execute = {
-      specificationRun(className)
-      Array[Task]()
-    }
-  }
-
-  def done = false
-
-  def specificationRun(className: String) =
-    SpecificationStructure.createSpecificationEither(className, loader) match {
-      case Left(e)  => handleClassCreationError(className, e)
-      case Right(s) => reporter(className, handler)(args).report(s)(s.content.arguments.overrideWith(commandLineArguments))
     }
 
-  def filesRun(className: String) =
-    toRun[FilesRunner](className).right.toOption.toSeq.flatMap(_.run(args)).flatMap(_.issues).foreach { issue =>
-      handler.handle(result(className, issue.result))
+  def done = ""
+
+  private def specificationRun(taskDef: TaskDef, loader: ClassLoader, handler: EventHandler, loggers: Array[Logger]) =
+    SpecificationStructure.createSpecificationEither(taskDef.fullyQualifiedName, loader) match {
+      case Left(e)  => handleClassCreationError(taskDef, e, handler, loggers)
+      case Right(s) => reporter(taskDef, handler, loggers)(args).report(s)(s.content.arguments.overrideWith(commandLineArguments))
     }
 
-  private def toRun[T <: AnyRef : Manifest](className: String): Either[Throwable, T] = {
-    val runner: Either[Throwable, T] = create[T](className + "$", loader) match {
+  def filesRun(taskDef: TaskDef, args: Array[String], loader: ClassLoader, handler: EventHandler, loggers: Array[Logger]) =
+    toRun[FilesRunner](taskDef, loader, handler, loggers).right.toOption.toSeq.flatMap(_.run(args)).flatMap(_.issues).foreach { issue =>
+      handler.handle(result(taskDef)(issue.result))
+    }
+
+  private def toRun[T <: AnyRef : Manifest](taskDef: TaskDef, loader: ClassLoader, handler: EventHandler, loggers: Array[Logger]): Either[Throwable, T] = {
+    val runner: Either[Throwable, T] = create[T](taskDef.fullyQualifiedName + "$", loader) match {
       case Right(s) => Right(s)
-      case Left(e) => create[T](className, loader)
+      case Left(e) => create[T](taskDef.fullyQualifiedName, loader)
     }
-    runner.left.map { e => handleClassCreationError(className, e) }
+    runner.left.map { e => handleClassCreationError(taskDef, e, handler, loggers) }
     runner
   }
 
   /**
    * Notify sbt that the specification could not be created
    */
-  private def handleClassCreationError(className: String, e: Throwable) {
-    handler.handle(error(className, e))
-    logError("Could not create an instance of "+className+"\n")
+  private def handleClassCreationError(taskDef: TaskDef, e: Throwable, handler: EventHandler, loggers: Array[Logger]) {
+    handler.handle(error(taskDef, e))
+    logError(loggers)("Could not create an instance of "+taskDef.fullyQualifiedName+"\n")
     (e :: e.chainedExceptions) foreach { s =>
-      logError("  caused by " + s.toString)
-      s.getStackTrace.foreach(t => logError("  " + t.toString))
+      logError(loggers)("  caused by " + s.toString)
+      s.getStackTrace.foreach(t => logError(loggers)("  " + t.toString))
     }
   }
 
-  protected def reporter(className: String, eventHandler: EventHandler)(args: Array[String]) =
-    new SbtConsoleReporter(consoleExporter(className, args, eventHandler), (a: Arguments) => otherExporters(className, args, eventHandler)(a))
+  protected def reporter(taskDef: TaskDef, handler: EventHandler, loggers: Array[Logger])(args: Array[String]) =
+    new SbtConsoleReporter(consoleExporter(taskDef, args, handler, loggers), (a: Arguments) => otherExporters(taskDef, args, handler, loggers)(a))
 
   /** @return true if the console must report the results */
-  private def isConsole(args: Array[String]) = !Seq("html", "junitxml", "markup").exists(args.contains) || args.contains("console")
-  private def consoleExporter(className: String, args: Array[String], handler: EventHandler) =
-    exporter(isConsole(args))(new SbtExporter(className, handler, loggers))
+  private def consoleExporter(taskDef: TaskDef, args: Array[String], handler: EventHandler, loggers: Array[Logger]) =
+    exporter(isConsole(Arguments(args:_*)))(new SbtExporter(taskDef, handler, loggers))
 
-  protected def finalExporter(className: String, handler: EventHandler) = FinalResultsExporter(className, handler, loggers)
+  protected def finalExporter(taskDef: TaskDef, handler: EventHandler, loggers: Array[Logger]) = FinalResultsExporter(taskDef, handler, loggers)
 
-  def otherExporters(className: String, args: Array[String], handler: EventHandler)(implicit arguments: Arguments): Seq[Exporting] = {
-    val exportFinalStats = exporter(!isConsole(args))(finalExporter(className, handler))
+  def otherExporters(taskDef: TaskDef, args: Array[String], handler: EventHandler, loggers: Array[Logger])(implicit arguments: Arguments): Seq[Exporting] = {
+    val exportFinalStats = exporter(!isConsole(Arguments(args:_*)))(finalExporter(taskDef, handler, loggers))
     super.exporters(args.filterNot(_ == "console").contains(_))(arguments) ++ exportFinalStats.toSeq
   }
 
   /** @return the list of all the exporters depending on the arguments passed on the command line */
-  def exporters(className: String, args: Array[String], handler: EventHandler)(implicit arguments: Arguments): Seq[Exporting] = {
-    consoleExporter(className, args, handler).toSeq ++ otherExporters(className, args, handler)(arguments)
+  def exporters(taskDef: TaskDef, args: Array[String], handler: EventHandler, loggers: Array[Logger])(implicit arguments: Arguments): Seq[Exporting] = {
+    consoleExporter(taskDef, args, handler, loggers).toSeq ++ otherExporters(taskDef, args, handler, loggers)(arguments)
   }
 }
 
 /**
  * This object can be used to debug the behavior of the SbtRunner
  */
-object sbtRunner extends SbtRunner(Array[String](), Thread.currentThread().getContextClassLoader, NoEventHandler, Array(ConsoleLogger)) with SystemExit with ConsoleOutput {
+object sbtRun extends SbtRunner(Array[String](), Array[String](), Thread.currentThread().getContextClassLoader) with SystemExit with ConsoleOutput {
   def main(arguments: Array[String]) {
     exitSystem(start(arguments:_*))
   }
@@ -138,7 +135,7 @@ object sbtRunner extends SbtRunner(Array[String](), Thread.currentThread().getCo
       println("The first argument should at least be the specification class name")
     implicit val commandLineArgs = Arguments(arguments.drop(1):_*)
     val className = arguments(0)
-    val sbtReporter = reporter(className, NoEventHandler)(arguments.toArray)
+    val sbtReporter = reporter(new TaskDef(className, Fingerprints.fp1, true, Array[Selector]()), NoEventHandler, Array(ConsoleLogger))(arguments.toArray)
     execute(sbtReporter, createSpecification(className)).headOption
   }
 
