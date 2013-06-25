@@ -17,7 +17,6 @@ trait FutureMatchers extends Expectations {
   implicit class FutureMatchable[T](m: Matcher[T]) {
     def await: Matcher[Future[T]]                                                        = await()
     def await(retries: Int = 0, timeout: FiniteDuration = 1.seconds): Matcher[Future[T]] = awaitFor(m)(retries, timeout)
-
   }
 
   def await[T](m: Matcher[T])(retries: Int = 0, timeout: FiniteDuration = 1.seconds): Matcher[Future[T]] = awaitFor(m)(retries, timeout)
