@@ -13,6 +13,7 @@ import io.Location
 import scala.Either
 import data.SeparatedTags
 import TagsFragments._
+import scala.xml.NodeSeq
 
 /**
  * A Fragment is a piece of a specification. It can be a piece of text, an action or
@@ -86,7 +87,7 @@ case class SpecEnd(specName: SpecName, isSeeOnlyLink: Boolean = false, location:
 /**
  * Free text, describing the system to specify
  */
-case class Text(text: FormattedString, location: Location = new Location) extends Fragment {
+case class Text(text: SimpleFormattedString, location: Location = new Location) extends Fragment {
   def t = text.raw
   override def matches(s: String) = t.matches(s)
   def flow = text.flow
@@ -103,22 +104,45 @@ case class Text(text: FormattedString, location: Location = new Location) extend
 object Text {
   def apply(s: String): Text = new Text(FormattedString(s))
 }
-case class FormattedString(t: String = "", formatting: Formatting = Formatting(), isEmpty: Boolean = false) {
-  def raw: String = t
-  def append(s: String) = copy(t = t+s)
-  def prepend(s: String) = copy(t = s+t)
-  def map(f: String => String) = copy(t = f(t))
-  def withMarkdown = copy(formatting = formatting.copy(markdown = true))
-  def withFlow = copy(formatting = formatting.copy(flow = true))
+trait FormattedString {
+  type F <: FormattedString
+
+  def raw: String
+  def formatting: Formatting
+  def isEmpty: Boolean
+  def map(f: String => String): F
+  def append(s: String) = map(t => t+s)
+  def prepend(s: String) = map(t => s+t)
+
+  def withMarkdown: FormattedString
+  def withFlow: FormattedString
+
+  def formatWithTagNames(names: Seq[String]): F
   def flow = formatting.flow
+  def toXml: NodeSeq
+
+  override def toString = raw
+}
+case class SimpleFormattedString(t: String = "", formatting: Formatting = Formatting(), isEmpty: Boolean = false) extends FormattedString {
+  type F = SimpleFormattedString
+
+  def raw: String = t
+  def map(f: String => String) = copy(t = f(t))
+
+  def withMarkdown = copy(formatting = formatting.copy(markdown = true))
+  def withoutMarkdown = copy(formatting = formatting.copy(markdown = false))
+  def withFlow = copy(formatting = formatting.copy(flow = true))
+  def withoutFlow = copy(formatting = formatting.copy(flow = false))
+
   def toXml = if (formatting.markdown) <code class="prettyprint">{raw}</code> else if (isEmpty) <t></t> else <t>{raw}</t>
 
   def formatWithTagNames(names: Seq[String]) = copy(formatting = formatting.fromTagNames(names: Seq[String]))
   override def toString = raw
 }
 object FormattedString {
+  def apply(t: String) = SimpleFormattedString(t)
   def code(t: String) = FormattedString(t).withMarkdown
-  def empty = FormattedString(isEmpty = true)
+  def empty = SimpleFormattedString(isEmpty = true)
 }
 /** Formatting for Text fragments */
 case class Formatting(flow: Boolean = false, markdown: Boolean = true, verbatim: Boolean = true) {

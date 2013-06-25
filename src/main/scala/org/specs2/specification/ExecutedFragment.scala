@@ -77,7 +77,7 @@ object ExecutedText1 {
 }
 case class ExecutedResult(s: FormattedString, result: Result, timer: SimpleTimer, location: Location, statistics: Stats) extends ExecutedFragment { outer =>
   def text(implicit args: Arguments) =
-    if (s.formatting.markdown && !result.expected.isEmpty && !args.fromSource) s.copy(t = result.expected)
+    if (s.formatting.markdown && !result.expected.isEmpty && !args.fromSource) s.map(_ => result.expected)
     else s
 
   def flow = s.flow

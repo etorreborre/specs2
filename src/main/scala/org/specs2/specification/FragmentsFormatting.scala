@@ -25,7 +25,7 @@ trait DefaultFragmentsFormatting extends FragmentsFormatting with TagsAssociatio
     Fragments.create(tagged:_*)
   }
 
-  private def formattedStringFor(tag: TaggingFragment) = (formatted: FormattedString) =>
+  private def formattedStringFor[F <: FormattedString](tag: TaggingFragment) = (formatted: F) =>
     formatted.formatWithTagNames(tag.names)
 }
 

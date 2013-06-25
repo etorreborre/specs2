@@ -137,8 +137,8 @@ case class HtmlResult(r: ExecutedResult, stats: Stats = Stats(), level: Int = 0,
   def print(out: HtmlReportOutput) = {
     out.when(!args.xonly || !r.result.isSuccess) { output =>
       r match {
-        case ExecutedResult(FormFormattedString(form),_,_,_,_) => printFormResult(form)(output)
-        case _                                                 => printResult(r.text(args), r.result)(output)
+        case ExecutedResult(f: FormFormattedString,_,_,_,_) => printFormResult(f.form)(output)
+        case _                                              => printResult(r.text(args), r.result)(output)
       }
     }
   }

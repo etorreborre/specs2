@@ -41,11 +41,11 @@ trait FragmentExecution {
    * A Form is executed separately by executing each row and cell, setting the results on each cell
    */
   def execute(f: Fragment)(implicit arguments: Arguments = Arguments()) = f match {
-    case e @ Example(FormFormattedString(form), _,_,_,_)     => {
+    case e @ Example(ff: FormFormattedString, _,_,_,_)     => {
       val timer = new SimpleTimer().start
-      val executed = if (arguments.plan) form else form.executeForm
+      val executed = if (arguments.plan) ff.form else ff.form.executeForm
       val result = executed.execute
-      ExecutedResult(FormFormattedString(executed), result, timer.stop, f.location, Stats(result).copy(timer = timer.stop))
+      ExecutedResult(FormFormattedString.create(executed), result, timer.stop, f.location, Stats(result).copy(timer = timer.stop))
     }
 	  case e: Example     => {
       val timer = new SimpleTimer().start

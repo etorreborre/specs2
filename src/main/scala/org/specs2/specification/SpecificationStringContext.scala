@@ -31,6 +31,7 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
   implicit def markdownLinkIsSpecPart(link: MarkdownLink): SpecPart = stringIsSpecPart(link.toString)
 
   implicit def asResultIsSpecPart[R : AsResult](r: =>R): SpecPart = new SpecPart {
+
     def append(fs: Fragments, text: String, expression: String = "") = {
       val texts = text.split("\n")
       val spaces = texts.lastOption.map(_.takeWhile(Seq(' ', '\n').contains)).getOrElse("")
@@ -39,7 +40,10 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
       val first = texts.dropRight(1).mkString("", "\n", "\n")
       val autoExample = texts.lastOption.map(_.trim.isEmpty).getOrElse(false)
 
-      val description = if (autoExample) FormattedString(expression.trim, Formatting(flow = true, markdown = true)) else FormattedString(texts.lastOption.map(_.trim).getOrElse(""), Formatting(flow = true, markdown = false))
+      val description =
+        if (autoExample) FormattedString(asCode(expression)).withFlow.withMarkdown
+        else             FormattedString(texts.lastOption.map(_.trim).getOrElse("")).withFlow.withoutMarkdown
+
       val before = first + indent
 
       val result =
@@ -52,6 +56,7 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
         }
       fs append result.middle
     }
+    private def asCode(expression: String) = if (expression.contains("\n")) "```\n"+expression+"\n```" else "`"+expression+"`"
   }
   implicit def anyAsResultIsSpecPart(r: =>Function0Result): SpecPart = new SpecPart {
     def append(fs: Fragments, text: String, expression: String = "") = asResultIsSpecPart(AsResult(r)).append(fs, text, expression)

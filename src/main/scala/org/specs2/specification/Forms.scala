@@ -16,7 +16,7 @@ trait Forms extends FormsBuilder with DecoratedProperties {
     lazy val form = tryOr(aForm.executeForm) { (e: Exception) =>
       Form("Initialisation error").tr(PropCell(Prop("", e.getMessage.notNull, (s: String, t: String) => execute.Error(e))("message")))
     }
-    new Example(FormFormattedString(form), () => form.result.getOrElse(Success(""))) {
+    new Example(FormFormattedString.create(form), () => form.result.getOrElse(Success(""))) {
       override def matches(s: String) = true
     }
   }
@@ -27,12 +27,23 @@ object Forms extends Forms
 /**
  * The FormFormattedString embeds the description of a form as text or as Xml
  */
-class FormFormattedString(val f: () => Form) extends FormattedString {
+case class FormFormattedString(f: () => Form, formatting: Formatting = Formatting(),
+                               isEmpty: Boolean = false,
+                               display: Form => String = (ff: Form) => new FormCell(ff).text) extends FormattedString {
+  type F = FormFormattedString
+
   lazy val form = f()
-  override def toXml = form.toXml
-  override def toString = new FormCell(form).text
+
+  def toXml = form.toXml
+  override def raw = toString
+  override def toString = display(form)
+  def map(f: String => String) = copy(display = display andThen f)
+
+  def withMarkdown = copy(formatting = formatting.copy(markdown = true))
+  def withFlow = copy(formatting = formatting.copy(flow = true))
+
+  def formatWithTagNames(names: Seq[String]) = copy(formatting = formatting.fromTagNames(names: Seq[String]))
 }
 object FormFormattedString {
-  def unapply(f: FormFormattedString): Option[Form] = Some(f.form)
-  def apply(f: =>Form) = new FormFormattedString(() => f)
+  def create(f: =>Form) = new FormFormattedString(() => f)
 }
