@@ -41,8 +41,8 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
       val autoExample = texts.lastOption.map(_.trim.isEmpty).getOrElse(false)
 
       val description =
-        if (autoExample) FormattedString(asCode(expression)).withFlow.withMarkdown
-        else             FormattedString(texts.lastOption.map(_.trim).getOrElse("")).withFlow.withoutMarkdown
+        if (autoExample) FormattedString.code(expression).withFlow
+        else             FormattedString(texts.lastOption.map(_.trim).getOrElse("")).withFlow
 
       val before = first + indent
 
@@ -56,7 +56,6 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
         }
       fs append result.middle
     }
-    private def asCode(expression: String) = if (expression.contains("\n")) "```\n"+expression+"\n```" else "`"+expression+"`"
   }
   implicit def anyAsResultIsSpecPart(r: =>Function0Result): SpecPart = new SpecPart {
     def append(fs: Fragments, text: String, expression: String = "") = asResultIsSpecPart(AsResult(r)).append(fs, text, expression)
