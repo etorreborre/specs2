@@ -29,19 +29,19 @@ trait Plural {
   implicit def quantity(i: Int) = Quantity(i)
   case class Quantity(i: Int) {
     /** @return a pluralized string describing this quantity */
-	  def qty(s: String) = i.toString + " " + s.plural(i)
+    def qty(s: String) = i.toString + " " + s.plural(i)
     /** @return a pluralized string describing this quantity with the be verb */
     def beQty(s: String) = i.toString + " " + s.bePlural(i)
     /**
      * @return a Option with a pluralized string describing this quantity if it is 
      * greater than 0 
      */
-	  def optQty(s: String): Option[String] = if (i > 0) Some(qty(s)) else None
+    def optQty(s: String): Option[String] = if (i > 0) Some(qty(s)) else None
     /**
      * @return a Option with a non-pluralized string describing this quantity if it is
      * greater than 0
      */
-	  def optInvariantQty(s: String): Option[String] = if (i > 0) Some(i.toString+" "+s) else None
+    def optInvariantQty(s: String): Option[String] = if (i > 0) Some(i.toString+" "+s) else None
   }
   /** @return an Ordinal which can have a rank in a sequence */
   implicit def ordinal(i: Int) = Ordinal(i)

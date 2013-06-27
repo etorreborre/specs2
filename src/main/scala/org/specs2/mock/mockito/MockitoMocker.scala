@@ -38,9 +38,9 @@ trait MockitoMocker {
   def doAnswer[T](a: Answer[T]) = org.mockito.Mockito.doAnswer(a)
   def doThrow[E <: Throwable](e: E) = org.mockito.Mockito.doThrow(e)
   def doNothing = org.mockito.Mockito.doNothing
-	
-	def answer[A](a: A): Answer[A] = answer((i: InvocationOnMock) => a)
-	def answer[A](f: InvocationOnMock => A): Answer[A] = new Answer[A] { def answer(i: InvocationOnMock): A = f(i) }
+
+  def answer[A](a: A): Answer[A] = answer((i: InvocationOnMock) => a)
+  def answer[A](f: InvocationOnMock => A): Answer[A] = new Answer[A] { def answer(i: InvocationOnMock): A = f(i) }
 
   def ignoreStubs(mocks: AnyRef*): Seq[AnyRef] = org.mockito.Mockito.ignoreStubs(mocks:_*).toSeq
 }

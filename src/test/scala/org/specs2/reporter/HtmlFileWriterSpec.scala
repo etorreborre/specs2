@@ -30,9 +30,9 @@ The HtmlFileWriter class is responsible for writing a html reports to disk.
     val fileWriter = new MockFileWriter {}
     val out = fileWriter.getWriter
     def writer = new HtmlFileWriter { 
-			override lazy val fileSystem = fs
-			override lazy val fileWriter = outer.fileWriter
-		}
+      override lazy val fileSystem = fs
+      override lazy val fileWriter = outer.fileWriter
+    }
 
   }
 

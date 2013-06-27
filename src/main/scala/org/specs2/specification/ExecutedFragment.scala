@@ -171,7 +171,7 @@ import scalaz._
 private[specs2]
 trait ExecutedFragmentsShow {
   implicit object showExecutedFragments extends Show[ExecutedFragment] {
-	  override def shows(f: ExecutedFragment) = f.toString
+    override def shows(f: ExecutedFragment) = f.toString
   }
 }
 private[specs2]

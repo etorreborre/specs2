@@ -26,12 +26,12 @@ trait MocksCreation extends TheMockitoMocker with ClassesOf {
   def mock[T : ClassTag](settings: org.mockito.MockSettings): T = Mocked[T](settings).done
   /**
    * implicit allowing to define the mock settings with a nice syntax:
-	 *  - named mock: val m = mock[java.util.List[String]].as("name")
-	 *  - smart mock: val m = mock[java.util.List[String]].smart
-	 *  - other settings: val m = mock[java.util.List[String]].
-   *	       settings(name = "list", 
-   *	                defaultReturn = 10, 
-	 *                  extraInterfaces = classesOf[Cloneable, Serializable])
+   *  - named mock: val m = mock[java.util.List[String]].as("name")
+   *  - smart mock: val m = mock[java.util.List[String]].smart
+   *  - other settings: val m = mock[java.util.List[String]].
+   *         settings(name = "list",
+   *                  defaultReturn = 10,
+   *                  extraInterfaces = classesOf[Cloneable, Serializable])
    */
   implicit def mocked[T : ClassTag](t: =>T) = Mocked[T]()
 
@@ -48,38 +48,38 @@ trait MocksCreation extends TheMockitoMocker with ClassesOf {
     def extraInterfaces[T1 : ClassTag, T2: ClassTag, T3: ClassTag] = settings(extraInterfaces = classesOf[T1, T2, T3])
     def extraInterfaces[T1 : ClassTag, T2: ClassTag, T3: ClassTag, T4: ClassTag] = settings(extraInterfaces = classesOf[T1, T2, T3, T4])
 
-		def settings(name            : MockProperty[String] = MockProperty[String](),
-		             smart           : MockProperty[Boolean] = MockProperty[Boolean](),
+    def settings(name            : MockProperty[String] = MockProperty[String](),
+                 smart           : MockProperty[Boolean] = MockProperty[Boolean](),
                  verbose         : MockProperty[Boolean] = MockProperty[Boolean](),
-						     defaultAnswer   : MockProperty[InvocationOnMock => Any] = MockProperty[InvocationOnMock => Any](),
-						     defaultReturn   : MockProperty[Any] = MockProperty[Any](),
-						     extraInterface  : MockProperty[Class[_]] = MockProperty[Class[_]](),
-		             extraInterfaces : MockProperty[Seq[Class[_]]] = MockProperty[Seq[Class[_]]]()) = {
-			update(name)(n => mockitoSettings.name(n)).
-			update(smart)(s => if (s) mockitoSettings.defaultAnswer(org.mockito.Mockito.RETURNS_SMART_NULLS) else mockitoSettings).
+                 defaultAnswer   : MockProperty[InvocationOnMock => Any] = MockProperty[InvocationOnMock => Any](),
+                 defaultReturn   : MockProperty[Any] = MockProperty[Any](),
+                 extraInterface  : MockProperty[Class[_]] = MockProperty[Class[_]](),
+                 extraInterfaces : MockProperty[Seq[Class[_]]] = MockProperty[Seq[Class[_]]]()) = {
+      update(name)(n => mockitoSettings.name(n)).
+      update(smart)(s => if (s) mockitoSettings.defaultAnswer(org.mockito.Mockito.RETURNS_SMART_NULLS) else mockitoSettings).
       update(verbose)(v => if (v) mockitoSettings.invocationListeners(new VerboseMockInvocationLogger()) else mockitoSettings).
       update(defaultAnswer)(a => mockitoSettings.defaultAnswer(mocker.answer(a))).
       update(defaultReturn)(r => mockitoSettings.defaultAnswer(mocker.answer(r))).
       update(extraInterface)(i => mockitoSettings.extraInterfaces(i)).
       update(extraInterfaces)(i => mockitoSettings.extraInterfaces(i:_*)).done
-		}
+    }
     /**
-		 * @return the mock object
-		 */
-	  def done: T = mocker.mock[T](mockitoSettings)
-		
-		/** update the settings with a new setting value if available */
-		private def update[P](prop: MockProperty[P])(f: P => org.mockito.MockSettings) = prop.toOption.map(p => Mocked[T](f(p))).getOrElse(this)
+     * @return the mock object
+     */
+    def done: T = mocker.mock[T](mockitoSettings)
+
+    /** update the settings with a new setting value if available */
+    private def update[P](prop: MockProperty[P])(f: P => org.mockito.MockSettings) = prop.toOption.map(p => Mocked[T](f(p))).getOrElse(this)
   }
 
   /**
    * this implicit helps with defining optional values for mockito settings
-   */	
+   */
   implicit def anyToMockProperty[T](t: =>T): MockProperty[T] = MockProperty(Property(t))
   case class MockProperty[T](p: Property[T] = Property[T]()) {
     def toOption: Option[T] = p.toOption
   }
-	
+
   /**
    * create a mock object with smart return values: val m = smartMock[java.util.List[String]]
    * 

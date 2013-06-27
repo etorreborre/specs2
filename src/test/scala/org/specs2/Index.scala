@@ -65,25 +65,25 @@ def head =
       <script type="text/javascript" src="./css/tabber.js"></script>
       <link href="./css/tabber.css" type="text/css" rel="stylesheet" media="screen" />
     <style type="text/css">
-	#top {
+  #top {
       margin-left: 150px;
       width: 60%;
     }
     #container {
       margin-left: 150px;
       width: 74%;
-	  float: left;
+    float: left;
     }
-	#sidebar {
+  #sidebar {
       width:13%;
       float:right;
     }
-	.console { font-family:Courier; color: #CCCCCC; background: #000000; border: 1px #CCCCCC; padding: 10px; }
+  .console { font-family:Courier; color: #CCCCCC; background: #000000; border: 1px #CCCCCC; padding: 10px; }
     .description { font-size: 1.1em; margin-bottom: 30px; margin-top: 0px; font-style: italic;}
     .footer { text-align:center; padding-top:30px; font-style: italic; }
     .download { float: right; }
-	s2 { font-style: italic; }
-	.sidelink { margin-left: 8px; }
+  s2 { font-style: italic; }
+  .sidelink { margin-left: 8px; }
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
   </style>
   <script type="text/javascript">
@@ -125,7 +125,7 @@ def sidebar = s"""
    <h3 style="margin-bottom: 0;">Get involved!</h3>
    <div style="margin-top: 10px;"><a class="sidelink" href="http://github.com/etorreborre/specs2">Github project</a>
    </div>
-   <a class="sidelink" 	href="http://groups.google.com/group/specs2-users">User group</a><br/>
+   <a class="sidelink"   href="http://groups.google.com/group/specs2-users">User group</a><br/>
    <a class="sidelink" href="http://github.com/etorreborre/specs2/issues">Issues</a><br/>
    <a class="sidelink" href="http://etorreborre.blogspot.com/search/label/specs2">Blog</a><br/>
    <a class="sidelink" href="sponsors.html">Sponsors</a><br/>
@@ -141,16 +141,16 @@ def footer = s"""
 
 def indexBody =
 s"""
-	<div id="container">
+  <div id="container">
     <h3 style="margin-top:0;">Presentation</h3>
 
     <s2>specs2</s2> is a library for writing executable software specifications.
-	<p/>
-	With <s2>specs2</s2> you can write software specifications for one class (<i>unit</i> specifications) or a full system (<i>acceptance</i> specifications):
+  <p/>
+  With <s2>specs2</s2> you can write software specifications for one class (<i>unit</i> specifications) or a full system (<i>acceptance</i> specifications):
 
-	<div class="tabber">
-	  <div class="tabbertab" title="Unit">
-	    <code class="prettyprint">   import org.specs2.mutable._
+  <div class="tabber">
+    <div class="tabbertab" title="Unit">
+      <code class="prettyprint">   import org.specs2.mutable._
 
   class HelloWorldSpec extends Specification {
 
@@ -166,9 +166,9 @@ s"""
       }
     }
   }</code>
-	  </div>
-	  <div class="tabbertab" title="Acceptance">
-	    <code class="prettyprint">   import org.specs2._
+    </div>
+    <div class="tabbertab" title="Acceptance">
+      <code class="prettyprint">   import org.specs2._
 
   class HelloWorldSpec extends Specification { def is = s2$triple
 
@@ -184,9 +184,9 @@ s"""
     def e2 = "Hello world" must startWith("Hello")
     def e3 = "Hello world" must endWith("world")
   }</code>
-	  </div>
-	</div>
-	<p/>
+    </div>
+  </div>
+  <p/>
 
   <h3 style="margin-top:20px">Features</h3>
 
@@ -209,9 +209,9 @@ s"""
     <h3><a name="Dependencies"></a>Dependencies</h3>
     The <s2>specs2</s2> jar is available with both sbt and maven
 
-	<div class="tabber">
-	  <div class="tabbertab" title="sbt">
-  	    <code class="prettyprint">
+  <div class="tabber">
+    <div class="tabbertab" title="sbt">
+        <code class="prettyprint">
   libraryDependencies ++= Seq(
     "org.specs2" %% "specs2" % "${VERSION}" % "test"
 
@@ -228,8 +228,8 @@ s"""
                     "releases"  at "http://oss.sonatype.org/content/repositories/releases")
 </code>
       </div>
-	  <div class="tabbertab" title="maven">
-  	    <code class="prettyprint">  &lt;dependency>
+    <div class="tabbertab" title="maven">
+        <code class="prettyprint">  &lt;dependency>
    &lt;groupId>org.specs2&lt;/groupId>
    &lt;artifactId>specs2_2.10&lt;/artifactId>
    &lt;version>${VERSION}&lt;/version>
@@ -270,34 +270,34 @@ s"""
 
     </code>
       </div>
-	</div>
+  </div>
 
     <h3><a name="Downloads"></a>Downloads</h3>
 
-	You can download the project here
-	<table width="850">
-	  <tr><th width="100">Version</th><th width="400">Files</th></tr>
-	  <tr>
-	      <td class="info">Snapshot</td>
-	      <td class="info">
-		    binaries (<a href="http://oss.sonatype.org/content/repositories/snapshots/org/specs2/specs2_2.10/${SNAPSHOT_VERSION}/">specs2 jar</a>,
-			            <a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/scalaz-core_2.10/7.0.0/">scalaz core jar</a>,
+  You can download the project here
+  <table width="850">
+    <tr><th width="100">Version</th><th width="400">Files</th></tr>
+    <tr>
+        <td class="info">Snapshot</td>
+        <td class="info">
+        binaries (<a href="http://oss.sonatype.org/content/repositories/snapshots/org/specs2/specs2_2.10/${SNAPSHOT_VERSION}/">specs2 jar</a>,
+                  <a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/scalaz-core_2.10/7.0.0/">scalaz core jar</a>,
                   <a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/scalaz-concurrent_2.10/7.0.0/">scalaz concurrent jar</a>)<br/>
        project (<a href="http://github.com/etorreborre/specs2/zipball/${NEXT_VERSION}">zip</a>,
                 <a href="http://github.com/etorreborre/specs2/tarball/${NEXT_VERSION}">tar</a>)
-		  </td>
-	  </tr>
-	  <tr>
-	      <td class="info">Released</td>
-	      <td class="info">
-		    binaries (<a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/specs2_2.10/${VERSION}/">specs2 jar</a>,
-			            <a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/scalaz-core_2.10/7.0.0/">scalaz core jar</a>,
+      </td>
+    </tr>
+    <tr>
+        <td class="info">Released</td>
+        <td class="info">
+        binaries (<a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/specs2_2.10/${VERSION}/">specs2 jar</a>,
+                  <a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/scalaz-core_2.10/7.0.0/">scalaz core jar</a>,
                   <a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/scalaz-concurrent_2.10/7.0.0/">scalaz concurrent jar</a>)<br/>
         project (<a href="http://github.com/etorreborre/specs2/zipball/SPECS2-${VERSION}">zip</a>,
                  <a href="http://github.com/etorreborre/specs2/tarball/SPECS2-${VERSION}">tar</a>)
-		  </td>
-	  </tr>
-	<table>
+      </td>
+    </tr>
+  <table>
     <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
       by running:
       <div class="console">$$ git clone git://github.com/etorreborre/specs2</div>
@@ -314,7 +314,7 @@ def sponsorsBody =
     <s2>specs2</s2> development is supported by:
        <p/>
        <img src="./images/yourkit.jpg" height="25" width="25"></img><b>  <a href="http://www.yourkit.com/">YourKit</a></b>
-	   <p/>
+     <p/>
        YourKit is kindly supporting open source projects with its full-featured Java Profiler.
        YourKit, LLC is the creator of innovative and intelligent tools for profiling
        Java and .NET applications. Take a look at YourKit's leading software products:
@@ -322,11 +322,11 @@ def sponsorsBody =
        <a href="http://www.yourkit.com/.net/profiler/index.jsp">YourKit .NET Profiler</a>.
        <p/>
        <img src="./images/BuiltOnDEV.png" height="25" width="25" ></img><b>  <a href="http://www.cloudbees.com">Cloudbees</a></b>
-	   <p/>
+     <p/>
        "At CloudBees, a group of us have a strong history of contributing and leading Free and Open Source (FOSS) projects. Consequently, we have first hand experience surrounding the challenges that FOSS projects present. As an open source developer, you want to focus on the features of your project and its quality -- you don't want to spend your time configuring and worrying about build and test servers."
        <p/>
-	   <img src="./images/BuiltOnDEV.png"></img>
-	   <p/>
+     <img src="./images/BuiltOnDEV.png"></img>
+     <p/>
 
   </div>
   """

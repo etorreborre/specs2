@@ -710,7 +710,7 @@ In specs2, those 2 methods are defined by the `${fullName[matcher.ThrownMessages
 
    - - -
 
-           	                                                                                                            """ ^
+                                                                                                                         """ ^
                                                                                                                         br ^
   include(xonly, examples)                                                                                              ^
   include(xonly, akaExpectations)                                                                                       ^

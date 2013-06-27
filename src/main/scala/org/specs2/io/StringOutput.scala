@@ -22,16 +22,16 @@ trait StringOutput extends Output {
    * otherwise it is added to the last message
    */
   override def printf(s: String, args: Any*) {
-	  val formatted = s format (args : _*)
-	  if (formatted.endsWith("\n"))
-	    append(formatted.dropRight(1))
-	  else if (msgs.isEmpty)
-	    append(formatted)
-	  else {
-	    val last = msgs.last 
-	    msgs.remove(msgs.size - 1)
-	    append(last + formatted)
-	  }
+    val formatted = s format (args : _*)
+    if (formatted.endsWith("\n"))
+      append(formatted.dropRight(1))
+    else if (msgs.isEmpty)
+      append(formatted)
+    else {
+      val last = msgs.last
+      msgs.remove(msgs.size - 1)
+      append(last + formatted)
+    }
   }
 
   protected def append(msg: String) = msgs += msg

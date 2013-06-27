@@ -48,26 +48,26 @@ trait DataTables extends Expectations {
    */
   abstract class Table(val titles: List[String], val execute: Boolean = false) {
 
-	  /**
-	   * Collect the results of each row
-	   * @param results list of (row description, row execution result)
+    /**
+     * Collect the results of each row
+     * @param results list of (row description, row execution result)
      * @return an aggregated Result from a list of results
      */
     protected def collect[R : AsResult](results: List[(Seq[String], R)]): DecoratedResult[DataTable] = {
-	    val result = allSuccess(results)
+      val result = allSuccess(results)
       val decorated =
         DecoratedResult(DataTable(titles, results), result.updateMessage {
-      	   TextTable("" +: titles :+ "", results.map { case (line, r) => resultLine(line, AsResult(r)) }:_*).show
-      	})
+           TextTable("" +: titles :+ "", results.map { case (line, r) => resultLine(line, AsResult(r)) }:_*).show
+        })
       checkResultFailure(decorated)
       decorated
-	  }
-	  /** @return the logical and combination of all the results */
+    }
+    /** @return the logical and combination of all the results */
     private def allSuccess[R : AsResult](results: List[(Seq[String], R)]): Result = {
       results.foldLeft(Success("", results.size): Result)((res, cur) => res and AsResult(cur._2))
     }
     /** @return the status of the row + the values + the failure message if any */
-	  private def resultLine(line: Seq[String], result: Result): Seq[String] = {
+    private def resultLine(line: Seq[String], result: Result): Seq[String] = {
       val message = if (result.isSuccess) "" else result.message
       result.status +: line :+ message
     }

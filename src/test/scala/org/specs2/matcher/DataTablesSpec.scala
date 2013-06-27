@@ -26,10 +26,10 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
   def boom = error("boom")
   
   def e1 =
-	  "a"   | "b" | "c" |>
-	   2    !  2  !  4  |
-	   1    !  1  !  2  | { (a, b, c) =>  a + b must_== c }
-	   
+    "a"   | "b" | "c" |>
+     2    !  2  !  4  |
+     1    !  1  !  2  | { (a, b, c) =>  a + b must_== c }
+
   def e2 = // if the table was executed, it would go "boom"
     "a"   | "b" | "c" |
      2    !  2  !  4  |
@@ -55,15 +55,15 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
     1             !! "world"   !  "1 world"     |> { (a, b, c) =>  a +" "+b must_== c }
 
   def e6 =
-	  "a"   |
-	   2    |
-	   1    |> { (a) =>  a must be_>=(0) }
+    "a"   |
+     2    |
+     1    |> { (a) =>  a must be_>=(0) }
 
 
   def e7 =
-	  "a"         | "b"       |>
-	  0           ! "0"       |
-	  List("a")   ! "List(a)" | { (a, b) =>  a.toString must_== b }
+    "a"         | "b"       |>
+    0           ! "0"       |
+    List("a")   ! "List(a)" | { (a, b) =>  a.toString must_== b }
 
   def e8 = (new InAMutableContext).result must throwA[DecoratedResultException]
 

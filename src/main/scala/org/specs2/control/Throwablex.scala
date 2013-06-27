@@ -85,12 +85,12 @@ trait Throwablex {
   }
   /** utility method to create a default stacktrace element */
   def stackTraceElement(m: String, className: String = "internals", fileName: String = "file", lineNumber: Int = 1) = 
-	   new StackTraceElement(m, className, fileName, lineNumber)
+     new StackTraceElement(m, className, fileName, lineNumber)
   /** @return an exception with the given message and stacktrace */
   def exception(m: String, st: Seq[StackTraceElement], cause: Throwable = null): Exception = {
-	  val exception = new Exception(m, cause)
-	  exception.setStackTrace(st.toArray)
-	  exception
+    val exception = new Exception(m, cause)
+    exception.setStackTrace(st.toArray)
+    exception
   }
   /** @return an exception with the given stacktrace */
   def exception(st: Seq[StackTraceElement]): Exception = exception("", st)

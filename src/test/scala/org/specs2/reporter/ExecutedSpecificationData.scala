@@ -18,18 +18,18 @@ trait ExecutedSpecificationData extends Data[ExecutedSpecification] with Fragmen
   implicit val arguments = Arguments()
   implicit def arbExecutedFragment: Arbitrary[ExecutedFragment] = Arbitrary(arbFragment.arbitrary.map(f => execute(f)))
 
-	def arbExecutedFragmentSeq = Arbitrary(arbExecutedFragment.arbitrary.map(f => Seq(f)))
+  def arbExecutedFragmentSeq = Arbitrary(arbExecutedFragment.arbitrary.map(f => Seq(f)))
 
-	lazy val arbExecutedSpecificationFragments = Arbitrary(arbExecutedSpecification.arbitrary.map(_.fragments))
+  lazy val arbExecutedSpecificationFragments = Arbitrary(arbExecutedSpecification.arbitrary.map(_.fragments))
 
-	def arbLinkedExecutedSpecificationFragments(seeOnly: Boolean = false): Arbitrary[Seq[ExecutedFragment]] = Arbitrary {
-		for (spec <- arbExecutedSpecification.arbitrary) yield {
-			spec.fragments match {
-				case ExecutedSpecStart(SpecStart(n,a,Linked(l,so,h),loc1),loc2,timer) +: rest => ExecutedSpecStart(SpecStart(n,a,Linked(Some(HtmlLink(n)),seeOnly,h),loc1), loc2, timer) +: rest
-				case other => other
-			}
-		}
-	}
+  def arbLinkedExecutedSpecificationFragments(seeOnly: Boolean = false): Arbitrary[Seq[ExecutedFragment]] = Arbitrary {
+    for (spec <- arbExecutedSpecification.arbitrary) yield {
+      spec.fragments match {
+        case ExecutedSpecStart(SpecStart(n,a,Linked(l,so,h),loc1),loc2,timer) +: rest => ExecutedSpecStart(SpecStart(n,a,Linked(Some(HtmlLink(n)),seeOnly,h),loc1), loc2, timer) +: rest
+        case other => other
+      }
+    }
+  }
 
   implicit lazy val arbExecutedSpecification: Arbitrary[ExecutedSpecification] =
     Arbitrary { arbSpecification.arbitrary.map(execute)  }

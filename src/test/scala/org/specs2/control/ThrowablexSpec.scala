@@ -28,8 +28,8 @@ The Throwablex trait provides extensions to regular throwables:
                                                                                                                  """
 
   "chained" - new group with ThrowablexContext {
-	  eg := e.chainedExceptions      === List(e.getCause)
-	  eg := e.getFullStackTrace.size === e.getStackTrace.size + e.getCause.getStackTrace.size
+    eg := e.chainedExceptions      === List(e.getCause)
+    eg := e.getFullStackTrace.size === e.getStackTrace.size + e.getCause.getStackTrace.size
     eg := e.messageAndCause        === "message. Cause: cause"
   }
   "location" - new group with ThrowablexContext {

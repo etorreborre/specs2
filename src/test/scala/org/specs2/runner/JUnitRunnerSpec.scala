@@ -77,42 +77,42 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
   }
 
   case class notified() extends WithNotifier {
-	  def desc(s: String) = =~(s) ^^ ((_:Description).getDisplayName)
-	  
-	  def e1 = { 
-	    run(ex1)
-	    Seq(there was one(notifier).fireTestStarted(desc("ex1")),
-	        there was one(notifier).fireTestFinished(desc("ex1")))
+    def desc(s: String) = =~(s) ^^ ((_:Description).getDisplayName)
+
+    def e1 = {
+      run(ex1)
+      Seq(there was one(notifier).fireTestStarted(desc("ex1")),
+          there was one(notifier).fireTestFinished(desc("ex1")))
     }
-	  def e2 = { 
-	    run(level1)
-	    Seq("ex1", "ex2") flatMap { s =>
-	      Seq(there was one(notifier).fireTestStarted(desc(s)),
-	          there was one(notifier).fireTestFinished(desc(s)))
-	    }
+    def e2 = {
+      run(level1)
+      Seq("ex1", "ex2") flatMap { s =>
+        Seq(there was one(notifier).fireTestStarted(desc(s)),
+            there was one(notifier).fireTestFinished(desc(s)))
+      }
     }
-	  def e3 = { 
-	    run(ex1Failure)
-	    Seq(there was one(notifier).fireTestStarted(desc("ex1")),
-	        there was one(notifier).fireTestFailure(any[Failure]))
+    def e3 = {
+      run(ex1Failure)
+      Seq(there was one(notifier).fireTestStarted(desc("ex1")),
+          there was one(notifier).fireTestFailure(any[Failure]))
     }
-	  def e4 = { 
-	    run(ex1Failure)
-	    val c = capture[Failure]
-	    there was one(notifier).fireTestFailure(c)
-	    c.value.getMessage must_== "failure"
+    def e4 = {
+      run(ex1Failure)
+      val c = capture[Failure]
+      there was one(notifier).fireTestFailure(c)
+      c.value.getMessage must_== "failure"
     }
-	  def e5 = { 
-	    run(ex1Error)
-	    there was one(notifier).fireTestFailure(be_==("error")^^((_:Failure).getMessage))
+    def e5 = {
+      run(ex1Error)
+      there was one(notifier).fireTestFailure(be_==("error")^^((_:Failure).getMessage))
     }
-	  def e6 = { 
-	    run(ex1Skipped)
-	    there was one(notifier).fireTestIgnored(desc("ex1"))
+    def e6 = {
+      run(ex1Skipped)
+      there was one(notifier).fireTestIgnored(desc("ex1"))
     }
-	  def e7 = { 
-	    run(ex1Pending)
-	    there was one(notifier).fireTestIgnored(desc("ex1"))
+    def e7 = {
+      run(ex1Pending)
+      there was one(notifier).fireTestIgnored(desc("ex1"))
     }
     def e8 = {
       run(ex1BeEqualToFailure)

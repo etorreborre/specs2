@@ -73,14 +73,14 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
 
   /** update the message of a result, keeping the subclass type */
   def updateMessage(msg: String): Result =
-	  this match {
-	    case Success(m, e)         => Success(msg,e)
-	    case Failure(m, e, st, d)  => Failure(msg, e, st, d)
-	    case Error(m, st)          => Error(msg, st)
-	    case Skipped(m, e)         => Skipped(msg, e)
-	    case Pending(m)            => Pending(msg)
+    this match {
+      case Success(m, e)         => Success(msg,e)
+      case Failure(m, e, st, d)  => Failure(msg, e, st, d)
+      case Error(m, st)          => Error(msg, st)
+      case Skipped(m, e)         => Skipped(msg, e)
+      case Pending(m)            => Pending(msg)
       case DecoratedResult(t, r) => DecoratedResult(t, r.updateMessage(msg))
-	  }
+    }
 
   /** change this result's message */
   def mapMessage(f: String => String): Result = updateMessage(f(message))
@@ -290,7 +290,7 @@ object Success {
     override val expectationsNb = expNb
   }
   def apply(m: String, expNb: Int) = new Success(m) {
-	  override val expectationsNb = expNb
+    override val expectationsNb = expNb
   }
 }
 /** 

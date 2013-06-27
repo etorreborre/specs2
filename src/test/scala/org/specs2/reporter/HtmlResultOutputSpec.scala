@@ -39,7 +39,7 @@ class HtmlResultOutputSpec extends Specification with DataTables with XmlMatcher
   case class links() {
     val out          = new HtmlResultOutput
     val specLink     = SpecHtmlLink(SpecName("name"), "before", "link", "after", "tip")
-	  val htmlSpecLink = out.printLink(specLink, 0)
+    val htmlSpecLink = out.printLink(specLink, 0)
 
     def e1 = htmlSpecLink.xml must \\("subtoc", "specId")
     def e2 = new HtmlResultOutput(filePath = "guide/MySpec.html").printLink(specLink, 0).xml must \\("a", "href" -> "../name.html")

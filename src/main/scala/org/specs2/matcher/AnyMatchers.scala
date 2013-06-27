@@ -119,7 +119,7 @@ trait AnyBaseMatchers {
              x)
     }
   }
-	
+
   /** matches if x.getClass.getInterfaces.contains(T) */
   def haveInterface[T : ClassTag] = new Matcher[Any] {
     def apply[S <: Any](x: Expectable[S]) = {
@@ -130,8 +130,8 @@ trait AnyBaseMatchers {
              x.description + " doesn't have interface " + q(c.getName) + " but " + xClass.getInterfaces.mkString(", "),
              x)
     }
-	}
-	
+  }
+
   /** matches if v.isAssignableFrom(c) */
   def beAssignableFrom[T : ClassTag] = new Matcher[Class[_]] {
     def apply[S <: Class[_]](x: Expectable[S]) = {
@@ -194,7 +194,7 @@ class BeTypedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1
           else                                      (b.describe(actualWithClass), q(expectedWithClass))
         }
         case other                          => other
-	    }
+      }
 
     def print(b: String, msg: String, a: String) = Seq(b, msg, a).mkString("\n".unless((Seq(a, b).exists(_.size <= 40))))
     result(isEqual, ok(print(db, " is equal to ", qa)), ko(print(db, " is not equal to ", qa)), b, expected.notNull, actual.notNull)

@@ -43,7 +43,7 @@ trait Matcher[-T] { outer =>
    * @return a MatchResult with an okMessage, a koMessage and the expectable value
    */
   protected def result[S <: T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[S]): MatchResult[S] = {
-	  Matcher.result(test, okMessage, koMessage, value) 
+    Matcher.result(test, okMessage, koMessage, value)
   }
   /**
    * This convenience method uses a triplet instead of separated arguments
@@ -58,7 +58,7 @@ trait Matcher[-T] { outer =>
    *         to display a failure comparison if necessary
    */
   protected def result[S <: T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[S], expected: String, actual: String): MatchResult[S] = {
-	  Matcher.result(test, okMessage, koMessage, value, expected, actual)
+    Matcher.result(test, okMessage, koMessage, value, expected, actual)
   }
   /**
    * @return a MatchResult copied on another one, but with a different expectable
@@ -229,15 +229,15 @@ object Matcher {
    *  Utility method for creating a MatchResult[T]
    */
   def result[T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T]): MatchResult[T] = {
-	  if (test) MatchSuccess(okMessage, koMessage, value)
-	  else      MatchFailure(okMessage, koMessage, value)
+    if (test) MatchSuccess(okMessage, koMessage, value)
+    else      MatchFailure(okMessage, koMessage, value)
   }
   /**
    * Utility method for creating a MatchResult[T], with the actual and expected strings to enable better failure
    * messages
    */
   def result[T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T], expected: String, actual: String): MatchResult[T] = {
-	  if (test) MatchSuccess(okMessage, koMessage, value)
-	  else      MatchFailure.create(okMessage, koMessage, value, FailureDetails(expected, actual))
+    if (test) MatchSuccess(okMessage, koMessage, value)
+    else      MatchFailure.create(okMessage, koMessage, value, FailureDetails(expected, actual))
   }
 }

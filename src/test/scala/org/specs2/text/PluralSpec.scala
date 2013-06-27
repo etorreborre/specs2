@@ -7,11 +7,11 @@ class PluralSpec extends Specification with Plural with Tables {
   
   "A string can be pluralized: 'apple'.plural(n)" in {
 
-	  "word"   | "quantity"	| "result"	|>
-    "apple"  ! 0 			    ! "apple"	  |
-    "apple"  ! 1			    ! "apple"	  |
-    "apple"  ! 2			    ! "apples"	|
-    "apple"  ! 3		      ! "apples"	| { (word, qty, result) =>
+    "word"   | "quantity"  | "result"  |>
+    "apple"  ! 0           ! "apple"    |
+    "apple"  ! 1          ! "apple"    |
+    "apple"  ! 2          ! "apples"  |
+    "apple"  ! 3          ! "apples"  | { (word, qty, result) =>
       word.plural(qty) === result
     }
   }

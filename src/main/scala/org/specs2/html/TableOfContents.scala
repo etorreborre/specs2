@@ -31,7 +31,7 @@ trait TableOfContents { outer =>
     body.headersTree.
       bottomUp { (h: Header, s: Stream[NodeSeq]) =>
         if (h.isRoot)
-		  // 'id' is the name of the attribute expected by jstree to "open" the tree on a specific node
+      // 'id' is the name of the attribute expected by jstree to "open" the tree on a specific node
           s.reduceNodes.updateHeadAttribute("id", id.toString)
         else if (h.isSubtoc)
           subTocs.get(h.specId).getOrElse(Empty) ++ s.reduceNodes

@@ -23,18 +23,18 @@ trait Trim extends control.Debug {
     
     def trimStart(start: String) =
       if (s.trim.startsWith(start)) s.trim.drop(start.size) else s.trim
-	  
+
     def trimEnd(end: String) =
       if (s.trim.endsWith(end)) s.trim.dropRight(end.size)  else s.trim
 
     def trimEnclosing(start: String): String = trimEnclosing(start, start)
 
-	  def trimEnclosing(start: String, end: String): String = if (s.trim.startsWith(start) && s.trim.endsWith(end)) {
+    def trimEnclosing(start: String, end: String): String = if (s.trim.startsWith(start) && s.trim.endsWith(end)) {
       trimStart(start).trimEnd(end).trim
     } else s
-	  
-	  def trimEnclosingXmlTag(t: String) = trimFirst("<"+t+".*?>").trimEnd("</"+t+">")
-	  
+
+    def trimEnclosingXmlTag(t: String) = trimFirst("<"+t+".*?>").trimEnd("</"+t+">")
+
     def removeStart(start: String) =
       if (s.startsWith(start)) s.drop(start.size) else s
 
@@ -43,11 +43,11 @@ trait Trim extends control.Debug {
 
     def removeEnclosing(toRemove: String):String = removeEnclosing(toRemove, toRemove)
 
-	  def removeEnclosing(start: String, end: String):String =
+    def removeEnclosing(start: String, end: String):String =
       if (isEnclosing(start, end)) removeStart(start).removeEnd(end)
       else                                 s
 
-	  def removeEnclosingXmlTag(t: String) =
+    def removeEnclosingXmlTag(t: String) =
       if (isEnclosing("<"+t, "</"+t+">")) removeFirst("<"+t+".*?>").trimEnd("</"+t+">")
       else                                s
 
@@ -56,7 +56,7 @@ trait Trim extends control.Debug {
     def trimNewLines = Seq("\r", "\n").foldLeft(s) { (res, cur) =>
       res.trimStart(cur).trimEnd(cur)
     }
-	
+
     def removeNewLines = Seq("\r", "\n").foldLeft(s) { (res, cur) =>
       res.replaceAll(cur, "")
     }

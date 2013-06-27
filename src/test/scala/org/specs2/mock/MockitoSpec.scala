@@ -114,28 +114,28 @@ STUBS
     
   "creation" - new group {
     eg := {
-			val list = mock[java.util.List[String]].as("list1")
-			(there was one(list).add("one")).message must contain("list1.add(\"one\")")
-		}
+      val list = mock[java.util.List[String]].as("list1")
+      (there was one(list).add("one")).message must contain("list1.add(\"one\")")
+    }
     eg := {
-			val list = mock[java.util.List[String]].settings(defaultReturn = 10)
+      val list = mock[java.util.List[String]].settings(defaultReturn = 10)
       list.size must_== 10
     }
     eg := {
-			val list = mock[java.util.List[String]].settings(name = "list1", defaultReturn = 10, extraInterfaces = classesOf[Cloneable, Serializable])
+      val list = mock[java.util.List[String]].settings(name = "list1", defaultReturn = 10, extraInterfaces = classesOf[Cloneable, Serializable])
       (list.size must_== 10) and 
-			((there was one(list).add("one")).message must contain("list1.add(\"one\")"))
+      ((there was one(list).add("one")).message must contain("list1.add(\"one\")"))
     }
     eg := {
-			val list = mock[java.util.List[String]].defaultAnswer((p1: InvocationOnMock) => "hello")
+      val list = mock[java.util.List[String]].defaultAnswer((p1: InvocationOnMock) => "hello")
       list.get(0) must_== "hello" 
     }
     eg := {
-			val list = mock[java.util.List[String]](withSettings.name("list1"))
-			(there was one(list).add("one")).message must contain("list1.add(\"one\")")
-		}
-	}
-	"verification" - new group with list {
+      val list = mock[java.util.List[String]](withSettings.name("list1"))
+      (there was one(list).add("one")).message must contain("list1.add(\"one\")")
+    }
+  }
+  "verification" - new group with list {
     eg := { list.add("one"); success }
     eg := {
       list.add("one")

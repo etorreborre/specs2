@@ -41,24 +41,24 @@ class TestInterfaceRunnerSpec extends Specification with Groups with Tags { def 
 
   "missing" - new g1 {
     object run extends MockLogger {
-	    val runner = new TestInterfaceRunner(getClass.getClassLoader, Array(logger))
-	    runner.run("missing", mock[TestFingerprint], mock[EventHandler], Array(""))
+      val runner = new TestInterfaceRunner(getClass.getClassLoader, Array(logger))
+      runner.run("missing", mock[TestFingerprint], mock[EventHandler], Array(""))
     }
-	  e1 := run.logger.messages must contain("error: Could not create an instance of missing\n")
-	  e2 := run.logger.messages must contain("error:   caused by java.lang.ClassNotFoundException: missing")
+    e1 := run.logger.messages must contain("error: Could not create an instance of missing\n")
+    e2 := run.logger.messages must contain("error:   caused by java.lang.ClassNotFoundException: missing")
   }
 
   "instance" - new g2 {
     object run extends MockLogger {
       val runner = new TestInterfaceRunner(getClass.getClassLoader, Array(logger))
-	    runner.run("org.specs2.runner.SpecificationForSbtWithException", mock[TestFingerprint], mock[EventHandler], Array(""))
-    }	  
-	  e1 := run.logger.messages must
-	       contain("error: Could not create an instance of org.specs2.runner.SpecificationForSbtWithException\n")
-	  e2 := run.logger.messages must
-	        contain("error:   caused by java.lang.IllegalArgumentException: cause")
-	  e3 := run.logger.messages must
-	        contain("error:   caused by java.lang.Exception: fail")
+      runner.run("org.specs2.runner.SpecificationForSbtWithException", mock[TestFingerprint], mock[EventHandler], Array(""))
+    }
+    e1 := run.logger.messages must
+         contain("error: Could not create an instance of org.specs2.runner.SpecificationForSbtWithException\n")
+    e2 := run.logger.messages must
+          contain("error:   caused by java.lang.IllegalArgumentException: cause")
+    e3 := run.logger.messages must
+          contain("error:   caused by java.lang.Exception: fail")
   }
 
   "reporting" - new g3 with Mockito with MockLogger with DataTables with matcher.MustMatchers with ArgumentsArgs {
@@ -164,12 +164,12 @@ class TestInterfaceRunnerSpec extends Specification with Groups with Tags { def 
 
 trait MockLogger extends matcher.MustExpectations with Mockito {
   val logger = new Logger with StringOutput {
-	  override def ansiCodesSupported = false
-	  override def error(message: String) = println("error: " + message)
-	  override def info(message: String)  = println("info: " + message)
-	  override def warn(message: String)  = println("warn: " + message)
-	  override def debug(message: String) = println("debug: " + message)
-	  override def trace(t: Throwable)    = println("trace: " + t)
+    override def ansiCodesSupported = false
+    override def error(message: String) = println("error: " + message)
+    override def info(message: String)  = println("info: " + message)
+    override def warn(message: String)  = println("warn: " + message)
+    override def debug(message: String) = println("debug: " + message)
+    override def trace(t: Throwable)    = println("trace: " + t)
   }
 }
 

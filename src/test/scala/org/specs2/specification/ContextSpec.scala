@@ -294,55 +294,55 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
 }
 trait ContextsForFragments extends StringOutput {
   object before1 extends Before with Apply {
-	  def before = println("before")
+    def before = println("before")
   }
   object beforeEach extends BeforeEach {
-	  def before = println("before")
+    def before = println("before")
   }
   object before2 extends Before {
     def before = println("before2")
   }
   object beforeWithError extends Before with StringOutput {
-	  def before = error("error")
+    def before = error("error")
   }
   object beforeWithSkipped extends Before with StringOutput {
-	  def before = Skipped("skipped")
+    def before = Skipped("skipped")
   }
   object beforeWithSkippedThrown extends Before with StringOutput with MustThrownMatchers {
-	  def before = skipped("skipped")
+    def before = skipped("skipped")
   }
   object beforeWithMatchFailed extends Before with StringOutput with MustMatchers {
-	  def before = 1 must_== 2
+    def before = 1 must_== 2
   }
   object beforeWithMatchFailedThrown extends Before with StringOutput with MustThrownMatchers {
-	  def before = 1 must_== 2
+    def before = 1 must_== 2
   }
   object after1 extends After {
-	  def after = println("after")
+    def after = println("after")
   }
   object after2 extends After {
     def after = println("after2")
   }
   object afterWithError extends After {
-	  def after = error("error")
+    def after = error("error")
   }
   object around1 extends Around {
-	  def around[T : AsResult](a: =>T) = { println("around"); AsResult(a) }
+    def around[T : AsResult](a: =>T) = { println("around"); AsResult(a) }
   }
   object around2 extends Around {
     def around[T : AsResult](a: =>T) = { println("around2"); AsResult(a) }
   }
   object outside extends Outside[String] {
-	  def outside = { println("outside"); "string" }
+    def outside = { println("outside"); "string" }
   }
   object outsideInt extends Outside[Int] {
-	  def outside = { println("outside"); 1 }
+    def outside = { println("outside"); 1 }
   }
   object outsideWithError extends Outside[String] with StringOutput {
-	  def outside = { error("error"); "ok" }
+    def outside = { error("error"); "ok" }
   }
   object aroundOutside extends AroundOutside[Int] {
-	  def outside = { println("outside"); 1 }
+    def outside = { println("outside"); 1 }
     def around[T : AsResult](a: =>T) = {
       println("around")
       AsResult(a)
@@ -355,17 +355,17 @@ trait ContextsForFragments extends StringOutput {
     }
   }
   object beforeAfter extends BeforeAfter {
-	  def before = println("before")
-	  def after = println("after")
+    def before = println("before")
+    def after = println("after")
   }
   object before2After2 extends BeforeAfter {
     def before = println("before2")
     def after = println("after2")
   }
   object beforeAfterAround extends BeforeAfterAround {
-	  def before = println("before")
-	  def after = println("after")
-	  def around[T : AsResult](a: =>T) = { println("around"); AsResult(a) }
+    def before = println("before")
+    def after = println("after")
+    def around[T : AsResult](a: =>T) = { println("around"); AsResult(a) }
   }
   object before2After2Around2 extends BeforeAfterAround {
     def before = println("before2")

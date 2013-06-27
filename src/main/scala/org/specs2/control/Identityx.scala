@@ -10,7 +10,7 @@ import scalaz.Monoid
 private[specs2]
 class Identityx[T](t: =>T) {
   def ?>(f: T => T)(implicit condition: Boolean = true) = when(condition)(f)
-	def when(condition: Boolean)(f: T => T) = if (condition) f(t) else t
+  def when(condition: Boolean)(f: T => T) = if (condition) f(t) else t
   def unless(condition: Boolean)(implicit m: Monoid[T]) = if (condition) t else m.zero
 }
 

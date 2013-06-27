@@ -124,7 +124,7 @@ trait CalledMatchers extends NumberOfTimes with FunctionArguments with TheMockit
   /** no more calls made to the mock */
   def noMoreCallsTo[T <: AnyRef](stubbed: IgnoreStubs): Unit = noMoreCallsTo(stubbed.mocks:_*)
 
-	/** implicit def supporting calls in order */
+  /** implicit def supporting calls in order */
   implicit def toInOrderMode[T : AsResult](calls: =>T): ToInOrderMode[T] = new ToInOrderMode(calls)
   /** 
    * class defining a then method to declare that calls must be made in a specific order.
