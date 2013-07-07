@@ -1,0 +1,86 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <style type="text/css" media="all">
+        @import url('./css/maven-base.css');
+        @import url('./css/maven-theme.css');
+      </style>
+      <link href="./css/prettify.css" type="text/css" rel="stylesheet" />
+      <script type="text/javascript" src="./css/prettify.js"></script>
+      <link rel="stylesheet" href="./css/print.css" type="text/css" media="print" />
+      <link href="./css/tooltip.css" rel="stylesheet" type="text/css" />
+      <link href="./css/specs2-user.css" type="text/css" rel="stylesheet" />
+
+      <script type="text/javascript" src="./css/jquery.js"></script>
+      <script type="text/javascript" src="./css/jquery.cookie.js"></script>
+      <script type="text/javascript" src="./css/jquery.hotkeys.js"></script>
+      <script type="text/javascript" src="./css/jquery.jstree.js"></script>
+      <script type="text/javascript" src="./css/tooltip.js"></script>
+      <script language="javascript">
+      function init() {  prettyPrint(); };
+      /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
+      String.prototype.endsWith = function(str) { return (this.match(str+'$') == str) };
+      function changeWidth(id,width) {  document.getElementById(id).style.width = width; };
+      function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
+      function toggleImage(image) {
+        if (image.src.endsWith('images/expanded.gif')) 
+          image.src = image.src.replace('expanded', 'collapsed');
+        else 
+          image.src = image.src.replace('collapsed', 'expanded');
+      };
+      function showHide(id) {
+        element = document.getElementById(id);
+        element.style.display = (element.style.display == 'block')? 'none' : 'block';
+      };
+      function showHideByClass(name) {
+		    var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+		      elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
+        }
+      };
+      function showByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'block';
+        }
+      };
+      function hideByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'none';
+        }
+      };
+      function showById(id) {
+        document.getElementById(id).style.display = ''
+      };
+      function hideById(id) {
+        document.getElementById(id).style.display = 'none'
+      };
+    </script>
+      <script language="javascript">window.onload=init;</script>
+      <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
+           tabber code, then the init code -->
+      <script type="text/javascript" src="./css/tabber.js"></script>
+      <link rel="stylesheet" href="./css/tabber.css" type="text/css" media="screen" />
+      <title>TestSpec</title>
+    </head><body><div class="colmask threecol">
+                   <div class="colmid">
+                     <div class="colleft">
+                       <div class="col1"><div id="central"><html><title>TestSpec</title><a name="TestSpec%0A++++++++++%0A++++++++"><h2 specId="1086324778">TestSpec
+          <notoc><a href="#" onclick="hideByClass('ok');hideById('onlyIssuesLink');showById('allElementsLink')"><i id="onlyIssuesLink" style="font-size:small">(issues only)</i></a><a href="#" onclick="showByClass('ok');hideById('allElementsLink');showById('onlyIssuesLink')"><i id="allElementsLink" style="display:none;font-size:small">(all)</i></a></notoc>
+        </h2></a><status class="ok"><div style="display: show; text-indent:5px;"></div></status><status class="ok"><div style="display: show; text-indent:0px;"><p>This is a simple, hierarchial specification<br />   If things are indented</p></div></status><status class="ok"><div style="display: show; text-indent:20px;"><img src="./images/icon_success_sml.gif" /> and examples are nested<br /></div></status><status class="ok"><div style="display: show; text-indent:20px;">    this should be reflected</div></status><status class="ok"><div style="display: show; text-indent:30px;"><img src="./images/icon_success_sml.gif" /> in the console<br /></div></status><status class="ok"><div style="display: show; text-indent:30px;"></div></status><status class="ok"><div style="display: show; text-indent:30px;"><img src="./images/icon_success_sml.gif" /> as well as the HTML report<br /></div></status><status class="ok"><div style="display: show; text-indent:20px;">    just as expected</div></status><status class="ok"><div style="display: show; text-indent:30px;"><img src="./images/icon_success_sml.gif" /> by me<br /></div></status><status class="ok"><div style="display: show; text-indent:30px;"></div></status><status class="ok"><div style="display: show; text-indent:30px;"><img src="./images/icon_pending_sml.gif" /> or maybe someone else TODO<br /></div></status><status class="ok"><div style="display: show; text-indent:20px;">    or if there's only text, indentation<br />    possibly on multiple following lines</div></status><status class="ok"><div style="display: show; text-indent:30px;"><img src="./images/icon_success_sml.gif" /> should also work<br /></div></status><status class="ok"><div style="display: show; text-indent:30px;"></div></status><status class="ko"><div style="display: show; text-indent:30px;"><img src="./images/icon_failure_sml.gif" /> and not quote lines as code<br /></div></status><status class="ko"><div style="display: show; text-indent:40px;">  ko (TestSpec.scala:17)</div></status><status class="ok"><div style="display: show; text-indent:0px;"></div></status><status class="ok"><br /></status><table class="dataTable">
+        <tr><th colSpan="2">Total for specification TestSpec</th></tr>
+        <tr><td>Finished in</td><td class="info">28 ms</td></tr>
+        <tr><td>Results</td><td class="failure">7 examples, 1 failure, 0 error, 1 pending</td></tr>
+      </table></html></div></div>
+                       <div class="col2"><div id="leftcolumn"><div id="tree">
+      <ul><li id="1086324778"><a href="examples.TestSpec.html#TestSpec%0A++++++++++%0A++++++++">TestSpec
+          
+        </a>
+            
+          </li></ul>
+      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1086324778','1086324778'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+    </div></div></div>
+                       <div class="col3"><div id="rightcolumn"></div></div>
+                     </div>
+                   </div>
+                 </div></body></html>

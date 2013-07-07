@@ -9,11 +9,6 @@
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
-      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
-      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
-      <script type="text/javascript" src="../../../lib/template.js"></script>
-      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
-      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../index.html';
@@ -76,19 +71,6 @@
       </span>
       </h4>
       <p class="comment cmt">This trait provides AnsiColors codes for the OutputReporter</p>
-    </li><li name="org.specs2.text.CodeMarkup" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="CodeMarkupextendsMarkupStringwithProductwithSerializable"></a>
-      <a id="CodeMarkup:CodeMarkup"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="CodeMarkup.html"><span class="name">CodeMarkup</span></a><span class="params">(<span name="text">text: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="MarkupString.html" class="extype" name="org.specs2.text.MarkupString">MarkupString</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      
     </li><li name="org.specs2.text.Colors" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ColorsextendsAnyRef"></a>
       <a id="Colors:Colors"></a>
@@ -199,19 +181,6 @@ with defaults as AnsiColors for a dark background console</p>
       </h4>
       <p class="comment cmt">case classes for the representation of lines which are different: not found, missing, misplaced
 </p>
-    </li><li name="org.specs2.text.EmptyMarkup" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="EmptyMarkupextendsMarkupStringwithProductwithSerializable"></a>
-      <a id="EmptyMarkup:EmptyMarkup"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="EmptyMarkup.html"><span class="name">EmptyMarkup</span></a><span class="params">()</span><span class="result"> extends <a href="MarkupString.html" class="extype" name="org.specs2.text.MarkupString">MarkupString</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      
     </li><li name="org.specs2.text.FirstDifferences" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="FirstDifferencesextendsSomeDifferenceswithProductwithSerializable"></a>
       <a id="FirstDifferences:FirstDifferences"></a>
@@ -309,19 +278,19 @@ pieces in between the interpolated expressions
       </span>
       </h4>
       <p class="comment cmt">This class shows the differences between 2 sequence of lines.</p>
-    </li><li name="org.specs2.text.MarkupString" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="MarkupStringextendsAnyRef"></a>
-      <a id="MarkupString:MarkupString"></a>
+    </li><li name="org.specs2.text.MarkdownOptions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MarkdownOptionsextendsProductwithSerializable"></a>
+      <a id="MarkdownOptions:MarkdownOptions"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">trait</span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="MarkupString.html"><span class="name">MarkupString</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="MarkdownOptions.html"><span class="name">MarkdownOptions</span></a><span class="params">(<span name="verbatim">verbatim: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
-      <p class="comment cmt">Abstraction of some text which may, or may not support a Markup syntax.</p>
+      
     </li><li name="org.specs2.text.MisplacedLine" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="MisplacedLineextendsDifferentLinewithProductwithSerializable"></a>
       <a id="MisplacedLine:MisplacedLine"></a>
@@ -362,19 +331,6 @@ pieces in between the interpolated expressions
       </h4>
       <p class="comment cmt">mix-in this trait to remove the implicit provided by the DifferenceFilters trait
 </p>
-    </li><li name="org.specs2.text.NoMarkup" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="NoMarkupextendsMarkupStringwithProductwithSerializable"></a>
-      <a id="NoMarkup:NoMarkup"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="NoMarkup.html"><span class="name">NoMarkup</span></a><span class="params">(<span name="text">text: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="MarkupString.html" class="extype" name="org.specs2.text.MarkupString">MarkupString</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      
     </li><li name="org.specs2.text.NotFoundLine" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="NotFoundLineextendsDifferentLinewithProductwithSerializable"></a>
       <a id="NotFoundLine:NotFoundLine"></a>
@@ -456,6 +412,20 @@ a regular expression:</p>
       </span>
       </h4>
       <p class="comment cmt">return some of the differences, filtered with a function
+</p>
+    </li><li name="org.specs2.text.Specs2Visitor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Specs2VisitorextendsToHtmlSerializerwithProductwithSerializable"></a>
+      <a id="Specs2Visitor:Specs2Visitor"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Specs2Visitor.html"><span class="name">Specs2Visitor</span></a><span class="params">(<span name="text">text: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="options">options: <a href="MarkdownOptions.html" class="extype" name="org.specs2.text.MarkdownOptions">MarkdownOptions</a> = <span class="defval" name="MarkdownOptions.apply(MarkdownOptions.apply$default$1)">...</span></span>)</span><span class="result"> extends <span class="extype" name="org.pegdown.ToHtmlSerializer">ToHtmlSerializer</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">specialised pegdown visitor to control the rendering of code blocks
 </p>
     </li><li name="org.specs2.text.TextTable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="TextTableextendsProductwithSerializable"></a>
@@ -594,7 +564,6 @@ a regular expression:</p>
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-
-
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../lib/template.js"></script>
     </body>
       </html>

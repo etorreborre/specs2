@@ -9,11 +9,6 @@
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
-      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
-      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
-      <script type="text/javascript" src="../../../lib/template.js"></script>
-      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
-      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../index.html';
@@ -40,7 +35,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">SpecEnd</span><span class="params">(<span name="specName">specName: <a href="SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a></span>, <span name="isSeeOnlyLink">isSeeOnlyLink: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result"> extends <a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">SpecEnd</span><span class="params">(<span name="specName">specName: <a href="SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a></span>, <span name="isSeeOnlyLink">isSeeOnlyLink: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="location">location: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a> = <span class="symbol">new io.Location()</span></span>)</span><span class="result"> extends <a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -87,7 +82,7 @@ In this case we must not store statistics for this specification (see Storing.sc
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="org.specs2.specification.SpecEnd#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(specName:org.specs2.specification.SpecName,isSeeOnlyLink:Boolean):org.specs2.specification.SpecEnd"></a>
+      <a id="&lt;init&gt;(specName:org.specs2.specification.SpecName,isSeeOnlyLink:Boolean,location:org.specs2.io.Location):org.specs2.specification.SpecEnd"></a>
       <a id="&lt;init&gt;:SpecEnd"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -95,7 +90,7 @@ In this case we must not store statistics for this specification (see Storing.sc
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">SpecEnd</span><span class="params">(<span name="specName">specName: <a href="SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a></span>, <span name="isSeeOnlyLink">isSeeOnlyLink: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span>
+        <span class="name">SpecEnd</span><span class="params">(<span name="specName">specName: <a href="SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a></span>, <span name="isSeeOnlyLink">isSeeOnlyLink: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="location">location: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a> = <span class="symbol">new io.Location()</span></span>)</span>
       </span>
       </h4>
       
@@ -199,7 +194,10 @@ In this case we must not store statistics for this specification (see Storing.sc
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -228,7 +226,10 @@ In this case we must not store statistics for this specification (see Storing.sc
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -270,7 +271,7 @@ In this case we must not store statistics for this specification (see Storing.sc
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.Fragment#location" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="org.specs2.specification.SpecEnd#location" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="location:org.specs2.io.Location"></a>
       <a id="location:Location"></a>
       <h4 class="signature">
@@ -282,7 +283,7 @@ In this case we must not store statistics for this specification (see Storing.sc
         <span class="name">location</span><span class="result">: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.specification.SpecEnd">SpecEnd</a> → <a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a></dd></dl></div>
     </li><li name="org.specs2.specification.SpecEnd#matches" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="matches(s:String):Boolean"></a>
       <a id="matches(String):Boolean"></a>
@@ -426,7 +427,10 @@ In this case we must not store statistics for this specification (see Storing.sc
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -442,7 +446,10 @@ In this case we must not store statistics for this specification (see Storing.sc
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -458,7 +465,10 @@ In this case we must not store statistics for this specification (see Storing.sc
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li></ol>
@@ -500,7 +510,6 @@ In this case we must not store statistics for this specification (see Storing.sc
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-
-
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../lib/template.js"></script>
     </body>
       </html>

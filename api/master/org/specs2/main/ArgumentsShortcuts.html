@@ -9,11 +9,6 @@
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
-      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
-      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
-      <script type="text/javascript" src="../../../lib/template.js"></script>
-      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
-      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../index.html';
@@ -185,7 +180,10 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="org.specs2.main.ArgumentsShortcuts#colors" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
@@ -311,23 +309,12 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
               
         </dd></dl></div>
-    </li><li name="org.specs2.main.ArgumentsShortcuts#freetext" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="freetext:org.specs2.main.Arguments"></a>
-      <a id="freetext:Arguments"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">freetext</span><span class="result">: <a href="Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">shortcut to not executing the text and avoid automatic indentation
-</p>
     </li><li name="org.specs2.main.ArgumentsShortcuts#fullStackTrace" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="fullStackTrace:org.specs2.main.Arguments"></a>
       <a id="fullStackTrace:Arguments"></a>
@@ -437,21 +424,6 @@
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>arguments for a specification where examples must be executed in their own specification
 </p></dd></dl></div>
-    </li><li name="org.specs2.main.ArgumentsShortcuts#literate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="literate:org.specs2.main.Arguments"></a>
-      <a id="literate:Arguments"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">literate</span><span class="result">: <a href="Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>arguments for a literate specification: no auto indent and a sequential
-        execution
-</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -478,20 +450,6 @@
       </span>
       </h4>
       <p class="shortcomment cmt">shortcut to avoid colored output
-</p>
-    </li><li name="org.specs2.main.ArgumentsShortcuts#noindent" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="noindent:org.specs2.main.Arguments"></a>
-      <a id="noindent:Arguments"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">noindent</span><span class="result">: <a href="Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">shortcut to avoid automatic indentation
 </p>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
@@ -685,7 +643,10 @@ all the examples are skipped
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -701,7 +662,10 @@ all the examples are skipped
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -717,7 +681,10 @@ all the examples are skipped
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="org.specs2.main.ArgumentsShortcuts#was" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
@@ -791,7 +758,6 @@ all the examples are skipped
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-
-
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../lib/template.js"></script>
     </body>
       </html>

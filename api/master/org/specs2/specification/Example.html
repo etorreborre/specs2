@@ -9,11 +9,6 @@
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
-      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
-      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
-      <script type="text/javascript" src="../../../lib/template.js"></script>
-      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
-      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../index.html';
@@ -44,7 +39,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A Example is:</p><p>- a description: some text, with possibly some markup annotations for rendering code fragments (used in AutoExamples)
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A Example is:</p><p>- a description: some text, with possibly some markdown annotations for rendering code fragments (used in AutoExamples)
 - a body: some executable code returning a Result
 </p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="org.specs2.specification.Example">Example</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
@@ -196,19 +191,22 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="org.specs2.specification.Example#desc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="desc:org.specs2.text.MarkupString"></a>
-      <a id="desc:MarkupString"></a>
+      <a id="desc:org.specs2.specification.FormattedString"></a>
+      <a id="desc:FormattedString"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">desc</span><span class="result">: <a href="../text/MarkupString.html" class="extype" name="org.specs2.text.MarkupString">MarkupString</a></span>
+        <span class="name">desc</span><span class="result">: <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>
       </span>
       </h4>
       
@@ -264,9 +262,25 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
               
         </dd></dl></div>
+    </li><li name="org.specs2.specification.Example#formatWith" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="formatWith(formatted:org.specs2.specification.FormattedString):org.specs2.specification.Example"></a>
+      <a id="formatWith(FormattedString):Example"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">formatWith</span><span class="params">(<span name="formatted">formatted: <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.specification.Example">Example</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">replace the current formatted string with another one</p>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -319,7 +333,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.specification.Example">Example</a> → <a href="../execute/Isolable.html" class="extype" name="org.specs2.execute.Isolable">Isolable</a></dd></dl></div>
-    </li><li name="org.specs2.specification.Fragment#location" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="org.specs2.specification.Example#location" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="location:org.specs2.io.Location"></a>
       <a id="location:Location"></a>
       <h4 class="signature">
@@ -331,7 +345,7 @@
         <span class="name">location</span><span class="result">: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.specification.Example">Example</a> → <a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a></dd></dl></div>
     </li><li name="org.specs2.specification.Example#map" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="map(f:org.specs2.execute.Result=&gt;org.specs2.execute.Result):org.specs2.specification.Example"></a>
       <a id="map((Result)⇒Result):Example"></a>
@@ -438,7 +452,10 @@ Arguments.ex value, it is enclosed with '.*' characters, so they are removed and
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -454,7 +471,10 @@ Arguments.ex value, it is enclosed with '.*' characters, so they are removed and
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -470,7 +490,10 @@ Arguments.ex value, it is enclosed with '.*' characters, so they are removed and
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li></ol>
@@ -516,7 +539,6 @@ Arguments.ex value, it is enclosed with '.*' characters, so they are removed and
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-
-
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../lib/template.js"></script>
     </body>
       </html>
