@@ -59,7 +59,7 @@ class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatche
     for start ^ t1 ^ ex1 ^ end ^ t2 ^ ex2                                                    ${tree().e2}
     for start ^ t1 ^ ex1 ^ p ^ t2 ^ ex2                                                      ${tree().e3}
     for start ^ t1 ^ ex1 ^ ex2 ^ p ^ t2 ^ ex1 ^ ex2                                          ${tree().e4}
-    for start\n t1 ex1 $$ok\n ex2 $$ok                                                       ${tree().e5} ${tag("x")}
+    for start\n t1 ex1 $$ok\n ex2 $$ok                                                       ${tree().e5}
 
   The indentation of a piece of text is calculated as follows
     if the text is "\n    " then it is the number of spaces after the newline                ${indentation().e1}
@@ -182,6 +182,8 @@ class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatche
       l <- Gen.listOfN(sz, arbitrary[Level[Fragment]])
     } yield l.foldMap(Levels[Fragment](_))
 
+
+
     def sizedList(sz: Int): Gen[Levels[Fragment]] = {
       if (sz <= 0) genLevels(1)
       else genLevels(sz)
@@ -196,9 +198,9 @@ class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatche
     fold(spec(fs))(reducer).toTreeLoc(mapper).toTree
   def spec(fs: Fragments) = ("start".title ^ fs).fragments
 
-  def t1 = "t1"
-  def t2 = "t2"
-  def t3 = "t3"
+  def t1 = Text("t1")
+  def t2 = Text("t2")
+  def t3 = Text("t3")
   def ex1 = "e1" ! success
   def ex2 = "e2" ! success
   def ex3 = "e3" ! success
