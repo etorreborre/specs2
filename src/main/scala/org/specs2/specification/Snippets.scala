@@ -25,15 +25,21 @@ trait Snippets extends execute.Snippets { outer: SpecificationStringContext with
       fs append { text ^ snippetFragments(snippet, expression) }
 
     private def snippetFragments(snippet: Snippet[T], expression: String) = {
-      if (snippet.mustBeVerified) Fragments.createList(Text(snippet.show(expression)), Step(snippet.verify.mapMessage("Snippet failure: "+_)))
-      else                        Fragments.createList((Text(snippet.show(expression)) +: resultFragments(snippet).middle):_*)
+      Fragments.createList(
+        Seq(Text(snippet.show(expression))) ++
+        resultFragments(snippet) ++
+        checkFragments(snippet):_*)
     }
 
     private def resultFragments(snippet: Snippet[T]) = {
-      if (snippet.showResult.isEmpty) Fragments.createList()
-      else                            Fragments.createList(Text("\n"+snippet.showResult))
+      if (snippet.showResult.isEmpty) Seq()
+      else                            Seq(Text("\n"+snippet.showResult))
     }
 
+    private def checkFragments(snippet: Snippet[T]) = {
+      if (snippet.mustBeVerified) Seq(Step(snippet.verify.mapMessage("Snippet failure: "+_)))
+      else                        Seq()
+    }
 
   }
 }
