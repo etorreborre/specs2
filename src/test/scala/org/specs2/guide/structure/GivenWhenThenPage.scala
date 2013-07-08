@@ -13,7 +13,7 @@ The Given/When/Then style of writing specifications is supported by the use of t
 
 Here is a simple example of a Given/When/Then specification using the `GWT` trait: ${snippet{
 
-class Calculator extends Specification with GWT { def is = s2"""
+class Calculator extends Specification with GWT with StandardDelimitedStepParsers { def is = s2"""
 
  Let's add numbers!
 
@@ -22,10 +22,10 @@ class Calculator extends Specification with GWT { def is = s2"""
   then I get {3}                  ${addition.end}
   """
 
-  val addition = Scenario("addition").
-                   given(anInt).
-                   when(anInt) { case i :: j :: _ => i + j }.
-                   andThen(anInt) { case expected :: sum :: _ => sum === expected }
+  lazy val addition = Scenario("addition").
+                        given(anInt).
+                        when(anInt) { case i :: j :: _ => i + j }.
+                        andThen(anInt) { case expected :: sum :: _ => sum === expected }
 
 } // 8<---
 executeSpec(new Calculator)
