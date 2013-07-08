@@ -103,6 +103,7 @@ case class Text(text: SimpleFormattedString, location: Location = new Location) 
 }
 object Text {
   def apply(s: String): Text = new Text(FormattedString(s))
+  def create(formattedString: SimpleFormattedString): Text = new Text(formattedString)
 }
 trait FormattedString {
   type F <: FormattedString

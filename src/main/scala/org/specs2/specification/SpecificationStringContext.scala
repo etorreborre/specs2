@@ -110,6 +110,9 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
     }
     formatSection(flow = true, markdown = true) ^ texts.lastOption.map(t => fragments append textFragment(t).fragments).getOrElse(fragments) ^ formatSection(flow = true, markdown = true)
   }
+
+  /** all the text fragments must be created with flow = true */
+  override implicit def textFragment(s: String): FragmentsFragment = fragments(Text.create(FormattedString(s).withFlow))
 }
 
 object S2Macro {
