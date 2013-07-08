@@ -126,7 +126,7 @@ trait Trim extends control.Debug {
   implicit class offSettable(s: String) {
     def offset(n: Int) =
       if (n == 0) s
-      else        s.split("\n").map(l => offsetLine(l, n)).mkString("\n")
+      else        s.split("\n", -1).map(l => offsetLine(l, n)).mkString("\n")
 
     private def offsetLine(l: String, n: Int) =
       if (n > 0 ) (" "*n + l)

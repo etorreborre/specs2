@@ -61,6 +61,14 @@ class TrimSpec extends Specification { def is = s2"""
         """  hello
           |  world""".stripMargin
     }
+    with a positive offset and a trailing newline ${
+      """hello
+        |world
+        |""".stripMargin.offset(n = 2) ===
+        """  hello
+          |  world
+          |  """.stripMargin
+    }
     with a negative offset ${
       """   hello
         |   world""".stripMargin.offset(n = -2) ===
