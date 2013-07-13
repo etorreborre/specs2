@@ -215,7 +215,7 @@ s"""
   libraryDependencies ++= Seq(
     "org.specs2" %% "specs2" % "${VERSION}" % "test"
 
-    // with Scala 2.9.2 (specs2 1.12.3 is the latest version for scala 2.9.2)
+    // with Scala 2.9.3 (specs2 1.12.3 is the latest version for scala 2.9.3)
     // "org.specs2" %% "specs2" % "1.12.3" % "test",
   )
 
@@ -238,9 +238,9 @@ s"""
 
 
  &lt;!--
-   with Scala 2.9.2, change the dependency to:
+   with Scala 2.9.3, change the dependency to:
 
-   &lt;artifactId>specs2_2.9.2&lt;/artifactId>
+   &lt;artifactId>specs2_2.9.3&lt;/artifactId>
    &lt;version>1.12.3&lt;/version>
 
  -->
@@ -281,8 +281,8 @@ s"""
         <td class="info">Snapshot</td>
         <td class="info">
         binaries (<a href="http://oss.sonatype.org/content/repositories/snapshots/org/specs2/specs2_2.10/${SNAPSHOT_VERSION}/">specs2 jar</a>,
-                  <a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/scalaz-core_2.10/7.0.0/">scalaz core jar</a>,
-                  <a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/scalaz-concurrent_2.10/7.0.0/">scalaz concurrent jar</a>)<br/>
+                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-core_2.10/7.0.2/">scalaz core jar</a>,
+                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-concurrent_2.10/7.0.2/">scalaz concurrent jar</a>)<br/>
        project (<a href="http://github.com/etorreborre/specs2/zipball/master">zip</a>,
                 <a href="http://github.com/etorreborre/specs2/tarball/master">tar</a>)
       </td>
@@ -291,8 +291,8 @@ s"""
         <td class="info">Released</td>
         <td class="info">
         binaries (<a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/specs2_2.10/${VERSION}/">specs2 jar</a>,
-                  <a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/scalaz-core_2.10/7.0.0/">scalaz core jar</a>,
-                  <a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/scalaz-concurrent_2.10/7.0.0/">scalaz concurrent jar</a>)<br/>
+                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-core_2.10/7.0.2/">scalaz core jar</a>,
+                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-concurrent_2.10/7.0.2/">scalaz concurrent jar</a>)<br/>
         project (<a href="http://github.com/etorreborre/specs2/zipball/SPECS2-${VERSION}">zip</a>,
                  <a href="http://github.com/etorreborre/specs2/tarball/SPECS2-${VERSION}">tar</a>)
       </td>

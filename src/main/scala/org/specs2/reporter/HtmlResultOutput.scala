@@ -102,9 +102,9 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
   }
 
   def printLink(link: HtmlLink) =
-    print(t(if (link.beforeText.isEmpty) "" else (link.beforeText+" ")) ++
+    print(wiki(if (link.beforeText.isEmpty) "" else (link.beforeText+" ")) ++
           <a href={link.url.relativeTo(filePath)} tooltip={link.tip}>{link.linkText}</a> ++
-          t(if (link.afterText.isEmpty) "" else (" " +link.afterText+" ")))
+          wiki(if (link.afterText.isEmpty) "" else (" " +link.afterText+" ")))
 
   /** print some text with a status icon (with an ok class) */
   def printTextWithIcon(message: FormattedString, iconName: String, level: Int = 0)  = printOkStatus(textWithIcon(message, iconName, level))
@@ -203,8 +203,10 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
   protected def toggleElement(a: Any) = "toggleImage(this); showHide('"+id(a)+"')"
   protected def id(a: Any) = System.identityHashCode(a).toString
   /** render some markup text as xhtml */
-  protected def wiki(text: FormattedString) =
+  protected def wiki(text: FormattedString): NodeSeq =
     if (text.formatting.markdown) textPrinter(text.raw, MarkdownOptions(verbatim = text.formatting.verbatim)) else text.toXml
+  protected def wiki(text: String): NodeSeq =
+    wiki(FormattedString(text).withMarkdown)
 
 
   /**
