@@ -283,8 +283,8 @@ s"""
         binaries (<a href="http://oss.sonatype.org/content/repositories/snapshots/org/specs2/specs2_2.10/${SNAPSHOT_VERSION}/">specs2 jar</a>,
                   <a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/scalaz-core_2.10/7.0.0/">scalaz core jar</a>,
                   <a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/scalaz-concurrent_2.10/7.0.0/">scalaz concurrent jar</a>)<br/>
-       project (<a href="http://github.com/etorreborre/specs2/zipball/${NEXT_VERSION}">zip</a>,
-                <a href="http://github.com/etorreborre/specs2/tarball/${NEXT_VERSION}">tar</a>)
+       project (<a href="http://github.com/etorreborre/specs2/zipball/master">zip</a>,
+                <a href="http://github.com/etorreborre/specs2/tarball/master">tar</a>)
       </td>
     </tr>
     <tr>
