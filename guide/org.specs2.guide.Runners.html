@@ -15,6 +15,8 @@
       <script type="text/javascript" src="./../css/jquery.hotkeys.js"></script>
       <script type="text/javascript" src="./../css/jquery.jstree.js"></script>
       <script type="text/javascript" src="./../css/tooltip.js"></script>
+      <script type="text/javascript" src="./../js/specs2-user.js"></script>
+      <script language="javascript">$.getScript("./../js/specs2-user.js", initUserScript(document));</script>
       <script language="javascript">
       function init() {  prettyPrint(); };
       /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
@@ -32,9 +34,9 @@
         element.style.display = (element.style.display == 'block')? 'none' : 'block';
       };
       function showHideByClass(name) {
-		    var elements = document.getElementsByClassName(name);
+        var elements = document.getElementsByClassName(name);
         for (i = 0; i < elements.length; i++) {
-		      elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
+          elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
         }
       };
       function showByClass(name) {
@@ -65,7 +67,7 @@
     </head><body><div id="breadcrumbs"><a href="../guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../guide/org.specs2.guide.Runners.html">Runners</a></div><div class="colmask threecol">
                    <div class="colmid">
                      <div class="colleft">
-                       <div class="col1"><div id="central"><title>Runners</title><a name="Runners"><h2 specId="1121282607">Runners</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><p><a name="Presentation"><h3>Presentation</h3></a><p>There are many ways to execute <strong><em>specs2</em></strong> specifications:</p>
+                       <div class="col1"><div id="central"><html><title>Runners</title><a name="Runners"><h2 specId="1614446876">Runners</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Presentation"><h3>Presentation</h3></a><p>There are many ways to execute <strong><em>specs2</em></strong> specifications:</p>
 <ul>
   <li>on the command line, with a console output, and the <code class="prettyprint">specs2.run</code> runner</li>
   <li>on the command line, with a html output, and the <code class="prettyprint">specs2.html</code> runner</li>
@@ -121,11 +123,7 @@
     </tr>
     <tr>
       <td><code class="prettyprint">specName</code> </td>
-      <td>&quot;.*Spec&quot; </td>
-      <td>regular expression to use when executing specifications with the FilesRunner</td>
-    </tr>
-    <tr>
-      <td colspan="3"><strong><em>Execution</em></strong> </td>
+      <td colspan="3">&quot;.<em>Spec&quot; | regular expression to use when executing specifications with the FilesRunner<br />  </em><strong>Execution</strong>* </td>
     </tr>
     <tr>
       <td><em><code class="prettyprint">plan</code> </em> </td>
@@ -194,19 +192,14 @@
       <td>use colors in the output (<code class="prettyprint">nocolor</code> can also be used on the command line)</td>
     </tr>
     <tr>
-      <td><em><code class="prettyprint">noindent</code></em> </td>
-      <td>false </td>
-      <td>don't indent automatically text and examples</td>
-    </tr>
-    <tr>
-      <td><em><code class="prettyprint">markdown</code></em> </td>
-      <td>true </td>
-      <td>interpret text as Markdown in the html reporter</td>
-    </tr>
-    <tr>
       <td><code class="prettyprint">pegdownExtensions</code> </td>
       <td><code class="prettyprint">org.pegdown.Extensions.ALL</code> </td>
       <td>specifies the extensions used when processing Markdown content with the pegdown library; the value is an <code class="prettyprint">Int</code> that is determinded by combining the possible values from <code class="prettyprint">org.pegdown.Extensions</code> with a logical <code class="prettyprint">AND</code>; note that SMARTS and QUOTES are always disabled for now</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">pegdownTimeout</code> </td>
+      <td><code class="prettyprint">2000</code> </td>
+      <td>Timeout for parsing Markdown text with Pegdown in milliseconds</td>
     </tr>
     <tr>
       <td><code class="prettyprint">failtrace</code> </td>
@@ -264,8 +257,7 @@
       <td>name of a class extending the <code class="prettyprint">org.specs2.reporter.Exporter</code> trait</td>
     </tr>
   </tbody>
-</table><a name="Most%2FLeast+frequently+used+arguments"><h5>Most/Least frequently used arguments</h5></a><p>Most of the arguments above can be set in a specification with <code class="prettyprint">args(name=value)</code>. However Scala would not allow the <code class="prettyprint">args</code> method to accept <em>all</em> the possible<br />arguments as parameters (because a method can only have up to 22 parameters). This is why the least frequently used arguments (not in italics) can be set with an object called <code class="prettyprint">args</code>, having separate methods for setting all the parameters, by &quot;category&quot;. For example: </p>
-<pre><code class="prettyprint">args.select(specName = &quot;.*Test&quot;, include=&quot;slow&quot;)
+</table><a name="Most%2FLeast+frequently+used+arguments"><h5>Most/Least frequently used arguments</h5></a><p>Most of the arguments above can be set in a specification with <code class="prettyprint">args(name=value)</code>. However Scala would not allow the <code class="prettyprint">args</code> method to accept <em>all</em> the possible<br />arguments as parameters (because a method can only have up to 22 parameters). This is why the least frequently used arguments (not in italics) can be set with an object called <code class="prettyprint">args</code>, having separate methods for setting all the parameters, by &quot;category&quot;. For example: </p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><pre><code class="prettyprint">args.select(specName = &quot;.*Test&quot;, include=&quot;slow&quot;)
 args.execute(threadsNb = 2)
 args.report(showtimes = true, xonly = true)
 </code></pre><a name="Shortcuts"><h5>Shortcuts</h5></a><p>There are some available shortcuts for some arguments</p>
@@ -342,21 +334,6 @@ args.report(showtimes = true, xonly = true)
       <td><code class="prettyprint">showOnly(status: String)</code> </td>
       <td><code class="prettyprint">args(showOnly=status)</code> </td>
       <td> </td>
-    </tr>
-    <tr>
-      <td><code class="prettyprint">noindent</code> </td>
-      <td><code class="prettyprint">args(noindent=true)</code> </td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td><code class="prettyprint">literate</code> </td>
-      <td><code class="prettyprint">args(noindent=true, sequential=true)</code> </td>
-      <td>for specifications where text must not be indented and examples be executed in order </td>
-    </tr>
-    <tr>
-      <td><code class="prettyprint">freetext</code> </td>
-      <td><code class="prettyprint">args(plan=true, noindent=true)</code> </td>
-      <td>for specifications with no examples at all and free display of text </td>
     </tr>
     <tr>
       <td><code class="prettyprint">descFromExpectations</code> </td>
@@ -448,8 +425,8 @@ args.report(showtimes = true, xonly = true)
   <li><code class="prettyprint">sbt\\.</code>, <code class="prettyprint">com.intellij</code>, <code class="prettyprint">org.eclipse.jdt</code>, <code class="prettyprint">org.junit</code></li>
 </ul><p>If this is not what you want, you can either:</p>
 <ul>
-  <li>use <code class="prettyprint">includeTrace(patterns: String*)</code> to create a new <code class="prettyprint">StackTraceFilter</code> which will include only the traces matching<br /> those patterns</li>
-  <li>use <code class="prettyprint">excludeTrace(patterns: String*)</code> to create a new <code class="prettyprint">StackTraceFilter</code> which will exclude only the traces matching<br /> those patterns</li>
+  <li>use <code class="prettyprint">includeTrace(patterns: String*)</code> to create a new <code class="prettyprint">StackTraceFilter</code> which will include only the traces matching<br />    those patterns</li>
+  <li>use <code class="prettyprint">excludeTrace(patterns: String*)</code> to create a new <code class="prettyprint">StackTraceFilter</code> which will exclude only the traces matching<br />    those patterns</li>
   <li>use <code class="prettyprint">includeAlsoTrace(patterns: String*)</code> to add new include patterns to the <code class="prettyprint">DefaultStackTraceFilter</code></li>
   <li>use <code class="prettyprint">excludeAlsoTrace(patterns: String*)</code> to add new exclude patterns to the <code class="prettyprint">DefaultStackTraceFilter</code></li>
   <li>use the <code class="prettyprint">org.specs2.control.IncludeExcludeStackTraceFilter</code> class to define both include and exclude patterns</li>
@@ -567,17 +544,7 @@ args.report(showtimes = true, xonly = true)
       <td>e.g. text:be, failure:m (see the Colors section) </td>
     </tr>
     <tr>
-      <td><code class="prettyprint">noindent</code> </td>
-      <td>boolean </td>
-      <td> </td>
-    </tr>
-    <tr>
       <td><code class="prettyprint">showtimes</code> </td>
-      <td>boolean </td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td><code class="prettyprint">markdown</code> </td>
       <td>boolean </td>
       <td> </td>
     </tr>
@@ -590,6 +557,11 @@ args.report(showtimes = true, xonly = true)
       <td><code class="prettyprint">pegdownExtensions</code> </td>
       <td>int </td>
       <td>flags from <code class="prettyprint">org.pegdown.Extensions</code> combined with logical <code class="prettyprint">AND</code> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">pegdownTimeout</code> </td>
+      <td>long </td>
+      <td> </td>
     </tr>
     <tr>
       <td><code class="prettyprint">fromsource</code> </td>
@@ -642,7 +614,7 @@ args.report(showtimes = true, xonly = true)
 </code></pre><a name="Files+Runner"><h4>Files Runner</h4></a><p>The <code class="prettyprint">specs2.files</code> object will, by default, select and execute Specifications found in the test source directory:</p>
 <ul>
   <li>the source directory is defined as <code class="prettyprint">src/test/scala</code> but can be changed by adjusting the system property <code class="prettyprint">specs2.srcTestDir</code></li>
-  <li>the specifications files are selected as classes or object which names match <code class="prettyprint">.*Spec</code>. This value can be changed by<br /> passing a different <code class="prettyprint">specName</code> value as a command-line argument</li>
+  <li>the specifications files are selected as classes or object which names match <code class="prettyprint">.*Spec</code>. This value can be changed by<br />    passing a different <code class="prettyprint">specName</code> value as a command-line argument</li>
   <li><code class="prettyprint">console</code>, <code class="prettyprint">html</code>, <code class="prettyprint">junitxml</code>, <code class="prettyprint">markdown</code> has to be passed on the command-line to specify which kind of output you want</li>
 </ul><p>You can also extend the <code class="prettyprint">org.specs2.runner.FilesRunner</code> trait and override its behavior to implement something more appropriate<br />to your environment if necessary.</p><p>Additionally you can use the following arguments to modify the behavior of the <code class="prettyprint">FilesRunner</code> object:</p>
 <ul>
@@ -825,7 +797,7 @@ testOptions in Test += Tests.Argument(&quot;html&quot;, &quot;console&quot;)
       <td>m </td>
     </tr>
   </tbody>
-</table><p><em>From command-line arguments</em></p><p>It is also possible to set colors by passing the <code class="prettyprint">colors</code> argument. This argument must be a list of <code class="prettyprint">key:value</code> pairs (comma-separated) where keys are taken from the property names above without the <code class="prettyprint">color.</code> prefix and values from the abbreviated color names.</p><p>For example you can pass on the command line:</p><p><code class="prettyprint">colors text:blue,failure:magenta</code></p><p>to have the text colored in blue and the failures in Magenta.</p><p>If the <code class="prettyprint">colors</code> option contains <code class="prettyprint">whitebg</code> then the default colors are considered to be <a href="http://etorreborre.github.io/specs2/api/SPECS2-2.0-RC1/index.html#org.specs2.text.Colors"><code class="prettyprint">InvertedColors</code></a></p><p><em>Through the API</em></p><p>Finally you can change the color scheme that's being used on the console by implementing your own <a href="http://etorreborre.github.io/specs2/api/SPECS2-2.0-RC1/index.html#org.specs2.text.Colors"><code class="prettyprint">org.specs2.text.Colors</code></a> trait or override values in the existing <code class="prettyprint">ConsoleColors</code> class. For example if you want to output magenta everywhere yellow is used you can write:</p>
+</table><p><em>From command-line arguments</em></p><p>It is also possible to set colors by passing the <code class="prettyprint">colors</code> argument. This argument must be a list of <code class="prettyprint">key:value</code> pairs (comma-separated) where keys are taken from the property names above without the <code class="prettyprint">color.</code> prefix and values from the abbreviated color names.</p><p>For example you can pass on the command line:</p><p><code class="prettyprint">colors text:blue,failure:magenta</code></p><p>to have the text colored in blue and the failures in Magenta.</p><p>If the <code class="prettyprint">colors</code> option contains <code class="prettyprint">whitebg</code> then the default colors are considered to be <a href="http://etorreborre.github.io/specs2/api/SPECS2-2.1/index.html#org.specs2.text.Colors"><code class="prettyprint">InvertedColors</code></a></p><p><em>Through the API</em></p><p>Finally you can change the color scheme that's being used on the console by implementing your own <a href="http://etorreborre.github.io/specs2/api/SPECS2-2.1/index.html#org.specs2.text.Colors"><code class="prettyprint">org.specs2.text.Colors</code></a> trait or override values in the existing <code class="prettyprint">ConsoleColors</code> class. For example if you want to output magenta everywhere yellow is used you can write:</p>
 <pre><code class="prettyprint">object MyColors = new org.specs2.text.ConsoleColors { override val failureColor = magenta }
 
 class MyColoredSpecification extends Specification { def is = colors(MyColors) ^
@@ -842,7 +814,7 @@ class MyColoredSpecification extends Specification { def is = colors(MyColors) ^
 <ul>
   <li>Provide command-line arguments in the &quot;Test options&quot;</li>
   <li>&quot;Jump to Test&quot; and &quot;Jump to Source&quot;</li>
-</ul><a name="Via+JUnit"><h3>Via JUnit</h3></a><p>It is possible to have <em><strong>specs2</strong></em> specifications executed as JUnit tests. This enables the integration of <strong><em>specs2</em></strong> with Maven and the JUnit runners of your IDE of choice.</p><p>There are 2 ways of enabling a Specification to be executed as a JUnit test: the verbose one and the simpler one. The simplest one is to extend <code class="prettyprint">SpecificationWithJUnit</code>:</p>
+</ul><a name="Via+JUnit"><h3>Via JUnit</h3></a><p>It is possible to have <strong><em>specs2</em></strong> specifications executed as JUnit tests. This enables the integration of <strong><em>specs2</em></strong> with Maven and the JUnit runners of your IDE of choice.</p><p>There are 2 ways of enabling a Specification to be executed as a JUnit test: the verbose one and the simpler one. The simplest one is to extend <code class="prettyprint">SpecificationWithJUnit</code>:</p>
 <pre><code class="prettyprint">class MySpecification extends SpecificationWithJUnit {
   def is = // as usual....
 }
@@ -879,14 +851,14 @@ class MySpecification extends Specification {
 </ul><p>Please see the API of each class to see how to use them.</p><a name="In+sbt_1"><h5>In sbt</h5></a><p>You can use a custom <code class="prettyprint">Exporter</code> from inside sbt by passing the <code class="prettyprint">exporter</code> argument with a <code class="prettyprint">Exporter</code> implementation class name:</p>
 <pre><code class="prettyprint">sbt&gt; test-only *BinarySpec* -- exporter com.mycompany.reporting.FtpExporter
 </code></pre>
-<hr /></p></div></status><status class="ok"><div style="display: show; text-indent:360px;"></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
+<hr /></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Runners</th></tr>
-        <tr><td>Finished in</td><td class="info">3 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">6 ms</td></tr>
         <tr><td>Results</td><td class="success">1 example, 0 failure, 0 error</td></tr>
-      </table></div></div>
+      </table></html></div></div>
                        <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="1801198340"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="934853266"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="701652509"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="863248745"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -896,7 +868,7 @@ class MySpecification extends Specification {
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="859583250"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="2021384529"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -930,6 +902,12 @@ class MySpecification extends Specification {
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Example+groups">Example groups</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Isolation">Isolation</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Tags">Tags</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Selection">Selection</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Formatting">Formatting</a>
             
           </li></ul>
           </li></ul>
@@ -1004,7 +982,7 @@ class MySpecification extends Specification {
             <ul></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1993732782"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1791136838"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1066,7 +1044,7 @@ class MySpecification extends Specification {
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="2064897441"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="971878228"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
@@ -1110,7 +1088,7 @@ class MySpecification extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="1121282607"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="1614446876"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1194,7 +1172,7 @@ class MySpecification extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="388054586"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="2011141464"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -1216,11 +1194,11 @@ class MySpecification extends Specification {
             
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Skip+examples">Skip examples</a>
             
+          </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Debug+statements">Debug statements</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Remove+implicits">Remove implicits</a>
             
-          </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Print+execution+data">Print execution data</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.HowTo.html#With+example+description">With example description</a>
             
@@ -1242,7 +1220,7 @@ class MySpecification extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="1320390364"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="655014647"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1288,7 +1266,7 @@ class MySpecification extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="521462439"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="423961913"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1308,7 +1286,7 @@ class MySpecification extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1801198340','1121282607'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['701652509','1614446876'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                        <div class="col3"><div id="rightcolumn"></div></div>
                      </div>

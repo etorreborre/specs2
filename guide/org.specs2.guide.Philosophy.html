@@ -15,6 +15,8 @@
       <script type="text/javascript" src="./../css/jquery.hotkeys.js"></script>
       <script type="text/javascript" src="./../css/jquery.jstree.js"></script>
       <script type="text/javascript" src="./../css/tooltip.js"></script>
+      <script type="text/javascript" src="./../js/specs2-user.js"></script>
+      <script language="javascript">$.getScript("./../js/specs2-user.js", initUserScript(document));</script>
       <script language="javascript">
       function init() {  prettyPrint(); };
       /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
@@ -32,9 +34,9 @@
         element.style.display = (element.style.display == 'block')? 'none' : 'block';
       };
       function showHideByClass(name) {
-		    var elements = document.getElementsByClassName(name);
+        var elements = document.getElementsByClassName(name);
         for (i = 0; i < elements.length; i++) {
-		      elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
+          elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
         }
       };
       function showByClass(name) {
@@ -65,7 +67,7 @@
     </head><body><div id="breadcrumbs"><a href="../guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../guide/org.specs2.guide.Philosophy.html">Philosophy</a></div><div class="colmask threecol">
                    <div class="colmid">
                      <div class="colleft">
-                       <div class="col1"><div id="central"><title>Philosophy</title><a name="Philosophy"><h2 specId="1320390364">Philosophy</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><p><a name="The+origins"><h3>The origins</h3></a><p><strong><em>specs2</em></strong> has been created as an evolution of the <a href="http://code.google.com/p/specs"><strong><em>specs</em></strong></a> project.</p><p><strong><em>specs</em></strong> started as learning project to explore Scala's DSL possibilities for doing Behaviour-Driven-Development (BDD).<br />Among the very first objectives of specs were:</p>
+                       <div class="col1"><div id="central"><html><title>Philosophy</title><a name="Philosophy"><h2 specId="655014647">Philosophy</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="The+origins"><h3>The origins</h3></a><p><strong><em>specs2</em></strong> has been created as an evolution of the <a href="http://code.google.com/p/specs"><strong><em>specs</em></strong></a> project.</p><p><strong><em>specs</em></strong> started as learning project to explore Scala's DSL possibilities for doing Behaviour-Driven-Development (BDD).<br />Among the very first objectives of specs were:</p>
 <ul>
   <li><p><strong>conciseness</strong>: it should be possible to express a software specification with the least amount of ceremony</p></li>
   <li><p><strong>readability</strong>: an <em>executable</em> specification should read like a purely textual one, by a non-programmer</p></li>
@@ -73,12 +75,12 @@
   <li><p><strong>configuration</strong>: there should sensible defaults and an easy way to override those values</p></li>
   <li><p><strong>clear implementation</strong>: since this is an open-source project with no business constraint, there's no excuse for not having a crystal clear implementation, right?</p></li>
   <li><p><strong>great user support</strong>: it's not because something is free that it should be buggy! Moreover this is also a good test on the design. A good design should be easy to fix and evolve</p></li>
-</ul></p></div></status><status class="ok"><div style="display: show; text-indent:6px;"></div></status><status class="ok"><div style="display: show; text-indent:0px;"><p><a name="The+score"><h3>The score</h3></a><p>After a few years of use, let's have a look at what worked and what didn't.</p><a name="Conciseness"><h6>Conciseness</h6></a><p>This objective was achieved thanks to the incredible power of implicits in Scala which provide lots of way to create an elegant syntax for specifying software. However, the implementation of that syntactic support has several drawbacks:</p>
+</ul></div></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="The+score"><h3>The score</h3></a><p>After a few years of use, let's have a look at what worked and what didn't.</p><a name="Conciseness"><h6>Conciseness</h6></a><p>This objective was achieved thanks to the incredible power of implicits in Scala which provide lots of way to create an elegant syntax for specifying software. However, the implementation of that syntactic support has several drawbacks:</p>
 <ul>
   <li><p><strong><em>specs</em></strong> provides implicits by inheriting methods from the <code class="prettyprint">Specification</code> class. While this is very convenient this is also considerably polluting the namespace of the user code <em>inside</em> the specification. This pollution leads to possible bugs (an implicit conversion being applied when you don't expect it) and possible namespace conflicts</p></li>
   <li><p>some &quot;reserved&quot; words like <code class="prettyprint">should</code>, <code class="prettyprint">can</code>, <code class="prettyprint">in</code> come from previous BDD libraries like rspec. But they are not always convenient and sometimes one wants to write <code class="prettyprint">&quot;my example should provide&quot;</code> just to avoid having every example under &quot;<code class="prettyprint">&quot;my example&quot; should</code>&quot; start with <code class="prettyprint">&quot;provide...&quot;</code>. There is a way to do this in <strong><em>specs</em></strong> but this requires the creation of an ad-hoc method</p></li>
   <li><p>some people like to structure their specifications with other keywords like Given-When-Then which require additional methods in the library for no more added value than just displaying those words</p></li>
-</ul><a name="Readability"><h6>Readability</h6></a><p>The readability of a specification written with <strong><em>specs</em></strong> largely depends on the writer of the specification. Since a specification is created by interleaving text and code, if the amount of code is too large then the textual content of the specification is largely lost and the developer cannot read it with just one glance.</p><p>Something was prototyped in <strong><em>specs</em></strong> to alleviate this issue: <a href="http://code.google.com/p/specs/wiki/LiterateSpecifications#A_short_example">LiterateSpecifications</a>. The idea was to use Scala support for XML literals in order to allow the writer to write pure text and insert, at the right places, some executable examples. It turns out that the implementation of this approach is fairly different from what was done for &quot;regular&quot; examples and cluttered the overall design.</p><a name="Extensibility"><h6>Extensibility</h6></a><p>Since its first release, <strong><em>specs</em></strong> has been extended in different ways. Many users have created their own matchers (<a href="http://code.google.com/p/specs/wiki/MatchersGuide#Eventually_matchers">some of them</a> have been integrated to the main library).</p><p>On the other hand, the additional runners which were developed for TeamCity or sbt were written by me, as well as other more fundamental enhancements, like <a href="http://code.google.com/p/specs/wiki/DeclareSpecifications#Specification_context">SpecificationContexts</a>.</p><p>The conclusion we can draw on this subject is that it's difficult to design something that's truly extensible without any idea of the future requirements!</p><a name="Configuration"><h6>Configuration</h6></a><p>The &quot;sensible&quot; defaults have been debated and some &quot;opinionated&quot; decisions have been taken, like the decision to mark any example without expectation as &quot;Pending&quot; for example. Unfortunately the configuration mechanism offered in exchange (to change the defaults) was not really appealing (a mix of properties-file-reflection-system-properties) and there is few evidence that anyone actually used it.</p><a name="Clear+implementation"><h6>Clear implementation</h6></a><p>This objective was certainly <em>not</em> achieved. There are several reasons for this. The design of the examples execution is certainly the main one.</p><p>In <strong><em>specs</em></strong> the examples are executed &quot;on-demand&quot; when a runner &quot;asks&quot; the specification for its successes and failures. The specification then asks each example for its status and an example knows that by executing himself. The trouble is, the example doesn't really have enough information to know it's full execution context: is there some code to execute beforehand for data setup? Or after all other examples, because it's the last example of the specification and a database disconnection is required then?</p><p>This design is aggravated by a &quot;magic&quot; feature provided by <strong><em>specs</em></strong>: <a href="http://code.google.com/p/specs/wiki/DeclareSpecifications#Execution_model">the automatic reset of local variables</a>.<br />This feature is <em>very</em> convenient for the user but the implementation is a nightmare! In order to make as if each example was executed in isolation, as if other examples did not modify surrounding variables, a new specification is created and just one example is executed inside that specification. This works, but at the expense of carefully copying a lot of state from the cloned specification to the original one. More than <em>20</em> issues were created because of that only feature!</p><a name="User+support"><h6>User support</h6></a><p>The user support has always been responsive, in terms of bug fixes and enhancements. However the object-oriented nature of <strong><em>specs</em></strong> with lots of variables and side-effects around made some bugs difficult to diagnose and made some enhancements downright impossible. The best example of an &quot;impossible&quot; feature to implement is the concurrent execution of examples.<br />With shared variables all around the place, there's little chance to ever get it right.</p><a name="A+new+hope"><h3>A new hope</h3></a><p>The redesign of <em><strong>specs2</strong></em> was precisely started to fight the complexities and issues of <em><strong>specs</strong></em>. In order to do that while remaining true to the original vision for <strong><em>specs</em></strong>, a new design compromise was necessary with new design principles:</p>
+</ul><a name="Readability"><h6>Readability</h6></a><p>The readability of a specification written with <strong><em>specs</em></strong> largely depends on the writer of the specification. Since a specification is created by interleaving text and code, if the amount of code is too large then the textual content of the specification is largely lost and the developer cannot read it with just one glance.</p><p>Something was prototyped in <strong><em>specs</em></strong> to alleviate this issue: <a href="http://code.google.com/p/specs/wiki/LiterateSpecifications#A_short_example">LiterateSpecifications</a>. The idea was to use Scala support for XML literals in order to allow the writer to write pure text and insert, at the right places, some executable examples. It turns out that the implementation of this approach is fairly different from what was done for &quot;regular&quot; examples and cluttered the overall design.</p><a name="Extensibility"><h6>Extensibility</h6></a><p>Since its first release, <strong><em>specs</em></strong> has been extended in different ways. Many users have created their own matchers (<a href="http://code.google.com/p/specs/wiki/MatchersGuide#Eventually_matchers">some of them</a> have been integrated to the main library).</p><p>On the other hand, the additional runners which were developed for TeamCity or sbt were written by me, as well as other more fundamental enhancements, like <a href="http://code.google.com/p/specs/wiki/DeclareSpecifications#Specification_context">SpecificationContexts</a>.</p><p>The conclusion we can draw on this subject is that it's difficult to design something that's truly extensible without any idea of the future requirements!</p><a name="Configuration"><h6>Configuration</h6></a><p>The &quot;sensible&quot; defaults have been debated and some &quot;opinionated&quot; decisions have been taken, like the decision to mark any example without expectation as &quot;Pending&quot; for example. Unfortunately the configuration mechanism offered in exchange (to change the defaults) was not really appealing (a mix of properties-file-reflection-system-properties) and there is few evidence that anyone actually used it.</p><a name="Clear+implementation"><h6>Clear implementation</h6></a><p>This objective was certainly <em>not</em> achieved. There are several reasons for this. The design of the examples execution is certainly the main one.</p><p>In <strong><em>specs</em></strong> the examples are executed &quot;on-demand&quot; when a runner &quot;asks&quot; the specification for its successes and failures. The specification then asks each example for its status and an example knows that by executing himself. The trouble is, the example doesn't really have enough information to know it's full execution context: is there some code to execute beforehand for data setup? Or after all other examples, because it's the last example of the specification and a database disconnection is required then?</p><p>This design is aggravated by a &quot;magic&quot; feature provided by <strong><em>specs</em></strong>: <a href="http://code.google.com/p/specs/wiki/DeclareSpecifications#Execution_model">the automatic reset of local variables</a>.<br />This feature is <em>very</em> convenient for the user but the implementation is a nightmare! In order to make as if each example was executed in isolation, as if other examples did not modify surrounding variables, a new specification is created and just one example is executed inside that specification. This works, but at the expense of carefully copying a lot of state from the cloned specification to the original one. More than <em>20</em> issues were created because of that only feature!</p><a name="User+support"><h6>User support</h6></a><p>The user support has always been responsive, in terms of bug fixes and enhancements. However the object-oriented nature of <strong><em>specs</em></strong> with lots of variables and side-effects around made some bugs difficult to diagnose and made some enhancements downright impossible. The best example of an &quot;impossible&quot; feature to implement is the concurrent execution of examples.<br />With shared variables all around the place, there's little chance to ever get it right.</p><a name="A+new+hope"><h3>A new hope</h3></a><p>The redesign of <strong><em>specs2</em></strong> was precisely started to fight the complexities and issues of <strong><em>specs</em></strong>. In order to do that while remaining true to the original vision for <strong><em>specs</em></strong>, a new design compromise was necessary with new design principles:</p>
 <ol>
   <li>Do not use mutable variables!</li>
   <li>Use a simple structure</li>
@@ -161,9 +163,9 @@ case class buy() extends Login {
   <li><p>the Forms presentation and implementation can be encapsulated in the same class to be reused as a coherent block in other specifications</p></li>
 </ul><p>The main drawback (for now) of this approach is that it is not possible to see, in real-time, a modification done on a Form as can be seen in a browser with Fitnesse. There needs to be a compilation step, which in Scala, is not instantaneous.</p><a name="But+if+you+STILL+want+mutable+specifications"><h5>But if you STILL want mutable specifications</h5></a><p>There are at least 2 very good reason for that.</p>
 <ol>
-  <li><p>you want a smooth migration path from <em><strong>specs</strong></em> to <strong><em>specs2</em></strong> because rewriting specifications from scratch, with a new syntax, does not bring a lot of value to your project</p></li>
+  <li><p>you want a smooth migration path from <strong><em>specs</em></strong> to <strong><em>specs2</em></strong> because rewriting specifications from scratch, with a new syntax, does not bring a lot of value to your project</p></li>
   <li><p>chaining fragments hides the implementation of the examples and you have to navigate too much between the text and the example code to understand what's going on. This is especially true when writing <em>unit</em> specifications where it's convenient to interleave short descriptions with blocks of code</p></li>
-</ol><p>Well, Scala is not a black-or-white language and mutation is definitely part of the toolbox. In the case of a specification DSL, we know the advantages: less syntax, and the drawbacks: uncontrolled side-effects.</p><p>Thus, in <em><strong>specs2</strong></em> it is possible to create specifications which look almost like the ones which can be created with <strong><em>specs</em></strong>, with a bit less functionalities:</p>
+</ol><p>Well, Scala is not a black-or-white language and mutation is definitely part of the toolbox. In the case of a specification DSL, we know the advantages: less syntax, and the drawbacks: uncontrolled side-effects.</p><p>Thus, in <strong><em>specs2</em></strong> it is possible to create specifications which look almost like the ones which can be created with <strong><em>specs</em></strong>, with a bit less functionalities:</p>
 <pre><code class="prettyprint">import org.specs2.mutable._   // similar to the mutable package for Scala collections
 
 class MyMutableSpecification extends Specification {
@@ -195,7 +197,7 @@ class MyMutableSpecification extends Specification {
 </ul><p>In this scheme, a specification is no longer executable on its own, contrary to the <strong><em>specs</em></strong> design. It always need a runner.</p><p>Unfortunately this dependency specification is not yet enforced automatically in <strong><em>specs2</em></strong> test suite, but this kind of feature could be implemented in the future.</p><a name="Implicit+definitions+control"><h5>Implicit definitions control</h5></a><p>There is a real tension to be solved here. On one hand, I want to encourage conciseness so that one should not have to stack too many traits on top of the Specification declaration to get the desired features. On the other hand, the more traits you add, the more implicits you bring in.</p><p>So the compromise is the following:</p>
 <ul>
   <li>The <code class="prettyprint">BaseSpecification</code> trait only allows to build Text fragments and Examples, without even any Matchers</li>
-  <li>On top of it, the <code class="prettyprint">Specification</code> trait stacks lots of convenient functionalities to<br /> . use a concise notation for arguments<br /> . use matchers (with both <code class="prettyprint">must</code> and <code class="prettyprint">should</code>)<br /> . use predefined fragments and results (like <code class="prettyprint">p</code>, <code class="prettyprint">br</code>, <code class="prettyprint">success</code>, <code class="prettyprint">pending</code>,...)<br /> . and more</li>
+  <li>On top of it, the <code class="prettyprint">Specification</code> trait stacks lots of convenient functionalities to<br />  . use a concise notation for arguments<br />  . use matchers (with both <code class="prettyprint">must</code> and <code class="prettyprint">should</code>)<br />  . use predefined fragments and results (like <code class="prettyprint">p</code>, <code class="prettyprint">br</code>, <code class="prettyprint">success</code>, <code class="prettyprint">pending</code>,...)<br />  . and more</li>
   <li>Specific traits are available to selectively deactivate features. For instance <code class="prettyprint">NoAutoExamples</code> deactivates the creation of examples from simple expectations.</li>
 </ul><p>This way, if there is any conflict when inheriting from the <code class="prettyprint">Specification</code> trait, it should be possible to either:</p>
 <ul>
@@ -218,14 +220,14 @@ class MyMutableSpecification extends Specification {
 
 }
 </code></pre>
-<hr /><p><br /></p></p></div></status><status class="ok"><br /></status><table class="dataTable">
+<hr /><p><br /></p></div></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Philosophy</th></tr>
-        <tr><td>Finished in</td><td class="info">6 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">12 ms</td></tr>
         <tr><td>Results</td><td class="success">5 examples, 0 failure, 0 error</td></tr>
-      </table></div></div>
+      </table></html></div></div>
                        <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="1801198340"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="934853266"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="701652509"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="863248745"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -235,7 +237,7 @@ class MyMutableSpecification extends Specification {
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="859583250"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="2021384529"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -269,6 +271,12 @@ class MyMutableSpecification extends Specification {
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Example+groups">Example groups</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Isolation">Isolation</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Tags">Tags</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Selection">Selection</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Formatting">Formatting</a>
             
           </li></ul>
           </li></ul>
@@ -343,7 +351,7 @@ class MyMutableSpecification extends Specification {
             <ul></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1993732782"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1791136838"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -405,7 +413,7 @@ class MyMutableSpecification extends Specification {
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="2064897441"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="971878228"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
@@ -449,7 +457,7 @@ class MyMutableSpecification extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="1121282607"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="1614446876"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -533,7 +541,7 @@ class MyMutableSpecification extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="388054586"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="2011141464"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -555,11 +563,11 @@ class MyMutableSpecification extends Specification {
             
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Skip+examples">Skip examples</a>
             
+          </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Debug+statements">Debug statements</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Remove+implicits">Remove implicits</a>
             
-          </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Print+execution+data">Print execution data</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.HowTo.html#With+example+description">With example description</a>
             
@@ -581,7 +589,7 @@ class MyMutableSpecification extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="1320390364"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="655014647"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -627,7 +635,7 @@ class MyMutableSpecification extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="521462439"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="423961913"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -647,7 +655,7 @@ class MyMutableSpecification extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['1801198340','1320390364'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['701652509','655014647'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                        <div class="col3"><div id="rightcolumn"></div></div>
                      </div>
