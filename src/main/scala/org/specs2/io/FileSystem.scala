@@ -38,8 +38,8 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
    * @return a Stream with all the recursively accessible files
    */
   private def recurse(file: File): Stream[File] = {
-	  import Stream._
-	  cons(file, if (file.listFiles == null) empty else file.listFiles.toStream.filterNot(isVersionFile).flatMap(recurse(_)))
+    import Stream._
+    cons(file, if (file.listFiles == null) empty else file.listFiles.toStream.filterNot(isVersionFile).flatMap(recurse(_)))
   }
   
   /**
@@ -49,8 +49,8 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
     val star = "<STAR>"
     val authorizedNamePattern = "[^\\/\\?<>\\|\\" + star + ":\"]" + star
     var pattern = glob.replace("\\", "/")
-    									.replace(".", "\\.")
-    									.replace("**/", "(" + authorizedNamePattern + "/)" + star)
+                      .replace(".", "\\.")
+                      .replace("**/", "(" + authorizedNamePattern + "/)" + star)
                       .replace("*", authorizedNamePattern)
                       .replace(star, "*")
     if (!pattern.startsWith("\\./"))

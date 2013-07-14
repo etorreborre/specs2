@@ -103,6 +103,7 @@ case class Text(text: SimpleFormattedString, location: Location = new Location) 
 }
 object Text {
   def apply(s: String): Text = new Text(FormattedString(s))
+  def create(formattedString: SimpleFormattedString): Text = new Text(formattedString)
 }
 trait FormattedString {
   type F <: FormattedString
@@ -123,7 +124,7 @@ trait FormattedString {
 
   override def toString = raw
 }
-case class SimpleFormattedString(t: String = "", formatting: Formatting = Formatting(), isEmpty: Boolean = false) extends FormattedString {
+case class SimpleFormattedString(t: String = "", formatting: Formatting = Formatting(), isEmpty: Boolean = false, isCode: Boolean = true) extends FormattedString {
   type F = SimpleFormattedString
 
   def raw: String = t
@@ -134,14 +135,18 @@ case class SimpleFormattedString(t: String = "", formatting: Formatting = Format
   def withFlow = copy(formatting = formatting.copy(flow = true))
   def withoutFlow = copy(formatting = formatting.copy(flow = false))
 
-  def toXml = if (formatting.markdown) <code class="prettyprint">{raw}</code> else if (isEmpty) <t></t> else <t>{raw}</t>
+  def toXml = if (formatting.markdown) <code class="prettyprint">{asCode}</code> else if (isEmpty) <t></t> else <t>{raw}</t>
 
   def formatWithTagNames(names: Seq[String]) = copy(formatting = formatting.fromTagNames(names: Seq[String]))
   override def toString = raw
+
+  private def asCode =
+    if (isCode) if (t.contains("\n")) "```\n"+t+"\n```" else "`"+t+"`"
+    else        raw
 }
 object FormattedString {
   def apply(t: String) = SimpleFormattedString(t)
-  def code(t: String) = FormattedString(t).withMarkdown
+  def code(t: String) = SimpleFormattedString(t, isCode = true).withMarkdown
   def empty = SimpleFormattedString(isEmpty = true)
 }
 /** Formatting for Text fragments */

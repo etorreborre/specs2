@@ -5,6 +5,7 @@ import io.ConsoleOutput
 import main.Arguments
 import execute.Result
 import specification.Stats
+import text.Trim._
 
 /**
  * Implementation of the ResultOutput trait as Text
@@ -33,11 +34,11 @@ class TextResultOutput extends ResultOutput with ConsoleOutput {
   /**
    * print one line
    */
-  def printLine(message: String)(implicit args: Arguments) = offset(message).split("\n").map(println)
+  def printLine(message: String)(implicit args: Arguments) = offset(message).split("\n", -1).map(println)
 
   /** add an offset to the message */
   protected def offset(message: String)(implicit args: Arguments) =
-    message.split("\n").map((" "*args.offset)+_).mkString("\n")
+    message.offset(args.offset)
 
 }
 

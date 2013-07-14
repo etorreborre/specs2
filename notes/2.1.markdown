@@ -1,0 +1,21 @@
+This version is mostly a bug fix release for 2.0
+
+New features
+
+ * added an `await` method on `Matcher[T]` to transform it to a `Matcher[Future[T]]` (search for `await` in the [Matchers guide](http://etorreborre.github.io/specs2/guide/org.specs2.guide.Matchers.html#Matchers))
+ 
+Improvements
+ 
+ * added a better failure message for Option.which matcher [#167](https://github.com/etorreborre/specs2/issues/167)
+ * added the possibility to specify the pegdown timeout when parsing specifications with Markdown text
+ * updated the Scalaz version to 7.0.2
+ 
+Fixes
+
+ * proper location for failures when the specification is executed from specs2 or scalaz [#168](https://github.com/etorreborre/specs2/issues/168)
+ * fixed the collection matcher combinators when working with thrown expectations [#169](https://github.com/etorreborre/specs2/issues/169)
+ * fixed the truncating of auto-examples in mutable specifications (http://bit.ly/15oLAuc)
+ * fixed a file creation issue when the parent directory is not an absolute path
+ 
+ ==========================
+

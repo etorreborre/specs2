@@ -82,7 +82,7 @@ trait TextPrinter {
      */
     protected def leveledText(s: String, level: Int)(implicit args: Arguments): String = {
       val indent = "  "*level
-      s.split("\n").map(indent+_).mkString("\n")
+      s.split("\n", -1).map(indent+_).mkString("\n")
     }
   }
   case class PrintSpecStart(start: ExecutedSpecStart) extends Print {
@@ -175,7 +175,7 @@ trait TextPrinter {
      * making sure that the description is still properly aligned, even with several lines
      */
     def statusAndDescription(text: String, result: Result, timer: SimpleTimer, isDataTable: Boolean)(implicit args: Arguments, out: ResultOutput) = {
-      val textLines = text.split("\n")
+      val textLines = text.split("\n", -1)
       val firstLine = textLines.headOption.getOrElse("")
       val indentation = firstLine.takeWhile(_ == ' ').drop(2)
       def time = if (args.showtimes) " ("+timer.time+")" else ""

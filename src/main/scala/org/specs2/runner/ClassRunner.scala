@@ -16,12 +16,12 @@ import reporter._
  * @see org.specs2.main.Arguments for other command line options
  */
 class ClassRunner extends Classes with ConsoleOutput with SystemExit {
-	lazy val reporter: Reporter = new ConsoleReporter {}
+  lazy val reporter: Reporter = new ConsoleReporter {}
 
   protected val errorHandler: PartialFunction[Throwable, Unit] = {  case e =>
-	  println(s"""\nAn error occurred: ${e.getMessage}
+    println(s"""\nAn error occurred: ${e.getMessage}
                 Please create an issue on the http://specs2.org website with the stacktrace below. Thanks.""")
-	  e.printStackTrace
+    e.printStackTrace
   }
 
   def main(arguments: Array[String]) {

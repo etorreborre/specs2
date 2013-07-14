@@ -54,66 +54,66 @@ class JUnitDescriptionsSpec extends Specification with FragmentsSamples {  def i
                                                                                                                         """
 
   def e1 = descriptionIs(ex1)(
-  		   "JUnitDescriptionsSpec",
-  		   "|",
-  		   "`- ex1(org.specs2.reporter.JUnitDescriptionsSpec)\n")
-  		   
+         "JUnitDescriptionsSpec",
+         "|",
+         "`- ex1(org.specs2.reporter.JUnitDescriptionsSpec)\n")
+
   def e2 = descriptionIs(ex1 ^ ex2)(
-  		   "JUnitDescriptionsSpec",
-  		   "|",
-  		   "+- ex1(org.specs2.reporter.JUnitDescriptionsSpec)",
-  		   "|",
-  		   "`- ex2(org.specs2.reporter.JUnitDescriptionsSpec)\n")
-  		   
+         "JUnitDescriptionsSpec",
+         "|",
+         "+- ex1(org.specs2.reporter.JUnitDescriptionsSpec)",
+         "|",
+         "`- ex2(org.specs2.reporter.JUnitDescriptionsSpec)\n")
+
   def e3 = descriptionIs(level1)(
-  		   "JUnitDescriptionsSpec",
-  		   "|",
-  		   "`- level1",
-  		   "   |",
-  		   "   +- level1::ex1(org.specs2.reporter.JUnitDescriptionsSpec)",
-  		   "   |",
-  		   "   `- level1::ex2(org.specs2.reporter.JUnitDescriptionsSpec)\n")
+         "JUnitDescriptionsSpec",
+         "|",
+         "`- level1",
+         "   |",
+         "   +- level1::ex1(org.specs2.reporter.JUnitDescriptionsSpec)",
+         "   |",
+         "   `- level1::ex2(org.specs2.reporter.JUnitDescriptionsSpec)\n")
 
   def e4 = descriptionIs(level1Level2)(
-  		   "JUnitDescriptionsSpec",
-  		   "|",
-  		   "+- level1",
-  		   "|  |",
-  		   "|  +- level1::ex1(org.specs2.reporter.JUnitDescriptionsSpec)",
-  		   "|  |",
-  		   "|  `- level1::ex2(org.specs2.reporter.JUnitDescriptionsSpec)",
-  		   "|",
-  		   "`- level2",
-  		   "   |",
-  		   "   +- level2::ex1(org.specs2.reporter.JUnitDescriptionsSpec)",
-  		   "   |",
-  		   "   `- level2::ex2(org.specs2.reporter.JUnitDescriptionsSpec)\n")
+         "JUnitDescriptionsSpec",
+         "|",
+         "+- level1",
+         "|  |",
+         "|  +- level1::ex1(org.specs2.reporter.JUnitDescriptionsSpec)",
+         "|  |",
+         "|  `- level1::ex2(org.specs2.reporter.JUnitDescriptionsSpec)",
+         "|",
+         "`- level2",
+         "   |",
+         "   +- level2::ex1(org.specs2.reporter.JUnitDescriptionsSpec)",
+         "   |",
+         "   `- level2::ex2(org.specs2.reporter.JUnitDescriptionsSpec)\n")
 
   def e5 = descriptionIs("level1" ^ ex1 ^ ex2 ^ p ^ "level2" ^ ex1 ^ ex2)(
-  		   "JUnitDescriptionsSpec",
-  		   "|",
-  		   "+- level1",
-  		   "|  |",
-  		   "|  +- level1::ex1(org.specs2.reporter.JUnitDescriptionsSpec)",
-  		   "|  |",
-  		   "|  `- level1::ex2(org.specs2.reporter.JUnitDescriptionsSpec)",
-  		   "|",
-  		   "`- level2",
-  		   "   |",
-  		   "   +- level2::ex1(org.specs2.reporter.JUnitDescriptionsSpec)",
-  		   "   |",
-  		   "   `- level2::ex2(org.specs2.reporter.JUnitDescriptionsSpec)\n")
-  		   
+         "JUnitDescriptionsSpec",
+         "|",
+         "+- level1",
+         "|  |",
+         "|  +- level1::ex1(org.specs2.reporter.JUnitDescriptionsSpec)",
+         "|  |",
+         "|  `- level1::ex2(org.specs2.reporter.JUnitDescriptionsSpec)",
+         "|",
+         "`- level2",
+         "   |",
+         "   +- level2::ex1(org.specs2.reporter.JUnitDescriptionsSpec)",
+         "   |",
+         "   `- level2::ex2(org.specs2.reporter.JUnitDescriptionsSpec)\n")
+
   def e6 = descriptionIs(level1 ^ end ^ ex3)(
-  		   "JUnitDescriptionsSpec",
-  		   "|",
-  		   "+- level1",
-  		   "|  |",
-  		   "|  +- level1::ex1(org.specs2.reporter.JUnitDescriptionsSpec)",
-  		   "|  |",
-  		   "|  `- level1::ex2(org.specs2.reporter.JUnitDescriptionsSpec)",
-  		   "|",
-  		   "`- ex3(org.specs2.reporter.JUnitDescriptionsSpec)\n")
+         "JUnitDescriptionsSpec",
+         "|",
+         "+- level1",
+         "|  |",
+         "|  +- level1::ex1(org.specs2.reporter.JUnitDescriptionsSpec)",
+         "|  |",
+         "|  `- level1::ex2(org.specs2.reporter.JUnitDescriptionsSpec)",
+         "|",
+         "`- ex3(org.specs2.reporter.JUnitDescriptionsSpec)\n")
 
   def e7 = descriptionIs(ex1 ^ "t1" ^ ex1 ^ ex2)(
          "JUnitDescriptionsSpec",

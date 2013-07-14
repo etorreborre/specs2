@@ -109,7 +109,7 @@ class XmlMatchersSpec extends script.Specification with Groups with XmlMatchers 
           "<a><b name2=\"value\"></b></a> doesn't contain subnode 'b' with attributes: name"
     e4 := (<a><b n="v"></b></a> must \("b", "n"->"v1")) returns
           "<a><b n=\"v\"></b></a> doesn't contain subnode 'b' with attributes: n=\"v1\""
-    e5 :=	(<a><b n="v"></b></a> must \("b", "n1"->"v")) returns
+    e5 :=  (<a><b n="v"></b></a> must \("b", "n1"->"v")) returns
           "<a><b n=\"v\"></b></a> doesn't contain subnode 'b' with attributes: n1=\"v\""
     e6 := (<a><b n="v"></b></a> must \("b", "n"->"v", "n2"->"v2")) returns
           "<a><b n=\"v\"></b></a> doesn't contain subnode 'b' with attributes: n=\"v\" n2=\"v2\""
@@ -124,7 +124,7 @@ class XmlMatchersSpec extends script.Specification with Groups with XmlMatchers 
           "<a><b name2=\"value\"></b></a> doesn't contain node 'b' with attributes: name"
     e2 := (<a><b n="v"></b></a> must \\("b", "n"->"v1")) returns
           "<a><b n=\"v\"></b></a> doesn't contain node 'b' with attributes: n=\"v1\""
-    e3 :=	(<a><b n="v"></b></a> must \\("b", "n1"->"v")) returns
+    e3 :=  (<a><b n="v"></b></a> must \\("b", "n1"->"v")) returns
           "<a><b n=\"v\"></b></a> doesn't contain node 'b' with attributes: n1=\"v\""
     e4 := (<a><b n="v"></b></a> must \\("b", "n"->"v", "n2"->"v2")) returns
           "<a><b n=\"v\"></b></a> doesn't contain node 'b' with attributes: n=\"v\" n2=\"v2\""
@@ -133,8 +133,8 @@ class XmlMatchersSpec extends script.Specification with Groups with XmlMatchers 
     e6 := (<a><b><c></c></b></a> must \\(<b><d></d></b>)) returns
           "<a><b><c></c></b></a> doesn't contain <b><d></d></b>"
     e7 := (<a><b>hello</b></a> must \\(<b>world</b>)) returns
-	        "<a><b>hello</b></a> doesn't contain <b>world</b>"
+          "<a><b>hello</b></a> doesn't contain <b>world</b>"
     e8 := (<a><b>{"hello"}</b></a> must \\(<b>world</b>)) returns
-	        "<a><b>hello</b></a> doesn't contain <b>world</b>"
+          "<a><b>hello</b></a> doesn't contain <b>world</b>"
   }
 }

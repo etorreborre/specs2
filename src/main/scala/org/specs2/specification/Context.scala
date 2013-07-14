@@ -12,8 +12,8 @@ import execute._
  */
 trait BeforeAfter extends Before with After { outer =>
   override def apply[T : AsResult](a: =>T): Result = {
-	  lazy val result = super[Before].apply(a)
-	  super[After].apply(result)
+    lazy val result = super[Before].apply(a)
+    super[After].apply(result)
   }
   
   /** compose the actions of 2 BeforeAfter traits */
@@ -38,9 +38,9 @@ trait BeforeAfter extends Before with After { outer =>
  */
 trait BeforeAfterAround extends Before with After with Around { outer =>
   override def apply[T : AsResult](a: =>T): Result = {
-	  lazy val result = super[Around].apply(a)
-	  lazy val resultWithBefore = super[Before].apply(result)
-	  super[After].apply(resultWithBefore)
+    lazy val result = super[Around].apply(a)
+    lazy val resultWithBefore = super[Before].apply(result)
+    super[After].apply(resultWithBefore)
   }
     /** compose the actions of 2 BeforeAfterAround traits */
   def compose(a: BeforeAfterAround): BeforeAfterAround = new BeforeAfterAround {

@@ -29,11 +29,11 @@ trait Exceptions {
    * @return None if there is an exception, or Some(value)
    */
   def tryo[T](a: =>T)(implicit f: Exception => Unit): Option[T] = {
-	  try { Some(a) }
-	  catch { case e: Exception => {
-	    f(e)
-	    None
-	  }}
+    try { Some(a) }
+    catch { case e: Exception => {
+      f(e)
+      None
+    }}
   }
   /**
    * try to evaluate an expression, returning a value T
@@ -42,7 +42,7 @@ trait Exceptions {
    * of the expected type.
    */
   def tryOr[T](a: =>T)(implicit f: Exception => T): T = {
-	  trye(a)(f).fold(identity, identity)
+    trye(a)(f).fold(identity, identity)
   }
   /**
    * try to evaluate an expression, returning a value T
@@ -51,8 +51,8 @@ trait Exceptions {
    * of the expected type.
    */
   def catchAllOr[T](a: =>T)(f: Throwable =>T): T = {
-	  try { a }
-	  catch { case e: Throwable => f(e) }
+    try { a }
+    catch { case e: Throwable => f(e) }
   }
   /**
    * try to evaluate an expression, returning a value T
@@ -90,8 +90,8 @@ trait Exceptions {
    * of the Either returned value.
    */
   def trye[T, S](a: =>T)(implicit f: Exception => S): Either[S, T] = {
-	  try { Right(a) }
-	  catch { case e: Exception => Left(f(e)) }
+    try { Right(a) }
+    catch { case e: Exception => Left(f(e)) }
   }
   /**
    * try to evaluate an expression, returning Either
@@ -100,8 +100,8 @@ trait Exceptions {
    * of the Either returned value.
    */
   def catchAll[T, S](a: =>T)(f: Throwable => S): Either[S, T] = {
-	  try { Right(a) }
-	  catch { case e: Throwable => Left(f(e)) }
+    try { Right(a) }
+    catch { case e: Throwable => Left(f(e)) }
   }
 }
 

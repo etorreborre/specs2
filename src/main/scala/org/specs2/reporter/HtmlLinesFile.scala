@@ -27,8 +27,8 @@ case class HtmlLinesFile(specName: SpecName, args: Arguments,
   def print(out: =>HtmlReportOutput) = {
     def output = out.filePathIs(link.url)
     output.printHtml(
-		  output.printHead(specName.title).
-		         printBody {
+      output.printHead(specName.title).
+             printBody {
                breadcrumbs ++
                  <div class="colmask threecol">
                    <div class="colmid">

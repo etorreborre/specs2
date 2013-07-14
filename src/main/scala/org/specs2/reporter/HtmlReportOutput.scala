@@ -14,7 +14,7 @@ import control.StackTraceFilter
  */
 trait HtmlReportOutput {
   /** @return the build html code */
-	def xml: NodeSeq
+  def xml: NodeSeq
   /** clear the current xml content */
   def clear: HtmlReportOutput
   /** print a NodeSeq */
@@ -28,14 +28,14 @@ trait HtmlReportOutput {
   /** set the file path for the current output */
   def filePathIs(path: String): HtmlReportOutput
   /** enclose the nodes inside <html/> tags */
-	def printHtml(n: =>NodeSeq): HtmlReportOutput
+  def printHtml(n: =>NodeSeq): HtmlReportOutput
   /** enclose the nodes inside <body/> tags */
   def printBody(n: =>NodeSeq): HtmlReportOutput
   /** provide the <head/> section */
   def printHead(title: String): HtmlReportOutput
 
   /** print a Br fragment */
-	def printBr: HtmlReportOutput
+  def printBr: HtmlReportOutput
   /** print a Text fragment inside a paragraph */
   def printPar(text: String = ""): HtmlReportOutput
   /** print a Text fragment with a given indent of indentation */
@@ -90,7 +90,7 @@ trait HtmlReportOutput {
   def printStack(e: ResultStackTrace, indent: Int, traceFilter: StackTraceFilter): HtmlReportOutput
 
   /** print the html for a Form that succeeded */
-	def printOkForm(form: NodeSeq): HtmlReportOutput
+  def printOkForm(form: NodeSeq): HtmlReportOutput
   /** print the html for a Form that failed */
   def printKoForm(form: NodeSeq): HtmlReportOutput
   /** print the statistics of a specification */

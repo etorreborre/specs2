@@ -18,8 +18,8 @@ trait After extends Context { outer =>
    * and finally the after action 
    */
   def apply[T : AsResult](a: =>T): Result = {
-	  try { AsResult(a) }
-	  finally { after	}
+    try { AsResult(a) }
+    finally { after  }
   } 
   
   /** compose the actions of 2 After traits */

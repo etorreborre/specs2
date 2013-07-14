@@ -135,9 +135,9 @@ case class Stats(examples:     Int = 0,
     def trendIsDefined(f: Stats => Int) = trend map (t => f(t) != 0) getOrElse false
 
     def displayTrendValue(f: Stats => Int): String = {
-			val i = trend map (t => f(t)) getOrElse 0
-			if (i == 0) "" else if (i > 0) " (+"+i+")" else " ("+i+")"
-		}
+      val i = trend map (t => f(t)) getOrElse 0
+      if (i == 0) "" else if (i > 0) " (+"+i+")" else " ("+i+")"
+    }
 
     def displayValue(f: Stats => Int, label: String, optional: Boolean = false, invariant: Boolean = false): Option[String] = {
       val base =
@@ -157,7 +157,7 @@ case class Stats(examples:     Int = 0,
             displayValue((_:Stats).errors, "error"),
             displayValue((_:Stats).pending, "pending", optional = true, invariant = true),
             displayValue((_:Stats).skipped, "skipped", optional = true, invariant = true)
-				).flatten.mkString(", "), args.color)
+        ).flatten.mkString(", "), args.color)
 
   }
 

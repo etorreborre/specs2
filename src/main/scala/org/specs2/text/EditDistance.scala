@@ -55,30 +55,30 @@ trait EditDistance {
      */
     def showDistance(sep: String, shortenSize: Int) = {
       val (firstSeparator, secondSeparator) = separators(sep)
-	    def modify(s: String, c: Char): String = modifyString(s, c.toString)
-	    def modifyString(s: String, mod: String): String = (firstSeparator + mod + secondSeparator + s).removeAll(secondSeparator + firstSeparator)
+      def modify(s: String, c: Char): String = modifyString(s, c.toString)
+      def modifyString(s: String, mod: String): String = (firstSeparator + mod + secondSeparator + s).removeAll(secondSeparator + firstSeparator)
 
       def findOperations(dist: Int, i: Int, j:Int, s1mod: String, s2mod: String): (String, String) = {
         if (i == 0 && j == 0) {
-  	      ("", "")
+          ("", "")
         }
         else if (i == 1 && j == 1) {
-  	      if (dist == 0) (s1(0) + s1mod, s2(0) + s2mod)
+          if (dist == 0) (s1(0) + s1mod, s2(0) + s2mod)
           else (modify(s1mod, s1(0)), modify(s2mod, s2(0)))
         }
         else if (j < 1) (modifyString(s1mod, s1.slice(0, i)), modifyString(s2mod, ""))
         else if (i < 1) (modifyString(s1mod, ""), modifyString(s2mod, s2.slice(0, j)))
         else {
-	        val (suppr, subst, ins) = (matrix(i - 1)(j), matrix(i - 1)(j - 1), matrix(i)(j - 1))
-	        if (suppr < subst)
-	          findOperations(suppr, i - 1, j, modify(s1mod, s1(i - 1)), modifyString(s2mod, ""))
-	        else if (ins < subst)
-	          findOperations(ins, i, j - 1, modifyString(s1mod, ""), modify(s2mod, s2(j - 1)))
-	        else if (subst < dist)
-	          findOperations(subst, i - 1, j - 1, modify(s1mod, s1(i - 1)), modify(s2mod, s2(j - 1)))
-	        else
-	          findOperations(subst, i - 1, j - 1, s1(i - 1) + s1mod, s2(j - 1) + s2mod)
-	      }
+          val (suppr, subst, ins) = (matrix(i - 1)(j), matrix(i - 1)(j - 1), matrix(i)(j - 1))
+          if (suppr < subst)
+            findOperations(suppr, i - 1, j, modify(s1mod, s1(i - 1)), modifyString(s2mod, ""))
+          else if (ins < subst)
+            findOperations(ins, i, j - 1, modifyString(s1mod, ""), modify(s2mod, s2(j - 1)))
+          else if (subst < dist)
+            findOperations(subst, i - 1, j - 1, modify(s1mod, s1(i - 1)), modify(s2mod, s2(j - 1)))
+          else
+            findOperations(subst, i - 1, j - 1, s1(i - 1) + s1mod, s2(j - 1) + s2mod)
+        }
       }
       val (s1diffs, s2diffs) = findOperations(distance, s1.length, s2.length, "", "")
       import DiffShortener._

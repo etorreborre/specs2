@@ -21,8 +21,8 @@ trait AnsiColors {
 
   /** @return a string with no color codes */
   def removeColors(s: String, doIt: Boolean = true): String = {
-	  if (doIt) all.foldLeft (s) { (res, cur) => res.replace(cur, "") }
-	  else	    s
+    if (doIt) all.foldLeft (s) { (res, cur) => res.replace(cur, "") }
+    else      s
   }
 
   /**
@@ -31,12 +31,12 @@ trait AnsiColors {
    */
   def color(s: String, color: String, doIt: Boolean = true) = {
     if (doIt) {
-		  val colored = s.split("\n").filter(_.nonEmpty).map(color + _ + reset)
-			if (s.startsWith("\n") && s.endsWith("\n")) colored.mkString("\n", "\n", "\n")
-			else if (s.startsWith("\n"))                colored.mkString("\n", "\n", "")  
-			else if (s.endsWith("\n"))                  colored.mkString("", "\n", "\n")  
-			else                                        colored.mkString("\n")  
-		}
+      val colored = s.split("\n").filter(_.nonEmpty).map(color + _ + reset)
+      if (s.startsWith("\n") && s.endsWith("\n")) colored.mkString("\n", "\n", "\n")
+      else if (s.startsWith("\n"))                colored.mkString("\n", "\n", "")
+      else if (s.endsWith("\n"))                  colored.mkString("", "\n", "\n")
+      else                                        colored.mkString("\n")
+    }
     else      removeColors(s, true)
   }
 

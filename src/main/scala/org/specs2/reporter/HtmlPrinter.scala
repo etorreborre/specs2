@@ -155,7 +155,7 @@ case class TreeToc(rootCode: SpecId, toc: NodeSeq = NodeSeq.Empty) {
   def toTree = (currentCode: SpecId) =>
     <div id="tree">
       <ul>{toc}</ul>
-      <script>{"""$(function () {	$('#tree').jstree({'core':{'initially_open':['"""+rootCode+"','"+currentCode+"""'], 'animation':200}, 'plugins':['themes', 'html_data']}); });"""}</script>
+      <script>{"""$(function () {  $('#tree').jstree({'core':{'initially_open':['"""+rootCode+"','"+currentCode+"""'], 'animation':200}, 'plugins':['themes', 'html_data']}); });"""}</script>
     </div> unless toc.isEmpty
 
 }

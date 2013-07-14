@@ -102,9 +102,9 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
   }
 
   def printLink(link: HtmlLink) =
-    print(t(if (link.beforeText.isEmpty) "" else (link.beforeText+" ")) ++
+    print(wiki(if (link.beforeText.isEmpty) "" else (link.beforeText+" ")) ++
           <a href={link.url.relativeTo(filePath)} tooltip={link.tip}>{link.linkText}</a> ++
-          t(if (link.afterText.isEmpty) "" else (" " +link.afterText+" ")))
+          wiki(if (link.afterText.isEmpty) "" else (" " +link.afterText+" ")))
 
   /** print some text with a status icon (with an ok class) */
   def printTextWithIcon(message: FormattedString, iconName: String, level: Int = 0)  = printOkStatus(textWithIcon(message, iconName, level))
@@ -124,7 +124,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
    */
   def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, level: Int) =
     printKoStatus(div(<img src={baseDir+"images/collapsed.gif"} onclick={toggleElement(e)}/> ++
-		                   t("  "+e.message.notNull+" ("+e.location+")"), level))
+                       t("  "+e.message.notNull+" ("+e.location+")"), level))
 
   /**
    * print the details of a Failure message in a collapsible div
@@ -136,7 +136,7 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
         val (expectedMessage, actualMessage) = ("Expected: " + expectedDiff, "Actual:   " + actualDiff)
         val (expectedFull, actualFull) = ("Expected (full): " + expected, "Actual (full):   " + actual)
         
-				printKoStatus(div(<img src={baseDir+"images/collapsed.gif"}  onclick={toggleElement(details)}/> ++ t("details"), level) ++
+        printKoStatus(div(<img src={baseDir+"images/collapsed.gif"}  onclick={toggleElement(details)}/> ++ t("details"), level) ++
           <div id={id(details)} style="display:none">
             <pre class="details">{expectedMessage+"\n"+actualMessage}</pre>
             { <pre class="details">{expectedFull+"\n"+actualFull}</pre> unless (diffs.showFull)  }
@@ -175,36 +175,38 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
   /**
    * print the html for a Form, by just adding the corresponding xml to the current output
    */
-	def printOkForm(form: NodeSeq) = print(okStatus(form))
+  def printOkForm(form: NodeSeq) = print(okStatus(form))
   def printKoForm(form: NodeSeq) = print(koStatus(form))
 
   protected def printOkStatus(n: NodeSeq) = print(okStatus(n))
-	protected def printKoStatus(n: NodeSeq) = print(koStatus(n))
-	protected def printStatus(n: NodeSeq, st: String) = print(status(n, st))
+  protected def printKoStatus(n: NodeSeq) = print(koStatus(n))
+  protected def printStatus(n: NodeSeq, st: String) = print(status(n, st))
 
   protected def textWithIcon(message: FormattedString, iconName: String, level: Int = 0) = div(<img src={icon(iconName)}/> ++ wiki(message.prepend("&nbsp;")) ++ <br/>, level)
   protected def xmlWithIcon(xml: NodeSeq, iconName: String, level: Int = 0) = div(<table class="exampleTable"><td><img src={icon(iconName)}/></td><td>{xml}</td></table>, level)
   protected def icon(t: String) = baseDir+"images/icon_"+t+"_sml.gif"
 
-	protected def okStatus(n: NodeSeq) = status(n, "ok")
-	protected def koStatus(n: NodeSeq) = status(n, "ko")
+  protected def okStatus(n: NodeSeq) = status(n, "ok")
+  protected def koStatus(n: NodeSeq) = status(n, "ko")
   /** print a NodeSeq with a given status class */
-	protected def status(n: NodeSeq, st: String) = <status class={st}>{n}</status>
+  protected def status(n: NodeSeq, st: String) = <status class={st}>{n}</status>
   /** create a div around some markup text to be displayed at a certain level of indentation */
-	protected def div(string: String, level: Int): NodeSeq  = div(t(string), level)
+  protected def div(string: String, level: Int): NodeSeq  = div(t(string), level)
   /** create a div around a NodeSeq to be displayed at a certain level of indentation */
-	protected def div(n: NodeSeq, level: Int, hidden: Boolean = false): NodeSeq =
+  protected def div(n: NodeSeq, level: Int, hidden: Boolean = false): NodeSeq =
     <div  style={"display: "+(if (hidden) "none" else "show")+s"; text-indent:${level*5}px;"}>{n}</div>
 
   /** create a paragraph around a NodeSeq to be displayed at a certain level of indentation */
-	protected def p(n: NodeSeq, level: Int) = <p class={"level"+level}>{n}</p>
+  protected def p(n: NodeSeq, level: Int) = <p class={"level"+level}>{n}</p>
   /** create a Text node */
-	protected def t(text: String): NodeSeq = scala.xml.Text(text)
+  protected def t(text: String): NodeSeq = scala.xml.Text(text)
   protected def toggleElement(a: Any) = "toggleImage(this); showHide('"+id(a)+"')"
   protected def id(a: Any) = System.identityHashCode(a).toString
   /** render some markup text as xhtml */
-  protected def wiki(text: FormattedString) =
+  protected def wiki(text: FormattedString): NodeSeq =
     if (text.formatting.markdown) textPrinter(text.raw, MarkdownOptions(verbatim = text.formatting.verbatim)) else text.toXml
+  protected def wiki(text: String): NodeSeq =
+    wiki(FormattedString(text).withMarkdown)
 
 
   /**
@@ -265,9 +267,9 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
         element.style.display = (element.style.display == 'block')? 'none' : 'block';
       };
       function showHideByClass(name) {
-		    var elements = document.getElementsByClassName(name);
+        var elements = document.getElementsByClassName(name);
         for (i = 0; i < elements.length; i++) {
-		      elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
+          elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
         }
       };
       function showByClass(name) {

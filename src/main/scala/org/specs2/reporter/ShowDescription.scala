@@ -17,7 +17,7 @@ trait ShowDescription {
     override def show(d: Description) = d.getDisplayName
   }
   implicit def toTree(desc: Description): Tree[Description] = 
-	  unfoldTree(desc)((d: Description) => (d, () => d.getChildren.toStream))
+    unfoldTree(desc)((d: Description) => (d, () => d.getChildren.toStream))
 }
 private[specs2]
 object ShowDescription extends ShowDescription

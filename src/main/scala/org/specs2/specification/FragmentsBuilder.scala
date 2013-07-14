@@ -56,9 +56,9 @@ trait FragmentsBuilder extends ExamplesFactory with ImplicitParameters with Form
   /** transient class to hold an example description before creating a full Example */
   class ExampleDesc(s: String) {
     /** @return an Example, using anything that can be translated to a Result, e.g. a Boolean */
-	  def ![T : AsResult](t: =>T): Example = exampleFactory.newExample(s, t)
+    def ![T : AsResult](t: =>T): Example = exampleFactory.newExample(s, t)
     /** @return an Example, using the example description */
-	  def ![T : AsResult](f: String => T): Example = exampleFactory.newExample(s, f(s))
+    def ![T : AsResult](f: String => T): Example = exampleFactory.newExample(s, f(s))
   }
 
   /**
@@ -193,7 +193,7 @@ import scalaz._
 private[specs2]
 trait FragmentsShow {
   implicit object showFragments extends Show[Fragment] {
-	  override def shows(f: Fragment) = f.toString
+    override def shows(f: Fragment) = f.toString
   }
 }
 

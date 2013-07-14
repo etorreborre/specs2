@@ -47,18 +47,18 @@ trait FragmentExecution {
       val result = executed.execute
       ExecutedResult(FormFormattedString.create(executed), result, timer.stop, f.location, Stats(result).copy(timer = timer.stop))
     }
-	  case e: Example     => {
+    case e: Example     => {
       val timer = new SimpleTimer().start
       val result = executeBody(e.execute)
       ExecutedResult(e.desc, result, timer.stop, f.location, Stats(result).copy(timer = timer.stop))
     }
-	  case t: Text                       => ExecutedText(t, f.location)
-	  case Br()                          => ExecutedBr(f.location)
+    case t: Text                       => ExecutedText(t, f.location)
+    case Br()                          => ExecutedBr(f.location)
     case Tab(n)                        => ExecutedTab(n, f.location)
     case Backtab(n)                    => ExecutedBacktab(n, f.location)
-	  case End()                         => ExecutedEnd(f.location)
-	  case s: SpecStart                  => ExecutedSpecStart(s.withArgs(arguments.overrideWith(s.arguments)), f.location, Stats().startTimer)
-	  case e: SpecEnd                    => ExecutedSpecEnd(e, f.location, Stats().startTimer)
+    case End()                         => ExecutedEnd(f.location)
+    case s: SpecStart                  => ExecutedSpecStart(s.withArgs(arguments.overrideWith(s.arguments)), f.location, Stats().startTimer)
+    case e: SpecEnd                    => ExecutedSpecEnd(e, f.location, Stats().startTimer)
     case s: Step                       => executeStep("step", s, f.location)
     case s: Action                     => executeStep("action", s, f.location)
     case _                             => ExecutedNoText(isAction = true, new SimpleTimer, f.location)

@@ -45,7 +45,7 @@ is formatted for JUnit reporting tools.
     the failure trace                                                                                                   ${message().e6}
     the skipped tag                                                                                                     ${message().e7}
 
-                                                                                                                        """
+"""
 
   object outputDir {
     val reporter = new JUnitXmlReporter {}

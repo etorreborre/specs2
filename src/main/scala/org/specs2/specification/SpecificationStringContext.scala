@@ -20,12 +20,12 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
   implicit def stringIsSpecPart(s: =>String): SpecPart = new SpecPart {
     def append(fs: Fragments, text: String, expression: String = "") = {
       val s1 = tryOr(s)(e => s"[${e.getMessage}]")
-      fs append textFragment(text+s1).fragments
+      fs append createTextFragment(text+s1).fragments
     }
   }
 
   implicit def exampleIsSpecPart(e: Example): SpecPart = new SpecPart {
-    def append(fs: Fragments, text: String, expression: String = "") = fs.append(textFragment(text)).append(e)
+    def append(fs: Fragments, text: String, expression: String = "") = fs.append(createTextFragment(text)).append(e)
   }
 
   implicit def markdownLinkIsSpecPart(link: MarkdownLink): SpecPart = stringIsSpecPart(link.toString)
@@ -41,28 +41,27 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
       val autoExample = texts.lastOption.map(_.trim.isEmpty).getOrElse(false)
 
       val description =
-        if (autoExample) FormattedString(asCode(expression)).withFlow.withMarkdown
-        else             FormattedString(texts.lastOption.map(_.trim).getOrElse("")).withFlow.withoutMarkdown
+        if (autoExample) FormattedString.code(expression).withFlow
+        else             FormattedString(texts.lastOption.map(_.trim).getOrElse("")).withFlow
 
       val before = first + indent
 
       val result =
         implicitly[AsResult[R]] match {
           case v : AnyValueAsResult[_] => AsResult(r) match {
-            case DecoratedResult(t, e: Error) => textFragment(before).append(exampleFactory.newExample(description, e))
-            case DecoratedResult(t, _)        => textFragment(text).append(textFragment(t.notNull).fragments)
+            case DecoratedResult(t, e: Error) => createTextFragment(before).append(exampleFactory.newExample(description, e))
+            case DecoratedResult(t, _)        => createTextFragment(text).append(createTextFragment(t.notNull).fragments)
           }
-          case other                        => textFragment(before).append(exampleFactory.newExample(description, AsResult(r)))
+          case other                        => createTextFragment(before).append(exampleFactory.newExample(description, AsResult(r)))
         }
       fs append result.middle
     }
-    private def asCode(expression: String) = if (expression.contains("\n")) "```\n"+expression+"\n```" else "`"+expression+"`"
   }
   implicit def anyAsResultIsSpecPart(r: =>Function0Result): SpecPart = new SpecPart {
     def append(fs: Fragments, text: String, expression: String = "") = asResultIsSpecPart(AsResult(r)).append(fs, text, expression)
   }
   implicit def formIsSpecPart(f: =>Form): SpecPart = new SpecPart {
-    def append(fs: Fragments, text: String, expression: String = "") = fs.append(textFragment(text)).append(Forms.formsAreExamples(f.executeForm))
+    def append(fs: Fragments, text: String, expression: String = "") = fs.append(createTextFragment(text)).append(Forms.formsAreExamples(f.executeForm))
   }
   implicit def toFormIsSpecPart(f: { def form: Form}): SpecPart = new SpecPart {
     def append(fs: Fragments, text: String, expression: String = "") = fs append { formIsSpecPart(f.form).append(text, expression) }
@@ -71,21 +70,21 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
     def append(fs: Fragments, text: String, expression: String = "") = f match {
       // in the case of a tag which applies to the example just before,
       // if the tag is just separated by some empty text, append the tag close to the example
-      case t: TaggedAs if text.trim.isEmpty => fs.append(t).append(textFragment(text))
-      case other                            => fs.append(textFragment(text)).add(other)
+      case t: TaggedAs if text.trim.isEmpty => fs.append(t).append(createTextFragment(text))
+      case other                            => fs.append(createTextFragment(text)).add(other)
     }
   }
   implicit def fragmentsIsSpecPart(fragments: Fragments): SpecPart = new SpecPart {
-    def append(fs: Fragments, text: String, expression: String = "") = fs.append(textFragment(text)).append(fragments)
+    def append(fs: Fragments, text: String, expression: String = "") = fs.append(createTextFragment(text)).append(fragments)
   }
   implicit def fragmentsFragmentIsSpecPart(ffs: FragmentsFragment): SpecPart = new SpecPart {
-    def append(fs: Fragments, text: String, expression: String = "") = fs.append(textFragment(text)).append(ffs.fragments)
+    def append(fs: Fragments, text: String, expression: String = "") = fs.append(createTextFragment(text)).append(ffs.fragments)
   }
   implicit def argumentsIsSpecPart(a: Arguments): SpecPart = new SpecPart {
-    def append(fs: Fragments, text: String, expression: String = "") = fs.append(textFragment(text)).add(a)
+    def append(fs: Fragments, text: String, expression: String = "") = fs.append(createTextFragment(text)).add(a)
   }
   implicit def specStructureIsSpecPart(s: SpecificationStructure): SpecPart = new SpecPart {
-    def append(fs: Fragments, text: String, expression: String = "") = fs.append(textFragment(text)).append(s.content)
+    def append(fs: Fragments, text: String, expression: String = "") = fs.append(createTextFragment(text)).append(s.content)
   }
 
   implicit class specificationInStringContext(sc: StringContext) {
@@ -109,8 +108,11 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
       }.getOrElse((res, text))
       variable.append(res1, text1, expression)
     }
-    formatSection(flow = true, markdown = true) ^ texts.lastOption.map(t => fragments append textFragment(t).fragments).getOrElse(fragments) ^ formatSection(flow = true, markdown = true)
+    formatSection(flow = true, markdown = true) ^ texts.lastOption.map(t => fragments append createTextFragment(t).fragments).getOrElse(fragments) ^ formatSection(flow = true, markdown = true)
   }
+
+  /** all the text fragments must be created with flow = true */
+  private def createTextFragment(s: String): FragmentsFragment = fragments(Text.create(FormattedString(s).withFlow))
 }
 
 object S2Macro {

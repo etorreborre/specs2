@@ -60,21 +60,21 @@ class EditDistanceSpec extends Specification with EditDistance with DataTables w
     e8 := showDistance("kitten", "kitsin", "<<+")  === ("kit<<te+n", "kit<<si+n")
 
     e9 :=
-      "a"	 || "b" 		| "result" 			  |>
-      "" 	 !! ""	   	! ("", "")    		|
-      "" 	 !! "a"	   	! ("[]", "[a]")   |
-      "a"  !! ""	   	! ("[a]", "[]")   |
-      "" 	 !! "ab"	  ! ("[]", "[ab]")	|
-      "ab" !! ""   		! ("[ab]", "[]") 	| { (a: String, b: String, result: (String, String)) =>
+      "a"  || "b"     | "result"        |>
+      ""   !! ""      ! ("", "")        |
+      ""   !! "a"     ! ("[]", "[a]")   |
+      "a"  !! ""      ! ("[a]", "[]")   |
+      ""   !! "ab"    ! ("[]", "[ab]")  |
+      "ab" !! ""      ! ("[ab]", "[]")  | { (a: String, b: String, result: (String, String)) =>
         showDistance(a, b) must_== result
       }
 
     e10 :=
-      "a"	|| "b" 		| "result" 			  |>
-      "a" !! "a"	  ! ("a", "a")    	|
-      "a" !! "b"	  ! ("[a]", "[b]")	|
-      "a" !! "bc"	  ! ("[a]", "[bc]") |
-      "a" !! "ab"	  ! ("a[]", "a[b]")	| { (a: String, b: String, result: (String, String)) =>
+      "a"  || "b"    | "result"        |>
+      "a"  !! "a"    ! ("a", "a")      |
+      "a"  !! "b"    ! ("[a]", "[b]")  |
+      "a"  !! "bc"   ! ("[a]", "[bc]") |
+      "a"  !! "ab"   ! ("a[]", "a[b]") | { (a: String, b: String, result: (String, String)) =>
         showDistance(a, b) must_== result
       }
   }
