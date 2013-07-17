@@ -15,6 +15,8 @@ import sbtrelease._
 import ReleasePlugin._
 import ReleaseKeys._
 import ReleaseStateTransformations._
+import ls.Plugin._
+import LsKeys._
 import Utilities._
 import Defaults._
 
@@ -31,6 +33,7 @@ object build extends Build {
                testingSettings          ++
                siteSettings             ++
                publicationSettings      ++
+               notificationSettings     ++
                releaseSettings
   ) 
 
@@ -94,6 +97,12 @@ object build extends Build {
     gitRemoteRepo := "git@github.com:etorreborre/specs2.git"
   )
 
+  lazy val notificationSettings: Seq[Settings] = lsSettings ++ Seq(
+    (LsKeys.ghBranch in LsKeys.lsync) := Some("master"),
+    (LsKeys.ghUser in LsKeys.lsync) := Some("etorreborre"),
+    (LsKeys.ghRepo in LsKeys.lsync) := Some("specs2")
+  )
+
   lazy val publicationSettings: Seq[Settings] = Seq(
     publishTo <<= version { v: String =>
       val nexus = "https://oss.sonatype.org/"
@@ -147,6 +156,7 @@ object build extends Build {
       generateIndexPage,
       publishSite,
       publishSignedArtifacts,
+      notifyLs,
       notifyHerald,
       tagRelease,
       setNextVersion,
@@ -225,9 +235,15 @@ object build extends Build {
   /**
    * NOTIFICATION
    */
+  lazy val notifyLs = ReleaseStep { st: State =>
+    val st2 = executeTask(writeVersion, "Writing ls.implicit.ly dependencies")(st)
+    val st3 = commitCurrent("Added a new ls file")(st2)
+    val st4 = pushCurrent(st3)
+    executeTask(lsync, "Synchronizing with the ls.implict.ly website")(st4)
+  }
   lazy val notifyHerald = ReleaseStep (
     action = (st: State) => {
-      Process("herald &").lines; st.log.info("Starting herald to publish the release notes")  
+      Process("herald &").lines; st.log.info("Starting herald to publish the release notes")
       commitCurrent("Updated the release notes")(st)
     },
     check  = (st: State) => {
