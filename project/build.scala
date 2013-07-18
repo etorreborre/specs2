@@ -55,7 +55,7 @@ object build extends Build {
       "org.scala-tools.testing" % "test-interface"     % "0.5"         % "optional",
       "org.hamcrest"            % "hamcrest-all"       % "1.1"         % "optional",
       "org.mockito"             % "mockito-all"        % "1.9.0"       % "optional",
-      "junit"                   % "junit"              % "4.7"         % "optional",
+      "junit"                   % "junit"              % "4.11"        % "optional",
       "org.pegdown"             % "pegdown"            % "1.2.1"       % "optional",
       "org.specs2"              % "classycle"          % "1.4.1"       % "optional")
     },
