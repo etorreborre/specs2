@@ -15,8 +15,6 @@ import sbtrelease._
 import ReleasePlugin._
 import ReleaseKeys._
 import ReleaseStateTransformations._
-import ls.Plugin._
-import LsKeys._
 import Utilities._
 import Defaults._
 
@@ -28,12 +26,11 @@ object build extends Build {
     base = file("."),
     settings = Defaults.defaultSettings ++
                specs2Settings           ++
-               dependenciesSettings     ++
+               dependencies.settings     ++
                compilationSettings      ++
                testingSettings          ++
                siteSettings             ++
                publicationSettings      ++
-               notificationSettings     ++
                releaseSettings
   ) 
 
@@ -43,25 +40,6 @@ object build extends Build {
     organization := "org.specs2",
     specs2Version in GlobalScope <<= version,
     scalaVersion := "2.10.2")
-
-  lazy val dependenciesSettings: Seq[Settings] = Seq(
-    libraryDependencies <<= scalaVersion { scalaVersion => Seq(
-      "org.scalaz"              %% "scalaz-core"       % "7.0.2",
-      "org.scalaz"              %% "scalaz-concurrent" % "7.0.2",
-      "com.chuusai"             %% "shapeless"         % "1.2.4"       % "optional",
-      "org.scala-lang"          % "scala-reflect"      % scalaVersion  % "optional",
-      "org.scala-lang"          % "scala-compiler"     % scalaVersion  % "optional",
-      "org.scalacheck"          % "scalacheck_2.10.0"  % "1.10.0"      % "optional",
-      "org.scala-tools.testing" % "test-interface"     % "0.5"         % "optional",
-      "org.hamcrest"            % "hamcrest-all"       % "1.1"         % "optional",
-      "org.mockito"             % "mockito-all"        % "1.9.0"       % "optional",
-      "junit"                   % "junit"              % "4.11"        % "optional",
-      "org.pegdown"             % "pegdown"            % "1.2.1"       % "optional",
-      "org.specs2"              % "classycle"          % "1.4.1"       % "optional")
-    },
-    resolvers ++= Seq("sonatype-releases" at "http://oss.sonatype.org/content/repositories/releases",
-                      "sonatype-snapshots" at "http://oss.sonatype.org/content/repositories/snapshots")
-  )
 
   lazy val compilationSettings: Seq[Settings] = Seq(
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
@@ -95,12 +73,6 @@ object build extends Build {
       repo
     },
     gitRemoteRepo := "git@github.com:etorreborre/specs2.git"
-  )
-
-  lazy val notificationSettings: Seq[Settings] = lsSettings ++ Seq(
-    (LsKeys.ghBranch in LsKeys.lsync) := Some("master"),
-    (LsKeys.ghUser in LsKeys.lsync) := Some("etorreborre"),
-    (LsKeys.ghRepo in LsKeys.lsync) := Some("specs2")
   )
 
   lazy val publicationSettings: Seq[Settings] = Seq(
@@ -156,7 +128,6 @@ object build extends Build {
       generateIndexPage,
       publishSite,
       publishSignedArtifacts,
-      notifyLs,
       notifyHerald,
       tagRelease,
       setNextVersion,
@@ -235,15 +206,9 @@ object build extends Build {
   /**
    * NOTIFICATION
    */
-  lazy val notifyLs = ReleaseStep { st: State =>
-    val st2 = executeTask(writeVersion, "Writing ls.implicit.ly dependencies")(st)
-    val st3 = commitCurrent("Added a new ls file")(st2)
-    val st4 = pushCurrent(st3)
-    executeTask(lsync, "Synchronizing with the ls.implict.ly website")(st4)
-  }
   lazy val notifyHerald = ReleaseStep (
     action = (st: State) => {
-      Process("herald &").lines; st.log.info("Starting herald to publish the release notes"); st
+      Process("herald &").lines; st.log.info("Starting herald to publish the release notes")
       commitCurrent("Updated the release notes")(st)
     },
     check  = (st: State) => {
