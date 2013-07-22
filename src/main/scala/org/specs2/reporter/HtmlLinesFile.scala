@@ -26,21 +26,7 @@ case class HtmlLinesFile(specName: SpecName, args: Arguments,
                          toc: TreeToc = TreeToc(SpecId(""))) {
   def print(out: =>HtmlReportOutput) = {
     def output = out.filePathIs(link.url)
-    output.printHtml(
-      output.printHead(specName.title).
-             printBody {
-               breadcrumbs ++
-                 <div class="colmask threecol">
-                   <div class="colmid">
-                     <div class="colleft">
-                       <div class="col1"><div id="central">{printLines(output)(args).xml}</div></div>
-                       <div class="col2"><div id="leftcolumn">{toc.toTree(specId)}</div></div>
-                       <div class="col3"><div id="rightcolumn"/></div>
-                     </div>
-                   </div>
-                 </div>
-             }.xml
-      )
+    output.printFile(specName, breadcrumbs, printLines(output)(args), toc)
   }
 
   def printLines(out: HtmlReportOutput)(implicit args: Arguments) = {

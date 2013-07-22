@@ -8,4 +8,11 @@ import io.ConsoleOutput
  */
 trait HtmlReporter extends DefaultReporter
     with HtmlExporting
-    with ConsoleOutput 
+    with ConsoleOutput
+
+/**
+ * Reports a Specification as a markdown page
+ */
+trait MarkdownReporter extends DefaultReporter
+with MarkdownExporting
+with ConsoleOutput
