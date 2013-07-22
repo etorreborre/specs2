@@ -15,6 +15,8 @@
       <script type="text/javascript" src="./../../css/jquery.hotkeys.js"></script>
       <script type="text/javascript" src="./../../css/jquery.jstree.js"></script>
       <script type="text/javascript" src="./../../css/tooltip.js"></script>
+      <script type="text/javascript" src="./../../js/specs2-user.js"></script>
+      <script language="javascript">$.getScript("./../../js/specs2-user.js", initUserScript(document));</script>
       <script language="javascript">
       function init() {  prettyPrint(); };
       /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
@@ -32,9 +34,9 @@
         element.style.display = (element.style.display == 'block')? 'none' : 'block';
       };
       function showHideByClass(name) {
-		    var elements = document.getElementsByClassName(name);
+        var elements = document.getElementsByClassName(name);
         for (i = 0; i < elements.length; i++) {
-		      elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
+          elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
         }
       };
       function showByClass(name) {
@@ -63,9 +65,9 @@
       <link rel="stylesheet" href="./../../css/tabber.css" type="text/css" media="screen" />
       <title>Design</title>
     </head><body><div id="breadcrumbs"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html">Design</a></div><div class="colmask threecol">
-                   <div class="colmid">
-                     <div class="colleft">
-                       <div class="col1"><div id="central"><html><title>Design</title><a name="Design"><h2 specId="37370288">Design</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Presentation"><h3>Presentation</h3></a><p>This page explains the overall design of <em>specs2</em>:</p>
+            <div class="colmid">
+              <div class="colleft">
+                <div class="col1"><div id="central"><html><title>Design</title><a name="Design"><h2 specId="1631833980">Design</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Presentation"><h3>Presentation</h3></a><p>This page explains the overall design of <em>specs2</em>:</p>
 <ul>
   <li>the structure of a specification</li>
   <li>how the specification is built</li>
@@ -88,7 +90,7 @@
   <li>Text: free text describing the specified system</li>
   <li>Example: a description and a piece of executable code returning a Result</li>
   <li>Step / Action: some action on the system which is only reported if there's an exception</li>
-  <li>SpecStart / SpecEnd: delimiters for the Specification. They also delimitate included Specifications.<br /> The SpecStart element holds: the Arguments used to tune the execution/reporting, the link to an included/referenced specification</li>
+  <li>SpecStart / SpecEnd: delimiters for the Specification. They also delimitate included Specifications.<br />    The SpecStart element holds: the Arguments used to tune the execution/reporting, the link to an included/referenced specification</li>
   <li>TaggingFragments: those fragments enclose other fragments which can be included or excluded from the execution</li>
 </ul><a name="Creation"><h3>Creation</h3></a><a name="Creating+Fragments"><h4>Creating Fragments</h4></a><p>There are implicits to create Fragments (found in the <code class="prettyprint">org.specs2.specification.FragmentsBuilder</code> trait):</p>
 <ul>
@@ -134,9 +136,9 @@
 + analysis reflect  xml html  time json
 + collection control  io  text  main data
 </code></pre></div></status></html></div></div>
-                       <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="208919176"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="2091728835"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+                <div class="col2"><div id="leftcolumn"><div id="tree">
+      <ul><li id="549867412"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="1511131089"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -146,7 +148,7 @@
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1847543829"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="633059074"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -260,7 +262,7 @@
             <ul></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1601975631"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1629469859"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -322,7 +324,7 @@
             
           </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="2063495285"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="798544501"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
@@ -366,7 +368,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="902571914"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="2098602223"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -450,7 +452,7 @@
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1211153655"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="1437822952"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -498,7 +500,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="1766271958"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="505741027"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -544,7 +546,7 @@
             
           </li></ul>
           </li></ul>
-          </li><li id="37370288"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="1631833980"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -564,9 +566,9 @@
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['208919176','37370288'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['549867412','1631833980'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
-                       <div class="col3"><div id="rightcolumn"></div></div>
-                     </div>
-                   </div>
-                 </div></body></html>
+                <div class="col3"><div id="rightcolumn"></div></div>
+              </div>
+            </div>
+          </div></body></html>

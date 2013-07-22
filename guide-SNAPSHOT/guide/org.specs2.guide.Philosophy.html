@@ -15,6 +15,8 @@
       <script type="text/javascript" src="./../../css/jquery.hotkeys.js"></script>
       <script type="text/javascript" src="./../../css/jquery.jstree.js"></script>
       <script type="text/javascript" src="./../../css/tooltip.js"></script>
+      <script type="text/javascript" src="./../../js/specs2-user.js"></script>
+      <script language="javascript">$.getScript("./../../js/specs2-user.js", initUserScript(document));</script>
       <script language="javascript">
       function init() {  prettyPrint(); };
       /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
@@ -32,9 +34,9 @@
         element.style.display = (element.style.display == 'block')? 'none' : 'block';
       };
       function showHideByClass(name) {
-		    var elements = document.getElementsByClassName(name);
+        var elements = document.getElementsByClassName(name);
         for (i = 0; i < elements.length; i++) {
-		      elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
+          elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
         }
       };
       function showByClass(name) {
@@ -63,9 +65,9 @@
       <link rel="stylesheet" href="./../../css/tabber.css" type="text/css" media="screen" />
       <title>Philosophy</title>
     </head><body><div id="breadcrumbs"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html">Philosophy</a></div><div class="colmask threecol">
-                   <div class="colmid">
-                     <div class="colleft">
-                       <div class="col1"><div id="central"><html><title>Philosophy</title><a name="Philosophy"><h2 specId="1766271958">Philosophy</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="The+origins"><h3>The origins</h3></a><p><strong><em>specs2</em></strong> has been created as an evolution of the <a href="http://code.google.com/p/specs"><strong><em>specs</em></strong></a> project.</p><p><strong><em>specs</em></strong> started as learning project to explore Scala's DSL possibilities for doing Behaviour-Driven-Development (BDD).<br />Among the very first objectives of specs were:</p>
+            <div class="colmid">
+              <div class="colleft">
+                <div class="col1"><div id="central"><html><title>Philosophy</title><a name="Philosophy"><h2 specId="505741027">Philosophy</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="The+origins"><h3>The origins</h3></a><p><strong><em>specs2</em></strong> has been created as an evolution of the <a href="http://code.google.com/p/specs"><strong><em>specs</em></strong></a> project.</p><p><strong><em>specs</em></strong> started as learning project to explore Scala's DSL possibilities for doing Behaviour-Driven-Development (BDD).<br />Among the very first objectives of specs were:</p>
 <ul>
   <li><p><strong>conciseness</strong>: it should be possible to express a software specification with the least amount of ceremony</p></li>
   <li><p><strong>readability</strong>: an <em>executable</em> specification should read like a purely textual one, by a non-programmer</p></li>
@@ -195,7 +197,7 @@ class MyMutableSpecification extends Specification {
 </ul><p>In this scheme, a specification is no longer executable on its own, contrary to the <strong><em>specs</em></strong> design. It always need a runner.</p><p>Unfortunately this dependency specification is not yet enforced automatically in <strong><em>specs2</em></strong> test suite, but this kind of feature could be implemented in the future.</p><a name="Implicit+definitions+control"><h5>Implicit definitions control</h5></a><p>There is a real tension to be solved here. On one hand, I want to encourage conciseness so that one should not have to stack too many traits on top of the Specification declaration to get the desired features. On the other hand, the more traits you add, the more implicits you bring in.</p><p>So the compromise is the following:</p>
 <ul>
   <li>The <code class="prettyprint">BaseSpecification</code> trait only allows to build Text fragments and Examples, without even any Matchers</li>
-  <li>On top of it, the <code class="prettyprint">Specification</code> trait stacks lots of convenient functionalities to<br /> . use a concise notation for arguments<br /> . use matchers (with both <code class="prettyprint">must</code> and <code class="prettyprint">should</code>)<br /> . use predefined fragments and results (like <code class="prettyprint">p</code>, <code class="prettyprint">br</code>, <code class="prettyprint">success</code>, <code class="prettyprint">pending</code>,...)<br /> . and more</li>
+  <li>On top of it, the <code class="prettyprint">Specification</code> trait stacks lots of convenient functionalities to<br />  . use a concise notation for arguments<br />  . use matchers (with both <code class="prettyprint">must</code> and <code class="prettyprint">should</code>)<br />  . use predefined fragments and results (like <code class="prettyprint">p</code>, <code class="prettyprint">br</code>, <code class="prettyprint">success</code>, <code class="prettyprint">pending</code>,...)<br />  . and more</li>
   <li>Specific traits are available to selectively deactivate features. For instance <code class="prettyprint">NoAutoExamples</code> deactivates the creation of examples from simple expectations.</li>
 </ul><p>This way, if there is any conflict when inheriting from the <code class="prettyprint">Specification</code> trait, it should be possible to either:</p>
 <ul>
@@ -220,12 +222,12 @@ class MyMutableSpecification extends Specification {
 </code></pre>
 <hr /><p><br /></p></div></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Philosophy</th></tr>
-        <tr><td>Finished in</td><td class="info">7 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">12 ms</td></tr>
         <tr><td>Results</td><td class="success">5 examples, 0 failure, 0 error</td></tr>
       </table></html></div></div>
-                       <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="208919176"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="2091728835"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+                <div class="col2"><div id="leftcolumn"><div id="tree">
+      <ul><li id="549867412"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="1511131089"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -235,7 +237,7 @@ class MyMutableSpecification extends Specification {
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1847543829"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="633059074"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -349,7 +351,7 @@ class MyMutableSpecification extends Specification {
             <ul></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1601975631"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1629469859"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -411,7 +413,7 @@ class MyMutableSpecification extends Specification {
             
           </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="2063495285"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="798544501"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
@@ -455,7 +457,7 @@ class MyMutableSpecification extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="902571914"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="2098602223"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -539,7 +541,7 @@ class MyMutableSpecification extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1211153655"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="1437822952"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -587,7 +589,7 @@ class MyMutableSpecification extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="1766271958"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="505741027"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -633,7 +635,7 @@ class MyMutableSpecification extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="37370288"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="1631833980"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -653,9 +655,9 @@ class MyMutableSpecification extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {	$('#tree').jstree({'core':{'initially_open':['208919176','1766271958'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['549867412','505741027'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
-                       <div class="col3"><div id="rightcolumn"></div></div>
-                     </div>
-                   </div>
-                 </div></body></html>
+                <div class="col3"><div id="rightcolumn"></div></div>
+              </div>
+            </div>
+          </div></body></html>
