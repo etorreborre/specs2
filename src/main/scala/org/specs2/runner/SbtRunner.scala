@@ -19,14 +19,16 @@ import Fingerprints._
  */
 class Specs2Framework extends Framework {
   def name = "specs2"
-  def fingerprints = Array[Fingerprint](fp1, fp2)
+  def fingerprints = Array[Fingerprint](fp1, fp1m, fp2, fp2m)
   def runner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader) =
     new SbtRunner(args, remoteArgs, loader)
 }
 
 object Fingerprints {
-  val fp1 =  new SpecificationFingerprint { override def toString = "specs2 Specification fingerprint" }
-  val fp2 =  new FilesRunnerFingerprint   { override def toString = "specs2 Specification files fingerprint"}
+  val fp1  =  new SpecificationFingerprint { override def toString = "specs2 Specification fingerprint" }
+  val fp1m =  new SpecificationFingerprint { override def toString = "specs2 Specification fingerprint"; override def isModule = false }
+  val fp2  =  new FilesRunnerFingerprint   { override def toString = "specs2 Specification files fingerprint"}
+  val fp2m =  new FilesRunnerFingerprint   { override def toString = "specs2 Specification files fingerprint"; override def isModule = false }
 }
 
 trait SpecificationFingerprint extends SubclassFingerprint {
@@ -35,7 +37,7 @@ trait SpecificationFingerprint extends SubclassFingerprint {
   def requireNoArgConstructor = false
 }
 trait FilesRunnerFingerprint extends SubclassFingerprint {
-  def isModule = false
+  def isModule = true
   def superclassName = "org.specs2.runner.FilesRunner"
   def requireNoArgConstructor = false
 }
