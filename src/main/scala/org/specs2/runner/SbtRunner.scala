@@ -19,35 +19,23 @@ import Fingerprints._
  */
 class Specs2Framework extends Framework {
   def name = "specs2"
-  def fingerprints = Array[Fingerprint](fp1, fp1Module, fp2, fp2Module)
+  def fingerprints = Array[Fingerprint](fp1, fp2)
   def runner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader) =
     new SbtRunner(args, remoteArgs, loader)
 }
 
 object Fingerprints {
-  val fp1       =  new SpecificationFingerprint { }
-  val fp1Module =  new SpecificationModuleFingerprint { }
-  val fp2       =  new FilesRunnerFingerprint { }
-  val fp2Module =  new FilesRunnerModuleFingerprint { }
+  val fp1 =  new SpecificationFingerprint { override def toString = "specs2 Specification fingerprint" }
+  val fp2 =  new FilesRunnerFingerprint   { override def toString = "specs2 Specification files fingerprint"}
 }
 
 trait SpecificationFingerprint extends SubclassFingerprint {
-  def isModule = false
-  def superclassName = "org.specs2.specification.SpecificationStructure"
-  def requireNoArgConstructor = false
-}
-trait SpecificationModuleFingerprint extends SubclassFingerprint {
   def isModule = true
   def superclassName = "org.specs2.specification.SpecificationStructure"
   def requireNoArgConstructor = false
 }
 trait FilesRunnerFingerprint extends SubclassFingerprint {
   def isModule = false
-  def superclassName = "org.specs2.runner.FilesRunner"
-  def requireNoArgConstructor = false
-}
-trait FilesRunnerModuleFingerprint extends SubclassFingerprint {
-  def isModule = true
   def superclassName = "org.specs2.runner.FilesRunner"
   def requireNoArgConstructor = false
 }
@@ -77,11 +65,7 @@ case class SbtRunner(args: Array[String],
   def done = ""
 
   private def specificationRun(taskDef: TaskDef, loader: ClassLoader, handler: EventHandler, loggers: Array[Logger]) = {
-    val name = taskDef.fingerprint match {
-      case _: SpecificationFingerprint       => taskDef.fullyQualifiedName
-      case _: SpecificationModuleFingerprint => taskDef.fullyQualifiedName +"$"
-    }
-    SpecificationStructure.createSpecificationEither(name, loader) match {
+    SpecificationStructure.createSpecificationEither(taskDef.fullyQualifiedName, loader) match {
       case Left(e)  => handleClassCreationError(taskDef, e, handler, loggers)
       case Right(s) => reporter(taskDef, handler, loggers)(args).report(s)(s.content.arguments.overrideWith(commandLineArguments))
     }
