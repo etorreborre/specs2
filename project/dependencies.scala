@@ -18,7 +18,7 @@ object dependencies {
   def scalalibs(scalaVersion: String) = Seq(
       "org.scala-lang"          % "scala-reflect"      % scalaVersion  % "optional",
       "org.scala-lang"          % "scala-compiler"     % scalaVersion  % "optional",
-      "org.scala-tools.testing" % "test-interface"     % "0.5"         % "optional")
+      "org.scala-sbt"           % "test-interface"     % "1.0"         % "optional")
 
   def specs2(scalaVersion: String = "2.2-SNAPSHOT") = Seq(
       "org.scalacheck"          %% "scalacheck"        % "1.10.0"      % "optional",

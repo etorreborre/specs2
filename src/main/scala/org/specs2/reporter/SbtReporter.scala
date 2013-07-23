@@ -16,7 +16,13 @@ import scalaz.Scalaz._
  * It prints out the result to the output defined by the sbt loggers
  * and publishes events to sbt event handlers
  */
-class SbtConsoleReporter(consoleExporter: Option[Exporting], otherExporters: Arguments => Seq[Exporting]) extends ConsoleReporter with AllExporting
+class SbtConsoleReporter(consoleExporter: Option[Exporting], otherExporters: Arguments => Seq[Exporting]) extends ConsoleReporter with AllExporting {
+  override def exporters(accept: String => Boolean)(implicit arguments: Arguments): Seq[Exporting] =
+    otherExporters(arguments)
+
+  override def exportConsole(accept: String => Boolean) (implicit arguments: Arguments) =
+    consoleExporter
+}
 
 /**
  * This reporter will just notify the test interface about test results for the end statistics

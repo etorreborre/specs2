@@ -19,27 +19,38 @@ import Fingerprints._
  */
 class Specs2Framework extends Framework {
   def name = "specs2"
-  def fingerprints = Array[Fingerprint](fp1, fp2)
+  def fingerprints = Array[Fingerprint](fp1, fp1Module, fp2, fp2Module)
   def runner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader) =
     new SbtRunner(args, remoteArgs, loader)
 }
 
 object Fingerprints {
-  val fp1 =  new SpecificationFingerprint { }
-  val fp2 =  new FilesRunnerFingerprint { }
+  val fp1       =  new SpecificationFingerprint { }
+  val fp1Module =  new SpecificationModuleFingerprint { }
+  val fp2       =  new FilesRunnerFingerprint { }
+  val fp2Module =  new FilesRunnerModuleFingerprint { }
 }
 
 trait SpecificationFingerprint extends SubclassFingerprint {
+  def isModule = false
+  def superclassName = "org.specs2.specification.SpecificationStructure"
+  def requireNoArgConstructor = false
+}
+trait SpecificationModuleFingerprint extends SubclassFingerprint {
   def isModule = true
   def superclassName = "org.specs2.specification.SpecificationStructure"
   def requireNoArgConstructor = false
 }
 trait FilesRunnerFingerprint extends SubclassFingerprint {
+  def isModule = false
+  def superclassName = "org.specs2.runner.FilesRunner"
+  def requireNoArgConstructor = false
+}
+trait FilesRunnerModuleFingerprint extends SubclassFingerprint {
   def isModule = true
   def superclassName = "org.specs2.runner.FilesRunner"
   def requireNoArgConstructor = false
 }
-
 case class SbtRunner(args: Array[String],
                      remoteArgs: Array[String],
                      loader: ClassLoader) extends _root_.sbt.testing.Runner with Events with SbtLoggers with Exporters {
@@ -48,27 +59,33 @@ case class SbtRunner(args: Array[String],
 
   def tasks(taskDefs: Array[TaskDef]): Array[Task] = taskDefs.map(newTask)
 
-  def newTask = (taskDef: TaskDef) =>
+  def newTask = (aTaskDef: TaskDef) =>
     new Task {
       def tags = Array[String]()
       def execute(handler: EventHandler, loggers: Array[Logger]) = {
         taskDef.fingerprint match {
-          case f: SpecificationFingerprint => specificationRun(taskDef, loader, handler, loggers)
-          case f: FilesRunnerFingerprint   => filesRun(taskDef, args, loader, handler, loggers)
+          case f: SpecificationFingerprint => specificationRun(aTaskDef, loader, handler, loggers)
+          case f: FilesRunnerFingerprint   => filesRun(aTaskDef, args, loader, handler, loggers)
           case _                           => ()
         }
         // nothing more to execute
         Array[Task]()
       }
+      def taskDef = aTaskDef
     }
 
   def done = ""
 
-  private def specificationRun(taskDef: TaskDef, loader: ClassLoader, handler: EventHandler, loggers: Array[Logger]) =
-    SpecificationStructure.createSpecificationEither(taskDef.fullyQualifiedName, loader) match {
+  private def specificationRun(taskDef: TaskDef, loader: ClassLoader, handler: EventHandler, loggers: Array[Logger]) = {
+    val name = taskDef.fingerprint match {
+      case _: SpecificationFingerprint       => taskDef.fullyQualifiedName
+      case _: SpecificationModuleFingerprint => taskDef.fullyQualifiedName +"$"
+    }
+    SpecificationStructure.createSpecificationEither(name, loader) match {
       case Left(e)  => handleClassCreationError(taskDef, e, handler, loggers)
       case Right(s) => reporter(taskDef, handler, loggers)(args).report(s)(s.content.arguments.overrideWith(commandLineArguments))
     }
+  }
 
   def filesRun(taskDef: TaskDef, args: Array[String], loader: ClassLoader, handler: EventHandler, loggers: Array[Logger]) =
     toRun[FilesRunner](taskDef, loader, handler, loggers).right.toOption.toSeq.flatMap(_.run(args)).flatMap(_.issues).foreach { issue =>
