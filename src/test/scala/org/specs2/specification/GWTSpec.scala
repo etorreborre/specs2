@@ -20,6 +20,8 @@ Extractors steps
   + given/when/then/then
   + given/given/when/then and seq of given
   + given/when/when/then and seq of when
+  + given/when/then with no extractors
+  + given/given/when/when/then where the order for type parameters is significant
 
 Stripping text
 ==============
@@ -148,6 +150,40 @@ Templates
           when {+}
           when {+}
           then {2}                  ${steps.end}
+        """
+      }
+    }
+
+    e7 := {
+      val steps = Scenario("e7").
+        given().
+        when() { case op :: i :: _ => i.size }.
+        when() { case op :: j :: _ => j.size }.
+        andThen().collect { case (e, numbers) => e.size must be_<(numbers.sum) }
+
+      executeExamplesResult { s2""" ${steps.start}
+          given {1}
+          when {+}
+          when {+}
+          then {2}                  ${steps.end}
+        """
+      }
+    }
+
+    e8 := {
+      val steps = Scenario("e8").
+        given(anInt).
+        given(aString).
+        when(aString) { case op :: s :: i :: _ => (op.size + s.size + i).toString }.
+        when(anInt)   { case i :: s :: j :: _ => i + s.size + j }.
+        andThen(anInt) { case e :: i :: j :: _ => e === i + j.toInt }
+
+      executeExamplesResult { s2""" ${steps.start}
+          given {1}
+          given {ab}
+          when {cde}
+          when {2}
+          then {11}                 ${steps.end}
         """
       }
     }

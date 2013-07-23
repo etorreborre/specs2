@@ -25,6 +25,12 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
     def apply(title: String)(implicit template: ScriptTemplate[Scenario, GivenWhenThenLines] = LastLinesScriptTemplate()): GWTStart = GWTStart(title, template)
   }
 
+  private lazy val allAsString = new StepParser[String] {
+    def parse(text: String) = Right(text)
+    override def strip(text: String) = text
+  }
+
+
   /**
    * Start of a scenario
    */
@@ -32,6 +38,8 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
     type S = GWTStart
 
     def given[T](f: StepParser[T]) = GWTGivens[T :: HNil, (StepParser[T]) :: HNil, T](title, template, f :: HNil)
+    def given(): GWTGivens[String :: HNil, (StepParser[String]) :: HNil, String] = given(allAsString)
+
     def fragments(text: String): Fragments = Fragments.createList(Text(text))
 
     def start: Scenario = this
@@ -55,7 +63,9 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
     type S = GWTGivens[GT, GTE, GTU]
 
     def given[T, U](f: StepParser[T])(implicit lub: ToList[T :: GT, U]) = GWTGivens[T :: GT, (StepParser[T]) :: GTE, U](title, template, f :: givenExtractors)
+    def given[U]()(implicit lub: ToList[String :: GT, U]): GWTGivens[String :: GT, (StepParser[String]) :: GTE, U] = given(allAsString)
     def when[T](f: StepParser[T]) = GWTWhensApply[T, GT, GTE, GTU, T :: HNil, HNil, (StepParser[T]) :: HNil, HNil, Any](this, f :: HNil, HNil)
+    def when(): GWTWhensApply[String, GT, GTE, GTU, String :: HNil, HNil, (StepParser[String]) :: HNil, HNil, Any] = when(allAsString)
 
     def fragments(text: String): Fragments = Fragments.createList(Text(text))
 
@@ -70,7 +80,9 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
     type S = GWTWhens[GT, GTE, GTU, WT, WTR, WTE, WM, WMU]
 
     def when[T](f: StepParser[T]) = GWTWhensApply[T, GT, GTE, GTU, T :: WT, WTR, (StepParser[T]) :: WTE, WM, WMU](givens, f :: whenExtractors, mappers)
+    def when(): GWTWhensApply[String, GT, GTE, GTU, String :: WT, WTR, (StepParser[String]) :: WTE, WM, WMU] = when(allAsString)
     def andThen[T](f: StepParser[T]) = GWTThensApply[T, GT, GTE, GTU, WT, WTR, WTE, WM, WMU, (StepParser[T]) :: HNil, HNil](GWTWhens(givens, whenExtractors, mappers), f :: HNil, HNil)
+    def andThen(): GWTThensApply[String, GT, GTE, GTU, WT, WTR, WTE, WM, WMU, (StepParser[String]) :: HNil, HNil] = andThen(allAsString)
 
     def title = givens.title
     def fragments(text: String): Fragments = Fragments.createList(Text(text))
@@ -109,6 +121,8 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
     def andThen[T](f: StepParser[T]) =
       GWTThensApply[T, GT, GTE, GTU, WT, WTR, WTE, WM, WTU, StepParser[T] :: TTE, VE](GWTWhens(whens.givens, whens.whenExtractors, whens.mappers), f :: thenExtractors, verifications)
 
+    def andThen(): GWTThensApply[String, GT, GTE, GTU, WT, WTR, WTE, WM, WTU, StepParser[String] :: TTE, VE] = andThen(allAsString)
+
     def title = whens.title
     def givens = whens.givens
     def template = givens.template
@@ -121,6 +135,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
      */
     def fragments(text: String): Fragments = {
 
+      /** results of given and when steps, stored in the reverse order of definition */
       var givenSteps: Seq[Step] = Seq()
       var whenSteps: Seq[Step]  = Seq()
 
@@ -131,18 +146,18 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
 
           // Given lines must create steps with extracted values
           case GivenLines(ls) => {
-            givenSteps = (givenExtractorsList zip ls).map { case (extractor, line) => Step(extractLine(extractor, line)) }
+            givenSteps = (givenExtractorsList zip ls).map { case (extractor, line) => Step(extractLine(extractor, line)) }.reverse
             fs append appendSteps(givenExtractorsList, ls, givenSteps)
           }
 
           // When lines must create steps with extracted values, and map them using given values
           case WhenLines(ls) => {
-            whenSteps = (whenExtractorsList zip ls zip whens.mappers.toList).map { case ((extractor, line), mapper) =>
+            whenSteps = (whenExtractorsList zip ls zip whenMappersList).map { case ((extractor, line), mapper) =>
               Step(execute(result(givenSteps), extractor, line) { t: Any =>
                 val map = mapper.asInstanceOf[Mapper[Any, Any, Any, Any]]
                 map(t, if (map.f1.isDefined) Left(stepsValues(givenSteps)) else Right(stepsValues(givenSteps).toList))
               })
-            }
+            }.reverse
 
             fs append appendSteps(whenExtractorsList, ls, whenSteps)
           }
@@ -171,9 +186,11 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
 
     /**
      * utility methods to build steps
+     * extractors, mappers and verifications are sorted in the order of definition
      */
     private def givenExtractorsList = givens.givenExtractors.toList.reverse.map(_.asInstanceOf[StepParser[_]])
     private def whenExtractorsList  = whens.whenExtractors.toList.reverse.map(_.asInstanceOf[StepParser[_]])
+    private def whenMappersList     = whens.mappers.toList.reverse
     private def thenExtractorsList  = thenExtractors.toList.reverse.map(_.asInstanceOf[StepParser[_]])
     private def verificationsList   = verifications.toList.reverse
 

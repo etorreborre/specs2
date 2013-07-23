@@ -1,0 +1,9 @@
+Fix release for 2.1
+
+Fixes
+
+ * removed some unnecessary newlines in the console [when using tags](http://bit.ly/15ZcBVb)
+ * fixed the generation of titles when using the markdown exporter
+ 
+ ==========================
+

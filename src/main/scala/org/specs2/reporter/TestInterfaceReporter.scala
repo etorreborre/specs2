@@ -56,16 +56,15 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends TextResultOu
 
   private def info(msg: String)(implicit args: Arguments) {
     val message = offset(msg)
-    // if a newline has already been added by the logger, remove the first newline
-    if (message.isEmpty) {
-      logInfo(" ")
-      loggerNewLines += 1
+
+    if (message.replace(" ", "").isEmpty) {
+      // do nothing
     }
-    else if (message.startsWith("\n") && loggerNewLines > 0) {
-      buffer.append(message.removeFirst("\n"))
+    else if (message.dropWhile(_ == ' ').startsWith("\n") && loggerNewLines > 0) {
+      buffer.append(message.dropWhile(_ == ' ').removeFirst("\n"))
       loggerNewLines = 0
     }
-    else if (!message.isEmpty) {
+    else {
       val all = buffer.toString + message
       val splitted = all.split("\n")
       buffer.clear

@@ -13,7 +13,7 @@ import execute._
 import xml.Nodex._
 import specification._
 import html.Htmlx._
-import org.specs2.html.Htmlx
+import html.SpecId
 
 /**
  * This class stores the html to print to a file (as a NodeSeq object)
@@ -33,14 +33,34 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
   private[specs2] lazy val blank = new HtmlResultOutput(NodeSeq.Empty, outer.filePath, None)
   /** clear the current output */
   def clear = copy(xml = NodeSeq.Empty)
+  /** show as a string */
+  def show: String = xml.toString
   /** set the file path of the file being written */
   def filePathIs(path: String) = copy(filePath = path)
   /** base directory for this file path */
   def baseDir = filePath.baseDir
+  /** print the whole file content */
+  def printFile(specName: SpecName, breadcrumbs: NodeSeq, lines: HtmlReportOutput, toc: TreeToc) = {
+    printHtml(
+      printHead(specName.title).
+        printBody {
+        breadcrumbs ++
+          <div class="colmask threecol">
+            <div class="colmid">
+              <div class="colleft">
+                <div class="col1"><div id="central">{lines.xml}</div></div>
+                <div class="col2"><div id="leftcolumn">{toc.toTree(SpecId(specName.id.toString))}</div></div>
+                <div class="col3"><div id="rightcolumn"/></div>
+              </div>
+            </div>
+          </div>
+      }.xml
+    )
+  }
   /** print the NodeSeq inside the html tags */
-  def printHtml(n: =>NodeSeq) = print(<html>{n}</html>)
+  def printHtml(n: NodeSeq) = print(<html>{n}</html>)
   /** print the NodeSeq inside the body tags, with anchors for header tags */
-  def printBody(n: =>NodeSeq) = print((<body>{n}</body>).addHeadersAnchors)
+  def printBody(n: NodeSeq) = print((<body>{n}</body>).addHeadersAnchors)
   /** print the head of the document */
   def printHead(title: String) = print(xml ++ head(title))
 

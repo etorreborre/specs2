@@ -15,6 +15,8 @@ import control.StackTraceFilter
 trait HtmlReportOutput {
   /** @return the build html code */
   def xml: NodeSeq
+  /** show as a string */
+  def show: String
   /** clear the current xml content */
   def clear: HtmlReportOutput
   /** print a NodeSeq */
@@ -27,10 +29,12 @@ trait HtmlReportOutput {
   def println(text: String = ""): HtmlReportOutput = print(text+"\n")
   /** set the file path for the current output */
   def filePathIs(path: String): HtmlReportOutput
+  /** print the whole file content */
+  def printFile(specName: SpecName, breadcrumbs: NodeSeq, lines: HtmlReportOutput, toc: TreeToc): HtmlReportOutput
   /** enclose the nodes inside <html/> tags */
-  def printHtml(n: =>NodeSeq): HtmlReportOutput
+  def printHtml(n: NodeSeq): HtmlReportOutput
   /** enclose the nodes inside <body/> tags */
-  def printBody(n: =>NodeSeq): HtmlReportOutput
+  def printBody(n: NodeSeq): HtmlReportOutput
   /** provide the <head/> section */
   def printHead(title: String): HtmlReportOutput
 
