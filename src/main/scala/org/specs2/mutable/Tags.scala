@@ -25,14 +25,14 @@ trait Tags extends org.specs2.specification.Tags { outer: FragmentsBuilder =>
   /**
    * This implicit allows to add tags and sections _after_ the examples
    */
-  implicit def fragmentTaggedAs[T <: Fragment](f: T) = new FragmentTaggedAs(f)
-  class FragmentTaggedAs[T <: Fragment](f: T) {
+  implicit def fragmentTaggedAs[T <: Fragment](f: =>T) = new FragmentTaggedAs(f)
+  class FragmentTaggedAs[T <: Fragment](f: =>T) {
     def tag(names: String*): T = {
-      addFragments(TaggedAs(names:_*))
+      addFragments(Tag(names:_*))
       f
     }
     def section(names: String*): T = {
-      addFragments(AsSection(names:_*))
+      addFragments(Section(names:_*))
       f
     }
   }

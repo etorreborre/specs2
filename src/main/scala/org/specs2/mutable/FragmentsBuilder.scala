@@ -23,12 +23,12 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
   with ImplicitParameters {
 
   /** local mutable contents of the specification */
-  protected[mutable] var specFragments: Fragments = new Fragments()
+  protected[mutable] var specFragments: Fragments = Fragments.createList(FF.br, FF.br)
   protected[specs2] def fragments: Fragments = { replay; specFragments }
 
   /** @return a Fragments object from a single piece of text */
   override implicit def textFragment(s: String): FragmentsFragment = {
-    val t = textStart(s)
+    val t = textStart(s).add(FF.br)
     addFragments(t)
     t
   }
@@ -57,7 +57,11 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
   implicit def inExample(s: String): InExample = new InExample(s)
   /** transient class to hold an example description before creating a full Example */
   class InExample(s: String) {
-    def in[T : AsResult](r: =>T): Example = exampleFactory.newExample(s, r)
+    def in[T : AsResult](r: =>T): Example = {
+      val example = exampleFactory.newExample(s, r)
+      addFragments(FF.br)
+      example
+    }
     def >>[T : AsResult](r: =>T): Example = in(r)
 
     def in[T : AsResult](f: String => T): Example = exampleFactory.newExample(s, f(s))
@@ -71,13 +75,14 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
     def in[T <: Fragment](block: =>T)(implicit p: ImplicitParam): Fragments = addSideEffectingBlock(block)
     def >>[T <: Fragment](block: =>T)(implicit p: ImplicitParam): Fragments = in(block)(p)
 
-    def in(fs: =>Fragments): Fragments = fs
-    def >>(fs: =>Fragments): Fragments = fs
+    def in(fs: =>Fragments): Fragments = addSideEffectingBlock(fs)
+    def >>(fs: =>Fragments): Fragments = addSideEffectingBlock(fs)
 
     private def addSideEffectingBlock[T](block: =>T) = {
       addFragments(s)
+      addFragments(FF.br)
       executeBlock(block)
-      addFragments(FF.p)
+      addFragments(FF.bt)
     }
   }
 
@@ -129,6 +134,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
 
   protected def addFragments[T](s: String, fs: =>T, word: String): Fragments = {
     addFragments(s + " " + word)
+    addFragments(FF.br)
     executeBlock(fs)
     addFragments(FF.p)
   }

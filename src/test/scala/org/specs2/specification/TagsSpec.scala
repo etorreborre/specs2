@@ -102,16 +102,16 @@ during the specification execution. There are 2 types of tags for marking a sing
   def withTags(fs: Fragments, args: Arguments) = select(args)(SpecificationStructure(fs)).content.fragments.map(_.toString)
 
   def includeMatch(fs: Fragments, tags: String, names: String*) = {
-    (includeTags(fs, tags.split(","):_*) must containMatch(_:String)).forall(names)
+    names must contain((n:String) => includeTags(fs, tags.split(","):_*) must contain(=~(n))).forall
   }
   def excludeMatch(fs: Fragments, tags: String, names: String*) = {
-    (excludeTags(fs, tags.split(","):_*) must containMatch(_:String)).forall(names)
+    names must contain((n:String) => excludeTags(fs, tags.split(","):_*) must contain(=~(n))).forall
   }
   def includeDoesntMatch(fs: Fragments, tags: String, names: String*) = {
-    (includeTags(fs, tags.split(","):_*) must not containMatch(_:String)).forall(names)
+    names must not contain((n:String) => includeTags(fs, tags.split(","):_*) must contain(=~(n)))
   }
   def excludeDoesntMatch(fs: Fragments, tags: String, names: String*) = {
-    (excludeTags(fs, tags.split(","):_*) must not containMatch(_:String)).forall(names)
+    names must not contain((n:String) => excludeTags(fs, tags.split(","):_*) must contain(=~(n)))
   }
   def includeMustSelect(fs: Fragments, tags: String, included: String, excluded: String) = {
     includeMatch(fs, tags, included) and includeDoesntMatch(fs, tags, excluded)
@@ -158,9 +158,9 @@ during the specification execution. There are 2 types of tags for marking a sing
       } section("t3")
 
     }
-    def e1 = includeMustSelect(tagged.content, "t1", "e1", "e2")
-    def e2 = includeMustSelect(tagged.content, "t2", "e2", "e1")
-    def e3 = includeMustSelect(tagged.content, "t3", "e4", "e3")
+    def e1 = includeMustSelect(tagged.content, tags="t1", included="e1", excluded="e2")
+    def e2 = includeMustSelect(tagged.content, tags="t2", included="e2", excluded="e1")
+    def e3 = includeMustSelect(tagged.content, tags="t3", included="e4", excluded="e3")
   }
 
   case class fromargs() {

@@ -92,10 +92,11 @@ trait TextPrinter {
         else
           if (start.name != start.title) out.printSpecStartTitle(leveledText(start.title, level)(args), stats)(args)
           else                           out.printSpecStartName(leveledText(start.name, level)(args), stats)(args)
+        if (args.xonly || args.hasFilter) out.printLine(" ")(args)
       }
     }
   }
-  case class PrintResult(r: ExecutedResult)           extends Print {
+  case class PrintResult(r: ExecutedResult) extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
       printResult(if (r.flow) r.text(args).raw else leveledText(r.text(args).raw, level)(args), r.hasDescription, r.result, r.timer)(args, out)
       
@@ -186,17 +187,17 @@ trait TextPrinter {
     }
   }
 
-  case class PrintText(t: ExecutedText)               extends Print {
+  case class PrintText(t: ExecutedText) extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
       if (args.canShow("-"))
         if (t.flow) out.printText(t.text)(args)
         else out.printText(leveledText(t.text, level)(args))(args)
   }        
-  case class PrintBr()                               extends Print {
+  case class PrintBr() extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
       if (args.canShow("-")) out.printLine(" ")(args)
   }
-  case class PrintSpecEnd(end: ExecutedSpecEnd, endStats: Stats)       extends Print {
+  case class PrintSpecEnd(end: ExecutedSpecEnd, endStats: Stats) extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) = {
       if (!end.isSeeOnlyLink && (args.xonly && stats.hasFailuresOrErrors || !args.xonly) && args.canShow("1"))
         printEndStats(stats)(args, out)
@@ -212,7 +213,7 @@ trait TextPrinter {
       out.printLine("")
     }
   }
-  case class PrintOther(fragment: ExecutedFragment)   extends Print {
+  case class PrintOther(fragment: ExecutedFragment) extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) = {}
   }
 }
