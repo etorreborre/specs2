@@ -72,81 +72,10 @@ class SbtExporter(taskDef: TaskDef, handler: EventHandler, loggers: Array[Logger
   }
 }
 
-class SbtResultOutput(val loggers: Array[Logger]) extends TextResultOutput with SbtLoggers {
-  private val buffer = new StringBuilder
-
-  private var loggerNewLines = 0
-
-  private def info(msg: String)(implicit args: Arguments) {
-    val message = offset(msg)
-
-    if (message.replace(" ", "").isEmpty) {
-      // do nothing
-    }
-    else if (message.dropWhile(_ == ' ').startsWith("\n") && loggerNewLines > 0) {
-      buffer.append(message.dropWhile(_ == ' ').removeFirst("\n"))
-      loggerNewLines = 0
-    }
-    else {
-      val all = buffer.toString + message
-      val splitted = all.split("\n")
-      buffer.clear
-
-      // if the characters after the last newline are only whitespace
-      // buffer them and only display what comes before
-      splitted.lastOption.filter(_.forall(_ == ' ')).map { last =>
-        if (splitted.dropRight(1).nonEmpty) {
-          buffer.append(last)
-          splitted.dropRight(1).foreach(logInfo(loggers))
-        } else logInfo(loggers)(all)
-      }.getOrElse(logInfo(loggers)(all))
-      loggerNewLines += 1
-    }
-  }
-
-  private def flushInfo(implicit args: Arguments) = {
-    // only flush the buffer if it is non empty, otherwise that would create an unnecessary newline
-    if (buffer.nonEmpty) logInfo(loggers)(buffer.toString)
-  }
-
-  override def printSpecStartName(message: String, stats: Stats)(implicit args: Arguments)  = {
-    info(message)
-    flushInfo
-  }
-  override def printSpecStartTitle(message: String, stats: Stats)(implicit args: Arguments) = {
-    info(message)
-    flushInfo
-  }
-  override def printSeeLink(message: String, stats: Stats)(implicit args: Arguments) = {
-    info(status(stats.result)+args.textColor(message))
-  }
-
-  override def printFailure(message: String)(implicit args: Arguments)                      = {
-    logFailure(loggers)(offset(message))
-  }
-  override def printError(message: String)(implicit args: Arguments)                        = {
-    logError(loggers)(offset(message))
-  }
-  override def printSuccess(message: String)(implicit args: Arguments)                      = {
-    info(message)
-  }
-  override def printSkipped(message: String)(implicit args: Arguments)                      = {
-    info(message)
-    flushInfo
-  }
-  override def printPending(message: String)(implicit args: Arguments)                      = {
-    info(message)
-  }
-  override def printStats(message: String)(implicit args: Arguments)                        = {
-    flushInfo
-    info(message)
-  }
-  override def printLine(message: String)(implicit args: Arguments)                         = {
-    info(message)
-  }
-  override def printText(message: String)(implicit args: Arguments)                         = {
-    info(message)
-  }
+class SbtResultOutput(val loggers: Array[Logger]) extends LineLoggerOutput with SbtLoggers {
+  def infoLog(msg: String)    = logInfo(loggers)(msg)
+  def failureLog(msg: String) = logFailure(loggers)(msg)
+  def errorLog(msg: String)   = logError(loggers)(msg)
 }
 
 trait SbtLoggers {

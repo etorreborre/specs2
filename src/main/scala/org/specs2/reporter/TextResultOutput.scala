@@ -37,7 +37,7 @@ class TextResultOutput extends ResultOutput with ConsoleOutput {
   def printLine(message: String)(implicit args: Arguments) = offset(message).split("\n", -1).map(println)
 
   /** add an offset to the message */
-  protected def offset(message: String)(implicit args: Arguments) =
+  def offset(message: String)(implicit args: Arguments) =
     message.offset(args.offset)
 
 }
