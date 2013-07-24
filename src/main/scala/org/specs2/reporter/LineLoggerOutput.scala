@@ -34,9 +34,9 @@ trait LineLoggerOutput extends ResultOutput with LineLogger {
   def printSeeLink(message: String, stats: Stats)(implicit args: Arguments)        = info(status(stats.result)+args.textColor(message))
   def printText(message: String)(implicit args: Arguments)                         = info(message)
   def printLine(message: String)(implicit args: Arguments)                         = { info(message); flushText(force=true) }
+  def printSuccess(message: String)(implicit args: Arguments)                      = info(message)
   def printSpecStartName(message: String, stats: Stats)(implicit args: Arguments)  = { flushText(); info(message) }
-  def printSpecStartTitle(message: String, stats: Stats)(implicit args: Arguments) = { flushText(); info(message) }
-  def printSuccess(message: String)(implicit args: Arguments)                      = { info(message) }
+  def printSpecStartTitle(message: String, stats: Stats)(implicit args: Arguments) = printSpecStartName(message, stats)
   def printSkipped(message: String)(implicit args: Arguments)                      = { flushText(force=true); info(message) }
   def printPending(message: String)(implicit args: Arguments)                      = { flushText(force=true); info(message) }
   def printFailure(message: String)(implicit args: Arguments)                      = { flushText(force=true); failureLog(output.offset(message)) }

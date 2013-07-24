@@ -28,8 +28,8 @@ class TestInterfaceReporterSpec extends Specification with DataTables with Pendi
     def report(fs: =>Fragments, a: Arguments = args(color=false)) = reporter.report(new Specification { def is = fs})(a)
 
     def e1 = {
-      report("title".title ^ "text")
-      there was one(logger).info("title")
+      report("title".title ^ "\ntext")
+      there was one(logger).info("title\ntext\nTotal for specification title")
     }
     def e2 = {
       report("ex" ! ("a" | "b" |> 1 ! 2 | { (a, b) => success } ))
@@ -50,11 +50,11 @@ class TestInterfaceReporterSpec extends Specification with DataTables with Pendi
            |   + contain 11 characters
            |   + start with 'Hello'
            |   + end with 'world'
-           |                                                     
-           |
+           |_____________________________________________________
            |Total for specification HelloWorldSpec
            |Finished in 0 ms
-           |3 examples, 0 failure, 0 error""".stripMargin.replaceAll(" ", "_")
+           |3 examples, 0 failure, 0 error
+           |""".stripMargin.replaceAll(" ", "_")
     }
     def e2 = {
       val hwSpec = new HelloWorldSpecWithTags
@@ -64,14 +64,14 @@ class TestInterfaceReporterSpec extends Specification with DataTables with Pendi
            | This is a specification to check the 'Hello world' string
            |
            | The 'Hello world' string should
-           |   + contain 11 characters
-           |   + start with 'Hello'
+           |   + contain 11 characters_
+           |   + start with 'Hello'_
            |   + end with 'world'
-           |                                                     
-           |
+           |_____________________________________________________
            |Total for specification HelloWorldSpecWithTags
            |Finished in 0 ms
-           |3 examples, 0 failure, 0 error""".stripMargin.replaceAll(" ", "_")
+           |3 examples, 0 failure, 0 error
+           |""".stripMargin.replaceAll(" ", "_")
     }
   }
 
