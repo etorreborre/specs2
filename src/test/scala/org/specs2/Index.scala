@@ -129,8 +129,12 @@ def sidebar = s"""
    <a class="sidelink" href="http://github.com/etorreborre/specs2/issues">Issues</a><br/>
    <a class="sidelink" href="http://etorreborre.blogspot.com/search/label/specs2">Blog</a><br/>
    <a class="sidelink" href="sponsors.html">Sponsors</a><br/>
-   <a class="sidelink" href="http://www.twitter.com/specs2org"><img style="margin-top: 10px;" src="http://twitter-badges.s3.amazonaws.com/twitter-a.png" alt="Follow specs2 on Twitter"/></a>
-  </div>
+   <h3 style="margin-bottom: 0;">Stay informed!</h3><br/>
+   <a class="sidelink" href="http://etorreborre.blogspot.com/search/label/specs2">Blog</a><br/>
+   <a class="sidelink" href="http://notes.implicit.ly/tagged/specs2">Announcements</a><br/>
+   <div class="sidelink"><a href="https://twitter.com/specs2org" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false" data-dnt="true">Follow @specs2org</a>
+   <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></div>
+</div>
 """
 
 def footer = s"""
