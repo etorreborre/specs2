@@ -85,7 +85,7 @@ trait TraversableBaseMatchers extends ContainChecks with TraversableBaseMatchers
   def sorted[T : Ordering] = beSorted[T]
 
   /** any scala collection has a size */
-  implicit def scalaTraversableIsSized[I <: GenTraversable[_]]: Sized[I] = new Sized[I] {
+  implicit def scalaTraversableIsSized[I <: GenTraversableOnce[_]]: Sized[I] = new Sized[I] {
     def size(t: I) = t.size
   }
   /** any scala array has a size */
