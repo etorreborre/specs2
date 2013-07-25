@@ -6,7 +6,7 @@ import Scalaz._
 import text._
 import AnsiColors._
 import io.StringOutput
-import main.Arguments
+import org.specs2.main.{MapSystemProperties, Arguments}
 import execute._
 import specification.{Example, SpecificationStructure, ExecutedFragment, Fragments, ExecutingSpecification, Tags}
 import matcher.DataTables
@@ -173,8 +173,8 @@ class TextPrinterSpec extends Specification with DataTables with Tags { def is =
 
     def e8  = failureMustBeMagenta(new ConsoleColors { override val failureColor = magenta })
     def e9  = failureMustBeMagenta(SmartColors.fromArgs("failure:m"))
-    def e10 = failureMustBeMagenta(new SmartColors {
-      override lazy val properties = Map("color.failure"->"magenta")
+    def e10 = failureMustBeMagenta(new SmartColors with MapSystemProperties {
+       lazy val properties = Map("color.failure"->"magenta")
     })
     def e11  = SmartColors.fromArgs("whitebg,success:b").textColor must_== black
   }

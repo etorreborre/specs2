@@ -76,7 +76,7 @@ class SmartColors(argsColors: Map[String, String] = Map()) extends ConsoleColors
     override lazy val properties = outer
   }
 
-  lazy val fromSystemProperties = areDefined("color\\..*")
+  lazy val fromSystemProperties = Seq("text", "success", "failure", "error", "pending", "skipped", "stats").exists(p => isDefined("color."+p))
 
   override lazy val textColor    = if (argsColors.get("text"   ).isDefined) argsColors("text"   ) else if (fromSystemProperties) systemColors.textColor    else defaultColors.textColor
   override lazy val successColor = if (argsColors.get("success").isDefined) argsColors("success") else if (fromSystemProperties) systemColors.successColor else defaultColors.successColor

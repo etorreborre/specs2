@@ -85,8 +85,8 @@ Execution
   }
 
   "properties" - new group {
-     case class properties(map:(String, String)*) extends SystemProperties {
-       override lazy val properties = Map(map:_*)
+     case class properties(map:(String, String)*) extends MapSystemProperties {
+       lazy val properties = Map(map:_*)
      }
 
     eg := Arguments.extract(Seq(""), properties("plan" -> "")).plan must_== true

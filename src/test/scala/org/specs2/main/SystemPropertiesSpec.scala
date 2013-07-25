@@ -35,8 +35,8 @@ Get as
    + None if the property is not declared
                                                                                              """
 
-  "set" - new group with SystemProperties {
-    override lazy val properties = Map("specs2.outdir" -> "target/results")
+  "set" - new group with MapSystemProperties {
+    lazy val properties = Map("specs2.outdir" -> "target/results")
 
     eg := getOrElse("outdir", "")                === "target/results"
     eg := getOrElse("outDir", "")                === "target/results"
@@ -44,8 +44,8 @@ Get as
     eg := getOrElse("specs2.missing", "default") === "default"
   }
 
-  "getIf" - new group with SystemProperties {
-    override lazy val properties = Map("specs2.whitebg" -> "")
+  "getIf" - new group with MapSystemProperties {
+    lazy val properties = Map("specs2.whitebg" -> "")
 
     eg := getIf("whitebg", 1)           must beSome(1)
     eg := getIf("whitebgxxx", 1)        must beNone
@@ -54,8 +54,8 @@ Get as
   }
 
   "getAs" - new group {
-    case class props(map:(String, String)*) extends SystemProperties {
-      override lazy val properties = Map(map:_*)
+    case class props(map:(String, String)*) extends MapSystemProperties {
+      lazy val properties = Map(map:_*)
     }
     eg := props("specs2.color" -> null).getPropertyAs[Boolean]("color")    must beNone
     eg := props("specs2.color" -> "true").getPropertyAs[Boolean]("color")  must beSome(true)

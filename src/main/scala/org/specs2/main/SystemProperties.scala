@@ -12,13 +12,14 @@ private[specs2]
 trait SystemProperties {
   val specs2Prefix = "specs2."
 
-  lazy val properties: Map[String, String] = Map(System.getProperties.toSeq.map(s => s._1.notNull -> s._2.notNull):_*)
+  /** @return a system property if it exists */
+  protected def systemGetProperty(p: String): Option[String] = Option(System.getProperty(p.notNull))
     
   /** @return the value of the system property p */  
-  def getProperty(p: String): Option[String] =        properties.get(specs2Prefix + p).
-                                               orElse(properties.get(specs2Prefix + p.toLowerCase)).
-                                               orElse(properties.get(p)).
-                                               orElse(properties.get(p.toLowerCase)).map(_.notNull)
+  def getProperty(p: String): Option[String] =        systemGetProperty(specs2Prefix + p).
+                                               orElse(systemGetProperty(specs2Prefix + p.toLowerCase)).
+                                               orElse(systemGetProperty(p)).
+                                               orElse(systemGetProperty(p.toLowerCase)).map(_.notNull)
 
   /** @return the value of the system property p as a given type */
   def getPropertyAs[T: FromString](p: String): Option[T] = getProperty(p) flatMap implicitly[FromString[T]].fromString
@@ -34,13 +35,6 @@ trait SystemProperties {
 
   /** @return true if a property is defined */
   def isDefined(p: String) = getProperty(p).isDefined
-
-  /** @return true if there is a property matching the regular expression */
-  def areDefined(pattern: String) = {
-    val shortPattern  = Pattern.compile(pattern)
-    val specs2Pattern = Pattern.compile(specs2Prefix + pattern)
-    properties.keys.exists { prop => shortPattern.matcher(prop).matches || specs2Pattern.matcher(prop).matches }
-  }
 }
 
 private[specs2]
@@ -50,6 +44,7 @@ object SystemProperties extends SystemProperties
  * This class is used in specifications to mock the system properties
  */
 private[specs2]
-case class MapSystemProperties(map: (String, String)*) extends SystemProperties {
-  override lazy val properties = Map(map:_*)
+trait MapSystemProperties extends SystemProperties {
+  def properties: Map[String, String]
+  override def systemGetProperty(p: String) = properties.get(p)
 }

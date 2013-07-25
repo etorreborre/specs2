@@ -165,7 +165,9 @@ during the specification execution. There are 2 types of tags for marking a sing
 
   case class fromargs() {
     def e1 = {
-      val properties = MapSystemProperties("specs2.include" -> "t1", "specs2.exclude" -> "")
+      val properties = new MapSystemProperties {
+        lazy val properties = Map("specs2.include" -> "t1", "specs2.exclude" -> "")
+      }
       val arguments = Arguments.extract(Seq(), properties)
       select(arguments)(SpecificationStructure(tagged)).fragments.fragments.map(_.toString) must containMatch("e1")
     }
