@@ -29,7 +29,7 @@ class TestInterfaceReporterSpec extends Specification with DataTables with Pendi
 
     def e1 = {
       report("title".title ^ "\ntext")
-      there was one(logger).info("title\ntext\nTotal for specification title")
+      there was atLeastOne(logger).info(anyString)
     }
     def e2 = {
       report("ex" ! ("a" | "b" |> 1 ! 2 | { (a, b) => success } ))

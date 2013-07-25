@@ -62,13 +62,13 @@ class SelectionSpec extends Specification with Tags { def is = s2"""
       spec.i === expectedLocalValue
     }
 
-    def e1 = isIsolated(new SpecificationWithLocalVariable { def is = isolated ^ "e1" ! { i = 1; ok } }, expectedLocalValue = 0)
-    def e2 = isIsolated(new SpecificationWithLocalVariable { def is = isolated ^ Step(i = 1) ^ "e1" ! ok ^ Step(i = 2) }, expectedLocalValue = 2)
-    def e3 = isIsolated(new SpecificationWithLocalVariable { def is = isolated ^ Step(i = 1) }, expectedLocalValue = 1)
-    def e4 = isIsolated(new SpecificationWithLocalVariable { def is = isolated ^ Action(i = 1) }, expectedLocalValue = 0)
+    def e1 = isIsolated(new SpecificationWithLocalVariable { def is = formatSection(flow = true) ^ isolated ^ "e1" ! { i = 1; ok } }, expectedLocalValue = 0)
+    def e2 = isIsolated(new SpecificationWithLocalVariable { def is = formatSection(flow = true) ^ isolated ^ Step(i = 1) ^ "e1" ! ok ^ Step(i = 2) }, expectedLocalValue = 2)
+    def e3 = isIsolated(new SpecificationWithLocalVariable { def is = formatSection(flow = true) ^ isolated ^ Step(i = 1) }, expectedLocalValue = 1)
+    def e4 = isIsolated(new SpecificationWithLocalVariable { def is = formatSection(flow = true) ^ isolated ^ Action(i = 1) }, expectedLocalValue = 0)
 
-    def e5 = isIsolated(new SpecificationWithLocalVariable { def is = isolated ^ ("e1" ! { i = 1; ok }).global }, expectedLocalValue = 1)
-    def e6 = isIsolated(new SpecificationWithLocalVariable { def is = isolated ^ Step(i = 1).global ^ "e1" ! { i = 2; ok } }, expectedLocalValue = 1)
+    def e5 = isIsolated(new SpecificationWithLocalVariable { def is = formatSection(flow = true) ^ isolated ^ ("e1" ! { i = 1; ok }).global }, expectedLocalValue = 1)
+    def e6 = isIsolated(new SpecificationWithLocalVariable { def is = formatSection(flow = true) ^ isolated ^ Step(i = 1).global ^ "e1" ! { i = 2; ok } }, expectedLocalValue = 1)
     def e7 = {
       val spec = (new org.specs2.mutable.Specification with org.specs2.mutable.Tags {
         isolated
@@ -91,14 +91,14 @@ class SelectionSpec extends Specification with Tags { def is = s2"""
 }
 
 trait WithSelection extends FragmentsBuilder {
-  val selection = new DefaultSelection with DefaultSequence with StringOutput
+  def selection = new DefaultSelection with DefaultSequence with StringOutput
 
   def selectSequence(fs: Fragments): Seq[FragmentSeq] = {
-    selection.sequence(fs.specName, selection.select(fs.arguments)(SpecificationStructure(fs)).is.fragments)(fs.arguments).toList
+    selection.sequence(fs.specName, selection.select(fs.arguments)(SpecificationStructure(fs)).is.fragments.filterNot(Fragments.isBr))(fs.arguments).toList
   }
   def select(f: Fragments)(implicit args: Arguments = Arguments()) = {
     val fs = new Specification { def is = f }.content
-    selection.select(args)(SpecificationStructure(fs)).content.fragments.toList.map(_.toString)
+    selection.select(args)(SpecificationStructure(fs)).content.fragments.toList.filterNot(Fragments.isBr).map(_.toString)
   }
   def step(message: String) = Step({selection.println(message); reporter.println(message)})
   def example(message: String) = message ! { selection.println(message); reporter.println(message); Success() }

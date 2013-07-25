@@ -131,6 +131,8 @@ object Fragments {
   def isAnAction: PartialFunction[Fragment, Action] = { case a: Action => a }
   /** @return the step if the Fragment is a Br fragment */
   def isABr: PartialFunction[Fragment, Fragment] = { case br: Br => br }
+  /** @return the step if the Fragment is a Br fragment */
+  def isBr: Fragment => Boolean = { case br: Br => true; case _ => false }
   /** @return the step if the Fragment is an End fragment */
   def isAnEnd: PartialFunction[Fragment, Fragment] = { case e: End => e }
   /** @return the text if the Fragment is a TaggingFragment */
