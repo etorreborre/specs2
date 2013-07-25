@@ -1,30 +1,29 @@
 package org.specs2
 package text
 
-import specification.Grouped
+import org.specs2.specification.{Tables, Grouped}
 import AnsiColors._
 
-class AnsiColorsSpec extends Specification with Grouped { def is = s2"""
+class AnsiColorsSpec extends Specification with Grouped with Tables { def is = s2"""
 
  it is possible to remove the colors from a string                                                 ${g1.e1}
- coloring a string must keep newlines
-  if start and end with newline                                                                    ${g1.e2}
-  if start with newline                                                                            ${g1.e3}
-  if end with newline                                                                              ${g1.e4}
-  if no newline                                                                                    ${g1.e5}
-  if empty                                                                                         ${g1.e6}
-   if multiline                                                                                    ${g1.e7}
+ coloring a string must keep newlines                                                              ${g1.e2}
                                                                                                    """
 
   new g1 {
     e1 := removeColors("hello" + AnsiColors.red) === "hello"
 
-    e2 := color("\nhello\n", "*")        === "\n*hello"+reset+"\n"
-    e3 := color("\nhello", "*")          === "\n*hello"+reset
-    e4 := color("hello\n", "*")          === "*hello"+reset+"\n"
-    e5 := color("hello", "*")            === "*hello"+reset
-    e6 := color("", "*")                 === ""
-    e7 := color("\nhello\nworld\n", "*") === "\n*hello"+reset+"\n*world"+reset+"\n"
+    e2 := {
+      val ^ = reset
+      "string to color"        | "result"                                  |>
+      "\nhello\n"              ! s"*${^}\n*hello${^}\n*${^}"               |
+      "\nhello"                ! s"*${^}\n*hello${^}"                      |
+      "hello\n"                ! s"*hello${^}\n*${^}"                      |
+      "hello"                  ! s"*hello${^}"                             |
+      ""                       ! s"*${^}"                                  |
+      "\nhello\nworld\n"       ! s"*${^}\n*hello${^}\n*world${^}\n*${^}"   |
+      { (s, r) => color(s, "*").replace("\n", "_").replace(^, "^") ===  r.replace("\n", "_").replace(^, "^") }
+    }
   }
 
 }

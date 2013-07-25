@@ -233,8 +233,7 @@ class TextPrinterSpec extends Specification with DataTables with Tags { def is =
     }
   }
   case class isolate() {
-    def e1 = print(new NonIsolatedSpecification) must
-      contain(allOf("+ e1", "x e2"))
+    def e1 = print(new NonIsolatedSpecification) must contain(allOf("+ e1", "x e2"))
     def e2 = print(new IsolatedSpecification) must contain(allOf("+ e1", "+ e2"))
   }
   case class stopOnFailargs() {
@@ -282,16 +281,17 @@ class TextPrinterSpec extends Specification with DataTables with Tags { def is =
     printWithColors(fragments).map(removeColors(_))
 
   def printWithColors(fs: Fragments): Seq[String] =
-    preReporter.exec("\n" ^ fs).foreach((n, fs) => printer.print(fs))
+    preReporter.exec("\n" ^ fs).foreach((n, fs) => printer.print(fs)).flatMap(_.split("\n"))
 
   def printWithColors(specification: SpecificationStructure): Seq[String] =
-    preReporter.exec(specification).foreach((n, fs) => printer.print(fs))
+    preReporter.exec(specification).foreach((n, fs) => printer.print(fs)).flatMap(_.split("\n"))
 
   val outer = this
   def printer = new TextPrinter {
     override lazy val textOutput = new TextResultOutput with StringOutput
     def print(fs: Seq[ExecutedFragment]) = {
       super.print(outer.content.specName, fs)
+      textOutput.flushText(force = true)
       textOutput.messages
     }
   }

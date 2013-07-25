@@ -195,7 +195,7 @@ trait TextPrinter {
   }        
   case class PrintBr() extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
-      if (args.canShow("-")) out.printLine(" ")(args)
+      if (args.canShow("-")) out.printText("\n")(args)
   }
   case class PrintSpecEnd(end: ExecutedSpecEnd, endStats: Stats) extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) = {

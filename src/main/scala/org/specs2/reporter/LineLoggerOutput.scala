@@ -16,22 +16,23 @@ trait LineLoggerOutput extends ResultOutput with LineLogger {
     buffer.append(offset(msg))
   }
 
-  def flushText(force: Boolean = false) = {
-    if (force ||
-        buffer.nonEmpty && endsWith(buffer.toString, "\n")) {
+  def flushText(force: Boolean = false)(implicit args: Arguments) = {
+    if (force || endsWith(buffer.toString, "\n")) {
       infoLog(buffer.toString)
       buffer.clear
     }
   }
 
-  private def endsWith(message: String, string: String) = {
-    message.reverse.
+  private def endsWith(message: String, string: String)(implicit args: Arguments) = {
+    val nocolor = args.colors.removeColors(message)
+    message.nonEmpty &&
+      message.reverse.
       dropWhile(_ == ' ').
       startsWith(string)
   }
 
   def printSeeLink(message: String, stats: Stats)(implicit args: Arguments)        = info(status(stats.result)+args.textColor(message))
-  def printText(message: String)(implicit args: Arguments)                         = info(message)
+  def printText(message: String)(implicit args: Arguments)                         = info(args.textColor(message))
   def printSuccess(message: String)(implicit args: Arguments)                      = info(message)
   def printSkipped(message: String)(implicit args: Arguments)                      = info(message)
   def printPending(message: String)(implicit args: Arguments)                      = info(message)

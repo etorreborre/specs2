@@ -77,7 +77,8 @@ object SpecificationStructure {
   import collection.Iterablex._
   
   def apply(fs: Fragments): SpecificationStructure = new SpecificationStructure {
-    def is = fs.fragments match {
+    def is = content
+    override lazy val content = fs.fragments match {
       case SpecStart(n,a,l,_) +: middle :+ SpecEnd(_,_,_) => Fragments(Some(n), middle, a, l)
       case other                                          => fs
     }

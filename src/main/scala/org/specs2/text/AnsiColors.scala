@@ -31,11 +31,11 @@ trait AnsiColors {
    */
   def color(s: String, color: String, doIt: Boolean = true) = {
     if (doIt) {
-      val colored = s.split("\n").filter(_.nonEmpty).map(color + _ + reset)
-      if (s.startsWith("\n") && s.endsWith("\n")) colored.mkString("\n", "\n", "\n")
-      else if (s.startsWith("\n"))                colored.mkString("\n", "\n", "")
-      else if (s.endsWith("\n"))                  colored.mkString("", "\n", "\n")
-      else                                        colored.mkString("\n")
+      val colored = s.foldLeft(color) { (res, cur) =>
+        if (cur == '\n') res + reset + cur + color
+        else             res + cur
+      } + reset
+      colored
     }
     else      removeColors(s, true)
   }

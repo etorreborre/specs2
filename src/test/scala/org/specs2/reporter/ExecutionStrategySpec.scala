@@ -46,7 +46,7 @@ class ExecutionStrategySpec extends mutable.Specification {
   def report(s: SpecificationStructure) = {
     val reporter = newReporter
     reporter.report(s)(args())
-    reporter.textOutput.messages.map(m => removeColors(m).split(" ").take(2).mkString(" ")).filterNot(_.trim.isEmpty)
+    reporter.textOutput.messages.flatMap(_.split("\n")).map(m => removeColors(m).split(" ").take(2).mkString(" ")).filterNot(_.trim.isEmpty)
   }
 
   def newReporter = new ConsoleReporter {
