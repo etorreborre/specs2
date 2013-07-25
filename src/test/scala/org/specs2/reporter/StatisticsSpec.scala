@@ -59,7 +59,7 @@ Statistics can be accumulated on each executed specification in order to be disp
   }
   
   def e8 = {
-    val endOfSpecStats = totals(spec2).apply(11) // the end stat for the inner specification
+    val endOfSpecStats = totals(spec2).apply(totals(spec2).size - 3) // the end stat for the inner specification
     (endOfSpecStats.examples must_== 5) and (endOfSpecStats.successes must_== 1)
   }
 
