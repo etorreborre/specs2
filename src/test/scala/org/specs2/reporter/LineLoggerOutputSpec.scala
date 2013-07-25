@@ -16,6 +16,7 @@ Simple cases
 
  + one example
  + one example and a total
+ + one example and a pending
 """
 
   "simple cases" - new group with lineLogger {
@@ -38,6 +39,14 @@ Simple cases
         printLine("")
       } must contain(allOf("some text\n  + one example\nTotal for specification spec1",
                            "Finished in 0 ms\n0 example, 0 failure, 0 error", ""))
+    }
+
+    eg := {
+      printed {
+        printSuccess("+ one example")
+        printText("\n")
+        printPending("* pending")
+      } must contain(exactly("+ one example\n* pending"))
     }
   }
 
