@@ -4,12 +4,11 @@ import Keys._
 object dependencies {
 
   lazy val settings = dependencies ++ resolversSettings
-  lazy val dependencies = libraryDependencies <<= (version, scalaVersion) { (version, scalaVersion) =>
-    scalalibs(scalaVersion) ++
+  lazy val dependencies = libraryDependencies ++= 
+    scalalibs(scalaVersion.value) ++
     scalaz()                ++
     specs2()
-  }
-
+  
   // Libraries
   def scalaz(scalazVersion: String = "7.0.2") = Seq(
     "org.scalaz"                        %% "scalaz-core"               % scalazVersion,
