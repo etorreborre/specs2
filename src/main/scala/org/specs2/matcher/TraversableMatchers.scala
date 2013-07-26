@@ -4,6 +4,7 @@ package matcher
 import control._
 import data.Sized
 import text.Quote._
+import text.Regexes._
 import text.Plural._
 import collection.Iterablex._
 import collection.Seqx._
@@ -46,7 +47,7 @@ trait TraversableBaseMatchers extends ContainChecks with TraversableBaseMatchers
   /** match if a traversable contains one of (t1, t2) */
   def containAnyOf[T](seq: Seq[T]) = contain(new BeOneOf(seq))
   /** match if traversable contains (x matches .*+t+.*) */
-  def containMatch[T](t: =>String) = containPattern[T](".*"+t+".*")
+  def containMatch[T](t: =>String) = containPattern[T](t.regexPart)
   /** match if traversable contains (x matches p) */
   def containPattern[T](t: =>String) = ContainWithResult(matcherIsContainCheck(new BeMatching(t))) ^^ ((ts: GenTraversableOnce[T]) => ts.toSeq.map(_.toString).to[GenTraversableOnce])
 
@@ -126,7 +127,7 @@ trait TraversableBeHaveMatchers extends LazyParameters { outer: TraversableMatch
   class TraversableBeHaveMatchers[T](s: MatchResult[Traversable[T]]) {
     def contain(check: ContainCheck[T]) = s(outer.contain(check))
     def containPattern(t: =>String) = s(outer.containPattern(t))
-    def containMatch(t: =>String) = containPattern(".*"+t+".*")
+    def containMatch(t: =>String) = containPattern(t.regexPart)
     /** @deprecated(message="use contain(function) instead", since="2.0") */
     def have(f: T => Boolean) = s(outer.have(f))
     /** @deprecated(message="use contain(like(partialFunction)) instead", since="2.0") */

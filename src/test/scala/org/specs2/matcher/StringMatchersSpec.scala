@@ -11,6 +11,7 @@ class StringMatchersSpec extends Specification { def is = s2"""
     ${ "eric" must beMatching("e.*") }
     ${ "eric" must beMatching(Pattern.compile("e.*")) }
     ${ "eric" must beMatching("e.*".r) }
+    ${ "eric\nme\nmyself" must =~("me") }
 
     "or 'be matching'
     ${ "eric" aka "ETO" must be matching("e.*") }

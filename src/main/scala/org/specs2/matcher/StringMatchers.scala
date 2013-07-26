@@ -5,6 +5,7 @@ import java.util.regex._
 import control.Exceptions._
 import text.Quote._
 import util.matching.Regex
+import text.Regexes._
 
 /**
  * The `StringMatchers` trait provides matchers which are applicable to String objects
@@ -61,11 +62,11 @@ trait StringBaseMatchers { outer =>
   /** matches if b matches the regex a */
   def beMatching(a: Regex) = new BeMatchingRegex(a)
   /** alias for beMatching but matching just a fragment of the string*/
-  def =~(t: =>String) = new BeMatching(".*"+t+".*")
+  def =~(t: =>String) = BeMatching.withPart(t)
   /** alias for beMatching but matching just a fragment of the string*/
-  def =~(p: Pattern) = new BeMatchingPattern(Pattern.compile(".*"+p.toString+".*"))
+  def =~(p: Pattern) = new BeMatchingPattern(Pattern.compile(p.toString.regexPart))
   /** alias for beMatching but matching just a fragment of the string*/
-  def =~(r: Regex) = new BeMatchingRegex((".*"+r.toString+".*").r)
+  def =~(r: Regex) = new BeMatchingRegex(r.toString.regexPart.r)
   /** matches if b.startsWith(a) */
   def startWith(t: String) = new Matcher[String] {
     def apply[S <: String](b: Expectable[S]) = {
@@ -211,6 +212,10 @@ class BeMatching(t: =>String) extends Matcher[String] {
            b.description + " matches " + q(a),
            b.description + " doesn't match " + q(a), b)
   }
+}
+
+object BeMatching {
+  def withPart(expression: String) = new BeMatching(expression.regexPart)
 }
 protected[specs2]
 class BeMatchingPattern(p: Pattern) extends BeMatching(p.toString) {

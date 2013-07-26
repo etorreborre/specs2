@@ -132,7 +132,7 @@ object StringMatchers extends Card {
 Matching on strings is very common. Here are the matchers which can help you:
 
  * `beMatching` (or ` be matching`) checks if a string matches a regular expression
- * `=~(s)` is a shortcut for `beMatching(".*"+s+".*")`
+ * `=~(s)` is a shortcut for `beMatching("(.|\\s)*"+s+"(.|\\s)*")`
  * `find(exp).withGroups(a, b, c)` checks if some groups are found in a string
  * `have length` checks the length of a string
  * `have size` checks the size of a string (seen as an `Iterable[Char]`)

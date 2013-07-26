@@ -23,6 +23,9 @@ trait Regexes {
       val pattern = tryOrElse(Pattern.compile(p))(Pattern.compile(enclosing+Pattern.quote(p.trimEnclosing(enclosing))+enclosing))
       pattern.matcher(s.removeAll("\n").removeAll("\r")).matches
     }
+
+    /** @return a regular expression String matching 's' inside another string, possibly multi-string */
+    def regexPart = s"\\s*.*\\s*$s\\s*.*\\s*"
   }
 
   implicit def regexMatch(r: Regex): RegexMatch = RegexMatch(r)

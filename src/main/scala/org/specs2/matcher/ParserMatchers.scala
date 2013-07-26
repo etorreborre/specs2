@@ -44,13 +44,13 @@ trait ParserBaseMatchers extends TraversableMatchers {
     ParseSuccessMatcher[T, ParseResult[T]](identity _).andThenWithResult(m)
   /** match if the parse successful => string match ok */
   def haveSuccessResult[T](result: String): Matcher[ParseResult[T]] =
-    haveSuccessResult(new BeMatching(".*"+result+".*") ^^ ((_:Any).toString))
+    haveSuccessResult(BeMatching.withPart(result) ^^ ((_:Any).toString))
   /** match if the parse fails => matcher ok */
   def haveFailureMsg[T](m: Matcher[String]): Matcher[ParseResult[T]] =
     ParseNoSuccessMatcher[T, ParseResult[T], PFailure](identity _).andThenWithMsg(m)
   /** match if the parse fails => string match ok */
   def haveFailureMsg[T](result: String): Matcher[ParseResult[T]] =
-    haveFailureMsg(new BeMatching(".*"+result+".*"))
+    haveFailureMsg(BeMatching.withPart(result))
 
 
   private[specs2] trait ParseResultMatcher[T, TMatchee] extends Matcher[TMatchee] {
@@ -82,7 +82,7 @@ trait ParserBaseMatchers extends TraversableMatchers {
     }
 
     /** check if the parsed value is as expected as a regexp*/
-    def withResult(result: String): Matcher[TMatchee] = withResult(new BeMatching(".*"+result+".*") ^^ ((_:Any).toString))
+    def withResult(result: String): Matcher[TMatchee] = withResult(BeMatching.withPart(result) ^^ ((_:Any).toString))
     /** check if the parsed value is as expected */
     def withResult(result: ExpectedParsedResult[T]): Matcher[TMatchee] = withResult(new BeEqualTo(result.t))
 
@@ -142,7 +142,7 @@ trait ParserBaseMatchers extends TraversableMatchers {
     }
 
     /** check if the failure message is as expected */
-    def withMsg(msg: ExpectedParsedResult[String]): Matcher[TMatchee] = withMsg(new BeMatching(".*"+msg.t+".*"))
+    def withMsg(msg: ExpectedParsedResult[String]): Matcher[TMatchee] = withMsg(BeMatching.withPart(msg.t))
 
     /** check if the failure message is as expected, using a matcher */
     def withMsg(msgMatcher: Matcher[String]): Matcher[TMatchee] = new Matcher[TMatchee] {
