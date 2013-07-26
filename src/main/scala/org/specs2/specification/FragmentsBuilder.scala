@@ -134,13 +134,6 @@ trait FragmentsBuilder extends ExamplesFactory with ImplicitParameters with Form
   case class SpecIdentificationMarkdownLink(s: String) {
     def markdownLink(specIdentification: SpecIdentification) = specIdentification.markdownLink(s)
   }
-
-  /** transform a scope to a success to be able to create traits containing any variables and usable in any Examples */
-  implicit def inScope(s: Scope): Success = Success()
-  /** typeclass to transform a Scope to a Result */
-  implicit def scopeAsResult[S <: Scope]: AsResult[S] = new AsResult[S] {
-    def asResult(t: =>S) = inScope(t)
-  }
 }
 
 /**

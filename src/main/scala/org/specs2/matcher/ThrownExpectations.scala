@@ -9,6 +9,7 @@ import scala.Some
 import execute.PendingException
 import execute.SkipException
 import execute.FailureException
+import org.specs2.specification.Scope
 
 /**
  * Thrown expectations will throw a FailureException if a match fails
@@ -25,7 +26,7 @@ import execute.FailureException
  *     }
  *   }
  */
-trait ThrownExpectations extends Expectations with StandardResults {
+trait ThrownExpectations extends Expectations with StandardResults with ScopedExpectations {
   override def createExpectable[T](t: =>T, alias: Option[String => String]): Expectable[T] =
     new Expectable(() => t) {
       // overriding this method is necessary to include the ThrownExpectation trait into the stacktrace of the created match result
@@ -99,6 +100,24 @@ object ThrownExpectations extends ThrownExpectations
 trait NoThrownExpectations extends Expectations {
   override protected def checkResultFailure(r: Result) = r
   override protected def checkMatchResultFailure[T](m: MatchResult[T]): MatchResult[T] = m
+}
+
+/**
+ * This trait allows to enclose expectations throwing exceptions in a `Scope` trait:
+ *
+ * "this is a failing test" >> new Scope { 1 must_== 2 }
+ */
+trait ScopedExpectations {
+  /** transform a scope to a success to be able to create traits containing any variables and usable in any Examples */
+  implicit def inScope(s: Scope): Success = Success()
+  /** typeclass to transform a Scope to a Result */
+  implicit def scopeAsResult[S <: Scope]: AsResult[S] = new AsResult[S] {
+    def asResult(t: =>S) = inScope(t)
+  }
+}
+trait NoScopedExpectations extends ScopedExpectations {
+  override def inScope(s: Scope): Success = super.inScope(s)
+  override def scopeAsResult[S <: Scope]: AsResult[S] = super.scopeAsResult
 }
 
 /**

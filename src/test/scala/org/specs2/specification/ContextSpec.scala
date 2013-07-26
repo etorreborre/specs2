@@ -212,7 +212,7 @@ class ContextSpec extends Specification with ResultMatchers with Groups with Fra
     }
   }
 
-  "mutable contexts" - new g6 with FragmentsExecution {
+  "mutable contexts" - new g6 with FragmentsExecution with ThrownExpectations {
     e1 := executing("e1" ! new beforeMutableContext { println("body"); 1 must_== 1 }).prints("before", "body")
     e2 := executing("e1" ! new afterMutableContext { println("body"); 1 must_== 1 }).prints("body", "after")
     e3 := executing("e1" ! new aroundMutableContext { println("body"); 1 must_== 1 }).prints("before", "body", "after")

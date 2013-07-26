@@ -4,10 +4,10 @@ package control
 import io.StringOutput
 import specification.Scope
 import scala.collection.mutable.ListBuffer
-import matcher.MustMatchers
+import org.specs2.matcher.{ScopedExpectations, MustMatchers}
 import control.Debug.Debuggable
 
-class DebugSpec extends Specification { def is = s2"""
+class DebugSpec extends Specification with ScopedExpectations { def is = s2"""
 
   It is possible to insert some method calls to print values on the console
     pp prints a value and returns it ${new output {

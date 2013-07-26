@@ -81,7 +81,7 @@ Custom
  + a custom match can be negated, or used with be/have
                                                                                                                 """
 
-  "or matches" - new group {
+  "or matches" - new group with ScopedExpectations {
     eg := "eric" must (beMatching("e.*") or beMatching(".*c"))
     eg := "eric" must (beMatching("a.*") or beMatching(".*z")).not
     eg := "eric" must (beMatching("e.*") or beMatching({error("boom");".*z"}))
