@@ -4,7 +4,8 @@ package text
 import Trim._
 import Split._
 /**
- * The EditDistance trait provides methods to compute and display the shortest distance between 2 strings.<p>
+ * The EditDistance trait provides methods to compute and display the shortest distance between 2 strings.
+ *
  * Usage:<pre>
  * showDistance("kitten", "sitting") // returns ("(k)itt(e)n", "(s)itt(i)n(g)")
  *
@@ -12,88 +13,178 @@ import Split._
  * showDistance("kitten", "sitting", "[]") // returns ("[k]itt[e]n", "[s]itt[i]n[g]")
  * </pre>
  */
-private[specs2]
 trait EditDistance {
+  type OpType = String
+  lazy val INS = "INS"
+  lazy val DEL = "DEL"
+  lazy val SUBST = "SUBST"
+  lazy val NONE = "NONE"
+
+  case class Op(opType: OpType, cost: Int = 0) {
+    override def toString =
+      (if      (opType == INS)   "+"
+       else if (opType == DEL)   "-"
+       else if (opType == SUBST) "~"
+       else                      " ")+cost
+  }
+  type DistanceMatrix = Array[Array[Op]]
+
   /**
-   * Class encapsulating the functions related to the edit distance of 2 strings
+   * Edit matrix for 2 given strings
    */
-  case class EditMatrix(s1: String, s2: String) {
+  class EditMatrix(s1: String, s2: String) extends StringDistance with ShowDistance with DiffShortener {
     /* matrix containing the edit distance for any prefix of s1 and s2: matrix(i)(j) = edit distance(s1[0..i], s[0..j])*/
-    val matrix = Array.ofDim[Int](s1.length + 1, s2.length + 1)
+    private val matrix = Array.ofDim[Op](s1.length + 1, s2.length + 1)
+    initialize(s1, s2, matrix)
 
-    /* initializing the matrix */
-    for (i <- 0 to s1.length;
-         j <- 0 to s2.length) {
-      if (i == 0) matrix(i)(j) = j // j insertions
-      else if (j == 0) matrix(i)(j) = i  // i suppressions
-      else matrix(i)(j) = min(matrix(i - 1)(j) + 1, // suppression
-                              matrix(i - 1)(j - 1) + (if (s1(i - 1) == s2(j - 1)) 0 else 1), // substitution
-                              matrix(i)(j - 1) + 1) // insertion
-
-    }
     /** @return the edit distance between 2 strings */
-    def distance = matrix(s1.length)(s2.length)
+    def distance = lastOp.cost
+    private def lastOp = matrix(s1.length)(s2.length)
 
-    /** prints the edit matrix of 2 strings */
-    def print = {
+    /** prints the edit matrix of the 2 strings */
+    def showMatrix = {
+      val result = new StringBuilder
+
       for (i <- 0 to s1.length) {
         def row = for (j <- 0 to s2.length) yield matrix(i)(j)
-        println(row.mkString("|"))
+        result.append(row.mkString("|"))
       }
-      this
+      result.toString
     }
 
-    /** @return a (String, String) displaying the differences between each input strings. The used separators are parenthesis: '(' and ')'*/
-    def showDistance: (String, String) = showDistance("()", 20)
+    /** show the distance between 2 strings */
+    def showDistance: (String, String) = showDistance("[]", 20)
 
+    /** show the distance between 2 strings by enclosing them with separators */
+    def showDistance(separator: String, shortenSize: Int): (String, String) = {
+      val (firstSeparator, secondSeparator) = StringDelimiter(separator).separators
+      val (s1diffs, s2diffs) = showOperations(s1, s2, matrix, separator)
+      (shorten(s1diffs, firstSeparator, secondSeparator, shortenSize),
+        shorten(s2diffs, firstSeparator, secondSeparator, shortenSize))
+    }
+
+    /** @return the longest common subsequence of letters between the 2 strings */
+    def longestSubsequence = showDistance._1.replaceAll("\\[.*?\\]", "")
+
+    override def toString = showMatrix
+  }
+
+  /**
+   * Evaluate the distance between 2 strings by counting the number of insertions, suppressions or substitutions
+   * which are necessary to transform one into the other
+   */
+  trait StringDistance {
+
+    def initialize(s1: String, s2: String, matrix: DistanceMatrix): Unit =
+      for (i <- 0 to s1.length;
+           j <- 0 to s2.length) {
+        if (i == 0)      matrix(i)(j) = Op(INS, j)                 // j insertions
+        else if (j == 0) matrix(i)(j) = Op(DEL, i)                 // i suppressions
+        else             matrix(i)(j) = cost(s1, s2, i, j, matrix) // otherwise
+      }
+
+    /** @return the cost of a substitution */
+    def substitutionCost(a: Char, b: Char): Int = if (a == b) 0 else 1
+
+    /** @return the cost of an insertion or deletion */
+    def insertionDeletionCost(c: Char) = 1
+
+    /** @return the lower cost and associated operation of a deletion, substitution or insertion */
+    def lowerCost(a: Char, b: Char, del: Int, subst: Int, ins: Int): Op = {
+      val min = math.min(del, math.min(subst, ins))
+           if (min == del)  Op(DEL, del)
+      else if (min == ins)  Op(INS, ins)
+      else if (a == b)      Op(NONE, subst)
+      else                  Op(SUBST, subst)
+    }
+
+    /** @return the cost for DistanceMatrix(i, j) */
+    def cost(s1: String, s2: String, i: Int, j: Int, matrix: DistanceMatrix) = {
+      lowerCost(
+         s1(i - 1), s2(j - 1),
+         matrix(i - 1)(j).cost     + insertionDeletionCost(s1(i - 1)),       // suppression
+         matrix(i - 1)(j - 1).cost + substitutionCost(s1(i - 1), s2(j - 1)), // substitution
+         matrix(i)(j - 1).cost     + insertionDeletionCost(s2(j - 1)))       // insertion
+    }
+  }
+
+  /**
+   * Given 2 strings and their edit distance matrix, show the operations allowing to go from one string to the other
+   */
+  trait ShowDistance extends DiffShortener {
     /**
-     * @param sep separators used to hightlight differences. If sep is empty, then no separator is used. If sep contains
+     * separators are used to highlight differences. If sep is empty, then no separator is used. If sep contains
      * one character, it is taken as the unique separator. If sep contains 2 or more characters, half of them are taken for the opening separator and
      * the rest for the closing separator.
      *
      * @return a (String, String) displaying the differences between each input strings. The used separators are specified by the caller.<p>
      */
-    def showDistance(sep: String, shortenSize: Int) = {
-      val (firstSeparator, secondSeparator) = separators(sep)
-      def modify(s: String, c: Char): String = modifyString(s, c.toString)
-      def modifyString(s: String, mod: String): String = (firstSeparator + mod + secondSeparator + s).removeAll(secondSeparator + firstSeparator)
+    protected def showOperations(s1: String, s2: String, matrix: DistanceMatrix, separator: String) = {
+      val delimiter = StringDelimiter(separator)
 
-      def findOperations(dist: Int, i: Int, j:Int, s1mod: String, s2mod: String): (String, String) = {
-        if (i == 0 && j == 0) {
-          ("", "")
-        }
-        else if (i == 1 && j == 1) {
-          if (dist == 0) (s1(0) + s1mod, s2(0) + s2mod)
-          else (modify(s1mod, s1(0)), modify(s2mod, s2(0)))
-        }
-        else if (j < 1) (modifyString(s1mod, s1.slice(0, i)), modifyString(s2mod, ""))
-        else if (i < 1) (modifyString(s1mod, ""), modifyString(s2mod, s2.slice(0, j)))
+      def showAllOperations(i: Int, j:Int, s1Operations: String = "", s2Operations: String = ""): (String, String) = {
+        if (i == 0 && j == 0) ("", "")
         else {
-          val (suppr, subst, ins) = (matrix(i - 1)(j), matrix(i - 1)(j - 1), matrix(i)(j - 1))
-          if (suppr < subst)
-            findOperations(suppr, i - 1, j, modify(s1mod, s1(i - 1)), modifyString(s2mod, ""))
-          else if (ins < subst)
-            findOperations(ins, i, j - 1, modifyString(s1mod, ""), modify(s2mod, s2(j - 1)))
-          else if (subst < dist)
-            findOperations(subst, i - 1, j - 1, modify(s1mod, s1(i - 1)), modify(s2mod, s2(j - 1)))
-          else
-            findOperations(subst, i - 1, j - 1, s1(i - 1) + s1mod, s2(j - 1) + s2mod)
+          val op = matrix(i)(j)
+          val dist = op.cost
+          if (i == 1 && j == 1) {
+            if (dist == 0) (s1(0) + s1Operations,                          s2(0) + s2Operations)
+            else           (delimiter.add(s1(0), s1Operations),            delimiter.add(s2(0), s2Operations))
+          }
+          else if (j < 1) (delimiter.append(s1.slice(0, i), s1Operations), delimiter.appendEmpty(s2Operations))
+          else if (i < 1) (delimiter.appendEmpty(s1Operations),            delimiter.append(s2.slice(0, j), s2Operations))
+          else {
+            if (op.opType == INS)        showAllOperations(i,     j - 1, delimiter.appendEmpty(s1Operations),    delimiter.add(s2(j - 1), s2Operations))
+            else if (op.opType == DEL)   showAllOperations(i - 1, j,     delimiter.add(s1(i - 1), s1Operations), delimiter.appendEmpty(s2Operations))
+            else if (op.opType == SUBST) showAllOperations(i - 1, j - 1, delimiter.add(s1(i - 1), s1Operations), delimiter.add(s2(j - 1), s2Operations))
+            else                         showAllOperations(i - 1, j - 1, s1(i - 1) + s1Operations,               s2(j - 1) + s2Operations)
+          }
         }
       }
-      val (s1diffs, s2diffs) = findOperations(distance, s1.length, s2.length, "", "")
-      import DiffShortener._
-      (shorten(s1diffs, firstSeparator, secondSeparator, shortenSize), shorten(s2diffs, firstSeparator, secondSeparator, shortenSize))
-    }
-    def min(suppr: Int, subst: Int, ins: =>Int) = {
-      if(suppr < subst) suppr
-      else if (ins < subst) ins
-      else subst
+      val (diff1, diff2) = showAllOperations(s1.length, s2.length)
+      (delimiter.trim(diff1), delimiter.trim(diff2))
     }
   }
+
+  /**
+   * reconstruct strings by appending modified elements with separators
+   */
+  case class StringDelimiter(separator: String) {
+    lazy val separators = (first, second)
+
+    def add(c: Char, s: String): String = append(c.toString, s)
+    def append(s2: String, s1: String): String = first+s2+second+s1
+    def appendEmpty(s: String): String = append("", s)
+
+    def trim(s: String) = s.removeAll(second+first)
+
+    private val middle = separator.size / 2 + separator.size % 2
+    private lazy val first =  if (separator.isEmpty) "" else separator.substring(0, middle)
+    private lazy val second = if (separator.size < 2) first else separator.substring(middle, separator.size)
+  }
+
   /** @return the edit distance between 2 strings = the minimum number of insertions/suppressions/substitutions to pass from one string to the other */
-  def editDistance(s1: String, s2: String): Int = foldSplittedStrings(s1, s2, 0, {
-    (r: Int, s1: String, s2: String) => r + new EditMatrix(s1, s2).distance }
-  )
+  def editDistance(s1: String, s2: String): Int =
+    foldSplittedStrings(s1, s2, 0, (r: Int, s1: String, s2: String) => { r + new EditMatrix(s1, s2).distance })
+
+  /** show the edit matrix for 2 strings */
+  def showMatrix(s1: String, s2: String) =
+    foldSplittedStrings(s1, s2, (), (r: Any, s1: String, s2: String) => new EditMatrix(s1, s2).showMatrix)
+
+  /**
+   * @param sep separators used to hightlight differences. If sep is empty, then no separator is used. If sep contains
+   * one character, it is taken as the unique separator. If sep contains 2 or more characters, the first half of the characters are taken as
+   * opening separator and the second half as closing separator.
+   *
+   * @return a (String, String) displaying the differences between each input strings.
+   * The used separators are specified by the caller. The string is shortened before and after differences if necessary. <p>
+   */
+  def showDistance(s1: String, s2: String, sep: String = "[]", shortenSize: Int = 20): (String, String) =
+    foldSplittedStrings(s1, s2, ("", ""), (r: (String, String), s1: String, s2: String) => {
+      val showDistance = new EditMatrix(s1, s2).showDistance(sep, shortenSize)
+      def skipLine(s: String) = if (s.isEmpty) s else s+"\n"
+      (skipLine(r._1) + showDistance._1, skipLine(r._2) + showDistance._2)
+    })
 
   /** apply edit distance functions on strings splitted on newlines so that there are no memory issues */
   private def foldSplittedStrings[T](s1: String, s2: String, init: T, f: (T, String, String) => T): T = {
@@ -113,37 +204,11 @@ trait EditDistance {
     def splitToSize(strings: List[String]) = strings.flatMap(_.splitToSize(200))
     (splitToSize(splitted1), splitToSize(splitted2))
   }
-  /** prints on the console the edit matrix for 2 strings */
-  def showMatrix(s1: String, s2: String) = foldSplittedStrings(s1, s2, (), {
-    (r: Any, s1: String, s2: String) => new EditMatrix(s1, s2).print }
-  )
-
-  /**
-   * @param sep separators used to hightlight differences. If sep is empty, then no separator is used. If sep contains
-   * one character, it is taken as the unique separator. If sep contains 2 or more characters, the first half of the characters are taken as
-   * opening separator and the second half as closing separator.
-   *
-   * @return a (String, String) displaying the differences between each input strings.
-   * The used separators are specified by the caller. The string is shortened before and after differences if necessary. <p>
-   */
-  def showDistance(s1: String, s2: String, sep: String = "[]", shortenSize: Int = 20): (String, String) = {
-    foldSplittedStrings(s1, s2, ("", ""), { (r: (String, String), s1: String, s2: String) =>
-        val showDistance = EditMatrix(s1, s2).showDistance(sep, shortenSize)
-        def skipLine(s: String) = if (s.isEmpty) s else (s + "\n")
-        (skipLine(r._1) + showDistance._1, skipLine(r._2) + showDistance._2)
-      }
-    )
-  }
-
-  private def separators(s: String) = (firstSeparator(s), secondSeparator(s))
-  private def firstSeparator(s: String) = if (s.isEmpty) "" else s.substring(0, s.size / 2 + s.size % 2)
-  private def secondSeparator(s: String) = if (s.size < 2) firstSeparator(s) else s.substring(s.size / 2 + s.size % 2, s.size)
 }
 
 /**
  * This object help shortening strings between differences when the strings are too long
  */
-private[specs2]
 trait DiffShortener {
   def shorten(s: String, firstSep: String = "[", secondSep: String = "]", size: Int = 5): String = {
     def shortenLeft(s: String) = if (s.size > size) ("..." + s.slice(s.size - size, s.size)) else s
@@ -183,9 +248,7 @@ trait DiffShortener {
     }
   }
 }
-private[specs2]
 object DiffShortener extends DiffShortener
 
-private[specs2]
 object EditDistance extends EditDistance
 

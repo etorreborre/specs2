@@ -50,7 +50,7 @@ class EditDistanceSpec extends Specification with EditDistance with DataTables w
 
   "show distance" - new g2 {
     e1 := (showDistance("kitte", "kittei")         === ("kitte[]", "kitte[i]")) and
-          (showDistance("kitten", "kittein")       === ("kitte[]n", "kitte[i]n"))
+           (showDistance("kitten", "kittein")       === ("kitte[]n", "kitte[i]n"))
     e2 := showDistance("kitten", "kit")            === ("kit[ten]", "kit[]")
     e3 := showDistance("kit", "kitten")            === ("kit[]", "kit[ten]")
     e4 := showDistance("kitten", "kitsin")         === ("kit[te]n", "kit[si]n")
