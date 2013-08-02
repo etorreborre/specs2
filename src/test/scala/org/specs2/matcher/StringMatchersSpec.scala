@@ -46,9 +46,14 @@ class StringMatchersSpec extends Specification { def is = s2"""
     ${ "eric" must beEqualTo(" eric ").ignoreSpace }
     the failure message must mention 'ignoring space' $e4
 
+    trimmed
+    ${ "eric" must beEqualTo(" eric ").trimmed }
+    the failure message must mention 'trimmed' $e5
+
     ignoring space and case
     ${ "  eric" must beEqualTo(" Eric ").ignoreSpace.ignoreCase }
-    "the failure message must mention 'ignoring space, ignoring case' $e5
+    ${ "  foo\n   bar\n" must beEqualTo(" foo\n   \n   bar\n ").ignoreSpace.ignoreCase }
+    "the failure message must mention 'ignoring space, ignoring case' $e6
 
     alternatively, ignoring case and space
     ${ "Eric".aka must beEqualTo(" eric ").ignoreCase.ignoreSpace }
@@ -68,7 +73,6 @@ class StringMatchersSpec extends Specification { def is = s2"""
   
   def e3 = ("eric".aka must beEqualTo("Xric").ignoreCase) returns "ignoring case"
   def e4 = ("eric".aka must beEqualTo("a eric ").ignoreSpace) returns "ignoring space"
-  def e5 = ("eric".aka must beEqualTo("xric ").ignoreSpace.ignoreCase) returns
-             "ignoring space, ignoring case"
-  def e6 = "eric".aka must beEqualTo(" Eric ").ignoreCase.ignoreSpace
+  def e5 = ("eric".aka must beEqualTo("a eric ").trimmed) returns "trimmed"
+  def e6 = ("eric".aka must beEqualTo("xric ").ignoreSpace.ignoreCase) returns "ignoring space, ignoring case"
 }

@@ -25,8 +25,10 @@ trait StringBaseMatchers { outer =>
   class StringMatcher(m: AdaptableMatcher[Any]) {
     private val ignoringCase = (_:Any) + ", ignoring case"
     private val ignoringSpace = (_:Any) + ", ignoring space"
+    private val isTrimmed = (_:Any) + ", trimmed"
     def ignoreCase: AdaptableMatcher[Any] = m.^^^((s: Any) => s.toString.toLowerCase, ignoringCase, ignoringCase)
-    def ignoreSpace: AdaptableMatcher[Any] = m.^^^((s: Any) => s.toString.trim, ignoringSpace, ignoringSpace)
+    def ignoreSpace: AdaptableMatcher[Any] = m.^^^((s: Any) => s.toString.replaceAll("\\s", ""), ignoringSpace, ignoringSpace)
+    def trimmed: AdaptableMatcher[Any] = m.^^^((s: Any) => s.toString.trim, isTrimmed, isTrimmed)
   }
   
   /** matches if a.toLowerCase.trim = b.toLowerCase.trim */   

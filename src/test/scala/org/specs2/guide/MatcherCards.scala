@@ -138,7 +138,8 @@ Matching on strings is very common. Here are the matchers which can help you:
  * `have size` checks the size of a string (seen as an `Iterable[Char]`)
  * `be empty` checks if a string is empty
  * `beEqualTo(b).ignoreCase` checks if 2 strings are equal regardless of casing
- * `beEqualTo(b).ignoreSpace` checks if 2 strings are equal when trimmed
+ * `beEqualTo(b).ignoreSpace` checks if 2 strings are equal when you `replaceAll("\\s", "")`
+ * `beEqualTo(b).trimmed` checks if 2 strings are equal when trimmed
  * `beEqualTo(b).ignoreSpace.ignoreCase` you can compose them
  * `contain(b)` checks if a string contains another one
  * `startWith(b)` checks if a string starts with another one
