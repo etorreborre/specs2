@@ -39,6 +39,8 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
 
     def given[T](f: StepParser[T]) = GWTGivens[T :: HNil, (StepParser[T]) :: HNil, T](title, template, f :: HNil)
     def given(): GWTGivens[String :: HNil, (StepParser[String]) :: HNil, String] = given(allAsString)
+    def when() = GWTGivens[HNil, HNil, Unit](title, template, HNil).when()
+    def when[R, U](value: =>R)(implicit lub: ToList[R :: HNil, U]) = GWTGivens[HNil, HNil, Unit](title, template, HNil).when().apply[R, U] { case _ => value }
 
     def fragments(text: String): Fragments = Fragments.createList(Text(text))
 
@@ -81,6 +83,9 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
 
     def when[T](f: StepParser[T]) = GWTWhensApply[T, GT, GTE, GTU, T :: WT, WTR, (StepParser[T]) :: WTE, WM, WMU](givens, f :: whenExtractors, mappers)
     def when(): GWTWhensApply[String, GT, GTE, GTU, String :: WT, WTR, (StepParser[String]) :: WTE, WM, WMU] = when(allAsString)
+    def when[R, U](value: =>R)(implicit lub: ToList[R :: WTR, U]): GWTWhens[GT, GTE, GTU, String :: WT, R :: WTR, (StepParser[String]) :: WTE, Mapper[String,GT,Nothing,R] :: WM, U]  =
+      when().apply[R, U] { case _ => value }
+
     def andThen[T](f: StepParser[T]) = GWTThensApply[T, GT, GTE, GTU, WT, WTR, WTE, WM, WMU, (StepParser[T]) :: HNil, HNil](GWTWhens(givens, whenExtractors, mappers), f :: HNil, HNil)
     def andThen(): GWTThensApply[String, GT, GTE, GTU, WT, WTR, WTE, WM, WMU, (StepParser[String]) :: HNil, HNil] = andThen(allAsString)
 

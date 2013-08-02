@@ -21,6 +21,7 @@ Extractors steps
   + given/given/when/then and seq of given
   + given/when/when/then and seq of when
   + given/when/then with no extractors
+  + when/then with no extractors and actions for when
   + given/given/when/when/then where the order for type parameters is significant
 
 Stripping text
@@ -172,6 +173,22 @@ Templates
 
     e8 := {
       val steps = Scenario("e8").
+        when("get value 1").
+        when("get value 2").
+        andThen().collect { case (e, values) =>
+        (e +: values) must contain(allOf(=~("the values are"), =~("value 1"), =~("value 2")))
+      }
+
+      executeExamplesResult { s2""" ${steps.start}
+          when we do 1
+          when we do 2
+          then the values are       ${steps.end}
+        """
+      }
+    }
+
+    e9 := {
+      val steps = Scenario("e9").
         given(anInt).
         given(aString).
         when(aString) { case op :: s :: i :: _ => (op.size + s.size + i).toString }.
