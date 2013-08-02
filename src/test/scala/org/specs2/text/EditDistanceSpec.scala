@@ -23,7 +23,8 @@ class EditDistanceSpec extends Specification with EditDistance with DataTables w
    show the differences with another separator like <<>>                                                  ${g2.e7}
    show the differences with another separator like <<+                                                   ${g2.e8}
    work on 0-sized strings                                                                                ${g2.e9}
-   work on 1-sized strings                                                                                ${g2.e1}
+   work on 1-sized strings                                                                                ${g2.e10}
+   work on a swap                                                                                         ${g2.e11}
 
  The diff shortener should
    not shorten a regular string                                                                           ${g3.e1}
@@ -77,6 +78,11 @@ class EditDistanceSpec extends Specification with EditDistance with DataTables w
       "a"  !! "ab"   ! ("a[]", "a[b]") | { (a: String, b: String, result: (String, String)) =>
         showDistance(a, b) must_== result
       }
+
+    e11 := {
+      new EditMatrix("abcd", "acbd").showMatrix.pp
+      showDistance("abcd", "acbd") === ("a[bc]d", "a[cb]d")
+    }
   }
 
   "shorten diffs" - new g3 with DiffShortener {

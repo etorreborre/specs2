@@ -47,7 +47,7 @@ trait EditDistance {
 
       for (i <- 0 to s1.length) {
         def row = for (j <- 0 to s2.length) yield matrix(i)(j)
-        result.append(row.mkString("|"))
+        result.append(row.mkString("|", "|", "|\n"))
       }
       result.toString
     }
@@ -60,7 +60,7 @@ trait EditDistance {
       val (firstSeparator, secondSeparator) = StringDelimiter(separator).separators
       val (s1diffs, s2diffs) = showOperations(s1, s2, matrix, separator)
       (shorten(s1diffs, firstSeparator, secondSeparator, shortenSize),
-        shorten(s2diffs, firstSeparator, secondSeparator, shortenSize))
+       shorten(s2diffs, firstSeparator, secondSeparator, shortenSize))
     }
 
     /** @return the longest common subsequence of letters between the 2 strings */
@@ -89,22 +89,35 @@ trait EditDistance {
     /** @return the cost of an insertion or deletion */
     def insertionDeletionCost(c: Char) = 1
 
-    /** @return the lower cost and associated operation of a deletion, substitution or insertion */
+    /**
+     * @return the lower cost and associated operation of a deletion, substitution or insertion
+     *         in case of equality between a non-substitution and an insertion/suppression
+     *         we select the insertion/suppression in order to group all the differences together
+     *         diff("abcd", "acbd") ==> ("a[bc]d", "a[cb]d"). the distance is 2, otherwise
+     *         diff("abcd", "acbd") ==> ("a[b]c[]d", "a[c]b[]d")
+     */
     def lowerCost(a: Char, b: Char, del: Int, subst: Int, ins: Int): Op = {
-      val min = math.min(del, math.min(subst, ins))
-           if (min == del)  Op(DEL, del)
-      else if (min == ins)  Op(INS, ins)
-      else if (a == b)      Op(NONE, subst)
-      else                  Op(SUBST, subst)
+      val (opDel, opSubst, opIns) = (Op(DEL, del), Op(SUBST, subst), Op(INS, ins))
+      if (ins < del) {
+        if (ins < subst) opIns
+        else if (ins == subst && a == b) opIns
+        else opSubst
+      } else {
+        if (del < subst) opDel
+        else if (del == subst && a == b) opDel
+        else opSubst
+      }
     }
 
     /** @return the cost for DistanceMatrix(i, j) */
     def cost(s1: String, s2: String, i: Int, j: Int, matrix: DistanceMatrix) = {
-      lowerCost(
-         s1(i - 1), s2(j - 1),
+      val result = lowerCost(s1(i - 1), s2(j - 1),
          matrix(i - 1)(j).cost     + insertionDeletionCost(s1(i - 1)),       // suppression
          matrix(i - 1)(j - 1).cost + substitutionCost(s1(i - 1), s2(j - 1)), // substitution
          matrix(i)(j - 1).cost     + insertionDeletionCost(s2(j - 1)))       // insertion
+
+      if (result.opType == SUBST && matrix(i - 1)(j - 1).cost == result.cost) Op(NONE, result.cost)
+      else result
     }
   }
 
@@ -134,7 +147,7 @@ trait EditDistance {
           else if (j < 1) (delimiter.append(s1.slice(0, i), s1Operations), delimiter.appendEmpty(s2Operations))
           else if (i < 1) (delimiter.appendEmpty(s1Operations),            delimiter.append(s2.slice(0, j), s2Operations))
           else {
-            if (op.opType == INS)        showAllOperations(i,     j - 1, delimiter.appendEmpty(s1Operations),    delimiter.add(s2(j - 1), s2Operations))
+            if      (op.opType == INS)   showAllOperations(i,     j - 1, delimiter.appendEmpty(s1Operations),    delimiter.add(s2(j - 1), s2Operations))
             else if (op.opType == DEL)   showAllOperations(i - 1, j,     delimiter.add(s1(i - 1), s1Operations), delimiter.appendEmpty(s2Operations))
             else if (op.opType == SUBST) showAllOperations(i - 1, j - 1, delimiter.add(s1(i - 1), s1Operations), delimiter.add(s2(j - 1), s2Operations))
             else                         showAllOperations(i - 1, j - 1, s1(i - 1) + s1Operations,               s2(j - 1) + s2Operations)
