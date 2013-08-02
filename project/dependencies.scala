@@ -7,7 +7,7 @@ object dependencies {
   lazy val dependencies = libraryDependencies ++= 
     scalalibs(scalaVersion.value) ++
     scalaz()                ++
-    specs2()
+    specs2
   
   // Libraries
   def scalaz(scalazVersion: String = "7.0.2") = Seq(
@@ -19,7 +19,7 @@ object dependencies {
       "org.scala-lang"          % "scala-compiler"     % scalaVersion  % "optional",
       "org.scala-sbt"           % "test-interface"     % "1.0"         % "optional")
 
-  def specs2(scalaVersion: String = "2.2-SNAPSHOT") = Seq(
+  def specs2 = Seq(
       "org.scalacheck"          %% "scalacheck"        % "1.10.0"      % "optional",
       "com.chuusai"             %% "shapeless"         % "1.2.4"       % "optional",
       "org.hamcrest"            % "hamcrest-all"       % "1.1"         % "optional",
