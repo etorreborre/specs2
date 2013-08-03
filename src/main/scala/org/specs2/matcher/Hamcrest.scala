@@ -19,8 +19,11 @@ trait Hamcrest {
   def createKoMessageFromHamcrest[T](t: =>T, hamcrest: org.hamcrest.Matcher[T]): String = {
     val description = new StringDescription
 
-    description.appendValue(t)
-    hamcrest.describeTo(description)
+    description
+       .appendText("\nExpected: ")
+       .appendDescriptionOf(hamcrest)
+       .appendText("\n     but: ")
+    hamcrest.describeMismatch(t, description)
     description.toString
   }
 

@@ -13,13 +13,16 @@ class HamcrestSpec extends script.Specification with Grouped with Hamcrest { def
 
   new g1 {
     e1 := 2 must beEven
-    e2 := (3 must beEven).message === "<3> is odd"
+    e2 := (3 must beEven).message === "\nExpected: an even Int\n     but: <3> is odd"
   }
 
   // a Hamcrest matcher for even numbers
   object beEven extends BaseMatcher[Int] {
-    def matches(item: Object): Boolean       = item.toString.toInt % 2 == 0
-    def describeTo(description: Description) { description.appendText(" is odd") }
+    def matches(item: Object): Boolean = item.toString.toInt % 2 == 0
+    def describeTo(description: Description): Unit = { description.appendText("an even Int") }
+    override def describeMismatch(item: Object, description: Description): Unit = {
+      description.appendValue(item).appendText(" is odd")
+    }
   }
 
 }
