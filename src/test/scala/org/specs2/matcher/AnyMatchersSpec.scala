@@ -49,7 +49,7 @@ class AnyMatchersSpec extends script.Specification with Groups with ResultMatche
   be_==~ checks the equality of 2 objects, up to an implicit conversion
   ${ 1L must be_==~(1) }
   ${ 2L must not be_==~(1) }
-  ${ (2L must be_==~(1)).message must_== "'2' is not equal to '1' [original object is: '1']" }
+  ${ (2L must be_==~(1)).message must contain("'2' is not equal to '1'") }
 
   beTrue matches true values
   ${ true must beTrue }

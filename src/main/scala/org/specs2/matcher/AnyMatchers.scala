@@ -51,7 +51,7 @@ trait AnyBaseMatchers {
     beTypedEqualTo(t, equality)
   /** matches if a == b after an implicit conversion */
   def be_==~[T, S](s: =>S)(implicit convert: S => T): Matcher[T] = new BeTypedEqualTo(convert(s)).
-    adapt(identity, (_:String)+" [original object is: "+q(s)+"]", (_:String)+" [original object is: "+q(s)+"]")
+    adapt(identity, identity, identity)
   /** matches if a == b after an implicit conversion */
   def ==~[T, S](s: =>S)(implicit convert: S => T): Matcher[T] = be_==~(s)(convert)
 
