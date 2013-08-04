@@ -41,7 +41,7 @@ class TestInterfaceReporterSpec extends Specification with DataTables with Pendi
 
     def e1 = {
       val hwSpec = new examples.HelloWorldSpec
-      stringReport(hwSpec).map(_.replaceAll("\\d ms", "0 ms").replaceAll(" ", "_")).mkString("\n") ===
+      stringReport(hwSpec).map(_.replaceAll("\\d+ ms", "0 ms").replaceAll(" ", "_")).mkString("\n") ===
         """|HelloWorldSpec
            |
            | This is a specification to check the 'Hello world' string
@@ -58,7 +58,7 @@ class TestInterfaceReporterSpec extends Specification with DataTables with Pendi
     }
     def e2 = {
       val hwSpec = new HelloWorldSpecWithTags
-      stringReport(hwSpec).map(_.replaceAll("\\d ms", "0 ms").replaceAll(" ", "_")).mkString("\n") ===
+      stringReport(hwSpec).map(_.replaceAll("\\d+ ms", "0 ms").replaceAll(" ", "_")).mkString("\n") ===
         """|HelloWorldSpecWithTags
            |
            | This is a specification to check the 'Hello world' string
