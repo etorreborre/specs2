@@ -171,11 +171,14 @@ class BeTypedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1
   protected val ko: String => String = identity
   
   def adapt(f: T => T, okFunction: String => String, koFunction: String => String) = {
-    val newMatcher = new BeTypedEqualTo(f(t), equality) {
+    new BeTypedEqualTo(f(t), equality) {
+      override def apply[S <: T](s: Expectable[S]): MatchResult[S] = {
+        val originalValues = s"\nOriginal values\n  Expected: '$t'\n  Actual  : '${s.value}'"
+        result(super.apply(s.map(f)).updateMessage(_+originalValues), s)
+      }
       override protected val ok: String => String = okFunction compose outer.ok
       override protected val ko: String => String = koFunction compose outer.ko
-    } 
-    newMatcher.^^((t: T) => f(t))
+    }
   }
   
   def apply[S <: T](b: Expectable[S]): MatchResult[S] = {

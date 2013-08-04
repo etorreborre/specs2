@@ -116,7 +116,7 @@ case class MatchSuccess[T] private[specs2](ok: () => String, ko: () => String, e
   def negate: MatchResult[T] = MatchFailure(koMessage, okMessage, expectable)
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
   override def mute = MatchSuccess("", "", expectable)
-  override def updateMessage(f: String => String) = copy(ko = () => f(koMessage))
+  override def updateMessage(f: String => String) = copy(ok = () => f(okMessage), ko = () => f(koMessage))
 }
 object MatchSuccess {
   def apply[T](ok: =>String, ko: =>String, expectable: Expectable[T]) =
@@ -134,7 +134,7 @@ case class MatchFailure[T] private[specs2](ok: () => String, ko: () => String, e
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
 
   override def mute                               = MatchFailure.create("", "", expectable, details)
-  override def updateMessage(f: String => String) = copy(ko = () => f(koMessage))
+  override def updateMessage(f: String => String) = copy(ok = () => f(okMessage), ko = () => f(koMessage))
   override def orThrow: MatchFailure[T]           = throw new FailureException(toResult)
   override def orSkip: MatchFailure[T]            = throw new SkipException(toResult)
 }

@@ -19,6 +19,7 @@ Adaptation
   + a matcher can be adapted with a function and a description function for the expectable
   + if the matcher is for equality, it has to be the typed equality matcher be_===
   + a matcher can be adapted with a function for both expected and actual values
+  + the adapted matcher must show both original and adapted values
   + a function can be adapted with a matcher to create a matcher
 
 Implicit conversions
@@ -63,6 +64,13 @@ Messages
       case class Human(age: Int, wealth: Int)
       def beMostlyEqualTo = (be_==(_:Human)) ^^^ ((_:Human).copy(wealth = 0))
       Human(age = 20, wealth=1000) must beMostlyEqualTo(Human(age = 20, wealth=1)) toResult
+    }
+    eg := {
+      def beEqualTrimmed = (be_==(_:String)) ^^^ ((_:String).trim)
+      val message = (" abc" must beEqualTrimmed("abc   ")).message
+      (message must contain(" abc")) and
+      (message must contain("abc  ")) and
+      (message must contain("abc"))
     }
     eg := {
       def haveExtension(extension: =>String) = ((_:File).getPath) ^^ endWith(extension)

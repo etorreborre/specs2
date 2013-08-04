@@ -86,7 +86,10 @@ trait MatchersImplicits extends Expectations with MatchResultCombinators with Ma
     /** @return a function which will return the composition of a matcher and a function */
     def ^^^[A](g: A => T) = (a: A) => 
       new Matcher[A] {
-        def apply[B <: A](b: Expectable[B]) = { result(f(g(a)).apply(b.map(g)), b) }
+        def apply[B <: A](b: Expectable[B]) = {
+          val originalValues = s"\nOriginal values\n  Expected: '$a'\n  Actual  : '${b.value}'"
+          result(f(g(a)).apply(b.map(g)), b).updateMessage(_+originalValues)
+        }
       }
 
     private def applyMatcher = (t: T) => f(t)(createExpectable(t))
