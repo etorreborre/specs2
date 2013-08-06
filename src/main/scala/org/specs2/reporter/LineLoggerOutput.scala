@@ -18,7 +18,7 @@ trait LineLoggerOutput extends ResultOutput with LineLogger {
 
   def flushText(force: Boolean = false)(implicit args: Arguments) = {
     if (force || endsWith(buffer.toString, "\n")) {
-      infoLog(buffer.toString)
+      if (!buffer.isEmpty) infoLog(buffer.toString)
       buffer.clear
     }
   }

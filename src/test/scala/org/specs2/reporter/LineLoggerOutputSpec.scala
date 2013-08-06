@@ -38,7 +38,7 @@ Simple cases
         printStats(Stats().display)
         printLine("")
       } must contain(allOf("some text\n  + one example\nTotal for specification spec1",
-                           "Finished in 0 ms\n0 example, 0 failure, 0 error", ""))
+                           "Finished in 0 ms\n0 example, 0 failure, 0 error"))
     }
 
     eg := {

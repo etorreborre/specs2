@@ -53,8 +53,7 @@ class TestInterfaceReporterSpec extends Specification with DataTables with Pendi
            |_____________________________________________________
            |Total for specification HelloWorldSpec
            |Finished in 0 ms
-           |3 examples, 0 failure, 0 error
-           |""".stripMargin.replaceAll(" ", "_")
+           |3 examples, 0 failure, 0 error""".stripMargin.replaceAll(" ", "_")
     }
     def e2 = {
       val hwSpec = new HelloWorldSpecWithTags
@@ -70,8 +69,7 @@ class TestInterfaceReporterSpec extends Specification with DataTables with Pendi
            |_____________________________________________________
            |Total for specification HelloWorldSpecWithTags
            |Finished in 0 ms
-           |3 examples, 0 failure, 0 error
-           |""".stripMargin.replaceAll(" ", "_")
+           |3 examples, 0 failure, 0 error""".stripMargin.replaceAll(" ", "_")
     }
   }
 
