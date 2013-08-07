@@ -64,7 +64,7 @@ class TestInterfaceRunner(val loader: ClassLoader, val loggers: Array[Logger]) e
   
   def runFilesRunner(className: String, handler: EventHandler, args: Array[String]) {
     toRun[FilesRunner](className, handler).right.toOption.toSeq.flatMap(_.run(args)).flatMap(_.issues).foreach { issue =>
-      handler.handle(result(issue.result))
+      handler.handle(result(issue.s.raw)(issue.result))
     }
   }
 

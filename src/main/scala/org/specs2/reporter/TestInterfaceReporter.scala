@@ -33,12 +33,12 @@ class TestInterfaceReporter(val handler: EventHandler, val loggers: Array[Logger
       case ExecutedResult(text: FormattedString, result: org.specs2.execute.Result, timer: SimpleTimer, _, _) => {
         def handleResult(res: org.specs2.execute.Result) {
           res match {
-            case Success(text,_)             => handler.handle(succeeded(text))
-            case r @ Failure(text, e, st, d) => handler.handle(failure(text, args.traceFilter(r.exception)))
-            case r @ Error(text, e)          => handler.handle(error(text, args.traceFilter(r.exception)))
-            case Skipped(text, _)            => handler.handle(skipped(text))
-            case Pending(text)               => handler.handle(skipped(text))
-            case DecoratedResult(t, r)       => handleResult(r)
+            case Success(_,_)             => handler.handle(succeeded(text.raw))
+            case r @ Failure(_, e, st, d) => handler.handle(failure(text.raw, args.traceFilter(r.exception)))
+            case r @ Error(_, e)          => handler.handle(error(text.raw, args.traceFilter(r.exception)))
+            case Skipped(d, _)            => handler.handle(skipped(text.raw, d))
+            case Pending(d)               => handler.handle(skipped(text.raw, d))
+            case DecoratedResult(t, r)    => handleResult(r)
           }
         }
         handleResult(result)
@@ -59,9 +59,9 @@ class TestInterfaceResultOutput(val loggers: Array[Logger]) extends LineLoggerOu
  * Specific events which can be notified to sbt
  */
 trait HandlerEvents {
-  class NamedEvent(name: String) extends Event {
+  class NamedEvent(name: String, desc: String = "") extends Event {
     def testName = name
-    def description = ""
+    def description = if (desc.isEmpty) name else desc
     def result = Result.Success
     def error: Throwable = null
   }
@@ -74,17 +74,17 @@ trait HandlerEvents {
     override def result = Result.Error
     override def error = e
   }
-  def skipped(name: String) = new NamedEvent(name) {
+  def skipped(name: String, description: String = "") = new NamedEvent(name, description) {
     override def result = Result.Skipped
     override def error = null
   }
-  def result(r: execute.Result): NamedEvent = r match {
-    case s @ execute.Success(_, _)             => succeeded(r.message)
-    case f @ execute.Failure(_,_,_,_)          => failure(r.message, f.exception)
-    case e @ execute.Error(_,_)                => error(r.message, e.exception)
-    case p @ execute.Pending(_)                => skipped(r.message)
-    case k @ execute.Skipped(_,_)              => skipped(r.message)
-    case d @ execute.DecoratedResult(dec, res) => result(res)
+  def result(name: String)(r: execute.Result): NamedEvent = r match {
+    case s @ execute.Success(_, _)             => succeeded(name)
+    case f @ execute.Failure(_,_,_,_)          => failure(name, f.exception)
+    case e @ execute.Error(_,_)                => error(name, e.exception)
+    case p @ execute.Pending(d)                => skipped(name, d)
+    case k @ execute.Skipped(d,_)              => skipped(name, d)
+    case d @ execute.DecoratedResult(dec, res) => result(name)(res)
   }
 }
 object HandlerEvents extends HandlerEvents

@@ -1,5 +1,6 @@
 package org.specs2
 package runner
+
 import io._
 import mock.Mockito
 import matcher.DataTables
@@ -7,6 +8,7 @@ import reporter._
 import org.scalatools.testing._
 import main.{ArgumentsArgs, Arguments}
 import specification.{Tags, Groups, ExecutingSpecification}
+import matcher._
 import execute.StandardResults
 import scala.collection.mutable.ListBuffer
 import annotation.tailrec
@@ -37,6 +39,7 @@ class TestInterfaceRunnerSpec extends Specification with Groups with Tags { def 
    if the results are displayed on the console
      the storing must be done in parallel to the exporting (to get results asap on the console)               ${g4().e1}
      the other exporters must use the result of the storing                                                   ${g4().e2}
+   The handler must get test names for failures and errors                                                    ${g5().e1}
                                                                                                               """
 
   "missing" - new g1 {
@@ -159,6 +162,19 @@ class TestInterfaceRunnerSpec extends Specification with Groups with Tags { def 
       reporter.report(spec)(Arguments("console html"))
       messages must contain(allOf("stored", "html export")).inOrder
     }
+  }
+
+  "events" - new g5 with Mockito with MockLogger with matcher.MustMatchers with ArgumentsArgs {
+    val outer = this
+    val handler = mock[EventHandler]
+    val reporter = new TestInterfaceReporter(handler, Array())
+    e1 := {
+      reporter.report(new Specification { def is = "test1" ! ko })(Arguments())
+      there was one(handler).handle(eventWithName("test1"))
+    }
+
+    def eventWithName(name: String): Matcher[Event] =
+      (e: Event) => (e.testName == name, s"${e.testName} != $name")
   }
 }
 
