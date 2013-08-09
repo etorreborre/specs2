@@ -141,7 +141,7 @@ class JUnitDescriptionsFragments(className: String) extends JUnitDescriptions[Fr
  * and provides the stackTrace of an exception which occurred during the specification execution
  */
 class SpecFailureAssertionFailedError(e: Exception) extends AssertionFailedError(e.getMessage) {
-  override def toString = e.getMessage
+  override def toString = e.toString
   override def getStackTrace = e.getStackTrace
   override def getCause = e.getCause
   override def printStackTrace() { e.printStackTrace() }
