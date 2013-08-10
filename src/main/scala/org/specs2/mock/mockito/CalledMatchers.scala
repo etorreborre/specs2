@@ -133,7 +133,7 @@ trait CalledMatchers extends NumberOfTimes with FunctionArguments with TheMockit
    */
   class ToInOrderMode[T : AsResult](calls: =>T) {
     def andThen[U](otherCalls: =>U): Result =
-      AsResult(calls) and createExpectable(otherCalls).applyMatcher(checkCalls).toResult
+      checkResultFailure(AsResult(calls) and createExpectable(otherCalls).applyMatcher(checkCalls).toResult)
   }
 }
 

@@ -109,6 +109,7 @@ STUBS
 
  The Mockito trait is reusable in other contexts
    + in mutable specs
+   + with an in order call
    + in JUnit
                                                                                                                         """
     
@@ -381,6 +382,18 @@ STUBS
           list.add("one")
           there was one(list).add("two")
           1 must_== 1 // to check if the previous expectation really fails
+        }
+      }
+      s.content.fragments.collect { case e: Example => FragmentExecution.executeBody(e.execute).isSuccess } must contain (false)
+    }
+
+    eg := {
+      val s = new org.specs2.mutable.Specification with Mockito {
+        "ex1" in new Scope {
+          val (list1, list2) = (mock[java.util.List[String]], mock[java.util.List[String]])
+          list1.add("two"); list2.add("one")
+          implicit val order = inOrder(list1, list2)
+          there was one(list2).add("two") andThen one(list1).add("one")
         }
       }
       s.content.fragments.collect { case e: Example => FragmentExecution.executeBody(e.execute).isSuccess } must contain (false)
