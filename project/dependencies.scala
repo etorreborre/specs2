@@ -6,7 +6,7 @@ object dependencies {
   lazy val settings = dependencies ++ resolversSettings
   lazy val dependencies = libraryDependencies ++= 
     scalalibs(scalaVersion.value) ++
-    scalaz()                ++
+    scalaz("7.1.0-SNAPSHOT")      ++
     specs2
   
   // Libraries
