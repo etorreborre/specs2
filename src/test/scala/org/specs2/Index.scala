@@ -219,8 +219,8 @@ s"""
   libraryDependencies ++= Seq(
     "org.specs2" %% "specs2" % "${VERSION}" % "test"
 
-    // with Scala 2.9.3 (specs2 1.12.3 is the latest version for scala 2.9.3)
-    // "org.specs2" %% "specs2" % "1.12.3" % "test",
+    // with Scala 2.9.3 (specs2 1.12.4.1 is the latest version for scala 2.9.3)
+    // "org.specs2" %% "specs2" % "1.12.4.1" % "test",
   )
 
   scalacOptions in Test ++= Seq("-Yrangepos")
@@ -245,7 +245,7 @@ s"""
    with Scala 2.9.3, change the dependency to:
 
    &lt;artifactId>specs2_2.9.3&lt;/artifactId>
-   &lt;version>1.12.3&lt;/version>
+   &lt;version>1.12.4.1&lt;/version>
 
  -->
 
