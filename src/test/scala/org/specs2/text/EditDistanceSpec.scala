@@ -80,7 +80,7 @@ class EditDistanceSpec extends Specification with EditDistance with DataTables w
       }
 
     e11 := {
-      new EditMatrix("abcd", "acbd").showMatrix.pp
+      new EditMatrix("abcd", "acbd").showMatrix
       showDistance("abcd", "acbd") === ("a[bc]d", "a[cb]d")
     }
   }
