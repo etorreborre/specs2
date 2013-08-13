@@ -10,7 +10,7 @@ import matcher.StoredExpectations
  *
  * @see the AllExpectations trait for its use
  */
-class ResultsContext(results: Seq[Result]) extends StoredResultsContext {
+class ResultsContext(results: =>Seq[Result]) extends StoredResultsContext {
   def storedResults = results
 }
 

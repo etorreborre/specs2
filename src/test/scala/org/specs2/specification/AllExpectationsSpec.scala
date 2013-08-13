@@ -3,7 +3,7 @@ package specification
 
 import _root_.org.specs2.mutable.{Specification => Spec}
 import reporter._
-import user.specification.AllExpectationsSpecification
+import user.specification.{AllExpectationsSpecificationWithScope, AllExpectationsSpecification}
 
 class AllExpectationsSpec extends Spec with AllExpectations {
 
@@ -17,10 +17,11 @@ class AllExpectationsSpec extends Spec with AllExpectations {
                                        "'1' is not equal to '3' [AllExpectationsSpecification.scala:9]"
     }
     "short-circuit the rest of the example if an expectation fails and uses 'orThrow'" >> {
+      executed.issues.map(_.message).toList must containMatch("'51' is not equal to '52'")
       executed.issues.map(_.message) must not containMatch("'13' is not equal to '14'")
     }
     "short-circuit the rest of the example if an expectation fails and uses 'orSkip'" >> {
-      executed.suspended.map(_.message).toList must containMatch("'51' is not equal to '52'")
+      executed.suspended.map(_.message).toList must not containMatch("'51' is not equal to '52'")
       executed.issues.map(_.message) must not containMatch("'15' is not equal to '16'")
     }
     "work ok on a specification with selected fragments" >> {
@@ -33,10 +34,18 @@ class AllExpectationsSpec extends Spec with AllExpectations {
       executedSequential.stats.expectations === 10
       executedSequential.stats.failures === 4
     }
+    "work ok on a mutable specification with Scopes" >> {
+      executedWithScope.hasIssues must beTrue
+      executedWithScope.stats.expectations === 3
+      executedWithScope.stats.failures === 1
+      executedWithScope.issues.head.message === "'1' is not equal to '2' [AllExpectationsSpecification.scala:31]\n"+
+                                                "'1' is not equal to '3' [AllExpectationsSpecification.scala:32]"
+    }
   }
 
   def executed = SilentConsoleReporter.report(new AllExpectationsSpecification)(args())
   def executedSelected = SilentConsoleReporter.report(new AllExpectationsSpecification)(args(ex = "It is"))
   def executedSequential = SilentConsoleReporter.report(new AllExpectationsSpecification)(sequential)
+  def executedWithScope = SilentConsoleReporter.report(new AllExpectationsSpecificationWithScope)(args())
 }
 
