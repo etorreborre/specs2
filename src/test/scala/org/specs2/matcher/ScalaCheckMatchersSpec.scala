@@ -83,6 +83,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
 
  A ScalaCheck property will create a Result
    with a number of expectations that is equal to the minTestsOk                                         $result1
+   with one expectation per Prop if the OneExpectationPerProp trait is used                              $result2
 
  It is possible to change the default parameters used for the test
    by setting up new implicit parameters locally                                                         ${config().e1}
@@ -148,7 +149,11 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
   def matcher1 = execute(prop(alwaysTrueWithMatcher)) must_== success100tries
   def matcher2 = execute(prop(stringToBooleanMatcher)) must_== success100tries
   def matcher3 = execute(prop(stringToBooleanMatcher)) must_== success100tries
-  def result1 =  execute(prop(trueFunction)).expectationsNb must_== 100
+  def result1  = execute(prop(trueFunction)).expectationsNb must_== 100
+  def result2  = {
+    val spec = new Specification with ScalaCheck with OneExpectationPerProp { def is = "test" ! prop(trueFunction) }
+    spec.is.examples.map(_.body()).head.expectationsNb must_== 1
+  }
 
   case class config() extends Before with ScalaCheckMatchers with StringOutput {
     def before = clear()

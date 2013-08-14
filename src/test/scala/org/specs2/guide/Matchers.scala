@@ -364,6 +364,11 @@ case class MyRandomGenerator() extends java.util.Random {
   (a + b) must_== (b + a)
 }.set(rng = MyRandomGenerator(), minTestsOk = 200, workers = 3)
 }}
+
+#### Expectations
+
+By default, a successful example using a `Prop` will be reported as 1 success and 100 (or `minTestsOk`) expectations. If you don't want the number of expectations to appear in the specification statistics just mix-in your specification the `org.specs2.matcher.OneExpectationPerProp` trait.
+
   """
 
   val mockitoSection =
@@ -383,18 +388,18 @@ class MockitoSpec extends Specification { def is = s2"""
     You can verify that a method was not called                                ${c().verify2}
   """
 case class c() extends Mockito {
-val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock[new java.util.LinkedList[String]]
-def stub = {
-m.get(0) returns "one"             // stub a method call with a return value
-m.get(0) must_== "one"             // call the method
-}
-def verify = {
-m.get(0) returns "one"             // stub a method call with a return value
-m.get(0)                           // call the method
-there was one(m).get(0)            // verify that the call happened
-}
-def verify2 = there was no(m).get(0) // verify that the call never happened
-}
+  val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock[new java.util.LinkedList[String]]
+  def stub = {
+    m.get(0) returns "one"             // stub a method call with a return value
+    m.get(0) must_== "one"             // call the method
+  }
+  def verify = {
+    m.get(0) returns "one"             // stub a method call with a return value
+    m.get(0)                           // call the method
+    there was one(m).get(0)            // verify that the call happened
+  }
+  def verify2 = there was no(m).get(0) // verify that the call never happened
+  }
 }
 }}
 

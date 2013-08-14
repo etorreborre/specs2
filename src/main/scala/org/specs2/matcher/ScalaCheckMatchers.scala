@@ -409,4 +409,14 @@ case class Parameters(minTestsOk: Int             = Test.Parameters.default.minS
 
 }
 
+/**
+ * This trait can be mixed in a Specification to avoid counting the number of times that a property was executed as the
+ * number of expectations. With this trait we just count 1 for each result
+ */
+trait OneExpectationPerProp extends ScalaCheckMatchers {
+  private val superPropAsResult = super.propAsResult
 
+  override implicit def propAsResult(implicit p: Parameters): AsResult[Prop] = new AsResult[Prop] {
+    def asResult(prop: =>Prop) = superPropAsResult.asResult(prop).setExpectationsNb(1)
+  }
+}
