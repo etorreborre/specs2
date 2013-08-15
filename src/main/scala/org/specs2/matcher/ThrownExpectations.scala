@@ -82,12 +82,12 @@ trait ThrownExpectations extends Expectations with StandardResults with ScopedEx
   override def pending: Pending = throw new PendingException(super.pending)
   override def anError: Error = throw new ErrorException(super.anError)
 
-  protected def failure(m: String): Nothing = failure(Failure(m))
-  protected def failure(f: Failure): Nothing = throw new FailureException(f)
-  protected def skipped(m: String): Nothing = skipped(Skipped(m))
-  protected def skipped(s: Skipped): Nothing = throw new SkipException(s)
-  protected def pending(m: String): Nothing = pending(Pending(m))
-  protected def pending(s: Pending): Nothing = throw new PendingException(s)
+  protected def failure(m: String): Failure = failure(Failure(m))
+  protected def failure(f: Failure): Failure = throw new FailureException(f)
+  protected def skipped(m: String): Skipped = skipped(Skipped(m))
+  protected def skipped(s: Skipped): Skipped = throw new SkipException(s)
+  protected def pending(m: String): Pending = pending(Pending(m))
+  protected def pending(s: Pending): Pending = throw new PendingException(s)
 }
 private [specs2]
 object ThrownExpectations extends ThrownExpectations
@@ -124,8 +124,8 @@ trait NoScopedExpectations extends ScopedExpectations {
  * This trait can be used to integrate failures and skip messages into specs2
  */
 trait ThrownMessages { this: ThrownExpectations =>
-  def fail(m: String): Nothing = failure(m)
-  def skip(m: String): Nothing = skipped(m)
+  def fail(m: String): Nothing = throw new FailureException(Failure(m))
+  def skip(m: String): Nothing = throw new SkipException(Skipped(m))
 }
 
 /** this class allows to throw a match failure result in an Exception */
