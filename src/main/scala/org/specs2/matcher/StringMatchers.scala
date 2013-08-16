@@ -63,11 +63,11 @@ trait StringBaseMatchers { outer =>
   def beMatching(a: Pattern) = new BeMatchingPattern(a)
   /** matches if b matches the regex a */
   def beMatching(a: Regex) = new BeMatchingRegex(a)
-  /** alias for beMatching but matching just a fragment of the string*/
+  /** alias for beMatching but matching just a fragment of the string */
   def =~(t: =>String) = BeMatching.withPart(t)
-  /** alias for beMatching but matching just a fragment of the string*/
-  def =~(p: Pattern) = new BeMatchingPattern(Pattern.compile(p.toString.regexPart))
-  /** alias for beMatching but matching just a fragment of the string*/
+  /** alias for beMatching but matching just a fragment of the string */
+  def =~(p: Pattern) = new BeMatchingPattern(Pattern.compile(p.toString.regexPart, p.flags()))
+  /** alias for beMatching but matching just a fragment of the string */
   def =~(r: Regex) = new BeMatchingRegex(r.toString.regexPart.r)
   /** matches if b.startsWith(a) */
   def startWith(t: String) = new Matcher[String] {
