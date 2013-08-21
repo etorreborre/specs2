@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import control.Exceptions._
-import execute.ResultLogicalCombinators
+import execute.{Result, ResultLogicalCombinators}
 import MatchResultExecution._
 /**
  * This trait provides logical operators to combine match results where potentially a MatchResult expression
@@ -22,8 +22,12 @@ trait MatchResultLogicalCombinators {
 
     /** @return the logical or of two results */
     def or[S >: T](other: =>MatchResult[S]): MatchResult[S] = result.fold(m1 => other, m1 => new OrMatch(m1, other).evaluate)
+    /** @return the logical or of a MatchResult and a Result */
+    def or(other: =>Result): Result = result.fold(m1 => other, m1 => ResultLogicalCombinators.combineResult(m1.toResult) or other)
     /** @return the logical and of two results */
     def and[S >: T](other: =>MatchResult[S]): MatchResult[S] = result.fold(m1 => expectable.check(m1), m1 => new AndMatch(m1, other).evaluate)
+    /** @return the logical and of a MatchResult and a Result */
+    def and(other: =>Result): Result = result.fold(m1 => expectable.check(m1).toResult, m1 => ResultLogicalCombinators.combineResult(m1.toResult) and other)
     /** apply the matcher and return the logical or of two results */
     def or(other: Matcher[T]): MatchResult[T] =
       tryOr {

@@ -16,6 +16,7 @@ class MatchResultLogicalCombinatorsSpec extends Specification with ResultMatcher
     (1 must_== 1) and (2 must_== 2)
     ((1 must_== 2) and (2 must_== 2)) must throwA[MatchFailureException[_]]
     ((1 must_== 2) and (2 must_== 2)) must beFailing
+    (1 must_== 1) and success
   }
   "Match results must not be evaluated twice when failing with and" >> {
     "when the first match is failing" >> {
@@ -35,6 +36,7 @@ class MatchResultLogicalCombinatorsSpec extends Specification with ResultMatcher
   "Match results can be combined with or" >> {
     (1 must_== 2) or (2 must_== 2)
     ((1 must_== 2) or (2 must_== 3)) must beFailing
+    (1 must_== 2) or success
   }
   "A match result can be negated" >> {
     (1 must_== 2).not
