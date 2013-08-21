@@ -40,6 +40,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
 
  We can compare a collection to another by using matchers
 
+   ${ Seq[Int]() must contain(exactly(Seq[Int]():_*))                          }
    ${ Seq(1, 2, 3) must contain(exactly(1, 2, 3))                              }
    ${ Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(1), be_>=(2)))         }
    ${ Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(1), be_>=(2)).inOrder) }
@@ -49,6 +50,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
    ${ Seq(1, 2, 3) must not(contain(allOf(Seq(0, 0).map(be_<=(_)):_*)))        }
    ${ Seq(1, 2, 3) must contain(allOf(1, 3).inOrder)                           }
 
+   ${ Seq(1, 2, 3) must contain(atLeast(Seq[Int]():_*))                        }
    ${ Seq(1, 2, 3) must contain(atLeast(3, 1))                                 }
    ${ Seq(1, 2, 3) must contain(atLeast(be_>=(0), be_>=(1), be_>=(2)))         }
 

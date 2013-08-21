@@ -330,7 +330,8 @@ case class ContainWithResultSeq[T](checks: Seq[ContainCheck[T]],
     (containsAtLeast, containsAtMost) match {
       case (true,  false) => Matcher.result(successes.size >= checks.size && checks.size <= seq.size, okMessage , koMessage, t)
       case (false, true)  => Matcher.result(successes.size <= checks.size && checks.size >= seq.size, okMessage , koMessage, t)
-      case _              => Matcher.result(!seq.isEmpty && successes.size == seq.size,               okMessage,  koMessage, t)
+      case _              => Matcher.result((seq++checks).isEmpty ||
+                                            !seq.isEmpty && successes.size == seq.size,               okMessage,  koMessage, t)
     }
   }
 
