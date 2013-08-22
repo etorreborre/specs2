@@ -19,7 +19,7 @@ import Utilities._
 import Defaults._
 
 object build extends Build {
-  type Settings = Project.Setting[_]
+  type Settings = Def.Setting[_]
 
   lazy val specs2 = Project(
     id = "specs2",
