@@ -39,16 +39,16 @@ class SpecsArgumentsSpec extends Specification with InternalScalazMatchers with 
                                                                                                                         """
 
   case class simple() {
-    val parent = spec(formatSection(flow=true) ^ xonly ^ "parent".title ^ "t1" ^ "e1" ! success)
-    def e1 = xonlyArgs(parent) must_== List(true, true, true, true, true)
+    val parent = spec(xonly ^ "parent".title ^ "t1" ^ "e1" ! success)
+    def e1 = xonlyArgs(parent) must_== List(true, true, true, true)
   }
   case class nested() {
-    val child1 = spec(formatSection(flow=true) ^ sequential ^ "child".title ^ "t2")
+    val child1 = spec(sequential ^ "child".title ^ "t2")
     val nested1 = spec(simple().parent ^ include(child1))
 
-    def e1 = xonlyArgs(nested1) must_== List(true, true, true, true, true, true, true, true, true)
-    def e2 = sequentialArgs(nested1) must_== List(false, false, false, false, true, true, true, true, false)
-    def e3 = names(nested1) must_== List("parent", "parent", "parent", "parent", "child", "child", "child", "child", "parent")
+    def e1 = xonlyArgs(nested1) must_== List(true, true, true, true, true, true, true)
+    def e2 = sequentialArgs(nested1) must_== List(false, false, false, true, true, true, false)
+    def e3 = names(nested1) must_== List("parent", "parent", "parent", "child", "child", "child", "parent")
   }
 
   def spec(fs: Fragments) = new Specification { def is = fs }.content

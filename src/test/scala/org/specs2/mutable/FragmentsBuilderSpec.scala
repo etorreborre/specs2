@@ -15,29 +15,48 @@ class FragmentsBuilderSpec extends Specification with AllExpectations {
       |(0,"Text(root)")
       ||
       |+- (0,"Text(a)")
+      ||
+      |+- (1,"Br()")
       ||  |
       ||  +- (0,"Text(b)")
+      ||  |
+      ||  +- (1,"Br()")
       ||  |  |
-      ||  |  `- (0,"Example(c)")
+      ||  |  +- (0,"Example(c)")
+      ||  |  |
+      ||  |  `- (1,"Br()")
       ||  |
-      ||  +- (1,"Backtab(1)")
+      ||  +- (2,"Br()")
       ||  |
-      ||  `- (2,"Example(d)")
-      ||
-      |+- (1,"Backtab(1)")
-      ||
-      |+- (2,"Text(e)")
+      ||  +- (3,"Backtab(1)")
       ||  |
-      ||  `- (0,"Example(f)")
+      ||  +- (4,"Example(d)")
+      ||  |
+      ||  `- (5,"Br()")
       ||
-      |`- (3,"Backtab(1)")
+      |+- (2,"Br()")
+      ||
+      |+- (3,"Backtab(1)")
+      ||
+      |+- (4,"Text(e)")
+      ||
+      |+- (5,"Br()")
+      ||  |
+      ||  +- (0,"Example(f)")
+      ||  |
+      ||  `- (1,"Br()")
+      ||
+      |+- (6,"Br()")
+      ||
+      |`- (7,"Backtab(1)")
       """.stripMargin.trimNewLines
-  }
+  } br
+  
   "Examples must be created with their 'blockCreationPath'" >> {
     "for a mutable specification" >> {
-      spec1.content.examples(0).creationPath ==== Some(MutableCreationPath(Seq(0, 0, 0, 0)))
-      spec1.content.examples(1).creationPath ==== Some(MutableCreationPath(Seq(0, 0, 2)))
-      spec1.content.examples(2).creationPath ==== Some(MutableCreationPath(Seq(0, 2, 0)))
+      spec1.content.examples(0).creationPath ==== Some(MutableCreationPath(Seq(0, 1, 1, 0)))
+      spec1.content.examples(1).creationPath ==== Some(MutableCreationPath(Seq(0, 1, 4)))
+      spec1.content.examples(2).creationPath ==== Some(MutableCreationPath(Seq(0, 5, 0)))
     }
     "for an acceptance specification" >> {
       spec2.content.examples(0).creationPath ==== Some(AcceptanceCreationPath(Seq(3)))
@@ -48,7 +67,7 @@ class FragmentsBuilderSpec extends Specification with AllExpectations {
   "It is possible to collect all the fragments which are created on a given 'path'" >> {
     val example = spec1.content.examples(2)
     spec1.fragmentsTo(example) must contain(be_==(example))
-  }
+  } br
 
   "Fragments creation with Unit" >> {
     "a block returning Unit is interpreted as a block of fragments when the examplesBlock method is used" >> {

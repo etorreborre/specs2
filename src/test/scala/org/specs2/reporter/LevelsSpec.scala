@@ -150,13 +150,13 @@ class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatche
       treeMap(interpolated)(mapper) must beDrawnAs(
         "SpecStart(start)",
         "|",
-        "+- Text(t1)",
-        "|  |",
-        "|  +- Example(ex1)",
-        "|  |",
-        "|  `- Example(ex2)",
-        "|",
-        "`- SpecEnd(start)")
+        "`- Text(t1)",
+        "   |",
+        "   +- Example(ex1)",
+        "   |",
+        "   +- Example(ex2)",
+        "   |",
+        "   `- SpecEnd(start)")
     }
 
     def beDrawnAs(lines: String*) = be_==(lines.mkString("", "\n", "\n")) ^^ {

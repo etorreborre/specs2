@@ -8,7 +8,7 @@ import FormattingFragments._
  * This trait post-process fragments.
  *
  * The default implementation looks for tags and sections to mark text and examples as
- * "flowing" (no automatic indentation) or "markdown"
+ * "markdown"
  */
 trait FragmentsFormatting {
   /** format a list of fragments according to their formatting tags */
@@ -21,13 +21,13 @@ trait DefaultFragmentsFormatting extends FragmentsFormatting with TagsAssociatio
     val tagged = tagFragments(fs.fragments).flatMap {
       case (t: Text, tag)    => {
         val t1 = t.copy(text = formattedStringFor(tag)(t.text))
-        if (t1.flow) Seq(t1) else Seq(t1, br)
+        Seq(t1)
       }
       case (e: Example, tag) => {
         val e1 = e.formatWith(formattedStringFor(tag)(e.desc))
-        if (e1.desc.flow) Seq(e1) else Seq(e1, br)
+        Seq(e1)
       }
-      case (s: SpecStart, tag) => if (Formatting().fromTagNames(tag.names).flow) Seq(s) else Seq(s, br, br)
+      case (s: SpecStart, tag) => Seq(s)
       case (f, _)              => Seq(f)
     }
     Fragments.create(tagged:_*)
