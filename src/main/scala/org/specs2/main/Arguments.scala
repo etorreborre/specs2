@@ -451,7 +451,7 @@ trait Extract {
   private val booleanProperties = immutableHashMapMemo[(String, SystemProperties), Option[Boolean]] { case (name, sp) =>
     sp.getPropertyAs[Boolean](name) orElse sp.getProperty(name).map(v => true)
   }
-  def boolSystemProperty(name: String)(implicit sp: SystemProperties): Option[Boolean] = booleanProperties(name, sp)
+  def boolSystemProperty(name: String)(implicit sp: SystemProperties): Option[Boolean] = booleanProperties(name -> sp)
 
   def bool(name: String, negatedName: String)(implicit args: Seq[String], sp: SystemProperties): Option[Boolean] = {
     bool(negatedName, false) orElse bool(name)

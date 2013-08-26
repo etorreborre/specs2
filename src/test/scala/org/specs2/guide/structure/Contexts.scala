@@ -166,7 +166,7 @@ class ContextSpec extends mutable.Specification {
 
 trait trees extends mutable.After {
   lazy val tree = getATreeWith4NodesFromTheDatabase
-  def after = cleanupDB
+  def after = cleanupDB()
 }
 }}
 
@@ -184,7 +184,7 @@ class ContextSpec extends Specification { def is = s2"""
   """
   case class trees() extends specification.After {
     lazy val tree = getATreeWith4NodesFromTheDatabase
-    def after = cleanupDB
+    def after = cleanupDB()
 
     // this is equivalent to: def e1 = this.apply { ... }
     def e1 = this { tree.removeNodes(2, 3) must have size(2) }
@@ -264,7 +264,7 @@ We can also combine both the `Around` and the `Outside` behaviors with the `Arou
 object http extends AroundOutside[HttpReq] {
   // create a context
   def around[T : AsResult](t: =>T) = {
-    createNewDatabase
+    createNewDatabase()
     // execute the code inside a databaseSession
     inDatabaseSession { AsResult(t) }
   }
@@ -317,7 +317,7 @@ When you just need to have set-up code executed before each example and if you d
 The `${fullName[BeforeExample]}` trait allows you to define a `before` method exactly like the one you define in the `Before` trait and apply it to all the examples of the specification: ${snippet{
 
 class MySpecification extends mutable.Specification with BeforeExample {
-  def before = cleanDatabase
+  def before = cleanDatabase()
 
   "This is a specification where the database is cleaned up before each example" >> {
     "first example" in { success }
@@ -512,24 +512,24 @@ trait context extends mutable.NameSpace {
   case class Tree[T](ts: T*) {
     def removeNodes(n: Int*) = Seq[Int]()
   }
-  def cleanupDB = ()
+  def cleanupDB() = ()
   def createATreeWith4Nodes = new Tree()
   def getATreeWith4NodesFromTheDatabase = new Tree()
-  def setupDB = ()
+  def setupDB() = ()
 
   def openHttpSession[T](name: String)(r: Result) = r
   case class HttpReq()
   def createRequest = HttpReq()
 
-  def createNewDatabase = ()
+  def createNewDatabase() = ()
   def openDatabase(name: String) = ()
   def closeDatabase(name: String) = ()
   case class DB(var executionsNb: Int = 0)
   lazy val db = DB()
-  def cleanDatabase = ()
-  def cleanUp = ()
-  def startDb = ()
-  def cleanDb = ()
+  def cleanDatabase() = ()
+  def cleanUp() = ()
+  def startDb() = ()
+  def cleanDb() = ()
   def deleteFile(name: String) = ()
   def inDatabaseSession[T](r: Result) = r
 }

@@ -141,9 +141,9 @@ class Invocation extends PrintableInvocation with InvocationOnMock with Printing
   def isDeclaredOnInterface: Boolean = this.getMethod.getDeclaringClass.isInterface
   def toString(printSettings: PrintSettings): String = toString(argumentsToMatchers, printSettings)
 
-  private[invocation] def markVerified { this.verified = true }
+  private[invocation] def markVerified() { this.verified = true }
   def markStubbed(stubInfo: StubInfo) { this._stubInfo = stubInfo }
-  def ignoreForVerification { _isIgnoredForVerification = true }
+  def ignoreForVerification() { _isIgnoredForVerification = true }
   def isIgnoredForVerification = _isIgnoredForVerification.booleanValue()
   def stubInfo: StubInfo = _stubInfo
 

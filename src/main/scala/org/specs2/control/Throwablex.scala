@@ -72,7 +72,7 @@ trait Throwablex {
     } 
 
     /** print all the stacktrace for t, including the traces from its causes */
-    def printFullStackTrace = t.getFullStackTrace.foreach(println(_))
+    def printFullStackTrace() = t.getFullStackTrace.foreach(println(_))
 
     /** set a new stacktrace */
     private def setStackTrace(st: Seq[StackTraceElement]) = {

@@ -174,5 +174,8 @@ trait Htmlx { outer =>
 
 }
 
+/** string representing a toc id */
+case class SpecIdOps(s: String)
+
 private[specs2]
 object Htmlx extends Htmlx

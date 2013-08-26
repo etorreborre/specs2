@@ -11,6 +11,7 @@ import Levels._
 import specification.FragmentsShow._
 import org.specs2.specification.TagsFragments.AsSection
 
+private[specs2]
 class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatchers with ArbitraryFragments with Tags { def is = sequential^ s2"""
   The Levels class is used to compute the 'level' of Fragments in a list of Fragments.                                  
                                                                                                                         

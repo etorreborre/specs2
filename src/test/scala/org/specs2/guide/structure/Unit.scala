@@ -62,7 +62,7 @@ step { initializeDatabase() }
 }}
 
  * `action`: create an `Action` ${snippet{
-action { justDoIt }
+action { justDoIt() }
 }}
 
  * `link`: create a link to another specification ${snippet{
@@ -168,5 +168,5 @@ class MutableSpec extends Specification {
 }}
   """
   def initializeDatabase() {}
-  def justDoIt {}
+  def justDoIt() {}
 }

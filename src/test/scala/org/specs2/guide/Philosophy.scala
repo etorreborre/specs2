@@ -169,8 +169,8 @@ We simply use case class instances for each Example. Here is a demonstration:
 
     trait Login {
       var loggedIn = false
-      def login = loggedIn = true
-      def logout = loggedIn = false
+      def login = { loggedIn = true; true }
+      def logout = { loggedIn = false; false }
     }
     case class history() extends Login {
       login
@@ -354,8 +354,8 @@ Scala 2.10 brings a new feature to the language: String interpolation. But the b
   }
   trait Login {
     var loggedIn = false
-    def login = loggedIn = true
-    def logout = loggedIn = false
+    def login = { loggedIn = true; true }
+    def logout = { loggedIn = false; false }
   }
   case class history() extends Login {
     login

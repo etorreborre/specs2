@@ -224,7 +224,7 @@ STUBS
     }
     eg := {
       list.add("one") returns (true, false, true)
-      (list.add("one"), list.add("one"), list.add("one")) must_== (true, false, true)
+      (list.add("one"), list.add("one"), list.add("one")) must_== ((true, false, true))
     }
 
     eg := {
@@ -352,7 +352,7 @@ STUBS
       list.get(2) must_== "The parameter is 2"
     }
     eg := {
-      list.get(anyInt) answers { (i, m) => "The parameters are " + (i.asInstanceOf[Array[_]].mkString, m) }
+      list.get(anyInt) answers { (i, m) => "The parameters are " + (i.asInstanceOf[Array[_]].mkString -> m) }
       list.get(1) must_== "The parameters are (1,list)"
     }
     eg := {

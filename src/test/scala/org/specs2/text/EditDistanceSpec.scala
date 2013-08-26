@@ -50,38 +50,38 @@ class EditDistanceSpec extends Specification with EditDistance with DataTables w
   }
 
   "show distance" - new g2 {
-    e1 := (showDistance("kitte", "kittei")         === ("kitte[]", "kitte[i]")) and
-           (showDistance("kitten", "kittein")       === ("kitte[]n", "kitte[i]n"))
-    e2 := showDistance("kitten", "kit")            === ("kit[ten]", "kit[]")
-    e3 := showDistance("kit", "kitten")            === ("kit[]", "kit[ten]")
-    e4 := showDistance("kitten", "kitsin")         === ("kit[te]n", "kit[si]n")
-    e5 := showDistance("kitte", "kitte")           === ("kitte", "kitte")
-    e6 := showDistance("kitten", "kitsin", "()")   === ("kit(te)n", "kit(si)n")
-    e7 := showDistance("kitten", "kitsin", "<<>>") === ("kit<<te>>n", "kit<<si>>n")
-    e8 := showDistance("kitten", "kitsin", "<<+")  === ("kit<<te+n", "kit<<si+n")
+    e1 := (showDistance("kitte", "kittei")         === "kitte[]" -> "kitte[i]") and
+          (showDistance("kitten", "kittein")       === "kitte[]n" -> "kitte[i]n")
+    e2 := showDistance("kitten", "kit")            === "kit[ten]" -> "kit[]"
+    e3 := showDistance("kit", "kitten")            === "kit[]" -> "kit[ten]"
+    e4 := showDistance("kitten", "kitsin")         === "kit[te]n" -> "kit[si]n"
+    e5 := showDistance("kitte", "kitte")           === "kitte" -> "kitte"
+    e6 := showDistance("kitten", "kitsin", "()")   === "kit(te)n" -> "kit(si)n"
+    e7 := showDistance("kitten", "kitsin", "<<>>") === "kit<<te>>n" -> "kit<<si>>n"
+    e8 := showDistance("kitten", "kitsin", "<<+")  === "kit<<te+n" -> "kit<<si+n"
 
     e9 :=
       "a"  || "b"     | "result"        |>
-      ""   !! ""      ! ("", "")        |
-      ""   !! "a"     ! ("[]", "[a]")   |
-      "a"  !! ""      ! ("[a]", "[]")   |
-      ""   !! "ab"    ! ("[]", "[ab]")  |
-      "ab" !! ""      ! ("[ab]", "[]")  | { (a: String, b: String, result: (String, String)) =>
-        showDistance(a, b) must_== result
+      ""   !! ""      ! "" -> ""        |
+      ""   !! "a"     ! "[]" -> "[a]"   |
+      "a"  !! ""      ! "[a]" -> "[]"   |
+      ""   !! "ab"    ! "[]" -> "[ab]"  |
+      "ab" !! ""      ! "[ab]" -> "[]"  | { (a: String, b: String, result: (String, String)) =>
+        showDistance(a, b) must_== (result)
       }
 
     e10 :=
       "a"  || "b"    | "result"        |>
-      "a"  !! "a"    ! ("a", "a")      |
-      "a"  !! "b"    ! ("[a]", "[b]")  |
-      "a"  !! "bc"   ! ("[a]", "[bc]") |
-      "a"  !! "ab"   ! ("a[]", "a[b]") | { (a: String, b: String, result: (String, String)) =>
-        showDistance(a, b) must_== result
+      "a"  !! "a"    ! "a" -> "a"      |
+      "a"  !! "b"    ! "[a]" -> "[b]"  |
+      "a"  !! "bc"   ! "[a]" -> "[bc]" |
+      "a"  !! "ab"   ! "a[]" -> "a[b]" | { (a: String, b: String, result: (String, String)) =>
+        showDistance(a, b) must_== (result)
       }
 
     e11 := {
       new EditMatrix("abcd", "acbd").showMatrix
-      showDistance("abcd", "acbd") === ("a[bc]d", "a[cb]d")
+      showDistance("abcd", "acbd") === "a[bc]d" -> "a[cb]d"
     }
   }
 

@@ -31,7 +31,7 @@ trait Split {
       def isDashedName(name: String) = dashedNames.contains(name.toLowerCase)
 
       val grouped = s.split("\\s").foldLeft(Seq[(String, Seq[String])]()) { (res, cur) =>
-        if (isDashedName(cur) || cur == "--") (res :+ (cur, Seq[String]()))
+        if (isDashedName(cur) || cur == "--") (res :+ (cur -> Seq[String]()))
         else                                  res.updateLastOr { case (name, values) => (name, values :+ cur) }((cur, Seq[String]()))
       }
       grouped.flatMap {

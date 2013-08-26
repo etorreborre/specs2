@@ -225,7 +225,7 @@ val loginForm = Form("login").
                   tr(effect("click on login", clickOn("login"))).
                   tr(effect("enter name",     enter("name", "me"))).
                   tr(effect("enter password", enter("password", "pw"))).
-                  tr(effect("submit", submit))
+                  tr(effect("submit", submit()))
 }}
 ${loginForm}
 
@@ -635,7 +635,7 @@ Note that the Calculator class is not, in itself an Example. But there is an imp
 
   def clickOn(s: String){}
   def enter(s: String, s2: String){}
-  def submit {}
+  def submit() {}
 
   case class Customer(name: String = "", address: Address = Address()) {
     def retrieve(customerId: Int) = {

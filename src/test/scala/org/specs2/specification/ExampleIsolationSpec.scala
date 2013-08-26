@@ -44,8 +44,8 @@ for each example by the sheer virtue of creating a fresh context object
 trait UserInteractions extends StandardResults with MustMatchers  {
   trait Login {
     var loggedIn = false
-    def login = loggedIn = true
-    def logout = loggedIn = false
+    def login = { loggedIn = true; true }
+    def logout = { loggedIn = false; false }
   }
   case class history() extends Login {
     login

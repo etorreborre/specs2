@@ -23,9 +23,9 @@ class RegexExtractorSpec extends script.Specification with Groups { def is = s2"
 
   "extraction" - new group {
     eg := extract1("hello ${world}!") === "world"
-    eg := extract2("${hello} ${world}!") === ("hello", "world")
+    eg := extract2("${hello} ${world}!") === (("hello", "world"))
     eg := extractAll("${hello} ${world}, I'm ${Eric}!") === Seq("hello", "world", "Eric")
-    eg := extract2("${hello} ${world}, I'm ${Eric}!") === ("hello", "world")
+    eg := extract2("${hello} ${world}, I'm ${Eric}!") === (("hello", "world"))
     eg := extract1("hello world")=== "hello world"
     eg := extract1("hello ${world}", group = "^+?".r) === "hello ${world}"
   }

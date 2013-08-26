@@ -248,6 +248,8 @@ For each of the checks above you can indicate how many times the check should be
 The other types of checks involve comparing the Traversable elements to other elements (values, matchers, function returning a `Result`)
  
  * with a set of values
+ ${snippet{Seq(1, 2, 3, 4) must contain(2, 4)}}
+ which is the same thing as
  ${snippet{Seq(1, 2, 3, 4) must contain(allOf(2, 4))}}
 
  * with a set of matchers

@@ -20,14 +20,14 @@ case class ExecutingSpecification(name: SpecName, arguments: Arguments, fs: Seq[
 
   /** @return a lazy list where each fragment will be executed on access */
   def foreach[T](f: (SpecName, Seq[ExecutedFragment]) => T) =
-    try { f(name, fs.view.map(_.get)) } finally { terminate }
+    try { f(name, fs.view.map(_.get)) } finally { terminate() }
 
   /** @return an ExecutingSpecification where each executed fragment is mapped to another one */
   def map(f: ExecutedFragment => ExecutedFragment) =  copy(fs = fs.map(_.map(f)))
 
   override def toString = fs.mkString("\n")
 
-  def terminate = executor.shutdown()
+  def terminate() = executor.shutdown()
 }
 
 /**

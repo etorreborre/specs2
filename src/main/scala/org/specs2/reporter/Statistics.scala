@@ -41,7 +41,7 @@ trait Statistics {
    * for the whole specification
    */
   case class SpecsStatistics(fragments: Seq[ExecutedFragment] = ArrayBuffer()) {
-    private implicit val statsMonoid = Stats.StatsMonoid
+    private val statsMonoid = Stats.StatsMonoid
     
     /** @return the list of all current stats, with the total on each line */
     lazy val totals: Seq[Stats] = {
@@ -52,7 +52,7 @@ trait Statistics {
         case ExecutedSpecEnd(_,_,s)    => BlockEnd(s)
         case other                     => BlockBit(f.stats)
       }
-      totalContext(fragments.map(toBlock))
+      totalContext(fragments.map(toBlock))(statsMonoid)
     }
     lazy val total = totals.lastOption.getOrElse(Stats())
   }

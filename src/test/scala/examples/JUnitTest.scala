@@ -8,22 +8,22 @@ import org.specs2.matcher._
 class JUnitTest extends JUnitMustMatchers {
 
   @Test
-  def test1 {
+  def test1() {
     "Hello world" must have size(11)
   }
 
   @Test
-  def test2 {
+  def test2() {
     "Hello world" must startWith("Hello")
   }
 
   @Test
-  def test3 {
+  def test3() {
     "Hello world" must endWith("world")
   }
 
   @Test
-  def test4 {
+  def test4() {
     "Hello world" must endWithWorld
   }
 

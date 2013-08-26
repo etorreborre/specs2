@@ -47,7 +47,7 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
  ${ "{'person' : {'name': 'Joe', 'name': 'Moe'}}" must */("name") /("Moe") }
                                                                                                                         
  The */ matcher can be chained with */                                                                                
- ${ "{'person': {'address' : {'street' : 'here' }}}" must */("person") */("address") /("street", "here") }
+ ${ "{'person': {'address' : {'street' : 'here' }}}" must */("person") */("address") /("street" -> "here") }
                                                                                                                         
  The / matcher can be chained with */                                                                                 
  ${ "{'person' : {'address' : {'street' : 'here'}}}" must /("person") */("street") /("here") }
@@ -61,8 +61,8 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
                                                                                                                         
  The /#(i) matcher matches the i-th element in a Map                                                                  
  ${ "{'name' : 'Joe', 'name2' : 'Moe'}" must /#(1) /("name2" -> "Moe") }
- ${ "{'person' : {'name': 'Joe', 'name2' : 'Moe'} }" must /("person") /#(1) /("name2", "Moe") }
- ${ "{'house' : {'person' : {'name': 'Joe', 'name2' : 'Moe'}}}" must */("person") /#(1) /("name2", "Moe") }
+ ${ "{'person' : {'name': 'Joe', 'name2' : 'Moe'} }" must /("person") /#(1) /("name2" -> "Moe") }
+ ${ "{'house' : {'person' : {'name': 'Joe', 'name2' : 'Moe'}}}" must */("person") /#(1) /("name2" -> "Moe") }
                                                                                                                         """
 
   // this example is taken from the liftweb project

@@ -24,7 +24,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
 
   /** local mutable contents of the specification */
   protected[mutable] var specFragments: Fragments = Fragments.createList()
-  protected[specs2] def fragments: Fragments = { replay; specFragments }
+  protected[specs2] def fragments: Fragments = { replay(); specFragments }
 
   /** @return a Fragments object from a single piece of text */
   override implicit def textFragment(s: String): FragmentsFragment = {
@@ -231,7 +231,7 @@ trait SideEffectingCreationPaths extends SpecificationNavigation {
    * play all the effects. After each executed effect, new effects might have been created.
    * Push them first at the beginning of the effects list so that they can be played first
    */
-  private[mutable] def replay = {
+  private[mutable] def replay() = {
     def targetReached = targetPath.map(_ == creationPath).getOrElse(false)
 
     while (!effects.isEmpty) {
@@ -253,23 +253,23 @@ trait SideEffectingCreationPaths extends SpecificationNavigation {
 
   private def nextNodeNumber = blocksTree.lastChild.map(_.getLabel._1 + 1).getOrElse(0)
 
-  private[mutable] def startBlock {
+  private[mutable] def startBlock() {
     effect(blocksTree = blocksTree.lastChild.getOrElse(blocksTree))
   }
 
-  private[mutable] def endBlock {
+  private[mutable] def endBlock() {
     effect(blocksTree = blocksTree.getParent)
   }
 
   private[mutable] def executeBlock[T](block: =>T) = {
-    startBlock
+    startBlock()
     effect {
       targetPath match {
         case Some(path) => if (path.startsWith(creationPath)) block
         case None       => block
       }
     }
-    endBlock
+    endBlock()
   }
 
   private[mutable] def effect(a: =>Unit) {

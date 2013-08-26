@@ -103,7 +103,7 @@ more precisely:
     error1   ! false       ! false       ! true      ! false       ! false       |
     skipped1 ! false       ! false       ! false     ! true        ! false       |
     pending1 ! false       ! false       ! false     ! false       ! true        | { (r, s, f, e, sk, p) =>
-      (r.isSuccess, r.isFailure, r.isError, r.isSkipped, r.isPending) must_== (s, f, e, sk, p)
+      (r.isSuccess, r.isFailure, r.isError, r.isSkipped, r.isPending) must_== ((s, f, e, sk, p))
     }
 
   val success1: Result = Success("s1")

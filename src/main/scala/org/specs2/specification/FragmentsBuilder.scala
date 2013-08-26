@@ -75,14 +75,14 @@ trait FragmentsBuilder extends ExamplesFactory with ImplicitParameters with Form
   implicit def stringToHtmlLinkFragments(s: String): HtmlLinkFragments = new HtmlLinkFragments(HtmlLink(SpecName(""), s, "", "", ""))
   class HtmlLinkFragments(link: HtmlLink) {
     def ~(s: SpecificationStructure) = outer.link(HtmlLink(name(s), link.beforeText, title(s)), s)
-    def ~(p: (String, SpecificationStructure)) = outer.link(HtmlLink(name(p._2), link.beforeText, p._1), p._2)
-    def ~(p: (String, SpecificationStructure, String)) = outer.link(HtmlLink(name(p._2), link.beforeText, p._1, p._3), p._2)
-    def ~(p: (String, SpecificationStructure, String, String)) = outer.link(HtmlLink(name(p._2), link.beforeText, p._1, p._3, p._4), p._2)
+    def ~(n: String, s: SpecificationStructure) = outer.link(HtmlLink(name(s), link.beforeText, n), s)
+    def ~(n: String, s: SpecificationStructure, a: String) = outer.link(HtmlLink(name(s), link.beforeText, n, a), s)
+    def ~(n: String, s: SpecificationStructure, m: String, a: String) = outer.link(HtmlLink(name(s), link.beforeText, n, m, a), s)
 
     def ~/(s: SpecificationStructure) = outer.see(HtmlLink(name(s), link.beforeText, title(s)), s)
-    def ~/(p: (String, SpecificationStructure)) = outer.see(HtmlLink(name(p._2), link.beforeText, p._1), p._2)
-    def ~/(p: (String, SpecificationStructure, String)) = outer.see(HtmlLink(name(p._2), link.beforeText, p._1, p._3), p._2)
-    def ~/(p: (String, SpecificationStructure, String, String)) = outer.see(HtmlLink(name(p._2), link.beforeText, p._1, p._3, p._4), p._2)
+    def ~/(n: String, s: SpecificationStructure) = outer.see(HtmlLink(name(s), link.beforeText, n), s)
+    def ~/(n: String, s: SpecificationStructure, a: String) = outer.see(HtmlLink(name(s), link.beforeText, n, a), s)
+    def ~/(n: String, s: SpecificationStructure, m: String, a: String) = outer.see(HtmlLink(name(s), link.beforeText, n, m, a), s)
 
     private def name(s: SpecificationStructure) = s.content.specName
     private def title(s: SpecificationStructure) = name(s).title
@@ -90,11 +90,11 @@ trait FragmentsBuilder extends ExamplesFactory with ImplicitParameters with Form
 
   implicit def stringToHtmlLinkFragments2(s: String): HtmlLinkFragments2 = new HtmlLinkFragments2(HtmlLink(SpecName(""), s, "", "", ""))
   class HtmlLinkFragments2(link: HtmlLink) {
-    def ~(p: (SpecificationStructure, String)) = outer.link(HtmlLink(name(p._1), link.beforeText, title(p._1), p._2), p._1)
-    def ~(p: (SpecificationStructure, String, String)) = outer.link(HtmlLink(name(p._1), link.beforeText, title(p._1), p._2, p._3), p._1)
+    def ~(s: SpecificationStructure, n: String) = outer.link(HtmlLink(name(s), link.beforeText, title(s), n), s)
+    def ~(s: SpecificationStructure, n: String, a: String) = outer.link(HtmlLink(name(s), link.beforeText, title(s), n, a), s)
     
-    def ~/(p: (SpecificationStructure, String)) = outer.see(HtmlLink(name(p._1), link.beforeText, title(p._1), p._2), p._1)
-    def ~/(p: (SpecificationStructure, String, String)) = outer.see(HtmlLink(name(p._1), link.beforeText, title(p._1), p._2, p._3), p._1)
+    def ~/(s: SpecificationStructure, n: String) = outer.see(HtmlLink(name(s), link.beforeText, title(s), n), s)
+    def ~/(s: SpecificationStructure, n: String, a: String) = outer.see(HtmlLink(name(s), link.beforeText, title(s), n, a), s)
 
     private def name(s: SpecificationStructure) = s.content.specName
     private def title(s: SpecificationStructure) = name(s).title

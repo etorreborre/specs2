@@ -30,8 +30,8 @@ For the complete list of arguments and shortcut methods read the [Runners](org.s
 
 Some specifications can depend on the arguments passed on the command line, for example to fine-tune the behaviour of some Context objects. If you need to do this, you can add an `Arguments` parameter to the Specification class. This parameter will be setup when the specification is instantiated: ${snippet{
 
-class DependOnCommandLine(args: Arguments) extends mutable.Specification {
-  skipAllUnless(!args.commandLine.contains("DB"))
+class DependOnCommandLine(arguments: Arguments) extends mutable.Specification {
+  skipAllUnless(!arguments.commandLine.contains("DB"))
 
   "database access" >> { dbAccess must beOk }
 }

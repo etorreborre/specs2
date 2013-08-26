@@ -33,9 +33,9 @@ class LinesContentDifferenceSpec extends Specification with AllExpectations { s2
      LinesContentDifference(ls1, ls2, partial = false, unordered = false, reportMisplaced = true)
 
    diff(lines1, lines2).isEmpty
-   diff(lines1, lines3).show === (Seq(MissingLine("c", 3), MissingLine("d", 4)), Seq())
-   diff(lines3, lines1).show === (Seq(), Seq(MissingLine("c", 3), MissingLine("d", 4)))
-   diff(lines3, lines4).show === (Seq(MissingLine("a", 1), MisplacedLine("b", 2)), Seq(MissingLine("d", 2)))
+   diff(lines1, lines3).show === Seq(MissingLine("c", 3), MissingLine("d", 4)) -> Seq()
+   diff(lines3, lines1).show === Seq() -> Seq(MissingLine("c", 3), MissingLine("d", 4))
+   diff(lines3, lines4).show === Seq(MissingLine("a", 1), MisplacedLine("b", 2)) -> Seq(MissingLine("d", 2))
  }
 
   "2. partial = false, unordered = true, reportMisplaced = true" >> {
@@ -43,10 +43,10 @@ class LinesContentDifferenceSpec extends Specification with AllExpectations { s2
       LinesContentDifference(ls1, ls2, partial = false, unordered = true, reportMisplaced = true)
 
     diff(lines1, lines2).isEmpty
-    diff(lines1, lines3).show === (Seq(NotFoundLine("c", 3), NotFoundLine("d", 4)), Seq())
-    diff(lines3, lines1).show === (Seq(), Seq(NotFoundLine("c", 3), NotFoundLine("d", 4)))
-    diff(lines3, lines4).show === (Seq(NotFoundLine("a", 1)), Seq(NotFoundLine("d", 2)))
-    diff(lines1, lines5).show === (Seq(NotFoundLine("b", 2)), Seq(NotFoundLine("c", 4)))
+    diff(lines1, lines3).show === Seq(NotFoundLine("c", 3), NotFoundLine("d", 4)) -> Seq()
+    diff(lines3, lines1).show === Seq() -> Seq(NotFoundLine("c", 3), NotFoundLine("d", 4))
+    diff(lines3, lines4).show === Seq(NotFoundLine("a", 1)) -> Seq(NotFoundLine("d", 2))
+    diff(lines1, lines5).show === Seq(NotFoundLine("b", 2)) -> Seq(NotFoundLine("c", 4))
   }
 
   "3. partial = true, unordered = false, reportMisplaced = true" >> {
@@ -54,9 +54,9 @@ class LinesContentDifferenceSpec extends Specification with AllExpectations { s2
       LinesContentDifference(ls1, ls2, partial = true, unordered = false, reportMisplaced = true)
 
     diff(lines1, lines2).isEmpty
-    diff(lines1, lines3).show === (Seq(), Seq())
-    diff(lines3, lines1).show === (Seq(), Seq(MissingLine("c", 3), MissingLine("d", 4)))
-    diff(lines3, lines4).show === (Seq(), Seq(MissingLine("d", 2)))
+    diff(lines1, lines3).show === Seq() -> Seq()
+    diff(lines3, lines1).show === Seq() -> Seq(MissingLine("c", 3), MissingLine("d", 4))
+    diff(lines3, lines4).show === Seq() -> Seq(MissingLine("d", 2))
   }
 
   "4. partial = true, unordered = true, reportMisplaced = true" >> {
@@ -64,10 +64,10 @@ class LinesContentDifferenceSpec extends Specification with AllExpectations { s2
       LinesContentDifference(ls1, ls2, partial = true, unordered = true, reportMisplaced = true)
 
     diff(lines1, lines2).isEmpty
-    diff(lines1, lines3).show === (Seq(), Seq())
-    diff(lines3, lines1).show === (Seq(), Seq(NotFoundLine("c", 3), NotFoundLine("d", 4)))
-    diff(lines3, lines4).show === (Seq(), Seq(NotFoundLine("d", 2)))
-    diff(lines1, lines5).show === (Seq(), Seq(NotFoundLine("c", 4)))
+    diff(lines1, lines3).show === Seq() -> Seq()
+    diff(lines3, lines1).show === Seq() -> Seq(NotFoundLine("c", 3), NotFoundLine("d", 4))
+    diff(lines3, lines4).show === Seq() -> Seq(NotFoundLine("d", 2))
+    diff(lines1, lines5).show === Seq() -> Seq(NotFoundLine("c", 4))
 
   }
 

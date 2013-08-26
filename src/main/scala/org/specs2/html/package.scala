@@ -5,7 +5,6 @@ package org.specs2
 package object html extends data.TaggedTypes {
 
   type SpecId = Newtype[String, SpecIdOps]
-  case class SpecIdOps(s: String)
 
   def SpecId(id: String): SpecId = newtype(id)
 }

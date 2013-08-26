@@ -157,19 +157,19 @@ class GivenWhenThenSpec extends Specification with ResultMatchers with DataTable
   "factory methods for When" - new g8 {
     e1 := {
       val number0: When[Int, (Int, Int)] = { n1: Int => (s2: String) => (n1,  s2.toInt) }
-      number0.extract(1, "with one more number ${2}") === (1, 2)
+      number0.extract(1, "with one more number ${2}") ==== ((1, 2))
     }
     e2 := {
       val number0 = readAs(".*?(\\d+).*(\\d+).*") and { n1: Int => (s1: String, s2: String) => (n1, s1.toInt + s2.toInt) }
-      number0.extract(1, "Two numbers 2 and 3") === (1, 5)
+      number0.extract(1, "Two numbers 2 and 3") ==== ((1, 5))
     }
     e3 := {
       val number0 = groupAs("\\d+") and { n1: Int => (s1: String, s2: String) => (n1, s1.toInt + s2.toInt) }
-      number0.extract(1, "Two numbers 1 and 2") === (1, 3)
+      number0.extract(1, "Two numbers 1 and 2") ==== ((1, 3))
     }
     e4 := {
       val number0 = groupAs("\\d+") and { n1: Int => (s1: String, s2: String) => (n1, s1.toInt + s2.toInt) must not(beNull) }
-      number0.extract(1, "Two numbers 1 and 2") === (1, 3)
+      number0.extract(1, "Two numbers 1 and 2") ==== ((1, 3))
     }
   }
   "factory methods for Given" - new g9 {

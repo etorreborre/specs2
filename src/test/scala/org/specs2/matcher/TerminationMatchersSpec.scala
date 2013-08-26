@@ -51,9 +51,9 @@ class TerminationMatchersSpec extends script.Specification with TerminationMatch
     eg := {
       val queue1 = new ArrayBlockingQueue[Int](1)
       var stop = true
-      def action1 = Promise { while (stop) { Thread.sleep(10)}; queue1.add(1) }.get
-      def action2 = Promise { stop = false }.get
-      action1 must terminate.onlyWhen(action2)
+      def action1() = Promise { while (stop) { Thread.sleep(10)}; queue1.add(1) }.get
+      def action2() = Promise { stop = false }.get
+      action1() must terminate.onlyWhen(action2())
     }
 
     eg := {

@@ -245,6 +245,9 @@ case object Step extends ImplicitParameters {
   /** create a Step object from either a previous result, or a value to evaluate */
   def fromEither[T](r: =>Either[Result, T]) = new Step(either(r))
 
+  /** empty step doing nothing */
+  def empty = Step(())
+
   private[specs2]
   def either[T](r: =>Either[Result, T]): LazyParameter[Result] = lazyfy {
     r match {

@@ -39,7 +39,7 @@ trait JUnitReporter extends ExecutionOrigin with DefaultReporter with Exporters 
    * - for each result, report the failure/error/skipped or pending message as a
    *   junit failure or ignored event on the RunNotifier
   */
-  def report {
+  def report = {
     selected |> sequence |> execute |> store |> export
   }
 

@@ -38,12 +38,12 @@ trait ExamplesIsolation { self: DefaultSelection =>
     Classes.tryToCreateObject[SpecificationNavigation](name.javaClassName).map { specification =>
       val fragments = select(specification.fragmentsTo(f)).toIndexedSeq
 
-      def executeStepsBefore = fragments.collect(isAStep).filter(_.isolable).foreach(_.execute)
+      def executeStepsBefore() = fragments.collect(isAStep).filter(_.isolable).foreach(_.execute)
 
       fragments.collect(isAnExample.orElse(isAnAction)).lastOption match {
-        case Some(e: Example) => executeStepsBefore; e.execute
-        case Some(a: Action)   => executeStepsBefore; a.execute
-        case other             => body
+        case Some(e: Example) => executeStepsBefore(); e.execute
+        case Some(a: Action)  => executeStepsBefore(); a.execute
+        case other            => body
       }
     }.getOrElse(body)
   }
