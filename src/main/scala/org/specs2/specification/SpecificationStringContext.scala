@@ -8,6 +8,7 @@ import text.NotNullStrings._
 import scala.reflect.macros.{Context => MContext}
 import reflect.Macros._
 import text.Interpolated
+import text.NotNullStrings._
 import control.Exceptions._
 import html.MarkdownLink
 import specification.TagsFragments._
@@ -19,7 +20,7 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
 
   implicit def stringIsSpecPart(s: =>String): SpecPart = new SpecPart {
     def append(fs: Fragments, text: String, expression: String = "") = {
-      val s1 = tryOr(s)(e => s"[${e.getMessage}]")
+      val s1 = tryOr(s)(e => s"[${e.getMessage.notNull}]")
       fs append createTextFragment(text+s1).fragments
     }
   }

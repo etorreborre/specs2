@@ -12,6 +12,7 @@ import specification._
 import text.AnsiColors
 import control.{ExecutionOrigin, Throwablex}
 import junit.framework.AssertionFailedError
+import text.NotNullStrings._
 
 /**
  * The JUnitReporter reports a specification by using a JUnit RunNotifier
@@ -140,7 +141,7 @@ class JUnitDescriptionsFragments(className: String) extends JUnitDescriptions[Fr
  * This class refines the `AssertionFailedError` from junit
  * and provides the stackTrace of an exception which occurred during the specification execution
  */
-class SpecFailureAssertionFailedError(e: Exception) extends AssertionFailedError(e.getMessage) {
+class SpecFailureAssertionFailedError(e: Exception) extends AssertionFailedError(e.getMessage.notNull) {
   override def toString = e.toString
   override def getStackTrace = e.getStackTrace
   override def getCause = e.getCause

@@ -3,6 +3,7 @@ package matcher
 
 import control.Exceptions._
 import scala.reflect.ClassTag
+import text.NotNullStrings._
 
 /**
  * These matchers can be used to check if exceptions are thrown or not
@@ -24,7 +25,7 @@ trait ExceptionBaseMatchers extends Expectations {
    * @return a matcher checking the type of an Exception and its message (as a regexp)
    */
   def throwA[E <: Throwable](message: String = ".*")(implicit m: ClassTag[E]): Matcher[Any] = {
-    throwA(m).like { case e => createExpectable(e.getMessage).applyMatcher(BeMatching.withPart(message)) }
+    throwA(m).like { case e => createExpectable(e.getMessage.notNull).applyMatcher(BeMatching.withPart(message)) }
   }
   /**
    * @return a matcher checking the value of an Exception
@@ -68,7 +69,7 @@ trait ExceptionBaseMatchers extends Expectations {
     private def asString(exception: Any) = {
       exception match {
         case e: Class[_]   => e.getName
-        case ex: Throwable => ex.getClass.getName + ": " + ex.getMessage
+        case ex: Throwable => ex.getClass.getName + ": " + ex.getMessage.notNull
         case other         => other.toString
       }
     }
@@ -93,7 +94,7 @@ trait ExceptionBaseMatchers extends Expectations {
     }
     private val classAndMessage = (e: Throwable) => {
       errorMustBeThrownIfExceptionIsExpected(e, exception.getClass)
-      exception.getClass == e.getClass && exception.getMessage == e.getMessage
+      exception.getClass == e.getClass && exception.getMessage.notNull == e.getMessage.notNull
     }
 
     private def checkBoolean[T](expectable: Expectable[T], f: Throwable => Boolean) = {

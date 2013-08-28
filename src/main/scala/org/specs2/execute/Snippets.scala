@@ -93,7 +93,7 @@ case class Snippet[T](code: () => T,
   }
 
   lazy val result: String = {
-    val resultAsString = tryOr(execute.notNull)(e => e.getMessage)
+    val resultAsString = tryOr(execute.notNull)(e => e.getMessage.notNull)
     if (resultAsString == "()") ""
     else                        params.prompt(resultAsString)
   }

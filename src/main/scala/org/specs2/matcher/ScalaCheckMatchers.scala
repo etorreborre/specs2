@@ -9,6 +9,7 @@ import scala.collection.Map
 import io.{Output, ConsoleOutput}
 import org.scalacheck._
 import execute.{ResultLogicalCombinators, AsResult}
+import text.NotNullStrings._
 
 /**
  * The ScalaCheckMatchers trait provides matchers which allow to
@@ -136,7 +137,7 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
         execute.Success(noCounterExample(succeeded), frequencies(fq)(defaultPrettyParams), succeeded)
       case r @ Result(GenException(execute.FailureException(f)), n, _, fq, _) => f
       case r @ Result(GenException(e), n, _, fq, _)        =>
-        execute.Failure(prettyTestRes(r)(defaultPrettyParams) + frequencies(fq), e.getMessage(), e.getStackTrace().toList)
+        execute.Failure(prettyTestRes(r)(defaultPrettyParams) + frequencies(fq), e.getMessage.notNull, e.getStackTrace().toList)
       case r @ Result(Exhausted, n, _, fq, _)              =>
         execute.Failure(prettyTestRes(r)(defaultPrettyParams) + frequencies(fq))
       case Result(Failed(args, labels), n, _, fq, _) =>

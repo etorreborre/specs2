@@ -11,6 +11,7 @@ import Foldable._
 import collection.Seqx._
 import text.Message.concat
 import text.Sentences._
+import text.NotNullStrings._
 import execute.ResultExecution._
 
 /**
@@ -336,7 +337,7 @@ case class Error(m: String, e: Exception) extends Result(m) with ResultStackTrac
 
   override def equals(o: Any) = {
     o match {
-      case Error(m2, e2) => m == m2 && e.getMessage == e2.getMessage
+      case Error(m2, e2) => m == m2 && e.getMessage.notNull == e2.getMessage.notNull
       case _ => false
     }
   }

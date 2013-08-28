@@ -7,6 +7,7 @@ import execute._
 import Expectable._
 import text.Quote._
 import text.Plural._
+import text.NotNullStrings._
 import reflect.ClassName._
 import MatchResultMessages._
 import time.Duration
@@ -142,7 +143,7 @@ trait Matcher[-T] { outer =>
    */
   def orSkip(message: String => String): Matcher[T] = new Matcher[T] {
     def apply[U <: T](a: Expectable[U]) = {
-      tryOr(outer(a)) { (e: Exception) => MatchSkip(message(e.getMessage), a) } match {
+      tryOr(outer(a)) { (e: Exception) => MatchSkip(message(e.getMessage.notNull), a) } match {
         case MatchFailure(_,ko,_,_)    => MatchSkip(message(ko()), a)
         case other                     => other
       }
@@ -163,7 +164,7 @@ trait Matcher[-T] { outer =>
    */
   def orPending(message: String => String): Matcher[T] = new Matcher[T] {
     def apply[U <: T](a: Expectable[U]) = {
-      tryOr(outer(a)) { (e: Exception) => MatchPending(message(e.getMessage), a) } match {
+      tryOr(outer(a)) { (e: Exception) => MatchPending(message(e.getMessage.notNull), a) } match {
         case MatchFailure(_,ko,_,_)    => MatchPending(message(ko()), a)
         case other                     => other
       }

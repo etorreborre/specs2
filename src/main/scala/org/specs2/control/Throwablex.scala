@@ -2,6 +2,7 @@ package org.specs2
 package control
 
 import java.io. { StringWriter, PrintWriter }
+import text.NotNullStrings._
 
 /**
  * This trait allows to add some utility methods to `Throwable` objects.
@@ -81,7 +82,7 @@ trait Throwablex {
     }
 
     /** @return the exception message and its cause if any */
-    def messageAndCause = t.getMessage + (if (t.getCause != null) ". Cause: "+t.getCause.getMessage else "")
+    def messageAndCause = t.getMessage.notNull + (if (t.getCause != null) ". Cause: "+t.getCause.getMessage.notNull else "")
   }
   /** utility method to create a default stacktrace element */
   def stackTraceElement(m: String, className: String = "internals", fileName: String = "file", lineNumber: Int = 1) = 

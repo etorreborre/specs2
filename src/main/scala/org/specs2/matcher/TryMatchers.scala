@@ -8,6 +8,7 @@ import AnyMatchers.beEqualTo
 import MatchersImplicits._
 import text.Regexes._
 import text.Quote._
+import text.NotNullStrings._
 
 /**
  * Matchers for util.Try instances
@@ -66,7 +67,7 @@ trait TryBaseMatchers extends ExceptionMatchers {
         val res: Result = value.value match {
           case Succeeded(t) if f.isDefinedAt(t)  => f(t).toResult.prependMessage("is a Success")
           case Succeeded(t) if !f.isDefinedAt(t) => Failure("is a Success but the function is undefined on this value")
-          case Failed(e)                         => Failure("is not a Success: "+e.getMessage)
+          case Failed(e)                         => Failure("is not a Success: "+e.getMessage.notNull)
         }
         result(res.isSuccess,
                s"${value.description} ${res.message}",
@@ -106,11 +107,11 @@ trait TryBaseMatchers extends ExceptionMatchers {
         value.value match {
           case Succeeded(_) => result(false, value.description + " is a Failure", value.description + " is not a Failure", value)
           case Failed(e)    => {
-            val (assignable, matches) = (expected.isAssignableFrom(e.getClass), e.getMessage.matchesSafely(message))
+            val (assignable, matches) = (expected.isAssignableFrom(e.getClass), e.getMessage.notNull.matchesSafely(message))
             result(assignable && matches,
                    s"${value.description} is a Failure and ${e.getClass.getName} has a correct type",
                    if (!assignable) (s"${value.description} is a Failure but '${e.getClass.getName}' is not of type '${expected.getName}'")
-                   else             (s"${value.description} is a Failure but '${e.getMessage}' doesn't match '$message'") ,
+                   else             (s"${value.description} is a Failure but '${e.getMessage.notNull}' doesn't match '$message'") ,
                    value)
           }
         }
