@@ -77,12 +77,12 @@ ${snippet {"This is a long, long, long description" ! ((s: String) => s.size mus
 Some examples may be temporarily failing but you may not want the entire test suite to fail just for those examples. Instead of commenting them out and then forgetting about those examples when the code is fixed, you can append `pendingUntilFixed` to the Example body: ${snippet{
 
 "this example fails for now" ! {
-1 must_== 2
+  1 must_== 2
 }.pendingUntilFixed
 
 // or, with a more specific message
 "this example fails for now" ! {
-1 must_== 2
+  1 must_== 2
 }.pendingUntilFixed("ISSUE-123")
 }}
 

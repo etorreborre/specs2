@@ -96,18 +96,18 @@ object OptionEitherMatchers extends Card {
   def text = s2"""
   There are several matchers to check Option and Either instances:
 
- * `beSome` checks if an element is Some(_)
- * `beSome(exp)` checks if an element is Some(exp)
- * `beSome.which(function)` checks if an element is Some(_) and satisfies a function returning a boolean
- * `beSome.like(partial function)` checks if an element is Some(_) and satisfies a partial function returning a `MatchResult`
- * `beNone` checks if an element is None
- * `beAsNoneAs` checks if 2 values are equal to None at the same time
- * `beRight` checks if an element is Right(_)
- * `beRight(exp)` checks if an element is Right(exp)
- * `beRight.like(partial function)` checks if an element is Right(_) and satisfies a partial function returning a `MatchResult`
- * `beLeft` checks if an element is Left(_)
- * `beLeft(exp)` checks if an element is Left(exp)
- * `beLeft.like(partial function)` checks if an element is Left(_) and satisfies a partial function returning a `MatchResult`
+ * `beSome` checks if an element is `Some(_)`
+ * `beSome(exp)` checks if an element is `Some(exp)`
+ * `beSome.which(function)` checks if an element is `Some(_`) and satisfies a function returning a boolean
+ * `beSome.like(partial function)` checks if an element is `Some(_)` and satisfies a partial function returning a `MatchResult`
+ * `beNone` checks if an element is `None`
+ * `beAsNoneAs` checks if 2 values are equal to `None` at the same time
+ * `beRight` checks if an element is `Right(_)`
+ * `beRight(exp)` checks if an element is `Right(exp)`
+ * `beRight.like(partial function)` checks if an element is `Right(_)` and satisfies a partial function returning a `MatchResult`
+ * `beLeft` checks if an element is `Left(_)`
+ * `beLeft(exp)` checks if an element is `Left(exp)`
+ * `beLeft.like(partial function)` checks if an element is `Left(_)` and satisfies a partial function returning a `MatchResult`
   """
 }
 
@@ -116,10 +116,10 @@ object TryMatchers extends Card {
   def text = s2"""
   There are several matchers to check Try instances:
 
- * `beSuccessfulTry` checks if an element is Success(_)
- * `beSuccessfulTry.withValue(exp)` checks if an element is Success(exp)
- * `beSuccessfulTry.which(function)` checks if an element is Some(_) and satisfies a function returning a boolean
- * `beSuccessfulTry.like(partial function)` checks if an element is Some(_) and satisfies a partial function returning a `MatchResult`
+ * `beSuccessfulTry` checks if an element is `Success(_)`
+ * `beSuccessfulTry.withValue(exp)` checks if an element is `Success(_)`
+ * `beSuccessfulTry.which(function)` checks if an element is `Success(_)` and satisfies a function returning a boolean
+ * `beSuccessfulTry.like(partial function)` checks if an element is `Success(_)` and satisfies a partial function returning a `MatchResult`
  * `beFailedTry` checks if an element is `Failure(_)`
  * `beFailedTry.withThrowable[T]` checks if an element is `Failure(t: T)`
  * `beFailedTry.withThrowable[T](message)` checks if an element is `Failure(t: T)` and `t.getMessage` matches `message`
@@ -320,20 +320,20 @@ It is very useful to have literal Xml in Scala, it is even more useful to have m
  <code class="prettyprint"><n a="1" b="2"/> must ==/(<n b="2" a="1"/>)</code>
 
  * `\` is an XPath-like matcher matching if a node is a direct child of another
- <code class="prettyprint"><a><b/></a> must \("b")</code>
+ <code class="prettyprint"><a><b/></a> must \\("b")</code>
 
  * You can also check attribute names
- <code class="prettyprint"><a><b name="value"></b></a> must \("b", "name")</code>
+ <code class="prettyprint"><a><b name="value"></b></a> must \\("b", "name")</code>
 
  * And attribute names and values as well (values are checked using a regular expression, use the <a href="http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#quote(java.lang.String)">quote method</a>  if you want an exact match)
- <code class="prettyprint"><a><b n="v" n2="v2" n3="v3"></b></a> must \("b", "n"->"v", "n2"->"v\\d")</code>
+ <code class="prettyprint"><a><b n="v" n2="v2" n3="v3"></b></a> must \\("b", "n"->"v", "n2"->"v\\d")</code>
 
  * Or the content of a `Text` node
- <code class="prettyprint"><a>hello</a> must \("a") \> "hello"</code> (alias `textIs`)
- <code class="prettyprint"><a>hello</a> must \("a") \>~ "h.*"</code>  (alias `textMatches`)
+ <code class="prettyprint"><a>hello</a> must \\("a") \\> "hello"</code> (alias `textIs`)
+ <code class="prettyprint"><a>hello</a> must \\("a") \\>~ "h.*"</code>  (alias `textMatches`)
 
- * The equivalent of `\` for a "deep" match is simply <code class="prettyprint">\\</code>
- <code class="prettyprint"><a><s><c></c></s></a> must \\("c")</code>
+ * The equivalent of `\` for a "deep" match is simply <code class="prettyprint">\\\\</code>
+ <code class="prettyprint"><a><s><c></c></s></a> must \\\\("c")</code>
 """
 }
 

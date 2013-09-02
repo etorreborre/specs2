@@ -32,11 +32,11 @@ There are many ways to define expectations in ***specs2***. You can define expec
 This is the simplest kind of result you can define for an expectation but also the least expressive!
 
 Here's an example: ${snippet{
-"This is hopefully true"         ! (1 != 2)
+"This is hopefully true" ! (1 != 2)
 }}
 
 This can be useful for simple expectations but a failure will give few information on what went wrong: ${snippet{
-"This is hopefully true"         ! (2 != 2) // fails with 'the value is false',...
+"This is hopefully true" ! (2 != 2) // fails with 'the value is false',...
 }}
 
 ### Standard results
@@ -657,14 +657,14 @@ Byname parameters can be verified but this will not work if the specs2 jar is no
 DataTables are a very effective way of grouping several similar examples into one. For example, here is how to specify the addition of integers by providing one example on each row of a table: ${snippet{
 
 class DataTableSpec extends Specification with matcher.DataTables { def is =
-"adding integers should just work in scala"  ! e1
+  "adding integers should just work in scala"  ! e1
 
-def e1 =
-"a"   | "b" | "c" |                                   // the header of the table, with `|` separated strings
-2    !  2  !  4  |                                   // an example row
-1    !  1  !  2  |> {                                // the > operator to "execute" the table
-(a, b, c) =>  a + b must_== c                        // the expectation to check on each row
-}
+  def e1 =
+    "a"   | "b" | "c" |                                   // the header of the table, with `|` separated strings
+     2    !  2  !  4  |                                   // an example row
+     1    !  1  !  2  |> {                                // the > operator to "execute" the table
+     (a, b, c) =>  a + b must_== c                        // the expectation to check on each row
+    }
 }
 }}
 

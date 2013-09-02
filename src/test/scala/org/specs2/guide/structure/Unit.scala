@@ -17,14 +17,14 @@ Those are all the methods which you can use to create fragments in a unit specif
  * `can`: create a group of Examples, with the preceding Text fragment appended with `can` ${snippet{
 
 "a configuration" can {
-  "have a name" in { ok }
+  "have a name" in ok
 }
 }}
 
  * <code class="prettyprint">&#62;&#62;</code>: create an Example or a group of Examples (with no appended text) ${snippet{
 
 "a configuration may" >> {
-  "have a name" in { ok }
+  "have a name" in ok
 }
 }}
 

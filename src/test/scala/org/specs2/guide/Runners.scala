@@ -21,7 +21,7 @@ There are many ways to execute ***specs2*** specifications:
 
  ***specs2*** is available for Scala 2.10 onwards and uses the following libraries, as specified using the [sbt dsl](http://www.scala-sbt.org/release/docs/Getting-Started/Library-Dependencies.html):
 
- <table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info">`"org.scalaz" % "scalaz-core" % "7.0.2"`</td><td class="info">mandatory</td></tr><tr><td class="info">`"org.scalaz" % "scalaz-concurrent" % "7.0.2"`</td><td class="info">mandatory</td></tr><tr><td class="info">`"com.chuusai" % "shapeless" % "1.2.3"`</td><td class="info">if you use the GWT trait</td></tr><tr><td class="info"> `"org.scalacheck" %% "scalacheck" % "1.10.0"`</td><td class="info">if using ScalaCheck</td></tr><tr><td class="info">`"org.mockito" % "mockito-all" % "1.9.0"`</td><td class="info">if using Mockito. Note: specs2.jar must be placed before mockito.jar on the classpath</td></tr><tr><td class="info">`"org.hamcrest" % "hamcrest-all" % "1.3"`</td><td class="info">if using Hamcrest matchers with Mockito</td></tr><tr><td class="info">`"junit" % "junit" % "4.7"`</td><td class="info">if using JUnit</td></tr><tr><td class="info">`"org.scala-sbt" % "test-interface" % "1.0"`</td><td class="info">provided by sbt when using it</td></tr><tr><td class="info">`"org.pegdown" % "pegdown" % "1.2.1"`</td><td class="info">if using the html runner</td></tr><tr><td class="info">`"org.specs2" % "classycle" % "1.4.1"`</td><td class="info">if using the `org.specs2.specification.Analysis` trait</td></tr><tr><td class="info">`"org.scala-lang" % "scala-compiler" % "2.10.1"`</td><td class="info">if using the `org.specs2.specification.Analysis` trait with the `CompilerDependencyFinder` trait</td></tr><tr><td class="info">`"org.scala-lang" % "scala-reflect" % "2.10.1"`</td><td class="info">if using interpolated specifications</td></tr></table>
+ <table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info">`"org.scalaz" % "scalaz-core" % "7.0.2"`</td><td class="info">mandatory</td></tr><tr><td class="info">`"org.scalaz" % "scalaz-concurrent" % "7.0.2"`</td><td class="info">mandatory</td></tr><tr><td class="info">`"com.chuusai" % "shapeless" % "1.2.4"`</td><td class="info">if you use the GWT trait</td></tr><tr><td class="info"> `"org.scalacheck" %% "scalacheck" % "1.10.0"`</td><td class="info">if using ScalaCheck</td></tr><tr><td class="info">`"org.mockito" % "mockito-all" % "1.9.0"`</td><td class="info">if using Mockito. Note: specs2.jar must be placed before mockito.jar on the classpath</td></tr><tr><td class="info">`"org.hamcrest" % "hamcrest-all" % "1.3"`</td><td class="info">if using Hamcrest matchers with Mockito</td></tr><tr><td class="info">`"junit" % "junit" % "4.7"`</td><td class="info">if using JUnit</td></tr><tr><td class="info">`"org.scala-sbt" % "test-interface" % "1.0"`</td><td class="info">provided by sbt when using it</td></tr><tr><td class="info">`"org.pegdown" % "pegdown" % "1.2.1"`</td><td class="info">if using the html runner</td></tr><tr><td class="info">`"org.specs2" % "classycle" % "1.4.1"`</td><td class="info">if using the `org.specs2.specification.Analysis` trait</td></tr><tr><td class="info">`"org.scala-lang" % "scala-compiler" % "2.10.2"`</td><td class="info">if using the `org.specs2.specification.Analysis` trait with the `CompilerDependencyFinder` trait</td></tr><tr><td class="info">`"org.scala-lang" % "scala-reflect" % "2.10.2"`</td><td class="info">if using interpolated specifications</td></tr></table>
 
 ### Arguments
 
@@ -46,7 +46,7 @@ From inside a specification, the available arguments are the following:
  *`exclude`   *      | ""                                       | do not execute the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
  *`wasIssue`  *      | false                                    | select only previously failed/error examples
  *`was`       *      | ""                                       | select only some previously executed examples based on their status
- `specName`          | ".*Spec"                                 | regular expression to use when executing specifications with the FilesRunner
+ `specName`          | ".\*Spec"                                 | regular expression to use when executing specifications with the FilesRunner
  ***Execution***     |||
  *`plan`      *      | false                                    | only report the text of the specification without executing anything
  *`skipAll`   *      | false                                    | skip all the examples
@@ -181,10 +181,8 @@ The `traceFilter` argument takes an instance of the `org.specs2.control.StackTra
 
 If this is not what you want, you can either:
 
- * use `includeTrace(patterns: String*)` to create a new `StackTraceFilter` which will include only the traces matching
-   those patterns
- * use `excludeTrace(patterns: String*)` to create a new `StackTraceFilter` which will exclude only the traces matching
-   those patterns
+ * use `includeTrace(patterns: String*)` to create a new `StackTraceFilter` which will include only the traces matching those patterns
+ * use `excludeTrace(patterns: String*)` to create a new `StackTraceFilter` which will exclude only the traces matching those patterns
  * use `includeAlsoTrace(patterns: String*)` to add new include patterns to the `DefaultStackTraceFilter`
  * use `excludeAlsoTrace(patterns: String*)` to add new exclude patterns to the `DefaultStackTraceFilter`
  * use the `org.specs2.control.IncludeExcludeStackTraceFilter` class to define both include and exclude patterns
@@ -236,7 +234,7 @@ _[`regexp` is a Java regular expression, csv a list of comma-separated values, m
 
 Note that any argument accepting values (like `include`) can be passed with a dash when those values contain spaces:
 
-    >test-only TaggedSpec -- -include issue 123 -- other arguments
+    > testOnly TaggedSpec -- -include issue 123 -- other arguments
 
 And as you can see above, `--` can be used to signal the end of some argument values
 
@@ -321,22 +319,9 @@ scala> specs2.run(spec1)
 
 ### Via SBT
 
-#### with sbt 0.7.x
+SBT knows how to run ***specs2*** specifications without any specific configuration. However, there are a few useful options which you can set (see [here](http://www.scala-sbt.org/release/docs/Detailed-Topics/Testing.html) for more information).
 
-In order to use ***specs2*** with sbt 0.7.x you need first to add the following lines to your sbt project:
-
-    def specs2Framework = new TestFramework("org.specs2.runner.SpecsFramework")
-    override def testFrameworks = super.testFrameworks ++ Seq(specs2Framework)
-
-Then, depending on the naming of your specification, you have to specify which classes you want to include for reporting:
-
-```
-override def includeTest(s: String) = { s.endsWith("Spec") || s.contains("UserGuide") }
-```
-
-#### with sbt > 0.9.x
-
-In this case you don't need to do much because ***specs2*** will be recognized out-of-the-box. However, if you want to filter some specifications you need to add this to your `build.sbt` file (see [here](http://www.scala-sbt.org/release/docs/Detailed-Topics/Testing.html) for more information):
+Exclude some specifications:
 
     // keep only specifications ending with Spec or Unit
     testOptions := Seq(Tests.Filter(s => Seq("Spec", "Unit").exists(s.endsWith(_))))
@@ -345,12 +330,12 @@ If you don't want the specifications to be executed in parallel:
 
     parallelExecution in Test := false
 
-If you want to pass arguments available for all specifications:
+If you want to pass some arguments to all specifications:
 
-    // equivalent to `test-only -- nocolor neverstore` on the command line
+    // equivalent to `testOnly -- nocolor neverstore` on the command line
     testOptions in Test += Tests.Argument("nocolor", "neverstore")
 
-    // equivalent to `test-only -- exclude integration` on the command line
+    // equivalent to `testOnly -- exclude integration` on the command line
     testOptions in Test += Tests.Argument("exclude", "integration")
 
 If you want the examples results to be displayed as soon as they've been executed you need to add:
@@ -359,12 +344,12 @@ If you want the examples results to be displayed as soon as they've been execute
 logBuffered := false
 ```
 
-##### Test-only arguments
+##### testOnly arguments
 
 When you execute one test only, you can pass the arguments on the command line:
 
 ```
-> test-only org.specs2.UserGuide -- xonly
+> testOnly org.specs2.UserGuide -- xonly
 ```
 
 ##### Output formats
@@ -374,7 +359,7 @@ When you execute one test only, you can pass the arguments on the command line:
 The `html` argument is available with sbt to allow the creation of the html report from the command line.
 
 ```
-> test-only org.specs2.UserGuide -- html
+> testOnly org.specs2.UserGuide -- html
 
 // in your build.sbt file
 testOptions in Test += Tests.Argument("html")
@@ -384,7 +369,7 @@ testOptions in Test += Tests.Argument("html")
 
 The `markdown` argument can be used to create ".md" files (to use with websites like GitHub):
 
-    > test-only org.specs2.UserGuide -- markdown
+    > testOnly org.specs2.UserGuide -- markdown
 
 In this case the markup text in the Specification is not interpreted.
 
@@ -393,7 +378,7 @@ In this case the markup text in the Specification is not interpreted.
 Similarly, JUnit xml output files can be created by passing the `junitxml` option:
 
 ```
-> test-only org.specs2.examples.HelloWorldUnitSpec -- junitxml
+> testOnly org.specs2.examples.HelloWorldUnitSpec -- junitxml
 
 // in your build.sbt file
 testOptions in Test += Tests.Argument("junitxml")
@@ -404,7 +389,7 @@ testOptions in Test += Tests.Argument("junitxml")
 If you want to get a console output as well, don't forget to add the `console` argument:
 
 ```
-> test-only org.specs2.UserGuide -- html console
+> testOnly org.specs2.UserGuide -- html console
 
 // in your build.sbt file
 testOptions in Test += Tests.Argument("html", "console")
@@ -415,7 +400,7 @@ testOptions in Test += Tests.Argument("html", "console")
 Any `FilesRunner` object can also be invoked by sbt, but you need to specify `console`, `html`, `junitxml`, `markdown` on the command line:
 
 ```
-> test-only allSpecs -- console
+> testOnly allSpecs -- console
 ```
 
 ##### Colors
@@ -491,8 +476,8 @@ Finally you can change the color scheme that's being used on the console by impl
     object MyColors = new org.specs2.text.ConsoleColors { override val failureColor = magenta }
 
     class MyColoredSpecification extends Specification { def is = colors(MyColors) ^
-       // the failure message will be magenta
-       "this is a failing example" ! failure
+      // the failure message will be magenta
+      "this is a failing example" ! failure
     }
 
 Note also that the the color support for sbt on Windows is a bit tricky. You need to follow the instructions [here](http://www.marioawad.com/2010/11/16/ansi-command-line-colors-under-windows) then add to your script launching sbt:
@@ -577,7 +562,7 @@ The `NotifierRunner` class can be instantiated with a custom `Notifier` and used
 You can also use a custom `Notifier` from inside sbt by passing the `notifier` argument with a `Notifier` implementation class name:
 
 ```
-sbt> test-only *BinarySpec* -- notifier com.mycompany.reporting.FtpNotifier
+sbt> testOnly *BinarySpec* -- notifier com.mycompany.reporting.FtpNotifier
 ```
 
 #### Exporter
@@ -596,7 +581,7 @@ Please see the API of each class to see how to use them.
 
 You can use a custom `Exporter` from inside sbt by passing the `exporter` argument with a `Exporter` implementation class name:
 
-    sbt> test-only *BinarySpec* -- exporter com.mycompany.reporting.FtpExporter
+    sbt> testOnly *BinarySpec* -- exporter com.mycompany.reporting.FtpExporter
 
    - - -
 
