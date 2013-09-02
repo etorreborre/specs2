@@ -1,0 +1,35 @@
+This version brings small improvements and fixes on top of 2.1.1
+
+Improvements
+============
+
+ * added the possibility to specify given/when/then steps without extractors
+ * added the possibility to start a GWT scenario with when steps only returning values
+ * implemented the new test-interface for sbt 0.13
+ * added a "stay informed" section on the welcome page with a link to the twitter account
+ * iterators can now use the `haveSize` matcher
+ * moved the implicit conversion for Scope to `ScopedExpectations` trait used by `ThrownExpectations` to use this conversion when it makes the most sense
+ * improved support for Hamcrest matchers using the `Matcher.describeMismatch` method
+ * show the original values for adapted matchers
+ * added some documentation for the use of `AsResult.effectively` in the case of a mutable specification
+ * added a `OneExpectationPerProp` trait for ScalaCheck to count only one expectation per property (instead of 100 by default)
+
+Fixes
+=====
+
+ * using `System.getProperty` instead of `System.getProperties` to avoid the need for write permissions [#177](https://github.com/etorreborre/specs2/issues/177)
+ * added the possibility to partially match strings in multiline strings [#179](https://github.com/etorreborre/specs2/issues/179)
+ * fixed the generation of titles when using the markdown exporter
+ * removing **all** spaces for `beEqual.ignoreSpace` and added `beEqual.trimmed` if we just want to trim strings [#181](https://github.com/etorreborre/specs2/issues/181)
+ * set the proper name on the test-interface events [#184](https://github.com/etorreborre/specs2/issues/184)
+ * added a toString method on SpecFailureAssertionFailedError to get better reporting with Jumi [#185](https://github.com/etorreborre/specs2/issues/185). Thanks to @orfjackal for the PR
+ * `inOrder` results must check results with the `Expectations` trait when using Mockito and mutable specifications [#186](https://github.com/etorreborre/specs2/issues/186)
+ * fixed the use of `AllExpectations` in a mutable spec with scopes
+ * fixed the return type of the `failure/skipped`... methods so that they can be used at the end of an example in a mutable spec
+ * using the pattern flags for the =~(pattern) matcher [#188](https://github.com/etorreborre/specs2/issues/188)
+ * fixed the `contain(exactly())` matcher when there are no elements to check
+ * added `and/or` methods on `MatchResult` taking a `Result` [#190](https://github.com/etorreborre/specs2/issues/190)
+ * protected against null messages in thrown exceptions
+ 
+ ==========================
+
