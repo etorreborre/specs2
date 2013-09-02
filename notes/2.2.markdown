@@ -1,7 +1,11 @@
 This version brings small improvements and fixes on top of 2.1.1
 
-Improvements
-============
+## Important!
+
+With the use of string interpolation for acceptance specifications the "old" style using operators is going now deprecated (to simplify the implementation and avoid bugs).
+The next version, 2.3 will still compile specifications written with the "old" style but their display will not be correct (it will miss newlines).
+
+## Improvements
 
  * added the possibility to specify given/when/then steps without extractors
  * added the possibility to start a GWT scenario with when steps only returning values
@@ -14,8 +18,7 @@ Improvements
  * added some documentation for the use of `AsResult.effectively` in the case of a mutable specification
  * added a `OneExpectationPerProp` trait for ScalaCheck to count only one expectation per property (instead of 100 by default)
 
-Fixes
-=====
+## Fixes
 
  * using `System.getProperty` instead of `System.getProperties` to avoid the need for write permissions [#177](https://github.com/etorreborre/specs2/issues/177)
  * added the possibility to partially match strings in multiline strings [#179](https://github.com/etorreborre/specs2/issues/179)
