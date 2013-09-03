@@ -25,29 +25,23 @@ trait TagsAssociation {
   private[specs2]
   def tags(fragments: Seq[Fragment]): Seq[TaggingFragment] = {
 
-    def removeTags(taggingToApply: Seq[TaggingFragment], tf: TaggingFragment) = taggingToApply.collect {
-      case s @ Section(_*)   => Section((s.names diff tf.names):_*)
-      case s @ AsSection(_*) => AsSection((s.names diff tf.names):_*)
-      case other             => other
-    }.filterNot(_.isEmpty)
-
-    fragments.foldLeft((Vector(), Vector()): (Seq[TaggingFragment], Seq[TaggingFragment])) { (res, cur) =>
-      val (tagged, taggingToApply) = res
+    fragments.foldLeft((Vector(): Seq[TaggingFragment], (Section(), Tag()))) { (res, cur) =>
+      val (tagged, (sectionTags, previousTag)) = res
       cur match {
         /** tag the next fragment */
-        case t1 @ Tag(_*)                                        => (tagged :+ t1, taggingToApply :+ t1)
-        /** beginning of section */
-        case t1 @ Section(_*) if !(taggingToApply contains t1)   => (tagged :+ Tag(t1.names:_*), taggingToApply :+ t1)
-        /** end of section */
-        case t1 @ Section(_*)                                    => (tagged :+ Tag(t1.names:_*), removeTags(taggingToApply, t1))
+        case t1 @ Tag(_*)                                        => (tagged :+ t1, (sectionTags, previousTag.add(t1)))
         /** tag the previous fragment */
-        case t1 @ TaggedAs(_*)                                   => (tagged.mapLast(_ |+| Tag(t1.names:_*)) :+ t1, taggingToApply)
+        case t1 @ TaggedAs(_*)                                   => (tagged.mapLast(_ |+| Tag(t1.names:_*)) :+ t1, (sectionTags, previousTag))
+        /** section for the next fragment */
+        case t1 @ Section(_*) =>
+          val (endTags, startTags) = (sectionTags.names.filter(t1.names.contains), t1.names.filterNot(sectionTags.names.contains))
+          (tagged :+ Tag(startTags:_*), (Section((sectionTags.names diff endTags) ++ startTags:_*), previousTag))
+        /** section for the previous fragment */
+        case t1 @ AsSection(_*) =>
+          val (endTags, startTags) = (sectionTags.names.filter(t1.names.contains), t1.names.filterNot(sectionTags.names.contains))
+          (tagged.mapLast(_ |+| Tag(startTags:_*)) :+ t1, (Section((sectionTags.names diff endTags) ++ startTags:_*), previousTag))
         /** beginning of section from the previous fragment */
-        case t1 @ AsSection(_*) if !(taggingToApply contains t1) => (tagged.mapLast(_ |+| Tag(t1.names:_*)) :+ t1, taggingToApply :+ t1)
-        /** end of section */
-        case t1 @ AsSection(_*)                                  => (tagged.mapLast(_ |+| Tag(t1.names:_*)) :+ t1, removeTags(taggingToApply, t1))
-        /** beginning of section from the previous fragment */
-        case f                                                   => (tagged :+ taggingToApply.sumr, taggingToApply.filter(_.isSection))
+        case f                                                   => (tagged :+ Tag(sectionTags.names ++ previousTag.names:_*), (sectionTags, Tag()))
       }
     }
   }._1

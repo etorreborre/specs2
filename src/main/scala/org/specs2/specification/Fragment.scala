@@ -340,11 +340,12 @@ object TagsFragments {
   /** tags the next fragment */
   case class Tag(names: String*) extends TaggingFragment {
     def isSection = false
+    def add(other: Tag) = Tag((names ++ other.names).distinct:_*)
     override def toString = names.mkString("Tag(", ",", ")")
     override def equals(o: Any) = {
       o match {
-        case t @ Tag(_*)      => names == t.names
-        case t @ TaggedAs(_*) => names == t.names
+        case t @ Tag(_*)      => names.distinct.toSet == t.names.distinct.toSet
+        case t @ TaggedAs(_*) => names.distinct.toSet == t.names.distinct.toSet
         case _ => false
       }
     }
@@ -352,11 +353,12 @@ object TagsFragments {
   /** tags the previous fragment */
   case class TaggedAs(names: String*) extends TaggingFragment {
     def isSection = false
+    def add(other: TaggedAs) = TaggedAs((names ++ other.names).distinct:_*)
     override def toString = names.mkString("TaggedAs(", ",", ")")
     override def equals(o: Any) = {
       o match {
-        case t @ Tag(_*)      => names == t.names
-        case t @ TaggedAs(_*) => names == t.names
+        case t @ Tag(_*)      => names.distinct.toSet == t.names.distinct.toSet
+        case t @ TaggedAs(_*) => names.distinct.toSet == t.names.distinct.toSet
         case _ => false
       }
     }
@@ -364,11 +366,12 @@ object TagsFragments {
   /** the previous fragment starts a section */
   case class AsSection(names: String*) extends TaggingFragment {
     def isSection = true
+    def add(other: AsSection) = AsSection((names ++ other.names).distinct:_*)
     override def toString = names.mkString("AsSection(", ",", ")")
     override def equals(o: Any) = {
       o match {
-        case s @ AsSection(_*) => names == s.names
-        case s @ Section(_*)   => names == s.names
+        case s @ AsSection(_*) => names.distinct.toSet == s.names.distinct.toSet
+        case s @ Section(_*)   => names.distinct.toSet == s.names.distinct.toSet
         case _ => false
       }
     }
@@ -376,11 +379,12 @@ object TagsFragments {
   /** the next fragment starts a section */
   case class Section(names: String*) extends TaggingFragment {
     def isSection = true
+    def add(other: Section) = Section((names ++ other.names).distinct:_*)
     override def toString = names.mkString("Section(", ",", ")")
     override def equals(o: Any) = {
       o match {
-        case s @ AsSection(_*) => names == s.names
-        case s @ Section(_*)   => names == s.names
+        case s @ AsSection(_*) => names.distinct.toSet == s.names.distinct.toSet
+        case s @ Section(_*)   => names.distinct.toSet == s.names.distinct.toSet
         case _ => false
       }
     }
@@ -392,7 +396,7 @@ object TagsFragments {
    */
   implicit def TaggingFragmentsAreMonoid = new Monoid[TaggingFragment] {
     val zero = Tag()
-    def append(t1: TaggingFragment, t2: =>TaggingFragment) = Tag((t1.names ++ t2.names):_*)
+    def append(t1: TaggingFragment, t2: =>TaggingFragment) = Tag((t1.names ++ t2.names).distinct:_*)
   }
 
   /** @return true if the object is a TaggingFragment */

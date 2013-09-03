@@ -8,7 +8,7 @@ import scalaz.Monoid
 import Fragments._
 import specification.StandardFragments.{End, Br}
 import io.Paths._
-import specification.TagsFragments.TaggingFragment
+import org.specs2.specification.TagsFragments._
 
 /**
  * A Fragments object is a list of fragments with a SpecStart and a SpecEnd
@@ -16,7 +16,7 @@ import specification.TagsFragments.TaggingFragment
 case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] = Vector().view,
                      arguments: Arguments = Arguments(), linked: Linked = Linked()) {
 
-  def fragments: Seq[Fragment] = if (isZero) Vector().view else (specStart +: middle :+ specEnd)
+  def fragments: Seq[Fragment] = if (isZero) Vector().view else specStart +: middle :+ specEnd
   def isZero = this == Fragments()
 
   def specTitleIs(name: SpecName): Fragments = copy(specTitle = specTitle.filterNot(_.title.isEmpty).map(_.overrideWith(name)).orElse(Some(name)))
@@ -30,8 +30,19 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   def append(fs: Fragments): Fragments =
     (middle, fs.middle) match {
       case (begin :+ (txt1: Text), (txt2: Text) +: rest) if !fs.isLink && txt1.text.formatting == txt2.text.formatting =>
-        ((new FragmentsFragment(this.copy(middle = Seq())))) ^ fs.copy(middle = begin ++ (txt1.add(txt2) +: rest))
-      case _                                                                       => (new FragmentsFragment(this)) ^ fs
+        new FragmentsFragment(this.copy(middle = Seq())) ^ fs.copy(middle = begin ++ (txt1.add(txt2) +: rest))
+
+      case _                                                               => new FragmentsFragment(this) ^ fs
+    }
+
+  /** append the fragments from fs, appending the text fragments if this object ends with a TaggingFragment and fs starts with a TaggingFragment */
+  def appendTags(fs: Fragments): Fragments =
+    (middle, fs.middle) match {
+      case (begin :+ (section1: AsSection), (section2: AsSection) +: rest) => new FragmentsFragment(this.copy(middle = Seq())) ^ fs.copy(middle = begin ++ (section1.add(section2) +: rest))
+      case (begin :+ (section1: Section),   (section2: Section) +: rest)   => new FragmentsFragment(this.copy(middle = Seq())) ^ fs.copy(middle = begin ++ (section1.add(section2) +: rest))
+      case (begin :+ (tag1: TaggedAs),      (tag2: TaggedAs) +: rest)      => new FragmentsFragment(this.copy(middle = Seq())) ^ fs.copy(middle = begin ++ (tag1.add(tag2) +: rest))
+      case (begin :+ (tag1: Tag),           (tag2: Tag) +: rest)           => new FragmentsFragment(this.copy(middle = Seq())) ^ fs.copy(middle = begin ++ (tag1.add(tag2) +: rest))
+      case _                                                               => new FragmentsFragment(this) ^ fs
     }
 
   /** append the fragments from fs, appending the text fragments if this object ends with Text and fs starts with Text */
@@ -39,7 +50,10 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
     append(Fragments.createList(fs:_*))
 
   /** recreate the Fragments so that 2 consecutive Text fragments are aggregated into one */
-  def compact = middle.foldLeft(copy(middle = Seq())) { (res, cur) => res append (Seq(cur)) }
+  def compact = middle.foldLeft(copy(middle = Seq())) { (res, cur) => res append Seq(cur) }
+
+  /** recreate the Fragments so that 2 consecutive Tagging fragments are aggregated into one */
+  def compactTags = middle.foldLeft(copy(middle = Seq())) { (res, cur) => res appendTags Fragments.createList(cur) }
 
   def middleDrop(n: Int) = copy(middle = Vector(middle:_*).drop(n).view)
   def middleDropRight(n: Int) = copy(middle = Vector(middle:_*).dropRight(n).view)

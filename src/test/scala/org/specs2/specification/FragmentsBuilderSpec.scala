@@ -4,6 +4,8 @@ package specification
 import text._
 import execute.Skipped
 import matcher._
+import Fragments._
+import control.Functions._
 
 class FragmentsBuilderSpec extends script.Specification with ResultMatchers with Groups with GivenWhenThen {  def is = s2"""
 
@@ -96,10 +98,10 @@ Other elements
     eg  := (fragments.head must haveClass[SpecStart]) and (fragments.last must haveClass[SpecEnd])
     eg  := content.specStart.arguments.xonly
     eg  := content.specStart.specName must beTheSameAs(content.specEnd.specName)
-    eg  := content.specStart.title must_== "title"
-    eg  := content.fragments.map(_.toString) must contain(equalTo("SpecStart(title)")).exactly(1.times)
+    eg  := content.specStart.title must_== "title1"
+    eg  := content.fragments.map(_.toString) must contain(equalTo("SpecStart(title1)")).exactly(1.times)
     eg  := content.specStart.arguments.xonly must beTrue
-    eg  := (content2.specStart.title must_== "title") and (content2.specStart.arguments.xonly must beTrue)
+    eg  := (content2.specStart.title must_== "title2") and (content2.specStart.arguments.xonly must beTrue)
     eg  :=  content6.specStart.title must not(beEmpty)
   }
   "arguments" - new group with specifications {
@@ -110,17 +112,17 @@ Other elements
   }
   "links" - new group with specifications {
 
-    eg := parentSpec1.content.fragments.toList must
-              beLike { case (s: SpecStart) :: _ :: (t: Text) :: SpecStart(_,_,Linked(Some(l), false, false),_) :: rest => ok }
-    eg := parentSpec2.content.fragments.toList must
-              beLike { case (s: SpecStart) :: _ :: (t: Text) :: SpecStart(_,_,Linked(Some(l), true, false),_) :: rest => ok }
-    eg := parentSpec3.content.fragments.toList must
-              beLike { case (s: SpecStart) :: _ :: (t: Text) :: SpecStart(_,_,Linked(Some(l), false, true),_) :: rest => ok }
+    eg := startTextEndFragments(parentSpec1.content) must
+              beLike { case (s: SpecStart) :: (t: Text) :: SpecStart(_,_,Linked(Some(l), false, false),_) :: rest => ok }
+    eg := startTextEndFragments(parentSpec2.content) must
+              beLike { case (s: SpecStart) :: (t: Text) :: SpecStart(_,_,Linked(Some(l), true, false),_) :: rest => ok }
+    eg := startTextEndFragments(parentSpec3.content) must
+              beLike { case (s: SpecStart) :: (t: Text) :: SpecStart(_,_,Linked(Some(l), false, true),_) :: rest => ok }
 
-    eg := parentSpec4.content.fragments.toList must
-              beLike { case (s: SpecStart) :: _ :: (t1: Text) ::
-                         SpecStart(_,_,Linked(Some(_), false, false), _) :: _ :: (t2: Text) :: (e1: SpecEnd) ::
-                         SpecStart(_,_,Linked(Some(_), false, false), _) :: _ :: (t3: Text) :: (e2: SpecEnd) :: rest => ok }
+    eg := startTextEndFragments(parentSpec4.content) must
+              beLike { case (s: SpecStart) :: (t1: Text) ::
+                         SpecStart(_,_,Linked(Some(_), false, false), _) :: (t2: Text) :: (e1: SpecEnd) ::
+                         SpecStart(_,_,Linked(Some(_), false, false), _) :: (t3: Text) :: (e2: SpecEnd) :: rest => ok }
 
     eg := selfReferencing.content must terminate(retries = 3, sleep = 100.millis)
   }
@@ -160,8 +162,8 @@ Other elements
   }
 
   trait specifications extends TerminationMatchers {
-    lazy val spec1 = new Specification { def is = formatSection(flow=true) ^ "title".title ^ xonly ^ "text" }
-    lazy val spec2 = new Specification { def is = formatSection(flow=true) ^ xonly ^ "title".title ^ "text" }
+    lazy val spec1 = new Specification { def is = formatSection(flow=true) ^ "title1".title ^ xonly ^ "text1" }
+    lazy val spec2 = new Specification { def is = formatSection(flow=true) ^ xonly ^ "title2".title ^ "text2" }
     lazy val content = spec1.content
     lazy val content2 = spec2.content
     lazy val content3 = new Specification { def is = xonly ^ args(include="t1") ^ "title".title ^ "text" }.content
@@ -182,5 +184,7 @@ Other elements
     }.content
 
     def fragments = content.fragments
+
+    def startTextEndFragments(fs: Fragments) = fs.fragments.toList.filter(isText || isSpecStart || isSpecEnd)
   }
 }

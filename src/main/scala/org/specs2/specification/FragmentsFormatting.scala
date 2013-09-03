@@ -18,9 +18,10 @@ trait FragmentsFormatting {
 trait DefaultFragmentsFormatting extends FragmentsFormatting with TagsAssociation {
 
   def formatFragments: Fragments => Fragments = (fs: Fragments) => {
-    val tagged = tagFragments(fs.fragments).flatMap {
+    val taggedFragments = tagFragments(fs.compactTags.fragments)
+    val tagged = taggedFragments.flatMap {
       case (t: Text, tag)    => {
-        val t1 = t.copy(text = formattedStringFor(tag)(t.text))
+        val t1 = t.copy(formattedStringFor(tag)(t.text))
         if (t1.flow) Seq(t1) else Seq(t1, br)
       }
       case (e: Example, tag) => {
