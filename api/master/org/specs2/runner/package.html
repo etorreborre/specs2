@@ -73,6 +73,19 @@
       <p class="comment cmt">This class can be used to executed a Specification in the Console
 by specifying its name as the first argument on the command line
 </p>
+    </li><li name="org.specs2.runner.FilesFingerprint" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FilesFingerprintextendsTestFingerprint"></a>
+      <a id="FilesFingerprint:FilesFingerprint"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="FilesFingerprint.html"><span class="name">FilesFingerprint</span></a><span class="result"> extends <span class="extype" name="org.scalatools.testing.TestFingerprint">TestFingerprint</span></span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.runner.FilesRunner" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="FilesRunnerextendsSpecificationsFinderwithSystemExit"></a>
       <a id="FilesRunner:FilesRunner"></a>
@@ -89,7 +102,7 @@ by specifying its name as the first argument on the command line
 specification and report them using the ConsoleReporter or the HtmlReporter depending on the presence of the html flag
 </p>
     </li><li name="org.specs2.runner.FilesRunnerFingerprint" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="FilesRunnerFingerprintextendsTestFingerprint"></a>
+      <a id="FilesRunnerFingerprintextendsSubclassFingerprint"></a>
       <a id="FilesRunnerFingerprint:FilesRunnerFingerprint"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,7 +110,7 @@ specification and report them using the ConsoleReporter or the HtmlReporter depe
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="FilesRunnerFingerprint.html"><span class="name">FilesRunnerFingerprint</span></a><span class="result"> extends <span class="extype" name="org.scalatools.testing.TestFingerprint">TestFingerprint</span></span>
+        <a href="FilesRunnerFingerprint.html"><span class="name">FilesRunnerFingerprint</span></a><span class="result"> extends <span class="extype" name="sbt.testing.SubclassFingerprint">SubclassFingerprint</span></span>
       </span>
       </h4>
       
@@ -156,6 +169,20 @@ to execute a specification as a JUnit suite.</p>
       </h4>
       <p class="comment cmt">This runner uses a JUnitXmlReporter, creating junit xml files
 </p>
+    </li><li name="org.specs2.runner.MarkdownRunner" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MarkdownRunnerextendsClassRunner"></a>
+      <a id="MarkdownRunner:MarkdownRunner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="MarkdownRunner.html"><span class="name">MarkdownRunner</span></a><span class="result"> extends <a href="ClassRunner.html" class="extype" name="org.specs2.runner.ClassRunner">ClassRunner</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">This runner uses a MarkdownReporter, creating markdown pages, for running the specification
+</p>
     </li><li name="org.specs2.runner.NotifierRunner" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="NotifierRunnerextendsProductwithSerializable"></a>
       <a id="NotifierRunner:NotifierRunner"></a>
@@ -170,6 +197,32 @@ to execute a specification as a JUnit suite.</p>
       </h4>
       <p class="comment cmt">This runner can be used with any class implementing the Notifier trait
 </p>
+    </li><li name="org.specs2.runner.SbtRunner" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SbtRunnerextendsRunnerwithEventswithSbtLoggerswithExporterswithProductwithSerializable"></a>
+      <a id="SbtRunner:SbtRunner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SbtRunner.html"><span class="name">SbtRunner</span></a><span class="params">(<span name="args">args: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="remoteArgs">remoteArgs: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="loader">loader: <span class="extype" name="java.lang.ClassLoader">ClassLoader</span></span>)</span><span class="result"> extends <span class="extype" name="sbt.testing.Runner">Runner</span> with <a href="../reporter/Events.html" class="extype" name="org.specs2.reporter.Events">Events</a> with <a href="../reporter/SbtLoggers.html" class="extype" name="org.specs2.reporter.SbtLoggers">SbtLoggers</a> with <span class="extype" name="org.specs2.reporter.Exporters">Exporters</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.runner.SpecificationFingerprint" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SpecificationFingerprintextendsSubclassFingerprint"></a>
+      <a id="SpecificationFingerprint:SpecificationFingerprint"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SpecificationFingerprint.html"><span class="name">SpecificationFingerprint</span></a><span class="result"> extends <span class="extype" name="sbt.testing.SubclassFingerprint">SubclassFingerprint</span></span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.runner.SpecificationsFinder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="SpecificationsFinderextendsFileSystemwithClasseswithConsoleOutputwithSourceFile"></a>
       <a id="SpecificationsFinder:SpecificationsFinder"></a>
@@ -197,6 +250,19 @@ on a regular expression representing the Specification name, usually .</p>
       </span>
       </h4>
       
+    </li><li name="org.specs2.runner.Specs2Framework" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Specs2FrameworkextendsFramework"></a>
+      <a id="Specs2Framework:Specs2Framework"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Specs2Framework.html"><span class="name">Specs2Framework</span></a><span class="result"> extends <span class="extype" name="sbt.testing.Framework">Framework</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Implementation of the Framework interface for the sbt tool.</p>
     </li><li name="org.specs2.runner.SpecsFramework" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="SpecsFrameworkextendsFramework"></a>
       <a id="SpecsFramework:SpecsFramework"></a>
@@ -279,7 +345,7 @@ on a regular expression representing the Specification name, usually .</p>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="ConsoleLogger$.html"><span class="name">ConsoleLogger</span></a><span class="result"> extends <span class="extype" name="org.scalatools.testing.Logger">Logger</span></span>
+        <a href="ConsoleLogger$.html"><span class="name">ConsoleLogger</span></a><span class="result"> extends <span class="extype" name="sbt.testing.Logger">Logger</span></span>
       </span>
       </h4>
       
@@ -310,6 +376,19 @@ on a regular expression representing the Specification name, usually .</p>
       </h4>
       <p class="comment cmt">Factory methods to help with testing
 </p>
+    </li><li name="org.specs2.runner.NoEventHandler" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NoEventHandler"></a>
+      <a id="NoEventHandler:NoEventHandler"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NoEventHandler$.html"><span class="name">NoEventHandler</span></a><span class="result"> extends <span class="extype" name="sbt.testing.EventHandler">EventHandler</span></span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.runner.NullEventHandler" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="NullEventHandler"></a>
       <a id="NullEventHandler:NullEventHandler"></a>
@@ -336,6 +415,46 @@ on a regular expression representing the Specification name, usually .</p>
       </span>
       </h4>
       
+    </li><li name="org.specs2.runner.TestInterfaceConsoleLogger" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TestInterfaceConsoleLogger"></a>
+      <a id="TestInterfaceConsoleLogger:TestInterfaceConsoleLogger"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="TestInterfaceConsoleLogger$.html"><span class="name">TestInterfaceConsoleLogger</span></a><span class="result"> extends <span class="extype" name="org.scalatools.testing.Logger">Logger</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.runner.TestInterfaceFingerprints" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TestInterfaceFingerprints"></a>
+      <a id="TestInterfaceFingerprints:TestInterfaceFingerprints"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="TestInterfaceFingerprints$.html"><span class="name">TestInterfaceFingerprints</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.runner.sbtRun" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="sbtRun"></a>
+      <a id="sbtRun:sbtRun"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="sbtRun$.html"><span class="name">sbtRun</span></a><span class="result"> extends <a href="SbtRunner.html" class="extype" name="org.specs2.runner.SbtRunner">SbtRunner</a> with <a href="SystemExit.html" class="extype" name="org.specs2.runner.SystemExit">SystemExit</a> with <a href="../io/ConsoleOutput.html" class="extype" name="org.specs2.io.ConsoleOutput">ConsoleOutput</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">This object can be used to debug the behavior of the SbtRunner
+</p>
     </li><li name="org.specs2.runner.testInterface" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="testInterface"></a>
       <a id="testInterface:testInterface"></a>

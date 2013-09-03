@@ -24,9 +24,9 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../../lib/trait_big.png" />
+        <a href="NoTimeConversions$.html" title="Go to companion"><img src="../../../lib/trait_to_object_big.png" /></a>
         <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a>.<a href="package.html" class="extype" name="org.specs2.time">time</a></p>
-        <h1>NoTimeConversions</h1>
+        <h1><a href="NoTimeConversions$.html" title="Go to companion">NoTimeConversions</a></h1>
       </div>
 
       <h4 id="signature" class="signature">
@@ -42,7 +42,10 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>This trait can be used to deactivate the time conversions (to avoid conflicts with Akka's conversions for example
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="TimeConversions.html" class="extype" name="org.specs2.time.TimeConversions">TimeConversions</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="TimeConversions.html" class="extype" name="org.specs2.time.TimeConversions">TimeConversions</a>, <a href="DurationConversions.html" class="extype" name="org.specs2.time.DurationConversions">DurationConversions</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block">
+          <span class="toggle">Known Subclasses</span>
+          <div class="subClasses hiddenContent"><a href="NoTimeConversions$.html" class="extype" name="org.specs2.time.NoTimeConversions">NoTimeConversions</a></div>
         </div></div>
         
 
@@ -60,7 +63,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="org.specs2.time.NoTimeConversions"><span>NoTimeConversions</span></li><li class="in" name="org.specs2.time.TimeConversions"><span>TimeConversions</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="org.specs2.time.NoTimeConversions"><span>NoTimeConversions</span></li><li class="in" name="org.specs2.time.TimeConversions"><span>TimeConversions</span></li><li class="in" name="org.specs2.time.DurationConversions"><span>DurationConversions</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -199,6 +202,19 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="org.specs2.time.DurationConversions#concurrentToSpecs2" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="concurrentToSpecs2(duration:scala.concurrent.duration.Duration):org.specs2.time.Duration"></a>
+      <a id="concurrentToSpecs2(scala.concurrent.duration.Duration):Duration"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">concurrentToSpecs2</span><span class="params">(<span name="duration">duration: <span class="extype" name="scala.concurrent.duration.Duration">scala.concurrent.duration.Duration</span></span>)</span><span class="result">: <a href="Duration.html" class="extype" name="org.specs2.time.Duration">Duration</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="DurationConversions.html" class="extype" name="org.specs2.time.DurationConversions">DurationConversions</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -442,6 +458,8 @@
         <div id="inheritedMembers">
         <div class="parent" name="org.specs2.time.TimeConversions">
               <h3>Inherited from <a href="TimeConversions.html" class="extype" name="org.specs2.time.TimeConversions">TimeConversions</a></h3>
+            </div><div class="parent" name="org.specs2.time.DurationConversions">
+              <h3>Inherited from <a href="DurationConversions.html" class="extype" name="org.specs2.time.DurationConversions">DurationConversions</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

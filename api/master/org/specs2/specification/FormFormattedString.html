@@ -32,17 +32,17 @@
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">FormFormattedString</span><span class="result"> extends <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>
+        <span class="name">FormFormattedString</span><span class="params">(<span name="f">f: () ⇒ <a href="../form/Form.html" class="extype" name="org.specs2.form.Form">Form</a></span>, <span name="formatting">formatting: <a href="Formatting.html" class="extype" name="org.specs2.specification.Formatting">Formatting</a> = <span class="defval" name="Formatting.apply(Formatting.apply$default$1, Formatting.apply$default$2, Formatting.apply$default$3)">...</span></span>, <span name="isEmpty">isEmpty: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="display">display: (<a href="../form/Form.html" class="extype" name="org.specs2.form.Form">Form</a>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="defval" name="((ff: org.specs2.form.Form) =&gt; new form.FormCell(ff, form.this.FormCell.&lt;init&gt;$default$2).text)">...</span></span>)</span><span class="result"> extends <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The FormFormattedString embeds the description of a form as text or as Xml
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a>, <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -60,7 +60,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="org.specs2.specification.FormFormattedString"><span>FormFormattedString</span></li><li class="in" name="org.specs2.specification.FormattedString"><span>FormattedString</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="org.specs2.specification.FormFormattedString"><span>FormFormattedString</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="org.specs2.specification.FormattedString"><span>FormattedString</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -81,7 +81,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="org.specs2.specification.FormFormattedString#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(f:()=&gt;org.specs2.form.Form):org.specs2.specification.FormFormattedString"></a>
+      <a id="&lt;init&gt;(f:()=&gt;org.specs2.form.Form,formatting:org.specs2.specification.Formatting,isEmpty:Boolean,display:org.specs2.form.Form=&gt;String):org.specs2.specification.FormFormattedString"></a>
       <a id="&lt;init&gt;:FormFormattedString"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -89,14 +89,30 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">FormFormattedString</span><span class="params">(<span name="f">f: () ⇒ <a href="../form/Form.html" class="extype" name="org.specs2.form.Form">Form</a></span>)</span>
+        <span class="name">FormFormattedString</span><span class="params">(<span name="f">f: () ⇒ <a href="../form/Form.html" class="extype" name="org.specs2.form.Form">Form</a></span>, <span name="formatting">formatting: <a href="Formatting.html" class="extype" name="org.specs2.specification.Formatting">Formatting</a> = <span class="defval" name="Formatting.apply(Formatting.apply$default$1, Formatting.apply$default$2, Formatting.apply$default$3)">...</span></span>, <span name="isEmpty">isEmpty: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="display">display: (<a href="../form/Form.html" class="extype" name="org.specs2.form.Form">Form</a>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="defval" name="((ff: org.specs2.form.Form) =&gt; new form.FormCell(ff, form.this.FormCell.&lt;init&gt;$default$2).text)">...</span></span>)</span>
       </span>
       </h4>
       
     </li></ol>
             </div>
 
-        
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="org.specs2.specification.FormFormattedString.F" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="F=org.specs2.specification.FormFormattedString"></a>
+      <a id="F:F"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">F</span><span class="result"> = <a href="" class="extype" name="org.specs2.specification.FormFormattedString">FormFormattedString</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.specification.FormFormattedString">FormFormattedString</a> → <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></dd></dl></div>
+    </li></ol>
+            </div>
 
         
 
@@ -168,15 +184,15 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="org.specs2.specification.FormattedString#append" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="append(s:String):org.specs2.specification.FormattedString"></a>
-      <a id="append(String):FormattedString"></a>
+      <a id="append(s:String):FormattedString.this.F"></a>
+      <a id="append(String):F"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">append</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>
+        <span class="name">append</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#F=org.specs2.specification.FormFormattedString" class="extmbr" name="org.specs2.specification.FormFormattedString.F">F</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></dd></dl></div>
@@ -212,6 +228,19 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="org.specs2.specification.FormFormattedString#display" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="display:org.specs2.form.Form=&gt;String"></a>
+      <a id="display:(Form)⇒String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">display</span><span class="result">: (<a href="../form/Form.html" class="extype" name="org.specs2.form.Form">Form</a>) ⇒ <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4>
+      
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -283,20 +312,20 @@
       </span>
       </h4>
       
-    </li><li name="org.specs2.specification.FormattedString#formatWithTagNames" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="formatWithTagNames(names:Seq[String]):org.specs2.specification.FormattedString"></a>
-      <a id="formatWithTagNames(Seq[String]):FormattedString"></a>
+    </li><li name="org.specs2.specification.FormFormattedString#formatWithTagNames" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="formatWithTagNames(names:Seq[String]):org.specs2.specification.FormFormattedString"></a>
+      <a id="formatWithTagNames(Seq[String]):FormFormattedString"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">formatWithTagNames</span><span class="params">(<span name="names">names: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>
+        <span class="name">formatWithTagNames</span><span class="params">(<span name="names">names: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.specification.FormFormattedString">FormFormattedString</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></dd></dl></div>
-    </li><li name="org.specs2.specification.FormattedString#formatting" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.specification.FormFormattedString">FormFormattedString</a> → <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></dd></dl></div>
+    </li><li name="org.specs2.specification.FormFormattedString#formatting" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="formatting:org.specs2.specification.Formatting"></a>
       <a id="formatting:Formatting"></a>
       <h4 class="signature">
@@ -308,7 +337,7 @@
         <span class="name">formatting</span><span class="result">: <a href="Formatting.html" class="extype" name="org.specs2.specification.Formatting">Formatting</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.specification.FormFormattedString">FormFormattedString</a> → <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -322,7 +351,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="org.specs2.specification.FormattedString#isEmpty" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="org.specs2.specification.FormFormattedString#isEmpty" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isEmpty:Boolean"></a>
       <a id="isEmpty:Boolean"></a>
       <h4 class="signature">
@@ -334,7 +363,7 @@
         <span class="name">isEmpty</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.specification.FormFormattedString">FormFormattedString</a> → <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -348,19 +377,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="org.specs2.specification.FormattedString#map" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="map(f:String=&gt;String):org.specs2.specification.FormattedString"></a>
-      <a id="map((String)⇒String):FormattedString"></a>
+    </li><li name="org.specs2.specification.FormFormattedString#map" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="map(f:String=&gt;String):org.specs2.specification.FormFormattedString"></a>
+      <a id="map((String)⇒String):FormFormattedString"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">map</span><span class="params">(<span name="f">f: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>
+        <span class="name">map</span><span class="params">(<span name="f">f: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.specification.FormFormattedString">FormFormattedString</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.specification.FormFormattedString">FormFormattedString</a> → <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -401,19 +430,19 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="org.specs2.specification.FormattedString#prepend" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="prepend(s:String):org.specs2.specification.FormattedString"></a>
-      <a id="prepend(String):FormattedString"></a>
+      <a id="prepend(s:String):FormattedString.this.F"></a>
+      <a id="prepend(String):F"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">prepend</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>
+        <span class="name">prepend</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#F=org.specs2.specification.FormFormattedString" class="extmbr" name="org.specs2.specification.FormFormattedString.F">F</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></dd></dl></div>
-    </li><li name="org.specs2.specification.FormattedString#raw" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="org.specs2.specification.FormFormattedString#raw" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="raw:String"></a>
       <a id="raw:String"></a>
       <h4 class="signature">
@@ -425,7 +454,7 @@
         <span class="name">raw</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.specification.FormFormattedString">FormFormattedString</a> → <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -439,19 +468,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="org.specs2.specification.FormattedString#t" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="t:String"></a>
-      <a id="t:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">t</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></dd></dl></div>
     </li><li name="org.specs2.specification.FormFormattedString#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -535,32 +551,32 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="org.specs2.specification.FormattedString#withFlow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="withFlow:org.specs2.specification.FormattedString"></a>
-      <a id="withFlow:FormattedString"></a>
+    </li><li name="org.specs2.specification.FormFormattedString#withFlow" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="withFlow:org.specs2.specification.FormFormattedString"></a>
+      <a id="withFlow:FormFormattedString"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">withFlow</span><span class="result">: <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>
+        <span class="name">withFlow</span><span class="result">: <a href="" class="extype" name="org.specs2.specification.FormFormattedString">FormFormattedString</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></dd></dl></div>
-    </li><li name="org.specs2.specification.FormattedString#withMarkdown" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="withMarkdown:org.specs2.specification.FormattedString"></a>
-      <a id="withMarkdown:FormattedString"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.specification.FormFormattedString">FormFormattedString</a> → <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></dd></dl></div>
+    </li><li name="org.specs2.specification.FormFormattedString#withMarkdown" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="withMarkdown:org.specs2.specification.FormFormattedString"></a>
+      <a id="withMarkdown:FormFormattedString"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">withMarkdown</span><span class="result">: <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>
+        <span class="name">withMarkdown</span><span class="result">: <a href="" class="extype" name="org.specs2.specification.FormFormattedString">FormFormattedString</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.specification.FormFormattedString">FormFormattedString</a> → <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -570,9 +586,7 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="org.specs2.specification.FormattedString">
-              <h3>Inherited from <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></h3>
-            </div><div class="parent" name="scala.Serializable">
+        <div class="parent" name="scala.Serializable">
               <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
@@ -580,6 +594,8 @@
               <h3>Inherited from <span class="extype" name="scala.Product">Product</span></h3>
             </div><div class="parent" name="scala.Equals">
               <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
+            </div><div class="parent" name="org.specs2.specification.FormattedString">
+              <h3>Inherited from <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

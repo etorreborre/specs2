@@ -815,6 +815,20 @@ and then to check that there's no unwanted dependency in the code.</p>
       <p class="comment cmt">This trait adds some syntactic sugar to transform function
 to properties by appending forAll
 </p>
+    </li><li name="org.specs2.matcher.FutureMatchers" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FutureMatchersextendsExpectations"></a>
+      <a id="FutureMatchers:FutureMatchers"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="FutureMatchers.html"><span class="name">FutureMatchers</span></a><span class="result"> extends <a href="Expectations.html" class="extype" name="org.specs2.matcher.Expectations">Expectations</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait is for transforming matchers of values to matchers of Futures
+</p>
     </li><li name="org.specs2.matcher.Hamcrest" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="HamcrestextendsAnyRef"></a>
       <a id="Hamcrest:Hamcrest"></a>
@@ -1095,7 +1109,7 @@ to properties by appending forAll
       </h4>
       <p class="comment cmt">The <code>Matcher</code> trait is the base trait for any Matcher.</p>
     </li><li name="org.specs2.matcher.Matchers" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="MatchersextendsAnyMatcherswithBeHaveMatcherswithTraversableMatcherswithMapMatcherswithStringMatcherswithExceptionMatcherswithNumericMatcherswithOptionMatcherswithEitherMatcherswithTryMatcherswithEventuallyMatcherswithMatchersImplicitswithLanguageFeatures"></a>
+      <a id="MatchersextendsAnyMatcherswithBeHaveMatcherswithTraversableMatcherswithMapMatcherswithStringMatcherswithExceptionMatcherswithNumericMatcherswithOptionMatcherswithEitherMatcherswithTryMatcherswithEventuallyMatcherswithFutureMatcherswithMatchersImplicitswithLanguageFeatures"></a>
       <a id="Matchers:Matchers"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1103,7 +1117,7 @@ to properties by appending forAll
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Matchers.html"><span class="name">Matchers</span></a><span class="result"> extends <a href="AnyMatchers.html" class="extype" name="org.specs2.matcher.AnyMatchers">AnyMatchers</a> with <span class="extype" name="org.specs2.matcher.BeHaveMatchers">BeHaveMatchers</span> with <a href="TraversableMatchers.html" class="extype" name="org.specs2.matcher.TraversableMatchers">TraversableMatchers</a> with <a href="MapMatchers.html" class="extype" name="org.specs2.matcher.MapMatchers">MapMatchers</a> with <a href="StringMatchers.html" class="extype" name="org.specs2.matcher.StringMatchers">StringMatchers</a> with <a href="ExceptionMatchers.html" class="extype" name="org.specs2.matcher.ExceptionMatchers">ExceptionMatchers</a> with <a href="NumericMatchers.html" class="extype" name="org.specs2.matcher.NumericMatchers">NumericMatchers</a> with <a href="OptionMatchers.html" class="extype" name="org.specs2.matcher.OptionMatchers">OptionMatchers</a> with <a href="EitherMatchers.html" class="extype" name="org.specs2.matcher.EitherMatchers">EitherMatchers</a> with <a href="TryMatchers.html" class="extype" name="org.specs2.matcher.TryMatchers">TryMatchers</a> with <a href="EventuallyMatchers.html" class="extype" name="org.specs2.matcher.EventuallyMatchers">EventuallyMatchers</a> with <a href="MatchersImplicits.html" class="extype" name="org.specs2.matcher.MatchersImplicits">MatchersImplicits</a> with <a href="../control/LanguageFeatures.html" class="extype" name="org.specs2.control.LanguageFeatures">LanguageFeatures</a></span>
+        <a href="Matchers.html"><span class="name">Matchers</span></a><span class="result"> extends <a href="AnyMatchers.html" class="extype" name="org.specs2.matcher.AnyMatchers">AnyMatchers</a> with <span class="extype" name="org.specs2.matcher.BeHaveMatchers">BeHaveMatchers</span> with <a href="TraversableMatchers.html" class="extype" name="org.specs2.matcher.TraversableMatchers">TraversableMatchers</a> with <a href="MapMatchers.html" class="extype" name="org.specs2.matcher.MapMatchers">MapMatchers</a> with <a href="StringMatchers.html" class="extype" name="org.specs2.matcher.StringMatchers">StringMatchers</a> with <a href="ExceptionMatchers.html" class="extype" name="org.specs2.matcher.ExceptionMatchers">ExceptionMatchers</a> with <a href="NumericMatchers.html" class="extype" name="org.specs2.matcher.NumericMatchers">NumericMatchers</a> with <a href="OptionMatchers.html" class="extype" name="org.specs2.matcher.OptionMatchers">OptionMatchers</a> with <a href="EitherMatchers.html" class="extype" name="org.specs2.matcher.EitherMatchers">EitherMatchers</a> with <a href="TryMatchers.html" class="extype" name="org.specs2.matcher.TryMatchers">TryMatchers</a> with <a href="EventuallyMatchers.html" class="extype" name="org.specs2.matcher.EventuallyMatchers">EventuallyMatchers</a> with <a href="FutureMatchers.html" class="extype" name="org.specs2.matcher.FutureMatchers">FutureMatchers</a> with <a href="MatchersImplicits.html" class="extype" name="org.specs2.matcher.MatchersImplicits">MatchersImplicits</a> with <a href="../control/LanguageFeatures.html" class="extype" name="org.specs2.control.LanguageFeatures">LanguageFeatures</a></span>
       </span>
       </h4>
       <p class="comment cmt">Trait aggregating the most common specs2 matchers
@@ -1271,6 +1285,19 @@ a match fails
       </h4>
       <p class="comment cmt">This trait can be used to remove aka and must methods on any value
 </p>
+    </li><li name="org.specs2.matcher.NoScopedExpectations" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NoScopedExpectationsextendsScopedExpectations"></a>
+      <a id="NoScopedExpectations:NoScopedExpectations"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NoScopedExpectations.html"><span class="name">NoScopedExpectations</span></a><span class="result"> extends <a href="ScopedExpectations.html" class="extype" name="org.specs2.matcher.ScopedExpectations">ScopedExpectations</a></span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.matcher.NoShouldExpectations" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="NoShouldExpectationsextendsShouldExpectations"></a>
       <a id="NoShouldExpectations:NoShouldExpectations"></a>
@@ -1338,6 +1365,20 @@ a match fails
       </h4>
       <p class="comment cmt">Matchers for Numerical values
 </p>
+    </li><li name="org.specs2.matcher.OneExpectationPerProp" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="OneExpectationPerPropextendsScalaCheckMatchers"></a>
+      <a id="OneExpectationPerProp:OneExpectationPerProp"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="OneExpectationPerProp.html"><span class="name">OneExpectationPerProp</span></a><span class="result"> extends <a href="ScalaCheckMatchers.html" class="extype" name="org.specs2.matcher.ScalaCheckMatchers">ScalaCheckMatchers</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait can be mixed in a Specification to avoid counting the number of times that a property was executed as the
+number of expectations.</p>
     </li><li name="org.specs2.matcher.OptionMatchers" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="OptionMatchersextendsOptionBaseMatcherswithOptionBeHaveMatchers"></a>
       <a id="OptionMatchers:OptionMatchers"></a>
@@ -1528,6 +1569,19 @@ assess properties multiple times with generated data.</p>
       </span>
       </h4>
       
+    </li><li name="org.specs2.matcher.ScopedExpectations" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ScopedExpectationsextendsAnyRef"></a>
+      <a id="ScopedExpectations:ScopedExpectations"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ScopedExpectations.html"><span class="name">ScopedExpectations</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait allows to enclose expectations throwing exceptions in a <code>Scope</code> trait:</p>
     </li><li name="org.specs2.matcher.ShouldExpectable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ShouldExpectable[T]extendsExpectable[T]"></a>
       <a id="ShouldExpectable[T]:ShouldExpectable[T]"></a>
@@ -1678,7 +1732,7 @@ a match fails
       <p class="comment cmt">This trait provides matchers to check if a block of code is terminating or not
 </p>
     </li><li name="org.specs2.matcher.ThrownExpectations" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ThrownExpectationsextendsExpectationswithStandardResults"></a>
+      <a id="ThrownExpectationsextendsExpectationswithStandardResultswithScopedExpectations"></a>
       <a id="ThrownExpectations:ThrownExpectations"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1686,7 +1740,7 @@ a match fails
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="ThrownExpectations.html"><span class="name">ThrownExpectations</span></a><span class="result"> extends <a href="Expectations.html" class="extype" name="org.specs2.matcher.Expectations">Expectations</a> with <a href="../execute/StandardResults.html" class="extype" name="org.specs2.execute.StandardResults">StandardResults</a></span>
+        <a href="ThrownExpectations.html"><span class="name">ThrownExpectations</span></a><span class="result"> extends <a href="Expectations.html" class="extype" name="org.specs2.matcher.Expectations">Expectations</a> with <a href="../execute/StandardResults.html" class="extype" name="org.specs2.execute.StandardResults">StandardResults</a> with <a href="ScopedExpectations.html" class="extype" name="org.specs2.matcher.ScopedExpectations">ScopedExpectations</a></span>
       </span>
       </h4>
       <p class="comment cmt">Thrown expectations will throw a FailureException if a match fails</p>
@@ -1801,6 +1855,19 @@ a match fails
       </span>
       <span class="symbol">
         <a href="AnyMatchers$.html"><span class="name">AnyMatchers</span></a><span class="result"> extends <a href="AnyMatchers.html" class="extype" name="org.specs2.matcher.AnyMatchers">AnyMatchers</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.matcher.BeMatching" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BeMatching"></a>
+      <a id="BeMatching:BeMatching"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BeMatching$.html"><span class="name">BeMatching</span></a>
       </span>
       </h4>
       
@@ -1932,6 +1999,19 @@ a match fails
       </span>
       <span class="symbol">
         <a href="FileMatchers$.html"><span class="name">FileMatchers</span></a><span class="result"> extends <a href="FileMatchers.html" class="extype" name="org.specs2.matcher.FileMatchers">FileMatchers</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.matcher.FutureMatchers" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FutureMatchers"></a>
+      <a id="FutureMatchers:FutureMatchers"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FutureMatchers$.html"><span class="name">FutureMatchers</span></a><span class="result"> extends <a href="FutureMatchers.html" class="extype" name="org.specs2.matcher.FutureMatchers">FutureMatchers</a></span>
       </span>
       </h4>
       

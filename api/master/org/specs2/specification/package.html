@@ -805,29 +805,29 @@ execution of an Action for example)
       <p class="comment cmt">For each created example use a given after method
 </p>
     </li><li name="org.specs2.specification.FormFormattedString" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="FormFormattedStringextendsFormattedString"></a>
+      <a id="FormFormattedStringextendsFormattedStringwithProductwithSerializable"></a>
       <a id="FormFormattedString:FormFormattedString"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="FormFormattedString.html"><span class="name">FormFormattedString</span></a><span class="result"> extends <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>
-      </span>
-      </h4>
-      <p class="comment cmt">The FormFormattedString embeds the description of a form as text or as Xml
-</p>
-    </li><li name="org.specs2.specification.FormattedString" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="FormattedStringextendsProductwithSerializable"></a>
-      <a id="FormattedString:FormattedString"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="FormattedString.html"><span class="name">FormattedString</span></a><span class="params">(<span name="t">t: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="formatting">formatting: <a href="Formatting.html" class="extype" name="org.specs2.specification.Formatting">Formatting</a> = <span class="defval" name="Formatting.apply(Formatting.apply$default$1, Formatting.apply$default$2, Formatting.apply$default$3)">...</span></span>, <span name="isEmpty">isEmpty: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="FormFormattedString.html"><span class="name">FormFormattedString</span></a><span class="params">(<span name="f">f: () ⇒ <a href="../form/Form.html" class="extype" name="org.specs2.form.Form">Form</a></span>, <span name="formatting">formatting: <a href="Formatting.html" class="extype" name="org.specs2.specification.Formatting">Formatting</a> = <span class="defval" name="Formatting.apply(Formatting.apply$default$1, Formatting.apply$default$2, Formatting.apply$default$3)">...</span></span>, <span name="isEmpty">isEmpty: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="display">display: (<a href="../form/Form.html" class="extype" name="org.specs2.form.Form">Form</a>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="defval" name="((ff: org.specs2.form.Form) =&gt; new form.FormCell(ff, form.this.FormCell.&lt;init&gt;$default$2).text)">...</span></span>)</span><span class="result"> extends <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The FormFormattedString embeds the description of a form as text or as Xml
+</p>
+    </li><li name="org.specs2.specification.FormattedString" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FormattedStringextendsAnyRef"></a>
+      <a id="FormattedString:FormattedString"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="FormattedString.html"><span class="name">FormattedString</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
@@ -1304,6 +1304,19 @@ execute some code inside the outside method provided by the context.</p>
       <p class="comment cmt">Marker trait that is used to create a new scope with variables and implicitly converted to a Success in a mutable
 Specification
 </p>
+    </li><li name="org.specs2.specification.SimpleFormattedString" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SimpleFormattedStringextendsFormattedStringwithProductwithSerializable"></a>
+      <a id="SimpleFormattedString:SimpleFormattedString"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SimpleFormattedString.html"><span class="name">SimpleFormattedString</span></a><span class="params">(<span name="t">t: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="formatting">formatting: <a href="Formatting.html" class="extype" name="org.specs2.specification.Formatting">Formatting</a> = <span class="defval" name="Formatting.apply(Formatting.apply$default$1, Formatting.apply$default$2, Formatting.apply$default$3)">...</span></span>, <span name="isEmpty">isEmpty: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="isCode">isCode: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result"> extends <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.specification.Snippets" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="SnippetsextendsSnippets"></a>
       <a id="Snippets:Snippets"></a>
@@ -1561,7 +1574,7 @@ examples must be executed concurrently and not isolated.</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Text.html"><span class="name">Text</span></a><span class="params">(<span name="text">text: <a href="FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>, <span name="location">location: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a> = <span class="symbol">new io.Location()</span></span>)</span><span class="result"> extends <a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Text.html"><span class="name">Text</span></a><span class="params">(<span name="text">text: <a href="SimpleFormattedString.html" class="extype" name="org.specs2.specification.SimpleFormattedString">SimpleFormattedString</a></span>, <span name="location">location: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a> = <span class="symbol">new io.Location()</span></span>)</span><span class="result"> extends <a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">Free text, describing the system to specify
@@ -1725,7 +1738,7 @@ examples must be executed concurrently and not isolated.</p>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="FormattedString$.html"><span class="name">FormattedString</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="FormattedString$.html"><span class="name">FormattedString</span></a>
       </span>
       </h4>
       

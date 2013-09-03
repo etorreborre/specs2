@@ -35,13 +35,13 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">FilesRunnerFingerprint</span><span class="result"> extends <span class="extype" name="org.scalatools.testing.TestFingerprint">TestFingerprint</span></span>
+        <span class="name">FilesRunnerFingerprint</span><span class="result"> extends <span class="extype" name="sbt.testing.SubclassFingerprint">SubclassFingerprint</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="org.scalatools.testing.TestFingerprint">TestFingerprint</span>, <span class="extype" name="org.scalatools.testing.SubclassFingerprint">SubclassFingerprint</span>, <span class="extype" name="org.scalatools.testing.Fingerprint">Fingerprint</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="sbt.testing.SubclassFingerprint">SubclassFingerprint</span>, <span class="extype" name="sbt.testing.Fingerprint">Fingerprint</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -59,7 +59,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="org.specs2.runner.FilesRunnerFingerprint"><span>FilesRunnerFingerprint</span></li><li class="in" name="org.scalatools.testing.TestFingerprint"><span>TestFingerprint</span></li><li class="in" name="org.scalatools.testing.SubclassFingerprint"><span>SubclassFingerprint</span></li><li class="in" name="org.scalatools.testing.Fingerprint"><span>Fingerprint</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="org.specs2.runner.FilesRunnerFingerprint"><span>FilesRunnerFingerprint</span></li><li class="in" name="sbt.testing.SubclassFingerprint"><span>SubclassFingerprint</span></li><li class="in" name="sbt.testing.Fingerprint"><span>Fingerprint</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -81,26 +81,10 @@
 
         
 
-        <div id="values" class="values members">
-              <h3>Abstract Value Members</h3>
-              <ol><li name="org.scalatools.testing.SubclassFingerprint#isModule" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="isModule():Boolean"></a>
-      <a id="isModule():Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">isModule</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>SubclassFingerprint</dd></dl></div>
-    </li></ol>
-            </div>
+        
 
         <div id="values" class="values members">
-              <h3>Concrete Value Members</h3>
+              <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
@@ -282,6 +266,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.specs2.runner.FilesRunnerFingerprint#isModule" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isModule():Boolean"></a>
+      <a id="isModule():Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isModule</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.runner.FilesRunnerFingerprint">FilesRunnerFingerprint</a> → SubclassFingerprint</dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -321,16 +318,29 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="org.specs2.runner.FilesRunnerFingerprint#superClassName" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="superClassName():String"></a>
-      <a id="superClassName():String"></a>
+    </li><li name="org.specs2.runner.FilesRunnerFingerprint#requireNoArgConstructor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="requireNoArgConstructor():Boolean"></a>
+      <a id="requireNoArgConstructor():Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">superClassName</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">requireNoArgConstructor</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.runner.FilesRunnerFingerprint">FilesRunnerFingerprint</a> → SubclassFingerprint</dd></dl></div>
+    </li><li name="org.specs2.runner.FilesRunnerFingerprint#superclassName" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="superclassName():String"></a>
+      <a id="superclassName():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">superclassName</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.runner.FilesRunnerFingerprint">FilesRunnerFingerprint</a> → SubclassFingerprint</dd></dl></div>
@@ -426,12 +436,10 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="org.scalatools.testing.TestFingerprint">
-              <h3>Inherited from <span class="extype" name="org.scalatools.testing.TestFingerprint">TestFingerprint</span></h3>
-            </div><div class="parent" name="org.scalatools.testing.SubclassFingerprint">
-              <h3>Inherited from <span class="extype" name="org.scalatools.testing.SubclassFingerprint">SubclassFingerprint</span></h3>
-            </div><div class="parent" name="org.scalatools.testing.Fingerprint">
-              <h3>Inherited from <span class="extype" name="org.scalatools.testing.Fingerprint">Fingerprint</span></h3>
+        <div class="parent" name="sbt.testing.SubclassFingerprint">
+              <h3>Inherited from <span class="extype" name="sbt.testing.SubclassFingerprint">SubclassFingerprint</span></h3>
+            </div><div class="parent" name="sbt.testing.Fingerprint">
+              <h3>Inherited from <span class="extype" name="sbt.testing.Fingerprint">Fingerprint</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

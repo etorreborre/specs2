@@ -2221,8 +2221,8 @@ It is equivalent to writing a must_== b
       </span>
       </h4>
       <p class="shortcomment cmt">implicit allowing to define the mock settings with a nice syntax:</p><div class="fullcomment"><div class="comment cmt"><p>implicit allowing to define the mock settings with a nice syntax:</p><ul><li>named mock: val m = mock[java.util.List[String]].as(&quot;name&quot;)</li><li>smart mock: val m = mock[java.util.List[String]].smart</li><li>other settings: val m = mock[java.util.List[String]].
-       settings(name = &quot;list&quot;,
-                defaultReturn = 10,
+        settings(name = &quot;list&quot;,
+                 defaultReturn = 10,
                  extraInterfaces = classesOf[Cloneable, Serializable])
 </li></ul></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="mockito/MocksCreation.html" class="extype" name="org.specs2.mock.mockito.MocksCreation">MocksCreation</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">

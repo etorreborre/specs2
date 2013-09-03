@@ -707,15 +707,15 @@ It creates a Specification class with the given classLoader the classes which ca
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="org.specs2.reporter.HandlerEvents#result" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="result(r:org.specs2.execute.Result):HandlerEvents.this.NamedEvent"></a>
-      <a id="result(Result):NamedEvent"></a>
+      <a id="result(name:String)(r:org.specs2.execute.Result):HandlerEvents.this.NamedEvent"></a>
+      <a id="result(String)(Result):NamedEvent"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">result</span><span class="params">(<span name="r">r: <a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a></span>)</span><span class="result">: <a href="#NamedEventextendsEvent" class="extmbr" name="org.specs2.reporter.HandlerEvents.NamedEvent">NamedEvent</a></span>
+        <span class="name">result</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="r">r: <a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a></span>)</span><span class="result">: <a href="#NamedEventextendsEvent" class="extmbr" name="org.specs2.reporter.HandlerEvents.NamedEvent">NamedEvent</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../reporter/HandlerEvents.html" class="extype" name="org.specs2.reporter.HandlerEvents">HandlerEvents</a></dd></dl></div>
@@ -759,15 +759,15 @@ It creates a Specification class with the given classLoader the classes which ca
       </h4>
       
     </li><li name="org.specs2.reporter.HandlerEvents#skipped" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="skipped(name:String):HandlerEvents.this.NamedEvent{deferror():Null}"></a>
-      <a id="skipped(String):NamedEvent{deferror():Null}"></a>
+      <a id="skipped(name:String,description:String):HandlerEvents.this.NamedEvent{deferror():Null}"></a>
+      <a id="skipped(String,String):NamedEvent{deferror():Null}"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">skipped</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#NamedEventextendsEvent" class="extmbr" name="org.specs2.reporter.HandlerEvents.NamedEvent">NamedEvent</a> { def error(): Null }</span>
+        <span class="name">skipped</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="description">description: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <a href="#NamedEventextendsEvent" class="extmbr" name="org.specs2.reporter.HandlerEvents.NamedEvent">NamedEvent</a> { def error(): Null }</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../reporter/HandlerEvents.html" class="extype" name="org.specs2.reporter.HandlerEvents">HandlerEvents</a></dd></dl></div>

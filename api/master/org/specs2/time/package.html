@@ -71,6 +71,19 @@
       </span>
       </h4>
       <p class="comment cmt">Time duration.</p>
+    </li><li name="org.specs2.time.DurationConversions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DurationConversionsextendsAnyRef"></a>
+      <a id="DurationConversions:DurationConversions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DurationConversions.html"><span class="name">DurationConversions</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.time.HmsTimer" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="HmsTimer[T&lt;:org.specs2.time.HmsTimer[T]]extendsAnyRef"></a>
       <a id="HmsTimer[T&lt;:HmsTimer[T]]:HmsTimer[T]"></a>
@@ -85,6 +98,19 @@
       </h4>
       <p class="comment cmt">This trait provides Timer functionalities based on the Java Calendar milliseconds
 </p>
+    </li><li name="org.specs2.time.NoDurationConversions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NoDurationConversionsextendsDurationConversions"></a>
+      <a id="NoDurationConversions:NoDurationConversions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NoDurationConversions.html"><span class="name">NoDurationConversions</span></a><span class="result"> extends <a href="DurationConversions.html" class="extype" name="org.specs2.time.DurationConversions">DurationConversions</a></span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.time.NoTimeConversions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="NoTimeConversionsextendsTimeConversions"></a>
       <a id="NoTimeConversions:NoTimeConversions"></a>
@@ -126,7 +152,7 @@
       </h4>
       
     </li><li name="org.specs2.time.TimeConversions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="TimeConversionsextendsAnyRef"></a>
+      <a id="TimeConversionsextendsDurationConversions"></a>
       <a id="TimeConversions:TimeConversions"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -134,7 +160,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="TimeConversions.html"><span class="name">TimeConversions</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="TimeConversions.html"><span class="name">TimeConversions</span></a><span class="result"> extends <a href="DurationConversions.html" class="extype" name="org.specs2.time.DurationConversions">DurationConversions</a></span>
       </span>
       </h4>
       <p class="comment cmt">This object provides functions to describe units of time</p>
@@ -145,7 +171,20 @@
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="org.specs2.time.SimpleTimer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="org.specs2.time.NoTimeConversions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NoTimeConversions"></a>
+      <a id="NoTimeConversions:NoTimeConversions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NoTimeConversions$.html"><span class="name">NoTimeConversions</span></a><span class="result"> extends <a href="NoTimeConversions.html" class="extype" name="org.specs2.time.NoTimeConversions">NoTimeConversions</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.time.SimpleTimer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="SimpleTimer"></a>
       <a id="SimpleTimer:SimpleTimer"></a>
       <h4 class="signature">

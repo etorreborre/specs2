@@ -35,17 +35,14 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">TextResultOutput</span><span class="result"> extends <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a> with <a href="../io/ConsoleOutput.html" class="extype" name="org.specs2.io.ConsoleOutput">ConsoleOutput</a></span>
+        <span class="name">TextResultOutput</span><span class="result"> extends <a href="LineLoggerOutput.html" class="extype" name="org.specs2.reporter.LineLoggerOutput">LineLoggerOutput</a> with <a href="../io/ConsoleOutput.html" class="extype" name="org.specs2.io.ConsoleOutput">ConsoleOutput</a></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Implementation of the ResultOutput trait as Text
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../io/ConsoleOutput.html" class="extype" name="org.specs2.io.ConsoleOutput">ConsoleOutput</a>, <a href="../io/Output.html" class="extype" name="org.specs2.io.Output">Output</a>, <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
-        </div><div class="toggleContainer block">
-          <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a href="TestInterfaceResultOutput.html" class="extype" name="org.specs2.reporter.TestInterfaceResultOutput">TestInterfaceResultOutput</a></div>
+          <div class="superTypes hiddenContent"><a href="../io/ConsoleOutput.html" class="extype" name="org.specs2.io.ConsoleOutput">ConsoleOutput</a>, <a href="../io/Output.html" class="extype" name="org.specs2.io.Output">Output</a>, <a href="LineLoggerOutput.html" class="extype" name="org.specs2.reporter.LineLoggerOutput">LineLoggerOutput</a>, <a href="LineLogger.html" class="extype" name="org.specs2.reporter.LineLogger">LineLogger</a>, <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -63,7 +60,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="org.specs2.reporter.TextResultOutput"><span>TextResultOutput</span></li><li class="in" name="org.specs2.io.ConsoleOutput"><span>ConsoleOutput</span></li><li class="in" name="org.specs2.io.Output"><span>Output</span></li><li class="in" name="org.specs2.reporter.ResultOutput"><span>ResultOutput</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="org.specs2.reporter.TextResultOutput"><span>TextResultOutput</span></li><li class="in" name="org.specs2.io.ConsoleOutput"><span>ConsoleOutput</span></li><li class="in" name="org.specs2.io.Output"><span>Output</span></li><li class="in" name="org.specs2.reporter.LineLoggerOutput"><span>LineLoggerOutput</span></li><li class="in" name="org.specs2.reporter.LineLogger"><span>LineLogger</span></li><li class="in" name="org.specs2.reporter.ResultOutput"><span>ResultOutput</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -228,6 +225,32 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.specs2.reporter.TextResultOutput#errorLog" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="errorLog(msg:String):Unit"></a>
+      <a id="errorLog(String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">errorLog</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.reporter.TextResultOutput">TextResultOutput</a> → <a href="LineLogger.html" class="extype" name="org.specs2.reporter.LineLogger">LineLogger</a></dd></dl></div>
+    </li><li name="org.specs2.reporter.TextResultOutput#failureLog" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="failureLog(msg:String):Unit"></a>
+      <a id="failureLog(String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">failureLog</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.reporter.TextResultOutput">TextResultOutput</a> → <a href="LineLogger.html" class="extype" name="org.specs2.reporter.LineLogger">LineLogger</a></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -262,6 +285,19 @@
       <p class="shortcomment cmt">flush the content if necessary
 </p><div class="fullcomment"><div class="comment cmt"><p>flush the content if necessary
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../io/ConsoleOutput.html" class="extype" name="org.specs2.io.ConsoleOutput">ConsoleOutput</a> → <a href="../io/Output.html" class="extype" name="org.specs2.io.Output">Output</a></dd></dl></div>
+    </li><li name="org.specs2.reporter.LineLoggerOutput#flushText" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="flushText(force:Boolean)(implicitargs:org.specs2.main.Arguments):Unit"></a>
+      <a id="flushText(Boolean)(Arguments):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">flushText</span><span class="params">(<span name="force">force: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LineLoggerOutput.html" class="extype" name="org.specs2.reporter.LineLoggerOutput">LineLoggerOutput</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -288,6 +324,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.specs2.reporter.TextResultOutput#infoLog" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="infoLog(msg:String):Unit"></a>
+      <a id="infoLog(String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">infoLog</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.reporter.TextResultOutput">TextResultOutput</a> → <a href="LineLogger.html" class="extype" name="org.specs2.reporter.LineLogger">LineLogger</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -340,19 +389,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="org.specs2.reporter.TextResultOutput#offset" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="offset(message:String)(implicitargs:org.specs2.main.Arguments):String"></a>
-      <a id="offset(String)(Arguments):String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">offset</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">add an offset to the message</p><div class="fullcomment"><div class="comment cmt"><p>add an offset to the message</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="org.specs2.io.Output#print" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="print(m:Any):Unit"></a>
       <a id="print(Any):Unit"></a>
@@ -368,7 +404,7 @@
       <p class="shortcomment cmt">print an object with no newline
 </p><div class="fullcomment"><div class="comment cmt"><p>print an object with no newline
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../io/Output.html" class="extype" name="org.specs2.io.Output">Output</a></dd></dl></div>
-    </li><li name="org.specs2.reporter.TextResultOutput#printError" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="org.specs2.reporter.LineLoggerOutput#printError" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="printError(message:String)(implicitargs:org.specs2.main.Arguments):Unit"></a>
       <a id="printError(String)(Arguments):Unit"></a>
       <h4 class="signature">
@@ -380,8 +416,8 @@
         <span class="name">printError</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.reporter.TextResultOutput">TextResultOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
-    </li><li name="org.specs2.reporter.TextResultOutput#printFailure" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LineLoggerOutput.html" class="extype" name="org.specs2.reporter.LineLoggerOutput">LineLoggerOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
+    </li><li name="org.specs2.reporter.LineLoggerOutput#printFailure" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="printFailure(message:String)(implicitargs:org.specs2.main.Arguments):Unit"></a>
       <a id="printFailure(String)(Arguments):Unit"></a>
       <h4 class="signature">
@@ -393,8 +429,8 @@
         <span class="name">printFailure</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.reporter.TextResultOutput">TextResultOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
-    </li><li name="org.specs2.reporter.TextResultOutput#printLine" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LineLoggerOutput.html" class="extype" name="org.specs2.reporter.LineLoggerOutput">LineLoggerOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
+    </li><li name="org.specs2.reporter.LineLoggerOutput#printLine" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="printLine(message:String)(implicitargs:org.specs2.main.Arguments):Unit"></a>
       <a id="printLine(String)(Arguments):Unit"></a>
       <h4 class="signature">
@@ -406,10 +442,8 @@
         <span class="name">printLine</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">print one line
-</p><div class="fullcomment"><div class="comment cmt"><p>print one line
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.reporter.TextResultOutput">TextResultOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
-    </li><li name="org.specs2.reporter.TextResultOutput#printLines" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <p class="shortcomment cmt">print one line</p><div class="fullcomment"><div class="comment cmt"><p>print one line</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LineLoggerOutput.html" class="extype" name="org.specs2.reporter.LineLoggerOutput">LineLoggerOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
+    </li><li name="org.specs2.reporter.LineLoggerOutput#printLines" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="printLines(message:String)(implicitargs:org.specs2.main.Arguments):Unit"></a>
       <a id="printLines(String)(Arguments):Unit"></a>
       <h4 class="signature">
@@ -421,8 +455,8 @@
         <span class="name">printLines</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.reporter.TextResultOutput">TextResultOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
-    </li><li name="org.specs2.reporter.TextResultOutput#printMessage" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LineLoggerOutput.html" class="extype" name="org.specs2.reporter.LineLoggerOutput">LineLoggerOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
+    </li><li name="org.specs2.reporter.LineLoggerOutput#printMessage" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="printMessage(message:String)(implicitargs:org.specs2.main.Arguments):Unit"></a>
       <a id="printMessage(String)(Arguments):Unit"></a>
       <h4 class="signature">
@@ -434,10 +468,8 @@
         <span class="name">printMessage</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">print some text, splitting it on several lines
-</p><div class="fullcomment"><div class="comment cmt"><p>print some text, splitting it on several lines
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.reporter.TextResultOutput">TextResultOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
-    </li><li name="org.specs2.reporter.TextResultOutput#printPending" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <p class="shortcomment cmt">print some text, splitting it on several lines</p><div class="fullcomment"><div class="comment cmt"><p>print some text, splitting it on several lines</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LineLoggerOutput.html" class="extype" name="org.specs2.reporter.LineLoggerOutput">LineLoggerOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
+    </li><li name="org.specs2.reporter.LineLoggerOutput#printPending" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="printPending(message:String)(implicitargs:org.specs2.main.Arguments):Unit"></a>
       <a id="printPending(String)(Arguments):Unit"></a>
       <h4 class="signature">
@@ -449,8 +481,8 @@
         <span class="name">printPending</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.reporter.TextResultOutput">TextResultOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
-    </li><li name="org.specs2.reporter.TextResultOutput#printSeeLink" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LineLoggerOutput.html" class="extype" name="org.specs2.reporter.LineLoggerOutput">LineLoggerOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
+    </li><li name="org.specs2.reporter.LineLoggerOutput#printSeeLink" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="printSeeLink(message:String,stats:org.specs2.specification.Stats)(implicitargs:org.specs2.main.Arguments):Unit"></a>
       <a id="printSeeLink(String,Stats)(Arguments):Unit"></a>
       <h4 class="signature">
@@ -462,8 +494,8 @@
         <span class="name">printSeeLink</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="stats">stats: <a href="../specification/Stats.html" class="extype" name="org.specs2.specification.Stats">Stats</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.reporter.TextResultOutput">TextResultOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
-    </li><li name="org.specs2.reporter.TextResultOutput#printSkipped" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LineLoggerOutput.html" class="extype" name="org.specs2.reporter.LineLoggerOutput">LineLoggerOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
+    </li><li name="org.specs2.reporter.LineLoggerOutput#printSkipped" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="printSkipped(message:String)(implicitargs:org.specs2.main.Arguments):Unit"></a>
       <a id="printSkipped(String)(Arguments):Unit"></a>
       <h4 class="signature">
@@ -475,8 +507,8 @@
         <span class="name">printSkipped</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.reporter.TextResultOutput">TextResultOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
-    </li><li name="org.specs2.reporter.TextResultOutput#printSpecStartName" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LineLoggerOutput.html" class="extype" name="org.specs2.reporter.LineLoggerOutput">LineLoggerOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
+    </li><li name="org.specs2.reporter.LineLoggerOutput#printSpecStartName" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="printSpecStartName(message:String,stats:org.specs2.specification.Stats)(implicitargs:org.specs2.main.Arguments):Unit"></a>
       <a id="printSpecStartName(String,Stats)(Arguments):Unit"></a>
       <h4 class="signature">
@@ -488,8 +520,8 @@
         <span class="name">printSpecStartName</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="stats">stats: <a href="../specification/Stats.html" class="extype" name="org.specs2.specification.Stats">Stats</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.reporter.TextResultOutput">TextResultOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
-    </li><li name="org.specs2.reporter.TextResultOutput#printSpecStartTitle" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LineLoggerOutput.html" class="extype" name="org.specs2.reporter.LineLoggerOutput">LineLoggerOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
+    </li><li name="org.specs2.reporter.LineLoggerOutput#printSpecStartTitle" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="printSpecStartTitle(message:String,stats:org.specs2.specification.Stats)(implicitargs:org.specs2.main.Arguments):Unit"></a>
       <a id="printSpecStartTitle(String,Stats)(Arguments):Unit"></a>
       <h4 class="signature">
@@ -501,7 +533,7 @@
         <span class="name">printSpecStartTitle</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="stats">stats: <a href="../specification/Stats.html" class="extype" name="org.specs2.specification.Stats">Stats</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.reporter.TextResultOutput">TextResultOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LineLoggerOutput.html" class="extype" name="org.specs2.reporter.LineLoggerOutput">LineLoggerOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
     </li><li name="org.specs2.io.Output#printStackTrace" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="printStackTrace(t:Throwable):Unit"></a>
       <a id="printStackTrace(Throwable):Unit"></a>
@@ -517,7 +549,7 @@
       <p class="shortcomment cmt">print stacktraces
 </p><div class="fullcomment"><div class="comment cmt"><p>print stacktraces
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../io/Output.html" class="extype" name="org.specs2.io.Output">Output</a></dd></dl></div>
-    </li><li name="org.specs2.reporter.TextResultOutput#printStats" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="org.specs2.reporter.LineLoggerOutput#printStats" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="printStats(message:String)(implicitargs:org.specs2.main.Arguments):Unit"></a>
       <a id="printStats(String)(Arguments):Unit"></a>
       <h4 class="signature">
@@ -529,8 +561,8 @@
         <span class="name">printStats</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.reporter.TextResultOutput">TextResultOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
-    </li><li name="org.specs2.reporter.TextResultOutput#printSuccess" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LineLoggerOutput.html" class="extype" name="org.specs2.reporter.LineLoggerOutput">LineLoggerOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
+    </li><li name="org.specs2.reporter.LineLoggerOutput#printSuccess" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="printSuccess(message:String)(implicitargs:org.specs2.main.Arguments):Unit"></a>
       <a id="printSuccess(String)(Arguments):Unit"></a>
       <h4 class="signature">
@@ -542,8 +574,8 @@
         <span class="name">printSuccess</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.reporter.TextResultOutput">TextResultOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
-    </li><li name="org.specs2.reporter.TextResultOutput#printText" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LineLoggerOutput.html" class="extype" name="org.specs2.reporter.LineLoggerOutput">LineLoggerOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
+    </li><li name="org.specs2.reporter.LineLoggerOutput#printText" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="printText(message:String)(implicitargs:org.specs2.main.Arguments):Unit"></a>
       <a id="printText(String)(Arguments):Unit"></a>
       <h4 class="signature">
@@ -555,7 +587,7 @@
         <span class="name">printText</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.reporter.TextResultOutput">TextResultOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LineLoggerOutput.html" class="extype" name="org.specs2.reporter.LineLoggerOutput">LineLoggerOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
     </li><li name="org.specs2.io.ConsoleOutput#printf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="printf(s:String,args:Any*):Unit"></a>
       <a id="printf(String,Any*):Unit"></a>
@@ -585,7 +617,7 @@
       <p class="shortcomment cmt">print an object with a newline
 </p><div class="fullcomment"><div class="comment cmt"><p>print an object with a newline
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../io/Output.html" class="extype" name="org.specs2.io.Output">Output</a></dd></dl></div>
-    </li><li name="org.specs2.reporter.TextResultOutput#status" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="org.specs2.reporter.LineLoggerOutput#status" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="status(result:org.specs2.execute.Result)(implicitargs:org.specs2.main.Arguments):String"></a>
       <a id="status(Result)(Arguments):String"></a>
       <h4 class="signature">
@@ -597,7 +629,7 @@
         <span class="name">status</span><span class="params">(<span name="result">result: <a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.reporter.TextResultOutput">TextResultOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="LineLoggerOutput.html" class="extype" name="org.specs2.reporter.LineLoggerOutput">LineLoggerOutput</a> → <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -694,6 +726,10 @@
               <h3>Inherited from <a href="../io/ConsoleOutput.html" class="extype" name="org.specs2.io.ConsoleOutput">ConsoleOutput</a></h3>
             </div><div class="parent" name="org.specs2.io.Output">
               <h3>Inherited from <a href="../io/Output.html" class="extype" name="org.specs2.io.Output">Output</a></h3>
+            </div><div class="parent" name="org.specs2.reporter.LineLoggerOutput">
+              <h3>Inherited from <a href="LineLoggerOutput.html" class="extype" name="org.specs2.reporter.LineLoggerOutput">LineLoggerOutput</a></h3>
+            </div><div class="parent" name="org.specs2.reporter.LineLogger">
+              <h3>Inherited from <a href="LineLogger.html" class="extype" name="org.specs2.reporter.LineLogger">LineLogger</a></h3>
             </div><div class="parent" name="org.specs2.reporter.ResultOutput">
               <h3>Inherited from <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></h3>
             </div><div class="parent" name="scala.AnyRef">

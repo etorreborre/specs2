@@ -179,6 +179,19 @@ Output:</p>
       </span>
       </h4>
       
+    </li><li name="org.specs2.reporter.Events" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="EventsextendsAnyRef"></a>
+      <a id="Events:Events"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Events.html"><span class="name">Events</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.reporter.ExamplesIsolation" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ExamplesIsolationextendsAnyRef"></a>
       <a id="ExamplesIsolation:ExamplesIsolation"></a>
@@ -234,6 +247,19 @@ Output:</p>
       </h4>
       <p class="comment cmt">public trait to create a custom exporter
 </p>
+    </li><li name="org.specs2.reporter.FinalResultsExporter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FinalResultsExporterextendsSbtExporterwithProductwithSerializable"></a>
+      <a id="FinalResultsExporter:FinalResultsExporter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="FinalResultsExporter.html"><span class="name">FinalResultsExporter</span></a><span class="params">(<span name="taskDef">taskDef: <span class="extype" name="sbt.testing.TaskDef">TaskDef</span></span>, <span name="handler">handler: <span class="extype" name="sbt.testing.EventHandler">EventHandler</span></span>, <span name="loggers">loggers: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="sbt.testing.Logger">Logger</span>]</span>)</span><span class="result"> extends <a href="SbtExporter.html" class="extype" name="org.specs2.reporter.SbtExporter">SbtExporter</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">This reporter will just notify the test interface about test results for the end statistics</p>
     </li><li name="org.specs2.reporter.FragmentSeq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="FragmentSeqextendsProductwithSerializable"></a>
       <a id="FragmentSeq:FragmentSeq"></a>
@@ -410,6 +436,34 @@ with the xml method
       </span>
       </h4>
       <p class="comment cmt">This trait execute specifications and exports them as JUnit xml files in the target/test-reports directory (by default).</p>
+    </li><li name="org.specs2.reporter.LineLogger" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LineLoggerextendsAnyRef"></a>
+      <a id="LineLogger:LineLogger"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LineLogger.html"><span class="name">LineLogger</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Logger with info, failure, error where each new message is displayed on a new line
+</p>
+    </li><li name="org.specs2.reporter.LineLoggerOutput" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LineLoggerOutputextendsResultOutputwithLineLogger"></a>
+      <a id="LineLoggerOutput:LineLoggerOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LineLoggerOutput.html"><span class="name">LineLoggerOutput</span></a><span class="result"> extends <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a> with <a href="LineLogger.html" class="extype" name="org.specs2.reporter.LineLogger">LineLogger</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">This outputs the textual results of an executed specification to a LineLogger
+</p>
     </li><li name="org.specs2.reporter.MarkdownExporting" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="MarkdownExportingextendsHtmlExporting"></a>
       <a id="MarkdownExporting:MarkdownExporting"></a>
@@ -423,6 +477,20 @@ with the xml method
       </span>
       </h4>
       <p class="comment cmt">Trait for exporting the specification as Markup files.</p>
+    </li><li name="org.specs2.reporter.MarkdownReporter" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="MarkdownReporterextendsDefaultReporterwithMarkdownExportingwithConsoleOutput"></a>
+      <a id="MarkdownReporter:MarkdownReporter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="MarkdownReporter.html"><span class="name">MarkdownReporter</span></a><span class="result"> extends <a href="DefaultReporter.html" class="extype" name="org.specs2.reporter.DefaultReporter">DefaultReporter</a> with <a href="MarkdownExporting.html" class="extype" name="org.specs2.reporter.MarkdownExporting">MarkdownExporting</a> with <a href="../io/ConsoleOutput.html" class="extype" name="org.specs2.io.ConsoleOutput">ConsoleOutput</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Reports a Specification as a markdown page
+</p>
     </li><li name="org.specs2.reporter.MessagesNotifier" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="MessagesNotifierextendsNotifierwithStringOutput"></a>
       <a id="MessagesNotifier:MessagesNotifier"></a>
@@ -531,6 +599,58 @@ seen as a Tree of Fragments.</p>
       </h4>
       <p class="comment cmt">This traits provides specialised print methods for message representing
 different types of results.</p>
+    </li><li name="org.specs2.reporter.SbtConsoleReporter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SbtConsoleReporterextendsConsoleReporterwithAllExporting"></a>
+      <a id="SbtConsoleReporter:SbtConsoleReporter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SbtConsoleReporter.html"><span class="name">SbtConsoleReporter</span></a><span class="result"> extends <a href="ConsoleReporter.html" class="extype" name="org.specs2.reporter.ConsoleReporter">ConsoleReporter</a> with <a href="AllExporting.html" class="extype" name="org.specs2.reporter.AllExporting">AllExporting</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Reporter for the test interface defined for sbt</p>
+    </li><li name="org.specs2.reporter.SbtExporter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SbtExporterextendsTextExportingwithEvents"></a>
+      <a id="SbtExporter:SbtExporter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SbtExporter.html"><span class="name">SbtExporter</span></a><span class="result"> extends <a href="TextExporting.html" class="extype" name="org.specs2.reporter.TextExporting">TextExporting</a> with <a href="Events.html" class="extype" name="org.specs2.reporter.Events">Events</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.reporter.SbtLoggers" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SbtLoggersextendsAnyRef"></a>
+      <a id="SbtLoggers:SbtLoggers"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SbtLoggers.html"><span class="name">SbtLoggers</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.reporter.SbtResultOutput" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SbtResultOutputextendsLineLoggerOutputwithSbtLoggers"></a>
+      <a id="SbtResultOutput:SbtResultOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SbtResultOutput.html"><span class="name">SbtResultOutput</span></a><span class="result"> extends <a href="LineLoggerOutput.html" class="extype" name="org.specs2.reporter.LineLoggerOutput">LineLoggerOutput</a> with <a href="SbtLoggers.html" class="extype" name="org.specs2.reporter.SbtLoggers">SbtLoggers</a></span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.reporter.Selection" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="SelectionextendsAnyRef"></a>
       <a id="Selection:Selection"></a>
@@ -642,7 +762,7 @@ and provides the stackTrace of an exception which occurred during the specificat
       </h4>
       <p class="comment cmt">Reporter for the test interface defined for sbt</p>
     </li><li name="org.specs2.reporter.TestInterfaceResultOutput" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="TestInterfaceResultOutputextendsTextResultOutputwithTestLoggers"></a>
+      <a id="TestInterfaceResultOutputextendsLineLoggerOutputwithTestLoggers"></a>
       <a id="TestInterfaceResultOutput:TestInterfaceResultOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -650,7 +770,7 @@ and provides the stackTrace of an exception which occurred during the specificat
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="TestInterfaceResultOutput.html"><span class="name">TestInterfaceResultOutput</span></a><span class="result"> extends <a href="TextResultOutput.html" class="extype" name="org.specs2.reporter.TextResultOutput">TextResultOutput</a> with <a href="TestLoggers.html" class="extype" name="org.specs2.reporter.TestLoggers">TestLoggers</a></span>
+        <a href="TestInterfaceResultOutput.html"><span class="name">TestInterfaceResultOutput</span></a><span class="result"> extends <a href="LineLoggerOutput.html" class="extype" name="org.specs2.reporter.LineLoggerOutput">LineLoggerOutput</a> with <a href="TestLoggers.html" class="extype" name="org.specs2.reporter.TestLoggers">TestLoggers</a></span>
       </span>
       </h4>
       
@@ -710,7 +830,7 @@ at the end of the specification
       <p class="comment cmt">This reporter can be used to get the result of a specification execution as a String
 </p>
     </li><li name="org.specs2.reporter.TextResultOutput" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="TextResultOutputextendsResultOutputwithConsoleOutput"></a>
+      <a id="TextResultOutputextendsLineLoggerOutputwithConsoleOutput"></a>
       <a id="TextResultOutput:TextResultOutput"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -718,7 +838,7 @@ at the end of the specification
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="TextResultOutput.html"><span class="name">TextResultOutput</span></a><span class="result"> extends <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a> with <a href="../io/ConsoleOutput.html" class="extype" name="org.specs2.io.ConsoleOutput">ConsoleOutput</a></span>
+        <a href="TextResultOutput.html"><span class="name">TextResultOutput</span></a><span class="result"> extends <a href="LineLoggerOutput.html" class="extype" name="org.specs2.reporter.LineLoggerOutput">LineLoggerOutput</a> with <a href="../io/ConsoleOutput.html" class="extype" name="org.specs2.io.ConsoleOutput">ConsoleOutput</a></span>
       </span>
       </h4>
       <p class="comment cmt">Implementation of the ResultOutput trait as Text
@@ -732,7 +852,7 @@ at the end of the specification
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="TreeToc.html"><span class="name">TreeToc</span></a><span class="params">(<span name="rootCode">rootCode: <a href="../html/package.html#SpecId=org.specs2.html.package.Newtype[String,org.specs2.html.package.SpecIdOps]" class="extmbr" name="org.specs2.html.SpecId">SpecId</a></span>, <span name="toc">toc: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span> = <span class="symbol">scala.xml.NodeSeq.Empty</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="TreeToc.html"><span class="name">TreeToc</span></a><span class="params">(<span name="rootCode">rootCode: <a href="../html/package.html#SpecId=org.specs2.html.package.Newtype[String,org.specs2.html.SpecIdOps]" class="extmbr" name="org.specs2.html.SpecId">SpecId</a></span>, <span name="toc">toc: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span> = <span class="symbol">scala.xml.NodeSeq.Empty</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">Table of contents, represented as a NodeSeq
