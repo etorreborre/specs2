@@ -67,7 +67,7 @@
     </head><body><div id="breadcrumbs"><a href="../guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../guide/org.specs2.guide.HowTo.html">HowTo</a></div><div class="colmask threecol">
             <div class="colmid">
               <div class="colleft">
-                <div class="col1"><div id="central"><html><title>HowTo</title><a name="HowTo"><h2 specId="616568730">HowTo</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Declare+arguments"><h3>Declare arguments</h3></a><p>Arguments are usually passed on the command line but you can also declare them at the beginning of the specification, to be applied only to that specification.<br />For example, you can turn off the concurrent execution of examples with the <code class="prettyprint">args(sequential = true)</code> call (or the shorter alias <code class="prettyprint">sequential</code>): </p>
+                <div class="col1"><div id="central"><html><title>HowTo</title><a name="HowTo"><h2 specId="1527053895">HowTo</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Declare+arguments"><h3>Declare arguments</h3></a><p>Arguments are usually passed on the command line but you can also declare them at the beginning of the specification, to be applied only to that specification.<br />For example, you can turn off the concurrent execution of examples with the <code class="prettyprint">args(sequential = true)</code> call (or the shorter alias <code class="prettyprint">sequential</code>): </p>
 <pre><code class="prettyprint">class ExamplesOneByOne extends Specification { def is = s2&quot;&quot;&quot; $sequential
 
   first example        $e1
@@ -75,8 +75,8 @@
                        &quot;&quot;&quot;
 }
 </code></pre><p>For the complete list of arguments and shortcut methods read the <a href="org.specs2.guide.Runners.html">Runners</a> page.</p><a name="Use+command-line+arguments"><h3>Use command-line arguments</h3></a><p>Some specifications can depend on the arguments passed on the command line, for example to fine-tune the behaviour of some Context objects. If you need to do this, you can add an <code class="prettyprint">Arguments</code> parameter to the Specification class. This parameter will be setup when the specification is instantiated: </p>
-<pre><code class="prettyprint">class DependOnCommandLine(args: Arguments) extends mutable.Specification {
-  skipAllUnless(!args.commandLine.contains(&quot;DB&quot;))
+<pre><code class="prettyprint">class DependOnCommandLine(arguments: Arguments) extends mutable.Specification {
+  skipAllUnless(!arguments.commandLine.contains(&quot;DB&quot;))
 
   &quot;database access&quot; &gt;&gt; { dbAccess must beOk }
 }
@@ -99,12 +99,12 @@
 }
 </code></pre><a name="Use+descriptions"><h3>Use descriptions</h3></a><p>The description of an Example can be used to create an expectation in the example body:</p><p><code class="prettyprint">&quot;This is a long, long, long description&quot; ! ((s: String) =&gt; s.size must be_&gt;(10))</code></p><a name="Pending+until+fixed"><h3>Pending until fixed</h3></a><p>Some examples may be temporarily failing but you may not want the entire test suite to fail just for those examples. Instead of commenting them out and then forgetting about those examples when the code is fixed, you can append <code class="prettyprint">pendingUntilFixed</code> to the Example body: </p>
 <pre><code class="prettyprint">&quot;this example fails for now&quot; ! {
-1 must_== 2
+  1 must_== 2
 }.pendingUntilFixed
 
 // or, with a more specific message
 &quot;this example fails for now&quot; ! {
-1 must_== 2
+  1 must_== 2
 }.pendingUntilFixed(&quot;ISSUE-123&quot;)
 </code></pre><p>The example above will be reported as <code class="prettyprint">Pending</code> until it succeeds. Then it is marked as a failure so that you can remember to remove the <code class="prettyprint">pendingUntilFixed</code> marker.</p><a name="Enhance+failures"><h3>Enhance failures</h3></a><p>Most of the time, the message displayed in the case of a matcher failure is clear enough. However a bit more information is sometimes necessary to get a better diagnostic on the value that's being checked. Let's say that you want to check a &quot;ticket list&quot;: <code class="prettyprint">machine.tickets must have size(3)</code></p><p>If you wish to get a more precise failure message you can set an alias with the <code class="prettyprint">aka</code> method (<em>also known as</em>): <code class="prettyprint">machine.tickets aka &quot;the created tickets&quot; must haveSize(3)</code></p><p>There is also a shortcut for <code class="prettyprint">value aka value.toString</code> which is simply <code class="prettyprint">value.aka</code>.</p><p>And when you want other ways to customize the description, you can use:</p>
 <ul>
@@ -462,8 +462,8 @@ factorial(3)
 <tr><td>a function name               </td><td><code class="prettyprint">${termName(factorial(1)}          === factorial                                 </code></td></tr>
 </table><a name="outside+specs2"><h4>outside specs2</h4></a><p>These functionalities are accessible outside of specs2 by importing the <code class="prettyprint">org.specs2.execute.Snippets</code> trait.</p></div></status></html></div></div>
                 <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="485359564"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="688288278"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="214028770"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="1036010496"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -473,7 +473,7 @@ factorial(3)
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1781899603"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1429611494"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -534,7 +534,9 @@ factorial(3)
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Around">Around</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#In+a+mutable+specification_1">In a mutable specification</a>
             
+          </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Outside">Outside</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#AroundOutside">AroundOutside</a>
             
@@ -584,10 +586,44 @@ factorial(3)
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Methods">Methods</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Full+example">Full example</a>
-            <ul></ul>
+            <ul><li id="270511497"><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Presentation">Presentation</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Rules">Rules</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Formatting+fragments">Formatting fragments</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Separating+groups+of+examples">Separating groups of examples</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Reset+the+levels">Reset the levels</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Changing+the+indentation+level">Changing the indentation level</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Combinations">Combinations</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Unit+specification">Unit specification</a>
+            
+          </li></ul>
+          </li><li id="218769307"><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#GivenWhenThenPage">GivenWhenThenPage</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then">Given When Then</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Parsing">Parsing</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Delimited+parsers">Delimited parsers</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Regex+parsers">Regex parsers</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Standard+parsers">Standard parsers</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Scenario">Scenario</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Tagging">Tagging</a>
+            
           </li></ul>
           </li></ul>
-          </li><li id="762700519"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li></ul>
+          </li></ul>
+          </li></ul>
+          </li><li id="255437110"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -614,6 +650,8 @@ factorial(3)
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#With+Generators">With Generators</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Test+properties">Test properties</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Expectations">Expectations</a>
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Mock+expectations">Mock expectations</a>
@@ -649,7 +687,7 @@ factorial(3)
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="335667539"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="994427323"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
@@ -693,7 +731,7 @@ factorial(3)
             
           </li></ul>
           </li></ul>
-          </li><li id="79983195"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="1562583072"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -733,10 +771,7 @@ factorial(3)
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#In+the+console">In the console</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Via+SBT">Via SBT</a>
-            <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#with+sbt+0.7.x">with sbt 0.7.x</a>
-            
-          </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#with+sbt+%3E+0.9.x">with sbt &gt; 0.9.x</a>
-            <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Test-only+arguments">Test-only arguments</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#testOnly+arguments">testOnly arguments</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Output+formats">Output formats</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Html">Html</a>
@@ -752,7 +787,6 @@ factorial(3)
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Colors">Colors</a>
             
-          </li></ul>
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Via+IDEA">Via IDEA</a>
             
@@ -777,7 +811,7 @@ factorial(3)
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="616568730"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="1527053895"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -825,7 +859,7 @@ factorial(3)
             
           </li></ul>
           </li></ul>
-          </li><li id="1923381595"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="1594927266"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -871,7 +905,7 @@ factorial(3)
             
           </li></ul>
           </li></ul>
-          </li><li id="492267853"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="1755234312"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -891,7 +925,7 @@ factorial(3)
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['485359564','616568730'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['214028770','1527053895'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                 <div class="col3"><div id="rightcolumn"></div></div>
               </div>

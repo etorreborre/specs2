@@ -67,7 +67,7 @@
     </head><body><div id="breadcrumbs"><a href="../guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../guide/org.specs2.guide.Matchers.html">Matchers</a></div><div class="colmask threecol">
             <div class="colmid">
               <div class="colleft">
-                <div class="col1"><div id="central"><html><title>Matchers</title><a name="Matchers"><h2 specId="762700519">Matchers</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
+                <div class="col1"><div id="central"><html><title>Matchers</title><a name="Matchers"><h2 specId="255437110">Matchers</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
 <ul>
   <li>Boolean</li>
   <li>Standard result</li>
@@ -76,7 +76,7 @@
   <li>Mock expectation</li>
   <li>DataTable</li>
   <li>Forms</li>
-</ul><a name="Boolean+results"><h3>Boolean results</h3></a><p>This is the simplest kind of result you can define for an expectation but also the least expressive!</p><p>Here's an example: <code class="prettyprint">&quot;This is hopefully true&quot;         ! (1 != 2)</code></p><p>This can be useful for simple expectations but a failure will give few information on what went wrong: </p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><p><code class="prettyprint">&quot;This is hopefully true&quot;         ! (2 != 2)</code></p><a name="Standard+results"><h3>Standard results</h3></a><p>Some standard results can be used when you need specific result meanings:</p>
+</ul><a name="Boolean+results"><h3>Boolean results</h3></a><p>This is the simplest kind of result you can define for an expectation but also the least expressive!</p><p>Here's an example: <code class="prettyprint">&quot;This is hopefully true&quot; ! (1 != 2)</code></p><p>This can be useful for simple expectations but a failure will give few information on what went wrong: </p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><p><code class="prettyprint">&quot;This is hopefully true&quot; ! (2 != 2)</code></p><a name="Standard+results"><h3>Standard results</h3></a><p>Some standard results can be used when you need specific result meanings:</p>
 <ul>
   <li><code class="prettyprint">success</code>: the example is ok</li>
   <li><code class="prettyprint">failure</code>: there is a non-met expectation</li>
@@ -193,37 +193,38 @@
   <li><code class="prettyprint">beAnInstanceOf[T]</code>: to check if an object is an instance of type <code class="prettyprint">T</code></li>
 </ul></td></tr></table></form></div><div class="tabbertab" title="Option/Either"><form><table class="dataTable"><tr><td class="none" style="info"><p>There are several matchers to check Option and Either instances:</p>
 <ul>
-  <li><code class="prettyprint">beSome</code> checks if an element is Some(_)</li>
-  <li><code class="prettyprint">beSome(exp)</code> checks if an element is Some(exp)</li>
-  <li><code class="prettyprint">beSome.which(function)</code> checks if an element is Some(_) and satisfies a function returning a boolean</li>
-  <li><code class="prettyprint">beSome.like(partial function)</code> checks if an element is Some(_) and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
-  <li><code class="prettyprint">beNone</code> checks if an element is None</li>
-  <li><code class="prettyprint">beAsNoneAs</code> checks if 2 values are equal to None at the same time</li>
-  <li><code class="prettyprint">beRight</code> checks if an element is Right(_)</li>
-  <li><code class="prettyprint">beRight(exp)</code> checks if an element is Right(exp)</li>
-  <li><code class="prettyprint">beRight.like(partial function)</code> checks if an element is Right(_) and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
-  <li><code class="prettyprint">beLeft</code> checks if an element is Left(_)</li>
-  <li><code class="prettyprint">beLeft(exp)</code> checks if an element is Left(exp)</li>
-  <li><code class="prettyprint">beLeft.like(partial function)</code> checks if an element is Left(_) and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
+  <li><code class="prettyprint">beSome</code> checks if an element is <code class="prettyprint">Some(_)</code></li>
+  <li><code class="prettyprint">beSome(exp)</code> checks if an element is <code class="prettyprint">Some(exp)</code></li>
+  <li><code class="prettyprint">beSome.which(function)</code> checks if an element is <code class="prettyprint">Some(_</code>) and satisfies a function returning a boolean</li>
+  <li><code class="prettyprint">beSome.like(partial function)</code> checks if an element is <code class="prettyprint">Some(_)</code> and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
+  <li><code class="prettyprint">beNone</code> checks if an element is <code class="prettyprint">None</code></li>
+  <li><code class="prettyprint">beAsNoneAs</code> checks if 2 values are equal to <code class="prettyprint">None</code> at the same time</li>
+  <li><code class="prettyprint">beRight</code> checks if an element is <code class="prettyprint">Right(_)</code></li>
+  <li><code class="prettyprint">beRight(exp)</code> checks if an element is <code class="prettyprint">Right(exp)</code></li>
+  <li><code class="prettyprint">beRight.like(partial function)</code> checks if an element is <code class="prettyprint">Right(_)</code> and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
+  <li><code class="prettyprint">beLeft</code> checks if an element is <code class="prettyprint">Left(_)</code></li>
+  <li><code class="prettyprint">beLeft(exp)</code> checks if an element is <code class="prettyprint">Left(exp)</code></li>
+  <li><code class="prettyprint">beLeft.like(partial function)</code> checks if an element is <code class="prettyprint">Left(_)</code> and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
 </ul></td></tr></table></form></div><div class="tabbertab" title="Try"><form><table class="dataTable"><tr><td class="none" style="info"><p>There are several matchers to check Try instances:</p>
 <ul>
-  <li><code class="prettyprint">beSuccessfulTry</code> checks if an element is Success(_)</li>
-  <li><code class="prettyprint">beSuccessfulTry.withValue(exp)</code> checks if an element is Success(exp)</li>
-  <li><code class="prettyprint">beSuccessfulTry.which(function)</code> checks if an element is Some(_) and satisfies a function returning a boolean</li>
-  <li><code class="prettyprint">beSuccessfulTry.like(partial function)</code> checks if an element is Some(_) and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
+  <li><code class="prettyprint">beSuccessfulTry</code> checks if an element is <code class="prettyprint">Success(_)</code></li>
+  <li><code class="prettyprint">beSuccessfulTry.withValue(exp)</code> checks if an element is <code class="prettyprint">Success(_)</code></li>
+  <li><code class="prettyprint">beSuccessfulTry.which(function)</code> checks if an element is <code class="prettyprint">Success(_)</code> and satisfies a function returning a boolean</li>
+  <li><code class="prettyprint">beSuccessfulTry.like(partial function)</code> checks if an element is <code class="prettyprint">Success(_)</code> and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
   <li><code class="prettyprint">beFailedTry</code> checks if an element is <code class="prettyprint">Failure(_)</code></li>
   <li><code class="prettyprint">beFailedTry.withThrowable[T]</code> checks if an element is <code class="prettyprint">Failure(t: T)</code></li>
   <li><code class="prettyprint">beFailedTry.withThrowable[T](message)</code> checks if an element is <code class="prettyprint">Failure(t: T)</code> and <code class="prettyprint">t.getMessage</code> matches <code class="prettyprint">message</code></li>
 </ul></td></tr></table></form></div><div class="tabbertab" title="String"><form><table class="dataTable"><tr><td class="none" style="info"><p>Matching on strings is very common. Here are the matchers which can help you:</p>
 <ul>
   <li><code class="prettyprint">beMatching</code> (or <code class="prettyprint">be matching</code>) checks if a string matches a regular expression</li>
-  <li><code class="prettyprint">=~(s)</code> is a shortcut for <code class="prettyprint">beMatching(&quot;.*&quot;+s+&quot;.*&quot;)</code></li>
+  <li><code class="prettyprint">=~(s)</code> is a shortcut for <code class="prettyprint">beMatching(&quot;(.|\\s)*&quot;+s+&quot;(.|\\s)*&quot;)</code></li>
   <li><code class="prettyprint">find(exp).withGroups(a, b, c)</code> checks if some groups are found in a string</li>
   <li><code class="prettyprint">have length</code> checks the length of a string</li>
   <li><code class="prettyprint">have size</code> checks the size of a string (seen as an <code class="prettyprint">Iterable[Char]</code>)</li>
   <li><code class="prettyprint">be empty</code> checks if a string is empty</li>
   <li><code class="prettyprint">beEqualTo(b).ignoreCase</code> checks if 2 strings are equal regardless of casing</li>
-  <li><code class="prettyprint">beEqualTo(b).ignoreSpace</code> checks if 2 strings are equal when trimmed</li>
+  <li><code class="prettyprint">beEqualTo(b).ignoreSpace</code> checks if 2 strings are equal when you <code class="prettyprint">replaceAll(&quot;\\s&quot;, &quot;&quot;)</code></li>
+  <li><code class="prettyprint">beEqualTo(b).trimmed</code> checks if 2 strings are equal when trimmed</li>
   <li><code class="prettyprint">beEqualTo(b).ignoreSpace.ignoreCase</code> you can compose them</li>
   <li><code class="prettyprint">contain(b)</code> checks if a string contains another one</li>
   <li><code class="prettyprint">startWith(b)</code> checks if a string starts with another one</li>
@@ -266,7 +267,7 @@
   <li><code class="prettyprint">Seq(1, 2, 3) must contain(be_&gt;(1)).between(1, 2)</code></li>
 </ul><p>The other types of checks involve comparing the Traversable elements to other elements (values, matchers, function returning a <code class="prettyprint">Result</code>)</p>
 <ul>
-  <li><p>with a set of values<br />  <code class="prettyprint">Seq(1, 2, 3, 4) must contain(allOf(2, 4))</code></p></li>
+  <li><p>with a set of values<br />  <code class="prettyprint">Seq(1, 2, 3, 4) must contain(2, 4)</code><br />  which is the same thing as<br />  <code class="prettyprint">Seq(1, 2, 3, 4) must contain(allOf(2, 4))</code></p></li>
   <li><p>with a set of matchers<br />  <code class="prettyprint">Seq(1, 2, 3, 4) must contain(allOf(be_&gt;(0), be_&gt;(1)))</code></p></li>
   <li><p>checking that the order is satisfied<br />  <code class="prettyprint">Seq(1, 2, 3, 4) must contain(allOf(be_&gt;(0), be_&gt;(1)).inOrder)</code></p></li>
 </ul><p>Note that when you use don't specify <code class="prettyprint">inOrder</code>, <code class="prettyprint">contain</code> is going to try the checks one by one, but will consume them greedily and not try all possible combinations of input value and check.</p><p>The <code class="prettyprint">allOf</code> method above can be replaced by <code class="prettyprint">atLeast</code>, <code class="prettyprint">atMost</code>, <code class="prettyprint">exactly</code> to be more specific on the number of elements which you expect to be correctly checked.</p><p>Finally, if you want to get the differences between 2 traversables:</p><p><code class="prettyprint">Seq(2, 4, 1) must containTheSameElementsAs(Seq(1, 4, 2))</code></p></td></tr></table></form></div><div class="tabbertab" title="Map"><form><table class="dataTable"><tr><td class="none" style="info"><p>Maps have their own matchers as well, to check keys and values:</p>
@@ -299,11 +300,11 @@ class MatchersSpec extends Specification with matcher.ResultMatchers { def is =
   <li><p><code class="prettyprint">beEqualToIgnoringSpace</code> compares 2 Nodes, without considering spaces<br />  <code class="prettyprint">&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must ==/(&lt;a&gt; &lt;b/&gt;&lt;/a&gt;)</code><br />  <code class="prettyprint">&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must beEqualToIgnoringSpace(&lt;a&gt; &lt;b/&gt;&lt;/a&gt;)</code></p></li>
   <li><p><code class="prettyprint">beEqualToIgnoringSpace</code> can also do an ordered comparison<br />  <code class="prettyprint"><a><c></c> <b></b></a> must ==/(<a> <c></c><b></b></a>).ordered</code></p></li>
   <li><p>on the other hand <code class="prettyprint">beEqualToIgnoringSpace</code> will not check attributes order<br />  <code class="prettyprint"><n b="2" a="1"></n> must ==/(<n a="1" b="2"></n>)</code></p></li>
-  <li><p><code class="prettyprint">\</code> is an XPath-like matcher matching if a node is a direct child of another<br />  <code class="prettyprint"><a><b></b></a> must (&quot;b&quot;)</code></p></li>
-  <li><p>You can also check attribute names<br />  <code class="prettyprint"><a><b name="value"></b></a> must (&quot;b&quot;, &quot;name&quot;)</code></p></li>
-  <li><p>And attribute names and values as well (values are checked using a regular expression, use the <a href="http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#quote(java.lang.String)">quote method</a> if you want an exact match)<br />  <code class="prettyprint"><a><b n3="v3" n2="v2" n="v"></b></a> must (&quot;b&quot;, &quot;n&quot;-&gt;&quot;v&quot;, &quot;n2&quot;-&gt;&quot;v\d&quot;)</code></p></li>
-  <li><p>Or the content of a <code class="prettyprint">Text</code> node<br />  <code class="prettyprint"><a>hello</a> must (&quot;a&quot;) &gt; &quot;hello&quot;</code> (alias <code class="prettyprint">textIs</code>)<br />  <code class="prettyprint"><a>hello</a> must (&quot;a&quot;) &gt;~ &quot;h.*&quot;</code> (alias <code class="prettyprint">textMatches</code>)</p></li>
-  <li><p>The equivalent of <code class="prettyprint">\</code> for a &quot;deep&quot; match is simply <code class="prettyprint">\</code><br />  <code class="prettyprint"><a><s><c></c></s></a> must \(&quot;c&quot;)</code></p></li>
+  <li><p><code class="prettyprint">\</code> is an XPath-like matcher matching if a node is a direct child of another<br />  <code class="prettyprint"><a><b></b></a> must \(&quot;b&quot;)</code></p></li>
+  <li><p>You can also check attribute names<br />  <code class="prettyprint"><a><b name="value"></b></a> must \(&quot;b&quot;, &quot;name&quot;)</code></p></li>
+  <li><p>And attribute names and values as well (values are checked using a regular expression, use the <a href="http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#quote(java.lang.String)">quote method</a> if you want an exact match)<br />  <code class="prettyprint"><a><b n3="v3" n2="v2" n="v"></b></a> must \(&quot;b&quot;, &quot;n&quot;-&gt;&quot;v&quot;, &quot;n2&quot;-&gt;&quot;v\d&quot;)</code></p></li>
+  <li><p>Or the content of a <code class="prettyprint">Text</code> node<br />  <code class="prettyprint"><a>hello</a> must \(&quot;a&quot;) \&gt; &quot;hello&quot;</code> (alias <code class="prettyprint">textIs</code>)<br />  <code class="prettyprint"><a>hello</a> must \(&quot;a&quot;) \&gt;~ &quot;h.*&quot;</code> (alias <code class="prettyprint">textMatches</code>)</p></li>
+  <li><p>The equivalent of <code class="prettyprint">\</code> for a &quot;deep&quot; match is simply <code class="prettyprint">\\</code><br />  <code class="prettyprint"><a><s><c></c></s></a> must \\(&quot;c&quot;)</code></p></li>
 </ul></td></tr></table></form></div><div class="tabbertab" title="Json"><form><table class="dataTable"><tr><td class="none" style="info"><p><a href="http://www.json.org">Json</a> is a simple data format essentially modeling recursive key-values. There are 2 matchers which can be used to verify the presence of appropriate values in Strings representing Json documents:</p>
 <ul>
   <li><p><code class="prettyprint">/(value)</code> checks if a value is present at the root of the document. This can only be the case if that document is an Array</p></li>
@@ -479,7 +480,7 @@ org.specs2.main x-&gt; org.specs2.io because org.specs2.io.FileSystem -&gt; org.
 </code></pre><p><strong><em>Alternative implementation</em></strong></p><p>Another implementation of the same functionality is available through the <code class="prettyprint">org.specs2.analysis.CompilerDependencyFinder</code> trait. This implementation uses the compiler dependency analysis functionality but needs more time, since it recompiles the sources.</p><p>The source files are taken from the <code class="prettyprint">src/main/scala</code> directory by default but you can change this value by using the <code class="prettyprint">Layers.inSourceDir</code> method.</p><p>While this implementation is slower than the Classycle one, it might retrieve more dependencies, for example when constants are inlined in class files.</p><p>Note: since this functionality relies on the scala compiler library, so you need to add it to your build file:</p>
 <pre><code class="prettyprint">// use sbt's scalaVersion Setting to define the scala-compiler library version
 libraryDependencies &lt;&lt;= scalaVersion { scala_version =&gt; Seq(
-  &quot;org.specs2&quot; %% &quot;specs2&quot; % 2.1.1 % &quot;test&quot;,
+  &quot;org.specs2&quot; %% &quot;specs2&quot; % 2.2 % &quot;test&quot;,
   &quot;org.scala-lang&quot; % &quot;scala-compiler&quot; % scala_version % &quot;test&quot;)
 }
 </code></pre></td></tr></table></form></div></div></td></tr></table></form></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Custom"><h4>Custom</h4></a><p>There are many ways to create matchers for your specific usage. The simplest way is to reuse the existing ones:</p>
@@ -672,14 +673,14 @@ def ex2 = Prop.forAll(abStrings, abStrings) { (s1: String, s2: String) =&gt; (s1
   <li><code class="prettyprint">rng</code>: the random number generator (default = <code class="prettyprint">new java.util.Random</code>)</li>
   <li><code class="prettyprint">callback</code>: a ScalaCheck TestCallback (see the ScalaCheck documentation)</li>
   <li><code class="prettyprint">loader</code>: a custom classloader (see the ScalaCheck documentation)</li>
-</ul><p>You can also set the random generator that is used in all the ScalaCheck generators: </p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><pre><code class="prettyprint">case class MyRandomGenerator() extends java.util.Random {
+</ul><p>You can also set the random generator that is used in all the ScalaCheck generators: </p></div></status><status class="ok"><p></p></status><status class="ok"><div style="display: show; text-indent:0px;"><pre><code class="prettyprint">case class MyRandomGenerator() extends java.util.Random {
   // implement a deterministic generator for example
 }
 
 &quot;this is a specific property&quot; ! prop { (a: Int, b: Int) =&gt;
   (a + b) must_== (b + a)
 }.set(rng = MyRandomGenerator(), minTestsOk = 200, workers = 3)
-</code></pre></div></status><status class="ok"><div style="display: show; text-indent:10px;"></div></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Mock+expectations"><h3>Mock expectations</h3></a><p>At the moment only the <a href="http://mockito.org">Mockito</a> library is supported.</p><p>Mockito allows to specify stubbed values and to verify that some calls are expected on your objects. In order to use those functionalities, you need to extend the <code class="prettyprint">org.specs2.mock.Mockito</code> trait: </p>
+</code></pre></div></status><status class="ok"><p></p></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Expectations"><h4>Expectations</h4></a><p>By default, a successful example using a <code class="prettyprint">Prop</code> will be reported as 1 success and 100 (or <code class="prettyprint">minTestsOk</code>) expectations. If you don't want the number of expectations to appear in the specification statistics just mix-in your specification the <code class="prettyprint">org.specs2.matcher.OneExpectationPerProp</code> trait.</p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Mock+expectations"><h3>Mock expectations</h3></a><p>At the moment only the <a href="http://mockito.org">Mockito</a> library is supported.</p><p>Mockito allows to specify stubbed values and to verify that some calls are expected on your objects. In order to use those functionalities, you need to extend the <code class="prettyprint">org.specs2.mock.Mockito</code> trait: </p>
 <pre><code class="prettyprint">import org.specs2.mock._
 class MockitoSpec extends Specification { def is = s2&quot;&quot;&quot;
 
@@ -689,18 +690,18 @@ class MockitoSpec extends Specification { def is = s2&quot;&quot;&quot;
     You can verify that a method was not called                                ${c().verify2}
   &quot;&quot;&quot;
 case class c() extends Mockito {
-val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock[new java.util.LinkedList[String]]
-def stub = {
-m.get(0) returns &quot;one&quot;             // stub a method call with a return value
-m.get(0) must_== &quot;one&quot;             // call the method
-}
-def verify = {
-m.get(0) returns &quot;one&quot;             // stub a method call with a return value
-m.get(0)                           // call the method
-there was one(m).get(0)            // verify that the call happened
-}
-def verify2 = there was no(m).get(0) // verify that the call never happened
-}
+  val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock[new java.util.LinkedList[String]]
+  def stub = {
+    m.get(0) returns &quot;one&quot;             // stub a method call with a return value
+    m.get(0) must_== &quot;one&quot;             // call the method
+  }
+  def verify = {
+    m.get(0) returns &quot;one&quot;             // stub a method call with a return value
+    m.get(0)                           // call the method
+    there was one(m).get(0)            // verify that the call happened
+  }
+  def verify2 = there was no(m).get(0) // verify that the call never happened
+  }
 }
 </code></pre><a name="Creation+and+settings"><h5>Creation and settings</h5></a><p>Mockito offers the possibility to provide specific settings for the mock being created:</p>
 <ul>
@@ -832,20 +833,20 @@ there was one(amount).show((32.4456, 2) -&gt; endWith(&quot;45&quot;))
 // with any Function2[A, B, R]
 there was one(amount).show(anyFunction2)
 </code></pre><a name="Auto-boxing"><h6>Auto-boxing</h6></a><p>Auto-boxing might interfere with the mocking of PartialFunctions. Please have a look at <a href="https://groups.google.com/d/topic/specs2-users/_bK8lCCjZ4c/discussion">this</a> for a discussion.</p><a name="Byname"><h6>Byname</h6></a><p>Byname parameters can be verified but this will not work if the specs2 jar is not put first on the classpath, before the mockito jar. Indeed specs2 redefines a Mockito class for intercepting method calls so that byname parameters are properly handled.</p><a name="DataTables"><h3>DataTables</h3></a><p>DataTables are a very effective way of grouping several similar examples into one. For example, here is how to specify the addition of integers by providing one example on each row of a table: </p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><pre><code class="prettyprint">class DataTableSpec extends Specification with matcher.DataTables { def is =
-&quot;adding integers should just work in scala&quot;  ! e1
+  &quot;adding integers should just work in scala&quot;  ! e1
 
-def e1 =
-&quot;a&quot;   | &quot;b&quot; | &quot;c&quot; |                                   // the header of the table, with `|` separated strings
-2    !  2  !  4  |                                   // an example row
-1    !  1  !  2  |&gt; {                                // the &gt; operator to &quot;execute&quot; the table
-(a, b, c) =&gt;  a + b must_== c                        // the expectation to check on each row
-}
+  def e1 =
+    &quot;a&quot;   | &quot;b&quot; | &quot;c&quot; |                                   // the header of the table, with `|` separated strings
+     2    !  2  !  4  |                                   // an example row
+     1    !  1  !  2  |&gt; {                                // the &gt; operator to &quot;execute&quot; the table
+     (a, b, c) =&gt;  a + b must_== c                        // the expectation to check on each row
+    }
 }
 </code></pre></div></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Implicit+%21"><h4>Implicit !</h4></a><p>There may be an implicit definition conflict when the first parameter of a row is a String, because examples can also be created by using the <code class="prettyprint">!</code> operator after a String. In that case, depending on which kind of specification you use, you can either:</p>
 <ul>
   <li>with an acceptance specification: use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance)</li>
   <li>with a unit specification: use the <code class="prettyprint">org.specs2.mutable.Tables</code> trait instead of <code class="prettyprint">org.specs2.matcher.DataTables</code> trait. This will &quot;deactivate&quot; the implicit used to create examples with <code class="prettyprint">!</code></li>
-</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="335667539"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../images/icon_success_sml.gif" /> Here's <a href="../guide/org.specs2.guide.FormsPage.html" tooltip="">how to use Forms</a></div></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
+</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="994427323"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../images/icon_success_sml.gif" /> Here's <a href="../guide/org.specs2.guide.FormsPage.html" tooltip="">how to use Forms</a></div></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
 <ul>
   <li><p><code class="prettyprint">org.specs2.matcher.MustMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldMatchers</code>) to write anything like <code class="prettyprint">1 must be_==(1)</code> and<br />    get a <code class="prettyprint">Result</code> back</p></li>
   <li><p>You can also use the side-effecting version of that trait called <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldThrownMatchers</code>).<br />    It throws a <code class="prettyprint">FailureException</code> as soon as an expectation is failing. Those traits can also be used in a regular<br />    Specification if you have several expectations per example and if you don't want to chain them with <code class="prettyprint">and</code>.</p></li>
@@ -862,12 +863,12 @@ def e1 =
 </code></pre>
 <hr /></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Matchers</th></tr>
-        <tr><td>Finished in</td><td class="info">349 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">451 ms</td></tr>
         <tr><td>Results</td><td class="success">47 examples, 539 expectations, 0 failure, 0 error</td></tr>
       </table></html></div></div>
                 <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="485359564"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="688288278"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="214028770"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="1036010496"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -877,7 +878,7 @@ def e1 =
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1781899603"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1429611494"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -938,7 +939,9 @@ def e1 =
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Around">Around</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#In+a+mutable+specification_1">In a mutable specification</a>
             
+          </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Outside">Outside</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#AroundOutside">AroundOutside</a>
             
@@ -988,10 +991,44 @@ def e1 =
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Methods">Methods</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Full+example">Full example</a>
-            <ul></ul>
+            <ul><li id="270511497"><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Presentation">Presentation</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Rules">Rules</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Formatting+fragments">Formatting fragments</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Separating+groups+of+examples">Separating groups of examples</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Reset+the+levels">Reset the levels</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Changing+the+indentation+level">Changing the indentation level</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Combinations">Combinations</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Unit+specification">Unit specification</a>
+            
+          </li></ul>
+          </li><li id="218769307"><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#GivenWhenThenPage">GivenWhenThenPage</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then">Given When Then</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Parsing">Parsing</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Delimited+parsers">Delimited parsers</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Regex+parsers">Regex parsers</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Standard+parsers">Standard parsers</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Scenario">Scenario</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Tagging">Tagging</a>
+            
           </li></ul>
           </li></ul>
-          </li><li id="762700519"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li></ul>
+          </li></ul>
+          </li></ul>
+          </li><li id="255437110"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1018,6 +1055,8 @@ def e1 =
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#With+Generators">With Generators</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Test+properties">Test properties</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Expectations">Expectations</a>
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Mock+expectations">Mock expectations</a>
@@ -1053,7 +1092,7 @@ def e1 =
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="335667539"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="994427323"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
@@ -1097,7 +1136,7 @@ def e1 =
             
           </li></ul>
           </li></ul>
-          </li><li id="79983195"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="1562583072"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1137,10 +1176,7 @@ def e1 =
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#In+the+console">In the console</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Via+SBT">Via SBT</a>
-            <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#with+sbt+0.7.x">with sbt 0.7.x</a>
-            
-          </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#with+sbt+%3E+0.9.x">with sbt &gt; 0.9.x</a>
-            <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Test-only+arguments">Test-only arguments</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#testOnly+arguments">testOnly arguments</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Output+formats">Output formats</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Html">Html</a>
@@ -1156,7 +1192,6 @@ def e1 =
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Colors">Colors</a>
             
-          </li></ul>
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Via+IDEA">Via IDEA</a>
             
@@ -1181,7 +1216,7 @@ def e1 =
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="616568730"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="1527053895"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -1229,7 +1264,7 @@ def e1 =
             
           </li></ul>
           </li></ul>
-          </li><li id="1923381595"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="1594927266"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1275,7 +1310,7 @@ def e1 =
             
           </li></ul>
           </li></ul>
-          </li><li id="492267853"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="1755234312"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1295,7 +1330,7 @@ def e1 =
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['485359564','762700519'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['214028770','255437110'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                 <div class="col3"><div id="rightcolumn"></div></div>
               </div>
