@@ -2,8 +2,8 @@ This version brings small improvements and fixes on top of 2.1.1
 
 ## Important!
 
-With the use of string interpolation for acceptance specifications the "old" style using operators is going now deprecated (to simplify the implementation and avoid bugs).
-The next version, 2.3 will still compile specifications written with the "old" style but their display will not be correct (it will miss newlines).
+With the use of string interpolation for acceptance specifications the "old" style using operators is now deprecated (to simplify the implementation and avoid bugs).
+The next version (2.3) will still compile specifications written with the "old" style but their display will not be correct (it will miss newlines).
 
 ## Improvements
 
