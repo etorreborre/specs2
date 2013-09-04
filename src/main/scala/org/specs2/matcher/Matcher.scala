@@ -7,12 +7,12 @@ import execute._
 import Expectable._
 import text.Quote._
 import text.Plural._
+import text.Sentences._
 import text.NotNullStrings._
 import reflect.ClassName._
 import MatchResultMessages._
 import time.Duration
 import MatchResultLogicalCombinators._
-import scala.collection.GenTraversableOnce
 
 /**
  * The `Matcher` trait is the base trait for any Matcher.
@@ -40,27 +40,36 @@ trait Matcher[-T] { outer =>
   def apply[S <: T](t: Expectable[S]): MatchResult[S]
   
   /**
-   * This convenience method can be used to evaluate a boolean condition and return an appropriate MatchResult
+   * This  method can be used to evaluate a boolean condition and return an appropriate MatchResult
    * @return a MatchResult with an okMessage, a koMessage and the expectable value
    */
   protected def result[S <: T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[S]): MatchResult[S] = {
     Matcher.result(test, okMessage, koMessage, value)
   }
   /**
-   * This convenience method uses a triplet instead of separated arguments
+   * This  method uses a triplet instead of separated arguments
    * @return a MatchResult with an okMessage, a koMessage and the expectable value
    */
   protected def result[S <: T](triplet: =>(Boolean, String, String), value: Expectable[S]): MatchResult[S] = {
     Matcher.result(triplet._1, triplet._2, triplet._3, value)
   }
   /**
-   * This convenience method can be used to evaluate a boolean condition and return an appropriate MatchResult
+   * This  method can be used to evaluate a boolean condition and return an appropriate MatchResult
    * @return a MatchResult with an okMessage, a koMessage, the expectable value and the expected/actual values as string
    *         to display a failure comparison if necessary
    */
   protected def result[S <: T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[S], expected: String, actual: String): MatchResult[S] = {
     Matcher.result(test, okMessage, koMessage, value, expected, actual)
   }
+
+  /** This  method can be used to create a successful match result */
+  protected def success[S <: T](message: =>String, value: Expectable[S]): MatchResult[S] =
+    Matcher.success(message, value)
+
+  /** This  method can be used to create a failed match result */
+  protected def failure[S <: T](message: =>String, value: Expectable[S]): MatchResult[S] =
+    Matcher.failure(message, value)
+
   /**
    * @return a MatchResult copied on another one, but with a different expectable
    */
@@ -69,7 +78,7 @@ trait Matcher[-T] { outer =>
       case MatchSuccess(ok, ko, _)                                   => Matcher.result(true,  ok(), ko(), value)
       case MatchFailure(ok, ko, _, NoDetails())                      => Matcher.result(false, ok(), ko(), value)
       case MatchFailure(ok, ko, _, FailureDetails(expected, actual)) => Matcher.result(false, ok(), ko(), value, expected, actual)
-      case _                                                         => Matcher.result(other.isSuccess, other.message, other.message, value)
+      case _                                                         => Matcher.result(other.isSuccess, other.message, value)
     }
   }
   /**
@@ -229,7 +238,7 @@ object Matcher {
   /**
    *  Utility method for creating a MatchResult[T]
    */
-  def result[T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T]): MatchResult[T] = {
+  def result[T](test: Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T]): MatchResult[T] = {
     if (test) MatchSuccess(okMessage, koMessage, value)
     else      MatchFailure(okMessage, koMessage, value)
   }
@@ -237,8 +246,20 @@ object Matcher {
    * Utility method for creating a MatchResult[T], with the actual and expected strings to enable better failure
    * messages
    */
-  def result[T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T], expected: String, actual: String): MatchResult[T] = {
+  def result[T](test: Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T], expected: String, actual: String): MatchResult[T] = {
     if (test) MatchSuccess(okMessage, koMessage, value)
     else      MatchFailure.create(okMessage, koMessage, value, FailureDetails(expected, actual))
   }
+
+  def result[T](test: Boolean, message: =>String, value: Expectable[T]): MatchResult[T] =
+    if (test) success(message, value)
+    else      failure(message, value)
+
+  def success[T](message: =>String, value: Expectable[T]): MatchResult[T] =
+    result(true, message, negateSentence(message), value)
+
+  /** This  method can be used to create a failed match result */
+  def failure[T](message: =>String, value: Expectable[T]): MatchResult[T] =
+    result(false, negateSentence(message), message, value)
+
 }
