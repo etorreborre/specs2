@@ -39,7 +39,9 @@ object build extends Build {
     name := "specs2",
     organization := "org.specs2",
     specs2Version in GlobalScope <<= version,
-    scalaVersion := "2.10.2")
+    scalaVersion := "2.10.2",
+    addCompilerPlugin("org.scala-lang.plugins" % "macro-paradise_2.10.3-RC1" % "2.0.0-SNAPSHOT")
+  )
 
   lazy val compilationSettings: Seq[Settings] = Seq(
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
@@ -54,7 +56,7 @@ object build extends Build {
     cancelable := true,
     javaOptions += "-Xmx3G",
     testOptions := Seq(Tests.Filter(s =>
-      Seq("Spec", "Suite", "Unit").exists(s.endsWith(_)) && !s.endsWith("FeaturesSpec") ||
+      Seq("Spec", "Suite", "Unit").exists(s.endsWith) && !s.endsWith("FeaturesSpec") ||
         s.contains("UserGuide")         || 
         s.toLowerCase.contains("index") ||
         s.matches("org.specs2.guide.*")))
