@@ -22,18 +22,19 @@ trait DefaultFragmentsFormatting extends FragmentsFormatting with TagsAssociatio
     val tagged = taggedFragments.flatMap {
       case (t: Text, tag)    => {
         val t1 = t.copy(formattedStringFor(tag)(t.text))
-        if (t1.flow) Seq(t1) else Seq(t1, TaggedAs(tag.names:_*), br)
+        if (t1.flow) Seq(t1) else t1 +: tagSeq(tag) :+ br
       }
       case (e: Example, tag) => {
         val e1 = e.formatWith(formattedStringFor(tag)(e.desc))
-        if (e1.desc.flow) Seq(e1) else Seq(e1, TaggedAs(tag.names:_*), br)
+        if (e1.desc.flow) Seq(e1) else e1 +: tagSeq(tag) :+ br
       }
-      case (s: SpecStart, tag) => if (Formatting().fromTagNames(tag.names).flow) Seq(s) else Seq(s, TaggedAs(tag.names:_*), br, br)
+      case (s: SpecStart, tag) => if (Formatting().fromTagNames(tag.names).flow) Seq(s) else (s +: tagSeq(tag)) ++ Seq(br, br)
       case (f, _)              => Seq(f)
     }
     Fragments.create(tagged:_*)
   }
 
+  private def tagSeq(tag: TaggingFragment) = if (tag.names.isEmpty) Seq() else Seq(TaggedAs(tag.names:_*))
   private def formattedStringFor[F <: FormattedString](tag: TaggingFragment) = (formatted: F) =>
     formatted.formatWithTagNames(tag.names)
 }
