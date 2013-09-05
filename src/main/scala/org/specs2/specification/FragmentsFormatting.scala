@@ -1,7 +1,7 @@
 package org.specs2
 package specification
 
-import TagsFragments.TaggingFragment
+import org.specs2.specification.TagsFragments.{TaggedAs, TaggingFragment}
 import FormattingFragments._
 
 /**
@@ -22,13 +22,13 @@ trait DefaultFragmentsFormatting extends FragmentsFormatting with TagsAssociatio
     val tagged = taggedFragments.flatMap {
       case (t: Text, tag)    => {
         val t1 = t.copy(formattedStringFor(tag)(t.text))
-        if (t1.flow) Seq(t1) else Seq(t1, br)
+        if (t1.flow) Seq(t1) else Seq(t1, TaggedAs(tag.names:_*), br)
       }
       case (e: Example, tag) => {
         val e1 = e.formatWith(formattedStringFor(tag)(e.desc))
-        if (e1.desc.flow) Seq(e1) else Seq(e1, br)
+        if (e1.desc.flow) Seq(e1) else Seq(e1, TaggedAs(tag.names:_*), br)
       }
-      case (s: SpecStart, tag) => if (Formatting().fromTagNames(tag.names).flow) Seq(s) else Seq(s, br, br)
+      case (s: SpecStart, tag) => if (Formatting().fromTagNames(tag.names).flow) Seq(s) else Seq(s, TaggedAs(tag.names:_*), br, br)
       case (f, _)              => Seq(f)
     }
     Fragments.create(tagged:_*)
