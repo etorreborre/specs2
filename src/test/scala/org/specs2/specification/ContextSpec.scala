@@ -230,9 +230,9 @@ class ContextSpec extends Specification with ResultMatchers with Groups with Fra
 }
 trait ContextData extends StandardResults with FragmentsBuilder with ContextsForFragments with Contexts {
 
-  def ok(name: String) = { println(name); success }
-  def ok1 = ok("e1")
-  def ok2 = ok("e2")
+  def okValue(name: String) = { println(name); success }
+  def ok1 = okValue("e1")
+  def ok2 = okValue("e2")
   
   def ex1 = "ex1" ! ok1  
   def ex1Before = "ex1" ! before1(ok1)

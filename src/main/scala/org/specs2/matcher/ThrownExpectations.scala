@@ -26,7 +26,7 @@ import org.specs2.specification.Scope
  *     }
  *   }
  */
-trait ThrownExpectations extends Expectations with StandardResults with ScopedExpectations {
+trait ThrownExpectations extends Expectations with StandardResults with StandardMatchResults with ScopedExpectations {
   override def createExpectable[T](t: =>T, alias: Option[String => String]): Expectable[T] =
     new Expectable(() => t) {
       // overriding this method is necessary to include the ThrownExpectation trait into the stacktrace of the created match result
@@ -79,6 +79,7 @@ trait ThrownExpectations extends Expectations with StandardResults with ScopedEx
 
   override def failure: Failure = throw new FailureException(super.failure)
   override def skipped: Skipped = throw new SkipException(super.skipped)
+  override def todo: Pending = throw new PendingException(super.todo)
   override def pending: Pending = throw new PendingException(super.pending)
   override def anError: Error = throw new ErrorException(super.anError)
 
@@ -88,6 +89,8 @@ trait ThrownExpectations extends Expectations with StandardResults with ScopedEx
   protected def skipped(s: Skipped): Skipped = throw new SkipException(s)
   protected def pending(m: String): Pending = pending(Pending(m))
   protected def pending(s: Pending): Pending = throw new PendingException(s)
+
+  override lazy val ko: MatchFailure[None.type] = throw new MatchFailureException(MatchFailure("ok", "ko", createExpectable(None)))
 }
 private [specs2]
 object ThrownExpectations extends ThrownExpectations
