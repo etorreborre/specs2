@@ -219,7 +219,7 @@ class ContextSpec extends Specification with ResultMatchers with Groups with Fra
   }
 
   trait FragmentsExecution extends StringOutput with ContextData {
-    def executing(exs: Fragments): Executed = Executed(executeBodies(exs).view.force)
+    def executing(exs: Fragments): Executed = Executed(executeBodies(exs).toList)
     case class Executed(r: Seq[Result]) {
       def prints(ms: String*): Result = {
         val msgs = messages.toList

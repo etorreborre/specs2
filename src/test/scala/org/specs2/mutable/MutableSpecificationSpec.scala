@@ -102,7 +102,7 @@ The following examples specify the functionalities for such a mutable specificat
       }
     }
     def fragments = spec.content.fragments
-    def contentList = fragments.map(_.toString).view.force.toList
+    def contentList = fragments.map(_.toString).toList
     def contentString = contentList.mkString("\n")
   }
 

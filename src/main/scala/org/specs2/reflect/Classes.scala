@@ -95,14 +95,12 @@ trait Classes extends Output {
           if (constructors.isEmpty)
             Left(new Exception("Can't find a constructor for class "+c.getName))
           else {
-            val results = constructors.view.map(constructor => createInstanceForConstructor(c, constructor, parameter))
-            val (ok, ko) = (results.collect { case r @ Right(_) => r } , results.collect { case l @ Left(_) => l })
-            ok.headOption match {
-              case Some(r @ Right(_)) => r
-              case other              => {
-                val exception = ko(0).a
-                Left(new Exception("Could not instantiate class "+c.getName+": "+ko.collect { case Left(e) => e.getMessage}.mkString(", "), exception))
-              }
+            val results = constructors.map(constructor => createInstanceForConstructor(c, constructor, parameter))
+            results.find(_.isRight) match {
+              case Some(r) => r
+              case None    =>
+                val exception = results.collect { case Left(e) => e }.iterator.toSeq.headOption.getOrElse(new Exception("no cause"))
+                Left(new Exception("Could not instantiate class "+c.getName+": "+exception.getMessage.mkString(", "), exception))
             }
           }
         } catch {

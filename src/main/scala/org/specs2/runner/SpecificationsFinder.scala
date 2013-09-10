@@ -25,8 +25,8 @@ trait SpecificationsFinder extends FileSystem with Classes with ConsoleOutput wi
                      basePath: String = FromSource.srcTestDir,
                      verbose: Boolean = false)
                     (implicit args: Arguments = Arguments()): Seq[SpecificationStructure] = {
-    specificationNames(path, pattern, basePath, verbose).view.filter(filter).
-      flatMap(n => createSpecification(n, verbose))
+    specificationNames(path, pattern, basePath, verbose).iterator.filter(filter).
+      flatMap(n => createSpecification(n, verbose)).toSeq
   }
   /**
    * @param path a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")

@@ -13,14 +13,14 @@ import main.Arguments
 case class ExecutingSpecification(name: SpecName, arguments: Arguments, fs: Seq[ExecutingFragment], executor: ExecutorService = newExecutor) {
 
   /** @return the executed fragments, but as a lazy list */
-  lazy val execute = ExecutedSpecification(name, foreach { (n, fs) => fs.view.map(_.get) })
+  lazy val execute = ExecutedSpecification(name, foreach { (n, fs) => fs.iterator.map(_.get).toSeq })
 
   /** @return the executed fragments */
   def executed = execute
 
   /** @return a lazy list where each fragment will be executed on access */
   def foreach[T](f: (SpecName, Seq[ExecutedFragment]) => T) =
-    try { f(name, fs.view.map(_.get)) } finally { terminate() }
+    try { f(name, fs.iterator.map(_.get).toSeq) } finally { terminate() }
 
   /** @return an ExecutingSpecification where each executed fragment is mapped to another one */
   def map(f: ExecutedFragment => ExecutedFragment) =  copy(fs = fs.map(_.map(f)))

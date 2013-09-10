@@ -13,10 +13,10 @@ import org.specs2.specification.TagsFragments._
 /**
  * A Fragments object is a list of fragments with a SpecStart and a SpecEnd
  */
-case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] = Vector().view,
+case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] = Stream().toSeq,
                      arguments: Arguments = Arguments(), linked: Linked = Linked()) {
 
-  def fragments: Seq[Fragment] = if (isZero) Vector().view else specStart +: middle :+ specEnd
+  def fragments: Seq[Fragment] = if (isZero) Stream().toSeq else specStart +: middle :+ specEnd
   def isZero = this == Fragments()
 
   def specTitleIs(name: SpecName): Fragments = copy(specTitle = specTitle.filterNot(_.title.isEmpty).map(_.overrideWith(name)).orElse(Some(name)))
@@ -55,9 +55,9 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   /** recreate the Fragments so that 2 consecutive Tagging fragments are aggregated into one */
   def compactTags = middle.foldLeft(copy(middle = Seq())) { (res, cur) => res appendTags Fragments.createList(cur) }
 
-  def middleDrop(n: Int) = copy(middle = Vector(middle:_*).drop(n).view)
-  def middleDropRight(n: Int) = copy(middle = Vector(middle:_*).dropRight(n).view)
-  def middleDropWhile(p: Fragment => Boolean) = copy(middle = Vector(middle:_*).dropWhile(p).view)
+  def middleDrop(n: Int) = copy(middle = Stream(middle:_*).drop(n))
+  def middleDropRight(n: Int) = copy(middle = Stream(middle:_*).dropRight(n))
+  def middleDropWhile(p: Fragment => Boolean) = copy(middle = Stream(middle:_*).dropWhile(p))
 
   def insert(e: Fragment): Fragments = prepend(e)
   def insert(fs: Seq[Fragment]): Fragments = copy(middle = fs ++ middle)
@@ -70,7 +70,7 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   def baseDirIs(dir: String)     = copy(specTitle = specTitle.map(_.baseDirIs(dir)), linked = linked.baseDirIs(dir))
 
   def linkIs(htmlLink: HtmlLink) = copy(linked = linked.linkIs(htmlLink))
-  def seeIs(htmlLink: HtmlLink)  = copy(middle = Vector().view, linked = linked.seeIs(htmlLink))
+  def seeIs(htmlLink: HtmlLink)  = copy(middle = Stream(), linked = linked.seeIs(htmlLink))
   def hide                       = copy(linked = linked.linkIs(HtmlLink(this)).hide)
   def isLink                     = linked.isLink
 
