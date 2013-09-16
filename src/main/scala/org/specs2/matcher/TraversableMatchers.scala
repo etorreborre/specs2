@@ -6,6 +6,7 @@ import data.Sized
 import text.Quote._
 import text.Regexes._
 import text.Plural._
+import text.NotNullStrings._
 import collection.Iterablex._
 import collection.Seqx._
 import MatchersImplicits._
@@ -320,18 +321,18 @@ case class ContainWithResultSeq[T](checks: Seq[ContainCheck[T]],
     val seq = t.value.seq.toSeq
 
     // results for each element, either checked in order or greedily from the list of checks
-    val results: Seq[Result] =
+    val (results, remainingChecks): (Seq[Result], Seq[ContainCheck[T]]) =
       if (checkOrder) {
         @tailrec
-        def checkResults(values: Seq[T], checks: Seq[ContainCheck[T]], results: Seq[Result] = Seq()): Seq[Result] = {
+        def checkResults(values: Seq[T], checks: Seq[ContainCheck[T]], results: Seq[Result] = Seq()): (Seq[Result], Seq[ContainCheck[T]]) = {
           (values, checks) match {
             case (v +: vs, c +: cs) => {
               val r = c.check(v)
               if (r.isSuccess) checkResults(vs, cs, results :+ r)
               else             checkResults(vs, checks, results :+ r)
             }
-            case (v +: vs, nil) => results :+ Failure("there are no more available checks for "+v)
-            case _              => results
+            case (v +: vs, nil) => (results :+ Failure("there are no more available checks for "+v, v.notNull), checks)
+            case _              => (results, checks)
           }
         }
         checkResults(seq, checks)
@@ -339,30 +340,57 @@ case class ContainWithResultSeq[T](checks: Seq[ContainCheck[T]],
         seq.foldLeft((Seq[Result](), checks)) { (res, cur) =>
           val (results, remainingChecks) = res
           val checksAgainstCurrentElement = remainingChecks.map(c => (c, c.check(cur)))
-          (results :+ checksAgainstCurrentElement.map(_._2).foldLeft(Failure("there are no more available checks for "+cur): Result) { (res, cur) => cur or res },
+          (results :+ checksAgainstCurrentElement.map(_._2).foldLeft(Failure("there are no more available checks for "+cur, cur.notNull): Result) { (res, cur) => cur or res },
             checksAgainstCurrentElement.removeFirst(_._2.isSuccess).map(_._1))
-        }._1
+        }
       }
 
-    lazy val (successes, failures) = results.partition(_.isSuccess)
-
-    val qty =
-      if      (containsAtLeast && containsAtMost) s"exactly ${checks.size}"
-      else if (containsAtLeast)                   s"at least ${checks.size}"
-      else if (containsAtMost)                    s"at most ${checks.size}"
-      else                                        s"${checks.size}"
-
-    val order = if (checkOrder) " in order" else ""
-    val values = s"correct ${"value".plural(checks.size)}$order"
-    val okMessage = s"${t.description} has $qty $values"
-    val koMessage = negateSentence(okMessage) + (if (failures.isEmpty) "" else failures.mkString("\n", "\n", "\n"))
+    val (successes, failures) = results.partition(_.isSuccess)
+    val koMessage = makeKoMessage(t.description, successes, failures, remainingChecks)
+    val okMessage = negateSentence(koMessage)
 
     (containsAtLeast, containsAtMost) match {
       case (true,  false) => Matcher.result(successes.size >= checks.size && checks.size <= seq.size, okMessage , koMessage, t)
       case (false, true)  => Matcher.result(successes.size <= checks.size && checks.size >= seq.size, okMessage , koMessage, t)
-      case _              => Matcher.result((seq++checks).isEmpty ||
-                                            !seq.isEmpty && successes.size == seq.size,               okMessage,  koMessage, t)
+      case (true,  true)  => Matcher.result(successes.size == checks.size && checks.size == seq.size, okMessage , koMessage, t)
+      case (false, false) => Matcher.result(successes.size <= checks.size && checks.size <= seq.size, okMessage , koMessage, t)
     }
+  }
+
+  private def makeKoMessage(description: String, successes: Seq[Result], failures: Seq[Result], remainingChecks: Seq[ContainCheck[T]]) = {
+    val equalChecks = checks.forall(isEqualCheck)
+    if (equalChecks) {
+      val order = if (checkOrder) " in order" else ""
+      val missingValues = remainingChecks.collect(expectedValue).flatten
+      val excessValues  = failures.map(_.expected)
+      if (missingValues.isEmpty)     s"$description must not contain ${excessValues.mkString(", ")}$order"
+      else if (excessValues.isEmpty) s"$description does not contain ${missingValues.mkString(", ")}$order"
+      else                           s"$description does not contain ${missingValues.mkString(", ")} and must not contain ${excessValues.mkString(", ")}$order"
+    } else {
+      val qty =
+        if      (containsAtLeast && containsAtMost) s"exactly ${checks.size}"
+        else if (containsAtLeast)                   s"at least ${checks.size}"
+        else if (containsAtMost)                    s"at most ${checks.size}"
+        else                                        s"${checks.size}"
+
+      val order = if (checkOrder) " in order" else ""
+      val values = s"correct ${"value".plural(checks.size)}$order"
+      s"$description does not contain $qty $values" +
+        (if (failures.isEmpty) "" else failures.mkString("\n", "\n", "\n"))
+    }
+
+  }
+
+  private def isEqualCheck = (c: ContainCheck[T]) => c match {
+    case _:BeEqualTypedContainCheck[T] => true
+    case _:BeEqualContainCheck[T]      => true
+    case _                             => false
+  }
+
+  private def expectedValue: PartialFunction[ContainCheck[T], Option[Any]] = {
+    case BeEqualTypedContainCheck(e) => Some(e)
+    case BeEqualContainCheck(e)      => Some(e)
+    case _                           => None
   }
 
   def atLeast = copy(containsAtLeast = true, containsAtMost = false)
