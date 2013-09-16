@@ -1,0 +1,19 @@
+Maintenance version for 2.2
+
+## Fixes
+
+ * fixed a bug in the contain matchers with `exactly` and `atMost` [1421c9c](http://bit.ly/18sKm6O)
+ * "Exclude" functionality doesn't seem to work in 2.2 [#192](https://github.com/etorreborre/specs2/issues/192)
+ * throwing exceptions in mutable specs for todo and ko [#193](https://github.com/etorreborre/specs2/issues/193)
+
+## Improvements 
+
+ * better failure messages for contain matchers when using equality as a check [1421c9c](http://bit.ly/18sKm6O)
+ * added methods to create MatchResults with just one message [#191](https://github.com/etorreborre/specs2/issues/191)
+
+## Experimental
+
+ * ["Macro-matchers"](https://github.com/etorreborre/specs2/issues/189) to automatically derive matchers for the public properties of a given type
+
+ ==========================
+
