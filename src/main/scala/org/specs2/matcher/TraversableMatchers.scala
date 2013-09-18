@@ -321,29 +321,10 @@ case class ContainWithResultSeq[T](checks: Seq[ContainCheck[T]],
     val seq = t.value.seq.toSeq
 
     // results for each element, either checked in order or greedily from the list of checks
+    // + the list of checks which were not performed
     val (results, remainingChecks): (Seq[Result], Seq[ContainCheck[T]]) =
-      if (checkOrder) {
-        @tailrec
-        def checkResults(values: Seq[T], checks: Seq[ContainCheck[T]], results: Seq[Result] = Seq()): (Seq[Result], Seq[ContainCheck[T]]) = {
-          (values, checks) match {
-            case (v +: vs, c +: cs) => {
-              val r = c.check(v)
-              if (r.isSuccess) checkResults(vs, cs, results :+ r)
-              else             checkResults(vs, checks, results :+ r)
-            }
-            case (v +: vs, nil) => (results :+ Failure("there are no more available checks for "+v, v.notNull), checks)
-            case _              => (results, checks)
-          }
-        }
-        checkResults(seq, checks)
-      } else {
-        seq.foldLeft((Seq[Result](), checks)) { (res, cur) =>
-          val (results, remainingChecks) = res
-          val checksAgainstCurrentElement = remainingChecks.map(c => (c, c.check(cur)))
-          (results :+ checksAgainstCurrentElement.map(_._2).foldLeft(Failure("there are no more available checks for "+cur, cur.notNull): Result) { (res, cur) => cur or res },
-            checksAgainstCurrentElement.removeFirst(_._2.isSuccess).map(_._1))
-        }
-      }
+      if (checkOrder) checkValuesInOrder(seq, checks)
+      else            checkValues(seq, checks)
 
     val (successes, failures) = results.partition(_.isSuccess)
     val koMessage = makeKoMessage(t.description, successes, failures, remainingChecks)
@@ -354,6 +335,59 @@ case class ContainWithResultSeq[T](checks: Seq[ContainCheck[T]],
       case (false, true)  => Matcher.result(successes.size <= checks.size && checks.size >= seq.size, okMessage , koMessage, t)
       case (true,  true)  => Matcher.result(successes.size == checks.size && checks.size == seq.size, okMessage , koMessage, t)
       case (false, false) => Matcher.result(successes.size <= checks.size && checks.size <= seq.size, okMessage , koMessage, t)
+    }
+  }
+
+  /**
+   * take each value in order and try to apply the first check of the list of checks
+   * if that check is successful, remove the value from the list of values to check and remove the check as well
+   * otherwise try the next check for the *next* value
+   *
+   * @return (the list of all the results for each tested value, the list of remaining checks if any)
+   */
+  @tailrec
+  private def checkValuesInOrder(values: Seq[T], checks: Seq[ContainCheck[T]], results: Seq[Result] = Seq()): (Seq[Result], Seq[ContainCheck[T]]) = {
+    (values, checks) match {
+      case (v +: vs, c +: cs) => {
+        val r = c.check(v)
+        if (r.isSuccess) checkValuesInOrder(vs, cs, results :+ r)
+        else             checkValuesInOrder(vs, checks, results :+ r)
+      }
+      case (v +: vs, nil) => (results :+ Failure("there are no more available checks for "+v, v.notNull), checks)
+      case _              => (results, checks)
+    }
+  }
+
+  /**
+   * take each value in order and try to apply the checks of the list of checks
+   * keep the result corresponding to the first successful check and return the list of remaining checks to be used on the other values
+   *
+   * @return (the list of each result for each tested value, the list of remaining checks if any)
+   */
+  @tailrec
+  private def checkValues(values: Seq[T], checks: Seq[ContainCheck[T]], results: Seq[Result] = Seq()): (Seq[Result], Seq[ContainCheck[T]]) = {
+    values match {
+      case currentValue +: remainingValues =>
+        val (result, uncheckedChecks) = checkValue(currentValue, checks, Seq(), Failure("there are no more available checks for " + currentValue, currentValue.notNull))
+        checkValues(remainingValues, uncheckedChecks, results :+ result)
+
+      case _ => (results, checks)
+    }
+  }
+
+
+  /**
+   * @return (the result of evaluating value with uncheckedChecks, unchecked and failed checks)
+   */
+  @tailrec
+  private def checkValue(value: T, uncheckedChecks: Seq[ContainCheck[T]], checkedChecks: Seq[ContainCheck[T]], previousResult: Result) : (Result, Seq[ContainCheck[T]]) = {
+    uncheckedChecks match {
+      case currentCheck +: remainingUncheckedChecks =>
+        val result = currentCheck.check(value)
+        if (result.isSuccess) (result, checkedChecks ++ remainingUncheckedChecks)
+        else                  checkValue(value, remainingUncheckedChecks, checkedChecks :+ currentCheck, result or previousResult)
+
+      case _ => (previousResult, checkedChecks)
     }
   }
 
