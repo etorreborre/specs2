@@ -162,7 +162,7 @@ Other elements
   }
 
   trait specifications extends TerminationMatchers {
-    lazy val spec1 = new Specification { def is = "title".title ^ xonly ^ "text1" }
+    lazy val spec1 = new Specification { def is = "title1".title ^ xonly ^ "text1" }
     lazy val spec2 = new Specification { def is = xonly ^ "title2".title ^ "text2" }
     lazy val content = spec1.content
     lazy val content2 = spec2.content
