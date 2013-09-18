@@ -74,6 +74,7 @@ trait ResultLogicalCombinators extends Results {
     def or(other: =>Result): Result = {
       lazy val o = ResultExecution.execute(other)
       r match {
+        case Success(_,_)         => r
         case f @ Failure(_,_,_,_) => {
           o match {
             case s @ Success(m, exp)    => if (r.message == m) r.addExpectationsNb(s.expectationsNb)
@@ -101,7 +102,7 @@ trait ResultLogicalCombinators extends Results {
             case other1                   => DecoratedResult(d.decorator, d.result or other1)
           }
         }
-        case _ => r
+        case Error(_, _) => other
       }
     }
 

@@ -18,6 +18,7 @@ class ResultLogicalCombinatorsSpec extends Specification with ResultMatchers { d
  ${ failure or success or success }
  ${ success or success or success }
  ${ (failure or failure or failure) must beFailing }
+ ${ (success or Error("")) must beSuccessful  }
 
  Even when some of them throw FailureExceptions
  ${ (success or failure1) must beSuccessful }
