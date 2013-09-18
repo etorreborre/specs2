@@ -337,12 +337,36 @@ case class ContainWithResultSeq[T](checks: Seq[ContainCheck[T]],
         }
         checkResults(seq, checks)
       } else {
-        seq.foldLeft((Seq[Result](), checks)) { (res, cur) =>
-          val (results, remainingChecks) = res
-          val checksAgainstCurrentElement = remainingChecks.map(c => (c, c.check(cur)))
-          (results :+ checksAgainstCurrentElement.map(_._2).foldLeft(Failure("there are no more available checks for "+cur, cur.notNull): Result) { (res, cur) => cur or res },
-            checksAgainstCurrentElement.removeFirst(_._2.isSuccess).map(_._1))
+
+        /**
+         * @return (the result of evaluating value with uncheckedChecks, unchecked and failed checks)
+         */
+        @tailrec
+        def checkResult(value: T, uncheckedChecks: Seq[ContainCheck[T]], checkedChecks: Seq[ContainCheck[T]], previousResult: Result) : (Result, Seq[ContainCheck[T]]) = {
+          uncheckedChecks match {
+            case currentCheck +: remainingUncheckedChecks =>
+              val result = currentCheck.check(value)
+              if( result.isSuccess ) {
+                (result, checkedChecks ++ remainingUncheckedChecks)
+              } else {
+                checkResult(value, remainingUncheckedChecks, checkedChecks :+ currentCheck, result or previousResult)
+              }
+
+            case nil => (previousResult, checkedChecks)
+          }
         }
+
+        @tailrec
+        def checkResults(values: Seq[T], checks: Seq[ContainCheck[T]], results: Seq[Result] = Seq()): (Seq[Result], Seq[ContainCheck[T]]) = {
+          values match {
+            case currentValue +: remainingValues =>
+              val (result, uncheckedChecks) = checkResult(currentValue, checks, Seq(), Failure("there are no more available checks for " + currentValue, currentValue.notNull))
+              checkResults(remainingValues, uncheckedChecks, results :+ result)
+
+            case nil => (results, checks)
+          }
+        }
+        checkResults(seq, checks)
       }
 
     val (successes, failures) = results.partition(_.isSuccess)
