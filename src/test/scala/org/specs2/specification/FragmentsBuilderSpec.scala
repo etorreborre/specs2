@@ -162,16 +162,16 @@ Other elements
   }
 
   trait specifications extends TerminationMatchers {
-    lazy val spec1 = new Specification { def is = formatSection(flow=true) ^ "title1".title ^ xonly ^ "text1" }
-    lazy val spec2 = new Specification { def is = formatSection(flow=true) ^ xonly ^ "title2".title ^ "text2" }
+    lazy val spec1 = new Specification { def is = "title".title ^ xonly ^ "text1" }
+    lazy val spec2 = new Specification { def is = xonly ^ "title2".title ^ "text2" }
     lazy val content = spec1.content
     lazy val content2 = spec2.content
     lazy val content3 = new Specification { def is = xonly ^ args(include="t1") ^ "title".title ^ "text" }.content
     lazy val content4 = new Specification { def is = args(include="t1") ^ "title".title ^ args(include="t2") ^ "text" }.content
-    lazy val parentSpec1 = new Specification { def is = formatSection(flow=true) ^ "e1" ^ link(spec1) }
-    lazy val parentSpec2 = new Specification { def is = formatSection(flow=true) ^ "e1" ^ see(spec2) }
-    lazy val parentSpec3 = new Specification { def is = formatSection(flow=true) ^ "e1" ^ link(spec1.hide) }
-    lazy val parentSpec4 = new Specification { def is = formatSection(flow=true) ^ "e1" ^ link(spec1, spec2) }
+    lazy val parentSpec1 = new Specification { def is = "e1" ^ link(spec1) }
+    lazy val parentSpec2 = new Specification { def is = "e1" ^ see(spec2) }
+    lazy val parentSpec3 = new Specification { def is = "e1" ^ link(spec1.hide) }
+    lazy val parentSpec4 = new Specification { def is = "e1" ^ link(spec1, spec2) }
     lazy val selfReferencing: Specification = new Specification { def is = "e1" ^ see(selfReferencing) }
 
     trait CustomSpecification extends Specification {

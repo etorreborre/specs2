@@ -319,7 +319,6 @@ You can tag specific examples or entire sections of a specification and execute 
 
 You can use the `formatSection` or `formatTag` methods to specify the formatting of `Texts` and `Examples` fragments with the following parameters:
 
- - `flow`: the fragment (`Text` or `Example`) shouldn't be reported with automatic indenting (default = `false`, set automatically to `true` when using `s2` interpolated strings)
  - `markdown`: the fragment is using Markdown (default = `true`)
  - `verbatim`: indented text with more than 4 spaces must be rendered as a code block (default = `true`)
 

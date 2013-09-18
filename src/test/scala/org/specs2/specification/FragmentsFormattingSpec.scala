@@ -10,7 +10,7 @@ class FragmentsFormattingSpec extends script.Specification with Groups { def is 
  When a section is tagged with a formatting tag, it must apply to all FormattedStrings of text and examples
 
  + for instance, a formatting section with verbatim = false and some text fragments
- + or a formatting section with flow = true, markdown = false and some examples
+ + or a formatting section with markdown = false and some examples
 
 """
 
@@ -19,13 +19,13 @@ class FragmentsFormattingSpec extends script.Specification with Groups { def is 
            contain(allOf(false, false))
 
     eg := {
-      val formattings = formatFragments(formatSection(flow = true, markdown = false) ^
+      val formattings = formatFragments(formatSection(markdown = false) ^
         "e1" ! ok ^
         "e2" ! ok ^
-        formatSection(flow = true, markdown = false) ^
+        formatSection(markdown = false) ^
         "e3" ! ok).fragments.collect(isAnExample).map(_.desc.formatting)
 
-      formattings === Seq(Formatting(flow = true, markdown = false), Formatting(flow = true, markdown = false), Formatting())
+      formattings === Seq(Formatting(markdown = false), Formatting(markdown = false), Formatting())
     }
   }
 }

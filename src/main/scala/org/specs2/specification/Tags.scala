@@ -30,17 +30,15 @@ trait FormattingTags extends Tags {
   /**
    * add a tagging section with special tag names specifying the formatting options
    */
-  def formatSection(markdown: Option[FormattingTagParameter] = None, flow: Option[FormattingTagParameter] = None, verbatim: Option[FormattingTagParameter] = None) =
+  def formatSection(markdown: Option[FormattingTagParameter] = None, verbatim: Option[FormattingTagParameter] = None) =
     section(markdown.map(p => doIt(p)+"markdown").toSeq ++
-            flow    .map(p => doIt(p)+"flow").toSeq ++
             verbatim.map(p => doIt(p)+"verbatim").toSeq:_*)
 
   /**
    * add a tag with special tag names specifying the formatting options
    */
-  def formatTag(markdown: Option[FormattingTagParameter] = None, flow: Option[FormattingTagParameter] = None, verbatim: Option[FormattingTagParameter] = None) =
+  def formatTag(markdown: Option[FormattingTagParameter] = None, verbatim: Option[FormattingTagParameter] = None) =
     tag(markdown.map(p => doIt(p)+"markdown").toSeq ++
-        flow    .map(p => doIt(p)+"flow").toSeq ++
         verbatim.map(p => doIt(p)+"verbatim").toSeq:_*)
 
   private def doIt(p: FormattingTagParameter) = (if (p.condition) "" else "!")+internal
