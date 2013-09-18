@@ -1,0 +1,8 @@
+Maintenance version for 2.2.1
+
+## Fixes
+
+ * fixed a bug in the evaluation of `or` with a `Success` and an `Error` [discussion](http://bit.ly/1bqYuyp)
+
+ ==========================
+
