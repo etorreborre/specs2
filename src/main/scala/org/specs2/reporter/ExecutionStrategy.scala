@@ -84,9 +84,9 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
 
     def skipAllAfterStopOnFailStep(fs: Seq[ExecutingFragment], previousSequence: Seq[ExecutingFragment]) =
       (fs.toList match {
-        case LazyExecutingFragment(_, s: Step) :: _     => s.stopOnFail
-        case FinishedExecutingFragment(_, s: Step) :: _ => s.stopOnFail
-        case other                                                  => false
+        case LazyExecutingFragment(_, s: Step) :: _                        => s.stopOnFail
+        case FinishedExecutingFragment(ExecutedNoText(s: Step, _, _)) :: _ => s.stopOnFail
+        case other                                                         => false
       }) && previousSequence.exists(f => !isOk(f.get))
   }
 
@@ -96,7 +96,7 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
 
   private def executeSequence(fs: FragmentSeq, barrier: =>Any)(implicit args: Arguments, strategy: Strategy): Seq[ExecutingFragment] = {
     if (!args.sequential) executeConcurrently(fs, barrier, args)(strategy)
-    else                  fs.fragments.map(f => FinishedExecutingFragment(executeFragment(args)(f), f))
+    else                  fs.fragments.map(f => FinishedExecutingFragment(executeFragment(args)(f)))
   }
 
   private def executeConcurrently(fs: FragmentSeq, barrier: =>Any, args: Arguments)(implicit strategy: Strategy) = {
@@ -104,9 +104,9 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
     fs.fragments.map {
       case f: Example => PromisedExecutingFragment(promise(executeWithBarrier(f))(strategy), f)
       case f: Action  => PromisedExecutingFragment(promise(executeWithBarrier(f))(strategy), f)
-      case f: Step    => FinishedExecutingFragment(executeWithBarrier(f), f)
-      case f: SpecEnd => FinishedExecutingFragment(executeWithBarrier(f), f)
-      case f          => FinishedExecutingFragment(executeFragment(args)(f), f)
+      case f: Step    => FinishedExecutingFragment(executeWithBarrier(f))
+      case f: SpecEnd => FinishedExecutingFragment(executeWithBarrier(f))
+      case f          => FinishedExecutingFragment(executeFragment(args)(f))
     }
   }
 }

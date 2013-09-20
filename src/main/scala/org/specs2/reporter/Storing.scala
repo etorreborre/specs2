@@ -29,11 +29,11 @@ trait DefaultStoring extends Storing with Statistics with WithDefaultStatisticsR
     val fragmentsWithSpecStartUpdatedWithStatistics =
       associateStartEnd(statisticsTotals(spec.execute.fragments), updateStatsOnSpecStart) |> storeStatistics
 
-    ExecutingSpecification.create(spec.name, fragmentsWithSpecStartUpdatedWithStatistics)
+    spec.copy(fs = fragmentsWithSpecStartUpdatedWithStatistics.map(FinishedExecutingFragment))
   }
 
   private def statisticsTotals(fragments: Seq[ExecutedFragment])(implicit args: Arguments) = {
-    val totals = fragments zip fragments.reduceWith(StatisticsReducer).totals
+    val totals = fragments zip fragments.reduceWith(ExecutedStatisticsReducer).totals
     totals map (setStatsOnSpecEndFragments andThen executedFragmentsToSpecBlock)
   }
 

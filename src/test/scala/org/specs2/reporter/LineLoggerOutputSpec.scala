@@ -26,7 +26,7 @@ Simple cases
       printed {
         printText("some text\n  ")
         printSuccess("+ one example")
-      } must contain(exactly("some text\n  + one example"))
+      } must contain(exactly("some text", "  + one example"))
     }
 
     eg := {
@@ -37,7 +37,7 @@ Simple cases
         printStats("Total for specification spec1")
         printStats(Stats().display)
         printLine("")
-      } must contain(allOf("some text\n  + one example\nTotal for specification spec1",
+      } must contain(allOf("some text", "  + one example\nTotal for specification spec1",
                            "Finished in 0 ms\n0 example, 0 failure, 0 error"))
     }
 
@@ -46,7 +46,7 @@ Simple cases
         printSuccess("+ one example")
         printText("\n")
         printPending("* pending")
-      } must contain(exactly("+ one example\n* pending"))
+      } must contain(exactly("+ one example", "* pending"))
     }
   }
 

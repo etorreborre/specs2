@@ -14,6 +14,8 @@ import scalaz.concurrent.Promise
  * Some fragments are executed right away, other ones on demand synchronously, and other ones concurrently
  */
 sealed trait ExecutingFragment {
+  /** @return the fragment, before execution */
+  def original: Fragment
   /** @return a fragment, completely executed */
   def get: ExecutedFragment
   /** @return and executing fragment, with another embedded ExecutedFragment */
@@ -25,6 +27,8 @@ sealed trait ExecutingFragment {
  * which have already been executed to provide a Result
  */
 sealed trait ExecutedFragment {
+  /** @return the fragment before execution */
+  def original: Fragment
   /** @return the location of the executed Fragment */
   def location: Location
   /** @return the statistics of the executed Fragment */
@@ -67,6 +71,8 @@ object ExecutedFragment {
 }
 
 case class ExecutedText(textFragment: Text, location: Location = new Location) extends ExecutedFragment {
+  def original = textFragment
+
   def formattedString = textFragment.text
   def text = textFragment.t
   def flow = textFragment.flow
@@ -76,6 +82,8 @@ object ExecutedText1 {
   def unapply(executedText: ExecutedText) = Option(executedText.text)
 }
 case class ExecutedResult(s: FormattedString, result: Result, timer: SimpleTimer, location: Location, statistics: Stats) extends ExecutedFragment { outer =>
+  def original = Example(s, result)
+
   def text(implicit args: Arguments) =
     if (s.formatting.markdown && !result.expected.isEmpty && !args.fromSource) s.map(_ => result.expected)
     else s
@@ -101,13 +109,23 @@ object ExecutedResult {
 trait ExecutedStandardFragment extends ExecutedFragment {
   val stats: Stats = Stats()
 }
-case class ExecutedBr(location: Location = new Location) extends ExecutedStandardFragment
-case class ExecutedEnd(location: Location = new Location) extends ExecutedStandardFragment
-case class ExecutedTab(n: Int = 1, location: Location = new Location) extends ExecutedStandardFragment
-case class ExecutedBacktab(n: Int = 1, location: Location = new Location) extends ExecutedStandardFragment
+case class ExecutedBr(location: Location = new Location) extends ExecutedStandardFragment {
+  def original = StandardFragments.Br()
+}
+case class ExecutedEnd(location: Location = new Location) extends ExecutedStandardFragment {
+  def original = StandardFragments.End()
+}
+
+case class ExecutedTab(n: Int = 1, location: Location = new Location) extends ExecutedStandardFragment {
+  def original = StandardFragments.Backtab()
+}
+case class ExecutedBacktab(n: Int = 1, location: Location = new Location) extends ExecutedStandardFragment {
+  def original = StandardFragments.Backtab()
+}
 
 case class ExecutedSpecStart(start: SpecStart, location: Location = new Location, stats: Stats = Stats().startTimer) extends ExecutedFragment {
-  
+  def original = start
+
   def isSeeOnlyLink = start.isSeeOnlyLink
   def isIncludeLink = start.isIncludeLink
   def isLink        = start.isLink
@@ -123,6 +141,8 @@ case class ExecutedSpecStart(start: SpecStart, location: Location = new Location
 
 }
 case class ExecutedSpecEnd(end: SpecEnd, location: Location = new Location, stats: Stats = Stats()) extends ExecutedFragment {
+  def original = end
+
   def specName = end.specName
   def name = end.name
   def title = end.title
@@ -135,9 +155,13 @@ case class ExecutedSpecEnd(end: SpecEnd, location: Location = new Location, stat
  * This executed Fragment is used when no text must be displayed (for the successful
  * execution of an Action for example)
  */
-case class ExecutedNoText(isAction: Boolean = false,
+case class ExecutedNoText(original: Fragment,
                           timer: SimpleTimer = new SimpleTimer,
                           location: Location = new Location) extends ExecutedFragment { outer =>
+  def isAction = original match {
+    case _: Action => true
+    case _         => false
+  }
 
   def stats: Stats = Stats(timer=outer.timer)
 }
@@ -145,15 +169,16 @@ case class ExecutedNoText(isAction: Boolean = false,
 /**
  * embed an already executed Fragment
  */
-case class FinishedExecutingFragment(f: ExecutedFragment, original: Fragment) extends ExecutingFragment {
+case class FinishedExecutingFragment(f: ExecutedFragment) extends ExecutingFragment {
+  def original: Fragment = f.original
   def get = f
-  def map(function: ExecutedFragment => ExecutedFragment) = FinishedExecutingFragment(function(f), original)
+  def map(function: ExecutedFragment => ExecutedFragment) = FinishedExecutingFragment(function(f))
 }
 
 /**
  * embed an executed Fragment into a promise
  */
-case class PromisedExecutingFragment(promised: Promise[ExecutedFragment], f: Fragment) extends ExecutingFragment {
+case class PromisedExecutingFragment(promised: Promise[ExecutedFragment], original: Fragment) extends ExecutingFragment {
   def get = promised.get
   def map(function: ExecutedFragment => ExecutedFragment) = copy(promised = promised.map(function))
 }

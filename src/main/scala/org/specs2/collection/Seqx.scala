@@ -27,7 +27,7 @@ trait Seqx { outer =>
   class ExtendedSeq[T](seq: Seq[T]) {
 
     def reduceWith[S](reducer: Reducer[T, S]) = {
-      seq.foldLeft(reducer.zero) { (res, cur) => reducer.snoc(res, cur) }
+      seq.toIterator.foldLeft(reducer.zero) { (res, cur) => reducer.snoc(res, cur) }
     }
 
     /** update the last element if there is one */

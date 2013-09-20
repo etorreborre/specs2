@@ -17,25 +17,35 @@ trait LineLoggerOutput extends ResultOutput with LineLogger {
   }
 
   def flushText(force: Boolean = false)(implicit args: Arguments) = {
-    if (force || endsWith(buffer.toString, "\n")) {
+    if (force) {
       if (!buffer.isEmpty) infoLog(buffer.toString)
       buffer.clear
+    } else if (endsWith(buffer.toString, "\n")) {
+      if (!buffer.isEmpty) {
+        val lines = buffer.toString.split("\n")
+        buffer.clear
+        if (lines.size == 1) infoLog(lines.mkString("\n"))
+        else {
+          infoLog(lines.dropRight(1).mkString("\n"))
+          buffer.append(lines.lastOption.getOrElse(""))
+        }
+      }
     }
   }
 
   private def endsWith(message: String, string: String)(implicit args: Arguments) = {
     val nocolor = args.colors.removeColors(message)
-    message.nonEmpty &&
-      message.reverse.
+    nocolor.nonEmpty &&
+      nocolor.reverse.
       dropWhile(_ == ' ').
       startsWith(string)
   }
 
   def printSeeLink(message: String, stats: Stats)(implicit args: Arguments)        = info(status(stats.result)+args.textColor(message))
   def printText(message: String)(implicit args: Arguments)                         = info(args.textColor(message))
-  def printSuccess(message: String)(implicit args: Arguments)                      = info(message)
-  def printSkipped(message: String)(implicit args: Arguments)                      = info(message)
-  def printPending(message: String)(implicit args: Arguments)                      = info(message)
+  def printSuccess(message: String)(implicit args: Arguments)                      = { flushText(); info(message) }
+  def printSkipped(message: String)(implicit args: Arguments)                      = { flushText(); info(message) }
+  def printPending(message: String)(implicit args: Arguments)                      = { flushText(); info(message) }
   def printFailure(message: String)(implicit args: Arguments)                      = { flushText(force=true); failureLog(offset(message)) }
   def printError(message: String)(implicit args: Arguments)                        = { flushText(force=true); errorLog(offset(message)) }
 

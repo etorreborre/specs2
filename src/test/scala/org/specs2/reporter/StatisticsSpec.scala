@@ -36,7 +36,7 @@ Statistics can be accumulated on each executed specification in order to be disp
     "e5" ! skipped          ^ end
   }
 
-  def statistics(s: SpecificationStructure) = foldAll(s.content.fragments.map(f => execute(f)))
+  def statistics(s: SpecificationStructure) = foldAll(s.content.fragments.map(f => FinishedExecutingFragment(execute(f).get)))
   def last(ss: Seq[Stats]) = ss.lastOption.getOrElse(Stats())
   def total(s: SpecificationStructure) = last(statistics(s).totals)
   def totals(s: SpecificationStructure) = statistics(s).totals

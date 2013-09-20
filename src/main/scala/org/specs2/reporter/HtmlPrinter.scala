@@ -92,7 +92,8 @@ trait HtmlPrinter {
    *
    * @return the HtmlLines to print
    */
-  def reduce(spec: ExecutedSpecification)(implicit args: Arguments): Seq[HtmlLine] = flatten(spec.fragments.reduceWith(reducer))
+  def reduce(spec: ExecutedSpecification)(implicit args: Arguments): Seq[HtmlLine] =
+    flatten(spec.fragments.map(f => FinishedExecutingFragment(f): ExecutingFragment).reduceWith(reducer))
 
   /**
    * Sort HtmlLines into a Tree of HtmlLinesFile object where the tree represents the tree of included specifications
@@ -114,7 +115,7 @@ trait HtmlPrinter {
   }
 
   /** flatten the results of the reduction to a seq of Html lines */
-  private def flatten(results: (((Seq[HtmlLine], SpecStats), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])): Seq[HtmlLine] = {
+  private def flatten(results: (((Seq[HtmlLine], SpecStats), Levels[Fragment]), SpecsArguments[ExecutingFragment])): Seq[HtmlLine] = {
     val (prints, stats, levels, args) = results.flatten
     (prints zip stats.stats zip levels.levels zip args.nestedArguments) map {
       case (((t, s), l), a) => t.set(s, l.level, a)
@@ -127,9 +128,9 @@ trait HtmlPrinter {
     Levels.LevelsReducer  &&&
     SpecsArgumentsReducer
 
-  implicit lazy val HtmlReducer: Reducer[ExecutedFragment, Stream[HtmlLine]] = {
+  implicit lazy val HtmlReducer: Reducer[ExecutingFragment, Stream[HtmlLine]] = {
     /** print an ExecutedFragment and its associated statistics */
-    def print(fragment: ExecutedFragment): HtmlLine = fragment match {
+    def print(fragment: ExecutingFragment): HtmlLine = fragment.get match {
       case start @ ExecutedSpecStart(_,_,_)       => HtmlSpecStart(start)
       case result @ ExecutedResult(_,_,_,_,_)     => HtmlResult(result)
       case text @ ExecutedText(s, _)              => HtmlText(text)
@@ -138,7 +139,7 @@ trait HtmlPrinter {
       case fragment                               => HtmlOther(fragment)
     }
 
-    Reducer.unitReducer { fragment: ExecutedFragment => Stream(print(fragment)) }
+    Reducer.unitReducer { fragment: ExecutingFragment => Stream(print(fragment)) }
   }
 
 }

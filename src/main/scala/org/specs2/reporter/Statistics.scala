@@ -29,9 +29,13 @@ trait Statistics {
     val zero = SpecsStatistics() 
   }
 
-  def foldAll(fs: Seq[ExecutedFragment]) = fs.foldMap(StatisticsReducer.unit)
+  def foldAll(fs: Seq[ExecutingFragment]) = fs.foldMap(StatisticsReducer.unit)
   
-  val StatisticsReducer: Reducer[ExecutedFragment, SpecsStatistics]  = Reducer.unitReducer {
+  val StatisticsReducer: Reducer[ExecutingFragment, SpecsStatistics]  = Reducer.unitReducer {
+    f: ExecutingFragment => SpecsStatistics(f)
+  }
+
+  val ExecutedStatisticsReducer: Reducer[ExecutedFragment, SpecsStatistics]  = Reducer.unitReducer {
     f: ExecutedFragment => SpecsStatistics(f)
   }
 
@@ -40,24 +44,25 @@ trait Statistics {
    * a list of 'current' stats for each fragment execution and the total statistics 
    * for the whole specification
    */
-  case class SpecsStatistics(fragments: Seq[ExecutedFragment] = ArrayBuffer()) {
+  case class SpecsStatistics(fragments: Seq[ExecutingFragment] = ArrayBuffer()) {
     private val statsMonoid = Stats.StatsMonoid
     
     /** @return the list of all current stats, with the total on each line */
     lazy val totals: Seq[Stats] = {
       import NestedBlocks._
 
-      def toBlock(f: ExecutedFragment) = f match {
+      def toBlock(f: ExecutingFragment) = f.get match {
         case ExecutedSpecStart(_,_,s)  => BlockStart(s)
         case ExecutedSpecEnd(_,_,s)    => BlockEnd(s)
-        case other                     => BlockBit(f.stats)
+        case other                     => BlockBit(other.stats)
       }
       totalContext(fragments.map(toBlock))(statsMonoid)
     }
     lazy val total = totals.lastOption.getOrElse(Stats())
   }
   case object SpecsStatistics {
-    def apply(current: ExecutedFragment) = new SpecsStatistics(ArrayBuffer(current))
+    def apply(current: ExecutingFragment) = new SpecsStatistics(ArrayBuffer(current))
+    def apply(current: ExecutedFragment) = new SpecsStatistics(ArrayBuffer(FinishedExecutingFragment(current)))
   }
 
   /**
@@ -73,8 +78,8 @@ trait Statistics {
     val zero = SpecStats()
   }
 
-  val StatsReducer: Reducer[ExecutedFragment, SpecStats] = Reducer.unitReducer {
-    f: ExecutedFragment => SpecStats(ArrayBuffer(f.stats))
+  val StatsReducer: Reducer[ExecutingFragment, SpecStats] = Reducer.unitReducer {
+    f: ExecutingFragment => SpecStats(ArrayBuffer(f.get.stats))
   }
 
 }
