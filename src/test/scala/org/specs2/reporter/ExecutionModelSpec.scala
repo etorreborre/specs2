@@ -9,7 +9,8 @@ class ExecutionModelSpec extends Specification with ScalaCheck with Groups { def
 
   A sequential specification must always be reported with a strict order of its fragments                   ${g1().e1}
   A concurrent specification must have at least one execution where the order is changed                    ${g1().e2}
-  A Step must always be executed after the preceding examples                                               ${g1().e3}
+  A random specification must be executed sequentially but in random order                                  ${g1().e3}
+  A Step must always be executed after the preceding examples                                               ${g1().e4}
                                                                                                             """
 
   implicit val timedSpec = SpecificationData.arbTimedSpecification(50)
@@ -30,6 +31,12 @@ class ExecutionModelSpec extends Specification with ScalaCheck with Groups { def
     }.set(minSize = 3, maxSize = 7).not
 
     e3 := prop { spec: Specification =>
+      val reporter = newReporter
+      reporter.report(simpleLabel(spec, reporter.textOutput))(arguments <| args(random = true) <| nocolor)
+      reporter.outputLabelIds must beSorted
+    }.set(minSize = 3, maxSize = 7).not
+
+    e4 := prop { spec: Specification =>
       val reporter = newReporter
       val s = exampleAndStepLabel(spec, reporter.textOutput)
       reporter.report(s)(nocolor)

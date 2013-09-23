@@ -24,7 +24,7 @@ class SequenceSpec extends Specification with ScalaCheck with ArbitraryFragments
     all examples must be executed in a sequence                                                   ${seq().e1}
     with a Reporter                                                                               ${seq().e2}
     included specifications must have their own arguments                                         ${seq().e3}
-                                                                                                                        """
+                                                                                                  """
 
   case class steps() extends ScalaCheck with WithSelection {
     implicit val params = set(maxSize = 3)

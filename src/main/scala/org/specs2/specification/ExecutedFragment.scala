@@ -187,10 +187,9 @@ case class PromisedExecutingFragment(promised: Promise[ExecutedFragment], origin
  * embed an executing Fragment into a function to execute it on demand
  */
 case class LazyExecutingFragment(f: ()=>ExecutedFragment, original: Fragment) extends ExecutingFragment {
-  def get = f()
+  lazy val get = f()
   def map(function: ExecutedFragment => ExecutedFragment) = LazyExecutingFragment(() =>function(f()), original)
 }
-
 
 import scalaz._
 private[specs2]
