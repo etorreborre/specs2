@@ -25,6 +25,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
     stopOnSkip:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    random:        ArgProperty[Boolean]           = ArgProperty[Boolean](),
     xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
     showOnly:      ArgProperty[String]            = ArgProperty[String](),
     color:         ArgProperty[Boolean]           = ArgProperty[Boolean]()) =
@@ -41,6 +42,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
       stopOnSkip,
       sequential,
       isolated,
+      random,
       xonly,
       showOnly,
       color))
@@ -70,7 +72,9 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
       stopOnSkip:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      threadsNb:     ArgProperty[Int]               = ArgProperty[Int]()
+      random:        ArgProperty[Boolean]           = ArgProperty[Boolean](),
+      threadsNb:     ArgProperty[Int]               = ArgProperty[Int](),
+      executor:      ArgProperty[String]            = ArgProperty[String]()
     ) = addArguments(super.execute(
         plan,
         skipAll,
@@ -78,7 +82,9 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
         stopOnSkip,
         sequential,
         isolated,
-        threadsNb))
+        random,
+        threadsNb,
+        executor))
 
     /** shorthand method to create an Arguments object */
     override def store(

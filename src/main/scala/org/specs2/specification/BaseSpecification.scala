@@ -72,7 +72,6 @@ trait SpecificationStructure extends DefaultFragmentsFormatting {
 /**
  * methods for creating SpecificationStructure instances from fragments
  */
-private[specs2]
 object SpecificationStructure {
   import collection.Iterablex._
   

@@ -12,6 +12,7 @@ import reflect.Classes._
 import io.ConsoleOutput
 import scalaz.Scalaz._
 import Fingerprints._
+import org.specs2.reflect.Classes
 
 /**
  * Implementation of the Framework interface for the sbt tool.
@@ -100,7 +101,8 @@ case class SbtRunner(args: Array[String],
   }
 
   protected def reporter(taskDef: TaskDef, handler: EventHandler, loggers: Array[Logger])(args: Array[String]) =
-    new SbtConsoleReporter(consoleExporter(taskDef, args, handler, loggers), (a: Arguments) => otherExporters(taskDef, args, handler, loggers)(a))
+    new SbtConsoleReporter(consoleExporter(taskDef, args, handler, loggers),
+                           (a: Arguments) => otherExporters(taskDef, args, handler, loggers)(a))
 
   /** @return true if the console must report the results */
   private def consoleExporter(taskDef: TaskDef, args: Array[String], handler: EventHandler, loggers: Array[Logger]) =

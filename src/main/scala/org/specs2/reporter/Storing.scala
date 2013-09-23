@@ -14,14 +14,12 @@ import main.Arguments
 *
 *  - SpecStart fragments from SpecEnd fragments
 */
-private[specs2]
 trait Storing {
   /** @return a function storing ExecutedFragments */
   def store(implicit args: Arguments): ExecutingSpecification => ExecutingSpecification
 
 }
 
-private[specs2]
 trait DefaultStoring extends Storing with Statistics with WithDefaultStatisticsRepository {
 
   def store(implicit args: Arguments): ExecutingSpecification => ExecutingSpecification = (spec: ExecutingSpecification) => {

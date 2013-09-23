@@ -24,6 +24,7 @@ trait ArgumentsArgs extends ArgProperties {
     stopOnSkip:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    random:        ArgProperty[Boolean]           = ArgProperty[Boolean](),
     xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
     showOnly:      ArgProperty[String]            = ArgProperty[String](),
     color:         ArgProperty[Boolean]           = ArgProperty[Boolean]()) =
@@ -40,7 +41,8 @@ trait ArgumentsArgs extends ArgProperties {
               stopOnFail = stopOnFail,
               stopOnSkip = stopOnSkip,
               sequential = sequential,
-              isolated   = isolated) <|
+              isolated   = isolated,
+              random     = random) <|
      (new ArgumentsNamespace).report(
               xonly      = xonly,
               showOnly   = showOnly,
@@ -71,7 +73,9 @@ trait ArgumentsArgs extends ArgProperties {
       stopOnSkip:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      threadsNb:     ArgProperty[Int]               = ArgProperty[Int]()
+      random:        ArgProperty[Boolean]           = ArgProperty[Boolean](),
+      threadsNb:     ArgProperty[Int]               = ArgProperty[Int](),
+      executor:      ArgProperty[String]            = ArgProperty[String]()
     ) = new Arguments(
        execute = Execute(plan.toOption,
                skipAll.toOption,
@@ -79,7 +83,9 @@ trait ArgumentsArgs extends ArgProperties {
                stopOnSkip.toOption,
                sequential.toOption,
                isolated.toOption,
-               threadsNb.toOption))
+               random.toOption,
+               threadsNb.toOption,
+               executor.toOption))
 
     /** shorthand method to create an Arguments object */
     def store(

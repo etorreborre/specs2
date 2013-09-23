@@ -4,6 +4,7 @@ package reporter
 import scalaz._
 import Scalaz._
 import main.Arguments
+import reflect.Classes
 import specification._
 
 /**
@@ -46,7 +47,27 @@ trait Reporter extends
 }
 
 trait DefaultReporter extends Reporter
-    with DefaultSelection
-    with DefaultSequence
-    with DefaultExecutionStrategy
-    with DefaultStoring
+  with Executor
+  with DefaultSelection
+  with DefaultSequence
+  with DefaultExecutionStrategy
+  with DefaultStoring {
+
+  override def select(implicit arguments: Arguments)   = delegate(arguments).map(_.select(arguments)).getOrElse(super.select(arguments))
+  override def sequence(implicit arguments: Arguments) = delegate(arguments).map(_.sequence(arguments)).getOrElse(super.sequence(arguments))
+  override def execute(implicit arguments: Arguments)  = delegate(arguments).map(_.execute(arguments)).getOrElse(super.execute(arguments))
+  override def store(implicit arguments: Arguments)    = delegate(arguments).map(_.store(arguments)).getOrElse(super.store(arguments))
+}
+
+trait Executor extends
+       DefaultSelection
+  with DefaultSequence
+  with DefaultExecutionStrategy
+  with DefaultStoring { self =>
+
+  def delegate(arguments: Arguments) =
+    if (arguments.execute.executor.nonEmpty) Classes.createObject[Executor](arguments.execute.executor, printMessage = true)
+    else None
+
+}
+
