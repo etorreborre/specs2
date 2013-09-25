@@ -112,6 +112,7 @@ class ContextSpec extends Specification with ResultMatchers with Groups with Fra
    the before code must be called before the body code                                                     ${g6().e1}
    the after code must be called after the body code                                                       ${g6().e2}
    the around code must be called around the body code                                                     ${g6().e3}
+   the around method must rethrow failed results as exceptions                                             ${g6().e4}
                                                                                                            """
 
   implicit val arguments = main.Arguments()
@@ -212,15 +213,16 @@ class ContextSpec extends Specification with ResultMatchers with Groups with Fra
     }
   }
 
-  "mutable contexts" - new g6 with FragmentsExecution with ThrownExpectations {
+  "mutable contexts" - new g6 with FragmentsExecution with MustThrownExpectations {
     e1 := executing("e1" ! new beforeMutableContext { println("body"); 1 must_== 1 }).prints("before", "body")
     e2 := executing("e1" ! new afterMutableContext { println("body"); 1 must_== 1 }).prints("body", "after")
     e3 := executing("e1" ! new aroundMutableContext { println("body"); 1 must_== 1 }).prints("before", "body", "after")
+    e4 := executing("e1" ! new aroundMutableContext { 1 must_== 2 }).results.head must beFailing
   }
 
   trait FragmentsExecution extends StringOutput with ContextData {
     def executing(exs: Fragments): Executed = Executed(executeBodies(exs).toList)
-    case class Executed(r: Seq[Result]) {
+    case class Executed(results: Seq[Result]) {
       def prints(ms: String*): Result = {
         val msgs = messages.toList
         msgs must_== List(ms:_*)
