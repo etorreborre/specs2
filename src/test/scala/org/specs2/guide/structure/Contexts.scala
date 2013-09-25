@@ -223,17 +223,6 @@ object http extends Around {
 
 Note that the context here is an object instead of a trait or case class instance because in this specification we don't need any variable isolation. We also take the advantage that objects extending `Context` traits (like `Before` / `After` / `Around`,...) have an `apply` method so we can directly write `http(e1)` meaning `http.apply(e1)`.
 
-##### In a mutable specification
-
-In a mutable specification exceptions are thrown when an expectation is failing. As a consequence, if you implement the `around` method of the `Around` trait, you need to use `AsResult.effectively` to evaluate the result and re-throw exceptions ${snippet{
-trait http extends mutable.Around {
-  def around[T : AsResult](t: =>T) = openHttpSession("test") {
-    // execute t inside a http session and rethrow exceptions
-    AsResult.effectively(t)
-  }
-}
-}}
-
 #### Outside
 
 `Outside` is bit like `Around` except that you can get access to the application state that you're setting in your Context object. Let's see that with an example (with a mutable Specification for a change): ${snippet{
