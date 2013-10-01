@@ -8,5 +8,5 @@ package mutable
  * thrown as exceptions 
  */
 trait After extends org.specs2.specification.After with DelayedInit {
-  override def delayedInit(x: => Unit): Unit = try { x } finally { after }
+  override def delayedInit(x: => Unit): Unit = try x finally after
 }

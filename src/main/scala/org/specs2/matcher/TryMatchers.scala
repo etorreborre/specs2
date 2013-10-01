@@ -25,11 +25,10 @@ trait TryBaseMatchers extends ExceptionMatchers {
   def aSuccessfulTry[T]   = beSuccessfulTry[T]
 
   case class SuccessTryMatcher[T]() extends  Matcher[Try[T]] { outer =>
-    def apply[S <: Try[T]](value: Expectable[S]) =
-      result(value.value.isSuccess,
-             s"${value.description} is a Success",
-             s"${value.description} is not a Success",
-             value)
+    def apply[S <: Try[T]](value: Expectable[S]) = value.value match {
+      case Succeeded(t) => result(true, s"${value.description} is a Success", s"${value.description} is a not Success", value)
+      case Failed(e)    => result(false, s"${value.description} is a Success", s"${value.description} is not a Success", value)
+    }
 
     def withValue(t: =>T) = new Matcher[Try[T]] {
       def apply[S <: Try[T]](value: Expectable[S]) =
@@ -46,20 +45,16 @@ trait TryBaseMatchers extends ExceptionMatchers {
     }
 
     def which(f: T => Boolean) = new Matcher[Try[T]] {
-      def apply[S <: Try[T]](value: Expectable[S]) = {
-        val defaultMessage = s"${value.description} is not Success[T]"
-        val (isSuccess, failureMessage) = value.value match {
-          case util.Success(t) if !f(t) => (false, s"${value.description} is Success[T] but $t does not satisfy the given predicate")
-          case None                     => (false, defaultMessage)
-          case _                        => (true , defaultMessage)
+      def apply[S <: Try[T]](value: Expectable[S]) =
+        value.value match {
+          case Succeeded(t) if f(t)  => result(true, s"${value.description} is Success and satisfies the given predicate",
+                                                     s"${value.description} is not a correct Success", value)
+          case Succeeded(t) if !f(t) => result(false, s"${value.description} is correct Success",
+                                                      s"${value.description} is Success but $t does not satisfy the given predicate", value)
+          case Failed(e)             => result(false, s"${value.description} is Success",
+                                                      s"${value.description} is not a Success: ${e.getMessage}", value)
         }
-        result(isSuccess,
-          s"${value.description} is Success[T] and satisfies the given predicate",
-          failureMessage,
-          value)
-      }
     }
-
     def like(f: PartialFunction[T, MatchResult[_]]) = partialMatcher(f)
 
     private def partialMatcher(f: PartialFunction[T, MatchResult[_]]) = new Matcher[Try[T]] {
@@ -89,6 +84,7 @@ trait TryBaseMatchers extends ExceptionMatchers {
              s"${value.description} is not a Failure",
              value)
     }
+
     def withThrowable[E <: Throwable : ClassTag] = new Matcher[Try[T]] {
       def apply[S <: Try[T]](value: Expectable[S]) = {
         val expected = implicitly[ClassTag[E]].runtimeClass
@@ -101,6 +97,7 @@ trait TryBaseMatchers extends ExceptionMatchers {
         }
       }
     }
+
     def withThrowable[E <: Throwable : ClassTag](message: String) = new Matcher[Try[T]] {
       def apply[S <: Try[T]](value: Expectable[S]) = {
         val expected = implicitly[ClassTag[E]].runtimeClass

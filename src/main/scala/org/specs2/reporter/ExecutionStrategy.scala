@@ -9,6 +9,7 @@ import Promise._
 import Strategy._
 import specification._
 import control.NamedThreadFactory
+import collection.Iterablex._
 import main.{ArgumentsArgs, Arguments}
 import ExecutedFragment._
 
@@ -24,9 +25,8 @@ trait ExecutionStrategy {
  * This trait uses Scalaz promises to execute Fragments concurrently
  * 
  * It uses a Fixed thread pool with a number of threads to execute the fragments.
- * The default number is the number of available threads by default but this can be overriden by providing different Arguments
+ * The default number is the number of available threads by default but this can be overridden by providing different Arguments
  */
-private[specs2]
 trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution {
   import ArgumentsArgs._
 
@@ -84,9 +84,9 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
 
     def skipAllAfterStopOnFailStep(fs: Seq[ExecutingFragment], previousSequence: Seq[ExecutingFragment]) =
       (fs.toList match {
-        case LazyExecutingFragment(_, s: Step) :: _     => s.stopOnFail
-        case FinishedExecutingFragment(_, s: Step) :: _ => s.stopOnFail
-        case other                                                  => false
+        case LazyExecutingFragment(_, s: Step) :: _                        => s.stopOnFail
+        case FinishedExecutingFragment(ExecutedNoText(s: Step, _, _)) :: _ => s.stopOnFail
+        case other                                                         => false
       }) && previousSequence.exists(f => !isOk(f.get))
   }
 
@@ -94,19 +94,34 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
     if (nextMustSkip) arguments <| args(skipAll=true)
     else              arguments
 
-  private def executeSequence(fs: FragmentSeq, barrier: =>Any)(implicit args: Arguments, strategy: Strategy): Seq[ExecutingFragment] = {
-    if (!args.sequential) executeConcurrently(fs, barrier, args)(strategy)
-    else                  fs.fragments.map(f => FinishedExecutingFragment(executeFragment(args)(f), f))
+  def executeSequence(fs: FragmentSeq, barrier: =>Any)(implicit args: Arguments, strategy: Strategy): Seq[ExecutingFragment] = {
+    if (args.sequential)  executeSequentially(fs, args)
+    else if (args.random) executeRandomly(fs, args)
+    else                  executeConcurrently(fs, barrier, args)(strategy)
   }
 
-  private def executeConcurrently(fs: FragmentSeq, barrier: =>Any, args: Arguments)(implicit strategy: Strategy) = {
+  def executeSequentially(fs: FragmentSeq, args: Arguments) =
+    fs.fragments.map(f => FinishedExecutingFragment(executeFragment(args)(f)))
+
+  def executeRandomly(fs: FragmentSeq, args: Arguments) = {
+    val fragments = fs.fragments
+    val scrambled: Iterable[(ExecutingFragment, Int)] = fs.fragments.map(f => LazyExecutingFragment(() => executeFragment(args)(f), f)).zipWithIndex.scramble
+
+    fragments.zipWithIndex.map { case (f, i) =>
+      // trigger the previous fragments executions
+      scrambled.takeWhile(_._2 != i).map(_._1.get)
+      FinishedExecutingFragment(scrambled.find(_._2 == i).get._1.get)
+    }
+  }
+
+  def executeConcurrently(fs: FragmentSeq, barrier: =>Any, args: Arguments)(implicit strategy: Strategy) = {
     def executeWithBarrier(f: Fragment) = { barrier; executeFragment(args)(f) }
     fs.fragments.map {
       case f: Example => PromisedExecutingFragment(promise(executeWithBarrier(f))(strategy), f)
       case f: Action  => PromisedExecutingFragment(promise(executeWithBarrier(f))(strategy), f)
-      case f: Step    => FinishedExecutingFragment(executeWithBarrier(f), f)
-      case f: SpecEnd => FinishedExecutingFragment(executeWithBarrier(f), f)
-      case f          => FinishedExecutingFragment(executeFragment(args)(f), f)
+      case f: Step    => FinishedExecutingFragment(executeWithBarrier(f))
+      case f: SpecEnd => FinishedExecutingFragment(executeWithBarrier(f))
+      case f          => FinishedExecutingFragment(executeFragment(args)(f))
     }
   }
 }

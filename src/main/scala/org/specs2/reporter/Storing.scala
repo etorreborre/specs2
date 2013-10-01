@@ -14,14 +14,12 @@ import main.Arguments
 *
 *  - SpecStart fragments from SpecEnd fragments
 */
-private[specs2]
 trait Storing {
   /** @return a function storing ExecutedFragments */
   def store(implicit args: Arguments): ExecutingSpecification => ExecutingSpecification
 
 }
 
-private[specs2]
 trait DefaultStoring extends Storing with Statistics with WithDefaultStatisticsRepository {
 
   def store(implicit args: Arguments): ExecutingSpecification => ExecutingSpecification = (spec: ExecutingSpecification) => {
@@ -29,11 +27,11 @@ trait DefaultStoring extends Storing with Statistics with WithDefaultStatisticsR
     val fragmentsWithSpecStartUpdatedWithStatistics =
       associateStartEnd(statisticsTotals(spec.execute.fragments), updateStatsOnSpecStart) |> storeStatistics
 
-    ExecutingSpecification.create(spec.name, fragmentsWithSpecStartUpdatedWithStatistics)
+    spec.copy(fs = fragmentsWithSpecStartUpdatedWithStatistics.map(FinishedExecutingFragment))
   }
 
   private def statisticsTotals(fragments: Seq[ExecutedFragment])(implicit args: Arguments) = {
-    val totals = fragments zip fragments.reduceWith(StatisticsReducer).totals
+    val totals = fragments zip fragments.reduceWith(ExecutedStatisticsReducer).totals
     totals map (setStatsOnSpecEndFragments andThen executedFragmentsToSpecBlock)
   }
 

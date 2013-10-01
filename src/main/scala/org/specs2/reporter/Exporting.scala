@@ -29,10 +29,8 @@ trait Exporter extends Exporting
 /**
  * Null implementation for the Exporting trait
  */
-private [specs2]
-trait NoExporting extends Exporting {
+trait NoExporting extends Exporter {
   def export(implicit args: Arguments) = (s: ExecutingSpecification) => s.execute
 }
-private [specs2]
 object NoExporting extends NoExporting
 

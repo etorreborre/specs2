@@ -9,5 +9,6 @@ import execute._
  * thrown as exceptions 
  */
 trait Around extends org.specs2.specification.Around with DelayedInit {
-  override def delayedInit(x: => Unit): Unit = around { x; Success() }
+  /** use effectively to re-throw FailureExceptions if x failed */
+  override def delayedInit(x: => Unit): Unit = ResultExecution.effectively(around { x; Success() })
 }

@@ -4,7 +4,7 @@ package form
 /**
  * This trait provides methods to perform differences on sequences of Forms.
  *
- * @see org.specs2.guide.Forms for specification and usages
+ * @see org.specs2.guide.FormsPage for specification and usages
  */
 private[specs2]
 trait FormDiffs {

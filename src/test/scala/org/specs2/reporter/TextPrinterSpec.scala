@@ -6,9 +6,9 @@ import Scalaz._
 import text._
 import AnsiColors._
 import io.StringOutput
-import org.specs2.main.{MapSystemProperties, Arguments}
+import main.{MapSystemProperties, Arguments}
 import execute._
-import specification.{Example, SpecificationStructure, ExecutedFragment, Fragments, ExecutingSpecification, Tags}
+import specification._
 import matcher.DataTables
 
 class TextPrinterSpec extends Specification with DataTables with Tags { def is = s2"""
@@ -289,7 +289,7 @@ class TextPrinterSpec extends Specification with DataTables with Tags { def is =
   val outer = this
   def printer = new TextPrinter {
     override lazy val textOutput = new TextResultOutput with StringOutput
-    def print(fs: Seq[ExecutedFragment]) = {
+    def print(fs: Seq[ExecutingFragment]) = {
       super.print(outer.content.specName, fs)
       textOutput.flushText(force = true)
       textOutput.messages
@@ -310,7 +310,7 @@ class TextPrinterSpec extends Specification with DataTables with Tags { def is =
 class IsolatedSpecification extends IsolableSpecification(true)
 class NonIsolatedSpecification extends IsolableSpecification(false)
 
-case class IsolableSpecification(isolate: Boolean) extends mutable.Specification {
+case class IsolableSpecification(isolate: Boolean) extends org.specs2.mutable.Specification {
   sequential
   if (isolate) isolated
 

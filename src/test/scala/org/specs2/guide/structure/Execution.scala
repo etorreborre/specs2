@@ -17,7 +17,7 @@ This section summarizes the execution algorithm of a specification based on its 
  6. if the Specification inherits from the `AllExpectations` trait, then it is executed as an `isolated` Specification unless it is already set as `sequential`
  7. if the `stopOnFail` argument is present, all the examples in the next group of fragments will be skipped if there is a failure in one of the previous groups
  8. if the `stopOnSkip` argument is present, all the examples in the next group of fragments will be skipped if there is a skipped in one of the previous groups
- 9. if there is a `Step(stopOnFail = true)`, all the examples in the next group of fragments will be skipped if there is a failure in the group before the `Step`
+ 9. if there is a `Step` created with `Step.stopOnFail` or `Step.stopOnFail(when = true)`, all the examples in the next group of fragments will be skipped if there is a failure in the group before the `Step`
   """
 
 }

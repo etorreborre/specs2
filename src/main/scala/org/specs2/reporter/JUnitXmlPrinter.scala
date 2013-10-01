@@ -50,7 +50,7 @@ trait JUnitXmlPrinter {
   }
 
   /** fold object used to create descriptions */
-  def descriptions(name: SpecName)(implicit args: Arguments) = new JUnitDescriptions[ExecutedFragment](name.javaClassName)(Levels.LevelsReducer) {
+  def descriptions(name: SpecName)(implicit args: Arguments) = new JUnitDescriptions[ExecutedFragment](name.javaClassName)(Levels.ExecutedLevelsReducer) {
     def initialFragment(className: String) = ExecutedText(Text(className), new Location())
     /**
      * This function is used to map each node in a Tree[Fragment] to a pair of

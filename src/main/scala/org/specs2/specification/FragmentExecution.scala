@@ -61,16 +61,16 @@ trait FragmentExecution {
     case e: SpecEnd                    => ExecutedSpecEnd(e, f.location, Stats().startTimer)
     case s: Step                       => executeStep("step", s, f.location)
     case s: Action                     => executeStep("action", s, f.location)
-    case _                             => ExecutedNoText(isAction = true, new SimpleTimer, f.location)
+    case other                         => executeStep("action", Action(), f.location)
   }
 
-  private def executeStep(stepName: String, s: Executable, location: Location)(implicit args: Arguments) = {
+  private def executeStep(stepName: String, s: Fragment with Executable, location: Location)(implicit args: Arguments) = {
     val timer = new SimpleTimer().start
     executeBody(s.execute) match {
       case err if err.isError  => ExecutedResult(FormattedString(stepName+" error"), err, timer.stop, location, Stats(err))
       case f   if f.isFailure  => ExecutedResult(FormattedString(stepName+" failure"), f, timer.stop, location, Stats(f))
       case sk  @ Skipped(_, _) => ExecutedResult(FormattedString("skipped "+stepName), sk, timer.stop, location, Stats(sk))
-      case other               => ExecutedNoText(isAction = stepName == "action", new SimpleTimer, location)
+      case other               => ExecutedNoText(s, new SimpleTimer, location)
     }
   }
 

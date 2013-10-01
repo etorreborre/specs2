@@ -153,8 +153,8 @@ Other elements
     eg := Step.fromEither(Left(Skipped())).execute must beSkipped
     eg := Step.fromEither(Right("value")).execute must beSuccessful
 
-    eg := Step(stopOnFail = true).execute must beSuccessful
-    eg := Step(stopOnFail = {throw new Exception; true}).execute must beError
+    eg := Step.stopOnFail.execute must beSuccessful
+    eg := Step.stopOnFail(when = {throw new Exception; true}).execute must beError
 
     eg := Step(1).execute must beSuccessful
     eg := Step({throw new Exception; 1}).execute must beError

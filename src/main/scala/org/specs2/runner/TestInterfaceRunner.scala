@@ -94,7 +94,8 @@ class TestInterfaceRunner(val loader: ClassLoader, val loggers: Array[Logger]) e
 
   /** @return true if the console must report the results */
   private def isConsole(args: Array[String]) = !Seq("html", "junitxml", "markdown").exists(args.contains) || args.contains("console")
-  private def consoleExporter(args: Array[String], handler: EventHandler) = exporter(isConsole(args))(new TestInterfaceReporter(handler, loggers))
+  private def consoleExporter(args: Array[String], handler: EventHandler) =
+    exporter(isConsole(args))(new TestInterfaceReporter(handler, loggers))
 
   protected def finalExporter(handler: EventHandler) = FinalResultsReporter(handler, loggers)
 

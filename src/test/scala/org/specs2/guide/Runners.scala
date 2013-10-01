@@ -54,6 +54,7 @@ From inside a specification, the available arguments are the following:
  *`stopOnSkip`*      | false                                    | skip all examples after the first skipped result
  *`sequential`*      | false                                    | don't execute examples concurrently
  *`isolated`*        | false                                    | execute each example in its own specification to get "fresh" local variables
+ `random`            | false                                    | execute each example sequentially but in random order
  `threadsNb`         | `Runtime.getRuntime.availableProcessors` | number of threads to use for concurrent execution
  ***Storing***       |||
  `never`             | false                                    | never store statistics
@@ -75,6 +76,7 @@ From inside a specification, the available arguments are the following:
  `notoc`             | false                                    | if true, will not create a table of contents on the generated html page
  `notifier`          | String                                   | name of a class extending the `org.specs2.reporter.Notifier` trait
  `exporter`          | String                                   | name of a class extending the `org.specs2.reporter.Exporter` trait
+ `reporter`          | String                                   | name of a class extending the `org.specs2.reporter.Reporter` trait
 
 ##### Most/Least frequently used arguments
 
@@ -229,6 +231,7 @@ On the command line you can pass the following arguments:
  `tracefilter`       | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns |
  `notifier`          | String                  | name of a class extending the `org.specs2.reporter.Notifier` trait      |
  `exporter`          | String                  | name of a class extending the `org.specs2.reporter.Exporter` trait      |
+ `reporter`          | String                  | name of a class extending the `org.specs2.reporter.Reporter` trait      |
 
 _[`regexp` is a Java regular expression, csv a list of comma-separated values, map is a list of csv pairs key:value]_
 
@@ -539,6 +542,22 @@ You can either:
 
 ### With your own
 
+#### Executor
+
+The `org.specs2.reporter.Executor` trait can be used to change the execution a Specification. This trait defines different methods for the executing a Specification and you can override them:
+
+  * `select` selects the fragments to execute, filtering out some examples based on tags for instance
+  * `sequence` groups fragments which can be executed concurrently
+  * `execute` executes the fragments
+  * `store` stores the results
+
+##### In sbt
+
+You can use a custom `Executor` from inside sbt by passing the `executor` argument with a `Executor` implementation class name:
+
+    sbt> testOnly *BinarySpec* -- executor com.mycompany.reporting.RandomExecutor
+
+
 #### Notifier
 
 The `org.specs2.reporter.Notifier` trait can be used to report execution events. It notifies of the following:
@@ -575,7 +594,7 @@ The `org.specs2.reporter.Exporter` trait can be used to collect `ExecutedFragmen
  * `ExecutingSpecification` is a list of fragments which might or might not have finished their execution
  * `ExecutedSpecification` must be a list of executed fragments
 
-Please see the API of each class to see how to use them.
+Please see the Scaladoc API of each trait to see how to use them.
 
 ##### In sbt
 

@@ -29,8 +29,9 @@ object MatcherMacros extends MatcherMacros {
     val typeOfT = weakTypeOf[T]
     val matcherClassType = newTypeName(matcherClassName[T](c))
 
-    val fields = typeOfT.members.filter(_.isPublic).filterNot { case m: MethodSymbol => m.isConstructor }.
-      filterNot(m => Seq("copy", "asInstanceOf", "isInstanceOf", "==", "!=").contains(m.name.decoded.toString)).
+    val fields = typeOfT.members.filter(_.isPublic).
+      filterNot(isConstructor(c)).
+      filterNot(isSynthetic(c)).
       filter(_.owner != typeOf[Object].typeSymbol).
       filter(_.owner != typeOf[Product].typeSymbol).
       filter(_.owner != typeOf[Equals].typeSymbol)
@@ -106,6 +107,17 @@ object MatcherMacros extends MatcherMacros {
   }
 
   private def matcherClassName[T : c.WeakTypeTag](c: Context) = c.universe.weakTypeOf[T].typeSymbol.name.encoded+"Matcher"
+
+  private def isConstructor(c: Context) = { import c.universe._
+    (s: Symbol) =>  s match {
+      case m: c.universe.MethodSymbol => m.isConstructor
+      case other                      => false
+    }
+  }
+
+  private def isSynthetic(c: Context) = { import c.universe._
+    (s: Symbol) => Seq("copy", "asInstanceOf", "isInstanceOf", "==", "!=").contains(s.name.decoded.toString)
+  }
 
   private def extractBody(c: Context) = { import c.universe._
     c.macroApplication.symbol.annotations.find(_.tpe.toString.endsWith("fieldMatcherBody")).

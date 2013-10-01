@@ -60,7 +60,7 @@ The **`is`** method lists [*specification fragments*](org.specs2.guide.Structure
 
 * examples: some executable code returning a [`Result`](org.specs2.guide.Matchers.html)
 * [ScalaCheck](org.specs2.guide.Matchers.html#ScalaCheck) properties
-* [Forms](org.specs2.guide.Forms.html)
+* [Forms](org.specs2.guide.FormsPage.html)
 * normal strings
 
 

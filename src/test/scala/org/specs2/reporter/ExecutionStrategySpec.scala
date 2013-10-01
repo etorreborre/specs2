@@ -15,16 +15,16 @@ class ExecutionStrategySpec extends mutable.Specification {
         "+ ex1",
         "+ ex2",
         "x ex3",
-        " ko",
-        "o ex4",
-        "o ex5")).inOrder
+        startWith("ko"),
+        startWith("o ex4"),
+        startWith("o ex5"))).inOrder
     }
 
     "if one example is ko, but not in the directly preceding block, then skip no examples" >> {
       report(spec2) must contain(allOf(
         "spec2",
         "x ex1",
-        " ko",
+        startWith("ko"),
         "+ ex2",
         "+ ex3",
         "+ ex4",
@@ -35,18 +35,18 @@ class ExecutionStrategySpec extends mutable.Specification {
       report(spec3) must contain(allOf(
         "spec3",
         "x ex1",
-        " ko",
+        startWith("ko"),
         "+ ex2",
         "+ ex3",
-        "o ex4",
-        "o ex5")).inOrder
+        startWith("o ex4"),
+        startWith("o ex5"))).inOrder
     }
   }
 
   def report(s: SpecificationStructure) = {
     val reporter = newReporter
     reporter.report(s)(args())
-    reporter.textOutput.messages.flatMap(_.split("\n")).map(m => removeColors(m).split(" ").take(2).mkString(" ")).filterNot(_.trim.isEmpty)
+    reporter.textOutput.messages.flatMap(m => removeColors(m).split("\n")).map(_.trim).filter(_.nonEmpty)
   }
 
   def newReporter = new ConsoleReporter {
@@ -54,36 +54,36 @@ class ExecutionStrategySpec extends mutable.Specification {
     lazy val messages = textOutput.messages
   }
 
-  val spec1 = new Specification { def is =
-    "spec1".title ^ br^
-    "ex1" ! ok ^ br^
-    "ex2" ! ok ^ br^
-    "ex3" ! ko ^ br^
-    Step(stopOnFail = true) ^
-    "ex4" ! ok ^ br ^
-    "ex5" ! ko ^ end
+  val spec1 = new Specification { def is = "spec1".title ^ s2"""
+    ex1 $ok
+    ex2 $ok
+    ex3 $ko
+    ${Step.stopOnFail}
+    ex4 $ok
+    ex5 $ko
+    """
   }
 
-  val spec2 = new Specification { def is =
-    "spec2".title ^ br^
-    "ex1" ! ko ^ br^
-    Step(stopOnFail = false) ^
-    "ex2" ! ok ^ br^
-    "ex3" ! ok ^ br^
-    Step(stopOnFail = true) ^
-    "ex4" ! ok ^ br^
-    "ex5" ! ko ^ end
+  val spec2 = new Specification { def is = "spec2".title ^ s2"""
+    ex1 $ko
+    ${Step.stopOnFail(when = false)}
+    ex2 $ok
+    ex3 $ok
+    ${Step.stopOnFail(when = true)}
+    ex4 $ok
+    ex5 $ko
+    """
   }
 
-  val spec3 = new Specification { def is = sequential ^
-    "spec3".title ^ br^
-      "ex1" ! ko ^ br^
-      Step(stopOnFail = false) ^
-      "ex2" ! ok ^ br^
-      "ex3" ! ok ^ br^
-      Step(stopOnFail = true) ^
-      "ex4" ! ok ^ br^
-      "ex5" ! ko ^ end
+  val spec3 = new Specification { def is = sequential ^ "spec3".title ^ s2"""
+      ex1  $ko
+      ${Step.stopOnFail(when = false)}
+      ex2 $ok
+      ex3 $ok
+      ${Step.stopOnFail(when = true)}
+      ex4 $ok
+      ex5 $ko
+    """
   }
 
 }

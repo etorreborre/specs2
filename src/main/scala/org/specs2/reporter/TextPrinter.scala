@@ -36,7 +36,7 @@ import matcher.DataTable
 trait TextPrinter {
   def textOutput: ResultOutput = new TextResultOutput
 
-  def print(name: SpecName, fs: Seq[ExecutedFragment])(implicit commandLineArgs: Arguments) = {
+  def print(name: SpecName, fs: Seq[ExecutingFragment])(implicit commandLineArgs: Arguments) = {
     fs.reduceWith(reducer)
   }
 
@@ -46,7 +46,7 @@ trait TextPrinter {
      LevelsReducer          &&&
      SpecsArgumentsReducer) >>> printIO(textOutput)(args)
 
-  type ToPrint = (((Stream[Print], SpecsStatistics), Levels[ExecutedFragment]), SpecsArguments[ExecutedFragment])
+  type ToPrint = (((Stream[Print], SpecsStatistics), Levels[Fragment]), SpecsArguments[ExecutingFragment])
 
   /** print a line to the output */
   def printIO(output: ResultOutput)(implicit args: Arguments) = (line: ToPrint) => {
@@ -60,17 +60,22 @@ trait TextPrinter {
     def print(implicit out: ResultOutput) = text.print(stats, level, args)
   }
   
-  implicit val PrintReducer: Reducer[ExecutedFragment, Stream[Print]] = {
+  implicit val PrintReducer: Reducer[ExecutingFragment, Stream[Print]] = {
     /** print an ExecutedFragment and its associated statistics */
-    def print: ExecutedFragment => Print = (fragment: ExecutedFragment) => fragment.get match {
+    def print: ExecutingFragment => Print = (fragment: ExecutingFragment) => fragment match {
+      case PromisedExecutingFragment(_, _:Executable) => PrintResult(() => fragment.get)
+      case other                                      => printExecuted(other.get)
+    }
+
+    def printExecuted: ExecutedFragment => Print = (fragment: ExecutedFragment) => fragment.get match {
       case start @ ExecutedSpecStart(_,_,_)    => PrintSpecStart(start)
-      case result @ ExecutedResult(_,_,_,_,_)  => PrintResult(result)
+      case result @ ExecutedResult(_,_,_,_,_)  => PrintResult(() => result)
       case text @ ExecutedText(s, _)           => PrintText(text)
       case par @ ExecutedBr(_)                 => PrintBr()
       case end @ ExecutedSpecEnd(_,_, s)       => PrintSpecEnd(end, s)
-      case f                                   => PrintOther(f)
+      case other                               => PrintOther(other)
     }
-    Reducer.unitReducer { fragment: ExecutedFragment => Stream(print(fragment)) }
+    Reducer.unitReducer { fragment: ExecutingFragment => Stream(print(fragment)) }
   }
     
   sealed trait Print {
@@ -96,10 +101,15 @@ trait TextPrinter {
       }
     }
   }
-  case class PrintResult(r: ExecutedResult) extends Print {
+  case class PrintResult(result: () => ExecutedFragment) extends Print {
+    private lazy val executedResult = result() match {
+      case e: ExecutedResult => Some(e)
+      case other             => None
+    }
+
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
-      printResult(r.text(args).raw, r.hasDescription, r.result, r.timer)(args, out)
-      
+      executedResult.map(r => printResult(r.text(args).raw, r.hasDescription, r.result, r.timer)(args, out))
+
     def printResult(desc: String, hasDescription: Boolean, result: Result, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput): Unit = {
       def print(res: Result, desc: String, isDataTable: Boolean) {
         def decoratedDescription(d: String) = statusAndDescription(d, result, timer, isDataTable)(args, out)

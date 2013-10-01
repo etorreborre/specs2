@@ -9,7 +9,7 @@ import text._
  * This trait provides shortcuts for frequently used arguments
  */
 trait ArgumentsShortcuts { this: ArgumentsArgs =>
-    /**
+  /**
    * @return arguments for a specification where examples must be executed sequentially
    */
   def sequential: Arguments = args(sequential = true)

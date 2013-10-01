@@ -24,6 +24,7 @@ class ClassRunnerSpec extends Specification { def is = s2"""
 
   def newRunner(className: String) = ExitRunner(className)
 }
+
 case class ExitRunner(name: String) extends ClassRunner {
   override lazy val reporter: Reporter = new ConsoleReporter {
     override def textOutput = new NoResultOutput

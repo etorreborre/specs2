@@ -127,7 +127,10 @@ case object Levels {
   /** fold a list of T to a Levels object */
   def foldAll[T](fs: Seq[T])(implicit reducer: Reducer[T, Levels[T]]) = fs.foldMap(reducer.unit)
 
-  implicit val LevelsReducer: Reducer[ExecutedFragment, Levels[ExecutedFragment]] =
+  implicit val LevelsReducer: Reducer[ExecutingFragment, Levels[Fragment]] =
+    Reducer.unitReducer { f: ExecutingFragment => Levels(fragmentToLevel(f.original)) }
+
+  implicit val ExecutedLevelsReducer: Reducer[ExecutedFragment, Levels[ExecutedFragment]] =
     Reducer.unitReducer { f: ExecutedFragment => Levels(executedFragmentToLevel(f)) }
 
   implicit def executedFragmentToLevel: ExecutedFragment => Level[ExecutedFragment] = (f: ExecutedFragment) => f match {

@@ -48,6 +48,7 @@ Arguments (
   def stopOnSkip: Boolean             = execute.stopOnSkip
   def sequential: Boolean             = execute.sequential
   def isolated: Boolean               = execute.isolated
+  def random: Boolean                 = execute.random
   def threadsNb: Int                  = execute.threadsNb
 
   def xonly: Boolean                  = report.xonly
@@ -208,7 +209,9 @@ case class Execute(
   _stopOnSkip:    Option[Boolean]          = None,
   _sequential:    Option[Boolean]          = None,
   _isolated:      Option[Boolean]          = None,
-  _threadsNb:     Option[Int]              = None) extends ShowArgs {
+  _random:        Option[Boolean]          = None,
+  _threadsNb:     Option[Int]              = None,
+  _executor:      Option[String]           = None) extends ShowArgs {
 
   def plan: Boolean                 = _plan.getOrElse(false)
   def skipAll: Boolean              = _skipAll.getOrElse(false)
@@ -216,7 +219,9 @@ case class Execute(
   def stopOnSkip: Boolean           = _stopOnSkip.getOrElse(false)
   def sequential: Boolean           = _sequential.getOrElse(false)
   def isolated: Boolean             = _isolated.getOrElse(false)
+  def random: Boolean               = _random.getOrElse(false)
   def threadsNb: Int                = _threadsNb.getOrElse(Runtime.getRuntime.availableProcessors)
+  def executor: String              = _executor.getOrElse("")
 
   def overrideWith(other: Execute) = {
     new Execute(
@@ -226,7 +231,9 @@ case class Execute(
       other._stopOnSkip      .orElse(_stopOnSkip),
       other._sequential      .orElse(_sequential),
       other._isolated        .orElse(_isolated),
-      other._threadsNb       .orElse(_threadsNb)
+      other._random          .orElse(_random),
+      other._threadsNb       .orElse(_threadsNb),
+      other._executor        .orElse(_executor)
     )
   }
 
@@ -237,8 +244,9 @@ case class Execute(
     "stopOnFail"     -> _stopOnFail   ,
     "stopOnSkip"     -> _stopOnSkip   ,
     "sequential"     -> _sequential   ,
-    "isolated"       -> _isolated   ,
-    "threadsNb"      -> _threadsNb    ).flatMap(showArg).mkString("Execute(", ", ", ")")
+    "isolated"       -> _isolated     ,
+    "threadsNb"      -> _threadsNb    ,
+    "executor"       -> _executor     ).flatMap(showArg).mkString("Execute(", ", ", ")")
 
 }
 private[specs2]
@@ -251,10 +259,12 @@ object Execute extends Extract {
       _stopOnSkip    = bool("stopOnSkip"),
       _sequential    = bool("sequential"),
       _isolated      = bool("isolated"),
-      _threadsNb     = int("threadsNb")
+      _random        = bool("random"),
+      _threadsNb     = int("threadsNb"),
+      _executor      = value("executor")
     )
   }
-  val allValueNames = Seq("plan", "skipAll", "stopOnFail", "stopOnSkip", "sequential", "isolated", "threadsNb")
+  val allValueNames = Seq("plan", "skipAll", "stopOnFail", "stopOnSkip", "sequential", "isolated", "random", "threadsNb", "executor")
 }
 
 /**
