@@ -17,5 +17,5 @@ class IndexExample extends Specification { def is =
    * if it has already been executed
    */
   def examplesLinks(t: String) = t.title ^ specifications().map(see)
-  
+
 }

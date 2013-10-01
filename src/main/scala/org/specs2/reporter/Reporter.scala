@@ -68,6 +68,5 @@ trait Executor extends
   def delegate(arguments: Arguments) =
     if (arguments.execute.executor.nonEmpty) Classes.createObject[Executor](arguments.execute.executor, printMessage = true)
     else None
-
 }
 

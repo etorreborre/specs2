@@ -222,7 +222,7 @@ case object Example {
  * @see the ContextSpec specification
  *
  */
-case class Step (step: LazyParameter[Result], stopOnFail: Boolean = false, location: Location = new Location, isolable: Boolean = true) extends Fragment with Executable with Isolable {
+case class Step(step: LazyParameter[Result], stopOnFail: Boolean = false, location: Location = new Location, isolable: Boolean = true) extends Fragment with Executable with Isolable {
 
   def execute = step.value
   override def toString = "Step"
@@ -265,11 +265,14 @@ case object Step extends ImplicitParameters {
     }
   }((e: Throwable) => Error(e)))
 
-  /** create a Step object from a stopOnFail value. Make sure that the boolean evaluation doesn't fail */
-  def apply(stopOnFail: =>Boolean)(implicit p: ImplicitParam) = {
-    val stop = catchAll(stopOnFail)(Error(_))
+  /** create a Step object from a boolean condition. Make sure that the boolean evaluation doesn't fail */
+  def stopOnFail(when: =>Boolean): Step = {
+    val stop = catchAll(when)(Error(_))
     fromEither(stop).copy(stopOnFail = stop.fold(_ => false, b => b))
   }
+
+  /** always stop on fail */
+  def stopOnFail: Step = stopOnFail(true)
 }
 /**
  * An Action is similar to a Step but can be executed concurrently with other examples.

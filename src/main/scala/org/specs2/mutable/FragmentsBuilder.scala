@@ -117,11 +117,12 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
   /**
    * add a new stopOnFail step to the Fragments
    */
-  def step(stopOnFail: Boolean) = {
-    val newStep = Step(stopOnFail = stopOnFail)
+  def stopOnFail(when: =>Boolean = true): Step = {
+    val newStep = Step.stopOnFail(when)
     addFragments(newStep)
     newStep
   }
+
   /**
    * add a new link to the Fragments
    */

@@ -33,6 +33,7 @@ trait SpecificationInclusion { this: FragmentsBuilder =>
   /** add the fragments of another specification without start and end */
   def inline(specs: SpecificationStructure*): Fragments = Fragments.createList(specs.flatMap(s => s.map(s.is).middle):_*)
 }
+
 /**
  * The structure of a Specification is simply defined as a sequence of fragments
  */
@@ -129,10 +130,10 @@ object SpecificationStructure {
       parameter = Some(args)).
       // try to create the specification from an object class name
       orElse(tryToCreateObject[SpecificationStructure](className+"$",
-      printMessage = false,
-      printStackTrace = false,
-      loader = classLoader,
-      parameter = Some(args)))
+                                                       printMessage = false,
+                                                       printStackTrace = false,
+                                                       loader = classLoader,
+                                                       parameter = Some(args)))
   }
 
   /**
