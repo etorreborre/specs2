@@ -20,7 +20,7 @@ class ClassRunner extends Classes with ConsoleOutput with SystemExit {
 
   protected val errorHandler: PartialFunction[Throwable, Unit] = {  case e =>
     println(s"""\nAn error occurred: ${e.getMessage}
-                Please create an issue on the http://specs2.org website with the stacktrace below. Thanks.""")
+                Please create an issue on http://github.com/etorreborre/specs2/issues with the stacktrace below. Thanks.""")
     e.printStackTrace
   }
 
