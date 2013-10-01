@@ -11,8 +11,9 @@ class TryMatchersSpec extends Specification with ResultMatchers { def is = s2"""
   ${ Succeeded(1) must beSuccessfulTry }
   ${ Succeeded(1) must beSuccessfulTry.withValue(1) }
   ${ Succeeded(1) must beASuccessfulTry.which(_ > 0) }
-  ${ (Succeeded(1) must beASuccessfulTry.which(_ > 0)) returns "'Success(1)' is Success[T] and satisfies the given predicate" }
-  ${ (Succeeded(1) must beASuccessfulTry.which(_ < 0)) returns "'Success(1)' is Success[T] but 1 does not satisfy the given predicate" }
+  ${ (Succeeded(1) must beASuccessfulTry.which(_ > 0)) returns "'Success(1)' is Success and satisfies the given predicate" }
+  ${ (Succeeded(1) must beASuccessfulTry.which(_ < 0)) returns "'Success(1)' is Success but 1 does not satisfy the given predicate" }
+  ${ (Failed[I](e) must beASuccessfulTry.which(_ > 0)) returns "'Failure(boom)' is not a Success" }
 
   ${ Succeeded(1) must beASuccessfulTry.like { case a if a > 0 => ok } }
   ${ (Succeeded(1) must not(beASuccessfulTry.like { case a => a must be_>=(0) })) returns "'Success(1)' is a Success and 1 is not less than 0" }
