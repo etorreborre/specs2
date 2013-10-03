@@ -29,7 +29,7 @@ trait MatchersImplicits extends Expectations with MatchResultCombinators with Ma
    * returning actual matchers
    */
   implicit class resultFunction[T, R : AsResult](f: T => R) {
-    private val cc: ContainWithResult[T] = ContainWithResult(ContainChecks.functionIsContainCheck(f))
+    private val cc: ContainWithResult[T] = ContainWithResult(ValueChecks.functionIsContainCheck(f))
 
     def forall                          : ContainWithResult[T] = cc.forall
     def foreach                         : ContainWithResult[T] = cc.foreach
@@ -51,7 +51,7 @@ trait MatchersImplicits extends Expectations with MatchResultCombinators with Ma
   }
 
   implicit class matcherContainResult[T](m: Matcher[T]) { outer =>
-    private val cc: ContainWithResult[T] = ContainWithResult(ContainChecks.matcherIsContainCheck(m))
+    private val cc: ContainWithResult[T] = ContainWithResult(ValueChecks.matcherIsContainCheck(m))
 
     def forall                          : ContainWithResult[T] = cc.forall
     def foreach                         : ContainWithResult[T] = cc.foreach

@@ -13,8 +13,7 @@ import MatchersImplicits._
 import scala.collection.{GenSeq, GenTraversableOnce, GenTraversable}
 import execute._
 import control.Times
-import ContainCheck._
-import ContainChecks._
+import ValueChecks._
 import execute.Failure
 import scala.annotation.tailrec
 /**
@@ -24,24 +23,24 @@ trait TraversableMatchers extends TraversableBaseMatchers with NumberOfTimes wit
 object TraversableMatchers extends TraversableMatchers
 
 private[specs2]
-trait TraversableBaseMatchers extends ContainChecks with TraversableBaseMatchersLowImplicits with ImplicitParameters { outer =>
+trait TraversableBaseMatchers extends ValueChecks with TraversableBaseMatchersLowImplicits with ImplicitParameters { outer =>
   
   trait TraversableMatcher[T] extends Matcher[GenTraversableOnce[T]]
 
   /**
    * ELEMENTS MATCHERS
    */
-  def contain[T](check: ContainCheck[T]): ContainWithResult[T] = new ContainWithResult(check)
+  def contain[T](check: ValueCheck[T]): ContainWithResult[T] = new ContainWithResult(check)
 
   /**
    * COLLECTION MATCHERS
    */
   def contain[T](cm: ContainWithResultSeq[T]): ContainWithResultSeq[T] = cm
 
-  def allOf[T](checks: ContainCheck[T]*)  : ContainWithResultSeq[T] = new ContainWithResultSeq(checks).atLeast
-  def exactly[T](checks: ContainCheck[T]*): ContainWithResultSeq[T] = new ContainWithResultSeq(checks).exactly
-  def atLeast[T](checks: ContainCheck[T]*): ContainWithResultSeq[T] = new ContainWithResultSeq(checks).atLeast
-  def atMost[T](checks: ContainCheck[T]*) : ContainWithResultSeq[T] = new ContainWithResultSeq(checks).atMost
+  def allOf[T](checks: ValueCheck[T]*)  : ContainWithResultSeq[T] = new ContainWithResultSeq(checks).atLeast
+  def exactly[T](checks: ValueCheck[T]*): ContainWithResultSeq[T] = new ContainWithResultSeq(checks).exactly
+  def atLeast[T](checks: ValueCheck[T]*): ContainWithResultSeq[T] = new ContainWithResultSeq(checks).atLeast
+  def atMost[T](checks: ValueCheck[T]*) : ContainWithResultSeq[T] = new ContainWithResultSeq(checks).atMost
 
   /** match if a traversable contains all the elements of seq (and maybe more) */
   def containAllOf[T](seq: Seq[T]) = contain(atLeast(seq.map(v => valueIsTypedContainCheck(v)):_*))
@@ -106,48 +105,46 @@ trait TraversableBaseMatchers extends ContainChecks with TraversableBaseMatchers
 }
 
 private[specs2]
-trait TraversableBaseMatchersLowImplicits { this: TraversableBaseMatchers =>
-  implicit def checkableSeqIsContainCheckSeq[T](seq: Seq[T])(implicit to: T => ContainCheck[T]): Seq[ContainCheck[T]] =
+trait TraversableBaseMatchersLowImplicits extends ValueChecksLowImplicits { this: TraversableBaseMatchers =>
+  implicit def checkableSeqIsContainCheckSeq[T](seq: Seq[T])(implicit to: T => ValueCheck[T]): Seq[ValueCheck[T]] =
     seq.map(to)
 
-  implicit def matcherSeqIsContainCheckSeq[T](seq: Seq[Matcher[T]]): Seq[ContainCheck[T]] =
+  implicit def matcherSeqIsContainCheckSeq[T](seq: Seq[Matcher[T]]): Seq[ValueCheck[T]] =
     seq.map(matcherIsContainCheck[T])
 
   /** this allows the contain(string) matcher for StringMatchers to be used with a Traversable */
   implicit def stringMatcherIsTraversableMatcher(m: Matcher[String]): Matcher[GenTraversableOnce[String]] =
     contain(matcherIsContainCheck(m))
 
-  implicit def valueIsTypedContainCheck[T](expected: T): BeEqualTypedContainCheck[T] = new BeEqualTypedContainCheck[T](expected)
-
   /**
    * Additional contain methods using to avoid automatic tuple conversions
    */
 
   // 2 to 5
-  def contain[T](t1: ContainCheck[T], t2: ContainCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2))
-  def contain[T](t1: ContainCheck[T], t2: ContainCheck[T], t3: ContainCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3))
-  def contain[T](t1: ContainCheck[T], t2: ContainCheck[T], t3: ContainCheck[T], t4: ContainCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4))
-  def contain[T](t1: ContainCheck[T], t2: ContainCheck[T], t3: ContainCheck[T], t4: ContainCheck[T], t5: ContainCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5))
+  def contain[T](t1: ValueCheck[T], t2: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2))
+  def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3))
+  def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T], t4: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4))
+  def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T], t4: ValueCheck[T], t5: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5))
   // 6 to 10
-  def contain[T](t1: ContainCheck[T], t2: ContainCheck[T], t3: ContainCheck[T], t4: ContainCheck[T], t5: ContainCheck[T], t6: ContainCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6))
-  def contain[T](t1: ContainCheck[T], t2: ContainCheck[T], t3: ContainCheck[T], t4: ContainCheck[T], t5: ContainCheck[T], t6: ContainCheck[T], t7: ContainCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7))
-  def contain[T](t1: ContainCheck[T], t2: ContainCheck[T], t3: ContainCheck[T], t4: ContainCheck[T], t5: ContainCheck[T], t6: ContainCheck[T], t7: ContainCheck[T], t8: ContainCheck[T], t9: ContainCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9))
-  def contain[T](t1: ContainCheck[T], t2: ContainCheck[T], t3: ContainCheck[T], t4: ContainCheck[T], t5: ContainCheck[T], t6: ContainCheck[T], t7: ContainCheck[T], t8: ContainCheck[T], t9: ContainCheck[T], t10: ContainCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10))
+  def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T], t4: ValueCheck[T], t5: ValueCheck[T], t6: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6))
+  def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T], t4: ValueCheck[T], t5: ValueCheck[T], t6: ValueCheck[T], t7: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7))
+  def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T], t4: ValueCheck[T], t5: ValueCheck[T], t6: ValueCheck[T], t7: ValueCheck[T], t8: ValueCheck[T], t9: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9))
+  def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T], t4: ValueCheck[T], t5: ValueCheck[T], t6: ValueCheck[T], t7: ValueCheck[T], t8: ValueCheck[T], t9: ValueCheck[T], t10: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10))
   // 11 to 15
-  def contain[T](t1: ContainCheck[T], t2: ContainCheck[T], t3: ContainCheck[T], t4: ContainCheck[T], t5: ContainCheck[T], t6: ContainCheck[T], t7: ContainCheck[T], t8: ContainCheck[T], t9: ContainCheck[T], t10: ContainCheck[T], t11: ContainCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11))
-  def contain[T](t1: ContainCheck[T], t2: ContainCheck[T], t3: ContainCheck[T], t4: ContainCheck[T], t5: ContainCheck[T], t6: ContainCheck[T], t7: ContainCheck[T], t8: ContainCheck[T], t9: ContainCheck[T], t10: ContainCheck[T], t11: ContainCheck[T], t12: ContainCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12))
-  def contain[T](t1: ContainCheck[T], t2: ContainCheck[T], t3: ContainCheck[T], t4: ContainCheck[T], t5: ContainCheck[T], t6: ContainCheck[T], t7: ContainCheck[T], t8: ContainCheck[T], t9: ContainCheck[T], t10: ContainCheck[T], t11: ContainCheck[T], t12: ContainCheck[T], t13: ContainCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13))
-  def contain[T](t1: ContainCheck[T], t2: ContainCheck[T], t3: ContainCheck[T], t4: ContainCheck[T], t5: ContainCheck[T], t6: ContainCheck[T], t7: ContainCheck[T], t8: ContainCheck[T], t9: ContainCheck[T], t10: ContainCheck[T], t11: ContainCheck[T], t12: ContainCheck[T], t13: ContainCheck[T], t14: ContainCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14))
-  def contain[T](t1: ContainCheck[T], t2: ContainCheck[T], t3: ContainCheck[T], t4: ContainCheck[T], t5: ContainCheck[T], t6: ContainCheck[T], t7: ContainCheck[T], t8: ContainCheck[T], t9: ContainCheck[T], t10: ContainCheck[T], t11: ContainCheck[T], t12: ContainCheck[T], t13: ContainCheck[T], t14: ContainCheck[T], t15: ContainCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15))
+  def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T], t4: ValueCheck[T], t5: ValueCheck[T], t6: ValueCheck[T], t7: ValueCheck[T], t8: ValueCheck[T], t9: ValueCheck[T], t10: ValueCheck[T], t11: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11))
+  def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T], t4: ValueCheck[T], t5: ValueCheck[T], t6: ValueCheck[T], t7: ValueCheck[T], t8: ValueCheck[T], t9: ValueCheck[T], t10: ValueCheck[T], t11: ValueCheck[T], t12: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12))
+  def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T], t4: ValueCheck[T], t5: ValueCheck[T], t6: ValueCheck[T], t7: ValueCheck[T], t8: ValueCheck[T], t9: ValueCheck[T], t10: ValueCheck[T], t11: ValueCheck[T], t12: ValueCheck[T], t13: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13))
+  def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T], t4: ValueCheck[T], t5: ValueCheck[T], t6: ValueCheck[T], t7: ValueCheck[T], t8: ValueCheck[T], t9: ValueCheck[T], t10: ValueCheck[T], t11: ValueCheck[T], t12: ValueCheck[T], t13: ValueCheck[T], t14: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14))
+  def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T], t4: ValueCheck[T], t5: ValueCheck[T], t6: ValueCheck[T], t7: ValueCheck[T], t8: ValueCheck[T], t9: ValueCheck[T], t10: ValueCheck[T], t11: ValueCheck[T], t12: ValueCheck[T], t13: ValueCheck[T], t14: ValueCheck[T], t15: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15))
   // 16 to 20
-  def contain[T](t1: ContainCheck[T], t2: ContainCheck[T], t3: ContainCheck[T], t4: ContainCheck[T], t5: ContainCheck[T], t6: ContainCheck[T], t7: ContainCheck[T], t8: ContainCheck[T], t9: ContainCheck[T], t10: ContainCheck[T], t11: ContainCheck[T], t12: ContainCheck[T], t13: ContainCheck[T], t14: ContainCheck[T], t15: ContainCheck[T], t16: ContainCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16))
-  def contain[T](t1: ContainCheck[T], t2: ContainCheck[T], t3: ContainCheck[T], t4: ContainCheck[T], t5: ContainCheck[T], t6: ContainCheck[T], t7: ContainCheck[T], t8: ContainCheck[T], t9: ContainCheck[T], t10: ContainCheck[T], t11: ContainCheck[T], t12: ContainCheck[T], t13: ContainCheck[T], t14: ContainCheck[T], t15: ContainCheck[T], t16: ContainCheck[T], t17: ContainCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17))
-  def contain[T](t1: ContainCheck[T], t2: ContainCheck[T], t3: ContainCheck[T], t4: ContainCheck[T], t5: ContainCheck[T], t6: ContainCheck[T], t7: ContainCheck[T], t8: ContainCheck[T], t9: ContainCheck[T], t10: ContainCheck[T], t11: ContainCheck[T], t12: ContainCheck[T], t13: ContainCheck[T], t14: ContainCheck[T], t15: ContainCheck[T], t16: ContainCheck[T], t17: ContainCheck[T], t18: ContainCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18))
-  def contain[T](t1: ContainCheck[T], t2: ContainCheck[T], t3: ContainCheck[T], t4: ContainCheck[T], t5: ContainCheck[T], t6: ContainCheck[T], t7: ContainCheck[T], t8: ContainCheck[T], t9: ContainCheck[T], t10: ContainCheck[T], t11: ContainCheck[T], t12: ContainCheck[T], t13: ContainCheck[T], t14: ContainCheck[T], t15: ContainCheck[T], t16: ContainCheck[T], t17: ContainCheck[T], t18: ContainCheck[T], t19: ContainCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19))
-  def contain[T](t1: ContainCheck[T], t2: ContainCheck[T], t3: ContainCheck[T], t4: ContainCheck[T], t5: ContainCheck[T], t6: ContainCheck[T], t7: ContainCheck[T], t8: ContainCheck[T], t9: ContainCheck[T], t10: ContainCheck[T], t11: ContainCheck[T], t12: ContainCheck[T], t13: ContainCheck[T], t14: ContainCheck[T], t15: ContainCheck[T], t16: ContainCheck[T], t17: ContainCheck[T], t18: ContainCheck[T], t19: ContainCheck[T], t20: ContainCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t20))
+  def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T], t4: ValueCheck[T], t5: ValueCheck[T], t6: ValueCheck[T], t7: ValueCheck[T], t8: ValueCheck[T], t9: ValueCheck[T], t10: ValueCheck[T], t11: ValueCheck[T], t12: ValueCheck[T], t13: ValueCheck[T], t14: ValueCheck[T], t15: ValueCheck[T], t16: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16))
+  def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T], t4: ValueCheck[T], t5: ValueCheck[T], t6: ValueCheck[T], t7: ValueCheck[T], t8: ValueCheck[T], t9: ValueCheck[T], t10: ValueCheck[T], t11: ValueCheck[T], t12: ValueCheck[T], t13: ValueCheck[T], t14: ValueCheck[T], t15: ValueCheck[T], t16: ValueCheck[T], t17: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17))
+  def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T], t4: ValueCheck[T], t5: ValueCheck[T], t6: ValueCheck[T], t7: ValueCheck[T], t8: ValueCheck[T], t9: ValueCheck[T], t10: ValueCheck[T], t11: ValueCheck[T], t12: ValueCheck[T], t13: ValueCheck[T], t14: ValueCheck[T], t15: ValueCheck[T], t16: ValueCheck[T], t17: ValueCheck[T], t18: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18))
+  def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T], t4: ValueCheck[T], t5: ValueCheck[T], t6: ValueCheck[T], t7: ValueCheck[T], t8: ValueCheck[T], t9: ValueCheck[T], t10: ValueCheck[T], t11: ValueCheck[T], t12: ValueCheck[T], t13: ValueCheck[T], t14: ValueCheck[T], t15: ValueCheck[T], t16: ValueCheck[T], t17: ValueCheck[T], t18: ValueCheck[T], t19: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19))
+  def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T], t4: ValueCheck[T], t5: ValueCheck[T], t6: ValueCheck[T], t7: ValueCheck[T], t8: ValueCheck[T], t9: ValueCheck[T], t10: ValueCheck[T], t11: ValueCheck[T], t12: ValueCheck[T], t13: ValueCheck[T], t14: ValueCheck[T], t15: ValueCheck[T], t16: ValueCheck[T], t17: ValueCheck[T], t18: ValueCheck[T], t19: ValueCheck[T], t20: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t20))
   // 21 to 22
-  def contain[T](t1: ContainCheck[T], t2: ContainCheck[T], t3: ContainCheck[T], t4: ContainCheck[T], t5: ContainCheck[T], t6: ContainCheck[T], t7: ContainCheck[T], t8: ContainCheck[T], t9: ContainCheck[T], t10: ContainCheck[T], t11: ContainCheck[T], t12: ContainCheck[T], t13: ContainCheck[T], t14: ContainCheck[T], t15: ContainCheck[T], t16: ContainCheck[T], t17: ContainCheck[T], t18: ContainCheck[T], t19: ContainCheck[T], t20: ContainCheck[T], t21: ContainCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t21, t21))
-  def contain[T](t1: ContainCheck[T], t2: ContainCheck[T], t3: ContainCheck[T], t4: ContainCheck[T], t5: ContainCheck[T], t6: ContainCheck[T], t7: ContainCheck[T], t8: ContainCheck[T], t9: ContainCheck[T], t10: ContainCheck[T], t11: ContainCheck[T], t12: ContainCheck[T], t13: ContainCheck[T], t14: ContainCheck[T], t15: ContainCheck[T], t16: ContainCheck[T], t17: ContainCheck[T], t18: ContainCheck[T], t19: ContainCheck[T], t20: ContainCheck[T], t21: ContainCheck[T], t22: ContainCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t21, t22))
+  def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T], t4: ValueCheck[T], t5: ValueCheck[T], t6: ValueCheck[T], t7: ValueCheck[T], t8: ValueCheck[T], t9: ValueCheck[T], t10: ValueCheck[T], t11: ValueCheck[T], t12: ValueCheck[T], t13: ValueCheck[T], t14: ValueCheck[T], t15: ValueCheck[T], t16: ValueCheck[T], t17: ValueCheck[T], t18: ValueCheck[T], t19: ValueCheck[T], t20: ValueCheck[T], t21: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t21, t21))
+  def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T], t4: ValueCheck[T], t5: ValueCheck[T], t6: ValueCheck[T], t7: ValueCheck[T], t8: ValueCheck[T], t9: ValueCheck[T], t10: ValueCheck[T], t11: ValueCheck[T], t12: ValueCheck[T], t13: ValueCheck[T], t14: ValueCheck[T], t15: ValueCheck[T], t16: ValueCheck[T], t17: ValueCheck[T], t18: ValueCheck[T], t19: ValueCheck[T], t20: ValueCheck[T], t21: ValueCheck[T], t22: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t21, t22))
 
 }
 
@@ -156,7 +153,7 @@ trait TraversableBeHaveMatchers extends LazyParameters { outer: TraversableMatch
 
   implicit def traversable[T](s: MatchResult[Traversable[T]]) = new TraversableBeHaveMatchers(s)
   class TraversableBeHaveMatchers[T](s: MatchResult[Traversable[T]]) {
-    def contain(check: ContainCheck[T]) = s(outer.contain(check))
+    def contain(check: ValueCheck[T]) = s(outer.contain(check))
     def containPattern(t: =>String) = s(outer.containPattern(t))
     def containMatch(t: =>String) = containPattern(t.regexPart)
     /** @deprecated(message="use contain(function) instead", since="2.0") */
@@ -201,71 +198,7 @@ class OrderingMatcher[T : Ordering] extends Matcher[Seq[T]] {
 import control.NumberOfTimes._
 import text.Plural._
 
-trait ContainCheck[T] { outer =>
-  def check:    T => Result
-  def checkNot: T => Result
-
-  def messages(expectable: String, successes: Seq[Result], failures: Seq[Result]): (String, String)
-
-  def negate = new ContainCheck[T] {
-    def check: T => Result = outer.checkNot
-    def checkNot: T => Result = outer.check
-    def messages(expectable: String, successes: Seq[Result], failures: Seq[Result]) = outer.messages(expectable, successes, failures)
-  }
-}
-
-trait ContainChecks {
-  implicit def matcherIsContainCheck[T](m: Matcher[T]): ContainCheck[T] = new ContainCheck[T] {
-    def check    = (t: T) => AsResult(m(Expectable(t)))
-    def checkNot = (t: T) => AsResult(m.not(Expectable(t)))
-    def messages(expectable: String, successes: Seq[Result], failures: Seq[Result]) =
-      ContainCheck.genericMessages(expectable, successes, failures)
-  }
-
-  implicit def functionIsContainCheck[T, R : AsResult](f: T => R): ContainCheck[T] = new ContainCheck[T] {
-    def check    = (t: T) => AsResult(f(t))
-    def checkNot = (t: T) => Results.negate(AsResult(f(t)))
-    def messages(expectable: String, successes: Seq[Result], failures: Seq[Result]) =
-      ContainCheck.genericMessages(expectable, successes, failures)
-  }
-
-  implicit def downcastBeEqualTypedContainCheck[T, S >: T](check: BeEqualTypedContainCheck[T]): ContainCheck[S] = check.downcast[S]
-}
-object ContainChecks extends ContainChecks
-
-case class BeEqualTypedContainCheck[T](expected: T) extends ContainCheck[T] {
-  private lazy val matcher = new BeTypedEqualTo(expected)
-  def check    = (t: T) => AsResult(matcher(Expectable(t)))
-  def checkNot = (t: T) => AsResult(matcher.not(Expectable(t)))
-  def messages(expectable: String, successes: Seq[Result], failures: Seq[Result]) =
-    (s"$expectable contains $expected", s"$expectable does not contain $expected")
-
-  def downcast[S] = new BeEqualContainCheck[S](expected)
-}
-
-case class BeEqualContainCheck[T](expected: Any) extends ContainCheck[T] {
-  private lazy val matcher = new BeEqualTo(expected)
-  def check    = (t: T) => AsResult(matcher(Expectable(t)))
-  def checkNot = (t: T) => AsResult(matcher.not(Expectable(t)))
-  def messages(expectable: String, successes: Seq[Result], failures: Seq[Result]) =
-    (s"$expectable contains $expected", s"$expectable does not contain $expected")
-}
-
-object ContainCheck {
-  def genericMessages(expectable: String, successes: Seq[Result], failures: Seq[Result]) = {
-    def elementsAre(results: Seq[Result], success: Boolean) =
-      if   (results.isEmpty)      s"There are no matches"
-      else if (results.size <= 1) s"There is ${results.size} ${if (success) "success" else "failure"}"
-      else                        s"There are ${results.size} ${if (success) "successes" else "failures"}"
-
-    def messages(results: Seq[Result]) = if (results.isEmpty) "" else results.map(_.message).mkString("\n", "\n", "\n")
-
-    (elementsAre(successes, success = true) + messages(successes),
-     elementsAre(failures, success = false) + messages(failures))
-  }
-}
-
-case class ContainWithResult[T](check: ContainCheck[T], timesMin: Option[Times] = Some(1.times), timesMax: Option[Times] = None, checkAll: Boolean = true) extends Matcher[GenTraversableOnce[T]] {
+case class ContainWithResult[T](check: ValueCheck[T], timesMin: Option[Times] = Some(1.times), timesMax: Option[Times] = None, checkAll: Boolean = true) extends Matcher[GenTraversableOnce[T]] {
   def apply[S <: GenTraversableOnce[T]](t: Expectable[S]) = {
     val seq = Vector(t.value.seq.toSeq:_*)
 
@@ -283,7 +216,7 @@ case class ContainWithResult[T](check: ContainCheck[T], timesMin: Option[Times] 
     }
 
     failures.collect { case s: Skipped => MatchSkip(s.message, t) }.headOption.getOrElse {
-      val (okMessage, koMessage) = check.messages(t.description, successes, failures)
+      val (okMessage, koMessage) = messages(t.description, successes, failures)
 
       (timesMin, timesMax) match {
         case (None,             None)             => Matcher.result(successes.size == seq.size,                     okMessage, koMessage, t)
@@ -310,9 +243,30 @@ case class ContainWithResult[T](check: ContainCheck[T], timesMin: Option[Times] 
 
   def forall  = copy(timesMin = None, timesMax = None, checkAll = false)
   def foreach = copy(timesMin = None, timesMax = None)
+
+  private
+  def messages[S <: GenTraversableOnce[T]](expectable: String, successes: Seq[Result], failures: Seq[Result]) = check match {
+    case BeEqualTypedValueCheck(expected) => (s"$expectable contains $expected", s"$expectable does not contain $expected")
+    case BeEqualValueCheck(expected)      => (s"$expectable contains $expected", s"$expectable does not contain $expected")
+    case _                                => genericMessages(expectable, successes, failures)
+  }
+
+  private
+  def genericMessages(expectable: String, successes: Seq[Result], failures: Seq[Result]) = {
+    def elementsAre(results: Seq[Result], success: Boolean) =
+      if   (results.isEmpty)      s"There are no matches"
+      else if (results.size <= 1) s"There is ${results.size} ${if (success) "success" else "failure"}"
+      else                        s"There are ${results.size} ${if (success) "successes" else "failures"}"
+
+    def messages(results: Seq[Result]) = if (results.isEmpty) "" else results.map(_.message).mkString("\n", "\n", "\n")
+
+    (elementsAre(successes, success = true) + messages(successes),
+     elementsAre(failures, success = false) + messages(failures))
+  }
+
 }
 
-case class ContainWithResultSeq[T](checks: Seq[ContainCheck[T]],
+case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
                                    containsAtLeast: Boolean = true,
                                    containsAtMost: Boolean = false,
                                    checkOrder: Boolean = false) extends Matcher[GenTraversableOnce[T]] {
@@ -322,7 +276,7 @@ case class ContainWithResultSeq[T](checks: Seq[ContainCheck[T]],
 
     // results for each element, either checked in order or greedily from the list of checks
     // + the list of checks which were not performed
-    val (results, remainingChecks): (Seq[Result], Seq[ContainCheck[T]]) =
+    val (results, remainingChecks): (Seq[Result], Seq[ValueCheck[T]]) =
       if (checkOrder) checkValuesInOrder(seq, checks)
       else            checkValues(seq, checks)
 
@@ -346,7 +300,7 @@ case class ContainWithResultSeq[T](checks: Seq[ContainCheck[T]],
    * @return (the list of all the results for each tested value, the list of remaining checks if any)
    */
   @tailrec
-  private def checkValuesInOrder(values: Seq[T], checks: Seq[ContainCheck[T]], results: Seq[Result] = Seq()): (Seq[Result], Seq[ContainCheck[T]]) = {
+  private def checkValuesInOrder(values: Seq[T], checks: Seq[ValueCheck[T]], results: Seq[Result] = Seq()): (Seq[Result], Seq[ValueCheck[T]]) = {
     (values, checks) match {
       case (v +: vs, c +: cs) => {
         val r = c.check(v)
@@ -365,7 +319,7 @@ case class ContainWithResultSeq[T](checks: Seq[ContainCheck[T]],
    * @return (the list of each result for each tested value, the list of remaining checks if any)
    */
   @tailrec
-  private def checkValues(values: Seq[T], checks: Seq[ContainCheck[T]], results: Seq[Result] = Seq()): (Seq[Result], Seq[ContainCheck[T]]) = {
+  private def checkValues(values: Seq[T], checks: Seq[ValueCheck[T]], results: Seq[Result] = Seq()): (Seq[Result], Seq[ValueCheck[T]]) = {
     values match {
       case currentValue +: remainingValues =>
         val (result, uncheckedChecks) = checkValue(currentValue, checks, Seq(), Failure("there are no more available checks for " + currentValue, currentValue.notNull))
@@ -380,7 +334,7 @@ case class ContainWithResultSeq[T](checks: Seq[ContainCheck[T]],
    * @return (the result of evaluating value with uncheckedChecks, unchecked and failed checks)
    */
   @tailrec
-  private def checkValue(value: T, uncheckedChecks: Seq[ContainCheck[T]], checkedChecks: Seq[ContainCheck[T]], previousResult: Result) : (Result, Seq[ContainCheck[T]]) = {
+  private def checkValue(value: T, uncheckedChecks: Seq[ValueCheck[T]], checkedChecks: Seq[ValueCheck[T]], previousResult: Result) : (Result, Seq[ValueCheck[T]]) = {
     uncheckedChecks match {
       case currentCheck +: remainingUncheckedChecks =>
         val result = currentCheck.check(value)
@@ -391,7 +345,7 @@ case class ContainWithResultSeq[T](checks: Seq[ContainCheck[T]],
     }
   }
 
-  private def makeKoMessage(description: String, successes: Seq[Result], failures: Seq[Result], remainingChecks: Seq[ContainCheck[T]]) = {
+  private def makeKoMessage(description: String, successes: Seq[Result], failures: Seq[Result], remainingChecks: Seq[ValueCheck[T]]) = {
     val equalChecks = checks.forall(isEqualCheck)
     if (equalChecks) {
       val order = if (checkOrder) " in order" else ""
@@ -415,15 +369,15 @@ case class ContainWithResultSeq[T](checks: Seq[ContainCheck[T]],
 
   }
 
-  private def isEqualCheck = (c: ContainCheck[T]) => c match {
-    case _:BeEqualTypedContainCheck[T] => true
-    case _:BeEqualContainCheck[T]      => true
+  private def isEqualCheck = (c: ValueCheck[T]) => c match {
+    case _:BeEqualTypedValueCheck[T] => true
+    case _:BeEqualValueCheck[T]      => true
     case _                             => false
   }
 
-  private def expectedValue: PartialFunction[ContainCheck[T], Option[Any]] = {
-    case BeEqualTypedContainCheck(e) => Some(e)
-    case BeEqualContainCheck(e)      => Some(e)
+  private def expectedValue: PartialFunction[ValueCheck[T], Option[Any]] = {
+    case BeEqualTypedValueCheck(e) => Some(e)
+    case BeEqualValueCheck(e)      => Some(e)
     case _                           => None
   }
 

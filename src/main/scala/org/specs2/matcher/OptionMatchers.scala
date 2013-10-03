@@ -23,6 +23,7 @@ trait OptionBaseMatchers {
              value)
     }
   }
+
   def some[T](t: =>T) = beSome(t)
   def beSome[T] = new SomeMatcher[T]
   def some[T] = beSome[T]
@@ -34,6 +35,7 @@ trait OptionBaseMatchers {
              value)
     }
   }
+
   def none = beNone
   def beAsNoneAs[T](other: =>Option[T]) = new Matcher[Option[T]] {
     def apply[S <: Option[T]](a: Expectable[S]) = {
@@ -44,8 +46,10 @@ trait OptionBaseMatchers {
              a)
     }
   }
+
   def asNoneAs[T](other: =>Option[T]) = beAsNoneAs(other)
 }
+
 private[specs2]
 trait OptionBeHaveMatchers { outer: OptionBaseMatchers =>
   implicit def toOptionResultMatcher[T](result: MatchResult[Option[T]]) = new OptionResultMatcher(result)
