@@ -3,6 +3,7 @@ package matcher
 
 import execute._
 import MatchersImplicits._
+import text.Quote._
 /**
  * Common interface for checks of a value of type T:
  *
@@ -32,9 +33,22 @@ trait ValueChecks extends ValueChecksLowImplicits {
 
   /** a function returning an object having an AsResult instance can check a value */
   implicit def functionIsContainCheck[T, R : AsResult](f: T => R): ValueCheck[T] = new ValueCheck[T] {
-    def check    = (t: T) => AsResult(f(t))
-    def checkNot = (t: T) => Results.negate(AsResult(f(t)))
+    def check    = (t: T) => functionResult(AsResult(f(t)), t)
+    def checkNot = (t: T) => Results.negate(check(t))
   }
+
+  /** a partial function returning an object having an AsResult instance can check a value */
+  implicit def partialFunctionIsContainCheck[T, R : AsResult](f: PartialFunction[T, R]): ValueCheck[T] = new ValueCheck[T] {
+    def check    = (t: T) => {
+      if (f.isDefinedAt(t)) functionResult(AsResult(f(t)), t)
+      else                  Failure("undefined function for "+q(t))
+    }
+    def checkNot = (t: T) => Results.negate(check(t))
+  }
+
+  private def functionResult[T](result: Result, t: T) =
+    if (Seq("true", "false").contains(result.message)) result.mapMessage(m => s"the function returns ${q(m)} on ${q(t)}")
+    else result
 
   /** a check of type T can be downcasted implicitly to a check of type S >: T */
   implicit def downcastBeEqualTypedContainCheck[T, S >: T](check: BeEqualTypedValueCheck[T]): ValueCheck[S] = check.downcast[S]
@@ -62,7 +76,7 @@ case class BeEqualValueCheck[T](expected: Any) extends ValueCheck[T] {
   private lazy val matcher = new BeEqualTo(expected)
   def check    = (t: T) => AsResult(matcher(Expectable(t)))
   def checkNot = (t: T) => AsResult(matcher.not(Expectable(t)))
-  }
+}
 
 
 

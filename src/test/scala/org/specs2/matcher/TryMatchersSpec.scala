@@ -11,8 +11,8 @@ class TryMatchersSpec extends Specification with ResultMatchers { def is = s2"""
   ${ Succeeded(1) must beSuccessfulTry }
   ${ Succeeded(1) must beSuccessfulTry.withValue(1) }
   ${ Succeeded(1) must beASuccessfulTry.which(_ > 0) }
-  ${ (Succeeded(1) must beASuccessfulTry.which(_ > 0)) returns "'Success(1)' is Success and satisfies the given predicate" }
-  ${ (Succeeded(1) must beASuccessfulTry.which(_ < 0)) returns "'Success(1)' is Success but 1 does not satisfy the given predicate" }
+  ${ (Succeeded(1) must beASuccessfulTry.which(_ > 0)) returns "'Success(1)' is a Success and the function returns 'true' on '1'" }
+  ${ (Succeeded(1) must beASuccessfulTry.which(_ < 0)) returns "'Success(1)' is a Success but the function returns 'false' on '1'" }
   ${ (Failed[I](e) must beASuccessfulTry.which(_ > 0)) returns "'Failure(boom)' is not a Success" }
 
   ${ Succeeded(1) must beASuccessfulTry.like { case a if a > 0 => ok } }
@@ -21,7 +21,7 @@ class TryMatchersSpec extends Specification with ResultMatchers { def is = s2"""
   ${ Failed[I](e) must not be successfulTry }
   ${ Failed[I](e) must not be successfulTry.withValue(2) }
   ${ (Failed[I](e) must beSuccessfulTry) returns "'Failure(boom)' is not a Success" }
-  ${ (Succeeded(1) must beSuccessfulTry.withValue(2)) returns "'Success(1)' is a Success but the value is incorrect:\n  '1' is not equal to '2'" }
+  ${ (Succeeded(1) must beSuccessfulTry.withValue(2)) returns "'Success(1)' is a Success but '1' is not equal to '2'" }
 
   beAFailure checks if an element is Failure(_)
   ${ Failed[I](e) must beFailedTry }

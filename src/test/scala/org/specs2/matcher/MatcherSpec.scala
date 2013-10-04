@@ -37,9 +37,9 @@ Implicit conversions
 Collections
 ===========
 
-  + a matcher for a seq of values can be defined by a function returning a MatchResult and used forall values+
+  + a matcher for a seq of values can be defined by a function returning a MatchResult and used forall values
      meaning that the first failure will fail all
-  + a matcher for a seq of values can be defined by a function returning a MatchResult and used foreach values+
+  + a matcher for a seq of values can be defined by a function returning a MatchResult and used foreach values
      meaning that all failures will be collected
 
 Messages
@@ -109,7 +109,7 @@ Messages
 
     eg := {
       def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i+" is even", (i: Int) => i+" is odd")
-      def beOdd: Matcher[Int] = ((i: Int) => beEven.apply(theValue(i)).not)
+      def beOdd: Matcher[Int] = (i: Int) => beEven.apply(theValue(i)).not
       (2 must beOdd) returns "2 is even"
     }
   }

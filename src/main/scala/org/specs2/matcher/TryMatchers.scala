@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import org.specs2.execute.{Success, Failure, Result}
+import org.specs2.execute.{AsResult, Failure, Result}
 import util.{Try, Success => Succeeded, Failure => Failed}
 import scala.reflect.ClassTag
 import AnyMatchers.beEqualTo
@@ -9,6 +9,7 @@ import MatchersImplicits._
 import text.Regexes._
 import text.Quote._
 import text.NotNullStrings._
+import ValueChecks._
 
 /**
  * Matchers for util.Try instances
@@ -19,103 +20,15 @@ object TryMatchers extends TryMatchers
 private[specs2]
 trait TryBaseMatchers extends ExceptionMatchers {
 
-  def beSuccessfulTry[T]  = SuccessTryMatcher[T]()
+  def beSuccessfulTry[T]  = SuccessMatcher[T]()
   def beASuccessfulTry[T] = beSuccessfulTry[T]
   def successfulTry[T]    = beSuccessfulTry[T]
   def aSuccessfulTry[T]   = beSuccessfulTry[T]
-
-  case class SuccessTryMatcher[T]() extends  Matcher[Try[T]] { outer =>
-    def apply[S <: Try[T]](value: Expectable[S]) = value.value match {
-      case Succeeded(t) => result(true, s"${value.description} is a Success", s"${value.description} is a not Success", value)
-      case Failed(e)    => result(false, s"${value.description} is a Success", s"${value.description} is not a Success", value)
-    }
-
-    def withValue(t: =>T) = new Matcher[Try[T]] {
-      def apply[S <: Try[T]](value: Expectable[S]) =
-        value.value match {
-          case Succeeded(v) => {
-            val expected = t
-            val koEqual = beEqualTo(expected).apply(Expectable(v)).message
-            result(v == expected,
-                   s"${value.description} is a Success with value ${q(expected)}",
-                   s"${value.description} is a Success but the value is incorrect:\n  $koEqual", value)
-          }
-          case Failed(_) => result(false, s"${value.description} is a Success", s"${value.description} is not a Success", value)
-        }
-    }
-
-    def which(f: T => Boolean) = new Matcher[Try[T]] {
-      def apply[S <: Try[T]](value: Expectable[S]) =
-        value.value match {
-          case Succeeded(t) if f(t)  => result(true, s"${value.description} is Success and satisfies the given predicate",
-                                                     s"${value.description} is not a correct Success", value)
-          case Succeeded(t) if !f(t) => result(false, s"${value.description} is correct Success",
-                                                      s"${value.description} is Success but $t does not satisfy the given predicate", value)
-          case Failed(e)             => result(false, s"${value.description} is Success",
-                                                      s"${value.description} is not a Success: ${e.getMessage}", value)
-        }
-    }
-    def like(f: PartialFunction[T, MatchResult[_]]) = partialMatcher(f)
-
-    private def partialMatcher(f: PartialFunction[T, MatchResult[_]]) = new Matcher[Try[T]] {
-      def apply[S <: Try[T]](value: Expectable[S]) = {
-        val res: Result = value.value match {
-          case Succeeded(t) if f.isDefinedAt(t)  => f(t).toResult.prependMessage("is a Success")
-          case Succeeded(t) if !f.isDefinedAt(t) => Failure("is a Success but the function is undefined on this value")
-          case Failed(e)                         => Failure("is not a Success: "+e.getMessage.notNull)
-        }
-        result(res.isSuccess,
-               s"${value.description} ${res.message}",
-               s"${value.description} ${res.message}",
-               value)
-      }
-    }
-  }
 
   def beFailedTry[T]  = new FailedTryMatcher[T]
   def beAFailedTry[T] = beFailedTry[T]
   def failedTry[T]    = beFailedTry[T]
   def aFailedTry[T]   = beFailedTry[T]
-
-  case class FailedTryMatcher[T]() extends Matcher[Try[T]] { outer =>
-    def apply[S <: Try[T]](value: Expectable[S]) = {
-      result(value.value.isFailure,
-             s"${value.description} is a Failure",
-             s"${value.description} is not a Failure",
-             value)
-    }
-
-    def withThrowable[E <: Throwable : ClassTag] = new Matcher[Try[T]] {
-      def apply[S <: Try[T]](value: Expectable[S]) = {
-        val expected = implicitly[ClassTag[E]].runtimeClass
-        value.value match {
-          case Succeeded(_) => result(false, value.description + " is a Failure", value.description + " is not a Failure", value)
-          case Failed(e)    => result(expected.isAssignableFrom(e.getClass),
-                                      s"${value.description} is a Failure and '${e.getClass.getName}' has a correct type",
-                                      s"${value.description} is a Failure but '${e.getClass.getName}' is not of type '${expected.getName}'",
-                                      value)
-        }
-      }
-    }
-
-    def withThrowable[E <: Throwable : ClassTag](message: String) = new Matcher[Try[T]] {
-      def apply[S <: Try[T]](value: Expectable[S]) = {
-        val expected = implicitly[ClassTag[E]].runtimeClass
-        value.value match {
-          case Succeeded(_) => result(false, value.description + " is a Failure", value.description + " is not a Failure", value)
-          case Failed(e)    => {
-            val (assignable, matches) = (expected.isAssignableFrom(e.getClass), e.getMessage.notNull.matchesSafely(message))
-            result(assignable && matches,
-                   s"${value.description} is a Failure and ${e.getClass.getName} has a correct type",
-                   if (!assignable) (s"${value.description} is a Failure but '${e.getClass.getName}' is not of type '${expected.getName}'")
-                   else             (s"${value.description} is a Failure but '${e.getMessage.notNull}' doesn't match '$message'") ,
-                   value)
-          }
-        }
-      }
-    }
-  }
-
 }
 
 private[specs2]
@@ -131,5 +44,49 @@ trait TryBeHaveMatchers { outer: TryBaseMatchers =>
     def beAFailedTry = result(outer.beFailedTry)
     def aFailedTry = result(outer.beFailedTry)
     def failedTry = result(outer.beFailedTry)
+  }
+}
+
+case class SuccessMatcher[T]() extends OptionLikeMatcher[Try, T]("a Success", (_:Try[T]).toOption) {
+  def withValue(t: =>T) = SuccessCheckedMatcher(t)
+}
+case class SuccessCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[Try, T]("a Success", (_:Try[T]).toOption, check)
+
+case class FailedTryMatcher[T]() extends Matcher[Try[T]] { outer =>
+  def apply[S <: Try[T]](value: Expectable[S]) = {
+    result(value.value.isFailure,
+      s"${value.description} is a Failure",
+      s"${value.description} is not a Failure",
+      value)
+  }
+
+  def withThrowable[E <: Throwable : ClassTag] = new Matcher[Try[T]] {
+    def apply[S <: Try[T]](value: Expectable[S]) = {
+      val expected = implicitly[ClassTag[E]].runtimeClass
+      value.value match {
+        case Succeeded(_) => result(false, value.description + " is a Failure", value.description + " is not a Failure", value)
+        case Failed(e)    => result(expected.isAssignableFrom(e.getClass),
+          s"${value.description} is a Failure and '${e.getClass.getName}' has a correct type",
+          s"${value.description} is a Failure but '${e.getClass.getName}' is not of type '${expected.getName}'",
+          value)
+      }
+    }
+  }
+
+  def withThrowable[E <: Throwable : ClassTag](message: String) = new Matcher[Try[T]] {
+    def apply[S <: Try[T]](value: Expectable[S]) = {
+      val expected = implicitly[ClassTag[E]].runtimeClass
+      value.value match {
+        case Succeeded(_) => result(false, value.description + " is a Failure", value.description + " is not a Failure", value)
+        case Failed(e)    => {
+          val (assignable, matches) = (expected.isAssignableFrom(e.getClass), e.getMessage.notNull.matchesSafely(message))
+          result(assignable && matches,
+            s"${value.description} is a Failure and ${e.getClass.getName} has a correct type",
+            if (!assignable) s"${value.description} is a Failure but '${e.getClass.getName}' is not of type '${expected.getName}'"
+            else             s"${value.description} is a Failure but '${e.getMessage.notNull}' doesn't match '$message'" ,
+            value)
+        }
+      }
+    }
   }
 }

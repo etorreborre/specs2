@@ -2,8 +2,9 @@ package org.specs2
 package matcher
 
 import text.Quote._
-import execute.{Success, Result, Failure}
+import execute._
 import text.NotNullStrings._
+import ValueChecks._
 
 /**
  * Matchers for Options
@@ -14,19 +15,13 @@ object OptionMatchers extends OptionMatchers
 private[specs2]
 trait OptionBaseMatchers {
   
-  def beSome[T](t: =>T) = new Matcher[Option[T]] {
-    def apply[S <: Option[T]](value: Expectable[S]) = {
-      val expected = t
-      result(value.value == Some(t), 
-             value.description + " is Some with value " + q(expected),
-             value.description + " is not Some with value " + q(expected),
-             value)
-    }
-  }
+  def beSome[T](check: ValueCheck[T]) = SomeCheckedMatcher(check)
 
-  def some[T](t: =>T) = beSome(t)
+  def some[T](check: ValueCheck[T]) = beSome(check)
+
   def beSome[T] = new SomeMatcher[T]
   def some[T] = beSome[T]
+
   def beNone = new Matcher[Option[Any]] {
     def apply[S <: Option[Any]](value: Expectable[S]) = {
       result(value.value == None,
@@ -55,51 +50,34 @@ trait OptionBeHaveMatchers { outer: OptionBaseMatchers =>
   implicit def toOptionResultMatcher[T](result: MatchResult[Option[T]]) = new OptionResultMatcher(result)
   class OptionResultMatcher[T](result: MatchResult[Option[T]]) {
     def beSome = result(outer.beSome)
-    def beSome(t: =>T) = result(outer.beSome(t))
+    def beSome(check: ValueCheck[T]) = result(outer.beSome(check))
     def beNone = result(outer.beNone)
     def some = result(outer.beSome)
-    def some(t: =>T) = result(outer.beSome(t))
+    def some(check: ValueCheck[T]) = result(outer.beSome(check))
     def none = result(outer.beNone)
     def asNoneAs(other: =>Option[T]) = result(beAsNoneAs(other))
   }
 }
-private[specs2]
-class SomeMatcher[T] extends Matcher[Option[T]] {
-  def apply[S <: Option[T]](value: Expectable[S]) = {
-    result(value.value.isDefined,
-           value.description + " is Some",
-           value.description + " is not Some",
-           value)
-  }
 
-  def which(f: T => Boolean) = new Matcher[Option[T]] {
-    def apply[S <: Option[T]](value: Expectable[S]) = {
-      val defaultMessage = s"${value.description} is not Some"
-      val (isSuccess, failureMessage) = value.value match {
-        case Some(t) if !f(t) => (false, s"${value.description} is Some but $t does not satisfy the given predicate")
-        case None             => (false, defaultMessage)
-        case _                => (true , defaultMessage)
+case class SomeMatcher[T]() extends OptionLikeMatcher[Option, T]("Some", identity)
+case class SomeCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[Option, T]("Some", identity, check)
+
+class OptionLikeMatcher[F[_], T](typeName: String, toOption: F[T] => Option[T]) extends Matcher[F[T]] {
+  def apply[S <: F[T]](value: Expectable[S]) =
+    result(toOption(value.value).isDefined, s"${value.description} is $typeName", s"${value.description} is not $typeName", value)
+
+  def which[R : AsResult](f: T => R) = new OptionLikeCheckedMatcher(typeName, toOption, f)
+  def like[R : AsResult](f: PartialFunction[T, R]) = new OptionLikeCheckedMatcher(typeName, toOption, f)
+}
+
+class OptionLikeCheckedMatcher[F[_], T](typeName: String, toOption: F[T] => Option[T], check: ValueCheck[T]) extends Matcher[F[T]] {
+  def apply[S <: F[T]](value: Expectable[S]) = {
+    toOption(value.value) match {
+      case Some(v) => {
+        val r = check.check(v)
+        result(r.isSuccess, s"${value.description} is $typeName and ${r.message}", s"${value.description} is $typeName but ${r.message}", value)
       }
-      result(isSuccess,
-             s"${value.description} is Some and satisfies the given predicate",
-             failureMessage,
-             value)
-    }
-  }
-
-  def like(f: PartialFunction[T, MatchResult[_]]) = partialMatcher(f)
-
-  private def partialMatcher(f: PartialFunction[T, MatchResult[_]]) = new Matcher[Option[T]] {
-    def apply[S <: Option[T]](value: Expectable[S]) = {
-      val res: Result = value.value match {
-        case Some(t) if f.isDefinedAt(t)  => f(t).toResult.prependMessage("is Some")
-        case Some(t) if !f.isDefinedAt(t) => Failure("is Some but the function is undefined on "+t.notNull)
-        case None                         => Failure("is not Some")
-      }
-      result(res.isSuccess,
-             value.description+" "+res.message,
-             value.description+" "+res.message,
-             value)
+      case None    => result(false, s"${value.description} is $typeName", s"${value.description} is not $typeName", value)
     }
   }
 }
