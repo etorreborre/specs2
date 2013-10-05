@@ -55,9 +55,11 @@ case class SbtRunner(args: Array[String],
       def tags = Array[String]()
       def execute(handler: EventHandler, loggers: Array[Logger]) = {
         taskDef.fingerprint match {
-          case f: SpecificationFingerprint => specificationRun(aTaskDef, loader, handler, loggers)
-          case f: FilesRunnerFingerprint   => filesRun(aTaskDef, args, loader, handler, loggers)
-          case _                           => ()
+          case f: SubclassFingerprint    =>
+            if (f.superclassName.endsWith("SpecificationStructure")) specificationRun(aTaskDef, loader, handler, loggers)
+            else if (f.superclassName.endsWith("FilesRunner"))       filesRun(aTaskDef, args, loader, handler, loggers)
+            else                                                     ()
+          case _                         => ()
         }
         // nothing more to execute
         Array[Task]()
