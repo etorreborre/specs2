@@ -332,7 +332,10 @@ case class NoDetails() extends Details
  */
 case class Error(m: String, e: Exception) extends Result(m) with ResultStackTrace { outer =>
   /** @return an exception created from the message and the stackTraceElements */
-  def exception = e
+  def exception = e match {
+    case Error.ThrowableException(t) => t
+    case other                       => other
+  }
   def stackTrace = e.getFullStackTrace.toList
 
   override def equals(o: Any) = {

@@ -22,6 +22,7 @@ import Statistics._
 import Levels._
 import SpecsArguments._
 import matcher.DataTable
+import org.specs2.execute.Error.ThrowableException
 
 /**
  * This trait reduces a list of ExecutedFragments to a list of PrintLines.
@@ -123,8 +124,9 @@ trait TextPrinter {
             case e: Error => {
               printError(desc, e, timer, isDataTable)
               args.traceFilter(e.stackTrace).foreach(t => out.printError(t.toString))
-              e.exception.chainedExceptions.foreach { (t: Throwable) =>
-                out.printError(t.getMessage.notNull)
+
+              e.exception.chainedExceptions.foreach { t: Throwable =>
+                out.printError("\nCaused by "+t.getClass.getName+": "+t.getMessage.notNull)
                 args.traceFilter(t.getStackTrace.toSeq).foreach(st => out.printError(st.toString))
               }
             }
@@ -160,7 +162,7 @@ trait TextPrinter {
 
     def printFailureDetails(d: Details)(implicit args: Arguments, out: ResultOutput) = {
       d match {
-        case FailureDetails(expected, actual) if (args.diffs.show(expected, actual)) => {
+        case FailureDetails(expected, actual) if args.diffs.show(expected, actual) => {
           val (expectedDiff, actualDiff) = args.diffs.showDiffs(expected, actual)
           out.printFailure("Expected: " + expectedDiff)
           out.printFailure("Actual:   " + actualDiff)
@@ -178,8 +180,12 @@ trait TextPrinter {
       val description = statusAndDescription(desc, f, timer, isDataTable)(args, out)
       out.printText(description)
       val exceptionName = f.exception.getClass.getSimpleName
-      out.printError((if (isDataTable) "" else desc.takeWhile(_ == ' ')+"  "+exceptionName+": ") +
-                     f.message + location(f))
+      val message = if (f.message.notNull == "null") "" else ": "+f.message
+      val errorMessage =
+        if (isDataTable) f.message + location(f)
+        else             s"${desc.takeWhile(_ == ' ')} $exceptionName: $message ${location(f)}"
+
+      out.printError(errorMessage)
     }
     /**
      * add the status to the description
