@@ -98,7 +98,7 @@ trait Json {
                                          objects: JSONType => Seq[T] = os,
                                          keyedValues: (Any, Any)  => Seq[T] = kvs,
                                          keyedObjects: (Any, Any) => Seq[T] = kvs): Seq[T] = json match {
-    case JSONObject(map) => map.toList.flatMap { v => v match {
+    case JSONObject(map) => map.toList.flatMap { kv => kv match {
         case (k, (o: JSONType)) => objects(o) ++ keyedObjects(k, o) ++ collect(o)(values, objects, keyedValues, keyedObjects)
         case (k, v)             => values(v)  ++ keyedValues(k, v)
       }
@@ -111,9 +111,9 @@ trait Json {
     case JSONArray(Nil)                   => Nil
   }
 
-  private def vs[T]  = (a: Any) => (Nil:Seq[T])
-  private def os[T]  = (a: JSONType) => (Nil:Seq[T])
-  private def kvs[T] = (k: Any, v: Any) => (Nil:Seq[T])
+  private def vs[T]  = (a: Any) => Nil: Seq[T]
+  private def os[T]  = (a: JSONType) => Nil: Seq[T]
+  private def kvs[T] = (k: Any, v: Any) => Nil: Seq[T]
 }
 private[specs2]
 object Json extends Json
