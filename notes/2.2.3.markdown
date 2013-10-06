@@ -1,0 +1,13 @@
+Maintenance version for 2.2.3
+
+## Fixes
+
+ * fixed the fingerprint pattern matching for specifications [sbt #868](https://github.com/sbt/sbt/issues/868)
+ * removed the intermediary ThrowableException for Errors [#197](https://github.com/etorreborre/specs2/issues/197)
+ * BREAKING CHANGE (see the API change [here](https://github.com/etorreborre/specs2/issues/198#issuecomment-25739812)): changed the creation of stopOnFail steps [#198](https://github.com/etorreborre/specs2/issues/198)
+ * fixed the `Try` matcher [#199](https://github.com/etorreborre/specs2/issues/199)
+ * using effectively in `mutable.Around` to avoid having to think about it
+ * generalised value checks to Option, Try and Either matchers [#201](https://github.com/etorreborre/specs2/issues/201)
+
+ ==========================
+
