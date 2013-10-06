@@ -23,12 +23,12 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
   with ImplicitParameters {
 
   /** local mutable contents of the specification */
-  protected[mutable] var specFragments: Fragments = Fragments.createList(FF.br, FF.br)
+  protected[mutable] var specFragments: Fragments = Fragments.createList()
   protected[specs2] def fragments: Fragments = { replay; specFragments }
 
   /** @return a Fragments object from a single piece of text */
   override implicit def textFragment(s: String): FragmentsFragment = {
-    val t = textStart(s).add(FF.br)
+    val t = textStart(s)
     addFragments(t)
     t
   }
@@ -79,9 +79,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
 
     private def addSideEffectingBlock[T](block: =>T) = {
       addFragments(s)
-      addFragments(FF.br)
       executeBlock(block)
-      addFragments(FF.br)
       addFragments(FF.bt)
     }
   }
@@ -135,7 +133,6 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
 
   protected def addFragments[T](s: String, fs: =>T, word: String): Fragments = {
     addFragments(s + " " + word)
-    addFragments(FF.br)
     executeBlock(fs)
     addFragments(FF.p)
   }
@@ -165,7 +162,6 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
   protected def addExample(ex: =>Example): Example = {
     val example = ex
     addFragments(Fragments.createList(example))
-    addFragments(FF.br)
     example
   }
 

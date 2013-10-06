@@ -90,6 +90,7 @@ case class SpecEnd(specName: SpecName, isSeeOnlyLink: Boolean = false, location:
 case class Text(text: SimpleFormattedString, location: Location = new Location) extends Fragment {
   def t = text.raw
   override def matches(s: String) = t.matches(s)
+  def flow = text.flow
   def add(other: Text) = copy(text.append(other.t))
 
   override def toString = s"Text($text)"
@@ -115,8 +116,10 @@ trait FormattedString {
   def prepend(s: String) = map(t => s+t)
 
   def withMarkdown: FormattedString
+  def withFlow: FormattedString
 
   def formatWithTagNames(names: Seq[String]): F
+  def flow = formatting.flow
   def toXml: NodeSeq
 
   override def toString = raw
@@ -129,6 +132,8 @@ case class SimpleFormattedString(t: String = "", formatting: Formatting = Format
 
   def withMarkdown = copy(formatting = formatting.copy(markdown = true))
   def withoutMarkdown = copy(formatting = formatting.copy(markdown = false))
+  def withFlow = copy(formatting = formatting.copy(flow = true))
+  def withoutFlow = copy(formatting = formatting.copy(flow = false))
 
   def toXml = if (formatting.markdown) <code class="prettyprint">{asCode}</code> else if (isEmpty) <t></t> else <t>{raw}</t>
 
@@ -145,8 +150,8 @@ object FormattedString {
   def empty = SimpleFormattedString(isEmpty = true)
 }
 /** Formatting for Text fragments */
-case class Formatting(markdown: Boolean = true, verbatim: Boolean = true) {
- def fromTagNames(names: Seq[String]) = copy(markdown = tagValue(names, "markdown", markdown), verbatim = tagValue(names, "verbatim", verbatim))
+case class Formatting(flow: Boolean = false, markdown: Boolean = true, verbatim: Boolean = true) {
+ def fromTagNames(names: Seq[String]) = copy(flow = tagValue(names, "flow", flow), markdown = tagValue(names, "markdown", markdown), verbatim = tagValue(names, "verbatim", verbatim))
 
   private def tagValue(names: Seq[String], name: String, defaultValue: Boolean) = {
     val nameFound         = names.exists(_ == FormattingTags.internal+name)

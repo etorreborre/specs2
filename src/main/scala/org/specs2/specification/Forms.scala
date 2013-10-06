@@ -40,6 +40,7 @@ case class FormFormattedString(f: () => Form, formatting: Formatting = Formattin
   def map(f: String => String) = copy(display = display andThen f)
 
   def withMarkdown = copy(formatting = formatting.copy(markdown = true))
+  def withFlow = copy(formatting = formatting.copy(flow = true))
 
   def formatWithTagNames(names: Seq[String]) = copy(formatting = formatting.fromTagNames(names: Seq[String]))
 }
