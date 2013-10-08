@@ -23,7 +23,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
   with ImplicitParameters {
 
   /** local mutable contents of the specification */
-  protected[mutable] var specFragments: Fragments = Fragments.createList(FF.br, FF.br)
+  protected[mutable] var specFragments: Fragments = Fragments.createList(FF.br)
   protected[specs2] def fragments: Fragments = { replay; specFragments }
 
   /** @return a Fragments object from a single piece of text */
@@ -134,14 +134,15 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
   override def see(htmlLink: HtmlLink, fs: Fragments): Fragments  = addFragments(super.see(htmlLink, fs))
 
   protected def addFragments[T](s: String, fs: =>T, word: String): Fragments = {
-    addFragments(s + " " + word)
     addFragments(FF.br)
+    addFragments(s + " " + word)
+    val result = addFragments(FF.br)
     executeBlock(fs)
-    addFragments(FF.p)
+    result
   }
 
   protected def addFragments(fs: Fragments): Fragments = {
-    val element = fs.middle.lastOption.getOrElse((Text("root")))
+    val element = fs.middle.lastOption.getOrElse(Text("root"))
     addBlockElement(element)
     element match {
       case e: Example => updateSpecFragments(fragments => new FragmentsFragment(fragments) ^ e.creationPathIs(creationPath))
