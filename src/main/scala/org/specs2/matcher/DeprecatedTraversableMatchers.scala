@@ -49,7 +49,7 @@ trait DeprecatedTraversableBaseMatchers { this: TraversableBaseMatchers =>
 
   /**
    * Matches if there l contains the same elements as the Traversable `traversable`.<br>
-   * @deprecated(message="use contain(atLeast(seq.mappartialFunction)).forall" instead, since="2.0")
+   * @deprecated(message="use containTheSameElementsAs(other)" instead, since="2.0")
    */
   def haveTheSameElementsAs[T](l: =>Traversable[T], equality: (T, T) => Boolean = (_:T) == (_:T)) =
     new HaveTheSameElementsAs(l.toSeq, equality)

@@ -52,11 +52,11 @@ trait TraversableBaseMatchers extends ValueChecks with TraversableBaseMatchersLo
   def containPattern[T](t: =>String) = ContainWithResult(matcherIsContainCheck(new BeMatching(t))) ^^ ((ts: GenTraversableOnce[T]) => ts.toSeq.map(_.toString).to[GenTraversableOnce])
 
   /** does a containAll comparison in both ways */
-  def containTheSameElementsAs[T](seq: Seq[T]): Matcher[Traversable[T]] = new Matcher[Traversable[T]] {
+  def containTheSameElementsAs[T](seq: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)): Matcher[Traversable[T]] = new Matcher[Traversable[T]] {
 
     def apply[S <: Traversable[T]](t: Expectable[S]) = {
-      val missing = (seq.toSeq.diff(t.value.toSeq))
-      val added   = (t.value.toSeq.diff(seq.toSeq))
+      val missing = seq.toSeq.difference(t.value.toSeq, equality)
+      val added   = t.value.toSeq.difference(seq.toSeq, equality)
       def message(diffs: Seq[_], msg: String) =
         if (diffs.isEmpty) "" else diffs.mkString("\n  "+msg+": ", ", ", "")
 

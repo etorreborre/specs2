@@ -43,4 +43,11 @@ class SeqxSpec extends mutable.Specification with ScalaCheck with DataTables {
     }
   }
 
+  "A difference between 2 seqs can be computed with a specific equality function" >> {
+    case class A(i: Int = 0, j: Int = 1)
+    val equality: (A, A) => Boolean = (a1: A, a2: A) => a1.i == a2.i
+
+    Seq(A(i = 1), A(i = 2)).difference(Seq(A(i = 2, j = 2)), equality) === Seq(A(i = 1))
+  }
+
 }

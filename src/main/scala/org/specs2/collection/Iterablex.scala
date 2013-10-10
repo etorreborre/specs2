@@ -40,7 +40,14 @@ trait Iterablex {
      * @return true if the 2 iterables contain the same elements recursively, in any order
      */
     def sameElementsAs(that: GenIterable[T]): Boolean = sameElementsAs(that, (x, y) => x == y)
+
     /**
+     * This recursive function is not really well-formed (the `asInstanceOf` should be ample proof).
+     * It only works if T <===> Seq[T]
+     *
+     * This is the case for NodeFunctions.isEqualIgnoringSpace where it is used to check if 2 xml NodeSeqs have the same
+     * nodes regardless of whitespace
+     *
      * @return true if the 2 iterables contain the same elements (according to a comparison function f) recursively, in any order
      */
     def sameElementsAs(that: GenIterable[T], f: (T, T) => Boolean): Boolean = {

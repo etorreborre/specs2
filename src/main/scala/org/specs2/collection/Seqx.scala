@@ -4,6 +4,7 @@ package collection
 import scalaz._
 import Generator._
 import std.iterable._
+import scala.collection.mutable.ListBuffer
 
 /**
  * This trait provides additional methods on Seqs and nested Seqs
@@ -19,12 +20,11 @@ trait Seqx { outer =>
   class ExtendedNestedSeq[T](seq: Seq[Seq[T]]) {
     def safeTranspose = outer.transpose(seq)
   }
-  /** @return an extension for a seq */
-  implicit def extendSeq[T](seq: Seq[T]): ExtendedSeq[T] = new ExtendedSeq(seq)
+
   /**
    * Additional methods for seqs
    */
-  class ExtendedSeq[T](seq: Seq[T]) {
+  implicit class ExtendedSeq[T](seq: Seq[T]) {
 
     def reduceWith[S](reducer: Reducer[T, S]) = {
       seq.toIterator.foldLeft(reducer.zero) { (res, cur) => reducer.snoc(res, cur) }
@@ -65,6 +65,35 @@ trait Seqx { outer =>
         }
       notFound(seq, other)
     }
+
+    /**
+     * This implementation reuses the Seq.diff implementation but with a user-defined equality
+     * @return remove all the elements of other from seq with a user-defined equality function
+     */
+    def difference(other: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)): Seq[T] = {
+      val occurrences = occurrenceCounts(other.seq, equality)
+      val result = new ListBuffer[T]
+      for (x <- seq)
+        if (occurrences(D(x, equality)) == 0) result += x
+        else                                  occurrences(D(x, equality)) -= 1
+      result.toSeq
+    }
+
+    private case class D(t: T, equality: (T, T) => Boolean) {
+      override def equals(o: Any) = o match {
+        case other: D => equality(t, other.t)
+        case _        => false
+      }
+      // always return the same hashcode because we can't guarantee that if equality(t1, t2) == true then t1.hashCode == t2.hashCode
+      // this however makes the search much less efficient
+      override def hashCode = 1
+    }
+    private def occurrenceCounts(sq: Seq[T], equality: (T, T) => Boolean): scala.collection.mutable.Map[D, Int] = {
+      val occurrences = new scala.collection.mutable.HashMap[D, Int] { override def default(k: D) = 0 }
+      for (y <- sq.seq) occurrences(D(y, equality)) += 1
+      occurrences
+    }
+
   }
 
   /**

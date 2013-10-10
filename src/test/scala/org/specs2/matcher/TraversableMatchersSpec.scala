@@ -133,6 +133,19 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
   "  is missing: 4").mkString("\n")
    }
 
+  A user-defined equality function can also be specified ${
+     case class A(i: Int = 0, j: Int = 1)
+     val equality: (A, A) => Boolean = (a1: A, a2: A) => a1.i == a2.i
+
+     Seq(A(i = 1), A(i = 2)) must containTheSameElementsAs(Seq(A(i = 2, j = 2), A(i = 1, j = 2)), equality)
+  }
+
+  type annotations might be necessary in some cases ${
+    case class A(i: Int = 0, j: Int = 1)
+    // otherwise "could not find implicit value for evidence parameter of type org.specs2.execute.AsResult[A]"
+    Seq(Seq(A(1))) must contain(exactly[Seq[A]](Seq(A(1))))
+  }
+
  With Java collections
  =====================
 
