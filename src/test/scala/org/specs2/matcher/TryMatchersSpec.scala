@@ -10,6 +10,7 @@ class TryMatchersSpec extends Specification with ResultMatchers { def is = s2"""
   beSuccessful checks if an element is Success(_)
   ${ Succeeded(1) must beSuccessfulTry }
   ${ Succeeded(1) must beSuccessfulTry.withValue(1) }
+  ${ Succeeded(1) must beSuccessfulTry.withValue(===(1)) }
   ${ Succeeded(1) must beASuccessfulTry.which(_ > 0) }
   ${ (Succeeded(1) must beASuccessfulTry.which(_ > 0)) returns "'Success(1)' is a Success and the function returns 'true' on '1'" }
   ${ (Succeeded(1) must beASuccessfulTry.which(_ < 0)) returns "'Success(1)' is a Success but the function returns 'false' on '1'" }

@@ -48,7 +48,7 @@ trait TryBeHaveMatchers { outer: TryBaseMatchers =>
 }
 
 case class SuccessMatcher[T]() extends OptionLikeMatcher[Try, T]("a Success", (_:Try[T]).toOption) {
-  def withValue(t: =>T) = SuccessCheckedMatcher(t)
+  def withValue(t: ValueCheck[T]) = SuccessCheckedMatcher(t)
 }
 case class SuccessCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[Try, T]("a Success", (_:Try[T]).toOption, check)
 
