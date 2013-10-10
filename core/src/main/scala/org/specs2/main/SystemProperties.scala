@@ -1,0 +1,50 @@
+package org.specs2
+package main
+import scala.collection.JavaConversions._
+import text.NotNullStrings._
+import text.FromString
+import java.util.regex.Pattern
+
+/**
+ * Utility methods to get systems properties prefixed with specs2
+ */
+private[specs2]
+trait SystemProperties {
+  val specs2Prefix = "specs2."
+
+  /** @return a system property if it exists */
+  protected def systemGetProperty(p: String): Option[String] = Option(System.getProperty(p.notNull))
+    
+  /** @return the value of the system property p */  
+  def getProperty(p: String): Option[String] =        systemGetProperty(specs2Prefix + p).
+                                               orElse(systemGetProperty(specs2Prefix + p.toLowerCase)).
+                                               orElse(systemGetProperty(p)).
+                                               orElse(systemGetProperty(p.toLowerCase)).map(_.notNull)
+
+  /** @return the value of the system property p as a given type */
+  def getPropertyAs[T: FromString](p: String): Option[T] = getProperty(p) flatMap implicitly[FromString[T]].fromString
+
+  /** @return the value of the system property p or a default value */
+  def getOrElse(p: String, defaultValue: String): String = getProperty(p).getOrElse(defaultValue)
+
+  /** @return the value Some(T) if the property is defined */
+  def getIf[T](p: String, value: =>T): Option[T] = getProperty(p).map(v => value)
+
+  /** @return the value Some(T) if the property is defined */
+  def getIfElse[T](p: String, v1: =>T)(v2: =>T): T = getIf(p, v1).getOrElse(v2)
+
+  /** @return true if a property is defined */
+  def isDefined(p: String) = getProperty(p).isDefined
+}
+
+private[specs2]
+object SystemProperties extends SystemProperties
+
+/**
+ * This class is used in specifications to mock the system properties
+ */
+private[specs2]
+trait MapSystemProperties extends SystemProperties {
+  def properties: Map[String, String]
+  override def systemGetProperty(p: String) = properties.get(p)
+}

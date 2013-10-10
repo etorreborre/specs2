@@ -24,19 +24,30 @@ object build extends Build {
   lazy val specs2 = Project(
     id = "specs2",
     base = file("."),
-    settings = Defaults.defaultSettings ++
+    settings = (name := "specs2") +: (
+            Defaults.defaultSettings    ++
                specs2Settings           ++
-               dependencies.settings     ++
+               dependencies.settings    ++
                compilationSettings      ++
                testingSettings          ++
                siteSettings             ++
                publicationSettings      ++
-               releaseSettings
+               releaseSettings)
   ) 
+
+  lazy val core = Project(
+    id = "core",
+    base = file("core"),
+    settings = 
+      Defaults.defaultSettings          ++
+               specs2Settings           ++
+               dependencies.settings    ++
+               compilationSettings      ++
+               testingSettings :+ (name := "specs2-core")
+    )
 
   lazy val specs2Version = SettingKey[String]("specs2-version", "defines the current specs2 version")
   lazy val specs2Settings: Seq[Settings] = Seq(
-    name := "specs2",
     organization := "org.specs2",
     specs2Version in GlobalScope <<= version,
     scalaVersion := "2.10.2",

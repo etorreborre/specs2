@@ -1,0 +1,43 @@
+
+{
+ "organization":"org.specs2",
+ "name":"specs2",
+ "version":"1.6.1",
+ "description":"specs2",
+ "site":"",
+ "tags":[],
+ "docs":"",
+ "licenses": [],
+ "resolvers": ["http://scala-tools.org/repo-releases"],
+ "dependencies": [{
+   "organization":"org.scala-tools.testing",
+   "name": "scalacheck",
+   "version": "1.9"
+  },{
+   "organization":"org.scala-tools.testing",
+   "name": "test-interface",
+   "version": "0.5"
+  },{
+   "organization":"org.specs2",
+   "name": "specs2-scalaz-core",
+   "version": "6.0.1"
+  },{
+   "organization":"org.hamcrest",
+   "name": "hamcrest-all",
+   "version": "1.1"
+  },{
+   "organization":"org.mockito",
+   "name": "mockito-all",
+   "version": "1.8.5"
+  },{
+   "organization":"junit",
+   "name": "junit",
+   "version": "4.7"
+  },{
+   "organization":"org.pegdown",
+   "name": "pegdown",
+   "version": "1.0.2"
+  }],
+ "scalas": ["2.9.0","2.9.0-1","2.9.1.RC1","2.9.1.RC2","2.9.1.RC3","2.9.1.RC4"],
+ "sbt": false
+}
