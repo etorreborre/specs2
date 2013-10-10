@@ -63,6 +63,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
    a FailureException can be thrown from a Prop                                                          $prop6
    in the Context of a mutable specification                                                             $prop7
    with a Pending or Skipped result the Prop is undecided                                                $prop8
+   if the Prop itself is an exception                                                                    $prop9
 
  It can also be used at the beginning of a specification                                                 $fragment1
 
@@ -118,6 +119,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
 
   def prop7 = FragmentExecution.executeSpecificationResult(new MutableSpecWithContextAndScalaCheck).isFailure
   def prop8 = execute(check(pendingProp)) must bePending
+  def prop9 = execute(exceptionPropOnConversion).toString must startWith("A counter-example is")
 
   def fragment1 = {
     val spec = new Specification { def is = prop((i: Int) => i == i) ^ end }
@@ -197,6 +199,7 @@ trait ScalaCheckProperties extends ScalaCheck with ResultMatchers {  this: Speci
 
   def exceptionWithCause(msg: String = "boom") = new java.lang.IllegalArgumentException(msg, new java.lang.Exception("cause"))
   def exceptionProp(msg: String = "boom") = forAll((b: Boolean) => {throw exceptionWithCause(msg); true})
+  def exceptionPropOnConversion: Prop = prop { (b: Boolean) => {throw new execute.FailureException(failure); Prop.passed} }
 
   def failureExceptionProp = forAll((b: Boolean) => {throw new execute.FailureException(failure); true})
   def pendingProp = forAll((b: Boolean) => b must beTrue.orPending)
