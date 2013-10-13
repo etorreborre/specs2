@@ -4,7 +4,6 @@ package specification
 import reflect.ClassName._
 import scalaz.Monoid
 import io.Paths._
-import html.MarkdownLink
 
 /**
  * Identification information for a specification

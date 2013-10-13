@@ -19,7 +19,6 @@ trait Matchers extends AnyMatchers
                   with EventuallyMatchers
                   with FutureMatchers
                   with MatchersImplicits
-                  with MatcherMacros
                   with LanguageFeatures
 
 object Matchers extends Matchers

@@ -19,7 +19,7 @@ import scala.annotation.tailrec
 /**
  * Matchers for traversables
  */
-trait TraversableMatchers extends TraversableBaseMatchers with NumberOfTimes with TraversableBeHaveMatchers with DeprecatedTraversableBaseMatchers with LazyParameters
+trait TraversableMatchers extends TraversableBaseMatchers with NumberOfTimes with TraversableBeHaveMatchers with LazyParameters
 object TraversableMatchers extends TraversableMatchers
 
 private[specs2]
@@ -156,12 +156,6 @@ trait TraversableBeHaveMatchers extends LazyParameters { outer: TraversableMatch
     def contain(check: ValueCheck[T]) = s(outer.contain(check))
     def containPattern(t: =>String) = s(outer.containPattern(t))
     def containMatch(t: =>String) = containPattern(t.regexPart)
-    /** @deprecated(message="use contain(function) instead", since="2.0") */
-    def have(f: T => Boolean) = s(outer.have(f))
-    /** @deprecated(message="use contain(like(partialFunction)) instead", since="2.0") */
-    def oneElementLike[U](like: PartialFunction[T, MatchResult[U]]) = s(outer.haveOneElementLike(like))
-    /** @deprecated(message="use contain(like(partialFunction)).forall instead", since="2.0") */
-    def allElementsLike[U](like: PartialFunction[T, MatchResult[U]]) = s(outer.haveAllElementsLike(like))
   }
 
   implicit def sized[T : Sized](s: MatchResult[T]) = new HasSize(s)

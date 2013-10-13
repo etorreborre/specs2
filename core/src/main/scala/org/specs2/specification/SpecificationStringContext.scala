@@ -1,7 +1,6 @@
 package org.specs2
 package specification
 
-import form.Form
 import main.{Arguments, ArgumentsArgs}
 import execute._
 import text.NotNullStrings._
@@ -10,7 +9,6 @@ import reflect.Macros._
 import text.Interpolated
 import text.NotNullStrings._
 import control.Exceptions._
-import html.MarkdownLink
 import specification.TagsFragments._
 
 /**
@@ -29,8 +27,6 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
     def append(fs: Fragments, text: String, expression: String = "") = fs.append(createTextFragment(text)).append(e)
   }
 
-  implicit def markdownLinkIsSpecPart(link: MarkdownLink): SpecPart = stringIsSpecPart(link.toString)
-
   implicit def asResultIsSpecPart[R : AsResult](r: =>R): SpecPart = new SpecPart {
 
     def append(fs: Fragments, text: String, expression: String = "") = {
@@ -39,7 +35,7 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
       val indent = spaces.mkString
 
       val first = texts.dropRight(1).mkString("", "\n", "\n")
-      val autoExample = texts.lastOption.map(_.trim.isEmpty).getOrElse(false)
+      val autoExample = texts.lastOption.exists(_.trim.isEmpty)
 
       val description =
         if (autoExample) FormattedString.code(expression)
@@ -60,12 +56,6 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
   }
   implicit def anyAsResultIsSpecPart(r: =>Function0Result): SpecPart = new SpecPart {
     def append(fs: Fragments, text: String, expression: String = "") = asResultIsSpecPart(AsResult(r)).append(fs, text, expression)
-  }
-  implicit def formIsSpecPart(f: =>Form): SpecPart = new SpecPart {
-    def append(fs: Fragments, text: String, expression: String = "") = fs.append(createTextFragment(text)).append(Forms.formsAreExamples(f.executeForm))
-  }
-  implicit def toFormIsSpecPart(f: { def form: Form}): SpecPart = new SpecPart {
-    def append(fs: Fragments, text: String, expression: String = "") = fs append { formIsSpecPart(f.form).append(text, expression) }
   }
   implicit def fragmentIsSpecPart(f: Fragment): SpecPart = new SpecPart {
     def append(fs: Fragments, text: String, expression: String = "") = f match {

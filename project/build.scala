@@ -24,35 +24,36 @@ object build extends Build {
   lazy val specs2 = Project(
     id = "specs2",
     base = file("."),
-    settings = (name := "specs2") +: (
-            Defaults.defaultSettings    ++
-               specs2Settings           ++
-               dependencies.settings    ++
-               compilationSettings      ++
-               testingSettings          ++
-               siteSettings             ++
-               publicationSettings      ++
-               releaseSettings)
-  ) 
+    settings = 
+      Seq(name := "specs2")    ++
+      defaultSettings          ++
+      specs2Settings           ++
+      dependencies.settings    ++
+      compilationSettings      ++
+      testingSettings          ++
+      siteSettings             ++
+      publicationSettings      ++
+      releaseSettings          ++
+      Seq(addCompilerPlugin("org.scala-lang.plugins" % "macro-paradise_2.10.3-RC1" % "2.0.0-SNAPSHOT"))
+  ).aggregate(core) 
 
   lazy val core = Project(
     id = "core",
     base = file("core"),
     settings = 
-      Defaults.defaultSettings          ++
-               specs2Settings           ++
-               dependencies.settings    ++
-               compilationSettings      ++
-               testingSettings :+ (name := "specs2-core")
+      Seq(name := "specs2-core") ++
+      defaultSettings            ++
+      specs2Settings             ++
+      dependencies.settings      ++
+      compilationSettings        ++
+      testingSettings
     )
 
   lazy val specs2Version = SettingKey[String]("specs2-version", "defines the current specs2 version")
   lazy val specs2Settings: Seq[Settings] = Seq(
     organization := "org.specs2",
     specs2Version in GlobalScope <<= version,
-    scalaVersion := "2.10.2",
-    addCompilerPlugin("org.scala-lang.plugins" % "macro-paradise_2.10.3-RC1" % "2.0.0-SNAPSHOT")
-  )
+    scalaVersion := "2.10.2")
 
   lazy val compilationSettings: Seq[Settings] = Seq(
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
@@ -62,15 +63,11 @@ object build extends Build {
   )
 
   lazy val testingSettings: Seq[Settings] = Seq(
-    initialCommands in console := "import org.specs2._",
+    initialCommands in console in test := "import org.specs2._",
     logBuffered := false,
     cancelable := true,
     javaOptions += "-Xmx3G",
-    testOptions := Seq(Tests.Filter(s =>
-      Seq("Spec", "Suite", "Unit").exists(s.endsWith) && !s.endsWith("FeaturesSpec") ||
-        s.contains("UserGuide")         || 
-        s.toLowerCase.contains("index") ||
-        s.matches("org.specs2.guide.*")))
+    testOptions := Seq(Tests.Filter(s => Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))
   )
 
   lazy val siteSettings: Seq[Settings] = ghpages.settings ++ SbtSite.site.settings ++ Seq(

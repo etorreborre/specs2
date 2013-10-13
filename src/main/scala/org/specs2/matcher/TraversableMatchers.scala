@@ -19,7 +19,7 @@ import scala.annotation.tailrec
 /**
  * Matchers for traversables
  */
-trait TraversableMatchers extends TraversableBaseMatchers with NumberOfTimes with TraversableBeHaveMatchers with DeprecatedTraversableBaseMatchers with LazyParameters
+trait TraversableMatchers extends TraversableBaseMatchers with NumberOfTimes with TraversableBeHaveMatchers with LazyParameters
 object TraversableMatchers extends TraversableMatchers
 
 private[specs2]
