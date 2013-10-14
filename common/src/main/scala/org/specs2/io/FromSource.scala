@@ -21,7 +21,7 @@ import control.TraceLocation
 private[specs2]
 trait FromSource {
   
-  private[specs2] lazy val srcTestDir: String = SystemProperties.getOrElse("srcTestDir", "src/test/scala").dirPath
+  private[specs2] def srcTestDir: String = SystemProperties.getOrElse("srcTestDir", new java.io.File("src/test/scala").getAbsolutePath).dirPath
 
   /**
    * get some source code by:

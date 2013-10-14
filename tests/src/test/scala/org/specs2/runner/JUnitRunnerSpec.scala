@@ -72,8 +72,8 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
     Seq(console: Exporting, html: Exporting).foreach(e => e.export(any[Arguments]) returns executeSpec)
 
     abstract class DummySpecification extends Specification
-    def run(f: Fragments) = junitRun[DummySpecification](f, properties, console, html).run(notifier)
-    def run(spec: SpecificationStructure) = junitRun(spec).run(notifier)
+    def run(f: Fragments): Unit = junitRun[DummySpecification](f, properties, console, html).run(notifier)
+    def run(spec: SpecificationStructure): Unit = run(spec.content)
     def messages(spec: SpecificationStructure) = { junitRun(spec).run(messagesNotifier); messagesNotifier.messages }
   }
 

@@ -83,8 +83,8 @@ object build extends Build {
   lazy val analysis = Project(id = "analysis", base = file("analysis"),
     settings = Seq(name := "specs2-analysis",
       libraryDependencies ++= Seq(
-        "org.scala-lang" % "scala-compiler"     % scalaVersion.value,
-        "org.specs2"     % "classycle" % "1.4.1" % "optional")) ++
+        "org.scala-lang" % "scala-compiler" % scalaVersion.value,
+        "org.specs2"     % "classycle"      % "1.4.1")) ++
     moduleSettings
   ).dependsOn(core)
 
@@ -147,7 +147,7 @@ object build extends Build {
   lazy val compilationSettings: Seq[Settings] = Seq(
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
     maxErrors := 20,
-    scalacOptions ++= Seq("-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_"),
+    scalacOptions in GlobalScope ++= Seq("-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_"),
     scalacOptions in Test ++= Seq("-Yrangepos")
   )
 
@@ -156,7 +156,8 @@ object build extends Build {
     logBuffered := false,
     cancelable := true,
     javaOptions += "-Xmx3G",
-    testOptions := Seq(Tests.Filter(s => Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))
+    fork in test := true,
+    testOptions := Seq(Tests.Filter(s => Seq("Spec", "Guide").exists(s.endsWith) && Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))
   )
 
   lazy val siteSettings: Seq[Settings] = ghpages.settings ++ SbtSite.site.settings ++ Seq(

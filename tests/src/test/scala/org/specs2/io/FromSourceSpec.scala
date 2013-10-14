@@ -4,9 +4,10 @@ import mutable._
 import specification.{SpecificationStructure, Example}
 import user.specification._
 
-class FromSourceSpec extends Specification with FromSource with Tags {
+class FromSourceSpec extends Specification with Tags {
+  step(System.setProperty("specs2.srcTestDir", "tests/src/test/scala"))
 
-  "General reading of code".txt
+  "General reading of code".p
   "An expression can be read from a source file" in {
     examples(spec)(0).desc.toString must contain("1 must_== 1")
   }
@@ -17,10 +18,10 @@ class FromSourceSpec extends Specification with FromSource with Tags {
     examples(new DifferentSpecification)(0).desc.toString must contain("1 must_== 1")
   }
   "If the file is not found, the full path is shown to the user" in {
-    other.NotFound.result.toString must be_==("No source file found at src/test/scala/org/specs2/io/other/FromSourceSpec.scala")
+    other.NotFound.result.toString must endWith("src/test/scala/org/specs2/io/other/FromSourceSpec.scala")
   }
 
-  "Special examples cases".txt
+  "Special examples cases".p
   "If there is a function call to an example, the example description should be found" in {
     examples(spec)(2).desc.toString must contain("a call to an example")
   }
@@ -54,6 +55,7 @@ class FromSourceSpec extends Specification with FromSource with Tags {
   "A mutable SpecificationWithJUnit can also have autoexamples" in {
     examples(mutableJUnitSpec)(0).desc.toString must contain("1 must_== 1")
   }
+  step(System.setProperty("specs2.srcTestDir", ""))
 
   lazy val spec                = new UserFromSourceSpecification
   lazy val spec2               = new SpecificationWithNoStartingText
