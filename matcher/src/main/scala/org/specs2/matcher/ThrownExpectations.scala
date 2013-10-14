@@ -9,7 +9,6 @@ import scala.Some
 import execute.PendingException
 import execute.SkipException
 import execute.FailureException
-import org.specs2.specification.Scope
 
 /**
  * Thrown expectations will throw a FailureException if a match fails
@@ -106,6 +105,10 @@ trait NoThrownExpectations extends Expectations {
 }
 
 /**
+ * This trait represents any Scope that is used to enclose expectations which might be thrown
+ */
+trait Scope
+/**
  * This trait allows to enclose expectations throwing exceptions in a `Scope` trait:
  *
  * "this is a failing test" >> new Scope { 1 must_== 2 }
@@ -122,6 +125,7 @@ trait NoScopedExpectations extends ScopedExpectations {
   override def inScope(s: Scope): Success = super.inScope(s)
   override def scopeAsResult[S <: Scope]: AsResult[S] = super.scopeAsResult
 }
+
 
 /**
  * This trait can be used to integrate failures and skip messages into specs2

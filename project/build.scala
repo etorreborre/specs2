@@ -31,8 +31,8 @@ object build extends Build {
       releaseSettings          ++
       Seq(name := "specs2")
   ).
-  dependsOn(core, analysis, form, html, markdown, junit, scalacheck, mock).
-  aggregate(core, analysis, form, html, markdown, junit, scalacheck, mock) 
+  dependsOn(html, markdown, junit, scalacheck, mock, tests).
+  aggregate(common, matcher, matcherExtra, core, analysis, form, html, markdown, junit, scalacheck, mock, tests) 
 
   lazy val moduleSettings = 
       defaultSettings          ++
@@ -40,15 +40,37 @@ object build extends Build {
       compilationSettings      ++
       testingSettings          
 
-  lazy val core = Project(id = "core", base = file("core"),
-    settings = Seq(name := "specs2-core",
+  lazy val common = Project(id = "common", base = file("common"),
+    settings = Seq(name := "specs2-common",
       libraryDependencies ++= Seq(
         "org.scalaz"     %% "scalaz-core"       % scalazVersion.value,
         "org.scalaz"     %% "scalaz-concurrent" % scalazVersion.value,
-        "org.scala-lang" %  "scala-reflect"     % scalaVersion.value,
-        "org.scala-sbt"  % "test-interface"     % "1.0"               % "optional")) ++
+        "org.scala-lang" %  "scala-reflect"     % scalaVersion.value)) ++
       moduleSettings
   )
+
+  lazy val tests = Project(id = "tests", base = file("tests"),
+    settings = Seq(name := "specs2-tests") ++
+      moduleSettings
+  ).dependsOn(markdown, junit, scalacheck, mock)
+
+  lazy val matcher = Project(id = "matcher", base = file("matcher"),
+    settings = Seq(name := "specs2-matcher") ++
+      moduleSettings
+  ).dependsOn(common)
+
+  lazy val matcherExtra = Project(id = "matcher-extra", base = file("matcher-extra"),
+    settings = Seq(name := "specs2-matcher-extra",
+      addCompilerPlugin("org.scala-lang.plugins" % "macro-paradise_2.10.3-RC1" % "2.0.0-SNAPSHOT")) ++
+      moduleSettings
+  ).dependsOn(analysis, scalacheck, matcher)
+
+  lazy val core = Project(id = "core", base = file("core"),
+    settings = Seq(name := "specs2-core",
+      libraryDependencies ++= Seq(
+        "org.scala-sbt"  % "test-interface"     % "1.0" % "optional")) ++
+      moduleSettings
+  ).dependsOn(matcher)
 
   lazy val analysis = Project(id = "analysis", base = file("analysis"),
     settings = Seq(name := "specs2-analysis",
@@ -68,12 +90,12 @@ object build extends Build {
      libraryDependencies ++= Seq(
         "org.pegdown"  % "pegdown" % "1.2.1")) ++
       moduleSettings
-  ).dependsOn(core)
+  ).dependsOn(common)
 
   lazy val html = Project(id = "html", base = file("html"),
     settings = Seq(name := "specs2-html") ++
       moduleSettings
-  ).dependsOn(core, form)
+  ).dependsOn(form)
 
   lazy val junit = Project(id = "junit", base = file("junit"),
     settings = Seq(name := "specs2-junit",
