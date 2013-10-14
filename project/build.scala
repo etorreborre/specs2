@@ -21,6 +21,7 @@ import Defaults._
 object build extends Build {
   type Settings = Def.Setting[_]
 
+  /** MAIN PROJECT */
   lazy val specs2 = Project(
     id = "specs2",
     base = file("."),
@@ -34,6 +35,19 @@ object build extends Build {
   dependsOn(html, markdown, junit, gwt, mock, guide, examples, tests).
   aggregate(common, matcher, matcherExtra, core, analysis, form, html, markdown, gwt, junit, scalacheck, mock, guide, examples, tests) 
 
+  
+  /** COMMON SETTINGS */
+  lazy val specs2Settings: Seq[Settings] = Seq(
+    organization := "org.specs2",
+    specs2Version in GlobalScope <<= version,
+    scalazVersion := "7.0.4",
+    scalaVersion := "2.10.2")
+
+  lazy val specs2Version = SettingKey[String]("specs2Version", "defines the current specs2 version")
+  lazy val scalazVersion = SettingKey[String]("scalazVersion", "defines the current scalaz version")
+
+  lazy val resolversSettings = resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.sonatypeRepo("snapshots"))
+
   lazy val moduleSettings = 
       defaultSettings      ++
       specs2Settings       ++
@@ -41,8 +55,7 @@ object build extends Build {
       compilationSettings  ++
       testingSettings          
 
-  lazy val resolversSettings = resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.sonatypeRepo("snapshots"))
-
+  /** MODULES */
   lazy val common = Project(id = "common", base = file("common"),
     settings = Seq(name := "specs2-common",
       libraryDependencies ++= Seq(
@@ -102,7 +115,6 @@ object build extends Build {
         "com.chuusai" % "shapeless_2.10.2" % "2.0.0-M1")) ++
       moduleSettings
   ).dependsOn(core, scalacheck)
-   
 
   lazy val markdown = Project(id = "markdown", base = file("markdown"),
     settings = Seq(name := "specs2-markdown",
@@ -138,15 +150,6 @@ object build extends Build {
       moduleSettings
   ).dependsOn(core)
 
-  lazy val specs2Version = SettingKey[String]("specs2Version", "defines the current specs2 version")
-  lazy val specs2Settings: Seq[Settings] = Seq(
-    organization := "org.specs2",
-    specs2Version in GlobalScope <<= version,
-    scalazVersion := "7.0.4",
-    scalaVersion := "2.10.2")
-
-  lazy val scalazVersion = SettingKey[String]("scalazVersion", "defines the current scalaz version")
-
   lazy val compilationSettings: Seq[Settings] = Seq(
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
     maxErrors := 20,
@@ -161,54 +164,6 @@ object build extends Build {
     javaOptions += "-Xmx3G",
     fork in test := true,
     testOptions := Seq(Tests.Filter(s => Seq("Spec", "Guide").exists(s.endsWith) && Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))
-  )
-
-  lazy val siteSettings: Seq[Settings] = ghpages.settings ++ SbtSite.site.settings ++ Seq(
-    siteSourceDirectory <<= target (_ / "specs2-reports"),
-    // depending on the version, copy the api files to a different directory
-    siteMappings <++= (mappings in packageDoc in Compile, version) map { (m, v) =>
-      for((f, d) <- m) yield (f, if (v.trim.endsWith("SNAPSHOT")) ("api/master/" + d) else ("api/SPECS2-"+v+"/"+d))
-    },
-    // override the synchLocal task to avoid removing the existing files
-    synchLocal <<= (privateMappings, updatedRepository, gitRunner, streams) map { (mappings, repo, git, s) =>
-      val betterMappings = mappings map { case (file, target) => (file, repo / target) }
-      IO.copy(betterMappings)
-      repo
-    },
-    gitRemoteRepo := "git@github.com:etorreborre/specs2.git"
-  )
-
-  lazy val publicationSettings: Seq[Settings] = Seq(
-    publishTo in Global <<= version { v: String =>
-      val nexus = "https://oss.sonatype.org/"
-      if (v.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus + "content/repositories/snapshots")
-      else                             Some("staging" at nexus + "service/local/staging/deploy/maven2")
-    },
-    publishMavenStyle := true,
-    publishArtifact in Test := false,
-    pomIncludeRepository := { x => false },
-    pomExtra := (
-      <url>http://specs2.org/</url>
-        <licenses>
-          <license>
-            <name>MIT-style</name>
-            <url>http://www.opensource.org/licenses/mit-license.php</url>
-            <distribution>repo</distribution>
-          </license>
-        </licenses>
-        <scm>
-          <url>http://github.com/etorreborre/specs2</url>
-          <connection>scm:http:http://etorreborre@github.com/etorreborre/specs2.git</connection>
-        </scm>
-        <developers>
-          <developer>
-            <id>etorreborre</id>
-            <name>Eric Torreborre</name>
-            <url>http://etorreborre.blogspot.com/</url>
-          </developer>
-        </developers>
-    ),
-    credentials := Seq(Credentials(Path.userHome / ".sbt" / "specs2.credentials"))
   )
 
   /**
@@ -265,6 +220,21 @@ object build extends Build {
   /**
    * DOCUMENTATION
    */
+  lazy val siteSettings: Seq[Settings] = ghpages.settings ++ SbtSite.site.settings ++ Seq(
+    siteSourceDirectory <<= target (_ / "specs2-reports"),
+    // depending on the version, copy the api files to a different directory
+    siteMappings <++= (mappings in packageDoc in Compile, version) map { (m, v) =>
+      for((f, d) <- m) yield (f, if (v.trim.endsWith("SNAPSHOT")) ("api/master/" + d) else ("api/SPECS2-"+v+"/"+d))
+    },
+    // override the synchLocal task to avoid removing the existing files
+    synchLocal <<= (privateMappings, updatedRepository, gitRunner, streams) map { (mappings, repo, git, s) =>
+      val betterMappings = mappings map { case (file, target) => (file, repo / target) }
+      IO.copy(betterMappings)
+      repo
+    },
+    gitRemoteRepo := "git@github.com:etorreborre/specs2.git"
+  )
+
   lazy val documentationSettings =
     testTaskDefinition(generateUserGuideTask, Seq(Tests.Filter(_.endsWith("UserGuide")), Tests.Argument("html"))) ++
     testTaskDefinition(generateIndexPageTask, Seq(Tests.Filter(_.endsWith("Index")), Tests.Argument("html")))
@@ -300,6 +270,39 @@ object build extends Build {
    * PUBLICATION
    */
   lazy val publishSignedArtifacts = executeStepTask(publishSigned, "Publishing signed artifacts")
+
+  lazy val publicationSettings: Seq[Settings] = Seq(
+    publishTo in Global <<= version { v: String =>
+      val nexus = "https://oss.sonatype.org/"
+      if (v.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus + "content/repositories/snapshots")
+      else                             Some("staging" at nexus + "service/local/staging/deploy/maven2")
+    },
+    publishMavenStyle := true,
+    publishArtifact in Test := false,
+    pomIncludeRepository := { x => false },
+    pomExtra := (
+      <url>http://specs2.org/</url>
+        <licenses>
+          <license>
+            <name>MIT-style</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
+          </license>
+        </licenses>
+        <scm>
+          <url>http://github.com/etorreborre/specs2</url>
+          <connection>scm:http:http://etorreborre@github.com/etorreborre/specs2.git</connection>
+        </scm>
+        <developers>
+          <developer>
+            <id>etorreborre</id>
+            <name>Eric Torreborre</name>
+            <url>http://etorreborre.blogspot.com/</url>
+          </developer>
+        </developers>
+    ),
+    credentials := Seq(Credentials(Path.userHome / ".sbt" / "specs2.credentials"))
+  )
 
   /**
    * NOTIFICATION
