@@ -110,7 +110,7 @@ object build extends Build {
   )
 
   lazy val publicationSettings: Seq[Settings] = Seq(
-    publishTo <<= version { v: String =>
+    publishTo in Global <<= version { v: String =>
       val nexus = "https://oss.sonatype.org/"
       if (v.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus + "content/repositories/snapshots")
       else                             Some("staging" at nexus + "service/local/staging/deploy/maven2")
