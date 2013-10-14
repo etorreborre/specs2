@@ -35,10 +35,13 @@ object build extends Build {
   aggregate(common, matcher, matcherExtra, core, analysis, form, html, markdown, gwt, junit, scalacheck, mock, guide, examples, tests) 
 
   lazy val moduleSettings = 
-      defaultSettings          ++
-      specs2Settings           ++
-      compilationSettings      ++
+      defaultSettings      ++
+      specs2Settings       ++
+      resolversSettings    ++
+      compilationSettings  ++
       testingSettings          
+
+  lazy val resolversSettings = resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.sonatypeRepo("snapshots"))
 
   lazy val common = Project(id = "common", base = file("common"),
     settings = Seq(name := "specs2-common",
