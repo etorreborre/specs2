@@ -29,8 +29,7 @@ object build extends Build {
       siteSettings             ++
       publicationSettings      ++
       releaseSettings          ++
-      Seq(name := "specs2",
-          addCompilerPlugin("org.scala-lang.plugins" % "macro-paradise_2.10.3-RC1" % "2.0.0-SNAPSHOT"))
+      Seq(name := "specs2")
   ).
   dependsOn(core, analysis, form, markdown).
   aggregate(core, analysis, form, markdown) 
