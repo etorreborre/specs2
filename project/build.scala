@@ -31,8 +31,8 @@ object build extends Build {
       releaseSettings          ++
       Seq(name := "specs2")
   ).
-  dependsOn(core, analysis, form, html, markdown).
-  aggregate(core, analysis, form, html, markdown) 
+  dependsOn(core, analysis, form, html, markdown, junit).
+  aggregate(core, analysis, form, html, markdown, junit) 
 
   lazy val moduleSettings = 
       defaultSettings          ++
@@ -74,6 +74,13 @@ object build extends Build {
     settings = Seq(name := "specs2-html") ++
       moduleSettings
   ).dependsOn(core, form)
+
+  lazy val junit = Project(id = "junit", base = file("junit"),
+    settings = Seq(name := "specs2-junit",
+     libraryDependencies ++= Seq(
+        "junit" % "junit" % "4.11" )) ++
+      moduleSettings
+  ).dependsOn(core)
 
   lazy val specs2Version = SettingKey[String]("specs2Version", "defines the current specs2 version")
   lazy val specs2Settings: Seq[Settings] = Seq(
