@@ -84,7 +84,7 @@ Execution
     e1 := Prop("name", "eric")("paolo").expected.get must_== "paolo"
   }
 
-  "exec" - new g4 with specification.Forms {
+  "exec" - new g4 with form.FormsBuilder {
     e1  := noValues.execute                             === Pending("No expected value")
     e2  := actualOnly.execute                           === Pending("No expected value")
     e3  := expectedOnly.execute                         === Pending("No actual value")

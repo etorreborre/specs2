@@ -77,6 +77,7 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
   implicit def specStructureIsSpecPart(s: SpecificationStructure): SpecPart = new SpecPart {
     def append(fs: Fragments, text: String, expression: String = "") = fs.append(createTextFragment(text)).append(s.content)
   }
+  implicit def markdownLinkIsSpecPart(link: MarkdownLink): SpecPart = stringIsSpecPart(link.toString)
 
   implicit class specificationInStringContext(sc: StringContext) {
     def s2(variables: SpecPart*) = macro S2Macro.s2Implementation

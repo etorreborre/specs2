@@ -1,9 +1,11 @@
-package org.specs2.mutable
-import org.specs2.matcher._
+package org.specs2
+package mutable
+
+import matcher._
 import org.specs2.specification._
-import org.specs2.execute.StandardResults._
+import execute.StandardResults._
+import execute.{DecoratedResult, Failure}
 import ThrownExpectationsSpecData._
-import org.specs2.execute.{DecoratedResult, Failure}
 
 class ThrownExpectationsSpec extends Specification with ResultMatchers {
   implicit val arguments = args()
@@ -27,19 +29,19 @@ class ThrownExpectationsSpec extends Specification with ResultMatchers {
   }
 }
 object ThrownExpectationsSpecData {
-  def body1 = new MustExpectations with ThrownExpectations with Scope {
+  def body1 = new MustExpectations with ThrownExpectations with matcher.Scope {
     1 must_== 2; success
   }
-  def body2 = new ShouldExpectations with ThrownExpectations with Scope {
+  def body2 = new ShouldExpectations with ThrownExpectations with matcher.Scope {
     1 should_== 2; success
   }
-  def body3 = new MustThrownExpectations with Scope {
+  def body3 = new MustThrownExpectations with matcher.Scope {
     1 must_== 2; success
   }
-  def body4 = new ShouldThrownExpectations with Scope {
+  def body4 = new ShouldThrownExpectations with matcher.Scope {
     1 should_== 2; success
   }
-  def body5 = new MustMatchers with ThrownExpectations with Scope with DataTables {
+  def body5 = new MustMatchers with ThrownExpectations with matcher.Scope with DataTables {
     "a" | "b" | "c" |>
     1   ! 1   ! 2   |
     1   ! 1   ! 3   | { (a, b, c) => (a+b) must_== c }

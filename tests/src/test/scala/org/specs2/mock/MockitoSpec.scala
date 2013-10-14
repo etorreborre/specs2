@@ -389,7 +389,7 @@ STUBS
 
     eg := {
       val s = new org.specs2.mutable.Specification with Mockito {
-        "ex1" in new Scope {
+        "ex1" in new specification.Scope {
           val (list1, list2) = (mock[java.util.List[String]], mock[java.util.List[String]])
           list1.add("two"); list2.add("one")
           implicit val order = inOrder(list1, list2)

@@ -8,7 +8,6 @@ import java.util.regex.Pattern
 /**
  * Utility methods to get systems properties prefixed with specs2
  */
-private[specs2]
 trait SystemProperties {
   val specs2Prefix = "specs2."
 
@@ -37,7 +36,6 @@ trait SystemProperties {
   def isDefined(p: String) = getProperty(p).isDefined
 }
 
-private[specs2]
 object SystemProperties extends SystemProperties
 
 /**

@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-class MatcherMacrosSpec extends Specification with ResultMatchers { def is = s2"""
+class MatcherMacrosSpec extends Specification with ResultMatchers with MatcherMacros { def is = s2"""
 
  It is possible to define a matcher with methods matching the public members of a given type
 

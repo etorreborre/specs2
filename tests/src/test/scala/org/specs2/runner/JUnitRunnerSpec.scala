@@ -12,6 +12,7 @@ import _root_.examples.HelloWorldUnitIsolatedSpec
 import io.StringOutput
 import scala.Some
 import scala.collection.mutable.ListBuffer
+import scala.reflect.ClassTag
 
 class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {  def is = s2"""
 
@@ -71,9 +72,9 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
     Seq(console: Exporting, html: Exporting).foreach(e => e.export(any[Arguments]) returns executeSpec)
 
     abstract class DummySpecification extends Specification
-    def run(f: Fragments) = JUnitRunner.apply[DummySpecification](f, properties, console, html).run(notifier)
-    def run(spec: SpecificationStructure) = JUnitRunner.apply(spec).run(notifier)
-    def messages(spec: SpecificationStructure) = { JUnitRunner.apply(spec).run(messagesNotifier); messagesNotifier.messages }
+    def run(f: Fragments) = junitRun[DummySpecification](f, properties, console, html).run(notifier)
+    def run(spec: SpecificationStructure) = junitRun(spec).run(notifier)
+    def messages(spec: SpecificationStructure) = { junitRun(spec).run(messagesNotifier); messagesNotifier.messages }
   }
 
   case class notified() extends WithNotifier {
@@ -179,7 +180,29 @@ class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {
 
     spec.asInstanceOf[JUnitRunnerIntegrationSpecification].messages must contain(allOf("before", "ex1", "ex2", "after"))
   }
+
+  def junitRun[T <: SpecificationStructure](spec: SpecificationStructure)(implicit m: ClassTag[T]) = new JUnitRunner(m.runtimeClass) {
+    override lazy val specification = spec
+  }
+
+  def junitRun[T <: SpecificationStructure](f: Fragments, props: SystemProperties, console: TextExporting, html: HtmlExporting)(implicit m: ClassTag[T]) = new JUnitRunner(m.runtimeClass) { outer =>
+    override lazy val specification = new Specification { def is = f }
+    override lazy val properties = props
+    override def run(n: RunNotifier) = {
+      val reporter = new JUnitReporter {
+        lazy val notifier = n
+        lazy val selected = outer.selected
+        lazy val args = outer.args
+        lazy val properties = outer.properties
+        lazy val descriptions = outer.fragmentsDescriptions
+        override def exporters(accept: String => Boolean)(implicit arguments: Arguments): Seq[Exporting] = Seq(console: Exporting, html: Exporting)
+      }
+      reporter.report
+    }
+  }
+
 }
+
 
 class TaggedSpecWithOneExcludedExample extends _root_.org.specs2.mutable.SpecificationWithJUnit with _root_.org.specs2.mutable.Tags {
   "this example is ok" >> ok

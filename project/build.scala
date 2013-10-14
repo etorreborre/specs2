@@ -31,8 +31,8 @@ object build extends Build {
       releaseSettings          ++
       Seq(name := "specs2")
   ).
-  dependsOn(html, markdown, junit, scalacheck, mock, tests).
-  aggregate(common, matcher, matcherExtra, core, analysis, form, html, markdown, junit, scalacheck, mock, tests) 
+  dependsOn(html, markdown, junit, gwt, mock, guide, examples, tests).
+  aggregate(common, matcher, matcherExtra, core, analysis, form, html, markdown, gwt, junit, scalacheck, mock, guide, examples, tests) 
 
   lazy val moduleSettings = 
       defaultSettings          ++
@@ -49,10 +49,18 @@ object build extends Build {
       moduleSettings
   )
 
+  lazy val examples = Project(id = "examples", base = file("examples")
+  ).dependsOn(common, matcher, matcherExtra, core, analysis, form, html, markdown, gwt, junit, scalacheck, mock)
+
+  lazy val guide = Project(id = "guide", base = file("guide"),
+    settings = Seq(name := "specs2-guide") ++
+      moduleSettings
+  ).dependsOn(examples % "test->test")
+
   lazy val tests = Project(id = "tests", base = file("tests"),
     settings = Seq(name := "specs2-tests") ++
       moduleSettings
-  ).dependsOn(markdown, junit, scalacheck, mock)
+  ).dependsOn(matcherExtra, examples % "test->test")
 
   lazy val matcher = Project(id = "matcher", base = file("matcher"),
     settings = Seq(name := "specs2-matcher") ++
@@ -84,6 +92,14 @@ object build extends Build {
     settings = Seq(name := "specs2-form") ++
       moduleSettings
   ).dependsOn(core, markdown)
+
+  lazy val gwt = Project(id = "gwt", base = file("gwt"),
+    settings = Seq(name := "specs2-gwt",
+     libraryDependencies ++= Seq(
+        "com.chuusai" % "shapeless_2.10.2" % "2.0.0-M1")) ++
+      moduleSettings
+  ).dependsOn(core, scalacheck)
+   
 
   lazy val markdown = Project(id = "markdown", base = file("markdown"),
     settings = Seq(name := "specs2-markdown",
@@ -191,11 +207,6 @@ object build extends Build {
     credentials := Seq(Credentials(Path.userHome / ".sbt" / "specs2.credentials"))
   )
 
-  /**
-   * EXAMPLE PROJECTS
-   */
-  lazy val examples = Project(id = "examples", base = file("examples"))
-  
   /**
    * RELEASE PROCESS
    */

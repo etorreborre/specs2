@@ -38,5 +38,3 @@ class LayersSpec extends mutable.Specification with Analysis {
 
   }
 }
-
-class LayersWithCompilerSpec extends LayersSpec with CompilerDependencyFinder
