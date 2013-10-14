@@ -102,7 +102,7 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
     formatSection(markdown = true) ^ texts.lastOption.map(t => fragments append createTextFragment(t).fragments).getOrElse(fragments) ^ formatSection(markdown = true)
   }
 
-  private def createTextFragment(s: String): FragmentsFragment = fragments(Text.create(FormattedString(s)))
+  private[specs2] def createTextFragment(s: String): FragmentsFragment = fragments(Text.create(FormattedString(s)))
 }
 
 object S2Macro {

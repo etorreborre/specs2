@@ -25,49 +25,51 @@ object build extends Build {
     id = "specs2",
     base = file("."),
     settings = 
-      defaultSettings          ++
-      specs2Settings           ++
-      dependencies.settings    ++
-      compilationSettings      ++
-      testingSettings          ++
+      moduleSettings           ++
       siteSettings             ++
       publicationSettings      ++
       releaseSettings          ++
       Seq(name := "specs2",
           addCompilerPlugin("org.scala-lang.plugins" % "macro-paradise_2.10.3-RC1" % "2.0.0-SNAPSHOT"))
   ).
-  dependsOn(core, analysis).
-  aggregate(core, analysis) 
+  dependsOn(core, analysis, form, markdown).
+  aggregate(core, analysis, form, markdown) 
 
-  lazy val core = Project(
-    id = "core",
-    base = file("core"),
-    settings = 
-      defaultSettings            ++
-      specs2Settings             ++
-      compilationSettings        ++
-      testingSettings            ++
-      Seq(name := "specs2-core",
-          libraryDependencies ++= Seq(
-            "org.scalaz"     %% "scalaz-core"       % scalazVersion.value,
-            "org.scalaz"     %% "scalaz-concurrent" % scalazVersion.value,
-            "org.scala-lang" % "scala-compiler"     % scalaVersion.value  % "optional",
-            "org.scala-lang" %  "scala-reflect"     % scalaVersion.value  % "optional",
-            "org.scala-sbt"  % "test-interface"     % "1.0"               % "optional"))
+  lazy val moduleSettings = 
+      defaultSettings          ++
+      specs2Settings           ++
+      compilationSettings      ++
+      testingSettings          
+
+  lazy val core = Project(id = "core", base = file("core"),
+    settings = Seq(name := "specs2-core",
+      libraryDependencies ++= Seq(
+        "org.scalaz"     %% "scalaz-core"       % scalazVersion.value,
+        "org.scalaz"     %% "scalaz-concurrent" % scalazVersion.value,
+        "org.scala-lang" % "scala-compiler"     % scalaVersion.value,
+        "org.scala-lang" %  "scala-reflect"     % scalaVersion.value,
+        "org.scala-sbt"  % "test-interface"     % "1.0"               % "optional")) ++
+      moduleSettings
   )
 
-  lazy val analysis = Project(
-    id = "analysis",
-    base = file("analysis"),
-    settings = 
-      defaultSettings                ++
-      specs2Settings                 ++
-      compilationSettings            ++
-      testingSettings                ++
-      Seq(name := "specs2-analysis",
-          libraryDependencies ++= Seq(
-            "org.scala-lang" % "scala-compiler"     % scalaVersion.value,
-            "org.specs2" % "classycle" % "1.4.1" % "optional"))
+  lazy val analysis = Project(id = "analysis", base = file("analysis"),
+    settings = Seq(name := "specs2-analysis",
+      libraryDependencies ++= Seq(
+        "org.scala-lang" % "scala-compiler"     % scalaVersion.value,
+        "org.specs2" % "classycle" % "1.4.1" % "optional")) ++
+    moduleSettings
+  ).dependsOn(core)
+
+  lazy val form = Project(id = "form", base = file("form"),
+    settings = Seq(name := "specs2-form") ++
+      moduleSettings
+  ).dependsOn(core, markdown)
+
+  lazy val markdown = Project(id = "markdown", base = file("markdown"),
+    settings = Seq(name := "specs2-markdown",
+     libraryDependencies ++= Seq(
+        "org.pegdown"  % "pegdown" % "1.2.1")) ++
+      moduleSettings
   ).dependsOn(core)
 
   lazy val specs2Version = SettingKey[String]("specs2Version", "defines the current specs2 version")
