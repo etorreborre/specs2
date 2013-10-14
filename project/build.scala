@@ -31,8 +31,8 @@ object build extends Build {
       releaseSettings          ++
       Seq(name := "specs2")
   ).
-  dependsOn(core, analysis, form, markdown).
-  aggregate(core, analysis, form, markdown) 
+  dependsOn(core, analysis, form, html, markdown).
+  aggregate(core, analysis, form, html, markdown) 
 
   lazy val moduleSettings = 
       defaultSettings          ++
@@ -45,7 +45,6 @@ object build extends Build {
       libraryDependencies ++= Seq(
         "org.scalaz"     %% "scalaz-core"       % scalazVersion.value,
         "org.scalaz"     %% "scalaz-concurrent" % scalazVersion.value,
-        "org.scala-lang" % "scala-compiler"     % scalaVersion.value,
         "org.scala-lang" %  "scala-reflect"     % scalaVersion.value,
         "org.scala-sbt"  % "test-interface"     % "1.0"               % "optional")) ++
       moduleSettings
@@ -55,7 +54,7 @@ object build extends Build {
     settings = Seq(name := "specs2-analysis",
       libraryDependencies ++= Seq(
         "org.scala-lang" % "scala-compiler"     % scalaVersion.value,
-        "org.specs2" % "classycle" % "1.4.1" % "optional")) ++
+        "org.specs2"     % "classycle" % "1.4.1" % "optional")) ++
     moduleSettings
   ).dependsOn(core)
 
@@ -70,6 +69,11 @@ object build extends Build {
         "org.pegdown"  % "pegdown" % "1.2.1")) ++
       moduleSettings
   ).dependsOn(core)
+
+  lazy val html = Project(id = "html", base = file("html"),
+    settings = Seq(name := "specs2-html") ++
+      moduleSettings
+  ).dependsOn(core, form)
 
   lazy val specs2Version = SettingKey[String]("specs2Version", "defines the current specs2 version")
   lazy val specs2Settings: Seq[Settings] = Seq(
