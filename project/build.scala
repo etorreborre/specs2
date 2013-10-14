@@ -31,8 +31,8 @@ object build extends Build {
       releaseSettings          ++
       Seq(name := "specs2")
   ).
-  dependsOn(core, analysis, form, html, markdown, junit).
-  aggregate(core, analysis, form, html, markdown, junit) 
+  dependsOn(core, analysis, form, html, markdown, junit, scalacheck, mock).
+  aggregate(core, analysis, form, html, markdown, junit, scalacheck, mock) 
 
   lazy val moduleSettings = 
       defaultSettings          ++
@@ -78,7 +78,22 @@ object build extends Build {
   lazy val junit = Project(id = "junit", base = file("junit"),
     settings = Seq(name := "specs2-junit",
      libraryDependencies ++= Seq(
-        "junit" % "junit" % "4.11" )) ++
+        "junit" % "junit" % "4.11")) ++
+      moduleSettings
+  ).dependsOn(core)
+
+  lazy val scalacheck = Project(id = "scalacheck", base = file("scalacheck"),
+    settings = Seq(name := "specs2-scalacheck",
+     libraryDependencies ++= Seq(
+        "org.scalacheck" %% "scalacheck" % "1.10.0")) ++
+      moduleSettings
+  ).dependsOn(core)
+
+  lazy val mock = Project(id = "mock", base = file("mock"),
+    settings = Seq(name := "specs2-mock",
+     libraryDependencies ++= Seq(
+      "org.hamcrest" % "hamcrest-core" % "1.3",
+      "org.mockito"  % "mockito-all"   % "1.9.0")) ++
       moduleSettings
   ).dependsOn(core)
 
