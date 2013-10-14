@@ -9,7 +9,6 @@ import text._
 import Split._
 import data.SeparatedTags
 import scala.Predef._
-import org.pegdown.Extensions
 
 /**
  * This class holds all the options that are relevant for specs2 execution and reporting.
@@ -337,7 +336,7 @@ case class Report(
   def showtimes: Boolean             = _showtimes.getOrElse(false)
   def offset: Int                    = _offset.getOrElse(0)
   def debugMarkdown: Boolean         = _debugMarkdown.getOrElse(false)
-  def pegdownExtensions: Int         = _pegdownExtensions.getOrElse(Extensions.ALL)
+  def pegdownExtensions: Int         = _pegdownExtensions.getOrElse(65535) // Extensions.ALL
   def pegdownTimeout: Long           = _pegdownTimeout.getOrElse(2000)
   def streaming: Boolean             = _streaming.getOrElse(false)
   def diffs: Diffs                   = _diffs.getOrElse(SmartDiffs())

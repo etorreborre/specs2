@@ -44,16 +44,24 @@ object build extends Build {
       Seq(name := "specs2-core") ++
       defaultSettings            ++
       specs2Settings             ++
-      dependencies.settings      ++
       compilationSettings        ++
-      testingSettings
-    )
+      testingSettings            ++
+      Seq(libraryDependencies ++= Seq(
+          "org.scalaz"     %% "scalaz-core"       % scalazVersion.value,
+          "org.scalaz"     %% "scalaz-concurrent" % scalazVersion.value,
+          "org.scala-lang" % "scala-compiler"     % scalaVersion.value  % "optional",
+          "org.scala-lang" %  "scala-reflect"     % scalaVersion.value  % "optional",
+          "org.scala-sbt"  % "test-interface"     % "1.0"               % "optional"))
+  )
 
-  lazy val specs2Version = SettingKey[String]("specs2-version", "defines the current specs2 version")
+  lazy val specs2Version = SettingKey[String]("specs2Version", "defines the current specs2 version")
   lazy val specs2Settings: Seq[Settings] = Seq(
     organization := "org.specs2",
     specs2Version in GlobalScope <<= version,
+    scalazVersion := "7.0.4",
     scalaVersion := "2.10.2")
+
+  lazy val scalazVersion = SettingKey[String]("scalazVersion", "defines the current scalaz version")
 
   lazy val compilationSettings: Seq[Settings] = Seq(
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
