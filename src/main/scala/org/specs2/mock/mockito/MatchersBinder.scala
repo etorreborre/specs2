@@ -11,10 +11,22 @@ import org.hamcrest.Matcher
 import org.mockito.exceptions.Reporter
 import org.mockito.internal.progress.ArgumentMatcherStorage
 
+/**
+ * This class is duplicated to allow some side-effect to happen during the evaluation of byname arguments
+ */
 @SuppressWarnings(Array("unchecked"))
 class MatchersBinder extends Serializable {
   def bindMatchers(argumentMatcherStorage: ArgumentMatcherStorage, invocation: Invocation): InvocationMatcher = {
+    
+    /** start of ugly hack */
+    /**
+     * this invokes argumentsToMatcher, which in turns add matchers to the arguments matchers storage
+     *
+     * if this is not called then verification might fail, arguing that the number of matchers is not equal to the number of arguments
+     */
     invocation.toString
+    /** end of ugly hack */
+
     val lastMatchers: List[Matcher[_]] = argumentMatcherStorage.pullMatchers
     validateMatchers(invocation, lastMatchers)
     val invocationWithMatchers: InvocationMatcher = new InvocationMatcher(invocation, lastMatchers)
