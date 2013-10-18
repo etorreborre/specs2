@@ -10,6 +10,8 @@ import java.util.List
 import org.hamcrest.Matcher
 import org.mockito.exceptions.Reporter
 import org.mockito.internal.progress.ArgumentMatcherStorage
+import org.mockito.invocation.Invocation
+import org.mockito.internal.matchers.LocalizedMatcher
 
 /**
  * This class is duplicated to allow some side-effect to happen during the evaluation of byname arguments
@@ -17,28 +19,28 @@ import org.mockito.internal.progress.ArgumentMatcherStorage
 @SuppressWarnings(Array("unchecked"))
 class MatchersBinder extends Serializable {
   def bindMatchers(argumentMatcherStorage: ArgumentMatcherStorage, invocation: Invocation): InvocationMatcher = {
-    
+
     /** start of ugly hack */
     /**
-     * this invokes argumentsToMatcher, which in turns add matchers to the arguments matchers storage
+     * invokes argumentsToMatcher, which in turns add matchers to the arguments matchers storage
      *
      * if this is not called then verification might fail, arguing that the number of matchers is not equal to the number of arguments
      */
-    invocation.toString
+    ArgumentsProcessor.argumentsToMatchers(invocation.getArguments)
     /** end of ugly hack */
 
-    val lastMatchers: List[Matcher[_]] = argumentMatcherStorage.pullMatchers
+    val lastMatchers = argumentMatcherStorage.pullLocalizedMatchers
     validateMatchers(invocation, lastMatchers)
-    val invocationWithMatchers: InvocationMatcher = new InvocationMatcher(invocation, lastMatchers)
+    val invocationWithMatchers: InvocationMatcher = new InvocationMatcher(invocation, lastMatchers.asInstanceOf[List[Matcher[_]]])
     invocationWithMatchers
   }
 
-  private def validateMatchers(invocation: Invocation, matchers: List[Matcher[_]]) {
-    if (!matchers.isEmpty) {
-      val recordedMatchersSize: Int = matchers.size
-      val expectedMatchersSize: Int = invocation.getArgumentsCount
+  private def validateMatchers(invocation: Invocation, lastMatchers: List[LocalizedMatcher]) {
+    if (!lastMatchers.isEmpty) {
+      val recordedMatchersSize: Int = lastMatchers.size
+      val expectedMatchersSize: Int = invocation.getArguments.length
       if (expectedMatchersSize != recordedMatchersSize) {
-        new Reporter().invalidUseOfMatchers(expectedMatchersSize, recordedMatchersSize)
+        new Reporter().invalidUseOfMatchers(expectedMatchersSize, lastMatchers)
       }
     }
   }

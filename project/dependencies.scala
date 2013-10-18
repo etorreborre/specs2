@@ -23,7 +23,7 @@ object dependencies {
       "org.scalacheck"          %% "scalacheck"        % "1.10.0"      % "optional",
       "com.chuusai"             %% "shapeless"         % "1.2.4"       % "optional",
       "org.hamcrest"            % "hamcrest-core"      % "1.3"         % "optional",
-      "org.mockito"             % "mockito-all"        % "1.9.0"       % "optional",
+      "org.mockito"             % "mockito-all"        % "1.9.5"       % "optional",
       "junit"                   % "junit"              % "4.11"        % "optional",
       "org.pegdown"             % "pegdown"            % "1.2.1"       % "optional",
       "org.specs2"              % "classycle"          % "1.4.1"       % "optional")
