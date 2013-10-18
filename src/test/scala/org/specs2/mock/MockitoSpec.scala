@@ -35,7 +35,12 @@ class MockitoSpec extends script.Specification with Mockito with ResultMatchers 
    + if one method has not been called on a mock there will be a failure
    + it is possible to check that no calls have been made
    + it is possible to pass byname parameters
+     + with several byname parameters
+     + with 2 parameter lists and byname parameters
    + it is possible to check byname parameters
+     + with several byname parameters
+     + with mixed byname parameter and byvalue parameter
+     + with 2 parameter lists and byname parameters
    it is possible to check a function parameter
      + with one argument
      + with one argument and a matcher for the return value
@@ -151,8 +156,28 @@ STUBS
       there was one(byname).call(10)
     }
     eg := {
+      byname.add(1, 2)
+      there was one(byname).add(1, 2)
+    }
+    eg := {
+      byname.mult(1)(2)
+      there was one(byname).mult(1)(2)
+    }
+    eg := {
       byname.call(10)
       there was one(byname).call(be_>(5))
+    }
+    eg := {
+      byname.add(1, 2)
+      there was one(byname).add(anyInt, anyInt)
+    }
+    eg := {
+      byname.min(2, 1)
+      there was one(byname).min(anyInt, anyInt)
+    }
+    eg := {
+      byname.mult(1)(2)
+      there was one(byname).mult(anyInt)(anyInt)
     }
 
     eg := {
@@ -416,7 +441,12 @@ STUBS
     val list = mock[java.util.List[String]]
     val queue = mock[scala.collection.immutable.Queue[String]]
 
-    trait ByName { def call(i: =>Int) = i }
+    trait ByName {
+      def call(i: =>Int) = i
+      def add(i: =>Int, j: =>Int) = i + j
+      def min(i: Int, j: =>Int) = i - j
+      def mult(i: =>Int)(j: =>Int) = i * j
+    }
     val byname = mock[ByName]
 
     trait WithFunction1 { def call(f: Int => String) = f(0) }

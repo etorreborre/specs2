@@ -21,7 +21,7 @@ import java.lang.reflect.Method
 import java.util.ArrayList
 import java.util.Arrays
 import java.util.List
-import org.mockito.internal.progress.ThreadSafeMockingProgress2
+import org.mockito.internal.progress.{ThreadSafeMockingProgress, ThreadSafeMockingProgress2}
 
 import Invocation.{expandVarArgs, MAX_LINE_LENGTH}
 import org.mockito.internal.matchers.{EqualsFunction0, EqualsFunction1, ArrayEquals, Equals, MatchersPrinter}
@@ -55,10 +55,18 @@ class Invocation extends PrintableInvocation with InvocationOnMock with Printing
         // evaluate the byname parameter to collect the argument matchers
         // if an exception is thrown we keep the value to compare it with the actual one (see "with Any" in the MockitoSpec and issue 82)
         val value = try { arg.asInstanceOf[Function0[_]].apply() } catch { case e: Throwable => e }
+        // during the evaluation of the value some matchers might have been created. pull them.
         val argumentsMatchers = ThreadSafeMockingProgress2.pullMatchers
-        // if there are no matchers, use the value directly with an equals matcher
+        // if there are no matchers at all being registered this means that
+        // we are invoking the method, not verifying it
+        // in that case add a new matcher corresponding to the argument (an equals matcher using the value)
         if (argumentsMatchers.isEmpty) matchers.add(new EqualsFunction0(value))
-        else                           matchers.addAll(argumentsMatchers)
+        else {
+          // otherwise we add all the existing arguments matchers +
+          // we reset the state of the argumentMatchersStorage
+          matchers.addAll(argumentsMatchers)
+          ThreadSafeMockingProgress2.reportMatchers(argumentsMatchers)
+        }
       }
       else if (arg.isInstanceOf[org.specs2.matcher.Matcher[_]]) {
         matchers.add(new org.specs2.mock.HamcrestMatcherAdapter(arg.asInstanceOf[org.specs2.matcher.Matcher[_]]))
