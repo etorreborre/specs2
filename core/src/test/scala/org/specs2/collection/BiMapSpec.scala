@@ -17,7 +17,7 @@ class BiMapSpec extends script.Specification with BiMapExamples { def is = s2"""
                                                                            """
 }
 
-trait BiMapExamples extends Groups with MustMatchers {
+trait BiMapExamples extends Groups with SpecificationLike {
   val bimap = Seq("one" <-> 1, "two" <-> 2, "three" <-> 3)
 
   "BiMap api" - new group {

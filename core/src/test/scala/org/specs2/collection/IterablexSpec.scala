@@ -1,12 +1,12 @@
 package org.specs2
 package collection
+
 import mutable.Specification
 import Listx._
-import org.scalacheck.Prop
+import org.scalacheck._
 import Iterablex._
-import matcher.ScalaCheckMatchers
 
-class IterablexSpec extends Specification with IterableData {
+class IterablexSpec extends Specification with IterableData with ScalaCheckResult {
 
   "Specification for Iterables extensions".title
 
@@ -28,9 +28,10 @@ class IterablexSpec extends Specification with IterableData {
     }
     "for 2 iterables created with same elements in a different order, even with different types like Stream and List" >> {
       implicit val iterables = sameIterablesOfDifferentTypes
-      Prop.forAll { t: (Iterable[Any], Iterable[Any]) => val (i1, i2) = t
+      val p = Prop.forAll { t: (Iterable[Any], Iterable[Any]) => val (i1, i2) = t
         i1.sameElementsAs(i2)
       }
+      Test.check(Test.Parameters.default, p).passed
     }
   }
 
@@ -57,7 +58,7 @@ class IterablexSpec extends Specification with IterableData {
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen._
 
-trait IterableData extends ScalaCheckMatchers {
+trait IterableData {
   val sameIterables: Arbitrary[(Iterable[Any], Iterable[Any])] = Arbitrary {
     for {
       i0 <- listOf(oneOf(1, 2, 3))

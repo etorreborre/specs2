@@ -2,9 +2,9 @@ package org.specs2
 package execute
 
 import mutable.Specification
-import mock.Mockito
+import org.mockito.Mockito._
 
-class EventuallyResultsSpec extends Specification with Mockito {
+class EventuallyResultsSpec extends Specification {
   """
   `eventually` can be used to retry any result until a maximum number of times is reached
     or until it succeeds.
@@ -33,9 +33,8 @@ class EventuallyResultsSpec extends Specification with Mockito {
     trait ToMock {
       def next: Int
     }
-    val m = mock[ToMock]
-    m.next returns 1 thenReturns 2 thenReturns 3
-
+    val m = mock(classOf[ToMock])
+    (1 to 3).foreach(i => doReturn(i).when(m).next)
     eventually(m.next == 3) must beTrue
   }
 }

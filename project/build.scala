@@ -77,7 +77,7 @@ object build extends Build {
   lazy val tests = Project(id = "tests", base = file("tests"),
     settings = Seq(name := "specs2-tests") ++
       moduleSettings
-  ).dependsOn(matcherExtra, examples % "test->test")
+  ).dependsOn(core % "compile->compile;test->test", matcherExtra, examples % "test->test")
 
   lazy val matcher = Project(id = "matcher", base = file("matcher"),
     settings = Seq(name := "specs2-matcher") ++
@@ -93,7 +93,9 @@ object build extends Build {
   lazy val core = Project(id = "core", base = file("core"),
     settings = Seq(name := "specs2-core",
       libraryDependencies ++= Seq(
-        "org.scala-sbt"  % "test-interface"     % "1.0" % "optional")) ++
+        "org.scala-sbt"  % "test-interface" % "1.0" % "optional",
+        mockitoLib % "test",
+        junitLib   % "test")) ++
       moduleSettings
   ).dependsOn(matcher)
 
@@ -131,27 +133,28 @@ object build extends Build {
 
   lazy val junit = Project(id = "junit", base = file("junit"),
     settings = Seq(name := "specs2-junit",
-     libraryDependencies ++= Seq(
-        "junit" % "junit" % "4.11")) ++
+     libraryDependencies ++= Seq(junitLib)) ++
       moduleSettings
   ).dependsOn(core)
 
   lazy val scalacheck = Project(id = "scalacheck", base = file("scalacheck"),
     settings = Seq(name := "specs2-scalacheck",
-     libraryDependencies ++= Seq(
-        scalacheckLib)) ++
+     libraryDependencies ++= Seq(scalacheckLib)) ++
       moduleSettings
   ).dependsOn(core)
 
   lazy val mock = Project(id = "mock", base = file("mock"),
     settings = Seq(name := "specs2-mock",
      libraryDependencies ++= Seq(
-      "org.hamcrest" % "hamcrest-core" % "1.3",
-      "org.mockito"  % "mockito-all"   % "1.9.0")) ++
+      hamcrestLib,
+      mockitoLib)) ++
       moduleSettings
   ).dependsOn(core)
 
-  lazy val scalacheckLib = "org.scalacheck" %% "scalacheck" % "1.10.0"
+  lazy val scalacheckLib = "org.scalacheck" %% "scalacheck"   % "1.10.0"
+  lazy val mockitoLib    = "org.mockito"    % "mockito-core"  % "1.9.0"
+  lazy val junitLib      = "junit"          % "junit"         % "4.11"
+  lazy val hamcrestLib   = "org.hamcrest"   % "hamcrest-core" % "1.3"
 
   lazy val compilationSettings: Seq[Settings] = Seq(
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
