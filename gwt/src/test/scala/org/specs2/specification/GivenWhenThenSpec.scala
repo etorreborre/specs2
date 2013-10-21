@@ -1,12 +1,10 @@
-package org.specs2
-package specification
+package org.specs2.specification
 
-import matcher._
-import control.ImplicitParameters
-import io.Output
-import reporter.SilentConsoleReporter
-import main.Arguments
-import text.RegexExtractor
+import org.specs2.{io, Specification}
+import org.specs2.matcher.{ThrownExpectations, DataTables, ResultMatchers}
+import org.specs2.text.RegexExtractor
+import org.specs2.reporter.SilentConsoleReporter
+import org.specs2.main.Arguments
 
 class GivenWhenThenSpec extends Specification with ResultMatchers with DataTables with Grouped with GivenWhenThen { def is = s2"""
 

@@ -7,7 +7,7 @@ import matcher._
 import Fragments._
 import control.Functions._
 
-class FragmentsBuilderSpec extends script.Specification with ResultMatchers with Groups with GivenWhenThen {  def is = s2"""
+class FragmentsBuilderSpec extends script.Specification with ResultMatchers with Groups {  def is = s2"""
 
  In a Specification, the `contents` variable stores an instance of the Fragments class,
  which is merely a list of fragments. Those fragments are:
@@ -35,7 +35,6 @@ SpecStart/SpecEnd
    + When a title is created there is only one SpecStart in the specification
    + A title can be added before arguments are declared
    + A title can be added after arguments are declared
-   + A title can not be empty
 
 Arguments
 =========
@@ -63,9 +62,6 @@ How to create an Example
  + An example is simply created with `string ! e1` where e1 returns a `Result`
  + An example can have its description marked as `code` for nice html rendering
  + An example can use its own description
- + An example can use a partial function to extract values from its text
-   + the description must be stripped out of value markers
-
  + An Error in the Example body will not fail the example creation
    + even if it is an AssertionError
 
@@ -102,7 +98,6 @@ Other elements
     eg  := content.fragments.map(_.toString) must contain(equalTo("SpecStart(title1)")).exactly(1.times)
     eg  := content.specStart.arguments.xonly must beTrue
     eg  := (content2.specStart.title must_== "title2") and (content2.specStart.arguments.xonly must beTrue)
-    eg  :=  content6.specStart.title must not(beEmpty)
   }
   "arguments" - new group with specifications {
     eg := (content3.specStart.arguments.xonly must beTrue) and (content3.specStart.arguments.include must_== "t1")
@@ -132,12 +127,6 @@ Other elements
     eg := Example(FormattedString.code("a == b"), success).desc.toXml.toString must startWith("<code")
 
     eg := ("description" ! ((s: String) => s must_== "description")).body() must beSuccessful
-
-    val soExample = "given the name: ${eric}, then the age is ${18}" ! so {
-      case (name: String, age: String) => age.toInt must_== 18
-    }
-    eg := soExample.body() must beSuccessful
-    eg := soExample.desc.toString must_== "given the name: eric, then the age is 18"
 
     def execute = FragmentExecution.executeFragment(args())
     eg := execute("example" ! { throw new NoSuchMethodError("flushBuffer"); success }).toString must beMatching(".*ThrowableException.*NoSuchMethodError\\: flushBuffer.*")
@@ -178,10 +167,6 @@ Other elements
       override def map(fs: =>Fragments) = "title".title ^ fs ^ "end of the spec"
     }
     lazy val content5 = new CustomSpecification { def is = sequential ^ "text" }.content
-    lazy val content6 = new Specification with GivenWhenThen {
-      val number: Given[Int] = (_:String).toInt
-      def is = "a number ${0}" ^ number
-    }.content
 
     def fragments = content.fragments
 

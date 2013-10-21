@@ -2,7 +2,7 @@ package org.specs2
 package specification
 
 import form._
-import FormsBuilder._
+import Forms._
 
 trait ComponentsDefinitions {
   case class Address(street: String = "", number: Int = 0) {

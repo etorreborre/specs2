@@ -1,5 +1,5 @@
-package user
-package specification
+package user.specification
+
 import org.specs2.execute._
 
 class UserExecutionSpecification extends org.specs2.Specification {

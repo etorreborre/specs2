@@ -1,9 +1,9 @@
 package org.specs2
 package xml
 
+import specification._
 import NodeFunctions._
 import Nodex._
-import specification.{ExamplesGroup, Grouped}
 import matcher.XmlMatchers
 
 class NodeFunctionsSpec extends Specification with Grouped with XmlMatchers { def is = s2"""

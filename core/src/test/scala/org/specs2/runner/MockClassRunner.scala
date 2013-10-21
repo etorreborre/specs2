@@ -1,11 +1,9 @@
-package org.specs2
-package runner
+package org.specs2.runner
 
-import specification.SpecificationStructure
-import reporter.{TextResultOutput, ConsoleReporter}
-import io.StringOutput
-import main.Arguments
-import Arguments._
+import org.specs2.main.Arguments
+import org.specs2.specification.SpecificationStructure
+import org.specs2.reporter.{TextResultOutput, ConsoleReporter}
+import org.specs2.io.StringOutput
 
 case class MockClassRunner(arguments: Arguments = Arguments()) extends ClassRunner {
   def run(s: SpecificationStructure) = {

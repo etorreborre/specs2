@@ -1,5 +1,6 @@
-package org.specs2
-package specification
+package org.specs2.specification
+
+import org.specs2.Specification
 
 class FormComponentsSpec extends Specification with Forms { def is = s2"""
 

@@ -1,8 +1,9 @@
 package org.specs2
 package io
-import mutable._
-import specification.{SpecificationStructure, Example}
+
 import user.specification._
+import mutable.{Specification, Tags}
+import specification.{Example, SpecificationStructure}
 
 class FromSourceSpec extends Specification with Tags {
   step(System.setProperty("specs2.srcTestDir", "tests/src/test/scala"))
@@ -77,5 +78,4 @@ package other {
   object NotFound extends org.specs2.Specification { def is = ""
     def result = success.desc
   }
-
 }

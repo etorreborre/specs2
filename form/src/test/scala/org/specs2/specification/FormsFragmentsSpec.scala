@@ -1,5 +1,6 @@
 package org.specs2
 package specification
+
 import form._
 
 class FormsFragmentsSpec extends Specification with Forms { def is = s2"""

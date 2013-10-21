@@ -5,9 +5,8 @@ import execute._
 import matcher.DataTables._
 import time.SimpleTimer
 import _root_.org.specs2.mutable.{Specification => Spec}
-import matcher.XmlMatchers
 
-class StatsSpec extends Spec with XmlMatchers {
+class StatsSpec extends Spec {
 
   "A Stats object can be resumed to a Result" >> {
     "if there are no failures or errors -> success"  >> {
@@ -57,14 +56,14 @@ class StatsSpec extends Spec with XmlMatchers {
   "XML" >> {
     "A Stats object can be exported as xml" >> {
       "with no trend" >> {
-        Stats(1, 2, 3, 4, 5, 6, 7).toXml must be_==/(
-        <stats examples="1" successes="2" expectations="3" failures="4" errors="5" pending="6" skipped="7"></stats>)
+        Stats(1, 2, 3, 4, 5, 6, 7).toXml.toString must be_==(
+        """<stats examples="1" successes="2" expectations="3" failures="4" errors="5" pending="6" skipped="7"></stats>""")
       }
       "with a trend" >> {
-        Stats(1, 2, 3, 4, 5, 6, 7, Some(Stats(-1, -2))).toXml must be_==/(
-        <stats examples="1" successes="2" expectations="3" failures="4" errors="5" pending="6" skipped="7">
+        Stats(1, 2, 3, 4, 5, 6, 7, Some(Stats(-1, -2))).toXml.toString must be_==(
+        """<stats examples="1" successes="2" expectations="3" failures="4" errors="5" pending="6" skipped="7">
           <trend><stats examples="-1" successes="-2"></stats></trend>
-        </stats>)
+        </stats>""")
       }
     }
     "A Stats object can be imported from xml" >> {

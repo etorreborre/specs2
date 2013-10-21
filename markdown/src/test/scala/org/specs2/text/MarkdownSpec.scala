@@ -1,9 +1,8 @@
-package org.specs2
-package text
+package org.specs2.text
 
-import mutable._
 import Markdown._
 import org.specs2.main.Arguments
+import org.specs2.mutable._
 
 class MarkdownSpec extends Specification {
   implicit val defaultArgs = Arguments()

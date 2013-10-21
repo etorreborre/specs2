@@ -1,7 +1,7 @@
-package org.specs2
-package specification
+package org.specs2.specification
 
 import script.{StepParser, GWT}
+import org.specs2.Specification
 
 class StepParsersSpec extends Specification with GWT with Grouped { def is = s2""" ${"Step parsers".title}
 

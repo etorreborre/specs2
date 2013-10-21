@@ -110,21 +110,21 @@ object build extends Build {
   lazy val form = Project(id = "form", base = file("form"),
     settings = Seq(name := "specs2-form") ++
       moduleSettings
-  ).dependsOn(core, markdown)
+  ).dependsOn(core, markdown, matcherExtra, scalacheck % "test->test")
 
   lazy val gwt = Project(id = "gwt", base = file("gwt"),
     settings = Seq(name := "specs2-gwt",
      libraryDependencies ++= Seq(
         "com.chuusai" % "shapeless_2.10.2" % "2.0.0-M1")) ++
       moduleSettings
-  ).dependsOn(core, scalacheck)
+  ).dependsOn(core, matcherExtra, scalacheck)
 
   lazy val markdown = Project(id = "markdown", base = file("markdown"),
     settings = Seq(name := "specs2-markdown",
      libraryDependencies ++= Seq(
         "org.pegdown"  % "pegdown" % "1.2.1")) ++
       moduleSettings
-  ).dependsOn(common)
+  ).dependsOn(common, core % "compile->test")
 
   lazy val html = Project(id = "html", base = file("html"),
     settings = Seq(name := "specs2-html") ++
