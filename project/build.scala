@@ -61,7 +61,8 @@ object build extends Build {
       libraryDependencies ++= Seq(
         "org.scalaz"     %% "scalaz-core"       % scalazVersion.value,
         "org.scalaz"     %% "scalaz-concurrent" % scalazVersion.value,
-        "org.scala-lang" %  "scala-reflect"     % scalaVersion.value)) ++
+        "org.scala-lang" %  "scala-reflect"     % scalaVersion.value,
+        scalacheckLib)) ++
       moduleSettings
   )
 
@@ -102,7 +103,7 @@ object build extends Build {
         "org.scala-lang" % "scala-compiler" % scalaVersion.value,
         "org.specs2"     % "classycle"      % "1.4.1")) ++
     moduleSettings
-  ).dependsOn(core)
+  ).dependsOn(core, matcher, scalacheck % "test")
 
   lazy val form = Project(id = "form", base = file("form"),
     settings = Seq(name := "specs2-form") ++
@@ -138,7 +139,7 @@ object build extends Build {
   lazy val scalacheck = Project(id = "scalacheck", base = file("scalacheck"),
     settings = Seq(name := "specs2-scalacheck",
      libraryDependencies ++= Seq(
-        "org.scalacheck" %% "scalacheck" % "1.10.0")) ++
+        scalacheckLib)) ++
       moduleSettings
   ).dependsOn(core)
 
@@ -149,6 +150,8 @@ object build extends Build {
       "org.mockito"  % "mockito-all"   % "1.9.0")) ++
       moduleSettings
   ).dependsOn(core)
+
+  lazy val scalacheckLib = "org.scalacheck" %% "scalacheck" % "1.10.0"
 
   lazy val compilationSettings: Seq[Settings] = Seq(
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),

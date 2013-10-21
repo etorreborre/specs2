@@ -1,5 +1,4 @@
-package org.specs2
-package collection
+package org.specs2.collection
 
 import org.scalacheck.Gen
 
