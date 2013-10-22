@@ -161,7 +161,7 @@ STUBS
     eg := {
       function1.call((_:Int).toString)
       (there was one(function1).call(1 -> startWith("1"))) and
-      ((there was one(function1).call(1 -> startWith("2"))).message must_== "'1' doesn't start with '2'")
+      ((there was one(function1).call(1 -> startWith("2"))).message must contain("'1' doesn't start with '2'"))
     }
     eg := {
       function2.call((i:Int, d: Double) => (i + d).toString)
@@ -198,7 +198,7 @@ STUBS
     }
     eg := {
       partial.call { case (i:Int, d: Double) if i > 10 => (i + d).toString }
-      (there was one(partial).call((1, 3.0) -> "4.0")).message must_== "a PartialFunction defined for (1,3.0)"
+      (there was one(partial).call((1, 3.0) -> "4.0")).message must contain("a PartialFunction defined for (1,3.0)")
     }
 
     eg := {
@@ -213,7 +213,7 @@ STUBS
     eg := {
       repeated.call(1, 2, 3)
       (there was one(repeated).call(1, 2, 3)) and
-      ((there was one(repeated).call(1, 2)).message must_== "WrappedArray(1, 2)")
+      ((there was one(repeated).call(1, 2)).message must contain("WrappedArray(1, 2)"))
     }
   }
   "stubs" - new group with list {

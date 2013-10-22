@@ -57,13 +57,11 @@ class StatsSpec extends Spec {
     "A Stats object can be exported as xml" >> {
       "with no trend" >> {
         Stats(1, 2, 3, 4, 5, 6, 7).toXml.toString must be_==(
-        """<stats examples="1" successes="2" expectations="3" failures="4" errors="5" pending="6" skipped="7"></stats>""")
+        """<stats pending="6" expectations="3" failures="4" errors="5" skipped="7" successes="2" examples="1"></stats>""")
       }
       "with a trend" >> {
         Stats(1, 2, 3, 4, 5, 6, 7, Some(Stats(-1, -2))).toXml.toString must be_==(
-        """<stats examples="1" successes="2" expectations="3" failures="4" errors="5" pending="6" skipped="7">
-          <trend><stats examples="-1" successes="-2"></stats></trend>
-        </stats>""")
+        """<stats pending="6" expectations="3" failures="4" errors="5" skipped="7" successes="2" examples="1"><trend><stats successes="-2" examples="-1"></stats></trend></stats>""")
       }
     }
     "A Stats object can be imported from xml" >> {

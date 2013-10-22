@@ -1,4 +1,5 @@
-package user.specification
+package user
+package specification
 
 import org.specs2.Specification
 import org.specs2.execute._

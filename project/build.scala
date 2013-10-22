@@ -32,7 +32,7 @@ object build extends Build {
       releaseSettings          ++
       Seq(name := "specs2")
   ).
-  dependsOn(Seq(html, markdown, junit, gwt, mock, guide, examples, tests).map(_ % "compile->optional;test->test"):_*).
+  dependsOn(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock).
   aggregate(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, guide, examples, tests) 
 
   
