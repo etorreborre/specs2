@@ -8,6 +8,9 @@ class OptionMatchersSpec extends Specification with ResultMatchers { def is = s2
   beSome checks if an element is Some(_)
   ${ Some(1) must beSome }
   ${ Some(1) must beSome(1) }
+  ${ Some(1) must beSome((_:Int) > 0) }
+  ${ Some(1) must beSome(positive) }
+  ${ Some(1) must beSome(be_==(1)) }
   ${ Some(1) must beSome.which(_ > 0) }
   ${ ((None: Option[Int]) must beSome.which(_ > 0)) returns "'None' is not Some" }
   ${ ((None: Option[Int]) must beSome.like { case i => i must be_>(0) }) returns "'None' is not Some" }
@@ -27,4 +30,6 @@ class OptionMatchersSpec extends Specification with ResultMatchers { def is = s2
   ${ None must beAsNoneAs(None) }
   ${ Some(1) must beAsNoneAs(Some(2)) }
   """
+
+  def positive: Matcher[Int] = (i: Int) => (i > 0, s"$i is not positive")
 }

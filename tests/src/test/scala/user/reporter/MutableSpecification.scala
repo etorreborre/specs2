@@ -20,13 +20,3 @@ class MutableMockitoSpecification extends Specification with org.specs2.mock.Moc
     there was one(mock[java.util.List[Int]]).get(0)
   }
 }
-
-class OkSpecification extends Specification {
-  "This example is ok" in ok
-}
-class KoSpecification extends Specification {
-  "This example is ko" in ko
-}
-class ErrorSpecification extends Specification {
-  "This example has an error" in { throw new Exception("bang"); ok }
-}

@@ -40,6 +40,7 @@ object build extends Build {
   lazy val specs2Settings: Seq[Settings] = Seq(
     organization := "org.specs2",
     specs2Version in GlobalScope <<= version,
+    specs2ShellPrompt,
     scalazVersion := "7.0.4",
     scalaVersion := "2.10.2")
 
@@ -57,7 +58,7 @@ object build extends Build {
 
   /** MODULES (sorted in alphabetical order) */
     lazy val analysis = Project(id = "analysis", base = file("analysis"),
-    settings = Seq(name := "specs2-analysis",
+    settings = Seq(specs2ArtifactName,
       libraryDependencies ++= Seq(
         "org.scala-lang" % "scala-compiler" % scalaVersion.value,
         "org.specs2"     % "classycle"      % "1.4.1")) ++
@@ -65,7 +66,7 @@ object build extends Build {
   ).dependsOn(common % "test->test", core, matcher, scalacheck % "test")
 
   lazy val common = Project(id = "common", base = file("common"),
-    settings = Seq(name := "specs2-common",
+    settings = Seq(specs2ArtifactName,
       libraryDependencies ++= Seq(
         "org.scalaz"     %% "scalaz-core"       % scalazVersion.value,
         "org.scalaz"     %% "scalaz-concurrent" % scalazVersion.value,
@@ -75,7 +76,7 @@ object build extends Build {
   )
 
   lazy val core = Project(id = "core", base = file("core"),
-    settings = Seq(name := "specs2-core",
+    settings = Seq(specs2ArtifactName,
       libraryDependencies ++= Seq(
         "org.scala-sbt"  % "test-interface" % "1.0" % "optional",
         mockitoLib % "test",
@@ -83,57 +84,58 @@ object build extends Build {
       moduleSettings
   ).dependsOn(matcher, common % "test->test")
 
-  lazy val examples = Project(id = "examples", base = file("examples")
+  lazy val examples = Project(id = "examples", base = file("examples"),
+    settings = Seq(specs2ArtifactName) ++ moduleSettings
   ).dependsOn(common, matcher, matcherExtra, core, analysis, form, html, markdown, gwt, junit, scalacheck, mock)
 
   lazy val form = Project(id = "form", base = file("form"),
-    settings = Seq(name := "specs2-form") ++
+    settings = Seq(specs2ArtifactName) ++
       moduleSettings
   ).dependsOn(core, markdown, matcherExtra, scalacheck % "test->test")
 
   lazy val guide = Project(id = "guide", base = file("guide"),
-    settings = Seq(name := "specs2-guide") ++
+    settings = Seq(specs2ArtifactName) ++
       moduleSettings
   ).dependsOn(examples % "test->test")
 
   lazy val gwt = Project(id = "gwt", base = file("gwt"),
-    settings = Seq(name := "specs2-gwt",
+    settings = Seq(specs2ArtifactName,
      libraryDependencies ++= Seq(
         "com.chuusai" % "shapeless_2.10.2" % "2.0.0-M1")) ++
       moduleSettings
   ).dependsOn(core, matcherExtra, scalacheck)
 
   lazy val html = Project(id = "html", base = file("html"),
-    settings = Seq(name := "specs2-html") ++
+    settings = Seq(specs2ArtifactName) ++
       moduleSettings
   ).dependsOn(form, mock % "test", matcherExtra % "test")
 
   lazy val junit = Project(id = "junit", base = file("junit"),
-    settings = Seq(name := "specs2-junit",
+    settings = Seq(specs2ArtifactName,
      libraryDependencies ++= Seq(junitLib)) ++
       moduleSettings
   ).dependsOn(core, matcherExtra % "test", mock % "test")
 
   lazy val markdown = Project(id = "markdown", base = file("markdown"),
-    settings = Seq(name := "specs2-markdown",
+    settings = Seq(specs2ArtifactName,
      libraryDependencies ++= Seq(
         "org.pegdown"  % "pegdown" % "1.2.1")) ++
       moduleSettings
   ).dependsOn(common, core % "compile->test")
 
   lazy val matcher = Project(id = "matcher", base = file("matcher"),
-    settings = Seq(name := "specs2-matcher") ++
+    settings = Seq(specs2ArtifactName) ++
       moduleSettings
   ).dependsOn(common)
 
   lazy val matcherExtra = Project(id = "matcher-extra", base = file("matcher-extra"),
-    settings = Seq(name := "specs2-matcher-extra",
+    settings = Seq(specs2ArtifactName,
       addCompilerPlugin("org.scala-lang.plugins" % "macro-paradise_2.10.3-RC1" % "2.0.0-SNAPSHOT")) ++
       moduleSettings
   ).dependsOn(analysis, scalacheck, matcher)
 
   lazy val mock = Project(id = "mock", base = file("mock"),
-    settings = Seq(name := "specs2-mock",
+    settings = Seq(specs2ArtifactName,
      libraryDependencies ++= Seq(
       hamcrestLib,
       mockitoLib)) ++
@@ -141,13 +143,13 @@ object build extends Build {
   ).dependsOn(core)
 
   lazy val scalacheck = Project(id = "scalacheck", base = file("scalacheck"),
-    settings = Seq(name := "specs2-scalacheck",
+    settings = Seq(specs2ArtifactName,
      libraryDependencies ++= Seq(scalacheckLib)) ++
       moduleSettings
   ).dependsOn(core)
 
   lazy val tests = Project(id = "tests", base = file("tests"),
-    settings = Seq(name := "specs2-tests") ++
+    settings = Seq(specs2ArtifactName) ++
       moduleSettings
   ).dependsOn(core % "compile->compile;test->test", matcherExtra, junit % "test->test", examples % "test->test")
 
@@ -155,9 +157,14 @@ object build extends Build {
    * Main libraries 
    */
   lazy val scalacheckLib = "org.scalacheck" %% "scalacheck"   % "1.10.0"
-  lazy val mockitoLib    = "org.mockito"    % "mockito-core"  % "1.9.0"
+  lazy val mockitoLib    = "org.mockito"    % "mockito-core"  % "1.9.5"
   lazy val junitLib      = "junit"          % "junit"         % "4.11"
   lazy val hamcrestLib   = "org.hamcrest"   % "hamcrest-core" % "1.3"
+
+  lazy val specs2ShellPrompt = shellPrompt in ThisBuild := { state => 
+    val name = Project.extract(state).currentRef.project
+    (if (name == "specs2") "" else name) + "> " 
+  }
 
   lazy val compilationSettings: Seq[Settings] = Seq(
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
@@ -278,6 +285,11 @@ object build extends Build {
   /**
    * PUBLICATION
    */
+  def specs2ArtifactName = artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
+    s"specs2-${artifact.name}-${module.revision}.${artifact.extension}"
+  }
+
+
   lazy val publishSignedArtifacts = executeStepTask(publishSigned, "Publishing signed artifacts")
 
   lazy val publicationSettings: Seq[Settings] = Seq(
