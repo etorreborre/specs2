@@ -2,14 +2,13 @@ package org.specs2
 package reporter
 
 import org.scalacheck.{ Arbitrary, Gen }
-import matcher.InternalScalazMatchers
 import scalaz._
 import Scalaz._
-import specification._
-import collection.Seqx._
 import Levels._
-import specification.FragmentsShow._
-import org.specs2.specification.TagsFragments.AsSection
+import specification._
+import matcher._
+import FragmentsShow._
+import collection.Seqx._
 
 private[specs2]
 class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatchers with ArbitraryFragments with Tags { def is = sequential^ s2"""

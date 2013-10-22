@@ -4,8 +4,8 @@ package reporter
 import specification._
 import io._
 import mock._
-import main.Arguments
-import matcher.XmlMatchers
+import matcher._
+import main._
 
 class HtmlFileSpec extends Specification with Mockito with XmlMatchers { def is = s2"""
 

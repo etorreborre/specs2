@@ -1,9 +1,9 @@
 package org.specs2
 package reporter
 
-import io._
 import specification._
-import execute.Executable
+import io._
+import execute._
 
 class ExecutionModelSpec extends Specification with ScalaCheck with Groups { def is = s2"""
 

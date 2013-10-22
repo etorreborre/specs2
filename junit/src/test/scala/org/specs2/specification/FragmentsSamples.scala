@@ -1,8 +1,8 @@
 package org.specs2
 package specification
-import execute._
-import matcher._
 
+import matcher._
+import execute._
 /**
  * This trait provides fragments to use for specifying folds and reporters
  */

@@ -1,18 +1,17 @@
 package org.specs2
 package runner
-import mock._
-import specification._
-import reporter._
-import main._
+
 import _root_.org.junit.runner.notification.{ RunNotifier, Failure }
 import _root_.org.junit.runner.Description
 import _root_.org.junit.ComparisonFailure
-import text.FromString
-import _root_.examples.HelloWorldUnitIsolatedSpec
-import io.StringOutput
-import scala.Some
 import scala.collection.mutable.ListBuffer
 import scala.reflect.ClassTag
+import mock.Mockito
+import specification._
+import main._
+import reporter._
+import io._
+import text._
 
 class JUnitRunnerSpec extends Specification with Mockito with FragmentsSamples {  def is = s2"""
 
@@ -218,4 +217,25 @@ class JUnitRunnerIntegrationSpecification extends _root_.org.specs2.mutable.Spec
   "ex1" in { messages += "ex1"; ok }
   "ex1" in { messages += "ex2"; ok }
   step { messages += "after" }
+}
+
+
+class HelloWorldUnitIsolatedSpec extends org.specs2.mutable.Specification {
+  isolated
+
+  "A variable with the 'Hello world' string" >> {
+    var local = "Hello world"
+    "can be modified" in {
+      local = "Hello you"
+      local must have size (9)
+    }
+    "several times" in {
+      local = "Hiya"
+      local must have size (4)
+    }
+    "or not" in {
+      local must have size (11)
+    }
+  }
+
 }

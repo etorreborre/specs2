@@ -1,20 +1,19 @@
 package org.specs2
 package runner
 
-import io._
-import mock.Mockito
-import matcher.DataTables
-import reporter._
 import org.scalatools.testing._
-import main.{ArgumentsArgs, Arguments}
-import specification.{Tags, Groups, ExecutingSpecification}
+import specification._
 import matcher._
-import execute.StandardResults
+import main._
+import reporter._
+import io._
+import mock._
+import execute._
 import scala.collection.mutable.ListBuffer
 import annotation.tailrec
 
 class TestInterfaceRunnerSpec extends Specification with Groups with Tags { def is = section("unstable") ^ s2"""
-                                                                                                                
+
  A TestInterfaceRunner is responsible for instantiating Specification classes found by
  sbt and executing them using a TestInterfaceReporter
 
@@ -177,6 +176,7 @@ class TestInterfaceRunnerSpec extends Specification with Groups with Tags { def 
       (e: Event) => (e.testName == name, s"${e.testName} != $name")
   }
 }
+
 
 trait MockLogger extends matcher.MustExpectations with Mockito {
   val logger = new Logger with StringOutput {

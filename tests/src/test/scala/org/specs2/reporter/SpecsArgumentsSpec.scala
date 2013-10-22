@@ -5,11 +5,10 @@ import org.scalacheck.{ Arbitrary, Gen, Prop }
 import org.scalacheck.Arbitrary._
 import scalaz._
 import Scalaz._
-import main.Arguments
-import matcher._
 import specification._
 import SpecsArguments._
 import FragmentSpecsArgumentsReducer._
+import matcher._
 
 class SpecsArgumentsSpec extends Specification with InternalScalazMatchers with ArbitraryFragments { def is = s2"""
   Each Specification provides arguments which can be used to influence its execution and reporting.

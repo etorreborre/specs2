@@ -1,5 +1,6 @@
 package org.specs2
 package reporter
+
 import specification._
 import main._
 import ExecutedSpecificationData._

@@ -1,11 +1,12 @@
 package org.specs2
 package reporter
-import specification._
-import main._
-import ExecutedFragment._
-import mock.Mockito
 
-class StoringSpec extends SpecificationWithJUnit { def is = s2"""
+import specification._
+import main.Arguments
+import ExecutedFragment._
+import mock._
+
+class StoringSpec extends Specification { def is = s2"""
 
    The statistics of a specification must                                                        
      be computed after execution                                                                 

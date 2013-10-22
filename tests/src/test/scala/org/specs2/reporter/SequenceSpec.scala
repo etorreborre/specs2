@@ -1,6 +1,7 @@
 package org.specs2
 package reporter
 
+import main._
 import specification._
 
 class SequenceSpec extends Specification with ScalaCheck with ArbitraryFragments { def is = s2"""

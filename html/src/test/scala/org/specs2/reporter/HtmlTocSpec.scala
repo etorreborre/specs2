@@ -1,9 +1,9 @@
 package org.specs2
 package reporter
 
-import scalaz.Scalaz._
-import main.Arguments
 import specification._
+import scalaz.Scalaz._
+import main._
 
 class HtmlTocSpec extends Specification { def is =                                        s2"""
 

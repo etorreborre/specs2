@@ -1,8 +1,9 @@
-package org.specs2
-package reporter
-import specification._
+package org.specs2.reporter
+
 import org.junit.runner._
 import ShowDescription._
+import org.specs2.Specification
+import org.specs2.specification.{Fragment, Fragments, FragmentsSamples}
 
 class JUnitDescriptionsSpec extends Specification with FragmentsSamples {  def is = s2"""
                                                                                          

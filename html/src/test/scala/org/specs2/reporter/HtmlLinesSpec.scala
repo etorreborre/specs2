@@ -14,7 +14,7 @@ with the applicable level, arguments and Statistics.
   An ExecutedResult is translated to a HtmlResult                                                      $e4
   An ExecutedBr is translated to a HtmlBr                                                              $e5
   Everything else is translated to HtmlOther, meaning that those fragments will not be printed out     $e6
-                                                                                                                        """
+                                                                                                       """
 
   lazy val spec = execute("text" ^ br ^ { 1 === 1 } ^ br ^ t(2) ^ end)
   lazy val lines = printer.reduce(spec)

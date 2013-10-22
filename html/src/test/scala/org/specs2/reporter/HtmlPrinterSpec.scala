@@ -1,9 +1,10 @@
 package org.specs2
 package reporter
-import mock._
-import text.MarkdownHeaders._
 
-class HtmlPrinterSpec extends SpecificationWithJUnit with Mockito { outer => def is = s2"""
+import specification._
+import mock._
+
+class HtmlPrinterSpec extends Specification with Mockito { outer => def is = s2"""
 
 #### Introduction
 

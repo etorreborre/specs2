@@ -1,9 +1,9 @@
 package org.specs2
 package reporter
 
+import specification._
 import io._
 import mock._
-import specification._
 
 class HtmlFileWriterSpec extends Specification with Mockito { outer => def is = s2"""
                                                                                      

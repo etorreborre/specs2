@@ -1,9 +1,9 @@
 package org.specs2
 package reporter
 
-import mock.Mockito
-import specification._
-import execute._
+import specification.{Grouped, Tags}
+import execute.Details
+import mock._
 
 class NotifierSpec extends Specification with Mockito with Tags with Grouped { def is = sequential ^ s2"""
 
