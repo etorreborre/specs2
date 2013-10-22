@@ -32,7 +32,7 @@ object build extends Build {
       releaseSettings          ++
       Seq(name := "specs2")
   ).
-  dependsOn(common, matcher, matcherExtra, core, html % "optional -> compile", analysis, form, markdown, gwt, junit, scalacheck, mock).
+  dependsOn(Seq(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock).map(_ % "optional -> compile"):_*).
   aggregate(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, guide, examples, tests) 
 
   
@@ -62,7 +62,7 @@ object build extends Build {
         "org.scala-lang" % "scala-compiler" % scalaVersion.value,
         "org.specs2"     % "classycle"      % "1.4.1")) ++
     moduleSettings
-  ).dependsOn(core, matcher, scalacheck % "test")
+  ).dependsOn(common % "test->test", core, matcher, scalacheck % "test")
 
   lazy val common = Project(id = "common", base = file("common"),
     settings = Seq(name := "specs2-common",
@@ -70,7 +70,7 @@ object build extends Build {
         "org.scalaz"     %% "scalaz-core"       % scalazVersion.value,
         "org.scalaz"     %% "scalaz-concurrent" % scalazVersion.value,
         "org.scala-lang" %  "scala-reflect"     % scalaVersion.value,
-        scalacheckLib)) ++
+        scalacheckLib % "test")) ++
       moduleSettings
   )
 
@@ -81,7 +81,7 @@ object build extends Build {
         mockitoLib % "test",
         junitLib   % "test")) ++
       moduleSettings
-  ).dependsOn(matcher)
+  ).dependsOn(matcher, common % "test->test")
 
   lazy val examples = Project(id = "examples", base = file("examples")
   ).dependsOn(common, matcher, matcherExtra, core, analysis, form, html, markdown, gwt, junit, scalacheck, mock)
