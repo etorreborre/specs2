@@ -58,4 +58,7 @@ class ExpectableSpec extends Specification with ResultMatchers with org.specs2.m
     val l = mock[List[Int]]
     l must be_==(l)
   }
+  "the description of an Expectable can be updated with another description" in {
+    ("a" aka "the string").updateDescription(_ + "!").description === "the string 'a'!"
+  }
 }
