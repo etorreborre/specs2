@@ -73,6 +73,8 @@ class Expectable[+T] private[specs2] (t: () => T) { outer =>
   def mapDescription(d: Option[String => String]): Expectable[T] = Expectable(value, d)
   def mapDescription(d: String => String): Expectable[T] = mapDescription(Some(d))
   def mapDescription(d: String): Expectable[T] = mapDescription((_:String) => d)
+  /** update the description with another description */
+  def updateDescription(d: String => String): Expectable[T] = mapDescription(d(description))
 }
 
 /**

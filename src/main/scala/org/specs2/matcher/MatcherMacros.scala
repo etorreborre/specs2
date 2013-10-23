@@ -42,8 +42,10 @@ object MatcherMacros extends MatcherMacros {
       val fieldType  = member.typeSignature
       val parameterName = newTermName(fieldName)
 
-      val valueBody    = q"""(fieldValue: $fieldType) => addMatcher((t :$typeOfT) => new org.specs2.matcher.BeTypedEqualTo[$fieldType](fieldValue)(theValue[$fieldType](t.$parameterName)).toResult)"""
-      val matcherBody  = q"""(matcherValue: org.specs2.matcher.Matcher[$fieldType]) => addMatcher((t :$typeOfT) => matcherValue[$fieldType](theValue[$fieldType](t.$parameterName)).toResult) """
+      val valueBody    = q"""(fieldValue: $fieldType) =>
+        addMatcher((t :$typeOfT) => new org.specs2.matcher.BeTypedEqualTo[$fieldType](fieldValue)(theValue[$fieldType](t.$parameterName).updateDescription(d => "  "+$fieldName+": "+d)).toResult)"""
+      val matcherBody  = q"""(matcherValue: org.specs2.matcher.Matcher[$fieldType]) =>
+        addMatcher((t :$typeOfT) => matcherValue[$fieldType](theValue[$fieldType](t.$parameterName).updateDescription(d => "  "+$fieldName+": "+d)).toResult) """
       val functionBody = q"""(f: $fieldType => org.specs2.execute.Result) => addMatcher((t :$typeOfT) => f(t.$parameterName)) """
 
       (q""" @fieldMatcherBody($valueBody) def $methodName(fieldValue: $fieldType): $matcherClassType = macro org.specs2.matcher.MatcherMacros.fieldMatcherImplementation[$fieldType, $typeOfT] """,
@@ -60,7 +62,8 @@ object MatcherMacros extends MatcherMacros {
 
         def apply[S <: $typeOfT](s: org.specs2.matcher.Expectable[S]) = {
           val r = matcherFunction(s.value)
-          result(r.isSuccess, r.message, r.message, s)
+          val message = r.mapMessage(m => "For "+s.description+"\n"+m).message
+          result(r.isSuccess, message, message, s)
         }
 
         ..$fieldMatchers

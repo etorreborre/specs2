@@ -13,6 +13,8 @@ class MatcherMacrosSpec extends Specification with ResultMatchers { def is = s2"
    several values at once                                               $e4
 
  The first member value to fail will return the failure message         $e5
+ The member name must be mentioned in the failure message               $e6
+ The expectable description must be included in the failure message     $e7
 
 """
 
@@ -25,6 +27,8 @@ class MatcherMacrosSpec extends Specification with ResultMatchers { def is = s2"
   def e4 = cat must matchA[Cat].name("Kitty").age(is(6)).kitten((_:Seq[Cat]) must haveSize(2))
 
   def e5 = (cat must matchA[Cat].name("Kitty").age(is(7)).kitten((_:Seq[Cat]) must haveSize(2))) returns "'6' is not equal to '7'"
+  def e6 = (cat must matchA[Cat].age(is(7))) returns "age: "
+  def e7 = (cat aka "the cat" must matchA[Cat].name("Kitty").age(is(7)).kitten((_:Seq[Cat]) must haveSize(2))) returns cat.toString
 
   def is[A](a: A) = be_==(a)
   case class Cat(name: String = "", age: Int = 0, kitten: Seq[Cat] = Seq())
