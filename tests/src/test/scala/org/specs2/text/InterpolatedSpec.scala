@@ -1,8 +1,8 @@
 package org.specs2
 package text
 
-import matcher.ParserMatchers
-import specification.Snippets
+import specification._
+import matcher._
 
 class InterpolatedSpec extends Specification with ParserMatchers with Snippets { def is = s2"""
 
