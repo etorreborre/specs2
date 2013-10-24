@@ -43,13 +43,13 @@ trait TraversableBaseMatchers extends ValueChecks with TraversableBaseMatchersLo
   def atMost[T](checks: ValueCheck[T]*) : ContainWithResultSeq[T] = new ContainWithResultSeq(checks).atMost
 
   /** match if a traversable contains all the elements of seq (and maybe more) */
-  def containAllOf[T](seq: Seq[T]) = contain(atLeast(seq.map(v => valueIsTypedContainCheck(v)):_*))
+  def containAllOf[T](seq: Seq[T]) = contain(atLeast(seq.map(v => valueIsTypedValueCheck(v)):_*))
   /** match if a traversable contains one of (t1, t2) */
   def containAnyOf[T](seq: Seq[T]) = contain(new BeOneOf(seq))
   /** match if traversable contains (x matches .*+t+.*) */
   def containMatch[T](t: =>String) = containPattern[T](t.regexPart)
   /** match if traversable contains (x matches p) */
-  def containPattern[T](t: =>String) = ContainWithResult(matcherIsContainCheck(new BeMatching(t))) ^^ ((ts: GenTraversableOnce[T]) => ts.toSeq.map(_.toString).to[GenTraversableOnce])
+  def containPattern[T](t: =>String) = ContainWithResult(matcherIsValueCheck(new BeMatching(t))) ^^ ((ts: GenTraversableOnce[T]) => ts.toSeq.map(_.toString).to[GenTraversableOnce])
 
   /** does a containAll comparison in both ways */
   def containTheSameElementsAs[T](seq: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)): Matcher[Traversable[T]] = new Matcher[Traversable[T]] {
@@ -110,11 +110,11 @@ trait TraversableBaseMatchersLowImplicits extends ValueChecksLowImplicits { this
     seq.map(to)
 
   implicit def matcherSeqIsContainCheckSeq[T](seq: Seq[Matcher[T]]): Seq[ValueCheck[T]] =
-    seq.map(matcherIsContainCheck[T])
+    seq.map(matcherIsValueCheck[T])
 
   /** this allows the contain(string) matcher for StringMatchers to be used with a Traversable */
   implicit def stringMatcherIsTraversableMatcher(m: Matcher[String]): Matcher[GenTraversableOnce[String]] =
-    contain(matcherIsContainCheck(m))
+    contain(matcherIsValueCheck(m))
 
   /**
    * Additional contain methods using to avoid automatic tuple conversions
