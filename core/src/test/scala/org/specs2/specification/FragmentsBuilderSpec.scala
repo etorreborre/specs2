@@ -119,7 +119,7 @@ Other elements
                          SpecStart(_,_,Linked(Some(_), false, false), _) :: (t2: Text) :: (e1: SpecEnd) ::
                          SpecStart(_,_,Linked(Some(_), false, false), _) :: (t3: Text) :: (e2: SpecEnd) :: rest => ok }
 
-    eg := selfReferencing.content must terminate(retries = 3, sleep = 100.millis)
+    eg := selfReferencing.content must beNull.not.eventually(retries = 3, sleep = 100.millis)
   }
   "examples" - new group {
     eg := success
@@ -150,7 +150,7 @@ Other elements
 
   }
 
-  trait specifications extends TerminationMatchers {
+  trait specifications {
     lazy val spec1 = new Specification { def is = "title1".title ^ xonly ^ "text1" }
     lazy val spec2 = new Specification { def is = xonly ^ "title2".title ^ "text2" }
     lazy val content = spec1.content

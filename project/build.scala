@@ -1,11 +1,10 @@
 import sbt._
 import complete.DefaultParsers._
 import Keys._
+import sbtassembly.Plugin._
 import com.typesafe.sbt._
 import pgp.PgpKeys._
-import sbt.Configuration
 import SbtSite._
-import scala.Some
 import SiteKeys._
 import SbtGit._
 import GitKeys._
@@ -323,7 +322,7 @@ object build extends Build {
         </developers>
     ),
     credentials := Seq(Credentials(Path.userHome / ".sbt" / "specs2.credentials"))
-  )
+  ) ++ assemblySettings
 
   /**
    * NOTIFICATION
