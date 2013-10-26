@@ -23,7 +23,11 @@ import control.Times
 * - create matchers from functions
 * - create matchers for seqs and sets from single matchers
 */
-trait MatchersImplicits extends Expectations with MatchResultCombinators with MatchResultImplicits with ExpectationsDescription { outer =>
+trait MatchersImplicits extends Expectations
+  with MatchResultCombinators
+  with MatcherZipOperators
+  with MatchResultImplicits
+  with ExpectationsDescription { outer =>
   /**
    * Add functionalities to functions returning matchers so that they can be combined before taking a value and
    * returning actual matchers
@@ -72,6 +76,11 @@ trait MatchersImplicits extends Expectations with MatchResultCombinators with Ma
     def atMostOnce(values: GenTraversableOnce[T]) : MatchResult[GenTraversableOnce[T]] = cc.atMostOnce (createExpectable(values))
   }
 
+  /** this allows a function returning a matcher to be used where the same function with a byname parameter is expected */
+  implicit def stringMatcherFunctionToBynameMatcherFunction[T, R](f: T => Matcher[R]): (=>T) => Matcher[R] = {
+    def f1(t: =>T) = f(t)
+    f1
+  }
 
   implicit class MatcherFunction[S, T](f: S => Matcher[T]) {
     /** @return a function which will return a matcher checking a sequence of objects  */

@@ -96,6 +96,26 @@ def allBeGreaterThan3: Matcher[Seq[Int]]   = be_>=(2).foreach    // like forall 
 def haveOneGreaterThan2: Matcher[Seq[Int]] = be_>=(2).atLeastOnce
 }}
 
+ * using `zip` operators for to match tuples ${snippet{
+
+type T = (String, String, String, Seq[(String, Double)])
+
+val t1: T = ("a", "b", "c", Seq(("d", 1.01), ("e", 2.02)))
+val t2: T = ("a", "b", "c", Seq(("d", 1.00), ("e", 2.00)))
+val t3: T = ("z", "b", "c", Seq(("d", 1.00), ("e", 3.00)))
+
+// create a matcher by zipping matchers to the expected value
+def beMatching(expected: T) = expected.zip(startWith, ===, ===, matchSequence)
+// match the elements of a sequence with a zipped matcher using string equality for the first field and
+// approximate Double equality for the second field
+def matchSequence(expected: =>Seq[(String, Double)]) = expected.contain(_.zip(===, ==~)).inOrder
+
+/** type inference doesn't work if this matcher, specialised to Double, is not defined */
+def ==~(d: =>Double) = beCloseTo(d +/- 0.1)
+
+t1 must beMatching(t2)
+}}
+
  * adapting the actual value ${snippet {
 
 // This matcher adapts the existing `be_<=` matcher to a matcher applicable to `Any`
