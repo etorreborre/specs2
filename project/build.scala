@@ -2,6 +2,7 @@ import sbt._
 import complete.DefaultParsers._
 import Keys._
 import sbtassembly.Plugin._
+import AssemblyKeys._
 import com.typesafe.sbt._
 import pgp.PgpKeys._
 import SbtSite._
@@ -291,11 +292,22 @@ object build extends Build {
 
   lazy val publishSignedArtifacts = executeStepTask(publishSigned, "Publishing signed artifacts")
 
-  lazy val publicationSettings: Seq[Settings] = Seq(
+  lazy val publicationSettings: Seq[Settings] = assemblySettings ++ Seq(
     publishTo in Global <<= version { v: String =>
       val nexus = "https://oss.sonatype.org/"
       if (v.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus + "content/repositories/snapshots")
       else                             Some("staging" at nexus + "service/local/staging/deploy/maven2")
+    },
+    jarName in assembly <<= (jarName in assembly) map { name =>
+      name.replace("-assembly", "")
+    },
+    test in assembly := {},
+    excludedJars in assembly <<= (fullClasspath in assembly) map { cp => 
+      cp.filter(_.data.getName.endsWith(".jar"))
+    },
+    mergeStrategy in assembly <<= (mergeStrategy in assembly) { old => {
+        case s => MergeStrategy.first
+      }
     },
     publishMavenStyle := true,
     publishArtifact in Test := false,
@@ -322,7 +334,7 @@ object build extends Build {
         </developers>
     ),
     credentials := Seq(Credentials(Path.userHome / ".sbt" / "specs2.credentials"))
-  ) ++ assemblySettings
+  )
 
   /**
    * NOTIFICATION
