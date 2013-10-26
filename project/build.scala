@@ -305,6 +305,11 @@ object build extends Build {
     excludedJars in assembly <<= (fullClasspath in assembly) map { cp => 
       cp.filter(_.data.getName.endsWith(".jar"))
     },
+    mergeStrategy in assembly <<= (mergeStrategy in assembly) { old => {
+        case s if s.endsWith(".DS_Store") => MergeStrategy.discard
+        case x                            => old(x)
+      }
+    },
     publishMavenStyle := true,
     publishArtifact in Test := false,
     pomIncludeRepository := { x => false },
