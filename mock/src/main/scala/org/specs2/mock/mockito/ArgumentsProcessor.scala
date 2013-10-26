@@ -1,17 +1,15 @@
 package org.mockito.internal.invocation
 
 import org.hamcrest.Matcher
-import org.mockito.internal.matchers._
+import org.mockito.internal.matchers.{EqualsFunction1, EqualsFunction0, ArrayEquals, Equals}
 
 import org.mockito.internal.util.collections.ArrayUtils
 
 import java.util.ArrayList
 import java.util.List
+import org.mockito.internal.progress.ThreadSafeMockingProgress2
 import scala.collection.{GenSetLike, GenSeqLike, JavaConversions}
 import JavaConversions._
-import org.mockito.internal.progress.ThreadSafeMockingProgress2
-import org.mockito.internal.matchers.EqualsFunction0
-import org.mockito.internal.matchers.EqualsFunction1
 
 /*
  * Copyright (c) 2007 Mockito contributors
