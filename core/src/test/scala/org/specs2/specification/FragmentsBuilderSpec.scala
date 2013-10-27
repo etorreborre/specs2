@@ -53,8 +53,6 @@ Links
      + and hidden, it'll be executed but not reported
 
    + Several specifications can be linked at once
-   + A specification can reference itself without creating a loop
-
 
 How to create an Example
 ========================
@@ -118,8 +116,6 @@ Other elements
               beLike { case (s: SpecStart) :: (t1: Text) ::
                          SpecStart(_,_,Linked(Some(_), false, false), _) :: (t2: Text) :: (e1: SpecEnd) ::
                          SpecStart(_,_,Linked(Some(_), false, false), _) :: (t3: Text) :: (e2: SpecEnd) :: rest => ok }
-
-    eg := selfReferencing.content must beNull.not.eventually(retries = 3, sleep = 100.millis)
   }
   "examples" - new group {
     eg := success
@@ -161,7 +157,6 @@ Other elements
     lazy val parentSpec2 = new Specification { def is = "e1" ^ see(spec2) }
     lazy val parentSpec3 = new Specification { def is = "e1" ^ link(spec1.hide) }
     lazy val parentSpec4 = new Specification { def is = "e1" ^ link(spec1, spec2) }
-    lazy val selfReferencing: Specification = new Specification { def is = "e1" ^ see(selfReferencing) }
 
     trait CustomSpecification extends Specification {
       override def map(fs: =>Fragments) = "title".title ^ fs ^ "end of the spec"
