@@ -59,9 +59,9 @@ object IncludeExcludeStackTraceFilter {
  */
 object DefaultStackTraceFilter extends
   IncludeExcludeStackTraceFilter(Seq(),
-    Seq("org.specs2", "scalaz\\.",
-        "java\\.", "scala\\.",
-        "sbt\\.", "com.intellij", "org.junit", "org.eclipse.jdt")) with ExecutionOrigin {
+    Seq("^org.specs2", "^scalaz\\.",
+      "^java\\.", "^scala\\.",
+      "^sbt\\.", "^com.intellij", "^org.junit", "^org.eclipse.jdt")) with ExecutionOrigin {
 
   override def apply(e: Seq[StackTraceElement]): Seq[StackTraceElement] = {
     val filtered =
