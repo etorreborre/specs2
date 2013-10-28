@@ -30,7 +30,7 @@ object build extends Build {
       releaseSettings          ++
       rootSettings             ++
       Seq(name := "specs2")
-  ).aggregate(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, guide, examples)
+  ).aggregate(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock)
   
   /** COMMON SETTINGS */
   lazy val specs2Settings: Seq[Settings] = Seq(
@@ -210,9 +210,9 @@ object build extends Build {
       pushChanges
     ),
     releaseSnapshotProcess := Seq[ReleaseStep](
-      generateUserGuide//,
-      //publishSite,
-      //publishSignedArtifacts
+      generateUserGuide,
+      publishSite,
+      publishSignedArtifacts
       ),
     commands += releaseSnapshotCommand
     ) ++
