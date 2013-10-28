@@ -35,7 +35,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">ExecutedNoText</span><span class="params">(<span name="isAction">isAction: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="timer">timer: <a href="../time/SimpleTimer.html" class="extype" name="org.specs2.time.SimpleTimer">SimpleTimer</a> = <span class="symbol">new time.SimpleTimer()</span></span>, <span name="location">location: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a> = <span class="symbol">new io.Location()</span></span>)</span><span class="result"> extends <a href="ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">ExecutedNoText</span><span class="params">(<span name="original">original: <a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a></span>, <span name="timer">timer: <a href="../time/SimpleTimer.html" class="extype" name="org.specs2.time.SimpleTimer">SimpleTimer</a> = <span class="symbol">new time.SimpleTimer()</span></span>, <span name="location">location: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a> = <span class="symbol">new io.Location()</span></span>)</span><span class="result"> extends <a href="ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -43,7 +43,7 @@
 execution of an Action for example)
 </p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="org.specs2.specification.ExecutedNoText">ExecutedNoText</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a>, <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -82,7 +82,7 @@ execution of an Action for example)
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="org.specs2.specification.ExecutedNoText#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(isAction:Boolean,timer:org.specs2.time.SimpleTimer,location:org.specs2.io.Location):org.specs2.specification.ExecutedNoText"></a>
+      <a id="&lt;init&gt;(original:org.specs2.specification.Fragment,timer:org.specs2.time.SimpleTimer,location:org.specs2.io.Location):org.specs2.specification.ExecutedNoText"></a>
       <a id="&lt;init&gt;:ExecutedNoText"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -90,7 +90,7 @@ execution of an Action for example)
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ExecutedNoText</span><span class="params">(<span name="isAction">isAction: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="timer">timer: <a href="../time/SimpleTimer.html" class="extype" name="org.specs2.time.SimpleTimer">SimpleTimer</a> = <span class="symbol">new time.SimpleTimer()</span></span>, <span name="location">location: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a> = <span class="symbol">new io.Location()</span></span>)</span>
+        <span class="name">ExecutedNoText</span><span class="params">(<span name="original">original: <a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a></span>, <span name="timer">timer: <a href="../time/SimpleTimer.html" class="extype" name="org.specs2.time.SimpleTimer">SimpleTimer</a> = <span class="symbol">new time.SimpleTimer()</span></span>, <span name="location">location: <a href="../io/Location.html" class="extype" name="org.specs2.io.Location">Location</a> = <span class="symbol">new io.Location()</span></span>)</span>
       </span>
       </h4>
       
@@ -112,7 +112,7 @@ execution of an Action for example)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -151,7 +151,7 @@ execution of an Action for example)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -190,7 +190,7 @@ execution of an Action for example)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -209,7 +209,7 @@ execution of an Action for example)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -264,7 +264,7 @@ execution of an Action for example)
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
         <span class="name">isAction</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
@@ -306,7 +306,7 @@ execution of an Action for example)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -336,6 +336,19 @@ execution of an Action for example)
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.specs2.specification.ExecutedNoText#original" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="original:org.specs2.specification.Fragment"></a>
+      <a id="original:Fragment"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">original</span><span class="result">: <a href="Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the fragment before execution</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.specification.ExecutedNoText">ExecutedNoText</a> → <a href="ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a></dd></dl></div>
     </li><li name="org.specs2.specification.ExecutedNoText#stats" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="stats:org.specs2.specification.Stats"></a>
       <a id="stats:Stats"></a>
@@ -452,7 +465,7 @@ execution of an Action for example)
             </div><div class="parent" name="org.specs2.specification.ExecutedFragment">
               <h3>Inherited from <a href="ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a></h3>
             </div><div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+              <h3>Inherited from <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
             </div>

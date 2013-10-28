@@ -1,0 +1,970 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <style type="text/css" media="all">
+        @import url('./../../css/maven-base.css');
+        @import url('./../../css/maven-theme.css');
+      </style>
+      <link href="./../../css/prettify.css" type="text/css" rel="stylesheet" />
+      <script type="text/javascript" src="./../../css/prettify.js"></script>
+      <link rel="stylesheet" href="./../../css/print.css" type="text/css" media="print" />
+      <link href="./../../css/tooltip.css" rel="stylesheet" type="text/css" />
+      <link href="./../../css/specs2-user.css" type="text/css" rel="stylesheet" />
+
+      <script type="text/javascript" src="./../../css/jquery.js"></script>
+      <script type="text/javascript" src="./../../css/jquery.cookie.js"></script>
+      <script type="text/javascript" src="./../../css/jquery.hotkeys.js"></script>
+      <script type="text/javascript" src="./../../css/jquery.jstree.js"></script>
+      <script type="text/javascript" src="./../../css/tooltip.js"></script>
+      <script type="text/javascript" src="./../../js/specs2-user.js"></script>
+      <script language="javascript">$.getScript("./../../js/specs2-user.js", initUserScript(document));</script>
+      <script language="javascript">
+      function init() {  prettyPrint(); };
+      /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
+      String.prototype.endsWith = function(str) { return (this.match(str+'$') == str) };
+      function changeWidth(id,width) {  document.getElementById(id).style.width = width; };
+      function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
+      function toggleImage(image) {
+        if (image.src.endsWith('images/expanded.gif')) 
+          image.src = image.src.replace('expanded', 'collapsed');
+        else 
+          image.src = image.src.replace('collapsed', 'expanded');
+      };
+      function showHide(id) {
+        element = document.getElementById(id);
+        element.style.display = (element.style.display == 'block')? 'none' : 'block';
+      };
+      function showHideByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
+        }
+      };
+      function showByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'block';
+        }
+      };
+      function hideByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'none';
+        }
+      };
+      function showById(id) {
+        document.getElementById(id).style.display = ''
+      };
+      function hideById(id) {
+        document.getElementById(id).style.display = 'none'
+      };
+    </script>
+      <script language="javascript">window.onload=init;</script>
+      <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
+           tabber code, then the init code -->
+      <script type="text/javascript" src="./../../css/tabber.js"></script>
+      <link rel="stylesheet" href="./../../css/tabber.css" type="text/css" media="screen" />
+      <title>Matchers</title>
+    </head><body><div id="breadcrumbs"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html">Matchers</a></div><div class="colmask threecol">
+            <div class="colmid">
+              <div class="colleft">
+                <div class="col1"><div id="central"><html><title>Matchers</title><a name="Matchers"><h2 specId="1700859443">Matchers</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
+<ul>
+  <li>Boolean</li>
+  <li>Standard result</li>
+  <li>Matcher result</li>
+  <li>Scalacheck property</li>
+  <li>Mock expectation</li>
+  <li>DataTable</li>
+  <li>Forms</li>
+</ul><a name="Boolean+results"><h3>Boolean results</h3></a><p>This is the simplest kind of result you can define for an expectation but also the least expressive!</p><p>Here's an example: <code class="prettyprint">&quot;This is hopefully true&quot; ! (1 != 2)</code></p><p>This can be useful for simple expectations but a failure will give few information on what went wrong: <code class="prettyprint">&quot;This is hopefully true&quot; ! (2 != 2)</code></p><a name="Standard+results"><h3>Standard results</h3></a><p>Some standard results can be used when you need specific result meanings:</p>
+<ul>
+  <li><code class="prettyprint">success</code>: the example is ok</li>
+  <li><code class="prettyprint">failure</code>: there is a non-met expectation</li>
+  <li><code class="prettyprint">anError</code>: a non-expected exception occurred</li>
+  <li><code class="prettyprint">skipped</code>: the example is skipped possibly at runtime because some conditions are not met. A more specific message can<br />be created with <code class="prettyprint">Skipped(&quot;my message&quot;)</code></li>
+  <li><code class="prettyprint">pending</code>: usually means &quot;not implemented yet&quot;, but a specific message can be created with <code class="prettyprint">Pending(&quot;my message&quot;)</code></li>
+</ul><p>Two additional results are also available to track the progress of features:</p>
+<ul>
+  <li><code class="prettyprint">done</code>: a <code class="prettyprint">Success</code> with the message &quot;DONE&quot;</li>
+  <li><code class="prettyprint">todo</code>: a <code class="prettyprint">Pending</code> with the message &quot;TODO&quot;</li>
+</ul><a name="Combinators"><h4>Combinators</h4></a><p>Logical combinators like <code class="prettyprint">and</code>, <code class="prettyprint">or</code>, <code class="prettyprint">not</code> can be used to combine results. You can also use the <code class="prettyprint">eventually</code> method to retry a Result until it is ok (this will actually work with anything convertible to a Result).</p><a name="Match+results"><h3>Match results</h3></a><p>This is by far the largest category of Results in <strong><em>specs2</em></strong>. They cover many data types, can be composed and adapted to create new ones or be created from scratch by the user.</p><a name="Out+of+the+box"><h4>Out of the box</h4></a><p>The most common matchers are automatically available when extending the <code class="prettyprint">Specification</code> trait:</p></div></status><status class="ok"><div style="display: show; text-indent:5px;"><img src="./../../images/icon_success_sml.gif" /> MatcherCards.toTabs<br /></div></status><status class="ok"><div style="display: show; text-indent:5px;"><p>The examples above show how to use matchers:</p>
+<ul>
+  <li>the general form for using a matcher is: <code class="prettyprint">a must matcher</code></li>
+  <li>but can use <code class="prettyprint">should</code> instead of <code class="prettyprint">must</code> if you prefer</li>
+  <li>for most matchers you can use a form where the <code class="prettyprint">be</code> word (or the <code class="prettyprint">have</code> word) is detached</li>
+  <li>you can as well negate a matcher by adding <code class="prettyprint">not</code> before it (or after it, as a method call)</li>
+</ul><a name="Optional"><h4>Optional</h4></a><p>These other matchers need to be selectively added to the specification by adding a new trait:</p></div></status><status class="ok"><div style="display: show; text-indent:10px;"><img src="./../../images/icon_success_sml.gif" /> OptionalMatcherCards.toTabs<br /></div></status><status class="ok"><div style="display: show; text-indent:10px;"><a name="Custom"><h4>Custom</h4></a><p>There are many ways to create matchers for your specific usage. The simplest way is to reuse the existing ones:</p>
+<ul>
+  <li>using logical operators</li>
+</ul>
+<pre><code class="prettyprint">def beBetween(i: Int, j: Int) = be_&gt;=(i) and be_&lt;=(j)
+
+// create a Seq Matcher from a Matcher
+def allBeGreaterThan2: Matcher[Seq[Int]]   = be_&gt;=(2).forall     // fail after the first failure
+def allBeGreaterThan3: Matcher[Seq[Int]]   = be_&gt;=(2).foreach    // like forall but execute all matchers and collect the results
+def haveOneGreaterThan2: Matcher[Seq[Int]] = be_&gt;=(2).atLeastOnce
+</code></pre>
+<ul>
+  <li>using <code class="prettyprint">zip</code> operators for to match tuples</li>
+</ul>
+<pre><code class="prettyprint">type T = (String, String, String, Seq[(String, Double)])
+
+val t1: T = (&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, Seq((&quot;d&quot;, 1.01), (&quot;e&quot;, 2.02)))
+val t2: T = (&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, Seq((&quot;d&quot;, 1.00), (&quot;e&quot;, 2.00)))
+val t3: T = (&quot;z&quot;, &quot;b&quot;, &quot;c&quot;, Seq((&quot;d&quot;, 1.00), (&quot;e&quot;, 3.00)))
+
+// create a matcher by zipping matchers to the expected value
+def beMatching(expected: T) = expected.zip(startWith, ===, ===, matchSequence)
+// match the elements of a sequence with a zipped matcher using string equality for the first field and
+// approximate Double equality for the second field
+def matchSequence(expected: =&gt;Seq[(String, Double)]) = expected.contain(_.zip(===, ==~)).inOrder
+
+/** type inference doesn't work if this matcher, specialised to Double, is not defined */
+def ==~(d: =&gt;Double) = beCloseTo(d +/- 0.1)
+
+t1 must beMatching(t2)
+</code></pre>
+<ul>
+  <li>adapting the actual value</li>
+</ul>
+<pre><code class="prettyprint">// This matcher adapts the existing `be_&lt;=` matcher to a matcher applicable to `Any`
+def beShort1 = be_&lt;=(5) ^^ { (t: Any) =&gt; t.toString.size }
+def beShort2 = be_&lt;=(5) ^^ { (t: Any) =&gt; t.toString.size aka &quot;the string size&quot; }
+
+// !!! use a BeTypedEqualTo matcher when using aka and equality !!!
+def beFive = be_===(5) ^^ { (t: Any) =&gt; t.toString.size aka &quot;the string size&quot; }
+
+// The adaptation can also be done the other way around when it's more readable
+def haveExtension(extension: =&gt;String) = ((_:File).getPath) ^^ endWith(extension)
+</code></pre>
+<ul>
+  <li>adapting the actual and expected values. This matcher compares 2 <code class="prettyprint">Human</code> objects but set their <code class="prettyprint">wealth</code> field to 0<br />    so that the equals method will not fail on that field:</li>
+</ul>
+<pre><code class="prettyprint">def beMostlyEqualTo = (be_==(_:Human)) ^^^ ((_:Human).copy(wealth = 0))
+// then
+Human(age = 20, wealth=1000) must beMostlyEqualTo(Human(age = 20, wealth=1)) toResult // success
+</code></pre>
+<ul>
+  <li>using <code class="prettyprint">eventually</code> to try a match a number of times until it succeeds:</li>
+</ul>
+<pre><code class="prettyprint">val iterator = List(1, 2, 3).iterator
+iterator.next must be_==(3).eventually
+// Use eventually(retries, n.millis) to use another number of tries and waiting time
+</code></pre>
+<ul>
+  <li>using <code class="prettyprint">await</code> to create a matcher that will match on <code class="prettyprint">Matcher[Future[T]]</code>:</li>
+</ul>
+<pre><code class="prettyprint">future(1) must be_&gt;(0).await
+future { Thread.sleep(100); 1 } must be_&gt;(0).await(retries = 2, timeout = 100.millis)
+</code></pre>
+<ul>
+  <li>using <code class="prettyprint">when</code> or <code class="prettyprint">unless</code> to apply a matcher only if a condition is satisfied:</li>
+</ul>
+<pre><code class="prettyprint">1 must be_==(2).when(false)                        // will return a success
+1 must be_==(2).unless(true)                       // same thing
+
+1 must be_==(2).when(false, &quot;don't check this&quot;)    // will return a success
+1 must be_==(2).unless(true, &quot;don't check this&quot;)   // same thing
+</code></pre>
+<ul>
+  <li>using <code class="prettyprint">iff</code> to say that a matcher must succeed if and only if a condition is satisfied:</li>
+</ul>
+<pre><code class="prettyprint">1 must be_==(1).iff(true)                        // will return a success
+1 must be_==(2).iff(true)                        // will return a failure
+1 must be_==(2).iff(false)                       // will return a success
+1 must be_==(1).iff(false)                       // will return a failure
+</code></pre>
+<ul>
+  <li>using <code class="prettyprint">orSkip</code> to return a <code class="prettyprint">Skipped</code> result instead of a Failure if the condition is not met</li>
+</ul>
+<pre><code class="prettyprint">1 must be_==(2).orSkip
+1 must be_==(2).orSkip(&quot;Precondition failed&quot;)    // prints &quot;Precondition failed: '1' is not equal to '2'&quot;
+1 must be_==(2).orSkip((ko:String) =&gt; &quot;BAD &quot;+ko) // prints &quot;BAD '1' is not equal to '2'&quot;
+</code></pre>
+<ul>
+  <li>using <code class="prettyprint">orPending</code> to return a <code class="prettyprint">Pending</code> result instead of a Failure if the condition is not met</li>
+</ul>
+<pre><code class="prettyprint">1 must be_==(2).orPending
+1 must be_==(2).orPending(&quot;Precondition failed&quot;)    // prints &quot;Precondition failed: '1' is not equal to '2'&quot;
+1 must be_==(2).orPending((ko:String) =&gt; &quot;BAD &quot;+ko) // prints &quot;BAD '1' is not equal to '2'&quot;
+</code></pre>
+<ul>
+  <li><p>using <code class="prettyprint">mute</code> to change a Matcher so that it returns MatchResults with no messages. This is used in Forms to create<br />    properties showing no messages when they fail</p></li>
+  <li><p>using <code class="prettyprint">updateMessage(f: String =&gt; String)</code> or <code class="prettyprint">setMessage(m: String)</code> to change the failure message</p></li>
+  <li><p>using <code class="prettyprint">&lt;==&gt;</code> or <code class="prettyprint">==&gt;</code> to provide a meaning for the expectation when the failure message would not be clear </p></li>
+</ul>
+<pre><code class="prettyprint">// when failing, this displays:
+// The byname function has not become a strict one because 'evaluated' is not equal to 'not evaluated'
+&quot;The byname function has become a strict one&quot; &lt;==&gt; (parameter === &quot;evaluated&quot;)
+</code></pre><p>Note that the sentence describing the expectation is negated when there is a failure. This functionality is provided by the <code class="prettyprint">org.specs2.text.Sentences::negateSentence</code> trait. You can override this method if you want/need to provide a better behavior for this feature.</p><a name="From+functions"><h5>From functions</h5></a><p>Another easy way to create matchers, is to use some implicit conversions from functions to Matchers: </p>
+<pre><code class="prettyprint">val m: Matcher[String]  = ((_: String).startsWith(&quot;hello&quot;), &quot;doesn't start with hello&quot;)
+val m1: Matcher[String] = ((_: String).startsWith(&quot;hello&quot;), &quot;starts with hello&quot;, &quot;doesn't start with hello&quot;)
+val m2: Matcher[String] = ((_: String).startsWith(&quot;hello&quot;), (s:String) =&gt; s+ &quot; doesn't start with hello&quot;)
+val m3: Matcher[String] = ((_: String).startsWith(&quot;hello&quot;), (s:String) =&gt; s+ &quot; starts with hello&quot;, (s:String) =&gt; s+ &quot; doesn't start with hello&quot;)
+val m4: Matcher[String] = (s: String) =&gt; (s.startsWith(&quot;hello&quot;), s+&quot; doesn't start with hello&quot;)
+val m5: Matcher[String] = (s: String) =&gt; (s.startsWith(&quot;hello&quot;), s+ &quot;starts with hello&quot;, s+ &quot; doesn't start with hello&quot;)
+</code></pre><p>And if you want absolute power over matching, you can define your own matcher: </p>
+<pre><code class="prettyprint">class MyOwn extends Matcher[String] {
+  def apply[S &lt;: String](s: Expectable[S]) = {
+    result(s.value.isEmpty,
+           s.description + &quot; is empty&quot;,
+           s.description + &quot; is not empty&quot;,
+           s)
+  }
+}
+</code></pre><p>In the code above you have to:</p>
+<ul>
+  <li><p>define the <code class="prettyprint">apply</code> method (and its somewhat complex signature)</p></li>
+  <li><p>use the protected <code class="prettyprint">result</code> method to return: a Boolean condition, a message when the match is ok, a message when the<br />    match is not ok, the &quot;expectable&quot; value. Note that if you change the expectable value you need to use the <code class="prettyprint">map</code> method<br />    on the <code class="prettyprint">s</code> expectable (<code class="prettyprint">s.map(other)</code>). This way you preserve the ability of the Expectable to throw an Exception if<br />    a subsequent match fails</p></li>
+  <li><p>you can use the <code class="prettyprint">description</code> method on the <code class="prettyprint">Expectable</code> class to return the full description of the expectable including<br />    the optional description you setup using the <code class="prettyprint">aka</code> method</p></li>
+</ul><a name="From+Hamcrest"><h5>From Hamcrest</h5></a><p>If you have Hamcrest matchers in your project and you want to reuse them as specs2 matchers, you can mix-in the <code class="prettyprint">org.specs2.matcher.Hamcrest</code> trait: </p>
+<pre><code class="prettyprint">class HamcrestSpec extends Specification with Grouped with Hamcrest { def is = s2&quot;&quot;&quot;
+
+  Hamcrest matchers can be used as specs2 matchers by mixing in the Hamcrest trait
+  for example a beEven Hamcrest matcher can be used in a 'must' expression              ${g1.e1}
+    the failure message must contain the matched value and the Hamcrest failure message ${g1.e2}
+                                                                                        &quot;&quot;&quot;
+
+  new g1 {
+    e1 := 2 must beEven
+    e2 := (3 must beEven).message === &quot;&lt;3&gt; is odd&quot;
+  }
+
+  // a Hamcrest matcher for even numbers
+  object beEven extends BaseMatcher[Int] {
+    def matches(item: Object): Boolean       = item.toString.toInt % 2 == 0
+    def describeTo(description: Description) { description.appendText(&quot; is odd&quot;) }
+  }
+
+}
+</code></pre><a name="With+sequences"><h4>With sequences</h4></a><p>If you have the same &quot;MatchResult&quot; expression that you'd like to verify for different values you can write one of the following: </p></div></status><status class="ok"><div style="display: show; text-indent:15px;"><pre><code class="prettyprint">// stop after the first failure
+((_:Int) must be_&gt;(2)).forall(Seq(3, 4, 5))
+forall(Seq(3, 4, 5)) ((_:Int) must be_&gt;(2))
+// check only the elements defined for the partial function
+forallWhen(Seq(3, 10, 15)) { case a if a &gt; 3 =&gt; a must be_&gt;(5) }
+
+// try to match all values and collect the results
+((_:Int) must be_&gt;(2)).foreach(Seq(3, 4, 5))
+foreach(Seq(3, 4, 5)) ((_:Int) must be_&gt;(2))
+// check only the elements defined for the partial function
+foreachWhen(Seq(3, 10, 15)) { case a if a &gt; 3 =&gt; a must be_&gt;(5) }
+
+// succeeds after the first success
+((_:Int) must be_&gt;(2)).atLeastOnce(Seq(3, 4, 5))
+atLeastOnce(Seq(3, 4, 5)) ((_:Int) must be_&gt;(2))
+// check only the elements defined for the partial function
+atLeastOnceWhen(Seq(3, 4, 10)) { case a if a &gt; 3 =&gt; a must be_&gt;(5) }
+</code></pre></div></status><status class="ok"><div style="display: show; text-indent:20px;"><a name="ScalaCheck"><h3>ScalaCheck</h3></a><p>A clever way of creating expectations in <strong><em>specs2</em></strong> is to use the <a href="http://code.google.com/p/scalacheck">ScalaCheck</a> library.</p><p>To declare ScalaCheck properties you first need to extend the <code class="prettyprint">ScalaCheck</code> trait. Then you can pass functions returning any kind of <code class="prettyprint">Result</code> (<code class="prettyprint">Boolean</code>, <code class="prettyprint">Result</code>, <code class="prettyprint">MatchResult</code>) to the <code class="prettyprint">prop</code> method and use the resulting <code class="prettyprint">Prop</code> as your example body: <code class="prettyprint">&quot;addition and multiplication are related&quot; ! prop { (a: Int) =&gt; a + a == 2 * a }</code></p><p>The function that is checked can either return: </p>
+<pre><code class="prettyprint">// a Boolean
+&quot;addition and multiplication are related&quot; ! prop { (a: Int) =&gt; a + a == 2 * a }
+
+// a MatchResult
+&quot;addition and multiplication are related&quot; ! prop { (a: Int) =&gt; a + a must_== 2 * a }
+
+// a Prop
+&quot;addition and multiplication are related&quot; ! prop { (a: Int) =&gt; (a &gt; 0) ==&gt; (a + a must_== 2 * a) }
+</code></pre><p>Note that if you pass functions using <code class="prettyprint">MatchResult</code>s you will get better failure messages so you are encouraged to do so.</p><p>By default the properties created with <code class="prettyprint">prop</code> will be shrinking counter-examples. If you want to avoid this, you can use <code class="prettyprint">propNoShrink</code> instead.</p><a name="Arbitrary+instances"><h4>Arbitrary instances</h4></a><p>By default ScalaCheck uses <code class="prettyprint">Arbitrary</code> instances taken from the surrounding example scope. However you'll certainly need to generate your own data from time to time. In that case you can create an <code class="prettyprint">Arbitrary</code> instance and make sure it is in the scope of the function you're testing: </p>
+<pre><code class="prettyprint">// this arbitrary will be used for all the examples
+implicit def a = Arbitrary { for { a &lt;- Gen.oneOf(&quot;a&quot;, &quot;b&quot;); b &lt;- Gen.oneOf(&quot;a&quot;, &quot;b&quot;) } yield a+b }
+
+&quot;a simple property&quot; ! ex1
+
+def ex1 = check((s: String) =&gt; s must contain(&quot;a&quot;) or contain(&quot;b&quot;))
+</code></pre><p>You can also be very specific if you want to use an <code class="prettyprint">Arbitrary</code> instance only on one example. In that case, just replace the <code class="prettyprint">check</code> method with the name of your <code class="prettyprint">Arbitrary</code> instance: </p>
+<pre><code class="prettyprint">&quot;a simple property&quot;       ! ex1
+&quot;a more complex property&quot; ! ex2
+
+implicit def abStrings = Arbitrary { for { a &lt;- Gen.oneOf(&quot;a&quot;, &quot;b&quot;); b &lt;- Gen.oneOf(&quot;a&quot;, &quot;b&quot;) } yield a+b }
+def ex1 = abStrings((s: String) =&gt; s must contain(&quot;a&quot;) or contain(&quot;b&quot;))
+
+// use a tuple if there are several parameters to your function
+def ex2 = (abStrings, abStrings)((s1: String, s2: String) =&gt; (s1+s2) must contain(&quot;a&quot;) or contain(&quot;b&quot;))
+</code></pre><a name="With+Generators"><h4>With Generators</h4></a><p>ScalaCheck also allows to create <code class="prettyprint">Prop</code>s directly with the <code class="prettyprint">Prop.forAll</code> method accepting <code class="prettyprint">Gen</code> instances: </p>
+<pre><code class="prettyprint">&quot;a simple property&quot;       ! ex1
+&quot;a more complex property&quot; ! ex2
+
+def abStrings = for { a &lt;- Gen.oneOf(&quot;a&quot;, &quot;b&quot;); b &lt;- Gen.oneOf(&quot;a&quot;, &quot;b&quot;) } yield a+b
+
+def ex1 = Prop.forAll(abStrings) { (s: String) =&gt; s must contain(&quot;a&quot;) or contain(&quot;b&quot;) }
+def ex2 = Prop.forAll(abStrings, abStrings) { (s1: String, s2: String) =&gt; (s1+s2) must contain(&quot;a&quot;) or contain(&quot;b&quot;) }
+</code></pre><a name="Test+properties"><h4>Test properties</h4></a><p>ScalaCheck test generation can be tuned with a few properties. If you want to change the default settings, you have to use implicit values: </p>
+<pre><code class="prettyprint">implicit val params = Parameters(minTestsOk = 20) // add &quot;verbose = true&quot; to get additional console printing
+</code></pre><p>It is also possible to specifically set the execution parameters on a given property: </p>
+<pre><code class="prettyprint">&quot;this is a specific property&quot; ! prop { (a: Int, b: Int) =&gt;
+  (a + b) must_== (b + a)
+}.set(minTestsOk = 200, workers = 3)
+</code></pre><p>The parameters you can modify are:</p>
+<ul>
+  <li><code class="prettyprint">minTestsOk</code>: minimum of tests which must be ok before the property is ok (default = 100)</li>
+  <li><code class="prettyprint">maxDiscardRatio</code>: if the data generation discards too many values, then the property can't be proven (default = 5)</li>
+  <li><code class="prettyprint">minSize</code>: minimum size for the &quot;sized&quot; data generators, like list generators (default = 0)</li>
+  <li><code class="prettyprint">maxSize</code>: maximum size for the &quot;sized&quot; data generators (default = 100)</li>
+  <li><code class="prettyprint">workers</code>: number of threads checking the property (default = 1)</li>
+  <li><code class="prettyprint">rng</code>: the random number generator (default = <code class="prettyprint">new java.util.Random</code>)</li>
+  <li><code class="prettyprint">callback</code>: a ScalaCheck TestCallback (see the ScalaCheck documentation)</li>
+  <li><code class="prettyprint">loader</code>: a custom classloader (see the ScalaCheck documentation)</li>
+</ul><p>You can also set the random generator that is used in all the ScalaCheck generators: </p></div></status><status class="ok"><div style="display: show; text-indent:25px;"><pre><code class="prettyprint">case class MyRandomGenerator() extends java.util.Random {
+  // implement a deterministic generator for example
+}
+
+&quot;this is a specific property&quot; ! prop { (a: Int, b: Int) =&gt;
+  (a + b) must_== (b + a)
+}.set(rng = MyRandomGenerator(), minTestsOk = 200, workers = 3)
+</code></pre><a name="Expectations"><h4>Expectations</h4></a><p>By default, a successful example using a <code class="prettyprint">Prop</code> will be reported as 1 success and 100 (or <code class="prettyprint">minTestsOk</code>) expectations. If you don't want the number of expectations to appear in the specification statistics just mix-in your specification the <code class="prettyprint">org.specs2.matcher.OneExpectationPerProp</code> trait.</p></div></status><status class="ok"><div style="display: show; text-indent:30px;"><a name="Mock+expectations"><h3>Mock expectations</h3></a><p>At the moment only the <a href="http://mockito.org">Mockito</a> library is supported.</p><p>Mockito allows to specify stubbed values and to verify that some calls are expected on your objects. In order to use those functionalities, you need to extend the <code class="prettyprint">org.specs2.mock.Mockito</code> trait: </p>
+<pre><code class="prettyprint">import org.specs2.mock._
+class MockitoSpec extends Specification { def is = s2&quot;&quot;&quot;
+
+  A java list can be mocked
+    You can make it return a stubbed value                                     ${c().stub}
+    You can verify that a method was called                                    ${c().verify}
+    You can verify that a method was not called                                ${c().verify2}
+  &quot;&quot;&quot;
+case class c() extends Mockito {
+  val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock[new java.util.LinkedList[String]]
+  def stub = {
+    m.get(0) returns &quot;one&quot;             // stub a method call with a return value
+    m.get(0) must_== &quot;one&quot;             // call the method
+  }
+  def verify = {
+    m.get(0) returns &quot;one&quot;             // stub a method call with a return value
+    m.get(0)                           // call the method
+    there was one(m).get(0)            // verify that the call happened
+  }
+  def verify2 = there was no(m).get(0) // verify that the call never happened
+  }
+}
+</code></pre><a name="Creation+and+settings"><h5>Creation and settings</h5></a><p>Mockito offers the possibility to provide specific settings for the mock being created:</p>
+<ul>
+  <li>its name</li>
+</ul><p><code class="prettyprint">val m = mock[List[String]].as(&quot;list1&quot;)</code></p>
+<ul>
+  <li>&quot;smart&quot; return values</li>
+</ul><p><code class="prettyprint">val m = mock[List[String]].smart</code></p>
+<ul>
+  <li>&quot;verbose&quot; enables Mockito's verbose logging</li>
+</ul><p><code class="prettyprint">val m = mock[List[String]].verbose</code></p>
+<ul>
+  <li>specific return values</li>
+</ul><p><code class="prettyprint">val m = mock[List[String]].defaultReturn(10)</code></p>
+<ul>
+  <li>specific answers</li>
+</ul>
+<pre><code class="prettyprint">// a function InvocationOnMock =&gt; V is used in place of the org.mockito.stubbing.Answer type for better conciseness
+val helloObject = (p1: InvocationOnMock) =&gt; &quot;hello &quot;+p1.toString
+val m = mock[List[String]].defaultAnswer(helloObject)
+</code></pre>
+<ul>
+  <li>extra interfaces</li>
+</ul>
+<pre><code class="prettyprint">val m1 = mock[List[String]].extraInterface[Cloneable]
+val m2 = mock[List[String]].extraInterfaces[Cloneable, Serializable]
+</code></pre><p>Now, if you want to combine several of those settings together you need to call the <code class="prettyprint">settings</code> method: </p>
+<pre><code class="prettyprint">val m1 = mock[List[String]].settings(name = &quot;list1&quot;,
+defaultReturn = 10,
+extraInterfaces = classesOf[Cloneable, Serializable])
+// or
+val m2 = mock[List[String]].settings(smart = true,
+extraInterface = classOf[Cloneable])
+</code></pre><p>Finally, in case the Mockito library gets new settings, you can declare the following: </p>
+<pre><code class="prettyprint">val settings = org.mockito.Mockito.withSettings
+val m = mock[List[String]](settings)
+</code></pre><a name="Stubbing"><h5>Stubbing</h5></a><p>Stubbing values is as simple as calling a method on the mock and declaring what should be returned or thrown: </p>
+<pre><code class="prettyprint">m.get(1) returns &quot;one&quot;
+m.get(2) throws new RuntimeException(&quot;forbidden&quot;)
+</code></pre><p>You can specify different consecutive returned values by appending thenReturns or thenThrows: </p>
+<pre><code class="prettyprint">m.get(1) returns &quot;one&quot; thenReturns &quot;two&quot;
+m.get(2) throws new RuntimeException(&quot;forbidden&quot;) thenReturns &quot;999&quot;
+</code></pre><a name="Mocking+and+Stubbing+at+the+same+time"><h6>Mocking and Stubbing at the same time</h6></a><p>It is also possible to create a mock while stubbing one of its methods, provided that you declare the type of the expected mock: </p>
+<pre><code class="prettyprint">val mocked: java.util.List[String] = mock[java.util.List[String]].contains(&quot;o&quot;) returns true
+mocked.contains(&quot;o&quot;) must beTrue
+</code></pre><a name="With+matchers"><h5>With matchers</h5></a><p>The built-in Mockito argument matchers can be used to specify the method arguments for stubbing: </p>
+<pre><code class="prettyprint">m.get(anyInt()) returns &quot;element&quot;
+m.get(999) must_== &quot;element&quot;
+</code></pre><p><strong><em>specs2</em></strong> matchers can also be passed directly as arguments: <code class="prettyprint">m.get(===(123)) returns &quot;one&quot;</code></p><a name="Callbacks"><h5>Callbacks</h5></a><p>In some rare cases, it is necessary to have the return value depend on the parameters passed to the mocked method: <code class="prettyprint">m.get(anyInt) answers { i =&gt; &quot;The parameter is &quot; + i.toString</code></p><p>The function passed to <code class="prettyprint">answers</code> will be called with each parameter passed to the stubbed method: </p>
+<pre><code class="prettyprint">m.get(0)    // returns &quot;The parameter is 0&quot;
+m.get(1)    // the second call returns a different value: &quot;The parameter is 1&quot;
+</code></pre><a name="Parameters+for+the+answers+function"><h6>Parameters for the <code class="prettyprint">answers</code> function</h6></a><p>Because of the use of reflection the function passed to answers will receive only instances of the <code class="prettyprint">java.lang.Object</code> type.</p><p>More precisely, it will:</p>
+<ul>
+  <li>pass the mock object if both the method has no parameters and the function has one parameter:<br /><code class="prettyprint">mock.size answers { mock =&gt; mock.hashCode }</code></li>
+  <li>pass the parameter if both the method and the function have one parameter:<br /><code class="prettyprint">mock.get(0) answers { i =&gt; i.toString }</code></li>
+  <li>pass the parameter and the mock object if the method has 1 parameter and the function has 2:<br /><code class="prettyprint">mock.get(0) answers { (i, mock) =&gt; i.toString + &quot; for mock &quot; + mock.toString }</code></li>
+</ul><p>In any other cases, if <code class="prettyprint">f</code> is a function of 1 parameter, the array of the method parameters will be passed and if the function has 2 parameters, the second one will be the mock.</p><a name="Verification"><h5>Verification</h5></a><p>By default Mockito doesn't expect any method to be called. However if your writing interaction-based specifications you want to specify that some methods are indeed called: </p>
+<pre><code class="prettyprint">there was one(m).get(0)              // one call only to get(0)
+there was no(m).get(0)               // no calls to get(0)
+
+// were can also be used
+there were two(m).get(0)             // 2 calls exactly to get(0)
+there were three(m).get(0)           // 3 calls exactly to get(0)
+there were 4.times(m).get(0)         // 4 calls exactly to get(0)
+
+there was atLeastOne(m).get(0)       // at least one call to get(0)
+there was atLeastTwo(m).get(0)       // at least two calls to get(0)
+there was atLeastThree(m).get(0)     // at least three calls to get(0)
+there was atLeast(4)(m).get(0)       // at least four calls to get(0)
+
+there was atMostOne(m).get(0)        // at most one call to get(0)
+there was atMostTwo(m).get(0)        // at most two calls to get(0)
+there was atMostThree(m).get(0)      // at most three calls to get(0)
+there was atMost(4)(m).get(0)        // at most four calls to get(0)
+</code></pre><p>It is also possible to add all verifications inside a block, when several mocks are involved: </p>
+<pre><code class="prettyprint">got {
+one(m).get(0)
+two(m).get(1)
+}
+</code></pre><a name="Order+of+calls"><h6>Order of calls</h6></a><p>The order of method calls can be checked by creating calls and chaining them with <code class="prettyprint">andThen</code>: </p>
+<pre><code class="prettyprint">val m1 = mock[List[String]]
+val m2 = mock[List[String]]
+
+m1.get(0)
+m1.get(0)
+m2.get(0)
+
+there was one(m1).get(0) andThen one(m1).get(1)
+</code></pre><p>when several mocks are involved, the expected order must be specified as an implicit value: </p>
+<pre><code class="prettyprint">val m1 = mock[List[String]]
+val m2 = mock[List[String]]
+</code></pre><a name="Ignoring+stubs"><h6>Ignoring stubs</h6></a><p>When specifying the behavior of an object in relation to others you may want to verify that some mocks have been called as collaborators and you don't really want to specify what happens to other mocks because they are just playing the role of stubs.</p><p>In this case the <code class="prettyprint">ignoreStubs</code> method can be used: </p>
+<pre><code class="prettyprint">val (stub1, stub2) = (mock[AStub], mock[AStub])
+there were noMoreCallsTo(ignoreStubs(stub1, stub2))
+</code></pre><p>This method is also available with the <code class="prettyprint">inOrder</code> method: </p>
+<pre><code class="prettyprint">val (list1, list2) = (&quot;&quot;, &quot;&quot;)
+</code></pre><p>For more documentation about this Mockito functionality, please read <a href="http://docs.mockito.googlecode.com/hg/1.9.0/org/mockito/Mockito.html#25">here</a>.</p><a name="Spies"><h6>Spies</h6></a><p>Spies can be used in order to do some &quot;partial mocking&quot; of real objects: </p>
+<pre><code class="prettyprint">val spiedList = spy(new LinkedList[String])
+
+// methods can be stubbed on a spy
+spiedList.size returns 100
+
+// other methods can also be used
+spiedList.add(&quot;one&quot;)
+spiedList.add(&quot;two&quot;)
+
+// and verification can happen on a spy
+there was one(spiedList).add(&quot;one&quot;)
+</code></pre><p>However, working with spies can be tricky: </p>
+<pre><code class="prettyprint">// if the list is empty, this will throws an IndexOutOfBoundsException
+spiedList.get(0) returns &quot;one&quot;
+</code></pre><p>As advised in the Mockito documentation, doReturn must be used in that case: </p>
+<pre><code class="prettyprint">org.mockito.Mockito.doReturn(&quot;one&quot;).when(spiedList).get(0)
+</code></pre><a name="Functions%2FPartialFunctions"><h6>Functions/PartialFunctions</h6></a><p>It is possible to verify method calls where parameters are functions by specifying how the passed function will react to a given set of arguments. Given the following mock:</p>
+<pre><code class="prettyprint">trait Amount {
+// a method showing an amount precision
+def show(display: Function2[Double, Int, String]) = ???
+}
+val amount = mock[Amount]
+</code></pre><p>If the mock is called with this function: </p>
+<pre><code class="prettyprint">amount.show((amount: Double, precision: Int) =&gt; &quot;%2.&quot;+precision+&quot;f&quot; format amount)
+</code></pre><p>Then it is possible to verify how the mock was called: </p>
+<pre><code class="prettyprint">// with sample arguments for the function and the expected result
+there was one(amount).show((32.4456, 2) -&gt; &quot;32.45&quot;)
+
+// with a matcher for the result
+there was one(amount).show((32.4456, 2) -&gt; endWith(&quot;45&quot;))
+
+// with any Function2[A, B, R]
+there was one(amount).show(anyFunction2)
+</code></pre><a name="Auto-boxing"><h6>Auto-boxing</h6></a><p>Auto-boxing might interfere with the mocking of PartialFunctions. Please have a look at <a href="https://groups.google.com/d/topic/specs2-users/_bK8lCCjZ4c/discussion">this</a> for a discussion.</p><a name="Byname"><h6>Byname</h6></a><p>Byname parameters can be verified but this will not work if the specs2 jar is not put first on the classpath, before the mockito jar. Indeed specs2 redefines a Mockito class for intercepting method calls so that byname parameters are properly handled.</p><a name="DataTables"><h3>DataTables</h3></a><p>DataTables are a very effective way of grouping several similar examples into one. For example, here is how to specify the addition of integers by providing one example on each row of a table: </p></div></status><status class="ok"><div style="display: show; text-indent:35px;"><pre><code class="prettyprint">class DataTableSpec extends Specification with matcher.DataTables { def is =
+  &quot;adding integers should just work in scala&quot;  ! e1
+
+  def e1 =
+    &quot;a&quot;   | &quot;b&quot; | &quot;c&quot; |                                   // the header of the table, with `|` separated strings
+     2    !  2  !  4  |                                   // an example row
+     1    !  1  !  2  |&gt; {                                // the &gt; operator to &quot;execute&quot; the table
+     (a, b, c) =&gt;  a + b must_== c                        // the expectation to check on each row
+    }
+}
+</code></pre><a name="Implicit+%21"><h4>Implicit !</h4></a><p>There may be an implicit definition conflict when the first parameter of a row is a String, because examples can also be created by using the <code class="prettyprint">!</code> operator after a String. In that case, depending on which kind of specification you use, you can either:</p>
+<ul>
+  <li>with an acceptance specification: use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance)</li>
+  <li>with a unit specification: use the <code class="prettyprint">org.specs2.mutable.Tables</code> trait instead of <code class="prettyprint">org.specs2.matcher.DataTables</code> trait. This will &quot;deactivate&quot; the implicit used to create examples with <code class="prettyprint">!</code></li>
+</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="418202897"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../../images/icon_success_sml.gif" /> Here's <a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html" tooltip="">how to use Forms</a></div></status><status class="ok"><div style="display: show; text-indent:40px;"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
+<ul>
+  <li><p><code class="prettyprint">org.specs2.matcher.MustMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldMatchers</code>) to write anything like <code class="prettyprint">1 must be_==(1)</code> and<br />    get a <code class="prettyprint">Result</code> back</p></li>
+  <li><p>You can also use the side-effecting version of that trait called <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldThrownMatchers</code>).<br />    It throws a <code class="prettyprint">FailureException</code> as soon as an expectation is failing. Those traits can also be used in a regular<br />    Specification if you have several expectations per example and if you don't want to chain them with <code class="prettyprint">and</code>.</p></li>
+  <li><p>Finally, in a JUnit-like library you can use the <code class="prettyprint">org.specs2.matcher.JUnitMustMatchers</code> trait which throws<br />    <code class="prettyprint">AssertionFailureError</code>s</p></li>
+</ul><a name="Without+any+dependency+on+specs2"><h4>Without any dependency on specs2</h4></a><p>The <a href="https://github.com/spray/spray/wiki/Testing">Testing</a> page of the <strong><em>spray</em></strong> project explains how you can define a testing trait in your library which can be used with specs2 or scalatest or any framework defining the following methods:</p>
+<ul>
+  <li><code class="prettyprint">fail(msg: String): Nothing</code></li>
+  <li><code class="prettyprint">skip(msg: String): Nothing</code></li>
+</ul><p>In specs2, those 2 methods are defined by the <code class="prettyprint">org.specs2.matcher.ThrownMessages</code> trait</p>
+<pre><code class="prettyprint">trait ThrownMessages { this: ThrownExpectations =&gt;
+  def fail(m: String): Nothing = failure(m)
+  def skip(m: String): Nothing = skipped(m)
+}
+</code></pre>
+<hr /></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
+        <tr><th colSpan="2">Total for specification Matchers</th></tr>
+        <tr><td>Finished in</td><td class="info">1 second, 474 ms</td></tr>
+        <tr><td>Results</td><td class="success">47 examples, 539 expectations, 0 failure, 0 error</td></tr>
+      </table></html></div></div>
+                <div class="col2"><div id="leftcolumn"><div id="tree">
+      <ul><li id="2068016152"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="1864003061"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Execution">Execution</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
+            
+          </li></ul>
+          </li><li id="746508004"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Styles">Styles</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Acceptance+specification">Acceptance specification</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Unit+specification">Unit specification</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Results">Results</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Standard">Standard</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Matchers">Matchers</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Expectations">Expectations</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Functional">Functional</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Thrown">Thrown</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#All">All</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Short-circuit">Short-circuit</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Auto-Examples">Auto-Examples</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#G+%2F+W+%2FT">G / W /T</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#DataTables">DataTables</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Example+groups">Example groups</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Isolation">Isolation</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Tags">Tags</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Selection">Selection</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Formatting">Formatting</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Contexts">Contexts</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Isolation_1">Isolation</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Scope">Scope</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Isolated+variables">Isolated variables</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Case+classes">Case classes</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Contexts+inheritance">Contexts inheritance</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Before%2FAfter">Before/After</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#In+a+mutable+specification">In a mutable specification</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#In+an+acceptance+specification">In an acceptance specification</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Around">Around</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Outside">Outside</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#AroundOutside">AroundOutside</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Fixture">Fixture</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#BeforeExample">BeforeExample</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Implicit+context">Implicit context</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Composition">Composition</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Combinations">Combinations</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Composition_1">Composition</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Steps%2FActions">Steps/Actions</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Steps">Steps</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Actions">Actions</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Template">Template</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Global+setup%2Fteardown">Global setup/teardown</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#For+fragments">For fragments</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Links">Links</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Inclusion">Inclusion</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Inline">Inline</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Html+link">Html link</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Html+Link">Html Link</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Reference">Reference</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Markdown+url">Markdown url</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Execution">Execution</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Unit+specifications">Unit specifications</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Methods">Methods</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Full+example">Full example</a>
+            <ul><li id="190038393"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Presentation">Presentation</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Rules">Rules</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Formatting+fragments">Formatting fragments</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Separating+groups+of+examples">Separating groups of examples</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Reset+the+levels">Reset the levels</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Changing+the+indentation+level">Changing the indentation level</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Combinations">Combinations</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Unit+specification">Unit specification</a>
+            
+          </li></ul>
+          </li><li id="588178946"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#GivenWhenThenPage">GivenWhenThenPage</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then">Given When Then</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Parsing">Parsing</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Delimited+parsers">Delimited parsers</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Regex+parsers">Regex parsers</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Standard+parsers">Standard parsers</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Scenario">Scenario</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Tagging">Tagging</a>
+            
+          </li></ul>
+          </li></ul>
+          </li></ul>
+          </li></ul>
+          </li></ul>
+          </li><li id="1700859443"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Combinators">Combinators</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Match+results">Match results</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Out+of+the+box">Out of the box</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Optional">Optional</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Custom">Custom</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#From+functions">From functions</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#From+Hamcrest">From Hamcrest</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#With+sequences">With sequences</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#ScalaCheck">ScalaCheck</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Arbitrary+instances">Arbitrary instances</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#With+Generators">With Generators</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Test+properties">Test properties</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Expectations">Expectations</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Mock+expectations">Mock expectations</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Creation+and+settings">Creation and settings</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Stubbing">Stubbing</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Mocking+and+Stubbing+at+the+same+time">Mocking and Stubbing at the same time</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#With+matchers">With matchers</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Callbacks">Callbacks</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Parameters+for+the+answers+function">Parameters for the answers function</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Verification">Verification</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Order+of+calls">Order of calls</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Ignoring+stubs">Ignoring stubs</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Spies">Spies</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Functions%2FPartialFunctions">Functions/PartialFunctions</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Auto-boxing">Auto-boxing</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Byname">Byname</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#DataTables">DataTables</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Implicit+%21">Implicit !</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
+            <ul><li id="418202897"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Properties">Properties</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Styles">Styles</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Simple+form">Simple form</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Adding+several+rows+at+once">Adding several rows at once</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Nesting+into+another+Form">Nesting into another Form</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Nesting+into+an+Effect+or+a+Prop">Nesting into an Effect or a Prop</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Using+tabs">Using tabs</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Aggregating+forms">Aggregating forms</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Lazy+cells">Lazy cells</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Xml+cells">Xml cells</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#1-n+relationships">1-n relationships</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Subset">Subset</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Subsequence">Subsequence</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Set">Set</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Sequence">Sequence</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Decision+tables">Decision tables</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Outside+specs2">Outside specs2</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Without+any+dependency+on+specs2">Without any dependency on specs2</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id="195103830"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Arguments">Arguments</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#API">API</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Most%2FLeast+frequently+used+arguments">Most/Least frequently used arguments</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Shortcuts">Shortcuts</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Output+directory">Output directory</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Storing+previous+results">Storing previous results</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Status+flags">Status flags</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Diffs">Diffs</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#StackTraceFilter">StackTraceFilter</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Command+line">Command line</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#System+properties">System properties</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#In+the+shell">In the shell</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Console+output">Console output</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Html+output">Html output</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#JUnit+XML+output">JUnit XML output</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Files+Runner">Files Runner</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#In+the+console">In the console</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Via+SBT">Via SBT</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#testOnly+arguments">testOnly arguments</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Output+formats">Output formats</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Html">Html</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Markdown">Markdown</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#JUnit">JUnit</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Console">Console</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Files+runner">Files runner</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Colors">Colors</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Via+IDEA">Via IDEA</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Via+JUnit">Via JUnit</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Arguments_1">Arguments</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Via+Eclipse">Via Eclipse</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Via+Maven">Via Maven</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#With+your+own">With your own</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Executor">Executor</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#In+sbt">In sbt</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Notifier">Notifier</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#NotifierRunner">NotifierRunner</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#In+sbt_1">In sbt</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Exporter">Exporter</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#In+sbt_2">In sbt</a>
+            
+          </li></ul>
+          </li></ul>
+          </li></ul>
+          </li><li id="792903642"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Add+a+title">Add a title</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Use+descriptions">Use descriptions</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Pending+until+fixed">Pending until fixed</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Enhance+failures">Enhance failures</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Share+examples">Share examples</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Create+an+index">Create an index</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Tag+examples">Tag examples</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#In+a+unit+specification">In a unit specification</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Skip+examples">Skip examples</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Debug+statements">Debug statements</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Remove+implicits">Remove implicits</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Print+execution+data">Print execution data</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#With+example+description">With example description</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Capture+snippets">Capture snippets</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#snippet">snippet</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#cuts">cuts</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#evaluation">evaluation</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#offsets">offsets</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#parameters">parameters</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#names">names</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#outside+specs2">outside specs2</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id="2049091262"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Conciseness">Conciseness</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Readability">Readability</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Extensibility">Extensibility</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Configuration">Configuration</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Clear+implementation">Clear implementation</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#User+support">User support</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#A+new+hope">A new hope</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Functional+%2F+immutable">Functional / immutable</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Chaining+everything">Chaining everything</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Arguments+have+to+be+supplied">Arguments have to be supplied</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Concurrency+is+a+breeze">Concurrency is a breeze</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#A+simple+structure">A simple structure</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Contexts">Contexts</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Indentation">Indentation</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Operators">Operators</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Forms">Forms</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#But+if+you+STILL+want+mutable+specifications">But if you STILL want mutable specifications</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Dependencies+control">Dependencies control</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Implicit+definitions+control">Implicit definitions control</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Enter+Scala+2.10">Enter Scala 2.10</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id="1126323792"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Structure">Structure</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Creation">Creation</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Creating+Fragments">Creating Fragments</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Mutable+Specification">Mutable Specification</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Execution">Execution</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Reporting">Reporting</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Dependencies">Dependencies</a>
+            
+          </li></ul>
+          </li></ul>
+          </li></ul>
+      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['2068016152','1700859443'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+    </div></div></div>
+                <div class="col3"><div id="rightcolumn"></div></div>
+              </div>
+            </div>
+          </div></body></html>

@@ -42,7 +42,7 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>This reporter will just notify the test interface about test results for the end statistics</p><p>It is only used if we are not using the Console exporter
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="SbtExporter.html" class="extype" name="org.specs2.reporter.SbtExporter">SbtExporter</a>, <a href="Events.html" class="extype" name="org.specs2.reporter.Events">Events</a>, <a href="TextExporting.html" class="extype" name="org.specs2.reporter.TextExporting">TextExporting</a>, <span class="extype" name="org.specs2.reporter.Exporting">Exporting</span>, <a href="TextPrinter.html" class="extype" name="org.specs2.reporter.TextPrinter">TextPrinter</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="SbtExporter.html" class="extype" name="org.specs2.reporter.SbtExporter">SbtExporter</a>, <a href="Events.html" class="extype" name="org.specs2.reporter.Events">Events</a>, <a href="TextExporting.html" class="extype" name="org.specs2.reporter.TextExporting">TextExporting</a>, <span class="extype" name="org.specs2.reporter.Exporting">Exporting</span>, <a href="TextPrinter.html" class="extype" name="org.specs2.reporter.TextPrinter">TextPrinter</a>, <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -107,7 +107,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="TextPrinter$Print.html"><span class="name">Print</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="TextPrinter$Print.html"><span class="name">Print</span></a><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="TextPrinter.html" class="extype" name="org.specs2.reporter.TextPrinter">TextPrinter</a></dd></dl></div>
@@ -159,7 +159,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="TextPrinter$PrintResult.html"><span class="name">PrintResult</span></a><span class="params">(<span name="r">r: <a href="../specification/ExecutedResult.html" class="extype" name="org.specs2.specification.ExecutedResult">ExecutedResult</a></span>)</span><span class="result"> extends <a href="TextPrinter$Print.html" class="extype" name="org.specs2.reporter.TextPrinter.Print">Print</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="TextPrinter$PrintResult.html"><span class="name">PrintResult</span></a><span class="params">(<span name="result">result: () ⇒ <a href="../specification/ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a></span>)</span><span class="result"> extends <a href="TextPrinter$Print.html" class="extype" name="org.specs2.reporter.TextPrinter.Print">Print</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="TextPrinter.html" class="extype" name="org.specs2.reporter.TextPrinter">TextPrinter</a></dd></dl></div>
@@ -216,15 +216,15 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Events.html" class="extype" name="org.specs2.reporter.Events">Events</a></dd></dl></div>
     </li><li name="org.specs2.reporter.TextPrinter.ToPrint" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ToPrint=(((Stream[TextPrinter.this.Print],org.specs2.reporter.Statistics.SpecsStatistics),org.specs2.reporter.Levels[org.specs2.specification.ExecutedFragment]),org.specs2.reporter.SpecsArguments[org.specs2.specification.ExecutedFragment])"></a>
-      <a id="ToPrint:(((Stream[Print],Statistics.SpecsStatistics),Levels[ExecutedFragment]),SpecsArguments[ExecutedFragment])"></a>
+      <a id="ToPrint=(((Stream[TextPrinter.this.Print],org.specs2.reporter.Statistics.SpecsStatistics),org.specs2.reporter.Levels[org.specs2.specification.Fragment]),org.specs2.reporter.SpecsArguments[org.specs2.specification.ExecutingFragment])"></a>
+      <a id="ToPrint:(((Stream[Print],Statistics.SpecsStatistics),Levels[Fragment]),SpecsArguments[ExecutingFragment])"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">ToPrint</span><span class="result"> = (((<span class="extype" name="scala.Stream">Stream</span>[<a href="#PrintextendsAnyRef" class="extmbr" name="org.specs2.reporter.TextPrinter.Print">Print</a>], <span class="extype" name="org.specs2.reporter.Statistics.SpecsStatistics">Statistics.SpecsStatistics</span>), <span class="extype" name="org.specs2.reporter.Levels">Levels</span>[<a href="../specification/ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a>]), <span class="extype" name="org.specs2.reporter.SpecsArguments">SpecsArguments</span>[<a href="../specification/ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a>])</span>
+        <span class="name">ToPrint</span><span class="result"> = (((<a href="../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[<a href="#PrintextendsAnyRef" class="extmbr" name="org.specs2.reporter.TextPrinter.Print">Print</a>], <span class="extype" name="org.specs2.reporter.Statistics.SpecsStatistics">Statistics.SpecsStatistics</span>), <span class="extype" name="org.specs2.reporter.Levels">Levels</span>[<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>]), <span class="extype" name="org.specs2.reporter.SpecsArguments">SpecsArguments</span>[<a href="../specification/ExecutingFragment.html" class="extype" name="org.specs2.specification.ExecutingFragment">ExecutingFragment</a>])</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="TextPrinter.html" class="extype" name="org.specs2.reporter.TextPrinter">TextPrinter</a></dd></dl></div>
@@ -250,7 +250,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Events$error.html"><span class="name">error</span></a><span class="params">(<span name="taskDef">taskDef: <span class="extype" name="sbt.testing.TaskDef">TaskDef</span></span>, <span name="exception">exception: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result"> extends <a href="Events$SpecEvent.html" class="extype" name="org.specs2.reporter.Events.SpecEvent">SpecEvent</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Events$error.html"><span class="name">error</span></a><span class="params">(<span name="taskDef">taskDef: <span class="extype" name="sbt.testing.TaskDef">TaskDef</span></span>, <span name="exception">exception: <a href="../../../scala/package.html#Throwable=Throwable" class="extmbr" name="scala.Throwable">Throwable</a></span>)</span><span class="result"> extends <a href="Events$SpecEvent.html" class="extype" name="org.specs2.reporter.Events.SpecEvent">SpecEvent</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Events.html" class="extype" name="org.specs2.reporter.Events">Events</a></dd></dl></div>
@@ -263,7 +263,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Events$failure.html"><span class="name">failure</span></a><span class="params">(<span name="taskDef">taskDef: <span class="extype" name="sbt.testing.TaskDef">TaskDef</span></span>, <span name="exception">exception: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result"> extends <a href="Events$SpecEvent.html" class="extype" name="org.specs2.reporter.Events.SpecEvent">SpecEvent</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Events$failure.html"><span class="name">failure</span></a><span class="params">(<span name="taskDef">taskDef: <span class="extype" name="sbt.testing.TaskDef">TaskDef</span></span>, <span name="exception">exception: <a href="../../../scala/package.html#Throwable=Throwable" class="extmbr" name="scala.Throwable">Throwable</a></span>)</span><span class="result"> extends <a href="Events$SpecEvent.html" class="extype" name="org.specs2.reporter.Events.SpecEvent">SpecEvent</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Events.html" class="extype" name="org.specs2.reporter.Events">Events</a></dd></dl></div>
@@ -335,7 +335,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -374,7 +374,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -392,15 +392,15 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="org.specs2.reporter.TextPrinter#PrintReducer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="PrintReducer:scalaz.Reducer[org.specs2.specification.ExecutedFragment,Stream[TextPrinter.this.Print]]"></a>
-      <a id="PrintReducer:Reducer[ExecutedFragment,Stream[Print]]"></a>
+      <a id="PrintReducer:scalaz.Reducer[org.specs2.specification.ExecutingFragment,Stream[TextPrinter.this.Print]]"></a>
+      <a id="PrintReducer:Reducer[ExecutingFragment,Stream[Print]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">PrintReducer</span><span class="result">: <span class="extype" name="scalaz.Reducer">Reducer</span>[<a href="../specification/ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a>, <span class="extype" name="scala.Stream">Stream</span>[<a href="#PrintextendsAnyRef" class="extmbr" name="org.specs2.reporter.TextPrinter.Print">Print</a>]]</span>
+        <span class="name">PrintReducer</span><span class="result">: <span class="extype" name="scalaz.Reducer">Reducer</span>[<a href="../specification/ExecutingFragment.html" class="extype" name="org.specs2.specification.ExecutingFragment">ExecutingFragment</a>, <a href="../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[<a href="#PrintextendsAnyRef" class="extmbr" name="org.specs2.reporter.TextPrinter.Print">Print</a>]]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="TextPrinter.html" class="extype" name="org.specs2.reporter.TextPrinter">TextPrinter</a></dd></dl></div>
@@ -426,7 +426,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -445,7 +445,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -555,7 +555,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -586,28 +586,28 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="org.specs2.reporter.TextPrinter#print" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="print(name:org.specs2.specification.SpecName,fs:Seq[org.specs2.specification.ExecutedFragment])(implicitcommandLineArgs:org.specs2.main.Arguments):(((Stream[TextPrinter.this.Print],org.specs2.reporter.Statistics.SpecsStatistics),org.specs2.reporter.Levels[org.specs2.specification.ExecutedFragment]),org.specs2.reporter.SpecsArguments[org.specs2.specification.ExecutedFragment])"></a>
-      <a id="print(SpecName,Seq[ExecutedFragment])(Arguments):(((Stream[Print],Statistics.SpecsStatistics),Levels[ExecutedFragment]),SpecsArguments[ExecutedFragment])"></a>
+      <a id="print(name:org.specs2.specification.SpecName,fs:Seq[org.specs2.specification.ExecutingFragment])(implicitcommandLineArgs:org.specs2.main.Arguments):(((Stream[TextPrinter.this.Print],org.specs2.reporter.Statistics.SpecsStatistics),org.specs2.reporter.Levels[org.specs2.specification.Fragment]),org.specs2.reporter.SpecsArguments[org.specs2.specification.ExecutingFragment])"></a>
+      <a id="print(SpecName,Seq[ExecutingFragment])(Arguments):(((Stream[Print],Statistics.SpecsStatistics),Levels[Fragment]),SpecsArguments[ExecutingFragment])"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">print</span><span class="params">(<span name="name">name: <a href="../specification/SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a></span>, <span name="fs">fs: <span class="extype" name="scala.Seq">Seq</span>[<a href="../specification/ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="commandLineArgs">commandLineArgs: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: (((<span class="extype" name="scala.Stream">Stream</span>[<a href="#PrintextendsAnyRef" class="extmbr" name="org.specs2.reporter.TextPrinter.Print">Print</a>], <span class="extype" name="org.specs2.reporter.Statistics.SpecsStatistics">Statistics.SpecsStatistics</span>), <span class="extype" name="org.specs2.reporter.Levels">Levels</span>[<a href="../specification/ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a>]), <span class="extype" name="org.specs2.reporter.SpecsArguments">SpecsArguments</span>[<a href="../specification/ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a>])</span>
+        <span class="name">print</span><span class="params">(<span name="name">name: <a href="../specification/SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a></span>, <span name="fs">fs: <a href="../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<a href="../specification/ExecutingFragment.html" class="extype" name="org.specs2.specification.ExecutingFragment">ExecutingFragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="commandLineArgs">commandLineArgs: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: (((<a href="../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[<a href="#PrintextendsAnyRef" class="extmbr" name="org.specs2.reporter.TextPrinter.Print">Print</a>], <span class="extype" name="org.specs2.reporter.Statistics.SpecsStatistics">Statistics.SpecsStatistics</span>), <span class="extype" name="org.specs2.reporter.Levels">Levels</span>[<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>]), <span class="extype" name="org.specs2.reporter.SpecsArguments">SpecsArguments</span>[<a href="../specification/ExecutingFragment.html" class="extype" name="org.specs2.specification.ExecutingFragment">ExecutingFragment</a>])</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="TextPrinter.html" class="extype" name="org.specs2.reporter.TextPrinter">TextPrinter</a></dd></dl></div>
     </li><li name="org.specs2.reporter.TextPrinter#printIO" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="printIO(output:org.specs2.reporter.ResultOutput)(implicitargs:org.specs2.main.Arguments):((((Stream[TextPrinter.this.Print],org.specs2.reporter.Statistics.SpecsStatistics),org.specs2.reporter.Levels[org.specs2.specification.ExecutedFragment]),org.specs2.reporter.SpecsArguments[org.specs2.specification.ExecutedFragment]))=&gt;(((Stream[TextPrinter.this.Print],org.specs2.reporter.Statistics.SpecsStatistics),org.specs2.reporter.Levels[org.specs2.specification.ExecutedFragment]),org.specs2.reporter.SpecsArguments[org.specs2.specification.ExecutedFragment])"></a>
-      <a id="printIO(ResultOutput)(Arguments):((((Stream[Print],Statistics.SpecsStatistics),Levels[ExecutedFragment]),SpecsArguments[ExecutedFragment]))⇒(((Stream[Print],Statistics.SpecsStatistics),Levels[ExecutedFragment]),SpecsArguments[ExecutedFragment])"></a>
+      <a id="printIO(output:org.specs2.reporter.ResultOutput)(implicitargs:org.specs2.main.Arguments):((((Stream[TextPrinter.this.Print],org.specs2.reporter.Statistics.SpecsStatistics),org.specs2.reporter.Levels[org.specs2.specification.Fragment]),org.specs2.reporter.SpecsArguments[org.specs2.specification.ExecutingFragment]))=&gt;(((Stream[TextPrinter.this.Print],org.specs2.reporter.Statistics.SpecsStatistics),org.specs2.reporter.Levels[org.specs2.specification.Fragment]),org.specs2.reporter.SpecsArguments[org.specs2.specification.ExecutingFragment])"></a>
+      <a id="printIO(ResultOutput)(Arguments):((((Stream[Print],Statistics.SpecsStatistics),Levels[Fragment]),SpecsArguments[ExecutingFragment]))⇒(((Stream[Print],Statistics.SpecsStatistics),Levels[Fragment]),SpecsArguments[ExecutingFragment])"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printIO</span><span class="params">(<span name="output">output: <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: ((((<span class="extype" name="scala.Stream">Stream</span>[<a href="#PrintextendsAnyRef" class="extmbr" name="org.specs2.reporter.TextPrinter.Print">Print</a>], <span class="extype" name="org.specs2.reporter.Statistics.SpecsStatistics">Statistics.SpecsStatistics</span>), <span class="extype" name="org.specs2.reporter.Levels">Levels</span>[<a href="../specification/ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a>]), <span class="extype" name="org.specs2.reporter.SpecsArguments">SpecsArguments</span>[<a href="../specification/ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a>])) ⇒ (((<span class="extype" name="scala.Stream">Stream</span>[<a href="#PrintextendsAnyRef" class="extmbr" name="org.specs2.reporter.TextPrinter.Print">Print</a>], <span class="extype" name="org.specs2.reporter.Statistics.SpecsStatistics">Statistics.SpecsStatistics</span>), <span class="extype" name="org.specs2.reporter.Levels">Levels</span>[<a href="../specification/ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a>]), <span class="extype" name="org.specs2.reporter.SpecsArguments">SpecsArguments</span>[<a href="../specification/ExecutedFragment.html" class="extype" name="org.specs2.specification.ExecutedFragment">ExecutedFragment</a>])</span>
+        <span class="name">printIO</span><span class="params">(<span name="output">output: <a href="ResultOutput.html" class="extype" name="org.specs2.reporter.ResultOutput">ResultOutput</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: ((((<a href="../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[<a href="#PrintextendsAnyRef" class="extmbr" name="org.specs2.reporter.TextPrinter.Print">Print</a>], <span class="extype" name="org.specs2.reporter.Statistics.SpecsStatistics">Statistics.SpecsStatistics</span>), <span class="extype" name="org.specs2.reporter.Levels">Levels</span>[<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>]), <span class="extype" name="org.specs2.reporter.SpecsArguments">SpecsArguments</span>[<a href="../specification/ExecutingFragment.html" class="extype" name="org.specs2.specification.ExecutingFragment">ExecutingFragment</a>])) ⇒ (((<a href="../../../scala/package.html#Stream[+A]=scala.collection.immutable.Stream[A]" class="extmbr" name="scala.Stream">Stream</a>[<a href="#PrintextendsAnyRef" class="extmbr" name="org.specs2.reporter.TextPrinter.Print">Print</a>], <span class="extype" name="org.specs2.reporter.Statistics.SpecsStatistics">Statistics.SpecsStatistics</span>), <span class="extype" name="org.specs2.reporter.Levels">Levels</span>[<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>]), <span class="extype" name="org.specs2.reporter.SpecsArguments">SpecsArguments</span>[<a href="../specification/ExecutingFragment.html" class="extype" name="org.specs2.specification.ExecutingFragment">ExecutingFragment</a>])</span>
       </span>
       </h4>
       <p class="shortcomment cmt">print a line to the output</p><div class="fullcomment"><div class="comment cmt"><p>print a line to the output</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="TextPrinter.html" class="extype" name="org.specs2.reporter.TextPrinter">TextPrinter</a></dd></dl></div>
@@ -748,7 +748,7 @@
             </div><div class="parent" name="org.specs2.reporter.TextPrinter">
               <h3>Inherited from <a href="TextPrinter.html" class="extype" name="org.specs2.reporter.TextPrinter">TextPrinter</a></h3>
             </div><div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+              <h3>Inherited from <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
             </div>

@@ -1,0 +1,590 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <style type="text/css" media="all">
+        @import url('./../../css/maven-base.css');
+        @import url('./../../css/maven-theme.css');
+      </style>
+      <link href="./../../css/prettify.css" type="text/css" rel="stylesheet" />
+      <script type="text/javascript" src="./../../css/prettify.js"></script>
+      <link rel="stylesheet" href="./../../css/print.css" type="text/css" media="print" />
+      <link href="./../../css/tooltip.css" rel="stylesheet" type="text/css" />
+      <link href="./../../css/specs2-user.css" type="text/css" rel="stylesheet" />
+
+      <script type="text/javascript" src="./../../css/jquery.js"></script>
+      <script type="text/javascript" src="./../../css/jquery.cookie.js"></script>
+      <script type="text/javascript" src="./../../css/jquery.hotkeys.js"></script>
+      <script type="text/javascript" src="./../../css/jquery.jstree.js"></script>
+      <script type="text/javascript" src="./../../css/tooltip.js"></script>
+      <script type="text/javascript" src="./../../js/specs2-user.js"></script>
+      <script language="javascript">$.getScript("./../../js/specs2-user.js", initUserScript(document));</script>
+      <script language="javascript">
+      function init() {  prettyPrint(); };
+      /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
+      String.prototype.endsWith = function(str) { return (this.match(str+'$') == str) };
+      function changeWidth(id,width) {  document.getElementById(id).style.width = width; };
+      function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
+      function toggleImage(image) {
+        if (image.src.endsWith('images/expanded.gif')) 
+          image.src = image.src.replace('expanded', 'collapsed');
+        else 
+          image.src = image.src.replace('collapsed', 'expanded');
+      };
+      function showHide(id) {
+        element = document.getElementById(id);
+        element.style.display = (element.style.display == 'block')? 'none' : 'block';
+      };
+      function showHideByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
+        }
+      };
+      function showByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'block';
+        }
+      };
+      function hideByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'none';
+        }
+      };
+      function showById(id) {
+        document.getElementById(id).style.display = ''
+      };
+      function hideById(id) {
+        document.getElementById(id).style.display = 'none'
+      };
+    </script>
+      <script language="javascript">window.onload=init;</script>
+      <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
+           tabber code, then the init code -->
+      <script type="text/javascript" src="./../../css/tabber.js"></script>
+      <link rel="stylesheet" href="./../../css/tabber.css" type="text/css" media="screen" />
+      <title>GivenWhenThenPage</title>
+    </head><body><div id="breadcrumbs"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html">Structure</a><t> / </t><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html">GivenWhenThenPage</a></div><div class="colmask threecol">
+            <div class="colmid">
+              <div class="colleft">
+                <div class="col1"><div id="central"><html><title>GivenWhenThenPage</title><a name="GivenWhenThenPage"><h2 specId="588178946">GivenWhenThenPage</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Given+When+Then"><h3>Given When Then</h3></a><p>The Given/When/Then style of writing specifications is supported by the use of the <code class="prettyprint">GWT</code> trait (there is also <a href="org.specs2.guide.structure.GivenWhenThenDeprecatedPage.html">another way</a> but it is not recommended because it leads to performance issues at compile-time).</p><p>Here is a simple example of a Given/When/Then specification using the <code class="prettyprint">GWT</code> trait: </p></div></status><status class="ok"><div style="display: show; text-indent:5px;"><pre><code class="prettyprint">class Calculator extends Specification with GWT with StandardDelimitedStepParsers { def is = s2&quot;&quot;&quot;
+
+ Let's add numbers!
+
+  the first number is {1}         ${addition.start}
+  if I add it to {2}
+  then I get {3}                  ${addition.end}
+  &quot;&quot;&quot;
+
+  lazy val addition = Scenario(&quot;addition&quot;).
+                        given(anInt).
+                        when(anInt) { case i :: j :: _ =&gt; i + j }.
+                        andThen(anInt) { case expected :: sum :: _ =&gt; sum === expected }
+
+}
+</code></pre></div></status><status class="ok"><div style="display: show; text-indent:10px;"><p>The first thing you can notice is that in specs2 you are not forced to use &quot;Given&quot;/&quot;When&quot;/&quot;Then&quot; as keywords. Those words are only guidelines to structure your scenario along the <a href="http://c2.com/cgi/wiki?ArrangeActAssert">&quot;Arrange/Act/Assert&quot;</a> way of testing. Then you can see that the text contains some values delimited with <code class="prettyprint">{}</code> and is annotated with the &quot;start&quot; and &quot;end&quot; of a <code class="prettyprint">Scenario</code>, linking the text to some code. This is indeed the general pattern for writing GWT specifications:</p>
+<ol>
+  <li>write a piece of <strong><em><code class="prettyprint">s2</code></em></strong> text containing with some values delimited by <code class="prettyprint">{}</code></li>
+  <li>define or reuse <code class="prettyprint">StepParsers</code> to extract well-typed values from strings</li>
+  <li>create a <code class="prettyprint">Scenario</code> object defining what each step should do: extract values only (<code class="prettyprint">given</code>), execute actions (<code class="prettyprint">when</code>), check results (<code class="prettyprint">andThen</code>)</li>
+</ol><p>There are a few variations from this general pattern</p><a name="Parsing"><h4>Parsing</h4></a><p>The <code class="prettyprint">Scenario</code> requires <code class="prettyprint">StepParser</code>s to extract strings from text and transform them into well-typed values.</p><a name="Delimited+parsers"><h5>Delimited parsers</h5></a><p>Those parsers are using <code class="prettyprint">{}</code> as delimiters for the values you want to extract. For example you can define an extractor for Int values like this: </p>
+<pre><code class="prettyprint">val anInt = StepParser((s: String) =&gt; s.toInt)
+</code></pre><p>You don't need to worry about catching exceptions, the <code class="prettyprint">DelimitedStepParser</code> class (which is the type of object effectively created) will handle that for you.</p><p>If necessary you can change the delimiters by overriding the implicit regular expression from the <code class="prettyprint">StepParsers</code> trait </p>
+<pre><code class="prettyprint">// use `[]` as a delimiter
+override implicit lazy val stepParserRegex = new Regex(&quot;\\[([^\\]]+)\\]&quot;)
+</code></pre><a name="Regex+parsers"><h5>Regex parsers</h5></a><p>The other type of step parsers is <code class="prettyprint">RegexStepParser</code>. Those parsers are using regular expressions with groups to extract values. You can create them with the <code class="prettyprint">readAs</code> and <code class="prettyprint">groupAs</code> methods </p></div></status><status class="ok"><div style="display: show; text-indent:15px;"><pre><code class="prettyprint">// match the whole line
+val anInt1 = readAs(&quot;.*(\\d+).*&quot;).and((s: String) =&gt; s.toInt)
+  
+// just declare the group you want to match
+val anInt2 = groupAs(&quot;\\d+&quot;).and((s: String) =&gt; s.toInt)
+
+// note: if you want to extract 2 ints, just pass a function of 2 arguments
+val twoInts = groupAs(&quot;\\d+&quot;).and((s1: String, s2: String) =&gt; (s1.toInt, s2.toInt))
+</code></pre><a name="Standard+parsers"><h5>Standard parsers</h5></a><p>A few <code class="prettyprint">StepParsers</code> have been predefined for you in the <code class="prettyprint">StandardDelimitedStepParsers</code> and <code class="prettyprint">StandardRegexStepParsers</code> traits to extract <code class="prettyprint">Int</code>s, <code class="prettyprint">Double</code>s and <code class="prettyprint">String</code>s</p><a name="Scenario"><h4>Scenario</h4></a><p>A <code class="prettyprint">Scenario</code> is a specific form of <a href="org.specs2.guide.Structure.html#Scripts"><code class="prettyprint">Script</code></a> which declares in which order values must be extracted from the text and what to do with them. By default it uses a <code class="prettyprint">ScriptTemplate</code> which is going to associate only the last lines of the text to the scenario steps (refer to the <a href="org.specs2.guide.Structure.html#Scripts"><code class="prettyprint">Script</code></a> section of the User Guide to see how to change this).</p><p>The <code class="prettyprint">Scenario</code> class provides 3 methods: <code class="prettyprint">given</code>, <code class="prettyprint">when</code>, <code class="prettyprint">andThen</code> which can be passed <code class="prettyprint">StepParsers</code> and functions:</p>
+<ul>
+  <li><code class="prettyprint">given</code> uses an extractor which will extract values for a line of text</li>
+  <li><code class="prettyprint">when</code> uses an extractor which will extract values from the corresponding line of text and a <code class="prettyprint">mapping</code> function to combine the result of the extraction + all the values from the given steps</li>
+  <li><code class="prettyprint">andThen</code> uses an extractor (usually to extract expected values) and a <code class="prettyprint">check</code> function taking <code class="prettyprint">when values</code> and returning a <code class="prettyprint">Result</code></li>
+</ul><p>More precisely, the functions passed to a <code class="prettyprint">when</code> step must be of the form</p>
+<ul>
+  <li><code class="prettyprint">when(aStepParser) { case p1 :: p2 :: .. :: _ =&gt; w1 }</code>, where <code class="prettyprint">p1</code> has the type extracted from <code class="prettyprint">aStepParser</code> and <code class="prettyprint">p2 .. pn</code> have the types of the values extracted by the previous <code class="prettyprint">given</code> steps</li>
+  <li><code class="prettyprint">when(aStepParser).collect { case (p1, p2n: Seq[LUB]) =&gt; w1 }</code>, where <code class="prettyprint">p1</code> has the type extracted from <code class="prettyprint">aStepParser</code> and <code class="prettyprint">p2n</code> is a <code class="prettyprint">Seq[LUB]</code> where <code class="prettyprint">LUB</code> is the least upper bound of the types of all the values extracted by the previous <code class="prettyprint">given</code> steps</li>
+</ul><p><code class="prettyprint">::</code> is the <a href="https://github.com/milessabin/shapeless">Shapeless</a> <code class="prettyprint">HCons</code> operator so don't forget at add the Shapeless dependency to your project if you are using the <code class="prettyprint">GWT</code> trait!</p><p>And similarly for <code class="prettyprint">andThen</code> steps</p>
+<ul>
+  <li><code class="prettyprint">andThen(aStepParser) { case p1 :: p2 :: .. :: _ =&gt; r: R }</code>, where <code class="prettyprint">p1</code> has the type extracted from <code class="prettyprint">aStepParser</code> and <code class="prettyprint">p2 .. pn</code> have the types of the values mapped by the previous <code class="prettyprint">when</code> steps</li>
+  <li><code class="prettyprint">andThen(aStepParser).collect { case (p1, p2n: Seq[LUB]) =&gt; r: R }</code>, where <code class="prettyprint">p1</code> has the type extracted from <code class="prettyprint">aStepParser</code> and <code class="prettyprint">p2n</code> is a <code class="prettyprint">Seq[LUB]</code> where <code class="prettyprint">LUB</code> is the least upper bound of the types of all the values mapped by the previous <code class="prettyprint">when</code> steps</li>
+</ul><p>The type <code class="prettyprint">R</code> of the value <code class="prettyprint">r</code> must be such that there is an <code class="prettyprint">AsResult</code> type class instance in scope to transform it to a <code class="prettyprint">Result</code>. In other words r is: a <code class="prettyprint">Boolean</code>, a <code class="prettyprint">MatchResult[_]</code>, a ScalaCheck <code class="prettyprint">Prop</code>,...</p><p>You will also note that the <code class="prettyprint">Scenario</code> class restricts the order of methods which you can call. It always has to be <code class="prettyprint">given* -&gt; when* -&gt; andThen*</code></p><a name="Tagging"><h4>Tagging</h4></a><p>When you insert a <code class="prettyprint">Scenario.start</code> and <code class="prettyprint">Scenario.end</code> in a piece of <code class="prettyprint">s2</code> text, this will automatically create a tagged &quot;<code class="prettyprint">Section</code>&quot; with the title of the Scenario so that you can execute only this scenario from the command-line by running:<br /><code class="prettyprint">
+sbt&gt; test-only *Calculator* -- include addition
+</code></p></div></status></html></div></div>
+                <div class="col2"><div id="leftcolumn"><div id="tree">
+      <ul><li id="2068016152"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="1864003061"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Execution">Execution</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
+            
+          </li></ul>
+          </li><li id="746508004"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Styles">Styles</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Acceptance+specification">Acceptance specification</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Unit+specification">Unit specification</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Results">Results</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Standard">Standard</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Matchers">Matchers</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Expectations">Expectations</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Functional">Functional</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Thrown">Thrown</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#All">All</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Short-circuit">Short-circuit</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Auto-Examples">Auto-Examples</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#G+%2F+W+%2FT">G / W /T</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#DataTables">DataTables</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Example+groups">Example groups</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Isolation">Isolation</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Tags">Tags</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Selection">Selection</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Formatting">Formatting</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Contexts">Contexts</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Isolation_1">Isolation</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Scope">Scope</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Isolated+variables">Isolated variables</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Case+classes">Case classes</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Contexts+inheritance">Contexts inheritance</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Before%2FAfter">Before/After</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#In+a+mutable+specification">In a mutable specification</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#In+an+acceptance+specification">In an acceptance specification</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Around">Around</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Outside">Outside</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#AroundOutside">AroundOutside</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Fixture">Fixture</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#BeforeExample">BeforeExample</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Implicit+context">Implicit context</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Composition">Composition</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Combinations">Combinations</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Composition_1">Composition</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Steps%2FActions">Steps/Actions</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Steps">Steps</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Actions">Actions</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Template">Template</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Global+setup%2Fteardown">Global setup/teardown</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#For+fragments">For fragments</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Links">Links</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Inclusion">Inclusion</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Inline">Inline</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Html+link">Html link</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Html+Link">Html Link</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Reference">Reference</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Markdown+url">Markdown url</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Execution">Execution</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Unit+specifications">Unit specifications</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Methods">Methods</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Full+example">Full example</a>
+            <ul><li id="190038393"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Presentation">Presentation</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Rules">Rules</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Formatting+fragments">Formatting fragments</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Separating+groups+of+examples">Separating groups of examples</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Reset+the+levels">Reset the levels</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Changing+the+indentation+level">Changing the indentation level</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Combinations">Combinations</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Unit+specification">Unit specification</a>
+            
+          </li></ul>
+          </li><li id="588178946"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#GivenWhenThenPage">GivenWhenThenPage</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then">Given When Then</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Parsing">Parsing</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Delimited+parsers">Delimited parsers</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Regex+parsers">Regex parsers</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Standard+parsers">Standard parsers</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Scenario">Scenario</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Tagging">Tagging</a>
+            
+          </li></ul>
+          </li></ul>
+          </li></ul>
+          </li></ul>
+          </li></ul>
+          </li><li id="1700859443"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Combinators">Combinators</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Match+results">Match results</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Out+of+the+box">Out of the box</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Optional">Optional</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Custom">Custom</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#From+functions">From functions</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#From+Hamcrest">From Hamcrest</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#With+sequences">With sequences</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#ScalaCheck">ScalaCheck</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Arbitrary+instances">Arbitrary instances</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#With+Generators">With Generators</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Test+properties">Test properties</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Expectations">Expectations</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Mock+expectations">Mock expectations</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Creation+and+settings">Creation and settings</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Stubbing">Stubbing</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Mocking+and+Stubbing+at+the+same+time">Mocking and Stubbing at the same time</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#With+matchers">With matchers</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Callbacks">Callbacks</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Parameters+for+the+answers+function">Parameters for the answers function</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Verification">Verification</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Order+of+calls">Order of calls</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Ignoring+stubs">Ignoring stubs</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Spies">Spies</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Functions%2FPartialFunctions">Functions/PartialFunctions</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Auto-boxing">Auto-boxing</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Byname">Byname</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#DataTables">DataTables</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Implicit+%21">Implicit !</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
+            <ul><li id="418202897"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Properties">Properties</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Styles">Styles</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Simple+form">Simple form</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Adding+several+rows+at+once">Adding several rows at once</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Nesting+into+another+Form">Nesting into another Form</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Nesting+into+an+Effect+or+a+Prop">Nesting into an Effect or a Prop</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Using+tabs">Using tabs</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Aggregating+forms">Aggregating forms</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Lazy+cells">Lazy cells</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Xml+cells">Xml cells</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#1-n+relationships">1-n relationships</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Subset">Subset</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Subsequence">Subsequence</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Set">Set</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Sequence">Sequence</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Decision+tables">Decision tables</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Outside+specs2">Outside specs2</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Without+any+dependency+on+specs2">Without any dependency on specs2</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id="195103830"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Arguments">Arguments</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#API">API</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Most%2FLeast+frequently+used+arguments">Most/Least frequently used arguments</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Shortcuts">Shortcuts</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Output+directory">Output directory</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Storing+previous+results">Storing previous results</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Status+flags">Status flags</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Diffs">Diffs</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#StackTraceFilter">StackTraceFilter</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Command+line">Command line</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#System+properties">System properties</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#In+the+shell">In the shell</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Console+output">Console output</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Html+output">Html output</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#JUnit+XML+output">JUnit XML output</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Files+Runner">Files Runner</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#In+the+console">In the console</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Via+SBT">Via SBT</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#testOnly+arguments">testOnly arguments</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Output+formats">Output formats</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Html">Html</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Markdown">Markdown</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#JUnit">JUnit</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Console">Console</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Files+runner">Files runner</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Colors">Colors</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Via+IDEA">Via IDEA</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Via+JUnit">Via JUnit</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Arguments_1">Arguments</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Via+Eclipse">Via Eclipse</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Via+Maven">Via Maven</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#With+your+own">With your own</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Executor">Executor</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#In+sbt">In sbt</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Notifier">Notifier</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#NotifierRunner">NotifierRunner</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#In+sbt_1">In sbt</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Exporter">Exporter</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#In+sbt_2">In sbt</a>
+            
+          </li></ul>
+          </li></ul>
+          </li></ul>
+          </li><li id="792903642"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Add+a+title">Add a title</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Use+descriptions">Use descriptions</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Pending+until+fixed">Pending until fixed</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Enhance+failures">Enhance failures</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Share+examples">Share examples</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Create+an+index">Create an index</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Tag+examples">Tag examples</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#In+a+unit+specification">In a unit specification</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Skip+examples">Skip examples</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Debug+statements">Debug statements</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Remove+implicits">Remove implicits</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Print+execution+data">Print execution data</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#With+example+description">With example description</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Capture+snippets">Capture snippets</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#snippet">snippet</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#cuts">cuts</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#evaluation">evaluation</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#offsets">offsets</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#parameters">parameters</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#names">names</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#outside+specs2">outside specs2</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id="2049091262"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Conciseness">Conciseness</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Readability">Readability</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Extensibility">Extensibility</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Configuration">Configuration</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Clear+implementation">Clear implementation</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#User+support">User support</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#A+new+hope">A new hope</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Functional+%2F+immutable">Functional / immutable</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Chaining+everything">Chaining everything</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Arguments+have+to+be+supplied">Arguments have to be supplied</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Concurrency+is+a+breeze">Concurrency is a breeze</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#A+simple+structure">A simple structure</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Contexts">Contexts</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Indentation">Indentation</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Operators">Operators</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Forms">Forms</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#But+if+you+STILL+want+mutable+specifications">But if you STILL want mutable specifications</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Dependencies+control">Dependencies control</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Implicit+definitions+control">Implicit definitions control</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Enter+Scala+2.10">Enter Scala 2.10</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id="1126323792"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Structure">Structure</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Creation">Creation</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Creating+Fragments">Creating Fragments</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Mutable+Specification">Mutable Specification</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Execution">Execution</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Reporting">Reporting</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Dependencies">Dependencies</a>
+            
+          </li></ul>
+          </li></ul>
+          </li></ul>
+      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['2068016152','588178946'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+    </div></div></div>
+                <div class="col3"><div id="rightcolumn"></div></div>
+              </div>
+            </div>
+          </div></body></html>

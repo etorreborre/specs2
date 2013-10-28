@@ -58,19 +58,20 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="org.mockito.internal.invocation.Invocation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="InvocationextendsPrintableInvocationwithInvocationOnMockwithPrintingFriendlyInvocationwithVerificationAwareInvocation"></a>
-      <a id="Invocation:Invocation"></a>
+              <ol><li name="org.mockito.internal.invocation.MatchersBinder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MatchersBinderextendsSerializable"></a>
+      <a id="MatchersBinder:MatchersBinder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="Invocation.html"><span class="name">Invocation</span></a><span class="result"> extends <span class="extype" name="org.mockito.exceptions.PrintableInvocation">PrintableInvocation</span> with <span class="extype" name="org.mockito.invocation.InvocationOnMock">InvocationOnMock</span> with <span class="extype" name="org.mockito.internal.reporting.PrintingFriendlyInvocation">PrintingFriendlyInvocation</span> with <span class="extype" name="org.mockito.internal.exceptions.VerificationAwareInvocation">VerificationAwareInvocation</span></span>
+        <a href="MatchersBinder.html"><span class="name">MatchersBinder</span></a><span class="result"> extends <span class="extype" name="java.io.Serializable">Serializable</span></span>
       </span>
       </h4>
-      <p class="comment cmt">This class redefines Mockito Invocation behavior class when evaluating byname arguments.</p>
+      <p class="comment cmt">This class is duplicated to allow some side-effect to happen during the evaluation of byname arguments
+</p>
     </li></ol>
             </div>
 
@@ -78,19 +79,36 @@
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="org.mockito.internal.invocation.Invocation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Invocation"></a>
-      <a id="Invocation:Invocation"></a>
+              <ol><li name="org.mockito.internal.invocation.ArgumentsProcessor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ArgumentsProcessor"></a>
+      <a id="ArgumentsProcessor:ArgumentsProcessor"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="Invocation$.html"><span class="name">Invocation</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="ArgumentsProcessor$.html"><span class="name">ArgumentsProcessor</span></a>
       </span>
       </h4>
-      <p class="comment cmt">Method call on a mock object.</p>
+      <p class="comment cmt">by Szczepan Faber, created at: 3/31/12
+</p>
+    </li><li name="org.mockito.internal.invocation.MatchersBinder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="MatchersBinder"></a>
+      <a id="MatchersBinder:MatchersBinder"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="MatchersBinder$.html"><span class="name">MatchersBinder</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@SuppressWarnings</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li></ol>
             </div>
 

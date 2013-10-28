@@ -99,8 +99,21 @@ html, junit xml, markdown, custom,.</p>
       </h4>
       <p class="comment cmt">The console reporter executes a Specification and exports the results to the Console
 Output:</p>
+    </li><li name="org.specs2.reporter.DefaultExecutionStrategy" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DefaultExecutionStrategyextendsExecutionStrategywithFragmentExecution"></a>
+      <a id="DefaultExecutionStrategy:DefaultExecutionStrategy"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DefaultExecutionStrategy.html"><span class="name">DefaultExecutionStrategy</span></a><span class="result"> extends <span class="extype" name="org.specs2.reporter.ExecutionStrategy">ExecutionStrategy</span> with <a href="../specification/FragmentExecution.html" class="extype" name="org.specs2.specification.FragmentExecution">FragmentExecution</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait uses Scalaz promises to execute Fragments concurrently</p>
     </li><li name="org.specs2.reporter.DefaultReporter" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="DefaultReporterextendsReporterwithDefaultSelectionwithDefaultSequencewithDefaultExecutionStrategywithDefaultStoring"></a>
+      <a id="DefaultReporterextendsReporterwithExecutorwithDefaultSelectionwithDefaultSequencewithDefaultExecutionStrategywithDefaultStoring"></a>
       <a id="DefaultReporter:DefaultReporter"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -108,7 +121,7 @@ Output:</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="DefaultReporter.html"><span class="name">DefaultReporter</span></a><span class="result"> extends <a href="Reporter.html" class="extype" name="org.specs2.reporter.Reporter">Reporter</a> with <a href="DefaultSelection.html" class="extype" name="org.specs2.reporter.DefaultSelection">DefaultSelection</a> with <a href="DefaultSequence.html" class="extype" name="org.specs2.reporter.DefaultSequence">DefaultSequence</a> with <span class="extype" name="org.specs2.reporter.DefaultExecutionStrategy">DefaultExecutionStrategy</span> with <span class="extype" name="org.specs2.reporter.DefaultStoring">DefaultStoring</span></span>
+        <a href="DefaultReporter.html"><span class="name">DefaultReporter</span></a><span class="result"> extends <a href="Reporter.html" class="extype" name="org.specs2.reporter.Reporter">Reporter</a> with <a href="Executor.html" class="extype" name="org.specs2.reporter.Executor">Executor</a> with <a href="DefaultSelection.html" class="extype" name="org.specs2.reporter.DefaultSelection">DefaultSelection</a> with <a href="DefaultSequence.html" class="extype" name="org.specs2.reporter.DefaultSequence">DefaultSequence</a> with <a href="DefaultExecutionStrategy.html" class="extype" name="org.specs2.reporter.DefaultExecutionStrategy">DefaultExecutionStrategy</a> with <a href="DefaultStoring.html" class="extype" name="org.specs2.reporter.DefaultStoring">DefaultStoring</a></span>
       </span>
       </h4>
       
@@ -134,7 +147,7 @@ Output:</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="DefaultSequence.html"><span class="name">DefaultSequence</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="DefaultSequence.html"><span class="name">DefaultSequence</span></a><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       <p class="comment cmt">The DefaultSequence trait sorts the Fragments by making sure Steps will be executed before Examples
@@ -152,6 +165,19 @@ Output:</p>
       </span>
       </h4>
       <p class="comment cmt">This repository store the results in one file per specification, in a special directory</p>
+    </li><li name="org.specs2.reporter.DefaultStoring" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DefaultStoringextendsStoringwithStatisticswithWithDefaultStatisticsRepository"></a>
+      <a id="DefaultStoring:DefaultStoring"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DefaultStoring.html"><span class="name">DefaultStoring</span></a><span class="result"> extends <a href="Storing.html" class="extype" name="org.specs2.reporter.Storing">Storing</a> with <span class="extype" name="org.specs2.reporter.Statistics">Statistics</span> with <span class="extype" name="org.specs2.reporter.WithDefaultStatisticsRepository">WithDefaultStatisticsRepository</span></span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.reporter.DescriptionAndExamples" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="DescriptionAndExamples[T]extendsProductwithSerializable"></a>
       <a id="DescriptionAndExamples[T]:DescriptionAndExamples[T]"></a>
@@ -188,7 +214,7 @@ Output:</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Events.html"><span class="name">Events</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="Events.html"><span class="name">Events</span></a><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       
@@ -201,7 +227,7 @@ Output:</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="ExamplesIsolation.html"><span class="name">ExamplesIsolation</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="ExamplesIsolation.html"><span class="name">ExamplesIsolation</span></a><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       <p class="comment cmt">This trait &quot;isolates&quot; examples by replacing their body with another one, created from a clone of the specification.</p>
@@ -214,7 +240,7 @@ Output:</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="ExamplesSelection.html"><span class="name">ExamplesSelection</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="ExamplesSelection.html"><span class="name">ExamplesSelection</span></a><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       <p class="comment cmt">This trait filters examples based on their description
@@ -228,11 +254,24 @@ Output:</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="ExecutableSpecification.html"><span class="name">ExecutableSpecification</span></a><span class="params">(<span name="name">name: <a href="../specification/SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a></span>, <span name="arguments">arguments: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>, <span name="fs">fs: <span class="extype" name="scala.Seq">Seq</span>[<a href="FragmentSeq.html" class="extype" name="org.specs2.reporter.FragmentSeq">FragmentSeq</a>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="ExecutableSpecification.html"><span class="name">ExecutableSpecification</span></a><span class="params">(<span name="name">name: <a href="../specification/SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a></span>, <span name="arguments">arguments: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>, <span name="fs">fs: <a href="../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<a href="FragmentSeq.html" class="extype" name="org.specs2.reporter.FragmentSeq">FragmentSeq</a>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">this case class transports the fragments to execute, grouped in sequences of examples which can be executed concurrently
 </p>
+    </li><li name="org.specs2.reporter.Executor" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ExecutorextendsDefaultSelectionwithDefaultSequencewithDefaultExecutionStrategywithDefaultStoring"></a>
+      <a id="Executor:Executor"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Executor.html"><span class="name">Executor</span></a><span class="result"> extends <a href="DefaultSelection.html" class="extype" name="org.specs2.reporter.DefaultSelection">DefaultSelection</a> with <a href="DefaultSequence.html" class="extype" name="org.specs2.reporter.DefaultSequence">DefaultSequence</a> with <a href="DefaultExecutionStrategy.html" class="extype" name="org.specs2.reporter.DefaultExecutionStrategy">DefaultExecutionStrategy</a> with <a href="DefaultStoring.html" class="extype" name="org.specs2.reporter.DefaultStoring">DefaultStoring</a></span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.reporter.Exporter" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ExporterextendsExporting"></a>
       <a id="Exporter:Exporter"></a>
@@ -269,7 +308,7 @@ Output:</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="FragmentSeq.html"><span class="name">FragmentSeq</span></a><span class="params">(<span name="fragments">fragments: <span class="extype" name="scala.Seq">Seq</span>[<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>]</span>, <span name="arguments">arguments: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="FragmentSeq.html"><span class="name">FragmentSeq</span></a><span class="params">(<span name="fragments">fragments: <a href="../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>]</span>, <span name="arguments">arguments: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
@@ -282,7 +321,7 @@ Output:</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="HandlerEvents.html"><span class="name">HandlerEvents</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="HandlerEvents.html"><span class="name">HandlerEvents</span></a><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       <p class="comment cmt">Specific events which can be notified to sbt
@@ -336,7 +375,7 @@ Output:</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="HtmlPrinter.html"><span class="name">HtmlPrinter</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="HtmlPrinter.html"><span class="name">HtmlPrinter</span></a><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       <p class="comment cmt">The Html printer is used to create an Html report of an executed specification.</p>
@@ -349,7 +388,7 @@ Output:</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="HtmlReportOutput.html"><span class="name">HtmlReportOutput</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="HtmlReportOutput.html"><span class="name">HtmlReportOutput</span></a><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       <p class="comment cmt">This trait defines how the specification elements should be translated as xhtml
@@ -419,7 +458,7 @@ with the xml method
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="JUnitXmlPrinter.html"><span class="name">JUnitXmlPrinter</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="JUnitXmlPrinter.html"><span class="name">JUnitXmlPrinter</span></a><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       <p class="comment cmt">The JUnitXml printer is used to create a JUnit xml report of an executed specification.</p>
@@ -445,7 +484,7 @@ with the xml method
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="LineLogger.html"><span class="name">LineLogger</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="LineLogger.html"><span class="name">LineLogger</span></a><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       <p class="comment cmt">Logger with info, failure, error where each new message is displayed on a new line
@@ -504,6 +543,20 @@ with the xml method
       </span>
       </h4>
       
+    </li><li name="org.specs2.reporter.NoExporting" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NoExportingextendsExporter"></a>
+      <a id="NoExporting:NoExporting"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NoExporting.html"><span class="name">NoExporting</span></a><span class="result"> extends <a href="Exporter.html" class="extype" name="org.specs2.reporter.Exporter">Exporter</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Null implementation for the Exporting trait
+</p>
     </li><li name="org.specs2.reporter.NoResultOutput" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="NoResultOutputextendsResultOutput"></a>
       <a id="NoResultOutput:NoResultOutput"></a>
@@ -540,7 +593,7 @@ with the xml method
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Notifier.html"><span class="name">Notifier</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="Notifier.html"><span class="name">Notifier</span></a><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       <p class="comment cmt">This trait can be used for any event concerning the execution of examples
@@ -581,7 +634,7 @@ seen as a Tree of Fragments.</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Reporter.html"><span class="name">Reporter</span></a><span class="result"> extends <a href="Selection.html" class="extype" name="org.specs2.reporter.Selection">Selection</a> with <a href="Sequence.html" class="extype" name="org.specs2.reporter.Sequence">Sequence</a> with <span class="extype" name="org.specs2.reporter.ExecutionStrategy">ExecutionStrategy</span> with <span class="extype" name="org.specs2.reporter.Storing">Storing</span> with <span class="extype" name="org.specs2.reporter.Exporting">Exporting</span></span>
+        <a href="Reporter.html"><span class="name">Reporter</span></a><span class="result"> extends <a href="Selection.html" class="extype" name="org.specs2.reporter.Selection">Selection</a> with <a href="Sequence.html" class="extype" name="org.specs2.reporter.Sequence">Sequence</a> with <span class="extype" name="org.specs2.reporter.ExecutionStrategy">ExecutionStrategy</span> with <a href="Storing.html" class="extype" name="org.specs2.reporter.Storing">Storing</a> with <span class="extype" name="org.specs2.reporter.Exporting">Exporting</span></span>
       </span>
       </h4>
       <p class="comment cmt">A Reporter will report the execution of a Specification following 3 steps:</p>
@@ -594,7 +647,7 @@ seen as a Tree of Fragments.</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="ResultOutput.html"><span class="name">ResultOutput</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="ResultOutput.html"><span class="name">ResultOutput</span></a><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       <p class="comment cmt">This traits provides specialised print methods for message representing
@@ -634,7 +687,7 @@ different types of results.</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="SbtLoggers.html"><span class="name">SbtLoggers</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="SbtLoggers.html"><span class="name">SbtLoggers</span></a><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       
@@ -660,7 +713,7 @@ different types of results.</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Selection.html"><span class="name">Selection</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="Selection.html"><span class="name">Selection</span></a><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       <p class="comment cmt">The Selection trait implements the logic for filtering the fragments to execute
@@ -674,7 +727,7 @@ different types of results.</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Sequence.html"><span class="name">Sequence</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="Sequence.html"><span class="name">Sequence</span></a><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       <p class="comment cmt">The Sequence trait implements the logic for the fragments to execute according to their dependencies
@@ -716,7 +769,7 @@ and provides the stackTrace of an exception which occurred during the specificat
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="StatisticsRepository.html"><span class="name">StatisticsRepository</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="StatisticsRepository.html"><span class="name">StatisticsRepository</span></a><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       
@@ -734,6 +787,20 @@ and provides the stackTrace of an exception which occurred during the specificat
       </h4>
       <p class="comment cmt">This trait selects examples based on their previous execution
 </p>
+    </li><li name="org.specs2.reporter.Storing" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StoringextendsAnyRef"></a>
+      <a id="Storing:Storing"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Storing.html"><span class="name">Storing</span></a><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait stores the results of an executed specification
+It also updates the statistics of:</p>
     </li><li name="org.specs2.reporter.TagSelection" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="TagSelectionextendsTagsAssociation"></a>
       <a id="TagSelection:TagSelection"></a>
@@ -783,7 +850,7 @@ and provides the stackTrace of an exception which occurred during the specificat
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="TestLoggers.html"><span class="name">TestLoggers</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="TestLoggers.html"><span class="name">TestLoggers</span></a><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       
@@ -811,7 +878,7 @@ at the end of the specification
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="TextPrinter.html"><span class="name">TextPrinter</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="TextPrinter.html"><span class="name">TextPrinter</span></a><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       <p class="comment cmt">This trait reduces a list of ExecutedFragments to a list of PrintLines.</p>
@@ -978,6 +1045,19 @@ at the end of the specification
       </span>
       <span class="symbol">
         <a href="MessagesNotifier$.html"><span class="name">MessagesNotifier</span></a><span class="result"> extends <a href="MessagesNotifier.html" class="extype" name="org.specs2.reporter.MessagesNotifier">MessagesNotifier</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.reporter.NoExporting" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NoExporting"></a>
+      <a id="NoExporting:NoExporting"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NoExporting$.html"><span class="name">NoExporting</span></a><span class="result"> extends <a href="NoExporting.html" class="extype" name="org.specs2.reporter.NoExporting">NoExporting</a></span>
       </span>
       </h4>
       

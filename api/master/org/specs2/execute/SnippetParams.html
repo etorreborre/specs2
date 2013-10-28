@@ -35,14 +35,14 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">SnippetParams</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="trimExpression">trimExpression: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">Snippet.trimApproximatedSnippet</span></span>, <span name="cutter">cutter: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="defval" name="ScissorsCutter.apply(ScissorsCutter.apply$default$1, ScissorsCutter.apply$default$2)">...</span></span>, <span name="asCode">asCode: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="defval" name="{<br/>&amp;nbsp;&amp;nbsp;  val x$53: Int = 0;<br/>&amp;nbsp;&amp;nbsp;  val x$54: String =&gt; String = Snippet.markdownCode$default$1;<br/>&amp;nbsp;&amp;nbsp;  val x$55: String =&gt; String = Snippet.markdownCode$default$2;<br/>&amp;nbsp;&amp;nbsp;  Snippet.markdownCode(x$54, x$55, x$53)<br/>&amp;nbsp;&amp;nbsp;}">...</span></span>, <span name="prompt">prompt: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">Snippet.greaterThanPrompt</span></span>, <span name="evalCode">evalCode: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="verify">verify: <span class="extype" name="scala.Option">Option</span>[(<span class="extype" name="org.specs2.execute.SnippetParams.T">T</span>) ⇒ <a href="Result.html" class="extype" name="org.specs2.execute.Result">Result</a>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">SnippetParams</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="trimExpression">trimExpression: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">Snippet.trimApproximatedSnippet</span></span>, <span name="cutter">cutter: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="defval" name="ScissorsCutter.apply(ScissorsCutter.apply$default$1, ScissorsCutter.apply$default$2)">...</span></span>, <span name="asCode">asCode: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="defval" name="{<br/>&amp;nbsp;&amp;nbsp;  val x$53: Int = 0;<br/>&amp;nbsp;&amp;nbsp;  val x$54: String =&gt; String @scala.reflect.internal.annotations.uncheckedBounds = Snippet.markdownCode$default$1;<br/>&amp;nbsp;&amp;nbsp;  val x$55: String =&gt; String @scala.reflect.internal.annotations.uncheckedBounds = Snippet.markdownCode$default$2;<br/>&amp;nbsp;&amp;nbsp;  Snippet.markdownCode(x$54, x$55, x$53)<br/>&amp;nbsp;&amp;nbsp;}">...</span></span>, <span name="prompt">prompt: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">Snippet.greaterThanPrompt</span></span>, <span name="evalCode">evalCode: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="verify">verify: <span class="extype" name="scala.Option">Option</span>[(<span class="extype" name="org.specs2.execute.SnippetParams.T">T</span>) ⇒ <a href="Result.html" class="extype" name="org.specs2.execute.Result">Result</a>] = <span class="symbol">scala.None</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Evaluation and display parameters for a Snippet.</p><p>It is possible to change:</p><ul><li>the function that's trimming the expression from newlines or accolades</li><li>the <code>cutter</code> function to remove part which must not be shown</li><li>the <code>asCode</code> function to render the resulting text</li><li>the <code>prompt</code> function to possibly display the evaluated result with a prompt</li><li>the <code>eval</code> boolean indicating if a snippet must be evaluated</li><li>the <code>verify</code> function checking the result
 </li></ul></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -89,7 +89,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">SnippetParams</span><span class="params">(<span name="trimExpression">trimExpression: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">Snippet.trimApproximatedSnippet</span></span>, <span name="cutter">cutter: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="defval" name="ScissorsCutter.apply(ScissorsCutter.apply$default$1, ScissorsCutter.apply$default$2)">...</span></span>, <span name="asCode">asCode: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="defval" name="{<br/>&amp;nbsp;&amp;nbsp;  val x$53: Int = 0;<br/>&amp;nbsp;&amp;nbsp;  val x$54: String =&gt; String = Snippet.markdownCode$default$1;<br/>&amp;nbsp;&amp;nbsp;  val x$55: String =&gt; String = Snippet.markdownCode$default$2;<br/>&amp;nbsp;&amp;nbsp;  Snippet.markdownCode(x$54, x$55, x$53)<br/>&amp;nbsp;&amp;nbsp;}">...</span></span>, <span name="prompt">prompt: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">Snippet.greaterThanPrompt</span></span>, <span name="evalCode">evalCode: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="verify">verify: <span class="extype" name="scala.Option">Option</span>[(<span class="extype" name="org.specs2.execute.SnippetParams.T">T</span>) ⇒ <a href="Result.html" class="extype" name="org.specs2.execute.Result">Result</a>] = <span class="symbol">scala.None</span></span>)</span>
+        <span class="name">SnippetParams</span><span class="params">(<span name="trimExpression">trimExpression: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">Snippet.trimApproximatedSnippet</span></span>, <span name="cutter">cutter: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="defval" name="ScissorsCutter.apply(ScissorsCutter.apply$default$1, ScissorsCutter.apply$default$2)">...</span></span>, <span name="asCode">asCode: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="defval" name="{<br/>&amp;nbsp;&amp;nbsp;  val x$53: Int = 0;<br/>&amp;nbsp;&amp;nbsp;  val x$54: String =&gt; String @scala.reflect.internal.annotations.uncheckedBounds = Snippet.markdownCode$default$1;<br/>&amp;nbsp;&amp;nbsp;  val x$55: String =&gt; String @scala.reflect.internal.annotations.uncheckedBounds = Snippet.markdownCode$default$2;<br/>&amp;nbsp;&amp;nbsp;  Snippet.markdownCode(x$54, x$55, x$53)<br/>&amp;nbsp;&amp;nbsp;}">...</span></span>, <span name="prompt">prompt: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">Snippet.greaterThanPrompt</span></span>, <span name="evalCode">evalCode: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="verify">verify: <span class="extype" name="scala.Option">Option</span>[(<span class="extype" name="org.specs2.execute.SnippetParams.T">T</span>) ⇒ <a href="Result.html" class="extype" name="org.specs2.execute.Result">Result</a>] = <span class="symbol">scala.None</span></span>)</span>
       </span>
       </h4>
       
@@ -111,7 +111,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -150,7 +150,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -215,7 +215,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -247,7 +247,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -331,7 +331,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -501,7 +501,7 @@
             </div><div class="parent" name="scala.Equals">
               <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
             </div><div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+              <h3>Inherited from <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
             </div>
