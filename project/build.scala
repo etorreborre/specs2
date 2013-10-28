@@ -1,8 +1,6 @@
 import sbt._
 import complete.DefaultParsers._
 import Keys._
-import sbtassembly.Plugin._
-import AssemblyKeys._
 import com.typesafe.sbt._
 import pgp.PgpKeys._
 import SbtSite._
@@ -30,11 +28,9 @@ object build extends Build {
       siteSettings             ++
       publicationSettings      ++
       releaseSettings          ++
+      rootSettings             ++
       Seq(name := "specs2", specs2ArtifactName)
-  ).
-  dependsOn(Seq(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock).map(_ % "optional -> compile"):_*)
-  .aggregate(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, guide, examples, tests) 
-
+  )
   
   /** COMMON SETTINGS */
   lazy val specs2Settings: Seq[Settings] = Seq(
@@ -44,20 +40,28 @@ object build extends Build {
     scalazVersion := "7.0.4",
     scalaVersion := "2.10.3")
 
-  lazy val specs2Version = SettingKey[String]("specs2Version", "defines the current specs2 version")
-  lazy val scalazVersion = SettingKey[String]("scalazVersion", "defines the current scalaz version")
+  lazy val specs2Version = settingKey[String]("defines the current specs2 version")
+  lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
+  lazy val aggregateCompile = ScopeFilter(
+             inProjects(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock),
+             inConfigurations(Compile))
 
   lazy val resolversSettings = resolvers ++= 
     Seq(Resolver.sonatypeRepo("releases"), 
         Resolver.sonatypeRepo("snapshots"),
         Resolver.typesafeIvyRepo("releases"))
 
-  lazy val moduleSettings = 
+  lazy val moduleSettings: Seq[Settings] = 
       defaultSettings      ++
       specs2Settings       ++
       resolversSettings    ++
       compilationSettings  ++
-      testingSettings          
+      testingSettings
+
+  lazy val rootSettings: Seq[Settings] = Seq(
+      sources in Compile  := sources.all(aggregateCompile).value.flatten,
+      libraryDependencies := libraryDependencies.all(aggregateCompile).value.flatten
+    )
 
   /** MODULES (sorted in alphabetical order) */
   lazy val analysis = Project(id = "analysis", base = file("analysis"),
@@ -294,25 +298,11 @@ object build extends Build {
 
   lazy val publishSignedArtifacts = executeStepTask(publishSigned, "Publishing signed artifacts")
 
-  lazy val publicationSettings: Seq[Settings] = assemblySettings ++ Seq(
+  lazy val publicationSettings: Seq[Settings] = Seq(
     publishTo in Global <<= version { v: String =>
       val nexus = "https://oss.sonatype.org/"
       if (v.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus + "content/repositories/snapshots")
       else                             Some("staging" at nexus + "service/local/staging/deploy/maven2")
-    },
-    jarName in assembly <<= (jarName in assembly) map { name =>
-      name.replace("-assembly", "")
-    },
-    test in assembly := {},
-    packageBin in TaskGlobal := assembly.value,
-    excludedJars in assembly <<= (fullClasspath in assembly) map { cp => 
-      cp.filter(p => !p.data.getName.startsWith("specs2") && p.data.getName.endsWith(".jar"))
-    },
-    mergeStrategy in assembly <<= (mergeStrategy in assembly) { old => {
-        case s if s.endsWith(".DS_Store")          => MergeStrategy.discard
-        case s if Seq("user").exists(s.startsWith) => MergeStrategy.discard
-        case x                                     => old(x)
-      }
     },
     publishMavenStyle := true,
     publishArtifact in Test := false,
