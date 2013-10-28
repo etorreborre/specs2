@@ -1,8 +1,6 @@
 import sbt._
 import complete.DefaultParsers._
 import Keys._
-import sbtassembly.Plugin._
-import AssemblyKeys._
 import com.typesafe.sbt._
 import pgp.PgpKeys._
 import SbtSite._
@@ -30,11 +28,9 @@ object build extends Build {
       siteSettings             ++
       publicationSettings      ++
       releaseSettings          ++
-      Seq(name := "specs2", specs2ArtifactName)
-  ).
-  dependsOn(Seq(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock).map(_ % "optional -> compile"):_*)
-  .aggregate(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, guide, examples, tests) 
-
+      rootSettings             ++
+      Seq(name := "specs2")
+  ).aggregate(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, guide, examples)
   
   /** COMMON SETTINGS */
   lazy val specs2Settings: Seq[Settings] = Seq(
@@ -44,42 +40,55 @@ object build extends Build {
     scalazVersion := "7.0.4",
     scalaVersion := "2.10.3")
 
-  lazy val specs2Version = SettingKey[String]("specs2Version", "defines the current specs2 version")
-  lazy val scalazVersion = SettingKey[String]("scalazVersion", "defines the current scalaz version")
+  lazy val specs2Version = settingKey[String]("defines the current specs2 version")
+  lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
+
+  lazy val aggregateCompile = ScopeFilter(
+             inProjects(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock),
+             inConfigurations(Compile))
+
+  lazy val aggregateTest = ScopeFilter(
+             inProjects(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, guide, examples),
+             inConfigurations(Test))
 
   lazy val resolversSettings = resolvers ++= 
     Seq(Resolver.sonatypeRepo("releases"), 
         Resolver.sonatypeRepo("snapshots"),
         Resolver.typesafeIvyRepo("releases"))
 
-  lazy val moduleSettings = 
+  lazy val moduleSettings: Seq[Settings] = 
       defaultSettings      ++
       specs2Settings       ++
       resolversSettings    ++
       compilationSettings  ++
-      testingSettings          
+      testingSettings
+
+  lazy val rootSettings: Seq[Settings] = Seq(
+      sources in Compile  := sources.all(aggregateCompile).value.flatten,
+      sources in Test     := sources.all(aggregateTest).value.flatten,
+      libraryDependencies := libraryDependencies.all(aggregateTest).value.flatten
+    )
 
   /** MODULES (sorted in alphabetical order) */
-  lazy val analysis = Project(id = "analysis", base = file("analysis"),
-    settings = Seq(specs2ArtifactName,
+  lazy val analysis = Project(id = "specs2-analysis", base = file("analysis"),
+    settings = Seq(
       libraryDependencies ++= Seq(
         "org.scala-lang" % "scala-compiler" % scalaVersion.value,
         "org.specs2"     % "classycle"      % "1.4.1")) ++
     moduleSettings
   ).dependsOn(common % "test->test", core, matcher, scalacheck % "test")
 
-  lazy val common = Project(id = "common", base = file("common"),
-    settings = Seq(specs2ArtifactName,
-      libraryDependencies ++= Seq(
-        "org.scalaz"     %% "scalaz-core"       % scalazVersion.value,
-        "org.scalaz"     %% "scalaz-concurrent" % scalazVersion.value,
-        "org.scala-lang" %  "scala-reflect"     % scalaVersion.value,
-        scalacheckLib % "test")) ++
-      moduleSettings
+  lazy val common = Project(id = "specs2-common", base = file("common"),
+    settings = moduleSettings ++ 
+      Seq(libraryDependencies ++= Seq(
+            "org.scalaz"     %% "scalaz-core"       % scalazVersion.value,
+            "org.scalaz"     %% "scalaz-concurrent" % scalazVersion.value,
+            "org.scala-lang" %  "scala-reflect"     % scalaVersion.value,
+            scalacheckLib % "test"))      
   )
 
-  lazy val core = Project(id = "core", base = file("core"),
-    settings = Seq(specs2ArtifactName,
+  lazy val core = Project(id = "specs2-core", base = file("core"),
+    settings = Seq(
       libraryDependencies ++= Seq(
         "org.scala-sbt"  % "test-interface" % "1.0" % "optional",
         mockitoLib % "test",
@@ -87,73 +96,67 @@ object build extends Build {
       moduleSettings
   ).dependsOn(matcher, common % "test->test")
 
-  lazy val examples = Project(id = "examples", base = file("examples"),
-    settings = Seq(specs2ArtifactName) ++ moduleSettings
+  lazy val examples = Project(id = "specs2-examples", base = file("examples"),
+    settings = moduleSettings
   ).dependsOn(common, matcher, matcherExtra, core, analysis, form, html, markdown, gwt, junit, scalacheck, mock)
 
-  lazy val form = Project(id = "form", base = file("form"),
-    settings = Seq(specs2ArtifactName) ++
-      moduleSettings
+  lazy val form = Project(id = "specs2-form", base = file("form"),
+    settings = moduleSettings
   ).dependsOn(core, markdown, matcherExtra, scalacheck % "test->test")
 
-  lazy val guide = Project(id = "guide", base = file("guide"),
-    settings = Seq(specs2ArtifactName) ++
-      moduleSettings
+  lazy val guide = Project(id = "specs2-guide", base = file("guide"),
+    settings = moduleSettings
   ).dependsOn(examples % "test->test")
 
-  lazy val gwt = Project(id = "gwt", base = file("gwt"),
-    settings = Seq(specs2ArtifactName,
+  lazy val gwt = Project(id = "specs2-gwt", base = file("gwt"),
+    settings = Seq(
      libraryDependencies ++= Seq(
         "com.chuusai" % "shapeless_2.10.2" % "2.0.0-M1")) ++
       moduleSettings
   ).dependsOn(core, matcherExtra, scalacheck)
 
-  lazy val html = Project(id = "html", base = file("html"),
-    settings = Seq(specs2ArtifactName) ++
-      moduleSettings
+  lazy val html = Project(id = "specs2-html", base = file("html"),
+    settings = moduleSettings
   ).dependsOn(form, mock % "test", matcherExtra % "test")
 
-  lazy val junit = Project(id = "junit", base = file("junit"),
-    settings = Seq(specs2ArtifactName,
-     libraryDependencies ++= Seq(junitLib)) ++
+  lazy val junit = Project(id = "specs2-junit", base = file("junit"),
+    settings = Seq(libraryDependencies ++= Seq(junitLib)) ++
       moduleSettings
   ).dependsOn(core, matcherExtra % "test", mock % "test")
 
-  lazy val markdown = Project(id = "markdown", base = file("markdown"),
-    settings = Seq(specs2ArtifactName,
+  lazy val markdown = Project(id = "specs2-markdown", base = file("markdown"),
+    settings = Seq(
      libraryDependencies ++= Seq(
         "org.pegdown"  % "pegdown" % "1.2.1")) ++
       moduleSettings
   ).dependsOn(common, core % "compile->test")
 
-  lazy val matcher = Project(id = "matcher", base = file("matcher"),
-    settings = Seq(specs2ArtifactName) ++
-      moduleSettings
+  lazy val matcher = Project(id = "specs2-matcher", base = file("matcher"),
+    settings = moduleSettings
   ).dependsOn(common)
 
-  lazy val matcherExtra = Project(id = "matcher-extra", base = file("matcher-extra"),
-    settings = Seq(specs2ArtifactName,
+  lazy val matcherExtra = Project(id = "specs2-matcher-extra", base = file("matcher-extra"),
+    settings = Seq(
       addCompilerPlugin("org.scala-lang.plugins" % "macro-paradise_2.10.3-RC1" % "2.0.0-SNAPSHOT")) ++
       moduleSettings
   ).dependsOn(analysis, scalacheck, matcher)
 
-  lazy val mock = Project(id = "mock", base = file("mock"),
-    settings = Seq(specs2ArtifactName,
+  lazy val mock = Project(id = "specs2-mock", base = file("mock"),
+    settings = Seq(
      libraryDependencies ++= Seq(
       hamcrestLib,
       mockitoLib)) ++
       moduleSettings
   ).dependsOn(core)
 
-  lazy val scalacheck = Project(id = "scalacheck", base = file("scalacheck"),
-    settings = Seq(specs2ArtifactName,
+  lazy val scalacheck = Project(id = "specs2-scalacheck", base = file("scalacheck"),
+    settings = Seq(
      libraryDependencies ++= Seq(scalacheckLib)) ++
       moduleSettings
   ).dependsOn(core)
 
-  lazy val tests = Project(id = "tests", base = file("tests"),
-    settings = Seq(specs2ArtifactName) ++
-      moduleSettings
+  lazy val tests = Project(id = "specs2-tests", base = file("tests"),
+    settings = moduleSettings
   ).dependsOn(core % "compile->compile;test->test", matcherExtra, junit % "test->test", examples % "test->test")
 
   /**
@@ -207,9 +210,10 @@ object build extends Build {
       pushChanges
     ),
     releaseSnapshotProcess := Seq[ReleaseStep](
-      generateUserGuide,
-      publishSite,
-      publishSignedArtifacts),
+      generateUserGuide//,
+      //publishSite,
+      //publishSignedArtifacts
+      ),
     commands += releaseSnapshotCommand
     ) ++
   Seq(publishUserGuideTask <<= pushSite.dependsOn(makeSite).dependsOn(generateUserGuideTask)) ++
@@ -288,31 +292,13 @@ object build extends Build {
   /**
    * PUBLICATION
    */
-  def specs2ArtifactName = artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
-    s"specs2-${artifact.name}_${sv.binary}-${module.revision}.${artifact.extension}"
-  }
-
   lazy val publishSignedArtifacts = executeStepTask(publishSigned, "Publishing signed artifacts")
 
-  lazy val publicationSettings: Seq[Settings] = assemblySettings ++ Seq(
+  lazy val publicationSettings: Seq[Settings] = Seq(
     publishTo in Global <<= version { v: String =>
       val nexus = "https://oss.sonatype.org/"
       if (v.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus + "content/repositories/snapshots")
       else                             Some("staging" at nexus + "service/local/staging/deploy/maven2")
-    },
-    jarName in assembly <<= (jarName in assembly) map { name =>
-      name.replace("-assembly", "")
-    },
-    test in assembly := {},
-    packageBin in TaskGlobal := assembly.value,
-    excludedJars in assembly <<= (fullClasspath in assembly) map { cp => 
-      cp.filter(p => !p.data.getName.startsWith("specs2") && p.data.getName.endsWith(".jar"))
-    },
-    mergeStrategy in assembly <<= (mergeStrategy in assembly) { old => {
-        case s if s.endsWith(".DS_Store")          => MergeStrategy.discard
-        case s if Seq("user").exists(s.startsWith) => MergeStrategy.discard
-        case x                                     => old(x)
-      }
     },
     publishMavenStyle := true,
     publishArtifact in Test := false,
