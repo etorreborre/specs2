@@ -30,10 +30,10 @@ object build extends Build {
       siteSettings             ++
       publicationSettings      ++
       releaseSettings          ++
-      Seq(name := "specs2")
+      Seq(name := "specs2", specs2ArtifactName)
   ).
-  dependsOn(Seq(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock).map(_ % "optional -> compile"):_*).
-  aggregate(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, guide, examples, tests) 
+  dependsOn(Seq(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock).map(_ % "optional -> compile"):_*)
+  .aggregate(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, guide, examples, tests) 
 
   
   /** COMMON SETTINGS */
@@ -42,12 +42,15 @@ object build extends Build {
     specs2Version in GlobalScope <<= version,
     specs2ShellPrompt,
     scalazVersion := "7.0.4",
-    scalaVersion := "2.10.2")
+    scalaVersion := "2.10.3")
 
   lazy val specs2Version = SettingKey[String]("specs2Version", "defines the current specs2 version")
   lazy val scalazVersion = SettingKey[String]("scalazVersion", "defines the current scalaz version")
 
-  lazy val resolversSettings = resolvers ++= Seq(Resolver.sonatypeRepo("releases"), Resolver.sonatypeRepo("snapshots"))
+  lazy val resolversSettings = resolvers ++= 
+    Seq(Resolver.sonatypeRepo("releases"), 
+        Resolver.sonatypeRepo("snapshots"),
+        Resolver.typesafeIvyRepo("releases"))
 
   lazy val moduleSettings = 
       defaultSettings      ++
@@ -57,7 +60,7 @@ object build extends Build {
       testingSettings          
 
   /** MODULES (sorted in alphabetical order) */
-    lazy val analysis = Project(id = "analysis", base = file("analysis"),
+  lazy val analysis = Project(id = "analysis", base = file("analysis"),
     settings = Seq(specs2ArtifactName,
       libraryDependencies ++= Seq(
         "org.scala-lang" % "scala-compiler" % scalaVersion.value,
@@ -286,9 +289,8 @@ object build extends Build {
    * PUBLICATION
    */
   def specs2ArtifactName = artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
-    s"specs2-${artifact.name}-${module.revision}.${artifact.extension}"
+    s"specs2-${artifact.name}_${sv.binary}-${module.revision}.${artifact.extension}"
   }
-
 
   lazy val publishSignedArtifacts = executeStepTask(publishSigned, "Publishing signed artifacts")
 
@@ -302,12 +304,14 @@ object build extends Build {
       name.replace("-assembly", "")
     },
     test in assembly := {},
+    packageBin in TaskGlobal := assembly.value,
     excludedJars in assembly <<= (fullClasspath in assembly) map { cp => 
-      cp.filter(_.data.getName.endsWith(".jar"))
+      cp.filter(p => !p.data.getName.startsWith("specs2") && p.data.getName.endsWith(".jar"))
     },
     mergeStrategy in assembly <<= (mergeStrategy in assembly) { old => {
-        case s if s.endsWith(".DS_Store") => MergeStrategy.discard
-        case x                            => old(x)
+        case s if s.endsWith(".DS_Store")          => MergeStrategy.discard
+        case s if Seq("user").exists(s.startsWith) => MergeStrategy.discard
+        case x                                     => old(x)
       }
     },
     publishMavenStyle := true,
