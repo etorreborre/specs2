@@ -63,11 +63,11 @@
            tabber code, then the init code -->
       <script type="text/javascript" src="./../css/tabber.js"></script>
       <link rel="stylesheet" href="./../css/tabber.css" type="text/css" media="screen" />
-      <title>GivenWhenThenPage</title>
+      <title>Given When Then</title>
     </head><body><div id="breadcrumbs"><a href="../guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../guide/org.specs2.guide.Structure.html">Structure</a><t> / </t><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html">GivenWhenThenPage</a></div><div class="colmask threecol">
             <div class="colmid">
               <div class="colleft">
-                <div class="col1"><div id="central"><html><title>GivenWhenThenPage</title><a name="GivenWhenThenPage"><h2 specId="1734043010">GivenWhenThenPage</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Given+When+Then"><h3>Given When Then</h3></a><p>The Given/When/Then style of writing specifications is supported by the use of the <code class="prettyprint">GWT</code> trait (there is also <a href="org.specs2.guide.structure.GivenWhenThenDeprecatedPage.html">another way</a> but it is not recommended because it leads to performance issues at compile-time).</p><p>Here is a simple example of a Given/When/Then specification using the <code class="prettyprint">GWT</code> trait: </p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><pre><code class="prettyprint">class Calculator extends Specification with GWT with StandardDelimitedStepParsers { def is = s2&quot;&quot;&quot;
+                <div class="col1"><div id="central"><html><title>Given When Then</title><a name="Given+When+Then"><h2 specId="913191484">Given When Then</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Given+When+Then_1"><h3>Given When Then</h3></a><p>The Given/When/Then style of writing specifications is supported by the use of the <code class="prettyprint">GWT</code> trait.</p><p>Here is a simple example of a Given/When/Then specification using the <code class="prettyprint">GWT</code> trait: </p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><pre><code class="prettyprint">class Calculator extends Specification with GWT with StandardDelimitedStepParsers { def is = s2&quot;&quot;&quot;
 
  Let's add numbers!
 
@@ -100,7 +100,7 @@ val anInt2 = groupAs(&quot;\\d+&quot;).and((s: String) =&gt; s.toInt)
 
 // note: if you want to extract 2 ints, just pass a function of 2 arguments
 val twoInts = groupAs(&quot;\\d+&quot;).and((s1: String, s2: String) =&gt; (s1.toInt, s2.toInt))
-</code></pre></div></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Standard+parsers"><h5>Standard parsers</h5></a><p>A few <code class="prettyprint">StepParsers</code> have been predefined for you in the <code class="prettyprint">StandardDelimitedStepParsers</code> and <code class="prettyprint">StandardRegexStepParsers</code> traits to extract <code class="prettyprint">Int</code>s, <code class="prettyprint">Double</code>s and <code class="prettyprint">String</code>s</p><a name="Scenario"><h4>Scenario</h4></a><p>A <code class="prettyprint">Scenario</code> is a specific form of <a href="org.specs2.guide.Structure.html#Scripts"><code class="prettyprint">Script</code></a> which declares in which order values must be extracted from the text and what to do with them. By default it uses a <code class="prettyprint">ScriptTemplate</code> which is going to associate only the last lines of the text to the scenario steps (refer to the <a href="org.specs2.guide.Structure.html#Scripts"><code class="prettyprint">Script</code></a> section of the User Guide to see how to change this).</p><p>The <code class="prettyprint">Scenario</code> class provides 3 methods: <code class="prettyprint">given</code>, <code class="prettyprint">when</code>, <code class="prettyprint">andThen</code> which can be passed <code class="prettyprint">StepParsers</code> and functions:</p>
+</code></pre><a name="Standard+parsers"><h5>Standard parsers</h5></a><p>A few <code class="prettyprint">StepParsers</code> have been predefined for you in the <code class="prettyprint">StandardDelimitedStepParsers</code> and <code class="prettyprint">StandardRegexStepParsers</code> traits to extract <code class="prettyprint">Int</code>s, <code class="prettyprint">Double</code>s and <code class="prettyprint">String</code>s</p><a name="Scenario"><h4>Scenario</h4></a><p>A <code class="prettyprint">Scenario</code> is a specific form of <a href="org.specs2.guide.Structure.html#Scripts"><code class="prettyprint">Script</code></a> which declares in which order values must be extracted from the text and what to do with them. By default it uses a <code class="prettyprint">ScriptTemplate</code> which is going to associate only the last lines of the text to the scenario steps (refer to the <a href="org.specs2.guide.Structure.html#Scripts"><code class="prettyprint">Script</code></a> section of the User Guide to see how to change this).</p><p>The <code class="prettyprint">Scenario</code> class provides 3 methods: <code class="prettyprint">given</code>, <code class="prettyprint">when</code>, <code class="prettyprint">andThen</code> which can be passed <code class="prettyprint">StepParsers</code> and functions:</p>
 <ul>
   <li><code class="prettyprint">given</code> uses an extractor which will extract values for a line of text</li>
   <li><code class="prettyprint">when</code> uses an extractor which will extract values from the corresponding line of text and a <code class="prettyprint">mapping</code> function to combine the result of the extraction + all the values from the given steps</li>
@@ -117,8 +117,8 @@ val twoInts = groupAs(&quot;\\d+&quot;).and((s1: String, s2: String) =&gt; (s1.t
 sbt&gt; test-only *Calculator* -- include addition
 </code></p></div></status></html></div></div>
                 <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="441002010"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1226600534"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="477899628"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="439624429"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -128,7 +128,7 @@ sbt&gt; test-only *Calculator* -- include addition
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1733958100"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1314037054"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -239,7 +239,7 @@ sbt&gt; test-only *Calculator* -- include addition
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Methods">Methods</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Full+example">Full example</a>
-            <ul><li id="411274008"><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
+            <ul><li id="648528333"><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Rules">Rules</a>
@@ -257,7 +257,7 @@ sbt&gt; test-only *Calculator* -- include addition
           </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Unit+specification">Unit specification</a>
             
           </li></ul>
-          </li><li id="1734043010"><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#GivenWhenThenPage">GivenWhenThenPage</a>
+          </li><li id="913191484"><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then_1">Given When Then</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then">Given When Then</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Parsing">Parsing</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Delimited+parsers">Delimited parsers</a>
@@ -276,7 +276,7 @@ sbt&gt; test-only *Calculator* -- include addition
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="511713799"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1124615447"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -340,7 +340,7 @@ sbt&gt; test-only *Calculator* -- include addition
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="686197104"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="1222669889"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
@@ -384,11 +384,13 @@ sbt&gt; test-only *Calculator* -- include addition
             
           </li></ul>
           </li></ul>
-          </li><li id="560658486"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="401379145"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Fine-grained+jars">Fine-grained jars</a>
             
+          </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Arguments">Arguments</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#API">API</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Most%2FLeast+frequently+used+arguments">Most/Least frequently used arguments</a>
@@ -468,7 +470,7 @@ sbt&gt; test-only *Calculator* -- include addition
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1071525759"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="912235308"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -516,7 +518,7 @@ sbt&gt; test-only *Calculator* -- include addition
             
           </li></ul>
           </li></ul>
-          </li><li id="896537406"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="979383741"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -562,7 +564,7 @@ sbt&gt; test-only *Calculator* -- include addition
             
           </li></ul>
           </li></ul>
-          </li><li id="258458365"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="320325804"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -582,7 +584,7 @@ sbt&gt; test-only *Calculator* -- include addition
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['441002010','1734043010'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['477899628','913191484'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                 <div class="col3"><div id="rightcolumn"></div></div>
               </div>

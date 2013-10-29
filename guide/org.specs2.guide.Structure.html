@@ -67,7 +67,7 @@
     </head><body><div id="breadcrumbs"><a href="../guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../guide/org.specs2.guide.Structure.html">Structure</a></div><div class="colmask threecol">
             <div class="colmid">
               <div class="colleft">
-                <div class="col1"><div id="central"><html><title>Structure</title><a name="Structure"><h2 specId="1733958100">Structure</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Presentation"><h3>Presentation</h3></a><p>In this section you will learn how to:</p>
+                <div class="col1"><div id="central"><html><title>Structure</title><a name="Structure"><h2 specId="1314037054">Structure</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Presentation"><h3>Presentation</h3></a><p>In this section you will learn how to:</p>
 <ul>
   <li>create examples and expectations</li>
   <li>define contexts to execute actions before/after examples</li>
@@ -228,7 +228,7 @@ trait Examples extends specification.Grouped with matcher.Matchers {
   e1 := ok
   e2 := ok
 }
-</code></pre><p>However, the <code class="prettyprint">service</code> variable will be shared by all the examples of each group, which can be potentially troublesome if that variable is mutated. If you want to provide complete isolation for each example, you should instead use the <code class="prettyprint">org.specs2.specification.Groups</code> trait and call each group as a function: </p></div></status><status class="ok"><p></p></status><status class="ok"><div style="display: show; text-indent:0px;"><pre><code class="prettyprint">class MySpecification extends Specification with Examples { def is = s2&quot;&quot;&quot;
+</code></pre><p>However, the <code class="prettyprint">service</code> variable will be shared by all the examples of each group, which can be potentially troublesome if that variable is mutated. If you want to provide complete isolation for each example, you should instead use the <code class="prettyprint">org.specs2.specification.Groups</code> trait and call each group as a function: </p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><pre><code class="prettyprint">class MySpecification extends Specification with Examples { def is = s2&quot;&quot;&quot;
 
   first example in first group                     ${g1().e1}
   second example in first group                    ${g1().e2}
@@ -245,7 +245,7 @@ trait Examples extends Groups with matcher.Matchers {
     e2 := ok
   }
 }
-</code></pre></div></status><status class="ok"><p></p></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Tags"><h4>Tags</h4></a><p>Tags can be used for 2 purposes: example selection and formatting.</p><a name="Selection"><h5>Selection</h5></a><p>You can tag specific examples or entire sections of a specification and execute them selectively from the command line. See <a href="org.specs2.guide.HowTo.html#Tags">HowTo</a> on how to use tags.</p><a name="Formatting"><h5>Formatting</h5></a><p>You can use the <code class="prettyprint">formatSection</code> or <code class="prettyprint">formatTag</code> methods to specify the formatting of <code class="prettyprint">Texts</code> and <code class="prettyprint">Examples</code> fragments with the following parameters:</p>
+</code></pre><a name="Tags"><h4>Tags</h4></a><p>Tags can be used for 2 purposes: example selection and formatting.</p><a name="Selection"><h5>Selection</h5></a><p>You can tag specific examples or entire sections of a specification and execute them selectively from the command line. See <a href="org.specs2.guide.HowTo.html#Tags">HowTo</a> on how to use tags.</p><a name="Formatting"><h5>Formatting</h5></a><p>You can use the <code class="prettyprint">formatSection</code> or <code class="prettyprint">formatTag</code> methods to specify the formatting of <code class="prettyprint">Texts</code> and <code class="prettyprint">Examples</code> fragments with the following parameters:</p>
 <ul>
   <li><code class="prettyprint">flow</code>: the fragment (<code class="prettyprint">Text</code> or <code class="prettyprint">Example</code>) shouldn't be reported with automatic indenting (default = <code class="prettyprint">false</code>, set automatically to <code class="prettyprint">true</code> when using <code class="prettyprint">s2</code> interpolated strings)</li>
   <li><code class="prettyprint">markdown</code>: the fragment is using Markdown (default = <code class="prettyprint">true</code>)</li>
@@ -541,7 +541,7 @@ trait DatabaseSpec extends Specification {
   lazy val dbSetup = databaseSetup
   override def map(fs: =&gt;Fragments) = Step(dbSetup.createDb) ^ Step(startDb) ^ fs ^ Step(cleanDb)
 }
-</code></pre><p>Note also that global setup and cleanup can be <a href="http://www.scala-sbt.org/release/docs/Detailed-Topics/Testing#setup-and-cleanup">done with sbt</a>.</p><a name="For+fragments"><h4>For fragments</h4></a><p>When using a Unit Specification, it can be useful to use variables which are only used for a given set of examples. This can be easily done by declaring local variables, but this might lead to duplication. One way to avoid that is to use the <code class="prettyprint">org.specs2.mutable.NameSpace</code> trait: </p></div></status><status class="ok"><p></p></status><status class="ok"><div style="display: show; text-indent:0px;"><pre><code class="prettyprint">trait context extends mutable.NameSpace {
+</code></pre><p>Note also that global setup and cleanup can be <a href="http://www.scala-sbt.org/release/docs/Detailed-Topics/Testing#setup-and-cleanup">done with sbt</a>.</p><a name="For+fragments"><h4>For fragments</h4></a><p>When using a Unit Specification, it can be useful to use variables which are only used for a given set of examples. This can be easily done by declaring local variables, but this might lead to duplication. One way to avoid that is to use the <code class="prettyprint">org.specs2.mutable.NameSpace</code> trait: </p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><pre><code class="prettyprint">trait context extends mutable.NameSpace {
   var variable1 = 1
   var variable2 = 2
 }
@@ -554,7 +554,7 @@ trait DatabaseSpec extends Specification {
   &quot;using one variable&quot;      &gt;&gt; { variable1 === 1 }
   &quot;using a second variable&quot; &gt;&gt; { variable2 === 2 }
 }
-</code></pre></div></status><status class="ok"><p></p></status><status class="ok"><div style="display: show; text-indent:0px;"></div></status><status class="ok"><div style="display: show; text-indent:5px;"></div></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Links"><h3>Links</h3></a><p>There are 2 ways to &quot;link&quot; specifications:</p>
+</code></pre></div></status><status class="ok"><div style="display: show; text-indent:5px;"></div></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Links"><h3>Links</h3></a><p>There are 2 ways to &quot;link&quot; specifications:</p>
 <ul>
   <li>by including another specification, to create a parent-child relationship</li>
   <li>by creating a reference to another specification, to create a peer relationship</li>
@@ -607,14 +607,14 @@ These are the included specifications
   ${&quot;text to highlight&quot; ~/ specification                                          }
   ${&quot;text to highlight&quot; ~/ (specification, &quot;after text&quot;)                          }
   ${&quot;text to highlight&quot; ~/ (specification, &quot;after text&quot;, &quot;tooltip&quot;)               }
-</code></pre><a name="Markdown+url"><h4>Markdown url</h4></a><p>If you just want to reference the url of the html page that's being generated for a given specification in a paragraph of text, you can use the <code class="prettyprint">markdownLink</code> method: </p></div></status><status class="ok"><p></p></status><status class="ok"><div style="display: show; text-indent:0px;"><pre><code class="prettyprint">s&quot;&quot;&quot;
+</code></pre><a name="Markdown+url"><h4>Markdown url</h4></a><p>If you just want to reference the url of the html page that's being generated for a given specification in a paragraph of text, you can use the <code class="prettyprint">markdownLink</code> method: </p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><pre><code class="prettyprint">s&quot;&quot;&quot;
   For more information you can read ${DetailedSpec.markdownLink}
   // or
   For more information you can read ${DetailedSpec.markdownLink(&quot;the detailed specification&quot;)}
   // or
   For more information you can read ${&quot;the detailed specification&quot;.markdownLink(DetailedSpec)}
 &quot;&quot;&quot;
-</code></pre></div></status><status class="ok"><p></p></status><status class="ok"><div style="display: show; text-indent:10px;"></div></status><status class="ok"><div style="display: show; text-indent:5px;"><a name="Execution"><h3>Execution</h3></a><p>This section summarizes the execution algorithm of a specification based on its fragments:</p>
+</code></pre></div></status><status class="ok"><div style="display: show; text-indent:5px;"><a name="Execution"><h3>Execution</h3></a><p>This section summarizes the execution algorithm of a specification based on its fragments:</p>
 <ol>
   <li>all the fragments are divided into groups delimited by <code class="prettyprint">Steps</code></li>
   <li>if the <code class="prettyprint">sequential</code> argument is present, each fragment goes to its own group</li>
@@ -666,7 +666,7 @@ textFragment(&quot;this is a text fragment&quot;)
   <li><p><code class="prettyprint">see</code>: add a link to another specification without including its fragments for execution <code class="prettyprint">see(new HelloWorldSpec)</code></p></li>
   <li><p><code class="prettyprint">include</code> to include another specification <code class="prettyprint">include(new HelloWorldSpec)</code></p></li>
   <li><p><code class="prettyprint">p, br, t, bt, end, endp</code>: add a formatting fragment</p></li>
-</ul><a name="Full+example"><h4>Full example</h4></a><p>To make things more concrete here is a full example: </p></div></status><status class="ok"><p></p></status><status class="ok"><div style="display: show; text-indent:0px;"><pre><code class="prettyprint">import mutable._
+</ul><a name="Full+example"><h4>Full example</h4></a><p>To make things more concrete here is a full example: </p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><pre><code class="prettyprint">import mutable._
 import specification._
 import execute.Success
 
@@ -748,10 +748,10 @@ class MutableSpec extends Specification {
     def e1 = string must have size(7)
   }
 }
-</code></pre></div></status><status class="ok"><p></p></status><status class="ok"><div style="display: show; text-indent:10px;"></div></status><status class="ok"><div style="display: show; text-indent:10px;"><hr /></div></status><subtoc specId="411274008"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../images/icon_success_sml.gif" /> <a href="../guide/org.specs2.guide.structure.FragmentsApi.html" tooltip="">Fragments API</a></div></status><subtoc specId="1734043010"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../images/icon_success_sml.gif" /> <a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html" tooltip="">GivenWhenThenPage</a></div></status></html></div></div>
+</code></pre></div></status><status class="ok"><div style="display: show; text-indent:10px;"><hr /></div></status><subtoc specId="648528333"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../images/icon_success_sml.gif" /> <a href="../guide/org.specs2.guide.structure.FragmentsApi.html" tooltip="">Fragments API</a></div></status><subtoc specId="913191484"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../images/icon_success_sml.gif" /> <a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html" tooltip="">Given When Then</a></div></status></html></div></div>
                 <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="441002010"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1226600534"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="477899628"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="439624429"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -761,7 +761,7 @@ class MutableSpec extends Specification {
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1733958100"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1314037054"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -872,7 +872,7 @@ class MutableSpec extends Specification {
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Methods">Methods</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Full+example">Full example</a>
-            <ul><li id="411274008"><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
+            <ul><li id="648528333"><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Rules">Rules</a>
@@ -890,7 +890,7 @@ class MutableSpec extends Specification {
           </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Unit+specification">Unit specification</a>
             
           </li></ul>
-          </li><li id="1734043010"><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#GivenWhenThenPage">GivenWhenThenPage</a>
+          </li><li id="913191484"><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then_1">Given When Then</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then">Given When Then</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Parsing">Parsing</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Delimited+parsers">Delimited parsers</a>
@@ -909,7 +909,7 @@ class MutableSpec extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="511713799"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1124615447"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -973,7 +973,7 @@ class MutableSpec extends Specification {
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="686197104"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="1222669889"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
@@ -1017,11 +1017,13 @@ class MutableSpec extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="560658486"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="401379145"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Fine-grained+jars">Fine-grained jars</a>
             
+          </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Arguments">Arguments</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#API">API</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Most%2FLeast+frequently+used+arguments">Most/Least frequently used arguments</a>
@@ -1101,7 +1103,7 @@ class MutableSpec extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1071525759"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="912235308"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -1149,7 +1151,7 @@ class MutableSpec extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="896537406"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="979383741"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1195,7 +1197,7 @@ class MutableSpec extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="258458365"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="320325804"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1215,7 +1217,7 @@ class MutableSpec extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['441002010','1733958100'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['477899628','1314037054'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                 <div class="col3"><div id="rightcolumn"></div></div>
               </div>

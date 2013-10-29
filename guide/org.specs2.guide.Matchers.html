@@ -67,7 +67,7 @@
     </head><body><div id="breadcrumbs"><a href="../guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../guide/org.specs2.guide.Matchers.html">Matchers</a></div><div class="colmask threecol">
             <div class="colmid">
               <div class="colleft">
-                <div class="col1"><div id="central"><html><title>Matchers</title><a name="Matchers"><h2 specId="511713799">Matchers</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
+                <div class="col1"><div id="central"><html><title>Matchers</title><a name="Matchers"><h2 specId="1124615447">Matchers</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
 <ul>
   <li>Boolean</li>
   <li>Standard result</li>
@@ -76,7 +76,7 @@
   <li>Mock expectation</li>
   <li>DataTable</li>
   <li>Forms</li>
-</ul><a name="Boolean+results"><h3>Boolean results</h3></a><p>This is the simplest kind of result you can define for an expectation but also the least expressive!</p><p>Here's an example: <code class="prettyprint">&quot;This is hopefully true&quot; ! (1 != 2)</code></p><p>This can be useful for simple expectations but a failure will give few information on what went wrong: </p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><p><code class="prettyprint">&quot;This is hopefully true&quot; ! (2 != 2)</code></p><a name="Standard+results"><h3>Standard results</h3></a><p>Some standard results can be used when you need specific result meanings:</p>
+</ul><a name="Boolean+results"><h3>Boolean results</h3></a><p>This is the simplest kind of result you can define for an expectation but also the least expressive!</p><p>Here's an example: <code class="prettyprint">&quot;This is hopefully true&quot; ! (1 != 2)</code></p><p>This can be useful for simple expectations but a failure will give few information on what went wrong: <code class="prettyprint">&quot;This is hopefully true&quot; ! (2 != 2)</code></p><a name="Standard+results"><h3>Standard results</h3></a><p>Some standard results can be used when you need specific result meanings:</p>
 <ul>
   <li><code class="prettyprint">success</code>: the example is ok</li>
   <li><code class="prettyprint">failure</code>: there is a non-met expectation</li>
@@ -195,20 +195,28 @@
 <ul>
   <li><code class="prettyprint">beSome</code> checks if an element is <code class="prettyprint">Some(_)</code></li>
   <li><code class="prettyprint">beSome(exp)</code> checks if an element is <code class="prettyprint">Some(exp)</code></li>
+  <li><code class="prettyprint">beSome(matcher)</code> checks if an element is <code class="prettyprint">Some(a)</code> where <code class="prettyprint">a</code> satisfies the matcher</li>
+  <li><code class="prettyprint">beSome(function: A =&gt; AsResult[B])</code> checks if an element is <code class="prettyprint">Some(a)</code> where <code class="prettyprint">function(a)</code> returns a successful <code class="prettyprint">Result</code><br />(note that a <code class="prettyprint">Seq[A]</code> is also a function <code class="prettyprint">Int =&gt; A</code> so if you want to check that a sequence is contained in <code class="prettyprint">Some</code> you need to use a matcher: <code class="prettyprint">beSome(===(Seq(1))</code>)</li>
   <li><code class="prettyprint">beSome.which(function)</code> checks if an element is <code class="prettyprint">Some(_</code>) and satisfies a function returning a boolean</li>
   <li><code class="prettyprint">beSome.like(partial function)</code> checks if an element is <code class="prettyprint">Some(_)</code> and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
   <li><code class="prettyprint">beNone</code> checks if an element is <code class="prettyprint">None</code></li>
   <li><code class="prettyprint">beAsNoneAs</code> checks if 2 values are equal to <code class="prettyprint">None</code> at the same time</li>
-  <li><code class="prettyprint">beRight</code> checks if an element is <code class="prettyprint">Right(_)</code></li>
-  <li><code class="prettyprint">beRight(exp)</code> checks if an element is <code class="prettyprint">Right(exp)</code></li>
+  <li><p><code class="prettyprint">beRight</code> checks if an element is <code class="prettyprint">Right(_)</code></p></li>
+  <li><code class="prettyprint">beRight(exp)</code> checks if an element is `Right(exp)</li>
+  <li><code class="prettyprint">beRight(matcher)</code> checks if an element is <code class="prettyprint">Right(a)</code> where <code class="prettyprint">a</code> satisfies the matcher</li>
+  <li><code class="prettyprint">beRight(function: A =&gt; AsResult[B])</code> checks if an element is <code class="prettyprint">Right(a)</code> where <code class="prettyprint">function(a)</code> returns a successful <code class="prettyprint">Result</code><br />(note that a <code class="prettyprint">Seq[A]</code> is also a function <code class="prettyprint">Int =&gt; A</code> so if you want to check that a sequence is contained in <code class="prettyprint">Right</code> you need to use a matcher: <code class="prettyprint">beRight(===(Seq(1))</code>)</li>
   <li><code class="prettyprint">beRight.like(partial function)</code> checks if an element is <code class="prettyprint">Right(_)</code> and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
-  <li><code class="prettyprint">beLeft</code> checks if an element is <code class="prettyprint">Left(_)</code></li>
+  <li><p><code class="prettyprint">beLeft</code> checks if an element is <code class="prettyprint">Left(_)</code></p></li>
   <li><code class="prettyprint">beLeft(exp)</code> checks if an element is <code class="prettyprint">Left(exp)</code></li>
+  <li><code class="prettyprint">beLeft(matcher)</code> checks if an element is <code class="prettyprint">Left(a)</code> where <code class="prettyprint">a</code> satisfies the matcher</li>
+  <li><code class="prettyprint">beLeft(function: A =&gt; AsResult[B])</code> checks if an element is <code class="prettyprint">Left(a)</code> where <code class="prettyprint">function(a)</code> returns a successful <code class="prettyprint">Result</code><br />(note that a <code class="prettyprint">Seq[A]</code> is also a function <code class="prettyprint">Int =&gt; A</code> so if you want to check that a sequence is contained in <code class="prettyprint">Left</code> you need to use a matcher: <code class="prettyprint">beLeft(===(Seq(1))</code>)</li>
   <li><code class="prettyprint">beLeft.like(partial function)</code> checks if an element is <code class="prettyprint">Left(_)</code> and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
 </ul></td></tr></table></form></div><div class="tabbertab" title="Try"><form><table class="dataTable"><tr><td class="none" style="info"><p>There are several matchers to check Try instances:</p>
 <ul>
   <li><code class="prettyprint">beSuccessfulTry</code> checks if an element is <code class="prettyprint">Success(_)</code></li>
   <li><code class="prettyprint">beSuccessfulTry.withValue(exp)</code> checks if an element is <code class="prettyprint">Success(_)</code></li>
+  <li><code class="prettyprint">beSuccessfulTry.withValue(matcher)</code> checks if an element is <code class="prettyprint">Success(a)</code> where <code class="prettyprint">a</code> satisfies the matcher</li>
+  <li><code class="prettyprint">beSuccessfulTry.withValue(function: A =&gt; AsResult[B])</code> checks if an element is <code class="prettyprint">Success(a)</code> where <code class="prettyprint">function(a)</code> returns a successful <code class="prettyprint">Result</code><br />(note that a <code class="prettyprint">Seq[A]</code> is also a function <code class="prettyprint">Int =&gt; A</code> so if you want to check that a sequence is contained in <code class="prettyprint">Success</code> you need to use a matcher: <code class="prettyprint">beSuccessfulTry.withValue(===(Seq(1))</code>)</li>
   <li><code class="prettyprint">beSuccessfulTry.which(function)</code> checks if an element is <code class="prettyprint">Success(_)</code> and satisfies a function returning a boolean</li>
   <li><code class="prettyprint">beSuccessfulTry.like(partial function)</code> checks if an element is <code class="prettyprint">Success(_)</code> and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
   <li><code class="prettyprint">beFailedTry</code> checks if an element is <code class="prettyprint">Failure(_)</code></li>
@@ -254,6 +262,7 @@
   <li><p>if a simple value is contained<br />  <code class="prettyprint">Seq(1, 2, 3) must contain(2)</code></p></li>
   <li><p>if a value matching a specific matcher is contained<br />  <code class="prettyprint">Seq(1, 2, 3) must contain(be_&gt;=(2))</code></p></li>
   <li><p>if a value passing a function returning a <code class="prettyprint">Result</code> is contained (<code class="prettyprint">MatchResult</code>, ScalaCheck <code class="prettyprint">Prop</code>,...)<br />  <code class="prettyprint">Seq(1, 2, 3) must contain((i: Int) =&gt; i must be_&gt;=(2))</code></p></li>
+  <li><p>note that a <code class="prettyprint">Seq[A]</code> is also a function <code class="prettyprint">Int =&gt; A</code> so if you want to check that a sequence is contained in another you need to use a matcher<br />  <code class="prettyprint">Seq(Seq(1)) must contain(===(Seq(1)))</code></p></li>
   <li><p>there are also 2 specialized matchers to check the string representation of the elements<br />  <code class="prettyprint">Seq(1234, 6237) must containMatch(&quot;23&quot;)</code> <code class="prettyprint">// matches with &quot;.*23.*&quot;</code><br />  <code class="prettyprint">Seq(1234, 6234) must containPattern(&quot;.*234&quot;)</code> <code class="prettyprint">// matches with !.*234&quot;</code></p></li>
 </ul><p>For each of the checks above you can indicate how many times the check should be satisfied:</p>
 <ul>
@@ -282,7 +291,7 @@
 <ul>
   <li><p><code class="prettyprint">beDefinedAt</code> checks if a PartialFunction is defined for a given value<br />    <code class="prettyprint">partial must beDefinedAt(1)</code></p></li>
   <li><p><code class="prettyprint">beDefinedBy</code> checks if a PartialFunction is defined for a given value<br />  and returns another one<br />    <code class="prettyprint">partial</code> must beDefinedBy(1 -&gt; true)</p></li>
-</ul></td></tr></table></form></div></div></td></tr></table></form></status><status class="ok"><div style="display: show; text-indent:0px;"><p>The examples above show how to use matchers:</p>
+</ul></td></tr></table></form></div></div></td></tr></table></form></status><status class="ok"><p></p></status><status class="ok"><p></p></status><status class="ok"><div style="display: show; text-indent:0px;"><p>The examples above show how to use matchers:</p>
 <ul>
   <li>the general form for using a matcher is: <code class="prettyprint">a must matcher</code></li>
   <li>but can use <code class="prettyprint">should</code> instead of <code class="prettyprint">must</code> if you prefer</li>
@@ -480,10 +489,10 @@ org.specs2.main x-&gt; org.specs2.io because org.specs2.io.FileSystem -&gt; org.
 </code></pre><p><strong><em>Alternative implementation</em></strong></p><p>Another implementation of the same functionality is available through the <code class="prettyprint">org.specs2.analysis.CompilerDependencyFinder</code> trait. This implementation uses the compiler dependency analysis functionality but needs more time, since it recompiles the sources.</p><p>The source files are taken from the <code class="prettyprint">src/main/scala</code> directory by default but you can change this value by using the <code class="prettyprint">Layers.inSourceDir</code> method.</p><p>While this implementation is slower than the Classycle one, it might retrieve more dependencies, for example when constants are inlined in class files.</p><p>Note: since this functionality relies on the scala compiler library, so you need to add it to your build file:</p>
 <pre><code class="prettyprint">// use sbt's scalaVersion Setting to define the scala-compiler library version
 libraryDependencies &lt;&lt;= scalaVersion { scala_version =&gt; Seq(
-  &quot;org.specs2&quot; %% &quot;specs2&quot; % 2.2.3 % &quot;test&quot;,
+  &quot;org.specs2&quot; %% &quot;specs2&quot; % 2.3 % &quot;test&quot;,
   &quot;org.scala-lang&quot; % &quot;scala-compiler&quot; % scala_version % &quot;test&quot;)
 }
-</code></pre></td></tr></table></form></div></div></td></tr></table></form></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Custom"><h4>Custom</h4></a><p>There are many ways to create matchers for your specific usage. The simplest way is to reuse the existing ones:</p>
+</code></pre></td></tr></table></form></div></div></td></tr></table></form></status><status class="ok"><p></p></status><status class="ok"><p></p></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Custom"><h4>Custom</h4></a><p>There are many ways to create matchers for your specific usage. The simplest way is to reuse the existing ones:</p>
 <ul>
   <li>using logical operators</li>
 </ul>
@@ -493,6 +502,25 @@ libraryDependencies &lt;&lt;= scalaVersion { scala_version =&gt; Seq(
 def allBeGreaterThan2: Matcher[Seq[Int]]   = be_&gt;=(2).forall     // fail after the first failure
 def allBeGreaterThan3: Matcher[Seq[Int]]   = be_&gt;=(2).foreach    // like forall but execute all matchers and collect the results
 def haveOneGreaterThan2: Matcher[Seq[Int]] = be_&gt;=(2).atLeastOnce
+</code></pre>
+<ul>
+  <li>using <code class="prettyprint">zip</code> operators for to match tuples</li>
+</ul>
+<pre><code class="prettyprint">type T = (String, String, String, Seq[(String, Double)])
+
+val t1: T = (&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, Seq((&quot;d&quot;, 1.01), (&quot;e&quot;, 2.02)))
+val t2: T = (&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, Seq((&quot;d&quot;, 1.00), (&quot;e&quot;, 2.00)))
+
+// create a matcher by zipping matchers to the expected value
+def beMatching(expected: T) = expected.zip(startWith, ===, ===, matchSequence)
+// match the elements of a sequence with a zipped matcher using string equality for the first field and
+// approximate Double equality for the second field
+def matchSequence(expected: =&gt;Seq[(String, Double)]) = expected.contain(_.zip(===, ==~)).inOrder
+
+/** type inference doesn't work if this matcher, specialised to Double, is not defined */
+def ==~(d: =&gt;Double) = beCloseTo(d +/- 0.1)
+
+t1 must beMatching(t2)
 </code></pre>
 <ul>
   <li>adapting the actual value</li>
@@ -624,7 +652,7 @@ foreachWhen(Seq(3, 10, 15)) { case a if a &gt; 3 =&gt; a must be_&gt;(5) }
 atLeastOnce(Seq(3, 4, 5)) ((_:Int) must be_&gt;(2))
 // check only the elements defined for the partial function
 atLeastOnceWhen(Seq(3, 4, 10)) { case a if a &gt; 3 =&gt; a must be_&gt;(5) }
-</code></pre></div></status><status class="ok"><div style="display: show; text-indent:5px;"></div></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="ScalaCheck"><h3>ScalaCheck</h3></a><p>A clever way of creating expectations in <strong><em>specs2</em></strong> is to use the <a href="http://code.google.com/p/scalacheck">ScalaCheck</a> library.</p><p>To declare ScalaCheck properties you first need to extend the <code class="prettyprint">ScalaCheck</code> trait. Then you can pass functions returning any kind of <code class="prettyprint">Result</code> (<code class="prettyprint">Boolean</code>, <code class="prettyprint">Result</code>, <code class="prettyprint">MatchResult</code>) to the <code class="prettyprint">prop</code> method and use the resulting <code class="prettyprint">Prop</code> as your example body: <code class="prettyprint">&quot;addition and multiplication are related&quot; ! prop { (a: Int) =&gt; a + a == 2 * a }</code></p><p>The function that is checked can either return: </p>
+</code></pre></div></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="ScalaCheck"><h3>ScalaCheck</h3></a><p>A clever way of creating expectations in <strong><em>specs2</em></strong> is to use the <a href="http://code.google.com/p/scalacheck">ScalaCheck</a> library.</p><p>To declare ScalaCheck properties you first need to extend the <code class="prettyprint">ScalaCheck</code> trait. Then you can pass functions returning any kind of <code class="prettyprint">Result</code> (<code class="prettyprint">Boolean</code>, <code class="prettyprint">Result</code>, <code class="prettyprint">MatchResult</code>) to the <code class="prettyprint">prop</code> method and use the resulting <code class="prettyprint">Prop</code> as your example body: <code class="prettyprint">&quot;addition and multiplication are related&quot; ! prop { (a: Int) =&gt; a + a == 2 * a }</code></p><p>The function that is checked can either return: </p>
 <pre><code class="prettyprint">// a Boolean
 &quot;addition and multiplication are related&quot; ! prop { (a: Int) =&gt; a + a == 2 * a }
 
@@ -673,14 +701,14 @@ def ex2 = Prop.forAll(abStrings, abStrings) { (s1: String, s2: String) =&gt; (s1
   <li><code class="prettyprint">rng</code>: the random number generator (default = <code class="prettyprint">new java.util.Random</code>)</li>
   <li><code class="prettyprint">callback</code>: a ScalaCheck TestCallback (see the ScalaCheck documentation)</li>
   <li><code class="prettyprint">loader</code>: a custom classloader (see the ScalaCheck documentation)</li>
-</ul><p>You can also set the random generator that is used in all the ScalaCheck generators: </p></div></status><status class="ok"><p></p></status><status class="ok"><div style="display: show; text-indent:0px;"><pre><code class="prettyprint">case class MyRandomGenerator() extends java.util.Random {
+</ul><p>You can also set the random generator that is used in all the ScalaCheck generators: </p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><pre><code class="prettyprint">case class MyRandomGenerator() extends java.util.Random {
   // implement a deterministic generator for example
 }
 
 &quot;this is a specific property&quot; ! prop { (a: Int, b: Int) =&gt;
   (a + b) must_== (b + a)
 }.set(rng = MyRandomGenerator(), minTestsOk = 200, workers = 3)
-</code></pre></div></status><status class="ok"><p></p></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Expectations"><h4>Expectations</h4></a><p>By default, a successful example using a <code class="prettyprint">Prop</code> will be reported as 1 success and 100 (or <code class="prettyprint">minTestsOk</code>) expectations. If you don't want the number of expectations to appear in the specification statistics just mix-in your specification the <code class="prettyprint">org.specs2.matcher.OneExpectationPerProp</code> trait.</p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Mock+expectations"><h3>Mock expectations</h3></a><p>At the moment only the <a href="http://mockito.org">Mockito</a> library is supported.</p><p>Mockito allows to specify stubbed values and to verify that some calls are expected on your objects. In order to use those functionalities, you need to extend the <code class="prettyprint">org.specs2.mock.Mockito</code> trait: </p>
+</code></pre><a name="Expectations"><h4>Expectations</h4></a><p>By default, a successful example using a <code class="prettyprint">Prop</code> will be reported as 1 success and 100 (or <code class="prettyprint">minTestsOk</code>) expectations. If you don't want the number of expectations to appear in the specification statistics just mix-in your specification the <code class="prettyprint">org.specs2.matcher.OneExpectationPerProp</code> trait.</p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Mock+expectations"><h3>Mock expectations</h3></a><p>At the moment only the <a href="http://mockito.org">Mockito</a> library is supported.</p><p>Mockito allows to specify stubbed values and to verify that some calls are expected on your objects. In order to use those functionalities, you need to extend the <code class="prettyprint">org.specs2.mock.Mockito</code> trait: </p>
 <pre><code class="prettyprint">import org.specs2.mock._
 class MockitoSpec extends Specification { def is = s2&quot;&quot;&quot;
 
@@ -842,11 +870,11 @@ there was one(amount).show(anyFunction2)
      (a, b, c) =&gt;  a + b must_== c                        // the expectation to check on each row
     }
 }
-</code></pre></div></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Implicit+%21"><h4>Implicit !</h4></a><p>There may be an implicit definition conflict when the first parameter of a row is a String, because examples can also be created by using the <code class="prettyprint">!</code> operator after a String. In that case, depending on which kind of specification you use, you can either:</p>
+</code></pre><a name="Implicit+%21"><h4>Implicit !</h4></a><p>There may be an implicit definition conflict when the first parameter of a row is a String, because examples can also be created by using the <code class="prettyprint">!</code> operator after a String. In that case, depending on which kind of specification you use, you can either:</p>
 <ul>
   <li>with an acceptance specification: use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance)</li>
   <li>with a unit specification: use the <code class="prettyprint">org.specs2.mutable.Tables</code> trait instead of <code class="prettyprint">org.specs2.matcher.DataTables</code> trait. This will &quot;deactivate&quot; the implicit used to create examples with <code class="prettyprint">!</code></li>
-</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="686197104"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../images/icon_success_sml.gif" /> Here's <a href="../guide/org.specs2.guide.FormsPage.html" tooltip="">how to use Forms</a></div></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
+</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="1222669889"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../images/icon_success_sml.gif" /> Here's <a href="../guide/org.specs2.guide.FormsPage.html" tooltip="">how to use Forms</a></div></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
 <ul>
   <li><p><code class="prettyprint">org.specs2.matcher.MustMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldMatchers</code>) to write anything like <code class="prettyprint">1 must be_==(1)</code> and<br />    get a <code class="prettyprint">Result</code> back</p></li>
   <li><p>You can also use the side-effecting version of that trait called <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldThrownMatchers</code>).<br />    It throws a <code class="prettyprint">FailureException</code> as soon as an expectation is failing. Those traits can also be used in a regular<br />    Specification if you have several expectations per example and if you don't want to chain them with <code class="prettyprint">and</code>.</p></li>
@@ -863,12 +891,12 @@ there was one(amount).show(anyFunction2)
 </code></pre>
 <hr /></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Matchers</th></tr>
-        <tr><td>Finished in</td><td class="info">716 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">610 ms</td></tr>
         <tr><td>Results</td><td class="success">47 examples, 539 expectations, 0 failure, 0 error</td></tr>
       </table></html></div></div>
                 <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="441002010"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1226600534"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="477899628"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="439624429"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -878,7 +906,7 @@ there was one(amount).show(anyFunction2)
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1733958100"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1314037054"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -989,7 +1017,7 @@ there was one(amount).show(anyFunction2)
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Methods">Methods</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Full+example">Full example</a>
-            <ul><li id="411274008"><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
+            <ul><li id="648528333"><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Rules">Rules</a>
@@ -1007,7 +1035,7 @@ there was one(amount).show(anyFunction2)
           </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Unit+specification">Unit specification</a>
             
           </li></ul>
-          </li><li id="1734043010"><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#GivenWhenThenPage">GivenWhenThenPage</a>
+          </li><li id="913191484"><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then_1">Given When Then</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then">Given When Then</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Parsing">Parsing</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Delimited+parsers">Delimited parsers</a>
@@ -1026,7 +1054,7 @@ there was one(amount).show(anyFunction2)
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="511713799"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1124615447"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1090,7 +1118,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="686197104"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="1222669889"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
@@ -1134,11 +1162,13 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li></ul>
-          </li><li id="560658486"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="401379145"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Fine-grained+jars">Fine-grained jars</a>
             
+          </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Arguments">Arguments</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#API">API</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Most%2FLeast+frequently+used+arguments">Most/Least frequently used arguments</a>
@@ -1218,7 +1248,7 @@ there was one(amount).show(anyFunction2)
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1071525759"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="912235308"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -1266,7 +1296,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li></ul>
-          </li><li id="896537406"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="979383741"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1312,7 +1342,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li></ul>
-          </li><li id="258458365"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="320325804"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1332,7 +1362,7 @@ there was one(amount).show(anyFunction2)
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['441002010','511713799'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['477899628','1124615447'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                 <div class="col3"><div id="rightcolumn"></div></div>
               </div>
