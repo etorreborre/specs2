@@ -111,7 +111,7 @@ def top = s"""
 def sidebar = s"""
    <div id="sidebar">
    <h3 style="margin-top: 0; margin-bottom: 0;">Try it!</h3>
-   <div class="sidelink" style="margin-top: 10px;"><a href="http://github.com/etorreborre/specs2-test">Sample project</a> (<a href="http://github.com/etorreborre/specs2-test/tarball/SPECS2-${VERSION}">tar</a>, <a href="http://github.com/etorreborre/specs2-test/zipball/SPECS2-${VERSION}">zip</a>)<br/>
+   <div class="sidelink" style="margin-top: 10px;"><a href="http://github.com/etorreborre/specs2-test">Sample project</a> (<a href="http://github.com/etorreborre/specs2-test/tarball/SPECS2-$VERSION">tar</a>, <a href="http://github.com/etorreborre/specs2-test/zipball/SPECS2-$VERSION">zip</a>)<br/>
    </div>
    <a class="sidelink" href="#Dependencies">Dependencies</a><br/>
    <a class="sidelink" href="#Downloads">Downloads</a><br/>
@@ -119,7 +119,7 @@ def sidebar = s"""
    <div class="sidelink" style="margin-top: 10px;"><a href="guide/org.specs2.guide.QuickStart.html">Quick Start</a><br/>
    </div>
    <a class="sidelink" href="guide/org.specs2.guide.UserGuide.html">User Guide</a><br/>
-   <a class="sidelink" href="${EXAMPLES_OFFICIAL_DIR}">Examples</a><br/>
+   <a class="sidelink" href="$EXAMPLES_OFFICIAL_DIR">Examples</a><br/>
    <a class="sidelink" href="${API_OFFICIAL_DIR}index.html">Scaladoc</a><br/>
    <h3 style="margin-bottom: 0;">Get involved!</h3>
    <div style="margin-top: 10px;"><a class="sidelink" href="http://github.com/etorreborre/specs2">Github project</a>
@@ -210,7 +210,7 @@ s"""
     <div class="tabbertab" title="sbt">
         <code class="prettyprint">
   libraryDependencies ++= Seq(
-    "org.specs2" %% "specs2" % "${VERSION}" % "test"
+    "org.specs2" %% "specs2" % "$VERSION" % "test"
 
     // with Scala 2.9.3 (specs2 1.12.4.1 is the latest version for scala 2.9.3)
     // "org.specs2" %% "specs2" % "1.12.4.1" % "test",
@@ -221,15 +221,14 @@ s"""
   // Read here for optional dependencies:
   // <a href="http://etorreborre.github.io/specs2/guide/org.specs2.guide.Runners.html#Dependencies">http://etorreborre.github.io/specs2/guide/org.specs2.guide.Runners.html#Dependencies</a>
 
-  resolvers ++= Seq("snapshots" at "http://oss.sonatype.org/content/repositories/snapshots",
-                    "releases"  at "http://oss.sonatype.org/content/repositories/releases")
+  resolvers ++= Seq("snapshots", "releases").map(Resolver.sonatypeRepo)
 </code>
       </div>
     <div class="tabbertab" title="maven">
         <code class="prettyprint">  &lt;dependency>
    &lt;groupId>org.specs2&lt;/groupId>
    &lt;artifactId>specs2_2.10&lt;/artifactId>
-   &lt;version>${VERSION}&lt;/version>
+   &lt;version>$VERSION&lt;/version>
    &lt;scope>test&lt;/scope>
  &lt;/dependency>
 
@@ -277,9 +276,9 @@ s"""
     <tr>
         <td class="info">Snapshot</td>
         <td class="info">
-        binaries (<a href="http://oss.sonatype.org/content/repositories/snapshots/org/specs2/specs2_2.10/${SNAPSHOT_VERSION}/">specs2 jar</a>,
-                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-core_2.10/7.0.2/">scalaz core jar</a>,
-                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-concurrent_2.10/7.0.2/">scalaz concurrent jar</a>)<br/>
+        binaries (<a href="http://oss.sonatype.org/content/repositories/snapshots/org/specs2/specs2_2.10/$SNAPSHOT_VERSION/">specs2 jar</a>,
+                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-core_2.10/7.0.4/">scalaz core jar</a>,
+                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-concurrent_2.10/7.0.4/">scalaz concurrent jar</a>)<br/>
        project (<a href="http://github.com/etorreborre/specs2/zipball/master">zip</a>,
                 <a href="http://github.com/etorreborre/specs2/tarball/master">tar</a>)
       </td>
@@ -287,11 +286,11 @@ s"""
     <tr>
         <td class="info">Released</td>
         <td class="info">
-        binaries (<a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/specs2_2.10/${VERSION}/">specs2 jar</a>,
-                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-core_2.10/7.0.2/">scalaz core jar</a>,
-                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-concurrent_2.10/7.0.2/">scalaz concurrent jar</a>)<br/>
-        project (<a href="http://github.com/etorreborre/specs2/zipball/SPECS2-${VERSION}">zip</a>,
-                 <a href="http://github.com/etorreborre/specs2/tarball/SPECS2-${VERSION}">tar</a>)
+        binaries (<a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/specs2_2.10/$VERSION/">specs2 jar</a>,
+                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-core_2.10/7.0.4/">scalaz core jar</a>,
+                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-concurrent_2.10/7.0.4/">scalaz concurrent jar</a>)<br/>
+        project (<a href="http://github.com/etorreborre/specs2/zipball/SPECS2-$VERSION">zip</a>,
+                 <a href="http://github.com/etorreborre/specs2/tarball/SPECS2-$VERSION">tar</a>)
       </td>
     </tr>
   <table>
