@@ -1,6 +1,11 @@
 package org.specs2
 package matcher
 
+/**
+ * this requires the macro compiler plugin with Scala 2.10.x:
+ *
+ *  addCompilerPlugin("org.scala-lang.plugins" % "macro-paradise_2.10.3-RC1" % "2.0.0-SNAPSHOT"))
+ */
 class MatcherMacrosSpec extends Specification with ResultMatchers with MatcherMacros { def is = s2"""
 
  It is possible to define a matcher with methods matching the public members of a given type

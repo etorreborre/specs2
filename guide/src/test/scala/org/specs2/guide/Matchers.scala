@@ -102,7 +102,6 @@ type T = (String, String, String, Seq[(String, Double)])
 
 val t1: T = ("a", "b", "c", Seq(("d", 1.01), ("e", 2.02)))
 val t2: T = ("a", "b", "c", Seq(("d", 1.00), ("e", 2.00)))
-val t3: T = ("z", "b", "c", Seq(("d", 1.00), ("e", 3.00)))
 
 // create a matcher by zipping matchers to the expected value
 def beMatching(expected: T) = expected.zip(startWith, ===, ===, matchSequence)

@@ -21,7 +21,22 @@ There are many ways to execute ***specs2*** specifications:
 
  ***specs2*** is available for Scala 2.10 onwards and uses the following libraries, as specified using the [sbt dsl](http://www.scala-sbt.org/release/docs/Getting-Started/Library-Dependencies.html):
 
- <table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info">`"org.scalaz" % "scalaz-core" % "7.0.2"`</td><td class="info">mandatory</td></tr><tr><td class="info">`"org.scalaz" % "scalaz-concurrent" % "7.0.2"`</td><td class="info">mandatory</td></tr><tr><td class="info">`"com.chuusai" % "shapeless" % "1.2.4"`</td><td class="info">if you use the GWT trait</td></tr><tr><td class="info"> `"org.scalacheck" %% "scalacheck" % "1.10.0"`</td><td class="info">if using ScalaCheck</td></tr><tr><td class="info">`"org.mockito" % "mockito-all" % "1.9.0"`</td><td class="info">if using Mockito. Note: specs2.jar must be placed before mockito.jar on the classpath</td></tr><tr><td class="info">`"org.hamcrest" % "hamcrest-all" % "1.3"`</td><td class="info">if using Hamcrest matchers with Mockito</td></tr><tr><td class="info">`"junit" % "junit" % "4.7"`</td><td class="info">if using JUnit</td></tr><tr><td class="info">`"org.scala-sbt" % "test-interface" % "1.0"`</td><td class="info">provided by sbt when using it</td></tr><tr><td class="info">`"org.pegdown" % "pegdown" % "1.2.1"`</td><td class="info">if using the html runner</td></tr><tr><td class="info">`"org.specs2" % "classycle" % "1.4.1"`</td><td class="info">if using the `org.specs2.specification.Analysis` trait</td></tr><tr><td class="info">`"org.scala-lang" % "scala-compiler" % "2.10.2"`</td><td class="info">if using the `org.specs2.specification.Analysis` trait with the `CompilerDependencyFinder` trait</td></tr><tr><td class="info">`"org.scala-lang" % "scala-reflect" % "2.10.2"`</td><td class="info">if using interpolated specifications</td></tr></table>
+ <table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info">`"org.scalaz" % "scalaz-core" % "7.0.4"`</td><td class="info">mandatory</td></tr><tr><td class="info">`"org.scalaz" % "scalaz-concurrent" % "7.0.4"`</td><td class="info">mandatory</td></tr><tr><td class="info">`"com.chuusai" % "shapeless" % "1.2.4"`</td><td class="info">if you use the GWT trait</td></tr><tr><td class="info"> `"org.scalacheck" %% "scalacheck" % "1.10.0"`</td><td class="info">if using ScalaCheck</td></tr><tr><td class="info">`"org.mockito" % "mockito-core" % "1.9.5"`</td><td class="info">if using Mockito. Note: specs2.jar must be placed before mockito.jar on the classpath</td></tr><tr><td class="info">`"org.hamcrest" % "hamcrest-core" % "1.3"`</td><td class="info">if using Hamcrest matchers with Mockito</td></tr><tr><td class="info">`"junit" % "junit" % "4.11"`</td><td class="info">if using JUnit</td></tr><tr><td class="info">`"org.scala-sbt" % "test-interface" % "1.0"`</td><td class="info">provided by sbt when using it</td></tr><tr><td class="info">`"org.pegdown" % "pegdown" % "1.2.1"`</td><td class="info">if using the html runner</td></tr><tr><td class="info">`"org.specs2" % "classycle" % "1.4.1"`</td><td class="info">if using the `org.specs2.specification.Analysis` trait</td></tr><tr><td class="info">`"org.scala-lang" % "scala-reflect" % "2.10.3"`</td><td class="info">if using interpolated specifications and/or macro matchers</td></tr><tr><td class="info">the macro plugin `addCompilerPlugin("org.scala-lang.plugins" % "macro-paradise_2.10.3-RC1" % "2.0.0-SNAPSHOT"))`</td><td class="info">if using macro matchers</td></tr></table>
+
+#### Fine-grained jars
+
+***specs2*** can be downloaded from [Sonatype](https://oss.sonatype.org/content/repositories/releases/org/specs2/specs2_2.10/$VERSION) as a big jar containing all the specs2 classes but also as smaller jars, depending on the features you need:
+
+ - `specs2-core`: for simple specifications executable in the console or with sbt
+ - `specs2-matcher`: to use specs2 matchers with JUnit
+ - `specs2-matcher-extra`: for the optional specs2 matchers
+ - `specs2-scalacheck`: to use ScalaCheck properties in specifications
+ - `specs2-mock`: to use Mockito matchers
+ - `specs2-analysis`: to use package dependencies matcher
+ - `specs2-gwt`: to write given-when-then specifications
+ - `specs2-form`: Fit-like forms
+ - `specs2-html`: to export specifications as html
+ - `specs2-junit`: to run specifications as JUnit tests
 
 ### Arguments
 

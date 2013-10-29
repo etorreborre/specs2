@@ -1,8 +1,33 @@
-New release!
+New release! Special thanks to [Eugene Yokota](https://twitter.com/eed3si9n) for helping sorting out the publishing of the new multi-module project.
+
+## New features
+
+ * Macro matchers to automatically [create matchers for your classes](http://bit.ly/18zVCsd). This uses the "macro-paradise" compiler plugin (add this line to your sbt file: `addCompilerPlugin("org.scala-lang.plugins" % "macro-paradise_2.10.3-RC1" % "2.0.0-SNAPSHOT"))`)
+
+ * ***specs2*** can be downloaded from [Sonatype](https://oss.sonatype.org/content/repositories/releases/org/specs2/specs2_2.10) as a big jar containing all the specs2 classes but also as smaller jars, depending on the features you need:
+
+ - `specs2-core`: for simple specifications executable in the console or with sbt
+ - `specs2-matcher`: to use specs2 matchers with JUnit
+ - `specs2-matcher-extra`: for the optional specs2 matchers
+ - `specs2-scalacheck`: to use ScalaCheck properties in specifications
+ - `specs2-mock`: to use Mockito matchers
+ - `specs2-analysis`: to use package dependencies matcher
+ - `specs2-gwt`: to write given-when-then specifications
+ - `specs2-form`: Fit-like forms
+ - `specs2-html`: to export specifications as html
+ - `specs2-junit`: to run specifications as JUnit tests
+
+ * `zip` operator for matchers in order to [match nested tuples](http://bit.ly/18zXAca)
+ * using `ValueChecks` in the `TryMatchers` and `EitherMatchers`. Now we can write: `Right(1) must beRight(be_==(1))`. fixes [#201](http://github.com/etorreborre/specs2/issues/201)
+
+## Removals
+
+ * the 'old' acceptance style for specifications (using the `^` operator to relate specification fragments) is not supported anymore, you should use string interpolation instead. This removal should not break the compilation but will not display nice results for 'old' specifications
 
 ## Fixes
 
- * 
+ * fixed location of fragments when they are contained in a package where the package name includes 'scala' but does not start with it
+ * fixed the evaluation of Mockito matchers when having [mixed byname and byvalue parameters](http://bit.ly/18zY8Pa) (this requires an upgrade to `mockito-core-1.9.5.jar`)
 
  ==========================
 
