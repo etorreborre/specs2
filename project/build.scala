@@ -106,7 +106,7 @@ object build extends Build {
 
   lazy val guide = Project(id = "specs2-guide", base = file("guide"),
     settings = moduleSettings
-  ).dependsOn(examples % "test->test")
+  ).dependsOn(examples % "compile->compile;test->test")
 
   lazy val gwt = Project(id = "specs2-gwt", base = file("gwt"),
     settings = Seq(
@@ -185,7 +185,7 @@ object build extends Build {
     cancelable := true,
     javaOptions += "-Xmx3G",
     fork in test := true,
-    testOptions := Seq(Tests.Filter(s => Seq("Spec", "Guide").exists(s.endsWith) && Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))
+    testOptions := Seq(Tests.Filter(s => Seq("Spec", "Guide", "Index").exists(s.endsWith) && Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))
   )
 
   /**

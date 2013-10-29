@@ -6,12 +6,12 @@ import java.util.LinkedList
 import mock.Mockito
 import org.mockito.invocation.InvocationOnMock
 import org.hamcrest.{BaseMatcher, Description}
-import specification.Forms._
-import specification.{Grouped, Snippets}
+import specification.{Forms, Grouped, Snippets}
+import Forms._
 import org.scalacheck.{Arbitrary, Gen, Prop, Test}
 import matcher.{Hamcrest, Expectable, Matcher, Parameters}
 
-class Matchers extends UserGuidePage with Snippets with ScalaCheck with Mockito { def is =
+class Matchers extends UserGuidePage with Snippets with ScalaCheck with Mockito with Forms { def is =
   generalSection ^
   scalaCheckSection ^
   mockitoSection

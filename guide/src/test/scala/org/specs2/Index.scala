@@ -22,7 +22,6 @@ def createHtml(body: String) = s"""
 $top
 $sidebar
 $body
-$footer
 </body>
 </html>
 """
@@ -134,12 +133,6 @@ def sidebar = s"""
    <a class="sidelink" href="http://notes.implicit.ly/tagged/specs2">Announcements</a><br/>
    <div class="sidelink"><a href="https://twitter.com/specs2org" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false" data-dnt="true">Follow @specs2org</a>
    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></div>
-</div>
-"""
-
-def footer = s"""
-<div class="footer">
-  get the source code on GitHub : <a href="http://github.com/etorreborre/specs2">etorreborre/specs2</a>
 </div>
 """
 

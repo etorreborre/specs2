@@ -6,7 +6,7 @@ import specification._
 import script.{StepParser, StepParsers, StandardDelimitedStepParsers, GWT}
 import scala.util.matching._
 
-class GivenWhenThenPage extends UserGuidePage with GWT with StandardDelimitedStepParsers with SpecificationExecution with Snippets { def is = s2"""
+class GivenWhenThenPage extends UserGuidePage with GWT with StandardDelimitedStepParsers with SpecificationExecution with Snippets { def is = "Given When Then".title ^ s2"""
 ### Given When Then
 
 The Given/When/Then style of writing specifications is supported by the use of the `GWT` trait.
