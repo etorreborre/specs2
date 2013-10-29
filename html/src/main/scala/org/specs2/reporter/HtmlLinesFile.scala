@@ -106,7 +106,7 @@ case class HtmlSpecStart(start: ExecutedSpecStart, stats: Stats = Stats(), level
 
 private[specs2]
 case class HtmlText(t: ExecutedText, stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) extends HtmlLine {
-  override def indent = level
+  override def indent = if (t.flow) level else (level * 2)
   def print(out: HtmlReportOutput) = out.when(!args.xonly)(_.printText(t.formattedString, indent))
   def set(stats: Stats = Stats(), level: Int = 0, args: Arguments = Arguments()) = copy(stats = stats, level = level, args = args)
   override def toString = t.toString

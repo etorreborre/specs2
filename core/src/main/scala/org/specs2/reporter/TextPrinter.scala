@@ -109,7 +109,7 @@ trait TextPrinter {
     }
 
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
-      executedResult.map(r => printResult(r.text(args).raw, r.hasDescription, r.result, r.timer)(args, out))
+      executedResult.map(r => printResult(if (r.flow) r.text(args).raw else leveledText(r.text(args).raw, level)(args), r.hasDescription, r.result, r.timer)(args, out))
 
     def printResult(desc: String, hasDescription: Boolean, result: Result, timer: SimpleTimer)(implicit args: Arguments, out: ResultOutput): Unit = {
       def print(res: Result, desc: String, isDataTable: Boolean) {
@@ -205,8 +205,10 @@ trait TextPrinter {
 
   case class PrintText(t: ExecutedText) extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
-      if (args.canShow("-")) out.printText(t.text)(args)
-  }
+      if (args.canShow("-"))
+        if (t.flow) out.printText(t.text)(args)
+        else out.printText(leveledText(t.text, level)(args))(args)
+  }        
   case class PrintBr() extends Print {
     def print(stats: Stats, level: Int, args: Arguments)(implicit out: ResultOutput) =
       if (args.canShow("-")) out.printText("\n")(args)

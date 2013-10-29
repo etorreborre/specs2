@@ -135,7 +135,7 @@ case object Levels {
 
   implicit def executedFragmentToLevel: ExecutedFragment => Level[ExecutedFragment] = (f: ExecutedFragment) => f match {
     case t @ ExecutedResult(_,_,_,_,_)                               => Terminal(t)
-    case t @ ExecutedText(Text(text, _), _)                          => if (t.text.trim.isEmpty) Neutral(t) else Indent(t)
+    case t @ ExecutedText(Text(text, _), _)                          => if (text.flow) Fixed(t, startIndentation(text.raw), endIndentation(text.raw)) else Indent(t)
     case t @ ExecutedTab(n, _)                                       => Indent(t, n)
     case t @ ExecutedBacktab(n, _)                                   => Unindent(t, n)
     case t @ ExecutedSpecStart(_,_,_)                                => Neutral(t)
@@ -151,7 +151,7 @@ case object Levels {
     case t: Example                         => Terminal(t)
     case t @ Tab(n)                         => Indent(t, n)
     case t @ Backtab(n)                     => Unindent(t, n)
-    case t: Text                            => if (t.text.raw.trim.isEmpty) Neutral(t) else Indent(t)
+    case t: Text                            => if (t.text.flow) Fixed(t, startIndentation(t.text.raw), endIndentation(t.text.raw)) else Indent(t)
     case t: SpecStart                       => Neutral(t)
     case t: SpecEnd                         => Neutral(t)
     case t @ End()                          => Reset(t)

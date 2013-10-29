@@ -2,7 +2,7 @@ package user.io
 
 import org.specs2.Specification
 
-class LocationSpecification extends Specification { def is =
+class LocationSpecification extends Specification { def is = formatSection(flow=true)^
   "presentation"                ^
   "this block should"           ^
     "have one example"          ! ok ^

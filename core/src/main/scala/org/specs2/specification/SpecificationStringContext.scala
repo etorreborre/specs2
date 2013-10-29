@@ -38,8 +38,8 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
       val autoExample = texts.lastOption.exists(_.trim.isEmpty)
 
       val description =
-        if (autoExample) FormattedString.code(expression)
-        else             FormattedString(texts.lastOption.map(_.trim).getOrElse(""))
+        if (autoExample) FormattedString.code(expression).withFlow
+        else             FormattedString(texts.lastOption.map(_.trim).getOrElse("")).withFlow
 
       val before = first + indent
 
@@ -100,7 +100,7 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
       }.getOrElse((res, text))
       variable.append(res1, text1, expression)
     }
-    formatSection(markdown = true) ^ texts.lastOption.map(t => fragments append createTextFragment(t).fragments).getOrElse(fragments) ^ formatSection(markdown = true)
+    formatSection(flow = true, markdown = true) ^ texts.lastOption.map(t => fragments append createTextFragment(t).fragments).getOrElse(fragments) ^ formatSection(flow = true, markdown = true)
   }
 
   private[specs2] def createTextFragment(s: String): FragmentsFragment = fragments(Text.create(FormattedString(s)))

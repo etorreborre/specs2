@@ -16,12 +16,12 @@ with the applicable level, arguments and Statistics.
   Everything else is translated to HtmlOther, meaning that those fragments will not be printed out     $e6
                                                                                                        """
 
-  lazy val spec = execute("text" ^ br ^ { 1 === 1 } ^ br ^ t(2) ^ end)
+  lazy val spec = execute(formatSection(flow=true) ^  "text" ^ { 1 === 1 } ^ br ^ t(2) ^ end)
   lazy val lines = printer.reduce(spec)
 
   def e1 = lines.head must haveClass[HtmlSpecStart]
   def e2 = lines.last must haveClass[HtmlSpecEnd]
-  def e3 = lines(1) must haveClass[HtmlText]
+  def e3 = lines(2) must haveClass[HtmlText]
   def e4 = lines(3) must haveClass[HtmlResult]
   def e5 = lines(4) must haveClass[HtmlBr]
   def e6 = lines(5) must haveClass[HtmlOther]

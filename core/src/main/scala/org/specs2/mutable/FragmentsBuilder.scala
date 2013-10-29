@@ -28,7 +28,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
 
   /** @return a Fragments object from a single piece of text */
   override implicit def textFragment(s: String): FragmentsFragment = {
-    val t = textStart(s).add(FF.br)
+    val t = textStart(s)
     addFragments(t)
     t
   }
@@ -79,9 +79,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
 
     private def addSideEffectingBlock[T](block: =>T) = {
       addFragments(s)
-      addFragments(FF.br)
       executeBlock(block)
-      addFragments(FF.br)
       addFragments(FF.bt)
     }
   }
@@ -166,7 +164,6 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
   protected def addExample(ex: =>Example): Example = {
     val example = ex
     addFragments(Fragments.createList(example))
-    addFragments(FF.br)
     example
   }
 
