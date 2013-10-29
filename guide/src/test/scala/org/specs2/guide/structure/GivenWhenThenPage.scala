@@ -9,7 +9,7 @@ import scala.util.matching._
 class GivenWhenThenPage extends UserGuidePage with GWT with StandardDelimitedStepParsers with SpecificationExecution with Snippets { def is = s2"""
 ### Given When Then
 
-The Given/When/Then style of writing specifications is supported by the use of the `GWT` trait (there is also [another way](org.specs2.guide.structure.GivenWhenThenDeprecatedPage.html) but it is not recommended because it leads to performance issues at compile-time).
+The Given/When/Then style of writing specifications is supported by the use of the `GWT` trait.
 
 Here is a simple example of a Given/When/Then specification using the `GWT` trait: ${snippet{
 
@@ -111,6 +111,5 @@ When you insert a `Scenario.start` and `Scenario.end` in a piece of `s2` text, t
 ```
 sbt> test-only *Calculator* -- include addition
 ```
-""" ^
-  include(xonly, new GivenWhenThenDeprecatedPage)
+"""
 }
