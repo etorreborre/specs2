@@ -78,7 +78,9 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
     def >>(fs: =>Fragments): Fragments = addSideEffectingBlock(fs)
 
     private def addSideEffectingBlock[T](block: =>T) = {
+      addFragments(FF.br)
       addFragments(s)
+      addFragments(FF.br)
       executeBlock(block)
       addFragments(FF.bt)
     }
@@ -163,7 +165,8 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
 
   protected def addExample(ex: =>Example): Example = {
     val example = ex
-    addFragments(Fragments.createList(example, FF.br))
+    addFragments(Fragments.createList(example))
+    addFragments(Fragments.createList(FF.br))
     example
   }
 

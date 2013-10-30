@@ -6,38 +6,56 @@ import specification.{AcceptanceCreationPath, MutableCreationPath, AllExpectatio
 import scalaz.Scalaz._
 import execute.Result
 
-class FragmentsBuilderSpec extends Specification with AllExpectations {
+class FragmentsBuilderSpec extends Specification with AllExpectations { "".newp
 
   "Creating fragments must maintain a tree showing all the creation paths for each block" >> {
     spec1.content
     spec1.blocksTree.toTree.map(b => (b._1, b._2.toString)).drawTree.trimNewLines ====
       """
-      |(0,"Text(root)")
-      ||
-      |+- (0,"Text(a)")
-      ||  |
-      ||  +- (0,"Text(b)")
-      ||  |  |
-      ||  |  `- (0,"Example(c)")
-      ||  |
-      ||  +- (1,"Backtab(1)")
-      ||  |
-      ||  `- (2,"Example(d)")
-      ||
-      |+- (1,"Backtab(1)")
-      ||
-      |+- (2,"Text(e)")
-      ||  |
-      ||  `- (0,"Example(f)")
-      ||
-      |`- (3,"Backtab(1)")
+        |(0,"Text(root)")
+        ||
+        |+- (0,"Br()")
+        ||
+        |+- (1,"Text(a)")
+        ||
+        |+- (2,"Br()")
+        ||  |
+        ||  +- (0,"Br()")
+        ||  |
+        ||  +- (1,"Text(b)")
+        ||  |
+        ||  +- (2,"Br()")
+        ||  |  |
+        ||  |  +- (0,"Example(c)")
+        ||  |  |
+        ||  |  `- (1,"Br()")
+        ||  |
+        ||  +- (3,"Backtab(1)")
+        ||  |
+        ||  +- (4,"Example(d)")
+        ||  |
+        ||  `- (5,"Br()")
+        ||
+        |+- (3,"Backtab(1)")
+        ||
+        |+- (4,"Br()")
+        ||
+        |+- (5,"Text(e)")
+        ||
+        |+- (6,"Br()")
+        ||  |
+        ||  +- (0,"Example(f)")
+        ||  |
+        ||  `- (1,"Br()")
+        ||
+        |`- (7,"Backtab(1)")
       """.stripMargin.trimNewLines
   }
   "Examples must be created with their 'blockCreationPath'" >> {
     "for a mutable specification" >> {
-      spec1.content.examples(0).creationPath ==== Some(MutableCreationPath(Seq(0, 0, 0, 0)))
-      spec1.content.examples(1).creationPath ==== Some(MutableCreationPath(Seq(0, 0, 2)))
-      spec1.content.examples(2).creationPath ==== Some(MutableCreationPath(Seq(0, 2, 0)))
+      spec1.content.examples(0).creationPath ==== Some(MutableCreationPath(Seq(0, 2, 2, 0)))
+      spec1.content.examples(1).creationPath ==== Some(MutableCreationPath(Seq(0, 2, 4)))
+      spec1.content.examples(2).creationPath ==== Some(MutableCreationPath(Seq(0, 6, 0)))
     }
     "for an acceptance specification" >> {
       spec2.content.examples(0).creationPath ==== Some(AcceptanceCreationPath(Seq(3)))
