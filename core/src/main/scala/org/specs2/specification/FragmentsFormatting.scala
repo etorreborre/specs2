@@ -21,8 +21,7 @@ trait DefaultFragmentsFormatting extends FragmentsFormatting with TagsAssociatio
     val taggedFragments = tagFragments(fs.compactTags.fragments)
     val tagged = taggedFragments.flatMap {
       case (t: Text, tag)      => Seq(t.copy(formattedStringFor(tag)(t.text)))
-      case (e: Example, tag)   => Seq(e.formatWith(formattedStringFor(tag)(e.desc)), br)
-      case (s: SpecStart, tag) => Seq(s)
+      case (e: Example, tag)   => Seq(e.formatWith(formattedStringFor(tag)(e.desc)))
       case (f, _)              => Seq(f)
     }
     Fragments.create(tagged:_*)

@@ -163,7 +163,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
 
   protected def addExample(ex: =>Example): Example = {
     val example = ex
-    addFragments(Fragments.createList(example))
+    addFragments(Fragments.createList(example, FF.br))
     example
   }
 

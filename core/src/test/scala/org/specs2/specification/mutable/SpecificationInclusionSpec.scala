@@ -15,7 +15,7 @@ class SpecificationInclusionSpec extends Spec {
       "SpecStart(spec2)", "Br()",
       "Example(ex2)", "Br()",
       "SpecStart(spec1)", "Br()",
-      "Example(ex1)", "Br()", "Br()",
+      "Example(ex1)", "Br()",
       "SpecEnd(spec1)",
       "SpecEnd(spec2)"
     )
@@ -26,7 +26,7 @@ class SpecificationInclusionSpec extends Spec {
     val spec2 = new Spec { "spec2".title; "ex2" >> ok; inline(spec1) }
     spec2.content.fragments.map(_.toString) === Seq(
       "SpecStart(spec2)", "Br()",
-      "Example(ex2)", "Br()",
+      "Example(ex2)", "Br()", "Br()",
       "Example(ex1)", "Br()",
       "SpecEnd(spec2)"
     )
