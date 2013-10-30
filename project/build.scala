@@ -26,7 +26,6 @@ object build extends Build {
     settings = 
       moduleSettings           ++
       siteSettings             ++
-      publicationSettings      ++
       releaseSettings          ++
       rootSettings             ++
       Seq(name := "specs2")
@@ -61,7 +60,8 @@ object build extends Build {
       specs2Settings       ++
       resolversSettings    ++
       compilationSettings  ++
-      testingSettings
+      testingSettings      ++
+      publicationSettings
 
   lazy val rootSettings: Seq[Settings] = Seq(
       sources in Compile  := sources.all(aggregateCompile).value.flatten,
