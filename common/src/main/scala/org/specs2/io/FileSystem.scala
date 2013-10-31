@@ -139,7 +139,7 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
     }
   }
   /** 
-   * Copy the content of a directory to another.
+   * copy a file to a destination directory
    * @param path path of the file to copy
    * @param dest destination directory path
    */
@@ -148,11 +148,13 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
     val destFilePath = dest + "/" + new File(path).getName
     new File(destFilePath).createNewFile
     val input = new BufferedInputStream(new FileInputStream(path))
-    val output  = new BufferedOutputStream(new FileOutputStream(destFilePath), 2048)
-    copy(input, output)
-    output.flush
-    output.close
-    input.close
+    try {
+      val output  = new BufferedOutputStream(new FileOutputStream(destFilePath), 2048)
+      try {
+        copy(input, output)
+        output.flush
+      } finally output.close
+    } finally input.close
   }  
   
   /** 
@@ -177,17 +179,20 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
             createFile(dirPath + "/" + entry.getName)
             val fos = new FileOutputStream(dirPath + "/" + entry.getName)
             val dest = new BufferedOutputStream(fos, 2048)
-            copy(zis, dest)
-            dest.flush
-            dest.close
+
+            try {
+              copy(zis, dest)
+              dest.flush
+            } finally dest.close
           }
 
         }
         extractEntry(zis.getNextEntry)
       }
     }
-    extractEntry(zis.getNextEntry)
-    zis.close
+
+    try extractEntry(zis.getNextEntry)
+    finally zis.close
   }
   
   /** 
@@ -213,17 +218,13 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
    * @param src name of the resource directory to copy
    * @param outputDir output directory where to copy the files to
    */
-  def copySpecResourcesDir(src: String, outputDir: String) {
-    val selfUrl = Thread.currentThread.getContextClassLoader.getResource(getClass.getName.replace(".", "/")+".class")
-    for (url <- Option(selfUrl) if url.getProtocol == "jar") {
-      val jarUrl = new URL(url.getPath.takeWhile(_ != '!').mkString)
-      unjar(jarUrl, outputDir, ".*" + src + "/.*")
+  def copySpecResourcesDir(src: String, outputDir: String, loader: ClassLoader): Unit =
+    for (url <- Option(loader.getResource(src))) {
+      if (url.getProtocol == "jar") {
+        val jarUrl = new URL(url.getPath.takeWhile(_ != '!').mkString)
+        unjar(jarUrl, outputDir, ".*" + src + "/.*")
+      } else copyDir(url, outputDir + src)
     }
-
-    val folderUrl = Thread.currentThread.getContextClassLoader.getResource(src)
-    for (url <- Option(folderUrl) if folderUrl.getProtocol != "jar")
-      copyDir(url, outputDir + src)
-  }
 
   /** @return true if 2 paths are the same according to their canonical representation */
   def samePath(p1: String, p2: String) = new File(p1).getCanonicalPath == new File(p2).getCanonicalPath

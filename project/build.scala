@@ -64,9 +64,11 @@ object build extends Build {
       publicationSettings
 
   lazy val rootSettings: Seq[Settings] = Seq(
-      sources in Compile  := sources.all(aggregateCompile).value.flatten,
-      sources in Test     := sources.all(aggregateTest).value.flatten,
-      libraryDependencies := libraryDependencies.all(aggregateTest).value.flatten
+      sources in Compile                      := sources.all(aggregateCompile).value.flatten,
+      unmanagedResourceDirectories in Compile := unmanagedResourceDirectories.all(aggregateCompile).value.flatten,
+      sources in Test                         := sources.all(aggregateTest).value.flatten,
+      unmanagedResourceDirectories in Test    := unmanagedResourceDirectories.all(aggregateTest).value.flatten,
+      libraryDependencies                     := libraryDependencies.all(aggregateTest).value.flatten
     )
 
   /** MODULES (sorted in alphabetical order) */
