@@ -1,0 +1,8 @@
+New module structure means new bugs
+
+## Fixes
+
+ * fixed the copying of html resources [#206](https://github.com/etorreborre/specs2/issues/206)
+
+ ==========================
+
