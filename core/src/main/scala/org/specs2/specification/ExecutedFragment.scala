@@ -117,7 +117,7 @@ case class ExecutedEnd(location: Location = new Location) extends ExecutedStanda
 }
 
 case class ExecutedTab(n: Int = 1, location: Location = new Location) extends ExecutedStandardFragment {
-  def original = StandardFragments.Backtab()
+  def original = StandardFragments.Tab()
 }
 case class ExecutedBacktab(n: Int = 1, location: Location = new Location) extends ExecutedStandardFragment {
   def original = StandardFragments.Backtab()

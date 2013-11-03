@@ -50,6 +50,9 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
 
     def should(fs: =>Fragments)(implicit p: ImplicitParam) = addFragments(s, fs, "should")
     def can(fs: =>Fragments)(implicit p: ImplicitParam)    = addFragments(s, fs, "can")
+
+    def should(fs: =>Unit)(implicit p1: ImplicitParam1, p2: ImplicitParam2) = addFragments(s, examplesBlock(fs), "should")
+    def can(fs: =>Unit)   (implicit p1: ImplicitParam1, p2: ImplicitParam2) = addFragments(s, examplesBlock(fs), "can")
   }
   /**
    * add a new example using 'in' or '>>' or '!'
@@ -71,13 +74,19 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
     def >>(block: =>NameSpace)(implicit p1: ImplicitParam1,
                                         p2: ImplicitParam2): Fragments = in(block)(p1, p2)
 
-    def in(block: =>Fragment)(implicit p: ImplicitParam): Fragments = addSideEffectingBlock(block)
+    def in(block: =>Fragment)(implicit p: ImplicitParam): Fragments = addSideEffectingBlock2(block)
     def >>(block: =>Fragment)(implicit p: ImplicitParam): Fragments = in(block)(p)
 
     def in(fs: =>Fragments): Fragments = addSideEffectingBlock(fs)
     def >>(fs: =>Fragments): Fragments = addSideEffectingBlock(fs)
 
     private def addSideEffectingBlock[T](block: =>T) = {
+      addFragments(FF.br)
+      addFragments(s)
+      executeBlock(block)
+      addFragments(FF.bt)
+    }
+    private def addSideEffectingBlock2[T](block: =>T) = {
       addFragments(FF.br)
       addFragments(s)
       addFragments(FF.br)
@@ -89,7 +98,7 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
   /** add a block of examples */
   def examplesBlock(u: =>Unit) = {
     executeBlock(u)
-    addFragments(FF.t(0))
+    FF.t(0)
   }
   /**
    * adding a conflicting implicit to warn the user when a `>>` was forgotten
@@ -136,9 +145,9 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
   protected def addFragments[T](s: String, fs: =>T, word: String): Fragments = {
     addFragments(FF.br)
     addFragments(s + " " + word)
-    val result = addFragments(FF.br)
+    addFragments(FF.br)
     executeBlock(fs)
-    result
+    addFragments(FF.bt)
   }
 
   protected def addFragments(fs: Fragments): Fragments = {
