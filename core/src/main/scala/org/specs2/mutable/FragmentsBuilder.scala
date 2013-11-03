@@ -71,8 +71,8 @@ trait FragmentsBuilder extends specification.FragmentsBuilder
     def >>(block: =>NameSpace)(implicit p1: ImplicitParam1,
                                         p2: ImplicitParam2): Fragments = in(block)(p1, p2)
 
-    def in[T <: Fragment](block: =>T)(implicit p: ImplicitParam): Fragments = addSideEffectingBlock(block)
-    def >>[T <: Fragment](block: =>T)(implicit p: ImplicitParam): Fragments = in(block)(p)
+    def in(block: =>Fragment)(implicit p: ImplicitParam): Fragments = addSideEffectingBlock(block)
+    def >>(block: =>Fragment)(implicit p: ImplicitParam): Fragments = in(block)(p)
 
     def in(fs: =>Fragments): Fragments = addSideEffectingBlock(fs)
     def >>(fs: =>Fragments): Fragments = addSideEffectingBlock(fs)
@@ -179,7 +179,8 @@ trait ExpectationsBlock { this: FragmentsBuilder =>
   /**
    * add a new example using 'in' but ending with a Unit block
    */
-  implicit class expectationsUnit(s: String) {
+  implicit override def inExample(s: String) = new InExampleUnit(s)
+  class InExampleUnit(s: String) extends InExample(s) {
     def in(block: =>Unit): Example = exampleFactory.newExample(s, {block; success})
     def >>(block: =>Unit): Example = in(block)
   }
@@ -191,9 +192,10 @@ trait ExamplesBlock { this: FragmentsBuilder =>
   /**
    * add a new example using 'in' but ending with a Unit block
    */
-  implicit class examplesUnit(s: String) {
-    def in(block: =>Unit) : Unit = { lazy val b = block; >>(new NameSpace { b }); b }
-    def >>(block: =>Unit) : Unit = in(block)
+  implicit override def inExample(s: String) = new InExampleUnit(s)
+  class InExampleUnit(s: String) extends InExample(s) {
+    def in(block: =>Unit): Fragment = { lazy val b = block; new InExample(s) >> (new NameSpace { b }); b; StandardFragments.Tab(0) }
+    def >>(block: =>Unit): Fragment = in(block)
   }
 }
 /**
