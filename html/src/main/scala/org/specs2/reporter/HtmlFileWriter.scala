@@ -34,6 +34,6 @@ trait HtmlFileWriter extends OutputDir {
 
    /** copy css and images file to the output directory */
   protected def copyResources() {
-    Seq("css", "images", "css/themes/default").foreach(fileSystem.copySpecResourcesDir(_, outputDir, classOf[HtmlFileWriter].getClassLoader))
+    Seq("css", "images", "css/themes/default").foreach(fileSystem.copySpecResourcesDir("org/specs2/reporter", _, outputDir, classOf[HtmlFileWriter].getClassLoader))
   }
 }

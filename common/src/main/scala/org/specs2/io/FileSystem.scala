@@ -2,8 +2,11 @@ package org.specs2
 package io
 
 import java.io._
-import java.net.URL
+import java.net.{JarURLConnection, URL}
 import java.util.zip._
+import scala.util.Try
+import java.util.regex.Pattern.{quote, compile}
+import java.util.regex.Matcher.quoteReplacement
 
 /**
  * The FileSystem trait abstracts file system operations to allow easier mocking of file system related functionalities.
@@ -92,7 +95,7 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
   def canRead(path: String) = path != null && new File(path).canRead  
 
   /** @return true if the file can be written */
-  def canWrite(path: String) = path != null && new File(path).canWrite  
+  def canWrite(path: String) = path != null && new File(path).canWrite
 
   /** @return true if the file is absolute */
   def isAbsolute(path: String) = path != null && new File(path).isAbsolute  
@@ -121,13 +124,7 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
   /** @return the files of that directory */
   def listFiles(path: String): List[String] = if (new File(path).list == null) List() else new File(path).list.toList
   
-  /** 
-   * copy the content of a directory to another.
-   * @param url url of the directory to copy
-   * @param dest destination directory path
-   */
-  def copyDir(url: URL, dest: String) { copyDir(new File(url.toURI).getPath, dest) }
-   /** 
+   /**
    * copy the content of a directory to another.
    * @param path path of the directory to copy
    * @param dest destination directory path
@@ -162,22 +159,28 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
    * Filters files which shouldn't be extracted with a regular expression.
    * @param path path of the jar file
    * @param dest destination directory path
-   * @param regexFilter regular expression filtering files which shouldn't be extracted
+   * @param regexFilter regular expression filtering files which shouldn't be
+   *                    extracted; the expression must capture the path of
+   *                    an entry as group 1 which will then be used relative
+   *                    to dirPath as target path for that entry
    */
   private def unjar(jarUrl: URL, dirPath: String, regexFilter: String) {
     mkdirs(dirPath)
+    val regex = compile(regexFilter)
     val uis = jarUrl.openStream()
     val zis = new ZipInputStream(new BufferedInputStream(uis))
 
     @annotation.tailrec
     def extractEntry(entry: ZipEntry) {
       if (entry != null) {
-        if (entry.getName.matches(regexFilter)) {
-          if (entry.isDirectory()){
-            createDir(dirPath + "/" + entry.getName)
+        val matcher = regex.matcher(entry.getName)
+        if (matcher.matches) {
+          val target = matcher.replaceFirst(s"${quoteReplacement(dirPath)}$$1")
+          if (entry.isDirectory()) {
+            createDir(target)
           } else {
-            createFile(dirPath + "/" + entry.getName)
-            val fos = new FileOutputStream(dirPath + "/" + entry.getName)
+            createFile(target)
+            val fos = new FileOutputStream(target)
             val dest = new BufferedOutputStream(fos, 2048)
 
             try {
@@ -214,17 +217,19 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
 
   /** 
    * Copy specs resources found either in the specs jar or in the classpath directories to an output directory
-   * 
-   * @param src name of the resource directory to copy
+   *
+   * @param base path of the base package (must not be empty!)
+   * @param src name of the resource directory to copy (relative to the base package)
    * @param outputDir output directory where to copy the files to
+   * @param origin a class that determines the location of the resources
    */
-  def copySpecResourcesDir(src: String, outputDir: String, loader: ClassLoader): Unit =
-    for (url <- Option(loader.getResource(src))) {
-      if (url.getProtocol == "jar") {
-        val jarUrl = new URL(url.getPath.takeWhile(_ != '!').mkString)
-        unjar(jarUrl, outputDir, ".*" + src + "/.*")
-      } else copyDir(url, outputDir + src)
+  def copySpecResourcesDir(base: String, src: String, outputDir: String, loader: ClassLoader): Unit =
+    Option(loader.getResource(s"$base/$src")) foreach { url =>
+      if (url.getProtocol.equalsIgnoreCase("jar")) unjar(jarOf(url), outputDir, s"^${quote(base)}(/${quote(src)}/.*)$$")
+      else copyDir(url.getPath, new File(outputDir, src).getPath)
     }
+
+  private def jarOf(url: URL): URL = url.openConnection.asInstanceOf[JarURLConnection].getJarFileURL
 
   /** @return true if 2 paths are the same according to their canonical representation */
   def samePath(p1: String, p2: String) = new File(p1).getCanonicalPath == new File(p2).getCanonicalPath
