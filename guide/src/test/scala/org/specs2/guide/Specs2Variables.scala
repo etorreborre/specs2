@@ -33,7 +33,7 @@ trait Specs2Variables {
   lazy val IMAGES_SNAPSHOT_DIR = "../../"+IMAGES_OFFICIAL_DIR
   lazy val IMAGES_DIR          = (if (IS_SNAPSHOT) IMAGES_SNAPSHOT_DIR else IMAGES_OFFICIAL_DIR)
 
-  lazy val EXAMPLES_OFFICIAL_DIR = "https://github.com/etorreborre/specs2/tree/SPECS2-"+VERSION+"/src/test/scala/examples"
+  lazy val EXAMPLES_OFFICIAL_DIR = "https://github.com/etorreborre/specs2/tree/SPECS2-"+VERSION+"/examples/src/test/scala/examples"
   lazy val API_OFFICIAL_DIR      = "http://etorreborre.github.io/specs2/api/SPECS2-" + VERSION + "/"
   lazy val API_SNAPSHOT_DIR      = "http://etorreborre.github.io/specs2/api/master/"
   lazy val API_DIR               = (if (IS_SNAPSHOT) API_SNAPSHOT_DIR else API_OFFICIAL_DIR)
