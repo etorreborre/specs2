@@ -4,6 +4,7 @@ package io
 import java.io._
 import java.net.URL
 import java.util.zip._
+import scala.util.Try
 
 /**
  * The FileSystem trait abstracts file system operations to allow easier mocking of file system related functionalities.
@@ -92,7 +93,7 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
   def canRead(path: String) = path != null && new File(path).canRead  
 
   /** @return true if the file can be written */
-  def canWrite(path: String) = path != null && new File(path).canWrite  
+  def canWrite(path: String) = path != null && new File(path).canWrite
 
   /** @return true if the file is absolute */
   def isAbsolute(path: String) = path != null && new File(path).isAbsolute  
@@ -217,13 +218,27 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
    * 
    * @param src name of the resource directory to copy
    * @param outputDir output directory where to copy the files to
+   * @param origin a class that determines the location of the resources
    */
-  def copySpecResourcesDir(src: String, outputDir: String, loader: ClassLoader): Unit =
-    for (url <- Option(loader.getResource(src))) {
-      if (url.getProtocol == "jar") {
-        val jarUrl = new URL(url.getPath.takeWhile(_ != '!').mkString)
-        unjar(jarUrl, outputDir, ".*" + src + "/.*")
-      } else copyDir(url, outputDir + src)
+  def copySpecResourcesDir(src: String, outputDir: String, origin: Class[_]): Unit =
+    (
+      for {
+        domain   <- Try(origin.getProtectionDomain).toOption
+        source   <- Option(domain.getCodeSource)
+        location  = source.getLocation
+      } yield
+        if (isDir(location.getPath)) new File(location.getPath, src).toURI.toURL
+        else location
+    ) orElse (
+      for {
+        originName <- Some(origin.getName.replace('.', '/') + ".class")
+        url <- Option(origin.getClassLoader.getResource(originName))
+      } yield
+        if (url.getProtocol.equalsIgnoreCase("jar")) new URL(url.getPath.takeWhile(_ != '!').mkString)
+        else new File(url.getPath.replace(originName, src)).toURI.toURL
+    ) foreach { url =>
+      if (exists(url.getPath) && isDir(url.getPath)) copyDir(url, new File(outputDir, src).getPath)
+      else if (exists(url.getPath) && url.getPath.toLowerCase.endsWith(".jar")) unjar(url, outputDir, ".*" + src + "/.*")
     }
 
   /** @return true if 2 paths are the same according to their canonical representation */

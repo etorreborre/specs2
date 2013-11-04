@@ -23,9 +23,9 @@ The HtmlFileWriter class is responsible for writing a html reports to disk.
   case class resources() extends MockHtmlFileWriter {
     writer.writeFiles(arguments)(Seq())
 
-    def css = there was one(fs).copySpecResourcesDir(===("css"), anyString, any[ClassLoader])
-    def images = there was one(fs).copySpecResourcesDir(===("images"), anyString, any[ClassLoader])
-    def jstheme = there was one(fs).copySpecResourcesDir(===("css/themes/default"), anyString, any[ClassLoader])
+    def css = there was one(fs).copySpecResourcesDir(===("css"), anyString, any[Class[_]])
+    def images = there was one(fs).copySpecResourcesDir(===("images"), anyString, any[Class[_]])
+    def jstheme = there was one(fs).copySpecResourcesDir(===("css/themes/default"), anyString, any[Class[_]])
   }
 
   trait MockHtmlFileWriter extends FragmentExecution with DefaultStoring { outer =>
