@@ -23,9 +23,9 @@ The HtmlFileWriter class is responsible for writing a html reports to disk.
   case class resources() extends MockHtmlFileWriter {
     writer.writeFiles(arguments)(Seq())
 
-    def css = there was one(fs).copySpecResourcesDir(===("css"), anyString, any[Class[_]])
-    def images = there was one(fs).copySpecResourcesDir(===("images"), anyString, any[Class[_]])
-    def jstheme = there was one(fs).copySpecResourcesDir(===("css/themes/default"), anyString, any[Class[_]])
+    def css = there was one(fs).copySpecResourcesDir(===("org/specs2/reporter"), ===("css"), anyString, any[ClassLoader])
+    def images = there was one(fs).copySpecResourcesDir(===("org/specs2/reporter"), ===("images"), anyString, any[ClassLoader])
+    def jstheme = there was one(fs).copySpecResourcesDir(===("org/specs2/reporter"), ===("css/themes/default"), anyString, any[ClassLoader])
   }
 
   trait MockHtmlFileWriter extends FragmentExecution with DefaultStoring { outer =>
@@ -39,9 +39,9 @@ The HtmlFileWriter class is responsible for writing a html reports to disk.
   }
 
   case class loading() {
-    def css = load("css") should not beNull
-    def images = load("images") should not beNull
-    def jstheme = load("css/themes/default") should not beNull
+    def css = load("org/specs2/reporter/css") should not beNull
+    def images = load("org/specs2/reporter/images") should not beNull
+    def jstheme = load("org/specs2/reporter/css/themes/default") should not beNull
 
     private def load(name: String) = classOf[HtmlFileWriter].getClassLoader.getResource(name)
   }
