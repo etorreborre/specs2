@@ -32,6 +32,7 @@ object MatcherMacros extends MatcherMacros {
     val fields = typeOfT.members.filter(_.isPublic).
       filterNot(isConstructor(c)).
       filterNot(isSynthetic(c)).
+      filter(_.owner != typeOf[Any].typeSymbol).
       filter(_.owner != typeOf[Object].typeSymbol).
       filter(_.owner != typeOf[Product].typeSymbol).
       filter(_.owner != typeOf[Equals].typeSymbol)
@@ -119,7 +120,7 @@ object MatcherMacros extends MatcherMacros {
   }
 
   private def isSynthetic(c: Context) = { import c.universe._
-    (s: Symbol) => Seq("copy", "asInstanceOf", "isInstanceOf", "==", "!=").contains(s.name.decoded.toString)
+    (s: Symbol) => s.isSynthetic
   }
 
   private def extractBody(c: Context) = { import c.universe._
