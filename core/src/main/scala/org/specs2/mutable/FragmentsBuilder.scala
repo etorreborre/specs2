@@ -203,7 +203,13 @@ trait ExamplesBlock { this: FragmentsBuilder =>
    */
   implicit override def inExample(s: String) = new InExampleUnit(s)
   class InExampleUnit(s: String) extends InExample(s) {
-    def in(block: =>Unit): Fragment = { lazy val b = block; new InExample(s) >> (new NameSpace { b }); b; StandardFragments.Tab(0) }
+    def in(block: =>Unit): Fragment = {
+      new InExample(s) >> {
+        addFragments(FF.br)
+        new NameSpace { block }
+      }
+      StandardFragments.Tab(0)
+    }
     def >>(block: =>Unit): Fragment = in(block)
   }
 }
