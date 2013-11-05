@@ -193,7 +193,7 @@ object build extends Build {
   /**
    * RELEASE PROCESS
    */
-  lazy val releaseSettings =
+  lazy val releaseSettings: Seq[Settings] =
     ReleasePlugin.releaseSettings ++ Seq(
     tagName <<= (version in ThisBuild) map (v => "SPECS2-" + v),
     releaseProcess := Seq[ReleaseStep](
@@ -294,7 +294,7 @@ object build extends Build {
   /**
    * PUBLICATION
    */
-  lazy val publishSignedArtifacts = executeStepTask(publishSigned, "Publishing signed artifacts")
+  lazy val publishSignedArtifacts = executeAggregateTask(publishSigned, "Publishing signed artifacts")
 
   lazy val publicationSettings: Seq[Settings] = Seq(
     publishTo in Global <<= version { v: String =>
@@ -349,6 +349,13 @@ object build extends Build {
    */
   private def executeStepTask(task: TaskKey[_], info: String) = ReleaseStep { st: State =>
     executeTask(task, info)(st)
+  }
+
+  private def executeAggregateTask(task: TaskKey[_], info: String) = (st: State) => {
+    st.log.info(info)
+    val extracted = Project.extract(st)
+    val ref: ProjectRef = extracted.get(thisProjectRef)
+    extracted.runAggregated(task in ref, st)
   }
 
   private def executeTask(task: TaskKey[_], info: String) = (st: State) => {
