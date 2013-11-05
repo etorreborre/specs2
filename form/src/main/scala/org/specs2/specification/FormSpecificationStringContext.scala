@@ -11,6 +11,7 @@ trait FormSpecificationStringContext extends SpecificationStringContext { this: 
   implicit def formIsSpecPart(f: =>Form): SpecPart = new SpecPart {
     def append(fs: Fragments, text: String, expression: String = "") = fs.append(createTextFragment(text)).append(formsAreExamples(f.executeForm))
   }
+
   implicit def toFormIsSpecPart(f: { def form: Form}): SpecPart = formIsSpecPart(f.form)
 }
 
