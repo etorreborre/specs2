@@ -12,16 +12,16 @@ trait SpecificationData extends Data[Specification] {
 
   implicit def arbFragment: Arbitrary[Fragment] = Arbitrary {
     Gen.frequency (
-      (2, Gen.value(Text("text"))),
-      (1, Gen.value(Example("success", success))),
-      (1, Gen.value(Example("failure", failure))),
-      (1, Gen.value(Example("error", anError))),
-      (1, Gen.value(Example("skipped", skipped))),
-      (1, Gen.value(Example("pending", pending))),
-      (1, Gen.value(Step("step"))),
-      (1, Gen.value(Action("action"))),
-      (1, Gen.value(Br())),
-      (1, Gen.value(Backtab())))
+      (2, Gen.const(Text("text"))),
+      (1, Gen.const(Example("success", success))),
+      (1, Gen.const(Example("failure", failure))),
+      (1, Gen.const(Example("error", anError))),
+      (1, Gen.const(Example("skipped", skipped))),
+      (1, Gen.const(Example("pending", pending))),
+      (1, Gen.const(Step("step"))),
+      (1, Gen.const(Action("action"))),
+      (1, Gen.const(Br())),
+      (1, Gen.const(Backtab())))
   }
 
   def arbFragmentSeq: Arbitrary[Seq[Fragment]] = Arbitrary {

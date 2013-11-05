@@ -10,12 +10,12 @@ trait ArbitraryFragments extends execute.StandardResults with FormattingFragment
 
   implicit def arbitraryFragment: Arbitrary[Fragment] = Arbitrary {
     Gen.frequency ( 
-      (1, Gen.value(Step(success))),
-      (10, Gen.value(Text("text"))),
-      (8, Gen.value(Example("ex1", success))),
-      (1, Gen.value(end)),
-      (2, Gen.value(bt)),
-      (1, Gen.value(br)))
+      (1, Gen.const(Step(success))),
+      (10, Gen.const(Text("text"))),
+      (8, Gen.const(Example("ex1", success))),
+      (1, Gen.const(end)),
+      (2, Gen.const(bt)),
+      (1, Gen.const(br)))
   }
   implicit def arbitraryFragments: Arbitrary[Fragments] = Arbitrary {
 

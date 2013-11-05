@@ -181,8 +181,8 @@ trait ScalaCheckProperties extends ScalaCheck with ResultMatchers {  this: Speci
   val stringToBooleanMatcher = (x: String) => true must_== true
   val identityProp = forAll(identityFunction)
   val alwaysTrueProp = proved
-  val alwaysTrue = Gen.value(true)
-  val alwaysFalse = Gen.value(false)
+  val alwaysTrue = Gen.const(true)
+  val alwaysFalse = Gen.const(false)
   val random = Gen.oneOf(true, false)
   val exceptionValues = Gen(p => throw new java.lang.Exception("e"))
   val propertyWithGenerationException = {

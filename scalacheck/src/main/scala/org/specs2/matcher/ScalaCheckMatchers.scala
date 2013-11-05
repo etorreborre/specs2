@@ -1,10 +1,10 @@
 package org.specs2
 package matcher
 
-import org.scalacheck.util.StdRand
 import org.scalacheck.Prop._
-import org.scalacheck.Test.{ Params, Proved, Passed, Failed, Exhausted, GenException, PropException, Result }
-import org.scalacheck.Pretty._
+import org.scalacheck.Test.{ Proved, Passed, Failed, Exhausted, GenException, PropException, Result }
+import org.scalacheck.util.{ FreqMap, Pretty }
+import Pretty._
 import scala.collection.Map
 import io.{Output, ConsoleOutput}
 import org.scalacheck._
@@ -127,7 +127,7 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
     // check the property with ScalaCheck
     val result = Test.check(params, prop)
 
-    def counterExampleMessage(args: Prop.Args, n: Int, labels: Set[String]) =
+    def counterExampleMessage(args: List[Prop.Arg[Any]], n: Int, labels: Set[String]) =
       "A counter-example is "+counterExample(args)+" (" + afterNTries(n) + afterNShrinks(args) + ")" + failedLabels(labels)
 
     result match {
@@ -189,7 +189,7 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
     else labels.mkString("\n", ", ", "\n")
   }
 
-  private[matcher] def frequencies(fq: Prop.FM)(implicit params: Pretty.Params) = {
+  private[matcher] def frequencies(fq: FreqMap[Set[Any]])(implicit params: Pretty.Params) = {
     if (fq.getRatios.isEmpty) ""
     else "\n" + Pretty.prettyFreqMap(fq)(params)
   }
@@ -243,7 +243,7 @@ trait ResultPropertyImplicits {
 
   /** @return a Prop that will not throw an exception when evaluated */
   implicit def propToProp(p: =>Prop): Prop = new Prop {
-    def apply(params: Prop.Params) = {
+    def apply(params: Gen.Parameters) = {
       try p(params)
       catch {
         case execute.FailureException(f) => (Prop.falsified :| (f.message+" ("+f.location+")"))(params)
@@ -258,7 +258,7 @@ trait ResultPropertyImplicits {
 
   implicit def resultProp(r: =>execute.Result): Prop = {
     new Prop {
-      def apply(params: Prop.Params) = {
+      def apply(params: Gen.Parameters) = {
         lazy val result = execute.ResultExecution.execute(r)
         val prop = 
         result match {
@@ -333,7 +333,7 @@ trait ScalaCheckParameters { outer: ScalaCheckMatchers with Output =>
             maxDiscardRatio: Float      = defaultParameters.maxDiscardRatio,
             maxSize: Int                = defaultParameters.maxSize,
             workers: Int                = defaultParameters.workers,
-            rng: java.util.Random       = defaultParameters.rng,
+            rng: scala.util.Random      = defaultParameters.rng,
             callback: Test.TestCallback = defaultParameters.callback,
             loader: Option[ClassLoader] = defaultParameters.loader): execute.Result =
       check(prop)(new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = false, outer))
@@ -348,7 +348,7 @@ trait ScalaCheckParameters { outer: ScalaCheckMatchers with Output =>
                 maxDiscardRatio: Float      = defaultParameters.maxDiscardRatio,
                 maxSize: Int                = defaultParameters.maxSize,
                 workers: Int                = defaultParameters.workers,
-                rng: java.util.Random       = defaultParameters.rng,
+                rng: scala.util.Random      = defaultParameters.rng,
                 callback: Test.TestCallback = defaultParameters.callback,
                 loader: Option[ClassLoader] = defaultParameters.loader): execute.Result =
       check(prop)(new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = true, outer))
@@ -360,7 +360,7 @@ trait ScalaCheckParameters { outer: ScalaCheckMatchers with Output =>
           maxDiscardRatio: Float      = defaultParameters.maxDiscardRatio,
           maxSize: Int                = defaultParameters.maxSize,
           workers: Int                = defaultParameters.workers,
-          rng: java.util.Random       = defaultParameters.rng,
+          rng: scala.util.Random      = defaultParameters.rng,
           callback: Test.TestCallback = defaultParameters.callback,
           loader: Option[ClassLoader] = defaultParameters.loader): Parameters =
     new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = false, outer)
@@ -371,7 +371,7 @@ trait ScalaCheckParameters { outer: ScalaCheckMatchers with Output =>
               maxDiscardRatio: Float      = defaultParameters.maxDiscardRatio,
               maxSize: Int                = defaultParameters.maxSize,
               workers: Int                = defaultParameters.workers,
-              rng: java.util.Random       = defaultParameters.rng,
+              rng: scala.util.Random      = defaultParameters.rng,
               callback: Test.TestCallback = defaultParameters.callback,
               loader: Option[ClassLoader] = defaultParameters.loader): Parameters =
     new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = true, outer)
@@ -388,7 +388,7 @@ case class Parameters(minTestsOk: Int             = Test.Parameters.default.minS
                       maxDiscardRatio: Float      = Test.Parameters.default.maxDiscardRatio,
                       maxSize: Int                = Test.Parameters.default.maxSize,
                       workers: Int                = Test.Parameters.default.workers,
-                      rng: java.util.Random       = Test.Parameters.default.rng,
+                      rng: scala.util.Random      = Test.Parameters.default.rng,
                       callback: Test.TestCallback = Test.Parameters.default.testCallback,
                       loader: Option[ClassLoader] = Test.Parameters.default.customClassLoader,
                       verbose: Boolean            = false,
@@ -398,14 +398,14 @@ case class Parameters(minTestsOk: Int             = Test.Parameters.default.minS
 
   def toScalaCheckParameters(implicit pretty: Pretty.Params): Test.Parameters =
     new Test.Parameters {
-      def minSuccessfulTests = outer.minTestsOk
-      def maxDiscardRatio    = outer.maxDiscardRatio
-      def maxSize            = outer.maxSize
-      def minSize            = outer.minSize
-      def workers            = outer.workers
-      def rng                = outer.rng
-      def testCallback       = outer.testCallback
-      def customClassLoader  = outer.loader
+      val minSuccessfulTests = outer.minTestsOk
+      val maxDiscardRatio    = outer.maxDiscardRatio
+      val maxSize            = outer.maxSize
+      val minSize            = outer.minSize
+      val workers            = outer.workers
+      val rng                = outer.rng
+      val testCallback       = outer.testCallback
+      val customClassLoader  = outer.loader
     }
 
   def verboseCallback(implicit pretty: Pretty.Params) = new Test.TestCallback {
