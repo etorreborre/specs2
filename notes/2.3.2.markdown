@@ -1,0 +1,13 @@
+Fixes on top of 2.3.1
+
+## Fixes
+
+ * better fix for the copy of html resources [#208](https://github.com/etorreborre/specs2/issues/208), thanks to Andreas Fierl! (@asfierl)
+ * fixed the indentation of mutable specfications [#209](https://github.com/etorreborre/specs2/issues/209)
+ * fixed the use of the `ExamplesBlock` trait when creating examples in a `foreach` loop in a mutable specification
+ * fixed the link to the examples directory on the welcome page (thanks to @jedws to reporting it)
+ * fixed the macro matchers for some synthetic methods on case classes
+
+
+ ==========================
+
