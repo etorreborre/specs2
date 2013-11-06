@@ -249,7 +249,7 @@ case object Step extends ImplicitParameters {
   def empty = Step(())
 
   private[specs2]
-  def either[T](r: =>Either[Result, T]): LazyParameter[Result] = lazyfy {
+  def either[T](r: =>Either[Result, T]): LazyParameter[Result] = lazyParameter {
     r match {
       case Left(l)               => l
       case Right(result: Result) => result
@@ -279,7 +279,7 @@ case object Step extends ImplicitParameters {
  *
  * It is only reported in case of a failure
  */
-case class Action (action: LazyParameter[Result] = lazyfy(Success()),
+case class Action (action: LazyParameter[Result] = lazyParameter(Success()),
                    location: Location = new Location,
                    isolable: Boolean = true, private[specs2] val creationPath: Option[CreationPath] = None) extends Fragment with Executable with Isolable { outer =>
 
