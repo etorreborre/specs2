@@ -15,6 +15,8 @@ import ReleaseKeys._
 import ReleaseStateTransformations._
 import Utilities._
 import Defaults._
+import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
+import com.typesafe.tools.mima.plugin.MimaKeys.previousArtifact
 
 object build extends Build {
   type Settings = Def.Setting[_]
@@ -28,6 +30,7 @@ object build extends Build {
       siteSettings             ++
       releaseSettings          ++
       rootSettings             ++
+      compatibilitySettings    ++
       Seq(name := "specs2")
   ).aggregate(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock)
   
@@ -343,6 +346,12 @@ object build extends Build {
       st
     }
   )
+
+  /**
+   * COMPATIBILITY
+   */
+  lazy val compatibilitySettings = mimaDefaultSettings ++
+    Seq(previousArtifact := Some("org.specs2" % "specs2_2.10" % "2.3.3"))
 
   /**
    * UTILITIES
