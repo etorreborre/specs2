@@ -328,7 +328,7 @@ As you also see above, named arguments can bring more readibility to the expecte
 #### Lazy cells
 
 Fields, Props and Forms are added right away to a row when building a Form with the `tr` method. If it is necessary to add
-them with a "call-by-name" behavior, the `lazyfy` method can be used: ${snippet{
+them with a "call-by-name" behavior, the `lazify` method can be used: ${snippet{
 
 def address = Address() // build an Address
 def customer = Customer()
@@ -336,7 +336,7 @@ def customer = Customer()
 Form("Customer").
   tr(prop("name", customer.name)("name")).
   // the address Form will be built only when the Customer Form is rendered
-  tr(lazyfy(address.actualIs(customer.address)))
+  tr(lazify(address.actualIs(customer.address)))
 }}
 
 #### Xml cells
