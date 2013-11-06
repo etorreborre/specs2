@@ -18,7 +18,7 @@ import Exceptions._
  */
 trait LazyParameters {
   /** transform a value to a zero-arg function returning that value */
-  implicit def lazyfy[T](value: =>T): LazyParameter[T] = new LazyParameter(() => value)
+  implicit def lazyParameter[T](value: =>T): LazyParameter[T] = new LazyParameter(() => value)
 }
 object LazyParameters extends LazyParameters
 
@@ -35,6 +35,6 @@ class LazyParameter[+T](private val v: () => T) {
   override def equals(o: Any) = value == o
   override def hashCode = value.hashCode
 
-  def map[S >: T](f: T => S) = LazyParameters.lazyfy(f(v()))
+  def map[S >: T](f: T => S) = LazyParameters.lazyParameter(f(value))
 }
 

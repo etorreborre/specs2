@@ -24,7 +24,7 @@ trait ExamplesIsolation { self: DefaultSelection =>
       if ((arguments <| args).isolated) {
         fragment match {
           case e: Example if e.isolable => e.copy(body = () => copyBody(name, e, e.body()))
-          case a: Action  if a.isolable => a.copy(action = lazyfy(copyBody(name, a, a.execute)))
+          case a: Action  if a.isolable => a.copy(action = lazyParameter(copyBody(name, a, a.execute)))
           case other                    => other
         }
       } else fragment

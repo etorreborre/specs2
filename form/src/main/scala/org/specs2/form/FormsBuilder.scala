@@ -38,7 +38,7 @@ trait FormsBuilder {
   }
 
   /** a cell can be added lazily to a row. It will only be evaluated when necessary */
-  def lazyfy(c: =>Cell) = new LazyCell(c)
+  def lazify(c: =>Cell) = new LazyCell(c)
 
   /** @return a new Form with the given title */
   def form(title: String) = Form(title)
