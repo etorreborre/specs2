@@ -62,7 +62,7 @@ object Markdown extends Markdown
  */
 case class Specs2Visitor(text: String, options: MarkdownOptions = MarkdownOptions()) extends org.pegdown.ToHtmlSerializer(new LinkRenderer) {
   override def visit(node: CodeNode) {
-    printTagAndAttribute(node, "code", "class", "prettyprint")
+    printCode(node)
   }
   override def visit(node: ParaNode) {
     super.visit(node)
@@ -88,12 +88,19 @@ case class Specs2Visitor(text: String, options: MarkdownOptions = MarkdownOption
     else super.visit(new VerbatimNode(node.getText, "prettyprint"))
   }
 
-  private def printTagAndAttribute(node: TextNode, tag: String, attributeName: String, attributeValue: String) {
-    printer.print('<').print(tag)
-    printer.print(' ').print(attributeName).print('=').print('"').print(attributeValue).print('"')
-    printer.print('>')
-    printer.printEncoded(node.getText())
-    printer.print('<').print('/').print(tag).print('>')
+  private def printCode(node: TextNode) {
+    val text = node.getText
+    if (text.contains("\n"))
+      printer.print("<pre>").
+        print("""<code class="prettyprint">""").
+        printEncoded(text.removeFirst("\n")).
+        print("</code>").
+        print("</pre>")
+    else
+      printer.
+        print("""<code class="prettyprint">""").
+        printEncoded(text).
+        print("</code>")
   }
 }
 
