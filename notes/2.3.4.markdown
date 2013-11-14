@@ -1,0 +1,12 @@
+Improvements and fixes on top of 2.3.2
+
+## Improvements 
+
+ * upgraded to ScalaCheck 1.11.0 [#211](https://github.com/etorreborre/specs2/issues/211)
+
+## Fixes
+
+ * implicitly converting to a SpecPart should not trigger an "auto-example" [#210](https://github.com/etorreborre/specs2/issues/210) 
+
+ ==========================
+
