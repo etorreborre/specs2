@@ -24,6 +24,6 @@ trait LinesContent[L1] {
  * Default implementation for reading lines out of a Seq
  */
 case class SeqLinesContent[A]() extends LinesContent[Seq[A]] {
-  def name(seq: Seq[A]) = "the sequence"
+  def name(seq: Seq[A]) = "sequence"
   def lines(seq: Seq[A]): Seq[String] = seq.map(_.toString)
 }

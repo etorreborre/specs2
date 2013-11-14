@@ -399,15 +399,15 @@ person must /("person") */("person") /("age" -> 33.0) // by default numbers are 
 
 You can as well use regular expressions or String matchers instead of values to verify the presence of keys or elements. For example: ${snippet{
 
-person must /("p.*".r) */(".*on".r) /("age" -> "\\d+\\.\\d".r)
-person must /("p.*".r) */(".*on".r) /("age" -> startWith("3"))
-person must /("p.*".r) */(".*on".r) /("age" -> (be_>(30) ^^ ((_:String).toInt)))
+person must /("p.*".r) */ ".*on".r /("age" -> "\\d+\\.\\d".r)
+person must /("p.*".r) */ ".*on".r /("age" -> startWith("3"))
+person must /("p.*".r) */ ".*on".r /("age" -> (be_>(30) ^^ ((_:String).toInt)))
 
 }}
 
 Finally you can access some records by their index: ${snippet{
 
-person must /("person") /#(2) /("person")
+person must /("person") /# 2 / "person"
 
 }}
 """
@@ -417,7 +417,7 @@ person must /("person") /#(2) /("person")
 object FileMatchers extends Card {
   def title = "File"
   def text = s2"""
-The Java api for files is more or less mimicked as matchers which can operate on strings denoting paths or on Files:
+The Java api for files is more or less mimicked as matchers which can operate on strings denoting paths or on Files (with the `org.specs2.matcher.FileMatchers` trait)
 
  * `beEqualToIgnoringSep` checks if 2 paths are the same regardless of their separators
  `"c:\temp\hello" must beEqualToIgnoringSep("c:/temp/hello")`
@@ -452,7 +452,10 @@ The Java api for files is more or less mimicked as matchers which can operate on
 object ContentMatchers extends Card with matcher.ContentMatchers {
   def title = "Content"
   def text = s2"""
-A few matchers can help us check the contents of files or actually anything containing lines of Strings. We can check that 2 files have the same lines: ${snippet{
+
+##### File contents
+
+The matchers from the `org.specs2.matcher.ContentMatchers` trait can help us check the contents of files. For example we can check that 2 text files have the same lines: ${snippet{
 (file1, file2) must haveSameLines
 file1 must haveSameLinesAs(file2)
 }}
@@ -463,7 +466,68 @@ file1 must containLines(file2)
 
 }}
 
-***LinesContent***
+If the files are binary files we can also check that they have the same MD5 hash: ${snippet{
+
+ (file1, file2) must haveSameMD5
+ file1 must haveSameMD5As(file2)
+
+}}
+
+***Order***
+
+It is possible to relax the constraint by requiring the equality or containment to be true regardless of the order of lines: ${snippet{
+
+ (file1, file2) must haveSameLines.unordered
+ file1 must haveSameLinesAs(file2).unordered
+ file1 must containLines(file2).unordered
+}}
+
+***Missing only***
+
+By default, `(file1, file2) must haveSameLines` will report misplaced lines if any, that is, lines of `f1` which appear in `f2` but not at the right position. However if `file2` is big, this search might degrade the performances. In that case you can turn it off with `missingOnly`: ${snippet{
+
+ (file1, file2) must haveSameLines.missingOnly
+
+}}
+
+***Show less differences***
+
+If there are too many differences, you can specify that you only want the first 10: ${snippet{
+
+ (file1, file2) must haveSameLines.showOnly(10.differences).unordered
+
+}}
+
+In the code above `10.differences` builds a `DifferenceFilter` which is merely a filtering function: `(lines1: Seq[String], lines2: Seq[String]) => (Seq[String], Seq[String])`. The parameter `lines1` is the sequence of lines not found in the second content while `lines2` is the sequence of lines not found in the first content.
+
+##### Directories contents
+
+We can compare the contents of 2 directories. We can for example check if no files are missing and none has been added: ${snippet{
+
+actualDir must haveSamePathsAs(expectedDir)
+// with a file filter applied to both the actual and expected directories
+actualDir must haveSamePathsAs(expectedDir).withFilter((file: File) => !file.isHidden)
+
+}}
+
+Once we know that all files are present we can check their content: ${snippet{
+
+// the default comparison expects that files are text files and that comparison must be done line by line
+actualDir must haveSameFilesAs(expectedDir)
+
+// with a file filter applied to both the actual and expected directories
+actualDir must haveSameFilesAs(expectedDir).withFilter((file: File) => !file.isHidden)
+
+// with a MD5 matcher for binary files
+actualDir must haveSameFilesAs(expectedDir).withMatcher(haveSameMD5)
+
+// it is also possible to only check the content of actual files when they exist in the expected directory
+actualDir must haveSameFilesContentAs(expectedDir)
+
+}}
+
+
+##### Lines contents
 
 Files are not the only possible source of lines and it is useful to be able to check the content of a `File` with a `Seq[String]`: ${snippet{
 
@@ -486,34 +550,9 @@ implicit def linesforMyType[T]: LinesContent[T] = new LinesContent[T] {
 
 }}
 
-***Order***
-
-It is possible to relax the constraint by requiring the equality or containment to be true regardless of the order of lines: ${snippet{
-
-(file1, file2) must haveSameLines.unordered
-file1 must haveSameLinesAs(file2).unordered
-file1 must containLines(file2).unordered
-}}
-
-***Missing only***
-
-By default, `(file1, file2) must haveSameLines` will report misplaced lines if any, that is, lines of `f1` which appear in `f2` but not at the right position. However if `file2` is big, this search might degrade the performances. In that case you can turn it off with `missingOnly`: ${snippet{
-
-(file1, file2) must haveSameLines.missingOnly
-
-}}
-
-***Show less differences***
-
-If there are too many differences, you can specify that you only want the first 10: ${snippet{
-
-(file1, file2) must haveSameLines.showOnly(10.differences).unordered
-
-}}
-
-In the code above `10.differences` builds a `DifferenceFilter` which is merely a filtering function: `(lines1: Seq[String], lines2: Seq[String]) => (Seq[String], Seq[String])`. The parameter `lines1` is the sequence of lines not found in the second content while `lines2` is the sequence of lines not found in the first content.
 """
   lazy val (file1, file2) = (new File(""), new File(""))
+  lazy val (actualDir, expectedDir) = (new File(""), new File(""))
   lazy val (line1, line2, line3) = ("", "", "")
 }
 

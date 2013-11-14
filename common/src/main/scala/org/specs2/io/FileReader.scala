@@ -8,6 +8,7 @@ import scala.xml.parsing._
 import scala.io.Source
 import scala.io.Source._
 import xml.Nodex._
+import text.MD5
 
 
 /**
@@ -16,16 +17,29 @@ import xml.Nodex._
  */
 private[specs2]
 trait FileReader {
-  def readLines(path: String) = scala.io.Source.fromFile(path).getLines.toIndexedSeq
+
+  /** @return the lines of a file */
+  def readLines(path: String): IndexedSeq[String] = {
+    if (hasContents(path)) scala.io.Source.fromFile(path).getLines.toIndexedSeq
+    else                   IndexedSeq()
+  }
+
+  /** @return the bytes of a file */
+  def readBytes(path: String): Array[Byte] = {
+    if (hasContents(path)) {
+      val stream = new BufferedInputStream(new FileInputStream(path))
+      try     Stream.continually(stream.read).takeWhile(-1 !=).map(_.toByte).toArray
+      finally stream.close
+    } else Array[Byte]()
+  }
+
   /**
    * reads the content of a file
    * @param path the path of the file to read
    * @return the content of the file at path
    */
   def readFile(path: String): String = {
-    if (!new File(path).exists)
-      ""
-    else {
+    if (hasContents(path)) {
       def appendLines(result: StringBuffer, in: BufferedReader, line: String): Unit = {
         if (line != null) {
           result.append(line)
@@ -33,18 +47,28 @@ trait FileReader {
           appendLines(result, in, in.readLine)
         }
       }
-      val in = new BufferedReader(new java.io.FileReader(path));
+      val in = new BufferedReader(new java.io.FileReader(path))
       try {
         val result = new StringBuffer
         appendLines(result, in, in.readLine)
         result.toString
-      } finally { in.close() }
-    }
+      } finally in.close
+    } else ""
   }
+
+  /** @return true if this path is an existing file which is not a directory */
+  private def hasContents(path: String) = new File(path).exists && !new File(path).isDirectory
+
   /**
    * @return a FileInputStream for a given file path
    */
   def inputStream(filePath: String): java.io.InputStream = new java.io.FileInputStream(filePath)
+
+  /** @return the MD5 hash of a file */
+  def md5(f: File): String = MD5.md5Hex(readBytes(f.getPath))
+
+  /** @return the path of a File relative to a base file */
+  def fromBaseFile(base: File) = (aFile: File) => Paths.from(base.getPath)(aFile.getPath)
 
   /**
    * @return the xml content of a file, using the XML parser

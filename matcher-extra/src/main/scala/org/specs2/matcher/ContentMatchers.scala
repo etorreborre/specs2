@@ -2,20 +2,24 @@ package org.specs2
 package matcher
 
 import java.io.File
-import text._
+import org.specs2.text._
 import io._
 import MatchResult._
 import scalaz.Scalaz._
+import MatchersImplicits._
 
 /**
  * The ContentMatchers trait provides matchers to make comparisons between files, sequences,...
  */
-trait ContentMatchers extends ContentBaseMatchers with ContentBeHaveMatchers
+trait ContentMatchers extends LinesContentMatchers with FilesContentMatchers
 object ContentMatchers extends ContentMatchers
 
-private[specs2]
-trait ContentBaseMatchers extends DifferenceFilters with Expectations with SeqsContents {
+trait LinesContentMatchers extends LinesContentBaseMatchers with LinesContentBeHaveMatchers
+object LinesContentMatchers extends LinesContentMatchers
 
+private[specs2]
+trait LinesContentBaseMatchers extends FileReader with DifferenceFilters with Expectations with SeqsContents {
+  
   /** matches if 2 contents, as a pair, have the same lines */
   def haveSameLines[L1 : LinesContent, L2 : LinesContent]: LinesPairComparisonMatcher[L1, L2] =
     LinesPairComparisonMatcher[L1, L2]()
@@ -63,10 +67,10 @@ trait ContentBaseMatchers extends DifferenceFilters with Expectations with SeqsC
     def unordered                        = copy[L1, L2](isUnordered = true)
     def missingOnly                      = copy[L1, L2](reportMisplaced = false)
 
-    protected def showDiffs(s: Seq[_]) = s.map("  "+_).mkString("\n")
+    protected def showDiffs(s: Seq[_]) = s.map("    "+_).mkString("", "\n", "\n")
     protected def inANotB(n1: String, n2: String) = {
-      if (isUnordered || reportMisplaced) "in "+n1+", not in "+n2+"\n"
-      else                                "in "+n1+", not in "+n2+" on the same line\n"
+      if (isUnordered || reportMisplaced) "  in "+n1+", not in "+n2+"\n"
+      else                                "  in "+n1+", not in "+n2+" on the same line\n"
 
     }
 
@@ -113,7 +117,7 @@ trait SeqsContents {
 }
 
 private[specs2]
-trait ContentBeHaveMatchers { this: ContentBaseMatchers =>
+trait LinesContentBeHaveMatchers { this: LinesContentBaseMatchers =>
   /**
    * matcher aliases and implicits to use with BeVerb and HaveVerb
    */

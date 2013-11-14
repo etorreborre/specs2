@@ -30,6 +30,7 @@ trait Paths { outer =>
   def relativeTo(p1: String, p2: String) = (p2.baseDir+p1).normalize
   def unrelativeTo(p1: String, p2: String) = if (p1.isRelative) p2.parentDir + p1.fileName else p1
   def fromTop(s: String) = relativeTo(s, s)
+  def from(base: String) = (_:String).replaceFirst(s"\\Q$base\\E/", "")
 }
 
 case class Path(s: String) {
@@ -47,6 +48,7 @@ case class Path(s: String) {
   def relativeTo(path: String) = Paths.relativeTo(s, path)
   def unrelativeTo(path: String) = Paths.unrelativeTo(s, path)
   def fromTop = Paths.fromTop(s)
+  def from(base: String) = Paths.from(base)(s)
 }
 
 private[specs2]

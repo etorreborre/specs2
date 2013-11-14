@@ -144,7 +144,7 @@ object build extends Build {
     settings = Seq(
       addCompilerPlugin("org.scala-lang.plugins" % "macro-paradise_2.10.3-RC1" % "2.0.0-SNAPSHOT")) ++
       moduleSettings
-  ).dependsOn(analysis, scalacheck, matcher)
+  ).dependsOn(analysis, scalacheck, matcher, core % "test->test")
 
   lazy val mock = Project(id = "specs2-mock", base = file("mock"),
     settings = Seq(

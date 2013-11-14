@@ -124,7 +124,7 @@ There are some available shortcuts for some arguments
  `showOnly(status: String)`                                            | `args(showOnly=status)`                                                               |                                                                                                |
  `descFromExpectations`                                                | `args.report(fromSource=false)`                                                              | create the example description for the ok message of the expectation instead of the source file  |
  `fullStackTrace`                                                      | `args.report(traceFilter=NoStackTraceFilter)`                                                | the stacktraces are not filtered                                                                 |
- `diffs(show, separators, triggerSize, shortenSize, diffRatio, full)`  | `args.report(diffs=SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full)`  | to display the differences when doing equality comparison                                        |
+ `diffs(show, separators, triggerSize, shortenSize, diffRatio, full)`  | `args.report(diffs=SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full))`  | to display the differences when doing equality comparison                                        |
 
 ##### Output directory
 

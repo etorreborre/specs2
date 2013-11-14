@@ -61,7 +61,7 @@ case class LinesContentDifference(
 
   // all && unordered
   private lazy val showNotOrdered: Diffs = {
-    val compareLine = ((p: (String, Int), o: String) => p._1 == o)
+    val compareLine = (p: (String, Int), o: String) => p._1 == o
     (lines1.zipWithIndex.delta(lines2, compareLine).map { case (l, i) => NotFoundLine(l, i+1) },
      lines2.zipWithIndex.delta(lines1, compareLine).map { case (l, i) => NotFoundLine(l, i+1) })
   }
