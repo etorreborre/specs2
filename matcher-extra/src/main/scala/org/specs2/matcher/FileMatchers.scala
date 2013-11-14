@@ -10,7 +10,10 @@ trait PathMatchers extends PathBaseMatchers with PathBeHaveMatchers
 object PathMatchers extends PathMatchers
 
 private[specs2]
-trait PathBaseMatchers extends FileSystem { outer =>
+trait PathBaseMatchers { outer =>
+  private[specs2] val fileSystem = org.specs2.io.fs
+  import fileSystem._
+
   /** matches if new File(path).exists */   
   def beAnExistingPath = new PathMatcher((s: String) => exists(s), "exists", "doesn't exist")
   /** matches if new File(path).canRead */   

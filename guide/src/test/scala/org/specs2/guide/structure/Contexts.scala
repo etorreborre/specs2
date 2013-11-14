@@ -6,8 +6,9 @@ import specification.{Step, Action, Around, Before, After, Outside, AroundOutsid
 import mutable.NameSpace
 import execute._
 import matcher.FileMatchers
+import io._
 
-object Contexts extends UserGuidePage with FileMatchers { def is = ""
+object Contexts extends UserGuidePage with FileMatchers with FileSystem { def is = ""
   val section = s2"""
 
 ### Contexts
