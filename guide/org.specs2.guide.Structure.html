@@ -67,7 +67,7 @@
     </head><body><div id="breadcrumbs"><a href="../guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../guide/org.specs2.guide.Structure.html">Structure</a></div><div class="colmask threecol">
             <div class="colmid">
               <div class="colleft">
-                <div class="col1"><div id="central"><html><title>Structure</title><a name="Structure"><h2 specId="592104623">Structure</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Presentation"><h3>Presentation</h3></a><p>In this section you will learn how to:</p>
+                <div class="col1"><div id="central"><html><title>Structure</title><a name="Structure"><h2 specId="1931723041">Structure</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Presentation"><h3>Presentation</h3></a><p>In this section you will learn how to:</p>
 <ul>
   <li>create examples and expectations</li>
   <li>define contexts to execute actions before/after examples</li>
@@ -175,11 +175,10 @@ beNone checks if an element is None
 ${ None must beNone }
 ${ Some(1) must not be none }
 &quot;&quot;&quot;
-</code></pre><p>In that case, the text of the example will be extracted from the source file and the output will be:<br /><code class="prettyprint">
-beNone checks if an element is None
+</code></pre><p>In that case, the text of the example will be extracted from the source file and the output will be:<br /><pre><code class="prettyprint">beNone checks if an element is None
 + None must beNone
 + Some(1) must not be none
-</code></p><a name="G+%2F+W+%2FT"><h4>G / W /T</h4></a><p>The Given/When/Then style for writing specifications is described <a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html">here</a>.</p><a name="DataTables"><h4>DataTables</h4></a><p><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a> are generally used to pack lots of expectations inside one example. A DataTable which is used as a <code class="prettyprint">Result</code> in the body of an Example will only be displayed when failing. If, on the other hand you want to display the table even when successful, to document your examples, you can omit the example description and inline the DataTable directly in the specification: </p>
+</code></pre></p><a name="G+%2F+W+%2FT"><h4>G / W /T</h4></a><p>The Given/When/Then style for writing specifications is described <a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html">here</a>.</p><a name="DataTables"><h4>DataTables</h4></a><p><a href="org.specs2.guide.Matchers.html#DataTables">DataTables</a> are generally used to pack lots of expectations inside one example. A DataTable which is used as a <code class="prettyprint">Result</code> in the body of an Example will only be displayed when failing. If, on the other hand you want to display the table even when successful, to document your examples, you can omit the example description and inline the DataTable directly in the specification: </p>
 <pre><code class="prettyprint">class DataTableSpec extends Specification with matcher.DataTables { def is =
 
   &quot;adding integers should just work in scala&quot;  ^ {
@@ -189,11 +188,10 @@ beNone checks if an element is None
      { (a, b, c) =&gt;  a + b must_== c }
   }
 }
-</code></pre><p>This specification will be rendered as:<br /><code class="prettyprint">adding integers should just work in scala
-+  a | b | c |
+</code></pre><p>This specification will be rendered as:<br /><pre><code class="prettyprint">adding integers should just work in scala+  a | b | c |
    2 | 2 | 4 |
    1 | 1 | 2 |
-</code></p><a name="Example+groups"><h4>Example groups</h4></a><p>When you create acceptance specifications, you have to find names to reference your examples, which can sometimes be a bit tedious. You can then get some support from the <code class="prettyprint">org.specs2.specification.Grouped</code> trait. This trait provides group traits, named <code class="prettyprint">g1</code> to <code class="prettyprint">g22</code> to define groups of examples. Each group trait defines 22 variables named <code class="prettyprint">e1</code> to <code class="prettyprint">e22</code>, to define examples bodies. The specification below shows how to use the <code class="prettyprint">Grouped</code> trait: </p>
+</code></pre></p><a name="Example+groups"><h4>Example groups</h4></a><p>When you create acceptance specifications, you have to find names to reference your examples, which can sometimes be a bit tedious. You can then get some support from the <code class="prettyprint">org.specs2.specification.Grouped</code> trait. This trait provides group traits, named <code class="prettyprint">g1</code> to <code class="prettyprint">g22</code> to define groups of examples. Each group trait defines 22 variables named <code class="prettyprint">e1</code> to <code class="prettyprint">e22</code>, to define examples bodies. The specification below shows how to use the <code class="prettyprint">Grouped</code> trait: </p>
 <pre><code class="prettyprint">class MySpecification extends Specification with Examples { def is =  s2&quot;&quot;&quot;
   first example in first group                                        ${g1.e1}
   second example in first group                                       ${g1.e2}
@@ -748,10 +746,10 @@ class MutableSpec extends Specification {
     def e1 = string must have size(7)
   }
 }
-</code></pre></div></status><status class="ok"><div style="display: show; text-indent:10px;"><hr /></div></status><subtoc specId="1449509731"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../images/icon_success_sml.gif" /> <a href="../guide/org.specs2.guide.structure.FragmentsApi.html" tooltip="">Fragments API</a></div></status><subtoc specId="878558412"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../images/icon_success_sml.gif" /> <a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html" tooltip="">Given When Then</a></div></status></html></div></div>
+</code></pre></div></status><status class="ok"><div style="display: show; text-indent:10px;"><hr /></div></status><subtoc specId="734401157"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../images/icon_success_sml.gif" /> <a href="../guide/org.specs2.guide.structure.FragmentsApi.html" tooltip="">Fragments API</a></div></status><subtoc specId="1145403267"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../images/icon_success_sml.gif" /> <a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html" tooltip="">Given When Then</a></div></status></html></div></div>
                 <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="1612722446"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1936131274"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1174828371"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="5150006"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -761,7 +759,7 @@ class MutableSpec extends Specification {
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="592104623"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1931723041"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -872,7 +870,7 @@ class MutableSpec extends Specification {
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Methods">Methods</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Full+example">Full example</a>
-            <ul><li id="1449509731"><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
+            <ul><li id="734401157"><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Rules">Rules</a>
@@ -890,7 +888,7 @@ class MutableSpec extends Specification {
           </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Unit+specification">Unit specification</a>
             
           </li></ul>
-          </li><li id="878558412"><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then_1">Given When Then</a>
+          </li><li id="1145403267"><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then_1">Given When Then</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then">Given When Then</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Parsing">Parsing</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Delimited+parsers">Delimited parsers</a>
@@ -909,7 +907,7 @@ class MutableSpec extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="351731694"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="701439006"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -920,7 +918,13 @@ class MutableSpec extends Specification {
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Out+of+the+box">Out of the box</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Optional">Optional</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#File+contents">File contents</a>
             
+          </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Directories+contents">Directories contents</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Lines+contents">Lines contents</a>
+            
+          </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Custom">Custom</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#From+functions">From functions</a>
             
@@ -973,7 +977,7 @@ class MutableSpec extends Specification {
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1200647239"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="951465230"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
@@ -1017,7 +1021,7 @@ class MutableSpec extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="368106536"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="477985935"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1103,7 +1107,7 @@ class MutableSpec extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1031578687"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="991642750"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -1151,7 +1155,7 @@ class MutableSpec extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="399484982"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="1075587169"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1197,7 +1201,7 @@ class MutableSpec extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="214130109"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="660529600"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1217,7 +1221,7 @@ class MutableSpec extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['1612722446','592104623'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['1174828371','1931723041'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                 <div class="col3"><div id="rightcolumn"></div></div>
               </div>

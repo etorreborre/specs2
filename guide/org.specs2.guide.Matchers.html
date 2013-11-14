@@ -67,7 +67,7 @@
     </head><body><div id="breadcrumbs"><a href="../guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../guide/org.specs2.guide.Matchers.html">Matchers</a></div><div class="colmask threecol">
             <div class="colmid">
               <div class="colleft">
-                <div class="col1"><div id="central"><html><title>Matchers</title><a name="Matchers"><h2 specId="351731694">Matchers</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
+                <div class="col1"><div id="central"><html><title>Matchers</title><a name="Matchers"><h2 specId="701439006">Matchers</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
 <ul>
   <li>Boolean</li>
   <li>Standard result</li>
@@ -337,10 +337,10 @@ val person = &quot;&quot;&quot;{
   }
 }
 </code></pre><p>You can use these combinations: <code class="prettyprint">person must /(&quot;person&quot;) */(&quot;person&quot;) /(&quot;age&quot; -&gt; 33.0)</code></p><p>You can as well use regular expressions or String matchers instead of values to verify the presence of keys or elements. For example: </p>
-<pre><code class="prettyprint">person must /(&quot;p.*&quot;.r) */(&quot;.*on&quot;.r) /(&quot;age&quot; -&gt; &quot;\\d+\\.\\d&quot;.r)
-person must /(&quot;p.*&quot;.r) */(&quot;.*on&quot;.r) /(&quot;age&quot; -&gt; startWith(&quot;3&quot;))
-person must /(&quot;p.*&quot;.r) */(&quot;.*on&quot;.r) /(&quot;age&quot; -&gt; (be_&gt;(30) ^^ ((_:String).toInt)))
-</code></pre><p>Finally you can access some records by their index: <code class="prettyprint">person must /(&quot;person&quot;) /#(2) /(&quot;person&quot;)</code></p></td></tr></table></form></div><div class="tabbertab" title="File"><form><table class="dataTable"><tr><td class="none" style="info"><p>The Java api for files is more or less mimicked as matchers which can operate on strings denoting paths or on Files:</p>
+<pre><code class="prettyprint">person must /(&quot;p.*&quot;.r) */ &quot;.*on&quot;.r /(&quot;age&quot; -&gt; &quot;\\d+\\.\\d&quot;.r)
+person must /(&quot;p.*&quot;.r) */ &quot;.*on&quot;.r /(&quot;age&quot; -&gt; startWith(&quot;3&quot;))
+person must /(&quot;p.*&quot;.r) */ &quot;.*on&quot;.r /(&quot;age&quot; -&gt; (be_&gt;(30) ^^ ((_:String).toInt)))
+</code></pre><p>Finally you can access some records by their index: <code class="prettyprint">person must /(&quot;person&quot;) /# 2 / &quot;person&quot;</code></p></td></tr></table></form></div><div class="tabbertab" title="File"><form><table class="dataTable"><tr><td class="none" style="info"><p>The Java api for files is more or less mimicked as matchers which can operate on strings denoting paths or on Files (with the <code class="prettyprint">org.specs2.matcher.FileMatchers</code> trait)</p>
 <ul>
   <li><code class="prettyprint">beEqualToIgnoringSep</code> checks if 2 paths are the same regardless of their separators<br />  <code class="prettyprint">&quot;c:\temp\hello&quot; must beEqualToIgnoringSep(&quot;c:/temp/hello&quot;)</code></li>
   <li><code class="prettyprint">beAnExistingPath</code> checks if a path exists</li>
@@ -367,10 +367,33 @@ person must /(&quot;p.*&quot;.r) */(&quot;.*on&quot;.r) /(&quot;age&quot; -&gt; 
   <li><code class="prettyprint">haveCanonicalPath</code> checks if afile has a given canonical path</li>
   <li><code class="prettyprint">haveParent</code> checks if a file has a given parent path</li>
   <li><code class="prettyprint">haveList</code> checks if a file has a given list of children</li>
-</ul></td></tr></table></form></div><div class="tabbertab" title="Content"><form><table class="dataTable"><tr><td class="none" style="info"><p>A few matchers can help us check the contents of files or actually anything containing lines of Strings. We can check that 2 files have the same lines: </p>
+</ul></td></tr></table></form></div><div class="tabbertab" title="Content"><form><table class="dataTable"><tr><td class="none" style="info"><a name="File+contents"><h5>File contents</h5></a><p>The matchers from the <code class="prettyprint">org.specs2.matcher.ContentMatchers</code> trait can help us check the contents of files. For example we can check that 2 text files have the same lines: </p>
 <pre><code class="prettyprint">(file1, file2) must haveSameLines
 file1 must haveSameLinesAs(file2)
-</code></pre><p>We can check that the content of one file is contained in another one: <code class="prettyprint">file1 must containLines(file2)</code></p><p><strong><em>LinesContent</em></strong></p><p>Files are not the only possible source of lines and it is useful to be able to check the content of a <code class="prettyprint">File</code> with a <code class="prettyprint">Seq[String]</code>: <code class="prettyprint">file1 must haveSameLinesAs(Seq(line1, line2, line3))</code></p><p>This is because those 2 types implement the <code class="prettyprint">org.specs2.text.LinesContent</code> trait, defining:</p>
+</code></pre><p>We can check that the content of one file is contained in another one: <code class="prettyprint">file1 must containLines(file2)</code></p><p>If the files are binary files we can also check that they have the same MD5 hash: </p>
+<pre><code class="prettyprint">(file1, file2) must haveSameMD5
+ file1 must haveSameMD5As(file2)
+</code></pre><p><strong><em>Order</em></strong></p><p>It is possible to relax the constraint by requiring the equality or containment to be true regardless of the order of lines: </p>
+<pre><code class="prettyprint">(file1, file2) must haveSameLines.unordered
+ file1 must haveSameLinesAs(file2).unordered
+ file1 must containLines(file2).unordered
+</code></pre><p><strong><em>Missing only</em></strong></p><p>By default, <code class="prettyprint">(file1, file2) must haveSameLines</code> will report misplaced lines if any, that is, lines of <code class="prettyprint">f1</code> which appear in <code class="prettyprint">f2</code> but not at the right position. However if <code class="prettyprint">file2</code> is big, this search might degrade the performances. In that case you can turn it off with <code class="prettyprint">missingOnly</code>: <code class="prettyprint">(file1, file2) must haveSameLines.missingOnly</code></p><p><strong><em>Show less differences</em></strong></p><p>If there are too many differences, you can specify that you only want the first 10: <code class="prettyprint">(file1, file2) must haveSameLines.showOnly(10.differences).unordered</code></p><p>In the code above <code class="prettyprint">10.differences</code> builds a <code class="prettyprint">DifferenceFilter</code> which is merely a filtering function: <code class="prettyprint">(lines1: Seq[String], lines2: Seq[String]) =&gt; (Seq[String], Seq[String])</code>. The parameter <code class="prettyprint">lines1</code> is the sequence of lines not found in the second content while <code class="prettyprint">lines2</code> is the sequence of lines not found in the first content.</p><a name="Directories+contents"><h5>Directories contents</h5></a><p>We can compare the contents of 2 directories. We can for example check if no files are missing and none has been added: </p>
+<pre><code class="prettyprint">actualDir must haveSamePathsAs(expectedDir)
+// with a file filter applied to both the actual and expected directories
+actualDir must haveSamePathsAs(expectedDir).withFilter((file: File) =&gt; !file.isHidden)
+</code></pre><p>Once we know that all files are present we can check their content: </p>
+<pre><code class="prettyprint">// the default comparison expects that files are text files and that comparison must be done line by line
+actualDir must haveSameFilesAs(expectedDir)
+
+// with a file filter applied to both the actual and expected directories
+actualDir must haveSameFilesAs(expectedDir).withFilter((file: File) =&gt; !file.isHidden)
+
+// with a MD5 matcher for binary files
+actualDir must haveSameFilesAs(expectedDir).withMatcher(haveSameMD5)
+
+// it is also possible to only check the content of actual files when they exist in the expected directory
+actualDir must haveSameFilesContentAs(expectedDir)
+</code></pre><a name="Lines+contents"><h5>Lines contents</h5></a><p>Files are not the only possible source of lines and it is useful to be able to check the content of a <code class="prettyprint">File</code> with a <code class="prettyprint">Seq[String]</code>: <code class="prettyprint">file1 must haveSameLinesAs(Seq(line1, line2, line3))</code></p><p>This is because those 2 types implement the <code class="prettyprint">org.specs2.text.LinesContent</code> trait, defining:</p>
 <ul>
   <li>a name for the overall content</li>
   <li>a method for returning the lines</li>
@@ -380,11 +403,7 @@ file1 must haveSameLinesAs(file2)
   def name(t: T) = &quot;My list of lines&quot;
   def lines(t: T): Seq[String] = Seq()// your implementation goes here
 }
-</code></pre><p><strong><em>Order</em></strong></p><p>It is possible to relax the constraint by requiring the equality or containment to be true regardless of the order of lines: </p>
-<pre><code class="prettyprint">(file1, file2) must haveSameLines.unordered
-file1 must haveSameLinesAs(file2).unordered
-file1 must containLines(file2).unordered
-</code></pre><p><strong><em>Missing only</em></strong></p><p>By default, <code class="prettyprint">(file1, file2) must haveSameLines</code> will report misplaced lines if any, that is, lines of <code class="prettyprint">f1</code> which appear in <code class="prettyprint">f2</code> but not at the right position. However if <code class="prettyprint">file2</code> is big, this search might degrade the performances. In that case you can turn it off with <code class="prettyprint">missingOnly</code>: <code class="prettyprint">(file1, file2) must haveSameLines.missingOnly</code></p><p><strong><em>Show less differences</em></strong></p><p>If there are too many differences, you can specify that you only want the first 10: <code class="prettyprint">(file1, file2) must haveSameLines.showOnly(10.differences).unordered</code></p><p>In the code above <code class="prettyprint">10.differences</code> builds a <code class="prettyprint">DifferenceFilter</code> which is merely a filtering function: <code class="prettyprint">(lines1: Seq[String], lines2: Seq[String]) =&gt; (Seq[String], Seq[String])</code>. The parameter <code class="prettyprint">lines1</code> is the sequence of lines not found in the second content while <code class="prettyprint">lines2</code> is the sequence of lines not found in the first content.</p></td></tr></table></form></div><div class="tabbertab" title="Scala Interpreter"><form><table class="dataTable"><tr><td class="none" style="info"><p>In the rare case where you want to use the Scala interpreter and execute a script: </p>
+</code></pre></td></tr></table></form></div><div class="tabbertab" title="Scala Interpreter"><form><table class="dataTable"><tr><td class="none" style="info"><p>In the rare case where you want to use the Scala interpreter and execute a script: </p>
 <pre><code class="prettyprint">class ScalaInterpreterMatchersSpec extends mutable.Specification with ScalaInterpreterMatchers {
   def interpret(s: String): String = &quot;&quot; // you have to provide your own Scala interpreter here
 
@@ -489,7 +508,7 @@ org.specs2.main x-&gt; org.specs2.io because org.specs2.io.FileSystem -&gt; org.
 </code></pre><p><strong><em>Alternative implementation</em></strong></p><p>Another implementation of the same functionality is available through the <code class="prettyprint">org.specs2.analysis.CompilerDependencyFinder</code> trait. This implementation uses the compiler dependency analysis functionality but needs more time, since it recompiles the sources.</p><p>The source files are taken from the <code class="prettyprint">src/main/scala</code> directory by default but you can change this value by using the <code class="prettyprint">Layers.inSourceDir</code> method.</p><p>While this implementation is slower than the Classycle one, it might retrieve more dependencies, for example when constants are inlined in class files.</p><p>Note: since this functionality relies on the scala compiler library, so you need to add it to your build file:</p>
 <pre><code class="prettyprint">// use sbt's scalaVersion Setting to define the scala-compiler library version
 libraryDependencies &lt;&lt;= scalaVersion { scala_version =&gt; Seq(
-  &quot;org.specs2&quot; %% &quot;specs2&quot; % 2.3.3 % &quot;test&quot;,
+  &quot;org.specs2&quot; %% &quot;specs2&quot; % 2.3.4 % &quot;test&quot;,
   &quot;org.scala-lang&quot; % &quot;scala-compiler&quot; % scala_version % &quot;test&quot;)
 }
 </code></pre></td></tr></table></form></div></div></td></tr></table></form></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Custom"><h4>Custom</h4></a><p>There are many ways to create matchers for your specific usage. The simplest way is to reuse the existing ones:</p>
@@ -874,7 +893,7 @@ there was one(amount).show(anyFunction2)
 <ul>
   <li>with an acceptance specification: use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance)</li>
   <li>with a unit specification: use the <code class="prettyprint">org.specs2.mutable.Tables</code> trait instead of <code class="prettyprint">org.specs2.matcher.DataTables</code> trait. This will &quot;deactivate&quot; the implicit used to create examples with <code class="prettyprint">!</code></li>
-</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="1200647239"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../images/icon_success_sml.gif" /> Here's <a href="../guide/org.specs2.guide.FormsPage.html" tooltip="">how to use Forms</a></div></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
+</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="951465230"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../images/icon_success_sml.gif" /> Here's <a href="../guide/org.specs2.guide.FormsPage.html" tooltip="">how to use Forms</a></div></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
 <ul>
   <li><p><code class="prettyprint">org.specs2.matcher.MustMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldMatchers</code>) to write anything like <code class="prettyprint">1 must be_==(1)</code> and<br />    get a <code class="prettyprint">Result</code> back</p></li>
   <li><p>You can also use the side-effecting version of that trait called <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldThrownMatchers</code>).<br />    It throws a <code class="prettyprint">FailureException</code> as soon as an expectation is failing. Those traits can also be used in a regular<br />    Specification if you have several expectations per example and if you don't want to chain them with <code class="prettyprint">and</code>.</p></li>
@@ -891,12 +910,12 @@ there was one(amount).show(anyFunction2)
 </code></pre>
 <hr /></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Matchers</th></tr>
-        <tr><td>Finished in</td><td class="info">457 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">622 ms</td></tr>
         <tr><td>Results</td><td class="success">47 examples, 539 expectations, 0 failure, 0 error</td></tr>
       </table></html></div></div>
                 <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="1612722446"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1936131274"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1174828371"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="5150006"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -906,7 +925,7 @@ there was one(amount).show(anyFunction2)
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="592104623"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1931723041"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -1017,7 +1036,7 @@ there was one(amount).show(anyFunction2)
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Methods">Methods</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Full+example">Full example</a>
-            <ul><li id="1449509731"><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
+            <ul><li id="734401157"><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Rules">Rules</a>
@@ -1035,7 +1054,7 @@ there was one(amount).show(anyFunction2)
           </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Unit+specification">Unit specification</a>
             
           </li></ul>
-          </li><li id="878558412"><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then_1">Given When Then</a>
+          </li><li id="1145403267"><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then_1">Given When Then</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then">Given When Then</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Parsing">Parsing</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Delimited+parsers">Delimited parsers</a>
@@ -1054,7 +1073,7 @@ there was one(amount).show(anyFunction2)
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="351731694"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="701439006"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1065,7 +1084,13 @@ there was one(amount).show(anyFunction2)
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Out+of+the+box">Out of the box</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Optional">Optional</a>
+            <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#File+contents">File contents</a>
             
+          </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Directories+contents">Directories contents</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Lines+contents">Lines contents</a>
+            
+          </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Custom">Custom</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#From+functions">From functions</a>
             
@@ -1118,7 +1143,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1200647239"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="951465230"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
@@ -1162,7 +1187,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li></ul>
-          </li><li id="368106536"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="477985935"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1248,7 +1273,7 @@ there was one(amount).show(anyFunction2)
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1031578687"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="991642750"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -1296,7 +1321,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li></ul>
-          </li><li id="399484982"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="1075587169"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1342,7 +1367,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li></ul>
-          </li><li id="214130109"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="660529600"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1362,7 +1387,7 @@ there was one(amount).show(anyFunction2)
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['1612722446','351731694'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['1174828371','701439006'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                 <div class="col3"><div id="rightcolumn"></div></div>
               </div>
