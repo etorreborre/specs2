@@ -63,11 +63,11 @@
            tabber code, then the init code -->
       <script type="text/javascript" src="./../../css/tabber.js"></script>
       <link rel="stylesheet" href="./../../css/tabber.css" type="text/css" media="screen" />
-      <title>GivenWhenThenPage</title>
+      <title>Given When Then</title>
     </head><body><div id="breadcrumbs"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html">Structure</a><t> / </t><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html">GivenWhenThenPage</a></div><div class="colmask threecol">
             <div class="colmid">
               <div class="colleft">
-                <div class="col1"><div id="central"><html><title>GivenWhenThenPage</title><a name="GivenWhenThenPage"><h2 specId="588178946">GivenWhenThenPage</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Given+When+Then"><h3>Given When Then</h3></a><p>The Given/When/Then style of writing specifications is supported by the use of the <code class="prettyprint">GWT</code> trait (there is also <a href="org.specs2.guide.structure.GivenWhenThenDeprecatedPage.html">another way</a> but it is not recommended because it leads to performance issues at compile-time).</p><p>Here is a simple example of a Given/When/Then specification using the <code class="prettyprint">GWT</code> trait: </p></div></status><status class="ok"><div style="display: show; text-indent:5px;"><pre><code class="prettyprint">class Calculator extends Specification with GWT with StandardDelimitedStepParsers { def is = s2&quot;&quot;&quot;
+                <div class="col1"><div id="central"><html><title>Given When Then</title><a name="Given+When+Then"><h2 specId="2087942734">Given When Then</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Given+When+Then_1"><h3>Given When Then</h3></a><p>The Given/When/Then style of writing specifications is supported by the use of the <code class="prettyprint">GWT</code> trait.</p><p>Here is a simple example of a Given/When/Then specification using the <code class="prettyprint">GWT</code> trait: </p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><pre><code class="prettyprint">class Calculator extends Specification with GWT with StandardDelimitedStepParsers { def is = s2&quot;&quot;&quot;
 
  Let's add numbers!
 
@@ -82,7 +82,7 @@
                         andThen(anInt) { case expected :: sum :: _ =&gt; sum === expected }
 
 }
-</code></pre></div></status><status class="ok"><div style="display: show; text-indent:10px;"><p>The first thing you can notice is that in specs2 you are not forced to use &quot;Given&quot;/&quot;When&quot;/&quot;Then&quot; as keywords. Those words are only guidelines to structure your scenario along the <a href="http://c2.com/cgi/wiki?ArrangeActAssert">&quot;Arrange/Act/Assert&quot;</a> way of testing. Then you can see that the text contains some values delimited with <code class="prettyprint">{}</code> and is annotated with the &quot;start&quot; and &quot;end&quot; of a <code class="prettyprint">Scenario</code>, linking the text to some code. This is indeed the general pattern for writing GWT specifications:</p>
+</code></pre></div></status><status class="ok"><div style="display: show; text-indent:0px;"><p>The first thing you can notice is that in specs2 you are not forced to use &quot;Given&quot;/&quot;When&quot;/&quot;Then&quot; as keywords. Those words are only guidelines to structure your scenario along the <a href="http://c2.com/cgi/wiki?ArrangeActAssert">&quot;Arrange/Act/Assert&quot;</a> way of testing. Then you can see that the text contains some values delimited with <code class="prettyprint">{}</code> and is annotated with the &quot;start&quot; and &quot;end&quot; of a <code class="prettyprint">Scenario</code>, linking the text to some code. This is indeed the general pattern for writing GWT specifications:</p>
 <ol>
   <li>write a piece of <strong><em><code class="prettyprint">s2</code></em></strong> text containing with some values delimited by <code class="prettyprint">{}</code></li>
   <li>define or reuse <code class="prettyprint">StepParsers</code> to extract well-typed values from strings</li>
@@ -92,7 +92,7 @@
 </code></pre><p>You don't need to worry about catching exceptions, the <code class="prettyprint">DelimitedStepParser</code> class (which is the type of object effectively created) will handle that for you.</p><p>If necessary you can change the delimiters by overriding the implicit regular expression from the <code class="prettyprint">StepParsers</code> trait </p>
 <pre><code class="prettyprint">// use `[]` as a delimiter
 override implicit lazy val stepParserRegex = new Regex(&quot;\\[([^\\]]+)\\]&quot;)
-</code></pre><a name="Regex+parsers"><h5>Regex parsers</h5></a><p>The other type of step parsers is <code class="prettyprint">RegexStepParser</code>. Those parsers are using regular expressions with groups to extract values. You can create them with the <code class="prettyprint">readAs</code> and <code class="prettyprint">groupAs</code> methods </p></div></status><status class="ok"><div style="display: show; text-indent:15px;"><pre><code class="prettyprint">// match the whole line
+</code></pre><a name="Regex+parsers"><h5>Regex parsers</h5></a><p>The other type of step parsers is <code class="prettyprint">RegexStepParser</code>. Those parsers are using regular expressions with groups to extract values. You can create them with the <code class="prettyprint">readAs</code> and <code class="prettyprint">groupAs</code> methods </p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><pre><code class="prettyprint">// match the whole line
 val anInt1 = readAs(&quot;.*(\\d+).*&quot;).and((s: String) =&gt; s.toInt)
   
 // just declare the group you want to match
@@ -113,12 +113,11 @@ val twoInts = groupAs(&quot;\\d+&quot;).and((s1: String, s2: String) =&gt; (s1.t
 <ul>
   <li><code class="prettyprint">andThen(aStepParser) { case p1 :: p2 :: .. :: _ =&gt; r: R }</code>, where <code class="prettyprint">p1</code> has the type extracted from <code class="prettyprint">aStepParser</code> and <code class="prettyprint">p2 .. pn</code> have the types of the values mapped by the previous <code class="prettyprint">when</code> steps</li>
   <li><code class="prettyprint">andThen(aStepParser).collect { case (p1, p2n: Seq[LUB]) =&gt; r: R }</code>, where <code class="prettyprint">p1</code> has the type extracted from <code class="prettyprint">aStepParser</code> and <code class="prettyprint">p2n</code> is a <code class="prettyprint">Seq[LUB]</code> where <code class="prettyprint">LUB</code> is the least upper bound of the types of all the values mapped by the previous <code class="prettyprint">when</code> steps</li>
-</ul><p>The type <code class="prettyprint">R</code> of the value <code class="prettyprint">r</code> must be such that there is an <code class="prettyprint">AsResult</code> type class instance in scope to transform it to a <code class="prettyprint">Result</code>. In other words r is: a <code class="prettyprint">Boolean</code>, a <code class="prettyprint">MatchResult[_]</code>, a ScalaCheck <code class="prettyprint">Prop</code>,...</p><p>You will also note that the <code class="prettyprint">Scenario</code> class restricts the order of methods which you can call. It always has to be <code class="prettyprint">given* -&gt; when* -&gt; andThen*</code></p><a name="Tagging"><h4>Tagging</h4></a><p>When you insert a <code class="prettyprint">Scenario.start</code> and <code class="prettyprint">Scenario.end</code> in a piece of <code class="prettyprint">s2</code> text, this will automatically create a tagged &quot;<code class="prettyprint">Section</code>&quot; with the title of the Scenario so that you can execute only this scenario from the command-line by running:<br /><code class="prettyprint">
-sbt&gt; test-only *Calculator* -- include addition
-</code></p></div></status></html></div></div>
+</ul><p>The type <code class="prettyprint">R</code> of the value <code class="prettyprint">r</code> must be such that there is an <code class="prettyprint">AsResult</code> type class instance in scope to transform it to a <code class="prettyprint">Result</code>. In other words r is: a <code class="prettyprint">Boolean</code>, a <code class="prettyprint">MatchResult[_]</code>, a ScalaCheck <code class="prettyprint">Prop</code>,...</p><p>You will also note that the <code class="prettyprint">Scenario</code> class restricts the order of methods which you can call. It always has to be <code class="prettyprint">given* -&gt; when* -&gt; andThen*</code></p><a name="Tagging"><h4>Tagging</h4></a><p>When you insert a <code class="prettyprint">Scenario.start</code> and <code class="prettyprint">Scenario.end</code> in a piece of <code class="prettyprint">s2</code> text, this will automatically create a tagged &quot;<code class="prettyprint">Section</code>&quot; with the title of the Scenario so that you can execute only this scenario from the command-line by running:<br /><pre><code class="prettyprint">sbt&gt; test-only *Calculator* -- include addition
+</code></pre></p></div></status></html></div></div>
                 <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="2068016152"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1864003061"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="188516804"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="848617521"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -128,7 +127,7 @@ sbt&gt; test-only *Calculator* -- include addition
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="746508004"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="293726299"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -239,7 +238,7 @@ sbt&gt; test-only *Calculator* -- include addition
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Methods">Methods</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Full+example">Full example</a>
-            <ul><li id="190038393"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
+            <ul><li id="451051777"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Rules">Rules</a>
@@ -257,7 +256,7 @@ sbt&gt; test-only *Calculator* -- include addition
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Unit+specification">Unit specification</a>
             
           </li></ul>
-          </li><li id="588178946"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#GivenWhenThenPage">GivenWhenThenPage</a>
+          </li><li id="2087942734"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then_1">Given When Then</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then">Given When Then</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Parsing">Parsing</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Delimited+parsers">Delimited parsers</a>
@@ -276,7 +275,7 @@ sbt&gt; test-only *Calculator* -- include addition
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1700859443"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1095525967"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -287,7 +286,13 @@ sbt&gt; test-only *Calculator* -- include addition
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Out+of+the+box">Out of the box</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Optional">Optional</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#File+contents">File contents</a>
             
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Directories+contents">Directories contents</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Lines+contents">Lines contents</a>
+            
+          </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Custom">Custom</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#From+functions">From functions</a>
             
@@ -340,7 +345,7 @@ sbt&gt; test-only *Calculator* -- include addition
             
           </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="418202897"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="210759278"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
@@ -384,11 +389,13 @@ sbt&gt; test-only *Calculator* -- include addition
             
           </li></ul>
           </li></ul>
-          </li><li id="195103830"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="1605244425"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Fine-grained+jars">Fine-grained jars</a>
             
+          </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Arguments">Arguments</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#API">API</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Most%2FLeast+frequently+used+arguments">Most/Least frequently used arguments</a>
@@ -468,7 +475,7 @@ sbt&gt; test-only *Calculator* -- include addition
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="792903642"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="1284937187"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -516,7 +523,7 @@ sbt&gt; test-only *Calculator* -- include addition
             
           </li></ul>
           </li></ul>
-          </li><li id="2049091262"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="289679609"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -562,7 +569,7 @@ sbt&gt; test-only *Calculator* -- include addition
             
           </li></ul>
           </li></ul>
-          </li><li id="1126323792"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="1496496321"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -582,7 +589,7 @@ sbt&gt; test-only *Calculator* -- include addition
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['2068016152','588178946'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['188516804','2087942734'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                 <div class="col3"><div id="rightcolumn"></div></div>
               </div>

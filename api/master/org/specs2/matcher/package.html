@@ -391,7 +391,7 @@
       </h4>
       
     </li><li name="org.specs2.matcher.ContentMatchers" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ContentMatchersextendsContentBaseMatcherswithContentBeHaveMatchers"></a>
+      <a id="ContentMatchersextendsLinesContentMatcherswithFilesContentMatchers"></a>
       <a id="ContentMatchers:ContentMatchers"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -399,7 +399,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="ContentMatchers.html"><span class="name">ContentMatchers</span></a><span class="result"> extends <span class="extype" name="org.specs2.matcher.ContentBaseMatchers">ContentBaseMatchers</span> with <span class="extype" name="org.specs2.matcher.ContentBeHaveMatchers">ContentBeHaveMatchers</span></span>
+        <a href="ContentMatchers.html"><span class="name">ContentMatchers</span></a><span class="result"> extends <a href="LinesContentMatchers.html" class="extype" name="org.specs2.matcher.LinesContentMatchers">LinesContentMatchers</a> with <a href="FilesContentMatchers.html" class="extype" name="org.specs2.matcher.FilesContentMatchers">FilesContentMatchers</a></span>
       </span>
       </h4>
       <p class="comment cmt">The ContentMatchers trait provides matchers to make comparisons between files, sequences,.</p>
@@ -631,6 +631,21 @@ and then to check that there's no unwanted dependency in the code.</p>
       </h4>
       <p class="comment cmt">The FileMatchers trait provides matchers which are applicable to files
 </p>
+    </li><li name="org.specs2.matcher.FilesContentMatchers" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FilesContentMatchersextendsFileMatcherswithLinesContentMatcherswithTraversableMatchers"></a>
+      <a id="FilesContentMatchers:FilesContentMatchers"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="FilesContentMatchers.html"><span class="name">FilesContentMatchers</span></a><span class="result"> extends <a href="FileMatchers.html" class="extype" name="org.specs2.matcher.FileMatchers">FileMatchers</a> with <a href="LinesContentMatchers.html" class="extype" name="org.specs2.matcher.LinesContentMatchers">LinesContentMatchers</a> with <a href="TraversableMatchers.html" class="extype" name="org.specs2.matcher.TraversableMatchers">TraversableMatchers</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">This trait provides matchers to check the presence of some expected files vs the actual ones
+and also ways to verify the contents of these files
+</p>
     </li><li name="org.specs2.matcher.FunctionPropertyImplicits" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="FunctionPropertyImplicitsextendsAnyRef"></a>
       <a id="FunctionPropertyImplicits:FunctionPropertyImplicits"></a>
@@ -778,6 +793,19 @@ to properties by appending forAll
       </span>
       <span class="symbol">
         <a href="LeftMatcher.html"><span class="name">LeftMatcher</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">()</span><span class="result"> extends <a href="OptionLikeMatcher.html" class="extype" name="org.specs2.matcher.OptionLikeMatcher">OptionLikeMatcher</a>[[a]<span class="extype" name="scala.util.Either">Either</span>[<span class="extype" name="org.specs2.matcher.&lt;refinement&gt;.l.a">a</span>, <span class="extype" name="scala.Any">Any</span>], <span class="extype" name="org.specs2.matcher.LeftMatcher.T">T</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.matcher.LinesContentMatchers" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LinesContentMatchersextendsLinesContentBaseMatcherswithLinesContentBeHaveMatchers"></a>
+      <a id="LinesContentMatchers:LinesContentMatchers"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LinesContentMatchers.html"><span class="name">LinesContentMatchers</span></a><span class="result"> extends <span class="extype" name="org.specs2.matcher.LinesContentBaseMatchers">LinesContentBaseMatchers</span> with <span class="extype" name="org.specs2.matcher.LinesContentBeHaveMatchers">LinesContentBeHaveMatchers</span></span>
       </span>
       </h4>
       
@@ -1354,7 +1382,7 @@ number of expectations.</p>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Parameters.html"><span class="name">Parameters</span></a><span class="params">(<span name="minTestsOk">minTestsOk: <span class="extype" name="scala.Int">Int</span> = <span class="defval" name="org.scalacheck.Test.Parameters.default.minSuccessfulTests">...</span></span>, <span name="minSize">minSize: <span class="extype" name="scala.Int">Int</span> = <span class="defval" name="org.scalacheck.Test.Parameters.default.minSize">...</span></span>, <span name="maxDiscardRatio">maxDiscardRatio: <span class="extype" name="scala.Float">Float</span> = <span class="defval" name="org.scalacheck.Test.Parameters.default.maxDiscardRatio">...</span></span>, <span name="maxSize">maxSize: <span class="extype" name="scala.Int">Int</span> = <span class="defval" name="org.scalacheck.Test.Parameters.default.maxSize">...</span></span>, <span name="workers">workers: <span class="extype" name="scala.Int">Int</span> = <span class="defval" name="org.scalacheck.Test.Parameters.default.workers">...</span></span>, <span name="rng">rng: <span class="extype" name="java.util.Random">Random</span> = <span class="defval" name="org.scalacheck.Test.Parameters.default.rng">...</span></span>, <span name="callback">callback: <span class="extype" name="org.scalacheck.Test.TestCallback">TestCallback</span> = <span class="defval" name="org.scalacheck.Test.Parameters.default.testCallback">...</span></span>, <span name="loader">loader: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="java.lang.ClassLoader">ClassLoader</span>] = <span class="defval" name="org.scalacheck.Test.Parameters.default.customClassLoader">...</span></span>, <span name="verbose">verbose: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="output">output: <a href="../io/Output.html" class="extype" name="org.specs2.io.Output">Output</a> = <span class="symbol">io.ConsoleOutput</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Parameters.html"><span class="name">Parameters</span></a><span class="params">(<span name="minTestsOk">minTestsOk: <span class="extype" name="scala.Int">Int</span> = <span class="defval" name="org.scalacheck.Test.Parameters.default.minSuccessfulTests">...</span></span>, <span name="minSize">minSize: <span class="extype" name="scala.Int">Int</span> = <span class="defval" name="org.scalacheck.Test.Parameters.default.minSize">...</span></span>, <span name="maxDiscardRatio">maxDiscardRatio: <span class="extype" name="scala.Float">Float</span> = <span class="defval" name="org.scalacheck.Test.Parameters.default.maxDiscardRatio">...</span></span>, <span name="maxSize">maxSize: <span class="extype" name="scala.Int">Int</span> = <span class="defval" name="org.scalacheck.Test.Parameters.default.maxSize">...</span></span>, <span name="workers">workers: <span class="extype" name="scala.Int">Int</span> = <span class="defval" name="org.scalacheck.Test.Parameters.default.workers">...</span></span>, <span name="rng">rng: <span class="extype" name="scala.util.Random">Random</span> = <span class="defval" name="org.scalacheck.Test.Parameters.default.rng">...</span></span>, <span name="callback">callback: <span class="extype" name="org.scalacheck.Test.TestCallback">TestCallback</span> = <span class="defval" name="org.scalacheck.Test.Parameters.default.testCallback">...</span></span>, <span name="loader">loader: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="java.lang.ClassLoader">ClassLoader</span>] = <span class="defval" name="org.scalacheck.Test.Parameters.default.customClassLoader">...</span></span>, <span name="verbose">verbose: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="output">output: <a href="../io/Output.html" class="extype" name="org.specs2.io.Output">Output</a> = <span class="symbol">io.ConsoleOutput</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">This class is the base class for the display and set case classes.</p>
@@ -2109,6 +2137,19 @@ a match fails
       </span>
       <span class="symbol">
         <a href="JUnitShouldMatchers$.html"><span class="name">JUnitShouldMatchers</span></a><span class="result"> extends <a href="JUnitShouldMatchers.html" class="extype" name="org.specs2.matcher.JUnitShouldMatchers">JUnitShouldMatchers</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.matcher.LinesContentMatchers" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LinesContentMatchers"></a>
+      <a id="LinesContentMatchers:LinesContentMatchers"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LinesContentMatchers$.html"><span class="name">LinesContentMatchers</span></a><span class="result"> extends <a href="LinesContentMatchers.html" class="extype" name="org.specs2.matcher.LinesContentMatchers">LinesContentMatchers</a></span>
       </span>
       </h4>
       

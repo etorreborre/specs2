@@ -301,20 +301,6 @@ out.write(<span class="lit">"content"</span>)
       </h4>
       <p class="shortcomment cmt">copy the content of a directory to another.</p><div class="fullcomment"><div class="comment cmt"><p>copy the content of a directory to another.</p></div><dl class="paramcmts block"><dt class="param">dest</dt><dd class="cmt"><p>destination directory path
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileSystem</dd></dl></div>
-    </li><li name="org.specs2.io.FileSystem#copyDir" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="copyDir(url:java.net.URL,dest:String):Unit"></a>
-      <a id="copyDir(URL,String):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">copyDir</span><span class="params">(<span name="url">url: <span class="extype" name="java.net.URL">URL</span></span>, <span name="dest">dest: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">copy the content of a directory to another.</p><div class="fullcomment"><div class="comment cmt"><p>copy the content of a directory to another.</p></div><dl class="paramcmts block"><dt class="param">url</dt><dd class="cmt"><p>url of the directory to copy</p></dd><dt class="param">dest</dt><dd class="cmt"><p>destination directory path
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileSystem</dd></dl></div>
     </li><li name="org.specs2.io.FileSystem#copyFile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="copyFile(path:String,dest:String):Unit"></a>
       <a id="copyFile(String,String):Unit"></a>
@@ -327,24 +313,23 @@ out.write(<span class="lit">"content"</span>)
         <span class="name">copyFile</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="dest">dest: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Copy the content of a directory to another.</p><div class="fullcomment"><div class="comment cmt"><p>Copy the content of a directory to another.</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>path of the file to copy</p></dd><dt class="param">dest</dt><dd class="cmt"><p>destination directory path
+      <p class="shortcomment cmt">copy a file to a destination directory</p><div class="fullcomment"><div class="comment cmt"><p>copy a file to a destination directory</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>path of the file to copy</p></dd><dt class="param">dest</dt><dd class="cmt"><p>destination directory path
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileSystem</dd></dl></div>
     </li><li name="org.specs2.io.FileSystem#copySpecResourcesDir" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="copySpecResourcesDir(src:String,outputDir:String):Unit"></a>
-      <a id="copySpecResourcesDir(String,String):Unit"></a>
+      <a id="copySpecResourcesDir(base:String,src:String,outputDir:String,loader:ClassLoader):Unit"></a>
+      <a id="copySpecResourcesDir(String,String,String,ClassLoader):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">copySpecResourcesDir</span><span class="params">(<span name="src">src: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="outputDir">outputDir: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">copySpecResourcesDir</span><span class="params">(<span name="base">base: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="src">src: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="outputDir">outputDir: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loader">loader: <span class="extype" name="java.lang.ClassLoader">ClassLoader</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Copy specs resources found either in the specs jar or in the classpath directories to an output directory
 </p><div class="fullcomment"><div class="comment cmt"><p>Copy specs resources found either in the specs jar or in the classpath directories to an output directory
-</p></div><dl class="paramcmts block"><dt class="param">src</dt><dd class="cmt"><p>name of the resource directory to copy</p></dd><dt class="param">outputDir</dt><dd class="cmt"><p>output directory where to copy the files to
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileSystem</dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">base</dt><dd class="cmt"><p>path of the base package (must not be empty!)</p></dd><dt class="param">src</dt><dd class="cmt"><p>name of the resource directory to copy (relative to the base package)</p></dd><dt class="param">outputDir</dt><dd class="cmt"><p>output directory where to copy the files to</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileSystem</dd></dl></div>
     </li><li name="org.specs2.reflect.Classes#create" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="create[T&lt;:AnyRef](className:String,classLoader:ClassLoader)(implicitm:scala.reflect.ClassTag[T]):Either[Throwable,T]"></a>
       <a id="create[T&lt;:AnyRef](String,ClassLoader)(ClassTag[T]):Either[Throwable,T]"></a>
@@ -563,6 +548,19 @@ Tries to load the class name and cast it to a specification
       <p class="shortcomment cmt">flush the content if necessary
 </p><div class="fullcomment"><div class="comment cmt"><p>flush the content if necessary
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../io/ConsoleOutput.html" class="extype" name="org.specs2.io.ConsoleOutput">ConsoleOutput</a> → <a href="../io/Output.html" class="extype" name="org.specs2.io.Output">Output</a></dd></dl></div>
+    </li><li name="org.specs2.io.FileReader#fromBaseFile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fromBaseFile(base:java.io.File):java.io.File=&gt;String"></a>
+      <a id="fromBaseFile(File):(File)⇒String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fromBaseFile</span><span class="params">(<span name="base">base: <span class="extype" name="java.io.File">File</span></span>)</span><span class="result">: (<span class="extype" name="java.io.File">File</span>) ⇒ <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the path of a File relative to a base file</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileReader</dd></dl></div>
     </li><li name="org.specs2.io.FileSystem#getAbsolutePath" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getAbsolutePath(path:String):String"></a>
       <a id="getAbsolutePath(String):String"></a>
@@ -803,6 +801,19 @@ Tries to load the class name and cast it to a specification
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the xml content of a file, using the XML parser
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileReader</dd></dl></div>
+    </li><li name="org.specs2.io.FileReader#md5" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="md5(f:java.io.File):String"></a>
+      <a id="md5(File):String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">md5</span><span class="params">(<span name="f">f: <span class="extype" name="java.io.File">File</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the MD5 hash of a file</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileReader</dd></dl></div>
     </li><li name="org.specs2.io.FileWriter#mkdirs" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="mkdirs(path:String):Boolean"></a>
       <a id="mkdirs(String):Boolean"></a>
@@ -927,6 +938,19 @@ Tries to load the class name and cast it to a specification
       <p class="shortcomment cmt">print an object with a newline
 </p><div class="fullcomment"><div class="comment cmt"><p>print an object with a newline
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../io/Output.html" class="extype" name="org.specs2.io.Output">Output</a></dd></dl></div>
+    </li><li name="org.specs2.io.FileReader#readBytes" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="readBytes(path:String):Array[Byte]"></a>
+      <a id="readBytes(String):Array[Byte]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">readBytes</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Byte">Byte</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the bytes of a file</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileReader</dd></dl></div>
     </li><li name="org.specs2.io.FileReader#readFile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="readFile(path:String):String"></a>
       <a id="readFile(String):String"></a>
@@ -942,7 +966,7 @@ Tries to load the class name and cast it to a specification
       <p class="shortcomment cmt">reads the content of a file</p><div class="fullcomment"><div class="comment cmt"><p>reads the content of a file</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>the path of the file to read</p></dd><dt>returns</dt><dd class="cmt"><p>the content of the file at path
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileReader</dd></dl></div>
     </li><li name="org.specs2.io.FileReader#readLines" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="readLines(path:String):scala.collection.immutable.IndexedSeq[String]"></a>
+      <a id="readLines(path:String):IndexedSeq[String]"></a>
       <a id="readLines(String):IndexedSeq[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -950,10 +974,10 @@ Tries to load the class name and cast it to a specification
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">readLines</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">readLines</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="../../../scala/package.html#IndexedSeq[+A]=IndexedSeq[A]" class="extmbr" name="scala.IndexedSeq">IndexedSeq</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileReader</dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the lines of a file</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileReader</dd></dl></div>
     </li><li name="org.specs2.io.FileSystem#removeDir" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="removeDir(path:String):String"></a>
       <a id="removeDir(String):String"></a>
