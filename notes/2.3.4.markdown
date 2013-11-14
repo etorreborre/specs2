@@ -1,12 +1,28 @@
-Improvements and fixes on top of 2.3.2
+New matchers for checking the contents of a directory
 
-## Improvements 
+## Features 
 
- * upgraded to ScalaCheck 1.11.0 [#211](https://github.com/etorreborre/specs2/issues/211)
+New matchers for checking paths and files inside a directory:
+
+    // check paths by comparing to another directory
+    actualDir must haveSamePathsAs(expectedDir).withFilter((file: File) => !file.isHidden)
+
+    // now check files
+    // the default comparison expects that files are text files and that comparison must be done line by line
+    actualDir must haveSameFilesAs(expectedDir)
+
+    // with a file filter applied to both the actual and expected directories
+    actualDir must haveSameFilesAs(expectedDir)
+
+    // with a MD5 matcher for binary files
+    actualDir must haveSameFilesAs(expectedDir).withFilter((file: File) => isBinary(file)).withMatcher(haveSameMD5)
+
+ * `haveSameMD5` is a matcher checking if two files have the same MD5 hash
 
 ## Fixes
 
- * implicitly converting to a SpecPart should not trigger an "auto-example" [#210](https://github.com/etorreborre/specs2/issues/210) 
+ * resolved a name clash of two "lazyfy" methods (by @asflierl) [#212](https://github.com/etorreborre/specs2/issues/212) 
+ * fixed the display of code when using Markdown and triple quotes
 
  ==========================
 
