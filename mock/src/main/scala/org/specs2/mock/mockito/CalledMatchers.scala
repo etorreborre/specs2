@@ -11,6 +11,7 @@ import execute.{ResultLogicalCombinators, AsResult, Result}
 import ResultLogicalCombinators._
 import control.NumberOfTimes
 import control.Times
+import time._
 
 /**
  * This trait provides methods to declare expectations on mock calls:
@@ -123,6 +124,27 @@ trait CalledMatchers extends NumberOfTimes with FunctionArguments with TheMockit
   def noMoreCallsTo[T <: AnyRef](mocks: T*): Unit = mocker.verifyNoMoreInteractions(mocks:_*)
   /** no more calls made to the mock */
   def noMoreCallsTo[T <: AnyRef](stubbed: IgnoreStubs): Unit = noMoreCallsTo(stubbed.mocks:_*)
+  /** add a timeout constraint to the verification */
+  def after(duration: Duration) = MockitoVerificationWithTimeout(duration)
+
+  case class MockitoVerificationWithTimeout(duration: Duration) {
+    /** no call made to the mock */
+    def no[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.timeout(duration.inMillis.toInt).never())(anOrder)
+    /** one call only made to the mock */
+    def one[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.timeout(duration.inMillis.toInt).times(1))(anOrder)
+    /** two calls only made to the mock */
+    def two[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.timeout(duration.inMillis.toInt).times(2))(anOrder)
+    /** three calls only made to the mock */
+    def three[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.timeout(duration.inMillis.toInt).times(3))(anOrder)
+    /** at least n calls made to the mock */
+    def atLeast[T <: AnyRef](i: Int)(mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.timeout(duration.inMillis.toInt).atLeast(i))(anOrder)
+    /** at least 1 call made to the mock */
+    def atLeastOne[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.timeout(duration.inMillis.toInt).atLeast(1))(anOrder)
+    /** at least 2 calls made to the mock */
+    def atLeastTwo[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.timeout(duration.inMillis.toInt).atLeast(2))(anOrder)
+    /** at least 3 calls made to the mock */
+    def atLeastThree[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.timeout(duration.inMillis.toInt).atLeast(3))(anOrder)
+  }
 
   /** implicit def supporting calls in order */
   implicit def toInOrderMode[T : AsResult](calls: =>T): ToInOrderMode[T] = new ToInOrderMode(calls)

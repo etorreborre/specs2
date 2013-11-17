@@ -7,6 +7,8 @@ import org.hamcrest.core.IsNull
 import org.mockito.Mockito.withSettings
 import org.mockito.invocation._
 import matcher._
+import scala.concurrent.ExecutionContext
+import ExecutionContext.Implicits.global
 
 class MockitoSpec extends script.Specification with Mockito with ResultMatchers with Groups {  def is = s2"""
 
@@ -60,6 +62,7 @@ class MockitoSpec extends script.Specification with Mockito with ResultMatchers 
      + with a single converted parameter, using a matcher
 
    + it is possible to verify a function with repeated parameters
+   + it is possible to specify a timeout for the call
 
 STUBS
 =====
@@ -114,7 +117,6 @@ STUBS
  The Mockito trait is reusable in other contexts
    + in mutable specs
    + with an in order call
-   + in JUnit
                                                                                                                         """
     
   "creation" - new group {
@@ -239,6 +241,12 @@ STUBS
       repeated.call(1, 2, 3)
       (there was one(repeated).call(1, 2, 3)) and
       ((there was one(repeated).call(1, 2)).message must contain("WrappedArray(1, 2)"))
+    }
+
+    eg := {
+      scala.concurrent.Future { Thread.sleep(200); takesSometime.call(10) }
+      ((there was after(10.millis).one(takesSometime).call(10)).message must contain("Wanted but not invoked")) and
+      (there was after(300.millis).one(takesSometime).call(10))
     }
   }
   "stubs" - new group with list {
@@ -456,6 +464,11 @@ STUBS
 
     trait WithRepeatedParams { def call[T](params: T*) = params.toString }
     val repeated = mock[WithRepeatedParams]
+
+    trait TakesSometime {
+      def call(i: Int) = i
+    }
+    val takesSometime = mock[TakesSometime]
   }
 }
 
