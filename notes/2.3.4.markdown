@@ -1,8 +1,6 @@
-New matchers for checking the contents of a directory
+New matchers for checking the contents of a directory!
 
 ## Features 
-
-New matchers for checking paths and files inside a directory:
 
     // check paths by comparing to another directory
     actualDir must haveSamePathsAs(expectedDir).withFilter((file: File) => !file.isHidden)
