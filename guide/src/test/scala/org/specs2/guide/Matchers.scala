@@ -550,6 +550,11 @@ there was atMostOne(m).get(0)        // at most one call to get(0)
 there was atMostTwo(m).get(0)        // at most two calls to get(0)
 there was atMostThree(m).get(0)      // at most three calls to get(0)
 there was atMost(4)(m).get(0)        // at most four calls to get(0)
+
+// the combinators above, except `atMost`, can also be used with a timeout
+there was after(10.millis).one(m).get(0)
+there was after(2.seconds).two(m).get(0)
+
 }}
 
 It is also possible to add all verifications inside a block, when several mocks are involved: ${snippet{
