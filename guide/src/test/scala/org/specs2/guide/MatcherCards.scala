@@ -386,9 +386,9 @@ val person = """{
     }
   }
 }
+"""
 // 8<--
 ()
-"""
 }}
 
 You can use these combinations: ${snippet{
