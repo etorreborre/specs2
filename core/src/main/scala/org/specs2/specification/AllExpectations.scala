@@ -46,8 +46,8 @@ trait AllExpectations extends StoredExpectations with ExamplesFactory with Speci
    * we force the specification to be isolated if it's not sequential or already isolated.
    * this is important because when an example runs, its results are being stored into a shared list
    */
-  override abstract def is = {
-    val fragments = super.is
+  override def map(fs: =>Fragments): Fragments = {
+    val fragments = fs
     val arguments = fragments.arguments
     if (arguments.isolated || arguments.sequential) fragments
     else fragments.add(args(isolated = true))
