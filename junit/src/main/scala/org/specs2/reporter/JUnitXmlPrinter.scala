@@ -73,7 +73,7 @@ trait JUnitXmlPrinter {
 
   case class TestSuite(description: Description, className: String, errors: Int, failures: Int, skipped: Int, time: Long = 0, tests: Seq[TestCase] = Seq())(implicit args: Arguments) {
     def addTest(t: TestCase) = copy(tests = tests :+ t)
-    def flush(out: Writer) = XML.write(out, xml, "utf-8", false, null)
+    def flush(out: Writer) = XML.write(out, xml, "utf-8", true, null)
 
     def xml =
       <testsuite hostname={tryo(InetAddress.getLocalHost.getHostName).getOrElse("no host detected")}
