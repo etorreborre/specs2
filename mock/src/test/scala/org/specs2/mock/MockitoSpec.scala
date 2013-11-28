@@ -35,6 +35,7 @@ class MockitoSpec extends script.Specification with Mockito with ResultMatchers 
    + it is possible to verify that a method has been called
    + if one method has not been called on a mock there will be a failure
    + it is possible to check that no calls have been made
+   + null values can be checked with beNull
    + it is possible to pass byname parameters
      + with several byname parameters
      + with 2 parameter lists and byname parameters
@@ -151,6 +152,11 @@ STUBS
     eg := (there was one(list).add("one")).message must startWith("The mock was not called as expected")
 
     eg := there were noCallsTo(list)
+
+    eg := {
+      list.add(3, null: String)
+      there was one(list).add(be_>(0), beNull[String])
+    }
 
     eg := {
       byname.call(10)
