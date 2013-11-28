@@ -44,6 +44,7 @@ object build extends Build {
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
   lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
+  lazy val paradisePlugin = compilerPlugin("org.scala-lang.plugins" %% "macro-paradise" % "2.0.0-SNAPSHOT" cross CrossVersion.full)
 
   lazy val aggregateCompile = ScopeFilter(
              inProjects(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock),
@@ -141,9 +142,9 @@ object build extends Build {
   ).dependsOn(common)
 
   lazy val matcherExtra = Project(id = "specs2-matcher-extra", base = file("matcher-extra"),
-    settings = Seq(
-      addCompilerPlugin("org.scala-lang.plugins" % "macro-paradise_2.10.3-RC1" % "2.0.0-SNAPSHOT")) ++
-      moduleSettings
+    settings = moduleSettings ++ Seq(
+      libraryDependencies ++= (if (scalaVersion.value.startsWith("2.11")) Nil else List(paradisePlugin))
+    )
   ).dependsOn(analysis, scalacheck, matcher, core % "test->test")
 
   lazy val mock = Project(id = "specs2-mock", base = file("mock"),
