@@ -39,7 +39,7 @@ object build extends Build {
     organization := "org.specs2",
     specs2Version in GlobalScope <<= version,
     specs2ShellPrompt,
-    scalazVersion := "7.0.4",
+    scalazVersion := "7.0.5",
     scalaVersion := "2.10.3")
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
@@ -79,7 +79,10 @@ object build extends Build {
   lazy val analysis = Project(id = "specs2-analysis", base = file("analysis"),
     settings = Seq(
       libraryDependencies ++= Seq(
-        "org.scala-lang" % "scala-compiler" % scalaVersion.value,
+        ("org.scala-lang" % "scala-compiler" % scalaVersion.value)
+          .exclude("org.scala-lang.modules", "scala-parser-combinators_2.11.0-M6")
+          .exclude("org.scala-lang.modules", "scala-xml_2.11.0-M6")
+        ,
         "org.specs2"     % "classycle"      % "1.4.1")) ++
     moduleSettings
   ).dependsOn(common % "test->test", core, matcher, scalacheck % "test")
@@ -116,9 +119,8 @@ object build extends Build {
 
   lazy val gwt = Project(id = "specs2-gwt", base = file("gwt"),
     settings = Seq(
-     libraryDependencies ++= Seq(
-        "com.chuusai" % "shapeless_2.10.2" % "2.0.0-M1")) ++
-      moduleSettings
+      libraryDependencies += "com.chuusai" %% "shapeless" % "2.0.0-M1" cross CrossVersion.full
+    ) ++ moduleSettings
   ).dependsOn(core, matcherExtra, scalacheck)
 
   lazy val html = Project(id = "specs2-html", base = file("html"),
@@ -168,7 +170,7 @@ object build extends Build {
   /**
    * Main libraries 
    */
-  lazy val scalacheckLib = "org.scalacheck" %% "scalacheck"   % "1.11.0"
+  lazy val scalacheckLib = "org.scalacheck" %% "scalacheck"   % "1.11.1"
   lazy val mockitoLib    = "org.mockito"    % "mockito-core"  % "1.9.5"
   lazy val junitLib      = "junit"          % "junit"         % "4.11"
   lazy val hamcrestLib   = "org.hamcrest"   % "hamcrest-core" % "1.3"
