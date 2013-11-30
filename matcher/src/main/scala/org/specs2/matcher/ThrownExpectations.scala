@@ -82,6 +82,7 @@ trait ThrownExpectations extends Expectations with StandardResults with Standard
   override def pending: Pending = throw new PendingException(super.pending)
   override def anError: Error = throw new ErrorException(super.anError)
 
+  protected def success(m: String): Success = Success(m)
   protected def failure(m: String): Failure = failure(Failure(m))
   protected def failure(f: Failure): Failure = throw new FailureException(f)
   protected def skipped(m: String): Skipped = skipped(Skipped(m))
