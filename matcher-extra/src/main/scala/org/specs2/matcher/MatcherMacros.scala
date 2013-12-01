@@ -49,9 +49,14 @@ object MatcherMacros extends MatcherMacros {
         addMatcher((t :$typeOfT) => matcherValue[$fieldType](theValue[$fieldType](t.$parameterName).updateDescription(d => "  "+$fieldName+": "+d)).toResult) """
       val functionBody = q"""(f: $fieldType => org.specs2.execute.Result) => addMatcher((t :$typeOfT) => f(t.$parameterName)) """
 
-      (q""" @fieldMatcherBody($valueBody) def $methodName(fieldValue: $fieldType): $matcherClassType = macro org.specs2.matcher.MatcherMacros.fieldMatcherImplementation[$fieldType, $typeOfT] """,
-       q""" @fieldMatcherBody($matcherBody) def $methodName(fieldValue: org.specs2.matcher.Matcher[$fieldType]): $matcherClassType = macro org.specs2.matcher.MatcherMacros.fieldMatcherImplementation[$fieldType, $typeOfT] """,
-       q""" @fieldMatcherBody($functionBody) def $methodName[R : org.specs2.execute.AsResult](fieldValue: $fieldType => R): $matcherClassType = macro org.specs2.matcher.MatcherMacros.fieldMatcherImplementation2[$fieldType, $typeOfT, R] """)
+   
+      val x = (
+        q""" @fieldMatcherBody($valueBody) def $methodName(fieldValue: $fieldType): $matcherClassType = macro org.specs2.matcher.MatcherMacros.fieldMatcherImplementation[$fieldType, $typeOfT] """,
+        q""" @fieldMatcherBody($matcherBody) def $methodName(fieldValue: org.specs2.matcher.Matcher[$fieldType]): $matcherClassType = macro org.specs2.matcher.MatcherMacros.fieldMatcherImplementation[$fieldType, $typeOfT] """,
+        q""" @fieldMatcherBody($functionBody) def $methodName[R : org.specs2.execute.AsResult](fieldValue: $fieldType => R): $matcherClassType = macro org.specs2.matcher.MatcherMacros.fieldMatcherImplementation2[$fieldType, $typeOfT, R] """
+      )
+
+      x: (Tree, Tree, Tree)
     }.unzip3
 
     val matcherDefinition = q"""
