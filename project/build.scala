@@ -183,7 +183,7 @@ object build extends Build {
   lazy val compilationSettings: Seq[Settings] = Seq(
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
     maxErrors := 20,
-    scalacOptions in GlobalScope ++= Seq("-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_"),
+    scalacOptions in GlobalScope ++= Seq("-Xcheckinit", "-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_"),
     scalacOptions in Test ++= Seq("-Yrangepos")
   )
 
