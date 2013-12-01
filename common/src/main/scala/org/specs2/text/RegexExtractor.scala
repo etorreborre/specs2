@@ -64,9 +64,9 @@ object RegexExtractor {
     }
   }
   /** extract all groups and return a list of strings */
-  def extractAll(text: String, full: =>Regex = "".r, group: =>Regex = DEFAULT_REGEX.r) = tryWithRegex(text, regexToUse(full, group)) {
+  def extractAll(text: String, full: =>Regex = "".r, group: =>Regex = DEFAULT_REGEX.r): List[String] = tryWithRegex(text, regexToUse(full, group)) {
     if (full.toString.isEmpty) group.findAllIn(text.trim).matchData.collect { case Regex.Groups(g) => g }.toList
-    else                       full.unapplySeq(text.trim).getOrElse(throw new FailureException(Failure(s"could not extract '$full' from $text")))
+    else                       full.unapplySeq(text.trim).getOrElse(throw new FailureException(Failure(s"could not extract '$full' from $text"))).toList
   }
 
   private def regexToUse(full: =>Regex, group: =>Regex) = if (full.toString.isEmpty) group else full

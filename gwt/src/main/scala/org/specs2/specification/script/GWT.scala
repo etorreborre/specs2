@@ -160,7 +160,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
           case WhenLines(ls) => {
             whenSteps = (whenExtractorsList zip ls zip whenMappersList).map { case ((extractor, line), mapper) =>
               Step(execute(result(givenSteps), extractor, line) { t: Any =>
-                val map = mapper.asInstanceOf[Mapper[Any, Any, Any, Any]]
+                val map = mapper.asInstanceOf[Mapper[Any, HList, Any, Any]]
                 map(t, if (map.f1.isDefined) Left(stepsValues(givenSteps)) else Right(stepsValues(givenSteps).toList))
               })
             }.reverse
@@ -173,7 +173,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
             val thenExamples: List[Fragment] = (thenExtractorsList zip ls zip verificationsList).map { case ((extractor: StepParser[_], line), verify) =>
               Example(extractor.strip(line),
                 execute(result(givenSteps) and result(whenSteps), extractor, line) { t: Any =>
-                  val verifyFunction = verify.asInstanceOf[VerifyFunction[Any, Any, Any, Any]]
+                  val verifyFunction = verify.asInstanceOf[VerifyFunction[Any, HList, Any, Any]]
                   verifyFunction(t, if (verifyFunction.f1.isDefined) Left(stepsValues(whenSteps)) else Right(stepsValues(whenSteps).toList))
                 }.asInstanceOf[Result])
             }
