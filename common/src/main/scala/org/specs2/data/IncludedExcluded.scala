@@ -16,11 +16,11 @@ import text.Trim._
  *
  */
 trait IncludedExcluded[T] {
-  val include: Seq[String]
-  val exclude: Seq[String]
+  def include: Seq[String]
+  def exclude: Seq[String]
 
-  val keepFunction: (T, Seq[String]) => Boolean
-  val containFunction: (T, Seq[String]) => Boolean = keepFunction
+  def keepFunction: (T, Seq[String]) => Boolean
+  def containFunction: (T, Seq[String]) => Boolean = keepFunction
 
   def keep(t: T): Boolean     = isIncluded(t)    && !isExcluded(t)
   def contain(t: T): Boolean  = isIncludedTag(t) && !isExcludedTag(t)
