@@ -357,6 +357,7 @@ An easy way to avoid this situation is to "deactivate" the specs2 implicits by m
 * `org.specs2.specification.NoAutoExamples`: deactivate the conversions from `Boolean/Result/MatchResult/DataTable` to `Fragment` or `Example`. Specific versions of this trait can be selectively used, on either `Boolean` or `Result` or `MatchResult` or `DataTable`. For example: `org.specs2.specification.NoBooleanAutoExamples` can be used to avoid the `^` method being used on booleans
 * `org.specs2.specification.NoFragmentsBuilder`: deactivate the implicit conversions from `String` to `Fragment`s
 * `org.specs2.specification.mutable.NoFragmentsBuilder`: deactivate the implicit conversions from to remove `in`, <code class="prettyprint">></code><code class="prettyprint">></code>, `should` and `can` methods from `String`s
+* `org.specs2.specification.NoToHtmlLinkFragments`: deactivate the use of `~` and `~/` operators on Strings to create html links
 
 ### Print execution data
 

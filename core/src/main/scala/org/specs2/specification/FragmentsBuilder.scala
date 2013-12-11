@@ -139,13 +139,19 @@ trait FragmentsBuilder extends ExamplesFactory with ImplicitParameters with Form
 /**
  * This trait can be used to deactivate implicits for building fragments
  */
-trait NoFragmentsBuilder extends FragmentsBuilder {
+trait NoFragmentsBuilder extends FragmentsBuilder with NoToHtmlLinkFragments {
   override def textStart(s: String): Fragments = super.textStart(s)
   override def textFragment(s: String): FragmentsFragment = super.textFragment(s)
   override def title(s: String): SpecTitle = super.title(s)
+  override def specificationStructureToFragments(s: SpecificationStructure): AsFragments = super.specificationStructureToFragments(s)
+}
+
+/**
+ * This trait can be used to deactivate implicits for ~ and ~/ operators on strings
+ */
+trait NoToHtmlLinkFragments extends FragmentsBuilder {
   override def stringToHtmlLinkFragments(s: String): HtmlLinkFragments = super.stringToHtmlLinkFragments(s)
   override def stringToHtmlLinkFragments2(s: String): HtmlLinkFragments2 = super.stringToHtmlLinkFragments2(s)
-  override def specificationStructureToFragments(s: SpecificationStructure): AsFragments = super.specificationStructureToFragments(s)
 }
 
 /**
