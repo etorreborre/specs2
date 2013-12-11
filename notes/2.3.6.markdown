@@ -1,0 +1,16 @@
+Maintenance version
+
+## Features 
+
+ * the project now compiles for both Scala 2.10 and 2.11.0-M7 thanks to @retronym
+
+## Fixes
+
+ * added the possibility to use the Mockito timeout methods [#214](https://github.com/etorreborre/specs2/issues/214) 
+ * changed junit reporter to include xml declaration for Jenkins [#215](https://github.com/etorreborre/specs2/issues/215)
+ * added a NoToHtmlLinkFragments trait to remove implicits on String to create html [#220](https://github.com/etorreborre/specs2/issues/220)
+ * fixed an unclosing triple quote in the user guide for json matchers
+
+
+ ==========================
+
