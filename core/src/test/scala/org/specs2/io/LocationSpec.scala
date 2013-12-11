@@ -63,10 +63,10 @@ class LocationSpec extends Specification {
     }
   }
 
-  "The FragmentsFragment::def ^(t: String) = fs add Text(t) method must be at line 145. Check the FragmentsBuilder file and fix the Location.scala code" >> {
-    val lines = Source.fromFile("core/src/main/scala/org/specs2/specification/FragmentsBuilder.scala").getLines.toSeq
-    // line 145 is index 144
-    lines.zipWithIndex.collect { case (line, 144) => line }.headOption must beSome.which { line: String =>
+  "The FragmentsFragment::def ^(t: String) = fs add Text(t) method must be at line 12. Check the FragmentsFragment file and fix the Location.scala code" >> {
+    val lines = Source.fromFile("core/src/main/scala/org/specs2/specification/FragmentsFragment.scala").getLines.toSeq
+    // line 12 is index 11
+    lines.zipWithIndex.collect { case (line, 11) => line }.headOption must beSome.which { line: String =>
       line must contain("def ^(t: String) = fragments add Text(t)")
     }
   }
