@@ -44,7 +44,7 @@ object build extends Build {
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
   lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
-  lazy val paradisePlugin = compilerPlugin("org.scala-lang.plugins" %% "macro-paradise" % "2.0.0-SNAPSHOT" cross CrossVersion.full)
+  lazy val paradisePlugin = compilerPlugin("org.scalamacros" %% "paradise" % "2.0.0-M1" cross CrossVersion.full)
 
   lazy val aggregateCompile = ScopeFilter(
              inProjects(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock),
