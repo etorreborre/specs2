@@ -74,6 +74,7 @@ STUBS
    a value can be returned when a parameter of the method matches
      + a hamcrest matcher
      + a specs2 matcher
+     + with a subtype matcher
      + a Set
      + a List
 
@@ -272,6 +273,18 @@ STUBS
     eg := {
       list.contains(argThat(beMatching(".*o"))) returns true
       list.contains("o") must_== true
+    }
+    eg := {
+
+      trait Vet { def treat(p: Pet) = true }
+      trait Pet
+      case class Dog() extends Pet
+      case class Cat() extends Pet
+      val vet = mock[Vet]
+      vet.treat(Cat())
+      def isDog: Matcher[Dog] = (d: Dog) => (true, "ok", "ko")
+
+      (there was one(vet).treat(isDog)) must not(throwA[ClassCastException])
     }
     eg := {
       list.contains(Set(1)) returns true

@@ -20,10 +20,13 @@ case class HamcrestMatcherAdapter[T](m: Matcher[T]) extends BaseMatcher {
     // special case for by-name arguments
     // in that case we apply the Function0 to get the value
     val i = if (item != null && item.isInstanceOf[Function0[_]]) item.asInstanceOf[Function0[_]].apply().asInstanceOf[A] else item
-    matcher.apply(Expectable(i)) match {
-      case MatchFailure(_, ko, _, _) => message = ko(); false
-      case _ => true
-    }
+    try {
+      matcher.apply(Expectable(i)) match {
+        case MatchFailure(_, ko, _, _) => message = ko(); false
+        case _ => true
+      }
+    // a class cast exception can happen if we tried: vet.treat(dog); there must be one(vet).treat(bird) (see issue #222)
+    } catch { case c: ClassCastException => false; case e: Throwable => throw e }
   }
 
   def describeTo(description: Description) {
