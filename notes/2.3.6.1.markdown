@@ -1,0 +1,9 @@
+Maintenance version 
+
+## Fixes
+
+ * using a non-SNAPSHOT version for Scala macros
+ * making sure that using a subtype matcher with Hamcrest doesn't throw a `ClassCastException` [#222](https://github.com/etorreborre/specs2/issues/222) 
+
+ ==========================
+
