@@ -26,4 +26,9 @@ or until it succeeds.
     val iterator = Stream.from(1).iterator
     (iterator.next must be_==(-1).eventually) must throwA[FailureException]
   }
+  "It is possible to use aka with eventually (issue #231)" in {
+    var i = 0
+    def get = { i += 1; i }
+    get aka "hello" must beEqualTo(3).eventually
+  }
 }

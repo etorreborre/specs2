@@ -19,7 +19,10 @@ import Expectable._
 class Expectable[+T] private[specs2] (t: () => T) { outer =>
   /** the value is only evaluated if necessary */
   lazy val value = t()
-  
+
+  /** definition of the value, possibly evaluating to different results each time it is invoked */
+  lazy val valueDefinition = t
+
   /**
    * optional additional description: it is a function which takes value.toString and returns a String
    */

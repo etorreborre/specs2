@@ -6,7 +6,7 @@ package matcher
  * This trait provides implicit definitions to transform any value into a MustExpectable
  */
 trait MustExpectations extends Expectations {
-  implicit def akaMust[T](tm: Expectable[T]) = new MustExpectable(() => tm.value) {
+  implicit def akaMust[T](tm: Expectable[T]) = new MustExpectable(() => tm.valueDefinition()) {
     override private[specs2] val desc = tm.desc
     override private[specs2] val showValueAs = tm.showValueAs
     override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
@@ -35,7 +35,7 @@ object MustExpectations extends MustExpectations
  * a match fails
  */
 trait MustThrownExpectations extends ThrownExpectations with MustExpectations {
-  override implicit def akaMust[T](tm: Expectable[T]) = new MustExpectable(() => tm.value) {
+  override implicit def akaMust[T](tm: Expectable[T]) = new MustExpectable(() => tm.valueDefinition()) {
     override private[specs2] val desc = tm.desc
     override private[specs2] val showValueAs = tm.showValueAs
     override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
