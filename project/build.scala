@@ -72,7 +72,7 @@ object build extends Build {
       unmanagedResourceDirectories in Compile := unmanagedResourceDirectories.all(aggregateCompile).value.flatten,
       sources in Test                         := sources.all(aggregateTest).value.flatten,
       unmanagedResourceDirectories in Test    := unmanagedResourceDirectories.all(aggregateTest).value.flatten,
-      libraryDependencies                     := libraryDependencies.all(aggregateTest).value.flatten
+      libraryDependencies                     := libraryDependencies.all(aggregateTest).value.flatten.map(maybeMarkProvided)
     )
 
   /** MODULES (sorted in alphabetical order) */
@@ -359,6 +359,15 @@ object build extends Build {
   /**
    * UTILITIES
    */
+
+  /** Mark some dependencies of the full artifact as provided */
+  def maybeMarkProvided(dep: ModuleID): ModuleID =
+    if (providedDependenciesInAggregate.exists(dep.name.startsWith)) dep.copy(configurations = Some("provided"))
+    else dep
+
+  /* A list of dependency module names that should be marked as "provided" for the aggregate artifact */
+  lazy val providedDependenciesInAggregate = Seq("shapeless")
+
   private def executeStepTask(task: TaskKey[_], info: String) = ReleaseStep { st: State =>
     executeTask(task, info)(st)
   }
