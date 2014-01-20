@@ -170,7 +170,7 @@ object build extends Build {
   /**
    * Main libraries 
    */
-  lazy val scalacheckLib = "org.scalacheck" %% "scalacheck"   % "1.11.1"
+  lazy val scalacheckLib = "org.scalacheck" %% "scalacheck"   % "1.11.2"
   lazy val mockitoLib    = "org.mockito"    % "mockito-core"  % "1.9.5"
   lazy val junitLib      = "junit"          % "junit"         % "4.11"
   lazy val hamcrestLib   = "org.hamcrest"   % "hamcrest-core" % "1.3"
