@@ -560,8 +560,8 @@ there was after(2.seconds).two(m).get(0)
 It is also possible to add all verifications inside a block, when several mocks are involved: ${snippet{
 
 got {
-one(m).get(0)
-two(m).get(1)
+  one(m).get(0)
+  two(m).get(1)
 }
 }}
 
@@ -569,18 +569,16 @@ two(m).get(1)
 
 The order of method calls can be checked by creating calls and chaining them with `andThen`: ${snippet{
 val m1 = mock[List[String]]
-val m2 = mock[List[String]]
 
 m1.get(0)
-m1.get(0)
-m2.get(0)
+m1.get(1)
 
 there was one(m1).get(0) andThen one(m1).get(1)
 }}
 when several mocks are involved, the expected order must be specified as an implicit value: ${snippet{
 val m1 = mock[List[String]]
 val m2 = mock[List[String]]
-// 8<--
+
 implicit val order = inOrder(m1, m2)
 there was one(m1).get(0) andThen one(m2).get(0)
 }}
