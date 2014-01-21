@@ -4,6 +4,7 @@ package specification
 import main._
 import reporter.DefaultSelection
 import matcher.ThrownExpectations
+import org.specs2.specification.TagsFragments.TaggedAsAlways
 
 class TagsSpec extends Specification with ThrownExpectations with Tags { def is = s2"""
 
@@ -22,31 +23,31 @@ during the specification execution. There are 2 types of tags for marking a sing
                                                                                                                         
  A TaggedAs(t1) fragment can be created using the tag method in an Acceptance specification
    then, when using exclude='t1'
-     the tagged fragment is excluded from the selection                                             ${tag1}
-      and other fragments are kept                                                                  ${tag2}
+     the tagged fragment is excluded from the selection                                             $tag1
+      and other fragments are kept                                                                  $tag2
    then, when using include='t1'
-     the tagged fragment is included in the selection                                               ${tag3}
-     and other fragments are excluded                                                               ${tag4}
-     a fragment with several names is also included                                                 ${tag5}
-     a SpecStart is not excluded                                                                    ${tag6}
-     a SpecEnd is not excluded                                                                      ${tag7}
+     the tagged fragment is included in the selection                                               $tag3
+     and other fragments are excluded                                                               $tag4
+     a fragment with several names is also included                                                 $tag5
+     a SpecStart is not excluded                                                                    $tag6
+     a SpecEnd is not excluded                                                                      $tag7
 
  A AsSection(t1) fragment can be created using the section method in an Acceptance specification
    then, when using exclude='t1'
-     the tagged fragments just before and after the section tag are excluded from the selection     ${section1}
-     and the fragments before the section are kept                                                  ${section2}
+     the tagged fragments just before and after the section tag are excluded from the selection     $section1
+     and the fragments before the section are kept                                                  $section2
      if the section is closed with another AsSection fragment containing the tag t1
-       the tagged fragments between the section tags are excluded                                   ${section3}
-       and the fragments outside the section are kept                                               ${section4}
+       the tagged fragments between the section tags are excluded                                   $section3
+       and the fragments outside the section are kept                                               $section4
    then, when using include='t1'
-     the tagged fragments just before and after the section tag are included in the selection       ${section5}
-     and the fragments before the section are excluded                                              ${section6}
+     the tagged fragments just before and after the section tag are included in the selection       $section5
+     and the fragments before the section are excluded                                              $section6
      if the section is closed with another AsSection fragment containing the tag t1
-       the tagged fragments between the section tags are included                                   ${section7}
-       and the fragments outside the section are excluded                                           ${section8}
+       the tagged fragments between the section tags are included                                   $section7
+       and the fragments outside the section are excluded                                           $section8
    then, when using several tags in the section
-     opening and closing a section with the same tags                                               ${section9}
-     opening and closing a section with different tags                                              ${section10}
+     opening and closing a section with the same tags                                               $section9
+     opening and closing a section with different tags                                              $section10
 
  Tags can also be used in a mutable specification
    a tag call on the line before an example will mark it                                            ${mutabletags().e1}
@@ -55,6 +56,11 @@ during the specification execution. There are 2 types of tags for marking a sing
 
  Tags can be specified from arguments
    from system properties                                                                           ${fromargs().e1}
+
+ There are special tags to make sure that some fragments are always kept
+   adding an AlwaysTag will keep the next fragment whenever
+     a given tag is included                                                                        $always1
+     a given tag is excluded                                                                        $always2
                                                                                                     """
 
   import DefaultSelection._
@@ -172,4 +178,16 @@ during the specification execution. There are 2 types of tags for marking a sing
       select(arguments)(SpecificationStructure(tagged)).fragments.fragments.map(_.toString) must containMatch("e1")
     }
   }
+
+  val alwaysTagged =
+      "text" ^
+      "e0" ! success ^ TaggedAsAlways ^
+      "e1" ! success ^ tag("t1") ^
+      "e2" ! success ^ end
+
+  def always1 = {
+    includeMustSelect(alwaysTagged, tags="t1", included="i0", excluded="e2") and
+    includeMustSelect(alwaysTagged, tags="t1", included="i1", excluded="e2")
+  }
+  def always2 = pending
 }

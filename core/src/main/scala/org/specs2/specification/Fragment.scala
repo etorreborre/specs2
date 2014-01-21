@@ -329,68 +329,98 @@ object StandardFragments {
  * Those fragments are used to tag other fragments in a specification\
  */
 object TagsFragments {
-  trait TaggingFragment extends Fragment {
+
+  trait TaggingFragment extends Fragment { outer =>
     val location = new Location()
     /** tagging names */
     def names: Seq[String]
     /** @return true if the fragment tagged with this must be kept */
-    def keep(args: Arguments): Boolean = SeparatedTags(args.include, args.exclude).keep(names)
+    def keep(args: Arguments): Boolean
+
+    /** @return a tag where both "keep" conditions apply */
+    def overrideWith(other: TaggingFragment): TaggingFragment = new TaggingFragment {
+      def isSection = outer.isSection
+      def isTaggingNext: Boolean = outer.isTaggingNext
+      def keep(args: Arguments) = outer.keep(args) && other.keep(args)
+      def names = (outer.names ++ other.names).distinct
+    }
+
+    override def equals(o: Any) = {
+      o match {
+        case t: TaggingFragment =>
+          names.distinct.toSet == t.names.distinct.toSet &&
+          isSection            == t.isSection            &&
+          isTaggingNext        == t.isTaggingNext
+        case _ => false
+      }
+    }
+
     /** @return true if this tagging fragment is a section */
     def isSection: Boolean
-    /** @return true if this fragment has no names */
-    def isEmpty = names.isEmpty
+    /** @return true if this tagging fragment is tagging the next fragment */
+    def isTaggingNext: Boolean
   }
-  /** tags the next fragment */
-  case class Tag(names: String*) extends TaggingFragment {
+
+  trait IncludeExcludeTag extends TaggingFragment {
+    /** @return true if the fragment tagged with this must be kept */
+    def keep(args: Arguments): Boolean = SeparatedTags(args.include, args.exclude).keep(names)
+  }
+
+  object AlwaysTag extends TaggingFragment {
     def isSection = false
-    def add(other: Tag) = Tag((names ++ other.names).distinct:_*)
+    def isTaggingNext = true
+    def keep(args: Arguments) = true
+    def names = Seq("___always___")
+  }
+
+  object TaggedAsAlways extends TaggingFragment {
+    def isSection = false
+    def isTaggingNext = false
+    def keep(args: Arguments) = true
+    def names = Seq("___always___")
+  }
+
+  object AlwaysSection extends TaggingFragment {
+    def isSection = true
+    def isTaggingNext = true
+    def keep(args: Arguments) = true
+    def names = Seq("___always___")
+  }
+
+  object AlwaysAsSection extends TaggingFragment {
+    def isSection = true
+    def isTaggingNext = false
+    def keep(args: Arguments) = true
+    def names = Seq("___always___")
+  }
+
+  /** tags the next fragment */
+  case class Tag(names: String*) extends IncludeExcludeTag {
+    def isSection = false
+    def isTaggingNext = true
+
     override def toString = names.mkString("Tag(", ",", ")")
-    override def equals(o: Any) = {
-      o match {
-        case t @ Tag(_*)      => names.distinct.toSet == t.names.distinct.toSet
-        case t @ TaggedAs(_*) => names.distinct.toSet == t.names.distinct.toSet
-        case _ => false
-      }
-    }
   }
   /** tags the previous fragment */
-  case class TaggedAs(names: String*) extends TaggingFragment {
+  case class TaggedAs(names: String*) extends IncludeExcludeTag {
     def isSection = false
-    def add(other: TaggedAs) = TaggedAs((names ++ other.names).distinct:_*)
+    def isTaggingNext = false
+
     override def toString = names.mkString("TaggedAs(", ",", ")")
-    override def equals(o: Any) = {
-      o match {
-        case t @ Tag(_*)      => names.distinct.toSet == t.names.distinct.toSet
-        case t @ TaggedAs(_*) => names.distinct.toSet == t.names.distinct.toSet
-        case _ => false
-      }
-    }
   }
   /** the previous fragment starts a section */
-  case class AsSection(names: String*) extends TaggingFragment {
+  case class AsSection(names: String*) extends IncludeExcludeTag {
     def isSection = true
-    def add(other: AsSection) = AsSection((names ++ other.names).distinct:_*)
+    def isTaggingNext = false
+
     override def toString = names.mkString("AsSection(", ",", ")")
-    override def equals(o: Any) = {
-      o match {
-        case s @ AsSection(_*) => names.distinct.toSet == s.names.distinct.toSet
-        case s @ Section(_*)   => names.distinct.toSet == s.names.distinct.toSet
-        case _ => false
-      }
-    }
   }
   /** the next fragment starts a section */
-  case class Section(names: String*) extends TaggingFragment {
+  case class Section(names: String*) extends IncludeExcludeTag {
     def isSection = true
-    def add(other: Section) = Section((names ++ other.names).distinct:_*)
+    def isTaggingNext = true
+
     override def toString = names.mkString("Section(", ",", ")")
-    override def equals(o: Any) = {
-      o match {
-        case s @ AsSection(_*) => names.distinct.toSet == s.names.distinct.toSet
-        case s @ Section(_*)   => names.distinct.toSet == s.names.distinct.toSet
-        case _ => false
-      }
-    }
   }
 
   /**
