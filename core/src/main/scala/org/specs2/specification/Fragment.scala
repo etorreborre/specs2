@@ -339,7 +339,7 @@ object TagsFragments {
 
     /** @return a tag where both "keep" conditions apply */
     def overrideWith(other: TaggingFragment): TaggingFragment = new TaggingFragment {
-      def isSection = outer.isSection
+      def isSection = outer.isSection && other.isSection
       def isTaggingNext: Boolean = outer.isTaggingNext
       def keep(args: Arguments) = outer.keep(args) && other.keep(args)
       def names = (outer.names ++ other.names).distinct
@@ -353,6 +353,13 @@ object TagsFragments {
           isTaggingNext        == t.isTaggingNext
         case _ => false
       }
+    }
+
+    override def toString = {
+      val name =
+        if (isSection) if (isTaggingNext) "Section" else "AsSection"
+        else           if (isTaggingNext) "Tag"     else "TaggedAs"
+      s"$name(${names.mkString(",")})"
     }
 
     /** @return true if this tagging fragment is a section */
@@ -370,57 +377,56 @@ object TagsFragments {
     def isSection = false
     def isTaggingNext = true
     def keep(args: Arguments) = true
-    def names = Seq("___always___")
+    def names = Seq("specs2.internal.always")
+  }
+
+  object AlwaysWhenNoIncludeTag extends TaggingFragment {
+    def isSection = false
+    def isTaggingNext = true
+    def keep(args: Arguments) = args.include.isEmpty
+    def names = Seq("specs2.internal.alwaysWhenNoInclude")
   }
 
   object TaggedAsAlways extends TaggingFragment {
     def isSection = false
     def isTaggingNext = false
     def keep(args: Arguments) = true
-    def names = Seq("___always___")
+    def names = Seq("specs2.internal.always")
   }
 
   object AlwaysSection extends TaggingFragment {
     def isSection = true
     def isTaggingNext = true
     def keep(args: Arguments) = true
-    def names = Seq("___always___")
+    def names = Seq("specs2.internal.always")
   }
 
   object AlwaysAsSection extends TaggingFragment {
     def isSection = true
     def isTaggingNext = false
     def keep(args: Arguments) = true
-    def names = Seq("___always___")
+    def names = Seq("specs2.internal.always")
   }
 
   /** tags the next fragment */
   case class Tag(names: String*) extends IncludeExcludeTag {
     def isSection = false
     def isTaggingNext = true
-
-    override def toString = names.mkString("Tag(", ",", ")")
   }
   /** tags the previous fragment */
   case class TaggedAs(names: String*) extends IncludeExcludeTag {
     def isSection = false
     def isTaggingNext = false
-
-    override def toString = names.mkString("TaggedAs(", ",", ")")
   }
   /** the previous fragment starts a section */
   case class AsSection(names: String*) extends IncludeExcludeTag {
     def isSection = true
     def isTaggingNext = false
-
-    override def toString = names.mkString("AsSection(", ",", ")")
   }
   /** the next fragment starts a section */
   case class Section(names: String*) extends IncludeExcludeTag {
     def isSection = true
     def isTaggingNext = true
-
-    override def toString = names.mkString("Section(", ",", ")")
   }
 
   /**
@@ -428,8 +434,11 @@ object TagsFragments {
    * with both list of tags
    */
   implicit def TaggingFragmentsAreMonoid = new Monoid[TaggingFragment] {
-    val zero = Tag()
-    def append(t1: TaggingFragment, t2: =>TaggingFragment) = Tag((t1.names ++ t2.names).distinct:_*)
+    val zero = AlwaysWhenNoIncludeTag
+    def append(t1: TaggingFragment, t2: =>TaggingFragment): TaggingFragment =
+      if (t1 == zero) t2
+      else if (t2 == zero) t1
+      else t1 overrideWith t2
   }
 
   /** @return true if the object is a TaggingFragment */

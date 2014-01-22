@@ -43,7 +43,7 @@ case class SeparatedTags(included: String, excluded: String, orSeparator: String
   val exclude = excluded.splitTrim(orSeparator)
 
   lazy val keepFunction = (n: Seq[String], tags: Seq[String]) => {
-    tags.exists(wanted => wanted.splitTrim(andSeparator).forall(n.map(_.trim).contains))
+    tags.exists(wanted => wanted.splitTrim(andSeparator).forall(t => n.isEmpty || n.map(_.trim).contains(t)))
   }
 
   override val containFunction = (n: Seq[String], tags: Seq[String]) => {

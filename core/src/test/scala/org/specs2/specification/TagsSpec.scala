@@ -128,8 +128,8 @@ during the specification execution. There are 2 types of tags for marking a sing
 
   def tag1 = excludeDoesntMatch(tagged, "t1", "e1")
   def tag2 = excludeMatch(tagged, "t1", "e2")
-  def tag3 = includeDoesntMatch(tagged , "t1", "e2")
-  def tag4 = includeMatch(tagged , "t1", "e1")
+  def tag3 = includeMatch(tagged , "t1", "e1")
+  def tag4 = includeDoesntMatch(tagged , "t1", "e2")
   def tag5 = includeMatch(tagged2, "t1", "e1")
   def tag6 = includeMatch(tagged , "t1", "SpecStart")
   def tag7 = includeMatch(tagged , "t1", "SpecStart")
@@ -186,8 +186,11 @@ during the specification execution. There are 2 types of tags for marking a sing
       "e2" ! success ^ end
 
   def always1 = {
-    includeMustSelect(alwaysTagged, tags="t1", included="i0", excluded="e2") and
-    includeMustSelect(alwaysTagged, tags="t1", included="i1", excluded="e2")
+    includeMustSelect(alwaysTagged, tags="t1", included="e0", excluded="e2") and
+    includeMustSelect(alwaysTagged, tags="t1", included="e1", excluded="e2")
   }
-  def always2 = pending
+
+  def always2 =
+    excludeMustSelect(alwaysTagged, tags="t1", included="e0", excluded="e1") and
+    excludeMustSelect(alwaysTagged, tags="t1", included="e2", excluded="e1")
 }
