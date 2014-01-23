@@ -339,10 +339,17 @@ object TagsFragments {
 
     /** @return a tag where both "keep" conditions apply */
     def overrideWith(other: TaggingFragment): TaggingFragment = new TaggingFragment {
-      def isSection = outer.isSection && other.isSection
-      def isTaggingNext: Boolean = outer.isTaggingNext
+      def isSection = false
+      def isTaggingNext: Boolean = false
       def keep(args: Arguments) = outer.keep(args) && other.keep(args)
       def names = (outer.names ++ other.names).distinct
+    }
+
+    def removeNames(otherNames: Seq[String]): TaggingFragment = new TaggingFragment {
+      def isSection = outer.isSection
+      def isTaggingNext: Boolean = outer.isTaggingNext
+      def keep(args: Arguments) = outer.keep(args)
+      def names = outer.names.diff(otherNames)
     }
 
     override def equals(o: Any) = {

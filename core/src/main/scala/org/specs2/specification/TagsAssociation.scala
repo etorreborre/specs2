@@ -25,22 +25,25 @@ trait TagsAssociation {
   private[specs2]
   def tags(fragments: Seq[Fragment]): Seq[TaggingFragment] = {
     val (tags, _) =
-    fragments.foldLeft((Vector(): Seq[TaggingFragment], (AlwaysWhenNoIncludeTag: TaggingFragment, AlwaysWhenNoIncludeTag: TaggingFragment))) { (res, cur) =>
+    fragments.foldLeft((Vector(): Seq[TaggingFragment], (Seq(): Seq[TaggingFragment], AlwaysWhenNoIncludeTag: TaggingFragment))) { (res, cur) =>
       val (tagged, (sectionTags, previousTag)) = res
       cur match {
         case t1: TaggingFragment if !t1.isSection =>
-          if (t1.isTaggingNext) (tagged :+ t1, (sectionTags, previousTag |+| t1))
+          if (t1.isTaggingNext) (tagged :+ t1,                   (sectionTags, previousTag |+| t1))
           else                  (tagged.mapLast(_ |+| t1) :+ t1, (sectionTags, previousTag))
 
         /** section for the next fragment */
         case t1: TaggingFragment =>
-          val (endTags, startTags) = (sectionTags.names.filter(t1.names.contains), t1.names.filterNot(sectionTags.names.contains))
+          val endTags = sectionTags.filter(_.names.exists(t1.names.contains))
+          val startTags = endTags.map(t => t.removeNames(t1.names)).filterNot(_.names.isEmpty)
+          val newSectionTags = if (endTags.isEmpty) startTags :+ t1 else startTags
+          val tagToApply = startTags.sumr
 
-          if (t1.isTaggingNext) (tagged :+ Tag(startTags:_*), (Section((sectionTags.names diff endTags) ++ startTags:_*), previousTag))
-          else                  (tagged.mapLast(_ |+| Tag(startTags:_*)) :+ t1, (Section((sectionTags.names diff endTags) ++ startTags:_*), previousTag))
+          if (t1.isTaggingNext) (tagged :+ tagToApply,                          (newSectionTags, t1))
+          else                  (tagged.mapLast(_ |+| tagToApply |+| t1) :+ t1, (newSectionTags, previousTag))
 
         /** beginning of section from the previous fragment */
-        case f => (tagged :+ (sectionTags |+| previousTag), (sectionTags, AlwaysWhenNoIncludeTag))
+        case f => (tagged :+ (sectionTags.sumr |+| previousTag), (sectionTags, AlwaysWhenNoIncludeTag))
       }
     }
     tags
