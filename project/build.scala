@@ -79,16 +79,15 @@ object build extends Build {
   lazy val analysis = Project(id = "specs2-analysis", base = file("analysis"),
     settings = Seq(
       libraryDependencies ++= Seq(
-        ("org.scala-lang" % "scala-compiler" % scalaVersion.value)
-          .exclude("org.scala-lang.modules", "scala-parser-combinators_2.11.0-M6")
-          .exclude("org.scala-lang.modules", "scala-xml_2.11.0-M6")
-        ,
+        "org.scala-lang" % "scala-compiler" % scalaVersion.value,
         "org.specs2"     % "classycle"      % "1.4.1")) ++
     moduleSettings
   ).dependsOn(common % "test->test", core, matcher, scalacheck % "test")
 
   lazy val common = Project(id = "specs2-common", base = file("common"),
     settings = moduleSettings ++ 
+      // lame
+      Seq(conflictWarning ~= { _.copy(failOnConflict = false) }) ++
       Seq(libraryDependencies ++= Seq(
             "org.scalaz"     %% "scalaz-core"       % scalazVersion.value,
             "org.scalaz"     %% "scalaz-concurrent" % scalazVersion.value,
@@ -170,7 +169,7 @@ object build extends Build {
   /**
    * Main libraries 
    */
-  lazy val scalacheckLib = "org.scalacheck" %% "scalacheck"   % "1.11.2"
+  lazy val scalacheckLib = "org.scalacheck" %% "scalacheck"   % "1.11.3"
   lazy val mockitoLib    = "org.mockito"    % "mockito-core"  % "1.9.5"
   lazy val junitLib      = "junit"          % "junit"         % "4.11"
   lazy val hamcrestLib   = "org.hamcrest"   % "hamcrest-core" % "1.3"
