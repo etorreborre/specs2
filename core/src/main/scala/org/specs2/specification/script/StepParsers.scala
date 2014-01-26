@@ -35,7 +35,7 @@ trait StepParsers extends ImplicitParameters {
   import RegexExtractor._
 
   /** This class creates Given or Then extractors from a regular expression and a function */
-  class ReadAs(regex: Regex = "".r, groups: Regex = """\{([^}]+)\}""".r) {
+  class ReadAs(regex: Regex = "".r, groups: Regex = stepParserRegex) {
     def apply(f: String => Unit) = and[Unit](f)
 
     def apply(f: (String, String) => Unit) = and[Unit](f)
@@ -92,13 +92,13 @@ trait StepParsers extends ImplicitParameters {
  */
 trait StandardDelimitedStepParsers extends StepParsers {
 
-  def anInt     = StepParser((_: String).toInt)
-  def twoInts   = StepParser((s1: String, s2: String) => (s1.toInt, s2.toInt))
-  def threeInts = StepParser((s1: String, s2: String, s3: String) => (s1.toInt, s2.toInt, s3.toInt))
+  def anInt     = StepParser((_: String).trim.toInt)
+  def twoInts   = StepParser((s1: String, s2: String) => (s1.trim.toInt, s2.trim.toInt))
+  def threeInts = StepParser((s1: String, s2: String, s3: String) => (s1.trim.toInt, s2.trim.toInt, s3.trim.toInt))
 
-  def aDouble      = StepParser((_: String).toDouble)
-  def twoDoubles   = StepParser((s1: String, s2: String) => (s1.toDouble, s2.toDouble))
-  def threeDoubles = StepParser((s1: String, s2: String, s3: String) => (s1.toDouble, s2.toDouble, s3.toDouble))
+  def aDouble      = StepParser((_: String).trim.toDouble)
+  def twoDoubles   = StepParser((s1: String, s2: String) => (s1.trim.toDouble, s2.trim.toDouble))
+  def threeDoubles = StepParser((s1: String, s2: String, s3: String) => (s1.trim.toDouble, s2.trim.toDouble, s3.trim.toDouble))
 
   def aString      = StepParser((s:String) => s)
   def twoStrings   = StepParser((s1:String, s2: String) => (s1, s2))
@@ -114,13 +114,13 @@ trait StandardRegexStepParsers extends StepParsers {
   private val decimalNumber = """(\d+(\.\d*)?|\d*\.\d+)"""
   private val string = """"[^"]*""""
 
-  def anInt     = groupAs(wholeNumber).and((_: String).toInt)
-  def twoInts   = groupAs(wholeNumber).and((s1: String, s2: String) => (s1.toInt, s2.toInt))
-  def threeInts = groupAs(wholeNumber).and((s1: String, s2: String, s3: String) => (s1.toInt, s2.toInt, s3.toInt))
+  def anInt     = groupAs(wholeNumber).and((_: String).trim.toInt)
+  def twoInts   = groupAs(wholeNumber).and((s1: String, s2: String) => (s1.trim.toInt, s2.trim.toInt))
+  def threeInts = groupAs(wholeNumber).and((s1: String, s2: String, s3: String) => (s1.trim.toInt, s2.trim.toInt, s3.trim.toInt))
 
-  def aDouble      = groupAs("-?"+decimalNumber).and((_: String).toDouble)
-  def twoDoubles   = groupAs("-?"+decimalNumber).and((s1: String, s2: String) => (s1.toDouble, s2.toDouble))
-  def threeDoubles = groupAs("-?"+decimalNumber).and((s1: String, s2: String, s3: String) => (s1.toDouble, s2.toDouble, s3.toDouble))
+  def aDouble      = groupAs("-?"+decimalNumber).and((_: String).trim.toDouble)
+  def twoDoubles   = groupAs("-?"+decimalNumber).and((s1: String, s2: String) => (s1.trim.toDouble, s2.trim.toDouble))
+  def threeDoubles = groupAs("-?"+decimalNumber).and((s1: String, s2: String, s3: String) => (s1.trim.toDouble, s2.trim.toDouble, s3.trim.toDouble))
 
   def aString      = groupAs(string).and((s:String) => s)
   def twoStrings   = groupAs(string).and((s1:String, s2: String) => (s1, s2))
