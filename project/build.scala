@@ -147,7 +147,9 @@ object build extends Build {
 
   lazy val matcherExtra = Project(id = "specs2-matcher-extra", base = file("matcher-extra"),
     settings = moduleSettings ++ Seq(
-      libraryDependencies ++= (if (scalaVersion.value.startsWith("2.11")) Nil else List(paradisePlugin))
+      libraryDependencies ++= (if (scalaVersion.value.startsWith("2.11")) Nil else 
+        List(paradisePlugin,
+             "org.scalamacros" %% "quasiquotes" % "2.0.0-M3" cross CrossVersion.full))
     )
   ).dependsOn(analysis, scalacheck, matcher, core % "test->test")
 
