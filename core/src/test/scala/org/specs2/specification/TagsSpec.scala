@@ -16,10 +16,24 @@ during the specification execution. There are 2 types of tags for marking a sing
  * `Tag(name1, name2,...)` marks the next fragment as tagged with the given names
 
  * `AsSection(name1, name2,...)` marks the previous fragment and the next as tagged with the given names,
-    until the next `Section(name1, name2)` tag
+    until the next `AsSection(name1, name2)` tag
  * `Section(name1, name2,...)` marks the next fragments as tagged with the given names, until the next `Section(name1, name2)` tag
 
-                                                                                                                        
+The logic for keeping fragments based on tags is the following:
+
+ 1. section tags are transformed into simple tags for each fragment they apply to
+
+ 2. a fragment that is tagged will only be included in the specification if the `keep(args: Arguments)` method
+    returns true
+
+ 3. "simple" tags have their `keep` method implemented based on the tag names. If `args.include` is specified
+    and the tag has all the `args.include` names then the fragment will be included. If `args.exclude` is specified
+    and the tag has any of the `args.exclude` names then the fragment will be excluded
+
+ 4. if 2 section tags (or one section tag and a simple tag) apply to a Fragment then both their `keep` method must return
+      true for the fragment to be kept
+
+
                                                                                                                         
  A TaggedAs(t1) fragment can be created using the tag method in an Acceptance specification
    then, when using exclude='t1'
@@ -57,10 +71,11 @@ during the specification execution. There are 2 types of tags for marking a sing
  Tags can be specified from arguments
    from system properties                                                                           ${fromargs().e1}
 
- There are special tags to make sure that some fragments are always kept
-   adding an AlwaysTag will keep the next fragment whenever
-     a given tag is included                                                                        $always1
-     a given tag is excluded                                                                        $always2
+ "Custom" tags can be created with a specific `keep` logic
+   the AlwaysTag will keep the next fragment whenever
+     args.include is specified                                                                      $always1
+     args.include is specified                                                                      $always2
+   mixing a Named section with a custom section must overlap both keep methods                      $custom1
                                                                                                     """
 
   import DefaultSelection._
@@ -193,4 +208,6 @@ during the specification execution. There are 2 types of tags for marking a sing
   def always2 =
     excludeMustSelect(alwaysTagged, tags="t1", included="e0", excluded="e1") and
     excludeMustSelect(alwaysTagged, tags="t1", included="e2", excluded="e1")
+
+  def custom1 = pending
 }
