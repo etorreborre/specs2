@@ -44,7 +44,7 @@ object build extends Build {
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
   lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
-  lazy val paradisePlugin = compilerPlugin("org.scalamacros" %% "paradise" % "2.0.0-M1" cross CrossVersion.full)
+  lazy val paradisePlugin = compilerPlugin("org.scalamacros" %% "paradise" % "2.0.0-M3" cross CrossVersion.full)
 
   lazy val aggregateCompile = ScopeFilter(
              inProjects(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock),
@@ -118,7 +118,10 @@ object build extends Build {
 
   lazy val gwt = Project(id = "specs2-gwt", base = file("gwt"),
     settings = Seq(
-      libraryDependencies += "com.chuusai" %% "shapeless" % "2.0.0-M1" cross CrossVersion.full
+      libraryDependencies <+= (scalaVersion) { sv => 
+        if (sv.contains("2.11")) "com.chuusai" % "shapeless_2.11.0-M7" % "2.0.0-M1"
+        else                     "com.chuusai" % "shapeless_2.10.3" % "2.0.0-M1"
+      }
     ) ++ moduleSettings
   ).dependsOn(core, matcherExtra, scalacheck)
 
