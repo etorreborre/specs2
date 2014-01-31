@@ -11,17 +11,17 @@ import specification.{Fragments, Fragment}
  */
 trait Tags extends org.specs2.specification.Tags { outer: FragmentsBuilder =>
   /** create a Tag fragment */
-  override def tag(names: String*): TaggingFragment = {
-    val t = Tag(names:_*)
-    addFragments(t)
-    t
-  }
+  override def tag(names: String*): TaggingFragment = addTag(Tag(names:_*))
+
   /** create a Section fragment */
-  override def section(names: String*): TaggingFragment = {
-    val t = Section(names:_*)
+  override def section(names: String*): TaggingFragment = addTag(Section(names:_*))
+
+  /** add a tagging fragment to the specification */
+  def addTag(t: TaggingFragment) = {
     addFragments(t)
     t
   }
+
   /**
    * This implicit allows to add tags and sections _after_ the examples
    */

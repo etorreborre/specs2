@@ -1,7 +1,7 @@
 package org.specs2
 package guide
 
-import specification.{Snippets, Around, Example, DefaultExampleFactory, ExampleFactory}
+import org.specs2.specification._
 import execute.{AsResult, Result, ResultExecution}
 import main.{CommandLineArguments, Arguments}
 import matcher.Matcher
@@ -319,6 +319,19 @@ be closed by a corresponding `section` call on a new line. For example, `example
 
 * when the `section` call is appended to a block of Fragments on the same line, all the fragments of that block are part of
 the section: `example 5` and `example 6` are tagged with `slow`
+
+#### `Always` tag
+
+Some specifications need to have some steps which will always be included whatever tags are specified on the command line. This is the case when defining a "template" specification with setup/teardown steps: ${snippet{
+  import TagsFragments._
+
+  trait DatabaseSpec extends Specification {
+    override def map(fs: =>Fragments) =
+      AlwaysTag ^ Step("startDb") ^
+      fs ^
+      AlwaysTag ^ Step("cleanDb")
+  }
+}}
 
 #### Skip examples
 
