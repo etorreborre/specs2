@@ -4,7 +4,8 @@ package specification
 import main._
 import reporter.DefaultSelection
 import matcher.ThrownExpectations
-import org.specs2.specification.TagsFragments.TaggedAsAlways
+import org.specs2.specification.TagsFragments.{TaggingFragment, TaggedAsAlways}
+import org.specs2.data.NamedTag
 
 class TagsSpec extends Specification with ThrownExpectations with Tags { def is = s2"""
 
@@ -209,5 +210,41 @@ The logic for keeping fragments based on tags is the following:
     excludeMustSelect(alwaysTagged, tags="t1", included="e0", excluded="e1") and
     excludeMustSelect(alwaysTagged, tags="t1", included="e2", excluded="e1")
 
-  def custom1 = pending
+  object CustomTagged1 extends TaggingFragment {
+    def isSection = true
+    def isTaggingNext = false
+
+    def tag: NamedTag = new NamedTag {
+      def keep(args: Arguments, names: Seq[String]) = args.include.contains("1")
+      def names = Seq("1")
+    }
+  }
+
+  object CustomTagged2 extends TaggingFragment {
+    def isSection = true
+    def isTaggingNext = false
+
+    def tag: NamedTag = new NamedTag {
+      def keep(args: Arguments, names: Seq[String]) = args.include.contains("2")
+      def names = Seq("2")
+    }
+  }
+
+  val customSection: Fragments =
+    "text" ^
+      "e0" ! success ^ CustomTagged1 ^
+      "e1" ! success ^
+      "e2" ! success ^ CustomTagged2 ^
+      "e3" ! success ^
+      "e4" ! success ^ CustomTagged1 ^
+      "e5" ! success ^
+      "e6" ! success ^ CustomTagged2 ^
+      "e7" ! success ^
+      "e8" ! success ^ end
+
+  def custom1 =
+    includeMatch(customSection, tags="1", "e0", "e1") and
+    includeMatch(customSection, tags="2", "e5", "e6") and
+    includeMatch(customSection, tags="12", "e2", "e3", "e4")
+
 }

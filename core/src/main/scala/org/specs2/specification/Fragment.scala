@@ -11,7 +11,7 @@ import Regexes._
 import scalaz.Monoid
 import io.Location
 import scala.Either
-import data.SeparatedTags
+import org.specs2.data.{NamedTag, SeparatedTags}
 import TagsFragments._
 import scala.xml.NodeSeq
 
@@ -332,106 +332,97 @@ object TagsFragments {
 
   trait TaggingFragment extends Fragment { outer =>
     val location = new Location()
-    /** tagging names */
-    def names: Seq[String]
-    /** @return true if the fragment tagged with this must be kept */
-    def keep(args: Arguments): Boolean
 
-    /** @return a tag where both "keep" conditions apply */
+    def tag: NamedTag
+    def names: Seq[String] = tag.names
+    /** @return true if this fragment starts a section */
+    def isSection: Boolean
+    /** @return true if this fragment tags the next fragment */
+    def isTaggingNext: Boolean
+
+    /** @return true if the arguments indicate that this tag must be kept */
+    def keep(args: Arguments): Boolean = tag.keep(args)
+
+    /** @return a tag where both "keep" conditions apply and where new names are used for evaluating the "keep" condition */
     def overrideWith(other: TaggingFragment): TaggingFragment = new TaggingFragment {
+      def tag = outer.tag.overrideWith(other.tag)
       def isSection = false
-      def isTaggingNext: Boolean = false
-      def keep(args: Arguments) = outer.keep(args) && other.keep(args)
-      def names = (outer.names ++ other.names).distinct
+      def isTaggingNext = false
     }
 
-    def removeNames(otherNames: Seq[String]): TaggingFragment = new TaggingFragment {
-      def isSection = outer.isSection
-      def isTaggingNext: Boolean = outer.isTaggingNext
-      def keep(args: Arguments) = outer.keep(args)
-      def names = outer.names.diff(otherNames)
+    def removeNames(otherNames: Seq[String]): TaggingFragment =
+      setNames(outer.names.diff(otherNames))
+
+    def setNames(otherNames: Seq[String]): TaggingFragment = new TaggingFragment {
+      def tag = outer.tag.setNames(otherNames)
+      def isSection = false
+      def isTaggingNext = false
     }
 
     override def equals(o: Any) = {
       o match {
         case t: TaggingFragment =>
-          names.distinct.toSet == t.names.distinct.toSet &&
-          isSection            == t.isSection            &&
-          isTaggingNext        == t.isTaggingNext
+          t.tag == tag                     &&
+          isSection == t.isSection         &&
+          isTaggingNext == t.isTaggingNext
         case _ => false
       }
     }
 
-    override def toString = {
-      val name =
-        if (isSection) if (isTaggingNext) "Section" else "AsSection"
-        else           if (isTaggingNext) "Tag"     else "TaggedAs"
-      s"$name(${names.mkString(",")})"
-    }
-
-    /** @return true if this tagging fragment is a section */
-    def isSection: Boolean
-    /** @return true if this tagging fragment is tagging the next fragment */
-    def isTaggingNext: Boolean
-  }
-
-  trait IncludeExcludeTag extends TaggingFragment {
-    /** @return true if the fragment tagged with this must be kept */
-    def keep(args: Arguments): Boolean = SeparatedTags(args.include, args.exclude).keep(names)
+    override def toString = tag.toString
   }
 
   object AlwaysTag extends TaggingFragment {
+    def tag = data.AlwaysTag
     def isSection = false
     def isTaggingNext = true
-    def keep(args: Arguments) = true
-    def names = Seq("specs2.internal.always")
   }
 
   object AlwaysWhenNoIncludeTag extends TaggingFragment {
+    def tag = data.AlwaysWhenNoIncludeTag
     def isSection = false
     def isTaggingNext = true
-    def keep(args: Arguments) = args.include.isEmpty
-    def names = Seq("specs2.internal.alwaysWhenNoInclude")
   }
 
   object TaggedAsAlways extends TaggingFragment {
+    def tag = data.AlwaysTag
     def isSection = false
     def isTaggingNext = false
-    def keep(args: Arguments) = true
-    def names = Seq("specs2.internal.always")
   }
 
   object AlwaysSection extends TaggingFragment {
+    def tag = data.AlwaysTag
     def isSection = true
     def isTaggingNext = true
-    def keep(args: Arguments) = true
-    def names = Seq("specs2.internal.always")
   }
 
   object AlwaysAsSection extends TaggingFragment {
+    def tag = data.AlwaysTag
     def isSection = true
     def isTaggingNext = false
-    def keep(args: Arguments) = true
-    def names = Seq("specs2.internal.always")
   }
 
   /** tags the next fragment */
-  case class Tag(names: String*) extends IncludeExcludeTag {
+  case class Tag(override val names: String*) extends TaggingFragment {
+    def tag = data.Tag(names:_*)
     def isSection = false
     def isTaggingNext = true
   }
   /** tags the previous fragment */
-  case class TaggedAs(names: String*) extends IncludeExcludeTag {
+  case class TaggedAs(override val names: String*) extends TaggingFragment {
+    def tag = data.Tag(names:_*)
     def isSection = false
     def isTaggingNext = false
   }
   /** the previous fragment starts a section */
-  case class AsSection(names: String*) extends IncludeExcludeTag {
+  case class AsSection(override val names: String*) extends TaggingFragment {
+    def tag = data.Tag(names:_*)
     def isSection = true
     def isTaggingNext = false
   }
   /** the next fragment starts a section */
-  case class Section(names: String*) extends IncludeExcludeTag {
+  case class Section(override val names: String*) extends TaggingFragment {
+    def tag = data.Tag(names:_*)
     def isSection = true
     def isTaggingNext = true
   }
@@ -440,8 +431,8 @@ object TagsFragments {
    * define a very coarse Monoid for TaggingFragments where appending 2 TaggingFragments returns a Tag object
    * with both list of tags
    */
-  implicit def TaggingFragmentsAreMonoid = new Monoid[TaggingFragment] {
-    val zero = AlwaysWhenNoIncludeTag
+  implicit val TaggingFragmentsAreMonoid = new Monoid[TaggingFragment] {
+    val zero: TaggingFragment = AlwaysWhenNoIncludeTag
     def append(t1: TaggingFragment, t2: =>TaggingFragment): TaggingFragment =
       if (t1 == zero) t2
       else if (t2 == zero) t1

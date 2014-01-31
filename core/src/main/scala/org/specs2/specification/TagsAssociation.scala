@@ -34,13 +34,13 @@ trait TagsAssociation {
 
         /** section for the next fragment */
         case t1: TaggingFragment =>
-          val endTags = sectionTags.filter(_.names.exists(t1.names.contains))
-          val startTags = endTags.map(t => t.removeNames(t1.names)).filterNot(_.names.isEmpty)
+          val endTags        = sectionTags.filter(_.names.exists(t1.names.contains))
+          val startTags      = sectionTags.map(t => t.removeNames(t1.names)).filterNot(_.names.isEmpty)
           val newSectionTags = if (endTags.isEmpty) startTags :+ t1 else startTags
-          val tagToApply = startTags.sumr
+          val tagToApply     = startTags.sumr |+| t1
 
-          if (t1.isTaggingNext) (tagged :+ tagToApply,                          (newSectionTags, t1))
-          else                  (tagged.mapLast(_ |+| tagToApply |+| t1) :+ t1, (newSectionTags, previousTag))
+          if (t1.isTaggingNext) (tagged :+ tagToApply,                   (newSectionTags, t1))
+          else                  (tagged.mapLast(_ |+| tagToApply) :+ t1, (newSectionTags, previousTag))
 
         /** beginning of section from the previous fragment */
         case f => (tagged :+ (sectionTags.sumr |+| previousTag), (sectionTags, AlwaysWhenNoIncludeTag))
