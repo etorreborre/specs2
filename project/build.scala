@@ -85,7 +85,7 @@ object build extends Build {
   ).dependsOn(common % "test->test", core, matcher, scalacheck % "test")
 
   lazy val common = Project(id = "specs2-common", base = file("common"),
-    settings = moduleSettings ++
+    settings = moduleSettings ++ 
       // lame
       Seq(conflictWarning ~= { _.copy(failOnConflict = false) }) ++
       Seq(libraryDependencies ++= Seq(

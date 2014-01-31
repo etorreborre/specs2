@@ -38,10 +38,10 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   /** append the fragments from fs, appending the text fragments if this object ends with a TaggingFragment and fs starts with a TaggingFragment */
   def appendTags(fs: Fragments): Fragments =
     (middle, fs.middle) match {
-      case (begin :+ (section1: AsSection), (section2: AsSection) +: rest) => new FragmentsFragment(this.copy(middle = Seq())) ^ fs.copy(middle = begin ++ (section1.add(section2) +: rest))
-      case (begin :+ (section1: Section),   (section2: Section) +: rest)   => new FragmentsFragment(this.copy(middle = Seq())) ^ fs.copy(middle = begin ++ (section1.add(section2) +: rest))
-      case (begin :+ (tag1: TaggedAs),      (tag2: TaggedAs) +: rest)      => new FragmentsFragment(this.copy(middle = Seq())) ^ fs.copy(middle = begin ++ (tag1.add(tag2) +: rest))
-      case (begin :+ (tag1: Tag),           (tag2: Tag) +: rest)           => new FragmentsFragment(this.copy(middle = Seq())) ^ fs.copy(middle = begin ++ (tag1.add(tag2) +: rest))
+      case (begin :+ (section1: AsSection), (section2: AsSection) +: rest) => new FragmentsFragment(this.copy(middle = Seq())) ^ fs.copy(middle = begin ++ (section1.overrideWith(section2) +: rest))
+      case (begin :+ (section1: Section),   (section2: Section) +: rest)   => new FragmentsFragment(this.copy(middle = Seq())) ^ fs.copy(middle = begin ++ (section1.overrideWith(section2) +: rest))
+      case (begin :+ (tag1: TaggedAs),      (tag2: TaggedAs) +: rest)      => new FragmentsFragment(this.copy(middle = Seq())) ^ fs.copy(middle = begin ++ (tag1.overrideWith(tag2) +: rest))
+      case (begin :+ (tag1: Tag),           (tag2: Tag) +: rest)           => new FragmentsFragment(this.copy(middle = Seq())) ^ fs.copy(middle = begin ++ (tag1.overrideWith(tag2) +: rest))
       case _                                                               => new FragmentsFragment(this) ^ fs
     }
 
