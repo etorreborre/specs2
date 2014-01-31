@@ -143,7 +143,7 @@ class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatche
         f match {
           case t: Text if t.text.raw.trim.isEmpty   => None
           case t: Text                              => Some(Text(t.text.raw.trim))
-          case t: TagsFragments.TaggingFragment     => None
+          case t: TagFragments.TagFragment     => None
           case other                                => Some(f)
         }
       }

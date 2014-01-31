@@ -4,7 +4,7 @@ package script
 
 import collection.Seqx._
 import text.Trim._
-import TagsFragments.{Tag, Section}
+import TagFragments.{Tag, Section}
 import execute.AsResult
 
 /**

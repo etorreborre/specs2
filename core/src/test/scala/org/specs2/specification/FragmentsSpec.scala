@@ -3,7 +3,7 @@ package specification
 
 import Fragments._
 import matcher.ThrownExpectations
-import org.specs2.specification.TagsFragments.AsSection
+import org.specs2.specification.TagFragments.AsSection
 
 class FragmentsSpec extends org.specs2.mutable.script.Specification with Groups with ThrownExpectations { s2"""
 

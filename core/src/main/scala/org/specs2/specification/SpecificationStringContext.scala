@@ -9,7 +9,7 @@ import reflect.Macros._
 import text.Interpolated
 import text.NotNullStrings._
 import control.Exceptions._
-import specification.TagsFragments._
+import specification.TagFragments._
 
 /**
  * Allow to use fragments inside interpolated strings starting with s2 in order to build the specification content

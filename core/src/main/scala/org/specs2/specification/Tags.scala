@@ -1,7 +1,7 @@
 package org.specs2
 package specification
 
-import TagsFragments._
+import TagFragments._
 import FormattingTags._
 
 /**
@@ -9,9 +9,9 @@ import FormattingTags._
  */
 trait Tags {
   /** create a TaggedAs fragment */
-  def tag(names: String*): TaggingFragment = TaggedAs(names:_*)
+  def tag(names: String*): TagFragment = TaggedAs(names:_*)
   /** create a AsSection fragment */
-  def section(names: String*): TaggingFragment = AsSection(names:_*)
+  def section(names: String*): TagFragment = AsSection(names:_*)
 
   /** shortcut to add tag more quickly when rerunning failed tests */
   private[specs2] def xtag = tag("x")

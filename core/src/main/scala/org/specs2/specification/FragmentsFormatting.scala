@@ -1,7 +1,7 @@
 package org.specs2
 package specification
 
-import org.specs2.specification.TagsFragments.{TaggedAs, TaggingFragment}
+import org.specs2.specification.TagFragments.{TaggedAs, TagFragment}
 import FormattingFragments._
 
 /**
@@ -27,7 +27,7 @@ trait DefaultFragmentsFormatting extends FragmentsFormatting with TagsAssociatio
     Fragments.create(tagged:_*)
   }
 
-  private def formattedStringFor[F <: FormattedString](tag: TaggingFragment) = (formatted: F) =>
+  private def formattedStringFor[F <: FormattedString](tag: TagFragment) = (formatted: F) =>
     formatted.formatWithTagNames(tag.names)
 }
 

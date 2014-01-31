@@ -1,7 +1,7 @@
 package org.specs2
 package guide
 
-import org.specs2.specification._
+import specification.{TagFragments, Fragments, Step, Around, Example, DefaultExampleFactory, Snippets}
 import execute.{AsResult, Result, ResultExecution}
 import main.{CommandLineArguments, Arguments}
 import matcher.Matcher
@@ -323,7 +323,7 @@ the section: `example 5` and `example 6` are tagged with `slow`
 #### `Always` tag
 
 Some specifications need to have some steps which will always be included whatever tags are specified on the command line. This is the case when defining a "template" specification with setup/teardown steps: ${snippet{
-  import TagsFragments._
+  import TagFragments._
 
   trait DatabaseSpec extends Specification {
     override def map(fs: =>Fragments) =

@@ -3,7 +3,7 @@ package reporter
 
 import main.Arguments
 import specification._
-import TagsFragments._
+import TagFragments._
 
 /**
  * This trait selects fragments based on their tags

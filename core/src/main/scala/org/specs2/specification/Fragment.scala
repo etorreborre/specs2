@@ -12,7 +12,7 @@ import scalaz.Monoid
 import io.Location
 import scala.Either
 import org.specs2.data.{NamedTag, SeparatedTags}
-import TagsFragments._
+import TagFragments._
 import scala.xml.NodeSeq
 
 /**
@@ -328,9 +328,9 @@ object StandardFragments {
 /**
  * Those fragments are used to tag other fragments in a specification\
  */
-object TagsFragments {
+object TagFragments {
 
-  trait TaggingFragment extends Fragment { outer =>
+  trait TagFragment extends Fragment { outer =>
     val location = new Location()
 
     def tag: NamedTag
@@ -344,16 +344,16 @@ object TagsFragments {
     def keep(args: Arguments): Boolean = tag.keep(args)
 
     /** @return a tag where both "keep" conditions apply and where new names are used for evaluating the "keep" condition */
-    def overrideWith(other: TaggingFragment): TaggingFragment = new TaggingFragment {
+    def overrideWith(other: TagFragment): TagFragment = new TagFragment {
       def tag = outer.tag.overrideWith(other.tag)
       def isSection = false
       def isTaggingNext = false
     }
 
-    def removeNames(otherNames: Seq[String]): TaggingFragment =
+    def removeNames(otherNames: Seq[String]): TagFragment =
       setNames(outer.names.diff(otherNames))
 
-    def setNames(otherNames: Seq[String]): TaggingFragment = new TaggingFragment {
+    def setNames(otherNames: Seq[String]): TagFragment = new TagFragment {
       def tag = outer.tag.setNames(otherNames)
       def isSection = false
       def isTaggingNext = false
@@ -361,7 +361,7 @@ object TagsFragments {
 
     override def equals(o: Any) = {
       o match {
-        case t: TaggingFragment =>
+        case t: TagFragment =>
           t.tag == tag                     &&
           isSection == t.isSection         &&
           isTaggingNext == t.isTaggingNext
@@ -372,56 +372,56 @@ object TagsFragments {
     override def toString = tag.toString
   }
 
-  object AlwaysTag extends TaggingFragment {
+  object AlwaysTag extends TagFragment {
     def tag = data.AlwaysTag
     def isSection = false
     def isTaggingNext = true
   }
 
-  object AlwaysWhenNoIncludeTag extends TaggingFragment {
+  object AlwaysWhenNoIncludeTag extends TagFragment {
     def tag = data.AlwaysWhenNoIncludeTag
     def isSection = false
     def isTaggingNext = true
   }
 
-  object TaggedAsAlways extends TaggingFragment {
+  object TaggedAsAlways extends TagFragment {
     def tag = data.AlwaysTag
     def isSection = false
     def isTaggingNext = false
   }
 
-  object AlwaysSection extends TaggingFragment {
+  object AlwaysSection extends TagFragment {
     def tag = data.AlwaysTag
     def isSection = true
     def isTaggingNext = true
   }
 
-  object AlwaysAsSection extends TaggingFragment {
+  object AlwaysAsSection extends TagFragment {
     def tag = data.AlwaysTag
     def isSection = true
     def isTaggingNext = false
   }
 
   /** tags the next fragment */
-  case class Tag(override val names: String*) extends TaggingFragment {
+  case class Tag(override val names: String*) extends TagFragment {
     def tag = data.Tag(names:_*)
     def isSection = false
     def isTaggingNext = true
   }
   /** tags the previous fragment */
-  case class TaggedAs(override val names: String*) extends TaggingFragment {
+  case class TaggedAs(override val names: String*) extends TagFragment {
     def tag = data.Tag(names:_*)
     def isSection = false
     def isTaggingNext = false
   }
   /** the previous fragment starts a section */
-  case class AsSection(override val names: String*) extends TaggingFragment {
+  case class AsSection(override val names: String*) extends TagFragment {
     def tag = data.Tag(names:_*)
     def isSection = true
     def isTaggingNext = false
   }
   /** the next fragment starts a section */
-  case class Section(override val names: String*) extends TaggingFragment {
+  case class Section(override val names: String*) extends TagFragment {
     def tag = data.Tag(names:_*)
     def isSection = true
     def isTaggingNext = true
@@ -431,9 +431,9 @@ object TagsFragments {
    * define a very coarse Monoid for TaggingFragments where appending 2 TaggingFragments returns a Tag object
    * with both list of tags
    */
-  implicit val TaggingFragmentsAreMonoid = new Monoid[TaggingFragment] {
-    val zero: TaggingFragment = AlwaysWhenNoIncludeTag
-    def append(t1: TaggingFragment, t2: =>TaggingFragment): TaggingFragment =
+  implicit val TaggingFragmentsAreMonoid = new Monoid[TagFragment] {
+    val zero: TagFragment = AlwaysWhenNoIncludeTag
+    def append(t1: TagFragment, t2: =>TagFragment): TagFragment =
       if (t1 == zero) t2
       else if (t2 == zero) t1
       else t1 overrideWith t2
@@ -441,7 +441,7 @@ object TagsFragments {
 
   /** @return true if the object is a TaggingFragment */
   def isTag(f: Fragment) = f match {
-    case t: TaggingFragment => true
+    case t: TagFragment => true
     case other              => false
   }
 }

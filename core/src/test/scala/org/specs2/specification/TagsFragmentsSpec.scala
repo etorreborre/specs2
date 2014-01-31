@@ -1,7 +1,7 @@
 package org.specs2
 package specification
 import matcher.DataTables
-import TagsFragments._
+import TagFragments._
 import _root_.org.specs2.mutable.{Specification => Spec}
 
 class TagsFragmentsSpec extends Spec with DataTables {

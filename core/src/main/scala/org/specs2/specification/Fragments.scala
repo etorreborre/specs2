@@ -8,7 +8,7 @@ import scalaz.Monoid
 import Fragments._
 import specification.StandardFragments.{End, Br}
 import io.Paths._
-import org.specs2.specification.TagsFragments._
+import org.specs2.specification.TagFragments._
 
 /**
  * A Fragments object is a list of fragments with a SpecStart and a SpecEnd
@@ -78,7 +78,7 @@ case class Fragments(specTitle: Option[SpecName] = None, middle: Seq[Fragment] =
   def examples: Seq[Example]       = middle.collect(isAnExample)
   def texts: Seq[Text]             = middle.collect(isSomeText)
   def starts: Seq[SpecStart]       = middle.collect(isASpecStart)
-  def tags: Seq[TaggingFragment]   = middle.collect(isSomeTag)
+  def tags: Seq[TagFragment]   = middle.collect(isSomeTag)
 
   def linkMarkdown = linked.markdown
   def linkHtml     = linked.html
@@ -150,7 +150,7 @@ object Fragments {
   /** @return the step if the Fragment is an End fragment */
   def isAnEnd: PartialFunction[Fragment, Fragment] = { case e: End => e }
   /** @return the text if the Fragment is a TaggingFragment */
-  def isSomeTag: PartialFunction[Fragment, TaggingFragment] = { case t: TaggingFragment => t }
+  def isSomeTag: PartialFunction[Fragment, TagFragment] = { case t: TagFragment => t }
 
 
   /** @return a Fragments object with the appropriate name set on the SpecStart fragment */

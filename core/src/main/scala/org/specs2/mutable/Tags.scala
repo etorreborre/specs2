@@ -1,7 +1,7 @@
 package org.specs2
 package mutable
 
-import specification.TagsFragments._
+import specification.TagFragments._
 import specification.{Fragments, Fragment}
 
 /**
@@ -11,13 +11,13 @@ import specification.{Fragments, Fragment}
  */
 trait Tags extends org.specs2.specification.Tags { outer: FragmentsBuilder =>
   /** create a Tag fragment */
-  override def tag(names: String*): TaggingFragment = addTag(Tag(names:_*))
+  override def tag(names: String*): TagFragment = addTag(Tag(names:_*))
 
   /** create a Section fragment */
-  override def section(names: String*): TaggingFragment = addTag(Section(names:_*))
+  override def section(names: String*): TagFragment = addTag(Section(names:_*))
 
   /** add a tagging fragment to the specification */
-  def addTag(t: TaggingFragment) = {
+  def addTag(t: TagFragment) = {
     addFragments(t)
     t
   }

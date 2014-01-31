@@ -1,7 +1,7 @@
 package org.specs2
 package specification
 
-import TagsFragments._
+import TagFragments._
 import scalaz.{syntax, Foldable, Scalaz}
 import Scalaz._
 import collection.Iterablex._
@@ -12,7 +12,7 @@ trait TagsAssociation {
    * Associate each fragment with its tag according to the "tags" method
    */
   private[specs2]
-  def tagFragments(fragments: Seq[Fragment]): Seq[(Fragment, TaggingFragment)] = fragments zip tags(fragments)
+  def tagFragments(fragments: Seq[Fragment]): Seq[(Fragment, TagFragment)] = fragments zip tags(fragments)
 
   /**
    * From a Seq of Fragments create a seq of corresponding tags for each fragment, considering that:
@@ -23,17 +23,17 @@ trait TagsAssociation {
    *  - a `Section` fragment is applicable to the the next fragment to the next `Section` fragment with the same name
    */
   private[specs2]
-  def tags(fragments: Seq[Fragment]): Seq[TaggingFragment] = {
+  def tags(fragments: Seq[Fragment]): Seq[TagFragment] = {
     val (tags, _) =
-    fragments.foldLeft((Vector(): Seq[TaggingFragment], (Seq(): Seq[TaggingFragment], AlwaysWhenNoIncludeTag: TaggingFragment))) { (res, cur) =>
+    fragments.foldLeft((Vector(): Seq[TagFragment], (Seq(): Seq[TagFragment], AlwaysWhenNoIncludeTag: TagFragment))) { (res, cur) =>
       val (tagged, (sectionTags, previousTag)) = res
       cur match {
-        case t1: TaggingFragment if !t1.isSection =>
+        case t1: TagFragment if !t1.isSection =>
           if (t1.isTaggingNext) (tagged :+ t1,                   (sectionTags, previousTag |+| t1))
           else                  (tagged.mapLast(_ |+| t1) :+ t1, (sectionTags, previousTag))
 
         /** section for the next fragment */
-        case t1: TaggingFragment =>
+        case t1: TagFragment =>
           val endTags        = sectionTags.filter(_.names.exists(t1.names.contains))
           val startTags      = sectionTags.map(t => t.removeNames(t1.names)).filterNot(_.names.isEmpty)
           val newSectionTags = if (endTags.isEmpty) startTags :+ t1 else startTags

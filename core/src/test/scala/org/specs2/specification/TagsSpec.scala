@@ -4,7 +4,7 @@ package specification
 import main._
 import reporter.DefaultSelection
 import matcher.ThrownExpectations
-import org.specs2.specification.TagsFragments.{TaggingFragment, TaggedAsAlways}
+import org.specs2.specification.TagFragments.{TagFragment, TaggedAsAlways}
 import org.specs2.data.NamedTag
 
 class TagsSpec extends Specification with ThrownExpectations with Tags { def is = s2"""
@@ -210,7 +210,7 @@ The logic for keeping fragments based on tags is the following:
     excludeMustSelect(alwaysTagged, tags="t1", included="e0", excluded="e1") and
     excludeMustSelect(alwaysTagged, tags="t1", included="e2", excluded="e1")
 
-  object CustomTagged1 extends TaggingFragment {
+  object CustomTagged1 extends TagFragment {
     def isSection = true
     def isTaggingNext = false
 
@@ -220,7 +220,7 @@ The logic for keeping fragments based on tags is the following:
     }
   }
 
-  object CustomTagged2 extends TaggingFragment {
+  object CustomTagged2 extends TagFragment {
     def isSection = true
     def isTaggingNext = false
 
