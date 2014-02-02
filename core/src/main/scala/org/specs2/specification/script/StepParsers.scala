@@ -87,6 +87,8 @@ trait StepParsers extends ImplicitParameters {
   }
 }
 
+object StepParsers extends StepParsers
+
 /**
  * a few delimited parsers (with `{}`) to extract ints, doubles and strings
  */

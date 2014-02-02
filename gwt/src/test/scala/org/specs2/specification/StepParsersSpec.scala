@@ -16,8 +16,9 @@ class StepParsersSpec extends Specification with GWT with Grouped { def is = s2"
    however extracting less values than the converting function returns an error       ${g1.e5}
 
  It is possible to use other delimiters like `[]`
-   by passing a new regular expression directly to the parser                         ${g1.e1}
-   by specifying another implicit regular expression                                  ${g2.e2}
+   by passing a new regular expression directly to the parser                         ${g2.e1}
+     the stripping must be done with the new regexp                                   ${g2.e2}
+   by specifying another implicit regular expression                                  ${g2.e3}
                                                                                          """
 
   "{} delimiters" - new g1 {
@@ -30,9 +31,12 @@ class StepParsersSpec extends Specification with GWT with Grouped { def is = s2"
 
   "[] delimiters" - new g2 {
     e1 := StepParser((_:String).toInt).withRegex("""\[([^\]]+)\]""".r).parse("a value [1]") === Right(1)
-    e2 := {
+
+    e2 := StepParser((s: String) => s).withRegex("""\[([^\]]+)\]""".r).parse("a value [{1}]") === Right("{1}")
+
+    e3 := {
       implicit val stepParserRegex = """\[([^\]]+)\]""".r
-      StepParser((_:String).toInt).parse("a value {1}") === Right(1)
+      StepParser((_:String).toInt).parse("a value [1]") === Right(1)
     }
   }
 
