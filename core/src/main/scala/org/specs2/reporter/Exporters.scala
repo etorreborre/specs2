@@ -9,7 +9,9 @@ private [specs2]
 trait Exporters {
   type EE = ExecutingSpecification => ExecutedSpecification
 
-  def isConsole(args: Arguments) = !Seq("html", "junitxml", "markdown").exists(args.contains) || args.contains("console")
+  val allOptionalExporters = Seq("html", "junitxml", "markdown", "notifier", "exporter")
+
+  def isConsole(args: Arguments) = !allOptionalExporters.exists(args.contains) || args.contains("console")
 
   def exportAll(arguments: Arguments): EE = exportAll(arguments, (s: String) => arguments.commandLine.contains(s))
 
@@ -18,7 +20,7 @@ trait Exporters {
   }
 
   def exportAll(exporters: Seq[Exporting])(implicit arguments: Arguments): EE = (spec: ExecutingSpecification) => {
-    val args = arguments.commandLineFilterNot("html", "markdown", "junitxml", "console", "notifier", "exporter")
+    val args = arguments.commandLineFilterNot(allOptionalExporters :+ "console":_*)
     exporters.foreach(_.export(args)(spec))
     spec.executed
   }
