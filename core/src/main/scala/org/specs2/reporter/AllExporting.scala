@@ -26,8 +26,11 @@ trait AllExporting extends Reporter with Exporters {
       case Some(e) => {
         val storeAndExport = (spec: ExecutingSpecification) => {
           val todo = Seq(store, e.export).par
-          todo.tasksupport = new ForkJoinTaskSupport(Specs2ForkJoin.pool)
-          todo.map(_(spec)).head.asInstanceOf[ExecutingSpecification]
+          val pool = Specs2ForkJoin.pool
+          todo.tasksupport = new ForkJoinTaskSupport(pool)
+          
+          try todo.map(_(spec)).head.asInstanceOf[ExecutingSpecification]
+          finally pool.shutdown
         }
         val executed = executing |> storeAndExport
         val args = arguments <| executed.arguments

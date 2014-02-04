@@ -25,8 +25,10 @@ trait ConsoleReporter extends DefaultReporter with TextExporting {
     // this allows to print the results as soon as executed
     val storeAndExport = (spec: ExecutingSpecification) => {
       val todo = Seq(store, export).par
-      todo.tasksupport = new ForkJoinTaskSupport(Specs2ForkJoin.pool)
-      todo.map(_(spec))
+      val pool = Specs2ForkJoin.pool
+      todo.tasksupport = new ForkJoinTaskSupport(pool)
+      try     todo.map(_(spec))
+      finally pool.shutdown
     }
     val toExecute = spec |> select |> sequence |> execute
     toExecute |> storeAndExport

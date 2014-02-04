@@ -18,7 +18,7 @@ case class NamedForkJoinWorkerThreadFactory(namePrefix: String,
 
   def newThread(pool: ForkJoinPool) = {
     val t = delegate.newThread(pool)
-    t.setName(namePrefix + threadNumber.getAndIncrement)
+    t.setName(namePrefix+"-"+threadNumber.getAndIncrement)
     t.setPriority(priority)
     t
   }

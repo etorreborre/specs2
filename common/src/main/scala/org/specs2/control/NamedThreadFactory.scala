@@ -16,12 +16,12 @@ case class NamedThreadFactory(namePrefix: String,
 
   private[this] val threadNumber = new AtomicInteger(1)
 
-  require(priority >= Thread.MIN_PRIORITY, "priority too low: " + priority);
-  require(priority <= Thread.MAX_PRIORITY, "priority too high: " + priority);
+  require(priority >= Thread.MIN_PRIORITY, "priority too low: " + priority)
+  require(priority <= Thread.MAX_PRIORITY, "priority too high: " + priority)
 
   def newThread(r: Runnable) = {
-    val t = new Thread(group, r, namePrefix + threadNumber.getAndIncrement, 0)
-    t.setPriority(priority);
+    val t = new Thread(group, r, namePrefix+"-"+threadNumber.getAndIncrement, 0)
+    t.setPriority(priority)
     t
   }
 }
