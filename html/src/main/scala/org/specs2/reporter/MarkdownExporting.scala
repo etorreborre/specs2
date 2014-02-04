@@ -5,7 +5,7 @@ import main.{Diffs, Arguments}
 import specification._
 import scala.xml.{Elem, Xhtml, NodeSeq}
 import text.Trim._
-import execute.{Details, ResultStackTrace, Result}
+import execute.{Details, ResultStackTrace, Result, Skipped, Success, Failure, Pending, Error}
 import control.StackTraceFilter
 import java.io.Writer
 import text.MarkdownOptions
@@ -63,20 +63,27 @@ case class MarkdownResultOutput(text: StringBuilder = new StringBuilder)(implici
   def printText(text: FormattedString, indent: Int)                                             = printText(text.raw, indent)
   def printTextPar(text: String = "", indent: Int = 0)                                          = print("\n").printText(text, indent).print("\n")
   def printSpecStart(name: SpecName, stats: Stats)                                              = println("## "+name.title)
-  def printIssueWithIcon(message: FormattedString, iconName: String, indent: Int = 0)           = append(htmlOutput.printIssueWithIcon(message, iconName, indent).xml.toString)
-  def printTextWithIcon(message: FormattedString, iconName: String, indent: Int = 0)            = append(htmlOutput.printTextWithIcon(message, iconName, indent).xml.toString)
+  def printIssueWithIcon(message: FormattedString, iconName: String, indent: Int = 0)           = printText(message.raw, indent).append(status(iconName))
+  def printTextWithIcon(message: FormattedString, iconName: String, indent: Int = 0)            = printText(message.raw, indent).append(status(iconName))
   def printOkXmlWithIcon(xml: NodeSeq, iconName: String, indent: Int = 0)                       = append(htmlOutput.printOkXmlWithIcon(xml, iconName, indent).xml.toString)
   def printKoXmlWithIcon(xml: NodeSeq, iconName: String, indent: Int = 0)                       = append(htmlOutput.printKoXmlWithIcon(xml, iconName, indent).xml.toString)
-  def printExceptionMessage(e: Result with ResultStackTrace, indent: Int)                       = append(htmlOutput.printExceptionMessage(e, indent).xml.toString)
-  def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, indent: Int)            = append(htmlOutput.printCollapsibleExceptionMessage(e, indent).xml.toString)
-  def printDetailedFailure(details: Details, indent: Int, diffs: Diffs)                         = append(htmlOutput.printDetailedFailure(details, indent, diffs).xml.toString)
-  def printStack(e: ResultStackTrace, indent: Int, traceFilter: StackTraceFilter)               = append(htmlOutput.printStack(e, indent, traceFilter).xml.toString)
-  def printOkForm(form: NodeSeq)                                                                = append(htmlOutput.printOkForm(form).xml.toString)
-  def printKoForm(form: NodeSeq)                                                                = append(htmlOutput.printKoForm(form).xml.toString)
-  def printStats(name: SpecName, stats: Stats)                                                  = append(htmlOutput.printStats(name, stats).xml.toString)
+  def printExceptionMessage(e: Result with ResultStackTrace, indent: Int)                       = printText(e.message+s" (${e.location})", indent)
+  def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, indent: Int)            = this
+  def printDetailedFailure(details: Details, indent: Int, diffs: Diffs)                         = this
+  def printStack(e: ResultStackTrace, indent: Int, traceFilter: StackTraceFilter)               = printText(e.stackTrace.mkString("\n"), indent)
+  def printOkForm(form: NodeSeq)                                                                = this
+  def printKoForm(form: NodeSeq)                                                                = this
+  def printStats(name: SpecName, stats: Stats)                                                  = printText(
+    s"""#| ${name.title} |
+        #| Finished in ${stats.time} |
+        #| ${stats.displayResults(Arguments("nocolor"))} |""".stripMargin('#'))
+
   def printLink(link: HtmlLink)                                                                 = append(htmlOutput.printLink(link).xml.toString)
   def printLink(link: HtmlLink, indent: Int, stats: Stats = Stats(), hidden: Boolean = false)   = {
     if (hidden) this
     else print(" * "+HtmlResultOutput().printLink(link).xml.toString)
   }
+
+  protected def status(iconName: String) =
+    Seq(Success(), Failure(), Pending(), Skipped(), Error()).find(_.statusName == iconName).map(r => s" (${r.status})").getOrElse("")
 }
