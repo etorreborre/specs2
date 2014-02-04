@@ -346,16 +346,16 @@ object TagFragments {
     /** @return a tag where both "keep" conditions apply and where new names are used for evaluating the "keep" condition */
     def overrideWith(other: TagFragment): TagFragment = new TagFragment {
       def tag = outer.tag.overrideWith(other.tag)
-      def isSection = false
+      def isSection = outer.isSection || other.isSection
       def isTaggingNext = false
     }
 
     def removeNames(otherNames: Seq[String]): TagFragment =
-      setNames(outer.names.diff(otherNames))
+      setNames(outer.names.filterNot(otherNames.contains))
 
     def setNames(otherNames: Seq[String]): TagFragment = new TagFragment {
       def tag = outer.tag.setNames(otherNames)
-      def isSection = false
+      def isSection = outer.isSection
       def isTaggingNext = false
     }
 
@@ -369,7 +369,9 @@ object TagFragments {
       }
     }
 
-    override def toString = tag.toString
+    override def toString =
+     if (isSection) s"Section(${names.distinct.mkString(",")})"
+      else tag.toString
   }
 
   object AlwaysTag extends TagFragment {

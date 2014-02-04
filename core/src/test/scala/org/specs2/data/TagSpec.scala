@@ -8,13 +8,16 @@ import org.specs2.matcher.DataTables
 import NamedTag._
 import NamedTagsAreMonoid._
 
-class TagMonoidSpec extends Specification with DataTables { def is = s2"""
+class TagSpec extends Specification with DataTables { def is = s2"""
 
   Tags (simple, named, section, custom) form a monoid so that:
 
     there is a zero tag                          $zeroTag
     the monoid is associative                    $associative
     adding 2 named tags uses both keep functions $add1
+
+  It is possible to remove tags from a tag       $remove1
+
  """
 
   def zeroTag = allTags must contain { t: NamedTag =>
@@ -50,6 +53,8 @@ class TagMonoidSpec extends Specification with DataTables { def is = s2"""
       (t1 |+| t2).keep(Arguments(args)) must_== result
     }
   }
+
+  def remove1 = Tag("1", "2", "3").removeNames(Seq("2")) must_== Tag("1", "3")
 
   val tag1: NamedTag = Tag("1")
   val tag2: NamedTag = Tag("2")

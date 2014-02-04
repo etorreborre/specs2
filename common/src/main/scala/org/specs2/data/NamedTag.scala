@@ -23,7 +23,7 @@ trait NamedTag { outer =>
 
   def setNames(otherNames: Seq[String]): NamedTag = new NamedTag {
     def keep(args: Arguments, names: Seq[String]) = outer.keep(args, names)
-    def names = otherNames
+    def names = otherNames.distinct
   }
 
   override def equals(o: Any) =
