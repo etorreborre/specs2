@@ -43,13 +43,21 @@ trait Exporters {
   protected def exporter(condition: Boolean)(e: =>Exporting) = if (condition) Some(e) else None
   protected def optionalExporter(condition: Boolean)(e: Option[Exporting]) = if (condition) e else None
 
-  def exportHtml(accept: String => Boolean)    (implicit arguments: Arguments) = exporter(accept("html"))(Classes.createObject[Exporting]("org.specs2.reporter.HtmlExporting$", true).get)
+  def exportHtml(accept: String => Boolean)    (implicit arguments: Arguments) =
+    exporter(accept("html"))(Classes.createObject[Exporting]("org.specs2.reporter.HtmlExporting$", true).
+      getOrElse(sys.error("can not create an instance of the Html exporter. Is the specs2-html module on the classpath?")))
 
-  def exportMarkdown(accept: String => Boolean)  (implicit arguments: Arguments) = exporter(accept("markdown"))(Classes.createObject[Exporting]("org.specs2.reporter.MarkdownExporting$", true).get)
+  def exportMarkdown(accept: String => Boolean)  (implicit arguments: Arguments) =
+    exporter(accept("markdown"))(Classes.createObject[Exporting]("org.specs2.reporter.MarkdownExporting$", true).
+      getOrElse(sys.error("can not create an instance of the Markdown exporter. Is the specs2-markdown module on the classpath?")))
 
-  def exportJUnitxml(accept: String => Boolean)(implicit arguments: Arguments) = exporter(accept("junitxml"))(Classes.createObject[Exporting]("org.specs2.reporter.JUnitXmlExporting$", true).get)
+  def exportJUnitxml(accept: String => Boolean)(implicit arguments: Arguments) =
+    exporter(accept("junitxml"))(Classes.createObject[Exporting]("org.specs2.reporter.JUnitXmlExporting$", true).
+      getOrElse(sys.error("can not create an instance of the JUnitXml exporter. Is the specs2-junit module on the classpath?")))
 
-  def exportConsole(accept: String => Boolean) (implicit arguments: Arguments) = exporter(accept("console"))(Classes.createObject[Exporting]("org.specs2.reporter.TextExporting$", true).get)
+  def exportConsole(accept: String => Boolean) (implicit arguments: Arguments) =
+    exporter(accept("console"))(Classes.createObject[Exporting]("org.specs2.reporter.TextExporting$", true).
+      getOrElse(sys.error("could not create an instance of the Text exporter")))
 
   def exportNotifier(accept: String => Boolean)(implicit arguments: Arguments) =
     optionalExporter(accept("notifier") || !arguments.report.notifier.isEmpty)(notifierExporter(arguments))
