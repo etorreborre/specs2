@@ -433,7 +433,7 @@ The Java api for files is more or less mimicked as matchers which can operate on
  * `haveAsCanonicalPath` checks if a path has a given canonical path
  * `haveParentPath` checks if a path has a given parent path
  * `listPaths` checks if a path has a given list of children
- * `exist` checks if a file existsy
+ * `exist` checks if a file exists
 
  * `beReadable` checks if a file is readable
  * `beWritable` checks if a file is writable
