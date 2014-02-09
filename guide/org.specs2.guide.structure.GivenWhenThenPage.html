@@ -67,7 +67,7 @@
     </head><body><div id="breadcrumbs"><a href="../guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../guide/org.specs2.guide.Structure.html">Structure</a><t> / </t><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html">GivenWhenThenPage</a></div><div class="colmask threecol">
             <div class="colmid">
               <div class="colleft">
-                <div class="col1"><div id="central"><html><title>Given When Then</title><a name="Given+When+Then"><h2 specId="1825518513">Given When Then</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Given+When+Then_1"><h3>Given When Then</h3></a><p>The Given/When/Then style of writing specifications is supported by the use of the <code class="prettyprint">GWT</code> trait.</p><p>Here is a simple example of a Given/When/Then specification using the <code class="prettyprint">GWT</code> trait: </p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><pre><code class="prettyprint">class Calculator extends Specification with GWT with StandardDelimitedStepParsers { def is = s2&quot;&quot;&quot;
+                <div class="col1"><div id="central"><html><title>Given When Then</title><a name="Given+When+Then"><h2 specId="379170811">Given When Then</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Given+When+Then_1"><h3>Given When Then</h3></a><p>The Given/When/Then style of writing specifications is supported by the use of the <code class="prettyprint">GWT</code> trait.</p><p>Here is a simple example of a Given/When/Then specification using the <code class="prettyprint">GWT</code> trait: </p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><pre><code class="prettyprint">class Calculator extends Specification with GWT with StandardDelimitedStepParsers { def is = s2&quot;&quot;&quot;
 
  Let's add numbers!
 
@@ -116,8 +116,8 @@ val twoInts = groupAs(&quot;\\d+&quot;).and((s1: String, s2: String) =&gt; (s1.t
 </ul><p>The type <code class="prettyprint">R</code> of the value <code class="prettyprint">r</code> must be such that there is an <code class="prettyprint">AsResult</code> type class instance in scope to transform it to a <code class="prettyprint">Result</code>. In other words r is: a <code class="prettyprint">Boolean</code>, a <code class="prettyprint">MatchResult[_]</code>, a ScalaCheck <code class="prettyprint">Prop</code>,...</p><p>You will also note that the <code class="prettyprint">Scenario</code> class restricts the order of methods which you can call. It always has to be <code class="prettyprint">given* -&gt; when* -&gt; andThen*</code></p><a name="Tagging"><h4>Tagging</h4></a><p>When you insert a <code class="prettyprint">Scenario.start</code> and <code class="prettyprint">Scenario.end</code> in a piece of <code class="prettyprint">s2</code> text, this will automatically create a tagged &quot;<code class="prettyprint">Section</code>&quot; with the title of the Scenario so that you can execute only this scenario from the command-line by running:<br /><pre><code class="prettyprint">sbt&gt; test-only *Calculator* -- include addition
 </code></pre></p></div></status></html></div></div>
                 <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="629981686"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1713461405"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1488812004"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="117858052"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -127,7 +127,7 @@ val twoInts = groupAs(&quot;\\d+&quot;).and((s1: String, s2: String) =&gt; (s1.t
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1339344215"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="3628218"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -238,7 +238,7 @@ val twoInts = groupAs(&quot;\\d+&quot;).and((s1: String, s2: String) =&gt; (s1.t
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Methods">Methods</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Full+example">Full example</a>
-            <ul><li id="662954462"><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
+            <ul><li id="1013419619"><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Rules">Rules</a>
@@ -256,7 +256,7 @@ val twoInts = groupAs(&quot;\\d+&quot;).and((s1: String, s2: String) =&gt; (s1.t
           </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Unit+specification">Unit specification</a>
             
           </li></ul>
-          </li><li id="1825518513"><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then_1">Given When Then</a>
+          </li><li id="379170811"><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then_1">Given When Then</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then">Given When Then</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Parsing">Parsing</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Delimited+parsers">Delimited parsers</a>
@@ -275,7 +275,7 @@ val twoInts = groupAs(&quot;\\d+&quot;).and((s1: String, s2: String) =&gt; (s1.t
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="320041861"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1445677634"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -345,7 +345,7 @@ val twoInts = groupAs(&quot;\\d+&quot;).and((s1: String, s2: String) =&gt; (s1.t
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1195685476"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="1991507197"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
@@ -389,7 +389,7 @@ val twoInts = groupAs(&quot;\\d+&quot;).and((s1: String, s2: String) =&gt; (s1.t
             
           </li></ul>
           </li></ul>
-          </li><li id="1260140460"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="1529710322"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -475,7 +475,7 @@ val twoInts = groupAs(&quot;\\d+&quot;).and((s1: String, s2: String) =&gt; (s1.t
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="513032909"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="995395"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -494,6 +494,8 @@ val twoInts = groupAs(&quot;\\d+&quot;).and((s1: String, s2: String) =&gt; (s1.t
             
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Tag+examples">Tag examples</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.HowTo.html#In+a+unit+specification">In a unit specification</a>
+            
+          </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Always+tag">Always tag</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Skip+examples">Skip examples</a>
             
@@ -523,7 +525,7 @@ val twoInts = groupAs(&quot;\\d+&quot;).and((s1: String, s2: String) =&gt; (s1.t
             
           </li></ul>
           </li></ul>
-          </li><li id="152201136"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="559678172"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -569,7 +571,7 @@ val twoInts = groupAs(&quot;\\d+&quot;).and((s1: String, s2: String) =&gt; (s1.t
             
           </li></ul>
           </li></ul>
-          </li><li id="2073477123"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="132226464"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -589,7 +591,7 @@ val twoInts = groupAs(&quot;\\d+&quot;).and((s1: String, s2: String) =&gt; (s1.t
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['629981686','1825518513'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['1488812004','379170811'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                 <div class="col3"><div id="rightcolumn"></div></div>
               </div>
