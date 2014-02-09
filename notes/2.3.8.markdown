@@ -1,0 +1,18 @@
+This is mostly a maintenance version with an important fix for a memory leak.
+
+## Fixes
+
+ * Thread leaks when invoked by sbt [#232](https://github.com/etorreborre/specs2/issues/232) 
+ * `aka` must not evaluates only once when used with `eventually` [#231](https://github.com/etorreborre/specs2/issues/231) 
+ * Impossible to chain more than one 'or' combinator [#233](https://github.com/etorreborre/specs2/issues/233) 
+ * removed part of the html generation in markdown reports for executed specifications with results
+ * fixed the use of a custom regular expression to parse GWT steps
+ * don't export to the console when a custom notifier is specified (use `console` if really needed)
+ * shapeless dependency in aggregate artifact must be marked as provided [#228](https://github.com/etorreborre/specs2/issues/228) 
+
+## Features
+
+ * the [`AlwaysTag`](http://etorreborre.github.io/specs2/guide/org.specs2.guide.HowTo.html#Always+tag) can be used to make sure that some steps always remain selected even when including only some tags
+
+ ==========================
+
