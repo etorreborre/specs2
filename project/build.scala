@@ -69,8 +69,12 @@ object build extends Build {
 
   lazy val rootSettings: Seq[Settings] = Seq(
       sources in Compile                      := sources.all(aggregateCompile).value.flatten,
+      unmanagedSources in Compile             := unmanagedSources.all(aggregateCompile).value.flatten,
+      unmanagedSourceDirectories in Compile   := unmanagedSourceDirectories.all(aggregateCompile).value.flatten,
       unmanagedResourceDirectories in Compile := unmanagedResourceDirectories.all(aggregateCompile).value.flatten,
       sources in Test                         := sources.all(aggregateTest).value.flatten,
+      unmanagedSources in Test                := unmanagedSources.all(aggregateTest).value.flatten,
+      unmanagedSourceDirectories in Test      := unmanagedSourceDirectories.all(aggregateTest).value.flatten,
       unmanagedResourceDirectories in Test    := unmanagedResourceDirectories.all(aggregateTest).value.flatten,
       libraryDependencies                     := libraryDependencies.all(aggregateTest).value.flatten.map(maybeMarkProvided)
     )

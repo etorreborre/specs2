@@ -9,6 +9,7 @@ This is mostly a maintenance version with an important fix for a memory leak.
  * fixed the use of a custom regular expression to parse GWT steps
  * don't export to the console when a custom notifier is specified (use `console` if really needed)
  * shapeless dependency in aggregate artifact must be marked as provided [#228](https://github.com/etorreborre/specs2/issues/228) 
+ * the sources jar must not be empty [#219](https://github.com/etorreborre/specs2/issues/219) 
 
 ## Features
 
