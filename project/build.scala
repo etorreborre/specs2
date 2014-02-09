@@ -80,7 +80,7 @@ object build extends Build {
     settings = Seq(
       libraryDependencies ++= Seq(
         "org.scala-lang" % "scala-compiler" % scalaVersion.value,
-        "org.specs2"     % "classycle"      % "1.4.1")) ++
+        "org.specs2"     % "classycle"      % "1.4.3")) ++
     moduleSettings
   ).dependsOn(common % "test->test", core, matcher, scalacheck % "test")
 
