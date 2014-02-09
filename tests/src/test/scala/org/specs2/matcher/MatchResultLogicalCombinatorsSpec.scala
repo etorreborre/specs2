@@ -34,6 +34,7 @@ class MatchResultLogicalCombinatorsSpec extends Specification with ResultMatcher
   }
   "Match results can be combined with or" >> {
     (1 must_== 2) or (2 must_== 2)
+    (1 must_== 1) or (1 must_== 2) or (1 must_== 3)
     ((1 must_== 2) or (2 must_== 3)) must beFailing
     (1 must_== 2) or success
   }
