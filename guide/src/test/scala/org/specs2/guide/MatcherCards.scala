@@ -136,7 +136,7 @@ object TryMatchers extends Card {
  * `beSuccessfulTry.like(partial function)` checks if an element is `Success(_)` and satisfies a partial function returning a `MatchResult`
  * `beFailedTry` checks if an element is `Failure(_)`
  * `beFailedTry.withThrowable[T]` checks if an element is `Failure(t: T)`
- * `beFailedTry.withThrowable[T](message)` checks if an element is `Failure(t: T)` and `t.getMessage` matches `message`
+ * `beFailedTry.withThrowable[T](pattern)` checks if an element is `Failure(t: T)` and `t.getMessage` matches `pattern`
   """
 }
 

@@ -73,17 +73,17 @@ case class FailedTryMatcher[T]() extends Matcher[Try[T]] { outer =>
     }
   }
 
-  def withThrowable[E <: Throwable : ClassTag](message: String) = new Matcher[Try[T]] {
+  def withThrowable[E <: Throwable : ClassTag](pattern: String) = new Matcher[Try[T]] {
     def apply[S <: Try[T]](value: Expectable[S]) = {
       val expected = implicitly[ClassTag[E]].runtimeClass
       value.value match {
         case Succeeded(_) => result(false, value.description + " is a Failure", value.description + " is not a Failure", value)
         case Failed(e)    => {
-          val (assignable, matches) = (expected.isAssignableFrom(e.getClass), e.getMessage.notNull.matchesSafely(message))
+          val (assignable, matches) = (expected.isAssignableFrom(e.getClass), e.getMessage.notNull.matchesSafely(pattern))
           result(assignable && matches,
             s"${value.description} is a Failure and ${e.getClass.getName} has a correct type",
             if (!assignable) s"${value.description} is a Failure but '${e.getClass.getName}' is not of type '${expected.getName}'"
-            else             s"${value.description} is a Failure but '${e.getMessage.notNull}' doesn't match '$message'" ,
+            else             s"${value.description} is a Failure but '${e.getMessage.notNull}' doesn't match '$pattern'" ,
             value)
         }
       }
