@@ -131,12 +131,6 @@ object sbtRun extends SbtRunner(Array[String](), Array[String](), Thread.current
     exitSystem(start(arguments:_*))
   }
 
-  protected val errorHandler = (e: Throwable) => e match { case e =>
-    println("\nAn error occurred. " +
-      "Please create an issue on the http://specs2.org website with the stacktrace below. Thanks.")
-    e.printStackTrace
-  }
-
   def start(arguments: String*): Option[ExecutedSpecification] = {
     if (arguments.length == 0)
       println("The first argument should at least be the specification class name")
@@ -147,7 +141,7 @@ object sbtRun extends SbtRunner(Array[String](), Array[String](), Thread.current
   }
 
   private def execute(sbtReporter: Reporter, specification: SpecificationStructure)(implicit args: Arguments = Arguments()): Option[ExecutedSpecification] = {
-    tryo(sbtReporter.report(specification)(args.overrideWith(specification.content.arguments)))(errorHandler)
+    tryo(sbtReporter.report(specification)(args.overrideWith(specification.content.arguments)))(ClassRunner.errorHandler)
   }
 
   private def createSpecification(className: String)(implicit args: Arguments) = SpecificationStructure.createSpecification(className, loader)

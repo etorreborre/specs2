@@ -18,12 +18,8 @@ import reporter._
 class ClassRunner extends Classes with ConsoleOutput with SystemExit {
   lazy val reporter: Reporter = new ConsoleReporter {}
 
-  protected val errorHandler: PartialFunction[Throwable, Unit] = {  case e =>
-    println(s"""\nAn error occurred: ${e.getMessage}
-                Please create an issue on http://github.com/etorreborre/specs2/issues with the stacktrace below. Thanks.""")
-    e.printStackTrace
-  }
-
+  protected val errorHandler = ClassRunner.errorHandler
+  
   def main(arguments: Array[String]) {
     exitSystem(start(arguments:_*))
   }
@@ -62,5 +58,17 @@ class ClassRunner extends Classes with ConsoleOutput with SystemExit {
   protected def createSpecification(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader)
                                    (implicit args: Arguments = Arguments()) =
     SpecificationStructure.createSpecification(className, classLoader)
+}
+
+object ClassRunner {
+  val errorHandler: PartialFunction[Throwable, Unit] = {  case e =>
+    println(s"""|\nAn error occurred: ${e.getMessage} during the creation of the specification.
+                |
+                |This might be cause by failing variable initializations. If this is the case you should consider transforming those
+                |variables into `lazy val`s instead of `val`s. 
+                |
+                |Otherwise please create an issue on http://github.com/etorreborre/specs2/issues with the stacktrace below. Thanks.""".stripMargin)
+    e.printStackTrace
+  }
 }
 

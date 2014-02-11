@@ -140,12 +140,6 @@ object testInterface extends TestInterfaceRunner(Thread.currentThread().getConte
     exitSystem(start(arguments:_*))
   }
 
-  protected val errorHandler: PartialFunction[Throwable, Unit] = {  case e =>
-    println(s"""\nAn error occurred: ${e.getMessage}
-                Please create an issue on the http://specs2.org website with the stacktrace below. Thanks.""")
-    e.printStackTrace
-  }
-
   def start(arguments: String*): Option[ExecutedSpecification] = {
     if (arguments.length == 0)
       println("The first argument should at least be the specification class name")
@@ -155,7 +149,7 @@ object testInterface extends TestInterfaceRunner(Thread.currentThread().getConte
   }
 
   private def execute(testInterfaceReporter: Reporter, specification: SpecificationStructure)(implicit args: Arguments = Arguments()): Option[ExecutedSpecification] = {
-    tryo(testInterfaceReporter.report(specification)(args.overrideWith(specification.content.arguments)))(errorHandler)
+    tryo(testInterfaceReporter.report(specification)(args.overrideWith(specification.content.arguments)))(ClassRunner.errorHandler)
   }
 
   private def createSpecification(className: String)(implicit args: Arguments) = SpecificationStructure.createSpecification(className, loader)
