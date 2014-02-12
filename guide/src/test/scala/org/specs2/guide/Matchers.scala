@@ -578,9 +578,14 @@ there was one(m1).get(0) andThen one(m1).get(1)
 when several mocks are involved, the expected order must be specified as an implicit value: ${snippet{
 val m1 = mock[List[String]]
 val m2 = mock[List[String]]
+val m3 = mock[List[String]]
 
-implicit val order = inOrder(m1, m2)
-there was one(m1).get(0) andThen one(m2).get(0)
+// the order of mock objects doesn't matter here
+implicit val order = inOrder(m1, m3, m2)
+
+m1.get(1); m2.get(2); m3.get(3)
+
+there was one(m1).get(1) andThen one(m2).get(2) andThen one(m3).get(3)
 }}
 
 ###### Ignoring stubs
