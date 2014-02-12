@@ -45,7 +45,7 @@ specification and report them using the ConsoleReporter or the HtmlReporter depe
 to extract and other options
 </p></span><span class="cmt"><p>org.specs2.io.FromSource for the definition of the source directory</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="SystemExit.html" class="extype" name="org.specs2.runner.SystemExit">SystemExit</a>, <a href="SpecificationsFinder.html" class="extype" name="org.specs2.runner.SpecificationsFinder">SpecificationsFinder</a>, <span class="extype" name="org.specs2.text.SourceFile">SourceFile</span>, <a href="../io/ConsoleOutput.html" class="extype" name="org.specs2.io.ConsoleOutput">ConsoleOutput</a>, <span class="extype" name="org.specs2.reflect.Classes">Classes</span>, <a href="../io/Output.html" class="extype" name="org.specs2.io.Output">Output</a>, <span class="extype" name="org.specs2.io.FileSystem">FileSystem</span>, <span class="extype" name="org.specs2.io.FileWriter">FileWriter</span>, <span class="extype" name="org.specs2.io.FileReader">FileReader</span>, <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="SystemExit.html" class="extype" name="org.specs2.runner.SystemExit">SystemExit</a>, <a href="SpecificationsFinder.html" class="extype" name="org.specs2.runner.SpecificationsFinder">SpecificationsFinder</a>, <span class="extype" name="org.specs2.text.SourceFile">SourceFile</span>, <a href="../io/ConsoleOutput.html" class="extype" name="org.specs2.io.ConsoleOutput">ConsoleOutput</a>, <span class="extype" name="org.specs2.reflect.Classes">Classes</span>, <a href="../io/Output.html" class="extype" name="org.specs2.io.Output">Output</a>, <span class="extype" name="org.specs2.io.FileSystem">FileSystem</span>, <span class="extype" name="org.specs2.io.FileWriter">FileWriter</span>, <span class="extype" name="org.specs2.io.FileReader">FileReader</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -98,7 +98,7 @@ to extract and other options
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -137,7 +137,7 @@ to extract and other options
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -163,7 +163,7 @@ to extract and other options
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">afterExecution</span><span class="params">(<span name="specs">specs: <a href="../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<a href="../specification/SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">afterExecution</span><span class="params">(<span name="specs">specs: <span class="extype" name="scala.Seq">Seq</span>[<a href="../specification/SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">print a message after the execution based on the number of specifications</p><div class="fullcomment"><div class="comment cmt"><p>print a message after the execution based on the number of specifications</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
@@ -272,7 +272,7 @@ out.write(<span class="lit">"content"</span>)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">classNames</span><span class="params">(<span name="packageName">packageName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="content">content: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="pattern">pattern: <span class="extype" name="java.util.regex.Pattern">Pattern</span></span>, <span name="suffix">suffix: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="verbose">verbose: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a href="../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">classNames</span><span class="params">(<span name="packageName">packageName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="content">content: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="pattern">pattern: <span class="extype" name="java.util.regex.Pattern">Pattern</span></span>, <span name="suffix">suffix: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="verbose">verbose: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">extract the class names corresponding to a pattern found in a content
@@ -288,7 +288,7 @@ out.write(<span class="lit">"content"</span>)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -364,7 +364,7 @@ out.write(<span class="lit">"content"</span>)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">create</span><span class="tparams">[<span name="T">T &lt;: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>]</span><span class="params">(<span name="className">className: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="classLoader">classLoader: <span class="extype" name="java.lang.ClassLoader">ClassLoader</span> = <span class="defval" name="Thread.currentThread.getContextClassLoader">...</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="org.specs2.reflect.Classes.create.T">T</span>]</span>)</span><span class="result">: <a href="../../../scala/package.html#Either[+A,+B]=scala.util.Either[A,B]" class="extmbr" name="scala.Either">Either</a>[<a href="../../../scala/package.html#Throwable=Throwable" class="extmbr" name="scala.Throwable">Throwable</a>, <span class="extype" name="org.specs2.reflect.Classes.create.T">T</span>]</span>
+        <span class="name">create</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="scala.AnyRef">AnyRef</span></span>]</span><span class="params">(<span name="className">className: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="classLoader">classLoader: <span class="extype" name="java.lang.ClassLoader">ClassLoader</span> = <span class="defval" name="Thread.currentThread.getContextClassLoader">...</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="org.specs2.reflect.Classes.create.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="scala.Throwable">Throwable</span>, <span class="extype" name="org.specs2.reflect.Classes.create.T">T</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an instance of a given class, returning either the instance, or an exception</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>Classes</dd></dl></div>
@@ -419,7 +419,7 @@ out.write(<span class="lit">"content"</span>)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createObject</span><span class="tparams">[<span name="T">T &lt;: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>]</span><span class="params">(<span name="className">className: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="printMessage">printMessage: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="printStackTrace">printStackTrace: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="org.specs2.reflect.Classes.createObject.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.specs2.reflect.Classes.createObject.T">T</span>]</span>
+        <span class="name">createObject</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="scala.AnyRef">AnyRef</span></span>]</span><span class="params">(<span name="className">className: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="printMessage">printMessage: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="printStackTrace">printStackTrace: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="org.specs2.reflect.Classes.createObject.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.specs2.reflect.Classes.createObject.T">T</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">A system property 'debugCreateObject' can be set to override the printMessage and printStackTrace parameters
@@ -437,7 +437,7 @@ so that the exception message and stacktrace are printed when the object can't b
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createObject</span><span class="tparams">[<span name="T">T &lt;: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>]</span><span class="params">(<span name="className">className: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="printMessage">printMessage: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="org.specs2.reflect.Classes.createObject.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.specs2.reflect.Classes.createObject.T">T</span>]</span>
+        <span class="name">createObject</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="scala.AnyRef">AnyRef</span></span>]</span><span class="params">(<span name="className">className: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="printMessage">printMessage: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="org.specs2.reflect.Classes.createObject.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.specs2.reflect.Classes.createObject.T">T</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an instance of a given class and optionally print message if the class can't be loaded</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>Classes</dd></dl></div>
@@ -450,7 +450,7 @@ so that the exception message and stacktrace are printed when the object can't b
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createObject</span><span class="tparams">[<span name="T">T &lt;: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>]</span><span class="params">(<span name="className">className: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="org.specs2.reflect.Classes.createObject.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.specs2.reflect.Classes.createObject.T">T</span>]</span>
+        <span class="name">createObject</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="scala.AnyRef">AnyRef</span></span>]</span><span class="params">(<span name="className">className: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="org.specs2.reflect.Classes.createObject.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.specs2.reflect.Classes.createObject.T">T</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an instance of a given class</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>Classes</dd></dl></div>
@@ -508,7 +508,7 @@ Tries to load the class name and cast it to a specification
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -547,7 +547,7 @@ Tries to load the class name and cast it to a specification
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">exitSystem</span><span class="params">(<span name="executed">executed: <a href="../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<a href="../specification/ExecutedSpecification.html" class="extype" name="org.specs2.specification.ExecutedSpecification">ExecutedSpecification</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">exitSystem</span><span class="params">(<span name="executed">executed: <span class="extype" name="scala.Seq">Seq</span>[<a href="../specification/ExecutedSpecification.html" class="extype" name="org.specs2.specification.ExecutedSpecification">ExecutedSpecification</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">exit the system with a specific code:</p><div class="fullcomment"><div class="comment cmt"><p>exit the system with a specific code:</p><p>- 0 if all the specifications are successful
@@ -579,7 +579,7 @@ Tries to load the class name and cast it to a specification
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">exitTheSystem</span><span class="params">(<span name="executed">executed: <a href="../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="scala.Option">Option</span>[<a href="../specification/ExecutedSpecification.html" class="extype" name="org.specs2.specification.ExecutedSpecification">ExecutedSpecification</a>]]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">exitTheSystem</span><span class="params">(<span name="executed">executed: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Option">Option</span>[<a href="../specification/ExecutedSpecification.html" class="extype" name="org.specs2.specification.ExecutedSpecification">ExecutedSpecification</a>]]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="SystemExit.html" class="extype" name="org.specs2.runner.SystemExit">SystemExit</a></dd></dl></div>
@@ -607,7 +607,7 @@ Tries to load the class name and cast it to a specification
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">filePaths</span><span class="params">(<span name="basePath">basePath: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;.&quot;</span></span>, <span name="path">path: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;*&quot;</span></span>, <span name="verbose">verbose: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a href="../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">filePaths</span><span class="params">(<span name="basePath">basePath: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;.&quot;</span></span>, <span name="path">path: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;*&quot;</span></span>, <span name="verbose">verbose: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>glob expression, for example: <code>./dir/**/.xml</code></p></dd><dt>returns</dt><dd class="cmt"><p>the list of paths represented by the &quot;glob&quot; definition <code>path</code>
@@ -880,7 +880,7 @@ Tries to load the class name and cast it to a specification
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">listFiles</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="../../../scala/package.html#List[+A]=List[A]" class="extmbr" name="scala.List">List</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">listFiles</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the files of that directory</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileSystem</dd></dl></div>
@@ -893,7 +893,7 @@ Tries to load the class name and cast it to a specification
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">loadXhtmlFile</span><span class="params">(<span name="filePath">filePath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="report">report: (<a href="../../../scala/package.html#Exception=Exception" class="extmbr" name="scala.Exception">Exception</a>, <span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span> = <span class="symbol">defaultLoadXhtmlFileReport</span></span>, <span name="sourceErrors">sourceErrors: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result">: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>
+        <span class="name">loadXhtmlFile</span><span class="params">(<span name="filePath">filePath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="report">report: (<span class="extype" name="scala.Exception">Exception</span>, <span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span> = <span class="symbol">defaultLoadXhtmlFileReport</span></span>, <span name="sourceErrors">sourceErrors: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result">: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the xml content of a file using the Xhtml parser</p><p>if the file contains several nodes, it wraps them up in a single artificial node
@@ -907,7 +907,7 @@ Tries to load the class name and cast it to a specification
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">loadXmlFile</span><span class="params">(<span name="filePath">filePath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="report">report: (<a href="../../../scala/package.html#Exception=Exception" class="extmbr" name="scala.Exception">Exception</a>) ⇒ <span class="extype" name="scala.Unit">Unit</span> = <span class="symbol">(e:Exception) =&gt; e.printStackTrace</span></span>)</span><span class="result">: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>
+        <span class="name">loadXmlFile</span><span class="params">(<span name="filePath">filePath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="report">report: (<span class="extype" name="scala.Exception">Exception</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span> = <span class="symbol">(e:Exception) =&gt; e.printStackTrace</span></span>)</span><span class="result">: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the xml content of a file, using the XML parser
@@ -960,7 +960,7 @@ Tries to load the class name and cast it to a specification
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -1027,7 +1027,7 @@ Tries to load the class name and cast it to a specification
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printStackTrace</span><span class="params">(<span name="t">t: <a href="../../../scala/package.html#Throwable=Throwable" class="extmbr" name="scala.Throwable">Throwable</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">printStackTrace</span><span class="params">(<span name="t">t: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">print stacktraces
@@ -1098,7 +1098,7 @@ Tries to load the class name and cast it to a specification
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">readLines</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="../../../scala/package.html#IndexedSeq[+A]=IndexedSeq[A]" class="extmbr" name="scala.IndexedSeq">IndexedSeq</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">readLines</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the lines of a file</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileReader</dd></dl></div>
@@ -1165,7 +1165,7 @@ Tries to load the class name and cast it to a specification
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">silentLoadXhtmlFileReport</span><span class="result">: (<a href="../../../scala/package.html#Exception=Exception" class="extmbr" name="scala.Exception">Exception</a>, <span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">silentLoadXhtmlFileReport</span><span class="result">: (<span class="extype" name="scala.Exception">Exception</span>, <span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FileReader</dd></dl></div>
@@ -1193,7 +1193,7 @@ Tries to load the class name and cast it to a specification
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">specificationClassNames</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <a href="../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">specificationClassNames</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the specifications class names to execute</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
@@ -1206,7 +1206,7 @@ Tries to load the class name and cast it to a specification
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">specificationNames</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;**/*.scala&quot;</span></span>, <span name="pattern">pattern: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;.*Spec&quot;</span></span>, <span name="basePath">basePath: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol"><span class="name"><a href="../io/package.html">FromSource.srcTestDir</a></span></span></span>, <span name="verbose">verbose: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a href="../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">specificationNames</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;**/*.scala&quot;</span></span>, <span name="pattern">pattern: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;.*Spec&quot;</span></span>, <span name="basePath">basePath: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol"><span class="name"><a href="../io/package.html">FromSource.srcTestDir</a></span></span></span>, <span name="verbose">verbose: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>a path to a directory containing scala files (it can be a glob: i.e. &quot;dir/**/spec.scala&quot;)</p></dd><dt class="param">pattern</dt><dd class="cmt"><p>a regular expression which is supposed to match an object name extending a Specification</p></dd><dt>returns</dt><dd class="cmt"><p>specification names by scanning files and trying to find specifications declarations
@@ -1220,7 +1220,7 @@ Tries to load the class name and cast it to a specification
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">specifications</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <a href="../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<a href="../specification/SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a>]</span>
+        <span class="name">specifications</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="../specification/SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the specifications to execute</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
@@ -1233,7 +1233,7 @@ Tries to load the class name and cast it to a specification
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">specifications</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;**/*.scala&quot;</span></span>, <span name="pattern">pattern: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;.*Spec&quot;</span></span>, <span name="filter">filter: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">(name: String) =&gt; true</span></span>, <span name="basePath">basePath: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol"><span class="name"><a href="../io/package.html">FromSource.srcTestDir</a></span></span></span>, <span name="verbose">verbose: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a> = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: <a href="../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<a href="../specification/SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a>]</span>
+        <span class="name">specifications</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;**/*.scala&quot;</span></span>, <span name="pattern">pattern: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;.*Spec&quot;</span></span>, <span name="filter">filter: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">(name: String) =&gt; true</span></span>, <span name="basePath">basePath: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol"><span class="name"><a href="../io/package.html">FromSource.srcTestDir</a></span></span></span>, <span name="verbose">verbose: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a> = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="../specification/SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>a path to a directory containing scala files (it can be a glob: i.e. &quot;dir/**/spec.scala&quot;)</p></dd><dt class="param">pattern</dt><dd class="cmt"><p>a regular expression which is supposed to match an object name extending a Specification</p></dd><dt class="param">filter</dt><dd class="cmt"><p>a function to filter out unwanted specifications</p></dd><dt>returns</dt><dd class="cmt"><p>specifications created from specification names
@@ -1273,7 +1273,7 @@ Tries to load the class name and cast it to a specification
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">tryToCreateObject</span><span class="tparams">[<span name="T">T &lt;: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>]</span><span class="params">(<span name="className">className: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="printMessage">printMessage: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>, <span name="printStackTrace">printStackTrace: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>, <span name="loader">loader: <span class="extype" name="java.lang.ClassLoader">ClassLoader</span> = <span class="defval" name="Thread.currentThread.getContextClassLoader">...</span></span>, <span name="parameter">parameter: <span class="extype" name="scala.Option">Option</span>[<a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="org.specs2.reflect.Classes.tryToCreateObject.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.specs2.reflect.Classes.tryToCreateObject.T">T</span>]</span>
+        <span class="name">tryToCreateObject</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="scala.AnyRef">AnyRef</span></span>]</span><span class="params">(<span name="className">className: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="printMessage">printMessage: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>, <span name="printStackTrace">printStackTrace: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>, <span name="loader">loader: <span class="extype" name="java.lang.ClassLoader">ClassLoader</span> = <span class="defval" name="Thread.currentThread.getContextClassLoader">...</span></span>, <span name="parameter">parameter: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.AnyRef">AnyRef</span>] = <span class="symbol">None</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="org.specs2.reflect.Classes.tryToCreateObject.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.specs2.reflect.Classes.tryToCreateObject.T">T</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Try to create an instance of a given class by using whatever constructor is available
@@ -1289,7 +1289,7 @@ and trying to instantiate the first parameter recursively if there is a paramete
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">tryToCreateObjectEither</span><span class="tparams">[<span name="T">T &lt;: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>]</span><span class="params">(<span name="className">className: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loader">loader: <span class="extype" name="java.lang.ClassLoader">ClassLoader</span> = <span class="defval" name="Thread.currentThread.getContextClassLoader">...</span></span>, <span name="parameter">parameter: <span class="extype" name="scala.Option">Option</span>[<a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>] = <span class="symbol"><span class="name"><a href="../../../scala/package.html">None</a></span></span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="org.specs2.reflect.Classes.tryToCreateObjectEither.T">T</span>]</span>)</span><span class="result">: <a href="../../../scala/package.html#Either[+A,+B]=scala.util.Either[A,B]" class="extmbr" name="scala.Either">Either</a>[<a href="../../../scala/package.html#Throwable=Throwable" class="extmbr" name="scala.Throwable">Throwable</a>, <span class="extype" name="org.specs2.reflect.Classes.tryToCreateObjectEither.T">T</span>]</span>
+        <span class="name">tryToCreateObjectEither</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="scala.AnyRef">AnyRef</span></span>]</span><span class="params">(<span name="className">className: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="loader">loader: <span class="extype" name="java.lang.ClassLoader">ClassLoader</span> = <span class="defval" name="Thread.currentThread.getContextClassLoader">...</span></span>, <span name="parameter">parameter: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.AnyRef">AnyRef</span>] = <span class="symbol">None</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m">m: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="org.specs2.reflect.Classes.tryToCreateObjectEither.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Either">Either</span>[<span class="extype" name="scala.Throwable">Throwable</span>, <span class="extype" name="org.specs2.reflect.Classes.tryToCreateObjectEither.T">T</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Try to create an instance of a given class by using whatever constructor is available
@@ -1425,7 +1425,7 @@ out.write(<span class="lit">"content"</span>)
             </div><div class="parent" name="org.specs2.io.FileReader">
               <h3>Inherited from <span class="extype" name="org.specs2.io.FileReader">FileReader</span></h3>
             </div><div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
             </div>

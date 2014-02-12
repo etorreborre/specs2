@@ -67,7 +67,7 @@
     </head><body><div id="breadcrumbs"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html">HowTo</a></div><div class="colmask threecol">
             <div class="colmid">
               <div class="colleft">
-                <div class="col1"><div id="central"><html><title>HowTo</title><a name="HowTo"><h2 specId="1776003813">HowTo</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Declare+arguments"><h3>Declare arguments</h3></a><p>Arguments are usually passed on the command line but you can also declare them at the beginning of the specification, to be applied only to that specification.<br />For example, you can turn off the concurrent execution of examples with the <code class="prettyprint">args(sequential = true)</code> call (or the shorter alias <code class="prettyprint">sequential</code>): </p>
+                <div class="col1"><div id="central"><html><title>HowTo</title><a name="HowTo"><h2 specId="763061952">HowTo</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Declare+arguments"><h3>Declare arguments</h3></a><p>Arguments are usually passed on the command line but you can also declare them at the beginning of the specification, to be applied only to that specification.<br />For example, you can turn off the concurrent execution of examples with the <code class="prettyprint">args(sequential = true)</code> call (or the shorter alias <code class="prettyprint">sequential</code>): </p>
 <pre><code class="prettyprint">class ExamplesOneByOne extends Specification { def is = s2&quot;&quot;&quot; $sequential
 
   first example        $e1
@@ -269,7 +269,16 @@ class TaggedSpecification extends Specification {
   <li><p>when the <code class="prettyprint">tag</code> is appended to an example, it applies to that example: <code class="prettyprint">example 2</code> is tagged with <code class="prettyprint">integration</code></p></li>
   <li><p>when the <code class="prettyprint">section</code> call is inserted on a new line, this opens a section for all the following fragments. This should<br />be closed by a corresponding <code class="prettyprint">section</code> call on a new line. For example, <code class="prettyprint">example 3</code> and <code class="prettyprint">example 4</code> are part of the<br />&quot;checkin&quot; section</p></li>
   <li><p>when the <code class="prettyprint">section</code> call is appended to a block of Fragments on the same line, all the fragments of that block are part of<br />the section: <code class="prettyprint">example 5</code> and <code class="prettyprint">example 6</code> are tagged with <code class="prettyprint">slow</code></p></li>
-</ul><a name="Skip+examples"><h4>Skip examples</h4></a><p>You can skip all the examples of a specification by using the <code class="prettyprint">skipAllIf</code> or <code class="prettyprint">skipAllUnless</code> methods: </p>
+</ul><a name="Always+tag"><h4><code class="prettyprint">Always</code> tag</h4></a><p>Some specifications need to have some steps which will always be included whatever tags are specified on the command line. This is the case when defining a &quot;template&quot; specification with setup/teardown steps: </p>
+<pre><code class="prettyprint">import TagFragments._
+
+  trait DatabaseSpec extends Specification {
+    override def map(fs: =&gt;Fragments) =
+      AlwaysTag ^ Step(&quot;startDb&quot;) ^
+      fs ^
+      AlwaysTag ^ Step(&quot;cleanDb&quot;)
+  }
+</code></pre><a name="Skip+examples"><h4>Skip examples</h4></a><p>You can skip all the examples of a specification by using the <code class="prettyprint">skipAllIf</code> or <code class="prettyprint">skipAllUnless</code> methods: </p>
 <pre><code class="prettyprint">class EmailSpecification extends mutable.Specification {
   skipAllIf(serverIsOffline)
   &quot;test email&quot; &gt;&gt; { sendEmail must beOk }
@@ -291,6 +300,7 @@ class TaggedSpecification extends Specification {
   <li><code class="prettyprint">org.specs2.specification.NoAutoExamples</code>: deactivate the conversions from <code class="prettyprint">Boolean/Result/MatchResult/DataTable</code> to <code class="prettyprint">Fragment</code> or <code class="prettyprint">Example</code>. Specific versions of this trait can be selectively used, on either <code class="prettyprint">Boolean</code> or <code class="prettyprint">Result</code> or <code class="prettyprint">MatchResult</code> or <code class="prettyprint">DataTable</code>. For example: <code class="prettyprint">org.specs2.specification.NoBooleanAutoExamples</code> can be used to avoid the <code class="prettyprint">^</code> method being used on booleans</li>
   <li><code class="prettyprint">org.specs2.specification.NoFragmentsBuilder</code>: deactivate the implicit conversions from <code class="prettyprint">String</code> to <code class="prettyprint">Fragment</code>s</li>
   <li><code class="prettyprint">org.specs2.specification.mutable.NoFragmentsBuilder</code>: deactivate the implicit conversions from to remove <code class="prettyprint">in</code>, <code class="prettyprint">&gt;</code><code class="prettyprint">&gt;</code>, <code class="prettyprint">should</code> and <code class="prettyprint">can</code> methods from <code class="prettyprint">String</code>s</li>
+  <li><code class="prettyprint">org.specs2.specification.NoToHtmlLinkFragments</code>: deactivate the use of <code class="prettyprint">~</code> and <code class="prettyprint">~/</code> operators on Strings to create html links</li>
 </ul><a name="Print+execution+data"><h3>Print execution data</h3></a><p>Knowing that an example passed is fine but sometimes you want to display more information, like the time spent executing the example for instance.</p><p>This can be done by creating a <code class="prettyprint">Context</code> object which will update the <code class="prettyprint">Result</code> of the example execution with whatever you want to display: </p>
 <pre><code class="prettyprint">import org.specs2._
 import time._
@@ -463,8 +473,8 @@ factorial(3)
 <tr><td>a function name               </td><td><code class="prettyprint">${termName(factorial(1)}          === factorial                                 </code></td></tr>
 </table><a name="outside+specs2"><h4>outside specs2</h4></a><p>These functionalities are accessible outside of specs2 by importing the <code class="prettyprint">org.specs2.execute.Snippets</code> trait.</p></div></status></html></div></div>
                 <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="83881241"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="933888076"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="482941389"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="1550768305"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -474,7 +484,7 @@ factorial(3)
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1351651084"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="953537876"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -585,7 +595,7 @@ factorial(3)
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Methods">Methods</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Full+example">Full example</a>
-            <ul><li id="31368826"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
+            <ul><li id="597292472"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Rules">Rules</a>
@@ -603,7 +613,7 @@ factorial(3)
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Unit+specification">Unit specification</a>
             
           </li></ul>
-          </li><li id="311845611"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then_1">Given When Then</a>
+          </li><li id="318453629"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then_1">Given When Then</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then">Given When Then</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Parsing">Parsing</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Delimited+parsers">Delimited parsers</a>
@@ -622,7 +632,7 @@ factorial(3)
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="134028343"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1671454743"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -692,7 +702,7 @@ factorial(3)
             
           </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="675303715"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="1773688636"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
@@ -736,7 +746,7 @@ factorial(3)
             
           </li></ul>
           </li></ul>
-          </li><li id="2138473353"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="224190418"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -822,7 +832,7 @@ factorial(3)
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1776003813"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="763061952"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -841,6 +851,8 @@ factorial(3)
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Tag+examples">Tag examples</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#In+a+unit+specification">In a unit specification</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Always+tag">Always tag</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Skip+examples">Skip examples</a>
             
@@ -870,7 +882,7 @@ factorial(3)
             
           </li></ul>
           </li></ul>
-          </li><li id="477413990"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="621549147"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -916,7 +928,7 @@ factorial(3)
             
           </li></ul>
           </li></ul>
-          </li><li id="1386550759"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="1873352011"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -936,7 +948,7 @@ factorial(3)
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['83881241','1776003813'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['482941389','763061952'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                 <div class="col3"><div id="rightcolumn"></div></div>
               </div>

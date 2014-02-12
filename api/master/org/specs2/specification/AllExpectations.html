@@ -46,7 +46,7 @@ of all the individual issues.</p><p>It must be noted that this trait relies on a
 Because of this restriction, a Specification using that trait can either run sequentially or isolated.</p><p>If the specification is neither sequential or isolated, we force it to be isolated by default.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../main/ArgumentsArgs.html" class="extype" name="org.specs2.main.ArgumentsArgs">ArgumentsArgs</a>, <a href="../main/ArgProperties.html" class="extype" name="org.specs2.main.ArgProperties">ArgProperties</a>, <a href="SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a>, <a href="DefaultFragmentsFormatting.html" class="extype" name="org.specs2.specification.DefaultFragmentsFormatting">DefaultFragmentsFormatting</a>, <a href="TagsAssociation.html" class="extype" name="org.specs2.specification.TagsAssociation">TagsAssociation</a>, <a href="FragmentsFormatting.html" class="extype" name="org.specs2.specification.FragmentsFormatting">FragmentsFormatting</a>, <a href="ExamplesFactory.html" class="extype" name="org.specs2.specification.ExamplesFactory">ExamplesFactory</a>, <a href="../matcher/StoredExpectations.html" class="extype" name="org.specs2.matcher.StoredExpectations">StoredExpectations</a>, <a href="../matcher/Expectations.html" class="extype" name="org.specs2.matcher.Expectations">Expectations</a>, <a href="../matcher/CanBeEqual.html" class="extype" name="org.specs2.matcher.CanBeEqual">CanBeEqual</a>, <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../main/ArgumentsArgs.html" class="extype" name="org.specs2.main.ArgumentsArgs">ArgumentsArgs</a>, <a href="../main/ArgProperties.html" class="extype" name="org.specs2.main.ArgProperties">ArgProperties</a>, <a href="SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a>, <a href="DefaultFragmentsFormatting.html" class="extype" name="org.specs2.specification.DefaultFragmentsFormatting">DefaultFragmentsFormatting</a>, <a href="TagsAssociation.html" class="extype" name="org.specs2.specification.TagsAssociation">TagsAssociation</a>, <a href="FragmentsFormatting.html" class="extype" name="org.specs2.specification.FragmentsFormatting">FragmentsFormatting</a>, <a href="ExamplesFactory.html" class="extype" name="org.specs2.specification.ExamplesFactory">ExamplesFactory</a>, <a href="../matcher/StoredExpectations.html" class="extype" name="org.specs2.matcher.StoredExpectations">StoredExpectations</a>, <a href="../matcher/Expectations.html" class="extype" name="org.specs2.matcher.Expectations">Expectations</a>, <a href="../matcher/CanBeEqual.html" class="extype" name="org.specs2.matcher.CanBeEqual">CanBeEqual</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -95,7 +95,7 @@ Because of this restriction, a Specification using that trait can either run seq
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="../matcher/CanBeEqual$CanBeEqualExpectation.html"><span class="name">CanBeEqualExpectation</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+        <a href="../matcher/CanBeEqual$CanBeEqualExpectation.html"><span class="name">CanBeEqualExpectation</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../matcher/CanBeEqual.html" class="extype" name="org.specs2.matcher.CanBeEqual">CanBeEqual</a></dd></dl></div>
@@ -108,17 +108,33 @@ Because of this restriction, a Specification using that trait can either run seq
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="../matcher/Expectations$Descriptible.html"><span class="name">Descriptible</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+        <a href="../matcher/Expectations$Descriptible.html"><span class="name">Descriptible</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../matcher/Expectations.html" class="extype" name="org.specs2.matcher.Expectations">Expectations</a></dd></dl></div>
     </li></ol>
             </div>
 
-        
+        <div id="values" class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="org.specs2.specification.SpecificationStructure#is" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="is:org.specs2.specification.Fragments"></a>
+      <a id="is:Fragments"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">is</span><span class="result">: <a href="Fragments.html" class="extype" name="org.specs2.specification.Fragments">Fragments</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">declaration of Fragments from the user</p><div class="fullcomment"><div class="comment cmt"><p>declaration of Fragments from the user</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a></dd></dl></div>
+    </li></ol>
+            </div>
 
         <div id="values" class="values members">
-              <h3>Value Members</h3>
+              <h3>Concrete Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
@@ -128,7 +144,7 @@ Because of this restriction, a Specification using that trait can either run seq
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -167,7 +183,7 @@ Because of this restriction, a Specification using that trait can either run seq
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -299,7 +315,7 @@ It is equivalent to writing a must_== b
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
@@ -396,7 +412,7 @@ It is equivalent to writing a must_== b
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -511,21 +527,6 @@ It is equivalent to writing a must_== b
       </span>
       </h4>
       <p class="shortcomment cmt">automatically convert a specification to its identification</p><div class="fullcomment"><div class="comment cmt"><p>automatically convert a specification to its identification</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a></dd></dl></div>
-    </li><li name="org.specs2.specification.AllExpectations#is" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="is:org.specs2.specification.Fragments"></a>
-      <a id="is:Fragments"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">is</span><span class="result">: <a href="Fragments.html" class="extype" name="org.specs2.specification.Fragments">Fragments</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">we force the specification to be isolated if it's not sequential or already isolated.</p><div class="fullcomment"><div class="comment cmt"><p>we force the specification to be isolated if it's not sequential or already isolated.
-this is important because when an example runs, its results are being stored into a shared list
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.specification.AllExpectations">AllExpectations</a> → <a href="SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -539,7 +540,7 @@ this is important because when an example runs, its results are being stored int
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="org.specs2.specification.SpecificationStructure#map" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="org.specs2.specification.AllExpectations#map" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="map(fs:=&gt;org.specs2.specification.Fragments):org.specs2.specification.Fragments"></a>
       <a id="map(⇒Fragments):Fragments"></a>
       <h4 class="signature">
@@ -551,7 +552,9 @@ this is important because when an example runs, its results are being stored int
         <span class="name">map</span><span class="params">(<span name="fs">fs: ⇒ <a href="Fragments.html" class="extype" name="org.specs2.specification.Fragments">Fragments</a></span>)</span><span class="result">: <a href="Fragments.html" class="extype" name="org.specs2.specification.Fragments">Fragments</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">this method can be overridden to map additional behavior in the user-defined fragments</p><div class="fullcomment"><div class="comment cmt"><p>this method can be overridden to map additional behavior in the user-defined fragments</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a></dd></dl></div>
+      <p class="shortcomment cmt">we force the specification to be isolated if it's not sequential or already isolated.</p><div class="fullcomment"><div class="comment cmt"><p>we force the specification to be isolated if it's not sequential or already isolated.
+this is important because when an example runs, its results are being stored into a shared list
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.specification.AllExpectations">AllExpectations</a> → <a href="SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a></dd></dl></div>
     </li><li name="org.specs2.specification.AllExpectations#mapMatchResult" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="mapMatchResult[T](m:org.specs2.matcher.MatchResult[T]):org.specs2.matcher.MatchResult[T]"></a>
       <a id="mapMatchResult[T](MatchResult[T]):MatchResult[T]"></a>
@@ -575,7 +578,7 @@ this is important because when an example runs, its results are being stored int
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
@@ -614,7 +617,7 @@ this is important because when an example runs, its results are being stored int
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">resultsContext</span><span class="params">(<span name="results">results: ⇒ <a href="../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a>]</span>)</span><span class="result">: <a href="Context.html" class="extype" name="org.specs2.specification.Context">Context</a></span>
+        <span class="name">resultsContext</span><span class="params">(<span name="results">results: ⇒ <span class="extype" name="scala.Seq">Seq</span>[<a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a>]</span>)</span><span class="result">: <a href="Context.html" class="extype" name="org.specs2.specification.Context">Context</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">create a new Context with the list of captured results.</p><div class="fullcomment"><div class="comment cmt"><p>create a new Context with the list of captured results.</p><p>This method could be overridden to filter the captured results and remove the skipped results for example
@@ -628,7 +631,7 @@ this is important because when an example runs, its results are being stored int
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">storedResults</span><span class="result">: <a href="../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a>]</span>
+        <span class="name">storedResults</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../matcher/StoredExpectations.html" class="extype" name="org.specs2.matcher.StoredExpectations">StoredExpectations</a></dd></dl></div>
@@ -745,7 +748,7 @@ this is important because when an example runs, its results are being stored int
             </div><div class="parent" name="org.specs2.matcher.CanBeEqual">
               <h3>Inherited from <a href="../matcher/CanBeEqual.html" class="extype" name="org.specs2.matcher.CanBeEqual">CanBeEqual</a></h3>
             </div><div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
             </div>

@@ -58,7 +58,20 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="org.specs2.data.IncludedExcluded" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="org.specs2.data.IncludeExcludeTag" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="IncludeExcludeTagextendsNamedTag"></a>
+      <a id="IncludeExcludeTag:IncludeExcludeTag"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="IncludeExcludeTag.html"><span class="name">IncludeExcludeTag</span></a><span class="result"> extends <a href="NamedTag.html" class="extype" name="org.specs2.data.NamedTag">NamedTag</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.data.IncludedExcluded" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="IncludedExcluded[T]extendsAnyRef"></a>
       <a id="IncludedExcluded[T]:IncludedExcluded[T]"></a>
       <h4 class="signature">
@@ -67,10 +80,23 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="IncludedExcluded.html"><span class="name">IncludedExcluded</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+        <a href="IncludedExcluded.html"><span class="name">IncludedExcluded</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       <p class="comment cmt">This trait provides a keep function which will determine if a element T must be kept with regards to:</p>
+    </li><li name="org.specs2.data.NamedTag" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NamedTagextendsAnyRef"></a>
+      <a id="NamedTag:NamedTag"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NamedTag.html"><span class="name">NamedTag</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
     </li><li name="org.specs2.data.NoTuplesToSeq" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="NoTuplesToSeqextendsTuplesToSeq"></a>
       <a id="NoTuplesToSeq:NoTuplesToSeq"></a>
@@ -93,7 +119,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="SeparatedTags.html"><span class="name">SeparatedTags</span></a><span class="params">(<span name="included">included: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="excluded">excluded: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="orSeparator">orSeparator: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;,&quot;</span></span>, <span name="andSeparator">andSeparator: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&amp;&amp;&quot;</span></span>)</span><span class="result"> extends <a href="IncludedExcluded.html" class="extype" name="org.specs2.data.IncludedExcluded">IncludedExcluded</a>[<a href="../../../scala/package.html#Seq[+A]=Seq[A]" class="extmbr" name="scala.Seq">Seq</a>[<span class="extype" name="scala.Predef.String">String</span>]] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="SeparatedTags.html"><span class="name">SeparatedTags</span></a><span class="params">(<span name="included">included: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="excluded">excluded: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="orSeparator">orSeparator: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;,&quot;</span></span>, <span name="andSeparator">andSeparator: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&amp;&amp;&quot;</span></span>)</span><span class="result"> extends <a href="IncludedExcluded.html" class="extype" name="org.specs2.data.IncludedExcluded">IncludedExcluded</a>[<span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">specialization of the IncludedExcluded trait for string separated tags</p>
@@ -106,10 +132,23 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Sized.html"><span class="name">Sized</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+        <a href="Sized.html"><span class="name">Sized</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       <p class="comment cmt">a trait for anything that can be sized</p>
+    </li><li name="org.specs2.data.Tag" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TagextendsIncludeExcludeTagwithProductwithSerializable"></a>
+      <a id="Tag:Tag"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Tag.html"><span class="name">Tag</span></a><span class="params">(<span name="names">names: <span class="extype" name="scala.Predef.String">String</span>*</span>)</span><span class="result"> extends <a href="IncludeExcludeTag.html" class="extype" name="org.specs2.data.IncludeExcludeTag">IncludeExcludeTag</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">tags the next element</p>
     </li><li name="org.specs2.data.TaggedTypes" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="TaggedTypesextendsAnyRef"></a>
       <a id="TaggedTypes:TaggedTypes"></a>
@@ -119,7 +158,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="TaggedTypes.html"><span class="name">TaggedTypes</span></a><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+        <a href="TaggedTypes.html"><span class="name">TaggedTypes</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
@@ -132,7 +171,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="TuplesToSeq.html"><span class="name">TuplesToSeq</span></a><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+        <a href="TuplesToSeq.html"><span class="name">TuplesToSeq</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
@@ -156,7 +195,46 @@
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="org.specs2.data.Reducerx" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="org.specs2.data.AlwaysTag" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AlwaysTag"></a>
+      <a id="AlwaysTag:AlwaysTag"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AlwaysTag$.html"><span class="name">AlwaysTag</span></a><span class="result"> extends <a href="NamedTag.html" class="extype" name="org.specs2.data.NamedTag">NamedTag</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.data.AlwaysWhenNoIncludeTag" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AlwaysWhenNoIncludeTag"></a>
+      <a id="AlwaysWhenNoIncludeTag:AlwaysWhenNoIncludeTag"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AlwaysWhenNoIncludeTag$.html"><span class="name">AlwaysWhenNoIncludeTag</span></a><span class="result"> extends <a href="NamedTag.html" class="extype" name="org.specs2.data.NamedTag">NamedTag</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.data.NamedTag" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NamedTag"></a>
+      <a id="NamedTag:NamedTag"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NamedTag$.html"><span class="name">NamedTag</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="org.specs2.data.Reducerx" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Reducerx"></a>
       <a id="Reducerx:Reducerx"></a>
       <h4 class="signature">
