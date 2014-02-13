@@ -270,11 +270,11 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
 
     // results for each element, either checked in order or greedily from the list of checks
     // + the list of checks which were not performed
-    val (results, remainingChecks): (Seq[Result], Seq[ValueCheck[T]]) =
+    val (results, remainingChecks): (Seq[(T, Seq[Result])], Seq[ValueCheck[T]]) =
       if (checkOrder) checkValuesInOrder(seq, checks)
       else            checkValues(seq, checks)
 
-    val (successes, failures) = results.partition(_.isSuccess)
+    val (successes, failures) = results.partition(_._2.forall(_.isSuccess))
     val koMessage = makeKoMessage(t.description, successes, failures, remainingChecks)
     val okMessage = negateSentence(koMessage)
 
@@ -294,14 +294,14 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
    * @return (the list of all the results for each tested value, the list of remaining checks if any)
    */
   @tailrec
-  private def checkValuesInOrder(values: Seq[T], checks: Seq[ValueCheck[T]], results: Seq[Result] = Seq()): (Seq[Result], Seq[ValueCheck[T]]) = {
+  private def checkValuesInOrder(values: Seq[T], checks: Seq[ValueCheck[T]], results: Seq[(T, Seq[Result])] = Seq()): (Seq[(T, Seq[Result])], Seq[ValueCheck[T]]) = {
     (values, checks) match {
       case (v +: vs, c +: cs) => {
         val r = c.check(v)
-        if (r.isSuccess) checkValuesInOrder(vs, cs, results :+ r)
-        else             checkValuesInOrder(vs, checks, results :+ r)
+        if (r.isSuccess) checkValuesInOrder(vs, cs, results :+ (v -> Seq(r)))
+        else             checkValuesInOrder(vs, checks, results :+ (v -> Seq(r)))
       }
-      case (v +: vs, nil) => (results :+ Failure("there are no more available checks for "+v, v.notNull), checks)
+      case (v +: vs, nil) => (results :+ (v -> Seq(Failure("is unexpected", v.notNull))), checks)
       case _              => (results, checks)
     }
   }
@@ -313,12 +313,14 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
    * @return (the list of each result for each tested value, the list of remaining checks if any)
    */
   @tailrec
-  private def checkValues(values: Seq[T], checks: Seq[ValueCheck[T]], results: Seq[Result] = Seq()): (Seq[Result], Seq[ValueCheck[T]]) = {
+  private def checkValues(values: Seq[T], checks: Seq[ValueCheck[T]], results: Seq[(T, Seq[Result])] = Seq()): (Seq[(T, Seq[Result])], Seq[ValueCheck[T]]) = {
     values match {
       case currentValue +: remainingValues =>
-        val (result, uncheckedChecks) = checkValue(currentValue, checks, Seq(), Failure("there are no more available checks for " + currentValue, currentValue.notNull))
-        checkValues(remainingValues, uncheckedChecks, results :+ result)
-
+        if (checks.isEmpty) (results :+ (currentValue -> Seq(Failure("no more checks for "+currentValue, currentValue.notNull))), checks)
+        else {
+          val (valueResults, uncheckedChecks) = checkValue(currentValue, checks, Seq(), Seq())
+          checkValues(remainingValues, uncheckedChecks, results :+ (currentValue -> valueResults))
+        }
       case _ => (results, checks)
     }
   }
@@ -328,23 +330,23 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
    * @return (the result of evaluating value with uncheckedChecks, unchecked and failed checks)
    */
   @tailrec
-  private def checkValue(value: T, uncheckedChecks: Seq[ValueCheck[T]], checkedChecks: Seq[ValueCheck[T]], previousResult: Result) : (Result, Seq[ValueCheck[T]]) = {
+  private def checkValue(value: T, uncheckedChecks: Seq[ValueCheck[T]], checkedChecks: Seq[ValueCheck[T]], results: Seq[Result]) : (Seq[Result], Seq[ValueCheck[T]]) = {
     uncheckedChecks match {
       case currentCheck +: remainingUncheckedChecks =>
         val result = currentCheck.check(value)
-        if (result.isSuccess) (result, checkedChecks ++ remainingUncheckedChecks)
-        else                  checkValue(value, remainingUncheckedChecks, checkedChecks :+ currentCheck, result or previousResult)
+        if (result.isSuccess) (Seq(result), checkedChecks ++ remainingUncheckedChecks)
+        else                   checkValue(value, remainingUncheckedChecks, checkedChecks :+ currentCheck, results :+ result)
 
-      case _ => (previousResult, checkedChecks)
+      case _ => (results, checkedChecks)
     }
   }
 
-  private def makeKoMessage(description: String, successes: Seq[Result], failures: Seq[Result], remainingChecks: Seq[ValueCheck[T]]) = {
+  private def makeKoMessage(description: String, successes: Seq[(T, Seq[Result])], failures: Seq[(T, Seq[Result])], remainingChecks: Seq[ValueCheck[T]]) = {
     val equalChecks = checks.forall(isEqualCheck)
     if (equalChecks) {
       val order = if (checkOrder) " in order" else ""
       val missingValues = remainingChecks.collect(expectedValue).flatten
-      val excessValues  = failures.map(_.expected)
+      val excessValues  = failures.map(_._1)
       if (missingValues.isEmpty)     s"$description must not contain ${excessValues.mkString(", ")}$order"
       else if (excessValues.isEmpty) s"$description does not contain ${missingValues.mkString(", ")}$order"
       else                           s"$description does not contain ${missingValues.mkString(", ")} and must not contain ${excessValues.mkString(", ")}$order"
@@ -358,7 +360,8 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
       val order = if (checkOrder) " in order" else ""
       val values = s"correct ${"value".plural(checks.size)}$order"
       s"$description does not contain $qty $values" +
-        (if (failures.isEmpty) "" else failures.mkString("\n", "\n", "\n"))
+        (if (failures.isEmpty) ""
+         else failures.map { case (value, results) => "- "+value+"\n"+results.map(" * "+_).mkString("\n") }.mkString("\n", "\n", "\n"))
     }
 
   }

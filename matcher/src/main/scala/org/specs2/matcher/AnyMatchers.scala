@@ -92,8 +92,8 @@ trait AnyBaseMatchers {
     def apply[S <: T](a: Expectable[S]) = {
       val r = if (pattern.isDefinedAt(a.value)) pattern.apply(a.value) else MatchFailure("", "", a)
       result(r.isSuccess,
-             a.description + " matches the given pattern " + r.message,
-             a.description + " doesn't match the expected pattern "  + r.message,
+             a.description + " is correct: " + r.message,
+             a.description + " is incorrect: " + r.message,
              a)
     }
   }

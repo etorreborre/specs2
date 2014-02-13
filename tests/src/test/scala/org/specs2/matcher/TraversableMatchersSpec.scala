@@ -64,11 +64,20 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
    Failure messages
    ${ (Seq[Int]() must contain(exactly(1))                                     ) returns "List() does not contain 1" }
    ${ (Seq(1, 2, 3) must contain(exactly(1, 2))                                ) returns "List(1, 2, 3) must not contain 3" }
-   ${ (Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(1), be_>=(5)))        ) returns "List(1, 2, 3) does not contain exactly 3 correct values\n3 is less than 5 and there are no more available checks for 3\n" }
-   ${ (Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(2), be_<=(1)).inOrder)) returns "List(1, 2, 3) does not contain exactly 3 correct values in order\n3 is greater than 1\n" }
+   ${ (Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(1), be_>=(5)))        ) returns
+      "List(1, 2, 3) does not contain exactly 3 correct values\n"+
+      "- 3\n"+
+      " * 3 is less than 5\n" }
+   ${ (Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(2), be_<=(1)).inOrder)) returns
+      "List(1, 2, 3) does not contain exactly 3 correct values in order\n"+
+        "- 3\n"+
+        " * 3 is greater than 1\n" }
 
    ${ (Seq(1, 2, 3) must contain(atLeast(4, 1))                                ) returns "List(1, 2, 3) does not contain 4" }
-   ${ (Seq(1, 2, 3) must contain(atLeast(be_>=(0), be_>=(1), be_<=(1)))        ) returns "List(1, 2, 3) does not contain at least 3 correct values\n3 is greater than 1 and there are no more available checks for 3\n" }
+   ${ (Seq(1, 2, 3) must contain(atLeast(be_>=(0), be_>=(1), be_<=(1)))        ) returns
+      "List(1, 2, 3) does not contain at least 3 correct values\n"+
+      "- 3\n"+
+      " * 3 is greater than 1\n" }
 
    ${ (Seq(1, 2)    must contain(atMost(1, 3))                                 ) returns "List(1, 2) does not contain 3 and must contain 2" }
    ${ (Seq(1, 2)    must contain(atMost(1))                                    ) returns "List(1, 2) must not contain 2" }
@@ -78,7 +87,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
    ${ (Seq(1, 2, 3) must contain(exactly(1, 2, 3, 4, 5))                       ) returns "List(1, 2, 3) does not contain 4, 5" }
    ${ (Seq(1, 2, 3) must contain(atLeast(1, 2, 3, 4))                          ) returns "List(1, 2, 3) does not contain 4" }
    ${ (Seq(1, 2, 3) must contain(atLeast(1, 2, 3, 4, 5))                       ) returns "List(1, 2, 3) does not contain 4, 5" }
-   ${ (Seq(1, 2, 3) must contain(atMost(1, 2))                                 ) returns "List(1, 2, 3) must not contain 3" }
+   ${ (Seq(1, 2, 3) must contain(atMost(1, 2))                                 ) returns "List(1, 2, 3) must not contain 3" }  $xtag
 
 
 
