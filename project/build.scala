@@ -32,7 +32,7 @@ object build extends Build {
       rootSettings             ++
       compatibilitySettings    ++
       Seq(name := "specs2")
-  ).aggregate(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock)
+  ).aggregate(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, tests)
   
   /** COMMON SETTINGS */
   lazy val specs2Settings: Seq[Settings] = Seq(

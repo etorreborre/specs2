@@ -1,7 +1,6 @@
 package org.specs2
 package matcher
 
-import mutable.Specification
 import execute._
 import io.StringOutput
 
@@ -9,7 +8,7 @@ import io.StringOutput
  * all these examples works in a mutable specification which means that FailureExceptions are caught before being
  * combined with the logical combinator
  */
-class MatchResultLogicalCombinatorsSpec extends Specification with ResultMatchers {
+class MatchResultLogicalCombinatorsSpec extends mutable.Specification with ResultMatchers {
 
   "Match results can be combined with and" >> {
     (1 must_== 1) and (2 must_== 2)

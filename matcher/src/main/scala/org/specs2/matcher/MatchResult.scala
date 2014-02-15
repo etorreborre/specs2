@@ -214,7 +214,9 @@ class OrMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T]
   lazy val m2 = second
   override def evaluate[S >: T] = {
     m1 match {
-      case MatchSuccess(_, _, _) => m1
+      // see MatchResultLogicalCombinatorsSpec for a case where OrMatches are nested together. see #233
+      case om: OrMatch[_] if om.m1.isSuccess => new OrMatch(om.m1, MatchSkip("", expectable))
+      case MatchSuccess(_, _, _)             => new OrMatch(m1, MatchSkip("", expectable))
       case _ => {
         (m1, m2) match {
           case (_, NeutralMatch(_))                                   => new OrMatch(m1, MatchSkip("", expectable))

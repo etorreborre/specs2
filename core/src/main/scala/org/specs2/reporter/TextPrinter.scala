@@ -42,17 +42,17 @@ trait TextPrinter {
   }
 
   private def reducer(implicit args: Arguments) =
-    (PrintReducer           &&&
-     StatisticsReducer      &&&
-     LevelsReducer          &&&
-     SpecsArgumentsReducer) >>> printIO(textOutput)(args)
+    (PrintReducer            &&&
+     StatsReducer2           &&&
+     LevelsReducer2          &&&
+     SpecsArgumentsReducer2) >>> printIO(textOutput)(args)
 
-  type ToPrint = (((Stream[Print], SpecsStatistics), Levels[Fragment]), SpecsArguments[ExecutingFragment])
+  type ToPrint = (((Stream[Print], Stats), Level[Fragment]), Arguments)
 
   /** print a line to the output */
   def printIO(output: ResultOutput)(implicit args: Arguments) = (line: ToPrint) => {
     line.flatten match {
-      case (p, s, l, a) => PrintLine(p.last, s.total, l.level, args <| a.last).print(output)
+      case (p, s, l, a) => PrintLine(p.last, s, l.level, args <| a).print(output)
     }
     line
   }

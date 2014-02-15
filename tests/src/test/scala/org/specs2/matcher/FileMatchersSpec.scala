@@ -3,7 +3,10 @@ package matcher
 import java.io.File
 import io._
 
-class FileMatchersSpec extends Specification with TestFiles with MockFileSystem with FileMatchers { def is = s2"""
+class FileMatchersSpec extends Specification with TestFiles with FileMatchers {
+  private[specs2] override val fileSystem = new MockFileSystem {}
+
+  def is = s2"""
 
  The FileMatchers trait provides matchers to check files and paths.
 
@@ -91,8 +94,10 @@ class FileMatchersSpec extends Specification with TestFiles with MockFileSystem 
                                                                                                                         """
 }
 
-case class fs() extends MustMatchers with MockFileSystem with TestFiles with FileMatchers {
-  addFile(okPath, "")
+case class fs() extends MustMatchers with TestFiles with FileMatchers {
+  private[specs2] override val fileSystem = new MockFileSystem {}
+  import fileSystem._
+  fileSystem.addFile(okPath, "")
 
   def e1 = okPath must beAnExistingPath
   def e2 = missingPath must not be anExistingPath

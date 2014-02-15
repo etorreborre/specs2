@@ -82,6 +82,9 @@ trait Statistics {
     f: ExecutingFragment => SpecStats(ArrayBuffer(f.get.stats))
   }
 
+  val StatsReducer2: Reducer[ExecutingFragment, Stats] = Reducer.unitReducer {
+    f: ExecutingFragment => f.get.stats
+  }
 }
 private [specs2]
 object Statistics extends Statistics

@@ -12,6 +12,7 @@ import MatchersImplicits._
  * and also ways to verify the contents of these files
  */
 trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with TraversableMatchers {
+  import fileSystem._
   /**
    * check that all the paths in `expectedDir` are the same as the ones in `actualDir`
    */

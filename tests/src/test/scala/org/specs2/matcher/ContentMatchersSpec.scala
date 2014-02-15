@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import io.MockFileSystem
+import org.specs2.io.{FileSystem, MockFileSystem}
 import text.LinesContent
 import java.io.File
 
@@ -21,7 +21,10 @@ class ContentMatchersSpec extends Specification with LinesContentMatchers { def 
 
 }
 
-case class comp() extends MustMatchers with MockFileSystem with TestFiles with LinesContentMatchers {
+case class comp() extends MustMatchers with TestFiles with ContentMatchers {
+  val mockFileSystem = new MockFileSystem {}
+  private[specs2] override val fileSystem: FileSystem = mockFileSystem
+  import mockFileSystem._
 
   addFile("f1", "hello\nbeautiful\nworld")
   addFile("f2", "hello\nbeautiful\nworld")
@@ -48,10 +51,11 @@ case class comp() extends MustMatchers with MockFileSystem with TestFiles with L
   def e6 = ((file("f6"), file("f7")) must haveSameLines.showOnly(1.difference).unordered).message.split("\n").toSeq must
               haveSameLinesAs(Seq(
                 "f6 is not the same as f7",
-                "in f6, not in f7",
-                "  2. morning",
-                "in f7, not in f6",
-                "  2. day"))
+                "  in f6, not in f7",
+                "    2. morning",
+                "",
+                "  in f7, not in f6",
+                "    2. day"))
 
   def e7 = (file("f1"), Seq("hello", "beautiful", "world")) must haveSameLines
 

@@ -23,7 +23,6 @@ import StandardFragments._
  * - an End fragment is a Reset, it set the level of the next fragment to 0 level
  *
  */
-private[specs2]
 case class Levels[T](private val levelsSeq: Vector[Level[T]] = Vector[Level[T]]()) {
   /** @return true if there are no levels */
   lazy val isEmpty = levelsSeq.isEmpty
@@ -106,7 +105,8 @@ case object Levels {
   def apply[T](b: Level[T]) = new Levels(Vector(b))
   /** Semigroup for Level[T] */
   implicit def LevelMonoid[T]: Monoid[Level[T]] = new Monoid[Level[T]] {
-    def append(l1: Level[T], l2: =>Level[T]) = {
+    def append(l1: Level[T], l22: =>Level[T]) = {
+      val l2 = l22
       (l1, l2) match {
         case (LevelZero(),    _)   => l2
         case (_,    LevelZero())   => l1
@@ -129,6 +129,9 @@ case object Levels {
 
   implicit val LevelsReducer: Reducer[ExecutingFragment, Levels[Fragment]] =
     Reducer.unitReducer { f: ExecutingFragment => Levels(fragmentToLevel(f.original)) }
+
+  implicit val LevelsReducer2: Reducer[ExecutingFragment, Level[Fragment]] =
+    Reducer.unitReducer { f: ExecutingFragment => fragmentToLevel(f.original) }
 
   implicit val ExecutedLevelsReducer: Reducer[ExecutedFragment, Levels[ExecutedFragment]] =
     Reducer.unitReducer { f: ExecutedFragment => Levels(executedFragmentToLevel(f)) }
@@ -166,6 +169,9 @@ case object Levels {
 
   implicit val FragmentLevelsReducer: Reducer[Fragment, Levels[Fragment]] =
     Reducer.unitReducer { f: Fragment => Levels(fragmentToLevel(f)) }
+
+  implicit val FragmentLevelsReducer2: Reducer[Fragment, Level[Fragment]] =
+    Reducer.unitReducer { f: Fragment => fragmentToLevel(f) }
 }
 
 private[specs2]

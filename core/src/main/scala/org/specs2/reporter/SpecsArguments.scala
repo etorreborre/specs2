@@ -100,6 +100,13 @@ case object SpecsArguments {
       }
     }
 
+  implicit val SpecsArgumentsReducer2: Reducer[ExecutingFragment, Arguments] =
+    Reducer.unitReducer {  (f: ExecutingFragment) => f.original match {
+         case s: SpecStart => s.arguments
+         case _            => Arguments()
+       }
+    }
+
   implicit val ExecutedSpecsArgumentsReducer: Reducer[ExecutedFragment, SpecsArguments[ExecutedFragment]] =
     Reducer.unitReducer {  (f: ExecutedFragment) => f match {
         case s: ExecutedSpecStart => SpecsArguments(StartOfArguments(f, s.specName, s.start.arguments))

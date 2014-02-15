@@ -18,8 +18,8 @@ trait LinesContentMatchers extends LinesContentBaseMatchers with LinesContentBeH
 object LinesContentMatchers extends LinesContentMatchers
 
 private[specs2]
-trait LinesContentBaseMatchers extends FileReader with DifferenceFilters with Expectations with SeqsContents {
-  
+trait LinesContentBaseMatchers extends DifferenceFilters with Expectations with SeqsContents {
+
   /** matches if 2 contents, as a pair, have the same lines */
   def haveSameLines[L1 : LinesContent, L2 : LinesContent]: LinesPairComparisonMatcher[L1, L2] =
     LinesPairComparisonMatcher[L1, L2]()

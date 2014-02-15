@@ -10,7 +10,6 @@ import matcher._
 import FragmentsShow._
 import collection.Seqx._
 
-private[specs2]
 class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatchers with ArbitraryFragments with Tags { def is = sequential^ s2"""
   The Levels class is used to compute the 'level' of Fragments in a list of Fragments.                                  
                                                                                                                         
@@ -59,7 +58,7 @@ class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatche
     for start ^ t1 ^ ex1 ^ end ^ t2 ^ ex2                                                    ${tree().e2}
     for start ^ t1 ^ ex1 ^ p ^ t2 ^ ex2                                                      ${tree().e3}
     for start ^ t1 ^ ex1 ^ ex2 ^ p ^ t2 ^ ex1 ^ ex2                                          ${tree().e4}
-    for start\n t1 ex1 $$ok\n ex2 $$ok                                                       ${tree().e5}
+    for start\n t1 ex1 $$ok\n ex2 $$ok                                                       ${tree().e5}$xtag
 
   The indentation of a piece of text is calculated as follows
     if the text is "\n    " then it is the number of spaces after the newline                ${indentation().e1}
@@ -143,7 +142,7 @@ class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatche
         f match {
           case t: Text if t.text.raw.trim.isEmpty   => None
           case t: Text                              => Some(Text(t.text.raw.trim))
-          case t: TagFragments.TagFragment     => None
+          case t: TagFragments.TagFragment          => None
           case other                                => Some(f)
         }
       }
@@ -196,7 +195,7 @@ class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatche
   def tree(fs: Fragments)    (implicit reducer: Reducer[Fragment, Levels[Fragment]] = Levels.FragmentLevelsReducer) = fold(spec(fs))(reducer).toTree
   def treeMap(fs: Fragments)(mapper: (Fragment, Seq[Fragment], Int) => Option[Fragment])(implicit reducer: Reducer[Fragment, Levels[Fragment]] = Levels.FragmentLevelsReducer) =
     fold(spec(fs))(reducer).toTreeLoc(mapper).toTree
-  def spec(fs: Fragments) = ("start".title ^ fs).fragments
+  def spec(fs: Fragments) = new Specification { def is = ("start".title ^ fs) }.content.fragments
 
   def t1 = Text("t1")
   def t2 = Text("t2")
