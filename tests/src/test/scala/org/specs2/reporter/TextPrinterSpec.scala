@@ -252,19 +252,19 @@ class TextPrinterSpec extends Specification with DataTables with Tags { def is =
     def e4 = print(t1 ^ error4) must contain("! error4") 
     def e5 = print(t1 ^ skipped5) must contain("o skip it") 
     def e6 = print(t1 ^ pending6) must containMatch("\\* todo") 
-    def e7 = print(t1 ^ "e1\nexample1" ! success) must contain(allOf(
+    def e7 = print(t1 ^ br ^ "e1\nexample1" ! success) must contain(allOf(
         "  + e1",
         "      example1"))
     def e8 = print(args.report(showtimes=true) ^ t1 ! success) must containMatch("t1 \\(.*\\)")
 
     def e9 = print(t1 ^ tableOk) must containMatch("\\+ a \\| b")
     def e10 = print(t1 ^ tableKo) must contain("x ")
-    def e11 = print(t1 ^ tableOk) must contain(allOf(startWith("+ a | b"),
+    def e11 = print(t1 ^ br ^ tableOk) must contain(allOf(startWith("+ a | b"),
                                                      startWith("  1 | 1")))
-    def e12 = print(t1 ^ tableKo) must contain(allOf(startWith("x "),
+    def e12 = print(t1 ^ br ^ tableKo) must contain(allOf(startWith("x "),
                                                      startWith("  | a | b |"),
                                                      startWith("x | 1 | 2 | '1' is not equal to '2'")))
-    def e13 = print(t1 ^ tableError) must contain(allOf(
+    def e13 = print(t1 ^ br ^ tableError) must contain(allOf(
                                                   startWith("! "),
                                                   startWith("  | a | b |"),
                                                   startWith("! | 1 | 2 | boom")))
@@ -281,7 +281,7 @@ class TextPrinterSpec extends Specification with DataTables with Tags { def is =
     printWithColors(fragments).map(removeColors(_))
 
   def printWithColors(fs: Fragments): Seq[String] =
-    preReporter.exec("\n" ^ fs).foreach((n, fs) => printer.print(fs)).flatMap(_.split("\n"))
+    preReporter.exec(new Specification { def is = "\n" ^ fs }.content).foreach((n, fs) => printer.print(fs)).flatMap(_.split("\n"))
 
   def printWithColors(specification: SpecificationStructure): Seq[String] =
     preReporter.exec(specification).foreach((n, fs) => printer.print(fs)).flatMap(_.split("\n"))
