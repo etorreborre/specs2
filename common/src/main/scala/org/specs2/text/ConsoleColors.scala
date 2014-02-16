@@ -13,9 +13,9 @@ class ConsoleColors extends AnsiColors with Colors {
   def successColor = green
   def failureColor = yellow
   def errorColor   = red
-  def pendingColor = blue
-  def skippedColor = cyan
-  def statsColor   = blue
+  def pendingColor = cyan
+  def skippedColor = magenta
+  def statsColor   = cyan
 
   def text   (s: String, doIt: Boolean = true) = color(s, textColor,    doIt)
   def success(s: String, doIt: Boolean = true) = color(s, successColor, doIt)
@@ -100,6 +100,7 @@ object SmartColors extends ColorsMap {
       else
         None
     }
+
     if (args.contains("whitebg"))
       new SmartColors(Map(map:_*)) { override lazy val defaultColors = new InvertedColors }
     else

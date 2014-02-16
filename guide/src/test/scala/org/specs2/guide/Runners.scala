@@ -445,9 +445,9 @@ Property        | Default value |
 `color.success` |  green        |
 `color.failure` |  yellow       |
 `color.error`   |  red          |
-`color.pending` |  blue         |
-`color.skipped` |  cyan         |
-`color.stats`   |  blue         |
+`color.pending` |  cyan         |
+`color.skipped` |  magenta      |
+`color.stats`   |  cyan         |
 
 The default values above are provided for a black background. If you have a white background you can use the `specs2.whitebg` property and then the default values will be:
 
