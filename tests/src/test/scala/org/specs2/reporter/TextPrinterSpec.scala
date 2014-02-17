@@ -64,9 +64,9 @@ class TextPrinterSpec extends Specification with DataTables with Tags { def is =
      success status is green                                                                      ${color().e2}
      failures status is yellow                                                                    ${color().e3}
      errors status are red                                                                        ${color().e4}
-     pending status is blue                                                                       ${color().e5}
-     skipped status is cyan                                                                       ${color().e6}
-     stats are blue                                                                               ${color().e7}
+     pending status is cyan                                                                       ${color().e5}
+     skipped status is magenta                                                                    ${color().e6}
+     stats are cyan                                                                               ${color().e7}
      colors can be redefined by passing a Colors object                                           ${color().e8}
      colors can be redefined by passing system properties                                         ${color().e9}
      colors can be redefined by passing command-line args                                         ${color().e10}
@@ -165,9 +165,9 @@ class TextPrinterSpec extends Specification with DataTables with Tags { def is =
     def e2 = printWithColors(ex1) must containMatch(green.remove("\033["))
     def e3 = printWithColors(fail3) must containMatch(yellow.remove("\033["))
     def e4 = printWithColors(error4) must containMatch(red.remove("\033["))
-    def e5 = printWithColors(pending6) must containMatch(blue.remove("\033["))
-    def e6 = printWithColors(skipped5) must containMatch(cyan.remove("\033["))
-    def e7 = printWithColors(t1) must containMatch(blue.remove("\033["))
+    def e5 = printWithColors(pending6) must containMatch(cyan.remove("\033["))
+    def e6 = printWithColors(skipped5) must containMatch(magenta.remove("\033["))
+    def e7 = printWithColors(t1) must containMatch(cyan.remove("\033["))
 
     def failureMustBeMagenta(cs: Colors) = printWithColors(colors(cs) ^ fail3) must containMatch("35m")
 
