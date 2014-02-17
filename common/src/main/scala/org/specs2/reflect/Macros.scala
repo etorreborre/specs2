@@ -1,31 +1,32 @@
 package org.specs2
 package reflect
 
-import scala.reflect.macros.Context
+import Compat210._
 
 object Macros {
+  import scala.reflect.macros._
 
-  def toAST[A](c: Context)(xs: c.Tree*)(implicit tt: c.TypeTag[A]): c.Tree = {
+  def toAST[A](c: blackbox.Context)(xs: c.Tree*)(implicit tt: c.TypeTag[A]): c.Tree = {
     import c.universe._
     Apply(Select(Ident(typeOf[A].typeSymbol.companionSymbol), newTermName("apply")), xs.toList)
   }
 
-  def methodCall(c: Context)(name: String, xs: c.Tree*): c.Tree = {
+  def methodCall(c: blackbox.Context)(name: String, xs: c.Tree*): c.Tree = {
     import c.universe._
     Apply(Ident(newTermName(name)), xs.toList)
   }
 
-  def stringExpr(c: Context)(variable: c.Expr[Any]): c.Tree =
+  def stringExpr(c: blackbox.Context)(variable: c.Expr[Any]): c.Tree =
     c.literal(sourceOf(c)(variable)).tree
 
-  def sourceOf(c: Context)(expr: c.Expr[_]): String = {
+  def sourceOf(c: blackbox.Context)(expr: c.Expr[_]): String = {
     val p = expr.tree.pos
     val source = new String(p.source.content)
     if (p.isRange) source.substring(p.start, p.end)
     else p.lineContent.substring(p.point - p.source.lineToOffset(p.source.offsetToLine(p.point)))
   }
 
-  def termName(c: Context)(m: c.Expr[Any]): c.Expr[String] = {
+  def termName(c: blackbox.Context)(m: c.Expr[Any]): c.Expr[String] = {
     import c.universe._
     val name = m.tree match {
       case Ident(termName)                                       => termName
@@ -42,4 +43,13 @@ object Macros {
     c.literal(name.toString.trim)
   }
 
+}
+
+/**
+ * to remove 2.11 warnings
+ */
+object Compat210 {
+  object blackbox {
+    type Context = scala.reflect.macros.Context
+  }
 }

@@ -4,9 +4,9 @@ package execute
 import control.Exceptions._
 import text.NotNullStrings._
 import text.Trim._
-import scala.reflect.macros.{Context => MContext}
 import scala.reflect.runtime.universe._
 import reflect.Macros
+import reflect.Compat210._
 import Snippet._
 
 /**
@@ -61,7 +61,8 @@ trait Snippets {
 }
 
 object Snippets extends Snippets {
-  def create[T](c: MContext)(code: c.Expr[T])(params: c.Expr[SnippetParams[T]]): c.Expr[Snippet[T]] = {
+  import scala.reflect._
+  def create[T](c: blackbox.Context)(code: c.Expr[T])(params: c.Expr[SnippetParams[T]]): c.Expr[Snippet[T]] = {
     import c.{universe => u}; import u._
     import Macros._
     val result = c.Expr(methodCall(c)("createSnippet", c.literal(c.macroApplication.pos.isRange).tree, stringExpr(c)(code), code.tree.duplicate, params.tree))
