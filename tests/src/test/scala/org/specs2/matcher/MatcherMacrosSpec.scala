@@ -6,7 +6,6 @@ package matcher
  *
  *  addCompilerPlugin("org.scala-lang.plugins" % "macro-paradise_2.10.3-RC1" % "2.0.0-SNAPSHOT"))
  */
-/*
 class MatcherMacrosSpec extends Specification with ResultMatchers with MatcherMacros { def is = s2"""
 
  It is possible to define a matcher with methods matching the public members of a given type
@@ -40,4 +39,3 @@ class MatcherMacrosSpec extends Specification with ResultMatchers with MatcherMa
   case class Cat(name: String = "", age: Int = 0, kitten: Seq[Cat] = Seq())
 }
 
-*/
