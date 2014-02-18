@@ -8,7 +8,7 @@ class SnippetsSpec extends script.Specification with Snippets with DataTables wi
 
  These are examples on how to use the various snippet methods
 
-   + with the `snippet` method
+   + with the `snippet` method xxxx
    + with the `snippet` method and 2 lines
    + with the `snippet` method and cut comments
    + with the `snippet` method and cut comments - 2 blocks

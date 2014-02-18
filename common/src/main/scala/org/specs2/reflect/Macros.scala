@@ -16,11 +16,13 @@ object Macros {
     Apply(Ident(newTermName(name)), xs.toList)
   }
 
-  def stringExpr(c: blackbox.Context)(variable: c.Expr[Any]): c.Tree =
-    c.literal(sourceOf(c)(variable)).tree
+  def stringExprMacroPos(c: blackbox.Context)(variable: c.Expr[Any]): c.Tree =
+    c.literal(sourceOf(c)(variable)(c.macroApplication.pos)).tree
 
-  def sourceOf(c: blackbox.Context)(expr: c.Expr[_]): String = {
-    val p = expr.tree.pos
+  def stringExpr(c: blackbox.Context)(variable: c.Expr[Any]): c.Tree =
+    c.literal(sourceOf(c)(variable)(variable.tree.pos)).tree
+
+  def sourceOf(c: blackbox.Context)(expr: c.Expr[_])(p: c.Position): String = {
     val source = new String(p.source.content)
     if (p.isRange) source.substring(p.start, p.end)
     else p.lineContent.substring(p.point - p.source.lineToOffset(p.source.offsetToLine(p.point)))

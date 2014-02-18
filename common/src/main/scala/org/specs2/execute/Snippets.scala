@@ -65,7 +65,7 @@ object Snippets extends Snippets {
   def create[T](c: blackbox.Context)(code: c.Expr[T])(params: c.Expr[SnippetParams[T]]): c.Expr[Snippet[T]] = {
     import c.{universe => u}; import u._
     import Macros._
-    val result = c.Expr(methodCall(c)("createSnippet", c.literal(c.macroApplication.pos.isRange).tree, stringExpr(c)(code), code.tree.duplicate, params.tree))
+    val result = c.Expr(methodCall(c)("createSnippet", c.literal(c.macroApplication.pos.isRange).tree, stringExprMacroPos(c)(code), code.tree.duplicate, params.tree))
     c.Expr(atPos(c.prefix.tree.pos)(result.tree))
   }
 }
@@ -151,11 +151,21 @@ object Snippet {
   lazy val scissorsMarkerFormat = s"$ls*// 8<\\-+.*\n"
 
   /**
-   * trim the expression from start and end accolades if it is a multiline expression
-   * + in some case it is necessary to add a dummy expression so that the range position of the captured snippet is
+   * RangePos snippets are built by using all the string at the macro application point
+   * (it used to be only the "inside" code but that got broken in 2.11.0-M8)
+   *
+   * 3 things need to be trimmed:
+   *
+   *  - the "snippet" method call
+   *
+   *  - the expression from start and end accolades if it is a multiline expression
+   *
+   *  - in some case it is necessary to add a dummy expression so that the range position of the captured snippet is
    * correct. /**/;1/**/ is the smallest such expression
    */
-  def trimRangePosSnippet = (expression: String) => {
+  def trimRangePosSnippet = (call: String) => {
+
+    val expression = Trimmed(call).removeStart("snippet")
     val trimmed =
       if (s"$ls*\\{$ls*.*".r.findPrefixOf(expression).isDefined) Trimmed(Trimmed(expression).removeFirst(s"\\{")).removeLast(s"\\}")
       else                                                       expression
