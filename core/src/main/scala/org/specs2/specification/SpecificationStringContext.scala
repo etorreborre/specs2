@@ -4,8 +4,8 @@ package specification
 import main.{Arguments, ArgumentsArgs}
 import execute._
 import text.NotNullStrings._
-import scala.reflect.macros.{Context => MContext}
 import reflect.Macros._
+import reflect.Compat210._
 import text.Interpolated
 import text.NotNullStrings._
 import control.Exceptions._
@@ -80,7 +80,7 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
   implicit def markdownLinkIsSpecPart(link: MarkdownLink): SpecPart = stringIsSpecPart(link.toString)
 
   implicit class specificationInStringContext(sc: StringContext) {
-    def s2(variables: SpecPart*) = macro S2Macro.s2Implementation
+    def s2(variables: SpecPart*): Fragments = macro S2Macro.s2Implementation
   }
 
   /**
@@ -107,7 +107,8 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
 }
 
 object S2Macro {
-  def s2Implementation(c: MContext)(variables: c.Expr[SpecPart]*) : c.Expr[Fragments] = {
+  import scala.reflect.macros._
+  def s2Implementation(c: blackbox.Context)(variables: c.Expr[SpecPart]*) : c.Expr[Fragments] = {
     import c.{universe => u}; import u.{ Position => _, _ }
 
     val texts = c.prefix.tree match { case Apply(_, List(Apply(_, ts))) => ts }

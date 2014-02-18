@@ -61,7 +61,7 @@ trait Snippets {
 }
 
 object Snippets extends Snippets {
-  import scala.reflect._
+  import scala.reflect.macros._
   def create[T](c: blackbox.Context)(code: c.Expr[T])(params: c.Expr[SnippetParams[T]]): c.Expr[Snippet[T]] = {
     import c.{universe => u}; import u._
     import Macros._
