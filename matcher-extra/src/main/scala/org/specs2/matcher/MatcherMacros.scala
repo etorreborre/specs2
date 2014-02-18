@@ -130,7 +130,7 @@ object MatcherMacros extends MatcherMacros {
 
   private def extractBody(c: Context) = { import c.universe._
     c.macroApplication.symbol.annotations.find(_.tpe.toString.endsWith("fieldMatcherBody")).
-      flatMap(_.scalaArgs.collectFirst { case Function(ValDef(_, a, _, _) :: Nil, b) => a -> c.resetAllAttrs(b) }).
+      flatMap(_.scalaArgs.map(arg => c.resetLocalAttrs(arg)).collectFirst { case Function(ValDef(_, a, _, _) :: Nil, b) => a -> b }).
       getOrElse(c.abort(c.enclosingPosition, "Annotation body not provided!"))
   }
 
