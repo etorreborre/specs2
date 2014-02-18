@@ -158,7 +158,7 @@ trait Classes extends Output {
       }
       instance.asInstanceOf[T]
     } catch {
-      case e: java.lang.reflect.InvocationTargetException => throw e.getTargetException
+      case e: java.lang.reflect.InvocationTargetException => throw e
     }
   }
 
