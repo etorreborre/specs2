@@ -151,15 +151,11 @@ trait Classes extends Output {
   private[reflect] def createInstanceFor[T <: AnyRef](klass: Class[T])(implicit m: ClassTag[T]): T = {
     val constructor = klass.getDeclaredConstructors()(0)
     constructor.setAccessible(true)
-    try {
-      var instance: AnyRef = constructor.newInstance().asInstanceOf[AnyRef]
-      if (!m.runtimeClass.isInstance(instance)) {
-        error(instance + " is not an instance of " + m.runtimeClass.getName)
-      }
-      instance.asInstanceOf[T]
-    } catch {
-      case e: java.lang.reflect.InvocationTargetException => throw e
+    var instance: AnyRef = constructor.newInstance().asInstanceOf[AnyRef]
+    if (!m.runtimeClass.isInstance(instance)) {
+      error(instance + " is not an instance of " + m.runtimeClass.getName)
     }
+    instance.asInstanceOf[T]
   }
 
   /**
