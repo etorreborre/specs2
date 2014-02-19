@@ -271,7 +271,7 @@ STUBS
       list.contains(null) must_== true
     }
     eg := {
-      list.contains(argThat(beMatching(".*o"))) returns true
+      list.contains(beMatching(".*o")) returns true
       list.contains("o") must_== true
     }
     eg := {
