@@ -77,19 +77,20 @@ trait ThrownExpectations extends Expectations with StandardResults with Standard
   }
 
   override def failure: Failure = throw new FailureException(super.failure)
-  override def skipped: Skipped = throw new SkipException(super.skipped)
   override def todo: Pending = throw new PendingException(super.todo)
-  override def pending: Pending = throw new PendingException(super.pending)
   override def anError: Error = throw new ErrorException(super.anError)
 
   override lazy val success = Success("success")
   protected def success(m: String): Success = Success(m)
   protected def failure(m: String): Failure = failure(Failure(m))
   protected def failure(f: Failure): Failure = throw new FailureException(f)
-  protected def skipped(m: String): Skipped = skipped(Skipped(m))
-  protected def skipped(s: Skipped): Skipped = throw new SkipException(s)
-  protected def pending(m: String): Pending = pending(Pending(m))
+
+  override def pending(m: String): Pending = pending(Pending(m))
   protected def pending(s: Pending): Pending = throw new PendingException(s)
+
+  override def skipped(m: String): Skipped = skipped(Skipped(m))
+  protected def skipped(s: Skipped): Skipped = throw new SkipException(s)
+
 
   override lazy val ko: MatchFailure[None.type] = throw new MatchFailureException(MatchFailure("ok", "ko", createExpectable(None)))
 }

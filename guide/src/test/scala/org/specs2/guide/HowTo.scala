@@ -2,7 +2,7 @@ package org.specs2
 package guide
 
 import specification.{TagFragments, Fragments, Step, Around, Example, DefaultExampleFactory, Snippets}
-import execute.{AsResult, Result, ResultExecution}
+import execute.{AsResult, Result, ResultExecution, Failure}
 import main.{CommandLineArguments, Arguments}
 import matcher.Matcher
 import time.SimpleTimer
@@ -87,6 +87,23 @@ Some examples may be temporarily failing but you may not want the entire test su
 }}
 
 The example above will be reported as `Pending` until it succeeds. Then it is marked as a failure so that you can remember to remove the `pendingUntilFixed` marker.
+
+### Mark a block as pending
+
+A full block can be marked as `Pending` just by using the `pending` method. For example: ${snippet{
+// 8<----------
+  implicit class Arrow(s: String) { def >>[R : AsResult](r: =>R) = s }
+// 8<----------
+"this is not really working now" >> pending {
+  Failure("why is this not ok?")
+}
+// with a message
+"this is not really working now" >> pending("I wish I knew why") {
+  Failure("why is this not ok?")
+}
+}}
+
+This feature is not limited to `Pending` blocks, you can do the same with `Skipped` blocks.
 
 ### Enhance failures
 
@@ -211,7 +228,7 @@ class StackSpec extends Specification { def is = s2"""
 
   class SizedStack(val capacity: Int) extends scala.collection.mutable.Stack[Int] {
     override def push(a: Int) = {
-      if (size == capacity) throw new Error("full stack")
+      if (size == capacity) sys.error("full stack")
         super.push(a)
     }
     def fill(range: Range) = {
