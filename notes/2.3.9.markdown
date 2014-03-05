@@ -4,6 +4,7 @@ Maintenance version
 
  * an example can be marked as pending simply by enclosing the code with `pending { ... }` (same thing with `skipped`)
  * improved failure messages for `Traversable` matchers and `beLike`
+ * output the stats in cyan by default [#235](https://github.com/etorreborre/specs2/issues/235)
 
 ## Fixes
 
