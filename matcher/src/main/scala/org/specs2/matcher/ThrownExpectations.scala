@@ -85,9 +85,11 @@ trait ThrownExpectations extends Expectations with StandardResults with Standard
   protected def failure(m: String): Failure = failure(Failure(m))
   protected def failure(f: Failure): Failure = throw new FailureException(f)
 
+  override def pending: Pending = pending("PENDING")
   override def pending(m: String): Pending = pending(Pending(m))
   protected def pending(s: Pending): Pending = throw new PendingException(s)
 
+  override def skipped: Skipped = skipped("skipped")
   override def skipped(m: String): Skipped = skipped(Skipped(m))
   protected def skipped(s: Skipped): Skipped = throw new SkipException(s)
 
