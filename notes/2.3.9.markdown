@@ -1,0 +1,17 @@
+Maintenance version
+
+## Improvements
+
+ * An example can be marked as pending simply by enclosing the code with `pending { ... }` (same thing with `skipped`)
+ * improved failure messages for Traversable matchers and `beLike`
+
+## Fixes
+
+ * improved the error message in case of an instantiation exception [#234](https://github.com/etorreborre/specs2/issues/234)
+ * better documentation/naming for the `Try` matchers with a pattern [#202](https://github.com/etorreborre/specs2/issues/202)
+ * better documentation/naming for Mockito's `inOrder` [#224](https://github.com/etorreborre/specs2/issues/224)
+ * simplified the signature of `argThat` [#237](https://github.com/etorreborre/specs2/issues/237)
+
+
+ ==========================
+
