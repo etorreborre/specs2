@@ -2,8 +2,8 @@ Maintenance version
 
 ## Improvements
 
- * An example can be marked as pending simply by enclosing the code with `pending { ... }` (same thing with `skipped`)
- * improved failure messages for Traversable matchers and `beLike`
+ * an example can be marked as pending simply by enclosing the code with `pending { ... }` (same thing with `skipped`)
+ * improved failure messages for `Traversable` matchers and `beLike`
 
 ## Fixes
 
