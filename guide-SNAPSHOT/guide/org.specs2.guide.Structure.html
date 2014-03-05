@@ -67,7 +67,7 @@
     </head><body><div id="breadcrumbs"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html">Structure</a></div><div class="colmask threecol">
             <div class="colmid">
               <div class="colleft">
-                <div class="col1"><div id="central"><html><title>Structure</title><a name="Structure"><h2 specId="953537876">Structure</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Presentation"><h3>Presentation</h3></a><p>In this section you will learn how to:</p>
+                <div class="col1"><div id="central"><html><title>Structure</title><a name="Structure"><h2 specId="1562162145">Structure</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Presentation"><h3>Presentation</h3></a><p>In this section you will learn how to:</p>
 <ul>
   <li>create examples and expectations</li>
   <li>define contexts to execute actions before/after examples</li>
@@ -597,8 +597,7 @@ These are the included specifications
   ${&quot;text to highlight&quot; ~ (specification, &quot;after text&quot;)                                }
   ${&quot;text to highlight&quot; ~ (specification, &quot;after text&quot;, &quot;tooltip&quot;)                     }
 </code></pre><a name="Reference"><h4>Reference</h4></a><p>Sometimes you just want to reference another specification without triggering its execution. For example when <a href="#Create+an+index">creating an index page</a>: </p>
-<pre><code class="prettyprint">s2&quot;&quot;&quot;
-&quot;&quot;&quot;
+<pre><code class="prettyprint">${see(new MailSenderSpec)}
 </code></pre><p>This will generate a html link in the main specification based on the referenced specification name. If you want to customize that link you can use the following syntax: </p>
 <pre><code class="prettyprint">  ${&quot;before text&quot; ~/ (&quot;text to highlight&quot;, specification, &quot;after text&quot;)           }
   ${&quot;before text&quot; ~/ (&quot;text to highlight&quot;, specification, &quot;after text&quot;, &quot;tooltip&quot;)}
@@ -629,18 +628,22 @@ These are the included specifications
 </ul>
 <pre><code class="prettyprint">&quot;a configuration&quot; can {
   &quot;have a name&quot; in ok
+}
 </code></pre>
 <ul>
   <li><code class="prettyprint">&gt;&gt;</code>: create an Example or a group of Examples (with no appended text)</li>
 </ul>
 <pre><code class="prettyprint">&quot;a configuration may&quot; &gt;&gt; {
   &quot;have a name&quot; in ok
+}
 </code></pre><p>Note that you can use a <code class="prettyprint">for</code> loop to create examples with the <code class="prettyprint">examplesBlock</code> method: </p>
 <pre><code class="prettyprint">&quot;this system has 5 examples&quot; &gt;&gt; {
   examplesBlock { (1 to 5) foreach { i =&gt; &quot;example &quot;+i &gt;&gt; ok } }
+}
 </code></pre><p>And you can also use a <code class="prettyprint">for</code> loop with the <code class="prettyprint">Result.unit</code> method to create a block of expectations: </p>
 <pre><code class="prettyprint">&quot;this example has 5 expectations&quot; in {
   Result.unit { (1 to 5) foreach { i =&gt; i must_== i } }
+}
 </code></pre>
 <ul>
   <li><code class="prettyprint">title</code>: give a title to the Specification</li>
@@ -658,12 +661,32 @@ These are the included specifications
 textFragment(&quot;this is a text fragment&quot;)
 </code></pre>
 <ul>
-  <li><p><code class="prettyprint">step</code>: create a <code class="prettyprint">Step</code> <code class="prettyprint">step { initializeDatabase() }</code></p></li>
-  <li><p><code class="prettyprint">action</code>: create an <code class="prettyprint">Action</code> <code class="prettyprint">action { justDoIt() }</code></p></li>
-  <li><p><code class="prettyprint">link</code>: create a link to another specification <code class="prettyprint">link(&quot;how&quot; ~ (&quot;to do hello world&quot;, new HelloWorldSpec))</code></p></li>
-  <li><p><code class="prettyprint">see</code>: add a link to another specification without including its fragments for execution <code class="prettyprint">see(new HelloWorldSpec)</code></p></li>
-  <li><p><code class="prettyprint">include</code> to include another specification <code class="prettyprint">include(new HelloWorldSpec)</code></p></li>
-  <li><p><code class="prettyprint">p, br, t, bt, end, endp</code>: add a formatting fragment</p></li>
+  <li><code class="prettyprint">step</code>: create a <code class="prettyprint">Step</code></li>
+</ul>
+<pre><code class="prettyprint">step { initializeDatabase() }
+</code></pre>
+<ul>
+  <li><code class="prettyprint">action</code>: create an <code class="prettyprint">Action</code></li>
+</ul>
+<pre><code class="prettyprint">action { justDoIt() }
+</code></pre>
+<ul>
+  <li><code class="prettyprint">link</code>: create a link to another specification</li>
+</ul>
+<pre><code class="prettyprint">link(&quot;how&quot; ~ (&quot;to do hello world&quot;, new HelloWorldSpec))
+</code></pre>
+<ul>
+  <li><code class="prettyprint">see</code>: add a link to another specification without including its fragments for execution</li>
+</ul>
+<pre><code class="prettyprint">see(new HelloWorldSpec)
+</code></pre>
+<ul>
+  <li><code class="prettyprint">include</code> to include another specification</li>
+</ul>
+<pre><code class="prettyprint">include(new HelloWorldSpec)
+</code></pre>
+<ul>
+  <li><code class="prettyprint">p, br, t, bt, end, endp</code>: add a formatting fragment</li>
 </ul><a name="Full+example"><h4>Full example</h4></a><p>To make things more concrete here is a full example: </p></div></status><status class="ok"><div style="display: show; text-indent:0px;"><pre><code class="prettyprint">import mutable._
 import specification._
 import execute.Success
@@ -746,10 +769,10 @@ class MutableSpec extends Specification {
     def e1 = string must have size(7)
   }
 }
-</code></pre></div></status><status class="ok"><div style="display: show; text-indent:10px;"><hr /></div></status><subtoc specId="597292472"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../../images/icon_success_sml.gif" /> <a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html" tooltip="">Fragments API</a></div></status><subtoc specId="318453629"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../../images/icon_success_sml.gif" /> <a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html" tooltip="">Given When Then</a></div></status></html></div></div>
+</code></pre></div></status><status class="ok"><div style="display: show; text-indent:10px;"><hr /></div></status><subtoc specId="918502897"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../../images/icon_success_sml.gif" /> <a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html" tooltip="">Fragments API</a></div></status><subtoc specId="1478628460"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../../images/icon_success_sml.gif" /> <a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html" tooltip="">Given When Then</a></div></status></html></div></div>
                 <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="482941389"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1550768305"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="586005349"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="1642170496"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -759,7 +782,7 @@ class MutableSpec extends Specification {
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="953537876"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1562162145"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -870,7 +893,7 @@ class MutableSpec extends Specification {
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Methods">Methods</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Full+example">Full example</a>
-            <ul><li id="597292472"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
+            <ul><li id="918502897"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Rules">Rules</a>
@@ -888,7 +911,7 @@ class MutableSpec extends Specification {
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Unit+specification">Unit specification</a>
             
           </li></ul>
-          </li><li id="318453629"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then_1">Given When Then</a>
+          </li><li id="1478628460"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then_1">Given When Then</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then">Given When Then</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Parsing">Parsing</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Delimited+parsers">Delimited parsers</a>
@@ -907,7 +930,7 @@ class MutableSpec extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1671454743"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="904543357"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -977,7 +1000,7 @@ class MutableSpec extends Specification {
             
           </li></ul>
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1773688636"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="1610728567"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
@@ -1021,7 +1044,7 @@ class MutableSpec extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="224190418"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="598485610"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1107,7 +1130,7 @@ class MutableSpec extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="763061952"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="1591363537"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -1117,6 +1140,8 @@ class MutableSpec extends Specification {
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Use+descriptions">Use descriptions</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Pending+until+fixed">Pending until fixed</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Mark+a+block+as+pending">Mark a block as pending</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Enhance+failures">Enhance failures</a>
             
@@ -1157,7 +1182,7 @@ class MutableSpec extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="621549147"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="1662640788"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1203,7 +1228,7 @@ class MutableSpec extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="1873352011"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="2012068990"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1223,7 +1248,7 @@ class MutableSpec extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['482941389','953537876'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['586005349','1562162145'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                 <div class="col3"><div id="rightcolumn"></div></div>
               </div>
