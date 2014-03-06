@@ -1,0 +1,10 @@
+Maintenance version (added 2 missing methods)
+
+
+## Fixes
+
+ * added 2 missing `pending` and `skipped` methods to the `ThrownExpectations` trait
+
+
+ ==========================
+
