@@ -17,6 +17,8 @@ import Utilities._
 import Defaults._
 import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 import com.typesafe.tools.mima.plugin.MimaKeys.previousArtifact
+import xerial.sbt.Sonatype._
+import SonatypeKeys._
 
 object build extends Build {
   type Settings = Def.Setting[_]
@@ -220,6 +222,7 @@ object build extends Build {
       generateIndexPage,
       publishSite,
       publishSignedArtifacts,
+      releaseToSonatype,
       notifyHerald,
       tagRelease,
       setNextVersion,
@@ -310,6 +313,8 @@ object build extends Build {
    * PUBLICATION
    */
   lazy val publishSignedArtifacts = executeAggregateTask(publishSigned, "Publishing signed artifacts")
+
+  lazy val releaseToSonatype = executeStepTask(sonatypeReleaseAll, "Closing and promoting the Sonatype repo")
 
   lazy val publicationSettings: Seq[Settings] = Seq(
     publishTo in Global <<= version { v: String =>
