@@ -221,7 +221,7 @@ object build extends Build {
       generateUserGuide,
       generateIndexPage,
       publishSite,
-      publishSignedArtifacts,
+      publishSignedArtifacts, 
       releaseToSonatype,
       notifyHerald,
       tagRelease,
@@ -347,7 +347,8 @@ object build extends Build {
         </developers>
     ),
     credentials := Seq(Credentials(Path.userHome / ".sbt" / "specs2.credentials"))
-  )
+  ) ++
+  sonatypeSettings
 
   /**
    * NOTIFICATION
