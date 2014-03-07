@@ -20,9 +20,12 @@ trait FormFragmentsBuilder extends FragmentsBuilder {
     lazy val form = tryOr(aForm.executeForm) { (e: Exception) =>
       Form("Initialisation error").tr(PropCell(Prop("", e.getMessage.notNull, (s: String, t: String) => Error(e))("message")))
     }
-    new Example(FormFormattedString.create(form), () => form.result.getOrElse(Success(""))) {
+    val func = () => form.result.getOrElse(Success("")) // lifted to a val to workaround: https://issues.scala-lang.org/browse/SI-8363
+    val formatted = FormFormattedString.create(form)
+    new Example(formatted, func) {
       override def matches(s: String) = true
     }
+    ???
   }
   implicit def formsHoldersAreExamples(f: =>{ def form: Form }): Example = formsAreExamples(f.form)
 }
