@@ -13,6 +13,7 @@ trait Sentences {
 
   protected lazy val negationsTable: BiMap[String, String] =
     Seq(
+      " contains"  <-> " does not contain",
       " must"      <-> " must not",
       " must"      <-> " mustn't",
       " can"       <-> " can not",
