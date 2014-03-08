@@ -12,5 +12,9 @@ package object matcher {
   implicit class Returns[T](t: =>MatchResult[T]) {
     def returns(m: String) = ResultExecution.execute(t.toResult) must contain(m) ^^ { (m: Result) => m.message }
     def returnsMatch(m: String) = ResultExecution.execute(t.toResult) must beMatching(m) ^^ { (m: Result) => m.message }
+    def returnsResult(m: String) = {
+      lazy val r = t.toResult
+      ResultExecution.execute(r) must contain(m) ^^ { (m: Result) => if (r.isSuccess) "success: "+m.message else "failure: "+m.message   }
+    }
   }
 }

@@ -79,7 +79,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
       "- 3\n"+
       " * 3 is greater than 1\n" }
 
-   ${ (Seq(1, 2)    must contain(atMost(1, 3))                                 ) returns "List(1, 2) does not contain 3 and must contain 2" }
+   ${ (Seq(1, 2)    must contain(atMost(1, 3))                                 ) returnsResult "failure: List(1, 2) does not contain 3 and must not contain 2" } $xtag
    ${ (Seq(1, 2)    must contain(atMost(1))                                    ) returns "List(1, 2) must not contain 2" }
 
    ${ (Seq(1, 2, 3) must contain(exactly(1, 2, 3, 4))                          ) returns "List(1, 2, 3) does not contain 4" }
@@ -87,9 +87,30 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
    ${ (Seq(1, 2, 3) must contain(exactly(1, 2, 3, 4, 5))                       ) returns "List(1, 2, 3) does not contain 4, 5" }
    ${ (Seq(1, 2, 3) must contain(atLeast(1, 2, 3, 4))                          ) returns "List(1, 2, 3) does not contain 4" }
    ${ (Seq(1, 2, 3) must contain(atLeast(1, 2, 3, 4, 5))                       ) returns "List(1, 2, 3) does not contain 4, 5" }
-   ${ (Seq(1, 2, 3) must contain(atMost(1, 2))                                 ) returns "List(1, 2, 3) must not contain 3" }  $xtag
+   ${ (Seq(1, 2, 3) must contain(atMost(1, 2))                                 ) returnsResult "failure: List(1, 2, 3) must not contain 3" }
 
+   Negation
+   $xsection
+   ${ Seq(1, 2)    must not(contain(exactly(1, 2, 3)))                        }
+   ${ Seq[Int]()   must not(contain(exactly(1)))                              }
+   ${ Seq(1, 2, 3) must not(contain(exactly(1, 2)))                           }
+   ${ Seq(1, 2)    must not(contain(atLeast(4, 1)))                           }
+   ${ Seq(1, 2)    must not(contain(atMost(1, 3)))                            }
+   ${ Seq(1, 2)    must not(contain(atMost(1)))                               }
 
+   ${ (Seq(1, 2)    must not(contain(exactly(1, 2)))                           ) returnsResult "failure: List(1, 2) does contain all values" }
+   ${ (Seq[Int]()   must not(contain(exactly(1)))                              ) returnsResult "failure: List() does not contain 1" }
+   ${ (Seq(1, 2, 3) must not(contain(exactly(1, 2)))                           ) returnsResult "failure: List(1, 2, 3) does contain 3" }
+   ${ (Seq(1, 2) must not(contain(atLeast(4, 1)))                              ) returnsResult "failure: List(1, 2, 3) does not contain 4" }
+   ${ (Seq(1, 2)    must not(contain(atMost(1, 3)))                            ) returnsResult "success: List(1, 2) does not contain 3 and must not contain 2" }
+   ${ (Seq(1, 2)    must not(contain(atMost(1)))                               ) returnsResult "success: List(1, 2) must not contain 2" }   $xsection
+   ${ (Seq(1, 2)    must not(contain(allOf(1, 2)))                             ) returns "List(1, 2) does contain 1, 2" }
+   ${ (Seq(1, 2, 3) must not(contain(exactly(1, 2, 3, 4)))                     ) returns "List(1, 2, 3) does not contain 4" }
+   ${ (Seq(1, 2, 3) must not(contain(exactly(1, 4)))                           ) returns "List(1, 2, 3) does not contain 4 and must not contain 2, 3" }
+   ${ (Seq(1, 2, 3) must not(contain(exactly(1, 2, 3, 4, 5)))                  ) returns "List(1, 2, 3) does not contain 4, 5" }
+   ${ (Seq(1, 2, 3) must not(contain(atLeast(1, 2, 3, 4)))                     ) returns "List(1, 2, 3) does not contain 4" }
+   ${ (Seq(1, 2, 3) must not(contain(atLeast(1, 2, 3, 4, 5)))                  ) returns "List(1, 2, 3) does not contain 4, 5" }
+   ${ (Seq(1, 2, 3) must not(contain(atMost(1, 2)))                            ) returns "List(1, 2, 3) must not contain 3" }
 
 
 
