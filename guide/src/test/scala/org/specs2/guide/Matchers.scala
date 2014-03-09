@@ -90,10 +90,6 @@ There are many ways to create matchers for your specific usage. The simplest way
 
 def beBetween(i: Int, j: Int) = be_>=(i) and be_<=(j)
 
-// create a Seq Matcher from a Matcher
-def allBeGreaterThan2: Matcher[Seq[Int]]   = be_>=(2).forall     // fail after the first failure
-def allBeGreaterThan3: Matcher[Seq[Int]]   = be_>=(2).foreach    // like forall but execute all matchers and collect the results
-def haveOneGreaterThan2: Matcher[Seq[Int]] = be_>=(2).atLeastOnce
 }}
 
  * using `zip` operators for to match tuples ${snippet{
@@ -283,7 +279,7 @@ foreachWhen(Seq(3, 10, 15)) { case a if a > 3 => a must be_>(5) }
 atLeastOnce(Seq(3, 4, 5)) ((_:Int) must be_>(2))
 // check only the elements defined for the partial function
 atLeastOnceWhen(Seq(3, 4, 10)) { case a if a > 3 => a must be_>(5) }
-}} 
+}}
 """
   def scalaCheckSection =
 s2"""

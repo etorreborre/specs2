@@ -56,23 +56,38 @@ trait MatchersImplicits extends Expectations
 
   implicit class matcherContainResult[T](m: Matcher[T]) { outer =>
     private val cc: ContainWithResult[T] = ContainWithResult(ValueChecks.matcherIsValueCheck(m))
-
+    /** @deprecated use collection must contain(matcher).forall instead */
     def forall                          : ContainWithResult[T] = cc.forall
+    /** @deprecated use collection must contain(matcher).foreach instead */
     def foreach                         : ContainWithResult[T] = cc.foreach
+    /** @deprecated use collection must contain(matcher).atLeastOnce instead */
     def atLeastOnce                     : ContainWithResult[T] = cc.atLeastOnce
+    /** @deprecated use collection must contain(matcher).atMostOnce instead */
     def atMostOnce                      : ContainWithResult[T] = cc.atMostOnce
+    /** @deprecated use collection must contain(matcher).atLeast instead */
     def atLeast(n: Times)               : ContainWithResult[T] = cc.atLeast(n)
+    /** @deprecated use collection must contain(matcher).atLeast instead */
     def atLeast(n: Int)                 : ContainWithResult[T] = cc.atLeast(n)
+    /** @deprecated use collection must contain(matcher).atMost instead */
     def atMost(n: Times)                : ContainWithResult[T] = cc.atMost(n)
+    /** @deprecated use collection must contain(matcher).atMost instead */
     def atMost(n: Int)                  : ContainWithResult[T] = cc.atMost(n)
+    /** @deprecated use collection must contain(matcher).between instead */
     def between(min: Times, max: Times) : ContainWithResult[T] = cc.between(min, max)
+    /** @deprecated use collection must contain(matcher).between instead */
     def between(min: Int, max: Int)     : ContainWithResult[T] = cc.between(min, max)
+    /** @deprecated use collection must contain(matcher).exactly instead */
     def exactly(n: Times)               : ContainWithResult[T] = cc.exactly(n)
+    /** @deprecated use collection must contain(matcher).exactly instead */
     def exactly(n: Int)                 : ContainWithResult[T] = cc.exactly(n)
 
+    /** @deprecated use collection must contain(matcher).forall(values) instead */
     def forall(values: GenTraversableOnce[T])     : MatchResult[GenTraversableOnce[T]] = cc.forall     (createExpectable(values))
+    /** @deprecated use collection must contain(matcher).foreach(values) instead */
     def foreach(values: GenTraversableOnce[T])    : MatchResult[GenTraversableOnce[T]] = cc.foreach    (createExpectable(values))
+    /** @deprecated use collection must contain(matcher).atLeastOnce(values) instead */
     def atLeastOnce(values: GenTraversableOnce[T]): MatchResult[GenTraversableOnce[T]] = cc.atLeastOnce(createExpectable(values))
+    /** @deprecated use collection must contain(matcher).atMostOnce(values) instead */
     def atMostOnce(values: GenTraversableOnce[T]) : MatchResult[GenTraversableOnce[T]] = cc.atMostOnce (createExpectable(values))
   }
 
@@ -83,10 +98,16 @@ trait MatchersImplicits extends Expectations
   }
 
   implicit class MatcherFunction[S, T](f: S => Matcher[T]) {
-    /** @return a function which will return a matcher checking a sequence of objects  */
+    /**
+     * @deprecated use collection must contain(exactly(seq.map(f))).inOrder
+     * @return a function which will return a matcher checking a sequence of objects
+     */
     def toSeq = (s: Seq[S]) => new SeqMatcher(s, f)
 
-    /** @return a function which will return a matcher checking a set of objects */
+    /**
+     * @deprecated use collection must contain(exactly(seq.map(f))).inOrder
+     * @return a function which will return a matcher checking a set of objects
+     */
     def toSet = (s: Set[S]) => new SetMatcher(s, f)
 
   }
