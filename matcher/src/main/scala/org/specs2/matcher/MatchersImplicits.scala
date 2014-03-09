@@ -122,17 +122,11 @@ trait MatchersImplicits extends Expectations
    * Usage: List(1, 2, 3) must ((beEqualTo(_:Int)).toSeq)(List(1, 2, 3))
    */
   class SeqMatcher[S, T](s: Seq[S], f: S => Matcher[T]) extends Matcher[Seq[T]] {
-    def apply[U <: Seq[T]](t: Expectable[U]) = {
-      val bothSequences = t.value.toList zip s.toList
-      val results = bothSequences.map { case (t1, s1) => f(s1).apply(createExpectable(t1)) }
-      if (s.size != t.value.size)
-        result(false,
-               "the seqs contain the same number of elements",
-                t.description + " contains " + t.value.size + " elements while " + q(s) + " contains " + s.size + " elements",
-                t)
-      else
-        result(FoldrGenerator[List].reduce(MatchResultMessageReducer[T], results), t)
-    }
+    def apply[U <: Seq[T]](t: Expectable[U]) =
+      ContainWithResultSeq[T](s.map(f).map(ValueChecks.matcherIsValueCheck[T]),
+                              containsAtLeast = true,
+                              containsAtMost = true,
+                              checkOrder = true).apply(t)
   }
 
   /**
@@ -140,23 +134,12 @@ trait MatchersImplicits extends Expectations
    * Usage: List(1, 2, 3) must ((beEqualTo(_:Int)).toSet)(List(2, 1, 3)) }}}
    */
   class SetMatcher[S, T](s: Set[S], f: S => Matcher[T]) extends Matcher[Set[T]] {
-    def apply[U <: Set[T]](t: Expectable[U]) = {
-      val setToTest = t
-      if (s.size != setToTest.value.size)
-        result(false, 
-               "the sets contain the same number of elements",
-                setToTest.description + " contains " + setToTest.value.size + " elements while " + q(s) + " contains " + s.size + " elements",
-                setToTest)
-      else {
-        val results = setToTest.value.map { (element: T) =>
-          s.find { (otherElement:S) => f(otherElement).apply(createExpectable(element)).isSuccess } match {
-            case None => result(false, "all matches", "no match for element " + q(element), setToTest)
-            case Some(x) => result(true, q(element) + " matches with " + x, "no match for element " + q(element), setToTest)
-          }
-        }
-        result(FoldrGenerator[Set].reduce(MatchResultMessageReducer[U], results), setToTest)
-      }
-    }
+    def apply[U <: Set[T]](t: Expectable[U]) =
+      ContainWithResultSeq[T](s.toSeq.map(f).map(ValueChecks.matcherIsValueCheck[T]),
+        containsAtLeast = true,
+        containsAtMost = true,
+        checkOrder = false).apply(t)
+
   }
 
   /** verify the function f for all the values, stopping after the first failure */
