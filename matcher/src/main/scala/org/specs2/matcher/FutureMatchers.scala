@@ -2,15 +2,14 @@ package org.specs2
 package matcher
 
 import concurrent.duration._
-import concurrent.{Await, Future}
-import concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Await, Future}
 import java.util.concurrent.TimeoutException
 import execute.{AsResult, Failure, Result}
 
 /**
  * This trait is for transforming matchers of values to matchers of Futures
  */
-trait FutureMatchers extends Expectations {
+trait FutureMatchers extends Expectations with ConcurrentExecutionContext {
 
   /**
    * add an `await` method to any matcher `Matcher[T]` so that it can be transformed into a `Matcher[Future[T]]`
@@ -48,3 +47,11 @@ trait FutureMatchers extends Expectations {
 }
 
 object FutureMatchers extends FutureMatchers
+
+/**
+ * Specification of the execution context to be used for executing futures
+ * This can be overridden to pass in your own execution context
+ */
+trait ConcurrentExecutionContext {
+  implicit val concurrentExecutionContext: ExecutionContext = concurrent.ExecutionContext.Implicits.global
+}
