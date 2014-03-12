@@ -142,12 +142,23 @@ iterator.next must be_==(3).eventually
  * using `await` to create a matcher that will match on `Matcher[Future[T]]`: ${snippet{
 // 8<--
 import time.NoTimeConversions._
+    import scala.concurrent._
+    import duration._
+    import ExecutionContext.Implicits.global
+// 8<--
+future(1) must be_>(0).await
+future { Thread.sleep(100); 1 } must be_>(0).await(retries = 2, timeout = 100.millis)
+}}
+
+ * using `await` to create a `Result` on a `Future` that returns a `Matcher[T]`: ${snippet{
+// 8<--
+import time.NoTimeConversions._
 import scala.concurrent._
 import duration._
 import ExecutionContext.Implicits.global
 // 8<--
-future(1) must be_>(0).await
-future { Thread.sleep(100); 1 } must be_>(0).await(retries = 2, timeout = 100.millis)
+future(1 === 1).await
+future(1 === 1).await(retries = 2, timeout = 100.millis)
 }}
 
  * using `when` or `unless` to apply a matcher only if a condition is satisfied: ${snippet{
