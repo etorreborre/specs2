@@ -28,7 +28,9 @@ trait FutureMatchers extends Expectations with ConcurrentExecutionContext {
       def awaitFor(retries: Int, totalDuration: FiniteDuration = 0.seconds): Result = {
         try Await.result(f.map(value => AsResult(value)), timeout)
         catch {
-          case e: TimeoutException => if (retries <= 0) Failure("Timeout after "+totalDuration) else awaitFor(retries - 1, totalDuration + timeout)
+          case e: TimeoutException =>
+            if (retries <= 0) Failure(s"Timeout after ${totalDuration + timeout}")
+            else awaitFor(retries - 1, totalDuration + timeout)
           case other: Throwable    => throw other
         }
       }
