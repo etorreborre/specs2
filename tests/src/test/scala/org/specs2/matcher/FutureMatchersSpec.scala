@@ -16,7 +16,7 @@ class FutureMatchersSpec extends Specification with Groups with NoTimeConversion
 
  with a retries number
  ${ Future { Thread.sleep(100); 1 } must be_>(0).await(retries = 2, timeout = 100.millis) }
- ${ (Future { Thread.sleep(800); 1 } must be_>(0).await(retries = 4, timeout = 50.millis)) returns "Timeout after 200 milliseconds" }
+ ${ (Future { Thread.sleep(800); 1 } must be_>(0).await(retries = 4, timeout = 50.millis)) returns "Timeout after 250 milliseconds" }
 
  A `Future` returning a `Matcher[T]` can be transformed into a `Result`
  ${ Future(1 === 1).await }
