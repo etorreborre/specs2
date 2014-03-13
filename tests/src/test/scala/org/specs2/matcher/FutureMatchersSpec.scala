@@ -7,6 +7,7 @@ import org.specs2.time.{NoTimeConversions}
 import concurrent._
 import duration._
 import ExecutionContext.Implicits.global
+import java.util.concurrent.{Executors, ThreadPoolExecutor, ForkJoinPool, Executor}
 
 class FutureMatchersSpec extends Specification with Groups with NoTimeConversions with ResultMatchers { def is = s2"""
 
@@ -23,6 +24,9 @@ class FutureMatchersSpec extends Specification with Groups with NoTimeConversion
 """
 
   // the current execution context can be overridden here
-  override implicit val concurrentExecutionContext: ExecutionContext = concurrent.ExecutionContext.Implicits.global
+  val pool = Executors.newFixedThreadPool(4)
+
+  override implicit val concurrentExecutionContext: ExecutionContext =
+    concurrent.ExecutionContext.fromExecutor(pool)
 
 }
