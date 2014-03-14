@@ -387,6 +387,10 @@ val init = withFile() compose withDatabase()
 "Do something on the full system" ! init(success)
 }}
 
+#### Console output
+
+Some specifications might be using libraries which tend to be immoderately logging their activity. If you want to temporarily switch off any console display during the execution of the examples you can add the `org.specs2.reporter.NoStdOutAroundExample` trait. This trait creates an `Around` context for example and re-directs the output to an empty stream until the example is finished. It then resets the output to the default `System.out` output. Of course since `System.out` and `Console.out` are shared resources this might not work so well when specifications or examples are executed concurrently. In this case you might consider using `fork in Test := true` within sbt or `sequential` within specs2 to get a proper display.
+
 #### Steps/Actions
 
 ##### Steps

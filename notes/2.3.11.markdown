@@ -3,6 +3,7 @@ Maintenance version
 ## Improvements
 
  * added await on `Future[T : AsResult]` to directly return a result [#241](http://github.com/etorreborre/specs2/issues/241)
+ * added a `NoStdOutAroundExample` trait to remove any console output during an example execution
 
 ## Deprecations
 

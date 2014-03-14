@@ -2,6 +2,7 @@ package org.specs2
 package specification
 
 import execute._
+import java.io.PrintStream
 
 /**
  * The Around trait can be inherited by classes which will
@@ -30,4 +31,3 @@ trait Around extends Context { outer =>
     }
   }
 }
-
