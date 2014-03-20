@@ -59,18 +59,18 @@ trait OptionBeHaveMatchers { outer: OptionBaseMatchers =>
   }
 }
 
-case class SomeMatcher[T]() extends OptionLikeMatcher[Option, T]("Some", identity)
-case class SomeCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[Option, T]("Some", identity, check)
+case class SomeMatcher[T]() extends OptionLikeMatcher[Option, T, T]("Some", identity)
+case class SomeCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[Option, T, T]("Some", identity, check)
 
-class OptionLikeMatcher[F[_], T](typeName: String, toOption: F[T] => Option[T]) extends Matcher[F[T]] {
+class OptionLikeMatcher[F[_], T, U](typeName: String, toOption: F[T] => Option[U]) extends Matcher[F[T]] {
   def apply[S <: F[T]](value: Expectable[S]) =
     result(toOption(value.value).isDefined, s"${value.description} is $typeName", s"${value.description} is not $typeName", value)
 
-  def which[R : AsResult](f: T => R) = new OptionLikeCheckedMatcher(typeName, toOption, f)
-  def like[R : AsResult](f: PartialFunction[T, R]) = new OptionLikeCheckedMatcher(typeName, toOption, f)
+  def which[R : AsResult](f: U => R) = new OptionLikeCheckedMatcher(typeName, toOption, f)
+  def like[R : AsResult](f: PartialFunction[U, R]) = new OptionLikeCheckedMatcher(typeName, toOption, f)
 }
 
-class OptionLikeCheckedMatcher[F[_], T](typeName: String, toOption: F[T] => Option[T], check: ValueCheck[T]) extends Matcher[F[T]] {
+class OptionLikeCheckedMatcher[F[_], T, U](typeName: String, toOption: F[T] => Option[U], check: ValueCheck[U]) extends Matcher[F[T]] {
   def apply[S <: F[T]](value: Expectable[S]) = {
     toOption(value.value) match {
       case Some(v) => {

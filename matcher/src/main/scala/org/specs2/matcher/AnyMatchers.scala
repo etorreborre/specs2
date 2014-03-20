@@ -104,7 +104,7 @@ trait AnyBaseMatchers {
       val xClass = x.value.asInstanceOf[java.lang.Object].getClass
       result(xClass == c,
              x.description + " has class " + q(c.getName),
-             x.description + " doesn't have class " + q(c.getName) + " but " + q(xClass.getName),
+             x.description + " doesn't have class " + q(c.getName) + ". It has class " + q(xClass.getName),
              x)
     }
   }
@@ -115,7 +115,7 @@ trait AnyBaseMatchers {
       val xClass = x.value.asInstanceOf[java.lang.Object].getClass
       result(c.isAssignableFrom(xClass.getSuperclass),
              x.description + " has super class " + q(c.getName),
-             x.description + " doesn't have super class " + q(c.getName) + " but " + q(xClass.getSuperclass.getName),
+             x.description + " doesn't have super class " + q(c.getName) + ". It has super class " + q(xClass.getSuperclass.getName),
              x)
     }
   }
@@ -127,7 +127,7 @@ trait AnyBaseMatchers {
       val xClass = x.value.asInstanceOf[java.lang.Object].getClass
       result(xClass.getInterfaces.contains(c),
              x.description + " has interface " + q(c.getName),
-             x.description + " doesn't have interface " + q(c.getName) + " but " + xClass.getInterfaces.mkString(", "),
+             x.description + " doesn't have interface " + q(c.getName) + ". It has interface " + xClass.getInterfaces.mkString(", "),
              x)
     }
   }
@@ -154,6 +154,8 @@ trait AnyBaseMatchers {
     }
   }
 }
+
+
 /**
  * Matcher for a boolean value which must be true
  */

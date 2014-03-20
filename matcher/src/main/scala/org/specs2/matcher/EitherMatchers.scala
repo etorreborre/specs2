@@ -43,8 +43,8 @@ trait EitherBeHaveMatchers { outer: EitherBaseMatchers =>
   }
 }
 
-case class RightMatcher[T]() extends OptionLikeMatcher[({type l[a]=Either[_, a]})#l, T]("Right", (_:Either[Any, T]).right.toOption)
-case class RightCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[({type l[a]=Either[_, a]})#l, T]("Right", (_:Either[Any, T]).right.toOption, check)
+case class RightMatcher[T]() extends OptionLikeMatcher[({type l[a]=Either[_, a]})#l, T, T]("Right", (_:Either[Any, T]).right.toOption)
+case class RightCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[({type l[a]=Either[_, a]})#l, T, T]("Right", (_:Either[Any, T]).right.toOption, check)
 
-case class LeftMatcher[T]() extends OptionLikeMatcher[({type l[a]=Either[a, _]})#l, T]("Left", (_:Either[T, Any]).left.toOption)
-case class LeftCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[({type l[a]=Either[a, _]})#l, T]("Left", (_:Either[T, Any]).left.toOption, check)
+case class LeftMatcher[T]() extends OptionLikeMatcher[({type l[a]=Either[a, _]})#l, T, T]("Left", (_:Either[T, Any]).left.toOption)
+case class LeftCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[({type l[a]=Either[a, _]})#l, T, T]("Left", (_:Either[T, Any]).left.toOption, check)

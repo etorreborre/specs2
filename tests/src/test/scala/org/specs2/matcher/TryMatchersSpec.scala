@@ -9,6 +9,7 @@ class TryMatchersSpec extends Specification with ResultMatchers { def is = s2"""
 
   beSuccessful checks if an element is Success(_)
   ${ Succeeded(1) must beSuccessfulTry }
+  ${ Succeeded(1) must beSuccessfulTry(1) }
   ${ Succeeded(1) must beSuccessfulTry.withValue(1) }
   ${ Succeeded(1) must beSuccessfulTry.withValue(===(1)) }
   ${ Succeeded(1) must beASuccessfulTry.which(_ > 0) }
@@ -25,13 +26,15 @@ class TryMatchersSpec extends Specification with ResultMatchers { def is = s2"""
   ${ (Succeeded(1) must beSuccessfulTry.withValue(2)) returns "'Success(1)' is a Success but '1' is not equal to '2'" }
 
   beAFailure checks if an element is Failure(_)
+  ${ Failed[I](e) must beFailedTry(e) }
   ${ Failed[I](e) must beFailedTry }
   ${ Succeeded(1) must not be failedTry }
   ${ (Succeeded(1) must be failedTry) returns "'Success(1)' is not a Failure" }
   ${ Failed[I](e) must be aFailedTry }
   ${ Failed[I](e) must beFailedTry.withThrowable[MyException] }
-  ${ (Failed[I](e) must beFailedTry.withThrowable[OtherException]) returns s"'Failure(boom)' is a Failure but '${classOf[MyException].getName}' is not of type '${classOf[OtherException].getName}'" }
+  ${ (Failed[I](e) must beFailedTry.withThrowable[OtherException]) returns s"'Failure(boom)' is a Failure but '$e' doesn't have class '${classOf[OtherException].getName}'. It has class '${classOf[MyException].getName}'" }
   ${ Failed[I](e) must beAFailedTry.withThrowable[MyException](".*oo.*") }
+  ${ Failed[I](e) must beFailedTry.like { case e: MyException => e.getMessage must startWith("b") }}
   ${ Failed[I](e) must not be aFailedTry.withThrowable[MyException]("bang") }
   ${ (Failed[I](e) must beAFailedTry.withThrowable[MyException]("bang")) returns "'Failure(boom)' is a Failure but 'boom' doesn't match 'bang'" }
   ${ Failed[I](e) must not be aFailedTry.withThrowable[OtherException] }
@@ -41,6 +44,10 @@ class TryMatchersSpec extends Specification with ResultMatchers { def is = s2"""
   def e = new MyException("boom")
   class MyException(m: String) extends Exception(m) {
     override def toString = m
+    override def equals(o: Any) = o match {
+      case e: MyException => e.getMessage == getMessage
+      case _ => false
+    }
   }
   class OtherException extends Exception
   type I = Int
