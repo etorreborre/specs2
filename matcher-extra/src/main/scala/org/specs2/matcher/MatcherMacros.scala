@@ -27,10 +27,10 @@ trait MatcherMacros {
 object MatcherMacros extends MatcherMacros {
 
   def matcherMacroImpl[T : c.WeakTypeTag](c: Context): c.Expr[Any] = { import c.universe._
-    val matchers = new MakeMatchers(c).matchers[T]
+    val (matcherClassType, classDefinition) = new MakeMatchers(c).matchers[T]
 
     val block = q"""
-      $matchers
+      $classDefinition
       new $matcherClassType {}
     """
 
@@ -145,7 +145,7 @@ class MakeMatchers[C <: Context](val c: C) extends StandardLiftables {
         x: (Tree, Tree, Tree)
     }.unzip3
 
-    q"""
+    val classDefinition = q"""
       case class $matcherClassType(matcherOfT: Option[$typeOfT => org.specs2.execute.Result] = None) extends org.specs2.matcher.Matcher[$typeOfT] {
         // this is a workaround for 'missing type' if a default function value is specified in the case class
         private def matcherFunction = matcherOfT.getOrElse((t: $typeOfT) => org.specs2.execute.Success())
@@ -163,6 +163,7 @@ class MakeMatchers[C <: Context](val c: C) extends StandardLiftables {
         ..$fieldFunctionMatchers
       }
     """
+    (matcherClassType, classDefinition)
   }
 
   private def isConstructor(c: Context) = { import c.universe._
