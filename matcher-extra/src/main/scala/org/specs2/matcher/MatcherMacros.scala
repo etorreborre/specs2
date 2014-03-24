@@ -27,60 +27,10 @@ trait MatcherMacros {
 object MatcherMacros extends MatcherMacros {
 
   def matcherMacroImpl[T : c.WeakTypeTag](c: Context): c.Expr[Any] = { import c.universe._
-    val typeOfT = weakTypeOf[T]
-    val matcherClassType = newTypeName(matcherClassName[T](c))
-
-    val fields = typeOfT.members.filter(_.isPublic).
-      filterNot(isConstructor(c)).
-      filterNot(isSynthetic(c)).
-      filter(_.owner != typeOf[Any].typeSymbol).
-      filter(_.owner != typeOf[Object].typeSymbol).
-      filter(_.owner != typeOf[Product].typeSymbol).
-      filter(_.owner != typeOf[Equals].typeSymbol)
-
-    val (fieldValueMatchers, fieldMatchers, fieldFunctionMatchers) = fields.map { member =>
-      val fieldName  = member.name.toString
-      val methodName = newTermName(fieldName)
-      val fieldType  = member.typeSignature
-      val parameterName = newTermName(fieldName)
-
-      val valueBody    = q"""(fieldValue: $fieldType) =>
-        addMatcher((t :$typeOfT) => new org.specs2.matcher.BeTypedEqualTo[$fieldType](fieldValue)(theValue[$fieldType](t.$parameterName).updateDescription(d => "  "+$fieldName+": "+d)).toResult)"""
-      val matcherBody  = q"""(matcherValue: org.specs2.matcher.Matcher[$fieldType]) =>
-        addMatcher((t :$typeOfT) => matcherValue[$fieldType](theValue[$fieldType](t.$parameterName).updateDescription(d => "  "+$fieldName+": "+d)).toResult) """
-      val functionBody = q"""(f: $fieldType => org.specs2.execute.Result) => addMatcher((t :$typeOfT) => f(t.$parameterName)) """
-
-   
-      val x = (
-        q""" @fieldMatcherBody($valueBody) def $methodName(fieldValue: $fieldType): $matcherClassType = macro org.specs2.matcher.MatcherMacros.fieldMatcherImplementation[$fieldType, $typeOfT] """,
-        q""" @fieldMatcherBody($matcherBody) def $methodName(fieldValue: org.specs2.matcher.Matcher[$fieldType]): $matcherClassType = macro org.specs2.matcher.MatcherMacros.fieldMatcherImplementation[$fieldType, $typeOfT] """,
-        q""" @fieldMatcherBody($functionBody) def $methodName[R : org.specs2.execute.AsResult](fieldValue: $fieldType => R): $matcherClassType = macro org.specs2.matcher.MatcherMacros.fieldMatcherImplementation2[$fieldType, $typeOfT, R] """
-      )
-
-      x: (Tree, Tree, Tree)
-    }.unzip3
-
-    val matcherDefinition = q"""
-      case class $matcherClassType(matcherOfT: Option[$typeOfT => org.specs2.execute.Result] = None) extends org.specs2.matcher.Matcher[$typeOfT] {
-        // this is a workaround for 'missing type' if a default function value is specified in the case class
-        private def matcherFunction = matcherOfT.getOrElse((t: $typeOfT) => org.specs2.execute.Success())
-
-        def addMatcher(f: $typeOfT => org.specs2.execute.Result): $matcherClassType = copy(Some((t: $typeOfT) => matcherFunction(t) and f(t)))
-
-        def apply[S <: $typeOfT](s: org.specs2.matcher.Expectable[S]) = {
-          val r = matcherFunction(s.value)
-          val message = r.mapMessage(m => "For "+s.description+"\n"+m).message
-          result(r.isSuccess, message, message, s)
-        }
-
-        ..$fieldMatchers
-        ..$fieldValueMatchers
-        ..$fieldFunctionMatchers
-      }
-    """
+    val matchers = new MakeMatchers(c).matchers
 
     val block = q"""
-      $matcherDefinition
+      $matchers
       new $matcherClassType {}
     """
 
@@ -116,18 +66,7 @@ object MatcherMacros extends MatcherMacros {
       """})(implicitly[c.WeakTypeTag[F]])
   }
 
-  private def matcherClassName[T : c.WeakTypeTag](c: Context) = c.universe.weakTypeOf[T].typeSymbol.name.encoded+"Matcher"
-
-  private def isConstructor(c: Context) = { import c.universe._
-    (s: Symbol) =>  s match {
-      case m: c.universe.MethodSymbol => m.isConstructor
-      case other                      => false
-    }
-  }
-
-  private def isSynthetic(c: Context) = { import c.universe._
-    (s: Symbol) => s.isSynthetic
-  }
+  def matcherClassName[T : c.WeakTypeTag](c: Context) = c.universe.weakTypeOf[T].typeSymbol.name.encoded+"Matcher"
 
   private def extractBody(c: Context) = { import c.universe._
     c.macroApplication.symbol.annotations.find(_.tpe.toString.endsWith("fieldMatcherBody")).
@@ -161,4 +100,79 @@ object MatcherMacros extends MatcherMacros {
   /** set the macro application position to the elements of a tree  */
   private def setMacroPosition(c: Context) = setPosition(c)(c.macroApplication.pos.makeTransparent)
 
+}
+
+import scala.quasiquotes.StandardLiftables
+
+class MakeMatchers[C <: Context](val c: C) extends StandardLiftables {
+
+  import c.universe._
+
+  val u: c.universe.type = c.universe
+
+  def matchers[T: c.WeakTypeTag] = {
+    val typeOfT = weakTypeOf[T]
+    val matcherClassType = newTypeName(MatcherMacros.matcherClassName[T](c))
+
+    val fields: Iterable[c.Symbol] = typeOfT.members.filter(_.isPublic).
+      filterNot(isConstructor(c)).
+      filterNot(isSynthetic(c)).
+      filter(_.owner != typeOf[Any].typeSymbol).
+      filter(_.owner != typeOf[Object].typeSymbol).
+      filter(_.owner != typeOf[Product].typeSymbol).
+      filter(_.owner != typeOf[Equals].typeSymbol)
+
+    val (fieldValueMatchers, fieldMatchers, fieldFunctionMatchers) = fields.map {
+      member =>
+        val fieldName = member.name.toString
+        val methodName = newTermName(fieldName)
+        val fieldType = member.typeSignature
+        val parameterName = newTermName(fieldName)
+
+        val valueBody = q"""(fieldValue: $fieldType) =>
+        addMatcher((t :$typeOfT) => new org.specs2.matcher.BeTypedEqualTo[$fieldType](fieldValue)(theValue[$fieldType](t.$parameterName).updateDescription(d => "  "+$fieldName+": "+d)).toResult)"""
+        val matcherBody = q"""(matcherValue: org.specs2.matcher.Matcher[$fieldType]) =>
+        addMatcher((t :$typeOfT) => matcherValue[$fieldType](theValue[$fieldType](t.$parameterName).updateDescription(d => "  "+$fieldName+": "+d)).toResult) """
+        val functionBody = q"""(f: $fieldType => org.specs2.execute.Result) => addMatcher((t :$typeOfT) => f(t.$parameterName)) """
+
+
+        val x = (
+          q""" @fieldMatcherBody($valueBody) def $methodName(fieldValue: $fieldType): $matcherClassType = macro org.specs2.matcher.MatcherMacros.fieldMatcherImplementation[$fieldType, $typeOfT] """,
+          q""" @fieldMatcherBody($matcherBody) def $methodName(fieldValue: org.specs2.matcher.Matcher[$fieldType]): $matcherClassType = macro org.specs2.matcher.MatcherMacros.fieldMatcherImplementation[$fieldType, $typeOfT] """,
+          q""" @fieldMatcherBody($functionBody) def $methodName[R : org.specs2.execute.AsResult](fieldValue: $fieldType => R): $matcherClassType = macro org.specs2.matcher.MatcherMacros.fieldMatcherImplementation2[$fieldType, $typeOfT, R] """
+          )
+
+        x: (Tree, Tree, Tree)
+    }.unzip3
+
+    q"""
+      case class $matcherClassType(matcherOfT: Option[$typeOfT => org.specs2.execute.Result] = None) extends org.specs2.matcher.Matcher[$typeOfT] {
+        // this is a workaround for 'missing type' if a default function value is specified in the case class
+        private def matcherFunction = matcherOfT.getOrElse((t: $typeOfT) => org.specs2.execute.Success())
+
+        def addMatcher(f: $typeOfT => org.specs2.execute.Result): $matcherClassType = copy(Some((t: $typeOfT) => matcherFunction(t) and f(t)))
+
+        def apply[S <: $typeOfT](s: org.specs2.matcher.Expectable[S]) = {
+          val r = matcherFunction(s.value)
+          val message = r.mapMessage(m => "For "+s.description+"\n"+m).message
+          result(r.isSuccess, message, message, s)
+        }
+
+        ..$fieldMatchers
+        ..$fieldValueMatchers
+        ..$fieldFunctionMatchers
+      }
+    """
+  }
+
+  private def isConstructor(c: Context) = { import c.universe._
+    (s: Symbol) =>  s match {
+      case m: c.universe.MethodSymbol => m.isConstructor
+      case other                      => false
+    }
+  }
+
+  private def isSynthetic(c: Context) = { import c.universe._
+    (s: Symbol) => s.isSynthetic
+  }
 }
