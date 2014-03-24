@@ -3,6 +3,7 @@ package matcher
 
 import scala.reflect.macros.Context
 import scala.annotation.StaticAnnotation
+import scala.quasiquotes.RuntimeLiftables._
 
 /**
  * Macro definitions to generate matchers for the members of a type T
@@ -161,4 +162,3 @@ object MatcherMacros extends MatcherMacros {
   private def setMacroPosition(c: Context) = setPosition(c)(c.macroApplication.pos.makeTransparent)
 
 }
-
