@@ -298,5 +298,10 @@ object MatchResult {
   implicit val OrNotMatchFunctor: Functor[OrNotMatch] = new Functor[OrNotMatch] {
     def map[A, B](m: OrNotMatch[A])(f: A => B) = new OrNotMatch(m.m1.map(f), m.m2.map(f))
   }
+
+  implicit def matchResultAsResult[M[_] <: MatchResult[_], T]: AsResult[M[T]] = new AsResult[M[T]] {
+    def asResult(t: =>M[T]): Result = AsResult(t.toResult)
+  }
+
 }
 

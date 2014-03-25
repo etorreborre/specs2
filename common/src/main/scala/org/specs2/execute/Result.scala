@@ -210,7 +210,12 @@ object Result {
   }
 
   /** the result of a side-effecting block */
-  def unit(u: =>Unit) = ResultExecution.execute(u)(_ => Success())
+  def unit(u: =>Unit) = ResultExecution.execute(u)(_ => AsResult(Success()))
+
+  /** implicit typeclass instance to create examples from Results */
+  implicit def resultAsResult[R <: Result]: AsResult[R] = new AsResult[R] {
+    def asResult(t: =>R): Result = ResultExecution.execute(t)
+  }
 }
 
 trait Results {
@@ -238,10 +243,6 @@ trait AsResult[T] {
 }
 
 object AsResult {
-  /** implicit typeclass instance to create examples from Results */
-  implicit def resultAsResult[R <: Result]: AsResult[R] = new AsResult[R] {
-    def asResult(t: =>R): Result = ResultExecution.execute(t)
-  }
   /** implicit typeclass instance to create examples from Booleans */
   implicit def booleanAsResult: AsResult[Boolean] = new AsResult[Boolean] {
     def asResult(t: =>Boolean): Result = Results.toResult(t)
@@ -250,12 +251,7 @@ object AsResult {
   /** nicer syntax to use the AsResult syntax: AsResult(r) */
   def apply[R : AsResult](r: =>R): Result = implicitly[AsResult[R]].asResult(r)
 
-  /** typeclass instance for types which are convertible to Result */
-  implicit def asResult[R <% Result]: AsResult[R] = new AsResult[R] {
-    def asResult(r: =>R): Result = ResultExecution.execute(r)
-  }
-
-  /** @return a Result but throw exceptions if it is not a success */ 
+  /** @return a Result but throw exceptions if it is not a success */
   def effectively[R : AsResult](r: =>R): Result = ResultExecution.effectively(AsResult(r))
 }
 

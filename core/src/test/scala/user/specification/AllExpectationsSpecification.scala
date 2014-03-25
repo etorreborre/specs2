@@ -2,6 +2,7 @@ package user.specification
 
 import org.specs2.mutable
 import org.specs2.specification.{Scope, AllExpectations}
+import org.specs2.execute._
 
 class AllExpectationsSpecification extends mutable.Specification with AllExpectations {
   "In this example all the expectations are evaluated" >> {
@@ -35,4 +36,5 @@ class AllExpectationsSpecificationWithScope extends mutable.Specification with A
 
   trait context extends Scope
 }
+
 

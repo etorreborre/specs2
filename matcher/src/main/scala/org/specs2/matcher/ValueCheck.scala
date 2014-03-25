@@ -21,10 +21,13 @@ trait ValueCheck[T] { outer =>
   }
 }
 
+object ValueCheck {
+  implicit def valueIsTypedValueCheck[T](expected: T): BeEqualTypedValueCheck[T] = new BeEqualTypedValueCheck[T](expected)
+}
 /**
  * implicit conversions used to create ValueChecks
  */
-trait ValueChecks extends ValueChecksLowImplicits1 {
+trait ValueChecks extends ValueChecksLowImplicits {
 
   /** a Matcher[T] can check a value */
   implicit def matcherIsValueCheck[T](m: Matcher[T]): ValueCheck[T] = new ValueCheck[T] {
@@ -43,9 +46,12 @@ trait ValueChecks extends ValueChecksLowImplicits1 {
 
   /** a check of type T can be downcasted implicitly to a check of type S >: T */
   implicit def downcastBeEqualTypedValueCheck[T, S >: T](check: BeEqualTypedValueCheck[T]): ValueCheck[S] = check.downcast[S]
+
+  /** an expected value can be used to check another value */
+  def valueIsTypedValueCheck[T](expected: T): BeEqualTypedValueCheck[T] = ValueCheck.valueIsTypedValueCheck(expected)
 }
 
-trait ValueChecksLowImplicits1 extends ValueChecksLowImplicits {
+trait ValueChecksLowImplicits {
   /** a function returning an object having an AsResult instance can check a value */
   implicit def functionIsValueCheck[T, R : AsResult](f: T => R): ValueCheck[T] = new ValueCheck[T] {
     def check    = (t: T) => functionResult(AsResult(f(t)), t)
@@ -56,12 +62,6 @@ trait ValueChecksLowImplicits1 extends ValueChecksLowImplicits {
     if (Seq("true", "false").contains(result.message)) result.mapMessage(m => s"the function returns ${q(m)} on ${q(t)}")
     else result
 
-}
-
-/** Lower implicit conversions to create ValueChecks */
-trait ValueChecksLowImplicits {
-  /** an expected value can be used to check another value */
-  implicit def valueIsTypedValueCheck[T](expected: T): BeEqualTypedValueCheck[T] = new BeEqualTypedValueCheck[T](expected)
 }
 
 object ValueChecks extends ValueChecks

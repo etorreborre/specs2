@@ -117,7 +117,7 @@ class AnyMatchersSpec extends script.Specification with Groups with ResultMatche
   ${ 1 must not have superClass[String] }
 
   haveInterface checks if a value has a given interface in the list of its interfaces
-  ${ new java.util.ArrayList() must haveInterface[java.util.List[_]] : Result}
+  ${ AsResult(new java.util.ArrayList() must haveInterface[java.util.List[_]]) }
   ${ 1 must not have interface[java.util.List[_]] : Result }
 
   beAssignableFrom checks if a class is assignable from another
