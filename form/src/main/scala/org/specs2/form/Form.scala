@@ -245,5 +245,10 @@ case object Form {
       c.xml(args).toList
   }
 
+  /** a Form can be implicitly transformed to results */
+  implicit def formAsResult: AsResult[Form] = new AsResult[Form] {
+    def asResult(f: =>Form): Result = f.execute
+  }
+
 }
 

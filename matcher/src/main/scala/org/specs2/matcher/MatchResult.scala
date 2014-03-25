@@ -303,5 +303,10 @@ object MatchResult {
     def asResult(t: =>M[T]): Result = AsResult(t.toResult)
   }
 
+  /** implicit typeclass instance to create examples from a sequence of MatchResults */
+  implicit def matchResultSeqAsResult[T]: AsResult[Seq[MatchResult[T]]] = new AsResult[Seq[MatchResult[T]]] {
+    def asResult(t: =>Seq[MatchResult[T]]): Result = t.foldLeft(StandardResults.success: Result)(_ and _.toResult)
+  }
+
 }
 

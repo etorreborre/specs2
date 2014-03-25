@@ -248,7 +248,7 @@ object MatchersImplicits extends MatchersImplicits
  * Implicit conversions for MatchResults
  */
 private[specs2]
-trait MatchResultImplicits extends MatchResultLowerImplicits { outer =>
+trait MatchResultImplicits { outer =>
   /**
    * implicit definition to transform a Seq of MatchResults to a Result
    */
@@ -265,17 +265,5 @@ trait MatchResultImplicits extends MatchResultLowerImplicits { outer =>
    */
   implicit def fromMatchResult(r: =>MatchResult[_]): Boolean = r.isSuccess || r.toResult.isSkipped || r.toResult.isPending
 
-  /** implicit typeclass instance to create examples from a sequence of MatchResults */
-  implicit def matchResultSeqAsResult[T]: AsResult[Seq[MatchResult[T]]] = new AsResult[Seq[MatchResult[T]]] {
-    def asResult(t: =>Seq[MatchResult[T]]): Result = t.foldLeft(StandardResults.success: Result)(_ and _.toResult)
-  }
 }
 
-trait MatchResultLowerImplicits { outer: MatchResultImplicits =>
-  /** implicit typeclass instance to create examples from MatchResults */
-/*
-  implicit def matchResultAsResult[T]: AsResult[MatchResult[T]] = new AsResult[MatchResult[T]] {
-    def asResult(t: =>MatchResult[T]): Result = outer.asResult(t)
-  }
-*/
-}
