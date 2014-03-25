@@ -27,7 +27,7 @@ trait MatcherMacros {
 object MatcherMacros extends MatcherMacros {
 
   def matcherMacroImpl[T : c.WeakTypeTag](c: Context): c.Expr[Any] = { import c.universe._
-    val (matcherClassType, classDefinition) = new MakeMatchers(c).matchers[T]
+    val (matcherClassType, classDefinition) = new MakeMatchers[c.type](c).matchers[T]
 
     val block = q"""
       $classDefinition
