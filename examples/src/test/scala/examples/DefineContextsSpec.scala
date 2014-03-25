@@ -37,23 +37,6 @@ class DefineContextsSpec extends Specification {
   }
 
   /**
-   * This specification uses an implicit context for each example
-   */
-  class BeforeWithImplicitContextSpecification extends Specification { def is =
-    s2""" $sequential
-
-    This is a list of examples
-    ${ "example1"                     ! e }
-    ${ "example2"                     ! e }
-
-    """
-
-    var i = 0
-    def e = { i += 1; i must_== 1 }
-    implicit val before: Context = new Before { def before = i = 0 }
-  }
-
-  /**
    * This specification uses an implicit Outside context for each example
    */
   class OutsideWithImplicitContextSpecification extends Specification { def is =
@@ -253,7 +236,6 @@ class DefineContextsSpec extends Specification {
 
   def is = sequential^
            new BeforeSpecification ^
-           new BeforeWithImplicitContextSpecification ^
            new OutsideWithImplicitContextSpecification ^
            new BeforeMutableSpecification ^
            new BeforeExampleMutableSpecification ^

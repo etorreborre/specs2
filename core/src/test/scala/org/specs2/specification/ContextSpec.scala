@@ -169,20 +169,6 @@ class ContextSpec extends Specification with ResultMatchers with Groups with Fra
   }
 
   "applyEach" - new g5 with FragmentsExecution {
-    e1 := {
-      val spec = new Specification {
-        implicit def before = before1
-        def is = "e1" ! { 1 must_== 1 }
-      }
-      executing(spec.content).prints("before")
-    }
-    e2 := {
-      val spec = new Spec {
-        implicit def before = before1
-        "e1" in { 1 must_== 1 }
-      }
-      executing(spec.content).prints("before")
-    }
     e3 := {
       val spec = new Specification {
         implicit def outside1 = outsideInt
@@ -196,13 +182,6 @@ class ContextSpec extends Specification with ResultMatchers with Groups with Fra
         "e1" in { (s: Int) => s must_== s }
       }
       executing(spec.content).prints("outside")
-    }
-    e5 := {
-      val spec = new Spec {
-        implicit def outside1 = aroundOutside
-        "e1" in { s: Int => s must_== s }
-      }
-      executing(spec.content).prints("around", "outside")
     }
     e6 := {
       val spec = new Spec {
