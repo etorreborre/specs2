@@ -18,8 +18,6 @@ class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
  a spec can define an Around context that is used for each example                                            ${g2.e2}
  a spec can define a BeforeAfter context that is used for each example                                        ${g2.e3}
  a spec can define a BeforeAfterAround context that is used for each example                                  ${g2.e4}
- a spec can define a implicit context that is used for each example                                           ${g2.e5}
- a mutable spec can define a implicit context that is used for each example                                   ${g2.e6}
                                                                                                               """
 
   "before" - new g1 {
@@ -81,24 +79,6 @@ class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
         def around[R : AsResult](r: =>R) = { println("around"); AsResult(r) }
         "ex1" ! success
       }, "before", "around", "after")
-
-    e5 := executeContains(
-      new Specification with StringOutput {
-        implicit val c: Context = new BeforeAfter {
-          def before { println("before") }
-          def after { println("after") }
-        }
-        def is = "ex1" ! { println("ex1"); ok }
-      }, "before", "ex1", "after")
-
-    e6 := executeContains(
-      new Spec with StringOutput {
-        implicit val c: Context = new BeforeAfter {
-          def before { println("before") }
-          def after { println("after") }
-        }
-        "ex1" in { println("ex1"); ok }
-      }, "before", "ex1", "after")
   }
 
   def executeContains(s: SpecificationStructure with StringOutput, messages: String*) = {

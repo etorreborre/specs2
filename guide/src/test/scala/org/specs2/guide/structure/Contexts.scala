@@ -201,7 +201,6 @@ But there is more to it. The next paragraphs will show how to:
 1. execute the body of each example inside a specific context: `Around`
 1. set-up a context object (say a http query) and pass it to each example: `Outside`
 1. declare a `before` method for all the examples of a Specification without even having to create a context object
-1. use an implicit context to avoid duplication
 1. create a new context object by combining existing ones
 
 #### Around
@@ -282,14 +281,7 @@ val evenNumbers = new Fixture[Int] {
 "even numbers can be divided by 2" ! evenNumbers { i: Int => i % 2 === 0 }
 }}
 
-The example above tests repeatedly the same code with different values (you could add before or after actions if you wanted to). As you can see, the fixture can be applied explicitly to the example body but you can as well declare it as an implicit context or use the `FixtureExample` trait to pass the fixture implicitly: ${snippet{
-
-// passing the fixture implicitly
-class MySpec1 extends Specification { def is = s2"""
-  even numbers can be divided by 2 ${ i: Int => i % 2 === 0 }
-                                                                          """
-  implicit val evenNumbers: Fixture[Int] = ???
-}
+The example above tests repeatedly the same code with different values (you could add before or after actions if you wanted to). As you can see, the fixture can be applied explicitly to the example body but you can use the `FixtureExample` trait to pass the fixture to each example: ${snippet{
 
 // using the FixtureExample trait
 class MySpec2 extends Specification with FixtureExample[Int] { def is = s2"""
@@ -317,46 +309,6 @@ class MySpecification extends mutable.Specification with BeforeExample {
 }}
 
 As you can guess, the `AfterExample`, `AroundExample`,... traits work similarly by requiring the corresponding `after`, `around`,... methods to be defined.
-
-#### Implicit context
-
-The `BeforeExample` trait is a nice shortcut to avoid the creation of a context object, but there is another possibility to avoid the repetition of the context name for each example. If your specification is: ${snippet{
-
-class ContextSpec extends mutable.Specification {
-  val myContext = new Before { def before = cleanUp }
-
-  "This is a specification where the database is cleaned up before each example" >> {
-    "first example" in myContext { 1 must_== 1 }
-    "second example" in myContext { 1 must_== 1 }
-  }
-}
-}}
-
-You can simply mark your context object as `implicit` and it will be automatically passed to each example: ${snippet{
-
-class ContextSpec extends mutable.Specification {
-  implicit val myContext = new Before { def before = cleanUp }
-
-  "This is a specification where the database is cleaned up before each example" >> {
-    "first example"  in { 1 must_== 1 }
-    "second example" in { 1 must_== 1 }
-  }
-}
-}}
-
-There is just one gotcha that you need to be aware of. If your implicit context is an `Outside[String]` context this will not work: ${snippet{
-
-class ContextSpec extends mutable.Specification {
-  implicit val myContext = new Outside[String] { def outside = "hello" }
-
-  "This is a specification uses a new String in each example" >> {
-    "first example"  in { (s: String) => s must_== s }
-    "second example" in { (s: String) => s must_== s }
-  }
-}
-}}
-
-Indeed in both examples above the `s` string that will be passed is the Example description as specified [here](#Use+descriptions).
 
 #### Composition
 
