@@ -42,7 +42,7 @@ object build extends Build {
     specs2Version in GlobalScope <<= version,
     specs2ShellPrompt,
     scalazVersion := "7.0.6",
-    scalaVersion := "2.10.3")
+    scalaVersion := "2.10.4")
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
   lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
