@@ -101,13 +101,9 @@ object MatcherMacros extends MatcherMacros {
 
 }
 
-import scala.quasiquotes.StandardLiftables
-
-class MakeMatchers[C <: Context](val c: C) extends StandardLiftables {
+class MakeMatchers[C <: Context](val c: C) {
 
   import c.universe._
-
-  val u: c.universe.type = c.universe
 
   def matchers[T: c.WeakTypeTag] = {
     val typeOfT = weakTypeOf[T]
