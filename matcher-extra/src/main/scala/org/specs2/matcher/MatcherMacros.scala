@@ -3,7 +3,6 @@ package matcher
 
 import scala.reflect.macros.Context
 import scala.annotation.StaticAnnotation
-import scala.quasiquotes.RuntimeLiftables._
 
 /**
  * Macro definitions to generate matchers for the members of a type T
@@ -102,13 +101,9 @@ object MatcherMacros extends MatcherMacros {
 
 }
 
-import scala.quasiquotes.StandardLiftables
-
-class MakeMatchers[C <: Context](val c: C) extends StandardLiftables {
+class MakeMatchers[C <: Context](val c: C) {
 
   import c.universe._
-
-  val u: c.universe.type = c.universe
 
   def matchers[T: c.WeakTypeTag] = {
     val typeOfT = weakTypeOf[T]
