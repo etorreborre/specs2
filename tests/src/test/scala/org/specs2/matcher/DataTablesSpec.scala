@@ -21,7 +21,7 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
     when failing                                                                                             $e10
   2 tables results can be and-ed together                                                                    $e11
   a cell can have null values                                                                                $e12
-                                                                                                                        """
+                                                                                                              """
 
   def boom = error("boom")
   
@@ -65,7 +65,14 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
     0           ! "0"       |
     List("a")   ! "List(a)" | { (a, b) =>  a.toString must_== b }
 
-  def e8 = (new InAMutableContext).result must throwA[DecoratedResultException]
+  def e8 = {
+    "a successful table must not throw an exception" ==> {
+      (new InAMutableContext).resultOk must not (throwA[DecoratedResultException])
+    } and
+    "a failed table must throw an exception" ==> {
+      (new InAMutableContext).resultKo must throwA[DecoratedResultException]
+    }
+  }
 
   def e9 = {
     val table =
@@ -114,11 +121,17 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
     "a"            || "b"    |>
     "a"            !! "b"    |
     (null: String) !! ""     | { (a, b) =>  ok }
+
+
 }
 
 class InAMutableContext extends MustThrownMatchers with DataTables {
-  lazy val result =
-      "a"         | "b"    |>
-        1          ! 2      | { (a, b) =>  a must_== b }
+  lazy val resultOk =
+      "a" | "b"    |>
+       1  ! 1      | { (a, b) =>  a must_== b }
+
+  lazy val resultKo =
+    "a" | "b"    |>
+     1  ! 2      | { (a, b) =>  a must_== b }
 }
 
