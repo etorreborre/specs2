@@ -16,6 +16,7 @@ Maintenance version
  * fixed the `or` combinator on `MatchResult` when the first evaluation throws an Exception
  * fixed the `AllExpectations` trait when an evaluation throws an Exception
  * fixed the use of DataTables in mutable specifications when [the datatable is successful and there are following expectations](http://bit.ly/1kqbVj9)
+ * added back the missing `specs2.files` object
 
 
  ==========================
