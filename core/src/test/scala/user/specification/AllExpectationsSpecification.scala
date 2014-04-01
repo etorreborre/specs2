@@ -36,4 +36,11 @@ class AllExpectationsSpecificationWithScope extends mutable.Specification with A
   trait context extends Scope
 }
 
+class AllExpectationsSpecificationWithException extends mutable.Specification with AllExpectations {
+  "In this example the exception is caught" >> {
+    throw new Exception("boom")
+    1 === 1
+  }
+}
+
 

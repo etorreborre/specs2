@@ -1,7 +1,7 @@
 package org.specs2
 package specification
 
-import execute.{AsResult, Result}
+import org.specs2.execute.{Success, ResultExecution, AsResult, Result}
 import execute.Result._
 import matcher.StoredExpectations
 
@@ -30,7 +30,11 @@ trait StoredExpectationsContext extends StoredExpectations with StoredResultsCon
 trait StoredResultsContext extends Context { this: { def storedResults: Seq[Result]} =>
   def apply[T : AsResult](r: =>T): Result = {
     // evaluate r, triggering side effects
-    AsResult(r)
-    issues(storedResults, "\n")
+    val asResult = AsResult(r)
+
+    // if the execution returns an Error (and not match failures)
+    // then add the result as a new issue
+    if (asResult.isError) issues(storedResults :+ asResult, "\n")
+    else                  issues(storedResults, "\n")
   }
 }

@@ -3,7 +3,7 @@ package specification
 
 import _root_.org.specs2.mutable.{Specification => Spec}
 import reporter._
-import user.specification.{AllExpectationsSpecificationWithScope, AllExpectationsSpecification}
+import user.specification.{AllExpectationsSpecificationWithException, AllExpectationsSpecificationWithScope, AllExpectationsSpecification}
 
 class AllExpectationsSpec extends Spec with AllExpectations {
 
@@ -41,9 +41,16 @@ class AllExpectationsSpec extends Spec with AllExpectations {
       executedWithScope.issues.head.message === "'1' is not equal to '2' [AllExpectationsSpecification.scala:31]\n"+
                                                 "'1' is not equal to '3' [AllExpectationsSpecification.scala:32]"
     }
+    "evaluate an exception" >> {
+      executedException.hasIssues must beTrue
+      executedException.stats.expectations === 1
+      executedException.stats.examples === 1
+      executedException.stats.errors === 1
+    }
   }
 
   def executed = SilentConsoleReporter.report(new AllExpectationsSpecification)(args())
+  def executedException = SilentConsoleReporter.report(new AllExpectationsSpecificationWithException)(args())
   def executedSelected = SilentConsoleReporter.report(new AllExpectationsSpecification)(args(ex = "It is"))
   def executedSequential = SilentConsoleReporter.report(new AllExpectationsSpecification)(sequential)
   def executedWithScope = SilentConsoleReporter.report(new AllExpectationsSpecificationWithScope)(args())
