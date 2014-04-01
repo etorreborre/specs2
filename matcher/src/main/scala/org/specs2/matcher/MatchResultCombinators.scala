@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import control.Exceptions._
-import execute.{Result, ResultLogicalCombinators}
+import org.specs2.execute.{Error, Result, ResultLogicalCombinators}
 import MatchResultExecution._
 /**
  * This trait provides logical operators to combine match results where potentially a MatchResult expression
@@ -17,30 +17,30 @@ trait MatchResultLogicalCombinators {
 
   implicit def combineMatchResult[T](m: =>MatchResult[T]): MatchResultCombinator[T] = new MatchResultCombinator[T](m)
   class MatchResultCombinator[T](mr: =>MatchResult[T]) {
-    lazy val result = executeEither(mr)
-    lazy val expectable = result.fold(m1 => m1.expectable, m1 => m1.expectable)
+    lazy val result = try Right(executeEither(mr)) catch { case e: Exception => Left(e): Either[Exception, Either[MatchResult[T], MatchResult[T]]] }
+    lazy val expectable = result.fold(e => throw e, _.fold(m1 => m1.expectable, m1 => m1.expectable))
 
     /** @return the logical or of two results */
-    def or[S >: T](other: =>MatchResult[S]): MatchResult[S] = result.fold(m1 => other, m1 => new OrMatch(m1, other).evaluate)
+    def or[S >: T](other: =>MatchResult[S]): MatchResult[S] = result.fold(_ => other, _.fold(m1 => other, m1 => new OrMatch(m1, other).evaluate))
     /** @return the logical or of a MatchResult and a Result */
-    def or(other: =>Result): Result = result.fold(m1 => other, m1 => ResultLogicalCombinators.combineResult(m1.toResult) or other)
+    def or(other: =>Result): Result = result.fold(_ => other, _.fold(m1 => other, m1 => ResultLogicalCombinators.combineResult(m1.toResult) or other))
     /** @return the logical and of two results */
-    def and[S >: T](other: =>MatchResult[S]): MatchResult[S] = result.fold(m1 => expectable.check(m1), m1 => new AndMatch(m1, other).evaluate)
+    def and[S >: T](other: =>MatchResult[S]): MatchResult[S] = result.fold(e => throw e, _.fold(m1 => expectable.check(m1), m1 => new AndMatch(m1, other).evaluate))
     /** @return the logical and of a MatchResult and a Result */
-    def and(other: =>Result): Result = result.fold(m1 => expectable.check(m1).toResult, m1 => ResultLogicalCombinators.combineResult(m1.toResult) and other)
+    def and(other: =>Result): Result = result.fold(e => throw e, _.fold(m1 => expectable.check(m1).toResult, m1 => ResultLogicalCombinators.combineResult(m1.toResult) and other))
     /** apply the matcher and return the logical or of two results */
     def or(other: Matcher[T]): MatchResult[T] =
       tryOr {
-        result.fold(m1 => m1.expectable.applyMatcher(other),
-                    m1 => combineMatchResult(m1).or(execute(m1.expectable.applyMatcher(other))))
+        result.fold(e => throw e, _.fold(m1 => m1.expectable.applyMatcher(other),
+                    m1 => combineMatchResult(m1).or(execute(m1.expectable.applyMatcher(other)))))
       } { e => Expectable({ throw e; expectable.value }).applyMatcher(other) }
 
     /** apply the matcher and return the logical and of two results */
     def and(other: Matcher[T]): MatchResult[T] =
-      result.fold(m1 => m1,
-                  m1 => combineMatchResult(m1).and(execute(m1.expectable.applyMatcher(other))))
+      result.fold(e => throw e, _.fold(m1 => m1,
+                  m1 => combineMatchResult(m1).and(execute(m1.expectable.applyMatcher(other)))))
     /** @return the negation of this result */
-    def not: MatchResult[T] = result.fold(m1 => m1.negate, m1 => m1.negate)
+    def not: MatchResult[T] = result.fold(e => throw e, _.fold(m1 => m1.negate, m1 => m1.negate))
 
     /** only consider this result if the condition is true */
     def when(b: Boolean, m: String= ""): MatchResult[T] = if (b) mr else MatchSuccess(m, m, expectable)

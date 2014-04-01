@@ -55,5 +55,9 @@ class MatchResultLogicalCombinatorsSpec extends mutable.Specification with Resul
     ((1 must_== 1): Result).iff(false);
     { ((1 must_== 2): Result).iff(true) } must throwAn[Exception]
   }
+  "A match result with an or condition where an exception is thrown during the first match" >> {
+    val matcher: Matcher[Int] = be_>(0) or throwAn[ArrayIndexOutOfBoundsException] or throwAn[IllegalArgumentException]
+    ({ throw new IllegalArgumentException; 1} must matcher) must beSuccessful
+  }
 
 }
