@@ -46,7 +46,8 @@ object build extends Build {
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
   lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
-  lazy val paradisePlugin = compilerPlugin("org.scalamacros" %% "paradise" % "2.0.0-M6" cross CrossVersion.full)
+  lazy val paradisePlugin = Seq(compilerPlugin("org.scalamacros" %% "paradise"    % "2.0.0-M7"), 
+                                               "org.scalamacros" %% "quasiquotes" % "2.0.0-M7")
 
   lazy val aggregateCompile = ScopeFilter(
              inProjects(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock),
@@ -153,9 +154,7 @@ object build extends Build {
 
   lazy val matcherExtra = Project(id = "specs2-matcher-extra", base = file("matcher-extra"),
     settings = moduleSettings ++ Seq(
-      libraryDependencies ++= (if (scalaVersion.value.startsWith("2.11")) Nil else 
-        List(paradisePlugin,
-             "org.scalamacros" %% "quasiquotes" % "2.0.0-M6" cross CrossVersion.full))
+      libraryDependencies ++= (if (scalaVersion.value.startsWith("2.11")) Nil else paradisePlugin)
     )
   ).dependsOn(analysis, scalacheck, matcher, core % "test->test")
 
