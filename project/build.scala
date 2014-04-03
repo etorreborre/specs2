@@ -46,7 +46,7 @@ object build extends Build {
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
   lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
-  lazy val paradisePlugin = Seq(compilerPlugin("org.scalamacros" %% "paradise"    % "2.0.0-M7"), 
+  lazy val paradisePlugin = Seq(compilerPlugin("org.scalamacros" %% "paradise"    % "2.0.0-M7" cross CrossVersion.full), 
                                                "org.scalamacros" %% "quasiquotes" % "2.0.0-M7")
 
   lazy val aggregateCompile = ScopeFilter(
