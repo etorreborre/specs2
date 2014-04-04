@@ -5,6 +5,7 @@ import control.Exceptions._
 import scala.reflect.ClassTag
 import text.NotNullStrings._
 
+
 /**
  * These matchers can be used to check if exceptions are thrown or not
  */
@@ -97,7 +98,7 @@ trait ExceptionBaseMatchers extends Expectations {
       exception.getClass == e.getClass && exception.getMessage.notNull == e.getMessage.notNull
     }
 
-    private def checkBoolean[T](expectable: Expectable[T], f: Throwable => Boolean) = {
+	    private def checkBoolean[T](expectable: Expectable[T], f: Throwable => Boolean) = {
       checkExceptionValue(expectable, f, exception.toString)
     }
     private def checkMatchResult[T](expectable: Expectable[T], e: Throwable => Boolean, f: PartialFunction[E, MatchResult[Any]]) = {
@@ -108,7 +109,7 @@ trait ExceptionBaseMatchers extends Expectations {
     checkException(expectable, 
                    f,
                    (e: Throwable) => "Got the exception " + e,
-                   (e: Throwable) => "Expected: "+ expectedAsString + ". Got: " + e + " instead",
+                   (e: Throwable) => "Expected: "+ expectedAsString + ". Got: " + e + " instead with stack trace " + e.getStackTrace.mkString("\r\n"),
                    "Got the exception " + expectedAsString,
                     "Expected: "+ expectedAsString + ". Got nothing")
   }
@@ -116,7 +117,7 @@ trait ExceptionBaseMatchers extends Expectations {
     checkExceptionWithMatcher(expectable,
                    e, f,
                    (e: Throwable) => "Got the exception " + e,
-                   (e: Throwable) => "Expected: "+ expectedAsString + ". Got: " + e + " instead",
+                   (e: Throwable) => "Expected: "+ expectedAsString + ". Got: " + e + " instead with stacktrace: " + e.getStackTrace.mkString("\r\n"),
                    "Got the exception " + expectedAsString,
                     "Expected: "+ expectedAsString + ". Got nothing")
   }
