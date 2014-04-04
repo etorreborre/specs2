@@ -37,7 +37,8 @@ trait TraversableBaseMatchers extends ValueChecks with TraversableBaseMatchersLo
    */
   def contain[T](cm: ContainWithResultSeq[T]): ContainWithResultSeq[T] = cm
 
-  def allOf[T](checks: ValueCheck[T]*)  : ContainWithResultSeq[T] = new ContainWithResultSeq(checks).atLeast
+  def allOf[T](checks: ValueCheck[T]*)  : ContainWithResultSeq[T] = new ContainWithResultSeq(checks).atLeast.onDistinctValues(false)
+  def eachOf[T](checks: ValueCheck[T]*)  : ContainWithResultSeq[T] = new ContainWithResultSeq(checks).atLeast
   def exactly[T](checks: ValueCheck[T]*): ContainWithResultSeq[T] = new ContainWithResultSeq(checks).exactly
   def atLeast[T](checks: ValueCheck[T]*): ContainWithResultSeq[T] = new ContainWithResultSeq(checks).atLeast
   def atMost[T](checks: ValueCheck[T]*) : ContainWithResultSeq[T] = new ContainWithResultSeq(checks).atMost
@@ -263,6 +264,7 @@ case class ContainWithResult[T](check: ValueCheck[T], timesMin: Option[Times] = 
 case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
                                    containsAtLeast: Boolean = true,
                                    containsAtMost: Boolean = false,
+                                   eachCheck: Boolean = false,
                                    checkOrder: Boolean = false,
                                    negate: Boolean = false) extends Matcher[GenTraversableOnce[T]] {
 
@@ -272,10 +274,10 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
     // results for each element, either checked in order or greedily from the list of checks
     // + the list of checks which were not performed
     val (results, remainingChecks): (Seq[(T, Seq[Result])], Seq[ValueCheck[T]]) =
-      if (checkOrder) checkValuesInOrder(seq, checks)
-      else            checkValues(seq, checks)
+      if (checkOrder) checkValuesInOrder(seq, checks, eachCheck)
+      else            checkValues(seq, checks, eachCheck)
 
-    val (successes, failures) = results.partition(_._2.forall(_.isSuccess))
+    val (successes, failures) = results.partition(rs => rs._2.nonEmpty && rs._2.forall(_.isSuccess))
     val missingValues = remainingChecks.collect(expectedValue).flatten
     val failedValues  = failures.map(_._1)
 
@@ -288,13 +290,21 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
         if (failedValues.isEmpty)
           if (missingValues.isEmpty)
             Matcher.result(success, s"${t.description} contains all expected values", t)
-          else
-            Matcher.result(success, s"${t.description} does not contain ${missingValues.mkString(", ")}", t)
+          else {
+            if (eachCheck && seq.exists(missingValues.contains))
+              Matcher.result(success, s"${t.description} is missing the ${"value".plural(missingValues)}: ${missingValues.mkString(", ")}", t)
+            else
+              Matcher.result(success, s"${t.description} does not contain ${missingValues.mkString(", ")}", t)
+          }
         else
         if (missingValues.isEmpty)
           Matcher.result(success, s"${t.description} contains ${failedValues.mkString(", ")}", t)
-        else
-          Matcher.result(success, s"${t.description} does not contain ${missingValues.mkString(", ")} but contains ${failedValues.mkString(", ")}", t)
+        else {
+          if (eachCheck && seq.exists(missingValues.contains))
+            Matcher.result(success, s"${t.description} is missing the ${"value".plural(missingValues)}: ${missingValues.mkString(", ")} but contains ${failedValues.mkString(", ")}", t)
+          else
+            Matcher.result(success, s"${t.description} does not contain ${missingValues.mkString(", ")} but contains ${failedValues.mkString(", ")}", t)
+        }
       } else {
         val qty     = s"$constraint ${checks.size}"
         val values  = s"correct ${"value".plural(checks.size)}$order"
@@ -308,8 +318,8 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
 
     val r =
       (containsAtLeast, containsAtMost) match {
-        case (true,  false) => makeResult("at least", missingValues.isEmpty && successes.size >= checks.size)
-        case (false, true)  => makeResult("at most", failedValues.isEmpty && successes.size <= checks.size)
+        case (true,  false) => makeResult("at least", missingValues.isEmpty && (eachCheck && successes.size >= checks.size || !eachCheck && (seq.isEmpty || successes.size > 0)))
+        case (false, true)  => makeResult("at most", failedValues.isEmpty && (!eachCheck || successes.size <= checks.size))
         case (true,  true)  => makeResult("exactly", successes.size == checks.size && checks.size == seq.size)
         case (false, false) => makeResult("", successes.size <= checks.size && checks.size <= seq.size)
       }
@@ -328,13 +338,18 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
    * @return (the list of all the results for each tested value, the list of remaining checks if any)
    */
   @tailrec
-  private def checkValuesInOrder(values: Seq[T], checks: Seq[ValueCheck[T]], results: Seq[(T, Seq[Result])] = Seq()): (Seq[(T, Seq[Result])], Seq[ValueCheck[T]]) = {
+  private def checkValuesInOrder(values: Seq[T], checks: Seq[ValueCheck[T]], eachCheck: Boolean, results: Seq[(T, Seq[Result])] = Seq()): (Seq[(T, Seq[Result])], Seq[ValueCheck[T]]) = {
     (values, checks) match {
-      case (v +: vs, c +: cs) => {
+      case (v +: vs, c +: cs) if eachCheck =>
         val r = c.check(v)
-        if (r.isSuccess) checkValuesInOrder(vs, cs, results :+ (v -> Seq(r)))
-        else             checkValuesInOrder(vs, checks, results :+ (v -> Seq(r)))
-      }
+        if (r.isSuccess) checkValuesInOrder(vs, cs, eachCheck, results :+ (v -> Seq(r)))
+        else             checkValuesInOrder(vs, checks, eachCheck, results :+ (v -> Seq(r)))
+
+      case (v +: vs, cs @ (_ +: _)) =>
+        val (successes, failures) = cs.map(c => (c, c.check(v))).partition(_._2.isSuccess)
+        if (successes.nonEmpty) checkValuesInOrder(vs, failures.map(_._1), eachCheck, results :+ (v -> successes.map(_._2)))
+        else                    checkValuesInOrder(vs, failures.map(_._1), eachCheck, results :+ (v -> failures.map(_._2)))
+
       case (v +: vs, nil) => (results :+ (v -> Seq(Failure("is unexpected", v.notNull))), checks)
       case _              => (results, checks)
     }
@@ -347,13 +362,13 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
    * @return (the list of each result for each tested value, the list of remaining checks if any)
    */
   @tailrec
-  private def checkValues(values: Seq[T], checks: Seq[ValueCheck[T]], results: Seq[(T, Seq[Result])] = Seq()): (Seq[(T, Seq[Result])], Seq[ValueCheck[T]]) = {
+  private def checkValues(values: Seq[T], checks: Seq[ValueCheck[T]], eachCheck: Boolean, results: Seq[(T, Seq[Result])] = Seq()): (Seq[(T, Seq[Result])], Seq[ValueCheck[T]]) = {
     values match {
       case currentValue +: remainingValues =>
         if (checks.isEmpty) (results :+ (currentValue -> Seq(Failure("no more checks for "+currentValue, currentValue.notNull))), checks)
         else {
-          val (valueResults, uncheckedChecks) = checkValue(currentValue, checks, Seq(), Seq())
-          checkValues(remainingValues, uncheckedChecks, results :+ (currentValue -> valueResults))
+          val (valueResults, uncheckedChecks) = checkValue(currentValue, checks, Seq(), eachCheck, Seq())
+          checkValues(remainingValues, uncheckedChecks, eachCheck, results :+ (currentValue -> valueResults))
         }
       case _ => (results, checks)
     }
@@ -364,12 +379,17 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
    * @return (the result of evaluating value with uncheckedChecks, unchecked and failed checks)
    */
   @tailrec
-  private def checkValue(value: T, uncheckedChecks: Seq[ValueCheck[T]], checkedChecks: Seq[ValueCheck[T]], results: Seq[Result]) : (Seq[Result], Seq[ValueCheck[T]]) = {
+  private def checkValue(value: T, uncheckedChecks: Seq[ValueCheck[T]], checkedChecks: Seq[ValueCheck[T]], eachCheck: Boolean, results: Seq[Result]) : (Seq[Result], Seq[ValueCheck[T]]) = {
     uncheckedChecks match {
-      case currentCheck +: remainingUncheckedChecks =>
+      case currentCheck +: remainingUncheckedChecks if eachCheck =>
         val result = currentCheck.check(value)
         if (result.isSuccess) (Seq(result), checkedChecks ++ remainingUncheckedChecks)
-        else                   checkValue(value, remainingUncheckedChecks, checkedChecks :+ currentCheck, results :+ result)
+        else                   checkValue(value, remainingUncheckedChecks, checkedChecks :+ currentCheck, eachCheck, results :+ result)
+
+      case allChecks @ (_ +: _) =>
+        val (successes, failures) = allChecks.map(c => (c, c.check(value))).partition(_._2.isSuccess)
+        if (successes.nonEmpty) (successes.map(_._2).take(1), checkedChecks ++ failures.map(_._1))
+        else                    (Nil, checkedChecks ++ allChecks)
 
       case _ => (results, checkedChecks)
     }
@@ -387,11 +407,13 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
     case _                         => None
   }
 
-  def atLeast = copy(containsAtLeast = true, containsAtMost = false)
-  def atMost  = copy(containsAtLeast = false, containsAtMost = true)
-  def exactly = copy(containsAtLeast = true, containsAtMost = true)
-
+  def atLeast = copy(containsAtLeast = true, containsAtMost = false, eachCheck = true)
+  def atMost  = copy(containsAtLeast = false, containsAtMost = true, eachCheck = true)
+  def exactly = copy(containsAtLeast = true, containsAtMost = true, eachCheck = true)
   def inOrder = copy(checkOrder = true)
+
+  def onDistinctValues: ContainWithResultSeq[T]                    = onDistinctValues(true)
+  def onDistinctValues(distinct: Boolean): ContainWithResultSeq[T] = copy(eachCheck = distinct)
 
   override def not = copy(negate = !negate)
 }

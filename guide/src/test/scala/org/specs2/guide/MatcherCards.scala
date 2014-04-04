@@ -275,9 +275,24 @@ The other types of checks involve comparing the Traversable elements to other el
  * checking that the order is satisfied
  ${snippet{Seq(1, 2, 3, 4) must contain(allOf(be_>(0), be_>(1)).inOrder)}}
 
-Note that when you use don't specify `inOrder`, `contain` is going to try the checks one by one, but will consume them greedily and not try all possible combinations of input value and check.
+Note that `allOf` tries to make each check at least successful once, even if that on the same value. If, on the other hand, you want to specify that each check must succeed on a *different* value you should use `onDistinctValues`. For example this will fail:
+${snippet{Seq(1) must contain(allOf(1, 1)).onDistinctValues}}
 
-The `allOf` method above can be replaced by `atLeast`, `atMost`, `exactly` to be more specific on the number of elements which you expect to be correctly checked.
+The `eachOf` method does the same thing (and this example will fail as well):
+${snippet{Seq(1) must contain(eachOf(1, 1))}}
+
+Another frequent use of Traversable matchers is to check if the Traversable have the right number of elements. For this you can use:
+
+ * `atLeast`, which is actually another name for `allOf`, where the traversable can contain more elements than required
+ ${snippet{Seq(1, 2, 3, 4) must contain(atLeast(2, 4))}}
+
+ * `atMost` where the traversable can not contain more elements than required
+ ${snippet{Seq(2, 3) must contain(atMost(2, 3, 4))}}
+
+ * `exactly` where the traversable must contain exactly the specified number of elements
+ ${snippet{Seq(1, 2) must contain(exactly(2, 1))}}
+
+The `atLeast/atMost/exactly` operators work on distinct values by default (because this is easier for counting the correspondance between actual values and expected ones). However you can use `onDistinctValues(false)` if you don't care.
 
 Finally, if you want to get the differences between 2 traversables:
 

@@ -45,14 +45,18 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
    ${ (Seq(1, 2, 3) must contain(exactly(1, 2, 3, 4))) returns "List(1, 2, 3) does not contain 4"    }
    ${ Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(1), be_>=(2)))                               }
    ${ Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(1), be_>=(2)).inOrder)                       }
-
    // this must be understood as allOf(2, 3)
    ${ Seq(1, 2, 3) must contain(2, 3) }
+   ${ Seq(1)       must contain(allOf(1, 1)) }
+$xsection
+   ${ (Seq(1)      must contain(eachOf(1, 1))) returns "List(1) is missing the value: 1" }
+$xsection
    ${ Seq(1, 2, 3) must contain(allOf(Seq(1, 2).map(be_>=(_)):_*))             }
    ${ Seq(1, 2, 3) must contain(allOf(Seq(1, 2).map(be_>=(_)):_*)).inOrder     }
    ${ Seq(1, 2, 3) must not(contain(allOf(Seq(0, 0).map(be_<=(_)):_*)))        }
    ${ Seq(1, 2, 3) must contain(allOf(1, 3).inOrder)                           }
-
+   ${ Seq(1, 1, 3) must contain(allOf(1, 3).inOrder)                           }
+   ${ (Seq(1) must contain(eachOf(1, 1).inOrder)) returns "List(1) is missing the value: 1" }
    ${ Seq(1, 2, 3) must contain(atLeast(Seq[Int]():_*))                        }
    ${ Seq(1, 2, 3) must contain(atLeast(3, 1))                                 }
    ${ Seq(1, 2, 3) must contain(atLeast(be_>=(0), be_>=(1), be_>=(2)))         }
@@ -79,7 +83,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Tag
       "- 3\n"+
       " * 3 is greater than 1\n" }
 
-   ${ (Seq(1, 2)    must contain(atMost(1, 3))                                 ) returns "List(1, 2) does not contain 3 but contains 2" } $xtag
+   ${ (Seq(1, 2)    must contain(atMost(1, 3))                                 ) returns "List(1, 2) does not contain 3 but contains 2" }
    ${ (Seq(1, 2)    must contain(atMost(1))                                    ) returns "List(1, 2) contains 2" }
 
    ${ (Seq(1, 2, 3) must contain(exactly(1, 2, 3, 4))                          ) returns "List(1, 2, 3) does not contain 4" }
