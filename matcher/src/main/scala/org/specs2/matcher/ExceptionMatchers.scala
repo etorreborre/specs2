@@ -107,8 +107,8 @@ trait ExceptionBaseMatchers extends Expectations {
   private def checkExceptionValue[T](expectable: Expectable[T], f: Throwable => Boolean, expectedAsString: String) = {
     checkException(expectable, 
                    f,
-                   (e: Throwable) => "Got the exception " + e,
-                   (e: Throwable) => "Expected: "+ expectedAsString + ". Got: " + e + " instead",
+                   (e: Throwable) => s"Got the exception $e",
+                   (e: Throwable) => s"Expected: $expectedAsString. Got: $e instead \n\n The  ${e.getClass.getSimpleName} stacktrace is\n\n${e.getStackTrace.mkString("\n")}",
                    "Got the exception " + expectedAsString,
                     "Expected: "+ expectedAsString + ". Got nothing")
   }
@@ -116,9 +116,10 @@ trait ExceptionBaseMatchers extends Expectations {
     checkExceptionWithMatcher(expectable,
                    e, f,
                    (e: Throwable) => "Got the exception " + e,
-                   (e: Throwable) => "Expected: "+ expectedAsString + ". Got: " + e + " instead",
-                   "Got the exception " + expectedAsString,
-                    "Expected: "+ expectedAsString + ". Got nothing")
+                   (e: Throwable) => s"Expected: $expectedAsString. Got: $e",
+                    "Got the exception " + expectedAsString,
+                    "Expected: "+ expectedAsString + ". Got nothing",
+                   (e: Throwable) => e.getStackTrace.toSeq)
   }
   private def checkException[T](expectable: Expectable[T], f: Throwable => Boolean,
       someOk: Throwable => String, someKo: Throwable => String,
@@ -131,17 +132,17 @@ trait ExceptionBaseMatchers extends Expectations {
   }
   private def checkExceptionWithMatcher[T, E <: Throwable](expectable: Expectable[T], ef: Throwable => Boolean, f: PartialFunction[E, MatchResult[Any]],
       someOk: Throwable => String, someKo: Throwable => String,
-      noneOk: String, noneKo: String) = {
+      noneOk: String, noneKo: String, stacktrace: Throwable => Seq[StackTraceElement]) = {
 
     getException(expectable.value) match {
-      case Some(e) => {
+      case Some(e) =>
         if (ef(e)) {
           val result = f(e.asInstanceOf[E])
-          Matcher.result(ef(e) && result.isSuccess, someOk(e)+" ("+result.message+")", someKo(e)+" ("+result.message+")", expectable)
+          Matcher.result(ef(e) && result.isSuccess, s"${someOk(e)} and ${result.message}", s"""${someKo(e)} and ${result.message}\n\n The ${e.getClass.getSimpleName} stacktrace is\n\n${stacktrace(e).mkString("\n")}""", expectable)
         }
         else
           Matcher.result(false, someOk(e), someKo(e), expectable)
-      }
+
       case None    => Matcher.result(false, noneOk, noneKo, expectable)
     }
   }

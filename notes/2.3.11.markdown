@@ -5,6 +5,7 @@ Maintenance version
  * added await on `Future[T : AsResult]` to directly return a result [#241](http://github.com/etorreborre/specs2/issues/241)
  * added a `NoStdOutAroundExample` trait to remove any console output during an example execution`
  * added an `onDistinctValues` on `contain` matchers to specify that checks must apply to distinct values. Changed the implementation of `allOf` to be `onDistinctValues(false)` so that `Seq(1) must contain(allOf(1, 1)` will not fail. For a match on distinct values, use `Seq(1) must contain(allOf(1, 1)).onDistinctValues` or Seq(1) must contain(eachOf(1, 1))`
+ * added the stacktrace of the caught exception in the failure message of a `throwA[Exception]` matcher [#250](http://github.com/etorreborre/specs2/issues/250)
 
 ## Deprecations
 
@@ -17,7 +18,7 @@ Maintenance version
  * fixed the `or` combinator on `MatchResult` when the first evaluation throws an Exception
  * fixed the `AllExpectations` trait when an evaluation throws an Exception
  * fixed the use of DataTables in mutable specifications when [the datatable is successful and there are following expectations](http://bit.ly/1kqbVj9)
- * added back the missing `specs2.files` object
+ * added back the missing `specs2.files` object 
 
  ==========================
 
