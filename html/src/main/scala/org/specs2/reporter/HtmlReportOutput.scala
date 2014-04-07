@@ -85,7 +85,7 @@ trait HtmlReportOutput {
   /** print a pending fragment with an icon */
   def printPendingXml(xml: NodeSeq, indent: Int = 0) = printOkXmlWithIcon(xml, "pending",  indent)
   /** print an exception message */
-  def printExceptionMessage(e: Result with ResultStackTrace, indent: Int): HtmlReportOutput
+  def printExceptionMessage(e: Result with ResultStackTrace, indent: Int, filter: StackTraceFilter): HtmlReportOutput
   /** print an exception message which can be expended/collapsed */
   def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, indent: Int): HtmlReportOutput
   /** print the details of a failure. The diffs arguments provides the way to expose the differences between expected and actual values */

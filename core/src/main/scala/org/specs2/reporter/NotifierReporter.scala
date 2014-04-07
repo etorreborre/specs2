@@ -61,7 +61,7 @@ trait NotifierExporting extends Exporting with Exporters {
           result match {
             case Success(_,_)            => notifier.exampleSuccess(s.raw, t.totalMillis)
             case fail @ Failure(_,_,_,_) => notifier.exampleFailure(s.raw, args.removeColors(fail.message),
-                                                                                    fail.location, args.traceFilter(fail.exception), fail.details, t.totalMillis)
+                                                                                    fail.location(args.traceFilter), args.traceFilter(fail.exception), fail.details, t.totalMillis)
             case err  @ Error(_,_)       => notifier.exampleError(s.raw, args.removeColors(err.message), err.location,
                                                                                    args.traceFilter(err.exception), t.totalMillis)
             case Skipped(_,_)            => notifier.exampleSkipped(s.raw, args.removeColors(r.message), t.totalMillis)

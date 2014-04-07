@@ -62,9 +62,9 @@ object Xml {
 
   private def stacktraces(row: Row)(implicit args: Arguments): NodeSeq = row.cells.map(stacktraces(_)).reduceNodes
 
-  private def stacktraces(e: Result with ResultStackTrace): NodeSeq =
+  private def stacktraces(e: Result with ResultStackTrace)(implicit args: Arguments): NodeSeq =
     <div class="formstacktrace details" id={System.identityHashCode(e).toString}>
-      {e.message.notNull+" ("+e.location+")"}
+      {e.message.notNull+" ("+e.location(args.traceFilter)+")"}
       {e.stackTrace.map(st => <div>{st}</div>)}
     </div>
 

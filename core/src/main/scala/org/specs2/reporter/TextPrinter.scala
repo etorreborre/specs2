@@ -158,7 +158,7 @@ trait TextPrinter {
         args.traceFilter(f.stackTrace).foreach(t => out.printFailure(t.toString))
     }
 
-    def location(r: ResultStackTrace) = " ("+r.location+")" unless r.location.isEmpty
+    def location(r: ResultStackTrace)(implicit args: Arguments) = " ("+r.location(args.traceFilter)+")" unless r.location.isEmpty
 
     def printFailureDetails(d: Details)(implicit args: Arguments, out: ResultOutput) = {
       d match {

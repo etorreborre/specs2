@@ -135,7 +135,8 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
   /** print an issue with a status icon (with a ko class) */
   def printIssueWithIcon(message: FormattedString, iconName: String, level: Int = 0) = printKoStatus(textWithIcon(message, iconName, level))
   /** print an exception message (with a ko class) */
-  def printExceptionMessage(e: Result with ResultStackTrace, level: Int)          = printKoStatus(div("  "+e.message+" ("+e.location+")", level))
+  def printExceptionMessage(e: Result with ResultStackTrace, level: Int, filter: StackTraceFilter) =
+    printKoStatus(div("  "+e.message+" ("+e.location(filter)+")", level))
 
   /**
    * print a collapsible exception message (with a ko class)

@@ -174,7 +174,7 @@ case class HtmlResult(r: ExecutedResult, stats: Stats = Stats(), level: Int = 0,
   def printFailureDetails(f: Failure)(out: HtmlReportOutput) = {
     val outMessage =
       if (args.failtrace) out.printCollapsibleExceptionMessage(f, indent + 2)
-      else                out.printExceptionMessage(f, indent + 2)
+      else                out.printExceptionMessage(f, indent + 2, args.traceFilter)
 
     outMessage.when(args.diffs.show)(_.printDetailedFailure(f.details, indent + 2, args.diffs))
   }

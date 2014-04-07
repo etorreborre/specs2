@@ -67,7 +67,7 @@ case class MarkdownResultOutput(text: StringBuilder = new StringBuilder)(implici
   def printTextWithIcon(message: FormattedString, iconName: String, indent: Int = 0)            = printText(message.raw, indent).append(status(iconName))
   def printOkXmlWithIcon(xml: NodeSeq, iconName: String, indent: Int = 0)                       = append(htmlOutput.printOkXmlWithIcon(xml, iconName, indent).xml.toString)
   def printKoXmlWithIcon(xml: NodeSeq, iconName: String, indent: Int = 0)                       = append(htmlOutput.printKoXmlWithIcon(xml, iconName, indent).xml.toString)
-  def printExceptionMessage(e: Result with ResultStackTrace, indent: Int)                       = printText(e.message+s" (${e.location})", indent)
+  def printExceptionMessage(e: Result with ResultStackTrace, indent: Int, filter: StackTraceFilter) = printText(e.message+s" (${e.location(filter)})", indent)
   def printCollapsibleExceptionMessage(e: Result with ResultStackTrace, indent: Int)            = this
   def printDetailedFailure(details: Details, indent: Int, diffs: Diffs)                         = this
   def printStack(e: ResultStackTrace, indent: Int, traceFilter: StackTraceFilter)               = printText(e.stackTrace.mkString("\n"), indent)
