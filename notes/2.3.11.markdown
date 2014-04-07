@@ -20,6 +20,6 @@ Maintenance version
  * fixed the use of DataTables in mutable specifications when [the datatable is successful and there are following expectations](http://bit.ly/1kqbVj9)
  * added back the missing `specs2.files` object 
  * using the arguments stacktrace filter for specifying a `Result` location [#254](http://github.com/etorreborre/specs2/issues/254)
-
+ * fixed the counting of expectations when using `and` between results
  ==========================
 

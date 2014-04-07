@@ -30,7 +30,7 @@ trait ResultLogicalCombinators extends Results {
       lazy val o = ResultExecution.execute(other)
       def combine(result: Result, ifFail: Failure => Failure = identity, ifError: Error => Error = identity) = {
         result match {
-          case s @ Success(_,_) =>   {
+          case s @ Success(_,_) =>
             o match {
               case Success(m, e)                  => if (r.message == m || r.message.isEmpty) Success(m, concat(s.exp, e), r.expectationsNb + o.expectationsNb)
               else                                     Success(r.message+" and "+m, concat(s.exp, e), r.expectationsNb + o.expectationsNb)
@@ -38,8 +38,8 @@ trait ResultLogicalCombinators extends Results {
               case Failure(_,_,_,_) | Error(_,_)  => o.addExpectationsNb(r.expectationsNb).mapExpected((e: String) => concat(r.expected, e))
               case _                              => r.addExpectationsNb(o.expectationsNb).mapExpected((e: String) => concat(e, o.expected))
             }
-          }
-          case Pending(_) | Skipped(_,_)     => {
+
+          case Pending(_) | Skipped(_,_)     =>
             o match {
               case s @ Success(_,_)       => s
               case f @ Failure(_,_,_,_)   => f
@@ -47,19 +47,18 @@ trait ResultLogicalCombinators extends Results {
               case DecoratedResult(d, r1) => DecoratedResult(d, r.and(r1))
               case _                      => result
             }
-          }
-          case d @ DecoratedResult(_,_)     => {
+
+          case d @ DecoratedResult(_,_)     =>
             o match {
-              case DecoratedResult(d2, r2) => {
-                val andResult = (d.result and r2)
+              case DecoratedResult(d2, r2) =>
+                val andResult = d.result and r2
                 if (andResult.isSuccess) DecoratedResult(d.decorator, andResult)
                 else                     DecoratedResult(d2, andResult)
-              }
               case another                 => DecoratedResult(d.decorator, d.result and another)
             }
-          }
-          case f @ Failure(_,_,_,_)        => ifFail(f) // re-throw if necessary
-          case e @ Error(_,_)              => ifError(e) // re-throw if necessary
+
+          case f @ Failure(_,_,_,_)        => ifFail(f.addExpectationsNb(1)) // re-throw if necessary
+          case e @ Error(_,_)              => ifError(e.addExpectationsNb(1)) // re-throw if necessary
         }
       }
       // if the original result threw an exception we must re-throw it
@@ -74,7 +73,7 @@ trait ResultLogicalCombinators extends Results {
     def or(other: =>Result): Result = {
       lazy val o = ResultExecution.execute(other)
       r match {
-        case Success(_,_)         => r
+        case Success(_,_)         => r.addExpectationsNb(1)
         case f @ Failure(_,_,_,_) => {
           o match {
             case s @ Success(m, exp)    => if (r.message == m) r.addExpectationsNb(s.expectationsNb)

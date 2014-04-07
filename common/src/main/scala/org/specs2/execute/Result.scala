@@ -32,6 +32,7 @@ import execute.ResultExecution._
  * 
  */
 sealed abstract class Result(val message: String = "", val expected: String = "", val expectationsNb: Int = 1) {
+  type SelfType <: Result
   /**
    * @return the colored textual status of the result
    */
@@ -105,11 +106,11 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
   /**
    * increment the number of expectations
    */
-  def addExpectationsNb(n: Int): Result = setExpectationsNb(expectationsNb + n)
+  def addExpectationsNb(n: Int) = setExpectationsNb(expectationsNb + n)
   /**
    * set the number of expectations
    */
-  def setExpectationsNb(n: Int): Result
+  def setExpectationsNb(n: Int): SelfType
 
   /**
    * @return true if the result is a Success instance
@@ -272,9 +273,11 @@ class AnyValueAsResult[T] extends AsResult[T] {
  * This class represents the success of an execution
  */
 case class Success(m: String = "", exp: String = "")  extends Result(m, exp) {
+  type SelfType = Success
+
   override def isSuccess = true
 
-  def setExpectationsNb(n: Int): Result = Success(m, expected, n)
+  def setExpectationsNb(n: Int) = Success(m, expected, n)
 
   def mute = Success()
 }
@@ -296,10 +299,13 @@ object Success {
  */
 case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceElement] = new Exception().getStackTrace.toList, details: Details = NoDetails())
   extends Result(m, e) with ResultStackTrace { outer =>
+
+  type SelfType = Failure
+
   /** @return an exception created from the message and the stackTraceElements */
   def exception = Throwablex.exception(m, stackTrace)
 
-  def setExpectationsNb(n: Int): Result = new Failure(m, e, stackTrace, details) {
+  def setExpectationsNb(n: Int) = new Failure(m, e, stackTrace, details) {
     override val expectationsNb = n
   }
   def mute = copy(m = "",  e = "")
@@ -327,6 +333,8 @@ case class NoDetails() extends Details
  * This class represents an exception occurring during an execution.
  */
 case class Error(m: String, e: Exception) extends Result(m) with ResultStackTrace { outer =>
+  type SelfType = Error
+
   /** @return an exception created from the message and the stackTraceElements */
   def exception = e match {
     case Error.ThrowableException(t) => t
@@ -341,7 +349,7 @@ case class Error(m: String, e: Exception) extends Result(m) with ResultStackTrac
     }
   }
 
-  def setExpectationsNb(n: Int): Result = new Error(m, e) {
+  def setExpectationsNb(n: Int) = new Error(m, e) {
     override val expectationsNb = n
   }
   def mute = copy(m = "")
@@ -363,9 +371,10 @@ case object Error {
  * @see Result for description
  */
 case class Pending(m: String = "")  extends Result(m) { outer =>
+  type SelfType = Pending
 
   def mute = Pending()
-  def setExpectationsNb(n: Int): Result = new Pending(m) {
+  def setExpectationsNb(n: Int) = new Pending(m) {
     override val expectationsNb = n
   }
 
@@ -376,9 +385,10 @@ case class Pending(m: String = "")  extends Result(m) { outer =>
  * @see Result for description 
  */
 case class Skipped(m: String = "", e: String = "")  extends Result(m, e) { outer =>
+  type SelfType = Skipped
 
   def mute = Skipped()
-  def setExpectationsNb(n: Int): Result = new Skipped(m) {
+  def setExpectationsNb(n: Int) = new Skipped(m) {
     override val expectationsNb = n
   }
 
@@ -391,8 +401,10 @@ case class Skipped(m: String = "", e: String = "")  extends Result(m, e) { outer
  * Is is used to provide a way to display properly the data tables in the HtmlExporter
  */
 case class DecoratedResult[+T](decorator: T, result: Result) extends Result(result.message, result.expected) { outer =>
+  type SelfType = Result
+
   def mute = DecoratedResult(decorator, result.mute)
-  def setExpectationsNb(n: Int): Result = new DecoratedResult(decorator, result) {
+  def setExpectationsNb(n: Int) = new DecoratedResult(decorator, result) {
     override val expectationsNb = n
   }
     
