@@ -64,7 +64,7 @@ A Notifier can be used to get a stream of events for the execution of a Specific
     e6 := { there was atLeastOne(notified).exampleSkipped(anyString, anyString, anyLong)                                                                                  }
     e7 := { there was atLeastOne(notified).examplePending(anyString, anyString, anyLong)                                                                                  }
     e8 := { there was atLeastOne(notified).
-            exampleFailure(anyString, anyString, anyString, containMatch("specs2") ^^ ((t:Throwable) => t.getStackTrace().map(_.toString).toList), any[Details], anyLong) }
+            exampleFailure(anyString, anyString, anyString, containMatch("user.reporter") ^^ ((t:Throwable) => t.getStackTrace().map(_.toString).toList), any[Details], anyLong) }
     e9 := { there was atLeastOne(notified).exampleSuccess(anyString, anyLong)                                                                                            }
   }
   "steps" - new g5 {

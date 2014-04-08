@@ -5,7 +5,7 @@ import matcher.DataTables
 import specification._
 import org.specs2.execute._
 
-class NotifierSpecification extends Specification with DataTables { def is = fullStackTrace^
+class NotifierSpecification extends Specification with DataTables { def is =
       "intro"                                                         ^p^
       "first group"                                                   ^
         "ex1" ! success                                               ^
@@ -19,4 +19,5 @@ class NotifierSpecification extends Specification with DataTables { def is = ful
         Step(Failure("clean failed"))                                 ^
         Step("clean ok")                                              ^
                                                                       end
-  }
+
+}
