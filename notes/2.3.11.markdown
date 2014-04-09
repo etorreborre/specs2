@@ -3,13 +3,15 @@ Maintenance version
 ## Improvements
 
  * added await on `Future[T : AsResult]` to directly return a result [#241](http://github.com/etorreborre/specs2/issues/241)
- * added a `NoStdOutAroundExample` trait to remove any console output during an example execution`
- * added an `onDistinctValues` on `contain` matchers to specify that checks must apply to distinct values. Changed the implementation of `allOf` to be `onDistinctValues(false)` so that `Seq(1) must contain(allOf(1, 1)` will not fail. For a match on distinct values, use `Seq(1) must contain(allOf(1, 1)).onDistinctValues` or Seq(1) must contain(eachOf(1, 1))`
- * added the stacktrace of the caught exception in the failure message of a `throwA[Exception]` matcher [#250](http://github.com/etorreborre/specs2/issues/250)
+ * added a `NoStdOutAroundExample` trait to remove any console output during an example execution
+ * added an `onDistinctValues` on `contain` matchers to specify that checks must apply to distinct values. 
+   Changed the implementation of `allOf` to be `onDistinctValues(false)` so that `Seq(1) must contain(allOf(1, 1))` will not fail. 
+   For a match on distinct values, use `Seq(1) must contain(allOf(1, 1)).onDistinctValues` or `Seq(1) must contain(eachOf(1, 1))`
+ * added the stacktrace of the caught exception in the failure message of a `throwAn[Exception]` matcher [#250](http://github.com/etorreborre/specs2/issues/250)
 
 ## Deprecations
 
- * `matcher.toSet`, `matcher.toSeq`, `matcher.forall`... are now deprecated since they can be expressed more clearly by using collection matchers
+ * `matcher.toSet, matcher.toSeq, matcher.forall`... are now deprecated since they can be expressed more clearly by using collection matchers
 
 ## Fixes
 
@@ -19,7 +21,8 @@ Maintenance version
  * fixed the `AllExpectations` trait when an evaluation throws an Exception
  * fixed the use of DataTables in mutable specifications when [the datatable is successful and there are following expectations](http://bit.ly/1kqbVj9)
  * added back the missing `specs2.files` object 
- * using the arguments stacktrace filter for specifying a `Result` location [#254](http://github.com/etorreborre/specs2/issues/254)
+ * using the arguments stacktrace filter for specifying a `Result` location. This allows custom matcher results to get a better location [#254](http://github.com/etorreborre/specs2/issues/254)
  * fixed the counting of expectations when using `and` between results
+
  ==========================
 
