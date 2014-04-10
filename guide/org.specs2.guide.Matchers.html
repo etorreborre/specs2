@@ -67,7 +67,7 @@
     </head><body><div id="breadcrumbs"><a href="../guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../guide/org.specs2.guide.Matchers.html">Matchers</a></div><div class="colmask threecol">
             <div class="colmid">
               <div class="colleft">
-                <div class="col1"><div id="central"><html><title>Matchers</title><a name="Matchers"><h2 specId="1836412732">Matchers</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
+                <div class="col1"><div id="central"><html><title>Matchers</title><a name="Matchers"><h2 specId="393570677">Matchers</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
 <ul>
   <li>Boolean</li>
   <li>Standard result</li>
@@ -283,7 +283,12 @@
   <li><p>with a set of values<br />  <code class="prettyprint">Seq(1, 2, 3, 4) must contain(2, 4)</code><br />  which is the same thing as<br />  <code class="prettyprint">Seq(1, 2, 3, 4) must contain(allOf(2, 4))</code></p></li>
   <li><p>with a set of matchers<br />  <code class="prettyprint">Seq(1, 2, 3, 4) must contain(allOf(be_&gt;(0), be_&gt;(1)))</code></p></li>
   <li><p>checking that the order is satisfied<br />  <code class="prettyprint">Seq(1, 2, 3, 4) must contain(allOf(be_&gt;(0), be_&gt;(1)).inOrder)</code></p></li>
-</ul><p>Note that when you use don't specify <code class="prettyprint">inOrder</code>, <code class="prettyprint">contain</code> is going to try the checks one by one, but will consume them greedily and not try all possible combinations of input value and check.</p><p>The <code class="prettyprint">allOf</code> method above can be replaced by <code class="prettyprint">atLeast</code>, <code class="prettyprint">atMost</code>, <code class="prettyprint">exactly</code> to be more specific on the number of elements which you expect to be correctly checked.</p><p>Finally, if you want to get the differences between 2 traversables:</p><p><code class="prettyprint">Seq(2, 4, 1) must containTheSameElementsAs(Seq(1, 4, 2))</code></p></td></tr></table></form></div><div class="tabbertab" title="Map"><form><table class="dataTable"><tr><td class="none" style="info"><p>Maps have their own matchers as well, to check keys and values:</p>
+</ul><p>Note that <code class="prettyprint">allOf</code> tries to make each check at least successful once, even if that on the same value. If, on the other hand, you want to specify that each check must succeed on a <em>different</em> value you should use <code class="prettyprint">onDistinctValues</code>. For example this will fail:<br /><code class="prettyprint">Seq(1) must contain(allOf(1, 1)).onDistinctValues</code></p><p>The <code class="prettyprint">eachOf</code> method does the same thing (and this example will fail as well):<br /><code class="prettyprint">Seq(1) must contain(eachOf(1, 1))</code></p><p>Another frequent use of Traversable matchers is to check if the Traversable have the right number of elements. For this you can use:</p>
+<ul>
+  <li><p><code class="prettyprint">atLeast</code>, which is actually another name for <code class="prettyprint">allOf</code>, where the traversable can contain more elements than required<br />  <code class="prettyprint">Seq(1, 2, 3, 4) must contain(atLeast(2, 4))</code></p></li>
+  <li><p><code class="prettyprint">atMost</code> where the traversable can not contain more elements than required<br />  <code class="prettyprint">Seq(2, 3) must contain(atMost(2, 3, 4))</code></p></li>
+  <li><p><code class="prettyprint">exactly</code> where the traversable must contain exactly the specified number of elements<br />  <code class="prettyprint">Seq(1, 2) must contain(exactly(2, 1))</code></p></li>
+</ul><p>The <code class="prettyprint">atLeast/atMost/exactly</code> operators work on distinct values by default (because this is easier for counting the correspondance between actual values and expected ones). However you can use <code class="prettyprint">onDistinctValues(false)</code> if you don't care.</p><p>Finally, if you want to get the differences between 2 traversables:</p><p><code class="prettyprint">Seq(2, 4, 1) must containTheSameElementsAs(Seq(1, 4, 2))</code></p></td></tr></table></form></div><div class="tabbertab" title="Map"><form><table class="dataTable"><tr><td class="none" style="info"><p>Maps have their own matchers as well, to check keys and values:</p>
 <ul>
   <li><p><code class="prettyprint">haveKey</code> checks if a Map has a given key<br />    <code class="prettyprint">Map(1 -&gt; &quot;1&quot;) must haveKey(1)</code></p></li>
   <li><p><code class="prettyprint">haveKeys</code> checks if a Map has several keys<br />    <code class="prettyprint">Map(1 -&gt; &quot;1&quot;, 2 -&gt; &quot;2&quot;) must haveKeys(1, 2)</code></p></li>
@@ -529,7 +534,7 @@ org.specs2.main x-&gt; org.specs2.io because org.specs2.io.FileSystem -&gt; org.
 </code></pre><p><strong><em>Alternative implementation</em></strong></p><p>Another implementation of the same functionality is available through the <code class="prettyprint">org.specs2.analysis.CompilerDependencyFinder</code> trait. This implementation uses the compiler dependency analysis functionality but needs more time, since it recompiles the sources.</p><p>The source files are taken from the <code class="prettyprint">src/main/scala</code> directory by default but you can change this value by using the <code class="prettyprint">Layers.inSourceDir</code> method.</p><p>While this implementation is slower than the Classycle one, it might retrieve more dependencies, for example when constants are inlined in class files.</p><p>Note: since this functionality relies on the scala compiler library, so you need to add it to your build file:</p>
 <pre><code class="prettyprint">// use sbt's scalaVersion Setting to define the scala-compiler library version
 libraryDependencies &lt;&lt;= scalaVersion { scala_version =&gt; Seq(
-  &quot;org.specs2&quot; %% &quot;specs2&quot; % 2.3.10 % &quot;test&quot;,
+  &quot;org.specs2&quot; %% &quot;specs2&quot; % 2.3.11 % &quot;test&quot;,
   &quot;org.scala-lang&quot; % &quot;scala-compiler&quot; % scala_version % &quot;test&quot;)
 }
 </code></pre></td></tr></table></form></div></div></td></tr></table></form></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Custom"><h4>Custom</h4></a><p>There are many ways to create matchers for your specific usage. The simplest way is to reuse the existing ones:</p>
@@ -537,11 +542,6 @@ libraryDependencies &lt;&lt;= scalaVersion { scala_version =&gt; Seq(
   <li>using logical operators</li>
 </ul>
 <pre><code class="prettyprint">def beBetween(i: Int, j: Int) = be_&gt;=(i) and be_&lt;=(j)
-
-// create a Seq Matcher from a Matcher
-def allBeGreaterThan2: Matcher[Seq[Int]]   = be_&gt;=(2).forall     // fail after the first failure
-def allBeGreaterThan3: Matcher[Seq[Int]]   = be_&gt;=(2).foreach    // like forall but execute all matchers and collect the results
-def haveOneGreaterThan2: Matcher[Seq[Int]] = be_&gt;=(2).atLeastOnce
 </code></pre>
 <ul>
   <li>using <code class="prettyprint">zip</code> operators for to match tuples</li>
@@ -594,6 +594,12 @@ iterator.next must be_==(3).eventually
 </ul>
 <pre><code class="prettyprint">future(1) must be_&gt;(0).await
 future { Thread.sleep(100); 1 } must be_&gt;(0).await(retries = 2, timeout = 100.millis)
+</code></pre>
+<ul>
+  <li>using <code class="prettyprint">await</code> to create a <code class="prettyprint">Result</code> on a <code class="prettyprint">Future</code> that returns a <code class="prettyprint">Matcher[T]</code>:</li>
+</ul>
+<pre><code class="prettyprint">future(1 === 1).await
+future(1 === 1).await(retries = 2, timeout = 100.millis)
 </code></pre>
 <ul>
   <li>using <code class="prettyprint">when</code> or <code class="prettyprint">unless</code> to apply a matcher only if a condition is satisfied:</li>
@@ -822,6 +828,8 @@ mocked.contains(&quot;o&quot;) must beTrue
 m.get(999) must_== &quot;element&quot;
 </code></pre><p><strong><em>specs2</em></strong> matchers can also be passed directly as arguments: </p>
 <pre><code class="prettyprint">m.get(===(123)) returns &quot;one&quot;
+</code></pre><p><strong>Note</strong> the call above works because there is an implicit method <code class="prettyprint">argThat</code> which transforms a specs2 <code class="prettyprint">Matcher[T]</code> into a Hamcrest one and in turn call Mockito's <code class="prettyprint">org.mockito.Matchers.argThat</code> method to register the Hamcrest matcher. However <a href="https://groups.google.com/forum/#!msg/specs2-users/_slOZQoICzU/DF-ZQCq_GmkJ">sometimes</a> the implicit conversion is not called and you have to explicitly call the <code class="prettyprint">argThat</code> method like so: </p>
+<pre><code class="prettyprint">m.get(argThat(===(123))) returns &quot;one&quot;
 </code></pre><a name="Callbacks"><h5>Callbacks</h5></a><p>In some rare cases, it is necessary to have the return value depend on the parameters passed to the mocked method: </p>
 <pre><code class="prettyprint">m.get(anyInt) answers { i =&gt; &quot;The parameter is &quot; + i.toString }
 </code></pre><p>The function passed to <code class="prettyprint">answers</code> will be called with each parameter passed to the stubbed method: </p>
@@ -930,7 +938,7 @@ there was one(amount).show(anyFunction2)
 <ul>
   <li>with an acceptance specification: use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance)</li>
   <li>with a unit specification: use the <code class="prettyprint">org.specs2.mutable.Tables</code> trait instead of <code class="prettyprint">org.specs2.matcher.DataTables</code> trait. This will &quot;deactivate&quot; the implicit used to create examples with <code class="prettyprint">!</code></li>
-</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="1708501943"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../images/icon_success_sml.gif" /> Here's <a href="../guide/org.specs2.guide.FormsPage.html" tooltip="">how to use Forms</a></div></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
+</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="383603217"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../images/icon_success_sml.gif" /> Here's <a href="../guide/org.specs2.guide.FormsPage.html" tooltip="">how to use Forms</a></div></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
 <ul>
   <li><p><code class="prettyprint">org.specs2.matcher.MustMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldMatchers</code>) to write anything like <code class="prettyprint">1 must be_==(1)</code> and<br />    get a <code class="prettyprint">Result</code> back</p></li>
   <li><p>You can also use the side-effecting version of that trait called <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldThrownMatchers</code>).<br />    It throws a <code class="prettyprint">FailureException</code> as soon as an expectation is failing. Those traits can also be used in a regular<br />    Specification if you have several expectations per example and if you don't want to chain them with <code class="prettyprint">and</code>.</p></li>
@@ -947,12 +955,12 @@ there was one(amount).show(anyFunction2)
 </code></pre>
 <hr /></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Matchers</th></tr>
-        <tr><td>Finished in</td><td class="info">730 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">630 ms</td></tr>
         <tr><td>Results</td><td class="success">47 examples, 539 expectations, 0 failure, 0 error</td></tr>
       </table></html></div></div>
                 <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="464133108"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="1923436997"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1752787793"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="1724185471"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -962,7 +970,7 @@ there was one(amount).show(anyFunction2)
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="1210972534"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="1910878803"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -1032,14 +1040,14 @@ there was one(amount).show(anyFunction2)
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#BeforeExample">BeforeExample</a>
             
-          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Implicit+context">Implicit context</a>
-            
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Composition">Composition</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Combinations">Combinations</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Composition_1">Composition</a>
             
           </li></ul>
+          </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Console+output">Console output</a>
+            
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Steps%2FActions">Steps/Actions</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Steps">Steps</a>
             
@@ -1073,7 +1081,7 @@ there was one(amount).show(anyFunction2)
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Methods">Methods</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Full+example">Full example</a>
-            <ul><li id="1336647247"><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
+            <ul><li id="1444690008"><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Rules">Rules</a>
@@ -1091,7 +1099,7 @@ there was one(amount).show(anyFunction2)
           </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Unit+specification">Unit specification</a>
             
           </li></ul>
-          </li><li id="1111833077"><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then_1">Given When Then</a>
+          </li><li id="2135595042"><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then_1">Given When Then</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then">Given When Then</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Parsing">Parsing</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Delimited+parsers">Delimited parsers</a>
@@ -1110,7 +1118,7 @@ there was one(amount).show(anyFunction2)
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1836412732"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="393570677"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1180,7 +1188,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1708501943"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="383603217"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
@@ -1224,7 +1232,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li></ul>
-          </li><li id="1522763610"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="1444396736"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1310,7 +1318,7 @@ there was one(amount).show(anyFunction2)
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="773961682"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="2102613910"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -1362,7 +1370,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li></ul>
-          </li><li id="167903626"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="1876869112"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1408,7 +1416,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li></ul>
-          </li><li id="495195842"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="1440197929"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1428,7 +1436,7 @@ there was one(amount).show(anyFunction2)
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['464133108','1836412732'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['1752787793','393570677'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                 <div class="col3"><div id="rightcolumn"></div></div>
               </div>
