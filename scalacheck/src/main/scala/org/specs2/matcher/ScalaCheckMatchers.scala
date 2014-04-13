@@ -24,8 +24,8 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
    with Expectations { outer: ScalaCheckMatchers =>
 
   /** implicit typeclass instance to create examples from Props */
-  implicit def propAsResult(implicit p: Parameters): AsResult[Prop] = new AsResult[Prop] {
-    def asResult(prop: =>Prop): execute.Result = checkProp(prop)(p)
+  implicit def propAsResult[P <: Prop](implicit p: Parameters): AsResult[P] = new AsResult[P] {
+    def asResult(prop: =>P): execute.Result = checkProp(prop)(p)
   }
   /** allow to combine properties as if they were results */
   implicit def combineProp(prop: =>Prop)(implicit p: Parameters): ResultLogicalCombinator = combineResult(propAsResult(p).asResult(prop))
@@ -426,9 +426,9 @@ case class Parameters(minTestsOk: Int             = Test.Parameters.default.minS
  * number of expectations. With this trait we just count 1 for each result
  */
 trait OneExpectationPerProp extends ScalaCheckMatchers {
-  private val superPropAsResult = super.propAsResult
+  private def superPropAsResult[P <: Prop] = super.propAsResult[P]
 
-  override implicit def propAsResult(implicit p: Parameters): AsResult[Prop] = new AsResult[Prop] {
-    def asResult(prop: =>Prop) = superPropAsResult.asResult(prop).setExpectationsNb(1)
+  override implicit def propAsResult[P <: Prop](implicit p: Parameters): AsResult[P] = new AsResult[P] {
+    def asResult(prop: =>P) = superPropAsResult.asResult(prop).setExpectationsNb(1)
   }
 }
