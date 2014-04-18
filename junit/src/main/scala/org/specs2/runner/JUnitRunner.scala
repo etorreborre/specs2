@@ -10,6 +10,7 @@ import java.io.{PrintStream, ByteArrayOutputStream}
 import org.junit.internal.TextListener
 import reflect.Classes
 import scala.reflect.ClassTag
+import org.junit.runner.manipulation.{NoTestsRemainException, Filter, Filterable}
 
 /**
  * The JUnitRunner class is a JUnit Runner class meant to be used with the RunWith annotation
@@ -19,7 +20,7 @@ import scala.reflect.ClassTag
  * of Description objects and a Map relating each Description to a Fragment to execute. 
  *
  */
-class JUnitRunner(klass: Class[_]) extends Runner with DefaultSelection { outer =>
+class JUnitRunner(klass: Class[_]) extends Runner with Filterable with DefaultSelection { outer =>
 
   /** specification to execute */
   lazy val specification = SpecificationStructure.createSpecification(klass.getName)(propertiesArgs)
@@ -49,6 +50,18 @@ class JUnitRunner(klass: Class[_]) extends Runner with DefaultSelection { outer 
     }
     reporter.report
   }
+
+  /**
+   * Remove tests that don't pass the parameter <code>filter</code>.
+   *
+   * @param filter the { @link Filter} to apply
+   * @throws NoTestsRemainException if all tests are filtered out
+   */
+  def filter(filter: Filter) {
+    if (!filter.shouldRun(classDescription)) throw new NoTestsRemainException
+  }
+
+  private def classDescription = Description.createSuiteDescription(klass.getName, klass.getAnnotations)
 }
 
 /**
