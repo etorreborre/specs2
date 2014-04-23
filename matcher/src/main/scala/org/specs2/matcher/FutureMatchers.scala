@@ -55,5 +55,12 @@ object FutureMatchers extends FutureMatchers
  * This can be overridden to pass in your own execution context
  */
 trait ConcurrentExecutionContext {
-  implicit val concurrentExecutionContext: ExecutionContext = concurrent.ExecutionContext.Implicits.global
+  implicit def concurrentExecutionContext: ExecutionContext = concurrent.ExecutionContext.Implicits.global
+}
+
+/**
+ * stack this trait to remove the implicit execution context used to evaluate features
+ */
+trait NoConcurrentExecutionContext extends ConcurrentExecutionContext {
+  override def concurrentExecutionContext: ExecutionContext = super.concurrentExecutionContext
 }
