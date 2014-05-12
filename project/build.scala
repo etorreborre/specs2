@@ -134,7 +134,7 @@ object build extends Build {
 
   lazy val html = Project(id = "specs2-html", base = file("html"),
     settings = moduleSettings
-  ).dependsOn(form, mock % "test", matcherExtra % "test")
+  ).dependsOn(form, mock % "test", matcherExtra % "test", scalacheck % "test")
 
   lazy val junit = Project(id = "specs2-junit", base = file("junit"),
     settings = Seq(libraryDependencies ++= Seq(junitLib)) ++
@@ -156,7 +156,7 @@ object build extends Build {
     settings = moduleSettings ++ Seq(
       libraryDependencies ++= (if (scalaVersion.value.startsWith("2.11")) Nil else paradisePlugin)
     )
-  ).dependsOn(analysis, scalacheck, matcher, core % "test->test")
+  ).dependsOn(analysis, matcher, core % "test->test")
 
   lazy val mock = Project(id = "specs2-mock", base = file("mock"),
     settings = Seq(
