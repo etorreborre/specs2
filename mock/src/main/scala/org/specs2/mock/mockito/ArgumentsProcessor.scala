@@ -73,7 +73,7 @@ object ArgumentsProcessor {
       else if (arg.isInstanceOf[GenSeqLike[_,_]] || arg.isInstanceOf[GenSetLike[_,_]]) {
         matchers.add(new Equals(arg))
       }
-      else if (arg.isInstanceOf[Function1[_,_]]) {
+      else if (arg.isInstanceOf[scala.runtime.AbstractFunction1[_,_]]) {
         matchers.add(new EqualsFunction1(arg))
       }
       else matchers.add(new Equals(arg))
