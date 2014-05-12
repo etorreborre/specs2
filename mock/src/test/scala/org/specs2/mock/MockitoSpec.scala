@@ -64,6 +64,7 @@ class MockitoSpec extends script.Specification with Mockito with ResultMatchers 
 
    + it is possible to verify a function with repeated parameters
    + it is possible to specify a timeout for the call
+   + it doesn't match maps and functions as equal
 
 STUBS
 =====
@@ -254,6 +255,11 @@ STUBS
       scala.concurrent.Future { Thread.sleep(200); takesSometime.call(10) }
       ((there was after(10.millis).one(takesSometime).call(10)).message must contain("Wanted but not invoked")) and
       (there was after(300.millis).one(takesSometime).call(10))
+    }
+
+    eg := {
+      functionInt.call((i: Int) => i + 2)
+      (there was one(functionInt).call(Map(1 -> 2))).message must contain("Argument(s) are different")
     }
   }
   "stubs" - new group with list {
@@ -472,6 +478,7 @@ STUBS
 
     val functionNothing = mock[WithFunctionNothing]
     val functionAny = mock[WithFunctionAny]
+    val functionInt = mock[WithFunctionInt]
 
     trait WithPartialFunction { def call(f: PartialFunction[(Int, Double), String]) = f.apply((1, 2.0)) }
     val partial = mock[WithPartialFunction]
@@ -493,4 +500,6 @@ STUBS
 
 trait WithFunctionNothing { def call(f: Int => Nothing) = 1 }
 trait WithFunctionAny { def call(f: () => Any) = 1 }
+trait WithFunctionInt { def call(f: Int => Any) = 1 }
+
 
