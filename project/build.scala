@@ -83,97 +83,112 @@ object build extends Build {
     )
 
   /** MODULES (sorted in alphabetical order) */
-  lazy val analysis = Project(id = "specs2-analysis", base = file("analysis"),
+  lazy val analysis = Project(id = "analysis", base = file("analysis"),
     settings = Seq(
       libraryDependencies ++= Seq(
         "org.scala-lang" % "scala-compiler" % scalaVersion.value,
         "org.specs2"     % "classycle"      % "1.4.3")) ++
-    moduleSettings
+    moduleSettings ++
+    Seq(name := "specs2-analysis")
   ).dependsOn(common % "test->test", core, matcher, scalacheck % "test")
 
-  lazy val common = Project(id = "specs2-common", base = file("common"),
-    settings = moduleSettings ++ 
-      // lame
-      Seq(conflictWarning ~= { _.copy(failOnConflict = false) }) ++
-      Seq(libraryDependencies ++= Seq(
+  lazy val common = Project(id = "common", base = file("common"),
+    settings = moduleSettings ++
+      Seq(conflictWarning ~= { _.copy(failOnConflict = false) }, // lame
+          libraryDependencies ++= Seq(
             "org.scalaz"     %% "scalaz-core"       % scalazVersion.value,
             "org.scalaz"     %% "scalaz-concurrent" % scalazVersion.value,
             "org.scala-lang" %  "scala-reflect"     % scalaVersion.value,
-            scalacheckLib % "test"))      
+            scalacheckLib % "test")) ++
+      Seq(name := "specs2-common")
   )
 
-  lazy val core = Project(id = "specs2-core", base = file("core"),
+  lazy val core = Project(id = "core", base = file("core"),
     settings = Seq(
       libraryDependencies ++= Seq(
         "org.scala-sbt"  % "test-interface" % "1.0" % "optional",
         mockitoLib % "test",
         junitLib   % "test")) ++
-      moduleSettings
+      moduleSettings ++
+      Seq(name := "specs2-core")
   ).dependsOn(matcher, common % "test->test")
 
-  lazy val examples = Project(id = "specs2-examples", base = file("examples"),
-    settings = moduleSettings
+  lazy val examples = Project(id = "examples", base = file("examples"),
+    settings = moduleSettings ++
+      Seq(name := "specs2-examples")
   ).dependsOn(common, matcher, matcherExtra, core, analysis, form, html, markdown, gwt, junit, scalacheck, mock)
 
-  lazy val form = Project(id = "specs2-form", base = file("form"),
-    settings = moduleSettings
+  lazy val form = Project(id = "form", base = file("form"),
+    settings = moduleSettings ++
+      Seq(name := "specs2-form")
   ).dependsOn(core, markdown, matcherExtra, scalacheck % "test->test")
 
-  lazy val guide = Project(id = "specs2-guide", base = file("guide"),
-    settings = moduleSettings
+  lazy val guide = Project(id = "guide", base = file("guide"),
+    settings = moduleSettings ++
+      Seq(name := "specs2-guide")
   ).dependsOn(examples % "compile->compile;test->test")
 
-  lazy val gwt = Project(id = "specs2-gwt", base = file("gwt"),
+  lazy val gwt = Project(id = "gwt", base = file("gwt"),
     settings = Seq(
-      libraryDependencies <+= (scalaVersion) { sv => 
+      libraryDependencies <+= (scalaVersion) { sv =>
         if (sv.contains("2.11")) "com.chuusai" % "shapeless_2.11.0-M7" % "2.0.0-M1"
         else                     "com.chuusai" % "shapeless_2.10.3" % "2.0.0-M1"
       }
-    ) ++ moduleSettings
+    ) ++ moduleSettings ++
+      Seq(name := "specs2-gwt")
   ).dependsOn(core, matcherExtra, scalacheck)
 
-  lazy val html = Project(id = "specs2-html", base = file("html"),
-    settings = moduleSettings
+  lazy val html = Project(id = "html", base = file("html"),
+    settings = moduleSettings ++
+      Seq(name := "specs2-html")
   ).dependsOn(form, mock % "test", matcherExtra % "test", scalacheck % "test")
 
-  lazy val junit = Project(id = "specs2-junit", base = file("junit"),
-    settings = Seq(libraryDependencies ++= Seq(junitLib)) ++
-      moduleSettings
+  lazy val junit = Project(id = "junit", base = file("junit"),
+    settings = Seq(
+      libraryDependencies ++= Seq(junitLib)) ++
+      moduleSettings ++
+      Seq(name := "specs2-junit")
   ).dependsOn(core, matcherExtra % "test", mock % "test")
 
-  lazy val markdown = Project(id = "specs2-markdown", base = file("markdown"),
+  lazy val markdown = Project(id = "markdown", base = file("markdown"),
     settings = Seq(
      libraryDependencies ++= Seq(
-        "org.pegdown"  % "pegdown" % "1.2.1")) ++
-      moduleSettings
+        "org.pegdown" % "pegdown" % "1.2.1")) ++
+      moduleSettings ++
+      Seq(name := "specs2-markdown")
   ).dependsOn(common, core % "compile->test")
 
-  lazy val matcher = Project(id = "specs2-matcher", base = file("matcher"),
-    settings = moduleSettings
+  lazy val matcher = Project(id = "matcher", base = file("matcher"),
+    settings = moduleSettings ++
+      Seq(name := "specs2-matcher")
   ).dependsOn(common)
 
-  lazy val matcherExtra = Project(id = "specs2-matcher-extra", base = file("matcher-extra"),
+  lazy val matcherExtra = Project(id = "matcher-extra", base = file("matcher-extra"),
     settings = moduleSettings ++ Seq(
+      name := "specs2-matcher-extra",
       libraryDependencies ++= (if (scalaVersion.value.startsWith("2.11")) Nil else paradisePlugin)
     )
   ).dependsOn(analysis, matcher, core % "test->test")
 
-  lazy val mock = Project(id = "specs2-mock", base = file("mock"),
+  lazy val mock = Project(id = "mock", base = file("mock"),
     settings = Seq(
-     libraryDependencies ++= Seq(
-      hamcrestLib,
-      mockitoLib)) ++
-      moduleSettings
+      libraryDependencies ++= Seq(
+        hamcrestLib,
+        mockitoLib)) ++
+      moduleSettings ++
+      Seq(name := "specs2-mock")
   ).dependsOn(core)
 
-  lazy val scalacheck = Project(id = "specs2-scalacheck", base = file("scalacheck"),
+  lazy val scalacheck = Project(id = "scalacheck", base = file("scalacheck"),
     settings = Seq(
-     libraryDependencies ++= Seq(scalacheckLib)) ++
-      moduleSettings
+      libraryDependencies ++= Seq(scalacheckLib)) ++
+      moduleSettings ++
+      Seq(name := "specs2-scalacheck")
   ).dependsOn(core)
 
-  lazy val tests = Project(id = "specs2-tests", base = file("tests"),
-    settings = moduleSettings
+  lazy val tests = Project(id = "tests", base = file("tests"),
+    settings = moduleSettings ++
+      Seq(name := "specs2-tests")
   ).dependsOn(core % "compile->compile;test->test", matcherExtra, junit % "test->test", examples % "test->test")
 
   /**
