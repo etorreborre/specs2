@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+import java.util.Date
 import sbt._
 import complete.DefaultParsers._
 import Keys._
@@ -19,6 +21,7 @@ import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 import com.typesafe.tools.mima.plugin.MimaKeys.previousArtifact
 import xerial.sbt.Sonatype._
 import SonatypeKeys._
+import sbtbuildinfo.Plugin._
 
 object build extends Build {
   type Settings = Def.Setting[_]
@@ -62,8 +65,20 @@ object build extends Build {
         Resolver.sonatypeRepo("snapshots"),
         Resolver.typesafeIvyRepo("releases"))
 
+  lazy val buildSettings: Seq[Settings] =
+    buildInfoSettings ++
+      Seq(sourceGenerators in Compile <+= buildInfo,
+          buildInfoObject <<= name (n => n.replace("specs2-", "").replace("-", "").capitalize +"BuildInfo"),
+          buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, "commit" -> commit, "datetime" -> datetime),
+          buildInfoPackage := "org.specs2")
+
+  def commit = Process(s"git log --pretty=format:%h -n 1").lines.head
+
+  def datetime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss Z").format(new Date)
+
   lazy val moduleSettings: Seq[Settings] = 
       defaultSettings      ++
+      buildSettings        ++
       specs2Settings       ++
       resolversSettings    ++
       compilationSettings  ++
