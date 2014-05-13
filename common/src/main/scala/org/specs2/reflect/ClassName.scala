@@ -50,7 +50,7 @@ trait ClassName { outer =>
    */
   def simpleName(klass: Class[_]): String = {
     // klass.getSimpleName can throw an error in the REPL
-    val result = catchAllOrElse(className(klass.getSimpleName))("classname")
+    val result = catchAllOrElse(className(klass.getSimpleName))(klass.getName)
     if (result.contains("anon") && klass.getSuperclass != null) simpleName(klass.getSuperclass)
     else result
   }
