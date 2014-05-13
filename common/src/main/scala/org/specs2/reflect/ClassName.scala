@@ -9,7 +9,7 @@ import text.CamelCase._
  * Utility reflection methods for Class names
  */
 private[specs2]
-trait ClassName {
+trait ClassName { outer =>
   /** @return the class name of an instance */
   def simpleClassName(any: AnyRef): String = simpleName(any.getClass)
   /** @return the class name of an instance */
@@ -50,7 +50,7 @@ trait ClassName {
    */
   def simpleName(klass: Class[_]): String = {
     // klass.getSimpleName can throw an error in the REPL
-    val result = catchAllOrElse(className(klass.getSimpleName))("specification")
+    val result = catchAllOrElse(className(klass.getSimpleName))("classname")
     if (result.contains("anon") && klass.getSuperclass != null) simpleName(klass.getSuperclass)
     else result
   }
@@ -58,10 +58,16 @@ trait ClassName {
    * @return the uncamelcased name of the class (or its parent if it is an anonymous class)
    */
   def humanName(c: Class[_]): String =
-    if (c.getSimpleName.contains("$"))
-      humanName(c.getSuperclass)
-    else
-      c.getSimpleName.camelCaseToWords
+    if (c.simpleName.contains("$")) {
+      if (c.getSuperclass != null) humanName(c.getSuperclass)
+      else                         c.simpleName
+    }
+    else c.simpleName.camelCaseToWords
+
+  implicit class ClassOps(klass: Class[_]) {
+    def simpleName = outer.simpleName(klass)
+    def humanName  = outer.humanName(klass)
+  }
 }
 private[specs2]
 object ClassName extends ClassName

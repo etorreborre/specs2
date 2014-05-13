@@ -11,6 +11,7 @@ import mock._
 import execute._
 import scala.collection.mutable.ListBuffer
 import annotation.tailrec
+import reflect.ClassName._
 
 class TestInterfaceRunnerSpec extends Specification with Groups with Tags { def is = section("unstable") ^ s2"""
 
@@ -92,7 +93,7 @@ class TestInterfaceRunnerSpec extends Specification with Groups with Tags { def 
       "junitxml,console"                      !! true      ! false  ! false       ! true       |
       "junitxml,html,console"                 !! true      ! true   ! false       ! true       |
       "junitxml,markdown,console"             !! true      ! false  ! true        ! true       |> { (arguments, c, h, m, j) =>
-        runner.exporters(arguments.split(","), handler).map(_.getClass.getSimpleName) must contain(allOf(selectedExporters(c, h, m, j):_*))
+        runner.exporters(arguments.split(","), handler).map(_.getClass.simpleName) must contain(allOf(selectedExporters(c, h, m, j):_*))
       }
 
     }

@@ -22,7 +22,8 @@ import Statistics._
 import Levels._
 import SpecsArguments._
 import matcher.DataTable
-import org.specs2.execute.Error.ThrowableException
+import execute.Error.ThrowableException
+import reflect.ClassName._
 
 /**
  * This trait reduces a list of ExecutedFragments to a list of PrintLines.
@@ -179,7 +180,7 @@ trait TextPrinter {
                    timer: SimpleTimer, isDataTable: Boolean = false)(implicit args: Arguments, out: ResultOutput) = {
       val description = statusAndDescription(desc, f, timer, isDataTable)(args, out)
       out.printText(description)
-      val exceptionName = f.exception.getClass.getSimpleName
+      val exceptionName = f.exception.getClass.simpleName
       val message = if (f.message.notNull == "null") "" else ": "+f.message
       val errorMessage =
         if (isDataTable) f.message + location(f)

@@ -3,6 +3,7 @@ package matcher
 
 import control.Exceptions._
 import scala.reflect.ClassTag
+import reflect.ClassName._
 import text.NotNullStrings._
 
 /**
@@ -108,7 +109,7 @@ trait ExceptionBaseMatchers extends Expectations {
     checkException(expectable, 
                    f,
                    (e: Throwable) => s"Got the exception $e",
-                   (e: Throwable) => s"Expected: $expectedAsString. Got: $e instead \n\n The  ${e.getClass.getSimpleName} stacktrace is\n\n${e.getStackTrace.mkString("\n")}",
+                   (e: Throwable) => s"Expected: $expectedAsString. Got: $e instead \n\n The  ${e.getClass.simpleName} stacktrace is\n\n${e.getStackTrace.mkString("\n")}",
                    "Got the exception " + expectedAsString,
                     "Expected: "+ expectedAsString + ". Got nothing")
   }
@@ -138,7 +139,7 @@ trait ExceptionBaseMatchers extends Expectations {
       case Some(e) =>
         if (ef(e)) {
           val result = f(e.asInstanceOf[E])
-          Matcher.result(ef(e) && result.isSuccess, s"${someOk(e)} and ${result.message}", s"""${someKo(e)} and ${result.message}\n\n The ${e.getClass.getSimpleName} stacktrace is\n\n${stacktrace(e).mkString("\n")}""", expectable)
+          Matcher.result(ef(e) && result.isSuccess, s"${someOk(e)} and ${result.message}", s"""${someKo(e)} and ${result.message}\n\n The ${e.getClass.simpleName} stacktrace is\n\n${stacktrace(e).mkString("\n")}""", expectable)
         }
         else
           Matcher.result(false, someOk(e), someKo(e), expectable)

@@ -9,6 +9,7 @@ import text.Quote._
 import scala.reflect.ClassTag
 import MatchResultLogicalCombinators._
 import scala.collection.GenTraversableOnce
+import reflect.ClassName._
 
 /**
 * Matchers for parser combinators
@@ -137,7 +138,7 @@ trait ParserBaseMatchers extends TraversableMatchers {
                          s.description+" is a Success and the input was not completely parsed. "+
                          remaining(next), s.description, s)
         case _                                                =>
-          Matcher.result(clazz.isInstance(s.value), s.description, s.description+" isn't a "+clazz.getSimpleName, s)
+          Matcher.result(clazz.isInstance(s.value), s.description, s.description+" isn't a "+clazz.simpleName, s)
       }
     }
 
