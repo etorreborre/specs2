@@ -4,15 +4,14 @@ Maintenance version
 
  * added a `Filterable` interface on the JUnit runner to make it category-aware [#256](http://github.com/etorreborre/specs2/issues/256)
  * added a `org.specs2.matcher.NoConcurrentExecutionContext` trait to remove the implicit execution context for FutureMatchers
- * added an `onDistinctValues` on `contain` matchers to specify that checks must apply to distinct values. 
-   Changed the implementation of `allOf` to be `onDistinctValues(false)` so that `Seq(1) must contain(allOf(1, 1))` will not fail. 
-   For a match on distinct values, use `Seq(1) must contain(allOf(1, 1)).onDistinctValues` or `Seq(1) must contain(eachOf(1, 1))`
- * added the stacktrace of the caught exception in the failure message of a `throwAn[Exception]` matcher [#250](http://github.com/etorreborre/specs2/issues/250)
+ * added a `BuildInfo` object for each jar containing: the module name, the version, the scala version, the commit and the timestamp
 
 ## Fixes
 
  * added back the specs2.files to its proper place [#258](http://github.com/etorreborre/specs2/issues/258)
  * fixed an unsafe type conversion with mockito [#260](http://github.com/etorreborre/specs2/issues/260)
+ * remove scalacheck dependency from matcherExtra module [#261](http://github.com/etorreborre/specs2/issues/261) (thanks to @xuwei_k)
+ * mockito - don't match maps and functions as equal [#262](http://github.com/etorreborre/specs2/issues/262) (thanks to @fwbrasil)
 
  ==========================
 
