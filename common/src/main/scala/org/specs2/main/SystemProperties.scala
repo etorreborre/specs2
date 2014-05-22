@@ -11,8 +11,14 @@ import java.util.regex.Pattern
 trait SystemProperties {
   val specs2Prefix = "specs2."
 
+  /** copy system properties on first access to avoid possible concurrent modification exceptions later */
+  private lazy val systemProperties =
+    synchronized(System.getProperties.stringPropertyNames.toList.foldLeft(Map[String, String]()) { (res, key) =>
+      res.updated(key,System.getProperty(key))
+    })
+
   /** @return a system property if it exists */
-  protected def systemGetProperty(p: String): Option[String] = Option(System.getProperty(p.notNull))
+  protected def systemGetProperty(p: String): Option[String] = systemProperties.get(p.notNull)
     
   /** @return the value of the system property p */  
   def getProperty(p: String): Option[String] =        systemGetProperty(specs2Prefix + p).
