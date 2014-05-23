@@ -100,7 +100,12 @@ trait Classes extends Output {
               case Some(r) => r
               case None    =>
                 val exception = results.collect { case Left(e) => e }.iterator.toSeq.headOption.getOrElse(new Exception("no cause"))
-                Left(new Exception("Could not instantiate class "+c.getName+": "+exception.getMessage.mkString(", "), exception))
+                val message = if (exception.getMessage == null) {
+                  "Could not instantiate class " + c.getName
+                } else {
+                  "Could not instantiate class " + c.getName + ": " + exception.getMessage.mkString(", ")
+                }
+                Left(new Exception(message, exception))
             }
           }
         } catch {
