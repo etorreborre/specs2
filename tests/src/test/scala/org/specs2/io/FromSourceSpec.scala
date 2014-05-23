@@ -4,9 +4,13 @@ package io
 import user.specification._
 import mutable.{Specification, Tags}
 import specification.{Example, SpecificationStructure}
+import org.specs2.execute.PendingUntilFixed
 
 class FromSourceSpec extends Specification with Tags {
   step(System.setProperty("specs2.srcTestDir", "tests/src/test/scala"))
+  skipAll // comment this line to execute those tests, only from the tests> submodule
+          // otherwise this won't work from the main project because
+          // the system properties are effectively immutable
 
   "General reading of code".p
   "An expression can be read from a source file" in {
@@ -72,6 +76,7 @@ class FromSourceSpec extends Specification with Tags {
   }.forall(examples(spec).zipWithIndex)
 
   def examples(s: SpecificationStructure) = s.is.examples
+
 }
 
 package other {
