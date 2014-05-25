@@ -8,7 +8,7 @@ import control.Throwablex._
 import io._
 import sys._
 import java.lang.reflect.Constructor
-import scalaz.Digit._0
+import text.NotNullStrings._
 
 /**
 * This trait provides utility functions for classes
@@ -43,8 +43,8 @@ trait Classes extends Output {
       val shouldPrintStackTrace = printStackTrace || debugCreateObject
       val shouldPrintMessage = printMessage || debugCreateObject
       val msg = (shouldPrintMessage, shouldPrintStackTrace) match {
-        case (_, true) => "Could not instantiate class: " + e.getFullStackTraceAsString
-        case (true, false) => "Could not instantiate class: " + className + ": " + e.getMessage
+        case (_, true)      => "Could not instantiate class: " + e.getFullStackTraceAsString
+        case (true, false)  => "Could not instantiate class: " + className + causedBy(e)
         case (false, false) => ""
       }
       println(msg)
@@ -100,11 +100,11 @@ trait Classes extends Output {
               case Some(r) => r
               case None    =>
                 val exception = results.collect { case Left(e) => e }.iterator.toSeq.headOption.getOrElse(new Exception("no cause"))
-                Left(new Exception("Could not instantiate class "+c.getName+": "+exception.getMessage.mkString(", "), exception))
+                Left(new Exception("Could not instantiate class "+c.getName+causedBy(exception), exception))
             }
           }
         } catch {
-          case e: Throwable => Left(new Exception("Could not instantiate class " + className + ": " + e.getMessage, e))
+          case e: Throwable => Left(new Exception("Could not instantiate class " + className + causedBy(e), e))
         }
       }
     }
@@ -176,7 +176,7 @@ trait Classes extends Output {
   private def printError(className: String, loader: ClassLoader, e: Throwable) {
     if (sys.props("debugLoadClass") != null) {
       println("loader is "+loader)
-      println("Could not load class " + className + ": " + e.getMessage)
+      println("Could not load class " + className + causedBy(e))
       e.getStackTrace foreach (s => println(s.toString))
     }
   }
