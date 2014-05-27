@@ -25,6 +25,7 @@ class SentencesSpec extends Specification with Tables with Sentences {
     "it isn't a"           ! "it is a"               ! false        |
     "they aren't a"        ! "they are a"            ! false        |
     "it does a"            ! "it does not a"         ! true         |
+    "it does doodoo"       ! "it does not doodoo"    ! true         |
     "it does not have a"   ! "it has a"              ! false        |
     "it won't do"          ! "it will do"            ! false        |
     "it wasn't a"          ! "it was a"              ! false        |
