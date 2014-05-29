@@ -3,7 +3,7 @@ package matcher
 
 import time.Duration
 import time.TimeConversions._
-import execute.EventuallyResults
+import org.specs2.execute.{ResultExecution, EventuallyResults}
 
 /**
  * This trait adds the possibility to retry a given matcher until it succeeds.
@@ -19,9 +19,10 @@ trait EventuallyMatchers extends EventuallyResults {
     def apply[S <: T](a: Expectable[S]) = retry(retries, sleep, a)
 
     def retry[S <: T](retries: Int, sleep: Duration, a: Expectable[S]): MatchResult[S] = {
-      val result = nested(a.evaluateOnce)
+      lazy val matchResult = nested(a.evaluateOnce)
+      val result = ResultExecution.execute(matchResult.toResult)
       if (result.isSuccess || retries == 1)
-        result
+        matchResult
       else {
         Thread.sleep(sleep.inMillis)
         retry(retries - 1, sleep, a)
