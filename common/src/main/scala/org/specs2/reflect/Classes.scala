@@ -19,7 +19,7 @@ trait Classes extends Output {
   /** @return an instance of a given class, returning either the instance, or an exception */
   def create[T <: AnyRef](className: String = "", classLoader: ClassLoader = Thread.currentThread.getContextClassLoader)
                          (implicit m: ClassTag[T]): Either[Throwable, T] =
-    trye(createInstanceFor(loadClassOf[T](className, loader = classLoader)))
+    ???
 
   /** @return an instance of a given class */
   def createObject[T <: AnyRef](className: String)(implicit m: ClassTag[T]): Option[T] =
@@ -37,19 +37,7 @@ trait Classes extends Output {
    * @return an instance of a given class and optionally print message and/or the stacktrace if the class can't be loaded.
    */
   def createObject[T <: AnyRef](className: String, printMessage: Boolean, printStackTrace: Boolean)
-                               (implicit m: ClassTag[T]): Option[T] = {
-    tryo(createInstanceOf[T](loadClass[T](className, m.runtimeClass.getClassLoader))) { (e: Exception) =>
-      val debugCreateObject = sys.props("debugCreateObject") != null
-      val shouldPrintStackTrace = printStackTrace || debugCreateObject
-      val shouldPrintMessage = printMessage || debugCreateObject
-      val msg = (shouldPrintMessage, shouldPrintStackTrace) match {
-        case (_, true)      => "Could not instantiate class: " + e.getFullStackTraceAsString
-        case (true, false)  => "Could not instantiate class: " + className + causedBy(e)
-        case (false, false) => ""
-      }
-      println(msg)
-    }.flatMap(identity)
-  }
+                               (implicit m: ClassTag[T]): Option[T] = ???
 
   /**
    * Try to create an instance of a given class by using whatever constructor is available

@@ -70,7 +70,7 @@ trait DefaultStatisticsRepository extends StatisticsRepository with OutputDir {
   private def attributeValueEquals(value: String)(node: Node) = node.attributes.exists(_.value.toString == value)
 
 
-  def loadStatistics(specName: SpecName): NodeSeq = fileSystem.loadXhtmlFile(specStatsPath(specName))
+  def loadStatistics(specName: SpecName): NodeSeq = ???
 
   def storeResults(specName: SpecName, results: Seq[ExecutedResult]) = {
     fileWriter.appendToXmlFile(specStatsPath(specName), resultsToXml(specName, results))

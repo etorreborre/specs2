@@ -127,11 +127,4 @@ trait MockFileSystem extends FileSystem {
     def read() = reader.read()
   }
 
-  override def loadXmlFile(filePath: String)(report: Exception => Unit = (e:Exception) => e.printStackTrace) = {
-    tryo {
-      val xhtml = fromString("<e>"+readFile(filePath)+"</e>")
-      (XhtmlParser(xhtml)\\"e")(0).child.reduceNodes
-    }.getOrElse(NodeSeq.Empty)
-  }
-
 }
