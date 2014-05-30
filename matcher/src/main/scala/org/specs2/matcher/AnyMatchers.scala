@@ -193,15 +193,15 @@ class BeTypedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1
 
     lazy val (db, qa) =
       (b.description, q(expected)) match {
-        case (x, y) if (!isEqual && x == y) => {
+        case (x, y) if !isEqual && x == y =>
           val (actualWithClass, expectedWithClass) = (actual.notNullWithClass, expected.notNullWithClass)
           if (actualWithClass == expectedWithClass) (b.describe(actual.notNullWithClass(showAll = true)), q(expected.notNullWithClass(showAll = true)))
           else                                      (b.describe(actualWithClass), q(expectedWithClass))
-        }
+
         case other                          => other
       }
 
-    def print(b: String, msg: String, a: String) = Seq(b, msg, a).mkString("\n".unless((Seq(a, b).exists(_.size <= 40))))
+    def print(b: String, msg: String, a: String) = Seq(b, msg, a).mkString("\n".unless(Seq(a, b).exists(_.size <= 40)))
     result(isEqual, ok(print(db, " is equal to ", qa)), ko(print(db, " is not equal to ", qa)), b, expected.notNull, actual.notNull)
   }
 

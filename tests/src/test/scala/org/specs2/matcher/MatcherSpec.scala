@@ -21,6 +21,7 @@ Adaptation
   + a matcher can be adapted with a function for both expected and actual values
   + the adapted matcher must show both original and adapted values
   + a function can be adapted with a matcher to create a matcher
+  + a matcher can be adapted with an expectable
 
 Implicit conversions
 ====================
@@ -75,6 +76,11 @@ Messages
     eg := {
       def haveExtension(extension: =>String) = ((_:File).getPath) ^^ endWith(extension)
       new File("spec.scala") must haveExtension(".scala")
+    }
+    eg := {
+      def beThree: Matcher[Int] = be_==(3)
+      val beStringThree = beThree ^^ ((s:String) => s.toInt aka s"the value")
+      ("3" must beStringThree).message === "the value '3' is equal to '3'"
     }
   }
 
