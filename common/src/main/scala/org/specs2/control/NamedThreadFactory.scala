@@ -9,7 +9,6 @@ import java.util.concurrent.atomic.AtomicInteger
  *
  * Contributed by @jedws
  */
-private[specs2]
 case class NamedThreadFactory(namePrefix: String,
                               group: ThreadGroup = Thread.currentThread.getThreadGroup,
                               priority: Int = Thread.currentThread.getPriority) extends ThreadFactory {
