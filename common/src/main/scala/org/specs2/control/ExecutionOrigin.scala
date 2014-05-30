@@ -4,7 +4,6 @@ package control
 /**
  * This trait is used primarily to change the junit behavior depending on the execution environment
  */
-private[specs2]
 trait ExecutionOrigin extends Stacktraces {
   /** return true if the current test is executed with Maven */
   lazy val isExecutedFromMaven = isExecutedFrom("org.apache.maven.surefire.Surefire.run")
@@ -29,4 +28,4 @@ trait ExecutionOrigin extends Stacktraces {
   def fromSpecs2orScalaz = (className: String) => className.startsWith("org.specs2.") || className.startsWith("scalaz.")
 }
 
-
+object ExecutionOrigin extends ExecutionOrigin
