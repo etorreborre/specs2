@@ -1,13 +1,13 @@
-package org.specs2.text
+package org.specs2
+package text
 
 import NotNullStrings._
-import collection.GenTraversableOnce
+import scala.collection.GenTraversableOnce
 
 /**
  * Quote and unquote strings
  *
  */
-private[specs2] 
 trait Quote {
 
   /** quote a value, unless it is a collection of objects */
@@ -41,4 +41,5 @@ trait Quote {
     def prefix(separator: String, other: String) = Seq(s, other).filter(_.nonEmpty).mkString(separator)
   }
 }
-private[specs2] object Quote extends Quote 
+
+object Quote extends Quote

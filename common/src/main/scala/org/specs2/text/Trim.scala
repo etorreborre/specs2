@@ -10,7 +10,6 @@ import util.matching.Regex.Match
 /**
  * Utility methods for trimming text
  */
-private[specs2]
 trait Trim extends control.Debug {
   /** add trimming methods to a String */
   implicit def trimmed(s: String): Trimmed = new Trimmed(s)
@@ -20,7 +19,7 @@ trait Trim extends control.Debug {
   implicit def stringWriterToString(sb: StringWriter): Trimmed = Trimmed(sb.toString)
 
   case class Trimmed(s: String) {
-    
+
     def trimStart(start: String) =
       if (s.trim.startsWith(start)) s.trim.drop(start.size) else s.trim
 
@@ -70,7 +69,7 @@ trait Trim extends control.Debug {
       if (matches.isEmpty) s
       else {
         val last = matches.last
-        (s.substring(0, last.start) + s.substring(last.end, s.size))
+        s.substring(0, last.start) + s.substring(last.end, s.size)
       }
     }
 
@@ -79,10 +78,18 @@ trait Trim extends control.Debug {
 
     def trimReplace(pairs: Pair[String, String]*) = pairs.foldLeft(s.trim) { (res, cur) =>
       res.replace(cur._1, cur._2)
-    } 
+    }
     def trimReplaceAll(pairs: Pair[String, String]*) = pairs.foldLeft(s.trim) { (res, cur) =>
       res.replaceAll(cur._1, cur._2)
-    } 
+    }
+
+    def trimStart = s.dropWhile(Seq(' ', '\n').contains)
+
+    def trimEnd = s.reverse.dropWhile(Seq(' ', '\n').contains).reverse
+
+    def trimSpaceStart = s.dropWhile(Seq(' ').contains)
+    def trimSpaceEnd = s.reverse.dropWhile(Seq(' ').contains).reverse
+
     def replaceAll(pairs: Pair[String, String]*) = pairs.foldLeft(s) { (res, cur) =>
       res.replaceAll(cur._1, cur._2)
     }
@@ -116,7 +123,7 @@ trait Trim extends control.Debug {
     def removeAll(remove: String) = s.replaceAll(Pattern.quote(remove), "")
 
     /** split and trim each, removing empty strings */
-    def splitTrim(separator: String): Seq[String] = (s.split(separator).collect { case t if !t.trim.isEmpty => t.trim }).toSeq
+    def splitTrim(separator: String): Seq[String] = s.split(separator).collect { case t if !t.trim.isEmpty => t.trim}.toSeq
 
     /** @return the string or empty if the condition is true */
     def unless(condition: Boolean) = if (condition) "" else s
@@ -129,10 +136,9 @@ trait Trim extends control.Debug {
       else        s.split("\n", -1).map(l => offsetLine(l, n)).mkString("\n")
 
     private def offsetLine(l: String, n: Int) =
-      if (n > 0 ) (" "*n + l)
+      if (n > 0 ) " " * n + l
       else        l.takeWhile(_ == ' ').drop(-n).mkString + l.dropWhile(_ == ' ').mkString
   }
-
 }
-private[specs2]
+
 object Trim extends Trim

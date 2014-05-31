@@ -9,7 +9,6 @@ import Quote._
  *
  * They also make sure that the toString or mkString methods don't throw exceptions when being evaluated
  */
-private[specs2]
 trait NotNullStrings {
 
   /**
@@ -115,12 +114,7 @@ trait NotNullStrings {
     }
   }
 
-  /**
-   * display the exception message only if the exception is not null
-   */
-  def causedBy(t: Throwable, separator: String = ": ") =
-    if (t.getMessage == null) ""
-    else separator+t.getMessage
 }
-private[specs2]
+
+
 object NotNullStrings extends NotNullStrings
