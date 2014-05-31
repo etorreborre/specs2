@@ -1,7 +1,7 @@
 package org.specs2
 package reporter
 
-import io.FileSystem
+import io.FileReader
 import scala.xml.NodeSeq
 import java.net.{HttpURLConnection, URL}
 import scalaz.Scalaz
@@ -14,7 +14,7 @@ import html.Htmlx._
 import execute.{Success, Failure, Result}
 import Result.ResultFailureMonoid
 
-trait HtmlUrls extends FileSystem {
+trait HtmlUrls extends FileReader {
 
   /**
    * check all the urls referenced in <a href="..."/> nodes of a html document having a given filePath.

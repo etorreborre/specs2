@@ -3,7 +3,6 @@ package reporter
 
 import mutable._
 import ExecutedSpecificationData._
-import io.MockWriter
 import specification.SpecificationStructure
 
 class MarkdownExportingSpec extends Specification {

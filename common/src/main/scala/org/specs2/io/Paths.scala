@@ -4,12 +4,13 @@ package io
 import java.io.File
 import java.net.URI
 import control.Exceptions._
+import control.Exceptions._
 import text.Trim._
+
 /**
  * This trait provides implicit conversions from strings to a Path object providing path-related functions like
  * setting all the separators as UNIX separators.
  */
-private[specs2]
 trait Paths { outer =>
   implicit def toPath(s: String) = Path(s)
 
@@ -31,6 +32,8 @@ trait Paths { outer =>
   def unrelativeTo(p1: String, p2: String) = if (p1.isRelative) p2.parentDir + p1.fileName else p1
   def fromTop(s: String) = relativeTo(s, s)
   def from(base: String) = (_:String).replaceFirst(s"\\Q$base\\E/", "")
+  def samePath(p1: String, p2: String) = new File(p1).getCanonicalPath == new File(p2).getCanonicalPath
+
 }
 
 case class Path(s: String) {
@@ -43,7 +46,7 @@ case class Path(s: String) {
   def baseDir = Paths.baseDir(s)
   def rebase(dir: String) = Paths.rebase(s, dir)
   def uriEncode = Paths.uriEncode(s)
-  def samePathAs(o: String) = fs.samePath(s, o)
+  def samePathAs(o: String) = Paths.samePath(s, o)
   def isRelative = Paths.isRelative(s)
   def relativeTo(path: String) = Paths.relativeTo(s, path)
   def unrelativeTo(path: String) = Paths.unrelativeTo(s, path)
@@ -51,5 +54,4 @@ case class Path(s: String) {
   def from(base: String) = Paths.from(base)(s)
 }
 
-private[specs2]
 object Paths extends Paths

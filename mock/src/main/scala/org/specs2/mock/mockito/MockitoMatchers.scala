@@ -4,7 +4,6 @@ package mockito
 
 import org.mockito.Matchers
 import org.hamcrest.core.IsAnything
-import io.FileWriter
 import scala.reflect.ClassTag
 
 /**
@@ -50,15 +49,18 @@ trait MockitoMatchers extends ArgThat {
 
 }
 
-import reflect.Generation._
-
-object MockitoMatchersGeneration {
-  def main(args: Array[String]) {
-
-    FileWriter.writeFile("MockitoMatchers.scala",
-      (1 to 22).map { i =>
-          "def anyFunction"+i+typeParameters(i)+" = anArgThat(new IsAnything["+function(i)+"])"
-      }.mkString("\n", "\n", "\n"))
-  }
-
-}
+/**
+ * GENERATION code
+ */
+//import reflect.Generation._
+//
+//object MockitoMatchersGeneration {
+//  def main(args: Array[String]) {
+//
+//    FileWriter.writeFile("MockitoMatchers.scala",
+//      (1 to 22).map { i =>
+//          "def anyFunction"+i+typeParameters(i)+" = anArgThat(new IsAnything["+function(i)+"])"
+//      }.mkString("\n", "\n", "\n"))
+//  }
+//
+//}

@@ -11,7 +11,7 @@ object PathMatchers extends PathMatchers
 
 private[specs2]
 trait PathBaseMatchers { outer =>
-  private[specs2] val fileSystem: FileSystem = org.specs2.io.fs
+  private[specs2] val fileSystem: FileReader = new org.specs2.io.FileReader {}
   import fileSystem._
 
   /** matches if new File(path).exists */   

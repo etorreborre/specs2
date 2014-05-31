@@ -2,7 +2,6 @@ package org.specs2
 package mock
 package mockito
 
-import io.FileWriter
 import text.NotNullStrings._
 import matcher._
 import MatchersImplicits._
@@ -148,6 +147,10 @@ trait FunctionArguments extends FunctionArgumentsLowImplicits {
 
 }
 
+/**
+ * GENERATION CODE
+ */
+/*
 import reflect.Generation._
 
 object FunctionArgumentsGeneration {
@@ -165,3 +168,4 @@ object FunctionArgumentsGeneration {
   }
 
 }
+*/

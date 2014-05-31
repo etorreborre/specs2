@@ -11,6 +11,7 @@ import io._
  * This implementation is faster and simpler than the CompilerDependencyFinder trait
  */
 trait ClassycleDependencyFinder extends DependencyFinder {
+  val fs = FileReader
 
   def getPackageDependents(packageName: String, sourceDir: String, targetDir: String): Seq[Dependency] = {
 

@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import org.specs2.io.{FileSystem, MockFileSystem}
+import org.specs2.io.FileSystem
 import text.LinesContent
 import java.io.File
 
