@@ -148,9 +148,7 @@ object testInterface extends TestInterfaceRunner(Thread.currentThread().getConte
     execute(testInterfaceReporter, createSpecification(arguments(0))).headOption
   }
 
-  private def execute(testInterfaceReporter: Reporter, specification: SpecificationStructure)(implicit args: Arguments = Arguments()): Option[ExecutedSpecification] = {
-    tryo(testInterfaceReporter.report(specification)(args.overrideWith(specification.content.arguments)))(ClassRunner.errorHandler)
-  }
+  private def execute(testInterfaceReporter: Reporter, specification: SpecificationStructure)(implicit args: Arguments = Arguments()): Option[ExecutedSpecification] = ???
 
   private def createSpecification(className: String)(implicit args: Arguments) = SpecificationStructure.createSpecification(className, loader)
 }

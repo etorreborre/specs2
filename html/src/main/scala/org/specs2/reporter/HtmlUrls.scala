@@ -14,7 +14,6 @@ import html.Htmlx._
 import execute.{Success, Failure, Result}
 import Result.ResultFailureMonoid
 
-private[specs2]
 trait HtmlUrls extends FileSystem {
 
   /**
@@ -64,7 +63,7 @@ trait HtmlUrls extends FileSystem {
     tryo {
       val huc = new URL(url).openConnection.asInstanceOf[HttpURLConnection]
       huc.connect()
-      Seq(HttpURLConnection.HTTP_OK, HttpURLConnection.HTTP_MOVED_TEMP).exists(huc.getResponseCode == _)
+      Seq(HttpURLConnection.HTTP_OK, HttpURLConnection.HTTP_MOVED_TEMP).contains(huc.getResponseCode)
     } getOrElse false
   }
 
@@ -73,7 +72,7 @@ trait HtmlUrls extends FileSystem {
     others.keys.exists(o => o.samePathAs(url)) || exists(root.dirPath + url)
 
   /**@return true if the url is an anchor in the document */
-  def isAliveAnchor(url: String, html: NodeSeq) = (html \\ "a").map(a => a.attribute("name").mkString).exists(_ == url.removeFirst("#"))
+  def isAliveAnchor(url: String, html: NodeSeq) = (html \\ "a").map(a => a.attribute("name").mkString).contains(url.removeFirst("#"))
 
   /**
    * This method is used when the html file can't be parsed
@@ -85,14 +84,14 @@ trait HtmlUrls extends FileSystem {
    * look for the anchor in another file to be written to disk by specs2 or a static file already generated
    * @return true if the url is found
    */
-  def isAliveAnchorInFile(url: String, others: Map[String, NodeSeq], root: String) = {
-    val (file, anchor) = (url.split("#")(0), url.split("#")(1))
-    isAliveFile(file, others, root) &&
-      (isAliveAnchor(anchor, others.find { case (k, v) => k.samePathAs(file) }.map(_._2).getOrElse(NodeSeq.Empty)) ||
-        isAliveAnchor(anchor, loadXhtmlFile(root.dirPath+file, silentLoadXhtmlFileReport, sourceErrors = false)) ||
-        isAliveAnchor(anchor, readFile(root.dirPath+file)))
-  }
+  def isAliveAnchorInFile(url: String, others: Map[String, NodeSeq], root: String) = ???
+//  {
+//    val (file, anchor) = (url.split("#")(0), url.split("#")(1))
+//    isAliveFile(file, others, root) &&
+//      (isAliveAnchor(anchor, others.find { case (k, v) => k.samePathAs(file)}.fold(NodeSeq.Empty)(_._2)) ||
+//        isAliveAnchor(anchor, loadXhtmlFile(root.dirPath+file, silentLoadXhtmlFileReport, sourceErrors = false)) ||
+//        isAliveAnchor(anchor, readFile(root.dirPath+file)))
+//  }
 }
 
-private[specs2]
 object HtmlUrls extends HtmlUrls

@@ -49,11 +49,7 @@ class ClassRunner extends Classes with ConsoleOutput with SystemExit {
    *    > implicit val myargs = nocolor
    *    > specs2.run(spec1)
    */
-  def apply(specifications: SpecificationStructure*)(implicit args: Arguments = Arguments()): Seq[ExecutedSpecification] = {
-    specifications flatMap { specification =>
-      tryo(reporter.report(specification)(args.overrideWith(specification.content.arguments)))(errorHandler)
-    }
-  }
+  def apply(specifications: SpecificationStructure*)(implicit args: Arguments = Arguments()): Seq[ExecutedSpecification] = ???
 
   protected def createSpecification(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader)
                                    (implicit args: Arguments = Arguments()) =

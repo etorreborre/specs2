@@ -9,11 +9,7 @@ import main.Arguments
 class TextRunner extends org.specs2.runner.ClassRunner {
   override lazy val reporter: TextReporter = new TextReporter {}
 
-  def apply(fs: Fragments): String = {
-    val specification = new Specification { def is = fs }
-    tryo(reporter.report(specification)(Arguments()))(errorHandler)
-    output
-  }
+  def apply(fs: Fragments): String = ???
 
   /** @return the output of one run */
   protected def output = {

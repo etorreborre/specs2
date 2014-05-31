@@ -140,9 +140,7 @@ object sbtRun extends SbtRunner(Array[String](), Array[String](), Thread.current
     execute(sbtReporter, createSpecification(className)).headOption
   }
 
-  private def execute(sbtReporter: Reporter, specification: SpecificationStructure)(implicit args: Arguments = Arguments()): Option[ExecutedSpecification] = {
-    tryo(sbtReporter.report(specification)(args.overrideWith(specification.content.arguments)))(ClassRunner.errorHandler)
-  }
+  private def execute(sbtReporter: Reporter, specification: SpecificationStructure)(implicit args: Arguments = Arguments()): Option[ExecutedSpecification] = ???
 
   private def createSpecification(className: String)(implicit args: Arguments) = SpecificationStructure.createSpecification(className, loader)
 }

@@ -50,8 +50,7 @@ trait Markdown {
   }
 
   private def parse(html: String)(implicit args: Arguments) = {
-    val f = (e: Exception) => if (args.debugMarkdown) e.printStackTrace
-    tryo(XhtmlParser(Source.fromString("<text>"+html+"</text>")).head.child)(f)
+    tryo(XhtmlParser(Source.fromString("<text>"+html+"</text>")).head.child)
   }
 }
 private[specs2]

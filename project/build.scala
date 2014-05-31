@@ -22,6 +22,7 @@ import com.typesafe.tools.mima.plugin.MimaKeys.previousArtifact
 import xerial.sbt.Sonatype._
 import SonatypeKeys._
 import sbtbuildinfo.Plugin._
+import depends._
 
 object build extends Build {
   type Settings = Def.Setting[_]
@@ -44,13 +45,9 @@ object build extends Build {
     organization := "org.specs2",
     specs2Version in GlobalScope <<= version,
     specs2ShellPrompt,
-    scalazVersion := "7.0.6",
     scalaVersion := "2.10.4")
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
-  lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
-  lazy val paradisePlugin = Seq(compilerPlugin("org.scalamacros" %% "paradise"    % "2.0.0-M7" cross CrossVersion.full), 
-                                               "org.scalamacros" %% "quasiquotes" % "2.0.0-M7")
 
   lazy val aggregateCompile = ScopeFilter(
              inProjects(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock),
@@ -100,9 +97,7 @@ object build extends Build {
   /** MODULES (sorted in alphabetical order) */
   lazy val analysis = Project(id = "analysis", base = file("analysis"),
     settings = Seq(
-      libraryDependencies ++= Seq(
-        "org.scala-lang" % "scala-compiler" % scalaVersion.value,
-        "org.specs2"     % "classycle"      % "1.4.3")) ++
+      libraryDependencies ++= depends.classycle ++ depends.compiler(scalaVersion.value)) ++
     moduleSettings ++
     Seq(name := "specs2-analysis")
   ).dependsOn(common % "test->test", core, matcher, scalacheck % "test")
@@ -110,20 +105,16 @@ object build extends Build {
   lazy val common = Project(id = "common", base = file("common"),
     settings = moduleSettings ++
       Seq(conflictWarning ~= { _.copy(failOnConflict = false) }, // lame
-          libraryDependencies ++= Seq(
-            "org.scalaz"     %% "scalaz-core"       % scalazVersion.value,
-            "org.scalaz"     %% "scalaz-concurrent" % scalazVersion.value,
-            "org.scala-lang" %  "scala-reflect"     % scalaVersion.value,
-            scalacheckLib % "test")) ++
-      Seq(name := "specs2-common")
+          libraryDependencies ++= depends.scalaz ++ depends.reflect(scalaVersion.value) ++ depends.scalacheck.map(_ % "test"),
+          name := "specs2-common")
   )
 
   lazy val core = Project(id = "core", base = file("core"),
     settings = Seq(
-      libraryDependencies ++= Seq(
-        "org.scala-sbt"  % "test-interface" % "1.0" % "optional",
-        mockitoLib % "test",
-        junitLib   % "test")) ++
+      libraryDependencies ++=
+        depends.testInterface.map(_ % "optional") ++
+        depends.mockito.map(_ % "test") ++
+        depends.junit.map(_ % "test")) ++
       moduleSettings ++
       Seq(name := "specs2-core")
   ).dependsOn(matcher, common % "test->test")
@@ -145,11 +136,8 @@ object build extends Build {
 
   lazy val gwt = Project(id = "gwt", base = file("gwt"),
     settings = Seq(
-      libraryDependencies <+= (scalaVersion) { sv =>
-        if (sv.contains("2.11")) "com.chuusai" % "shapeless_2.11.0-M7" % "2.0.0-M1"
-        else                     "com.chuusai" % "shapeless_2.10.3" % "2.0.0-M1"
-      }
-    ) ++ moduleSettings ++
+      libraryDependencies ++= depends.shapeless(scalaVersion.value)) ++
+      moduleSettings ++
       Seq(name := "specs2-gwt")
   ).dependsOn(core, matcherExtra, scalacheck)
 
@@ -160,15 +148,14 @@ object build extends Build {
 
   lazy val junit = Project(id = "junit", base = file("junit"),
     settings = Seq(
-      libraryDependencies ++= Seq(junitLib)) ++
+      libraryDependencies ++= depends.junit) ++
       moduleSettings ++
       Seq(name := "specs2-junit")
   ).dependsOn(core, matcherExtra % "test", mock % "test")
 
   lazy val markdown = Project(id = "markdown", base = file("markdown"),
     settings = Seq(
-     libraryDependencies ++= Seq(
-        "org.pegdown" % "pegdown" % "1.2.1")) ++
+     libraryDependencies ++= depends.pegdown) ++
       moduleSettings ++
       Seq(name := "specs2-markdown")
   ).dependsOn(common, core % "compile->test")
@@ -181,22 +168,22 @@ object build extends Build {
   lazy val matcherExtra = Project(id = "matcher-extra", base = file("matcher-extra"),
     settings = moduleSettings ++ Seq(
       name := "specs2-matcher-extra",
-      libraryDependencies ++= (if (scalaVersion.value.startsWith("2.11")) Nil else paradisePlugin)
+      libraryDependencies ++= depends.paradise(scalaVersion.value)
     )
   ).dependsOn(analysis, matcher, core % "test->test")
 
   lazy val mock = Project(id = "mock", base = file("mock"),
     settings = Seq(
-      libraryDependencies ++= Seq(
-        hamcrestLib,
-        mockitoLib)) ++
+      libraryDependencies ++=
+        depends.hamcrest ++
+        depends.mockito) ++
       moduleSettings ++
       Seq(name := "specs2-mock")
   ).dependsOn(core)
 
   lazy val scalacheck = Project(id = "scalacheck", base = file("scalacheck"),
     settings = Seq(
-      libraryDependencies ++= Seq(scalacheckLib)) ++
+      libraryDependencies ++= depends.scalacheck) ++
       moduleSettings ++
       Seq(name := "specs2-scalacheck")
   ).dependsOn(core)
@@ -206,15 +193,7 @@ object build extends Build {
       Seq(name := "specs2-tests")
   ).dependsOn(core % "compile->compile;test->test", matcherExtra, junit % "test->test", examples % "test->test")
 
-  /**
-   * Main libraries 
-   */
-  lazy val scalacheckLib = "org.scalacheck" %% "scalacheck"   % "1.11.3"
-  lazy val mockitoLib    = "org.mockito"    % "mockito-core"  % "1.9.5"
-  lazy val junitLib      = "junit"          % "junit"         % "4.11"
-  lazy val hamcrestLib   = "org.hamcrest"   % "hamcrest-core" % "1.3"
-
-  lazy val specs2ShellPrompt = shellPrompt in ThisBuild := { state => 
+  lazy val specs2ShellPrompt = shellPrompt in ThisBuild := { state =>
     val name = Project.extract(state).currentRef.project
     (if (name == "specs2") "" else name) + "> " 
   }

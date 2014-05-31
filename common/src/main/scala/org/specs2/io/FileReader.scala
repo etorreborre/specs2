@@ -69,6 +69,31 @@ trait FileReader {
 
   /** @return the path of a File relative to a base file */
   def fromBaseFile(base: File) = (aFile: File) => Paths.from(base.getPath)(aFile.getPath)
+
+
+  /**
+   * @return the xml content of a file using the Xhtml parser
+   *
+   * if the file contains several nodes, it wraps them up in a single artificial node
+   */
+  def loadXhtmlFile(filePath: String, sourceErrors: Boolean = true) =
+    ???
+//  tryo {
+//    val fileContent = readFile(filePath)
+//    val xhtml = fromString("<e>"+fileContent+"</e>")
+//    (parse(xhtml, sourceErrors)\\"e")(0).child.reduceNodes
+//  }
+
+  private[this] def parse(source: Source, sourceErrors: Boolean = true) = {
+    if (sourceErrors) XhtmlParser(source)
+    else new XhtmlParser(source) {
+      override def reportSyntaxError(pos: Int, str: String): Unit = ()
+    }.initialize.document
+  }
+
+//  def silentLoadXhtmlFileReport          = (e: Exception, filePath: String) => ()
+//  private[this] def defaultLoadXhtmlFileReport = (e: Exception, filePath: String) => { scala.Console.println("trying to load: "+filePath+"\n"); e.printStackTrace }
+
 }
 private[specs2]
 object FileReader extends FileReader
