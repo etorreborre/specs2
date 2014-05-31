@@ -3,7 +3,6 @@ package specification
 
 import script._
 import FragmentExecution._
-import runner.TextRunner
 
 class GWTSpec extends script.Specification with GWT with Grouped with StandardDelimitedStepParsers { def is = s2"""
 

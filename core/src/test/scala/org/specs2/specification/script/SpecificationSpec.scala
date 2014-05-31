@@ -2,7 +2,6 @@ package org.specs2
 package specification
 package script
 
-import runner.TextRunner
 import main.Arguments
 
 class SpecificationSpec extends script.Specification with Grouped { def is = s2"""
@@ -69,14 +68,15 @@ class SpecificationSpec extends script.Specification with Grouped { def is = s2"
     }
   }
 
-  def run(text: String, groups: ExamplesGroup*)(implicit arguments: Arguments = Arguments()) = {
-    (new TextRunner) { new script.Specification with Grouped { outer =>
-      def is = arguments ^ nocolor ^ s2"""$text"""
-      (0 until groups.size) foreach { i =>
-        (0 until 22).foreach(j => outer.group(i).example(j) := groups(i).example(j).t())
-      }
-    }.content}.split("\n").toSeq
-  }
+  def run(text: String, groups: ExamplesGroup*)(implicit arguments: Arguments = Arguments()): Seq[String] = ???
+//  {
+//    (new TextRunner) { new script.Specification with Grouped { outer =>
+//      def is = arguments ^ nocolor ^ s2"""$text"""
+//      (0 until groups.size) foreach { i =>
+//        (0 until 22).foreach(j => outer.group(i).example(j) := groups(i).example(j).t())
+//      }
+//    }.content}.split("\n").toSeq
+//  }
 
   trait sampleGroups extends Groups {
     val (g1ok, g2ok) = (new g1 { e1 := ok; e2 := ok }, new g2 { e1 := ok; e2 := ok })

@@ -1,13 +1,14 @@
 package org.specs2
 package data
-import scalaz.{Tree, TreeLoc, Scalaz}
-import Scalaz._
+
+import scalaz.{Tree, TreeLoc}
+import scalaz.syntax.foldable._
+import scalaz.std.stream._
 import Tree._
 
 /**
  * Utility methods for scalaz Trees
  */
-private[specs2]
 trait Trees { outer =>
 
   /**
@@ -20,6 +21,7 @@ trait Trees { outer =>
     def prune(f: Tree[A] => Option[A])(implicit initial: A): Tree[A] = outer.prune(t, f)(initial)
     def flattenSubForests = outer.flattenSubForests(t)
     def flattenLeft       = outer.flattenLeft(t)
+    def size              = t.flatten.size
   }
 
   /**
@@ -80,12 +82,13 @@ trait Trees { outer =>
     def updateLabel(f: T => T) = t.setLabel(f(t.getLabel))
     def addChild(c: T) = t.insertDownLast(leaf(c)).getParent
     def addFirstChild(c: T) = t.insertDownFirst(leaf(c)).getParent
+    def insertDownLast(c: T) = t.insertDownLast(leaf(c))
   }
 
   /**
    * @return the number of nodes in a TreeLoc
    */
-  def size[A](t: TreeLoc[A]) = t.root.toTree.flatten.size
+  def size[A](t: TreeLoc[A]): Int = t.root.toTree.size
 
   /**
    * @return the list of all parent locs from a given TreeLoc
@@ -94,6 +97,14 @@ trait Trees { outer =>
     case Some(p) => parentLocs(p, p +: ps)
     case None    => ps
   }
+
+  implicit def treeLocIsSized[T]: Sized[TreeLoc[T]] = new Sized[TreeLoc[T]] {
+    def size(t: TreeLoc[T]) : Int = t.size
+  }
+
+  implicit def treeIsSized[T]: Sized[Tree[T]] = new Sized[Tree[T]] {
+    def size(t: Tree[T]) : Int = t.size
+  }
 }
-private[specs2]
+
 object Trees extends Trees

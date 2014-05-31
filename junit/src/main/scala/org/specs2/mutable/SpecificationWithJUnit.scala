@@ -9,7 +9,7 @@ import matcher.MatchResult
 /**
  * This class must be inherited to allow a Specification to be executed as a JUnit test
  */
-@RunWith(classOf[JUnitRunner])
+//@RunWith(classOf[JUnitRunner])
 abstract class SpecificationWithJUnit extends Specification {
   override lazy val exampleDepth = 11
   override implicit def matchExample(expression: =>MatchResult[_]) : Example = createExample(expression.toResult, exampleDepth)

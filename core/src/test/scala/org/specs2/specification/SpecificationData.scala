@@ -8,7 +8,7 @@ import collection.Iterablex._
 import specification.StandardFragments._
 import execute.Executable
 
-trait SpecificationData extends Data[Specification] {
+trait SpecificationData  { //extends Data[Specification] {
 
   implicit def arbFragment: Arbitrary[Fragment] = Arbitrary {
     Gen.frequency (
@@ -54,7 +54,7 @@ trait SpecificationData extends Data[Specification] {
       }
       yield new Specification { def is = specTitle.title ^ fragmentOrIncluded.flatten }
     }
-    sizeOf1(genSpecification)
+    Gen.sized( _ => genSpecification(1))
 
   }
 

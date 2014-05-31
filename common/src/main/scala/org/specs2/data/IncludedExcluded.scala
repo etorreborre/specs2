@@ -26,10 +26,10 @@ trait IncludedExcluded[T] {
   def contain(t: T): Boolean  = isIncludedTag(t) && !isExcludedTag(t)
 
   def isIncluded(t: T) = include.isEmpty  || keepFunction(t, include)
-  def isExcluded(t: T) = !exclude.isEmpty && keepFunction(t, exclude)
+  def isExcluded(t: T) = exclude.nonEmpty && keepFunction(t, exclude)
 
   def isIncludedTag(t: T) = include.isEmpty  || containFunction(t, include)
-  def isExcludedTag(t: T) = !exclude.isEmpty && containFunction(t, exclude)
+  def isExcludedTag(t: T) = exclude.nonEmpty && containFunction(t, exclude)
 }
 
 /**
