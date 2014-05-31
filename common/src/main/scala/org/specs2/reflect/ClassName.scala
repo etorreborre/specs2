@@ -1,15 +1,17 @@
 package org.specs2
 package reflect
 
+import control.Exceptions._
 import scala.reflect.NameTransformer
 import control.Exceptions._
 import text.CamelCase._
+import ClassName._
 
 /**
- * Utility reflection methods for Class names
+ * Reflection methods for Class names
  */
-private[specs2]
 trait ClassName { outer =>
+
   /** @return the class name of an instance */
   def simpleClassName(any: AnyRef): String = simpleName(any.getClass)
   /** @return the class name of an instance */
@@ -57,17 +59,17 @@ trait ClassName { outer =>
   /**
    * @return the uncamelcased name of the class (or its parent if it is an anonymous class)
    */
-  def humanName(c: Class[_]): String =
-    if (c.simpleName.contains("$")) {
-      if (c.getSuperclass != null) humanName(c.getSuperclass)
-      else                         c.simpleName
-    }
-    else c.simpleName.camelCaseToWords
+  def humanName(c: Class[_]): String = {
+    val name = simpleName(c)
+    if (name.contains("$") && c.getSuperclass != null) humanName(c.getSuperclass)
+    else name.camelCaseToWords
+  }
 
   implicit class ClassOps(klass: Class[_]) {
     def simpleName = outer.simpleName(klass)
     def humanName  = outer.humanName(klass)
   }
+
 }
-private[specs2]
+
 object ClassName extends ClassName

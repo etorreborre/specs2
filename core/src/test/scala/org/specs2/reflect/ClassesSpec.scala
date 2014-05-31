@@ -1,8 +1,10 @@
 package org.specs2
 package reflect
 
+import org.specs2.matcher.Matcher
 import specification.Grouped
 import Classes._
+import control._
 
 class ClassesSpec extends Specification with Grouped { def is = s2"""
 
@@ -15,11 +17,13 @@ class ClassesSpec extends Specification with Grouped { def is = s2"""
 
   "instantiations" - new g1 {
 
-    e1 := tryToCreateObject[Specification]("org.specs2.reflect.FromClassName") must beSome
-    e2 := tryToCreateObject[Specification]("org.specs2.reflect.FromClassNameWithArg") must beSome
-    e3 := tryToCreateObject[Specification]("org.specs2.reflect.ClassesSpec$FromNestedClass") must beSome
-    e4 := tryToCreateObject[Specification]("org.specs2.reflect.FromObjectName$") must beSome
+    e1 := createInstance[Specification]("org.specs2.reflect.FromClassName", getClass.getClassLoader) must beOk
+    e2 := createInstance[Specification]("org.specs2.reflect.FromClassNameWithArg", getClass.getClassLoader) must beOk
+    e3 := createInstance[Specification]("org.specs2.reflect.ClassesSpec$FromNestedClass", getClass.getClassLoader) must beOk
+    e4 := createInstance[Specification]("org.specs2.reflect.FromObjectName$", getClass.getClassLoader) must beOk
 
+    def beOk[T]: Matcher[Action[T]] = (action: Action[T]) =>
+      action.execute(noLogging).unsafePerformIO.toOption must beSome
   }
 
   class FromNestedClass extends Specification  { def is = ok }
