@@ -10,7 +10,9 @@ import scalaz.syntax.monad._
 import scalaz.effect._
 
 /**
- * Transformer version of Status.
+ * Transformer version of Status
+ *
+ * Credits to @markhibberd
  */
 case class StatusT[F[+_], +A](run: F[Status[A]]) {
   def map[B](f: A => B)(implicit F: Functor[F]): StatusT[F, B] =

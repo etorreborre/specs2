@@ -1,4 +1,5 @@
-package org.specs2.control
+package org.specs2
+package control
 
 import scala.util.control.NonFatal
 import scalaz.{\/, \&/, Equal, Monad}, \&/._, \/._
@@ -20,26 +21,26 @@ import scalaz.syntax.id._
  *  - useful methods for manipulating error messages.
  *  - better pattern matching support.
  *  - and again, scala.
+ *
+ * Credits to @markhibberd
  */
 sealed trait Status[+A] {
-  @inline final def fold[X](
-                             ok: A => X,
-                             error: These[String, Throwable] => X
-                             ): X = this match {
-    case Ok(a)    => ok(a)
-    case Ko(e) => error(e)
-  }
+  @inline final def fold[X](ok: A => X,
+                            error: These[String, Throwable] => X): X =
+    this match {
+      case Ok(a)    => ok(a)
+      case Ko(e) => error(e)
+    }
 
-  @inline final def foldAll[X](
-                                ok: A => X,
-                                fail: String => X,
-                                exception: Throwable => X,
-                                both: (String, Throwable) => X
-                                ): X = fold(ok, _ match {
-    case This(m) => fail(m)
-    case That(e) => exception(e)
-    case Both(m, e) => both(m, e)
-  })
+  @inline final def foldAll[X](ok: A => X,
+                               fail: String => X,
+                               exception: Throwable => X,
+                               both: (String, Throwable) => X): X =
+    fold(ok, _ match {
+      case This(m) => fail(m)
+      case That(e) => exception(e)
+      case Both(m, e) => both(m, e)
+    })
 
   def map[B](f: A => B): Status[B] =
     flatMap(f andThen Status.ok[B])

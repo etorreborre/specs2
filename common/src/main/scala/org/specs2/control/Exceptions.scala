@@ -3,7 +3,6 @@ package control
 
 import scalaz.{-\/, \/-, \/}
 
-
 /**
  * This trait provides methods to catch exceptions and transform them into values which can be passed to
  * further computations.
@@ -33,7 +32,7 @@ trait Exceptions {
    * If the expression throws an Exception a function f is used to return a value
    * of the expected type.
    */
-  def tryOr[T](a: =>T)(implicit f: Exception => T): T =
+  def tryOr[T](a: =>T)(f: Exception => T): T =
     trye(a)(f).fold(identity, identity)
 
   /**
@@ -56,7 +55,7 @@ trait Exceptions {
    * try to evaluate an expression and return it if nothing fails.
    * return ko otherwise
    */
-  def tryOrElse[T](a: =>T)(ko: T): T = tryo(a).map(identity).getOrElse(ko)
+  def tryOrElse[T](a: =>T)(ko: T): T = tryo(a).fold(ko)(identity)
   /**
    * try to evaluate an expression and return it in an Option if nothing fails.
    * return None otherwise
@@ -68,7 +67,7 @@ trait Exceptions {
    * return ko otherwise
    */
   def tryMap[T, S](a: =>T)(ok: S)(ko: S): S =
-    tryo(a).map(x => ok).getOrElse(ko)
+    tryo(a).fold(ko)(_ => ok)
 
   /**
    * try to evaluate an expression and return true if nothing fails.

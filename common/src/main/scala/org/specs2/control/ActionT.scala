@@ -21,6 +21,7 @@ import scalaz.concurrent.Task
  *  - The formulation lets us plug in a few things together to handle
  *    IO and other values of F, whilst keeping some level of sanity.
  *
+ * Credits to @markhibberd
  */
 case class ActionT[F[+_], W, R, +A](runT: R => StatusT[({ type l[+a] = WriterT[F, W, a] })#l, A]) {
   def map[B](f: A => B)(implicit W: Monoid[W], F: Functor[F]): ActionT[F, W, R, B] =
