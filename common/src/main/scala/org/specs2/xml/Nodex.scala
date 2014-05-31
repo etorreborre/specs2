@@ -6,7 +6,6 @@ import scala.xml._
 /**
  * Extension methods for NodeSeqs and Nodes
  */
-private[specs2]
 trait Nodex { outer =>
   /**
    * This class adds more methods to the NodeSeq class
@@ -62,5 +61,5 @@ trait Nodex { outer =>
   implicit def pairToUnprefixedAttribute(pair: Tuple2[Any, Any]) = new UnprefixedAttribute(pair._1.toString, pair._2.toString, Null)
 
 }
-private[specs2]
+
 object Nodex extends Nodex
