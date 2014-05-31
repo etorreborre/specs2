@@ -1,10 +1,6 @@
 package org.specs2
 package control
 
-/**
- * This trait contains helper functions for stacktraces
- */
-private[specs2]
 trait Stacktraces {
   /**
    * This method is used to determine for example if the JUnit runner is executed from Maven or within Eclipse.
@@ -22,5 +18,4 @@ trait Stacktraces {
   def isFromClass(classNamePredicate: String => Boolean, st: Seq[StackTraceElement]): Boolean = st.exists(t => classNamePredicate(t.getClassName))
 }
 
-private[specs2]
 object Stacktraces extends Stacktraces
