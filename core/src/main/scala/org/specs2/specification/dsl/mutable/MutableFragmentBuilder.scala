@@ -15,7 +15,7 @@ trait MutableFragmentBuilder extends FragmentBuilder
 
   private[specs2] val specFragments = new scala.collection.mutable.ListBuffer[Fragment]
 
-  def fragments = (env: Env) => {
+  def specificationFragments = (env: Env) => {
     val content = {
       fragmentFactory.Break +: // add a line break just after the specification title
       replayFragments(env).toSeq
@@ -23,7 +23,8 @@ trait MutableFragmentBuilder extends FragmentBuilder
     Fragments(Process.emitAll(content).toSource)
   }
 
-  def structure = (env: Env) => SpecStructure(header, arguments, fragments(env))
+  def specificationStructure = (env: Env) =>
+    SpecStructure(header, arguments, specificationFragments(env))
 
   private def replayFragments(environment: Env) = {
     env = environment

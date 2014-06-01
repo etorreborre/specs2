@@ -3,10 +3,11 @@ package specification
 
 import matcher._
 import _root_.org.specs2.mutable.{Specification => Spec}
+import org.specs2.specification.core.{Fragment, Fragments}
 
 class AutoExamplesSpec extends Specification with DataTables { def is = s2"""
 
- The trimCode function should
+ The trimExpression function should
    remove formatting fragments                                                               $e1
    remove backticks
      with no parameter list                                                                  $e2
@@ -23,31 +24,31 @@ class AutoExamplesSpec extends Specification with DataTables { def is = s2"""
            "success ^"                !! "success"                 |
            "success ^end^"            !! "success"                 |
            "success ^ end"            !! "success"                 |
-           "{ success } ^ end"        !! "success"                 | { (code, result) => trimCode(code) must_== result }
+           "{ success } ^ end"        !! "success"                 | { (code, result) => trimExpression(code) must_== result }
 
-  def e2 = trimCode("`method`") must_== "method"
+  def e2 = trimExpression("`method`") must_== "method"
 
-  def e3 = trimCode("`method`(p1)") must_== "method"
+  def e3 = trimExpression("`method`(p1)") must_== "method"
 
-  def e4 = trimCode("`method`(p1, p2)") must_== "method"
+  def e4 = trimExpression("`method`(p1, p2)") must_== "method"
 
   def dt1 = firstExampleDescription("text" ^ datatableOk) must be empty
 
   def m1 = {
     val spec = new Spec with DataTables {
-      { 1 must_== 1 }.eg
+      eg { 1 must_== 1 }
 
-      { true }.eg
+      eg { true }
 
-      { success }.eg
+      eg { success }
 
-      { datatableOk }.eg
+      eg { datatableOk }
     }
-    spec.content.examples must have size(4)
+    spec.is.fragments.fragments.filter(Fragment.isExample) must have size(4)
   }
 
   def firstExampleDescription(fs: Fragments) =
-    fs.fragments.collect { case e: Example => e }.head.desc.toString
+    fs.fragments.filter(Fragment.isExample).head.description.show
 
   def datatableOk =
     "a"   | "b" | "c" |>

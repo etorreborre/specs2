@@ -4,6 +4,8 @@ package specification
 import execute._
 import java.io.PrintStream
 
+import scalaz.Monad
+
 /**
  * The Around trait can be inherited by classes which will
  * execute some code inside the around method provided by the context.
@@ -31,3 +33,24 @@ trait Around extends Context { outer =>
     }
   }
 }
+
+/**
+ * A Fixture can be implicitly passed to a set of examples taking a function as an input.
+ *
+ * It can effectively act as an Outside and an Around context
+ */
+trait Fixture[T] {
+  def apply[R : AsResult](f: T => R): Result
+}
+
+object Fixture {
+  implicit def fixtureHasMonad: Monad[Fixture] = new Monad[Fixture] {
+    def point[A](a: =>A) = new Fixture[A] {
+      def apply[R : AsResult](f: A => R): Result = AsResult(f(a))
+    }
+    def bind[A, B](fixture: Fixture[A])(fa: A => Fixture[B]): Fixture[B] = new Fixture[B] {
+      def apply[R : AsResult](fb: B => R): Result = fixture((a: A) => fa(a)(fb))
+    }
+  }
+}
+

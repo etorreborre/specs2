@@ -54,10 +54,10 @@ class TagSpec extends Specification with DataTables { def is = s2"""
     }
   }
 
-  def remove1 = Tag("1", "2", "3").removeNames(Seq("2")) must_== Tag("1", "3")
+  def remove1 = data.Tag("1", "2", "3").removeNames(Seq("2")) must_== Tag("1", "3")
 
-  val tag1: NamedTag = Tag("1")
-  val tag2: NamedTag = Tag("2")
+  val tag1: NamedTag = data.Tag("1")
+  val tag2: NamedTag = data.Tag("2")
 
   val allTags = Seq(tag1, tag2, AlwaysTag, AlwaysWhenNoIncludeTag)
 

@@ -49,8 +49,8 @@ trait AllExpectations extends StoredExpectations with FragmentsFactory with Spec
    * we force the specification to be isolated if it's not sequential or already isolated.
    * this is important because when an example runs, its results are being stored into a shared list
    */
-  override def structure = (env: Env) => {
-    val parent = super.structure(env)
+  abstract override def is = {
+    val parent = super.is
     val arguments = parent.arguments
     if (arguments.isolated || arguments.sequential) parent
     else parent.copy(arguments = args(isolated = true))

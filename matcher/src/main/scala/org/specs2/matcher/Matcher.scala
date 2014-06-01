@@ -11,7 +11,7 @@ import text.Sentences._
 import text.NotNullStrings._
 import reflect.ClassName._
 import MatchResultMessages._
-import time.Duration
+import scala.concurrent.duration._
 import MatchResultLogicalCombinators._
 
 /**

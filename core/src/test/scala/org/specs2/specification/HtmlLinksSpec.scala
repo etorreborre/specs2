@@ -1,6 +1,8 @@
 package org.specs2
 package specification
 
+import core._
+
 class HtmlLinksSpec extends Specification { def is = s2"""
 
   Html links referencing specifications can be introduced
@@ -29,12 +31,13 @@ class HtmlLinksSpec extends Specification { def is = s2"""
   ${ a("learn" ~ ("How to", howTo, "do it", "yes")) === "learn <a href='HowTo.html' tip='yes'>How to</a> do it" }
   """
 
-  def a(fs: Fragments) = {
-    val link = fs.linked.link.get
-    s"""${link.beforeText} <a href='${link.url}'${if (link.tip.isEmpty) "" else s" tip='${link.tip}'"}>${link.linkText}</a> ${link.afterText}""".trim
+  def a(f: Fragment) = f match {
+    case Fragment(link @ SpecificationLink(_,_,_,_,_), _, _) =>
+      s"""${link.before} <a href='${link.url}'${if (link.tooltip.isEmpty) "" else s" tip='${link.tooltip}'"}>${link.linkText}</a> ${link.after}""".trim
+    case other => "not a link"
   }
 
-  lazy val userGuide = new Specification { def is = "User guide".title.urlIs("test.UserGuide.html") }
+  lazy val userGuide = new Specification { def is = "User guide".title }
 
   // a specification with no title
   class HowTo extends Specification { def is = "" }

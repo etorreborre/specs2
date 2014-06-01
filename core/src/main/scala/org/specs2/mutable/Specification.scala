@@ -1,8 +1,8 @@
 package org.specs2
 package mutable
 
-import specification.mutable._
 import specification.core.mutable.SpecificationStructure
+import specification.mutable._
 import specification.dsl.mutable.SpecificationCreation
 
 /**

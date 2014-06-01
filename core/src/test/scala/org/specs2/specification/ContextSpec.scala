@@ -2,12 +2,15 @@ package org.specs2
 package specification
 
 import io._
+import org.specs2.specification.core.Fragments
+import org.specs2.specification.create.FragmentsFactory
+import org.specs2.specification.dsl.FragmentDsl
 import sys._
 import execute._
 import matcher._
 import _root_.org.specs2.mutable.{Around => MAround, Before => MBefore, After => MAfter, Specification => Spec}
 
-class ContextSpec extends Specification with ResultMatchers with Groups with FragmentExecution { def is = s2"""
+class ContextSpec extends Specification with ResultMatchers with Groups { def is = s2"""
 
  It is sometimes necessary to provide functions to "prepare" the specification before executing the Fragments
  and clean it up afterwards. This may be for example:
@@ -26,8 +29,6 @@ class ContextSpec extends Specification with ResultMatchers with Groups with Fra
     * Before
     * After
     * Around
-    * Outside
-    * BeforeAfter or BeforeAfterAround or AroundOutside for combined functionality
 
  The Before trait can be used to execute methods before Fragments
    the before method is executed before a first example                                                    ${g1().e1}
@@ -62,35 +63,8 @@ class ContextSpec extends Specification with ResultMatchers with Groups with Fra
    the first example will execute                                                                          ${g2().e4}
    but it will be reported as an error                                                                     ${g2().e5}
 
- Any result can be wrapped in an After context with an implicit                                            ${g2().e6}
-
  The Around trait can be used to
-   execute the example inside a user provided context                                                      ${g2().e7}
-
- The Outside trait can be used to
-   execute the example inside a user provided function                                                     ${g2().e8}
-   get a proper error if the context preparation fails                                                     ${g2().e9}
-
- The AroundOutside trait can be used to
-   execute the example inside a user provided function, with some code around                              ${g2().e10}
-
- The BeforeAfter trait can be used to
-   execute a method before and after each example                                                          ${g2().e11}
-
- The BeforeAfterAround trait can be used to
-   execute a method before, around and after the first example                                             ${g2().e12}
-
- The Before After Around traits can be composed to create more complex setups
-   before compose before2                                                                                  ${g3().e1}
-   before then before2                                                                                     ${g3().e2}
-   after compose after2                                                                                    ${g3().e3}
-   after then after2                                                                                       ${g3().e4}
-   beforeAfter compose before2After2                                                                       ${g3().e5}
-   beforeAfter then before2After2                                                                          ${g3().e6}
-   around compose around2                                                                                  ${g3().e7}
-   around then around2                                                                                     ${g3().e8}
-   beforeAfterAround compose before2After2Around                                                           ${g3().e9}
-   beforeAfterAround then before2After2Around2                                                             ${g3().e10}
+   execute the example inside a user provided context                                                      ${g2().e6}
 
  An Action can be used to create Step fragments containing an action to execute:
    val beforeSpec = new Action
@@ -99,14 +73,6 @@ class ContextSpec extends Specification with ResultMatchers with Groups with Fra
    that action will execute and return a result                                                            ${g4().e1}
    if it executes ok, nothing is printed, it is a silent Success                                           ${g4().e2}
    otherwise, it is reported as an Error                                                                   ${g4().e3}
-
- A context can be passed applied to many fragments
-   for an acceptance spec                                                                                  ${g5().e1}
-   for a mutable spec                                                                                      ${g5().e2}
-   for an outside context and an acceptance spec                                                           ${g5().e3}
-   for an outside context and a mutable spec                                                               ${g5().e4}
-   for an aroundOutside context and an acceptance spec                                                     ${g5().e5}
-   for a fixture and an acceptance spec                                                                    ${g5().e6}
 
  In a mutable spec
    the before code must be called before the body code                                                     ${g6().e1}
@@ -138,58 +104,13 @@ class ContextSpec extends Specification with ResultMatchers with Groups with Fra
     e3  := executeBodies(ex1FailAfter).head must beFailing
     e4  := executing(ex1_afterFail).prints("e1")
     e5  := executeBodies(ex1_beforeFail).map(_.message) must_== List("error")
-    e6  := executing(ex1ImplicitAfter).prints("e1", "after")
-    e7  := executing(ex1Around).prints("around", "e1")
-    e8  := executing(ex1Outside).prints("outside", "e1")
-    e9  := executeBodies(ex1OutsideFail).map(_.message) must_== List("error")
-    e10 := executing(ex1AroundOutside).prints("around", "outside", "e1")
-    e11 := executing(ex1BeforeAfter).prints("before", "e1", "after")
-    e12 := executing(ex1BeforeAfterAround).prints("before", "around", "e1", "after")
-  }
-
-  "compose" - new g3 with FragmentsExecution {
-    e1  := executing(ex1BeforeComposeBefore2).prints("before2", "before", "e1")
-    e2  := executing(ex1BeforeThenBefore2).prints("before", "before2", "e1")
-    e3  := executing(ex1AfterComposeAfter2).prints("e1", "after2", "after")
-    e4  := executing(ex1AfterThenAfter2).prints("e1", "after", "after2")
-    e5  := executing(ex1BeforeAfterComposeBefore2After2).prints("before2", "before", "e1", "after2", "after")
-    e6  := executing(ex1BeforeAfterThenBefore2After2).prints("before", "before2", "e1", "after", "after2")
-    e7  := executing(ex1AroundComposeAround2).prints("around2", "around", "e1")
-    e8  := executing(ex1AroundThenAround2).prints("around", "around2", "e1")
-    e9  := executing(ex1BeforeAfterAroundComposeBefore2After2Around2).
-         prints("before2", "before", "around2", "around", "e1", "after2", "after")
-    e10 := executing(ex1BeforeAfterAroundThenBefore2After2Around2).
-                   prints("before", "before2", "around", "around2", "e1", "after", "after2")
+    e6  := executing(ex1Around).prints("around", "e1")
   }
 
   "other context" - new g4 with FragmentsExecution {
     e1 := executing(firstThenEx1).prints("first", "e1")
     e2 := executeBodies(silentFirstThenEx1).map(_.message) must_== List("success")
     e3 := executeBodies(failingFirstThenEx1).map(_.message) must_== List("error", "success")
-  }
-
-  "applyEach" - new g5 with FragmentsExecution {
-    e3 := {
-      val spec = new Specification {
-        implicit def outside1 = outsideInt
-        def is = "e1" ! { (s: Int) => s must_== s }
-      }
-      executing(spec.content).prints("outside")
-    }
-    e4 := {
-      val spec = new Spec {
-        implicit def outside1 = outsideInt
-        "e1" in { (s: Int) => s must_== s }
-      }
-      executing(spec.content).prints("outside")
-    }
-    e6 := {
-      val spec = new Spec {
-        implicit def fixture1 = fixtureInt
-        "e1" in { s: Int => s must_== s }
-      }
-      executing(spec.content).prints("fixture")
-    }
   }
 
   "mutable contexts" - new g6 with FragmentsExecution with MustThrownExpectations {
@@ -200,7 +121,10 @@ class ContextSpec extends Specification with ResultMatchers with Groups with Fra
   }
 
   trait FragmentsExecution extends StringOutput with ContextData {
-    def executing(exs: Fragments): Executed = Executed(executeBodies(exs).toList)
+    def executeBodies(exs: Fragments) = exs.fragments.map(_.executionResult)
+
+    def executing(exs: Fragments): Executed = Executed(exs.fragments.map(_.executionResult))
+
     case class Executed(results: Seq[Result]) {
       def prints(ms: String*): Result = {
         val msgs = messages.toList
@@ -209,7 +133,8 @@ class ContextSpec extends Specification with ResultMatchers with Groups with Fra
     }
   }
 }
-trait ContextData extends StandardResults with FragmentsBuilder with ContextsForFragments with Contexts {
+trait ContextData extends StandardResults with FragmentsFactory with ContextsForFragments with FragmentDsl {
+  val factory = fragmentFactory; import factory._
 
   def okValue(name: String) = { println(name); success }
   def ok1 = okValue("e1")
@@ -220,13 +145,6 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
   def ex1BeforeComposeBefore2 = "ex1" ! (before1 compose before2)(ok1)
   def ex1BeforeThenBefore2 = "ex1" ! (before1 andThen before2)(ok1)
   def ex1AfterComposeAfter2 = "ex1" ! (after1 compose after2)(ok1)
-  def ex1AfterThenAfter2 = "ex1" ! (after1 andThen after2)(ok1)
-  def ex1BeforeAfterComposeBefore2After2 = "ex1" ! (beforeAfter compose before2After2)(ok1)  
-  def ex1BeforeAfterThenBefore2After2 = "ex1" ! (beforeAfter andThen before2After2)(ok1)
-  def ex1AroundComposeAround2 = "ex1" ! (around1 compose around2)(ok1)
-  def ex1AroundThenAround2 = "ex1" ! (around1 andThen around2)(ok1)
-  def ex1BeforeAfterAroundComposeBefore2After2Around2 = "ex1" ! (beforeAfterAround compose before2After2Around2)(ok1)
-  def ex1BeforeAfterAroundThenBefore2After2Around2 = "ex1" ! (beforeAfterAround andThen before2After2Around2)(ok1)
 
   def ex1_beforeFail = "ex1" ! beforeWithError(ok1) 
   def ex1_beforeSkipped = "ex1" ! beforeWithSkipped(ok1)
@@ -259,25 +177,15 @@ trait ContextData extends StandardResults with FragmentsBuilder with ContextsFor
     def around[R : AsResult](r: =>R) = { println("before"); try { AsResult(r) } finally { println("after") }}
   }
 
-
-  def ex1ImplicitAfter = "ex1" ! ok1.after(println("after"))
-
   def ex1Around = "ex1" ! around1(ok1)
-  def ex1Outside = "ex1" ! outside((s:String) => ok1)
-  def ex1OutsideFail = "ex1" ! outsideWithError((s:String) => ok1)
-  def ex1AroundOutside = "ex1" ! aroundOutside((s:Int) => ok1)
-  def ex1BeforeAfter = "ex1" ! beforeAfter(ok1)
-  def ex1BeforeAfterAround = "ex1" ! beforeAfterAround(ok1)
-  
+
   def firstThenEx1 = Step(println("first")) ^ ex1
   def silentFirstThenEx1 = Step("first") ^ ex1
   def failingFirstThenEx1 = Step { error("error"); 1 } ^ ex1
 }
+
 trait ContextsForFragments extends StringOutput {
-  object before1 extends Before with Apply {
-    def before = println("before")
-  }
-  object beforeEach extends BeforeEach {
+  object before1 extends Before {
     def before = println("before")
   }
   object before2 extends Before {
@@ -313,44 +221,10 @@ trait ContextsForFragments extends StringOutput {
   object around2 extends Around {
     def around[T : AsResult](a: =>T) = { println("around2"); AsResult(a) }
   }
-  object outside extends Outside[String] {
-    def outside = { println("outside"); "string" }
-  }
-  object outsideInt extends Outside[Int] {
-    def outside = { println("outside"); 1 }
-  }
-  object outsideWithError extends Outside[String] with StringOutput {
-    def outside = { error("error"); "ok" }
-  }
-  object aroundOutside extends AroundOutside[Int] {
-    def outside = { println("outside"); 1 }
-    def around[T : AsResult](a: =>T) = {
-      println("around")
-      AsResult(a)
-    }
-  }
   object fixtureInt extends Fixture[Int] {
     def apply[R : AsResult](f: Int => R) = {
       println("fixture")
       AsResult(f(1))
     }
-  }
-  object beforeAfter extends BeforeAfter {
-    def before = println("before")
-    def after = println("after")
-  }
-  object before2After2 extends BeforeAfter {
-    def before = println("before2")
-    def after = println("after2")
-  }
-  object beforeAfterAround extends BeforeAfterAround {
-    def before = println("before")
-    def after = println("after")
-    def around[T : AsResult](a: =>T) = { println("around"); AsResult(a) }
-  }
-  object before2After2Around2 extends BeforeAfterAround {
-    def before = println("before2")
-    def after = println("after2")
-    def around[T : AsResult](a: =>T) = { println("around2"); AsResult(a) }
   }
 }

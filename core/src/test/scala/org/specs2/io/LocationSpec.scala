@@ -2,10 +2,10 @@ package org.specs2
 package io
 
 import mutable.Specification
+import org.specs2.specification.core.{Fragment, SpecificationStructure}
+import specification._
 import user.io.{LocationSpecification, LocationUnitSpecification}
-import specification.Fragments._
-import specification.{SpecificationStructure, Fragment}
-import scala.io.Source
+import Fragment._
 
 class LocationSpec extends Specification {
   "A unit specification must have correct locations for its fragments" >> {
@@ -58,26 +58,14 @@ class LocationSpec extends Specification {
     "for the br element" >> {
       brAt(index = 0) === 10
     }
-    "for the end element" >> {
-      endAt(index = 0) === 16
-    }
   }
 
-  "The FragmentsFragment::def ^(t: String) = fs add Text(t) method must be at line 12. Check the FragmentsFragment file and fix the Location.scala code" >> {
-    val lines = Source.fromFile("core/src/main/scala/org/specs2/specification/FragmentsFragment.scala").getLines.toSeq
-    // line 12 is index 11
-    lines.zipWithIndex.collect { case (line, 11) => line }.headOption must beSome.which { line: String =>
-      line must contain("def ^(t: String) = fragments add Text(t)")
-    }
-  }
+  def textAt(index: Int)(implicit spec: SpecificationStructure) = fragmentLine(isText, index)
+  def exampleAt(index: Int)(implicit spec: SpecificationStructure) = fragmentLine(isExample, index)
+  def brAt(index: Int)(implicit spec: SpecificationStructure) = fragmentLine(isFormatting, index)
 
-  def textAt(index: Int)(implicit spec: SpecificationStructure) = fragmentLine(isSomeText, index)
-  def exampleAt(index: Int)(implicit spec: SpecificationStructure) = fragmentLine(isAnExample, index)
-  def brAt(index: Int)(implicit spec: SpecificationStructure) = fragmentLine(isABr, index)
-  def endAt(index: Int)(implicit spec: SpecificationStructure) = fragmentLine(isAnEnd, index)
+  def fragmentLine(selector: Function[Fragment, Boolean], index: Int)(implicit spec: SpecificationStructure) =
+    fragments(spec).filter(selector).apply(index).location.lineNumber(arguments.traceFilter).getOrElse(-1)
 
-  def fragmentLine(selector: PartialFunction[Fragment, Fragment], index: Int)(implicit spec: SpecificationStructure) =
-    fragments.collect(selector).apply(index).location.lineNumber
-
-  def fragments(implicit spec: SpecificationStructure) = spec.content.fragments
+  def fragments(implicit spec: SpecificationStructure) = spec.is.fragments.fragments
 }

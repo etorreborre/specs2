@@ -58,6 +58,30 @@ trait FragmentDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDsl
     def ^(other: SpecStructure) : SpecStructure = structure ^ other.fragments
   }
 
+  // allow writing: def is = "my spec".title
+  implicit def specHeaderAsStructure(header: SpecHeader): SpecStructure =
+    SpecStructure(header, Arguments(), Fragments())
+
+  // allow writing: def is = ""
+  implicit def stringAsSpecStructure(s: String): SpecStructure =
+    SpecHeader(getClass) ^ s
+
+  // allow writing: def is = ok
+  implicit def resultAsSpecStructure[R : AsResult](r: =>R): SpecStructure =
+    SpecHeader(getClass) ^ Fragment(NoText, Execution.result(r))
+
+  // allow writing: def is = "test" ! ok
+  implicit def fragmentAsSpecStructure(f: Fragment): SpecStructure =
+    SpecHeader(getClass) ^ f
+
+  // allow writing: def is = "a" ! ok ^ "b" ! ok
+  implicit def fragmentsAsSpecStructure(fs: Fragments): SpecStructure =
+    SpecHeader(getClass) ^ fs
+
+  def section(names: String*)   = fragmentFactory.Section(names:_*)
+  def asSection(names: String*) = fragmentFactory.AsSection(names:_*)
+  def tag(names: String*)       = fragmentFactory.Tag(names:_*)
+  def taggedAs(names: String*)  = fragmentFactory.TaggedAs(names:_*)
 }
 
 object FragmentDsl extends FragmentDsl

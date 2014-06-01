@@ -12,7 +12,7 @@ import scalaz.stream.Process
 import Process.{Process1, eval}
 
 case class SpecStructure(header: SpecHeader, arguments: Arguments, fragments: Fragments) {
-  def title = header.title
+
   def contents = contentsLens.get(this)
   def map(f: Fragments => Fragments): SpecStructure                            = fragmentsLens.modify(this)(f)
   def |>(p: Process1[Fragment, Fragment]): SpecStructure                       = fragmentsLens.modify(this)(_ |> p)
@@ -20,7 +20,7 @@ case class SpecStructure(header: SpecHeader, arguments: Arguments, fragments: Fr
   def withPreviousResults(env: Env): SpecStructure                             = |>(withPreviousResult(header.className, env))
 
   def specClassName = header.className
-  def name = title.getOrElse(header.simpleName)
+  def name = header.title.getOrElse(header.simpleName)
 }
 
 object SpecStructure {

@@ -74,8 +74,10 @@ case class Location(trace: Array[StackTraceElement] = (new Exception).getStackTr
   def classLocation(filter: StackTraceFilter) = traceLocation(filter).map(_.classLocation)
   /** the class name, file Name and the line number where the Throwable was created */
   def fullLocation(filter: StackTraceFilter) = traceLocation(filter).map(_.fullLocation)
+  /** the line number */
+  def lineNumber(filter: StackTraceFilter) = traceLocation(filter).headOption.map(_.lineNumber)
 
-  override def toString = traceLocation(NoStackTraceFilter).map(_.fullLocation).getOrElse("<empty filtered stacktrace>")
+  override def toString = traceLocation(NoStackTraceFilter).fold("<empty filtered stacktrace>")(_.fullLocation)
 
   override def equals(a: Any) = a match {
     case l: Location => l.toString == this.toString

@@ -10,7 +10,11 @@ import scalaz.std.anyVal._
 import scalaz.syntax.traverse._
 import scalaz.std.list._
 
-trait SpecificationStructure {
+trait ContextualSpecificationStructure {
+  def structure: Env => SpecStructure
+}
+
+trait SpecificationStructure extends ContextualSpecificationStructure {
   def is: SpecStructure
   def structure = (env: Env) => is.withPreviousResults(env).map(fs => map(fs))
   def fragments = (env: Env) => structure(env).fragments

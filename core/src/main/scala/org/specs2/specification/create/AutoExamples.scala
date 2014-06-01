@@ -17,7 +17,7 @@ trait AutoExamples extends FragmentsFactory {
   def createExample[T](expression: String, code: =>T, asResult: AsResult[T]): Fragment =
     fragmentFactory.Example(Code(trimExpression(expression)), code)(asResult)
 
-  private def trimExpression(call: String) = {
+  private[specs2] def trimExpression(call: String) = {
     val expression = Trimmed(call).removeStart("eg")
     if (containsAccolade(expression)) expression.removeFirst(s"\\{").removeLast(s"\\}")
     else                              expression

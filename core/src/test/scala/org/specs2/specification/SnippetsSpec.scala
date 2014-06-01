@@ -3,8 +3,9 @@ package specification
 
 import matcher.DataTables
 import execute.Snippet._
+import core._
 
-class SnippetsSpec extends script.Specification with Snippets with DataTables with Grouped { def is = s2""" $sequential
+class SnippetsSpec extends script.Specification with Snippets with DataTables with Grouped { def is = sequential ^ s2"""
 
  These are examples on how to use the various snippet methods
 
@@ -51,7 +52,7 @@ Robustness
 
   "snippets capture" - new group {
 
-  eg := { s2""" code: ${ snippet { got {1 + 1} } } """.texts(1).t.trim === "`got {1 + 1}`" }
+  eg := { s2""" code: ${ snippet { got {1 + 1} } } """.texts(1) === "`got {1 + 1}`" }
   def got[T](t: T) = t
 
 
@@ -60,7 +61,7 @@ got {
   var n = 0
   n = 1
 }
-} } """.texts(1).t.trim ===
+} } """.texts(1) ===
     """|```
        |got {
        |  var n = 0
@@ -75,7 +76,7 @@ var n = 0
 n = 1
 // 8<--
 n = 0
-} }""".texts(1).t.trim ===
+} }""".texts(1).trim ===
     """|```
        |n = 1
        |```""".stripMargin
@@ -89,13 +90,13 @@ n = 1
 n = 0
 // 8<--
 var i = 0
-  } }""".texts(1).t.trim ===
+  } }""".texts(1) ===
     """```
       |n = 1
       |var i = 0
       |```""".stripMargin
 
-   eg := s2""" code ${snippet { "e1" ! { ok } /**/;1/**/} }""".texts(1).t.trim === """`"e1" ! { ok }`"""
+   eg := s2""" code ${snippet { "e1" ! { ok } /**/;1/**/} }""".texts(1) === """`"e1" ! { ok }`"""
  }
   "offsets" - new group {
     eg := s2""" code: ${ snippet {
@@ -105,7 +106,7 @@ var n = 0
 n = 1
 // 8<--
 n = 0
-  }.offsetIs(2) }""".texts(1).t.trim ===
+  }.offsetIs(2) }""".texts(1) ===
     """|```
        |  n = 1
        |```""".stripMargin
@@ -117,7 +118,7 @@ n = 0
   n = 1
   // 8<--
   n = 0
-  }.offsetIs(-2) }""".texts(1).t.trim ===
+  }.offsetIs(-2) }""" ===
     """|```
        |n = 1
        |```""".stripMargin
@@ -125,7 +126,7 @@ n = 0
   }
   "trimming" - new group {
     eg := {
-      "code"                   || "result" |>
+        "code"                   || "result" |>
         "snippet{ hello }"       !! "hello"  |
         " snippet{ hello }"      !! "hello"  |
         " snippet { hello }"     !! "hello"  |
@@ -147,7 +148,7 @@ n = 0
     eg := s2""" code: ${ snippet {
   var n = 1
   1 + n
-  }.eval.offsetIs(-2) }""".texts.drop(1).take(2).map(_.t.trim).mkString("\n") ===
+  }.eval.offsetIs(-2) }""".texts.drop(1).take(2).mkString("\n") ===
     """|```
        |var n = 1
        |1 + n
@@ -159,19 +160,19 @@ n = 0
     eg := {
       "code"                                         || "markdown"                 |>
       s"""the trait `${simpleName[Snippets]}`"""     !! "the trait `Snippets`"     |
-      { (code, markdown) => texts(code)(0) === markdown}
+      { (code, markdown) => code === markdown}
     }
 
     eg := {
       "code"                                   || "markdown"                                      |>
       s"""the trait `${fullName[Snippets]}`""" !! "the trait `org.specs2.specification.Snippets`" |
-      { (code, markdown) => texts(code)(0) === markdown}
+      { (code, markdown) => code === markdown}
     }
 
     eg := {
       "code"                              || "markdown"                                      |>
       s"""the method `${termName(is)}`""" !! "the method `is`"                               |
-        { (code, markdown) => texts(code)(0) === markdown}
+        { (code, markdown) => code === markdown}
     }
 
     eg := {
@@ -179,13 +180,13 @@ n = 0
       "code"                                                        || "markdown"                                      |>
       s"""the method `${termName(function(1, ""))}`"""              !! "the method `function`"                         |
       s"""the method `${termName(function[Int, String](1, ""))}`""" !! "the method `function`"                         |
-      { (code, markdown) => texts(code)(0) === markdown}
+      { (code, markdown) => code === markdown}
     }
 
     eg := {
       "code"                                         || "markdown"                   |>
       s"""the attribute `${termName(attribute1)}`""" !! "the attribute `attribute1`" |
-        { (code, markdown) => texts(code)(0) === markdown}
+        { (code, markdown) => code === markdown}
     }
   }
   "effects" - new group {
@@ -198,7 +199,9 @@ n = 0
     }
   }
 
-  def texts(fs: Fragments) = fs.texts.map(_.t).toIndexedSeq
+  implicit class SpecStructureTexts(spec: SpecStructure) {
+    def texts = spec.fragments.fragments.filter(Fragment.isText).map(_.description.show.trim)
+  }
   val attribute1 = 1
 }
 

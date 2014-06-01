@@ -1,7 +1,6 @@
 package org.specs2
 
 import specification._
-import specification.create.SpecificationCreation
 import specification.core.ImmutableSpecificationStructure
 import specification.create.SpecificationCreation
 

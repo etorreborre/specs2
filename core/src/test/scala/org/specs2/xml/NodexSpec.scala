@@ -1,5 +1,6 @@
 package org.specs2
 package xml
+
 import Nodex._
 import scala.xml._
 import scala.xml.NodeSeq._
@@ -36,8 +37,8 @@ class NodexSpec extends Specification { def is = s2"""
     }
     ${ <a><b/><c/></a> ==/ <a><c/><b/></a> }
     ${ ! (<a>1</a> ==/ <a></a>) }
-    ${ Text("1") isEqualIgnoringSpace Text(" 1 ") }
-    ${ !(Text("1") isEqualIgnoringSpace Text("2")) }
+    ${ scala.xml.Text("1") isEqualIgnoringSpace scala.xml.Text(" 1 ") }
+    ${ !(scala.xml.Text("1") isEqualIgnoringSpace scala.xml.Text("2")) }
 
   isEqualIgnoringSpaceOrdered returns true if 2 NodeSeqs are the same regardless of spaces and order
     ${ <a><b/><c/></a> isEqualIgnoringSpaceOrdered <a><b/><c/></a> }

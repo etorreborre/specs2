@@ -27,7 +27,7 @@ trait ResultExecution { outer =>
       case ErrorException(f)                                                 => f
       case DecoratedResultException(f)                                       => f
       case e: Exception                                                      => Error(e)
-      case e: AssertionError if (fromJUnit(e))                               => Failure(e.getMessage.notNull, "", e.getStackTrace.toList)
+      case e: AssertionError if fromJUnit(e)                                 => Failure(e.getMessage.notNull, "", e.getStackTrace.toList)
       case e: java.lang.Error if simpleClassName(e) == "NotImplementedError" => Failure(e.getMessage.notNull, "", e.getStackTrace.toList)
       case e: Throwable                                                      => Error(e)
     }
@@ -53,7 +53,7 @@ trait ResultExecution { outer =>
       case e: ErrorException                                                 => throw e
       case e: DecoratedResultException                                       => throw e
       case e: Exception                                                      => throw ErrorException(Error(e))
-      case e: AssertionError if (fromJUnit(e))                               => throw FailureException(Failure(e.getMessage.notNull, "", e.getStackTrace.toList))
+      case e: AssertionError if fromJUnit(e)                                 => throw FailureException(Failure(e.getMessage.notNull, "", e.getStackTrace.toList))
       case e: java.lang.Error if simpleClassName(e) == "NotImplementedError" => throw FailureException(Failure(e.getMessage.notNull, "", e.getStackTrace.toList))
       case e: Throwable                                                      => throw ErrorException(Error(e))
     }

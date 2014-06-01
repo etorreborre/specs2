@@ -2,7 +2,6 @@ package org.specs2
 package specification
 
 import script._
-import FragmentExecution._
 
 class GWTSpec extends script.Specification with GWT with Grouped with StandardDelimitedStepParsers { def is = s2"""
 

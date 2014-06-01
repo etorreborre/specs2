@@ -8,11 +8,11 @@ import control.ImplicitParameters
 
 
 trait SpecificationFeatures extends
-MustMatchers
-with ShouldMatchers
-with StandardResults
-with StandardMatchResults
-with PendingUntilFixed
-with ImplicitParameters
-with Debug
+  MustMatchers
+  with ShouldMatchers
+  with StandardResults
+  with StandardMatchResults
+  with PendingUntilFixed
+  with ImplicitParameters
+  with Debug
 

@@ -10,14 +10,15 @@ import control.ImplicitParameters.ImplicitParam
 
 trait ExampleDsl extends FragmentsFactory { outer =>
 
-  implicit def forExample(d: String) = new ForExample(d)
-  class ForExample(d: String) {
+  implicit def bangExample(d: String) = new BangExample(d)
+
+  class BangExample(d: String) {
     def ![R : AsResult](r: => R): Fragment                                      = fragmentFactory.Example(d, r)
     def ![R : AsResult](r: String => R): Fragment                               = fragmentFactory.Example(d, r)
     def ![R](r: Env => R)(implicit as: AsResult[R], p: ImplicitParam): Fragment = fragmentFactory.Example(d, r)(as, p)
   }
 }
 
-trait NoExampleDsl extends ExampleDsl {
-  override def forExample(d: String) = super.forExample(d)
+trait NoBangExampleDsl extends ExampleDsl {
+  override def bangExample(d: String) = super.bangExample(d)
 }

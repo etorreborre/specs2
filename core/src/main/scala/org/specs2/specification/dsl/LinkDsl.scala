@@ -14,8 +14,14 @@ trait LinkDsl extends FragmentsFactory {
     def ~(s: SpecStructure): Fragment =
       fragmentFactory.Link(SpecificationLink(s.header, alias = text))
 
+    def ~(alias: String, s: SpecStructure): Fragment =
+      fragmentFactory.Link(SpecificationLink(s.header, alias = alias))
+
     def ~(s: SpecStructure, after: String): Fragment =
       fragmentFactory.Link(SpecificationLink(s.header, before = text, after = after))
+
+    def ~(alias: String, s: SpecStructure, after: String): Fragment =
+      fragmentFactory.Link(SpecificationLink(s.header, before = text, alias = alias, after = after))
 
     def ~(alias: String, s: SpecStructure, after: String, tooltip: String): Fragment =
       fragmentFactory.Link(SpecificationLink(s.header, before = text, alias = alias, after = after, tooltip = tooltip))
@@ -24,7 +30,9 @@ trait LinkDsl extends FragmentsFactory {
       fragmentFactory.Link(SpecificationLink(s.header, tooltip = tooltip, after = after))
 
     def ~(s: SpecificationStructure): Fragment = text ~ s.is
+    def ~(alias: String, s: SpecificationStructure): Fragment = text ~ (alias, s.is)
     def ~(s: SpecificationStructure, after: String): Fragment = text ~ (s.is, after)
+    def ~(alias: String, s: SpecificationStructure, after: String): Fragment = text ~ (alias, s.is, after)
     def ~(alias: String, s: SpecificationStructure, after: String, tooltip: String): Fragment = text ~ (alias, s.is, after, tooltip)
     def ~(s: SpecificationStructure, after: String, tooltip: String): Fragment = text ~ (s.is, after, tooltip)
 

@@ -2,7 +2,9 @@ package org.specs2
 package specification
 
 import io.StringOutput
-import execute.{AsResult, Result}
+import execute._
+import org.specs2.specification.core.SpecificationStructure
+import specification.create._
 import _root_.org.specs2.mutable.{Specification => Spec}
 
 class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
@@ -11,13 +13,9 @@ class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
  a spec can define a Before context that is used for each example                                                     
    in a mutable spec                                                                                          ${g1.e1}
    also in an acceptance spec                                                                                 ${g1.e2}
-   defined on several fragments                                                                               ${g1.e3}
-   even for a mutable spec                                                                                    ${g1.e4}
 
  a spec can define an After context that is used for each example                                             ${g2.e1}
  a spec can define an Around context that is used for each example                                            ${g2.e2}
- a spec can define a BeforeAfter context that is used for each example                                        ${g2.e3}
- a spec can define a BeforeAfterAround context that is used for each example                                  ${g2.e4}
                                                                                                               """
 
   "before" - new g1 {
@@ -33,22 +31,6 @@ class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
         def is = "ex1" ! success
       }, "before")
 
-    e3 := executeContains(
-      new Specification with StringOutput {
-        object withBefore extends BeforeEach { def before { println("before") } }
-        def is = withBefore(spec)
-        def spec =
-          "this should"     ^
-            "ex1" ! success ^
-            "ex2" ! success
-      }, "before", "before")
-
-    e4 := executeContains(
-      new Spec with StringOutput {
-        object withBefore extends BeforeEach { def before { println("before") } }
-        override def is = withBefore(super.is)
-        "ex1" ! { 1 must_== 2 }
-      }, "before")
   }
 
   "other" - new g2 {
@@ -64,25 +46,10 @@ class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
         "ex1" ! success
       },"around")
 
-    e3 := executeContains(
-      new Spec with BeforeAfterExample with StringOutput {
-        def before { println("before") }
-        def after { println("after") }
-        "ex1" ! success
-      },"before", "after")
-
-
-    e4 := executeContains(
-      new Spec with BeforeAfterAroundExample with StringOutput {
-        def before { println("before") }
-        def after { println("after") }
-        def around[R : AsResult](r: =>R) = { println("around"); AsResult(r) }
-        "ex1" ! success
-      }, "before", "around", "after")
   }
 
   def executeContains(s: SpecificationStructure with StringOutput, messages: String*) = {
-    FragmentExecution.executeBodies(s.content).toList
+    s.is.fragments.fragments.map(_.executionResult).toList
     s.messages must contain(allOf(messages:_*)).inOrder
   }
 

@@ -1,8 +1,7 @@
 package org.specs2
 package matcher
 
-import time.Duration
-import time.TimeConversions._
+import scala.concurrent.duration._
 import org.specs2.execute.{ResultExecution, EventuallyResults}
 
 /**
@@ -24,13 +23,13 @@ trait EventuallyMatchers extends EventuallyResults {
       if (result.isSuccess || retries == 1)
         matchResult
       else {
-        Thread.sleep(sleep.inMillis)
+        Thread.sleep(sleep.toMillis)
         retry(retries - 1, sleep, a)
       }
     }
   }
 
   /** @return a matcher that will retry the nested matcher 40 times  */
-  def eventually[T](nested: =>Matcher[T]): Matcher[T] = eventually(40, 100.milliseconds)(nested)
+  def eventually[T](nested: =>Matcher[T]): Matcher[T] = eventually(40, 100.millis)(nested)
 }
 object EventuallyMatchers extends EventuallyMatchers 
