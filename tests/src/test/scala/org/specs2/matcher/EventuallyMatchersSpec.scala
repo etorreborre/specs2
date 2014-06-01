@@ -3,12 +3,11 @@ package matcher
 
 import mutable._
 import execute._
-import org.specs2.time.NoTimeConversions
 import scala.concurrent._
 import scala.concurrent.duration._
 import ExecutionContext.Implicits.global
 
-class EventuallyMatchersSpec extends Specification with NoTimeConversions {
+class EventuallyMatchersSpec extends Specification {
                                                                                                                         """
 `eventually` can be used to retry any matcher until a maximum number of times is reached
 or until it succeeds.

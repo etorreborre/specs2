@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import time._
-import TimeConversions._
+import scala.concurrent.duration._
 import scalaz._
 import Scalaz._
 import concurrent.Promise
@@ -34,8 +34,8 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
   def retry[S <: T](originalRetries: Int, retries: Int, sleep: Duration, a: Expectable[S], promise: Promise[S], whenActionExecuted: Boolean = false): MatchResult[S] = {
 
     lazy val fulfilled = promise.fulfilled
-    val parameters = "with retries="+originalRetries+" and sleep="+sleep.inMillis
-    val evenWhenAction = whenDesc.map(w => " even when "+w).getOrElse("")
+    val parameters = "with retries="+originalRetries+" and sleep="+sleep.toMillis
+    val evenWhenAction = whenDesc.fold("")(w => " even when " + w)
     val onlyWhenAction = whenDesc.getOrElse("the second action")
     def terminates = result(true, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a)
     def blocks     = { promise.break; result(false, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a) }
@@ -51,12 +51,12 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
         if (retries <= 0) blocks
         else {
           // leave the action a chance to finish
-          Thread.sleep(sleep.inMillis)
+          Thread.sleep(sleep.toMillis)
           // if still not finished, try to execute the when action
           if (!promise.fulfilled && !whenActionExecuted) {
             whenAction.map(_())
             // leave again the action a chance to finish
-            Thread.sleep(sleep.inMillis)
+            Thread.sleep(sleep.toMillis)
             retry(originalRetries, retries - 1, sleep, a, promise, whenActionExecuted = true)
           } else
             retry(originalRetries, retries - 1, sleep, a, promise)
@@ -67,7 +67,7 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
       else {
         if (retries <= 0) blocks
         else {
-          Thread.sleep(sleep.inMillis)
+          Thread.sleep(sleep.toMillis)
           retry(originalRetries, retries - 1, sleep, a, promise)
         }
       }

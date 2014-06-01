@@ -3,13 +3,12 @@ package matcher
 
 import specification._
 import script._
-import org.specs2.time.{NoTimeConversions}
 import concurrent._
 import duration._
 import ExecutionContext.Implicits.global
-import java.util.concurrent.{Executors, ThreadPoolExecutor, ForkJoinPool, Executor}
+import java.util.concurrent.Executors
 
-class FutureMatchersSpec extends Specification with Groups with NoTimeConversions with ResultMatchers { def is = sequential ^ s2"""
+class FutureMatchersSpec extends Specification with Groups with ResultMatchers { def is = sequential ^ s2"""
 
  Any `Matcher[T]` can be transformed into a `Matcher[Future[T]]` with the `await` method
  ${ Future(1) must be_>(0).await }

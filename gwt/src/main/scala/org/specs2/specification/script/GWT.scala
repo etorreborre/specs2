@@ -16,6 +16,8 @@ import scalaz.syntax.std.list._
  * way of describing acceptance criteria
  */
 trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
+  private val factory = fragmentFactory; import factory._
+
   /** renaming of the shapeless cons object to avoid imports */
   val :: = shapeless.::
 
@@ -203,17 +205,17 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
     private def verificationsList   = verifications.toList.reverse
 
     /** @return the values of all executed steps */
-    private def stepsValues(steps: Seq[Fragment]) = steps.foldRight(HNil: HList) { (cur, res) => value(cur.execute) :: res }
+    private def stepsValues(steps: Seq[Fragment]) = steps.foldRight(HNil: HList) { (cur, res) => value(cur.executionResult) :: res }
     /** @return a -and- on all the execution results of steps */
-    private def result(steps: Seq[Fragment]) = steps.foldRight(Success(): Result) { (cur, res) => cur.execute and res }
+    private def result(steps: Seq[Fragment]) = steps.foldRight(Success(): Result) { (cur, res) => cur.executionResult and res }
     /** execute a block of code depending on a previous result */
     private def executeIf(result: Result)(value: =>Any) = if (result.isSuccess) value else Skipped(" ")
 
     /** zip extractors, lines and steps to intercalate steps between texts fragments (and strip the lines of their delimiters if any */
     private def appendSteps(extractors: Seq[StepParser[_]], lines: Seq[String], steps: Seq[Fragment]): Seq[Fragment] =
       (extractors zip lines zip steps).map {
-        case ((extractor: StepParser[_], l: String), s: Fragment) => fragmentFactory.Text(extractor.strip(l)+"\n") ^ s
-      }.flatMap(_.middle)
+        case ((extractor: StepParser[_], l: String), s: Fragment) => Seq(fragmentFactory.Text(extractor.strip(l)+"\n"), s)
+      }.flatten
 
     /** extract values from a line and execute a function */
     private def execute(previousResult: Result, extractor: StepParser[_], line: String)(f: Any => Any) =

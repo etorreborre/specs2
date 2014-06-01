@@ -19,7 +19,7 @@ trait Cards {
  *
  * The text will be interpreted as Markdown text when rendered as html
  */
-trait Card extends Specification with Snippets { def is = s2""" """
+trait Card extends Specification with Snippets { def is = ""
   def title: String
   def text: Fragments
   def toTab: Tab = form.Tab(title, Form.tr(TextCell(text.fragments.filter(Fragment.isText).map(_.description.show).mkString).bkWhite))

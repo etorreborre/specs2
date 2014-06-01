@@ -141,7 +141,6 @@ iterator.next must be_==(3).eventually
 
  * using `await` to create a matcher that will match on `Matcher[Future[T]]`: ${snippet{
 // 8<--
-import time.NoTimeConversions._
     import scala.concurrent._
     import duration._
     import ExecutionContext.Implicits.global
@@ -152,7 +151,6 @@ future { Thread.sleep(100); 1 } must be_>(0).await(retries = 2, timeout = 100.mi
 
  * using `await` to create a `Result` on a `Future` that returns a `Matcher[T]`: ${snippet{
 // 8<--
-import time.NoTimeConversions._
 import scala.concurrent._
 import duration._
 import ExecutionContext.Implicits.global

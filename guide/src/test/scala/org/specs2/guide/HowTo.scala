@@ -378,7 +378,6 @@ By default, the `Specification` trait imports quite a few implicit definitions (
 An easy way to avoid this situation is to "deactivate" the specs2 implicits by mixing-in the relevant trait from this list:
 
 * `org.specs2.control.NoDebug`: deactivate the `pp` method on objects
-* `org.specs2.time.NoTimeConversions`: deactivate the `millis`, `seconds`,... methods on `Int`s and `Long`s
 * `org.specs2.main.NoArgProperties`: deactivate the `toOption: Option[T]` method on any value of type `T`
 * `org.specs2.matcher.NoCanBeEqual`: deactivate the `===` method on any type `T`
 * `org.specs2.matcher.NoMustExpectations`: deactivate the `must`, `must_==`,... methods on any value of type `T`
