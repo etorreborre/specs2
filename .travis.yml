@@ -7,4 +7,8 @@ scala:
 jdk:
   - oraclejdk7
 
+branches:
+  except:
+    - specs2-three
+
 script: sbt -sbt-version 0.13.5 -scala-version $TRAVIS_SCALA_VERSION 'test-only -- -exclude unstable -xonly'
