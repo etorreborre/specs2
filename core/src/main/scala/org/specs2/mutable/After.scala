@@ -1,4 +1,5 @@
-package org.specs2
+package org
+package specs2
 package mutable
 
 /**
@@ -7,6 +8,6 @@ package mutable
  * Since the delayedInit method doesn't return a Result, this only works with mutable specifications where results are
  * thrown as exceptions 
  */
-trait After extends org.specs2.specification.After with DelayedInit {
+trait After extends specification.After with DelayedInit {
   override def delayedInit(x: => Unit): Unit = try x finally after
 }

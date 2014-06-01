@@ -2,6 +2,8 @@ package org.specs2
 package specification
 package script
 
+import org.specs2.specification.core.{Fragment, Fragments}
+import specification.create.FragmentsFactory
 import shapeless.{HList, HNil, ::}
 import shapeless.ops.hlist.ToList
 import execute._
@@ -13,7 +15,7 @@ import scalaz.syntax.std.list._
  * The GWT trait can be used to associate a piece of text to Given/When/Then steps according to the [BDD](http://en.wikipedia.org/wiki/Behavior-driven_development)
  * way of describing acceptance criteria
  */
-trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
+trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
   /** renaming of the shapeless cons object to avoid imports */
   val :: = shapeless.::
 
@@ -43,7 +45,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
     def when() = GWTGivens[HNil, HNil, Unit](title, template, HNil).when()
     def when[R, U](value: =>R)(implicit lub: ToList[R :: HNil, U]) = GWTGivens[HNil, HNil, Unit](title, template, HNil).when().apply[R, U] { case _ => value }
 
-    def fragments(text: String): Fragments = Fragments.createList(Text(text))
+    def fragments(text: String): Fragments = Fragments(fragmentFactory.Text(text))
 
     def start: Scenario = this
     def end: Scenario = this
@@ -70,7 +72,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
     def when[T](f: StepParser[T]) = GWTWhensApply[T, GT, GTE, GTU, T :: HNil, HNil, (StepParser[T]) :: HNil, HNil, Any](this, f :: HNil, HNil)
     def when(): GWTWhensApply[String, GT, GTE, GTU, String :: HNil, HNil, (StepParser[String]) :: HNil, HNil, Any] = when(allAsString)
 
-    def fragments(text: String): Fragments = Fragments.createList(Text(text))
+    def fragments(text: String): Fragments = Fragments(fragmentFactory.Text(text))
 
     def start = copy(isStart = true)
     def end   = copy(isStart = false)
@@ -91,7 +93,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
     def andThen(): GWTThensApply[String, GT, GTE, GTU, WT, WTR, WTE, WM, WMU, (StepParser[String]) :: HNil, HNil] = andThen(allAsString)
 
     def title = givens.title
-    def fragments(text: String): Fragments = Fragments.createList(Text(text))
+    def fragments(text: String): Fragments = Fragments(fragmentFactory.Text(text))
 
     def start = copy(isStart = true)
     def end   = copy(isStart = false)
@@ -142,17 +144,17 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
     def fragments(text: String): Fragments = {
 
       /** results of given and when steps, stored in the reverse order of definition */
-      var givenSteps: Seq[Step] = Seq()
-      var whenSteps: Seq[Step]  = Seq()
+      var givenSteps: Seq[Fragment] = Seq()
+      var whenSteps: Seq[Fragment]  = Seq()
 
-      template.lines(text, this).lines.foldLeft(Fragments.createList()) { (fs, lines) =>
+      template.lines(text, this).lines.foldLeft(Fragments()) { (fs, lines) =>
         lines match {
           // Text lines are left untouched
-          case TextLines(ls) => fs add Text(ls+"\n")
+          case TextLines(ls) => fs append fragmentFactory.Text(ls+"\n")
 
           // Given lines must create steps with extracted values
           case GivenLines(ls) => {
-            givenSteps = (givenExtractorsList zip ls).map { case (extractor, line) => Step(extractLine(extractor, line)) }.reverse
+            givenSteps = (givenExtractorsList zip ls).map { case (extractor, line) => fragmentFactory.Step(extractLine(extractor, line)) }.reverse
             fs append appendSteps(givenExtractorsList, ls, givenSteps)
           }
 
@@ -177,7 +179,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
                   verifyFunction(t, if (verifyFunction.f1.isDefined) Left(stepsValues(whenSteps)) else Right(stepsValues(whenSteps).toList))
                 }.asInstanceOf[Result])
             }
-            fs append thenExamples.intersperse(Text("\n"))
+            fs append thenExamples.intersperse(fragmentFactory.Text("\n"))
           }
         }
       }
@@ -201,16 +203,16 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsBuilder =>
     private def verificationsList   = verifications.toList.reverse
 
     /** @return the values of all executed steps */
-    private def stepsValues(steps: Seq[Step]) = steps.foldRight(HNil: HList) { (cur, res) => value(cur.execute) :: res }
+    private def stepsValues(steps: Seq[Fragment]) = steps.foldRight(HNil: HList) { (cur, res) => value(cur.execute) :: res }
     /** @return a -and- on all the execution results of steps */
-    private def result(steps: Seq[Step]) = steps.foldRight(Success(): Result) { (cur, res) => cur.execute and res }
+    private def result(steps: Seq[Fragment]) = steps.foldRight(Success(): Result) { (cur, res) => cur.execute and res }
     /** execute a block of code depending on a previous result */
     private def executeIf(result: Result)(value: =>Any) = if (result.isSuccess) value else Skipped(" ")
 
     /** zip extractors, lines and steps to intercalate steps between texts fragments (and strip the lines of their delimiters if any */
-    private def appendSteps(extractors: Seq[StepParser[_]], lines: Seq[String], steps: Seq[Step]): Seq[Fragment] =
+    private def appendSteps(extractors: Seq[StepParser[_]], lines: Seq[String], steps: Seq[Fragment]): Seq[Fragment] =
       (extractors zip lines zip steps).map {
-        case ((extractor: StepParser[_], l: String), s: Step) => Text(extractor.strip(l)+"\n") ^ s
+        case ((extractor: StepParser[_], l: String), s: Fragment) => fragmentFactory.Text(extractor.strip(l)+"\n") ^ s
       }.flatMap(_.middle)
 
     /** extract values from a line and execute a function */
@@ -294,7 +296,7 @@ case class BulletTemplate(bullet: String = "*") extends ScriptTemplate[Scenario,
   def lines(text: String, script: Scenario): GivenWhenThenLines = {
     text.split("\n").foldLeft(GivenWhenThenLines()) { (res, line) =>
       val firstBulletWord =
-        (if (line.trim.startsWith(bullet)) line.trim.drop(1).trim.split(" ").headOption.getOrElse("") else "").toLowerCase
+        (if (line.trim.startsWith(bullet)) line.trim.tail.trim.split(" ").headOption.getOrElse("") else "").toLowerCase
 
       val newLine = line.replace(bullet+" ", "")
       if      (firstBulletWord.startsWith("given")) res.append(GivenLines.create(newLine))
@@ -310,10 +312,10 @@ case class BulletTemplate(bullet: String = "*") extends ScriptTemplate[Scenario,
  */
 case class GivenWhenThenLines(lines: Seq[GWTLines] = Seq()) extends ScriptLines {
   def prepend(ls: GWTLines) = (ls, lines.headOption) match {
-    case (TextLines(l1), Some(TextLines(l2)))   => copy(lines = TextLines (l1 ++ l2) +: lines.drop(1))
-    case (GivenLines(l1), Some(GivenLines(l2))) => copy(lines = GivenLines(l1 ++ l2) +: lines.drop(1))
-    case (WhenLines(l1), Some(WhenLines(l2)))   => copy(lines = WhenLines (l1 ++ l2) +: lines.drop(1))
-    case (ThenLines(l1), Some(ThenLines(l2)))   => copy(lines = ThenLines (l1 ++ l2) +: lines.drop(1))
+    case (TextLines(l1), Some(TextLines(l2)))   => copy(lines = TextLines (l1 ++ l2) +: lines.tail)
+    case (GivenLines(l1), Some(GivenLines(l2))) => copy(lines = GivenLines(l1 ++ l2) +: lines.tail)
+    case (WhenLines(l1), Some(WhenLines(l2)))   => copy(lines = WhenLines (l1 ++ l2) +: lines.tail)
+    case (ThenLines(l1), Some(ThenLines(l2)))   => copy(lines = ThenLines (l1 ++ l2) +: lines.tail)
     case (TextLines(l1), _)                     => if (l1.nonEmpty) copy(lines = ls +: lines) else this
     case _                                      => copy(lines = ls +: lines)
   }

@@ -112,6 +112,7 @@ object build extends Build {
   lazy val core = Project(id = "core", base = file("core"),
     settings = Seq(
       libraryDependencies ++=
+        depends.shapeless(scalaVersion.value) ++
         depends.testInterface.map(_ % "optional") ++
         depends.mockito.map(_ % "test") ++
         depends.junit.map(_ % "test")) ++

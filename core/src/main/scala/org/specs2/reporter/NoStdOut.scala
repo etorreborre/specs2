@@ -2,7 +2,8 @@ package org.specs2
 package reporter
 
 import execute.{Result, AsResult}
-import specification.{Around, AroundExample}
+import specification._
+import create.AroundExample
 import java.io.{FileDescriptor, FileOutputStream, OutputStream, PrintStream}
 
 /**

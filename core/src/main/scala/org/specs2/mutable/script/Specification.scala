@@ -1,4 +1,7 @@
-package org.specs2.mutable.script
+package org
+package specs2
+package mutable
+package script
 
 /**
  * This Specification trait is using a Script (`GroupScript`) and a default template `BulletedExamplesTemplate`
@@ -10,6 +13,4 @@ abstract class Specification extends SpecificationLike
 /**
  * Trait for the mutable.script.Specification abstract class
  */
-trait SpecificationLike extends org.specs2.specification.script.SpecificationLike with org.specs2.mutable.SpecificationFeatures {
-  def is = fragments
-}
+trait SpecificationLike extends specification.script.SpecificationLike with specification.SpecificationFeatures

@@ -1,9 +1,9 @@
 package org.specs2
 package specification
 
-import execute._
-import main._
-import Snippet._
+import org.specs2.execute._
+import specification.core._
+import specification.create._
 
 /**
  * Snippets of code can be extracted from interpolated specification strings.
@@ -18,17 +18,19 @@ import Snippet._
  * It is also possible to check that the result value is equal to a specific value by using the `check[R : AsResult](f: T => R)` method.
  *
  */
-trait Snippets extends execute.Snippets { outer: SpecificationStringContext with FragmentsBuilder with ArgumentsArgs =>
+trait Snippets extends org.specs2.execute.Snippets { outer: S2StringContext with FragmentsFactory =>
+  private val factory = outer.fragmentFactory
+  import factory._
 
-  implicit def snippetIsSpecPart[T](snippet: Snippet[T]): SpecPart = new SpecPart {
-    def append(fs: Fragments, text: String, expression: String = "") =
-      fs append { text ^ snippetFragments(snippet, expression) }
+  implicit def snippetIsSpecPart[T](snippet: Snippet[T]): InterpolatedPart = new InterpolatedPart {
+    def append(parts: Vector[Fragment], text: String, expression: String = ""): Vector[Fragment] =
+      (parts :+ Text(text)) ++ snippetFragments(snippet, expression).fragments
 
-    private def snippetFragments(snippet: Snippet[T], expression: String) = {
-      Fragments.createList(
+    private def snippetFragments(snippet: Snippet[T], expression: String): Fragments = {
+      Fragments(
         Seq(Text(snippet.show(expression))) ++
-        resultFragments(snippet) ++
-        checkFragments(snippet):_*)
+          resultFragments(snippet) ++
+          checkFragments(snippet):_*)
     }
 
     private def resultFragments(snippet: Snippet[T]) = {
@@ -43,4 +45,3 @@ trait Snippets extends execute.Snippets { outer: SpecificationStringContext with
 
   }
 }
-

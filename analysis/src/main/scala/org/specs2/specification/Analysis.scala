@@ -1,14 +1,14 @@
 package org.specs2
 package specification
 
-import org.specs2.execute
 import execute.AsResult
-import org.specs2.matcher.{Expectations, DependencyMatchers}
+import matcher.{Expectations, DependencyMatchers}
+import specification.create.FragmentsFactory
 
 /**
  * This trait provides integrated analysis method for a scala project
  */
-trait Analysis extends DependencyMatchers { this: FragmentsBuilder with Expectations =>
+trait Analysis extends DependencyMatchers { this: FragmentsFactory with Expectations =>
 
   /**
    * this implicit definition allows to check if a Layers definition is respected.
@@ -21,7 +21,8 @@ trait Analysis extends DependencyMatchers { this: FragmentsBuilder with Expectat
   /**
    * this implicit definition allows to insert a Layers definition directly into the specification, as a Fragment
    */
-  implicit def LayersToExample(layers: Layers): Example = layers.toMarkdown ! layers
+  implicit def LayersToExample(layers: Layers) =
+    fragmentFactory.Example(layers.toMarkdown, layers)
 
   /**
    * this implicit definition allows to check if a Layers definition is respected

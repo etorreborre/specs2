@@ -1,35 +1,15 @@
 package org.specs2
 package mutable
 
-import control._
-import time._
-import execute._
-import matcher._
-import main.ArgumentsShortcuts
-import specification._
-import control.Functions._
+import specification.mutable._
+import specification.core.mutable.SpecificationStructure
+import specification.dsl.mutable.SpecificationCreation
 
+/**
+ * Class for a Specification using the mutable DSL and thrown expectations
+ */
 abstract class Specification extends SpecificationLike
-trait SpecificationLike extends SpecificationStructure with SpecificationFeatures {
-  def is = fragments
-}
 
-trait SpecificationFeatures extends SpecificationStringContext
-   with mutable.FragmentsBuilder
-   with mutable.SpecificationInclusion
-   with ArgumentsArgs
-   with ArgumentsShortcuts
-   with MustThrownMatchers
-   with ShouldThrownMatchers
-   with FormattingFragments
-   with StandardResults
-   with StandardMatchResults
-   with mutable.Tags
-   with AutoExamples
-   with TimeConversions
-   with PendingUntilFixed
-   with Contexts
-   with SpecificationNavigation
-   with ContextsInjection
-   with Debug
-
+trait SpecificationLike extends SpecificationStructure
+  with SpecificationCreation
+  with SpecificationFeatures

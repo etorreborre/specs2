@@ -60,7 +60,7 @@ object Xml {
     case other                                       => NodeSeq.Empty
   }
 
-  private def stacktraces(row: Row)(implicit args: Arguments): NodeSeq = row.cells.map(stacktraces(_)).reduceNodes
+  private def stacktraces(row: Row)(implicit args: Arguments): NodeSeq = row.cells.map(stacktraces).reduceNodes
 
   private def stacktraces(e: Result with ResultStackTrace)(implicit args: Arguments): NodeSeq =
     <div class="formstacktrace details" id={System.identityHashCode(e).toString}>
@@ -87,7 +87,7 @@ case class TextCell(s: String, result: Option[Result] = None, decorator: Decorat
 
   def text = s
 
-  def xml(implicit args: Arguments) = <td class={result.map(_.statusName).getOrElse("none")} style="info">{decorateValue(Markdown.toXhtml(text))}</td>
+  def xml(implicit args: Arguments) = <td class={result.fold("none")(_.statusName)} style="info">{decorateValue(Markdown.toXhtml(text))}</td>
 
   def execute = result.getOrElse(Skipped())
   def setResult(r: Result) = TextCell(s, result)

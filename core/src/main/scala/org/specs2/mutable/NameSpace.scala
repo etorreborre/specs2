@@ -1,4 +1,5 @@
-package org.specs2.mutable
+package org.specs2
+package mutable
 
 /**
  * This marker trait can be used to scope variables which should only be used for a given set of fragments

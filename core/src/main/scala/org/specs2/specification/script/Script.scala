@@ -2,6 +2,8 @@ package org.specs2
 package specification
 package script
 
+import core.Fragments
+
 /**
  * A Script is responsible for analysing a piece of text an creating a sequence of fragments.
  *

@@ -2,7 +2,7 @@ package org.specs2
 package io
 
 import user.specification._
-import mutable.{Specification, Tags}
+import mutable.Specification
 import specification.{Example, SpecificationStructure}
 import org.specs2.execute.PendingUntilFixed
 

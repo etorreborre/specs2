@@ -4,6 +4,8 @@ package specification
 import matcher._
 import execute._
 import main._
+import specification.core._
+import specification.create._
 
 /**
  * This trait can be mixed-in a specification to allow examples to have all of their expectations being evaluated (unless
@@ -18,7 +20,7 @@ import main._
  *
  * If the specification is neither sequential or isolated, we force it to be isolated by default.
  */
-trait AllExpectations extends StoredExpectations with ExamplesFactory with SpecificationStructure with ArgumentsArgs {
+trait AllExpectations extends StoredExpectations with FragmentsFactory with SpecificationStructure with ArgumentsArgs {
   /**
    * @return a Result having its location as part of its message
    */
@@ -33,7 +35,8 @@ trait AllExpectations extends StoredExpectations with ExamplesFactory with Speci
   /**
    * @return an example factory which will take the stored results and make them the example result
    */
-  implicit override def exampleFactory: ExampleFactory = new DecoratedExampleFactory(super.exampleFactory, resultsContext(storedResults))
+  implicit override def fragmentFactory: FragmentFactory =
+    new ContextualFragmentFactory(super.fragmentFactory, resultsContext(storedResults))
 
   /**
    * create a new Context with the list of captured results.
@@ -46,11 +49,11 @@ trait AllExpectations extends StoredExpectations with ExamplesFactory with Speci
    * we force the specification to be isolated if it's not sequential or already isolated.
    * this is important because when an example runs, its results are being stored into a shared list
    */
-  override def map(fs: =>Fragments): Fragments = {
-    val fragments = fs
-    val arguments = fragments.arguments
-    if (arguments.isolated || arguments.sequential) fragments
-    else fragments.add(args(isolated = true))
+  override def structure = (env: Env) => {
+    val parent = super.structure(env)
+    val arguments = parent.arguments
+    if (arguments.isolated || arguments.sequential) parent
+    else parent.copy(arguments = args(isolated = true))
   }
 }
 

@@ -8,7 +8,7 @@ import execute._
  * Since the delayedInit method doesn't return a Result, this only works with mutable specifications where results are
  * thrown as exceptions 
  */
-trait Around extends org.specs2.specification.Around with DelayedInit {
+trait Around extends specification.Around with DelayedInit {
   /** use effectively to re-throw FailureExceptions if x failed */
   override def delayedInit(x: => Unit): Unit = ResultExecution.effectively(around { x; Success() })
 }

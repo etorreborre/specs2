@@ -2,14 +2,15 @@ package org.specs2
 package mutable
 
 import main._
-import text._
 import control.StackTraceFilter
+import specification.dsl.mutable.MutableArgumentsBuilder
+import text._
 
 /**
  * This trait provides shortcuts to create Arguments instances and adding them to the SpecificationStructure by mutating its
  * current content
  */
-trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
+trait ArgumentsArgs extends main.ArgumentsArgs { this: MutableArgumentsBuilder =>
   override lazy val args = new ArgumentsNamespaceMutable
 
   /** shorthand method to create an Arguments object */
@@ -30,7 +31,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
     showOnly:      ArgProperty[String]            = ArgProperty[String](),
     color:         ArgProperty[Boolean]           = ArgProperty[Boolean]()) =
 
-    addArguments(super.args(
+    setArguments(super.args(
       ex,
       include,
       exclude,
@@ -56,7 +57,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
       exclude:       ArgProperty[String]            = ArgProperty[String](),
       wasIssue:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
       was:           ArgProperty[String]            = ArgProperty[String](),
-      specName:      ArgProperty[String]            = ArgProperty[String]()) = addArguments(super.select(
+      specName:      ArgProperty[String]            = ArgProperty[String]()) = setArguments(super.select(
         ex,
         include,
         exclude,
@@ -75,7 +76,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
       random:        ArgProperty[Boolean]           = ArgProperty[Boolean](),
       threadsNb:     ArgProperty[Int]               = ArgProperty[Int](),
       executor:      ArgProperty[String]            = ArgProperty[String]()
-    ) = addArguments(super.execute(
+    ) = setArguments(super.execute(
         plan,
         skipAll,
         stopOnFail,
@@ -90,7 +91,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
     override def store(
       reset:       ArgProperty[Boolean]           = ArgProperty[Boolean](),
       never:       ArgProperty[Boolean]           = ArgProperty[Boolean]()
-    ) = addArguments(super.store(
+    ) = setArguments(super.store(
                      reset,
                      never))
 
@@ -113,7 +114,7 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: FragmentsBuilder =>
       checkUrls:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
       notoc:             ArgProperty[Boolean]           = ArgProperty[Boolean](),
       notifier:          ArgProperty[String]            = ArgProperty[String](),
-      exporter:          ArgProperty[String]            = ArgProperty[String]()) = addArguments(super.report(
+      exporter:          ArgProperty[String]            = ArgProperty[String]()) = setArguments(super.report(
         xonly,
         showOnly,
         failtrace,

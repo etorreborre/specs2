@@ -22,8 +22,8 @@ object depends {
   lazy val hamcrest      = Seq("org.hamcrest"   % "hamcrest-core" % "1.3")
 
   def shapeless(scalaVersion: String) =
-    if (scalaVersion.contains("2.11")) Seq("com.chuusai" % "shapeless_2.11.0-M7" % "2.0.0-M1")
-    else                               Seq("com.chuusai" % "shapeless_2.10.3" % "2.0.0-M1")
+    if (scalaVersion.contains("2.11")) Seq("com.chuusai" % "shapeless_2.11" % "2.0.0")
+    else                               Seq("com.chuusai" % ("shapeless_"+scalaVersion) % "2.0.0")
 
   lazy val pegdown = Seq("org.pegdown" % "pegdown" % "1.2.1")
 
