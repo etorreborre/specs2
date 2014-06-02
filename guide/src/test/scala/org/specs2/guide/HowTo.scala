@@ -14,7 +14,7 @@ class HowTo extends UserGuidePage { def is = s2"""
 Arguments are usually passed on the command line but you can also declare them at the beginning of the specification, to be applied only to that specification.
 For example, you can turn off the concurrent execution of examples with the `args(sequential = true)` call (or the shorter alias `sequential`): ${snippet{
 
-class ExamplesOneByOne extends Specification { def is = s2""" $sequential
+class ExamplesOneByOne extends Specification { def is = sequential ^ s2"""
 
   first example        $e1
   the the second one   $e2

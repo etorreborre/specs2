@@ -18,7 +18,7 @@ class FormsFragmentsSpec extends Specification with Forms with ThrownExpectation
                                                                                      """
                                                                                
   object frags extends Customers {
-    def e1_1 = ("This is the expected customer" ^ form).middle.size must_== 2
+    def e1_1 = ("This is the expected customer" ^ form).size must_== 2
     def e1_2 = ("This is the expected customer" ^ form).middle(1).text must_== s"Example($formText)"
     def e1_3 = s2"This is the expected customer $form".middle(2).text must_== s"Example($formText)"
 
