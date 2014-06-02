@@ -3,7 +3,7 @@ package org.specs2.specification
 import script.{StepParser, GWT}
 import org.specs2.Specification
 
-class StepParsersSpec extends Specification with GWT with Grouped { def is = s2""" ${"Step parsers".title}
+class StepParsersSpec extends Specification with GWT with Grouped { def is = "Step parsers".title ^ s2"""
 
 
  Delimited parsers can be used to extract values from specifications
