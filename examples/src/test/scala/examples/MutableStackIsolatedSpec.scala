@@ -19,7 +19,7 @@ class MutableStackIsolatedSpec extends Specification { isolated
   step { stack = emptyStack }
   eg { stack must beEmpty }
   eg { stack.top must throwA[NoSuchElementException] }
-  eg { stack.pop must throwA[NoSuchElementException] }; endp
+  eg { stack.pop must throwA[NoSuchElementException] }; p
 
   "2. Non-empty and not full".br
   "when the stack is not empty and not full".br
@@ -27,7 +27,7 @@ class MutableStackIsolatedSpec extends Specification { isolated
   eg { stack must not be empty }
   eg { stack.top === normalStack.top; stack === normalStack }
   eg { stack.pop === normalStack.top; stack !== normalStack }
-  eg { stack push 1; stack.top === 1; stack !== normalStack }; endp
+  eg { stack push 1; stack.top === 1; stack !== normalStack }; p
 
   "3. Full".br
   "when the stack is full".br

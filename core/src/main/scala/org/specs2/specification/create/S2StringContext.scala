@@ -83,9 +83,14 @@ trait S2StringContext extends FragmentsFactory { outer =>
       (fs :+ Text(text)) ++ fragments.fragments
   }
 
-  implicit def specStructureIsInterpolatedPart(s: SpecificationStructure): InterpolatedPart = new InterpolatedPart {
+  implicit def specificationStructureIsInterpolatedPart(s: SpecificationStructure): InterpolatedPart = new InterpolatedPart {
     def append(fs: Vector[Fragment], text: String, expression: String = "") = 
-      (fs :+ Text(text)) ++ s.is.fragments.fragments
+      specStructureIsInterpolatedPart(s.is).append(fs, text, expression)
+  }
+
+  implicit def specStructureIsInterpolatedPart(s: SpecStructure): InterpolatedPart = new InterpolatedPart {
+    def append(fs: Vector[Fragment], text: String, expression: String = "") =
+      (fs :+ Text(text)) ++ s.fragments.fragments
   }
 
   /**

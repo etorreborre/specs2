@@ -2,6 +2,7 @@ package examples
 
 import org.specs2.Specification
 import org.specs2.specification._
+import org.specs2.specification.create.{DefaultFragmentFactory, FragmentFactory, AroundExample, BeforeExample}
 import org.specs2.time._
 import org.specs2.execute._
 import org.specs2.matcher.{TerminationMatchers, MustMatchers}
@@ -34,35 +35,6 @@ class DefineContextsSpec extends Specification {
       def e1 = this { aNewSystem must_== "a fresh value" }
       def e2 = this { aNewSystem must_== "a fresh value" }
     }
-  }
-
-  /**
-   * This specification uses an implicit Outside context for each example
-   */
-  class OutsideWithImplicitContextSpecification extends Specification { def is =
-                                                             s2"""
-    This is a list of examples
-      example1                                  $e1
-      example2                                  $e2
-                                                               """
-    implicit val outside: Outside[Int] = new Outside[Int] { def outside = 1 }
-
-    def e1 = (i: Int) => i must_== 1
-    def e2 = (i: Int) => i must_== 1
-  }
-
-  /**
-   * This specification uses an implicit fixture for each example
-   */
-  class ImplicitFixtureSpecification extends Specification { def is = s2"""
-    This is a list of examples
-      example1                                  $e1
-      example2                                  $e2
-                                                               """
-    implicit val fixture: Fixture[Int] = new Fixture[Int] { def apply[R : AsResult](f: Int => R) = AsResult(f(1)) }
-
-    def e1 = (i: Int) => i must_== 1
-    def e2 = (i: Int) => i must_== 1
   }
 
   /**
@@ -114,29 +86,24 @@ class DefineContextsSpec extends Specification {
    * This specification shows how to create an Around context that will measure the execution time of
    * each example and update the result message
    */
-  class TimedExecutionSpecification extends Specification with AroundContextExample[Around] { def is = s2"""
+  class TimedExecutionSpecification extends Specification with AroundExample { def is = s2"""
     example 1 ${ Thread.sleep(90); ok }
     example 2 ${ Thread.sleep(10); ok }
     """
 
-    def aroundContext = new Timed {}
+    def around[T : AsResult](t: =>T): Result = {
+      // use `ResultExecution.execute` to catch possible exceptions
+      val (result, timer) = withTimer(ResultExecution.execute(AsResult(t)))
 
-    trait Timed extends Around {
-      def around[T : AsResult](t: =>T): Result = {
-        // use `ResultExecution.execute` to catch possible exceptions
-        val (result, timer) = withTimer(ResultExecution.execute(AsResult(t)))
+      // update the result with a piece of text which will be displayed in the console
+      result.updateExpected("Execution time: "+timer.time)
+    }
 
-        // update the result with a piece of text which will be displayed in the console
-        result.updateExpected("Execution time: "+timer.time)
-      }
-
-      /** mesure the execution time of a piece of code */
-      def withTimer[T](t: =>T): (T, SimpleTimer) = {
-        val timer = (new SimpleTimer).start
-        val result = t
-        (result, timer.stop)
-      }
-
+    /** mesure the execution time of a piece of code */
+    def withTimer[T](t: =>T): (T, SimpleTimer) = {
+      val timer = (new SimpleTimer).start
+      val result = t
+      (result, timer.stop)
     }
 
   }
@@ -151,26 +118,9 @@ class DefineContextsSpec extends Specification {
     """
     // create a new DefaultExampleFactory where the body of the example uses
     // the current example description
-    override lazy val exampleFactory = new DefaultExampleFactory {
-      override def newExample[T : AsResult](description: String, t: =>T): Example =
-        super.newExample(description, context(description)(AsResult(t)))
-    }
-  }
-
-  /**
-   * This mutable specification shows how to reuse a trait providing an Around context which is
-   * also going to use the example description. It is using a mutable Example factory for this.
-   */
-  class MutableTimedDescribedSpecification extends org.specs2.mutable.Specification with TimedContext {
-
-    "Example 1" in ok
-    "Example 2" in ok
-
-    // create a new MutableExampleFactory where the body of the example uses
-    // the current example description
-    override lazy val exampleFactory = new MutableExampleFactory {
-      override def newExample[T : AsResult](description: String, t: =>T): Example =
-        super.newExample(description, context(description)(AsResult(t)))
+    override lazy val fragmentFactory = new DefaultFragmentFactory {
+      override def Example[T : AsResult](description: String, t: =>T) =
+        super.Example(description, context(description)(AsResult(t)))
     }
   }
 
@@ -217,11 +167,12 @@ class DefineContextsSpec extends Specification {
    * This shows how to create a context which will timeout any example that takes too long to execute
    * It uses the `CommandLineArguments` trait to be able to set the timeout value from the command-line
    */
-  trait ExamplesTimeout extends AroundExample with MustMatchers with TerminationMatchers with CommandLineArguments {
+  trait ExamplesTimeout extends AroundExample with MustMatchers with TerminationMatchers {
 
-    lazy val commandLineTimeOut = arguments.commandLine.int("timeout").map(_.millis)
+//    lazy val commandLineTimeOut = arguments.commandLine.int("timeout").map(_.millis)
 
-    def timeout = commandLineTimeOut.getOrElse(100.millis)
+    def timeout = //commandLineTimeOut.getOrElse(
+      100.millis //)
 
     def around[T : AsResult](t: =>T) = {
       lazy val result = t
@@ -234,13 +185,11 @@ class DefineContextsSpec extends Specification {
 
   def println(s: String) = s // change this definition to see messages in the console
 
-  def is = sequential^
+  def is = sequential ^
            new BeforeSpecification ^
-           new OutsideWithImplicitContextSpecification ^
            new BeforeMutableSpecification ^
            new BeforeExampleMutableSpecification ^
            new BeforeExampleSpecification ^
            new TimedExecutionSpecification ^
-           new MutableTimedDescribedSpecification ^
            new TimedDescribedSpecification
 }

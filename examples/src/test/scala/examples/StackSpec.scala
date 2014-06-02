@@ -11,9 +11,9 @@ import org.specs2._
  *
  * Those examples are reused with different data in each case
  */
-class StackSpec extends Specification { def is = s2""" ${ "Specification for a Stack with a limited capacity".title }
+class StackSpec extends Specification { def is =  "Specification for a Stack with a limited capacity".title ^ s2"""
 
- A Stack with limited capacity can either be:                             $endp
+ A Stack with limited capacity can either be:                             $p
    1. Empty                                                               $anEmptyStack
    2. Normal (i.e. not empty but not full)                                $aNormalStack
    3. Full                                                                $aFullStack

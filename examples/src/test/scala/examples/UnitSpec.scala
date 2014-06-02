@@ -62,10 +62,8 @@ class UnitSpec extends mutable.Specification {
     // otherwise a case class can be used but the example body will be further down the file
     "contain 7 characters" in system2().e1
   }
-  // you can add links to other specifications with `link`
-  link("how" ~ ("to do hello world", new IncludedSpec))
-  // you can include other specifications with `include`
-  include(new IncludedSpec)
+  // you can add links to other specifications
+  "how" ~ ("to do hello world", new IncludedSpec)
 
   // a step to execute after the specification must be declared at the end
   step {

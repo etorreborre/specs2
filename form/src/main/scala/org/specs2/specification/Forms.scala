@@ -10,3 +10,5 @@ import form._
  */
 trait Forms extends FormsBuilder with FormFragmentsFactory with DecoratedProperties with FormS2StringContext
 
+object Forms extends Forms
+
