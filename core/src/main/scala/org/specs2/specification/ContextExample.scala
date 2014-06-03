@@ -1,9 +1,9 @@
 package org.specs2
 package specification
-package create
 
-import execute.{Result, AsResult}
 import core._
+import create.{ContextualFragmentFactory, FragmentsFactory}
+import execute._
 
 /**
  * For each created example use a given context
@@ -28,6 +28,20 @@ trait BeforeExample extends ContextExample { outer =>
 trait AfterExample extends ContextExample { outer =>
   protected def after: Any
   protected def context = new After { def after = outer.after }
+}
+
+/**
+ * For each created example use a given before action
+ */
+trait BeforeAfterExample extends ContextExample { outer =>
+  protected def before: Any
+
+  protected def after: Any
+
+  protected def context = new BeforeAfter {
+    def before = outer.before
+    def after = outer.after
+  }
 }
 
 /**

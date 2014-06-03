@@ -6,9 +6,8 @@ import NodeFunctions._
 import Nodex._
 import matcher.XmlMatchers
 
-class NodeFunctionsSpec extends Specification with Grouped with XmlMatchers { def is = s2"""
-  ${"node functions".title}                                                                                              
-                                                                                                                        
+class NodeFunctionsSpec extends Specification with Grouped with XmlMatchers { def is = "node functions".title ^ s2"""
+
   The matchNode function must return true if
     there is a match on the node label                                                               ${g1.e1}
     and a match on one attribute name                                                                ${g1.e2}

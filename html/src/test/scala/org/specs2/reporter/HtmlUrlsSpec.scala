@@ -5,7 +5,8 @@ import mutable.Specification
 import matcher.ResultMatchers
 import scala.xml.NodeSeq
 
-class HtmlUrlsSpec extends Specification with ResultMatchers with HtmlUrls with MockFileSystem {
+/*
+class HtmlUrlsSpec extends Specification with ResultMatchers with HtmlUrls {
   skipAllIf(isDead("http://www.google.com"))
 
   "it is possible to check the web links of an html document" >> {
@@ -45,3 +46,4 @@ class HtmlUrlsSpec extends Specification with ResultMatchers with HtmlUrls with 
     } must beFailing("http://www.etorreborre1.com is dead\nhttp://www.etorreborre2.com is dead")
   }
 }
+*/

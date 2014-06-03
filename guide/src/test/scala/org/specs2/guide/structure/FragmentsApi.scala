@@ -205,7 +205,7 @@ class s extends mutable.Specification { // 8<--
 { 1 === 1 }.eg;
 { 2 === 2 }.eg
 
-"And a second block".newp;
+"And a second block".p;
 { 3 === 3 }.eg;
 { 4 === 4 }.eg
 // 8<--

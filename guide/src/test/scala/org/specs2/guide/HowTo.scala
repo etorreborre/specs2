@@ -1,6 +1,7 @@
 package org.specs2
 package guide
 
+import org.specs2.specification.create.DefaultFragmentFactory
 import specification.{TagFragments, Fragments, Step, Around, Example, DefaultExampleFactory, Snippets}
 import execute.{AsResult, Result, ResultExecution, Failure}
 import main.{CommandLineArguments, Arguments}
@@ -456,24 +457,25 @@ class MutableTimedSpecification extends mutable.Specification with TimedContext 
   "Example 1" in ok
   "Example 2" in ok
 
-  // create a new MutableExampleFactory where the body of the example uses
+  // create a new DefaultFragmentFactory where the body of the example uses
   // the current example description
-  override lazy val exampleFactory = new MutableExampleFactory {
-    override def newExample[T : AsResult](description: String, t: =>T): Example =
-      super.newExample(description, context(description)(AsResult(t)))
+  override lazy val fragmentFactory = new DefaultFragmentFactory {
+    override def Example[T: AsResult](description: String, t: => T) =
+      super.Example(description, context(description)(AsResult(t)))
   }
 }
 
-class TimedSpecification extends Specification with TimedContext { def is = s2"""
+class TimedSpecification extends Specification with TimedContext {
+  def is = s2"""
   Example 1 $ok
   Example 2 $ok
   """
 
-// create a new DefaultExampleFactory where the body of the example uses
-// the current example description
-override lazy val exampleFactory = new DefaultExampleFactory {
-  override def newExample[T : AsResult](description: String, t: =>T): Example =
-    super.newExample(description, context(description)(AsResult(t)))
+  // create a new DefaultFragmentFactory where the body of the example uses
+  // the current example description
+  override lazy val fragmentFactory = new DefaultFragmentFactory {
+    override def Example[T: AsResult](description: String, t: => T) =
+      super.Example(description, context(description)(AsResult(t)))
   }
 }
 }}

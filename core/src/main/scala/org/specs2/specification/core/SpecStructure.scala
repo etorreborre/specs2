@@ -21,6 +21,9 @@ case class SpecStructure(header: SpecHeader, arguments: Arguments, fragments: Fr
 
   def specClassName = header.className
   def name = header.title.getOrElse(header.simpleName)
+
+  def texts = fragments.texts
+  def examples = fragments.examples
 }
 
 object SpecStructure {

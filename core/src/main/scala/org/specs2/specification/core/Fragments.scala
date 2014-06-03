@@ -12,6 +12,7 @@ import scalaz.stream.Process
 import Process._
 import control._
 import text.Trim._
+import Fragment._
 
 case class Fragments(contents: Process[Task, Fragment]) {
   def update(f: Process[Task, Fragment] => Process[Task, Fragment]) = contentsLens.modify(this)(f)
@@ -31,6 +32,9 @@ case class Fragments(contents: Process[Task, Fragment]) {
   def prepend(others: Seq[Fragment]): Fragments          = prepend(Fragments(others:_*))
 
   def when(condition: =>Boolean) = contentsLens.modify(this)(_  when emit(condition))
+
+  def texts    = fragments.filter(isText)
+  def examples = fragments.filter(isExample)
 }
 
 object Fragments {

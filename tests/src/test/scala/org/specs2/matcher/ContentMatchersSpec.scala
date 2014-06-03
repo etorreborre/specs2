@@ -22,22 +22,22 @@ class ContentMatchersSpec extends Specification with LinesContentMatchers { def 
 }
 
 case class comp() extends MustMatchers with TestFiles with ContentMatchers {
-  val mockFileSystem = new MockFileSystem {}
-  private[specs2] override val fileSystem: FileSystem = mockFileSystem
-  import mockFileSystem._
+//  val mockFileSystem = new MockFileSystem {}
+//  private[specs2] override val fileSystem: FileSystem = mockFileSystem
+//  import mockFileSystem._
 
-  addFile("f1", "hello\nbeautiful\nworld")
-  addFile("f2", "hello\nbeautiful\nworld")
-  addFile("f3", "beautiful\nworld\nhello")
-  addFile("f4", "hello\nworld")
-  addFile("f5", "world\nhello")
-  addFile("f6", "good\nmorning\nbeautiful\nworld")
-  addFile("f7", "good\nday\ncrazy\nworld")
+//  addFile("f1", "hello\nbeautiful\nworld")
+//  addFile("f2", "hello\nbeautiful\nworld")
+//  addFile("f3", "beautiful\nworld\nhello")
+//  addFile("f4", "hello\nworld")
+//  addFile("f5", "world\nhello")
+//  addFile("f6", "good\nmorning\nbeautiful\nworld")
+//  addFile("f7", "good\nday\ncrazy\nworld")
 
   // read contents from the mock file system
   override implicit protected val fileContentForMatchers = new LinesContent[File] {
     def name(f: File) = f.getPath
-    def lines(f: File) = readLines(f.getPath)
+    def lines(f: File) = Seq[String]() //readLines(f.getPath)
   }
 
 

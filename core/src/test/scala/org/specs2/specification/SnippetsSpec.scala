@@ -52,7 +52,7 @@ Robustness
 
   "snippets capture" - new group {
 
-  eg := { s2""" code: ${ snippet { got {1 + 1} } } """.texts(1) === "`got {1 + 1}`" }
+  eg := { s2""" code: ${ snippet { got {1 + 1} } } """.trimmedTexts(1) === "`got {1 + 1}`" }
   def got[T](t: T) = t
 
 
@@ -61,7 +61,7 @@ got {
   var n = 0
   n = 1
 }
-} } """.texts(1) ===
+} } """.trimmedTexts(1) ===
     """|```
        |got {
        |  var n = 0
@@ -76,7 +76,7 @@ var n = 0
 n = 1
 // 8<--
 n = 0
-} }""".texts(1).trim ===
+} }""".trimmedTexts(1).trim ===
     """|```
        |n = 1
        |```""".stripMargin
@@ -90,13 +90,13 @@ n = 1
 n = 0
 // 8<--
 var i = 0
-  } }""".texts(1) ===
+  } }""".trimmedTexts(1) ===
     """```
       |n = 1
       |var i = 0
       |```""".stripMargin
 
-   eg := s2""" code ${snippet { "e1" ! { ok } /**/;1/**/} }""".texts(1) === """`"e1" ! { ok }`"""
+   eg := s2""" code ${snippet { "e1" ! { ok } /**/;1/**/} }""".trimmedTexts(1) === """`"e1" ! { ok }`"""
  }
   "offsets" - new group {
     eg := s2""" code: ${ snippet {
@@ -106,7 +106,7 @@ var n = 0
 n = 1
 // 8<--
 n = 0
-  }.offsetIs(2) }""".texts(1) ===
+  }.offsetIs(2) }""".trimmedTexts(1) ===
     """|```
        |  n = 1
        |```""".stripMargin
@@ -148,7 +148,7 @@ n = 0
     eg := s2""" code: ${ snippet {
   var n = 1
   1 + n
-  }.eval.offsetIs(-2) }""".texts.drop(1).take(2).mkString("\n") ===
+  }.eval.offsetIs(-2) }""".trimmedTexts.drop(1).take(2).mkString("\n") ===
     """|```
        |var n = 1
        |1 + n
@@ -200,7 +200,7 @@ n = 0
   }
 
   implicit class SpecStructureTexts(spec: SpecStructure) {
-    def texts = spec.fragments.fragments.filter(Fragment.isText).map(_.description.show.trim)
+    def trimmedTexts = spec.fragments.fragments.filter(Fragment.isText).map(_.description.show.trim)
   }
   val attribute1 = 1
 }

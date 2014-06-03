@@ -165,6 +165,13 @@ trait FileSystem {
     Files.copy(Paths.get(path), Paths.get(dest).resolve(Paths.get(new File(path).getName)), StandardCopyOption.REPLACE_EXISTING)
   }
 
+  /** create a new file */
+  def createFile(path: String): Action[Boolean] =
+    Actions.safe { new File(path).createNewFile }
+
+  /** delete files or directories */
+  def delete(path: String): Action[Unit] =
+    listFiles(path).map(_.reverse.map(_.delete)).map(_ => ())
 }
 
 object FileSystem extends FileSystem

@@ -1,13 +1,15 @@
 package org.specs2
 package mock
 
+import org.specs2.specification.core.Fragment
 import specification._
 import control.Exceptions._
 import org.hamcrest.core.IsNull
 import org.mockito.Mockito.withSettings
 import org.mockito.invocation._
 import matcher._
-import scala.concurrent.ExecutionContext
+import scala.concurrent._
+import duration._
 import ExecutionContext.Implicits.global
 
 class MockitoSpec extends script.Specification with Mockito with ResultMatchers with Groups {  def is = s2"""
@@ -441,7 +443,7 @@ STUBS
           1 must_== 1 // to check if the previous expectation really fails
         }
       }
-      s.content.fragments.collect { case e: Example => FragmentExecution.executeBody(e.execute).isSuccess } must contain (false)
+      s.is.fragments.fragments.filter(Fragment.isExample).map(_.executionResult.isSuccess) must contain (false)
     }
 
     eg := {
@@ -453,7 +455,7 @@ STUBS
           there was one(list2).add("two") andThen one(list1).add("one")
         }
       }
-      s.content.fragments.collect { case e: Example => FragmentExecution.executeBody(e.execute).isSuccess } must contain (false)
+      s.is.fragments.fragments.filter(Fragment.isExample).map(_.executionResult.isSuccess) must contain (false)
     }
 
   }

@@ -41,6 +41,7 @@ trait FragmentDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDsl
   }
 
   implicit class appendToArguments(args: Arguments) {
+    def ^(other: Arguments)         : Arguments = args.overrideWith(other)
     def ^(s: SpecificationStructure): SpecStructure = ^(s.is)
     def ^(structure: SpecStructure) : SpecStructure = structure.copy(arguments = args)
     def ^(header: SpecHeader)       : SpecStructure = SpecStructure(header, args, Fragments())

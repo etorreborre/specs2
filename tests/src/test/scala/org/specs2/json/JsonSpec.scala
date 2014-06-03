@@ -16,7 +16,7 @@ class JsonSpec extends Specification with ScalaCheck {
     Json.terminalValues(json) must beTerminalValues
   }
 
-  "Find methods".newp
+  "Find methods".p
   "The find method returns None if a key is not present at the first level of a document" ! prop { (json: JSONType) =>
     Json.find("xx", json) must beNone
   }
@@ -27,7 +27,7 @@ class JsonSpec extends Specification with ScalaCheck {
     Json.find("(?i)KEY".r, new JSONObject(Map("key"->json))) must beSome(json)
   }
 
-  "FindDeep methods".newp
+  "FindDeep methods".p
   "The findDeep method returns Some(value) if a key is present somewhere in a document and points to a JSON object" ! prop { (json: JSONType) =>
     Json.findDeep("a", json) must beSome.iff(json.toString.contains(""""a" : """))
   }

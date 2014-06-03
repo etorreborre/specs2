@@ -18,23 +18,23 @@ class FormsFragmentsSpec extends Specification with Forms with ThrownExpectation
                                                                                      """
                                                                                
   object frags extends Customers {
-    def e1_1 = ("This is the expected customer" ^ form).size must_== 2
-    def e1_2 = ("This is the expected customer" ^ form).middle(1).text must_== s"Example($formText)"
-    def e1_3 = s2"This is the expected customer $form".middle(2).text must_== s"Example($formText)"
+    def e1_1 = ("This is the expected customer" ^ form).fragments.size must_== 2
+    def e1_2 = ("This is the expected customer" ^ form).fragments(1).toString must_== s"Example($formText)"
+    def e1_3 = s2"This is the expected customer $form" .fragments.fragments(2) .toString must_== s"Example($formText)"
 
     def e1_4 = {
       val spec = s2"This is the expected customer $eric"
-      spec.middle(1).text must_== "Text(This is the expected customer )"
-      spec.middle(2).text must_== s"Example($formText)"
+      spec.fragments.fragments(1).toString must_== "Text(This is the expected customer )"
+      spec.fragments.fragments(2).toString must_== s"Example($formText)"
     }
 
     def e2 = {
       val example = "the customer must be as expected" ! form
-      example.execute.isSuccess must beTrue
+      example.executionResult.isSuccess must beTrue
     }
     def e3 = {
       val example = "the customer must be as expected" ! failedForm
-      example.execute.message must_== "'20' is not equal to '18'"
+      example.executionResult.message must_== "'20' is not equal to '18'"
       
     }
   }

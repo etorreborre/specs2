@@ -2,7 +2,7 @@ package org.specs2
 
 import specification._
 
-class DependenciesSpec extends Specification with Analysis with Tags { def is = s2"""
+class DependenciesSpec extends Specification with Analysis { def is = s2"""
 
   The following dependencies must be enforced in specs2:
 
