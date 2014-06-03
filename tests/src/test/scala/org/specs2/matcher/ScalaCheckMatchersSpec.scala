@@ -123,7 +123,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
   def prop9 = execute(exceptionPropOnConversion).toString must startWith("A counter-example is")
 
   def fragment1 = {
-    val spec = new Specification { def is = prop((i: Int) => i == i) ^ end }
+    val spec = new Specification { def is = prop((i: Int) => i == i) }
     pending // FragmentExecution.executeSpecificationResult(spec).isSuccess
   }
 
@@ -155,7 +155,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
   def result1  = execute(prop(trueFunction)).expectationsNb must_== 100
   def result2  = {
     val spec = new Specification with ScalaCheck with OneExpectationPerProp { def is = "test" ! prop(trueFunction) }
-    spec.is.examples.map(_.body()).head.expectationsNb must_== 1
+    spec.is.examples.map(_.executionResult).head.expectationsNb must_== 1
   }
 
   case class config() extends Before with ScalaCheckMatchers with StringOutput {
@@ -206,14 +206,14 @@ trait ScalaCheckProperties extends ScalaCheck with ResultMatchers {  this: Speci
   def pendingProp = forAll((b: Boolean) => b must beTrue.orPending)
 }
 
-class MutableSpecWithContextAndScalaCheck extends mutable.Specification with ScalaCheck {
+class MutableSpecWithContextAndScalaCheck extends org.specs2.mutable.Specification with ScalaCheck {
   "check something with before code" ! new SC {
     prop { (s: String) =>
       s.reverse must_== aString
     }.set(rng = new util.Random, minTestsOk = 200)
   }
 
-  trait SC extends mutable.Before with StringOutput {
+  trait SC extends org.specs2.mutable.Before with StringOutput {
     val aString = "xxx"
     def before { println("before") }
   }

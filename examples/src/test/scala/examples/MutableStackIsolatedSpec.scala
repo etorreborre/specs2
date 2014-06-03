@@ -8,7 +8,7 @@ import org.specs2.specification.AllExpectations
  *
  * - a mutable specification
  * - the `isolated` argument in order to be able to use local variables safely for a group of examples
- * - auto-examples (annotated with .eg but ; have to be inserted to avoid type-inference issues
+ * - auto-examples
  * - formatting fragments operator to transform any string to a Text fragment followed by a formatting fragment
  */
 class MutableStackIsolatedSpec extends Specification { isolated

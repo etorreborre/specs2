@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import scala.xml._
-import specification.{Text => _, script, Groups}
+import specification.{script, Groups}
 
 class XmlMatchersSpec extends script.Specification with Groups with XmlMatchers { def is = s2"""
 

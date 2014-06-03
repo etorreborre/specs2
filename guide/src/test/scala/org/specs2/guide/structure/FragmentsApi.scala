@@ -187,12 +187,12 @@ There are also 2 additional postfix operations which can be used to start new pa
 // 8<--
 class s extends mutable.Specification { // 8<--
 "This is a first block of examples".p;
-{ 1 === 1 }.eg;
-{ 2 === 2 }.eg.endp
+eg { 1 === 1 };
+eg { 2 === 2 }; endp
 
 "And a second block".p;
-{ 3 === 3 }.eg;
-{ 4 === 4 }.eg
+eg { 3 === 3 };
+eg { 4 === 4 }
 // 8<--
 }
 }}

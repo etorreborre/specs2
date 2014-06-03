@@ -5,6 +5,7 @@ import io.StringOutput
 import java.util.concurrent._
 import scalaz.concurrent.Promise
 import specification._
+import scala.concurrent.duration._
 
 class TerminationMatchersSpec extends script.Specification with TerminationMatchers with Grouped { def is = section("unstable")^ s2"""
                                                                                                    

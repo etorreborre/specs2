@@ -95,6 +95,12 @@ trait FragmentDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDsl
   def asSection(names: String*) = fragmentFactory.AsSection(names:_*)
   def tag(names: String*)       = fragmentFactory.Tag(names:_*)
   def taggedAs(names: String*)  = fragmentFactory.TaggedAs(names:_*)
+
+  /** shortcut to add tag more quickly when rerunning failed tests */
+  private[specs2] def xtag = tag("x")
+  /** shortcut to add section more quickly when rerunning failed tests */
+  private[specs2] def xsection = section("x")
+
 }
 
 object FragmentDsl extends FragmentDsl
