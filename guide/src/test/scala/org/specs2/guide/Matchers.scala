@@ -6,17 +6,19 @@ import java.util.LinkedList
 import mock.Mockito
 import org.mockito.invocation.InvocationOnMock
 import org.hamcrest.{BaseMatcher, Description}
+import org.specs2.specification.core.SpecStructure
 import specification.{Forms, Grouped, Snippets}
 import Forms._
 import org.scalacheck.{Arbitrary, Gen, Prop, Test}
 import matcher.{Hamcrest, Expectable, Matcher, Parameters}
+import scala.concurrent.duration._
 
 class Matchers extends UserGuidePage with Snippets with ScalaCheck with Mockito with Forms { def is =
   generalSection ^
   scalaCheckSection ^
   mockitoSection
 
-  def generalSection = s2"""
+  def generalSection: SpecStructure = s2"""
 There are many ways to define expectations in ***specs2***. You can define expectations with anything that returns a `Result`:
 
   * Boolean
@@ -290,7 +292,7 @@ atLeastOnce(Seq(3, 4, 5)) ((_:Int) must be_>(2))
 atLeastOnceWhen(Seq(3, 4, 10)) { case a if a > 3 => a must be_>(5) }
 }}
 """
-  def scalaCheckSection =
+  def scalaCheckSection: SpecStructure =
 s2"""
 ### ScalaCheck
 
@@ -395,7 +397,7 @@ By default, a successful example using a `Prop` will be reported as 1 success an
 
   """
 
-  val mockitoSection =
+  def mockitoSection: SpecStructure =
 s2"""
 ### Mock expectations
 
@@ -753,28 +755,28 @@ In specs2, those 2 methods are defined by the `${fullName[matcher.ThrownMessages
 
                                                                                                                          """ ^
                                                                                                                         br ^
-  include(xonly, examples)                                                                                              ^
-  include(xonly, akaExpectations)                                                                                       ^
-  include(xonly, scalaCheckExamples)                                                                                    ^
-  include(xonly, new MockitoSpecification)                                                                              ^
-  include(xonly, new DataTableSpecification)                                                                            ^
-  include(xonly, mockitoExamples)                                                                                       ^
-  include(xonly, jsonExamples)                                                                                          ^
-  include(xonly, new ParserSpec)                                                                                        ^
+  link(examples)                                                                                              ^
+  link(akaExpectations)                                                                                       ^
+  link(scalaCheckExamples)                                                                                    ^
+  link(new MockitoSpecification)                                                                              ^
+  link(new DataTableSpecification)                                                                            ^
+  link(mockitoExamples)                                                                                       ^
+  link(jsonExamples)                                                                                          ^
+  link(new ParserSpec)                                                                                        ^
   end
 
   def m: java.util.List[String] = mock[java.util.List[String]]
   trait AStub
 
-  lazy val examples = new Specification { def is = "Examples".title ^
-    "This is hopefully true"         ! (1 != 2)     ^
-    { 1 must beEqualTo(1)      }                    ^
-    { 1 must_== 1              }                    ^ // my favorite!
-    { 1 should_== 1            }                    ^ // for should lovers
-    { 1 === 1                  }                    ^ // the ultimate shortcut
-    { 1 must be equalTo(1)     }                    ^ // with a literate style
-    { 1 must not be equalTo(2) }                    ^ // with a negation
-                                                    end
+  lazy val examples = new Specification { def is = "Examples".title ^ s2"""
+    "This is hopefully true" ${ 1 != 2 }
+    classical                ${ 1 must beEqualTo(1) }
+    my favorite!             ${ 1 must_== 1 }
+    for should lovers        ${ 1 should_== 1 }
+    the ultimate shortcut    ${ 1 === 1 }
+    with a literate style    ${ 1 must be equalTo(1) }
+    with a negation          ${ 1 must not be equalTo(2) }
+                                                    """
     def beShort = be_<=(5) ^^ { (t: Any) => t.toString.size }
   }
 
@@ -905,26 +907,26 @@ import util.parsing.combinator.RegexParsers
 import NumberParsers.{number, error}
 
 class ParserSpec extends Specification with matcher.ParserMatchers {  def is =
-  "Parsers for numbers"                                                                   ^
-                                                                                          p^
-  "beASuccess and succeedOn check if the parse succeeds"                                  ^
-  { number("1") must beASuccess }                                                         ^
-  { number must succeedOn("12") }                                                         ^
-  { number must succeedOn("12").withResult(12) }                                          ^
-  { number must succeedOn("12").withResult(equalTo(12)) }                                 ^
-  { number("1") must haveSuccessResult("1") }                                             ^
-                                                                                          p^
-  "beAFailure and failOn check if the parse fails"                                        ^
-  { number must failOn("abc") }                                                           ^
-  { number must failOn("abc").withMsg("string matching regex.*expected") }                ^
-  { number must failOn("abc").withMsg(matching(".*string matching regex.*expected.*")) }  ^
-  { number("i") must beAFailure }                                                         ^
-  { number("i") must haveFailureMsg("i' found") }                                         ^
-                                                                                          p^
-  "beAnError and errorOn check if the parser errors out completely"                       ^
-  { error must errorOn("") }                                                              ^
-  { error("") must beAnError }                                                            ^
-                                                                                          end
+  "Parsers for numbers"                                                                      ^
+                                                                                             p^
+  "beASuccess and succeedOn check if the parse succeeds"                                     ^
+  eg { number("1") must beASuccess }                                                         ^
+  eg { number must succeedOn("12") }                                                         ^
+  eg { number must succeedOn("12").withResult(12) }                                          ^
+  eg { number must succeedOn("12").withResult(equalTo(12)) }                                 ^
+  eg { number("1") must haveSuccessResult("1") }                                             ^
+                                                                                             p^
+  "beAFailure and failOn check if the parse fails"                                           ^
+  eg { number must failOn("abc") }                                                           ^
+  eg { number must failOn("abc").withMsg("string matching regex.*expected") }                ^
+  eg { number must failOn("abc").withMsg(matching(".*string matching regex.*expected.*")) }  ^
+  eg { number("i") must beAFailure }                                                         ^
+  eg { number("i") must haveFailureMsg("i' found") }                                         ^
+                                                                                             p^
+  "beAnError and errorOn check if the parser errors out completely"                          ^
+  eg { error must errorOn("") }                                                              ^
+  eg { error("") must beAnError }                                                            ^
+                                                                                             end
 
   val parsers = NumberParsers
 }

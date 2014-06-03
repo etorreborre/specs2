@@ -2,7 +2,7 @@ package org.specs2
 package guide
 package structure
 
-import specification.Groups
+import org.specs2.specification.{Tables, Groups}
 
 object Examples extends UserGuidePage {  def is = ""
 
@@ -38,7 +38,7 @@ This specification builds 1 piece of `Text` and 2 `Examples` which are `Fragment
 
 }}
 
-Please read the ${(new FragmentsApi).markdownLink("Fragments API").fromTop} page you want to know more about the low-level operators to create and chain Specification Fragments.
+Please read the ${new FragmentsApi} page you want to know more about the low-level operators to create and chain Specification Fragments.
 
 ##### _Unit_ specification
 
@@ -213,15 +213,15 @@ beNone checks if an element is None
 ```
 #### G / W /T
 
-The Given/When/Then style for writing specifications is described ${(new GivenWhenThenPage).markdownLink("here").fromTop}.
+The Given/When/Then style for writing specifications is described ${new GivenWhenThenPage}.
 
 #### DataTables
 
 [DataTables](org.specs2.guide.Matchers.html#DataTables) are generally used to pack lots of expectations inside one example. A DataTable which is used as a `Result` in the body of an Example will only be displayed when failing. If, on the other hand you want to display the table even when successful, to document your examples, you can omit the example description and inline the DataTable directly in the specification: ${snippet{
 
-class DataTableSpec extends Specification with matcher.DataTables { def is =
+class DataTableSpec extends Specification with Tables { def is =
 
-  "adding integers should just work in scala"  ^ {
+  "adding integers should just work in scala"  ^ eg {
     "a"   | "b" | "c" |
      2    !  2  !  4  |
      1    !  1  !  2  |>

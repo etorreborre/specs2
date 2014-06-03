@@ -11,32 +11,32 @@ import control.ImplicitParameters.ImplicitParam
 trait FormDsl extends FragmentDsl with FormFragmentsFactory {
   private val factory = formFragmentFactory
 
-  implicit class appendFormToString(s: String) {
+  implicit class appendFormToString(s: String) extends appendToString(s) {
     def ^(form: =>Form)                                          : Fragments = appendToString(s) ^ factory.FormFragment(form)
     def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): Fragments = appendToString(s) ^ factory.FormFragment(aForm)(p)
   }
 
-  implicit class appendFormToFragment(f: Fragment) {
+  implicit class appendFormToFragment(f: Fragment) extends appendToFragment(f) {
     def ^(form: =>Form)                                          : Fragments = appendToFragment(f) ^ factory.FormFragment(form)
     def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): Fragments = appendToFragment(f) ^ factory.FormFragment(aForm)(p)
   }
 
-  implicit class appendFormToFragments(fs: Fragments) {
+  implicit class appendFormToFragments(fs: Fragments) extends appendToFragments(fs) {
     def ^(form: =>Form)                                          : Fragments = appendToFragments(fs) ^ factory.FormFragment(form)
     def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): Fragments = appendToFragments(fs) ^ factory.FormFragment(aForm)(p)
   }
 
-  implicit class appendFormToArguments(args: Arguments) {
+  implicit class appendFormToArguments(args: Arguments) extends appendToArguments(args) {
     def ^(form: =>Form)                                          : SpecStructure = appendToArguments(args) ^ factory.FormFragment(form)
     def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): SpecStructure = appendToArguments(args) ^ factory.FormFragment(aForm)(p)
   }
 
-  implicit class appendFormToSpecHeader(header: SpecHeader) {
+  implicit class appendFormToSpecHeader(header: SpecHeader) extends appendToSpecHeader(header) {
     def ^(form: =>Form)                                          : SpecStructure = appendToSpecHeader(header) ^ factory.FormFragment(form)
     def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): SpecStructure = appendToSpecHeader(header) ^ factory.FormFragment(aForm)(p)
   }
 
-  implicit class appendFormToSpecStructure(structure: SpecStructure) {
+  implicit class appendFormToSpecStructure(structure: SpecStructure) extends appendToSpecStructure(structure) {
     def ^(form: =>Form)                                          : SpecStructure = appendToSpecStructure(structure) ^ factory.FormFragment(form)
     def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): SpecStructure = appendToSpecStructure(structure) ^ factory.FormFragment(aForm)(p)
   }

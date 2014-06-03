@@ -178,7 +178,7 @@ class s extends mutable.Specification { // 8<--
 "this is some text and a paragraph".p
 "this is an example and a paragraph" >> {
   1 must_== 1
-} p
+}
 // 8<--
 }
 }}
@@ -188,7 +188,7 @@ There are also 2 additional postfix operations which can be used to start new pa
 class s extends mutable.Specification { // 8<--
 "This is a first block of examples".p;
 eg { 1 === 1 };
-eg { 2 === 2 }; endp
+eg { 2 === 2 }; p
 
 "And a second block".p;
 eg { 3 === 3 };
@@ -202,12 +202,12 @@ You can use `newp` (or `newbr`) to the same effect: ${snippet{
 class s extends mutable.Specification { // 8<--
 
 "This is a first block of examples".p;
-{ 1 === 1 }.eg;
-{ 2 === 2 }.eg
+eg { 1 === 1 }
+eg { 2 === 2 }
 
 "And a second block".p;
-{ 3 === 3 }.eg;
-{ 4 === 4 }.eg
+eg { 3 === 3 }
+eg { 4 === 4 }
 // 8<--
 }
 }}
@@ -216,7 +216,7 @@ A shortcut is also available to indent a 'subexample' locally: ${snippet{
 // 8<--
 class s extends mutable.Specification { // 8<--
 "this is the first major example" >> { ok }
-  "this is minor and should be indented" >> { ok } lt;
+  "this is minor and should be indented" >> { ok } //lt;
 "this is the second major example" >> { ok }
 // 8<--
 }

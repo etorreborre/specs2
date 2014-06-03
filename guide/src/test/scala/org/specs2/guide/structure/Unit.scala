@@ -31,7 +31,9 @@ Those are all the methods which you can use to create fragments in a unit specif
 Note that you can use a `for` loop to create examples with the `examplesBlock` method: ${snippet{
 
 "this system has 5 examples" >> {
-  examplesBlock { (1 to 5) foreach { i => "example "+i >> ok } }
+  //examplesBlock {
+    (1 to 5) foreach { i => "example "+i >> ok }
+ //}
 }
 }}
 
@@ -46,7 +48,7 @@ And you can also use a `for` loop with the `Result.unit` method to create a bloc
 
 "My spec title".title
 // an url path can be used to specify a different path for the html reporting
-"My spec title".title.urlIs("com/MySpec.html")
+"My spec title".title //.urlIs("com/MySpec.html")
 }}
 
  * `args`: create arguments for the specification
@@ -54,7 +56,7 @@ And you can also use a `for` loop with the `Result.unit` method to create a bloc
  * `.txt` or `textFragment`: create a `Text` fragment ${snippet{
 "this is a text fragment".txt
 
-textFragment("this is a text fragment")
+Text("this is a text fragment")
 }}
 
  * `step`: create a `Step` ${snippet{
@@ -70,11 +72,11 @@ link("how" ~ ("to do hello world", new HelloWorldSpec))
 }}
 
  * `see`: add a link to another specification without including its fragments for execution ${snippet{
-see(new HelloWorldSpec)
+link(new HelloWorldSpec)
 }}
 
  * `include` to include another specification ${snippet{
-include(new HelloWorldSpec)
+link(new HelloWorldSpec)
 }}
 
  * `p, br, t, bt, end, endp`: add a formatting fragment
@@ -144,7 +146,7 @@ class MutableSpec extends Specification {
   // you can use `see` instead of `link`
   link("how" ~ ("to do hello world", new HelloWorldSpec))
   // you can include other specifications with `include`
-  include(new HelloWorldSpec)
+  link(new HelloWorldSpec)
 
   // a step to execute after the specification must be declared at the end
   step {

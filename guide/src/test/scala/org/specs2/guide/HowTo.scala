@@ -1,8 +1,10 @@
 package org.specs2
 package guide
 
+import org.specs2.data.AlwaysTag
 import org.specs2.specification.create.DefaultFragmentFactory
-import specification.{TagFragments, Fragments, Step, Around, Example, DefaultExampleFactory, Snippets}
+import specification._
+import core._
 import execute.{AsResult, Result, ResultExecution, Failure}
 import main.{CommandLineArguments, Arguments}
 import matcher.Matcher
@@ -31,7 +33,7 @@ For the complete list of arguments and shortcut methods read the [Runners](org.s
 
 Some specifications can depend on the arguments passed on the command line, for example to fine-tune the behaviour of some Context objects. If you need to do this, you can add an `Arguments` parameter to the Specification class. This parameter will be setup when the specification is instantiated: ${snippet{
 
-class DependOnCommandLine(arguments: Arguments) extends mutable.Specification {
+class DependOnCommandLine(arguments: Arguments) extends org.specs2.mutable.Specification {
   skipAllUnless(!arguments.commandLine.contains("DB"))
 
   "database access" >> { dbAccess must beOk }
@@ -43,7 +45,7 @@ def dbAccess = ok
 
 Alternatively, if you need to keep your specification as a trait, you can mix-in the `org.specs2.main.CommandLineArguments` trait. This trait has an `arguments` variable which will contain the command-line arguments: ${snippet{
 
-class CommandedSpecification extends mutable.Specification with CommandLineArguments {
+class CommandedSpecification extends org.specs2.mutable.Specification { //with CommandLineArguments {
   if (arguments.sequential) "this is" >> ok
   else                      "this is" >> ko
 }
@@ -59,11 +61,10 @@ Note that the `arguments` instance gives you access to all the specs2 arguments 
 
 Usually the title of a specification is derived from the specification class name. However if you want to give a more readable name to your specification report you can do the following: ${snippet{
 
-class MySpec extends Specification { def is = s2"""
-  ${"My beautiful specifications".title}
+class MySpec extends Specification { def is = "My beautiful specifications".title ^ s2"""
 
-  // The rest of the spec goes here
-  """
+// The rest of the spec goes here
+"""
 }
 }}
 
@@ -133,11 +134,9 @@ And when you want other ways to customize the description, you can use:
 In a given specification some examples may look similar enough that you would like to "factor" them out and share them between
 different parts of your specification. The best example of this situation is a specification for a Stack of limited size: ${ snippet {
 
-class StackSpec extends Specification { def is = s2"""
+class StackSpec extends Specification { def is = "Specification for a Stack with a limited capacity".title ^ s2"""
 
-  ${"Specification for a Stack with a limited capacity".title}
-
-  A Stack with limited capacity can either be:                             $endp
+  A Stack with limited capacity can either be:                             $p
     1. Empty                                                               $anEmptyStack
     2. Normal (i.e. not empty but not full)                                $aNormalStack
     3. Full                                                                $aFullStack
@@ -252,7 +251,7 @@ class index extends Specification { def is =
   examplesLinks("Example specifications")
 
   // see the SpecificationsFinder trait for the parameters of the 'specifications' method
-  def examplesLinks(t: String) = t.title ^ specifications().map(see)
+  def examplesLinks(t: String) = t.title ^ specifications().map(link)
 }
 }}
 
@@ -307,7 +306,8 @@ class TaggedSpecification extends Specification {
     "and the first group of examples" >> {
       tag("feature 1", "unit")
       "example 1" in success
-      "example 2" in success tag("integration")
+      "example 2" in success
+      tag("integration")
     }
   }
   section("checkin")
@@ -320,7 +320,8 @@ class TaggedSpecification extends Specification {
   "and the last group of examples" >> {
     "example 5" in success
     "example 6" in success
-  } section("slow")
+  }
+  section("slow")
 }
 }}
 
@@ -341,13 +342,12 @@ the section: `example 5` and `example 6` are tagged with `slow`
 #### `Always` tag
 
 Some specifications need to have some steps which will always be included whatever tags are specified on the command line. This is the case when defining a "template" specification with setup/teardown steps: ${snippet{
-  import TagFragments._
 
   trait DatabaseSpec extends Specification {
     override def map(fs: =>Fragments) =
-      AlwaysTag ^ Step("startDb") ^
+      tag(AlwaysTag) ^ Step("startDb") ^
       fs ^
-      AlwaysTag ^ Step("cleanDb")
+      tag(AlwaysTag) ^ Step("cleanDb")
   }
 }}
 
@@ -355,7 +355,7 @@ Some specifications need to have some steps which will always be included whatev
 
 You can skip all the examples of a specification by using the `skipAllIf` or `skipAllUnless` methods: ${snippet{
 
-class EmailSpecification extends mutable.Specification {
+class EmailSpecification extends org.specs2.mutable.Specification {
   skipAllIf(serverIsOffline)
   "test email" >> { sendEmail must beOk }
 }
@@ -452,7 +452,7 @@ trait TimedContext {
   }
 }
 
-class MutableTimedSpecification extends mutable.Specification with TimedContext {
+class MutableTimedSpecification extends org.specs2.mutable.Specification with TimedContext {
 
   "Example 1" in ok
   "Example 2" in ok

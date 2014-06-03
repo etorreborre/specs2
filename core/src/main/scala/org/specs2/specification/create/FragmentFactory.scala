@@ -3,6 +3,7 @@ package specification
 package create
 
 import execute.{Success, AsResult}
+import org.specs2.data.{NamedTag, Tag}
 import specification.core._
 import Description._
 import Execution._
@@ -23,6 +24,11 @@ trait FragmentFactory {
   def TaggedAs(names: String*): Fragment
   def Section(names: String*): Fragment
   def AsSection(names: String*): Fragment
+
+  def Mark(tag: NamedTag): Fragment
+  def MarkAs(tag: NamedTag): Fragment
+  def MarkSection(tag: NamedTag): Fragment
+  def MarkSectionAs(tag: NamedTag): Fragment
 
   def Action[T](t: =>T): Fragment
   def Step[T](t: =>T): Fragment
@@ -57,6 +63,11 @@ trait DefaultFragmentFactory extends FragmentFactory {
   def TaggedAs(names: String*): Fragment  = Fragment(taggedAs(names:_*), Execution.NoExecution)
   def Section(names: String*): Fragment   = Fragment(section(names:_*), Execution.NoExecution)
   def AsSection(names: String*): Fragment = Fragment(asSection(names:_*), Execution.NoExecution)
+
+  def Mark(tag: NamedTag): Fragment          = Fragment(mark(tag), Execution.NoExecution)
+  def MarkAs(tag: NamedTag): Fragment        = Fragment(markAs(tag), Execution.NoExecution)
+  def MarkSection(tag: NamedTag): Fragment   = Fragment(markSection(tag), Execution.NoExecution)
+  def MarkSectionAs(tag: NamedTag): Fragment = Fragment(markSectionAs(tag), Execution.NoExecution)
 
   def Action[T](t: =>T): Fragment = Fragment(NoText, result({ t; Success() }))
   def Step[T](t: =>T): Fragment   = Fragment(NoText, result({ t; Success() }).join)
@@ -103,17 +114,22 @@ class ContextualFragmentFactory(factory: FragmentFactory, context: Context) exte
   def Section(names: String*): Fragment         = factory.Section(names:_*)
   def AsSection(names: String*): Fragment       = factory.AsSection(names:_*)
 
-  def Action[T](t: =>T): Fragment             = factory.Action[T](t)
-  def Step[T](t: =>T): Fragment               = factory.Step[T](t)
-  def Text(t: String): Fragment               = factory.Text(t)
-  def Break: Fragment                         = factory.Break
-  def Start: Fragment                         = factory.Start
-  def End: Fragment                           = factory.End
-  def Tab: Fragment                           = factory.Tab
-  def Tab(n: Int): Fragment                   = factory.Tab(n)
-  def Backtab: Fragment                       = factory.Backtab
-  def Backtab(n: Int): Fragment               = factory.Backtab(n)
-  def Link(link: SpecificationLink): Fragment = factory.Link(link)
+  def Mark(tag: NamedTag): Fragment                  = factory.Mark(tag)
+  def MarkAs(tag: NamedTag): Fragment                = factory.MarkAs(tag)
+  def MarkSection(tag: NamedTag): Fragment           = factory.MarkSection(tag)
+  def MarkSectionAs(tag: NamedTag): Fragment         = factory.MarkSectionAs(tag)
+
+  def Action[T](t: =>T): Fragment               = factory.Action[T](t)
+  def Step[T](t: =>T): Fragment                 = factory.Step[T](t)
+  def Text(t: String): Fragment                 = factory.Text(t)
+  def Break: Fragment                           = factory.Break
+  def Start: Fragment                           = factory.Start
+  def End: Fragment                             = factory.End
+  def Tab: Fragment                             = factory.Tab
+  def Tab(n: Int): Fragment                     = factory.Tab(n)
+  def Backtab: Fragment                         = factory.Backtab
+  def Backtab(n: Int): Fragment                 = factory.Backtab(n)
+  def Link(link: SpecificationLink): Fragment   = factory.Link(link)
 
 }
 
@@ -134,6 +150,11 @@ trait DelegatedFragmentFactory extends FragmentsFactory with FragmentFactory {
   def TaggedAs(names: String*): Fragment        = factory.TaggedAs(names:_*)
   def Section(names: String*): Fragment         = factory.Section(names:_*)
   def AsSection(names: String*): Fragment       = factory.AsSection(names:_*)
+
+  def Mark(tag: NamedTag): Fragment                  = factory.Mark(tag)
+  def MarkAs(tag: NamedTag): Fragment                = factory.MarkAs(tag)
+  def MarkSection(tag: NamedTag): Fragment           = factory.MarkSection(tag)
+  def MarkSectionAs(tag: NamedTag): Fragment         = factory.MarkSectionAs(tag)
 
   def Action[T](t: =>T): Fragment             = factory.Action[T](t)
   def Step[T](t: =>T): Fragment               = factory.Step[T](t)

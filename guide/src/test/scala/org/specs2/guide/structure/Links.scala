@@ -28,15 +28,17 @@ Otherwise, if you want to include several specifications at once you can use the
 
 s2"""
 These are the included specifications
-  ${include(childSpec1, childSpec2, childSpec3)}
+  ${link(childSpec1)}
+  ${link(childSpec2)}
+  ${link(childSpec3)}
 """
 }}
 
 The effect of doing so is that all the fragments of the children specification will be inlined in the parent one. This is exactly what is done in some pages of this user guide, but with a twist: ${snippet{
 
 s2"""
-  ${include(xonly, new HelloWorldSpec) }
-  ${include(xonly, new HelloWorldUnitSpec)}
+  ${link(new HelloWorldSpec) }
+  ${link(new HelloWorldUnitSpec)}
 """
 }}
 
@@ -46,7 +48,7 @@ In the code above there are specific arguments to the included specifications so
 
 When you include a specification in another one the console will display the beginning and end statistics of the included specification. If you just want to insert the "middle" fragments of the included specification you can use `inline`: ${snippet{
 s2"""
-  ${inline(otherSpecification)}
+  ${link(otherSpecification)}
 """
 }}
 ##### Html link
@@ -58,7 +60,7 @@ s2"""
 }}
 This declaration will include the child specification so it is executed when the parent specification is executed. However during the reporting, only a Html link will be created in the parent file, referencing a separate file for the children specification. On the other hand if you "hide" the specification, the link will not be printed out: ${snippet{
 s2"""
-  ${link((new QuickStart).hide)}
+  ${link((new QuickStart))}
  """
 }}
 ###### Html Link
@@ -96,7 +98,7 @@ class s extends Specification { def is = s2""" // 8<--
 Sometimes you just want to reference another specification without triggering its execution. For example when [creating an index page](#Create+an+index): ${snippet{
 // 8<--
 s2""" // 8<--
-${see(new MailSenderSpec)}
+${link(new MailSenderSpec)}
 // 8<--
 """
 }}
@@ -104,11 +106,11 @@ ${see(new MailSenderSpec)}
 This will generate a html link in the main specification based on the referenced specification name. If you want to customize that link you can use the following syntax: ${snippet{
 // 8<--
 class s extends Specification { def is = s2""" // 8<--
-  ${"before text" ~/ ("text to highlight", specification, "after text")           }
-  ${"before text" ~/ ("text to highlight", specification, "after text", "tooltip")}
-  ${"text to highlight" ~/ specification                                          }
-  ${"text to highlight" ~/ (specification, "after text")                          }
-  ${"text to highlight" ~/ (specification, "after text", "tooltip")               }
+  ${"before text" ~ ("text to highlight", specification, "after text")           }
+  ${"before text" ~ ("text to highlight", specification, "after text", "tooltip")}
+  ${"text to highlight" ~ specification                                          }
+  ${"text to highlight" ~ (specification, "after text")                          }
+  ${"text to highlight" ~ (specification, "after text", "tooltip")               }
 // 8<--
   """
 }
@@ -116,13 +118,13 @@ class s extends Specification { def is = s2""" // 8<--
 
 #### Markdown url
 
-If you just want to reference the url of the html page that's being generated for a given specification in a paragraph of text, you can use the `${termName(specification.markdownLink)}` method: ${snippet{
+If you just want to reference the url of the html page that's being generated for a given specification in a paragraph of text, you can use the `${termName(specification)}` method: ${snippet{
 s"""
-  For more information you can read ${DetailedSpec.markdownLink}
+  For more information you can read ${DetailedSpec}
   // or
-  For more information you can read ${DetailedSpec.markdownLink("the detailed specification")}
+  For more information you can read ${DetailedSpec}
   // or
-  For more information you can read ${"the detailed specification".markdownLink(DetailedSpec)}
+  For more information you can read ${"the detailed specification"}
 """
 }}
   """

@@ -621,7 +621,7 @@ You can use a custom `Exporter` from inside sbt by passing the `exporter` argume
 
                                                                                                                         """ ^
                                                                                                                         br ^
-  include(xonly, argumentsSpec)                                                                                         ^
+  link(argumentsSpec)                                                                                         ^
                                                                                                                         end
 
   // User guide examples can be added here

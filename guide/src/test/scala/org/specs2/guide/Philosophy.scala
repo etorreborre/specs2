@@ -331,8 +331,8 @@ Scala 2.10 brings a new feature to the language: String interpolation. But the b
 <br/>
 
     """^
-  include(xonly, chaining)                                                                                                 ^
-  include(xonly, context)                                                                                                  ^
+  link(chaining)                                                                                                 ^
+  link(context)                                                                                                  ^
                                                                                                                            end
 
 

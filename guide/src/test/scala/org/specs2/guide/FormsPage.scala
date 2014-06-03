@@ -553,7 +553,7 @@ Note that the Calculator class is not, in itself an Example. But there is an imp
 - - -
                                                                                                                     """ ^
                                                                                                                         br ^
-  include(xonly, new CalculatorSpecification)                                                                           ^
+  link(new CalculatorSpecification)                                                                           ^
   end
 
   import Form._

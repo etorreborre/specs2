@@ -3,7 +3,7 @@ package specification
 package core
 
 import scalaz.Show
-import data.Tag
+import org.specs2.data.{NamedTag, Tag}
 
 trait Description {
   def show: String
@@ -60,7 +60,7 @@ case class backtab(n: Int = 1) extends Description {
   def show = ""
 }
 
-case class Marker(tag: Tag, isSection: Boolean = false, appliesToNext: Boolean = true) extends Description {
+case class Marker(tag: NamedTag, isSection: Boolean = false, appliesToNext: Boolean = true) extends Description {
   def show = ""
 }
 
@@ -75,10 +75,15 @@ object AlwaysWhenNoIncludeMarker extends Description {
 object Description {
   def text(text: String) = RawText(text)
 
-  def tag(ts: String*)       = Marker(Tag(ts:_*), isSection = false)
-  def taggedAs(ts: String*)  = Marker(Tag(ts:_*), isSection = false, appliesToNext = false)
-  def section(ts: String*)   = Marker(Tag(ts:_*), isSection = true)
-  def asSection(ts: String*) = Marker(Tag(ts:_*), isSection = true, appliesToNext = false)
+  def tag(ts: String*)       = mark(Tag(ts:_*))
+  def taggedAs(ts: String*)  = markAs(Tag(ts:_*))
+  def section(ts: String*)   = markSection(Tag(ts:_*))
+  def asSection(ts: String*) = markSectionAs(Tag(ts:_*))
+
+  def mark(tag: NamedTag)          = Marker(tag, isSection = false)
+  def markAs(tag: NamedTag)        = Marker(tag, isSection = false, appliesToNext = false)
+  def markSection(tag: NamedTag)   = Marker(tag, isSection = true)
+  def markSectionAs(tag: NamedTag) = Marker(tag, isSection = true, appliesToNext = false)
 
   implicit def showInstance: Show[Description] = new Show[Description] {
     override def shows(d: Description): String =

@@ -94,8 +94,8 @@ You can explore the rest of this [User Guide](org.specs2.guide.UserGuide.html "G
  * use sbt/maven/junit to execute a specification
  * export your specification as an html document (like this one!)
   """^
-  include(xonly, new HelloWorldSpec)                                                                                    ^
-  include(xonly, new HelloWorldUnitSpec)                                                                                ^
+  link(new HelloWorldSpec)                                                                                    ^
+  link(new HelloWorldUnitSpec)                                                                                ^
                                                                                                                         end
 
 }

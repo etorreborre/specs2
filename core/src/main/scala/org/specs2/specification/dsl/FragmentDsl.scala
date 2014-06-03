@@ -5,6 +5,7 @@ package dsl
 import main.Arguments
 import execute.AsResult
 import control.ImplicitParameters._
+import org.specs2.data.{NamedTag, Tag}
 import specification.core._
 import specification.create.{FragmentsFactory, DelegatedFragmentFactory}
 
@@ -91,10 +92,15 @@ trait FragmentDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDsl
   implicit def fragmentsAsSpecStructure(fs: Fragments): SpecStructure =
     SpecHeader(getClass) ^ fs
 
-  def section(names: String*)   = fragmentFactory.Section(names:_*)
-  def asSection(names: String*) = fragmentFactory.AsSection(names:_*)
-  def tag(names: String*)       = fragmentFactory.Tag(names:_*)
-  def taggedAs(names: String*)  = fragmentFactory.TaggedAs(names:_*)
+  def tag(names: String*)      : Fragment = fragmentFactory.Tag(names:_*)
+  def taggedAs(names: String*) : Fragment = fragmentFactory.TaggedAs(names:_*)
+  def section(names: String*)  : Fragment = fragmentFactory.Section(names:_*)
+  def asSection(names: String*): Fragment = fragmentFactory.AsSection(names:_*)
+
+  def tag(tag: NamedTag)      : Fragment = fragmentFactory.Mark(tag)
+  def taggedAs(tag: NamedTag) : Fragment = fragmentFactory.MarkAs(tag)
+  def section(tag: NamedTag)  : Fragment = fragmentFactory.MarkSection(tag)
+  def asSection(tag: NamedTag): Fragment = fragmentFactory.MarkSectionAs(tag)
 
   /** shortcut to add tag more quickly when rerunning failed tests */
   private[specs2] def xtag = tag("x")
