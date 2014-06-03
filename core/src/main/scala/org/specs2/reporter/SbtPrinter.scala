@@ -1,0 +1,96 @@
+package org.specs2
+package reporter
+
+import data.Fold
+import scalaz.concurrent.Task
+import scalaz.stream.Process.Sink
+import sbt.testing._
+import Fold._
+import text.AnsiColors._
+import scalaz.stream.io._
+import main.Arguments
+import specification.core._
+
+trait SbtPrinter extends Printer {
+  /** sbt loggers to display text */
+  def loggers: Array[Logger]
+  /** events handler to notify Sbt of successes/failures */
+  def events: SbtEvents
+
+  lazy val textPrinter = TextPrinter
+
+  /**
+   * use 2 Folds:
+   * - one for logging messages to the console
+   * - one for registering sbt events
+   */
+  def fold(env: Env, spec: SpecStructure): Fold[Fragment] =
+    textFold(env, spec) >> eventFold(env, spec)
+
+  def textFold(env: Env, spec: SpecStructure) =
+    textPrinter.fold(env.copy(lineLogger = SbtLineLogger(loggers)), spec)
+
+  def eventFold(env: Env, spec: SpecStructure) =
+    Fold.fromSink(eventSink(env, spec))
+
+  def eventSink(env: Env, spec: SpecStructure): Sink[Task, Fragment] =
+    channel(notify(env.arguments))
+
+  def notify(args: Arguments): Fragment => Task[Unit] = { fragment =>
+    import org.specs2._
+    Task.now {
+      if (fragment.isRunnable) {
+        def handleResult(res: execute.Result) {
+          res match {
+            case execute.Success(text,_)             => events.succeeded()
+            case r @ execute.Failure(text, e, st, d) => events.failure(args.traceFilter(r.exception))
+            case r @ execute.Error(text, e)          => events.error(args.traceFilter(r.exception))
+            case execute.Skipped(text, _)            => events.skipped()
+            case execute.Pending(text)               => events.pending()
+            case execute.DecoratedResult(t, r)       => handleResult(r)
+          }
+        }
+        handleResult(fragment.executionResult)
+      }
+    }
+  }
+
+}
+
+/**
+ * Sbt events for a given TaskDef and event handler
+ */
+trait SbtEvents {
+  /** sbt event handler to notify of successes/failures */
+  def handler: EventHandler
+  /** sbt task definition for this run */
+  def taskDef: TaskDef
+
+  def error                          = handler.handle(SpecEvent(Status.Error))
+  def error(exception: Throwable)    = handler.handle(SpecEvent(Status.Error, new OptionalThrowable(exception)))
+  def failure(exception: Throwable)  = handler.handle(SpecEvent(Status.Failure, new OptionalThrowable(exception)))
+  def succeeded()                    = handler.handle(SpecEvent(Status.Success))
+  def skipped  ()                    = handler.handle(SpecEvent(Status.Skipped))
+  def pending  ()                    = handler.handle(SpecEvent(Status.Pending))
+  def ignored  ()                    = handler.handle(SpecEvent(Status.Ignored))
+  def canceled ()                    = handler.handle(SpecEvent(Status.Canceled))
+
+  case class SpecEvent(status: Status, throwable: OptionalThrowable = new OptionalThrowable) extends Event {
+    val fullyQualifiedName = taskDef.fullyQualifiedName
+    val fingerprint        = taskDef.fingerprint
+    val selector           = taskDef.selectors.headOption.getOrElse(new SuiteSelector)
+    val duration           = 10000L
+  }
+}
+
+case class SbtLineLogger(loggers: Array[Logger]) extends BufferedLineLogger {
+  def infoLine(msg: String) = loggers.foreach { logger =>
+    logger.info(removeColors(msg, !logger.ansiCodesSupported))
+  }
+  def failureLine(msg: String) = loggers.foreach { logger =>
+    logger.error(removeColors(msg, !logger.ansiCodesSupported))
+  }
+  def errorLine(msg: String) = loggers.foreach { logger =>
+    logger.error(removeColors(msg, !logger.ansiCodesSupported))
+  }
+}

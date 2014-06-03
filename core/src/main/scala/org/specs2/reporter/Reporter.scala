@@ -1,0 +1,67 @@
+package org.specs2
+package reporter
+
+import specification._
+import specification.process._
+import core._
+import scalaz.concurrent.Task
+import control._
+import Actions._
+import scalaz.{Writer => _, _}, Scalaz._
+import Task._
+import scalaz.stream.Process
+import data._
+import Processes._
+import Fold._
+import Printer._
+
+/**
+ * A reporter is responsible to select printers based on the arguments
+ * execute the specification and pass it to each printer for printing
+ *
+ * It is also responsible for saving the specification state at the end of the run
+ */
+trait Reporter {
+
+  def report(env: Env, printers: Map[PrinterName, Printer] = Map(CONSOLE -> TextPrinter)): SpecStructure => Action[Unit] = { spec =>
+    val executing = spec |> Filter.filter(env) |> Executor.execute(env)
+
+    val folds = selectPrinters(env, printers).map(_.fold(env, spec)) :+ statsStoreFold(env, spec)
+    Actions.fromTask(runFolds(executing.contents, folds))
+  }
+
+  def selectPrinters(env: Env, printers: Map[PrinterName, Printer]): List[Printer] = {
+    val args = env.arguments
+
+    val console =
+      if (!printerNames.map(_.name).exists(args.contains) || args.contains(CONSOLE.name))
+        printers.get(CONSOLE).toList
+      else List()
+
+    val otherPrinters = printers.filterKeys(_ != CONSOLE).filterKeys(key => args.commandLine.bool(key.name).isDefined).values.toList
+
+    console ++ otherPrinters
+  }
+
+  /**
+   * Use a Fold to store the stats of each example + the stats of the specification
+   */
+  def statsStoreFold(env: Env, spec: SpecStructure) = new Fold[Fragment] {
+    type S = Stats
+
+    lazy val sink: Process.Sink[Task, (Fragment, Stats)] =
+      Process.constant {  case (fragment: Fragment, stats: Stats) =>
+        env.statisticsRepository.storeResult(spec.specClassName, fragment.description, fragment.executionResult).toTask
+      }
+
+    def fold = Statistics.fold
+    def init = Stats()
+
+    def last(stats: Stats) =
+      env.statisticsRepository.storeStatistics(spec.specClassName, stats).toTask
+  }
+
+}
+
+object Reporter extends Reporter
+
