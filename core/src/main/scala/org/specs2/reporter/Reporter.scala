@@ -14,6 +14,7 @@ import data._
 import Processes._
 import Fold._
 import Printer._
+import SpecStructure._
 
 /**
  * A reporter is responsible to select printers based on the arguments
@@ -24,8 +25,9 @@ import Printer._
 trait Reporter {
 
   def report(env: Env, printers: List[Printer]): SpecStructure => Action[Unit] = { spec =>
-    val executing = spec |> Filter.filter(env) |> Executor.execute(env)
-    val folds = printers.map(_.fold(env, spec)) :+ statsStoreFold(env, spec)
+    val env1 = env.copy(arguments = env.arguments.overrideWith(spec.arguments))
+    val executing = spec |> Filter.filter(env1) |> Executor.execute(env1)
+    val folds = printers.map(_.fold(env1, spec)) :+ statsStoreFold(env1, spec)
     Actions.fromTask(runFolds(executing.contents, folds))
   }
 

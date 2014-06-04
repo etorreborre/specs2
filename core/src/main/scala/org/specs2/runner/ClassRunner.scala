@@ -74,11 +74,15 @@ object consoleRunner extends ClassRunner {
   def main(args: Array[String]) = run(args)
 }
 
+/**
+ * Test runner to simulate a console run
+ */
 object TextRunner extends ClassRunner {
-  def run(spec: SpecificationStructure)(implicit env: Env = Env()): LineLogger with StringOutput = {
+  def run(spec: SpecificationStructure, args: Arguments = Arguments())(implicit env: Env = Env()): LineLogger with StringOutput = {
     val logger = LineLogger.stringLogger
     try {
-      report(env.copy(lineLogger = logger))(spec)
+      val env1 = env.copy(lineLogger = logger, arguments = env.arguments.overrideWith(args))
+      report(env1)(spec).execute(env.systemLogger).unsafePerformIO
       logger
     } finally env.shutdown
   }
