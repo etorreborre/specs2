@@ -138,7 +138,7 @@ object Executor extends Executor {
   def executeAll(seq: Fragment*)(implicit env: Env = Env()) = executeSeq(seq)(env)
 
   /** only to be used in tests */
-  def executeSeq(seq: Seq[Fragment])(implicit env: Env = Env()) = {
+  def executeSeq(seq: Seq[Fragment])(implicit env: Env = Env()): IndexedSeq[Fragment] = {
     try { (Process(seq:_*).toSource |> executeTasks(env)).sequence(Runtime.getRuntime.availableProcessors).runLog.run }
     finally env.shutdown
   }

@@ -2,9 +2,11 @@ package org.specs2
 package specification
 
 import io._
-import org.specs2.specification.core.Fragments
+import org.specs2.main.Arguments
+import org.specs2.specification.core.{Env, Fragments}
 import org.specs2.specification.create.FragmentsFactory
 import org.specs2.specification.dsl.FragmentDsl
+import org.specs2.specification.process.Executor
 import sys._
 import execute._
 import matcher._
@@ -109,7 +111,7 @@ class ContextSpec extends Specification with ResultMatchers with Groups { def is
 
   "other context" - new g4 with FragmentsExecution {
     e1 := executing(firstThenEx1).prints("first", "e1")
-    e2 := executeBodies(silentFirstThenEx1).map(_.message) must_== List("success")
+    e2 := executeBodies(silentFirstThenEx1).map(_.message) must_== List("", "success")
     e3 := executeBodies(failingFirstThenEx1).map(_.message) must_== List("error", "success")
   }
 
@@ -121,9 +123,12 @@ class ContextSpec extends Specification with ResultMatchers with Groups { def is
   }
 
   trait FragmentsExecution extends StringOutput with ContextData {
-    def executeBodies(exs: Fragments) = exs.fragments.map(_.executionResult)
+    def executeBodies(exs: Fragments) = {
+      val env = Env(arguments = Arguments("sequential"))
+      Executor.executeSeq(exs.fragments)(env).map(_.executionResult)
+    }
 
-    def executing(exs: Fragments): Executed = Executed(exs.fragments.map(_.executionResult))
+    def executing(exs: Fragments): Executed = Executed(executeBodies(exs))
 
     case class Executed(results: Seq[Result]) {
       def prints(ms: String*): Result = {
