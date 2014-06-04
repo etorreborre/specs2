@@ -118,7 +118,7 @@ n = 0
   n = 1
   // 8<--
   n = 0
-  }.offsetIs(-2) }""" ===
+  }.offsetIs(-2) }""".trimmedTexts(1) ===
     """|```
        |n = 1
        |```""".stripMargin
