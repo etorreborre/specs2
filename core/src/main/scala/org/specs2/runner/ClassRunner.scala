@@ -3,6 +3,7 @@ package runner
 
 import control._
 import Actions._
+import org.specs2.io.StringOutput
 import reflect.Classes
 import specification.core._
 import reporter._
@@ -71,5 +72,18 @@ object ClassRunner extends ClassRunner
 
 object consoleRunner extends ClassRunner {
   def main(args: Array[String]) = run(args)
+}
+
+object TextRunner extends ClassRunner {
+  def run(spec: SpecificationStructure)(implicit env: Env = Env()): LineLogger with StringOutput = {
+    val logger = LineLogger.stringLogger
+    try {
+      report(env.copy(lineLogger = logger))(spec)
+      logger
+    } finally env.shutdown
+  }
+
+  override def createPrinters(args: Arguments, loader: ClassLoader): Action[List[Printer]] =
+    List(createTextPrinter(args, loader)).sequenceU.map(_.flatten)
 }
 
