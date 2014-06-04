@@ -13,6 +13,7 @@ trait TextDsl extends FragmentBuilder with FragmentsFactory {
       addFragment(fragmentFactory.Break)
     }
     def p = addFragmentBlock {
+      addFragment(fragmentFactory.Break)
       addFragment(fragmentFactory.Text(s))
       addFragment(fragmentFactory.Break)
       addFragment(fragmentFactory.Backtab)

@@ -4,10 +4,10 @@ package dsl
 package mutable
 
 import execute.AsResult
-import specification.core.Fragment
+import org.specs2.specification.core.{Fragments, Fragment}
 
 trait AutoExamples extends create.AutoExamples with FragmentBuilder {
-  override def createExample[T](expression: String, code: =>T, asResult: AsResult[T]): Fragment =
-    addFragment(super.createExample(expression, code, asResult))
+  override def createExample[T](expression: String, code: =>T, asResult: AsResult[T]): Fragments =
+    Fragments(super.createExample(expression, code, asResult).fragments.map(addFragment):_*)
 
 }

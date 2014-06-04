@@ -42,7 +42,7 @@ class AutoExamplesSpec extends Specification with DataTables { def is = s2"""
 
       eg { success }
 
-      eg { datatableOk }
+      datatableOk
     }
     spec.is.fragments.fragments.filter(Fragment.isExample) must have size(4)
   }
@@ -50,9 +50,10 @@ class AutoExamplesSpec extends Specification with DataTables { def is = s2"""
   def firstExampleDescription(fs: Fragments) =
     fs.fragments.filter(Fragment.isExample).head.description.show
 
-  def datatableOk =
+  def datatableOk = eg {
     "a"   | "b" | "c" |>
      2    !  2  !  4  |
      1    !  1  !  2  | { (a, b, c) =>  a + b must_== c }
+  }
 
 }

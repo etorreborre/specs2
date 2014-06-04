@@ -6,16 +6,17 @@ import execute.AsResult
 import reflect.Compat210.blackbox
 import reflect.Macros
 import text.Trim._
-import specification.core.{Code, Fragment}
+import specification.core.{Code, Fragments, Fragment}
 
 /**
  * This trait allows to capture some code as an example description
  */
 trait AutoExamples extends FragmentsFactory {
-  implicit def eg[T : AsResult](code: =>T): Fragment = macro AutoExamples.create[T]
+  implicit def eg[T : AsResult](code: =>T): Fragments = macro AutoExamples.create[T]
 
-  def createExample[T](expression: String, code: =>T, asResult: AsResult[T]): Fragment =
-    fragmentFactory.Example(Code(trimExpression(expression)), code)(asResult)
+  def createExample[T](expression: String, code: =>T, asResult: AsResult[T]): Fragments =
+    Fragments(fragmentFactory.Example(Code(trimExpression(expression)), code)(asResult),
+              fragmentFactory.Break)
 
   private[specs2] def trimExpression(call: String) = {
     val expression = Trimmed(call).removeStart("eg")
@@ -30,7 +31,7 @@ trait AutoExamples extends FragmentsFactory {
 }
 
 object AutoExamples extends AutoExamples {
-  def create[T](c: blackbox.Context)(code: c.Expr[T])(asResult: c.Expr[AsResult[T]]): c.Expr[Fragment] = {
+  def create[T](c: blackbox.Context)(code: c.Expr[T])(asResult: c.Expr[AsResult[T]]): c.Expr[Fragments] = {
     import c.{universe => u}; import u._
     import Macros._
     val result = c.Expr(methodCall(c)("createExample", stringExprMacroPos(c)(code), code.tree.duplicate, asResult.tree))
