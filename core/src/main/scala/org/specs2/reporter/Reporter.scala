@@ -23,24 +23,11 @@ import Printer._
  */
 trait Reporter {
 
-  def report(env: Env, printers: Map[PrinterName, Printer] = Map(CONSOLE -> TextPrinter)): SpecStructure => Action[Unit] = { spec =>
+  def report(env: Env, printers: List[Printer]): SpecStructure => Action[Unit] = { spec =>
     val executing = spec |> Filter.filter(env) |> Executor.execute(env)
 
-    val folds = selectPrinters(env, printers).map(_.fold(env, spec)) :+ statsStoreFold(env, spec)
+    val folds = printers.map(_.fold(env, spec)) :+ statsStoreFold(env, spec)
     Actions.fromTask(runFolds(executing.contents, folds))
-  }
-
-  def selectPrinters(env: Env, printers: Map[PrinterName, Printer]): List[Printer] = {
-    val args = env.arguments
-
-    val console =
-      if (!printerNames.map(_.name).exists(args.contains) || args.contains(CONSOLE.name))
-        printers.get(CONSOLE).toList
-      else List()
-
-    val otherPrinters = printers.filterKeys(_ != CONSOLE).filterKeys(key => args.commandLine.bool(key.name).isDefined).values.toList
-
-    console ++ otherPrinters
   }
 
   /**

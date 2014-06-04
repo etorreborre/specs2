@@ -4,6 +4,7 @@ package reporter
 import specification._
 import scalaz.stream.Process
 import scalaz.stream.io
+import scalaz.std.anyVal._
 import scalaz.stream.Process.{Env => E, _}
 import scalaz.concurrent.Task
 import data.Processes._
@@ -15,7 +16,7 @@ import text.Trim
 import Trim._
 import scalaz.concurrent.Task._
 import reflect.Classes
-import control._
+import org.specs2.control._
 import Actions._
 import Fold._
 import specification.core._
@@ -216,47 +217,3 @@ trait TextPrinter extends Printer {
 
 object TextPrinter extends TextPrinter
 
-/**
- * A Printer is essentially defined by a Fold that can run
- * a Process[Task, Fragment], use a Sink for side-effects and
- * accumulate state for final reporting
- */
-trait Printer {
-  def fold(env: Env, spec: SpecStructure): Fold[Fragment]
-
-  /** convenience method to print a SpecStructure using the printer's Fold */
-  def print(env: Env): SpecStructure => Task[Unit] = { spec: SpecStructure =>
-    Fold.runFold(spec.contents, fold(env, spec))
-  }
-}
-
-object Printer {
-  val CONSOLE  = PrinterName("console")
-  val HTML     = PrinterName("html")
-  val JUNIT    = PrinterName("junit")
-  val MARKDOWN = PrinterName("markdown")
-  val JUNITXML = PrinterName("junitxml")
-  val PRINTER  = PrinterName("printer")
-  val NOTIFIER = PrinterName("notifier")
-
-  val printerNames = Seq(CONSOLE, HTML, JUNIT, JUNITXML, MARKDOWN, PRINTER, NOTIFIER)
-
-  case class PrinterName(name: String)
-
-  def createPrinters(args: Arguments, loader: ClassLoader): Map[PrinterName, Printer] =
-    createPrinter(args, loader).map(PRINTER -> _).toMap ++
-    createNotifierPrinter(args, loader).map(NOTIFIER -> _).toMap
-
-  /** create a custom printer from a Name passed in arguments */
-  def createPrinter(args: Arguments, loader: ClassLoader): Option[Printer] =
-    args.commandLine.value("printer").flatMap { name => Classes.createInstance[Printer](name, loader).runOption }
-
-  /** create a custom printer from a Name passed in arguments */
-  def createNotifierPrinter(args: Arguments, loader: ClassLoader): Option[Printer] =
-    createNotifier(args, loader).map(NotifierPrinter.printer)
-
-  /** create a custom notifier from a Name passed in arguments */
-  def createNotifier(args: Arguments, loader: ClassLoader): Option[Notifier] =
-    args.commandLine.value("notifier").flatMap { name => Classes.createInstance[Notifier](name, loader).runOption }
-
-}

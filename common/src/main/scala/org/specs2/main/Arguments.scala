@@ -104,6 +104,8 @@ Arguments (
    */
   def commandLineFilterNot(excluded: String*) = copy(commandLine = commandLine.filterNot(excluded:_*))
 
+  def verbose = commandLine.value("verbose").isDefined
+
   override def toString = Seq(select, execute, report, commandLine).mkString("Arguments(", ", ", ")")
 
 }
@@ -427,6 +429,7 @@ case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs {
   def arguments: Seq[String] = _arguments
   def contains(a: String) = arguments contains a
   def value(name: String) = Arguments.value(name)(_arguments, SystemProperties)
+  def isDefined(name: String) = value(name).isDefined
   def int(name: String) = Arguments.int(name)(_arguments, SystemProperties)
   def bool(name: String) = Arguments.bool(name)(_arguments, SystemProperties)
   def filter(included: String*) = copy(_arguments = arguments.filter(included.toSet.contains))
