@@ -298,7 +298,7 @@ case class BulletTemplate(bullet: String = "*") extends ScriptTemplate[Scenario,
   def lines(text: String, script: Scenario): GivenWhenThenLines = {
     text.split("\n").foldLeft(GivenWhenThenLines()) { (res, line) =>
       val firstBulletWord =
-        (if (line.trim.startsWith(bullet)) line.trim.tail.trim.split(" ").headOption.getOrElse("") else "").toLowerCase
+        (if (line.trim.startsWith(bullet)) line.trim.drop(1).trim.split(" ").headOption.getOrElse("") else "").toLowerCase
 
       val newLine = line.replace(bullet+" ", "")
       if      (firstBulletWord.startsWith("given")) res.append(GivenLines.create(newLine))

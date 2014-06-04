@@ -23,7 +23,7 @@ trait ClassRunner {
    * run the specification
    */
   def run(args: Array[String]) {
-    val env = Env(arguments = Arguments(args.tail.mkString(" ")))
+    val env = Env(arguments = Arguments(args.drop(1).mkString(" ")))
 
     val actions: Action[Unit] = args.toList match {
       case Nil =>
