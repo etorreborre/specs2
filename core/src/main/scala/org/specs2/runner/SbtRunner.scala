@@ -54,7 +54,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
     Classes.createInstance[SpecificationStructure](taskDef.fullyQualifiedName, loader).flatMap { spec =>
       val env = Env(arguments = commandLineArguments)
 
-      val report = 
+      val report =
       if (commandLineArguments.commandLine.contains("all")) {
         for {
           printers <- createPrinters(taskDef, handler, loggers, commandLineArguments)

@@ -25,7 +25,6 @@ trait Reporter {
 
   def report(env: Env, printers: List[Printer]): SpecStructure => Action[Unit] = { spec =>
     val executing = spec |> Filter.filter(env) |> Executor.execute(env)
-
     val folds = printers.map(_.fold(env, spec)) :+ statsStoreFold(env, spec)
     Actions.fromTask(runFolds(executing.contents, folds))
   }

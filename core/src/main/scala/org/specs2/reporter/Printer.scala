@@ -56,44 +56,45 @@ object Printer {
 
   def createTextPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] =
     if (!printerNames.map(_.name).exists(args.contains) || args.commandLine.isDefined(CONSOLE.name)) Actions.ok(Some(TextPrinter))
-    else noPrinter("no console printer required", args.verbose)
+    else noPrinter("no console printer defined", args.verbose)
 
   def createJUnitXmlPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] =
     createPrinterInstance(args, loader,
       JUNITXML, "org.specs2.reporter.JUnitXmlPrinter$",
       "cannot create a JUnit XML printer. Please check that specs2-junit is on the classpath",
-      "no JUnit XML printer required")
+      "no JUnit XML printer defined")
 
   def createHtmlPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] =
     createPrinterInstance(args, loader,
       HTML, "org.specs2.reporter.HtmlPrinter$",
       "cannot create a HTML printer. Please check that specs2-html is on the classpath",
-      "no HTML printer required")
+      "no HTML printer defined")
 
   def createMarkdownPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] =
     createPrinterInstance(args, loader,
       MARKDOWN, "org.specs2.reporter.MarkdownPrinter$",
       "cannot create a Markdown printer. Please check that specs2-markdown is on the classpath",
-      "no Markdown printer required")
+      "no Markdown printer defined")
 
   /** create a custom printer from a Name passed in arguments */
   def createPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] =
     createCustomPrinterInstance[Printer](args, loader,
      PRINTER,
       (className: String) => s"cannot create a $className printer. Please check that this class can be instantiated",
-      s"no custom printer required")
+      s"no custom printer defined")
 
   def createNotifierPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] =
     createCustomPrinterInstance[Notifier](args, loader,
       NOTIFIER,
       (className: String) => s"cannot create a $className notifier. Please check that this class can be instantiated",
-      s"no custom notifier required").map(_.map(NotifierPrinter.printer))
+      s"no custom notifier defined").map(_.map(NotifierPrinter.printer))
 
   def createPrinterInstance(args: Arguments, loader: ClassLoader, name: PrinterName, className: String, failureMessage: String, noRequiredMessage: String): Action[Option[Printer]] =
     if (args.commandLine.isDefined(name.name))
       for {
         instance <- Classes.createInstanceEither[Printer](className, loader)
-        result   <- instance match {
+        result   <-
+        instance match {
           case \/-(i) => Actions.ok(Some(i))
           case -\/(t) => noPrinter(failureMessage, t, args.verbose)
         }

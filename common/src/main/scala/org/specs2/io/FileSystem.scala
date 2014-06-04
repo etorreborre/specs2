@@ -71,13 +71,17 @@ trait FileSystem {
     Actions.fromTask(writeFileTask(path, content))
 
   def writeFileTask(path: String, content: String): Task[Unit] =
+    mkParentDirs(path).toTask >>
     Process(content).toSource.pipe(process1.utf8Encode).to(io.fileChunkW(path)).run
 
   def withFile(path: String)(action: Action[Unit]): Action[Unit] =
     (action >> deleteFile(path)).orElse(deleteFile(path)).map(_ => ())
 
+  def mkParentDirs(path: String): Action[Unit] =
+    Actions.safe(Option(new File(path).getParentFile).fold(())(_.mkdirs))
 
-  def mkdirs(path: String): Action[Unit] = Actions.safe(new File(path).mkdirs)
+  def mkdirs(path: String): Action[Unit] =
+    Actions.safe(new File(path).mkdirs)
 
   /**
    * Unjar the jar (or zip file) specified by "path" to the "dest" directory.

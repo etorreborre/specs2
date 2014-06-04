@@ -75,6 +75,8 @@ trait Classes {
    */
   private def createInstanceForConstructor[T <: AnyRef : ClassTag](c: Class[_], constructor: Constructor[_],
                                                                    loader: ClassLoader, parameter: Option[AnyRef] = None): Action[T] = Actions.safe {
+    constructor.setAccessible(true)
+
     if (constructor.getParameterTypes.isEmpty)
       Actions.safe(constructor.newInstance().asInstanceOf[T])
 

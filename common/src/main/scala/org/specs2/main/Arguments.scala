@@ -104,7 +104,7 @@ Arguments (
    */
   def commandLineFilterNot(excluded: String*) = copy(commandLine = commandLine.filterNot(excluded:_*))
 
-  def verbose = commandLine.value("verbose").isDefined
+  def verbose = commandLine.bool("verbose").isDefined
 
   override def toString = Seq(select, execute, report, commandLine).mkString("Arguments(", ", ", ")")
 
