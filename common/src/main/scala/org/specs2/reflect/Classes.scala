@@ -24,7 +24,7 @@ trait Classes {
    *
    * This is useful to instantiate nested classes which are referencing their outer class in their constructor
    */
-  def createInstance[T <: AnyRef](className: String, loader: ClassLoader, parameter: Option[AnyRef] = None)(implicit m: ClassTag[T]): Action[T] =
+  def createInstance[T <: AnyRef](className: String, loader: ClassLoader)(implicit m: ClassTag[T]): Action[T] =
     Actions.reader { configuration  =>
       loadClass(className, loader).map { klass: Class[T] =>
         val constructors = klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)
@@ -34,7 +34,7 @@ trait Classes {
         else {
           // how to get the first successful action?
           val results = constructors.map { constructor =>
-            createInstanceForConstructor(klass, constructor, loader, parameter).execute(configuration).unsafePerformIO
+            createInstanceForConstructor(klass, constructor, loader).execute(configuration).unsafePerformIO
           }
           val result: Action[T] = results.find(_.isOk).cata(Actions.fromStatus,
             results.map(Actions.fromStatus).headOption.getOrElse(Actions.fail("no cause")))
@@ -47,7 +47,7 @@ trait Classes {
    * Try to create an instance of a given class by using whatever constructor is available
    * and return either the instance or an exception
    */
-  def createInstanceEither[T <: AnyRef](className: String, loader: ClassLoader, parameter: Option[AnyRef] = None)(implicit m: ClassTag[T]): Action[Throwable \/ T] =
+  def createInstanceEither[T <: AnyRef](className: String, loader: ClassLoader)(implicit m: ClassTag[T]): Action[Throwable \/ T] =
     Actions.reader { configuration  =>
       loadClass(className, loader).map { klass: Class[T] =>
         val constructors = klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)
@@ -57,7 +57,7 @@ trait Classes {
         else {
           // how to get the first successful action?
           val results = constructors.map { constructor =>
-            createInstanceForConstructor(klass, constructor, loader, parameter).execute(configuration).unsafePerformIO
+            createInstanceForConstructor(klass, constructor, loader).execute(configuration).unsafePerformIO
           }
           val result: Action[Throwable \/ T] =
             results
@@ -74,20 +74,19 @@ trait Classes {
    * Given a class, a zero or one-parameter constructor, return an instance of that class
    */
   private def createInstanceForConstructor[T <: AnyRef : ClassTag](c: Class[_], constructor: Constructor[_],
-                                                                   loader: ClassLoader, parameter: Option[AnyRef] = None): Action[T] = Actions.safe {
+                                                                   loader: ClassLoader): Action[T] = Actions.safe {
     constructor.setAccessible(true)
 
     if (constructor.getParameterTypes.isEmpty)
       Actions.safe(constructor.newInstance().asInstanceOf[T])
 
     else if (constructor.getParameterTypes.size == 1) {
-      // if the specification has a construction, it is either because it is a nested class
-      // or if it has an Arguments parameter
+      // if the specification has a constructor with one parameter, it is either because
+      // it is a nested class
       // or it might have a parameter that has a 0 args constructor
       val constructorParameter =
-        createInstance[T](getOuterClassName(c), loader)
-          .orElse(Actions.ok(parameter))
-          .orElse(createInstance[AnyRef](constructor.getParameterTypes.toSeq(0).getName, loader))
+          createInstance[T](getOuterClassName(c), loader)
+            .orElse(createInstance[AnyRef](constructor.getParameterTypes.toSeq(0).getName, loader))
 
       constructorParameter.map(constructor.newInstance(_).asInstanceOf[T])
     } else Actions.fail("Can't find a suitable constructor for class "+c.getName)
