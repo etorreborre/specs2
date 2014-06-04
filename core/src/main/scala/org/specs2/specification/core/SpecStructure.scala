@@ -43,7 +43,7 @@ object SpecStructure {
   /** return true if s1 depends on s2, i.e, s1 has a link to s2 */
   val dependsOn = (s1: SpecStructure, s2: SpecStructure) => {
     val s1Links = s1.fragments.fragments.collect { case Fragment(l: SpecificationLink, _, _) => l.specClassName }
-    s1Links.exists(_ == s2.specClassName)
+    s1Links.contains(s2.specClassName)
   }
 
 }

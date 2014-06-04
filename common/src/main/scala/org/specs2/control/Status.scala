@@ -127,6 +127,12 @@ object Status {
     case (Both(m, t)) => s"${m}, caused by:\n${Throwables.renderWithStack(t)}}"
   }
 
+  def asException(these: These[String, Throwable]) = these match {
+    case (This(m)) => new Exception(m)
+    case (That(t)) => t
+    case (Both(m, t)) => new Exception(m, t)
+  }
+
   def prependThis(these: These[String, Throwable], prepend: String): These[String, Throwable] =
     these.fold(m      => This(prepend + " - " + m),
       t      => Both(prepend, t),

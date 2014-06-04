@@ -5,7 +5,8 @@ package core
 import main.Arguments
 import reporter.LineLogger
 import LineLogger._
-import io.FileSystem
+import io._
+import control._
 import process.StatisticsRepository
 
 case class Env(arguments: Arguments       = Arguments(),
@@ -15,6 +16,8 @@ case class Env(arguments: Arguments       = Arguments(),
                statisticsRepository: StatisticsRepository = StatisticsRepository.file("target/specs2-reports/stats"),
                /** default console logger */
                lineLogger: LineLogger = NoLineLogger,
+               /** logger for issues */
+               systemLogger: Logger = noLogging,
                fileSystem: FileSystem = FileSystem) {
 
   /**
