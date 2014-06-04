@@ -37,7 +37,7 @@ trait FilesRunner {
     for {
       _  <- beforeExecution(args, isVerbose(args))
       ss <- specs.map(sort(env))
-      _  <- ss.toList.map(classRunner.report(env)).sequenceU
+      _  <- ss.toList.map(ClassRunner.report(env)).sequenceU
       _  <- afterExecution(ss, isVerbose(args))
     } yield ()
   }
@@ -53,7 +53,7 @@ trait FilesRunner {
   /** print a message before the execution */
   protected def beforeExecution(args: Arguments, verbose: Boolean): Action[Unit] = for {
     _        <- log("\nExecuting specifications", verbose)
-    printers <- classRunner.createPrinters(args, Thread.currentThread.getContextClassLoader)
+    printers <- ClassRunner.createPrinters(args, Thread.currentThread.getContextClassLoader)
     _        <- log("printers are "+printers.mkString(", "), verbose)
   } yield ()
 

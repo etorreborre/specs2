@@ -7,6 +7,8 @@ import main._
 import reporter._
 import specification.core._
 import control._
+import scalaz.std.anyVal._
+import control.Actions._
 
 class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterable { outer =>
 
@@ -38,9 +40,11 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
       lazy val description = outer.getDescription
     }
 
-    val actions =
-      Reporter.report(env, Map(JUNIT -> printer, CONSOLE -> TextPrinter))(specStructure) >>
-      Actions.safe(env.shutdown)
+    val actions = for {
+      printers <- ClassRunner.createPrinters(env.arguments, Thread.currentThread.getContextClassLoader)
+      _        <- Reporter.report(env, printers)(specStructure)
+      _        <- Actions.safe(env.shutdown)
+    } yield ()
 
     actions.execute(consoleLogging).unsafePerformIO
   }

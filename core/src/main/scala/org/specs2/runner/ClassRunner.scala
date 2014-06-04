@@ -13,7 +13,6 @@ import scalaz.syntax.bind._
 import scalaz.syntax.traverse._
 import scalaz.std.list._
 import Runner._
-import reporter.Printer.PrinterName
 
 /**
  * The class runner expects the first argument to be the class name of
@@ -68,7 +67,9 @@ trait ClassRunner {
 
 }
 
-object classRunner extends ClassRunner {
+object ClassRunner extends ClassRunner
+
+object consoleRunner extends ClassRunner {
   def main(args: Array[String]) = run(args)
 }
 
