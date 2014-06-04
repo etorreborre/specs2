@@ -10,7 +10,7 @@ trait SpecificationStructure extends specification.core.SpecificationStructure
 
   def is = {
     val env = Env() // transient env
-    try structure(Env())
+    try specificationStructure(Env())
     finally env.shutdown
   }
 }
