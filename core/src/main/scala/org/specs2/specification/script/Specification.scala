@@ -67,10 +67,10 @@ case class GroupsScript(title: String = "groups", isStart: Boolean = true, group
 
       cur match {
         case ex if Fragment.isExample(ex) =>
-          (fragments ++ (indentation(ex.description.show) +: exampleTagsFor(groupIndex, e) :+ createExample(ex.description.show, groupIndex, e) :+ factory.Text("\n")), e + 1)
+          ((fragments) ++ (indentation(ex.description.show) +: exampleTagsFor(groupIndex, e) :+ createExample(ex.description.show, groupIndex, e)), e + 1)
 
         case other =>
-          (fragments :+ other, e)
+          (fragments :+ factory.Break :+ other, e)
       }
     }._1 ++
     groupTagsFor(groupIndex)
