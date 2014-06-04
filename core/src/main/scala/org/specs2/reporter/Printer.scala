@@ -2,6 +2,8 @@ package org.specs2
 package reporter
 
 import specification._
+import scala.reflect.ClassTag
+import scalaz.{\/, -\/, \/-}
 import scalaz.stream.Process
 import scalaz.stream.io
 import scalaz.std.anyVal._
@@ -57,50 +59,69 @@ object Printer {
     else noPrinter("no console printer required", args.verbose)
 
   def createJUnitXmlPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] =
-    if (args.commandLine.isDefined(JUNITXML.name))
-      Classes.createInstance[Printer]("org.specs2.reporter.JUnitXmlPrinter", loader).map(Some(_))
-        .orElse(noPrinter("cannot create a JUnit XML printer. Please check that specs2-junit is on the classpath"))
-    else
-      noPrinter("no JUnit XML printer required", args.verbose)
+    createPrinterInstance(args, loader,
+      JUNITXML, "org.specs2.reporter.JUnitXmlPrinter$",
+      "cannot create a JUnit XML printer. Please check that specs2-junit is on the classpath",
+      "no JUnit XML printer required")
 
   def createHtmlPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] =
-    if (args.commandLine.isDefined(HTML.name))
-      Classes.createInstance[Printer]("org.specs2.reporter.HtmlPrinter", loader).map(Some(_))
-        .orElse(noPrinter("cannot create a HTML printer. Please check that specs2-html is on the classpath"))
-    else
-      noPrinter("no HTML printer required", args.verbose)
+    createPrinterInstance(args, loader,
+      HTML, "org.specs2.reporter.HtmlPrinter$",
+      "cannot create a HTML printer. Please check that specs2-html is on the classpath",
+      "no HTML printer required")
 
   def createMarkdownPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] =
-    if (args.commandLine.isDefined(HTML.name))
-      Classes.createInstance[Printer]("org.specs2.reporter.MarkdownPrinter", loader).map(Some(_))
-        .orElse(noPrinter("cannot create a Markdown printer. Please check that specs2-markdown is on the classpath"))
-    else
-      noPrinter("no Markdown printer required", args.verbose)
+    createPrinterInstance(args, loader,
+      MARKDOWN, "org.specs2.reporter.MarkdownPrinter$",
+      "cannot create a Markdown printer. Please check that specs2-markdown is on the classpath",
+      "no Markdown printer required")
 
   /** create a custom printer from a Name passed in arguments */
   def createPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] =
-    args.commandLine.value(PRINTER.name) match {
-      case Some(className) =>
-        Classes.createInstance[Printer](className, loader).map(Some(_))
-          .orElse(noPrinter(s"cannot create a $className printer. Please check that this class can be instantiated"))
-      case None =>
-        noPrinter(s"no custom printer required", args.verbose)
-    }
+    createCustomPrinterInstance[Printer](args, loader,
+     PRINTER,
+      (className: String) => s"cannot create a $className printer. Please check that this class can be instantiated",
+      s"no custom printer required")
 
   def createNotifierPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] =
-    args.commandLine.value(NOTIFIER.name) match {
-      case Some(className) =>
-        Classes.createInstance[Notifier](className, loader).map(NotifierPrinter.printer).map(Some(_))
-          .orElse(noPrinter(s"cannot create a $className notifier. Please check that this class can be instantiated"))
+    createCustomPrinterInstance[Notifier](args, loader,
+      NOTIFIER,
+      (className: String) => s"cannot create a $className notifier. Please check that this class can be instantiated",
+      s"no custom notifier required").map(_.map(NotifierPrinter.printer))
 
-      case None =>
-        noPrinter(s"no custome printer required", args.verbose)
+  def createPrinterInstance(args: Arguments, loader: ClassLoader, name: PrinterName, className: String, failureMessage: String, noRequiredMessage: String): Action[Option[Printer]] =
+    if (args.commandLine.isDefined(name.name))
+      for {
+        instance <- Classes.createInstanceEither[Printer](className, loader)
+        result   <- instance match {
+          case \/-(i) => Actions.ok(Some(i))
+          case -\/(t) => noPrinter(failureMessage, t, args.verbose)
+        }
+      } yield result
+    else noPrinter(noRequiredMessage, args.verbose)
+
+  def createCustomPrinterInstance[T <: AnyRef](args: Arguments, loader: ClassLoader,
+                                               name: PrinterName, failureMessage: String => String, noRequiredMessage: String)(implicit m: ClassTag[T]): Action[Option[T]] =
+    args.commandLine.value(name.name) match {
+      case Some(className) =>
+        for {
+          instance <- Classes.createInstanceEither[T](className, loader)(m)
+          result   <- instance match {
+            case \/-(i) => Actions.ok(Some(i))
+            case -\/(t) => noPrinter(failureMessage(className), t, args.verbose)
+          }
+        } yield result
+
+      case None => noPrinter(noRequiredMessage, args.verbose)
     }
 
-  private def noPrinter(message: String): Action[Option[Printer]] =
+  private def noPrinter[T](message: String, t: Throwable, verbose: Boolean): Action[Option[T]] =
+    log(message, verbose) >> logThrowable(t, verbose) >> Actions.ok(None)
+
+  private def noPrinter[T](message: String): Action[Option[T]] =
     log(message) >> Actions.ok(None)
 
-  private def noPrinter(message: String, verbose: Boolean): Action[Option[Printer]] =
+  private def noPrinter[T](message: String, verbose: Boolean): Action[Option[T]] =
     log(message, verbose) >> Actions.ok(None)
 }
 

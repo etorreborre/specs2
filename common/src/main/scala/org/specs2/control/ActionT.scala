@@ -1,9 +1,12 @@
 package org.specs2
 package control
 
-import scalaz.{Functor, \/, \&/, WriterT, Monoid, Monad, syntax}
+import scalaz.\&/.That
+import scalaz.\&/.This
+import scalaz._
 import \&/._
-import syntax.monad._
+import scalaz.syntax
+import scalaz.syntax.monad._
 import scalaz.effect._
 import scalaz.std.anyVal._
 import scalaz.concurrent.Task
@@ -166,6 +169,9 @@ trait ActionTSupport[F[+_], W, R] {
 
   def fromStatus[A](v: Status[A])(implicit M: MonadIO[F], W: Monoid[W]): ActionT[F, W, R, A] =
     ActionT.fromIOStatus(IO(v))
+
+  def fromStatusAsDisjunction[A](v: Status[A])(implicit M: MonadIO[F], W: Monoid[W]): ActionT[F, W, R, Throwable \/ A] =
+    ActionT.safe(v.toDisjunction.leftMap(_.fold(s => new Exception(s), identity, (s, t) => t)))
 
   def exception[A](t: Throwable)(implicit M: Monad[F], W: Monoid[W]): ActionT[F, W, R, A] =
     ActionT.exception(t)

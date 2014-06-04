@@ -6,6 +6,7 @@ import org.specs2.execute.{AsResult, Result}
 import org.specs2.execute.Error.ThrowableException
 import scalaz.concurrent.Task
 import scalaz.stream.Process
+import scalaz.syntax.bind._
 
 package object control {
   type Logger = String => IO[Unit]
@@ -18,6 +19,16 @@ package object control {
   /** log a value, using the logger coming from the Reader environment */
   def log[R](r: R): Action[Unit] =
     Actions.ask.flatMap(logger => logger(r.toString).liftIO[Action])
+
+  /** log a Throwable with its stacktrace and cause, using the logger coming from the Reader environment */
+  def logThrowable(t: Throwable, verbose: Boolean): Action[Unit] =
+    if (verbose) logThrowable(t) else Actions.empty
+
+  def logThrowable(t: Throwable): Action[Unit] =
+    log(t.getMessage) >>
+    log(t.getStackTrace.mkString("\n")) >>
+      (if (t.getCause != null) logThrowable(t.getCause)
+       else                    Actions.empty)
 
   /** log a value, using the logger coming from the Reader environment, only if verbose is true */
   def log[R](r: R, verbose: Boolean): Action[Unit] =

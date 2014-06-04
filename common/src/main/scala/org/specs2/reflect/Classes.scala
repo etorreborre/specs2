@@ -8,6 +8,7 @@ import scala.reflect.ClassTag
 import ClassName._
 import control._
 import Actions._
+import scalaz.{-\/, \/}
 import scalaz.std.anyVal._
 import scalaz.syntax.std.option._
 import java.lang.reflect.Constructor
@@ -37,6 +38,32 @@ trait Classes {
           }
           val result: Action[T] = results.find(_.isOk).cata(Actions.fromStatus,
             results.map(Actions.fromStatus).headOption.getOrElse(Actions.fail("no cause")))
+          result
+        }
+      }.flatMap(identity)
+    }.flatMap(identity)
+
+  /**
+   * Try to create an instance of a given class by using whatever constructor is available
+   * and return either the instance or an exception
+   */
+  def createInstanceEither[T <: AnyRef](className: String, loader: ClassLoader, parameter: Option[AnyRef] = None)(implicit m: ClassTag[T]): Action[Throwable \/ T] =
+    Actions.reader { configuration  =>
+      loadClass(className, loader).map { klass: Class[T] =>
+        val constructors = klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)
+
+        if (constructors.isEmpty)
+          Actions.ok(-\/(new Exception("Can't find a constructor for class "+klass.getName)))
+        else {
+          // how to get the first successful action?
+          val results = constructors.map { constructor =>
+            createInstanceForConstructor(klass, constructor, loader, parameter).execute(configuration).unsafePerformIO
+          }
+          val result: Action[Throwable \/ T] =
+            results
+              .find(_.isOk)
+              .cata(Actions.fromStatusAsDisjunction[T],
+                    results.map(Actions.fromStatusAsDisjunction).headOption.getOrElse(Actions.ok[Throwable \/ T](-\/(new Exception("no cause")))))
           result
         }
       }.flatMap(identity)
