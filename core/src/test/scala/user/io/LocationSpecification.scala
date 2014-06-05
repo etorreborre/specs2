@@ -1,8 +1,8 @@
 package user.io
-
 import org.specs2.Specification
+import org.specs2.io.WithFragments
 
-class LocationSpecification extends Specification { def is =
+class LocationSpecification extends Specification with WithFragments { def is =
   "presentation"                ^
   "this block should"           ^
     "have one example"          ! ok ^
@@ -15,4 +15,5 @@ class LocationSpecification extends Specification { def is =
       ko                        ^
                                 end
 
+  def fragmentsList = is.fragments.fragments
 }

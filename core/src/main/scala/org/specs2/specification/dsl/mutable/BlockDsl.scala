@@ -5,24 +5,24 @@ package mutable
 
 import control.ImplicitParameters._
 import execute.AsResult
-import specification.core.Fragment
+import org.specs2.specification.core.{Location, Fragment}
 import specification.create.FragmentsFactory
 
 trait BlockDsl extends FragmentBuilder with FragmentsFactory {
 
   implicit class describe(d: String) {
-    def >>(f: =>Fragment): Unit = addBlock(d, f)
-    def should(f: =>Fragment)   = addBlock(s"$d should", f)
-    def can(f: =>Fragment)      = addBlock(s"$d can", f)
+    def >>(f: =>Fragment): Unit = addBlock(d, f, Location())
+    def should(f: =>Fragment)   = addBlock(s"$d should", f, Location())
+    def can(f: =>Fragment)      = addBlock(s"$d can", f, Location())
 
-    def >>(f: =>Unit)(implicit p: ImplicitParam): Unit = addBlock(d, f)
-    def should(f: =>Unit)(implicit p: ImplicitParam)   = addBlock(s"$d should", f)
-    def can(f: =>Unit)(implicit p: ImplicitParam)      = addBlock(s"$d can", f)
+    def >>(f: =>Unit)(implicit p: ImplicitParam): Unit = addBlock(d, f, Location())
+    def should(f: =>Unit)(implicit p: ImplicitParam)   = addBlock(s"$d should", f, Location())
+    def can(f: =>Unit)(implicit p: ImplicitParam)      = addBlock(s"$d can", f, Location())
 
-    private def addBlock(text: String, f: =>Any) = addFragmentBlock {
+    private def addBlock(text: String, f: =>Any, location: Location) = addFragmentBlock {
       addStart
       addBreak
-      addText(text)
+      addText(text, location)
       addFragment(fragmentFactory.Tab)
       addBreak
       addFragmentBlock(f)
@@ -30,7 +30,9 @@ trait BlockDsl extends FragmentBuilder with FragmentsFactory {
       addEnd
     }
 
-    private def addText(text: String) = addFragment(fragmentFactory.Text(text))
+    private def addText(text: String, location: Location) =
+      addFragment(fragmentFactory.Text(text).copy(location = location))
+
     private def addBreak = addFragment(fragmentFactory.Break)
     private def addStart = addFragment(fragmentFactory.Start)
     private def addEnd = addFragment(fragmentFactory.End)
