@@ -69,10 +69,14 @@ case class Fragment(description: Description, execution: Execution, location: Lo
   override def toString = s"Fragment($description, $execution) ($location)"
 }
 
-case class Location(trace: Array[StackTraceElement] = (new Exception).getStackTrace) {
+case class Location(trace: Seq[StackTraceElement] = (new Exception).getStackTrace) {
   def traceLocation(filter: StackTraceFilter): Option[TraceLocation] =
     filter(trace).headOption.map(TraceLocation.apply)
 
+  /** @return a filtered Location */
+  def filter(filter: StackTraceFilter) = copy(filter(trace))
+
+  /** file name and line number */
   def location(filter: StackTraceFilter) = traceLocation(filter).map(_.location)
   /** the class name and the line number where the Throwable was created */
   def classLocation(filter: StackTraceFilter) = traceLocation(filter).map(_.classLocation)
