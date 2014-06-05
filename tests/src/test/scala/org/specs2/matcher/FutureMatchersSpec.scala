@@ -21,6 +21,9 @@ class FutureMatchersSpec extends Specification with Groups with NoTimeConversion
  A `Future` returning a `Matcher[T]` can be transformed into a `Result`
  ${ Future(1 === 1).await }
 
+ A `throwA[T]` matcher can be used to match a failed future with the `await` method
+ ${ Future.failed(new RuntimeException) must throwA[RuntimeException].await }
+
 """
 
   // the current execution context can be overridden here
