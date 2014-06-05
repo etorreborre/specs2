@@ -36,10 +36,10 @@ class LocationSpec extends Specification {
     implicit def spec = new LocationSpecification
 
     "for the first piece of text, 'presentation''" >> {
-      textAt(index = 0) === Some(6)
+      textAt(index = 0) === Some(5)
     }
     "for the second piece of text, with 'should'" >> {
-      textAt(index = 1) === Some(7)
+      textAt(index = 1) === Some(8)
     }
     "for the first example" >> {
       exampleAt(index = 0) === Some(8)
@@ -48,16 +48,13 @@ class LocationSpec extends Specification {
       exampleAt(index = 1) === Some(9)
     }
     "for the third piece of text" >> {
-      textAt(index = 2) === Some(11)
+      textAt(index = 2) === Some(9)
     }
     "for the 3rd example" >> {
       exampleAt(index = 2) === Some(12)
     }
     "for the 4th example" >> {
-      exampleAt(index = 3) === Some(14)
-    }
-    "for the br element" >> {
-      brAt(index = 0) === Some(10)
+      exampleAt(index = 3) === Some(13)
     }
   }
 
@@ -67,10 +64,13 @@ class LocationSpec extends Specification {
 
   def fragmentLine(selector: Function[Fragment, Boolean], index: Int)(implicit spec: WithFragments) = {
 
-    val filter = StackTraceFilter(trace => !Seq("org.specs2.specification.", "org.specs2.mutable.").exists(trace.getClassName.startsWith))
+    val filter = StackTraceFilter(trace =>
+      !Seq("scala.",
+           "org.specs2.Specification",
+           "org.specs2.specification.",
+           "org.specs2.mutable.").exists(trace.getClassName.startsWith))
 
     val fragmentLocation = fragments(spec).filter(selector).apply(index).location
-    fragmentLocation.trace.mkString("\n")
 
     fragmentLocation.filter(filter).lineNumber(filter)
   }

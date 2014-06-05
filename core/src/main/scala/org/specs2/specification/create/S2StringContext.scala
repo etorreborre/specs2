@@ -3,6 +3,7 @@ package specification
 package create
 
 import execute._
+import org.specs2.control.TraceLocation
 import text.Interpolated
 import reflect.Compat210.blackbox
 import reflect.Macros._
@@ -22,21 +23,24 @@ trait S2StringContext extends FragmentsFactory { outer =>
   import ff._
 
   implicit def stringIsInterpolatedPart(s: =>String): InterpolatedPart = new InterpolatedPart {
-    def append(fs: Vector[Fragment], text: String, expression: String = "") =  {
+    def append(fs: Vector[Fragment], text: String, start: Location, end: Location, expression: String) =  {
       val s1 =
         try s
         catch { case e: Throwable => s"[${e.getMessage.notNull}]" }
-      fs :+ Text(text + s1)
+      fs :+ Text(text + s1).setLocation(start)
     }
   }
 
   implicit def fragmentIsInterpolatedPart(f: Fragment): InterpolatedPart = new InterpolatedPart {
-    def append(fs: Vector[Fragment], text: String, expression: String = "") =  {
+    def append(fs: Vector[Fragment], text: String, start: Location, end: Location, expression: String) =  {
       f match {
         // in the case of a tag which applies to the example just before,
         // if the tag is just separated by some empty text, append the tag close to the example
-        case tag @ Fragment(Marker(_, _, false), _, _) if text.trim.isEmpty => fs :+ tag :+ Text(text)
-        case other => fs :+ Text(text) :+ other
+        case tag @ Fragment(Marker(_, _, false), _, _) if text.trim.isEmpty =>
+          fs :+ tag.setLocation(end) :+ Text(text).setLocation(start)
+
+        case other =>
+          fs :+ Text(text).setLocation(start) :+ other.setLocation(end)
       }
     }
   }
@@ -46,9 +50,9 @@ trait S2StringContext extends FragmentsFactory { outer =>
 
   implicit def asResultIsInterpolatedPart[R : AsResult](r: =>R): InterpolatedPart = new InterpolatedPart {
 
-    def append(fs: Vector[Fragment], text: String, expression: String = "") =  {
+    def append(fs: Vector[Fragment], text: String, start: Location, end: Location, expression: String) =  {
       val texts = text.split("\n")
-      val spaces = texts.lastOption.map(_.takeWhile(Seq(' ', '\n').contains)).getOrElse("")
+      val spaces = texts.lastOption.fold("")(_.takeWhile(Seq(' ', '\n').contains))
       val indent = spaces.mkString
 
       val first = if (texts.size > 1) texts.dropRight(1).mkString("", "\n", "\n") else ""
@@ -56,17 +60,19 @@ trait S2StringContext extends FragmentsFactory { outer =>
 
       val description =
         if (autoExample) Code(expression)
-        else             RawText(texts.lastOption.map(_.trim).getOrElse(""))
+        else             RawText(texts.lastOption.fold("")(_.trim))
 
-      val before = if (first.nonEmpty) Vector(Text(first + indent)) else Vector()
+      val before =
+        if (first.nonEmpty) Vector(Text(first + indent).setLocation(start))
+        else                Vector()
 
       val result =
         implicitly[AsResult[R]] match {
           case v : AnyValueAsResult[_] => AsResult(r) match {
-            case DecoratedResult(t, e: Error) => before :+ Example(description, e)
-            case DecoratedResult(t, _)        => Vector(Text(text), Text(t.notNull))
+            case DecoratedResult(t, e: Error) => before :+ Example(description, e).setLocation(end)
+            case DecoratedResult(t, _)        => Vector(Text(text), Text(t.notNull)).map(_.setLocation(end))
           }
-          case other                          => before :+ Example(description, AsResult(r))
+          case other                          => before :+ Example(description, AsResult(r)).setLocation(end)
         }
       fs ++ result
     }
@@ -74,23 +80,23 @@ trait S2StringContext extends FragmentsFactory { outer =>
 
 
   implicit def anyAsResultIsInterpolatedPart(r: =>Function0Result): InterpolatedPart = new InterpolatedPart {
-    def append(fs: Vector[Fragment], text: String, expression: String = "") = 
-      asResultIsInterpolatedPart(AsResult(r)).append(fs, text, expression)
+    def append(fs: Vector[Fragment], text: String, start: Location, end: Location, expression: String) = 
+      asResultIsInterpolatedPart(AsResult(r)).append(fs, text, start, end, expression)
   }
 
   implicit def fragmentsIsInterpolatedPart(fragments: Fragments): InterpolatedPart = new InterpolatedPart {
-    def append(fs: Vector[Fragment], text: String, expression: String = "") =
-      (fs :+ Text(text)) ++ fragments.fragments
+    def append(fs: Vector[Fragment], text: String, start: Location, end: Location, expression: String) =
+      (fs :+ Text(text).setLocation(start)) ++ fragments.fragments
   }
 
   implicit def specificationStructureIsInterpolatedPart(s: SpecificationStructure): InterpolatedPart = new InterpolatedPart {
-    def append(fs: Vector[Fragment], text: String, expression: String = "") = 
-      specStructureIsInterpolatedPart(s.is).append(fs, text, expression)
+    def append(fs: Vector[Fragment], text: String, start: Location, end: Location, expression: String) = 
+      specStructureIsInterpolatedPart(s.is).append(fs, text, start, end, expression)
   }
 
   implicit def specStructureIsInterpolatedPart(s: SpecStructure): InterpolatedPart = new InterpolatedPart {
-    def append(fs: Vector[Fragment], text: String, expression: String = "") =
-      (fs :+ Text(text)) ++ s.fragments.fragments
+    def append(fs: Vector[Fragment], text: String, start: Location, end: Location, expression: String) =
+      (fs :+ Text(text).setLocation(start)) ++ s.fragments.fragments
   }
 
   /**
@@ -98,17 +104,23 @@ trait S2StringContext extends FragmentsFactory { outer =>
    *
    * if the Yrangepos scalac option is not set then we use an approximated method to find the expressions texts
    */
-  def s2(content: String, Yrangepos: Boolean, texts: Seq[String], variables: Seq[InterpolatedPart], rangeExpressions: Seq[String]): SpecStructure =  {
+  def s2(content: String, Yrangepos: Boolean, texts: Seq[String], 
+         textsStartPositions: Seq[String], textsEndPositions: Seq[String],
+         variables: Seq[InterpolatedPart], rangeExpressions: Seq[String]): SpecStructure =  {
+
     val expressions = if (Yrangepos) rangeExpressions else new Interpolated(content, texts).expressions
 
-    val fragments = (texts zip variables zip expressions).foldLeft(Vector[Fragment]()) { (res, cur) =>
-      val ((text, variable), expression) = cur
+    val (textsStartLocations1, textsEndLocations1) = 
+      (positionsToLocation(textsStartPositions), positionsToLocation(textsEndPositions))
+
+    val fragments = (texts zip variables zip expressions zip textsStartLocations1 zip textsEndLocations1).foldLeft(Vector[Fragment]()) { (res, cur) =>
+      val ((((text, variable), expression), startLocation), endLocation) = cur
 
       // always provide the latest full piece of text to the spec part for the append method
       val (res1, text1) = res.lastOption.collect { case f @ Fragment(RawText(t), _, _) if !f.isRunnable =>
         (res.dropRight(1), t + text)
       }.getOrElse((res, text))
-      variable.append(res1, text1, expression)
+      variable.append(res1, text1, SimpleLocation(startLocation), SimpleLocation(endLocation), expression)
     }
 
     // The last piece of text is trimmed to allow the placement of closing quotes in the s2 string
@@ -122,6 +134,13 @@ trait S2StringContext extends FragmentsFactory { outer =>
     def s2(variables: InterpolatedPart*) = macro S2Macro.s2Implementation
   }
 
+  
+  private def positionsToLocation(positions: Seq[String]): Seq[TraceLocation] =
+    positions.map(_.split("\\|").toList).map {
+      case path :: fileName :: line :: _ => TraceLocation(path, fileName, "Specification", "s2", line.toInt)
+      // this case should not happen!
+      case other                         => TraceLocation("not found", "file name", "Specification", "s2", 0)
+    }
 }
 
 object S2StringContext extends DefaultFragmentFactory
@@ -139,11 +158,19 @@ object S2Macro {
     val content = contentFrom(macroPos).drop("s2\"\"\"".size)
     val Yrangepos = macroPos.isRange
 
+    def traceLocation(pos: c.universe.Position) =
+      Seq(pos.source.path, pos.source.file.name, pos.line).mkString("|")
+
+    val textStartPositions = texts.map(t => c.literal(traceLocation(t.pos)).tree)
+    val textEndPositions = texts.map(t => c.literal(traceLocation(t.pos.focusEnd)).tree)
+
     val result =
       c.Expr(methodCall(c)("s2",
         c.literal(content).tree,
         c.literal(Yrangepos).tree,
         toAST[List[_]](c)(texts:_*),
+        toAST[List[_]](c)(textStartPositions:_*),
+        toAST[List[_]](c)(textEndPositions:_*),
         toAST[List[_]](c)(variables.map(_.tree):_*),
         toAST[List[_]](c)(variables.map(stringExpr(c)(_)):_*)))
 
@@ -154,6 +181,6 @@ object S2Macro {
 }
 
 trait InterpolatedPart {
-  def append(parts: Vector[Fragment], text: String, expression: String = ""): Vector[Fragment]
+  def append(parts: Vector[Fragment], text: String, start: Location, end: Location, expression: String): Vector[Fragment]
 }
 

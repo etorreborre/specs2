@@ -47,7 +47,7 @@ object Fragments {
   }
 }
 
-case class Fragment(description: Description, execution: Execution, location: Location = Location()) {
+case class Fragment(description: Description, execution: Execution, location: Location = ExceptionLocation()) {
 
   def executionResult = execution.result
   def isRunnable = execution.isRunnable
@@ -66,33 +66,10 @@ case class Fragment(description: Description, execution: Execution, location: Lo
   def setPreviousResult(r: Option[Result]) = copy(execution = execution.setPreviousResult(r))
   def was(statusCheck: String => Boolean) = execution.was(statusCheck)
 
+  def setLocation(location: Location) = copy(location = location)
   override def toString = s"Fragment($description, $execution) ($location)"
 }
 
-case class Location(trace: Seq[StackTraceElement] = (new Exception).getStackTrace) {
-  def traceLocation(filter: StackTraceFilter): Option[TraceLocation] =
-    filter(trace).headOption.map(TraceLocation.apply)
-
-  /** @return a filtered Location */
-  def filter(filter: StackTraceFilter) = copy(filter(trace))
-
-  /** file name and line number */
-  def location(filter: StackTraceFilter) = traceLocation(filter).map(_.location)
-  /** the class name and the line number where the Throwable was created */
-  def classLocation(filter: StackTraceFilter) = traceLocation(filter).map(_.classLocation)
-  /** the class name, file Name and the line number where the Throwable was created */
-  def fullLocation(filter: StackTraceFilter) = traceLocation(filter).map(_.fullLocation)
-  /** the line number */
-  def lineNumber(filter: StackTraceFilter) = traceLocation(filter).headOption.map(_.lineNumber)
-
-  override def toString = traceLocation(NoStackTraceFilter).fold("<empty filtered stacktrace>")(_.fullLocation)
-
-  override def equals(a: Any) = a match {
-    case l: Location => l.toString == this.toString
-    case other       => false
-  }
-
-}
 
 object Fragment {
   implicit def showInstance(implicit showd: Show[Description], showe: Show[Execution]): Show[Fragment] = new Show[Fragment] {

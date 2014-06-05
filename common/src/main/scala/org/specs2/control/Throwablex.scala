@@ -101,12 +101,14 @@ trait Throwablex {
   /** location information from a stackTrace element */
 }
 
-case class TraceLocation(path: String, fileName: String, className: String, lineNumber: Int) {
+case class TraceLocation(path: String, fileName: String, className: String, methodName: String, lineNumber: Int) {
   lazy val location: String = fileName + ":" + lineNumber
   /** the class name and the line number where the Throwable was created */
   lazy val classLocation: String = className + ":" + lineNumber
   /** the class name, file Name and the line number where the Throwable was created */
   lazy val fullLocation: String = className + " (" + location + ")"
+
+  def stackTraceElement = new StackTraceElement(className, methodName, fileName, lineNumber)
 }
 
 object TraceLocation {
@@ -117,7 +119,7 @@ object TraceLocation {
     lazy val fileName = t.getFileName
     lazy val className = t.getClassName.split('$')(0)
     lazy val lineNumber = t.getLineNumber
-    TraceLocation(path, fileName, className, lineNumber)
+    TraceLocation(path, fileName, className, t.getMethodName, lineNumber)
   }
 }
 
