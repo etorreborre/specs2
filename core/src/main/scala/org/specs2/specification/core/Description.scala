@@ -27,7 +27,7 @@ case object NoText extends Description {
 case class SpecificationLink(header: SpecHeader, before: String = "", after: String = "", alias: String = "", tooltip: String = "") extends Description {
   def specClassName = header.className
 
-  def url = header.show
+  def url = specClassName+".html"
 
   def linkText =
     if (alias.nonEmpty) alias else header.show
