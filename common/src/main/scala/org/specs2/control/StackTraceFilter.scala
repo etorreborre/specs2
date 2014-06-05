@@ -14,6 +14,11 @@ trait StackTraceFilter {
   def apply[T <: Throwable](t: T): T = t.filter((st: Seq[StackTraceElement]) => apply(st))
 }
 
+object StackTraceFilter {
+  def apply(f: StackTraceElement => Boolean) = new StackTraceFilter {
+    override def apply(e: Seq[StackTraceElement]): Seq[StackTraceElement] = e.filter(f)
+  }
+}
 /**
  * Implementation of the StackTraceFilter trait with a list of include/exclude patterns
  */
