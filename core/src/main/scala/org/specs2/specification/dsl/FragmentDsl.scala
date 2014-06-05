@@ -5,9 +5,11 @@ package dsl
 import main.Arguments
 import execute.AsResult
 import control.ImplicitParameters._
-import org.specs2.data.{NamedTag, Tag}
+import org.specs2.data.NamedTag
 import specification.core._
-import specification.create.{FragmentsFactory, DelegatedFragmentFactory}
+import specification.create.DelegatedFragmentFactory
+import scalaz.std.vector._
+import scalaz.syntax.std.vector._
 
 trait FragmentDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDsl with LinkDsl { outer =>
 
@@ -106,6 +108,18 @@ trait FragmentDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDsl
   private[specs2] def xtag = tag("x")
   /** shortcut to add section more quickly when rerunning failed tests */
   private[specs2] def xsection = section("x")
+
+  /**
+   * create a block of new fragments where each of them is separated
+   * by a newline and there is a specific offset from the left margin
+   */
+  def fragmentsBlock(fragments: Seq[Fragment], offset: Int = 2): Fragments = {
+    val newLine = Vector(fragmentFactory.Break, fragmentFactory.Text(" "*offset))
+    (newLine ++ fragments.toList)
+      .map(Fragments(_))
+      .intersperse(Fragments(newLine:_*))
+      .reduce(_ append _)
+  }
 
 }
 
