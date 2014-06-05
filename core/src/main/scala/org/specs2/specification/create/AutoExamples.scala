@@ -19,9 +19,12 @@ trait AutoExamples extends FragmentsFactory {
               fragmentFactory.Break)
 
   private[specs2] def trimExpression(call: String) = {
-    val expression = Trimmed(call).removeStart("eg")
-    if (containsAccolade(expression)) expression.removeFirst(s"\\{").removeLast(s"\\}")
-    else                              expression
+    call.
+      trimEnclosing("${", "}").
+      trimStart("eg").
+      trimEnclosing("{", "}").
+      trimEnclosing("`", "`").
+      removeFirst("`\\(.*\\)").trimFirst("`")
   }
 
   private def containsAccolade(expression: String) =

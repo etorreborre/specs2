@@ -8,11 +8,10 @@ import org.specs2.specification.core.{Fragment, Fragments}
 class AutoExamplesSpec extends Specification with DataTables { def is = s2"""
 
  The trimExpression function should
-   remove formatting fragments                                                               $e1
    remove backticks
-     with no parameter list                                                                  $e2
-     with a parameter list - one param                                                       $e3
-     with a parameter list - 2 params                                                        $e4
+     with no parameter list                                                                  $e1
+     with a parameter list - one param                                                       $e2
+     with a parameter list - 2 params                                                        $e3
 
  DataTables can be used as examples directly
    their description must be left empty, since the result contains the full description      $dt1
@@ -20,17 +19,11 @@ class AutoExamplesSpec extends Specification with DataTables { def is = s2"""
  Autoexamples can also be used in mutable specifications                                     $m1
                                                                                              """
 
-  def e1 = "code"                     || "result"                  |>
-           "success ^"                !! "success"                 |
-           "success ^end^"            !! "success"                 |
-           "success ^ end"            !! "success"                 |
-           "{ success } ^ end"        !! "success"                 | { (code, result) => trimExpression(code) must_== result }
+  def e1 = trimExpression("`method`") must_== "method"
 
-  def e2 = trimExpression("`method`") must_== "method"
+  def e2 = trimExpression("`method`(p1)") must_== "method"
 
-  def e3 = trimExpression("`method`(p1)") must_== "method"
-
-  def e4 = trimExpression("`method`(p1, p2)") must_== "method"
+  def e3 = trimExpression("`method`(p1, p2)") must_== "method"
 
   def dt1 = firstExampleDescription("text" ^ datatableOk) must be empty
 
