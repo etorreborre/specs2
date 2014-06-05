@@ -2,6 +2,7 @@ package org.specs2
 package mutable
 
 import matcher._
+import org.specs2.control.Debug
 import specification._
 import execute.StandardResults._
 import execute._
@@ -30,10 +31,10 @@ class ThrownExpectationsSpec extends Specification with ResultMatchers {
   def execute[T](t: =>T) = ResultExecution.execute(t)(_ => Success())
 }
 object ThrownExpectationsSpecData {
-  def body1 = new MustExpectations with ThrownExpectations with matcher.Scope {
+  def body1 = new MustThrownExpectations with matcher.Scope {
     1 must_== 2; success
   }
-  def body2 = new ShouldExpectations with ThrownExpectations with matcher.Scope {
+  def body2 = new ShouldThrownExpectations with matcher.Scope {
     1 should_== 2; success
   }
   def body3 = new MustThrownExpectations with matcher.Scope {
@@ -42,7 +43,7 @@ object ThrownExpectationsSpecData {
   def body4 = new ShouldThrownExpectations with matcher.Scope {
     1 should_== 2; success
   }
-  def body5 = new MustMatchers with ThrownExpectations with matcher.Scope with DataTables {
+  def body5 = new MustThrownExpectations with matcher.Scope with DataTables with Debug {
     "a" | "b" | "c" |>
     1   ! 1   ! 2   |
     1   ! 1   ! 3   | { (a, b, c) => (a+b) must_== c }

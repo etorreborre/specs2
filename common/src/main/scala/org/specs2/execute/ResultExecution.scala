@@ -80,6 +80,7 @@ trait ResultExecution { outer =>
       case Left(SkipException(f))                            => Left(f)
       case Left(PendingException(f))                         => Left(f)
       case Left(ErrorException(f))                           => Left(f)
+      case Left(DecoratedResultException(f))                 => Left(f)
       case Left(e)                                           => Left(Error(e))
       case Right(m: ResultLike)     if !m.toResult.isSuccess => Left(m.toResult)
       case Right(r: Result)         if !r.isSuccess          => Left(r)
