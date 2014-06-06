@@ -15,8 +15,8 @@ trait FormS2StringContext extends S2StringContext { this: FormFragmentsFactory =
   import formFactory._
 
   implicit def formIsInterpolatedPart(f: =>Form): InterpolatedPart = new InterpolatedPart {
-    override def append(parts: Vector[Fragment], text: String, expression: String): Vector[Fragment] =
-      parts :+ Text(text) :+ FormFragment(f.executeForm)
+    override def append(parts: Vector[Fragment], text: String, start: Location, end: Location, expression: String): Vector[Fragment] =
+      parts :+ Text(text).setLocation(start) :+ FormFragment(f.executeForm).setLocation(end)
   }
 
   implicit def toFormIsInterpolatedPart(f: { def form: Form}): InterpolatedPart = formIsInterpolatedPart(f.form)
