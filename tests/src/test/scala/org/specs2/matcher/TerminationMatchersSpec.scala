@@ -31,7 +31,7 @@ class TerminationMatchersSpec extends script.Specification with TerminationMatch
 
   "termination" - new group {
     eg := { Thread.sleep(50) must terminate(sleep = 100.millis) }
-    eg := { (Thread.sleep(150) must terminate) returns "the action is blocking with retries=1 and sleep=100" }
+    eg := { (Thread.sleep(300) must terminate(retries=1, sleep=100.millis)) returns "the action is blocking with retries=1 and sleep=100" }
 
     eg := { Thread.sleep(50) must terminate(retries=3, sleep=20.millis) }
     eg := { (Thread.sleep(1000) must terminate(retries=3, sleep=20.millis)) returns "the action is blocking with retries=3 and sleep=20" }
