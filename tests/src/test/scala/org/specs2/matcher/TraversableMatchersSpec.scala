@@ -66,6 +66,8 @@ $xsection
    ${ Seq(1, 2, 3) must contain(atMost(be_>=(0), be_>=(1), be_>=(2)).inOrder)  }
 
    Failure messages
+   ${ (Seq[Int]() must contain(2, 3)                                           ) returns "List() does not contain 2, 3" }
+   ${ (Seq[Int]() must contain(allOf(2, 3))                                    ) returns "List() does not contain 2, 3" }
    ${ (Seq[Int]() must contain(exactly(1))                                     ) returns "List() does not contain 1" }
    ${ (Seq(1, 2, 3) must contain(exactly(1, 2))                                ) returns "List(1, 2, 3) contains 3" }
    ${ (Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(1), be_>=(5)))        ) returns
