@@ -44,6 +44,26 @@ trait Classes {
     }.flatMap(identity)
 
   /**
+   * create an instance from an existing class
+   */
+  def createInstance[T <: AnyRef](klass: Class[T], loader: ClassLoader)(implicit m: ClassTag[T]): Action[T] =
+    Actions.reader { configuration  =>
+      val constructors = klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)
+
+      if (constructors.isEmpty)
+        Actions.fail("Can't find a constructor for class "+klass.getName)
+      else {
+        // how to get the first successful action?
+        val results = constructors.map { constructor =>
+          createInstanceForConstructor(klass, constructor, loader).execute(configuration).unsafePerformIO
+        }
+        val result: Action[T] = results.find(_.isOk).cata(Actions.fromStatus,
+          results.map(Actions.fromStatus).headOption.getOrElse(Actions.fail("no cause")))
+        result
+      }
+    }.flatMap(identity)
+
+  /**
    * Try to create an instance of a given class by using whatever constructor is available
    * and return either the instance or an exception
    */

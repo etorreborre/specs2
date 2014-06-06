@@ -19,7 +19,7 @@ class IsolatedExecutionSpec extends Specification with EnvFixture { def is = s2"
 
   def e1 = { env: Env =>
     val spec = new TestIsolatedSpec1
-    val env1 = env.copy(arguments = Arguments("sequential isolated"))
+    val env1 = env.copy(arguments = Arguments("sequential"))
     val executed = execute(spec)(env1)
 
     val results = executed.collect { case f if f.isRunnable => f.execution.result }
@@ -28,7 +28,7 @@ class IsolatedExecutionSpec extends Specification with EnvFixture { def is = s2"
 
   def e2 = { env: Env =>
     val spec = new TestIsolatedSpec2
-    val env1 = env.copy(arguments = Arguments("sequential isolated"))
+    val env1 = env.copy(arguments = Arguments("sequential"))
     val executed = execute(spec)(env1)
 
     val results = executed.collect { case f if f.isRunnable => f.execution.result }
@@ -42,7 +42,7 @@ class IsolatedExecutionSpec extends Specification with EnvFixture { def is = s2"
 /**
  * this isolated specification must have all its examples ok because they are properly isolated
  */
-class TestIsolatedSpec1 extends org.specs2.mutable.Specification with MustMatchers {
+class TestIsolatedSpec1 extends org.specs2.mutable.Specification with MustMatchers { isolated
   "this" should {
     var i = 0
     "create example 1" >> {
@@ -55,7 +55,7 @@ class TestIsolatedSpec1 extends org.specs2.mutable.Specification with MustMatche
   }
 }
 
-class TestIsolatedSpec2 extends org.specs2.Specification with MustMatchers { def is =
+class TestIsolatedSpec2 extends org.specs2.Specification with MustMatchers { def is = isolated ^
   s2"""
   this should
     create example 1 $e1

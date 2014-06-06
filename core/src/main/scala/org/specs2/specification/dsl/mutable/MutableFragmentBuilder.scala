@@ -61,25 +61,28 @@ trait MutableFragmentBuilder extends FragmentBuilder
     else
       fragment
 
-  private def mustBeIsolated(fragment: Fragment) =
+  private def mustBeIsolated(fragment: Fragment) = {
     fragment.isRunnable               &&
     fragment.execution.isolable       &&
     arguments.isolated                &&
-    env.executionEnv.withoutIsolation
+    !env.executionEnv.withoutIsolation
+  }
 
-  private def duplicateExecution(effectPath: EffectPath) = Execution.withEnv { env: Env =>
-    val instance = Classes.createInstance[MutableFragmentBuilder](getClass.toString, Thread.currentThread.getContextClassLoader).execute(env.systemLogger).unsafePerformIO
-    instance.toDisjunction.fold(
+  private def duplicateExecution(effectPath: EffectPath) = {
+    Execution.withEnv { env: Env =>
+      val instance = Classes.createInstance[MutableFragmentBuilder](getClass.asInstanceOf[Class[MutableFragmentBuilder]], getClass.getClassLoader).execute(env.systemLogger).unsafePerformIO
+      instance.toDisjunction.fold(
       e => org.specs2.execute.Error(Status.asException(e)),
       { newSpec =>
-          newSpec.targetPath = Some(effectPath)
+        newSpec.targetPath = Some(effectPath)
 
-          val lastCreatedFragment = newSpec.replayFragments(env).last
-          val isolatedExecution = lastCreatedFragment.execution
+        val lastCreatedFragment = newSpec.replayFragments(env).last
+        val isolatedExecution = lastCreatedFragment.execution
 
-          if (isolatedExecution.isRunnable) isolatedExecution.execute(env).result
-          else                              org.specs2.execute.Success()
-     })
+        if (isolatedExecution.isRunnable) isolatedExecution.execute(env).result
+        else                              org.specs2.execute.Success()
+      })
+    }
   }
 
 }
