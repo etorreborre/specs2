@@ -7,6 +7,9 @@ import scalaz.stream.{Process, process1}
 import Process.Process1
 import scalaz.syntax.monoid._
 
+/**
+ * Compute the statistics for executed fragments
+ */
 trait Statistics {
 
   def statsProcess: Process1[Fragment, Stats] =
@@ -15,7 +18,9 @@ trait Statistics {
     }
 
   def fold = (fragment: Fragment, stats: Stats) =>
-    stats |+| fragment.execution.executedResult.map(Stats.apply).getOrElse(defaultStats(fragment))
+    stats |+| fragment.execution.executedResult.fold(defaultStats(fragment)) { result =>
+      Stats(result).copy(timer = fragment.execution.executionTime)
+    }
 
   def defaultStats(fragment: Fragment) =
     if (Fragment.isExample(fragment)) Stats(examples = 1)
