@@ -408,7 +408,7 @@ object Report extends Extract {
       _pegdownTimeout    = long("pegdownTimeout"),
       _streaming         = bool("streaming"),
       _fromSource        = bool("fromSource"),
-      _traceFilter       = bool("fullStackTrace").map(t=>NoStackTraceFilter).
+      _traceFilter       = bool("fullStackTrace").map(t => NoStackTraceFilter).
                            orElse(value("traceFilter", IncludeExcludeStackTraceFilter.fromString(_))),
       _checkUrls         = bool("checkUrls"),
       _notoc             = bool("noToc"),

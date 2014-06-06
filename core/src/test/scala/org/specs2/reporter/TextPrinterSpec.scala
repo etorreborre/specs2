@@ -83,6 +83,7 @@ trait tp extends MustMatchers with StandardMatchResults with StandardResults {
 presentation
 """ contains
     """|[info] title
+       |[info]
        |[info] presentation"""
 
   def b1 = s2"""
@@ -108,9 +109,9 @@ presentation
   def b4 = s2"""e1 ${skipped("for now")}""" contains """[info] o e1"""
   def b5 = s2"""e1 ${pending("for now")}""" contains """[info] * e1"""
 
-  def b6 = "t".title ^ "e1\n  example1" ! ok contains
+  def b6 = "t".title ^ "e1\nexample1" ! ok contains
   """|[info] + e1
-     |[info]   example1""".stripMargin
+     |[info]    example1""".stripMargin
 
   def b7 = {
     def ex1 = AsResult { Thread.sleep(30); ok }
@@ -121,17 +122,17 @@ presentation
 s2"""e1 $ok
 e2 $ko
 e3 $ko
-""" contains
-    """|[info] Total for specification dsl1
-       |[info] Finished in 0 ms
-       |[info] 3 examples, 2 failures, 0 error"""
+""" contains(
+    """|[info] Total for specification dslx
+       |[info] Finished in x ms
+       |[info] x examples, x failures, x error""", (_:String).replaceAll("\\d+", "x"))
 
   def d1 =
 s2"""e1 ${1 must_== 2}""" contains
       """|[error] x e1
-         |[error]  '1' is not equal to '2' (TextPrinterSpec.scala"""
+         |[error]  '1' is not equal to '2'"""
 
-  def d2 = Arguments("failtrace") ^
+  def d2 = Arguments("failtrace fullstacktrace") ^
 s2"""e1 ${1 must_== 2}""" contains
      """|[error]_org.specs2.report"""
 
@@ -140,10 +141,10 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
     """|[error] Expected: a[d]cdea[d]cdea[d]cdea[d]cdea[d]cde
        |[error] Actual:   a[b]cdea[b]cdea[b]cdea[b]cdea[b]cde"""
 
-  def e1 =
+  def e1 = Arguments("fullstacktrace") ^
     s2"""e1 $error1""" contains
       """|[error] ! e1
-         |[error]  boom (TextPrinterSpec.scala"""
+         |[error]  boom"""
 
   def e2 = s2"""e1 $error1""" contains """|[error] org.specs2.report"""
 
@@ -236,12 +237,12 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
 object TextPrinterSpec extends MustMatchers {
 
   implicit class fragmentOutputContains(fragment: Fragment) {
-    def contains(contained: String) = Fragments(fragment) contains contained
+    def contains(contained: String, f: String => String = identity) = Fragments(fragment).contains(contained, f)
   }
 
   implicit class fragmentsOutputContains(fragments: Fragments) {
-    def contains(contained: String) =
-      SpecStructure(SpecHeader(getClass), Arguments(), fragments) contains contained
+    def contains(contained: String, f: String => String = identity) =
+      SpecStructure(SpecHeader(getClass), Arguments(), fragments).contains(contained, f)
   }
 
   implicit class outputContains(spec: SpecStructure) {
@@ -250,8 +251,8 @@ object TextPrinterSpec extends MustMatchers {
     lazy val printed = {
       val logger = stringLogger
       lazy val env =
-        optionalEnv.map(_.copy(lineLogger = logger))
-        .getOrElse(Env(lineLogger = logger, arguments = Arguments("sequential")))
+        optionalEnv.fold(Env(lineLogger = logger,
+          arguments = spec.arguments.overrideWith(Arguments("sequential fullstacktrace"))))(_.copy(lineLogger = logger))
 
       TextPrinter.run(env)(spec.copy(fragments = spec.fragments
         .prepend(DefaultFragmentFactory.Break) // add a newline after the title
@@ -261,8 +262,8 @@ object TextPrinterSpec extends MustMatchers {
       messages.map(_.removeEnd(" ")).mkString("\n").replace(" ", "_")
     }
 
-    def contains(contained: String) =
-      printed must contain(contained.stripMargin.replace(" ", "_"))
+    def contains(contained: String, f: String => String = identity) =
+      f(printed) must contain(contained.stripMargin.replace(" ", "_"))
 
     def containsOnly(contained: String) =
       printed must be_==(contained.stripMargin.replace(" ", "_"))
