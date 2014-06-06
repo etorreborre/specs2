@@ -10,6 +10,7 @@ import io._
 import sys.error
 import specification._
 import java.util
+import process._
 
 class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { def is = s2"""
 
@@ -104,7 +105,8 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
   
   val success100tries = Success("The property passed without any counter-example after 100 tries")
 
-  def execute[R : AsResult](r: =>R): Result  = ("example" ! r).executionResult
+  def execute[R : AsResult](r: =>R): Result =
+    Executor.execute("example" ! r).executionResult
 
   def prop1 = execute(proved) must_== Success("The property passed without any counter-example after 1 try")
   def prop2 = execute(trueStringFunction.forAll) must_== success100tries
