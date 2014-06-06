@@ -32,17 +32,17 @@ class FilesContentMatchersSpec extends Specification
 
   def e1 = {
     val action =
-      createFile("target/test/actual/f1")        >>
-      createFile("target/test/actual/sub/f2")    >>
-      createFile("target/test/expected/f1")      >>
-      createFile("target/test/expected/sub/f2")  >>
-      createFile("target/test/expected2/f1")     >>
-      createFile("target/test/expected2/sub/f3")
+      createFile(s"$targetDir/actual/f1")        >>
+      createFile(s"$targetDir/actual/sub/f2")    >>
+      createFile(s"$targetDir/expected/f1")      >>
+      createFile(s"$targetDir/expected/sub/f2")  >>
+      createFile(s"$targetDir/expected2/f1")     >>
+      createFile(s"$targetDir/expected2/sub/f3")
 
     action.execute(noLogging).unsafePerformIO
 
-     "target/test/actual".file must haveSamePathsAs("target/test/expected".file)
-    ("target/test/actual".file must haveSamePathsAs("target/test/expected2".file)) returns
+     s"$targetDir/actual".file must haveSamePathsAs(s"$targetDir/expected".file)
+    (s"$targetDir/actual".file must haveSamePathsAs(s"$targetDir/expected2".file)) returns
       """|target/test/actual is not the same as target/test/expected2
          |  in target/test/actual, not in target/test/expected2
          |    MISSING:   3. sub/f2
@@ -55,32 +55,32 @@ class FilesContentMatchersSpec extends Specification
   def e2 = {
 
     val action =
-      createFile("target/test/actual/f1")        >>
-      createFile("target/test/actual/sub/f2")    >>
-      createFile("target/test/expected/f1")      >>
-      createFile("target/test/expected/sub/f2")  >>
-      createFile("target/test/expected/sub/f3")
+      createFile(s"$targetDir/actual/f1")        >>
+      createFile(s"$targetDir/actual/sub/f2")    >>
+      createFile(s"$targetDir/expected/f1")      >>
+      createFile(s"$targetDir/expected/sub/f2")  >>
+      createFile(s"$targetDir/expected/sub/f3")
 
     action.execute(noLogging).unsafePerformIO
 
     val notF3 = (f: File) => !f.getPath.endsWith("f3")
 
-    "target/test/actual".file must haveSamePathsAs("target/test/expected".file).withFilter(notF3)
+    s"$targetDir/actual".file must haveSamePathsAs(s"$targetDir/expected".file).withFilter(notF3)
   }
 
   def e3 = {
     val action =
-      writeFile("target/test/actual/f1", "text1")               >>
-      writeFile("target/test/actual/sub/f2", "text2\ntext3")    >>
-      writeFile("target/test/expected/f1", "text1")             >>
-      writeFile("target/test/expected/sub/f2", "text2\ntext3")  >>
-      writeFile("target/test/expected2/f1", "text1")            >>
-      writeFile("target/test/expected2/sub/f2", "text2\ntext4")
+      writeFile(s"$targetDir/actual/f1", "text1")               >>
+      writeFile(s"$targetDir/actual/sub/f2", "text2\ntext3")    >>
+      writeFile(s"$targetDir/expected/f1", "text1")             >>
+      writeFile(s"$targetDir/expected/sub/f2", "text2\ntext3")  >>
+      writeFile(s"$targetDir/expected2/f1", "text1")            >>
+      writeFile(s"$targetDir/expected2/sub/f2", "text2\ntext4")
 
     action.execute(noLogging).unsafePerformIO
 
-    "target/test/actual".file must haveSameFilesContentAs("target/test/expected".file)
-    ("target/test/actual".file must haveSameFilesContentAs("target/test/expected2".file)) returns
+    s"$targetDir/actual".file must haveSameFilesContentAs(s"$targetDir/expected".file)
+    (s"$targetDir/actual".file must haveSameFilesContentAs(s"$targetDir/expected2".file)) returns
       """|target/test/actual/sub/f2 is not the same as target/test/expected2/sub/f2
          |  in target/test/actual/sub/f2, not in target/test/expected2/sub/f2
          |    MISSING:   2. text3
@@ -92,28 +92,29 @@ class FilesContentMatchersSpec extends Specification
 
   def e4 = {
     val action =
-      writeFile("target/test/actual/f1", "text1")               >>
-      writeFile("target/test/actual/sub/f2", "text2\ntext3")    >>
-      writeFile("target/test/expected/f1", "text1")             >>
-      writeFile("target/test/expected/sub/f2", "text2\ntext3")  >>
-      writeFile("target/test/expected2/f1", "text1")            >>
-      writeFile("target/test/expected2/sub/f2", "text2\ntext4")
+      writeFile(s"$targetDir/actual/f1", "text1")               >>
+      writeFile(s"$targetDir/actual/sub/f2", "text2\ntext3")    >>
+      writeFile(s"$targetDir/expected/f1", "text1")             >>
+      writeFile(s"$targetDir/expected/sub/f2", "text2\ntext3")  >>
+      writeFile(s"$targetDir/expected2/f1", "text1")            >>
+      writeFile(s"$targetDir/expected2/sub/f2", "text2\ntext4")
 
     action.execute(noLogging).unsafePerformIO
 
-    "target/test/actual".file must haveSameFilesContentAs("target/test/expected".file).withMatcher(haveSameMD5)
-    AsResult("target/test/actual".file must haveSameFilesContentAs("target/test/expected2".file).withMatcher(haveSameMD5)).message.replace(" ", "_") ===
-      // be careful with whitespace after 'MD5' !!
-      """|There is 1 failure
-         |MD5 mismatch:
-         |file                         | MD5_____________________________
-         |target/test/actual/sub/f2    | 4392ebd49e53e2cfe36abb22e39601db
-         |target/test/expected2/sub/f2 | 1b7b2f1969fee054225ad6bbf7f6bdd7
-         |""".stripMargin.replace(" ", "_")
+    s"$targetDir/actual".file must haveSameFilesContentAs(s"$targetDir/expected".file).withMatcher(haveSameMD5)
+    AsResult(s"$targetDir/actual".file must haveSameFilesContentAs(s"$targetDir/expected2".file).withMatcher(haveSameMD5)).message.replace(" ", "_") ===
+
+      s"""|There is 1 failure
+          |MD5 mismatch:
+          |file                        | MD5_____________________________
+          |$targetDir/actual/sub/f2    | 4392ebd49e53e2cfe36abb22e39601db
+          |$targetDir/expected2/sub/f2 | 1b7b2f1969fee054225ad6bbf7f6bdd7
+          |""".stripMargin.replace(" ", "_")
   }
 
-  def before = new File("target/test").mkdir
-  def after = delete("target/test").execute(noLogging).unsafePerformIO
+  val targetDir = "target/test"+getClass.getSimpleName
+  def before = new File(targetDir).mkdir
+  def after = delete(targetDir).execute(noLogging).unsafePerformIO
 
   implicit class pathToFile(s: String) {
     def file = new File(s)

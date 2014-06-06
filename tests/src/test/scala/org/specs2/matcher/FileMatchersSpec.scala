@@ -1,13 +1,13 @@
 package org.specs2
 package matcher
+
 import java.io.File
 import io._
-import org.specs2.execute.StandardResults
+import execute.StandardResults
+import org.specs2.specification._
+import control._
 
-class FileMatchersSpec extends Specification with TestFiles with FileMatchers {
-//  private[specs2] override val fileSystem = new MockFileSystem {}
-
-  def is = s2"""
+class FileMatchersSpec extends Specification with TestFiles with FileMatchers {  def is = sequential ^ s2"""
 
  The FileMatchers trait provides matchers to check files and paths.
 
@@ -40,25 +40,25 @@ class FileMatchersSpec extends Specification with TestFiles with FileMatchers {
    ${ "/tmp" must not be aHiddenPath }
 
    beAFilePath checks if a path is a file
-   ${ "c:/tmp.txt" must beAFilePath }
-   ${ "c:/tmp" must not be aFilePath }
+   ${ okPath must beAFilePath }
+   ${ dirPath must not be aFilePath }
 
    beADirectorPath checks if a path is a directory
-   ${ "c:/tmp" must beADirectoryPath }
-   ${ "c:/tmp.txt" must not be aDirectoryPath }
+   ${ dirPath must beADirectoryPath }
+   ${ okPath must not be aDirectoryPath }
 
    havePathName checks if a path has a given name
-   ${ "c:/tmp/test.txt" must havePathName("test.txt") }
-   ${ "c:/tmp/test.txt" must not have pathName("name.txt") }
+   ${ okPath must havePathName("file.txt") }
+   ${ okPath must not have pathName("name.txt") }
 
    haveAsAbsolutePath checks if a path has a given absolute path
-   ${ "c:/tmp/test.txt" must haveAsAbsolutePath("c:/tmp/test.txt") }
+   ${ okPath must haveAsAbsolutePath(new File(okPath).getAbsolutePath) }
 
    haveAsCanonicalPath checks if a path has a given canonical path
-   ${ "c:/tmp/../test.txt" must haveAsCanonicalPath("c:/test.txt") }
+   ${ "c:/tmp/../dir" must haveAsCanonicalPath("c:/dir") }
 
    haveParentPath checks if a path has a given parent path
-   ${ "c:/tmp/dir/test.txt" must haveParentPath("c:/tmp/dir") }
+   ${ okPath must haveParentPath(dirPath) }
 
    listPaths checks if a path has a given list of children                                               ${fs().e7}
 
@@ -74,53 +74,63 @@ class FileMatchersSpec extends Specification with TestFiles with FileMatchers {
    ${ file(".tmp") must beHidden }
 
    beAFile checks if a file is a file
-   ${ file("c:/tmp.txt") must beAFile }
+   ${ file(okPath) must beAFile }
 
    beADirectory checks if a file is a directory
-   ${ file("c:/tmp") must beADirectory }
+   ${ file(dirPath) must beADirectory }
 
    haveName checks if a file has a given name
-   ${ file("c:/tmp/test.txt") must haveName("test.txt") }
+   ${ file(okPath) must haveName(new File(okPath).getName) }
 
    haveAbsolutePath checks if a file has a given absolute path
-   ${ file("c:/tmp/test.txt") must haveAbsolutePath("c:/tmp/test.txt") }
+   ${ file(okPath) must haveAbsolutePath(new File(okPath).getAbsolutePath) }
 
-   haveCanonicalPath checks if afile has a given canonical path
-   ${ file("c:/tmp/dir/../test.txt") must haveCanonicalPath("c:/tmp/test.txt") }
+   haveCanonicalPath checks if a file has a given canonical path
+   ${ file("c:/tmp/../dir/test.txt") must haveCanonicalPath("c:/dir/test.txt") }
 
    haveParent checks if a file has a given parent path
    ${ file("c:/tmp/dir/test.txt") must haveParent("c:/tmp/dir") }
 
    haveList checks if a file has a given list of children                                                ${fs().e11}
                                                                                                                         """
+
 }
 
-case class fs() extends MustMatchers with TestFiles with FileMatchers with StandardResults {
-//  private[specs2] override val fileSystem = new MockFileSystem {}
-//  import fileSystem._
-//  fileSystem.addFile(okPath, "")
-
+case class fs() extends MustMatchers with TestFiles with FileMatchers with StandardResults with Debug {
   def e1 = okPath must beAnExistingPath
   def e2 = missingPath must not be anExistingPath
-  def e3 = pending // setReadable(okPath) must beAReadablePath
-  def e4 = pending //setNotReadable(okPath) must not be aReadablePath
-  def e5 = pending // setWritable(okPath) must beAWritablePath
-  def e6 = pending // setNotWritable(okPath) must not be aWritablePath
-  def e7 = {
-    //addChild("c:/t/", "c:/t/test.txt")
-    "c:/t/" must listPaths("c:/t/test.txt") }
+  def e3 = setReadable(okPath, true) must beAReadablePath
+  def e4 = setReadable(okPath, false) must not be aReadablePath
+  def e5 = setWritable(okPath, true) must beAWritablePath
+  def e6 = setWritable(okPath, false) must not be aWritablePath
+  def e7 = dirPath must listPaths("file.txt")
   def e8 = file(okPath) must exist
-  def e9 =  pending // file(setReadable(okPath)) must beReadable
-  def e10 = pending // file(setWritable(okPath)) must beWritable
-  def e11 = {
-    //addChild("c:/t", "c:/t/tst.txt")
-    file("c:/t/") must haveList("c:/t/tst.txt") }
+  def e9 =  file(setReadable(okPath, true)) must beReadable
+  def e10 = file(setWritable(okPath, true)) must beWritable
+  def e11 = file(dirPath) must haveList("file.txt")
+
 }
 
 
-trait TestFiles {
-  val okPath = "path"
-  val missingPath = "absent"
+trait TestFiles extends FileSystem with BeforeAfterExample {
+  lazy val dirPath = s"target/test/fs"
+  lazy val okPath = s"$dirPath/file.txt"
+  lazy val missingPath = "absent"
+
+  def before =
+    writeFile(okPath, "").execute(noLogging).unsafePerformIO
+
+  def after = () //delete(dirPath).execute(noLogging).unsafePerformIO
+
+  def setReadable(path: String, r: Boolean) = {
+    new File(path).setReadable(r)
+    path
+  }
+
+  def setWritable(path: String, r: Boolean) = {
+    new File(path).setWritable(r)
+    path
+  }
 
   def file(s: String) = new File(s)
 }
