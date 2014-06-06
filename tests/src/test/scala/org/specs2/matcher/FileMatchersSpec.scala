@@ -120,7 +120,7 @@ trait TestFiles extends FileSystem with BeforeAfterExample {
   def before =
     writeFile(okPath, "").execute(noLogging).unsafePerformIO
 
-  def after = () //delete(dirPath).execute(noLogging).unsafePerformIO
+  def after = delete(dirPath).execute(noLogging).unsafePerformIO
 
   def setReadable(path: String, r: Boolean) = {
     new File(path).setReadable(r)

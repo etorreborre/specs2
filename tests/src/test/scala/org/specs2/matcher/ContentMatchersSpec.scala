@@ -1,11 +1,17 @@
 package org.specs2
 package matcher
 
-import org.specs2.io.FileSystem
+import io._
+import specification.BeforeAfterExample
+import control._
 import text.LinesContent
 import java.io.File
+import Actions._
+import ActionT._
+import scalaz.std.anyVal._
+import scalaz.syntax.bind._
 
-class ContentMatchersSpec extends Specification with LinesContentMatchers { def is = s2"""
+class ContentMatchersSpec extends Specification with LinesContentMatchers with BeforeAfterExample with FileSystem { def is = sequential ^ s2"""
 
  haveSameLinesAs checks if a file has the same lines as another file                                     ${comp().e1}
    it is possible to write (f1, f2) must haveSameLines as well                                           ${comp().e2}
@@ -17,47 +23,49 @@ class ContentMatchersSpec extends Specification with LinesContentMatchers { def 
    we can compare against a Seq of lines instead                                                         ${comp().e7}
                                                                                                          """
       
-  def e8 = (new File("f1.txt"), new File("f2.txt")) must haveSameLines.unordered
+  lazy val dir = "target/test/contents"
 
-}
+  def before = {
+    val action =
+      writeFile(s"$dir/f1", "hello\nbeautiful\nworld")         >>
+      writeFile(s"$dir/f2", "hello\nbeautiful\nworld")         >>
+      writeFile(s"$dir/f3", "beautiful\nworld\nhello")         >>
+      writeFile(s"$dir/f4", "hello\nworld")                    >>
+      writeFile(s"$dir/f5", "world\nhello")                    >>
+      writeFile(s"$dir/f6", "good\nmorning\nbeautiful\nworld") >>
+      writeFile(s"$dir/f7", "good\nday\ncrazy\nworld")
 
-case class comp() extends MustMatchers with TestFiles with ContentMatchers {
-//  val mockFileSystem = new MockFileSystem {}
-//  private[specs2] override val fileSystem: FileSystem = mockFileSystem
-//  import mockFileSystem._
-
-//  addFile("f1", "hello\nbeautiful\nworld")
-//  addFile("f2", "hello\nbeautiful\nworld")
-//  addFile("f3", "beautiful\nworld\nhello")
-//  addFile("f4", "hello\nworld")
-//  addFile("f5", "world\nhello")
-//  addFile("f6", "good\nmorning\nbeautiful\nworld")
-//  addFile("f7", "good\nday\ncrazy\nworld")
-
-  // read contents from the mock file system
-  override implicit protected val fileContentForMatchers = new LinesContent[File] {
-    def name(f: File) = f.getPath
-    def lines(f: File) = Seq[String]() //readLines(f.getPath)
+    action.execute(noLogging).unsafePerformIO
   }
 
+  def after = delete(s"$dir").execute(noLogging).unsafePerformIO
+}
 
-  def e1 = file("f1") must haveSameLinesAs(file("f2"))
-  def e2 = (file("f1"), file("f2")) must haveSameLines
-  def e3 = (file("f1"), file("f2")) must haveSameLines.unordered
+case class comp() extends MustMatchers with TestFiles with ContentMatchers with FileSystem {
+  lazy val dir = "target/test/contents"
 
-  def e4 = file("f1") must containLines(file("f4"))
-  def e5 = file("f1") must containLines(file("f5")).unordered
+  override implicit protected val fileContentForMatchers = new LinesContent[File] {
+    def name(f: File) = f.getPath
+    def lines(f: File) = readLines(f.getPath).execute(noLogging).unsafePerformIO.toOption.get
+  }
 
-  def e6 = ((file("f6"), file("f7")) must haveSameLines.showOnly(1.difference).unordered).message.split("\n").toSeq must
+  def e1 =  file(s"$dir/f1") must haveSameLinesAs(file(s"$dir/f2"))
+  def e2 = (file(s"$dir/f1"), file(s"$dir/f2")) must haveSameLines
+  def e3 = (file(s"$dir/f1"), file(s"$dir/f2")) must haveSameLines.unordered
+
+  def e4 = file(s"$dir/f1") must containLines(file(s"$dir/f4"))
+  def e5 = file(s"$dir/f1") must containLines(file(s"$dir/f5")).unordered
+
+  def e6 = ((file(s"$dir/f6"), file(s"$dir/f7")) must haveSameLines.showOnly(1.difference).unordered).message.split("\n").toSeq must
               haveSameLinesAs(Seq(
-                "f6 is not the same as f7",
-                "  in f6, not in f7",
-                "    2. morning",
-                "",
-                "  in f7, not in f6",
-                "    2. day"))
+                s"$dir/f6 is not the same as $dir/f7",
+                s"  in $dir/f6, not in $dir/f7",
+                s"    2. morning",
+                s"",
+                s"  in $dir/f7, not in $dir/f6",
+                s"    2. day"))
 
-  def e7 = (file("f1"), Seq("hello", "beautiful", "world")) must haveSameLines
+  def e7 = (file(s"$dir/f1"), Seq("hello", "beautiful", "world")) must haveSameLines
 
 }
 
