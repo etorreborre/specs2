@@ -42,6 +42,7 @@ class FilesContentMatchersSpec extends Specification
     action.execute(noLogging).unsafePerformIO
 
      s"$targetDir/actual".file must haveSamePathsAs(s"$targetDir/expected".file)
+
     (s"$targetDir/actual".file must haveSamePathsAs(s"$targetDir/expected2".file)) returns
      s"""|$targetDir/actual is not the same as $targetDir/expected2
          |  in $targetDir/actual, not in $targetDir/expected2
@@ -56,15 +57,15 @@ class FilesContentMatchersSpec extends Specification
     val action =
       createFile(s"$targetDir/actual/f1")        >>
       createFile(s"$targetDir/actual/sub/f2")    >>
-      createFile(s"$targetDir/expected/f1")      >>
-      createFile(s"$targetDir/expected/sub/f2")  >>
-      createFile(s"$targetDir/expected/sub/f3")
+      createFile(s"$targetDir/expected2/f1")      >>
+      createFile(s"$targetDir/expected2/sub/f2")  >>
+      createFile(s"$targetDir/expected2/sub/f3")
 
     action.execute(noLogging).unsafePerformIO
 
     val notF3 = (f: File) => !f.getPath.endsWith("f3")
 
-    s"$targetDir/actual".file must haveSamePathsAs(s"$targetDir/expected".file).withFilter(notF3)
+    s"$targetDir/actual".file must haveSamePathsAs(s"$targetDir/expected2".file).withFilter(notF3)
   }
 
   def e3 = {
@@ -109,7 +110,7 @@ class FilesContentMatchersSpec extends Specification
           |""".stripMargin.replace(" ", "")
   }
 
-  val targetDir = "target/test/fcm"
+  val targetDir = "target/test/fcm-"+hashCode
   def before = new File(targetDir).mkdir
   def after = delete(targetDir).execute(noLogging).unsafePerformIO
 
