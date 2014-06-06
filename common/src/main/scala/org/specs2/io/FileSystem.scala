@@ -171,7 +171,8 @@ trait FileSystem {
 
   /** create a new file */
   def createFile(path: String): Action[Boolean] =
-    Actions.safe { new File(path).createNewFile }
+    mkParentDirs(path) >>
+    Actions.safe(new File(path).createNewFile)
 
   /** delete files or directories */
   def delete(path: String): Action[Unit] =

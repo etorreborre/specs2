@@ -4,7 +4,11 @@ package matcher
 import java.io.File
 import execute.AsResult
 import io._
-import org.specs2.specification.BeforeAfterExample
+import specification.BeforeAfterExample
+import control._
+import Actions._
+import scalaz.std.anyVal._
+import scalaz.syntax.bind._
 
 class FilesContentMatchersSpec extends Specification
   with FilesContentMatchers with BeforeAfterExample with ThrownExpectations with FileSystem { def is = sequential ^ diffs(show = true, triggerSize = 0, diffRatio = 100)^ s2"""
@@ -27,14 +31,15 @@ class FilesContentMatchersSpec extends Specification
                           """
 
   def e1 = {
-    createFile("target/test/actual/f1")
-    createFile("target/test/actual/sub/f2")
+    val action =
+      createFile("target/test/actual/f1")        >>
+      createFile("target/test/actual/sub/f2")    >>
+      createFile("target/test/expected/f1")      >>
+      createFile("target/test/expected/sub/f2")  >>
+      createFile("target/test/expected2/f1")     >>
+      createFile("target/test/expected2/sub/f3")
 
-    createFile("target/test/expected/f1")
-    createFile("target/test/expected/sub/f2")
-
-    createFile("target/test/expected2/f1")
-    createFile("target/test/expected2/sub/f3")
+    action.execute(noLogging).unsafePerformIO
 
      "target/test/actual".file must haveSamePathsAs("target/test/expected".file)
     ("target/test/actual".file must haveSamePathsAs("target/test/expected2".file)) returns
@@ -48,26 +53,31 @@ class FilesContentMatchersSpec extends Specification
   }
 
   def e2 = {
-    createFile("target/test/actual/f1")
-    createFile("target/test/actual/sub/f2")
 
-    createFile("target/test/expected/f1")
-    createFile("target/test/expected/sub/f2")
-    createFile("target/test/expected/sub/f3")
+    val action =
+      createFile("target/test/actual/f1")        >>
+      createFile("target/test/actual/sub/f2")    >>
+      createFile("target/test/expected/f1")      >>
+      createFile("target/test/expected/sub/f2")  >>
+      createFile("target/test/expected/sub/f3")
+
+    action.execute(noLogging).unsafePerformIO
+
     val notF3 = (f: File) => !f.getPath.endsWith("f3")
 
     "target/test/actual".file must haveSamePathsAs("target/test/expected".file).withFilter(notF3)
   }
 
   def e3 = {
-    writeFile("target/test/actual/f1", "text1")
-    writeFile("target/test/actual/sub/f2", "text2\ntext3")
-    
-    writeFile("target/test/expected/f1", "text1")
-    writeFile("target/test/expected/sub/f2", "text2\ntext3")
-    
-    writeFile("target/test/expected2/f1", "text1")
-    writeFile("target/test/expected2/sub/f2", "text2\ntext4")
+    val action =
+      writeFile("target/test/actual/f1", "text1")               >>
+      writeFile("target/test/actual/sub/f2", "text2\ntext3")    >>
+      writeFile("target/test/expected/f1", "text1")             >>
+      writeFile("target/test/expected/sub/f2", "text2\ntext3")  >>
+      writeFile("target/test/expected2/f1", "text1")            >>
+      writeFile("target/test/expected2/sub/f2", "text2\ntext4")
+
+    action.execute(noLogging).unsafePerformIO
 
     "target/test/actual".file must haveSameFilesContentAs("target/test/expected".file)
     ("target/test/actual".file must haveSameFilesContentAs("target/test/expected2".file)) returns
@@ -81,28 +91,29 @@ class FilesContentMatchersSpec extends Specification
   }
 
   def e4 = {
-    writeFile("target/test/actual/f1", "text1")
-    writeFile("target/test/actual/sub/f2", "text2\ntext3")
+    val action =
+      writeFile("target/test/actual/f1", "text1")               >>
+      writeFile("target/test/actual/sub/f2", "text2\ntext3")    >>
+      writeFile("target/test/expected/f1", "text1")             >>
+      writeFile("target/test/expected/sub/f2", "text2\ntext3")  >>
+      writeFile("target/test/expected2/f1", "text1")            >>
+      writeFile("target/test/expected2/sub/f2", "text2\ntext4")
 
-    writeFile("target/test/expected/f1", "text1")
-    writeFile("target/test/expected/sub/f2", "text2\ntext3")
-
-    writeFile("target/test/expected2/f1", "text1")
-    writeFile("target/test/expected2/sub/f2", "text2\ntext4")
+    action.execute(noLogging).unsafePerformIO
 
     "target/test/actual".file must haveSameFilesContentAs("target/test/expected".file).withMatcher(haveSameMD5)
-    AsResult("target/test/actual".file must haveSameFilesContentAs("target/test/expected2".file).withMatcher(haveSameMD5)).message ===
+    AsResult("target/test/actual".file must haveSameFilesContentAs("target/test/expected2".file).withMatcher(haveSameMD5)).message.replace(" ", "_") ===
       // be careful with whitespace after 'MD5' !!
       """|There is 1 failure
          |MD5 mismatch:
-         |file                         | MD5
+         |file                         | MD5_____________________________
          |target/test/actual/sub/f2    | 4392ebd49e53e2cfe36abb22e39601db
          |target/test/expected2/sub/f2 | 1b7b2f1969fee054225ad6bbf7f6bdd7
-         |""".stripMargin
+         |""".stripMargin.replace(" ", "_")
   }
 
   def before = new File("target/test").mkdir
-  def after = delete("target/test")
+  def after = delete("target/test").execute(noLogging).unsafePerformIO
 
   implicit class pathToFile(s: String) {
     def file = new File(s)
