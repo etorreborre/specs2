@@ -5,21 +5,21 @@ package mutable
 
 import control.ImplicitParameters._
 import execute.AsResult
-import org.specs2.specification.core.{ExceptionLocation, Fragment}
+import org.specs2.specification.core.{StacktraceLocation, Fragment}
 import specification.create.FragmentsFactory
 
 trait BlockDsl extends FragmentBuilder with FragmentsFactory {
 
   implicit class describe(d: String) {
-    def >>(f: =>Fragment): Unit = addBlock(d, f, ExceptionLocation())
-    def should(f: =>Fragment)   = addBlock(s"$d should", f, ExceptionLocation())
-    def can(f: =>Fragment)      = addBlock(s"$d can", f, ExceptionLocation())
+    def >>(f: =>Fragment): Unit = addBlock(d, f, StacktraceLocation())
+    def should(f: =>Fragment)   = addBlock(s"$d should", f, StacktraceLocation())
+    def can(f: =>Fragment)      = addBlock(s"$d can", f, StacktraceLocation())
 
-    def >>(f: =>Unit)(implicit p: ImplicitParam): Unit = addBlock(d, f, ExceptionLocation())
-    def should(f: =>Unit)(implicit p: ImplicitParam)   = addBlock(s"$d should", f, ExceptionLocation())
-    def can(f: =>Unit)(implicit p: ImplicitParam)      = addBlock(s"$d can", f, ExceptionLocation())
+    def >>(f: =>Unit)(implicit p: ImplicitParam): Unit = addBlock(d, f, StacktraceLocation())
+    def should(f: =>Unit)(implicit p: ImplicitParam)   = addBlock(s"$d should", f, StacktraceLocation())
+    def can(f: =>Unit)(implicit p: ImplicitParam)      = addBlock(s"$d can", f, StacktraceLocation())
 
-    private def addBlock(text: String, f: =>Any, location: ExceptionLocation) = addFragmentBlock {
+    private def addBlock(text: String, f: =>Any, location: StacktraceLocation) = addFragmentBlock {
       addStart
       addBreak
       addText(text, location)
@@ -30,7 +30,7 @@ trait BlockDsl extends FragmentBuilder with FragmentsFactory {
       addEnd
     }
 
-    private def addText(text: String, location: ExceptionLocation) =
+    private def addText(text: String, location: StacktraceLocation) =
       addFragment(fragmentFactory.Text(text).setLocation(location))
 
     private def addBreak = addFragment(fragmentFactory.Break)

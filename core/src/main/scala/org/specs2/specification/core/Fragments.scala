@@ -47,7 +47,7 @@ object Fragments {
   }
 }
 
-case class Fragment(description: Description, execution: Execution, location: Location = ExceptionLocation()) {
+case class Fragment(description: Description, execution: Execution, location: Location = StacktraceLocation()) {
 
   def executionResult = execution.result
   def isRunnable = execution.isRunnable

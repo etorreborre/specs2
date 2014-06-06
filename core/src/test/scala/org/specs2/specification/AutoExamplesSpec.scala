@@ -13,19 +13,19 @@ class AutoExamplesSpec extends Specification with DataTables { def is = s2"""
      with a parameter list - one param                                                       $e2
      with a parameter list - 2 params                                                        $e3
 
- DataTables can be used as examples directly
-   their description must be left empty, since the result contains the full description      $dt1
+ DataTables can be used as examples directly                                                 $dt1
 
  Autoexamples can also be used in mutable specifications                                     $m1
                                                                                              """
 
   def e1 = trimExpression("`method`") must_== "method"
-
   def e2 = trimExpression("`method`(p1)") must_== "method"
-
   def e3 = trimExpression("`method`(p1, p2)") must_== "method"
 
-  def dt1 = firstExampleDescription("text" ^ datatableOk) must be empty
+  def dt1 = firstExampleDescription("text" ^ datatableOk) must_==
+  """|"a"  | "b" | "c" |>
+     |2    ! 2   ! 4   |
+     |1    ! 1   ! 2   | { (a, b, c) =>  a + b must_== c }""".stripMargin
 
   def m1 = {
     val spec = new Spec with DataTables {
@@ -35,7 +35,11 @@ class AutoExamplesSpec extends Specification with DataTables { def is = s2"""
 
       eg { success }
 
-      datatableOk
+      eg {
+        "a"  | "b" | "c" |>
+        2    ! 2   ! 4   |
+        1    ! 1   ! 2   | { (a, b, c) =>  a + b must_== c }
+      }
     }
     spec.is.fragments.fragments.filter(Fragment.isExample) must have size(4)
   }
@@ -44,9 +48,9 @@ class AutoExamplesSpec extends Specification with DataTables { def is = s2"""
     fs.fragments.filter(Fragment.isExample).head.description.show
 
   def datatableOk = eg {
-    "a"   | "b" | "c" |>
-     2    !  2  !  4  |
-     1    !  1  !  2  | { (a, b, c) =>  a + b must_== c }
+    "a"  | "b" | "c" |>
+    2    ! 2   ! 4   |
+    1    ! 1   ! 2   | { (a, b, c) =>  a + b must_== c }
   }
 
 }

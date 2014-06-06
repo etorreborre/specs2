@@ -24,7 +24,7 @@ trait AutoExamples extends FragmentsFactory {
       trimStart("eg").
       trimEnclosing("{", "}").
       trimEnclosing("`", "`").
-      removeFirst("`\\(.*\\)").trimFirst("`")
+      removeFirst("`\\(.*\\)").trimFirst("`").split("\n", -1).map(_.trim).mkString("\n")
   }
 
   private def containsAccolade(expression: String) =

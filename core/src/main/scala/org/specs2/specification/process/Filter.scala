@@ -22,12 +22,16 @@ trait Filter {
     filterByName(env: Env) |> filterByTags(env) |> filterByPrevious(env)
 
   /** filter fragments by name */
-  def filterByName(env: Env): Process1[Fragment, Fragment] =
-    process1.filter {
-      case Fragment(RawText(t),e,_) if e.isRunnable => t.matches(env.arguments.ex)
-      case Fragment(Code(t),e,_)    if e.isRunnable => t.matches(env.arguments.ex)
-      case other                                    => true
-    }
+  def filterByName(env: Env): Process1[Fragment, Fragment] = {
+    val regex = env.arguments.ex
+    if (regex !=".*")
+      process1.filter {
+        case Fragment(RawText(t),e,_) if e.isRunnable => t.matches(regex)
+        case Fragment(Code(t),e,_)    if e.isRunnable => t.matches(regex)
+        case other                                    => true
+      }
+    else process1.id
+  }
 
   /** filter fragments by tags */
   def filterByTags(env: Env): Process1[Fragment, Fragment] = {

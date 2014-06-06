@@ -28,7 +28,7 @@ case class SimpleLocation(trace: TraceLocation) extends Location {
     traceLocation(filter).fold(this)(SimpleLocation.apply)
 }
 
-case class ExceptionLocation(trace: Seq[StackTraceElement] = (new Exception).getStackTrace) extends Location {
+case class StacktraceLocation(trace: Seq[StackTraceElement] = (new Exception).getStackTrace) extends Location {
   def traceLocation(filter: StackTraceFilter): Option[TraceLocation] =
     filter(trace).headOption.map(TraceLocation.apply)
 
@@ -36,8 +36,9 @@ case class ExceptionLocation(trace: Seq[StackTraceElement] = (new Exception).get
   def filter(filter: StackTraceFilter) = copy(filter(trace))
 
   override def equals(a: Any) = a match {
-    case l: ExceptionLocation => l.toString == this.toString
+    case l: StacktraceLocation => l.toString == this.toString
     case other                => false
   }
 
+  override def toString = s"${getClass.getSimpleName}(${traceLocation(NoStackTraceFilter)}})"
 }

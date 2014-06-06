@@ -92,6 +92,7 @@ trait TextPrinter extends Printer {
   def printFragment(args: Arguments): ((Fragment, (Stats, Int))) => Process[Task, LogLine] = {
     case (fragment, (stats, indentation)) =>
       val indentationSize = args.commandLine.int("indentation").getOrElse(0)
+
       fragment match {
         case Fragment(RawText(t), e, l) if e.isRunnable =>
           printRunnable(t, e, args, indentation)
@@ -178,8 +179,7 @@ trait TextPrinter extends Printer {
 
     val status = result.coloredStatus(args) + " "
     val decoratedFirstLine = indentation + status + firstLine.dropWhile(_ == ' ')
-
-    val rest = textLines.drop(1).map(indentation+_)
+    val rest = textLines.drop(1).map(line => indentation + "   " + line)
     (decoratedFirstLine +: rest).mkString("\n")
   }
 
