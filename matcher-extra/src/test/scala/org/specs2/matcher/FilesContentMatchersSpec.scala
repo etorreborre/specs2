@@ -43,13 +43,12 @@ class FilesContentMatchersSpec extends Specification
 
      s"$targetDir/actual".file must haveSamePathsAs(s"$targetDir/expected".file)
     (s"$targetDir/actual".file must haveSamePathsAs(s"$targetDir/expected2".file)) returns
-      """|target/test/actual is not the same as target/test/expected2
-         |  in target/test/actual, not in target/test/expected2
+     s"""|$targetDir/actual is not the same as $targetDir/expected2
+         |  in $targetDir/actual, not in $targetDir/expected2
          |    MISSING:   3. sub/f2
          |
-         |  in target/test/expected2, not in target/test/actual
-         |    MISSING:   3. sub/f3
-         |""".stripMargin
+         |  in $targetDir/expected2, not in $targetDir/actual
+         |    MISSING:   3. sub/f3""".stripMargin
   }
 
   def e2 = {
@@ -81,13 +80,12 @@ class FilesContentMatchersSpec extends Specification
 
     s"$targetDir/actual".file must haveSameFilesContentAs(s"$targetDir/expected".file)
     (s"$targetDir/actual".file must haveSameFilesContentAs(s"$targetDir/expected2".file)) returns
-      """|target/test/actual/sub/f2 is not the same as target/test/expected2/sub/f2
-         |  in target/test/actual/sub/f2, not in target/test/expected2/sub/f2
+     s"""|$targetDir/actual/sub/f2 is not the same as $targetDir/expected2/sub/f2
+         |  in $targetDir/actual/sub/f2, not in $targetDir/expected2/sub/f2
          |    MISSING:   2. text3
          |
-         |  in target/test/expected2/sub/f2, not in target/test/actual/sub/f2
-         |    MISSING:   2. text4
-         |""".stripMargin
+         |  in $targetDir/expected2/sub/f2, not in $targetDir/actual/sub/f2
+         |    MISSING:   2. text4""".stripMargin
   }
 
   def e4 = {
@@ -102,17 +100,16 @@ class FilesContentMatchersSpec extends Specification
     action.execute(noLogging).unsafePerformIO
 
     s"$targetDir/actual".file must haveSameFilesContentAs(s"$targetDir/expected".file).withMatcher(haveSameMD5)
-    AsResult(s"$targetDir/actual".file must haveSameFilesContentAs(s"$targetDir/expected2".file).withMatcher(haveSameMD5)).message.replace(" ", "_") ===
-
+    AsResult(s"$targetDir/actual".file must haveSameFilesContentAs(s"$targetDir/expected2".file).withMatcher(haveSameMD5)).message.replace(" ", "") ===
       s"""|There is 1 failure
           |MD5 mismatch:
-          |file                        | MD5_____________________________
+          |file                        | MD5
           |$targetDir/actual/sub/f2    | 4392ebd49e53e2cfe36abb22e39601db
           |$targetDir/expected2/sub/f2 | 1b7b2f1969fee054225ad6bbf7f6bdd7
-          |""".stripMargin.replace(" ", "_")
+          |""".stripMargin.replace(" ", "")
   }
 
-  val targetDir = "target/test"+getClass.getSimpleName
+  val targetDir = "target/test/fcm"
   def before = new File(targetDir).mkdir
   def after = delete(targetDir).execute(noLogging).unsafePerformIO
 
