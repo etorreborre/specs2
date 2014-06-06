@@ -1,14 +1,14 @@
 package org.specs2
 package reporter
 
-import org.specs2.mock._
-import org.specs2.main.Arguments
-import org.specs2.io.StringOutput
+import examples.HelloWorldSpec
+import mock._
+import main.Arguments
+import io.StringOutput
 import sbt.testing.{TaskDef, EventHandler, Logger}
-import org.specs2.runner._
-import org.specs2.examples.HelloWorldSpec
-import org.specs2.specification.core._
-import org.specs2.specification.process.Executor
+import runner._
+import specification.core._
+import specification.process.Executor
 
 class SbtPrinterSpec extends Specification with EnvFixture { def is = s2"""
                                                                                                                         

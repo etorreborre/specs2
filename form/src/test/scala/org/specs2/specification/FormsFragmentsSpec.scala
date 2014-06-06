@@ -3,6 +3,8 @@ package specification
 
 import form._
 import matcher._
+import org.specs2.specification.core.SpecStructure
+import org.specs2.specification.process.Executor
 
 class FormsFragmentsSpec extends Specification with Forms with ThrownExpectations { def is = s2"""
   
@@ -14,18 +16,18 @@ class FormsFragmentsSpec extends Specification with Forms with ThrownExpectation
 
  It can also be added as the body of an example
    returning success if the form is a success                                        ${frags.e2}
-   returning a failure if one property in the  form fails                            ${frags.e3}
+   returning a failure if one property in the form fails                             ${frags.e3}
                                                                                      """
                                                                                
   object frags extends Customers {
-    def e1_1 = ("This is the expected customer" ^ form).fragments.size must_== 2
-    def e1_2 = ("This is the expected customer" ^ form).fragments(1).toString must_== s"Example($formText)"
-    def e1_3 = s2"This is the expected customer $form" .fragments.fragments(2) .toString must_== s"Example($formText)"
+    def e1_1 = execute("This is the expected customer" ^ form).size must_== 2
+    def e1_2 = execute("This is the expected customer" ^ form).map(_.description.show).apply(1) must_== s"$formText"
+    def e1_3 = execute(s2"This is the expected customer $form").map(_.description.show).apply(1) must_== s"$formText"
 
     def e1_4 = {
-      val spec = s2"This is the expected customer $eric"
-      spec.fragments.fragments(1).toString must_== "Text(This is the expected customer )"
-      spec.fragments.fragments(2).toString must_== s"Example($formText)"
+      val spec = execute(s2"This is the expected customer $eric").map(_.description.show)
+      spec(0).toString must_== "This is the expected customer "
+      spec(1).toString must_== s"$formText"
     }
 
     def e2 = {
@@ -33,10 +35,13 @@ class FormsFragmentsSpec extends Specification with Forms with ThrownExpectation
       example.executionResult.isSuccess must beTrue
     }
     def e3 = {
-      val example = "the customer must be as expected" ! failedForm
+      val example = Executor.execute("the customer must be as expected" ! failedForm)
       example.executionResult.message must_== "'20' is not equal to '18'"
       
     }
+
+    def execute(spec: SpecStructure) =
+      Executor.executeAll(spec.fragments.fragments:_*)
   }
 
   trait Customers {

@@ -4,6 +4,7 @@ package html
 import mutable.Specification
 import HtmlTemplate._
 import control._
+import matcher.ControlMatchers._
 
 class HtmlTemplateSpec extends Specification {
   "replace variables in a template" >> {

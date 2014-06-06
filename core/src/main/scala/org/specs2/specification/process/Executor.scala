@@ -136,6 +136,7 @@ object Executor extends Executor {
 
   /** only to be used in tests */
   def executeAll(seq: Fragment*)(implicit env: Env = Env()) = executeSeq(seq)(env)
+  def execute(f: Fragment)(implicit env: Env = Env()) = executeAll(f)(env).head
 
   /** only to be used in tests */
   def executeSeq(seq: Seq[Fragment])(implicit env: Env = Env()): IndexedSeq[Fragment] = {
