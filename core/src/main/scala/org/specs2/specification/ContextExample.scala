@@ -64,26 +64,51 @@ trait FixtureExample[T] extends FragmentsFactory { outer =>
 }
 
 /**
+ * Execute a step before all fragments
+ */
+trait BeforeAll extends SpecificationStructure with FragmentsFactory {
+  def beforeAll: Unit
+  override def map(fs: =>core.Fragments) = fs.prepend(fragmentFactory.Step(beforeAll))
+}
+
+/**
+ * Execute a step after all fragments
+ */
+trait AfterAll extends SpecificationStructure with FragmentsFactory {
+  def afterAll: Unit
+  override def map(fs: =>core.Fragments) = fs.append(fragmentFactory.Step(afterAll))
+}
+
+/**
+ * Execute a step before and after all fragments
+ */
+trait BeforeAfterAll extends SpecificationStructure with FragmentsFactory {
+  def beforeAll: Unit
+  def afterAll: Unit
+  override def map(fs: =>core.Fragments) = fs.prepend(fragmentFactory.Step(beforeAll)).append(fragmentFactory.Step(afterAll))
+}
+
+/**
  * Execute some fragments before all others
  */
-trait BeforeAll extends SpecificationStructure {
-  def beforeAll: core.Fragments
-  override def map(fs: =>core.Fragments) = fs.prepend(beforeAll)
+trait BeforeSpec extends SpecificationStructure {
+  def beforeSpec: core.Fragments
+  override def map(fs: =>core.Fragments) = fs.prepend(beforeSpec)
 }
 
 /**
  * Execute some fragments after all others
  */
-trait AfterAll extends SpecificationStructure {
-  def afterAll: core.Fragments
-  override def map(fs: =>core.Fragments) = fs.append(afterAll)
+trait AfterSpec extends SpecificationStructure {
+  def afterSpec: core.Fragments
+  override def map(fs: =>core.Fragments) = fs.append(afterSpec)
 }
 
 /**
  * Execute some fragments before and after all others
  */
-trait BeforeAfterAll extends SpecificationStructure {
-  def beforeAll: core.Fragments
-  def afterAll: core.Fragments
-  override def map(fs: =>core.Fragments) = fs.prepend(beforeAll).append(afterAll)
+trait BeforeAfterSpec extends SpecificationStructure {
+  def beforeSpec: core.Fragments
+  def afterSpec: core.Fragments
+  override def map(fs: =>core.Fragments) = fs.prepend(beforeSpec).append(afterSpec)
 }
