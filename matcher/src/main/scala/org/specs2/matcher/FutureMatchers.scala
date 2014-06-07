@@ -33,9 +33,10 @@ trait FutureMatchers extends Expectations {
       def awaitFor(retries: Int, totalDuration: FiniteDuration = 0.seconds): Result = {
         try Await.result(f.map(value => AsResult(value)), timeout)
         catch {
-          case e: TimeoutException =>
+          case e: TimeoutException  =>
             if (retries <= 0) Failure(s"Timeout after ${totalDuration + timeout}")
             else awaitFor(retries - 1, totalDuration + timeout)
+
           case other: Throwable    => throw other
         }
       }

@@ -20,8 +20,8 @@ case class ExecutionEnv(timeOut:  Option[Duration] = None,
     ExecutionEnv.defaultExecutor
   }
 
-  def shutdown = {
-    try     executor.shutdown()
+  def shutdown: Unit = {
+    try     executor.shutdownNow()
     finally timer.stop
   }
 }
