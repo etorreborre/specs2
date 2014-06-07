@@ -32,9 +32,9 @@ class StackIsolatedSpec extends Specification with Groups { def is = isolated ^ 
                                                                       """
 
   /** stacks creation */
-  def stackIsEmpty  = Step(stack = emptyStack)
-  def stackIsNormal = Step(stack = normalStack)
-  def stackIsFull   = Step(stack = fullStack)
+  def stackIsEmpty  = step(stack = emptyStack)
+  def stackIsNormal = step(stack = normalStack)
+  def stackIsFull   = step(stack = fullStack)
 
   def emptyStack  = SizedStack(maxCapacity = 10, size = 0)
   def normalStack = SizedStack(maxCapacity = 10, size = 2)

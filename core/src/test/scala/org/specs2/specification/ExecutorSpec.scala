@@ -33,21 +33,33 @@ class ExecutorSpec extends Specification with Groups with ResultMatchers with Th
   "steps" - new group with results {
 
     eg := {
-      val fragments = Seq(Example("slow", slow), Example("medium", medium), Step(step1), Example("fast", fast))
+      val fragments = Seq(
+        factory.example("slow", slow),
+        factory.example("medium", medium),
+        factory.step(step1),
+        factory.example("fast", fast))
       execute(fragments) must not(contain(beSkipped[Result]))
 
       messages.toList must_== Seq("medium", "slow", "step", "fast")
     }
 
     eg := {
-      val fragments = Seq(Example("slow", slow), Example("medium", mediumFail), Step(step1).stopOnFail, Example("fast", fast))
+      val fragments = Seq(
+        factory.example("slow", slow),
+        factory.example("medium", mediumFail),
+        factory.step(step1).stopOnFail,
+        factory.example("fast", fast))
       execute(fragments) must contain(beSkipped[Result])
 
       messages.toList must_== Seq("medium", "slow", "step")
     }
 
     eg := {
-      val fragments = Seq(Example("slow", slow), Example("medium", mediumSkipped), Step(step1), Example("fast", fast))
+      val fragments = Seq(
+        factory.example("slow", slow),
+        factory.example("medium", mediumSkipped),
+        factory.step(step1),
+        factory.example("fast", fast))
       execute(fragments, Env(arguments = Arguments("stopOnSkipped"))) must contain(beSkipped[Result])
 
       messages.toList must_== Seq("medium", "slow", "step")
@@ -58,7 +70,11 @@ class ExecutorSpec extends Specification with Groups with ResultMatchers with Th
   "execute" - new group with results {
 
     eg := {
-      val fragments = Seq(Example("slow", slow), Example("medium", medium), Step(step1), Example("fast", fast))
+      val fragments = Seq(
+        factory.example("slow", slow),
+        factory.example("medium", medium),
+        factory.step(step1),
+        factory.example("fast", fast))
       execute(fragments, Env(arguments = Arguments("sequential"))) must not(contain(beSkipped[Result]))
 
       messages.toList must_== Seq("slow", "medium", "step", "fast")
@@ -66,22 +82,23 @@ class ExecutorSpec extends Specification with Groups with ResultMatchers with Th
 
     eg := {
       val fragments = Seq(
-        Example("slow", slow),
-        Example("medium", medium),
-        Step(step1),
-        Example("fast", fast))
+        factory.example("slow", slow),
+        factory.example("medium", medium),
+        factory.step(step1),
+        factory.example("fast", fast))
       execute(fragments, Env(arguments = Arguments("sequential")))
 
       messages.toList must_== Seq("slow", "medium", "step", "fast")
     }
 
     eg := {
-      val fragments = Seq(Example("very slow", verySlow))
+      val fragments = Seq(factory.example("very slow", verySlow))
       val env = Env(executionEnv = ExecutionEnv(timeOut = Some(100.millis)))
       execute(fragments, env) must contain(beSkipped[Result]("timeout after 100 milliseconds"))
     }
   }
 
+  val factory = fragmentFactory
   def execute(fragments: Seq[Fragment], env: Env = Env()): IndexedSeq[Result] =
     Executor.executeSeq(fragments)(env).map(_.executionResult)
 

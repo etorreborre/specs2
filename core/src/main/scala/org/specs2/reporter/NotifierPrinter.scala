@@ -4,7 +4,7 @@ package reporter
 import specification._
 import data.Fold
 import scalaz.concurrent.Task
-import scalaz.stream.Process.{Env => _,_}
+import scalaz.stream.Process.{Env => _, End => _, _}
 import scalaz.stream.io
 import execute._
 import scalaz.syntax.show._
@@ -22,9 +22,9 @@ object NotifierPrinter {
 
       def fold = (f: Fragment, notified: Notified) => f match {
         // a block start. The next text is the "context" name
-        case Fragment(`start`,_,_) => notified.copy(start = true, close = false, hide = true)
+        case Fragment(Start,_,_) => notified.copy(start = true, close = false, hide = true)
         // a block start. The "context" name is the current block name
-        case Fragment(`end`,_ ,_) => notified.copy(start = false, close = true, hide = true)
+        case Fragment(End,_ ,_) => notified.copy(start = false, close = true, hide = true)
           
         case f1 if Fragment.isText(f1) =>
           if (notified.start) notified.copy(context = f1.description.shows, start = true, hide = false)

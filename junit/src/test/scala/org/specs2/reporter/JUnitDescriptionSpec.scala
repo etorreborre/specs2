@@ -74,7 +74,7 @@ class JUnitDescriptionSpec extends Specification with JUnitDescriptionSpecTest {
     "   |",
     "   `- level2::ex2(org.specs2.reporter.JUnitDescriptionSpec)\n")
 
-  def a5 = descriptionIs(level1 ^ Break ^ Backtab ^ level2)(
+  def a5 = descriptionIs(level1 ^ break ^ backtab ^ level2)(
     "JUnitDescriptionSpec",
     "|",
     "+- level1",
@@ -185,14 +185,14 @@ class JUnitDescriptionSpec extends Specification with JUnitDescriptionSpecTest {
 trait ReporterExamples extends MustMatchers with StandardResults with StandardMatchResults with FragmentsFactory with FragmentDsl {
   private val factory = fragmentFactory; import factory._
 
-  lazy val text = Text("text")
+  lazy val text = factory.text("text")
 
   def exOk(i: Int) = "ex"+i ! {println("ex"+i);success}
 
   lazy val ex1 = "ex1" ! success
   lazy val ex2 = "ex2" ! success
   lazy val ex3 = "ex3" ! success
-  lazy val empty1 = Text("     ")
+  lazy val empty1 = factory.text("     ")
   lazy val ex1Failure = "ex1" ! failure
   lazy val ex1BeEqualToFailure = "ex1" ! { 1 must_== 2 }
   lazy val ex1Error = "ex1" ! anError
@@ -200,11 +200,11 @@ trait ReporterExamples extends MustMatchers with StandardResults with StandardMa
   lazy val ex1Pending  = "ex1" ! pending
   lazy val exampleWithExpectations = "ex1" ! Success("ok", 2)
 
-  lazy val level1 = Start ^ "level1" ^ Break ^ ex1 ^ ex2 ^ End
-  lazy val level2 = Start ^ "level2" ^ Break ^ ex1 ^ ex2 ^ End
-  lazy val level2WithFailure = Start ^ "level2" ^ Break ^ ex1Failure ^ ex2 ^ End
+  lazy val level1 = start ^ "level1" ^ break ^ ex1 ^ ex2 ^ end
+  lazy val level2 = start ^ "level2" ^ break ^ ex1 ^ ex2 ^ end
+  lazy val level2WithFailure = start ^ "level2" ^ break ^ ex1Failure ^ ex2 ^ end
   lazy val level1Level2 = level1 ^ level2
-  lazy val level1ParLevel2 = level1 ^ Break ^ Backtab ^ level2
+  lazy val level1ParLevel2 = level1 ^ break ^ backtab ^ level2
 
   lazy val helloWorld = "hello \nworld" ! success
 

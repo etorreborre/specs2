@@ -19,7 +19,7 @@ trait MutableFragmentBuilder extends FragmentBuilder
 
   def specificationFragments = (env: Env) => {
     val content = {
-      fragmentFactory.Break +: // add a line break just after the specification title
+      fragmentFactory.break +: // add a line break just after the specification title
       replayFragments(env).toSeq
     }
     Fragments(Process.emitAll(content).toSource)

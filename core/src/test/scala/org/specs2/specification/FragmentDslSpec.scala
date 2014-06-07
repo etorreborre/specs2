@@ -80,6 +80,6 @@ class FragmentDslSpec extends Specification { def is = s2"""
   def g3 = ((FragmentDsl.bangExample("text") ! ((e: Env) => ok)) ^ f1).fragments must haveSize(2)
 
 
-  val (f1, f2, f3) = (Text("t1"), Text("t2"), Text("t3"))
+  val (f1, f2, f3) = (text("t1"), text("t2"), text("t3"))
   val header = FragmentDsl.title("t").title
 }

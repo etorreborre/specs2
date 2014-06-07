@@ -67,10 +67,10 @@ case class GroupsScript(title: String = "groups", isStart: Boolean = true, group
 
       cur match {
         case ex if Fragment.isExample(ex) =>
-          ((fragments) ++ (indentation(ex.description.show) +: exampleTagsFor(groupIndex, e) :+ createExample(ex.description.show, groupIndex, e)), e + 1)
+          (fragments ++ (indentation(ex.description.show) +: exampleTagsFor(groupIndex, e) :+ createExample(ex.description.show, groupIndex, e)), e + 1)
 
         case other =>
-          (fragments :+ factory.Break :+ other, e)
+          (fragments :+ factory.break :+ other, e)
       }
     }._1 ++
     groupTagsFor(groupIndex)
@@ -78,17 +78,17 @@ case class GroupsScript(title: String = "groups", isStart: Boolean = true, group
 
   private def group(i: Int) = groups.group(i)
 
-  private def exampleTagsFor(g: Int, e: Int) = Seq(factory.TaggedAs(exampleName(g, e)))
+  private def exampleTagsFor(g: Int, e: Int) = Seq(factory.taggedAs(exampleName(g, e)))
 
   private def groupTagsFor(i: Int) = {
     val name = group(i).groupName
-    if (name.matches("g\\d\\d?\\.e\\d\\d?")) Seq(factory.Section(name))
-    else                                     Seq(factory.Section(name.removeEnclosing("'"), s"g${i+1}"))
+    if (name.matches("g\\d\\d?\\.e\\d\\d?")) Seq(factory.section(name))
+    else                                     Seq(factory.section(name.removeEnclosing("'"), s"g${i+1}"))
   }
 
   private def exampleName(i: Int, j: Int) = s"g${i+1}.e${j+1}"
-  private def createExample(line: String, i: Int, j: Int) = factory.Example(line, group(i).example(j).t().mapMessage(_ + " - " + exampleName(i, j)))
-  private def indentation(line: String) = factory.Text(line.takeWhile(_ == ' ').mkString)
+  private def createExample(line: String, i: Int, j: Int) = factory.example(line, group(i).example(j).t().mapMessage(_ + " - " + exampleName(i, j)))
+  private def indentation(line: String) = factory.text(line.takeWhile(_ == ' ').mkString)
 
   def start = this
   def end = copy(isStart = false)
@@ -135,6 +135,6 @@ case class BulletedExamplesTemplate(factory: FragmentFactory)(implicit params: G
     params.isGroupStart(line, nextLine) && lastBlock.fold(false)(_.fragments.exists(Fragment.isExample))
 
   private def createFragments(line: String) =
-    if (params.isExample(line)) Fragments(factory.Text(line.takeWhile(_ == ' ')), factory.Example(params.stripExample(line), execute.Pending()))
-    else                        Fragments(factory.Text(params.stripGroup(line)))
+    if (params.isExample(line)) Fragments(factory.text(line.takeWhile(_ == ' ')), factory.example(params.stripExample(line), execute.Pending()))
+    else                        Fragments(factory.text(params.stripGroup(line)))
 }

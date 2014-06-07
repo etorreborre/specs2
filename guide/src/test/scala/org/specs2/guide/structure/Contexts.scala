@@ -312,10 +312,10 @@ Some set-up actions are very time-consuming and should be executed only once for
 
 class DatabaseSpec extends Specification { def is = s2"""
 
-This specification opens a database and execute some tests       ${ Step(openDatabase("test")) }
+This specification opens a database and execute some tests       ${ step(openDatabase("test")) }
   example 1                                                      $success
   example 2                                                      $success
-                                                                 ${ Step(closeDatabase("test")) }
+                                                                 ${ step(closeDatabase("test")) }
   """
 }
 }}
@@ -327,11 +327,11 @@ The examples are (by default) executed concurrently between the 2 steps and the 
 `Step`s are very useful because they will really be executed sequentially, before anything else, but if you need to execute some actions which are completely independent of the rest of the specification, there is an equivalent to `Step` adequately called `Action`: ${snippet{
 class DatabaseSpec extends Specification { def is = s2"""
 
-  This specification opens a database and execute some tests"     ${ Step(openDatabase("test")) }
+  This specification opens a database and execute some tests"     ${ step(openDatabase("test")) }
     example 1                                                     $success
-    add 1 to the number of specification executions"              ${ Action(db.executionsNb += 1) }
+    add 1 to the number of specification executions"              ${ action(db.executionsNb += 1) }
     example 2                                                     $success
-                                                                  ${ Step(closeDatabase("test")) }
+                                                                  ${ step(closeDatabase("test")) }
                                                                   """
 }
 }}
@@ -340,16 +340,16 @@ Of course, `Step`s and `Action`s are not the privilege of acceptance specificati
 
 class DatabaseSpec extends org.specs2.mutable.Specification {
 
-  Text("This specification opens a database and execute some tests")
-  Step(openDatabase("test"))
+  text("This specification opens a database and execute some tests")
+  step(openDatabase("test"))
 
   "example 1" in success
 
-  Text("add 1 to the number of specification executions")
-  Action(db.executionsNb += 1)
+  text("add 1 to the number of specification executions")
+  action(db.executionsNb += 1)
 
   "example 2" in success
-  Step(closeDatabase("test"))
+  step(closeDatabase("test"))
 }
 }}
 
@@ -364,7 +364,7 @@ import specification._
 
 trait DatabaseSpec extends Specification {
   /** the map method allows to "post-process" the fragments after their creation */
-  override def map(fs: =>Fragments) = Step(startDb) ^ fs ^ Step(cleanDb)
+  override def map(fs: =>Fragments) = step(startDb) ^ fs ^ step(cleanDb)
 }
 }}
 
@@ -382,7 +382,7 @@ object databaseSetup  {
 // the DatabaseSpec trait
 trait DatabaseSpec extends Specification {
   lazy val dbSetup = databaseSetup
-  override def map(fs: =>Fragments) = Step(dbSetup.createDb) ^ Step(startDb) ^ fs ^ Step(cleanDb)
+  override def map(fs: =>Fragments) = step(dbSetup.createDb) ^ step(startDb) ^ fs ^ step(cleanDb)
 }
 }}
 

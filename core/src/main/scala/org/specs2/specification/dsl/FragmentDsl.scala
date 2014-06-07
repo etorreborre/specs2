@@ -18,11 +18,11 @@ trait FragmentDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDsl
 
   implicit class appendToString(s: String) {
     def ^(s: SpecificationStructure): SpecStructure = ^(s.is)
-    def ^(structure: SpecStructure) : SpecStructure = structure.map(_.prepend(fragmentFactory.Text(s)))
-    def ^(others: Fragments)        : Fragments     = fragmentFactory.Text(s) ^ others
+    def ^(structure: SpecStructure) : SpecStructure = structure.map(_.prepend(fragmentFactory.text(s)))
+    def ^(others: Fragments)        : Fragments     = fragmentFactory.text(s) ^ others
     def ^(others: Seq[Fragment])    : Fragments     = ^(Fragments(others:_*))
     def ^(other: Fragment)          : Fragments     = s ^ Fragments(other)
-    def ^(other: String)            : Fragments     = s ^ fragmentFactory.Text(other)
+    def ^(other: String)            : Fragments     = s ^ fragmentFactory.text(other)
   }
 
   implicit class appendToFragment(f: Fragment) {
@@ -31,7 +31,7 @@ trait FragmentDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDsl
     def ^(others: Fragments)        : Fragments      = Fragments(Fragments(f).contents ++ others.contents)
     def ^(others: Seq[Fragment])    : Fragments      = ^(Fragments(others:_*))
     def ^(other: Fragment)          : Fragments      = Fragments(f, other)
-    def ^(other: String)            : Fragments      = f ^ fragmentFactory.Text(other)
+    def ^(other: String)            : Fragments      = f ^ fragmentFactory.text(other)
   }
 
   implicit class appendToFragments(fs: Fragments) {
@@ -40,7 +40,7 @@ trait FragmentDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDsl
     def ^(others: Fragments)        : Fragments     = fs.append(others)
     def ^(others: Seq[Fragment])    : Fragments     = ^(Fragments(others:_*))
     def ^(other: Fragment)          : Fragments     = fs.append(other)
-    def ^(other: String)            : Fragments     = fs ^ fragmentFactory.Text(other)
+    def ^(other: String)            : Fragments     = fs ^ fragmentFactory.text(other)
   }
 
   implicit class appendToArguments(args: Arguments) {
@@ -51,7 +51,7 @@ trait FragmentDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDsl
     def ^(others: Fragments)        : SpecStructure = SpecStructure(SpecHeader(specClass = outer.getClass), args, others)
     def ^(others: Seq[Fragment])    : SpecStructure = ^(Fragments(others:_*))
     def ^(other: Fragment)          : SpecStructure = args ^ Fragments(other)
-    def ^(other: String)            : SpecStructure = args ^ fragmentFactory.Text(other)
+    def ^(other: String)            : SpecStructure = args ^ fragmentFactory.text(other)
   }
 
   implicit class appendToSpecHeader(header: SpecHeader) {
@@ -61,13 +61,13 @@ trait FragmentDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDsl
     def ^(others: Fragments)        : SpecStructure = SpecStructure(header, Arguments(), others)
     def ^(others: Seq[Fragment])    : SpecStructure = ^(Fragments(others:_*))
     def ^(other: Fragment)          : SpecStructure = header ^ Fragments(other)
-    def ^(other: String)            : SpecStructure = header ^ fragmentFactory.Text(other)
+    def ^(other: String)            : SpecStructure = header ^ fragmentFactory.text(other)
   }
 
   implicit class appendToSpecStructure(structure: SpecStructure) {
     def ^(others: Fragments)    : SpecStructure = structure.copy(fragments = structure.fragments.append(others))
     def ^(others: Seq[Fragment]): SpecStructure = ^(Fragments(others:_*))
-    def ^(other: String)        : SpecStructure = structure ^ fragmentFactory.Text(other)
+    def ^(other: String)        : SpecStructure = structure ^ fragmentFactory.text(other)
     def ^(other: Fragment)      : SpecStructure = structure ^ Fragments(other)
     /** warning: if other contains arguments or a title they will be lost! */
     def ^(s: SpecificationStructure): SpecStructure = ^(s.is)
@@ -94,15 +94,10 @@ trait FragmentDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDsl
   implicit def fragmentsAsSpecStructure(fs: Fragments): SpecStructure =
     SpecHeader(getClass) ^ fs
 
-  def tag(names: String*)      : Fragment = fragmentFactory.Tag(names:_*)
-  def taggedAs(names: String*) : Fragment = fragmentFactory.TaggedAs(names:_*)
-  def section(names: String*)  : Fragment = fragmentFactory.Section(names:_*)
-  def asSection(names: String*): Fragment = fragmentFactory.AsSection(names:_*)
-
-  def tag(tag: NamedTag)      : Fragment = fragmentFactory.Mark(tag)
-  def taggedAs(tag: NamedTag) : Fragment = fragmentFactory.MarkAs(tag)
-  def section(tag: NamedTag)  : Fragment = fragmentFactory.MarkSection(tag)
-  def asSection(tag: NamedTag): Fragment = fragmentFactory.MarkSectionAs(tag)
+  def tag(tag: NamedTag)      : Fragment = fragmentFactory.mark(tag)
+  def taggedAs(tag: NamedTag) : Fragment = fragmentFactory.markAs(tag)
+  def section(tag: NamedTag)  : Fragment = fragmentFactory.markSection(tag)
+  def asSection(tag: NamedTag): Fragment = fragmentFactory.markSectionAs(tag)
 
   /** shortcut to add tag more quickly when rerunning failed tests */
   private[specs2] def xtag = tag("x")
@@ -114,7 +109,7 @@ trait FragmentDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDsl
    * by a newline and there is a specific offset from the left margin
    */
   def fragmentsBlock(fragments: Seq[Fragment], offset: Int = 2): Fragments = {
-    val newLine = Vector(fragmentFactory.Break, fragmentFactory.Text(" "*offset))
+    val newLine = Vector(fragmentFactory.break, fragmentFactory.text(" "*offset))
     (newLine ++ fragments.toList)
       .map(Fragments(_))
       .intersperse(Fragments(newLine:_*))

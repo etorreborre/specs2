@@ -184,9 +184,9 @@ trait ContextData extends StandardResults with FragmentsFactory with ContextsFor
 
   def ex1Around = "ex1" ! around1(ok1)
 
-  def firstThenEx1 = Step(println("first")) ^ ex1
-  def silentFirstThenEx1 = Step("first") ^ ex1
-  def failingFirstThenEx1 = Step { error("error"); 1 } ^ ex1
+  def firstThenEx1 = step(println("first")) ^ ex1
+  def silentFirstThenEx1 =  step("first") ^ ex1
+  def failingFirstThenEx1 = step { error("error"); 1 } ^ ex1
 }
 
 trait ContextsForFragments extends StringOutput {

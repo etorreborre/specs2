@@ -28,7 +28,7 @@ trait Analysis extends DependencyMatchers with FragmentDsl { this: FragmentsFact
    * this implicit definition allows to insert a Layers definition directly into the specification, as a Fragment
    */
   implicit def LayersToExample(layers: Layers): Fragment =
-    fragmentFactory.Example(layers.toMarkdown, layers)
+    fragmentFactory.example(layers.toMarkdown, layers)
 
   /**
    * this implicit definition allows to check if a Layers definition is respected

@@ -37,7 +37,7 @@ trait JUnitDescriptions extends ExecutionOrigin {
 
   def createDescriptionTree(spec: SpecStructure): TreeLoc[(Fragment, Description)] = {
     val className = spec.specClassName
-    val rootFragment = DefaultFragmentFactory.Text(spec.header.simpleName)
+    val rootFragment = DefaultFragmentFactory.text(spec.header.simpleName)
 
     Levels.treeLocMap(spec.fragments)(keep).getOrElse(leaf(rootFragment).loc).root.setLabel(rootFragment).cojoin.map {
       current: TreeLoc[Fragment] =>

@@ -56,7 +56,7 @@ And you can also use a `for` loop with the `Result.unit` method to create a bloc
  * `.txt` or `textFragment`: create a `Text` fragment ${snippet{
 "this is a text fragment".txt
 
-Text("this is a text fragment")
+text("this is a text fragment")
 }}
 
  * `step`: create a `Step` ${snippet{

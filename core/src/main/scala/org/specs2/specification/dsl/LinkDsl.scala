@@ -12,22 +12,22 @@ trait LinkDsl extends FragmentsFactory {
 
   implicit class linkFragment(text: String) {
     def ~(s: SpecStructure): Fragment =
-      fragmentFactory.Link(SpecificationLink(s.header, before = text))
+      fragmentFactory.link(SpecificationLink(s.header, before = text))
 
     def ~(alias: String, s: SpecStructure): Fragment =
-      fragmentFactory.Link(SpecificationLink(s.header, before = text, alias = alias))
+      fragmentFactory.link(SpecificationLink(s.header, before = text, alias = alias))
 
     def ~(s: SpecStructure, after: String): Fragment =
-      fragmentFactory.Link(SpecificationLink(s.header, before = text, after = after))
+      fragmentFactory.link(SpecificationLink(s.header, before = text, after = after))
 
     def ~(alias: String, s: SpecStructure, after: String): Fragment =
-      fragmentFactory.Link(SpecificationLink(s.header, before = text, alias = alias, after = after))
+      fragmentFactory.link(SpecificationLink(s.header, before = text, alias = alias, after = after))
 
     def ~(alias: String, s: SpecStructure, after: String, tooltip: String): Fragment =
-      fragmentFactory.Link(SpecificationLink(s.header, before = text, alias = alias, after = after, tooltip = tooltip))
+      fragmentFactory.link(SpecificationLink(s.header, before = text, alias = alias, after = after, tooltip = tooltip))
 
     def ~(s: SpecStructure, after: String, tooltip: String): Fragment =
-      fragmentFactory.Link(SpecificationLink(s.header, before = text, tooltip = tooltip, after = after))
+      fragmentFactory.link(SpecificationLink(s.header, before = text, tooltip = tooltip, after = after))
 
     def ~(s: SpecificationStructure): Fragment = text ~ s.is
     def ~(alias: String, s: SpecificationStructure): Fragment = text ~ (alias, s.is)
@@ -38,7 +38,7 @@ trait LinkDsl extends FragmentsFactory {
 
   }
 
-  def link(s: SpecStructure): Fragment          = fragmentFactory.Link(SpecificationLink(s.header))
+  def link(s: SpecStructure): Fragment          = fragmentFactory.link(SpecificationLink(s.header))
   def link(s: SpecificationStructure): Fragment = link(s.is)
 
 }

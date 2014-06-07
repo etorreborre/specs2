@@ -33,8 +33,8 @@ For the complete list of arguments and shortcut methods read the [Runners](org.s
 
 Some specifications can depend on the arguments passed on the command line, for example to fine-tune the behaviour of some Context objects. If you need to do this, you can add an `Arguments` parameter to the Specification class. This parameter will be setup when the specification is instantiated: ${snippet{
 
-class DependOnCommandLine(arguments: Arguments) extends org.specs2.mutable.Specification {
-  skipAllUnless(!arguments.commandLine.contains("DB"))
+class DependOnCommandLine(args: Arguments) extends org.specs2.mutable.Specification {
+  skipAllUnless(!args.commandLine.contains("DB"))
 
   "database access" >> { dbAccess must beOk }
 }
@@ -345,9 +345,9 @@ Some specifications need to have some steps which will always be included whatev
 
   trait DatabaseSpec extends Specification {
     override def map(fs: =>Fragments) =
-      tag(AlwaysTag) ^ Step("startDb") ^
+      tag(AlwaysTag) ^ step("startDb") ^
       fs ^
-      tag(AlwaysTag) ^ Step("cleanDb")
+      tag(AlwaysTag) ^ step("cleanDb")
   }
 }}
 
@@ -460,8 +460,8 @@ class MutableTimedSpecification extends org.specs2.mutable.Specification with Ti
   // create a new DefaultFragmentFactory where the body of the example uses
   // the current example description
   override lazy val fragmentFactory = new DefaultFragmentFactory {
-    override def Example[T: AsResult](description: String, t: => T) =
-      super.Example(description, context(description)(AsResult(t)))
+    override def example[T: AsResult](description: String, t: => T) =
+      super.example(description, context(description)(AsResult(t)))
   }
 }
 
@@ -474,8 +474,8 @@ class TimedSpecification extends Specification with TimedContext {
   // create a new DefaultFragmentFactory where the body of the example uses
   // the current example description
   override lazy val fragmentFactory = new DefaultFragmentFactory {
-    override def Example[T: AsResult](description: String, t: => T) =
-      super.Example(description, context(description)(AsResult(t)))
+    override def example[T: AsResult](description: String, t: => T) =
+      super.example(description, context(description)(AsResult(t)))
   }
 }
 }}

@@ -103,7 +103,7 @@ trait TextPrinter extends Printer {
         case Fragment(d, e, l) if e.isRunnable && !e.result.isSuccess =>
           printRunnable(d.show, e, args, indentation)
 
-        case Fragment(`br`, e, l) =>
+        case Fragment(Br, e, l) =>
           if (args.canShow("-")) emit(" \n").info
           else emitNone
 

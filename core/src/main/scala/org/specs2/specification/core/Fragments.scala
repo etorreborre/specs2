@@ -121,11 +121,11 @@ object Fragment {
   }
 
   def isFormatting(f: Fragment) = f.description match {
-    case `start`    => true
-    case `end`      => true
-    case `br`       => true
-    case tab(_)     => true
-    case backtab(_) => true
+    case Start    => true
+    case End      => true
+    case Br       => true
+    case Tab(_)     => true
+    case Backtab(_) => true
     case _          => false
   }
 

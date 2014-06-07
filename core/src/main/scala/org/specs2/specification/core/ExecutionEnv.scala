@@ -21,7 +21,7 @@ case class ExecutionEnv(timeOut:  Option[Duration] = None,
   }
 
   def shutdown = {
-    try     executor.shutdown
+    try     executor.shutdown()
     finally timer.stop
   }
 }

@@ -40,23 +40,23 @@ case class SpecificationLink(header: SpecHeader, before: String = "", after: Str
 
 }
 
-case object br extends Description {
+case object Br extends Description {
   def show = "\n"
 }
 
-case object start extends Description {
+case object Start extends Description {
   def show = ""
 }
 
-case object end extends Description {
+case object End extends Description {
   def show = ""
 }
 
-case class tab(n: Int = 1) extends Description {
+case class Tab(n: Int = 1) extends Description {
   def show = ""
 }
 
-case class backtab(n: Int = 1) extends Description {
+case class Backtab(n: Int = 1) extends Description {
   def show = ""
 }
 

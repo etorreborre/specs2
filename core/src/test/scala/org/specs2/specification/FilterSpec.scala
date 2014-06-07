@@ -46,22 +46,22 @@ class FilterSpec extends Specification with Groups with ResultMatchers with Thro
 
   "by tag" - new group {
     eg := {
-      val fragments = Fragments(Tag("x"), ex("e1"), ex("e2"))
+      val fragments = Fragments(tag("x"), ex("e1"), ex("e2"))
       checkFiltering(fragments, "x", expected = Seq("e1"), unexpected = Seq("e2"))
     }
 
     eg := {
-      val fragments = Fragments(ex("e1"), TaggedAs("x"), ex("e2"))
+      val fragments = Fragments(ex("e1"), taggedAs("x"), ex("e2"))
       checkFiltering(fragments, "x", expected = Seq("e1"), unexpected = Seq("e2"))
     }
 
     eg := {
       val fragments = Fragments(ex("e1"), 
-                                Section("x"), 
+                                section("x"), 
                                 ex("e2"),
                                 ex("e3"),
                                 ex("e4"),
-                                Section("x"),
+                                section("x"),
                                 ex("e5")
       )
       checkFiltering(fragments, "x", expected = Seq("e2", "e3", "e4"), unexpected = Seq("e1", "e5"))
@@ -69,9 +69,9 @@ class FilterSpec extends Specification with Groups with ResultMatchers with Thro
 
     eg := {
       val fragments = Fragments(ex("e1"),
-        ex("e2"), AsSection("x"),
+        ex("e2"), asSection("x"),
         ex("e3"),
-        ex("e4"), AsSection("x"),
+        ex("e4"), asSection("x"),
         ex("e5")
       )
       checkFiltering(fragments, "x", expected = Seq("e2", "e3", "e4"), unexpected = Seq("e1", "e5"))
@@ -80,13 +80,13 @@ class FilterSpec extends Specification with Groups with ResultMatchers with Thro
     eg := {
       val fragments = Fragments(
         ex("e1"),
-        ex("e2"), AsSection("x"),
+        ex("e2"), asSection("x"),
         ex("e3"),
-        ex("e4"), AsSection("y"),
+        ex("e4"), asSection("y"),
         ex("e5"),
-        ex("e6"), AsSection("x"),
+        ex("e6"), asSection("x"),
         ex("e7"),
-        ex("e8"), AsSection("y"),
+        ex("e8"), asSection("y"),
         ex("e9")
       )
       checkFiltering(fragments, "x",           expected = Seq("e2", "e3", "e4", "e5", "e6"), unexpected = Seq("e1", "e7", "e8", "e9"))
@@ -123,7 +123,7 @@ class FilterSpec extends Specification with Groups with ResultMatchers with Thro
   }
 
   // test methods
-  def ex(desc: String) = Example(desc, success)
+  def ex(desc: String) = example(desc, success)
 
   // expected / unexpected is in the point of view of including the tag
   def checkFiltering(fragments: Fragments, tags: Seq[String], expected: Seq[String], unexpected: Seq[String]): Result = {

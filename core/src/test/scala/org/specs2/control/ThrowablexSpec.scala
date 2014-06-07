@@ -3,7 +3,7 @@ package control
 
 import specification._
 
-class ThrowablexSpec extends script.Specification with Throwablex with Grouped { def is = Section("unstable") ^ s2"""
+class ThrowablexSpec extends script.Specification with Throwablex with Grouped { def is = section("unstable") ^ s2"""
 
 The Throwablex trait provides extensions to regular throwables:
 

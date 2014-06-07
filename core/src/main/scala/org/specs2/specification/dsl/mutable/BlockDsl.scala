@@ -9,7 +9,8 @@ import org.specs2.specification.core.{StacktraceLocation, Fragment}
 import specification.create.FragmentsFactory
 
 trait BlockDsl extends FragmentBuilder with FragmentsFactory {
-
+  private val factory = fragmentFactory
+  
   implicit class describe(d: String) {
     def >>(f: =>Fragment): Unit = addBlock(d, f, StacktraceLocation())
     def should(f: =>Fragment)   = addBlock(s"$d should", f, StacktraceLocation())
@@ -23,19 +24,19 @@ trait BlockDsl extends FragmentBuilder with FragmentsFactory {
       addStart
       addBreak
       addText(text, location)
-      addFragment(fragmentFactory.Tab)
+      addFragment(factory.tab)
       addBreak
       addFragmentBlock(f)
-      addFragment(fragmentFactory.Backtab)
+      addFragment(factory.backtab)
       addEnd
     }
 
     private def addText(text: String, location: StacktraceLocation) =
-      addFragment(fragmentFactory.Text(text).setLocation(location))
+      addFragment(factory.text(text).setLocation(location))
 
-    private def addBreak = addFragment(fragmentFactory.Break)
-    private def addStart = addFragment(fragmentFactory.Start)
-    private def addEnd = addFragment(fragmentFactory.End)
+    private def addBreak = addFragment(factory.break)
+    private def addStart = addFragment(factory.start)
+    private def addEnd = addFragment(factory.end)
   }
 
   /**

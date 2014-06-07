@@ -10,8 +10,8 @@ trait Indentation {
   def fold = (fragment: Fragment, indentation: Int) =>
     indentation +
     (fragment match {
-      case f @ Fragment(tab(n),_ ,_)     => indentation + 1
-      case f @ Fragment(backtab(n),_ ,_) => max(0, indentation - 1)
+      case f @ Fragment(Tab(n),_ ,_)     => indentation + 1
+      case f @ Fragment(Backtab(n),_ ,_) => max(0, indentation - 1)
       case _                             => indentation
     })
 

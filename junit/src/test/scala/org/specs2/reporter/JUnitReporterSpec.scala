@@ -83,11 +83,11 @@ class JUnitReporterSpec extends Specification with Mockito with EnvFixture {  de
     def e9 = { env: Env =>
       val messages = new ListBuffer[String]
       run {
-        Step {
+        step {
           messages += "before"
         } ^
         "ex1" ! { messages += "ex1"; ok } ^
-        Step {
+        step {
           messages += "after"
         }
       }(env)

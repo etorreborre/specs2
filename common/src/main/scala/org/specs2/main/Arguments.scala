@@ -21,8 +21,7 @@ import scala.Predef._
  * - report:  for the reporting of results
  *
  */
-case class
-Arguments (
+case class Arguments (
   select:        Select           = Select(),
   execute:       Execute          = Execute(),
   store:         Store            = Store(),
@@ -146,7 +145,6 @@ object Arguments extends Extract {
 /**
  * Selection arguments
  */
-private[specs2]
 case class Select(
   _ex:            Option[String]           = None,
   _include:       Option[String]           = None,
@@ -185,7 +183,6 @@ case class Select(
     "specName"       -> _specName     ).flatMap(showArg).mkString("Select(", ", ", ")")
 }
 
-private[specs2]
 object Select extends Extract {
   def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Select = {
     new Select (
@@ -202,7 +199,6 @@ object Select extends Extract {
 /**
  * Execution arguments
  */
-private[specs2]
 case class Execute(
   _plan:          Option[Boolean]          = None,
   _skipAll:       Option[Boolean]          = None,
@@ -250,7 +246,6 @@ case class Execute(
     "executor"       -> _executor     ).flatMap(showArg).mkString("Execute(", ", ", ")")
 
 }
-private[specs2]
 object Execute extends Extract {
   def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Execute = {
     new Execute (
@@ -271,7 +266,6 @@ object Execute extends Extract {
 /**
  * Storing arguments
  */
-private[specs2]
 case class Store(
   _reset:         Option[Boolean]          = None,
   _never:         Option[Boolean]          = None) extends ShowArgs {
@@ -293,7 +287,6 @@ case class Store(
 
 }
 
-private[specs2]
 object Store extends Extract {
   def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Store = {
     new Store (
@@ -308,7 +301,6 @@ object Store extends Extract {
 /**
  * Reporting arguments
  */
-private[specs2]
 case class Report(
   _showOnly:          Option[String]           = None,
   _failtrace:         Option[Boolean]          = None,
@@ -393,7 +385,6 @@ case class Report(
 
 }
 
-private[specs2]
 object Report extends Extract {
   def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Report = {
     new Report (
@@ -423,7 +414,6 @@ object Report extends Extract {
 /**
  * Command-line arguments
  */
-private[specs2]
 case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs {
 
   def arguments: Seq[String] = _arguments
@@ -439,7 +429,6 @@ case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs {
   override def toString = _arguments.mkString("CommandLine(", ", ", ")")
 }
 
-private[specs2]
 object CommandLine extends Extract {
   def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): CommandLine =
     new CommandLine(_arguments = value("commandline").map(splitValues).getOrElse(Seq()) ++ arguments)
@@ -451,7 +440,6 @@ object CommandLine extends Extract {
 
 import Memo._
 
-private[specs2]
 trait Extract {
   def bool(name: String, mappedValue: Boolean = true)(implicit args: Seq[String], sp: SystemProperties): Option[Boolean] = {
     args.find(_.toLowerCase.contains(name.toLowerCase)).map(a => mappedValue).orElse(boolSystemProperty(name))
@@ -484,7 +472,6 @@ trait Extract {
 
 }
 
-private[specs2]
 trait ShowArgs {
   def showArg(a: (String, Option[_])) = a._2.map(a._1 +" = "+_)
 }

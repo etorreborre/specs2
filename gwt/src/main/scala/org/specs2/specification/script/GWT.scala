@@ -47,7 +47,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
     def when() = GWTGivens[HNil, HNil, Unit](title, template, HNil).when()
     def when[R, U](value: =>R)(implicit lub: ToList[R :: HNil, U]) = GWTGivens[HNil, HNil, Unit](title, template, HNil).when().apply[R, U] { case _ => value }
 
-    def fragments(text: String): Fragments = Fragments(fragmentFactory.Text(text))
+    def fragments(text: String): Fragments = Fragments(fragmentFactory.text(text))
 
     def start: Scenario = this
     def end: Scenario = this
@@ -74,7 +74,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
     def when[T](f: StepParser[T]) = GWTWhensApply[T, GT, GTE, GTU, T :: HNil, HNil, (StepParser[T]) :: HNil, HNil, Any](this, f :: HNil, HNil)
     def when(): GWTWhensApply[String, GT, GTE, GTU, String :: HNil, HNil, (StepParser[String]) :: HNil, HNil, Any] = when(allAsString)
 
-    def fragments(text: String): Fragments = Fragments(fragmentFactory.Text(text))
+    def fragments(text: String): Fragments = Fragments(fragmentFactory.text(text))
 
     def start = copy(isStart = true)
     def end   = copy(isStart = false)
@@ -95,7 +95,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
     def andThen(): GWTThensApply[String, GT, GTE, GTU, WT, WTR, WTE, WM, WMU, (StepParser[String]) :: HNil, HNil] = andThen(allAsString)
 
     def title = givens.title
-    def fragments(text: String): Fragments = Fragments(fragmentFactory.Text(text))
+    def fragments(text: String): Fragments = Fragments(fragmentFactory.text(text))
 
     def start = copy(isStart = true)
     def end   = copy(isStart = false)
@@ -152,18 +152,18 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
       template.lines(text, this).lines.foldLeft(Fragments()) { (fs, lines) =>
         lines match {
           // Text lines are left untouched
-          case TextLines(ls) => fs append fragmentFactory.Text(ls+"\n")
+          case TextLines(ls) => fs append fragmentFactory.text(ls+"\n")
 
           // Given lines must create steps with extracted values
           case GivenLines(ls) => {
-            givenSteps = (givenExtractorsList zip ls).map { case (extractor, line) => fragmentFactory.Step(extractLine(extractor, line)) }.reverse
+            givenSteps = (givenExtractorsList zip ls).map { case (extractor, line) => fragmentFactory.step(extractLine(extractor, line)) }.reverse
             fs append appendSteps(givenExtractorsList, ls, givenSteps)
           }
 
           // When lines must create steps with extracted values, and map them using given values
           case WhenLines(ls) => {
             whenSteps = (whenExtractorsList zip ls zip whenMappersList).map { case ((extractor, line), mapper) =>
-              Step(execute(result(givenSteps), extractor, line) { t: Any =>
+              factory.step(execute(result(givenSteps), extractor, line) { t: Any =>
                 val map = mapper.asInstanceOf[Mapper[Any, HList, Any, Any]]
                 map(t, if (map.f1.isDefined) Left(stepsValues(givenSteps)) else Right(stepsValues(givenSteps).toList))
               })
@@ -175,13 +175,13 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
           // Then lines must create examples with previous when values
           case ThenLines(ls) => {
             val thenExamples: List[Fragment] = (thenExtractorsList zip ls zip verificationsList).map { case ((extractor: StepParser[_], line), verify) =>
-              Example(extractor.strip(line),
+              example(extractor.strip(line),
                 execute(result(givenSteps) and result(whenSteps), extractor, line) { t: Any =>
                   val verifyFunction = verify.asInstanceOf[VerifyFunction[Any, HList, Any, Any]]
                   verifyFunction(t, if (verifyFunction.f1.isDefined) Left(stepsValues(whenSteps)) else Right(stepsValues(whenSteps).toList))
                 }.asInstanceOf[Result])
             }
-            fs append thenExamples.intersperse(fragmentFactory.Text("\n"))
+            fs append thenExamples.intersperse(fragmentFactory.text("\n"))
           }
         }
       }
@@ -214,7 +214,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
     /** zip extractors, lines and steps to intercalate steps between texts fragments (and strip the lines of their delimiters if any */
     private def appendSteps(extractors: Seq[StepParser[_]], lines: Seq[String], steps: Seq[Fragment]): Seq[Fragment] =
       (extractors zip lines zip steps).map {
-        case ((extractor: StepParser[_], l: String), s: Fragment) => Seq(fragmentFactory.Text(extractor.strip(l)+"\n"), s)
+        case ((extractor: StepParser[_], l: String), s: Fragment) => Seq(fragmentFactory.text(extractor.strip(l)+"\n"), s)
       }.flatten
 
     /** extract values from a line and execute a function */

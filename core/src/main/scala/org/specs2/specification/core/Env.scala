@@ -3,6 +3,7 @@ package specification
 package core
 
 import main.Arguments
+import org.specs2.execute.AsResult
 import reporter.LineLogger
 import LineLogger._
 import io._
@@ -30,4 +31,12 @@ case class Env(arguments: Arguments       = Arguments(),
    */
   def setWithoutIsolation = copy(executionEnv = executionEnv.setWithoutIsolation)
 
+}
+
+object Env {
+  def executeResult[R : AsResult](r: Env => R) = {
+    val env = Env()
+    try AsResult(r(env))
+    finally env.shutdown
+  }
 }

@@ -5,16 +5,14 @@ package create
 import core.Fragments
 
 trait FormattingFragments extends FragmentsFactory {
-  private val ff = fragmentFactory
-  import ff._
+  private val factory = fragmentFactory
 
   def p          = Fragments(br, br, bt)
-  def br         = Break
-  def end        = End
-  def t          = Tab
-  def t(n: Int)  = Tab(n)
-  def bt         = Backtab
-  def bt(n: Int) = Backtab(n)
+  def br         = factory.break
+  def t          = factory.tab
+  def t(n: Int)  = factory.tab(n)
+  def bt         = factory.backtab
+  def bt(n: Int) = factory.backtab(n)
 }
 
 object FormattingFragments extends FormattingFragments

@@ -22,10 +22,10 @@ class MutableFragmentDslSpec extends org.specs2.Specification { def is = s2"""
 
 """
 
-  def e1 = fragments(new dsl { "e1" in ok }) must contain(exactly(Break, Example("e1", ok), Break))
+  def e1 = fragments(new dsl { "e1" in ok }) must contain(exactly(break, example("e1", ok), break))
 
   def e2 = fragments(new dsl { "e1" in Results.foreach(1 to 2)(i => i === i) }) must
-    contain(exactly(Break, Example("e1", ok), Break))
+    contain(exactly(break, example("e1", ok), break))
 
   def e3 = fragments(new dsl {
     "this" should {
@@ -34,12 +34,12 @@ class MutableFragmentDslSpec extends org.specs2.Specification { def is = s2"""
     }
   }).map(_.description) must
     contain(exactly(Seq(
-      Break,
-      Start, Break,
-      Text("this should"), Tab, Break,
-      Example("e1", ok), Break,
-      Example("e2", ok),
-      Break, Backtab, End).map(_.description):_*))
+      break,
+      start, break,
+      text("this should"), tab, break,
+      example("e1", ok), break,
+      example("e2", ok),
+      break, backtab, end).map(_.description):_*))
 
   def e4 = fragments(new dsl {
     "this" should {
@@ -47,12 +47,12 @@ class MutableFragmentDslSpec extends org.specs2.Specification { def is = s2"""
     }
   }).map(_.description) must
     contain(exactly(Seq(
-      Break,
-      Start, Break,
-      Text("this should"), Tab, Break,
-      Example("e1", ok), Break,
-      Example("e2", ok),
-      Break, Backtab, End).map(_.description):_*))
+      break,
+      start, break,
+      text("this should"), tab, break,
+      example("e1", ok), break,
+      example("e2", ok),
+      break, backtab, end).map(_.description):_*))
 
   def e5 = structure(new dsl {
     "have a title".title

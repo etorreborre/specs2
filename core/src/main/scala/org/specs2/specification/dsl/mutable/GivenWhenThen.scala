@@ -9,6 +9,8 @@ import specification.core._
 import specification.create.FragmentsFactory
 
 trait GivenWhenThen { outer: MutableFragmentBuilder with FragmentsFactory =>
+  private val factory = fragmentFactory
+
   def given(description: String)(action: =>Any) = step(s"given $description")(action)
 
   def given[T](description: String, extractor: String => Option[T])(action: T => Any) =
@@ -24,35 +26,35 @@ trait GivenWhenThen { outer: MutableFragmentBuilder with FragmentsFactory =>
 
   def step(description: String)(action: =>Any): Fragment = {
     addParagraph(description)
-    fragmentFactory.Step(action)
+    factory.step(action)
   }
 
   def step[T](description: String, extractor: String => Option[T])(action: T => Any): Fragment = {
     val extracted = extractor(description)
     addParagraph(description)
-    fragmentFactory.Step(extracted.map(action).getOrElse(throw new Exception("failed to extract a value from "+description)))
+    factory.step(extracted.map(action).getOrElse(throw new Exception("failed to extract a value from "+description)))
   }
 
   def step[T](description: String, extractor: String => Option[(String, T)])(action: T => Any)(implicit p: ImplicitParam): Fragment = {
     extractor(description).map { case (d, v) =>
       addParagraph(d)
-      fragmentFactory.Step(action(v))
+      factory.step(action(v))
     }.getOrElse(throw new Exception("failed to extract a value from "+description))
   }
 
   def andThen[R : AsResult](description: String)(r: =>R): Fragment =
-    addFragment(fragmentFactory.Example(description, r))
+    addFragment(factory.example(description, r))
 
   def andThen[R : AsResult, T](description: String, extractor: String => Option[T])(r: T => R): Fragment = {
     extractor(description).map { d =>
-      addFragment(fragmentFactory.Example(description, r(d)))
+      addFragment(factory.example(description, r(d)))
     }.getOrElse(throw new Exception("failed to extract a value from "+description))
   }
 
   private def addParagraph(description: String) = {
-    addFragment(fragmentFactory.Text(description))
-    addFragment(fragmentFactory.Break)
-    addFragment(fragmentFactory.Backtab)
+    addFragment(factory.text(description))
+    addFragment(factory.break)
+    addFragment(factory.backtab)
   }
 
 }

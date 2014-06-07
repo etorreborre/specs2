@@ -11,7 +11,7 @@ class SpecStructureSpec extends Specification { def is = s2"""
 """
 
   def a1 = {
-    lazy val s1 = SpecStructure(SpecHeader(classOf[S1]), Arguments(), Fragments(fragmentFactory.Link(SpecificationLink(s2.header))))
+    lazy val s1 = SpecStructure(SpecHeader(classOf[S1]), Arguments(), Fragments(fragmentFactory.link(SpecificationLink(s2.header))))
     lazy val s2 = SpecStructure(SpecHeader(classOf[S2]), Arguments(), Fragments())
     SpecStructure.dependsOn(s1, s2) and SpecStructure.dependsOn(s2, s1).not
   }

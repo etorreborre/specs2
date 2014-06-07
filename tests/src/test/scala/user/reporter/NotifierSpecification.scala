@@ -16,8 +16,8 @@ class NotifierSpecification extends Specification with DataTables { def is =
         "ex4" ! Skipped("skipped")                                    ^
         "ex5" ! Pending("pending")                                    ^
         "ex6" ! ("a" | "b" |> 1 ! 2 | { (a, b) => success })          ^
-        Step(Failure("clean failed"))                                 ^
-        Step("clean ok")                                              ^
+        step(Failure("clean failed"))                                 ^
+        step("clean ok")                                              ^
                                                                       end
 
 }

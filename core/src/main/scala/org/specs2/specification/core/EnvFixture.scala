@@ -1,8 +1,7 @@
-package org.specs2
-package specification
-package core
+package org.specs2.specification.core
 
-import execute._
+import org.specs2.execute.{AsResult, Result}
+import org.specs2.specification.FixtureExample
 
 trait EnvFixture extends FixtureExample[Env] {
   protected def fixture[R : AsResult](f: Env => R): Result = {

@@ -96,7 +96,7 @@ A form can be added to another
     eg := Form("title").tr(form("title")).rows.size must_== 1
     eg := Form("title").tr(Row.tr(field(1), field(2))).rows(0).cells.size must_== 2
     eg := Form.tr(Row.tr(field(1), field(2))).rows(0).cells.size must_== 2
-    eg := Form.tabs(Seq("name")) { (s: String) => tab(s, Form("title")) }.rows.size must_== 1
+    eg := Form.tabs(Seq("name")) { (s: String) => Tabs().tab(s, Form("title")) }.rows.size must_== 1
     eg := Form.trs(Seq("a", "b")) { (s: String) => Row.tr(field(s)) }.rows.size must_== 2
 
     eg := Form(okDataTable.decorator).text must startWith("| a | b |")

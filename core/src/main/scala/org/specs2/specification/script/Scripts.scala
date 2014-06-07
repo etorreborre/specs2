@@ -23,8 +23,8 @@ trait Scripts { outer: FragmentsFactory =>
    */
   implicit def scriptIsInterpolatedPart(script: Script): InterpolatedPart = new InterpolatedPart {
     def append(fs: Vector[Fragment], text: String, start: Location, end: Location, expression: String): Vector[Fragment] = {
-      if (script.isStart) fs :+ factory.Section(script.title) :+ factory.Text(text).setLocation(start)
-      else                fs ++ (script.fragments(text).fragments.toVector.map(_.setLocation(end)) :+ factory.AsSection(script.title))
+      if (script.isStart) fs :+ factory.section(script.title) :+ factory.text(text).setLocation(start)
+      else                fs ++ (script.fragments(text).fragments.toVector.map(_.setLocation(end)) :+ factory.asSection(script.title))
     }
   }
 }

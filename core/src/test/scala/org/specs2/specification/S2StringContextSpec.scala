@@ -29,17 +29,15 @@ class S2StringContextSpec extends Specification { def is = s2"""
 object exs extends MustMatchers with StandardResults {
   import interpolator._
 
-  val env = Env()
-
   def e1 = s2"""this is ${"some text"}""".fragments.fragments must haveSize(1)
 
-  def e2 = s2"""this is ${DefaultFragmentFactory.Text("some text")}""".fragments.fragments must haveSize(2)
+  def e2 = s2"""this is ${DefaultFragmentFactory.text("some text")}""".fragments.fragments must haveSize(2)
 
   def e3 = s2"""this is $ok""".fragments.fragments must haveSize(1)
 
   def e4 = s2"""this is ${new Function0Result(() => Success())}""".fragments.fragments must haveSize(1)
 
-  def e5 = s2"""this is ${Fragments(Text("the"), Text(" world"))}""".fragments.fragments must haveSize(3)
+  def e5 = s2"""this is ${Fragments(text("the"), text(" world"))}""".fragments.fragments must haveSize(3)
 
   def e6 = s2"""this is $spec""".fragments.fragments must haveSize(3)
 
@@ -48,14 +46,14 @@ object exs extends MustMatchers with StandardResults {
     create example 1 $ok
     create example 2 $ok""".fragments.fragments must haveSize(4)
 
-  def e8 = s2"""a tagged example $ok ${DefaultFragmentFactory.TaggedAs("x")}""".fragments.fragments.map(Fragment.fragmentType) must_==
+  def e8 = s2"""a tagged example $ok ${DefaultFragmentFactory.taggedAs("x")}""".fragments.fragments.map(Fragment.fragmentType) must_==
     Seq("Example", "Tag", "Text")
 
-  def e9 = s2"""a tagged example $ok ${DefaultFragmentFactory.AsSection("x")}""".fragments.fragments.map(Fragment.fragmentType) must_==
+  def e9 = s2"""a tagged example $ok ${DefaultFragmentFactory.asSection("x")}""".fragments.fragments.map(Fragment.fragmentType) must_==
     Seq("Example", "Tag", "Text")
 
   val spec = new SpecificationStructure { outer =>
-    def is = SpecStructure(SpecHeader(outer.getClass), Arguments(), Fragments(Text("the"), Text(" world")))
+    def is = SpecStructure(SpecHeader(outer.getClass), Arguments(), Fragments(text("the"), text(" world")))
   }
 
   val ok = Success()

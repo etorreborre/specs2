@@ -4,30 +4,32 @@ package create
 
 import execute._
 import org.specs2.control.TraceLocation
+import org.specs2.specification.process.{StatisticsRepository, Executor}
 import text.Interpolated
 import reflect.Compat210.blackbox
 import reflect.Macros._
 import text.NotNullStrings._
 import text.Trim._
-import main.Arguments
+import org.specs2.main.{CommandLine, Arguments}
 import specification.core._
 import execute.DecoratedResult
 import specification.core.RawText
 import specification.core.Code
+
+import scala.concurrent.ExecutionContext
 
 /**
  * Allow to use fragments inside interpolated strings starting with s2 in order to build the specification content
  */
 trait S2StringContext extends FragmentsFactory { outer =>
   private val ff = fragmentFactory
-  import ff._
 
   implicit def stringIsInterpolatedPart(s: =>String): InterpolatedPart = new InterpolatedPart {
     def append(fs: Vector[Fragment], text: String, start: Location, end: Location, expression: String) =  {
       val s1 =
         try s
         catch { case e: Throwable => s"[${e.getMessage.notNull}]" }
-      fs :+ Text(text + s1).setLocation(start)
+      fs :+ ff.text(text + s1).setLocation(start)
     }
   }
 
@@ -37,19 +39,21 @@ trait S2StringContext extends FragmentsFactory { outer =>
         // in the case of a tag which applies to the example just before,
         // if the tag is just separated by some empty text, append the tag close to the example
         case tag @ Fragment(Marker(_, _, false), _, _) if text.trim.isEmpty =>
-          fs :+ tag.setLocation(end) :+ Text(text).setLocation(start)
+          fs :+ tag.setLocation(end) :+ ff.text(text).setLocation(start)
 
         case other =>
-          fs :+ Text(text).setLocation(start) :+ other.setLocation(end)
+          fs :+ ff.text(text).setLocation(start) :+ other.setLocation(end)
       }
     }
   }
 
   implicit def specificationLinkIsInterpolatedPart(link: SpecificationLink): InterpolatedPart =
-    fragmentIsInterpolatedPart(fragmentFactory.Link(link))
+    fragmentIsInterpolatedPart(fragmentFactory.link(link))
 
-  implicit def asResultIsInterpolatedPart[R : AsResult](r: =>R): InterpolatedPart = new InterpolatedPart {
+  implicit def asResultIsInterpolatedPart[R : AsResult](r: =>R): InterpolatedPart =
+    envFunctionIsInterpolatedPart((env: Env) => r)
 
+  implicit def envFunctionIsInterpolatedPart[R : AsResult](f: Env => R): InterpolatedPart = new InterpolatedPart {
     def append(fs: Vector[Fragment], text: String, start: Location, end: Location, expression: String) =  {
       val texts = text.split("\n")
       val spaces = texts.lastOption.fold("")(_.takeWhile(Seq(' ', '\n').contains))
@@ -63,21 +67,32 @@ trait S2StringContext extends FragmentsFactory { outer =>
         else             RawText(texts.lastOption.fold("")(_.trim))
 
       val before =
-        if (first.nonEmpty) Vector(Text(first + indent).setLocation(start))
+        if (first.nonEmpty) Vector(ff.text(first + indent).setLocation(start))
         else                Vector()
 
       val result =
         implicitly[AsResult[R]] match {
-          case v : AnyValueAsResult[_] => AsResult(r) match {
-            case DecoratedResult(t, e: Error) => before :+ Example(description, e).setLocation(end)
-            case DecoratedResult(t, _)        => Vector(Text(text), Text(t.notNull)).map(_.setLocation(end))
+          case v : AnyValueAsResult[_] => Env.executeResult(f) match {
+            case DecoratedResult(t, e: Error) => before :+ ff.example(description, e).setLocation(end)
+            case DecoratedResult(t, _)        => Vector(ff.text(text), ff.text(t.notNull)).map(_.setLocation(end))
           }
-          case other                          => before :+ Example(description, AsResult(r)).setLocation(end)
+          case other                          => before :+ ff.example(description, Execution.withEnv(f)).setLocation(end)
         }
       fs ++ result
     }
   }
 
+  implicit def argumentsFunctionIsInterpolatedPart[R : AsResult](f: Arguments => R): InterpolatedPart =
+    envFunctionIsInterpolatedPart((env: Env) => f(env.arguments))
+
+  implicit def statsRepositoryFunctionIsInterpolatedPart[R : AsResult](f: StatisticsRepository => R): InterpolatedPart =
+    envFunctionIsInterpolatedPart((env: Env) => f(env.statisticsRepository))
+
+  implicit def commandLineFunctionIsInterpolatedPart[R : AsResult](f: CommandLine => R): InterpolatedPart =
+    envFunctionIsInterpolatedPart((env: Env) => f(env.arguments.commandLine))
+
+  implicit def executionContextFunctionIsInterpolatedPart[R : AsResult](f: ExecutionContext => R): InterpolatedPart =
+    envFunctionIsInterpolatedPart((env: Env) => f(ExecutionContext.fromExecutor(env.executionEnv.executor)))
 
   implicit def anyAsResultIsInterpolatedPart(r: =>Function0Result): InterpolatedPart = new InterpolatedPart {
     def append(fs: Vector[Fragment], text: String, start: Location, end: Location, expression: String) = 
@@ -86,7 +101,7 @@ trait S2StringContext extends FragmentsFactory { outer =>
 
   implicit def fragmentsIsInterpolatedPart(fragments: Fragments): InterpolatedPart = new InterpolatedPart {
     def append(fs: Vector[Fragment], text: String, start: Location, end: Location, expression: String) =
-      (fs :+ Text(text).setLocation(start)) ++ fragments.fragments
+      (fs :+ ff.text(text).setLocation(start)) ++ fragments.fragments
   }
 
   implicit def specificationStructureIsInterpolatedPart(s: SpecificationStructure): InterpolatedPart = new InterpolatedPart {
@@ -96,7 +111,7 @@ trait S2StringContext extends FragmentsFactory { outer =>
 
   implicit def specStructureIsInterpolatedPart(s: SpecStructure): InterpolatedPart = new InterpolatedPart {
     def append(fs: Vector[Fragment], text: String, start: Location, end: Location, expression: String) =
-      (fs :+ Text(text).setLocation(start)) ++ s.fragments.fragments
+      (fs :+ ff.text(text).setLocation(start)) ++ s.fragments.fragments
   }
 
   /**
@@ -125,7 +140,7 @@ trait S2StringContext extends FragmentsFactory { outer =>
 
     // The last piece of text is trimmed to allow the placement of closing quotes in the s2 string
     // to be on column 0 or aligned with examples and still have the same display when using the Text printer
-    val last = texts.lastOption.map(_.trimEnd).filterNot(_.isEmpty).map(Text).toSeq
+    val last = texts.lastOption.map(_.trimEnd).filterNot(_.isEmpty).map(ff.text).toSeq
 
     SpecStructure(SpecHeader(outer.getClass), Arguments(), Fragments(fragments ++ last:_*))
   }

@@ -6,17 +6,17 @@ package mutable
 import create.FragmentsFactory
 
 trait TextDsl extends FragmentBuilder with FragmentsFactory {
-  implicit class text(s: String) {
-    def txt = addFragment(fragmentFactory.Text(s))
+  implicit class textFragment(s: String) {
+    def txt = addFragment(fragmentFactory.text(s))
     def br  = addFragmentBlock {
-      addFragment(fragmentFactory.Text(s))
-      addFragment(fragmentFactory.Break)
+      addFragment(fragmentFactory.text(s))
+      addFragment(fragmentFactory.break)
     }
     def p = addFragmentBlock {
-      addFragment(fragmentFactory.Break)
-      addFragment(fragmentFactory.Text(s))
-      addFragment(fragmentFactory.Break)
-      addFragment(fragmentFactory.Backtab)
+      addFragment(fragmentFactory.break)
+      addFragment(fragmentFactory.text(s))
+      addFragment(fragmentFactory.break)
+      addFragment(fragmentFactory.backtab)
     }
   }
 }

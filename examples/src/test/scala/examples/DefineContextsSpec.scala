@@ -119,8 +119,8 @@ class DefineContextsSpec extends Specification {
     // create a new DefaultExampleFactory where the body of the example uses
     // the current example description
     override lazy val fragmentFactory = new DefaultFragmentFactory {
-      override def Example[T : AsResult](description: String, t: =>T) =
-        super.Example(description, context(description)(AsResult(t)))
+      override def example[T : AsResult](description: String, t: =>T) =
+        super.example(description, context(description)(AsResult(t)))
     }
   }
 

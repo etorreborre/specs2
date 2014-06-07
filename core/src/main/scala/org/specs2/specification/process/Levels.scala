@@ -11,7 +11,7 @@ import data.Trees._
 import scalaz.stream.{Process, Process1}
 import specification.create._
 import DefaultFragmentFactory._
-import Process._
+import Process.{End =>_,_}
 import specification.core._
 import Fragment._
 import scala.math._
@@ -30,9 +30,9 @@ trait Levels {
 
       receive1 {
         // level goes +1 when a new block starts
-        case f @ Fragment(`start`,_ ,_) => nextLevel(f, level.copy(start = true, incrementNext = false))
+        case f @ Fragment(Start,_ ,_) => nextLevel(f, level.copy(start = true, incrementNext = false))
         case f if Fragment.isText(f)    => nextLevel(f, level.copy(start = true, incrementNext = true))
-        case f @ Fragment(`end`,_ ,_)   => nextLevel(f, level.copy(start = false, incrementNext = false, max(0, level.l - 1)))
+        case f @ Fragment(End,_ ,_)   => nextLevel(f, level.copy(start = false, incrementNext = false, max(0, level.l - 1)))
         case f                          => 
           if (level.incrementNext) nextLevel(f, level.copy(start = false, incrementNext = false, l = level.l + 1))
           else                     sameLevel(f)
@@ -57,7 +57,7 @@ trait Levels {
           emit(newTree) ++ go(newTree)
       }
     }
-    go(leaf((Text("root"), 0)).loc).map(_.map(_._1))
+    go(leaf((text("root"), 0)).loc).map(_.map(_._1))
   }
 
   def treeLoc(fs: Fragments): Option[TreeLoc[Fragment]] =

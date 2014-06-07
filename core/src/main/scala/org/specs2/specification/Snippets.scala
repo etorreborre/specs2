@@ -20,26 +20,25 @@ import specification.create._
  */
 trait Snippets extends org.specs2.execute.Snippets { outer: S2StringContext with FragmentsFactory =>
   private val factory = outer.fragmentFactory
-  import factory._
 
   implicit def snippetIsSpecPart[T](snippet: Snippet[T]): InterpolatedPart = new InterpolatedPart {
     def append(parts: Vector[Fragment], text: String, start: Location, end: Location, expression: String): Vector[Fragment] =
-      (parts :+ Text(text).setLocation(start)) ++ snippetFragments(snippet, end, expression).fragments
+      (parts :+ factory.text(text).setLocation(start)) ++ snippetFragments(snippet, end, expression).fragments
 
     private def snippetFragments(snippet: Snippet[T], location: Location, expression: String): Fragments = {
       Fragments(
-        Seq(Text(snippet.show(expression)).setLocation(location)) ++
+        Seq(factory.text(snippet.show(expression)).setLocation(location)) ++
           resultFragments(snippet, location) ++
           checkFragments(snippet, location):_*)
     }
 
     private def resultFragments(snippet: Snippet[T], location: Location) = {
       if (snippet.showResult.isEmpty) Seq()
-      else                            Seq(Text("\n"+snippet.showResult).setLocation(location))
+      else                            Seq(factory.text("\n"+snippet.showResult).setLocation(location))
     }
 
     private def checkFragments(snippet: Snippet[T], location: Location) = {
-      if (snippet.mustBeVerified) Seq(Step(snippet.verify.mapMessage("Snippet failure: "+_)).setLocation(location))
+      if (snippet.mustBeVerified) Seq(factory.step(snippet.verify.mapMessage("Snippet failure: "+_)).setLocation(location))
       else                        Seq()
     }
 

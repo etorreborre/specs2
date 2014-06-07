@@ -68,7 +68,7 @@ trait FixtureExample[T] extends FragmentsFactory { outer =>
  */
 trait BeforeAll extends SpecificationStructure with FragmentsFactory {
   def beforeAll: Unit
-  override def map(fs: =>core.Fragments) = fs.prepend(fragmentFactory.Step(beforeAll))
+  override def map(fs: =>core.Fragments) = fs.prepend(fragmentFactory.step(beforeAll))
 }
 
 /**
@@ -76,7 +76,7 @@ trait BeforeAll extends SpecificationStructure with FragmentsFactory {
  */
 trait AfterAll extends SpecificationStructure with FragmentsFactory {
   def afterAll: Unit
-  override def map(fs: =>core.Fragments) = fs.append(fragmentFactory.Step(afterAll))
+  override def map(fs: =>core.Fragments) = fs.append(fragmentFactory.step(afterAll))
 }
 
 /**
@@ -85,7 +85,7 @@ trait AfterAll extends SpecificationStructure with FragmentsFactory {
 trait BeforeAfterAll extends SpecificationStructure with FragmentsFactory {
   def beforeAll: Unit
   def afterAll: Unit
-  override def map(fs: =>core.Fragments) = fs.prepend(fragmentFactory.Step(beforeAll)).append(fragmentFactory.Step(afterAll))
+  override def map(fs: =>core.Fragments) = fs.prepend(fragmentFactory.step(beforeAll)).append(fragmentFactory.step(afterAll))
 }
 
 /**

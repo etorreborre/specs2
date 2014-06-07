@@ -16,14 +16,14 @@ class OnlineSpecificationSpec extends Specification { def is = s2"""
   def e1 = {
     def continue(n: Int): FragmentsContinuation = FragmentsContinuation { r: Result =>
       if (n == 1) None
-      else        Some(core.Fragments(Process.emit(Break) fby example(n - 1).contents))
+      else        Some(core.Fragments(Process.emit(break) fby createExample(n - 1).contents))
     }
 
     def online(n: Int) = Execution(success, continue(n))
 
-    def example(n: Int) = core.Fragments(Example(RawText("an online example"), online(n)))
+    def createExample(n: Int) = core.Fragments(fragmentFactory.example(RawText("an online example"), online(n)))
 
-    example(3) contains
+    createExample(3) contains
       """|[info] + an online example
          |[info] + an online example
          |[info] + an online example""".stripMargin

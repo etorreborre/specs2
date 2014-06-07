@@ -170,7 +170,7 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
     """|[info] o e1
        |[info] wontdo"""
 
-  def i1 = SpecStructure(SpecHeader(getClass), Arguments(), "e1" ! ok ^ Break ^ Break ^ "e2" ! ok) contains
+  def i1 = SpecStructure(SpecHeader(getClass), Arguments(), "e1" ! ok ^ break ^ break ^ "e2" ! ok) contains
     """|[info] + e1
        |[info]_
        |[info] + e2"""
@@ -255,7 +255,7 @@ object TextPrinterSpec extends MustMatchers {
           arguments = spec.arguments.overrideWith(Arguments("sequential fullstacktrace"))))(_.copy(lineLogger = logger))
 
       TextPrinter.run(env)(spec.copy(fragments = spec.fragments
-        .prepend(DefaultFragmentFactory.Break) // add a newline after the title
+        .prepend(DefaultFragmentFactory.break) // add a newline after the title
         .update(Executor.execute(env))))
 
       val messages = logger.messages
