@@ -3,7 +3,9 @@ package matcher
 
 import io.StringOutput
 import java.util.concurrent._
-import scalaz.concurrent.Promise
+import org.specs2.specification.core.Env
+
+import scalaz.concurrent.{Strategy, Promise}
 import specification._
 import scala.concurrent.duration._
 
@@ -50,11 +52,16 @@ class TerminationMatchersSpec extends script.Specification with TerminationMatch
     }
 
     eg := {
+      val env = Env()
+      implicit val strategy: Strategy = Strategy.Executor(env.executionEnv.executor)
+
       val queue1 = new ArrayBlockingQueue[Int](1)
       var stop = true
       def action1() = Promise { while (stop) { Thread.sleep(10)}; queue1.add(1) }.get
       def action2() = Promise { stop = false }.get
-      action1() must terminate.onlyWhen(action2())
+
+      try action1() must terminate.onlyWhen(action2())
+      finally env.shutdown
     }
 
     eg := {
