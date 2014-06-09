@@ -1,6 +1,7 @@
 package org.specs2
 package reporter
 
+import org.specs2.collection.Seqx
 import specification.core.{SpecificationLink, Fragment, SpecStructure, Env}
 import data.Fold
 import specification.process.{Stats, Statistics}
@@ -23,6 +24,10 @@ import Actions._
 import html.HtmlTemplate
 import text.Trim._
 import scala.sys.process.ProcessLogger
+import execute._
+import text.NotNullStrings._
+import io.Paths.toPath
+import Seqx._
 
 trait HtmlPrinter extends Printer {
   def fold(env: Env, spec: SpecStructure): Fold[Fragment] = new Fold[Fragment] {
@@ -188,44 +193,6 @@ trait HtmlPrinter extends Printer {
   }
 
   def printFragment(arguments: Arguments, baseDir: String, pandoc: Boolean) = (fragment: Fragment) => {
-    import execute._
-    import text.NotNullStrings._
-    import io.Paths.toPath
-
-    def toggleElement(a: Any) = "toggleImage(this); showHide('"+id(a)+"')"
-    def id(a: Any) = System.identityHashCode(a).toString
-
-    def show(f: Fragment) =
-      f.description.show
-
-    def showStacktrace(id: String, st: List[StackTraceElement], klass: String) =
-      <stacktrace id={id} style="display:none" class={klass}>
-        { arguments.traceFilter(st).map(t => <stacktrace-elt>{t.toString.replace("$", ".")}<br/></stacktrace-elt>).foldLeft(NodeSeq.Empty)(_ ++ _) }
-      </stacktrace>
-
-    def failureElement(element: String, f: Result with ResultStackTrace, description: Any, m: String, showTrace: Boolean) = {
-      val message = <message class="failure">{m.notNull+" ("+f.location(arguments.traceFilter)+")"}</message>
-      val fullMessage =
-        if (showTrace) <li class ="failure toggle" onclick={toggleElement(f)}>{message}</li>
-        else           <li class ="failure notoggle">{message}</li>
-
-      val trace =
-        if (showTrace) showStacktrace(id(f), f.stackTrace, "failure")
-        else NodeSeq.Empty
-
-      <li class={s"$element failure"}>{description}<br/>
-        {fullMessage}
-      {trace}</li>
-    }
-
-    def errorElement(element: String, er: Result with ResultStackTrace, description: Any, m: String) = {
-      <li class={s"$element error"}>{description}<br/>
-        <li class ="error toggle" onclick={toggleElement(er)}>
-          <message class="error">{m.notNull+" ("+er.location(arguments.traceFilter)+")"}</message>
-        </li>
-        {showStacktrace(id(er), er.stackTrace, "error")}
-      </li>
-    }
 
     fragment match {
       case t if Fragment.isText(t) =>
@@ -248,10 +215,10 @@ trait HtmlPrinter extends Printer {
             <li class="example success ok">{show(e)}</li>
 
           case f1 @ Failure(m, e1, st, details) =>
-            failureElement("example", f1, show(e), m, arguments.failtrace)
+            failureElement("example", f1, show(e), m, arguments.failtrace, arguments)
 
           case er @ Error(m, e1) =>
-            errorElement("example", er, show(e), m)
+            errorElement("example", er, show(e), m, arguments)
 
           case r: Skipped =>
             <li class="example skipped ok">{show(e)}<br/>
@@ -272,10 +239,10 @@ trait HtmlPrinter extends Printer {
       case f if Fragment.isStepOrAction(f) =>
         f.executionResult match {
           case f1 @ Failure(m, e1, st, details) =>
-            failureElement("step", f1, <message class="failure">Failed step!</message>, m, arguments.failtrace)
+            failureElement("step", f1, <message class="failure">Failed step!</message>, m, arguments.failtrace, arguments)
 
           case er @ Error(m, e1) =>
-            errorElement("step", er, <message class="error">Error in a step!</message>, m)
+            errorElement("step", er, <message class="error">Error in a step!</message>, m, arguments)
 
           case other => NodeSeq.Empty
         }
@@ -290,6 +257,41 @@ trait HtmlPrinter extends Printer {
 
       case other => NodeSeq.Empty
     }
+  }
+
+  def toggleElement(a: Any) = "toggleImage(this); showHide('"+id(a)+"')"
+  def id(a: Any) = System.identityHashCode(a).toString
+
+  def show(f: Fragment) =
+    f.description.show
+
+  def showStacktrace(id: String, st: List[StackTraceElement], klass: String, arguments: Arguments) =
+    <stacktrace id={id} style="display:none" class={klass}>
+      { arguments.traceFilter(st).map(t => <stacktrace-elt>{t.toString.replace("$", ".")}<br/></stacktrace-elt>).foldLeft(NodeSeq.Empty)(_ ++ _) }
+    </stacktrace>
+
+  def failureElement(element: String, f: Result with ResultStackTrace, description: Any, m: String, showTrace: Boolean, arguments: Arguments) = {
+    val message = <message class="failure">{m.notNull+" ("+f.location(arguments.traceFilter)+")"}</message>
+    val fullMessage =
+      if (showTrace) <li class ="failure toggle" onclick={toggleElement(f)}>{message}</li>
+      else           <li class ="failure notoggle">{message}</li>
+
+    val trace =
+      if (showTrace) showStacktrace(id(f), f.stackTrace, "failure", arguments)
+      else NodeSeq.Empty
+
+    <li class={s"$element failure"}>{description}<br/>
+      {fullMessage}
+      {trace}</li>
+  }
+
+  def errorElement(element: String, er: Result with ResultStackTrace, description: Any, m: String, arguments: Arguments) = {
+    <li class={s"$element error"}>{description}<br/>
+      <li class ="error toggle" onclick={toggleElement(er)}>
+        <message class="error">{m.notNull+" ("+er.location(arguments.traceFilter)+")"}</message>
+      </li>
+      {showStacktrace(id(er), er.stackTrace, "error", arguments)}
+    </li>
   }
 
   def printStatistics(title: String, stats: Stats) = {
