@@ -11,6 +11,12 @@ body {
 .text-flow {
   white-space: pre-wrap;	
 }
+pre.prettyprint.prettyprinted { 
+  margin: 1px;
+  padding: 2px; 
+  border: 0px;
+}
+
 
 h1 {
   color: #5981B4;
@@ -187,4 +193,7 @@ table.datatable .success {
   font-style: italic;
   color: #5981B4;
   font-size: 16px;
+}
+pre {
+  border: 0px;
 }

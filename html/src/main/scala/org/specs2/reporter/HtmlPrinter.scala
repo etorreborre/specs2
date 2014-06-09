@@ -176,7 +176,7 @@ trait HtmlPrinter extends Printer {
 
   def copyResources(env: Env, outDir: String): Action[List[Unit]] =
     env.fileSystem.mkdirs(outDir) >>
-    List("css", "images", "templates").
+    List("css", "javascript", "images", "templates").
       map(copySpecResourcesDir(env, "org/specs2/reporter", outDir, classOf[HtmlPrinter].getClassLoader)).sequenceU
 
 
