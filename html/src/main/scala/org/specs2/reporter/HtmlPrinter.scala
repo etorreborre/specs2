@@ -331,3 +331,5 @@ trait HtmlPrinter extends Printer {
   private def jarOf(url: URL): URL = url.openConnection.asInstanceOf[JarURLConnection].getJarFileURL
 
 }
+
+object HtmlPrinter extends HtmlPrinter

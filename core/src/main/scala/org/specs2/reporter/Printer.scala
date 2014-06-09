@@ -94,10 +94,10 @@ object Printer {
       for {
         instance <- Classes.createInstanceEither[Printer](className, loader)
         result   <-
-        instance match {
-          case \/-(i) => Actions.ok(Some(i))
-          case -\/(t) => noPrinter(failureMessage, t, args.verbose)
-        }
+          instance match {
+            case \/-(i) => Actions.ok(Some(i))
+            case -\/(t) => noPrinter(failureMessage, t, args.verbose)
+          }
       } yield result
     else noPrinter(noRequiredMessage, args.verbose)
 

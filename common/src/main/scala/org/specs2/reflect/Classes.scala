@@ -8,7 +8,7 @@ import scala.reflect.ClassTag
 import ClassName._
 import control._
 import Actions._
-import scalaz.{-\/, \/}
+import scalaz.{\/-, -\/, \/}
 import scalaz.std.anyVal._
 import scalaz.syntax.std.option._
 import java.lang.reflect.Constructor
@@ -69,23 +69,27 @@ trait Classes {
    */
   def createInstanceEither[T <: AnyRef](className: String, loader: ClassLoader)(implicit m: ClassTag[T]): Action[Throwable \/ T] =
     Actions.reader { configuration  =>
-      loadClass(className, loader).map { klass: Class[T] =>
-        val constructors = klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)
+      loadClassEither(className, loader).map { throwableOrClass: Throwable \/ Class[T] =>
+        throwableOrClass match {
+         case -\/(t)     => Actions.ok(-\/(t))
+         case \/-(klass) =>
+           val constructors = klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)
 
-        if (constructors.isEmpty)
-          Actions.ok(-\/(new Exception("Can't find a constructor for class "+klass.getName)))
-        else {
-          // how to get the first successful action?
-          val results = constructors.map { constructor =>
-            createInstanceForConstructor(klass, constructor, loader).execute(configuration).unsafePerformIO
-          }
-          val result: Action[Throwable \/ T] =
-            results
-              .find(_.isOk)
-              .cata(Actions.fromStatusAsDisjunction[T],
-                    results.map(Actions.fromStatusAsDisjunction).headOption.getOrElse(Actions.ok[Throwable \/ T](-\/(new Exception("no cause")))))
-          result
-        }
+           if (constructors.isEmpty)
+             Actions.ok(-\/(new Exception("Can't find a constructor for class "+klass.getName)))
+           else {
+             // how to get the first successful action?
+             val results = constructors.map { constructor =>
+               createInstanceForConstructor(klass, constructor, loader).execute(configuration).unsafePerformIO
+             }
+             val result: Action[Throwable \/ T] =
+               results
+                 .find(_.isOk)
+                 .cata(Actions.fromStatusAsDisjunction[T],
+                   results.map(Actions.fromStatusAsDisjunction).headOption.getOrElse(Actions.ok[Throwable \/ T](-\/(new Exception("no cause")))))
+             result
+           }
+         }
       }.flatMap(identity)
     }.flatMap(identity)
 
@@ -126,9 +130,13 @@ trait Classes {
   /**
    * Load a class, given the class name
    */
-  def loadClass[T <: AnyRef](className: String, loader: ClassLoader): Action[Class[T]] = Actions.safe {
-    loader.loadClass(className).asInstanceOf[Class[T]]
+  def loadClassEither[T <: AnyRef](className: String, loader: ClassLoader): Action[Throwable \/ Class[T]] = Actions.safe {
+    try \/-(loader.loadClass(className).asInstanceOf[Class[T]])
+    catch { case t: Throwable => -\/(t) }
   }
+
+  def loadClass[T <: AnyRef](className: String, loader: ClassLoader): Action[Class[T]] =
+    loadClassEither(className, loader).flatMap((_:Throwable\/Class[T]).fold((t: Throwable) => Actions.error(t), Actions.ok))
 
 }
 /**

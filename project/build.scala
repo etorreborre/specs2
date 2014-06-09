@@ -213,7 +213,7 @@ object build extends Build {
     cancelable := true,
     javaOptions += "-Xmx3G",
     fork in test := true,
-    testOptions := Seq(Tests.Filter(s => Seq("Spec", "Guide", "Index").exists(s.endsWith) && Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))
+    testOptions := Seq(Tests.Filter(s => Seq(".guide.").exists(s.contains) || Seq("Spec", "Guide", "Index").exists(s.endsWith) && Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))
   )
 
   /**
