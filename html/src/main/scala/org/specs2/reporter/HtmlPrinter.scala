@@ -159,7 +159,7 @@ trait HtmlPrinter extends Printer {
 
   def getPandoc(env: Env): Action[Option[Pandoc]] = {
     import env.arguments.commandLine._
-    val markdown = bool("html.markdown").getOrElse(false)
+    val markdown = bool("pandoc").getOrElse(false)
 
     if (markdown) {
       val pandoc = Pandoc(
@@ -232,13 +232,13 @@ trait HtmlPrinter extends Printer {
         val text = t.description.show
 
         if (text.trim.nonEmpty) {
-          if (pandoc) <text class="ok">{text}</text>
+          if (pandoc) <text class="ok">{scala.xml.Unparsed(text)}</text>
           else {
             // remove additional newlines and replace with just one when there is no markdown formatting
             val brStart = if (text.filterNot(_ == ' ').startsWith("\n")) <br/> else NodeSeq.Empty
             val brEnd   = if (text.filterNot(_ == ' ').endsWith("\n"))   <br/> else NodeSeq.Empty
 
-            <text class="ok">{brStart}{text.trim}{brEnd}</text>
+            <text class="ok">{brStart}{scala.xml.Unparsed(text.trim)}{brEnd}</text>
           }
         } else NodeSeq.Empty
 
