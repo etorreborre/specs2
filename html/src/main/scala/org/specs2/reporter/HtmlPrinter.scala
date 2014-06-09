@@ -39,14 +39,12 @@ trait HtmlPrinter extends Printer {
           case None         => printHtml(env, spec, stats)
           case Some(pandoc) => printHtmlWithPandoc(env, spec, stats, pandoc)
         }
-
       action.toTask
     }
   }
 
   def printHtml(env: Env, spec: SpecStructure, stats: Stats): Action[Unit] = {
     import env.fileSystem._
-
     for {
       options  <- getHtmlOptions(env.arguments)
       _        <- copyResources(env, options.outDir)
@@ -63,7 +61,7 @@ trait HtmlPrinter extends Printer {
       outDir    = out,
       baseDir   = value("html.basedir").getOrElse(HtmlOptions.baseDir),
       template  = value("html.template").getOrElse(HtmlOptions.template(out)),
-      variables = value("html.variables").map(vs => Map(vs.split(",").map(v => (v.split("=")(0), v.split("=")(1))):_*)).getOrElse(HtmlOptions.variables)))
+      variables = value("html.variables").fold(HtmlOptions.variables)(vs => Map(vs.split(",").map(v => (v.split("=")(0), v.split("=")(1))): _*))))
   }
 
 
@@ -101,23 +99,25 @@ trait HtmlPrinter extends Printer {
         .updated("outDir", options.outDir)
 
     val bodyFile = options.outDir+"body"
-    val commandLine = Pandoc.commandLine(bodyFile, options.template, variables1, outputFilePath(options.outDir, spec), pandoc)
+    val pandocArguments = Pandoc.arguments(bodyFile, options.template, variables1, outputFilePath(options.outDir, spec), pandoc)
 
     withFile(bodyFile) {
       writeFile(bodyFile, makeBody(spec, stats, options, env.arguments, pandoc = true)) >>
-      runProcess(commandLine)
+      runProcess(pandoc.executable, pandocArguments)
     }
   }
 
-  def runProcess(commandLine: String): Action[Unit] = {
+  def runProcess(executable: String, arguments: Seq[String] = Seq()): Action[Unit] = {
     val logger = new StringProcessLogger
     try {
-      val code = sys.process.Process(commandLine).!(logger)
+
+      val code = sys.process.Process(executable, arguments).!(logger)
       if (code == 0) Actions.ok(())
       else           Actions.fail(logger.lines)
-    } catch { case t: Throwable => Actions.fail(t.getMessage+"\n"+logger.lines) }
+    } catch { case t: Throwable =>
+      Actions.fail(t.getMessage+"\n"+logger.lines)
+    }
   }
-
 
   def outputFilePath(directory: String, spec: SpecStructure) =
     directory+spec.specClassName+".html"
@@ -135,7 +135,7 @@ trait HtmlPrinter extends Printer {
                     inputFormat: String,
                     outputFormat: String) {
     def isExecutableAvailable: Action[Unit] =
-      runProcess(s"$executable --version")
+      runProcess(s"$executable", Seq("--version"))
   }
   
   object Pandoc {
@@ -143,22 +143,30 @@ trait HtmlPrinter extends Printer {
     val inputFormat = "markdown"
     val outputFormat = "html"
     
-    def commandLine(bodyPath: String, templatePath: String, variables: Map[String, String], outputFile: String, options: Pandoc) = {
-      val variablesOption = variables.map { case (k, v) => s"-V $k=$v"  }.mkString(" ")
-      s"${options.executable} $bodyPath -f ${options.inputFormat} $variablesOption -t ${options.outputFormat} --template $templatePath -s -S -o $outputFile"
+    def arguments(bodyPath: String, templatePath: String, variables: Map[String, String], outputFile: String, options: Pandoc): Seq[String] = {
+      val variablesOption = variables.flatMap { case (k, v) => Seq("-V", s"$k=$v") }
+
+      Seq(bodyPath,
+          "-f", options.inputFormat,
+          "-t", options.outputFormat,
+          "--template", templatePath,
+          "-s", "-S",
+          "-o", outputFile) ++
+      variablesOption
     } 
 
   }
 
   def getPandoc(env: Env): Action[Option[Pandoc]] = {
     import env.arguments.commandLine._
-    val markdown = bool("markdown").getOrElse(false)
+    val markdown = bool("html.markdown").getOrElse(false)
 
     if (markdown) {
       val pandoc = Pandoc(
         executable   = value("pandoc.exec")       .getOrElse(Pandoc.executable),
         inputFormat  = value("pandoc.inputformat").getOrElse(Pandoc.inputFormat),
         outputFormat = value("pandoc.outputformat").getOrElse(Pandoc.outputFormat))
+
       pandoc.isExecutableAvailable.map(_ => Some(pandoc)).orElse(
         Actions.fail("the pandoc executable is not available at: "+pandoc.executable))
     }

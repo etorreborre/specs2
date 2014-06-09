@@ -59,6 +59,9 @@ case class ActionT[F[+_], W, R, +A](runT: R => StatusT[({ type l[+a] = WriterT[F
 
   def orElse[AA >: A](otherwise: ActionT[F, W, R, AA])(implicit W: Monoid[W], F: Monad[F]): ActionT[F, W, R, AA] =
     |||(otherwise)
+
+  def andFinally[AA >: A](otherwise: ActionT[F, W, R, Unit])(implicit W: Monoid[W], F: Monad[F]): ActionT[F, W, R, AA] =
+    ActionT[F, W, R, AA](r => runT(r).andFinally(otherwise.runT(r)))
 }
 
 object ActionT extends ActionTLowPriority {

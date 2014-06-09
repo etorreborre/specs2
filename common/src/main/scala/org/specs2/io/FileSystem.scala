@@ -75,7 +75,7 @@ trait FileSystem {
     Process(content).toSource.pipe(process1.utf8Encode).to(io.fileChunkW(path)).run
 
   def withFile(path: String)(action: Action[Unit]): Action[Unit] =
-    (action >> deleteFile(path)).orElse(deleteFile(path)).map(_ => ())
+    action.andFinally(deleteFile(path).map(_ => ()))
 
   def mkParentDirs(path: String): Action[Unit] =
     Actions.safe(Option(new File(path).getParentFile).fold(())(_.mkdirs))

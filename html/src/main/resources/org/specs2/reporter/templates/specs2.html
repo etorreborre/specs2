@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>$title$</title>
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700' rel='stylesheet'
+          type='text/css'>
+    <link href="$baseDir$/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="$baseDir$/css/font-awesome.min.css" rel="stylesheet">
+    <link href="$baseDir$/css/specs2.css" rel="stylesheet">
+
+    <script language="javascript">
+      function toggleImage(image) {
+        if (image.style.listStyleImage.match('expanded')) {
+          image.style.listStyleImage = "url(images/collapsed.gif)";
+        } else {
+          image.style.listStyleImage = "url(images/expanded.gif)";
+        }
+      };
+      function showHide(id) {
+        element = document.getElementById(id);
+        element.style.display = (element.style.display == 'block')? 'none' : 'block';
+      };
+      function showHideByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
+        }
+      };
+      function showByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = '';
+        }
+      };
+      function showAll() {
+        showByTag('text');
+        showByTag('example');
+        showByTag('step');
+      };
+      function showByTag(name) {
+        var elements = document.getElementsByTagName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'block';
+        }
+      };
+      function hideByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'none';
+        }
+      };
+      function showById(id) {
+        document.getElementById(id).style.display = ''
+      };
+      function hideById(id) {
+        document.getElementById(id).style.display = 'none'
+      };
+    </script>
+
+</head>
+<body>
+$if(issues)$
+<h1>$title$
+    <a href="#" onclick="hideByClass('ok');hideById('onlyIssuesLink');showById('allElementsLink')"><span id=onlyIssuesLink class="issues-toggle"> (issues only)</span></a>
+    <a href="#" onclick="showByClass('ok');hideById('allElementsLink');showById('onlyIssuesLink')"><span id=allElementsLink style="display:none" class="issues-toggle"> (all)</span></a>
+</h1>
+$else$
+<h1>$title$</h1>
+$endif$
+
+$toc$
+$body$
+</body>
+
+</html>

@@ -36,7 +36,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
               val action = specificationRun(aTaskDef, loader, handler, loggers)
               action.execute(consoleLogging).unsafePerformIO.fold(
                 ok => ok,
-                e  => handleClassCreationError(e, loggers, sbtEvents(taskDef, handler))
+                e  => handleRunError(e, loggers, sbtEvents(taskDef, handler))
               )
             }
             else ()
@@ -54,18 +54,18 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
     Classes.createInstance[SpecificationStructure](taskDef.fullyQualifiedName, loader).flatMap { spec =>
       val env = Env(arguments = commandLineArguments)
 
-      val report =
+      val report: Action[Unit] =
       if (commandLineArguments.commandLine.contains("all")) {
         for {
           printers <- createPrinters(taskDef, handler, loggers, commandLineArguments)
           ss       <- SpecificationStructure.linkedSpecifications(spec, env, loader)
           sorted   <- safe(SpecificationStructure.topologicalSort(env)(ss).getOrElse(Seq()) :+ spec)
           rs = sorted.toList.map(s => Reporter.report(env, printers)(s.structure(env))).sequenceU
-        } yield rs
+        } yield ()
         
-      } else createPrinters(taskDef, handler, loggers, commandLineArguments).map(printers => Reporter.report(env, printers)(spec.structure(env)))
+      } else createPrinters(taskDef, handler, loggers, commandLineArguments).flatMap(printers => Reporter.report(env, printers)(spec.structure(env)))
       
-      report >> Actions.safe(env.shutdown)
+      report.andFinally(Actions.safe(env.shutdown))
     }
   }
 
@@ -78,12 +78,19 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
          createPrinter(args, loader),
          createNotifierPrinter(args, loader)).sequenceU.map(_.flatten)
 
-  def createSbtPrinter(h: EventHandler, ls: Array[Logger], e: SbtEvents) = Actions.ok(Some {
-    new SbtPrinter {
-      lazy val handler = h
-      lazy val loggers = ls
-      lazy val events = e
-    }})
+  def createSbtPrinter(h: EventHandler, ls: Array[Logger], e: SbtEvents) = {
+    val arguments = Arguments(args.mkString(" "))
+
+    if (!printerNames.map(_.name).exists(args.contains) || arguments.commandLine.isDefined(CONSOLE.name))
+      Actions.ok(Some {
+        new SbtPrinter {
+          lazy val handler = h
+          lazy val loggers = ls
+          lazy val events = e
+      }})
+    else noPrinter("no console printer defined", arguments.verbose)
+  }
+
 
   def sbtEvents(t: TaskDef, h: EventHandler) = new SbtEvents {
     lazy val taskDef = t
@@ -91,9 +98,9 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
   }
 
   /**
-   * Notify sbt that the specification could not be created
+   * Notify sbt of errors during the run
    */
-  private def handleClassCreationError(e: String \&/ Throwable, loggers: Array[Logger], events: SbtEvents) {
+  private def handleRunError(e: String \&/ Throwable, loggers: Array[Logger], events: SbtEvents) {
     val logger = SbtLineLogger(loggers)
     def logThrowable(t: Throwable) {
       logger.errorLine(t.getMessage+"\n")

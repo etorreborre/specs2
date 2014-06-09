@@ -116,13 +116,13 @@ object Printer {
       case None => noPrinter(noRequiredMessage, args.verbose)
     }
 
-  private def noPrinter[T](message: String, t: Throwable, verbose: Boolean): Action[Option[T]] =
+  def noPrinter[T](message: String, t: Throwable, verbose: Boolean): Action[Option[T]] =
     log(message, verbose) >> logThrowable(t, verbose) >> Actions.ok(None)
 
-  private def noPrinter[T](message: String): Action[Option[T]] =
+  def noPrinter[T](message: String): Action[Option[T]] =
     log(message) >> Actions.ok(None)
 
-  private def noPrinter[T](message: String, verbose: Boolean): Action[Option[T]] =
+  def noPrinter[T](message: String, verbose: Boolean): Action[Option[T]] =
     log(message, verbose) >> Actions.ok(None)
 }
 

@@ -47,6 +47,14 @@ case class StatusT[F[+_], +A](run: F[Status[A]]) {
 
   def |||[AA >: A](otherwise: => StatusT[F, AA])(implicit F: Monad[F]): StatusT[F, AA] =
     StatusT[F, AA](isOk.flatMap(ok => if (ok) this.run else otherwise.run))
+
+  def andFinally(otherwise: =>StatusT[F, Unit])(implicit F: Monad[F]): StatusT[F, A] = {
+    StatusT[F, A](run.flatMap { r =>
+      try otherwise.run.map(_ => r)
+      catch { case t: Throwable => StatusT.exception[F, A](t).run }
+    })
+  }
+
 }
 
 object StatusT extends LowPriorityStatusT {
