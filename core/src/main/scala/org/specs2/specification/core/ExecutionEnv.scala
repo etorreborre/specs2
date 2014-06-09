@@ -2,6 +2,7 @@ package org.specs2
 package specification
 package core
 
+import scala.collection.JavaConversions._
 import control._
 import scala.concurrent.duration.Duration
 import java.util.concurrent._
@@ -21,7 +22,7 @@ case class ExecutionEnv(timeOut:  Option[Duration] = None,
   }
 
   def shutdown: Unit = {
-    try     executor.shutdownNow()
+    try     executor.shutdownNow
     finally timer.stop
   }
 }

@@ -20,4 +20,7 @@ class FutureMatchersSpec extends Specification with Groups with ResultMatchers {
  ${ implicit c: ExecutionContext => Future(1 === 1).await }
 
 """
+
 }
+
+case class CustomException(e: String) extends Exception(e)
