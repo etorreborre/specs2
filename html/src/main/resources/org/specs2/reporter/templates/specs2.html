@@ -4,12 +4,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>$title$</title>
 
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700' rel='stylesheet'
-          type='text/css'>
-    <link href="$baseDir$/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="$baseDir$/css/font-awesome.min.css" rel="stylesheet">
-    <link href="$baseDir$/css/prettify.css" type="text/css" rel="stylesheet" />
-    <link href="$baseDir$/css/specs2.css" rel="stylesheet"/>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700" rel="stylesheet" type='text/css'>
+    <link href="$baseDir$/css/bootstrap.min.css" rel="stylesheet" media="screen" type="text/css">
+    <link href="css/960.css" rel="stylesheet" type="text/css" media="all"  />
+    <link href="$baseDir$/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <link href="$baseDir$/css/prettify.css" rel="stylesheet" type="text/css"/>
+    <link href="$baseDir$/css/specs2.css" rel="stylesheet" type="text/css"/>
 
     <script src="$baseDir$/javascript/run_prettify.js"/>
 
@@ -64,6 +64,11 @@
 
 </head>
 <body>
+
+<div class="container_12">
+<div class="grid_2">
+$toc$</div>
+<div class="grid_10">
 $if(issues)$
 <h1>$title$
     <a href="#" onclick="hideByClass('ok');hideById('onlyIssuesLink');showById('allElementsLink')"><span id=onlyIssuesLink class="issues-toggle"> (issues only)</span></a>
@@ -73,8 +78,9 @@ $else$
 <h1>$title$</h1>
 $endif$
 
-$toc$
 $body$
+</div>
+</div>
 </body>
 
 </html>

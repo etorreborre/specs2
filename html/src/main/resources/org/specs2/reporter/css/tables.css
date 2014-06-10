@@ -1,0 +1,50 @@
+/* Not Just a Grid v1.1 - June 2011 - (c) 2011 Al Redpath / Outrageous Creations! Licenced under an MIT Licence*/
+/* ---------------------------------------------------------------------------- */
+/* Plain Table ---------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------- */
+table.plain {color:#000;font: 11px "Trebuchet MS", Arial, Helvetica, sans-serif;letter-spacing:2px;border-spacing:1px;border-collapse:collapse;}
+table.plain caption {font-weight: bold;font-style:italic;text-transform:uppercase;letter-spacing:3px;text-align:right;margin:0 10px 0 0;padding:0;color:#444;caption-side: bottom;}
+table.plain td, table.plain th {padding:4px 6px 4px 6px;border:1px solid #bbb;}
+/* ----- */
+/* thead */
+/* ----- */
+table.plain thead {color:#444;font-size:12px;font-weight:bold;text-transform:uppercase;text-shadow: 0 1px 1px rgba(255,255,255,0.9);}
+table.plain thead th, table.plain thead td {padding:6px;}
+table.plain thead tr {background:#eee url(../images/notjustagrid/misc/transoverlay-mattesoft.png) repeat-x;}
+/* ----- */
+/* tfoot */
+/* ----- */
+table.plain tfoot tr {background:#eee url(../images/notjustagrid/misc/transoverlay-mattesoft.png) repeat-x;}
+table.plain tfoot {font-size: 10px;}
+/* ----- */
+/* tbody */
+/* ----- */
+table.plain tbody tr th {text-align:right;font-weight:bold;background:#eee url(../images/notjustagrid/misc/greycorner-even.gif) top left no-repeat;}
+/* ---------------------------------------------------------------------------- */
+/* Datalist Table ------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------- */
+table.datalist {color:#000;font: 11px "Trebuchet MS", Arial, Helvetica, sans-serif;letter-spacing:2px;border-spacing:1px;border-collapse:collapse;}
+table.datalist caption {font-weight: bold;font-style:italic;text-transform:uppercase;letter-spacing:3px;text-align:right;margin:0 10px 0 0;padding:0;color:#444;caption-side: bottom;}
+table.datalist td, table.datalist th {padding:4px 6px 4px 6px;border:1px solid #bbb;}
+/* ----- */
+/* thead */
+/* ----- */
+table.datalist thead {color:#444;font-size:12px;font-weight:bold;text-transform:uppercase;text-shadow: 0 1px 1px rgba(255,255,255,0.9);}
+table.datalist thead th,table.datalist thead td  {padding:6px;}
+table.datalist thead tr {background:#eee url(../images/notjustagrid/misc/transoverlay-matte.png) repeat-x;}
+/* ----- */
+/* tfoot */
+/* ----- */
+table.datalist tfoot tr {background:#eee url(../images/notjustagrid/misc/transoverlay-matte.png) repeat-x;}
+table.datalist tfoot td, table.datalist tfoot th {font-size: 10px;}
+/* ----- */
+/* tbody */
+/* ----- */
+table.datalist tbody tr th {text-align:right;background:url(../images/notjustagrid/misc/greycorner-even.gif) top left no-repeat; /* Background image for browser which don't support nth-child */}
+table.datalist tbody tr:hover {background-color:#dcdcdc;} /* Hover colour for Internet Explorer and other browsers which don't support nth-child */
+table.datalist tbody tr:nth-child(odd) {background-color:#e6e6e6;}
+table.datalist tbody tr:nth-child(even) {background-color:#eee;}
+table.datalist tbody tr:nth-child(odd):hover {background-color:#dcdcdc;}
+table.datalist tbody tr:nth-child(even):hover {background-color:#d5d5d5;}
+table.datalist tbody tr:nth-child(odd) th {background:url(../images/notjustagrid/misc/colourcorner-even.gif) top left no-repeat;}
+table.datalist tbody tr:nth-child(even) th {background:url(../images/notjustagrid/misc/colourcorner-odd.gif) top left no-repeat;}
