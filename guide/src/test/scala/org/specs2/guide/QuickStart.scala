@@ -2,41 +2,11 @@ package org.specs2
 package guide
 
 import _root_.examples._
+import org.specs2.main.Arguments
 
-class QuickStart extends UserGuidePage { def is = "Quick Start".title ^ s2"""
-There are 2 major styles of specifications with ***specs2***:
+class QuickStart extends UserGuidePage { def is = "Quick Start".title ^s2"""
 
- * _unit_ specifications where the specification text is interleaved with the specification code. It is generally used to
-   specify a single class
-
- * _acceptance_ specifications where all the specification text stands as one and the implementation code is elsewhere.
-   It is generally used for acceptance or integration scenarios
-
-#### Unit
-
-Unit specifications extend the `org.specs2.mutable.Specification` trait and are using the `should/in` format: ${snippet{
-
-import org.specs2.mutable._
-
-class HelloWorldSpec extends Specification {
-
-  "The 'Hello world' string" should {
-    "contain 11 characters" in {
-      "Hello world" must have size(11)
-    }
-    "start with 'Hello'" in {
-      "Hello world" must startWith("Hello")
-    }
-    "end with 'world'" in {
-      "Hello world" must endWith("world")
-    }
-  }
-}
-}}
-
-#### Acceptance
-
-Acceptance specifications extend the `org.specs2.Specification` trait and must define a method called `is`: ${snippet{
+Follow the [installation](install) instructions and create copy the following specification in a file named `HelloWorldSpec.scala`: ${snippet{
 
 import org.specs2._
 
@@ -56,46 +26,36 @@ class HelloWorldSpec extends Specification { def is = s2"""
 }
 }}
 
-The **`is`** method lists [*specification fragments*](org.specs2.guide.Structure.html#Declare+examples) which can be interpolated from a **`s2`** String where you can inject:
-
-* examples: some executable code returning a [`Result`](org.specs2.guide.Matchers.html)
-* [ScalaCheck](org.specs2.guide.Matchers.html#ScalaCheck) properties
-* [Forms](org.specs2.guide.FormsPage.html)
-* normal strings
-
+As you can see, a ***specs2*** software specification is nothing more than a Scala class extending `org.specs2.Specification` and declaring a special `is` method. This method contains some plain text describing what your application should do as well as some executable code specifying precisely what is expected.
 
 #### Execution
 
-And this is it! Now to execute your specification, you use a [*runner*](org.specs2.guide.Runners.html#Presentation) which will display the results:
+And this is it! Now you can execute your specification with a [*runner*](org.specs2.guide.Runners.html#Presentation) and observe the results:
 
-    > scala -cp ... specs2.run HelloWorldSpec
+```
+> scala -cp ... specs2.run HelloWorldSpec
 
-    HelloWorldSpec
+HelloWorldSpec
 
-    This is a specification to check the 'Hello world' string
+This is a specification to check the 'Hello world' string
 
-    The 'Hello world' string should
-    + contain 11 characters
-    + start with 'Hello'
-    + end with 'world'
+The 'Hello world' string should
++ contain 11 characters
++ start with 'Hello'
++ end with 'world'
 
-    Total for specification HelloWorldSpec
-    Finished in 0 second, 58 ms
-    3 examples, 0 failure, 0 error
+Total for specification HelloWorldSpec
+Finished in 0 second, 58 ms
+3 examples, 0 failure, 0 error
+```
 
-#### And much more!
+#### Learn more!
 
-You can explore the rest of this [User Guide](org.specs2.guide.UserGuide.html "Guide") to learn how to:
+The rest of this ${see(new UserGuide)} will show you how to:
 
- * use the many ***specs2*** matchers to specify precise expectations
- * define _contexts_ to setup/teardown data for your examples
- * include / link specifications and reuse examples
- * use Mockito or ScalaCheck
- * use sbt/maven/junit to execute a specification
- * export your specification as an html document (like this one!)
-  """^
-  link(new HelloWorldSpec)                                                                                    ^
-  link(new HelloWorldUnitSpec)                                                                                ^
-                                                                                                                        end
+ * [structure](structure) your specification using one of the 2 major "styles" of specifications: "Acceptance" and "Unit"
+ * use the many ***specs2*** [matchers](matchers) to specify precisely the expected behavior of your application
+ * [run](run) your specification and output results in various formats
+"""
 
 }

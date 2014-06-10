@@ -19,5 +19,6 @@ trait LinkDsl extends FragmentBuilder with dsl.LinkDsl {
   }
 
   override def link(s: SpecStructure) = addFragment(super.link(s))
+  override def see(s: SpecStructure)  = addFragment(super.see(s))
 
 }

@@ -66,7 +66,8 @@ trait HtmlPrinter extends Printer {
       outDir    = out,
       baseDir   = value("html.basedir").getOrElse(HtmlOptions.baseDir),
       template  = value("html.template").getOrElse(HtmlOptions.template(out)),
-      variables = value("html.variables").fold(HtmlOptions.variables)(vs => Map(vs.split(",").map(v => (v.split("=")(0), v.split("=")(1))): _*))))
+      variables = value("html.variables").fold(HtmlOptions.variables)(vs => Map(vs.split(",").map(v => (v.split("=")(0), v.split("=")(1))): _*)),
+      noStats   = bool("html.nostats").getOrElse(HtmlOptions.noStats)))
   }
 
 
@@ -127,13 +128,14 @@ trait HtmlPrinter extends Printer {
   def outputFilePath(directory: String, spec: SpecStructure) =
     directory+spec.specClassName+".html"
 
-  case class HtmlOptions(outDir: String, baseDir: String, template: String, variables: Map[String, String])
+  case class HtmlOptions(outDir: String, baseDir: String, template: String, variables: Map[String, String], noStats: Boolean)
 
   object HtmlOptions {
     val outDir = "target/specs2-reports/"
     def template(outDir: String) = outDir+"/templates/specs2.html"
     val variables = Map[String, String]()
     val baseDir = "."
+    val noStats = false
   }
 
   case class Pandoc(executable: String,
@@ -189,7 +191,7 @@ trait HtmlPrinter extends Printer {
     val title = spec.name
 
     s"""${spec.fragments.fragments.map(printFragment(arguments, options.outDir, pandoc)).mkString("\n")}""" ++
-    s"""${printStatistics(title, stats)}"""
+    s"""${printStatistics(title, stats, options)}"""
   }
 
   def printFragment(arguments: Arguments, baseDir: String, pandoc: Boolean) = (fragment: Fragment) => {
@@ -294,16 +296,18 @@ trait HtmlPrinter extends Printer {
     </li>
   }
 
-  def printStatistics(title: String, stats: Stats) = {
-    val statsClass = if (stats.hasErrors) "error" else if (stats.hasIssues) "failure" else "success"
-
-    <table class="datatable">
-      <tr><th colSpan="2">{s"Total for specification ${title.trim}"}</th></tr>
-      <tr><td>Finished in</td><td class="info">{stats.time}</td></tr>
-      <tr><td>Results</td><td class={statsClass}>
-        {stats.displayResults(Arguments("nocolor"))}</td></tr>
-    </table>
-  }
+  def printStatistics(title: String, stats: Stats, options: HtmlOptions) =
+    if (options.noStats) ""
+    else {
+      val statsClass = if (stats.hasErrors) "error" else if (stats.hasIssues) "failure" else "success"
+      
+      <table class="datatable">
+        <tr><th colSpan="2">{s"Total for specification ${title.trim}"}</th></tr>
+        <tr><td>Finished in</td><td class="info">{stats.time}</td></tr>
+        <tr><td>Results</td><td class={statsClass}>
+          {stats.displayResults(Arguments("nocolor"))}</td></tr>
+      </table>
+    }
 
   def copySpecResourcesDir(env: Env, base: String, outputDir: String, loader: ClassLoader)(src: String): Action[Unit] = {
     Option(loader.getResource(s"$base/$src")) match {
