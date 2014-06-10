@@ -138,9 +138,9 @@ n = 0
 
     eg := {
       "code"                                      || "result" |>
-        " snippet{ hello \n}.set(eval = true) "     !! "hello"  |
-        " snippet{ hello \n}.eval "                 !! "hello"  |
-        " snippet{ hello \n}.offsetIs(2) "          !! "hello"  |
+      " snippet{ hello \n}.set(eval = true) "     !! "hello"  |
+      " snippet{ hello \n}.eval "                 !! "hello"  |
+      " snippet{ hello \n}.offsetIs(2) "          !! "hello"  |
         { (c, r) => trimApproximatedSnippet(c) === r }
     }
   }
@@ -199,8 +199,8 @@ n = 0
     }
   }
 
-  implicit class SpecStructureTexts(spec: SpecStructure) {
-    def trimmedTexts = spec.fragments.fragments.filter(Fragment.isText).map(_.description.show.trim)
+  implicit class fragmentsTexts(fs: Fragments) {
+    def trimmedTexts = fs.fragments.filter(Fragment.isText).map(_.description.show.trim)
   }
   val attribute1 = 1
 }

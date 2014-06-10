@@ -2,7 +2,7 @@ package org.specs2
 package reporter
 
 import org.specs2.specification.create.FragmentsFactory
-import org.specs2.specification.dsl.FragmentDsl
+import org.specs2.specification.dsl.FragmentsDsl
 import specification.core._
 import matcher.{MustMatchers, StandardMatchResults}
 import data.Trees._
@@ -182,7 +182,7 @@ class JUnitDescriptionSpec extends Specification with JUnitDescriptionSpecTest {
   }
 }
 
-trait ReporterExamples extends MustMatchers with StandardResults with StandardMatchResults with FragmentsFactory with FragmentDsl {
+trait ReporterExamples extends MustMatchers with StandardResults with StandardMatchResults with FragmentsFactory with FragmentsDsl {
   private val factory = fragmentFactory; import factory._
 
   lazy val text = factory.text("text")

@@ -17,6 +17,7 @@ import Fragment._
 case class Fragments(contents: Process[Task, Fragment]) {
   def update(f: Process[Task, Fragment] => Process[Task, Fragment]) = contentsLens.modify(this)(f)
   def flatMap(f: Fragment => Process[Task, Fragment])               = contentsLens.modify(this)(_ flatMap f)
+  def map(f: Fragment => Fragment)                                  = contentsLens.modify(this)(_ map f)
   def |> (other: Process1[Fragment, Fragment])                      = contentsLens.modify(this)(_ |> other)
   def fragments: IndexedSeq[Fragment]                               = contents.runLog.run
   def filter(predicate: Fragment => Boolean)                        = contentsLens.modify(this)(_ filter predicate)
@@ -25,6 +26,8 @@ case class Fragments(contents: Process[Task, Fragment]) {
   def append(other: Fragment): Fragments                = append(Process(other))
   def append(others: Seq[Fragment]): Fragments          = append(Fragments(others:_*))
   def append(others: Fragments): Fragments              = append(others.contents)
+
+  def appendLazy(other: =>Fragment): Fragments          = append(Process.emitLazy(other))
 
   def prepend(other: Process[Task, Fragment]): Fragments = contentsLens.modify(this)(other fby _)
   def prepend(other: Fragment): Fragments                = prepend(Process(other))
@@ -70,6 +73,7 @@ case class Fragment(description: Description, execution: Execution, location: Lo
   override def toString = s"Fragment($description, $execution) ($location)"
 }
 
+case class LazyFragment(fragment: () => Fragment)
 
 object Fragment {
   implicit def showInstance(implicit showd: Show[Description], showe: Show[Execution]): Show[Fragment] = new Show[Fragment] {

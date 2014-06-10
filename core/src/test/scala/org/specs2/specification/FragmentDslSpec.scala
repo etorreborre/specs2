@@ -1,13 +1,13 @@
 package org.specs2.specification
 
 import org.specs2.Specification
-import org.specs2.specification.dsl.FragmentDsl
-import FragmentDsl._
+import org.specs2.specification.dsl.FragmentsDsl
+import FragmentsDsl._
 import org.specs2.specification.core.Env
-import org.specs2.specification.dsl.FragmentDsl
-import org.specs2.specification.dsl.FragmentDsl
-import org.specs2.specification.dsl.FragmentDsl
-import org.specs2.specification.dsl.FragmentDsl
+import org.specs2.specification.dsl.FragmentsDsl
+import org.specs2.specification.dsl.FragmentsDsl
+import org.specs2.specification.dsl.FragmentsDsl
+import org.specs2.specification.dsl.FragmentsDsl
 
 class FragmentDslSpec extends Specification { def is = s2"""
 
@@ -75,11 +75,11 @@ class FragmentDslSpec extends Specification { def is = s2"""
   def e5 = (xonly ^ header ^ (f1 ^ f2)).fragments.fragments must haveSize(2)
   def e6 = (header ^ xonly ^ (f1 ^ f2)).fragments.fragments must haveSize(2)
 
-  def g1 = ((FragmentDsl.bangExample("text") ! ok) ^ f1).fragments must haveSize(2)
-  def g2 = ((FragmentDsl.bangExample("text") ! ((s: String) => ok)) ^ f1).fragments must haveSize(2)
-  def g3 = ((FragmentDsl.bangExample("text") ! ((e: Env) => ok)) ^ f1).fragments must haveSize(2)
+  def g1 = ((FragmentsDsl.bangExample("text") ! ok) ^ f1).fragments must haveSize(2)
+  def g2 = ((FragmentsDsl.bangExample("text") ! ((s: String) => ok)) ^ f1).fragments must haveSize(2)
+  def g3 = ((FragmentsDsl.bangExample("text") ! ((e: Env) => ok)) ^ f1).fragments must haveSize(2)
 
 
   val (f1, f2, f3) = (text("t1"), text("t2"), text("t3"))
-  val header = FragmentDsl.title("t").title
+  val header = FragmentsDsl.title("t").title
 }

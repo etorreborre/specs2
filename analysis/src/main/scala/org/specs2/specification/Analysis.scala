@@ -4,13 +4,13 @@ package specification
 import execute.AsResult
 import matcher.{Expectations, DependencyMatchers}
 import org.specs2.specification.core.{Fragments, Fragment}
-import org.specs2.specification.dsl.FragmentDsl
+import org.specs2.specification.dsl.FragmentsDsl
 import specification.create.FragmentsFactory
 
 /**
  * This trait provides integrated analysis method for a scala project
  */
-trait Analysis extends DependencyMatchers with FragmentDsl { this: FragmentsFactory with Expectations =>
+trait Analysis extends DependencyMatchers with FragmentsDsl { this: FragmentsFactory with Expectations =>
 
   /**
    * this implicit definition allows to check if a Layers definition is respected.

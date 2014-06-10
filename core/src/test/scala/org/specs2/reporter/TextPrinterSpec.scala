@@ -2,6 +2,7 @@ package org.specs2
 package reporter
 
 import matcher.{StandardMatchResults, MustMatchers}
+import org.specs2.specification.dsl.FragmentsDsl
 import specification._
 import control._
 import text.Trim._
@@ -9,7 +10,7 @@ import execute._
 import main.Arguments
 import LineLogger._
 import core._
-import create.DefaultFragmentFactory
+import org.specs2.specification.create.{S2StringContext, DefaultFragmentFactory}
 import process.{Stats, Executor, StatisticsRepository}
 import io.StringOutput
 import text.AnsiColors
@@ -71,7 +72,7 @@ class TextPrinterSpec extends Specification with tp { def is = s2"""
 """
 }
 
-trait tp extends MustMatchers with StandardMatchResults with StandardResults {
+trait tp extends MustMatchers with StandardMatchResults with StandardResults with S2StringContext with FragmentsDsl {
   import org.specs2.specification.dsl1._
   import TextPrinterSpec._
 
@@ -234,7 +235,7 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
   def error1 = { sys.error("boom"); ok }
 }
 
-object TextPrinterSpec extends MustMatchers {
+object TextPrinterSpec extends MustMatchers with FragmentsDsl {
 
   implicit class fragmentOutputContains(fragment: Fragment) {
     def contains(contained: String, f: String => String = identity) = Fragments(fragment).contains(contained, f)
@@ -275,7 +276,7 @@ object TextPrinterSpec extends MustMatchers {
       printed must beMatching(pattern.stripMargin.replace(" ", "_"))
   }
 
-  implicit class outputContainsForEnv(spec: (SpecStructure, Env)) extends outputContains(spec._1) {
+  implicit class outputContainsForEnv(spec: (Fragments, Env)) extends outputContains(spec._1) {
     override lazy val optionalEnv = Some(spec._2)
   }
 }

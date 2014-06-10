@@ -4,6 +4,7 @@ package dsl
 
 import core._
 import create.FragmentsFactory
+import control.ImplicitParameters.ImplicitParam
 
 /**
  * DSL for adding links to other specifications
@@ -12,7 +13,7 @@ trait LinkDsl extends FragmentsFactory {
 
   implicit class linkFragment(text: String) {
     def ~(s: SpecStructure): Fragment =
-      fragmentFactory.link(SpecificationLink(s.header, before = text))
+      fragmentFactory.link(SpecificationLink(s.header, alias = text))
 
     def ~(alias: String, s: SpecStructure): Fragment =
       fragmentFactory.link(SpecificationLink(s.header, before = text, alias = alias))
@@ -38,35 +39,35 @@ trait LinkDsl extends FragmentsFactory {
   }
 
   implicit class seeFragment(text: String) {
-    def ~/(s: SpecStructure): Fragment =
-      fragmentFactory.see(SpecificationLink(s.header, before = text))
+    def ~/(s: SpecStructure): LazyFragment =
+      fragmentFactory.see(SpecificationLink(s.header, alias = text))
 
-    def ~/(alias: String, s: SpecStructure): Fragment =
+    def ~/(alias: String, s: SpecStructure): LazyFragment =
       fragmentFactory.see(SpecificationLink(s.header, before = text, alias = alias))
 
-    def ~/(s: SpecStructure, after: String): Fragment =
+    def ~/(s: SpecStructure, after: String): LazyFragment =
       fragmentFactory.see(SpecificationLink(s.header, before = text, after = after))
 
-    def ~/(alias: String, s: SpecStructure, after: String): Fragment =
+    def ~/(alias: String, s: SpecStructure, after: String): LazyFragment =
       fragmentFactory.see(SpecificationLink(s.header, before = text, alias = alias, after = after))
 
-    def ~/(alias: String, s: SpecStructure, after: String, tooltip: String): Fragment =
+    def ~/(alias: String, s: SpecStructure, after: String, tooltip: String): LazyFragment =
       fragmentFactory.see(SpecificationLink(s.header, before = text, alias = alias, after = after, tooltip = tooltip))
 
-    def ~/(s: SpecStructure, after: String, tooltip: String): Fragment =
+    def ~/(s: SpecStructure, after: String, tooltip: String): LazyFragment =
       fragmentFactory.see(SpecificationLink(s.header, before = text, tooltip = tooltip, after = after))
 
-    def ~/(s: SpecificationStructure): Fragment = text ~ s.is
-    def ~/(alias: String, s: SpecificationStructure): Fragment = text ~ (alias, s.is)
-    def ~/(s: SpecificationStructure, after: String): Fragment = text ~ (s.is, after)
-    def ~/(alias: String, s: SpecificationStructure, after: String): Fragment = text ~ (alias, s.is, after)
-    def ~/(alias: String, s: SpecificationStructure, after: String, tooltip: String): Fragment = text ~ (alias, s.is, after, tooltip)
-    def ~/(s: SpecificationStructure, after: String, tooltip: String): Fragment = text ~ (s.is, after, tooltip)
+    def ~/(s: SpecificationStructure): LazyFragment = text ~/ s.is
+    def ~/(alias: String, s: SpecificationStructure): LazyFragment = text ~/ (alias, s.is)
+    def ~/(s: SpecificationStructure, after: String): LazyFragment = text ~/ (s.is, after)
+    def ~/(alias: String, s: SpecificationStructure, after: String): LazyFragment = text ~/ (alias, s.is, after)
+    def ~/(alias: String, s: SpecificationStructure, after: String, tooltip: String): LazyFragment = text ~/ (alias, s.is, after, tooltip)
+    def ~/(s: SpecificationStructure, after: String, tooltip: String): LazyFragment = text ~/ (s.is, after, tooltip)
   }
 
   def link(s: SpecStructure): Fragment          = fragmentFactory.link(SpecificationLink(s.header))
   def link(s: SpecificationStructure): Fragment = link(s.is)
 
-  def see(s: SpecStructure): Fragment           = fragmentFactory.see(SpecificationLink(s.header))
-  def see(s: SpecificationStructure): Fragment  = see(s.is)
+  def see(s: SpecStructure): LazyFragment             = fragmentFactory.see(SpecificationLink(s.header))
+  def see(s: =>SpecificationStructure)(implicit p: ImplicitParam): LazyFragment = fragmentFactory.see(SpecificationLink(s.is.header))
 }

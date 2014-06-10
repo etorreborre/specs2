@@ -3,8 +3,8 @@ package specification
 package dsl
 package mutable
 
-import specification.dsl
-import specification.core.SpecStructure
+import org.specs2.specification.core.{SpecificationStructure, SpecStructure}
+import control.ImplicitParameters.ImplicitParam
 
 /**
  * DSL for adding links to other specifications
@@ -18,7 +18,8 @@ trait LinkDsl extends FragmentBuilder with dsl.LinkDsl {
     override def ~(s: SpecStructure, after: String, tooltip: String) = addFragment(super.~(s, after, tooltip))
   }
 
-  override def link(s: SpecStructure) = addFragment(super.link(s))
-  override def see(s: SpecStructure)  = addFragment(super.see(s))
+  override def link(s: SpecStructure)  = addFragment(super.link(s))
+  override def see(s: SpecStructure) = addFragment(super.see(s))
+  override def see(s: =>SpecificationStructure)(implicit p: ImplicitParam) = addFragment(super.see(s)(p))
 
 }

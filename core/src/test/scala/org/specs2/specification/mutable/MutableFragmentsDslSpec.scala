@@ -4,9 +4,9 @@ package mutable
 import create.DefaultFragmentFactory
 import DefaultFragmentFactory._
 import core.{Env, Results, Fragment}
-import dsl.mutable.{MutableFragmentDsl, MutableFragmentBuilder}
+import dsl.mutable.{MutableFragmentsDsl, MutableFragmentBuilder}
 
-class MutableFragmentDslSpec extends org.specs2.Specification { def is = s2"""
+class MutableFragmentsDslSpec extends org.specs2.Specification { def is = s2"""
 
   create examples
     with a string and a result $e1
@@ -72,5 +72,5 @@ class MutableFragmentDslSpec extends org.specs2.Specification { def is = s2"""
     finally env.shutdown
   }
 
-  trait dsl extends MutableFragmentBuilder with MutableFragmentDsl
+  trait dsl extends MutableFragmentBuilder with MutableFragmentsDsl
 }

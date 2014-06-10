@@ -7,7 +7,7 @@ import main.ArgumentsShortcuts
 
 trait SpecificationCreation extends specification.create.SpecificationCreation
   with AutoExamples
-  with MutableFragmentDsl
+  with MutableFragmentsDsl
   with ArgumentsShortcuts
   with ArgumentsDsl
 

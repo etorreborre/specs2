@@ -21,10 +21,10 @@ trait Scripts { outer: FragmentsFactory =>
    *
    * The whole sequence also creates one tagged section with the title of the sequence
    */
-  implicit def scriptIsInterpolatedPart(script: Script): InterpolatedPart = new InterpolatedPart {
-    def append(fs: Vector[Fragment], text: String, start: Location, end: Location, expression: String): Vector[Fragment] = {
-      if (script.isStart) fs :+ factory.section(script.title) :+ factory.text(text).setLocation(start)
-      else                fs ++ (script.fragments(text).fragments.toVector.map(_.setLocation(end)) :+ factory.asSection(script.title))
+  implicit def scriptIsInterpolatedFragment(script: Script): InterpolatedFragment = new InterpolatedFragment {
+    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String): Fragments = {
+      if (script.isStart) fs append factory.section(script.title) append factory.text(text).setLocation(start)
+      else                fs append (script.fragments(text).map(_.setLocation(end)) append factory.asSection(script.title))
     }
   }
 }

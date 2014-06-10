@@ -5,7 +5,7 @@ import io._
 import org.specs2.main.Arguments
 import org.specs2.specification.core.{Env, Fragments}
 import org.specs2.specification.create.FragmentsFactory
-import org.specs2.specification.dsl.FragmentDsl
+import org.specs2.specification.dsl.FragmentsDsl
 import org.specs2.specification.process.Executor
 import sys._
 import execute._
@@ -138,7 +138,7 @@ class ContextSpec extends Specification with ResultMatchers with Groups { def is
     }
   }
 }
-trait ContextData extends StandardResults with FragmentsFactory with ContextsForFragments with FragmentDsl {
+trait ContextData extends StandardResults with FragmentsFactory with ContextsForFragments with FragmentsDsl {
   val factory = fragmentFactory; import factory._
 
   def okValue(name: String) = { println(name); success }

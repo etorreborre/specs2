@@ -55,6 +55,18 @@ trait MutableFragmentBuilder extends FragmentBuilder
     fragment
   }
 
+  def addFragment(fragment: LazyFragment): LazyFragment = {
+    effects.addBlock {
+      if (effects.isAt(targetPath)) {
+        effects.stopEffects
+        specFragments.append(fragment.fragment())
+      }
+      else
+        specFragments.append(isolate(fragment.fragment(), effects.effectPath))
+    }
+    fragment
+  }
+
   private def isolate(fragment: Fragment, effectPath: EffectPath) =
     if (!targetPath.isDefined && mustBeIsolated(fragment))
       fragment.setExecution(duplicateExecution(effectPath))
@@ -89,6 +101,7 @@ trait MutableFragmentBuilder extends FragmentBuilder
 
 trait FragmentBuilder {
   def addFragment(f: Fragment): Fragment
+  def addFragment(f: LazyFragment): LazyFragment
   def addFragmentBlock(block: =>Any): Unit
 }
 

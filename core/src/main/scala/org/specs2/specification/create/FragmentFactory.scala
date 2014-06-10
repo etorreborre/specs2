@@ -47,7 +47,7 @@ trait FragmentFactory {
   def backtab(n: Int): Fragment
 
   def link(link: SpecificationLink): Fragment
-  def see(link: SpecificationLink): Fragment
+  def see(link: =>SpecificationLink): LazyFragment
 }
 
 /**
@@ -85,8 +85,8 @@ trait DefaultFragmentFactory extends FragmentFactory {
   def backtab: Fragment         = backtab(1)
   def backtab(n: Int): Fragment = Fragment(Backtab(n), Execution.NoExecution)
 
-  def link(link: SpecificationLink) = Fragment(link, Execution.SpecificationStats(link.specClassName))
-  def see(link: SpecificationLink)  = Fragment(link, Execution.NoExecution)
+  def link(link: SpecificationLink)  = Fragment(link, Execution.SpecificationStats(link.specClassName))
+  def see(link: =>SpecificationLink) = LazyFragment(() => Fragment(link, Execution.NoExecution))
 
 }
 
@@ -113,29 +113,29 @@ class ContextualFragmentFactory(factory: FragmentFactory, context: Context) exte
   def example[T](text: String, withEnv: Env => T)(implicit as: AsResult[T], p: ImplicitParam): Fragment =
     factory.example(text, (e: Env) => context(withEnv(e)))(Result.resultAsResult, p)
 
-  def tag(names: String*): Fragment             = factory.tag(names:_*)
-  def taggedAs(names: String*): Fragment        = factory.taggedAs(names:_*)
-  def section(names: String*): Fragment         = factory.section(names:_*)
-  def asSection(names: String*): Fragment       = factory.asSection(names:_*)
+  def tag(names: String*): Fragment                = factory.tag(names:_*)
+  def taggedAs(names: String*): Fragment           = factory.taggedAs(names:_*)
+  def section(names: String*): Fragment            = factory.section(names:_*)
+  def asSection(names: String*): Fragment          = factory.asSection(names:_*)
 
-  def mark(tag: NamedTag): Fragment             = factory.mark(tag)
-  def markAs(tag: NamedTag): Fragment           = factory.markAs(tag)
-  def markSection(tag: NamedTag): Fragment      = factory.markSection(tag)
-  def markSectionAs(tag: NamedTag): Fragment    = factory.markSectionAs(tag)
+  def mark(tag: NamedTag): Fragment                = factory.mark(tag)
+  def markAs(tag: NamedTag): Fragment              = factory.markAs(tag)
+  def markSection(tag: NamedTag): Fragment         = factory.markSection(tag)
+  def markSectionAs(tag: NamedTag): Fragment       = factory.markSectionAs(tag)
 
-  def action[T](t: =>T): Fragment               = factory.action[T](t)
-  def step[T](t: =>T): Fragment                 = factory.step[T](t)
-  def text(t: String): Fragment                 = factory.text(t)
-  def code(t: String): Fragment                 = factory.code(t)
-  def break: Fragment                           = factory.break
-  def start: Fragment                           = factory.start
-  def end: Fragment                             = factory.end
-  def tab: Fragment                             = factory.tab
-  def tab(n: Int): Fragment                     = factory.tab(n)
-  def backtab: Fragment                         = factory.backtab
-  def backtab(n: Int): Fragment                 = factory.backtab(n)
-  def link(link: SpecificationLink): Fragment   = factory.link(link)
-  def see(link: SpecificationLink): Fragment    = factory.see(link)
+  def action[T](t: =>T): Fragment                  = factory.action[T](t)
+  def step[T](t: =>T): Fragment                    = factory.step[T](t)
+  def text(t: String): Fragment                    = factory.text(t)
+  def code(t: String): Fragment                    = factory.code(t)
+  def break: Fragment                              = factory.break
+  def start: Fragment                              = factory.start
+  def end: Fragment                                = factory.end
+  def tab: Fragment                                = factory.tab
+  def tab(n: Int): Fragment                        = factory.tab(n)
+  def backtab: Fragment                            = factory.backtab
+  def backtab(n: Int): Fragment                    = factory.backtab(n)
+  def link(link: SpecificationLink): Fragment      = factory.link(link)
+  def see(link: =>SpecificationLink): LazyFragment = factory.see(link)
 
 }
 
@@ -174,7 +174,7 @@ trait DelegatedFragmentFactory extends FragmentsFactory with FragmentFactory {
   def backtab: Fragment                         = factory.backtab
   def backtab(n: Int): Fragment                 = factory.backtab(n)
   def link(link: SpecificationLink): Fragment   = factory.link(link)
-  def see(link: SpecificationLink): Fragment    = factory.see(link)
+  def see(link: =>SpecificationLink)            = factory.see(link)
 
 }
 

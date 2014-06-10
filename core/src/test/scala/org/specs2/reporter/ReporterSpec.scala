@@ -9,6 +9,7 @@ import matcher.{ThrownExpectations, MustMatchers, StandardMatchResults, ControlM
 import ControlMatchers._
 import execute.Result
 import org.specs2.specification.create.S2StringContext
+import org.specs2.specification.dsl.FragmentsDsl
 import scalaz.concurrent.Task
 import data.Processes._
 import data.Fold
@@ -98,13 +99,13 @@ class FakeJUnitPrinter(logger: LineLogger) extends Printer {
     Fold.fromFunction((f: Fragment) => Task.now(logger.infoLog("junit\n")))
 }
 
-object reporterSpecSupport extends MustMatchers with StandardMatchResults with S2StringContext {
+object reporterSpecSupport extends MustMatchers with StandardMatchResults with S2StringContext with FragmentsDsl {
   /**
    * TEST METHODS
    */
   lazy val reporter = new Reporter {}
 
-  def spec(logger: LineLogger = NoLineLogger) = s2"""
+  def spec(logger: LineLogger = NoLineLogger): SpecStructure = s2"""
  ex1 ${ex1(logger)}
  ex2 ${ex2(logger)}
  ex3 ${ex3(logger)}

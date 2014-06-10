@@ -13,13 +13,13 @@ trait FormS2StringContext extends S2StringContext { this: FormFragmentsFactory =
   private val formFactory = formFragmentFactory
   import formFactory._
 
-  implicit def formIsInterpolatedPart(f: =>Form): InterpolatedPart = new InterpolatedPart {
-    override def append(parts: Vector[Fragment], text: String, start: Location, end: Location, expression: String): Vector[Fragment] = {
-      parts :+ factory.text(text).setLocation(start) :+ FormFragment(f.executeForm).setLocation(end)
+  implicit def formIsInterpolatedFragment(f: =>Form): InterpolatedFragment = new InterpolatedFragment {
+    override def append(fs: Fragments, text: String, start: Location, end: Location, expression: String): Fragments = {
+      fs append factory.text(text).setLocation(start) append FormFragment(f.executeForm).setLocation(end)
     }
   }
 
-  implicit def toFormIsInterpolatedPart(f: { def form: Form}): InterpolatedPart = formIsInterpolatedPart(f.form)
+  implicit def toFormIsInterpolatedFragment(f: { def form: Form}): InterpolatedFragment = formIsInterpolatedFragment(f.form)
 
 }
 

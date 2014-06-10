@@ -11,7 +11,7 @@ import specification.create.DelegatedFragmentFactory
 import scalaz.std.vector._
 import scalaz.syntax.std.vector._
 
-trait FragmentDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDsl with LinkDsl { outer =>
+trait FragmentsDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDsl with LinkDsl { outer =>
 
   implicit def fragmentToFragments(f: Fragment): Fragments =
     Fragments(f)
@@ -94,6 +94,9 @@ trait FragmentDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDsl
   implicit def fragmentsAsSpecStructure(fs: Fragments): SpecStructure =
     SpecHeader(getClass) ^ fs
 
+  implicit def specStructureAsFragments(spec: SpecStructure): Fragments =
+    spec.fragments
+
   def tag(tag: NamedTag)      : Fragment = fragmentFactory.mark(tag)
   def taggedAs(tag: NamedTag) : Fragment = fragmentFactory.markAs(tag)
   def section(tag: NamedTag)  : Fragment = fragmentFactory.markSection(tag)
@@ -118,4 +121,4 @@ trait FragmentDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDsl
 
 }
 
-object FragmentDsl extends FragmentDsl
+object FragmentsDsl extends FragmentsDsl

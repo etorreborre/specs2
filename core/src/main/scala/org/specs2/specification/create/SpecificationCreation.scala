@@ -3,10 +3,10 @@ package specification
 package create
 
 import main.{ArgumentsShortcuts, ArgumentsArgs}
-import specification.dsl.FragmentDsl
+import specification.dsl.FragmentsDsl
 
 trait SpecificationCreation extends
-       FragmentDsl
+       FragmentsDsl
   with AutoExamples
   with ArgumentsArgs
   with ArgumentsShortcuts

@@ -8,7 +8,7 @@ import form._
 import create._
 import control.ImplicitParameters.ImplicitParam
 
-trait FormDsl extends FragmentDsl with FormFragmentsFactory {
+trait FormDsl extends FragmentsDsl with FormFragmentsFactory {
   private val factory = formFragmentFactory
 
   implicit class appendFormToString(s: String) extends appendToString(s) {

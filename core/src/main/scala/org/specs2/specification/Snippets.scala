@@ -21,9 +21,9 @@ import specification.create._
 trait Snippets extends org.specs2.execute.Snippets { outer: S2StringContext with FragmentsFactory =>
   private val factory = outer.fragmentFactory
 
-  implicit def snippetIsSpecPart[T](snippet: Snippet[T]): InterpolatedPart = new InterpolatedPart {
-    def append(parts: Vector[Fragment], text: String, start: Location, end: Location, expression: String): Vector[Fragment] =
-      (parts :+ factory.text(text).setLocation(start)) ++ snippetFragments(snippet, end, expression).fragments
+  implicit def snippetIsSpecPart[T](snippet: Snippet[T]): InterpolatedFragment = new InterpolatedFragment {
+    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String): Fragments =
+      (fs append factory.text(text).setLocation(start)) append snippetFragments(snippet, end, expression)
 
     private def snippetFragments(snippet: Snippet[T], location: Location, expression: String): Fragments = {
       Fragments(
