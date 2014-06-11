@@ -17,9 +17,9 @@ import specification.core._
  */
 trait Filter {
 
-  /** filter fragments by name, tags and previous execution */
+  /** filter fragments by name, markers and previous execution */
   def filter(env: Env): Process1[Fragment, Fragment] =
-    filterByName(env: Env) |> filterByTags(env) |> filterByPrevious(env)
+    filterByName(env: Env) |> filterByMarker(env) |> filterByPrevious(env)
 
   /** filter fragments by name */
   def filterByName(env: Env): Process1[Fragment, Fragment] = {
@@ -33,8 +33,16 @@ trait Filter {
     else process1.id
   }
 
-  /** filter fragments by tags */
-  def filterByTags(env: Env): Process1[Fragment, Fragment] = {
+  /**
+   * filter fragments by markers
+   *
+   * This method is a bit involved but we have to consider lots of different cases
+   *
+   * - if the marker is a tag or a section
+   * - if the marker applies to the previous or next fragment
+   * - if there is an irrelevant empty text between the marker and the fragment it applies to
+   */
+  def filterByMarker(env: Env): Process1[Fragment, Fragment] = {
     val arguments = env.arguments
 
     def go(sections: List[NamedTag] = Nil): Process1[(Option[Fragment], Fragment, Option[Fragment]), Fragment] = {
@@ -50,24 +58,47 @@ trait Filter {
         emit(fragment).filter(_ => apply.keep(arguments, apply.names)) fby go(tags)
       }
 
+      def skip(fragment: Fragment) =
+        emit(fragment).filter(_ => false) fby go(sections)
+
       receive1 {
-        // tag for the next fragment
+        // 1. tag for the next fragment, after some blank text
+        case (Some(Fragment(Marker(t, false, true),_,_)), Fragment(RawText(tx), _, _), Some(fragment)) if tx.trim.isEmpty =>
+          filter(fragment, tag = t)
+
+        // 2. don't emit the fragment twice if it has already been emitted with condition 1.
+        case (Some(Fragment(RawText(tx), _, _)), fragment, _) if tx.trim.isEmpty =>
+          skip(fragment)
+
+        // 3. otherwise if the tag is for the next fragment
         case (Some(Fragment(Marker(t, false, true),_,_)), fragment, _) =>
           filter(fragment, tag = t)
 
-        // start or end of a new section
-        case (Some(Fragment(Marker(tag, true, true), _, _)), fragment, _) =>
-          filter(fragment, updateSections(tag))
+        // 4. tag for the previous fragment with one blank in between
+        case (Some(fragment), Fragment(RawText(tx), _, _), Some(Fragment(Marker(t, false, false),_,_))) if tx.trim.isEmpty =>
+          filter(fragment, tag = t)
 
-        // tag for the previous fragment
+        // 5. tag for the previous fragment
         case (_, fragment, Some(Fragment(Marker(t, false, false),_,_))) =>
           filter(fragment, tag = t)
 
-        // start or end of a new section impacting the current fragment
+        // 6. no tag after a fragment and blank text, emit it
+        case (Some(fragment), Fragment(RawText(tx), _, _), _) if tx.trim.isEmpty =>
+          filter(fragment)
+
+        // 7. if the next fragment is some empty text, don't emit the tag right away, wait for condition 4.
+        case (_, fragment, Some(Fragment(RawText(tx), _, _))) if tx.trim.isEmpty =>
+          skip(fragment)
+
+        // 8. start or end of a new section
+        case (Some(Fragment(Marker(tag, true, true), _, _)), fragment, _) =>
+          filter(fragment, updateSections(tag))
+
+        // 9. start or end of a new section impacting the current fragment
         case (_, fragment, Some(Fragment(Marker(tag, true, false), _, _))) =>
           filter(fragment, updateSections(tag), tag)
 
-        // filter fragments in between tags according to sections
+        // 10. filter fragments in between tags according to sections
         case (_, fragment, _) =>
           filter(fragment)
       }

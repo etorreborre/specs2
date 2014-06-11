@@ -47,7 +47,7 @@ trait FragmentFactory {
   def backtab(n: Int): Fragment
 
   def link(link: SpecificationLink): Fragment
-  def see(link: =>SpecificationLink): LazyFragment
+  def see(link: =>SpecificationLink): Fragment
 }
 
 /**
@@ -86,7 +86,7 @@ trait DefaultFragmentFactory extends FragmentFactory {
   def backtab(n: Int): Fragment = Fragment(Backtab(n), Execution.NoExecution)
 
   def link(link: SpecificationLink)  = Fragment(link, Execution.SpecificationStats(link.specClassName))
-  def see(link: =>SpecificationLink) = LazyFragment(() => Fragment(link, Execution.NoExecution))
+  def see(link: =>SpecificationLink) = Fragment(link, Execution.NoExecution)
 
 }
 
@@ -135,7 +135,7 @@ class ContextualFragmentFactory(factory: FragmentFactory, context: Context) exte
   def backtab: Fragment                            = factory.backtab
   def backtab(n: Int): Fragment                    = factory.backtab(n)
   def link(link: SpecificationLink): Fragment      = factory.link(link)
-  def see(link: =>SpecificationLink): LazyFragment = factory.see(link)
+  def see(link: =>SpecificationLink): Fragment     = factory.see(link)
 
 }
 

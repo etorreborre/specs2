@@ -33,29 +33,14 @@ trait S2StringContext extends FragmentsFactory { outer =>
     }
   }
 
-  implicit def fragmentIsInterpolatedFragment(f: Fragment): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =  {
-      f match {
-        // in the case of a tag which applies to the example just before,
-        // if the tag is just separated by some empty text, append the tag close to the example
-        case tag @ Fragment(Marker(_, _, false), _, _) if text.trim.isEmpty =>
-          fs append tag.setLocation(end) append ff.text(text).setLocation(start)
-
-        case other =>
-          fs append ff.text(text).setLocation(start) append other.setLocation(end)
-      }
-    }
+  implicit def fragmentIsInterpolatedFragment(f: =>Fragment): InterpolatedFragment = new InterpolatedFragment {
+    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =
+      fs append ff.text(text).setLocation(start) appendLazy f.setLocation(end)
   }
 
   implicit def specificationLinkIsInterpolatedFragment(link: SpecificationLink): InterpolatedFragment = new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) = {
       fs append ff.text(text).setLocation(start) append fragmentFactory.link(link).setLocation(end)
-    }
-  }
-
-  implicit def lazyFragmentIsInterpolatedFragment(f: LazyFragment): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) = {
-      fs append ff.text(text).setLocation(start) appendLazy f.fragment().setLocation(end)
     }
   }
 
@@ -140,11 +125,6 @@ trait S2StringContext extends FragmentsFactory { outer =>
 
     val fragments = (texts zip variables zip expressions zip textsStartLocations1 zip textsEndLocations1).foldLeft(Fragments()) { (res, cur) =>
       val ((((text, variable), expression), startLocation), endLocation) = cur
-
-      // always provide the latest full piece of text to the spec part for the append method
-//      val (res1, text1) = res.lastOption.collect { case f @ Fragment(RawText(t), _, _) if !f.isRunnable =>
-//        (res.dropRight(1), t + text)
-//      }.getOrElse((res, text))
       variable.append(res, text, SimpleLocation(startLocation), SimpleLocation(endLocation), expression)
     }
 

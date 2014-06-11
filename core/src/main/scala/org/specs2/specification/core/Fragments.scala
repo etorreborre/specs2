@@ -73,8 +73,6 @@ case class Fragment(description: Description, execution: Execution, location: Lo
   override def toString = s"Fragment($description, $execution) ($location)"
 }
 
-case class LazyFragment(fragment: () => Fragment)
-
 object Fragment {
   implicit def showInstance(implicit showd: Show[Description], showe: Show[Execution]): Show[Fragment] = new Show[Fragment] {
     override def shows(f: Fragment): String =

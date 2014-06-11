@@ -23,7 +23,9 @@ class FilterSpec extends Specification with Groups with ResultMatchers with Thro
  Filter by tag
  =============
   + tagging the next fragment
+  + tagging the next fragment after an empty text
   + tagging the previous fragment
+  + tagging the previous fragment before an empty text
   + tagging a section of fragments, starting with the next one
   + tagging a section of fragments, starting with the previous one
   + with overlapping sections
@@ -51,7 +53,17 @@ class FilterSpec extends Specification with Groups with ResultMatchers with Thro
     }
 
     eg := {
+      val fragments = Fragments(tag("x"), text(" "), ex("e1"), ex("e2"))
+      checkFiltering(fragments, "x", expected = Seq("e1"), unexpected = Seq("e2"))
+    }
+
+    eg := {
       val fragments = Fragments(ex("e1"), taggedAs("x"), ex("e2"))
+      checkFiltering(fragments, "x", expected = Seq("e1"), unexpected = Seq("e2"))
+    }
+
+    eg := {
+      val fragments = Fragments(ex("e1"), text(" "), taggedAs("x"), ex("e2"))
       checkFiltering(fragments, "x", expected = Seq("e1"), unexpected = Seq("e2"))
     }
 
@@ -136,7 +148,7 @@ class FilterSpec extends Specification with Groups with ResultMatchers with Thro
 
   def includeContains(fragments: Fragments, tags: Seq[String], expected: Seq[String], unexpected: Seq[String]): Result = {
     val env = Env(arguments = Arguments(s"include ${tags.mkString(",")}"))
-    val executed = (fragments.contents |> Filter.filterByTags(env)).runLog.run
+    val executed = (fragments.contents |> Filter.filterByMarker(env)).runLog.run
     val descriptions = executed.map(_.description.toString)
 
     expected.foreach(e => descriptions aka "expected for include" must contain(beMatching(".*"+e+".*")))
@@ -146,7 +158,7 @@ class FilterSpec extends Specification with Groups with ResultMatchers with Thro
 
   def excludeContains(fragments: Fragments, tags: Seq[String], unexpected: Seq[String], expected: Seq[String]): Result = {
     val env = Env(arguments = Arguments(s"exclude ${tags.mkString(",")}"))
-    val executed = fragments |> Filter.filterByTags(env)
+    val executed = fragments |> Filter.filterByMarker(env)
     val descriptions = executed.fragments.map(_.description.toString)
 
     expected.foreach(e => descriptions aka "expected for exclude" must contain(beMatching(".*"+e+".*")))
