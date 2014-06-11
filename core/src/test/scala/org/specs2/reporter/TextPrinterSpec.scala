@@ -124,7 +124,7 @@ s2"""e1 $ok
 e2 $ko
 e3 $ko
 """ contains(
-    """|[info] Total for specification dslx
+    """|[info] Total for specification TextPrinterSpec
        |[info] Finished in x ms
        |[info] x examples, x failures, x error""", (_:String).replaceAll("\\d+", "x"))
 
@@ -243,7 +243,7 @@ object TextPrinterSpec extends MustMatchers with FragmentsDsl {
 
   implicit class fragmentsOutputContains(fragments: Fragments) {
     def contains(contained: String, f: String => String = identity) =
-      SpecStructure(SpecHeader(getClass), Arguments(), fragments).contains(contained, f)
+      SpecStructure(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, f)
   }
 
   implicit class outputContains(spec: SpecStructure) {
