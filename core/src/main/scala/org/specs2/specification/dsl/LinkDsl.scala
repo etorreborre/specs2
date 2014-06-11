@@ -13,7 +13,7 @@ trait LinkDsl extends FragmentsFactory {
 
   implicit class linkFragment(text: String) {
     def ~(s: SpecStructure): Fragment =
-      fragmentFactory.link(SpecificationLink(s.header, alias = text))
+      fragmentFactory.link(SpecificationLink(s.header, before = text))
 
     def ~(alias: String, s: SpecStructure): Fragment =
       fragmentFactory.link(SpecificationLink(s.header, before = text, alias = alias))
@@ -40,7 +40,7 @@ trait LinkDsl extends FragmentsFactory {
 
   implicit class seeFragment(text: String) {
     def ~/(s: SpecStructure): LazyFragment =
-      fragmentFactory.see(SpecificationLink(s.header, alias = text))
+      fragmentFactory.see(SpecificationLink(s.header, before = text))
 
     def ~/(alias: String, s: SpecStructure): LazyFragment =
       fragmentFactory.see(SpecificationLink(s.header, before = text, alias = alias))
@@ -65,9 +65,9 @@ trait LinkDsl extends FragmentsFactory {
     def ~/(s: SpecificationStructure, after: String, tooltip: String): LazyFragment = text ~/ (s.is, after, tooltip)
   }
 
-  def link(s: SpecStructure): Fragment          = fragmentFactory.link(SpecificationLink(s.header))
+  def link(s: SpecStructure): Fragment          = fragmentFactory.link(SpecificationLink(s.header, alias = s.header.show))
   def link(s: SpecificationStructure): Fragment = link(s.is)
 
-  def see(s: SpecStructure): LazyFragment             = fragmentFactory.see(SpecificationLink(s.header))
-  def see(s: =>SpecificationStructure)(implicit p: ImplicitParam): LazyFragment = fragmentFactory.see(SpecificationLink(s.is.header))
+  def see(s: SpecStructure): LazyFragment             = fragmentFactory.see(SpecificationLink(s.header, alias = s.header.show))
+  def see(s: =>SpecificationStructure)(implicit p: ImplicitParam): LazyFragment = fragmentFactory.see(SpecificationLink(s.is.header, alias = s.is.header.show))
 }
