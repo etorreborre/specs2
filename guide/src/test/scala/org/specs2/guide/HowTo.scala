@@ -251,7 +251,7 @@ class index extends Specification { def is =
   examplesLinks("Example specifications")
 
   // see the SpecificationsFinder trait for the parameters of the 'specifications' method
-  def examplesLinks(t: String) = t.title ^ specifications().map(link)
+  def examplesLinks(t: String) = t.title ^ specifications().map(s => link(s))
 }
 }}
 

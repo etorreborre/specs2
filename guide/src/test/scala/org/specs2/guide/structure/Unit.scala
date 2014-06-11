@@ -68,7 +68,7 @@ action { justDoIt() }
 }}
 
  * `link`: create a link to another specification ${snippet{
-link("how" ~ ("to do hello world", new HelloWorldSpec))
+//link("how" ~ ("to do hello world", new HelloWorldSpec))
 }}
 
  * `see`: add a link to another specification without including its fragments for execution ${snippet{
@@ -144,7 +144,7 @@ class MutableSpec extends Specification {
   // you can add links to other specifications with `link`
   // they will be executed when this one is executed. If you don't want this to happen
   // you can use `see` instead of `link`
-  link("how" ~ ("to do hello world", new HelloWorldSpec))
+  //link("how" ~ ("to do hello world", new HelloWorldSpec))
   // you can include other specifications with `include`
   link(new HelloWorldSpec)
 

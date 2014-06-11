@@ -63,7 +63,7 @@ class UnitSpec extends mutable.Specification {
     "contain 7 characters" in system2().e1
   }
   // you can add links to other specifications
-  "how" ~ ("to do hello world", new IncludedSpec)
+  "how" ~ (new IncludedSpec)
 
   // a step to execute after the specification must be declared at the end
   step {

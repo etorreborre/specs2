@@ -250,12 +250,7 @@ trait HtmlPrinter extends Printer {
         }
 
       case Fragment(link: SpecificationLink,_,_) =>
-        <link class="ok">{
-          scala.xml.Text(if (link.before.isEmpty) "" else link.before) ++
-            <a href={link.url.relativeTo(baseDir)} tooltip={link.tooltip} class="ok">{link.linkText}</a> ++
-            scala.xml.Text(if (link.after.isEmpty) "" else " " +link.after)
-          }</link>
-
+        <link class="ok"><a href={link.url.relativeTo(baseDir)} tooltip={link.tooltip} class="ok">{link.linkText}</a></link>
 
       case other => NodeSeq.Empty
     }

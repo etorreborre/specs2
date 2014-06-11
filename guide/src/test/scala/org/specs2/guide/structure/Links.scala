@@ -5,6 +5,7 @@ package structure
 import examples._
 
 object Links extends UserGuidePage { def is = ""
+  /*
   def section = s2"""
 
 ### Links
@@ -133,4 +134,6 @@ s"""
   lazy val (childSpec, childSpec1, childSpec2, childSpec3, otherSpecification) =
     (specification, specification, specification, specification, specification)
   lazy val DetailedSpec = specification
+
+  */
 }

@@ -3,23 +3,30 @@ package specification
 package dsl
 package mutable
 
-import org.specs2.specification.core.{SpecificationStructure, SpecStructure}
-import control.ImplicitParameters.ImplicitParam
+import core.{SpecificationStructure, SpecStructure}
 
 /**
  * DSL for adding links to other specifications
  */
 trait LinkDsl extends FragmentBuilder with dsl.LinkDsl {
 
-  implicit class mutableLinkFragment(text: String) extends linkFragment(text) {
-    override def ~(s: SpecStructure)                = addFragment(super.~(s))
-    override def ~(s: SpecStructure, after: String) = addFragment(super.~(s, after))
-    override def ~(alias: String, s: SpecStructure, after: String, tooltip: String) = addFragment(super.~(alias, s, after, tooltip))
-    override def ~(s: SpecStructure, after: String, tooltip: String) = addFragment(super.~(s, after, tooltip))
+  implicit class mutableLinkFragment(alias: String) extends linkFragment(alias) {
+    override def ~(s: SpecStructure)                              = addFragment(super.~(s))
+    override def ~(s: SpecStructure, tooltip: String)             = addFragment(super.~(s, tooltip))
+    override def ~(s: => SpecificationStructure)                  = addFragment(super.~(s))
+    override def ~(s: => SpecificationStructure, tooltip: String) = addFragment(super.~(s, tooltip))
   }
 
-  override def link(s: SpecStructure)  = addFragment(super.link(s))
-  override def see(s: SpecStructure) = addFragment(super.see(s))
-  override def see(s: =>SpecificationStructure)(implicit p: ImplicitParam) = addFragment(super.see(s)(p))
+  implicit class mutableSeeFragment(alias: String) extends seeFragment(alias) {
+    override def ~/(s: SpecStructure)                             = addFragment(super.~/(s))
+    override def ~/(s: SpecStructure, tooltip: String)            = addFragment(super.~/(s, tooltip))
+    override def ~/(s: =>SpecificationStructure)                  = addFragment(super.~/(s))
+    override def ~/(s: =>SpecificationStructure, tooltip: String) = addFragment(super.~/(s, tooltip))
+  }
+
+  override def link(s: SpecStructure)            = addFragment(super.link(s))
+  override def link(s: =>SpecificationStructure) = addFragment(super.link(s))
+  override def see(s: SpecStructure)             = addFragment(super.see(s))
+  override def see(s: =>SpecificationStructure)  = addFragment(super.see(s))
 
 }

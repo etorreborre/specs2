@@ -49,7 +49,6 @@ class TextPrinterSpec extends Specification with tp { def is = s2"""
    as PENDING if nothing is specified                         $g1
    as a specific user message                                 $g2
 
-
  Skipped messages must be shown
    as SKIPPED if nothing is specified                         $h1
    as the standard 'skipped'                                  $h2
@@ -58,7 +57,7 @@ class TextPrinterSpec extends Specification with tp { def is = s2"""
  Formatting fragments are displayed
    breaks as 1 newline                                        $i1
 
-  Specification links
+  Specification links are displayed
     with no title                                             $j1
     with a title                                              $j2
     with results                                              $j3
@@ -176,17 +175,17 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
        |[info]_
        |[info] + e2"""
 
-  def j1 = s2"""${SpecificationLink(SpecHeader(classOf[String]), before = "the ", after = " spec")}""" contains
+  def j1 = s2"""the ${SpecificationLink(SpecHeader(classOf[String]))} spec""" contains
     """|[info] * the String spec """
 
-  def j2 = s2"""${SpecificationLink(SpecHeader(classOf[String], Some("STRING")), before = "the ", after = " spec")}""" contains
+  def j2 = s2"""the ${SpecificationLink(SpecHeader(classOf[String], Some("STRING")))} spec""" contains
     """|[info] * the STRING spec """
 
   def j3 = {
     val repository = StatisticsRepository.memory
     repository.storeStatistics(classOf[String].getName, Stats(examples = 1, failures = 1)).runOption
     val env = Env(statisticsRepository = repository)
-    (s2"""${SpecificationLink(SpecHeader(classOf[String], Some("STRING")), before = "the ", after = " spec")}""", env) contains
+    (s2"""the ${SpecificationLink(SpecHeader(classOf[String], Some("STRING")))} spec""", env) contains
     """|[info] x the STRING spec"""
 
   }

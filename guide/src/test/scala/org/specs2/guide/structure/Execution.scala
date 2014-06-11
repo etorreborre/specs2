@@ -2,7 +2,11 @@ package org.specs2
 package guide
 package structure
 
-object Execution extends UserGuideVariables {
+object Execution extends Specification with UserGuideVariables {
+def is =
+  s2"""
+      |
+    """
 
   def section = s"""
 ### Execution

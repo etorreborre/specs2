@@ -24,7 +24,7 @@ case object NoText extends Description {
   def show: String = ""
 }
 
-case class SpecificationLink(header: SpecHeader, before: String = "", after: String = "", alias: String = "", tooltip: String = "") extends Description {
+case class SpecificationLink(header: SpecHeader, alias: String = "", tooltip: String = "") extends Description {
   def specClassName = header.className
 
   def url = specClassName+".html"
@@ -33,11 +33,7 @@ case class SpecificationLink(header: SpecHeader, before: String = "", after: Str
     if (alias.nonEmpty) alias else header.show
 
   def show =
-    (if (before.nonEmpty) before else "") +
-    (if (alias.nonEmpty) alias else header.show) +
-    (if (after.nonEmpty) after else "") +
-    (if (alias.nonEmpty) s"[${header.show}}]" else "")
-
+    if (alias.nonEmpty) alias else header.show
 }
 
 case object Br extends Description {

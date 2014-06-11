@@ -12,12 +12,12 @@ class UserGuide extends UserGuidePage { def is = "User Guide".title ^ s2"""
 
   In this user guide, you will find:
 
-  ${ "a " ~ ("quick start guide", new QuickStart)                       }
-  ${ "how to " ~ ("structure your specification", new Structure)        }
-  ${ "how to use " ~ ("matchers", new Matchers)                         }
-  ${ "how to " ~ ("execute a specification", new Runners)               }
-  ${ "\"how to\" tips " ~ ("to improve your specifications", new HowTo) }
-  ${ "the ***specs2*** " ~ ("philosophy", new Philosophy)               }
-  ${ "the ***specs2*** " ~ ("design", new Design)                       }
+  a ${ "quick start guide" ~ new QuickStart }
+  $${ "how to " ~ ("structure your specification", new Structure)        }
+  $${ "how to use " ~ ("matchers", new Matchers)                         }
+  $${ "how to " ~ ("execute a specification", new Runners)               }
+  $${ "\"how to\" tips " ~ ("to improve your specifications", new HowTo) }
+  $${ "the ***specs2*** " ~ ("philosophy", new Philosophy)               }
+  $${ "the ***specs2*** " ~ ("design", new Design)                       }
                                                                         """
 }
