@@ -62,7 +62,7 @@ got {
   n = 1
 }
 } } """.trimmedTexts(1) ===
-    """|```
+    """|```prettyprint
        |got {
        |  var n = 0
        |  n = 1
@@ -77,7 +77,7 @@ n = 1
 // 8<--
 n = 0
 } }""".trimmedTexts(1).trim ===
-    """|```
+    """|```prettyprint
        |n = 1
        |```""".stripMargin
 
@@ -91,7 +91,7 @@ n = 0
 // 8<--
 var i = 0
   } }""".trimmedTexts(1) ===
-    """```
+    """```prettyprint
       |n = 1
       |var i = 0
       |```""".stripMargin
@@ -107,7 +107,7 @@ n = 1
 // 8<--
 n = 0
   }.offsetIs(2) }""".trimmedTexts(1) ===
-    """|```
+    """|```prettyprint
        |  n = 1
        |```""".stripMargin
 
@@ -119,7 +119,7 @@ n = 0
   // 8<--
   n = 0
   }.offsetIs(-2) }""".trimmedTexts(1) ===
-    """|```
+    """|```prettyprint
        |n = 1
        |```""".stripMargin
 
@@ -149,7 +149,7 @@ n = 0
   var n = 1
   1 + n
   }.eval.offsetIs(-2) }""".trimmedTexts.drop(1).take(2).mkString("\n") ===
-    """|```
+    """|```prettyprint
        |var n = 1
        |1 + n
        |```
