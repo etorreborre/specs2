@@ -33,7 +33,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
         taskDef.fingerprint match {
           case f: SubclassFingerprint    =>
             if (f.superclassName.endsWith("SpecificationStructure")) {
-              val action = specificationRun(aTaskDef, loader, handler, loggers)
+              val action = specificationRun(aTaskDef, loader, handler, loggers, isModule = f.isModule)
               action.execute(consoleLogging).unsafePerformIO.fold(
                 ok => ok,
                 e  => handleRunError(e, loggers, sbtEvents(taskDef, handler))
@@ -50,8 +50,8 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
 
   def done = ""
 
-  def specificationRun(taskDef: TaskDef, loader: ClassLoader, handler: EventHandler, loggers: Array[Logger]): Action[Unit] = {
-    Classes.createInstance[SpecificationStructure](taskDef.fullyQualifiedName, loader).flatMap { spec =>
+  def specificationRun(taskDef: TaskDef, loader: ClassLoader, handler: EventHandler, loggers: Array[Logger], isModule: Boolean): Action[Unit] = {
+    Classes.createInstance[SpecificationStructure](taskDef.fullyQualifiedName+(if (isModule) "$" else ""), loader).flatMap { spec =>
       val env = Env(arguments = commandLineArguments)
 
       val report: Action[Unit] =
@@ -161,7 +161,7 @@ object sbtRun extends SbtRunner(Array(), Array(), Thread.currentThread.getContex
       control.log("The first argument should at least be the specification class name")
     else {
       val taskDef = new TaskDef(arguments(0), Fingerprints.fp1, true, Array())
-      specificationRun(taskDef, Thread.currentThread.getContextClassLoader, NoEventHandler, Array(ConsoleLogger))
+      specificationRun(taskDef, Thread.currentThread.getContextClassLoader, NoEventHandler, Array(ConsoleLogger), isModule = false)
     }
   }
 

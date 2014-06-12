@@ -42,8 +42,8 @@ h2 {
 h3 {
   color: #3A6AAC;
   background-color: #F6F3F3;
-  font-size: 20px;
-  padding: 2px 2px 2px 6px;
+  font-size: 22px;
+  padding: 0px 2px 0px 6px;
   border: 1px solid #aaa;
 }
 h4 {
@@ -51,6 +51,7 @@ h4 {
   background-color: #FFFDFD;
   font-size: 18px;
   padding: 4px 4px 4px 6px;
+  margin: 15px 4px 10px 4px;
   border: 1px solid #bbb;
 }
 h5 {
@@ -143,13 +144,13 @@ stacktrace.error {
   background-color: rgba(255, 153, 153, 0.30);
 }
 
-table.datatable {
+table {
   table-layout: auto;
   width: auto;
   background: #EEEEEE;
   border-collapse: collapse;
   empty-cells: show;
-  margin: 20px 5px 0 5px;
+  margin: 20px 5px 20px 5px;
   padding: 0px;
 
   border: solid #AAAAAA;
@@ -161,34 +162,62 @@ table.datatable {
   font-size: 0.9em;
 }
 
-table.datatable th {
+table th {
   border: solid #AAAAAA;
-  border-width: 0px 1px 1px 0px;
+  border-width: 1px 1px 1px 1px;
   padding: 2px 6px 2px 6px;
 }
-table.datatable td {
+table th .header {
   border: solid #AAAAAA;
-  border-width: 0px 1px 1px 0px;
-  padding: 1px 3px 1px 3px;
+  border-width: 1px 1px 1px 1px;
+  padding: 2px 6px 2px 6px;
 }
-table.datatable .success {
+table td {
+  border: solid #AAAAAA;
+  border-width: 1px 1px 1px 1px;
+  padding: 5px 5px 5px 5px;
+}
+table .success {
   background-color: #CCFFCC;
 }
-table.datatable .failure {
+table .failure {
   background-color: #FFFF99;
 }
-table.datatable .error {
+table .error {
   background-color: #FF9999;
 }
-table.datatable .skipped {
+table .skipped {
   background-color: #DDDDDD;
 }
-table.datatable .info {
+table .info {
   background-color: #FFFFFF;
 }
-table.datatable .success {
+table .success {
   background-color: #CCFFCC;
 }
+table tr.even {
+  background-color: #FFFFFF;
+}
+table tr.odd {
+  background-color: #FFFFFF;
+}
+table td .none {
+  background-color: white;
+  padding: 5px 5px 5px 5px;
+  border: none;
+  border-radius: 0px;
+  box-shadow: none;
+  font-size: 14px;
+}
+div .tabbertab table {
+  border: 0;
+  border-width: 0;
+  border-radius: 0;
+  border-color: none;
+  border-style: none;
+  box-shadow: none;
+}
+
 .issues-toggle {
   font-style: italic;
   color: #5981B4;

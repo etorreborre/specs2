@@ -2,18 +2,21 @@ package org.specs2
 package reporter
 
 import org.specs2.collection.Seqx
-import specification.core.{SpecificationLink, Fragment, SpecStructure, Env}
+import org.specs2.execute.Failure
+import org.specs2.execute.Pending
+import org.specs2.execute.Skipped
+import org.specs2.specification.core.SpecificationLink
+import org.specs2.specification.core._
 import data.Fold
 import specification.process.{Stats, Statistics}
 import io.Paths._
 import main.Arguments
+import scala.Some
 import scala.xml.NodeSeq
 import scalaz.syntax.bind._
 import io._
 import control._
 import java.util.regex.Pattern._
-import specification.core.Env
-import specification.core.SpecificationLink
 import java.io.File
 import java.net.{JarURLConnection, URL}
 import scalaz.std.list._
@@ -147,7 +150,7 @@ trait HtmlPrinter extends Printer {
   
   object Pandoc {
     val executable = "pandoc"
-    val inputFormat = "markdown"
+    val inputFormat = "markdown+pipe_tables"
     val outputFormat = "html"
     
     def arguments(bodyPath: String, templatePath: String, variables: Map[String, String], outputFile: String, options: Pandoc): Seq[String] = {
@@ -251,6 +254,9 @@ trait HtmlPrinter extends Printer {
 
       case Fragment(link: SpecificationLink,_,_) =>
         <link class="ok"><a href={link.url.relativeTo(baseDir)} tooltip={link.tooltip} class="ok">{link.linkText}</a></link>
+
+      case Fragment(form @ FormDescription(_),_,_) =>
+        form.xml(arguments)
 
       case other => NodeSeq.Empty
     }

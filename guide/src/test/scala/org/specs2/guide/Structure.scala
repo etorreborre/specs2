@@ -24,9 +24,9 @@ Both ways of writing specifications have advantages and drawbacks:
  - Acceptance specifications are easier to read as a narrative but require navigation between the text and the code. You also need to define a `is` method holding the body of the specification.
  - Unit specifications are easier to navigate but the text tends to be lost in a sea of code
 
-#### _Acceptance_ specification
+#### Acceptance specification
 
-An _acceptance_ specification extends `org.specs2.Specification` and defines the `is` method. You can implement this method with an interpolated **`s2`** string: ${snippet{
+An acceptance specification extends `org.specs2.Specification` and defines the `is` method. You can implement this method with an interpolated **`s2`** string: ${snippet{
 class MySpecification extends org.specs2.Specification { def is = s2"""
 
  this is my specification
@@ -44,11 +44,11 @@ The `s2` string contains the text of your specification as well as some referenc
  - one `Example` with the description "where example 1 must be true" and the code `1 must_== 1`
  - another `Example` with the description "where example 2 must be true" and the code `2 must_== 2`
 
-All the rest (`"this is my specification"`) is parsed as `Text` and is not executed.
+All the rest, `"this is my specification"`, is parsed as `Text` and is not executed.
 
-#### _Unit_ specification
+#### Unit specification
 
-A _unit_ specification extends `org.specs2.mutable.Specification` and uses the `>>` operator to create "blocks" containing `Texts` and `Examples`: ${snippet{
+A unit specification extends `org.specs2.mutable.Specification` and uses the `>>` operator to create "blocks" containing `Texts` and `Examples`: ${snippet{
 class MySpecification extends mutable.Specification {
   "this is my specification" >> {
     "where example 1 must be true" >> {
@@ -72,15 +72,15 @@ The `>>` blocks can be nested and this allows you to structure your specificatio
 
 ### Expectations
 
-There is another major difference between the acceptance specifications and unit specifications. The first style encourages you to write [one expectation per example](http://bit.ly/one_assertion_per_test) while the second allows you to use several. Having just one expectation per example is useful because when a specification fails you know immediately what is wrong. However it is sometimes expensive to setup data for an example so having several expectations sharing the same setup is useful as well.
+There is another major difference between the acceptance specifications and unit specifications. The first style encourages you to write [one expectation per example](http://bit.ly/one_assertion_per_test) while the second allows to use several. One expectation per example is useful because when a specification fails, you know immediately what is wrong. However it is sometimes expensive to setup data for an example so having several expectations sharing the same setup is sometimes what you want.
 
-The good news is that for each of the 2 main styles, acceptance and unit, you can choose what kind of mode you want for the expectations if the default mode doesn't suit you.
+The good news is that for each of the 2 main styles, acceptance and unit, you can choose exactly which mode you prefer if the default mode is not convenient.
 
 #### Functional expectations
 
-In an acceptance specification, by default, the `Result` of an `Example` is always given by the last statement of its body. For instance, this example will never fail because the first expectation is "lost": ${snippet{ s2"""
-
-  // this will never fail!
+In an acceptance specification, by default, the `Result` of an `Example` is always given by the last statement of its body. For instance, this example will never fail because the first expectation is "lost": ${snippet{
+// this will never fail!
+s2"""
   my example on strings $e1
 """
   def e1 = {
@@ -98,7 +98,7 @@ s2"""
            ("hello" must startWith("hell"))
 }}
 
-This is a bit tedious and not very pleasing to read so you can see why this mode encourages one expectation per example only. But if you need several expectations per example as below, you just need to mix-in the `org.specs2.execute.ThrownExpectations` trait to the specification.
+This is a bit tedious and not very pleasing to read so you can see why this mode encourages one expectation per example only. If you need several expectations per example, you can need to mix-in the `org.specs2.execute.ThrownExpectations` trait to the specification which is the one used for unit specifications by default.
 
 ##### Thrown expectations
 
@@ -115,7 +115,7 @@ It is also possible to use the "functional" expectation mode with a unit specifi
 
 ### Now learn how to...
 
- - use ${"matchers" ~/ new Matchers} to specify the body of your examples
+ - use ${"matchers" ~/ Matchers} to specify the body of your examples
  - set up ${"contexts" ~/ Contexts} for the examples
  - control the ${"execution" ~/ Execution} of a specification
  - ${"run" ~/ new Runners} a specification
@@ -125,6 +125,9 @@ It is also possible to use the "functional" expectation mode with a unit specifi
  - create *auto-examples* where the code *is* the description of the `Example`
  - collect *all* expectations
  - use scripts and auto-numbered examples
+ - use the Given-When-Then style for structuring specifications
+ - mark examples as pending until they succeed
+ - use the command line arguments to define the body of an example
 
 """
 /*

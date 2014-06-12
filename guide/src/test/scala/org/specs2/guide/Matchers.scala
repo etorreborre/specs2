@@ -13,7 +13,60 @@ import org.scalacheck.{Arbitrary, Gen, Prop, Test}
 import matcher.{Hamcrest, Expectable, Matcher, Parameters}
 import scala.concurrent.duration._
 
-class Matchers extends UserGuidePage with Snippets with ScalaCheck with Mockito with Forms { def is =
+object Matchers extends UserGuidePage { def is = s2"""
+
+The most frequent way to specify some expected behaviour with specs2 is to use _matchers_. You generally execute an action, a command or a function and then check if the actual value you get is equal to an expected one (the ["arrange-act-assert"](http://bit.ly/arrange_act_assert) paradigm). For example you create a specification for an object manipulating paths:${snippet{
+// 8<---
+object Paths { def directoryPath(p: String) = p+"/" }
+// 8<---
+// describe the functionality
+s2"the directoryPath method should return well-formed paths $e1"
+
+// give an example with some code
+def e1 = Paths.directoryPath("/tmp/path/to/dir") must beEqualTo("/tmp/path/to/dir/")
+}}
+
+The `must` operator takes the actual value returned by `directoryPath` and applies it to a `Matcher` built with the expected value. `beEqualTo` is one of the many matchers defined by ***specs2***, it just checks if 2 values are equal. In the following sections you will learn
+
+ - different variations on equality checking
+ - to use the matchers for the most common data types in Scala, and most notably `Traversable` ones
+ - how to derive a new matcher from an existing one
+ - how to create your own matchers
+
+### Equality
+
+${EqualityMatchers.text}
+
+Now let's check the other matchers.
+
+### Out of the box
+
+These are the matchers which are available when you extends `Specification`
+
+  ${ MatcherCards.toTabs }
+
+### Now learn how to...
+
+ - use standard results (`failure`, `success`, `skipped`, `todo`...) instead of matchers
+ - add descriptions to your expectations to create even better failure messages
+ - use datatables to conveniently group several examples into one
+ - use ScalaCheck to generate and verify data for your examples
+ - use Mockito to mock the interactions with another system
+ - use `Forms` to display actual and expected values in html tables
+
+### And if you want to know more
+
+ - read the reference card on all of ***specs2*** matchers
+ - use syntactic variations on the `value must matcherOf(expected)` form
+ - implement the `AsResult` typeclass to go beyond matchers
+ - use the `beA[CaseClass]` matcher to automatically create matchers for case classes
+ - use the `Analysis` matchers to specify dependencies between packages
+
+"""
+
+}
+
+class oldmatchers extends UserGuidePage with Snippets with ScalaCheck with Mockito with Forms { def is =
   generalSection ^
   scalaCheckSection ^
   mockitoSection

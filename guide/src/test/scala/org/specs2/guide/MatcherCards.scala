@@ -10,7 +10,6 @@ import scala.concurrent.duration._
 object MatcherCards extends Cards {
   def title = "Specification Matchers"
   def cards = Seq(
-    EqualityMatchers,
     AnyMatchers,
     OptionEitherMatchers,
     TryMatchers,
@@ -38,9 +37,9 @@ object OptionalMatcherCards extends Cards {
 object AnyMatchers extends Card {
   def title = "Any"
   def text = s2"""
-These matchers can be used with `Any` objects:
+These matchers can be used with objects, regardless of their type:
 
- * `beLike { case exp => ok }`: to check if an object is like a given pattern (`ok` is a predefined value, `ko` is the opposite)
+ * `beLike { case exp => result }`: to check if an object is like a given pattern. `result` can be any expression using a matcher
  * `beLike { case exp => exp must beXXX }`: to check if an object is like a given pattern, and verifies a condition
  * `beNull`
  * `beAsNullAs`: when 2 objects must be null at the same time if one of them is null
@@ -56,39 +55,33 @@ These matchers can be used with `Any` objects:
 object EqualityMatchers extends Card {
   def title = "Equality"
   def text = s2"""
-The most common type of matcher is ***`beEqualTo`*** to test for equality. There are different ways to use this matcher:
+The most common type of matcher is ***`beEqualTo`*** to test for equality. It is so frequent that there are several equivalent syntaxes to declare equality
 
  Matcher                    |  Comment
  -------------------------- | --------------------------
  `1 must beEqualTo(1)      `| the normal way
- `1 must be_==(1)          `| with a shorter matcher
+ `1 must be_==(1)          `| with a symbol
  `1 must_== 1              `| my favorite!
  `1 mustEqual 1            `| if you dislike underscores
  `1 should_== 1            `| for should lovers
- `1 === 1                  `| the ultimate shortcut
+ `1 === 1                  `| the ultimate shortcut, synonym for `1 must beEqualTo(1)`
  `1 must be equalTo(1)     `| with a literate style
 
-   *with a negation*        |
- -------------------------- |
- `1 must not be equalTo(2) `|
- `1 must_!= 2              `|
- `1 mustNotEqual 2         `|
- `1 must be_!=(2)          `|
- `1 !== 2                  `|
+The `beEqualTo` matcher is using the regular `==` Scala equality. However in the case of `Arrays`, Scala `==` is just using reference equality, `eq`, for `Arrays`. So the `beEqualTo` matcher has been adapted to transform `Arrays` to `Seqs` before checking for equality, so that `Array(1, 2, 3) === Array(1, 2, 3)` (despite the fact that `Array(1, 2, 3) != Array(1, 2, 3)`).
 
-For some other types of equality:
+There are also other notions of equality
 
  Matcher                    |  Comment
  -------------------------- | --------------------------
- `be_===                   `| same as `be_==` but can be used with some combinators like `^^^` or `toSeq` because the parameter type is kept
- `be_==~                   `| checks if `(a:A) == (b:A)` when there is an implicit conversion from B (the type of b) to A (the type of a)
- `beTheSameAs              `| checks if `a eq b` (`a must be(b)` also works)
+ `beTypedEqualTo           `| typed equality. `a must beTypedEqualTo(b)` will not work if `a` and `b` don't have compatible types
+ `be_===                   `| synonym for `beTypedEqualTo`
+ `a ==== b                 `| synonym for `a must beTypedEqualTo(b)`
+ `be_==~                   `| checks if `(a: A) == conv(b: B)` when there is an implicit conversion `conv` from `B` to `A`
+ `beTheSameAs              `| reference equality: checks if `a eq b` (`a must be(b)` also works)
+ `be                       `| `a must be(b)`: synonym for `beTheSameAs`
  `beTrue, beFalse          `| shortcuts for Boolean equality
- `a ==== b                 `| similar to `a === b` but will not typecheck if `a` and `b` don't have the same type
 
-
-Note: the `beEqualTo` matcher is using the regular `==` Scala equality. However in the case of `Arrays`, Scala `==` is just using reference equality, `eq`, for `Arrays`. So the `beEqualTo` matcher has been adapted to transform `Arrays` to `Seqs` before checking for equality, so that `Array(1, 2, 3) === Array(1, 2, 3)` (despite the fact that `Array(1, 2, 3) != Array(1, 2, 3)`).
-  """
+"""
 }
 
 object OptionEitherMatchers extends Card {
@@ -193,7 +186,7 @@ Less often you need to do comparisons on Numerical values:
    `5 must beBetween(4, 6).excludingBounds`
    `// with brackets notation`
    `5 must (`be[`(4, 7)`]`) `
-"""
+                                                                                                                  ."""
 }
 
 object ExceptionMatchers extends Card {
@@ -332,7 +325,7 @@ Maps have their own matchers as well, to check keys and values:
 
  * `beDefinedBy` checks if a PartialFunction is defined for a given value
  and returns another one
-   `partial` must beDefinedBy(1 -> true)
+   `partial must beDefinedBy(1 -> true)`
 """
 }
 
