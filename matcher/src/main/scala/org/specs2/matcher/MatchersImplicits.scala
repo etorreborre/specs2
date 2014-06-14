@@ -54,43 +54,6 @@ trait MatchersImplicits extends Expectations
     def atMostOnce(values: GenTraversableOnce[T])  = createExpectable(values).applyMatcher(cc.atMostOnce)
   }
 
-  implicit class matcherContainResult[T](m: Matcher[T]) { outer =>
-    private val cc: ContainWithResult[T] = ContainWithResult(ValueChecks.matcherIsValueCheck(m))
-    /** @deprecated use collection must contain(matcher).forall instead */
-    def forall                          : ContainWithResult[T] = cc.forall
-    /** @deprecated use collection must contain(matcher).foreach instead */
-    def foreach                         : ContainWithResult[T] = cc.foreach
-    /** @deprecated use collection must contain(matcher).atLeastOnce instead */
-    def atLeastOnce                     : ContainWithResult[T] = cc.atLeastOnce
-    /** @deprecated use collection must contain(matcher).atMostOnce instead */
-    def atMostOnce                      : ContainWithResult[T] = cc.atMostOnce
-    /** @deprecated use collection must contain(matcher).atLeast instead */
-    def atLeast(n: Times)               : ContainWithResult[T] = cc.atLeast(n)
-    /** @deprecated use collection must contain(matcher).atLeast instead */
-    def atLeast(n: Int)                 : ContainWithResult[T] = cc.atLeast(n)
-    /** @deprecated use collection must contain(matcher).atMost instead */
-    def atMost(n: Times)                : ContainWithResult[T] = cc.atMost(n)
-    /** @deprecated use collection must contain(matcher).atMost instead */
-    def atMost(n: Int)                  : ContainWithResult[T] = cc.atMost(n)
-    /** @deprecated use collection must contain(matcher).between instead */
-    def between(min: Times, max: Times) : ContainWithResult[T] = cc.between(min, max)
-    /** @deprecated use collection must contain(matcher).between instead */
-    def between(min: Int, max: Int)     : ContainWithResult[T] = cc.between(min, max)
-    /** @deprecated use collection must contain(matcher).exactly instead */
-    def exactly(n: Times)               : ContainWithResult[T] = cc.exactly(n)
-    /** @deprecated use collection must contain(matcher).exactly instead */
-    def exactly(n: Int)                 : ContainWithResult[T] = cc.exactly(n)
-
-    /** @deprecated use collection must contain(matcher).forall(values) instead */
-    def forall(values: GenTraversableOnce[T])     : MatchResult[GenTraversableOnce[T]] = cc.forall     (createExpectable(values))
-    /** @deprecated use collection must contain(matcher).foreach(values) instead */
-    def foreach(values: GenTraversableOnce[T])    : MatchResult[GenTraversableOnce[T]] = cc.foreach    (createExpectable(values))
-    /** @deprecated use collection must contain(matcher).atLeastOnce(values) instead */
-    def atLeastOnce(values: GenTraversableOnce[T]): MatchResult[GenTraversableOnce[T]] = cc.atLeastOnce(createExpectable(values))
-    /** @deprecated use collection must contain(matcher).atMostOnce(values) instead */
-    def atMostOnce(values: GenTraversableOnce[T]) : MatchResult[GenTraversableOnce[T]] = cc.atMostOnce (createExpectable(values))
-  }
-
   /** this allows a function returning a matcher to be used where the same function with a byname parameter is expected */
   implicit def stringMatcherFunctionToBynameMatcherFunction[T, R](f: T => Matcher[R]): (=>T) => Matcher[R] = {
     def f1(t: =>T) = f(t)
@@ -166,13 +129,13 @@ trait MatchersImplicits extends Expectations
   /** verify the function f for all the values, stopping after the first failure */
   def forall[T, R : AsResult](values: GenTraversableOnce[T])(f: T => R) = f.forall(values)
   /** apply a matcher for all values */
-  def forall[T](matcher: Matcher[T]) = matcher.forall
+  def forall[T](matcher: Matcher[T]) = ContainWithResult(ValueChecks.matcherIsValueCheck(matcher)).forall
   /** verify the function f for all the values, stopping after the first failure, where the PartialFunction is defined */
   def forallWhen[T, U](values: GenTraversable[T])(f: PartialFunction[T, MatchResult[U]]) = forall(values.filter(f.isDefinedAt))(f)
   /** verify the function f for all the values, and collect all failures */
   def foreach[T, R : AsResult](values: GenTraversableOnce[T])(f: T => R) = f.foreach(values)
   /** apply a matcher foreach value */
-  def foreach[T](matcher: Matcher[T]) = matcher.foreach
+  def foreach[T](matcher: Matcher[T]) = ContainWithResult(ValueChecks.matcherIsValueCheck(matcher)).foreach
   /** verify the function f for all the values, and collect all failures, where the PartialFunction is defined */
   def foreachWhen[T, R : AsResult](values: GenTraversable[T])(f: PartialFunction[T, R]) = foreach(values.filter(f.isDefinedAt))(f)
   /** verify the function f for at least one value */
@@ -180,9 +143,9 @@ trait MatchersImplicits extends Expectations
   /** verify the function f for at least one value */
   def atMostOnce[T, R : AsResult](values: GenTraversableOnce[T])(f: T => R) = f.atMostOnce(values)
   /** apply a matcher atLeast one value */
-  def atLeastOnce[T](matcher: Matcher[T]) = matcher.atLeastOnce
+  def atLeastOnce[T](matcher: Matcher[T]) = ContainWithResult(ValueChecks.matcherIsValueCheck(matcher)).atLeastOnce
   /** apply a matcher atLeast one value */
-  def atMostOnce[T](matcher: Matcher[T]) = matcher.atMostOnce
+  def atMostOnce[T](matcher: Matcher[T]) = ContainWithResult(ValueChecks.matcherIsValueCheck(matcher)).atMostOnce
   /** verify the function f for at least one value, where the PartialFunction is defined */
   def atLeastOnceWhen[T, R : AsResult](values: GenTraversable[T])(f: PartialFunction[T, R]) = atLeastOnce(values.filter(f.isDefinedAt))(f)
   /** verify the function f for at least one value, where the PartialFunction is defined */
