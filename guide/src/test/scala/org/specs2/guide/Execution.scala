@@ -38,6 +38,24 @@ There is no "result" for a step but if it throws an Exception an `Error` will be
 
 ### Stop the execution
 
+You can however control if the rest of the specification must be executed by adding some constraints on the step. For example:${snippet{
+  class StepWithStopOnErrorSpec extends Specification { def is = s2"""
+  this is example 1 $ok
+  this is example 2 $ok
+  ${step { sys.error("sorry!"); "stop here for a second" }.stopOnError}
+
+  this is example 3 $ok
+  this is example 4 $ok
+"""}
+}}
+
+When this specification is executed examples 3 and 4 will be skipped because the step returns an `Error`. You are not limited to errors and the API gives you:
+
+ - `stopOnFail` stop if there is a failure in the previous examples or in the step
+ - `stopOnSkipped` stop if there is a skipped result in the previous examples or in the step
+ - `stopWhen(Result => Boolean)` stop if there the `and`-ed result of the previous examples and the step verify a condition
+
+----------
 
 
 This section summarizes the execution algorithm of a specification based on its fragments:
