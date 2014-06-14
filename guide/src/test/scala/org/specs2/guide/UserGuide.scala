@@ -13,6 +13,8 @@ object UserGuide extends UserGuidePage { def is = "User Guide".title ^ s2"""
   In this user guide, you will find:
 
   a ${ "quick start guide" ~ QuickStart }
+
+  
   $${ "how to " ~ ("structure your specification", new Structure)        }
   $${ "how to use " ~ ("matchers", new Matchers)                         }
   $${ "how to " ~ ("execute a specification", new Runners)               }
