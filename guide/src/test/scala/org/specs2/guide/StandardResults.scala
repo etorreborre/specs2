@@ -35,5 +35,29 @@ Two additional results are also available to track the progress of features:
   * `done`: a `Success` with the message "DONE"
   * `todo`: a `Pending` with the message "TODO"
 
+### Skipping an example
+
+If you already have some code for your example, adding `skipped` at the end to skip it is not very efficient:
+
+ - there is a possibility that the code throws an exception
+ - the code will be executed which will waste resources
+
+What you want in that case in to skip the whole block:${snippet{
+  s2" this example *must* be skipped $e1"
+
+  def e1 = skipped {
+    // whatever code is in there, it will not be executed and the result will be skipped
+    throw new Exception("uh oh")
+    1 === 1
+  }
+}}
+
+### Standard `MatchResults`
+
+When combining matchers you might be expected to return a `MatchResult[_]`. There are predefined values for those too:
+
+ * `ok` or `ok(message)` for a successful `MatchResult`
+ * `ko` or `ko(message)` for a failed `MatchResult`
+
 """
 }

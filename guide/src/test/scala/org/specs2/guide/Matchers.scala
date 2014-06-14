@@ -220,7 +220,7 @@ In the code above you have to:
 
  - read the reference card on all of ***specs2*** matchers
  - use syntactic variations on the `value must matcherOf(expected)` form
- - implement the `AsResult` typeclass to go beyond matchers
+ - implement the ${"`AsResult` typeclass" ~ AsResultTypeclass} to go beyond matchers
  - use the `beA[CaseClass]` matcher to automatically create matchers for case classes
  - use the `Analysis` matchers to specify dependencies between packages
 
