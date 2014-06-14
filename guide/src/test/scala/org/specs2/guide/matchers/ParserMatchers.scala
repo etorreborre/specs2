@@ -11,13 +11,13 @@ object ParserMatchers extends Card with UserGuideVariables {
   def text =  s2"""
 Scala provides a parsing library using [parser combinators](http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html).
 
-You can specify your own parsers by:
+To specify your own parsers you need to:
 
- * extending the `org.specs2.matcher.ParserMatchers` trait
- * associating the `val parsers` variable with your parsers definition
- * using the `beASuccess`, `beAFailure`, `succeedOn`, `failOn`, `errorOn` matchers to specify the results of parsing input
+ * extend the `org.specs2.matcher.ParserMatchers` trait
+ * associate the `val parsers` variable with your parsers definition
+ * use the `beASuccess`, `beAFailure`, `succeedOn`, `failOn`, `errorOn` matchers to specify the results of parsing input
  strings. `beAPartialSuccess`, `be aPartialSuccess`, `succeedOn.partially` will allow a successful match only on part of the input
- * using `haveSuccessResult` and `haveFailureMsg` to specify what happens *only* on success or failure. Those matchers accept
+ * use `haveSuccessResult` and `haveFailureMsg` to specify what happens *only* on success or failure. Those matchers accept
  a String or a matcher so that
  . `haveSuccessResult("r") <==> haveSuccessResult(beMatching(".*r.*") ^^ ((_:Any).toString)`
  . `haveFailingMsg("m") <==> haveFailingMsg(beMatching(".*r.*"))`
