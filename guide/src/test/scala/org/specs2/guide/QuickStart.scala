@@ -48,8 +48,8 @@ Finished in 0 second, 58 ms
 
 The rest of this ${see(UserGuide)} will show you how to:
 
- * [structure](structure) your specification using one of the 2 major "styles" of specifications: "Acceptance" and "Unit"
- * use the many ***specs2*** [matchers](matchers) to specify precisely the expected behavior of your application
+ * ${"structure" ~ Structure} your specification using one of the 2 major "styles" of specifications: "Acceptance" and "Unit"
+ * use the many ***specs2*** ${"matchers" ~ Matchers} to specify precisely the expected behavior of your application
  * [run](run) your specification and output results in various formats
 """
 

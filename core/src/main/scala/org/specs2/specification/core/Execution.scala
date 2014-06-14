@@ -23,7 +23,7 @@ case class Execution(run:            Option[Env => Result],
   lazy val executedResult = executed
   lazy val result = executedResult.getOrElse(org.specs2.execute.Success("no execution yet defined"))
 
-  def execute(env: Env) = run.map(r => setResult(r(env))).getOrElse(this)
+  def execute(env: Env) = run.fold(this)(r => setResult(r(env)))
 
   def updateRun(newRun: (Env => Result) => (Env => Result)) = copy(run = run.map(r => newRun(r)))
   def setResult(r: =>Result) = copy(executed = Some(r))
@@ -31,7 +31,7 @@ case class Execution(run:            Option[Env => Result],
   def stopNextIf(r: Result): Execution            = stopNextIf((r1: Result) => r1.status == r.status)
   def stopNextIf(f: Result => Boolean): Execution = copy(nextMustStopIf = f)
   def skip = setResult(Skipped())
-  def makeGlobal: Execution = makeGlobal(true)
+  def makeGlobal: Execution = makeGlobal(when = true)
   def makeGlobal(when: Boolean): Execution = copy(isolable = !when)
   def isRunnable = run.isDefined
 
@@ -45,7 +45,7 @@ case class Execution(run:            Option[Env => Result],
     "Execution("+
       (if (run.isDefined) "executable" else "no run")+
       (if (!isolable) ", global" else "") +
-      (previousResult.map(", previous "+_) getOrElse "") +
+      previousResult.fold("")(", previous " + _) +
      ")"
 
   override def equals(a: Any) = a match {

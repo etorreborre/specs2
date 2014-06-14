@@ -3,21 +3,21 @@ package guide
 
 import org.specs2.specification._
 
-class TestAcceptanceSpec extends Specification with BeforeAfterEach with BeforeAfterAll
-{ def is = sequential ^ s2"""
+class TestAcceptanceSpec extends Specification with BeforeAfterAll { def is =  s2"""
   first example $e1
   first example $e1
+  ${step { sys.error("bang");"stop here".pp}.stopOnError}
   first example $e1
   first example $e1
 """
 
-  def beforeAll = "before all".pp
-  def afterAll = "after all".pp
+  def beforeAll = "before all"
+  def afterAll = "after all"
 
-  def before = "before".pp
-  def after = "after".pp
+  def before = "before"
+  def after = "after"
 
-  def e1 = ok.pp
+  def e1 = ok
 
 
 }

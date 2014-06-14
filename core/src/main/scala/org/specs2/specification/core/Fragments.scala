@@ -57,8 +57,10 @@ case class Fragment(description: Description, execution: Execution, location: Lo
   def mustStopOn(r: Result) = execution.nextMustStopIf(r)
 
   def stopOn(r: Result) = updateExecution(_.stopNextIf(r))
-  def stopOnFail        = stopOn(org.specs2.execute.Failure())
-  def stopOnSkipped     = stopOn(Skipped())
+  def stopOnError       = stopWhen(_.isError)
+  def stopOnFail        = stopWhen(_.isFailure)
+  def stopOnSkipped     = stopWhen(_.isSkipped)
+
   def stopWhen(f: Result => Boolean) = updateExecution(_.stopNextIf(f))
   def join              = updateExecution(_.join)
   def isolate           = updateExecution(_.makeGlobal)

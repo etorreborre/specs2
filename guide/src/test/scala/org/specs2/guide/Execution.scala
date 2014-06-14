@@ -1,15 +1,44 @@
 package org.specs2
 package guide
-package old
-package structure
-object Execution extends Specification with UserGuideVariables {
-def is =
-  s2"""
-      |
-    """
 
-  def section = s"""
-### Execution
+object Execution extends UserGuidePage { def is = s2"""
+
+## Execution
+
+### Parallel by default
+
+***specs2*** examples are executed concurrently by default:
+
+ - this makes the execution faster
+
+ - it encourages to write independent examples when the result of a given example should not be influenced by others
+
+Then starting from this default you can progressively add constraints to get more control over the execution.
+
+### Steps
+
+A `Step` is an action which can be executed anywhere in a specification. When you declare a `Step` like this:${snippet{
+class StepSpec extends Specification { def is = s2"""
+  this is example 1 $ok
+  this is example 2 $ok
+  ${step("stop here for a second")}
+
+  this is example 3 $ok
+  this is example 4 $ok
+"""}
+}}
+
+Then the specification will:
+
+  - execute examples 1 and 2 in parallel
+  - execute the step
+  - execute examples 3 and 4 in parallel
+
+There is no "result" for a step but if it throws an Exception an `Error` will be reported. This will not however stop the execution of the rest of the specification.
+
+### Stop the execution
+
+
 
 This section summarizes the execution algorithm of a specification based on its fragments:
 

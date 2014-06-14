@@ -253,8 +253,6 @@ trait HtmlPrinter extends Printer {
         }
 
       case Fragment(link: SpecificationLink,_,_) =>
-        println(link.url)
-        println(baseDir)
         <link class="ok"><a href={link.url.rebase(baseDir)} tooltip={link.tooltip} class="ok">{link.linkText}</a></link>
 
       case Fragment(form @ FormDescription(_),_,_) =>

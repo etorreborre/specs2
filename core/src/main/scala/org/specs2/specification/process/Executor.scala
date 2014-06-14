@@ -57,10 +57,11 @@ trait Executor {
         else                             Success()
 
       // depending on the result we decide if we should go on executing fragments
-      val nextMustStop = mustStop ||
-                         arguments.stopOnFail && barrierResult.isFailure ||
-                         arguments.stopOnSkip && barrierResult.isSkipped ||
-                         fragment.execution.nextMustStopIf(barrierResult)
+      val nextMustStopBecauseOfBarrierResult =
+        mustStop ||
+        arguments.stopOnFail && barrierResult.isFailure ||
+        arguments.stopOnSkip && barrierResult.isSkipped ||
+        fragment.execution.nextMustStopIf(barrierResult)
 
       // if the previous fragments decided that we should stop the execution
       // skip the execution
@@ -77,12 +78,17 @@ trait Executor {
       }(env.executionEnv.timeOut.getOrElse(fragment.execution.duration))
 
       // if this fragment is a join point, start a new sequence
-      val nextBarrier =
-        if (fragment.execution.mustJoin) Task.now(executedFragment.execution.result)
+      // and check if the execution needs to be stopped in case of a step error
+      val (nextBarrier, nextMustStopBecauseOfStepResult) =
+        if (fragment.execution.mustJoin) {
+          val stepResult = executedFragment.executionResult
+          (Task.now(stepResult), fragment.execution.nextMustStopIf(stepResult))
+        }
         // otherwise add the current execution to the sequence of current executions
-        else                             barrier.map { case r => Result.ResultFailureMonoid.append(r, executedFragment.execution.result) }
+        else
+          (barrier.map { case r => Result.ResultFailureMonoid.append(r, executedFragment.execution.result) }, false)
 
-      emit(executingFragment) fby sequencedExecution(env, nextBarrier, nextMustStop)
+      emit(executingFragment) fby sequencedExecution(env, nextBarrier, nextMustStopBecauseOfBarrierResult || nextMustStopBecauseOfStepResult)
     }
 
   /** execute one fragment */

@@ -14,7 +14,7 @@ object UserGuide extends UserGuidePage { def is = "User Guide".title ^ s2"""
 
   a ${ "quick start guide" ~ QuickStart }
 
-  
+
   $${ "how to " ~ ("structure your specification", new Structure)        }
   $${ "how to use " ~ ("matchers", new Matchers)                         }
   $${ "how to " ~ ("execute a specification", new Runners)               }
