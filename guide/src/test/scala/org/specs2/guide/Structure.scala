@@ -126,6 +126,7 @@ It is also possible to use the "functional" expectation mode with a unit specifi
  - use the Given-When-Then style for structuring specifications
  - mark examples as pending until they succeed
  - use the command line arguments to define the body of an example
+ - create a trait which will add specification fragments before or after an other specification when mixed-in
 
 """
 /*

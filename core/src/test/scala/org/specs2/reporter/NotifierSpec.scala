@@ -6,10 +6,10 @@ import control._
 import matcher.ControlMatchers._
 import execute.{Result, AsResult, Details}
 import io.StringOutput
-import specification.core.{EnvFixture, Env}
-import specification.FixtureExample
+import specification.core.{ForEachEnv, Env}
+import specification.ForEach
 
-class NotifierSpec extends Specification with EnvFixture { def is = s2"""
+class NotifierSpec extends Specification with ForEachEnv { def is = s2"""
 
  Run a mutable spec with a Notifier $a1
 

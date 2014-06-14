@@ -4,14 +4,14 @@ package matcher
 import java.io.File
 import execute.AsResult
 import io._
-import specification.BeforeAfterExample
+import specification.BeforeAfterEach
 import control._
 import Actions._
 import scalaz.std.anyVal._
 import scalaz.syntax.bind._
 
 class FilesContentMatchersSpec extends Specification
-  with FilesContentMatchers with BeforeAfterExample with ThrownExpectations with FileSystem { def is = sequential ^ diffs(show = true, triggerSize = 0, diffRatio = 100)^ s2"""
+  with FilesContentMatchers with BeforeAfterEach with ThrownExpectations with FileSystem { def is = sequential ^ diffs(show = true, triggerSize = 0, diffRatio = 100)^ s2"""
 
  File content matchers help to compare the contents of 2 directories:
 

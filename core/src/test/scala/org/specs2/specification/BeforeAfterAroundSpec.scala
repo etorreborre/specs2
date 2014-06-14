@@ -21,13 +21,13 @@ class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
 
   "before" - new g1 {
     e1 := executeContains(
-      new Spec with BeforeExample with StringOutput {
+      new Spec with BeforeEach with StringOutput {
         def before { println("before") }
         "ex1" ! success
       }, "before")
 
     e2 := executeContains(
-      new Specification with BeforeExample with StringOutput {
+      new Specification with BeforeEach with StringOutput {
         def before { println("before") }
         def is = "ex1" ! success
       }, "before")
@@ -36,13 +36,13 @@ class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
 
   "other" - new g2 {
     e1 := executeContains(
-    new Spec with AfterExample with StringOutput {
+    new Spec with AfterEach with StringOutput {
       def after { println("after") }
       "ex1" ! success
     },"after")
 
     e2 := executeContains(
-      new Spec with AroundExample with StringOutput {
+      new Spec with AroundEach with StringOutput {
         def around[R : AsResult](r: =>R) = { println("around"); AsResult(r) }
         "ex1" ! success
       },"around")

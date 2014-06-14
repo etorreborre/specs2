@@ -57,10 +57,10 @@ class DefineContextsSpec extends Specification {
   }
 
   /**
-   * This specification uses the `BeforeExample` trait to execute some code before each example
+   * This specification uses the `BeforeEach` trait to execute some code before each example
    * by simply defining a `before` method
    */
-  class BeforeExampleSpecification extends Specification with BeforeExample { def is = s2"""
+  class BeforeEachSpecification extends Specification with BeforeEach { def is = s2"""
 
     This is a list of examples
       example1                                  $ok
@@ -70,9 +70,9 @@ class DefineContextsSpec extends Specification {
   }
 
   /**
-   * This mutable specification also uses the `BeforeExample` trait
+   * This mutable specification also uses the `BeforeEach` trait
    */
-  class BeforeExampleMutableSpecification extends org.specs2.mutable.Specification with BeforeExample {
+  class BeforeEachMutableSpecification extends org.specs2.mutable.Specification with BeforeEach {
     "This is a list of examples" >> {
       "example1"                 >> success
       "example2"                 >> success
@@ -85,7 +85,7 @@ class DefineContextsSpec extends Specification {
    * This specification shows how to create an Around context that will measure the execution time of
    * each example and update the result message
    */
-  class TimedExecutionSpecification extends Specification with AroundExample { def is = s2"""
+  class TimedExecutionSpecification extends Specification with AroundEach { def is = s2"""
     example 1 ${ Thread.sleep(90); ok }
     example 2 ${ Thread.sleep(10); ok }
     """
@@ -187,8 +187,8 @@ class DefineContextsSpec extends Specification {
   def is = sequential ^
            new BeforeSpecification ^
            new BeforeMutableSpecification ^
-           new BeforeExampleMutableSpecification ^
-           new BeforeExampleSpecification ^
+           new BeforeEachMutableSpecification ^
+           new BeforeEachSpecification ^
            new TimedExecutionSpecification ^
            new TimedDescribedSpecification
 }

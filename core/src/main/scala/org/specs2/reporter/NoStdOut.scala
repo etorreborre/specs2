@@ -44,6 +44,6 @@ object NullOutputStream extends OutputStream {
  * This trait allows to remove any console display during the execution of the examples
  * of a Specification
  */
-trait NoStdOutAroundExample extends AroundExample {
+trait NoStdOutAroundEach extends AroundEach {
   def around[T : AsResult](t: =>T): Result = NoStdOut(t)
 }

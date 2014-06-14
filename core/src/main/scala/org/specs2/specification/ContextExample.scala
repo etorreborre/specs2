@@ -17,7 +17,7 @@ trait ContextExample extends FragmentsFactory { outer =>
 /**
  * For each created example use a given before action
  */
-trait BeforeExample extends ContextExample { outer =>
+trait BeforeEach extends ContextExample { outer =>
   protected def before: Any
   protected def context = new Before { def before = outer.before }
 }
@@ -25,7 +25,7 @@ trait BeforeExample extends ContextExample { outer =>
 /**
  * For each created example use a given after action
  */
-trait AfterExample extends ContextExample { outer =>
+trait AfterEach extends ContextExample { outer =>
   protected def after: Any
   protected def context = new After { def after = outer.after }
 }
@@ -33,9 +33,8 @@ trait AfterExample extends ContextExample { outer =>
 /**
  * For each created example use a given before action
  */
-trait BeforeAfterExample extends ContextExample { outer =>
+trait BeforeAfterEach extends ContextExample { outer =>
   protected def before: Any
-
   protected def after: Any
 
   protected def context = new BeforeAfter {
@@ -47,7 +46,7 @@ trait BeforeAfterExample extends ContextExample { outer =>
 /**
  * For each created example use a given around action
  */
-trait AroundExample extends ContextExample { outer =>
+trait AroundEach extends ContextExample { outer =>
   protected def around[R : AsResult](r: =>R): Result
   protected def context = new Around { def around[R : AsResult](r: =>R) = outer.around(r) }
 }
@@ -55,11 +54,11 @@ trait AroundExample extends ContextExample { outer =>
 /**
  * For each created example use a given fixture object
  */
-trait FixtureExample[T] extends FragmentsFactory { outer =>
-  protected def fixture[R : AsResult](f: T => R): Result
+trait ForEach[T] extends FragmentsFactory { outer =>
+  protected def foreach[R : AsResult](f: T => R): Result
 
-  implicit def fixtureFunctionToResult[R : AsResult]: AsResult[T => R] = new AsResult[T => R] {
-    def asResult(f: =>(T => R)) = fixture(f)
+  implicit def foreachFunctionToResult[R : AsResult]: AsResult[T => R] = new AsResult[T => R] {
+    def asResult(f: =>(T => R)) = foreach(f)
   }
 }
 
@@ -68,7 +67,7 @@ trait FixtureExample[T] extends FragmentsFactory { outer =>
  */
 trait BeforeAll extends SpecificationStructure with FragmentsFactory {
   def beforeAll: Unit
-  override def map(fs: =>core.Fragments) = fs.prepend(fragmentFactory.step(beforeAll))
+  override def map(fs: =>core.Fragments) = super.map(fs).prepend(fragmentFactory.step(beforeAll))
 }
 
 /**
@@ -76,7 +75,7 @@ trait BeforeAll extends SpecificationStructure with FragmentsFactory {
  */
 trait AfterAll extends SpecificationStructure with FragmentsFactory {
   def afterAll: Unit
-  override def map(fs: =>core.Fragments) = fs.append(fragmentFactory.step(afterAll))
+  override def map(fs: =>core.Fragments) = super.map(fs).append(fragmentFactory.step(afterAll))
 }
 
 /**
@@ -85,7 +84,7 @@ trait AfterAll extends SpecificationStructure with FragmentsFactory {
 trait BeforeAfterAll extends SpecificationStructure with FragmentsFactory {
   def beforeAll: Unit
   def afterAll: Unit
-  override def map(fs: =>core.Fragments) = fs.prepend(fragmentFactory.step(beforeAll)).append(fragmentFactory.step(afterAll))
+  override def map(fs: =>core.Fragments) = super.map(fs).prepend(fragmentFactory.step(beforeAll)).append(fragmentFactory.step(afterAll))
 }
 
 /**
@@ -93,7 +92,7 @@ trait BeforeAfterAll extends SpecificationStructure with FragmentsFactory {
  */
 trait BeforeSpec extends SpecificationStructure {
   def beforeSpec: core.Fragments
-  override def map(fs: =>core.Fragments) = fs.prepend(beforeSpec)
+  override def map(fs: =>core.Fragments) = super.map(fs).prepend(beforeSpec)
 }
 
 /**
@@ -101,7 +100,7 @@ trait BeforeSpec extends SpecificationStructure {
  */
 trait AfterSpec extends SpecificationStructure {
   def afterSpec: core.Fragments
-  override def map(fs: =>core.Fragments) = fs.append(afterSpec)
+  override def map(fs: =>core.Fragments) = super.map(fs).append(afterSpec)
 }
 
 /**
@@ -110,5 +109,5 @@ trait AfterSpec extends SpecificationStructure {
 trait BeforeAfterSpec extends SpecificationStructure {
   def beforeSpec: core.Fragments
   def afterSpec: core.Fragments
-  override def map(fs: =>core.Fragments) = fs.prepend(beforeSpec).append(afterSpec)
+  override def map(fs: =>core.Fragments) = super.map(fs).prepend(beforeSpec).append(afterSpec)
 }

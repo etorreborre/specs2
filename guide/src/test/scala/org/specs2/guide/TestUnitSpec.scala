@@ -1,9 +1,9 @@
 package org.specs2
 package guide
 
-import org.specs2.specification.BeforeExample
+import org.specs2.specification.BeforeEach
 
-class TestUnitSpec extends mutable.Specification with BeforeExample {
+class TestUnitSpec extends mutable.Specification with BeforeEach {
   // you need to define the "before" action
   def before = println("before")
 

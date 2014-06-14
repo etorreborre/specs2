@@ -13,7 +13,7 @@ import matcher.ControlMatchers._
 
 import scala.collection.mutable.ListBuffer
 
-class JUnitReporterSpec extends Specification with Mockito with EnvFixture {  def is = s2"""
+class JUnitReporterSpec extends Specification with Mockito with ForEachEnv {  def is = s2"""
 
  The JUnitRunner is meant to be used with the RunWith annotation.
  It takes a Specification, executes it and notifies a RunNotifier object of the possible

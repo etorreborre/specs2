@@ -17,7 +17,7 @@ import Printer._
 import specification.core._
 import specification.process._
 
-class ReporterSpec extends Specification with EnvFixture with ThrownExpectations { def is = s2"""
+class ReporterSpec extends Specification with ForEachEnv with ThrownExpectations { def is = s2"""
 
  The reporter is responsible for:
    - filtering the specification fragments
