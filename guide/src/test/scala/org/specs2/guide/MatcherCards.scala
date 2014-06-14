@@ -37,25 +37,25 @@ object OptionalMatcherCards extends Cards {
 object AnyMatchers extends Card {
   def title = "Any"
   def text = s2"""
-These matchers can be used with objects, regardless of their type:
+These matchers can be used with any object, regardless of its type:
 
- * `beLike { case exp => result }`: to check if an object is like a given pattern. `result` can be any expression using a matcher
- * `beLike { case exp => exp must beXXX }`: to check if an object is like a given pattern, and verifies a condition
- * `beNull`
- * `beAsNullAs`: when 2 objects must be null at the same time if one of them is null
- * `beOneOf(a, b, c)`: to check if an object is one of a given list
- * `haveClass`: to check the class of an object
- * `haveSuperclass`: to check if the class of an object as another class as one of its ancestors
- * `haveInterface`: to check if an object is implementing a given interface
- * `beAssignableFrom`: to check if a class is assignable from another
- * `beAnInstanceOf[T]`: to check if an object is an instance of type `T`
+ * `beLike { case exp => result }` check if an object is like a given pattern. `result` can be any expression using a matcher
+ * `beLike { case exp => exp must beXXX }` check if an object is like a given pattern, and verifies a condition
+ * `beNull` check if an object is null
+ * `beAsNullAs` when 2 objects must be null at the same time if one of them is null
+ * `beOneOf(a, b, c)` check if an object is one of a given list
+ * `haveClass` check the class of an object
+ * `haveSuperclass` check if the class of an object as another class as one of its ancestors
+ * `haveInterface` check if an object is implementing a given interface
+ * `beAssignableFrom` check if a class is assignable from another
+ * `beAnInstanceOf[T]` check if an object is an instance of type `T`
 
 """
 }
 object EqualityMatchers extends Card {
   def title = "Equality"
   def text = s2"""
-The most common type of matcher is ***`beEqualTo`*** to test for equality. It is so frequent that there are several equivalent syntaxes to declare equality
+The most common type of matcher is `beEqualTo` to test for equality. It is so frequent that there are several equivalent ways to declare equality
 
  Matcher                    |  Comment
  -------------------------- | --------------------------
@@ -67,8 +67,6 @@ The most common type of matcher is ***`beEqualTo`*** to test for equality. It is
  `1 === 1                  `| the ultimate shortcut, synonym for `1 must beEqualTo(1)`
  `1 must be equalTo(1)     `| with a literate style
 
-The `beEqualTo` matcher is using the regular `==` Scala equality. However in the case of `Arrays`, Scala `==` is just using reference equality, `eq`, for `Arrays`. So the `beEqualTo` matcher has been adapted to transform `Arrays` to `Seqs` before checking for equality, so that `Array(1, 2, 3) === Array(1, 2, 3)` (despite the fact that `Array(1, 2, 3) != Array(1, 2, 3)`).
-
 There are also other notions of equality
 
  Matcher                    |  Comment
@@ -76,10 +74,12 @@ There are also other notions of equality
  `beTypedEqualTo           `| typed equality. `a must beTypedEqualTo(b)` will not work if `a` and `b` don't have compatible types
  `be_===                   `| synonym for `beTypedEqualTo`
  `a ==== b                 `| synonym for `a must beTypedEqualTo(b)`
- `be_==~                   `| checks if `(a: A) == conv(b: B)` when there is an implicit conversion `conv` from `B` to `A`
- `beTheSameAs              `| reference equality: checks if `a eq b` (`a must be(b)` also works)
+ `be_==~                   `| check if `(a: A) == conv(b: B)` when there is an implicit conversion `conv` from `B` to `A`
+ `beTheSameAs              `| reference equality: check if `a eq b` (`a must be(b)` also works)
  `be                       `| `a must be(b)`: synonym for `beTheSameAs`
  `beTrue, beFalse          `| shortcuts for Boolean equality
+
+_Note_: the `beEqualTo` matcher is using the regular `==` Scala equality. However in the case of `Arrays`, Scala `==` is just using reference equality, `eq`, for `Arrays`. So the `beEqualTo` matcher has been adapted to transform `Arrays` to `Seqs` before checking for equality, so that `Array(1, 2, 3) === Array(1, 2, 3)` (despite the fact that `Array(1, 2, 3) != Array(1, 2, 3)`).
 
 """
 }
@@ -89,29 +89,29 @@ object OptionEitherMatchers extends Card {
   def text = s2"""
   There are several matchers to check Option and Either instances:
 
- * `beSome` checks if an element is `Some(_)`
- * `beSome(exp)` checks if an element is `Some(exp)`
- * `beSome(matcher)` checks if an element is `Some(a)` where `a` satisfies the matcher
- * `beSome(function: A => AsResult[B])` checks if an element is `Some(a)` where `function(a)` returns a successful `Result`
+ * `beSome` check if an element is `Some(_)`
+ * `beSome(exp)` check if an element is `Some(exp)`
+ * `beSome(matcher)` check if an element is `Some(a)` where `a` satisfies the matcher
+ * `beSome(function: A => AsResult[B])` check if an element is `Some(a)` where `function(a)` returns a successful `Result`
     (note that a `Seq[A]` is also a function `Int => A` so if you want to check that a sequence is contained in `Some` you need to use a matcher: `beSome(===(Seq(1))`)
- * `beSome.which(function)` checks if an element is `Some(_`) and satisfies a function returning a boolean
- * `beSome.like(partial function)` checks if an element is `Some(_)` and satisfies a partial function returning a `MatchResult`
- * `beNone` checks if an element is `None`
- * `beAsNoneAs` checks if 2 values are equal to `None` at the same time
+ * `beSome.which(function)` check if an element is `Some(_`) and satisfies a function returning a boolean
+ * `beSome.like(partial function)` check if an element is `Some(_)` and satisfies a partial function returning a `MatchResult`
+ * `beNone` check if an element is `None`
+ * `beAsNoneAs` check if 2 values are equal to `None` at the same time
 
- * `beRight` checks if an element is `Right(_)`
- * `beRight(exp)` checks if an element is `Right(exp)
- * `beRight(matcher)` checks if an element is `Right(a)` where `a` satisfies the matcher
- * `beRight(function: A => AsResult[B])` checks if an element is `Right(a)` where `function(a)` returns a successful `Result`
+ * `beRight` check if an element is `Right(_)`
+ * `beRight(exp)` check if an element is `Right(exp)
+ * `beRight(matcher)` check if an element is `Right(a)` where `a` satisfies the matcher
+ * `beRight(function: A => AsResult[B])` check if an element is `Right(a)` where `function(a)` returns a successful `Result`
     (note that a `Seq[A]` is also a function `Int => A` so if you want to check that a sequence is contained in `Right` you need to use a matcher: `beRight(===(Seq(1))`)
- * `beRight.like(partial function)` checks if an element is `Right(_)` and satisfies a partial function returning a `MatchResult`
+ * `beRight.like(partial function)` check if an element is `Right(_)` and satisfies a partial function returning a `MatchResult`
 
- * `beLeft` checks if an element is `Left(_)`
- * `beLeft(exp)` checks if an element is `Left(exp)`
- * `beLeft(matcher)` checks if an element is `Left(a)` where `a` satisfies the matcher
- * `beLeft(function: A => AsResult[B])` checks if an element is `Left(a)` where `function(a)` returns a successful `Result`
+ * `beLeft` check if an element is `Left(_)`
+ * `beLeft(exp)` check if an element is `Left(exp)`
+ * `beLeft(matcher)` check if an element is `Left(a)` where `a` satisfies the matcher
+ * `beLeft(function: A => AsResult[B])` check if an element is `Left(a)` where `function(a)` returns a successful `Result`
     (note that a `Seq[A]` is also a function `Int => A` so if you want to check that a sequence is contained in `Left` you need to use a matcher: `beLeft(===(Seq(1))`)
- * `beLeft.like(partial function)` checks if an element is `Left(_)` and satisfies a partial function returning a `MatchResult`
+ * `beLeft.like(partial function)` check if an element is `Left(_)` and satisfies a partial function returning a `MatchResult`
   """
 }
 
@@ -120,16 +120,16 @@ object TryMatchers extends Card {
   def text = s2"""
   There are several matchers to check Try instances:
 
- * `beSuccessfulTry` checks if an element is `Success(_)`
- * `beSuccessfulTry.withValue(exp)` checks if an element is `Success(_)`
- * `beSuccessfulTry.withValue(matcher)` checks if an element is `Success(a)` where `a` satisfies the matcher
- * `beSuccessfulTry.withValue(function: A => AsResult[B])` checks if an element is `Success(a)` where `function(a)` returns a successful `Result`
+ * `beSuccessfulTry` check if an element is `Success(_)`
+ * `beSuccessfulTry.withValue(exp)` check if an element is `Success(_)`
+ * `beSuccessfulTry.withValue(matcher)` check if an element is `Success(a)` where `a` satisfies the matcher
+ * `beSuccessfulTry.withValue(function: A => AsResult[B])` check if an element is `Success(a)` where `function(a)` returns a successful `Result`
     (note that a `Seq[A]` is also a function `Int => A` so if you want to check that a sequence is contained in `Success` you need to use a matcher: `beSuccessfulTry.withValue(===(Seq(1))`)
- * `beSuccessfulTry.which(function)` checks if an element is `Success(_)` and satisfies a function returning a boolean
- * `beSuccessfulTry.like(partial function)` checks if an element is `Success(_)` and satisfies a partial function returning a `MatchResult`
- * `beFailedTry` checks if an element is `Failure(_)`
- * `beFailedTry.withThrowable[T]` checks if an element is `Failure(t: T)`
- * `beFailedTry.withThrowable[T](pattern)` checks if an element is `Failure(t: T)` and `t.getMessage` matches `pattern`
+ * `beSuccessfulTry.which(function)` check if an element is `Success(_)` and satisfies a function returning a boolean
+ * `beSuccessfulTry.like(partial function)` check if an element is `Success(_)` and satisfies a partial function returning a `MatchResult`
+ * `beFailedTry` check if an element is `Failure(_)`
+ * `beFailedTry.withThrowable[T]` check if an element is `Failure(t: T)`
+ * `beFailedTry.withThrowable[T](pattern)` check if an element is `Failure(t: T)` and `t.getMessage` matches `pattern`
   """
 }
 
@@ -138,19 +138,19 @@ object StringMatchers extends Card {
   def text = s2"""
 Matching on strings is very common. Here are the matchers which can help you:
 
- * `beMatching` (or ` be matching`) checks if a string matches a regular expression
+ * `beMatching` or ` be matching` check if a string matches a regular expression
  * `=~(s)` is a shortcut for `beMatching("(.|\\s)*"+s+"(.|\\s)*")`
- * `find(exp).withGroups(a, b, c)` checks if some groups are found in a string
- * `have length` checks the length of a string
- * `have size` checks the size of a string (seen as an `Iterable[Char]`)
- * `be empty` checks if a string is empty
- * `beEqualTo(b).ignoreCase` checks if 2 strings are equal regardless of casing
- * `beEqualTo(b).ignoreSpace` checks if 2 strings are equal when you `replaceAll("\\s", "")`
- * `beEqualTo(b).trimmed` checks if 2 strings are equal when trimmed
+ * `find(exp).withGroups(a, b, c)` check if some groups are found in a string
+ * `have length` check the length of a string
+ * `have size` check the size of a string (seen as an `Iterable[Char]`)
+ * `be empty` check if a string is empty
+ * `beEqualTo(b).ignoreCase` check if 2 strings are equal regardless of casing
+ * `beEqualTo(b).ignoreSpace` check if 2 strings are equal when you `replaceAll("\\s", "")`
+ * `beEqualTo(b).trimmed` check if 2 strings are equal when trimmed
  * `beEqualTo(b).ignoreSpace.ignoreCase` you can compose them
- * `contain(b)` checks if a string contains another one
- * `startWith(b)` checks if a string starts with another one
- * `endWith(b)` checks if a string ends with another one
+ * `contain(b)` check if a string contains another one
+ * `startWith(b)` check if a string starts with another one
+ * `endWith(b)` check if a string ends with another one
 """
 }
 
@@ -175,11 +175,11 @@ Less often you need to do comparisons on Numerical values:
    `2 must be_>(1)`
    `2 must beGreaterThan(1)`
 
- * `beCloseTo` checks if 2 Numerics are close to each other
+ * `beCloseTo` check if 2 Numerics are close to each other
    `1.0 must beCloseTo(1, 0.5)`
    `4 must be ~(5 +/- 2)`
 
- * `beBetween` checks if a value is between 2 others
+ * `beBetween` check if a value is between 2 others
    `5 must beBetween(3, 6)`
    `5 must beBetween(3, 6).excludingEnd`
    `5 must beBetween(4, 6).excludingStart`
@@ -194,14 +194,14 @@ object ExceptionMatchers extends Card {
   def text = s2"""
 ***specs2*** offers very compact ways of checking that some exceptions are thrown:
 
- * `throwA[ExceptionType]` checks if a block of code throws an exception of the given type
- * `throwA[ExceptionType](message = "boom")` additionally checks if the exception message is as expected
- * `throwA(exception)` or `throwAn(exception)` checks if a block of code throws an exception of the same type, with the
+ * `throwA[ExceptionType]` check if a block of code throws an exception of the given type
+ * `throwA[ExceptionType](message = "boom")` additionally check if the exception message is as expected
+ * `throwA(exception)` or `throwAn(exception)` check if a block of code throws an exception of the same type, with the
  same message
  * `throwA[ExceptionType].like { case e => e must matchSomething }` or
- `throwA(exception).like { case e => e must matchSomething }` allow to verify that the thrown exception satisfies a property
+ `throwA(exception).like { case e => e must matchSomething }` check that the thrown exception satisfies a property
  * `throwA[ExceptionType](me.like { case e => e must matchSomething }` or
- `throwA(exception).like { case e => e must matchSomething }` allow to verify that the thrown exception satisfies a property
+ `throwA(exception).like { case e => e must matchSomething }` check that the thrown exception satisfies a property
 
 For all the above matchers you can use `throwAn` instead of `throwA` if the exception name starts with a vowel for better
 readability.
@@ -215,15 +215,15 @@ Traversables can be checked with several matchers.
 
 If you want to check the size of a `Traversable`
 
- * to check if it is empty
+ * check if it is empty
  ${snippet{Seq() must be empty}}
  ${snippet{Seq(1, 2, 3) must not be empty}}
 
- * to check its size
+ * check its size
  ${snippet{Seq(1, 2) must have size(2)}}
  ${snippet{Seq(1, 2) must have length(2)}} // equivalent to size
 
- * to check its ordering (works with any type `T` which has an `Ordering`)
+ * check its ordering (works with any type `T` which has an `Ordering`)
  ${snippet{Seq(1, 2, 3) must beSorted}}
 
 Then you can check the elements which are contained in the Traversable
@@ -244,7 +244,7 @@ Then you can check the elements which are contained in the Traversable
  ${snippet{Seq(1234, 6237) must containMatch("23")     }}   `// matches with ".*23.*"`
  ${snippet{Seq(1234, 6234) must containPattern(".*234")}}   `// matches with !.*234"`
 
-For each of the checks above you can indicate how many times the check should be satisfied:
+For each of the check above you can indicate how many times the check should be satisfied:
 
  * ${snippet{Seq(1, 2, 3) must contain(be_>(0)).forall}}  // this will stop after the first failure
  * ${snippet{Seq(1, 2, 3) must contain(be_>(0)).foreach}} // this will report all failures
@@ -255,7 +255,7 @@ For each of the checks above you can indicate how many times the check should be
  * ${snippet{Seq(1, 2, 3) must contain(be_>(1)).between(1.times, 2.times)}}
  * ${snippet{Seq(1, 2, 3) must contain(be_>(1)).between(1, 2)}}
 
-The other types of checks involve comparing the Traversable elements to other elements (values, matchers, function returning a `Result`)
+The other types of check involve comparing the Traversable elements to other elements (values, matchers, function returning a `Result`)
  
  * with a set of values
  ${snippet{Seq(1, 2, 3, 4) must contain(2, 4)}}
@@ -300,30 +300,30 @@ object MapMatchers extends Card {
   def text = s2"""
 Maps have their own matchers as well, to check keys and values:
 
- * `haveKey` checks if a Map has a given key
+ * `haveKey` check if a Map has a given key
    `Map(1 -> "1") must haveKey(1)`
 
- * `haveKeys` checks if a Map has several keys
+ * `haveKeys` check if a Map has several keys
    `Map(1 -> "1", 2 -> "2") must haveKeys(1, 2)`
 
- * `haveValue` checks if a Map has a given value
+ * `haveValue` check if a Map has a given value
    `Map(1 -> "1") must haveValue("1")`
 
- * `haveValues` checks if a Map has several values
+ * `haveValues` check if a Map has several values
    `Map(1 -> "1", 2 -> "2") must haveValue("1", "2")`
 
- * `havePair` checks if a Map has a given pair of values
+ * `havePair` check if a Map has a given pair of values
    `Map(1 -> "1") must havePair(1 -> "1")`
 
- * `havePairs` checks if a Map has some pairs of values
+ * `havePairs` check if a Map has some pairs of values
    `Map(1->"1", 2->"2", 3->"3") must havePairs(1->"1", 2->"2")`
 
  But Maps are also Partial Functions, so:
 
- * `beDefinedAt` checks if a PartialFunction is defined for a given value
+ * `beDefinedAt` check if a PartialFunction is defined for a given value
    `partial must beDefinedAt(1)`
 
- * `beDefinedBy` checks if a PartialFunction is defined for a given value
+ * `beDefinedBy` check if a PartialFunction is defined for a given value
  and returns another one
    `partial must beDefinedBy(1 -> true)`
 """
@@ -367,17 +367,17 @@ object JsonMatchers extends Card with matcher.JsonMatchers {
   def text =  s2"""
  [Json](http://www.json.org) is a simple data format essentially modeling recursive key-values. There are 2 matchers which can be used to verify the presence of appropriate values in Strings representing Json documents:
 
- * `/(value)` checks if a value is present at the root of the document. This can only be the case if that document is an Array
+ * `/(value)` check if a value is present at the root of the document. This can only be the case if that document is an Array
 
- * `/(regex)` checks if a value matching the regex is present at the root of the document. This can only be the case if that document is an Array
+ * `/(regex)` check if a value matching the regex is present at the root of the document. This can only be the case if that document is an Array
 
- * `/(key -> value)` checks if a pair is present at the root of the document. This can only be the case if that document is a Map
+ * `/(key -> value)` check if a pair is present at the root of the document. This can only be the case if that document is a Map
 
- * `*/(value)` checks if a value is present anywhere in the document, either as an entry in an Array, or as the value for a key in a Map
+ * `*/(value)` check if a value is present anywhere in the document, either as an entry in an Array, or as the value for a key in a Map
 
- * `*/(key -> value)` checks if a pair is present anywhere in a Map of the document
+ * `*/(key -> value)` check if a pair is present anywhere in a Map of the document
 
- * `/#(i)` selects the ith element in a 0-based indexed Array or a Map and allow further checks on that element
+ * `/#(i)` selects the ith element in a 0-based indexed Array or a Map and allow further check on that element
 
 Now the interesting part comes from the fact that those matchers can be chained to search specific paths in the Json document. For example, for the following document: ${snippet{
 
@@ -427,33 +427,33 @@ object FileMatchers extends Card {
   def text = s2"""
 The Java api for files is more or less mimicked as matchers which can operate on strings denoting paths or on Files (with the `org.specs2.matcher.FileMatchers` trait)
 
- * `beEqualToIgnoringSep` checks if 2 paths are the same regardless of their separators
+ * `beEqualToIgnoringSep` check if 2 paths are the same regardless of their separators
  `"c:\temp\hello" must beEqualToIgnoringSep("c:/temp/hello")`
- * `beAnExistingPath` checks if a path exists
- * `beAReadablePath` checks if a path is readable
- * `beAWritablePath` checks if a path is writable
- * `beAnAbsolutePath` checks if a path is absolute
- * `beAHiddenPath` checks if a path is hidden
- * `beAFilePath` checks if a path is a file
- * `beADirectoryPath` checks if a path is a directory
- * `havePathName` checks if a path has a given name
- * `haveAsAbsolutePath` checks if a path has a given absolute path
- * `haveAsCanonicalPath` checks if a path has a given canonical path
- * `haveParentPath` checks if a path has a given parent path
- * `listPaths` checks if a path has a given list of children
- * `exist` checks if a file exists
+ * `beAnExistingPath` check if a path exists
+ * `beAReadablePath` check if a path is readable
+ * `beAWritablePath` check if a path is writable
+ * `beAnAbsolutePath` check if a path is absolute
+ * `beAHiddenPath` check if a path is hidden
+ * `beAFilePath` check if a path is a file
+ * `beADirectoryPath` check if a path is a directory
+ * `havePathName` check if a path has a given name
+ * `haveAsAbsolutePath` check if a path has a given absolute path
+ * `haveAsCanonicalPath` check if a path has a given canonical path
+ * `haveParentPath` check if a path has a given parent path
+ * `listPaths` check if a path has a given list of children
+ * `exist` check if a file exists
 
- * `beReadable` checks if a file is readable
- * `beWritable` checks if a file is writable
- * `beAbsolute` checks if a file is absolute
- * `beHidden` checks if a file is hidden
- * `beAFile` checks if a file is a file
- * `beADirectory` checks if a file is a directory
- * `haveName` checks if a file has a given name
- * `haveAbsolutePath` checks if a file has a given absolute path
- * `haveCanonicalPath` checks if afile has a given canonical path
- * `haveParent` checks if a file has a given parent path
- * `haveList` checks if a file has a given list of children
+ * `beReadable` check if a file is readable
+ * `beWritable` check if a file is writable
+ * `beAbsolute` check if a file is absolute
+ * `beHidden` check if a file is hidden
+ * `beAFile` check if a file is a file
+ * `beADirectory` check if a file is a directory
+ * `haveName` check if a file has a given name
+ * `haveAbsolutePath` check if a file has a given absolute path
+ * `haveCanonicalPath` check if afile has a given canonical path
+ * `haveParent` check if a file has a given parent path
+ * `haveList` check if a file has a given list of children
 """
 }
 
