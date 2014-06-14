@@ -3,33 +3,91 @@ package guide
 
 import io._
 import matcher._
-import specification.{BeforeExample, AfterExample, Before, After, BeforeAfter, AroundExample, Around, Fixture, FixtureExample}
+import org.specs2.matcher.Scope
+import org.specs2.mutable
+import org.specs2.specification._
 import specification.core.{Fragments}
 import execute._
 
 object Contexts extends UserGuidePage with FileMatchers with FileSystem { def is = ""
   val section = s2"""
 
-### Contexts
+## Contexts
 
-In a specification some examples are very simple and just check that a function is behaving as expected. However other examples can be more complex and require a more elaborate set-up of data to:
+In a specification some examples are very simple and just check that a function is behaving as expected. However other examples can be more complex and require to execute in specific context:
 
- * to create inter-related domain objects
- * to put the environment (database, filesystem, external system) in the appropriate state
+ * with some state being setup before the example executes
+ * with some clean up after the example is executed
+ * inside a database context, with or without the possibility to access the transaction context
+ * with state being setup before *all* examples
+ * with clean up being done after *all* the examples
 
-And there are usually 3 difficulties in doing that:
+For all those situations, there is a ***specs2*** trait which you can mix in your specification.
 
- 1. _Variables isolation_: making sure that each example can be executed with its own data without being impacted by the undesired side-effects of other examples
- 1. _Before/After code_: running code before or after every example without repeating that code in the body of each example
- 1. _Global setup/teardown code_: setting some state when this could take lots of resources, so you need to do it just once before anything runs
+### BeforeExample / AfterExample
 
-How does a library like [JUnit](http://junit.org/) solves this?
+The `org.specs2.specification.BeforeExample` trait defines an action that will be executed before each example:${snippet{
+class BeforeSpecification extends mutable.Specification with BeforeExample {
+  // you need to define the "before" action
+  def before = println("before")
 
- 1. _Variables isolation_: for each test run a new class instance is created so that there are new "fresh" variables for the current test case
- 1. _Before/After code_: there are `@Before` and `@After` annotations to declare once the code that must be executed before or after each example
- 1. _Global setup/teardown code_: there are `@BeforeClass` and `@AfterClass` annotations dedicated to that kind of code
+  "example 1" >> { println("example1"); ok }
+  "example 2" >> { println("example2"); ok }
+}
+}}
 
-Now let's see how this can be achieved with ***specs2***.
+If you execute this specification you may see something like:
+```console
+[info] before
+[info] before
+[info] example2
+[info] example1
+```
+
+As you guess, defining a behaviour "after" is very similar:${snippet{
+class AfterSpecification extends mutable.Specification with AfterExample {
+  // you need to define the "after" action
+  def after = println("after")
+
+  "example 1" >> { println("example1"); ok }
+  "example 2" >> { println("example2"); ok }
+}
+}}
+
+You might also want to mix the 2:${snippet{
+class BeforeAfterSpecification extends mutable.Specification with BeforeAfterExample {
+  def before = println("before")
+  def after = println("after")
+
+  "example 1" >> { println("example1"); ok }
+  "example 2" >> { println("example2"); ok }
+}
+}}
+
+### AroundExample
+
+Another very common situation is when you need to execute in the context of a database transaction or a web request. In this case you can use the `AroundExample` trait to execute each example in the proper context:${snippet{
+
+trait DatabaseContext extends AroundExample {
+  // you need to define the "around" method
+  def around[R : AsResult](r: => R): Result = {
+    openDatabaseTransaction
+    try AsResult(r)
+    finally closeDatabaseTransaction
+  }
+
+  // do what you need to do with the database
+  def openDatabaseTransaction = ???
+  def closeDatabaseTransaction = ???
+}
+
+class AroundSpecification extends mutable.Specification with DatabaseContext {
+  "example 1" >> { println("using the database"); ok }
+  "example 2" >> { println("using the database too"); ok }
+}
+}}
+
+The example above shows that...
 
 #### Isolation
 
