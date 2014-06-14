@@ -47,7 +47,13 @@ trait S2StringContext extends FragmentsFactory { outer =>
   implicit def asResultIsInterpolatedFragment[R : AsResult](r: =>R): InterpolatedFragment =
     envFunctionIsInterpolatedFragment((env: Env) => r)
 
-  implicit def envFunctionIsInterpolatedFragment[R : AsResult](f: Env => R): InterpolatedFragment = new InterpolatedFragment {
+  implicit def stringFunctionIsInterpolatedFragment[R : AsResult](f: String => R): InterpolatedFragment =
+    stringAndEnvFunctionIsInterpolatedFragment((s: String) => (e: Env) => f(s))
+
+  implicit def envFunctionIsInterpolatedFragment[R : AsResult](f: Env => R): InterpolatedFragment =
+      stringAndEnvFunctionIsInterpolatedFragment(_ => f)
+
+  private def stringAndEnvFunctionIsInterpolatedFragment[R : AsResult](f: String => Env => R): InterpolatedFragment = new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =  {
       val texts = text.split("\n")
       val spaces = texts.lastOption.fold("")(_.takeWhile(Seq(' ', '\n').contains))
@@ -66,11 +72,11 @@ trait S2StringContext extends FragmentsFactory { outer =>
 
       val result =
         implicitly[AsResult[R]] match {
-          case v : AnyValueAsResult[_] => Env.executeResult(f) match {
+          case v : AnyValueAsResult[_] => Env.executeResult(f(description.show)) match {
             case DecoratedResult(t, e: Error) => before :+ ff.example(description, e).setLocation(end)
             case DecoratedResult(t, _)        => Vector(ff.text(text), ff.text(t.notNull)).map(_.setLocation(end))
           }
-          case other                          => before :+ ff.example(description, Execution.withEnv(f)).setLocation(end)
+          case other                          => before :+ ff.example(description, Execution.withEnv(f(description.show))).setLocation(end)
         }
       fs append result
     }
