@@ -127,37 +127,35 @@ There is however one thing you cannot do with `AroundExample`. You can't pass th
 
 ### ForEach
 
-Sometimes you need to create a specific context for each example but also make it accessible to each example. Here is a specification having examples using an active database transaction:${
-    snippet {
-      // a transaction with the database
-      trait Transaction
+Sometimes you need to create a specific context for each example but also make it accessible to each example. Here is a specification having examples using an active database transaction:${snippet {
+// a transaction with the database
+trait Transaction
 
-      trait DatabaseContext extends ForEach[Transaction] {
-        // you need to define the "foreach" method
-        def foreach[R: AsResult](f: Transaction => R): Result = {
-          val transaction = openDatabaseTransaction
-          try AsResult(f(transaction))
-          finally closeDatabaseTransaction(transaction)
-        }
-
-        // create and close a transaction
-        def openDatabaseTransaction: Transaction = ???
-
-        def closeDatabaseTransaction(t: Transaction) = ???
-      }
-
-      class FixtureSpecification extends mutable.Specification with DatabaseContext {
-        "example 1" >> { t: Transaction =>
-          println("use the transaction")
-          ok
-        }
-        "example 2" >> { t: Transaction =>
-          println("use it here as well")
-          ok
-        }
-      }
-    }
+trait DatabaseContext extends ForEach[Transaction] {
+  // you need to define the "foreach" method
+  def foreach[R: AsResult](f: Transaction => R): Result = {
+    val transaction = openDatabaseTransaction
+    try AsResult(f(transaction))
+    finally closeDatabaseTransaction(transaction)
   }
+
+  // create and close a transaction
+  def openDatabaseTransaction: Transaction = ???
+
+  def closeDatabaseTransaction(t: Transaction) = ???
+}
+
+class FixtureSpecification extends mutable.Specification with DatabaseContext {
+  "example 1" >> { t: Transaction =>
+    println("use the transaction")
+    ok
+  }
+  "example 2" >> { t: Transaction =>
+    println("use it here as well")
+    ok
+  }
+}
+}}
 
 ### BeforeAll / AfterAll
 
@@ -270,7 +268,7 @@ object Scopes extends UserGuidePage { def is = s2"""
 
 ### Scope
 
-The techniques described in ${"`Context` objects" ~ ContextObjects} are not always applicable to unit specifications where we want examples to be a "block" of code below some text. Instead of creating a case class we can instantiate a trait which will hold the "fresh" state:${snippet{
+The techniques described in ${"`Context` objects" ~ ContextObjects} are not always applicable to unit specifications where we want examples to be a "block" of code described by some text. Instead of creating a case class we can instantiate a trait which will hold the "fresh" state:${snippet{
 class ContextSpec extends mutable.Specification {
   "this is the first example" in new trees {
     tree.removeNodes(2, 3) must have size(2)
@@ -290,10 +288,10 @@ Each example of that specification gets a new instance of the `trees` trait. So 
 
 Now you might wonder why the `trees` trait is extending the `org.specs2.specification.Scope` trait? The reason is that the body of an Example only accepts objects which are convertible to a `Result`. By extending `Scope` we can take advantage of an implicit conversion provided by the `Specification` trait to convert our context object to a `Result`.
 
-Scopes are a way to create a "fresh" object and associated variables for each example being executed. The advantages are that:
+### Before / After
 
- - those classes can be reused and extended
- - the execution behavior only relies on language constructs
+It is also possible to extends Scopes with `Before` and `After` traits but they need to be `org.specs2.mutable.Before` and `org.specs2.mutable.After` traits. This is necessary because those traits extend the Scala `DelayedInit` trait allowing to insert code around the execution of the body of an object.
+
 """
 
   case class Tree[T](ts: T*) {
