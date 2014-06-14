@@ -1,14 +1,9 @@
 package org.specs2
 package guide
 
-import _root_.examples._
-import org.specs2.main.Arguments
-
-class QuickStart extends UserGuidePage { def is = "Quick Start".title ^s2"""
+object QuickStart extends UserGuidePage { def is = "Quick Start".title ^s2"""
 
 Follow the [installation](install) instructions and create copy the following specification in a file named `HelloWorldSpec.scala`: ${snippet{
-
-import org.specs2._
 
 class HelloWorldSpec extends Specification { def is = s2"""
 
@@ -51,7 +46,7 @@ Finished in 0 second, 58 ms
 
 #### Learn more!
 
-The rest of this ${see(new UserGuide)} will show you how to:
+The rest of this ${see(UserGuide)} will show you how to:
 
  * [structure](structure) your specification using one of the 2 major "styles" of specifications: "Acceptance" and "Unit"
  * use the many ***specs2*** [matchers](matchers) to specify precisely the expected behavior of your application

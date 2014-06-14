@@ -1,7 +1,10 @@
-package org.specs2.guide
+package org.specs2
+package guide
 
 import scala.io.Source
-import org.specs2.control.Exceptions._
+import control.Exceptions._
+
+object Specs2Variables extends Specs2Variables
 
 trait Specs2Variables {
 
@@ -43,5 +46,3 @@ trait Specs2Variables {
   private lazy val buildSbt = tryo(Source.fromFile("version.sbt"))
 
 }
-
-object Specs2Variables extends Specs2Variables

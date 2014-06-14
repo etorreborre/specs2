@@ -1,10 +1,8 @@
-package org.specs2
-package guide
+package org.specs2.guide
 
-import org.specs2.specification.{Groups, Tables}
-import structure._
+import org.specs2.guide.old.structure._
 
-class Structure extends UserGuidePage { def is = s2"""
+object Structure extends UserGuidePage { def is = s2"""
 
 ### Styles
 
@@ -49,7 +47,7 @@ All the rest, `"this is my specification"`, is parsed as `Text` and is not execu
 #### Unit specification
 
 A unit specification extends `org.specs2.mutable.Specification` and uses the `>>` operator to create "blocks" containing `Texts` and `Examples`: ${snippet{
-class MySpecification extends mutable.Specification {
+class MySpecification extends org.specs2.mutable.Specification {
   "this is my specification" >> {
     "where example 1 must be true" >> {
       1 must_== 1
@@ -118,7 +116,7 @@ It is also possible to use the "functional" expectation mode with a unit specifi
  - use ${"matchers" ~/ Matchers} to specify the body of your examples
  - set up ${"contexts" ~/ Contexts} for the examples
  - control the ${"execution" ~/ Execution} of a specification
- - ${"run" ~/ new Runners} a specification
+ - ${"run" ~/ Runners} a specification
 
 ### And if you want to know more
 

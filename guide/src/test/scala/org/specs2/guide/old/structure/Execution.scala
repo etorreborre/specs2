@@ -1,7 +1,7 @@
 package org.specs2
 package guide
+package old
 package structure
-
 object Execution extends Specification with UserGuideVariables {
 def is =
   s2"""

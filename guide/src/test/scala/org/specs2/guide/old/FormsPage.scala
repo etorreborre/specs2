@@ -1,5 +1,6 @@
 package org.specs2
 package guide
+package old
 
 import sys._
 import form._

@@ -1,12 +1,13 @@
 package org.specs2
 package guide
+package old
 
-import org.specs2.data.AlwaysTag
-import org.specs2.specification.create.DefaultFragmentFactory
+import data.AlwaysTag
 import specification._
+import create._
 import core._
 import execute.{AsResult, Result, ResultExecution, Failure}
-import main.{CommandLineArguments, Arguments}
+import main.Arguments
 import matcher.Matcher
 import time.SimpleTimer
 
@@ -46,8 +47,8 @@ def dbAccess = ok
 Alternatively, if you need to keep your specification as a trait, you can mix-in the `org.specs2.main.CommandLineArguments` trait. This trait has an `arguments` variable which will contain the command-line arguments: ${snippet{
 
 class CommandedSpecification extends org.specs2.mutable.Specification { //with CommandLineArguments {
-  if (arguments.sequential) "this is" >> ok
-  else                      "this is" >> ko
+//  if (arguments.sequential) "this is" >> ok
+//  else                      "this is" >> ko
 }
 }}
 

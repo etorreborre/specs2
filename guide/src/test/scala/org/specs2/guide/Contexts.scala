@@ -1,14 +1,11 @@
 package org.specs2
 package guide
-package structure
 
-import org.specs2.mutable
-import org.specs2.specification._
-import org.specs2.specification.core.Fragments
-import org.specs2.mutable.NameSpace
-import execute._
-import matcher.FileMatchers
 import io._
+import matcher._
+import specification.{BeforeExample, AfterExample, Before, After, BeforeAfter, AroundExample, Around, Fixture, FixtureExample}
+import specification.core.{Fragments}
+import execute._
 
 object Contexts extends UserGuidePage with FileMatchers with FileSystem { def is = ""
   val section = s2"""
@@ -45,9 +42,7 @@ Now let's see how this can be achieved with ***specs2***.
 
 Let's see an example of using a `Scope` with a mutable specification: ${snippet{
 
-import org.specs2.specification.Scope
-
-class ContextSpec extends org.specs2.mutable.Specification {
+class ContextSpec extends mutable.Specification {
   "this is the first example" in new trees {
     tree.removeNodes(2, 3) must have size(2)
   }
@@ -77,7 +72,7 @@ However, sometimes, we wish to go for a more concise way of getting fresh variab
 
 The `isolated` argument changes the execution method so that each example is executed in a brand new instance of the Specification: ${snippet{
 
-class IsolatedSpec extends org.specs2.mutable.Specification {
+class IsolatedSpec extends mutable.Specification {
   isolated
 
   "Each example should be executed in isolation" >> {
@@ -138,7 +133,7 @@ trait HasAPendingOrder extends LoggedIn {
 #### Before/After
 
 If you want to run some code before or after each example, the `Before` and `After` traits are there to help you (they both extend the `Scope` trait). In the following examples we'll only show the use of `After` because `Before` most of the time unnecessary: ${snippet{
-class ContextSpec extends org.specs2.mutable.Specification {
+class ContextSpec extends mutable.Specification {
   "this is the first example" in new trees {
     tree.removeNodes(2, 3) must have size(2)
   }
@@ -359,9 +354,6 @@ There may still be some duplication of code if you have to use the same kind of 
 
 If that's the case you can define your own `Specification` trait doing the job: ${snippet{
 
-import org.specs2._
-import specification._
-
 trait DatabaseSpec extends Specification {
   /** the map method allows to "post-process" the fragments after their creation */
   override def map(fs: =>Fragments) = step(startDb) ^ fs ^ step(cleanDb)
@@ -390,7 +382,7 @@ Note also that global setup and cleanup can be [done with sbt](http://www.scala-
 
 #### For fragments
 
-When using a Unit Specification, it can be useful to use variables which are only used for a given set of examples. This can be easily done by declaring local variables, but this might lead to duplication. One way to avoid that is to use the `${fullName[NameSpace]}` trait: ${snippet{
+When using a Unit Specification, it can be useful to use variables which are only used for a given set of examples. This can be easily done by declaring local variables, but this might lead to duplication. One way to avoid that is to use the `org.specs2.mutable.NameSpace` trait: ${snippet{
 // 8<--
 class s extends org.specs2.mutable.Specification {
 // 8<--

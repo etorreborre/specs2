@@ -1,8 +1,9 @@
 package org.specs2
 package guide
-package structure
+package old.structure
 
-import org.specs2.specification.{Tables, Groups}
+import specification.{Tables, Groups}
+import matcher.ThrownExpectations
 
 object Examples extends UserGuidePage {  def is = ""
 
@@ -38,7 +39,7 @@ This specification builds 1 piece of `Text` and 2 `Examples` which are `Fragment
 
 }}
 
-Please read the ${new FragmentsApi} page you want to know more about the low-level operators to create and chain Specification Fragments.
+Please read the new FragmentsApi page you want to know more about the low-level operators to create and chain Specification Fragments.
 
 ##### _Unit_ specification
 
@@ -148,7 +149,7 @@ def e1 = "hello" must have size(10000) and
 
 ##### Thrown
 
-The above functionality encourages a specification style where every expectation is carefully specified and is considered good practice by some. However you might see it as an annoying restriction. You can avoid it by mixing-in the `${fullName[matcher.ThrownExpectations]}` trait. With that trait, any failing expectation will throw a `FailureException` and the rest of the example will not be executed.
+The above functionality encourages a specification style where every expectation is carefully specified and is considered good practice by some. However you might see it as an annoying restriction. You can avoid it by mixing-in the `${fullName[ThrownExpectations]}` trait. With that trait, any failing expectation will throw a `FailureException` and the rest of the example will not be executed.
 
 There is also an additional method `failure(message)` to throw a `FailureException` at will.
 

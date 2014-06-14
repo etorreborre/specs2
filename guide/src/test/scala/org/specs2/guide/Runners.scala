@@ -3,7 +3,7 @@ package guide
 
 import main.Diffs
 
-class Runners extends UserGuidePage { def is = s2"""
+object Runners extends UserGuidePage { def is = s2"""
 ### Presentation
 
 There are many ways to execute ***specs2*** specifications:

@@ -1,6 +1,6 @@
 package org.specs2
 package guide
-package structure
+package old.structure
 
 class FragmentsApi extends UserGuidePage { def is = "Fragments API".title^ s2"""
 ### Presentation

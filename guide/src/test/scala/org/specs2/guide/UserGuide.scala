@@ -1,7 +1,7 @@
 package org.specs2
 package guide
 
-class UserGuide extends UserGuidePage { def is = "User Guide".title ^ s2"""
+object UserGuide extends UserGuidePage { def is = "User Guide".title ^ s2"""
 
  ***specs2*** is a library for writing executable software specifications in Scala.
 
@@ -12,7 +12,7 @@ class UserGuide extends UserGuidePage { def is = "User Guide".title ^ s2"""
 
   In this user guide, you will find:
 
-  a ${ "quick start guide" ~ new QuickStart }
+  a ${ "quick start guide" ~ QuickStart }
   $${ "how to " ~ ("structure your specification", new Structure)        }
   $${ "how to use " ~ ("matchers", new Matchers)                         }
   $${ "how to " ~ ("execute a specification", new Runners)               }

@@ -1,6 +1,6 @@
 package org.specs2
 
-import guide.{UserGuideVariables, Specs2Variables}
+import org.specs2.guide.{UserGuideVariables, Specs2Variables}
 import io.FileSystem
 import scala.io.Source
 import Specs2Variables._

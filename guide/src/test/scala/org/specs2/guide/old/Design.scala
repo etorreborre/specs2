@@ -1,5 +1,6 @@
-package org.specs2
-package guide
+package org.specs2.guide.old
+
+import org.specs2.guide.UserGuidePage
 
 class Design extends UserGuidePage { def is =
   """

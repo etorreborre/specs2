@@ -1,6 +1,6 @@
 package org.specs2
 package guide
-package structure
+package old.structure
 
 import execute.Result
 import examples.HelloWorldSpec

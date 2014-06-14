@@ -1,5 +1,7 @@
 package org.specs2
-package guide
+package guide.old
+
+import org.specs2.guide.UserGuidePage
 
 class Philosophy extends UserGuidePage { def is =
   """

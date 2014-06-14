@@ -6,7 +6,6 @@ import org.specs2.specification.create.{DefaultFragmentFactory, FragmentFactory}
 import org.specs2.time._
 import org.specs2.execute._
 import org.specs2.matcher.{TerminationMatchers, MustMatchers}
-import org.specs2.main.CommandLineArguments
 import scala.concurrent.duration._
 
 
@@ -148,7 +147,7 @@ class DefineContextsSpec extends Specification {
   /**
    * This specification shows how to create an "Around" context which will time out every example
    */
-  class TimeoutContextSpec extends org.specs2.mutable.Specification with ExamplesTimeout {
+  class TimeoutContextSpec extends org.specs2.mutable.Specification  {
 
     "This example should pass" >> {
       { Thread.sleep(50); 1 } must_== 1
@@ -163,24 +162,24 @@ class DefineContextsSpec extends Specification {
 
   }
 
-  /**
-   * This shows how to create a context which will timeout any example that takes too long to execute
-   * It uses the `CommandLineArguments` trait to be able to set the timeout value from the command-line
-   */
-  trait ExamplesTimeout extends AroundExample with MustMatchers with TerminationMatchers {
-
-//    lazy val commandLineTimeOut = arguments.commandLine.int("timeout").map(_.millis)
-
-    def timeout = //commandLineTimeOut.getOrElse(
-      100.millis //)
-
-    def around[T : AsResult](t: =>T) = {
-      lazy val result = t
-      val termination = result must terminate[T](sleep = timeout).orSkip((ko: String) => "TIMEOUT: "+timeout)
-      termination.toResult and AsResult(result)
-    }
-
-  }
+//  /**
+//   * This shows how to create a context which will timeout any example that takes too long to execute
+//   * It uses the `CommandLineArguments` trait to be able to set the timeout value from the command-line
+//   */
+//  trait ExamplesTimeout extends AroundExample with MustMatchers with TerminationMatchers {
+//
+////    lazy val commandLineTimeOut = arguments.commandLine.int("timeout").map(_.millis)
+//
+//    def timeout = //commandLineTimeOut.getOrElse(
+//      100.millis //)
+//
+//    def around[T : AsResult](t: =>T) = {
+//      lazy val result = t
+//      val termination = result must terminate[T](sleep = timeout).orSkip((ko: String) => "TIMEOUT: "+timeout)
+//      termination.toResult and AsResult(result)
+//    }
+//
+//  }
 
 
   def println(s: String) = s // change this definition to see messages in the console
