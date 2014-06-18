@@ -47,7 +47,19 @@ What you want in that case in to skip the whole block:${snippet{
 
   def e1 = skipped {
     // whatever code is in there, it will not be executed and the result will be skipped
-    throw new Exception("uh oh")
+    throw new Exception("uh-oh")
+    1 === 1
+  }
+}}
+
+### Setting an example as Pending
+
+Similarly you can mark the example as `Pending`:${snippet{
+  s2" this example is pending for now$e1"
+
+  def e1 = pending {
+    // whatever code is in there, it will not be executed and the result will be pending
+    throw new Exception("uh-oh")
     1 === 1
   }
 }}

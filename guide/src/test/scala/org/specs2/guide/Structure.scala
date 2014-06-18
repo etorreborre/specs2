@@ -121,6 +121,7 @@ It is also possible to use the "functional" expectation mode with a unit specifi
 ### And if you want to know more
 
  - create *auto-examples* where the code *is* the description of the `Example`
+ - ${"skip" ~ SkipExamples} examples
  - collect *all* expectations
  - use scripts and auto-numbered examples
  - use the Given-When-Then style for structuring specifications
@@ -153,58 +154,6 @@ The `org.specs2.specification.AllExpectations` trait goes further and gives you 
 
 The second example above hints at a restriction for this kind of Specification. The failures are accumulated for each example by mutating a shared variable. "Mutable" means that the concurrent execution of examples will be an issue if done blindly. To avoid this, the `AllExpectations` trait overrides the Specification arguments so that the Specification becomes [isolated](#Isolated+variables) unless it is already `isolated` or `sequential`.
 
-#### Results
-
-An `Example` is a piece of text followed by anything which can be converted to an `org.specs2.execute.Result` (via the `org.specs2.execute.AsResult` typeclass):
-
-* a standard result (success, failure, pending,...)
-* a Matcher result
-* a boolean value
-* a ScalaCheck property
-
-##### Standard
-
-The simplest `Result` values are provided by the `StandardResults` trait (mixed-in with `Specification`), and match the 5
-types of results provided by ***specs2***:
-
-* `success`: the example is ok
-* `failure`: there is a non-met expectation
-* `anError`: a unexpected exception occurred
-* `skipped`: the example is skipped possibly at runtime because some conditions are not met
-* `pending`: usually means "not implemented yet"
-
-Two additional results are also available to track the progress of features:
-
-* `done`: a `Success` with the message "DONE"
-* `todo`: a `Pending` with the message "TODO"
-
-##### Matchers
-
-Usually the body of an example is made of *expectations* using matchers: ${snippet{
-
-  def e1 = 1 must_== 1
-}}
-
-You can refer to the [Matchers](org.specs2.guide.Matchers.html) guide to learn all about matchers and how to create expectations.
-
-
-###### Short-circuit
-
-Ultimately, you may want to stop the execution of an example if one expectation is not verified. This is possible with `orThrow`: ${snippet{
-  // 8<--
-  class s extends mutable.Specification {
-    // 8<--
-    "In this example all the expectations are evaluated" >> {
-      1 === 1            // this is ok
-      (1 === 3).orThrow  // this fails but is never executed
-      1 === 4
-    }
-    // 8<--
-  }
-  // 8<--
-}}
-
-Alternatively, `orSkip` will skip the rest of the example in case of a failure.
 
 #### Auto-Examples
 

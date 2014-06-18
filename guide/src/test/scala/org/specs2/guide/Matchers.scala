@@ -210,7 +210,7 @@ In the code above you have to:
 ### Now learn how to...
 
  - use ${"standard results" ~ StandardResults} (`failure`, `success`, `skipped`, `todo`...) instead of matchers
- - add descriptions to your expectations to create even better failure messages
+ - add ${"descriptions" ~ ExpectationDescription} to your expectations to create even better failure messages
  - use datatables to conveniently group several examples into one
  - use ScalaCheck to generate and verify data for your examples
  - use Mockito to mock the interactions with another system

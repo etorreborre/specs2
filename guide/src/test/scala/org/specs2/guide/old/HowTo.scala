@@ -108,28 +108,6 @@ A full block can be marked as `Pending` just by using the `pending` method. For 
 
 This feature is not limited to `Pending` blocks, you can do the same with `Skipped` blocks.
 
-### Enhance failures
-
-Most of the time, the message displayed in the case of a matcher failure is clear enough. However a bit more information is sometimes necessary to get a better diagnostic on the value that's being checked. Let's say that you want to check a "ticket list": ${snippet{
-
-// will fail with "List(ticket1, ticket2) doesn't have size 3" for example
-machine.tickets must have size(3) // machine is a user-defined object
-}}
-
-If you wish to get a more precise failure message you can set an alias with the `aka` method (*also known as*): ${snippet{
-
-// will fail with "the created tickets 'List(ticket1, ticket2)' doesn't have size 3"
-machine.tickets aka "the created tickets" must haveSize(3)
-}}
-
-There is also a shortcut for `value aka value.toString` which is simply `value.aka`.
-
-And when you want other ways to customize the description, you can use:
-
-* `post`: `"a" post "is the first letter"` prints `a is the first letter`
-* `as`: `"b" as ((s:String) => "a"+s+"c")` prints `abc`
-* `showAs`: `Seq(1, 2, 3, 4).showAs((_:Seq[Int]).filter(isEven).mkString("|"))` prints `2|4`. This one is especially useful to filter out big data structures (lists, maps, xml...) before the failure display
-
 ### Share examples
 
 In a given specification some examples may look similar enough that you would like to "factor" them out and share them between

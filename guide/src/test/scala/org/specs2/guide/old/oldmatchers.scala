@@ -90,21 +90,6 @@ These other matchers need to be selectively added to the specification by adding
 
 
 
- * using `mute` to change a Matcher so that it returns MatchResults with no messages. This is used in Forms to create
-   properties showing no messages when they fail
-
- * using `updateMessage(f: String => String)` or `setMessage(m: String)` to change the failure message
-
- * using `<==>` or `==>` to provide a meaning for the expectation when the failure message would not be clear ${snippet{
-
-// when failing, this displays:
-// The byname function has not become a strict one because 'evaluated' is not equal to 'not evaluated'
-"The byname function has become a strict one" <==> (parameter === "evaluated")
- // 8<--
- def parameter = "evaluated"
-}}
-
-  Note that the sentence describing the expectation is negated when there is a failure. This functionality is provided by the `org.specs2.text.Sentences::negateSentence` trait. You can override this method if you want/need to provide a better behavior for this feature.
 
 
 ##### From Hamcrest
