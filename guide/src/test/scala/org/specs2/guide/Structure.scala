@@ -120,7 +120,8 @@ It is also possible to use the "functional" expectation mode with a unit specifi
 
 ### And if you want to know more
 
- - create *auto-examples* where the code *is* the description of the `Example`
+ - create ${"*auto-examples*" ~ AutoExamples} where the code *is* the description of the `Example`
+ - integrate ${"snippets of code" ~ Snippets} to your specification
  - ${"skip" ~ SkipExamples} examples
  - collect *all* expectations
  - use scripts and auto-numbered examples
