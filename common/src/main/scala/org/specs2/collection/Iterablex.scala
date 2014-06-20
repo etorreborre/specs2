@@ -115,11 +115,12 @@ trait Iterablex {
     /** @return a sequence rotated of a number of elements */
     def rotate(n: Int) = xs.slice(n, xs.size) ++ xs.slice(0, n)
     /** @return a randomly mixed sequence */
-    def scramble = {
-      val random = new java.util.Random
+    def scramble: Seq[T] = scramble(new scala.util.Random)
+
+    /** @return a randomly mixed sequence */
+    def scramble(random: scala.util.Random): Seq[T] =
       // rotate arbitrarily the sequence first then sort randomly
       xs.rotate(random.nextInt(xs.size+1)).seq.toSeq.sortWith((_,_) => random.nextInt(2) > 0)
-    }
 
   }
 }

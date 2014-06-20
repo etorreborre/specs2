@@ -19,6 +19,9 @@ case class Env(arguments: Arguments       = Arguments(),
                lineLogger: LineLogger = NoLineLogger,
                /** logger for issues */
                systemLogger: Logger = noLogging,
+               /** random generator */
+               random: scala.util.Random = new scala.util.Random,
+               /** file system interface */
                fileSystem: FileSystem = FileSystem) {
 
   /**

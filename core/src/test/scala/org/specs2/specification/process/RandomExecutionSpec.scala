@@ -16,7 +16,7 @@ class RandomExecutionSpec extends script.Specification with Groups with ThrownEx
   "random" - new group with results {
     eg := {
       val n = 10
-      val spec = new Specification with RandomExecution { def is =
+      val spec = new Specification with RandomSequentialExecution { def is =
         s2"""${Fragments((1 to n).map(i => "e"+i ! ex(i)):_*)}"""
 
         def ex(i: =>Int) = { print("ex"+i); ok }
@@ -38,7 +38,7 @@ class RandomExecutionSpec extends script.Specification with Groups with ThrownEx
       val fs_1_to_5 = Fragments((1 to 5).map(i => "e"+i ! ex(i)):_*)
       val fs_6_to_10 = Fragments((6 to 10).map(i => "e"+i ! ex(i)):_*)
 
-      val spec = new Specification with RandomExecution { def is =
+      val spec = new Specification with RandomSequentialExecution { def is =
         s2"""${fs_1_to_5.append(step("stop")).append(fs_6_to_10)}"""
       }
 

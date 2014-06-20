@@ -12,29 +12,31 @@ import scala.collection.concurrent.{Map => CMap, TrieMap}
 
 /**
  * This trait adds random execution constraints between examples.
+ *
+ * As a result they will be executed randomly but in sequence
  */
-trait RandomExecution extends SpecificationStructure {
-  override def map(fs: => Fragments) = super.map(addExecutionConstraints(fs))
+trait RandomSequentialExecution extends SpecificationStructure {
+  override def map(fs: =>Fragments, env: Env) = super.map(addExecutionConstraints(fs, env))
 
   /**
    * find sequences of concurrent examples
    */
-  private def addExecutionConstraints(fs: Fragments): Fragments = {
+  private def addExecutionConstraints(fs: Fragments, env: Env): Fragments = {
     val concurrentSequences = fs.fragments.foldLeft(Vector(Vector[Fragment]())) { (res, cur) =>
       res.updateLast(_ :+ cur).toVector ++
         // start a new section if there is a step
         (if (Fragment.isStep(cur)) Vector(Vector[Fragment]()) else Vector())
     }
-    val withConstraints = concurrentSequences.map(addExecutionConstraints)
+    val withConstraints = concurrentSequences.map(addExecutionConstraints(env))
     Fragments(withConstraints.reduce(_ ++ _): _*)
   }
 
   /**
    * Define a random order and enforce the new execution order using a map of previous executions
    */
-  private def addExecutionConstraints(fragments: Vector[Fragment]): Vector[Fragment] = {
+  private def addExecutionConstraints(env: Env)(fragments: Vector[Fragment]): Vector[Fragment] = {
     // scramble all fragments
-    val scrambled = fragments.zipWithIndex.scramble
+    val scrambled = fragments.zipWithIndex.scramble(env.random)
     // map of all executions
     val executions: CMap[Int, LazyValue[Execution]] = new TrieMap()
 

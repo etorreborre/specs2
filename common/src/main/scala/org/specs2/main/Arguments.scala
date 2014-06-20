@@ -46,7 +46,6 @@ case class Arguments (
   def stopOnSkip: Boolean             = execute.stopOnSkip
   def sequential: Boolean             = execute.sequential
   def isolated: Boolean               = execute.isolated
-  def random: Boolean                 = execute.random
   def threadsNb: Int                  = execute.threadsNb
 
   def xonly: Boolean                  = report.xonly
@@ -63,6 +62,9 @@ case class Arguments (
   def diffs: Diffs                    = report.diffs
   def fromSource: Boolean             = report.fromSource
   def traceFilter: StackTraceFilter   = report.traceFilter
+
+  @deprecated("use the org.specs2.specification.process.RandomSequentialExecution trait instead", since="3.0")
+  def random: Boolean                 = execute.random
 
   /** @return true if the command line contains a given string */
   def contains(a: String) = commandLine contains a
@@ -216,9 +218,11 @@ case class Execute(
   def stopOnSkip: Boolean           = _stopOnSkip.getOrElse(false)
   def sequential: Boolean           = _sequential.getOrElse(false)
   def isolated: Boolean             = _isolated.getOrElse(false)
-  def random: Boolean               = _random.getOrElse(false)
   def threadsNb: Int                = _threadsNb.getOrElse(Runtime.getRuntime.availableProcessors)
   def executor: String              = _executor.getOrElse("")
+
+  @deprecated("use the org.specs2.specification.process.RandomSequentialExecution trait instead", since="3.0")
+  def random: Boolean               = _random.getOrElse(false)
 
   def overrideWith(other: Execute) = {
     new Execute(
