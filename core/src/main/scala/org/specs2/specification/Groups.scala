@@ -53,7 +53,7 @@ import execute._
 
  */
 trait Groups extends GroupsLike { outer =>
-  def group(i: Int): ExamplesGroup = {
+  def createExamplesGroup(i: Int): ExamplesGroup = {
     if (autoNumberedGroups.nonEmpty) autoNumberedGroups.applyOrElse(i, (n: Int) => g1)()
     else                             numberedExampleGroups.applyOrElse(i, (n: Int) => g1)()
   }
@@ -211,7 +211,7 @@ trait Groups extends GroupsLike { outer =>
  * }
  */
 trait Grouped extends GroupsLike { outer =>
-  def group(i: Int): ExamplesGroup = {
+  def createExamplesGroup(i: Int): ExamplesGroup = {
     if (autoNumberedGroups.nonEmpty) autoNumberedGroups.applyOrElse(i, (n: Int) => g1)
     else                             numberedExampleGroups.applyOrElse(i, (n: Int) => g1)
   }
@@ -285,19 +285,19 @@ trait GroupsLike {
   trait AutoNumberedGroup extends ExamplesGroup {
     private var autoNumberedExamples: Seq[Function0Result] = Seq()
 
-    override def example(i: Int) =
+    override def createExample(i: Int) =
       if (autoNumberedExamples.nonEmpty) autoNumberedExamples.applyOrElse(i, (index:Int) => Function0Result.anyToAnyResult(new execute.Pending(s" - PENDING ")))
       else                               numberedExamples(i)
 
     def eg = this
 
     def :=[R: AsResult](r: =>R) {
-      autoNumberedExamples = autoNumberedExamples :+ (Function0Result.anyToAnyResult(r))
+      autoNumberedExamples = autoNumberedExamples :+ Function0Result.anyToAnyResult(r)
     }
   }
   trait group extends AutoNumberedGroup
 
-  def group(i: Int): ExamplesGroup
+  def createExamplesGroup(i: Int): ExamplesGroup
 }
 
 case class ExamplesGroup(private var name: String = "") {
@@ -330,5 +330,5 @@ case class ExamplesGroup(private var name: String = "") {
 
   protected lazy val numberedExamples = Seq(e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11,e12,e13,e14,e15,e16,e17,e18,e19,e20,e21,e22)
 
-  def example(i: Int) = numberedExamples(i)
+  def createExample(i: Int) = numberedExamples(i)
 }

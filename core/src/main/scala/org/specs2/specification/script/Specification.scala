@@ -76,7 +76,7 @@ case class GroupsScript(title: String = "groups", isStart: Boolean = true, group
     groupTagsFor(groupIndex)
   }
 
-  private def group(i: Int) = groups.group(i)
+  private def group(i: Int) = groups.createExamplesGroup(i)
 
   private def exampleTagsFor(g: Int, e: Int) = Seq(factory.taggedAs(exampleName(g, e)))
 
@@ -87,7 +87,7 @@ case class GroupsScript(title: String = "groups", isStart: Boolean = true, group
   }
 
   private def exampleName(i: Int, j: Int) = s"g${i+1}.e${j+1}"
-  private def createExample(line: String, i: Int, j: Int) = factory.example(line, group(i).example(j).t().mapMessage(_ + " - " + exampleName(i, j)))
+  private def createExample(line: String, i: Int, j: Int) = factory.example(line, group(i).createExample(j).t().mapMessage(_ + " - " + exampleName(i, j)))
   private def indentation(line: String) = factory.text(line.takeWhile(_ == ' ').mkString)
 
   def start = this

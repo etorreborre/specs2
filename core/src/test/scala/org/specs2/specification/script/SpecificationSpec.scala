@@ -74,7 +74,7 @@ class SpecificationSpec extends script.Specification with Grouped { def is = s2"
       new script.Specification with Grouped { outer =>
         def is = arguments ^ nocolor ^ s2"""$text1"""
         (0 until groups.size) foreach { i =>
-          (0 until 22).foreach(j => outer.group(i).example(j) := groups(i).example(j).t())
+          (0 until 22).foreach(j => outer.createExamplesGroup(i).createExample(j) := groups(i).createExample(j).t())
         }
       }
     }.messages
