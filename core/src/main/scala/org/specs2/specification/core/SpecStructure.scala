@@ -13,7 +13,7 @@ import Process.{Process1, eval}
 
 case class SpecStructure(header: SpecHeader, arguments: Arguments, fragments: Fragments) {
 
-  def contents = contentsLens.get(this)
+  def contents: Process[Task, Fragment] = contentsLens.get(this)
   def map(f: Fragments => Fragments): SpecStructure                            = fragmentsLens.modify(this)(f)
   def |>(p: Process1[Fragment, Fragment]): SpecStructure                       = fragmentsLens.modify(this)(_ |> p)
   def |>(f: Process[Task, Fragment] => Process[Task, Fragment]): SpecStructure = fragmentsLens.modify(this)(_ update f)

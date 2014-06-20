@@ -57,7 +57,7 @@ trait Executor {
         else                             Success()
 
       // depending on the result we decide if we should go on executing fragments
-      val nextMustStopBecauseOfBarrierResult =
+      val barrierStop =
         mustStop ||
         arguments.stopOnFail && barrierResult.isFailure ||
         arguments.stopOnSkip && barrierResult.isSkipped ||
@@ -79,7 +79,7 @@ trait Executor {
 
       // if this fragment is a join point, start a new sequence
       // and check if the execution needs to be stopped in case of a step error
-      val (nextBarrier, nextMustStopBecauseOfStepResult) =
+      val (nextBarrier, stepStop) =
         if (fragment.execution.mustJoin) {
           val stepResult = executedFragment.executionResult
           (Task.now(stepResult), fragment.execution.nextMustStopIf(stepResult))
@@ -88,7 +88,7 @@ trait Executor {
         else
           (barrier.map { case r => Result.ResultFailureMonoid.append(r, executedFragment.execution.result) }, false)
 
-      emit(executingFragment) fby sequencedExecution(env, nextBarrier, nextMustStopBecauseOfBarrierResult || nextMustStopBecauseOfStepResult)
+      emit(executingFragment) fby sequencedExecution(env, nextBarrier, barrierStop || stepStop)
     }
 
   /** execute one fragment */
@@ -135,8 +135,9 @@ object Executor extends Executor {
     finally env.shutdown
 
   def runSpecification(spec: Specification) = {
-    val env = Env(arguments = spec.structure(Env()).arguments)
-    try runSpec(spec.structure(env), env)
+    lazy val structure = spec.structure(Env())
+    val env = Env(arguments = structure.arguments)
+    try runSpec(structure, env)
     finally env.shutdown
   }
 
