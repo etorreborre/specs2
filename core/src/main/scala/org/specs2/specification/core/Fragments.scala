@@ -2,6 +2,8 @@ package org.specs2
 package specification
 package core
 
+import java.util.concurrent.{CyclicBarrier, CountDownLatch}
+
 import scalaz.concurrent.Task
 import execute.{AsResult, Skipped, Result}
 import shapeless._
@@ -18,6 +20,7 @@ case class Fragments(contents: Process[Task, Fragment]) {
   def update(f: Process[Task, Fragment] => Process[Task, Fragment]) = contentsLens.modify(this)(f)
   def flatMap(f: Fragment => Process[Task, Fragment])               = contentsLens.modify(this)(_ flatMap f)
   def map(f: Fragment => Fragment)                                  = contentsLens.modify(this)(_ map f)
+  def mapDescription(f: Description => Description)                 = map(_.updateDescription(f))
   def |> (other: Process1[Fragment, Fragment])                      = contentsLens.modify(this)(_ |> other)
   def fragments: IndexedSeq[Fragment]                               = contents.runLog.run
   def filter(predicate: Fragment => Boolean)                        = contentsLens.modify(this)(_ filter predicate)
@@ -38,6 +41,9 @@ case class Fragments(contents: Process[Task, Fragment]) {
 
   def texts    = fragments.filter(isText)
   def examples = fragments.filter(isExample)
+
+  def stripMargin: Fragments = stripMargin('|')
+  def stripMargin(margin: Char): Fragments = mapDescription(_.stripMargin(margin))
 }
 
 object Fragments {
@@ -67,6 +73,9 @@ case class Fragment(description: Description, execution: Execution, location: Lo
   def makeGlobal(when: Boolean)           = updateExecution(_.makeGlobal(when))
   def skip              = updateExecution(_.skip)
   def updateExecution(f: Execution => Execution) = copy(execution = f(execution))
+  def updateRun(r: (Env => Result) => (Env => Result)) = updateExecution(_.updateRun(r))
+
+  def updateDescription(f: Description => Description) = copy(description = f(description))
   def setExecution(e: Execution) = updateExecution(_ => e)
   def setPreviousResult(r: Option[Result]) = copy(execution = execution.setPreviousResult(r))
   def was(statusCheck: String => Boolean) = execution.was(statusCheck)
