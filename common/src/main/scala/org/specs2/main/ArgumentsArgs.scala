@@ -16,6 +16,7 @@ trait ArgumentsArgs extends ArgProperties {
     ex:            ArgProperty[String]            = ArgProperty[String](),
     include:       ArgProperty[String]            = ArgProperty[String](),
     exclude:       ArgProperty[String]            = ArgProperty[String](),
+    @deprecated("use the was x! instead", since="3.0")
     wasIssue:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
     was:           ArgProperty[String]            = ArgProperty[String](),
     plan:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
@@ -24,6 +25,7 @@ trait ArgumentsArgs extends ArgProperties {
     stopOnSkip:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    @deprecated("use the org.specs2.specification.process.RandomSequentialExecution trait instead", since="3.0")
     random:        ArgProperty[Boolean]           = ArgProperty[Boolean](),
     xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
     showOnly:      ArgProperty[String]            = ArgProperty[String](),

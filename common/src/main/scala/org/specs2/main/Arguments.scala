@@ -34,7 +34,6 @@ case class Arguments (
   def keep(tags: String*)             = select.keep(tags:_*)
   def contain(tags: String*)          = select.contain(tags:_*)
   def hasFilter                       = select.hasFilter
-  def wasIssue: Boolean               = select.wasIssue
   def was(s: String): Boolean         = select.was(s)
   def wasIsDefined: Boolean           = select.wasIsDefined
   def specName: String                = select.specName
@@ -65,6 +64,8 @@ case class Arguments (
 
   @deprecated("use the org.specs2.specification.process.RandomSequentialExecution trait instead", since="3.0")
   def random: Boolean                 = execute.random
+  @deprecated("use the was x! instead", since="3.0")
+  def wasIssue: Boolean               = select.wasIssue
 
   /** @return true if the command line contains a given string */
   def contains(a: String) = commandLine contains a
@@ -162,10 +163,12 @@ case class Select(
   def keep(tags: String*)           = SeparatedTags(include, exclude).keep(tags)
   def contain(tags: String*)        = SeparatedTags(include, exclude).contain(tags)
   def hasFilter                     = Seq(_include, _exclude, _ex, _was, _specName).exists(_.isDefined)
-  def wasIssue: Boolean             = was("x") || was("!")
   def was(s: String): Boolean       = hasFlags(s, _was)
   def wasIsDefined: Boolean         = _was.isDefined
   def specName: String              = _specName.getOrElse(".*Spec")
+
+  @deprecated("use the was x! instead", since="3.0")
+  def wasIssue: Boolean             = was("x") || was("!")
 
   def overrideWith(other: Select) = {
     new Select(
