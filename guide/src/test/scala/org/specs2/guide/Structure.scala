@@ -122,7 +122,7 @@ It is also possible to use the "functional" expectation mode with a unit specifi
  - create ${"*auto-examples*" ~ AutoExamples} where the code *is* the description of the `Example`
  - integrate ${"snippets of code" ~ CaptureSnippets} to your specification
  - ${"skip" ~ SkipExamples} examples
- - collect *all* expectations
+ - collect ${"*all* expectations" ~ GetAllExpectations}
  - use scripts and auto-numbered examples
  - use the Given-When-Then style for structuring specifications
  - mark examples as pending until they succeed
