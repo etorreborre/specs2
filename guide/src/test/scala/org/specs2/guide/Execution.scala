@@ -83,6 +83,13 @@ class ActionSpec extends Specification { def is = s2"""
 """}
 }}
 
+### Now learn how to...
+
+ - use ${"arguments and tags" ~/ Filtering} to select the examples to execute
+
+### If you want to know more
+
+ - add ${"random sequencing" ~ RandomExecution} to your specification
 
 """
 

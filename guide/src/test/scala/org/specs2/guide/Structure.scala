@@ -1,6 +1,5 @@
-package org.specs2.guide
-
-import org.specs2.guide.old.structure._
+package org.specs2
+package guide
 
 object Structure extends UserGuidePage { def is = s2"""
 

@@ -92,7 +92,6 @@ trait TextPrinter extends Printer {
   def printFragment(args: Arguments): ((Fragment, (Stats, Int))) => Process[Task, LogLine] = {
     case (fragment, (stats, indentation)) =>
       val indentationSize = args.commandLine.int("indentation").getOrElse(0)
-
       fragment match {
         case Fragment(RawText(t), e, l) if e.isRunnable =>
           printRunnable(t, e, args, indentation)
