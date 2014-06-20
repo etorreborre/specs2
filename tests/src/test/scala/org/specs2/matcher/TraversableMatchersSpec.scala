@@ -48,9 +48,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Gro
    // this must be understood as allOf(2, 3)
    ${ Seq(1, 2, 3) must contain(2, 3) }
    ${ Seq(1)       must contain(allOf(1, 1)) }
-$xsection
    ${ (Seq(1)      must contain(eachOf(1, 1))) returns "List(1) is missing the value: 1" }
-$xsection
    ${ Seq(1, 2, 3) must contain(allOf(Seq(1, 2).map(be_>=(_)):_*))             }
    ${ Seq(1, 2, 3) must contain(allOf(Seq(1, 2).map(be_>=(_)):_*)).inOrder     }
    ${ Seq(1, 2, 3) must not(contain(allOf(Seq(0, 0).map(be_<=(_)):_*)))        }
@@ -74,6 +72,7 @@ $xsection
       "List(1, 2, 3) does not contain exactly 3 correct values\n"+
       "- 3\n"+
       " * 3 is less than 5\n" }
+   ${ (Seq(1, 2, 3) must contain(allOf(3, 2).inOrder)) returns "the value 2 is not in order" }
    ${ (Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(2), be_<=(1)).inOrder)) returns
       "List(1, 2, 3) does not contain exactly 3 correct values in order\n"+
         "- 3\n"+
