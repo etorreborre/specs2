@@ -46,10 +46,10 @@ class JsonSpec extends Specification with ScalaCheck {
     case other         => true
   }
 
-  def beTerminalValues: Matcher[Seq[Any]] = beTerminalValue.forall
+  def beTerminalValues: Matcher[Seq[Any]] = ((a: Any) => a must beTerminalValue).forall
   def beTerminalValue: Matcher[Any] = (isTerminal(_:Any), (_:Any)+" is not terminal")
 
-  def haveTerminalValues: Matcher[Seq[(Any, Any)]] = haveTerminalValue.forall
+  def haveTerminalValues: Matcher[Seq[(Any, Any)]] = ((_: (Any, Any)) must haveTerminalValue).forall
   def haveTerminalValue = beTerminalValue ^^ ((p:(Any, Any)) => p._2)
 }
 

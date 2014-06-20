@@ -71,20 +71,20 @@ class AnyMatchersSpec extends script.Specification with Groups with ResultMatche
   ${ Set(1, 2, 3) must ((be_===(_:Int)).toSet)(Set(1, 2, 3)) }
 
  forall allows to transform a single matcher to a matcher checking that all elements of a Seq are matching
-  ${ Seq(2, 3, 4) must be_>=(2).forall }
+  ${ Seq(2, 3, 4) must contain(be_>=(2)).forall }
   ${ forall(Seq((1, 2), (3, 4))) { case (a, b) => a must be_<(b) } }
   ${ forallWhen(Seq((2, 1), (3, 4))) { case (a, b) if a > 2 => a must be_<(b) } }
   ${ (Seq(2, 3, 4) must contain(_:Int)).forall(Seq(2, 4)) }
 
   foreach is like forall but will execute all matchers and collect the results
-  ${ Seq(2, 3, 4) must be_>=(2).foreach }
+  ${ Seq(2, 3, 4) must contain(be_>=(2)).foreach }
   ${ foreach(Seq((1, 2), (3, 4))) { case (a, b) => a must be_<(b) } }
   ${ foreachWhen(Seq((2, 1), (3, 4))) { case (a, b) if a > 2 => a must be_<(b) } }
   ${ ((_:Int) must be_>=(2)).foreach(Seq(2, 3, 4)) }
   if all expectations throws are Skipped then the whole result must be skipped $skipForeach
 
   atLeastOnce allows to transform a single matcher to a matcher checking that one element of a Seq is matching
-  ${ Seq(2, 3, 4) must be_>(2).atLeastOnce }
+  ${ Seq(2, 3, 4) must contain(be_>(2)).atLeastOnce }
   ${ ((_:Int) must be_>(2)).atLeastOnce(Seq(2, 3, 4)) }
   ${ ((i:Int) => MustExpectations.theValue(i) must be_>(2)).atLeastOnce(Seq(2, 3, 4)) }
   ${ atLeastOnce(Seq((4, 2), (3, 4))) { case (a, b) => a must be_<(b) } }
