@@ -22,6 +22,8 @@ import com.typesafe.tools.mima.plugin.MimaKeys.previousArtifact
 import xerial.sbt.Sonatype._
 import SonatypeKeys._
 import sbtbuildinfo.Plugin._
+import scoverage.ScoverageSbtPlugin._
+import ScoverageKeys._
 
 object build extends Build {
   type Settings = Def.Setting[_]
@@ -234,6 +236,8 @@ object build extends Build {
     javaOptions += "-Xmx3G",
     fork in test := true,
     testOptions := Seq(Tests.Filter(s => Seq("Spec", "Guide", "Index").exists(s.endsWith) && Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))
+  ) ++ instrumentSettings ++ Seq(
+    excludedPackages in ScoverageCompile := ".*create.AutoExamples.*;.*create.S2StringContext.*"
   )
 
   /**

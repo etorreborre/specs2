@@ -13,3 +13,5 @@ addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "0.1.6")
 addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "0.2.1")
 
 addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.3.1")
+
+addSbtPlugin("org.scoverage" %% "sbt-scoverage" % "0.99.5.1")
