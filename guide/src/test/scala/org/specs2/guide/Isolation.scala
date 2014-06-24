@@ -4,7 +4,7 @@ package guide
 import java.io.{PrintWriter, ByteArrayOutputStream}
 import java.util.Properties
 
-import scala.collection.mutable.ListBuffer
+import scala.collection.JavaConversions._
 
 object Isolation extends UserGuidePage { def is = s2"""
 
