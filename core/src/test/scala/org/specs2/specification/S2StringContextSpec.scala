@@ -20,8 +20,6 @@ class S2StringContextSpec extends Specification { def is = s2"""
   fragments                                                    ${exs.e5}
   fragments from a specification                               ${exs.e6}
   2 examples                                                   ${exs.e7}
-  an example and a tag                                         ${exs.e8}
-  an example and a section                                     ${exs.e9}
   """
 
 }
@@ -45,12 +43,6 @@ object exs extends MustMatchers with StandardResults with S2StringContext {
   this should
     create example 1 $ok
     create example 2 $ok""".fragments must haveSize(4)
-
-  def e8 = s2"""a tagged example $ok ${DefaultFragmentFactory.taggedAs("x")}""".fragments.map(Fragment.fragmentType) must_==
-    Seq("Example", "Tag", "Text")
-
-  def e9 = s2"""a tagged example $ok ${DefaultFragmentFactory.asSection("x")}""".fragments.map(Fragment.fragmentType) must_==
-    Seq("Example", "Tag", "Text")
 
   val spec = new SpecificationStructure { outer =>
     def is = SpecStructure(SpecHeader(outer.getClass), Arguments(), Fragments(text("the"), text(" world")))
