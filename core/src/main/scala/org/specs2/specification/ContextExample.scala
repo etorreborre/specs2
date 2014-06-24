@@ -115,18 +115,17 @@ trait BeforeAfterSpec extends SpecificationStructure {
 /**
  * DEPRECATED TRAITS
  */
-
-@deprecated(since="3.0", message="use the BeforeEach trait instead")
+@deprecated("use the BeforeEach trait instead", "3.0")
 trait BeforeExample extends BeforeEach
 
-@deprecated(since="3.0", message="use the AfterEach trait instead")
+@deprecated("use the BeforeEach trait instead", "3.0")
 trait AfterExample extends AfterEach
 
-@deprecated(since="3.0", message="use the AroundEach trait instead")
+@deprecated("use the BeforeEach trait instead", "3.0")
 trait AroundExample extends AroundEach
 
-@deprecated(since="3.0", message="use the BeforeAfterEach trait instead")
+@deprecated("use the BeforeEach trait instead", "3.0")
 trait BeforeAfterExample extends BeforeAfterEach
 
-@deprecated(since="3.0", message="use the ForEach trait instead")
-trait FixtureExample extends ForEach
+@deprecated("use the BeforeEach trait instead", "3.0")
+trait FixtureExample[T] extends ForEach[T]
