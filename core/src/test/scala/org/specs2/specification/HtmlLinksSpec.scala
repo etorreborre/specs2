@@ -8,7 +8,7 @@ class HtmlLinksSpec extends Specification { def is = s2"""
   Html links referencing specifications can be introduced
 
   for a specification
-  ${ a(link(userGuide))                             === "<a href='org.specs2.specification.HowTo.html'>HowTo</a>" }
+  ${ a(link(userGuide))                             === "<a href='org.specs2.specification.UserGuideSpecification.html'>User guide</a>" }
   ${ a(link(howTo))                                 === "<a href='org.specs2.specification.HowTo.html'>HowTo</a>" }
 
   with a specific alias
