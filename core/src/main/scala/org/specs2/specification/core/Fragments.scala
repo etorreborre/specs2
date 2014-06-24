@@ -92,13 +92,11 @@ object Fragment {
 
   def isText(f: Fragment) = (f.description match {
     case t: RawText => true
-    case t: Code    => true
     case _          => false
   }) && !f.isRunnable
 
   def isExample(f: Fragment) = (f.description match {
     case t: RawText => true
-    case t: Code    => true
     case _          => false
   }) && f.isRunnable
 

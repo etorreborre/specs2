@@ -36,7 +36,7 @@ trait AllExpectations extends StoredExpectations with FragmentsFactory with Spec
    * @return an example factory which will take the stored results and make them the example result
    */
   implicit override def fragmentFactory: FragmentFactory =
-    new ContextualFragmentFactory(super.fragmentFactory, resultsContext(storedResults))
+    new ContextualFragmentFactory(super.fragmentFactory, (env: Env) => resultsContext(storedResults))
 
   /**
    * create a new Context with the list of captured results.

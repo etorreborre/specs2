@@ -96,9 +96,6 @@ trait TextPrinter extends Printer {
         case Fragment(RawText(t), e, l) if e.isRunnable =>
           printRunnable(t, e, args, indentation)
 
-        case Fragment(Code(t), e, l) if e.isRunnable =>
-          printRunnable(t, e, args, indentation)
-
         case Fragment(d, e, l) if e.isRunnable && !e.result.isSuccess =>
           printRunnable(d.show, e, args, indentation)
 

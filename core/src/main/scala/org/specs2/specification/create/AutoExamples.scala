@@ -6,7 +6,7 @@ import execute.AsResult
 import reflect.Compat210.blackbox
 import reflect.Macros
 import text.Trim._
-import specification.core.{Code, Fragments, Fragment}
+import org.specs2.specification.core.{Description, Fragments}
 
 /**
  * This trait allows to capture some code as an example description
@@ -15,7 +15,7 @@ trait AutoExamples extends FragmentsFactory {
   implicit def eg[T : AsResult](code: =>T): Fragments = macro AutoExamples.create[T]
 
   def createExample[T](expression: String, code: =>T, asResult: AsResult[T]): Fragments =
-    Fragments(fragmentFactory.example(Code(trimExpression(expression)), code)(asResult),
+    Fragments(fragmentFactory.example(Description.code(trimExpression(expression)), code)(asResult),
               fragmentFactory.break)
 
   private[specs2] def trimExpression(call: String) = {

@@ -14,7 +14,6 @@ import org.specs2.main.{CommandLine, Arguments}
 import specification.core._
 import execute.DecoratedResult
 import specification.core.RawText
-import specification.core.Code
 
 import scala.concurrent.ExecutionContext
 
@@ -63,7 +62,7 @@ trait S2StringContext extends FragmentsFactory { outer =>
       val autoExample = texts.lastOption.exists(_.trim.isEmpty)
 
       val description =
-        if (autoExample) Code(expression)
+        if (autoExample) Description.code(expression)
         else             RawText(texts.lastOption.fold("")(_.trim))
 
       val before =

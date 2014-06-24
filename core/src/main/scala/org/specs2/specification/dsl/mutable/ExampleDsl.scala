@@ -6,7 +6,7 @@ package mutable
 import execute.AsResult
 import control.ImplicitParameters
 import ImplicitParameters._
-import org.specs2.specification.core.{Env, Fragment}
+import org.specs2.specification.core.{RawText, Execution, Env, Fragment}
 import specification.dsl
 
 trait ExampleDsl extends BlockDsl with dsl.ExampleDsl {
@@ -16,8 +16,11 @@ trait ExampleDsl extends BlockDsl with dsl.ExampleDsl {
     def >>(f: =>Fragment): Unit = describe(d) >> f
     def >>(f: =>Unit)(implicit p: ImplicitParam): Unit = describe(d).>>(f)(p)
 
-    def >>[R : AsResult](r: =>R): Fragment = {
-      addFragment(fragmentFactory.example(d, r))
+    def >>[R : AsResult](r: =>R): Fragment =
+      >>(Execution.result(r))
+
+    def >>(execution: Execution): Fragment = {
+      addFragment(fragmentFactory.example(RawText(d), execution))
       addFragment(fragmentFactory.break)
     }
 

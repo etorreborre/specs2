@@ -18,12 +18,6 @@ case class RawText(text: String) extends Description {
   override def stripMargin(margin: Char) = copy(text.stripMargin(margin))
 }
 
-case class Code(md: String) extends Description {
-  def show: String = md
-  override def matches(s: String) = md matches s
-  override def stripMargin(margin: Char) = copy(md.stripMargin(margin))
-}
-
 case object NoText extends Description {
   def show: String = ""
 }
@@ -74,6 +68,9 @@ object AlwaysWhenNoIncludeMarker extends Description {
 
 object Description {
   def text(text: String) = RawText(text)
+  def code(text: String) =
+    if (text.contains("\n")) RawText("```\n"+text+"\n```")
+    else                     RawText(s"`$text`")
 
   def tag(ts: String*)       = mark(Tag(ts:_*))
   def taggedAs(ts: String*)  = markAs(Tag(ts:_*))

@@ -4,8 +4,8 @@ package dsl
 package mutable
 
 trait MutableFragmentsDsl extends
-        FragmentsDsl
-  with  ExampleDsl
+       FragmentsDsl
+  with ExampleDsl
   with BlockDsl
   with TextDsl
   with ActionDsl

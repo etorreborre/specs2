@@ -9,7 +9,7 @@ import execute._
  * For each created example use a given context
  */
 trait ContextExample extends FragmentsFactory { outer =>
-  protected def context: Context
+  protected def context: Env => Context
 
   override protected def fragmentFactory = new ContextualFragmentFactory(super.fragmentFactory, context)
 }
@@ -19,7 +19,7 @@ trait ContextExample extends FragmentsFactory { outer =>
  */
 trait BeforeEach extends ContextExample { outer =>
   protected def before: Any
-  protected def context = new Before { def before = outer.before }
+  protected def context = (env: Env) => new Before { def before = outer.before }
 }
 
 /**
@@ -27,7 +27,7 @@ trait BeforeEach extends ContextExample { outer =>
  */
 trait AfterEach extends ContextExample { outer =>
   protected def after: Any
-  protected def context = new After { def after = outer.after }
+  protected def context = (env: Env) => new After { def after = outer.after }
 }
 
 /**
@@ -37,7 +37,7 @@ trait BeforeAfterEach extends ContextExample { outer =>
   protected def before: Any
   protected def after: Any
 
-  protected def context = new BeforeAfter {
+  protected def context = (env: Env) => new BeforeAfter {
     def before = outer.before
     def after = outer.after
   }
@@ -48,18 +48,28 @@ trait BeforeAfterEach extends ContextExample { outer =>
  */
 trait AroundEach extends ContextExample { outer =>
   protected def around[R : AsResult](r: =>R): Result
-  protected def context = new Around { def around[R : AsResult](r: =>R) = outer.around(r) }
+  protected def context = (env: Env) => new Around { def around[R : AsResult](r: =>R) = outer.around(r) }
 }
 
 /**
  * For each created example use a given fixture object
  */
-trait ForEach[T] extends FragmentsFactory { outer =>
+trait ForEach[T] extends ContextExample { outer =>
   protected def foreach[R : AsResult](f: T => R): Result
+  protected def foreachWithEnv[R : AsResult](f: Env => T => R): Env => Result =
+    (env: Env) => foreach(f(env))
+
+  protected def context = (env: Env) => new Around { def around[R : AsResult](r: =>R) = AsResult(r) }
 
   implicit def foreachFunctionToResult[R : AsResult]: AsResult[T => R] = new AsResult[T => R] {
     def asResult(f: =>(T => R)) = foreach(f)
   }
+  
+  implicit def foreachFunctionToExecution[R : AsResult](f: T => R): Execution =
+    Execution.withEnv(foreachWithEnv((env: Env) => f))
+
+  implicit def foreachFunctionWithEnvToExecution[R : AsResult](f: Env => T => R): Execution =
+    Execution.withEnv((env: Env) => foreach(f(env)))
 }
 
 /**

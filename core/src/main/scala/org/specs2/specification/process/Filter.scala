@@ -27,7 +27,6 @@ trait Filter {
     if (regex !=".*")
       process1.filter {
         case Fragment(RawText(t),e,_) if e.isRunnable => t.matches(regex)
-        case Fragment(Code(t),e,_)    if e.isRunnable => t.matches(regex)
         case other                                    => true
       }
     else process1.id
