@@ -176,17 +176,17 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
        |[info] + e2"""
 
   def j1 = s2"""the ${SpecificationLink(SpecHeader(classOf[String]))} spec""" contains
-    """|[info] * the String spec """
+    """|[info] the * String spec"""
 
   def j2 = s2"""the ${SpecificationLink(SpecHeader(classOf[String], Some("STRING")))} spec""" contains
-    """|[info] * the STRING spec """
+    """|[info] the * STRING spec"""
 
   def j3 = {
     val repository = StatisticsRepository.memory
     repository.storeStatistics(classOf[String].getName, Stats(examples = 1, failures = 1)).runOption
     val env = Env(statisticsRepository = repository)
     (s2"""the ${SpecificationLink(SpecHeader(classOf[String], Some("STRING")))} spec""", env) contains
-    """|[info] x the STRING spec"""
+    """|[info] the x STRING spec"""
 
   }
 

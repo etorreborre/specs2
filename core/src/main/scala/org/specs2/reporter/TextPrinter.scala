@@ -144,12 +144,15 @@ trait TextPrinter extends Printer {
 
   def printSuccess(show: String, success: execute.Success, args: Arguments) = {
     val expected = if (success.exp.nonEmpty) "\n"+success.exp else ""
-    emit(show+expected).info
+    if (expected.trim.nonEmpty) emit(show+expected).info
+    else                        emit(show).info
   }
 
   def printPending(show: String, pending: execute.Pending, args: Arguments) = {
-    val reason =  if (pending.message.isEmpty) "PENDING" else pending.message
-    emit(show+" "+reason).info
+    val reason = if (pending.message.isEmpty) "PENDING" else pending.message
+
+    if (reason.trim.nonEmpty) emit(show+" "+reason).info
+    else                      emit(show).info
   }
 
   def printSkipped(show: String, skipped: execute.Skipped, args: Arguments) = {
@@ -158,7 +161,8 @@ trait TextPrinter extends Printer {
         if (skipped.message.isEmpty) "SKIPPED" else skipped.message
       else skipped.message
 
-    emit(show+"\n"+reason).info
+    if (reason.trim.nonEmpty) emit(show+"\n"+reason).info
+    else                      emit(show).info
   }
 
   def printOther(show: String, other: execute.Result, args: Arguments) = {
