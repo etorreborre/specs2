@@ -5,7 +5,7 @@ package mutable
 
 import control.ImplicitParameters._
 import execute.AsResult
-import org.specs2.specification.core.{StacktraceLocation, Fragment}
+import org.specs2.specification.core.{Fragments, StacktraceLocation, Fragment}
 import specification.create.FragmentsFactory
 
 trait BlockDsl extends FragmentBuilder with FragmentsFactory {
@@ -19,6 +19,10 @@ trait BlockDsl extends FragmentBuilder with FragmentsFactory {
     def >>(f: =>Unit)(implicit p: ImplicitParam): Unit = addBlock(d, f, StacktraceLocation())
     def should(f: =>Unit)(implicit p: ImplicitParam)   = addBlock(s"$d should", f, StacktraceLocation())
     def can(f: =>Unit)(implicit p: ImplicitParam)      = addBlock(s"$d can", f, StacktraceLocation())
+
+    def >>(f: =>Fragments)(implicit p1: ImplicitParam1): Unit     = >>     {f; ()}
+    def should(f: =>Fragments)(implicit p1: ImplicitParam1): Unit = should {f; ()}
+    def can(f: =>Fragments)(implicit p1: ImplicitParam1): Unit    = can    {f; ()}
 
     private def addBlock(text: String, f: =>Any, location: StacktraceLocation) = addFragmentBlock {
       addStart

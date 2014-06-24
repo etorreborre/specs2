@@ -90,14 +90,6 @@ object Fragment {
       s"Fragment(${f.description.shows})"
   }
 
-  val Empty = Fragment(NoText, Execution.NoExecution)
-
-  /** this allows the creation of fragments with a for loop */
-  def foreach[T](seq: Seq[T])(f: T => Fragment): Fragment = {
-    seq foreach f
-    Empty
-  }
-
   def isText(f: Fragment) = (f.description match {
     case t: RawText => true
     case t: Code    => true

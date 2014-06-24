@@ -139,7 +139,8 @@ It is also possible to use the "functional" expectation mode with a unit specifi
  - use ${"named examples" ~ NamedExamples} in acceptance specifications to get default example names
  - use ${"scripts and auto-numbered examples" ~ AutoNumberedExamples} to completely separate the specification text from the code
  - use the Given-When-Then style for structuring specifications
- - mark examples as pending until they succeed
+ - mark examples as ${"pending until they are fixed" ~ PendingUntilFixedExamples}
+ - add ${"links to other specifications" ~ LinkOtherSpecifications}
  - use the command line arguments to define the body of an example
  - create a trait which will add specification fragments before or after an other specification when mixed-in
 

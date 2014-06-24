@@ -1,6 +1,7 @@
 package org.specs2.specification
 package mutable
 
+import core._
 import create.DefaultFragmentFactory
 import DefaultFragmentFactory._
 import core.{Env, Results, Fragment}
@@ -43,7 +44,7 @@ class MutableFragmentsDslSpec extends org.specs2.Specification { def is = s2"""
 
   def e4 = fragments(new dsl {
     "this" should {
-      Fragment.foreach(1 to 2) { i => "e"+i in ok }
+      (1 to 2).repeat { i => "e"+i in ok }
     }
   }).map(_.description) must
     contain(exactly(Seq(
