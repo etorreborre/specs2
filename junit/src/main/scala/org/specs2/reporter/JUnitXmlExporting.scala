@@ -36,10 +36,10 @@ trait JUnitXmlExporting extends Exporting with JUnitXmlPrinter {
    */
   def print(name: SpecName, fs: Seq[ExecutedFragment])(implicit args: Arguments) {
     lazy val suite = testSuite(name, fs)
-    fileWriter.write(filePath(suite.description)) { out => suite.flush(out) }
+    fileWriter.write(filePath(name.fullName)) { out => suite.flush(out) }
   }
 
-  def filePath(desc: Description) = outputDir + desc.getClassName + ".xml"
+  def filePath(fullSpecName: String) = outputDir + fullSpecName + ".xml"
 
 }
 
