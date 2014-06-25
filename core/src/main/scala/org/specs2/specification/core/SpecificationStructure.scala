@@ -4,7 +4,7 @@ package core
 
 import data.TopologicalSort
 import control._
-import org.specs2.main.Arguments
+import org.specs2.main.{CommandLine, Arguments}
 import reflect.Classes
 import Classes._
 import scalaz.std.anyVal._
@@ -13,21 +13,18 @@ import scalaz.std.list._
 
 trait ContextualSpecificationStructure {
   def structure: Env => SpecStructure
+  def fragments = (env: Env) => structure(env).fragments
 }
 
 trait SpecificationStructure extends ContextualSpecificationStructure {
   def is: SpecStructure
-  def structure = (env: Env) => is.withPreviousResults(env).map(fs => map(map(fs, env)))
-  def fragments = (env: Env) => structure(env).fragments
+  def structure = (env: Env) => decorate(is, env)
+  def decorate(is: SpecStructure, env: Env) = is.withPreviousResults(env).map(fs => map(map(fs, env)))
 
   /** modify the fragments */
   def map(fs: =>Fragments): Fragments = fs
   /** modify the fragments, using the current environment */
   def map(fs: =>Fragments, env: Env): Fragments = fs
-}
-
-trait WithArguments { this: SpecificationStructure =>
-  def withArguments = (arguments: Arguments) => SpecStructure
 }
 
 object SpecificationStructure {

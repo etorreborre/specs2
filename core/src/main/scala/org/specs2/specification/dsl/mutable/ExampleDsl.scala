@@ -6,7 +6,8 @@ package mutable
 import execute.AsResult
 import control.ImplicitParameters
 import ImplicitParameters._
-import org.specs2.specification.core.{RawText, Execution, Env, Fragment}
+import org.specs2.main.CommandLine
+import org.specs2.specification.core._
 import specification.dsl
 
 trait ExampleDsl extends BlockDsl with dsl.ExampleDsl {
@@ -14,10 +15,17 @@ trait ExampleDsl extends BlockDsl with dsl.ExampleDsl {
 
   class BlockExample(d: String) {
     def >>(f: =>Fragment): Unit = describe(d) >> f
+    def >>(fs: =>Fragments)(implicit p1: ImplicitParam1): Unit = describe(d).>>(fs)(p1)
     def >>(f: =>Unit)(implicit p: ImplicitParam): Unit = describe(d).>>(f)(p)
 
     def >>[R : AsResult](r: =>R): Fragment =
       >>(Execution.result(r))
+
+    def >>[R](f: CommandLine => R)(implicit asResult: AsResult[R], p: ImplicitParam): Fragment =
+      >>(Execution.withEnv((env: Env) => asResult.asResult(f(env.arguments.commandLine))))
+
+    def >>[R](f: Env => R)(implicit asResult: AsResult[R], p1: ImplicitParam1): Fragment =
+      >>(Execution.withEnv((env: Env) => asResult.asResult(f(env))))
 
     def >>(execution: Execution): Fragment = {
       addFragment(fragmentFactory.example(RawText(d), execution))
@@ -25,6 +33,9 @@ trait ExampleDsl extends BlockDsl with dsl.ExampleDsl {
     }
 
     def in[R : AsResult](r: =>R): Fragment = d >> r
+    def in[R](f: CommandLine => R)(implicit asResult: AsResult[R], p: ImplicitParam): Fragment = d.>>(f)(asResult, p)
+    def in[R](f: Env => R)(implicit asResult: AsResult[R], p1: ImplicitParam1): Fragment = d.>>(f)(asResult, p1)
+    def in(execution: Execution): Fragment = d >> execution
   }
 
   override implicit def bangExample(d: String): BangExample =

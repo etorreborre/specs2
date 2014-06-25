@@ -30,7 +30,7 @@ object Runner {
       (t :: t.chainedExceptions).map { s =>
         consoleLogging("  caused by " + s.toString) >>
           s.getStackTrace.toList.traverseU(t => consoleLogging("  " + t.toString))
-      }.sequenceU.void
+      }.sequence.void
   }
 
   def exitSystem(status: Int) {

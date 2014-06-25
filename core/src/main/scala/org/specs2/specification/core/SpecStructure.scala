@@ -46,4 +46,7 @@ object SpecStructure {
     s1Links.contains(s2.specClassName)
   }
 
+  def empty(klass: Class[_]) =
+    new SpecStructure(SpecHeader(klass), Arguments(), Fragments())
+
 }
