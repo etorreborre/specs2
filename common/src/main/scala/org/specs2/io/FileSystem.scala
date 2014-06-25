@@ -3,12 +3,13 @@ package io
 
 import control._
 import Actions._
+import ActionT._
 import data.Processes
 import scalaz.{std, syntax, stream, concurrent}
 import std.anyVal._
 import syntax.bind._
 import std.list._
-import syntax.traverse._
+import syntax.traverse.ToTraverseOps
 import stream._
 import concurrent.Task
 import java.io._
@@ -75,7 +76,7 @@ trait FileSystem {
     Process(content).toSource.pipe(process1.utf8Encode).to(io.fileChunkW(path)).run
 
   def withFile(path: String)(action: Action[Unit]): Action[Unit] =
-    action.andFinally(deleteFile(path).map(_ => ()))
+    action.andFinally(deleteFile(path).void)
 
   def mkParentDirs(path: String): Action[Unit] =
     Actions.safe(Option(new File(path).getParentFile).fold(())(_.mkdirs))
@@ -156,7 +157,7 @@ trait FileSystem {
         files.toList.map { file =>
           if (file.isDirectory) copyDir(file.getPath, dest)
           else                  copyFile(file.getPath, dest)
-        }.sequenceU.map(_ => ())
+        }.sequenceU.void
       }
 
   /**
@@ -176,7 +177,7 @@ trait FileSystem {
 
   /** delete files or directories */
   def delete(path: String): Action[Unit] =
-    listFiles(path).map(_.reverse.map(_.delete)).map(_ => ())
+    listFiles(path).map(_.reverse.map(_.delete)).void
 }
 
 object FileSystem extends FileSystem

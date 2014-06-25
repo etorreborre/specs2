@@ -3,9 +3,10 @@ package runner
 
 import control._
 import scalaz.effect.IO
+import scalaz.effect.IO._
 import scalaz.std.anyVal._
 import scalaz.syntax.bind._
-import scalaz.syntax.traverse._
+import scalaz.syntax.traverse.ToTraverseOps
 import scalaz.std.list._
 import Throwablex._
 
@@ -29,7 +30,7 @@ object Runner {
       (t :: t.chainedExceptions).map { s =>
         consoleLogging("  caused by " + s.toString) >>
           s.getStackTrace.toList.traverseU(t => consoleLogging("  " + t.toString))
-      }.sequenceU.map(_ => ())
+      }.sequenceU.void
   }
 
   def exitSystem(status: Int) {
