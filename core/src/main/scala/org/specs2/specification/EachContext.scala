@@ -2,7 +2,7 @@ package org.specs2
 package specification
 
 import core._
-import create.{ContextualFragmentFactory, FragmentsFactory}
+import org.specs2.specification.create.{InterpolatedFragment, S2StringContext, ContextualFragmentFactory, FragmentsFactory}
 import execute._
 import org.specs2.main.CommandLine
 
@@ -65,20 +65,35 @@ trait AroundEach extends EachContext { outer =>
  */
 trait ForEach[T] extends EachContext { outer =>
   protected def foreach[R : AsResult](f: T => R): Result
-  protected def foreachWithEnv[R : AsResult](f: Env => T => R): Env => Result =
-    (env: Env) => foreach(f(env))
 
-  protected def context = (env: Env) => new Around { def around[R : AsResult](r: =>R) = AsResult(r) }
+  protected def context: Env => Context = (env: Env) => new Around {
+    def around[R : AsResult](r: =>R) = AsResult(r)
+  }
 
   implicit def foreachFunctionToResult[R : AsResult]: AsResult[T => R] = new AsResult[T => R] {
     def asResult(f: =>(T => R)) = foreach(f)
   }
-  
-  implicit def foreachFunctionToExecution[R : AsResult](f: T => R): Execution =
-    Execution.withEnv(foreachWithEnv((env: Env) => f))
+}
 
-  implicit def foreachFunctionWithEnvToExecution[R : AsResult](f: Env => T => R): Execution =
-    Execution.withEnv((env: Env) => foreach(f(env)))
+/**
+ * For each example but inject data depending on command line arguments
+ */
+trait ForEachWithCommandLine[T] extends EachContext { outer: S2StringContext =>
+  protected def foreach[R : AsResult](commandLine: CommandLine)(f: T => R): Result
+
+  protected def context: Env => Context = (env: Env) => new Around {
+    def around[R : AsResult](r: =>R) = AsResult(r)
+  }
+
+  implicit def foreachFunctionToExecution[R : AsResult](f: T => R): Execution =
+    Execution.withEnv((env: Env) => foreach(env.arguments.commandLine)(f))
+
+  implicit def foreachFunctionIsInterpolatedFragment[R : AsResult](f: =>(T => R)): InterpolatedFragment = new InterpolatedFragment {
+    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) = {
+      val (description, before) = descriptionAndBefore(text, start, end, expression)
+      fs append before append ff.example(description, foreachFunctionToExecution(f)).setLocation(end)
+    }
+  }
 }
 
 /**

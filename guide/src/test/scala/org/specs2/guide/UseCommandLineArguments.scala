@@ -2,7 +2,8 @@ package org.specs2
 package guide
 
 import main._
-import org.specs2.specification.{Before, CommandLineContextForEach, EachContext, CommandLineArguments}
+import execute.AsResult
+import org.specs2.specification.{Before, CommandLineArguments, CommandLineContextForEach, ForEachWithCommandLine}
 import specification.core.foreachInSequence
 
 object UseCommandLineArguments extends UserGuidePage { def is = s2"""
@@ -77,5 +78,31 @@ class SpecificationWithArgs extends Specification with CommandLineContextForEach
 }
 }}
 
+## Control data injection
+
+The final situation where you would need to use command-line arguments is with a `ForEach` trait. If you want to influence the injection of data with the command line, the `ForEachWithCommandLine` trait needs to be mixed in:${snippet{
+class SpecificationWithArgs extends Specification with ForEachWithCommandLine[Int] { def is = s2"""
+ This is a specification
+  with one example using injected data ${ (i: Int) => i must_== i }
+"""
+  /** you need to define this method */
+  def foreach[R : AsResult](commandLine: CommandLine)(f: Int => R) =
+    AsResult(f(commandLine.int("value").getOrElse(0)))
+}
+}}
+
+And for a mutable specification:${snippet{
+class SpecificationWithArgs extends mutable.Specification with specification.mutable.ForEachWithCommandLine[Int] {
+  "This is a specification" >> {
+    "with one example using injected data" >> { (i: Int) =>
+      i must_== i
+    }
+   }
+
+   /** you need to define this method */
+   def foreach[R : AsResult](commandLine: CommandLine)(f: Int => R) =
+     AsResult(f(commandLine.int("value").getOrElse(0)))
+}
+}}
 """
 }

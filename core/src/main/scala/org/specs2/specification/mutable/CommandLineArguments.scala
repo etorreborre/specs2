@@ -2,7 +2,7 @@ package org.specs2
 package specification.mutable
 
 import main.CommandLine
-import specification.core.Env
+import org.specs2.specification.core._
 import specification.core.mutable.SpecificationStructure
 
 trait CommandLineArguments extends SpecificationStructure {

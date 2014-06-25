@@ -21,7 +21,7 @@ import scala.concurrent.ExecutionContext
  * Allow to use fragments inside interpolated strings starting with s2 in order to build the specification content
  */
 trait S2StringContext extends FragmentsFactory { outer =>
-  private val ff = fragmentFactory
+  private[specs2] val ff = fragmentFactory
 
   implicit def stringIsInterpolatedFragment(s: =>String): InterpolatedFragment = new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =  {
@@ -54,20 +54,7 @@ trait S2StringContext extends FragmentsFactory { outer =>
 
   private def stringAndEnvFunctionIsInterpolatedFragment[R : AsResult](f: String => Env => R): InterpolatedFragment = new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =  {
-      val texts = text.split("\n")
-      val spaces = texts.lastOption.fold("")(_.takeWhile(Seq(' ', '\n').contains))
-      val indent = spaces.mkString
-
-      val first = if (texts.size > 1) texts.dropRight(1).mkString("", "\n", "\n") else ""
-      val autoExample = texts.lastOption.exists(_.trim.isEmpty)
-
-      val description =
-        if (autoExample) Description.code(expression)
-        else             RawText(texts.lastOption.fold("")(_.trim))
-
-      val before =
-        if (first.nonEmpty) Vector(ff.text(first + indent).setLocation(start))
-        else                Vector()
+      val (description, before) = descriptionAndBefore(text, start, end, expression)
 
       val result =
         implicitly[AsResult[R]] match {
@@ -77,6 +64,7 @@ trait S2StringContext extends FragmentsFactory { outer =>
           }
           case other                          => before :+ ff.example(description, Execution.withEnv(f(description.show))).setLocation(end)
         }
+
       fs append result
     }
   }
@@ -86,6 +74,32 @@ trait S2StringContext extends FragmentsFactory { outer =>
 
   implicit def statsRepositoryFunctionIsInterpolatedFragment[R : AsResult](f: StatisticsRepository => R): InterpolatedFragment =
     envFunctionIsInterpolatedFragment((env: Env) => f(env.statisticsRepository))
+
+  implicit def executionIsInterpolatedFragment(execution: Execution): InterpolatedFragment = new InterpolatedFragment {
+    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) = {
+      val (description, before) = descriptionAndBefore(text, start, end, expression)
+      fs append before append ff.example(description, execution).setLocation(end)
+    }
+  }
+
+  private[specs2] def descriptionAndBefore(text: String, start: Location, end: Location, expression: String) = {
+    val texts = text.split("\n")
+    val spaces = texts.lastOption.fold("")(_.takeWhile(Seq(' ', '\n').contains))
+    val indent = spaces.mkString
+
+    val first = if (texts.size > 1) texts.dropRight(1).mkString("", "\n", "\n") else ""
+    val autoExample = texts.lastOption.exists(_.trim.isEmpty)
+
+    val description =
+      if (autoExample) Description.code(expression)
+      else             RawText(texts.lastOption.fold("")(_.trim))
+
+    val before =
+      if (first.nonEmpty) Vector(ff.text(first + indent).setLocation(start))
+      else                Vector()
+
+    (description, before)
+  }
 
   implicit def commandLineFunctionIsInterpolatedFragment[R : AsResult](f: CommandLine => R): InterpolatedFragment =
     envFunctionIsInterpolatedFragment((env: Env) => f(env.arguments.commandLine))
