@@ -38,12 +38,21 @@ trait FutureMatchers extends Expectations with ConcurrentExecutionContext {
     }
   }
 
+  def await[T](m: Matcher[T]): Matcher[Future[T]] = awaitFor(m)()
   def await[T](m: Matcher[T])(retries: Int = 0, timeout: FiniteDuration = 1.seconds): Matcher[Future[T]] = awaitFor(m)(retries, timeout)
 
   private def awaitFor[T](m: Matcher[T])(retries: Int = 0, timeout: FiniteDuration = 1.seconds): Matcher[Future[T]] = new Matcher[Future[T]] {
     def apply[S <: Future[T]](a: Expectable[S]) = {
-      val r = a.value.map(v => createExpectable(v).applyMatcher(m).toResult).await(retries, timeout)
-      result(r.isSuccess, r.message, r.message, a)
+      try {
+        val r = a.value.map(v => createExpectable(v).applyMatcher(m).toResult).await(retries, timeout)
+        result(r.isSuccess, r.message, r.message, a)
+      } catch {
+        // if awaiting on the future throws an exception because it was a failed future
+        // there try to match again because the matcher can be a `throwA` matcher
+        case t: Throwable =>
+          val r = createExpectable(throw t).applyMatcher(m).toResult
+          result(r.isSuccess, r.message, r.message, a)
+      }
     }
   }
 }

@@ -55,6 +55,7 @@ trait ExceptionBaseMatchers extends Expectations {
         checkMatchResult(value, (e: Throwable) => classType(e), f)
       }
     }
+
     private val classType =
       (e: Throwable) => {
         errorMustBeThrownIfExceptionIsExpected(e, klass)
