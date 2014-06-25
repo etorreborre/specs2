@@ -4,20 +4,29 @@ package specification
 import core._
 import create.{ContextualFragmentFactory, FragmentsFactory}
 import execute._
+import org.specs2.main.CommandLine
 
 /**
  * For each created example use a given context
  */
-trait ContextExample extends FragmentsFactory { outer =>
+trait EachContext extends FragmentsFactory { outer =>
   protected def context: Env => Context
 
   override protected def fragmentFactory = new ContextualFragmentFactory(super.fragmentFactory, context)
 }
 
 /**
+ * For each created example use a context using the command line arguments
+ */
+trait CommandLineContextForEach extends FragmentsFactory { outer =>
+  protected def context: CommandLine => Context
+  override protected def fragmentFactory = new ContextualFragmentFactory(super.fragmentFactory, (env: Env) => context(env.arguments.commandLine))
+}
+
+/**
  * For each created example use a given before action
  */
-trait BeforeEach extends ContextExample { outer =>
+trait BeforeEach extends EachContext { outer =>
   protected def before: Any
   protected def context = (env: Env) => new Before { def before = outer.before }
 }
@@ -25,7 +34,7 @@ trait BeforeEach extends ContextExample { outer =>
 /**
  * For each created example use a given after action
  */
-trait AfterEach extends ContextExample { outer =>
+trait AfterEach extends EachContext { outer =>
   protected def after: Any
   protected def context = (env: Env) => new After { def after = outer.after }
 }
@@ -33,7 +42,7 @@ trait AfterEach extends ContextExample { outer =>
 /**
  * For each created example use a given before action
  */
-trait BeforeAfterEach extends ContextExample { outer =>
+trait BeforeAfterEach extends EachContext { outer =>
   protected def before: Any
   protected def after: Any
 
@@ -46,7 +55,7 @@ trait BeforeAfterEach extends ContextExample { outer =>
 /**
  * For each created example use a given around action
  */
-trait AroundEach extends ContextExample { outer =>
+trait AroundEach extends EachContext { outer =>
   protected def around[R : AsResult](r: =>R): Result
   protected def context = (env: Env) => new Around { def around[R : AsResult](r: =>R) = outer.around(r) }
 }
@@ -54,7 +63,7 @@ trait AroundEach extends ContextExample { outer =>
 /**
  * For each created example use a given fixture object
  */
-trait ForEach[T] extends ContextExample { outer =>
+trait ForEach[T] extends EachContext { outer =>
   protected def foreach[R : AsResult](f: T => R): Result
   protected def foreachWithEnv[R : AsResult](f: Env => T => R): Env => Result =
     (env: Env) => foreach(f(env))
