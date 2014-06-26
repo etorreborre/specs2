@@ -221,8 +221,9 @@ In the code above you have to:
  - read the reference card on all of ***specs2*** matchers
  - use ${"syntactic variations" ~ SyntacticVariations} on the `value must matcher` form
  - implement the ${"`AsResult` typeclass" ~ AsResultTypeclass} to go beyond matchers
- - use the `beA[CaseClass]` matcher to automatically create matchers for case classes
- - use the `Analysis` matchers to specify dependencies between packages
+ - use the ${"`beA[CaseClass]`" ~ CaseClassMatchers} matcher to automatically create matchers for case classes
+ - use the ${"dependencies matchers" ~ DependencyMatchers} to specify dependencies between packages
+ - use specs2 matchers ${"outside ***secs2***" ~ OutsideSpecs2}
 
 """
 

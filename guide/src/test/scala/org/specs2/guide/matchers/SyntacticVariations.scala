@@ -20,7 +20,7 @@ Finally there are some shortcuts for the equality matcher:${snippet{
   1 must_== 1
   1 mustEqual 1
   1 === 1
-  
+
   // with a negation
   1 must_!= 2
   1 mustNotEqual 1
