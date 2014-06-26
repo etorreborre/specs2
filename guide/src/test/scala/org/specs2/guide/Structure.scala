@@ -143,6 +143,7 @@ It is also possible to use the "functional" expectation mode with a unit specifi
  - add ${"links to other specifications" ~ LinkOtherSpecifications}
  - use the ${"command line arguments" ~ UseCommandLineArguments} to define the body of an example
  - add ${"debug statements" ~ DebugStatements}
+ - print ${"execution data" ~ PrintExecutionData}
  - create a trait which will add specification fragments before or after an other specification when mixed-in
 
 """
