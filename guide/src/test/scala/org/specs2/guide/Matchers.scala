@@ -211,8 +211,8 @@ In the code above you have to:
 
  - use ${"standard results" ~ StandardResults} (`failure`, `success`, `skipped`, `todo`...) instead of matchers
  - add ${"descriptions" ~ ExpectationDescription} to your expectations to create even better failure messages
- - use datatables to conveniently group several examples into one
- - use ScalaCheck to generate and verify data for your examples
+ - use ${"datatables" ~ UseDatatables} to conveniently group several examples into one
+ - use ${"ScalaCheck" ~ UseScalaCheck} to generate and verify data for your examples
  - use Mockito to mock the interactions with another system
  - use `Forms` to display actual and expected values in html tables
 
