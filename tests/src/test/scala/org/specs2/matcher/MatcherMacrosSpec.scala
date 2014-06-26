@@ -20,7 +20,7 @@ class MatcherMacrosSpec extends Specification with ResultMatchers with MatcherMa
  The first member value to fail will return the failure message         $e5
  The member name must be mentioned in the failure message               $e6
  The expectable description must be included in the failure message     $e7
-
+ Deeply nested matches must mention their full path when failing        $e8
 """
 
   val cat = Cat(name = "Kitty", age = 6, kitten = Seq(Cat("Oreo", 1), Cat("Ella", 2)))
@@ -34,8 +34,20 @@ class MatcherMacrosSpec extends Specification with ResultMatchers with MatcherMa
   def e5 = (cat must matchA[Cat].name("Kitty").age(is(7)).kitten((_:Seq[Cat]) must haveSize(2))) returns "'6' is not equal to '7'"
   def e6 = (cat must matchA[Cat].age(is(7))) returns "age: "
   def e7 = (cat aka "the cat" must matchA[Cat].name("Kitty").age(is(7)).kitten((_:Seq[Cat]) must haveSize(2))) returns cat.toString
+  def e8 = (Nested() must matchA[Nested].n1(_ must matchA[Nested1].n2(_ must matchA[Nested2].n3(_ must matchA[Nested3].name("other"))))) returns
+"""|For 'Nested(Nested1(Nested2(Nested3(name))))'
+   |For 'Nested1(Nested2(Nested3(name)))'
+   |For 'Nested2(Nested3(name))'
+   |For 'Nested3(name)'
+   |  name: 'name' is not equal to 'other'""".stripMargin
 
   def is[A](a: A) = be_==(a)
   case class Cat(name: String = "", age: Int = 0, kitten: Seq[Cat] = Seq())
+
+  case class Nested(n1: Nested1 = Nested1())
+  case class Nested1(n2: Nested2 = Nested2())
+  case class Nested2(n3: Nested3 = Nested3())
+  case class Nested3(name: String = "name")
+
 }
 
