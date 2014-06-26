@@ -2,7 +2,8 @@ package org.specs2
 package specification
 package process
 
-import org.specs2.control.Timer
+import control.Timer
+import data.Processes
 
 import scalaz.stream.Process.{Env =>_,_}
 import execute._
@@ -13,6 +14,7 @@ import Description._
 import time.SimpleTimer
 import scalaz.concurrent.{Future, Task}
 import scala.concurrent.duration.Duration
+import Processes._
 
 /**
  * Functions for executing fragments.
@@ -30,7 +32,7 @@ trait Executor {
    *  - sequence the execution so that only parts in between steps are executed concurrently
    */
   def execute(env: Env): Process[Task, Fragment] => Process[Task, Fragment] = { contents: Process[Task, Fragment] =>
-    (contents |> sequencedExecution(env)).sequence(Runtime.getRuntime.availableProcessors).flatMap(executeOnline(env))
+    (contents |> sequencedExecution(env)).sequence1(Runtime.getRuntime.availableProcessors).flatMap(executeOnline(env))
   }
 
   /** a Process1 to execute fragments as tasks */
@@ -74,7 +76,7 @@ trait Executor {
       val executingFragment = timedout(fragment, env.executionEnv.timer) {
         if (mustStop)             Task.now(fragment.skip)
         else if (executeNow)      Task.now(executedFragment)
-        else                      start(executedFragment)(env)
+        else                      fork(executedFragment)(env.executionEnv.executor)
       }(env.executionEnv.timeOut.getOrElse(fragment.execution.duration))
 
       // if this fragment is a join point, start a new sequence
@@ -109,10 +111,6 @@ trait Executor {
       case None => Process(fragment).toSource
     }
   }
-
-  /** start the execution right away */
-  def start[A](a: =>A)(env: Env) =
-    new Task(Future(Task.Try(a))(env.executionEnv.executor).start)
 
   /** use the scalaz implementation of Timer to timeout the task */
   def timedout(fragment: Fragment, timer: Timer)(task: Task[Fragment])(duration: Duration): Task[Fragment] = {
