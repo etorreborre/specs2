@@ -218,7 +218,7 @@ In the code above you have to:
 
 ### And if you want to know more
 
- - read the reference card on all of ***specs2*** matchers
+ - read the ${"reference card" ~ ReferenceCard} on all of ***specs2*** matchers
  - use ${"syntactic variations" ~ SyntacticVariations} on the `value must matcher` form
  - implement the ${"`AsResult` typeclass" ~ AsResultTypeclass} to go beyond matchers
  - use the ${"`beA[CaseClass]`" ~ CaseClassMatchers} matcher to automatically create matchers for case classes
