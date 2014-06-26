@@ -213,13 +213,13 @@ In the code above you have to:
  - add ${"descriptions" ~ ExpectationDescription} to your expectations to create even better failure messages
  - use ${"datatables" ~ UseDatatables} to conveniently group several examples into one
  - use ${"ScalaCheck" ~ UseScalaCheck} to generate and verify data for your examples
- - use Mockito to mock the interactions with another system
+ - use ${"Mockito " ~ UseMockito} to mock the interactions with another system
  - use `Forms` to display actual and expected values in html tables
 
 ### And if you want to know more
 
  - read the reference card on all of ***specs2*** matchers
- - use syntactic variations on the `value must matcherOf(expected)` form
+ - use ${"syntactic variations" ~ SyntacticVariations} on the `value must matcher` form
  - implement the ${"`AsResult` typeclass" ~ AsResultTypeclass} to go beyond matchers
  - use the `beA[CaseClass]` matcher to automatically create matchers for case classes
  - use the `Analysis` matchers to specify dependencies between packages
