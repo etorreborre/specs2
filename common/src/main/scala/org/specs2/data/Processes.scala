@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutorService
 import scalaz.stream.Process._
 import scalaz.stream.Process
 import scalaz.\/._
-import scalaz.concurrent.Task
+import scalaz.concurrent.{Future, Task}
 import Task._
 import scalaz.syntax.bind._
 import scalaz.{Nondeterminism, Monoid}
@@ -54,17 +54,9 @@ trait Processes {
       ps.flatMap(ts => Process.emitAll(ts).toSource)
   }
 
-  /**
-   * @see the discussion here: https://groups.google.com/forum/#!topic/scalaz/RXY5A42DHCY
-   */
-  implicit class toSequence1[A](p: Process[Task, Task[A]]) {
-    def sequence1(bufSize: Int) =
-      p.chunk(bufSize).map(implicitly[Nondeterminism[Task]].gather).eval.flatMap(Process.emitAll)
-  }
-
-  /** allow the execution of A to be concurrent */
-  def fork[A](a: =>A)(pool: ExecutorService): Task[A] =
-    Task.fork(Task.delay(a))
+  /** start an execution right away */
+  def start[A](a: =>A)(executorService: ExecutorService) =
+    new Task(Future(Task.Try(a))(executorService).start)
 
   /** syntax sugar for Processes */
   implicit class asLogged[F[_], A](process: Process[F, A]) {

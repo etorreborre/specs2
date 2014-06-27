@@ -32,7 +32,7 @@ trait Executor {
    *  - sequence the execution so that only parts in between steps are executed concurrently
    */
   def execute(env: Env): Process[Task, Fragment] => Process[Task, Fragment] = { contents: Process[Task, Fragment] =>
-    (contents |> sequencedExecution(env)).sequence1(Runtime.getRuntime.availableProcessors).flatMap(executeOnline(env))
+    (contents |> sequencedExecution(env)).sequence(Runtime.getRuntime.availableProcessors).flatMap(executeOnline(env))
   }
 
   /** a Process1 to execute fragments as tasks */
@@ -76,7 +76,7 @@ trait Executor {
       val executingFragment = timedout(fragment, env.executionEnv.timer) {
         if (mustStop)             Task.now(fragment.skip)
         else if (executeNow)      Task.now(executedFragment)
-        else                      fork(executedFragment)(env.executionEnv.executor)
+        else                      start(executedFragment)(env.executionEnv.executor)
       }(env.executionEnv.timeOut.getOrElse(fragment.execution.duration))
 
       // if this fragment is a join point, start a new sequence
