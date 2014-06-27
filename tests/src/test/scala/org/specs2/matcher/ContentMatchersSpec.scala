@@ -15,6 +15,7 @@ class ContentMatchersSpec extends Specification with LinesContentMatchers { def 
    the comparison can be unordered                                                                       ${comp().e5}
    we can show only a given number of differences                                                        ${comp().e6}
    we can compare against a Seq of lines instead                                                         ${comp().e7}
+   it works with duplicated lines                                                                        ${comp().e8}
                                                                                                          """
       
   def e8 = (new File("f1.txt"), new File("f2.txt")) must haveSameLines.unordered
@@ -33,6 +34,7 @@ case class comp() extends MustMatchers with TestFiles with ContentMatchers {
   addFile("f5", "world\nhello")
   addFile("f6", "good\nmorning\nbeautiful\nworld")
   addFile("f7", "good\nday\ncrazy\nworld")
+  addFile("f8", "hello\nbeautiful\nworld\nworld")
 
   // read contents from the mock file system
   override implicit protected val fileContentForMatchers = new LinesContent[File] {
@@ -58,6 +60,8 @@ case class comp() extends MustMatchers with TestFiles with ContentMatchers {
                 "    2. day"))
 
   def e7 = (file("f1"), Seq("hello", "beautiful", "world")) must haveSameLines
+
+  def e8 = (file("f8"), file("f8")) must haveSameLines
 
 }
 

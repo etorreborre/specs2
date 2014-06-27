@@ -46,11 +46,15 @@ case class LinesContentDifference(
 
   // all && ordered
   private lazy val showNotEqual: Diffs = {
+    val lines2WithIndex = lines2.zipWithIndex
     val diffs1 = lines1.zipWithIndex.flatMap { case (l1, index1) =>
-        if (lines2.contains(l1))
-          if (lines2.indexOf(l1) == index1)   None
-          else                                Some(MisplacedLine(l1, index1+1))
-        else                                  Some(MissingLine(l1, index1+1))
+        lines2WithIndex.find(_._2 == index1).map(_._1) match {
+          case None     => Some(MissingLine(l1, index1+1))
+          case Some(l2) =>
+            if (l1 == l2)                 None
+            else if (lines2.contains(l1)) Some(MisplacedLine(l1, index1+1))
+            else                          Some(MissingLine(l1, index1+1))
+        }
     }
 
     (diffs1, missingInOther(lines2, lines1))
