@@ -5,65 +5,71 @@ package mutable
 
 import execute.AsResult
 import control.ImplicitParameters._
+import org.specs2.specification.script.StepParser
 import specification.core._
 import specification.create.FragmentsFactory
 
-trait GivenWhenThen { outer: MutableFragmentBuilder with FragmentsFactory =>
+trait GivenWhenThen extends org.specs2.specification.dsl.GivenWhenThen { outer: MutableFragmentBuilder with FragmentsFactory =>
   private val factory = fragmentFactory
 
-  def given(description: String)(action: =>Any) = step(s"given $description")(action)
+  implicit class stringStep(s: String) {
+    def example[T, R: AsResult](extractor: StepParser[T])(f: T => R) =
+      outer.example(s)(extractor)(f)
 
-  def given[T](description: String, extractor: String => Option[T])(action: T => Any) =
-    step(s"given $description", extractor)(action)
+    def step[T](extractor: StepParser[T]): StepParserStep[T] =
+      StepParserStep(s, extractor)
 
-  def given[T](description: String, extractor: String => Option[(String, T)])(action: T => Any)(implicit p: ImplicitParam) = {
-    step(s"given $description", extractor)(action)(p)
+    def action[T](extractor: StepParser[T]): StepParserAction[T] =
+      StepParserAction(s, extractor)
   }
 
-  def when(description: String)(action: =>Any) = step(s"when $description")(action)
-  def when[T](description: String, extractor: String => Option[T])(action: T => Any) =
-    step(s"when $description", extractor)(action)
+  def step[T](description: String)(extractor: StepParser[T])(action: T => Any): Fragments =
+    addFragmentsBlock(super.step(extractor)(action)(description))
 
-  def step(description: String)(action: =>Any): Fragment = {
-    addParagraph(description)
-    addFragment(factory.step(action))
+  def action[T](description: String)(extractor: StepParser[T])(action1: T => Any): Fragments =
+    addFragmentsBlock(super.action(extractor)(action1)(description))
+
+  def example[T, R : AsResult](description: String)(extractor: StepParser[T])(action: T => R): Fragments =
+    addFragmentsBlock(super.example(extractor)(action).apply(description))
+
+  case class StepParserExample[T](s: String, extractor: StepParser[T]) {
+    def in[R : AsResult](f: T => R) = >>(f)
+
+    def >>[R : AsResult](f: T => R) =
+      example(s)(extractor)(f)
   }
 
-  def step[T](description: String, extractor: String => Option[T])(action: T => Any): Fragment = {
-    val extracted = extractor(description)
-    addParagraph(description)
-    addFragment(factory.step(extracted.map(action).getOrElse(throw new Exception("failed to extract a value from "+description))))
+  case class StepParserStep[T](s: String, extractor: StepParser[T]) {
+    def apply(f: T => Any) =
+      step(s)(extractor)(f)
   }
 
-  def step[T](description: String, extractor: String => Option[(String, T)])(action: T => Any)(implicit p: ImplicitParam): Fragment = {
-    extractor(description).map { case (d, v) =>
-      addParagraph(d)
-      addFragment(factory.step(action(v)))
-    }.getOrElse(throw new Exception("failed to extract a value from "+description))
+  case class StepParserAction[T](s: String, extractor: StepParser[T]) {
+    def apply(f: T => Any) =
+      action(s)(extractor)(f)
   }
-
-  def andThen[R : AsResult](description: String)(r: =>R): Fragment =
-    addExample(s"then $description")(r)
-
-  def addExample[R : AsResult](description: String)(r: =>R): Fragment = {
-    addFragment(factory.example(description, r))
-    addFragment(factory.break)
-  }
-
-  def andThen[R : AsResult, T](description: String, extractor: String => Option[T])(r: T => R): Fragment =
-    addExample(s"then $description", extractor)(r)
-
-  def addExample[R : AsResult, T](description: String, extractor: String => Option[T])(r: T => R): Fragment = {
-    extractor(description).map { d =>
-      addFragment(factory.example(description, r(d)))
-    }.getOrElse(throw new Exception("failed to extract a value from "+description))
-  }
-
-  private def addParagraph(description: String) = {
-    addFragment(factory.text(description))
-    addFragment(factory.break)
-    addFragment(factory.backtab)
-  }
-
 }
+
+trait GivenWhenThenSyntax { this: GivenWhenThen =>
+  def Given[T](description: String)(extractor: StepParser[T])(action: T => Any): Fragments =
+    step("Given "+description)(extractor)(action)
+
+  def When[T](description: String)(extractor: StepParser[T])(action: T => Any): Fragments =
+    step("When "+description)(extractor)(action)
+
+  def Then[T, R : AsResult](description: String)(extractor: StepParser[T])(action: T => R): Fragments =
+    example("Then "+description)(extractor)(action)
+}
+
+trait GivenWhenAndThenSyntax { this: GivenWhenThen =>
+  def given[T](description: String)(extractor: StepParser[T])(action: T => Any): Fragments =
+    step("given "+description)(extractor)(action)
+
+  def when[T](description: String)(extractor: StepParser[T])(action: T => Any): Fragments =
+    step("when "+description)(extractor)(action)
+
+  def andThen[T, R : AsResult](description: String)(extractor: StepParser[T])(action: T => R): Fragments =
+    example("then "+description)(extractor)(action)
+}
+
 
