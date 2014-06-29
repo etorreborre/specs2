@@ -12,27 +12,24 @@ trait BlockDsl extends FragmentBuilder with FragmentsFactory {
   private val factory = fragmentFactory
   
   implicit class describe(d: String) {
-    def >>(f: =>Fragment): Unit = addBlock(d, f, StacktraceLocation())
-    def should(f: =>Fragment)   = addBlock(s"$d should", f, StacktraceLocation())
-    def can(f: =>Fragment)      = addBlock(s"$d can", f, StacktraceLocation())
+    def >>(f: =>Fragment): Fragment     = addBlock(d,            f, addFragmentBlock, StacktraceLocation())
+    def should(f: =>Fragment): Fragment = addBlock(s"$d should", f, addFragmentBlock, StacktraceLocation())
+    def can(f: =>Fragment): Fragment   = addBlock(s"$d can",     f, addFragmentBlock, StacktraceLocation())
 
-    def >>(f: =>Unit)(implicit p: ImplicitParam): Unit = addBlock(d, f, StacktraceLocation())
-    def should(f: =>Unit)(implicit p: ImplicitParam)   = addBlock(s"$d should", f, StacktraceLocation())
-    def can(f: =>Unit)(implicit p: ImplicitParam)      = addBlock(s"$d can", f, StacktraceLocation())
+    def >>(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments     = addBlock(d,            fs, addFragmentsBlock, StacktraceLocation())
+    def should(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments = addBlock(s"$d should", fs, addFragmentsBlock, StacktraceLocation())
+    def can(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments    = addBlock(s"$d can",    fs, addFragmentsBlock, StacktraceLocation())
 
-    def >>(f: =>Fragments)(implicit p1: ImplicitParam1): Unit     = >>     {f; ()}
-    def should(f: =>Fragments)(implicit p1: ImplicitParam1): Unit = should {f; ()}
-    def can(f: =>Fragments)(implicit p1: ImplicitParam1): Unit    = can    {f; ()}
-
-    private def addBlock(text: String, f: =>Any, location: StacktraceLocation) = addFragmentBlock {
+    private def addBlock[T](text: String, t: =>T, addFunction: (=>T) => T, location: StacktraceLocation): T = addFunction {
       addStart
       addBreak
       addText(text, location)
       addFragment(factory.tab)
       addBreak
-      addFragmentBlock(f)
+      val result = t
       addFragment(factory.backtab)
       addEnd
+      t
     }
 
     private def addText(text: String, location: StacktraceLocation) =
@@ -40,7 +37,7 @@ trait BlockDsl extends FragmentBuilder with FragmentsFactory {
 
     private def addBreak = addFragment(factory.break)
     private def addStart = addFragment(factory.start)
-    private def addEnd = addFragment(factory.end)
+    private def addEnd   = addFragment(factory.end)
   }
 
   /**

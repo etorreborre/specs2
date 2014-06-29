@@ -41,7 +41,15 @@ trait MutableFragmentBuilder extends FragmentBuilder
 
   private[specs2] var env: Env = Env()
 
-  def addFragmentBlock(fs: =>Any) = effects.nestBlock(effects.addBlock(fs))
+  def addFragmentBlock(f: =>Fragment) = {
+    effects.nestBlock(effects.addBlock(f))
+    fragmentFactory.end
+  }
+
+  def addFragmentsBlock(fs: =>Fragments) = {
+    effects.nestBlock(effects.addBlock(fs))
+    Fragments()
+  }
 
   def addFragment(fragment: Fragment): Fragment = {
     effects.addBlock {
@@ -89,7 +97,8 @@ trait MutableFragmentBuilder extends FragmentBuilder
 
 trait FragmentBuilder {
   def addFragment(f: Fragment): Fragment
-  def addFragmentBlock(block: =>Any): Unit
+  def addFragmentBlock(block: =>Fragment): Fragment
+  def addFragmentsBlock(block: =>Fragments): Fragments
 }
 
 trait MutableHeaderBuilder {
