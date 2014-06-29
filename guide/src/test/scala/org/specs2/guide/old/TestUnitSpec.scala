@@ -1,6 +1,6 @@
-package org.specs2
-package guide
+package org.specs2.guide.old
 
+import org.specs2.mutable
 import org.specs2.specification.BeforeEach
 
 class TestUnitSpec extends mutable.Specification with BeforeEach {

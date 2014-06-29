@@ -1,10 +1,8 @@
 package org.specs2
 package guide
 
-import org.specs2.specification.dsl.mutable.{GivenWhenAndThenSyntax, GivenWhenThenSyntax}
-import org.specs2.specification.script.{StepParsers, StepParser, StandardDelimitedStepParsers}
-import specification.dsl
-
+import specification.script.{StandardRegexStepParsers, StepParsers, StepParser, StandardDelimitedStepParsers}
+import specification.dsl.mutable.{GivenWhenAndThenSyntax, GivenWhenThenSyntax}
 import scala.util.matching.Regex
 
 object GivenWhenThenStyle extends UserGuidePage { def is = s2"""
@@ -82,8 +80,8 @@ How do you code this with an acceptance specification?
 
 ### With an acceptance specification
 
-You can implement this approach with the `org.specs2.specification.dsl.GivenWhenThen` trait:${snippet{
-class GWTSpec extends Specification with dsl.GivenWhenThen with StandardDelimitedStepParsers{ def is = s2"""
+You can implement this approach with the `org.specs2.specification.dsl.GWT` trait:${snippet{
+class GWTSpec extends Specification with specification.dsl.GWT with StandardDelimitedStepParsers{ def is = s2"""
  Given a first number {2}     $g1
  When multiply it by {3}      $w1
  Then I get {6}               $t1
@@ -151,7 +149,7 @@ A few `StepParsers` have been predefined for you in the `StandardDelimitedStepPa
 ### With a mutable specification
 
 Several syntaxes are available with a mutable specification. The first syntax uses modified `step` and `example` methods to create steps and examples:${snippet{
-class GWTSpec extends mutable.Specification with dsl.mutable.GivenWhenThen with StandardDelimitedStepParsers {
+class GWTSpec extends mutable.Specification with org.specs2.specification.dsl.mutable.GWT with StandardDelimitedStepParsers {
 
   "adding numbers".p
 
@@ -172,7 +170,7 @@ class GWTSpec extends mutable.Specification with dsl.mutable.GivenWhenThen with 
 }}
 
 The second syntax is mostly the same but with postfix methods:${snippet{
-class GWTSpec extends mutable.Specification with dsl.mutable.GivenWhenThen with StandardDelimitedStepParsers {
+class GWTSpec extends mutable.Specification with org.specs2.specification.dsl.mutable.GWT with StandardDelimitedStepParsers {
 
   "adding numbers".p
 
@@ -193,7 +191,7 @@ class GWTSpec extends mutable.Specification with dsl.mutable.GivenWhenThen with 
 }}
 
 The final 2 syntaxes are just specialisations of the `mutable.GivenWhenThen` trait with the `Given/When/Then` keywords:${snippet{
-class GWTSpec extends mutable.Specification with dsl.mutable.GivenWhenThen with StandardDelimitedStepParsers with GivenWhenThenSyntax {
+class GWTSpec extends mutable.Specification with org.specs2.specification.dsl.mutable.GWT with StandardDelimitedStepParsers with GivenWhenThenSyntax {
 
   "adding numbers".p
 
@@ -221,24 +219,24 @@ Then I get 6
 ```
 
 If you prefer to have uncapitalized `given/when/then` you can use the `GivenWhenAndThenSyntax`:${snippet{
-  class GWTSpec extends mutable.Specification with dsl.mutable.GivenWhenThen with StandardDelimitedStepParsers with GivenWhenAndThenSyntax {
+class GWTSpec extends mutable.Specification with org.specs2.specification.dsl.mutable.GWT with StandardDelimitedStepParsers with GivenWhenAndThenSyntax {
 
-    "adding numbers".p
+  "adding numbers".p
 
-    given("a first number {2}")(anInt) { i =>
-      number = i
-    }
-
-    when("I multiply it by {3}")(anInt) { j =>
-      number = number * j
-    }
-
-    andThen("I get {6}")(anInt) { n: Int =>
-      number must_== n
-    }
-
-    var number = 0
+  given("a first number {2}")(anInt) { i =>
+    number = i
   }
+
+  when("I multiply it by {3}")(anInt) { j =>
+    number = number * j
+  }
+
+  andThen("I get {6}")(anInt) { n: Int =>
+    number must_== n
+  }
+
+  var number = 0
+}
 }}
 
 Which renders
@@ -250,6 +248,57 @@ then I get 6
 
 In this case `andThen` has to be used in place of `then` because `then` is going to become a Scala keyword.
 
+## Full support
+
+The full support fixes an issue with all the previous styles: the necessity to create mutable variables to keep track of state changes between steps and examples. It also enforces statically a proper sequencing of the Given/When/Then actions.
+
+Here, we mix-in the `org.specs2.specification.script.GWT` trait. This trait provides a class, `Scenario`, to parse the specification text and create `Steps` and `Examples`. Let's see an example:${snippet{
+class GWTSpec extends Specification with org.specs2.specification.script.GWT with StandardRegexStepParsers { def is = s2"""
+
+ A given-when-then example for a calculator                       ${calculator1.start}
+   Given the following number: 1
+   And a second number: 2
+   And a third number: 6
+   When I use this operator: +
+   Then I should get: 9
+   And it should be >: 0                                          ${calculator1.end}
+
+"""
+
+  val anOperator = readAs(".*: (.)$").and((s: String) => s)
+
+  val calculator1 =
+    Scenario("calculator1").
+      given(anInt).
+      given(anInt).
+      given(anInt).
+      when(anOperator) { case op :: i :: j :: k :: _ => if (op == "+") i + j + k else i * j * k }.
+      andThen(anInt)   { case expected :: sum :: _ => sum === expected}.
+      andThen(anInt)   { case expected :: sum :: _ => sum must be_>(expected)}
+}
+}}
+
+In this example, `calculator1.start` marks the beginning of a Given/When/Then section and each line until `calculator1.end` must correspond to a `given, `when` or `andThen` call on the scenario.
+
+ * `given` uses a `StepParser` to extract values for a line of text
+ * `when` uses a `StepParser` to extract values from the corresponding line of text and a `mapping` function to combine the result of the extraction + all the values from the given steps
+ * `andThen` uses a `StepParser` (usually to extract expected values) and a `check` function taking `when values` and returning a `Result`
+
+More precisely, the functions passed to a `when` step must be of the form
+
+ * `when(aStepParser) { case p1 :: p2 :: .. :: _ => w1 }`, where `p1` has the type extracted from `aStepParser` and `p2 .. pn` have the types of the values extracted by the previous `given` steps
+ * `when(aStepParser).collect { case (p1, p2n: Seq[LUB]) => w1 }`, where `p1` has the type extracted from `aStepParser` and `p2n` is a `Seq[LUB]` where `LUB` is the least upper bound of the types of all the values extracted by the previous `given` steps
+
+`::` is the [Shapeless](https://github.com/milessabin/shapeless) `HCons` operator so don't forget at add the Shapeless dependency to your project if you are using the `GWT` trait!
+
+And similarly for `andThen` steps
+
+ * `andThen(aStepParser) { case p1 :: p2 :: .. :: _ => r: R }`, where `p1` has the type extracted from `aStepParser` and `p2 .. pn` have the types of the values mapped by the previous `when` steps
+ * `andThen(aStepParser).collect { case (p1, p2n: Seq[LUB]) => r: R }`, where `p1` has the type extracted from `aStepParser` and `p2n` is a `Seq[LUB]` where `LUB` is the least upper bound of the types of all the values mapped by the previous `when` steps
+
+The type `R` of the value `r` must be such that there is an `AsResult` type class instance in scope to transform it to a `Result`. In other words r is: a `Boolean`, a `MatchResult[_]`, a ScalaCheck `Prop`,...
+
+You will also note that the `Scenario` class restricts the order of methods which you can call. It always has to be `given* -> when* -> andThen*`.
 
 """
 }

@@ -5,7 +5,7 @@ package mutable
 
 import script.StandardDelimitedStepParsers
 
-class GivenWhenThenIntermediateSpec extends org.specs2.mutable.Specification with dsl.mutable.GivenWhenThen with StandardDelimitedStepParsers {
+class GWTIntermediateSpec extends org.specs2.mutable.Specification with dsl.mutable.GWT with StandardDelimitedStepParsers {
 
  "adding numbers".p
 

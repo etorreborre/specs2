@@ -1,7 +1,6 @@
-package org.specs2
-package guide
+package org.specs2.guide.old
 
-import org.specs2.specification._
+import org.specs2.Specification
 
 class TestAcceptanceSpec extends Specification { def is =  s2"""
   example 1 $e1

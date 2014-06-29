@@ -344,4 +344,3 @@ case class TextLines(lines: String) extends GWTLines
 object TextLines { def create(lines: Seq[String]): TextLines = TextLines(lines.mkString("\n")) }
 
 
-

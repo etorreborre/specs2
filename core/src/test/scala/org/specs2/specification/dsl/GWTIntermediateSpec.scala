@@ -6,7 +6,7 @@ import org.specs2.specification.script.{StandardDelimitedStepParsers, StepParser
 
 import scala.util.parsing.combinator.RegexParsers
 
-class GivenWhenThenIntermediateSpec extends Specification with GivenWhenThen with StandardDelimitedStepParsers { def is = s2"""
+class GWTIntermediateSpec extends Specification with GWT with StandardDelimitedStepParsers { def is = s2"""
  Given a first number {2}     $g1
  When multiply it by {3}      $w1
  Then I get {6}               $t1

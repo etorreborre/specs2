@@ -7,11 +7,11 @@ import core._
 import create.FragmentsFactory
 import script.StepParser
 
-trait GivenWhenThen { outer: FragmentsFactory =>
+trait GWT { outer: FragmentsFactory =>
   private val factory = fragmentFactory
 
-  def action[T](extractor: StepParser[T])(action1: T => Any) = { description: String =>
-    extractor.parse(description).fold(
+  def action[T](parser: StepParser[T])(action1: T => Any) = { description: String =>
+    parser.parse(description).fold(
     e => Fragments(factory.step(Error("failed to extract a value from "+description+": "+e.getMessage+e.getStackTrace.mkString("\n", "\n", "\n")))),
     { case (d, t) =>
       Fragments(
@@ -20,8 +20,8 @@ trait GivenWhenThen { outer: FragmentsFactory =>
     })
   }
 
-  def step[T](extractor: StepParser[T])(action: T => Any) = { description: String =>
-    extractor.parse(description).fold(
+  def step[T](parser: StepParser[T])(action: T => Any) = { description: String =>
+    parser.parse(description).fold(
     e => Fragments(factory.step(Error("failed to extract a value from "+description+": "+e.getMessage+e.getStackTrace.mkString("\n", "\n", "\n")))),
     { case (d, t) =>
       Fragments(
@@ -30,8 +30,8 @@ trait GivenWhenThen { outer: FragmentsFactory =>
     })
   }
 
-  def example[T, R : AsResult](extractor: StepParser[T])(action: T => R) = { description: String =>
-    extractor.parse(description).fold(
+  def example[T, R : AsResult](parser: StepParser[T])(action: T => R) = { description: String =>
+    parser.parse(description).fold(
     e => Fragments(factory.step(Error("failed to extract a value from "+description+": "+e.getMessage+e.getStackTrace.mkString("\n", "\n", "\n")))),
     { case (d, t) =>
       Fragments(factory.example(d, action(t)))
