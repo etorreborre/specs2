@@ -37,6 +37,13 @@ trait S2StringContext extends FragmentsFactory { outer =>
       fs append ff.text(text).setLocation(start) appendLazy f.setLocation(end)
   }
 
+  implicit def descriptionToFragmentsIsInterpolatedFragment(fragments: String => Fragments): InterpolatedFragment = new InterpolatedFragment {
+    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) = {
+      val (description, before) = descriptionAndBefore(text, start, end, expression)
+      fs append before append fragments(description.text)
+    }
+  }
+
   implicit def specificationLinkIsInterpolatedFragment(link: SpecificationLink): InterpolatedFragment = new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) = {
       fs append ff.text(text).setLocation(start) append fragmentFactory.link(link).setLocation(end)

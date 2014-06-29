@@ -1,35 +1,32 @@
 package org.specs2
 package specification
 package dsl
-package mutable
 
-import execute.AsResult
+import org.specs2.control.Status
+import org.specs2.execute.{Error, AsResult}
 import control.ImplicitParameters._
-import specification.core._
-import specification.create.FragmentsFactory
+import core._
+import create.FragmentsFactory
+import script.StepParser
 
-trait GivenWhenThen { outer: MutableFragmentBuilder with FragmentsFactory =>
+trait GivenWhenThen { outer: FragmentsFactory =>
   private val factory = fragmentFactory
 
-  def given(description: String)(action: =>Any) = step(s"given $description")(action)
-
-  def given[T](description: String, extractor: String => Option[T])(action: T => Any) =
-    step(s"given $description", extractor)(action)
-
-  def given[T](description: String, extractor: String => Option[(String, T)])(action: T => Any)(implicit p: ImplicitParam) = {
-    step(s"given $description", extractor)(action)(p)
+  def step[T](extractor: StepParser[T])(action: T => Unit) = { description: String =>
+    extractor.parse(description).fold(
+    e => Fragments(factory.step(Error("failed to extract a value from "+description+": "+e.getMessage+e.getStackTrace.mkString("\n", "\n", "\n")))),
+    { case (d, t) =>
+      Fragments(
+        factory.text(d),
+         factory.step(action(t)))
+    })
   }
-
+/*
   def when(description: String)(action: =>Any) = step(s"when $description")(action)
   def when[T](description: String, extractor: String => Option[T])(action: T => Any) =
     step(s"when $description", extractor)(action)
 
-  def step(description: String)(action: =>Any): Fragment = {
-    addParagraph(description)
-    addFragment(factory.step(action))
-  }
-
-  def step[T](description: String, extractor: String => Option[T])(action: T => Any): Fragment = {
+  def step[T](extractor: String => Option[T])(action: T => Any): Fragment = {
     val extracted = extractor(description)
     addParagraph(description)
     addFragment(factory.step(extracted.map(action).getOrElse(throw new Exception("failed to extract a value from "+description))))
@@ -64,6 +61,6 @@ trait GivenWhenThen { outer: MutableFragmentBuilder with FragmentsFactory =>
     addFragment(factory.break)
     addFragment(factory.backtab)
   }
-
+*/
 }
 
