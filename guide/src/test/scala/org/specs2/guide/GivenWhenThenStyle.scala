@@ -1,8 +1,11 @@
 package org.specs2
 package guide
 
+import org.specs2.specification.dsl.mutable.{GivenWhenAndThenSyntax, GivenWhenThenSyntax}
 import org.specs2.specification.script.{StepParsers, StepParser, StandardDelimitedStepParsers}
 import specification.dsl
+
+import scala.util.matching.Regex
 
 object GivenWhenThenStyle extends UserGuidePage { def is = s2"""
 
@@ -111,19 +114,21 @@ You can change the delimiters being used by overriding the implicit regular expr
 // 8<--
 trait NewStepParsers extends StepParsers { // 8<--
   // use `[]` as a delimiter
-  override implicit lazy val stepParserRegex = "\\[([^\\]]+)\\]".r
+  override implicit lazy val stepParserRegex = new Regex("\\[([^\\]]+)\\]")
 // 8<--
 }
 }}
 
 But you can also specify another regular expression "locally" for a given step parser:${snippet{
-  val anInt = StepParser((_: String).toInt)("\\[([^\\]]+)\\]".r)
+  val anInt = StepParser((_: String).toInt)(new Regex("\\[([^\\]]+)\\]"))
 }}
 
 #### Regex parsers
 
 More generally you can use any regular expression to parse values with the `readAs` and `groupAs` methods ${snippet{
-
+// 8<---
+import StepParsers._
+// 8<---
 // match the whole line
 val anInt1 = readAs(".*(\\d+).*").and((s: String) => s.toInt)
 
@@ -137,13 +142,39 @@ val twoInts = groupAs("\\d+").and((s1: String, s2: String) => (s1.toInt, s2.toIn
 
 #### Standard parsers
 
-A few `StepParsers` have been predefined for you in the `StandardDelimitedStepParsers` and `StandardRegexStepParsers` traits to extract `Int`s, `Double`s and `String`s
+A few `StepParsers` have been predefined for you in the `StandardDelimitedStepParsers` and `StandardRegexStepParsers` traits to extract `Int`s, `Double`s and `String`s:
 
+ - `anInt`, `twoInts`, `threeInts`
+ - `aDouble`, `twoDoubles`, `threeDoubles`
+ - `aString`, `twoStrings`, `threeStrings`
 
 ### With a mutable specification
 
-Several syntaxes are available with a mutable specification:${snippet{
+Several syntaxes are available with a mutable specification. The first syntax uses modified `step` and `example` methods to create steps and examples:${snippet{
 class GWTSpec extends mutable.Specification with dsl.mutable.GivenWhenThen with StandardDelimitedStepParsers {
+
+  "adding numbers".p
+
+  step("Given a first number {2}")(anInt) { i =>
+    number = i
+  }
+
+  step("When I multiply it by {3}")(anInt) { j =>
+    number = number * j
+  }
+
+  example("Then I get {6}")(anInt) { n: Int =>
+    number must_== n
+  }
+
+  var number = 0
+}
+}}
+
+The second syntax is mostly the same but with postfix methods:${snippet{
+class GWTSpec extends mutable.Specification with dsl.mutable.GivenWhenThen with StandardDelimitedStepParsers {
+
+  "adding numbers".p
 
   "Given a first number {2}".step(anInt) { i =>
     number = i
@@ -161,6 +192,63 @@ class GWTSpec extends mutable.Specification with dsl.mutable.GivenWhenThen with 
 }
 }}
 
+The final 2 syntaxes are just specialisations of the `mutable.GivenWhenThen` trait with the `Given/When/Then` keywords:${snippet{
+class GWTSpec extends mutable.Specification with dsl.mutable.GivenWhenThen with StandardDelimitedStepParsers with GivenWhenThenSyntax {
+
+  "adding numbers".p
+
+  Given("a first number {2}")(anInt) { i =>
+    number = i
+  }
+
+  When("I multiply it by {3}")(anInt) { j =>
+    number = number * j
+  }
+
+  Then("I get {6}")(anInt) { n: Int =>
+    number must_== n
+  }
+
+  var number = 0
+}
+}}
+
+This will create sentences such as:
+```
+Given a first number 2
+When I multiply it by 3
+Then I get 6
+```
+
+If you prefer to have uncapitalized `given/when/then` you can use the `GivenWhenAndThenSyntax`:${snippet{
+  class GWTSpec extends mutable.Specification with dsl.mutable.GivenWhenThen with StandardDelimitedStepParsers with GivenWhenAndThenSyntax {
+
+    "adding numbers".p
+
+    given("a first number {2}")(anInt) { i =>
+      number = i
+    }
+
+    when("I multiply it by {3}")(anInt) { j =>
+      number = number * j
+    }
+
+    andThen("I get {6}")(anInt) { n: Int =>
+      number must_== n
+    }
+
+    var number = 0
+  }
+}}
+
+Which renders
+```
+given a first number 2
+when I multiply it by 3
+then I get 6
+```
+
+In this case `andThen` has to be used in place of `then` because `then` is going to become a Scala keyword.
 
 
 """

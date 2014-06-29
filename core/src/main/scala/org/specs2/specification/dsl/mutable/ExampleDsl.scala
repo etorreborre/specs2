@@ -14,8 +14,8 @@ trait ExampleDsl extends BlockDsl with dsl.ExampleDsl {
   implicit def blockExample(d: String) = new BlockExample(d)
 
   class BlockExample(d: String) {
-    def >>(f: =>Fragment): Unit = describe(d) >> f
-    def >>(fs: =>Fragments)(implicit p1: ImplicitParam1): Unit = describe(d).>>(fs)(p1)
+    def >>(f: =>Fragment): Fragment = describe(d) >> f
+    def >>(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments = describe(d).>>(fs)(p1)
 
     def >>[R : AsResult](r: =>R): Fragment =
       >>(Execution.result(r))

@@ -7,6 +7,8 @@ import script.StandardDelimitedStepParsers
 
 class GivenWhenThenIntermediateSpec extends org.specs2.mutable.Specification with dsl.mutable.GivenWhenThen with StandardDelimitedStepParsers {
 
+ "adding numbers".p
+
  "Given a first number {2}".step(anInt) { i =>
    number = i
  }

@@ -31,8 +31,8 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
   }
 
   private lazy val allAsString = new StepParser[String] {
-    def parse(text: String) = Right(text)
-    override def strip(text: String) = text
+    def parse(text: String) = Right((text, text))
+    def strip(text: String) = text
   }
 
 
@@ -155,13 +155,12 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
           case TextLines(ls) => fs append fragmentFactory.text(ls+"\n")
 
           // Given lines must create steps with extracted values
-          case GivenLines(ls) => {
+          case GivenLines(ls) =>
             givenSteps = (givenExtractorsList zip ls).map { case (extractor, line) => fragmentFactory.step(extractLine(extractor, line)) }.reverse
             fs append appendSteps(givenExtractorsList, ls, givenSteps)
-          }
 
           // When lines must create steps with extracted values, and map them using given values
-          case WhenLines(ls) => {
+          case WhenLines(ls) =>
             whenSteps = (whenExtractorsList zip ls zip whenMappersList).map { case ((extractor, line), mapper) =>
               factory.step(execute(result(givenSteps), extractor, line) { t: Any =>
                 val map = mapper.asInstanceOf[Mapper[Any, HList, Any, Any]]
@@ -170,10 +169,9 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
             }.reverse
 
             fs append appendSteps(whenExtractorsList, ls, whenSteps)
-          }
 
           // Then lines must create examples with previous when values
-          case ThenLines(ls) => {
+          case ThenLines(ls) =>
             val thenExamples: List[Fragment] = (thenExtractorsList zip ls zip verificationsList).map { case ((extractor: StepParser[_], line), verify) =>
               example(extractor.strip(line),
                 execute(result(givenSteps) and result(whenSteps), extractor, line) { t: Any =>
@@ -182,7 +180,6 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
                 }.asInstanceOf[Result])
             }
             fs append thenExamples.intersperse(fragmentFactory.text("\n"))
-          }
         }
       }
     }

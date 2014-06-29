@@ -24,13 +24,13 @@ trait GivenWhenThen extends org.specs2.specification.dsl.GivenWhenThen { outer: 
   }
 
   def step[T](description: String)(extractor: StepParser[T])(action: T => Any): Fragments =
-    addFragmentsBlock(super.step(extractor)(action)(description))
+    addFragments(super.step(extractor)(action)(description).append(factory.break))
 
   def action[T](description: String)(extractor: StepParser[T])(action1: T => Any): Fragments =
-    addFragmentsBlock(super.action(extractor)(action1)(description))
+    addFragments(super.action(extractor)(action1)(description).append(factory.break))
 
   def example[T, R : AsResult](description: String)(extractor: StepParser[T])(action: T => R): Fragments =
-    addFragmentsBlock(super.example(extractor)(action).apply(description))
+    addFragments(super.example(extractor)(action).apply(description).append(factory.break))
 
   case class StepParserExample[T](s: String, extractor: StepParser[T]) {
     def in[R : AsResult](f: T => R) = >>(f)

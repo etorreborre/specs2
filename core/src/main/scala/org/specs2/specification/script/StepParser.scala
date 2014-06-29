@@ -16,6 +16,7 @@ trait StepParser[T] {
    * if the original text contains delimiters to indicate the values to extract, remove them
    */
   def parse(text: String): Either[Exception, (String, T)]
+  def strip(text: String): String
 }
 
 /**

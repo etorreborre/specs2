@@ -9,33 +9,47 @@ import org.specs2.specification.core.{Fragments, Fragment}
 trait TextDsl extends FragmentBuilder with FragmentsFactory {
   implicit class textFragment(s: String) {
     def txt = addFragment(fragmentFactory.text(s))
-    def br  = s.txt.br
-    def p   = s.txt.p
+    def br: Fragment  = s.txt.br
+    def br(n: Int): Fragment = s.txt.br(n)
+    def p: Fragment = s.txt.p
+    def p(n: Int): Fragment = s.txt.p(n)
   }
 
   implicit class fragmentFormatting(f: =>Fragment) {
-    def br  = addFragmentBlock {
-      f
-      addFragment(fragmentFactory.break)
+    def br: Fragment  = br(1)
+    def br(n: Int): Fragment  = addFragmentBlock {
+      val result = f
+      (1 to n).map(_ => addFragment(fragmentFactory.break))
+      result
     }
-    def p = addFragmentBlock {
-      addFragment(fragmentFactory.break)
-      f
-      addFragment(fragmentFactory.break)
+
+    def p: Fragment = p(2)
+    def p(n: Int): Fragment = addFragmentBlock {
+      val before = math.max(1, n - 1)
+      (1 to before).map(_ => addFragment(fragmentFactory.break))
+      val result = f
+      (1 to n).map(_ => addFragment(fragmentFactory.break))
       addFragment(fragmentFactory.backtab)
+      result
     }
   }
 
   implicit class fragmentsFormatting(fs: =>Fragments) {
-    def br  = addFragmentBlock {
-      fs
-      addFragment(fragmentFactory.break)
+    def br: Fragments  = br(1)
+    def br(n: Int): Fragments  = addFragmentsBlock {
+      val result = fs
+      (1 to n).map(_ => addFragment(fragmentFactory.break))
+      result
     }
-    def p = addFragmentBlock {
-      addFragment(fragmentFactory.break)
-      fs
-      addFragment(fragmentFactory.break)
+
+    def p: Fragments = p(2)
+    def p(n: Int): Fragments = addFragmentsBlock {
+      val before = math.max(1, n - 1)
+      (1 to before).map(_ => addFragment(fragmentFactory.break))
+      val result = fs
+      (1 to n).map(_ => addFragment(fragmentFactory.break))
       addFragment(fragmentFactory.backtab)
+      result
     }
   }
 

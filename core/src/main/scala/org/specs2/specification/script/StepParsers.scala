@@ -53,6 +53,7 @@ trait StepParsers extends ImplicitParameters {
 
     trait ReadAsParser[T] extends StepParser[T] {
       def parse(text: String) = trye((text, parse1(text)))(identity)
+      def strip(text: String) = text
       protected def parse1(text: String): T
     }
 

@@ -63,6 +63,11 @@ trait MutableFragmentBuilder extends FragmentBuilder
     fragment
   }
 
+  def addFragments(fragments: Fragments): Fragments = {
+    fragments.fragments.foreach(addFragment)
+    fragments
+  }
+
   private def isolate(fragment: Fragment, effectPath: EffectPath) =
     if (!targetPath.isDefined && mustBeIsolated(fragment))
       fragment.setExecution(duplicateExecution(effectPath))
@@ -97,6 +102,7 @@ trait MutableFragmentBuilder extends FragmentBuilder
 
 trait FragmentBuilder {
   def addFragment(f: Fragment): Fragment
+  def addFragments(fs: Fragments): Fragments
   def addFragmentBlock(block: =>Fragment): Fragment
   def addFragmentsBlock(block: =>Fragments): Fragments
 }

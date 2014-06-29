@@ -5,6 +5,7 @@ package old.structure
 import execute.Result
 import examples.HelloWorldSpec
 import specification.Snippets
+import specification.core.foreachInSequence
 
 object Unit extends mutable.Specification with Snippets {
   def section = s2"""
@@ -32,7 +33,7 @@ Note that you can use a `for` loop to create examples with the `examplesBlock` m
 
 "this system has 5 examples" >> {
   //examplesBlock {
-    (1 to 5) foreach { i => "example "+i >> ok }
+    (1 to 5).repeat { i => "example "+i >> ok }
  //}
 }
 }}
