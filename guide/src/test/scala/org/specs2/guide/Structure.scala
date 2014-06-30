@@ -138,12 +138,13 @@ It is also possible to use the "functional" expectation mode with a unit specifi
  - collect ${"*all* expectations" ~ GetAllExpectations}
  - use ${"named examples" ~ NamedExamples} in acceptance specifications to get default example names
  - use ${"scripts and auto-numbered examples" ~ AutoNumberedExamples} to completely separate the specification text from the code
- - use the ${"Given/When/Then style" ~ GivenWhenThenStyle} for structuring specifications
+ - use the ${"Given/When/Then style" ~ GivenWhenThenStyle} to structure specifications
  - mark examples as ${"pending until they are fixed" ~ PendingUntilFixedExamples}
  - add ${"links to other specifications" ~ LinkOtherSpecifications}
  - use the ${"command line arguments" ~ UseCommandLineArguments} to define the body of an example
  - add ${"debug statements" ~ DebugStatements}
  - print ${"execution data" ~ PrintExecutionData}
+ - extend the specification by creating examples ${"_while it is executing_" ~ CreateOnlineSpecifications}
  - create a trait which will decorate or transform an other specification when mixed-in
 
 """
