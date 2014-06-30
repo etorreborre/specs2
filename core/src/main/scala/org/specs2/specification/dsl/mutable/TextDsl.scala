@@ -9,8 +9,10 @@ import org.specs2.specification.core.{Fragments, Fragment}
 trait TextDsl extends FragmentBuilder with FragmentsFactory {
   implicit class textFragment(s: String) {
     def txt = addFragment(fragmentFactory.text(s))
+
     def br: Fragment  = s.txt.br
     def br(n: Int): Fragment = s.txt.br(n)
+
     def p: Fragment = s.txt.p
     def p(n: Int): Fragment = s.txt.p(n)
   }
@@ -27,10 +29,21 @@ trait TextDsl extends FragmentBuilder with FragmentsFactory {
     def p(n: Int): Fragment = addFragmentBlock {
       val before = math.max(1, n - 1)
       (1 to before).map(_ => addFragment(fragmentFactory.break))
-      val result = f
+      f
       (1 to n).map(_ => addFragment(fragmentFactory.break))
       addFragment(fragmentFactory.backtab)
-      result
+    }
+
+    def tab: Fragment = tab(1)
+    def tab(n: Int): Fragment = addFragmentBlock {
+      f
+      addFragment(fragmentFactory.tab(n))
+    }
+
+    def backtab: Fragment = backtab(1)
+    def backtab(n: Int): Fragment = addFragmentBlock {
+      f
+      addFragment(fragmentFactory.backtab(n))
     }
   }
 
@@ -51,6 +64,21 @@ trait TextDsl extends FragmentBuilder with FragmentsFactory {
       addFragment(fragmentFactory.backtab)
       result
     }
+
+    def tab: Fragments = tab(1)
+    def tab(n: Int): Fragments = addFragmentsBlock {
+      val result = fs
+      addFragment(fragmentFactory.tab(n))
+      result
+    }
+
+    def backtab: Fragments = backtab(1)
+    def backtab(n: Int): Fragments = addFragmentsBlock {
+      val result = fs
+      addFragment(fragmentFactory.backtab(n))
+      result
+    }
+
   }
 
 }
