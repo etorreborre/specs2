@@ -17,30 +17,31 @@ import text.Trim._
 import Fragment._
 
 case class Fragments(contents: Process[Task, Fragment]) {
-  def update(f: Process[Task, Fragment] => Process[Task, Fragment]) = contentsLens.modify(this)(f)
-  def flatMap(f: Fragment => Process[Task, Fragment])               = contentsLens.modify(this)(_ flatMap f)
-  def map(f: Fragment => Fragment)                                  = contentsLens.modify(this)(_ map f)
-  def mapDescription(f: Description => Description)                 = map(_.updateDescription(f))
-  def |> (other: Process1[Fragment, Fragment])                      = contentsLens.modify(this)(_ |> other)
-  def fragments: IndexedSeq[Fragment]                               = contents.runLog.run
-  def filter(predicate: Fragment => Boolean)                        = contentsLens.modify(this)(_ filter predicate)
-
-  def append(other: Process[Task, Fragment]): Fragments = contentsLens.modify(this)(_ fby other)
   def append(other: Fragment): Fragments                = append(Process(other))
   def append(others: Seq[Fragment]): Fragments          = append(Fragments(others:_*))
   def append(others: Fragments): Fragments              = append(others.contents)
-
   def appendLazy(other: =>Fragment): Fragments          = append(Process.emitLazy(other))
 
-  def prepend(other: Process[Task, Fragment]): Fragments = contentsLens.modify(this)(other fby _)
   def prepend(other: Fragment): Fragments                = prepend(Process(other))
   def prepend(others: Fragments): Fragments              = prepend(others.contents)
   def prepend(others: Seq[Fragment]): Fragments          = prepend(Fragments(others:_*))
+  def prependLazy(other: =>Fragment): Fragments          = prepend(Process.emitLazy(other))
 
   def when(condition: =>Boolean) = contentsLens.modify(this)(_  when emit(condition))
 
-  def texts    = fragments.filter(isText)
-  def examples = fragments.filter(isExample)
+  def map(f: Fragment => Fragment)                                  = contentsLens.modify(this)(_ map f)
+  def mapDescription(f: Description => Description)                 = map(_.updateDescription(f))
+  def filter(predicate: Fragment => Boolean)                        = contentsLens.modify(this)(_ filter predicate)
+
+  def update(f: Process[Task, Fragment] => Process[Task, Fragment]) = contentsLens.modify(this)(f)
+  def flatMap(f: Fragment => Process[Task, Fragment])               = contentsLens.modify(this)(_ flatMap f)
+  def |> (other: Process1[Fragment, Fragment])                      = contentsLens.modify(this)(_ |> other)
+  def append(other: Process[Task, Fragment]): Fragments             = contentsLens.modify(this)(_ fby other)
+  def prepend(other: Process[Task, Fragment]): Fragments            = contentsLens.modify(this)(other fby _)
+
+  def fragments: IndexedSeq[Fragment] = contents.runLog.run
+  def texts                           = fragments.filter(isText)
+  def examples                        = fragments.filter(isExample)
 
   def stripMargin: Fragments = stripMargin('|')
   def stripMargin(margin: Char): Fragments = mapDescription(_.stripMargin(margin))
@@ -48,12 +49,8 @@ case class Fragments(contents: Process[Task, Fragment]) {
 
 object Fragments {
   val contentsLens = lens[Fragments] >> 'contents
-  def apply(fragments: Fragment*): Fragments = Fragments(emitAll(fragments).toSource)
 
-  def trimFirstText(fs: Seq[Fragment]): Vector[Fragment] = fs match {
-    case Fragment(RawText(t), e, l) +: rest => Fragment(RawText(t.trimStart), e, l) +: rest.toVector
-    case other => other.toVector
-  }
+  def apply(fragments: Fragment*): Fragments = Fragments(emitAll(fragments).toSource)
 }
 
 case class Fragment(description: Description, execution: Execution, location: Location = StacktraceLocation()) {
@@ -91,12 +88,12 @@ object Fragment {
   }
 
   def isText(f: Fragment) = (f.description match {
-    case t: RawText => true
+    case t: Text => true
     case _          => false
   }) && !f.isRunnable
 
   def isExample(f: Fragment) = (f.description match {
-    case t: RawText => true
+    case t: Text => true
     case _          => false
   }) && f.isRunnable
 

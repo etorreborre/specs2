@@ -26,7 +26,7 @@ trait Filter {
     val regex = env.arguments.ex
     if (regex !=".*")
       process1.filter {
-        case Fragment(RawText(t),e,_) if e.isRunnable => t.matches(regex)
+        case Fragment(Text(t),e,_) if e.isRunnable => t.matches(regex)
         case other                                    => true
       }
     else process1.id
@@ -62,11 +62,11 @@ trait Filter {
 
       receive1 {
         // 1. tag for the next fragment, after some blank text
-        case (Some(Fragment(Marker(t, false, true),_,_)), Fragment(RawText(tx), _, _), Some(fragment)) if tx.trim.isEmpty =>
+        case (Some(Fragment(Marker(t, false, true),_,_)), Fragment(Text(tx), _, _), Some(fragment)) if tx.trim.isEmpty =>
           filter(fragment, tag = t)
 
         // 2. don't emit the fragment twice if it has already been emitted with condition 1.
-        case (Some(Fragment(RawText(tx), _, _)), fragment, _) if tx.trim.isEmpty =>
+        case (Some(Fragment(Text(tx), _, _)), fragment, _) if tx.trim.isEmpty =>
           skip(fragment)
 
         // 3. otherwise if the tag is for the next fragment
@@ -74,7 +74,7 @@ trait Filter {
           filter(fragment, tag = t)
 
         // 4. tag for the previous fragment with one blank in between
-        case (Some(fragment), Fragment(RawText(tx), _, _), Some(Fragment(Marker(t, false, false),_,_))) if tx.trim.isEmpty =>
+        case (Some(fragment), Fragment(Text(tx), _, _), Some(Fragment(Marker(t, false, false),_,_))) if tx.trim.isEmpty =>
           filter(fragment, tag = t)
 
         // 5. tag for the previous fragment
@@ -82,11 +82,11 @@ trait Filter {
           filter(fragment, tag = t)
 
         // 6. no tag after a fragment and blank text, emit it
-        case (Some(fragment), Fragment(RawText(tx), _, _), _) if tx.trim.isEmpty =>
+        case (Some(fragment), Fragment(Text(tx), _, _), _) if tx.trim.isEmpty =>
           filter(fragment)
 
         // 7. if the next fragment is some empty text, don't emit the tag right away, wait for condition 4.
-        case (_, fragment, Some(Fragment(RawText(tx), _, _))) if tx.trim.isEmpty =>
+        case (_, fragment, Some(Fragment(Text(tx), _, _))) if tx.trim.isEmpty =>
           skip(fragment)
 
         // 8. start or end of a new section

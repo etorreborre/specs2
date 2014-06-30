@@ -29,6 +29,8 @@ The `map` method is indeed called everytime the specification returns the list o
  - reformatting all text
  - ...
 
+You will probably need to learn a bit more about specs2 ${""""Fragments" API""" ~ FragmentsApi} in order to modify, delete or add new "Fragments".
+
 """
 }
 

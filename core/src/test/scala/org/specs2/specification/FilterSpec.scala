@@ -112,7 +112,7 @@ class FilterSpec extends Specification with Groups with ResultMatchers with Thro
       val repo = StatisticsRepository.memory
       val env = Env(arguments = Arguments("was x"), statisticsRepository = repo)
 
-      repo.storeResult(getClass.getName, RawText("e1"), org.specs2.execute.Failure("failed")).runOption
+      repo.storeResult(getClass.getName, Text("e1"), org.specs2.execute.Failure("failed")).runOption
 
       val fragments = Fragments(
         ex("e1"),

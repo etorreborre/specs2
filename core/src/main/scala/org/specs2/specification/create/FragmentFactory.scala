@@ -8,7 +8,7 @@ import specification.core._
 import Description._
 import Execution._
 import control.ImplicitParameters._
-import specification.core.RawText
+import specification.core.Text
 
 /**
  * Interface for creating specification fragments
@@ -60,9 +60,9 @@ trait DefaultFragmentFactory extends FragmentFactory {
   def example[T : AsResult](text: String, r: =>T): Fragment                = example(Description.text(text), r)
   def example[T : AsResult](text: String, withText: String => T): Fragment = example(text, withText(text))
   def example[T : AsResult](text: String, withDescriptionAndEnv: (String, Env) => T): Fragment =
-    Fragment(RawText(text), Execution.withEnv((env: Env) => withDescriptionAndEnv(text, env)))
+    Fragment(Text(text), Execution.withEnv((env: Env) => withDescriptionAndEnv(text, env)))
   def example[T](text: String, withEnv: Env => T)(implicit as: AsResult[T], p: ImplicitParam): Fragment =
-  Fragment(RawText(text), Execution.withEnv(withEnv))
+  Fragment(Text(text), Execution.withEnv(withEnv))
 
   def tag(names: String*): Fragment       = Fragment(Description.tag(names:_*), Execution.NoExecution)
   def taggedAs(names: String*): Fragment  = Fragment(Description.taggedAs(names:_*), Execution.NoExecution)
@@ -77,7 +77,7 @@ trait DefaultFragmentFactory extends FragmentFactory {
   def action[T](t: =>T): Fragment = Fragment(NoText, result({ t; Success() }))
   def step[T](t: =>T): Fragment   = Fragment(NoText, result({ t; Success() }).join)
 
-  def text(t: String)           = Fragment(RawText(t), Execution.NoExecution)
+  def text(t: String)           = Fragment(Text(t), Execution.NoExecution)
   def code(t: String)           = Fragment(Description.code(t), Execution.NoExecution)
 
   def break                     = Fragment(Br, Execution.NoExecution)

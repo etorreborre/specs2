@@ -42,8 +42,8 @@ class LevelsSpec extends Specification { def is = s2"""
     // use this mapper to keep only text and examples
     val mapper = (f: Fragment) => {
       f match {
-        case Fragment(RawText(t), _, _) if t.trim.isEmpty => None
-        case Fragment(RawText(t), e, l)  => Some(Fragment(RawText(t.trim), e, l))
+        case Fragment(Text(t), _, _) if t.trim.isEmpty => None
+        case Fragment(Text(t), e, l)  => Some(Fragment(Text(t.trim), e, l))
         case other                       => None
       }
     }

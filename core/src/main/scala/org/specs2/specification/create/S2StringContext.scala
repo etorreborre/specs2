@@ -13,7 +13,7 @@ import text.Trim._
 import org.specs2.main.{CommandLine, Arguments}
 import specification.core._
 import execute.DecoratedResult
-import specification.core.RawText
+import specification.core.Text
 
 import scala.concurrent.ExecutionContext
 
@@ -99,7 +99,7 @@ trait S2StringContext extends FragmentsFactory { outer =>
 
     val description =
       if (autoExample) Description.code(expression)
-      else             RawText(texts.lastOption.fold("")(_.trim))
+      else             Text(texts.lastOption.fold("")(_.trim))
 
     val before =
       if (first.nonEmpty) Vector(ff.text(first + indent).setLocation(start))

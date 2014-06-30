@@ -27,7 +27,7 @@ trait ExampleDsl extends BlockDsl with dsl.ExampleDsl {
       >>(Execution.withEnv((env: Env) => asResult.asResult(f(env))))
 
     def >>(execution: Execution): Fragment = {
-      addFragment(fragmentFactory.example(RawText(d), execution))
+      addFragment(fragmentFactory.example(Text(d), execution))
       addFragment(fragmentFactory.break)
     }
 

@@ -12,7 +12,7 @@ trait Description {
   def stripMargin: Description = stripMargin('|')
 }
 
-case class RawText(text: String) extends Description {
+case class Text(text: String) extends Description {
   def show: String = text
   override def matches(s: String) = text matches s
   override def stripMargin(margin: Char) = copy(text.stripMargin(margin))
@@ -67,10 +67,10 @@ object AlwaysWhenNoIncludeMarker extends Description {
 }
 
 object Description {
-  def text(text: String) = RawText(text)
+  def text(text: String) = Text(text)
   def code(text: String) =
-    if (text.contains("\n")) RawText("```\n"+text+"\n```")
-    else                     RawText(s"`$text`")
+    if (text.contains("\n")) Text("```\n"+text+"\n```")
+    else                     Text(s"`$text`")
 
   def tag(ts: String*)       = mark(Tag(ts:_*))
   def taggedAs(ts: String*)  = markAs(Tag(ts:_*))
@@ -85,7 +85,7 @@ object Description {
   implicit def showInstance: Show[Description] = new Show[Description] {
     override def shows(d: Description): String =
       d match {
-        case RawText(t) => t
+        case Text(t) => t
         case _ => d.toString
       }
   }

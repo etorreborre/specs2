@@ -6,7 +6,7 @@ import org.specs2.matcher.Matcher
 import org.specs2.specification.dsl.Online
 import scalaz.stream.Process
 import reporter.TextPrinterSpec._
-import org.specs2.specification.core.{Fragments, FragmentsContinuation, Execution, RawText}
+import org.specs2.specification.core.{Fragments, FragmentsContinuation, Execution, Text}
 
 class OnlineSpecificationSpec extends Specification { def is = s2"""
 
@@ -22,7 +22,7 @@ class OnlineSpecificationSpec extends Specification { def is = s2"""
 
     def online(n: Int) = Execution(success, continue(n))
 
-    def createExample(n: Int) = core.Fragments(fragmentFactory.example(RawText("an online example"), online(n)))
+    def createExample(n: Int) = core.Fragments(fragmentFactory.example(Text("an online example"), online(n)))
 
     createExample(3) contains
       """|[info] + an online example

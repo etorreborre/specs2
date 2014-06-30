@@ -62,7 +62,7 @@ trait JUnitDescriptions extends ExecutionOrigin {
 
   /** filter out the fragments which don't need to be represented in the JUnit descriptions */
   def keep: Levels.Mapper = {
-    case f @ Fragment(RawText(t), e, _) if t.trim.isEmpty => None
+    case f @ Fragment(Text(t), e, _) if t.trim.isEmpty => None
     case f if Fragment.isFormatting(f)                    => None
     case f                                                => Some(f)
   }
