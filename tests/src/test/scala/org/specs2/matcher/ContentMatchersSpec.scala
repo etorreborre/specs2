@@ -21,6 +21,7 @@ class ContentMatchersSpec extends Specification with LinesContentMatchers with B
    the comparison can be unordered                                                                       ${comp().e5}
    we can show only a given number of differences                                                        ${comp().e6}
    we can compare against a Seq of lines instead                                                         ${comp().e7}
+   it works with duplicated lines                                                                        ${comp().e8}
                                                                                                          """
       
   lazy val dir = "target/test/contents"
@@ -33,7 +34,8 @@ class ContentMatchersSpec extends Specification with LinesContentMatchers with B
       writeFile(s"$dir/f4", "hello\nworld")                    >>
       writeFile(s"$dir/f5", "world\nhello")                    >>
       writeFile(s"$dir/f6", "good\nmorning\nbeautiful\nworld") >>
-      writeFile(s"$dir/f7", "good\nday\ncrazy\nworld")
+      writeFile(s"$dir/f7", "good\nday\ncrazy\nworld")         >>
+      writeFile(s"$dir/f8", "good\nday\ncrazy\nworld\nworld")
 
     action.execute(noLogging).unsafePerformIO
   }
@@ -66,6 +68,8 @@ case class comp() extends MustMatchers with TestFiles with ContentMatchers with 
                 s"    2. day"))
 
   def e7 = (file(s"$dir/f1"), Seq("hello", "beautiful", "world")) must haveSameLines
+
+  def e8 = (file(s"$dir/f8"), file(s"$dir/f8")) must haveSameLines
 
 }
 
