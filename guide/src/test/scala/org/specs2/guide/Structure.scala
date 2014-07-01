@@ -131,6 +131,7 @@ It is also possible to use the "functional" expectation mode with a unit specifi
  - use ${"named examples" ~ NamedExamples} in acceptance specifications to get default example names
  - use ${"scripts and auto-numbered examples" ~ AutoNumberedExamples} to completely separate the specification text from the code
  - use the ${"Given/When/Then style" ~ GivenWhenThenStyle} to structure specifications
+ - use ${"Forms" ~ UseForms} to create executable HTML tables in your specification
  - use the ${"command line arguments" ~ UseCommandLineArguments} to define the body of an example
  - add ${"debug statements" ~ DebugStatements}
  - print ${"execution data" ~ PrintExecutionData}

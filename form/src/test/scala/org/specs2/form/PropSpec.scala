@@ -66,8 +66,8 @@ Execution
   
   "creation" - new g1 {
     e1 := noValues.label                       === "name"
-    e2 := actualOnly.actual.get                === 18
-    e3 := nameProp.actual.get                  === "eric"
+    e2 := actualOnly.actual.toOption           === Some(18)
+    e3 := nameProp.actual.toOption             === Some("eric")
     e4 := constrained.label                    === "name"
     e5 := withMatcher("e").execute             === Success("'eric' contains 'e'")
     e6 := Prop("", 1, be_>(0).mute).execute    === Success("")
@@ -81,7 +81,7 @@ Execution
   }
 
   "update" - new g3 {
-    e1 := Prop("name", "eric")("paolo").expected.get must_== "paolo"
+    e1 := Prop("name", "eric")("paolo").expected.toOption must_== Some("paolo")
   }
 
   "exec" - new g4 with form.FormsBuilder {

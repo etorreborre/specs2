@@ -16,10 +16,6 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
   def optionalValue: Option[T] = execute.evaluatedValue
   /** alias for optionalValue */
   def toOption: Option[T] = optionalValue
-  /** @return a value */
-  def get: T = optionalValue.get
-  /** alias for get */
-  def apply(): T = get
   /** update the value */
   def update(newValue: =>T) = withValue(newValue)
   /** alial for update */
@@ -39,24 +35,21 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
   /** option-like isEmpty */
   def isEmpty = optionalValue.isEmpty
   /** option-like map */
-  def map[U](f: T => U): Property[U] = new Property(() => optionalValue.map(f(_)))
+  def map[U](f: T => U): Property[U] = new Property(() => optionalValue.map(f))
   /** option-like orElse */
   def orElse[U >: T](other: => Property[U]): Property[U] = new Property(() => optionalValue.orElse(other.optionalValue))
   /** option-like toLeft */
-  def toLeft[R](right: R) = optionalValue.toLeft(right)
+  def toLeft[R](right: R): Either[T, R] = optionalValue.toLeft(right)
   /** option-like toRight */
-  def toRight[L](left: L) = optionalValue.toRight(left)
+  def toRight[L](left: L): Either[L, T] = optionalValue.toRight(left)
   /** to a list */
   def toList = optionalValue.toList
   
   /** @return execute the property */
-  private def execute: Property[T] = {
-    if (!evaluated)
-      copy(value, true, evaluatedValue = value())
-    else 
-      this
-  }
-  
+  private def execute: Property[T] =
+    if (!evaluated) copy(value, true, evaluatedValue = value())
+    else            this
+
   override def equals(other: Any) = {
     try {
       other match {
@@ -73,12 +66,8 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
     } catch {
       case e: Exception => e.hashCode
     }
-  /** @return an Option-like representation */
-  override def toString = try {
-    optionalValue.toString
-  } catch {
-    case e: Exception => "Evaluation error " + e.getMessage
-  }
+
+  override def toString = optionalValue.fold("")(_.toString)
 }
 /**
  * Companion object to create properties with possibly no initial value
@@ -87,9 +76,9 @@ object Property {
   def apply[T](i: =>T) = new Property(() => Some(i))
   def apply[T]() = new Property[T](() => None)
 }
-private[specs2]
+
 trait Properties {
   implicit def aProperty[T](t: T) = Property(t)
 }
-private[specs2]
+
 object Properties extends Properties

@@ -45,7 +45,7 @@ trait FormsBuilder {
   /** @return a new Field with a label and a value */
   def field[T](label: String, value: =>T): Field[T] = Field(label, value)
 
-  /** @return a new EffectCell with a label and a value */
+  /** @return a new Effect with a label and a value */
   def effect[T](label: String, value: =>T): Effect[T] = Effect(label, value)
 
   /** @return a new Field with a label and several values */

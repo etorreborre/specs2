@@ -16,7 +16,7 @@ several ways of creating forms to support the specification of domain objects or
 First example: Address entity
 -----------------------------
 
-  The first example shows how to create a simple form component representity an
+  The first example shows how to create a simple form component representing an
     Address entity:
 
     * it is modeled as a case class declaring expected values

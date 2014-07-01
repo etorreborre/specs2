@@ -8,8 +8,8 @@ import text.NotNullStrings._
 
 /**
  * The Prop class is a named property which holds:
- *   - an expected value
  *   - an actual value
+ *   - an expected value
  *   - a constraint to check if the actual value conforms to the expected one
  * 
  * This property can be executed and can be inserted in a Form.
@@ -48,11 +48,6 @@ case class Prop[T, S](
   lazy val actualValue = ResultExecution.executeProperty(actual, Pending("No actual value"))
   /** @return the expected value as an option */
   lazy val expectedValue = ResultExecution.executeProperty(expected, Pending("No expected value"))
-  /**
-   * shortcut method for this().get returning the contained expected value.
-   * @return the expected value if set and throws an exception otherwise
-   */
-  def get: S = expected.get
 
   /** execute the constraint set on this property, with the expected value */
   def execute: Result = {
@@ -78,9 +73,9 @@ case class Prop[T, S](
    * label: "this" (actual: "that")
    */
   override def toString = {
-    (if (label.isEmpty) "" else (label + ": ")) + 
+    (if (label.isEmpty) "" else label + ": ") +
     valueToString(expectedValue) +
-    (if (expectedValue.right.toOption == actualValue.right.toOption) "" else (" (actual: " + valueToString(actualValue) + ")"))
+    (if (expectedValue.right.toOption == actualValue.right.toOption) "" else " (actual: " + valueToString(actualValue) + ")")
   }
 
   /**
@@ -96,9 +91,9 @@ case class Prop[T, S](
   /** set a new Decorator */
   def decoratorIs(d: Decorator) = copy(decorator = d)
 
-  override def equals(a: Any) = a match {
+  override def equals(other: Any) = other match {
     case Prop(l, a, e, c, d) => label == l && actual == a && expected == e
-    case other               => false
+    case _                   => false
   }
   override def hashCode = label.hashCode + actual.hashCode + expected.hashCode
 }
@@ -106,18 +101,18 @@ case class Prop[T, S](
  * Companion object with factory methods
  */
 object Prop {
-  /** create a Prop with a label and an expected value */
-  def apply[T](label: String, actual: =>T): Prop[T, T] = {
+  /** create a Prop with a label and an actual value */
+  def apply[T](label: String, actual: =>T): Prop[T, T] =
     new Prop(label, Property(actual), Property[T](), checkProp)
-  }
-  /** create a Prop with a label, an expected value, and a constraint */
-  def apply[T, S](label: String, act: =>T, c: (T, S) => Result) = {
+
+  /** create a Prop with a label, an actual value, and a constraint */
+  def apply[T, S](label: String, act: =>T, c: (T, S) => Result) =
     new Prop[T, S](label, actual = Property(act), constraint = c)
-  }
+
   /** create a Prop with a label, an expected value, and a constraint */
-  def apply[T, S](label: String, act: =>T, c: (S) => Matcher[T]) = {
+  def apply[T, S](label: String, act: =>T, c: S => Matcher[T]) =
     new Prop[T, S](label, actual = Property(act), constraint = (t: T, s: S) => c(s).apply(Expectable(t)).toResult)
-  }
+
   /** create a Prop with a label, an actual value, and a matcher on the actual value */
   def apply[T](label: String, act: =>T, c: Matcher[T]): Prop[T, T] = {
     lazy val a = act
@@ -129,9 +124,11 @@ object Prop {
   }
   /** create a Prop with an empty label and an actual value */
   def apply[T](act: =>T): Prop[T, T] = new Prop[T, T](actual = Property(act))
+
   /** default constraint function */
-  private[Prop] def checkProp[T, S]: (T, T) => Result = (t: T, s: T) => (new BeTypedEqualTo(s).apply(Expectable(t))).toResult
+  private[Prop] def checkProp[T, S]: (T, T) => Result = (t: T, s: T) => new BeTypedEqualTo(s).apply(Expectable(t)).toResult
 }
+
 /**
  * generic trait for anything having a label, to unify Props and Forms
  */

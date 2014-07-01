@@ -38,9 +38,9 @@ It has an Option-like structure, supporting the same kind of operations and can 
 
   "creation" - new group with prop {
     eg := Property().isEmpty
-    eg := p1.get must_== 1
-    eg := p1.update(2).optionalValue must_== Some(2)
-    eg := p1.updateValue(Some(2)).optionalValue must_== Some(2)
+    eg := p1.toOption must_== Some(1)
+    eg := p1.update(2).toOption must_== Some(2)
+    eg := p1.updateValue(Some(2)).toOption must_== Some(2)
     eg := p1.toString must_== "Some(1)"
   }
 
@@ -53,9 +53,9 @@ It has an Option-like structure, supporting the same kind of operations and can 
   }
 
   "option" - new group with prop {
-    eg := p1.map(_.toString).get must_== "1"
-    eg := p1.flatMap(i => Some(i.toString)).get must_== "1"
-    eg := p1.filter(_ >= 0).get must_== 1
+    eg := p1.map(_.toString).toOption must_== Some("1")
+    eg := p1.flatMap(i => Some(i.toString)).toOption must_== Some("1")
+    eg := p1.filter(_ >= 0).toOption must_== Some(1)
     eg := { p1.foreach(i => print("1")); messages.size must_== 1 }
     eg := p1.getOrElse(0) must_== 1
     eg := p1.isDefined must beTrue

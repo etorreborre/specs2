@@ -5,6 +5,7 @@ import control.Property
 import execute._
 import DecoratedProperties._
 import text.NotNullStrings._
+import StandardResults._
 
 /**
  * A Field is a property which is used only to display input values or output values.
@@ -12,11 +13,10 @@ import text.NotNullStrings._
  * The apply method can be used to retrieve the Field value:
  *   `Field(label, 1).apply() must_== 1`
  * 
- * The value is stored in a Property object so it will not be evaluated until explicitly
- * queried.
+ * The value is stored in a Property object so it will not be evaluated until explicitly queried
+ *
  */
-case class Field[T](label: String, value: Property[T], decorator: Decorator = Decorator()) extends Executable with StandardResults
-  with DecoratedProperty[Field[T]] {
+case class Field[T](label: String, value: Property[T], decorator: Decorator = Decorator()) extends Executable with DecoratedProperty[Field[T]] {
   /** executing a field execute the value and returns success unless there is an Error */
   override def execute = {
     valueOrResult match {
@@ -24,16 +24,17 @@ case class Field[T](label: String, value: Property[T], decorator: Decorator = De
       case Right(v) => skipped
     }
   }
+
   lazy val valueOrResult: Either[Result, T] = ResultExecution.executeProperty(value)
-  /**
-   * set a new value on the field. 
-   */
+
+  /** set a new value on the field. */
   def apply(v: =>T) = new Field(label, value(v), decorator)
-  /** @return the field value */
-  def apply(): T = value.get
-  /** alias for apply() */
-  def get: T = apply()
-  /** @return "label: value" */
+
+  /** @return the field value as an Option */
+  def toOption = value.toOption
+  /** @return the field value as an Option */
+  def optionalValue = value.optionalValue
+
   override def toString = {
     val valueString = valueOrResult match {
       case Left(Success(_,_)) => "_"
@@ -43,7 +44,7 @@ case class Field[T](label: String, value: Property[T], decorator: Decorator = De
     (if (label.nonEmpty) label + ": " else "") + valueString
   }
   /** transforms this typed Field as a Field containing the toString value of the Fields value*/
-  def toStringField = new Field(label, Property(value.get.toString), decorator)
+  def toStringField = new Field(label, value.map(_.toString), decorator)
   /** set a new Decorator */
   def decoratorIs(d: Decorator) = copy(decorator = d)
 
@@ -69,15 +70,17 @@ case class Field[T](label: String, value: Property[T], decorator: Decorator = De
  * concatenatedFields2.toString == label: hello, world
  */
 case object Field {
+  /** create a Field with no label */
   def apply[T](value: =>T): Field[T] = new Field("", Property(value))
+
+  /** create a Field with a label and a value */
   def apply[T](label: String, value: =>T): Field[T] = new Field(label, Property(value))
+
+  /** create a Field with a label and other fields values, concatenated as strings */
   def apply(label: String, value1: Field[_], values: Field[_]*): Field[String] = Field(label, "/", value1, values:_*)
-  def apply(label: String, separator: String, value1: Field[_], values: Field[_]*): Field[String] = {
-    val f: Field[String] = if (values.isEmpty)
-      Field(label, value1.get.toString)
-    else
-      Field(label, (value1 :: values.toList).map(_.get).mkString(separator))
-    Field(label, f())
-  }
+
+  /** create a Field with a label and other fields values, concatenated as strings */
+  def apply(label: String, separator: String, value1: Field[_], values: Field[_]*): Field[String] =
+    Field(label, if (values.isEmpty) value1.toString else (value1 :: values.toList).mkString(separator))
 }
 

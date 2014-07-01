@@ -22,7 +22,7 @@ Texts, or blocks of examples can also get a special indentation by using the `ta
 class UnitSpec extends mutable.Specification {
 """
 This is a long and important introduction to this specification.
-""".text
+""".txt
 
 """
 The examples below show everything you can do with the system.
