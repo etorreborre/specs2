@@ -3,7 +3,7 @@ package guide
 
 object QuickStart extends UserGuidePage { def is = "Quick Start".title ^s2"""
 
-Follow the [installation](install) instructions and create copy the following specification in a file named `HelloWorldSpec.scala`: ${snippet{
+Follow the ${"installation" ~ Installation} instructions and create copy the following specification in a file named `HelloWorldSpec.scala`: ${snippet{
 
 class HelloWorldSpec extends Specification { def is = s2"""
 
