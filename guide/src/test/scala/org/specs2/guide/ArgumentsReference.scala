@@ -13,6 +13,14 @@ class MySpec extends Specification { def is = args(xonly=true) ^ s2"""
 }
 }}
 
+## Paths
+
+ Name               | Default value            | Description
+ ------------------ | ------------------------ | -------------------------------------------------------------------------------------------
+ `junit.outdir`     | `target/test-reports/`   | output directory for JUnit XML files
+
+
+
 ## Arguments API
 
 From inside a specification, the available arguments are the following.
