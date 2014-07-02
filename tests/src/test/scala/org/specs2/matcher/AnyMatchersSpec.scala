@@ -31,6 +31,9 @@ class AnyMatchersSpec extends script.Specification with Groups with ResultMatche
   ${ Array(1, 2) must be_===(Array(1, 2)) }
   ${ Array(1, 3) must not be_===(Array(1, 2)) }
   ${ (Array(1, 3) must not be_===(Array(1, 2))).message === "Array(1, 3) is not equal to Array(1, 2)" }
+  ${ Array(Array(1, 2)) must be_==(Array(Array(1, 2))) }
+  ${ Array(1, 2) must be_==(Seq(1, 2)) }
+  ${ Seq(1, 2) must be_==(Array(1, 2)) }
   ${ (1 must_== 2).toResult must beLike { case Failure(_,_,_,FailureDetails(e, a)) => e must_== "2" } }
   the actual value must be evaluated before the expected one
   ${ var result = "";
