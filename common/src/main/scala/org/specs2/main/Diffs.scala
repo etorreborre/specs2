@@ -1,6 +1,7 @@
 package org.specs2
 package main
 
+import control.Exceptions._
 import text._
 import EditDistance._
 
@@ -32,4 +33,22 @@ case class SmartDiffs(show: Boolean = true, separators: String = "[]", triggerSi
     else
       (expected, actual)
   }
+}
+
+object SmartDiffs {
+  def fromString(s: String): Either[Exception, Diffs] = trye {
+    val values = s.split(",")
+    SmartDiffs(show = boolean(values(0)),
+               separators = values(1),
+               triggerSize = values(2).toInt,
+               shortenSize = values(3).toInt,
+               diffRatio = values(4).toInt,
+               showFull = boolean(values(5)))
+  }(identity)
+
+  private def boolean(s: String) =
+    if (Seq("true", "t").contains(s.trim.toLowerCase)) true
+    else if (Seq("false", "f").contains(s.trim.toLowerCase)) false
+    else throw new Exception(s+" is not a boolean value")
+
 }

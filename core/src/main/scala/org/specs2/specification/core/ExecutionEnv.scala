@@ -2,12 +2,14 @@ package org.specs2
 package specification
 package core
 
+import main.Arguments
 import scala.collection.JavaConversions._
 import control._
 import scala.concurrent.duration.Duration
 import java.util.concurrent._
 
-case class ExecutionEnv(timeOut:  Option[Duration] = None,
+case class ExecutionEnv(arguments: Arguments,
+                        timeOut:  Option[Duration] = None,
                         withoutIsolation: Boolean  = false,
                         timer:    Timer            = new Timer) {
 
@@ -18,7 +20,7 @@ case class ExecutionEnv(timeOut:  Option[Duration] = None,
 
   lazy val executor = {
     timer.start
-    ExecutionEnv.defaultExecutor
+    ExecutionEnv.executor(arguments.threadsNb)
   }
 
   def shutdown: Unit = {

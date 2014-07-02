@@ -87,10 +87,6 @@ trait ArgumentsShortcuts { this: ArgumentsArgs =>
   def diffs(show: Boolean = true, separators: String = "[]", triggerSize: Int = 20, diffRatio: Int = 30, shortenSize: Int = 5, full: Boolean = false): Arguments =
     args.report(diffs = SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full))
   /**
-   * shortcut to display the example descriptions from the expectations ok messages
-   */
-  def descFromExpectations = args.report(fromSource = false)
-  /**
    * shortcut to create a stackTrace filter to include only some elements
    */
   def includeTrace(patterns: String*) = new IncludeExcludeStackTraceFilter(patterns.toSeq, Seq[String]())

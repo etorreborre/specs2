@@ -37,16 +37,25 @@ trait Reporter {
   def statsStoreFold(env: Env, spec: SpecStructure) = new Fold[Fragment] {
     type S = Stats
 
+    private val neverStore = env.arguments.store.never
+    private val resetStore = env.arguments.store.reset
+
+    def prepare: Task[Unit] =
+      if (resetStore) env.statisticsRepository.resetStatistics.toTask
+      else            Task.now(())
+
     lazy val sink: Process.Sink[Task, (Fragment, Stats)] =
       Process.constant {  case (fragment: Fragment, stats: Stats) =>
-        env.statisticsRepository.storeResult(spec.specClassName, fragment.description, fragment.executionResult).toTask
+        if (neverStore) Task.now(())
+        else            env.statisticsRepository.storeResult(spec.specClassName, fragment.description, fragment.executionResult).toTask
       }
 
     def fold = Statistics.fold
     def init = Stats()
 
     def last(stats: Stats) =
-      env.statisticsRepository.storeStatistics(spec.specClassName, stats).toTask
+      if (neverStore) Task.now(())
+      else            env.statisticsRepository.storeStatistics(spec.specClassName, stats).toTask
   }
 
 }

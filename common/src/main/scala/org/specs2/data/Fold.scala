@@ -27,11 +27,13 @@ import scalaz.stream.io._
  */
 trait Fold[T] {
   type S
-  
+
+  def prepare: Task[Unit]
   def sink: Sink[Task, (T, S)]
   def fold: (T, S) => S
   def init: S
   def last(s: S): Task[Unit]
+
 }
 
 /**
@@ -45,6 +47,8 @@ object Fold {
   def fromSink[T](aSink: Sink[Task, T]) =  new Fold[T] {
     type S = Unit
     lazy val sink: Sink[Task, (T, S)] = toFoldSink(aSink)
+
+    def prepare = Task.now(())
     def fold = (t: T, u: Unit) => u
     def init = ()
     def last(u: Unit) = Task.now(u)
@@ -140,6 +144,8 @@ object Fold {
     def >>(fold2: Fold[T]) = new Fold[T] {
       type S = (fold1.S, fold2.S)
 
+      def prepare = fold1.prepare >> fold2.prepare
+
       def sink = fold1.sink.zipWith(fold2.sink) { (f1: ((T, fold1.S)) => Task[Unit], f2: ((T, fold2.S)) => Task[Unit]) =>
         (ts: (T, S)) => {
           val (t, (s1, s2)) = ts
@@ -157,6 +163,7 @@ object Fold {
    * Run a fold an return the last value
    */
   def runFoldLast[T](process: Process[Task, T], fold: Fold[T]): Task[fold.S] =
+     fold.prepare >>
     logged(process |> zipWithFoldState(fold)).drainW(fold.sink).map(_._2).runLastOr(fold.init)
 
   /**

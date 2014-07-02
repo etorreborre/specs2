@@ -13,6 +13,7 @@ import io.Paths._
 import main.Arguments
 import scala.Some
 import scala.xml.NodeSeq
+import scalaz.concurrent.Task
 import scalaz.syntax.bind._
 import io._
 import control._
@@ -38,6 +39,7 @@ trait HtmlPrinter extends Printer {
 
     lazy val sink = Fold.unitSink[Fragment, Stats]
 
+    def prepare = Task.now(())
     def fold = Statistics.fold
     def init = Stats()
 

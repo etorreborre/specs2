@@ -20,6 +20,8 @@ object NotifierPrinter {
       val args = env.arguments
       type S = Notified
 
+      def prepare = Task.now(())
+
       def fold = (f: Fragment, notified: Notified) => f match {
         // a block start. The next text is the "context" name
         case Fragment(Start,_,_) => notified.copy(start = true, close = false, hide = true)

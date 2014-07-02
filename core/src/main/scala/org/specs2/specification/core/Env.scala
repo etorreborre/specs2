@@ -10,8 +10,7 @@ import io._
 import control._
 import process.StatisticsRepository
 
-case class Env(arguments: Arguments       = Arguments(),
-               executionEnv: ExecutionEnv = ExecutionEnv(),
+case class Env(arguments: Arguments           = Arguments(),
                indentationSize: Int           = 2,
                /** default statistics repository */
                statisticsRepository: StatisticsRepository = StatisticsRepository.file("target/specs2-reports/stats"),
@@ -24,6 +23,7 @@ case class Env(arguments: Arguments       = Arguments(),
                /** file system interface */
                fileSystem: FileSystem = FileSystem) {
 
+  lazy val executionEnv = ExecutionEnv(arguments)
   /**
    * shutdown computing resources like thread pools
    */
@@ -32,11 +32,17 @@ case class Env(arguments: Arguments       = Arguments(),
   /**
    * @return an isolated env
    */
-  def setWithoutIsolation = copy(executionEnv = executionEnv.setWithoutIsolation)
+  def setWithoutIsolation = new Env(arguments, indentationSize, statisticsRepository, lineLogger, systemLogger, random, fileSystem) {
+    override lazy val executionEnv = ExecutionEnv(arguments).setWithoutIsolation
+  }
 
 }
 
 object Env {
+  def apply(executionEnvironment: ExecutionEnv) = new Env(executionEnvironment.arguments) {
+    override lazy val executionEnv = executionEnvironment
+  }
+
   def executeResult[R : AsResult](r: Env => R) = {
     val env = Env()
     try AsResult(r(env))

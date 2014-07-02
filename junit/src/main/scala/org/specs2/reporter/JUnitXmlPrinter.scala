@@ -7,6 +7,7 @@ import main.Arguments
 import execute._
 import specification._
 import data.Fold
+import scalaz.concurrent.Task
 import scalaz.stream.Process.{Env =>_,_}
 import control._
 import io.Paths._
@@ -25,6 +26,7 @@ trait JUnitXmlPrinter extends Printer {
 
     lazy val sink = Fold.unitSink[Fragment, Stats]
 
+    def prepare = Task.now(())
     def fold = Statistics.fold
     def init = Stats()
 

@@ -4,49 +4,144 @@ package guide
 import main.Diffs
 
 object Runners extends UserGuidePage { def is = s2"""
-### Presentation
+## Presentation
 
-There are many ways to execute ***specs2*** specifications:
+The most common way to run specs2 specifications is to use [sbt](http://scala-sbt.org). In this section we will present the most important options for running specifications
 
- * on the command line, with a console output, and the `specs2.run` runner
- * on the command line, with a html output, and the `specs2.html` runner
- * on the command line, with a console or a html output, and the `specs2.files` runner
- * using [Intellij IDEA](http://confluence.jetbrains.net/display/SCA/Scala+Plugin+for+IntelliJ+IDEA)
- * using [sbt](http://www.scala-sbt.org)
- * using [JUnit](http://www.junit.org)
- * using [Maven](http://maven.apache.org)
- * using your own reporting tool implementing the `Notifier` interface (simple) or the `Exporter` interface (with a full access to the executed specification)
+### Via sbt
 
-### Dependencies
+Sbt recognizes ***specs2*** as a ["test framework"](http://www.scala-sbt.org/release/docs/Testing.html). This means that any class or object extending the `Specification` abstract class can be executed by sbt. The `test` command will run all the specifications in your project provided you put them in the `src/test/scala` directory:
+```
+sbt>test
+```
 
- ***specs2*** is available for Scala 2.10 onwards and uses the following libraries, as specified using the [sbt dsl](http://www.scala-sbt.org/release/docs/Getting-Started/Library-Dependencies.html):
+Most of the time however you will use the `test-only` command, either because you want to run one specification only or because you want to pass arguments:
+```
+sbt> test-only org.acme.secret.KillerAppSpec
+```
 
- <table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info">`"org.scalaz" % "scalaz-core" % "7.0.4"`</td><td class="info">mandatory</td></tr><tr><td class="info">`"org.scalaz" % "scalaz-concurrent" % "7.0.4"`</td><td class="info">mandatory</td></tr><tr><td class="info">`"com.chuusai" % "shapeless" % "1.2.4"`</td><td class="info">if you use the GWT trait</td></tr><tr><td class="info"> `"org.scalacheck" %% "scalacheck" % "1.10.0"`</td><td class="info">if using ScalaCheck</td></tr><tr><td class="info">`"org.mockito" % "mockito-core" % "1.9.5"`</td><td class="info">if using Mockito. Note: specs2.jar must be placed before mockito.jar on the classpath</td></tr><tr><td class="info">`"org.hamcrest" % "hamcrest-core" % "1.3"`</td><td class="info">if using Hamcrest matchers with Mockito</td></tr><tr><td class="info">`"junit" % "junit" % "4.11"`</td><td class="info">if using JUnit</td></tr><tr><td class="info">`"org.scala-sbt" % "test-interface" % "1.0"`</td><td class="info">provided by sbt when using it</td></tr><tr><td class="info">`"org.pegdown" % "pegdown" % "1.2.1"`</td><td class="info">if using the html runner</td></tr><tr><td class="info">`"org.specs2" % "classycle" % "1.4.1"`</td><td class="info">if using the `org.specs2.specification.Analysis` trait</td></tr><tr><td class="info">`"org.scala-lang" % "scala-reflect" % "2.10.3"`</td><td class="info">if using interpolated specifications and/or macro matchers</td></tr><tr><td class="info">`"org.scala-lang.plugins" % "macro-paradise_2.10.3-RC1" % "2.0.0-SNAPSHOT"`</td><td class="info">if using macro matchers, add this macro plugin to sbt with `addCompilerPlugin("org.scala-lang.plugins" % "macro-paradise_2.10.3-RC1" % "2.0.0-SNAPSHOT")`</td></tr></table>
+Various sbt options can apply to [test execution in sbt](http://www.scala-sbt.org/release/docs/Testing.html) but here are the ones which you are most likely to use:
 
-#### Fine-grained jars
+ - exclude some specifications:
+   `testOptions := Seq(Tests.Filter(s => Seq("Spec", "Unit").exists(s.endsWith)))`
 
-***specs2*** can be downloaded from [Sonatype](https://oss.sonatype.org/content/repositories/releases/org/specs2/specs2_2.10/$VERSION) as a big jar containing all the specs2 classes but also as smaller jars, depending on the features you need:
+ - don't execute the specifications in parallel
+   `parallelExecution in Test := false`
 
- - `specs2-core`: for simple specifications executable in the console or with sbt
- - `specs2-matcher`: to use specs2 matchers with JUnit
- - `specs2-matcher-extra`: for the optional specs2 matchers
- - `specs2-scalacheck`: to use ScalaCheck properties in specifications
- - `specs2-mock`: to use Mockito matchers
- - `specs2-analysis`: to use package dependencies matcher
- - `specs2-gwt`: to write given-when-then specifications
- - `specs2-form`: Fit-like forms
- - `specs2-html`: to export specifications as html
- - `specs2-junit`: to run specifications as JUnit tests
+ - pass some arguments to all specifications
+   `testOptions in Test += Tests.Argument("nocolor", "neverstore")`
+   `testOptions in Test += Tests.Argument("exclude", "integration")`
+
+ - display results as soon as they've been executed
+   `logBuffered := false`
+
+### Output
+
+When you run a specification, whatever environment you are in: sbt, shell, IDE,... you can specify different outputs for the results. For example in sbt by default the results appear in the console but if you want JUnit XML files to be produced you can just add the `junitxml` argument. Adding any "Output" argument will deactivate the console (you will see no output in the console) but you can enable it again by passing the `console` argument. You can of course specify several outputs like `html junitxml console`.
+
+Here is a list of all the existing `Printers` in specs2 with links to the corresponding section in the User Guide for more information.
+
+ Argument   | Section
+ ---------- | --------
+ `console`  | $ConsoleOutput
+ `junitxml` | $JUnitXmlOutput
+ `html`     | $HtmlOutput
+ `markdown` | $MarkdownOutput
+ `pdf`      | $PdfOutput
+ `notifier` | $CustomOutput
+ `printer`  | $CustomOutput
 
 ### Arguments
 
+With the `test-only` command arguments can be passed on the command line for selecting, executing or reporting a specification. Please consult the following sections for more information:
+
+ - ${"Filtering" ~ Filtering} to select only some example to run
+ - ${"Execution" ~ Execution} to modify the execution parameters
+ - ${"Console output" ~ ConsoleOutput}, ${"Html output" ~ HtmlOutput}, ${"Custom output" ~ CustomOutput}... for "reporting" arguments
+ - the ${"arguments reference guide" ~ ArgumentsReference} for a list of all arguments
+
+### Output types
+
+## Now learn to...
+
+ * run specifications ${"in an IDE" ~ RunInIDE}: (ScalaIDE](http://scala-ide.org), [IntelliJ IDEA](http://www.jetbrains.com/idea/features/scala.html)
+ * output ${"JUnit XML files" ~ JUnitXmlOutput} to run in a continuous integration server like [Jenkins](http://jenkins-ci.org)
+ * ${"output HTML files" ~ HtmlOutput}
+
+## And if you want to know more
+
+ * run specifications with ${"another build tool" ~ OtherBuildTools}: maven, gradle
+ * run specifications ${"without a build tool" ~ RunInShell}
+ * output ${"Markdown files" ~ MarkdownOutput}
+ * output ${"PDF files" ~ PdfOutput}
+ * use your own reporting tool implementing the ${"`Notifier` interface (simple) or the `Printer` interface" ~ CustomOutput}
+
+
+
+For example you can select which examples to run:
+
+  Name               | Value format  | Comments
+ ------------------- | ------------- | --------------------------------
+ `ex`                | regexp        | specify the examples to execute
+ `include`           | csv           | include some tags
+ `exclude`           | csv           | do not execute the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."  |
+ `wasIssue`          | boolean       | select only previously failed/error examples|
+ `was`               | String        | select only some previously executed examples based on their status|
+ `specname`          | regexp        |                                                                         |
+
+
+  Name               | Value format            | Comments
+ ------------------- | ----------------------- | ------------------------------------------------------------------------
+ ***Selection***     |||
+ `ex`                | regexp                  |                                                                         |
+ `include`           | csv                     |                                                                         |
+ `exclude`           | csv                     |                                                                         |
+ `wasIssue`          | boolean                 |                                                                         |
+ `was`               | String                  | see: Status flags                                                       |
+ `specname`          | regexp                  |                                                                         |
+ ***Execution***     |||
+ `plan`              | boolean                 |                                                                         |
+ `skipall`           | boolean                 |                                                                         |
+ `sequential`        | boolean                 |                                                                         |
+ `isolated`          | boolean                 |                                                                         |
+ `threadsnb`         | int                     |                                                                         |
+ ***Storing***       |||
+ `resetstore`        | boolean                 |                                                                         |
+ `neverstore`        | boolean                 |                                                                         |
+ ***Reporting***     |||
+ `xonly`             | boolean                 |                                                                         |
+ `showonly`          | String                  | see: Status flags                                                       |
+ `failtrace`         | boolean                 |                                                                         |
+ `color`             | boolean                 |                                                                         |
+ `colors`            | map                     | e.g. text:be, failure:m (see the Colors section)                        |
+ `showtimes`         | boolean                 |                                                                         |
+ `debugmarkdown`     | boolean                 |                                                                         |
+ `pegdownExtensions` | int                     | flags from `org.pegdown.Extensions` combined with logical `AND`         |
+ `pegdownTimeout`    | long                    |                                                                         |
+ `fromsource`        | boolean                 |                                                                         |
+ `fullstacktrace`    | boolean                 |                                                                         |
+ `checkurls`         | boolean                 |                                                                         |
+ `notoc`             | boolean                 |                                                                         |
+ `tracefilter`       | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns |
+ `notifier`          | String                  | name of a class extending the `org.specs2.reporter.Notifier` trait      |
+ `exporter`          | String                  | name of a class extending the `org.specs2.reporter.Exporter` trait      |
+ `reporter`          | String                  | name of a class extending the `org.specs2.reporter.Reporter` trait      |
+
+_[`regexp` is a Java regular expression, csv a list of comma-separated values, map is a list of csv pairs key:value]_
+
+Note that any argument accepting values (like `include`) can be passed with a dash when those values contain spaces:
+
+    > testOnly TaggedSpec -- -include issue 123 -- other arguments
+
+And as you can see above, `--` can be used to signal the end of some argument values
+
 You can specify arguments which will control the execution and reporting. They can be passed on the command line, or declared inside the specification, using the `args(name=value)` syntax: ${snippet {
 
-class MySpec extends Specification { def is = args(xonly=true) ^ s2"""
+  class MySpec extends Specification { def is = args(xonly=true) ^ s2"""
   Clever spec title
   And some intro text
   brilliant expectation $success                                   """
-}
+  }
 }}
 
 #### API
@@ -98,9 +193,9 @@ From inside a specification, the available arguments are the following:
 Most of the arguments above can be set in a specification with `args(name=value)`. However Scala would not allow the `args` method to accept *all* the possible
 arguments as parameters (because a method can only have up to 22 parameters). This is why the least frequently used arguments (not in italics) can be set with an object called `args`, having separate methods for setting all the parameters, by "category". For example: ${snippet{
 
-args.select(specName = ".*Test", include="slow")
-args.execute(threadsNb = 2)
-args.report(showtimes = true, xonly = true)
+  args.select(specName = ".*Test", include="slow")
+  args.execute(threadsNb = 2)
+  args.report(showtimes = true, xonly = true)
 }}
 
 ##### Shortcuts
@@ -211,50 +306,6 @@ Note that the default filter also truncates the stacktrace in the middle if it i
 
 On the command line you can pass the following arguments:
 
-  Name               | Value format            | Comments
- ------------------- | ----------------------- | ------------------------------------------------------------------------
- ***Selection***     |||
- `ex`                | regexp                  |                                                                         |
- `include`           | csv                     |                                                                         |
- `exclude`           | csv                     |                                                                         |
- `wasIssue`          | boolean                 |                                                                         |
- `was`               | String                  | see: Status flags                                                       |
- `specname`          | regexp                  |                                                                         |
- ***Execution***     |||
- `plan`              | boolean                 |                                                                         |
- `skipall`           | boolean                 |                                                                         |
- `sequential`        | boolean                 |                                                                         |
- `isolated`          | boolean                 |                                                                         |
- `threadsnb`         | int                     |                                                                         |
- ***Storing***       |||
- `resetstore`        | boolean                 |                                                                         |
- `neverstore`        | boolean                 |                                                                         |
- ***Reporting***     |||
- `xonly`             | boolean                 |                                                                         |
- `showonly`          | String                  | see: Status flags                                                       |
- `failtrace`         | boolean                 |                                                                         |
- `color`             | boolean                 |                                                                         |
- `colors`            | map                     | e.g. text:be, failure:m (see the Colors section)                        |
- `showtimes`         | boolean                 |                                                                         |
- `debugmarkdown`     | boolean                 |                                                                         |
- `pegdownExtensions` | int                     | flags from `org.pegdown.Extensions` combined with logical `AND`         | 
- `pegdownTimeout`    | long                    |                                                                         |
- `fromsource`        | boolean                 |                                                                         |
- `fullstacktrace`    | boolean                 |                                                                         |
- `checkurls`         | boolean                 |                                                                         |
- `notoc`             | boolean                 |                                                                         |
- `tracefilter`       | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns |
- `notifier`          | String                  | name of a class extending the `org.specs2.reporter.Notifier` trait      |
- `exporter`          | String                  | name of a class extending the `org.specs2.reporter.Exporter` trait      |
- `reporter`          | String                  | name of a class extending the `org.specs2.reporter.Reporter` trait      |
-
-_[`regexp` is a Java regular expression, csv a list of comma-separated values, map is a list of csv pairs key:value]_
-
-Note that any argument accepting values (like `include`) can be passed with a dash when those values contain spaces:
-
-    > testOnly TaggedSpec -- -include issue 123 -- other arguments
-
-And as you can see above, `--` can be used to signal the end of some argument values
 
 #### System properties
 
@@ -335,32 +386,6 @@ scala> implicit val myargs = nocolor
 scala> specs2.run(spec1)
 ```
 
-### Via SBT
-
-SBT knows how to run ***specs2*** specifications without any specific configuration. However, there are a few useful options which you can set (see [here](http://www.scala-sbt.org/release/docs/Detailed-Topics/Testing.html) for more information).
-
-Exclude some specifications:
-
-    // keep only specifications ending with Spec or Unit
-    testOptions := Seq(Tests.Filter(s => Seq("Spec", "Unit").exists(s.endsWith(_))))
-
-If you don't want the specifications to be executed in parallel:
-
-    parallelExecution in Test := false
-
-If you want to pass some arguments to all specifications:
-
-    // equivalent to `testOnly -- nocolor neverstore` on the command line
-    testOptions in Test += Tests.Argument("nocolor", "neverstore")
-
-    // equivalent to `testOnly -- exclude integration` on the command line
-    testOptions in Test += Tests.Argument("exclude", "integration")
-
-If you want the examples results to be displayed as soon as they've been executed you need to add:
-
-```
-logBuffered := false
-```
 
 ##### testOnly arguments
 

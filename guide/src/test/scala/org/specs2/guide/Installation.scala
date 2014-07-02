@@ -51,5 +51,25 @@ dependencies {
 }
 ```
 
+## Other dependencies
+
+Depending on the specs2 features you want to use you will need to add more dependencies to your build:
+
+ - `specs2-matcher-extra` for the optional specs2 matchers
+ - `specs2-scalacheck` to use ScalaCheck properties in specifications
+ - `specs2-mock` to use Mockito matchers
+ - `specs2-analysis` to use the package dependencies matcher
+ - `specs2-gwt` to write given/when/then specifications
+ - `specs2-form` html form-like specifications
+ - `specs2-html` to export specifications as html
+ - `specs2-markdown` to export specifications as markdown files
+ - `specs2-junit` to run specifications as JUnit tests
+
+The other 2 dependencies are:
+
+ - `specs2-core`: the default library, for simple specifications executable with sbt/maven/gradle
+ - `specs2-matcher` to use specs2 matchers with another library like [JUnit](http://junit.org)
+
+
 """
 }

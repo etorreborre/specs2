@@ -41,6 +41,7 @@ trait TextPrinter extends Printer {
         (current: (Fragment, S)) =>  printFragment(args)(current).map(write).eval.run
       }
 
+    def prepare = Task.now(())
     def fold = Statistics.fold zip Indentation.fold
     def init = (Stats(), 0)
 

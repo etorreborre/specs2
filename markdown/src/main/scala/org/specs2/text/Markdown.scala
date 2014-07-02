@@ -19,7 +19,7 @@ trait Markdown {
    * @return a Markdown processor
    *         for now QUOTES and SMARTS are not rendered to avoid  <?> characters to appear on html pages
    */
-  def processor(implicit args: Arguments) = new PegDownProcessor(args.pegdownExtensions & ~Extensions.QUOTES & ~Extensions.SMARTS, args.pegdownTimeout)
+  def processor(implicit args: Arguments) = new PegDownProcessor(~Extensions.QUOTES & ~Extensions.SMARTS, 10000)
   
   /**
    * parse the markdown string and return html.
@@ -45,7 +45,7 @@ trait Markdown {
     val html = toHtmlNoPar(text, options)
     parse(html) match {
       case Some(f) => f
-      case None => scala.xml.Text(if (args.debugMarkdown) html else text)
+      case None => scala.xml.Text(text)
     }
   }
 

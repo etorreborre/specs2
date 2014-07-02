@@ -119,9 +119,11 @@ On the line above `x` is the status of the previous example. Here is a table of 
   `-`  | text
   `1`  | statistics
 
-### Display filtering
+This selection only works because ***specs2*** stores the state of each specification in a directory after a run (`target/specs2-reports/stats` by default). If you decide that this storing is useless and you want to skip it you can use the `neverstore` argument. Otherwise if you want to make sure that the `stats` directory doesn't become too big over time you can use the `resetstore` argument which will remove the current store before running the specification.
 
-This is slightly different. The previous sections show how to select examples to execute by name, tag or previous execution. You can additionally decide what you want to _show_ in the console by using the `showOnly` argument and the flags in the table above. So if you want to execute a specification and only show the failures you use `showOnly x`. There is also a shortcut for failures and errors that will hide all the examples which are successful, pending or skipped.
+## If you want to know more
 
+ - learn how to ${"display only some examples" ~ ConsoleOutput}
+ - consult the ${"arguments reference guide" ~ ArgumentsReference} for a list of all arguments
 """
 }

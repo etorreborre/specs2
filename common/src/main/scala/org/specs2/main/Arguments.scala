@@ -1,6 +1,8 @@
 package org.specs2
 package main
 
+import org.specs2.reflect.Classes
+
 import scalaz.{Memo, Monoid, Scalaz}
 import Scalaz._
 import control._
@@ -55,11 +57,7 @@ case class Arguments (
   def colors: Colors                  = report.colors
   def showtimes: Boolean              = report.showtimes
   def offset: Int                     = report.offset
-  def debugMarkdown: Boolean          = report.debugMarkdown
-  def pegdownExtensions: Int          = report.pegdownExtensions
-  def pegdownTimeout: Long            = report.pegdownTimeout
   def diffs: Diffs                    = report.diffs
-  def fromSource: Boolean             = report.fromSource
   def traceFilter: StackTraceFilter   = report.traceFilter
 
   @deprecated("use the org.specs2.specification.process.RandomSequentialExecution trait instead", since="3.0")
@@ -315,12 +313,7 @@ case class Report(
   _colors:            Option[Colors]           = None,
   _showtimes:         Option[Boolean]          = None,
   _offset:            Option[Int]              = None,
-  _debugMarkdown:     Option[Boolean]          = None,
-  _pegdownExtensions: Option[Int]              = None,
-  _pegdownTimeout:    Option[Long]             = None,
-  _streaming:         Option[Boolean]          = None,
   _diffs:             Option[Diffs]            = None,
-  _fromSource:        Option[Boolean]          = None,
   _traceFilter:       Option[StackTraceFilter] = None,
   _checkUrls :        Option[Boolean]          = None,
   _notoc:             Option[Boolean]          = None,
@@ -336,12 +329,7 @@ case class Report(
   def colors: Colors                 = _colors.getOrElse(new SmartColors())
   def showtimes: Boolean             = _showtimes.getOrElse(false)
   def offset: Int                    = _offset.getOrElse(0)
-  def debugMarkdown: Boolean         = _debugMarkdown.getOrElse(false)
-  def pegdownExtensions: Int         = _pegdownExtensions.getOrElse(65535) // Extensions.ALL
-  def pegdownTimeout: Long           = _pegdownTimeout.getOrElse(2000)
-  def streaming: Boolean             = _streaming.getOrElse(false)
   def diffs: Diffs                   = _diffs.getOrElse(SmartDiffs())
-  def fromSource: Boolean            = _fromSource.getOrElse(true)
   def traceFilter: StackTraceFilter  = _traceFilter.getOrElse(DefaultStackTraceFilter)
   def checkUrls: Boolean             = _checkUrls.getOrElse(false)
   def notoc: Boolean                 = _notoc.getOrElse(false)
@@ -357,12 +345,7 @@ case class Report(
       other._colors           .orElse(_colors),
       other._showtimes        .orElse(_showtimes),
       other._offset           .orElse(_offset),
-      other._debugMarkdown    .orElse(_debugMarkdown),
-      other._pegdownExtensions.orElse(_pegdownExtensions),
-      other._pegdownTimeout   .orElse(_pegdownTimeout),
-      other._streaming        .orElse(_streaming),
       other._diffs            .orElse(_diffs),
-      other._fromSource       .orElse(_fromSource),
       other._traceFilter      .orElse(_traceFilter),
       other._checkUrls        .orElse(_checkUrls),
       other._notoc            .orElse(_notoc),
@@ -378,12 +361,7 @@ case class Report(
     "colors"            -> _colors,
     "showtimes"         -> _showtimes,
     "offset"            -> _offset,
-    "debugMarkdown"     -> _debugMarkdown,
-    "pegdownExtensions" -> _pegdownExtensions,
-    "pegdownTimeout"    -> _pegdownTimeout,
-    "streaming"         -> _streaming,
     "diffs"             -> _diffs,
-    "fromSource"        -> _fromSource,
     "traceFilter"       -> _traceFilter,
     "checkUrls"         -> _checkUrls,
     "notoc"             -> _notoc,
@@ -401,13 +379,10 @@ object Report extends Extract {
       _colors            = value("colors").map(SmartColors.fromArgs),
       _showtimes         = bool("showTimes"),
       _offset            = int("offset"),
-      _debugMarkdown     = bool("debugMarkdown"),
-      _pegdownExtensions = int("pegdownExtensions"),
-      _pegdownTimeout    = long("pegdownTimeout"),
-      _streaming         = bool("streaming"),
-      _fromSource        = bool("fromSource"),
+      _diffs             = value("smartdiffs").flatMap(parameters => SmartDiffs.fromString(parameters).right.toOption).
+                            orElse(value("diffsclass").map(name => Classes.createInstance[Diffs](name, getClass.getClassLoader)).flatMap(_.runOption)),
       _traceFilter       = bool("fullStackTrace").map(t => NoStackTraceFilter).
-                           orElse(value("traceFilter", IncludeExcludeStackTraceFilter.fromString(_))),
+                           orElse(value("traceFilter", IncludeExcludeStackTraceFilter.fromString)),
       _checkUrls         = bool("checkUrls"),
       _notoc             = bool("noToc"),
       _notifier          = value("notifier"),
@@ -416,7 +391,7 @@ object Report extends Extract {
   }
 
   val allValueNames = Seq("showOnly", "xOnly", "failTrace", "color", "noColor", "colors", "offset", "showTimes",
-                          "debugMarkdown", "pegdownExtensions", "pegdownTimeout", "streaming", "fromSource", "fullStackTrace", "traceFilter", "checkUrls", "noToc", "notifier", "exporter")
+                          "fullStackTrace", "traceFilter", "checkUrls", "noToc", "notifier", "exporter")
 }
 /**
  * Command-line arguments
