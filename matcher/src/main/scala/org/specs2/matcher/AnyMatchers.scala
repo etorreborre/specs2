@@ -187,8 +187,10 @@ class BeTypedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1
     val (actual, expected) = (b.value, t)
     def isEqual =
       (actual, expected) match {
-        case (arr: Array[_], arr2: Array[_]) => arr.toSeq == arr2.toSeq
-        case other                           => equality(actual, expected)
+        case (arr: Array[_], arr2: Array[_])    => arr.deep == arr2.deep
+        case (arr: Array[_], t: Traversable[_]) => arr.deep == t
+        case (t: Traversable[_], arr: Array[_]) => t == arr.deep
+        case other                              => equality(actual, expected)
       }
 
     lazy val (db, qa) =
