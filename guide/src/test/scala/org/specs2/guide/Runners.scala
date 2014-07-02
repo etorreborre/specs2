@@ -176,7 +176,7 @@ From inside a specification, the available arguments are the following:
  `pegdownExtensions` | `org.pegdown.Extensions.ALL`             | specifies the extensions used when processing Markdown content with the pegdown library; the value is an `Int` that is determinded by combining the possible values from `org.pegdown.Extensions` with a logical `AND`; note that SMARTS and QUOTES are always disabled for now
  `pegdownTimeout`    | `2000`                                   | Timeout for parsing Markdown text with Pegdown in milliseconds
  `failtrace`         | false                                    | report the stacktrace for failures
- `colors`            | `org.specs2.text.SmartColors`            | define alternative colors (replace failureColor from being yellow to magenta for example)
+ `colors`            | `org.specs2.text.MappedColors`           | define alternative colors (replace failureColor from being yellow to magenta for example)
  `showtimes`         | false                                    | show individual execution times
  `debugMarkdown`     | false                                    | print more information when Markdown formatting fails
  `diffs`             | `SmartDiffs`                             | use a specific algorithm to display differences
@@ -457,7 +457,7 @@ Then, there are different ways to set-up the colors you want to use for the outp
 
 *From system properties*
 
-The so-called "SmartColors" argument will check if there are colors defined as specs2 properties. If so, the colors  used
+The so-called "MappedColors" argument will check if there are colors defined as specs2 properties. If so, the colors  used
 to output text in the Console will be extracted from those properties:
 
 e.g. `-Dspecs2.color.failure=m` will use magenta for failures.

@@ -14,10 +14,11 @@ You will get a "console" output whenever you run a specification from ${"sbt" ~ 
  `failtrace`         | boolean                 | show a stack trace for failures
  `fullstacktrace`    | boolean                 | show a full stack trace
  `tracefilter`       | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns
- `smartdiffs`        | see below               |
- `diffsclass`        | class name              |
+ `smartdiffs`        | see below               | define the parameters for the `SmartDiffs` instance for differences
+ `diffsclass`        | class name              | use a specific instance of the `Diffs` trait
  `nocolor`           | boolean                 | do not use colors
  `colors`            | map                     | use different colors
+ `colorsclass`       | class name              | use a specific instance of the `Colors` trait
  `showtimes`         | boolean                 | show execution times for examples
 
 Some of these arguments deserve further explanations.
@@ -34,6 +35,7 @@ You can decide what you want to _show_ in the console by using the `showonly` ar
   `*`  | pending example
   `-`  | text
   `1`  | statistics
+
 For example if you just want to show text and failures you can use `showonly -x`. And the `xonly` argument is actually a shortcut for `showonly x!`.
 
 ### StackTraceFilter
@@ -80,7 +82,7 @@ trait Diffs {
 }
 ```
 
-In this case pass the `diffsclass` argument with the class name.
+In this case pass the `diffsclass` argument with the class name: `diffsclass org.acme.MyDiffsClass`.
 
 ### Colors
 
@@ -89,38 +91,17 @@ By default, the reporting will output colors. If you're running on windows you m
  * use the [following tip](http://www.marioawad.com/2010/11/16/ansi-command-line-colors-under-windows) to install colors in the DOS console
  * or pass `nocolor` as a command line argument
 
-Then, there are different ways to set-up the colors you want to use for the output
+It is possible to set colors by passing the `colors` argument. This argument must be a list of `key:value` pairs (comma-separated) where keys are taken from this table:
 
-*From system properties*
-
-The so-called "SmartColors" argument will check if there are colors defined as specs2 properties. If so, the colors  used
-to output text in the Console will be extracted from those properties:
-
-e.g. `-Dspecs2.color.failure=m` will use magenta for failures.
-
-The property names and default values are:
-
-Property        | Default value |
---------------- |  ------------ |
-`color.text`    |  white        |
-`color.success` |  green        |
-`color.failure` |  yellow       |
-`color.error`   |  red          |
-`color.pending` |  cyan         |
-`color.skipped` |  magenta      |
-`color.stats`   |  cyan         |
-
-The default values above are provided for a black background. If you have a white background you can use the `specs2.whitebg` property and then the default values will be:
-
-Property        | Default value |
---------------- |  ------------ |
-`color.text`    |  black        |
-`color.success` |  green        |
-`color.failure` |  magenta      |
-`color.error`   |  red          |
-`color.pending` |  blue         |
-`color.skipped` |  cyan         |
-`color.stats`   |  blue         |
+Property  | Default value |
+--------- | ------------- |
+`text`    |  white        |
+`success` |  green        |
+`failure` |  yellow       |
+`error`   |  red          |
+`pending` |  cyan         |
+`skipped` |  magenta      |
+`stats`   |  cyan         |
 
 All the available colors are listed here, with their corresponding abbreviation which you can use to refer to them as well:
 
@@ -136,36 +117,39 @@ All the available colors are listed here, with their corresponding abbreviation 
  magenta | m            |
 
 
-*From command-line arguments*
-
-It is also possible to set colors by passing the `colors` argument. This argument must be a list of `key:value` pairs (comma-separated) where keys are taken from the property names above without the `color.` prefix and values from the abbreviated color names.
 
 For example you can pass on the command line:
 
  `colors text:blue,failure:magenta`
 
- to have the text colored in blue and the failures in Magenta.
+to have the text colored in blue and the failures in Magenta.
 
-If the `colors` option contains `whitebg` then the default colors are considered to be [`InvertedColors`](${API_DIR}index.html#org.specs2.text.Colors)
+If the `colors` option contains `whitebg` then the default colors are considered to be [`InvertedColors`](${API_DIR}index.html#org.specs2.text.Colors):
 
-*Through the API*
+Property  | Default value |
+--------- | ------------  |
+`text`    |  black        |
+`success` |  green        |
+`failure` |  magenta      |
+`error`   |  red          |
+`pending` |  blue         |
+`skipped` |  cyan         |
+`stats`   |  blue         |
 
-Finally you can change the color scheme that's being used on the console by implementing your own [`org.specs2.text.Colors`](${API_DIR}index.html#org.specs2.text.Colors) trait or override values in the existing `ConsoleColors` class. For example if you want to output magenta everywhere yellow is used you can write:
+You can also change the color scheme that's being used on the console by implementing your own [`org.specs2.text.Colors`](${API_DIR}index.html#org.specs2.text.Colors) trait or override values in the existing `ConsoleColors` class and pass this class to the `colorsclass` argument. For example if you want to output magenta everywhere yellow is used you can write:
+```
+class MyColors extends org.specs2.text.ConsoleColors {
+  override val failureColor = magenta
+}
+```
 
-    object MyColors = new org.specs2.text.ConsoleColors { override val failureColor = magenta }
+and invoke `colorsclass org.acme.MyColors`
 
-    class MyColoredSpecification extends Specification { def is = colors(MyColors) ^
-      // the failure message will be magenta
-      "this is a failing example" ! failure
-    }
-
-Note also that the the color support for sbt on Windows is a bit tricky. You need to follow the instructions [here](http://www.marioawad.com/2010/11/16/ansi-command-line-colors-under-windows) then add to your script launching sbt:
+Finally note that the the color support for sbt on Windows is a bit tricky. You need to follow the instructions [here](http://www.marioawad.com/2010/11/16/ansi-command-line-colors-under-windows) then add to your script launching sbt:
 
 ```
 -Djline.terminal=jline.UnsupportedTerminal
 ```
-
-
 
 """
 }

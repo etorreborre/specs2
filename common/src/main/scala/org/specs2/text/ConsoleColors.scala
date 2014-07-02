@@ -2,6 +2,7 @@ package org.specs2
 package text
 
 import AnsiColors._
+import ColorsMap._
 
 /**
 * This class defines the colors to use to print out text on the Console
@@ -52,59 +53,34 @@ class InvertedColors extends ConsoleColors {
 
 }
 
-import main.SystemProperties
-
-class ColorsFromSystemProperties() extends ConsoleColors with ColorsMap {
-  lazy val properties: SystemProperties = SystemProperties
-  lazy val defaultColors = properties.getIfElse("color.whitebg", new InvertedColors: ConsoleColors)(new ConsoleColors)
-
-  override lazy val textColor    = getColor(properties.getOrElse("color.text",    "notfound")).getOrElse(defaultColors.textColor   )
-  override lazy val successColor = getColor(properties.getOrElse("color.success", "notfound")).getOrElse(defaultColors.successColor)
-  override lazy val failureColor = getColor(properties.getOrElse("color.failure", "notfound")).getOrElse(defaultColors.failureColor)
-  override lazy val errorColor   = getColor(properties.getOrElse("color.error",   "notfound")).getOrElse(defaultColors.errorColor  )
-  override lazy val pendingColor = getColor(properties.getOrElse("color.pending", "notfound")).getOrElse(defaultColors.pendingColor)
-  override lazy val skippedColor = getColor(properties.getOrElse("color.skipped", "notfound")).getOrElse(defaultColors.skippedColor)
-  override lazy val statsColor   = getColor(properties.getOrElse("color.stats",   "notfound")).getOrElse(defaultColors.statsColor  )
-}
-
 /**
- * This class checks if colors must be taken from system properties
+ * This class takes colors from a map, using default colors if some values are missing
  */
-class SmartColors(argsColors: Map[String, String] = Map()) extends ConsoleColors with ColorsMap with SystemProperties { outer =>
+class MappedColors(colors: Map[String, String] = Map()) extends ConsoleColors { outer =>
   lazy val defaultColors = new ConsoleColors
-  lazy val systemColors = new ColorsFromSystemProperties {
-    override lazy val properties = outer
-  }
 
-  lazy val fromSystemProperties = Seq("text", "success", "failure", "error", "pending", "skipped", "stats").exists(p => isDefined("color."+p))
-
-  override lazy val textColor    = if (argsColors.get("text"   ).isDefined) argsColors("text"   ) else if (fromSystemProperties) systemColors.textColor    else defaultColors.textColor
-  override lazy val successColor = if (argsColors.get("success").isDefined) argsColors("success") else if (fromSystemProperties) systemColors.successColor else defaultColors.successColor
-  override lazy val failureColor = if (argsColors.get("failure").isDefined) argsColors("failure") else if (fromSystemProperties) systemColors.failureColor else defaultColors.failureColor
-  override lazy val errorColor   = if (argsColors.get("error"  ).isDefined) argsColors("error"  ) else if (fromSystemProperties) systemColors.errorColor   else defaultColors.errorColor
-  override lazy val pendingColor = if (argsColors.get("pending").isDefined) argsColors("pending") else if (fromSystemProperties) systemColors.pendingColor else defaultColors.pendingColor
-  override lazy val skippedColor = if (argsColors.get("skipped").isDefined) argsColors("skipped") else if (fromSystemProperties) systemColors.skippedColor else defaultColors.skippedColor
-  override lazy val statsColor   = if (argsColors.get("stats"  ).isDefined) argsColors("stats"  ) else if (fromSystemProperties) systemColors.statsColor   else defaultColors.statsColor
+  override lazy val textColor    = colors.getOrElse("text"   , defaultColors.textColor)
+  override lazy val successColor = colors.getOrElse("success", defaultColors.successColor)
+  override lazy val failureColor = colors.getOrElse("failure", defaultColors.failureColor)
+  override lazy val errorColor   = colors.getOrElse("error"  , defaultColors.errorColor)
+  override lazy val pendingColor = colors.getOrElse("pending", defaultColors.pendingColor)
+  override lazy val skippedColor = colors.getOrElse("skipped", defaultColors.skippedColor)
+  override lazy val statsColor   = colors.getOrElse("stats"  , defaultColors.statsColor)
 }
 
 /**
- * Factory method to create SmartColors 'argsColor' attribute
+ * Factory method to create MappedColors 'colors' attribute
  */
-private[specs2]
-object SmartColors extends ColorsMap {
+object MappedColors {
   def fromArgs(args: String) = {
     val map = args.split(",").flatMap { s =>
       val keyValue = s.trim.split(":")
-      if (keyValue.size == 2)
-         getColor(keyValue(1).trim).map(c => keyValue(0) -> c)
-      else
-        None
+      if (keyValue.size == 2) getColor(keyValue(1).trim).map(c => keyValue(0) -> c)
+      else                    None
     }
 
-    if (args.contains("whitebg"))
-      new SmartColors(Map(map:_*)) { override lazy val defaultColors = new InvertedColors }
-    else
-      new SmartColors(Map(map:_*))
+    if (args.contains("whitebg")) new MappedColors(Map(map:_*)) { override lazy val defaultColors = new InvertedColors }
+    else                          new MappedColors(Map(map:_*))
   }
 }
 
@@ -135,3 +111,5 @@ trait ColorsMap {
 
   def getColor(s: String) = colors.get(s).orElse(abbreviatedColors.get(s))
 }
+
+object ColorsMap extends ColorsMap

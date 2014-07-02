@@ -50,7 +50,7 @@ For execution:
  `pegdownExtensions` | `org.pegdown.Extensions.ALL`             | specifies the extensions used when processing Markdown content with the pegdown library; the value is an `Int` that is determinded by combining the possible values from `org.pegdown.Extensions` with a logical `AND`; note that SMARTS and QUOTES are always disabled for now
  `pegdownTimeout`    | `2000`                                   | Timeout for parsing Markdown text with Pegdown in milliseconds
  `failtrace`         | false                                    | report the stacktrace for failures
- `colors`            | `org.specs2.text.SmartColors`            | define alternative colors (replace failureColor from being yellow to magenta for example)
+ `colors`            | `org.specs2.text.MappedColors`           | define alternative colors (replace failureColor from being yellow to magenta for example)
  `showtimes`         | false                                    | show individual execution times
  `debugMarkdown`     | false                                    | print more information when Markdown formatting fails
  `diffs`             | `SmartDiffs`                             | use a specific algorithm to display differences

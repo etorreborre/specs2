@@ -3,6 +3,7 @@ package main
 
 import org.specs2.reflect.Classes
 
+import scala.reflect.ClassTag
 import scalaz.{Memo, Monoid, Scalaz}
 import Scalaz._
 import control._
@@ -326,7 +327,7 @@ case class Report(
   def canShow(s: String)             = hasFlags(s, _showOnly)
   def failtrace: Boolean             = _failtrace.getOrElse(false)
   def color: Boolean                 = _color.getOrElse(true)
-  def colors: Colors                 = _colors.getOrElse(new SmartColors())
+  def colors: Colors                 = _colors.getOrElse(new MappedColors())
   def showtimes: Boolean             = _showtimes.getOrElse(false)
   def offset: Int                    = _offset.getOrElse(0)
   def diffs: Diffs                   = _diffs.getOrElse(SmartDiffs())
@@ -376,11 +377,11 @@ object Report extends Extract {
       _showOnly          = value("showOnly").orElse(bool("xOnly").map(v => "x!")),
       _failtrace         = bool("failTrace"),
       _color             = bool("color", "noColor"),
-      _colors            = value("colors").map(SmartColors.fromArgs),
+      _colors            = value("colors").map(MappedColors.fromArgs).orElse(value("colorsclass").flatMap(instance[Colors])),
       _showtimes         = bool("showTimes"),
       _offset            = int("offset"),
       _diffs             = value("smartdiffs").flatMap(parameters => SmartDiffs.fromString(parameters).right.toOption).
-                            orElse(value("diffsclass").map(name => Classes.createInstance[Diffs](name, getClass.getClassLoader)).flatMap(_.runOption)),
+                            orElse(value("diffsclass").flatMap(instance)),
       _traceFilter       = bool("fullStackTrace").map(t => NoStackTraceFilter).
                            orElse(value("traceFilter", IncludeExcludeStackTraceFilter.fromString)),
       _checkUrls         = bool("checkUrls"),
@@ -439,18 +440,20 @@ trait Extract {
     bool(negatedName, false) orElse bool(name)
   }
   def value[T](name: String, f: String => T)(implicit args: Seq[String], sp: SystemProperties): Option[T] = {
-    args.zip(args.drop(1)).find(_._1.toLowerCase.equals(name.toLowerCase)).map(s => f(s._2)).orElse(valueSystemProperty(name, f))
+    args.zip(args.drop(1)).find(_._1.toLowerCase == name.toLowerCase).map(s => f(s._2)).orElse(valueSystemProperty(name, f))
   }
   def valueSystemProperty[T](name: String, f: String => T)(implicit sp: SystemProperties): Option[T] = {
     sp.getProperty(name).map(o => f(o.toString))
   }
-  def value[T](name: String)(implicit args: Seq[String], sp: SystemProperties): Option[String] = value(name, identity _)
+  def value[T](name: String)(implicit args: Seq[String], sp: SystemProperties): Option[String] = value(name, identity)
   def int(name: String)(implicit args: Seq[String], sp: SystemProperties): Option[Int] = {
     tryo(value(name)(args, sp).map(_.toInt)).getOrElse(None)
   }
   def long(name: String)(implicit args: Seq[String], sp: SystemProperties): Option[Long] = {
     tryo(value(name)(args, sp).map(_.toLong)).getOrElse(None)
   }
+  def instance[T <: AnyRef](name: String)(implicit m: ClassTag[T]): Option[T] =
+    Classes.createInstance[T](name, getClass.getClassLoader).runOption
 
 }
 
