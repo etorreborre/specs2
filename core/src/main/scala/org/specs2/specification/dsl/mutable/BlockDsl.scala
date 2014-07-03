@@ -14,7 +14,7 @@ trait BlockDsl extends FragmentBuilder with FragmentsFactory {
   implicit class describe(d: String) {
     def >>(f: =>Fragment): Fragment     = addBlock(d,            f, addFragmentBlock, StacktraceLocation())
     def should(f: =>Fragment): Fragment = addBlock(s"$d should", f, addFragmentBlock, StacktraceLocation())
-    def can(f: =>Fragment): Fragment   = addBlock(s"$d can",     f, addFragmentBlock, StacktraceLocation())
+    def can(f: =>Fragment): Fragment    = addBlock(s"$d can",    f, addFragmentBlock, StacktraceLocation())
 
     def >>(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments     = addBlock(d,            fs, addFragmentsBlock, StacktraceLocation())
     def should(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments = addBlock(s"$d should", fs, addFragmentsBlock, StacktraceLocation())
@@ -26,10 +26,10 @@ trait BlockDsl extends FragmentBuilder with FragmentsFactory {
       addText(text, location)
       addFragment(factory.tab)
       addBreak
-      val result = t
+      val result = addFunction(t)
       addFragment(factory.backtab)
       addEnd
-      t
+      result
     }
 
     private def addText(text: String, location: StacktraceLocation) =

@@ -41,7 +41,7 @@ It has an Option-like structure, supporting the same kind of operations and can 
     eg := p1.toOption must_== Some(1)
     eg := p1.update(2).toOption must_== Some(2)
     eg := p1.updateValue(Some(2)).toOption must_== Some(2)
-    eg := p1.toString must_== "Some(1)"
+    eg := p1.toString must_== "1"
   }
 
   "execution"  - new group with prop {
