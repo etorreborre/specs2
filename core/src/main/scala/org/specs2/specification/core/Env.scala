@@ -8,10 +8,18 @@ import reporter.LineLogger
 import LineLogger._
 import io._
 import control._
-import process.StatisticsRepository
+import process.{Executor, DefaultExecutor, StatisticsRepository, Selector, DefaultSelector}
 
 case class Env(arguments: Arguments           = Arguments(),
                indentationSize: Int           = 2,
+
+               /** selector class */
+               selectorInstance: Arguments => Selector = (arguments: Arguments) =>
+                 Arguments.instance(arguments.select.selector).getOrElse(DefaultSelector),
+
+               /** executor instance */
+               executorInstance: Arguments => Executor = (arguments: Arguments) =>
+                 Arguments.instance(arguments.execute.executor).getOrElse(DefaultExecutor),
 
                /** default console logger */
                lineLogger: LineLogger = NoLineLogger,
@@ -36,6 +44,8 @@ case class Env(arguments: Arguments           = Arguments(),
   lazy val statisticsRepository: StatisticsRepository =
     statsRepository(arguments)
 
+  lazy val selector = selectorInstance(arguments)
+  lazy val executor = executorInstance(arguments)
 
   lazy val executionEnv = executionEnvironment(arguments)
 

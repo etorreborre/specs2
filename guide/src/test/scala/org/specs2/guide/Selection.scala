@@ -4,7 +4,7 @@ package guide
 import org.specs2.data.AlwaysTag
 import org.specs2.specification.core.Fragments
 
-object Filtering extends UserGuidePage { def is = s2"""
+object Selection extends UserGuidePage { def is = s2"""
 ### Select an example to execute
 
 Many specifications are written incrementally. You specify a little bit then you implement the application. When you go through this Specify-Implement-Execute cycle it is useful to be able to focus on just one example, the one you are currently working on. The `ex` (for "example") argument is what you need:

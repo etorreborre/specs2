@@ -35,13 +35,13 @@ class FormsFragmentsSpec extends Specification with Forms with ThrownExpectation
       example.executionResult.isSuccess must beTrue
     }
     def e3 = {
-      val example = Executor.execute("the customer must be as expected" ! failedForm)
+      val example = DefaultExecutor.execute("the customer must be as expected" ! failedForm)
       example.executionResult.message must_== "'20' is not equal to '18'"
       
     }
 
     def execute(spec: SpecStructure) =
-      Executor.executeAll(spec.fragments.fragments:_*)
+      DefaultExecutor.executeAll(spec.fragments.fragments:_*)
   }
 
   trait Customers {

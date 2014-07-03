@@ -13,7 +13,7 @@ class FormDslSpec extends org.specs2.Specification { def is = s2"""
 """
 
   def e1 = {
-    Executor.executeAll(dsl.insert(Form("test"))).head.description match {
+    DefaultExecutor.executeAll(dsl.insert(Form("test"))).head.description match {
       case f @ FormDescription(_) => f.show === "| test |"
       case other => ko("not a form "+other)
     }

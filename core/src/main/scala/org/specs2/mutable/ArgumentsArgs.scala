@@ -51,11 +51,13 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: MutableArgumentsBuilder =
       ex:            ArgProperty[String]            = ArgProperty[String](),
       include:       ArgProperty[String]            = ArgProperty[String](),
       exclude:       ArgProperty[String]            = ArgProperty[String](),
-      was:           ArgProperty[String]            = ArgProperty[String]()) = setArguments(super.select(
+      was:           ArgProperty[String]            = ArgProperty[String](),
+      selector:      ArgProperty[String]            = ArgProperty[String]()) = setArguments(super.select(
         ex,
         include,
         exclude,
-        was))
+        was,
+        selector))
 
     /** shorthand method to create an Arguments object */
     override def execute(

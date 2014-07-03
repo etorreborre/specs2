@@ -51,12 +51,14 @@ trait ArgumentsArgs extends ArgProperties {
       ex:            ArgProperty[String]            = ArgProperty[String](),
       include:       ArgProperty[String]            = ArgProperty[String](),
       exclude:       ArgProperty[String]            = ArgProperty[String](),
-      was:           ArgProperty[String]            = ArgProperty[String]()) = new Arguments(
+      was:           ArgProperty[String]            = ArgProperty[String](),
+      selector:      ArgProperty[String]            = ArgProperty[String]()) = new Arguments(
        select = Select(
               ex.toOption.map(".*"+_+".*"),
               include.toOption,
               exclude.toOption,
-              was.toOption))
+              was.toOption,
+              selector.toOption))
 
     /** shorthand method to create an Arguments object */
     def execute(

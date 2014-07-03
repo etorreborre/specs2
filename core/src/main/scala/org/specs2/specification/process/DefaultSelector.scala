@@ -13,12 +13,18 @@ import control._
 import specification.core._
 
 /**
- * Filter function for Fragment processes
+ * Selection function for Fragment processes
  */
-trait Filter {
+trait Selector {
 
-  /** filter fragments by name, markers and previous execution */
-  def filter(env: Env): Process1[Fragment, Fragment] =
+  /** select fragments by name, markers and previous execution */
+  def select(env: Env): Process1[Fragment, Fragment]
+}
+
+trait DefaultSelector extends Selector {
+
+  /** select fragments by name, markers and previous execution */
+  def select(env: Env): Process1[Fragment, Fragment] =
     filterByName(env: Env) |> filterByMarker(env) |> filterByPrevious(env)
 
   /** filter fragments by name */
@@ -116,4 +122,4 @@ trait Filter {
 
 }
 
-object Filter extends Filter
+object DefaultSelector extends DefaultSelector

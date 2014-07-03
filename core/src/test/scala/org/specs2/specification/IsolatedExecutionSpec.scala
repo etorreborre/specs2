@@ -36,7 +36,7 @@ class IsolatedExecutionSpec extends Specification with ForEachEnv { def is = s2"
   }
 
   def execute(spec: SpecificationStructure)(env: Env) =
-    (spec.fragments(env).contents |> Executor.executeTasks(env)).eval.runLog.run
+    (spec.fragments(env).contents |> DefaultExecutor.executeTasks(env)).eval.runLog.run
 }
 
 /**

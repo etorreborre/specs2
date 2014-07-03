@@ -145,7 +145,8 @@ case class Select(
   _ex:            Option[String]           = None,
   _include:       Option[String]           = None,
   _exclude:       Option[String]           = None,
-  _was:           Option[String]           = None) extends ShowArgs {
+  _was:           Option[String]           = None,
+  _selector:      Option[String]           = None) extends ShowArgs {
 
   import Arguments._
   
@@ -157,13 +158,15 @@ case class Select(
   def hasFilter                     = Seq(_include, _exclude, _ex, _was).exists(_.isDefined)
   def was(s: String): Boolean       = hasFlags(s, _was)
   def wasIsDefined: Boolean         = _was.isDefined
+  def selector                      = _selector.getOrElse("")
 
   def overrideWith(other: Select) = {
     new Select(
       other._ex              .orElse(_ex),
       other._include         .orElse(_include),
       other._exclude         .orElse(_exclude),
-      other._was             .orElse(_was)
+      other._was             .orElse(_was),
+      other._selector        .orElse(_selector)
     )
   }
 
@@ -171,7 +174,8 @@ case class Select(
     "ex"             -> _ex         ,
     "include"        -> _include    ,
     "exclude"        -> _exclude    ,
-    "was"            -> _was       ).flatMap(showArg).mkString("Select(", ", ", ")")
+    "was"            -> _was        ,
+    "selector"       -> _selector  ).flatMap(showArg).mkString("Select(", ", ", ")")
 }
 
 object Select extends Extract {
@@ -180,10 +184,11 @@ object Select extends Extract {
        _ex            = value("ex", ".*"+(_:String)+".*"),
        _include       = value("include"),
        _exclude       = value("exclude"),
-       _was           = value("was")
+       _was           = value("was"),
+       _selector      = value("selector")
     )
   }
-  val allValueNames = Seq("ex", "include", "exclude", "was")
+  val allValueNames = Seq("ex", "include", "exclude", "was", "selector")
 }
 
 /**

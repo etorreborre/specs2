@@ -4,7 +4,7 @@ package specification
 import io.StringOutput
 import execute._
 import org.specs2.specification.core.SpecificationStructure
-import org.specs2.specification.process.Executor
+import org.specs2.specification.process.DefaultExecutor
 import specification.create._
 import _root_.org.specs2.mutable.{Specification => Spec}
 
@@ -50,7 +50,7 @@ class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
   }
 
   def executeContains(s: SpecificationStructure with StringOutput, messages: String*) = {
-    Executor.executeSeq(s.is.fragments.fragments).map(_.executionResult).toList
+    DefaultExecutor.executeSeq(s.is.fragments.fragments).map(_.executionResult).toList
     s.messages must contain(allOf(messages:_*)).inOrder
   }
 

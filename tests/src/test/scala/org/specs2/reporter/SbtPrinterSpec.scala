@@ -39,7 +39,7 @@ class SbtPrinterSpec extends Specification with ForEachEnv { def is = s2"""
 
     def e1 = { env: Env =>
       val hwSpec: org.specs2.Specification = new examples.HelloWorldSpec
-      val executed = Executor.executeSpec(hwSpec.is, env)
+      val executed = DefaultExecutor.executeSpec(hwSpec.is, env)
 
       print(executed).replaceAll("\\d+ ms", "0 ms").replaceAll(" ", "_") ===
       """|HelloWorldSpec

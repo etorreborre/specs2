@@ -6,7 +6,7 @@ import Statistics._
 import scalaz.stream.Process
 import matcher._
 import scalaz.concurrent.Task
-import Executor._
+import DefaultExecutor._
 import dsl.FragmentsDsl
 
 class StatsSpec extends Specification { import stats1._; def is = s2"""

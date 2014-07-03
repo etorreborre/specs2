@@ -55,7 +55,7 @@ Here is a list of all the existing `Printers` in specs2 with links to the corres
 
 With the `test-only` command arguments can be passed on the command line for selecting, executing or reporting a specification. Please consult the following sections for more information:
 
- - ${"Filtering" ~ Filtering} to select only some example to run
+ - ${"Filtering" ~ Selection} to select only some example to run
  - ${"Execution" ~ Execution} to modify the execution parameters
  - ${"Console output" ~ ConsoleOutput}, ${"Html output" ~ HtmlOutput}, ${"Custom output" ~ CustomOutput}... for "reporting" arguments
  - the ${"arguments reference guide" ~ ArgumentsReference} for a list of all arguments
@@ -75,71 +75,5 @@ With the `test-only` command arguments can be passed on the command line for sel
  * output ${"Markdown files" ~ MarkdownOutput}
  * output ${"PDF files" ~ PdfOutput}
  * use your own reporting tool implementing the ${"`Notifier` interface (simple) or the `Printer` interface" ~ CustomOutput}
-
-
-### With your own
-
-#### Executor
-
-The `org.specs2.reporter.Executor` trait can be used to change the execution a Specification. This trait defines different methods for the executing a Specification and you can override them:
-
-  * `select` selects the fragments to execute, filtering out some examples based on tags for instance
-  * `sequence` groups fragments which can be executed concurrently
-  * `execute` executes the fragments
-  * `store` stores the results
-
-##### In sbt
-
-You can use a custom `Executor` from inside sbt by passing the `executor` argument with a `Executor` implementation class name:
-
-    sbt> testOnly *BinarySpec* -- executor com.mycompany.reporting.RandomExecutor
-
-
-#### Notifier
-
-The `org.specs2.reporter.Notifier` trait can be used to report execution events. It notifies of the following:
-
- * specification start: the beginning of a specification, with its name
- * specification end: the end of a specification, with its name
- * context start: the beginning of a sub-level when the specification is seen as a tree or Fragments
- * context end: the end of a sub-level when the specification is seen as a tree or Fragments
- * text: any Text fragment that needs to be displayed
- * example start
- * example result: success / failure / error / skipped / pending
-
-All those notifications come with a location (to trace back to the originating fragment in the Specification) and a duration when relevant (i.e. for examples and actions).
-
-##### NotifierRunner
-
-The `NotifierRunner` class can be instantiated with a custom `Notifier` and used from the command line.
-
-##### In sbt
-
-You can also use a custom `Notifier` from inside sbt by passing the `notifier` argument with a `Notifier` implementation class name:
-
-```
-sbt> testOnly *BinarySpec* -- notifier com.mycompany.reporting.FtpNotifier
-```
-
-#### Exporter
-
-The `org.specs2.reporter.Exporter` trait can be used to collect `ExecutedFragments` and report them as desired. The only method to implement is:
-
-    def export(implicit args: Arguments): ExecutingSpecification => ExecutedSpecification
-
- * `args` is an `Arguments` object created from command line options
- * `ExecutingSpecification` is a list of fragments which might or might not have finished their execution
- * `ExecutedSpecification` must be a list of executed fragments
-
-Please see the Scaladoc API of each trait to see how to use them.
-
-##### In sbt
-
-You can use a custom `Exporter` from inside sbt by passing the `exporter` argument with a `Exporter` implementation class name:
-
-    sbt> testOnly *BinarySpec* -- exporter com.mycompany.reporting.FtpExporter
-
-   - - -
-
                                                                                                                         """
 }

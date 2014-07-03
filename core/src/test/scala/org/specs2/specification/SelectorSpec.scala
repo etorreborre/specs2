@@ -14,14 +14,14 @@ import main.Arguments
 import specification.core._
 import specification.process._
 
-class FilterSpec extends Specification with Groups with ResultMatchers with ThrownExpectations { def is = s2"""
+class SelectorSpec extends Specification with Groups with ResultMatchers with ThrownExpectations { def is = s2"""
 
- Filter by name
- ==============
+ Selection by name
+ =================
   + by example name
 
- Filter by tag
- =============
+ Selection by tag
+ ================
   + tagging the next fragment
   + tagging the next fragment after an empty text
   + tagging the previous fragment
@@ -30,8 +30,8 @@ class FilterSpec extends Specification with Groups with ResultMatchers with Thro
   + tagging a section of fragments, starting with the previous one
   + with overlapping sections
 
- Filter by previous
- ==================
+ Selection by previous
+ =====================
   + previous
 
 """
@@ -40,7 +40,7 @@ class FilterSpec extends Specification with Groups with ResultMatchers with Thro
     eg := {
       val fragments = Fragments(ex("e1"), ex("e2"))
       val env = Env(arguments = Arguments("ex e1"))
-      val executed = fragments |> Filter.filter(env)
+      val executed = fragments |> DefaultSelector.select(env)
 
       executed.fragments must haveSize(1)
     }
@@ -49,22 +49,22 @@ class FilterSpec extends Specification with Groups with ResultMatchers with Thro
   "by tag" - new group {
     eg := {
       val fragments = Fragments(tag("x"), ex("e1"), ex("e2"))
-      checkFiltering(fragments, "x", expected = Seq("e1"), unexpected = Seq("e2"))
+      checkSelection(fragments, "x", expected = Seq("e1"), unexpected = Seq("e2"))
     }
 
     eg := {
       val fragments = Fragments(tag("x"), text(" "), ex("e1"), ex("e2"))
-      checkFiltering(fragments, "x", expected = Seq("e1"), unexpected = Seq("e2"))
+      checkSelection(fragments, "x", expected = Seq("e1"), unexpected = Seq("e2"))
     }
 
     eg := {
       val fragments = Fragments(ex("e1"), taggedAs("x"), ex("e2"))
-      checkFiltering(fragments, "x", expected = Seq("e1"), unexpected = Seq("e2"))
+      checkSelection(fragments, "x", expected = Seq("e1"), unexpected = Seq("e2"))
     }
 
     eg := {
       val fragments = Fragments(ex("e1"), text(" "), taggedAs("x"), ex("e2"))
-      checkFiltering(fragments, "x", expected = Seq("e1"), unexpected = Seq("e2"))
+      checkSelection(fragments, "x", expected = Seq("e1"), unexpected = Seq("e2"))
     }
 
     eg := {
@@ -76,7 +76,7 @@ class FilterSpec extends Specification with Groups with ResultMatchers with Thro
                                 section("x"),
                                 ex("e5")
       )
-      checkFiltering(fragments, "x", expected = Seq("e2", "e3", "e4"), unexpected = Seq("e1", "e5"))
+      checkSelection(fragments, "x", expected = Seq("e2", "e3", "e4"), unexpected = Seq("e1", "e5"))
     }
 
     eg := {
@@ -86,7 +86,7 @@ class FilterSpec extends Specification with Groups with ResultMatchers with Thro
         ex("e4"), asSection("x"),
         ex("e5")
       )
-      checkFiltering(fragments, "x", expected = Seq("e2", "e3", "e4"), unexpected = Seq("e1", "e5"))
+      checkSelection(fragments, "x", expected = Seq("e2", "e3", "e4"), unexpected = Seq("e1", "e5"))
     }
 
     eg := {
@@ -101,9 +101,9 @@ class FilterSpec extends Specification with Groups with ResultMatchers with Thro
         ex("e8"), asSection("y"),
         ex("e9")
       )
-      checkFiltering(fragments, "x",           expected = Seq("e2", "e3", "e4", "e5", "e6"), unexpected = Seq("e1", "e7", "e8", "e9"))
-      checkFiltering(fragments, "x&&y",        expected = Seq("e4", "e5", "e6"),             unexpected = Seq("e1", "e2", "e3", "e7", "e8", "e9"))
-      checkFiltering(fragments, Seq("x", "y"), expected = (2 to 8).map("e"+_).toSeq,         unexpected = Seq("e1", "e9"))
+      checkSelection(fragments, "x",           expected = Seq("e2", "e3", "e4", "e5", "e6"), unexpected = Seq("e1", "e7", "e8", "e9"))
+      checkSelection(fragments, "x&&y",        expected = Seq("e4", "e5", "e6"),             unexpected = Seq("e1", "e2", "e3", "e7", "e8", "e9"))
+      checkSelection(fragments, Seq("x", "y"), expected = (2 to 8).map("e"+_).toSeq,         unexpected = Seq("e1", "e9"))
     }
   }
 
@@ -124,7 +124,7 @@ class FilterSpec extends Specification with Groups with ResultMatchers with Thro
 
 
     def check(fragments: Fragments, expected: Seq[String], unexpected: Seq[String])(env: Env): Result = {
-      val executed = fragments |> Filter.filterByPrevious(env)
+      val executed = fragments |> DefaultSelector.filterByPrevious(env)
       val descriptions = executed.fragments.map(_.description.toString)
 
       expected.foreach(e => descriptions aka "expected for exclude" must contain(beMatching(".*"+e+".*")))
@@ -138,17 +138,17 @@ class FilterSpec extends Specification with Groups with ResultMatchers with Thro
   def ex(desc: String) = example(desc, success)
 
   // expected / unexpected is in the point of view of including the tag
-  def checkFiltering(fragments: Fragments, tags: Seq[String], expected: Seq[String], unexpected: Seq[String]): Result = {
+  def checkSelection(fragments: Fragments, tags: Seq[String], expected: Seq[String], unexpected: Seq[String]): Result = {
     includeContains(fragments, tags, expected, unexpected)
     excludeContains(fragments, tags, expected, unexpected)
   }
 
-  def checkFiltering(fragments: Fragments, tag: String, expected: Seq[String], unexpected: Seq[String]): Result =
-    checkFiltering(fragments, List(tag), expected, unexpected)
+  def checkSelection(fragments: Fragments, tag: String, expected: Seq[String], unexpected: Seq[String]): Result =
+    checkSelection(fragments, List(tag), expected, unexpected)
 
   def includeContains(fragments: Fragments, tags: Seq[String], expected: Seq[String], unexpected: Seq[String]): Result = {
     val env = Env(arguments = Arguments(s"include ${tags.mkString(",")}"))
-    val executed = (fragments.contents |> Filter.filterByMarker(env)).runLog.run
+    val executed = (fragments.contents |> DefaultSelector.filterByMarker(env)).runLog.run
     val descriptions = executed.map(_.description.toString)
 
     expected.foreach(e => descriptions aka "expected for include" must contain(beMatching(".*"+e+".*")))
@@ -158,7 +158,7 @@ class FilterSpec extends Specification with Groups with ResultMatchers with Thro
 
   def excludeContains(fragments: Fragments, tags: Seq[String], unexpected: Seq[String], expected: Seq[String]): Result = {
     val env = Env(arguments = Arguments(s"exclude ${tags.mkString(",")}"))
-    val executed = fragments |> Filter.filterByMarker(env)
+    val executed = fragments |> DefaultSelector.filterByMarker(env)
     val descriptions = executed.fragments.map(_.description.toString)
 
     expected.foreach(e => descriptions aka "expected for exclude" must contain(beMatching(".*"+e+".*")))

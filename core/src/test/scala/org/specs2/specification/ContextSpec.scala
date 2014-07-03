@@ -6,7 +6,7 @@ import org.specs2.main.Arguments
 import org.specs2.specification.core.{Env, Fragments}
 import org.specs2.specification.create.FragmentsFactory
 import org.specs2.specification.dsl.FragmentsDsl
-import org.specs2.specification.process.Executor
+import org.specs2.specification.process.DefaultExecutor
 import sys._
 import execute._
 import matcher._
@@ -125,7 +125,7 @@ class ContextSpec extends Specification with ResultMatchers with Groups { def is
   trait FragmentsExecution extends StringOutput with ContextData {
     def executeBodies(exs: Fragments) = {
       val env = Env(arguments = Arguments("sequential"))
-      Executor.executeSeq(exs.fragments)(env).map(_.executionResult)
+      DefaultExecutor.executeSeq(exs.fragments)(env).map(_.executionResult)
     }
 
     def executing(exs: Fragments): Executed = Executed(executeBodies(exs))

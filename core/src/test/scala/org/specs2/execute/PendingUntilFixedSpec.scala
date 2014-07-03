@@ -3,7 +3,7 @@ package execute
 
 import mutable.Specification
 import org.specs2.specification.core.Fragment
-import org.specs2.specification.process.Executor
+import org.specs2.specification.process.DefaultExecutor
 
 class PendingUntilFixedSpec extends Specification {
 
@@ -35,6 +35,6 @@ class PendingUntilFixedSpec extends Specification {
   }
 
   def execute(f: Fragment) =
-    Executor.executeAll(f).head.executionResult
+    DefaultExecutor.executeAll(f).head.executionResult
 
 }

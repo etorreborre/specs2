@@ -31,6 +31,17 @@ trait Executor {
    *  - filter the ones that the user wants to keep
    *  - sequence the execution so that only parts in between steps are executed concurrently
    */
+  def execute(env: Env): Process[Task, Fragment] => Process[Task, Fragment]
+}
+
+trait DefaultExecutor extends Executor {
+
+  /**
+   * execute fragments:
+   *
+   *  - filter the ones that the user wants to keep
+   *  - sequence the execution so that only parts in between steps are executed concurrently
+   */
   def execute(env: Env): Process[Task, Fragment] => Process[Task, Fragment] = { contents: Process[Task, Fragment] =>
     (contents |> sequencedExecution(env)).sequence(Runtime.getRuntime.availableProcessors).flatMap(executeOnline(env))
   }
@@ -124,7 +135,7 @@ trait Executor {
 /**
  * helper functions for executing fragments
  */
-object Executor extends Executor {
+object DefaultExecutor extends DefaultExecutor {
   def executeSpec(spec: SpecStructure, env: Env): SpecStructure =
     spec.|>((contents: Process[Task, Fragment]) => (contents |> sequencedExecution(env)).sequence(Runtime.getRuntime.availableProcessors))
 

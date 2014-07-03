@@ -22,7 +22,7 @@ class RandomExecutionSpec extends script.Specification with Groups with ThrownEx
         def ex(i: =>Int) = { print("ex"+i); ok }
       }
 
-      Executor.runSpecification(spec)
+      DefaultExecutor.runSpecification(spec)
 
       val allExamples = allOf((1 to n).map("ex"+_):_*)
 
@@ -42,7 +42,7 @@ class RandomExecutionSpec extends script.Specification with Groups with ThrownEx
         s2"""${fs_1_to_5.append(step("stop")).append(fs_6_to_10)}"""
       }
 
-      Executor.runSpecification(spec)
+      DefaultExecutor.runSpecification(spec)
 
       val allExamples = allOf((1 to n).map("ex"+_):_*)
 

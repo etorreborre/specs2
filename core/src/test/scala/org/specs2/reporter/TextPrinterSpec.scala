@@ -11,7 +11,7 @@ import main.Arguments
 import LineLogger._
 import core._
 import org.specs2.specification.create.{S2StringContext, DefaultFragmentFactory}
-import process.{Stats, Executor, StatisticsRepository}
+import process.{Stats, DefaultExecutor, StatisticsRepository}
 import io.StringOutput
 import text.AnsiColors
 
@@ -212,7 +212,7 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
 
     val spec = SpecStructure(SpecHeader(getClass, Some("title\n")), Arguments(), fragments)
     val env = Env(lineLogger = logger)
-    TextPrinter.run(env)(Executor.executeSpec(spec, env))
+    TextPrinter.run(env)(DefaultExecutor.executeSpec(spec, env))
 
     val executed = logger.messages.filter(_.contains("executed")).map(_.replace("executed", "").trim.toInt)
     val printed = logger.messages.filter(_.contains("+")).map(_.replace("+", "").replace("ex", "").trim.toInt)
@@ -256,7 +256,7 @@ object TextPrinterSpec extends MustMatchers with FragmentsDsl {
 
       TextPrinter.run(env)(spec.copy(fragments = spec.fragments
         .prepend(DefaultFragmentFactory.break) // add a newline after the title
-        .update(Executor.execute(env))))
+        .update(DefaultExecutor.execute(env))))
 
       val messages = logger.messages
       messages.map(_.removeEnd(" ")).mkString("\n").replace(" ", "_")

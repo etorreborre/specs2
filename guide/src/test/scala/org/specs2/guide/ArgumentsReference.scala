@@ -28,7 +28,7 @@ This reference guide for arguments is divided in several sections:
 
  Name                    | Default value                  | Description
  ----------------------- | ------------------------------ | -------------------------------------------------------------------------------------------
- `stats.outdir`          | `target/specs2-reports/stats`  | output directory for run statistics (see $Filtering)
+ `stats.outdir`          | `target/specs2-reports/stats`  | output directory for run statistics (see $Selection)
  `junit.outdir`          | `target/test-reports/`         | output directory for JUnit XML files (see $JUnitXmlOutput)
  `filesrunner.basepath`  | `src/test/scala`               | source directory for test files (see $RunInShell)
  `filesrunner.path`      | `**/*.scala`                   | glob pattern for the file paths (see $RunInShell)
@@ -42,6 +42,7 @@ This reference guide for arguments is divided in several sections:
  `include`               | `""`                           | execute only the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
  `exclude`               | `""`                           | do not execute the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
  `was`                   | `""`                           | select only some previously executed examples based on their status
+ `selector`              | `""`                           | implementation of the `org.specs2.specification.process.Selector` trait
 
 ## Execution
 
@@ -54,6 +55,7 @@ This reference guide for arguments is divided in several sections:
  `sequential`            | `false`                                  | don't execute examples concurrently
  `isolated`              | `false`                                  | execute each example in its own specification to get "fresh" local variables
  `threadsNb`             | `Runtime.getRuntime.availableProcessors` | number of threads to use for concurrent execution
+ `executor`              | `""`                                     | implementation of the `org.specs2.specification.process.Executor` trait
 
 
 ## Storing

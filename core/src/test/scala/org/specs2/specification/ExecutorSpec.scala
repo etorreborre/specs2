@@ -10,7 +10,7 @@ import matcher.{ThrownExpectations, ResultMatchers}
 import scala.concurrent.duration._
 import main.Arguments
 import specification.core._
-import specification.process.Executor
+import specification.process.DefaultExecutor
 
 class ExecutorSpec extends Specification with Groups with ResultMatchers with ThrownExpectations { def is = s2"""
 
@@ -106,7 +106,7 @@ class ExecutorSpec extends Specification with Groups with ResultMatchers with Th
 
   val factory = fragmentFactory
   def execute(fragments: Seq[Fragment], env: Env = Env()): IndexedSeq[Result] =
-    Executor.executeSeq(fragments)(env).map(_.executionResult)
+    DefaultExecutor.executeSeq(fragments)(env).map(_.executionResult)
 
   trait results {
     val messages = new ListBuffer[String]
