@@ -67,7 +67,7 @@ Execution
 
   "values" - new group {
     eg := Arguments("xonly").xonly must beTrue
-    eg := Arguments("ex", "Hello.*").ex must_== "Hello.*"
+    eg := Arguments("ex", "Hello").ex must_== ".*Hello.*"
 
     eg := Arguments("").xonly must beFalse
     eg := Arguments("").ex must_== ".*"
@@ -93,8 +93,8 @@ Execution
     eg := Arguments.extract(Seq(""), properties("plan" -> "")).plan must_== true
     eg := Arguments.extract(Seq(""), properties("plan" -> "true")).plan must_== true
     eg := Arguments.extract(Seq(""), properties("plan" -> "false")).plan must_== false
-    eg := Arguments.extract(Seq(""), properties("ex"   -> "spec.*")).ex must_== "spec.*"
-    eg := Arguments.extract(Seq(""), properties("specs2.ex" -> "spec.*")).ex must_== "spec.*"
+    eg := Arguments.extract(Seq(""), properties("ex"   -> "spec")).ex must_== ".*spec.*"
+    eg := Arguments.extract(Seq(""), properties("specs2.ex" -> "spec")).ex must_== ".*spec.*"
    }
 
   "execution" - new group {
