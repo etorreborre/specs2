@@ -65,6 +65,6 @@ trait FilesRunner {
   }
 }
 
-object filesRunner extends FilesRunner {
+object files extends FilesRunner {
   def main(args: Array[String]) = run(args)
 }
