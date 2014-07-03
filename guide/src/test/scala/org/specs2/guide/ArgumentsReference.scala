@@ -33,6 +33,7 @@ This reference guide for arguments is divided in several sections:
  `filesrunner.basepath`  | `src/test/scala`               | source directory for test files (see $RunInShell)
  `filesrunner.path`      | `**/*.scala`                   | glob pattern for the file paths (see $RunInShell)
  `filesrunner.pattern`   | `.*Spec`                       | regular expression for the specification class/object name (see $RunInShell)
+ `html.outdir`           | `target/specs2-reports`        | output directory for html files (see $HtmlOutput)
 
 ## Selection
 
@@ -85,6 +86,15 @@ See the $ConsoleOutput page for a more precise description of this options.
  `notifier`              | `""`                           | name of a class extending the `org.specs2.reporter.Notifier` trait
  `printer`               | `""`                           | name of a class extending the `org.specs2.reporter.Printer` trait
 
+For ${"the HTML output" ~ HtmlOutput} the following options can be used:
+
+ Name                    | Default value                                | Description
+ ----------------------- | -------------------------------------------- | ------------------------------
+ `html.outdir`           | `target/specs2-reports/`                     |
+ `html.basedir`          | `.`                                          |
+ `html.template`         | `target/specs2-reports/templates/specs2.html | copied from the `resources/templates` directory
+ `html.variables`        | `Map[String, String]()`                      | passed to the template during the Pandoc evaluation
+ `html.nostats`          | `false`                                      | if true no stats are displayed
 
 ## Arguments API
 
