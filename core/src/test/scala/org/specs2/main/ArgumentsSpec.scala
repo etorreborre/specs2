@@ -3,6 +3,7 @@ package main
 
 import matcher.DataTables
 import execute.Result
+import org.specs2.text.MappedColors
 import specification._
 
 class ArgumentsSpec extends script.Specification with DataTables with Grouped { def is = s2"""
@@ -24,11 +25,11 @@ Definition
 
   If an argument is not specified, its default value is returned
     + for a boolean argument like xonly, it is false
-    + for a string argument like specName, it is .*Spec
+    + for a string argument like ex, it is .*
 
   The argument names can be capitalized or not
     + for a boolean argument like xonly, xOnly is admissible
-    + for a string argument like specName, specname is admissible
+    + for a string argument like colorsclass, colorsClass is admissible
     + but the name has to match exactly, 'exclude' must not be mistaken for 'ex'
 
   + Some boolean arguments have negated names, like nocolor, meaning !color
@@ -66,13 +67,13 @@ Execution
 
   "values" - new group {
     eg := Arguments("xonly").xonly must beTrue
-    eg := Arguments("specName", "spec").specName must_== "spec"
+    eg := Arguments("ex", "Hello.*").ex must_== "Hello.*"
 
     eg := Arguments("").xonly must beFalse
-    eg := Arguments("").specName must_== ".*Spec"
+    eg := Arguments("").ex must_== ".*"
 
     eg := Arguments("xOnly").xonly must beTrue
-    eg := Arguments("specname", "spec").specName must_== "spec"
+    eg := Arguments("colorClass", classOf[MappedColors].getName).colors must_== MappedColors()
     eg := Arguments("exclude", "spec").ex must_== Arguments().ex
 
     eg := Arguments("nocolor").color must beFalse
@@ -92,8 +93,8 @@ Execution
     eg := Arguments.extract(Seq(""), properties("plan" -> "")).plan must_== true
     eg := Arguments.extract(Seq(""), properties("plan" -> "true")).plan must_== true
     eg := Arguments.extract(Seq(""), properties("plan" -> "false")).plan must_== false
-    eg := Arguments.extract(Seq(""), properties("specname" -> "spec")).specName must_== "spec"
-    eg := Arguments.extract(Seq(""), properties("specs2.specname" -> "spec")).specName must_== "spec"
+    eg := Arguments.extract(Seq(""), properties("ex"   -> "spec.*")).ex must_== "spec.*"
+    eg := Arguments.extract(Seq(""), properties("specs2.ex" -> "spec.*")).ex must_== "spec.*"
    }
 
   "execution" - new group {

@@ -110,7 +110,7 @@ class FilterSpec extends Specification with Groups with ResultMatchers with Thro
   "by previous" - new group {
     eg := {
       val repo = StatisticsRepository.memory
-      val env = Env(arguments = Arguments("was x"), statisticsRepository = repo)
+      val env = Env(arguments = Arguments("was x")).setStatisticRepository(repo)
 
       repo.storeResult(getClass.getName, Text("e1"), org.specs2.execute.Failure("failed")).runOption
 

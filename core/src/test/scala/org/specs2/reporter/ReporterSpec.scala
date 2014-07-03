@@ -57,13 +57,13 @@ class ReporterSpec extends Specification with ForEachEnv with ThrownExpectations
 
   def a3 = { env: Env =>
     val repository = StatisticsRepository.memory
-    reported(env.copy(statisticsRepository = repository))
+    reported(env.setStatisticRepository(repository))
     repository.getStatistics(spec().specClassName) must beOk(beSome((_: Stats).examples must_== 3))
   }
 
   def a4 = { env: Env =>
     val repository = StatisticsRepository.memory
-    reported(env.copy(statisticsRepository = repository))
+    reported(env.setStatisticRepository(repository))
     val ex2 = spec().fragments.fragments(3)
     repository.previousResult(spec().specClassName, ex2.description) must beOk(beSome((_: Result).isFailure must beTrue))
   }

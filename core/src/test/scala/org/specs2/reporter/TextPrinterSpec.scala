@@ -184,7 +184,7 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
   def j3 = {
     val repository = StatisticsRepository.memory
     repository.storeStatistics(classOf[String].getName, Stats(examples = 1, failures = 1)).runOption
-    val env = Env(statisticsRepository = repository)
+    val env = Env().setStatisticRepository(repository)
     (s2"""the ${SpecificationLink(SpecHeader(classOf[String], Some("STRING")))} spec""", env) contains
     """|[info] the x STRING spec"""
 

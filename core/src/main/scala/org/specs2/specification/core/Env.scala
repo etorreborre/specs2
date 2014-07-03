@@ -42,17 +42,22 @@ case class Env(arguments: Arguments           = Arguments(),
   /** shutdown computing resources like thread pools */
   def shutdown = executionEnv.shutdown
 
-  /**
-   * @return an isolated env
-   */
+  /** @return an isolated env */
   def setWithoutIsolation =
     copy(executionEnvironment = (arguments: Arguments) => executionEnvironment(arguments).setWithoutIsolation)
 
+  /** set a new statistic repository */
+  def setStatisticRepository(repository: StatisticsRepository) =
+    copy(statsRepository = (args: Arguments) => repository)
+
+  /** set a new execution environment */
+  def setExecutionEnv(env: ExecutionEnv) =
+    copy(executionEnvironment = (args: Arguments) => env)
 }
 
 object Env {
   def apply(execEnv: ExecutionEnv) =
-    new Env(executionEnvironment = (arguments: Arguments) => execEnv)
+    new Env().setExecutionEnv(execEnv)
 
   def executeResult[R: AsResult](r: Env => R) = {
     val env = Env()
