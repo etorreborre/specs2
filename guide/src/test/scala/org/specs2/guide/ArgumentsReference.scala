@@ -83,8 +83,7 @@ See the $ConsoleOutput page for a more precise description of this options.
  `colorsclass`           | `""`                           | use a specific instance of the `Colors` trait
  `showtimes`             | `false`                        | show execution times for examples
  `notifier`              | `""`                           | name of a class extending the `org.specs2.reporter.Notifier` trait
- `exporter`              | `""`                           | name of a class extending the `org.specs2.reporter.Exporter` trait
- `reporter`              | `""`                           | name of a class extending the `org.specs2.reporter.Reporter` trait
+ `printer`               | `""`                           | name of a class extending the `org.specs2.reporter.Printer` trait
 
 
 ## Arguments API
