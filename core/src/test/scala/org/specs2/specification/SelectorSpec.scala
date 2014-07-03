@@ -118,7 +118,7 @@ class SelectorSpec extends Specification with Groups with ResultMatchers with Th
       val fragments = Fragments(
         ex("e1"),
         ex("e2")
-      ).flatMap(Reporter.readStats(getClass.getName, env))
+      ).flatMap(Statistics.readStats(getClass.getName, env))
 
       check(fragments, expected = Seq("e1"), unexpected = Seq("e2"))(env)
     }

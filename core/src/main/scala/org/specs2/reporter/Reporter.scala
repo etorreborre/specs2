@@ -15,6 +15,7 @@ import Processes._
 import Fold._
 import Printer._
 import SpecStructure._
+import Statistics._
 
 /**
  * A reporter is responsible to select printers based on the arguments
@@ -29,18 +30,6 @@ trait Reporter {
     val executing = readStats(spec, env1) |> env1.selector.select(env1) |> env1.executor.execute(env1)
     val folds = printers.map(_.fold(env1, spec)) :+ statsStoreFold(env1, spec)
     Actions.fromTask(runFolds(executing.contents, folds))
-  }
-
-  /**
-   * load the previous statistics if necessary
-   */
-  def readStats(spec: SpecStructure, env: Env): SpecStructure =
-    if (env.arguments.wasIsDefined) spec.flatMap(readStats(spec.specClassName, env))
-    else                            spec
-
-
-  def readStats(className: String, env: Env): Fragment => Process[Task, Fragment] = { f: Fragment =>
-    Process.eval(env.statisticsRepository.previousResult(className, f.description).map(r => f.setPreviousResult(r)).toTask)
   }
 
   /**
