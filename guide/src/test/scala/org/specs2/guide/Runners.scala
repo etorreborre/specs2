@@ -64,7 +64,7 @@ With the `test-only` command arguments can be passed on the command line for sel
 
 ## Now learn to...
 
- * run specifications ${"in an IDE" ~ RunInIDE}: (ScalaIDE](http://scala-ide.org), [IntelliJ IDEA](http://www.jetbrains.com/idea/features/scala.html)
+ * run specifications ${"in an IDE" ~ RunInIDE}: [ScalaIDE](http://scala-ide.org), [IntelliJ IDEA](http://www.jetbrains.com/idea/features/scala.html)
  * output ${"JUnit XML files" ~ JUnitXmlOutput} to run in a continuous integration server like [Jenkins](http://jenkins-ci.org)
  * ${"output HTML files" ~ HtmlOutput}
 
