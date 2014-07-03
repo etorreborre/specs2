@@ -72,7 +72,7 @@ case class Arguments (
   def <|(other: Arguments) = overrideWith(other)
   
   /**
-   * @return a new Arguments object where the values of this are overriden with the values of other if defined
+   * @return a new Arguments object where the values of this are overridden with the values of other if defined
    */
   def overrideWith(other: Arguments): Arguments = {
     new Arguments(
