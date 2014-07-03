@@ -22,10 +22,10 @@ class AutoExamplesSpec extends Specification with DataTables { def is = s2"""
   def e2 = trimExpression("`method`(p1)") must_== "method"
   def e3 = trimExpression("`method`(p1, p2)") must_== "method"
 
-  def dt1 = firstExampleDescription("text" ^ datatableOk) must_==
+  def dt1 = firstExampleDescription("text" ^ datatableOk) must contain(
   """|"a"  | "b" | "c" |>
      |2    ! 2   ! 4   |
-     |1    ! 1   ! 2   | { (a, b, c) =>  a + b must_== c }""".stripMargin
+     |1    ! 1   ! 2   | { (a, b, c) =>  a + b must_== c }""".stripMargin)
 
   def m1 = {
     val spec = new Spec with DataTables {
