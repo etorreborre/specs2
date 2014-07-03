@@ -39,7 +39,6 @@ case class Arguments (
   def hasFilter                       = select.hasFilter
   def was(s: String): Boolean         = select.was(s)
   def wasIsDefined: Boolean           = select.wasIsDefined
-  def specName: String                = select.specName
 
   def plan: Boolean                   = execute.plan
   def skipAll: Boolean                = execute.skipAll
@@ -60,11 +59,6 @@ case class Arguments (
   def offset: Int                     = report.offset
   def diffs: Diffs                    = report.diffs
   def traceFilter: StackTraceFilter   = report.traceFilter
-
-  @deprecated("use the org.specs2.specification.process.RandomSequentialExecution trait instead", since="3.0")
-  def random: Boolean                 = execute.random
-  @deprecated("use the was x! instead", since="3.0")
-  def wasIssue: Boolean               = select.wasIssue
 
   /** @return true if the command line contains a given string */
   def contains(a: String) = commandLine contains a
@@ -151,8 +145,7 @@ case class Select(
   _ex:            Option[String]           = None,
   _include:       Option[String]           = None,
   _exclude:       Option[String]           = None,
-  _was:           Option[String]           = None,
-  _specName:      Option[String]           = None) extends ShowArgs {
+  _was:           Option[String]           = None) extends ShowArgs {
 
   import Arguments._
   
@@ -161,21 +154,16 @@ case class Select(
   def exclude: String               = _exclude.getOrElse("")
   def keep(tags: String*)           = SeparatedTags(include, exclude).keep(tags)
   def contain(tags: String*)        = SeparatedTags(include, exclude).contain(tags)
-  def hasFilter                     = Seq(_include, _exclude, _ex, _was, _specName).exists(_.isDefined)
+  def hasFilter                     = Seq(_include, _exclude, _ex, _was).exists(_.isDefined)
   def was(s: String): Boolean       = hasFlags(s, _was)
   def wasIsDefined: Boolean         = _was.isDefined
-  def specName: String              = _specName.getOrElse(".*Spec")
-
-  @deprecated("use the was x! instead", since="3.0")
-  def wasIssue: Boolean             = was("x") || was("!")
 
   def overrideWith(other: Select) = {
     new Select(
       other._ex              .orElse(_ex),
       other._include         .orElse(_include),
       other._exclude         .orElse(_exclude),
-      other._was             .orElse(_was),
-      other._specName        .orElse(_specName)
+      other._was             .orElse(_was)
     )
   }
 
@@ -183,8 +171,7 @@ case class Select(
     "ex"             -> _ex         ,
     "include"        -> _include    ,
     "exclude"        -> _exclude    ,
-    "was"            -> _was        ,
-    "specName"       -> _specName     ).flatMap(showArg).mkString("Select(", ", ", ")")
+    "was"            -> _was       ).flatMap(showArg).mkString("Select(", ", ", ")")
 }
 
 object Select extends Extract {
@@ -193,11 +180,10 @@ object Select extends Extract {
        _ex            = value("ex", ".*"+(_:String)+".*"),
        _include       = value("include"),
        _exclude       = value("exclude"),
-       _was           = value("was").orElse(bool("wasIssue").map(v => "x!")),
-       _specName      = value("specName")
+       _was           = value("was")
     )
   }
-  val allValueNames = Seq("ex", "include", "exclude", "was", "wasIssue", "specName")
+  val allValueNames = Seq("ex", "include", "exclude", "was")
 }
 
 /**
@@ -210,7 +196,6 @@ case class Execute(
   _stopOnSkip:    Option[Boolean]          = None,
   _sequential:    Option[Boolean]          = None,
   _isolated:      Option[Boolean]          = None,
-  _random:        Option[Boolean]          = None,
   _threadsNb:     Option[Int]              = None,
   _executor:      Option[String]           = None) extends ShowArgs {
 
@@ -223,9 +208,6 @@ case class Execute(
   def threadsNb: Int                = _threadsNb.getOrElse(Runtime.getRuntime.availableProcessors)
   def executor: String              = _executor.getOrElse("")
 
-  @deprecated("use the org.specs2.specification.process.RandomSequentialExecution trait instead", since="3.0")
-  def random: Boolean               = _random.getOrElse(false)
-
   def overrideWith(other: Execute) = {
     new Execute(
       other._plan            .orElse(_plan),
@@ -234,7 +216,6 @@ case class Execute(
       other._stopOnSkip      .orElse(_stopOnSkip),
       other._sequential      .orElse(_sequential),
       other._isolated        .orElse(_isolated),
-      other._random          .orElse(_random),
       other._threadsNb       .orElse(_threadsNb),
       other._executor        .orElse(_executor)
     )
@@ -261,12 +242,11 @@ object Execute extends Extract {
       _stopOnSkip    = bool("stopOnSkip"),
       _sequential    = bool("sequential"),
       _isolated      = bool("isolated"),
-      _random        = bool("random"),
       _threadsNb     = int("threadsNb"),
       _executor      = value("executor")
     )
   }
-  val allValueNames = Seq("plan", "skipAll", "stopOnFail", "stopOnSkip", "sequential", "isolated", "random", "threadsNb", "executor")
+  val allValueNames = Seq("plan", "skipAll", "stopOnFail", "stopOnSkip", "sequential", "isolated", "threadsNb", "executor")
 }
 
 /**

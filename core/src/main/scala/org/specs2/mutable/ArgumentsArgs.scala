@@ -18,8 +18,6 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: MutableArgumentsBuilder =
     ex:            ArgProperty[String]            = ArgProperty[String](),
     include:       ArgProperty[String]            = ArgProperty[String](),
     exclude:       ArgProperty[String]            = ArgProperty[String](),
-    @deprecated("use the was x! instead", since="3.0")
-    wasIssue:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
     was:           ArgProperty[String]            = ArgProperty[String](),
     plan:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
     skipAll:       ArgProperty[Boolean]           = ArgProperty[Boolean](),
@@ -27,8 +25,6 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: MutableArgumentsBuilder =
     stopOnSkip:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    @deprecated("use the org.specs2.specification.process.RandomSequentialExecution trait instead", since="3.0")
-    random:        ArgProperty[Boolean]           = ArgProperty[Boolean](),
     xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
     showOnly:      ArgProperty[String]            = ArgProperty[String](),
     color:         ArgProperty[Boolean]           = ArgProperty[Boolean]()) =
@@ -37,7 +33,6 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: MutableArgumentsBuilder =
       ex,
       include,
       exclude,
-      wasIssue,
       was,
       plan,
       skipAll,
@@ -45,7 +40,6 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: MutableArgumentsBuilder =
       stopOnSkip,
       sequential,
       isolated,
-      random,
       xonly,
       showOnly,
       color))
@@ -57,15 +51,11 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: MutableArgumentsBuilder =
       ex:            ArgProperty[String]            = ArgProperty[String](),
       include:       ArgProperty[String]            = ArgProperty[String](),
       exclude:       ArgProperty[String]            = ArgProperty[String](),
-      wasIssue:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      was:           ArgProperty[String]            = ArgProperty[String](),
-      specName:      ArgProperty[String]            = ArgProperty[String]()) = setArguments(super.select(
+      was:           ArgProperty[String]            = ArgProperty[String]()) = setArguments(super.select(
         ex,
         include,
         exclude,
-        wasIssue,
-        was,
-        specName))
+        was))
 
     /** shorthand method to create an Arguments object */
     override def execute(
@@ -75,7 +65,6 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: MutableArgumentsBuilder =
       stopOnSkip:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      random:        ArgProperty[Boolean]           = ArgProperty[Boolean](),
       threadsNb:     ArgProperty[Int]               = ArgProperty[Int](),
       executor:      ArgProperty[String]            = ArgProperty[String]()
     ) = setArguments(super.execute(
@@ -85,7 +74,6 @@ trait ArgumentsArgs extends main.ArgumentsArgs { this: MutableArgumentsBuilder =
         stopOnSkip,
         sequential,
         isolated,
-        random,
         threadsNb,
         executor))
 

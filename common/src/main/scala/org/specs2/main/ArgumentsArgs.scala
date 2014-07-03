@@ -16,8 +16,6 @@ trait ArgumentsArgs extends ArgProperties {
     ex:            ArgProperty[String]            = ArgProperty[String](),
     include:       ArgProperty[String]            = ArgProperty[String](),
     exclude:       ArgProperty[String]            = ArgProperty[String](),
-    @deprecated("use the was x! instead", since="3.0")
-    wasIssue:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
     was:           ArgProperty[String]            = ArgProperty[String](),
     plan:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
     skipAll:       ArgProperty[Boolean]           = ArgProperty[Boolean](),
@@ -25,8 +23,6 @@ trait ArgumentsArgs extends ArgProperties {
     stopOnSkip:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    @deprecated("use the org.specs2.specification.process.RandomSequentialExecution trait instead", since="3.0")
-    random:        ArgProperty[Boolean]           = ArgProperty[Boolean](),
     xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
     showOnly:      ArgProperty[String]            = ArgProperty[String](),
     color:         ArgProperty[Boolean]           = ArgProperty[Boolean]()) =
@@ -35,7 +31,6 @@ trait ArgumentsArgs extends ArgProperties {
             ex         = ex,
             include    = include,
             exclude    = exclude,
-            wasIssue   = wasIssue,
             was        = was)       <|
      (new ArgumentsNamespace).execute(
               plan       = plan,
@@ -43,8 +38,7 @@ trait ArgumentsArgs extends ArgProperties {
               stopOnFail = stopOnFail,
               stopOnSkip = stopOnSkip,
               sequential = sequential,
-              isolated   = isolated,
-              random     = random) <|
+              isolated   = isolated) <|
      (new ArgumentsNamespace).report(
               xonly      = xonly,
               showOnly   = showOnly,
@@ -57,15 +51,12 @@ trait ArgumentsArgs extends ArgProperties {
       ex:            ArgProperty[String]            = ArgProperty[String](),
       include:       ArgProperty[String]            = ArgProperty[String](),
       exclude:       ArgProperty[String]            = ArgProperty[String](),
-      wasIssue:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      was:           ArgProperty[String]            = ArgProperty[String](),
-      specName:      ArgProperty[String]            = ArgProperty[String]()) = new Arguments(
+      was:           ArgProperty[String]            = ArgProperty[String]()) = new Arguments(
        select = Select(
               ex.toOption.map(".*"+_+".*"),
               include.toOption,
               exclude.toOption,
-              wasIssue.toOption.map(v => if (v) "x!" else "x!+-o*").orElse(was.toOption),
-              specName.toOption))
+              was.toOption))
 
     /** shorthand method to create an Arguments object */
     def execute(
@@ -75,7 +66,6 @@ trait ArgumentsArgs extends ArgProperties {
       stopOnSkip:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      random:        ArgProperty[Boolean]           = ArgProperty[Boolean](),
       threadsNb:     ArgProperty[Int]               = ArgProperty[Int](),
       executor:      ArgProperty[String]            = ArgProperty[String]()
     ) = new Arguments(
@@ -85,7 +75,6 @@ trait ArgumentsArgs extends ArgProperties {
                stopOnSkip.toOption,
                sequential.toOption,
                isolated.toOption,
-               random.toOption,
                threadsNb.toOption,
                executor.toOption))
 

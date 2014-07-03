@@ -72,11 +72,6 @@ trait ArgumentsShortcuts { this: ArgumentsArgs =>
    */
   def exclude(tags: String): Arguments = args(exclude = tags)
   /**
-   * shortcut to include only previousy failed/errors examples
-   */
-  @deprecated("use the was x! instead", since="3.0")
-  def wasIssue: Arguments = args(wasIssue = true)
-  /**
    * shortcut to include only examples with some previous statuses
    */
   def was(s: String): Arguments = args(was = s)
