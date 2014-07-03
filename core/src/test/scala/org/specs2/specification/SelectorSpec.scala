@@ -3,6 +3,7 @@ package specification
 
 import create.DefaultFragmentFactory
 import DefaultFragmentFactory._
+import org.specs2.reporter.Reporter
 import specification.script.Specification
 import execute.Result
 import matcher.{ThrownExpectations, ResultMatchers}
@@ -117,7 +118,7 @@ class SelectorSpec extends Specification with Groups with ResultMatchers with Th
       val fragments = Fragments(
         ex("e1"),
         ex("e2")
-      ).update(SpecStructure.withPreviousResult(getClass.getName, env))
+      ).flatMap(Reporter.readStats(getClass.getName, env))
 
       check(fragments, expected = Seq("e1"), unexpected = Seq("e2"))(env)
     }

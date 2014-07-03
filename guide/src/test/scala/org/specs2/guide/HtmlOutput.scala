@@ -10,6 +10,7 @@ Template
 Custom CSS
 Custom Javascript
 
+## Create an index
 
 ## Arguments
 

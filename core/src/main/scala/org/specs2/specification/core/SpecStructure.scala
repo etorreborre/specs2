@@ -17,7 +17,7 @@ case class SpecStructure(header: SpecHeader, arguments: Arguments, fragments: Fr
   def map(f: Fragments => Fragments): SpecStructure                            = fragmentsLens.modify(this)(f)
   def |>(p: Process1[Fragment, Fragment]): SpecStructure                       = fragmentsLens.modify(this)(_ |> p)
   def |>(f: Process[Task, Fragment] => Process[Task, Fragment]): SpecStructure = fragmentsLens.modify(this)(_ update f)
-  def withPreviousResults(env: Env): SpecStructure                             = |>(withPreviousResult(header.className, env))
+  def flatMap(f: Fragment => Process[Task, Fragment]): SpecStructure           = |>(_.flatMap(f))
 
   def specClassName = header.className
   def name = header.title.getOrElse(header.simpleName)
@@ -31,14 +31,6 @@ object SpecStructure {
   lazy val argumentsLens = lens[SpecStructure] >> 'arguments
   lazy val fragmentsLens = lens[SpecStructure] >> 'fragments
   lazy val contentsLens  = fragmentsLens >> 'contents
-
-  def withPreviousResult(className: String, env: Env): Process[Task, Fragment] => Process[Task, Fragment] = { process =>
-    if (env.arguments.wasIsDefined)
-      process.flatMap { f =>
-        eval(env.statisticsRepository.previousResult(className, f.description).map(r => f.setPreviousResult(r)).toTask)
-      }
-    else process
-  }
 
   /** return true if s1 depends on s2, i.e, s1 has a link to s2 */
   val dependsOn = (s1: SpecStructure, s2: SpecStructure) => {
