@@ -19,7 +19,7 @@ class IsolatedExecutionSpec extends Specification with ForEachEnv { def is = s2"
 
   def e1 = { env: Env =>
     val spec = new TestIsolatedSpec1
-    val env1 = env.copy(arguments = Arguments("sequential"))
+    val env1 = env.setArguments(Arguments("sequential"))
     val executed = execute(spec)(env1)
 
     val results = executed.collect { case f if f.isRunnable => f.execution.result }
@@ -28,7 +28,7 @@ class IsolatedExecutionSpec extends Specification with ForEachEnv { def is = s2"
 
   def e2 = { env: Env =>
     val spec = new TestIsolatedSpec2
-    val env1 = env.copy(arguments = Arguments("sequential"))
+    val env1 = env.setArguments(Arguments("sequential"))
     val executed = execute(spec)(env1)
 
     val results = executed.collect { case f if f.isRunnable => f.execution.result }

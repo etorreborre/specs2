@@ -55,25 +55,25 @@ Here is a list of all the existing `Printers` in specs2 with links to the corres
 
 With the `test-only` command arguments can be passed on the command line for selecting, executing or reporting a specification. Please consult the following sections for more information:
 
- - ${"Filtering" ~ Selection} to select only some example to run
- - ${"Execution" ~ Execution} to modify the execution parameters
- - ${"Console output" ~ ConsoleOutput}, ${"Html output" ~ HtmlOutput}, ${"Custom output" ~ CustomOutput}... for "reporting" arguments
- - the ${"arguments reference guide" ~ ArgumentsReference} for a list of all arguments
+ - ${"Filtering" ~/ Selection} to select only some example to run
+ - ${"Execution" ~/ Execution} to modify the execution parameters
+ - ${"Console output" ~/ ConsoleOutput}, ${"Html output" ~/ HtmlOutput}, ${"Custom output" ~/ CustomOutput}... for "reporting" arguments
+ - the ${"arguments reference guide" ~/ ArgumentsReference} for a list of all arguments
 
 ### Output types
 
 ## Now learn to...
 
- * run specifications ${"in an IDE" ~ RunInIDE}: [ScalaIDE](http://scala-ide.org), [IntelliJ IDEA](http://www.jetbrains.com/idea/features/scala.html)
- * output ${"JUnit XML files" ~ JUnitXmlOutput} to run in a continuous integration server like [Jenkins](http://jenkins-ci.org)
- * ${"output HTML files" ~ HtmlOutput}
+ * run specifications ${"in an IDE" ~/ RunInIDE}: [ScalaIDE](http://scala-ide.org), [IntelliJ IDEA](http://www.jetbrains.com/idea/features/scala.html)
+ * output ${"JUnit XML files" ~/ JUnitXmlOutput} to run in a continuous integration server like [Jenkins](http://jenkins-ci.org)
+ * ${"output HTML files" ~/ HtmlOutput}
 
 ## And if you want to know more
 
- * run specifications with ${"another build tool" ~ OtherBuildTools}: maven, gradle
- * run specifications ${"without a build tool" ~ RunInShell}
- * output ${"Markdown files" ~ MarkdownOutput}
- * output ${"PDF files" ~ PdfOutput}
- * use your own reporting tool implementing the ${"`Notifier` interface (simple) or the `Printer` interface" ~ CustomOutput}
+ * run specifications with ${"another build tool" ~/ OtherBuildTools}: maven, gradle
+ * run specifications ${"without a build tool" ~/ RunInShell}
+ * output ${"Markdown files" ~/ MarkdownOutput}
+ * output ${"PDF files" ~/ PdfOutput}
+ * use your own reporting tool implementing the ${"`Notifier` interface (simple) or the `Printer` interface" ~/ CustomOutput}
                                                                                                                         """
 }

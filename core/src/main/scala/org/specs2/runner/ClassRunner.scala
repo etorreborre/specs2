@@ -81,7 +81,7 @@ object TextRunner extends ClassRunner {
   def run(spec: SpecificationStructure, args: Arguments = Arguments())(implicit env: Env = Env()): LineLogger with StringOutput = {
     val logger = LineLogger.stringLogger
     try {
-      val env1 = env.copy(lineLogger = logger, arguments = env.arguments.overrideWith(args))
+      val env1 = env.setLineLogger(logger).setArguments(env.arguments.overrideWith(args))
       report(env1)(spec).execute(env.systemLogger).unsafePerformIO
       logger
     } finally env.shutdown

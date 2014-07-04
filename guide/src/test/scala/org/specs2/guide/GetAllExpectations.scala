@@ -30,7 +30,7 @@ class AllExpectationsSpec extends Specification with AllExpectations {
 }
 }}
 
-The second example above hints at a restriction for this kind of Specification. The failures are accumulated for each example by mutating a shared variable. "Mutable" means that the concurrent execution of examples will be an issue if done blindly. To avoid this, the `AllExpectations` trait overrides the Specification arguments so that the Specification becomes ${"isolated" ~ Execution} unless it is already `isolated` or `sequential`.
+The second example above hints at a restriction for this kind of Specification. The failures are accumulated for each example by mutating a shared variable. "Mutable" means that the concurrent execution of examples will be an issue if done blindly. To avoid this, the `AllExpectations` trait overrides the Specification arguments so that the Specification becomes ${"isolated" ~/ Execution} unless it is already `isolated` or `sequential`.
 
 """
 

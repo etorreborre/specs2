@@ -5,7 +5,7 @@ import specification.BeforeAll
 
 object TemplateSpecification extends UserGuidePage { def is = s2"""
 
-On the ${"Contexts" ~ Contexts} page we saw that there is a way to define an action which will be executed before all examples with the `BeforeAll` trait. It is very likely that that you will actually make your own trait extending `BeforeAll` to reuse this action in more than one specification:${snippet{
+On the ${"Contexts" ~/ Contexts} page we saw that there is a way to define an action which will be executed before all examples with the `BeforeAll` trait. It is very likely that that you will actually make your own trait extending `BeforeAll` to reuse this action in more than one specification:${snippet{
 trait DatabaseSetup extends BeforeAll {
   def beforeAll = println("prepare database")
 }
@@ -29,7 +29,7 @@ The `map` method is indeed called everytime the specification returns the list o
  - reformatting all text
  - ...
 
-You will probably need to learn a bit more about specs2 ${""""Fragments" API""" ~ FragmentsApi} in order to modify, delete or add new "Fragments".
+You will probably need to learn a bit more about specs2 ${""""Fragments" API""" ~/ FragmentsApi} in order to modify, delete or add new "Fragments".
 
 """
 }

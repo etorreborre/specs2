@@ -7,18 +7,19 @@ import scalaz.concurrent.Task
 import SpecStructure._
 import scalaz.std.anyVal._
 import control._
-import shapeless._
 import scalaz.stream.Process
 import Process.{Process1, eval}
 
-case class SpecStructure(header: SpecHeader, arguments: Arguments, fragments: Fragments) {
+case class SpecStructure(header: SpecHeader, arguments: Arguments, lazyFragments: () => Fragments) {
+  lazy val fragments = lazyFragments()
 
-  def contents: Process[Task, Fragment] = contentsLens.get(this)
-  def map(f: Fragments => Fragments): SpecStructure                            = fragmentsLens.modify(this)(f)
-  def |>(p: Process1[Fragment, Fragment]): SpecStructure                       = fragmentsLens.modify(this)(_ |> p)
-  def |>(f: Process[Task, Fragment] => Process[Task, Fragment]): SpecStructure = fragmentsLens.modify(this)(_ update f)
+  def contents: Process[Task, Fragment]                                        = fragments.contents
+  def map(f: Fragments => Fragments): SpecStructure                            = copy(lazyFragments = () => f(fragments))
+  def |>(p: Process1[Fragment, Fragment]): SpecStructure                       = copy(lazyFragments = () => fragments |> p)
+  def |>(f: Process[Task, Fragment] => Process[Task, Fragment]): SpecStructure = copy(lazyFragments = () => fragments update f)
   def flatMap(f: Fragment => Process[Task, Fragment]): SpecStructure           = |>(_.flatMap(f))
 
+  def setFragments(fs: =>Fragments) = copy(lazyFragments = () => fs)
   def specClassName = header.className
   def name = header.title.getOrElse(header.simpleName)
 
@@ -27,10 +28,14 @@ case class SpecStructure(header: SpecHeader, arguments: Arguments, fragments: Fr
 }
 
 object SpecStructure {
-  lazy val headerLens    = lens[SpecStructure] >> 'header
-  lazy val argumentsLens = lens[SpecStructure] >> 'arguments
-  lazy val fragmentsLens = lens[SpecStructure] >> 'fragments
-  lazy val contentsLens  = fragmentsLens >> 'contents
+  def apply(header: SpecHeader): SpecStructure =
+    new SpecStructure(header, Arguments(), () => Fragments())
+
+  def apply(header: SpecHeader, arguments: Arguments): SpecStructure =
+    new SpecStructure(header, arguments, () => Fragments())
+
+  def create(header: SpecHeader, arguments: Arguments, fragments: =>Fragments): SpecStructure =
+    new SpecStructure(header, arguments, () => fragments)
 
   /** return true if s1 depends on s2, i.e, s1 has a link to s2 */
   val dependsOn = (s1: SpecStructure, s2: SpecStructure) => {
@@ -39,6 +44,6 @@ object SpecStructure {
   }
 
   def empty(klass: Class[_]) =
-    new SpecStructure(SpecHeader(klass), Arguments(), Fragments())
+    SpecStructure(SpecHeader(klass))
 
 }

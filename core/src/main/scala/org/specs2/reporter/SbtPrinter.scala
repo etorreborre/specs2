@@ -28,7 +28,7 @@ trait SbtPrinter extends Printer {
     textFold(env, spec) >> eventFold(env, spec)
 
   def textFold(env: Env, spec: SpecStructure) =
-    textPrinter.fold(env.copy(lineLogger = SbtLineLogger(loggers)), spec)
+    textPrinter.fold(env.setLineLogger(SbtLineLogger(loggers)), spec)
 
   def eventFold(env: Env, spec: SpecStructure) =
     Fold.fromSink(eventSink(env, spec))

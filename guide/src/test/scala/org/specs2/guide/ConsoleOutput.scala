@@ -5,7 +5,7 @@ import main._
 
 object ConsoleOutput extends UserGuidePage { def is = s2"""
 
-You will get a "console" output whenever you run a specification from ${"sbt" ~ Runners}, ${"Maven, Gradle" ~ OtherBuildTools} or a ${"shell session" ~ RunInShell}. There are arguments you can use to change the output:
+You will get a "console" output whenever you run a specification from ${"sbt" ~/ Runners}, ${"Maven, Gradle" ~/ OtherBuildTools} or a ${"shell session" ~/ RunInShell}. There are arguments you can use to change the output:
 
   Name               | Value format            | Comments
  ------------------- | ----------------------- | ------------------------------------------------------------------------

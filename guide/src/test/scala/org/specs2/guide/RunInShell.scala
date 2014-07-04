@@ -6,7 +6,7 @@ It is not necessary to use a build tool to run a specification. You just need to
 
 ## Dependencies
 
-When you use a build tool you generally only need to specify the main dependencies then the transitive dependencies will be fetched for you. In addition to the scala jars and ${"specs2 jars" ~ Installation} you might need the following jars (in sbt notation):
+When you use a build tool you generally only need to specify the main dependencies then the transitive dependencies will be fetched for you. In addition to the scala jars and ${"specs2 jars" ~/ Installation} you might need the following jars (in sbt notation):
 
  Dependency                                                                             | Comment
  -------------------------------------------------------------------------------------- | ---------------------------
@@ -62,7 +62,7 @@ Name                    | Default value       | Description
 
 ## Outputs
 
-By default the `specs2.run` a `specs2.files` will output their results to the console but you can also use other printers as described in the ${"Runners" ~ Runners} section.
+By default the `specs2.run` a `specs2.files` will output their results to the console but you can also use other printers as described in the ${"Runners" ~/ Runners} section.
 
 """
 }

@@ -11,7 +11,7 @@ object FirstSpecification extends Specification { def is = s2"""
   ${ 1 must_== 1 }
 
   And all these examples are also important so we need to know if they all pass
-  ${"important specification" ~ SecondSpecification}
+  ${"important specification" ~/ SecondSpecification}
 
   Finally it is worth having a look at ${"this specification" ~/ ThirdSpecification}.
 """
@@ -41,7 +41,7 @@ Also, for better html rendering, you can add a tooltip:${snippet{
 // 8<--
 object OtherSpec extends Specification { def is = """nothing""" }
 class s extends Specification { def is = s2""" // 8<--
-  ${ "alias" ~ (OtherSpec, "tooltip") }
+  ${ "alias" ~/ (OtherSpec, "tooltip") }
 // 8<--
 """
 }

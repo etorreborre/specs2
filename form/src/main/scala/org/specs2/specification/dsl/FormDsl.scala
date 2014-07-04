@@ -6,7 +6,7 @@ import main.Arguments
 import core._
 import form._
 import create._
-import control.ImplicitParameters.ImplicitParam
+import control.ImplicitParameters._
 
 trait FormDsl extends FragmentsDsl with FormFragmentsFactory {
   private val factory = formFragmentFactory
@@ -32,12 +32,12 @@ trait FormDsl extends FragmentsDsl with FormFragmentsFactory {
   }
 
   implicit class appendFormToSpecHeader(header: SpecHeader) extends appendToSpecHeader(header) {
-    def ^(form: =>Form)                                          : SpecStructure = appendToSpecHeader(header) ^ factory.FormFragment(form)
+    def ^(form: =>Form)(implicit p1: ImplicitParam1)             : SpecStructure = appendToSpecHeader(header) ^ factory.FormFragment(form)
     def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): SpecStructure = appendToSpecHeader(header) ^ factory.FormFragment(aForm)(p)
   }
 
   implicit class appendFormToSpecStructure(structure: SpecStructure) extends appendToSpecStructure(structure) {
-    def ^(form: =>Form)                                          : SpecStructure = appendToSpecStructure(structure) ^ factory.FormFragment(form)
+    def ^(form: =>Form)(implicit p1: ImplicitParam1)             : SpecStructure = appendToSpecStructure(structure) ^ factory.FormFragment(form)
     def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): SpecStructure = appendToSpecStructure(structure) ^ factory.FormFragment(aForm)(p)
   }
 }

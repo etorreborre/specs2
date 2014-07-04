@@ -16,7 +16,10 @@ case class ExecutionEnv(arguments: Arguments,
   /**
    * fragments must not be created as "isolated"
    */
-  def setWithoutIsolation = copy(withoutIsolation = true)
+  def setWithoutIsolation = {
+    shutdown
+    copy(withoutIsolation = true)
+  }
 
   lazy val executor = {
     timer.start

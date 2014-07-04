@@ -123,7 +123,7 @@ This selection only works because ***specs2*** stores the state of each specific
 
 ## If you want to know more
 
- - learn how to ${"display only some examples" ~ ConsoleOutput}
- - consult the ${"arguments reference guide" ~ ArgumentsReference} for a list of all arguments
+ - learn how to ${"display only some examples" ~/ ConsoleOutput}
+ - consult the ${"arguments reference guide" ~/ ArgumentsReference} for a list of all arguments
 """
 }

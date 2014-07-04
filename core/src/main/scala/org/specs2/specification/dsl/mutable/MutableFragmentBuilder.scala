@@ -26,7 +26,7 @@ trait MutableFragmentBuilder extends FragmentBuilder
   }
 
   def specificationStructure = (env: Env) =>
-    SpecStructure(header, arguments, specificationFragments(env))
+    SpecStructure.create(header, arguments, specificationFragments(env))
 
   private def replayFragments(environment: Env) = {
     env = environment

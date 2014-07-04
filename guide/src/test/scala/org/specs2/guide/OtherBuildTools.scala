@@ -2,7 +2,7 @@ package org.specs2
 package guide
 
 object OtherBuildTools extends UserGuidePage { def is = s2"""
-The most straightforward way to run specs2 specifications is to use [sbt](http://scala-sbt.org). However other build tools such as Maven and Gradle can be used too (please refer to the ${"Installation" ~ Installation} guide for instructions on how to set-up projects for those tools).
+The most straightforward way to run specs2 specifications is to use [sbt](http://scala-sbt.org). However other build tools such as Maven and Gradle can be used too (please refer to the ${"Installation" ~/ Installation} guide for instructions on how to set-up projects for those tools).
 
 ## Maven
 
@@ -19,7 +19,7 @@ class MySpecification extends org.specs2.Specification { def is = s2"""
 
 ## Gradle
 
-For Gradle you need to use the same `RunWith` annotation and the [`test`](http://www.gradle.org/docs/current/dsl/org.gradle.api.tasks.testing.Test.html) task. You can also follow the instructions in [this blog post](http://blog.mindcrime-ilab.de/2013/10/25/gradle-rocking-scala-specs2-tests) and create a task that will leverage the ${"`specs2.file` runner" ~ RunInShell}. This way you will avoid having to annotate the classes.
+For Gradle you need to use the same `RunWith` annotation and the [`test`](http://www.gradle.org/docs/current/dsl/org.gradle.api.tasks.testing.Test.html) task. You can also follow the instructions in [this blog post](http://blog.mindcrime-ilab.de/2013/10/25/gradle-rocking-scala-specs2-tests) and create a task that will leverage the ${"`specs2.file` runner" ~/ RunInShell}. This way you will avoid having to annotate the classes.
 """
 }
 

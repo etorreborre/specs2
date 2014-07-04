@@ -120,22 +120,22 @@ It is also possible to use the "functional" expectation mode with a unit specifi
 
 ### And if you want to know more
 
- - create ${"*auto-examples*" ~ AutoExamples} where the code *is* the description of the `Example`
- - integrate ${"snippets of code" ~ CaptureSnippets} to your specification
- - ${"skip" ~ SkipExamples} examples
- - collect ${"*all* expectations" ~ GetAllExpectations}
- - mark examples as ${"pending until they are fixed" ~ PendingUntilFixedExamples}
- - add ${"links to other specifications" ~ LinkOtherSpecifications}
- - add ${"new lines and tabs" ~ SpecificationFormatting} in unit specifications
- - create a trait which will ${"decorate or transform other specifications" ~ TemplateSpecification} when mixed-in
- - use ${"named examples" ~ NamedExamples} in acceptance specifications to get default example names
- - use ${"scripts and auto-numbered examples" ~ AutoNumberedExamples} to completely separate the specification text from the code
- - use the ${"Given/When/Then style" ~ GivenWhenThenStyle} to structure specifications
- - use ${"Forms" ~ UseForms} to create executable HTML tables in your specification
- - use the ${"command line arguments" ~ UseCommandLineArguments} to define the body of an example
- - add ${"debug statements" ~ DebugStatements}
- - print ${"execution data" ~ PrintExecutionData}
- - extend the specification by creating examples ${"_while it is executing_" ~ CreateOnlineSpecifications}
+ - create ${"*auto-examples*" ~/ AutoExamples} where the code *is* the description of the `Example`
+ - integrate ${"snippets of code" ~/ CaptureSnippets} to your specification
+ - ${"skip" ~/ SkipExamples} examples
+ - collect ${"*all* expectations" ~/ GetAllExpectations}
+ - mark examples as ${"pending until they are fixed" ~/ PendingUntilFixedExamples}
+ - add ${"links to other specifications" ~/ LinkOtherSpecifications}
+ - add ${"new lines and tabs" ~/ SpecificationFormatting} in unit specifications
+ - create a trait which will ${"decorate or transform other specifications" ~/ TemplateSpecification} when mixed-in
+ - use ${"named examples" ~/ NamedExamples} in acceptance specifications to get default example names
+ - use ${"scripts and auto-numbered examples" ~/ AutoNumberedExamples} to completely separate the specification text from the code
+ - use the ${"Given/When/Then style" ~/ GivenWhenThenStyle} to structure specifications
+ - use ${"Forms" ~/ UseForms} to create executable HTML tables in your specification
+ - use the ${"command line arguments" ~/ UseCommandLineArguments} to define the body of an example
+ - add ${"debug statements" ~/ DebugStatements}
+ - print ${"execution data" ~/ PrintExecutionData}
+ - extend the specification by creating examples ${"_while it is executing_" ~/ CreateOnlineSpecifications}
 
 """
 }

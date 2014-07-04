@@ -45,7 +45,7 @@ object exs extends MustMatchers with StandardResults with S2StringContext {
     create example 2 $ok""".fragments must haveSize(4)
 
   val spec = new SpecificationStructure { outer =>
-    def is = SpecStructure(SpecHeader(outer.getClass), Arguments(), Fragments(text("the"), text(" world")))
+    def is = SpecStructure.create(SpecHeader(outer.getClass), Arguments(), Fragments(text("the"), text(" world")))
   }
 
   val ok = Success()

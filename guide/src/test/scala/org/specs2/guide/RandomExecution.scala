@@ -4,7 +4,7 @@ package guide
 import specification.process.RandomSequentialExecution
 
 object RandomExecution extends UserGuidePage { def is = s2"""
- The ${"execution" ~ Execution} page describes the most frequent modes of execution:
+ The ${"execution" ~/ Execution} page describes the most frequent modes of execution:
 
   - fully concurrent
   - concurrent with steps

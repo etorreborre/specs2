@@ -3,7 +3,7 @@ package guide
 
 object QuickStart extends UserGuidePage { def is = "Quick Start".title ^s2"""
 
-Follow the ${"installation" ~ Installation} instructions and create copy the following specification in a file named `HelloWorldSpec.scala`: ${snippet{
+Follow the ${"installation" ~/ Installation} instructions and create copy the following specification in a file named `HelloWorldSpec.scala`: ${snippet{
 
 class HelloWorldSpec extends Specification { def is = s2"""
 
@@ -48,9 +48,9 @@ Finished in 0 second, 58 ms
 
 The rest of this ${see(UserGuide)} will show you how to:
 
- * ${"structure" ~ Structure} your specification using one of the 2 major "styles" of specifications: "Acceptance" and "Unit"
- * use the many ***specs2*** ${"matchers" ~ Matchers} to specify precisely the expected behavior of your application
- * ${"run" ~ Runners} your specification and output results in various formats
+ * ${"structure" ~/ Structure} your specification using one of the 2 major "styles" of specifications: "Acceptance" and "Unit"
+ * use the many ***specs2*** ${"matchers" ~/ Matchers} to specify precisely the expected behavior of your application
+ * ${"run" ~/ Runners} your specification and output results in various formats
 """
 
 }

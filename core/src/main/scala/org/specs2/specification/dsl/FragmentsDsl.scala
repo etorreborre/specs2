@@ -47,8 +47,8 @@ trait FragmentsDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDs
     def ^(other: Arguments)         : Arguments = args.overrideWith(other)
     def ^(s: SpecificationStructure): SpecStructure = ^(s.is)
     def ^(structure: SpecStructure) : SpecStructure = structure.copy(arguments = args)
-    def ^(header: SpecHeader)       : SpecStructure = SpecStructure(header, args, Fragments())
-    def ^(others: Fragments)        : SpecStructure = SpecStructure(SpecHeader(specClass = outer.getClass), args, others)
+    def ^(header: SpecHeader)       : SpecStructure = SpecStructure(header, args)
+    def ^(others: Fragments)        : SpecStructure = SpecStructure(SpecHeader(specClass = outer.getClass), args, () => others)
     def ^(others: Seq[Fragment])    : SpecStructure = ^(Fragments(others:_*))
     def ^(other: Fragment)          : SpecStructure = args ^ Fragments(other)
     def ^(other: String)            : SpecStructure = args ^ fragmentFactory.text(other)
@@ -57,15 +57,15 @@ trait FragmentsDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDs
   implicit class appendToSpecHeader(header: SpecHeader) {
     def ^(s: SpecificationStructure): SpecStructure = ^(s.is)
     def ^(structure: SpecStructure) : SpecStructure = structure.copy(header = header)
-    def ^(args: Arguments)          : SpecStructure = SpecStructure(header, args, Fragments())
-    def ^(others: Fragments)        : SpecStructure = SpecStructure(header, Arguments(), others)
+    def ^(args: Arguments)          : SpecStructure = SpecStructure(header, args)
+    def ^(others: =>Fragments)      : SpecStructure = SpecStructure(header, Arguments(), () => others)
     def ^(others: Seq[Fragment])    : SpecStructure = ^(Fragments(others:_*))
     def ^(other: Fragment)          : SpecStructure = header ^ Fragments(other)
     def ^(other: String)            : SpecStructure = header ^ fragmentFactory.text(other)
   }
 
   implicit class appendToSpecStructure(structure: SpecStructure) {
-    def ^(others: Fragments)    : SpecStructure = structure.copy(fragments = structure.fragments.append(others))
+    def ^(others: Fragments)    : SpecStructure = structure.copy(lazyFragments = () => structure.fragments.append(others))
     def ^(others: Seq[Fragment]): SpecStructure = ^(Fragments(others:_*))
     def ^(other: String)        : SpecStructure = structure ^ fragmentFactory.text(other)
     def ^(other: Fragment)      : SpecStructure = structure ^ Fragments(other)
@@ -76,7 +76,7 @@ trait FragmentsDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDs
 
   // allow writing: def is = "my spec".title
   implicit def specHeaderAsStructure(header: SpecHeader): SpecStructure =
-    SpecStructure(header, Arguments(), Fragments())
+    SpecStructure(header)
 
   // allow writing: def is = ""
   implicit def stringAsSpecStructure(s: String): SpecStructure =
@@ -91,7 +91,7 @@ trait FragmentsDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDs
     SpecHeader(getClass) ^ f
 
   // allow writing: def is = "a" ! ok ^ "b" ! ok
-  implicit def fragmentsAsSpecStructure(fs: Fragments): SpecStructure =
+  implicit def fragmentsAsSpecStructure(fs: =>Fragments): SpecStructure =
     SpecHeader(getClass) ^ fs
 
   implicit def specStructureAsFragments(spec: SpecStructure): Fragments =

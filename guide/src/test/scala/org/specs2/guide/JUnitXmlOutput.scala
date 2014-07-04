@@ -6,7 +6,7 @@ Many continuous integration servers (like [Jenkins](http://jenkins-ci.org) accep
 
  `test-only org.acme.MySpec -- junitxml`
 
-The JUnit XML file corresponding to the specification will be produced by default in the `target/test-reports` directory. You can change this directory by passing the `junit.outdir` argument. ${"Remember" ~ ConsoleOutput} that using `junitxml` by itself will turn out the console reporting. You need to add `console` to get it back.
+The JUnit XML file corresponding to the specification will be produced by default in the `target/test-reports` directory. You can change this directory by passing the `junit.outdir` argument. ${"Remember" ~/ ConsoleOutput} that using `junitxml` by itself will turn out the console reporting. You need to add `console` to get it back.
 
 """
 }

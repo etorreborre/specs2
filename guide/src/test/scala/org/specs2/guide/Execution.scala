@@ -90,8 +90,8 @@ class ActionSpec extends Specification { def is = s2"""
 
 ### If you want to know more
 
- - add ${"random sequencing" ~ RandomExecution} to your specification
- - consult the ${"arguments reference guide" ~ ArgumentsReference} for a list of all arguments
+ - add ${"random sequencing" ~/ RandomExecution} to your specification
+ - consult the ${"arguments reference guide" ~/ ArgumentsReference} for a list of all arguments
 
 """
 

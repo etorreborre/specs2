@@ -170,7 +170,7 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
     """|[info] o e1
        |[info] wontdo"""
 
-  def i1 = SpecStructure(SpecHeader(getClass), Arguments(), "e1" ! ok ^ break ^ break ^ "e2" ! ok) contains
+  def i1 = SpecStructure.create(SpecHeader(getClass), Arguments(), "e1" ! ok ^ break ^ break ^ "e2" ! ok) contains
     """|[info] + e1
        |[info]_
        |[info] + e2"""
@@ -210,7 +210,7 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
         ok
       })):_*)
 
-    val spec = SpecStructure(SpecHeader(getClass, Some("title\n")), Arguments(), fragments)
+    val spec = SpecStructure.create(SpecHeader(getClass, Some("title\n")), Arguments(), fragments)
     val env = Env(lineLogger = logger)
     TextPrinter.run(env)(DefaultExecutor.executeSpec(spec, env))
 
@@ -242,7 +242,7 @@ object TextPrinterSpec extends MustMatchers with FragmentsDsl {
 
   implicit class fragmentsOutputContains(fragments: Fragments) {
     def contains(contained: String, f: String => String = identity) =
-      SpecStructure(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, f)
+      SpecStructure.create(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, f)
   }
 
   implicit class outputContains(spec: SpecStructure) {
@@ -254,7 +254,7 @@ object TextPrinterSpec extends MustMatchers with FragmentsDsl {
         optionalEnv.fold(Env(lineLogger = logger,
           arguments = spec.arguments.overrideWith(Arguments("sequential fullstacktrace"))))(_.copy(lineLogger = logger))
 
-      TextPrinter.run(env)(spec.copy(fragments = spec.fragments
+      TextPrinter.run(env)(spec.setFragments(spec.fragments
         .prepend(DefaultFragmentFactory.break) // add a newline after the title
         .update(DefaultExecutor.execute(env))))
 

@@ -7,7 +7,7 @@ object AutoNumberedExamples extends UserGuidePage { def is = s2"""
 
 ## Auto numbered examples
 
-In the ${"named examples" ~ NamedExamples} section we can see that there is a way to create groups of examples with standard names and use these names in the specification text (via the `s2` interpolated string). Here we go a step further. The specification text is going to be some pure text, the examples will be described as examples groups and the numbers will be created automatically. What does it look like? ${snippet{
+In the ${"named examples" ~/ NamedExamples} section we can see that there is a way to create groups of examples with standard names and use these names in the specification text (via the `s2` interpolated string). Here we go a step further. The specification text is going to be some pure text, the examples will be described as examples groups and the numbers will be created automatically. What does it look like? ${snippet{
 class BulletedExamplesSpec extends script.Specification with Groups { def is = """
 
 This is an introduction

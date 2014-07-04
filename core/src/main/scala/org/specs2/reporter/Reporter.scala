@@ -26,7 +26,7 @@ import Statistics._
 trait Reporter {
 
   def report(env: Env, printers: List[Printer]): SpecStructure => Action[Unit] = { spec =>
-    val env1 = env.copy(arguments = env.arguments.overrideWith(spec.arguments))
+    val env1 = env.setArguments(env.arguments.overrideWith(spec.arguments))
     val executing = readStats(spec, env1) |> env1.selector.select(env1) |> env1.executor.execute(env1)
     val folds = printers.map(_.fold(env1, spec)) :+ statsStoreFold(env1, spec)
     Actions.fromTask(runFolds(executing.contents, folds))

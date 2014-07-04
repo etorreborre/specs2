@@ -11,35 +11,35 @@ import control._
 import process.{Executor, DefaultExecutor, StatisticsRepository, Selector, DefaultSelector}
 
 case class Env(arguments: Arguments           = Arguments(),
-               indentationSize: Int           = 2,
+          indentationSize: Int           = 2,
 
-               /** selector class */
-               selectorInstance: Arguments => Selector = (arguments: Arguments) =>
-                 Arguments.instance(arguments.select.selector).getOrElse(DefaultSelector),
+          /** selector class */
+          selectorInstance: Arguments => Selector = (arguments: Arguments) =>
+            Arguments.instance(arguments.select.selector).getOrElse(DefaultSelector),
 
-               /** executor instance */
-               executorInstance: Arguments => Executor = (arguments: Arguments) =>
-                 Arguments.instance(arguments.execute.executor).getOrElse(DefaultExecutor),
+          /** executor instance */
+          executorInstance: Arguments => Executor = (arguments: Arguments) =>
+            Arguments.instance(arguments.execute.executor).getOrElse(DefaultExecutor),
 
-               /** default console logger */
-               lineLogger: LineLogger = NoLineLogger,
+          /** default console logger */
+          lineLogger: LineLogger = NoLineLogger,
 
-               /** default statistics repository */
-               statsRepository: Arguments => StatisticsRepository = (arguments: Arguments) =>
-                  StatisticsRepository.file(arguments.commandLine.value("stats.outdir").getOrElse("target/specs2-reports/stats")),
+          /** default statistics repository */
+          statsRepository: Arguments => StatisticsRepository = (arguments: Arguments) =>
+             StatisticsRepository.file(arguments.commandLine.value("stats.outdir").getOrElse("target/specs2-reports/stats")),
 
-               /** execution environment */
-               executionEnvironment: Arguments => ExecutionEnv = (arguments: Arguments) =>
-                 ExecutionEnv(arguments),
+          /** execution environment */
+          executionEnvironment: Arguments => ExecutionEnv = (arguments: Arguments) =>
+            ExecutionEnv(arguments),
 
-               /** logger for issues */
-               systemLogger: Logger = noLogging,
+          /** logger for issues */
+          systemLogger: Logger = noLogging,
 
-               /** random generator */
-               random: scala.util.Random = new scala.util.Random,
+          /** random generator */
+          random: scala.util.Random = new scala.util.Random,
 
-               /** file system interface */
-               fileSystem: FileSystem = FileSystem) {
+          /** file system interface */
+          fileSystem: FileSystem = FileSystem) {
 
   lazy val statisticsRepository: StatisticsRepository =
     statsRepository(arguments)
@@ -52,17 +52,35 @@ case class Env(arguments: Arguments           = Arguments(),
   /** shutdown computing resources like thread pools */
   def shutdown = executionEnv.shutdown
 
+  /** set new LineLogger */
+  def setLineLogger(logger: LineLogger) = {
+    shutdown
+    copy(lineLogger = logger)
+  }
+
+  /** set new arguments */
+  def setArguments(args: Arguments) = {
+    shutdown
+    copy(arguments = args)
+  }
+
   /** @return an isolated env */
-  def setWithoutIsolation =
+  def setWithoutIsolation = {
+    shutdown
     copy(executionEnvironment = (arguments: Arguments) => executionEnvironment(arguments).setWithoutIsolation)
+  }
 
   /** set a new statistic repository */
-  def setStatisticRepository(repository: StatisticsRepository) =
+  def setStatisticRepository(repository: StatisticsRepository) = {
+    shutdown
     copy(statsRepository = (args: Arguments) => repository)
+  }
 
   /** set a new execution environment */
-  def setExecutionEnv(env: ExecutionEnv) =
+  def setExecutionEnv(env: ExecutionEnv) = {
+    shutdown
     copy(executionEnvironment = (args: Arguments) => env)
+  }
 }
 
 object Env {

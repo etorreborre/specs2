@@ -115,7 +115,7 @@ Another very common situation is when you need to execute in the context of a da
     }
   }
 
-The specification above shows a trait `DatabaseContext` extending `AroundEach` (so that trait can be reused for other specifications). It define a method named `around` taking the body of the example, anything with an ${"AsResult" ~ AsResultTypeclass} typeclass and returns a result. Because `r` is a byname parameter, you are free to do whatever you want before or after evaluating it, like opening and closing a database transaction.
+The specification above shows a trait `DatabaseContext` extending `AroundEach` (so that trait can be reused for other specifications). It define a method named `around` taking the body of the example, anything with an ${"AsResult" ~/ AsResultTypeclass} typeclass and returns a result. Because `r` is a byname parameter, you are free to do whatever you want before or after evaluating it, like opening and closing a database transaction.
 
 The `AroundEach` trait can be used for lots of different purposes:
 
@@ -167,8 +167,8 @@ Some setups are very expensive and can be shared across all examples. For exampl
 
 ## If you want to know more
 
- * use ${"`Context` objects" ~ ContextObjects} to create contexts for just a few examples in the specification
- * use ${"traits and`Scopes`" ~ Scopes} to create contexts in unit specifications where you can access state directly on variables
+ * use ${"`Context` objects" ~/ ContextObjects} to create contexts for just a few examples in the specification
+ * use ${"traits and`Scopes`" ~/ Scopes} to create contexts in unit specifications where you can access state directly on variables
 
 """
 }
@@ -268,7 +268,7 @@ object Scopes extends UserGuidePage { def is = s2"""
 
 ### Scope
 
-The techniques described in ${"`Context` objects" ~ ContextObjects} are not always applicable to unit specifications where we want examples to be a "block" of code described by some text. Instead of creating a case class we can instantiate a trait which will hold the "fresh" state:${snippet{
+The techniques described in ${"`Context` objects" ~/ ContextObjects} are not always applicable to unit specifications where we want examples to be a "block" of code described by some text. Instead of creating a case class we can instantiate a trait which will hold the "fresh" state:${snippet{
 class ContextSpec extends mutable.Specification {
   "this is the first example" in new trees {
     tree.removeNodes(2, 3) must have size(2)
@@ -294,7 +294,7 @@ It is also possible to extend Scopes with `Before` and `After` traits but they n
 
 ## If you want to know more...
 
- - print ${"execution data" ~ PrintExecutionData}
+ - print ${"execution data" ~/ PrintExecutionData}
 
 """
 

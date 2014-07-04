@@ -17,7 +17,7 @@ class NotifierSpec extends Specification with ForEachEnv { def is = s2"""
 
   def a1 = { env: Env =>
     val spec = new NotifierSpec1
-    val env1 = env.copy(arguments = Arguments("notifier"))
+    val env1 = env.setArguments(Arguments("notifier"))
     val notifier = new TestNotifier
     Reporter.report(env1, List(NotifierPrinter.printer(notifier)))(spec.structure(env)).runOption
     notifier.messages.mkString("\n") must_==
