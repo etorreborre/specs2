@@ -28,7 +28,7 @@ A Field is a labelled property with can be embedded in a Form.
 
   "creation" - new g1 {
     e1 := Field(18).label                     === ""
-    e2 := age()                               === 18
+    e2 := age.toOption                        === Some(18)
     e3 := Field("person", name, age).toString === "person: eric/18"
   }
   "execution" - new g2 {
@@ -36,6 +36,6 @@ A Field is a labelled property with can be embedded in a Form.
     e2 := ageError.execute must be like { case Error(_, _) => ok }
   }
   "modification" - new g3 {
-    e1 := age.toStringField() must_== "18"
+    e1 := age.toStringField.toOption must_== Some("18")
   }
 }

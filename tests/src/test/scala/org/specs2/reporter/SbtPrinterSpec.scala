@@ -8,7 +8,7 @@ import io.StringOutput
 import sbt.testing.{TaskDef, EventHandler, Logger}
 import runner._
 import specification.core._
-import specification.process.Executor
+import specification.process.DefaultExecutor
 
 class SbtPrinterSpec extends Specification with ForEachEnv { def is = s2"""
                                                                                                                         

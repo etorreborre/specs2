@@ -121,6 +121,10 @@ But you can also specify another regular expression "locally" for a given step p
   val anInt = StepParser((_: String).toInt)(new Regex("\\[([^\\]]+)\\]"))
 }}
 
+Finally `StepParsers` can collect all the delimited values at once with the `seq` method:${snippet{
+  StepParser.seq((seq: Seq[String]) => seq.map(_.toInt).sum).parse("values {1}, {2}, {3}") === Right(6)
+}}
+
 #### Regex parsers
 
 More generally you can use any regular expression to parse values with the `readAs` and `groupAs` methods ${snippet{

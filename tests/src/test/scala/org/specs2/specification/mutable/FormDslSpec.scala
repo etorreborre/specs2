@@ -3,7 +3,7 @@ package mutable
 
 import org.specs2.form.Form
 import org.specs2.specification.create.DefaultFormFragmentFactory
-import org.specs2.specification.process.Executor
+import org.specs2.specification.process.DefaultExecutor
 import org.specs2.specification.core.FormDescription
 import org.specs2.specification.dsl.mutable.{FormDsl, MutableFragmentBuilder}
 

@@ -4,7 +4,7 @@ package specification
 import form._
 import matcher._
 import org.specs2.specification.core.SpecStructure
-import org.specs2.specification.process.Executor
+import org.specs2.specification.process.DefaultExecutor
 
 class FormsFragmentsSpec extends Specification with Forms with ThrownExpectations { def is = s2"""
   

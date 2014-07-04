@@ -24,7 +24,7 @@ class StepParsersSpec extends Specification with GWT with Grouped { def is = "St
   "{} delimiters" - new g1 {
    e1 := StepParser((_:String).toInt).parse("a value {1}") === Right(1)
    e2 := StepParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("2 values {1} and {2}") === Right((1, 2))
-   e3 := StepParser((seq: Seq[String]) => seq.map(_.toInt).sum).parse("values {1}, {2}, {3}") === Right(6)
+   e3 := StepParser.seq((seq: Seq[String]) => seq.map(_.toInt).sum).parse("values {1}, {2}, {3}") === Right(6)
    e4 := StepParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("3 values {1} and {2} and {3}") === Right((1, 2))
    e5 := StepParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("1 value {1}") must beLeft
   }
