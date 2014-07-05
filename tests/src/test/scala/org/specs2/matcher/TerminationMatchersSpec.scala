@@ -53,7 +53,7 @@ class TerminationMatchersSpec extends script.Specification with TerminationMatch
 
     eg := {
       val env = Env()
-      implicit val strategy: Strategy = Strategy.Executor(env.executionEnv.executor)
+      implicit val strategy: Strategy = Strategy.Executor(env.executorService)
 
       val queue1 = new ArrayBlockingQueue[Int](1)
       var stop = true

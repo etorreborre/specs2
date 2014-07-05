@@ -37,6 +37,9 @@ object SpecStructure {
   def apply(header: SpecHeader, arguments: Arguments): SpecStructure =
     new SpecStructure(header, arguments, () => Fragments())
 
+  def create(header: SpecHeader, fragments: =>Fragments): SpecStructure =
+    new SpecStructure(header, Arguments(), () => fragments)
+
   def create(header: SpecHeader, arguments: Arguments, fragments: =>Fragments): SpecStructure =
     new SpecStructure(header, arguments, () => fragments)
 

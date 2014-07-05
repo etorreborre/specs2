@@ -30,7 +30,7 @@ class SbtPrinterSpec extends Specification with ForEachEnv { def is = s2"""
     }
 
     def e1 = { env: Env =>
-      printer.print(env)(SpecStructure(SpecHeader(classOf[HelloWorldSpec]), Arguments(), Fragments(text("\ntitle"), text("\ntext")))).run
+      printer.print(env)(SpecStructure.create(SpecHeader(classOf[HelloWorldSpec]), Fragments(text("\ntitle"), text("\ntext")))).run
       there was one(logger).info(beMatching("HelloWorldSpec\ntitle\ntext"))
     }
   }
