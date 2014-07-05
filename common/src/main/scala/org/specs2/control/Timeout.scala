@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock
  *
  * It is extended with start/stop methods to better control the usage of thread resources
  */
-case class Timer(timeoutTickMs: Int = 100, workerName: String = "TimeoutContextWorker") {
+case class Timeout(timeoutTickMs: Int = 100, workerName: String = "TimeoutContextWorker") {
   val safeTickMs = if (timeoutTickMs > 0) timeoutTickMs else 1
   private[this] val nondeterminism = Nondeterminism[Future]
   @volatile private[this] var continueRunning: Boolean = true
@@ -48,7 +48,10 @@ case class Timer(timeoutTickMs: Int = 100, workerName: String = "TimeoutContextW
 
   private[this] lazy val workerThread = new Thread(workerRunnable, workerName)
 
-  def start() = workerThread.start()
+  def start = {
+    workerThread.start()
+    this
+  }
 
   def stop() {
     continueRunning = false
@@ -70,12 +73,11 @@ case class Timer(timeoutTickMs: Int = 100, workerName: String = "TimeoutContextW
     Future.async[T](listen)
   }
 
-  def withTimeout[T](future: Future[T], timeout: Long): Future[Timeout \/ T] = {
-    val timeoutFuture = valueWait(Timeout, timeout)
+  def withTimeout[T](future: Future[T], timeout: Long): Future[SomeTimeout \/ T] = {
+    val timeoutFuture = valueWait(SomeTimeout, timeout)
     nondeterminism.choose(timeoutFuture, future).map(_.fold(_._1.left, _._2.right))
   }
 }
 
-trait Timeout
-object Timeout extends Timeout
-
+trait SomeTimeout
+object SomeTimeout extends SomeTimeout

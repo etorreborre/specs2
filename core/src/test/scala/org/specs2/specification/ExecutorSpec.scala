@@ -12,7 +12,7 @@ import main.Arguments
 import specification.core._
 import specification.process.DefaultExecutor
 
-class ExecutorSpec extends Specification with Groups with ResultMatchers with ThrownExpectations { def is = s2"""
+class   ExecutorSpec extends Specification with Groups with ResultMatchers with ThrownExpectations { def is = s2"""
 
  Steps
  =====
@@ -97,7 +97,7 @@ class ExecutorSpec extends Specification with Groups with ResultMatchers with Th
 
     eg := {
       val fragments = Seq(example("very slow", verySlow))
-      val env = Env(ExecutionEnv(Arguments(), timeOut = Some(100.millis)))
+      val env = Env(ExecutionEnv(timeOut = Some(100.millis)))
 
       execute(fragments, env) must contain(beSkipped[Result]("timeout after 100 milliseconds"))
     }

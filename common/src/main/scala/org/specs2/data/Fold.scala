@@ -163,7 +163,7 @@ object Fold {
    * Run a fold an return the last value
    */
   def runFoldLast[T](process: Process[Task, T], fold: Fold[T]): Task[fold.S] =
-     fold.prepare >>
+    fold.prepare >>
     logged(process |> zipWithFoldState(fold)).drainW(fold.sink).map(_._2).runLastOr(fold.init)
 
   /**

@@ -2,6 +2,8 @@ package org.specs2
 package specification
 package core
 
+import java.util.concurrent.ExecutorService
+
 import main.Arguments
 import org.specs2.execute.AsResult
 import reporter.LineLogger
@@ -29,8 +31,7 @@ case class Env(arguments: Arguments           = Arguments(),
              StatisticsRepository.file(arguments.commandLine.value("stats.outdir").getOrElse("target/specs2-reports/stats")),
 
           /** execution environment */
-          executionEnvironment: Arguments => ExecutionEnv = (arguments: Arguments) =>
-            ExecutionEnv(arguments),
+          executionEnv: ExecutionEnv = ExecutionEnv(),
 
           /** logger for issues */
           systemLogger: Logger = noLogging,
@@ -47,40 +48,33 @@ case class Env(arguments: Arguments           = Arguments(),
   lazy val selector = selectorInstance(arguments)
   lazy val executor = executorInstance(arguments)
 
-  lazy val executionEnv = executionEnvironment(arguments)
+  lazy val executorService = ExecutionEnv.executor(arguments.threadsNb)
+  lazy val timeout = (new Timeout).start
 
-  /** shutdown computing resources like thread pools */
-  def shutdown = executionEnv.shutdown
+  def shutdown: Unit = {
+    try     executorService.shutdownNow
+    finally timeout.stop
+  }
 
   /** set new LineLogger */
-  def setLineLogger(logger: LineLogger) = {
-    shutdown
+  def setLineLogger(logger: LineLogger) =
     copy(lineLogger = logger)
-  }
 
   /** set new arguments */
-  def setArguments(args: Arguments) = {
-    shutdown
+  def setArguments(args: Arguments) =
     copy(arguments = args)
-  }
 
   /** @return an isolated env */
-  def setWithoutIsolation = {
-    shutdown
-    copy(executionEnvironment = (arguments: Arguments) => executionEnvironment(arguments).setWithoutIsolation)
-  }
+  def setWithoutIsolation =
+    copy(executionEnv = executionEnv.setWithoutIsolation)
 
   /** set a new statistic repository */
-  def setStatisticRepository(repository: StatisticsRepository) = {
-    shutdown
+  def setStatisticRepository(repository: StatisticsRepository) =
     copy(statsRepository = (args: Arguments) => repository)
-  }
 
   /** set a new execution environment */
-  def setExecutionEnv(env: ExecutionEnv) = {
-    shutdown
-    copy(executionEnvironment = (args: Arguments) => env)
-  }
+  def setExecutionEnv(env: ExecutionEnv) =
+    copy(executionEnv = env)
 }
 
 object Env {
@@ -89,7 +83,6 @@ object Env {
 
   def executeResult[R: AsResult](r: Env => R) = {
     val env = Env()
-    try AsResult(r(env))
-    finally env.shutdown
+    AsResult(r(env))
   }
 }

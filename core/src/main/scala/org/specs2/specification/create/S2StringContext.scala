@@ -112,7 +112,7 @@ trait S2StringContext extends FragmentsFactory { outer =>
     envFunctionIsInterpolatedFragment((env: Env) => f(env.arguments.commandLine))
 
   implicit def executionContextFunctionIsInterpolatedFragment[R : AsResult](f: ExecutionContext => R): InterpolatedFragment =
-    envFunctionIsInterpolatedFragment((env: Env) => f(ExecutionContext.fromExecutorService(env.executionEnv.executor,
+    envFunctionIsInterpolatedFragment((env: Env) => f(ExecutionContext.fromExecutorService(env.executorService,
       (t: Throwable) => control.logThrowable(t, env.arguments.verbose).execute(env.systemLogger).unsafePerformIO)))
 
   implicit def anyAsResultIsInterpolatedFragment(r: =>Function0Result): InterpolatedFragment = new InterpolatedFragment {

@@ -60,8 +60,7 @@ class TerminationMatchersSpec extends script.Specification with TerminationMatch
       def action1() = Promise { while (stop) { Thread.sleep(10)}; queue1.add(1) }.get
       def action2() = Promise { stop = false }.get
 
-      try action1() must terminate.onlyWhen(action2())
-      finally env.shutdown
+      action1() must terminate.onlyWhen(action2())
     }
 
     eg := {

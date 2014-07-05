@@ -15,11 +15,9 @@ object UserGuide extends UserGuidePage { def is = "User Guide".title ^ s2"""
   a ${ "quick start guide" ~/ QuickStart }
 
 
-  $${ "how to " ~/ ("structure your specification", new Structure)        }
-  $${ "how to use " ~/ ("matchers", new Matchers)                         }
-  $${ "how to " ~/ ("execute a specification", new Runners)               }
-  $${ "\"how to\" tips " ~/ ("to improve your specifications", new HowTo) }
-  $${ "the ***specs2*** " ~/ ("philosophy", new Philosophy)               }
-  $${ "the ***specs2*** " ~/ ("design", new Design)                       }
+  how to ${"structure your specification" ~/ Structure}
+  how to use ${"matchers" ~/ Matchers }
+  how to ${"execute a specification" ~ Runners }
+  how to ${"how to troubleshoot errors" ~/ TroubleShooting }
                                                                         """
 }

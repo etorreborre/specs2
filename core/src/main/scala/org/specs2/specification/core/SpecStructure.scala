@@ -19,7 +19,10 @@ case class SpecStructure(header: SpecHeader, arguments: Arguments, lazyFragments
   def |>(f: Process[Task, Fragment] => Process[Task, Fragment]): SpecStructure = copy(lazyFragments = () => fragments update f)
   def flatMap(f: Fragment => Process[Task, Fragment]): SpecStructure           = |>(_.flatMap(f))
 
+  def setHeader(h: SpecHeader) = copy(header = h)
+  def setArguments(args: Arguments) = copy(arguments = args)
   def setFragments(fs: =>Fragments) = copy(lazyFragments = () => fs)
+
   def specClassName = header.className
   def name = header.title.getOrElse(header.simpleName)
 

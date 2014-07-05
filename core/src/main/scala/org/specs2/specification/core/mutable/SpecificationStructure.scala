@@ -8,10 +8,6 @@ import specification.dsl.mutable.MutableFragmentBuilder
 trait SpecificationStructure extends specification.core.SpecificationStructure
   with MutableFragmentBuilder {
 
-  def is = {
-    val env = Env() // transient env
-    try specificationStructure(Env())
-    finally env.shutdown
-  }
+  def is = specificationStructure(Env())
 }
 

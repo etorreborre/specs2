@@ -4,7 +4,7 @@ package data
 import java.util.concurrent.ExecutorService
 
 import scalaz.stream.Process._
-import scalaz.stream.Process
+import scalaz.stream.{io, Process}
 import scalaz.\/._
 import scalaz.concurrent.{Future, Task}
 import Task._
@@ -52,6 +52,19 @@ trait Processes {
   implicit class ProcessSeqSyntax[T](ps: Process[Task, Seq[T]]) {
     def flatten: Process[Task, T] =
       ps.flatMap(ts => Process.emitAll(ts).toSource)
+  }
+
+  /**
+   * additional operations for processes
+   */
+  implicit class processOps[T](ps: Process[Task, T]) {
+    def andFinally(t: Task[Unit]): Process[Task, T] = {
+      val sink: Sink[Task, T] =
+        io.resource(Task.now(()))(u => t)(
+          u => Task.now(u => Task.now(u)))
+
+      ps.observe(sink)
+    }
   }
 
   /** start an execution right away */

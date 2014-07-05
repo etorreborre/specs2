@@ -8,28 +8,14 @@ import control._
 import scala.concurrent.duration.Duration
 import java.util.concurrent._
 
-case class ExecutionEnv(arguments: Arguments,
-                        timeOut:  Option[Duration] = None,
-                        withoutIsolation: Boolean  = false,
-                        timer:    Timer            = new Timer) {
+case class ExecutionEnv(timeOut:  Option[Duration] = None,
+                        withoutIsolation: Boolean  = false) {
 
   /**
    * fragments must not be created as "isolated"
    */
-  def setWithoutIsolation = {
-    shutdown
+  def setWithoutIsolation =
     copy(withoutIsolation = true)
-  }
-
-  lazy val executor = {
-    timer.start
-    ExecutionEnv.executor(arguments.threadsNb)
-  }
-
-  def shutdown: Unit = {
-    try     executor.shutdownNow
-    finally timer.stop
-  }
 }
 
 object ExecutionEnv {

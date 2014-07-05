@@ -69,8 +69,7 @@ class MutableFragmentsDslSpec extends org.specs2.Specification { def is = s2"""
 
   def structure(dsl1: dsl) = {
     val env = Env()
-    try dsl1.specificationStructure(env)
-    finally env.shutdown
+    dsl1.specificationStructure(env)
   }
 
   trait dsl extends MutableFragmentBuilder with MutableFragmentsDsl

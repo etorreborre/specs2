@@ -23,7 +23,7 @@ class HelloWorldSpec extends Specification { def is = s2"""
 
 As you can see, a ***specs2*** software specification is nothing more than a Scala class extending `org.specs2.Specification` and declaring a special `is` method. This method contains some plain text describing what your application should do as well as some executable code specifying precisely what is expected.
 
-#### Execution
+## Execution
 
 And this is it! Now you can execute your specification with a [*runner*](org.specs2.guide.Runners.html#Presentation) and observe the results:
 
@@ -44,7 +44,7 @@ Finished in 0 second, 58 ms
 3 examples, 0 failure, 0 error
 ```
 
-#### Learn more!
+## Learn more!
 
 The rest of this ${see(UserGuide)} will show you how to:
 

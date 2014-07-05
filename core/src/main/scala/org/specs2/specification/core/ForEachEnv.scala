@@ -6,8 +6,7 @@ import org.specs2.specification.ForEach
 trait ForEachEnv extends ForEach[Env] {
   protected def foreach[R : AsResult](f: Env => R): Result = {
     val env = Env()
-    try AsResult(f(env))
-    finally env.shutdown
+    AsResult(f(env))
   }
 }
 

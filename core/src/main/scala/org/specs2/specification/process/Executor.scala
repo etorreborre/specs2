@@ -2,7 +2,9 @@ package org.specs2
 package specification
 package process
 
-import control.Timer
+import java.util.concurrent.ExecutorService
+
+import control.Timeout
 import data.Processes
 
 import scalaz.stream.Process.{Env =>_,_}
@@ -43,7 +45,7 @@ trait DefaultExecutor extends Executor {
    *  - sequence the execution so that only parts in between steps are executed concurrently
    */
   def execute(env: Env): Process[Task, Fragment] => Process[Task, Fragment] = { contents: Process[Task, Fragment] =>
-    (contents |> sequencedExecution(env)).sequence(Runtime.getRuntime.availableProcessors).flatMap(executeOnline(env))
+    (contents |> sequencedExecution(env)).sequence(Runtime.getRuntime.availableProcessors).flatMap(executeOnline(env)).andFinally(Task.delay(env.shutdown))
   }
 
   /** a Process1 to execute fragments as tasks */
@@ -84,10 +86,10 @@ trait DefaultExecutor extends Executor {
       lazy val executedFragment = executeFragment(env)(fragment)
       val executeNow = env.arguments.sequential || fragment.execution.mustJoin
 
-      val executingFragment = timedout(fragment, env.executionEnv.timer) {
+      val executingFragment = timedout(fragment, env.timeout) {
         if (mustStop)             Task.now(fragment.skip)
         else if (executeNow)      Task.now(executedFragment)
-        else                      start(executedFragment)(env.executionEnv.executor)
+        else                      start(executedFragment)(env.executorService)
       }(env.executionEnv.timeOut.getOrElse(fragment.execution.duration))
 
       // if this fragment is a join point, start a new sequence
@@ -124,7 +126,7 @@ trait DefaultExecutor extends Executor {
   }
 
   /** use the scalaz implementation of Timer to timeout the task */
-  def timedout(fragment: Fragment, timer: Timer)(task: Task[Fragment])(duration: Duration): Task[Fragment] = {
+  def timedout(fragment: Fragment, timer: Timeout)(task: Task[Fragment])(duration: Duration): Task[Fragment] = {
     new Task(timer.withTimeout(task.get, duration.toMillis).map {
       case -\/(t)  => \/-(fragment.setExecution(fragment.execution.setResult(Skipped("timeout after "+duration))))
       case \/-(r)  => r
@@ -136,18 +138,17 @@ trait DefaultExecutor extends Executor {
  * helper functions for executing fragments
  */
 object DefaultExecutor extends DefaultExecutor {
+
   def executeSpec(spec: SpecStructure, env: Env): SpecStructure =
-    spec.|>((contents: Process[Task, Fragment]) => (contents |> sequencedExecution(env)).sequence(Runtime.getRuntime.availableProcessors))
+    spec.|>((contents: Process[Task, Fragment]) => (contents |> sequencedExecution(env)).sequence(Runtime.getRuntime.availableProcessors).andFinally(Task.delay(env.shutdown)))
 
   def runSpec(spec: SpecStructure, env: Env) =
-    try executeSpec(spec, env).contents.runLog.run
-    finally env.shutdown
+    executeSpec(spec, env).contents.runLog.run
 
   def runSpecification(spec: Specification) = {
     lazy val structure = spec.structure(Env())
     val env = Env(arguments = structure.arguments)
-    try runSpec(structure, env)
-    finally env.shutdown
+    runSpec(structure, env)
   }
 
   /** only to be used in tests */
@@ -155,17 +156,13 @@ object DefaultExecutor extends DefaultExecutor {
   def execute(f: Fragment)(implicit env: Env = Env()) = executeAll(f)(env).head
 
   /** only to be used in tests */
-  def executeSeq(seq: Seq[Fragment])(implicit env: Env = Env()): IndexedSeq[Fragment] = {
+  def executeSeq(seq: Seq[Fragment])(implicit env: Env = Env()): IndexedSeq[Fragment] =
     try { (Process(seq:_*).toSource |> executeTasks(env)).sequence(Runtime.getRuntime.availableProcessors).runLog.run }
     finally env.shutdown
-  }
 
   /** synchronous execution */
-  def executeFragments1 = {
-    val env = Env()
-    try process1.lift(executeFragment(env))
-    finally env.shutdown
-  }
+  def executeFragments1 =
+    process1.lift(executeFragment(Env()))
 
   /** synchronous execution with a specific environment */
   def executeFragments1(env: Env) = process1.lift(executeFragment(env))
