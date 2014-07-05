@@ -27,7 +27,7 @@ trait FormDsl extends FragmentsDsl with FormFragmentsFactory {
   }
 
   implicit class appendFormToArguments(args: Arguments) extends appendToArguments(args) {
-    def ^(form: =>Form)                                          : SpecStructure = appendToArguments(args) ^ factory.FormFragment(form)
+    def ^(form: =>Form)(implicit p1: ImplicitParam1)             : SpecStructure = appendToArguments(args) ^ factory.FormFragment(form)
     def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): SpecStructure = appendToArguments(args) ^ factory.FormFragment(aForm)(p)
   }
 

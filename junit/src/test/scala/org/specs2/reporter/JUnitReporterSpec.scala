@@ -111,7 +111,7 @@ class JUnitReporterSpec extends Specification with Mockito with ForEachEnv {  de
     }
 
     def run(f: Fragment)(env: Env): Unit = run(Fragments(f))(env)
-    def run(fs: Fragments)(env: Env): Unit = run(SpecStructure(SpecHeader(getClass), Arguments(), fs))(env)
+    def run(fs: Fragments)(env: Env): Unit = run(SpecStructure.create(SpecHeader(getClass), Arguments(), fs))(env)
     
     def run(spec: SpecStructure)(env: Env): Unit = {
       val reporter = Reporter
