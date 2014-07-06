@@ -37,9 +37,9 @@ class SbtPrinterSpec extends Specification with ForEachEnv { def is = s2"""
 
   case class printer2() extends Mockito { outer =>
 
-    def e1 = { env: Env =>
+    def e1 = { 
       val hwSpec: org.specs2.Specification = new examples.HelloWorldSpec
-      val executed = DefaultExecutor.executeSpec(hwSpec.is, env)
+      val executed = DefaultExecutor.executeSpec(hwSpec.is, Env())
 
       print(executed).replaceAll("\\d+ ms", "0 ms").replaceAll(" ", "_") ===
       """|HelloWorldSpec

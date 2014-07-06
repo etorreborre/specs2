@@ -45,7 +45,16 @@ trait DefaultExecutor extends Executor {
    *  - sequence the execution so that only parts in between steps are executed concurrently
    */
   def execute(env: Env): Process[Task, Fragment] => Process[Task, Fragment] = { contents: Process[Task, Fragment] =>
-    (contents |> sequencedExecution(env)).sequence(Runtime.getRuntime.availableProcessors).flatMap(executeOnline(env)).andFinally(Task.delay(env.shutdown))
+    execute1(env)(contents).andFinally(Task.delay(env.shutdown))
+  }
+
+  /**
+   * execute fragments possibly with a recursive call to execute1.
+   *
+   * The difference with `execute` is that `executes` shuts down the environment when the process is finished
+   */
+  def execute1(env: Env): Process[Task, Fragment] => Process[Task, Fragment] = { contents: Process[Task, Fragment] =>
+    (contents |> sequencedExecution(env)).sequence(Runtime.getRuntime.availableProcessors).flatMap(executeOnline(env))
   }
 
   /** a Process1 to execute fragments as tasks */
@@ -118,7 +127,7 @@ trait DefaultExecutor extends Executor {
     fragment.execution.continuation match {
       case Some(continue) =>
         continue(fragment.executionResult).cata(
-          fs => Process(fragment).toSource fby execute(env)(fs.contents),
+          fs => Process(fragment).toSource fby execute1(env)(fs.contents),
           Process(fragment).toSource)
 
       case None => Process(fragment).toSource

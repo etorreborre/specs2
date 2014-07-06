@@ -37,7 +37,6 @@ class AnyMatchersSpec extends script.Specification with Groups with ResultMatche
      {{ result = result + "a" }; 1} must_== {{ result = result + "b" }; 1}
      result must_== "ab"
    }
-
   beTheSameAs checks if a value is eq to another one
   ${ aValue must beTheSameAs(aValue) }
   ${ "a" must not beTheSameAs("b") }
