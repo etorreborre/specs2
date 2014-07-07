@@ -1,0 +1,15 @@
+Maintenance version
+
+## Fixes
+
+ * defaulting to displaying the full class name of a class if the simple class name doesn't work (in the console sometimes)
+ * copy system properties in an immutable map to avoid CMEs [#264](http://github.com/etorreborre/specs2/issues/264)
+ * avoid NPE when an exception with no message is caught on class instantiation [#265](http://github.com/etorreborre/specs2/issues/265)
+ * fixed the `.await` method for future matchers and failed futures [#269](http://github.com/etorreborre/specs2/issues/269)
+ * output the full class name of a class in the junitxml path [#273](http://github.com/etorreborre/specs2/issues/273)
+ * fixed the `inOrder` matcher for the `allOf` container matcher
+ * deal with duplicated lines in `haveSameLinesAs` [#276](http://github.com/etorreborre/specs2/issues/276)
+ * added back a missing conversion method for `AsResult` instances This allows to write `List(1 must_== 1, 1 must_== 1)`
+
+ ==========================
+
