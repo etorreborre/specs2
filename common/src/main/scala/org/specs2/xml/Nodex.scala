@@ -6,7 +6,6 @@ import scala.xml._
 /**
  * Extension methods for NodeSeqs and Nodes
  */
-private[specs2]
 trait Nodex { outer =>
   /**
    * This class adds more methods to the NodeSeq class
@@ -52,7 +51,7 @@ trait Nodex { outer =>
    * this implicit definition adds an 'unless' method to a NodeSeq so that it is only evaluated if a condition is true.
    * Otherwise NodeSeq.Empty is returned
    */
-  implicit class unless(ns: =>NodeSeq) {
+  implicit class extendNodeSeqOps(ns: =>NodeSeq) {
     def unless(b: Boolean) = if (b) NodeSeq.Empty else ns
   }
 

@@ -1,7 +1,7 @@
 package org.specs2
 package reporter
 
-import scalaz.Scalaz._
+import scalaz.syntax.id._
 import scala.xml._
 import xml.Nodex._
 import specification.{Example, ExecutedResult, Stats, SpecName}
