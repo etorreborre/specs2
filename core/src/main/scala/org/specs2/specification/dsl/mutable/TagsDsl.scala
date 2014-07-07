@@ -16,7 +16,7 @@ trait TagsDsl extends FragmentsDsl with MutableFragmentBuilder { outer =>
    * This implicit allows to add tags and sections _after_ the examples
    */
   implicit class FragmentTaggedAs(f: =>Fragment) {
-    def tag(tag: NamedTag)     = { outer.tag(names); f }
+    def tag(tag: NamedTag)     = { outer.tag(tag); f }
     def section(tag: NamedTag) = { outer.tag(tag); f }
   }
 
@@ -24,7 +24,7 @@ trait TagsDsl extends FragmentsDsl with MutableFragmentBuilder { outer =>
    * This implicit allows to add tags and sections _after_ the examples
    */
   implicit class FragmentsTaggedAs(fs: =>Fragments) {
-    def tag(tag: NamedTag)     = { outer.tag(names); fs }
+    def tag(tag: NamedTag)     = { outer.tag(tag); fs }
     def section(tag: NamedTag) = { outer.section(tag); fs }
   }
 
