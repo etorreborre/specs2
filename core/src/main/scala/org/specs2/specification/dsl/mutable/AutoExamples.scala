@@ -8,6 +8,6 @@ import org.specs2.specification.core.{Fragments, Fragment}
 
 trait AutoExamples extends create.AutoExamples with FragmentBuilder {
   override def createExample[T](expression: String, code: =>T, asResult: AsResult[T]): Fragments =
-    Fragments(super.createExample(expression, code, asResult).fragments.map(addFragment):_*)
+    Fragments(super.createExample(expression, code, asResult).append(fragmentFactory.break).fragments.map(addFragment):_*)
 
 }

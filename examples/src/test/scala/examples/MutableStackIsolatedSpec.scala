@@ -14,14 +14,14 @@ import org.specs2.specification.AllExpectations
 class MutableStackIsolatedSpec extends Specification { isolated
   "A Stack with limited capacity can either be:".p
 
-  "1. Empty".br
+  "1. Empty".p
   "when the stack is empty".br
   step { stack = emptyStack }
   eg { stack must beEmpty }
   eg { stack.top must throwA[NoSuchElementException] }
   eg { stack.pop must throwA[NoSuchElementException] }; p
 
-  "2. Non-empty and not full".br
+  "2. Non-empty and not full".p
   "when the stack is not empty and not full".br
   step { stack = normalStack }
   eg { stack must not be empty }
@@ -29,7 +29,7 @@ class MutableStackIsolatedSpec extends Specification { isolated
   eg { stack.pop === normalStack.top; stack !== normalStack }
   eg { stack push 1; stack.top === 1; stack !== normalStack }; p
 
-  "3. Full".br
+  "3. Full".p
   "when the stack is full".br
   step { stack = fullStack }
   eg { (stack push 1) must throwAn[Error] }

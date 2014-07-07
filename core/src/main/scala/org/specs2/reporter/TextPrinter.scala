@@ -174,7 +174,7 @@ trait TextPrinter extends Printer {
 
 
   def statusAndDescription(text: String, result: Result)(args: Arguments) = {
-    val textLines = text.split("\n", -1)
+    val textLines = text.trimEnclosing("`").trimEnclosing("```").split("\n", -1)
     val firstLine = textLines.headOption.getOrElse("")
     val indentation = firstLine.takeWhile(_ == ' ').drop(2)
 

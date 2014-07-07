@@ -15,8 +15,7 @@ trait AutoExamples extends FragmentsFactory {
   implicit def eg[T : AsResult](code: =>T): Fragments = macro AutoExamples.create[T]
 
   def createExample[T](expression: String, code: =>T, asResult: AsResult[T]): Fragments =
-    Fragments(fragmentFactory.example(Description.code(trimExpression(expression)), code)(asResult),
-              fragmentFactory.break)
+    Fragments(fragmentFactory.example(Description.code(trimExpression(expression)), code)(asResult))
 
   private[specs2] def trimExpression(call: String) = {
     call.
