@@ -1,7 +1,8 @@
 package org.specs2
 package mock
 
-import org.specs2.specification.core.Fragment
+import org.specs2.specification.core.{Env, Fragment}
+import org.specs2.specification.process.DefaultExecutor
 import specification._
 import control.Exceptions._
 import org.hamcrest.core.IsNull
@@ -118,6 +119,9 @@ STUBS
 
  + A parameter can be captured in order to check its value
  + A parameter can be captured in order to check its successive values
+
+ OTHER CONTEXTS
+ ==============
 
  The Mockito trait is reusable in other contexts
    + in mutable specs
@@ -407,15 +411,15 @@ STUBS
     val list = mockAs[java.util.List[String]]("list")
 
     eg := {
-      list.get(anyInt) answers { i => "The parameter is " + i.toString }
+      list.get(anyInt) answers { i => "The parameter is " + i.toString}
       list.get(2) must_== "The parameter is 2"
     }
     eg := {
-      list.get(anyInt) answers { (i, m) => "The parameters are " + (i.asInstanceOf[Array[_]].mkString -> m) }
+      list.get(anyInt) answers { (i, m) => "The parameters are " + (i.asInstanceOf[Array[_]].mkString -> m)}
       list.get(1) must_== "The parameters are (1,list)"
     }
     eg := {
-      list.size answers { m => m.toString.size }
+      list.size answers { m => m.toString.size}
       list.size must_== 4
     }
     eg := {
@@ -433,7 +437,9 @@ STUBS
       c.values.toString === "[1, 2]"
     }
     implicit val args = main.Arguments()
+  }
 
+  "other contexts" - new group {
     eg := {
       val s = new org.specs2.mutable.Specification with Mockito {
         val list = mock[java.util.List[String]]
@@ -443,7 +449,7 @@ STUBS
           1 must_== 1 // to check if the previous expectation really fails
         }
       }
-      s.is.fragments.fragments.filter(Fragment.isExample).map(_.executionResult.isSuccess) must contain (false)
+      DefaultExecutor.runSpec(s.is, Env()).filter(Fragment.isExample).map(_.executionResult.isSuccess) must contain (false)
     }
 
     eg := {
@@ -455,7 +461,7 @@ STUBS
           there was one(list2).add("two") andThen one(list1).add("one")
         }
       }
-      s.is.fragments.fragments.filter(Fragment.isExample).map(_.executionResult.isSuccess) must contain (false)
+      DefaultExecutor.runSpec(s.is, Env()).filter(Fragment.isExample).map(_.executionResult.isSuccess) must contain (false)
     }
 
   }
