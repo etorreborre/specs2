@@ -22,21 +22,21 @@ class StepParsersSpec extends Specification with GWT with Grouped { def is = "St
                                                                                          """
 
   "{} delimiters" - new g1 {
-   e1 := StepParser((_:String).toInt).parse("a value {1}") === Right(1)
-   e2 := StepParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("2 values {1} and {2}") === Right((1, 2))
-   e3 := StepParser.seq((seq: Seq[String]) => seq.map(_.toInt).sum).parse("values {1}, {2}, {3}") === Right(6)
-   e4 := StepParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("3 values {1} and {2} and {3}") === Right((1, 2))
+   e1 := StepParser((_:String).toInt).parse("a value {1}") === Right(("a value 1", 1))
+   e2 := StepParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("2 values {1} and {2}") === Right(("2 values 1 and 2", (1, 2)))
+   e3 := StepParser.seq((seq: Seq[String]) => seq.map(_.toInt).sum).parse("values {1}, {2}, {3}") === Right(("values 1, 2, 3", 6))
+   e4 := StepParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("3 values {1} and {2} and {3}") === Right(("3 values 1 and 2 and 3", (1, 2)))
    e5 := StepParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("1 value {1}") must beLeft
   }
 
   "[] delimiters" - new g2 {
-    e1 := StepParser((_:String).toInt).withRegex("""\[([^\]]+)\]""".r).parse("a value [1]") === Right(1)
+    e1 := StepParser((_:String).toInt).withRegex("""\[([^\]]+)\]""".r).parse("a value [1]") === Right(("a value 1", 1))
 
-    e2 := StepParser((s: String) => s).withRegex("""\[([^\]]+)\]""".r).parse("a value [{1}]") === Right("{1}")
+    e2 := StepParser((s: String) => s).withRegex("""\[([^\]]+)\]""".r).parse("a value [{1}]") === Right(("a value {1}", "{1}"))
 
     e3 := {
       implicit val stepParserRegex = """\[([^\]]+)\]""".r
-      StepParser((_:String).toInt).parse("a value [1]") === Right(1)
+      StepParser((_:String).toInt).parse("a value [1]") === Right(("a value 1", 1))
     }
   }
 
