@@ -102,6 +102,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
    */
   private def handleRunError(e: String \&/ Throwable, loggers: Array[Logger], events: SbtEvents) {
     val logger = SbtLineLogger(loggers)
+
     def logThrowable(t: Throwable) {
       logger.errorLine(t.getMessage+"\n")
       (t :: t.chainedExceptions) foreach { s =>

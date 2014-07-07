@@ -237,39 +237,6 @@ trait Results {
 object Results extends Results
 
 /**
- * Typeclass trait for anything that can be transformed to a Result
- */
-trait AsResult[T] {
-  def asResult(t: =>T): Result
-}
-
-object AsResult {
-  /** implicit typeclass instance to create examples from Booleans */
-  implicit def booleanAsResult: AsResult[Boolean] = new AsResult[Boolean] {
-    def asResult(t: =>Boolean): Result = Results.toResult(t)
-  }
-
-  /** nicer syntax to use the AsResult syntax: AsResult(r) */
-  def apply[R : AsResult](r: =>R): Result = implicitly[AsResult[R]].asResult(r)
-
-  /** @return a Result but throw exceptions if it is not a success */
-  def effectively[R : AsResult](r: =>R): Result = ResultExecution.effectively(AsResult(r))
-}
-
-/**
- * Type class to transform any value to a Result
- */
-class AnyValueAsResult[T] extends AsResult[T] {
-  def asResult(t: =>T) = {
-    executeEither(t)(_.toString) match {
-      case Left(e)  => new DecoratedResult((), e)
-      case Right(v) => new DecoratedResult(v, Success())
-    }
-  }
-}
-
-
-/**
  * This class represents the success of an execution
  */
 case class Success(m: String = "", exp: String = "")  extends Result(m, exp) {

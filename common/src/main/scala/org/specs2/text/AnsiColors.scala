@@ -1,6 +1,8 @@
 package org.specs2
 package text
 
+import NotNullStrings._
+
 /**
  * This trait provides AnsiColors codes for the OutputReporter
  * @see http://en.wikipedia.org/wiki/ANSI_escape_code
@@ -21,8 +23,8 @@ trait AnsiColors {
 
   /** @return a string with no color codes */
   def removeColors(s: String, doIt: Boolean = true): String = {
-    if (doIt) all.foldLeft (s) { (res, cur) => res.replace(cur, "") }
-    else      s
+    if (doIt) all.foldLeft (s.notNull) { (res, cur) => res.replace(cur, "") }
+    else      s.notNull
   }
 
   /**

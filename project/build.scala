@@ -213,7 +213,7 @@ object build extends Build {
     initialCommands in console in test := "import org.specs2._",
     logBuffered := false,
     cancelable := true,
-    javaOptions += "-Xmx3G",
+    javaOptions ++= Seq("-Xmx3G", "-Xss4M"),
     fork in test := true,
     testOptions := Seq(Tests.Filter(s => Seq(".guide.").exists(s.contains) || Seq("Spec", "Guide", "Index").exists(s.endsWith) && Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))
   ) ++ instrumentSettings ++ Seq(

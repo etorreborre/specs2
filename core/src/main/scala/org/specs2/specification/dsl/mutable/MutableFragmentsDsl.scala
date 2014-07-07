@@ -12,4 +12,5 @@ trait MutableFragmentsDsl extends
   with TitleDsl
   with ArgumentsDsl
   with LinkDsl
+  with TagsDsl
 

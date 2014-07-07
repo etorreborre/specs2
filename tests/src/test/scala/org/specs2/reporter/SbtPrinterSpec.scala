@@ -29,15 +29,15 @@ class SbtPrinterSpec extends Specification with ForEachEnv { def is = s2"""
       }
     }
 
-    def e1 = { env: Env =>
-      printer.print(env)(SpecStructure.create(SpecHeader(classOf[HelloWorldSpec]), Fragments(text("\ntitle"), text("\ntext")))).run
+    def e1 = {
+      printer.print(Env())(SpecStructure.create(SpecHeader(classOf[HelloWorldSpec]), Fragments(text("\ntitle"), text("\ntext")))).run
       there was one(logger).info(beMatching("HelloWorldSpec\ntitle\ntext"))
     }
   }
 
   case class printer2() extends Mockito { outer =>
 
-    def e1 = { 
+    def e1 = {
       val hwSpec: org.specs2.Specification = new examples.HelloWorldSpec
       val executed = DefaultExecutor.executeSpec(hwSpec.is, Env())
 

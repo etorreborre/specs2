@@ -45,7 +45,7 @@ trait DefaultExecutor extends Executor {
    *  - sequence the execution so that only parts in between steps are executed concurrently
    */
   def execute(env: Env): Process[Task, Fragment] => Process[Task, Fragment] = { contents: Process[Task, Fragment] =>
-    execute1(env)(contents).andFinally(Task.delay(env.shutdown))
+     execute1(env)(contents).andFinally(Task.delay(env.shutdown))
   }
 
   /**
@@ -151,7 +151,7 @@ object DefaultExecutor extends DefaultExecutor {
   def executeSpec(spec: SpecStructure, env: Env): SpecStructure =
     spec.|>((contents: Process[Task, Fragment]) => (contents |> sequencedExecution(env)).sequence(Runtime.getRuntime.availableProcessors).andFinally(Task.delay(env.shutdown)))
 
-  def runSpec(spec: SpecStructure, env: Env) =
+  def runSpec(spec: SpecStructure, env: Env): IndexedSeq[Fragment] =
     executeSpec(spec, env).contents.runLog.run
 
   def runSpecification(spec: Specification) = {
