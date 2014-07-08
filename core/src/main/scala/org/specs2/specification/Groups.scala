@@ -1,7 +1,12 @@
 package org.specs2
 package specification
 
+import java.util.concurrent.ExecutorService
+
 import execute._
+import org.specs2.control.ImplicitParameters.ImplicitParam
+import org.specs2.specification.core.{Env, Location, Fragments, Execution}
+import org.specs2.specification.create.{S2StringContext, InterpolatedFragment}
 
 /**
  * This trait can be used to standardize names for groups of examples in an acceptance specification.
@@ -52,7 +57,7 @@ import execute._
  * }
 
  */
-trait Groups extends GroupsLike { outer =>
+trait Groups extends GroupsLike { outer: S2StringContext =>
   def createExamplesGroup(i: Int): ExamplesGroup = {
     if (autoNumberedGroups.nonEmpty) autoNumberedGroups.applyOrElse(i, (n: Int) => g1)()
     else                             numberedExampleGroups.applyOrElse(i, (n: Int) => g1)()
@@ -210,7 +215,7 @@ trait Groups extends GroupsLike { outer =>
  *   }
  * }
  */
-trait Grouped extends GroupsLike { outer =>
+trait Grouped extends GroupsLike { outer: S2StringContext =>
   def createExamplesGroup(i: Int): ExamplesGroup = {
     if (autoNumberedGroups.nonEmpty) autoNumberedGroups.applyOrElse(i, (n: Int) => g1)
     else                             numberedExampleGroups.applyOrElse(i, (n: Int) => g1)
@@ -281,20 +286,32 @@ trait Grouped extends GroupsLike { outer =>
   private var autoNumberedGroups: Seq[ExamplesGroup] = Seq()
 }
 
-trait GroupsLike {
+trait GroupsLike { this: S2StringContext =>
   trait AutoNumberedGroup extends ExamplesGroup {
-    private var autoNumberedExamples: Seq[Function0Result] = Seq()
+    private var autoNumberedExamples: Seq[ExecutionVar] = Seq()
 
     override def createExample(i: Int) =
-      if (autoNumberedExamples.nonEmpty) autoNumberedExamples.applyOrElse(i, (index:Int) => Function0Result.anyToAnyResult(new execute.Pending(s" - PENDING ")))
+      if (autoNumberedExamples.nonEmpty) autoNumberedExamples.applyOrElse(i, (index:Int) => new ExecutionVar())
       else                               numberedExamples(i)
 
     def eg = this
 
     def :=[R: AsResult](r: =>R) {
-      autoNumberedExamples = autoNumberedExamples :+ Function0Result.anyToAnyResult(r)
+      autoNumberedExamples = autoNumberedExamples :+ ExecutionVar.result(r)
+    }
+
+    def :=[R : AsResult](f: Env => R) {
+      autoNumberedExamples = autoNumberedExamples :+ ExecutionVar.withEnv(f)
+    }
+
+    def :=[R](f: ExecutorService => R)(implicit p: ImplicitParam, asResult: AsResult[R]) {
+      autoNumberedExamples = autoNumberedExamples :+ ExecutionVar.withExecutorService(f)
     }
   }
+
+  implicit def executionVarIsInterpolatedFragment(executionVar: =>ExecutionVar): InterpolatedFragment =
+    executionIsInterpolatedFragment(executionVar.execution())
+
   trait group extends AutoNumberedGroup
 
   def createExamplesGroup(i: Int): ExamplesGroup
@@ -305,30 +322,53 @@ case class ExamplesGroup(private var name: String = "") {
 
   def nameIs(n: String) = { name = s"'$n'"; this }
 
-  val e1:  Function0Result = new execute.Pending(s" - PENDING")
-  val e2:  Function0Result = new execute.Pending(s" - PENDING")
-  val e3:  Function0Result = new execute.Pending(s" - PENDING")
-  val e4:  Function0Result = new execute.Pending(s" - PENDING")
-  val e5:  Function0Result = new execute.Pending(s" - PENDING")
-  val e6:  Function0Result = new execute.Pending(s" - PENDING")
-  val e7:  Function0Result = new execute.Pending(s" - PENDING")
-  val e8:  Function0Result = new execute.Pending(s" - PENDING")
-  val e9:  Function0Result = new execute.Pending(s" - PENDING")
-  val e10: Function0Result = new execute.Pending(s" - PENDING")
-  val e11: Function0Result = new execute.Pending(s" - PENDING")
-  val e12: Function0Result = new execute.Pending(s" - PENDING")
-  val e13: Function0Result = new execute.Pending(s" - PENDING")
-  val e14: Function0Result = new execute.Pending(s" - PENDING")
-  val e15: Function0Result = new execute.Pending(s" - PENDING")
-  val e16: Function0Result = new execute.Pending(s" - PENDING")
-  val e17: Function0Result = new execute.Pending(s" - PENDING")
-  val e18: Function0Result = new execute.Pending(s" - PENDING")
-  val e19: Function0Result = new execute.Pending(s" - PENDING")
-  val e20: Function0Result = new execute.Pending(s" - PENDING")
-  val e21: Function0Result = new execute.Pending(s" - PENDING")
-  val e22: Function0Result = new execute.Pending(s" - PENDING")
+  val e1:  ExecutionVar = new ExecutionVar()
+  val e2:  ExecutionVar = new ExecutionVar()
+  val e3:  ExecutionVar = new ExecutionVar()
+  val e4:  ExecutionVar = new ExecutionVar()
+  val e5:  ExecutionVar = new ExecutionVar()
+  val e6:  ExecutionVar = new ExecutionVar()
+  val e7:  ExecutionVar = new ExecutionVar()
+  val e8:  ExecutionVar = new ExecutionVar()
+  val e9:  ExecutionVar = new ExecutionVar()
+  val e10: ExecutionVar = new ExecutionVar()
+  val e11: ExecutionVar = new ExecutionVar()
+  val e12: ExecutionVar = new ExecutionVar()
+  val e13: ExecutionVar = new ExecutionVar()
+  val e14: ExecutionVar = new ExecutionVar()
+  val e15: ExecutionVar = new ExecutionVar()
+  val e16: ExecutionVar = new ExecutionVar()
+  val e17: ExecutionVar = new ExecutionVar()
+  val e18: ExecutionVar = new ExecutionVar()
+  val e19: ExecutionVar = new ExecutionVar()
+  val e20: ExecutionVar = new ExecutionVar()
+  val e21: ExecutionVar = new ExecutionVar()
+  val e22: ExecutionVar = new ExecutionVar()
 
   protected lazy val numberedExamples = Seq(e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11,e12,e13,e14,e15,e16,e17,e18,e19,e20,e21,e22)
 
   def createExample(i: Int) = numberedExamples(i)
+}
+
+class ExecutionVar(var execution: () => Execution = () => Execution.result(new execute.Pending(s" - PENDING"))) {
+  def :=[T : AsResult](t: =>T) = {
+    execution = () => Execution.result(t)
+    this
+  }
+
+  def :=(other: ExecutionVar) = {
+    execution = () => other.execution()
+    this
+  }
+}
+object ExecutionVar {
+  def result[R : AsResult](r: =>R) =
+    new ExecutionVar := r
+  
+  def withEnv[R : AsResult](f: Env => R) =
+    new ExecutionVar(() => Execution.withEnv(f))
+
+  def withExecutorService[R : AsResult](f: ExecutorService => R) =
+    new ExecutionVar(() => Execution.withExecutorService(f))
+
 }

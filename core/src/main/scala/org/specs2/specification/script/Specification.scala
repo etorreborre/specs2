@@ -87,7 +87,7 @@ case class GroupsScript(title: String = "groups", isStart: Boolean = true, group
   }
 
   private def exampleName(i: Int, j: Int) = s"g${i+1}.e${j+1}"
-  private def createExample(line: String, i: Int, j: Int) = factory.example(line, group(i).createExample(j).t().mapMessage(_ + " - " + exampleName(i, j)))
+  private def createExample(line: String, i: Int, j: Int) = factory.example(line, group(i).createExample(j).execution().mapMessage(_ + " - " + exampleName(i, j)))
   private def indentation(line: String) = factory.text(line.takeWhile(_ == ' ').mkString)
 
   def start = this

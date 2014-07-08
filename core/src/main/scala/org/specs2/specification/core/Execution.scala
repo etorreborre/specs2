@@ -2,6 +2,8 @@ package org.specs2
 package specification
 package core
 
+import java.util.concurrent.ExecutorService
+
 import execute._
 import scala.concurrent.duration._
 import scalaz.Show
@@ -42,6 +44,12 @@ case class Execution(run:            Option[Env => Result],
   def setExecutionTime(timer: SimpleTimer) = copy(executionTime = timer)
   def time = executionTime.time
 
+  def mapResult(f: Result => Result) =
+    updateRun(run => (env: Env) => f(run(env)))
+
+  def mapMessage(f: String => String) =
+    mapResult(_.mapMessage(f))
+
   override def toString =
     "Execution("+
       (if (run.isDefined) "executable" else "no run")+
@@ -67,6 +75,8 @@ object Execution {
 
   def result[T : AsResult](r: =>T)       = withEnv(_ => AsResult(r))
   def withEnv[T : AsResult](f: Env => T) = Execution(Some((env: Env) => AsResult(f(env))))
+  def withExecutorService[T : AsResult](f: ExecutorService => T) =
+    withEnv((env: Env) => f(env.executorService))
 
   def executed[T : AsResult](r: T): Execution = {
     lazy val asResult = AsResult(r)

@@ -4,6 +4,7 @@ package script
 
 import main.Arguments
 import org.specs2.runner.TextRunner
+import org.specs2.specification.create.{S2StringContext, FragmentsFactory}
 
 class SpecificationSpec extends script.Specification with Grouped { def is = s2"""
 
@@ -74,12 +75,12 @@ class SpecificationSpec extends script.Specification with Grouped { def is = s2"
       new script.Specification with Grouped { outer =>
         def is = arguments ^ nocolor ^ s2"""$text1"""
         (0 until groups.size) foreach { i =>
-          (0 until 22).foreach(j => outer.createExamplesGroup(i).createExample(j) := groups(i).createExample(j).t())
+          (0 until 22).foreach(j => outer.createExamplesGroup(i).createExample(j) := groups(i).createExample(j))
         }
       }
     }.messages
 
-  trait sampleGroups extends Groups {
+  trait sampleGroups extends Groups with S2StringContext with FragmentsFactory {
     val (g1ok, g2ok) = (new g1 { e1 := ok; e2 := ok }, new g2 { e1 := ok; e2 := ok })
   }
 
