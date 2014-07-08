@@ -48,7 +48,7 @@ case class Env(arguments: Arguments           = Arguments(),
   lazy val selector = selectorInstance(arguments)
   lazy val executor = executorInstance(arguments)
 
-  lazy val executorService = ExecutionEnv.executor(arguments.threadsNb)
+  lazy val executorService = ExecutionEnv.executor(arguments.threadsNb, "env"+hashCode.toString)
   lazy val timeout = (new Timeout).start
 
   def shutdown: Unit = {

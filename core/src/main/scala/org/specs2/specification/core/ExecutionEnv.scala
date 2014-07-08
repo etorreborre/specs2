@@ -19,8 +19,8 @@ case class ExecutionEnv(timeOut:  Option[Duration] = None,
 }
 
 object ExecutionEnv {
-  def defaultExecutor = executor(Runtime.getRuntime.availableProcessors)
-  def executor(threadsNb: Int) = Executors.newFixedThreadPool(threadsNb, new NamedThreadFactory("specs2.DefaultExecutionStrategy"))
+  def defaultExecutor = executor(Runtime.getRuntime.availableProcessors, "DefaultExecutionStrategy")
+  def executor(threadsNb: Int, name: String) = Executors.newFixedThreadPool(threadsNb, new NamedThreadFactory("specs2."+name))
 }
 
 

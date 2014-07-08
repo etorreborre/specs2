@@ -53,14 +53,14 @@ class TerminationMatchersSpec extends script.Specification with TerminationMatch
 
     eg := {
       val env = Env()
-      implicit val strategy: Strategy = Strategy.Executor(env.executorService)
 
       val queue1 = new ArrayBlockingQueue[Int](1)
       var stop = true
-      def action1() = Promise { while (stop) { Thread.sleep(10)}; queue1.add(1) }.get
-      def action2() = Promise { stop = false }.get
+      def action1() = scalaz.concurrent.Future({ while (stop) { Thread.sleep(10)}; queue1.add(1) })(env.executorService).run
+      def action2() = scalaz.concurrent.Future({ stop = false })(env.executorService).run
 
-      action1() must terminate.onlyWhen(action2())
+      try action1() must terminate.onlyWhen(action2())
+      finally env.shutdown
     }
 
     eg := {

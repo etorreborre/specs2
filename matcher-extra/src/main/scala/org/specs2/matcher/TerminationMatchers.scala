@@ -1,11 +1,12 @@
 package org.specs2
 package matcher
 
+import org.specs2.specification.core.Env
 import time._
 import scala.concurrent.duration._
 import scalaz._
 import Scalaz._
-import concurrent.Promise
+import scalaz.concurrent.{Strategy, Promise}
 import Promise._
 
 /**
@@ -28,8 +29,11 @@ trait TerminationBaseMatchers {
 }
 
 class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[() => Any] = None, whenDesc: Option[String] = None, onlyWhen: Boolean = false) extends Matcher[T] {
+  // for the execution environment
+  private val env = Env()
+
   def apply[S <: T](a: Expectable[S]) =
-    retry(retries, retries, sleep, a, promise(a.value))
+    retry(retries, retries, sleep, a, createPromise(a.value))
 
   def retry[S <: T](originalRetries: Int, retries: Int, sleep: Duration, a: Expectable[S], promise: Promise[S], whenActionExecuted: Boolean = false): MatchResult[S] = {
 
@@ -37,8 +41,16 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
     val parameters = "with retries="+originalRetries+" and sleep="+sleep.toMillis
     val evenWhenAction = whenDesc.fold("")(w => " even when " + w)
     val onlyWhenAction = whenDesc.getOrElse("the second action")
-    def terminates = result(true, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a)
-    def blocks     = { promise.break; result(false, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a) }
+
+    def terminates =
+      try result(true, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a)
+      finally env.shutdown
+
+    def blocks     = {
+      promise.break
+      try result(false, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a)
+      finally env.shutdown
+    }
 
     if (whenAction.isDefined) {
       if (fulfilled) {
@@ -72,6 +84,12 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
         }
       }
     }
+
+  }
+
+  private def createPromise[A](a: =>A): Promise[A] = {
+    implicit val strategy: Strategy = Strategy.Executor(env.executorService)
+    promise(a)(strategy)
   }
 
   private def withAWhenAction[S](whenAction: Option[() => S], whenDesc: =>Option[String], onlyWhen: Boolean) =
