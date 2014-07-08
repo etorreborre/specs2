@@ -1,6 +1,7 @@
 package org.specs2
 package matcher
 
+import org.specs2.specification.process.DefaultExecutor
 import specification._
 import java.util.Arrays._
 import scala.collection.parallel.ParSeq
@@ -205,7 +206,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Gro
           Seq(1) must not contain(1)
         }
       }
-      pending //FragmentExecution.executeExamples(spec.content)(args()).head.result must beFailing
+      DefaultExecutor.runSpecification(spec).map(_.executionResult).reduce(_ and _) must beFailing
     }
   }
 
