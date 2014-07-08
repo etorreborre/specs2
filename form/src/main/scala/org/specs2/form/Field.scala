@@ -81,6 +81,6 @@ case object Field {
 
   /** create a Field with a label and other fields values, concatenated as strings */
   def apply(label: String, separator: String, value1: Field[_], values: Field[_]*): Field[String] =
-    Field(label, if (values.isEmpty) value1.toString else (value1 :: values.toList).mkString(separator))
+    Field(label, if (values.isEmpty) value1.toString else (value1 :: values.toList).map(_.value).mkString(separator))
 }
 
