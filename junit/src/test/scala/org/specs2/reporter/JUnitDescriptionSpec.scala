@@ -37,6 +37,7 @@ class JUnitDescriptionSpec extends Specification with JUnitDescriptionSpecTest {
                                                                                                                     """
 
   import ReporterExamples._
+  val factory = fragmentFactory; import factory._
 
   def a1 = descriptionIs(ex1)(
     "JUnitDescriptionSpec",

@@ -56,6 +56,7 @@ object Fragments {
 case class Fragment(description: Description, execution: Execution, location: Location = StacktraceLocation()) {
 
   def executionResult = execution.result
+  def isExecuted = execution.isExecuted
   def isRunnable = execution.isRunnable
   def mustStopOn(r: Result) = execution.nextMustStopIf(r)
 

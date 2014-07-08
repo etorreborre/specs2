@@ -17,26 +17,28 @@ class IsolatedExecutionSpec extends Specification with ForEachEnv { def is = s2"
    for an acceptance spec $e2
 """
 
-  def e1 = { env: Env =>
+  def e1 = {
     val spec = new TestIsolatedSpec1
-    val env1 = env.setArguments(Arguments("sequential"))
-    val executed = execute(spec)(env1)
-
+    val executed = execute(spec)
     val results = executed.collect { case f if f.isRunnable => f.execution.result }
     results must contain(exactly[Result](Success("example1"), Success("example2")))
   }
 
-  def e2 = { env: Env =>
+  def e2 = {
     val spec = new TestIsolatedSpec2
-    val env1 = env.setArguments(Arguments("sequential"))
-    val executed = execute(spec)(env1)
+    val executed = execute(spec)
 
     val results = executed.collect { case f if f.isRunnable => f.execution.result }
     results must contain(exactly[Result](Success("example1"), Success("example2")))
   }
 
-  def execute(spec: SpecificationStructure)(env: Env) =
-    DefaultExecutor.executeSeq(spec.fragments(env).fragments)(env)
+  def execute(spec: SpecificationStructure) = {
+    val env = Env()
+    val fragments = spec.structure(env).fragments
+
+    try Fragments(DefaultExecutor.execute(env)(fragments.contents)).fragments
+    finally env.shutdown
+  }
 }
 
 /**

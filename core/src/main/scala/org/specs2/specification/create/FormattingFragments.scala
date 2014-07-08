@@ -13,6 +13,7 @@ trait FormattingFragments extends FragmentsFactory {
   def t(n: Int)  = factory.tab(n)
   def bt         = factory.backtab
   def bt(n: Int) = factory.backtab(n)
+  def end        = factory.end
 }
 
 object FormattingFragments extends FormattingFragments

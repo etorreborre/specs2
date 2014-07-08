@@ -3,7 +3,7 @@ package specification
 package create
 
 import main.{ArgumentsShortcuts, ArgumentsArgs}
-import specification.dsl.FragmentsDsl
+import org.specs2.specification.dsl.{TagsDsl, FragmentsDsl}
 
 trait SpecificationCreation extends
        FragmentsDsl

@@ -85,22 +85,25 @@ trait MutableFragmentBuilder extends FragmentBuilder
 
   private def duplicateExecution(effectPath: EffectPath) = {
     Execution.withEnv { env: Env =>
-      val instance = Classes.createInstance[MutableFragmentBuilder](getClass.asInstanceOf[Class[MutableFragmentBuilder]], getClass.getClassLoader).execute(env.systemLogger).unsafePerformIO
+
+      def instance =
+        Classes.createInstance[MutableFragmentBuilder](getClass.asInstanceOf[Class[MutableFragmentBuilder]], getClass.getClassLoader)
+          .execute(env.systemLogger).unsafePerformIO
+
       instance.toDisjunction.fold(
-      e => org.specs2.execute.Error(Status.asException(e)),
-      { newSpec =>
+        e => org.specs2.execute.Error(Status.asException(e)),
+        { newSpec =>
 
-        val allFragments = newSpec.replayFragments(env)
-        val previousSteps = allFragments.filter(f => Fragment.isStep(f) && f.execution.isolable)
-        val previousStepsExecution = previousSteps.foldLeft(Success(): Result) { _ and _.execution.execute(env).result }
+          newSpec.targetPath = Some(effectPath)
+          val pathFragments = newSpec.replayFragments(env)
+          val previousSteps = pathFragments.filter(f => Fragment.isStep(f) && f.execution.isolable)
+          val isolatedExecution = pathFragments.last.execution
 
-        newSpec.targetPath = Some(effectPath)
-        val pathFragments = newSpec.replayFragments(env)
-        val isolatedExecution = pathFragments.last.execution
-
-        if (isolatedExecution.isRunnable) previousStepsExecution and isolatedExecution.execute(env).result
-        else                              previousStepsExecution
-      })
+          if (previousSteps.nonEmpty) {
+            val previousStepsExecution = previousSteps.foldLeft(Success(): Result) { _ and _.execution.execute(env).result }
+            previousStepsExecution and isolatedExecution.execute(env).result
+          } else isolatedExecution.execute(env).result
+        })
     }
   }
 

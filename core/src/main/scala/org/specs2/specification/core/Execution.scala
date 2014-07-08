@@ -22,6 +22,7 @@ case class Execution(run:            Option[Env => Result],
 
   lazy val executedResult = executed
   lazy val result = executedResult.getOrElse(org.specs2.execute.Success("no execution yet defined"))
+  def isExecuted = executedResult.isDefined
 
   def execute(env: Env) = run.fold(this)(r => setResult(r(env)))
 
@@ -64,8 +65,7 @@ object Execution {
   def apply[T : AsResult](r: =>T, continuation: FragmentsContinuation) =
     new Execution(run = Some((env: Env) => AsResult(r)), continuation = Some(continuation))
 
-  def result[T : AsResult](r: =>T) = Execution(Some((env: Env) => AsResult(r)))
-
+  def result[T : AsResult](r: =>T)       = withEnv(_ => AsResult(r))
   def withEnv[T : AsResult](f: Env => T) = Execution(Some((env: Env) => AsResult(f(env))))
 
   def executed[T : AsResult](r: T): Execution = {

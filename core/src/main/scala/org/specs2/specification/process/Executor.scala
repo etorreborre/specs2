@@ -71,14 +71,14 @@ trait DefaultExecutor extends Executor {
    *
    *  - the execution stops if one fragment indicates that the result of the previous executions is not correct
    */
-  def sequencedExecution(env: Env, barrier: Task[Result] = Task.now(Success()), mustStop: Boolean = false): Process1[Fragment, Task[Fragment]] =
+  def sequencedExecution(env: Env, barrier: Task[Result] = Task.now(Success("barrier")), mustStop: Boolean = false): Process1[Fragment, Task[Fragment]] =
     receive1 { fragment: Fragment =>
       val arguments = env.arguments
 
       // if we need to wait, we do, an get the result
       val barrierResult =
         if (fragment.execution.mustJoin) barrier.attemptRun.fold(t => Error(t), r => r)
-        else                             Success()
+        else                             Success("no barrier result")
 
       // depending on the result we decide if we should go on executing fragments
       val barrierStop =
@@ -147,6 +147,9 @@ trait DefaultExecutor extends Executor {
  * helper functions for executing fragments
  */
 object DefaultExecutor extends DefaultExecutor {
+
+  def executeSpecWithoutShutdown(spec: SpecStructure, env: Env): SpecStructure =
+    spec.|>((contents: Process[Task, Fragment]) => (contents |> sequencedExecution(env)).sequence(Runtime.getRuntime.availableProcessors))
 
   def executeSpec(spec: SpecStructure, env: Env): SpecStructure =
     spec.|>((contents: Process[Task, Fragment]) => (contents |> sequencedExecution(env)).sequence(Runtime.getRuntime.availableProcessors).andFinally(Task.delay(env.shutdown)))

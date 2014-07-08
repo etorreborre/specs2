@@ -13,6 +13,7 @@ class OnlineSpecificationSpec extends Specification { def is = s2"""
  A specification can have examples returning a result and Fragments depending on the result value $e1
 
 """
+  val factory = fragmentFactory; import factory._
 
   def e1 = {
     def continue(n: Int): FragmentsContinuation = FragmentsContinuation { r: Result =>

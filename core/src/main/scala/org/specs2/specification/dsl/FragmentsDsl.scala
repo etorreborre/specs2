@@ -7,11 +7,11 @@ import execute.AsResult
 import control.ImplicitParameters._
 import org.specs2.data.NamedTag
 import specification.core._
-import specification.create.DelegatedFragmentFactory
+import org.specs2.specification.create.{FragmentsFactory, DelegatedFragmentFactory}
 import scalaz.std.vector._
 import scalaz.syntax.std.vector._
 
-trait FragmentsDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDsl with LinkDsl { outer =>
+trait FragmentsDsl extends FragmentsFactory with TitleDsl with ExampleDsl with LinkDsl with TagsDsl with ActionDsl { outer =>
 
   implicit def fragmentToFragments(f: Fragment): Fragments =
     Fragments(f)
@@ -96,16 +96,6 @@ trait FragmentsDsl extends DelegatedFragmentFactory with TitleDsl with ExampleDs
 
   implicit def specStructureAsFragments(spec: SpecStructure): Fragments =
     spec.fragments
-
-  def tag(tag: NamedTag)      : Fragment = fragmentFactory.mark(tag)
-  def taggedAs(tag: NamedTag) : Fragment = fragmentFactory.markAs(tag)
-  def section(tag: NamedTag)  : Fragment = fragmentFactory.markSection(tag)
-  def asSection(tag: NamedTag): Fragment = fragmentFactory.markSectionAs(tag)
-
-  /** shortcut to add tag more quickly when rerunning failed tests */
-  private[specs2] def xtag = tag("x")
-  /** shortcut to add section more quickly when rerunning failed tests */
-  private[specs2] def xsection = section("x")
 
   /**
    * create a block of new fragments where each of them is separated

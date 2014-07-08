@@ -74,6 +74,7 @@ class TextPrinterSpec extends Specification with tp { def is = s2"""
 trait tp extends MustMatchers with StandardMatchResults with StandardResults with S2StringContext with FragmentsDsl {
   import org.specs2.specification.dsl1._
   import TextPrinterSpec._
+  val factory = fragmentFactory; import factory._
 
   def a1 =
     "title".title ^ "" contains

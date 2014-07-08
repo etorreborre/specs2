@@ -50,6 +50,7 @@ class FragmentDslSpec extends Specification { def is = s2"""
    "description" ! (e: Env) => result    $g3
 
 """
+  val factory = fragmentFactory; import factory._
 
   def a1 = (f1 ^ f2).fragments must haveSize(2)
   def a2 = (f1 ^ (f2 ^ f3)).fragments must haveSize(3)

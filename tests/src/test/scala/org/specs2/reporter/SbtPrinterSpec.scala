@@ -16,6 +16,7 @@ class SbtPrinterSpec extends Specification with ForEachEnv { def is = s2"""
    print the specification title if defined                                   ${printer().e1}
    print HelloWorldSpec ok                                                    ${printer2().e1}
                                                                               """
+  val factory = fragmentFactory; import factory._
 
   case class printer() extends Mockito { outer =>
     val logger =  mock[Logger]
