@@ -1,8 +1,11 @@
 package org.specs2
 package matcher
 
+import java.util.concurrent.ExecutorService
+
 import org.specs2.specification.core.Env
 import time._
+import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scalaz._
 import Scalaz._
@@ -20,17 +23,15 @@ trait TerminationBaseMatchers {
   /**
    * this matchers will check if a block of code terminates within a given duration, after just one try
    */
-  def terminate[T]: TerminationMatcher[T] = terminate()
+  def terminate[T](implicit es: ExecutorService): TerminationMatcher[T] = terminate()(es)
 
   /**
    * this matchers will check if a block of code terminates within a given duration, and a given number of retries
    */
-  def terminate[T](retries: Int = 1, sleep: Duration = 100.millis) = new TerminationMatcher[T](retries, sleep)
+  def terminate[T](retries: Int = 1, sleep: Duration = 100.millis)(implicit es: ExecutorService) = new TerminationMatcher[T](retries, sleep)
 }
 
-class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[() => Any] = None, whenDesc: Option[String] = None, onlyWhen: Boolean = false) extends Matcher[T] {
-  // for the execution environment
-  private val env = Env()
+class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[() => Any] = None, whenDesc: Option[String] = None, onlyWhen: Boolean = false)(implicit es: ExecutorService) extends Matcher[T] {
 
   def apply[S <: T](a: Expectable[S]) =
     retry(retries, retries, sleep, a, createPromise(a.value))
@@ -43,13 +44,11 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
     val onlyWhenAction = whenDesc.getOrElse("the second action")
 
     def terminates =
-      try result(true, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a)
-      finally env.shutdown
+      result(true, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a)
 
     def blocks     = {
       promise.break
-      try result(false, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a)
-      finally env.shutdown
+      result(false, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a)
     }
 
     if (whenAction.isDefined) {
@@ -87,8 +86,8 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
 
   }
 
-  private def createPromise[A](a: =>A): Promise[A] = {
-    implicit val strategy: Strategy = Strategy.Executor(env.executorService)
+  private def createPromise[A](a: =>A)(implicit es: ExecutorService): Promise[A] = {
+    implicit val strategy: Strategy = Strategy.Executor(es)
     promise(a)(strategy)
   }
 
@@ -112,9 +111,7 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
 private[specs2]
 trait TerminationNotMatchers { outer: TerminationBaseMatchers =>
 
-   implicit def toTerminationResultMatcher[T](result: MatchResult[T]) = new TerminationResultMatcher(result)
-
-   class TerminationResultMatcher[T](result: MatchResult[T]) {
+   implicit class TerminationResultMatcher[T](result: MatchResult[T])(implicit es: ExecutorService) {
      def terminate = result(outer.terminate)
      def terminate(retries: Int = 0, sleep: Duration = 100.millis) = result(outer.terminate(retries, sleep))
    }

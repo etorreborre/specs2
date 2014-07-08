@@ -2,6 +2,8 @@ package org.specs2
 package specification
 package create
 
+import java.util.concurrent.ExecutorService
+
 import execute._
 import org.specs2.control.TraceLocation
 import org.specs2.specification.process.{StatisticsRepository, Executor}
@@ -114,6 +116,9 @@ trait S2StringContext extends FragmentsFactory { outer =>
   implicit def executionContextFunctionIsInterpolatedFragment[R : AsResult](f: ExecutionContext => R): InterpolatedFragment =
     envFunctionIsInterpolatedFragment((env: Env) => f(ExecutionContext.fromExecutorService(env.executorService,
       (t: Throwable) => control.logThrowable(t, env.arguments.verbose).execute(env.systemLogger).unsafePerformIO)))
+
+  implicit def executorServiceFunctionIsInterpolatedFragment[R : AsResult](f: ExecutorService => R): InterpolatedFragment =
+    envFunctionIsInterpolatedFragment((env: Env) => f(env.executorService))
 
   implicit def anyAsResultIsInterpolatedFragment(r: =>Function0Result): InterpolatedFragment = new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =
