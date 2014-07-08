@@ -117,7 +117,7 @@ trait Scope
 object Scope {
   /** typeclass to transform a Scope to a Result */
   implicit def scopeAsResult[S <: Scope]: AsResult[S] = new AsResult[S] {
-    def asResult(t: =>S): Result = AsResult { t; Success() }
+    def asResult(t: =>S): Result = AsResult { Result.resultOrSuccess(t) }
   }
   /** typeclass to transform a Scope to a Result */
   implicit def scopeToResult(t: =>Scope): Result = AsResult(t)

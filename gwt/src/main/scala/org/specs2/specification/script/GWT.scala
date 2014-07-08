@@ -2,8 +2,8 @@ package org.specs2
 package specification
 package script
 
-import org.specs2.specification.core.{Fragment, Fragments}
-import specification.create.FragmentsFactory
+import core.{Env, Fragment, Fragments}
+import create.{FragmentFactory, FragmentsFactory}
 import shapeless.{HList, HNil, ::}
 import shapeless.ops.hlist.ToList
 import execute._
@@ -16,7 +16,7 @@ import scalaz.syntax.std.list._
  * way of describing acceptance criteria
  */
 trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
-  private val factory = fragmentFactory; import factory._
+  private val factory: FragmentFactory = fragmentFactory; import factory._
 
   /** renaming of the shapeless cons object to avoid imports */
   val :: = shapeless.::
@@ -47,7 +47,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
     def when() = GWTGivens[HNil, HNil, Unit](title, template, HNil).when()
     def when[R, U](value: =>R)(implicit lub: ToList[R :: HNil, U]) = GWTGivens[HNil, HNil, Unit](title, template, HNil).when().apply[R, U] { case _ => value }
 
-    def fragments(text: String): Fragments = Fragments(fragmentFactory.text(text))
+    def fragments(text: String): Fragments = Fragments(factory.text(text), factory.break)
 
     def start: Scenario = this
     def end: Scenario = this
@@ -74,7 +74,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
     def when[T](f: StepParser[T]) = GWTWhensApply[T, GT, GTE, GTU, T :: HNil, HNil, (StepParser[T]) :: HNil, HNil, Any](this, f :: HNil, HNil)
     def when(): GWTWhensApply[String, GT, GTE, GTU, String :: HNil, HNil, (StepParser[String]) :: HNil, HNil, Any] = when(allAsString)
 
-    def fragments(text: String): Fragments = Fragments(fragmentFactory.text(text))
+    def fragments(text: String): Fragments = Fragments(factory.text(text), factory.break)
 
     def start = copy(isStart = true)
     def end   = copy(isStart = false)
@@ -95,7 +95,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
     def andThen(): GWTThensApply[String, GT, GTE, GTU, WT, WTR, WTE, WM, WMU, (StepParser[String]) :: HNil, HNil] = andThen(allAsString)
 
     def title = givens.title
-    def fragments(text: String): Fragments = Fragments(fragmentFactory.text(text))
+    def fragments(text: String): Fragments = Fragments(factory.text(text), factory.break)
 
     def start = copy(isStart = true)
     def end   = copy(isStart = false)
@@ -149,22 +149,29 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
       var givenSteps: Seq[Fragment] = Seq()
       var whenSteps: Seq[Fragment]  = Seq()
 
+      lazy val givenValues = stepsValues(givenSteps)
+      lazy val givenResult = result(givenSteps)
+      lazy val whenValues = stepsValues(whenSteps)
+      lazy val whenResult = result(whenSteps)
+
       template.lines(text, this).lines.foldLeft(Fragments()) { (fs, lines) =>
         lines match {
           // Text lines are left untouched
-          case TextLines(ls) => fs append fragmentFactory.text(ls+"\n")
+          case TextLines(ls) =>
+            fs append factory.text(ls) append break
 
           // Given lines must create steps with extracted values
           case GivenLines(ls) =>
-            givenSteps = (givenExtractorsList zip ls).map { case (extractor, line) => fragmentFactory.step(extractLine(extractor, line)) }.reverse
-            fs append appendSteps(givenExtractorsList, ls, givenSteps)
+            givenSteps = (givenExtractorsList zip ls).map { case (extractor, line) => factory.step(extractLine(extractor, line)) }.reverse
+            fs append breaks(2) append appendSteps(givenExtractorsList, ls, givenSteps)
 
           // When lines must create steps with extracted values, and map them using given values
           case WhenLines(ls) =>
+
             whenSteps = (whenExtractorsList zip ls zip whenMappersList).map { case ((extractor, line), mapper) =>
-              factory.step(execute(result(givenSteps), extractor, line) { t: Any =>
+              factory.step(execute(givenResult, extractor, line) { t: Any =>
                 val map = mapper.asInstanceOf[Mapper[Any, HList, Any, Any]]
-                map(t, if (map.f1.isDefined) Left(stepsValues(givenSteps)) else Right(stepsValues(givenSteps).toList))
+                DecoratedResult(map(t, if (map.f1.isDefined) Left(givenValues) else Right(givenValues.toList)), Success())
               })
             }.reverse
 
@@ -174,12 +181,12 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
           case ThenLines(ls) =>
             val thenExamples: List[Fragment] = (thenExtractorsList zip ls zip verificationsList).map { case ((extractor: StepParser[_], line), verify) =>
               example(extractor.strip(line),
-                execute(result(givenSteps) and result(whenSteps), extractor, line) { t: Any =>
+                execute(givenResult and whenResult, extractor, line) { t: Any =>
                   val verifyFunction = verify.asInstanceOf[VerifyFunction[Any, HList, Any, Any]]
-                  verifyFunction(t, if (verifyFunction.f1.isDefined) Left(stepsValues(whenSteps)) else Right(stepsValues(whenSteps).toList))
+                  verifyFunction(t, if (verifyFunction.f1.isDefined) Left(whenValues) else Right(whenValues.toList))
                 }.asInstanceOf[Result])
             }
-            fs append thenExamples.intersperse(fragmentFactory.text("\n"))
+            fs append thenExamples.intersperse(factory.break)
         }
       }
     }
@@ -202,16 +209,21 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
     private def verificationsList   = verifications.toList.reverse
 
     /** @return the values of all executed steps */
-    private def stepsValues(steps: Seq[Fragment]) = steps.foldRight(HNil: HList) { (cur, res) => value(cur.executionResult) :: res }
+    private def stepsValues(steps: Seq[Fragment]) = steps.foldRight(HNil: HList) { (cur, res) =>
+      value(cur.execution.execute(Env()).result) :: res
+    }
     /** @return a -and- on all the execution results of steps */
-    private def result(steps: Seq[Fragment]) = steps.foldRight(Success(): Result) { (cur, res) => cur.executionResult and res }
+    private def result(steps: Seq[Fragment]) = steps.foldRight(Success(): Result) { (cur, res) =>
+      cur.execution.execute(Env()).result and res
+    }
     /** execute a block of code depending on a previous result */
     private def executeIf(result: Result)(value: =>Any) = if (result.isSuccess) value else Skipped(" ")
 
     /** zip extractors, lines and steps to intercalate steps between texts fragments (and strip the lines of their delimiters if any */
     private def appendSteps(extractors: Seq[StepParser[_]], lines: Seq[String], steps: Seq[Fragment]): Seq[Fragment] =
       (extractors zip lines zip steps).map {
-        case ((extractor: StepParser[_], l: String), s: Fragment) => Seq(fragmentFactory.text(extractor.strip(l)+"\n"), s)
+        case ((extractor: StepParser[_], l: String), s: Fragment) =>
+          Seq(factory.text(extractor.strip(l)), break, s)
       }.flatten
 
     /** extract values from a line and execute a function */
@@ -223,8 +235,11 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
         }
       }
     /** extract values from a line */
-    private def extractLine(extractor: Any, line: String) =
-      extractor.asInstanceOf[StepParser[Any]].parse(line).fold(e => Error(e), t => DecoratedResult(t, Success()))
+    private def extractLine(extractor: Any, line: String): Result = {
+      extractor.asInstanceOf[StepParser[Any]].parse(line).fold(e => Error(e), t => DecoratedResult(t._2, Success()))
+    }
+
+    private def breaks(n: Int): Fragments = Fragments((1 to n).map(i => factory.break):_*)
   }
 
   case class GWTThensApply[T, GT <: HList, GTE <: HList, GTU,
@@ -248,7 +263,10 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
     }
   }
 
-  private def value(r: Result) = r match { case DecoratedResult(v, _) => v; case _ => r }
+  private def value(r: Result) = r match {
+    case DecoratedResult(v, _) => v
+    case _ => r
+  }
 
 }
 

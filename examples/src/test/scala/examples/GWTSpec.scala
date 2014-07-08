@@ -29,13 +29,13 @@ class GWTSpec extends Specification with GWT with StandardRegexStepParsers { def
   val anOperator = readAs(".*: (.)$").and((s: String) => s)
 
   val calculator1 =
-    Scenario("calculator1").
-      given(anInt).
-      given(anInt).
-      given(anInt).
-      when(anOperator) { case op :: i :: j :: k :: _ => if (op == "+") (i+j+k) else (i*j*k) }.
-      andThen(anInt) { case expected :: sum :: _ => sum === expected }.
-      andThen(anInt) { case expected :: sum :: _ => sum must be_>(expected) }
+    Scenario("calculator1")
+      .given(anInt)
+      .given(anInt)
+      .given(anInt)
+      .when(anOperator) { case op :: i :: j :: k :: _ => if (op == "+") i+j+k else i*j*k }
+      .andThen(anInt)   { case expected :: sum :: _ => sum === expected }
+      .andThen(anInt)   { case expected :: sum :: _ => sum must be_>(expected) }
 
   val calculator2 =
     calculator1.withTitle("calculator2").

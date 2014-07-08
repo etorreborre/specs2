@@ -217,6 +217,11 @@ object Result {
   implicit def resultAsResult[R <: Result]: AsResult[R] = new AsResult[R] {
     def asResult(t: =>R): Result = ResultExecution.execute(t)
   }
+
+  def resultOrSuccess(t: Any): Result = t match {
+    case r: Result => r
+    case _         => Success()
+  }
 }
 
 trait Results {

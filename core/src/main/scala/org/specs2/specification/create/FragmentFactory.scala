@@ -2,7 +2,7 @@ package org.specs2
 package specification
 package create
 
-import execute.{Success, AsResult}
+import org.specs2.execute.{Result, Success, AsResult}
 import org.specs2.data.{NamedTag, Tag}
 import specification.core._
 import Description._
@@ -62,7 +62,7 @@ trait DefaultFragmentFactory extends FragmentFactory {
   def example[T : AsResult](text: String, withDescriptionAndEnv: (String, Env) => T): Fragment =
     Fragment(Text(text), Execution.withEnv((env: Env) => withDescriptionAndEnv(text, env)))
   def example[T](text: String, withEnv: Env => T)(implicit as: AsResult[T], p: ImplicitParam): Fragment =
-  Fragment(Text(text), Execution.withEnv(withEnv))
+    Fragment(Text(text), Execution.withEnv(withEnv))
 
   def tag(names: String*): Fragment       = Fragment(Description.tag(names:_*), Execution.NoExecution)
   def taggedAs(names: String*): Fragment  = Fragment(Description.taggedAs(names:_*), Execution.NoExecution)
@@ -74,8 +74,8 @@ trait DefaultFragmentFactory extends FragmentFactory {
   def markSection(tag: NamedTag): Fragment   = Fragment(Description.markSection(tag), Execution.NoExecution)
   def markSectionAs(tag: NamedTag): Fragment = Fragment(Description.markSectionAs(tag), Execution.NoExecution)
 
-  def action[T](t: =>T): Fragment = Fragment(NoText, result({ t; Success() }))
-  def step[T](t: =>T): Fragment   = Fragment(NoText, result({ t; Success() }).join)
+  def action[T](t: =>T): Fragment = Fragment(NoText, result { Result.resultOrSuccess(t) })
+  def step[T](t: =>T): Fragment   = Fragment(NoText, result { Result.resultOrSuccess(t) }.join)
 
   def text(t: String)           = Fragment(Text(t), Execution.NoExecution)
   def code(t: String)           = Fragment(Description.code(t), Execution.NoExecution)

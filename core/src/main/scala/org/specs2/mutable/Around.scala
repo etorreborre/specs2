@@ -10,5 +10,5 @@ import execute._
  */
 trait Around extends specification.Around with DelayedInit {
   /** use effectively to re-throw FailureExceptions if x failed */
-  override def delayedInit(x: => Unit): Unit = ResultExecution.effectively(around { x; Success() })
+  override def delayedInit(x: => Unit): Unit = ResultExecution.effectively(around { Result.resultOrSuccess(x) })
 }
