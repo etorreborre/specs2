@@ -120,13 +120,13 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
   def prop5 = execute(check(proved)) must beSuccessful
   def prop6 = execute(failureExceptionProp).toString must startWith("A counter-example is")
 
-  def prop7 = pending // FragmentExecution.executeSpecificationResult(new MutableSpecWithContextAndScalaCheck).isFailure
+  def prop7 = DefaultExecutor.runSpecification(new MutableSpecWithContextAndScalaCheck).map(_.executionResult).reduce(_ and _).isFailure
   def prop8 = execute(check(pendingProp)) must bePending
   def prop9 = execute(exceptionPropOnConversion).toString must startWith("A counter-example is")
 
   def fragment1 = {
     val spec = new Specification { def is = prop((i: Int) => i == i) }
-    pending // FragmentExecution.executeSpecificationResult(spec).isSuccess
+    DefaultExecutor.runSpecification(spec).map(_.executionResult).reduce(_ and _).isSuccess
   }
 
   def partial1 = execute(partialFunction.forAll) must_== success100tries

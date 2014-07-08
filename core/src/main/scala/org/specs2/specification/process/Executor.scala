@@ -157,7 +157,7 @@ object DefaultExecutor extends DefaultExecutor {
   def runSpec(spec: SpecStructure, env: Env): IndexedSeq[Fragment] =
     executeSpec(spec, env).contents.runLog.run
 
-  def runSpecification(spec: Specification) = {
+  def runSpecification(spec: SpecificationStructure) = {
     lazy val structure = spec.structure(Env())
     val env = Env(arguments = structure.arguments)
     runSpec(structure, env)
