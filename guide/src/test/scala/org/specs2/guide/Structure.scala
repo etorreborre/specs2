@@ -32,7 +32,6 @@ class MySpecification extends org.specs2.Specification { def is = s2"""
                                           """
 
  def e1 = 1 must_== 1
-
  def e2 = 2 must_== 2
 }
 }}
@@ -53,7 +52,7 @@ class MySpecification extends org.specs2.mutable.Specification {
       1 must_== 1
     }
     "where example 2 must be true" >> {
-       2 must_== 2
+      2 must_== 2
     }
   }
 }
@@ -120,14 +119,14 @@ It is also possible to use the "functional" expectation mode with a unit specifi
 
 ### And if you want to know more
 
- - create ${"*auto-examples*" ~/ AutoExamples} where the code *is* the description of the `Example`
- - integrate ${"snippets of code" ~/ CaptureSnippets} to your specification
  - ${"skip" ~/ SkipExamples} examples
  - collect ${"*all* expectations" ~/ GetAllExpectations}
  - mark examples as ${"pending until they are fixed" ~/ PendingUntilFixedExamples}
  - add ${"links to other specifications" ~/ LinkOtherSpecifications}
  - add ${"new lines and tabs" ~/ SpecificationFormatting} in unit specifications
  - create a trait which will ${"decorate or transform other specifications" ~/ TemplateSpecification} when mixed-in
+ - create ${"*auto-examples*" ~/ AutoExamples} where the code *is* the description of the `Example`
+ - integrate ${"snippets of code" ~/ CaptureSnippets} to your specification
  - use ${"named examples" ~/ NamedExamples} in acceptance specifications to get default example names
  - use ${"scripts and auto-numbered examples" ~/ AutoNumberedExamples} to completely separate the specification text from the code
  - use the ${"Given/When/Then style" ~/ GivenWhenThenStyle} to structure specifications

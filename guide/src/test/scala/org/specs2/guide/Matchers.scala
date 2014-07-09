@@ -214,7 +214,7 @@ In the code above you have to:
  - use ${"datatables" ~/ UseDatatables} to conveniently group several examples into one
  - use ${"ScalaCheck" ~/ UseScalaCheck} to generate and verify data for your examples
  - use ${"Mockito " ~/ UseMockito} to mock the interactions with another system
- - use `Forms` to display actual and expected values in html tables
+ - use ${"Forms" ~/ UseForms} to display actual and expected values in html tables
 
 ### And if you want to know more
 
@@ -223,7 +223,7 @@ In the code above you have to:
  - implement the ${"`AsResult` typeclass" ~/ AsResultTypeclass} to go beyond matchers
  - use the ${"`beA[CaseClass]`" ~/ CaseClassMatchers} matcher to automatically create matchers for case classes
  - use the ${"dependencies matchers" ~/ DependencyMatchers} to specify dependencies between packages
- - use specs2 matchers ${"outside ***secs2***" ~/ OutsideSpecs2}
+ - use $specs2 matchers ${s"outside $specs2" ~/ OutsideSpecs2}
 
 """
 
