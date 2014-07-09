@@ -195,7 +195,7 @@ trait HtmlPrinter extends Printer {
   def makeBody(spec: SpecStructure, stats: Stats, options: HtmlOptions, arguments: Arguments, pandoc: Boolean): String = {
     val title = spec.name
 
-    s"""${spec.fragments.fragments.map(printFragment(arguments, options.outDir, pandoc)).mkString("\n")}""" ++
+    s"""${spec.fragments.fragments.map(printFragment(arguments, options.outDir, pandoc)).mkString("")}""" ++
     s"""${printStatistics(title, stats, options)}"""
   }
 
@@ -206,7 +206,7 @@ trait HtmlPrinter extends Printer {
         val text = t.description.show
 
         if (text.trim.nonEmpty) {
-          if (pandoc) <t>{scala.xml.Unparsed(text)}</t>
+          if (pandoc) scala.xml.Unparsed(text)
           else {
             // remove additional newlines and replace with just one when there is no markdown formatting
             val brStart = if (text.filterNot(_ == ' ').startsWith("\n")) <br/> else NodeSeq.Empty

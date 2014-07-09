@@ -38,7 +38,7 @@ You can install Maven from [there](http://maven.apache.org/guides/getting-starte
 
 ## Gradle
 
-Go to this [page](http://www.gradle.org/installation) to install Gradle. You then need to install the [Scala plugin](http://www.gradle.org/docs/current/userguide/scala_plugin.html) and add to your `build.gradle` file:
+Go to this [page](http://www.gradle.org/installation) to install Gradle. You then need to install the [Scala plugin](http://www.gradle.org/docs/current/userguide/scala_plugin.html) and add the following to your `build.gradle` file:
 ```
 repositories {
   maven {
@@ -55,21 +55,24 @@ dependencies {
 
 Depending on the $specs2 features you want to use you will need to add more dependencies to your build:
 
- - `specs2-matcher-extra` for the optional $specs2 matchers
- - `specs2-scalacheck` to use ScalaCheck properties in specifications
- - `specs2-mock` to use Mockito matchers
- - `specs2-analysis` to use the package dependencies matcher
- - `specs2-gwt` to write given/when/then specifications
- - `specs2-form` html form-like specifications
- - `specs2-html` to export specifications as html
- - `specs2-markdown` to export specifications as markdown files
- - `specs2-junit` to run specifications as JUnit tests
+ Name                    | Functionality
+ ----------------------- | --------------
+ `specs2-matcher-extra`  | for the optional $specs2 matchers
+ `specs2-scalacheck`     | to use ScalaCheck properties in specifications
+ `specs2-mock`           | to use Mockito matchers
+ `specs2-analysis`       | to use the package dependencies matcher
+ `specs2-gwt`            | to write given/when/then specifications
+ `specs2-form`           | html form-like specifications
+ `specs2-html`           | to export specifications as html
+ `specs2-markdown`       | to export specifications as markdown files
+ `specs2-junit`          | to run specifications as JUnit tests
 
-The other 2 dependencies are:
+Note: the `specs2-core` jar depends on 2 other $specs2 jars:
 
- - `specs2-core`: the default library, for simple specifications executable with sbt/maven/gradle
- - `specs2-matcher` to use $specs2 matchers with another library like [JUnit](http://junit.org)
-
+ Name                    | Functionality
+ ----------------------- | --------------
+ `specs2-common`         | utility classes for text, collections, xml,...
+ `specs2-matcher`        | common $specs2 matchers. They can be used as a stand-alone library with [JUnit](http://junit.org)
 
 """
 }
