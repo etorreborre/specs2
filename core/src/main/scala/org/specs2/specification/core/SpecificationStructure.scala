@@ -44,8 +44,25 @@ object SpecificationStructure {
 
   /** @return all the linked specifications */
   def linkedSpecifications(spec: SpecificationStructure, env: Env, classLoader: ClassLoader): Action[Seq[SpecificationStructure]] = {
-    val distinct = (ss: List[SpecificationStructure]) => ss.groupBy(_.structure(env)).values.map(_.head).toSeq
-    linkedSpecificationsClassnames(spec, env).map(name => create(name, classLoader)).sequenceU.map(distinct)
+    val byName = (ss: List[SpecificationStructure]) => ss.groupBy(_.structure(env).specClassName).mapValues(_.head)
+
+    def getLinked(s: SpecificationStructure, visited: Map[String, SpecificationStructure]): Map[String, SpecificationStructure] =
+      linkedSpecificationsClassnames(s, env).map(name => create(name, classLoader)).sequenceU.map(byName).runOption.getOrElse(Map())
+        .filterNot { case (n, _) => visited.keys.toSeq.contains(n) }
+
+    Actions.safe {
+      def getAll(seed: Seq[SpecificationStructure], visited: Map[String, SpecificationStructure]): Seq[SpecificationStructure] = {
+        if (seed.isEmpty) visited.values.toSeq
+        else {
+          val toVisit: Map[String, SpecificationStructure] = Map(seed.flatMap { s => getLinked(s, visited) }:_*)
+          getAll(toVisit.values.toSeq, visited ++ toVisit)
+        }
+      }
+      val name = spec.structure(env).specClassName
+      val linked = getLinked(spec, Map(name -> spec))
+      getAll(linked.values.toSeq, Map(linked.toSeq :+ (name -> spec):_*))
+    }
+
   }
 
   /** @return the class names of all the linked specifications */
