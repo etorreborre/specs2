@@ -5,7 +5,7 @@ object RunInIDE extends UserGuidePage { def is = s2"""
 
 ## Intellij IDEA
 
-[IntelliJ IDEA](http://www.jetbrains.com/idea/features/scala.html) is the IDE with the best specs2 integration for now. You can:
+[IntelliJ IDEA](http://www.jetbrains.com/idea/features/scala.html) is the IDE with the best $specs2 integration for now. You can:
 
  * execute a specification by selecting its name and pressing `CTRL+SHIFT+F10`
  * execute a single example by selecting its description and pressing `CTRL+SHIFT+F10`
@@ -16,7 +16,7 @@ However passing arguments needs to be done through system properties for now. So
 
 ## Scala IDE
 
-There is no integration of specs2 in [ScalaIDE](http://scala-ide.org) yet, but it is possible to execute specifications as JUnit tests:${snippet{
+There is no integration of $specs2 in [ScalaIDE](http://scala-ide.org) yet, but it is possible to execute specifications as JUnit tests:${snippet{
 import org.specs2.runner.JUnitRunner
 import org.junit.runner.RunWith
 

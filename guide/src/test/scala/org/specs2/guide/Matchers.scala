@@ -9,7 +9,7 @@ import org.specs2.specification.Forms
 
 object Matchers extends UserGuidePage with Forms { def is = s2"""
 
-The most frequent way to specify some expected behaviour with specs2 is to use _matchers_. You generally execute an action, a command or a function and then check if the actual value you get is equal to an expected one (the ["arrange-act-assert"](http://bit.ly/arrange_act_assert) paradigm). For example, if you create a specification for an object manipulating paths:${snippet{
+The most frequent way to specify some expected behaviour with $specs2 is to use _matchers_. You generally execute an action, a command or a function and then check if the actual value you get is equal to an expected one (the ["arrange-act-assert"](http://bit.ly/arrange_act_assert) paradigm). For example, if you create a specification for an object manipulating paths:${snippet{
 // 8<---
 object Paths { def directoryPath(p: String) = p+"/" }
 // 8<---

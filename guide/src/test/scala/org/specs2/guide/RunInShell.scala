@@ -2,7 +2,7 @@ package org.specs2
 package guide
 
 object RunInShell extends UserGuidePage { def is = s2"""
-It is not necessary to use a build tool to run a specification. You just need to have the right dependencies on the classpath and use of of specs2 "runners".
+It is not necessary to use a build tool to run a specification. You just need to have the right dependencies on the classpath and use of of $specs2 "runners".
 
 ## Dependencies
 

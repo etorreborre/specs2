@@ -5,7 +5,7 @@ object GetAllExpectations extends UserGuidePage { def is = s2"""
 
 ## Expectations
 
-The 2 main default modes of expectations in specs2 are:
+The 2 main default modes of expectations in $specs2 are:
 
   - No thrown expectations
   - thrown expectations

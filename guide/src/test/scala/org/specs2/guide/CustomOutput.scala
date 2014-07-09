@@ -6,7 +6,7 @@ import scalaz.stream._
 
 object CustomOutput extends UserGuidePage { def is = s2"""
 
-You can implement your own reporting of specs2 specifications:
+You can implement your own reporting of $specs2 specifications:
 
  - using the `Notifier` trait which acts like a listener
  - using a `Printer` which gives you more flexibility for reporting exactly what you want

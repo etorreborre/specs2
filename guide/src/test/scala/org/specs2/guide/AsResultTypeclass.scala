@@ -17,7 +17,7 @@ All of these types implement the `org.specs2.execute.AsResult` typeclass, meanin
   }
 }}
 
-This gives some flexibility in integrating any kind of custom definition of a "result" into specs2 and this is why you find this typeclass as a requirement to build examples or to declare contexts.
+This gives some flexibility in integrating any kind of custom definition of a "result" into $specs2 and this is why you find this typeclass as a requirement to build examples or to declare contexts.
 You can take advantage of this type class by defining your own kind of result and providing a typeclass instance for it:${snippet{
   // 8<----
   trait AsResult[T] {

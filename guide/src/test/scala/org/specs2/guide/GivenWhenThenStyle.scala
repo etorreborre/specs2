@@ -15,7 +15,7 @@ The Given/When/Then style structures the specification with 3 main elements:
  - When steps:  command which your are currently specifying
  - Then steps:  expectations about the end state of the system
 
-In specs2 the support for Given/When/Then can be more or less complex depending on the features you with to use:
+In $specs2 the support for Given/When/Then can be more or less complex depending on the features you with to use:
 
  - basic support: given and when steps are just commands on a system, returning no value
  - intermediate support: given/when/then steps can parse part of the text to create their commands

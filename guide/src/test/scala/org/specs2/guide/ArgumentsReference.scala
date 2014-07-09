@@ -17,7 +17,7 @@ They can also be passed as system properties: `-Dspecs2.<argument name>=<argumen
 
 This reference guide for arguments is divided in several sections:
 
- - "path" arguments defining where specs2 should read or write files
+ - "path" arguments defining where $specs2 should read or write files
  - "selection" arguments to select the examples to run
  - "execution" arguments for execution parameters
  - "storing" arguments to store statistics

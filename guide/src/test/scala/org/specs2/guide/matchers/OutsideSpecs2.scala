@@ -18,7 +18,7 @@ The $specs2 matchers are a well-delimited piece of functionality that you should
 
 ### Without any dependency on specs2
 
-The [Testing](https://github.com/spray/spray/wiki/Testing) page of the ***spray*** project explains how you can define a testing trait in your library which can be used with specs2 or scalatest or any framework defining the following methods:
+The [Testing](https://github.com/spray/spray/wiki/Testing) page of the ***spray*** project explains how you can define a testing trait in your library which can be used with $specs2 or scalatest or any framework defining the following methods:
 
    * `fail(msg: String): Nothing`
    * `skip(msg: String): Nothing`

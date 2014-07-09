@@ -53,7 +53,7 @@ Note also that the default filter also truncates the stacktrace in the middle if
 
 ### Diffs
 
-When using the equality matcher specs2 tries to display the difference between the expected and the actual values using a class: `org.specs2.main.SmartDiffs`. There are several parameters for that class which you can specify from the command line as `smartdiffs show,separators,triggerSize,shortenSize,diffRatio,full`:
+When using the equality matcher $specs2 tries to display the difference between the expected and the actual values using a class: `org.specs2.main.SmartDiffs`. There are several parameters for that class which you can specify from the command line as `smartdiffs show,separators,triggerSize,shortenSize,diffRatio,full`:
 
 
 For the diffs arguments the values you can specify are:
