@@ -7,7 +7,7 @@ import matcher._
 /** 
  * Adapter class to use specs2 matchers as Hamcrest matchers 
  */
-case class HamcrestMatcherAdapter[T](m: Matcher[T]) extends BaseMatcher {
+case class HamcrestMatcherAdapter[T](m: Matcher[T]) extends BaseMatcher[T] {
   /** this variable is necessary to store the result of a match */ 
   private var message = ""
     
