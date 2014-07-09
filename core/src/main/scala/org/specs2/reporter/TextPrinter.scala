@@ -1,6 +1,7 @@
 package org.specs2
 package reporter
 
+import org.specs2.matcher.DataTable
 import specification._
 import scalaz.stream.Process
 import scalaz.stream.io
@@ -117,13 +118,18 @@ trait TextPrinter extends Printer {
       val indentationSize = args.commandLine.int("indentation").getOrElse(0)
       val show = indentText(showTime(statusAndDescription(text, execution.result)(args), execution, args), indentation, indentationSize)
 
+      def printResult(r: Result) =
+        r match {
+          case err: execute.Error        => printError(show, err, args)
+          case failure: execute.Failure  => printFailure(show, failure, args)
+          case success: execute.Success  => printSuccess(show, success, args)
+          case pending: execute.Pending  => printPending(show, pending, args)
+          case skipped: execute.Skipped  => printSkipped(show, skipped, args)
+          case other                     => printOther(show, other, args)
+        }
       execution.result match {
-        case err: execute.Error        => printError(show, err, args)
-        case failure: execute.Failure  => printFailure(show, failure, args)
-        case success: execute.Success  => printSuccess(show, success, args)
-        case pending: execute.Pending  => printPending(show, pending, args)
-        case skipped: execute.Skipped  => printSkipped(show, skipped, args)
-        case other                     => printOther(show, other, args)
+        case DecoratedResult(t: DataTable, r) => printResult(r)
+        case other                            => printResult(other)
       }
     } else emitNone
 
