@@ -2,8 +2,7 @@ package org.specs2
 package specification
 package core
 
-import java.util.concurrent.{CyclicBarrier, CountDownLatch}
-
+import data.Processes
 import scalaz.concurrent.Task
 import execute.{AsResult, Skipped, Result}
 import shapeless._
@@ -45,6 +44,57 @@ case class Fragments(contents: Process[Task, Fragment]) {
 
   def stripMargin: Fragments = stripMargin('|')
   def stripMargin(margin: Char): Fragments = mapDescription(_.stripMargin(margin))
+
+  def compact = {
+    val (text1, accumulated1) = fragments.foldLeft((None, Vector()): (Option[String], Seq[Fragment])) { case ((text, accumulated), fragment) =>
+      fragment match {
+        case Fragment(Text(t),l, e) if isText(fragment) =>
+          (text.map(_+t).orElse(Some(t)), accumulated)
+
+        case other =>
+          text match {
+            case Some(t1) => (None, accumulated ++ Seq(Fragment(Text(t1), Execution.NoExecution), other))
+            case None     => (None, accumulated :+ other)
+          }
+      }
+    }
+    val compacted = text1.fold(accumulated1)(t => accumulated1 :+ Fragment(Text(t), Execution.NoExecution))
+    Fragments(compacted:_*)
+  }
+  // withNext is not playing well with scan :-(
+  /*
+    update { p: Process[Task, Fragment] =>
+    (p |> Processes.withNext[Fragment]).scan((None, Vector()): (Option[String], Seq[Fragment])) { case ((text, accumulated), (fragment, next)) =>
+      println((fragment, next))
+      (fragment, next) match {
+        case (Fragment(Text(t),l, e), Some(_)) if isText(fragment) =>
+          println("case 1")
+          (text.map(_+t).orElse(Some(t)), accumulated)
+
+        case (other, Some(_)) =>
+          println("case 2")
+          text match {
+            case Some(t1) => (None, Seq(Fragment(Text(t1), Execution.NoExecution), other))
+            case None     => (None, Seq(other))
+          }
+
+        case (Fragment(Text(t), e, l), None) if isText(fragment) =>
+          println("case 3")
+          text match {
+            case Some(t1) => (None, Seq(Fragment(Text(t1+t), e, l)))
+            case None     => (None, Seq(fragment))
+          }
+
+        case (other, None) =>
+          println("case 4")
+          text match {
+            case Some(t1) => (None, Seq(Fragment(Text(t1), Execution.NoExecution), other))
+            case None     => (None, Seq(other))
+          }
+      }
+    }.flatMap { case (_, fs) => emitSeq(fs) }
+  }
+  */
 }
 
 object Fragments {

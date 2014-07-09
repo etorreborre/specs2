@@ -41,12 +41,12 @@ case class GroupsScript(title: String = "groups", isStart: Boolean = true, group
    * and replace it with new fragments containing examples by associating the marked text with groups examples
    */
   def lines(fs: Fragments) = {
-    fs.fragments.foldLeft((Fragments(), 0, 0)) { (res, cur) =>
+    fs.compact.fragments.foldLeft((Fragments(), 0, 0)) { (res, cur) =>
       val (resultFragments, previousGroupIndex, previousExampleIndex) = res
       val (fragments, newGroupIndex, newExampleIndex) =
         cur match {
-          case t: Fragment if Fragment.isText(t) => createExamples(groupTemplate.lines(t.description.show, this), previousGroupIndex, previousExampleIndex)
-          case other   => (Fragments(other), previousGroupIndex, previousExampleIndex)
+          case t if Fragment.isText(t) => createExamples(groupTemplate.lines(t.description.show, this), previousGroupIndex, previousExampleIndex)
+          case other                   => (Fragments(other), previousGroupIndex, previousExampleIndex)
         }
       (resultFragments append fragments, newGroupIndex, newExampleIndex)
     }._1
@@ -94,6 +94,9 @@ case class GroupsScript(title: String = "groups", isStart: Boolean = true, group
   def end = copy(isStart = false)
 }
 
+/**
+ * Block of fragments
+ */
 case class FragmentsScriptLines(blocks: Seq[Fragments]) extends ScriptLines
 
 trait GroupTemplateParameters {
@@ -115,6 +118,9 @@ case class BulletedExamplesTemplateParameters() extends GroupTemplateParameters 
   def stripGroup(line: String) = line
 }
 
+/**
+ * Analyse a piece of text and group Fragments belonging to the same group
+ */
 case class BulletedExamplesTemplate(factory: FragmentFactory)(implicit params: GroupTemplateParameters = BulletedExamplesTemplateParameters()) extends ScriptTemplate[GroupsScript, FragmentsScriptLines] {
 
   def lines(text: String, script: GroupsScript): FragmentsScriptLines = {
