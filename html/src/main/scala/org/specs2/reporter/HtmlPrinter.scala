@@ -206,7 +206,7 @@ trait HtmlPrinter extends Printer {
         val text = t.description.show
 
         if (text.trim.nonEmpty) {
-          if (pandoc) <text class="ok">{scala.xml.Unparsed(text)}</text>
+          if (pandoc) <t>{scala.xml.Unparsed(text)}</t>
           else {
             // remove additional newlines and replace with just one when there is no markdown formatting
             val brStart = if (text.filterNot(_ == ' ').startsWith("\n")) <br/> else NodeSeq.Empty
