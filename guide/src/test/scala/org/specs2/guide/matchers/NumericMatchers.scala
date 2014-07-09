@@ -4,7 +4,7 @@ package matchers
 
 import form.Card
 
-object NumericMatchers extends Card {
+object NumericMatchers extends UserGuideCard {
   def title = "Numeric"
   def text = s2"""
 Less often you need to do comparisons on Numerical values:

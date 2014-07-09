@@ -4,7 +4,7 @@ package matchers
 
 import form.Card
 
-object AnyMatchers extends Card {
+object AnyMatchers extends UserGuideCard {
   def title = "Any"
   def text = s2"""
 These matchers can be used with any object, regardless of its type:

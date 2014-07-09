@@ -9,7 +9,7 @@ The most common way to run specs2 specifications is to use [sbt](http://scala-sb
 
 ### Via sbt
 
-Sbt recognizes ***specs2*** as a ["test framework"](http://www.scala-sbt.org/release/docs/Testing.html). This means that any class or object extending the `Specification` abstract class can be executed by sbt. The `test` command will run all the specifications in your project provided you put them in the `src/test/scala` directory:
+Sbt recognizes $specs2 as a ["test framework"](http://www.scala-sbt.org/release/docs/Testing.html). This means that any class or object extending the `Specification` abstract class can be executed by sbt. The `test` command will run all the specifications in your project provided you put them in the `src/test/scala` directory:
 ```
 sbt>test
 ```

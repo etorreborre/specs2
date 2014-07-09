@@ -4,14 +4,14 @@ package matchers
 
 import form.Card
 
-object DependencyMatchers extends Card with specification.Analysis with UserGuideVariables {
+object DependencyMatchers extends UserGuideCard with specification.Analysis with UserGuideVariables {
   def title = "Dependency Matchers"
   def text = s2"""
 It is highly desirable to have acyclic dependencies between the packages of a project. This often leads to describing the packages structure as "layered": each package on a layer can only depend on a package on a lower layer. **_specs2_** helps you enforce this design property with specific matchers.
 
 **Layers definition**
 
-First you need to define the packages and their expected dependencies. Mix-in the `${fullName[specification.Analysis]}` trait and define, (taking ***specs2*** as an example): ${snippet{
+First you need to define the packages and their expected dependencies. Mix-in the `${fullName[specification.Analysis]}` trait and define, (taking $specs2 as an example): ${snippet{
 
 layers (
   "runner",

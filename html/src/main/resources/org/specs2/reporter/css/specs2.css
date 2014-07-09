@@ -17,6 +17,11 @@ pre.prettyprint.prettyprinted {
   border: 0px;
 }
 
+s2 {
+  font-weight: bold;
+  font-style: italic;
+  font-family: "Helvetica";
+}
 
 h1 {
   color: #5981B4;

@@ -4,7 +4,7 @@ package matchers
 
 import form.Card
 
-object TraversableMatchers extends Card {
+object TraversableMatchers extends UserGuideCard {
   def title = "Traversable"
   def text = s2"""
 Traversables can be checked with several matchers.

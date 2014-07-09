@@ -107,7 +107,7 @@ m.get(org.mockito.Matchers.anyInt()) returns "element"
 m.get(999) must_== "element"
 }}
 
-***specs2*** matchers can also be passed directly as arguments: ${snippet{
+$specs2 matchers can also be passed directly as arguments: ${snippet{
 m.get(===(123)) returns "one"
 }}
 

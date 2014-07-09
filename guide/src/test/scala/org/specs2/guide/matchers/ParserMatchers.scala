@@ -6,7 +6,7 @@ import form.Card
 
 import scala.util.parsing.combinator._
 
-object ParserMatchers extends Card with UserGuideVariables {
+object ParserMatchers extends UserGuideCard with UserGuideVariables {
   def title = "Parser"
   def text =  s2"""
 Scala provides a parsing library using [parser combinators](http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html).

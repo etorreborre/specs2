@@ -7,7 +7,7 @@ import text.LinesContent
 
 import form.Card
 
-object ContentMatchers extends Card with matcher.ContentMatchers {
+object ContentMatchers extends UserGuideCard with matcher.ContentMatchers {
   def title = "Content"
   def text = s2"""
 

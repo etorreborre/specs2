@@ -21,7 +21,7 @@ class HelloWorldSpec extends Specification { def is = s2"""
 }
 }}
 
-As you can see, a ***specs2*** software specification is nothing more than a Scala class extending `org.specs2.Specification` and declaring a special `is` method. This method contains some plain text describing what your application should do as well as some executable code specifying precisely what is expected.
+As you can see, a $specs2 software specification is nothing more than a Scala class extending `org.specs2.Specification` and declaring a special `is` method. This method contains some plain text describing what your application should do as well as some executable code specifying precisely what is expected.
 
 ## Execution
 
@@ -49,7 +49,7 @@ Finished in 0 second, 58 ms
 The rest of this ${see(UserGuide)} will show you how to:
 
  * ${"structure" ~/ Structure} your specification using one of the 2 major "styles" of specifications: "Acceptance" and "Unit"
- * use the many ***specs2*** ${"matchers" ~/ Matchers} to specify precisely the expected behavior of your application
+ * use the many $specs2 ${"matchers" ~/ Matchers} to specify precisely the expected behavior of your application
  * ${"run" ~/ Runners} your specification and output results in various formats
 """
 

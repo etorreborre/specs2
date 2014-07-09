@@ -4,7 +4,7 @@ package matchers
 
 import form.Card
 
-object XmlMatchers extends Card {
+object XmlMatchers extends UserGuideCard {
   def title = "Xml"
   def text = """
 It is very useful to have literal Xml in Scala, it is even more useful to have matchers for it! If you want to use those matchers you need to extend the `org.specs2.matcher.XmlMatchers` trait:

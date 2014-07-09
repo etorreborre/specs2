@@ -4,7 +4,7 @@ package matchers
 
 import form.Card
 
-object JsonMatchers extends Card with matcher.JsonMatchers {
+object JsonMatchers extends UserGuideCard with matcher.JsonMatchers {
   def title = "Json"
   def text =  s2"""
  [Json](http://www.json.org) is a simple data format essentially modeling recursive key-values. Once you extend the `org.specs2.matcher.JsonMatchers` trait, you can verify the presence of appropriate values in Strings representing Json documents:

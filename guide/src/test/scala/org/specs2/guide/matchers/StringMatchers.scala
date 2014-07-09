@@ -4,7 +4,7 @@ package matchers
 
 import form.Card
 
-object StringMatchers extends Card {
+object StringMatchers extends UserGuideCard {
   def title = "String"
   def text = s2"""
 Matching on strings is very common. Here are the matchers which can help you:

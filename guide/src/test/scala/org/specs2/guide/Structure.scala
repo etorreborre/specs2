@@ -10,7 +10,7 @@ In a Specification you generally want to include 2 things:
  - some informal text describing what the system/application/function should do
  - some code specifying exactly what is expected when something is executed
 
-With ***specs2*** you have 2 main ways to do this:
+With $specs2 you have 2 main ways to do this:
 
  - you can create an "Acceptance" specification where all the informal text is written in one place and the code is written elsewhere. The name "acceptance" comes from the fact that it might be easier for a non-developer to read to text to validate your specification
 

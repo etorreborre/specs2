@@ -4,7 +4,7 @@ package matchers
 
 import form.Card
 
-object FileMatchers extends Card {
+object FileMatchers extends UserGuideCard {
   def title = "File"
   def text = s2"""
 The Java api for files is more or less mimicked as matchers which can operate on strings denoting paths or on Files (with the `org.specs2.matcher.FileMatchers` trait)

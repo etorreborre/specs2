@@ -2,7 +2,7 @@ package org.specs2
 package guide
 
 object StandardResults extends UserGuidePage { def is = s2"""
-The ***specs2*** ${see(QuickStart)} guide introduces matchers to create expressions but you can use other kinds of predefined results to implement your examples.
+The $specs2 ${see(QuickStart)} guide introduces matchers to create expressions but you can use other kinds of predefined results to implement your examples.
 
 ### Boolean results
 

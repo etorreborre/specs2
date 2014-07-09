@@ -3,7 +3,7 @@ package guide
 
 object Installation extends UserGuidePage { def is = s2"""
 
-There are 3 preferred ways to install ***specs2***:
+There are 3 preferred ways to install $specs2:
 
  - [sbt](http://scala-sbt.org)
  - [maven](http://maven.apache.org)

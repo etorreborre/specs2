@@ -4,7 +4,7 @@ package matchers
 
 import form.Card
 
-object TryMatchers extends Card {
+object TryMatchers extends UserGuideCard {
   def title = "Try"
   def text = s2"""
   There are several matchers to check Try instances:

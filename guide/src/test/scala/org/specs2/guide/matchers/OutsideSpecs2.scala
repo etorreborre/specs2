@@ -6,7 +6,7 @@ object OutsideSpecs2 extends UserGuidePage { def is = s2"""
 
 ## Outside specs2
 
-The ***specs2*** matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:
+The $specs2 matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:
 
  * `${fullName[matcher.MustMatchers]}` (or `${fullName[matcher.ShouldMatchers]}`) to write anything like `1 must be_==(1)` and
    get a `Result` back

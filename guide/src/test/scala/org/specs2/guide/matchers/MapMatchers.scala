@@ -4,7 +4,7 @@ package matchers
 
 import form.Card
 
-object MapMatchers extends Card {
+object MapMatchers extends UserGuideCard {
   def title = "Map"
   def text = s2"""
 Maps have their own matchers as well, to check keys and values:

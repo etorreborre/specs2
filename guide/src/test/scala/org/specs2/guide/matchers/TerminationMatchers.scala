@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutorService
 import form.Card
 import scala.concurrent.duration._
 
-object TerminationMatchers extends Card with matcher.TerminationMatchers {
+object TerminationMatchers extends UserGuideCard with matcher.TerminationMatchers {
   def title = "Termination"
   def text = s2"""
 

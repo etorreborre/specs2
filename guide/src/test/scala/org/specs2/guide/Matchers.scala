@@ -20,7 +20,7 @@ s2"the directoryPath method should return well-formed paths $e1"
 def e1 = Paths.directoryPath("/tmp/path/to/dir") must beEqualTo("/tmp/path/to/dir/")
 }}
 
-The `must` operator takes the actual value returned by `directoryPath` and applies it to a `Matcher` built with the expected value. `beEqualTo` is one of the many matchers defined by ***specs2***, it just checks if 2 values are equal. In the following sections you will learn:
+The `must` operator takes the actual value returned by `directoryPath` and applies it to a `Matcher` built with the expected value. `beEqualTo` is one of the many matchers defined by $specs2, it just checks if 2 values are equal. In the following sections you will learn:
 
  - the different ways of checking [equality](#equality)
  - to use the matchers for the most [common data types](#out-of-the-box) in Scala, and most notably `Traversable`
@@ -218,7 +218,7 @@ In the code above you have to:
 
 ### And if you want to know more
 
- - read the ${"reference card" ~/ ReferenceCard} on all of ***specs2*** matchers
+ - read the ${"reference card" ~/ ReferenceCard} on all of $specs2 matchers
  - use ${"syntactic variations" ~/ SyntacticVariations} on the `value must matcher` form
  - implement the ${"`AsResult` typeclass" ~/ AsResultTypeclass} to go beyond matchers
  - use the ${"`beA[CaseClass]`" ~/ CaseClassMatchers} matcher to automatically create matchers for case classes

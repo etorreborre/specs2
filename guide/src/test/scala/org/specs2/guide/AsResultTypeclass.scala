@@ -2,7 +2,7 @@ package org.specs2
 package guide
 
 object AsResultTypeclass extends UserGuidePage { def is = s2"""
-There are many ways to define expectations in ***specs2***:
+There are many ways to define expectations in $specs2:
 
   * Boolean
   * Standard result

@@ -8,7 +8,7 @@ import matcher.ScalaCheckMatchers._
 object UseScalaCheck extends UserGuidePage { def is = s2"""
 ## ScalaCheck
 
-A clever way of creating expectations in ***specs2*** is to use the [ScalaCheck](https://github.com/rickynils/scalacheck) library.
+A clever way of creating expectations in $specs2 is to use the [ScalaCheck](https://github.com/rickynils/scalacheck) library.
 
 To declare ScalaCheck properties you first need to extend the `org.specs2.ScalaCheck` trait. Then you can pass functions returning any kind of `Result` (`Boolean`, `Result`, `MatchResult`) to the `prop` method and use the resulting `Prop` as your example body: ${snippet{
 s2"addition and multiplication are related ${ prop { (a: Int) => a + a == 2 * a } }"

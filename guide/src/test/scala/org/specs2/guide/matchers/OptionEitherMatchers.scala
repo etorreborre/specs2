@@ -4,7 +4,7 @@ package matchers
 
 import form.Card
 
-object OptionEitherMatchers extends Card {
+object OptionEitherMatchers extends UserGuideCard {
   def title = "Option/Either"
   def text = s2"""
   There are several matchers to check Option and Either instances:

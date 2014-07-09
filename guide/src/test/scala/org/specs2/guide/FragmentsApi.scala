@@ -4,7 +4,7 @@ package guide
 import specification.core.Fragments
 
 object FragmentsApi extends UserGuidePage { def is = s2"""
-In ***specs2*** a specification can simply be viewed as a sequence of "Fragments". A `Fragment` is something which has:
+In $specs2 a specification can simply be viewed as a sequence of "Fragments". A `Fragment` is something which has:
 
  - a `Description`
  - an `Execution`

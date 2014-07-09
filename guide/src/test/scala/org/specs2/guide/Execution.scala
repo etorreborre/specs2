@@ -7,7 +7,7 @@ object Execution extends UserGuidePage { def is = s2"""
 
 ### Parallel by default
 
-***specs2*** examples are executed concurrently by default:
+$specs2 examples are executed concurrently by default:
 
  - this makes the execution faster
 

@@ -5,7 +5,7 @@ package matchers
 import form.Card
 import matcher.ScalaInterpreterMatchers
 
-object InterpreterMatchers extends Card with matcher.ScalaInterpreterMatchers {
+object InterpreterMatchers extends UserGuideCard with matcher.ScalaInterpreterMatchers {
   def title = "Scala Interpreter"
   def text =  s2"""
 In the rare case where you want to use the Scala interpreter and execute a script: ${snippet{

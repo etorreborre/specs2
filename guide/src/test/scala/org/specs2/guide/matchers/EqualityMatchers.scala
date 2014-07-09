@@ -4,7 +4,7 @@ package matchers
 
 import form.Card
 
-object EqualityMatchers extends Card {
+object EqualityMatchers extends UserGuideCard {
   def title = "Equality"
   def text = s2"""
 The most common type of matcher is `beEqualTo` to test for equality. It is so frequent that there are several equivalent ways to declare equality

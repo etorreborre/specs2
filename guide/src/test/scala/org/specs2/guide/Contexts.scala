@@ -24,7 +24,7 @@ In a specification some examples are very straightforward. They just check that 
  * with state being setup before *all* examples
  * with clean up being done after *all* the examples
 
-For all those situations, there is a ***specs2*** trait which you can mix in your specification.
+For all those situations, there is a $specs2 trait which you can mix in your specification.
 
 ### BeforeEach / AfterEach
 

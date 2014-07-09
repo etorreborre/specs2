@@ -5,7 +5,7 @@ package matchers
 import form.Card
 import org.specs2.matcher.MatcherMacros
 
-object CaseClassMatchers extends Card with MatcherMacros {
+object CaseClassMatchers extends UserGuideCard with MatcherMacros {
   def title = "Case class"
 
   def text = s2"""
