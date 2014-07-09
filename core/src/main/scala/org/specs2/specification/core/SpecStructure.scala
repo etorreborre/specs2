@@ -3,6 +3,8 @@ package specification
 package core
 
 import main.Arguments
+import org.specs2.data.TopologicalSort
+import org.specs2.reflect.Classes._
 import scalaz.concurrent.Task
 import SpecStructure._
 import scalaz.std.anyVal._

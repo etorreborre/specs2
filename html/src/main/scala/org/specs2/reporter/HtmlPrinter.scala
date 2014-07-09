@@ -109,7 +109,7 @@ trait HtmlPrinter extends Printer {
         .updated("baseDir", options.baseDir)
         .updated("outDir", options.outDir)
 
-    val bodyFile = options.outDir+"body"
+    val bodyFile = options.outDir+"body-"+spec.hashCode
     val pandocArguments = Pandoc.arguments(bodyFile, options.template, variables1, outputFilePath(options.outDir, spec), pandoc)
 
     withFile(bodyFile) {
@@ -171,7 +171,7 @@ trait HtmlPrinter extends Printer {
 
   def getPandoc(env: Env): Action[Option[Pandoc]] = {
     import env.arguments.commandLine._
-    val markdown = bool("pandoc").getOrElse(false)
+    val markdown = bool("pandoc").getOrElse(true)
 
     if (markdown) {
       val pandoc = Pandoc(

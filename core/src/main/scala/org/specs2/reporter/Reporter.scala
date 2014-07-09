@@ -26,6 +26,10 @@ import Statistics._
  */
 trait Reporter {
 
+  /**
+   * report 1 spec structure with the given printers
+   * first find and sort the linked specifications and report them
+   */
   def report(env: Env, printers: List[Printer]): SpecStructure => Action[Unit] = { spec =>
     val env1 = env.setArguments(env.arguments.overrideWith(spec.arguments))
     val executing = readStats(spec, env1) |> env1.selector.select(env1) |> env1.executor.execute(env1)

@@ -44,7 +44,8 @@ object SpecificationStructure {
 
   /** @return all the linked specifications */
   def linkedSpecifications(spec: SpecificationStructure, env: Env, classLoader: ClassLoader): Action[Seq[SpecificationStructure]] = {
-    linkedSpecificationsClassnames(spec, env).map(name => create(name, classLoader)).sequenceU
+    val distinct = (ss: List[SpecificationStructure]) => ss.groupBy(_.structure(env)).values.map(_.head).toSeq
+    linkedSpecificationsClassnames(spec, env).map(name => create(name, classLoader)).sequenceU.map(distinct)
   }
 
   /** @return the class names of all the linked specifications */

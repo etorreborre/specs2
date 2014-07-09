@@ -12,12 +12,10 @@ object UserGuide extends UserGuidePage { def is = "User Guide".title ^ s2"""
 
   In this user guide, you will find:
 
-  a ${ "quick start guide" ~/ QuickStart }
-
-
-  how to ${"structure your specification" ~/ Structure}
-  how to use ${"matchers" ~/ Matchers }
-  how to ${"execute a specification" ~ Runners }
-  how to ${"how to troubleshoot errors" ~/ TroubleShooting }
+ <li class="example success"> a ${ "quick start guide" ~/ QuickStart } </li>
+ * how to ${"structure your specification" ~/ Structure}
+ * how to use ${"matchers" ~/ Matchers }
+ * how to ${"execute a specification" ~/ Runners }
+ * how to ${"how to troubleshoot errors" ~/ TroubleShooting }
                                                                         """
 }

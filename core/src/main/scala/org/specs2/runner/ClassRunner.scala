@@ -49,7 +49,7 @@ trait ClassRunner {
       for {
         printers <- createPrinters(env.arguments, loader)
         ss       <- SpecificationStructure.linkedSpecifications(spec, env, loader)
-        sorted   <- safe(SpecificationStructure.topologicalSort(env)(ss).getOrElse(Seq()) :+ spec)
+        sorted   <- safe(SpecificationStructure.topologicalSort(env)(ss).getOrElse(ss) :+ spec)
         rs = sorted.toList.map(s => Reporter.report(env, printers)(s.structure(env))).sequenceU
       } yield rs
 

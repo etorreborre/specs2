@@ -1,9 +1,8 @@
 package org.specs2
 package guide
 
-import main.Diffs
-
 object Runners extends UserGuidePage { def is = s2"""
+
 ## Presentation
 
 The most common way to run specs2 specifications is to use [sbt](http://scala-sbt.org). In this section we will present the most important options for running specifications
