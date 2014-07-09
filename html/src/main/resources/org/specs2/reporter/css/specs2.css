@@ -43,6 +43,7 @@ h2 {
   border-radius: 3px;
   padding: 3px 3px 3px 6px;
   border: 1px solid #999;
+  margin-top: 20px;
 }
 h3 {
   color: #3A6AAC;
@@ -50,6 +51,7 @@ h3 {
   font-size: 22px;
   padding: 0px 2px 0px 6px;
   border: 1px solid #aaa;
+  margin-top: 15px;
 }
 h4 {
   color: #3A6AAC;
