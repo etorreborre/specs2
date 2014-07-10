@@ -35,6 +35,6 @@ Numerical values can be compared with the following matchers
    `5 must beBetween(4, 6).excludingStart`
    `5 must beBetween(4, 6).excludingBounds`
    `// with brackets notation`
-   ```5 must (`be[`(4, 7)`]`)```
+   `5 must (be`\``[`\``(4, 7)`\``]`\``)`
                                                                                                                   ."""
 }
