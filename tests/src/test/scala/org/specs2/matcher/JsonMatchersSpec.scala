@@ -63,7 +63,7 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
  ${ "{'person' : {'name': 'Joe', 'name2' : 'Moe'} }" must /("person") /#(1) /("name2" -> "Moe") }
  ${ "{'house' : {'person' : {'name': 'Joe', 'name2' : 'Moe'}}}" must */("person") /#(1) /("name2" -> "Moe") }
 
- withSize can be used to check the size of an element
+ have(size(n)) can be used to check the size of an element
  ${ "['name', 'Joe']" must have(size(2)) }
  ${ "[{'name': 'Joe'}]" must /#(0).andHave(size(1)) }
  ${ "{'name' : ['Joe']}" must /("name").andHave(size(1)) }
