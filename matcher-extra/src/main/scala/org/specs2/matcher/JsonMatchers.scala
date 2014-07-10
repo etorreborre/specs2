@@ -64,6 +64,10 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersLowImplicits { oute
 
   /** allow to match on the i-th element of an Array or a Map (0-based) */
   def /#(i: Int) = new JsonSelector(i)
+
+  /** match if the document has the expected size at the top-level */
+  def withSize(n: Int): JsonSizeMatcher = new JsonSizeMatcher(n)
+
   case class JsonSelector(i: Int, negate: Boolean = false) { parentSelector =>
     protected def select(json: JSONType): Option[JSONType] = json match {
       case JSONObject(map) if i >= 0 && i < map.size  => Some(JSONObject(Map(map.iterator.toSeq(i))))
@@ -91,6 +95,10 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersLowImplicits { oute
     def */(pair: JsonPairSpec): JsonDeepPairMatcher = new JsonDeepPairMatcher(pair._1, pair._2) {
       override def navigate(json: JSONType): Option[JSONType] = select(json)
     }.not(when = negate)
+    /** check the size of the current value */
+    def withSize(n: Int) = new JsonSizeMatcher(n) {
+      override def navigate(json: JSONType): Option[JSONType] = parentSelector.select(json)
+    }
   }
 
   class JsonPairMatcher(key: JsonValueSpec, value: JsonValueSpec) extends Matcher[String] {
@@ -140,21 +148,45 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersLowImplicits { oute
     }
     /** in this case, interpret 'value' as the key and value1 as the expected value in the Array */
     def /(value1: JsonValueSpec) = new JsonValueMatcher(value1) {
-      override def navigate(json: JSONType): Option[JSONType] = parent.navigate(json).flatMap(find(value, _))
+      override def navigate(json: JSONType): Option[JSONType] = parent.navigateToValue(json)
     }
     /** in this case, interpret 'value' as the key and key1/value1 as the expected pair in the Map */
     def /(pair1: JsonPairSpec) = new JsonPairMatcher(pair1._1, pair1._2) {
-      override def navigate(json: JSONType): Option[JSONType] = parent.navigate(json).flatMap(find(value, _))
+      override def navigate(json: JSONType): Option[JSONType] = parent.navigateToValue(json)
     }
     /** in this case, interpret 'value' as the key and value1 as the expected value in the Array */
     def */(value1: JsonValueSpec) = new JsonDeepValueMatcher(value1) {
-      override def navigate(json: JSONType): Option[JSONType] = parent.navigate(json).flatMap(find(value, _))
+      override def navigate(json: JSONType): Option[JSONType] = parent.navigateToValue(json)
     }
     /** in this case, interpret 'value' as the key and value1 as the expected pair in the map */
     def */(pair1: JsonPairSpec) = new JsonDeepPairMatcher(pair1._1, pair1._2) {
-      override def navigate(json: JSONType): Option[JSONType] = parent.navigate(json).flatMap(find(value, _))
+      override def navigate(json: JSONType): Option[JSONType] = parent.navigateToValue(json)
     }
+    /** check the size of the current value */
+    def withSize(n: Int) = new JsonSizeMatcher(n) {
+      override def navigate(json: JSONType): Option[JSONType] = parent.navigateToValue(json)
+    }
+
+    private def navigateToValue(json: JSONType) = navigate(json).flatMap(find(value, _))
   }
+
+  class JsonSizeMatcher(n: Int) extends Matcher[String] { parent =>
+    def navigate(json: JSONType): Option[JSONType] = Some(json)
+
+    def apply[S <: String](s: Expectable[S]) = {
+      parse(s.value.notNull).map(navigate) match {
+        case Some(Some(JSONObject(obj))) =>
+          val o = obj.map(p => p._1+" : "+p._2).mkString("{", ", ", "}")
+          result(obj.size == n, s"$o has size $n", s"$o doesn't have size $n", s)
+        case Some(Some(JSONArray(list))) =>
+          result(list.size == n, s"$list has size $n", s"$list doesn't have size $n", s)
+        case Some(None) => result(false, "ok", s.value+" is empty", s)
+        case None       => result(false, "ok", "Could not parse:\n"+s.value, s)
+      }
+    }
+
+  }
+
   class JsonDeepPairMatcher(key: JsonValueSpec, value: JsonValueSpec) extends Matcher[String] {
     def navigate(json: JSONType): Option[JSONType] = Some(json)
 
@@ -175,6 +207,7 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersLowImplicits { oute
     def not(when: Boolean): JsonDeepPairMatcher = if (when) this.not else this
 
   }
+
   class JsonDeepValueMatcher(value: JsonValueSpec) extends Matcher[String] { parent =>
     def navigate(json: JSONType): Option[JSONType] = Some(json)
 
@@ -194,25 +227,29 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersLowImplicits { oute
 
     /** select the i'th element after navigation */
     def /#(i: Int) = new JsonSelector(i) {
-      override def select(json: JSONType): Option[JSONType] =
-        parent.navigate(json).flatMap(j => findDeep(value, j)).flatMap(super.select)
+      override def select(json: JSONType): Option[JSONType] = parent.navigateToValue(json).flatMap(super.select)
     }
     /** in this case, interpret 'value' as the key and value1 as the expected value in the Array */
     def /(value1: JsonValueSpec) = new JsonValueMatcher(value1) {
-      override def navigate(json: JSONType): Option[JSONType] = parent.navigate(json).flatMap(findDeep(value, _))
+      override def navigate(json: JSONType): Option[JSONType] = parent.navigateToValue(json)
     }
     /** in this case, interpret 'value' as the key and pair1 as the expected pair in the map */
     def /(pair1: JsonPairSpec) = new JsonPairMatcher(pair1._1, pair1._2) {
-      override def navigate(json: JSONType): Option[JSONType] = parent.navigate(json).flatMap(findDeep(value, _))
+      override def navigate(json: JSONType): Option[JSONType] = parent.navigateToValue(json)
     }
     /** in this case, interpret 'value' as the key and value1 as the expected value in the Array */
     def */(value1: JsonValueSpec) = new JsonDeepValueMatcher(value1) {
-      override def navigate(json: JSONType): Option[JSONType] = parent.navigate(json).flatMap(findDeep(value, _))
+      override def navigate(json: JSONType): Option[JSONType] = parent.navigateToValue(json)
     }
     /** in this case, interpret 'value' as the key and value1 as the expected pair in the map */
     def */(pair1: JsonPairSpec) = new JsonDeepPairMatcher(pair1._1, pair1._2) {
-      override def navigate(json: JSONType): Option[JSONType] = parent.navigate(json).flatMap(findDeep(value, _))
+      override def navigate(json: JSONType): Option[JSONType] = parent.navigateToValue(json)
     }
+    def withSize(n: Int) = new JsonSizeMatcher(n) {
+      override def navigate(json: JSONType): Option[JSONType] = parent.navigateToValue(json)
+    }
+
+    private def navigateToValue(json: JSONType) = navigate(json).flatMap(findDeep(value, _))
   }
 
   /**

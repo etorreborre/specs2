@@ -63,6 +63,14 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
  ${ "{'name' : 'Joe', 'name2' : 'Moe'}" must /#(1) /("name2" -> "Moe") }
  ${ "{'person' : {'name': 'Joe', 'name2' : 'Moe'} }" must /("person") /#(1) /("name2" -> "Moe") }
  ${ "{'house' : {'person' : {'name': 'Joe', 'name2' : 'Moe'}}}" must */("person") /#(1) /("name2" -> "Moe") }
+
+ withSize can be used to check the size of an element
+ ${ "['name', 'Joe']" must withSize(2) }
+ ${ "[{'name': 'Joe'}]" must /#(0).withSize(1) }
+ ${ "{'name' : ['Joe']}" must /("name").withSize(1) }
+ ${ "{'person' : [{'names':['e', 't']}]}" must /("person")./#(0)./("names").withSize(2) }
+ ${ "{'person' : {'names': ['e', 't']}}" must */("names").withSize(2) }
+ ${ "{'person' : ['names', ['e', 't']] }" must /("person")./#(1).withSize(2) }
                                                                                                                         """
 
   // this example is taken from the liftweb project
