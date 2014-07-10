@@ -18,7 +18,7 @@ With $specs2 you have 2 main ways to do this:
 
 Both ways of writing specifications have advantages and drawbacks:
 
- - Acceptance specifications are easier to read as a narrative but require navigation between the text and the code. You also need to define a `is` method holding the body of the specification.
+ - Acceptance specifications are easier to read as a narrative but require navigation between the text and the code. You also need to define a `is` method holding the body of the specification
  - Unit specifications are easier to navigate but the text tends to be lost in a sea of code
 
 ### Acceptance specification
@@ -60,16 +60,16 @@ class MySpecification extends org.specs2.mutable.Specification {
 
 This specification creates one piece of `Text` and 2 `Examples` as before but:
 
- - there is no need to define an `is` method (this means that a mutable variable is used to collect the `Texts` and `Examples` hence the `mutable` package)
+ - there is no need to define an `is` method (this means that a mutable variable is used to collect the `Texts` and `Examples` hence the `mutable` package name)
  - the code is close to each piece of text it specifies
 
 However once a specification is created with all its `Texts` and `Examples`, the execution will be the same, whether it is an Acceptance one or a Unit one.
 
-The `>>` blocks can be nested and this allows you to structure your specification so that the outermost blocks describe the general context while the innermost ones describe a more specific context. A similar effect can be achieved by simply indenting text in an acceptance specification.
+The `>>` blocks can be nested and this allows you to structure your specification so that the outermost blocks describe a general context while the innermost ones describe a more specific context. A similar effect can be achieved by simply indenting text in an acceptance specification.
 
 ### Expectations
 
-There is another major difference between the acceptance specifications and unit specifications. The first style encourages you to write [one expectation per example](http://bit.ly/one_assertion_per_test) while the second allows to use several. One expectation per example is useful because when a specification fails, you know immediately what is wrong. However it is sometimes expensive to setup data for an example so having several expectations sharing the same setup is sometimes what you want.
+There is another major difference between the acceptance specifications and unit specifications. The first style encourages you to write [one expectation per example](http://bit.ly/one_assertion_per_test) while the second allows to use several. One expectation per example is useful because when a specification fails, you know immediately what is wrong. However it is sometimes expensive to setup data for an example so having several expectations sharing the same setup is sometimes might be preferrable.
 
 The good news is that for each of the 2 main styles, acceptance and unit, you can choose exactly which mode you prefer if the default mode is not convenient.
 
@@ -110,14 +110,14 @@ class MySpecification extends org.specs2.mutable.Specification {
 
 It is also possible to use the "functional" expectation mode with a unit specification by mixing in the `org.specs2.execute.NoThrownExpectations` trait.
 
-### Now learn how to...
+## Now learn how to...
 
  - use ${"matchers" ~/ Matchers} to specify the body of your examples
  - set up ${"contexts" ~/ Contexts} for the examples
  - control the ${"execution" ~/ Execution} of a specification
  - ${"run" ~/ Runners} a specification
 
-### And if you want to know more
+#### And if you want to know more
 
  - ${"skip" ~/ SkipExamples} examples
  - collect ${"*all* expectations" ~/ GetAllExpectations}

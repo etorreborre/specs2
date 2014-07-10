@@ -7,21 +7,21 @@ import form.Card
 object NumericMatchers extends UserGuideCard {
   def title = "Numeric"
   def text = s2"""
-Less often you need to do comparisons on Numerical values:
+Numerical values can be compared with the following matchers
 
- * `beLessThanOrEqualTo` compares any Ordered type with `<=`
+ * `beLessThanOrEqualTo` compares any `Ordered` type with `<=`
    `1 must be_<=(2)`
    `1 must beLessThanOrEqualTo(2)`
 
- * `beLessThan` compares any Ordered type with `<`
+ * `beLessThan` compares any `Ordered` type with `<`
    `1 must be_<(2)`
    `1 must beLessThan(2)`
 
- * `beGreaterThanOrEqualTo` compares any Ordered type with `>=`
+ * `beGreaterThanOrEqualTo` compares any `Ordered` type with `>=`
    `2 must be_>=(1)`
    `2 must beGreaterThanOrEqualTo(1)`
 
- * `beGreaterThan` compares any Ordered type with `>`
+ * `beGreaterThan` compares any `Ordered` type with `>`
    `2 must be_>(1)`
    `2 must beGreaterThan(1)`
 
@@ -35,6 +35,6 @@ Less often you need to do comparisons on Numerical values:
    `5 must beBetween(4, 6).excludingStart`
    `5 must beBetween(4, 6).excludingBounds`
    `// with brackets notation`
-   `5 must (`be[`(4, 7)`]`) `
+   ```5 must (`be[`(4, 7)`]`)```
                                                                                                                   ."""
 }

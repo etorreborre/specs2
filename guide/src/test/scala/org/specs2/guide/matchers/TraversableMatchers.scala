@@ -7,9 +7,7 @@ import form.Card
 object TraversableMatchers extends UserGuideCard {
   def title = "Traversable"
   def text = s2"""
-Traversables can be checked with several matchers.
-
-If you want to check the size of a `Traversable`
+Traversables can be checked with several matchers. If you want to check the size of a `Traversable`
 
  * check if it is empty
  ${snippet{Seq() must be empty}}
@@ -21,6 +19,8 @@ If you want to check the size of a `Traversable`
 
  * check its ordering (works with any type `T` which has an `Ordering`)
  ${snippet{Seq(1, 2, 3) must beSorted}}
+
+#### Check each element individually
 
 Then you can check the elements which are contained in the Traversable
 
@@ -51,7 +51,9 @@ For each of the check above you can indicate how many times the check should be 
  * ${snippet{Seq(1, 2, 3) must contain(be_>(1)).between(1.times, 2.times)}}
  * ${snippet{Seq(1, 2, 3) must contain(be_>(1)).between(1, 2)}}
 
-The other types of check involve comparing the Traversable elements to other elements (values, matchers, function returning a `Result`)
+#### Check all elements
+
+The other types of checks involve comparing the Traversable elements to other elements (values, matchers, function returning a `Result`)
 
  * with a set of values
  ${snippet{Seq(1, 2, 3, 4) must contain(2, 4)}}
@@ -64,7 +66,7 @@ The other types of check involve comparing the Traversable elements to other ele
  * checking that the order is satisfied
  ${snippet{Seq(1, 2, 3, 4) must contain(allOf(be_>(0), be_>(1)).inOrder)}}
 
-Note that `allOf` tries to make each check at least successful once, even if that on the same value. If, on the other hand, you want to specify that each check must succeed on a *different* value you should use `onDistinctValues`. For example this will fail:
+Note that `allOf` tries to make each check be successful at least once, even if it is on the same value. On the other hand, if you want to specify that each check must succeed on a *different* value you should use `onDistinctValues`. For example this will fail:
 ${snippet{Seq(1) must contain(allOf(1, 1)).onDistinctValues}}
 
 The `eachOf` method does the same thing (and this example will fail as well):
@@ -81,7 +83,7 @@ Another frequent use of Traversable matchers is to check if the Traversable have
  * `exactly` where the traversable must contain exactly the specified number of elements
  ${snippet{Seq(1, 2) must contain(exactly(2, 1))}}
 
-The `atLeast/atMost/exactly` operators work on distinct values by default (because this is easier for counting the correspondance between actual values and expected ones). However you can use `onDistinctValues(false)` if you don't care.
+The `atLeast/atMost/exactly` operators work on distinct values by default (because this is easier for counting the correspondence between actual values and expected ones). However you can use `onDistinctValues(false)` if you don't care.
 
 Finally, if you want to get the differences between 2 traversables:
 
