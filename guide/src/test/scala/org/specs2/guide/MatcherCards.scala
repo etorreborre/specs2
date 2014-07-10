@@ -87,7 +87,7 @@ For some other types of equality:
  `a ==== b                 `| similar to `a === b` but will not typecheck if `a` and `b` don't have the same type
 
 
-Note: the `beEqualTo` matcher is using the regular `==` Scala equality. However in the case of `Arrays`, Scala `==` is just using reference equality, `eq`, for `Arrays`. So the `beEqualTo` matcher has been adapted to transform `Arrays` to `Seqs` before checking for equality, so that `Array(1, 2, 3) === Array(1, 2, 3)` (despite the fact that `Array(1, 2, 3) != Array(1, 2, 3)`).
+_Note_: the `beEqualTo` matcher is using the regular `==` Scala equality. However in the case of `Arrays`, Scala `==` is just using reference equality, `eq`. So the `beEqualTo` matcher has been adapted to use the `.deep` method on `Arrays`, transforming them to `IndexedSeqs` (possibly nested), before checking for equality, so that `Array(1, 2, 3) === Array(1, 2, 3)` (despite the fact that `Array(1, 2, 3) != Array(1, 2, 3)`).
   """
 }
 
