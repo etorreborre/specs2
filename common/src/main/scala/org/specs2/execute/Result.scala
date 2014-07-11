@@ -228,10 +228,13 @@ trait Results {
     if (b) org.specs2.execute.Success("true") else org.specs2.execute.Failure("false")
 
   def negate(r: Result) = {
-    if (r.isSuccess) Failure(negateSentence(r.message), r.expected).setExpectationsNb(r.expectationsNb)
-    else if (r.isFailure) Failure(negateSentence(r.message), r.expected).setExpectationsNb(r.expectationsNb)
+    if (r.isSuccess)      Failure(negateSentence(r.message), r.expected).setExpectationsNb(r.expectationsNb)
+    else if (r.isFailure) Success(negateSentence(r.message), r.expected).setExpectationsNb(r.expectationsNb)
     else r
   }
+
+  def negateWhen(condition: Boolean)(r: Result) =
+    if (condition) negate(r) else r
 }
 
 object Results extends Results

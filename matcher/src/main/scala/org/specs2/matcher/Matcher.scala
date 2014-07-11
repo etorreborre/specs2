@@ -81,6 +81,11 @@ trait Matcher[-T] { outer =>
       case _                                                         => Matcher.result(other.isSuccess, other.message, value)
     }
   }
+
+  /** @return a Match Result from another result */
+  protected def result[S <: T](other: Result, value: Expectable[S]): MatchResult[S] =
+    Matcher.result(other, value)
+
   /**
    * @return a MatchResult using the messages embedded in a MatchResultMessage (i.e. an accumulation of messages from other matches)
    */
@@ -250,6 +255,11 @@ object Matcher {
   def result[T](test: Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T], expected: String, actual: String): MatchResult[T] = {
     if (test) MatchSuccess(okMessage, koMessage, value)
     else      MatchFailure.create(okMessage, koMessage, value, FailureDetails(expected, actual))
+  }
+
+  def result[T](r: Result, value: Expectable[T]): MatchResult[T] = {
+    if (r.isSuccess) MatchSuccess(r.message, r.message, value)
+    else             MatchFailure(r.message, r.message, value)
   }
 
   def result[T](test: Boolean, message: =>String, value: Expectable[T]): MatchResult[T] =
