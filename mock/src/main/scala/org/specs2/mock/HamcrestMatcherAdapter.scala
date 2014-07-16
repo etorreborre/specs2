@@ -22,7 +22,7 @@ case class HamcrestMatcherAdapter[T](m: Matcher[T]) extends BaseMatcher {
     val i = if (item != null && item.isInstanceOf[Function0[_]]) item.asInstanceOf[Function0[_]].apply().asInstanceOf[A] else item
     try {
       matcher.apply(Expectable(i)) match {
-        case MatchFailure(_, ko, _, _) => message = ko(); false
+        case f: MatchFailure[_] => message = f.koMessage; false
         case _ => true
       }
     // a class cast exception can happen if we tried: vet.treat(dog); there must be one(vet).treat(bird) (see issue #222)

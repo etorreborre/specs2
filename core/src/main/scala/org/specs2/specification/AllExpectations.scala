@@ -27,8 +27,8 @@ trait AllExpectations extends StoredExpectations with FragmentsFactory with Spec
   override protected def mapMatchResult[T](m: MatchResult[T]): MatchResult[T] = {
     def addLocation(message: String, location: String) = message + " [" + location + "]"
     m match {
-      case f @ MatchFailure(_,_,_,_) => f.copy(ok = () => addLocation(f.okMessage, f.toResult.location), ko = () => addLocation(f.koMessage, f.toResult.location))
-      case other                     => other
+      case f: MatchFailure[_] => f.copy(ok = () => addLocation(f.okMessage, f.toResult.location), ko = () => addLocation(f.koMessage, f.toResult.location))
+      case other              => other
     }
   }
 

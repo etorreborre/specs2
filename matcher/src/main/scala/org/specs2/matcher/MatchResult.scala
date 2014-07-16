@@ -96,6 +96,8 @@ trait MatchResult[+T] extends ResultLike {
   def mute: MatchResult[T] = this
   /** update the failure message of this match result */
   def updateMessage(f: String => String) = this
+  /** filter the trace of this result (if there is one) */
+  def filterTrace(f: List[StackTraceElement] => List[StackTraceElement]) = this
   /** set a new failure message on this match result */
   def setMessage(message: String) = updateMessage((s: String) => message)
 
@@ -109,8 +111,8 @@ trait MatchResult[+T] extends ResultLike {
  * This is actually here to avoid overloading conflicts with the apply method in the companion object
  */
 case class MatchSuccess[T] private[specs2](ok: () => String, ko: () => String, expectable: Expectable[T])(implicit p: Int = 0) extends MatchResult[T] {
-  def okMessage = ok()
-  def koMessage = ko()
+  lazy val okMessage = ok()
+  lazy val koMessage = ko()
   override def toResult = Success(okMessage)
 
   def negate: MatchResult[T] = MatchFailure(koMessage, okMessage, expectable)
@@ -122,28 +124,40 @@ object MatchSuccess {
   def apply[T](ok: =>String, ko: =>String, expectable: Expectable[T]) =
     new MatchSuccess(() => ok, () => ko, expectable)
 }
-case class MatchFailure[T] private[specs2](ok: () => String, ko: () => String, expectable: Expectable[T], details: Details = NoDetails()) extends MatchResult[T] {
-  def okMessage = ok()
-  def koMessage = ko()
+case class MatchFailure[T] private[specs2](ok: () => String, ko: () => String,
+                                           expectable: Expectable[T],
+                                           trace: List[StackTraceElement] = (new Exception).getStackTrace.toList,
+                                           details: Details = NoDetails()) extends MatchResult[T] {
+  lazy val okMessage = ok()
+  lazy val koMessage = ko()
 
-  /** an exception having the same stacktrace */
-  val exception = new Exception(koMessage)
-  override def toResult = Failure(koMessage, okMessage, exception.getStackTrace.toList, details)
+  def exception = {
+    val e = new Exception(koMessage)
+    e.setStackTrace(trace.toArray)
+    e
+  }
+
+  override def toResult = Failure(koMessage, okMessage, trace, details)
 
   def negate: MatchResult[T] = MatchSuccess(koMessage, okMessage, expectable)
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
 
   override def mute                               = MatchFailure.create("", "", expectable, details)
   override def updateMessage(f: String => String) = copy(ok = () => f(okMessage), ko = () => f(koMessage))
+  override def filterTrace(f: List[StackTraceElement] => List[StackTraceElement]) = copy(trace = f(trace))
   override def orThrow: MatchFailure[T]           = throw new FailureException(toResult)
   override def orSkip: MatchFailure[T]            = throw new SkipException(toResult)
 }
-object MatchFailure {
-  def create[T](ok: =>String, ko: =>String, expectable: Expectable[T], details: Details) =
-    new MatchFailure(() => ok, () => ko, expectable, details)
 
-  def apply[T](ok: =>String, ko: =>String, expectable: Expectable[T]) =
-    new MatchFailure(() => ok, () => ko, expectable)
+object MatchFailure {
+  def create[T](ok: =>String, ko: =>String, expectable: Expectable[T], trace: List[StackTraceElement], details: Details): MatchFailure[T] =
+    new MatchFailure(() => ok, () => ko, expectable, trace, details)
+
+  def create[T](ok: =>String, ko: =>String, expectable: Expectable[T], details: Details): MatchFailure[T] =
+    create(ok, ko, expectable, (new Exception).getStackTrace.toList, details)
+
+  def apply[T](ok: =>String, ko: =>String, expectable: Expectable[T]): MatchFailure[T] =
+    create(ok, ko, expectable, NoDetails())
 }
 
 case class MatchSkip[T] private[specs2](override val message: String, expectable: Expectable[T]) extends MatchResult[T] {
@@ -180,18 +194,18 @@ class AndMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T
   lazy val m2 = second
   override def evaluate[S >: T] = {
     m1 match {
-      case MatchFailure(_,_,_,_) => m1
+      case f: MatchFailure[_] => m1
       case _ =>
         (m1, m2) match {
-          case (_, NeutralMatch(_))                              => new AndMatch(m1, MatchSkip("", expectable))
-          case (NeutralMatch(_), _)                              => new AndMatch(m2, MatchSkip("", expectable))
-          case (NotMatch(_), NotMatch(_))                        => new AndNotMatch(m1.evaluate, m2.evaluate)
-          case (_, NotMatch(_))                                  => new AndNotMatch(m1, MatchSkip("", expectable))
-          case (NotMatch(_), _)                                  => new AndMatch(m1.evaluate, m2).evaluate
-          case (MatchSuccess(_, _, _), MatchFailure(_, _, _, _)) => m2
-          case (MatchSuccess(_, _, _), _)                        => m1
-          case (_, MatchSuccess(_, _, _))                        => m2
-          case (_, _)                                            => m1
+          case (_, NeutralMatch(_))                      => new AndMatch(m1, MatchSkip("", expectable))
+          case (NeutralMatch(_), _)                      => new AndMatch(m2, MatchSkip("", expectable))
+          case (NotMatch(_), NotMatch(_))                => new AndNotMatch(m1.evaluate, m2.evaluate)
+          case (_, NotMatch(_))                          => new AndNotMatch(m1, MatchSkip("", expectable))
+          case (NotMatch(_), _)                          => new AndMatch(m1.evaluate, m2).evaluate
+          case (s: MatchSuccess[_], f: MatchFailure[_])  => m2
+          case (s: MatchSuccess[_], _)                   => m1
+          case (_, s: MatchSuccess[_])                   => m2
+          case (_, _)                                    => m1
         }
     }
   }
@@ -219,13 +233,13 @@ class OrMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T]
       case MatchSuccess(_, _, _)             => new OrMatch(m1, MatchSkip("", expectable))
       case _ => {
         (m1, m2) match {
-          case (_, NeutralMatch(_))                                   => new OrMatch(m1, MatchSkip("", expectable))
-          case (NeutralMatch(_), _)                                   => new OrMatch(m2, MatchSkip("", expectable))
-          case (NotMatch(_), NotMatch(_))                             => new OrNotMatch(m1.evaluate, m2)
-          case (_, NotMatch(_))                                       => new OrNotMatch(m1, m2)
-          case (NotMatch(_), _)                                       => new OrMatch(m1.evaluate, m2).evaluate
-          case (_, MatchSuccess(_, _, _))                             => m2
-          case (MatchFailure(ok,ko,e,d), MatchFailure(ok2,ko2,e2,d2)) => MatchFailure.create(ok()+"; "+ok2(), ko()+"; "+ko2(), e, d)
+          case (_, NeutralMatch(_))                       => new OrMatch(m1, MatchSkip("", expectable))
+          case (NeutralMatch(_), _)                       => new OrMatch(m2, MatchSkip("", expectable))
+          case (NotMatch(_), NotMatch(_))                 => new OrNotMatch(m1.evaluate, m2)
+          case (_, NotMatch(_))                           => new OrNotMatch(m1, m2)
+          case (NotMatch(_), _)                           => new OrMatch(m1.evaluate, m2).evaluate
+          case (_, s: MatchSuccess[_])                    => m2
+          case (f1: MatchFailure[_], f2: MatchFailure[_]) => MatchFailure.create(f1.okMessage+"; "+f2.okMessage, f1.koMessage+"; "+f2.koMessage, f1.expectable, f1.trace, f1.details)
           case (_, _) => m1
         }
       }

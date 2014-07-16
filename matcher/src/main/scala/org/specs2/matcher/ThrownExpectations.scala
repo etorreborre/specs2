@@ -68,10 +68,10 @@ trait ThrownExpectations extends Expectations with StandardResults with Standard
   /** this method can be overriden to throw exceptions when checking the match result */
   override protected def checkMatchResultFailure[T](m: MatchResult[T]) = {
     m match {
-      case f @ MatchFailure(_,_,_,_) => throw new MatchFailureException(f)
-      case s @ MatchSkip(_,_)        => throw new MatchSkipException(s)
-      case p @ MatchPending(_,_)     => throw new MatchPendingException(p)
-      case _                         => ()
+      case f @ MatchFailure(_,_,_,_,_) => throw new MatchFailureException(f)
+      case s @ MatchSkip(_,_)          => throw new MatchSkipException(s)
+      case p @ MatchPending(_,_)       => throw new MatchPendingException(p)
+      case _                           => ()
     }
     m
   }

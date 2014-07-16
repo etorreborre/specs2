@@ -11,9 +11,9 @@ trait MatchResultMessages {
 
   implicit def MatchResultMessageReducer[T]: Reducer[MatchResult[T], MatchResultMessage] =
     Reducer.unitReducer { r: MatchResult[T] => r match {
-      case MatchSuccess(ok, ko, e)    => SuccessMessage.create(ok(), ko())
-      case MatchFailure(ok, ko, e, d) => FailureMessage.create(ok(), ko())
-      case _                          => NeutralMessage(r.message)
+      case s: MatchSuccess[_] => SuccessMessage.create(s.okMessage, s.koMessage)
+      case f: MatchFailure[_] => FailureMessage.create(f.okMessage, f.koMessage)
+      case _                  => NeutralMessage(r.message)
     }}
 
   implicit val MatchResultMessageMonoid = new Monoid[MatchResultMessage] {
@@ -31,15 +31,15 @@ trait MatchResultMessages {
     def isSuccess: Boolean = true
   }
   case class SuccessMessage(ok: () => String, ko: () => String) extends MatchResultMessage {
-    def okMessage = ok()
-    def koMessage = ko()
+    lazy val okMessage = ok()
+    lazy val koMessage = ko()
 
     def append(m2: MatchResultMessage) = {
       m2 match {
-        case SuccessMessage(ok, ko) => SuccessMessage.create(okMessage+"; "+ok(), koMessage+"; "+ko())
-        case FailureMessage(ok, ko) => FailureMessage.create(okMessage+"; "+ok(), koMessage+"; "+ko())
-        case NeutralMessage(m)      => SuccessMessage.create(okMessage+"; "+m, koMessage+"; "+m)
-        case _                      => this
+        case s: MatchSuccess[_] => SuccessMessage.create(okMessage+"; "+s.okMessage, koMessage+"; "+s.koMessage)
+        case f: MatchFailure[_] => FailureMessage.create(okMessage+"; "+f.okMessage, koMessage+"; "+f.koMessage)
+        case NeutralMessage(m)  => SuccessMessage.create(okMessage+"; "+m, koMessage+"; "+m)
+        case _                  => this
       }
     }
   }
@@ -47,15 +47,15 @@ trait MatchResultMessages {
     def create(ok: =>String, ko: =>String) = new SuccessMessage(() => ok, () => ko)
   }
   case class FailureMessage(ok: () => String, ko: () => String) extends MatchResultMessage {
-    def okMessage = ok()
-    def koMessage = ko()
+    lazy val okMessage = ok()
+    lazy val koMessage = ko()
 
     def append(m2: MatchResultMessage) = {
       m2 match {
-        case SuccessMessage(ok, ko) => FailureMessage.create(okMessage+"; "+ok(), koMessage+"; "+ko())
-        case FailureMessage(ok, ko) => FailureMessage.create(okMessage+"; "+ok(), koMessage+"; "+ko())
-        case NeutralMessage(m)      => FailureMessage.create(okMessage+"; "+m, koMessage+"; "+m)
-        case _                      => this
+        case s: MatchSuccess[_] => FailureMessage.create(okMessage+"; "+s.okMessage, koMessage+"; "+s.koMessage)
+        case f: MatchFailure[_] => FailureMessage.create(okMessage+"; "+f.okMessage, koMessage+"; "+f.koMessage)
+        case NeutralMessage(m)  => FailureMessage.create(okMessage+"; "+m, koMessage+"; "+m)
+        case _                  => this
       }
     }
     override def isSuccess: Boolean = false
@@ -66,10 +66,10 @@ trait MatchResultMessages {
   case class NeutralMessage(message: String) extends MatchResultMessage {
     def append(m2: MatchResultMessage) = {
       m2 match {
-        case SuccessMessage(ok, ko) => SuccessMessage.create(message+"; "+ok, message+"; "+ko())
-        case FailureMessage(ok, ko) => FailureMessage.create(message+"; "+ok(), message+"; "+ko)
-        case NeutralMessage(m)      => NeutralMessage(message+"; "+m)
-        case _ => this
+        case s: MatchSuccess[_] => SuccessMessage.create(message+"; "+s.okMessage, message+"; "+s.koMessage)
+        case f: MatchFailure[_] => FailureMessage.create(message+"; "+f.okMessage, message+"; "+f.koMessage)
+        case NeutralMessage(m)  => NeutralMessage(message+"; "+m)
+        case _                  => this
       }
     }
   }
