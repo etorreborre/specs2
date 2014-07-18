@@ -47,7 +47,8 @@ object build extends Build {
     organization := "org.specs2",
     specs2Version in GlobalScope <<= version,
     specs2ShellPrompt,
-    scalaVersion := "2.10.4")
+    scalaVersion := "2.10.4",
+    crossScalaVersions := Seq("2.10.4", "2.11.1"))
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 
@@ -234,7 +235,7 @@ object build extends Build {
       generateUserGuide,
       generateIndexPage,
       publishSite,
-      publishSignedArtifacts, 
+      ReleaseStep(publishSignedArtifacts, check = identity, enableCrossBuild = true),
       releaseToSonatype,
       notifyHerald,
       tagRelease,
@@ -245,7 +246,7 @@ object build extends Build {
     releaseSnapshotProcess := Seq[ReleaseStep](
       generateUserGuide,
       publishSite,
-      publishSignedArtifacts
+      ReleaseStep(publishSignedArtifacts, check = identity, enableCrossBuild = true)
       ),
     commands += releaseSnapshotCommand
     ) ++
