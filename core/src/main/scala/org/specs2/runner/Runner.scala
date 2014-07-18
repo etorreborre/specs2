@@ -1,14 +1,11 @@
 package org.specs2
 package runner
 
-import control._
+import org.specs2.control.Throwablex._
+import org.specs2.control._
+
 import scalaz.effect.IO
-import scalaz.effect.IO._
-import scalaz.std.anyVal._
-import scalaz.syntax.bind._
-import scalaz.syntax.traverse.ToTraverseOps
-import scalaz.std.list._
-import Throwablex._
+import scalaz._, Scalaz._
 
 /**
  * reusable actions for Runners
@@ -26,11 +23,14 @@ object Runner {
   }
 
   def logThrowable(t: Throwable): IO[Unit] = {
-    consoleLogging(t.getMessage+"\n") >>
-      (t :: t.chainedExceptions).map { s =>
-        consoleLogging("  caused by " + s.toString) >>
-          s.getStackTrace.toList.traverseU(t => consoleLogging("  " + t.toString))
-      }.sequence.void
+    consoleLogging("\n"+t.toString+"\n")    >>
+    t.chainedExceptions.traverse_(s => consoleLogging("  caused by " + s.toString)) >>
+    consoleLogging("\nSTACKTRACE") >>
+    t.getStackTrace.toList.traverse_(t => consoleLogging("  "+t.toString)) >>
+    t.chainedExceptions.traverse_ { s =>
+      consoleLogging("\n  CAUSED BY " + s.toString) >>
+      s.getStackTrace.toList.traverse_(t => consoleLogging("  "+t.toString))
+    }
   }
 
   def exitSystem(status: Int) {

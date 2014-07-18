@@ -19,6 +19,7 @@ import reporter.SbtLineLogger
 import reflect.Classes
 import reporter.Printer._
 import specification.core._
+import text.NotNullStrings._
 
 case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader) extends _root_.sbt.testing.Runner {
   private lazy val commandLineArguments = Arguments(args:_*)
@@ -104,16 +105,21 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
     val logger = SbtLineLogger(loggers)
 
     def logThrowable(t: Throwable) {
-      logger.errorLine(t.getMessage+"\n")
-      (t :: t.chainedExceptions) foreach { s =>
-        logger.errorLine("  caused by " + s.toString)
+      logger.errorLine("\n"+t.toString+"\n")
+      t.chainedExceptions foreach { s => logger.errorLine("  caused by " + s.toString) }
+
+      logger.errorLine("\nSTACKTRACE")
+      t.getStackTrace.foreach(t => logger.errorLine("  " + t.toString))
+
+      t.chainedExceptions foreach { s =>
+        logger.errorLine("\n  CAUSED BY " + s.toString)
         s.getStackTrace.foreach(t => logger.errorLine("  " + t.toString))
       }
     }
     e.fold(
       m =>      { events.error; logger.errorLine(m) },
-      t =>      { events.error(t); logger.errorLine(t.getMessage); logThrowable(t) },
-      (m, t) => { events.error(t); logger.errorLine(t.getMessage); logThrowable(t) }
+      t =>      { events.error(t); if (t.getMessage != null) logger.errorLine(t.getMessage); logThrowable(t) },
+      (m, t) => { events.error(t); if (t.getMessage != null) logger.errorLine(t.getMessage); logThrowable(t) }
     )
     logger.close
   }
