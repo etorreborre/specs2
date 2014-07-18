@@ -2,14 +2,13 @@ package org.specs2
 package matcher
 
 import org.scalacheck.Prop._
-import org.scalacheck.Test.{ Proved, Passed, Failed, Exhausted, GenException, PropException, Result }
-import org.scalacheck.util.{ FreqMap, Pretty }
-import Pretty._
-import scala.collection.Map
-import io.{Output, ConsoleOutput}
+import org.scalacheck.Test.{Exhausted, Failed, GenException, Passed, PropException, Proved, Result}
 import org.scalacheck._
-import execute.{ResultLogicalCombinators, AsResult}
-import text.NotNullStrings._
+import org.scalacheck.util.Pretty._
+import org.scalacheck.util.{FreqMap, Pretty}
+import org.specs2.execute.{AsResult, ResultLogicalCombinators}
+import org.specs2.io.{ConsoleOutput, Output}
+import org.specs2.text.NotNullStrings._
 
 /**
  * The ScalaCheckMatchers trait provides matchers which allow to
@@ -133,34 +132,61 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
     result match {
       case Result(Proved(as), succeeded, discarded, fq, _) =>
         execute.Success(noCounterExample(succeeded), frequencies(fq)(defaultPrettyParams), succeeded)
+
       case Result(Passed, succeeded, discarded, fq, _)     =>
         execute.Success(noCounterExample(succeeded), frequencies(fq)(defaultPrettyParams), succeeded)
+
       case r @ Result(GenException(execute.FailureException(f)), n, _, fq, _) => f
+
       case r @ Result(GenException(e), n, _, fq, _)        =>
-        execute.Failure(prettyTestRes(r)(defaultPrettyParams) + frequencies(fq), e.getMessage.notNull, e.getStackTrace().toList)
+        execute.Failure(prettyTestRes(r)(defaultPrettyParams) + frequencies(fq), e.getMessage.notNull, e.getStackTrace.toList)
+
       case r @ Result(Exhausted, n, _, fq, _)              =>
         execute.Failure(prettyTestRes(r)(defaultPrettyParams) + frequencies(fq))
+
       case Result(Failed(args, labels), n, _, fq, _) =>
-        new execute.Failure(counterExampleMessage(args, n, labels) + frequencies(fq)) {
+        new execute.Failure(counterExampleMessage(args, n, labels) + frequencies(fq), details = collectDetails(fq)) {
           // the location is already included in the failure message
           override def location = ""
         }
+
       case Result(PropException(args, ex, labels), n, _, fq, _) =>
         ex match {
           case execute.FailureException(f) =>
-            new execute.Failure(counterExampleMessage(args, n, labels+f.message) + frequencies(fq)) {
+            new execute.Failure(counterExampleMessage(args, n, labels+f.message) + frequencies(fq), details = f.details) {
               override def location = f.location
             }
           case execute.SkipException(s)    => s
           case execute.PendingException(p) => p
           case e: java.lang.Exception      =>
             execute.Error("A counter-example is "+counterExample(args)+": " + ex + getCause(e) +
-                                                " ("+afterNTries(n)+")"+ failedLabels(labels) + frequencies(fq), e)
+              " ("+afterNTries(n)+")"+ failedLabels(labels) + frequencies(fq), e)
           case throwable    => throw ex
         }
-
     }
   }
+
+  /**
+   * Failure details might get collected with the collect operation when evaluating
+   * the Prop
+   */
+  private def collectDetails[T](fq: FreqMap[Set[T]]): execute.Details = {
+    fq.getRatios.flatMap(_._1.toList).collect { case d @ execute.FailureDetails(_,_) => d }
+      .headOption.getOrElse(execute.NoDetails())
+  }
+
+  /**
+   * Remove failure details from collected data
+   */
+  private def removeDetails(fq: FreqMap[Set[Any]]): FreqMap[Set[Any]] = {
+    fq.getCounts.foldLeft(FreqMap.empty[Set[Any]]) { case (res, (set, count)) =>
+      set.toList match {
+        case (_:execute.FailureDetails) :: _ => res
+        case _                               => (1 to count).foldLeft(res) { case (map, i) => map + set }
+      }
+    }
+  }
+
   // depending on the result, return the appropriate success status and messages
   // the failure message indicates a counter-example to the property
   private[matcher] def noCounterExample(n: Int) = "The property passed without any counter-example " + afterNTries(n)
@@ -246,8 +272,13 @@ trait ResultPropertyImplicits {
     def apply(params: Gen.Parameters) = {
       try p(params)
       catch {
-        case execute.FailureException(f) => (Prop.falsified :| (f.message+" ("+f.location+")"))(params)
-        case e: Throwable                => Prop.exception(e)(params)
+        case execute.FailureException(f) if f.details != execute.NoDetails() =>
+          (Prop.falsified :| (f.message+" ("+f.location+")"))(params).collect(f.details)
+
+        case execute.FailureException(f) =>
+          (Prop.falsified :| (f.message+" ("+f.location+")"))(params)
+
+        case e: Throwable => Prop.exception(e)(params)
       }
     }
   }
@@ -268,7 +299,13 @@ trait ResultPropertyImplicits {
           case e : execute.Error   => Prop.exception(e.exception)
           case other               => Prop.passed
         }
-        prop.apply(params)
+        result match {
+          case f: execute.Failure if f.details != execute.NoDetails() =>
+            prop.apply(params).collect(f.details)
+
+          case _ =>
+            prop.apply(params)
+        }
       }
     }
   }
