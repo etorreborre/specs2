@@ -85,6 +85,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
  A ScalaCheck property will create a Result
    with a number of expectations that is equal to the minTestsOk                                         $result1
    with one expectation per Prop if the OneExpectationPerProp trait is used                              $result2
+   with failure details if any                                                                           $result3
 
  It is possible to change the default parameters used for the test
    by setting up new implicit parameters locally                                                         ${config().e1}
@@ -156,6 +157,10 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
     val spec = new Specification with ScalaCheck with OneExpectationPerProp { def is = "test" ! prop(trueFunction) }
     spec.is.examples.map(_.body()).head.expectationsNb must_== 1
   }
+  def result3  = execute(prop(failureWithDetails)) match {
+    case f: org.specs2.execute.Failure => if (f.details == org.specs2.execute.NoDetails()) ko("no details") else ok
+    case _                             => ko("not a failure")
+  }
 
   case class config() extends Before with ScalaCheckMatchers with StringOutput {
     def before = clear()
@@ -184,6 +189,7 @@ trait ScalaCheckProperties extends ScalaCheck with ResultMatchers {  this: Speci
   val alwaysTrue = Gen.const(true)
   val alwaysFalse = Gen.const(false)
   val random = Gen.oneOf(true, false)
+  val failureWithDetails = (a: Boolean) => "abc" ==== "bca"
 
   val propertyWithGenerationException = {
     implicit def arb: Arbitrary[Int] = Arbitrary { for (n <- Gen.choose(1, 3)) yield { error("boo"); n }}

@@ -133,22 +133,28 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
     result match {
       case Result(Proved(as), succeeded, discarded, fq, _) =>
         execute.Success(noCounterExample(succeeded), frequencies(fq)(defaultPrettyParams), succeeded)
+
       case Result(Passed, succeeded, discarded, fq, _)     =>
         execute.Success(noCounterExample(succeeded), frequencies(fq)(defaultPrettyParams), succeeded)
+
       case r @ Result(GenException(execute.FailureException(f)), n, _, fq, _) => f
+
       case r @ Result(GenException(e), n, _, fq, _)        =>
-        execute.Failure(prettyTestRes(r)(defaultPrettyParams) + frequencies(fq), e.getMessage.notNull, e.getStackTrace().toList)
+        execute.Failure(prettyTestRes(r)(defaultPrettyParams) + frequencies(fq), e.getMessage.notNull, e.getStackTrace.toList)
+
       case r @ Result(Exhausted, n, _, fq, _)              =>
         execute.Failure(prettyTestRes(r)(defaultPrettyParams) + frequencies(fq))
+
       case Result(Failed(args, labels), n, _, fq, _) =>
-        new execute.Failure(counterExampleMessage(args, n, labels) + frequencies(fq)) {
+        new execute.Failure(counterExampleMessage(args, n, labels) + frequencies(fq), details = collectDetails(fq)) {
           // the location is already included in the failure message
           override def location = ""
         }
+
       case Result(PropException(args, ex, labels), n, _, fq, _) =>
         ex match {
           case execute.FailureException(f) =>
-            new execute.Failure(counterExampleMessage(args, n, labels+f.message) + frequencies(fq)) {
+            new execute.Failure(counterExampleMessage(args, n, labels+f.message) + frequencies(fq), details = f.details) {
               override def location = f.location
             }
           case execute.SkipException(s)    => s
@@ -161,6 +167,28 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
 
     }
   }
+
+  /**
+   * Failure details might get collected with the collect operation when evaluating
+   * the Prop
+   */
+  private def collectDetails[T](fq: FreqMap[Set[T]]): execute.Details = {
+    fq.getRatios.flatMap(_._1.toList).collect { case d @ execute.FailureDetails(_,_) => d }
+      .headOption.getOrElse(execute.NoDetails())
+  }
+
+  /**
+   * Remove failure details from collected data
+   */
+  private def removeDetails(fq: FreqMap[Set[Any]]): FreqMap[Set[Any]] = {
+    fq.getCounts.foldLeft(FreqMap.empty[Set[Any]]) { case (res, (set, count)) =>
+      set.toList match {
+        case (_:execute.FailureDetails) :: _ => res
+        case _                               => (1 to count).foldLeft(res) { case (map, i) => map + set }
+      }
+    }
+  }
+
   // depending on the result, return the appropriate success status and messages
   // the failure message indicates a counter-example to the property
   private[matcher] def noCounterExample(n: Int) = "The property passed without any counter-example " + afterNTries(n)
@@ -191,7 +219,7 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
 
   private[matcher] def frequencies(fq: FreqMap[Set[Any]])(implicit params: Pretty.Params) = {
     if (fq.getRatios.isEmpty) ""
-    else "\n" + Pretty.prettyFreqMap(fq)(params)
+    else "\n" + Pretty.prettyFreqMap(removeDetails(fq))(params)
   }
 }
 object ScalaCheckMatchers extends ScalaCheckMatchers
@@ -246,8 +274,13 @@ trait ResultPropertyImplicits {
     def apply(params: Gen.Parameters) = {
       try p(params)
       catch {
-        case execute.FailureException(f) => (Prop.falsified :| (f.message+" ("+f.location+")"))(params)
-        case e: Throwable                => Prop.exception(e)(params)
+        case execute.FailureException(f) if f.details != execute.NoDetails() =>
+          (Prop.falsified :| (f.message+" ("+f.location+")"))(params).collect(f.details)
+
+        case execute.FailureException(f) =>
+          (Prop.falsified :| (f.message+" ("+f.location+")"))(params)
+
+        case e: Throwable => Prop.exception(e)(params)
       }
     }
   }
@@ -257,18 +290,26 @@ trait ResultPropertyImplicits {
   implicit def matchResultToProp[T](m: MatchResult[T]): Prop = resultProp(m.toResult)
 
   implicit def resultProp(r: =>execute.Result): Prop = {
+
     new Prop {
       def apply(params: Gen.Parameters) = {
         lazy val result = execute.ResultExecution.execute(r)
         val prop = 
+          result match {
+            case f : execute.Failure => Prop.falsified :| (f.message+" ("+f.location+")")
+            case s : execute.Skipped => Prop.exception(new execute.SkipException(s))
+            case p : execute.Pending => Prop.exception(new execute.PendingException(p))
+            case e : execute.Error   => Prop.exception(e.exception)
+            case other               => Prop.passed
+          }
+
         result match {
-          case f : execute.Failure => Prop.falsified :| (f.message+" ("+f.location+")")
-          case s : execute.Skipped => Prop.exception(new execute.SkipException(s))
-          case p : execute.Pending => Prop.exception(new execute.PendingException(p))
-          case e : execute.Error   => Prop.exception(e.exception)
-          case other               => Prop.passed
+          case f: execute.Failure if f.details != execute.NoDetails() =>
+            prop.apply(params).collect(f.details)
+
+          case _ =>
+            prop.apply(params)
         }
-        prop.apply(params)
       }
     }
   }
