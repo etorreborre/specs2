@@ -94,12 +94,23 @@ case class SbtRunner(args: Array[String],
    * Notify sbt that the specification could not be created
    */
   private def handleClassCreationError(taskDef: TaskDef, e: Throwable, handler: EventHandler, loggers: Array[Logger]) {
+    def logerror(m: String) = logError(loggers)(m)
+
     handler.handle(error(taskDef, e))
-    logError(loggers)("Could not create an instance of "+taskDef.fullyQualifiedName+"\n")
-    (e :: e.chainedExceptions) foreach { s =>
-      logError(loggers)("  caused by " + s.toString)
-      s.getStackTrace.foreach(t => logError(loggers)("  " + t.toString))
+
+    logerror("\nCould not create an instance of "+taskDef.fullyQualifiedName+"\n")
+
+    logerror("\n"+e.toString+"\n")
+    e.chainedExceptions.foreach(s => logerror("  caused by "+s.toString))
+
+    logerror("\nSTACKTRACE")
+    e.getStackTrace.foreach(t => logerror("  "+t.toString))
+
+    e.chainedExceptions.foreach { s =>
+      logerror("\n  CAUSED BY "+s.toString)
+      s.getStackTrace.foreach(t => logerror("  "+t.toString))
     }
+
   }
 
   protected def reporter(taskDef: TaskDef, handler: EventHandler, loggers: Array[Logger])(args: Array[String]) =
