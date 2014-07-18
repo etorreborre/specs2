@@ -1,19 +1,16 @@
 package org.specs2
 package execute
 
-import control.Throwablex
-import control.Throwablex._
-import text.NotNullStrings._
-import main.Arguments
-import scalaz.Scalaz._
-import scalaz.{Foldable, Monoid}
-import Foldable._
-import collection.Seqx._
-import text.Message.concat
-import text.Sentences._
-import text.NotNullStrings._
-import execute.ResultExecution._
+import org.specs2.control.Throwablex
+import org.specs2.control.Throwablex._
+import org.specs2.main.Arguments
 import org.specs2.reflect.ClassName._
+import org.specs2.text.Message.concat
+import org.specs2.text.NotNullStrings._
+import org.specs2.text.Sentences._
+
+import scalaz.Monoid
+import scalaz.Scalaz._
 /**
  * The result of an execution, either:
  *
@@ -147,7 +144,7 @@ object Result {
    * @return the accumulation of all results, without success messages
    */
   def issues(results: Seq[Result], separator: String = "; ") =
-    results.foldMap(identity)(ResultFailuresMonoid(separator)).addExpectationsNb(-1)
+    results.toList.foldMap(identity)(ResultFailuresMonoid(separator)).addExpectationsNb(-1)
 
   implicit val ResultMonoid: Monoid[Result] = new Monoid[Result] {
     val zero = Success()
@@ -233,10 +230,13 @@ trait Results {
     if (b) org.specs2.execute.Success("true") else org.specs2.execute.Failure("false")
 
   def negate(r: Result) = {
-    if (r.isSuccess) Failure(negateSentence(r.message), r.expected).setExpectationsNb(r.expectationsNb)
-    else if (r.isFailure) Failure(negateSentence(r.message), r.expected).setExpectationsNb(r.expectationsNb)
+    if (r.isSuccess)      Failure(negateSentence(r.message), r.expected).setExpectationsNb(r.expectationsNb)
+    else if (r.isFailure) Success(negateSentence(r.message), r.expected).setExpectationsNb(r.expectationsNb)
     else r
   }
+
+  def negateWhen(condition: Boolean)(r: Result) =
+    if (condition) negate(r) else r
 }
 
 object Results extends Results

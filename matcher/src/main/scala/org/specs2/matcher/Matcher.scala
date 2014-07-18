@@ -1,18 +1,16 @@
 package org.specs2
 package matcher
 
-import scalaz.Scalaz._
-import control.Exceptions._
-import execute._
-import Expectable._
-import text.Quote._
-import text.Plural._
-import text.Sentences._
-import text.NotNullStrings._
-import reflect.ClassName._
-import MatchResultMessages._
+import org.specs2.control.Exceptions._
+import org.specs2.execute._
+import org.specs2.matcher.MatchResultLogicalCombinators._
+import org.specs2.matcher.MatchResultMessages._
+import org.specs2.text.NotNullStrings._
+import org.specs2.text.Quote._
+import org.specs2.text.Sentences._
+
 import scala.concurrent.duration._
-import MatchResultLogicalCombinators._
+import scalaz.Scalaz._
 
 /**
  * The `Matcher` trait is the base trait for any Matcher.
@@ -81,6 +79,11 @@ trait Matcher[-T] { outer =>
       case _                                                         => Matcher.result(other.isSuccess, other.message, value)
     }
   }
+
+  /** @return a Match Result from another result */
+  protected def result[S <: T](other: Result, value: Expectable[S]): MatchResult[S] =
+    Matcher.result(other, value)
+
   /**
    * @return a MatchResult using the messages embedded in a MatchResultMessage (i.e. an accumulation of messages from other matches)
    */
@@ -250,6 +253,11 @@ object Matcher {
   def result[T](test: Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T], expected: String, actual: String): MatchResult[T] = {
     if (test) MatchSuccess(okMessage, koMessage, value)
     else      MatchFailure.create(okMessage, koMessage, value, FailureDetails(expected, actual))
+  }
+
+  def result[T](r: Result, value: Expectable[T]): MatchResult[T] = {
+    if (r.isSuccess) MatchSuccess(r.message, r.message, value)
+    else             MatchFailure(r.message, r.message, value)
   }
 
   def result[T](test: Boolean, message: =>String, value: Expectable[T]): MatchResult[T] =
