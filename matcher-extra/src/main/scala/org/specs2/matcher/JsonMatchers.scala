@@ -1,14 +1,14 @@
 package org.specs2
 package matcher
 
+import org.specs2.data.Sized
+import org.specs2.execute.ResultLogicalCombinators._
+import org.specs2.execute._
+import org.specs2.json.Json._
+import org.specs2.text.NotNullStrings._
+
+import scala.util.matching.Regex
 import scala.util.parsing.json._
-import text.Quote._
-import text.NotNullStrings._
-import text.Regexes._
-import text.Trim._
-import json.Json._
-import util.matching.Regex
-import json.Json
 
 /**
  * Matchers for Json expressions (entered as strings)
@@ -16,292 +16,291 @@ import json.Json
 trait JsonMatchers extends JsonBaseMatchers with JsonBaseBeHaveMatchers
 
 private[specs2]
-trait JsonMatchersLowImplicits { this: JsonBaseMatchers =>
-  implicit def anyToJSonValueSpec[T]: ToJsonValueSpec[T] = new ToJsonValueSpec[T] {
-    def toJsonValueSpec(a: T): JsonValueSpec = JsonEqualValue(a)
+trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =>
+
+  def have(m: Matcher[JsonType]): JsonMatcher = JsonMatcher.create(check = m)
+  def /(selector: JsonSelector) : JsonSelectorMatcher = JsonMatcher.create(JsonQuery(First, selector))
+  def */(selector: JsonSelector): JsonSelectorMatcher = JsonMatcher.create(JsonQuery(Deep, selector))
+  def /#(n: Int)                : JsonSelectorMatcher = JsonMatcher.create(JsonQuery(First, JsonIndexSelector(n)))
+
+  abstract class JsonMatcher extends Matcher[String] {
+    def apply[S <: String](s: Expectable[S]) = {
+      parse(s.value.notNull) match {
+        case None       => result(negated, "ok", "Could not parse\n" + s.value, s)
+        case Some(json) => result(negateWhen(negated)(find(Some(json), queries.toList)), s)
+      }
+    }
+
+    def negate: JsonMatcher
+    def negated: Boolean
+    protected def queries: Seq[JsonQuery]
+    protected def check: Matcher[JsonType]
+
+    private def find(json: Option[JSONType], queries: List[JsonQuery]): Result = {
+      def checkRest(value: Any, rest: List[JsonQuery]) =
+        (value, rest) match {
+          case (_, Nil)    => Success("found "+value.notNull)
+          case ((k, v), q :: _) =>
+            if (q.selector.select(Map((k.notNull, v))).isDefined) Success()
+            else                                                  Failure(s"found '${value.notNull}' but no value to select for ${q.name}")
+          case (v, q :: _) =>
+            if (q.selector.select(List(v)).isDefined) Success()
+            else                                      Failure(s"found '${value.notNull}' but no value to select for ${q.name}")
+        }
+
+      (json, queries) match {
+        case (None,    Nil)             => Success("ok")
+        case (Some(JSONArray(a)), Nil)  => check(Expectable(JsonType.array(a))).toResult
+        case (Some(JSONObject(o)), Nil) => check(Expectable(JsonType.map(o))).toResult
+        case (None,    q :: _)          => Failure(q.selector.name + " not found")
+
+        /**
+         * FIRST
+         */
+        case (Some(JSONArray(list)), JsonQuery(First, selector) :: rest) =>
+          selector.select(list) match {
+            case Some(v: JSONType) => find(Some(v), rest)
+            case Some(v)           => checkRest(v, rest)
+            case None              => selectorNotFound(selector, list)
+          }
+
+        case (Some(JSONObject(map)), JsonQuery(First, selector) :: rest) =>
+          selector.select(map) match {
+            case Some((k,v: JSONType)) => find(Some(v), rest)
+            case Some((k,v))           => checkRest(v, rest) or checkRest((k, v), rest)
+            case None                  => selectorNotFound(selector, map)
+          }
+
+        /**
+         * DEEP
+         */
+        case (Some(JSONArray(list)), JsonQuery(Deep, selector) :: rest) =>
+          selector.select(list) match {
+            case Some(v: JSONType) => find(Some(v), rest)
+            case Some(v)           => checkRest(v, rest)
+            case None    =>
+              list.toStream.map {
+                case v: JSONType => find(Some(v), queries)
+                case v           => checkRest(v, queries)
+              }.find(_.isSuccess)
+                .getOrElse(selectorNotFound(selector, list))
+          }
+
+        case (Some(JSONObject(map)), JsonQuery(Deep, selector) :: rest) =>
+          selector.select(map) match {
+            case Some((k,v: JSONType)) => find(Some(v), rest)
+            case Some((k,v))           => checkRest(v, rest)
+            case None        =>
+              map.values.map {
+                case v: JSONType => find(Some(v), queries)
+                case v           => checkRest(v, queries)
+              }.find(_.isSuccess)
+                .getOrElse(selectorNotFound(selector, map))
+          }
+      }
+    }
+
+    private def selectorNotFound[K, V](selector: JsonSelector, map: Map[K, V]) =
+      Failure(s"${showMap(map)} doesn't contain ${selector.name}")
+
+    private def selectorNotFound[T](selector: JsonSelector, list: List[T]) =
+      Failure(s"${showList(list)} doesn't contain ${selector.name}")
+
+    private def showMap[K, V](map: Map[K, V]) =
+      map.map { case (k,v) => s"$k:$v" }.mkString("{",", ","}")
+
+    private def showList[T](list: List[T]) =
+      list.mkString("[",", ","]")
+  }
+
+  /**
+   * This matcher can be chained to select further elements in the Json object
+   */
+  case class JsonSelectorMatcher(queries: Seq[JsonQuery], negated: Boolean = false) extends JsonMatcher { parent =>
+    val check: Matcher[JsonType] = JsonType.anyMatch
+
+    def /(selector: JsonSelector) : JsonSelectorMatcher = append(JsonQuery(First, selector))
+    def */(selector: JsonSelector): JsonSelectorMatcher = append(JsonQuery(Deep, selector))
+    def /#(n: Int)                : JsonSelectorMatcher = append(JsonQuery(First, JsonIndexSelector(n)))
+
+    def /(kv: JsonPairSelector) : JsonSelectorMatcher = parent./(kv._1)./(kv._2)
+    def */(kv: JsonPairSelector): JsonSelectorMatcher = parent.*/(kv._1)./(kv._2)
+
+    def andHave(m: Matcher[JsonType]): JsonFinalMatcher = JsonFinalMatcher(selectAnyValueLast(queries), m)
+
+    override def not = negate
+    def negate = copy(negated = !negated)
+
+    /** add queries one by one */
+    private def append(other: JsonQuery*) =
+      copy(queries = other.foldLeft(queries)((res, cur) => appendQuery(res, cur)))
+
+    /**
+     * add a new query
+     *
+     * If the last query selects a value, allow it to select a pair as well
+     */
+    private def appendQuery(previous: Seq[JsonQuery], other: JsonQuery) =
+      previous match {
+        case start :+ JsonQuery(qt, s: JsonValueSelector) => start :+ JsonQuery(qt, s.toValueOrKey) :+ other
+        case _ => previous :+ other
+      }
+
+    /**
+     * allow the last query to select a value or a key
+     */
+    private def selectAnyValueLast(queries: Seq[JsonQuery]) =
+      queries match {
+        case start :+ JsonQuery(qt, s) => start :+ JsonQuery(qt, s.toValueOrKey)
+        case _ => queries
+      }
+  }
+
+  /**
+   * This matcher can not be chained anymore with selections
+   */
+  case class JsonFinalMatcher(queries: Seq[JsonQuery], check: Matcher[JsonType], negated: Boolean = false) extends JsonMatcher { parent =>
+    def negate = copy(negated = !negated)
+  }
+
+  object JsonMatcher {
+    def create(path: JsonQuery*)         = JsonSelectorMatcher(path)
+    def create(check: Matcher[JsonType]) = JsonFinalMatcher(Nil, check)
   }
 }
 
+sealed trait JsonType
+trait JsonArray extends JsonType {
+  def list: List[Any]
+}
+trait JsonMap extends JsonType {
+  def map: Map[String, Any]
+}
+
+object JsonType {
+  def array(array: List[Any]) = new JsonArray {
+    def list = array
+  }
+  def map(o: Map[String, Any]) = new JsonMap {
+    def map = o
+  }
+  val anyMatch = new  Matcher[JsonType] {
+    def apply[S <: JsonType](s: Expectable[S]) = result(true, "ok", "ko", s)
+  }
+
+  implicit def JsonTypeIsSized: Sized[JsonType] = new Sized[JsonType] {
+    def size(json: JsonType) = json match {
+      case l: JsonArray => l.list.size
+      case m: JsonMap   => m.map.size
+    }
+  }
+}
+
+/**
+ * Different ways of selecting elements in a Json object
+ */
+trait JsonSelectors {
+  sealed trait JsonSelector {
+    def select(list: List[Any]): Option[Any]
+    def select(map: Map[String, Any]): Option[(String, Any)]
+    def name: String
+
+    def toValueOrKey = JsonValueOrKeySelector(this)
+  }
+
+  trait JsonValueSelector extends JsonSelector
+
+  case class JsonEqualValueSelector(v: Any) extends JsonValueSelector {
+    def select(names: List[Any]) = names.find(_.notNull == v.notNull)
+    def select(map: Map[String, Any]) = None
+    def name = s"'${v.notNull}'"
+  }
+  case class JsonIndexSelector(n: Int) extends JsonSelector {
+    def select(names: List[Any]) = names.zipWithIndex.find { case (_, i) => i == n }.map(_._1)
+    def select(map: Map[String, Any]) = map.zipWithIndex.find { case (_, i) => i == n }.map(_._1)
+    def name = s"index $n'"
+  }
+  case class JsonRegexSelector(r: Regex) extends JsonValueSelector {
+    def select(names: List[Any]) = names.find(_.notNull matches r.toString).map(_.notNull)
+    def select(map: Map[String, Any]) = None
+    def name = s"'${r.toString}'"
+  }
+  case class JsonMatcherSelector(m: Matcher[String]) extends JsonValueSelector {
+    def select(names: List[Any])      = names.find(n => m(Expectable(n.notNull)).isSuccess)
+    def select(map: Map[String, Any]) = None
+    def name = "matcher"
+  }
+  case class JsonPairSelector(_1: JsonSelector, _2: JsonSelector) extends JsonSelector {
+    def select(list: List[Any]): Option[Any] = None
+    def select(map: Map[String, Any]): Option[(String, Any)] =
+      _1.select(map.keys.toList).flatMap(k => map.find { case (k1, v) => k.notNull == k1 && _2.select(List(v)).isDefined })
+
+    def name = s"${_1.name}:${_2.name}"
+  }
+  case class JsonValueOrKeySelector(selector: JsonSelector) extends JsonSelector {
+    def select(list: List[Any]): Option[Any] = selector.select(list)
+    def select(map: Map[String, Any]): Option[(String, Any)] =
+      selector.select(map.keys.toList).flatMap(k => map.find { case (k1, v) => k.notNull == k1 })
+
+    def name = selector.name
+  }
+
+
+  sealed trait JsonQueryType
+  case object First extends JsonQueryType
+  case object Deep extends JsonQueryType
+
+  case class JsonQuery(query: JsonQueryType, selector: JsonSelector) {
+    def name = selector.name
+  }
+
+}
+
 private[specs2]
-trait JsonBaseMatchers extends Expectations with JsonMatchersLowImplicits { outer =>
+trait JsonMatchersImplicits extends JsonMatchersLowImplicits { this: JsonBaseMatchers =>
   /** datatype to specify how json values must be checked */
-  implicit def toJsonStringMatcher(m: Matcher[String]): JsonStringMatcher = JsonStringMatcher(m)
-  implicit def toJsonValue(s: Any): JsonEqualValue = JsonEqualValue(s)
-  implicit def toJsonRegex(r: Regex): JsonRegex = JsonRegex(r)
-  trait ToJsonValueSpec[T] {
-    def toJsonValueSpec(t: T): JsonValueSpec
+  implicit def toJsonValueSelectorStringMatcher[M <: Matcher[String]](m: M): JsonSelector = JsonMatcherSelector(m)
+  implicit def toJsonValueSelectorStringValue(s: String): JsonSelector                    = JsonEqualValueSelector(s)
+  implicit def toJsonValueSelectorRegex(r: Regex): JsonSelector                           = JsonRegexSelector(r)
+  implicit def toJsonValueSelectorDoubleValue(d: Double): JsonSelector                    = JsonEqualValueSelector(d.toString)
+  implicit def toJsonValueSelectorIntValue(i: Int): JsonSelector                          = JsonEqualValueSelector(i.toString)
+  implicit def toJsonValueSelectorBooleanValue(b: Boolean): JsonSelector                  = JsonEqualValueSelector(b.toString)
+
+  implicit def regexToJsonSelector: ToJsonSelector[Regex] = new ToJsonSelector[Regex] {
+    def toJsonSelector(r: Regex): JsonSelector = r
   }
-  implicit def regexToJSonValueSpec: ToJsonValueSpec[Regex] = new ToJsonValueSpec[Regex] {
-    def toJsonValueSpec(r: Regex): JsonValueSpec = r
+  implicit def matcherToJsonSelector[M <: Matcher[String]]: ToJsonSelector[M] = new ToJsonSelector[M] {
+    def toJsonSelector(m: M): JsonSelector = m
   }
-  implicit def stringMatcherToJSonValueSpec: ToJsonValueSpec[Matcher[String]] = new ToJsonValueSpec[Matcher[String]] {
-    def toJsonValueSpec(m: Matcher[String]): JsonValueSpec = m
+  implicit def stringMatcherToJsonSelector: ToJsonSelector[Matcher[String]] = new ToJsonSelector[Matcher[String]] {
+    def toJsonSelector(m: Matcher[String]): JsonSelector = m
   }
-  object ToJsonValueSpec {
-    def apply[T : ToJsonValueSpec](t: T) = implicitly[ToJsonValueSpec[T]].toJsonValueSpec(t)
-  }
-  implicit def toJsonPairSpec[K : ToJsonValueSpec, V : ToJsonValueSpec](kv: (K, V)): JsonPairSpec = {
-    val (key, value) = kv
-    JsonPairSpec(ToJsonValueSpec(key), ToJsonValueSpec(value))
-  }
-  trait JsonValueSpec
-  case class JsonEqualValue(v: Any) extends JsonValueSpec
-  case class JsonRegex(r: Regex) extends JsonValueSpec
-  case class JsonStringMatcher(m: Matcher[String]) extends JsonValueSpec
-  case class JsonPairSpec(k: JsonValueSpec, v: JsonValueSpec) {
-    def _1 = k; def _2 = v
+  object ToJsonSelector {
+    def apply[T : ToJsonSelector](t: T) = implicitly[ToJsonSelector[T]].toJsonSelector(t)
   }
 
-  /** match if the document contains the value at the top-level */
-  def /(value: JsonValueSpec): JsonValueMatcher = new JsonValueMatcher(value)
-  /** match if the document contains the value at any level */
-  def */(value: JsonValueSpec): JsonDeepValueMatcher = new JsonDeepValueMatcher(value)
+  implicit def toJsonSelectorPair[K : ToJsonSelector, V : ToJsonSelector](kv: (K, V)): JsonPairSelector =
+    JsonPairSelector(implicitly[ToJsonSelector[K]].toJsonSelector(kv._1), implicitly[ToJsonSelector[V]].toJsonSelector(kv._2))
+}
 
-  /** match if the document contains the pair at the top level */
-  def /(pair: JsonPairSpec): JsonPairMatcher = new JsonPairMatcher(pair._1, pair._2)
-  /** match if the document contains the pair at any level */
-  def */(pair: JsonPairSpec): JsonDeepPairMatcher = new JsonDeepPairMatcher(pair._1, pair._2)
-
-  /** allow to match on the i-th element of an Array or a Map (0-based) */
-  def /#(i: Int) = new JsonSelector(i)
-  case class JsonSelector(i: Int, negate: Boolean = false) { parentSelector =>
-    protected def select(json: JSONType): Option[JSONType] = json match {
-      case JSONObject(map) if i >= 0 && i < map.size  => Some(JSONObject(Map(map.iterator.toSeq(i))))
-      case JSONArray(list) if i >= 0 && i < list.size => list(i) match {
-        case o: JSONType => Some(o)
-        case other       => Some(JSONArray(List(other)))
-      }
-      case other         => None
-    }
-    /** negate the next matcher */
-    def not: JsonSelector = copy(negate = true)
-
-    def /#(j: Int) = new JsonSelector(j) {
-      override def select(json: JSONType): Option[JSONType] = parentSelector.select(json).flatMap(super.select)
-    }
-    def /(value: JsonValueSpec): JsonValueMatcher = new JsonValueMatcher(value) {
-      override def navigate(json: JSONType): Option[JSONType] = select(json)
-    }.not(when = negate)
-    def */(value: JsonValueSpec): JsonDeepValueMatcher = new JsonDeepValueMatcher(value) {
-      override def navigate(json: JSONType): Option[JSONType] = select(json)
-    }.not(when = negate)
-    def /(pair: JsonPairSpec): JsonPairMatcher = new JsonPairMatcher(pair._1, pair._2) {
-      override def navigate(json: JSONType): Option[JSONType] = select(json)
-    }.not(when = negate)
-    def */(pair: JsonPairSpec): JsonDeepPairMatcher = new JsonDeepPairMatcher(pair._1, pair._2) {
-      override def navigate(json: JSONType): Option[JSONType] = select(json)
-    }.not(when = negate)
+private[specs2]
+trait JsonMatchersLowImplicits extends JsonSelectors { this: JsonBaseMatchers =>
+  trait ToJsonSelector[T] {
+    def toJsonSelector(t: T): JsonSelector
   }
 
-  class JsonPairMatcher(key: JsonValueSpec, value: JsonValueSpec) extends Matcher[String] {
-    def navigate(json: JSONType): Option[JSONType] = Some(json)
-
-    def apply[S <: String](s: Expectable[S]) = {
-      parse(s.value).map(navigate) match {
-        case Some(Some(JSONObject(obj))) => result(havePair(obj, obj.toSeq, key, value), s)
-        case Some(Some(JSONArray(list))) => result(false, "ok", list.mkString("[", ", ", "]")+" doesn't contain "+stringOrRegex(key, value), s)
-        case Some(None)                  => result(false, "ok", s.value+" is empty", s)
-        case None                        => result(false, "ok", "Could not parse:\n"+s.value, s)
-      }
-    }
-    override def not: JsonPairMatcher = new JsonPairMatcher(key, value) {
-      override def apply[S <: String](s: Expectable[S]) = super.apply(s).negate
-    }
-    private[specs2]
-    def not(when: Boolean): JsonPairMatcher = if (when) this.not else this
+  implicit def stringToJsonSelector: ToJsonSelector[String] = new ToJsonSelector[String] {
+    def toJsonSelector(a: String): JsonSelector = JsonEqualValueSelector(a)
   }
-
-  class JsonValueMatcher(value: JsonValueSpec) extends Matcher[String] { parent =>
-    def navigate(json: JSONType): Option[JSONType] = Some(json)
-
-    def apply[S <: String](s: Expectable[S]) = {
-      parse(s.value.notNull).map(navigate) match {
-        case Some(Some(JSONObject(obj))) => result(false, "ok", obj.map(p => p._1+" : "+p._2).mkString("{", ", ", "}")+" doesn't contain "+stringOrRegex(value), s)
-        case Some(Some(JSONArray(list))) => result(containValue(list, value), s)
-        case Some(None)                  => result(false, "ok", s.value+" is empty", s)
-        case None                        => result(false, "ok", "Could not parse:\n"+s.value, s)
-      }
-    }
-    override def not: JsonValueMatcher = new JsonValueMatcher(value) {
-      override def apply[S <: String](s: Expectable[S]) = super.apply(s).negate
-    }
-    private[specs2]
-    def not(when: Boolean): JsonValueMatcher = if (when) this.not else this
-
-    /** select the i'th element after navigation */
-    def /#(i: Int) = new JsonSelector(i) {
-      override def select(json: JSONType): Option[JSONType] = parent.navigate(json) match {
-        case Some(JSONObject(map)) => map.find { case (k, v) => regexOrEqualMatch(k, value) }.flatMap {
-          case (_, o: JSONType) => super.select(o)
-          case _                => None
-        }
-        case other                 => None
-      }
-    }
-    /** in this case, interpret 'value' as the key and value1 as the expected value in the Array */
-    def /(value1: JsonValueSpec) = new JsonValueMatcher(value1) {
-      override def navigate(json: JSONType): Option[JSONType] = parent.navigate(json).flatMap(find(value, _))
-    }
-    /** in this case, interpret 'value' as the key and key1/value1 as the expected pair in the Map */
-    def /(pair1: JsonPairSpec) = new JsonPairMatcher(pair1._1, pair1._2) {
-      override def navigate(json: JSONType): Option[JSONType] = parent.navigate(json).flatMap(find(value, _))
-    }
-    /** in this case, interpret 'value' as the key and value1 as the expected value in the Array */
-    def */(value1: JsonValueSpec) = new JsonDeepValueMatcher(value1) {
-      override def navigate(json: JSONType): Option[JSONType] = parent.navigate(json).flatMap(find(value, _))
-    }
-    /** in this case, interpret 'value' as the key and value1 as the expected pair in the map */
-    def */(pair1: JsonPairSpec) = new JsonDeepPairMatcher(pair1._1, pair1._2) {
-      override def navigate(json: JSONType): Option[JSONType] = parent.navigate(json).flatMap(find(value, _))
-    }
+  implicit def doubleToJsonSelector: ToJsonSelector[Double] = new ToJsonSelector[Double] {
+    def toJsonSelector(a: Double): JsonSelector = JsonEqualValueSelector(a.toString)
   }
-  class JsonDeepPairMatcher(key: JsonValueSpec, value: JsonValueSpec) extends Matcher[String] {
-    def navigate(json: JSONType): Option[JSONType] = Some(json)
-
-    def apply[S <: String](s: Expectable[S]) = {
-      parse(s.value).map(navigate) match {
-        case Some(Some(JSONObject(o: Map[_,_]))) if havePair(o.toSeq, key, value) => result(true,
-                                                                                            havePairOkMessage(o, o.toSeq, key, value), havePairKoMessage(o, o.toSeq, key, value), s)
-        case Some(Some(o))                                                        => result(havePair(o, terminalPairs(o), key, value), s)
-        case Some(None)                                                           => result(false, "ok", s.value+" is empty", s)
-        case None                                                                 => result(false, "ok", "Could not parse:\n"+s.value, s)
-      }
-    }
-
-    override def not: JsonDeepPairMatcher = new JsonDeepPairMatcher(key, value) {
-      override def apply[S <: String](s: Expectable[S]) = super.apply(s).negate
-    }
-    private[specs2]
-    def not(when: Boolean): JsonDeepPairMatcher = if (when) this.not else this
-
+  implicit def intToJsonSelector: ToJsonSelector[Int] = new ToJsonSelector[Int] {
+    def toJsonSelector(a: Int): JsonSelector = JsonEqualValueSelector(a.toString)
   }
-  class JsonDeepValueMatcher(value: JsonValueSpec) extends Matcher[String] { parent =>
-    def navigate(json: JSONType): Option[JSONType] = Some(json)
-
-    def apply[S <: String](s: Expectable[S]) = {
-      parse(s.value.notNull).map(navigate) match {
-        case Some(Some(o)) => result(containValue(terminalValues(o), value), s)
-        case Some(None)    => result(false, "ok", s.value.notNull+" is empty", s)
-        case None          => result(false, "ok", "Could not parse:\n"+s.value, s)
-      }
-    }
-
-    override def not: JsonDeepValueMatcher = new JsonDeepValueMatcher(value) {
-      override def apply[S <: String](s: Expectable[S]) = super.apply(s).negate
-    }
-    private[specs2]
-    def not(when: Boolean): JsonDeepValueMatcher = if (when) this.not else this
-
-    /** select the i'th element after navigation */
-    def /#(i: Int) = new JsonSelector(i) {
-      override def select(json: JSONType): Option[JSONType] =
-        parent.navigate(json).flatMap(j => findDeep(value, j)).flatMap(super.select)
-    }
-    /** in this case, interpret 'value' as the key and value1 as the expected value in the Array */
-    def /(value1: JsonValueSpec) = new JsonValueMatcher(value1) {
-      override def navigate(json: JSONType): Option[JSONType] = parent.navigate(json).flatMap(findDeep(value, _))
-    }
-    /** in this case, interpret 'value' as the key and pair1 as the expected pair in the map */
-    def /(pair1: JsonPairSpec) = new JsonPairMatcher(pair1._1, pair1._2) {
-      override def navigate(json: JSONType): Option[JSONType] = parent.navigate(json).flatMap(findDeep(value, _))
-    }
-    /** in this case, interpret 'value' as the key and value1 as the expected value in the Array */
-    def */(value1: JsonValueSpec) = new JsonDeepValueMatcher(value1) {
-      override def navigate(json: JSONType): Option[JSONType] = parent.navigate(json).flatMap(findDeep(value, _))
-    }
-    /** in this case, interpret 'value' as the key and value1 as the expected pair in the map */
-    def */(pair1: JsonPairSpec) = new JsonDeepPairMatcher(pair1._1, pair1._2) {
-      override def navigate(json: JSONType): Option[JSONType] = parent.navigate(json).flatMap(findDeep(value, _))
-    }
+  implicit def booleanToJsonSelector: ToJsonSelector[Boolean] = new ToJsonSelector[Boolean] {
+    def toJsonSelector(a: Boolean): JsonSelector = JsonEqualValueSelector(a.toString)
   }
-
-  /**
-   * @return true if there is one pair is matching the (k, v) pair where k and/or v can be a Regex +
-   * an ok message and a ko message
-   */
-  private def havePair(o: Any, pairs: Seq[(Any, Any)], k: JsonValueSpec, v: JsonValueSpec): (Boolean, String, String) =
-    (havePair(pairs, k, v),
-     havePairOkMessage(o, pairs, k, v),
-     havePairKoMessage(o, pairs, k, v))
-
-  /** @return ok message for the presence of a pair in a map */
-  private def havePairOkMessage(o: Any, pairs: Seq[(Any, Any)], k: JsonValueSpec, v: JsonValueSpec) =
-    mapString(o)+" contains "+stringOrRegex(k, v)
-  /** @return ko message for the presence of a pair in a map */
-  private def havePairKoMessage(o: Any, pairs: Seq[(Any, Any)], k: JsonValueSpec, v: JsonValueSpec) =
-    mapString(o)+" doesn't contain "+stringOrRegex(k, v)
-
-  /**
-   * @return true if there is one pair is matching the (k, v) pair where k and/or v can be a Regex
-   */
-  private def havePair(pairs: Seq[(Any, Any)], k: JsonValueSpec, v: JsonValueSpec): Boolean =
-    findPair(pairs, k, v).nonEmpty
-
-  /**
-    * @return true if there is one pair is matching the (k, v) pair where k and/or v can be a Regex
-    */
-  private def findPair(pairs: Seq[(Any, Any)], k: JsonValueSpec, v: JsonValueSpec): Option[(Any, Any)] =
-     pairs.collect { case (key, value) if regexOrEqualMatch(key, k) && regexOrEqualMatch(value, v) => (key, value) }.headOption
-
-  /**
-   * @return find with a Regex or a String or a String matcher
-   */
-  private def find(key: JsonValueSpec, json: JSONType): Option[JSONType] = key match {
-    case JsonEqualValue(v)    => Json.find(v.notNull, json)
-    case JsonRegex(r)         => Json.find(r, json)
-    case JsonStringMatcher(m) => Json.find((s: String) => m(Expectable(s)).isSuccess, json)
-  }
-
-  /**
-   * @return findDeep with a Regex or a String or a String matcher
-   */
-  def findDeep(key: JsonValueSpec, json: JSONType): Option[JSONType] = key match {
-    case JsonEqualValue(v)    => Json.findDeep(v.notNull, json)
-    case JsonRegex(r)         => Json.findDeep(r, json)
-    case JsonStringMatcher(m) => Json.findDeep((s: Any) => m(Expectable(s.notNull)).isSuccess, json)
-  }
-
-  /**
-   * @return true if there is one pair is matching the (k, v) pair where k and/or v can be a Regex +
-   * an ok message and a ko message
-   */
-  private def containValue(values: Seq[Any], v: JsonValueSpec): (Boolean, String, String) =
-    (values.collect { case value if regexOrEqualMatch(value, v) => v  }.nonEmpty,
-      listString(values)+" contains "+stringOrRegex(v),
-      listString(values)+" doesn't contain "+stringOrRegex(v))
-
-  /**
-   * @return s represented as a Regex if it is one
-   */
-  private def stringOrRegex(s: JsonValueSpec): String = s match {
-    case JsonRegex(r)         => q(r)+".r"
-    case JsonStringMatcher(_) => "the specified matcher"
-    case JsonEqualValue(v)    => q(v)
-  }
-
-  /**
-   * @return (k, v) represented as a pair of Regex or String depending on what there types are
-   */
-  private def stringOrRegex(k: JsonValueSpec, v: JsonValueSpec): String = stringOrRegex(k)+" : "+stringOrRegex(v)
-
-  /**
-   * @return true if v is a regex and it matches value or if the 2 are equal
-   */
-  private def regexOrEqualMatch(value: Any, v: JsonValueSpec) = v match {
-    case JsonRegex(r)          => r matches value.notNull
-    case JsonStringMatcher(m)  => m.apply(Expectable(value.notNull)).isSuccess
-    case JsonEqualValue(other) => other == value
-  }
-
-  private def mapString(o: Any) =
-    o match {
-      case m: Map[_,_] => m.iterator.map { case (k, v) => k+" : "+v}.mkString("{", ",", "}")
-      case other       => other.notNull.remove("\"")
-    }
-
-  private def listString(values: Seq[Any]) =
-    values.mkString("[", ", ", "]")
-
 }
 
 private[specs2]
@@ -309,11 +308,10 @@ trait JsonBaseBeHaveMatchers { outer: JsonBaseMatchers =>
 
   implicit def toNotMatcherJson(result: NotMatcher[Any]) : NotMatcherJson = new NotMatcherJson(result)
   class NotMatcherJson(result: NotMatcher[Any]) {
-    def /#(i: Int): JsonSelector = outer./#(i).not
-    def /(pair: JsonPairSpec): JsonPairMatcher = outer./(pair).not
-    def */(pair: JsonPairSpec): JsonDeepPairMatcher = outer.*/(pair).not
-    def /(value: JsonValueSpec): JsonValueMatcher = outer./(value).not
-    def */(value: JsonValueSpec): JsonDeepValueMatcher = outer.*/(value).not
+    def have(m: Matcher[JsonType])   = outer.have(m).negate
+    def /#(i: Int)                   = outer./#(i).negate
+    def /(selector: JsonSelector)    = outer./(selector).negate
+    def */(selector: JsonSelector)   = outer.*/(selector).negate
   }
 }
 
