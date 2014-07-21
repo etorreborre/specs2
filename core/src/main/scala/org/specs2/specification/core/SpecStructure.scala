@@ -9,8 +9,8 @@ import scalaz.concurrent.Task
 import SpecStructure._
 import scalaz.std.anyVal._
 import control._
-import scalaz.stream.Process
-import Process.{Process1, eval}
+import scalaz.stream._
+import Process._
 
 case class SpecStructure(header: SpecHeader, arguments: Arguments, lazyFragments: () => Fragments) {
   lazy val fragments = lazyFragments()

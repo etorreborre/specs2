@@ -8,10 +8,10 @@ import scalaz.std.list._
 import Tree._
 import TreeLoc._
 import data.Trees._
-import scalaz.stream.{Process, Process1}
+import scalaz.stream.{End =>_,_}
 import specification.create._
 import DefaultFragmentFactory._
-import Process.{End =>_,_}
+import Process._
 import specification.core._
 import Fragment._
 import scala.math._
@@ -57,7 +57,7 @@ trait Levels {
           emit(newTree) ++ go(newTree)
       }
     }
-    go(leaf((text("root"), 0)).loc).map(_.map(_._1))
+    go(leaf((DefaultFragmentFactory.text("root"), 0)).loc).map(_.map(_._1))
   }
 
   def treeLoc(fs: Fragments): Option[TreeLoc[Fragment]] =

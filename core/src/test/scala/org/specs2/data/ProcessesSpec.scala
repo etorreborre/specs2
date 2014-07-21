@@ -7,6 +7,8 @@ import specification.script.Specification
 import scalaz.stream.Process._
 import ProcessMatchers._
 
+import scalaz.stream._
+
 class ProcessesSpec extends Specification with Groups with ResultMatchers with ThrownExpectations { def is = s2"""
 
  Streams

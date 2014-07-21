@@ -9,8 +9,7 @@ import control._
 import Actions._
 import scalaz.{Writer => _, _}, Scalaz._
 import Task._
-import scalaz.stream.Process
-import scalaz.stream.io
+import scalaz.stream._
 import data._
 import Processes._
 import Fold._
@@ -50,7 +49,7 @@ trait Reporter {
       if (resetStore) env.statisticsRepository.resetStatistics.toTask
       else            Task.now(())
 
-    lazy val sink: Process.Sink[Task, (Fragment, Stats)] =
+    lazy val sink: Sink[Task, (Fragment, Stats)] =
       io.channel {  case (fragment, stats) =>
         if (neverStore) Task.delay(())
         else            env.statisticsRepository.storeResult(spec.specClassName, fragment.description, fragment.executionResult).toTask

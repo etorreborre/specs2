@@ -2,7 +2,7 @@ package org.specs2
 package data
 
 import scala.annotation.tailrec
-import scalaz.stream.Process
+import scalaz.stream._
 import Process._
 import scalaz.concurrent.Task
 import Task._
@@ -165,7 +165,7 @@ object Fold {
    */
   def runFoldLast[T](process: Process[Task, T], fold: Fold[T]): Task[fold.S] =
     fold.prepare >>
-    runLastOr(logged(process |> zipWithFoldState(fold)).drainW(fold.sink).map(_._2), fold.init)
+    logged(process |> zipWithFoldState(fold)).drainW(fold.sink).map(_._2).runLastOr(fold.init)
 
   /**
    * Run a Fold an let it perform a last action with the accumulated state
@@ -178,29 +178,6 @@ object Fold {
    */
   def runFolds[T](process: Process[Task, T], folds: List[Fold[T]]): Task[Unit] =
     runFold(process, folds.suml)
-
-
-  /**
-   * tail-recursive implementation of runLastOr
-   */
-  def runLastOr[T](process: Process[Task, T], t: T): Task[T] = {
-    @tailrec
-    def go(last: Task[Option[T]], rest: Process[Task, T]): Task[Option[T]] =
-      rest match {
-        case Emit(h,t) =>
-          go(Task.now(h.lastOption), t)
-
-        case Halt(e) =>
-          last
-
-        case Await(req, recv, fb,c) =>
-          req.map(recv).attemptRun match {
-            case -\/(t) => Task.fail(t)
-            case \/-(p) => go(last, p)
-          }
-      }
-    go(Task.now(None), process).map(_.getOrElse(t))
-  }
 
 }
 

@@ -3,7 +3,7 @@ package reporter
 
 import junit.framework.AssertionFailedError
 
-import scalaz.stream.Process.{Env =>_,_}
+import scalaz.stream.{Process, Sink}
 import specification._
 import text.NotNullStrings._
 import scalaz.concurrent.Task

@@ -2,7 +2,7 @@ package org.specs2
 package specification
 package process
 
-import scalaz.stream.{Process, process1}
+import scalaz.stream._
 import scalaz.stream.Process.{Env =>_,_}
 import data._
 import main._

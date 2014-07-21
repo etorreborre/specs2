@@ -51,7 +51,7 @@ trait FileSystem {
         val children = Option(file.listFiles).map(_.toList).getOrElse(Nil)
 
         if (children.isEmpty) Process.halt
-        else                  Process.emitSeq(children, children.map(go).sequenceU.flatten)
+        else                  Process.emitAll(children) fby children.map(go).sequenceU.flatten
       }
     go(file)
   }
@@ -73,7 +73,7 @@ trait FileSystem {
 
   def writeFileTask(path: String, content: String): Task[Unit] =
     mkParentDirs(path).toTask >>
-    Process(content).toSource.pipe(process1.utf8Encode).to(io.fileChunkW(path)).run
+    Process(content).toSource.pipe(text.utf8Encode).to(io.fileChunkW(path)).run
 
   def withFile(path: String)(action: Action[Unit]): Action[Unit] =
     action.andFinally(deleteFile(path).void)

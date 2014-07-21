@@ -9,22 +9,22 @@ import shapeless._
 import Fragments._
 import scalaz.Show
 import scalaz.syntax.show._
-import scalaz.stream.Process
+import scalaz.stream._
 import Process._
 import control._
-import text.Trim._
+import org.specs2.text.Trim._
 import Fragment._
 
 case class Fragments(contents: Process[Task, Fragment]) {
   def append(other: Fragment): Fragments                = append(Process(other))
   def append(others: Seq[Fragment]): Fragments          = append(Fragments(others:_*))
   def append(others: Fragments): Fragments              = append(others.contents)
-  def appendLazy(other: =>Fragment): Fragments          = append(Process.emitLazy(other))
+  def appendLazy(other: =>Fragment): Fragments          = append(Process.eval(Task.delay(other)))
 
   def prepend(other: Fragment): Fragments                = prepend(Process(other))
   def prepend(others: Fragments): Fragments              = prepend(others.contents)
   def prepend(others: Seq[Fragment]): Fragments          = prepend(Fragments(others:_*))
-  def prependLazy(other: =>Fragment): Fragments          = prepend(Process.emitLazy(other))
+  def prependLazy(other: =>Fragment): Fragments          = prepend(Process.eval(Task.delay(other)))
 
   def when(condition: =>Boolean) = contentsLens.modify(this)(_  when emit(condition))
 

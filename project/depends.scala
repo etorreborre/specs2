@@ -13,7 +13,7 @@ object depends {
 
   lazy val scalaz = Seq("org.scalaz"        %% "scalaz-core"      ,
                         "org.scalaz"        %% "scalaz-concurrent").map(_ % "7.0.6") ++
-                    Seq("org.scalaz.stream" %% "scalaz-stream"    % "0.3.2")
+                    Seq("org.scalaz.stream" %% "scalaz-stream"    % "0.3.4")
 
 
   lazy val scalacheck    = Seq("org.scalacheck" %% "scalacheck"   % "1.11.3")

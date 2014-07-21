@@ -4,8 +4,8 @@ package reporter
 import specification._
 import data.Fold
 import scalaz.concurrent.Task
-import scalaz.stream.Process.{Env => _, End => _, _}
-import scalaz.stream.io
+import scalaz.stream.{End =>_,_}
+import scalaz.stream.Process.{Env => _, _}
 import execute._
 import scalaz.syntax.show._
 import specification.core._

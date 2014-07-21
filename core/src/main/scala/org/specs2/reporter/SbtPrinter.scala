@@ -3,10 +3,10 @@ package reporter
 
 import data.Fold
 import scalaz.concurrent.Task
-import scalaz.stream.Process.Sink
+import scalaz.stream._
 import sbt.testing._
 import Fold._
-import text.AnsiColors._
+import org.specs2.text.AnsiColors._
 import scalaz.stream.io._
 import main.Arguments
 import specification.core._

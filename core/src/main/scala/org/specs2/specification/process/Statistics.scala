@@ -5,8 +5,7 @@ package process
 import control._
 import specification.core._
 import scalaz.concurrent.Task
-import scalaz.stream.{Process, process1}
-import Process.Process1
+import scalaz.stream._
 import scalaz.syntax.monoid._
 import scalaz.std.anyVal._
 

@@ -3,8 +3,7 @@ package reporter
 
 import org.specs2.matcher.DataTable
 import specification._
-import scalaz.stream.Process
-import scalaz.stream.io
+import scalaz.stream._
 import scalaz.std.anyVal._
 import scalaz.stream.Process.{Env => E, _}
 import scalaz.concurrent.Task
@@ -13,7 +12,7 @@ import data.Fold
 import execute._
 import main.Arguments
 import LogLine._
-import text.Trim
+import org.specs2.text.Trim
 import Trim._
 import scalaz.concurrent.Task._
 import reflect.Classes

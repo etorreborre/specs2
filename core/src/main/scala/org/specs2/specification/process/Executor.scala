@@ -7,9 +7,9 @@ import java.util.concurrent.ExecutorService
 import control.Timeout
 import data.Processes
 
+import scalaz.stream._
 import scalaz.stream.Process.{Env =>_,_}
 import execute._
-import scalaz.stream.{Process, process1}
 import scalaz.{Success=>_, Failure=>_,_}, Scalaz._
 import specification.core._
 import Description._
@@ -77,7 +77,7 @@ trait DefaultExecutor extends Executor {
 
       // if we need to wait, we do, an get the result
       val barrierResult =
-        if (fragment.execution.mustJoin) barrier.attemptRun.fold(t => Error(t), r => r)
+        if (fragment.execution.mustJoin) barrier.attemptRun.fold(t => org.specs2.execute.Error(t), r => r)
         else                             Success("no barrier result")
 
       // depending on the result we decide if we should go on executing fragments

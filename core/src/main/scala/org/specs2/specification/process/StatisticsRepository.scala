@@ -9,7 +9,7 @@ import scalaz.syntax.bind._
 import java.io._
 import scalaz.stream.io._
 import specification.core.Description
-import scalaz.stream.{process1, Process}
+import scalaz.stream._
 import scala.collection.mutable.HashMap
 
 
@@ -50,7 +50,7 @@ object Store {
     def set[A](key: Key[A], fact: A): Action[Unit] =
       Actions.fromIO(filepath(key).getParentFile.mkdirs) >>
       Actions.fromTask {
-        Process(StoreKeys.encode(key, fact)).toSource.pipe(process1.utf8Encode).to(fileChunkW(filepath(key).toString)).run
+        Process(StoreKeys.encode(key, fact)).toSource.pipe(text.utf8Encode).to(fileChunkW(filepath(key).toString)).run
       }
 
     def get[A](key: Key[A]): Action[Option[A]] =

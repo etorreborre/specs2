@@ -9,7 +9,7 @@ import scalaz.concurrent.{Strategy, Promise}
 import specification._
 import scala.concurrent.duration._
 
-class TerminationMatchersSpec extends script.Specification with TerminationMatchers with Grouped { def is = section("unstable")^ s2"""
+class TerminationMatchersSpec extends script.Specification with TerminationMatchers with Grouped { def is = sequential^ s2"""
                                                                                                    
  It is possible to check if a block of code terminates
    with a default number of retries and default sleep time
@@ -32,7 +32,7 @@ class TerminationMatchersSpec extends script.Specification with TerminationMatch
                                                                                                 """
 
   "termination" - new group {
-    eg := { implicit es: ES => Thread.sleep(50) must terminate(sleep = 100.millis) }
+    eg := { implicit es: ES => Thread.sleep(50) must terminate(sleep = 200.millis) }
     eg := { implicit es: ES => (Thread.sleep(300) must terminate(retries=1, sleep=100.millis)) returns "the action is blocking with retries=1 and sleep=100" }
 
     eg := { implicit es: ES => Thread.sleep(50) must terminate(retries=3, sleep=20.millis) }
