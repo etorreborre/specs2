@@ -271,8 +271,9 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
   def apply[S <: GenTraversableOnce[T]](t: Expectable[S]) = {
     val seq = t.value.seq.toSeq
 
-    // results for each element, either checked in order or greedily from the list of checks
-    // + the list of checks which were not performed
+    // results for each element, either checked in order or
+    // trying to find the best matching from the list of checks
+    // return the matched values + the list of checks which were not performed
     val (results, remainingChecks): (Seq[(T, Seq[Result])], Seq[ValueCheck[T]]) =
       if (checkOrder) checkValuesInOrder(seq, checks, eachCheck)
       else            checkValues(seq, checks, eachCheck)
@@ -407,7 +408,7 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
   private def isEqualCheck = (c: ValueCheck[T]) => c match {
     case _:BeEqualTypedValueCheck[T] => true
     case _:BeEqualValueCheck[T]      => true
-    case _                             => false
+    case _                           => false
   }
 
   private def expectedValue: PartialFunction[ValueCheck[T], Option[Any]] = {
