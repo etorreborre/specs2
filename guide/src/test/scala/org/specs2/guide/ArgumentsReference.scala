@@ -1,7 +1,9 @@
 package org.specs2
 package guide
 
-object ArgumentsReference extends UserGuidePage { def is = s2"""
+import org.specs2.specification.core.SpecificationLink
+
+object ArgumentsReference extends UserGuidePage { def is = "Arguments reference".title ^ s2"""
 ## Presentation
 
 Arguments can be passed on the command line, or declared inside a specification, using the `args(name=value)` syntax:${snippet {
@@ -13,7 +15,7 @@ class MySpec extends Specification { def is = args(xonly=true) ^ s2"""
 }
 }}
 
-They can also be passed as system properties: `-Dspecs2.<argument name>=<argument value>` (`-Dname=value` also works but you might have collisions with other properties).
+They can also be passed as system properties: `-Dspecs2.name=value` (`-Dname=value` also works but you might have collisions with other properties).
 
 This reference guide for arguments is divided in several sections:
 
@@ -35,13 +37,14 @@ This reference guide for arguments is divided in several sections:
  `filesrunner.pattern`   | `.*Spec`                       | regular expression for the specification class/object name (see $RunInShell)
  `html.outdir`           | `target/specs2-reports`        | output directory for html files (see $HtmlOutput)
 
+
 ## Selection
 
  Name                    | Default value                  | Description
  ----------------------- | ------------------------------ | -------------------------------------------------------------------------------------------
  `ex`                    | `.*`                           | regular expression specifying the examples to execute. Use `ex .*brilliant.*` on the command line
- `include`               | `""`                           | execute only the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
- `exclude`               | `""`                           | do not execute the fragments tagged with any of the comma-separated list of tags: "t1,t2,..."
+ `include`               | `""`                           | execute only the fragments tagged with any of the comma-separated list of tags: `t1,t2,...`
+ `exclude`               | `""`                           | do not execute the fragments tagged with any of the comma-separated list of tags: `t1,t2,...`
  `was`                   | `""`                           | select only some previously executed examples based on their status
  `selector`              | `""`                           | implementation of the `org.specs2.specification.process.Selector` trait
 
@@ -88,17 +91,16 @@ See the $ConsoleOutput page for a more precise description of this options.
 
 For ${"the HTML output" ~/ HtmlOutput} the following options can be used:
 
- Name                    | Default value                                | Description
- ----------------------- | -------------------------------------------- | ------------------------------
- `html.outdir`           | `target/specs2-reports/`                     |
- `html.basedir`          | `.`                                          |
- `html.template`         | `target/specs2-reports/templates/specs2.html | copied from the `resources/templates` directory
- `html.variables`        | `Map[String, String]()`                      | passed to the template during the Pandoc evaluation
- `html.nostats`          | `false`                                      | if true no stats are displayed
+ Name                    | Default value                                 | Description
+ ----------------------- | --------------------------------------------- | ------------------------------
+ `html.outdir`           | `target/specs2-reports/`                      | output directory for the html files
+ `html.template`         | `target/specs2-reports/templates/specs2.html` | copied from the `resources/templates` directory
+ `html.variables`        | `Map[String, String]()`                       | passed to the template during the Pandoc evaluation
+ `html.nostats`          | `false`                                       | if true no stats are displayed
 
 ## Arguments API
 
-From inside a specification, the `args` method provides the most frequent arguments as `args(argumentName = argumentValue). In the least frequent cases you will have to write:${snippet {
+From inside a specification, the `args` method provides the most frequent arguments as `args(argumentName = argumentValue)`. In the least frequent cases you will have to write:${snippet {
 // for selection arguments
 args.select(ex = "example \\d*")
 
@@ -108,7 +110,7 @@ args.execute(threadsNb = 4)
 // for storing arguments
 args.store(reset = true)
 
-  // for reporting arguments
+// for reporting arguments
 args.report(xonly = true)
 }}
 
@@ -131,5 +133,6 @@ There are also a few shortcuts:
  `fullStackTrace`                                                      | `args.report(traceFilter=NoStackTraceFilter)`
  `diffs(show, separators, triggerSize, shortenSize, diffRatio, full)`  | `args.report(diffs=SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full))`
 """
+
 }
 

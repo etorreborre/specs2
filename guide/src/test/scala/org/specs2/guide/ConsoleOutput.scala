@@ -3,7 +3,7 @@ package guide
 
 import main._
 
-object ConsoleOutput extends UserGuidePage { def is = s2"""
+object ConsoleOutput extends UserGuidePage { def is = "Console output".title ^ s2"""
 
 You will get a "console" output whenever you run a specification from ${"sbt" ~/ Runners}, ${"Maven, Gradle" ~/ OtherBuildTools} or a ${"shell session" ~/ RunInShell}. There are arguments you can use to change the output:
 
@@ -23,7 +23,7 @@ You will get a "console" output whenever you run a specification from ${"sbt" ~/
 
 Some of these arguments deserve further explanations.
 
-### `showonly`
+### Show only
 
 You can decide what you want to _show_ in the console by using the `showonly` arguments and the following flags:
 
@@ -53,17 +53,19 @@ Note also that the default filter also truncates the stacktrace in the middle if
 
 ### Diffs
 
-When using the equality matcher $specs2 tries to display the difference between the expected and the actual values using a class: `org.specs2.main.SmartDiffs`. There are several parameters for that class which you can specify from the command line as `smartdiffs show,separators,triggerSize,shortenSize,diffRatio,full`:
+When using the equality matcher $specs2 tries to display the difference between the expected and the actual values using a class: `org.specs2.main.SmartDiffs`. There are several parameters for that class which you can specify from the command line as:
+```
+sbt> test-only -- smartdiffs show,separators,triggerSize,shortenSize,diffRatio,full
+```
 
-
-For the diffs arguments the values you can specify are:
-
-  * `show` will not show anything (default is true)
-  * `separators` allows to change the separators used to show the differences (default is "[]")
-  * `triggerSize` controls the size above which the differences must be shown (default is 20)
-  * `shortenSize` controls the number of characters to display around each difference (default is 5)
-  * `diffRatio` percentage of differences above which the differences must not be shown (default is 30)
-  * `full` displays the full original expected and actual strings
+ Parameter          | Description
+ ------------------ | -----------
+ `show`             | will not show anything (default is true)
+ `separators`       | allows to change the separators used to show the differences (default is "[]")
+ `triggerSize`      | controls the size above which the differences must be shown (default is 20)
+ `shortenSize`      | controls the number of characters to display around each difference (default is 5)
+ `diffRatio`        | percentage of differences above which the differences must not be shown (default is 30)
+ `full`             | displays the full original expected and actual strings
 
 You can also specify your own enhanced algorithm for displaying the difference by providing an instance of the `${fullName[Diffs]}` trait:
 ```

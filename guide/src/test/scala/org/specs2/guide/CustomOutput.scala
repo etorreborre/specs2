@@ -13,17 +13,19 @@ You can implement your own reporting of $specs2 specifications:
 
 ## Notifier
 
-The ${fullName[org.specs2.reporter.Notifier]} trait can be used to report execution events. It notifies of the following:
+The `${fullName[org.specs2.reporter.Notifier]}` trait can be used to report execution events. It notifies of the following:
 
- * specification start: the beginning of a specification, with its name
- * specification end: the end of a specification, with its name
- * context start: the beginning of a sub-level when the specification is seen as a tree or Fragments
- * context end: the end of a sub-level when the specification is seen as a tree or Fragments
- * text: any Text fragment that needs to be displayed
- * example start
- * example result: success / failure / error / skipped / pending
+ Event                | Description
+ -------------------- | -----------
+ specification start  | the beginning of a specification, with its name
+ specification end    | the end of a specification, with its name
+ context start        | the beginning of a sub-level when the specification is seen as a tree or Fragments
+ context end          | the end of a sub-level when the specification is seen as a tree or Fragments
+ text                 | any Text fragment that needs to be displayed
+ example start        | the beginning of an example
+ example result       | `success / failure / error / skipped / pending`
 
-All those notifications come with a location (to trace back to the originating fragment in the Specification) and a duration when relevant (i.e. for examples and actions).
+All those notifications come with a location (to trace back to the originating fragment in the Specification) and a duration when relevant (i.e. for examples).
 
 You can then using the `notifier` argument to pass the name of your custom notifier:
 ```
@@ -32,7 +34,7 @@ sbt> testOnly *BinarySpec* -- notifier org.acme.reporting.FtpNotifier
 
 ## Printer
 
-The ${fullName[org.specs2.reporter.Printer]} trait defines how to output each fragment of the specification. The only method to implement is:
+The `${fullName[org.specs2.reporter.Printer]}` trait defines how to output each fragment of the specification. The only method to implement is:
 ```
 def fold(env: Env, spec: SpecStructure): Fold[Fragment]
 ```

@@ -9,14 +9,9 @@ import org.specs2.specification._
 import specification.core.{Fragments}
 import execute._
 
-object Contexts extends UserGuidePage with FileMatchers with FileSystem {
-  def is = ""
+object Contexts extends UserGuidePage with FileMatchers with FileSystem { def is = s2"""
 
-  val section = s2"""
-
-## Contexts
-
-In a specification some examples are very straightforward. They just check that a function is returning expected when given some inputs. However other examples can be more complex and require to execute in specific context:
+In a specification some examples are very straightforward. They just check that a function is returning expected values when given some inputs. However other examples can be more complex and require to execute in specific context:
 
  * with some state being setup before the example executes
  * with some clean up after the example is executed
@@ -28,21 +23,18 @@ For all those situations, there is a $specs2 trait which you can mix in your spe
 
 ### BeforeEach / AfterEach
 
-The `org.specs2.specification.BeforeEach` trait defines an action that will be executed before each example:${
-    snippet {
-      class BeforeSpecification extends mutable.Specification with BeforeEach {
-        // you need to define the "before" action
-        def before = println("before")
-
-        "example 1" >> {
-          println("example1"); ok
-        }
-        "example 2" >> {
-          println("example2"); ok
-        }
-      }
-    }
+The `org.specs2.specification.BeforeEach` trait defines an action that will be executed before each example:${snippet {
+class BeforeSpecification extends mutable.Specification with BeforeEach {
+  // you need to define the "before" action
+  def before = println("before")
+  "example 1" >> {
+    println("example1"); ok
   }
+  "example 2" >> {
+    println("example2"); ok
+  }
+}
+}}
 
 If you execute this specification you may see something like:
 ```console
@@ -52,70 +44,60 @@ If you execute this specification you may see something like:
 [info] example1
 ```
 
-As you guess, defining a behaviour "after" is very similar:${
-    snippet {
-      class AfterSpecification extends mutable.Specification with AfterEach {
-        // you need to define the "after" action
-        def after = println("after")
+As you guess, defining a behaviour "after" is very similar:${snippet {
+class AfterSpecification extends mutable.Specification with AfterEach {
+  // you need to define the "after" action
+  def after = println("after")
 
-        "example 1" >> {
-          println("example1"); ok
-        }
-        "example 2" >> {
-          println("example2"); ok
-        }
-      }
-    }
+  "example 1" >> {
+    println("example1"); ok
   }
-
-You might also want to mix the 2:${
-    snippet {
-      class BeforeAfterSpecification extends mutable.Specification with BeforeAfterEach {
-        def before = println("before")
-
-        def after = println("after")
-
-        "example 1" >> {
-          println("example1"); ok
-        }
-        "example 2" >> {
-          println("example2"); ok
-        }
-      }
-    }
+  "example 2" >> {
+    println("example2"); ok
   }
+}
+}}
+
+You might also want to mix the two:${snippet {
+class BeforeAfterSpecification extends mutable.Specification with BeforeAfterEach {
+  def before = println("before")
+
+  def after = println("after")
+
+  "example 1" >> {
+    println("example1"); ok
+  }
+  "example 2" >> {
+    println("example2"); ok
+  }
+}
+}}
 
 ### AroundEach
 
-Another very common situation is when you need to execute in the context of a database transaction or a web request. In this case you can use the `AroundEach` trait to execute each example in the proper context:${
-    snippet {
-
-      trait DatabaseContext extends AroundEach {
-        // you need to define the "around" method
-        def around[R: AsResult](r: => R): Result = {
-          openDatabaseTransaction
-          try AsResult(r)
-          finally closeDatabaseTransaction
-        }
-
-        // do what you need to do with the database
-        def openDatabaseTransaction = ???
-
-        def closeDatabaseTransaction = ???
-      }
-
-      class AroundSpecification extends mutable.Specification with DatabaseContext {
-        "example 1" >> {
-          println("using the database"); ok
-        }
-        "example 2" >> {
-          println("using the database too"); ok
-        }
-      }
-    }
+Another very common situation is when you need to execute in the context of a database transaction or a web request. In this case you can use the `AroundEach` trait to execute each example in the proper context:${snippet {
+trait DatabaseContext extends AroundEach {
+  // you need to define the "around" method
+  def around[R: AsResult](r: => R): Result = {
+    openDatabaseTransaction
+    try AsResult(r)
+    finally closeDatabaseTransaction
   }
+  // do what you need to do with the database
+  def openDatabaseTransaction = ???
+  def closeDatabaseTransaction = ???
+}
+class AroundSpecification extends mutable.Specification with DatabaseContext {
+  "example 1" >> {
+    println("using the database"); ok
+  }
+  "example 2" >> {
+    println("using the database too"); ok
+  }
+}
+}}
 
-The specification above shows a trait `DatabaseContext` extending `AroundEach` (so that trait can be reused for other specifications). It define a method named `around` taking the body of the example, anything with an ${"AsResult" ~/ AsResultTypeclass} typeclass and returns a result. Because `r` is a byname parameter, you are free to do whatever you want before or after evaluating it, like opening and closing a database transaction.
+The specification above shows a trait `DatabaseContext` extending `AroundEach` (so that trait can be reused for other specifications). It defines a method named `around` taking the body of the example, anything with an ${"AsResult" ~/ AsResultTypeclass} typeclass, and returns a result. Because `r` is a byname parameter, you are free to do whatever you want before or after evaluating it, like opening and closing a database transaction.
 
 The `AroundEach` trait can be used for lots of different purposes:
 
@@ -123,7 +105,7 @@ The `AroundEach` trait can be used for lots of different purposes:
  - to time them out if they run for too long
  - to run them in different contexts, with different parameters
 
-There is however one thing you cannot do with `AroundExample`. You can't pass the context to the example if it needs it. The `FixtureExample` trait solves this problem.
+There is however one thing you cannot do with `AroundExample`. You can't pass the context to the example if it needs it. The `ForEach` trait solves this problem.
 
 ### ForEach
 
@@ -238,18 +220,18 @@ s2"""
 This works because each "context" object has an `apply` method taking `R : AsResult` and returning `Result`.
 
 Finally a last kind of "context" object, a `Fixture` can be used to inject some state:${snippet{
-  val evenNumbers = new Fixture[Int] {
-    def apply[R : AsResult](f: Int => R) = {
-      // test f with 1, 2, 3
-      Seq(1, 2, 3).foldLeft(Success(): Result) { (res, i) =>
-        res and AsResult(f(i))
-      }
+val evenNumbers = new Fixture[Int] {
+  def apply[R : AsResult](f: Int => R) = {
+    // test f with 1, 2, 3
+    Seq(1, 2, 3).foldLeft(Success(): Result) { (res, i) =>
+      res and AsResult(f(i))
     }
   }
+}
 
-  s2"even numbers can be divided by 2  $e1"
+s2"even numbers can be divided by 2  $e1"
 
-  def e1 = evenNumbers { i: Int => i % 2 === 0 }
+def e1 = evenNumbers { i: Int => i % 2 === 0 }
 }}
 
 """

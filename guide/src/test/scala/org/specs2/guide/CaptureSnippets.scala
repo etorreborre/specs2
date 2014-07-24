@@ -3,8 +3,7 @@ package guide
 
 import specification.Snippets
 
-object CaptureSnippets extends UserGuidePage { def is = s2"""
-### Capture snippets
+object CaptureSnippets extends UserGuidePage { def is = "Capture snippets".title ^ s2"""
 
 It is possible to include pieces of code in your documentation with the `${fullName[Snippets]}` trait using the `snippet` method to capture a block code with marker comments to delimit the parts you want to show.
 
@@ -16,7 +15,7 @@ Here is an example of using the `snippet` method:
 
 ```
 s2$triple
-This is a multi-line string with a snippet of code: $${ snippet {
+This is a multi-line string with a code snippet: $${ snippet {
 def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
 factorial(3) == 6
 }}
@@ -25,7 +24,7 @@ $triple
 
 When you use the `snippet` method, the reports will show:
 
-This is a multi-line string with a snippet of code:
+This is a multi-line string with a code snippet:
 
 ```
 def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
@@ -34,7 +33,7 @@ factorial(3) == 6
 
 #### Cuts
 
-Since snippets are compiled code, you have to include many declarations, like imports or variables definitions, so that the code compiles. However this will make your documentation more verbose than necessary, so it is useful to hide them. One way to do this is to delimit the code to show with some comments of the form `// 8<--`:
+Since snippets are compiled code, you might have to include many declarations, like imports or variables definitions, so that the code compiles but this can make your documentation more verbose than necessary. You can hide those definitions by delimiting the code to show with some comments of the form `// 8<--`:
 
 ```
 s2$triple
@@ -48,7 +47,7 @@ factorial(3) == 6
 $triple
 ```
 
-The snippet above will only show `factorial(3) == 6`. You can actually repeat this pattern several times:
+The snippet above will only show `factorial(3) == 6`. You can repeat this pattern several times:
 
 ```
 s2$triple
@@ -100,8 +99,8 @@ It is possible to adjust the margin of captured source code by adding or removin
 ```
 s2$triple
 This is a snippet of code with a negative offset to align the code to the border of the screen: $${ snippet {
-def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
-factorial(3)
+   def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
+   factorial(3)
 }.offsetIs(-3)}
 $triple
 ```
@@ -115,9 +114,9 @@ factorial(3)
 #### Parameters
 
 All of the settings above: cuts, offset,... are coming from an implicit `SnippetParams` object that is changing the behavior of the created Snippets. You can choose, for a given scope, to replace these parameters with other ones and simply shadow the default parameters with your own, for example to always evaluate the snippets results:
-
-     implicit snippetParams = SnippetParams(eval = true)
-
+```
+implicit snippetParams = SnippetParams(eval = true)
+```
 The parameters you can set are:
 
 name              | description

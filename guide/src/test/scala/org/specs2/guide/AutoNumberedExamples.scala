@@ -3,28 +3,28 @@ package guide
 
 import specification._
 
-object AutoNumberedExamples extends UserGuidePage { def is = s2"""
+object AutoNumberedExamples extends UserGuidePage { def is = "Auto-numbered examples" ^ s2"""
 
 ## Auto numbered examples
 
 In the ${"named examples" ~/ NamedExamples} section we can see that there is a way to create groups of examples with standard names and use these names in the specification text (via the `s2` interpolated string). Here we go a step further. The specification text is going to be some pure text, the examples will be described as examples groups and the numbers will be created automatically. What does it look like? ${snippet{
 class BulletedExamplesSpec extends script.Specification with Groups { def is = """
+  This is an introduction
 
-This is an introduction
+  First section
+  =============
 
-First section
-=============
+  A bit more text there.
+   + and the first example
+   + and the second example
 
-A bit more text there.
- + and the first example
- + and the second example
+  Second section
+  =============
 
-Second section
-=============
+  Then another section
+   + and the third example
+   + and the fourth example
 
-Then another section
- + and the third example
- + and the fourth example
 """
 
   "first section" - new group {
@@ -53,7 +53,7 @@ At runtime, the text gets parsed and:
  - each group is enclosed in a `section` with the group name (automatically numbered, starting from `g1`)
  - each example is tagged with its group name, and its number (automatically numbered, starting from `e1`)
 
-So, in the example above the fourth example will be marked as `pending (g2.e2)` where `g2` is the group name and `e2` is the example name. As you can guess, sections and tags make it easy to just re-run parts of the specification without having to create those sections and tags yourself.
+So, in the specification above the fourth example will be marked as `pending (g2.e2)` where `g2` is the group name and `e2` is the example name. As you can guess, sections and tags make it easy to just re-run parts of the specification without having to create those sections and tags yourself.
 
 The major issue with this style of specification is that you cannot use your IDE to navigate from a piece of text to the corresponding code. You have to count the groups and count the number of examples to find the right one.
 
