@@ -45,6 +45,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Gro
    ${ Seq(1, 2, 3) must contain(exactly(1, 2, 3))                                                    }
    ${ (Seq(1, 2, 3) must contain(exactly(1, 2, 3, 4))) returns "List(1, 2, 3) does not contain 4"    }
    ${ Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(1), be_>=(2)))                               }
+   ${ Seq(1, 2, 3) must contain(atLeast(be_>=(0), be_>=(1), be_<=(1)))                               }
    ${ Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(1), be_>=(2)).inOrder)                       }
    // this must be understood as allOf(2, 3)
    ${ Seq(1, 2, 3) must contain(2, 3) }
@@ -80,10 +81,13 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Gro
         " * 3 is greater than 1\n" }
 
    ${ (Seq(1, 2, 3) must contain(atLeast(4, 1))                                ) returns "List(1, 2, 3) does not contain 4" }
+<<<<<<< HEAD
    ${ (Seq(1, 2, 3) must contain(atLeast(be_>=(0), be_>=(1), be_<=(1)))        ) returns
       "List(1, 2, 3) does not contain at least 3 correct values\n"+
       "- 3\n"+
       " * 3 is greater than 1\n" }
+=======
+>>>>>>> 966e171... find the best match for a collection of matchers on a Traversable
 
    ${ (Seq(1, 2)    must contain(atMost(1, 3))                                 ) returns "List(1, 2) does not contain 3 but contains 2" }
    ${ (Seq(1, 2)    must contain(atMost(1))                                    ) returns "List(1, 2) contains 2" }
