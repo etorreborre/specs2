@@ -130,9 +130,9 @@ trait S2StringContext extends FragmentsFactory { outer =>
       (fs append ff.text(text).setLocation(start)) append fragments
   }
 
-  implicit def specificationStructureIsInterpolatedFragment(s: SpecificationStructure): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =
-      specStructureIsInterpolatedFragment(s.is).append(fs, text, start, end, expression)
+  implicit def specificationStructureIsInterpolatedFragment(s: SpecificationStructure): InterpolatedFragment = {
+    lazy val specStructure = s.is
+    specificationLinkIsInterpolatedFragment(SpecificationLink(specStructure.header, alias = specStructure.header.show))
   }
 
   implicit def specStructureIsInterpolatedFragment(s: SpecStructure): InterpolatedFragment = new InterpolatedFragment {

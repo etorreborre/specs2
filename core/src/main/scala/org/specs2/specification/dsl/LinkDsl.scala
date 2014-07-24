@@ -45,3 +45,4 @@ trait LinkDsl extends FragmentsFactory {
   def see(s: =>SpecificationStructure): Fragment = fragmentFactory.see(SpecificationLink(s.is.header, alias = s.is.header.show))
 
 }
+
