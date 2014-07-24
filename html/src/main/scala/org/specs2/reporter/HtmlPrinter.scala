@@ -81,7 +81,7 @@ trait HtmlPrinter extends Printer {
     val variables1 =
       options.variables
         .updated("body", body)
-        .updated("title", spec.name)
+        .updated("title", spec.wordsTitle)
         .updated("baseDir", options.baseDir)
         .updated("outDir", options.outDir)
     HtmlTemplate.runTemplate(template, variables1)
@@ -105,7 +105,7 @@ trait HtmlPrinter extends Printer {
 
     val variables1 =
       options.variables
-        .updated("title", spec.name)
+        .updated("title", spec.wordsTitle)
         .updated("baseDir", options.baseDir)
         .updated("outDir", options.outDir)
 

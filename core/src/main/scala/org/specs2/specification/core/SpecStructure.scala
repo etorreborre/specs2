@@ -27,6 +27,7 @@ case class SpecStructure(header: SpecHeader, arguments: Arguments, lazyFragments
 
   def specClassName = header.className
   def name = header.title.getOrElse(header.simpleName)
+  def wordsTitle = header.title.getOrElse(header.wordsTitle)
 
   def texts = fragments.texts
   def examples = fragments.examples
