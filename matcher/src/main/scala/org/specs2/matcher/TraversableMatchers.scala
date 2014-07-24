@@ -371,17 +371,24 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
    *
    * @return (the list of each result for each tested value, the list of remaining checks if any)
    */
-  @tailrec
+//  @tailrec
   private def checkValues(values: Seq[T], checks: Seq[ValueCheck[T]], eachCheck: Boolean, results: Seq[(T, Seq[Result])] = Seq()): (Seq[(T, Seq[Result])], Seq[ValueCheck[T]]) = {
-    values match {
-      case currentValue +: remainingValues =>
-        if (checks.isEmpty) (results :+ (currentValue -> Seq(Failure("no more checks for "+currentValue, currentValue.notNull))), checks)
-        else {
-          val (valueResults, uncheckedChecks) = checkValue(currentValue, checks, Seq(), eachCheck, Seq())
-          checkValues(remainingValues, uncheckedChecks, eachCheck, results :+ (currentValue -> valueResults))
-        }
-      case _ => (results, checks)
-    }
+    val (results: Seq[(T, ValueCheck[T], Result)], unchecked) =
+      BestMatching.findBestMatch(values, checks, (t: T, check: ValueCheck[T]) => check.check(t), eachCheck)
+
+    val resultsAsSeq = results.map { case (t, v, r) => (t, Seq(r)) }
+    (resultsAsSeq, unchecked)
+//
+//
+//    values match {
+//      case currentValue +: remainingValues =>
+//        if (checks.isEmpty) (results :+ (currentValue -> Seq(Failure("no more checks for "+currentValue, currentValue.notNull))), checks)
+//        else {
+//          val (valueResults, uncheckedChecks) = checkValue(currentValue, checks, Seq(), eachCheck, Seq())
+//          checkValues(remainingValues, uncheckedChecks, eachCheck, results :+ (currentValue -> valueResults))
+//        }
+//      case _ => (results, checks)
+//    }
   }
 
 

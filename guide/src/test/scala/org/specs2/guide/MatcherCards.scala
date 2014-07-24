@@ -292,7 +292,7 @@ Another frequent use of Traversable matchers is to check if the Traversable have
  * `exactly` where the traversable must contain exactly the specified number of elements
  ${snippet{Seq(1, 2) must contain(exactly(2, 1))}}
 
-The `atLeast/atMost/exactly` operators work on distinct values by default (because this is easier for counting the correspondance between actual values and expected ones). However you can use `onDistinctValues(false)` if you don't care.
+The `atLeast/atMost/exactly` operators work on distinct values by default (because this is easier for counting the correspondence between actual values and expected ones). However you can use `onDistinctValues(false)` if you don't care.
 
 Finally, if you want to get the differences between 2 traversables:
 
