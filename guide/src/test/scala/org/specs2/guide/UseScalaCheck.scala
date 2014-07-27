@@ -5,8 +5,7 @@ import org.scalacheck.{Prop, Gen, Arbitrary}
 import matcher.Parameters
 import matcher.ScalaCheckMatchers._
 
-object UseScalaCheck extends UserGuidePage { def is = s2"""
-## ScalaCheck
+object UseScalaCheck extends UserGuidePage { def is = "ScalaCheck".title ^ s2"""
 
 A clever way of creating expectations in $specs2 is to use the [ScalaCheck](https://github.com/rickynils/scalacheck) library.
 

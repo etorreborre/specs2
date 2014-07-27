@@ -3,8 +3,6 @@ package guide
 
 object Execution extends UserGuidePage { def is = s2"""
 
-## Execution
-
 ### Parallel by default
 
 $specs2 examples are executed concurrently by default:
@@ -13,7 +11,7 @@ $specs2 examples are executed concurrently by default:
 
  - it encourages to write independent examples when the result of a given example should not be influenced by others
 
-Then starting from this default you can progressively add constraints to get more control over the execution.
+Starting from this default you can progressively add constraints to get more control over the execution.
 
 ### Steps
 
@@ -38,7 +36,7 @@ There is no "result" for a step but if it throws an Exception an `Error` will be
 
 ### Stop the execution
 
-You can however control if the rest of the specification must be executed by adding some constraints on the step. For example:${snippet{
+You can still control if the rest of the specification must be executed by adding some constraints on the step. For example:${snippet{
 class StepWithStopOnErrorSpec extends Specification { def is = s2"""
   this is example 1 $ok
   this is example 2 $ok
@@ -53,11 +51,11 @@ When this specification is executed examples 3 and 4 will be skipped because the
 
  - `stopOnFail` stop if there is a failure in the previous examples or in the step
  - `stopOnSkipped` stop if there is a skipped result in the previous examples or in the step
- - `stopWhen(Result => Boolean)` stop if there the `and`-ed result of the previous examples and the step verify a condition
+ - `stopWhen(Result => Boolean)` stop if the `and`-ed result of the previous examples and the step verify a given condition
 
 ### Sequential
 
-If all your specification is a list of well-ordered examples you can use the `sequential` argument to make sure that they are executed in order:${snippet{
+If your specification is a list of well-ordered examples you can use the `sequential` argument to make sure that they are executed in order:${snippet{
 class SequentialSpec extends Specification { def is = sequential ^ s2"""
   this is example 1 $ok
   this is example 2 $ok

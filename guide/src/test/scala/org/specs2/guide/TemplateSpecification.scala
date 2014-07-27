@@ -18,8 +18,8 @@ class DatabaseSpecification1 extends Specification with DatabaseSetup { def is =
 
 How does this work? The `BeforeAll` trait overrides a method called `map` in the `Specification` trait and adds one `Step` before anything else in the specification:
 ```
-  override def map(fs: =>Fragments): Fragments =
-    super.map(fs).prepend(fragmentFactory.step(beforeAll))
+override def map(fs: =>Fragments): Fragments =
+  super.map(fs).prepend(fragmentFactory.step(beforeAll))
 ```
 
 The `map` method is indeed called everytime the specification returns the list of `Fragment` defining it. You can leverage this and define your own traits:
@@ -28,6 +28,8 @@ The `map` method is indeed called everytime the specification returns the list o
  - filtering out some undesirable fragments
  - reformatting all text
  - ...
+
+### If you want to know more
 
 You will probably need to learn a bit more about $specs2 ${""""Fragments" API""" ~/ FragmentsApi} in order to modify, delete or add new "Fragments".
 

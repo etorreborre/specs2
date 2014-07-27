@@ -3,7 +3,7 @@ package guide
 
 import org.specs2.execute.{Success, ResultExecution, AsResult}
 
-object TroubleShooting extends UserGuidePage { def is = s2"""
+object TroubleShooting extends UserGuidePage { def is = "Troubleshooting".title ^ s2"""
 
 This section presents some of the common pitfalls you might face when using $specs2 and Scala
 
@@ -30,7 +30,7 @@ In that case you can either:
  - create 2 examples having one expectation each
  - mix-in the `ThrownExpectations` trait
 
-### AsResult
+### No evidence parameter for AsResult
 
 Here is a mysterious `AsResult` message
 ```
@@ -59,7 +59,7 @@ implicit def unitAsResult: AsResult[Unit] = new AsResult[Unit] {
 }
 }}
 
-### Inference
+### Type mismatch
 
 This is also a tricky one, showing the limitations of embedding a pseudo-natural language into a programming language:
 ```

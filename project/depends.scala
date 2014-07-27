@@ -32,8 +32,8 @@ object depends {
 
   def paradise(scalaVersion: String) =
     if (scalaVersion.startsWith("2.11")) Nil
-    else  Seq(compilerPlugin("org.scalamacros" %% "paradise"    % "2.0.0-M7" cross CrossVersion.full),
-                             "org.scalamacros" %% "quasiquotes" % "2.0.0-M7")
+    else  Seq(compilerPlugin("org.scalamacros" %% "paradise"    % "2.0.0" cross CrossVersion.full),
+                             "org.scalamacros" %% "quasiquotes" % "2.0.0")
 }
 
 

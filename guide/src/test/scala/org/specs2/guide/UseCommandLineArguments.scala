@@ -3,14 +3,14 @@ package guide
 
 import main._
 import execute.AsResult
-import org.specs2.specification.{Before, CommandLineArguments, CommandLineContextForEach, ForEachWithCommandLine}
+import org.specs2.specification.{Before, CommandLineArguments, CommandLineArgumentsInContext, ForEachWithCommandLineArguments}
 import specification.core.foreachInSequence
 
 object UseCommandLineArguments extends UserGuidePage { def is = s2"""
 
-Some specifications need to be fine-tuned and slightly modified. Sometimes to access a specific environment, or to disable some examples, or to execute more ScalaCheck properties. For all those situations it is desirable to modify the specification directly from the command-line without having to recompile it.
+Some specifications need to be fine-tuned and constantly modified. Sometimes to access a specific environment, or to disable some examples, or to execute more ScalaCheck properties. For all those situations it is desirable to modify the specification directly from the command-line without having to recompile it.
 
-## Control an example
+### Control an example
 
 Let's see first how to use the command line to modify the outcome of just one example:${snippet{
 class SpecificationWithArgs extends Specification { def is = s2"""
@@ -32,7 +32,7 @@ class SpecificationWithArgs extends mutable.Specification {
 }
 }}
 
-## Control a specification
+### Control a specification
 
 You can also drive the creation of the full specification with command line arguments:${snippet{
 class SpecificationWithArgs extends Specification with CommandLineArguments { def is(commandLine: CommandLine) =
@@ -63,10 +63,10 @@ class SpecificationWithArgs extends mutable.Specification with specification.mut
 }
 }}
 
-## Control a context
+### Control a context
 
-The next thing you might want to control is contexts. Instead of using the `BeforeEach` / `AfterEach` / `AroundEach` traits directly you will need to implement the `CommandLineContextForEach` trait and provide the appropriate context object:${snippet{
-class SpecificationWithArgs extends Specification with CommandLineContextForEach { def is = s2"""
+The next thing you might want to control is contexts. Instead of using the `BeforeEach` / `AfterEach` / `AroundEach` traits directly you will need to implement the `CommandLineArgumentsInContext` trait and provide the appropriate context object:${snippet{
+class SpecificationWithArgs extends Specification with CommandLineArgumentsInContext { def is = s2"""
  This is a specification with a context depending on command line arguments
   with one example $ok
 """
@@ -78,10 +78,10 @@ class SpecificationWithArgs extends Specification with CommandLineContextForEach
 }
 }}
 
-## Control data injection
+### Control data injection
 
-The final situation where you would need to use command-line arguments is with a `ForEach` trait. If you want to influence the injection of data with the command line, the `ForEachWithCommandLine` trait needs to be mixed in:${snippet{
-class SpecificationWithArgs extends Specification with ForEachWithCommandLine[Int] { def is = s2"""
+The final situation where you would need to use command-line arguments is with a `ForEach` trait. If you want to influence the injection of data with the command line, the `ForEachWithCommandLineArguments` trait needs to be mixed in:${snippet{
+class SpecificationWithArgs extends Specification with ForEachWithCommandLineArguments[Int] { def is = s2"""
  This is a specification
   with one example using injected data ${ (i: Int) => i must_== i }
 """

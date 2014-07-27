@@ -7,7 +7,7 @@ import org.specs2.specification.core.Fragments
 object Selection extends UserGuidePage { def is = s2"""
 ### Select an example to execute
 
-Many specifications are written incrementally. You specify a little bit then you implement the application. When you go through this Specify-Implement-Execute cycle it is useful to be able to focus on just one example, the one you are currently working on. The `ex` (for "example") argument is what you need:
+Many specifications are written incrementally. You specify a little bit then you implement the application. When you go through this Specify-Implement-Execute cycle it is useful to be able to focus on just one example, the one you are currently working on. The `ex` argument is what you need (`ex` stands for "example"):
 ```
 sbt> test-only *MySpecification* -- ex contains
 ```
@@ -121,7 +121,7 @@ On the line above `x` is the status of the previous example. Here is a table of 
 
 This selection only works because $specs2 stores the state of each specification in a directory after a run (`target/specs2-reports/stats` by default). If you decide that this storing is useless and you want to skip it you can use the `neverstore` argument. Otherwise if you want to make sure that the `stats` directory doesn't become too big over time you can use the `resetstore` argument which will remove the current store before running the specification.
 
-## If you want to know more
+### If you want to know more
 
  - learn how to ${"display only some examples" ~/ ConsoleOutput}
  - consult the ${"arguments reference guide" ~/ ArgumentsReference} for a list of all arguments

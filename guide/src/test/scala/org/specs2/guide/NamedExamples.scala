@@ -7,7 +7,9 @@ object NamedExamples extends UserGuidePage { def is = s2"""
 
 ### Naming examples
 
-When you create acceptance specifications, you have to find names to reference your examples and this can sometimes be a bit tedious. So why not have the specification do it for you? With the `${fullName[specification.Grouped]}` trait you get "group traits", from `g1` to `g22` to define groups of examples. Each group trait defines 22 variables named `e1` to `e22`, to define examples. This is an example on how to use groups: ${snippet{
+When you create acceptance specifications, you have to find names to reference your examples and this can sometimes be a bit tedious. So why not have the specification do it for you? With the `${fullName[specification.Grouped]}` trait you get "group traits", from `g1` to `g22` to define groups of examples. Each group trait defines 22 variables named `e1` to `e22`, to define examples.
+
+Here is an example on how to use groups: ${snippet{
 class MySpecification extends Specification with specification.Grouped { def is =  s2"""
   first example in first group                                        ${g1.e1}
   second example in first group                                       ${g1.e2}
@@ -47,14 +49,12 @@ class MySpecification extends Specification with specification.Groups { def is =
       list must haveSize(1)
     }
 
-    // the second example is isolated from the first
-    // and will succeed
+    // the second example is isolated from the first and will succeed
     e2 := {
       list.append(1, 2, 3)
       list must haveSize(3)
     }
   }
-
 }
 }}
 

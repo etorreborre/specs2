@@ -53,7 +53,7 @@ trait Xml {
 object Xml {
   /** @return the stacktraces of a Cell depending on its type and execution result */
   def stacktraces(cell: Cell)(implicit args: Arguments): NodeSeq = cell match {
-    case FormCell(f: Form)                           => f.rows.map(stacktraces(_)).reduceNodes
+    case FormCell(f: Form)                           => f.rows.map(stacktraces).reduceNodes
     case PropCell(_, Some(e @ Error(_, _)))          => stacktraces(e)
     case PropCell(_, Some(f @ Failure(_, _, _, _)))  => stacktraces(f)
     case FieldCell(_, Some(e @ Error(_, _)))         => stacktraces(e)

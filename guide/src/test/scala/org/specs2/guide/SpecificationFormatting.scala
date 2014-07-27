@@ -2,7 +2,7 @@ package org.specs2
 package guide
 
 object SpecificationFormatting extends UserGuidePage { def is = s2"""
-It is fairly easy to make the text of an acceptance specification look like you want in the console thanks to interpolated strings. Doing to same thing is not obvious at first in a unit specification. How do you add a new line after an example? After the specification title? How do you indent a group of examples a bit more?
+Acceptance specifications are displayed in the console almost as they are in `.scala` files thanks to interpolated strings. However it is not obvious to know how to change the display of a unit specification. How do you add a new line after an example? After the specification title? How do you indent a group of examples a bit more?
 
 First of all, you can always add a piece text by using the `txt` method on a `String`:${snippet{
 class UnitSpec extends mutable.Specification {

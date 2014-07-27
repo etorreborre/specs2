@@ -250,7 +250,7 @@ object Scopes extends UserGuidePage { def is = s2"""
 
 ### Scope
 
-The techniques described in ${"`Context` objects" ~/ ContextObjects} are not always applicable to unit specifications where we want examples to be a "block" of code described by some text. Instead of creating a case class we can instantiate a trait which will hold the "fresh" state:${snippet{
+The techniques described in ${"`Context` objects" ~/ ContextObjects} are not always applicable to unit specifications where we want examples to be a "block" of code described by some text. Instead of creating a case class we can instantiate a trait which will hold a "fresh" state:${snippet{
 class ContextSpec extends mutable.Specification {
   "this is the first example" in new trees {
     tree.removeNodes(2, 3) must have size(2)
@@ -274,7 +274,7 @@ Now you might wonder why the `trees` trait is extending the `org.specs2.specific
 
 It is also possible to extend Scopes with `Before` and `After` traits but they need to be `org.specs2.mutable.Before` and `org.specs2.mutable.After` traits. This is necessary because those traits extend the Scala `DelayedInit` trait allowing to insert code around the execution of the body of an object.
 
-## If you want to know more...
+### If you want to know more...
 
  - print ${"execution data" ~/ PrintExecutionData}
 

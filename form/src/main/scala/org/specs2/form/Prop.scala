@@ -38,7 +38,7 @@ case class Prop[T, S](
               actual: Property[T] = Property[T](),
               expected: Property[S] = Property[S](),
               constraint: (T, S) => Result = Prop.checkProp,
-              decorator: Decorator = Decorator()) extends Executable with DecoratedProperty[Prop[T, S]] {
+              decorator: Decorator = Decorator().bkGreyLabel) extends Executable with DecoratedProperty[Prop[T, S]] {
   
   /**
    * The apply method sets the expected value and returns the Prop

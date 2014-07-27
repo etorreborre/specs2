@@ -7,7 +7,7 @@ import specification.dsl.mutable.ExampleDsl
 import specification.create.S2StringContext
 
 
-trait ForEachWithCommandLine[T] extends specification.ForEachWithCommandLine[T] with ExampleDsl { outer: S2StringContext =>
+trait ForEachWithCommandLine[T] extends specification.ForEachWithCommandLineArguments[T] with ExampleDsl { outer: S2StringContext =>
   override implicit def blockExample(d: String) = new BlockExample1(d)
 
   class BlockExample1(d: String) extends BlockExample(d) {

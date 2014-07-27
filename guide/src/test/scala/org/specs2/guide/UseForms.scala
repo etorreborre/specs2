@@ -6,7 +6,7 @@ import form._
 import examples.Address
 import specification.Forms
 
-object UseForms extends UserGuidePage with Forms { def is = s2"""
+object UseForms extends UserGuidePage with Forms { def is = "Forms".title ^ s2"""
 
 Forms are a way to represent domain objects or services, and declare expected values in a tabular format. Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.
 
@@ -53,32 +53,25 @@ An `Effect` is almost like a `Field` but it never shows its value. The value of 
 
 A `Prop` is like a `Field`, it has a label. But you can give it 2 values, an "actual" one and an "expected" one. When executing the property, both values are compared to get a result. You can create a `Prop` with the following functions:
 
- * `prop(value)` a property with no label
- * `prop(label, actual)` a property with a label and an actual value
- * `prop(label, actual, expected)` a property with a label, an actual value and an expected one
- * `prop(label, actual, constraint)` a property with a label, an actual value and a function taking the actual value,
-   an expected one and returning a `Result`
-
-      prop("label", "actual", (a: String, b: String) => (a === b).toResult)
-
- * `prop(label, actual, matcher constraint)` a property with a label, an actual value and a function taking the expected value,
-   returning a Matcher that will be applied to the actual one
-
-      prop("label", "expected", (s: String) => beEqualTo(s))
-
- * `prop(label, actual, matcher)` a property with a label, an actual value and a matcher to apply to that value
-
-      prop("label", Some(1), beSome)
+ Expression                                                               | Description
+ ------------------------------------------------------------------------ | --------------------------
+ `prop(value)`                                                            | a property with no label
+ `prop(label, actual)`                                                    | a property with a label and an actual value
+ `prop(label, actual, expected)`                                          | a property with a label, an actual value and an expected one
+ `prop(label, actual, constraint)`                                        | a property with a label, an actual value and a function taking the actual value, an expected one and returning a `Result`
+ `prop("label", "actual", (a: String, b: String) => (a === b).toResult)`  | a property with a label, an actual value and a function taking the expected value, returning a Matcher that will be applied to the actual one
+ `prop("label", "expected", (expected: String) => beEqualtTo(exepcted))`  | a property with a label, an actual value and function applying a matcher to that value
+ `prop(label, actual, matcher)`                                           | a property with a label, an actual value and a matcher to apply to that value
 
     If the matcher is `mute`d then no message will be displayed in case of a failure.
 
 If the expected value is not provided when building the property, it can be given with the `apply` method:${snippet{
-  // 8<--
-  val prop1 = prop("actual") // 8<--
-  // apply "sets" the expected value
-  prop1.apply("expected")
-  // or
-  prop1("expected")
+// 8<--
+val prop1 = prop("actual") // 8<--
+// apply "sets" the expected value
+prop1.apply("expected")
+// or
+prop1("expected")
 }}
 
 Let's look at a few examples:
@@ -151,7 +144,7 @@ The address must be retrieved from the database with the proper street and numbe
   tr(prop("street", actualStreet(123), "Oxford St")).
   tr(prop("number", actualNumber(123), 20))}
 """
-  }
+}
 }}
 
 One way to encapsulate and reuse this Form across specifications is to define a case class: ${snippet{

@@ -3,7 +3,7 @@ package guide
 
 object Structure extends UserGuidePage { def is = s2"""
 
-## Styles
+### Styles
 
 In a Specification you generally want to include 2 things:
 
@@ -12,9 +12,9 @@ In a Specification you generally want to include 2 things:
 
 With $specs2 you have 2 main ways to do this:
 
- - you can create an "Acceptance" specification where all the informal text is written in one place and the code is written elsewhere. The name "acceptance" comes from the fact that it might be easier for a non-developer to read to text to validate your specification
+ - you can create an *"Acceptance"* specification where all the informal text is written in one place and the code is written elsewhere. The name "acceptance" comes from the fact that it might be easier for a non-developer to read to text to validate your specification
 
- - you can create a "Unit" specification where the code is interleaved with the text. The name "unit" comes from the fact that Unit specifications have a structure which is close to unit tests in "classical" frameworks such as JUnit
+ - you can create a *"Unit"* specification where the code is interleaved with the text. The name "unit" comes from the fact that Unit specifications have a structure which is close to unit tests in "classical" frameworks such as JUnit
 
 Both ways of writing specifications have advantages and drawbacks:
 
@@ -31,8 +31,8 @@ class MySpecification extends org.specs2.Specification { def is = s2"""
    where example 2 must be true           $e2
                                           """
 
- def e1 = 1 must_== 1
- def e2 = 2 must_== 2
+  def e1 = 1 must_== 1
+  def e2 = 2 must_== 2
 }
 }}
 
@@ -69,7 +69,7 @@ The `>>` blocks can be nested and this allows you to structure your specificatio
 
 ### Expectations
 
-There is another major difference between the acceptance specifications and unit specifications. The first style encourages you to write [one expectation per example](http://bit.ly/one_assertion_per_test) while the second allows to use several. One expectation per example is useful because when a specification fails, you know immediately what is wrong. However it is sometimes expensive to setup data for an example so having several expectations sharing the same setup is sometimes might be preferrable.
+There is another major difference between the acceptance specifications and unit specifications. The first style encourages you to write [one expectation per example](http://bit.ly/one_assertion_per_test) while the second allows to use several. One expectation per example is useful because when a specification fails, you know immediately what is wrong. However it is sometimes expensive to setup data for an example so having several expectations sharing the same setup might be preferable on occasions.
 
 The good news is that for each of the 2 main styles, acceptance and unit, you can choose exactly which mode you prefer if the default mode is not convenient.
 
@@ -95,7 +95,7 @@ s2"""
            ("hello" must startWith("hell"))
 }}
 
-This is a bit tedious and not very pleasing to read so you can see why this mode encourages one expectation per example only. If you need several expectations per example, you can need to mix-in the `org.specs2.execute.ThrownExpectations` trait to the specification which is the one used for unit specifications by default.
+This is a bit tedious and not very pleasing to read so you can see why this mode encourages one expectation per example only! If you need several expectations per example, you can need to mix-in the `org.specs2.execute.ThrownExpectations` trait to the specification which is the one used for unit specifications by default.
 
 #### Thrown expectations
 
@@ -110,14 +110,14 @@ class MySpecification extends org.specs2.mutable.Specification {
 
 It is also possible to use the "functional" expectation mode with a unit specification by mixing in the `org.specs2.execute.NoThrownExpectations` trait.
 
-## Now learn how to...
+### Now learn how to...
 
  - use ${"matchers" ~/ Matchers} to specify the body of your examples
  - set up ${"contexts" ~/ Contexts} for the examples
  - control the ${"execution" ~/ Execution} of a specification
  - ${"run" ~/ Runners} a specification
 
-#### And if you want to know more
+### And if you want to know more
 
  - ${"skip" ~/ SkipExamples} examples
  - collect ${"*all* expectations" ~/ GetAllExpectations}

@@ -18,7 +18,7 @@ trait EachContext extends FragmentsFactory { outer =>
 /**
  * For each created example use a context using the command line arguments
  */
-trait CommandLineContextForEach extends FragmentsFactory { outer =>
+trait CommandLineArgumentsInContext extends FragmentsFactory { outer =>
   protected def context: CommandLine => Context
   override protected def fragmentFactory = new ContextualFragmentFactory(super.fragmentFactory, (env: Env) => context(env.arguments.commandLine))
 }
@@ -78,7 +78,7 @@ trait ForEach[T] extends EachContext { outer =>
 /**
  * For each example but inject data depending on command line arguments
  */
-trait ForEachWithCommandLine[T] extends EachContext { outer: S2StringContext =>
+trait ForEachWithCommandLineArguments[T] extends EachContext { outer: S2StringContext =>
   protected def foreach[R : AsResult](commandLine: CommandLine)(f: T => R): Result
 
   protected def context: Env => Context = (env: Env) => new Around {

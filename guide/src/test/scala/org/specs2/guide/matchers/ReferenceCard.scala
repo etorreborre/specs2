@@ -2,16 +2,22 @@ package org.specs2
 package guide
 package matchers
 
-object ReferenceCard extends UserGuidePage { def is = s2"""
-## Equality
+import specification.Forms
+
+object ReferenceCard extends UserGuidePage with Forms { def is = s2"""
+### Equality
 
 ${EqualityMatchers.text}
 
-## Out of the box
+### Out of the box
+
+These are the all the available matchers when you extend `Specification`
 
 ${ MatcherCards.toTabs }
 
-## Optional
+### Optional
+
+Those matchers are optional. To use them, you need to add a new trait to your specification:
 
 ${ OptionalMatcherCards.toTabs }
 

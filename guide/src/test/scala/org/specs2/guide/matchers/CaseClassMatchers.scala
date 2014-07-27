@@ -9,7 +9,9 @@ object CaseClassMatchers extends UserGuideCard with MatcherMacros {
   def title = "Case class"
 
   def text = s2"""
-There is a special support for matching case classes, using a matcher macro. To use it you need to add the `specs2-matcher-extra` jar to your project and add the `org.specs2.matcher.MatcherMacros` trait to your specification. Then, with the `matchA` matcher you can check the values of case class attributes:${snippet{
+There is a special support for matching case classes, using a matcher macro. To use it you need to add the `specs2-matcher-extra` jar to your project and add the `org.specs2.matcher.MatcherMacros` trait to your specification.
+
+Then, with the `matchA` matcher you can check the values of case class attributes:${snippet{
 // case class for a Cat
 case class Cat(name: String = "", age: Int = 0, kitten: Seq[Cat] = Seq())
 // a given cat

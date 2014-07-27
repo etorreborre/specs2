@@ -9,7 +9,9 @@ import org.specs2.specification.Forms
 
 object Matchers extends UserGuidePage with Forms { def is = s2"""
 
-The most frequent way to specify some expected behaviour with $specs2 is to use _matchers_. You generally execute an action, a command or a function and then check if the actual value you get is equal to an expected one (the ["arrange-act-assert"](http://bit.ly/arrange_act_assert) paradigm). For example, if you create a specification for an object manipulating paths:${snippet{
+The most frequent way to specify some expected behaviour with $specs2 is to use _matchers_. You generally execute an action, a command or a function and then check if the actual value you get is equal to an expected one (the ["arrange-act-assert"](http://bit.ly/arrange_act_assert) paradigm).
+
+For example, if you create a specification for an object manipulating paths:${snippet{
 // 8<---
 object Paths { def directoryPath(p: String) = p+"/" }
 // 8<---
@@ -20,11 +22,13 @@ s2"the directoryPath method should return well-formed paths $e1"
 def e1 = Paths.directoryPath("/tmp/path/to/dir") must beEqualTo("/tmp/path/to/dir/")
 }}
 
-The `must` operator takes the actual value returned by `directoryPath` and applies it to a `Matcher` built with the expected value. `beEqualTo` is one of the many matchers defined by $specs2, it just checks if 2 values are equal. In the following sections you will learn:
+The `must` operator takes the actual value returned by `directoryPath` and applies it to a `Matcher` built with the expected value. `beEqualTo` is one of the many matchers defined by $specs2, it just checks if 2 values are equal.
+
+In the following sections you will learn:
 
  - the different ways of checking the [equality](#equality) of values
  - to use the matchers for the most [common data types](#out-of-the-box) in Scala, and most notably `Traversable`
- - to use [other types of matchers](#optional) in less common situations, for: json, xml, files, parsers combinators...
+ - to use [other types of matchers](#optional) in less common situations: json, xml, files, parsers combinators...
  - how to [derive](#derive-matchers) a new matcher from an existing one
  - how to create [your own matchers](#create-your-own)
 

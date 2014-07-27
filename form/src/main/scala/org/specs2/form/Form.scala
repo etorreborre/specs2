@@ -202,7 +202,8 @@ case object Form {
    * @return the xml representation of a Form
    */
   def toXml(form: Form)(implicit args: Arguments) = {
-    <form><table>{titleAndRows(form)}</table>{formStacktraces(form)}</form>
+    <form>
+    <table>{titleAndRows(form)}</table>{formStacktraces(form)}</form>
   }
   /**
    * This method creates an xml representation of a Form as an Html table rows,
@@ -222,9 +223,10 @@ case object Form {
    */
   def formStacktraces(form: Form)(implicit args: Arguments = Arguments()) = {
     val traces = Xml.stacktraces(new FormCell(form))
-    (<i>[click on failed cells to see the stacktraces]</i> unless traces.isEmpty) ++
-    traces
+    if (traces.isEmpty) NodeSeq.Empty
+    else <pre><i>[click on failed cells to see the stacktraces]</i>{traces}</pre>
   }
+
   /**
    * Private methods for building the Form xml
    */

@@ -5,7 +5,7 @@ import specification.script.{StandardRegexStepParsers, StepParsers, StepParser, 
 import specification.dsl.mutable.{GivenWhenAndThenSyntax, GivenWhenThenSyntax}
 import scala.util.matching.Regex
 
-object GivenWhenThenStyle extends UserGuidePage { def is = s2"""
+object GivenWhenThenStyle extends UserGuidePage { def is = "Given when then".title ^ s2"""
 
 ## Presentation
 
@@ -41,7 +41,7 @@ class GWTSpec extends Specification { def is = s2"""
     // do an action
     number *= number
   }
-
+  // check the result
   def t1 = number must_== 2
 }
 }}
@@ -81,7 +81,7 @@ How do you code this with an acceptance specification?
 ### With an acceptance specification
 
 You can implement this approach with the `org.specs2.specification.dsl.GWT` trait:${snippet{
-class GWTSpec extends Specification with specification.dsl.GWT with StandardDelimitedStepParsers{ def is = s2"""
+class GWTSpec extends Specification with specification.dsl.GWT with StandardDelimitedStepParsers { def is = s2"""
  Given a first number {2}     $g1
  When multiply it by {3}      $w1
  Then I get {6}               $t1
@@ -99,7 +99,7 @@ Now we need a bit of help to extract values from the text. This is provided in t
 
 #### Delimited parsers
 
-The easiest way to extract values from a string is to delimit exactly where are the values to extract, then to provide a way to transform those values to meaningful types. This is the role of `StepParsers`. Those parsers are using `{}` as delimiters for the values you want to extract. For example you can define an extractor for Int values like this: ${snippet{
+The easiest way to extract values from a string is to delimit exactly where are the values to extract, then to provide a way to give them meaningful types. This is the role of `StepParsers`. Those parsers are using `{}` as delimiters for the values you want to extract. For example you can define an extractor for Int values like this: ${snippet{
   val anInt = StepParser((_: String).toInt)
 }}
 
@@ -194,7 +194,7 @@ class GWTSpec extends mutable.Specification with org.specs2.specification.dsl.mu
 }
 }}
 
-The final 2 syntaxes are just specialisations of the `mutable.GivenWhenThen` trait with the `Given/When/Then` keywords:${snippet{
+Those two syntaxes are just specialisations of the `mutable.GivenWhenThen` trait which provides  `Given/When/Then` keywords:${snippet{
 class GWTSpec extends mutable.Specification with org.specs2.specification.dsl.mutable.GWT with StandardDelimitedStepParsers with GivenWhenThenSyntax {
 
   "adding numbers".p
@@ -222,8 +222,9 @@ When I multiply it by 3
 Then I get 6
 ```
 
-If you prefer to have uncapitalized `given/when/then` you can use the `GivenWhenAndThenSyntax`:${snippet{
-class GWTSpec extends mutable.Specification with org.specs2.specification.dsl.mutable.GWT with StandardDelimitedStepParsers with GivenWhenAndThenSyntax {
+If you prefer to have uncapitalized `given/when/then` methods you can use the `GivenWhenAndThenSyntax` trait:${snippet{
+class GWTSpec extends mutable.Specification with org.specs2.specification.dsl.mutable.GWT
+  with StandardDelimitedStepParsers with GivenWhenAndThenSyntax {
 
   "adding numbers".p
 
@@ -250,7 +251,7 @@ when I multiply it by 3
 then I get 6
 ```
 
-In this case `andThen` has to be used in place of `then` because `then` is going to become a Scala keyword.
+In this case `andThen` has to be used in place of `then` because `then` is going to become a Scala keyword in future releases.
 
 ## Full support
 
@@ -282,7 +283,7 @@ class GWTSpec extends Specification with org.specs2.specification.script.GWT wit
 }
 }}
 
-In this example, `calculator1.start` marks the beginning of a Given/When/Then section and each line until `calculator1.end` must correspond to a `given, `when` or `andThen` call on the scenario.
+In this example, `calculator1.start` marks the beginning of a Given/When/Then section and each line until `calculator1.end` must correspond to a `given`, `when` or `andThen` call on the scenario.
 
  * `given` uses a `StepParser` to extract values for a line of text
  * `when` uses a `StepParser` to extract values from the corresponding line of text and a `mapping` function to combine the result of the extraction + all the values from the given steps

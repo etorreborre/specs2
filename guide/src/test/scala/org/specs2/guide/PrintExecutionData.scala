@@ -9,7 +9,7 @@ import time.SimpleTimer
 
 object PrintExecutionData extends UserGuidePage { def is = s2"""
 
-## Print execution data
+###  Print execution time
 
 Knowing that an example succeeded is fine but sometimes you want to display more information, like the time spent executing the example for instance.
 This can be done by using the `AroundEach` trait and update the `Result` of the example execution with whatever you want to display: ${snippet{
@@ -43,7 +43,7 @@ When you execute a specification mixing the `Timed` trait you should see the tim
 [info] Execution time: 11 ms
 ```
 
-## With the example description
+### With the example description
 
 More generally, you can both use the example description and the example body to display custom messages. To do this you need to intercept the creation of examples by creating a new `FragmentFactory`: ${snippet{
 

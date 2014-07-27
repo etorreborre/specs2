@@ -36,7 +36,7 @@ h1 {
   background-color: #f5f5f5;
 }
 h2 {
-  color: #CE5B80;
+  color: #E7779B;
   background-color: #F6F3F3;
   font-size: 24px;
   font-weight: bold;
@@ -239,4 +239,7 @@ div .tabbertab table {
 pre {
   border: 0px;
   margin-bottom: 10px;
+}
+.formstacktrace {
+  display: none;
 }
