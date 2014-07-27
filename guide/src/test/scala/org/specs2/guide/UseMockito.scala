@@ -6,12 +6,9 @@ import org.mockito.invocation.InvocationOnMock
 import org.specs2.mock._
 import scala.concurrent.duration._
 
-object UseMockito extends UserGuidePage with Mockito { def is = s2"""
-## Mock expectations
+object UseMockito extends UserGuidePage with Mockito { def is = "Mockito".title ^ s2"""
 
-At the moment only the [Mockito](http://mockito.org) library is supported.
-
-Mockito allows to specify stubbed values and to verify that some calls are expected on your objects. In order to use those functionalities, you need to extend the `org.specs2.mock.Mockito` trait: ${ snippet {
+[Mockito](https://code.google.com/p/mockito) allows to specify stubbed values and to verify that some calls are expected on your objects. In order to use those functionalities, you need to extend the `org.specs2.mock.Mockito` trait:${snippet{
 
 class MockitoSpec extends Specification with Mockito { def is = s2"""
 
@@ -111,7 +108,7 @@ $specs2 matchers can also be passed directly as arguments: ${snippet{
 m.get(===(123)) returns "one"
 }}
 
-**Note** the call above works because there is an implicit method `argThat` which transforms a $specs2 `Matcher[T]` into a Hamcrest one and in turn call Mockito's `org.mockito.Matchers.argThat` method to register the Hamcrest matcher. However [sometimes](https://groups.google.com/forum/#!msg/specs2-users/_slOZQoICzU/DF-ZQCq_GmkJ) the implicit conversion is not called and you have to explicitly call the `argThat` method like so: ${snippet{
+*Note*: the call above works because there is an implicit method `argThat` which transforms a $specs2 `Matcher[T]` into a Hamcrest one and in turn call Mockito's `org.mockito.Matchers.argThat` method to register the Hamcrest matcher. However [sometimes](https://groups.google.com/forum/#!msg/specs2-users/_slOZQoICzU/DF-ZQCq_GmkJ) the implicit conversion is not called and you have to explicitly call the `argThat` method like so: ${snippet{
 m.get(argThat(===(123))) returns "one"
 }}
 
@@ -246,18 +243,16 @@ val spiedList = spy(new LinkedList[String])
 org.mockito.Mockito.doReturn("one").when(spiedList).get(0)
 }}
 
-#### Functions/PartialFunctions
+#### Functions / PartialFunctions
 
-It is possible to verify method calls where parameters are functions by specifying how the passed function will react to a given set of arguments. Given the following mock:
-
-```
+It is possible to verify method calls where parameters are functions by specifying how the passed function will react to a given set of arguments. Given the following mock:${snippet{
 trait Amount {
   // a method showing an amount precision
-  def show(display: Function2[Double, Int, String]) = ???
+  def show(display: (Double, Int) => String) = ???
 }
 
 val amount = mock[Amount]
-```
+}}
 
 If the mock is called with this function: ${snippet{
 // 8<--
@@ -287,8 +282,6 @@ Auto-boxing might interfere with the mocking of PartialFunctions. Please have a 
 #### Byname
 
 Byname parameters can be verified but this will not work if the $specs2 jar is not put first on the classpath, before the mockito jar. Indeed $specs2 redefines a Mockito class for intercepting method calls so that byname parameters are properly handled.
-
-}
 """
 
   trait Amount { def show(display: Function2[Double, Int, String]) = "" }

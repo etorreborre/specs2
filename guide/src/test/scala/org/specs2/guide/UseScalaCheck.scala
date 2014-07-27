@@ -44,12 +44,17 @@ s2"""
   a simple property       $ex1
   a more complex property $ex2
 """
-  implicit def abStrings = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
+implicit def abStrings = Arbitrary {
+  for {
+    a <- Gen.oneOf("a", "b")
+    b <- Gen.oneOf("a", "b")
+  } yield a+b
+}
 
-  def ex1 = abStrings((s: String) => s must contain("a") or contain("b"))
+def ex1 = abStrings((s: String) => s must contain("a") or contain("b"))
 
-  // use a tuple if there are several parameters to your function
-  def ex2 = (abStrings, abStrings)((s1: String, s2: String) => (s1+s2) must contain("a") or contain("b"))
+// use a tuple if there are several parameters to your function
+def ex2 = (abStrings, abStrings)((s1: String, s2: String) => (s1+s2) must contain("a") or contain("b"))
 }}
 
 ### With Generators
@@ -59,10 +64,15 @@ s2"""
   a simple property       $ex1
   a more complex property $ex2
 """
-  def abStrings = for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b
+def abStrings = for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b
 
-  def ex1 = Prop.forAll(abStrings) { (s: String) => s must contain("a") or contain("b") }
-  def ex2 = Prop.forAll(abStrings, abStrings) { (s1: String, s2: String) => (s1+s2) must contain("a") or contain("b") }
+def ex1 = Prop.forAll(abStrings) { s: String =>
+  s must contain("a") or contain("b")
+}
+
+def ex2 = Prop.forAll(abStrings, abStrings) { (s1: String, s2: String) =>
+    (s1+s2) must contain("a") or contain("b")
+}
 }}
 
 ### Test properties
@@ -81,14 +91,16 @@ class ScalaCheckSpec extends mutable.Specification with ScalaCheck {
 
 The parameters you can modify are:
 
- * `minTestsOk`: minimum of tests which must be ok before the property is ok (default = 100)
- * `maxDiscardRatio`: if the data generation discards too many values, then the property can't be proven (default = 5)
- * `minSize`: minimum size for the "sized" data generators, like list generators (default = 0)
- * `maxSize`: maximum size for the "sized" data generators (default = 100)
- * `workers`: number of threads checking the property (default = 1)
- * `rng`: the random number generator (default = `new java.util.Random`)
- * `callback`: a ScalaCheck TestCallback (see the ScalaCheck documentation)
- * `loader`: a custom classloader (see the ScalaCheck documentation)
+ Parameter         | Description
+ ----------------- | ------------
+ `minTestsOk`      | minimum of tests which must be ok before the property is ok (default = 100)
+ `maxDiscardRatio` | if the data generation discards too many values, then the property can't be proven (default = 5)
+ `minSize`         | minimum size for the "sized" data generators, like list generators (default = 0)
+ `maxSize`         | maximum size for the "sized" data generators (default = 100)
+ `workers`         | number of threads checking the property (default = 1)
+ `rng`             | the random number generator (default = `new java.util.Random`)
+ `callback`        | a ScalaCheck TestCallback (see the ScalaCheck documentation)
+ `loader`          | a custom classloader (see the ScalaCheck documentation)
 
 You can also set the random generator that is used in all the ScalaCheck generators: ${snippet{
 case class MyRandomGenerator() extends java.util.Random {
