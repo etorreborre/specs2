@@ -196,7 +196,7 @@ Details
   "details" - new group {
     eg := {
       (List(1, 2) must_== List("1", "2")) must beFailing(
-        "\\Q'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.Integer]'\n is not equal to \n'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.String]'\\E")
+        "\\Q'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.Integer]'\n\n is not equal to \n\n'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.String]'\\E")
     }
     eg := {
       ("hello" must_== Hello()) must beFailing(
@@ -204,11 +204,11 @@ Details
     }
     eg := {
       (List("1, 2") must_== List("1", "2")) must beFailing(
-        "\\Q'List('1, 2'): scala.collection.immutable.$colon$colon[java.lang.String]'\n is not equal to \n'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.String]'\\E")
+        "\\Q'List('1, 2'): scala.collection.immutable.$colon$colon[java.lang.String]'\n\n is not equal to \n\n'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.String]'\\E")
     }
     eg := {
       (Map(1 -> "2") must_== Map(1 -> 2)) must beFailing(
-        "\\Q'Map(1: java.lang.Integer -> 2: java.lang.String): scala.collection.immutable.Map$Map1'\n is not equal to \n'Map(1: java.lang.Integer -> 2: java.lang.Integer): scala.collection.immutable.Map$Map1'\\E")
+        "\\Q'Map(1: java.lang.Integer -> 2: java.lang.String): scala.collection.immutable.Map$Map1'\n\n is not equal to \n\n'Map(1: java.lang.Integer -> 2: java.lang.Integer): scala.collection.immutable.Map$Map1'\\E")
     }
   }
 

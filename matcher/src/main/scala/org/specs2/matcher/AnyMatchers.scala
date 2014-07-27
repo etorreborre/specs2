@@ -201,7 +201,9 @@ class BeTypedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1
         case other                          => other
       }
 
-    def print(b: String, msg: String, a: String) = Seq(b, msg, a).mkString("\n".unless(Seq(a, b).exists(_.size <= 40)))
+    def print(b: String, msg: String, a: String) =
+      Seq(b, msg, a).mkString("\n\n".unless(Seq(a, b).forall(_.size <= 40)))
+
     result(isEqual, ok(print(db, " is equal to ", qa)), ko(print(db, " is not equal to ", qa)), b, expected.notNull, actual.notNull)
   }
 
