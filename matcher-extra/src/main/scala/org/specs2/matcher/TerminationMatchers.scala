@@ -2,8 +2,8 @@ package org.specs2
 package matcher
 
 import java.util.concurrent.ExecutorService
-
 import org.specs2.specification.core.Env
+import scala.annotation.tailrec
 import time._
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
@@ -36,7 +36,8 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
   def apply[S <: T](a: Expectable[S]) =
     retry(retries, retries, sleep, a, createPromise(a.value))
 
-  def retry[S <: T](originalRetries: Int, retries: Int, sleep: Duration, a: Expectable[S], promise: Promise[S], whenActionExecuted: Boolean = false): MatchResult[S] = {
+  @tailrec
+  private final def retry[S <: T](originalRetries: Int, retries: Int, sleep: Duration, a: Expectable[S], promise: Promise[S], whenActionExecuted: Boolean = false): MatchResult[S] = {
 
     lazy val fulfilled = promise.fulfilled
     val parameters = "with retries="+originalRetries+" and sleep="+sleep.toMillis
