@@ -26,7 +26,12 @@ class TerminationMatchersSpec extends script.Specification with TerminationMatch
      + if action1 terminates after action 2 -> success
      + if action1 terminates before action 2 -> failure
      + if action1 doesn't terminate after action 2 -> failure
+
+  We should not overflow the stack
+    + when a very large number of retries is provided
                                                                                                 """
+
+  sequential  // time-sensitive tests
 
   "termination" - new group {
     eg := { Thread.sleep(50) must terminate(sleep = 100.millis) }
@@ -68,6 +73,15 @@ class TerminationMatchersSpec extends script.Specification with TerminationMatch
       // we sleep first for 100, then trigger the action and wait again for 100. In that case, it's not enough waiting
       // even after the action has been triggered
       ({Thread.sleep(300); queue1.add(1)} must terminate.onlyWhen(queue1.add(1))) returns "the action is blocking with retries=1 and sleep=100"
+    }
+
+    eg := {
+      import scala.concurrent.duration._ //need to convert a Double to millis so that the test runs quickly
+      // we sleep for 10 seconds
+      // we retry 100,000 times with a sleep of 0.01 millis
+      // thus we must terminate within (100,000 * 0.01) ms = 1 second
+      // which will not happen since we sleep for 10 seconds
+      Thread.sleep(10 * 1000) must terminate(retries=100000, sleep=0.01.millis) returns "the action is blocking with retries=100000 and sleep=0"
     }
 
   }

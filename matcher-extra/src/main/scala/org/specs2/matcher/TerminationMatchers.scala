@@ -1,6 +1,7 @@
 package org.specs2
 package matcher
 
+import scala.annotation.tailrec
 import time._
 import TimeConversions._
 import scalaz._
@@ -31,7 +32,8 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
   def apply[S <: T](a: Expectable[S]) =
     retry(retries, retries, sleep, a, promise(a.value))
 
-  def retry[S <: T](originalRetries: Int, retries: Int, sleep: Duration, a: Expectable[S], promise: Promise[S], whenActionExecuted: Boolean = false): MatchResult[S] = {
+  @tailrec
+  private final def retry[S <: T](originalRetries: Int, retries: Int, sleep: Duration, a: Expectable[S], promise: Promise[S], whenActionExecuted: Boolean = false): MatchResult[S] = {
 
     lazy val fulfilled = promise.fulfilled
     val parameters = "with retries="+originalRetries+" and sleep="+sleep.inMillis
