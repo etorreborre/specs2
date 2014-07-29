@@ -5,14 +5,6 @@ import java.io._
 import execute._
 import specification._
 
-class AnyMatchers2Spec extends script.Specification with Groups { def is = s2"""
-
-  be_== checks the equality of 2 objects
-  ${ "a" must_== "a" }
-  ${ "a" must not be_==(null) }
-  ${ (null: String) must not be_==("a") }
-"""}
-
 class AnyMatchersSpec extends script.Specification with Groups with ResultMatchers { def is = s2"""
 
   be_== checks the equality of 2 objects

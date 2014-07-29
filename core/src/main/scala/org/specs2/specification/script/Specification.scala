@@ -40,13 +40,16 @@ case class GroupsScript(title: String = "groups", isStart: Boolean = true, group
    * Go through the list of all fragments. For each piece of text, try to parse it with the template
    * and replace it with new fragments containing examples by associating the marked text with groups examples
    */
-  def lines(fs: Fragments) = {
+  def lines(fs: Fragments): Fragments = {
     fs.compact.fragments.foldLeft((Fragments(), 0, 0)) { (res, cur) =>
       val (resultFragments, previousGroupIndex, previousExampleIndex) = res
       val (fragments, newGroupIndex, newExampleIndex) =
         cur match {
-          case t if Fragment.isText(t) => createExamples(groupTemplate.lines(t.description.show, this), previousGroupIndex, previousExampleIndex)
-          case other                   => (Fragments(other), previousGroupIndex, previousExampleIndex)
+          case t if Fragment.isText(t) && t.description.show.trim.nonEmpty =>
+            createExamples(groupTemplate.lines(t.description.show, this), previousGroupIndex, previousExampleIndex)
+
+          case other =>
+            (Fragments(other), previousGroupIndex, previousExampleIndex)
         }
       (resultFragments append fragments, newGroupIndex, newExampleIndex)
     }._1
@@ -60,7 +63,7 @@ case class GroupsScript(title: String = "groups", isStart: Boolean = true, group
     }
   }
 
-  private def createExamplesForBlock(block: Fragments, groupIndex: Int, exampleIndex: Int) = {
+  private def createExamplesForBlock(block: Fragments, groupIndex: Int, exampleIndex: Int): Seq[Fragment] = {
     groupTagsFor(groupIndex) ++
     block.fragments.foldLeft((Seq[Fragment](), exampleIndex)) { (res, cur) =>
       val (fragments, e) = res
@@ -134,7 +137,7 @@ case class BulletedExamplesTemplate(factory: FragmentFactory)(implicit params: G
       val blocks = if (startNewBlock(line, nextLine, res.lastOption)) res :+ Fragments() else res
       blocks.updateLast(fs => fs append createFragments(line))
     }
-    FragmentsScriptLines(fragmentLines)
+    FragmentsScriptLines(fragmentLines.map(_.compact))
   }
 
   private def startNewBlock(line: String, nextLine: String, lastBlock: Option[Fragments]) =
