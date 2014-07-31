@@ -36,6 +36,11 @@ class MatcherMacrosSpec extends Specification with ResultMatchers with MatcherMa
   def e7 = (cat aka "the cat" must matchA[Cat].name("Kitty").age(is(7)).kitten((_:Seq[Cat]) must haveSize(2))) returns cat.toString
 
   def is[A](a: A) = be_==(a)
-  case class Cat(name: String = "", age: Int = 0, kitten: Seq[Cat] = Seq())
+  
+  case class Cat(name: String = "", age: Int = 0, kitten: Seq[Cat] = Seq()) {
+    // additional methods can exist on the case class
+    // but will not be used for matching
+    def test(hello: String) {}
+  }
 }
 

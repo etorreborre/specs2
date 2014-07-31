@@ -110,7 +110,7 @@ class MakeMatchers[C <: Context](val c: C) {
     val matcherClassType = newTypeName(MatcherMacros.matcherClassName[T](c))
 
     val fields: Iterable[c.Symbol] = typeOfT.members.filter(_.isPublic).
-      filterNot(isConstructor(c)).
+      filter(isGetter(c)).
       filterNot(isSynthetic(c)).
       filter(_.owner != typeOf[Any].typeSymbol).
       filter(_.owner != typeOf[Object].typeSymbol).
@@ -171,4 +171,12 @@ class MakeMatchers[C <: Context](val c: C) {
   private def isSynthetic(c: Context) = { import c.universe._
     (s: Symbol) => s.isSynthetic
   }
+
+  private def isGetter(c: Context) = { import c.universe._
+    (s: Symbol) =>  s match {
+      case m: c.universe.MethodSymbol => m.isGetter
+      case other                      => false
+    }
+  }
+
 }
