@@ -42,7 +42,12 @@ class MatcherMacrosSpec extends Specification with ResultMatchers with MatcherMa
    |  name: 'name' is not equal to 'other'""".stripMargin
 
   def is[A](a: A) = be_==(a)
-  case class Cat(name: String = "", age: Int = 0, kitten: Seq[Cat] = Seq())
+
+  case class Cat(name: String = "", age: Int = 0, kitten: Seq[Cat] = Seq()) {
+    // additional methods can exist on the case class
+    // but will not be used for matching
+    def test(hello: String) {}
+  }
 
   case class Nested(n1: Nested1 = Nested1())
   case class Nested1(n2: Nested2 = Nested2())
