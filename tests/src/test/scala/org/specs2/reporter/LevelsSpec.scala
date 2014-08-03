@@ -10,7 +10,7 @@ import matcher._
 import FragmentsShow._
 import collection.Seqx._
 
-class LevelsSpec extends Specification with ScalaCheck with InternalScalazMatchers with ArbitraryFragments with Tags { def is = sequential^ s2"""
+class LevelsSpec extends Specification with ScalaCheck with ScalazMatchers with ArbitraryFragments with Tags { def is = sequential^ s2"""
   The Levels class is used to compute the 'level' of Fragments in a list of Fragments.                                  
                                                                                                                         
   A simple piece of text has level 0                                                                                  

@@ -46,14 +46,14 @@ object build extends Build {
     organization := "org.specs2",
     specs2Version in GlobalScope <<= version,
     specs2ShellPrompt,
-    scalazVersion := "7.0.6",
-    scalaVersion := "2.10.4",
-    crossScalaVersions := Seq("2.10.4", "2.11.1"))
+    scalazVersion := "7.1.0",
+    scalaVersion := "2.11.2",
+    crossScalaVersions := Seq("2.10.4", "2.11.2"))
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
   lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
-  lazy val paradisePlugin = Seq(compilerPlugin("org.scalamacros" %% "paradise"    % "2.0.0-M7" cross CrossVersion.full), 
-                                               "org.scalamacros" %% "quasiquotes" % "2.0.0-M7")
+  lazy val paradisePlugin = Seq(compilerPlugin("org.scalamacros" %% "paradise"    % "2.0.0" cross CrossVersion.full),
+                                               "org.scalamacros" %% "quasiquotes" % "2.0.0")
 
   lazy val aggregateCompile = ScopeFilter(
              inProjects(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock),
