@@ -1,0 +1,21 @@
+Upgrade + maintenance version
+
+This version now uses Scalaz 7.1.0 by default.
+
+## Improvements 
+ 
+ * find the best match for an unordered collection of matchers on a `Traversable`
+ * added more newlines between expected/actual values in case of inequality
+
+## Fixes
+
+ * `HamcrestMatcherAdapter` extends `BaseMatcher[T]`
+ * using `.deep` to compare arrays in the equality matcher [#277](http://github.com/etorreborre/specs2/issues/277)
+ * fixed the negation for json matchers [#279](http://github.com/etorreborre/specs2/issues/279)
+ * keep failure details in ScalaCheck properties
+ * better display of instantiation exceptions [#281](http://github.com/etorreborre/specs2/issues/281)
+ * tailrec'd the `TerminationMatcher` retry [#284](http://github.com/etorreborre/specs2/issues/284) (Thanks to Alissa Pajer)
+ * allow methods with parameters to be used with Macro matchers [#285](http://github.com/etorreborre/specs2/issues/285)
+
+ ==========================
+
