@@ -66,7 +66,7 @@ object build extends Build {
   lazy val resolversSettings = resolvers ++= 
     Seq(Resolver.sonatypeRepo("releases"), 
         Resolver.sonatypeRepo("snapshots"),
-        Resolver.typesafeIvyRepo("releases"))
+        Resolver.typesafeRepo("releases"))
 
   lazy val buildSettings: Seq[Settings] =
     buildInfoSettings ++
