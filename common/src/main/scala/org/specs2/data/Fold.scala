@@ -58,6 +58,22 @@ object Fold {
    * Transform a simple sink where the written value doesn't depend on the
    * current state into a sink where the current state is passed all the time
    * (and actually ignored)
+   * Create a Fold a State function
+   */
+  def fromState[T, S1](state: (T, S1) => S1)(initial: S1) = new Fold[T] {
+    type S = S1
+    lazy val sink: Sink[Task, (T, S)] = unitSink[T, S]
+
+    def prepare = Task.now(())
+    def fold = state
+    def init = initial
+    def last(s: S) = Task.now(())
+  }
+
+  /**
+   * Transform a simple sink into a sink, where the written value doesn't depend on the
+   * current state to a sink for folds, where the current state is passed all the time
+   * (and actually ignored here)
    */
   def toFoldSink[T, S](sink: Sink[Task, T]): Sink[Task, (T, S)] =
     sink.map(f => (ts: (T, S)) => f(ts._1))

@@ -4,6 +4,7 @@ package core
 
 import scalaz.Show
 import org.specs2.data.{NamedTag, Tag}
+import text.Regexes._
 
 /**
  * Description of a Fragment
@@ -20,7 +21,7 @@ trait Description {
  */
 case class Text(text: String) extends Description {
   def show: String = text
-  override def matches(s: String) = text matches s
+  override def matches(s: String) = text matchesSafely s
   override def stripMargin(margin: Char) = copy(text.stripMargin(margin))
 }
 

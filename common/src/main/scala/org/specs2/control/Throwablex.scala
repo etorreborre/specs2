@@ -3,6 +3,7 @@ package control
 
 import java.io. _
 import text.NotNullStrings._
+import text.Regexes._
 
 /**
  * This trait adds some utility methods to `Throwable` objects.
@@ -44,7 +45,7 @@ trait Throwablex {
     }
 
     /** match a stacktrace element with a pattern */
-    private def patternMatches(p: String) = (_:StackTraceElement).toString matches (".*"+p+".*")
+    private def patternMatches(p: String) = (_:StackTraceElement).toString matchesSafely (".*"+p+".*")
     /**
      * Select all traces of this exception not matching a given pattern
      */

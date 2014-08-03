@@ -9,11 +9,9 @@ import Trim._
 /**
  * This trait provides utility functions for working with regexes
  */
-private[specs2]
 trait Regexes {
 
-  implicit def regexed(s: String): Regexed = Regexed(s)
-  case class Regexed(s: String) {
+  implicit class Regexed(s: String) {
 
     /**
      * matchesSafely a pattern p. If p cannot be compiled, then it is quoted
@@ -34,5 +32,4 @@ trait Regexes {
 
 }
 
-private[specs2]
 object Regexes extends Regexes
