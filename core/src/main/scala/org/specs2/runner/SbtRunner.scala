@@ -63,7 +63,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
         for {
           printers <- createPrinters(taskDef, handler, loggers, commandLineArguments)
           ss       <- SpecificationStructure.linkedSpecifications(spec, env, loader)
-          sorted   <- safe(SpecificationStructure.topologicalSort(env)(ss).getOrElse(ss) :+ spec)
+          sorted   <- safe(SpecificationStructure.topologicalSort(env)(ss).getOrElse(ss))
           _        <- Reporter.prepare(env, printers)(sorted.toList)
           rs       =  sorted.toList.map(s => Reporter.report(env, printers)(s.structure(env))).sequenceU
           _        <- Reporter.finalize(env, printers)(sorted.toList)

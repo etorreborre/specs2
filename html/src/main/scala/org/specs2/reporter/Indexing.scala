@@ -28,8 +28,9 @@ object Indexing {
     def last(index: Index): Task[Unit] = FileSystem.writeFileTask(path, Index.toJson(index))
   }
 
-  def createIndexedPages(env: Env, specifications: List[SpecificationStructure], options: HtmlOptions): Seq[IndexedPage] =
+  def createIndexedPages(env: Env, specifications: List[SpecificationStructure], options: HtmlOptions): Seq[IndexedPage] = {
     specifications.map(createIndexedPage(env, options))
+  }
 
   def createIndexedPage(env: Env, options: HtmlOptions) = (specification: SpecificationStructure) => {
     val spec = specification.structure(env)
