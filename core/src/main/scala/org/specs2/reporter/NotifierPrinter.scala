@@ -1,6 +1,8 @@
 package org.specs2
 package reporter
 
+import org.specs2.control._
+import specification._
 import data.Fold
 import scalaz.concurrent.Task
 import scalaz.stream._
@@ -16,6 +18,9 @@ object NotifierPrinter {
    * create a printer from a notifier
    */
   def printer(notifier: Notifier) = new Printer {
+    def prepare(env: Env, specifications: List[SpecificationStructure]): Action[Unit]  = Actions.unit
+    def finalize(env: Env, specifications: List[SpecificationStructure]): Action[Unit] = Actions.unit
+
     def fold(env: Env, spec: SpecStructure) = new Fold[Fragment] {
       val args = env.arguments
       type S = Notified

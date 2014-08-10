@@ -13,7 +13,7 @@ import text.AnsiColors
 import execute._
 import org.junit.ComparisonFailure
 import main.Arguments
-import control.Throwablex
+import org.specs2.control.{Actions, Action, Throwablex}
 import scalaz.stream.io
 import data.Fold
 
@@ -21,6 +21,8 @@ import data.Fold
  * The JUnitPrinter sends notifications to JUnit's RunNotifier
  */
 trait JUnitPrinter extends Printer { outer =>
+  def prepare(env: Env, specifications: List[SpecificationStructure]): Action[Unit] = Actions.unit
+  def finalize(env: Env, specifications: List[SpecificationStructure]): Action[Unit] = Actions.unit
 
   /** the junit notifier to use */
   def notifier: RunNotifier

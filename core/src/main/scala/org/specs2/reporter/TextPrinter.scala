@@ -2,6 +2,7 @@ package org.specs2
 package reporter
 
 import matcher.DataTable
+import control._
 import specification.core._
 import specification.process._
 import text.NotNullStrings._
@@ -23,6 +24,8 @@ import LogLine._
  * At the end of the run the specification statistics are displayed as well.
  */
 trait TextPrinter extends Printer {
+  def prepare(env: Env, specifications: List[SpecificationStructure]): Action[Unit]  = Actions.unit
+  def finalize(env: Env, specifications: List[SpecificationStructure]): Action[Unit] = Actions.unit
 
   def fold(env: Env, spec: SpecStructure) = new Fold[Fragment] {
     // statistics and indentation

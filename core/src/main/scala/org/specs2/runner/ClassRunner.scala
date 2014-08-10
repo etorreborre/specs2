@@ -9,10 +9,7 @@ import specification.core._
 import reporter._
 import main.Arguments
 import reporter.Printer._
-import scalaz.std.anyVal._
-import scalaz.syntax.bind._
-import scalaz.syntax.traverse._
-import scalaz.std.list._
+import scalaz._, Scalaz._
 import Runner._
 
 /**
@@ -58,11 +55,13 @@ trait ClassRunner {
         printers <- createPrinters(env.arguments, loader)
         ss       <- SpecificationStructure.linkedSpecifications(spec, env, loader)
         sorted   <- safe(SpecificationStructure.topologicalSort(env)(ss).getOrElse(ss) :+ spec)
-        rs = sorted.toList.map(s => Reporter.report(env, printers)(s.structure(env))).sequenceU
+        _        <- Reporter.prepare(env, printers)(sorted.toList)
+        _        =  sorted.toList.map(s => Reporter.report(env, printers)(s.structure(env))).sequenceU.void
+        _        <- Reporter.finalize(env, printers)(sorted.toList)
       } yield ()
 
     } else
-      createPrinters(env.arguments, loader).map(printers => Reporter.report(env, printers)(spec.structure(env))).map(_ => ())
+      createPrinters(env.arguments, loader).map(printers => Reporter.report(env, printers)(spec.structure(env))).void
   }
 
   /** accepted printers */

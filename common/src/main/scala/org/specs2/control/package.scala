@@ -3,6 +3,7 @@ package org.specs2
 import org.specs2.control.ActionT
 
 import scalaz.{WriterT, Monoid}
+import scalaz.{Monad, Monoid}
 import scalaz.std.anyVal._
 import scalaz.effect._
 import org.specs2.execute.{AsResult, Result}
@@ -25,14 +26,17 @@ package object control {
    * Action type, using a logger as a reader and no writer
    */
   type Action[A] = ActionT[IO, Logs, Logger, A]
+
+  object Actions extends ActionTSupport[IO, Logs, Logger] {
+    def unit: Action[Unit] = empty(implicitly[Monad[IO]], implicitly[Monoid[Logs]])
+  }
+
   type Logs = Vector[String]
 
   implicit def LogsMonoid: Monoid[Logs] = new Monoid[Logs] {
     def zero: Logs = Vector[String]()
     def append(f1: Logs, f2: =>Logs): Logs = f1 ++ f2
   }
-
-  object Actions extends ActionTSupport[IO, Logs, Logger]
 
   /** warn the user about something that is probably wrong on his side, this is not a specs2 bug */
   def warn(message: String): Action[Unit] =
@@ -51,17 +55,17 @@ package object control {
 
   /** log a Throwable with its stacktrace and cause, using the logger coming from the Reader environment */
   def logThrowable(t: Throwable, verbose: Boolean): Action[Unit] =
-    if (verbose) logThrowable(t) else Actions.empty
+    if (verbose) logThrowable(t) else Actions.unit
 
   def logThrowable(t: Throwable): Action[Unit] =
     log(t.getMessage) >>
     log(t.getStackTrace.mkString("\n")) >>
       (if (t.getCause != null) logThrowable(t.getCause)
-       else                    Actions.empty)
+       else                    Actions.unit)
 
   /** log a value, using the logger coming from the Reader environment, only if verbose is true */
   def log[R](r: R, verbose: Boolean): Action[Unit] =
-    if (verbose) log(r) else Actions.empty
+    if (verbose) log(r) else Actions.unit
 
   /**
    * This implicit allows any IO[Result] to be used inside an example:

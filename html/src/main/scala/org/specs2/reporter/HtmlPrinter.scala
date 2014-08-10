@@ -2,10 +2,14 @@ package org.specs2
 package reporter
 
 import specification.core._
+import org.specs2.collection.Seqx
+import org.specs2.specification.core._
 import data.Fold
 import specification.process.{Stats, Statistics}
 import io._
 import main.Arguments
+import scala.xml.NodeSeq
+import scalaz.stream.Process
 import scalaz.concurrent.Task
 import control._
 import java.util.regex.Pattern._
@@ -18,6 +22,14 @@ import html.HtmlTemplate
 import HtmlBodyPrinter._
 import Pandoc._
 import ActionT._
+import scalaz.syntax.bind._
+import Actions._
+import org.specs2.html.HtmlTemplate
+import text.Trim._
+import scala.sys.process.ProcessLogger
+import execute._
+import text.NotNullStrings._
+import Seqx._
 
 /**
  * Printer for html files
@@ -25,6 +37,17 @@ import ActionT._
 trait HtmlPrinter extends Printer {
 
   /** @return a Fold for the Html output */
+  def prepare(env: Env, specifications: List[SpecificationStructure]): Action[Unit]  = Actions.unit
+
+  /**
+   * create an index for all the specifications
+   */
+  def finalize(env: Env, specifications: List[SpecificationStructure]): Action[Unit] = for {
+    options   <- getHtmlOptions(env.arguments)
+    htmlPages <- Actions.ok(Indexing.createIndexedPages(env, specifications, options))
+    _         <- Fold.runFold(Process.emitAll(htmlPages), Indexing.indexFold(options.indexFile)).toAction
+  } yield ()
+
   def fold(env: Env, spec: SpecStructure): Fold[Fragment] = new Fold[Fragment] {
     type S = Stats
 
@@ -91,10 +114,13 @@ trait HtmlPrinter extends Printer {
     val body = makeBody(spec, stats, options, arguments, pandoc = true)
     val variables1 =
       options.variables
-        .updated("body", body)
-        .updated("title", spec.wordsTitle)
+        .updated("body",    body)
+        .updated("title",   spec.wordsTitle)
+        .updated("path",    outputFilePath(options.outDir, spec).path)
         .updated("baseDir", options.baseDir.path)
-        .updated("outDir", options.outDir.path)
+        .updated("outDir",  options.outDir.path)
+        .updated("baseDir", options.baseDir.path)
+        .updated("outDir",  options.outDir.path)
     HtmlTemplate.runTemplate(template, variables1)
   }
 

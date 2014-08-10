@@ -37,6 +37,7 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
   /** run the specification with a Notifier */
   def run(n: RunNotifier) {
     val printer = new JUnitPrinter {
+
       lazy val notifier = n
       lazy val descriptions = outer.descriptions
       lazy val description = outer.getDescription

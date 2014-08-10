@@ -22,6 +22,13 @@ import Statistics._
  */
 trait Reporter {
 
+  def prepare(env: Env, printers: List[Printer]): List[SpecificationStructure] => Action[Unit] = { specs =>
+    printers.traverseU(_.prepare(env, specs)).void
+  }
+
+  def finalize(env: Env, printers: List[Printer]): List[SpecificationStructure] => Action[Unit] = { specs =>
+    printers.traverseU(_.finalize(env, specs)).void
+  }
   /**
    * report 1 spec structure with the given printers
    * first find and sort the linked specifications and report them

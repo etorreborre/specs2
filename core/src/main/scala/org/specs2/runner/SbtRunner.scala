@@ -58,14 +58,15 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
   def specificationRun(taskDef: TaskDef, loader: ClassLoader, handler: EventHandler, loggers: Array[Logger], isModule: Boolean): Action[Unit] = {
     Classes.createInstance[SpecificationStructure](taskDef.fullyQualifiedName+(if (isModule) "$" else ""), loader).flatMap { spec =>
       val env = Env(arguments = commandLineArguments)
-
       val report: Action[Unit] =
       if (commandLineArguments.commandLine.contains("all")) {
         for {
           printers <- createPrinters(taskDef, handler, loggers, commandLineArguments)
           ss       <- SpecificationStructure.linkedSpecifications(spec, env, loader)
           sorted   <- safe(SpecificationStructure.topologicalSort(env)(ss).getOrElse(ss) :+ spec)
+          _        <- Reporter.prepare(env, printers)(sorted.toList)
           rs       =  sorted.toList.map(s => Reporter.report(env, printers)(s.structure(env))).sequenceU
+          _        <- Reporter.finalize(env, printers)(sorted.toList)
         } yield ()
         
       } else createPrinters(taskDef, handler, loggers, commandLineArguments).flatMap(printers => Reporter.report(env, printers)(spec.structure(env)))

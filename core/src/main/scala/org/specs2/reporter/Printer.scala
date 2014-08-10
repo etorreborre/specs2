@@ -20,6 +20,9 @@ import specification.core._
  *  - accumulates state for final reporting
  */
 trait Printer {
+  def prepare(env: Env, specifications: List[SpecificationStructure]): Action[Unit]
+  def finalize(env: Env, specifications: List[SpecificationStructure]): Action[Unit]
+
   def fold(env: Env, spec: SpecStructure): Fold[Fragment]
 
   /** convenience method to print a SpecStructure using the printer's Fold */

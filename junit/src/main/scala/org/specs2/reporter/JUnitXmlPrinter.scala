@@ -19,6 +19,8 @@ import specification.process._
  * The JUnitXmlPrinter creates an xml file with the specification execution results
  */
 trait JUnitXmlPrinter extends Printer {
+  def prepare(env: Env, specs: List[SpecificationStructure]): Action[Unit]  = Actions.unit
+  def finalize(env: Env, specs: List[SpecificationStructure]): Action[Unit] = Actions.unit
 
   def fold(env: Env, spec: SpecStructure): Fold[Fragment] = new Fold[Fragment] {
     type S = Stats
