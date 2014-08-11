@@ -108,7 +108,8 @@ object build extends Build {
   lazy val common = Project(id = "common", base = file("common"),
     settings = moduleSettings ++
       Seq(conflictWarning ~= { _.copy(failOnConflict = false) }, // lame
-          libraryDependencies ++= depends.scalaz ++ depends.reflect(scalaVersion.value) ++ depends.scalacheck.map(_ % "test"),
+          libraryDependencies ++= depends.scalaz ++ depends.reflect(scalaVersion.value) ++ depends.scalacheck.map(_ % "test") ++
+            depends.paradise(scalaVersion.value),
           name := "specs2-common")
   )
 
