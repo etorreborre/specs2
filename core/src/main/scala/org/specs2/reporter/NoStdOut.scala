@@ -18,11 +18,11 @@ trait NoStdOut extends Around {
       // both System.out and Console.out must be swapped because Console keeps
       // a variable containing System.out
       System.setOut(noOut)
-      Console.setOut(noOut)
-      AsResult(t)
+      Console.withOut(noOut) {
+        AsResult(t)
+      }
     } finally {
       System.setOut(stdOut)
-      Console.setOut(stdOut)
     }
   }
 
