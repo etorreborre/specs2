@@ -4,11 +4,11 @@ package matcher
 import org.specs2.data.Sized
 import org.specs2.execute.ResultLogicalCombinators._
 import org.specs2.execute._
-import org.specs2.json.Json._
+import org.specs2.json._
+import Json._
 import org.specs2.text.NotNullStrings._
 
 import scala.util.matching.Regex
-import scala.util.parsing.json._
 
 /**
  * Matchers for Json expressions (entered as strings)
@@ -169,6 +169,9 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
   }
 }
 
+/**
+ * abstract JSON types for specs2
+ */
 sealed trait JsonType
 trait JsonArray extends JsonType {
   def list: List[Any]
@@ -314,4 +317,3 @@ trait JsonBaseBeHaveMatchers { outer: JsonBaseMatchers =>
     def */(selector: JsonSelector)   = outer.*/(selector).negate
   }
 }
-

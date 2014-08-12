@@ -1,7 +1,6 @@
 package org.specs2
 package json
 
-import util.parsing.json._
 import util.matching.Regex
 import text.Regexes._
 import text.NotNullStrings._
