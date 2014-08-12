@@ -142,28 +142,28 @@ trait Groups extends GroupsLike { outer: S2StringContext =>
   }
 
   private def storeGroup(i: Int, g: =>ExamplesGroup): Unit = {
-    if      (i == 1 ) { g1  = () => g; g1  }
-    else if (i == 2 ) { g2  = () => g; g2  }
-    else if (i == 3 ) { g3  = () => g; g3  }
-    else if (i == 4 ) { g4  = () => g; g4  }
-    else if (i == 5 ) { g5  = () => g; g5  }
-    else if (i == 6 ) { g6  = () => g; g6  }
-    else if (i == 7 ) { g7  = () => g; g7  }
-    else if (i == 8 ) { g8  = () => g; g8  }
-    else if (i == 9 ) { g9  = () => g; g9  }
-    else if (i == 10) { g10 = () => g; g10 }
-    else if (i == 11) { g11 = () => g; g11 }
-    else if (i == 12) { g12 = () => g; g12 }
-    else if (i == 13) { g13 = () => g; g13 }
-    else if (i == 14) { g14 = () => g; g14 }
-    else if (i == 15) { g15 = () => g; g15 }
-    else if (i == 16) { g16 = () => g; g16 }
-    else if (i == 17) { g17 = () => g; g17 }
-    else if (i == 18) { g18 = () => g; g18 }
-    else if (i == 19) { g19 = () => g; g19 }
-    else if (i == 20) { g20 = () => g; g20 }
-    else if (i == 21) { g21 = () => g; g21 }
-    else if (i == 22) { g22 = () => g; g22 }
+    if      (i == 1 ) { g1  = () => g }
+    else if (i == 2 ) { g2  = () => g }
+    else if (i == 3 ) { g3  = () => g }
+    else if (i == 4 ) { g4  = () => g }
+    else if (i == 5 ) { g5  = () => g }
+    else if (i == 6 ) { g6  = () => g }
+    else if (i == 7 ) { g7  = () => g }
+    else if (i == 8 ) { g8  = () => g }
+    else if (i == 9 ) { g9  = () => g }
+    else if (i == 10) { g10 = () => g }
+    else if (i == 11) { g11 = () => g }
+    else if (i == 12) { g12 = () => g }
+    else if (i == 13) { g13 = () => g }
+    else if (i == 14) { g14 = () => g }
+    else if (i == 15) { g15 = () => g }
+    else if (i == 16) { g16 = () => g }
+    else if (i == 17) { g17 = () => g }
+    else if (i == 18) { g18 = () => g }
+    else if (i == 19) { g19 = () => g }
+    else if (i == 20) { g20 = () => g }
+    else if (i == 21) { g21 = () => g }
+    else if (i == 22) { g22 = () => g }
   }
 
   private lazy val numberedExampleGroups = Seq(g1,g2,g3,g4,g5,g6,g7,g8,g9,g10,g11,g12,g13,g14,g15,g16,g17,g18,g19,g20,g21,g22)

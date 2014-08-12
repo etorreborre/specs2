@@ -77,7 +77,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
          createHtmlPrinter(args, loader),
          createMarkdownPrinter(args, loader),
          createPrinter(args, loader),
-         createNotifierPrinter(args, loader)).sequenceU.map(_.flatten)
+         createNotifierPrinter(args, loader)).map(_.map(_.toList)).sequenceU.map(_.flatten)
 
   def createSbtPrinter(h: EventHandler, ls: Array[Logger], e: SbtEvents) = {
     val arguments = Arguments(args.mkString(" "))

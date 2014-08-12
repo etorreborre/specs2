@@ -179,8 +179,8 @@ trait HtmlPrinter extends Printer {
         inputFormat  = value("pandoc.inputformat").getOrElse(Pandoc.inputFormat),
         outputFormat = value("pandoc.outputformat").getOrElse(Pandoc.outputFormat))
 
-      pandoc.isExecutableAvailable.map(_ => Some(pandoc)).orElse(
-        Actions.fail("the pandoc executable is not available at: "+pandoc.executable))
+      pandoc.isExecutableAvailable.map(_ => Option(pandoc)).orElse(
+        Actions.fail[Option[Pandoc]]("the pandoc executable is not available at: "+pandoc.executable))
     }
 
     else Actions.ok(None)

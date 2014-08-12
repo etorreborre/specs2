@@ -34,7 +34,7 @@ trait SpecificationsFinder {
                          basePath: String          = new java.io.File("src/test/scala").getAbsolutePath,
                          verbose: Boolean          = false,
                          classLoader: ClassLoader  = Thread.currentThread.getContextClassLoader,
-                         fileSystem: FileSystem    = FileSystem): Action[Seq[SpecificationStructure]] =
+                         fileSystem: FileSystem    = FileSystem): Action[List[SpecificationStructure]] =
     specificationNames(path, pattern, basePath, fileSystem, verbose).flatMap { names =>
       names.filter(filter).map(n => SpecificationStructure.create(n, classLoader)).toList.sequenceU
     }
@@ -63,7 +63,7 @@ trait SpecificationsFinder {
    * @param pattern a regular expression which is supposed to match an object name extending a Specification
    * @return specification names by scanning files and trying to find specifications declarations
    */
-  def specificationNames(pathGlob: String, pattern: String, basePath: String, fileSystem: FileSystem, verbose: Boolean) : Action[Seq[String]] = {
+  def specificationNames(pathGlob: String, pattern: String, basePath: String, fileSystem: FileSystem, verbose: Boolean) : Action[List[String]] = {
     lazy val specClassPattern = {
       val p = specPattern("class", pattern)
       log("\nthe pattern used to match specification classes is: "+p+"\n", verbose) >>
@@ -80,8 +80,8 @@ trait SpecificationsFinder {
       objectPattern <- specObjectPattern
       classPattern  <- specClassPattern
       paths         <- fileSystem.filePaths(basePath, pathGlob, verbose)
-    } yield paths.toVector.map(path => readClassNames(path, objectPattern, classPattern, fileSystem, verbose)).sequenceU.map(_.flatten)
-  }.flatMap(identity)
+    } yield paths.toList.map(path => readClassNames(path, objectPattern, classPattern, fileSystem, verbose)).sequenceU.map(_.flatten)
+  }.flatMap[List[String]](identity)
 
   /**
    * Read the content of the file at 'path' and return all names matching the object pattern

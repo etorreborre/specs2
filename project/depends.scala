@@ -12,8 +12,8 @@ object depends {
   def reflect(scalaVersion: String)  = Seq("org.scala-lang" % "scala-reflect" % scalaVersion)
 
   lazy val scalaz = Seq("org.scalaz"        %% "scalaz-core"      ,
-                        "org.scalaz"        %% "scalaz-concurrent").map(_ % "7.0.6") ++
-                    Seq("org.scalaz.stream" %% "scalaz-stream"    % "0.3.4")
+                        "org.scalaz"        %% "scalaz-concurrent").map(_ % "7.1.0") ++
+                    Seq("org.scalaz.stream" %% "scalaz-stream"    % "0.5a")
 
 
   lazy val scalacheck    = Seq("org.scalacheck" %% "scalacheck"   % "1.11.3")

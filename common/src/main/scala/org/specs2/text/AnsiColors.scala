@@ -8,16 +8,16 @@ import NotNullStrings._
  * @see http://en.wikipedia.org/wiki/ANSI_escape_code
  */
 trait AnsiColors {
-  lazy val black   = "\033[30m"
-  lazy val red     = "\033[31m"
-  lazy val green   = "\033[32m"
-  lazy val yellow  = "\033[33m"
-  lazy val blue    = "\033[34m"
-  lazy val magenta = "\033[35m"
-  lazy val cyan    = "\033[36m"
-  lazy val white   = "\033[37m"
+  lazy val black   = "\u001b[30m"
+  lazy val red     = "\u001b[31m"
+  lazy val green   = "\u001b[32m"
+  lazy val yellow  = "\u001b[33m"
+  lazy val blue    = "\u001b[34m"
+  lazy val magenta = "\u001b[35m"
+  lazy val cyan    = "\u001b[36m"
+  lazy val white   = "\u001b[37m"
     
-  lazy val reset   = "\033[0m"
+  lazy val reset   = "\u001b[0m"
     
   lazy val all = Seq(black, red, green, yellow, blue, magenta, cyan, white, reset)
 

@@ -3,7 +3,7 @@ package runner
 
 import control._
 import Actions._
-import org.specs2.io.StringOutput
+import io.StringOutput
 import reflect.Classes
 import specification.core._
 import reporter._
@@ -31,7 +31,7 @@ trait ClassRunner {
         Actions.fail("there must be at least one argument, the fully qualified class name")
 
       case className :: rest =>
-        createSpecification(className).flatMap(report(env)) >>
+        createSpecification(className).flatMap[Unit](report(env)) >>
         Actions.safe(env.shutdown)
     }
     execute(actions)
@@ -42,7 +42,7 @@ trait ClassRunner {
     Classes.createInstance[SpecificationStructure](className, Thread.currentThread.getContextClassLoader)
 
   /** report the specification */
-  def report(env: Env) = { spec: SpecificationStructure =>
+  def report(env: Env): SpecificationStructure => Action[Unit] = { spec: SpecificationStructure =>
     val loader = Thread.currentThread.getContextClassLoader
 
     if (env.arguments.commandLine.contains("all")) {
@@ -51,10 +51,10 @@ trait ClassRunner {
         ss       <- SpecificationStructure.linkedSpecifications(spec, env, loader)
         sorted   <- safe(SpecificationStructure.topologicalSort(env)(ss).getOrElse(ss) :+ spec)
         rs = sorted.toList.map(s => Reporter.report(env, printers)(s.structure(env))).sequenceU
-      } yield rs
+      } yield ()
 
     } else
-      createPrinters(env.arguments, loader).map(printers => Reporter.report(env, printers)(spec.structure(env)))
+      createPrinters(env.arguments, loader).map(printers => Reporter.report(env, printers)(spec.structure(env))).map(_ => ())
   }
 
   /** accepted printers */

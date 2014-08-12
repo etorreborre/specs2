@@ -67,7 +67,7 @@ trait S2StringContext extends FragmentsFactory { outer =>
 
       val result =
         implicitly[AsResult[R]] match {
-          case v : AnyValueAsResult[_] => Env.executeResult(f(description.show)) match {
+          case v : AnyValueAsResult[_] => (Env.executeResult(f(description.show)): @unchecked) match {
             case DecoratedResult(t, e: Error) => before :+ ff.example(description, e).setLocation(end)
             case DecoratedResult(t, _)        => Vector(ff.text(text), ff.text(t.notNull)).map(_.setLocation(end))
           }
@@ -167,7 +167,8 @@ trait S2StringContext extends FragmentsFactory { outer =>
   }
 
   implicit class specificationInStringContext(sc: StringContext) {
-    def s2(variables: InterpolatedFragment*) = macro S2Macro.s2Implementation
+    def s2(variables: InterpolatedFragment*): Fragments =
+      macro S2Macro.s2Implementation
   }
 
   

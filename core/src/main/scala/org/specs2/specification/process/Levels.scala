@@ -8,7 +8,7 @@ import scalaz.std.list._
 import Tree._
 import TreeLoc._
 import data.Trees._
-import scalaz.stream.{End =>_,_}
+import scalaz.stream._
 import specification.create._
 import DefaultFragmentFactory._
 import Process._

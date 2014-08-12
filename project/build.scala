@@ -47,8 +47,8 @@ object build extends Build {
     organization := "org.specs2",
     specs2Version in GlobalScope <<= version,
     specs2ShellPrompt,
-    scalaVersion := "2.10.4",
-    crossScalaVersions := Seq("2.10.4", "2.11.1"))
+    scalaVersion := "2.11.2",
+    crossScalaVersions := Seq("2.10.4", "2.11.2"))
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 
@@ -63,7 +63,8 @@ object build extends Build {
   lazy val resolversSettings = resolvers ++= 
     Seq(Resolver.sonatypeRepo("releases"), 
         Resolver.sonatypeRepo("snapshots"),
-        Resolver.typesafeIvyRepo("releases"))
+        Resolver.typesafeIvyRepo("releases"),
+        "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases")
 
   lazy val buildSettings: Seq[Settings] =
     buildInfoSettings ++

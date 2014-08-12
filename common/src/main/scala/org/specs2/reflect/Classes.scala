@@ -30,7 +30,7 @@ trait Classes {
         val constructors = klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)
 
         if (constructors.isEmpty)
-          Actions.fail("Can't find a constructor for class "+klass.getName)
+          Actions.fail[T]("Can't find a constructor for class "+klass.getName)
         else {
           // how to get the first successful action?
           val results = constructors.map { constructor =>
@@ -40,8 +40,8 @@ trait Classes {
             results.map(Actions.fromStatus).headOption.getOrElse(Actions.fail("no cause")))
           result
         }
-      }.flatMap(identity)
-    }.flatMap(identity)
+      }.flatMap[T](identity)
+    }.flatMap[T](identity)
 
   /**
    * create an instance from an existing class
@@ -51,7 +51,7 @@ trait Classes {
       val constructors = klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)
 
       if (constructors.isEmpty)
-        Actions.fail("Can't find a constructor for class "+klass.getName)
+        Actions.fail[T]("Can't find a constructor for class "+klass.getName)
       else {
         // how to get the first successful action?
         val results = constructors.map { constructor =>
@@ -61,7 +61,7 @@ trait Classes {
           results.map(Actions.fromStatus).headOption.getOrElse(Actions.fail("no cause")))
         result
       }
-    }.flatMap(identity)
+    }.flatMap[T](identity)
 
   /**
    * Try to create an instance of a given class by using whatever constructor is available
@@ -71,12 +71,12 @@ trait Classes {
     Actions.reader { configuration  =>
       loadClassEither(className, loader).map { throwableOrClass: Throwable \/ Class[T] =>
         throwableOrClass match {
-         case -\/(t)     => Actions.ok(-\/(t))
+         case -\/(t)     => Actions.ok[Throwable \/ T](-\/(t))
          case \/-(klass) =>
            val constructors = klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)
 
            if (constructors.isEmpty)
-             Actions.ok(-\/(new Exception("Can't find a constructor for class "+klass.getName)))
+             Actions.ok[Throwable \/ T](-\/(new Exception("Can't find a constructor for class "+klass.getName)))
            else {
              // how to get the first successful action?
              val results = constructors.map { constructor =>
@@ -90,8 +90,8 @@ trait Classes {
              result
            }
          }
-      }.flatMap(identity)
-    }.flatMap(identity)
+      }.flatMap[Throwable \/ T](identity)
+    }.flatMap[Throwable \/ T](identity)
 
 
   /**
@@ -110,11 +110,11 @@ trait Classes {
       // or it might have a parameter that has a 0 args constructor
       val constructorParameter =
           createInstance[T](getOuterClassName(c), loader)
-            .orElse(createInstance[AnyRef](constructor.getParameterTypes.toSeq(0).getName, loader))
+            .orElse(createInstance[T](constructor.getParameterTypes.toSeq(0).getName, loader))
 
       constructorParameter.map(constructor.newInstance(_).asInstanceOf[T])
-    } else Actions.fail("Can't find a suitable constructor for class "+c.getName)
-  }.flatMap(action => action)
+    } else Actions.fail[T]("Can't find a suitable constructor for class "+c.getName)
+  }.flatMap[T](identity)
 
   /**
    * @return an instance of a given class, checking that the created instance typechecks as expected
@@ -123,9 +123,9 @@ trait Classes {
     val constructor = klass.getDeclaredConstructors()(0)
     constructor.setAccessible(true)
     val instance: AnyRef = constructor.newInstance().asInstanceOf[AnyRef]
-    if (!m.runtimeClass.isInstance(instance)) Actions.fail(instance + " is not an instance of " + m.runtimeClass.getName)
+    if (!m.runtimeClass.isInstance(instance)) Actions.fail[T](instance + " is not an instance of " + m.runtimeClass.getName)
     else Actions.safe(instance.asInstanceOf[T])
-  }.flatMap(identity)
+  }.flatMap[T](identity)
 
   /**
    * Load a class, given the class name

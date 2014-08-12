@@ -26,7 +26,7 @@ import scalaz.concurrent.Task
  *
  * Credits to @markhibberd
  */
-case class ActionT[F[+_], W, R, +A](runT: R => StatusT[({ type l[+a] = WriterT[F, W, a] })#l, A]) {
+case class ActionT[F[_], W, R, A](runT: R => StatusT[({ type l[a] = WriterT[F, W, a] })#l, A]) {
   def map[B](f: A => B)(implicit W: Monoid[W], F: Functor[F]): ActionT[F, W, R, B] =
     ActionT(r => runT(r).map(f))
 
@@ -51,72 +51,72 @@ case class ActionT[F[+_], W, R, +A](runT: R => StatusT[({ type l[+a] = WriterT[F
   def executeT(r: R)(implicit F: Functor[F]): StatusT[F, A] =
     StatusT(execute(r))
 
-  def |||[AA >: A](otherwise: => ActionT[F, W, R, AA])(implicit W: Monoid[W], F: Monad[F]): ActionT[F, W, R, AA] =
-    ActionT[F, W, R, AA](r => runT(r) ||| otherwise.runT(r))
+  def |||(otherwise: => ActionT[F, W, R, A])(implicit W: Monoid[W], F: Monad[F]): ActionT[F, W, R, A] =
+    ActionT[F, W, R, A](r => runT(r) ||| otherwise.runT(r))
 
-  def orElse[AA >: A](otherwise: => AA)(implicit W: Monoid[W], F: Monad[F]): ActionT[F, W, R, AA] =
-    |||(ActionT.ok[F, W, R, AA](otherwise))
+  def orElse(otherwise: => A)(implicit W: Monoid[W], F: Monad[F]): ActionT[F, W, R, A] =
+    |||(ActionT.ok[F, W, R, A](otherwise))
 
-  def orElse[AA >: A](otherwise: ActionT[F, W, R, AA])(implicit W: Monoid[W], F: Monad[F]): ActionT[F, W, R, AA] =
+  def orElse(otherwise: ActionT[F, W, R, A])(implicit W: Monoid[W], F: Monad[F]): ActionT[F, W, R, A] =
     |||(otherwise)
 
-  def andFinally[AA >: A](otherwise: ActionT[F, W, R, Unit])(implicit W: Monoid[W], F: Monad[F]): ActionT[F, W, R, AA] =
-    ActionT[F, W, R, AA](r => runT(r).andFinally(otherwise.runT(r)))
+  def andFinally(otherwise: ActionT[F, W, R, Unit])(implicit W: Monoid[W], F: Monad[F]): ActionT[F, W, R, A] =
+    ActionT[F, W, R, A](r => runT(r).andFinally(otherwise.runT(r)))
 }
 
 object ActionT extends ActionTLowPriority {
-  def ask[F[+_]: Monad, W: Monoid, R]: ActionT[F, W, R, R] =
+  def ask[F[_]: Monad, W: Monoid, R]: ActionT[F, W, R, R] =
     reader(identity)
 
-  def reader[F[+_]: Monad, W: Monoid, R, A](f: R => A): ActionT[F, W, R, A] =
-    ActionT(r => StatusT.safe[({ type l[+a] = WriterT[F, W, a] })#l, A](f(r)))
+  def reader[F[_]: Monad, W: Monoid, R, A](f: R => A): ActionT[F, W, R, A] =
+    ActionT(r => StatusT.safe[({ type l[a] = WriterT[F, W, a] })#l, A](f(r)))
 
-  def status[F[+_]: Monad, W: Monoid, R, A](f: R => Status[A]): ActionT[F, W, R, A] =
-    ActionT(r => StatusT.status[({ type l[+a] = WriterT[F, W, a] })#l, A](f(r)))
+  def status[F[_]: Monad, W: Monoid, R, A](f: R => Status[A]): ActionT[F, W, R, A] =
+    ActionT(r => StatusT.status[({ type l[a] = WriterT[F, W, a] })#l, A](f(r)))
 
-  def option[F[+_]: Monad, W: Monoid, R, A](f: R => A): ActionT[F, W, R, Option[A]] =
-    ActionT(r => StatusT.option[({ type l[+a] = WriterT[F, W, a] })#l, A](f(r)))
+  def option[F[_]: Monad, W: Monoid, R, A](f: R => A): ActionT[F, W, R, Option[A]] =
+    ActionT(r => StatusT.option[({ type l[a] = WriterT[F, W, a] })#l, A](f(r)))
 
-  def safe[F[+_]: Monad, W: Monoid, R, A](a: => A): ActionT[F, W, R, A] =
+  def safe[F[_]: Monad, W: Monoid, R, A](a: => A): ActionT[F, W, R, A] =
     reader[F, W, R, A](_ => a)
 
-  def ok[F[+_]: Monad, W: Monoid, R, A](a: A): ActionT[F, W, R, A] =
-    ActionT(_ => StatusT.ok[({ type l[+a] = WriterT[F, W, a] })#l, A](a))
+  def ok[F[_]: Monad, W: Monoid, R, A](a: A): ActionT[F, W, R, A] =
+    ActionT(_ => StatusT.ok[({ type l[a] = WriterT[F, W, a] })#l, A](a))
 
-  def exception[F[+_]: Monad, W: Monoid, R, A](t: Throwable): ActionT[F, W, R, A] =
-    ActionT(_ => StatusT.exception[({ type l[+a] = WriterT[F, W, a] })#l, A](t))
+  def exception[F[_]: Monad, W: Monoid, R, A](t: Throwable): ActionT[F, W, R, A] =
+    ActionT(_ => StatusT.exception[({ type l[a] = WriterT[F, W, a] })#l, A](t))
 
-  def fail[F[+_]: Monad, W: Monoid, R, A](message: String): ActionT[F, W, R, A] =
-    ActionT(_ => StatusT.fail[({ type l[+a] = WriterT[F, W, a] })#l, A](message))
+  def fail[F[_]: Monad, W: Monoid, R, A](message: String): ActionT[F, W, R, A] =
+    ActionT(_ => StatusT.fail[({ type l[a] = WriterT[F, W, a] })#l, A](message))
 
-  def error[F[+_]: Monad, W: Monoid, R, A](message: String, t: Throwable): ActionT[F, W, R, A] =
-    ActionT(_ => StatusT.error[({ type l[+a] = WriterT[F, W, a] })#l, A](message, t))
+  def error[F[_]: Monad, W: Monoid, R, A](message: String, t: Throwable): ActionT[F, W, R, A] =
+    ActionT(_ => StatusT.error[({ type l[a] = WriterT[F, W, a] })#l, A](message, t))
 
-  def these[F[+_]: Monad, W: Monoid, R, A](both: These[String, Throwable]): ActionT[F, W, R, A] =
-    ActionT(_ => StatusT.these[({ type l[+a] = WriterT[F, W, a] })#l, A](both))
+  def these[F[_]: Monad, W: Monoid, R, A](both: These[String, Throwable]): ActionT[F, W, R, A] =
+    ActionT(_ => StatusT.these[({ type l[a] = WriterT[F, W, a] })#l, A](both))
 
-  def fromDisjunction[F[+_]: Monad, W: Monoid, R, A](either: These[String, Throwable] \/ A): ActionT[F, W, R, A] =
-    ActionT[F, W, R, A](_ => StatusT.fromDisjunction[({ type l[+a] = WriterT[F, W, a] })#l, A](either))
+  def fromDisjunction[F[_]: Monad, W: Monoid, R, A](either: These[String, Throwable] \/ A): ActionT[F, W, R, A] =
+    ActionT[F, W, R, A](_ => StatusT.fromDisjunction[({ type l[a] = WriterT[F, W, a] })#l, A](either))
 
-  def fromDisjunctionString[F[+_]: Monad, W: Monoid, R, A](either: String \/ A): ActionT[F, W, R, A] =
+  def fromDisjunctionString[F[_]: Monad, W: Monoid, R, A](either: String \/ A): ActionT[F, W, R, A] =
     fromDisjunction[F, W, R, A](either.leftMap(This.apply))
 
-  def fromDisjunctionThrowable[F[+_]: Monad, W: Monoid, R, A](either: Throwable \/ A): ActionT[F, W, R, A] =
+  def fromDisjunctionThrowable[F[_]: Monad, W: Monoid, R, A](either: Throwable \/ A): ActionT[F, W, R, A] =
     fromDisjunction[F, W, R, A](either.leftMap(That.apply))
 
-  def fromDisjunctionF[F[+_]: Monad, W: Monoid, R, A](either: F[These[String, Throwable] \/ A]): ActionT[F, W, R, A] =
-    ActionT[F, W, R, A](_ => StatusT.fromDisjunctionF[({ type l[+a] = WriterT[F, W, a] })#l, A](WriterT(either.map(a => (Monoid[W].zero, a)))))
+  def fromDisjunctionF[F[_]: Monad, W: Monoid, R, A](either: F[These[String, Throwable] \/ A]): ActionT[F, W, R, A] =
+    ActionT[F, W, R, A](_ => StatusT.fromDisjunctionF[({ type l[a] = WriterT[F, W, a] })#l, A](WriterT(either.map(a => (Monoid[W].zero, a)))))
 
-  def fromIO[F[+_]: MonadIO, W: Monoid, R, A](v: IO[A]): ActionT[F, W, R, A] =
-    ActionT[F, W, R, A](_ => StatusT[({ type l[+a] = WriterT[F, W, a] })#l, A](WriterT(v.map(a => (Monoid[W].zero, Status.ok(a))).liftIO[F])))
+  def fromIO[F[_]: MonadIO, W: Monoid, R, A](v: IO[A]): ActionT[F, W, R, A] =
+    ActionT[F, W, R, A](_ => StatusT[({ type l[a] = WriterT[F, W, a] })#l, A](WriterT(v.map(a => (Monoid[W].zero, Status.ok(a))).liftIO[F])))
 
-  def fromTask[F[+_]: MonadIO, W: Monoid, R, A](task: Task[A]): ActionT[F, W, R, A] =
+  def fromTask[F[_]: MonadIO, W: Monoid, R, A](task: Task[A]): ActionT[F, W, R, A] =
     task.attemptRun.fold(t => exception(t), a => ok(a))
 
-  def fromIOStatus[F[+_]: MonadIO, W: Monoid, R, A](v: IO[Status[A]]): ActionT[F, W, R, A] =
+  def fromIOStatus[F[_]: MonadIO, W: Monoid, R, A](v: IO[Status[A]]): ActionT[F, W, R, A] =
     fromIO[F, W, R, Status[A]](v).flatMap(r => status(_ => r))
 
-  implicit def ActionTMonad[F[+_]: Monad, W: Monoid, R]: Monad[({ type l[a] = ActionT[F, W, R, a] })#l] =
+  implicit def ActionTMonad[F[_]: Monad, W: Monoid, R]: Monad[({ type l[a] = ActionT[F, W, R, a] })#l] =
     new Monad[({ type l[a] = ActionT[F, W, R, a] })#l] {
       def bind[A, B](a: ActionT[F, W, R, A])(f: A => ActionT[F, W, R, B]) = a.flatMap(f)
       def point[A](a: => A) = ok[F, W, R, A](a)
@@ -124,7 +124,7 @@ object ActionT extends ActionTLowPriority {
 }
 
 trait ActionTLowPriority {
-  implicit def ActionTMonadIO[F[+_]: MonadIO, W: Monoid, R]: MonadIO[({ type l[a] = ActionT[F, W, R, a] })#l] =
+  implicit def ActionTMonadIO[F[_]: MonadIO, W: Monoid, R]: MonadIO[({ type l[a] = ActionT[F, W, R, a] })#l] =
     new MonadIO[({ type l[a] = ActionT[F, W, R, a] })#l] {
       def bind[A, B](a: ActionT[F, W, R, A])(f: A => ActionT[F, W, R, B]) = a.flatMap(f)
       def point[A](a: => A) = ActionT.ok[F, W, R, A](a)
@@ -133,7 +133,7 @@ trait ActionTLowPriority {
 }
 
 
-trait ActionTSupport[F[+_], W, R] {
+trait ActionTSupport[F[_], W, R] {
   def ask(implicit M: Monad[F], W: Monoid[W]): ActionT[F, W, R, R] =
     ActionT.ask
 

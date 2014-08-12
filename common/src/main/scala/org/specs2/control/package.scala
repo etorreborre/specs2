@@ -13,7 +13,7 @@ package object control {
   lazy val noLogging = (s: String) => IO(())
   lazy val consoleLogging = (s: String) => IO(println(s))
 
-  type Action[+A] = ActionT[IO, Unit, Logger, A]
+  type Action[A] = ActionT[IO, Unit, Logger, A]
   object Actions extends ActionTSupport[IO, Unit, Logger]
 
   /** log a value, using the logger coming from the Reader environment */
