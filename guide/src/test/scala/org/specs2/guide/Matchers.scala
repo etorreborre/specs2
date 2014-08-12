@@ -97,8 +97,8 @@ The easiest way to create a new matcher is to derive it from an existing one. Yo
   import scala.concurrent._
   import scala.concurrent.duration._
   // 8<--
-  future(1) must be_>(0).await
-  future { Thread.sleep(100); 1 } must be_>(0).await(retries = 2, timeout = 100.millis)
+  Future(1) must be_>(0).await
+  Future { Thread.sleep(100); 1 } must be_>(0).await(retries = 2, timeout = 100.millis)
 }}
 
  * use `await` to wait on a `Future[Matcher[T]]`: ${snippet{
@@ -107,8 +107,8 @@ The easiest way to create a new matcher is to derive it from an existing one. Yo
   import scala.concurrent._
   import scala.concurrent.duration._
   // 8<--
-  future(1 === 1).await
-  future(1 === 1).await(retries = 2, timeout = 100.millis)
+  Future(1 === 1).await
+  Future(1 === 1).await(retries = 2, timeout = 100.millis)
 }}
 
  * use `when` or `unless` to apply a matcher only if a condition is satisfied: ${snippet{

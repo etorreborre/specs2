@@ -90,7 +90,7 @@ object MatcherMacros extends MatcherMacros {
   private def setPosition(c: Context)(position: c.Position) = {
     import c.universe._
     import compat._
-    
+
     new Transformer {
       override def transform(tree: Tree) = tree match {
         case t => internal.setPos(super.transform(t), position)
