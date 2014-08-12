@@ -65,7 +65,7 @@ object Snippets extends Snippets {
   def create[T](c: blackbox.Context)(code: c.Expr[T])(params: c.Expr[SnippetParams[T]]): c.Expr[Snippet[T]] = {
     import c.{universe => u}; import u._
     import Macros._
-    val result = c.Expr(methodCall(c)("createSnippet", c.literal(c.macroApplication.pos.isRange).tree, stringExprMacroPos(c)(code), code.tree.duplicate, params.tree))
+    val result = c.Expr(methodCall(c)("createSnippet", q"${c.macroApplication.pos.isRange}", stringExprMacroPos(c)(code), code.tree.duplicate, params.tree))
     c.Expr(atPos(c.prefix.tree.pos)(result.tree))
   }
 }

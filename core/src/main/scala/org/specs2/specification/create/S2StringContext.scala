@@ -198,13 +198,13 @@ object S2Macro {
     def traceLocation(pos: c.universe.Position) =
       Seq(pos.source.path, pos.source.file.name, pos.line).mkString("|")
 
-    val textStartPositions = texts.map(t => c.literal(traceLocation(t.pos)).tree)
-    val textEndPositions = texts.map(t => c.literal(traceLocation(t.pos.focusEnd)).tree)
+    val textStartPositions = texts.map(t => q"${traceLocation(t.pos)}")
+    val textEndPositions = texts.map(t => q"${traceLocation(t.pos.focusEnd)}")
 
     val result =
       c.Expr(methodCall(c)("s2",
-        c.literal(content).tree,
-        c.literal(Yrangepos).tree,
+        q"${content}",
+        q"${Yrangepos}",
         toAST[List[_]](c)(texts:_*),
         toAST[List[_]](c)(textStartPositions:_*),
         toAST[List[_]](c)(textEndPositions:_*),
