@@ -3,7 +3,6 @@ package json
 
 import mutable.Specification
 import matcher._
-import util.parsing.json._
 import org.scalacheck._
 import JsonGen._
 
