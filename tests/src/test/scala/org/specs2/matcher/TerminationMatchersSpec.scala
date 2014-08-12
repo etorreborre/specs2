@@ -3,9 +3,7 @@ package matcher
 
 import io.StringOutput
 import java.util.concurrent._
-import org.specs2.specification.core.Env
-
-import scalaz.concurrent.{Strategy, Promise}
+import scalaz.concurrent._
 import specification._
 import scala.concurrent.duration._
 
@@ -28,6 +26,7 @@ class TerminationMatchersSpec extends script.Specification with TerminationMatch
    with an onlyWhen clause
      + if action1 terminates after action 2 -> success
      + if action1 terminates before action 2 -> failure
+     + if action1 terminates before action 2 -> failure with a specific message
      + if action1 doesn't terminate after action 2 -> failure
 
   We should not overflow the stack
@@ -69,8 +68,13 @@ class TerminationMatchersSpec extends script.Specification with TerminationMatch
     eg := { implicit es: ES =>
       val queue1 = new ArrayBlockingQueue[Int](1)
 
-      ((queue1.add(1) must terminate.onlyWhen(queue1.size)) returns "the action terminated before the second action") and
-      ((queue1.add(1) must terminate.onlyWhen("taking the size", queue1.size)) returns "the action terminated before taking the size")
+      (queue1.add(1) must terminate.onlyWhen(queue1.size)) returns "the action terminated before the second action"
+    }
+
+    eg := { implicit es: ES =>
+      val queue1 = new ArrayBlockingQueue[Int](1)
+
+      (queue1.add(1) must terminate.onlyWhen("taking the size", queue1.size)) returns "the action terminated before taking the size"
     }
 
     eg := { implicit es: ES =>

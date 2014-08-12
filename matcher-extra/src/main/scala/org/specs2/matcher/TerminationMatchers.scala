@@ -2,6 +2,7 @@ package org.specs2
 package matcher
 
 import java.util.concurrent.ExecutorService
+import java.util.concurrent.atomic.AtomicBoolean
 import org.specs2.specification.core.Env
 import scala.annotation.tailrec
 import time._
@@ -9,7 +10,7 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scalaz._
 import Scalaz._
-import scalaz.concurrent.{Strategy, Promise}
+import scalaz.concurrent.{Future, Strategy, Promise}
 import Promise._
 
 /**
@@ -34,12 +35,10 @@ trait TerminationBaseMatchers {
 class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[() => Any] = None, whenDesc: Option[String] = None, onlyWhen: Boolean = false)(implicit es: ExecutorService) extends Matcher[T] {
 
   def apply[S <: T](a: Expectable[S]) =
-    retry(retries, retries, sleep, a, createPromise(a.value))
+    retry(retries, retries, sleep, a, createFuture(a.value))
 
   @tailrec
-  private final def retry[S <: T](originalRetries: Int, retries: Int, sleep: Duration, a: Expectable[S], promise: Promise[S], whenActionExecuted: Boolean = false): MatchResult[S] = {
-
-    lazy val fulfilled = promise.fulfilled
+  private final def retry[S <: T](originalRetries: Int, retries: Int, sleep: Duration, a: Expectable[S], future: Future[S], whenActionExecuted: Boolean = false): MatchResult[S] = {
     val parameters = "with retries="+originalRetries+" and sleep="+sleep.toMillis
     val evenWhenAction = whenDesc.fold("")(w => " even when " + w)
     val onlyWhenAction = whenDesc.getOrElse("the second action")
@@ -47,13 +46,13 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
     def terminates =
       result(true, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a)
 
-    def blocks     = {
-      promise.break
+    def blocks = {
+      cancelled.set(true)
       result(false, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a)
     }
 
     if (whenAction.isDefined) {
-      if (fulfilled) {
+      if (terminated.get) {
         if (onlyWhen) {
           result(whenActionExecuted,
                  "the action terminates only when "+onlyWhenAction+" terminates",
@@ -65,31 +64,37 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
           // leave the action a chance to finish
           Thread.sleep(sleep.toMillis)
           // if still not finished, try to execute the when action
-          if (!promise.fulfilled && !whenActionExecuted) {
+          if (!terminated.get && !whenActionExecuted) {
             whenAction.map(_())
             // leave again the action a chance to finish
             Thread.sleep(sleep.toMillis)
-            retry(originalRetries, retries - 1, sleep, a, promise, whenActionExecuted = true)
+            retry(originalRetries, retries - 1, sleep, a, future, whenActionExecuted = true)
           } else
-            retry(originalRetries, retries - 1, sleep, a, promise)
+            retry(originalRetries, retries - 1, sleep, a, future)
         }
       }
     } else {
-      if (fulfilled) terminates
+      if (terminated.get) terminates
       else {
         if (retries <= 0) blocks
         else {
           Thread.sleep(sleep.toMillis)
-          retry(originalRetries, retries - 1, sleep, a, promise)
+          retry(originalRetries, retries - 1, sleep, a, future)
         }
       }
     }
 
   }
 
-  private def createPromise[A](a: =>A)(implicit es: ExecutorService): Promise[A] = {
-    implicit val strategy: Strategy = Strategy.Executor(es)
-    promise(a)(strategy)
+  /**
+   * use a variable to determine if the future has finished executing
+   */
+  private var terminated = new AtomicBoolean(false)
+  private var cancelled = new AtomicBoolean(false)
+  private def createFuture[A](a: =>A)(implicit es: ExecutorService): Future[A] = {
+    val future = Future(a)
+    future.runAsyncInterruptibly(_ => terminated.set(true), cancelled)
+    future
   }
 
   private def withAWhenAction[S](whenAction: Option[() => S], whenDesc: =>Option[String], onlyWhen: Boolean) =
