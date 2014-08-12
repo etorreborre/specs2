@@ -67,7 +67,7 @@ trait Processes {
     def andFinally(t: Task[Unit]): Process[Task, T] = {
       val sink: Sink[Task, T] =
         io.resource(Task.now(()))(u => t)(
-          u => Task.now(u => Task.now(u)))
+          _ => Task.now(_ => Task.now(())))
 
       ps.observe(sink)
     }

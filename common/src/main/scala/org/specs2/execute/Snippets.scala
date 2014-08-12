@@ -60,9 +60,11 @@ trait Snippets {
   def termName(m: Any): String            = macro Macros.termName
 }
 
+import reflect.Compat210._
+import blackbox._
+
 object Snippets extends Snippets {
-  import scala.reflect.macros._
-  def create[T](c: blackbox.Context)(code: c.Expr[T])(params: c.Expr[SnippetParams[T]]): c.Expr[Snippet[T]] = {
+  def create[T](c: Context)(code: c.Expr[T])(params: c.Expr[SnippetParams[T]]): c.Expr[Snippet[T]] = {
     import c.{universe => u}; import u._
     import Macros._
     val result = c.Expr(methodCall(c)("createSnippet", q"${c.macroApplication.pos.isRange}", stringExprMacroPos(c)(code), code.tree.duplicate, params.tree))
