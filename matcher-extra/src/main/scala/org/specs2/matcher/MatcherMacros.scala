@@ -1,15 +1,15 @@
 package org.specs2
 package matcher
 
-import scala.reflect.macros.Context
+import reflect.Compat210.blackbox._
 import scala.annotation.StaticAnnotation
 
 /**
  * Macro definitions to generate matchers for the members of a type T
  */
 trait MatcherMacros {
-  def matchA[T]  = macro org.specs2.matcher.MatcherMacros.matcherMacroImpl[T]
-  def matchAn[T] = macro org.specs2.matcher.MatcherMacros.matcherMacroImpl[T]
+  def matchA[T]: Any  = macro org.specs2.matcher.MatcherMacros.matcherMacroImpl[T]
+  def matchAn[T]:Any = macro org.specs2.matcher.MatcherMacros.matcherMacroImpl[T]
 
   class fieldMatcherBody(tree: Any) extends StaticAnnotation
 }
@@ -40,7 +40,7 @@ object MatcherMacros extends MatcherMacros {
     import c.universe._
 
     val (arg, body) = extractBody(c)
-    val prefixVal = newTermName(c.fresh)
+    val prefixVal = TermName(c.freshName)
 
     c.Expr(setMacroPosition(c).transform {
       q"""
@@ -53,7 +53,7 @@ object MatcherMacros extends MatcherMacros {
   def fieldMatcherImplementation2[F : c.WeakTypeTag, T : c.WeakTypeTag, R](c: Context)(fieldValue: c.Expr[F])(asResult: c.Expr[R]) = { import c.universe._
 
     val (arg, body) = extractBody(c)
-    val prefixVal = newTermName(c.fresh)
+    val prefixVal = TermName(c.freshName)
 
     c.Expr(setMacroPosition(c).transform {
       q"""
@@ -65,11 +65,11 @@ object MatcherMacros extends MatcherMacros {
       """})(implicitly[c.WeakTypeTag[F]])
   }
 
-  def matcherClassName[T : c.WeakTypeTag](c: Context) = c.universe.weakTypeOf[T].typeSymbol.name.encoded+"Matcher"
+  def matcherClassName[T : c.WeakTypeTag](c: Context) = c.universe.weakTypeOf[T].typeSymbol.name.encodedName.toString+"Matcher"
 
   private def extractBody(c: Context) = { import c.universe._
-    c.macroApplication.symbol.annotations.find(_.tpe.toString.endsWith("fieldMatcherBody")).
-      flatMap(_.scalaArgs.map(arg => c.resetLocalAttrs(arg)).collectFirst { case Function(ValDef(_, a, _, _) :: Nil, b) => a -> b }).
+    c.macroApplication.symbol.annotations.find(_.tree.tpe.toString.endsWith("fieldMatcherBody")).
+      flatMap(_.tree.children.tail.map(arg => c.untypecheck(arg)).collectFirst { case Function(ValDef(_, a, _, _) :: Nil, b) => a -> b }).
       getOrElse(c.abort(c.enclosingPosition, "Annotation body not provided!"))
   }
 
@@ -77,8 +77,8 @@ object MatcherMacros extends MatcherMacros {
     import c.universe._
     new Transformer {
       override def transform(tree: Tree) = tree match {
-        case This(qualifier) if qualifier.decoded.startsWith(className) => Ident(prefixVal)
-        case other                                                      => super.transform(other)
+        case This(qualifier) if qualifier.decodedName.toString.startsWith(className) => Ident(prefixVal)
+        case other                                                                   => super.transform(other)
       }
     }
   }
@@ -90,9 +90,10 @@ object MatcherMacros extends MatcherMacros {
   private def setPosition(c: Context)(position: c.Position) = {
     import c.universe._
     import compat._
+    
     new Transformer {
       override def transform(tree: Tree) = tree match {
-        case t => super.transform(t).setPos(position)
+        case t => internal.setPos(super.transform(t), position)
       }
     }
   }
@@ -107,7 +108,7 @@ class MakeMatchers[C <: Context](val c: C) {
 
   def matchers[T: c.WeakTypeTag] = {
     val typeOfT = weakTypeOf[T]
-    val matcherClassType = newTypeName(MatcherMacros.matcherClassName[T](c))
+    val matcherClassType = TypeName(MatcherMacros.matcherClassName[T](c))
 
     val fields: Iterable[c.Symbol] = typeOfT.members.filter(_.isPublic).
       filter(isGetter(c)).
@@ -120,9 +121,9 @@ class MakeMatchers[C <: Context](val c: C) {
     val (fieldValueMatchers, fieldMatchers, fieldFunctionMatchers) = fields.map {
       member =>
         val fieldName = member.name.toString
-        val methodName = newTermName(fieldName)
+        val methodName = TermName(fieldName)
         val fieldType = member.typeSignature
-        val parameterName = newTermName(fieldName)
+        val parameterName = TermName(fieldName)
 
         val valueBody = q"""(fieldValue: $fieldType) =>
         addMatcher((t :$typeOfT) => new org.specs2.matcher.BeTypedEqualTo[$fieldType](fieldValue)(theValue[$fieldType](t.$parameterName).updateDescription(d => "  "+$fieldName+": "+d)).toResult)"""
