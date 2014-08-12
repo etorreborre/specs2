@@ -6,7 +6,7 @@ import scalaz.{\/, \&/, Equal, Monad}, \&/._, \/._
 import scalaz.std.option._
 import scalaz.std.AllInstances._
 import scalaz.syntax.std.option._
-import scalaz.syntax.id._
+import scalaz.syntax.either._
 
 /**
  * A data type for holding statuses. This is effectively just an
