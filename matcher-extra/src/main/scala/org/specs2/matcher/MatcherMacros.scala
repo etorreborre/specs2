@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import reflect.Compat210.blackbox._
+import reflect.MacroContext.blackbox._
 import scala.annotation.StaticAnnotation
 
 /**

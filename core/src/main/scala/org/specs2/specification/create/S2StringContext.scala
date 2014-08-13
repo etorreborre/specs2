@@ -8,7 +8,7 @@ import execute._
 import org.specs2.control.TraceLocation
 import org.specs2.specification.process.{StatisticsRepository, Executor}
 import text.Interpolated
-import reflect.Compat210.blackbox
+import reflect.MacroContext.blackbox
 import reflect.Macros._
 import text.NotNullStrings._
 import text.Trim._

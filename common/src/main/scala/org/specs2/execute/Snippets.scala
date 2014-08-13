@@ -6,7 +6,7 @@ import text.NotNullStrings._
 import text.Trim._
 import scala.reflect.runtime.universe._
 import reflect.Macros
-import reflect.Compat210._
+import reflect.MacroContext._
 import Snippet._
 
 /**
@@ -60,7 +60,7 @@ trait Snippets {
   def termName(m: Any): String            = macro Macros.termName
 }
 
-import reflect.Compat210._
+import reflect.MacroContext._
 import blackbox._
 
 object Snippets extends Snippets {

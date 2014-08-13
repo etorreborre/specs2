@@ -76,10 +76,10 @@ trait Trim extends control.Debug {
     /** trim the string of everything that is before the start substring if there is one */
     def startFrom(start: String) = if (s.startsWith(start) || !s.contains(start)) s else new String(s.substring(s.indexOf(start)))
 
-    def trimReplace(pairs: Pair[String, String]*) = pairs.foldLeft(s.trim) { (res, cur) =>
+    def trimReplace(pairs: (String, String)*) = pairs.foldLeft(s.trim) { (res, cur) =>
       res.replace(cur._1, cur._2)
     }
-    def trimReplaceAll(pairs: Pair[String, String]*) = pairs.foldLeft(s.trim) { (res, cur) =>
+    def trimReplaceAll(pairs: (String, String)*) = pairs.foldLeft(s.trim) { (res, cur) =>
       res.replaceAll(cur._1, cur._2)
     }
 
@@ -90,13 +90,13 @@ trait Trim extends control.Debug {
     def trimSpaceStart = s.dropWhile(Seq(' ').contains)
     def trimSpaceEnd = s.reverse.dropWhile(Seq(' ').contains).reverse
 
-    def replaceAll(pairs: Pair[String, String]*) = pairs.foldLeft(s) { (res, cur) =>
+    def replaceAll(pairs: (String, String)*) = pairs.foldLeft(s) { (res, cur) =>
       res.replaceAll(cur._1, cur._2)
     }
-    def replaceInsideTag(tag: String, p: Pair[String, String]*) = {
+    def replaceInsideTag(tag: String, p: (String, String)*) = {
       replaceAll(tagPattern(tag), (s: String) => java.util.regex.Matcher.quoteReplacement(s.replaceAll(p:_*)))
     }
-    def replaceInsideTags(tags: String*)(p: Pair[String, String]*) = {
+    def replaceInsideTags(tags: String*)(p: (String, String)*) = {
       tags.foldLeft(s) { (res, tag) =>
         res.replaceAll(tagPattern(tag), (s: String) => java.util.regex.Matcher.quoteReplacement(s.replaceAll(p:_*)))
       }

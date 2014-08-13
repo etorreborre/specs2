@@ -1,7 +1,7 @@
 package org.specs2
 package reflect
 
-import Compat210._
+import MacroContext._
 import blackbox._
 
 object Macros {
@@ -50,13 +50,4 @@ object Macros {
     c.Expr(q"${name.toString.trim}")
   }
 
-}
-
-/**
- * to remove 2.11 warnings
- */
-object Compat210 {
-  object blackbox {
-    type Context = scala.reflect.macros.Context
-  }
 }

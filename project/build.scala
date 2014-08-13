@@ -205,12 +205,15 @@ object build extends Build {
   }
 
   lazy val compilationSettings: Seq[Settings] = Seq(
+    // https://gist.github.com/djspiewak/976cd8ac65e20e136f05
+    unmanagedSourceDirectories in Compile += (sourceDirectory in Compile).value / s"scala-${scalaBinaryVersion.value}",
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
     maxErrors := 20,
     incOptions := incOptions.value.withNameHashing(true),
     scalacOptions in GlobalScope ++= Seq("-Xcheckinit", "-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_"),
     scalacOptions in Test ++= Seq("-Yrangepos")
   )
+
 
   lazy val testingSettings: Seq[Settings] = Seq(
     initialCommands in console in test := "import org.specs2._",

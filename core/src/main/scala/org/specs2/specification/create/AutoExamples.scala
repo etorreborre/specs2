@@ -3,7 +3,7 @@ package specification
 package create
 
 import execute.AsResult
-import reflect.Compat210.blackbox
+import reflect.MacroContext.blackbox
 import reflect.Macros
 import text.Trim._
 import org.specs2.specification.core.{Description, Fragments}

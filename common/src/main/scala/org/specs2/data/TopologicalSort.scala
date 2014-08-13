@@ -29,8 +29,9 @@ object TopologicalSort {
     class Node(val t: T, var permanent: Boolean = false, var temp: Boolean = false) {
       override def toString = t.toString+"-"+(if (unmarked) "u" else if (temp) "t" else "p")
       def unmarked     = !permanent && !temp
-      def setTemp      = { temp = true }
-      def setPermanent = { permanent = true; temp = false }
+
+      def setTemp()      = { temp = true }
+      def setPermanent() = { permanent = true; temp = false }
     }
     class CycleException extends Exception
 

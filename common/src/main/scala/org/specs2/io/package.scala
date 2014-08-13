@@ -1,7 +1,7 @@
 package org.specs2
 
-import org.specs2.reflect.Compat210
-import Compat210._
+import org.specs2.reflect.MacroContext
+import MacroContext._
 import blackbox._
 
 package object io {
