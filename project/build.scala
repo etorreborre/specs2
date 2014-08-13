@@ -1,5 +1,6 @@
 import java.text.SimpleDateFormat
 import java.util.Date
+import com.typesafe.tools.mima.core.{MissingMethodProblem, ProblemFilters}
 import sbt._
 import complete.DefaultParsers._
 import Keys._
@@ -18,7 +19,7 @@ import ReleaseStateTransformations._
 import Utilities._
 import Defaults._
 import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
-import com.typesafe.tools.mima.plugin.MimaKeys.previousArtifact
+import com.typesafe.tools.mima.plugin.MimaKeys._
 import xerial.sbt.Sonatype._
 import SonatypeKeys._
 import sbtbuildinfo.Plugin._
@@ -403,7 +404,13 @@ object build extends Build {
    * COMPATIBILITY
    */
   lazy val compatibilitySettings = mimaDefaultSettings ++
-    Seq(previousArtifact := Some("org.specs2" % "specs2_2.10" % "2.3.7"))
+    Seq(previousArtifact := Some("org.specs2" %% "specs2_2.11" % "2.4")) ++
+    Seq(binaryIssueFilters ++= binaryProblems)
+
+  lazy val binaryProblems =
+    // see commit d2e6845, those were lazy vals or defs inside a matcher method
+    Seq("print", "isEqual", "qa", "db").map(name =>
+        ProblemFilters.exclude[MissingMethodProblem]("org.specs2.matcher.BeTypedEqualTo.org$specs2$matcher$BeTypedEqualTo$$"+name+"$1"))
 
   /**
    * UTILITIES
