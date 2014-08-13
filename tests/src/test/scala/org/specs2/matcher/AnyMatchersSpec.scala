@@ -7,38 +7,6 @@ import specification._
 
 class AnyMatchersSpec extends script.Specification with Groups with ResultMatchers { def is = s2"""
 
-  be_== checks the equality of 2 objects
-  ${ "a" must_== "a" }
-  ${ "a" must not be_==(null) }
-  ${ (null: String) must not be_==("a") }
-  ${ "a" must_!= "b" }
-  ${ "a" should_== "a" }
-  ${ "a" should_!= "b" }
-  ${ "a" must be_==("a") }
-  ${ "a" must not be_==("b") }
-  ${ "a" must be_!=("b") }
-  ${ "a" must not be_!=("a") }
-  ${ "a" === "a" }
-  ${ "a" !== "b" }
-  ${ "a" must be_===("a") }
-  // doesn't compile
-  // { "a" ==== 1 }
-  ${ "a" must not be_===("b") }
-  ${ "a" must be_!==("b") }
-  ${ "a" must not be_!==("a") }
-  ${ Array(1, 2) must be_==(Array(1, 2)) }
-  ${ Array(1, 3) must not be_==(Array(1, 2)) }
-  ${ Array(1, 2) must be_===(Array(1, 2)) }
-  ${ Array(Array(1, 2)) must be_===(Array(Array(1, 2))) }
-  ${ Array(1, 3) must not be_===(Array(1, 2)) }
-  ${ (Array(1, 3) must not be_===(Array(1, 2))).message === "Array(1, 3) is not equal to Array(1, 2)" }
-  ${ (1 must_== 2).toResult must beLike { case Failure(_,_,_,FailureDetails(e, a)) => e must_== "2" } }
-  the actual value must be evaluated before the expected one
-  ${ var result = "";
-     {{ result = result + "a" }; 1} must_== {{ result = result + "b" }; 1}
-     result must_== "ab"
-   }
-
   beTheSameAs checks if a value is eq to another one
   ${ aValue must beTheSameAs(aValue) }
   ${ "a" must not beTheSameAs("b") }
@@ -134,22 +102,6 @@ Implicits
 
   + the === implicits can be deactivated with the NoCanBeEqual trait
   + the must implicits can be deactivated with the NoMustExpectations trait
-
-Robustness
-==========
-
-  the be_== matcher must be robust in face of
-   + a null object
-   + a non-traversable collection
-
-Details
-=======
-
-  the be_== matcher must warn when comparing 2 objects with the same toString representation but not the same type"
-   + with List[Int] and List[String]
-   + with 'hello': String and 'hello': Hello
-   + with List("1, 2") and List("1", "2")
-   + with Map(1 -> "2") and Map(1 -> 2)
                                                                                                                         """
   "be like" - new group {
     eg := { (List(1, 2) must beLike { case List(a, b) => (a + b) must_== 2 }) returns "'3' is not equal to '2'" }
@@ -184,44 +136,12 @@ Details
     }
   }
 
-  "robustness" - new group {
-    eg := ((null: String) must_== "1") must not(throwAn[Exception])
-    eg := {
-      def newTraversable = new TraversableWithNoDefinedForeach[Int] {}
-      val (t1, t2) = (newTraversable, newTraversable)
-      (t1 must_== t2) must not(throwAn[Exception])
-    }
-  }
-
-  "details" - new group {
-    eg := {
-      (List(1, 2) must_== List("1", "2")) must beFailing(
-        "\\Q'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.Integer]'\n\n is not equal to \n\n'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.String]'\\E")
-    }
-    eg := {
-      ("hello" must_== Hello()) must beFailing(
-        "\\Q'hello: java.lang.String' is not equal to 'hello: org.specs2.matcher.Hello'\\E")
-    }
-    eg := {
-      (List("1, 2") must_== List("1", "2")) must beFailing(
-        "\\Q'List('1, 2'): scala.collection.immutable.$colon$colon[java.lang.String]'\n\n is not equal to \n\n'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.String]'\\E")
-    }
-    eg := {
-      (Map(1 -> "2") must_== Map(1 -> 2)) must beFailing(
-        "\\Q'Map(1: java.lang.Integer -> 2: java.lang.String): scala.collection.immutable.Map$Map1'\n\n is not equal to \n\n'Map(1: java.lang.Integer -> 2: java.lang.Integer): scala.collection.immutable.Map$Map1'\\E")
-    }
-  }
-
   val aValue: String = "a value"
 
   val type1 = new Type1 { override def toString = "type1" }
 
   def skipForeach =
     { foreach(Seq(0, 1, 2)) { case a => a must be_<(0).orSkip("todo") } } must beLike { case MatchSkip(_,_) => ok }
-}
-
-trait TraversableWithNoDefinedForeach[T] extends Traversable[T] {
-  def foreach[U](f: T => U): Unit = sys.error("foreach is not defined on this traversable but toString is")
 }
 
 trait Type1

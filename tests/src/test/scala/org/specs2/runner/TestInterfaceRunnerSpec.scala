@@ -86,7 +86,7 @@ class TestInterfaceRunnerSpec extends Specification with Groups with Tags { def 
 
       def export(condition: Boolean, e: String) = if (condition) Some(e) else None
       def selectedExporters(c: Boolean, h: Boolean, m: Boolean, j: Boolean) =
-        Seq(export(c, "TestInterfaceReporter"), export(h, "HtmlExporting$"), export(m, "MarkdownExporting$"), export(j, "JUnitXmlExporting$")).flatten
+        Seq(export(c, "TestInterfaceReporter"), export(h, "HtmlExporting"), export(m, "MarkdownExporting"), export(j, "JUnitXmlExporting")).flatten
 
       "args"                                  || "console" | "html" | "markdown"  | "junitxml" |
       "junitxml"                              !! false     ! false  ! false       ! true       |

@@ -14,6 +14,8 @@ object BestMatching {
   /**
    * This function indexes values of type T and V, and the result of their matching
    * so that the algorithm can work on a simplified graph form of just of matching elements represented by integers
+   *
+   * @return matched values with their result and missing values
    */
   def findBestMatch[T, V, R : AsResult](ts: Seq[T], vs: Seq[V], matchingFunction: (T, V) => R, eachCheck: Boolean = true): (Seq[(T, V, Result)], Seq[V]) = {
     // perform n^2 matches
