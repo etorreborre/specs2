@@ -11,7 +11,7 @@ class ExpectableSpec extends Specification with ResultMatchers with org.specs2.m
   "An expectable described with aka will only evaluate the description in case of a failure" in {
     var evaluated = false
     ("a" aka {
-      evaluated = true;
+      evaluated = true
       "the string" }) must_== "a"
     "the aka description is not evaluated on a success" <==> { evaluated === false }
   }

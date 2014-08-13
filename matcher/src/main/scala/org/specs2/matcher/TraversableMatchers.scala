@@ -378,17 +378,6 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
 
     val resultsAsSeq = results.map { case (t, v, r) => (t, Seq(r)) }
     (resultsAsSeq, unchecked)
-//
-//
-//    values match {
-//      case currentValue +: remainingValues =>
-//        if (checks.isEmpty) (results :+ (currentValue -> Seq(Failure("no more checks for "+currentValue, currentValue.notNull))), checks)
-//        else {
-//          val (valueResults, uncheckedChecks) = checkValue(currentValue, checks, Seq(), eachCheck, Seq())
-//          checkValues(remainingValues, uncheckedChecks, eachCheck, results :+ (currentValue -> valueResults))
-//        }
-//      case _ => (results, checks)
-//    }
   }
 
 

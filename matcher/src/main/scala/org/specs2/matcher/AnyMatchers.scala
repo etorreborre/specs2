@@ -6,7 +6,6 @@ import text.Quote._
 import text.NotNullStrings._
 import execute._
 import scala.reflect.ClassTag
-import org.specs2.control.DefaultStackTraceFilter
 
 /**
  * This trait provides matchers which are applicable to any type of value
@@ -163,51 +162,6 @@ class BeTrueMatcher extends Matcher[Boolean] {
   def apply[S <: Boolean](v: Expectable[S]) = {
     result(v.value, v.description + " is true", v.description + " is false", v) 
   }
-}
-/**
- * Typed equality Matcher
- */
-class BeTypedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1 == t2) extends AdaptableMatcher[T] { outer =>
-  import AnyMatchers._
-  protected val ok: String => String = identity
-  protected val ko: String => String = identity
-  
-  def adapt(f: T => T, okFunction: String => String, koFunction: String => String) = {
-    new BeTypedEqualTo(f(t), equality) {
-      override def apply[S <: T](s: Expectable[S]): MatchResult[S] = {
-        val originalValues = s"\nOriginal values\n  Expected: '$t'\n  Actual  : '${s.value}'"
-        result(super.apply(s.map(f)).updateMessage(_+originalValues), s)
-      }
-      override protected val ok: String => String = okFunction compose outer.ok
-      override protected val ko: String => String = koFunction compose outer.ko
-    }
-  }
-  
-  def apply[S <: T](b: Expectable[S]): MatchResult[S] = {
-    val (actual, expected) = (b.value, t)
-    def isEqual =
-      (actual, expected) match {
-        case (arr: Array[_], arr2: Array[_]) => arr.deep == arr2.deep
-        case other                           => equality(actual, expected)
-      }
-
-    lazy val (db, qa) =
-      (b.description, q(expected)) match {
-        case (x, y) if !isEqual && x == y =>
-          val (actualWithClass, expectedWithClass) = (actual.notNullWithClass, expected.notNullWithClass)
-          if (actualWithClass == expectedWithClass) (b.describe(actual.notNullWithClass(showAll = true)), q(expected.notNullWithClass(showAll = true)))
-          else                                      (b.describe(actualWithClass), q(expectedWithClass))
-
-        case other                          => other
-      }
-
-    def print(b: String, msg: String, a: String) =
-      Seq(b, msg, a).mkString("\n\n".unless(Seq(a, b).forall(_.size <= 40)))
-
-    result(isEqual, ok(print(db, " is equal to ", qa)), ko(print(db, " is not equal to ", qa)), b, expected.notNull, actual.notNull)
-  }
-
-  def expected = t
 }
 
 /**
