@@ -2,7 +2,6 @@ package org.specs2
 package reflect
 
 import MacroContext._
-import blackbox._
 
 object Macros {
 

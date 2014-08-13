@@ -3,7 +3,7 @@ package specification
 package create
 
 import execute.AsResult
-import reflect.MacroContext.blackbox
+import reflect.MacroContext._
 import reflect.Macros
 import text.Trim._
 import org.specs2.specification.core.{Description, Fragments}
@@ -33,7 +33,7 @@ trait AutoExamples extends FragmentsFactory {
 }
 
 object AutoExamples extends AutoExamples {
-  def create[T](c: blackbox.Context)(code: c.Expr[T])(asResult: c.Expr[AsResult[T]]): c.Expr[Fragments] = {
+  def create[T](c: Context)(code: c.Expr[T])(asResult: c.Expr[AsResult[T]]): c.Expr[Fragments] = {
     import c.{universe => u}; import u._
     import Macros._
     val result = c.Expr(methodCall(c)("createExample", stringExprMacroPos(c)(code), code.tree.duplicate, asResult.tree))

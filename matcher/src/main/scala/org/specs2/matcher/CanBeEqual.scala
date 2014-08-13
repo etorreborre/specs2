@@ -13,9 +13,9 @@ trait CanBeEqual { this: Expectations =>
   implicit def canBeEqual[T](t: =>T) = new CanBeEqualExpectation(t)
   class CanBeEqualExpectation[T](t: =>T) {
     /** equality matcher on Expectables */
-    def ===[S >: T](other: =>S) = createExpectable(t).applyMatcher(new BeEqualTo(other))
+    def ===[S >: T](other: =>S) = createExpectable(t).applyMatcher[S](new BeEqualTo(other))
     /** ! equality matcher on Expectables */
-    def !==[S >: T](other: =>S) = createExpectable(t).applyMatcher(new BeEqualTo(other).not)
+    def !==[S >: T](other: =>S) = createExpectable(t).applyMatcher[S](new BeEqualTo(other).not)
     /** typed equality matcher on Expectables */
     def ====(other: =>T) = createExpectable(t).applyMatcher(new BeTypedEqualTo(other))
     /** ! typed equality matcher on Expectables */

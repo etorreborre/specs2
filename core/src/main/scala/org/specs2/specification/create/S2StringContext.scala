@@ -8,7 +8,7 @@ import execute._
 import org.specs2.control.TraceLocation
 import org.specs2.specification.process.{StatisticsRepository, Executor}
 import text.Interpolated
-import reflect.MacroContext.blackbox
+import reflect.MacroContext._
 import reflect.Macros._
 import text.NotNullStrings._
 import text.Trim._
@@ -183,7 +183,7 @@ trait S2StringContext extends FragmentsFactory { outer =>
 object S2StringContext extends DefaultFragmentFactory
 
 object S2Macro {
-  def s2Implementation(c: blackbox.Context)(variables: c.Expr[InterpolatedFragment]*) : c.Expr[Fragments] = {
+  def s2Implementation(c: Context)(variables: c.Expr[InterpolatedFragment]*) : c.Expr[Fragments] = {
     import c.{universe => u}; import u.{ Position => _, _ }
 
     val texts = c.prefix.tree match { case Apply(_, List(Apply(_, ts))) => ts }

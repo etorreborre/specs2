@@ -1,8 +1,6 @@
 package org.specs2
 
-import org.specs2.reflect.MacroContext
-import MacroContext._
-import blackbox._
+import reflect.MacroContext._
 
 package object io {
 

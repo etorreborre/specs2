@@ -5,8 +5,8 @@ import control.Exceptions._
 import text.NotNullStrings._
 import text.Trim._
 import scala.reflect.runtime.universe._
-import reflect.Macros
-import reflect.MacroContext._
+import reflect._
+import MacroContext._
 import Snippet._
 
 /**
@@ -61,7 +61,6 @@ trait Snippets {
 }
 
 import reflect.MacroContext._
-import blackbox._
 
 object Snippets extends Snippets {
   def create[T](c: Context)(code: c.Expr[T])(params: c.Expr[SnippetParams[T]]): c.Expr[Snippet[T]] = {

@@ -23,7 +23,7 @@ class HamcrestMatcherAdapterSpec extends mutable.Specification {
 
                                                                                           
   def matchMessage(value1: Int, value2: Int) = {
-    val m = HamcrestMatcherAdapter(beEqualTo(value2))
+    val m = HamcrestMatcherAdapter[Int](beEqualTo(value2))
     m.matchesSafely(value1)
 
     val description = new org.hamcrest.StringDescription
