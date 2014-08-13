@@ -13,7 +13,7 @@ import scalaz._, Scalaz._
  *
  * If the list is empty, this means we are at the location root
  */
-case class DirectoryPath(dirs: Vector[FileName]) {
+case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean) {
 
   /** @return either the parent directory or the root if we already are at the root */
   def dir: DirectoryPath  = parent.getOrElse(this)
@@ -32,10 +32,10 @@ case class DirectoryPath(dirs: Vector[FileName]) {
     }
 
   /** @return the path for this file as a / separated string */
-  def path: String = if (isRoot) "" else dirs.map(_.name).toList.mkString("/")
+  def path: String = (if (absolute) "/" else "") + dirs.map(_.name).toList.mkString("/")
 
   /** @return the path for this file as a / separated string, with a final / */
-  def dirPath: String = dirs.map(_.name).toList.mkString("", "/", "/")
+  def dirPath: String = if (isRoot) path else path+"/"
 
   /** @return a File for this path */
   def toFile: File = new File(path)
@@ -47,9 +47,9 @@ case class DirectoryPath(dirs: Vector[FileName]) {
    */
   def </>(other: DirectoryPath): DirectoryPath =
     (this, other) match {
-      case (_, DirectoryPath.ROOT) => this
-      case (DirectoryPath.ROOT, _) => other
-      case _                 => copy(dirs = dirs ++ other.dirs)
+      case (_, DirectoryPath.EMPTY) => this
+      case (DirectoryPath.EMPTY, _) => other
+      case _                        => copy(dirs = dirs ++ other.dirs)
     }
 
   /**
@@ -57,7 +57,7 @@ case class DirectoryPath(dirs: Vector[FileName]) {
    * @return another FilePath
    */
   def </>(other: FilePath): FilePath =
-    FilePath(DirectoryPath(dirs ++ other.dir.dirs), other.name)
+    FilePath(DirectoryPath(dirs ++ other.dir.dirs, absolute), other.name)
 
   /**
    * append a new name to this directory
@@ -88,22 +88,40 @@ case class DirectoryPath(dirs: Vector[FileName]) {
 
   def isRoot = dirs.isEmpty
 
+  /** @return an absolute directory path */
+  def asAbsolute = setAbsolute(true)
+
+  /** @return a relative directory path */
+  def asRelative = setAbsolute(false)
+
+  /** @return modify the absolute status of this dir path */
+  def setAbsolute(isAbsolute: Boolean) = copy(absolute = isAbsolute)
+
+  /** @return true if this directory path is relative */
+  def isRelative = !isAbsolute
+
+  /** @return true if this directory path is absolute */
+  def isAbsolute = absolute
 }
 
 object DirectoryPath {
-  def apply(n: FileName): DirectoryPath = apply(Vector(n))
+  def apply(n: FileName): DirectoryPath = DirectoryPath(Vector(n), absolute = false)
 
   def apply(uuid: UUID): DirectoryPath = apply(FileName(uuid))
 
-  def unsafe(s: String): DirectoryPath =
-    DirectoryPath(removeScheme(s).split("/").filter(_.nonEmpty).map(FileName.unsafe).toVector)
+  def unsafe(s: String): DirectoryPath = {
+    val withoutScheme = removeScheme(s)
+    val isAbsolute = withoutScheme.startsWith("/")
+    DirectoryPath(withoutScheme.split("/").filter(_.nonEmpty).map(FileName.unsafe).toVector, isAbsolute)
+  }
 
   def unsafe(f: File): DirectoryPath = unsafe(f.getPath)
   def unsafe(uri: URI): DirectoryPath = unsafe(uri.toString)
 
   private def removeScheme(s: String): String = Seq("file:").foldLeft(s) { (res, cur) => res.replace(cur, "") }
 
-  val ROOT = DirectoryPath(dirs = Vector())
+  val ROOT = DirectoryPath(dirs = Vector(), absolute = true)
+  val EMPTY = DirectoryPath(dirs = Vector(), absolute = false)
 }
 
 /**
@@ -131,6 +149,20 @@ case class FilePath(dir: DirectoryPath, name: FileName) {
   /** @return interpret this FilePath as a DirectoryPath */
   def toDirectoryPath: DirectoryPath = dir </> name
 
+  /** @return true if the file path is absolute */
+  def isAbsolute = dir.isAbsolute
+
+  /** @return an absolute file path */
+  def asAbsolute = setAbsolute(true)
+  /** @return a relative file path */
+  def asRelative = setAbsolute(false)
+
+  /** @return modify the absolute status of this file path */
+  def setAbsolute(absolute: Boolean) = copy(dir.setAbsolute(absolute))
+
+  /** @return true if this file path is relative */
+  def isRelative = !isAbsolute
+
 }
 
 object FilePath {
@@ -147,10 +179,10 @@ object FilePath {
  *   http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_267
  */
 case class FileName private(name: String) {
-  def </>(other: DirectoryPath) : DirectoryPath  = DirectoryPath(this +: other.dirs)
-  def </>(other: FilePath): FilePath = FilePath(DirectoryPath(this +: other.dir.dirs), other.name)
-  def </>(other: FileName): DirectoryPath  = DirectoryPath(this) </> other
-  def <|>(other: FileName): FilePath = DirectoryPath(this) <|> other
+  def </>(other: DirectoryPath) : DirectoryPath  = DirectoryPath(this +: other.dirs, absolute = false)
+  def </>(other: FilePath): FilePath = FilePath(DirectoryPath(this +: other.dir.dirs, absolute = false), other.name)
+  def </>(other: FileName): DirectoryPath  = DirectoryPath(Vector(this), absolute = false) </> other
+  def <|>(other: FileName): FilePath = DirectoryPath(Vector(this), absolute = false) <|> other
 }
 
 object FileName {

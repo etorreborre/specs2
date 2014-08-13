@@ -25,12 +25,27 @@ class DirectoryPathSpec extends Specification { def is = s2"""
    ${ DirectoryPath.unsafe(new URI("hello/world")).path === "hello/world"  }
 
  The DirectoryPath loses its scheme if created from a string/file/uri
-   ${ DirectoryPath.unsafe(new URI("file://hello/world")).path === "hello/world"  }
+   ${ DirectoryPath.unsafe(new URI("file://hello/world")).path === "/hello/world"  }
+
+ An absolute dir path can be built from
+   a string starting with a /
+   ${ DirectoryPath.unsafe("/hello/world").isAbsolute }
+   the DirectoryPath.Root object
+   ${ (DirectoryPath.ROOT </> "world").isAbsolute }
+
+ A relative dir path can be built from
+   a string not starting with a /
+   ${ DirectoryPath.unsafe("hello/world").isRelative }
+   the DirectoryPath.Empty object
+   ${ (DirectoryPath.EMPTY </> "world").isRelative }
+   a literal string
+   ${ ("hello" </> "world").isRelative }
 
  Basic operations can be executed on a DirectoryPath
    get the parent
    ${ DirectoryPath.ROOT.parent must beNone }
-   ${ DirectoryPath("test").parent must beSome(DirectoryPath.ROOT) }
+   ${ DirectoryPath("test").parent must beSome(DirectoryPath.EMPTY) }
+   ${ DirectoryPath("test").asAbsolute.parent must beSome(DirectoryPath.ROOT) }
    ${ ("test" </> "hello" </> "world").parent must beSome("test" </> "hello") }
 
    get the basename
@@ -40,8 +55,10 @@ class DirectoryPathSpec extends Specification { def is = s2"""
    ${ ("test" </> "hello" </> "world").root must_== DirectoryPath("test") }
 
    get the path as a string
-   ${ DirectoryPath.ROOT.path must_== "" }
+   ${ DirectoryPath.ROOT.path must_== "/" }
+   ${ DirectoryPath.EMPTY.path must_== "" }
    ${ DirectoryPath("test").path must_== "test" }
+   ${ DirectoryPath("test").asAbsolute.path must_== "/test" }
    ${ ("test" </> "hello" </> "world").path must_== "test/hello/world" }
 
    get the path as a string, with a last slash
