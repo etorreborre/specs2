@@ -433,7 +433,7 @@ object build extends Build {
 
   private def commitCurrent(commitMessage: String): State => State = { st: State =>
     vcs(st).add(".") !! st.log
-    val status = (vcs(st).status !!) trim
+    val status = (vcs(st).status !!).trim
 
     if (status.nonEmpty) {
       vcs(st).commit(commitMessage) ! st.log

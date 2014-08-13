@@ -27,9 +27,9 @@ class InterpolatedSpec extends Specification with ParserMatchers with Snippets {
 
   def e1 = {
     val string =
-      """|This is an interpolated string with one variable $e1
-         |and another variable ${ new BigTrait {} }
-         |Then some other text""".stripMargin
+      s"""|This is an interpolated string with one variable $$e1
+          |and another variable $${ new BigTrait {} }
+          |Then some other text""".stripMargin
 
     new Interpolated(string,
       Seq("This is an interpolated string with one variable ",
@@ -39,9 +39,9 @@ class InterpolatedSpec extends Specification with ParserMatchers with Snippets {
 
   def e2 = {
     val string =
-      """|$e1
-         |middle $e2
-         |end""".stripMargin
+      s"""|$$e1
+          |middle $$e2
+          |end""".stripMargin
 
     new Interpolated(string,
       Seq("",
@@ -51,8 +51,8 @@ class InterpolatedSpec extends Specification with ParserMatchers with Snippets {
 
   def e3 = {
     val string =
-      """|start $e1
-         |middle $e2""".stripMargin
+      s"""|start $$e1
+          |middle $$e2""".stripMargin
 
     new Interpolated(string,
       Seq("start ",
@@ -62,7 +62,7 @@ class InterpolatedSpec extends Specification with ParserMatchers with Snippets {
 
   def e4 = {
     val string =
-      """|start $e1 $e2 """.stripMargin
+      s"""|start $$e1 $$e2 """.stripMargin
 
     new Interpolated(string,
       Seq("start ", " ", " ")).expressions === Seq("e1", "e2")
@@ -70,14 +70,14 @@ class InterpolatedSpec extends Specification with ParserMatchers with Snippets {
 
   lazy val parsers = InterpolatedParsers
 
-  def e5 = parsers.interpolatedVariable("$hello") must beASuccess
-  def e6 = parsers.interpolatedVariable("${hello}") must beASuccess
-  def e7 = parsers.interpolatedVariable("${ exp { other } }") must beASuccess.withResult("\\Q exp { other } \\E")
-  def e8 = parsers.interpolatedVariable("${`hello world`}") must beASuccess.withResult("`hello world`")
-  def e9 = parsers.interpolatedVariable("${ exp ${ o1 } ${ o2 } end}") must beASuccess.withResult("\\Q exp ${ o1 } ${ o2 } end\\E")
+  def e5 = parsers.interpolatedVariable(s"$$hello") must beASuccess
+  def e6 = parsers.interpolatedVariable(s"$${hello}") must beASuccess
+  def e7 = parsers.interpolatedVariable(s"$${ exp { other } }") must beASuccess.withResult("\\Q exp { other } \\E")
+  def e8 = parsers.interpolatedVariable(s"$${`hello world`}") must beASuccess.withResult("`hello world`")
+  def e9 = parsers.interpolatedVariable(s"$${ exp $${ o1 } $${ o2 } end}") must beASuccess.withResult("\\Q exp ${ o1 } ${ o2 } end\\E")
   def e10 = {
     val snippet =
-      """${
+      s"""$${
 block  }""".stripMargin
 
     parsers.interpolatedVariable(snippet) must beASuccess

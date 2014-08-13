@@ -2,8 +2,10 @@ package org.specs2
 package guide
 package matchers
 
-import form.Card
 import org.specs2.matcher.MatcherMacros
+import org.specs2.reflect._
+import Macros._
+import MacroContext._
 
 object CaseClassMatchers extends UserGuideCard with MatcherMacros {
   def title = "Case class"

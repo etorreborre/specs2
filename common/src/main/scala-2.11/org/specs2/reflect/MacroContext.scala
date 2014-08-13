@@ -1,10 +1,8 @@
-package org.specs2
-package reflect
+package org.specs2.reflect
 
 /**
  * to remove 2.11 warnings
  */
-trait MacroContext {
-  type Context = scala.reflect.macros.blackbox.Context
+object MacroContext {
+  type Context = scala.reflect.macros.whitebox.Context
 }
-object MacroContext extends MacroContext
