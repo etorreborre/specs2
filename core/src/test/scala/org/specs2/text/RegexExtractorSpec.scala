@@ -20,18 +20,20 @@ class RegexExtractorSpec extends script.Specification with Groups { def is = s2"
  + FailureException if there are not enough parameters
  + ErrorException if the regular expression is malformed
 """
+  val REGEX = """\|\{([^}]+)\}""".r
 
   "extraction" - new group {
-    eg := extract1("hello ${world}!") === "world"
-    eg := extract2("${hello} ${world}!") === (("hello", "world"))
-    eg := extractAll("${hello} ${world}, I'm ${Eric}!") === Seq("hello", "world", "Eric")
-    eg := extract2("${hello} ${world}, I'm ${Eric}!") === (("hello", "world"))
+
+    eg := extract1("hello |{world}!", group = REGEX) === "world"
+    eg := extract2("|{hello} |{world}!", group = REGEX) === (("hello", "world"))
+    eg := extractAll("|{hello} |{world}, I'm |{Eric}!", group = REGEX) === Seq("hello", "world", "Eric")
+    eg := extract2("|{hello} |{world}, I'm |{Eric}!", group = REGEX) === (("hello", "world"))
     eg := extract1("hello world")=== "hello world"
-    eg := extract1("hello ${world}", group = "^+?".r) === "hello ${world}"
+    eg := extract1("hello |{world}", group = "^+?".r) === "hello |{world}"
   }
 
   "errors" -  new group {
-    eg := extract2("hello ${world}") must throwA[FailureException]
-    eg := extract1("hello ${world}", group = new Regex("][")) must throwA[ErrorException]
+    eg := extract2("hello |{world}", group = REGEX) must throwA[FailureException]
+    eg := extract1("hello |{world}", group = new Regex("][")) must throwAn[ErrorException]
   }
 }
