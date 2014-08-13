@@ -51,9 +51,9 @@ case class Env(arguments: Arguments           = Arguments(),
   lazy val executorService = ExecutionEnv.executor(arguments.threadsNb, "env"+hashCode.toString)
   lazy val timeout = (new Timeout).start
 
-  def shutdown: Unit = {
+  def shutdown(): Unit = {
     try     executorService.shutdownNow
-    finally timeout.stop
+    finally timeout.stop()
   }
 
   /** set new LineLogger */

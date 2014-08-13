@@ -66,7 +66,7 @@ trait SbtEvents {
   /** sbt task definition for this run */
   def taskDef: TaskDef
 
-  def error                          = handler.handle(SpecEvent(Status.Error))
+  def error()                        = handler.handle(SpecEvent(Status.Error))
   def error(exception: Throwable)    = handler.handle(SpecEvent(Status.Error, new OptionalThrowable(exception)))
   def failure(exception: Throwable)  = handler.handle(SpecEvent(Status.Failure, new OptionalThrowable(exception)))
   def succeeded()                    = handler.handle(SpecEvent(Status.Success))

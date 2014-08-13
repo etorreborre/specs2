@@ -11,7 +11,7 @@ trait LineLogger {
   def infoLog(msg: String)
   def failureLog(msg: String)
   def errorLog(msg: String)
-  def close
+  def close()
 }
 
 object LineLogger {
@@ -27,7 +27,7 @@ object LineLogger {
     def infoLog(msg: String)    = ()
     def failureLog(msg: String) = ()
     def errorLog(msg: String)   = ()
-    def close                   = ()
+    def close()                 = ()
   }
 
   /** this logger can be used for tests */

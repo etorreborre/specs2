@@ -100,7 +100,7 @@ trait ForEachWithCommandLineArguments[T] extends EachContext { outer: S2StringCo
  * Execute a step before all fragments
  */
 trait BeforeAll extends SpecificationStructure with FragmentsFactory {
-  def beforeAll: Unit
+  def beforeAll(): Unit
   override def map(fs: =>core.Fragments) = super.map(fs).prepend(fragmentFactory.step(beforeAll))
 }
 
@@ -108,7 +108,7 @@ trait BeforeAll extends SpecificationStructure with FragmentsFactory {
  * Execute a step after all fragments
  */
 trait AfterAll extends SpecificationStructure with FragmentsFactory {
-  def afterAll: Unit
+  def afterAll(): Unit
   override def map(fs: =>core.Fragments) = super.map(fs).append(fragmentFactory.step(afterAll))
 }
 
@@ -116,8 +116,8 @@ trait AfterAll extends SpecificationStructure with FragmentsFactory {
  * Execute a step before and after all fragments
  */
 trait BeforeAfterAll extends SpecificationStructure with FragmentsFactory {
-  def beforeAll: Unit
-  def afterAll: Unit
+  def beforeAll(): Unit
+  def afterAll(): Unit
   override def map(fs: =>core.Fragments) = super.map(fs).prepend(fragmentFactory.step(beforeAll)).append(fragmentFactory.step(afterAll))
 }
 

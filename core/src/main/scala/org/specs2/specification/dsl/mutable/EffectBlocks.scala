@@ -63,24 +63,24 @@ class EffectBlocks {
   /** @return the current path to root */
   def effectPath = EffectPath(blocksTree.lastChild.getOrElse(blocksTree).path.reverse.toIndexedSeq)
 
-  private def startBlock = effect {
+  private def startBlock() = effect {
     blocksTree = blocksTree.insertDownLast(nextNodeNumber)
   }
 
-  private def endBlock = effect {
+  private def endBlock() = effect {
     blocksTree = blocksTree.getParent
   }
 
-  def isAt(path: Option[EffectPath]) = path.exists(_ == effectPath)
+  def isAt(path: Option[EffectPath]) = path.contains(effectPath)
 
   def nestBlock(block: =>Any) = {
-    startBlock
+    startBlock()
     block
-    endBlock
+    endBlock()
   }
 
   /** stop creating fragments when the target is reached */
-  def stopEffects = stop = true
+  def stopEffects() = stop = true
 
 
   def addBlock[T](t: =>T) = effect {
