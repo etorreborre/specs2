@@ -3,7 +3,6 @@ package text
 
 import matcher._
 import specification.Grouped
-import DiffShortener._
 
 class EditDistanceSpec extends Specification with EditDistance with DataTables with Grouped { def is = s2"""
 

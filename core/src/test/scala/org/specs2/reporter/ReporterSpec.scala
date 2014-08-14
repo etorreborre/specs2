@@ -2,20 +2,17 @@ package org.specs2
 package reporter
 
 import control._
-import Actions._
 import main.Arguments
+import matcher._
+import execute._
 import LineLogger._
-import matcher.{ThrownExpectations, MustMatchers, StandardMatchResults, ControlMatchers}
-import ControlMatchers._
-import execute.Result
-import org.specs2.specification.create.S2StringContext
-import org.specs2.specification.dsl.FragmentsDsl
-import scalaz.concurrent.Task
-import data.Processes._
 import data.Fold
-import Printer._
+import specification.create.S2StringContext
+import specification.dsl.FragmentsDsl
 import specification.core._
 import specification.process._
+import ControlMatchers._
+import scalaz.concurrent.Task
 
 class ReporterSpec extends Specification with ForEachEnv with ThrownExpectations { def is = s2"""
 

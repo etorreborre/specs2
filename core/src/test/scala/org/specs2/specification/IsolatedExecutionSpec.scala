@@ -3,8 +3,6 @@ package specification
 
 import execute._
 import matcher._
-import scalaz.Scalaz._
-import scalaz.stream._
 import main.Arguments
 import core._
 import process._

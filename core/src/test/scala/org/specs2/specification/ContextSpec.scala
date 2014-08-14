@@ -2,11 +2,11 @@ package org.specs2
 package specification
 
 import io._
-import org.specs2.main.Arguments
-import org.specs2.specification.core.{Env, Fragments}
-import org.specs2.specification.create.FragmentsFactory
-import org.specs2.specification.dsl.FragmentsDsl
-import org.specs2.specification.process.DefaultExecutor
+import main.Arguments
+import specification.core.{Env, Fragments}
+import specification.create.FragmentsFactory
+import specification.dsl.FragmentsDsl
+import specification.process.DefaultExecutor
 import sys._
 import execute._
 import matcher._
@@ -139,7 +139,7 @@ class ContextSpec extends Specification with ResultMatchers with Groups { def is
   }
 }
 trait ContextData extends StandardResults with FragmentsFactory with ContextsForFragments with FragmentsDsl {
-  val factory = fragmentFactory; import factory._
+  val factory = fragmentFactory
 
   def okValue(name: String) = { println(name); success }
   def ok1 = okValue("e1")

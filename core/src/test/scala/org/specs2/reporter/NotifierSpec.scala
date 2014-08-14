@@ -3,11 +3,9 @@ package reporter
 
 import main._
 import control._
-import matcher.ControlMatchers._
-import execute.{Result, AsResult, Details}
+import execute._
 import io.StringOutput
 import specification.core.{ForEachEnv, Env}
-import specification.ForEach
 
 class NotifierSpec extends Specification with ForEachEnv { def is = s2"""
 

@@ -19,7 +19,6 @@ class StatsSpec extends Specification { import stats1._; def is = s2"""
 }
 
 import dsl1._
-import ValueChecks._
 
 object stats1 extends MustMatchers with StandardMatchResults with MatchersImplicits {
   import ProcessMatchers._

@@ -5,7 +5,6 @@ import execute._
 import execute.Skipped
 import execute.Pending
 import execute.Failure
-import scala.Some
 import execute.PendingException
 import execute.SkipException
 import execute.FailureException

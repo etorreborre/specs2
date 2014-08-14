@@ -5,7 +5,6 @@ import scalaz._
 import Trees._
 import Scalaz._
 import Tree._
-import text.Trim._
 import matcher.DataTables
 import specification._
 

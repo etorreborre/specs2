@@ -3,17 +3,15 @@ package specification
 
 import create.DefaultFragmentFactory
 import DefaultFragmentFactory._
-import org.specs2.reporter.Reporter
-import specification.script.Specification
+import reporter.Reporter
+import script.Specification
+import core._
+import process._
 import execute.Result
 import matcher.{ThrownExpectations, ResultMatchers}
-import scalaz.stream.{Process, Process1}
-import Process.{Env =>_,_}
 import control._
 import scalaz.{Tag =>_, _}, Scalaz._
 import main.Arguments
-import specification.core._
-import specification.process._
 
 class SelectorSpec extends Specification with Groups with ResultMatchers with ThrownExpectations { def is = s2"""
 

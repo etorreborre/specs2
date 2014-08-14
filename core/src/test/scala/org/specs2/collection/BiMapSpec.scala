@@ -2,7 +2,6 @@ package org.specs2
 package collection
 
 import specification._
-import matcher._
 import BiMap._
 
 class BiMapSpec extends script.Specification with BiMapExamples { def is = s2"""

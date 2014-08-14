@@ -2,15 +2,15 @@ package org.specs2
 package reporter
 
 import matcher.{StandardMatchResults, MustMatchers}
-import org.specs2.specification.dsl.FragmentsDsl
 import specification._
+import specification.dsl.FragmentsDsl
+import specification.create.{S2StringContext, DefaultFragmentFactory}
 import control._
 import text.Trim._
 import execute._
 import main.Arguments
 import LineLogger._
 import core._
-import org.specs2.specification.create.{S2StringContext, DefaultFragmentFactory}
 import process.{Stats, DefaultExecutor, StatisticsRepository}
 import io.StringOutput
 import text.AnsiColors
@@ -72,7 +72,6 @@ class TextPrinterSpec extends Specification with tp { def is = s2"""
 }
 
 trait tp extends MustMatchers with StandardMatchResults with StandardResults with S2StringContext with FragmentsDsl {
-  import org.specs2.specification.dsl1._
   import TextPrinterSpec._
   val factory = fragmentFactory; import factory._
 

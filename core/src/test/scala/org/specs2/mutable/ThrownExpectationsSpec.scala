@@ -2,9 +2,7 @@ package org.specs2
 package mutable
 
 import matcher._
-import org.specs2.control.Debug
-import specification._
-import execute.StandardResults._
+import control.Debug
 import execute._
 import ThrownExpectationsSpecData._
 

@@ -2,9 +2,8 @@ package org.specs2
 package io
 
 import mutable.Specification
-import org.specs2.control._
-import org.specs2.specification.core.{Fragment, SpecificationStructure}
-import specification._
+import control._
+import specification.core._
 import user.io.{LocationSpecification, LocationUnitSpecification}
 import Fragment._
 
