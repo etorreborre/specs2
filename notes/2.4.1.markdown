@@ -1,0 +1,10 @@
+Maintenance version
+
+## Improvements 
+ 
+ * Adding companion object to `ExceptionMatchers` for easy importing (by Zach Abbott)
+ * better display for `Traversable` differences when using equality
+
+
+ ==========================
+
