@@ -8,7 +8,6 @@ import io._
 import main.Arguments
 import mock.Mockito
 import specification.core._
-import reporter.Printer._
 import matcher.ControlMatchers._
 
 import scala.collection.mutable.ListBuffer

@@ -1,21 +1,15 @@
 package org.specs2
 package reporter
 
-import org.specs2.collection.Seqx
-import org.specs2.execute.Failure
-import org.specs2.execute.Pending
-import org.specs2.execute.Skipped
-import org.specs2.specification.core.SpecificationLink
-import org.specs2.specification.core._
+import collection.Seqx
+import specification.core._
 import data.Fold
 import specification.process.{Stats, Statistics}
 import io.Paths._
 import main.Arguments
-import scala.Some
 import scala.xml.NodeSeq
 import scalaz.concurrent.Task
 import scalaz.syntax.bind._
-import io._
 import control._
 import java.util.regex.Pattern._
 import java.io.File
@@ -24,14 +18,11 @@ import scalaz.std.list._
 import scalaz.std.anyVal._
 import scalaz.syntax.traverse._
 import scalaz.syntax.bind._
-import Actions._
 import html.HtmlTemplate
-import text.Trim._
 import scala.sys.process.ProcessLogger
 import execute._
 import text.NotNullStrings._
 import io.Paths.toPath
-import Seqx._
 
 trait HtmlPrinter extends Printer {
   def fold(env: Env, spec: SpecStructure): Fold[Fragment] = new Fold[Fragment] {

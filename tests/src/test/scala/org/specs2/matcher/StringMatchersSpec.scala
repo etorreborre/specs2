@@ -1,7 +1,6 @@
 package org.specs2
 package matcher
-import execute._
-import specification._
+
 import java.util.regex.Pattern
 
 class StringMatchersSpec extends Specification { def is = s2"""

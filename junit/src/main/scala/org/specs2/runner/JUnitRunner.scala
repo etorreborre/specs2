@@ -8,7 +8,6 @@ import reporter._
 import specification.core._
 import control._
 import scalaz.std.anyVal._
-import control.Actions._
 
 class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterable { outer =>
 

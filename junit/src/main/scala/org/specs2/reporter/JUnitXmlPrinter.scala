@@ -5,10 +5,8 @@ import org.junit.runner.Description
 import java.net.InetAddress
 import main.Arguments
 import execute._
-import specification._
 import data.Fold
 import scalaz.concurrent.Task
-import scalaz.stream.Process.{Env =>_,_}
 import control._
 import io.Paths._
 import scala.collection.JavaConversions._

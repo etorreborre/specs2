@@ -2,14 +2,12 @@ package org.specs2
 package html
 
 import scala.xml._
-import transform.{RuleTransformer, RewriteRule}
+import transform.RewriteRule
 import scalaz.{ Tree, TreeLoc, Scalaz, Show }
-import Scalaz._
 import Tree._
 import xml.Nodex._
 import java.net.URLDecoder
 import io.Paths._
-import scala.collection.mutable
 import data.UniqueNames
 
 /**

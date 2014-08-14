@@ -2,11 +2,9 @@ package examples
 
 import org.specs2.Specification
 import org.specs2.specification._
-import org.specs2.specification.create.{DefaultFragmentFactory, FragmentFactory}
+import org.specs2.specification.create.DefaultFragmentFactory
 import org.specs2.time._
 import org.specs2.execute._
-import org.specs2.matcher.{TerminationMatchers, MustMatchers}
-import scala.concurrent.duration._
 
 
 /**

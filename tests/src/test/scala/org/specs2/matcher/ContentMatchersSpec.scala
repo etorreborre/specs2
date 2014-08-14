@@ -6,7 +6,6 @@ import specification.BeforeAfterEach
 import control._
 import text.LinesContent
 import java.io.File
-import Actions._
 import ActionT._
 import scalaz.std.anyVal._
 import scalaz.syntax.bind._

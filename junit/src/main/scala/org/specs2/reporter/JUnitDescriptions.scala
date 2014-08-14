@@ -4,15 +4,12 @@ package reporter
 import org.junit.runner.Description
 import scalaz.{Tree, TreeLoc}
 import data.Trees._
-import TreeLoc._
 import Tree._
 import data.Trees
 import Trees._
 import specification._
 import core._
 import process._
-import text.Trim
-import Trim._
 import control.ExecutionOrigin
 import specification.core.{NoText, Fragment}
 import specification.create.DefaultFragmentFactory

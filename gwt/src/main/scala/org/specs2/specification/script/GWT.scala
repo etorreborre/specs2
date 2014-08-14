@@ -8,7 +8,6 @@ import shapeless.{HList, HNil, ::}
 import shapeless.ops.hlist.ToList
 import execute._
 import ResultLogicalCombinators._
-import scalaz.std.list._
 import scalaz.syntax.std.list._
 
 /**

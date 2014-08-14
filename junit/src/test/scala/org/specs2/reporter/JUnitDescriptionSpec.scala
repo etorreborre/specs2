@@ -1,11 +1,10 @@
 package org.specs2
 package reporter
 
-import org.specs2.specification.create.FragmentsFactory
-import org.specs2.specification.dsl.FragmentsDsl
+import specification.create.FragmentsFactory
+import specification.dsl.FragmentsDsl
 import specification.core._
 import matcher.{MustMatchers, StandardMatchResults}
-import data.Trees._
 import org.junit.runner.Description
 import execute.{Result, Success, StandardResults}
 import ShowDescription._

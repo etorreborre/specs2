@@ -3,13 +3,12 @@ package form
 
 import scala.xml._
 import collection.Seqx._
-import collection.Iterablex._
 import xml.Nodex._
 import text.Trim._
 import execute._
 import main.Arguments
 import StandardResults._
-import matcher.{DataTable, ResultMatchers}
+import matcher._
 import DecoratedProperties._
 import language.existentials
 import ResultLogicalCombinators._

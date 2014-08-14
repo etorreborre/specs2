@@ -4,13 +4,11 @@ package reporter
 import junit.framework.AssertionFailedError
 
 import scalaz.stream.{Process, Sink}
-import specification._
 import text.NotNullStrings._
 import scalaz.concurrent.Task
 import org.junit.runner.Description
 import org.junit.runner.notification.RunNotifier
 import specification.core._
-import Fragment._
 import text.AnsiColors
 import execute._
 import org.junit.ComparisonFailure

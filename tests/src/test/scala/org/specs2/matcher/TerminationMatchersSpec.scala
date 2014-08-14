@@ -3,7 +3,6 @@ package matcher
 
 import io.StringOutput
 import java.util.concurrent._
-import scalaz.concurrent._
 import specification._
 import scala.concurrent.duration._
 
