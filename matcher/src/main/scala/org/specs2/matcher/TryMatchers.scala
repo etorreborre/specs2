@@ -1,15 +1,10 @@
 package org.specs2
 package matcher
 
-import org.specs2.execute.{AsResult, Failure, Result}
-import util.{Try, Success => Succeeded, Failure => Failed}
+import util._
 import scala.reflect.ClassTag
-import AnyMatchers.beEqualTo
 import MatchersImplicits._
-import text.Regexes._
-import text.Quote._
 import text.NotNullStrings._
-import ValueChecks._
 
 /**
  * Matchers for util.Try instances

@@ -2,17 +2,14 @@ package org.specs2
 package specification
 package core
 
-import data.Processes
 import scalaz.concurrent.Task
-import execute.{AsResult, Skipped, Result}
+import execute.{AsResult, Result}
 import shapeless._
 import Fragments._
 import scalaz.Show
 import scalaz.syntax.show._
 import scalaz.stream._
 import Process._
-import control._
-import org.specs2.text.Trim._
 import Fragment._
 
 case class Fragments(contents: Process[Task, Fragment]) {

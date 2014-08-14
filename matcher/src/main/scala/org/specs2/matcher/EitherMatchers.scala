@@ -2,9 +2,6 @@ package org.specs2
 package matcher
 
 import text.NotNullStrings._
-import text.Quote._
-import org.specs2.execute._
-import ValueChecks._
 
 /**
  * Matchers for the Either datatype

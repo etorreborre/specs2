@@ -1,28 +1,20 @@
 package org.specs2
 package reporter
 
-import org.specs2.matcher.DataTable
-import specification._
-import scalaz.stream._
-import scalaz.std.anyVal._
-import scalaz.stream.Process.{Env => E, _}
-import scalaz.concurrent.Task
-import data.Processes._
+import matcher.DataTable
+import specification.core._
+import specification.process._
+import text.Trim
+import Trim._
 import data.Fold
+import Fold._
 import execute._
 import main.Arguments
-import LogLine._
-import org.specs2.text.Trim
-import Trim._
+import scalaz.stream._
+import scalaz.stream.Process.{Env =>_,_}
+import scalaz.concurrent.Task
 import scalaz.concurrent.Task._
-import reflect.Classes
-import org.specs2.control._
-import Actions._
-import Fold._
-import specification.core._
-import specification.core._
-import execute.FailureDetails
-import specification.process._
+import LogLine._
 
 trait TextPrinter extends Printer {
 

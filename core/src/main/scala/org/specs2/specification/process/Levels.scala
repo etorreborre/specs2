@@ -3,17 +3,13 @@ package specification
 package process
 
 import scalaz.{Tree, TreeLoc}
-import scalaz.syntax.foldable._
-import scalaz.std.list._
 import Tree._
-import TreeLoc._
 import data.Trees._
 import scalaz.stream._
 import specification.create._
 import DefaultFragmentFactory._
 import Process._
 import specification.core._
-import Fragment._
 import scala.math._
 
 trait Levels {

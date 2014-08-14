@@ -11,15 +11,12 @@ import control.Throwablex
 import Throwablex._
 import scalaz.\&/
 import scalaz.std.anyVal._
-import scalaz.syntax.bind._
 import scalaz.syntax.traverse._
 import scalaz.std.list._
-import scalaz.std.vector._
 import reporter.SbtLineLogger
 import reflect.Classes
 import reporter.Printer._
 import specification.core._
-import text.NotNullStrings._
 
 case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader) extends _root_.sbt.testing.Runner {
   private lazy val commandLineArguments = Arguments(args:_*)

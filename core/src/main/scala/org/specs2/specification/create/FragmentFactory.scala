@@ -2,10 +2,9 @@ package org.specs2
 package specification
 package create
 
-import org.specs2.execute.{Result, Success, AsResult}
-import org.specs2.data.{NamedTag, Tag}
+import org.specs2.execute.{Result, AsResult}
+import org.specs2.data.NamedTag
 import specification.core._
-import Description._
 import Execution._
 import control.ImplicitParameters._
 import specification.core.Text

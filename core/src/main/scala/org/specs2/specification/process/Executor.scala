@@ -12,9 +12,8 @@ import scalaz.stream.Process.{Env =>_,_}
 import execute._
 import scalaz.{Success=>_, Failure=>_,_}, Scalaz._
 import specification.core._
-import Description._
 import time.SimpleTimer
-import scalaz.concurrent.{Future, Task}
+import scalaz.concurrent.Task
 import scala.concurrent.duration.Duration
 import Processes._
 

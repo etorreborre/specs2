@@ -5,7 +5,6 @@ package mutable
 
 import execute.{Error, Result}
 import specification.core.Fragment
-import specification.create.FragmentsFactory
 
 trait ActionDsl extends FragmentBuilder with org.specs2.specification.dsl.ActionDsl {
   override def action(a: =>Any) = addFragment(super.action(a))

@@ -5,7 +5,7 @@ import java.util.concurrent.ExecutorService
 
 import execute._
 import org.specs2.control.ImplicitParameters.ImplicitParam
-import org.specs2.specification.core.{Env, Location, Fragments, Execution}
+import org.specs2.specification.core.{Env, Execution}
 import org.specs2.specification.create.{S2StringContext, InterpolatedFragment}
 
 /**

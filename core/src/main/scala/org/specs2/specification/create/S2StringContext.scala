@@ -5,18 +5,15 @@ package create
 import java.util.concurrent.ExecutorService
 
 import execute._
-import org.specs2.control.TraceLocation
-import org.specs2.specification.process.{StatisticsRepository, Executor}
+import control.TraceLocation
+import process._
+import core._
 import text.Interpolated
-import reflect.MacroContext._
-import reflect.Macros._
 import text.NotNullStrings._
 import text.Trim._
-import org.specs2.main.{CommandLine, Arguments}
-import specification.core._
-import execute.DecoratedResult
-import specification.core.Text
-
+import reflect.MacroContext._
+import reflect.Macros._
+import main.{CommandLine, Arguments}
 import scala.concurrent.ExecutionContext
 
 /**

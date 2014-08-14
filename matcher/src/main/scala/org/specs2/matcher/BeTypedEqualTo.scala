@@ -1,7 +1,6 @@
 package org.specs2
 package matcher
 
-import execute._
 import text.Quote._
 import text.NotNullStrings._
 import text.Trim._

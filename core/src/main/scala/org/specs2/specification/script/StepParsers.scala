@@ -6,7 +6,6 @@ import util.matching.Regex
 import control.ImplicitParameters
 import control.Exceptions._
 import text.RegexExtractor
-import RegexExtractor._
 
 /**
  * StepParsers are using delimiters or regular expressions with groups to extract values from a piece of text

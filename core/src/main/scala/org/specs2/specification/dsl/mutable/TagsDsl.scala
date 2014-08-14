@@ -3,7 +3,7 @@ package specification
 package dsl
 package mutable
 
-import data.{Tag, NamedTag}
+import data._
 import core.{Fragments, Fragment}
 
 trait TagsDsl extends org.specs2.specification.dsl.TagsDsl with MutableFragmentBuilder { outer =>

@@ -4,7 +4,6 @@ package dsl
 package mutable
 
 import execute.AsResult
-import control.ImplicitParameters._
 import org.specs2.specification.script.StepParser
 import specification.core._
 import specification.create.FragmentsFactory

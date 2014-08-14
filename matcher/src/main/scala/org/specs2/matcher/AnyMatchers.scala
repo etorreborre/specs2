@@ -1,10 +1,7 @@
 package org.specs2
 package matcher
 
-import text.Trim._
 import text.Quote._
-import text.NotNullStrings._
-import execute._
 import scala.reflect.ClassTag
 
 /**

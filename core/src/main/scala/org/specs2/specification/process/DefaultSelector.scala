@@ -5,11 +5,9 @@ package process
 import scalaz.stream._
 import scalaz.stream.Process.{Env =>_,_}
 import data._
-import main._
 import scalaz.syntax.foldable._
 import scalaz.std.list._
 import data.Processes._
-import control._
 import specification.core._
 
 /**

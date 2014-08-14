@@ -6,15 +6,10 @@ import specification.process._
 import core._
 import scalaz.concurrent.Task
 import control._
-import Actions._
 import scalaz.{Writer => _, _}, Scalaz._
-import Task._
 import scalaz.stream._
 import data._
-import Processes._
 import Fold._
-import Printer._
-import SpecStructure._
 import Statistics._
 
 /**

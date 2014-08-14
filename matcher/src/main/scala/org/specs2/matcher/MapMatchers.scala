@@ -3,7 +3,6 @@ package matcher
 
 import text.Quote._
 import text.Plural._
-import MatchResult._
 import scalaz._
 import Scalaz._
 /**

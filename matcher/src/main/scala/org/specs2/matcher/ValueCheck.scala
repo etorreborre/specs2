@@ -2,7 +2,6 @@ package org.specs2
 package matcher
 
 import execute._
-import MatchersImplicits._
 import text.Quote._
 /**
  * Common interface for checks of a value of type T:

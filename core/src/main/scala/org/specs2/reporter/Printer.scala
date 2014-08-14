@@ -1,31 +1,16 @@
 package org.specs2
 package reporter
 
-import specification._
 import scala.reflect.ClassTag
-import scalaz.{\/, -\/, \/-}
-import scalaz.stream.Process
-import scalaz.stream.io
+import scalaz.{-\/, \/-}
 import scalaz.std.anyVal._
 import scalaz.syntax.bind._
-import scalaz.stream.Process.{Env => E, _}
 import scalaz.concurrent.Task
-import data.Processes._
 import data.Fold
-import execute._
 import main.Arguments
-import LogLine._
-import text.Trim
-import Trim._
-import scalaz.concurrent.Task._
 import reflect.Classes
 import org.specs2.control._
-import Actions._
-import Fold._
 import specification.core._
-import specification.core._
-import execute.FailureDetails
-import specification.process._
 
 /**
  * A Printer is essentially defined by a Fold that can run

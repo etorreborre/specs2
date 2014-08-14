@@ -2,8 +2,6 @@ package org.specs2
 package matcher
 
 import scalaz._
-import reflect.Anyx._
-import execute._
 import text.Quote._
 import text.NotNullStrings._
 import Expectable._

@@ -1,9 +1,7 @@
 package org.specs2
 package matcher
 
-import text.Quote._
 import execute._
-import text.NotNullStrings._
 import ValueChecks._
 
 /**

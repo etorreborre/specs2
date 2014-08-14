@@ -4,11 +4,8 @@ package dsl
 
 import main.Arguments
 import execute.AsResult
-import control.ImplicitParameters._
-import org.specs2.data.NamedTag
-import specification.core._
-import org.specs2.specification.create.{FragmentsFactory, DelegatedFragmentFactory}
-import scalaz.std.vector._
+import core._
+import create._
 import scalaz.syntax.std.vector._
 
 trait FragmentsDsl extends FragmentsFactory with TitleDsl with ExampleDsl with LinkDsl with TagsDsl with ActionDsl { outer =>

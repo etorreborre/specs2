@@ -263,9 +263,7 @@ class OrNotMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult
  *
  * A MatchResult is a Functor where the fmap function acts on the embedded Expectable value (which itself is a Functor)
  */
-private[specs2]
 object MatchResult {
-  import Expectable._
 
   implicit val MatchResultFunctor: Functor[MatchResult] = new Functor[MatchResult] {
     def map[A, B](m: MatchResult[A])(f: A => B) = m match {

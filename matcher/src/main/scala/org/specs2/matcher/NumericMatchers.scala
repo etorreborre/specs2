@@ -1,8 +1,6 @@
 package org.specs2
 package matcher
 
-import text.Quote._
-
 /**
  * Matchers for Numerical values
  */

@@ -4,7 +4,6 @@ import org.specs2.control.Actions
 import org.specs2.main.Arguments
 import org.specs2.runner.{Runner, ClassRunner}
 import org.specs2.specification.core.{Env, SpecificationStructure}
-import Actions._
 import scalaz._, Scalaz._
 
 object run extends ClassRunner {

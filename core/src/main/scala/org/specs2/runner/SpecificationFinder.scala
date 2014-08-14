@@ -2,19 +2,15 @@ package org.specs2
 package runner
 
 import java.util.regex._
-import org.specs2._
 import control._
 import reflect.Classes
 import specification.core._
 import text.SourceFile._
 import io._
-import Actions._
 import scalaz.std.anyVal._
 import scalaz.syntax.bind._
 import scalaz.syntax.traverse._
-import scalaz.std.vector._
 import scalaz.std.list._
-import Classes._
 
 /**
  * This trait loads specifications found on a given source directory based
