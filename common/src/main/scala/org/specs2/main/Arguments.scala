@@ -5,7 +5,6 @@ import org.specs2.reflect.Classes
 
 import scala.reflect.ClassTag
 import scalaz.{Memo, Monoid, Scalaz}
-import Scalaz._
 import control._
 import Exceptions._
 import text._

@@ -1,7 +1,6 @@
 package org.specs2
 package io
 
-import control.Throwablex._
 import control.TraceLocation
 
 /**

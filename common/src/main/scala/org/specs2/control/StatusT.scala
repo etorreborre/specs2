@@ -1,11 +1,7 @@
 package org.specs2
 package control
 
-import scalaz.{\/, \&/, Equal, Monad, Functor}, \&/._, \/._
-import scalaz.std.option._
-import scalaz.std.AllInstances._
-import scalaz.syntax.std.option._
-import scalaz.syntax.id._
+import scalaz.{\/, \&/, Equal, Monad, Functor}, \&/._
 import scalaz.syntax.monad._
 import scalaz.effect._
 

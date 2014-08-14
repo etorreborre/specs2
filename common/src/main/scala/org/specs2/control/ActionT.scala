@@ -8,7 +8,6 @@ import \&/._
 import scalaz.syntax
 import scalaz.syntax.monad._
 import scalaz.effect._
-import scalaz.std.anyVal._
 import scalaz.concurrent.Task
 
 /**

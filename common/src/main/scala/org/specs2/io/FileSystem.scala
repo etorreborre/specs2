@@ -2,9 +2,7 @@ package org.specs2
 package io
 
 import control._
-import Actions._
 import ActionT._
-import data.Processes
 import scalaz.{std, syntax, stream, concurrent}
 import std.anyVal._
 import syntax.bind._

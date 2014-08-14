@@ -3,7 +3,6 @@ package json
 
 import util.matching.Regex
 import text.Regexes._
-import text.NotNullStrings._
 
 /**
  * This trait provides utility functions for Json objects

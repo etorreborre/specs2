@@ -1,7 +1,6 @@
 package org.specs2
 package text
 
-import collection._
 import java.io.StringWriter
 import java.util.regex.Pattern
 import util.matching.Regex

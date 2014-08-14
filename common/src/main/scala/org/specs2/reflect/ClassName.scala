@@ -5,7 +5,6 @@ import control.Exceptions._
 import scala.reflect.NameTransformer
 import control.Exceptions._
 import text.CamelCase._
-import ClassName._
 
 /**
  * Reflection methods for Class names

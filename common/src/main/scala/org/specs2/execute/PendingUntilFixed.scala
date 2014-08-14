@@ -1,7 +1,6 @@
 package org.specs2
 package execute
 
-import control.Exceptions._
 import text.Quote._
 
 /**

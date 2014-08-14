@@ -2,12 +2,8 @@ package org.specs2
 package io
 
 import java.io._
-import scala.xml.NodeSeq
-import control.Exceptions._
 import scala.xml.parsing._
 import scala.io.Source
-import scala.io.Source._
-import xml.Nodex._
 import text.MD5
 
 

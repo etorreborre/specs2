@@ -2,8 +2,6 @@ package org.specs2
 package execute
 
 import text.Message._
-import ResultLogicalCombinators._
-import control.Exceptions._
 
 /**
  * This trait provides logical combinators to Results: and, or, not

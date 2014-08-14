@@ -210,7 +210,7 @@ object build extends Build {
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
     maxErrors := 20,
     incOptions := incOptions.value.withNameHashing(true),
-    scalacOptions in GlobalScope ++= Seq("-Xcheckinit", "-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_"),
+    scalacOptions in GlobalScope ++= Seq("-Ywarn-unused-import", "-Xcheckinit", "-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_"),
     scalacOptions in Test ++= Seq("-Yrangepos")
   )
 

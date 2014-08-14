@@ -7,7 +7,6 @@ import ClassName._
 import scala.reflect.ClassTag
 import ClassName._
 import control._
-import Actions._
 import scalaz.{\/-, -\/, \/}
 import scalaz.std.anyVal._
 import scalaz.syntax.std.option._

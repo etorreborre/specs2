@@ -2,7 +2,6 @@ package org.specs2
 package collection
 
 import scalaz._
-import Generator._
 import std.iterable._
 import scala.collection.mutable.ListBuffer
 

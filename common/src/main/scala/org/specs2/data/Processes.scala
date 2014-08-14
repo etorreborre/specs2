@@ -8,8 +8,7 @@ import Process._
 import scalaz.\/._
 import scalaz.concurrent.{Future, Task}
 import Task._
-import scalaz.syntax.bind._
-import scalaz.{Nondeterminism, Monoid}
+import scalaz.Nondeterminism
 
 /**
  * Useful functions for processes
