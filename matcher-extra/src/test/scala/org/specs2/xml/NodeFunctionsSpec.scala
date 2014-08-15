@@ -2,7 +2,6 @@ package org.specs2
 package xml
 
 import specification._
-import NodeFunctions._
 import Nodex._
 import matcher.XmlMatchers
 

@@ -6,7 +6,6 @@ import org.specs2.text._
 import io._
 import MatchResult._
 import scalaz.Scalaz._
-import MatchersImplicits._
 
 /**
  * The ContentMatchers trait provides matchers to make comparisons between files, sequences,...

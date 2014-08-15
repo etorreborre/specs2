@@ -1,9 +1,7 @@
 package org.specs2
 
-import org.specs2.guide.{UserGuideVariables, Specs2Variables}
+import org.specs2.guide._
 import io.FileSystem
-import scala.io.Source
-import Specs2Variables._
 
 class Index extends Specification with FileSystem with UserGuideVariables { def is =
   "create a new index page"    ! createPage("index.html", indexBody)^

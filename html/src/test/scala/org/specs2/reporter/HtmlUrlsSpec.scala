@@ -1,11 +1,11 @@
 package org.specs2
 package reporter
 
+
+/*
 import mutable.Specification
 import matcher.ResultMatchers
 import scala.xml.NodeSeq
-
-/*
 class HtmlUrlsSpec extends Specification with ResultMatchers with HtmlUrls {
   skipAllIf(isDead("http://www.google.com"))
 

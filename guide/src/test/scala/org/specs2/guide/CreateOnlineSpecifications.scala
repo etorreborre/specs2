@@ -2,9 +2,8 @@ package org.specs2
 package guide
 
 import matcher.Matcher
-import org.specs2.specification.core.{Fragments, FragmentsContinuation, foreachInSequence}
+import org.specs2.specification.core.{Fragments, foreachInSequence}
 import specification.dsl.Online
-import FragmentsContinuation._
 
 object CreateOnlineSpecifications extends UserGuidePage { def is = s2"""
  Most of the specifications we write are known up front because this is precisely what guides the construction of our systems. However in some systems data comes first and drives what we can do with the system. For example we want to check that:

@@ -82,13 +82,9 @@ object MatcherMacros extends MatcherMacros {
     }
   }
 
-  // TODO 2.11 Remove this after dropping 2.10.x support.
-  private object HasCompat { val compat = ??? }; import HasCompat._
-
   /** set a specific position to the elements of a tree  */
   private def setPosition(c: Context)(position: c.Position) = {
     import c.universe._
-    import compat._
 
     new Transformer {
       override def transform(tree: Tree) = tree match {

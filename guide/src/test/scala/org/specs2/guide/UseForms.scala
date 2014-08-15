@@ -468,8 +468,6 @@ ${ Order(123).hasSequence(
 
 One very popular type of Forms are *decision tables*. A decision table is a Form where, on each row, several values are used for a computation and the result must be equal to other values on the same row. A very simple example of this is a calculator: ${snippet{
 
-import Form._
-
 case class Calculator(form: Form = Form()) {
   def tr(a: Int, b: Int, a_plus_b: Int, a_minus_b: Int) = Calculator {
     def plus = prop(a + b)(a_plus_b)
@@ -532,7 +530,6 @@ Note that the Calculator class is not, in itself an Example. But there is an imp
                                                                                                                    """
 
   import Form._
-  import specification.Forms._
 
   case class Order(orderId: Int) {
     lazy val actualLines = // those should be extracted from the actual order entity retrieved by id

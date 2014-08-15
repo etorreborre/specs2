@@ -5,7 +5,6 @@ import org.scalacheck.{ Arbitrary, Shrink, Prop }
 
 import scalaz._, Scalaz._
 import MatchResultLogicalCombinators._
-import execute.ResultLogicalCombinators
 
 /**
  * This trait provides matchers for some Scalaz (http://github/scalaz/scalaz) datatypes.
