@@ -2,6 +2,7 @@ package org.specs2
 package analysis
 
 import data.IncludedExcluded
+import io._
 import util.Properties._
 /**
  * This trait allows to define expected dependencies between packages layers
@@ -25,8 +26,8 @@ trait LayersAnalysis extends ClassycleDependencyFinder {
    * If those packages share a common prefix, it will be stored in the `prefix` member
    */
   case class Layer(names: Set[String], prefix: String = "",
-                   sourceDir: String = "src/main/scala/",
-                   targetDir: String = "target/scala-"+releaseVersion.orElse(developmentVersion).getOrElse("2.9.1")+"/classes/",
+                   sourceDir: DirectoryPath = "src" </> "main" </> "scala",
+                   targetDir: DirectoryPath = "target" </> FileName.unsafe("scala-"+releaseVersion.orElse(developmentVersion).getOrElse("2.9.1")) </> "classes",
                    included: Seq[String] = Seq(), excluded: Seq[String] = Seq()) {
     /** specify a prefix for this layer packages */
     def withPrefix(p: String) = copy(prefix = if (this.prefix.isEmpty) p else p+"."+this.prefix)

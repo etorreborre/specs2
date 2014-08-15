@@ -13,7 +13,7 @@ import io._
 trait ClassycleDependencyFinder extends DependencyFinder {
   val fs = FileReader
 
-  def getPackageDependents(packageName: String, sourceDir: String, targetDir: String): Seq[Dependency] = {
+  def getPackageDependents(packageName: String, sourceDir: DirectoryPath, targetDir: DirectoryPath): Seq[Dependency] = {
 
     val analyser = new Analyser(fs.filePaths(targetDir, "**/*.class").toArray)
     analyser.createClassGraph()
