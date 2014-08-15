@@ -2,8 +2,6 @@ package org.specs2
 package guide
 package matchers
 
-import form.Card
-
 object OptionEitherMatchers extends UserGuideCard {
   def title = "Option/Either"
   def text = s2"""
