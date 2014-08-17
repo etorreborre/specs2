@@ -4,6 +4,8 @@ package analysis
 import classycle._
 import reflect._
 import io._
+import control._
+import scalaz.std.anyVal._
 
 /**
  * Implementation of the dependency finder using the classycle library.
@@ -11,19 +13,20 @@ import io._
  * This implementation is faster and simpler than the CompilerDependencyFinder trait
  */
 trait ClassycleDependencyFinder extends DependencyFinder {
-  val fs = FileReader
+  val fs = FilePathReader
 
-  def getPackageDependents(packageName: String, sourceDir: DirectoryPath, targetDir: DirectoryPath): Seq[Dependency] = {
+  def getPackageDependents(sourceDir: DirectoryPath, targetDir: DirectoryPath): String => Action[Seq[Dependency]] = (packageName: String) => {
+    fs.filePaths(targetDir, "**/*.class").map { paths =>
+      val analyser = new Analyser(paths.map(_.path).toArray)
+      analyser.createClassGraph()
 
-    val analyser = new Analyser(fs.filePaths(targetDir, "**/*.class").toArray)
-    analyser.createClassGraph()
-
-    analyser.getClassGraph.collect {
-      case classVertex if ClassName.packageName(classVertex.getAttributes.asInstanceOf[ClassAttributes].getName) == packageName =>
-        (0 until classVertex.getNumberOfIncomingArcs).map { i =>
-          Dependency(ClassName.className(classVertex.getAttributes.asInstanceOf[ClassAttributes].getName),
-            ClassName.className(classVertex.getTailVertex(i).getAttributes.asInstanceOf[ClassAttributes].getName))
-        }
-    }.flatMap(identity).distinct
+      analyser.getClassGraph.collect {
+        case classVertex if ClassName.packageName(classVertex.getAttributes.asInstanceOf[ClassAttributes].getName) == packageName =>
+          (0 until classVertex.getNumberOfIncomingArcs).map { i =>
+            Dependency(ClassName.className(classVertex.getAttributes.asInstanceOf[ClassAttributes].getName),
+              ClassName.className(classVertex.getTailVertex(i).getAttributes.asInstanceOf[ClassAttributes].getName))
+          }
+      }.flatMap(identity).distinct.toSeq
+    }
   }
 }

@@ -2,7 +2,7 @@ package org.specs2
 package guide
 package matchers
 
-import form.Card
+import io._
 
 object DependencyMatchers extends UserGuideCard with specification.Analysis with UserGuideVariables {
   def title = "Dependency Matchers"
@@ -29,7 +29,7 @@ The above expression defines layers as an ordered list of `String`s containing s
 
 By default, the packages are supposed to correspond to directories in the `src/target/scala-<version>/classes` directory. If your project has a different layout you can declare another target directory: ${snippet{
 
-layers("...").inTargetDir("out/classes")
+layers("...").inTargetDir("out" </> "classes")
 }}
 
 ### Inclusion/Exclusion

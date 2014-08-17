@@ -13,15 +13,15 @@ import text.MD5
 trait FileReader {
 
   /** @return the lines of a file */
-  def readLines(path: FilePath): IndexedSeq[String] = {
-    if (exists(path)) scala.io.Source.fromFile(path.path).getLines.toIndexedSeq
-    else              IndexedSeq()
+  def readLines(path: String): IndexedSeq[String] = {
+    if (hasContents(path)) scala.io.Source.fromFile(path).getLines.toIndexedSeq
+    else                   IndexedSeq()
   }
 
   /** @return the bytes of a file */
-  def readBytes(path: FilePath): Array[Byte] = {
-    if (exists(path)) {
-      val stream = new BufferedInputStream(new FileInputStream(path.path))
+  def readBytes(path: String): Array[Byte] = {
+    if (hasContents(path)) {
+      val stream = new BufferedInputStream(new FileInputStream(path))
       try     Stream.continually(stream.read).takeWhile(-1 !=).map(_.toByte).toArray
       finally stream.close
     } else Array[Byte]()
@@ -32,8 +32,8 @@ trait FileReader {
    * @param path the path of the file to read
    * @return the content of the file at path
    */
-  def readFile(path: FilePath): String = {
-    if (exists(path)) {
+  def readFile(path: String): String = {
+    if (hasContents(path)) {
       def appendLines(result: StringBuffer, in: BufferedReader, line: String): Unit = {
         if (line != null) {
           result.append(line)
@@ -50,8 +50,8 @@ trait FileReader {
     } else ""
   }
 
-  /** @return true if this path is an existing file */
-  def exists(path: FilePath) = new File(path).exists
+  /** @return true if this path is an existing file which is not a directory */
+  private def hasContents(path: String) = new File(path).exists && !new File(path).isDirectory
 
   /**
    * @return true if the File represented by this path is a directory
@@ -71,9 +71,7 @@ trait FileReader {
   def inputStream(filePath: String): java.io.InputStream = new java.io.FileInputStream(filePath)
 
   /** @return the MD5 hash of a file */
-  def md5(f: File): String =
-    if (f.isDirectory) "<this is a directory - we can't get an MD5>"
-    else MD5.md5Hex(readBytes(FilePath.unsafe(f)))
+  def md5(f: File): String = MD5.md5Hex(readBytes(f.getPath))
 
   /** @return the path of a File relative to a base file */
   def fromBaseFile(base: File) = (aFile: File) => Paths.from(base.getPath)(aFile.getPath)

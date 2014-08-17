@@ -7,7 +7,10 @@ import org.scalacheck._
 import Prop._
 import collection.SeqGenerators._
 import collection.Iterablex._
+import io.DirectoryPath
+import control.Actions
 import specification._
+import scalaz.std.anyVal._
 
 class LayersAnalysisSpec extends script.Specification with DataLayers with Grouped { def is = s2"""
 
@@ -54,8 +57,8 @@ trait DataLayers extends SpecificationLike with DependencyMatchers with ScalaChe
   lazy val packageNames = Seq("a", "b", "c", "d", "e", "f")
 
   // return dependent packages according to the alphabetical order
-  override def getPackageDependents(packageName: String, sourceDir: String, targetDir: String) =
-    dependentPackages(packageName).map(p => Dependency(packageName+".AClass", p+".ADependentClass"))
+  override def getPackageDependents(sourceDir: DirectoryPath, targetDir: DirectoryPath) = (packageName: String) =>
+    Actions.ok(dependentPackages(packageName).map(p => Dependency(packageName+".AClass", p+".ADependentClass")))
 
   // dependent packages are all the packages which are lower is the alphabetical order
   def dependentPackages(packageName: String) = packageNames.slice(0, packageNames.indexOf(packageName))

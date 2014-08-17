@@ -9,7 +9,7 @@ import org.specs2.text.Message.concat
 import org.specs2.text.NotNullStrings._
 import org.specs2.text.Sentences._
 
-import scalaz.Monoid
+import scalaz.{\&/, Monoid}
 import scalaz.Scalaz._
 /**
  * The result of an execution, either:
@@ -219,6 +219,9 @@ object Result {
     case r: Result => r
     case _         => Success()
   }
+
+  implicit def theseToResult(these: String \&/ Throwable): Result =
+    these.fold(s => Error(s), t => Error(Error.ThrowableException(t)), (s, t) => new Error(s, Error.ThrowableException(t)))
 }
 
 trait Results {

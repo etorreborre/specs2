@@ -2,6 +2,9 @@ package org.specs2
 package matcher
 
 import analysis._
+import execute.Result
+import control._
+
 /**
  * The dependency matchers trait provides a way to specify the dependencies that should be verified in your project
  * and then to check that there's no unwanted dependency in the code.
@@ -35,8 +38,11 @@ trait DependencyBaseMatchers extends LayersAnalysis {
    */
   class LayersDependenciesMatcher extends Matcher[Layers] {
     def apply[S <: Layers](ls: Expectable[S]) = {
-      val unsatisfied = ls.value.unsatisfied
-      result(unsatisfied.isEmpty, "all dependencies are satisfied", "those dependencies are not satisfied:\n"+unsatisfied.showBreaks, ls)
+      ls.value.unsatisfied.execute(noLogging).unsafePerformIO.fold(
+        unsatisfied => result(unsatisfied.isEmpty, "all dependencies are satisfied", "those dependencies are not satisfied:\n"+unsatisfied.showBreaks, ls),
+        issue       => result(Result.theseToResult(issue), ls)
+      )
+
     }
   }
 
