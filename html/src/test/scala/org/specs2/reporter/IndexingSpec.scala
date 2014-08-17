@@ -26,8 +26,8 @@ class IndexingSpec extends Specification { def is = s2"""
     runFold(Process.emitAll(pages), indexFold(path)).run
 
     val expected =
-    s"""|var tipuesearch = {"pages": [{"title":"page 1", "text":"content1", "tags":[], "loc":"page1"},
-        |{"title":"page 2", "text":"content2", "tags":[], "loc":"page2"}]}""".stripMargin
+    s"""|var tipuesearch = {"pages": [{"title":"page 1", "text":"content1", "tags":"", "loc":"page1"},
+        |{"title":"page 2", "text":"content2", "tags":"", "loc":"page2"}]}""".stripMargin
 
     FileSystem.readFile(path).map(_.trim) must beOk(===(expected))
   }

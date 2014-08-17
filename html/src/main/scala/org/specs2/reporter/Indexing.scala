@@ -66,7 +66,7 @@ object Index {
     index.entries.map(page)
 
   def page(entry: IndexEntry): String =
-    s"""{"title":"${entry.title}", "text":"${entry.text}", "tags":${entry.tags.map("\""+_+"\"").mkString("[",",", "]")}, "loc":"${entry.path}"}"""
+    s"""{"title":"${entry.title}", "text":"${entry.text.replace("\n", "")}", "tags":${entry.tags.mkString("\""," ", "\"")}, "loc":"${entry.path.path}"}"""
 
 }
 
