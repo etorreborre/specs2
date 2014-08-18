@@ -70,9 +70,10 @@ trait ResultLogicalCombinators extends Results {
      */
     def or(other: =>Result): Result = {
       lazy val o = ResultExecution.execute(other)
+
       r match {
         case Success(_,_)         => r.addExpectationsNb(1)
-        case f @ Failure(_,_,_,_) => {
+        case f @ Failure(_,_,_,_) =>
           o match {
             case s @ Success(m, exp)    => if (r.message == m) r.addExpectationsNb(s.expectationsNb)
             else Success(r.message+" and "+m, exp, r.expectationsNb + s.expectationsNb)
@@ -80,25 +81,23 @@ trait ResultLogicalCombinators extends Results {
             case DecoratedResult(d, r1) => DecoratedResult(d, r.or(r1))
             case _                      => r.addExpectationsNb(o.expectationsNb).mapExpected((e: String) => concat(e, o.expected))
           }
-        }
-        case Pending(_) | Skipped(_,_)     => {
+
+        case Pending(_) | Skipped(_,_)     =>
           o match {
             case s @ Success(_,_)       => s
             case f @ Failure(_,_,_,_)   => f
             case DecoratedResult(d, r1) => DecoratedResult(d, r.or(r1))
             case _                      => o
           }
-        }
-        case d @ DecoratedResult(_,_)     => {
+
+        case d @ DecoratedResult(_,_)     =>
           o match {
-            case DecoratedResult(d2, r2) => {
-              val orResult = (d.result or r2)
+            case DecoratedResult(d2, r2) =>
+              val orResult = d.result or r2
               if (orResult.isSuccess) DecoratedResult(d.decorator, orResult)
               else                    DecoratedResult(d2, orResult)
-            }
             case other1                   => DecoratedResult(d.decorator, d.result or other1)
           }
-        }
         case Error(_, _) => other
       }
     }
@@ -113,11 +112,11 @@ trait ResultLogicalCombinators extends Results {
     }
 
     /** only consider this result if the condition is true */
-    def when(b: Boolean, m: String= ""): Result= if (b) res else Success(m)
+    def when(condition: Boolean, message: String= ""): Result= if (condition) res else Success(message)
     /** only consider this result if the condition is false */
-    def unless(b: Boolean, m: String= ""): Result = res.when(!b, m)
+    def unless(condition: Boolean, message: String= ""): Result = res.when(!condition, message)
     /** when the condition is true the result it taken as is, when it's false, take its negation */
-    def iff(b: Boolean): Result = if (b) res else res.not
+    def iff(condition: Boolean): Result = if (condition) res else res.not
   }
 }
 
