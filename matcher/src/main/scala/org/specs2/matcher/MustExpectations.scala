@@ -1,6 +1,8 @@
 package org.specs2
 package matcher
 
+import org.specs2.execute.Result
+
 
 /**
  * This trait provides implicit definitions to transform any value into a MustExpectable
@@ -10,6 +12,7 @@ trait MustExpectations extends Expectations {
     override private[specs2] val desc = tm.desc
     override private[specs2] val showValueAs = tm.showValueAs
     override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
+    override def checkResult(r: Result): Result = checkResultFailure(r)
   }
   implicit def theValue[T](t: =>T): MustExpectable[T] = createMustExpectable(t)
   implicit def theBlock(t: =>Nothing): MustExpectable[Nothing] = createMustExpectable(t)
@@ -40,6 +43,7 @@ trait MustThrownExpectations extends ThrownExpectations with MustExpectations {
     override private[specs2] val showValueAs = tm.showValueAs
     override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
     override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
+    override def checkResult(r: Result): Result = checkResultFailure(r)
   }
   override protected def createMustExpectable[T](t: =>T) = new MustExpectable(() => t) {
     override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
