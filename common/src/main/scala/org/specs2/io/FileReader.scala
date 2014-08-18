@@ -12,55 +12,13 @@ import text.MD5
  */
 trait FileReader {
 
-  /** @return the lines of a file */
-  def readLines(path: String): IndexedSeq[String] = {
-    if (hasContents(path)) scala.io.Source.fromFile(path).getLines.toIndexedSeq
-    else                   IndexedSeq()
-  }
-
-  /** @return the bytes of a file */
-  def readBytes(path: String): Array[Byte] = {
-    if (hasContents(path)) {
-      val stream = new BufferedInputStream(new FileInputStream(path))
-      try     Stream.continually(stream.read).takeWhile(-1 !=).map(_.toByte).toArray
-      finally stream.close
-    } else Array[Byte]()
-  }
-
-  /**
-   * reads the content of a file
-   * @param path the path of the file to read
-   * @return the content of the file at path
-   */
-  def readFile(path: String): String = {
-    if (hasContents(path)) {
-      def appendLines(result: StringBuffer, in: BufferedReader, line: String): Unit = {
-        if (line != null) {
-          result.append(line)
-          result.append("\n")
-          appendLines(result, in, in.readLine)
-        }
-      }
-      val in = new BufferedReader(new java.io.FileReader(path))
-      try {
-        val result = new StringBuffer
-        appendLines(result, in, in.readLine)
-        result.toString
-      } finally in.close
-    } else ""
-  }
-
-  /** @return true if this path is an existing file which is not a directory */
-  private def hasContents(path: String) = new File(path).exists && !new File(path).isDirectory
-
   /**
    * @return true if the File represented by this path is a directory
    */
   def isDir(path: String) = isDirectory(path)
 
-  private def fileMatchesPattern(f: File, pattern: String, verbose: Boolean = false) = {
+  private def fileMatchesPattern(f: File, pattern: String) = {
     val filePath = "./"+f.getPath.replace("\\", "/")
-    if (verbose && f.isFile) println(filePath+" matches pattern: "+(filePath matches pattern))
     f.isFile && (filePath matches pattern)
   }
 
@@ -69,9 +27,6 @@ trait FileReader {
    * @return a FileInputStream for a given file path
    */
   def inputStream(filePath: String): java.io.InputStream = new java.io.FileInputStream(filePath)
-
-  /** @return the MD5 hash of a file */
-  def md5(f: File): String = MD5.md5Hex(readBytes(f.getPath))
 
   /** @return the path of a File relative to a base file */
   def fromBaseFile(base: File) = (aFile: File) => Paths.from(base.getPath)(aFile.getPath)
@@ -111,44 +66,6 @@ trait FileReader {
 
   /** @return the files of that directory */
   def listFiles(path: String): List[String] = if (new File(path).list == null) List() else new File(path).list.toList
-
-  /**
-   * @param path glob expression, for example: `./dir/**/*.xml`
-   * @return the list of paths represented by the "glob" definition `path`
-   */
-  def filePaths(basePath: String = ".", path: String = "*", verbose: Boolean = false): Seq[String] = {
-    val found = recurse(new File(basePath))
-    if (verbose) found.foreach { f => println("found file: "+f) }
-    val pattern = globToPattern(path) + (if (isDir(path)) "/*.*" else "")
-    if (verbose) println("\nThe pattern used to match files is: "+pattern)
-    val collected = found.collect { case f if fileMatchesPattern(f, pattern, verbose) => f.getPath }.toSeq
-    collected
-  }
-
-  /**
-   * @return the regular expression equivalent to a glob pattern
-   */
-  def globToPattern(glob: String): String = {
-    val star = "<STAR>"
-    val authorizedNamePattern = "[^\\/\\?<>\\|\\" + star + ":\"]" + star
-    val pattern = glob.replace("\\", "/")
-      .replace(".", "\\.")
-      .replace("**/", "(" + authorizedNamePattern + "/)" + star)
-      .replace("*", authorizedNamePattern)
-      .replace(star, "*")
-
-    if (!pattern.startsWith("\\./")) "\\./" + pattern
-    else                             pattern
-  }
-
-  /**
-   * @param file start file
-   * @return a Stream with all the recursively accessible files
-   */
-  private def recurse(file: File): Stream[File] = {
-    import Stream._
-    cons(file, if (file.listFiles == null) empty else file.listFiles.toStream.flatMap(recurse))
-  }
 
   /**
    * @return the xml content of a file using the Xhtml parser

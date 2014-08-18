@@ -2,10 +2,13 @@ package org.specs2
 package matcher
 
 import java.io.File
+import execute.Result
 import text._
 import io._
 import Paths._
 import MatchersImplicits._
+import scalaz.std.anyVal._
+import control._
 
 /**
  * This trait provides matchers to check the presence of some expected files vs the actual ones
@@ -33,9 +36,19 @@ trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with T
   /** match 2 files if they have the same MD5 digest */
   def haveSameMD5: Matcher[(File, File)] = { pair: (File, File) =>
     val (actual, expected) = pair
-    val (md5_1, md5_2) = (md5(actual), md5(expected))
-    val message = TextTable(header = Seq("file", "MD5"), lines = Seq(Seq(actual.getPath, md5_1), Seq(expected.getPath, md5_2))).show
-    (md5_1 == md5_2, s"MD5 mismatch:\n$message")
+
+    val action  = for {
+      _     <- FilePathReader.mustNotBeADirectory(actual)
+      _     <- FilePathReader.mustNotBeADirectory(expected)
+      md5_1 <- FilePathReader.md5(FilePath.unsafe(actual))
+      md5_2 <- FilePathReader.md5(FilePath.unsafe(expected))
+    } yield {
+      val message = TextTable(header = Seq("file", "MD5"), lines = Seq(Seq(actual.getPath, md5_1), Seq(expected.getPath, md5_2))).show
+      (md5_1 == md5_2, s"MD5 mismatch:\n$message")
+    }
+    action.execute(noLogging).unsafePerformIO.toDisjunction.fold(
+      failure => (false, Result.theseToResult(failure).message),
+      identity)
   }
 
   /** match 2 files if they have the same MD5 digest */

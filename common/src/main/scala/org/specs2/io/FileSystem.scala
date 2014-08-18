@@ -6,17 +6,13 @@ import ActionT._
 import scalaz.{std, syntax, stream, concurrent}
 import std.anyVal._
 import syntax.bind._
-import std.list._
-import syntax.traverse.ToTraverseOps
 import stream._
 import concurrent.Task
 import java.io._
-import data.Processes
 import java.util.regex.Pattern._
 import java.util.regex.Matcher._
 import java.net.URL
 import java.util.zip._
-import Paths._
 import java.util.regex.Pattern.compile
 import java.util.regex.Matcher.quoteReplacement
 
@@ -24,54 +20,6 @@ import java.util.regex.Matcher.quoteReplacement
  * Interface for the FileSystem where effects are denoted with the "Action" type
  */
 trait FileSystem {
-  /**
-   * @param path glob expression, for example: `./dir/**/*.xml`
-   * @return the list of paths represented by the "glob" definition `path`
-   */
-  def filePaths(basePath: String = ".", path: String = "*", verbose: Boolean): Action[Seq[String]] = for {
-    found <- listFiles(basePath).map(_.filter(_.isFile))
-    _     <- found.toList.map(f => log("found file: "+f, verbose)).sequenceU
-  } yield filterFiles(found, path, verbose)
-
-  def filterFiles(found: Seq[File], path: String, verbose: Boolean): Seq[String] = {
-    val pattern = globToPattern(path) + (if (isDirectory(path)) "/*.*" else "")
-    if (verbose) println("\nThe pattern used to match files is: "+pattern)
-    found.collect { case f if fileMatchesPattern(f, pattern, verbose) => f.getPath }.toSeq
-  }
-
-  private def listFiles(path: String): Action[IndexedSeq[File]] =
-    Actions.fromTask(listFiles(new File(path)).runLog[Task, File])
-
-  private def fileMatchesPattern(f: File, pattern: String, verbose: Boolean = false) = {
-    val filePath = f.getPath
-      .replaceFirst(".:", "") // remove any letter drive on Windows
-      .unixize
-
-    if (verbose) println(filePath+" matches pattern: "+(filePath matches pattern))
-    filePath matches pattern
-  }
-
-  /**
-   * @return the regular expression equivalent to a glob pattern (see the specs for Fragments)
-   */
-  def globToPattern(glob: String): String = {
-    val star = "<STAR>"
-    val authorizedNamePattern = "[^\\/\\?<>\\|\\" + star + ":\"]" + star
-    glob.replace("\\", "/")
-         .replace(".", "\\.")
-         .replace("**/", "(" + authorizedNamePattern + "/)" + star)
-         .replace("*", authorizedNamePattern)
-         .replace(star, "*")
-  }
-
-  private def listFiles(file: File): Process[Task, File] = {
-    def go(f: File): Process[Task, File] = {
-      val children = Option(f.listFiles).map(_.toList).getOrElse(Nil)
-      Process.emit(f) fby Process.emitAll(children.map(go)).flatMap(identity)
-    }
-    go(file)
-  }
-
   /** @return true if the file is a directory */
   def isDirectory(path: String) = path != null && new File(path).isDirectory
 
@@ -94,11 +42,11 @@ trait FileSystem {
   def withFile(path: String)(action: Action[Unit]): Action[Unit] =
     action.andFinally(deleteFile(path).void)
 
-  def mkParentDirs(path: String): Action[Unit] =
-    Actions.safe(Option(new File(path).getParentFile).fold(())(_.mkdirs))
+  def mkParentDirs(dir: DirectoryPath): Action[Unit] =
+    Actions.safe(Option(dir.parent).fold(())(_.mkdirs))
 
-  def mkdirs(path: String): Action[Unit] =
-    Actions.safe(new File(path).mkdirs)
+  def mkdirs(path: DirectoryPath): Action[Unit] =
+    Actions.safe(path.toFile.mkdirs)
 
   /**
    * Unjar the jar (or zip file) specified by "path" to the "dest" directory.
@@ -167,7 +115,7 @@ trait FileSystem {
    * @param src path of the directory to copy
    * @param dest destination directory path
    */
-  def copyDir(src: String, dest: String): Action[Unit] =
+  def copyDir(src: DirectoryPath, dest: DirectoryPath): Action[Unit] =
     mkdirs(dest) >>
       listFiles(src).flatMap { files =>
         files.toList.map { file =>
@@ -187,12 +135,16 @@ trait FileSystem {
   }
 
   /** create a new file */
-  def createFile(path: String): Action[Boolean] =
-    mkParentDirs(path) >>
-    Actions.safe(new File(path).createNewFile)
+  def createFile(filePath: FilePath): Action[Boolean] =
+    mkdirs(filePath.dir) >>
+    Actions.safe(filePath.toFile.createNewFile)
 
   /** delete files or directories */
-  def delete(path: String): Action[Unit] =
+  def delete(file: FilePath): Action[Unit] =
+    Action(file.delete).void
+
+  /** delete a directory */
+  def delete(dir: DirectoryPath): Action[Unit] =
     listFiles(path).map(_.reverse.map(_.delete)).void
 }
 
