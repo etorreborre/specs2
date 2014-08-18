@@ -21,7 +21,7 @@ trait EventuallyMatchers extends EventuallyResults {
     def retry[S <: T](retries: Int, sleep: Duration, a: Expectable[S]): MatchResult[S] = {
       lazy val matchResult = nested(a.evaluateOnce)
       val result = ResultExecution.execute(matchResult.toResult)
-      if (result.isSuccess || retries == 1)
+      if (result.isSuccess || retries <= 1)
         matchResult
       else {
         Thread.sleep(sleep.inMillis)
