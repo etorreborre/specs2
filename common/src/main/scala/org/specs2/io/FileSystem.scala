@@ -12,12 +12,13 @@ import stream._
 import concurrent.Task
 import java.io._
 import data.Processes
-import Processes._
-import java.net.URL
 import java.util.regex.Pattern._
-import java.util.zip.{ZipEntry, ZipInputStream}
 import java.util.regex.Matcher._
-import FileReader._
+import java.net.URL
+import java.util.zip._
+import Paths._
+import java.util.regex.Pattern.compile
+import java.util.regex.Matcher.quoteReplacement
 
 /**
  * Interface for the FileSystem where effects are denoted with the "Action" type
@@ -27,30 +28,47 @@ trait FileSystem {
    * @param path glob expression, for example: `./dir/**/*.xml`
    * @return the list of paths represented by the "glob" definition `path`
    */
-  def filePaths(basePath: String, path: String, verbose: Boolean): Action[Seq[String]] = for {
-    found <- listFiles(basePath)
+  def filePaths(basePath: String = ".", path: String = "*", verbose: Boolean): Action[Seq[String]] = for {
+    found <- listFiles(basePath).map(_.filter(_.isFile))
     _     <- found.toList.map(f => log("found file: "+f, verbose)).sequenceU
-    pattern = globToPattern(path) + (if (isDirectory(path)) "/*.*" else "")
-    _     <- log("\nThe pattern used to match files is: "+pattern, verbose)
-  } yield found.collect { case f if fileMatchesPattern(f, pattern) => f.getPath }.toSeq
+  } yield filterFiles(found, path, verbose)
 
-  /** @return true if the file path matches the pattern */
-  private def fileMatchesPattern(f: File, pattern: String) = {
-    val filePath = "./"+f.getPath.replace("\\", "/")
-    f.isFile && (filePath matches pattern)
+  def filterFiles(found: Seq[File], path: String, verbose: Boolean): Seq[String] = {
+    val pattern = globToPattern(path) + (if (isDirectory(path)) "/*.*" else "")
+    if (verbose) println("\nThe pattern used to match files is: "+pattern)
+    found.collect { case f if fileMatchesPattern(f, pattern, verbose) => f.getPath }.toSeq
   }
 
   private def listFiles(path: String): Action[IndexedSeq[File]] =
     Actions.fromTask(listFiles(new File(path)).runLog[Task, File])
 
-  private def listFiles(file: File): Process[Task, File] = {
-    def go(f: File): Process[Task, File] =
-      Process.await(Task.delay(f)) { file =>
-        val children = Option(file.listFiles).map(_.toList).getOrElse(Nil)
+  private def fileMatchesPattern(f: File, pattern: String, verbose: Boolean = false) = {
+    val filePath = f.getPath
+      .replaceFirst(".:", "") // remove any letter drive on Windows
+      .unixize
 
-        if (children.isEmpty) Process.halt
-        else                  Process.emitAll(children) fby children.map(go).sequenceU.flatten
-      }
+    if (verbose) println(filePath+" matches pattern: "+(filePath matches pattern))
+    filePath matches pattern
+  }
+
+  /**
+   * @return the regular expression equivalent to a glob pattern (see the specs for Fragments)
+   */
+  def globToPattern(glob: String): String = {
+    val star = "<STAR>"
+    val authorizedNamePattern = "[^\\/\\?<>\\|\\" + star + ":\"]" + star
+    glob.replace("\\", "/")
+         .replace(".", "\\.")
+         .replace("**/", "(" + authorizedNamePattern + "/)" + star)
+         .replace("*", authorizedNamePattern)
+         .replace(star, "*")
+  }
+
+  private def listFiles(file: File): Process[Task, File] = {
+    def go(f: File): Process[Task, File] = {
+      val children = Option(f.listFiles).map(_.toList).getOrElse(Nil)
+      Process.emit(f) fby Process.emitAll(children.map(go)).flatMap(identity)
+    }
     go(file)
   }
 
