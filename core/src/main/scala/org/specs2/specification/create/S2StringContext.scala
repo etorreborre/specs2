@@ -1,13 +1,12 @@
 package org.specs2
-package specification
-package create
+package specification.create
 
 import java.util.concurrent.ExecutorService
 
 import execute._
 import control.TraceLocation
-import process._
-import core._
+import specification.process._
+import specification.core._
 import text.Interpolated
 import text.NotNullStrings._
 import text.Trim._
@@ -15,6 +14,7 @@ import reflect.MacroContext._
 import reflect.Macros._
 import main.{CommandLine, Arguments}
 import scala.concurrent.ExecutionContext
+import scala.reflect.internal.util.Position
 
 /**
  * Allow to use fragments inside interpolated strings starting with s2 in order to build the specification content
@@ -178,7 +178,7 @@ trait S2StringContext extends FragmentsFactory { outer =>
 }
 
 object S2StringContext extends DefaultFragmentFactory
-
+import scala.reflect.macros._
 object S2Macro {
   def s2Implementation(c: Context)(variables: c.Expr[InterpolatedFragment]*) : c.Expr[Fragments] = {
     import c.{universe => u}; import u.{ Position => _, _ }
@@ -196,7 +196,7 @@ object S2Macro {
       Seq(pos.source.path, pos.source.file.name, pos.line).mkString("|")
 
     val textStartPositions = texts.map(t => q"${traceLocation(t.pos)}")
-    val textEndPositions = texts.map(t => q"${traceLocation(t.pos.focusEnd)}")
+    val textEndPositions = texts.map(t => q"${traceLocation(t.pos.focus.withPoint(t.pos.end))}")
 
     val result =
       c.Expr(methodCall(c)("s2",

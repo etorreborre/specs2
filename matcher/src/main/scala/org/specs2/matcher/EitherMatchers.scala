@@ -1,8 +1,6 @@
 package org.specs2
 package matcher
 
-import text.NotNullStrings._
-
 /**
  * Matchers for the Either datatype
  */

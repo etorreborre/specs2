@@ -37,7 +37,7 @@ object exs extends MustMatchers with StandardResults with S2StringContext {
 
   def e5 = s2"""this is ${Fragments(text("the"), text(" world"))}""".fragments must haveSize(3)
 
-  def e6 = s2"""this is $spec""".fragments must haveSize(3)
+  def e6 = s2"""this is $spec""".fragments must haveSize(2)
 
   def e7 = s2"""
   this should
