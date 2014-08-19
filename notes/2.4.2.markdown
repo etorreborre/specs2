@@ -1,0 +1,11 @@
+Maintenance version
+
+## Fixes 
+ 
+ * `1 must beEqualTo(1) and beEqualTo(2)` now properly throws an Exception in a mutable specification
+ * `SpecificationsFinder.specificationNames` finds specifications under a Windows drive when using the `srcTestDir` option [#290](http://github.com/etorreborre/specs2/issues/290)
+
+
+
+ ==========================
+

@@ -4,7 +4,7 @@ package io
 import java.io._
 import java.net.{JarURLConnection, URL}
 import java.util.zip._
-import scala.util.Try
+import Paths._
 import java.util.regex.Pattern.{quote, compile}
 import java.util.regex.Matcher.quoteReplacement
 
@@ -22,27 +22,33 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
   def filePaths(basePath: String = ".", path: String = "*", verbose: Boolean = false): Seq[String] = {
     val found = recurse(new File(basePath))
     if (verbose) found.foreach { f => println("found file: "+f) }
+    filterFiles(found, path, verbose)
+  }
+
+  def filterFiles(found: Seq[File], path: String, verbose: Boolean): Seq[String] = {
     val pattern = globToPattern(path) + (if (isDir(path)) "/*.*" else "")
     if (verbose) println("\nThe pattern used to match files is: "+pattern)
-    val collected = found.collect { case f if fileMatchesPattern(f, pattern, verbose) => f.getPath }.toSeq
-    collected
+    found.collect { case f if fileMatchesPattern(f, pattern, verbose) => f.getPath }.toSeq
   }
 
   private def isVersionFile(f: File) = Seq(".svn", ".cvs").exists(f.getPath.contains(_))
 
   private def fileMatchesPattern(f: File, pattern: String, verbose: Boolean = false) = {
-    val filePath = "./"+f.getPath.replace("\\", "/")
-    if (verbose && f.isFile) println(filePath+" matches pattern: "+(filePath matches pattern))
-    f.isFile && (filePath matches pattern)
+    val filePath = f.getPath
+      .replaceFirst(".:", "") // remove any letter drive on Windows
+      .unixize
+
+    if (verbose) println(filePath+" matches pattern: "+(filePath matches pattern))
+    filePath matches pattern
   }
 
   /**
    * @param file start file
-   * @return a Stream with all the recursively accessible files
+   * @return a Stream with all the recursively accessible files (not directories)
    */
   private def recurse(file: File): Stream[File] = {
     import Stream._
-    cons(file, if (file.listFiles == null) empty else file.listFiles.toStream.filterNot(isVersionFile).flatMap(recurse(_)))
+    cons(file, if (file.listFiles == null) empty else file.listFiles.toStream.filterNot(isVersionFile).flatMap(recurse)).filter(_.isFile)
   }
   
   /**
@@ -56,8 +62,6 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
                       .replace("**/", "(" + authorizedNamePattern + "/)" + star)
                       .replace("*", authorizedNamePattern)
                       .replace(star, "*")
-    if (!pattern.startsWith("\\./"))
-      pattern = "\\./" + pattern 
     pattern
   }
   
