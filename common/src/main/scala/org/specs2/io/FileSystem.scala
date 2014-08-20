@@ -57,12 +57,11 @@ trait FileSystem extends org.specs2.io.FileReader with org.specs2.io.FileWriter 
   def globToPattern(glob: String): String = {
     val star = "<STAR>"
     val authorizedNamePattern = "[^\\/\\?<>\\|\\" + star + ":\"]" + star
-    var pattern = glob.replace("\\", "/")
-                      .replace(".", "\\.")
-                      .replace("**/", "(" + authorizedNamePattern + "/)" + star)
-                      .replace("*", authorizedNamePattern)
-                      .replace(star, "*")
-    pattern
+    glob.replace("\\", "/")
+        .replace(".", "\\.")
+        .replace("**/", "(" + authorizedNamePattern + "/)" + star)
+        .replace("*", authorizedNamePattern)
+        .replace(star, "*")
   }
   
   /**
