@@ -5,7 +5,8 @@ import control._
 import ActionT._
 import scalaz.{std, syntax, stream, concurrent}
 import std.anyVal._
-import syntax.bind._
+import std.list._
+import syntax.all._
 import stream._
 import concurrent.Task
 import java.io._
@@ -19,34 +20,25 @@ import java.util.regex.Matcher.quoteReplacement
 /**
  * Interface for the FileSystem where effects are denoted with the "Action" type
  */
-trait FileSystem {
-  /** @return true if the file is a directory */
-  def isDirectory(path: String) = path != null && new File(path).isDirectory
+trait FileSystem extends FilePathReader {
+  def deleteFile(filePath: FilePath): Action[Boolean] =
+    Actions.safe(filePath.toFile.delete)
 
-  def readFile(path: String): Action[String] =
-    readLines(path).map(_.mkString("\n"))
+  def writeFile(filePath: FilePath, content: String): Action[Unit] =
+    Actions.fromTask(writeFileTask(filePath, content))
 
-  def readLines(path: String): Action[Seq[String]] =
-    Actions.fromTask(io.linesR(path).runLog[Task, String])
+  def writeFileTask(filePath: FilePath, content: String): Task[Unit] =
+    mkdirs(filePath).toTask >>
+    Process(content).toSource.pipe(text.utf8Encode).to(io.fileChunkW(filePath.path)).run
 
-  def deleteFile(path: String): Action[Boolean] =
-    Actions.safe(new File(path).delete)
-
-  def writeFile(path: String, content: String): Action[Unit] =
-    Actions.fromTask(writeFileTask(path, content))
-
-  def writeFileTask(path: String, content: String): Task[Unit] =
-    mkParentDirs(path).toTask >>
-    Process(content).toSource.pipe(text.utf8Encode).to(io.fileChunkW(path)).run
-
-  def withFile(path: String)(action: Action[Unit]): Action[Unit] =
+  def withFile(path: FilePath)(action: Action[Unit]): Action[Unit] =
     action.andFinally(deleteFile(path).void)
-
-  def mkParentDirs(dir: DirectoryPath): Action[Unit] =
-    Actions.safe(Option(dir.parent).fold(())(_.mkdirs))
 
   def mkdirs(path: DirectoryPath): Action[Unit] =
     Actions.safe(path.toFile.mkdirs)
+
+  def mkdirs(path: FilePath): Action[Unit] =
+    mkdirs(path.dir)
 
   /**
    * Unjar the jar (or zip file) specified by "path" to the "dest" directory.
@@ -58,7 +50,7 @@ trait FileSystem {
    *                    an entry as group 1 which will then be used relative
    *                    to dirPath as target path for that entry
    */
-  def unjar(jarUrl: URL, dest: String, regexFilter: String): Action[Unit] = {
+  def unjar(jarUrl: URL, dest: DirectoryPath, regexFilter: String): Action[Unit] = {
     val regex = compile(regexFilter)
     val uis = jarUrl.openStream()
     val zis = new ZipInputStream(new BufferedInputStream(uis))
@@ -68,14 +60,11 @@ trait FileSystem {
       if (entry != null) {
         val matcher = regex.matcher(entry.getName)
         if (matcher.matches) {
-          val target = matcher.replaceFirst(s"${quoteReplacement(dest)}$$1")
-          if (entry.isDirectory) {
-            mkdirs(target)
-          } else {
-            mkdirs(target)
+          val target = matcher.replaceFirst(s"${quoteReplacement(dest.path)}$$1")
+          new File(target).mkdirs
+          if (!entry.isDirectory) {
             val fos = new FileOutputStream(target)
             val dest = new BufferedOutputStream(fos, 2048)
-
             try {
               copy(zis, dest)
               dest.flush
@@ -117,21 +106,19 @@ trait FileSystem {
    */
   def copyDir(src: DirectoryPath, dest: DirectoryPath): Action[Unit] =
     mkdirs(dest) >>
-      listFiles(src).flatMap { files =>
-        files.toList.map { file =>
-          if (file.isDirectory) copyDir(file.getPath, dest)
-          else                  copyFile(file.getPath, dest)
-        }.sequenceU.void
+      listFilePaths(src).flatMap { files =>
+        files.toList.map(copyFile(dest)).sequenceU.void
       }
 
   /**
    * copy a file to a destination directory
-   * @param path path of the file to copy
+   * @param filePath path of the file to copy
    * @param dest destination directory path
    */
-  def copyFile(path: String, dest: String): Action[Unit] = Actions.safe {
+  def copyFile(dest: DirectoryPath)(filePath: FilePath): Action[Unit] = Actions.safe {
     import java.nio.file._
-    Files.copy(Paths.get(path), Paths.get(dest).resolve(Paths.get(new File(path).getName)), StandardCopyOption.REPLACE_EXISTING)
+    Files.copy(Paths.get(filePath.path),
+               Paths.get(dest.path).resolve(Paths.get(filePath.name.name)), StandardCopyOption.REPLACE_EXISTING)
   }
 
   /** create a new file */
@@ -141,11 +128,12 @@ trait FileSystem {
 
   /** delete files or directories */
   def delete(file: FilePath): Action[Unit] =
-    Action(file.delete).void
+    Actions.safe(file.toFile.delete).void
 
   /** delete a directory */
   def delete(dir: DirectoryPath): Action[Unit] =
-    listFiles(path).map(_.reverse.map(_.delete)).void
+    listFilePaths(dir).flatMap(_.map(delete).toList.sequenceU.void) >>
+    delete(dir.toFilePath) // delete the directory once it is empty
 }
 
 object FileSystem extends FileSystem

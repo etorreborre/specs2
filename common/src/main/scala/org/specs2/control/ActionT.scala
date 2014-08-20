@@ -154,6 +154,15 @@ trait ActionTSupport[F[_], W, R] {
   def ok[A](a: A)(implicit M: Monad[F], W: Monoid[W]): ActionT[F, W, R, A] =
     ActionT.ok(a)
 
+  def check[A](a: =>A, predicate: A => Boolean, failureMessage: String)(implicit M: Monad[F], W: Monoid[W]): ActionT[F, W, R, A] =
+    checkThat(a, predicate(a), failureMessage)
+
+  def checkThat[A](a: =>A, condition: Boolean, failureMessage: String)(implicit M: Monad[F], W: Monoid[W]): ActionT[F, W, R, A] =
+    safe(a).flatMap { value =>
+      if (condition) safe(value)
+      else                  fail(failureMessage)
+    }
+
   def empty(implicit M: Monad[F], W: Monoid[W]): ActionT[F, W, R, Unit] =
     ok(())
 

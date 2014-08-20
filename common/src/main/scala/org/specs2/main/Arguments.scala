@@ -386,6 +386,7 @@ case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs {
   def arguments: Seq[String] = _arguments
   def contains(a: String) = arguments contains a
   def value(name: String) = Arguments.value(name)(_arguments, SystemProperties)
+  def valueOr(name: String, defaultValue: String) = Arguments.value(name)(_arguments, SystemProperties).getOrElse(defaultValue)
   def isDefined(name: String) = value(name).isDefined
   def int(name: String) = Arguments.int(name)(_arguments, SystemProperties)
   def bool(name: String) = Arguments.bool(name)(_arguments, SystemProperties)

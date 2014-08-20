@@ -178,7 +178,7 @@ trait S2StringContext extends FragmentsFactory { outer =>
 }
 
 object S2StringContext extends DefaultFragmentFactory
-import scala.reflect.macros._
+
 object S2Macro {
   def s2Implementation(c: Context)(variables: c.Expr[InterpolatedFragment]*) : c.Expr[Fragments] = {
     import c.{universe => u}; import u.{ Position => _, _ }

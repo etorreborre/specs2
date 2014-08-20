@@ -1,8 +1,9 @@
 package org.specs2
 package runner
 
-import main.{ArgumentsArgs, Arguments}
+import main._
 import control._
+import io.DirectoryPath
 import specification.core._
 import runner.Runner._
 import scalaz.std.anyVal._
@@ -27,12 +28,15 @@ trait FilesRunner {
 
   def run(env: Env): Action[Unit] = {
     val args = env.arguments
-
-    val specs = findSpecifications(
-      path     = args.commandLine.value("filesrunner.path").getOrElse("**/*.scala"),
-      pattern  = args.commandLine.value("filesrunner.pattern").getOrElse(".*Spec"),
-      basePath = args.commandLine.value("filesrunner.basepath").getOrElse(new java.io.File("src/test/scala").getAbsolutePath),
-      verbose  = isVerbose(args))
+    val base = args.commandLine.valueOr("filesrunner.basepath", new java.io.File("src/test/scala").getAbsolutePath)
+    val specs = for {
+      basePath <- Actions.checkThat(base, new java.io.File(base).isDirectory, s"$base must be a directory")
+      ss       <- findSpecifications(
+        path     = args.commandLine.valueOr("filesrunner.path", "**/*.scala"),
+        pattern  = args.commandLine.valueOr("filesrunner.pattern", ".*Spec"),
+        basePath = DirectoryPath.unsafe(basePath),
+        verbose  = isVerbose(args))
+    } yield ss
 
     for {
       _  <- beforeExecution(args, isVerbose(args))
