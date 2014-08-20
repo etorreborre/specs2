@@ -10,9 +10,9 @@ When you use a build tool you generally only need to specify the main dependenci
 
  Dependency                                                                             | Comment
  -------------------------------------------------------------------------------------- | ---------------------------
- `"org.scalaz" %% "scalaz-core" % "7.0.6"`                                              | mandatory
- `"org.scalaz" %% "scalaz-concurrent" % "7.0.6"`                                        | mandatory
- `"org.scalaz.stream" %% "scalaz-stream" % "0.5.0"`                                     | mandatory
+ `"org.scalaz" %% "scalaz-core" % "7.1.0"`                                              | mandatory
+ `"org.scalaz" %% "scalaz-concurrent" % "7.1.0"`                                        | mandatory
+ `"org.scalaz.stream" %% "scalaz-stream" % "0.5a"`                                      | mandatory
  `"com.chuusai" %% "shapeless" % "2.0.0"`                                               | if you use the GWT trait
  `"org.scalacheck" %% "scalacheck" % "1.11.3"`                                          | if using ScalaCheck
  `"org.mockito" % "mockito-core" % "1.9.5"`                                             | if using Mockito. Note: specs2.jar must be placed before mockito.jar on the classpath
@@ -20,8 +20,14 @@ When you use a build tool you generally only need to specify the main dependenci
  `"junit" % "junit" % "4.11"`                                                           | if using JUnit
  `"org.specs2" % "classycle" % "1.4.1"`                                                 | if using the `org.specs2.specification.Analysis` trait
  `"org.scala-lang" % "scala-reflect" % "2.10.3"`                                        | if using interpolated specifications and/or macro matchers
- `compilerPlugin("org.scalamacros" %% "paradise" % "2.0.0"    cross CrossVersion.full)` | if using macro matchers
- `"org.scalamacros" %% "quasiquotes" % "2.0.0"`                                         | if using macro matchers
+ `compilerPlugin("org.scalamacros" %% "paradise" % "2.0.0" cross CrossVersion.full)`    | if using macro matchers and Scala 2.10
+ `"org.scalamacros" %% "quasiquotes" % "2.0.0"`                                         | if using macro matchers and Scala 2.10
+
+
+ Resolvers                                                                              | Comment
+ -------------------------------------------------------------------------------------- | ---------------------------
+ `"Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases"`                     | for `scalaz-stream`
+ `Resolver.sonatypeRepo("releases")`                                                    | for other Scala libraries
 
 ### From the shell
 
