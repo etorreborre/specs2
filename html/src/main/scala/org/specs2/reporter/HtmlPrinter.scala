@@ -56,11 +56,11 @@ trait HtmlPrinter extends Printer {
 
   def getHtmlOptions(arguments: Arguments): Action[HtmlOptions] = {
     import arguments.commandLine._
-    val out = directoryPathOr("html.outdir", HtmlOptions.outDir).asAbsolute
+    val out = directoryOr("html.outdir", HtmlOptions.outDir).asAbsolute
     Actions.ok(HtmlOptions(
       outDir    = out,
-      baseDir   = directoryPathOr("html.basedir", HtmlOptions.baseDir),
-      template  = filePathOr("html.template", HtmlOptions.template(out)),
+      baseDir   = directoryOr("html.basedir", HtmlOptions.baseDir),
+      template  = fileOr("html.template", HtmlOptions.template(out)),
       variables = mapOr("html.variables", HtmlOptions.variables),
       noStats   = boolOr("html.nostats", HtmlOptions.noStats)))
   }
@@ -170,7 +170,7 @@ trait HtmlPrinter extends Printer {
 
     if (markdown) {
       val pandoc = Pandoc(
-        executable   = filePathOr("pandoc.exec", Pandoc.executable),
+        executable   = fileOr("pandoc.exec", Pandoc.executable),
         inputFormat  = valueOr("pandoc.inputformat", Pandoc.inputFormat),
         outputFormat = valueOr("pandoc.outputformat", Pandoc.outputFormat))
 

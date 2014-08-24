@@ -395,12 +395,10 @@ case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs {
   def mapOr(name: String, defaultValue: Map[String, String]) = map(name).getOrElse(defaultValue)
 
   def directory(name: String) = value(name).map(DirectoryPath.unsafe)
-  def directoryOr(name: String, defaultValue: String) = directory(name).getOrElse(DirectoryPath.unsafe(defaultValue))
-  def directoryPathOr(name: String, defaultValue: DirectoryPath) = directory(name).getOrElse(defaultValue)
+  def directoryOr(name: String, defaultValue: DirectoryPath) = directory(name).getOrElse(defaultValue)
 
   def file(name: String) = value(name).map(FilePath.unsafe)
-  def fileOr(name: String, defaultValue: String) = file(name).getOrElse(FilePath.unsafe(defaultValue))
-  def filePathOr(name: String, defaultValue: FilePath) = file(name).getOrElse(defaultValue)
+  def fileOr(name: String, defaultValue: FilePath) = file(name).getOrElse(defaultValue)
 
   def int(name: String) = Arguments.int(name)(_arguments, SystemProperties)
   def intOr(name: String, defaultValue: Int) = int(name).getOrElse(defaultValue)

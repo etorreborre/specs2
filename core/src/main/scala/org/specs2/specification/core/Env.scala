@@ -26,7 +26,7 @@ case class Env(arguments: Arguments = Arguments(),
 
           /** default statistics repository */
           statsRepository: Arguments => StatisticsRepository = (arguments: Arguments) =>
-             StatisticsRepository.file(arguments.commandLine.directoryOr("stats.outdir", "target/specs2-reports/stats")),
+             StatisticsRepository.file(arguments.commandLine.directoryOr("stats.outdir", "target" </> "specs2-reports" </> "stats")),
 
           /** execution environment */
           executionEnv: ExecutionEnv = ExecutionEnv(),
