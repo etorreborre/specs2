@@ -2,8 +2,6 @@ package org.specs2
 package specification
 package core
 
-import java.util.concurrent.ExecutorService
-
 import main.Arguments
 import org.specs2.execute.AsResult
 import reporter.LineLogger
@@ -12,8 +10,8 @@ import io._
 import control._
 import process.{Executor, DefaultExecutor, StatisticsRepository, Selector, DefaultSelector}
 
-case class Env(arguments: Arguments           = Arguments(),
-          indentationSize: Int           = 2,
+case class Env(arguments: Arguments = Arguments(),
+          indentationSize: Int = 2,
 
           /** selector class */
           selectorInstance: Arguments => Selector = (arguments: Arguments) =>
@@ -28,7 +26,7 @@ case class Env(arguments: Arguments           = Arguments(),
 
           /** default statistics repository */
           statsRepository: Arguments => StatisticsRepository = (arguments: Arguments) =>
-             StatisticsRepository.file(arguments.commandLine.value("stats.outdir").getOrElse("target/specs2-reports/stats")),
+             StatisticsRepository.file(arguments.commandLine.directoryOr("stats.outdir", "target/specs2-reports/stats")),
 
           /** execution environment */
           executionEnv: ExecutionEnv = ExecutionEnv(),

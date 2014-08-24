@@ -1,7 +1,8 @@
 package org.specs2
 package main
 
-import org.specs2.reflect.Classes
+import io._
+import reflect.Classes
 
 import scala.reflect.ClassTag
 import scalaz.{Memo, Monoid, Scalaz}
@@ -385,11 +386,28 @@ case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs {
 
   def arguments: Seq[String] = _arguments
   def contains(a: String) = arguments contains a
-  def value(name: String) = Arguments.value(name)(_arguments, SystemProperties)
-  def valueOr(name: String, defaultValue: String) = Arguments.value(name)(_arguments, SystemProperties).getOrElse(defaultValue)
   def isDefined(name: String) = value(name).isDefined
+
+  def value(name: String) = Arguments.value(name)(_arguments, SystemProperties)
+  def valueOr(name: String, defaultValue: String) = value(name).getOrElse(defaultValue)
+
+  def map(name: String) = value(name).map(vs => Map(vs.split(",").map(v => (v.split("=")(0), v.split("=")(1))): _*))
+  def mapOr(name: String, defaultValue: Map[String, String]) = map(name).getOrElse(defaultValue)
+
+  def directory(name: String) = value(name).map(DirectoryPath.unsafe)
+  def directoryOr(name: String, defaultValue: String) = directory(name).getOrElse(DirectoryPath.unsafe(defaultValue))
+  def directoryPathOr(name: String, defaultValue: DirectoryPath) = directory(name).getOrElse(defaultValue)
+
+  def file(name: String) = value(name).map(FilePath.unsafe)
+  def fileOr(name: String, defaultValue: String) = file(name).getOrElse(FilePath.unsafe(defaultValue))
+  def filePathOr(name: String, defaultValue: FilePath) = file(name).getOrElse(defaultValue)
+
   def int(name: String) = Arguments.int(name)(_arguments, SystemProperties)
+  def intOr(name: String, defaultValue: Int) = int(name).getOrElse(defaultValue)
+
   def bool(name: String) = Arguments.bool(name)(_arguments, SystemProperties)
+  def boolOr(name: String, defaultValue: Boolean) = bool(name).getOrElse(defaultValue)
+
   def filter(included: String*) = copy(_arguments = arguments.filter(included.toSet.contains))
   def filterNot(excluded: String*) = copy(_arguments = arguments.filterNot(excluded.toSet.contains))
   def overrideWith(other: CommandLine) = copy(_arguments = if (other.arguments.isEmpty) this._arguments else other.arguments)

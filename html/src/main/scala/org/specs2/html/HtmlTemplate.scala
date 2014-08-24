@@ -1,6 +1,8 @@
 package org.specs2
 package html
 
+import io.FilePath
+
 import scala.util.parsing.combinator._
 import control.{Actions, Action}
 import scalaz.std.anyVal._
@@ -20,6 +22,9 @@ object HtmlTemplate {
 
   }
 
+  /**
+   * Variables replacement parser for Pandoc-like templates
+   */
   def pandocParser(variables: Map[String, String]) = new RegexParsers {
     override def skipWhitespace = false
 

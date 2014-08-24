@@ -4,12 +4,9 @@ package process
 
 import control.{Actions, Action}
 import execute.Result
+import io._
 import scalaz.std.anyVal._
-import scalaz.syntax.bind._
-import java.io._
-import scalaz.stream.io._
 import specification.core.Description
-import scalaz.stream._
 import scala.collection.mutable.HashMap
 
 
@@ -45,30 +42,23 @@ trait Store {
 }
 
 object Store {
-  def file(baseDirectory: String) = new Store {
+  import FileSystem._
+
+  def directory(baseDirectory: DirectoryPath) = new Store {
 
     def set[A](key: Key[A], fact: A): Action[Unit] =
-      Actions.fromIO(filepath(key).getParentFile.mkdirs) >>
-      Actions.fromTask {
-        Process(StoreKeys.encode(key, fact)).toSource.pipe(text.utf8Encode).to(fileChunkW(filepath(key).toString)).run
-      }
+      writeFile(filepath(key), StoreKeys.encode(key, fact))
 
     def get[A](key: Key[A]): Action[Option[A]] =
-      if (filepath(key).exists)
-        Actions.fromTask {
-          linesR(filepath(key).toString)
-            .reduce((l1: String, l2: String) => l1+"\n"+l2).map(s => StoreKeys.decode(key, s)).runLog.map(_.headOption.flatten)
-        }
-      else Actions.ok(None)
-
-    private def filepath[A](key: Key[A]): File =
-      new File(s"""$baseDirectory/${StoreKeys.resolve(key)}""")
-
-    def reset: Action[Unit] =
-      Actions.fromIO {
-        new File(baseDirectory).listFiles.map(_.delete)
-        new File(baseDirectory).delete
+      exists(filepath(key)).flatMap { e =>
+        if (e) readFile(filepath(key)).map(content => StoreKeys.decode(key, content))
+        else   Actions.ok(None)
       }
+
+    def reset: Action[Unit] = delete(baseDirectory)
+
+    private def filepath[A](key: Key[A]): FilePath =
+      baseDirectory </> FilePath.unsafe(StoreKeys.resolve(key))
   }
 
   val memory = MemoryStore()
@@ -98,5 +88,5 @@ case class SpecificationResultKey(specClassName: String, description: Descriptio
 
 object StatisticsRepository {
   val memory = StatisticsRepository(Store.memory)
-  def file(path: String) = StatisticsRepository(Store.file(path))
+  def file(dir: DirectoryPath) = StatisticsRepository(Store.directory(dir))
 }

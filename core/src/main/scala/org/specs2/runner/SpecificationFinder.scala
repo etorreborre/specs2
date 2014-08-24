@@ -19,36 +19,36 @@ import scalaz.std.list._
 trait SpecificationsFinder {
 
   /**
-   * @param path a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
+   * @param glob a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
    * @param pattern a regular expression which is supposed to match an object name extending a Specification
    * @param filter a function to filter out unwanted specifications
    * @return specifications created from specification names
    */
-  def findSpecifications(path: String              = "**/*.scala",
+  def findSpecifications(glob: String              = "**/*.scala",
                          pattern: String           = ".*Spec",
                          filter: String => Boolean = { (name: String) => true },
                          basePath: DirectoryPath   = DirectoryPath.unsafe(new java.io.File("src/test/scala").getAbsolutePath),
                          verbose: Boolean          = false,
                          classLoader: ClassLoader  = Thread.currentThread.getContextClassLoader,
                          fileSystem: FileSystem    = FileSystem): Action[List[SpecificationStructure]] =
-    specificationNames(path, pattern, basePath, fileSystem, verbose).flatMap { names =>
+    specificationNames(glob, pattern, basePath, fileSystem, verbose).flatMap { names =>
       names.filter(filter).map(n => SpecificationStructure.create(n, classLoader)).toList.sequenceU
     }
 
   /**
-   * @param path a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
+   * @param glob a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
    * @param pattern a regular expression which is supposed to match an object name extending a Specification
    * @param filter a function to filter out unwanted specifications
    * @return specifications created from specification names
    */
-  def specifications(path: String              = "**/*.scala",
+  def specifications(glob: String              = "**/*.scala",
                      pattern: String           = ".*Spec",
                      filter: String => Boolean = { (name: String) => true },
                      basePath: DirectoryPath   = DirectoryPath.unsafe(new java.io.File("src/test/scala").getAbsolutePath),
                      verbose: Boolean          = false,
                      classLoader: ClassLoader  = Thread.currentThread.getContextClassLoader,
                      fileSystem: FileSystem    = FileSystem): Seq[SpecificationStructure] =
-    findSpecifications(path, pattern, filter, basePath, verbose, classLoader, fileSystem)
+    findSpecifications(glob, pattern, filter, basePath, verbose, classLoader, fileSystem)
       .execute(if (verbose) consoleLogging else noLogging)
       .unsafePerformIO().toEither.fold(
         e   => { if (verbose) println(e); Seq() },

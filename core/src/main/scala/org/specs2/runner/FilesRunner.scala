@@ -32,7 +32,7 @@ trait FilesRunner {
     val specs = for {
       basePath <- Actions.checkThat(base, new java.io.File(base).isDirectory, s"$base must be a directory")
       ss       <- findSpecifications(
-        path     = args.commandLine.valueOr("filesrunner.path", "**/*.scala"),
+        glob     = args.commandLine.valueOr("filesrunner.path", "**/*.scala"),
         pattern  = args.commandLine.valueOr("filesrunner.pattern", ".*Spec"),
         basePath = DirectoryPath.unsafe(basePath),
         verbose  = isVerbose(args))

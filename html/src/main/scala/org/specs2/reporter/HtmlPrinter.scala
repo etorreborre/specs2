@@ -1,10 +1,10 @@
 package org.specs2
 package reporter
 
-import collection.Seqx
 import specification.core._
 import data.Fold
 import specification.process.{Stats, Statistics}
+import io._
 import io.Paths._
 import main.Arguments
 import scala.xml.NodeSeq
@@ -22,7 +22,6 @@ import html.HtmlTemplate
 import scala.sys.process.ProcessLogger
 import execute._
 import text.NotNullStrings._
-import io.Paths.toPath
 
 trait HtmlPrinter extends Printer {
   def fold(env: Env, spec: SpecStructure): Fold[Fragment] = new Fold[Fragment] {
@@ -57,13 +56,13 @@ trait HtmlPrinter extends Printer {
 
   def getHtmlOptions(arguments: Arguments): Action[HtmlOptions] = {
     import arguments.commandLine._
-    val out = value("html.outdir").getOrElse(HtmlOptions.outDir).absoluteDirPath
+    val out = directoryPathOr("html.outdir", HtmlOptions.outDir).asAbsolute
     Actions.ok(HtmlOptions(
       outDir    = out,
-      baseDir   = value("html.basedir").getOrElse(HtmlOptions.baseDir),
-      template  = value("html.template").getOrElse(HtmlOptions.template(out)),
-      variables = value("html.variables").fold(HtmlOptions.variables)(vs => Map(vs.split(",").map(v => (v.split("=")(0), v.split("=")(1))): _*)),
-      noStats   = bool("html.nostats").getOrElse(HtmlOptions.noStats)))
+      baseDir   = directoryPathOr("html.basedir", HtmlOptions.baseDir),
+      template  = filePathOr("html.template", HtmlOptions.template(out)),
+      variables = mapOr("html.variables", HtmlOptions.variables),
+      noStats   = boolOr("html.nostats", HtmlOptions.noStats)))
   }
 
 
@@ -73,8 +72,8 @@ trait HtmlPrinter extends Printer {
       options.variables
         .updated("body", body)
         .updated("title", spec.wordsTitle)
-        .updated("baseDir", options.baseDir)
-        .updated("outDir", options.outDir)
+        .updated("baseDir", options.baseDir.path)
+        .updated("outDir", options.outDir.path)
     HtmlTemplate.runTemplate(template, variables1)
   }
 
@@ -84,8 +83,8 @@ trait HtmlPrinter extends Printer {
     for {
       options  <- getHtmlOptions(env.arguments)
       _        <- copyResources(env, options.outDir)
-      _        <- withFile(options.outDir+options.template.fileName) {
-                    copyFile(options.template, options.outDir) >>
+      _        <- withFile(options.outDir <|> options.template.name) {
+                    copyFile(options.outDir)(options.template) >>
                     makePandocHtml(spec, stats, pandoc, options, env)
                   }
     } yield ()
@@ -97,10 +96,12 @@ trait HtmlPrinter extends Printer {
     val variables1 =
       options.variables
         .updated("title", spec.wordsTitle)
-        .updated("baseDir", options.baseDir)
-        .updated("outDir", options.outDir)
+        .updated("baseDir", options.baseDir.path)
+        .updated("outDir", options.outDir.path)
 
-    val bodyFile = options.outDir+"body-"+spec.hashCode
+    val bodyFile: FilePath =
+      options.outDir <|> FileName.unsafe("body-"+spec.hashCode)
+
     val pandocArguments = Pandoc.arguments(bodyFile, options.template, variables1, outputFilePath(options.outDir, spec), pandoc)
 
     withFile(bodyFile) {
@@ -109,11 +110,11 @@ trait HtmlPrinter extends Printer {
     }
   }
 
-  def runProcess(executable: String, arguments: Seq[String] = Seq()): Action[Unit] = {
+  def runProcess(executable: FilePath, arguments: Seq[String] = Seq()): Action[Unit] = {
     val logger = new StringProcessLogger
     try {
 
-      val code = sys.process.Process(executable, arguments).!(logger)
+      val code = sys.process.Process(executable.path, arguments).!(logger)
       if (code == 0) Actions.ok(())
       else           Actions.fail(logger.lines)
     } catch { case t: Throwable =>
@@ -121,40 +122,43 @@ trait HtmlPrinter extends Printer {
     }
   }
 
-  def outputFilePath(directory: String, spec: SpecStructure) =
-    directory+spec.specClassName+".html"
+  def outputFilePath(directory: DirectoryPath, spec: SpecStructure): FilePath =
+    directory <|> FileName.unsafe(spec.specClassName+".html")
 
-  case class HtmlOptions(outDir: String, baseDir: String, template: String, variables: Map[String, String], noStats: Boolean)
+  case class HtmlOptions(outDir: DirectoryPath, baseDir: DirectoryPath, template: FilePath, variables: Map[String, String], noStats: Boolean)
 
   object HtmlOptions {
-    val outDir = "target/specs2-reports/"
-    def template(outDir: String) = outDir+"/templates/specs2.html"
+    val outDir    = "target" </> "specs2-reports"
+    val baseDir   = DirectoryPath.EMPTY
     val variables = Map[String, String]()
-    val baseDir = "."
-    val noStats = false
+    val noStats   = false
+
+    def template(outDir: DirectoryPath): FilePath =
+      outDir </> "templates" <|> "specs2.html"
   }
 
-  case class Pandoc(executable: String,
+  case class Pandoc(executable: FilePath,
                     inputFormat: String,
                     outputFormat: String) {
+
     def isExecutableAvailable: Action[Unit] =
-      runProcess(s"$executable", Seq("--version"))
+      runProcess(executable, Seq("--version"))
   }
   
   object Pandoc {
-    val executable = "pandoc"
-    val inputFormat = "markdown+pipe_tables"
+    val executable   = FilePath("pandoc")
+    val inputFormat  = "markdown+pipe_tables"
     val outputFormat = "html"
     
-    def arguments(bodyPath: String, templatePath: String, variables: Map[String, String], outputFile: String, options: Pandoc): Seq[String] = {
+    def arguments(bodyPath: FilePath, templatePath: FilePath, variables: Map[String, String], outputFile: FilePath, options: Pandoc): Seq[String] = {
       val variablesOption = variables.flatMap { case (k, v) => Seq("-V", s"$k=$v") }
 
-      Seq(bodyPath,
+      Seq(bodyPath.path,
           "-f", options.inputFormat,
           "-t", options.outputFormat,
-          "--template", templatePath,
+          "--template", templatePath.path,
           "-s", "-S",
-          "-o", outputFile) ++
+          "-o", outputFile.path) ++
       variablesOption
     } 
 
@@ -162,25 +166,28 @@ trait HtmlPrinter extends Printer {
 
   def getPandoc(env: Env): Action[Option[Pandoc]] = {
     import env.arguments.commandLine._
-    val markdown = bool("pandoc").getOrElse(true)
+    val markdown = boolOr("pandoc", true)
 
     if (markdown) {
       val pandoc = Pandoc(
-        executable   = value("pandoc.exec")       .getOrElse(Pandoc.executable),
-        inputFormat  = value("pandoc.inputformat").getOrElse(Pandoc.inputFormat),
-        outputFormat = value("pandoc.outputformat").getOrElse(Pandoc.outputFormat))
+        executable   = filePathOr("pandoc.exec", Pandoc.executable),
+        inputFormat  = valueOr("pandoc.inputformat", Pandoc.inputFormat),
+        outputFormat = valueOr("pandoc.outputformat", Pandoc.outputFormat))
 
       pandoc.isExecutableAvailable.map(_ => Option(pandoc)).orElse(
-        Actions.fail[Option[Pandoc]]("the pandoc executable is not available at: "+pandoc.executable))
+        Actions.fail[Option[Pandoc]]("the pandoc executable is not available at: "+pandoc.executable.path))
     }
 
     else Actions.ok(None)
   }
 
-  def copyResources(env: Env, outDir: String): Action[List[Unit]] =
+  def copyResources(env: Env, outDir: DirectoryPath): Action[List[Unit]] =
     env.fileSystem.mkdirs(outDir) >>
-    List("css", "javascript", "images", "templates").
-      map(copySpecResourcesDir(env, "org/specs2/reporter", outDir, classOf[HtmlPrinter].getClassLoader)).sequenceU
+    List(DirectoryPath("css"),
+         DirectoryPath("javascript"),
+         DirectoryPath("images"),
+         DirectoryPath("templates")).
+      map(copySpecResourcesDir(env, "org" </> "specs2" </> "reporter", outDir, classOf[HtmlPrinter].getClassLoader)).sequenceU
 
 
   def makeBody(spec: SpecStructure, stats: Stats, options: HtmlOptions, arguments: Arguments, pandoc: Boolean): String = {
@@ -190,7 +197,7 @@ trait HtmlPrinter extends Printer {
     s"""${printStatistics(title, stats, options)}"""
   }
 
-  def printFragment(arguments: Arguments, baseDir: String, pandoc: Boolean) = (fragment: Fragment) => {
+  def printFragment(arguments: Arguments, baseDir: DirectoryPath, pandoc: Boolean) = (fragment: Fragment) => {
 
     fragment match {
       case t if Fragment.isText(t) =>
@@ -246,7 +253,7 @@ trait HtmlPrinter extends Printer {
         }
 
       case Fragment(link: SpecificationLink,_,_) =>
-        <link class="ok"><a href={link.url.rebase(baseDir)} tooltip={link.tooltip} class="ok">{link.linkText}</a></link>
+        <link class="ok"><a href={link.url.rebase(baseDir.path)} tooltip={link.tooltip} class="ok">{link.linkText}</a></link>
 
       case Fragment(form @ FormDescription(_),_,_) =>
         form.xml(arguments)
@@ -303,17 +310,17 @@ trait HtmlPrinter extends Printer {
       </table>
     }
 
-  def copySpecResourcesDir(env: Env, base: String, outputDir: String, loader: ClassLoader)(src: String): Action[Unit] = {
-    Option(loader.getResource(s"$base/$src")) match {
+  def copySpecResourcesDir(env: Env, base: DirectoryPath, outputDir: DirectoryPath, loader: ClassLoader)(src: DirectoryPath): Action[Unit] = {
+    Option(loader.getResource((base </> src).path)) match {
       case None =>
-        Actions.fail(s"no resource found for url $base/$src")
+        Actions.fail(s"no resource found for url ${(base </> src).path}")
 
       case Some(url) =>
         val fs = env.fileSystem
         if (url.getProtocol.equalsIgnoreCase("jar"))
-          fs.unjar(jarOf(url), outputDir, s"^${quote(base)}(/${quote(src)}/.*)$$")
+          fs.unjar(jarOf(url), outputDir, s"^${quote(base.path)}(/${quote(src.path)}/.*)$$")
         else
-          fs.copyDir(url.getPath, new File(outputDir, src).getPath)
+          fs.copyDir(DirectoryPath.unsafe(url.toURI), outputDir </> src)
     }
   }
 

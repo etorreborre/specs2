@@ -2,6 +2,7 @@ package org.specs2
 package specification
 
 import control._
+import io._
 import scalaz.syntax.bind._
 import scalaz.std.anyVal._
 import execute.AsResult
@@ -16,13 +17,13 @@ class StoreSpec extends Specification { def is = sequential ^ s2"""
 """
 
   def e1 = {
-    val store = process.Store.file("target/test")
+    val store = process.Store.directory("target" </> "test")
     val key = SpecificationStatsKey("name")
     (store.set(key, Stats(1)) >> store.get(key)).map(_ must beSome(Stats(1)))
   }
 
   def e2 = {
-    val store = process.Store.file("target/test")
+    val store = process.Store.directory("target" </> "test")
     AsResult(e1)
 
     val key = SpecificationStatsKey("name")

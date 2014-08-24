@@ -91,7 +91,7 @@ class FileMatchersSpec extends Specification with TestFiles with FileMatchers { 
    haveParent checks if a file has a given parent path
    ${ file("c:/tmp/dir/test.txt") must haveParent("c:/tmp/dir") }
 
-   haveList checks if a file has a given list of children                                                ${fs().e11}
+   haveList checks if a file has a given list of children ${fs().e11}
                                                                                                                         """
 
 }
@@ -113,14 +113,16 @@ case class fs() extends MustMatchers with TestFiles with FileMatchers with Stand
 
 
 trait TestFiles extends FileSystem with BeforeAfterEach {
-  lazy val dirPath = s"target/test/fs"
-  lazy val okPath = s"$dirPath/file.txt"
+  lazy val directoryPath = "target" </> "test" </> "fs"
+  lazy val dirPath = directoryPath.path
+  lazy val okFilePath = directoryPath <|> "file.txt"
+  lazy val okPath = okFilePath.path
   lazy val missingPath = "absent"
 
   def before =
-    writeFile(okPath, "").execute(noLogging).unsafePerformIO
+    writeFile(okFilePath, "").execute(noLogging).unsafePerformIO
 
-  def after = delete(dirPath).execute(noLogging).unsafePerformIO
+  def after = delete(directoryPath).execute(noLogging).unsafePerformIO
 
   def setReadable(path: String, r: Boolean) = {
     new File(path).setReadable(r)

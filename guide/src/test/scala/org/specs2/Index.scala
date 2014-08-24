@@ -1,14 +1,14 @@
 package org.specs2
 
 import org.specs2.guide._
-import io.FileSystem
+import io._
 
 class Index extends Specification with FileSystem with UserGuideVariables { def is =
   "create a new index page"    ! createPage("index.html", indexBody)^
   "create a new sponsors page" ! createPage("sponsors.html", sponsorsBody)
 
-  def createPage(fileName: String, body: String, outputDir: String = "target/specs2-reports/") = {
-    writeFile(outputDir+fileName, createHtml(body))
+  def createPage(fileName: String, body: String, outputDir: DirectoryPath = "target" </> "specs2-reports") = {
+    writeFile(outputDir <|> FileName.unsafe(fileName), createHtml(body))
     ok
   }
 
