@@ -5,7 +5,8 @@ import java.util.concurrent.ThreadFactory
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
- * This factory creates named threads which can be prefixed by "specs2" to get a better understanding of thread dumps
+ * This factory creates named threads which can be prefixed by "specs2" to track the threads used by
+ * specs2 for the specification execution
  *
  * Contributed by @jedws
  */

@@ -5,7 +5,7 @@ import java.io. _
 import text.NotNullStrings._
 
 /**
- * This trait allows to add some utility methods to `Throwable` objects.
+ * This trait adds some utility methods to `Throwable` objects.
  */
 trait Throwablex {
   /**

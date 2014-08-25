@@ -2,7 +2,15 @@ package org.specs2
 package control
 
 /**
- * This trait is used to overcome some limitations with method overloading due to type erasure
+ * This trait is used to abuse method overloading and allow some of the methods in specs2 DSL to
+ * be applicable to various parameters.
+ *
+ * For example in a mutable specification, the >> method is overloaded for lots of different arguments:
+ *
+ *  - result
+ *  - function of the Environment
+ *  - function of the Command line
+ *  - ...
  */
 trait ImplicitParameters {
 

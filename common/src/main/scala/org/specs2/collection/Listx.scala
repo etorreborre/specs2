@@ -11,6 +11,7 @@ trait Listx { outer =>
 
   /** @return an extension for a nested list */
   implicit def extendNestedList[T](list: List[List[T]]): ExtendedNestedList[T] = new ExtendedNestedList(list)
+
   /**
    * Additional methods for nested lists
    */
@@ -46,5 +47,6 @@ trait Listx { outer =>
     else filtered.map(_.head) :: transpose(filtered.map(_.tail))
   }
 }
+
 private[specs2]
 object Listx extends Listx

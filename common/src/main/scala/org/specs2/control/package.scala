@@ -9,11 +9,18 @@ import scalaz.stream.Process
 import scalaz.syntax.bind._
 
 package object control {
+  /**
+   * Actions logging
+   */
   type Logger = String => IO[Unit]
   lazy val noLogging = (s: String) => IO(())
   lazy val consoleLogging = (s: String) => IO(println(s))
 
+  /**
+   * Action type, using a logger as a reader and no writer
+   */
   type Action[A] = ActionT[IO, Unit, Logger, A]
+
   object Actions extends ActionTSupport[IO, Unit, Logger]
 
   /** log a value, using the logger coming from the Reader environment */
@@ -35,7 +42,7 @@ package object control {
     if (verbose) log(r) else Actions.empty
 
   /**
-   * This implicit allows any IO[result] to be used inside an example:
+   * This implicit allows any IO[Result] to be used inside an example:
    *
    * "this should work" in {
    *   IO(success)
@@ -49,7 +56,6 @@ package object control {
    * This implicit allows an IOAction[result] to be used inside an example.
    *
    * For example to read a database.
-   *
    */
   implicit def ioActionResultAsResult[T : AsResult]: AsResult[Action[T]] = new AsResult[Action[T]] {
     def asResult(ioAction: =>Action[T]): Result =
@@ -61,10 +67,9 @@ package object control {
       )
   }
 
-  implicit class ioActionToProcess[T](action: Action[T]) {
-    def toProcess = Process(action.toTask).eval
-  }
-
+  /**
+   * An Action[T] can be converted to a Task[T]
+   */
   implicit class ioActionToTask[T](action: Action[T]) {
     def toTask = Task.delay (
       action.execute(noLogging).unsafePerformIO).flatMap(_.fold(
@@ -76,10 +81,24 @@ package object control {
       )))
   }
 
+  /**
+   * An Action[T] can be converted to a Task[T] then to a Process[T] returning just one element
+   */
+  implicit class ioActionToProcess[T](action: Action[T]) {
+    def toProcess = Process(action.toTask).eval
+  }
+
+  /**
+   * execute an action with no logging and return an option
+   */
   implicit class ioActionToOption[T](action: Action[T]) {
     def runOption = action.toTask.attemptRun.toOption
   }
 
+  /**
+   * A Task[T] (the result of running a Process[Task, T] for example) can be converted to
+   * an Action[T]
+   */
   implicit class taskToAction[T](task: Task[T]) {
     def toAction = Actions.fromTask(task)
   }

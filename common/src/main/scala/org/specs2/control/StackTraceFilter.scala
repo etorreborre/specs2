@@ -19,6 +19,7 @@ object StackTraceFilter {
     override def apply(e: Seq[StackTraceElement]): Seq[StackTraceElement] = e.filter(f)
   }
 }
+
 /**
  * Implementation of the StackTraceFilter trait with a list of include/exclude patterns
  */
@@ -59,6 +60,7 @@ object IncludeExcludeStackTraceFilter {
       new IncludeExcludeStackTraceFilter(splitted(0).splitTrim(","), splitted.drop(1).mkString(",").splitTrim(","))
   }
 }
+
 /**
  * default filter for specs2 runs
  */

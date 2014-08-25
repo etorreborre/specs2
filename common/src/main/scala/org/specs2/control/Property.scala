@@ -69,6 +69,7 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
 
   override def toString = optionalValue.fold("")(_.toString)
 }
+
 /**
  * Companion object to create properties with possibly no initial value
  */

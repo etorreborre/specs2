@@ -10,7 +10,7 @@ import Seqx._
 /**
  * This trait provides additional methods on Iterable.
  *
- * It is made public so that user can reuse the sameElementsAsMethod
+ * It is made public so that users can reuse the sameElementsAs method
  */
 trait Iterablex {
   /**
@@ -54,7 +54,7 @@ trait Iterablex {
       def isNotItsOwnIterable(a: GenIterable[_]) = a.isEmpty || a.iterator.next != a
       def matchTwo(x: T, y: T): Boolean = {
         (x, y) match {
-          case (a: GenIterable[_], b: GenIterable[_]) if (isNotItsOwnIterable(a)) =>
+          case (a: GenIterable[_], b: GenIterable[_]) if isNotItsOwnIterable(a) =>
             x.asInstanceOf[GenIterable[T]].sameElementsAs(y.asInstanceOf[GenIterable[T]], f)
           case _ => f(x, y)
         }
@@ -96,15 +96,13 @@ trait Iterablex {
      * @return the representation of the elements of the iterable using the toString method recursively
      */
     def toDeepString: String = {
-      if (!xs.isEmpty && xs == xs.iterator.next)
+      if (xs.nonEmpty && xs == xs.iterator.next)
         xs.toString
       else
-        "[" + xs.toList.map { x => 
-          x match {
-            case i: GenIterable[_] => i.toDeepString
-            case _ => x.toString
-          }
-       }.mkString(", ") + "]"
+        "[" + xs.toList.map {
+          case i: GenIterable[_] => i.toDeepString
+          case x => x.toString
+        }.mkString(", ") + "]"
     }
     /** map the first element with a function */
     def mapFirst(f: T => T): GenSeq[T] = (xs.take(1).map(f) ++ xs.drop(1)).toSeq
