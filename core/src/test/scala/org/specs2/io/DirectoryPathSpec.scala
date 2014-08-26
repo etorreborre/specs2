@@ -4,6 +4,8 @@ package io
 import java.io.File
 import java.net.URI
 
+import org.specs2.matcher.Matcher
+
 class DirectoryPathSpec extends Specification { def is = s2"""
 
  Paths are of 2 sorts:
@@ -69,6 +71,8 @@ class DirectoryPathSpec extends Specification { def is = s2"""
    get a portion of the path
    ${ ("test" </> "hello" </> "world" </> "eric").relativeTo("test" </> "hello")  === "world" </> "eric" }
    ${ ("test" </> "hello" </> "world" </> "eric").relativeTo("other" </> "hello") === "test" </> "hello" </> "world" </> "eric" }
+   ${ ("test" </> "hello" </> "world" </> "eric").relativeTo("test" </> "hello")  must beRelative }
+   ${ ("test" </> "hello" </> "world" <|> "eric").relativeTo("test" </> "hello")  must beRelative }
    ${ ("test" </> "hello" </> "world").fromRoot === "hello" </> "world" }
 
  FilePaths
@@ -87,5 +91,11 @@ class DirectoryPathSpec extends Specification { def is = s2"""
    ${ ("test" </> "hello" <|> "world").path must_== "test/hello/world" }
 
 """
+
+  def beRelative: Matcher[DirectoryPath] = { dirPath: DirectoryPath => (dirPath.isRelative, s"$dirPath is not relative") }
+  def beAbsolute: Matcher[DirectoryPath] = { dirPath: DirectoryPath => (dirPath.isAbsolute, s"$dirPath is not absolute") }
+  def beRelative(implicit p1: ImplicitParam1): Matcher[FilePath] = { filePath: FilePath => (filePath.isRelative, s"$filePath is not relative") }
+  def beAbsolute(implicit p1: ImplicitParam1): Matcher[FilePath] = { filePath: FilePath => (filePath.isAbsolute, s"$filePath is not absolute") }
+
 }
 

@@ -76,7 +76,7 @@ case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean) {
    */
   def relativeTo(other: DirectoryPath): DirectoryPath =
     (dirs, other.dirs) match {
-      case (h +: t, h1 +: t1) if h == h1 => copy(dirs = t).relativeTo(other.copy(dirs = t1))
+      case (h +: t, h1 +: t1) if h == h1 => copy(dirs = t, absolute = false).relativeTo(other.copy(dirs = t1))
       case _                             => this
     }
 
@@ -153,9 +153,10 @@ case class FilePath(dir: DirectoryPath, name: FileName) {
   def isAbsolute = dir.isAbsolute
 
   /** @return an absolute file path */
-  def asAbsolute = setAbsolute(true)
+  def asAbsolute = setAbsolute(absolute = true)
+
   /** @return a relative file path */
-  def asRelative = setAbsolute(false)
+  def asRelative = setAbsolute(absolute = false)
 
   /** @return modify the absolute status of this file path */
   def setAbsolute(absolute: Boolean) = copy(dir.setAbsolute(absolute))
