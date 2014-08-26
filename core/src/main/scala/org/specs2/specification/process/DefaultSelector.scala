@@ -4,10 +4,10 @@ package process
 
 import scalaz.stream._
 import scalaz.stream.Process.{Env =>_,_}
+import process1.zipWithPreviousAndNext
 import data._
 import scalaz.syntax.foldable._
 import scalaz.std.list._
-import data.Processes._
 import specification.core._
 
 /**
@@ -107,7 +107,7 @@ trait DefaultSelector extends Selector {
       }
     }
 
-    if ((arguments.include + arguments.exclude).nonEmpty) withPreviousAndNext[Fragment] |> go()
+    if ((arguments.include + arguments.exclude).nonEmpty) zipWithPreviousAndNext[Fragment] |> go()
     else process1.id[Fragment]
   }
 

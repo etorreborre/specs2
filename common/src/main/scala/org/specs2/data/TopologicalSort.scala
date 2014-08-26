@@ -3,6 +3,10 @@ package data
 
 import scala.collection.mutable.ListBuffer
 
+/**
+ * Topological sorting is used to define the order of execution of dependent specifications
+ * when they form an acyclic graph
+ */
 object TopologicalSort {
   /**
    * sort elements topologically so that element at position i doesn't depend on element at position j if i < j

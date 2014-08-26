@@ -2,12 +2,13 @@ package org.specs2
 package data
 
 import text.Trim._
+
 /**
  * This trait provides a keep function which will determine if a element T must be kept with regards to:
  *
  *  - a list of include tags
  *  - a list of exclude tags
- *  - a matchFunction which say if the element match a given tag
+ *  - a matchFunction which say if the element matches a given tag
  *
  *  The element is kept if it is included and not excluded
  *

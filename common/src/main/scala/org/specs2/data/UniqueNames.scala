@@ -17,7 +17,7 @@ case class UniqueNames(separator: String = "_") {
   /**
    * @return a unique name based on the name unicity
    */
-  def uniqueName(name: String) = {
+  def uniqueName(name: String) = synchronized {
     val result = if (names.contains(name)) {
       name + separator + names(name)
     } else name
@@ -28,7 +28,7 @@ case class UniqueNames(separator: String = "_") {
   /**
    * @return a unique name based on the reference hashcode
    */
-  def uniqueName(reference: Any, name: String) = {
+  def uniqueName(reference: Any, name: String) = synchronized {
     val code = reference.hashCode
     val result = if (references.contains(code)) {
       name + separator + references(code)

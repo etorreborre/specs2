@@ -2,9 +2,13 @@ package org.specs2
 package data
 
 import scala.collection.mutable
+
 /**
  * Hopcroft-Karp (https://en.wikipedia.org/wiki/Hopcroft%E2%80%93Karp_algorithm) algorithm for
  * finding the maximum matching in a bipartite graph
+ *
+ * This is used for "contain" matchers to find the best matches between actual and expected elements in 2 lists
+ *
  */
 object HopcroftKarp {
 

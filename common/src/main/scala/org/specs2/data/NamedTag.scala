@@ -4,6 +4,12 @@ package data
 import main.Arguments
 import scalaz.Monoid
 
+/**
+ * A tag with names.
+ *
+ * Given a list of names and the current arguments this tag must be able to determine if what it is tagging must
+ * be kept or not
+ */
 trait NamedTag { outer =>
   /** tagging names */
   def names: Seq[String]
@@ -35,16 +41,29 @@ trait NamedTag { outer =>
   override def toString = s"Tag(${names.mkString(",")})"
 }
 
+/**
+ * An IncludeExcludeTag is defined with inclusion/exclusion patterns
+ */
 trait IncludeExcludeTag extends NamedTag { outer =>
   /** @return true if the element tagged with this must be kept */
-  def keep(args: Arguments, names: Seq[String]): Boolean = SeparatedTags(args.include, args.exclude).keep(names)
+  def keep(args: Arguments, names: Seq[String]): Boolean =
+    SeparatedTags(args.include, args.exclude).keep(names)
 }
 
+/**
+ * This tag will always keep its tagged element.
+ *
+ * It is used to keep setup/teardown behaviour in specification whether examples are tagged or not and
+ * whatever is passed on the command line
+ */
 object AlwaysTag extends NamedTag {
   def keep(args: Arguments, names: Seq[String]) = true
   def names = Seq("specs2.internal.always")
 }
 
+/**
+ * Similar to the AlwaysTag this tag is keeping elements only if there is no included tags
+ */
 object AlwaysWhenNoIncludeTag extends NamedTag {
   def keep(args: Arguments, names: Seq[String]) = args.include.isEmpty
   def names = Seq("specs2.internal.alwaysWhenNoInclude")

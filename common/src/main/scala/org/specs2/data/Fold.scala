@@ -1,12 +1,11 @@
 package org.specs2
 package data
 
-import scala.annotation.tailrec
 import scalaz.stream._
 import Process._
 import scalaz.concurrent.Task
 import Task._
-import scalaz.{\/-, -\/, Monoid}
+import scalaz.Monoid
 import scalaz.std.list._
 import scalaz.syntax.foldable._
 import scalaz.syntax.bind._
@@ -56,9 +55,9 @@ object Fold {
   }
 
   /**
-   * Transform a simple sink into a sink, where the written value doesn't depend on the
-   * current state to a sink for folds, where the current state is passed all the time
-   * (and actually ignored here)
+   * Transform a simple sink where the written value doesn't depend on the
+   * current state into a sink where the current state is passed all the time
+   * (and actually ignored)
    */
   def toFoldSink[T, S](sink: Sink[Task, T]): Sink[Task, (T, S)] =
     sink.map(f => (ts: (T, S)) => f(ts._1))
