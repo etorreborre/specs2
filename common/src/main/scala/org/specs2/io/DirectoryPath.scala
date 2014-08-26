@@ -7,11 +7,10 @@ import java.util.UUID
 import scalaz._, Scalaz._
 
 /**
- * Representation of a directory relative to some base location
+ * Representation of a directory path which can be relative or absolute
  *
- * It is a list of FileNames and we can append other DirPaths or FilePaths to it
- *
- * If the list is empty, this means we are at the location root
+ * It is a list of FileNames and we can append other DirectoryPaths or FilePaths to it
+ * If the list is empty, this means we are at the root
  */
 case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean) {
 
@@ -125,11 +124,12 @@ object DirectoryPath {
 }
 
 /**
- * Representation of a file relative to some base location
+ * Representation of a file path, absolute or relative
  *
  * It has a parent directory and a name
  */
 case class FilePath(dir: DirectoryPath, name: FileName) {
+
   /** @return the root directory containing this file */
   def root: DirectoryPath = dir.root
 
@@ -142,6 +142,10 @@ case class FilePath(dir: DirectoryPath, name: FileName) {
   /** @return the portion of a file path that is relative to another */
   def relativeTo(other: DirectoryPath): FilePath =
     copy(dir = dir.relativeTo(other))
+
+  /** @return a file path with the same name but in another directory path */
+  def rebaseTo(other: DirectoryPath): FilePath =
+    copy(dir = other)
 
   /** @return return the portion of the file path that starts from the rootname */
   def fromRoot: FilePath = relativeTo(root)

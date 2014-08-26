@@ -21,22 +21,29 @@ import java.util.regex.Matcher.quoteReplacement
  * Interface for the FileSystem where effects are denoted with the "Action" type
  */
 trait FileSystem extends FilePathReader {
+
+  /** delete a file */
   def deleteFile(filePath: FilePath): Action[Boolean] =
     Actions.safe(filePath.toFile.delete)
 
+  /** write a string to a file as UTF-8 */
   def writeFile(filePath: FilePath, content: String): Action[Unit] =
     Actions.fromTask(writeFileTask(filePath, content))
 
+  /** write a string to a file as UTF-8 */
   def writeFileTask(filePath: FilePath, content: String): Task[Unit] =
     mkdirs(filePath).toTask >>
     Process(content).toSource.pipe(text.utf8Encode).to(io.fileChunkW(filePath.path)).run
 
-  def withFile(path: FilePath)(action: Action[Unit]): Action[Unit] =
+  /** execute an action with a File, then delete it */
+  def withEphemeralFile(path: FilePath)(action: Action[Unit]): Action[Unit] =
     action.andFinally(deleteFile(path).void)
 
+  /** create a directory and its parent directories */
   def mkdirs(path: DirectoryPath): Action[Unit] =
     Actions.safe(path.toFile.mkdirs)
 
+  /** create a the directory containing a file and its parent directories */
   def mkdirs(path: FilePath): Action[Unit] =
     mkdirs(path.dir)
 

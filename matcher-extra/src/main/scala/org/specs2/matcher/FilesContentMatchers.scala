@@ -5,7 +5,6 @@ import java.io.File
 import execute.Result
 import text._
 import io._
-import Paths._
 import MatchersImplicits._
 import scalaz.std.anyVal._
 import control._
@@ -15,7 +14,6 @@ import control._
  * and also ways to verify the contents of these files
  */
 trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with TraversableMatchers {
-  import fileSystem._
   /**
    * check that all the paths in `expectedDir` are the same as the ones in `actualDir`
    */
@@ -56,9 +54,13 @@ trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with T
     haveSameMD5(createExpectable((actual, expected)))
   }
 
+  private def filePathFilter(filter: File => Boolean) =
+    (f: FilePath) => filter(f.toFile)
+
   case class LocalPathsMatcher(expectedDir: File, filter: File => Boolean = (f: File) => true) extends Matcher[File] {
     def apply[S <: File](actualDir: Expectable[S]) = {
-      result(haveSameLinesAs(LocalPaths(expectedDir, filter)).apply(createExpectable(LocalPaths(actualDir.value, filter))), actualDir)
+      result(haveSameLinesAs(LocalPaths(DirectoryPath.unsafe(expectedDir), filePathFilter(filter)))
+        .apply(createExpectable(LocalPaths(DirectoryPath.unsafe(actualDir.value), filePathFilter(filter)))), actualDir)
     }
 
     def withFilter(f: File => Boolean) = copy(filter = f)
@@ -67,9 +69,13 @@ trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with T
   case class LocalFilesContentMatcher(expectedDir: File,
                                       filter: File => Boolean = (f: File) => true,
                                       filesMatcher: Matcher[(File, File)] = haveSameLines[File, File]) extends Matcher[File] {
+
     def apply[S <: File](actualDir: Expectable[S]) = {
-      val expectedFiles = LocalPaths(expectedDir, filter)
-      val pairs = expectedFiles.localPaths.map(p => (new File(actualDir.value.getPath.dirPath+p), new File(expectedDir.getPath.dirPath+p))).filter(_._1.exists)
+      val expectedFiles = LocalPaths(DirectoryPath.unsafe(expectedDir), filePathFilter(filter))
+      val pairs = expectedFiles.files.map { p =>
+        ((DirectoryPath.unsafe(actualDir.value) </> p).toFile,
+         (DirectoryPath.unsafe(expectedDir) </> p).toFile)
+      }.filter(_._1.exists)
       result(contain(filesMatcher).forall.apply(createExpectable(pairs)), actualDir)
     }
 
@@ -90,23 +96,13 @@ trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with T
   }
 
   private implicit def LocalPathsLinesContent: LinesContent[LocalPaths] = new LinesContent[LocalPaths] {
-    def name(lp: LocalPaths) = lp.basePath
+    def name(lp: LocalPaths) = lp.base.path
     def lines(lp: LocalPaths) = lp.localPaths
   }
 
-  private case class LocalPaths(base: File, filter: File => Boolean = (f: File) => true) {
-    def basePath = base.getPath
-    def files = recurse(base).filter(filter).toSeq.sortBy(fromBaseFile(base))
-    def localPaths = files.map(fromBaseFile(base)).sorted.toSeq
-  }
-
-  /**
-   * collect files recursively, including directories
-   */
-  private def recurse(file: File): Stream[File] = {
-    val files = file.listFiles
-    if (files == null) Stream.empty
-    else files.toStream ++ files.filter(_.isDirectory).toStream.flatMap(recurse)
+  private case class LocalPaths(base: DirectoryPath, filter: FilePath => Boolean) {
+    def files = FilePathReader.listFilePaths(base).map(_.filter(filter).sortBy(fp => fp.relativeTo(base).path)).runOption.getOrElse(Nil)
+    def localPaths = files.map(_.path).sorted
   }
 
 }

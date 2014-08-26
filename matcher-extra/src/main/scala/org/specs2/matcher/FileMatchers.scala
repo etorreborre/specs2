@@ -11,8 +11,8 @@ object PathMatchers extends PathMatchers
 
 private[specs2]
 trait PathBaseMatchers { outer =>
-  private[specs2] val fileSystem: FileReader = new org.specs2.io.FileReader {}
-  import fileSystem._
+  private[specs2] val fileReader: FileReader = new org.specs2.io.FileReader {}
+  import fileReader._
 
   /** matches if new File(path).exists */   
   def beAnExistingPath = new PathMatcher((s: String) => exists(s), "exists", "doesn't exist")

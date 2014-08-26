@@ -2,11 +2,12 @@ package org.specs2
 package html
 
 import scala.xml._
+import io._
 import NodeSeq._
 import xml.Nodex._
 import Htmlx._
 import data.Trees._
-import io.Paths._
+
 /**
  * This trait checks for the presence of a <toc/> tag at the beginning of a xml document and replaces it
  * by a list of links to the headers of the document
@@ -27,17 +28,17 @@ trait TableOfContents { outer =>
    *
    * @return the toc of a document
    */
-  def tocItemList(body: NodeSeq, rootUrl: String, url: String, id: SpecId, subTocs: Map[SpecId, NodeSeq]): NodeSeq = {
+  def tocItemList(body: NodeSeq, rootUrl: DirectoryPath, url: String, id: SpecId, subTocs: Map[SpecId, NodeSeq]): NodeSeq = {
     body.headersTree.
       bottomUp { (h: Header, s: Stream[NodeSeq]) =>
         if (h.isRoot)
       // 'id' is the name of the attribute expected by jstree to "open" the tree on a specific node
           s.reduceNodes.updateHeadAttribute("id", id.toString)
         else if (h.isSubtoc)
-          subTocs.get(h.specId).getOrElse(Empty) ++ s.reduceNodes
+          subTocs.getOrElse(h.specId, Empty) ++ s.reduceNodes
         else
-          <li id={h.specId.toString}><a href={h.anchorName(url).relativeTo(rootUrl)}>{h.name}</a>
-            { <ul>{s.toSeq}</ul> unless (s.toSeq.isEmpty) }
+          <li id={h.specId.toString}><a href={FilePath.unsafe(h.anchorName(url)).relativeTo(rootUrl).path}>{h.name}</a>
+            { <ul>{s.toSeq}</ul> unless s.toSeq.isEmpty }
           </li>
     }.rootLabel
   }

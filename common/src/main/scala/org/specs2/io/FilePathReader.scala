@@ -4,11 +4,15 @@ package io
 import java.io.{File, FileInputStream, BufferedInputStream}
 import control._
 import text.MD5
+import scala.io.Codec
 import scalaz.concurrent._
 import scalaz.stream._
 import scalaz.std.anyVal._
 import Paths._
 
+/**
+ * Methods to read files on the FileSystem
+ */
 trait FilePathReader {
 
   /**
@@ -55,10 +59,12 @@ trait FilePathReader {
     go(directory)
   }
 
-  def readFile(path: FilePath): Action[String] =
+  /** @return the content of a file as a UTF-8 string by default */
+  def readFile(path: FilePath)(implicit codec: Codec): Action[String] =
     readLines(path).map(_.mkString("\n"))
 
-  def readLines(filePath: FilePath): Action[IndexedSeq[String]] =
+  /** @return the content of a file as UTF-8 lines by default */
+  def readLines(filePath: FilePath)(implicit codec: Codec): Action[IndexedSeq[String]] =
     Actions.fromTask(io.linesR(filePath.path).runLog[Task, String])
 
   /** read the content of a file as an Array of Bytes */

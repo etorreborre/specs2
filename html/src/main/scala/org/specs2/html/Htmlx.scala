@@ -1,13 +1,13 @@
 package org.specs2
 package html
 
+import io._
 import scala.xml._
 import transform.RewriteRule
 import scalaz.{ Tree, TreeLoc, Scalaz, Show }
 import Tree._
 import xml.Nodex._
 import java.net.URLDecoder
-import io.Paths._
 import data.UniqueNames
 
 /**
@@ -144,12 +144,11 @@ trait Htmlx { outer =>
     def applyTransformation(n: Node): Seq[Node] = n match {
       case e: Node if pf.isDefinedAt(e) => pf(e)
       case Group(xs)              => Group(applyTransformation(xs))
-      case other                  => {
+      case other                  =>
         val ch = n.child
         val nch = applyTransformation(ch)
         if (ch eq nch) n
         else           Elem(n.prefix, n.label, n.attributes, n.scope, true, nch: _*)
-      }
     }
     def rewrite(n: NodeSeq) = applyTransformation(n)
   }
@@ -160,14 +159,14 @@ trait Htmlx { outer =>
   private def uniqueNamer = UniqueNames()
 
   /** @return the href urls in <a/> elements */
-  def urls(ns: NodeSeq, filePath: String = ""): Seq[String] = {
+  def urls(ns: NodeSeq, filePath: FilePath = DirectoryPath.EMPTY.toFilePath): List[String] = {
     def decode(href: String) = {
       val splitted = href.split("#").toSeq
-      val url    = URLDecoder.decode(splitted(0), "UTF-8").unrelativeTo(filePath)
+      val url    = filePath.dir </> FilePath.unsafe(URLDecoder.decode(splitted(0), "UTF-8"))
       val anchor = splitted.drop(1).lastOption.map(anchor => "#"+anchor).getOrElse("")
-      url + anchor
+      url.path + anchor
     }
-    (ns \\ "a").flatMap(a => a.attribute("href").map(href => decode(href.mkString)))
+    (ns \\ "a").flatMap(a => a.attribute("href").map(href => decode(href.mkString))).toList
   }
 
 }

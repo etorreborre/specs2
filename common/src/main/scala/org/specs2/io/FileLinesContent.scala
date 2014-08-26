@@ -7,6 +7,8 @@ import control._
 
 /**
  * Default implementation for reading lines out of a file
+ *
+ * This is used in FileContentMatchers
  */
 object FileLinesContent extends LinesContent[File] {
   def lines(f: File): Seq[String] =

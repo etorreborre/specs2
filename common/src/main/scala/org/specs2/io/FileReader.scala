@@ -2,34 +2,12 @@ package org.specs2
 package io
 
 import java.io._
-import scala.xml.parsing._
-import scala.io.Source
-import text.MD5
-
 
 /**
- * The FileReader trait provides functions to read files as unsafe functions (not in IO)
+ * The FileReader trait provides most of the File API methods as an interface
+ * in order to be able to mock them
  */
 trait FileReader {
-
-  /**
-   * @return true if the File represented by this path is a directory
-   */
-  def isDir(path: String) = isDirectory(path)
-
-  private def fileMatchesPattern(f: File, pattern: String) = {
-    val filePath = "./"+f.getPath.replace("\\", "/")
-    f.isFile && (filePath matches pattern)
-  }
-
-
-  /**
-   * @return a FileInputStream for a given file path
-   */
-  def inputStream(filePath: String): java.io.InputStream = new java.io.FileInputStream(filePath)
-
-  /** @return the path of a File relative to a base file */
-  def fromBaseFile(base: File) = (aFile: File) => Paths.from(base.getPath)(aFile.getPath)
 
   /** @return true if the file exists */
   def exists(path: String) = path != null && new File(path).exists
@@ -66,29 +44,7 @@ trait FileReader {
 
   /** @return the files of that directory */
   def listFiles(path: String): List[String] = if (new File(path).list == null) List() else new File(path).list.toList
-
-  /**
-   * @return the xml content of a file using the Xhtml parser
-   *
-   * if the file contains several nodes, it wraps them up in a single artificial node
-   */
-  def loadXhtmlFile(filePath: String, sourceErrors: Boolean = true) =
-    ???
-//  tryo {
-//    val fileContent = readFile(filePath)
-//    val xhtml = fromString("<e>"+fileContent+"</e>")
-//    (parse(xhtml, sourceErrors)\\"e")(0).child.reduceNodes
-//  }
-
-  private[this] def parse(source: Source, sourceErrors: Boolean = true) = {
-    if (sourceErrors) XhtmlParser(source)
-    else new XhtmlParser(source) {
-      override def reportSyntaxError(pos: Int, str: String): Unit = ()
-    }.initialize.document
-  }
-
-//  def silentLoadXhtmlFileReport          = (e: Exception, filePath: String) => ()
-//  private[this] def defaultLoadXhtmlFileReport = (e: Exception, filePath: String) => { scala.Console.println("trying to load: "+filePath+"\n"); e.printStackTrace }
-
 }
+
 object FileReader extends FileReader
+

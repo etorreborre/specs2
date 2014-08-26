@@ -5,7 +5,6 @@ import specification.core._
 import data.Fold
 import specification.process.{Stats, Statistics}
 import io._
-import io.Paths._
 import main.Arguments
 import scala.xml.NodeSeq
 import scalaz.concurrent.Task
@@ -83,7 +82,7 @@ trait HtmlPrinter extends Printer {
     for {
       options  <- getHtmlOptions(env.arguments)
       _        <- copyResources(env, options.outDir)
-      _        <- withFile(options.outDir <|> options.template.name) {
+      _        <- withEphemeralFile(options.outDir <|> options.template.name) {
                     copyFile(options.outDir)(options.template) >>
                     makePandocHtml(spec, stats, pandoc, options, env)
                   }
@@ -104,7 +103,7 @@ trait HtmlPrinter extends Printer {
 
     val pandocArguments = Pandoc.arguments(bodyFile, options.template, variables1, outputFilePath(options.outDir, spec), pandoc)
 
-    withFile(bodyFile) {
+    withEphemeralFile(bodyFile) {
       writeFile(bodyFile, makeBody(spec, stats, options, env.arguments, pandoc = true)) >>
       runProcess(pandoc.executable, pandocArguments)
     }
@@ -253,7 +252,7 @@ trait HtmlPrinter extends Printer {
         }
 
       case Fragment(link: SpecificationLink,_,_) =>
-        <link class="ok"><a href={link.url.rebase(baseDir.path)} tooltip={link.tooltip} class="ok">{link.linkText}</a></link>
+        <link class="ok"><a href={FilePath.unsafe(link.url).rebaseTo(baseDir).path} tooltip={link.tooltip} class="ok">{link.linkText}</a></link>
 
       case Fragment(form @ FormDescription(_),_,_) =>
         form.xml(arguments)

@@ -2,6 +2,7 @@ package org.specs2
 package html
 
 import TableOfContents._
+import io._
 import scala.xml.NodeSeq
 import specification._
 import matcher.XmlMatchers
@@ -36,6 +37,6 @@ class TableOfContentsSpec extends script.Specification with HtmlDocuments with G
   }
 
   def addToc(body: NodeSeq, subtocs: Map[SpecId, NodeSeq] = Map()) =
-    tocItemList(body, "guide/UserGuide.html", "guide/UserGuide.html", SpecId("specName"), subtocs)
+    tocItemList(body, DirectoryPath.unsafe("guide"), "guide/UserGuide.html", SpecId("specName"), subtocs)
 
 }

@@ -4,8 +4,7 @@ package matcher
 import java.io.File
 import specification._
 import user.specification._
-import io.Location
-import org.specs2.execute.Failure
+import execute.Failure
 
 class MatcherSpec extends script.Specification with ResultMatchers with Groups { def is = s2"""
 
