@@ -56,7 +56,7 @@ class InvertedColors extends ConsoleColors {
 /**
  * This class takes colors from a map, using default colors if some values are missing
  */
-case class MappedColors(colors: Map[String, String] = Map()) extends ConsoleColors { outer =>
+case class MappedColors(colors: Map[String, AnsiColor] = Map()) extends ConsoleColors { outer =>
   lazy val defaultColors = new ConsoleColors
 
   override lazy val textColor    = colors.getOrElse("text"   , defaultColors.textColor)
