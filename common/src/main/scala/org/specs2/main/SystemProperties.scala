@@ -6,7 +6,7 @@ import text.FromString
 import java.util.regex.Pattern
 
 /**
- * Utility methods to get systems properties prefixed with specs2
+ * Get systems properties prefixed with specs2
  */
 trait SystemProperties {
   val specs2Prefix = "specs2."
@@ -43,12 +43,3 @@ trait SystemProperties {
 }
 
 object SystemProperties extends SystemProperties
-
-/**
- * This class is used in specifications to mock the system properties
- */
-private[specs2]
-trait MapSystemProperties extends SystemProperties {
-  def properties: Map[String, String]
-  override def systemGetProperty(p: String) = properties.get(p)
-}

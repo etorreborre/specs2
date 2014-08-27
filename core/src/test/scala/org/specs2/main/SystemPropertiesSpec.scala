@@ -63,3 +63,11 @@ Get as
     eg := props("specs2.other" -> "false").getPropertyAs[Boolean]("color") must beNone
   }
 }
+
+/**
+ * This class is used in specifications to mock the system properties
+ */
+trait MapSystemProperties extends SystemProperties {
+  def properties: Map[String, String]
+  override def systemGetProperty(p: String) = properties.get(p)
+}

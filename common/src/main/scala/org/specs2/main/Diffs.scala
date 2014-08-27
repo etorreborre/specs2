@@ -5,7 +5,7 @@ import control.Exceptions._
 import text._
 
 /**
- * this trait is used to define and compute the differences between strings (used by the reporters)
+ * Define and compute the differences between strings (used by the printers)
  */
 trait Diffs {
   /** @return true if the differences must be shown */
