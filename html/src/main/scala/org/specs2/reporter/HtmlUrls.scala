@@ -43,7 +43,7 @@ trait HtmlUrls {
     aliveResult(url, isAliveHttp(url))
 
   protected def isAliveFileResult(url: String, others: Map[String, NodeSeq], rootDirectory: DirectoryPath) =
-    aliveResult((rootDirectory </> FilePath.unsafe(url)).path, isAliveFile(url, others, rootDirectory))
+    aliveResult((rootDirectory / FilePath.unsafe(url)).path, isAliveFile(url, others, rootDirectory))
 
   protected def isAliveAnchorResult(url: String, html: NodeSeq) =
     aliveResult(url, isAliveAnchor(url, html))
@@ -68,7 +68,7 @@ trait HtmlUrls {
 
   /**@return true if the url can be accessed on the file system */
   def isAliveFile(url: String, others: Map[String, NodeSeq], rootDirectory: DirectoryPath) =
-    others.keys.exists(o => o == url) || exists(rootDirectory </> FilePath.unsafe(url)).runOption.getOrElse(false)
+    others.keys.exists(o => o == url) || exists(rootDirectory / FilePath.unsafe(url)).runOption.getOrElse(false)
 
   /**@return true if the url is an anchor in the document */
   def isAliveAnchor(url: String, html: NodeSeq) =
@@ -88,7 +88,7 @@ trait HtmlUrls {
     val (file, anchor) = (url.split("#")(0), url.split("#")(1))
     isAliveFile(file, others, rootDirectory) &&
       (isAliveAnchor(anchor, others.find { case (k, v) => k == file }.fold(NodeSeq.Empty)(_._2)) ||
-        isAliveAnchor(anchor, readFile(rootDirectory </> FilePath.unsafe(file)).runOption.getOrElse("")))
+        isAliveAnchor(anchor, readFile(rootDirectory / FilePath.unsafe(file)).runOption.getOrElse("")))
   }
 }
 

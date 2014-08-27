@@ -58,7 +58,7 @@ object Store {
     def reset: Action[Unit] = delete(baseDirectory)
 
     private def filepath[A](key: Key[A]): FilePath =
-      baseDirectory </> FilePath.unsafe(StoreKeys.resolve(key))
+      baseDirectory / FilePath.unsafe(StoreKeys.resolve(key))
   }
 
   val memory = MemoryStore()

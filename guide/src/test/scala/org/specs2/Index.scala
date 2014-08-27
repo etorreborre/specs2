@@ -7,8 +7,8 @@ class Index extends Specification with FileSystem with UserGuideVariables { def 
   "create a new index page"    ! createPage("index.html", indexBody)^
   "create a new sponsors page" ! createPage("sponsors.html", sponsorsBody)
 
-  def createPage(fileName: String, body: String, outputDir: DirectoryPath = "target" </> "specs2-reports") = {
-    writeFile(outputDir <|> FileName.unsafe(fileName), createHtml(body))
+  def createPage(fileName: String, body: String, outputDir: DirectoryPath = "target" / "specs2-reports") = {
+    writeFile(outputDir | FileName.unsafe(fileName), createHtml(body))
     ok
   }
 

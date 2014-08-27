@@ -33,47 +33,47 @@ class DirectoryPathSpec extends Specification { def is = s2"""
    a string starting with a /
    ${ DirectoryPath.unsafe("/hello/world").isAbsolute }
    the DirectoryPath.Root object
-   ${ (DirectoryPath.ROOT </> "world").isAbsolute }
+   ${ (DirectoryPath.ROOT / "world").isAbsolute }
 
  A relative dir path can be built from
    a string not starting with a /
    ${ DirectoryPath.unsafe("hello/world").isRelative }
    the DirectoryPath.Empty object
-   ${ (DirectoryPath.EMPTY </> "world").isRelative }
+   ${ (DirectoryPath.EMPTY / "world").isRelative }
    a literal string
-   ${ ("hello" </> "world").isRelative }
+   ${ ("hello" / "world").isRelative }
 
  Basic operations can be executed on a DirectoryPath
    get the parent
    ${ DirectoryPath.ROOT.parent must beNone }
    ${ DirectoryPath("test").parent must beSome(DirectoryPath.EMPTY) }
    ${ DirectoryPath("test").asAbsolute.parent must beSome(DirectoryPath.ROOT) }
-   ${ ("test" </> "hello" </> "world").parent must beSome("test" </> "hello") }
+   ${ ("test" / "hello" / "world").parent must beSome("test" / "hello") }
 
    get the basename
-   ${ ("test" </> "hello" </> "world").name === FileName.unsafe("world") }
+   ${ ("test" / "hello" / "world").name === FileName.unsafe("world") }
 
    get the rootname
-   ${ ("test" </> "hello" </> "world").root must_== DirectoryPath("test") }
+   ${ ("test" / "hello" / "world").root must_== DirectoryPath("test") }
 
    get the path as a string
    ${ DirectoryPath.ROOT.path must_== "/" }
    ${ DirectoryPath.EMPTY.path must_== "" }
    ${ DirectoryPath("test").path must_== "test" }
    ${ DirectoryPath("test").asAbsolute.path must_== "/test" }
-   ${ ("test" </> "hello" </> "world").path must_== "test/hello/world" }
+   ${ ("test" / "hello" / "world").path must_== "test/hello/world" }
 
    get the path as a string, with a last slash
    ${ DirectoryPath.ROOT.dirPath must_== "/" }
    ${ DirectoryPath("test").dirPath must_== "test/" }
-   ${ ("test" </> "hello" </> "world").dirPath must_== "test/hello/world/" }
+   ${ ("test" / "hello" / "world").dirPath must_== "test/hello/world/" }
 
    get a portion of the path
-   ${ ("test" </> "hello" </> "world" </> "eric").relativeTo("test" </> "hello")  === "world" </> "eric" }
-   ${ ("test" </> "hello" </> "world" </> "eric").relativeTo("other" </> "hello") === "test" </> "hello" </> "world" </> "eric" }
-   ${ ("test" </> "hello" </> "world" </> "eric").relativeTo("test" </> "hello")  must beRelative }
-   ${ ("test" </> "hello" </> "world" <|> "eric").relativeTo("test" </> "hello")  must beRelative }
-   ${ ("test" </> "hello" </> "world").fromRoot === "hello" </> "world" }
+   ${ ("test" / "hello" / "world" / "eric").relativeTo("test" / "hello")  === "world" / "eric" }
+   ${ ("test" / "hello" / "world" / "eric").relativeTo("other" / "hello") === "test" / "hello" / "world" / "eric" }
+   ${ ("test" / "hello" / "world" / "eric").relativeTo("test" / "hello")  must beRelative }
+   ${ ("test" / "hello" / "world" | "eric").relativeTo("test" / "hello")  must beRelative }
+   ${ ("test" / "hello" / "world").fromRoot === "hello" / "world" }
 
  FilePaths
  =========
@@ -88,7 +88,7 @@ class DirectoryPathSpec extends Specification { def is = s2"""
 
    get the path as a string
    ${ FilePath("test").path must_== "test" }
-   ${ ("test" </> "hello" <|> "world").path must_== "test/hello/world" }
+   ${ ("test" / "hello" | "world").path must_== "test/hello/world" }
 
 """
 

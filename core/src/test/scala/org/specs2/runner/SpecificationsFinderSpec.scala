@@ -15,7 +15,7 @@ class SpecificationsFinderSpec extends Specification { def is = s2"""
 """
 
   def e1 =
-    filePaths("core" </> "src" </> "test" </> "scala", "**/*.scala", verbose = false) must findFiles
+    filePaths("core" / "src" / "test" / "scala", "**/*.scala", verbose = false) must findFiles
 
   def e2 =
     filePaths(DirectoryPath.unsafe(new File("core/src/test/scala").getAbsolutePath), "**/*.scala", verbose = false) must findFiles

@@ -75,8 +75,8 @@ trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with T
     def apply[S <: File](actualDir: Expectable[S]) = {
       val expectedFiles = LocalPaths(DirectoryPath.unsafe(expectedDir), filePathFilter(filter))
       val pairs = expectedFiles.files.map { p =>
-        ((DirectoryPath.unsafe(actualDir.value) </> p).toFile,
-         (DirectoryPath.unsafe(expectedDir) </> p).toFile)
+        ((DirectoryPath.unsafe(actualDir.value) / p).toFile,
+         (DirectoryPath.unsafe(expectedDir) / p).toFile)
       }.filter(_._1.exists)
       result(contain(filesMatcher).forall.apply(createExpectable(pairs)), actualDir)
     }

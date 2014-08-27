@@ -162,7 +162,7 @@ trait Htmlx { outer =>
   def urls(ns: NodeSeq, filePath: FilePath = DirectoryPath.EMPTY.toFilePath): List[String] = {
     def decode(href: String) = {
       val splitted = href.split("#").toSeq
-      val url    = filePath.dir </> FilePath.unsafe(URLDecoder.decode(splitted(0), "UTF-8"))
+      val url    = filePath.dir / FilePath.unsafe(URLDecoder.decode(splitted(0), "UTF-8"))
       val anchor = splitted.drop(1).lastOption.map(anchor => "#"+anchor).getOrElse("")
       url.path + anchor
     }

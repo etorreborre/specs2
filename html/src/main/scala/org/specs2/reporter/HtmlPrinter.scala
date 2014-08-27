@@ -82,7 +82,7 @@ trait HtmlPrinter extends Printer {
     for {
       options  <- getHtmlOptions(env.arguments)
       _        <- copyResources(env, options.outDir)
-      _        <- withEphemeralFile(options.outDir <|> options.template.name) {
+      _        <- withEphemeralFile(options.outDir | options.template.name) {
                     copyFile(options.outDir)(options.template) >>
                     makePandocHtml(spec, stats, pandoc, options, env)
                   }
@@ -99,7 +99,7 @@ trait HtmlPrinter extends Printer {
         .updated("outDir", options.outDir.path)
 
     val bodyFile: FilePath =
-      options.outDir <|> FileName.unsafe("body-"+spec.hashCode)
+      options.outDir | FileName.unsafe("body-"+spec.hashCode)
 
     val pandocArguments = Pandoc.arguments(bodyFile, options.template, variables1, outputFilePath(options.outDir, spec), pandoc)
 
@@ -122,18 +122,18 @@ trait HtmlPrinter extends Printer {
   }
 
   def outputFilePath(directory: DirectoryPath, spec: SpecStructure): FilePath =
-    directory <|> FileName.unsafe(spec.specClassName+".html")
+    directory | FileName.unsafe(spec.specClassName+".html")
 
   case class HtmlOptions(outDir: DirectoryPath, baseDir: DirectoryPath, template: FilePath, variables: Map[String, String], noStats: Boolean)
 
   object HtmlOptions {
-    val outDir    = "target" </> "specs2-reports"
+    val outDir    = "target" / "specs2-reports"
     val baseDir   = DirectoryPath.EMPTY
     val variables = Map[String, String]()
     val noStats   = false
 
     def template(outDir: DirectoryPath): FilePath =
-      outDir </> "templates" <|> "specs2.html"
+      outDir / "templates" | "specs2.html"
   }
 
   case class Pandoc(executable: FilePath,
@@ -186,7 +186,7 @@ trait HtmlPrinter extends Printer {
          DirectoryPath("javascript"),
          DirectoryPath("images"),
          DirectoryPath("templates")).
-      map(copySpecResourcesDir(env, "org" </> "specs2" </> "reporter", outDir, classOf[HtmlPrinter].getClassLoader)).sequenceU
+      map(copySpecResourcesDir(env, "org" / "specs2" / "reporter", outDir, classOf[HtmlPrinter].getClassLoader)).sequenceU
 
 
   def makeBody(spec: SpecStructure, stats: Stats, options: HtmlOptions, arguments: Arguments, pandoc: Boolean): String = {
@@ -310,16 +310,16 @@ trait HtmlPrinter extends Printer {
     }
 
   def copySpecResourcesDir(env: Env, base: DirectoryPath, outputDir: DirectoryPath, loader: ClassLoader)(src: DirectoryPath): Action[Unit] = {
-    Option(loader.getResource((base </> src).path)) match {
+    Option(loader.getResource((base / src).path)) match {
       case None =>
-        Actions.fail(s"no resource found for url ${(base </> src).path}")
+        Actions.fail(s"no resource found for url ${(base / src).path}")
 
       case Some(url) =>
         val fs = env.fileSystem
         if (url.getProtocol.equalsIgnoreCase("jar"))
           fs.unjar(jarOf(url), outputDir, s"^${quote(base.path)}(/${quote(src.path)}/.*)$$")
         else
-          fs.copyDir(DirectoryPath.unsafe(url.toURI), outputDir </> src)
+          fs.copyDir(DirectoryPath.unsafe(url.toURI), outputDir / src)
     }
   }
 

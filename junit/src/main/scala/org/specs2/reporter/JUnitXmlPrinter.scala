@@ -34,8 +34,8 @@ trait JUnitXmlPrinter extends Printer {
       val suite = descriptions.foldLeft(start) { case (res, (f, d)) =>
         res.addTest(new TestCase(d, f.executionResult, f.execution.executionTime.totalMillis)(env.arguments))
       }
-      val outputDirectory = env.arguments.commandLine.directoryOr("junit.outdir", "target" </> "test-reports").asAbsolute
-      env.fileSystem.writeFileTask(outputDirectory <|> FileName.unsafe(spec.specClassName+".xml"), suite.xml)
+      val outputDirectory = env.arguments.commandLine.directoryOr("junit.outdir", "target" / "test-reports").asAbsolute
+      env.fileSystem.writeFileTask(outputDirectory | FileName.unsafe(spec.specClassName+".xml"), suite.xml)
     }
 
   }

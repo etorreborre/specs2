@@ -113,9 +113,9 @@ case class fs() extends MustMatchers with TestFiles with FileMatchers with Stand
 
 
 trait TestFiles extends FileSystem with BeforeAfterEach {
-  lazy val directoryPath = "target" </> "test" </> "fs"
+  lazy val directoryPath = "target" / "test" / "fs"
   lazy val dirPath = directoryPath.path
-  lazy val okFilePath = directoryPath <|> "file.txt"
+  lazy val okFilePath = directoryPath | "file.txt"
   lazy val okPath = okFilePath.path
   lazy val missingPath = "absent"
 

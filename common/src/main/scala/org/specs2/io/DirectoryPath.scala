@@ -44,7 +44,7 @@ case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean) {
    *
    * DirectoryPath.Root plays the role an empty element for this operation
    */
-  def </>(other: DirectoryPath): DirectoryPath =
+  def /(other: DirectoryPath): DirectoryPath =
     (this, other) match {
       case (_, DirectoryPath.EMPTY) => this
       case (DirectoryPath.EMPTY, _) => other
@@ -55,20 +55,20 @@ case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean) {
    * append a FilePath to this directory
    * @return another FilePath
    */
-  def </>(other: FilePath): FilePath =
+  def /(other: FilePath): FilePath =
     FilePath(DirectoryPath(dirs ++ other.dir.dirs, absolute), other.name)
 
   /**
    * append a new name to this directory
    * @return a DirectoryPath
    */
-  def </>(name: FileName): DirectoryPath  = copy(dirs = dirs :+ name)
+  def /(name: FileName): DirectoryPath  = copy(dirs = dirs :+ name)
 
   /**
    * append a new name to this directory but
    * @return a FilePath
    */
-  def <|>(name: FileName): FilePath = FilePath(this, name)
+  def |(name: FileName): FilePath = FilePath(this, name)
 
   /**
    * @return the portion of a dir path that is relative to another
@@ -151,7 +151,7 @@ case class FilePath(dir: DirectoryPath, name: FileName) {
   def fromRoot: FilePath = relativeTo(root)
 
   /** @return interpret this FilePath as a DirectoryPath */
-  def toDirectoryPath: DirectoryPath = dir </> name
+  def toDirectoryPath: DirectoryPath = dir / name
 
   /** @return true if the file path is absolute */
   def isAbsolute = dir.isAbsolute
@@ -184,10 +184,10 @@ object FilePath {
  *   http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_267
  */
 case class FileName private(name: String) {
-  def </>(other: DirectoryPath) : DirectoryPath  = DirectoryPath(this +: other.dirs, absolute = false)
-  def </>(other: FilePath): FilePath = FilePath(DirectoryPath(this +: other.dir.dirs, absolute = false), other.name)
-  def </>(other: FileName): DirectoryPath  = DirectoryPath(Vector(this), absolute = false) </> other
-  def <|>(other: FileName): FilePath = DirectoryPath(Vector(this), absolute = false) <|> other
+  def /(other: DirectoryPath) : DirectoryPath  = DirectoryPath(this +: other.dirs, absolute = false)
+  def /(other: FilePath): FilePath = FilePath(DirectoryPath(this +: other.dir.dirs, absolute = false), other.name)
+  def /(other: FileName): DirectoryPath  = DirectoryPath(Vector(this), absolute = false) / other
+  def |(other: FileName): FilePath = DirectoryPath(Vector(this), absolute = false) | other
 }
 
 object FileName {
