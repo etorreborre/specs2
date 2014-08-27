@@ -7,6 +7,7 @@ import control._
 import util.Properties._
 import scalaz._
 import Scalaz._
+
 /**
  * This trait allows to define expected dependencies between packages layers
  */

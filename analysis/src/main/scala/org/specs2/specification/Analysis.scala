@@ -8,7 +8,7 @@ import org.specs2.specification.dsl.FragmentsDsl
 import specification.create.FragmentsFactory
 
 /**
- * This trait provides integrated analysis method for a scala project
+ * This trait provides integrated dependency analysis method for a Scala project
  */
 trait Analysis extends DependencyMatchers with FragmentsDsl { this: FragmentsFactory with Expectations =>
 

@@ -8,6 +8,7 @@ import collection.Iterablex._
 /**
  * This object provides useful functions for Nodes and NodeSeqs
  */
+private[specs2]
 trait NodeFunctions {
   /**
    * @return true if the Node represents some empty text (containing spaces or newlines)
@@ -145,4 +146,5 @@ trait NodeFunctions {
 
 }
 
+private[specs2]
 object NodeFunctions extends NodeFunctions

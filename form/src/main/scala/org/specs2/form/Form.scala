@@ -4,7 +4,6 @@ package form
 import scala.xml._
 import collection.Seqx._
 import xml.Nodex._
-import text.Trim._
 import execute._
 import main.Arguments
 import StandardResults._
@@ -12,6 +11,7 @@ import matcher._
 import DecoratedProperties._
 import language.existentials
 import ResultLogicalCombinators._
+import control.ImplicitParameters._
 
 /**
  * A Form is a container for Rows (@see Row) where each row contain some Cell (@see Cell).

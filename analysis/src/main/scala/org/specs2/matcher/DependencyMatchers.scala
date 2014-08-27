@@ -27,7 +27,6 @@ import control._
  */
 trait DependencyMatchers extends DependencyBaseMatchers with DependencyBeHaveMatchers
 
-private[specs2]
 trait DependencyBaseMatchers extends LayersAnalysis {
 
   /** matcher for Layers declarations */

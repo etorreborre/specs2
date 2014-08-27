@@ -85,6 +85,7 @@ trait HmsTimer[T <: HmsTimer[T]] {
    */
   protected def getTime = Calendar.getInstance.getTime.getTime
 }
+
 class SimpleTimer extends HmsTimer[SimpleTimer] {
   def copy(e: List[Long] = Nil, m: List[Long] = Nil) =
     new SimpleTimer {
