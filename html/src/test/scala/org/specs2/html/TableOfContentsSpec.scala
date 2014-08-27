@@ -27,7 +27,7 @@ class TableOfContentsSpec extends script.Specification with HtmlDocuments with G
     //      </ul>
     //    </li>
     e2 := addToc(aBodyWithHeaders) must \\ ("li") \ ("a") \> "title"
-    e3 := addToc(aBodyWithHeaders) must \\ ("li") \ ("a", "href" -> "../guide/UserGuide.html#title.*")
+    e3 := addToc(aBodyWithHeaders) must \\ ("li") \ ("a", "href" -> "UserGuide.html#title.*")
     e4 := addToc(aBodyWithHeaders) must \\ ("li", "id")
     e5 := {
       val subtoc = <a href="http://specs2.org/#other" />

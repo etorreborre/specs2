@@ -47,12 +47,12 @@ class FilesContentMatchersSpec extends Specification
     (targetDir </> actual).toFile must haveSamePathsAs((targetDir </> expected).toFile)
 
     ((targetDir </> actual).toFile must haveSamePathsAs((targetDir </> "expected2").toFile)) returns
-     s"""|$targetDir/actual is not the same as $targetDir/expected2
-         |  in $targetDir/actual, not in $targetDir/expected2
-         |    MISSING:   3. sub/f2
+     s"""|${(targetDir </> actual).path} is not the same as ${(targetDir </> expected2).path}
+         |  in ${(targetDir </> actual).path}, not in ${(targetDir </> expected2).path}
+         |    MISSING:   2. sub/f2
          |
-         |  in $targetDir/expected2, not in $targetDir/actual
-         |    MISSING:   3. sub/f3""".stripMargin
+         |  in ${(targetDir </> expected2).path}, not in ${(targetDir </> actual).path}
+         |    MISSING:   2. sub/f3""".stripMargin
   }
 
   def e2 = {
@@ -84,26 +84,27 @@ class FilesContentMatchersSpec extends Specification
 
     (targetDir </> actual).toFile must haveSameFilesContentAs((targetDir </> expected).toFile)
     ((targetDir </> actual).toFile must haveSameFilesContentAs((targetDir </> expected2).toFile)) returns
-     s"""|${(targetDir </> actual </> sub </> f2).path} is not the same as ${(targetDir </> expected </> sub </> f2).path}
-         |  in ${(targetDir </> actual </> sub </> f2).path}, not in ${(targetDir </> expected </> sub </> f2).path}
+     s"""|${(targetDir </> actual </> sub </> f2).path} is not the same as ${(targetDir </> expected2 </> sub </> f2).path}
+         |  in ${(targetDir </> actual </> sub </> f2).path}, not in ${(targetDir </> expected2 </> sub </> f2).path}
          |    MISSING:   2. text3
          |
-         |  in ${(targetDir </> expected </> sub </> f2).path}, not in ${(targetDir </> actual </> sub </> f2).path}
+         |  in ${(targetDir </> expected2 </> sub </> f2).path}, not in ${(targetDir </> actual </> sub </> f2).path}
          |    MISSING:   2. text4""".stripMargin
   }
 
   def e4 = {
     val action =
-      writeFile(targetDir </> actual    <|> f1,          "text1")                   >>
-      writeFile(targetDir </> actual    </> sub <|> f2,  "text2\ntext3")    >>
-      writeFile(targetDir </> expected  <|> f1,          "text1")                 >>
-      writeFile(targetDir </> expected  </> sub <|> f2,  "text2\ntext3")  >>
-      writeFile(targetDir </> expected2 <|> f1,          "text1")                >>
+      writeFile(targetDir </> actual    <|> f1,          "text1")        >>
+      writeFile(targetDir </> actual    </> sub <|> f2,  "text2\ntext3") >>
+      writeFile(targetDir </> expected  <|> f1,          "text1")        >>
+      writeFile(targetDir </> expected  </> sub <|> f2,  "text2\ntext3") >>
+      writeFile(targetDir </> expected2 <|> f1,          "text1")        >>
       writeFile(targetDir </> expected2 </> sub <|> f2,  "text2\ntext4")
 
     action.execute(noLogging).unsafePerformIO
 
     (targetDir <|> actual).toFile must haveSameFilesContentAs((targetDir <|> expected).toFile).withMatcher(haveSameMD5)
+
     AsResult((targetDir <|> actual).toFile must haveSameFilesContentAs((targetDir <|> expected2).toFile).withMatcher(haveSameMD5)).message.replace(" ", "") ===
       s"""|There is 1 failure
           |MD5 mismatch:
@@ -114,8 +115,9 @@ class FilesContentMatchersSpec extends Specification
   }
 
   val targetDir = "target" </> "test" </> FileName.unsafe("fcm-"+hashCode)
-  def before = FileSystem.mkdirs(targetDir).execute(noLogging).unsafePerformIO
-  def after = FileSystem.delete(targetDir).execute(noLogging).unsafePerformIO
+
+  def before = () // FileSystem.mkdirs(targetDir).execute(noLogging).unsafePerformIO
+  def after  = () // FileSystem.delete(targetDir).execute(noLogging).unsafePerformIO
 
 }
 

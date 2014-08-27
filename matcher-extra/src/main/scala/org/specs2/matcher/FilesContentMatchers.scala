@@ -36,6 +36,8 @@ trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with T
     val (actual, expected) = pair
 
     val action  = for {
+      _     <- FilePathReader.mustExist(actual)
+      _     <- FilePathReader.mustExist(expected)
       _     <- FilePathReader.mustNotBeADirectory(actual)
       _     <- FilePathReader.mustNotBeADirectory(expected)
       md5_1 <- FilePathReader.md5(FilePath.unsafe(actual))
@@ -101,7 +103,7 @@ trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with T
   }
 
   private case class LocalPaths(base: DirectoryPath, filter: FilePath => Boolean) {
-    def files = FilePathReader.listFilePaths(base).map(_.filter(filter).sortBy(fp => fp.relativeTo(base).path)).runOption.getOrElse(Nil)
+    def files = FilePathReader.listFilePaths(base).map(_.filter(filter).map(_.relativeTo(base)).sortBy(_.path)).runOption.getOrElse(Nil)
     def localPaths = files.map(_.path).sorted
   }
 

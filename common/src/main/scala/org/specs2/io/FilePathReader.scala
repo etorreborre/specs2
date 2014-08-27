@@ -86,18 +86,25 @@ trait FilePathReader {
   def exists(directoryPath: DirectoryPath): Action[Boolean] =
     Actions.safe(directoryPath.toFile.exists)
 
+  /** succeeds if the file exists */
+  def mustExist(file: File): Action[Unit] =
+    Actions.safe(file.exists).flatMap { exists =>
+      if (exists) Actions.ok(())
+      else        Actions.fail(s"$file does not exist")
+    }
+
   /** succeeds if the file is a directory */
   def mustBeADirectory(file: File): Action[Unit] =
     Actions.safe(file.isDirectory).flatMap { isDirectory =>
-      if (isDirectory) Actions.fail(s"$file is a directory")
-      else             Actions.ok(())
+      if (isDirectory) Actions.ok(())
+      else             Actions.fail(s"$file is a directory")
     }
 
   /** succeeds if the file is not a directory */
   def mustNotBeADirectory(file: File): Action[Unit] =
     Actions.safe(file.isDirectory).flatMap { isDirectory =>
-      if (isDirectory) Actions.ok(())
-      else             Actions.fail(s"$file is a directory")
+      if (isDirectory) Actions.fail(s"$file is a directory")
+      else             Actions.ok(())
     }
 }
 

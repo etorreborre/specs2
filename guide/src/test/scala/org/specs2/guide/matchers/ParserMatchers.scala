@@ -2,8 +2,6 @@ package org.specs2
 package guide
 package matchers
 
-import form.Card
-
 import scala.util.parsing.combinator._
 
 object ParserMatchers extends UserGuideCard with UserGuideVariables {
