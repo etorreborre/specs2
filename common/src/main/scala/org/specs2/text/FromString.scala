@@ -4,7 +4,9 @@ package text
 import control.Exceptions._
 
 /**
- * This typeclass is used to describe any instance which can be decoded from a String
+ * This typeclass is used to describe any instance which can be decoded from a String.
+ *
+ * It can be used to pass string properties in SystemProperties and decode them in a specific way
  */
 trait FromString[T] {
   def fromString(s: String): Option[T]

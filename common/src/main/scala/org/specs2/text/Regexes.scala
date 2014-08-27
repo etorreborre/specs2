@@ -28,8 +28,7 @@ trait Regexes {
     def regexPart = s"\\s*.*\\s*$s\\s*.*\\s*"
   }
 
-  implicit def regexMatch(r: Regex): RegexMatch = RegexMatch(r)
-  case class RegexMatch(r: Regex) {
+  implicit class RegexMatch(r: Regex) {
     def matches(s: String): Boolean = r.pattern.matcher(s).matches
   }
 

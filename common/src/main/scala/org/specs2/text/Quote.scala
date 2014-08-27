@@ -6,8 +6,8 @@ import scala.collection.GenTraversableOnce
 
 /**
  * Quote and unquote strings
- *
  */
+private[specs2]
 trait Quote {
 
   /** quote a value, unless it is a collection of objects */
@@ -42,4 +42,5 @@ trait Quote {
   }
 }
 
+private[specs2]
 object Quote extends Quote

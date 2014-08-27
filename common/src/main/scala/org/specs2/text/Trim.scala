@@ -9,7 +9,9 @@ import util.matching.Regex.Match
 /**
  * Utility methods for trimming text
  */
-trait Trim extends control.Debug {
+private[specs2]
+trait Trim {
+
   /** add trimming methods to a String */
   implicit def trimmed(s: String): Trimmed = new Trimmed(s)
   /** utility conversion for StringBuffers */
@@ -78,6 +80,7 @@ trait Trim extends control.Debug {
     def trimReplace(pairs: (String, String)*) = pairs.foldLeft(s.trim) { (res, cur) =>
       res.replace(cur._1, cur._2)
     }
+
     def trimReplaceAll(pairs: (String, String)*) = pairs.foldLeft(s.trim) { (res, cur) =>
       res.replaceAll(cur._1, cur._2)
     }
@@ -87,19 +90,23 @@ trait Trim extends control.Debug {
     def trimEnd = s.reverse.dropWhile(Seq(' ', '\n').contains).reverse
 
     def trimSpaceStart = s.dropWhile(Seq(' ').contains)
+
     def trimSpaceEnd = s.reverse.dropWhile(Seq(' ').contains).reverse
 
     def replaceAll(pairs: (String, String)*) = pairs.foldLeft(s) { (res, cur) =>
       res.replaceAll(cur._1, cur._2)
     }
+
     def replaceInsideTag(tag: String, p: (String, String)*) = {
       replaceAll(tagPattern(tag), (s: String) => java.util.regex.Matcher.quoteReplacement(s.replaceAll(p:_*)))
     }
+
     def replaceInsideTags(tags: String*)(p: (String, String)*) = {
       tags.foldLeft(s) { (res, tag) =>
         res.replaceAll(tagPattern(tag), (s: String) => java.util.regex.Matcher.quoteReplacement(s.replaceAll(p:_*)))
       }
     }
+
     private def tagPattern(tag: String) = "<"+tag+">(.(.|\n)*?)</"+tag+">"
 
     /** replace each group with something else */
@@ -140,4 +147,5 @@ trait Trim extends control.Debug {
   }
 }
 
+private[specs2]
 object Trim extends Trim

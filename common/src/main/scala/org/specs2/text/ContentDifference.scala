@@ -12,12 +12,15 @@ import scala.collection.{IndexedSeqOptimized, immutable}
 trait ContentDifference {
   type Difference
 
+  /** @return true if there is no difference in 2 contents */
   def isEmpty: Boolean
+
+  /** @return what is missing in content1 from content2 and what is missing in content2 from content1 */
   def show: (Seq[Difference], Seq[Difference])
 }
 
 /**
- * This class shows the differences between 2 sequence of lines.
+ * This class shows the differences between 2 sequences of lines.
  *
  * - if partial is true we only expect some of the lines of lines2 to be in lines1
  * - if unordered is true we only expect the lines of lines2 to appear in any order in lines1

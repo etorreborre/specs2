@@ -6,11 +6,11 @@ import collection.Seqx._
 
 private[specs2]
 trait Split {
-  implicit def makeSplitted(s: String) = new Splitted(s)
 
-  class Splitted(s: String) {
+  implicit class Splitted(s: String) {
 
     def splitToSize(n: Int): List[String] = splitToSize(s, n, Nil)
+
     private def splitToSize(string: String, n: Int, result: List[String]): List[String] = {
       if (string.size <= n) (string :: result).reverse
       else
@@ -18,8 +18,10 @@ trait Split {
         splitToSize(new String(string.drop(n)), n, new String(string.take(n)) :: result)
     }
 
-    private val quoted = "\"[^\"]*\"|[^\\s]+".r
-    def splitQuoted = quoted.findAllIn(s).toSeq.map(_.trimEnclosing("\""))
+    def splitQuoted = {
+      val quoted = "\"[^\"]*\"|[^\\s]+".r
+      quoted.findAllIn(s).toSeq.map(_.trimEnclosing("\""))
+    }
 
     /**
      * split a string along some names which start with a dash:
@@ -31,7 +33,7 @@ trait Split {
       def isDashedName(name: String) = dashedNames.contains(name.toLowerCase)
 
       val grouped = s.split("\\s").foldLeft(Seq[(String, Seq[String])]()) { (res, cur) =>
-        if (isDashedName(cur) || cur == "--") (res :+ (cur -> Seq[String]()))
+        if (isDashedName(cur) || cur == "--") res :+ (cur -> Seq[String]())
         else                                  res.updateLastOr { case (name, values) => (name, values :+ cur) }((cur, Seq[String]()))
       }
       grouped.flatMap {
@@ -42,5 +44,6 @@ trait Split {
     }
   }
 }
+
 private[specs2]
 object Split extends Split

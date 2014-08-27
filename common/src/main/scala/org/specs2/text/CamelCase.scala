@@ -6,6 +6,7 @@ import java.lang.StringBuilder
 /**
  * This trait does CamelCase transformations on names
  */
+private[specs2]
 trait CamelCase {
 
   implicit class CamelCased(s: String) {
@@ -17,4 +18,5 @@ trait CamelCase {
   }
 }
 
+private[specs2]
 object CamelCase extends CamelCase

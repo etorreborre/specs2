@@ -12,6 +12,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock
  *
  * It is extended with start/stop methods to better control the usage of thread resources
  */
+private[specs2]
 case class Timeout(timeoutTickMs: Int = 100, workerName: String = "TimeoutContextWorker") {
   val safeTickMs = if (timeoutTickMs > 0) timeoutTickMs else 1
   private[this] val nondeterminism = Nondeterminism[Future]

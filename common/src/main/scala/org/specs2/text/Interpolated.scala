@@ -6,7 +6,7 @@ import Trim._
 import util.parsing.input.{CharSequenceReader, Reader}
 
 /**
- * this class extracts interpolated expressions from an interpolated string, given the string content and the text
+ * This class extracts interpolated expressions from an interpolated string, given the string content and the text
  * pieces in between the interpolated expressions
  */
 class Interpolated(stringContent: String, texts: Seq[String]) extends InterpolatedParsers {

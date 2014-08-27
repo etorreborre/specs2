@@ -94,10 +94,10 @@ trait MapBaseMatchers {
       val isDefined = values.map(v => (v, f.value.isDefinedAt(v)))
       val undefined = isDefined.filter(!_._2).map(_._1)
       result(isDefined.map(_._2).forall(_ == true), 
-             f.optionalDescription.getOrElse("the function") + noun(" is defined for the value").plural(values.size) +
+             f.optionalDescription.getOrElse("the function") + Noun(" is defined for the value").plural(values.size) +
                                              " " + q(values.mkString(", ")),
              f.optionalDescription.getOrElse("the function") +
-                                             noun(" is not defined for the value").plural(undefined.size) + " " +
+                                             Noun(" is not defined for the value").plural(undefined.size) + " " +
                                              q(undefined.mkString(", ")), f)
     }
   }
@@ -108,8 +108,8 @@ trait MapBaseMatchers {
       val isDefined = values.map(v => (v, f.value.isDefinedAt(v._1) && f.value(v._1) == v._2))
       val undefined = isDefined.filter(!_._2).map(_._1)
       result(isDefined.map(_._2).forall(_ == true), 
-             f.optionalDescription.getOrElse("the function") + noun(" is defined by the value").plural(values.size) + " " + q(values.mkString(", ")),
-             f.optionalDescription.getOrElse("the function") + noun(" is not defined by the value").plural(undefined.size) + " " + q(undefined.mkString(", ")),
+             f.optionalDescription.getOrElse("the function") + Noun(" is defined by the value").plural(values.size) + " " + q(values.mkString(", ")),
+             f.optionalDescription.getOrElse("the function") + Noun(" is not defined by the value").plural(undefined.size) + " " + q(undefined.mkString(", ")),
              f)
     }
   }

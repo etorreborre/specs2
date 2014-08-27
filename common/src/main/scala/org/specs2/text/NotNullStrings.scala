@@ -5,10 +5,11 @@ import control.Exceptions._
 import Quote._
 
 /**
- * Utility methods to replace a null String with "null"
+ * Methods to replace a null String with "null"
  *
- * They also make sure that the toString or mkString methods don't throw exceptions when being evaluated
+ * There are also methods to make sure that the toString or mkString methods don't throw exceptions when being evaluated
  */
+private[specs2]
 trait NotNullStrings {
 
   /**
@@ -116,5 +117,5 @@ trait NotNullStrings {
 
 }
 
-
+private[specs2]
 object NotNullStrings extends NotNullStrings

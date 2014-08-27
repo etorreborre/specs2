@@ -7,8 +7,9 @@ import scalaz.std.anyVal._
 import scalaz.syntax.bind._
 
 /**
- * utility methods to parse the contents of source files
+ * Utility methods to parse the contents of source files
  */
+private[specs2]
 trait SourceFile {
   private lazy val CLASSNAME_REGEX = "([\\p{L}_$][\\p{L}\\p{N}_$]*\\.)*[\\p{L}_$][\\p{L}\\p{N}_$]*".r
 
@@ -46,5 +47,6 @@ trait SourceFile {
 
 }
 
+private[specs2]
 object SourceFile extends SourceFile
 
