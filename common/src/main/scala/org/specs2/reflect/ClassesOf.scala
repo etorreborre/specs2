@@ -5,8 +5,10 @@ import scala.reflect.ClassTag
 import language.existentials
 
 /**
-  * This trait adds some syntactic sugar to create a sequence of classes from the declaration of their types
-  */
+ * This trait adds some syntactic sugar to create a sequence of classes from the declaration of their types
+ *
+ * This is used in Mockito to specify extra mocked interfaces
+ */
 trait ClassesOf {
 
   def classesOf[T1 : ClassTag, T2 : ClassTag] =

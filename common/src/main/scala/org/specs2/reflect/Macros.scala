@@ -3,6 +3,9 @@ package reflect
 
 import MacroContext._
 
+/**
+ * Macros helper functions
+ */
 object Macros {
 
   def toAST[A](c: Context)(xs: c.Tree*)(implicit tt: c.TypeTag[A]): c.Tree = {
