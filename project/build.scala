@@ -37,7 +37,6 @@ object build extends Build {
       moduleSettings           ++
       siteSettings             ++
       releaseSettings          ++
-//      rootSettings             ++
       compatibilitySettings    ++
       Seq(name := "specs2")
   ).aggregate(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, tests)
@@ -52,15 +51,7 @@ object build extends Build {
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 
-  lazy val aggregateCompile = ScopeFilter(
-             inProjects(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock),
-             inConfigurations(Compile))
-
-  lazy val aggregateTest = ScopeFilter(
-             inProjects(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, guide, examples),
-             inConfigurations(Test))
-
-  lazy val resolversSettings = resolvers ++= 
+  lazy val resolversSettings = resolvers ++=
     Seq(Resolver.sonatypeRepo("releases"), 
         Resolver.sonatypeRepo("snapshots"),
         Resolver.typesafeIvyRepo("releases"),
@@ -85,18 +76,6 @@ object build extends Build {
       compilationSettings  ++
       testingSettings      ++
       publicationSettings
-
-  lazy val rootSettings: Seq[Settings] = Seq(
-      sources in Compile                      := sources.all(aggregateCompile).value.flatten,
-      unmanagedSources in Compile             := unmanagedSources.all(aggregateCompile).value.flatten,
-      unmanagedSourceDirectories in Compile   := unmanagedSourceDirectories.all(aggregateCompile).value.flatten,
-      unmanagedResourceDirectories in Compile := unmanagedResourceDirectories.all(aggregateCompile).value.flatten,
-      sources in Test                         := sources.all(aggregateTest).value.flatten,
-      unmanagedSources in Test                := unmanagedSources.all(aggregateTest).value.flatten,
-      unmanagedSourceDirectories in Test      := unmanagedSourceDirectories.all(aggregateTest).value.flatten,
-      unmanagedResourceDirectories in Test    := unmanagedResourceDirectories.all(aggregateTest).value.flatten,
-      libraryDependencies                     := libraryDependencies.all(aggregateTest).value.flatten.map(maybeMarkProvided)
-    )
 
   /** MODULES (sorted in alphabetical order) */
   lazy val analysis = Project(id = "analysis", base = file("analysis"),
