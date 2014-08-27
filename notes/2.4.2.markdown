@@ -2,11 +2,14 @@ Maintenance version
 
 ## Improvements
 
+ * added disjunction (`\/` in Scalaz) matchers
  * added the possibility to use a matcher with `haveSize`: `List(1, 2) must haveSize(be_>(1))`
 
 ## Fixes 
  
  * `1 must beEqualTo(1) and beEqualTo(2)` now properly throws an Exception in a mutable specification
+ * fixed an evaluation case with `match result and matcher`
+ * added a note to the traversable matchers guide on annotating the haveSize matcher [#289](http://github.com/etorreborre/specs2/issues/289)
  * `SpecificationsFinder.specificationNames` finds specifications under a Windows drive when using the `srcTestDir` option [#290](http://github.com/etorreborre/specs2/issues/290)
 
 
