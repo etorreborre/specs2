@@ -5,12 +5,17 @@ package mutable
 
 import main._
 
+/**
+ * Arguments creation with an additional implicit from (=> T) to Property[T] to allow the direct passing of parameters
+ */
+trait ArgumentsDsl extends ArgumentsCreation with ArgProperties
 
 /**
- * This trait provides shortcuts to create Arguments instances and adding them to the SpecificationStructure by mutating its
+ * Methods with default Property values to create Arguments instances
+ * Arguments are being added to the SpecificationStructure by mutating its
  * current content
  */
-trait ArgumentsDsl extends ArgumentsArgs with MutableArgumentsBuilder {
+trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableArgumentsBuilder {
   /** shorthand method to create an Arguments object */
   override def args(ex:            ArgProperty[String]            = ArgProperty[String](),
                     include:       ArgProperty[String]            = ArgProperty[String](),

@@ -34,7 +34,7 @@ trait SpecLike extends ImmutableSpecificationStructure
   with S2StringContext1
   with FragmentsDsl1
   with MustMatchers1
-  with ArgumentsArgs
+  with ArgumentsCreation
   with ArgumentsShortcuts
   with FormattingFragments
 

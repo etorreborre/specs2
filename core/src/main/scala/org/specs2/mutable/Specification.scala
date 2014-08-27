@@ -28,7 +28,7 @@ trait SpecificationLike extends SpecificationStructure
 abstract class Spec extends SpecLike
 trait SpecLike extends SpecificationStructure
   with ExampleDsl0
-  with ArgumentsDsl
+  with ArgumentsCreation
   with ArgumentsShortcuts
   with ActionDsl
   with MustThrownMatchers1

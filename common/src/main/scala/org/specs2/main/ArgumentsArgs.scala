@@ -5,9 +5,16 @@ import control._
 import text._
 
 /**
- * This trait provides shortcuts to create Arguments instances
+ * Methods with default Property values to create Arguments instances
+ * 
+ * There is an implicit conversion from (=> T) to Property[T] to allow the direct passing of parameters 
  */
-trait ArgumentsArgs extends ArgProperties {
+trait ArgumentsArgs extends ArgumentsCreation with ArgProperties
+
+/**
+ * Methods with default Property values to create Arguments instances
+ */
+trait ArgumentsCreation {
 
   lazy val args = new ArgumentsNamespace
 
@@ -123,7 +130,7 @@ trait ArgumentsArgs extends ArgProperties {
 object ArgumentsArgs extends ArgumentsArgs
 
 trait ArgProperties {
-  implicit def anyToArgProperty[T](t: =>T): ArgProperty[T] = ArgProperty(Property(t))
+  implicit def anyToArgProperty[T](t: =>T): ArgProperty[T] = ArgProperty(t)
 }
 
 /**
@@ -137,4 +144,9 @@ object ArgProperties extends ArgProperties
 
 case class ArgProperty[T](private val aProperty: Property[T] = Property[T]()) {
   def toOption: Option[T] = aProperty.toOption
+}
+
+object ArgProperty {
+  def apply[T](t: => T): ArgProperty[T] =
+    ArgProperty(Property(t))
 }

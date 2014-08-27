@@ -12,8 +12,7 @@ class SpecSpec extends Spec { def is = sequential ^ s2"""
         "appendToArguments",               // to add arguments
         "fragmentsAsSpecStructure",        // for def is = s2"... directly
         "asResultIsInterpolatedFragment",  // to interpolate results
-        "specificationInStringContext",    // for the s2 macro
-        "anyToArgProperty"                 // to define arguments
+        "specificationInStringContext"     // for the s2 macro
       ))
   }
 }

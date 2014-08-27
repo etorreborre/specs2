@@ -134,7 +134,7 @@ class EffectBlocksSpec extends org.specs2.Specification with ThrownExpectations 
   def beAt(path: Int*): Matcher[EffectBlocks] = (effects: EffectBlocks) =>
     (effects.isAt(Some(EffectPath(path))), s"effect path is ${effects.effectPath} but should be $path")
 
-  def nest(n: Int, effects: EffectBlocks, content: =>Any): Any =
+  final def nest(n: Int, effects: EffectBlocks, content: =>Any): Any =
     if (n == 0) content
     else        effects.nestBlock(nest(n - 1, effects, content))
 
