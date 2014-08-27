@@ -16,6 +16,7 @@ Traversables can be checked with several matchers. If you want to check the size
  * check its size
  ${snippet{Seq(1, 2) must have size(2)}}
  ${snippet{Seq(1, 2) must have length(2)}} // equivalent to size
+ ${snippet{Seq(1, 2) must have size(be_>=(1))}} // with a matcher
 
 _note_: you might have to annotate the `haveSize` matcher when using some combinators. For example: `(futures: Future[Seq[Int]]) must haveSize[Seq[Int]](1).await`
 
