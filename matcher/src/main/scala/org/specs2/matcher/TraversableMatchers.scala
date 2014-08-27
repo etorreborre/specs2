@@ -81,6 +81,15 @@ trait TraversableBaseMatchers extends ValueChecks with TraversableBaseMatchersLo
   /** alias for haveSize */
   def length[T : Sized](n: Int) = haveLength[T](n)
 
+  /** match if there is a way to size T */
+  def haveSize[T : Sized](check: ValueCheck[Int]) = new SizedCheckedMatcher[T](check, "size")
+  /** alias for haveSize */
+  def size[T : Sized](check: ValueCheck[Int]) = haveSize[T](check)
+  /** alias for haveSize */
+  def haveLength[T : Sized](check: ValueCheck[Int]) = new SizedCheckedMatcher[T](check, "length")
+  /** alias for haveSize */
+  def length[T : Sized](check: ValueCheck[Int]) = haveLength[T](check)
+
   /** @return a matcher checking if the elements are ordered */
   def beSorted[T : Ordering] = new OrderingMatcher[T]
   /** alias for beSorted */
@@ -163,6 +172,8 @@ trait TraversableBeHaveMatchers extends LazyParameters { outer: TraversableMatch
   class HasSize[T : Sized](s: MatchResult[T]) {
     def size(n: Int) : MatchResult[T] = s(outer.haveSize[T](n))
     def length(n: Int) : MatchResult[T] = size(n)
+    def size(check: ValueCheck[Int]) : MatchResult[T] = s(outer.haveSize[T](check))
+    def length(check: ValueCheck[Int]) : MatchResult[T] = size(check)
   }
 
   implicit def orderedSeqMatchResult[T : Ordering](result: MatchResult[Seq[T]]) = new OrderedSeqMatchResult(result)
@@ -178,8 +189,19 @@ class SizedMatcher[T : Sized](n: Int, sizeWord: String) extends Matcher[T] {
     val s = implicitly[Sized[T]]
     val valueSize = s.size(traversable.value)
     result(valueSize == n,
-      traversable.description + " have "+sizeWord+" "+ n,
+      traversable.description + " has "+sizeWord+" "+ n,
       traversable.description + " doesn't have "+sizeWord+" " + n + " but "+sizeWord+" " + valueSize, traversable)
+  }
+}
+
+class SizedCheckedMatcher[T : Sized](check: ValueCheck[Int], sizeWord: String) extends Matcher[T] {
+  def apply[S <: T](traversable: Expectable[S]) = {
+    val s = implicitly[Sized[T]]
+    val valueSize = s.size(traversable.value)
+    val checked = check.check(valueSize)
+    result(checked.isSuccess,
+      traversable.description + " has the right "+sizeWord+": "+ checked.message,
+      traversable.description + " doesn't have the right "+sizeWord+": "+ checked.message, traversable)
   }
 }
 

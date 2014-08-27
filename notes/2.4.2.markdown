@@ -1,5 +1,9 @@
 Maintenance version
 
+## Improvements
+
+ * added the possibility to use a matcher with `haveSize`: `List(1, 2) must haveSize(be_>(1))`
+
 ## Fixes 
  
  * `1 must beEqualTo(1) and beEqualTo(2)` now properly throws an Exception in a mutable specification

@@ -128,6 +128,8 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Gro
     ${ Seq() must be empty }
     ${ (Seq() must not be empty) must beFailing }
     ${ Seq(1, 2) must haveSize(2) }
+    ${ Seq(1, 2) must haveSize(be_>=(1)) }
+    ${ Seq(1, 2) must not(haveSize(be_<=(0))) }
     ${ Seq(1, 2) must have size(2) }
     ${ Seq(1, 2) must not have size(1) }
     ${ Seq(1, 2) must haveLength(2) }

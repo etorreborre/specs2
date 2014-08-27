@@ -2,7 +2,7 @@ package org.specs2
 package guide
 
 import form._
-import org.specs2.matcher.{DisjunctionMatchers, ScalaInterpreterMatchers}
+import org.specs2.matcher.ScalaInterpreterMatchers
 import text.LinesContent
 import java.io.File
 import time.TimeConversions
@@ -122,7 +122,7 @@ object OptionEitherMatchers extends Card {
   """
 }
 
-object DisjunctionMatchers extends Card with DisjunctionMatchers {
+object DisjunctionMatchers extends Card with org.specs2.matcher.DisjunctionMatchers {
   def title = "Disjunction"
   def text = s2"""
   There are several matchers to check `scalaz.\/` instances:
@@ -250,6 +250,7 @@ If you want to check the size of a `Traversable`
  * to check its size
  ${snippet{Seq(1, 2) must have size(2)}}
  ${snippet{Seq(1, 2) must have length(2)}} // equivalent to size
+ ${snippet{Seq(1, 2) must have size(be_>=(1))}} // with a matcher
 
 _note_: you might have to annotate the `haveSize` matcher when using some combinators. For example: `(futures: Future[Seq[Int]]) must haveSize[Seq[Int]](1).await`
 
