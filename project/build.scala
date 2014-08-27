@@ -81,7 +81,6 @@ object build extends Build {
   def datetime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss Z").format(new Date)
 
   lazy val moduleSettings: Seq[Settings] = 
-      defaultSettings      ++
       buildSettings        ++
       specs2Settings       ++
       resolversSettings    ++
