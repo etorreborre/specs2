@@ -37,7 +37,7 @@ object build extends Build {
       moduleSettings           ++
       siteSettings             ++
       releaseSettings          ++
-      rootSettings             ++
+//      rootSettings             ++
       compatibilitySettings    ++
       Seq(name := "specs2")
   ).aggregate(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, tests)
