@@ -34,9 +34,9 @@ trait AnsiColors {
   def color(s: String, color: AnsiColor, doIt: Boolean = true) = {
     if (doIt) {
       val colored = s.foldLeft(color.color) { (res, cur) =>
-        if (cur == '\n') res + reset + cur + color.color
+        if (cur == '\n') res + reset.color + cur + color.color
         else             res + cur
-      } + reset
+      } + reset.color
       colored
     }
     else removeColors(s, true)
