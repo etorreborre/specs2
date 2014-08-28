@@ -16,6 +16,11 @@ import scalaz.concurrent.Task
 import scalaz.concurrent.Task._
 import LogLine._
 
+/**
+ * Prints the result of a specification execution to the console (using the line logger provided by the environment)
+ *
+ * At the end of the run the specification statistics are displayed as well.
+ */
 trait TextPrinter extends Printer {
 
   def fold(env: Env, spec: SpecStructure) = new Fold[Fragment] {
@@ -62,7 +67,6 @@ trait TextPrinter extends Printer {
       logger => Task.delay((line: LogLine) => Task.now(line.log(logger)))
     )
 
-
   def start(logger: LineLogger, header: SpecHeader): Task[LineLogger] =
     printHeader(header).map(_.log(logger)).run.map(_ => logger)
 
@@ -102,7 +106,7 @@ trait TextPrinter extends Printer {
       }
   }
 
-
+  /** print an executed fragment: example, step, action */
   def printRunnable(text: String, execution: Execution, args: Arguments, indentation: Int): Process[Task, LogLine] = {
 
     if (args.canShow(execution.result.status)) {
@@ -164,14 +168,14 @@ trait TextPrinter extends Printer {
     emit(show).info
   }
 
+  /** show execution times if the showtimes argument is true */
   def showTime(description: String, execution: Execution, args: Arguments) = {
     val time = if (args.showtimes) " ("+execution.time+")" else ""
     description + time
   }
 
-
   def statusAndDescription(text: String, result: Result)(args: Arguments) = {
-    val textLines = text.trimEnclosing("`").trimEnclosing("```").split("\n", -1)
+    val textLines = text.trimEnclosing("`").trimEnclosing("```").split("\n", -1) // trim markdown code marking
     val firstLine = textLines.headOption.getOrElse("")
     val indentation = firstLine.takeWhile(_ == ' ').drop(2)
 
@@ -191,6 +195,9 @@ trait TextPrinter extends Printer {
     else emitNone
   }
 
+  /**
+   * If the failure contains the expected and actual values, display them
+   */
   def printFailureDetails(args: Arguments):  Details => Process[Task, LogLine] = {
     case FailureDetails(expected, actual) if args.diffs.show(expected, actual) =>
       val (expectedDiff, actualDiff) = args.diffs.showDiffs(expected, actual)

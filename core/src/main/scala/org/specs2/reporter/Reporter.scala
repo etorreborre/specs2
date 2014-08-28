@@ -13,8 +13,10 @@ import Fold._
 import Statistics._
 
 /**
- * A reporter is responsible to select printers based on the arguments
- * execute the specification and pass it to each printer for printing
+ * A reporter is responsible for
+ *  - selecting printers based on the command-line arguments
+ *  - executing the specification
+ *  - passing it to each printer for printing
  *
  * It is also responsible for saving the specification state at the end of the run
  */

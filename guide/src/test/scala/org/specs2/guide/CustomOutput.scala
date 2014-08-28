@@ -61,6 +61,10 @@ Once you've defined your `Printer` trait you can use the `printer` argument like
 ```
 sbt> testOnly *BinarySpec* -- printer org.acme.reporting.LatexPrinter
 ```
+
+## Troubleshooting
+
+If your custom `Notifier` or `Printer` fails to be instantiated you can re-run the execution with the `verbose` argument in order to get an error message and a stack trace.
 """
 }
 

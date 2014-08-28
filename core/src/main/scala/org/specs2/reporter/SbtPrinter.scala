@@ -11,6 +11,12 @@ import scalaz.stream.io._
 import main.Arguments
 import specification.core._
 
+/**
+ * Text printer for Sbt
+ *
+ * It delegates the console printing to a normal text printer but using the Sbt loggers
+ * It also publishes events (success, error, skipped, pending) to Sbt
+ */
 trait SbtPrinter extends Printer {
   /** sbt loggers to display text */
   def loggers: Array[Logger]
@@ -83,6 +89,9 @@ trait SbtEvents {
   }
 }
 
+/**
+ * Line logger using sbt's loggers
+ */
 case class SbtLineLogger(loggers: Array[Logger]) extends BufferedLineLogger {
   def infoLine(msg: String) = loggers.foreach { logger =>
     logger.info(removeColors(msg, !logger.ansiCodesSupported))

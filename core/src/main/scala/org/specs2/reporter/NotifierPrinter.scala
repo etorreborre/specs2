@@ -7,6 +7,9 @@ import scalaz.stream._
 import scalaz.syntax.show._
 import specification.core._
 
+/**
+ * A Printer can be created from a Notifier implementation
+ */
 object NotifierPrinter {
 
   /**

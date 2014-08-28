@@ -23,6 +23,9 @@ trait Notifier {
   def examplePending(name: String, message: String, location: String, duration: Long)
 }
 
+/**
+ * Notifier that prints out to the console
+ */
 class ConsoleNotifier extends Notifier {
   def specStart(title: String, location: String)                                                                      = Console.println(s"[start  ] $title")
   def specEnd(title: String, location: String)                                                                        = Console.println(s"[end    ] $title")

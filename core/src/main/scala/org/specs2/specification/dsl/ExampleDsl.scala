@@ -19,6 +19,6 @@ trait ExampleDsl extends FragmentsFactory { outer =>
   }
 }
 
-trait NoBangExampleDsl extends ExampleDsl {
+trait NoBangExamples extends ExampleDsl {
   override def bangExample(d: String) = super.bangExample(d)
 }
