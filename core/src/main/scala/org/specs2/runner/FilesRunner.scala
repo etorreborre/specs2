@@ -23,7 +23,7 @@ trait FilesRunner {
     val env = Env(arguments = Arguments(args.mkString(" ")))
 
     val actions: Action[Unit] = run(env) >> Actions.safe(env.shutdown)
-    execute(actions)
+    execute(actions, env.arguments)
   }
 
   def run(env: Env): Action[Unit] = {

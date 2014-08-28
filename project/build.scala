@@ -190,7 +190,9 @@ object build extends Build {
     maxErrors := 20,
     incOptions := incOptions.value.withNameHashing(true),
     scalacOptions in GlobalScope ++= Seq("-Ywarn-unused-import", "-Xcheckinit", "-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_"),
-    scalacOptions in Test ++= Seq("-Yrangepos")
+    scalacOptions in Test ++= Seq("-Yrangepos"),
+    scalacOptions in (Compile, console) ++= Seq("-Yrangepos", "-feature", "-language:_"),
+    scalacOptions in (Test, console) ++= Seq("-Yrangepos", "-feature", "-language:_")
   )
 
 

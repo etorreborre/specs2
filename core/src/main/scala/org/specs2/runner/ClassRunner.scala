@@ -16,7 +16,7 @@ import scalaz.std.list._
 import Runner._
 
 /**
- * The class runner expects the first argument to be the class name of
+ * The class runner expects the first command-line argument to be the class name of
  * a specification to execute
  */
 trait ClassRunner {
@@ -24,7 +24,8 @@ trait ClassRunner {
    * run the specification
    */
   def run(args: Array[String]) {
-    val env = Env(arguments = Arguments(args.drop(1).mkString(" ")))
+    val arguments = Arguments(args.drop(1).mkString(" "))
+    val env = Env(arguments = arguments)
 
     val actions: Action[Unit] = args.toList match {
       case Nil =>
@@ -34,7 +35,7 @@ trait ClassRunner {
         createSpecification(className).flatMap[Unit](report(env)) >>
         Actions.safe(env.shutdown)
     }
-    execute(actions)
+    execute(actions, arguments)
   }
 
   /** create the specification from the class name */
