@@ -53,7 +53,6 @@ trait ClassRunner {
   /** report the specification */
   def report(env: Env): SpecificationStructure => Action[Unit] = { spec: SpecificationStructure =>
     val loader = Thread.currentThread.getContextClassLoader
-
     if (env.arguments.commandLine.contains("all")) {
       for {
         printers <- createPrinters(env.arguments, loader)

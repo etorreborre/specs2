@@ -1,6 +1,7 @@
 package specs2
 
 import org.specs2.main.Arguments
+import org.specs2.reporter.LineLogger._
 import org.specs2.runner.{Runner, ClassRunner}
 import org.specs2.specification.core.{Env, SpecificationStructure}
 import scalaz._, Scalaz._
@@ -11,7 +12,9 @@ object run extends ClassRunner {
    * Run one or more specifications with `specs2.run(spec1, spec2)` from a terminal
    */
   def apply(specifications: SpecificationStructure*)(implicit arguments: Arguments = Arguments()) = {
-    val env = Env(arguments = arguments)
+    val env = Env(arguments = arguments,
+                  lineLogger = consoleLogger)
+
     try     Runner.execute(specifications.toList.map(report(env)).sequenceU.void, arguments, exit = false)
     finally env.shutdown
   }

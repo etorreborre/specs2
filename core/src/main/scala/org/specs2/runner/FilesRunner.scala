@@ -4,6 +4,7 @@ package runner
 import main._
 import control._
 import io.DirectoryPath
+import org.specs2.reporter.LineLogger._
 import specification.core._
 import runner.Runner._
 import scalaz.std.anyVal._
@@ -23,7 +24,8 @@ trait FilesRunner {
    * Run the specifications found in files based on command-line arguments
    */
   def run(args: Array[String], exit: Boolean = false) {
-    val env = Env(arguments = Arguments(args.mkString(" ")))
+    val env = Env(arguments = Arguments(args.mkString(" ")),
+                  lineLogger = consoleLogger)
 
     val actions: Action[Unit] =
       run(env) >> Actions.safe(env.shutdown)
