@@ -9,7 +9,6 @@ import create._
 import scalaz.syntax.std.vector._
 
 trait FragmentsDsl extends FragmentsFactory with TitleDsl with ExampleDsl with LinkDsl with TagsDsl with ActionDsl { outer =>
-
   implicit def fragmentToFragments(f: Fragment): Fragments =
     Fragments(f)
 
@@ -109,3 +108,13 @@ trait FragmentsDsl extends FragmentsFactory with TitleDsl with ExampleDsl with L
 }
 
 object FragmentsDsl extends FragmentsDsl
+
+/**
+ * Lightweight Dsl trait with just a few implicits
+ */
+trait FragmentsDsl1 extends LinkDsl0 with TagsDsl with ActionDsl { outer =>
+  implicit class appendToArguments(args: Arguments) {
+    def ^(fs: =>Fragments): SpecStructure =
+      SpecStructure(SpecHeader(specClass = outer.getClass), args, () => fs)
+  }
+}

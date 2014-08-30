@@ -19,22 +19,7 @@ import scala.reflect.internal.util.Position
 /**
  * Allow to use fragments inside interpolated strings starting with s2 in order to build the specification content
  */
-trait S2StringContext extends FragmentsFactory { outer =>
-  private[specs2] val ff = fragmentFactory
-
-  implicit def stringIsInterpolatedFragment(s: =>String): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =  {
-      val s1 =
-        try s
-        catch { case e: Throwable => s"[${e.getMessage.notNull}]" }
-      fs append ff.text(text + s1).setLocation(start)
-    }
-  }
-
-  implicit def fragmentIsInterpolatedFragment(f: =>Fragment): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =
-      fs append ff.text(text).setLocation(start) appendLazy f.setLocation(end)
-  }
+trait S2StringContext extends S2StringContext1 { outer =>
 
   implicit def descriptionToFragmentsIsInterpolatedFragment(fragments: String => Fragments): InterpolatedFragment = new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) = {
@@ -49,14 +34,65 @@ trait S2StringContext extends FragmentsFactory { outer =>
     }
   }
 
-  implicit def asResultIsInterpolatedFragment[R : AsResult](r: =>R): InterpolatedFragment =
-    envFunctionIsInterpolatedFragment((env: Env) => r)
-
   implicit def stringFunctionIsInterpolatedFragment[R : AsResult](f: String => R): InterpolatedFragment =
     stringAndEnvFunctionIsInterpolatedFragment((s: String) => (e: Env) => f(s))
 
   implicit def envFunctionIsInterpolatedFragment[R : AsResult](f: Env => R): InterpolatedFragment =
-      stringAndEnvFunctionIsInterpolatedFragment(_ => f)
+    stringAndEnvFunctionIsInterpolatedFragment(_ => f)
+
+  implicit def argumentsFunctionIsInterpolatedFragment[R : AsResult](f: Arguments => R): InterpolatedFragment =
+    envFunctionIsInterpolatedFragment((env: Env) => f(env.arguments))
+
+  implicit def statsRepositoryFunctionIsInterpolatedFragment[R : AsResult](f: StatisticsRepository => R): InterpolatedFragment =
+    envFunctionIsInterpolatedFragment((env: Env) => f(env.statisticsRepository))
+
+  implicit def executionIsInterpolatedFragment(execution: Execution): InterpolatedFragment = new InterpolatedFragment {
+    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) = {
+      val (description, before) = descriptionAndBefore(text, start, end, expression)
+      fs append before append ff.example(description, execution).setLocation(end)
+    }
+  }
+  implicit def commandLineFunctionIsInterpolatedFragment[R : AsResult](f: CommandLine => R): InterpolatedFragment =
+    envFunctionIsInterpolatedFragment((env: Env) => f(env.arguments.commandLine))
+
+  implicit def executionContextFunctionIsInterpolatedFragment[R : AsResult](f: ExecutionContext => R): InterpolatedFragment =
+    envFunctionIsInterpolatedFragment((env: Env) => f(ExecutionContext.fromExecutorService(env.executorService,
+      (t: Throwable) => control.logThrowable(t, env.arguments.verbose).execute(env.systemLogger).unsafePerformIO)))
+
+  implicit def executorServiceFunctionIsInterpolatedFragment[R : AsResult](f: ExecutorService => R): InterpolatedFragment =
+    envFunctionIsInterpolatedFragment((env: Env) => f(env.executorService))
+
+  implicit def anyAsResultIsInterpolatedFragment(r: =>Function0Result): InterpolatedFragment = new InterpolatedFragment {
+    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =
+      asResultIsInterpolatedFragment(AsResult(r)).append(fs, text, start, end, expression)
+  }
+
+  implicit def specificationStructureIsInterpolatedFragment(s: SpecificationStructure): InterpolatedFragment = {
+    lazy val specStructure = s.is
+    specificationLinkIsInterpolatedFragment(SpecificationLink(specStructure.header, alias = specStructure.header.show))
+  }
+
+  implicit def specStructureIsInterpolatedFragment(s: SpecStructure): InterpolatedFragment = new InterpolatedFragment {
+    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =
+      (fs append ff.text(text).setLocation(start)) append s.fragments
+  }
+
+  implicit def stringIsInterpolatedFragment(s: =>String): InterpolatedFragment = new InterpolatedFragment {
+    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =  {
+      val s1 =
+        try s
+        catch { case e: Throwable => s"[${e.getMessage.notNull}]" }
+      fs append ff.text(text + s1).setLocation(start)
+    }
+  }
+
+  implicit def asResultIsInterpolatedFragment[R : AsResult](r: =>R): InterpolatedFragment =
+    envFunctionIsInterpolatedFragment((env: Env) => r)
+
+  implicit def fragmentsIsInterpolatedFragment(fragments: Fragments): InterpolatedFragment = new InterpolatedFragment {
+    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =
+      (fs append ff.text(text).setLocation(start)) append fragments
+  }
 
   private def stringAndEnvFunctionIsInterpolatedFragment[R : AsResult](f: String => Env => R): InterpolatedFragment = new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =  {
@@ -72,19 +108,6 @@ trait S2StringContext extends FragmentsFactory { outer =>
         }
 
       fs append result
-    }
-  }
-
-  implicit def argumentsFunctionIsInterpolatedFragment[R : AsResult](f: Arguments => R): InterpolatedFragment =
-    envFunctionIsInterpolatedFragment((env: Env) => f(env.arguments))
-
-  implicit def statsRepositoryFunctionIsInterpolatedFragment[R : AsResult](f: StatisticsRepository => R): InterpolatedFragment =
-    envFunctionIsInterpolatedFragment((env: Env) => f(env.statisticsRepository))
-
-  implicit def executionIsInterpolatedFragment(execution: Execution): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) = {
-      val (description, before) = descriptionAndBefore(text, start, end, expression)
-      fs append before append ff.example(description, execution).setLocation(end)
     }
   }
 
@@ -107,35 +130,18 @@ trait S2StringContext extends FragmentsFactory { outer =>
     (description, before)
   }
 
-  implicit def commandLineFunctionIsInterpolatedFragment[R : AsResult](f: CommandLine => R): InterpolatedFragment =
-    envFunctionIsInterpolatedFragment((env: Env) => f(env.arguments.commandLine))
+}
 
-  implicit def executionContextFunctionIsInterpolatedFragment[R : AsResult](f: ExecutionContext => R): InterpolatedFragment =
-    envFunctionIsInterpolatedFragment((env: Env) => f(ExecutionContext.fromExecutorService(env.executorService,
-      (t: Throwable) => control.logThrowable(t, env.arguments.verbose).execute(env.systemLogger).unsafePerformIO)))
+trait S2StringContext1 extends S2StringContext0 { outer =>
 
-  implicit def executorServiceFunctionIsInterpolatedFragment[R : AsResult](f: ExecutorService => R): InterpolatedFragment =
-    envFunctionIsInterpolatedFragment((env: Env) => f(env.executorService))
-
-  implicit def anyAsResultIsInterpolatedFragment(r: =>Function0Result): InterpolatedFragment = new InterpolatedFragment {
+  implicit def fragmentIsInterpolatedFragment(f: =>Fragment): InterpolatedFragment = new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =
-      asResultIsInterpolatedFragment(AsResult(r)).append(fs, text, start, end, expression)
+      fs append ff.text(text).setLocation(start) appendLazy f.setLocation(end)
   }
+}
 
-  implicit def fragmentsIsInterpolatedFragment(fragments: Fragments): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =
-      (fs append ff.text(text).setLocation(start)) append fragments
-  }
-
-  implicit def specificationStructureIsInterpolatedFragment(s: SpecificationStructure): InterpolatedFragment = {
-    lazy val specStructure = s.is
-    specificationLinkIsInterpolatedFragment(SpecificationLink(specStructure.header, alias = specStructure.header.show))
-  }
-
-  implicit def specStructureIsInterpolatedFragment(s: SpecStructure): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =
-      (fs append ff.text(text).setLocation(start)) append s.fragments
-  }
+trait S2StringContext0 extends FragmentsFactory { outer =>
+  private[specs2] val ff = fragmentFactory
 
   /**
    * based on the interpolated variables and the expressions captured with the macro, create the appropriate fragments

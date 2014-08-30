@@ -21,10 +21,16 @@ trait Matchers extends AnyMatchers
                   with MatchersImplicits
                   with LanguageFeatures
 
+trait Matchers1 extends
+       AnyBaseMatchers
+
 object Matchers extends Matchers
 
 trait MustMatchers extends Matchers with MustExpectations
 object MustMatchers extends MustMatchers
+
+trait MustMatchers1 extends Matchers1 with MustExpectations1
+
 trait ShouldMatchers extends Matchers with ShouldExpectations
 object ShouldMatchers extends ShouldMatchers
 

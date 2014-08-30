@@ -8,7 +8,7 @@ import create.FragmentsFactory
 /**
  * DSL for adding links to other specifications
  */
-trait LinkDsl extends FragmentsFactory {
+trait LinkDsl extends LinkDsl0 {
 
   implicit class linkFragment(alias: String) {
     def ~(s: SpecStructure): Fragment =
@@ -17,10 +17,10 @@ trait LinkDsl extends FragmentsFactory {
     def ~(s: SpecStructure, tooltip: String): Fragment =
       fragmentFactory.link(SpecificationLink(s.header, alias = alias, tooltip = tooltip))
 
-    def ~(s: =>SpecificationStructure): Fragment =
+    def ~(s: => SpecificationStructure): Fragment =
       fragmentFactory.link(SpecificationLink(s.is.header, alias = alias))
 
-    def ~(s: =>SpecificationStructure, tooltip: String): Fragment =
+    def ~(s: => SpecificationStructure, tooltip: String): Fragment =
       fragmentFactory.link(SpecificationLink(s.is.header, alias = alias, tooltip = tooltip))
   }
 
@@ -31,13 +31,19 @@ trait LinkDsl extends FragmentsFactory {
     def ~/(s: SpecStructure, tooltip: String): Fragment =
       fragmentFactory.see(SpecificationLink(s.header, alias = alias, tooltip = tooltip))
 
-    def ~/(s: =>SpecificationStructure): Fragment =
+    def ~/(s: => SpecificationStructure): Fragment =
       fragmentFactory.see(SpecificationLink(s.is.header, alias = alias))
 
-    def ~/(s: =>SpecificationStructure, tooltip: String): Fragment =
+    def ~/(s: => SpecificationStructure, tooltip: String): Fragment =
       fragmentFactory.see(SpecificationLink(s.is.header, alias = alias, tooltip = tooltip))
   }
 
+}
+
+/**
+ * Create links without any implicits
+ */
+trait LinkDsl0 extends FragmentsFactory {
   def link(s: SpecStructure): Fragment            = fragmentFactory.link(SpecificationLink(s.header, alias = s.header.show))
   def link(s: =>SpecificationStructure): Fragment = fragmentFactory.link(SpecificationLink(s.is.header, alias = s.is.header.show))
 
