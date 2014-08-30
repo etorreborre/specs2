@@ -19,11 +19,16 @@ import SpecificationsFinder._
  */
 trait FilesRunner {
 
-  def run(args: Array[String]) {
+  /**
+   * Run the specifications found in files based on command-line arguments
+   */
+  def run(args: Array[String], exit: Boolean = false) {
     val env = Env(arguments = Arguments(args.mkString(" ")))
 
-    val actions: Action[Unit] = run(env) >> Actions.safe(env.shutdown)
-    execute(actions, env.arguments)
+    val actions: Action[Unit] =
+      run(env) >> Actions.safe(env.shutdown)
+
+    execute(actions, env.arguments, exit)
   }
 
   def run(env: Env): Action[Unit] = {
@@ -70,5 +75,6 @@ trait FilesRunner {
 }
 
 object files extends FilesRunner {
-  def main(args: Array[String]) = run(args)
+  def main(args: Array[String]) =
+    run(args, exit = true)
 }

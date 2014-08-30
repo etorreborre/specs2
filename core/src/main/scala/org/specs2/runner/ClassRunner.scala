@@ -20,10 +20,18 @@ import Runner._
  * a specification to execute
  */
 trait ClassRunner {
+
+  /**
+   * run a specification but don't exit with System.exit
+   */
+  def run(args: Array[String]) {
+    run(args, exit = false)
+  }
+
   /**
    * run the specification
    */
-  def run(args: Array[String]) {
+  def run(args: Array[String], exit: Boolean) {
     val arguments = Arguments(args.drop(1).mkString(" "))
     val env = Env(arguments = arguments)
 
@@ -35,7 +43,7 @@ trait ClassRunner {
         createSpecification(className).flatMap[Unit](report(env)) >>
         Actions.safe(env.shutdown)
     }
-    execute(actions, arguments)
+    execute(actions, arguments, exit)
   }
 
   /** create the specification from the class name */
@@ -72,7 +80,8 @@ trait ClassRunner {
 object ClassRunner extends ClassRunner
 
 object consoleRunner extends ClassRunner {
-  def main(args: Array[String]) = run(args)
+  def main(args: Array[String]) =
+    run(args, exit = true)
 }
 
 /**

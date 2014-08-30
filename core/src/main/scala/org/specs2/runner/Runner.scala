@@ -12,13 +12,17 @@ import scalaz._, Scalaz._
  * reusable actions for Runners
  */
 object Runner {
-  def execute(actions: Action[Unit], arguments: Arguments) = {
+
+  /**
+   * execute some actions and exit with the proper code if 'exist' is true
+   */
+  def execute(actions: Action[Unit], arguments: Arguments, exit: Boolean) = {
     actions.execute(consoleLogging).unsafePerformIO.fold(
-      ok => IO(exitSystem(0, arguments)),
+      ok => IO(exitSystem(0, exit)),
       error => error.fold(
         consoleLogging,
         t => logThrowable(t, arguments),
-        (m, t) => consoleLogging(m) >> logThrowable(t, arguments) >> IO(exitSystem(100, arguments))
+        (m, t) => consoleLogging(m) >> logThrowable(t, arguments) >> IO(exitSystem(100, exit))
       )
     ).unsafePerformIO
   }
@@ -36,8 +40,8 @@ object Runner {
     } else IO(())
   }
 
-  def exitSystem(status: Int, arguments: Arguments = Arguments()) {
-    if (!arguments.commandLine.boolOr("noexitcode", false)) System.exit(status)
+  def exitSystem(status: Int, exit: Boolean) {
+    if (exit) System.exit(status)
   }
 }
 
