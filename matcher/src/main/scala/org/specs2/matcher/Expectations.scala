@@ -6,7 +6,7 @@ import execute._
 /**
  * This trait provides implicit definitions to transform any value into an Expectable
  */
-trait Expectations extends Expectations0 with CanBeEqual {
+trait Expectations extends ExpectationsCreation with CanBeEqual {
   /** describe a value with the aka method */
   implicit def describe[T](t: => T): Descriptible[T] = new Descriptible(t)
 
@@ -38,7 +38,7 @@ trait Expectations extends Expectations0 with CanBeEqual {
 /**
  * Base trait to create expectations
  */
-trait Expectations0 {
+trait ExpectationsCreation {
   /** @return an Expectable */
   def createExpectable[T](t: =>T): Expectable[T] = createExpectable(t, None)
   /** @return an Expectable with a description */

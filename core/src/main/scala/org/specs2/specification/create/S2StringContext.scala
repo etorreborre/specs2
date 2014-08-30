@@ -86,15 +86,26 @@ trait S2StringContext extends S2StringContext1 { outer =>
     }
   }
 
-  implicit def asResultIsInterpolatedFragment[R : AsResult](r: =>R): InterpolatedFragment =
-    envFunctionIsInterpolatedFragment((env: Env) => r)
+
+  implicit def fragmentIsInterpolatedFragment(f: =>Fragment): InterpolatedFragment = new InterpolatedFragment {
+    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =
+      fs append ff.text(text).setLocation(start) appendLazy f.setLocation(end)
+  }
 
   implicit def fragmentsIsInterpolatedFragment(fragments: Fragments): InterpolatedFragment = new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =
       (fs append ff.text(text).setLocation(start)) append fragments
   }
 
-  private def stringAndEnvFunctionIsInterpolatedFragment[R : AsResult](f: String => Env => R): InterpolatedFragment = new InterpolatedFragment {
+}
+
+private[specs2]
+trait S2StringContext1 extends S2StringContextCreation { outer =>
+
+  implicit def asResultIsInterpolatedFragment[R : AsResult](r: =>R): InterpolatedFragment =
+    stringAndEnvFunctionIsInterpolatedFragment(_ => (env: Env) => r)
+
+  private[specs2] def stringAndEnvFunctionIsInterpolatedFragment[R : AsResult](f: String => Env => R): InterpolatedFragment = new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =  {
       val (description, before) = descriptionAndBefore(text, start, end, expression)
 
@@ -130,17 +141,10 @@ trait S2StringContext extends S2StringContext1 { outer =>
     (description, before)
   }
 
+
 }
 
-trait S2StringContext1 extends S2StringContext0 { outer =>
-
-  implicit def fragmentIsInterpolatedFragment(f: =>Fragment): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =
-      fs append ff.text(text).setLocation(start) appendLazy f.setLocation(end)
-  }
-}
-
-trait S2StringContext0 extends FragmentsFactory { outer =>
+trait S2StringContextCreation extends FragmentsFactory { outer =>
   private[specs2] val ff = fragmentFactory
 
   /**

@@ -12,6 +12,13 @@ import Process._
 import specification.core._
 import scala.math._
 
+/**
+ * Compute the "level" of each fragment to be able to represent the whole specification
+ * as a tree.
+ *
+ * In mutable specifications text fragments add one level to the following fragments,
+ * Otherwise should and can blocks create Start/End fragments indicating that the level should go up then down
+ */
 trait Levels {
 
   def levelsProcess: Process1[Fragment, (Fragment, Int)] =
@@ -27,9 +34,9 @@ trait Levels {
       receive1 {
         // level goes +1 when a new block starts
         case f @ Fragment(Start,_ ,_) => nextLevel(f, level.copy(start = true, incrementNext = false))
-        case f if Fragment.isText(f)    => nextLevel(f, level.copy(start = true, incrementNext = true))
+        case f if Fragment.isText(f)  => nextLevel(f, level.copy(start = true, incrementNext = true))
         case f @ Fragment(End,_ ,_)   => nextLevel(f, level.copy(start = false, incrementNext = false, max(0, level.l - 1)))
-        case f                          => 
+        case f                        =>
           if (level.incrementNext) nextLevel(f, level.copy(start = false, incrementNext = false, l = level.l + 1))
           else                     sameLevel(f)
       }

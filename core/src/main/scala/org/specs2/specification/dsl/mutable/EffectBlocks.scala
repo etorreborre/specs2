@@ -9,6 +9,7 @@ import scalaz.Tree._
 /**
  * This class tracks "nested" effects
  */
+private[specs2]
 class EffectBlocks {
   /**
    * This tree loc contains the "path" of Examples and Actions when they are created in a block creating another fragment
@@ -26,7 +27,7 @@ class EffectBlocks {
   private[specs2] var blocksTree: TreeLoc[Int] = leaf(0).loc
 
   /** list of actions to create fragments */
-  private var effects: scala.collection.mutable.ListBuffer[() => Unit] = new scala.collection.mutable.ListBuffer()
+  private val effects: scala.collection.mutable.ListBuffer[() => Unit] = new scala.collection.mutable.ListBuffer()
 
   /** stop evaluating effects */
   private var stop = false
@@ -98,6 +99,7 @@ class EffectBlocks {
   }
 }
 
+private[specs2]
 case class EffectPath(path: Seq[Int] = Seq()) {
   def startsWith(other: EffectPath) = path.take(other.path.size) == other.path
 }

@@ -9,7 +9,11 @@ import scalaz.std.anyVal._
 import specification.core.Description
 import scala.collection.mutable.HashMap
 
-
+/**
+ * Store the execution statistics.
+ *
+ * The actual store might be on disk on in-memory
+ */
 case class StatisticsRepository(store: Store) {
   /** get the latest statistics for a given specification */
   def getStatistics(specClassName: String): Action[Option[Stats]] =
@@ -35,36 +39,10 @@ case class StatisticsRepository(store: Store) {
     store.reset
 }
 
-trait Store {
-  def get[A](key: Key[A]): Action[Option[A]]
-  def set[A](key: Key[A], a: A): Action[Unit]
-  def reset: Action[Unit]
-}
-
-object Store {
-  import FileSystem._
-
-  def directory(baseDirectory: DirectoryPath) = new Store {
-
-    def set[A](key: Key[A], fact: A): Action[Unit] =
-      writeFile(filepath(key), StoreKeys.encode(key, fact))
-
-    def get[A](key: Key[A]): Action[Option[A]] =
-      exists(filepath(key)).flatMap { e =>
-        if (e) readFile(filepath(key)).map(content => StoreKeys.decode(key, content))
-        else   Actions.ok(None)
-      }
-
-    def reset: Action[Unit] = delete(baseDirectory)
-
-    private def filepath[A](key: Key[A]): FilePath =
-      baseDirectory / FilePath.unsafe(StoreKeys.resolve(key))
-  }
-
-  val memory = MemoryStore()
-}
-
-case class MemoryStore(statistics: HashMap[String, Stats] = new HashMap[String, Stats],
+/**
+ * In memory store for statistics
+ */
+case class StatisticsMemoryStore(statistics: HashMap[String, Stats] = new HashMap[String, Stats],
                        results: HashMap[(String, Long), Result] = new HashMap[(String, Long), Result]) extends Store {
   def get[A](key: Key[A]): Action[Option[A]] = key match {
     case SpecificationStatsKey(specClassName) => Actions.ok(statistics.get(specClassName))
@@ -82,11 +60,36 @@ case class MemoryStore(statistics: HashMap[String, Stats] = new HashMap[String, 
 
 }
 
-sealed trait Key[A]
 case class SpecificationStatsKey(specClassName: String) extends Key[Stats]
 case class SpecificationResultKey(specClassName: String, description: Description) extends Key[Result]
 
 object StatisticsRepository {
-  val memory = StatisticsRepository(Store.memory)
-  def file(dir: DirectoryPath) = StatisticsRepository(Store.directory(dir))
+  val memory = StatisticsRepository(StatisticsStore.memory)
+  def file(dir: DirectoryPath) = StatisticsRepository(StatisticsStore.directory(dir))
+}
+
+object StatisticsStore {
+  import FileSystem._
+
+  /**
+   * key-value store backed-up by the file system
+   */
+  def directory(baseDirectory: DirectoryPath) = new Store {
+
+    def set[A](key: Key[A], fact: A): Action[Unit] =
+      writeFile(filepath(key), StoreKeys.encode(key, fact))
+
+    def get[A](key: Key[A]): Action[Option[A]] =
+      exists(filepath(key)).flatMap { e =>
+        if (e) readFile(filepath(key)).map(content => StoreKeys.decode(key, content))
+        else   Actions.ok(None)
+      }
+
+    def reset: Action[Unit] = delete(baseDirectory)
+
+    private def filepath[A](key: Key[A]): FilePath =
+      baseDirectory / FilePath.unsafe(StoreKeys.resolve(key))
+  }
+
+  val memory = StatisticsMemoryStore()
 }

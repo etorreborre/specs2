@@ -8,7 +8,7 @@ import create.FragmentsFactory
 /**
  * DSL for adding links to other specifications
  */
-trait LinkDsl extends LinkDsl0 {
+trait LinkDsl extends LinkCreation {
 
   implicit class linkFragment(alias: String) {
     def ~(s: SpecStructure): Fragment =
@@ -43,7 +43,7 @@ trait LinkDsl extends LinkDsl0 {
 /**
  * Create links without any implicits
  */
-trait LinkDsl0 extends FragmentsFactory {
+trait LinkCreation extends FragmentsFactory {
   def link(s: SpecStructure): Fragment            = fragmentFactory.link(SpecificationLink(s.header, alias = s.header.show))
   def link(s: =>SpecificationStructure): Fragment = fragmentFactory.link(SpecificationLink(s.is.header, alias = s.is.header.show))
 

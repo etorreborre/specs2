@@ -110,11 +110,19 @@ trait FragmentsDsl extends FragmentsFactory with TitleDsl with ExampleDsl with L
 object FragmentsDsl extends FragmentsDsl
 
 /**
- * Lightweight Dsl trait with just a few implicits
+ * Lightweight Dsl trait with just a few implicits:
+ *
+ *  - use arguments
+ *  - use s2 string directly in "def is = ..."
  */
-trait FragmentsDsl1 extends LinkDsl0 with TagsDsl with ActionDsl { outer =>
+private[specs2]
+trait FragmentsDsl1 extends LinkCreation with TagsDsl with ActionDsl { outer =>
   implicit class appendToArguments(args: Arguments) {
     def ^(fs: =>Fragments): SpecStructure =
       SpecStructure(SpecHeader(specClass = outer.getClass), args, () => fs)
   }
+
+  // allow writing: def is = "a" ! ok ^ "b" ! ok
+  implicit def fragmentsAsSpecStructure(fs: =>Fragments): SpecStructure =
+    SpecStructure.create(SpecHeader(getClass), fs)
 }

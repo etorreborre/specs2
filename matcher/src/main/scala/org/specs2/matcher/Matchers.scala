@@ -29,7 +29,8 @@ object Matchers extends Matchers
 trait MustMatchers extends Matchers with MustExpectations
 object MustMatchers extends MustMatchers
 
-trait MustMatchers1 extends Matchers1 with MustExpectations1
+private[specs2] trait MustMatchers1 extends Matchers1 with MustExpectations1
+private[specs2] trait MustThrownMatchers1 extends Matchers1 with MustThrownExpectations1
 
 trait ShouldMatchers extends Matchers with ShouldExpectations
 object ShouldMatchers extends ShouldMatchers

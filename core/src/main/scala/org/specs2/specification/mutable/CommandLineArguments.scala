@@ -5,6 +5,9 @@ import main.CommandLine
 import org.specs2.specification.core._
 import specification.core.mutable.SpecificationStructure
 
+/**
+ * Syntax for building a mutable specifications based on command-line arguments
+ */
 trait CommandLineArguments extends SpecificationStructure {
   def is(commandLine: CommandLine): Any
 
@@ -16,6 +19,9 @@ trait CommandLineArguments extends SpecificationStructure {
   }
 }
 
+/**
+ * Syntax for building a mutable specifications based on the current environment
+ */
 trait Environment extends SpecificationStructure {
   def is(env: Env): Any
 

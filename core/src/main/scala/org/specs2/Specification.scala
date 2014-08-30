@@ -1,6 +1,7 @@
 package org.specs2
 
 import matcher._
+import main._
 import specification.dsl.FragmentsDsl1
 import specification._
 import specification.core.ImmutableSpecificationStructure
@@ -28,9 +29,12 @@ trait SpecificationLike extends ImmutableSpecificationStructure
  *  - 1 implicit to add arguments to the specification
  *
  */
-abstract class Spec extends ImmutableSpecificationStructure
+abstract class Spec extends SpecLike
+trait SpecLike extends ImmutableSpecificationStructure
   with S2StringContext1
   with FragmentsDsl1
   with MustMatchers1
+  with ArgumentsArgs
+  with ArgumentsShortcuts
   with FormattingFragments
 

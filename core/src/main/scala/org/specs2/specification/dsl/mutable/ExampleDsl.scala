@@ -10,7 +10,19 @@ import org.specs2.main.CommandLine
 import org.specs2.specification.core._
 import specification.dsl
 
-trait ExampleDsl extends BlockDsl with dsl.ExampleDsl {
+trait ExampleDsl extends ExampleDsl1 with dsl.ExampleDsl {
+  override implicit def bangExample(d: String): BangExample =
+    new MutableBangExample(d)
+
+  class MutableBangExample(d: String) extends BangExample(d) {
+    override def ![R : AsResult](r: => R): Fragment                                      = addFragment(fragmentFactory.example(d, r))
+    override def ![R : AsResult](r: String => R): Fragment                               = addFragment(fragmentFactory.example(d, r))
+    override def ![R](r: Env => R)(implicit as: AsResult[R], p: ImplicitParam): Fragment = addFragment(fragmentFactory.example(d, r)(as, p))
+  }
+}
+
+private[specs2]
+trait ExampleDsl1 extends BlockDsl {
   implicit def blockExample(d: String) = new BlockExample(d)
 
   class BlockExample(d: String) {
@@ -36,14 +48,26 @@ trait ExampleDsl extends BlockDsl with dsl.ExampleDsl {
     def in[R](f: Env => R)(implicit asResult: AsResult[R], p1: ImplicitParam1): Fragment = d.>>(f)(asResult, p1)
     def in(execution: Execution): Fragment = d >> execution
   }
+}
 
-  override implicit def bangExample(d: String): BangExample =
-    new MutableBangExample(d)
+/**
+ * Lightweight ExampleDsl trait
+ */
+private[specs2]
+trait ExampleDsl0 extends BlockCreation {
+  implicit def blockExample(d: String) = new BlockExample(d)
 
-  class MutableBangExample(d: String) extends BangExample(d) {
-    override def ![R : AsResult](r: => R): Fragment                                      = addFragment(fragmentFactory.example(d, r))
-    override def ![R : AsResult](r: String => R): Fragment                               = addFragment(fragmentFactory.example(d, r))
-    override def ![R](r: Env => R)(implicit as: AsResult[R], p: ImplicitParam): Fragment = addFragment(fragmentFactory.example(d, r)(as, p))
+  class BlockExample(d: String) {
+    def >>(f: =>Fragment): Fragment = addBlock(d, f, addFragmentBlock)
+
+    def >>(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments = addBlock(d, fs, addFragmentsBlock)
+
+    def >>[R : AsResult](r: =>R): Fragment = {
+      addFragment(fragmentFactory.example(Text(d), Execution.result(r)))
+      addFragment(fragmentFactory.break)
+    }
+
+    def in[R : AsResult](r: =>R): Fragment = d >> r
   }
 }
 

@@ -6,7 +6,9 @@ import specification.core.Fragment
 import specification.dsl.mutable.ExampleDsl
 import specification.create.S2StringContext
 
-
+/**
+ * ForeachWithCommandLine trait, adapted for mutable specifications
+ */
 trait ForEachWithCommandLine[T] extends specification.ForEachWithCommandLineArguments[T] with ExampleDsl { outer: S2StringContext =>
   override implicit def blockExample(d: String) = new BlockExample1(d)
 

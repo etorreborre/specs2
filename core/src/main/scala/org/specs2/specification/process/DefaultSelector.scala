@@ -17,8 +17,16 @@ trait Selector {
 
   /** select fragments by name, markers and previous execution */
   def select(env: Env): Process1[Fragment, Fragment]
+
 }
 
+/**
+ * Default selection for specification fragments:
+ * 
+ *  - filter based on the name
+ *  - filter based on the tags
+ *  - filter based on previous execution
+ */
 trait DefaultSelector extends Selector {
 
   /** select fragments by name, markers and previous execution */

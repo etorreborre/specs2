@@ -24,7 +24,12 @@ import execute.FailureException
  *     }
  *   }
  */
-trait ThrownExpectations extends Expectations with StandardResults with StandardMatchResults {
+trait ThrownExpectations extends ThrownExpectationsCreation
+
+/**
+ * Lightweight ThrownExpectations trait with less implicit methods
+ */
+trait ThrownExpectationsCreation extends ExpectationsCreation with StandardResults with StandardMatchResults {
   override def createExpectable[T](t: =>T, alias: Option[String => String]): Expectable[T] =
     new Expectable(() => t) {
       // overriding this method is necessary to include the ThrownExpectation trait into the stacktrace of the created match result

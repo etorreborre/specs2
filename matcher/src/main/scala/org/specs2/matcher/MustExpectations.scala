@@ -17,11 +17,14 @@ trait MustExpectations extends MustExpectations1 {
 
   implicit def theBlock(t: =>Nothing): MustExpectable[Nothing] = createMustExpectable(t)
 }
-trait MustExpectations1 extends MustExpectations0 {
+
+private[specs2]
+trait MustExpectations1 extends MustExpectationsCreation {
   implicit def theValue[T](t: => T): MustExpectable[T] = createMustExpectable(t)
 }
 
-trait MustExpectations0 extends Expectations0 {
+private[specs2]
+trait MustExpectationsCreation extends ExpectationsCreation {
   protected def createMustExpectable[T](t: =>T) = new MustExpectable(() => t) {
     override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
   }
@@ -52,9 +55,10 @@ trait MustThrownExpectations extends MustExpectations with MustThrownExpectation
   }
 }
 
-trait MustThrownExpectations1 extends MustExpectations1 with MustThrownExpectations0
+private[specs2]
+trait MustThrownExpectations1 extends MustExpectations1 with MustThrownExpectationsCreation
 
-trait MustThrownExpectations0 extends ThrownExpectations with MustExpectations0 {
+trait MustThrownExpectationsCreation extends ThrownExpectationsCreation with MustExpectationsCreation {
   override protected def createMustExpectable[T](t: =>T) = new MustExpectable(() => t) {
     override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
     override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)

@@ -7,7 +7,7 @@ package matcher
  * List(1, 2) must be like { case List(a, b) => ok }
  * List(1, 2) must be like { case List(a, b) => ko("unexpected") }
  */
-trait StandardMatchResults extends Expectations {
+trait StandardMatchResults extends ExpectationsCreation {
   def ok(m: String) = MatchSuccess(m, "ko", createExpectable(None))
   def ko(m: String) = MatchFailure("ok", m, createExpectable(None))
 

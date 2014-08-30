@@ -35,6 +35,12 @@ trait Executor {
   def execute(env: Env): Process[Task, Fragment] => Process[Task, Fragment]
 }
 
+/**
+ * Default execution for specifications:
+ * 
+ *  - concurrent by default
+ *  - using steps for synchronisation points
+ */
 trait DefaultExecutor extends Executor {
 
   /**
