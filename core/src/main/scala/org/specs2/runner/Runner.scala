@@ -14,7 +14,7 @@ import scalaz._, Scalaz._
 object Runner {
 
   /**
-   * execute some actions and exit with the proper code if 'exist' is true
+   * Execute some actions and exit with the proper code if 'exist' is true
    */
   def execute(actions: Action[Unit], arguments: Arguments, exit: Boolean) = {
     actions.execute(consoleLogging).unsafePerformIO.fold(
@@ -27,6 +27,9 @@ object Runner {
     ).unsafePerformIO
   }
 
+  /**
+   * Use the console logging to log exceptions
+   */
   def logThrowable(t: Throwable, arguments: Arguments): IO[Unit] = {
     if (arguments.commandLine.boolOr("silent", false)) {
       consoleLogging("\n"+t.toString+"\n")    >>
@@ -40,6 +43,9 @@ object Runner {
     } else IO(())
   }
 
+  /**
+   * Exit the JVM with a given status
+   */
   def exitSystem(status: Int, exit: Boolean) {
     if (exit) System.exit(status)
   }

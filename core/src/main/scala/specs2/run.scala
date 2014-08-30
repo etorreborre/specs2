@@ -6,6 +6,9 @@ import org.specs2.runner.{Runner, ClassRunner}
 import org.specs2.specification.core.{Env, SpecificationStructure}
 import scalaz._, Scalaz._
 
+/**
+ * Run a specification from the command-line with specs2.run <specification name> <arguments>
+ */
 object run extends ClassRunner {
 
   /**

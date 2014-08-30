@@ -18,6 +18,9 @@ import reflect.Classes
 import reporter.Printer._
 import specification.core._
 
+/**
+ * Runner for Sbt
+ */
 case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader) extends _root_.sbt.testing.Runner {
   private lazy val commandLineArguments = Arguments(args:_*)
 
@@ -130,8 +133,11 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
  */
 class Specs2Framework extends Framework {
   def name = "specs2"
+
   def fingerprints = Array[Fingerprint](fp1, fp1m)
-  def runner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader) = new SbtRunner(args, remoteArgs, loader)
+
+  def runner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader) =
+    new SbtRunner(args, remoteArgs, loader)
 }
 
 object Fingerprints {
