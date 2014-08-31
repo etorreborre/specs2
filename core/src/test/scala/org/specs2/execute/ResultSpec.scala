@@ -2,8 +2,9 @@ package org.specs2
 package execute
 
 import matcher.{ResultMatchers, DataTables}
+import matcher.MatchersImplicits._
 
-class ResultSpec extends Specification with DataTables with ResultMatchers { def is = s2"""
+class ResultSpec extends Spec with DataTables with ResultMatchers { def is = s2"""
 
 Results are the outcome of some execution. There are several kinds of Results, all having a message describing them
 more precisely:
@@ -86,14 +87,14 @@ more precisely:
  ${ (true and false) must beFailing }
 
  A match result can be evaluated only when a boolean condition is satisfied
- ${ ((1 must_== 2): Result).when(false) }
+ ${ (1 must_== 2: Result).when(false) }
 
  A match result can be evaluated only unless a boolean condition is satisfied
- ${ ((1 must_== 2): Result).unless(true) }
+ ${ (1 must_== 2: Result).unless(true) }
 
  A match result can be evaluated if and only if a boolean condition is satisfied
- ${ ((1 must_== 2): Result).iff(false) }
- ${ ((1 must_== 1): Result).iff(true) }
+ ${ (1 must_== 2: Result).iff(false) }
+ ${ (1 must_== 1: Result).iff(true) }
                                                                                                                         """
 
   def statuses =

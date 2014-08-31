@@ -10,7 +10,20 @@ import text.Regexes._
 /**
  * The `StringMatchers` trait provides matchers which are applicable to String objects
  */
-trait StringMatchers extends StringBaseMatchers with StringBeHaveMatchers
+trait StringMatchers extends StringBaseMatchers with StringBeHaveMatchers {
+  /** adapt the BeEqualTo matcher to provide ignoreCase and ignoreSpace matcher */
+  implicit def stringMatcher(m: AdaptableMatcher[Any]): StringMatcher = new StringMatcher(m)
+}
+
+case class StringMatcher(m: AdaptableMatcher[Any]) {
+  private val ignoringCase = (_:Any) + ", ignoring case"
+  private val ignoringSpace = (_:Any) + ", ignoring space"
+  private val isTrimmed = (_:Any) + ", trimmed"
+  def ignoreCase: AdaptableMatcher[Any] = m.^^^((s: Any) => s.toString.toLowerCase, ignoringCase, ignoringCase)
+  def ignoreSpace: AdaptableMatcher[Any] = m.^^^((s: Any) => s.toString.replaceAll("\\s", ""), ignoringSpace, ignoringSpace)
+  def trimmed: AdaptableMatcher[Any] = m.^^^((s: Any) => s.toString.trim, isTrimmed, isTrimmed)
+}
+
 object StringMatchers extends StringMatchers
 
 /** 
@@ -20,23 +33,13 @@ object StringMatchers extends StringMatchers
  */
 private[specs2]
 trait StringBaseMatchers { outer =>
-  /** adapt the BeEqualTo matcher to provide ignoreCase and ignoreSpace matcher */
-  implicit def stringMatcher(m: AdaptableMatcher[Any]): StringMatcher = new StringMatcher(m)
-  class StringMatcher(m: AdaptableMatcher[Any]) {
-    private val ignoringCase = (_:Any) + ", ignoring case"
-    private val ignoringSpace = (_:Any) + ", ignoring space"
-    private val isTrimmed = (_:Any) + ", trimmed"
-    def ignoreCase: AdaptableMatcher[Any] = m.^^^((s: Any) => s.toString.toLowerCase, ignoringCase, ignoringCase)
-    def ignoreSpace: AdaptableMatcher[Any] = m.^^^((s: Any) => s.toString.replaceAll("\\s", ""), ignoringSpace, ignoringSpace)
-    def trimmed: AdaptableMatcher[Any] = m.^^^((s: Any) => s.toString.trim, isTrimmed, isTrimmed)
-  }
-  
+
   /** matches if a.toLowerCase.trim = b.toLowerCase.trim */   
   def ==/(s: String) = be_==/(s)
   /** matches if a.toLowerCase.trim = b.toLowerCase.trim */   
-  def be_==/(a: String) = new BeEqualTo(a).ignoreCase.ignoreSpace
+  def be_==/(a: String) = StringMatcher(StringMatcher(new BeEqualTo(a)).ignoreCase).ignoreSpace
   /** matches if a.toLowerCase.trim != b.toLowerCase.trim */   
-  def be_!=/(a: String) = new BeEqualTo(a).ignoreCase.ignoreSpace
+  def be_!=/(a: String) = be_==/(a).not
   /** matches if a.toLowerCase.trim != b.toLowerCase.trim */   
   def !=/(s: String) = be_!=/(s)
   /** matches if (b contains a) */

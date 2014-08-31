@@ -12,14 +12,20 @@ import execute._
 import control.Times
 import execute.Failure
 import scala.annotation.tailrec
+import ValueChecks._
 /**
  * Matchers for traversables
  */
-trait TraversableMatchers extends TraversableBaseMatchers with NumberOfTimes with TraversableBeHaveMatchers with LazyParameters
+trait TraversableMatchers extends TraversableBaseMatchers
+  with TraversableBeHaveMatchers
+  with LazyParameters
+  with TraversableBaseMatchersLowImplicits
+  with ImplicitParameters
+
 object TraversableMatchers extends TraversableMatchers
 
 private[specs2]
-trait TraversableBaseMatchers extends ValueChecks with TraversableBaseMatchersLowImplicits with ImplicitParameters { outer =>
+trait TraversableBaseMatchers { outer =>
   
   trait TraversableMatcher[T] extends Matcher[GenTraversableOnce[T]]
 
@@ -90,23 +96,6 @@ trait TraversableBaseMatchers extends ValueChecks with TraversableBaseMatchersLo
   def beSorted[T : Ordering] = new OrderingMatcher[T]
   /** alias for beSorted */
   def sorted[T : Ordering] = beSorted[T]
-
-  /** any scala collection has a size */
-  implicit def scalaTraversableIsSized[I <: GenTraversableOnce[_]]: Sized[I] = new Sized[I] {
-    def size(t: I) = t.size
-  }
-  /** any scala array has a size */
-  implicit def scalaArrayIsSized[T]: Sized[Array[T]] = new Sized[Array[T]] {
-    def size(t: Array[T]) = t.length
-  }
-  /** any java collection has a size */
-  implicit def javaCollectionIsSized[T <: java.util.Collection[_]]: Sized[T] = new Sized[T] {
-    def size(t: T) = t.size()
-  }
-  /** a regular string has a size, without having to be converted to an Traversable */
-  implicit def stringIsSized: Sized[String] = new Sized[String] {
-    def size(t: String) = t.size
-  }
 
 }
 

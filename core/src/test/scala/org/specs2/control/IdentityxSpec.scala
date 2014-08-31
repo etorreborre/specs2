@@ -2,7 +2,7 @@ package org.specs2
 package control
 import Identityx._
 
-class IdentityxSpec extends mutable.Specification {
+class IdentityxSpec extends mutable.Spec {
 
   "A function can be executed conditionally on an object depending on an implicit condition" >> {
     "when the condition is true" >> {

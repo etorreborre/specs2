@@ -4,7 +4,11 @@ package matcher
 /**
  * Matchers for Numerical values
  */
-trait NumericMatchers extends NumericBaseMatchers with NumericBeHaveMatchers
+trait NumericMatchers extends NumericBaseMatchers with NumericBeHaveMatchers {
+  /** implicit definition to create delta for the beCloseTo matcher */
+  implicit def ToDelta[S : Numeric](n: S): CanHaveDelta[S] = CanHaveDelta(n)
+}
+
 object NumericMatchers extends NumericMatchers {
   import text.NotNullStrings._
 
@@ -21,12 +25,13 @@ private[specs2]
 trait NumericBaseMatchers {
   /** matches if x <= n */   
   def beLessThanOrEqualTo[S <% Ordered[S]](n: S) = new BeLessThanOrEqualTo(n)
+  /** matches if x <= n */
   def lessThanOrEqualTo[S <% Ordered[S]](n: S) = beLessThanOrEqualTo(n)
   /** alias for beLessThanOrEqualTo */
   def be_<=[S <% Ordered[S]](n: S) = beLessThanOrEqualTo(n)
   /** alias for beLessThanOrEqualTo */
   def <=[S <% Ordered[S]](n: S) = beLessThanOrEqualTo(n)
-  /** matches if x < n */   
+  /** matches if x < n */
   def beLessThan[S <% Ordered[S]](n: S) = new BeLessThan(n)
   def lessThan[S <% Ordered[S]](n: S) = beLessThan(n)
   /** alias for beLessThan */
@@ -48,18 +53,16 @@ trait NumericBaseMatchers {
   /** alias for beGreaterThan */
   def >[S <% Ordered[S]](n: S) = beGreaterThan(n)
   
-  /** implicit definition to create delta for the beCloseTo matcher */
-  implicit def ToDelta[S : Numeric](n: S): CanHaveDelta[S] = CanHaveDelta(n)
   /** matches if x = n +/- delta */
   def beCloseTo[S : Numeric](n: S, delta: S): Matcher[S] = new BeCloseTo(n, delta)
   def closeTo[S : Numeric](n: S, delta: S): Matcher[S] = beCloseTo(n, delta)
   /** matches if x = n +/- delta */   
-  def beCloseTo[S : Numeric](delta: Delta[S]): Matcher[S] = beCloseTo(delta.n, delta.delta)
-  def closeTo[S : Numeric](delta: Delta[S]): Matcher[S] = beCloseTo(delta)
+  def beCloseTo[S : Numeric](delta: PlusOrMinus[S]): Matcher[S] = beCloseTo(delta.n, delta.delta)
+  def closeTo[S : Numeric](delta: PlusOrMinus[S]): Matcher[S] = beCloseTo(delta)
   /** alias for beCloseTo */
   def ~[S : Numeric](n: S)(delta: S): Matcher[S] = beCloseTo(n, delta)
   /** alias for beCloseTo */
-  def ~[S : Numeric](delta: Delta[S]): Matcher[S] = beCloseTo(delta)
+  def ~[S : Numeric](delta: PlusOrMinus[S]): Matcher[S] = beCloseTo(delta)
 
   /** matches if a value is between 2 others according to an Ordering */
   def beBetween[T <% Ordered[T]](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2)
@@ -72,12 +75,11 @@ trait NumericBaseMatchers {
 }
 
 /** transient class allowing the creation of a delta */
-private[specs2]
 case class CanHaveDelta[S : Numeric](n: S) {
-  def +/-(delta: S) = Delta(n, delta)
+  def +/-(delta: S) = PlusOrMinus(n, delta)
 }
 /** class representing a numeric range */
-case class Delta[S](n: S, delta: S)
+case class PlusOrMinus[S](n: S, delta: S)
 
 private[specs2]
 trait NumericBeHaveMatchers { outer: NumericBaseMatchers =>
@@ -108,11 +110,11 @@ trait NumericBeHaveMatchers { outer: NumericBaseMatchers =>
   implicit def toNumericResultMatcher[S : Numeric](result: MatchResult[S]) = new NumericResultMatcher(result)
   class NumericResultMatcher[S : Numeric](result: MatchResult[S]) {
     def beCloseTo(n: S, delta: S) = result(outer.beCloseTo(n, delta))
-    def beCloseTo(delta: Delta[S]) = result(outer.beCloseTo(delta))
+    def beCloseTo(delta: PlusOrMinus[S]) = result(outer.beCloseTo(delta))
     def closeTo(n: S, delta: S) = result(outer.beCloseTo(n, delta))
-    def closeTo(delta: Delta[S]) = result(outer.beCloseTo(delta))
+    def closeTo(delta: PlusOrMinus[S]) = result(outer.beCloseTo(delta))
     def ~(n: S, delta: S) = result(outer.beCloseTo(n, delta))
-    def ~(delta: Delta[S]) = result(outer.beCloseTo(delta))
+    def ~(delta: PlusOrMinus[S]) = result(outer.beCloseTo(delta))
   }
   implicit def toNeutralMatcherOrdered(result: NeutralMatcher[Any]) : NeutralMatcherOrdered = 
     new NeutralMatcherOrdered(result)
@@ -127,7 +129,7 @@ trait NumericBeHaveMatchers { outer: NumericBaseMatchers =>
     new NeutralMatcherNumeric(result)
   class NeutralMatcherNumeric(result: NeutralMatcher[Any]) {
     def ~[S : Numeric](n: S, delta: S) = beCloseTo(n, delta)
-    def ~[S : Numeric](delta: Delta[S]) = beCloseTo(delta)
+    def ~[S : Numeric](delta: PlusOrMinus[S]) = beCloseTo(delta)
   }
 }
 

@@ -13,7 +13,7 @@ trait ExceptionMatchers extends ExceptionBaseMatchers with ExceptionBeHaveMatche
 object ExceptionMatchers extends ExceptionMatchers
 
 private[specs2]
-trait ExceptionBaseMatchers extends Expectations {
+trait ExceptionBaseMatchers extends ExpectationsCreation {
   /**
    * @return a matcher checking the type of an Exception
    */

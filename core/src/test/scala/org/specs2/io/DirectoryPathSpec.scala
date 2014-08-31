@@ -4,9 +4,11 @@ package io
 import java.io.File
 import java.net.URI
 
-import org.specs2.matcher.Matcher
+import matcher.Matcher
+import matcher.MatchersImplicits._
+import control.ImplicitParameters._
 
-class DirectoryPathSpec extends Specification { def is = s2"""
+class DirectoryPathSpec extends Spec { def is = s2"""
 
  Paths are of 2 sorts:
 

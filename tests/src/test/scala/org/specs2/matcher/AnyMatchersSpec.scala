@@ -112,7 +112,7 @@ Implicits
     eg := {
       // if this specification compiles and if result is ok, this means that the === implicit could be redefined
       // thanks to the NoCanBeEqual trait
-      val spec = new Specification with NoCanBeEqual {
+      val spec = new Specification with NoTypedEqualExpectations {
         implicit def otherTripleEqualUse[T](t: =>T) = new {
           def ===[S](other: S) = other
         }

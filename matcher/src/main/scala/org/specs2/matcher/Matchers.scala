@@ -23,6 +23,15 @@ trait Matchers extends AnyMatchers
 
 trait Matchers1 extends
        AnyBaseMatchers
+  with TraversableBaseMatchers
+  with StringBaseMatchers
+  with ExceptionBaseMatchers
+  with NumericBaseMatchers
+  with OptionBaseMatchers
+  with EitherBaseMatchers
+  with TryBaseMatchers
+  with EventuallyMatchers
+  with FutureBaseMatchers
 
 object Matchers extends Matchers
 

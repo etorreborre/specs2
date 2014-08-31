@@ -13,7 +13,7 @@ trait TryMatchers extends TryBaseMatchers with TryBeHaveMatchers
 object TryMatchers extends TryMatchers
 
 private[specs2]
-trait TryBaseMatchers extends ExceptionMatchers {
+trait TryBaseMatchers {
 
   def beSuccessfulTry[T]  = TrySuccessMatcher[T]()
   def beASuccessfulTry[T] = beSuccessfulTry[T]

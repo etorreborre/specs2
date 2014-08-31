@@ -5,13 +5,13 @@ package matcher
 /**
  * This trait adds some implicits to create expectations with the `===` sign
  */
-trait CanBeEqual { this: Expectations =>
+trait TypedEqualExpectations { this: ExpectationsCreation =>
   /**
    * A value can be tested against another with the === operator.
    * It is equivalent to writing a must_== b
    */
-  implicit def canBeEqual[T](t: =>T) = new CanBeEqualExpectation(t)
-  class CanBeEqualExpectation[T](t: =>T) {
+  implicit def typedEqualExpectation[T](t: =>T) = new TypedEqualExpectation(t)
+  class TypedEqualExpectation[T](t: =>T) {
     /** equality matcher on Expectables */
     def ===[S >: T](other: =>S) = createExpectable(t).applyMatcher[S](new BeEqualTo(other))
     /** ! equality matcher on Expectables */
@@ -23,9 +23,10 @@ trait CanBeEqual { this: Expectations =>
   }
 }
 
+object TypedEqualExpectations extends ExpectationsCreation
 /**
- * This trait can be used to suppress the CanBeEqual implicits
+ * This trait can be used to suppress the TypedEqualExpectations implicits
  */
-trait NoCanBeEqual extends CanBeEqual { this: Expectations =>
-  override def canBeEqual[T](t: =>T) = super.canBeEqual(t)
+trait NoTypedEqualExpectations extends TypedEqualExpectations { this: ExpectationsCreation =>
+  override def typedEqualExpectation[T](t: =>T) = super.typedEqualExpectation(t)
 }

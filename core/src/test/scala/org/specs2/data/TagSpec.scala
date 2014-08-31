@@ -7,8 +7,9 @@ import org.specs2.main.Arguments
 import org.specs2.matcher.DataTables
 import NamedTag._
 import NamedTagsAreMonoid._
+import matcher.MatchersImplicits._
 
-class TagSpec extends Specification with DataTables { def is = s2"""
+class TagSpec extends Spec with DataTables { def is = s2"""
 
   Tags (simple, named, section, custom) form a monoid so that:
 
