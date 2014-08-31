@@ -143,10 +143,11 @@ trait AnyBaseMatchers {
     def apply[S <: Any](x: Expectable[S]) = {
       val c = implicitly[ClassTag[T]].runtimeClass
       val xClass = x.value.asInstanceOf[java.lang.Object].getClass
+      val xWithClass = x.mapDescription(d => s"'$d: ${xClass.getName}'")
       result(c.isAssignableFrom(xClass),
-             x.description + " is an instance of " + q(c.getName),
-             x.description + " is not an instance of " + q(c.getName),
-             x)
+             xWithClass.description + " is an instance of " + q(c.getName),
+             xWithClass.description + " is not an instance of " + q(c.getName),
+             xWithClass)
     }
   }
 }
