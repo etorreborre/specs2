@@ -4,7 +4,7 @@ package data
 import scalaz.concurrent.Task
 import scalaz.stream.Process
 
-class FoldSpec extends Specification { def is = s2"""
+class FoldSpec extends Spec { def is = s2"""
 
  A fold can be executed on a large Process $large
 

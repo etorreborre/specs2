@@ -2,15 +2,16 @@ package org.specs2
 package control
 
 import Functions._
+import matcher.ExpectationsDescription._
 
-class FunctionsSpec extends Specification { def is = s2"""
+class FunctionsSpec extends Spec { def is = s2"""
 
   a byname function can be transformed into a strict one  ${
     def byNameFunction(u: =>Unit) {}
     var parameter = "not evaluated"
     toStrictFunction1(byNameFunction){ parameter = "evaluated" }
 
-    "The byname function has become a strict one" <==> (parameter === "evaluated")
+    "The byname function has become a strict one" <==> (parameter must ===("evaluated"))
   }
 
   functions can be or-ed with ||  ${

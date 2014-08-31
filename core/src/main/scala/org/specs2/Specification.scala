@@ -2,6 +2,7 @@ package org.specs2
 
 import matcher._
 import main._
+import org.specs2.execute.StandardResults
 import specification.dsl.FragmentsDsl1
 import specification._
 import specification.core.ImmutableSpecificationStructure
@@ -37,4 +38,5 @@ trait SpecLike extends ImmutableSpecificationStructure
   with ArgumentsCreation
   with ArgumentsShortcuts
   with FormattingFragments
+  with StandardResults
 

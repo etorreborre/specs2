@@ -1,10 +1,9 @@
 package org.specs2
 package data
 
-import mutable.{Tables, Specification}
-import matcher.DataTables
+import mutable.Tables
 
-class SeparatedTagsSpec extends Specification with Tables {
+class SeparatedTagsSpec extends mutable.Spec with Tables {
 
   "tagged elements can be included / excluded by tags" >> {
     "element tags" | "include"    | "exclude"  | "keep" |>
@@ -19,7 +18,7 @@ class SeparatedTagsSpec extends Specification with Tables {
     "t1,t2"        ! ""           ! "t1 && t2" ! false  |
     "t1"           ! ""           ! "t1 && t2" ! true   |
     { (elementTags, included, excluded, keep) =>
-      SeparatedTags(included, excluded).keep(elementTags.split(",")) === keep
+      SeparatedTags(included, excluded).keep(elementTags.split(",")) must_== keep
     }
   }
 
@@ -36,7 +35,7 @@ class SeparatedTagsSpec extends Specification with Tables {
       "t1,t2"        ! ""           ! "t1 && t2" ! false     |
       "t1"           ! ""           ! "t1 && t2" ! false     |
       { (elementTags, included, excluded, contain) =>
-        SeparatedTags(included, excluded).contain(elementTags.split(",")) === contain
+        SeparatedTags(included, excluded).contain(elementTags.split(",")) must_== contain
       }
   }
 }

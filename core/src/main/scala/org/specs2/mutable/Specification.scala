@@ -3,6 +3,7 @@ package mutable
 
 import matcher._
 import main.ArgumentsShortcuts
+import org.specs2.execute.StandardResults
 import specification.create.FormattingFragments
 import specification.core.mutable.SpecificationStructure
 import specification.mutable._
@@ -33,4 +34,6 @@ trait SpecLike extends SpecificationStructure
   with ActionDsl
   with MustThrownMatchers1
   with FormattingFragments
+  with StandardResults
+
 

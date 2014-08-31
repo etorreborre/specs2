@@ -20,6 +20,8 @@ trait ExpectationsDescription extends Sentences with Expectations {
   }
 }
 
+object ExpectationsDescription extends ExpectationsDescription
+
 trait NoExpectationsDescription extends ExpectationsDescription {
   override def describeExpectation(description: String): ExpectationDescription = super.describeExpectation(description)
 }

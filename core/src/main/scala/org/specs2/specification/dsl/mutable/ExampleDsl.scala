@@ -67,6 +67,9 @@ trait ExampleDsl0 extends BlockCreation {
       addFragment(fragmentFactory.break)
     }
 
+    def should(f: => Fragment): Fragment = addBlock(s"$d should", f, addFragmentBlock)
+    def can(f: => Fragment): Fragment    = addBlock(s"$d can",    f, addFragmentBlock)
+
     def in[R : AsResult](r: =>R): Fragment = d >> r
   }
 }
