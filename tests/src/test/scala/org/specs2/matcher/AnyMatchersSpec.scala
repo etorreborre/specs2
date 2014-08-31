@@ -95,7 +95,7 @@ class AnyMatchersSpec extends script.Specification with Groups with ResultMatche
   beAnInstanceOf checks if an object is an instance of a given type
   ${ type1 must beAnInstanceOf[Type1] }
   ${ type1 must not be anInstanceOf[Type2] }
-  ${ (type1 must beAnInstanceOf[Type2]).message must_== "'type1' is not an instance of 'org.specs2.matcher.Type2'" }
+  ${ (type1 must beAnInstanceOf[Type2]).message must_== s"'type1: ${type1.getClass.getName}' is not an instance of 'org.specs2.matcher.Type2'" }
 
 Implicits
 =========

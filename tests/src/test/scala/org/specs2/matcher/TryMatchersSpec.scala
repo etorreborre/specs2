@@ -32,7 +32,9 @@ class TryMatchersSpec extends Specification with ResultMatchers { def is = s2"""
   ${ (Succeeded(1) must be failedTry) returns "'Success(1)' is not a Failure" }
   ${ Failed[I](e) must be aFailedTry }
   ${ Failed[I](e) must beFailedTry.withThrowable[MyException] }
-  ${ (Failed[I](e) must beFailedTry.withThrowable[OtherException]) returns s"'Failure(boom)' is a Failure but '$e' doesn't have class '${classOf[OtherException].getName}'. It has class '${classOf[MyException].getName}'" }
+  ${ Failed[I](e) must beFailedTry.withThrowable[Exception] }
+  ${ (Failed[I](e) must beFailedTry.withThrowable[OtherException]) returns
+     s"'Failure(boom)' is a Failure but '$e: ${classOf[MyException].getName}' is not an instance of '${classOf[OtherException].getName}'" }
   ${ Failed[I](e) must beAFailedTry.withThrowable[MyException](".*oo.*") }
   ${ Failed[I](e) must beFailedTry.like { case e: MyException => e.getMessage must startWith("b") }}
   ${ Failed[I](e) must not be aFailedTry.withThrowable[MyException]("bang") }
