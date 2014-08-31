@@ -146,7 +146,10 @@ object Result {
   def issues(results: Seq[Result], separator: String = "; ") =
     results.toList.foldMap(identity)(ResultFailuresMonoid(separator)).addExpectationsNb(-1)
 
-  implicit val ResultMonoid: Monoid[Result] = new Monoid[Result] {
+  /**
+   * This monoids keeps success messages if the result of the |+| is not a success
+   */
+  val ResultMonoid: Monoid[Result] = new Monoid[Result] {
     val zero = Success()
     def append(m1: Result, m2: =>Result) = {
       (m1, m2) match {
@@ -179,6 +182,7 @@ object Result {
       }
     }.setExpectationsNb(m1.expectationsNb + m2.expectationsNb)
   }
+
   /**
    * This monoids "absorbs" success messages if the result of the |+| is not a success
    */
