@@ -11,8 +11,8 @@ Maintenance version
  * fixed an evaluation case with `match result and matcher`
  * added a note to the traversable matchers guide on annotating the haveSize matcher [#289](http://github.com/etorreborre/specs2/issues/289)
  * `SpecificationsFinder.specificationNames` finds specifications under a Windows drive when using the `srcTestDir` option [#290](http://github.com/etorreborre/specs2/issues/290)
+ * In a failed `Try` matcher the actual exception can be a subclass of the expected one [#291](http://github.com/etorreborre/specs2/issues/291)
+ * removed the `implicit` qualifier on the `ResultMonoid` so that `ResultFailureMonoid` becomes the default [#293](http://github.com/etorreborre/specs2/issues/293)
 
-
-
- ==========================
+==========================
 
