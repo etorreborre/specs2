@@ -1,12 +1,12 @@
 package org.specs2
 package main
 
-import matcher.DataTables
+import org.specs2.matcher.{TypedEqualExpectations, DataTables}
 import execute.Result
 import org.specs2.text.MappedColors
 import specification._
 
-class ArgumentsSpec extends script.Specification with DataTables with Grouped { def is = s2"""
+class ArgumentsSpec extends script.Spec with DataTables with Grouped with TypedEqualExpectations with ArgProperties { def is = s2"""
 
 Arguments can be passed on the command line as an Array of Strings. There are 2 types of arguments:
 

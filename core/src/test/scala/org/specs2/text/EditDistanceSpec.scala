@@ -3,8 +3,9 @@ package text
 
 import matcher._
 import specification.Grouped
+import MatchersImplicits._
 
-class EditDistanceSpec extends Specification with EditDistance with DataTables with Grouped { def is = s2"""
+class EditDistanceSpec extends Spec with EditDistance with DataTables with Grouped with TypedEqualExpectations { def is = s2"""
 
  The edit distance should
    return 0 if there's no insertions                                                                      ${g1.e1}
@@ -66,7 +67,7 @@ class EditDistanceSpec extends Specification with EditDistance with DataTables w
       "a"  !! ""      ! "[a]" -> "[]"   |
       ""   !! "ab"    ! "[]" -> "[ab]"  |
       "ab" !! ""      ! "[ab]" -> "[]"  | { (a: String, b: String, result: (String, String)) =>
-        showDistance(a, b) must_== (result)
+        showDistance(a, b) must_== result
       }
 
     e10 :=
@@ -75,7 +76,7 @@ class EditDistanceSpec extends Specification with EditDistance with DataTables w
       "a"  !! "b"    ! "[a]" -> "[b]"  |
       "a"  !! "bc"   ! "[a]" -> "[bc]" |
       "a"  !! "ab"   ! "a[]" -> "a[b]" | { (a: String, b: String, result: (String, String)) =>
-        showDistance(a, b) must_== (result)
+        showDistance(a, b) must_== result
       }
 
     e11 := {
@@ -99,12 +100,12 @@ class EditDistanceSpec extends Specification with EditDistance with DataTables w
   "performances" - new g4 {
     val factor = 1000
     e1 := {
-      (editDistance("kitten\n" * factor, "kitsin\n" * factor) must be > 0) and
-      (showDistance("kitten\n" * factor, "kitsin\n" * factor)._1.size must be > 0)
+      (editDistance("kitten\n" * factor, "kitsin\n" * factor) must be_>(0)) and
+      (showDistance("kitten\n" * factor, "kitsin\n" * factor)._1.size must be_>(0))
     }
     e2 := {
-      (editDistance("kitten" * factor, "kitsin" * factor) must be > 0) and
-      (showDistance("kitten" * factor, "kitsin" * factor)._1.size must be > 0)
+      (editDistance("kitten" * factor, "kitsin" * factor) must be_>(0)) and
+      (showDistance("kitten" * factor, "kitsin" * factor)._1.size must be_>(0))
     }
   }
 }

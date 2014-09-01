@@ -1,9 +1,10 @@
 package org.specs2
 package text
 
-import mutable.{Tables, Specification}
+import mutable.{Tables, Spec}
+import matcher.TypedEqualExpectations
 
-class PluralSpec extends Specification with Plural with Tables {
+class PluralSpec extends Spec with Plural with Tables with TypedEqualExpectations {
   
   "A string can be pluralized: 'apple'.plural(n)" in {
 

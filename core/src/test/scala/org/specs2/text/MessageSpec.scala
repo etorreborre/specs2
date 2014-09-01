@@ -1,15 +1,15 @@
 package org.specs2
 package text
 
-import mutable.Specification
+import mutable.Spec
 import Message._
 
-class MessageSpec extends Specification {
+class MessageSpec extends Spec {
 
   "it is possible to concat messages, so that empty messages don't get displayed" >> {
-    concat("hello", "", ",")      === "hello"
-    concat("hello", "world", ",") === "hello,world"
-    concat("", "world", ",")      === "world"
+    concat("hello", "", ",")      must_== "hello"
+    concat("hello", "world", ",") must_== "hello,world"
+    concat("", "world", ",")      must_== "world"
   }
 
 }

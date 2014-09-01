@@ -5,10 +5,10 @@ import scalaz._
 import Trees._
 import Scalaz._
 import Tree._
-import matcher.DataTables
+import matcher._
 import specification._
 
-class TreesSpec extends script.Specification with DataTables with Grouped { def is = s2"""
+class TreesSpec extends script.Spec with DataTables with Grouped with Expectations { def is = s2"""
 
  # A tree can be pruned by providing a function mapping nodes to Option[Node]
     + if a node is mapped to Some(n), it stays in the tree

@@ -23,6 +23,17 @@ trait SpecificationLike extends org.specs2.SpecificationLike with Scripts with G
   override def map(fs: =>Fragments) = GroupsScript(groups = outer)(BulletedExamplesTemplate(fragmentFactory), fragmentFactory).lines(super.map(fs))
 }
 
+abstract class Spec extends SpecLike
+
+/**
+ * Trait for the script.Spec abstract class
+ */
+trait SpecLike extends org.specs2.Spec with Scripts with GroupsLike { outer =>
+  /** analyse the fragments and extract examples from pieces of text */
+  override def map(fs: =>Fragments) = GroupsScript(groups = outer)(BulletedExamplesTemplate(fragmentFactory), fragmentFactory).lines(super.map(fs))
+}
+
+
 /**
  * This script associates lines extracted by a template to example bodies defined by a GroupsLike trait.
  *

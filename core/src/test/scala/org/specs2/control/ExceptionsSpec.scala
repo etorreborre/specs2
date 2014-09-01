@@ -4,7 +4,7 @@ package control
 import sys._
 import specification._
 
-class ExceptionsSpec extends script.Specification with Exceptions with Grouped {  def is = s2"""
+class ExceptionsSpec extends script.Spec with Exceptions with Grouped {  def is = s2"""
                                                                                                                
 The Exceptions trait provides functional ways to catch exceptions and deal with them:
 

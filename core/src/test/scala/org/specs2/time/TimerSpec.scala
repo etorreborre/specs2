@@ -1,9 +1,10 @@
 package org.specs2
 package time
 
+import org.specs2.matcher.TypedEqualExpectations
 import specification.Grouped
 
-class TimerSpec extends Specification with Grouped {  def is = s2"""
+class TimerSpec extends Spec with Grouped with TypedEqualExpectations {  def is = s2"""
 
   A timer can be created and not started                                   
     neverStarted returns true                                              ${g1.e1}

@@ -1,10 +1,11 @@
 package org.specs2
 package collection
 
+import matcher._
 import specification._
 import BiMap._
 
-class BiMapSpec extends script.Specification with BiMapExamples { def is = s2"""
+class BiMapSpec extends script.Spec with BiMapExamples  { def is = s2"""
 
  Bimaps define bijection relationships between values
 
@@ -16,7 +17,7 @@ class BiMapSpec extends script.Specification with BiMapExamples { def is = s2"""
                                                                            """
 }
 
-trait BiMapExamples extends Groups with SpecificationLike {
+trait BiMapExamples extends Groups with SpecLike with TypedEqualExpectations {
   val bimap = Seq("one" <-> 1, "two" <-> 2, "three" <-> 3)
 
   "BiMap api" - new group {

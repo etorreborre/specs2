@@ -4,7 +4,7 @@ package control
 import io._
 import specification._
 
-class PropertySpec extends script.Specification with Groups { def is = s2"""
+class PropertySpec extends script.Spec with Groups { def is = s2"""
 
 A Property is used to store values which can be lazily accessed when required.
 

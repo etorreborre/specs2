@@ -57,7 +57,7 @@ import org.specs2.specification.create.{S2StringContextCreation, S2StringContext
  * }
 
  */
-trait Groups extends GroupsLike { outer: S2StringContext =>
+trait Groups extends GroupsLike { outer: S2StringContextCreation =>
   def createExamplesGroup(i: Int): ExamplesGroup = {
     if (autoNumberedGroups.nonEmpty) autoNumberedGroups.applyOrElse(i, (n: Int) => g1)()
     else                             numberedExampleGroups.applyOrElse(i, (n: Int) => g1)()
