@@ -1,11 +1,11 @@
 package org.specs2
 package specification
 
-import matcher.DataTables
+import matcher._
 import execute.Snippet._
 import core._
 
-class SnippetsSpec extends script.Specification with Snippets with DataTables with Grouped { def is = sequential ^ s2"""
+class SnippetsSpec extends script.Spec with Snippets with DataTables with Grouped with TypedEqual { def is = sequential ^ s2"""
 
  These are examples on how to use the various snippet methods
 

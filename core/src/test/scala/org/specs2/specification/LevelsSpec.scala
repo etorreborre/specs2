@@ -7,7 +7,7 @@ import Fragment._
 import process._
 import Levels._
 
-class LevelsSpec extends Specification { def is = s2"""
+class LevelsSpec extends Spec { def is = s2"""
 
  The Levels class is used to compute the 'level' of Fragments in a list of Fragments.
  This is used with mutable specifications to be able to display a tree of examples (Acceptance specification just list their examples on the same level)

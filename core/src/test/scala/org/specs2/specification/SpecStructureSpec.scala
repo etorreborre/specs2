@@ -3,8 +3,9 @@ package specification
 
 import org.specs2.main.Arguments
 import org.specs2.specification.core._
+import matcher.MatchersImplicits._
 
-class SpecStructureSpec extends Specification { def is = s2"""
+class SpecStructureSpec extends Spec { def is = s2"""
 
  A spec structure depends on another if it has links to it $a1
 

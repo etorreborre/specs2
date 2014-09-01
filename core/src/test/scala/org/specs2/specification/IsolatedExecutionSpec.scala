@@ -7,7 +7,7 @@ import main.Arguments
 import core._
 import process._
 
-class IsolatedExecutionSpec extends Specification with ForEachEnv { def is = s2"""
+class IsolatedExecutionSpec extends Spec with ForEachEnv { def is = s2"""
 
  We want to be able to isolate the execution of examples if isolated == true
  The isolated fragments must run with their own class instance

@@ -2,8 +2,9 @@ package org.specs2
 package text
 
 import Split._
+import matcher._
 
-class SplitSpec extends mutable.Specification {
+class SplitSpec extends mutable.Spec with TypedEqual {
 
   "a command line can be splitted" >> {
     "around spaces" >> {

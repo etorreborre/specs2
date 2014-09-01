@@ -11,7 +11,7 @@ import main.Arguments
 import specification.core._
 import specification.process.DefaultExecutor
 
-class ExecutorSpec extends Specification with Groups with ResultMatchers with ThrownExpectations { def is = s2"""
+class ExecutorSpec extends Spec with Groups with ResultMatchers with ThrownExpectations { def is = s2"""
 
  Steps
  =====

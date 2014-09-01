@@ -5,7 +5,7 @@ package matcher
 /**
  * This trait adds some implicits to create expectations with the `===` sign
  */
-trait TypedEqualExpectations { this: ExpectationsCreation =>
+trait TypedEqual { this: ExpectationsCreation =>
   /**
    * A value can be tested against another with the === operator.
    * It is equivalent to writing a must_== b
@@ -23,10 +23,10 @@ trait TypedEqualExpectations { this: ExpectationsCreation =>
   }
 }
 
-object TypedEqualExpectations extends ExpectationsCreation
+object TypedEqual extends ExpectationsCreation
 /**
- * This trait can be used to suppress the TypedEqualExpectations implicits
+ * This trait can be used to suppress the TypedEqual implicit
  */
-trait NoTypedEqualExpectations extends TypedEqualExpectations { this: ExpectationsCreation =>
+trait NoTypedEqual extends TypedEqual { this: ExpectationsCreation =>
   override def typedEqualExpectation[T](t: =>T) = super.typedEqualExpectation(t)
 }

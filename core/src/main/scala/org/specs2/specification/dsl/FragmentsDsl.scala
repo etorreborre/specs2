@@ -8,7 +8,7 @@ import core._
 import create._
 import scalaz.syntax.std.vector._
 
-trait FragmentsDsl extends FragmentsFactory with TitleDsl with ExampleDsl with LinkDsl with TagsDsl with ActionDsl { outer =>
+trait FragmentsDsl extends FragmentsFactory with FragmentsDsl1 with TitleDsl with ExampleDsl with LinkDsl { outer =>
   implicit def fragmentToFragments(f: Fragment): Fragments =
     Fragments(f)
 
@@ -37,17 +37,6 @@ trait FragmentsDsl extends FragmentsFactory with TitleDsl with ExampleDsl with L
     def ^(others: Seq[Fragment])    : Fragments     = ^(Fragments(others:_*))
     def ^(other: Fragment)          : Fragments     = fs.append(other)
     def ^(other: String)            : Fragments     = fs ^ fragmentFactory.text(other)
-  }
-
-  implicit class appendToArguments(args: Arguments) {
-    def ^(other: Arguments)         : Arguments = args.overrideWith(other)
-    def ^(s: SpecificationStructure): SpecStructure = ^(s.is)
-    def ^(structure: SpecStructure) : SpecStructure = structure.copy(arguments = args)
-    def ^(header: SpecHeader)       : SpecStructure = SpecStructure(header, args)
-    def ^(others: =>Fragments)        : SpecStructure = SpecStructure(SpecHeader(specClass = outer.getClass), args, () => others)
-    def ^(others: Seq[Fragment])    : SpecStructure = ^(Fragments(others:_*))
-    def ^(other: Fragment)          : SpecStructure = args ^ Fragments(other)
-    def ^(other: String)            : SpecStructure = args ^ fragmentFactory.text(other)
   }
 
   implicit class appendToSpecHeader(header: SpecHeader) {
@@ -86,10 +75,6 @@ trait FragmentsDsl extends FragmentsFactory with TitleDsl with ExampleDsl with L
   implicit def fragmentAsSpecStructure(f: Fragment): SpecStructure =
     SpecHeader(getClass) ^ f
 
-  // allow writing: def is = "a" ! ok ^ "b" ! ok
-  implicit def fragmentsAsSpecStructure(fs: =>Fragments): SpecStructure =
-    SpecHeader(getClass) ^ fs
-
   implicit def specStructureAsFragments(spec: SpecStructure): Fragments =
     spec.fragments
 
@@ -118,8 +103,14 @@ object FragmentsDsl extends FragmentsDsl
 private[specs2]
 trait FragmentsDsl1 extends LinkCreation with TagsDsl with ActionDsl { outer =>
   implicit class appendToArguments(args: Arguments) {
-    def ^(fs: =>Fragments): SpecStructure =
-      SpecStructure(SpecHeader(specClass = outer.getClass), args, () => fs)
+    def ^(other: Arguments)         : Arguments = args.overrideWith(other)
+    def ^(s: SpecificationStructure): SpecStructure = ^(s.is)
+    def ^(structure: SpecStructure) : SpecStructure = structure.copy(arguments = args)
+    def ^(header: SpecHeader)       : SpecStructure = SpecStructure(header, args)
+    def ^(others: =>Fragments)        : SpecStructure = SpecStructure(SpecHeader(specClass = outer.getClass), args, () => others)
+    def ^(others: Seq[Fragment])    : SpecStructure = ^(Fragments(others:_*))
+    def ^(other: Fragment)          : SpecStructure = args ^ Fragments(other)
+    def ^(other: String)            : SpecStructure = args ^ fragmentFactory.text(other)
   }
 
   // allow writing: def is = "a" ! ok ^ "b" ! ok

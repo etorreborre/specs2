@@ -18,7 +18,7 @@ import specification.create._
  * It is also possible to check that the result value is equal to a specific value by using the `check[R : AsResult](f: T => R)` method.
  *
  */
-trait Snippets extends org.specs2.execute.Snippets { outer: S2StringContext with FragmentsFactory =>
+trait Snippets extends org.specs2.execute.Snippets { outer: S2StringContextCreation with FragmentsFactory =>
   private val factory = outer.fragmentFactory
 
   implicit def snippetIsSpecPart[T](snippet: Snippet[T]): InterpolatedFragment = new InterpolatedFragment {

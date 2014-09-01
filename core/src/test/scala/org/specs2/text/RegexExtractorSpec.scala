@@ -1,12 +1,13 @@
 package org.specs2
 package text
 
+import matcher.TypedEqual
 import specification._
 import RegexExtractor._
 import execute.{ErrorException, FailureException}
 import util.matching.Regex
 
-class RegexExtractorSpec extends script.Specification with Groups { def is = s2"""
+class RegexExtractorSpec extends script.Spec with Groups with TypedEqual { def is = s2"""
 
  # RegexExtractors can extract up to 10 distinct parameters from a piece of text
  + one parameter

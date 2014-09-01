@@ -5,7 +5,7 @@ import matcher._
 import specification.Grouped
 import MatchersImplicits._
 
-class EditDistanceSpec extends Spec with EditDistance with DataTables with Grouped with TypedEqualExpectations { def is = s2"""
+class EditDistanceSpec extends Spec with EditDistance with DataTables with Grouped with TypedEqual { def is = s2"""
 
  The edit distance should
    return 0 if there's no insertions                                                                      ${g1.e1}

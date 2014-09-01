@@ -1,8 +1,9 @@
 package org.specs2
 package text
 
+import matcher._
 
-class TextTableSpec extends mutable.Specification {
+class TextTableSpec extends mutable.Spec with TypedEqual {
   "a text table must format it content to equal length" >> {
     TextTable(
       Seq("",   "a"    , "b",    "c"),

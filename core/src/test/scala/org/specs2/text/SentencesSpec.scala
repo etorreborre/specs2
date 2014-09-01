@@ -1,9 +1,11 @@
 package org.specs2
 package text
 
-import mutable.{Tables, Specification}
+import mutable.{Tables, Spec}
+import matcher._
+import MatchersImplicits._
 
-class SentencesSpec extends Specification with Tables with Sentences {
+class SentencesSpec extends Spec with Tables with Sentences with TypedEqual with ExpectationsDescription {
 
   "It is possible to create the negation of a sentence" >> {
     "sentence"             | "negated"               | "reversible" |>

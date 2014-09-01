@@ -8,12 +8,13 @@ import script.Specification
 import core._
 import process._
 import execute.Result
-import matcher.{ThrownExpectations, ResultMatchers}
+import matcher._
 import control._
 import scalaz.{Tag =>_, _}, Scalaz._
 import main.Arguments
+import MatchersImplicits._
 
-class SelectorSpec extends Specification with Groups with ResultMatchers with ThrownExpectations { def is = s2"""
+class SelectorSpec extends Spec with Groups with ResultMatchers with MustThrownExpectations with Expectations { def is = s2"""
 
  Selection by name
  =================
@@ -127,7 +128,7 @@ class SelectorSpec extends Specification with Groups with ResultMatchers with Th
       val descriptions = executed.fragments.map(_.description.toString)
 
       expected.foreach(e => descriptions aka "expected for exclude" must contain(beMatching(".*"+e+".*")))
-      unexpected.foreach(e => descriptions aka "unexpected for exclude"  must not contain(beMatching(".*"+e+".*")))
+      unexpected.foreach(e => descriptions aka "unexpected for exclude"  must not(contain(beMatching(".*"+e+".*"))))
       ok
     }
 
@@ -151,7 +152,7 @@ class SelectorSpec extends Specification with Groups with ResultMatchers with Th
     val descriptions = executed.map(_.description.toString)
 
     expected.foreach(e => descriptions aka "expected for include" must contain(beMatching(".*"+e+".*")))
-    unexpected.foreach(e => descriptions aka "unexpected for include" must not contain(beMatching(".*"+e+".*")))
+    unexpected.foreach(e => descriptions aka "unexpected for include" must not(contain(beMatching(".*"+e+".*"))))
     ok
   }
 
@@ -161,7 +162,7 @@ class SelectorSpec extends Specification with Groups with ResultMatchers with Th
     val descriptions = executed.fragments.map(_.description.toString)
 
     expected.foreach(e => descriptions aka "expected for exclude" must contain(beMatching(".*"+e+".*")))
-    unexpected.foreach(e => descriptions aka "unexpected for exclude"  must not contain(beMatching(".*"+e+".*")))
+    unexpected.foreach(e => descriptions aka "unexpected for exclude"  must not(contain(beMatching(".*"+e+".*"))))
     ok
   }
 }

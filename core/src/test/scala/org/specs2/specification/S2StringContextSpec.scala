@@ -10,7 +10,7 @@ import org.specs2.specification.create._
 import org.specs2.specification.core._
 import org.specs2.specification.dsl.FragmentsDsl
 
-class S2StringContextSpec extends Specification { def is = s2"""
+class S2StringContextSpec extends Spec { def is = s2"""
 
  Fragments can be interpolated from a s2 string
   a simple string as Text, aggregating it to the previous Text ${exs.e1}

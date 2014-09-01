@@ -2,11 +2,12 @@ package org.specs2
 package specification
 package process
 
-import matcher.ThrownExpectations
+import org.specs2.specification.dsl.ExampleDsl
 import specification.core.Fragments
 import scala.collection.mutable.ListBuffer
+import matcher._
 
-class RandomExecutionSpec extends script.Specification with Groups with ThrownExpectations { def is = s2"""
+class RandomExecutionSpec extends script.Spec with Groups with ThrownExpectations with TraversableMatchers with ExampleDsl { def is = s2"""
  It is possible to force the order of execution of a specification so that
    + the execution is sequential but with a random order on the examples
    + the randomisation only happens in between steps

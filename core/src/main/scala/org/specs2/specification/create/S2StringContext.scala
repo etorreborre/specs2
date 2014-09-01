@@ -84,11 +84,6 @@ trait S2StringContext extends S2StringContext1 { outer =>
   }
 
 
-  implicit def fragmentIsInterpolatedFragment(f: =>Fragment): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =
-      fs append ff.text(text).setLocation(start) appendLazy f.setLocation(end)
-  }
-
   implicit def fragmentsIsInterpolatedFragment(fragments: Fragments): InterpolatedFragment = new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =
       (fs append ff.text(text).setLocation(start)) append fragments
@@ -98,6 +93,11 @@ trait S2StringContext extends S2StringContext1 { outer =>
 
 private[specs2]
 trait S2StringContext1 extends S2StringContextCreation { outer =>
+
+  implicit def fragmentIsInterpolatedFragment(f: =>Fragment): InterpolatedFragment = new InterpolatedFragment {
+    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =
+      fs append ff.text(text).setLocation(start) appendLazy f.setLocation(end)
+  }
 
   implicit def asResultIsInterpolatedFragment[R : AsResult](r: =>R): InterpolatedFragment =
     stringAndEnvFunctionIsInterpolatedFragment(_ => (env: Env) => r)

@@ -17,7 +17,7 @@ class BiMapSpec extends script.Spec with BiMapExamples  { def is = s2"""
                                                                            """
 }
 
-trait BiMapExamples extends Groups with SpecLike with TypedEqualExpectations {
+trait BiMapExamples extends Groups with SpecLike with TypedEqual {
   val bimap = Seq("one" <-> 1, "two" <-> 2, "three" <-> 3)
 
   "BiMap api" - new group {

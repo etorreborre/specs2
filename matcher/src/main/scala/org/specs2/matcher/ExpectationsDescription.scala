@@ -4,7 +4,7 @@ package matcher
 import text.Sentences
 import execute.{ResultExecution, AsResult}
 
-trait ExpectationsDescription extends Sentences with Expectations {
+trait ExpectationsDescription extends Sentences with ExpectationsCreation {
 
   implicit def describeExpectation(description: String): ExpectationDescription = new ExpectationDescription(description)
 

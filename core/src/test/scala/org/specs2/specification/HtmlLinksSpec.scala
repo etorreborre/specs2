@@ -2,8 +2,10 @@ package org.specs2
 package specification
 
 import core._
+import matcher._
+import dsl.LinkDsl
 
-class HtmlLinksSpec extends Specification { def is = s2"""
+class HtmlLinksSpec extends Spec with TypedEqual with LinkDsl { def is = s2"""
 
   Html links referencing specifications can be introduced
 

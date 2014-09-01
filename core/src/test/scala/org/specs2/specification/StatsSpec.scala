@@ -9,7 +9,7 @@ import scalaz.concurrent.Task
 import DefaultExecutor._
 import dsl.FragmentsDsl
 
-class StatsSpec extends Specification { import stats1._; def is = s2"""
+class StatsSpec extends Spec { import stats1._; def is = s2"""
 
  Statitistics can be computed for a stream of fragments
   1 success            $e1

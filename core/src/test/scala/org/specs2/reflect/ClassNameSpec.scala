@@ -3,9 +3,9 @@ package reflect
 
 import mutable.{Tables, Spec}
 import ClassName._
-import matcher.TypedEqualExpectations
+import matcher.TypedEqual
 
-class ClassNameSpec extends Spec with Tables with TypedEqualExpectations {
+class ClassNameSpec extends Spec with Tables with TypedEqual {
 
   "Class names must be decoded" in {
     "name"                   | "decoded"                |>

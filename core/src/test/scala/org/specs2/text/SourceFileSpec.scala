@@ -1,9 +1,10 @@
 package org.specs2
 package text
 
+import matcher.TypedEqual
 import specification.Grouped
 
-class SourceFileSpec extends Specification with Grouped with SourceFile { def is = sequential ^ s2"""
+class SourceFileSpec extends Spec with Grouped with SourceFile with TypedEqual { def is = sequential ^ s2"""
 
  the package name of a source file can be extracted
    for a simple name                                                     ${g1.e1}

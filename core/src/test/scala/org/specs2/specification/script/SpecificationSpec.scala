@@ -3,10 +3,11 @@ package specification
 package script
 
 import main.Arguments
-import org.specs2.runner.TextRunner
-import org.specs2.specification.create.{S2StringContext, FragmentsFactory}
+import runner.TextRunner
+import specification.create.{S2StringContext, FragmentsFactory}
+import matcher.MatchersImplicits._
 
-class SpecificationSpec extends script.Specification with Grouped { def is = s2"""
+class SpecificationSpec extends script.Spec with Grouped { def is = s2"""
 
  Examples creation
  ================
@@ -52,7 +53,7 @@ class SpecificationSpec extends script.Specification with Grouped { def is = s2"
                             + ex1
                             + ex2""")(exclude("g2.e2"))
 
-      result must not containMatch("\\+ ex2")
+      result must not(containMatch("\\+ ex2"))
     }
 
     e2 := {
@@ -65,7 +66,7 @@ class SpecificationSpec extends script.Specification with Grouped { def is = s2"
                             + fx2
                  """
       val result = run(text, g1ok, g2ok)(exclude("g1"))
-      (result must not containMatch("\\+ ex2")) and
+      (result must not(containMatch("\\+ ex2"))) and
       (result must containMatch("\\+ fx1"))
     }
   }

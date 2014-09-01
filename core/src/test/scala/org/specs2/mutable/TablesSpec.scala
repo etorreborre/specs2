@@ -1,9 +1,9 @@
 package org.specs2
 package mutable
 
-import matcher.TypedEqualExpectations
+import matcher.TypedEqual
 
-class TablesSpec extends Spec with Tables with TypedEqualExpectations {
+class TablesSpec extends Spec with Tables with TypedEqual {
   addText("When using the Tables trait")
 
   "The first value of a DataTable can be a String followed by a single !" >> {

@@ -4,10 +4,11 @@ package mutable
 import core._
 import create.DefaultFragmentFactory
 import DefaultFragmentFactory._
-import core.{Env, Results, Fragment}
+import core.{Env, Results}
 import dsl.mutable.{MutableFragmentsDsl, MutableFragmentBuilder}
+import org.specs2.matcher._
 
-class MutableFragmentsDslSpec extends org.specs2.Specification { def is = s2"""
+class MutableFragmentsDslSpec extends org.specs2.Spec with TypedEqual with TraversableMatchers { def is = s2"""
 
   create examples
     with a string and a result $e1

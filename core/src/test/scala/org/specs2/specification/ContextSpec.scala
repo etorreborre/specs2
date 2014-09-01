@@ -12,7 +12,7 @@ import execute._
 import matcher._
 import _root_.org.specs2.mutable.{Around => MAround, Before => MBefore, After => MAfter, Specification => Spec}
 
-class ContextSpec extends Specification with ResultMatchers with Groups { def is = s2"""
+class ContextSpec extends org.specs2.Spec with ResultMatchers with Groups { def is = s2"""
 
  It is sometimes necessary to provide functions to "prepare" the specification before executing the Fragments
  and clean it up afterwards. This may be for example:
@@ -133,7 +133,7 @@ class ContextSpec extends Specification with ResultMatchers with Groups { def is
     case class Executed(results: Seq[Result]) {
       def prints(ms: String*): Result = {
         val msgs = messages.toList
-        msgs must_== List(ms:_*)
+        (msgs must_== ms.toList).toResult
       }  
     }
   }

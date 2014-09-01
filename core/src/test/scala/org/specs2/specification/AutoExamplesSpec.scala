@@ -4,8 +4,10 @@ package specification
 import matcher._
 import _root_.org.specs2.mutable.{Specification => Spec}
 import org.specs2.specification.core.{Fragment, Fragments}
+import org.specs2.specification.create.AutoExamples
+import org.specs2.specification.dsl.FragmentsDsl
 
-class AutoExamplesSpec extends Specification with DataTables { def is = s2"""
+class AutoExamplesSpec extends org.specs2.Spec with DataTables with AutoExamples with FragmentsDsl { def is = s2"""
 
  The trimExpression function should
    remove backticks
@@ -41,7 +43,7 @@ class AutoExamplesSpec extends Specification with DataTables { def is = s2"""
         1    ! 1   ! 2   | { (a, b, c) =>  a + b must_== c }
       }
     }
-    spec.is.fragments.fragments.filter(Fragment.isExample) must have size(4)
+    spec.is.fragments.fragments.filter(Fragment.isExample) must haveSize(4)
   }
 
   def firstExampleDescription(fs: Fragments) =

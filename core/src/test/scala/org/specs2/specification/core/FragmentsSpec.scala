@@ -2,11 +2,10 @@ package org.specs2
 package specification
 package core
 
-import org.specs2.data.Processes
 import text.Trim._
-//import scalaz._, Scalaz._
+import matcher._
 
-class FragmentsSpec extends Specification with Tables { def is = s2"""
+class FragmentsSpec extends Spec with Tables with TypedEqual { def is = s2"""
  Fragments can be compacted    $a1
 """
   val factory = fragmentFactory; import factory._

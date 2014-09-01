@@ -2,12 +2,12 @@ package org.specs2
 package io
 
 import control._
-import org.specs2.matcher.TypedEqualExpectations
+import org.specs2.matcher.TypedEqual
 import specification.core._
 import user.io.{LocationSpecification, LocationUnitSpecification}
 import Fragment._
 
-class LocationSpec extends org.specs2.mutable.Spec with TypedEqualExpectations {
+class LocationSpec extends org.specs2.mutable.Spec with TypedEqual {
   "A unit specification must have correct locations for its fragments" >> {
     implicit def spec = new LocationUnitSpecification
 
