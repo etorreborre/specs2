@@ -39,4 +39,5 @@ trait SpecLike extends ImmutableSpecificationStructure
   with ArgumentsShortcuts
   with FormattingFragments
   with StandardResults
+  with StandardMatchResults
 

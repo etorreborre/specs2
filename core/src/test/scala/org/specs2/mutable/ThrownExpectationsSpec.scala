@@ -6,7 +6,7 @@ import control.Debug
 import execute._
 import ThrownExpectationsSpecData._
 
-class ThrownExpectationsSpec extends Specification with ResultMatchers {
+class ThrownExpectationsSpec extends Spec with ResultMatchers {
 
   "An acceptance spec using" >> {
     "ThrownExpectations should fail when the first must matcher fails in an Example" in {

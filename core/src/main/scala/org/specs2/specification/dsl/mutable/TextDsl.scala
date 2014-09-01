@@ -6,9 +6,10 @@ package mutable
 import create.FragmentsFactory
 import org.specs2.specification.core.{Fragments, Fragment}
 
-trait TextDsl extends FragmentBuilder with FragmentsFactory {
+trait TextDsl extends TextCreation { outer =>
+  
   implicit class textFragment(s: String) {
-    def txt = addFragment(fragmentFactory.text(s))
+    def txt = outer.addText(s)
 
     def br: Fragment  = s.txt.br
     def br(n: Int): Fragment = s.txt.br(n)
@@ -83,3 +84,27 @@ trait TextDsl extends FragmentBuilder with FragmentsFactory {
 
 }
 
+trait TextCreation extends FragmentBuilder with FragmentsFactory { outer =>
+
+  def addText(s: String): Fragment =
+    addFragment(fragmentFactory.text(s))
+
+  def addBreak: Fragment  = addBreak(1)
+  def addBreak(n: Int): Fragment  = addFragmentBlock {
+    val f = addFragment(fragmentFactory.break)
+    (1 until n).toList.map(_ => addFragment(fragmentFactory.break))
+    f
+  }
+
+  def addTab: Fragment = addTab(1)
+
+  def addTab(n: Int): Fragment = addFragmentBlock {
+    addFragment(fragmentFactory.tab(n))
+  }
+
+  def addBacktab: Fragment = addBacktab(1)
+  def addBacktab(n: Int): Fragment = addFragmentBlock {
+    addFragment(fragmentFactory.backtab(n))
+  }
+
+}

@@ -3,7 +3,7 @@ package reporter
 
 import LineLogger._
 
-class BufferedLineLoggerSpec extends Specification { def is = s2"""
+class BufferedLineLoggerSpec extends Spec { def is = s2"""
 
  Newlines must be buffered $a1
 

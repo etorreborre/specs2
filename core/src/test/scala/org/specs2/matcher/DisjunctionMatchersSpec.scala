@@ -3,7 +3,7 @@ package matcher
 
 import scalaz.{\/-, -\/}
 
-class DisjunctionMatchersSpec extends Specification with ResultMatchers with DisjunctionMatchers { def is = s2"""
+class DisjunctionMatchersSpec extends Spec with ResultMatchers with DisjunctionMatchers { def is = s2"""
 
  The DisjunctionMatchers trait provides matchers to check \/ instances
                                                                                                                         

@@ -5,8 +5,9 @@ import org.specs2.matcher.Matcher
 import specification.Grouped
 import Classes._
 import control._
+import matcher.MatchersImplicits._
 
-class ClassesSpec extends Specification with Grouped { def is = s2"""
+class ClassesSpec extends Spec with Grouped { def is = s2"""
 
   it is possible to instantiate a Specification 
     from a class name ${g1.e1}

@@ -33,7 +33,7 @@ import ResultLogicalCombinators._
  * 
  * @see org.specs2.matcher.DataTablesSpec for examples
  */
-trait DataTables extends Expectations {
+trait DataTables extends ExpectationsCreation {
   
   /** @return a TableHeader with one heading only */
   implicit def toTableHeader(a: String) = new TableHeader(List(a))

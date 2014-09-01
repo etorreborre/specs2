@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutorService
 import execute._
 import org.specs2.control.ImplicitParameters.ImplicitParam
 import org.specs2.specification.core.{Env, Execution}
-import org.specs2.specification.create.{S2StringContext, InterpolatedFragment}
+import org.specs2.specification.create.{S2StringContextCreation, S2StringContext, InterpolatedFragment}
 
 /**
  * This trait can be used to standardize names for groups of examples in an acceptance specification.
@@ -215,7 +215,7 @@ trait Groups extends GroupsLike { outer: S2StringContext =>
  *   }
  * }
  */
-trait Grouped extends GroupsLike { outer: S2StringContext =>
+trait Grouped extends GroupsLike { outer: S2StringContextCreation =>
   def createExamplesGroup(i: Int): ExamplesGroup = {
     if (autoNumberedGroups.nonEmpty) autoNumberedGroups.applyOrElse(i, (n: Int) => g1)
     else                             numberedExampleGroups.applyOrElse(i, (n: Int) => g1)
@@ -286,7 +286,7 @@ trait Grouped extends GroupsLike { outer: S2StringContext =>
   private var autoNumberedGroups: Seq[ExamplesGroup] = Seq()
 }
 
-trait GroupsLike { this: S2StringContext =>
+trait GroupsLike { this: S2StringContextCreation =>
   trait AutoNumberedGroup extends ExamplesGroup {
     private var autoNumberedExamples: Seq[ExecutionVar] = Seq()
 
@@ -310,7 +310,7 @@ trait GroupsLike { this: S2StringContext =>
   }
 
   implicit def executionVarIsInterpolatedFragment(executionVar: =>ExecutionVar): InterpolatedFragment =
-    executionIsInterpolatedFragment(executionVar.execution())
+    createExecutionInterpolatedFragment(executionVar.execution())
 
   trait group extends AutoNumberedGroup
 

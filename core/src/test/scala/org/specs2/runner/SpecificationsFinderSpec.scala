@@ -8,7 +8,7 @@ import matcher.ControlMatchers._
 import control.Action
 import matcher.Matcher
 
-class SpecificationsFinderSpec extends Specification { def is = s2"""
+class SpecificationsFinderSpec extends Spec { def is = s2"""
   It is possible to find specifications in the local test directory   $e1
   It is possible to find specifications in an absolute test directory $e2
   It is possible to find specifications in a specific drive           $e3

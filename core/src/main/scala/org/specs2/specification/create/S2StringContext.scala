@@ -46,12 +46,9 @@ trait S2StringContext extends S2StringContext1 { outer =>
   implicit def statsRepositoryFunctionIsInterpolatedFragment[R : AsResult](f: StatisticsRepository => R): InterpolatedFragment =
     envFunctionIsInterpolatedFragment((env: Env) => f(env.statisticsRepository))
 
-  implicit def executionIsInterpolatedFragment(execution: Execution): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) = {
-      val (description, before) = descriptionAndBefore(text, start, end, expression)
-      fs append before append ff.example(description, execution).setLocation(end)
-    }
-  }
+  implicit def executionIsInterpolatedFragment(execution: Execution): InterpolatedFragment =
+    createExecutionInterpolatedFragment(execution)
+
   implicit def commandLineFunctionIsInterpolatedFragment[R : AsResult](f: CommandLine => R): InterpolatedFragment =
     envFunctionIsInterpolatedFragment((env: Env) => f(env.arguments.commandLine))
 
@@ -105,6 +102,18 @@ trait S2StringContext1 extends S2StringContextCreation { outer =>
   implicit def asResultIsInterpolatedFragment[R : AsResult](r: =>R): InterpolatedFragment =
     stringAndEnvFunctionIsInterpolatedFragment(_ => (env: Env) => r)
 
+}
+
+trait S2StringContextCreation extends FragmentsFactory { outer =>
+  private[specs2] val ff = fragmentFactory
+
+  def createExecutionInterpolatedFragment(execution: Execution): InterpolatedFragment = new InterpolatedFragment {
+    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) = {
+      val (description, before) = descriptionAndBefore(text, start, end, expression)
+      fs append before append ff.example(description, execution).setLocation(end)
+    }
+  }
+
   private[specs2] def stringAndEnvFunctionIsInterpolatedFragment[R : AsResult](f: String => Env => R): InterpolatedFragment = new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =  {
       val (description, before) = descriptionAndBefore(text, start, end, expression)
@@ -140,12 +149,6 @@ trait S2StringContext1 extends S2StringContextCreation { outer =>
 
     (description, before)
   }
-
-
-}
-
-trait S2StringContextCreation extends FragmentsFactory { outer =>
-  private[specs2] val ff = fragmentFactory
 
   /**
    * based on the interpolated variables and the expressions captured with the macro, create the appropriate fragments

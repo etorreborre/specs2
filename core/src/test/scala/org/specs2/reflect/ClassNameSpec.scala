@@ -1,10 +1,11 @@
 package org.specs2
 package reflect
 
-import mutable.{Tables, Specification}
+import mutable.{Tables, Spec}
 import ClassName._
+import matcher.TypedEqualExpectations
 
-class ClassNameSpec extends Specification with Tables {
+class ClassNameSpec extends Spec with Tables with TypedEqualExpectations {
 
   "Class names must be decoded" in {
     "name"                   | "decoded"                |>

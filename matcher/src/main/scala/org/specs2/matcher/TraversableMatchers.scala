@@ -97,20 +97,6 @@ trait TraversableBaseMatchers { outer =>
   /** alias for beSorted */
   def sorted[T : Ordering] = beSorted[T]
 
-}
-
-private[specs2]
-trait TraversableBaseMatchersLowImplicits extends ValueChecksLowImplicits { this: TraversableBaseMatchers =>
-  implicit def checkableSeqIsContainCheckSeq[T](seq: Seq[T])(implicit to: T => ValueCheck[T]): Seq[ValueCheck[T]] =
-    seq.map(to)
-
-  implicit def matcherSeqIsContainCheckSeq[T](seq: Seq[Matcher[T]]): Seq[ValueCheck[T]] =
-    seq.map(matcherIsValueCheck[T])
-
-  /** this allows the contain(string) matcher for StringMatchers to be used with a Traversable */
-  implicit def stringMatcherIsTraversableMatcher(m: Matcher[String]): Matcher[GenTraversableOnce[String]] =
-    contain(matcherIsValueCheck(m))
-
   /**
    * Additional contain methods using to avoid automatic tuple conversions
    */
@@ -140,6 +126,19 @@ trait TraversableBaseMatchersLowImplicits extends ValueChecksLowImplicits { this
   // 21 to 22
   def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T], t4: ValueCheck[T], t5: ValueCheck[T], t6: ValueCheck[T], t7: ValueCheck[T], t8: ValueCheck[T], t9: ValueCheck[T], t10: ValueCheck[T], t11: ValueCheck[T], t12: ValueCheck[T], t13: ValueCheck[T], t14: ValueCheck[T], t15: ValueCheck[T], t16: ValueCheck[T], t17: ValueCheck[T], t18: ValueCheck[T], t19: ValueCheck[T], t20: ValueCheck[T], t21: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t21, t21))
   def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T], t4: ValueCheck[T], t5: ValueCheck[T], t6: ValueCheck[T], t7: ValueCheck[T], t8: ValueCheck[T], t9: ValueCheck[T], t10: ValueCheck[T], t11: ValueCheck[T], t12: ValueCheck[T], t13: ValueCheck[T], t14: ValueCheck[T], t15: ValueCheck[T], t16: ValueCheck[T], t17: ValueCheck[T], t18: ValueCheck[T], t19: ValueCheck[T], t20: ValueCheck[T], t21: ValueCheck[T], t22: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t21, t22))
+}
+
+private[specs2]
+trait TraversableBaseMatchersLowImplicits extends ValueChecksLowImplicits { this: TraversableBaseMatchers =>
+  implicit def checkableSeqIsContainCheckSeq[T](seq: Seq[T])(implicit to: T => ValueCheck[T]): Seq[ValueCheck[T]] =
+    seq.map(to)
+
+  implicit def matcherSeqIsContainCheckSeq[T](seq: Seq[Matcher[T]]): Seq[ValueCheck[T]] =
+    seq.map(matcherIsValueCheck[T])
+
+  /** this allows the contain(string) matcher for StringMatchers to be used with a Traversable */
+  implicit def stringMatcherIsTraversableMatcher(m: Matcher[String]): Matcher[GenTraversableOnce[String]] =
+    contain(matcherIsValueCheck(m))
 
 }
 

@@ -31,6 +31,7 @@ trait SpecLike extends SpecificationStructure
   with ExampleDsl0
   with ArgumentsCreation
   with ArgumentsShortcuts
+  with TextCreation
   with ActionDsl
   with MustThrownMatchers1
   with FormattingFragments

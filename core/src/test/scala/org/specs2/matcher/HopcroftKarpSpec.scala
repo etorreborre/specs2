@@ -3,8 +3,10 @@ package matcher
 
 import data.HopcroftKarp._
 import BestMatching._
+import ValueChecks._
+import MatchResult._
 
-class HopcroftKarpSpec extends Specification { def is = s2"""
+class HopcroftKarpSpec extends Spec { def is = s2"""
 
  The Hopcroft-Karp algorithm can be used to efficiently find the maximum
  matching of a bipartite graph
@@ -52,7 +54,8 @@ class HopcroftKarpSpec extends Specification { def is = s2"""
     // 4 matches with List(4)
     // 5 matches with List(1, 5)
     val (matches, remaining) =
-    findBestMatch(1 to 5, List(
+    findBestMatch[Int, List[Int], MatchResult[_]](
+      1 to 5, List(
                    List(1, 2, 3),
                    List[Int](),
                    List(1),
