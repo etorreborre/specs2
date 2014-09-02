@@ -3,7 +3,7 @@ package form
 
 import specification._
 
-class FormsSpec extends script.Specification with FormsBuilder with Grouped { def is = s2"""
+class FormsSpec extends script.Spec with FormsBuilder with Grouped { def is = s2"""
 
 The Forms object provides several utility functions for creating forms
                                                                                           

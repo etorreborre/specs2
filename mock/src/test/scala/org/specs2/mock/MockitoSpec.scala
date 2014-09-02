@@ -1,8 +1,8 @@
 package org.specs2
 package mock
 
-import org.specs2.specification.core.{Env, Fragment}
-import org.specs2.specification.process.DefaultExecutor
+import specification.core.{Env, Fragment}
+import specification.process.DefaultExecutor
 import specification._
 import control.Exceptions._
 import org.hamcrest.core.IsNull
@@ -12,8 +12,9 @@ import matcher._
 import scala.concurrent._
 import duration._
 import ExecutionContext.Implicits.global
+import MatchersImplicits._
 
-class MockitoSpec extends script.Specification with Mockito with ResultMatchers with Groups {  def is = s2"""
+class MockitoSpec extends script.Spec with Mockito with ResultMatchers with Groups {  def is = s2"""
 
  Mockito is a Java library for mocking.
 

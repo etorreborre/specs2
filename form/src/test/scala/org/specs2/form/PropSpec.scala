@@ -5,8 +5,10 @@ import control.Property
 import execute._
 import sys._
 import specification._
+import matcher._
+import MatchersImplicits._
 
-class PropSpec extends script.Specification with Grouped {  def is = s2"""
+class PropSpec extends script.Spec with Grouped with TypedEqual {  def is = s2"""
                                                                     
 A Prop is a Field defining an expected and an actual value.
 

@@ -7,11 +7,9 @@ import org.specs2.execute.{Result, ResultLogicalCombinators}
  * This trait provides logical operators to combine match results where potentially a MatchResult expression
  * throws an Exception, either because it is an error or because it is a ThrownExpectation
  */
-private [specs2]
 trait MatchResultCombinators extends MatchResultLogicalCombinators with ResultLogicalCombinators
 object MatchResultCombinators extends MatchResultCombinators
 
-private [specs2]
 trait MatchResultLogicalCombinators {
 
   implicit def combineMatchResult[T](m: =>MatchResult[T]): MatchResultCombinator[T] = new MatchResultCombinator[T](m)

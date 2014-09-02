@@ -2,17 +2,18 @@ package org.specs2
 package matcher
 
 import MatchersImplicits._
+
 /**
  * This trait provides 'zip' operators to create matchers on tuples based on "zipped" matchers on fields
  */
-trait MatcherZipOperators extends Expectations with ValueChecks { outer =>
+trait MatcherZipOperators extends ExpectationsCreation { outer =>
 
   def contain[T, S](f: (=>(T)) => Matcher[S])(expected: =>Seq[T]) = (s: Seq[S]) =>
     expected.contain(f)(createExpectable(s))
 
   implicit class ContainSeqMatcherFunction[T](seq: Seq[T]) {
     def contain[S](f: (=>T) => Matcher[S]): ContainWithResultSeq[S] =
-      new ContainWithResultSeq(seq.map(t => matcherIsValueCheck(f(t)))).exactly
+      new ContainWithResultSeq(seq.map(t => ValueChecks.matcherIsValueCheck(f(t)))).exactly
   }
 
   def zip[T1,T2, S1,S2](m1: (=>T1) => Matcher[S1],m2: (=>T2) => Matcher[S2]):
@@ -383,6 +384,8 @@ trait MatcherZipOperatorsCodeGeneration { outer =>
       }"""
   }
 }
+
+object MatcherZipOperators extends MatcherZipOperators
 
 /**
  * This trait can be mixed in to remove the implicit definitions for zipping matchers

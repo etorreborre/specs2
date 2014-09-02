@@ -4,7 +4,7 @@ package data
 import data.TopologicalSort._
 import matcher._
 
-class TopologicalSortSpec extends Specification with ScalaCheckMatchers { def is = s2"""
+class TopologicalSortSpec extends Spec with ScalaCheckMatchers { def is = s2"""
 
   elements are sorted topologically
     simple example                                   $a1
@@ -25,7 +25,7 @@ class TopologicalSortSpec extends Specification with ScalaCheckMatchers { def is
     val list = (edges.keys ++ edges.values).toSeq.distinct
 
     val sorted = sort[Int](list, (i: Int, j: Int) => edges.toSeq.contains((i, j)))
-    (0 to sorted.size - 1).flatMap(i => (i to sorted.size - 1).map((i, _))) must not contain((p: (Int, Int)) => edges.toSeq.contains(p))
+    (0 to sorted.size - 1).flatMap(i => (i to sorted.size - 1).map((i, _))) must not (contain((p: (Int, Int)) => edges.toSeq.contains(p)))
   }
 
   def a4 = sort[Int](Seq(1, 2), (i: Int, j: Int) => true) must beNone

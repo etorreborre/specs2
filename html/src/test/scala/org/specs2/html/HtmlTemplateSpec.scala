@@ -1,11 +1,11 @@
 package org.specs2
 package html
 
-import mutable.Specification
+import mutable.Spec
 import HtmlTemplate._
 import matcher.ControlMatchers._
 
-class HtmlTemplateSpec extends Specification {
+class HtmlTemplateSpec extends Spec {
   "replace variables in a template" >> {
     runTemplate(
       "hello $name$, I'm $me$ and this is not defined $undefined$",

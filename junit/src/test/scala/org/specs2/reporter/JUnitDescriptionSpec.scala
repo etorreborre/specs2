@@ -2,7 +2,7 @@ package org.specs2
 package reporter
 
 import specification.create.FragmentsFactory
-import specification.dsl.FragmentsDsl
+import org.specs2.specification.dsl.{ExampleDsl, FragmentsDsl}
 import specification.core._
 import matcher.{MustMatchers, StandardMatchResults}
 import org.junit.runner.Description

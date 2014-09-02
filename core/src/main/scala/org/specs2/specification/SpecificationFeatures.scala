@@ -8,7 +8,7 @@ import control.ImplicitParameters
 
 
 trait SpecificationFeatures extends
-  MustMatchers
+       MustMatchers
   with ShouldMatchers
   with StandardResults
   with StandardMatchResults

@@ -4,10 +4,12 @@ package data
 import scalaz.{Tag => _}
 import scalaz.syntax.semigroup._
 import org.specs2.main.Arguments
-import org.specs2.matcher.DataTables
 import NamedTag._
 import NamedTagsAreMonoid._
-import matcher.MatchersImplicits._
+import matcher._
+import MatchersImplicits._
+import Expectations._
+import ValueChecks._
 
 class TagSpec extends Spec with DataTables { def is = s2"""
 

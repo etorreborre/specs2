@@ -2,9 +2,10 @@ package org.specs2
 package execute
 
 import matcher.ResultMatchers
-import matcher.MatchersImplicits._
+import execute.ResultLogicalCombinators._
+import matcher.TypedEqual
 
-class ResultLogicalCombinatorsSpec extends Spec with ResultMatchers { def is = s2"""
+class ResultLogicalCombinatorsSpec extends Spec with ResultMatchers with TypedEqual { def is = s2"""
 
  Multiple results can be or-ed
  ${ success or success }

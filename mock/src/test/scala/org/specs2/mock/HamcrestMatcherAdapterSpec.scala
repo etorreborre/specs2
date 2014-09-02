@@ -1,7 +1,7 @@
 package org.specs2
 package mock
 
-class HamcrestMatcherAdapterSpec extends mutable.Specification {
+class HamcrestMatcherAdapterSpec extends mutable.Spec {
 
   "A specs2 matcher can be adapted to be used like a Hamcrest matcher" >> {
     "when the match is ok" >> {

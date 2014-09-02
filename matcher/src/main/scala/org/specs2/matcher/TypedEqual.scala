@@ -10,7 +10,9 @@ trait TypedEqual { this: ExpectationsCreation =>
    * A value can be tested against another with the === operator.
    * It is equivalent to writing a must_== b
    */
-  implicit def typedEqualExpectation[T](t: =>T) = new TypedEqualExpectation(t)
+  implicit def typedEqualExpectation[T](t: =>T): TypedEqualExpectation[T] =
+    new TypedEqualExpectation(t)
+
   class TypedEqualExpectation[T](t: =>T) {
     /** equality matcher on Expectables */
     def ===[S >: T](other: =>S) = createExpectable(t).applyMatcher[S](new BeEqualTo(other))

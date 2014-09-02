@@ -5,15 +5,16 @@ import java.io.File
 import execute.Result
 import text._
 import io._
-import MatchersImplicits._
 import scalaz.std.anyVal._
 import control._
+import MatchersImplicits._
+import ValueChecks._
 
 /**
  * This trait provides matchers to check the presence of some expected files vs the actual ones
  * and also ways to verify the contents of these files
  */
-trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with TraversableMatchers {
+trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with TraversableMatchers with ExpectationsCreation {
   /**
    * check that all the paths in `expectedDir` are the same as the ones in `actualDir`
    */

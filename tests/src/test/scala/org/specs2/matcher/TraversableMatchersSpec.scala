@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import org.specs2.specification.process.DefaultExecutor
+import specification.process.DefaultExecutor
 import specification._
 import java.util.Arrays._
 import scala.collection.parallel.ParSeq

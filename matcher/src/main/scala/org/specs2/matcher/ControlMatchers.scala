@@ -4,11 +4,12 @@ package matcher
 import execute.AsResult
 import control._
 import scalaz.std.anyVal._
+import MatchersCreation._
 
 /**
  * Matchers for Action values
  */
-trait ControlMatchers extends MatchersImplicits {
+trait ControlMatchers extends ValueChecks {
 
   def beOk[T]: Matcher[Action[T]] = (action: Action[T]) =>
     AsResult(action.map(_ => execute.Success()))

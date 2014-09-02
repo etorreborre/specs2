@@ -9,7 +9,7 @@ import control._
 import scalaz.std.anyVal._
 import scalaz.syntax.bind._
 
-class FilesContentMatchersSpec extends Specification
+class FilesContentMatchersSpec extends Spec
   with FilesContentMatchers with BeforeAfterEach with ThrownExpectations with FileSystem { def is = sequential ^ diffs(show = true, triggerSize = 0, diffRatio = 100)^ s2"""
 
  File content matchers help to compare the contents of 2 directories:
@@ -35,11 +35,11 @@ class FilesContentMatchersSpec extends Specification
 
   def e1 = {
     val action =
-      createFile(targetDir / actual    | f1)         >>
+      createFile(targetDir / actual    | f1)       >>
       createFile(targetDir / actual    / sub | f2) >>
-      createFile(targetDir / expected  | f1)         >>
+      createFile(targetDir / expected  | f1)       >>
       createFile(targetDir / expected  / sub | f2) >>
-      createFile(targetDir / expected2 | f1)         >>
+      createFile(targetDir / expected2 | f1)       >>
       createFile(targetDir / expected2 / sub | f3)
 
     action.execute(noLogging).unsafePerformIO
@@ -116,8 +116,8 @@ class FilesContentMatchersSpec extends Specification
 
   val targetDir = "target" / "test" / FileName.unsafe("fcm-"+hashCode)
 
-  def before = () // FileSystem.mkdirs(targetDir).execute(noLogging).unsafePerformIO
-  def after  = () // FileSystem.delete(targetDir).execute(noLogging).unsafePerformIO
+  def before = FileSystem.mkdirs(targetDir).execute(noLogging).unsafePerformIO
+  def after  = FileSystem.delete(targetDir).execute(noLogging).unsafePerformIO
 
 }
 

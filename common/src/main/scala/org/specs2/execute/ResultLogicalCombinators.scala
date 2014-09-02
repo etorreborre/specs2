@@ -9,7 +9,6 @@ import text.Message._
  * A Result expression can throw an exception which will be changed into a failure or an error before being used
  * with and/or/not
  */
-private[specs2]
 trait ResultLogicalCombinators extends Results {
 
   implicit def combineBoolean(b: =>Boolean): ResultLogicalCombinator = new ResultLogicalCombinator(b)

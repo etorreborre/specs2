@@ -5,7 +5,7 @@ import specification._
 import Nodex._
 import matcher.XmlMatchers
 
-class NodeFunctionsSpec extends Specification with Grouped with XmlMatchers { def is = "node functions".title ^ s2"""
+class NodeFunctionsSpec extends Spec with Grouped with XmlMatchers { def is = s2"""
 
   The matchNode function must return true if
     there is a match on the node label                                                               ${g1.e1}
@@ -20,7 +20,7 @@ class NodeFunctionsSpec extends Specification with Grouped with XmlMatchers { de
                                                                                                                         
   The equalIgnoreSpace function must
     return false if 2 nodes are not equal after evaluation
-    ${ <a>{"a"}</a> must not ==/(<a>{"b"}</a>) }
+    ${ <a>{"a"}</a> must not(==/(<a>{"b"}</a>)) }
     return true if 2 nodes are equal even with spaces
     ${ <a>{"a"}</a> must ==/(<a>{" a "}</a>) }
     return true if 2 nodes are in a Group"

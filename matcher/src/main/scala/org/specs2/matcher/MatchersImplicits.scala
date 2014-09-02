@@ -7,7 +7,7 @@ import text.Quote._
 import Result.ResultFailureMonoid
 import scala.collection.{GenTraversable, GenTraversableOnce}
 import ResultLogicalCombinators._
-import text.Sentences
+import text.Sentences._
 import control.Times
 
 /**
@@ -18,11 +18,41 @@ import control.Times
 * - create matchers from functions
 * - create matchers for seqs and sets from single matchers
 */
-trait MatchersImplicits extends Expectations
-  with MatchResultCombinators
+trait MatchersImplicits extends
+       MatchResultCombinators
   with MatcherZipOperators
   with MatchResultImplicits
-  with ExpectationsDescription { outer =>
+  with ResultImplicits
+  with MatchersCreation
+  with SequenceMatchersCreation
+
+object MatchersImplicits extends MatchersImplicits
+
+/**
+ * Implicit conversions for MatchResults
+ */
+trait MatchResultImplicits { outer =>
+  /**
+   * implicit definition to transform a Seq of MatchResults to a Result
+   */
+  implicit def seqToResult[T](r: Seq[MatchResult[T]]): Result = r.foldLeft(StandardResults.success: Result)(_ and _.toResult)
+
+  /**
+   * implicit definition to transform any MatchResult to a Result
+   */
+  implicit def asResult[T](r: MatchResult[T]): Result = ResultExecution.execute(r.toResult)
+
+  /**
+   * implicit definition to accept any MatchResult as a Boolean value.
+   * It is true if the MatchResult is not an Error or a Failure
+   */
+  implicit def fromMatchResult(r: =>MatchResult[_]): Boolean = r.isSuccess || r.toResult.isSkipped || r.toResult.isPending
+
+}
+
+object MatchResultImplicits extends MatchResultImplicits
+
+trait ResultImplicits extends ExpectationsCreation {
   /**
    * Add functionalities to functions returning matchers so that they can be combined before taking a value and
    * returning actual matchers
@@ -48,13 +78,11 @@ trait MatchersImplicits extends Expectations
     def atLeastOnce(values: GenTraversableOnce[T]) = createExpectable(values).applyMatcher(cc.atLeastOnce)
     def atMostOnce(values: GenTraversableOnce[T])  = createExpectable(values).applyMatcher(cc.atMostOnce)
   }
+}
 
-  /** this allows a function returning a matcher to be used where the same function with a byname parameter is expected */
-  implicit def stringMatcherFunctionToBynameMatcherFunction[T, R](f: T => Matcher[R]): (=>T) => Matcher[R] = {
-    def f1(t: =>T) = f(t)
-    f1
-  }
+object ResultImplicits extends ResultImplicits
 
+trait SequenceMatchersCreation extends ExpectationsCreation { outer =>
   implicit class MatcherFunction[S, T](f: S => Matcher[T]) {
     /**
      * @deprecated use collection must contain(exactly(seq.map(f))).inOrder
@@ -72,7 +100,7 @@ trait MatchersImplicits extends Expectations
 
   implicit class InvariantMatcherFunction[T](f: T => Matcher[T]) {
     /** @return a function which will return the composition of a matcher and a function */
-    def ^^^[A](g: A => T) = (a: A) => 
+    def ^^^[A](g: A => T) = (a: A) =>
       new Matcher[A] {
         def apply[B <: A](b: Expectable[B]) = {
           val originalValues = s"\nOriginal values\n  Expected: '$a'\n  Actual  : '${b.value}'"
@@ -89,23 +117,15 @@ trait MatchersImplicits extends Expectations
   }
 
   /**
-   * this implicit provides an inverted syntax to adapt matchers to make the adaptation more readable in some cases:
-   * - def haveExtension(extension: =>String) = ((_:File).getPath) ^^ endWith(extension)
-   */
-  implicit class AdaptFunction[T, S](f: T => S) {
-    def ^^(m: Matcher[S]): Matcher[T] = m ^^ f
-  }
-
-  /**
    * The `SeqMatcher` class is a matcher matching a sequence of objects with a matcher returned by a function.<p>
    * Usage: List(1, 2, 3) must ((beEqualTo(_:Int)).toSeq)(List(1, 2, 3))
    */
   class SeqMatcher[S, T](s: Seq[S], f: S => Matcher[T]) extends Matcher[Seq[T]] {
     def apply[U <: Seq[T]](t: Expectable[U]) =
       ContainWithResultSeq[T](s.map(f).map(ValueChecks.matcherIsValueCheck[T]),
-                              containsAtLeast = true,
-                              containsAtMost = true,
-                              checkOrder = true).apply(t)
+        containsAtLeast = true,
+        containsAtMost = true,
+        checkOrder = true).apply(t)
   }
 
   /**
@@ -120,6 +140,8 @@ trait MatchersImplicits extends Expectations
         checkOrder = false).apply(t)
 
   }
+
+  import ResultImplicits._
 
   /** verify the function f for all the values, stopping after the first failure */
   def forall[T, R : AsResult](values: GenTraversableOnce[T])(f: T => R) = f.forall(values)
@@ -145,11 +167,18 @@ trait MatchersImplicits extends Expectations
   def atLeastOnceWhen[T, R : AsResult](values: GenTraversable[T])(f: PartialFunction[T, R]) = atLeastOnce(values.filter(f.isDefinedAt))(f)
   /** verify the function f for at least one value, where the PartialFunction is defined */
   def atMostOnceWhen[T, R : AsResult](values: GenTraversable[T])(f: PartialFunction[T, R]) = atMostOnce(values.filter(f.isDefinedAt))(f)
+}
+
+object SequenceMatchersCreation extends SequenceMatchersCreation
+
+trait MatchersCreation {
+
   /**
    * This method transform a function to a Matcher
    */
   implicit def functionToMatcher[T](f: (T => Boolean, String)): Matcher[T] =
     functionAndMessagesToMatcher[T]((f._1, (t:T) => negateSentence(q(t)+" "+f._2), (t:T) => q(t)+" "+f._2))
+
   /**
    * This method transform a function to a Matcher
    */
@@ -197,31 +226,20 @@ trait MatchersImplicits extends Expectations
     }
   }
 
-}
-
-private[specs2]
-object MatchersImplicits extends MatchersImplicits
-
-/**
- * Implicit conversions for MatchResults
- */
-private[specs2]
-trait MatchResultImplicits { outer =>
-  /**
-   * implicit definition to transform a Seq of MatchResults to a Result
-   */
-  implicit def seqToResult[T](r: Seq[MatchResult[T]]): Result = r.foldLeft(StandardResults.success: Result)(_ and _.toResult)
+  /** this allows a function returning a matcher to be used where the same function with a byname parameter is expected */
+  implicit def stringMatcherFunctionToBynameMatcherFunction[T, R](f: T => Matcher[R]): (=>T) => Matcher[R] = {
+    def f1(t: =>T) = f(t)
+    f1
+  }
 
   /**
-   * implicit definition to transform any MatchResult to a Result
+   * this implicit provides an inverted syntax to adapt matchers to make the adaptation more readable in some cases:
+   * - def haveExtension(extension: =>String) = ((_:File).getPath) ^^ endWith(extension)
    */
-  implicit def asResult[T](r: MatchResult[T]): Result = ResultExecution.execute(r.toResult)
-
-  /**
-   * implicit definition to accept any MatchResult as a Boolean value.
-   * It is true if the MatchResult is not an Error or a Failure
-   */
-  implicit def fromMatchResult(r: =>MatchResult[_]): Boolean = r.isSuccess || r.toResult.isSkipped || r.toResult.isPending
+  implicit class AdaptFunction[T, S](f: T => S) {
+    def ^^(m: Matcher[S]): Matcher[T] = m ^^ f
+  }
 
 }
 
+object MatchersCreation extends MatchersCreation

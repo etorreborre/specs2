@@ -4,8 +4,9 @@ package form
 import execute._
 import sys._
 import specification._
+import matcher._
 
-class FieldSpec extends script.Specification with Grouped { def is = s2"""
+class FieldSpec extends script.Spec with Grouped with TypedEqual { def is = s2"""
 
 A Field is a labelled property with can be embedded in a Form.                                                        
 
@@ -33,7 +34,7 @@ A Field is a labelled property with can be embedded in a Form.
   }
   "execution" - new g2 {
     e1 := age.execute      must_== skipped
-    e2 := ageError.execute must be like { case Error(_, _) => ok }
+    e2 := ageError.execute must beLike { case Error(_, _) => ok }
   }
   "modification" - new g3 {
     e1 := age.toStringField.toOption must_== Some("18")

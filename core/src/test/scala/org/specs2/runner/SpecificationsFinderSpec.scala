@@ -6,7 +6,9 @@ import io._
 import FileSystem._
 import matcher.ControlMatchers._
 import control.Action
-import matcher.Matcher
+import matcher._
+import MatchersCreation._
+
 
 class SpecificationsFinderSpec extends Spec { def is = s2"""
   It is possible to find specifications in the local test directory   $e1

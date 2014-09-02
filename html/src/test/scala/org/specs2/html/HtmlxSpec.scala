@@ -4,8 +4,9 @@ package html
 import Htmlx._
 import scala.xml.NodeSeq
 import specification.Grouped
+import matcher._
 
-class HtmlxSpec extends Specification with HtmlDocuments with Grouped { def is = s2"""
+class HtmlxSpec extends Spec with HtmlDocuments with Grouped with TypedEqual { def is = s2"""
 
   headers functions
   ${ isHeader(<h1/>) must beTrue }

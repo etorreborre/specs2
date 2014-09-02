@@ -4,7 +4,7 @@ import Markdown._
 import org.specs2.main.Arguments
 import org.specs2.mutable._
 
-class MarkdownSpec extends Specification {
+class MarkdownSpec extends Spec {
   implicit val defaultArgs = Arguments()
 
   "Emphasized text" >>
@@ -15,14 +15,14 @@ class MarkdownSpec extends Specification {
   { toHtmlNoPar("hello\nworld") must contain("hello<br/>world") }
 
   "title and line break" >>
-  { toXhtml("### Title\nline1\n\nline2").toString must not contain("### Title") }
+  { toXhtml("### Title\nline1\n\nline2").toString must not(contain("### Title")) }
 
 
   "Embedded code" >>
   { toHtmlNoPar(someCode) must contain("""<code class="prettyprint">""") }
 
   "Code with newlines must be enclosed in one code tag only" >>
-  { toHtmlNoPar(someCode).split(" ").filter(_.trim.contains("</code>")) must have size(1) }
+  { toHtmlNoPar(someCode).split(" ").filter(_.trim.contains("</code>")) must haveSize(1) }
 
   "Inlined code must not have <pre> tags" >>
     { toHtmlNoPar("this is some `inlined` code") must contain("""this is some <code class="prettyprint">inlined</code> code""") }
@@ -49,12 +49,12 @@ class MarkdownSpec extends Specification {
   "verbatim code blocks are activated by default" >> {
     toHtml("""
              |     this is some text
-           """.stripMargin, MarkdownOptions(verbatim = false)) must not contain("code")
+           """.stripMargin, MarkdownOptions(verbatim = false)) must not(contain("code"))
   }
   "verbatim code blocks can alse be rendered as simple text" >> {
     toHtml("""
              |     this is some text
-           """.stripMargin, MarkdownOptions(verbatim = false)) must not contain("code")
+           """.stripMargin, MarkdownOptions(verbatim = false)) must not(contain("code"))
   }
 
   val someCode = """
