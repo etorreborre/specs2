@@ -143,7 +143,7 @@ trait TraversableBaseMatchersLowImplicits extends ValueChecksLowImplicits { this
 }
 
 private[specs2]
-trait TraversableBeHaveMatchers extends LazyParameters { outer: TraversableMatchers =>
+trait TraversableBeHaveMatchers extends LazyParameters with BeHaveMatchers  { outer: TraversableMatchers =>
 
   implicit def traversable[T](s: MatchResult[Traversable[T]]) = new TraversableBeHaveMatchers(s)
   class TraversableBeHaveMatchers[T](s: MatchResult[Traversable[T]]) {

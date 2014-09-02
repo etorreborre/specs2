@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-class EitherMatchersSpec extends Specification with ResultMatchers { def is = s2"""
+class EitherMatchersSpec extends Spec with EitherMatchers with ResultMatchers { def is = s2"""
 
  The EitherMatchers trait provides matchers to check Either instances
                                                                                                                         

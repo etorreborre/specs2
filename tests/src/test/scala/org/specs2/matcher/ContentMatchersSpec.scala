@@ -10,7 +10,7 @@ import ActionT._
 import scalaz.std.anyVal._
 import scalaz.syntax.bind._
 
-class ContentMatchersSpec extends Specification with LinesContentMatchers with BeforeAfterEach with FileSystem with TestFileNames { def is = sequential ^ s2"""
+class ContentMatchersSpec extends Spec with LinesContentMatchers with BeforeAfterEach with FileSystem with TestFileNames { def is = sequential ^ s2"""
 
  haveSameLinesAs checks if a file has the same lines as another file                                     ${comp().e1}
    it is possible to write (f1, f2) must haveSameLines as well                                           ${comp().e2}

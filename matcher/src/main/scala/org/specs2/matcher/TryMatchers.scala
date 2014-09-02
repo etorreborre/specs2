@@ -25,6 +25,9 @@ trait TryBaseMatchers {
   def successfulTry[T]   (check: ValueCheck[T]) = beSuccessfulTry[T]         (check)
   def aSuccessfulTry[T]  (check: ValueCheck[T]) = beSuccessfulTry[T]         (check)
 
+  def successfulTry[T]   (t: T) = beSuccessfulTry[T](t)
+  def aSuccessfulTry[T]  (t: T) = beSuccessfulTry[T](t)
+
   def beFailedTry[T]  = new TryFailureMatcher[T]
   def beAFailedTry[T] = beFailedTry[T]
   def failedTry[T]    = beFailedTry[T]
@@ -34,10 +37,13 @@ trait TryBaseMatchers {
   def beAFailedTry[T](check: ValueCheck[Throwable]) = beFailedTry[T]                 (check)
   def failedTry[T]   (check: ValueCheck[Throwable]) = beFailedTry[T]                 (check)
   def aFailedTry[T]  (check: ValueCheck[Throwable]) = beFailedTry[T]                 (check)
+
+  def failedTry[T]   (t: Throwable) = beFailedTry[T](t)
+  def aFailedTry[T]  (t: Throwable) = beFailedTry[T](t)
 }
 
 private[specs2]
-trait TryBeHaveMatchers { outer: TryBaseMatchers =>
+trait TryBeHaveMatchers extends BeHaveMatchers { outer: TryBaseMatchers =>
 
   implicit def toTryResultMatcher[T](result: MatchResult[Try[T]]) = new TryResultMatcher(result)
   class TryResultMatcher[T](result: MatchResult[Try[T]]) {

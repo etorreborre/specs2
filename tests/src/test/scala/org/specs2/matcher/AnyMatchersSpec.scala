@@ -4,8 +4,10 @@ package matcher
 import java.io._
 import execute._
 import specification._
+import SequenceMatchersCreation._
+import ResultImplicits._
 
-class AnyMatchersSpec extends script.Specification with Groups with ResultMatchers { def is = s2"""
+class AnyMatchersSpec extends script.Spec with Groups with ResultMatchers with AnyMatchers with ValueChecks { def is = s2"""
 
   beTheSameAs checks if a value is eq to another one
   ${ aValue must beTheSameAs(aValue) }
@@ -87,7 +89,7 @@ class AnyMatchersSpec extends script.Specification with Groups with ResultMatche
 
   haveInterface checks if a value has a given interface in the list of its interfaces
   ${ AsResult(new java.util.ArrayList() must haveInterface[java.util.List[_]]) }
-  ${ 1 must not have interface[java.util.List[_]] : Result }
+  ${ AsResult(1 must not have interface[java.util.List[_]]) }
 
   beAssignableFrom checks if a class is assignable from another
   ${ classOf[OutputStream] must beAssignableFrom[FileOutputStream] }

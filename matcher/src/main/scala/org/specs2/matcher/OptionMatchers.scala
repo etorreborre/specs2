@@ -15,6 +15,7 @@ trait OptionBaseMatchers {
   
   def beSome[T](check: ValueCheck[T]) = SomeCheckedMatcher(check)
 
+  def some[T](t: T) = beSome(t)
   def some[T](check: ValueCheck[T]) = beSome(check)
 
   def beSome[T] = new SomeMatcher[T]
@@ -44,7 +45,7 @@ trait OptionBaseMatchers {
 }
 
 private[specs2]
-trait OptionBeHaveMatchers { outer: OptionBaseMatchers =>
+trait OptionBeHaveMatchers extends BeHaveMatchers { outer: OptionBaseMatchers =>
   implicit def toOptionResultMatcher[T](result: MatchResult[Option[T]]) = new OptionResultMatcher(result)
   class OptionResultMatcher[T](result: MatchResult[Option[T]]) {
     def beSome = result(outer.beSome)

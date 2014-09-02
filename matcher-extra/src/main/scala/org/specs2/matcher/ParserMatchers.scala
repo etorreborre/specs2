@@ -174,7 +174,7 @@ trait ParserBaseMatchers extends TraversableMatchers {
 }
 
 private[specs2]
-trait ParserBeHaveMatchers { outer: ParserBaseMatchers =>
+trait ParserBeHaveMatchers extends BeHaveMatchers { outer: ParserBaseMatchers =>
   import parsers.{Success => PSuccess, Failure => PFailure, Error => PError, _}
   
   implicit def toParsedResultMatcher[T](result: MatchResult[ParseResult[T]]) = new ParsedResultMatcher(result)

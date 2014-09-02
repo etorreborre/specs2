@@ -4,7 +4,7 @@ package matcher
 /**
  * This trait provides special matchers to be used in expressions like
  * 
- * `1 must be equalTo(1) and not be equalTo(2)
+ * 1 must be equalTo(1) and not be equalTo(2)
  */
 private[specs2]
 trait BeHaveMatchers {

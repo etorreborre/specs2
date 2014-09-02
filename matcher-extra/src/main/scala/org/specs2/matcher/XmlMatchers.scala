@@ -84,7 +84,7 @@ trait XmlBaseMatchers { outer =>
 }
 
 private[specs2]
-trait XmlBeHaveMatchers { outer: XmlBaseMatchers =>
+trait XmlBeHaveMatchers extends BeHaveMatchers { outer: XmlBaseMatchers =>
   implicit def toXmlResultMatcher(result: MatchResult[Seq[Node]]) : XmlResultMatcher = new XmlResultMatcher(result)
   class XmlResultMatcher(result: MatchResult[Seq[Node]]) {
     def equalToIgnoringSpace(node: Seq[Node]) = result(outer.equalToIgnoringSpace(node))

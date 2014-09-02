@@ -92,7 +92,7 @@ trait ResultBaseMatchers {
   }
 }
 private[specs2]
-trait ResultBeHaveMatchers { outer: ResultBaseMatchers =>
+trait ResultBeHaveMatchers extends BeHaveMatchers { outer: ResultBaseMatchers =>
   implicit def toResultMatcher[T : AsResult](result: MatchResult[T]) = new ResultMatcher(result)
   class ResultMatcher[T : AsResult](result: MatchResult[T]) {
     def successful = result(outer.beSuccessful[T])

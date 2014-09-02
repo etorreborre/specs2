@@ -165,7 +165,7 @@ trait ExceptionBaseMatchers extends ExpectationsCreation {
 }
 
 private[specs2]
-trait ExceptionBeHaveMatchers { outer: ExceptionBaseMatchers =>
+trait ExceptionBeHaveMatchers extends BeHaveMatchers { outer: ExceptionBaseMatchers =>
   implicit def toExceptionMatcher[T](result: MatchResult[T]) = new ExceptionMatcherResult(result)
   class ExceptionMatcherResult[T](result: MatchResult[T]) {
     def throwA[E <: Throwable](implicit m: ClassTag[E]) = result(outer.throwA(m))

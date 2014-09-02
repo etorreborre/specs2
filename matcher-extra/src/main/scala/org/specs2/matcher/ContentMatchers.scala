@@ -116,7 +116,7 @@ trait SeqsContents {
 }
 
 private[specs2]
-trait LinesContentBeHaveMatchers { this: LinesContentBaseMatchers =>
+trait LinesContentBeHaveMatchers extends BeHaveMatchers { this: LinesContentBaseMatchers =>
   /**
    * matcher aliases and implicits to use with BeVerb and HaveVerb
    */

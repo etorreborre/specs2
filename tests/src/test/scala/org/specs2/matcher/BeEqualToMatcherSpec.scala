@@ -3,7 +3,7 @@ package matcher
 
 import execute._
 
-class BeEqualToMatcherSpec extends Specification with ResultMatchers { def is = s2"""
+class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers { def is = s2"""
 
   be_== checks the equality of 2 objects
   ${ "a" must_== "a" }
@@ -53,7 +53,7 @@ class BeEqualToMatcherSpec extends Specification with ResultMatchers { def is = 
          |1""".stripMargin
    }
 
-  ${ (Map("cnt" -> 1, "people" -> List(Map("friend" -> Map("name" -> "Bob"), "age" -> 45, "name" -> "Bill")), "city" -> "Montreal") ===
+  ${ (Map("cnt" -> 1, "people" -> List(Map("friend" -> Map("name" -> "Bob"), "age" -> 45, "name" -> "Bill")), "city" -> "Montreal") must_==
         Map("people" -> List(Map("name" -> "Bill", "friend" -> Map("name" -> "Bob"), "age" -> 45)), "city" -> "Montrea", "cnt" -> 1)) returns
   """|Missing values
      |city -> Montrea

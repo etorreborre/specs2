@@ -183,7 +183,7 @@ case class NeverMatcher[T]() extends Matcher[T] {
  * 
  *  `1 must be equalTo(1)`
  */
-trait AnyBeHaveMatchers { outer: AnyMatchers =>
+trait AnyBeHaveMatchers extends BeHaveMatchers { outer: AnyMatchers =>
   implicit def anyBeHaveMatcher[T](result: MatchResult[T]) = new AnyBeHaveMatchers(result)
   class AnyBeHaveMatchers[T](result: MatchResult[T]) {
     def be_==(t: T) = result(outer.be_==(t))

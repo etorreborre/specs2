@@ -169,7 +169,7 @@ trait StringBaseMatchers { outer =>
 }
 
 private[specs2]
-trait StringBeHaveMatchers { outer: StringBaseMatchers =>
+trait StringBeHaveMatchers extends BeHaveMatchers { outer: StringBaseMatchers =>
   implicit def toStringResultMatcher(result: MatchResult[String]) = new StringResultMatcher(result)
   class StringResultMatcher(result: MatchResult[String]) {
     def matching(s: =>String) = result(beMatching(s))

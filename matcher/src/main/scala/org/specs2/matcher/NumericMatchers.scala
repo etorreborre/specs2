@@ -82,7 +82,7 @@ case class CanHaveDelta[S : Numeric](n: S) {
 case class PlusOrMinus[S](n: S, delta: S)
 
 private[specs2]
-trait NumericBeHaveMatchers { outer: NumericBaseMatchers =>
+trait NumericBeHaveMatchers extends BeHaveMatchers { outer: NumericBaseMatchers =>
   /** 
    * matcher aliases and implicits to use with be + matcher
    */

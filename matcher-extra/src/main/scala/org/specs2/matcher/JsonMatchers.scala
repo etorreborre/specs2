@@ -307,7 +307,7 @@ trait JsonMatchersLowImplicits extends JsonSelectors { this: JsonBaseMatchers =>
 }
 
 private[specs2]
-trait JsonBaseBeHaveMatchers { outer: JsonBaseMatchers =>
+trait JsonBaseBeHaveMatchers extends BeHaveMatchers { outer: JsonBaseMatchers =>
 
   implicit def toNotMatcherJson(result: NotMatcher[Any]) : NotMatcherJson = new NotMatcherJson(result)
   class NotMatcherJson(result: NotMatcher[Any]) {

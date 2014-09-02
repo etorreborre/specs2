@@ -53,7 +53,7 @@ trait PathBaseMatchers { outer =>
 }
 
 private[specs2]
-trait PathBeHaveMatchers { outer: PathBaseMatchers =>
+trait PathBeHaveMatchers extends BeHaveMatchers { outer: PathBaseMatchers =>
   /** 
    * matcher aliases and implicits to use with be / have + matcher
    */

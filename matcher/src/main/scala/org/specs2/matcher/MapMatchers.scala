@@ -116,7 +116,7 @@ trait MapBaseMatchers {
 
 }
 private[specs2]
-trait MapBeHaveMatchers { outer: MapBaseMatchers =>
+trait MapBeHaveMatchers extends BeHaveMatchers { outer: MapBaseMatchers =>
   implicit def toMapKeyResultMatcher[K](result: MatchResult[Iterable[(K, Any)]]) = new MapKeyResultMatcher(result)
   class MapKeyResultMatcher[K](result: MatchResult[Iterable[(K, Any)]]) {
     def key(k: K) = result(outer.haveKey(k))
