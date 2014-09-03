@@ -23,7 +23,13 @@ trait ValueCheck[T] { outer =>
 
 object ValueCheck {
   implicit def valueIsTypedValueCheck[T](expected: T): BeEqualTypedValueCheck[T] = new BeEqualTypedValueCheck[T](expected)
+
+  def alwaysOk[T] = new ValueCheck[T] {
+    def check:    T => Result = (t: T) => StandardResults.success
+    def checkNot: T => Result = (t: T) => StandardResults.failure
+  }
 }
+
 /**
  * implicit conversions used to create ValueChecks
  */
