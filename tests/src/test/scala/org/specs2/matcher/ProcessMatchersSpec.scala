@@ -3,6 +3,7 @@ package matcher
 
 import java.util.concurrent._
 
+import execute.{AsResult, EventuallyResults}
 import specification._
 import time.NoTimeConversions
 
@@ -10,7 +11,7 @@ import scala.concurrent.duration._
 import scalaz.concurrent._
 import scalaz.stream._
 
-class ProcessMatchersSpec extends Specification with ProcessMatchers with ResultMatchers with NoTimeConversions { def is = s2"""
+class ProcessMatchersSpec extends Specification with ProcessMatchers with ResultMatchers with NoTimeConversions with Retries { def is = s2"""
 
  It is possible to check the execution of processes
    check the produced values
@@ -46,4 +47,14 @@ class ProcessMatchersSpec extends Specification with ProcessMatchers with Result
 
   implicit val scheduledExecutorService: ScheduledExecutorService =
     Executors.newScheduledThreadPool(1)
+}
+
+trait Retries extends AroundExample with EventuallyResults {
+  def retries: Int = 5
+  def sleep: Duration = 100.millis
+
+  // if the ci server is very loaded the tests might fail, so we retry 5 times
+  def around[R : AsResult](r: =>R) =
+    AsResult(eventually(retries = retries, sleep = time.Duration.fromScalaDuration(sleep))(r))
+
 }

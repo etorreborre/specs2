@@ -6,7 +6,7 @@ import org.specs2.time.NoTimeConversions
 import scalaz.concurrent.Task
 import scala.concurrent.duration._
 
-class TaskMatchersSpec extends Specification with TaskMatchers with ResultMatchers with NoTimeConversions { def is = s2"""
+class TaskMatchersSpec extends Specification with TaskMatchers with ResultMatchers with NoTimeConversions with Retries { def is = s2"""
 
  It is possible to check the execution of tasks
    check the return value

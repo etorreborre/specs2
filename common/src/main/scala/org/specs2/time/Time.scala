@@ -81,6 +81,10 @@ class Duration(val at: Long) {
   def <=(other: Duration) = at <= other.at
 }
 
+object Duration {
+  def fromScalaDuration(duration: scala.concurrent.duration.Duration): Duration =
+    new Duration(duration.toMillis)
+}
 class Time(at: Long) extends Duration(at) {
   override def +(delta: Duration) = new Time(at + delta.inMillis)
   override def -(delta: Duration) = new Time(at - delta.inMillis)
