@@ -1,6 +1,8 @@
 package org.specs2
 package matcher
 
+import org.specs2.execute.{Failure, Success}
+
 import scala.concurrent.duration._
 import scalaz.stream._
 import scalaz.concurrent._
@@ -37,8 +39,6 @@ trait ProcessMatchers extends ExpectationsCreation {
     def apply[S <: Process[Task, T]](e: Expectable[S]) = {
       val process = e.value
       val r = attemptRun(check, duration).apply(createExpectable(process.runLog))
-      println(r.message)
-      println(duration)
       result(r, e)
     }
 
