@@ -3,7 +3,7 @@ package matcher
 import mutable._
 import execute.FailureException
 
-class ExpectableSpec extends Specification with ResultMatchers with org.specs2.mock.Mockito {
+class ExpectableSpec extends Spec with ResultMatchers with org.specs2.mock.Mockito with MustMatchers {
 
   "An expectable can have a precise description with aka(description)" in {
     ("a" aka "the string").description must_== "the string 'a'"
@@ -28,7 +28,7 @@ class ExpectableSpec extends Specification with ResultMatchers with org.specs2.m
     ("b" as ((s:String) => "a"+s+"c")).description must_== "abc"
   }
   "An expectable can be described with a function describing its value" in {
-    (Seq(1, 2) showAs((_:Seq[Int]).mkString("|")) must haveSize(3)) returns "1|2 doesn't have size 3 but size 2"
+    (List(1, 2) showAs((_:Seq[Int]).mkString("|")) must haveSize(3)) returns "1|2 doesn't have size 3 but size 2"
   }
   "An expectable can be mapped to another value, keeping its ability to throw exceptions when not matching" in {
     val factory = new ThrownExpectations () {}

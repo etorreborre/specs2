@@ -134,7 +134,7 @@ case class Path(p: String) {
   def getPath(): String = p
 }
 private[specs2]
-trait FileBeHaveMatchers { this: FileBaseMatchers =>
+trait FileBeHaveMatchers extends BeHaveMatchers { this: FileBaseMatchers =>
   /** 
    * matcher aliases and implicits to use with BeVerb and HaveVerb 
    */

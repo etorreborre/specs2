@@ -7,11 +7,11 @@ import scala.concurrent._
 import scala.concurrent.duration._
 import ExecutionContext.Implicits.global
 
-class EventuallyMatchersSpec extends Specification {
-                                                                                                                        """
+class EventuallyMatchersSpec extends Spec with FutureMatchers with ExpectationsDescription {
+addText { """
 `eventually` can be used to retry any matcher until a maximum number of times is reached
 or until it succeeds.
-""".txt
+""" }
   
   "A matcher can match right away with eventually" in {
     1 must eventually(be_==(1))

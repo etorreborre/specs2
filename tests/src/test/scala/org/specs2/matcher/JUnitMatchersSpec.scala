@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 import java.lang._
 
-class JUnitMatchersSpec extends Specification { def is = s2"""
+class JUnitMatchersSpec extends Spec { def is = s2"""
                                                                                                                         
 The specs2 matchers can be reused in JUnit test cases
                                                                                                                         

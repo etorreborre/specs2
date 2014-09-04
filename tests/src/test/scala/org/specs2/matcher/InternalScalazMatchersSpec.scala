@@ -3,7 +3,7 @@ package matcher
 
 import scalaz._, Scalaz._
 
-class InternalScalazMatchersSpec extends Specification with InternalScalazMatchers { def is = s2"""
+class InternalScalazMatchersSpec extends Spec with InternalScalazMatchers { def is = s2"""
 
   Validation
   ${ 1.success must succeedWith(1) }

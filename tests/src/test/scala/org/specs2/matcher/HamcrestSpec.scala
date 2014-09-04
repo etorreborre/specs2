@@ -4,7 +4,7 @@ package matcher
 import org.hamcrest._
 import specification._
 
-class HamcrestSpec extends script.Specification with Grouped with Hamcrest { def is = s2"""
+class HamcrestSpec extends script.Spec with Grouped with Hamcrest with TypedEqual { def is = s2"""
 
   Hamcrest matchers can be used as specs2 matchers by mixing in the Hamcrest trait      
   + for example a beEven hamcrest matcher can be used in a 'must' expression

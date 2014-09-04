@@ -7,7 +7,7 @@ import execute.StandardResults
 import org.specs2.specification._
 import control._
 
-class FileMatchersSpec extends Specification with TestFiles with FileMatchers {  def is = sequential ^ s2"""
+class FileMatchersSpec extends Spec with TestFiles with FileMatchers {  def is = sequential ^ s2"""
 
  The FileMatchers trait provides matchers to check files and paths.
 
