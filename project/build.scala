@@ -186,8 +186,8 @@ object build extends Build {
     settings = moduleSettings ++ Seq(
       name := "specs2-matcher-extra",
       libraryDependencies ++=
-        (if (scalaVersion.value.startsWith("2.11")) Seq("org.scalaz.stream" %% "scalaz-stream" % "0.5a") else
-          Seq("org.scalaz.stream" %% "scalaz-stream" % "0.5") ++ paradisePlugin)
+        Seq("org.scalaz.stream" %% "scalaz-stream" % "0.5a") ++
+        (if (scalaVersion.value.startsWith("2.11")) Nil else paradisePlugin)
     )
   ).dependsOn(analysis, matcher, core % "test->test")
 
