@@ -22,11 +22,19 @@ trait ValueCheck[T] { outer =>
 }
 
 object ValueCheck {
-  implicit def valueIsTypedValueCheck[T](expected: T): BeEqualTypedValueCheck[T] = new BeEqualTypedValueCheck[T](expected)
+  implicit def typedValueCheck[T](expected: T): BeEqualTypedValueCheck[T] = new BeEqualTypedValueCheck[T](expected)
 
   def alwaysOk[T] = new ValueCheck[T] {
     def check:    T => Result = (t: T) => StandardResults.success
     def checkNot: T => Result = (t: T) => StandardResults.failure
+  }
+
+  def toOptionCheck[T](valueCheck: ValueCheck[T]): ValueCheck[Option[T]] = new ValueCheck[Option[T]] {
+    def check = (t: Option[T]) =>
+      t.map(valueCheck.check).getOrElse(Failure("Expected a value, got None"))
+
+    def checkNot = (t: Option[T]) =>
+      ResultLogicalCombinators.combineResult(check(t)).not
   }
 }
 
@@ -54,7 +62,7 @@ trait ValueChecks extends ValueChecksLowImplicits {
   implicit def downcastBeEqualTypedValueCheck[T, S >: T](check: BeEqualTypedValueCheck[T]): ValueCheck[S] = check.downcast[S]
 
   /** an expected value can be used to check another value */
-  def valueIsTypedValueCheck[T](expected: T): BeEqualTypedValueCheck[T] = ValueCheck.valueIsTypedValueCheck(expected)
+  def valueIsTypedValueCheck[T](expected: T): BeEqualTypedValueCheck[T] = ValueCheck.typedValueCheck(expected)
 }
 
 trait ValueChecksLowImplicits {

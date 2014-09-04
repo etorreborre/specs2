@@ -21,7 +21,7 @@ trait TaskMatchers {
   def returnBefore[T](duration: Duration): TaskMatcher[T] =
     attemptRun(ValueCheck.alwaysOk, Some(duration))
 
-  private def attemptRun[T](check: ValueCheck[T], duration: Option[Duration]): TaskMatcher[T] =
+  private[specs2] def attemptRun[T](check: ValueCheck[T], duration: Option[Duration]): TaskMatcher[T] =
     TaskMatcher(check, duration)
 
   case class TaskMatcher[T](check: ValueCheck[T], duration: Option[Duration]) extends Matcher[Task[T]] {
@@ -63,3 +63,5 @@ trait TaskMatchers {
 
   }
 }
+
+object TaskMatchers extends TaskMatchers

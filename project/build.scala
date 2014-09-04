@@ -67,7 +67,8 @@ object build extends Build {
   lazy val resolversSettings = resolvers ++= 
     Seq(Resolver.sonatypeRepo("releases"), 
         Resolver.sonatypeRepo("snapshots"),
-        Resolver.typesafeRepo("releases"))
+        Resolver.typesafeRepo("releases"),
+        "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases")
 
   lazy val buildSettings: Seq[Settings] =
     buildInfoSettings ++
@@ -184,7 +185,9 @@ object build extends Build {
   lazy val matcherExtra = Project(id = "matcher-extra", base = file("matcher-extra"),
     settings = moduleSettings ++ Seq(
       name := "specs2-matcher-extra",
-      libraryDependencies ++= (if (scalaVersion.value.startsWith("2.11")) Nil else paradisePlugin)
+      libraryDependencies ++=
+        (if (scalaVersion.value.startsWith("2.11")) Seq("org.scalaz.stream" %% "scalaz-stream" % "0.5a") else
+          Seq("org.scalaz.stream" %% "scalaz-stream" % "0.5") ++ paradisePlugin)
     )
   ).dependsOn(analysis, matcher, core % "test->test")
 
