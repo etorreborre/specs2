@@ -9,7 +9,7 @@ import duration._
 import ExecutionContext.Implicits.global
 import java.util.concurrent.{Executors, ThreadPoolExecutor, ForkJoinPool, Executor}
 
-class FutureMatchersSpec extends Specification with Groups with NoTimeConversions with ResultMatchers { def is = sequential ^ s2"""
+class FutureMatchersSpec extends Specification with Groups with NoTimeConversions with ResultMatchers with Retries { def is = sequential ^ s2"""
 
  Any `Matcher[T]` can be transformed into a `Matcher[Future[T]]` with the `await` method
  ${ Future(1) must be_>(0).await }
