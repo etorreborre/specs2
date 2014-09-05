@@ -4,6 +4,10 @@ package create
 
 import core.Fragments
 
+/**
+ * Fragments which can be used to change the display
+ * of the Specification: paragraphs, breaks, tabs
+ */
 trait FormattingFragments extends FragmentsFactory {
   private val factory = fragmentFactory
 

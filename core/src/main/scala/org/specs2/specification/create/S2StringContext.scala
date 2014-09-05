@@ -17,7 +17,15 @@ import scala.concurrent.ExecutionContext
 import scala.reflect.internal.util.Position
 
 /**
- * Allow to use fragments inside interpolated strings starting with s2 in order to build the specification content
+ * These implicit methods declare which kind of object can be interpolated in a s2 string;
+ *
+ *  - a function using the previous text and returning Fragments
+ *  - specification links
+ *  - examples using the Env, arguments, the statistics repository, the command line arguments
+ *  - other specifications
+ *  - strings
+ *  - fragments
+ *
  */
 trait S2StringContext extends S2StringContext1 { outer =>
 
@@ -83,7 +91,6 @@ trait S2StringContext extends S2StringContext1 { outer =>
     }
   }
 
-
   implicit def fragmentsIsInterpolatedFragment(fragments: Fragments): InterpolatedFragment = new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =
       (fs append ff.text(text).setLocation(start)) append fragments
@@ -91,6 +98,9 @@ trait S2StringContext extends S2StringContext1 { outer =>
 
 }
 
+/**
+ * Lightweight methods to interpolate fragments where only results and fragment can be interpolated
+ */
 private[specs2]
 trait S2StringContext1 extends S2StringContextCreation { outer =>
 
@@ -104,6 +114,9 @@ trait S2StringContext1 extends S2StringContextCreation { outer =>
 
 }
 
+/**
+ * Methods to create interpolated fragments with no implicits
+ */
 trait S2StringContextCreation extends FragmentsFactory { outer =>
   private[specs2] val ff = fragmentFactory
 
@@ -227,6 +240,12 @@ object S2Macro {
 
 }
 
+/**
+ * An interpolated fragment
+ *
+ *  - is appended to the previous fragments
+ *  - can use the previous text, start location, end location and interpolated expression to create new Fragments
+ */
 trait InterpolatedFragment {
   def append(fragments: Fragments, text: String, start: Location, end: Location, expression: String): Fragments
 }

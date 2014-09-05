@@ -9,9 +9,11 @@ import text.Trim._
 import org.specs2.specification.core.{Description, Fragments}
 
 /**
- * This trait allows to capture some code as an example description
+ * This trait allows to create examples where the description is the code itself
+ * and the code returns an AsResult value
  */
 trait AutoExamples extends FragmentsFactory {
+
   implicit def eg[T : AsResult](code: =>T): Fragments = macro AutoExamples.create[T]
 
   def createExample[T](expression: String, code: =>T, asResult: AsResult[T]): Fragments =
@@ -33,11 +35,13 @@ trait AutoExamples extends FragmentsFactory {
 }
 
 object AutoExamples extends AutoExamples {
+
   def create[T](c: Context)(code: c.Expr[T])(asResult: c.Expr[AsResult[T]]): c.Expr[Fragments] = {
     import c.{universe => u}; import u._
     import Macros._
     val result = c.Expr(methodCall(c)("createExample", stringExprMacroPos(c)(code), code.tree.duplicate, asResult.tree))
     c.Expr(atPos(c.prefix.tree.pos)(result.tree))
   }
+
 }
 
