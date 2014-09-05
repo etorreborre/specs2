@@ -104,7 +104,7 @@ trait DefaultExecutor extends Executor {
         if (mustStop)             Task.now(fragment.skip)
         else if (executeNow)      Task.now(executedFragment)
         else                      start(executedFragment)(env.executorService)
-      }(env.executionEnv.timeOut.getOrElse(fragment.execution.duration))
+      }(env.executionEnv.timeOut.getOrElse(fragment.execution.timeout))
 
       // if this fragment is a join point, start a new sequence
       // and check if the execution needs to be stopped in case of a step error

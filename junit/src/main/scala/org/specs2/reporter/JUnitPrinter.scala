@@ -46,7 +46,7 @@ trait JUnitPrinter extends Printer { outer =>
       f.description == fragment.description && f.location == fragment.location }.map(_._2)
 
     description.map { description: Description =>
-      if (fragment.isRunnable) Task.now {
+      if (fragment.isExecutable) Task.now {
         notifier.fireTestStarted(description)
         notifyResult(description, fragment.executionResult)(args)
       } else Task.now(())

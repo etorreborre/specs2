@@ -5,6 +5,9 @@ package core
 import scalaz.Show
 import org.specs2.data.{NamedTag, Tag}
 
+/**
+ * Description of a Fragment
+ */
 trait Description {
   def show: String
   def matches(s: String) = false
@@ -12,16 +15,25 @@ trait Description {
   def stripMargin: Description = stripMargin('|')
 }
 
+/**
+ * Text description
+ */
 case class Text(text: String) extends Description {
   def show: String = text
   override def matches(s: String) = text matches s
   override def stripMargin(margin: Char) = copy(text.stripMargin(margin))
 }
 
+/**
+ * NoText description, used when creating steps and actions which are not described
+ */
 case object NoText extends Description {
   def show: String = ""
 }
 
+/**
+ * Link to another specification
+ */
 case class SpecificationLink(header: SpecHeader, alias: String = "", tooltip: String = "") extends Description {
   def specClassName = header.className
 
@@ -34,39 +46,54 @@ case class SpecificationLink(header: SpecHeader, alias: String = "", tooltip: St
     if (alias.nonEmpty) alias else header.show
 }
 
+/**
+ * Break (== new line)
+ */
 case object Br extends Description {
   def show = "\n"
 }
 
+/**
+ * Start of a block. This is used to delimit the blocks in mutable specifications and
+ * know exactly how to create levels when transforming a specification to a tree of examples (for JUnit for example)
+ */
 case object Start extends Description {
   def show = ""
 }
 
+/**
+ * End of a block
+ */
 case object End extends Description {
   def show = ""
 }
 
+/**
+ * The next fragment must be indented
+ */
 case class Tab(n: Int = 1) extends Description {
   def show = ""
 }
 
+/**
+ * The next fragment must be un-indented
+ */
 case class Backtab(n: Int = 1) extends Description {
   def show = ""
 }
 
+/**
+ * Description of a Tag fragment
+ */
 case class Marker(tag: NamedTag, isSection: Boolean = false, appliesToNext: Boolean = true) extends Description {
   def show = ""
 }
 
-object AlwaysMarker extends Description {
-  def show = ""
-}
-
-object AlwaysWhenNoIncludeMarker extends Description {
-  def show = ""
-}
-
+/**
+ * Creation methods for Descriptions
+ */
 object Description {
+
   def text(text: String) = Text(text)
   def code(text: String) =
     if (text.contains("\n")) Text("```\n"+text+"\n```")

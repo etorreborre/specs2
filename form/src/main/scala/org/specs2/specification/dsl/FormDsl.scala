@@ -8,6 +8,9 @@ import form._
 import create._
 import control.ImplicitParameters._
 
+/**
+ * Dsl for creating Forms in an acceptance specification
+ */
 trait FormDsl extends FragmentsDsl with SpecStructureDsl with FormFragmentsFactory {
   private val factory = formFragmentFactory
 

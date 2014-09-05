@@ -18,7 +18,7 @@ class IsolatedExecutionSpec extends Spec with ForEachEnv { def is = s2"""
   def e1 = {
     val spec = new TestIsolatedSpec1
     val executed = execute(spec)
-    val results = executed.collect { case f if f.isRunnable => f.execution.result }
+    val results = executed.collect { case f if f.isExecutable => f.execution.result }
     results must contain(exactly[Result](Success("example1"), Success("example2")))
   }
 
@@ -26,7 +26,7 @@ class IsolatedExecutionSpec extends Spec with ForEachEnv { def is = s2"""
     val spec = new TestIsolatedSpec2
     val executed = execute(spec)
 
-    val results = executed.collect { case f if f.isRunnable => f.execution.result }
+    val results = executed.collect { case f if f.isExecutable => f.execution.result }
     results must contain(exactly[Result](Success("example1"), Success("example2")))
   }
 

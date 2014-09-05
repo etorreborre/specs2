@@ -10,6 +10,15 @@ import io._
 import control._
 import process.{Executor, DefaultExecutor, StatisticsRepository, Selector, DefaultSelector}
 
+/**
+ * Whole creation / execution / reporting environment for a specification
+ *
+ * Part of it is driven by the command-line, part of it is specs2 implementation
+ * Yet it can be used to drive the creation or execution of examples
+ *
+ * Note: creating an Env instance is a delicate activity because the Env hold a thread pool that needs
+ *       to be shutdown at the end of the execution
+ */
 case class Env(arguments: Arguments = Arguments(),
           indentationSize: Int = 2,
 

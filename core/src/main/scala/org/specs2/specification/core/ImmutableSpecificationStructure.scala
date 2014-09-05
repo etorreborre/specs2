@@ -30,7 +30,7 @@ trait ImmutableSpecificationStructure extends SpecificationStructure {
    */
   private def isolateExamples(env: Env): Fragments => Fragments = (fs: Fragments) => {
     val isolated = fs.fragments.zipWithIndex.map { case (f @ Fragment(d, e, l), i) =>
-      if (e.isRunnable && f.execution.isolable) isolate(fs, f, i, env)
+      if (e.isExecutable && f.execution.isolable) isolate(fs, f, i, env)
       else f
     }
     Fragments(isolated:_*)

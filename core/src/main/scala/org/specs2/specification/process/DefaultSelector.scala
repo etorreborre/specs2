@@ -38,7 +38,7 @@ trait DefaultSelector extends Selector {
     val regex = env.arguments.ex
     if (regex !=".*")
       process1.filter {
-        case Fragment(Text(t),e,_) if e.isRunnable => t.matches(regex)
+        case Fragment(Text(t),e,_) if e.isExecutable => t.matches(regex)
         case other                                    => true
       }
     else process1.id

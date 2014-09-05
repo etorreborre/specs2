@@ -6,6 +6,16 @@ import main.Arguments
 import scalaz.concurrent.Task
 import scalaz.stream._
 
+/**
+ * Structure of a Specification:
+ *
+ *  - a header
+ *  - some arguments
+ *  - specification fragments
+ *
+ * Note that the fragments have to be lazy in order to avoid cycles when 2 specifications are referencing
+ * each other with links
+ */
 case class SpecStructure(header: SpecHeader, arguments: Arguments, lazyFragments: () => Fragments) {
   lazy val fragments = lazyFragments()
 
@@ -27,6 +37,9 @@ case class SpecStructure(header: SpecHeader, arguments: Arguments, lazyFragments
   def examples = fragments.examples
 }
 
+/**
+ * Create SpecStructures from header, arguments, fragments
+ */
 object SpecStructure {
   def apply(header: SpecHeader): SpecStructure =
     new SpecStructure(header, Arguments(), () => Fragments())

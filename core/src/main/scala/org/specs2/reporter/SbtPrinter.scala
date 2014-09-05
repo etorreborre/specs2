@@ -45,7 +45,7 @@ trait SbtPrinter extends Printer {
   def notify(args: Arguments): Fragment => Task[Unit] = { fragment =>
     import org.specs2._
     Task.now {
-      if (fragment.isRunnable) {
+      if (fragment.isExecutable) {
         def handleResult(res: execute.Result) {
           res match {
             case execute.Success(text,_)             => events.succeeded()

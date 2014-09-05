@@ -77,7 +77,7 @@ trait MutableFragmentBuilder extends FragmentBuilder
       fragment
 
   private def mustBeIsolated(fragment: Fragment) = {
-    fragment.isRunnable               &&
+    fragment.isExecutable               &&
     fragment.execution.isolable       &&
     arguments.isolated                &&
     !env.executionEnv.withoutIsolation

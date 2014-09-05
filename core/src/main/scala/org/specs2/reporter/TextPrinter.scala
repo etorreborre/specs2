@@ -90,10 +90,10 @@ trait TextPrinter extends Printer {
     case (fragment, (stats, indentation)) =>
       val indentationSize = args.commandLine.int("indentation").getOrElse(0)
       fragment match {
-        case Fragment(Text(t), e, l) if e.isRunnable =>
+        case Fragment(Text(t), e, l) if e.isExecutable =>
           printRunnable(t, e, args, indentation)
 
-        case Fragment(d, e, l) if e.isRunnable && !e.result.isSuccess =>
+        case Fragment(d, e, l) if e.isExecutable && !e.result.isSuccess =>
           printRunnable(d.show, e, args, indentation)
 
         case Fragment(Br, e, l) =>

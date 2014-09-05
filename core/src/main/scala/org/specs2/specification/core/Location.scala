@@ -4,6 +4,11 @@ package core
 
 import control._
 
+/**
+ * Location of a Fragment
+ *
+ * This is currently implemented using stacktraces which is very brittle
+ */
 trait Location {
   def traceLocation(filter: StackTraceFilter): Option[TraceLocation]
   /** @return a filtered Location */
