@@ -2,9 +2,9 @@ package org.specs2
 package specification
 
 import core.Env
-import dsl.FragmentsDsl
+import dsl._
 
-class FragmentsDslSpec extends Spec with FragmentsDsl { def is = s2"""
+class AcceptanceDslSpec extends Spec with AcceptanceDsl { def is = s2"""
 
  The caret ^ operator can be used to join fragments and build a Fragments object
    f1 ^ f2         $a1

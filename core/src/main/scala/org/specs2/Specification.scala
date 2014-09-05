@@ -3,7 +3,7 @@ package org.specs2
 import matcher._
 import main._
 import org.specs2.execute.StandardResults
-import specification.dsl.FragmentsDsl1
+import specification.dsl.AcceptanceDsl1
 import specification._
 import specification.core.ImmutableSpecificationStructure
 import specification.create._
@@ -33,7 +33,7 @@ trait SpecificationLike extends ImmutableSpecificationStructure
 abstract class Spec extends SpecLike
 trait SpecLike extends ImmutableSpecificationStructure
   with S2StringContext1
-  with FragmentsDsl1
+  with AcceptanceDsl1
   with MustMatchers1
   with ArgumentsCreation
   with ArgumentsShortcuts

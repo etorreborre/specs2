@@ -5,7 +5,7 @@ import core._
 import create.DefaultFragmentFactory
 import DefaultFragmentFactory._
 import core.{Env, Results}
-import dsl.mutable.{MutableFragmentsDsl, MutableFragmentBuilder}
+import dsl.mutable.{MutableDsl, MutableFragmentBuilder}
 import org.specs2.matcher._
 
 class MutableFragmentsDslSpec extends org.specs2.Spec with TypedEqual with TraversableMatchers { def is = s2"""
@@ -73,5 +73,5 @@ class MutableFragmentsDslSpec extends org.specs2.Spec with TypedEqual with Trave
     dsl1.specificationStructure(env)
   }
 
-  trait dsl extends MutableFragmentBuilder with MutableFragmentsDsl
+  trait dsl extends MutableFragmentBuilder with MutableDsl
 }

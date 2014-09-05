@@ -3,7 +3,7 @@ package specification
 package dsl
 package mutable
 
-trait MutableFragmentsDsl extends
+trait MutableDsl extends
        FragmentsDsl
   with ExampleDsl
   with BlockDsl
@@ -12,5 +12,5 @@ trait MutableFragmentsDsl extends
   with TitleDsl
   with ArgumentsDsl
   with LinkDsl
-  with TagsDsl
+  with TagDsl
 

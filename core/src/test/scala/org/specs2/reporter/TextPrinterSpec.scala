@@ -3,7 +3,7 @@ package reporter
 
 import matcher.{StandardMatchResults, MustMatchers}
 import specification._
-import specification.dsl.FragmentsDsl
+import dsl.{AcceptanceDsl, FragmentsDsl}
 import specification.create.{S2StringContext, DefaultFragmentFactory}
 import control._
 import text.Trim._
@@ -71,7 +71,7 @@ class TextPrinterSpec extends Specification with tp { def is = s2"""
 """
 }
 
-trait tp extends MustMatchers with StandardMatchResults with StandardResults with S2StringContext with FragmentsDsl {
+trait tp extends MustMatchers with StandardMatchResults with StandardResults with S2StringContext with AcceptanceDsl {
   import TextPrinterSpec._
   val factory = fragmentFactory; import factory._
 

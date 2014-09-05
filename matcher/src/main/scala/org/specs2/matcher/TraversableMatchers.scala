@@ -21,6 +21,7 @@ trait TraversableMatchers extends TraversableBaseMatchers
   with LazyParameters
   with TraversableBaseMatchersLowImplicits
   with ImplicitParameters
+  with NumberOfTimes
 
 object TraversableMatchers extends TraversableMatchers
 

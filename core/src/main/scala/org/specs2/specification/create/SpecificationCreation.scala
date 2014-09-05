@@ -6,7 +6,7 @@ import main.{ArgumentsShortcuts, ArgumentsArgs}
 import org.specs2.specification.dsl._
 
 trait SpecificationCreation extends
-       FragmentsDsl
+       AcceptanceDsl
   with AutoExamples
   with ArgumentsArgs
   with ArgumentsShortcuts

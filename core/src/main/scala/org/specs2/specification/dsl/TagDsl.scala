@@ -6,7 +6,7 @@ import data.NamedTag
 import core._
 import create.FragmentsFactory
 
-trait TagsDsl extends FragmentsFactory { outer =>
+trait TagDsl extends FragmentsFactory { outer =>
 
   def tag(names: String*)    : Fragment   = fragmentFactory.taggedAs(names:_*)
   def section(names: String*)  : Fragment = fragmentFactory.asSection(names:_*)

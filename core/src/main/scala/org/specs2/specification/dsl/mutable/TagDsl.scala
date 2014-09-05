@@ -6,7 +6,7 @@ package mutable
 import data._
 import core.{Fragments, Fragment}
 
-trait TagsDsl extends org.specs2.specification.dsl.TagsDsl with MutableFragmentBuilder { outer =>
+trait TagDsl extends org.specs2.specification.dsl.TagDsl with MutableFragmentBuilder { outer =>
   override def tag(names: String*)    : Fragment   = addFragment(fragmentFactory.tag(names:_*))
   override def section(names: String*)  : Fragment = addFragment(fragmentFactory.section(names:_*))
 
