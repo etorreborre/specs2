@@ -1,14 +1,14 @@
 package org.specs2
 package matcher
 
-import execute._
+import MatchersCreation._
 import io.StringOutput
 
 /**
  * all these examples works in a mutable specification which means that FailureExceptions are caught before being
  * combined with the logical combinator
  */
-class MatchResultCombinatorsSpec extends mutable.Specification with ResultMatchers {
+class MatchResultCombinatorsSpec extends mutable.Spec with ResultMatchers with MatchResultCombinators with TypedEqual {
 
   "Match results can be combined with and" >> {
     (1 must_== 1) and (2 must_== 2)
@@ -52,19 +52,19 @@ class MatchResultCombinatorsSpec extends mutable.Specification with ResultMatche
   }
 
   "A match result can be evaluated only when a boolean condition is satisfied" >> {
-    (1 must_== 2: Result).when(false);
-    { (1 must_== 2: Result).when(true) } must throwAn[Exception]
+    (1 must_== 2).when(false)
+    (1 must_== 2).when(true) must throwAn[Exception]
   }
 
   "A match result can be evaluated only unless a boolean condition is satisfied" >> {
-    (1 must_== 2: Result).unless(true);
-    { (1 must_== 2: Result).unless(false) } must throwAn[Exception]
+    (1 must_== 2).unless(true)
+    (1 must_== 2).unless(false) must throwAn[Exception]
   }
 
   "A match result can be evaluated if and only if a boolean condition is satisfied" >> {
-    (1 must_== 2: Result).iff(false)
-    (1 must_== 1: Result).iff(false);
-    { (1 must_== 2: Result).iff(true) } must throwAn[Exception]
+    (1 must_== 2).iff(false)
+    (1 must_== 1).iff(false)
+    (1 must_== 2).iff(true) must throwAn[Exception]
   }
 
   "A match result with an or condition where an exception is thrown during the first match" >> {

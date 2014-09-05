@@ -8,7 +8,7 @@ import scala.collection.parallel.ParSeq
 import control.NumberOfTimes
 import scala.collection.JavaConversions.collectionAsScalaIterable
 
-class TraversableMatchersSpec extends Specification with ResultMatchers with Grouped with NumberOfTimes { def is = s2"""
+class TraversableMatchersSpec extends Spec with ResultMatchers with Grouped with NumberOfTimes with MustMatchers { def is = s2"""
 
  We can check the elements of a collection by using matchers
    ${ Seq(1, 2, 3) must contain(2) }

@@ -257,7 +257,7 @@ class BeNull[T] extends Matcher[T] {
 case class BeOneOf[T](t: Seq[T]) extends Matcher[T] {
   def apply[S <: T](y: Expectable[S]) = {
     val x = t
-    result(x.exists(_ == y.value),
+    result(x.contains(y.value),
       y.description + s" is contained in " + q(x.mkString(", ")),
       y.description + s" is not contained in " + q(x.mkString(", ")),
       y)

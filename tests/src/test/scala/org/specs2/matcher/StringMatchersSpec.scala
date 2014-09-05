@@ -3,7 +3,7 @@ package matcher
 
 import java.util.regex.Pattern
 
-class StringMatchersSpec extends Specification { def is = s2"""
+class StringMatchersSpec extends Spec with StringMatchers with MustExpectations with TraversableMatchers with AnyMatchers { def is = s2"""
   
   A string can be matched against a pattern using
     beMatching

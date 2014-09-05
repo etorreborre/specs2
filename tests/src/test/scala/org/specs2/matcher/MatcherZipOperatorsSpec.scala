@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-class MatcherZipOperatorsSpec extends Specification { def is = s2"""
+class MatcherZipOperatorsSpec extends Spec with MustMatchers { def is = s2"""
 
  It is possible to create matchers for tuples using individual matchers for fields $e1
  The failure message must mention the full tuple and the failing field             $e2

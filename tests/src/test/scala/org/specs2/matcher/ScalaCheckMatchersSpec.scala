@@ -5,14 +5,15 @@ import java.util
 
 import org.scalacheck.Prop.{forAll, proved}
 import org.scalacheck._
-import org.specs2.execute.{AsResult, Result, Success}
-import org.specs2.io._
-import org.specs2.specification._
-import org.specs2.specification.process._
+import execute._
+import io._
+import specification._
+import specification.dsl.ExampleDsl
+import specification.process._
 
 import scala.sys.error
 
-class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { def is = s2"""
+class ScalaCheckMatchersSpec extends Spec with ScalaCheckProperties { def is = s2"""
 
  A ScalaCheck property can be used in the body of an Example
    Here are some examples with
@@ -179,7 +180,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
 }
 
 
-trait ScalaCheckProperties extends ScalaCheck with ResultMatchers {  this: Specification =>
+trait ScalaCheckProperties extends ScalaCheck with ResultMatchers with MustMatchers with ExampleDsl with StandardResults {
   def identityFunction = (a: Boolean) => a
   val trueFunction = (b: Boolean) => true
   val falseFunction = (b: Boolean) => false

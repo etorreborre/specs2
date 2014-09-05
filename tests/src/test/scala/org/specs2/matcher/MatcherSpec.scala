@@ -6,7 +6,7 @@ import specification._
 import user.specification._
 import execute.Failure
 
-class MatcherSpec extends script.Specification with ResultMatchers with Groups { def is = s2"""
+class MatcherSpec extends script.Spec with ResultMatchers with Groups with MustMatchers { def is = s2"""
 
 Matchers can be created in different ways
 

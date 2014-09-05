@@ -5,8 +5,9 @@ import execute._
 import specification._
 import sys._
 import io.StringOutput
+import MatchResultCombinators._
 
-class LogicalMatcherSpec extends script.Specification with ResultMatchers with Grouped { def is = s2"""
+class LogicalMatcherSpec extends script.Spec with ResultMatchers with Grouped with StringMatchers with TraversableMatchers with TypedEqual { def is = s2"""
 
 Or matches
 ==========

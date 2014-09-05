@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-class NumericMatchersSpec extends Specification {  def is = s2"""
+class NumericMatchersSpec extends Spec with NumericMatchers with MustExpectations {  def is = s2"""
                                                                                                                         
 The NumericMatchers trait provides matchers to do comparisons with Numeric
 types and more generally with Ordered types.

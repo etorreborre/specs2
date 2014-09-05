@@ -3,7 +3,7 @@ package matcher
 
 import util.{Success => Succeeded, Failure => Failed}
 
-class TryMatchersSpec extends Specification with ResultMatchers { def is = s2"""
+class TryMatchersSpec extends Spec with TryMatchers with ResultMatchers { def is = s2"""
 
  The TryMatchers trait provides matchers to check Try instances.
 

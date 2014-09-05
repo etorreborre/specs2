@@ -3,7 +3,7 @@ package matcher
 
 import execute._
 
-class ResultMatchersSpec extends Specification with ResultMatchers { def is = s2"""
+class ResultMatchersSpec extends Spec with ResultMatchers with TypedEqual { def is = s2"""
 
 The ResultMatchers trait provides matchers to check Result instances.
 

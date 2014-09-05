@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-class MapMatchersSpec extends Specification { def is = s2"""
+class MapMatchersSpec extends Spec with MapMatchers { def is = s2"""
 
  The MapMatchers trait provides matchers to check Map instances.
 

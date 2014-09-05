@@ -1,6 +1,5 @@
 package org.specs2
 package matcher
-import java.lang._
 
 class JUnitMatchersSpec extends Spec { def is = s2"""
                                                                                                                         
