@@ -5,7 +5,7 @@ import specification._
 import matcher._
 import junit.framework.AssertionFailedError
 
-class MockitoSpec extends script.Specification with Mockito with ResultMatchers with Groups {  def is = s2"""
+class MockitoSpec extends script.Spec with Mockito with ResultMatchers with Groups {  def is = s2"""
 
  The Mockito trait is reusable in other contexts
    + in JUnit

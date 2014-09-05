@@ -10,7 +10,7 @@ import runner._
 import specification.core._
 import specification.process.DefaultExecutor
 
-class SbtPrinterSpec extends Specification with ForEachEnv { def is = s2"""
+class SbtPrinterSpec extends Spec with ForEachEnv { def is = s2"""
                                                                                                                         
  A TestInterfaceReporter should                                                                                      
    print the specification title if defined                                   ${printer().e1}

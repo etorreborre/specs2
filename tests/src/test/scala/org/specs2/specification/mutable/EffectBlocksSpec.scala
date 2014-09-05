@@ -2,11 +2,12 @@ package org.specs2.specification.mutable
 
 import org.specs2.ScalaCheck
 import org.specs2.matcher.{Matcher, ThrownExpectations}
+import org.specs2.matcher.MatchersCreation._
 import scala.collection.mutable.ListBuffer
 import org.scalacheck.{Gen, Arbitrary}
 import org.specs2.specification.dsl.mutable.{EffectPath, EffectBlocks}
 
-class EffectBlocksSpec extends org.specs2.Specification with ThrownExpectations with ScalaCheck { def is = s2"""
+class EffectBlocksSpec extends org.specs2.Spec with ThrownExpectations with ScalaCheck { def is = s2"""
 
   addBlock + replay plays the effect                                      $e1
   n * addBlock + replay plays all effects in order                        $e2
