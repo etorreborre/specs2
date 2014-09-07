@@ -5,12 +5,14 @@ package dsl
 import core.SpecHeader
 
 /**
- * Syntax for creating the specification title
+ * Dsl for creating a specification title
  */
 trait TitleDsl { outer =>
+
   implicit def title(s: String) = new TitleOps(s)
   class TitleOps(s: String) {
     def title: SpecHeader = SpecHeader(outer.getClass, Some(s))
   }
+
 }
 

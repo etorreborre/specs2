@@ -10,6 +10,9 @@ import org.specs2.main.CommandLine
 import org.specs2.specification.core._
 import specification.dsl
 
+/**
+ * Dsl for creating examples in a mutable specification
+ */
 trait ExampleDsl extends ExampleDsl1 with dsl.ExampleDsl {
   override implicit def bangExample(d: String): BangExample =
     new MutableBangExample(d)

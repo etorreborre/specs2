@@ -5,6 +5,9 @@ package mutable
 
 import main.ArgumentsShortcuts
 
+/**
+ * Trait for creating a mutable specification
+ */
 trait SpecificationCreation extends specification.create.SpecificationCreation
   with AutoExamples
   with MutableDsl

@@ -6,6 +6,9 @@ package mutable
 import create.FragmentsFactory
 import org.specs2.specification.core.{Fragments, Fragment}
 
+/**
+ * Dsl for creating text and formatting fragments in a mutable specification
+ */
 trait TextDsl extends TextCreation { outer =>
   
   implicit class textFragment(s: String) {

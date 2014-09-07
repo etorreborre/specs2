@@ -6,7 +6,7 @@ package mutable
 import core.{SpecificationStructure, SpecStructure}
 
 /**
- * DSL for adding links to other specifications
+ * Dsl for creating links in a mutable specification
  */
 trait LinkDsl extends FragmentBuilder with dsl.LinkDsl {
 

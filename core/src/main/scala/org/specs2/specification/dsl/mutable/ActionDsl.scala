@@ -6,6 +6,9 @@ package mutable
 import execute.{Error, Result}
 import specification.core.Fragment
 
+/**
+ * Dsl to create actions in a mutable spec
+ */
 trait ActionDsl extends FragmentBuilder with org.specs2.specification.dsl.ActionDsl {
   override def action(a: =>Any) = addFragment(super.action(a))
   override def step(a: =>Any) = addFragment(super.step(a))

@@ -8,6 +8,9 @@ import execute.AsResult
 import org.specs2.specification.core.{Fragments, StacktraceLocation, Fragment}
 import specification.create.FragmentsFactory
 
+/**
+ * Create blocks of examples in a mutable specification
+ */
 private[specs2]
 trait BlockDsl extends BlockCreation {
   implicit class describe(d: String) {

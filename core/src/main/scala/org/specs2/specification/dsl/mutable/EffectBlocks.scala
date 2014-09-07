@@ -7,7 +7,11 @@ import scalaz.TreeLoc
 import scalaz.Tree._
 
 /**
- * This class tracks "nested" effects
+ * This class tracks "nested" effects.
+ *
+ * It is used to create nested blocks in mutable specifications and make sure
+ * that we can control which blocks to evaluate based on a target "path" in the tree
+ * of blocks
  */
 private[specs2]
 class EffectBlocks {

@@ -4,6 +4,9 @@ package dsl
 
 import create.FragmentsFactory
 
+/**
+ * Action Dsl for mutable specifications
+ */
 trait ActionDsl extends FragmentsFactory {
   def step(a: =>Any) = fragmentFactory.step(a)
   def step(a: =>Any, global: Boolean = false) = fragmentFactory.step(a).makeGlobal(global)

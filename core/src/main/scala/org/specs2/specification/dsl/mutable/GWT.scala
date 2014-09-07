@@ -8,6 +8,9 @@ import org.specs2.specification.script.StepParser
 import specification.core._
 import specification.create.FragmentsFactory
 
+/**
+ * Given-When-Then Dsl for creating examples (but also steps and actions) in a mutable specification
+ */
 trait GWT extends org.specs2.specification.dsl.GWT { outer: MutableFragmentBuilder with FragmentsFactory =>
   private val factory = fragmentFactory
 
@@ -49,6 +52,9 @@ trait GWT extends org.specs2.specification.dsl.GWT { outer: MutableFragmentBuild
   }
 }
 
+/**
+ * Given / When / Then syntax in order to use the word "Then"
+ */
 trait GivenWhenThenSyntax { this: GWT =>
   def Given[T](description: String)(parser: StepParser[T])(action: T => Any): Fragments =
     step("Given "+description)(parser)(action)
@@ -60,6 +66,9 @@ trait GivenWhenThenSyntax { this: GWT =>
     example("Then "+description)(parser)(action)
 }
 
+/**
+ * given / when / andThen syntax because the "then" keyword is not available
+ */
 trait GivenWhenAndThenSyntax { this: GWT =>
   def given[T](description: String)(parser: StepParser[T])(action: T => Any): Fragments =
     step("given "+description)(parser)(action)

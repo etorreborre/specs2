@@ -6,7 +6,7 @@ package mutable
 import main._
 
 /**
- * Arguments creation with an additional implicit from (=> T) to Property[T] to allow the direct passing of parameters
+ * Create arguments in an acceptance specification
  */
 trait ArgumentsDsl extends ArgumentsCreation with ArgProperties
 
@@ -14,6 +14,7 @@ trait ArgumentsDsl extends ArgumentsCreation with ArgProperties
  * Methods with default Property values to create Arguments instances
  * Arguments are being added to the SpecificationStructure by mutating its
  * current content
+ *
  */
 trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableArgumentsBuilder {
   /** shorthand method to create an Arguments object */

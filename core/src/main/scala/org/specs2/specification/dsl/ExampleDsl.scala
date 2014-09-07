@@ -7,6 +7,9 @@ import execute.AsResult
 import org.specs2.specification.core.{Text, Execution, Env, Fragment}
 import control.ImplicitParameters.ImplicitParam
 
+/**
+ * Example Dsl for mutable specifications
+ */
 trait ExampleDsl extends FragmentsFactory { outer =>
 
   implicit def bangExample(d: String) = new BangExample(d)

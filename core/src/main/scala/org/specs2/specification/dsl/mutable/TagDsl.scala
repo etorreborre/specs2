@@ -6,6 +6,9 @@ package mutable
 import data._
 import core.{Fragments, Fragment}
 
+/**
+ * Dsl for creating tags in a mutable specification
+ */
 trait TagDsl extends org.specs2.specification.dsl.TagDsl with MutableFragmentBuilder { outer =>
   override def tag(names: String*)    : Fragment   = addFragment(fragmentFactory.tag(names:_*))
   override def section(names: String*)  : Fragment = addFragment(fragmentFactory.section(names:_*))

@@ -6,6 +6,9 @@ import data.NamedTag
 import core._
 import create.FragmentsFactory
 
+/**
+ * Dsl for creating tags
+ */
 trait TagDsl extends FragmentsFactory { outer =>
 
   def tag(names: String*)    : Fragment   = fragmentFactory.taggedAs(names:_*)

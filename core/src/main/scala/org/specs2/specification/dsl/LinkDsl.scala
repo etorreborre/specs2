@@ -6,7 +6,7 @@ import core._
 import create.FragmentsFactory
 
 /**
- * DSL for adding links to other specifications
+ * Dsl for creating links
  */
 trait LinkDsl extends LinkCreation {
 

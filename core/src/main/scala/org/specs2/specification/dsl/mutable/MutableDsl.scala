@@ -3,6 +3,9 @@ package specification
 package dsl
 package mutable
 
+/**
+ * Dsl for creating mutable specifications
+ */
 trait MutableDsl extends
        FragmentsDsl
   with ExampleDsl

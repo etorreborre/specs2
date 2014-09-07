@@ -12,6 +12,18 @@ import scalaz.stream._
 import specification.create.FragmentsFactory
 import specification.core._
 
+/**
+ * Creation of fragments in a mutable specification
+ *
+ * This essentially works by keep a mutable ListBuffer of Fragments
+ *
+ * Arguments and title are also added with mutable variables
+ *
+ * Most of the complexity in that trait comes from the "isolated" mode of execution where we
+ * want to be able to recreate some blocks and not others when running an example
+ * in its own instance of the Specification
+ *
+ */
 trait MutableFragmentBuilder extends FragmentBuilder
   with FragmentsFactory
   with MutableArgumentsBuilder
