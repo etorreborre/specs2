@@ -28,7 +28,6 @@ trait SpecificationLike extends ImmutableSpecificationStructure
  *  - 2 implicits to create the specification string context
  *  - 1 implicit to create expectations with "must"
  *  - 1 implicit to add arguments to the specification
- *
  */
 abstract class Spec extends SpecLike
 trait SpecLike extends ImmutableSpecificationStructure

@@ -40,7 +40,7 @@ trait TextPrinter extends Printer {
 
     def prepare = Task.now(())
     def fold = Statistics.fold zip Indentation.fold
-    def init = (Stats(), 0)
+    def init = (Stats.empty, 0)
 
     def last(state: S) =
       printStats(spec.header, args)(state._1).to(logSink).run

@@ -178,6 +178,8 @@ case class Stats(examples:     Int = 0,
  */
 case object Stats {
 
+  def empty = Stats()
+
   implicit object StatsMonoid extends Monoid[Stats] {
     def append(s1: Stats, s2: =>Stats) = {
       s1.copy(
@@ -193,7 +195,7 @@ case object Stats {
       )
     }
 
-    val zero = Stats()
+    val zero = empty
   }
 
   def apply(result: Result): Stats =
@@ -207,7 +209,7 @@ case object Stats {
     }
 
   def fromXml(stats: scala.xml.Node): Option[Stats] = {
-    if (stats.label != Stats().toXml.label)
+    if (stats.label != Stats.empty.toXml.label)
       None
     else {
       val map = stats.attributes.asAttrMap

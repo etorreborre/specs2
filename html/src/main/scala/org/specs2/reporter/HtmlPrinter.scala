@@ -30,7 +30,7 @@ trait HtmlPrinter extends Printer {
 
     def prepare = Task.now(())
     def fold = Statistics.fold
-    def init = Stats()
+    def init = Stats.empty
 
     def last(stats: Stats) = {
       val action =

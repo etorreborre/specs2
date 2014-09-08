@@ -133,7 +133,7 @@ object Execution {
 
   /** get the execution statistics of a specification as a Decorated result */
   def getStatistics(env: Env, specClassName: String): Result =
-    AsResult(env.statisticsRepository.getStatisticsOr(specClassName, Stats()).map { s =>
+    AsResult(env.statisticsRepository.getStatisticsOr(specClassName, Stats.empty).map { s =>
       if (s.examples == 0) Pending(" ") // use a space to avoid PENDING to be appended after the spec name
       else                 DecoratedResult(s, s.result)
     })

@@ -53,7 +53,7 @@ trait Reporter {
       }
 
     def fold = Statistics.fold
-    def init = Stats()
+    def init = Stats.empty
 
     def last(stats: Stats) =
       if (neverStore) Task.now(())

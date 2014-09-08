@@ -20,7 +20,7 @@ import specification.create._
  *
  * If the specification is neither sequential or isolated, we force it to be isolated by default.
  */
-trait AllExpectations extends StoredExpectations with FragmentsFactory with SpecificationStructure with ArgumentsArgs {
+trait AllExpectations extends StoredExpectations with FragmentsFactory with SpecificationStructure with ArgumentsCreation {
   /**
    * @return a Result having its location as part of its message
    */
@@ -53,7 +53,7 @@ trait AllExpectations extends StoredExpectations with FragmentsFactory with Spec
     val parent = super.is
     val arguments = parent.arguments
     if (arguments.isolated || arguments.sequential) parent
-    else parent.copy(arguments = args(isolated = true))
+    else parent.copy(arguments = args(isolated = ArgProperty(true)))
   }
 }
 

@@ -7,6 +7,9 @@ import specification.core.mutable.SpecificationStructure
 
 /**
  * Syntax for building a mutable specifications based on command-line arguments
+ *
+ * The fragments should be declared as a result of the "def is(commandLine: CommandLine)" method
+ *
  */
 trait CommandLineArguments extends SpecificationStructure {
   def is(commandLine: CommandLine): Any

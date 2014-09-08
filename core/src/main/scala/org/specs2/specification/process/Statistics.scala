@@ -16,7 +16,7 @@ trait Statistics {
 
   def statsProcess: Process1[Fragment, Stats] =
     process1.reduceMap { fragment =>
-      fragment.execution.executedResult.map(Stats.apply).getOrElse(Stats())
+      fragment.execution.executedResult.map(Stats.apply).getOrElse(Stats.empty)
     }
 
   def fold = (fragment: Fragment, stats: Stats) =>
@@ -26,7 +26,7 @@ trait Statistics {
 
   def defaultStats(fragment: Fragment) =
     if (Fragment.isExample(fragment)) Stats(examples = 1)
-    else                              Stats()
+    else                              Stats.empty
 
   /**
    * load the previous statistics if necessary
