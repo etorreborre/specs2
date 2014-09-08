@@ -8,8 +8,8 @@ import reporter._
 import control.{Logger => _, _}
 import Actions._
 import control.Throwablex
-import Throwablex._
 import scalaz.\&/
+import scalaz.effect.IO
 import scalaz.std.anyVal._
 import scalaz.syntax.traverse._
 import scalaz.std.list._
@@ -37,7 +37,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
               val action = specificationRun(aTaskDef, loader, handler, loggers, isModule = f.isModule)
               action.execute(consoleLogging).unsafePerformIO.fold(
                 ok => ok,
-                e  => handleRunError(e, loggers, sbtEvents(taskDef, handler))
+                e  => handleRunError(e, loggers, sbtEvents(taskDef, handler), commandLineArguments)
               )
             }
             else ()
@@ -101,21 +101,12 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
   /**
    * Notify sbt of errors during the run
    */
-  private def handleRunError(e: String \&/ Throwable, loggers: Array[Logger], events: SbtEvents) {
+  private def handleRunError(e: String \&/ Throwable, loggers: Array[Logger], events: SbtEvents, arguments: Arguments) {
     val logger = SbtLineLogger(loggers)
 
-    def logThrowable(t: Throwable) {
-      logger.errorLine("\n"+t.toString+"\n")
-      t.chainedExceptions foreach { s => logger.errorLine("  caused by " + s.toString) }
+    def logThrowable(t: Throwable) =
+      Runner.logThrowable(t, arguments)(m => IO(logger.errorLine(m))).unsafePerformIO
 
-      logger.errorLine("\nSTACKTRACE")
-      t.getStackTrace.foreach(t => logger.errorLine("  " + t.toString))
-
-      t.chainedExceptions foreach { s =>
-        logger.errorLine("\n  CAUSED BY " + s.toString)
-        s.getStackTrace.foreach(t => logger.errorLine("  " + t.toString))
-      }
-    }
     e.fold(
       m =>      { events.error; logger.errorLine(m) },
       t =>      { events.error(t); if (t.getMessage != null) logger.errorLine(t.getMessage); logThrowable(t) },

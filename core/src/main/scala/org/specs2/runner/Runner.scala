@@ -21,8 +21,8 @@ object Runner {
       ok => IO(exitSystem(0, exit)),
       error => error.fold(
         consoleLogging,
-        t => logThrowable(t, arguments),
-        (m, t) => consoleLogging(m) >> logThrowable(t, arguments) >> IO(exitSystem(100, exit))
+        t => logThrowable(t, arguments)(consoleLogging),
+        (m, t) => consoleLogging(m) >> logThrowable(t, arguments)(consoleLogging) >> IO(exitSystem(100, exit))
       )
     ).unsafePerformIO
   }
@@ -30,16 +30,18 @@ object Runner {
   /**
    * Use the console logging to log exceptions
    */
-  def logThrowable(t: Throwable, arguments: Arguments): IO[Unit] = {
+  def logThrowable(t: Throwable, arguments: Arguments)(print: String => IO[Unit]): IO[Unit] = {
     if (!arguments.commandLine.boolOr("silent", false)) {
-      consoleLogging("\n"+t.toString+"\n")    >>
-      t.chainedExceptions.traverse_(s => consoleLogging("  caused by " + s.toString)) >>
-      consoleLogging("\nSTACKTRACE") >>
-      t.getStackTrace.toList.traverse_(t => consoleLogging("  "+t.toString)) >>
+      print("\n"+t.toString+"\n")    >>
+      t.chainedExceptions.traverse_(s => print("  caused by " + s.toString)) >>
+      print("\nSTACKTRACE") >>
+      t.getStackTrace.toList.traverse_(t => print("  "+t.toString)) >>
       t.chainedExceptions.traverse_ { s =>
-        consoleLogging("\n  CAUSED BY " + s.toString) >>
-          s.getStackTrace.toList.traverse_(t => consoleLogging("  "+t.toString))
-      }
+        print("\n  CAUSED BY " + s.toString) >>
+          s.getStackTrace.toList.traverse_(t => print("  "+t.toString))
+      } >>
+      print("\n\nThis looks like a specs2 exception...\nPlease report it with the preceding stacktrace at http://github.com/etorreborre/specs2/issues") >>
+      print(" ")
     } else IO(())
   }
 
