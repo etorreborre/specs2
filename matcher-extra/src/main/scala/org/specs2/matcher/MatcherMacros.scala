@@ -3,6 +3,7 @@ package matcher
 
 import reflect.MacroContext._
 import scala.annotation.StaticAnnotation
+
 /**
  * Macro definitions to generate matchers for the members of a type T
  */

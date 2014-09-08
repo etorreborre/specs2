@@ -17,6 +17,9 @@ import control.Throwablex
 import scalaz.stream.io
 import data.Fold
 
+/**
+ * The JUnitPrinter sends notifications to JUnit's RunNotifier
+ */
 trait JUnitPrinter extends Printer { outer =>
 
   /** the junit notifier to use */

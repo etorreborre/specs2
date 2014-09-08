@@ -14,6 +14,10 @@ import control.ExecutionOrigin
 import specification.core.{NoText, Fragment}
 import specification.create.DefaultFragmentFactory
 
+/**
+ * Create Description objects from the specification fragments
+ * and arrange them as a tree
+ */
 trait JUnitDescriptions extends ExecutionOrigin {
 
   def createDescription(spec: SpecStructure): Description =
@@ -71,7 +75,7 @@ trait JUnitDescriptions extends ExecutionOrigin {
 
     val description =
       if (testName.isEmpty) (if (suiteName.isEmpty) className else suiteName)
-      else (sanitize(testName)+"("+origin+")")
+      else sanitize(testName) + "(" + origin + ")"
 
     Description.createSuiteDescription(description)
   }

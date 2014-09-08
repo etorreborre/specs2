@@ -17,7 +17,7 @@ class HelloWorldScriptSpec extends script.Specification with Groups { def is = s
                                                                                  """
 
   "hello world" - new group {
-    eg := "Hello world" must have size(11)
+    eg := "Hello world" must haveSize(11)
     eg := "Hello world" must startWith("Hello")
     eg := "Hello world" must endWith("world")
   }

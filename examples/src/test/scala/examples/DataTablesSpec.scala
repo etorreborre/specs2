@@ -8,7 +8,7 @@ import matcher.DataTables
  */
 class DataTablesSpec extends Specification with DataTables { def is = s2"""
 
-  adding integers should just work in scala  $addition
+ Adding integers should just work in scala $addition
                                                                         """
   def addition =
 

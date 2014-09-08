@@ -8,6 +8,9 @@ import core.Fragment
 import form._
 import create._
 
+/**
+ * Dsl for creating Forms in a mutable specification
+ */
 trait FormDsl extends FragmentBuilder with FormFragmentFactory { outer =>
   def insert(aForm: =>Form): Fragment = addFragment(FormFragment(aForm))
   def insert(aForm: =>{ def form: Form })(implicit p: ImplicitParam): Fragment = insert(aForm.form)

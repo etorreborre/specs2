@@ -15,6 +15,9 @@ import Exceptions._
 import specification.core._
 import specification.process._
 
+/**
+ * The JUnitXmlPrinter creates an xml file with the specification execution results
+ */
 trait JUnitXmlPrinter extends Printer {
 
   def fold(env: Env, spec: SpecStructure): Fold[Fragment] = new Fold[Fragment] {

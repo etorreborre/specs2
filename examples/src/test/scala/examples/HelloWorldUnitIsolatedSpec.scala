@@ -13,14 +13,14 @@ class HelloWorldUnitIsolatedSpec extends mutable.Specification {
     var local = "Hello world"
     "can be modified" in {
       local = "Hello you"
-      local must have size (9)
+      local must haveSize(9)
     }
     "several times" in {
       local = "Hiya"
-      local must have size (4)
+      local must haveSize(4)
     }
     "or not" in {
-      local must have size (11)
+      local must haveSize(11)
     }
   }
 

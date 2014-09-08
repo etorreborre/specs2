@@ -15,7 +15,7 @@ class HelloWorldSpec extends Specification { def is = s2"""
    end with 'world'                                  $e3
                                                      """
 
-  def e1 = "Hello world" must have size 11
+  def e1 = "Hello world" must haveSize(11)
   def e2 = "Hello world" must startWith("Hello")
   def e3 = "Hello world" must endWith("world")
 

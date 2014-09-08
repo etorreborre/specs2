@@ -9,7 +9,7 @@ class JUnitTest extends JUnitMustMatchers {
 
   @Test
   def test1() {
-    "Hello world" must have size(11)
+    "Hello world" must haveSize(11)
   }
 
   @Test
@@ -28,5 +28,7 @@ class JUnitTest extends JUnitMustMatchers {
   }
 
   // custom matchers can be created by coercing a function T => (Boolean, String, String) to Matcher[T]
-  def endWithWorld: Matcher[String] = (s: String) => (s.endsWith("world"), s+" ends with world", s+" doesn't end with world")
+  def endWithWorld: Matcher[String] = { s: String =>
+    (s.endsWith("world"), s+" ends with world", s+" doesn't end with world")
+  }
 }

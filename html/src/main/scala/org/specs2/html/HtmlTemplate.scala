@@ -1,8 +1,6 @@
 package org.specs2
 package html
 
-import io.FilePath
-
 import scala.util.parsing.combinator._
 import control.{Actions, Action}
 import scalaz.std.anyVal._

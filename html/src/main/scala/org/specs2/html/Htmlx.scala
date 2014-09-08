@@ -16,19 +16,16 @@ import data.UniqueNames
 private[specs2]
 trait Htmlx { outer =>
 
-  implicit def extendHtmlNodeSeq(ns: NodeSeq) = ExtendedHtml(ns)
-  case class ExtendedHtml(ns: NodeSeq) {
+  implicit class HtmlOps(ns: NodeSeq) {
     def headers = outer.headers(ns)
     def headersTree = outer.headersToTree(ns.headers).toTree
   }
 
-  implicit def extendHtmlNode(n: Node) = ExtendedHtmlNode(n)
-  case class ExtendedHtmlNode(n: Node) {
+  implicit class HtmlNodeOps(n: Node) {
     def addHeadersAnchors = outer.headersAnchors.rewrite(n).headOption.getOrElse(NodeSeq.Empty)
   }
 
-  implicit def extendHtmlSeqNode(ns: Seq[Node]) = ExtendedHtmlSeqNode(ns)
-  case class ExtendedHtmlSeqNode(ns: Seq[Node]) {
+  implicit class HtmlSeqNodeOps(ns: Seq[Node]) {
     def updateHead(f: PartialFunction[Node, Node]) = outer.updateHead(ns)(f)
     def updateHeadAttribute(name: String, value: String): NodeSeq = outer.updateHeadAttribute(ns, name, value)
     def updateHeadAttribute(name: String, value: Int): NodeSeq = outer.updateHeadAttribute(ns, name, value)

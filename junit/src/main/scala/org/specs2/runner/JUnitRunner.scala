@@ -9,6 +9,9 @@ import specification.core._
 import control._
 import scalaz.std.anyVal._
 
+/**
+ * Runner for specs2 specifications
+ */
 class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterable { outer =>
 
   /** specification to execute */

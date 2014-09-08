@@ -9,50 +9,8 @@ import org.specs2.execute._
 
 /**
  * This specification shows various ways to setup contexts for examples.
- *
- * For more details @see org.specs2.guide.Structure
  */
 class DefineContextsSpec extends Specification {
-
-  /**
-   * This specification uses a context class extending the `Before` trait.
-   * It is also creating "fresh" variables for each example
-   */
-  class BeforeSpecification extends Specification { def is = s2"""
-
-    This is a list of examples
-      example1                                  ${clean().e1}
-      example2                                  ${clean().e2}
-                                                               """
-
-    case class clean() extends Before {
-      val aNewSystem = "a fresh value"
-      def before = println("clean up before each example")
-
-      def e1 = this { aNewSystem must_== "a fresh value" }
-      def e2 = this { aNewSystem must_== "a fresh value" }
-    }
-  }
-
-  /**
-   * This specification shows how to use the mutable.Before trait in a mutable specification
-   */
-  class BeforeMutableSpecification extends org.specs2.mutable.Specification {
-    "This is a list of examples" >> {
-      "example1" >> new clean {
-        aNewSystem must_== "a fresh value"
-      }
-      "example2" >> new clean {
-        aNewSystem must_== "a fresh value"
-      }
-    }
-
-    /** here we need a trait extending mutable.Before because the example body will be executed as a "delayed init"  section*/
-    trait clean extends org.specs2.mutable.Before {
-      lazy val aNewSystem = "a fresh value"
-      def before = println("clean up before each example")
-    }
-  }
 
   /**
    * This specification uses the `BeforeEach` trait to execute some code before each example
@@ -142,51 +100,11 @@ class DefineContextsSpec extends Specification {
     }
   }
 
-  /**
-   * This specification shows how to create an "Around" context which will time out every example
-   */
-  class TimeoutContextSpec extends org.specs2.mutable.Specification  {
-
-    "This example should pass" >> {
-      { Thread.sleep(50); 1 } must_== 1
-    }
-    //  "This example should timeout" >> {
-    //    def loop: Unit = loop;
-    //    { loop; 1 } must_== 1
-    //  }
-    //  "This example should fail" >> {
-    //    { Thread.sleep(50); 2 } must_== 1
-    //  }
-
-  }
-
-//  /**
-//   * This shows how to create a context which will timeout any example that takes too long to execute
-//   * It uses the `CommandLineArguments` trait to be able to set the timeout value from the command-line
-//   */
-//  trait ExamplesTimeout extends AroundExample with MustMatchers with TerminationMatchers {
-//
-////    lazy val commandLineTimeOut = arguments.commandLine.int("timeout").map(_.millis)
-//
-//    def timeout = //commandLineTimeOut.getOrElse(
-//      100.millis //)
-//
-//    def around[T : AsResult](t: =>T) = {
-//      lazy val result = t
-//      val termination = result must terminate[T](sleep = timeout).orSkip((ko: String) => "TIMEOUT: "+timeout)
-//      termination.toResult and AsResult(result)
-//    }
-//
-//  }
-
-
   def println(s: String) = s // change this definition to see messages in the console
 
   def is = sequential ^
-           new BeforeSpecification ^
-           new BeforeMutableSpecification ^
-           new BeforeEachMutableSpecification ^
-           new BeforeEachSpecification ^
-           new TimedExecutionSpecification ^
-           new TimedDescribedSpecification
+    new BeforeEachSpecification ^
+    new BeforeEachMutableSpecification ^
+    new TimedExecutionSpecification ^
+    new TimedDescribedSpecification
 }

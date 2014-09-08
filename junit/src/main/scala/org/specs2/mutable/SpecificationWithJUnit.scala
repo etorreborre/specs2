@@ -9,3 +9,6 @@ import runner._
  */
 @RunWith(classOf[JUnitRunner])
 abstract class SpecificationWithJUnit extends Specification
+
+@RunWith(classOf[JUnitRunner])
+abstract class SpecWithJUnit extends Spec

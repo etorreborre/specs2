@@ -4,6 +4,7 @@ package create
 
 import core._
 import form._
+
 /**
  * Allow to use forms inside interpolated strings starting with s2 in order to build the specification content
  */
