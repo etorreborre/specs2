@@ -2,9 +2,6 @@ package org.specs2
 package specification
 package process
 
-import java.util.concurrent.ExecutorService
-
-import control.Timeout
 import data.Processes
 
 import scalaz.stream._
@@ -14,7 +11,7 @@ import scalaz.{Success=>_, Failure=>_,_}, Scalaz._
 import specification.core._
 import time.SimpleTimer
 import scalaz.concurrent.Task
-import scala.concurrent.duration.Duration
+import scala.concurrent.duration.FiniteDuration
 import Processes._
 
 /**
@@ -100,11 +97,11 @@ trait DefaultExecutor extends Executor {
       lazy val executedFragment = executeFragment(env)(fragment)
       val executeNow = env.arguments.sequential || fragment.execution.mustJoin
 
-      val executingFragment = timedout(fragment, env.timeout) {
+      val executingFragment = timedout(fragment, env) {
         if (mustStop)             Task.now(fragment.skip)
         else if (executeNow)      Task.now(executedFragment)
         else                      start(executedFragment)(env.executorService)
-      }(env.executionEnv.timeOut.getOrElse(fragment.execution.timeout))
+      }(env.executionEnv.timeOut.orElse(fragment.execution.timeout))
 
       // if this fragment is a join point, start a new sequence
       // and check if the execution needs to be stopped in case of a step error
@@ -140,11 +137,15 @@ trait DefaultExecutor extends Executor {
   }
 
   /** use the scalaz implementation of Timer to timeout the task */
-  def timedout(fragment: Fragment, timer: Timeout)(task: Task[Fragment])(duration: Duration): Task[Fragment] = {
-    new Task(timer.withTimeout(task.get, duration.toMillis).map {
-      case -\/(t)  => \/-(fragment.setExecution(fragment.execution.setResult(Skipped("timeout after "+duration))))
-      case \/-(r)  => r
-    })
+  def timedout(fragment: Fragment, env: Env)(task: Task[Fragment])(duration: Option[FiniteDuration]): Task[Fragment] = {
+    duration match {
+      case None    => task
+      case Some(d) =>
+        new Task(env.timeout.withTimeout(task.get, d.toMillis).map {
+          case -\/(t)  => \/-(fragment.setExecution(fragment.execution.setResult(Skipped("timeout after "+duration))))
+          case \/-(r)  => r
+        })
+    }
   }
 }
 

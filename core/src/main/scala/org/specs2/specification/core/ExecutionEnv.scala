@@ -3,7 +3,7 @@ package specification
 package core
 
 import control._
-import scala.concurrent.duration.Duration
+import scala.concurrent.duration.FiniteDuration
 import java.util.concurrent._
 
 /**
@@ -12,7 +12,7 @@ import java.util.concurrent._
  * if withoutIsolation is true then fragments are executed right away because they are
  * already in their own copy of the specification
  */
-case class ExecutionEnv(timeOut:  Option[Duration] = None,
+case class ExecutionEnv(timeOut:  Option[FiniteDuration] = None,
                         withoutIsolation: Boolean  = false) {
 
   /**

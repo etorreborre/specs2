@@ -29,7 +29,7 @@ import control._
  */
 case class Execution(run:            Option[Env => Result],
                      executed:       Option[Result]                = None,
-                     timeout:        Duration                      = Duration.Inf,
+                     timeout:        Option[FiniteDuration]        = None,
                      mustJoin:       Boolean                       = false,
                      nextMustStopIf: Result => Boolean             = (r: Result) => false,
                      isolable:       Boolean                       = true,
