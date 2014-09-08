@@ -31,7 +31,7 @@ object Runner {
    * Use the console logging to log exceptions
    */
   def logThrowable(t: Throwable, arguments: Arguments): IO[Unit] = {
-    if (arguments.commandLine.boolOr("silent", false)) {
+    if (!arguments.commandLine.boolOr("silent", false)) {
       consoleLogging("\n"+t.toString+"\n")    >>
       t.chainedExceptions.traverse_(s => consoleLogging("  caused by " + s.toString)) >>
       consoleLogging("\nSTACKTRACE") >>

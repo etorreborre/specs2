@@ -58,10 +58,10 @@ trait HtmlPrinter extends Printer {
     val out = directoryOr("html.outdir", HtmlOptions.outDir).asAbsolute
     Actions.ok(HtmlOptions(
       outDir    = out,
-      baseDir   = directoryOr("html.basedir", HtmlOptions.baseDir),
-      template  = fileOr("html.template", HtmlOptions.template(out)),
-      variables = mapOr("html.variables", HtmlOptions.variables),
-      noStats   = boolOr("html.nostats", HtmlOptions.noStats)))
+      baseDir   = directoryOr("html.basedir",   HtmlOptions.baseDir),
+      template  = fileOr(     "html.template",  HtmlOptions.template(out)),
+      variables = mapOr(      "html.variables", HtmlOptions.variables),
+      noStats   = boolOr(     "html.nostats",   HtmlOptions.noStats)))
   }
 
 
