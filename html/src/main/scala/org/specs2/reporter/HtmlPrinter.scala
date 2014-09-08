@@ -127,8 +127,8 @@ trait HtmlPrinter extends Printer {
   case class HtmlOptions(outDir: DirectoryPath, baseDir: DirectoryPath, template: FilePath, variables: Map[String, String], noStats: Boolean)
 
   object HtmlOptions {
-    val outDir    = "target" / "specs2-reports"
-    val baseDir   = DirectoryPath.EMPTY
+    val outDir    = DirectoryPath.unsafe(new File("target/specs2-reports").getAbsoluteFile)
+    val baseDir   = DirectoryPath.unsafe(".")
     val variables = Map[String, String]()
     val noStats   = false
 
@@ -180,13 +180,14 @@ trait HtmlPrinter extends Printer {
     else Actions.ok(None)
   }
 
-  def copyResources(env: Env, outDir: DirectoryPath): Action[List[Unit]] =
+  def copyResources(env: Env, outDir: DirectoryPath): Action[List[Unit]] = {
     env.fileSystem.mkdirs(outDir) >>
-    List(DirectoryPath("css"),
-         DirectoryPath("javascript"),
-         DirectoryPath("images"),
-         DirectoryPath("templates")).
-      map(copySpecResourcesDir(env, "org" / "specs2" / "reporter", outDir, classOf[HtmlPrinter].getClassLoader)).sequenceU
+      List(DirectoryPath("css"),
+        DirectoryPath("javascript"),
+        DirectoryPath("images"),
+        DirectoryPath("templates")).
+        map(copySpecResourcesDir(env, "org" / "specs2" / "reporter", outDir, classOf[HtmlPrinter].getClassLoader)).sequenceU
+  }
 
 
   def makeBody(spec: SpecStructure, stats: Stats, options: HtmlOptions, arguments: Arguments, pandoc: Boolean): String = {
