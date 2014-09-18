@@ -234,7 +234,6 @@ case class ContainWithResult[T](check: ValueCheck[T], timesMin: Option[Times] = 
 
     failures.collect { case s: Skipped => MatchSkip(s.message, t) }.headOption.getOrElse {
       val (okMessage, koMessage) = messages(t.description, successes, failures)
-
       (timesMin, timesMax) match {
         case (None,             None)             => Matcher.result(successes.size == seq.size,                     okMessage, koMessage, t)
         case (Some(Times(min)), None)             => Matcher.result(successes.size >= min,                          okMessage, koMessage, t)
@@ -350,10 +349,22 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
 
     val r =
       (containsAtLeast, containsAtMost) match {
-        case (true,  false) => makeResult("at least", missingValues.isEmpty && (eachCheck && successes.size >= checks.size || !eachCheck && (seq.isEmpty || successes.size > 0)))
-        case (false, true)  => makeResult("at most", failedValues.isEmpty && (!eachCheck || successes.size <= checks.size))
-        case (true,  true)  => makeResult("exactly", successes.size == checks.size && checks.size == seq.size)
-        case (false, false) => makeResult("", successes.size <= checks.size && checks.size <= seq.size)
+        case (true,  false) =>
+          makeResult("at least",
+            missingValues.isEmpty &&
+              (eachCheck && successes.size >= checks.size ||
+               !eachCheck && (seq.isEmpty && successes.size == 0 ||
+                 checks.nonEmpty && successes.size > 0 ||
+                 checks.isEmpty && successes.isEmpty)))
+
+        case (false, true)  =>
+          makeResult("at most", failedValues.isEmpty && (!eachCheck || successes.size <= checks.size))
+
+        case (true,  true)  =>
+          makeResult("exactly", successes.size == checks.size && checks.size == seq.size)
+
+        case (false, false) =>
+          makeResult("", successes.size <= checks.size && checks.size <= seq.size)
       }
 
     if (negate) Matcher.result(!r.isSuccess, r.message, r.message, t)
