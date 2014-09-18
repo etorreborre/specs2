@@ -50,6 +50,8 @@ class TraversableMatchersSpec extends Spec with ResultMatchers with Grouped with
    // this must be understood as allOf(2, 3)
    ${ Seq(1, 2, 3) must contain(2, 3) }
    ${ Seq(1)       must contain(allOf(1, 1)) }
+   ${ Seq(1)       must contain(allOf(List[Int]():_*)) }
+   ${ Seq[Int]()   must contain(atMost(1)) }
    ${ (Seq(1)      must contain(eachOf(1, 1))) returns "List(1) is missing the value: 1" }
    ${ Seq(1, 2, 3) must contain(allOf(Seq(1, 2).map(be_>=(_)):_*))             }
    ${ Seq(1, 2, 3) must contain(allOf(Seq(1, 2).map(be_>=(_)):_*)).inOrder     }
