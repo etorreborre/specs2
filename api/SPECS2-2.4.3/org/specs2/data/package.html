@@ -1,0 +1,381 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>data - org.specs2.data</title>
+          <meta name="description" content="data - org.specs2.data" />
+          <meta name="keywords" content="data org.specs2.data" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'org.specs2.data.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../lib/package_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a></p>
+        <h1>data</h1> <span class="permalink">
+      <a href="../../../index.html#org.specs2.data.package" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">data</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="org.specs2.data.IncludeExcludeTag" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="IncludeExcludeTagextendsNamedTag"></a>
+      <a id="IncludeExcludeTag:IncludeExcludeTag"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="IncludeExcludeTag.html"><span class="name">IncludeExcludeTag</span></a><span class="result"> extends <a href="NamedTag.html" class="extype" name="org.specs2.data.NamedTag">NamedTag</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.data.package@IncludeExcludeTagextendsNamedTag" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.data.IncludedExcluded" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="IncludedExcluded[T]extendsAnyRef"></a>
+      <a id="IncludedExcluded[T]:IncludedExcluded[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="IncludedExcluded.html"><span class="name">IncludedExcluded</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.data.package@IncludedExcluded[T]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait provides a keep function which will determine if a element T must be kept with regards to:</p><div class="fullcomment"><div class="comment cmt"><p>This trait provides a keep function which will determine if a element T must be kept with regards to:</p><ul><li>a list of include tags</li><li>a list of exclude tags</li><li>a matchFunction which say if the element match a given tag</li></ul><p> The element is kept if it is included and not excluded</p><ul><li>it is included if the include list is empty or the element matches an including tag</li><li>it is excluded if the exclude list is not empty and the element matches an excluding tag</li></ul></div></div>
+    </li><li name="org.specs2.data.NamedTag" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NamedTagextendsAnyRef"></a>
+      <a id="NamedTag:NamedTag"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NamedTag.html"><span class="name">NamedTag</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.data.package@NamedTagextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.data.NoTuplesToSeq" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NoTuplesToSeqextendsTuplesToSeq"></a>
+      <a id="NoTuplesToSeq:NoTuplesToSeq"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NoTuplesToSeq.html"><span class="name">NoTuplesToSeq</span></a><span class="result"> extends <a href="TuplesToSeq.html" class="extype" name="org.specs2.data.TuplesToSeq">TuplesToSeq</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.data.package@NoTuplesToSeqextendsTuplesToSeq" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.data.SeparatedTags" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SeparatedTagsextendsIncludedExcluded[Seq[String]]withProductwithSerializable"></a>
+      <a id="SeparatedTags:SeparatedTags"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SeparatedTags.html"><span class="name">SeparatedTags</span></a><span class="params">(<span name="included">included: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="excluded">excluded: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="orSeparator">orSeparator: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;,&quot;</span></span>, <span name="andSeparator">andSeparator: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&amp;&amp;&quot;</span></span>)</span><span class="result"> extends <a href="IncludedExcluded.html" class="extype" name="org.specs2.data.IncludedExcluded">IncludedExcluded</a>[<span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.data.package@SeparatedTagsextendsIncludedExcluded[Seq[String]]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">specialization of the IncludedExcluded trait for string separated tags</p><div class="fullcomment"><div class="comment cmt"><p>specialization of the IncludedExcluded trait for string separated tags</p><p>2 tags t1, t2 separated by a &quot;,&quot; means that t1 OR t2 must be included (/excluded)
+2 tags t1, t2 separated by a &quot;&amp;&amp;&quot; means that t1 AND t2 must be included (/excluded)
+</p></div></div>
+    </li><li name="org.specs2.data.Sized" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Sized[T]extendsAnyRef"></a>
+      <a id="Sized[T]:Sized[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Sized.html"><span class="name">Sized</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.data.package@Sized[T]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">a trait for anything that can be sized</p>
+    </li><li name="org.specs2.data.Tag" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TagextendsIncludeExcludeTagwithProductwithSerializable"></a>
+      <a id="Tag:Tag"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Tag.html"><span class="name">Tag</span></a><span class="params">(<span name="names">names: <span class="extype" name="scala.Predef.String">String</span>*</span>)</span><span class="result"> extends <a href="IncludeExcludeTag.html" class="extype" name="org.specs2.data.IncludeExcludeTag">IncludeExcludeTag</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.data.package@TagextendsIncludeExcludeTagwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">tags the next element</p>
+    </li><li name="org.specs2.data.TaggedTypes" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="TaggedTypesextendsAnyRef"></a>
+      <a id="TaggedTypes:TaggedTypes"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="TaggedTypes.html"><span class="name">TaggedTypes</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.data.package@TaggedTypesextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.data.TuplesToSeq" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="TuplesToSeqextendsAnyRef"></a>
+      <a id="TuplesToSeq:TuplesToSeq"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="TuplesToSeq.html"><span class="name">TuplesToSeq</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.data.package@TuplesToSeqextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.data.UniqueNames" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="UniqueNamesextendsProductwithSerializable"></a>
+      <a id="UniqueNames:UniqueNames"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="UniqueNames.html"><span class="name">UniqueNames</span></a><span class="params">(<span name="separator">separator: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;_&quot;</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.data.package@UniqueNamesextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Stateful class to create unique names.</p><div class="fullcomment"><div class="comment cmt"><p>Stateful class to create unique names.</p><p>When the same name is asked for the second time, a unique int is attached to it
+</p></div></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="org.specs2.data.AlwaysTag" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AlwaysTag"></a>
+      <a id="AlwaysTag:AlwaysTag"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AlwaysTag$.html"><span class="name">AlwaysTag</span></a><span class="result"> extends <a href="NamedTag.html" class="extype" name="org.specs2.data.NamedTag">NamedTag</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.data.package@AlwaysTag" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.data.AlwaysWhenNoIncludeTag" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AlwaysWhenNoIncludeTag"></a>
+      <a id="AlwaysWhenNoIncludeTag:AlwaysWhenNoIncludeTag"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AlwaysWhenNoIncludeTag$.html"><span class="name">AlwaysWhenNoIncludeTag</span></a><span class="result"> extends <a href="NamedTag.html" class="extype" name="org.specs2.data.NamedTag">NamedTag</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.data.package@AlwaysWhenNoIncludeTag" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.data.HopcroftKarp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="HopcroftKarp"></a>
+      <a id="HopcroftKarp:HopcroftKarp"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="HopcroftKarp$.html"><span class="name">HopcroftKarp</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.data.package@HopcroftKarp" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Hopcroft-Karp (https://en.wikipedia.org/wiki/Hopcroft%E2%80%93Karp_algorithm) algorithm for
+finding the maximum matching in a bipartite graph
+</p>
+    </li><li name="org.specs2.data.NamedTag" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NamedTag"></a>
+      <a id="NamedTag:NamedTag"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NamedTag$.html"><span class="name">NamedTag</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.data.package@NamedTag" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.data.Reducerx" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Reducerx"></a>
+      <a id="Reducerx:Reducerx"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Reducerx$.html"><span class="name">Reducerx</span></a><span class="result"> extends <span class="extype" name="org.specs2.data.Reducerx">Reducerx</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.data.package@Reducerx" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.data.TuplesToSeq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TuplesToSeq"></a>
+      <a id="TuplesToSeq:TuplesToSeq"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="TuplesToSeq$.html"><span class="name">TuplesToSeq</span></a><span class="result"> extends <a href="TuplesToSeq.html" class="extype" name="org.specs2.data.TuplesToSeq">TuplesToSeq</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.data.package@TuplesToSeq" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
