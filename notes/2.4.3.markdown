@@ -1,0 +1,8 @@
+Maintenance version
+
+## Fixes 
+ 
+ * `Seq(1) must contain(allOf(List[Int]():_*))` must be successful
+
+==========================
+
