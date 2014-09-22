@@ -29,7 +29,7 @@ import ScoverageKeys._
 object build extends Build {
   type Settings = Def.Setting[_]
 
-  lazy val SCALAZ_VERSION = "7.1.0"
+  lazy val SCALAZ_VERSION = "7.0.6"
 
   /** MAIN PROJECT */
   lazy val specs2 = Project(
