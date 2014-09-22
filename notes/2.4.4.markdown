@@ -1,0 +1,8 @@
+Maintenance version
+
+## Fixes 
+ 
+ * Using the right `scalaz-stream` version depending on the Scalaz version
+
+==========================
+

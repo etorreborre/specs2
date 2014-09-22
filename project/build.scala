@@ -29,6 +29,8 @@ import ScoverageKeys._
 object build extends Build {
   type Settings = Def.Setting[_]
 
+  lazy val SCALAZ_VERSION = "7.1.0"
+
   /** MAIN PROJECT */
   lazy val specs2 = Project(
     id = "specs2",
@@ -47,7 +49,7 @@ object build extends Build {
     organization := "org.specs2",
     specs2Version in GlobalScope <<= version,
     specs2ShellPrompt,
-    scalazVersion := "7.1.0",
+    scalazVersion := SCALAZ_VERSION,
     scalaVersion := "2.11.2",
     crossScalaVersions := Seq("2.10.4", scalaVersion.value))
 
@@ -186,7 +188,8 @@ object build extends Build {
     settings = moduleSettings ++ Seq(
       name := "specs2-matcher-extra",
       libraryDependencies ++=
-        Seq("org.scalaz.stream" %% "scalaz-stream" % "0.5a") ++
+        (if (scalazVersion.value == "7.1.0") Seq("org.scalaz.stream" %% "scalaz-stream" % "0.5a")
+         else                                Seq("org.scalaz.stream" %% "scalaz-stream" % "0.5")) ++
         (if (scalaVersion.value.startsWith("2.11")) Nil else paradisePlugin)
     )
   ).dependsOn(analysis, matcher, core % "test->test")
@@ -250,6 +253,7 @@ object build extends Build {
   lazy val releaseSettings: Seq[Settings] =
     ReleasePlugin.releaseSettings ++ Seq(
     tagName <<= (version in ThisBuild) map (v => "SPECS2-" + v),
+    crossBuild := true,
     releaseProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
       inquireVersions,
