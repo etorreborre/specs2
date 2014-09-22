@@ -77,7 +77,8 @@ object build extends Build {
       Seq(sourceGenerators in Compile <+= buildInfo,
           buildInfoObject <<= name (n => n.replace("specs2-", "").replace("-", "").capitalize +"BuildInfo"),
           buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, "commit" -> commit, "datetime" -> datetime),
-          buildInfoPackage := "org.specs2")
+          buildInfoPackage := "org.specs2",
+          unmanagedSourceDirectories in Compile += (sourceDirectory in Compile).value / s"scala-scalaz-${scalazVersion.value}")
 
   def commit = Process(s"git log --pretty=format:%h -n 1").lines.head
 

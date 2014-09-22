@@ -3,8 +3,6 @@ package matcher
 
 import execute._
 import TaskMatchers._
-
-import scala.concurrent.duration._
 import scalaz.stream._
 import scalaz.concurrent._
 import matcher.ValueCheck._
@@ -15,35 +13,29 @@ import matcher.ValueCheck._
 trait ProcessMatchers extends Expectations {
 
   def returnValues[T](values: Seq[T]): ProcessMatcher[T] =
-    ProcessMatcher(typedValueCheck(values), None)
+    ProcessMatcher(typedValueCheck(values))
 
   def returnValues[T](values: ValueCheck[Seq[T]]): ProcessMatcher[T] =
-    ProcessMatcher(values, None)
+    ProcessMatcher(values)
 
   def returnLast[T](value: T): ProcessLastMatcher[T] =
     returnLast(typedValueCheck(value))
 
   def returnLast[T](check: ValueCheck[T]): ProcessLastMatcher[T] =
-    ProcessLastMatcher(toOptionCheck(check), None)
+    ProcessLastMatcher(toOptionCheck(check))
 
   def returnLastOption[T](value: Option[T]): ProcessLastMatcher[T] =
-    ProcessLastMatcher(typedValueCheck(value), None)
+    ProcessLastMatcher(typedValueCheck(value))
 
   def returnLastOption[T](check: ValueCheck[Option[T]]): ProcessLastMatcher[T] =
-    ProcessLastMatcher(check, None)
+    ProcessLastMatcher(check)
 
-  def terminateBefore[T](duration: Duration): ProcessMatcher[T] =
-    ProcessMatcher(ValueCheck.alwaysOk, Some(duration))
-
-  case class ProcessMatcher[T](check: ValueCheck[Seq[T]], duration: Option[Duration]) extends Matcher[Process[Task, T]] {
+  case class ProcessMatcher[T](check: ValueCheck[Seq[T]]) extends Matcher[Process[Task, T]] {
     def apply[S <: Process[Task, T]](e: Expectable[S]) = {
       val process = e.value
-      val r = attemptRun(check, duration).apply(createExpectable(process.runLog))
+      val r = attemptRun(check).apply(createExpectable(process.runLog))
       result(r, e)
     }
-
-    def before(d: Duration): ProcessMatcher[T] =
-      copy(duration = Some(d))
 
     def withValues(values: Seq[T]): ProcessMatcher[T] =
       withValues(ValueChecks.valueIsTypedValueCheck(values))
@@ -52,18 +44,14 @@ trait ProcessMatchers extends Expectations {
       copy(check = check)
 
     def withLast(check: ValueCheck[Option[T]]): ProcessLastMatcher[T] =
-      ProcessLastMatcher(check, duration)
+      ProcessLastMatcher(check)
   }
 
-  case class ProcessLastMatcher[T](check: ValueCheck[Option[T]], duration: Option[Duration]) extends Matcher[Process[Task, T]] {
+  case class ProcessLastMatcher[T](check: ValueCheck[Option[T]]) extends Matcher[Process[Task, T]] {
     def apply[S <: Process[Task, T]](e: Expectable[S]) = {
       val process = e.value
-      result(attemptRun(check, duration).apply(createExpectable(process.runLast)), e)
+      result(attemptRun(check).apply(createExpectable(process.runLast)), e)
     }
-
-    def before(d: Duration): ProcessLastMatcher[T] =
-      copy(duration = Some(d))
-
   }
 }
 

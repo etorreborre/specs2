@@ -16,4 +16,6 @@ addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.3.1")
 
 addSbtPlugin("org.scoverage" %% "sbt-scoverage" % "0.99.5.1")
 
+addSbtPlugin("com.orrsella" % "sbt-stats" % "1.0.5")
+
 resolvers += Resolver.sonatypeRepo("releases")

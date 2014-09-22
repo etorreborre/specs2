@@ -1,11 +1,11 @@
 package org.specs2
 package matcher
 
+import matcher.ValueChecks._
 import scala.concurrent.TimeoutException
 import scala.concurrent.duration.Duration
 import scalaz.concurrent.Task
 import text.NotNullStrings._
-import ValueChecks._
 
 /**
  * Matchers for scalaz.concurrent.Task
