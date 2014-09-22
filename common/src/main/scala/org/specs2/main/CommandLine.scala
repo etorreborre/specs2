@@ -1,6 +1,8 @@
 package org.specs2
 package main
 
+import java.io.File
+
 import io._
 import text.Split._
 
@@ -19,10 +21,10 @@ case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs {
   def map(name: String) = value(name).map(vs => Map(vs.split(",").map(v => (v.split("=")(0), v.split("=")(1))): _*))
   def mapOr(name: String, defaultValue: Map[String, String]) = map(name).getOrElse(defaultValue)
 
-  def directory(name: String) = value(name).map(DirectoryPath.unsafe)
+  def directory(name: String) = value(name).map(n => DirectoryPath.unsafe(new File(n).getAbsolutePath).asAbsolute)
   def directoryOr(name: String, defaultValue: DirectoryPath) = directory(name).getOrElse(defaultValue)
 
-  def file(name: String) = value(name).map(FilePath.unsafe)
+  def file(name: String) = value(name).map(n => FilePath.unsafe(new File(n).getAbsolutePath).asAbsolute)
   def fileOr(name: String, defaultValue: FilePath) = file(name).getOrElse(defaultValue)
 
   def int(name: String) = Arguments.int(name)(_arguments, SystemProperties)

@@ -7,7 +7,7 @@ import specification.core.Env
 import scalaz.std.anyVal._
 
 /** Representation of the Pandoc executable */
-case class Pandoc(executable: FilePath, inputFormat: String, outputFormat: String) {
+case class Pandoc(verbose: Boolean, executable: FilePath, inputFormat: String, outputFormat: String) {
   def isExecutableAvailable: Action[Unit] =
     Executable.run(executable, Seq("--version"))
 
@@ -38,6 +38,7 @@ object Pandoc {
 
     if (markdown) {
       val pandoc = Pandoc(
+        verbose      = boolOr("pandoc.verbose", false),
         executable   = fileOr("pandoc.exec", Pandoc.executable),
         inputFormat  = valueOr("pandoc.inputformat", Pandoc.inputFormat),
         outputFormat = valueOr("pandoc.outputformat", Pandoc.outputFormat))

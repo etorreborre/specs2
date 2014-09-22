@@ -71,7 +71,7 @@ trait HtmlPrinter extends Printer {
    */
   def getHtmlOptions(arguments: Arguments): Action[HtmlOptions] = {
     import arguments.commandLine._
-    val out = directoryOr("html.outdir", HtmlOptions.outDir).asAbsolute
+    val out = directoryOr("html.outdir", HtmlOptions.outDir)
     Actions.ok(HtmlOptions(
       outDir    = out,
       baseDir   = directoryOr("html.basedir",   HtmlOptions.baseDir),
