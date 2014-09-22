@@ -11,10 +11,11 @@ object depends {
 
   def reflect(scalaVersion: String)  = Seq("org.scala-lang" % "scala-reflect" % scalaVersion)
 
-  lazy val scalaz = Seq("org.scalaz"        %% "scalaz-core"      ,
-                        "org.scalaz"        %% "scalaz-concurrent").map(_ % "7.1.0") ++
-                    Seq("org.scalaz.stream" %% "scalaz-stream"    % "0.5a")
-
+  def scalaz(scalazVersion: String) =
+    Seq("org.scalaz"        %% "scalaz-core"      ,
+        "org.scalaz"        %% "scalaz-concurrent").map(_ % scalazVersion) ++
+      (if (scalazVersion == "7.1.0") Seq("org.scalaz.stream" %% "scalaz-stream" % "0.5a")
+       else                          Seq("org.scalaz.stream" %% "scalaz-stream" % "0.5"))
 
   lazy val scalacheck    = Seq("org.scalacheck" %% "scalacheck"   % "1.11.3")
   lazy val mockito       = Seq("org.mockito"    % "mockito-core"  % "1.9.5")

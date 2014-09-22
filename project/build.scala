@@ -47,6 +47,7 @@ object build extends Build {
     specs2Version in GlobalScope <<= version,
     specs2ShellPrompt,
     scalaVersion := "2.11.2",
+    scalazVersion := "7.1.0",
     crossScalaVersions := Seq("2.10.4", "2.11.2"))
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
@@ -88,7 +89,7 @@ object build extends Build {
   lazy val common = Project(id = "common", base = file("common"),
     settings = moduleSettings ++
       Seq(conflictWarning ~= { _.copy(failOnConflict = false) }, // lame
-          libraryDependencies ++= depends.scalaz ++ depends.reflect(scalaVersion.value) ++ depends.scalacheck.map(_ % "test") ++
+          libraryDependencies ++= depends.scalaz(scalazVersion.value) ++ depends.reflect(scalaVersion.value) ++ depends.scalacheck.map(_ % "test") ++
             depends.paradise(scalaVersion.value),
           name := "specs2-common")
   )
@@ -189,7 +190,9 @@ object build extends Build {
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
     maxErrors := 20,
     incOptions := incOptions.value.withNameHashing(true),
-    scalacOptions in GlobalScope ++= Seq("-Ywarn-unused-import", "-Xcheckinit", "-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_"),
+    scalacOptions in GlobalScope ++=
+      (if (scalaVersion.value == "2.11") Seq("-Ywarn-unused-import", "-Xcheckinit", "-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_")
+       else                              Seq("-Xcheckinit", "-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_")),
     scalacOptions in Test ++= Seq("-Yrangepos"),
     scalacOptions in (Compile, console) ++= Seq("-Yrangepos", "-feature", "-language:_"),
     scalacOptions in (Test, console) ++= Seq("-Yrangepos", "-feature", "-language:_")
@@ -213,6 +216,7 @@ object build extends Build {
   lazy val releaseSettings: Seq[Settings] =
     ReleasePlugin.releaseSettings ++ Seq(
     tagName <<= (version in ThisBuild) map (v => "SPECS2-" + v),
+    crossBuild := true,
     releaseProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
       inquireVersions,
