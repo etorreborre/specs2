@@ -32,7 +32,7 @@ You can use the following arguments to change the HTML generation:
  ----------------------- | -------------------------------------------- | ------------------------------
  `pandoc.exec`           | `pandoc`                                     | path to the Pandoc executable
  `pandoc.inputformat`    | `markdown+pipe_tables`                       | pandoc arguments (see the Pandoc [user guide](http://johnmacfarlane.net/pandoc/README.html))
- `pandoc.outputformat`   | `html`                                       | can be changed to pdf if necessary
+ `pandoc.outputformat`   | `html`                                       |
 
 ### Use a different template
 

@@ -43,7 +43,6 @@ Here is a list of all the existing `Printers` in $specs2 with links to the corre
  `junitxml` | $JUnitXmlOutput
  `html`     | $HtmlOutput
  `markdown` | $MarkdownOutput
- `pdf`      | $PdfOutput
  `notifier` | $CustomOutput
  `printer`  | $CustomOutput
 
@@ -68,7 +67,6 @@ With the `test-only` command arguments can be passed on the command line for sel
  * run specifications with ${"another build tool" ~/ OtherBuildTools}: maven, gradle
  * run specifications ${"without a build tool" ~/ RunInShell}
  * output ${"Markdown files" ~/ MarkdownOutput}
- * output ${"PDF files" ~/ PdfOutput}
  * use your ${"own reporting tool" ~/ CustomOutput} by implementing the `Notifier` interface (simple) or the `Printer` interface
                                                                                                                         """
 }
