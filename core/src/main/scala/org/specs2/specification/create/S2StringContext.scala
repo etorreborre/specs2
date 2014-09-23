@@ -7,14 +7,12 @@ import execute._
 import control.TraceLocation
 import specification.process._
 import specification.core._
-import text.Interpolated
+import text.{Trim, Interpolated}
+import Trim._
 import text.NotNullStrings._
 import text.Trim._
-import reflect.MacroContext._
-import reflect.Macros._
 import main.{CommandLine, Arguments}
 import scala.concurrent.ExecutionContext
-import scala.reflect.internal.util.Position
 
 /**
  * These implicit methods declare which kind of object can be interpolated in a s2 string;
@@ -32,7 +30,7 @@ trait S2StringContext extends S2StringContext1 { outer =>
   implicit def descriptionToFragmentsIsInterpolatedFragment(fragments: String => Fragments): InterpolatedFragment = new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) = {
       val (description, before) = descriptionAndBefore(text, start, end, expression)
-      fs append before append fragments(description.text)
+      fs append before append fragments(description.show)
     }
   }
 
@@ -153,7 +151,7 @@ trait S2StringContextCreation extends FragmentsFactory { outer =>
     val autoExample = texts.lastOption.exists(_.trim.isEmpty)
 
     val description =
-      if (autoExample) Description.code(expression)
+      if (autoExample) Description.code(expression.removeEnclosing("`"))
       else             Text(texts.lastOption.fold("")(_.trim))
 
     val before =

@@ -1,8 +1,7 @@
 package org.specs2
 package specification
 
-import org.specs2.Specification
-import org.specs2.matcher.MustMatchers
+import org.specs2.matcher.{ThrownExpectations, MustMatchers}
 import org.specs2.execute.{StandardResults, Function0Result, Success}
 import Function0Result._
 import org.specs2.main.Arguments
@@ -10,7 +9,7 @@ import org.specs2.specification.create._
 import org.specs2.specification.core._
 import org.specs2.specification.dsl.FragmentsDsl
 
-class S2StringContextSpec extends Spec { def is = s2"""
+class S2StringContextSpec extends Spec with ThrownExpectations { def is = s2"""
 
  Fragments can be interpolated from a s2 string
   a simple string as Text, aggregating it to the previous Text ${exs.e1}
@@ -20,6 +19,7 @@ class S2StringContextSpec extends Spec { def is = s2"""
   fragments                                                    ${exs.e5}
   fragments from a specification                               ${exs.e6}
   2 examples                                                   ${exs.e7}
+  a method call                                                ${exs.e8}
   """
 
 }
@@ -31,7 +31,11 @@ object exs extends MustMatchers with StandardResults with S2StringContext {
 
   def e2 = s2"""this is ${text("some text")}""".fragments must haveSize(2)
 
-  def e3 = s2"""this is $ok""".fragments must haveSize(1)
+  def e3 = {
+    val fragments = s2"""this is $ok""".fragments
+    fragments must haveSize(1)
+    fragments.head.description.show must_== "`ok`"
+  }
 
   def e4 = s2"""this is ${new Function0Result(() => Success())}""".fragments must haveSize(1)
 
@@ -43,6 +47,14 @@ object exs extends MustMatchers with StandardResults with S2StringContext {
   this should
     create example 1 $ok
     create example 2 $ok""".fragments must haveSize(4)
+
+  def e8 = {
+    val fragments = s2""" ${`a method call`}""".fragments
+    fragments must haveSize(1)
+    fragments.head.description.show must_== "a method call"
+  }
+
+  def `a method call` = ok
 
   val spec = new SpecificationStructure { outer =>
     def is = SpecStructure.create(SpecHeader(outer.getClass), Arguments(), Fragments(text("the"), text(" world")))

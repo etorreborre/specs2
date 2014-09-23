@@ -24,6 +24,15 @@ case class Text(text: String) extends Description {
   override def stripMargin(margin: Char) = copy(text.stripMargin(margin))
 }
 
+case class Code(text: String) extends Description {
+  def show: String =
+    if (text.contains("\n")) "```\n"+text+"\n```"
+    else                     s"`$text`"
+
+  override def matches(s: String) = text matches s
+  override def stripMargin(margin: Char) = copy(text.stripMargin(margin))
+}
+
 /**
  * NoText description, used when creating steps and actions which are not described
  */
@@ -95,9 +104,7 @@ case class Marker(tag: NamedTag, isSection: Boolean = false, appliesToNext: Bool
 object Description {
 
   def text(text: String) = Text(text)
-  def code(text: String) =
-    if (text.contains("\n")) Text("```\n"+text+"\n```")
-    else                     Text(s"`$text`")
+  def code(text: String) = Code(text)
 
   def tag(ts: String*)       = mark(Tag(ts:_*))
   def taggedAs(ts: String*)  = markAs(Tag(ts:_*))

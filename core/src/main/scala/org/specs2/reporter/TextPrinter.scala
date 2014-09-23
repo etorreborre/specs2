@@ -93,11 +93,21 @@ trait TextPrinter extends Printer {
         case Fragment(Text(t), e, l) if e.isExecutable =>
           printRunnable(t, e, args, indentation)
 
+        case Fragment(Code(t), e, l) if e.isExecutable =>
+          printRunnable(t, e, args, indentation)
+
+        case Fragment(Code(text), e, l) if e.isExecutable && !e.result.isSuccess =>
+          printRunnable(text, e, args, indentation)
+
         case Fragment(d, e, l) if e.isExecutable && !e.result.isSuccess =>
           printRunnable(d.show, e, args, indentation)
 
         case Fragment(Br, e, l) =>
           if (args.canShow("-")) emit(" \n").info
+          else emitNone
+
+        case Fragment(Code(text), e, l) =>
+          if (args.canShow("-")) emit(indentText(text, indentation, indentationSize)).info
           else emitNone
 
         case Fragment(d, e, l) =>

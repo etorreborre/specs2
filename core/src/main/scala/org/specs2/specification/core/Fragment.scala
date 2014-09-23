@@ -63,12 +63,14 @@ object Fragment {
 
   def isText(f: Fragment) = (f.description match {
     case t: Text => true
-    case _          => false
+    case t: Code => true
+    case _       => false
   }) && !f.isExecutable
 
   def isExample(f: Fragment) = (f.description match {
     case t: Text => true
-    case _          => false
+    case t: Code => true
+    case _       => false
   }) && f.isExecutable
 
   def isStepOrAction(f: Fragment) =

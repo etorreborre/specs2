@@ -3,7 +3,7 @@ package reporter
 
 import io.{FilePath, DirectoryPath}
 import main.Arguments
-import specification.core.{FormDescription, SpecificationLink, Fragment, SpecStructure}
+import org.specs2.specification.core._
 import specification.process.Stats
 import execute._
 import text.NotNullStrings._
@@ -98,7 +98,11 @@ trait HtmlBodyPrinter {
   def id(a: Any) = System.identityHashCode(a).toString
 
   def show(f: Fragment) =
-    f.description.show
+    f.description match {
+      case Code(text) => <code>{text}</code>
+      case other      => <text>{f.description.show}</text>
+    }
+
 
   def showStacktrace(id: String, st: List[StackTraceElement], klass: String, arguments: Arguments) =
     <stacktrace id={id} style="display:none" class={klass}>
