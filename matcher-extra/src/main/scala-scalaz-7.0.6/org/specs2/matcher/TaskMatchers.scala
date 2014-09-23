@@ -1,0 +1,42 @@
+package org.specs2
+package matcher
+
+import ValueChecks._
+import scalaz.concurrent.Task
+import text.NotNullStrings._
+
+/**
+ * Matchers for scalaz.concurrent.Task
+ */
+trait TaskMatchers {
+
+  def returnValue[T](t: T): TaskMatcher[T] =
+    returnValue(valueIsTypedValueCheck(t))
+
+  def returnValue[T](check: ValueCheck[T]): TaskMatcher[T] =
+    attemptRun(check)
+
+  private[specs2] def attemptRun[T](check: ValueCheck[T]): TaskMatcher[T] =
+    TaskMatcher(check)
+
+  case class TaskMatcher[T](check: ValueCheck[T]) extends Matcher[Task[T]] {
+    def apply[S <: Task[T]](e: Expectable[S]) =
+      e.value.attemptRun.fold(failedAttempt(e), checkResult(e))
+
+    def withValue(check: ValueCheck[T]): TaskMatcher[T] =
+      TaskMatcher(check)
+
+    def withValue(t: T): TaskMatcher[T] =
+      withValue(valueIsTypedValueCheck(t))
+
+    private def failedAttempt[S <: Task[T]](e: Expectable[S])(t: Throwable): MatchResult[S] = {
+      val message = "an exception was thrown "+t.getMessage.notNull
+      result(false, message, message, e)
+    }
+
+    private def checkResult[S <: Task[T]](e: Expectable[S])(t: T): MatchResult[S] =
+      result(check.check(t), e)
+  }
+}
+
+object TaskMatchers extends TaskMatchers

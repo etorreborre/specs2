@@ -2,8 +2,6 @@ package org.specs2
 package specification
 package dsl
 
-import main.Arguments
-import execute.AsResult
 import core._
 import create._
 import scalaz.syntax.std.vector._
@@ -12,6 +10,7 @@ import scalaz.syntax.std.vector._
  * Creation of Fragments with the ^ syntax
  */
 trait FragmentsDsl extends FragmentsFactory with AcceptanceDsl1 { outer =>
+
   implicit def fragmentToFragments(f: Fragment): Fragments =
     Fragments(f)
 

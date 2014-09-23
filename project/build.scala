@@ -69,8 +69,8 @@ object build extends Build {
 
   def datetime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss Z").format(new Date)
 
-  lazy val moduleSettings: Seq[Settings] = 
-      defaultSettings      ++
+  lazy val moduleSettings: Seq[Settings] =
+      coreDefaultSettings  ++
       buildSettings        ++
       specs2Settings       ++
       resolversSettings    ++
@@ -89,8 +89,11 @@ object build extends Build {
   lazy val common = Project(id = "common", base = file("common"),
     settings = moduleSettings ++
       Seq(conflictWarning ~= { _.copy(failOnConflict = false) }, // lame
-          libraryDependencies ++= depends.scalaz(scalazVersion.value) ++ depends.reflect(scalaVersion.value) ++ depends.scalacheck.map(_ % "test") ++
-            depends.paradise(scalaVersion.value),
+          libraryDependencies ++=
+            depends.scalaz(scalazVersion.value) ++
+            depends.reflect(scalaVersion.value) ++
+            depends.paradise(scalaVersion.value) ++
+            depends.scalacheck.map(_ % "test"),
           name := "specs2-common")
   )
 
@@ -98,6 +101,8 @@ object build extends Build {
     settings = Seq(
       libraryDependencies ++=
         depends.shapeless(scalaVersion.value) ++
+        depends.reflect(scalaVersion.value) ++
+        depends.paradise(scalaVersion.value) ++
         depends.testInterface.map(_ % "optional") ++
         depends.mockito.map(_ % "test") ++
         depends.junit.map(_ % "test")) ++
@@ -186,7 +191,9 @@ object build extends Build {
 
   lazy val compilationSettings: Seq[Settings] = Seq(
     // https://gist.github.com/djspiewak/976cd8ac65e20e136f05
-    unmanagedSourceDirectories in Compile += (sourceDirectory in Compile).value / s"scala-${scalaBinaryVersion.value}",
+    unmanagedSourceDirectories in Compile ++=
+      Seq((sourceDirectory in Compile).value / s"scala-${scalaBinaryVersion.value}",
+          (sourceDirectory in Compile).value / s"scala-scalaz-${scalazVersion.value}"),
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
     maxErrors := 20,
     incOptions := incOptions.value.withNameHashing(true),

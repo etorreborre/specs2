@@ -27,3 +27,6 @@ trait AcceptanceDsl1 extends
   with LinkCreation 
   with TagDsl
   with ActionDsl
+
+private[specs2]
+object AcceptanceDsl1 extends AcceptanceDsl1

@@ -76,7 +76,7 @@ class EffectBlocks {
     blocksTree = blocksTree.getParent
   }
 
-  def isAt(path: Option[EffectPath]) = path.contains(effectPath)
+  def isAt(path: Option[EffectPath]) = path.toList.contains(effectPath)
 
   def nestBlock(block: =>Any) = {
     startBlock()

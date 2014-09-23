@@ -10,21 +10,16 @@ import create.FragmentsFactory
 /**
  * Creation of SpecStructure with the ^ syntax
  */
-trait SpecStructureDsl extends SpecStructureDsl1 { outer =>
+trait SpecStructureDsl extends SpecStructureDsl1 with SpecStructureDslLowImplicits { outer =>
 
   implicit class appendSpecStructureToString(s: String) {
     def ^(s: SpecificationStructure): SpecStructure = ^(s.is)
     def ^(structure: SpecStructure) : SpecStructure = structure.map(_.prepend(fragmentFactory.text(s)))
   }
 
-  implicit class appendSpecStructureToFragment(f: Fragment) {
+  implicit class appendSpecStructureToFragment(f: =>Fragment) {
     def ^(s: SpecificationStructure): SpecStructure = ^(s.is)
     def ^(structure: SpecStructure) : SpecStructure  = structure.map(_.prepend(f))
-  }
-
-  implicit class appendSpecStructureToFragments(fs: Fragments) {
-    def ^(s: SpecificationStructure): SpecStructure = ^(s.is)
-    def ^(structure: SpecStructure) : SpecStructure = structure.map(_.prepend(fs))
   }
 
   implicit class appendSpecStructureToSpecHeader(header: SpecHeader) {
@@ -55,10 +50,6 @@ trait SpecStructureDsl extends SpecStructureDsl1 { outer =>
   implicit def stringAsSpecStructure(s: String): SpecStructure =
     SpecHeader(getClass) ^ s
 
-  // allow writing: def is = ok
-  implicit def resultAsSpecStructure[R : AsResult](r: =>R): SpecStructure =
-    SpecHeader(getClass) ^ Fragment(NoText, Execution.result(r))
-
   // allow writing: def is = "test" ! ok
   implicit def fragmentAsSpecStructure(f: Fragment): SpecStructure =
     SpecHeader(getClass) ^ f
@@ -66,6 +57,18 @@ trait SpecStructureDsl extends SpecStructureDsl1 { outer =>
   implicit def specStructureAsFragments(spec: SpecStructure): Fragments =
     spec.fragments
 
+}
+
+private[specs2]
+trait SpecStructureDslLowImplicits {
+  // allow writing: def is = ok
+  implicit def resultAsSpecStructure[R : AsResult](r: =>R): SpecStructure =
+    SpecStructure.create(SpecHeader(getClass), Arguments(), Fragments(Fragment(NoText, Execution.result(r))))
+
+  implicit class appendSpecStructureToFragments(fs: =>Fragments) {
+    def ^(s: SpecificationStructure): SpecStructure = ^(s.is)
+    def ^(structure: SpecStructure) : SpecStructure = structure.map(_.prepend(fs))
+  }
 }
 
 private[specs2]

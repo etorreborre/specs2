@@ -9,7 +9,7 @@ object depends {
 
   def compiler(scalaVersion: String) = Seq("org.scala-lang" % "scala-compiler" % scalaVersion)
 
-  def reflect(scalaVersion: String)  = Seq("org.scala-lang" % "scala-reflect" % scalaVersion)
+  def reflect(scalaVersion: String) = Seq("org.scala-lang" % "scala-reflect" % scalaVersion)
 
   def scalaz(scalazVersion: String) =
     Seq("org.scalaz"        %% "scalaz-core"      ,
