@@ -25,7 +25,7 @@ package object control {
 
   /** log a value, using the logger coming from the Reader environment */
   def log[R](r: R): Action[Unit] =
-    Actions.ask.flatMap(logger => logger(r.toString).liftIO[Action])
+    Actions.ask.flatMap(logger => Actions.fromIO(logger(r.toString)))
 
   /** log a Throwable with its stacktrace and cause, using the logger coming from the Reader environment */
   def logThrowable(t: Throwable, verbose: Boolean): Action[Unit] =

@@ -2,11 +2,10 @@ package org.specs2
 package control
 
 import scala.util.control.NonFatal
-import scalaz.{\/, \&/, Equal, Monad}, \&/._, \/._
+import scalaz.{\/, \&/, Equal, Monad, \/-, -\/}, \&/._, \/._
 import scalaz.std.option._
 import scalaz.std.AllInstances._
 import scalaz.syntax.std.option._
-import scalaz.syntax.either._
 
 /**
  * A data type for holding statuses. This is effectively just an
@@ -72,7 +71,7 @@ sealed trait Status[+A] {
     !isOk
 
   def toDisjunction: These[String, Throwable] \/ A =
-    fold(_.right, _.left)
+    fold(\/-(_), -\/(_))
 
   def toOption: Option[A] =
     fold(_.some, _ => none[A])
