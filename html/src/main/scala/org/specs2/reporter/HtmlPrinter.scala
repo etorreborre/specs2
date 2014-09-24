@@ -7,17 +7,17 @@ import specification.process.{Stats, Statistics}
 import io._
 import main.Arguments
 import scalaz.concurrent.Task
-import scalaz.syntax.bind._
 import control._
 import java.util.regex.Pattern._
 import java.net.{JarURLConnection, URL}
 import scalaz.std.list._
 import scalaz.std.anyVal._
 import scalaz.syntax.traverse._
-import scalaz.syntax.bind._
+import scalaz.syntax.bind.ToBindOps
 import html.HtmlTemplate
 import HtmlBodyPrinter._
 import Pandoc._
+import ActionT._
 
 /**
  * Printer for html files
@@ -147,14 +147,15 @@ trait HtmlPrinter extends Printer {
   def outputFilePath(directory: DirectoryPath, spec: SpecStructure): FilePath =
     directory | FileName.unsafe(spec.specClassName+".html")
 
-  def copyResources(env: Env, outDir: DirectoryPath): Action[List[Unit]] = {
-    env.fileSystem.mkdirs(outDir) >>
+  def copyResources(env: Env, outDir: DirectoryPath): Action[List[Unit]] =
+    env.fileSystem.mkdirs(outDir) >> {
       List(DirectoryPath("css"),
         DirectoryPath("javascript"),
         DirectoryPath("images"),
         DirectoryPath("templates")).
-        map(copySpecResourcesDir(env, "org" / "specs2" / "reporter", outDir, classOf[HtmlPrinter].getClassLoader)).sequenceU
-  }
+        map(copySpecResourcesDir(env, "org" / "specs2" / "reporter", outDir, classOf[HtmlPrinter].getClassLoader)).sequenceU |||
+        Actions.fail("Cannot copy resources to "+outDir.path)
+    }
 
   def copySpecResourcesDir(env: Env, base: DirectoryPath, outputDir: DirectoryPath, loader: ClassLoader)(src: DirectoryPath): Action[Unit] = {
     Option(loader.getResource((base / src).path)) match {
