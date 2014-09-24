@@ -133,9 +133,10 @@ case class Path(p: String) {
   def path = this
   def getPath(): String = p
 }
+
 private[specs2]
-trait FileBeHaveMatchers extends BeHaveMatchers { this: FileBaseMatchers =>
-  /** 
+trait FileBeHaveMatchers extends BeHaveMatchers { outer: FileBaseMatchers =>
+  /**
    * matcher aliases and implicits to use with BeVerb and HaveVerb 
    */
   implicit def toFileResultMatcher[T <: { def getPath(): String }](result: MatchResult[T]) = new FileResultMatcher(result)
@@ -145,6 +146,7 @@ trait FileBeHaveMatchers extends BeHaveMatchers { this: FileBaseMatchers =>
     def writable = result(beWritable)
     def absolute = result(beAbsolute)
     def aFile = result(beAFile)
+    def exist = result(outer.exist)
     def aDirectory = result(beADirectory)
     def name(name: String) = result(haveName(name))
     def paths(list: String) = result(haveList(list))

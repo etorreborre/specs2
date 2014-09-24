@@ -64,8 +64,9 @@ class FileMatchersSpec extends Spec with TestFiles with FileMatchers {  def is =
 
  The FileMatchers trait provides similar matchers, but for files
    exist checks if a file exists                                                                         ${fs().e8}
-   beReadable checks if a file is readable                                                               ${fs().e9}
-   beWritable checks if a file is writable                                                               ${fs().e10}
+   exist checks if a file doesn't exist                                                                  ${fs().e9}
+   beReadable checks if a file is readable                                                               ${fs().e10}
+   beWritable checks if a file is writable                                                               ${fs().e11}
 
    beAbsolute checks if a file is absolute
    ${ file("/tmp") must beAbsolute }
@@ -91,7 +92,7 @@ class FileMatchersSpec extends Spec with TestFiles with FileMatchers {  def is =
    haveParent checks if a file has a given parent path
    ${ file("c:/tmp/dir/test.txt") must haveParent("c:/tmp/dir") }
 
-   haveList checks if a file has a given list of children ${fs().e11}
+   haveList checks if a file has a given list of children ${fs().e12}
                                                                                                                         """
 
 }
@@ -105,9 +106,10 @@ case class fs() extends MustMatchers with TestFiles with FileMatchers with Stand
   def e6 = setWritable(okPath, false) must not be aWritablePath
   def e7 = dirPath must listPaths("file.txt")
   def e8 = file(okPath) must exist
-  def e9 =  file(setReadable(okPath, true)) must beReadable
-  def e10 = file(setWritable(okPath, true)) must beWritable
-  def e11 = file(dirPath) must haveList("file.txt")
+  def e9 = file(missingPath) must not exist
+  def e10 =  file(setReadable(okPath, true)) must beReadable
+  def e11 = file(setWritable(okPath, true)) must beWritable
+  def e12 = file(dirPath) must haveList("file.txt")
 
 }
 
