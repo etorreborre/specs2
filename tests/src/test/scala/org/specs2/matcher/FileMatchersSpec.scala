@@ -63,8 +63,9 @@ class FileMatchersSpec extends Specification with TestFiles with FileMatchers {
 
  The FileMatchers trait provides similar matchers, but for files
    exist checks if a file exists                                                                         ${fs().e8}
-   beReadable checks if a file is readable                                                               ${fs().e9}
-   beWritable checks if a file is writable                                                               ${fs().e10}
+   not exist checks if a file does not exist                                                             ${fs().e9}
+   beReadable checks if a file is readable                                                               ${fs().e10}
+   beWritable checks if a file is writable                                                               ${fs().e11}
 
    beAbsolute checks if a file is absolute
    ${ file("/tmp") must beAbsolute }
@@ -90,7 +91,7 @@ class FileMatchersSpec extends Specification with TestFiles with FileMatchers {
    haveParent checks if a file has a given parent path
    ${ file("c:/tmp/dir/test.txt") must haveParent("c:/tmp/dir") }
 
-   haveList checks if a file has a given list of children                                                ${fs().e11}
+   haveList checks if a file has a given list of children                                                ${fs().e12}
                                                                                                                         """
 }
 
@@ -108,9 +109,10 @@ case class fs() extends MustMatchers with TestFiles with FileMatchers {
   def e7 = { addChild("c:/t/", "c:/t/test.txt")
              "c:/t/" must listPaths("c:/t/test.txt") }
   def e8 = file(okPath) must exist
-  def e9 = file(setReadable(okPath)) must beReadable
-  def e10 = file(setWritable(okPath)) must beWritable
-  def e11 = { addChild("c:/t", "c:/t/tst.txt")
+  def e9 = file(missingPath) must not exist
+  def e10 = file(setReadable(okPath)) must beReadable
+  def e11 = file(setWritable(okPath)) must beWritable
+  def e12 = { addChild("c:/t", "c:/t/tst.txt")
               file("c:/t/") must haveList("c:/t/tst.txt") }
 }
 

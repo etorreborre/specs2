@@ -134,7 +134,7 @@ case class Path(p: String) {
   def getPath(): String = p
 }
 private[specs2]
-trait FileBeHaveMatchers { this: FileBaseMatchers =>
+trait FileBeHaveMatchers { outer: FileBaseMatchers =>
   /** 
    * matcher aliases and implicits to use with BeVerb and HaveVerb 
    */
@@ -145,6 +145,7 @@ trait FileBeHaveMatchers { this: FileBaseMatchers =>
     def writable = result(beWritable)
     def absolute = result(beAbsolute)
     def aFile = result(beAFile)
+    def exist = result(outer.exist)
     def aDirectory = result(beADirectory)
     def name(name: String) = result(haveName(name))
     def paths(list: String) = result(haveList(list))
