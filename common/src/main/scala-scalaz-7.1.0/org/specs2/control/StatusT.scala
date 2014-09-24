@@ -42,11 +42,11 @@ case class StatusT[F[_], A](run: F[Status[A]]) {
     toOption.map(_.getOrElse(otherwise))
 
   def |||(otherwise: => StatusT[F, A])(implicit F: Monad[F]): StatusT[F, A] =
-    StatusT[F, A](isOk.flatMap(ok => if (ok) this.run else otherwise.run))
+    StatusT[F, A](run.flatMap(status => if (status.isOk) F.point(status) else otherwise.run))
 
   def andFinally(otherwise: =>StatusT[F, Unit])(implicit F: Monad[F]): StatusT[F, A] = {
     StatusT[F, A](run.flatMap { r =>
-      try otherwise.run.map(_ => r)
+      try otherwise.run.as(r)
       catch { case t: Throwable => StatusT.exception[F, A](t).run }
     })
   }

@@ -160,7 +160,7 @@ trait ActionTSupport[F[_], W, R] {
   def checkThat[A](a: =>A, condition: Boolean, failureMessage: String)(implicit M: Monad[F], W: Monoid[W]): ActionT[F, W, R, A] =
     safe(a).flatMap { value =>
       if (condition) safe(value)
-      else                  fail(failureMessage)
+      else           fail(failureMessage)
     }
 
   def empty(implicit M: Monad[F], W: Monoid[W]): ActionT[F, W, R, Unit] =
