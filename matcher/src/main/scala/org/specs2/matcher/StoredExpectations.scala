@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import execute.Result
+import execute._
 
 /**
  * This trait evaluates expectations and stores them in a local variable for further usage
@@ -9,12 +9,13 @@ import execute.Result
 trait StoredExpectations extends Expectations {
   private[specs2] lazy val results = new scala.collection.mutable.ListBuffer[Result]
 
-  override protected def checkResultFailure(r: Result): Result = {
-    results.append(r)
-    r
+  override protected def checkResultFailure(r: =>Result): Result = {
+    results.append(AsResult(r))
+    Success()
   }
+
   override protected def checkMatchResultFailure[T](m: MatchResult[T]): MatchResult[T] = {
-    checkResultFailure(m.toResult)
+    checkResultFailure(AsResult(m))
     m
   }
 

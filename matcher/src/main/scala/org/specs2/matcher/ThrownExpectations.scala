@@ -58,7 +58,7 @@ trait ThrownExpectationsCreation extends ExpectationsCreation with StandardResul
       }
     }
 
-  override protected def checkResultFailure(r: Result) = {
+  override protected def checkResultFailure(r: =>Result) = {
     r match {
       case f @ Failure(_,_,_,_)      => throw new FailureException(f)
       case s @ Skipped(_,_)          => throw new SkipException(s)
@@ -80,25 +80,26 @@ trait ThrownExpectationsCreation extends ExpectationsCreation with StandardResul
     m
   }
 
-  override def failure: Failure = throw new FailureException(super.failure)
-  override def todo: Pending = throw new PendingException(super.todo)
-  override def anError: Error = throw new ErrorException(super.anError)
+  override def failure: Failure = { checkResultFailure(throw new FailureException(super.failure)); super.failure }
+  override def todo: Pending    = { checkResultFailure(throw new PendingException(super.todo));    super.todo }
+  override def anError: Error   = { checkResultFailure(throw new ErrorException(super.anError));   super.anError }
 
   override lazy val success = Success("success")
-  protected def success(m: String): Success = Success(m)
-  protected def failure(m: String): Failure = failure(Failure(m))
-  protected def failure(f: Failure): Failure = throw new FailureException(f)
+  protected def success(m: String): Success  = { checkResultFailure(Success(m)); Success(m) }
+  protected def failure(m: String): Failure  = failure(Failure(m))
+  protected def failure(f: Failure): Failure = { checkResultFailure(throw new FailureException(f)); f }
 
   override def pending: Pending = pending("PENDING")
-  override def pending(m: String): Pending = pending(Pending(m))
-  protected def pending(s: Pending): Pending = throw new PendingException(s)
+  override def pending(m: String): Pending   = pending(Pending(m))
+  protected def pending(p: Pending): Pending = { checkResultFailure(throw new PendingException(p)); p }
 
   override def skipped: Skipped = skipped("skipped")
-  override def skipped(m: String): Skipped = skipped(Skipped(m))
-  protected def skipped(s: Skipped): Skipped = throw new SkipException(s)
+  override def skipped(m: String): Skipped   = skipped(Skipped(m))
+  protected def skipped(s: Skipped): Skipped = { checkResultFailure(throw new SkipException(s)); s }
 
 
-  override lazy val ko: MatchFailure[None.type] = throw new MatchFailureException(MatchFailure("ok", "ko", createExpectable(None)))
+  override lazy val ko: MatchResult[Any] =
+    checkMatchResultFailure(throw new MatchFailureException(MatchFailure("ok", "ko", createExpectable(None))))
 }
 private [specs2]
 object ThrownExpectations extends ThrownExpectations
@@ -109,7 +110,7 @@ object ThrownExpectations extends ThrownExpectations
  * For example it can be mixed-in a mutable.Specification so that no exception is thrown on failure
  */
 trait NoThrownExpectations extends Expectations {
-  override protected def checkResultFailure(r: Result) = r
+  override protected def checkResultFailure(r: =>Result) = r
   override protected def checkMatchResultFailure[T](m: MatchResult[T]): MatchResult[T] = m
 }
 

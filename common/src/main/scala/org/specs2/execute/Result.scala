@@ -134,6 +134,10 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
    */
   def isFailure: Boolean = false
   /**
+   * @return true if the result is a Failure that was thrown like a JUnit assertion error or a NotImplemented exception
+   */
+  def isThrownFailure: Boolean = false
+  /**
    * @return the result with no message
    */
   def mute: Result
@@ -161,7 +165,7 @@ object Result {
 
         case (Success(msg1, e1),           Failure(msg2, e2, st1, d2)) => m2.updateMessage(msg1+"; "+msg2)
         case (Failure(msg1, e1, st1, d1),  Failure(msg2, e2, st2, d2)) => Failure(msg1+"; "+msg2,
-                                                                                  concat(e1, e2), st1, NoDetails())
+                                                                                  concat(e1, e2), st1, NoDetails)
 
         case (Success(msg1, e1),           Error(msg2, st1))           => m2.updateMessage(msg1+"; "+msg2)
         case (Error(msg1, st1),            Error(msg2, st2))           => Error(msg1+"; "+msg2, st1)
@@ -188,25 +192,28 @@ object Result {
    */
   implicit val ResultFailureMonoid: Monoid[Result] = ResultFailuresMonoid("; ")
   implicit def ResultFailuresMonoid(separator: String): Monoid[Result] = new Monoid[Result] {
-      val zero = Success()
-    def append(m1: Result, m2: =>Result) = {
+    val zero = Success()
+
+    def append(m1: Result, m2: => Result) = {
       (m1, m2) match {
-        case (Success(msg1, e1),           Success(msg2, e2))          => Success("", concat(e1, e2))
-        case (Success(msg1, e1),           other)                      => other
-        case (other,                       Success(msg2, e2))          => other
-        case (Failure(msg1, e1, st1, d1),  Failure(msg2, e2, st2, d2)) => Failure(concat(msg1, msg2, separator), e1+separator+e2, st1, NoDetails())
-        case (Error(msg1, st1),            Error(msg2, st2))           => Error(concat(msg1, msg2, separator), st1)
-        case (Error(msg1, st1),            Failure(msg2, e2, st2, d2)) => Error(concat(msg1, msg2, separator), st1)
-        case (Skipped(msg1, e1),           Skipped(msg2, e2))          => Skipped(concat(msg1, msg2, separator), e1+separator+e2)
-        case (Skipped(msg1, e1),           Pending(msg2))              => Pending(concat(msg1, msg2, separator))
-        case (Pending(msg1),               Skipped(msg2, e2))          => Pending(concat(msg1, msg2, separator))
-        case (Pending(msg1),               Pending(msg2))              => Pending(concat(msg1, msg2, separator))
-        case (DecoratedResult(t, r),       other)                      => DecoratedResult(t, append(r, other))
-        case (other,                       DecoratedResult(t, r))      => DecoratedResult(t, append(other, r))
-        case (Failure(msg1, e1, st, d),    _)                          => m1
-        case (Error(msg1, st),             _)                          => m1
-        case (_,                           Failure(msg1, e1, st, d))   => m2
-        case (_,                           Error(msg1, st))            => m2
+        case (Success(msg1, e1), Success(msg2, e2)) => Success("", concat(e1, e2))
+        case (Success(msg1, e1), other) => other
+        case (other, Success(msg2, e2)) => other
+        case (Failure(msg1, e1, st1, d1), Failure(msg2, e2, st2, NoDetails)) => Failure(concat(msg1, msg2, separator), e1 + separator + e2, st1, d1)
+        case (Failure(msg1, e1, st1, NoDetails), Failure(msg2, e2, st2, d2)) => Failure(concat(msg1, msg2, separator), e1 + separator + e2, st2, d2)
+        case (Failure(msg1, e1, st1, d1), Failure(msg2, e2, st2, d2)) => Failure(concat(msg1, msg2, separator), e1 + separator + e2, st1, d1)
+        case (Error(msg1, st1), Error(msg2, st2)) => Error(concat(msg1, msg2, separator), st1)
+        case (Error(msg1, st1), Failure(msg2, e2, st2, d2)) => Error(concat(msg1, msg2, separator), st1)
+        case (Skipped(msg1, e1), Skipped(msg2, e2)) => Skipped(concat(msg1, msg2, separator), e1 + separator + e2)
+        case (Skipped(msg1, e1), Pending(msg2)) => Pending(concat(msg1, msg2, separator))
+        case (Pending(msg1), Skipped(msg2, e2)) => Pending(concat(msg1, msg2, separator))
+        case (Pending(msg1), Pending(msg2)) => Pending(concat(msg1, msg2, separator))
+        case (DecoratedResult(t, r), other) => DecoratedResult(t, append(r, other))
+        case (other, DecoratedResult(t, r)) => DecoratedResult(t, append(other, r))
+        case (Failure(msg1, e1, st, d), _) => m1
+        case (Error(msg1, st), _) => m1
+        case (_, Failure(msg1, e1, st, d)) => m2
+        case (_, Error(msg1, st)) => m2
       }
     }.setExpectationsNb(m1.expectationsNb + m2.expectationsNb)
   }
@@ -276,7 +283,7 @@ object Success {
  * This class represents the failure of an execution.
  * It has a message and a stacktrace
  */
-case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceElement] = new Exception().getStackTrace.toList, details: Details = NoDetails())
+case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceElement] = new Exception().getStackTrace.toList, details: Details = NoDetails)
   extends Result(m, e) with ResultStackTrace { outer =>
 
   type SelfType = Failure
@@ -298,6 +305,8 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
   }
   override def hashCode = m.hashCode + e.hashCode
   override def isFailure: Boolean = true
+  override def isThrownFailure: Boolean = 
+    Seq(FromNotImplementedError, FromJUnitAssertionError).contains(details)
 
   def skip: Skipped = Skipped(m, e)
 }
@@ -307,7 +316,10 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
  */
 sealed trait Details
 case class FailureDetails(expected: String, actual: String) extends Details
-case class NoDetails() extends Details
+case object NoDetails extends Details
+case object FromNotImplementedError extends Details
+case object FromJUnitAssertionError extends Details
+
 /** 
  * This class represents an exception occurring during an execution.
  */

@@ -124,10 +124,11 @@ object MatchSuccess {
   def apply[T](ok: =>String, ko: =>String, expectable: Expectable[T]) =
     new MatchSuccess(() => ok, () => ko, expectable)
 }
+
 case class MatchFailure[T] private[specs2](ok: () => String, ko: () => String,
                                            expectable: Expectable[T],
                                            trace: List[StackTraceElement] = (new Exception).getStackTrace.toList,
-                                           details: Details = NoDetails()) extends MatchResult[T] {
+                                           details: Details = NoDetails) extends MatchResult[T] {
   lazy val okMessage = ok()
   lazy val koMessage = ko()
 

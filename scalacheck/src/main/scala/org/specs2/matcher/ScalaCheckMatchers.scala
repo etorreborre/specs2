@@ -172,7 +172,7 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
    */
   private def collectDetails[T](fq: FreqMap[Set[T]]): execute.Details = {
     fq.getRatios.flatMap(_._1.toList).collect { case d @ execute.FailureDetails(_,_) => d }
-      .headOption.getOrElse(execute.NoDetails())
+      .headOption.getOrElse(execute.NoDetails)
   }
 
   /**
@@ -272,7 +272,7 @@ trait ResultPropertyImplicits {
     def apply(params: Gen.Parameters) = {
       try p(params)
       catch {
-        case execute.FailureException(f) if f.details != execute.NoDetails() =>
+        case execute.FailureException(f) if f.details != execute.NoDetails =>
           (Prop.falsified :| (f.message+" ("+f.location+")"))(params).collect(f.details)
 
         case execute.FailureException(f) =>
@@ -300,7 +300,7 @@ trait ResultPropertyImplicits {
           case other               => Prop.passed
         }
         result match {
-          case f: execute.Failure if f.details != execute.NoDetails() =>
+          case f: execute.Failure if f.details != execute.NoDetails =>
             prop.apply(params).collect(f.details)
 
           case _ =>

@@ -162,7 +162,7 @@ class ScalaCheckMatchersSpec extends Spec with ScalaCheckProperties { def is = s
     spec.is.examples.map(_.executionResult).head.expectationsNb must_== 1
   }
   def result3  = execute(prop(failureWithDetails)) match {
-    case f: org.specs2.execute.Failure => if (f.details == org.specs2.execute.NoDetails()) ko("no details") else ok
+    case f: org.specs2.execute.Failure => if (f.details == org.specs2.execute.NoDetails) ko("no details") else ok
     case _                             => ko("not a failure")
   }
 

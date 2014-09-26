@@ -32,7 +32,7 @@ trait ExpectationsCreation {
   /** this method can be overriden to intercept a MatchResult and change its message before it is thrown */
   protected def mapMatchResult[T](m: MatchResult[T]): MatchResult[T] = m
   /** this method can be overriden to throw exceptions when checking the result */
-  protected def checkResultFailure(r: Result): Result = r
+  protected def checkResultFailure(r: =>Result): Result = r
   /** this method can be overriden to throw exceptions when checking the match result */
-  protected def checkMatchResultFailure[T](m: MatchResult[T]) = m
+  protected def checkMatchResultFailure[T](m: MatchResult[T]): MatchResult[T] = m
 }

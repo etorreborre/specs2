@@ -8,16 +8,16 @@ package matcher
  * List(1, 2) must be like { case List(a, b) => ko("unexpected") }
  */
 trait StandardMatchResults extends ExpectationsCreation {
-  def ok(m: String): MatchSuccess[None.type] =
+  def ok(m: String): MatchResult[Any] =
     MatchSuccess(m, "ko", createExpectable(None))
 
-  def ko(m: String): MatchFailure[None.type] =
+  def ko(m: String): MatchResult[Any] =
     MatchFailure("ok", m, createExpectable(None))
 
-  lazy val ok: MatchSuccess[None.type] =
+  lazy val ok: MatchResult[Any] =
     MatchSuccess("ok", "ko", createExpectable(None))
 
-  lazy val ko: MatchFailure[None.type] =
+  lazy val ko: MatchResult[Any] =
     MatchFailure("ok", "ko", createExpectable(None))
 }
 

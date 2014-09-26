@@ -3,6 +3,7 @@ package specification
 package process
 
 import control._
+import org.specs2.data.Fold
 import specification.core._
 import scalaz.concurrent.Task
 import scalaz.stream._
@@ -45,4 +46,21 @@ trait Statistics {
 
 }
 
-object Statistics extends Statistics
+object Statistics extends Statistics {
+  /** compute the statistics as a Fold */
+  def statisticsFold = new Fold[Fragment] {
+    type S = Stats
+
+    def prepare: Task[Unit] = Task.now(())
+
+    lazy val sink: Sink[Task, (Fragment, Stats)] = Fold.unitSink
+
+    def fold = Statistics.fold
+    def init = Stats.empty
+
+    def last(stats: Stats) = Task.now(())
+  }
+
+  def runStats(spec: SpecStructure): Stats =
+    Fold.runFoldLast(spec.contents, Statistics.statisticsFold).run
+}
