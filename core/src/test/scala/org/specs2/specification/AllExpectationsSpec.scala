@@ -3,7 +3,7 @@ package specification
 
 import _root_.org.specs2.mutable.{Specification => Spec}
 import reporter._
-import user.specification.{AllExpectationsSpecificationWithException, AllExpectationsSpecificationWithScope, AllExpectationsSpecification}
+import user.specification._
 
 class AllExpectationsSpec extends Spec with AllExpectations {
 
@@ -47,6 +47,13 @@ class AllExpectationsSpec extends Spec with AllExpectations {
       executedException.stats.examples === 1
       executedException.stats.errors === 1
     }
+    "evaluate an expression which is not implemented yet" >> {
+      executedWithNotImplementedError.hasIssues must beTrue
+      executedWithNotImplementedError.stats.expectations === 2
+      executedWithNotImplementedError.stats.examples === 1
+      executedWithNotImplementedError.stats.errors === 0
+      executedWithNotImplementedError.stats.failures === 1
+    }
   }
 
   def executed = SilentConsoleReporter.report(new AllExpectationsSpecification)(args())
@@ -54,5 +61,6 @@ class AllExpectationsSpec extends Spec with AllExpectations {
   def executedSelected = SilentConsoleReporter.report(new AllExpectationsSpecification)(args(ex = "It is"))
   def executedSequential = SilentConsoleReporter.report(new AllExpectationsSpecification)(sequential)
   def executedWithScope = SilentConsoleReporter.report(new AllExpectationsSpecificationWithScope)(args())
+  def executedWithNotImplementedError = SilentConsoleReporter.report(new AllExpectationsSpecificationWithNotImplementedError)(args())
 }
 

@@ -98,7 +98,7 @@ trait JUnitReporter extends ExecutionOrigin with DefaultReporter with Exporters 
 
   /** @return a Throwable expected by JUnit Failure object */
   private def junitFailure(f: Failure)(implicit args: Arguments): Throwable = f match {
-    case Failure(m, e, st, NoDetails()) =>
+    case Failure(m, e, st, NoDetails) =>
       new SpecFailureAssertionFailedError(Throwablex.exception(AnsiColors.removeColors(m), args.traceFilter(st)))
 
     case Failure(m, e, st, FailureDetails(expected, actual)) => new ComparisonFailure(AnsiColors.removeColors(m), expected, actual) {

@@ -122,7 +122,7 @@ object MatchSuccess {
   def apply[T](ok: =>String, ko: =>String, expectable: Expectable[T]) =
     new MatchSuccess(() => ok, () => ko, expectable)
 }
-case class MatchFailure[T] private[specs2](ok: () => String, ko: () => String, expectable: Expectable[T], details: Details = NoDetails()) extends MatchResult[T] {
+case class MatchFailure[T] private[specs2](ok: () => String, ko: () => String, expectable: Expectable[T], details: Details = NoDetails) extends MatchResult[T] {
   def okMessage = ok()
   def koMessage = ko()
 

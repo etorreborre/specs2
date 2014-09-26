@@ -195,7 +195,7 @@ case object Stats {
     val zero = Stats()
   }
 
-  def apply(result: Result): Stats = 
+  def apply(result: Result): Stats = {
     result match {
       case s @ Success(_,_)      => Stats(examples = 1, expectations = result.expectationsNb, successes = 1)
       case f @ Failure(_,_,_,_)  => Stats(examples = 1, expectations = result.expectationsNb, failures = 1)
@@ -204,7 +204,8 @@ case object Stats {
       case Skipped(_, _)         => Stats(examples = 1, expectations = result.expectationsNb, skipped = 1)
       case DecoratedResult(t, r) => Stats(r)
     }
-  
+  }
+
   def fromXml(stats: scala.xml.Node): Option[Stats] = {
     if (stats.label != Stats().toXml.label)
       None

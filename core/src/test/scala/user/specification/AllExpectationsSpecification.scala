@@ -43,4 +43,13 @@ class AllExpectationsSpecificationWithException extends mutable.Specification wi
   }
 }
 
+class AllExpectationsSpecificationWithNotImplementedError extends mutable.Specification with AllExpectations {
+  def notImplementedYet: Int = ???
+  "In this example the exception is caught" >> {
+    1 === 2
+    notImplementedYet must_== 1
+    3 === 4
+  }
+}
+
 
