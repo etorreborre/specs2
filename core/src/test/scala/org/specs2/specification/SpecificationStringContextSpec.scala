@@ -1,9 +1,11 @@
 package org.specs2
 package specification
 
+import org.specs2.matcher.DataTables
 import runner.MockClassRunner
+import text.Trim._
 
-class SpecificationStringContextSpec extends Specification { def is = s2"""
+class SpecificationStringContextSpec extends Specification with DataTables { def is = s2"""
 
  A user specification can use string interpolation to write the specification fragments ${
   val lines = MockClassRunner().run(new UserInterpolatedSpecification)
@@ -29,16 +31,18 @@ class SpecificationStringContextSpec extends Specification { def is = s2"""
    for an auto-example (no text on the line)                                              $e2
    for a multiple line text
      when the last line is indented it is taken as the description                        $e3
-     when the last line is not indented the full paragraph is taken as the description    $e4
-     for an auto-example (no text on the last line)                                       $e5
+     when more than one lines are indented they are taken as the description              $e4
+     when more than one lines have a | margin they are taken as the description           $e5
+     for an auto-example (no text on the last line)                                       $e6
 
 """
 
   def e1 = createDescription("example1", "ok")              === (("\n", FormattedString("example1").withFlow))
   def e2 = createDescription("  ", "ok")                    === (("  ", FormattedString.code("ok").withFlow))
   def e3 = createDescription("intro\n  ex1", "ok")          === (("intro\n  ", FormattedString("ex1").withFlow))
-  def e4 = createDescription("long\nexample", "ok")         === (("\n", FormattedString("long\nexample").withFlow))
-  def e5 = createDescription("long\nautoexample\n  ", "ok") === (("long\nautoexample\n  ", FormattedString.code("ok").withFlow))
+  def e4 = createDescription("  long\n  example", "ok")     === (("\n  ", FormattedString("  long\n  example").withFlow))
+  def e5 = createDescription(" | long\n |  example", "ok")  === (("\n ", FormattedString("  long\n   example").withFlow))
+  def e6 = createDescription("long\nautoexample\n  ", "ok") === (("long\nautoexample\n  ", FormattedString.code("ok").withFlow))
 
 }
 

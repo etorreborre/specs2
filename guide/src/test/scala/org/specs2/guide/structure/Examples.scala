@@ -38,6 +38,31 @@ This specification builds 1 piece of `Text` and 2 `Examples` which are `Fragment
 
 }}
 
+###### Multi-line description
+
+In a `s2` string the description of an example is taken as all the text having the same indentation before the example body:${snippet{
+s2"""
+  This is the introduction paragraph
+  Which presents the examples
+    the first example has one line $ok
+
+    the second example has
+    more than one line             $ok
+"""
+}}
+
+If you want the example description to be unevenly aligned you can use a margin `|`:${snippet{
+s2"""
+  This is the introduction paragraph
+  Which presents the examples
+    |this example has a very
+    | very very
+    |   specific indentation $ok
+"""
+}}
+
+###### API
+
 Please read the ${(new FragmentsApi).markdownLink("Fragments API").fromTop} page you want to know more about the low-level operators to create and chain Specification Fragments.
 
 ##### _Unit_ specification

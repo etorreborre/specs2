@@ -4,6 +4,7 @@ package specification
 import main.{Arguments, ArgumentsArgs}
 import execute._
 import text.NotNullStrings._
+import text.Trim._
 import reflect.Macros._
 import reflect.Compat210._
 import text.Interpolated
@@ -99,15 +100,17 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
     else {
       val lastLine = texts.lastOption.getOrElse("")
       val lastIndent = lastLine.takeWhile(_ == ' ')
-      val (descriptionLines, beforeLines) = texts.reverse.span(line => line.takeWhile(_ == ' ') == lastIndent)
+      val (descriptionLines, beforeLines) =texts.reverse.span(_.takeWhile(_ == ' ') == lastIndent)
 
       val description =
-        if (descriptionLines.size > 1) descriptionLines.reverse.mkString("\n")
+        if (descriptionLines.size > 1)
+          if (lastLine.trim.startsWith("|")) descriptionLines.reverse.map(_.removeFirst("\\|")).mkString("\n")
+          else                               descriptionLines.reverse.mkString("\n")
         else                           descriptionLines.map(_.dropWhile(_ == ' ')).reverse.mkString("\n")
 
       val before = beforeLines.reverse.mkString("", "\n", "\n"+lastIndent)
 
-      (before, FormattedString(description.trim).withFlow)
+      (before, FormattedString(description.trimEndSpace).withFlow)
     }
   }
 

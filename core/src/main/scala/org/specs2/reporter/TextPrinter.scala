@@ -199,7 +199,7 @@ trait TextPrinter {
       def time = if (args.showtimes) " ("+timer.time+")" else ""
 
       val decoratedFirstLine = indentation + out.status(result)(args) + firstLine.dropWhile(_ == ' ') + time
-      val rest = textLines.drop(1).map(l => indentation + (if (isDataTable) "  " else "") + l)
+      val rest = textLines.drop(1).map(l => if (isDataTable) s" $l" else s"  $l")
       (decoratedFirstLine +: rest).mkString("\n")
     }
   }

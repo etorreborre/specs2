@@ -12,6 +12,9 @@ class TrimSpec extends Specification { def is = s2"""
   ${eg{ " hello (world)  ".trimReplace("(" -> "[", ")" -> "]") === "hello [world]" }}
   ${eg{ " hello \\world  ".trimReplaceAll("h" -> "H", "w" -> "W") === "Hello \\World" }}
 
+  Trim the end of a line
+  ${eg{ " hello world   ".trimEndSpace === " hello world"}}
+
   Trim enclosing symbols
   ${eg{ " (hello world)  ".trimEnclosing("(", ")") === "hello world" }}
   ${eg{ " ( (hello world) )  ".trimEnclosing("(", ")") === "(hello world)" }}
