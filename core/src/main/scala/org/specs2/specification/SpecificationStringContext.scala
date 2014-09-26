@@ -10,7 +10,6 @@ import text.Interpolated
 import text.NotNullStrings._
 import control.Exceptions._
 import specification.TagFragments._
-
 /**
  * Allow to use fragments inside interpolated strings starting with s2 in order to build the specification content
  */
@@ -30,18 +29,7 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
   implicit def asResultIsSpecPart[R : AsResult](r: =>R): SpecPart = new SpecPart {
 
     def append(fs: Fragments, text: String, expression: String = "") = {
-      val texts = text.split("\n")
-      val spaces = texts.lastOption.map(_.takeWhile(Seq(' ', '\n').contains)).getOrElse("")
-      val indent = spaces.mkString
-
-      val first = texts.dropRight(1).mkString("", "\n", "\n")
-      val autoExample = texts.lastOption.exists(_.trim.isEmpty)
-
-      val description =
-        if (autoExample) FormattedString.code(expression).withFlow
-        else             FormattedString(texts.lastOption.map(_.trim).getOrElse("")).withFlow
-
-      val before = first + indent
+      val (before, description) = createDescription(text, expression)
 
       val result =
         implicitly[AsResult[R]] match {
@@ -101,6 +89,26 @@ trait SpecificationStringContext { outer: FragmentsBuilder with ArgumentsArgs wi
       variable.append(res1, text1, expression)
     }
     formatSection(flow = true, markdown = true) ^ texts.lastOption.map(t => fragments append createTextFragment(t).fragments).getOrElse(fragments) ^ formatSection(flow = true, markdown = true)
+  }
+
+  private[specs2] def createDescription(text: String, expression: String): (String, SimpleFormattedString) = {
+    val texts = text.split("\n").toSeq
+    val autoExample = texts.lastOption.exists(_.trim.isEmpty)
+
+    if (autoExample) (text, FormattedString.code(expression).withFlow)
+    else {
+      val lastLine = texts.lastOption.getOrElse("")
+      val lastIndent = lastLine.takeWhile(_ == ' ')
+      val (descriptionLines, beforeLines) = texts.reverse.span(line => line.takeWhile(_ == ' ') == lastIndent)
+
+      val description =
+        if (descriptionLines.size > 1) descriptionLines.reverse.mkString("\n")
+        else                           descriptionLines.map(_.dropWhile(_ == ' ')).reverse.mkString("\n")
+
+      val before = beforeLines.reverse.mkString("", "\n", "\n"+lastIndent)
+
+      (before, FormattedString(description.trim).withFlow)
+    }
   }
 
   private[specs2] def createTextFragment(s: String): FragmentsFragment = fragments(Text.create(FormattedString(s)))
