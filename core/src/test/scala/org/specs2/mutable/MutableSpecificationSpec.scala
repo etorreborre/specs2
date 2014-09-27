@@ -28,6 +28,7 @@ The following examples specify the functionalities for such a mutable specificat
     the first error stops an Example execution                                                       ${g2().e2}
     the first skipped expectation skips the Example execution                                        ${g2().e3}
     the failure method throws a FailureException                                                     ${g2().e4}
+    the Result.unit method must re-throw FailureExceptions                                           ${g2().e5}
                                                                                                      """
 
   "fragments" - new g1 with HasAMutableSpec {
@@ -56,6 +57,8 @@ The following examples specify the functionalities for such a mutable specificat
       output.messages must not contain("statement executed after skipped expectation")
     }
     e4 := { new Specification { failure("failed") } must throwA[FailureException] }
+
+    e5 := { new Specification { Result.unit(failure("failed")) } must throwA[FailureException] }
   }
 
   trait HasAMutableSpec {
