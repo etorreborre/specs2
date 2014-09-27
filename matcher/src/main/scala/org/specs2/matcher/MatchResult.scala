@@ -158,7 +158,7 @@ object MatchFailure {
     create(ok, ko, expectable, (new Exception).getStackTrace.toList, details)
 
   def apply[T](ok: =>String, ko: =>String, expectable: Expectable[T]): MatchFailure[T] =
-    create(ok, ko, expectable, NoDetails())
+    create(ok, ko, expectable, NoDetails)
 }
 
 case class MatchSkip[T] private[specs2](override val message: String, expectable: Expectable[T]) extends MatchResult[T] {

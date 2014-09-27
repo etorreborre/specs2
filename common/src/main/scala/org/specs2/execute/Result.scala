@@ -219,7 +219,7 @@ object Result {
   }
 
   /** the result of a side-effecting block */
-  def unit(u: =>Unit) = ResultExecution.execute(u)(_ => AsResult(Success()))
+  def unit(u: =>Unit) = ResultExecution.effectively { u; Success() }
 
   /** implicit typeclass instance to create examples from Results */
   implicit def resultAsResult[R <: Result]: AsResult[R] = new AsResult[R] {

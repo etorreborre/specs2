@@ -73,11 +73,10 @@ trait Matcher[-T] { outer =>
    */
   protected def result[S <: T](other: MatchResult[_], value: Expectable[S]): MatchResult[S] = {
     other match {
-      case MatchSuccess(ok, ko, _)                                   => Matcher.result(true,  ok(), ko(), value)
-      case MatchFailure(ok, ko, _, _, NoDetails)                     => Matcher.result(false, ok(), ko(), value)
-      case MatchFailure(ok, ko, _, FailureDetails(expected, actual)) => Matcher.result(false, ok(), ko(), value, expected, actual)
-      case MatchFailure(ok, ko, _, _)                                => Matcher.result(false, ok(), ko(), value)
-      case _                                                         => Matcher.result(other.isSuccess, other.message, value)
+      case MatchSuccess(ok, ko, _)                                      => Matcher.result(true,  ok(), ko(), value)
+      case MatchFailure(ok, ko, _, _, FailureDetails(expected, actual)) => Matcher.result(false, ok(), ko(), value, expected, actual)
+      case MatchFailure(ok, ko, _, _, _)                                => Matcher.result(false, ok(), ko(), value)
+      case _                                                            => Matcher.result(other.isSuccess, other.message, value)
     }
   }
 

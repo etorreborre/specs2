@@ -95,7 +95,11 @@ more precisely:
  A match result can be evaluated if and only if a boolean condition is satisfied
  ${ (1 must_== 2: Result).iff(false) }
  ${ (1 must_== 1: Result).iff(true) }
-                                                                                                                        """
+
+ the Result.unit method must re-throw FailureExceptions
+ ${ Result.unit(Seq(1).foreach(i => throw new FailureException(failure))) must throwA[FailureException] }
+
+"""
 
   def statuses =
     "result" | "isSuccess" | "isFailure" | "isError" | "isSkipped" | "isPending" |>
