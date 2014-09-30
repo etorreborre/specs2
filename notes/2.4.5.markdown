@@ -1,0 +1,26 @@
+Maintenance version
+
+## Improvements 
+ 
+ * in `s2` strings multi-line examples are now possible by aligning text or using a margin
+ 
+```
+s2"""
+  Introduction
+    an example
+    with 2 lines $ok
+
+    |an example
+    | with a very
+    |   specific indentation $ok
+"""
+``` 
+
+## Fixes 
+ 
+ * added a method to allow writing `file must not exist` [#297](http://github.com/etorreborre/specs2/issues/297)
+ * collect `NotImplementedErrors` in `AllExpectations` [#298](http://github.com/etorreborre/specs2/issues/298)
+ * re-throw exceptions when using the `Result.unit` method [#299](http://github.com/etorreborre/specs2/issues/299)
+
+==========================
+
