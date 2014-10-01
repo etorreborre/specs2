@@ -78,19 +78,19 @@ object desc extends MustMatchers with StandardResults with StandardMatchResults 
 
   def e1 =
     s2"""this is
-           an example $ok""".examples(0).description must_== Description.text("an example ")
+           an example $ok""".examples(0).description must_== Description.text("an example")
 
   def e2 =
     s2"""
   this is
     a multi-line
-    example $ok""".examples(0).description must_== Description.text("a multi-line\n    example ")
+    example $ok""".examples(0).description must_== Description.text("a multi-line\n    example")
 
   def e3 =
 s2"""
   this is
     |a multi-line
-    |  margin example $ok""".examples(0).description must_== Description.text("a multi-line\n      margin example ")
+    |  margin example $ok""".examples(0).description must_== Description.text("a multi-line\n      margin example")
 
   def e4 =
     s2"""this is an auto-example

@@ -166,7 +166,7 @@ trait S2StringContextCreation extends FragmentsFactory { outer =>
         if (beforeLines.isEmpty) Vector()
         else                     Vector(ff.text(beforeLines.reverse.mkString("", "\n", "\n" + lastIndent)).setLocation(start))
 
-      (Description.text(description.removeStart(lastIndent)), before)
+      (Description.text(description.removeStart(lastIndent).trimEndSpace), before)
     }
   }
 
