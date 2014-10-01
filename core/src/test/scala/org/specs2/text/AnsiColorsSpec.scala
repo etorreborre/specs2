@@ -14,7 +14,7 @@ class AnsiColorsSpec extends Spec with Grouped with Tables { def is = s2"""
     e1 := removeColors("hello" + AnsiColors.red.color) must_== "hello"
 
     e2 := {
-      val ^ = reset
+      val ^ = reset.color
       "string to color"        | "result"                                  |>
       "\nhello\n"              ! s"*${^}\n*hello${^}\n*${^}"               |
       "\nhello"                ! s"*${^}\n*hello${^}"                      |
@@ -22,7 +22,7 @@ class AnsiColorsSpec extends Spec with Grouped with Tables { def is = s2"""
       "hello"                  ! s"*hello${^}"                             |
       ""                       ! s"*${^}"                                  |
       "\nhello\nworld\n"       ! s"*${^}\n*hello${^}\n*world${^}\n*${^}"   |
-      { (s, r) => color(s, AnsiColor("*")).replace("\n", "_").replace(^.color, "^") must_==  r.replace("\n", "_").replace(^.color, "^") }
+      { (s, r) => color(s, AnsiColor("*")).replace("\n", "_").replace(^, "^") must_==  r.replace("\n", "_").replace(^, "^") }
     }
   }
 
