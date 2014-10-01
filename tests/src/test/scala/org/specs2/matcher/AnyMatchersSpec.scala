@@ -7,7 +7,7 @@ import specification._
 import SequenceMatchersCreation._
 import ResultImplicits._
 
-class AnyMatchersSpec extends script.Spec with Groups with ResultMatchers with AnyMatchers with ValueChecks { def is = s2"""
+class AnyMatchersSpec extends script.Specification with Groups with ResultMatchers with AnyMatchers with ValueChecks { def is = s2"""
 
   beTheSameAs checks if a value is eq to another one
   ${ aValue must beTheSameAs(aValue) }
@@ -61,7 +61,7 @@ class AnyMatchersSpec extends script.Spec with Groups with ResultMatchers with A
   ${ atLeastOnce(Seq((4, 2), (3, 4))) { case (a, b) => a must be_<(b) } }
   ${ atLeastOnceWhen(Seq((2, 1), (3, 4))) { case (a, b) if a > 2 => a must be_<(b) } }
   ${ atLeastOnce(Seq(Some(1), None)) { _ must beSome(1) } }
-  ${ (new MatchersImplicits with ThrownExpectations).atLeastOnce(Seq(1))(_ must be_<(0)) must throwA[FailureException] } ${tag("issue #169")}
+  ${ (new org.specs2.mutable.Specification { atLeastOnce(Seq(1))(_ must be_<(0)) }) must throwA[FailureException] } ${tag("issue #169")}
 
   beNull matches null values
   ${ (null:String) must beNull }

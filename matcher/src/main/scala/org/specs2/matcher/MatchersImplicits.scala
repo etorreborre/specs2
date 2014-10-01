@@ -82,7 +82,7 @@ trait ResultImplicits extends ExpectationsCreation {
 
 object ResultImplicits extends ResultImplicits
 
-trait SequenceMatchersCreation extends ExpectationsCreation { outer =>
+trait SequenceMatchersCreation extends ExpectationsCreation with ResultImplicits { outer =>
   implicit class MatcherFunction[S, T](f: S => Matcher[T]) {
     /**
      * @deprecated use collection must contain(exactly(seq.map(f))).inOrder
@@ -140,8 +140,6 @@ trait SequenceMatchersCreation extends ExpectationsCreation { outer =>
         checkOrder = false).apply(t)
 
   }
-
-  import ResultImplicits._
 
   /** verify the function f for all the values, stopping after the first failure */
   def forall[T, R : AsResult](values: GenTraversableOnce[T])(f: T => R) = f.forall(values)
