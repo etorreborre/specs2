@@ -7,21 +7,21 @@ import ValueChecks._
 /**
  * Matchers for Options
  */
-trait OptionMatchers extends OptionBaseMatchers with OptionBeHaveMatchers
+trait OptionMatchers extends OptionBaseMatchers with OptionBeHaveMatchers with ValueChecks
+
 object OptionMatchers extends OptionMatchers
 
 private[specs2]
 trait OptionBaseMatchers {
-  
-  def beSome[T](check: ValueCheck[T]) = SomeCheckedMatcher(check)
 
-  def some[T](t: T) = beSome(t)
-  def some[T](check: ValueCheck[T]) = beSome(check)
+  def beSome[T](check: ValueCheck[T]): SomeCheckedMatcher[T] = SomeCheckedMatcher(check)
+  def some[T](t: T): SomeCheckedMatcher[T] = beSome(t)
+  def some[T](check: ValueCheck[T]): SomeCheckedMatcher[T] = beSome(check)
 
-  def beSome[T] = new SomeMatcher[T]
-  def some[T] = beSome[T]
+  def beSome[T]: SomeMatcher[T] = new SomeMatcher[T]
+  def some[T]: SomeMatcher[T] = beSome[T]
 
-  def beNone = new Matcher[Option[Any]] {
+  def beNone: Matcher[Option[Any]] = new Matcher[Option[Any]] {
     def apply[S <: Option[Any]](value: Expectable[S]) = {
       result(value.value == None,
              value.description + " is None",
@@ -30,8 +30,9 @@ trait OptionBaseMatchers {
     }
   }
 
-  def none = beNone
-  def beAsNoneAs[T](other: =>Option[T]) = new Matcher[Option[T]] {
+  def none: Matcher[Option[Any]] = beNone
+
+  def beAsNoneAs[T](other: =>Option[T]): Matcher[Option[T]] = new Matcher[Option[T]] {
     def apply[S <: Option[T]](a: Expectable[S]) = {
       val b = other
       result(a.value == None && b == None || a.value != None && b != None, 
@@ -41,7 +42,8 @@ trait OptionBaseMatchers {
     }
   }
 
-  def asNoneAs[T](other: =>Option[T]) = beAsNoneAs(other)
+  def asNoneAs[T](other: =>Option[T]): Matcher[Option[T]] =
+    beAsNoneAs(other)
 }
 
 private[specs2]

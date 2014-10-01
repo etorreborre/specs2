@@ -14,7 +14,9 @@ class SpecSpec extends Spec { def is = sequential ^ s2"""
         "fragmentsAsSpecStructure",        // for def is = s2"... directly
         "fragmentIsInterpolatedFragment",  // to interpolate steps and actions
         "asResultIsInterpolatedFragment",  // to interpolate results
-        "specificationInStringContext"     // for the s2 macro
+        "specificationInStringContext",    // for the s2 macro
+        "matcherIsValueCheck",             // to use ValueChecks in contain matchers
+        "functionIsValueCheck"
       ))
   }
 

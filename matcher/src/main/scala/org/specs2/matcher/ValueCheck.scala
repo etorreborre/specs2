@@ -40,14 +40,7 @@ object ValueCheck {
 /**
  * implicit conversions used to create ValueChecks
  */
-trait ValueChecks extends ValueChecksLowImplicits {
-
-  /** a Matcher[T] can check a value */
-  implicit def matcherIsValueCheck[T](m: Matcher[T]): ValueCheck[T] = new ValueCheck[T] {
-    def check    = (t: T) => AsResult(m(Expectable(t)))
-    def checkNot = (t: T) => AsResult(m.not(Expectable(t)))
-  }
-
+trait ValueChecks extends ValueChecksBase {
   /** a partial function returning an object having an AsResult instance can check a value */
   implicit def partialfunctionIsValueCheck[T, R : AsResult](f: PartialFunction[T, R]): ValueCheck[T] = new ValueCheck[T] {
     def check    = (t: T) => {
@@ -59,6 +52,15 @@ trait ValueChecks extends ValueChecksLowImplicits {
 
   /** a check of type T can be downcasted implicitly to a check of type S >: T */
   implicit def downcastBeEqualTypedValueCheck[T, S >: T](check: BeEqualTypedValueCheck[T]): ValueCheck[S] = check.downcast[S]
+}
+
+trait ValueChecksBase extends ValueChecksLowImplicits {
+
+  /** a Matcher[T] can check a value */
+  implicit def matcherIsValueCheck[T](m: Matcher[T]): ValueCheck[T] = new ValueCheck[T] {
+    def check    = (t: T) => AsResult(m(Expectable(t)))
+    def checkNot = (t: T) => AsResult(m.not(Expectable(t)))
+  }
 
   /** an expected value can be used to check another value */
   def valueIsTypedValueCheck[T](expected: T): BeEqualTypedValueCheck[T] =

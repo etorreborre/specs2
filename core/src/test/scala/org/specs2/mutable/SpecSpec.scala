@@ -7,8 +7,10 @@ class SpecSpec extends Spec {
     import scala.reflect.runtime.universe._
     typeOf[Spec].members.filter(m => m.isImplicit && m.isMethod).map(_.name.toString).toSet must
       beEqualTo(Set(
-        "theValue",          // must expectations
-        "blockExample"       // create >> examples
+        "theValue",             // must expectations
+        "blockExample",         // create >> examples
+        "matcherIsValueCheck",  // to use ValueChecks in contain matchers
+        "functionIsValueCheck"
       ))
   }
 

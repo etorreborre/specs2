@@ -33,6 +33,7 @@ trait Matchers1 extends
   with TryBaseMatchers
   with EventuallyMatchers
   with FutureBaseMatchers
+  with ValueChecksBase
 
 object Matchers extends Matchers
 
