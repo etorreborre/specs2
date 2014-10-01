@@ -63,8 +63,9 @@ class MatchResultCombinatorsSpec extends mutable.Spec with ResultMatchers with M
 
   "A match result can be evaluated if and only if a boolean condition is satisfied" >> {
     (1 must_== 2).iff(false)
-    (1 must_== 1).iff(false)
+    (1 must_== 1).iff(true)
     (1 must_== 2).iff(true) must throwAn[Exception]
+    (1 must_== 1).iff(false) must throwAn[Exception]
   }
 
   "A match result with an or condition where an exception is thrown during the first match" >> {
