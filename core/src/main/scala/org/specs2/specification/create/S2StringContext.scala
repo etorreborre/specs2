@@ -142,23 +142,32 @@ trait S2StringContextCreation extends FragmentsFactory { outer =>
     }
   }
 
-  private[specs2] def descriptionAndBefore(text: String, start: Location, end: Location, expression: String) = {
-    val texts = text.split("\n")
-    val spaces = texts.lastOption.fold("")(_.takeWhile(Seq(' ', '\n').contains))
-    val indent = spaces.mkString
-
-    val first = if (texts.size > 1) texts.dropRight(1).mkString("", "\n", "\n") else ""
+  private[specs2] def descriptionAndBefore(text: String, start: Location, end: Location, expression: String): (Description, Vector[Fragment]) = {
+    val texts = text.split("\n", -1).toSeq
     val autoExample = texts.lastOption.exists(_.trim.isEmpty)
 
-    val description =
-      if (autoExample) Description.code(expression.removeEnclosing("`"))
-      else             Text(texts.lastOption.fold("")(_.trim))
+    if (autoExample) {
+      (Description.code(expression.removeEnclosing("`")),
+        if (texts.size == 1) Vector()
+        else                 Vector(ff.text(texts.mkString("\n")).setLocation(start)))
+    }
+    else {
+      val lastLine = texts.lastOption.getOrElse("")
+      val lastIndent = lastLine.takeWhile(_ == ' ')
+      val (descriptionLines, beforeLines) = texts.reverse.span(_.takeWhile(_ == ' ') == lastIndent)
 
-    val before =
-      if (first.nonEmpty) Vector(ff.text(first + indent).setLocation(start))
-      else                Vector()
+      val description =
+        if (descriptionLines.size > 1)
+          if (lastLine.trim.startsWith("|")) descriptionLines.reverse.map(_.removeFirst("\\|")).mkString("\n")
+          else descriptionLines.reverse.mkString("\n")
+        else descriptionLines.map(_.dropWhile(_ == ' ')).reverse.mkString("\n")
 
-    (description, before)
+      val before =
+        if (beforeLines.isEmpty) Vector()
+        else                     Vector(ff.text(beforeLines.reverse.mkString("", "\n", "\n" + lastIndent)).setLocation(start))
+
+      (Description.text(description.removeStart(lastIndent)), before)
+    }
   }
 
   /**

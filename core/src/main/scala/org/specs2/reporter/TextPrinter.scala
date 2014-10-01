@@ -187,11 +187,12 @@ trait TextPrinter extends Printer {
   def statusAndDescription(text: String, result: Result)(args: Arguments) = {
     val textLines = text.trimEnclosing("`").trimEnclosing("```").split("\n", -1) // trim markdown code marking
     val firstLine = textLines.headOption.getOrElse("")
-    val indentation = firstLine.takeWhile(_ == ' ').drop(2)
+    val (indentation, line) = firstLine.span(_ == ' ')
 
     val status = result.coloredStatus(args) + " "
-    val decoratedFirstLine = indentation + status + firstLine.dropWhile(_ == ' ')
-    val rest = textLines.drop(1).map(line => indentation + "   " + line)
+    val decoratedFirstLine = indentation + status + line
+
+    val rest = textLines.drop(1).map(l => s"  $l")
     (decoratedFirstLine +: rest).mkString("\n")
   }
 

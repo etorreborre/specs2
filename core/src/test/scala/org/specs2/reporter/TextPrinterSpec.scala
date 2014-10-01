@@ -111,7 +111,7 @@ presentation
 
   def b6 = "t".title ^ "e1\nexample1" ! ok contains
   """|[info] + e1
-     |[info]    example1""".stripMargin
+     |[info]   example1""".stripMargin
 
   def b7 = {
     def ex1 = AsResult { Thread.sleep(30); ok }

@@ -123,6 +123,7 @@ It is also possible to use the "functional" expectation mode with a unit specifi
  - collect ${"*all* expectations" ~/ GetAllExpectations}
  - mark examples as ${"pending until they are fixed" ~/ PendingUntilFixedExamples}
  - add ${"links to other specifications" ~/ LinkOtherSpecifications}
+ - create example descriptions spanning ${"several lines" ~/ MultilineDescriptions}
  - add ${"new lines and tabs" ~/ SpecificationFormatting} in unit specifications
  - create a trait which will ${"decorate or transform other specifications" ~/ TemplateSpecification} when mixed-in
  - create ${"*auto-examples*" ~/ AutoExamples} where the code *is* the description of the `Example`
