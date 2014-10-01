@@ -96,7 +96,7 @@ trait TextCreation extends FragmentBuilder with FragmentsFactory { outer =>
     addFragmentBlock {
       val before = math.max(1, n - 1)
       (1 to before).map(_ => addFragment(fragmentFactory.break))
-      fragmentFactory.text(s)
+      addFragment(fragmentFactory.text(s))
       (1 to n).map(_ => addFragment(fragmentFactory.break))
       addFragment(fragmentFactory.backtab)
     }
