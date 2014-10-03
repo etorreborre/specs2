@@ -16,6 +16,11 @@ object AsResult {
     def asResult(t: =>Boolean): Result = Results.toResult(t)
   }
 
+  /** AsResult typeclass instance for boolean with no stacktraces */
+  def booleanAsSimpleResult: AsResult[Boolean] = new AsResult[Boolean] {
+    def asResult(t: =>Boolean): Result = Results.booleanToSimpleResult(t)
+  }
+
   /** typeclass instance for types which are convertible to Result */
   implicit def asResult[R](implicit convert: R => Result): AsResult[R] = new AsResult[R] {
     def asResult(r: =>R): Result = ResultExecution.execute(convert(r))

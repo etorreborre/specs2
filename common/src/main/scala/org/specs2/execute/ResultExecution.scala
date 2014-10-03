@@ -16,6 +16,7 @@ trait ResultExecution { outer =>
   class ExecutableResult(r: =>Result) {
     def execute = outer.execute(r)
   }
+
   /** execute a Result and return a Result even if there are specs2 exceptions */
   def execute(result: =>Result) =
     try {

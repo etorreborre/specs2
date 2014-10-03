@@ -87,6 +87,10 @@ trait MatchResult[+T] extends ResultLike {
   /** apply the matcher */
   def have(m: Matcher[T]) = apply(m)
   def toResult: Result = evaluate.toResult
+
+  /** @return a result with no detailed information like location */
+  def toSimpleResult: Result = evaluate.toResult
+
   def isSuccess = toResult.isSuccess
   def message = toResult.message
   def orThrow = this
@@ -127,32 +131,35 @@ object MatchSuccess {
 
 case class MatchFailure[T] private[specs2](ok: () => String, ko: () => String,
                                            expectable: Expectable[T],
-                                           trace: List[StackTraceElement] = (new Exception).getStackTrace.toList,
+                                           stacktrace: () => List[StackTraceElement],
                                            details: Details = NoDetails) extends MatchResult[T] {
   lazy val okMessage = ok()
   lazy val koMessage = ko()
 
   def exception = {
     val e = new Exception(koMessage)
-    e.setStackTrace(trace.toArray)
+    e.setStackTrace(stacktrace().toArray)
     e
   }
 
-  override def toResult = Failure(koMessage, okMessage, trace, details)
+  lazy val trace = stacktrace()
+
+  override def toResult = Failure(koMessage, okMessage, stacktrace(), details)
+  override def toSimpleResult: Result = Failure(koMessage, okMessage, Nil, NoDetails)
 
   def negate: MatchResult[T] = MatchSuccess(koMessage, okMessage, expectable)
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
 
   override def mute                               = MatchFailure.create("", "", expectable, details)
   override def updateMessage(f: String => String) = copy(ok = () => f(okMessage), ko = () => f(koMessage))
-  override def filterTrace(f: List[StackTraceElement] => List[StackTraceElement]) = copy(trace = f(trace))
+  override def filterTrace(f: List[StackTraceElement] => List[StackTraceElement]) = copy(stacktrace = () => f(trace))
   override def orThrow: MatchFailure[T]           = throw new FailureException(toResult)
   override def orSkip: MatchFailure[T]            = throw new SkipException(toResult)
 }
 
 object MatchFailure {
   def create[T](ok: =>String, ko: =>String, expectable: Expectable[T], trace: List[StackTraceElement], details: Details): MatchFailure[T] =
-    new MatchFailure(() => ok, () => ko, expectable, trace, details)
+    new MatchFailure(() => ok, () => ko, expectable, () => trace, details)
 
   def create[T](ok: =>String, ko: =>String, expectable: Expectable[T], details: Details): MatchFailure[T] =
     create(ok, ko, expectable, (new Exception).getStackTrace.toList, details)
@@ -314,6 +321,10 @@ object MatchResult {
 
   implicit def matchResultAsResult[M[_] <: MatchResult[_], T]: AsResult[M[T]] = new AsResult[M[T]] {
     def asResult(t: =>M[T]): Result = AsResult(t.toResult)
+  }
+
+  def matchResultAsSimpleResult[M[_] <: MatchResult[_], T]: AsResult[M[T]] = new AsResult[M[T]] {
+    def asResult(t: =>M[T]): Result = AsResult(t.toSimpleResult)
   }
 
   /** implicit typeclass instance to create examples from a sequence of MatchResults */

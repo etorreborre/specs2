@@ -243,6 +243,9 @@ trait Results {
   implicit def toResult(b: Boolean): Result =
     if (b) org.specs2.execute.Success("true") else org.specs2.execute.Failure("false")
 
+  def booleanToSimpleResult(b: Boolean): Result =
+    if (b) org.specs2.execute.Success("true") else org.specs2.execute.Failure("false", "", Nil, NoDetails)
+
   def negate(r: Result) = {
     if (r.isSuccess)      Failure(negateSentence(r.message), r.expected).setExpectationsNb(r.expectationsNb)
     else if (r.isFailure) Success(negateSentence(r.message), r.expected).setExpectationsNb(r.expectationsNb)
