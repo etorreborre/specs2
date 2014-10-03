@@ -87,6 +87,10 @@ trait MatchResult[+T] extends ResultLike {
   /** apply the matcher */
   def have(m: Matcher[T]) = apply(m)
   def toResult: Result = evaluate.toResult
+
+  /** @return a result with no detailed information like location */
+  def toSimpleResult: Result = evaluate.toResult
+
   def isSuccess = toResult.isSuccess
   def message = toResult.message
   def orThrow = this
@@ -129,6 +133,7 @@ case class MatchFailure[T] private[specs2](ok: () => String, ko: () => String, e
   /** an exception having the same stacktrace */
   val exception = new Exception(koMessage)
   override def toResult = Failure(koMessage, okMessage, exception.getStackTrace.toList, details)
+  override def toSimpleResult: Result = Failure(koMessage, okMessage, Nil, NoDetails)
 
   def negate: MatchResult[T] = MatchSuccess(koMessage, okMessage, expectable)
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
@@ -301,6 +306,10 @@ object MatchResult {
 
   implicit def matchResultAsResult[M[_] <: MatchResult[_], T]: AsResult[M[T]] = new AsResult[M[T]] {
     def asResult(t: =>M[T]): Result = AsResult(t.toResult)
+  }
+
+  def matchResultAsSimpleResult[M[_] <: MatchResult[_], T]: AsResult[M[T]] = new AsResult[M[T]] {
+    def asResult(t: =>M[T]): Result = AsResult(t.toSimpleResult)
   }
 
   /** implicit typeclass instance to create examples from a sequence of MatchResults */

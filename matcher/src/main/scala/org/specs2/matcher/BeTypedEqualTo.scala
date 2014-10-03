@@ -122,7 +122,7 @@ class BeTypedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1
     Seq(b, msg, a).mkString("\n\n".unless(Seq(a, b).forall(_.size <= 40)))
 
   private def missingElements(actual: Seq[Any], expected: Seq[Any]): (Boolean, String) = {
-    val (matched, missingFromActual) = BestMatching.findBestMatch(actual, expected, (t: Any, v: Any) => ===(t).apply(Expectable(v)), eachCheck = true)
+    val (matched, missingFromActual) = BestMatching.findBestMatch(actual, expected, (t: Any, v: Any) => ===(t).apply(Expectable(v)), eachCheck = true)(MatchResult.matchResultAsSimpleResult)
     val (okValues, koValues)         = matched.partition(_._3.isSuccess)
     val missingFromExpected          = koValues.map(_._1)
     val isEqual                      = missingFromActual.isEmpty && missingFromExpected.isEmpty
