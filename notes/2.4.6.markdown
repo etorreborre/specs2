@@ -1,0 +1,8 @@
+Maintenance version
+
+## Fixes 
+ 
+ * fix for performance issues when using the equality matcher on large lists
+
+==========================
+
