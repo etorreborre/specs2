@@ -19,13 +19,18 @@ object BestMatching {
    */
   def findBestMatch[T, V, R : AsResult](ts: Seq[T], vs: Seq[V], matchingFunction: (T, V) => R, eachCheck: Boolean = true): (Seq[(T, V, Result)], Seq[V]) = {
     // perform n^2 matches
-    val matches: List[(T, Int, V, Int, Result)] =
-      ts.zipWithIndex.foldLeft(List[(T, Int, V, Int, Result)]()) { case (res, (t, i)) =>
+    val matches: Vector[(T, Int, V, Int, Result)] = {
+      // hoisted out of the loop for some performance gain and predictability
+      val vsZip = vs.zipWithIndex.to[Vector]
+
+      ts.zipWithIndex.foldLeft(Vector[(T, Int, V, Int, Result)]()) { case (res, (t, i)) =>
         val results = vs.zipWithIndex.map { case (v, j) =>
           (t, i, v, ts.size + j, AsResult(matchingFunction(t, v)))
         }
         res ++ results
       }
+    }
+
     val allResults: Map[(Int, Int), (T, V, Result)] = matches.map { case (t, i, v, j, r) => ((i, j), (t, v, r)) }.toMap
 
     // edges of the graph in the form of a map from t vertex in the first part of the bipartite graph to a list of vertices
