@@ -173,8 +173,11 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
    * the Prop
    */
   private def collectDetails[T](fq: FreqMap[Set[T]]): execute.Details = {
-    fq.getRatios.flatMap(_._1.toList).collect { case d @ execute.FailureDetails(_,_) => d }
-      .headOption.getOrElse(execute.NoDetails)
+    fq.getRatios.flatMap(_._1.toList).collect {
+      case d @ execute.FailureDetails(_,_)             => d
+      case d @ execute.FailureSeqDetails(_,_)          => d
+      case d @ execute.FailureUnorderedSeqDetails(_,_) => d
+    }.headOption.getOrElse(execute.NoDetails)
   }
 
   /**
@@ -183,8 +186,10 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
   private def removeDetails(fq: FreqMap[Set[Any]]): FreqMap[Set[Any]] = {
     fq.getCounts.foldLeft(FreqMap.empty[Set[Any]]) { case (res, (set, count)) =>
       set.toList match {
-        case (_:execute.FailureDetails) :: _ => res
-        case _                               => (1 to count).foldLeft(res) { case (map, i) => map + set }
+        case (_:execute.FailureDetails) :: _             => res
+        case (_:execute.FailureSeqDetails) :: _          => res
+        case (_:execute.FailureUnorderedSeqDetails) :: _ => res
+        case _                                           => (1 to count).foldLeft(res) { case (map, i) => map + set }
       }
     }
   }

@@ -152,18 +152,36 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
    */
   def printDetailedFailure(details: Details, level: Int, diffs: Diffs) = {
     details match {
-      case FailureDetails(expected, actual) if diffs.show(expected, actual) => {
+      case FailureDetails(expected, actual) if diffs.show(expected, actual) =>
         val (expectedDiff, actualDiff) = diffs.showDiffs(expected, actual)
         val (expectedMessage, actualMessage) = ("Expected: " + expectedDiff, "Actual:   " + actualDiff)
         val (expectedFull, actualFull) = ("Expected (full): " + expected, "Actual (full):   " + actual)
-        
+
         printKoStatus(div(<img src={baseDir+"images/collapsed.gif"}  onclick={toggleElement(details)}/> ++ t("details"), level) ++
           <div id={id(details)} style="display:none">
             <pre class="details">{expectedMessage+"\n"+actualMessage}</pre>
-            { <pre class="details">{expectedFull+"\n"+actualFull}</pre> unless (diffs.showFull)  }
+            { <pre class="details">{expectedFull+"\n"+actualFull}</pre> unless diffs.showFull  }
           </div>)
-      }
-      case _ => this
+
+      case FailureSeqDetails(expected, actual) if diffs.show(expected, actual, ordered = true) =>
+        val (added, missing) = diffs.showDiffs(expected, actual, ordered = true)
+        val details = added+"\n"+missing
+
+        printKoStatus(div(<img src={baseDir+"images/collapsed.gif"}  onclick={toggleElement(details)}/> ++ t("details"), level) ++
+          <div id={id(details)} style="display:none">
+            <pre class="details">{details}</pre>
+          </div>)
+
+      case FailureUnorderedSeqDetails(expected, actual) if diffs.show(expected, actual, ordered = false) =>
+        val (added, missing) = diffs.showDiffs(expected, actual, ordered = false)
+        val details = added+"\n"+missing
+
+        printKoStatus(div(<img src={baseDir+"images/collapsed.gif"}  onclick={toggleElement(details)}/> ++ t("details"), level) ++
+          <div id={id(details)} style="display:none">
+            <pre class="details">{details}</pre>
+          </div>)
+
+      case NoDetails | FromJUnitAssertionError | FromNotImplementedError => this
     }
   }
 

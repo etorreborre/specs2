@@ -1,6 +1,9 @@
 package org.specs2
 package main
 
+import org.specs2.reflect.Classes
+
+import scala.reflect.ClassTag
 import scalaz.{Memo, Monoid, Scalaz}
 import Scalaz._
 import control._
@@ -406,8 +409,10 @@ object Report extends Extract {
       _pegdownTimeout    = long("pegdownTimeout"),
       _streaming         = bool("streaming"),
       _fromSource        = bool("fromSource"),
+      _diffs             = value("smartdiffs").flatMap(parameters => SmartDiffs.fromString(parameters).right.toOption).
+                             orElse(value("diffsclass").flatMap(instance)),
       _traceFilter       = bool("fullStackTrace").map(t=>NoStackTraceFilter).
-                           orElse(value("traceFilter", IncludeExcludeStackTraceFilter.fromString(_))),
+                           orElse(value("traceFilter", IncludeExcludeStackTraceFilter.fromString)),
       _checkUrls         = bool("checkUrls"),
       _notoc             = bool("noToc"),
       _notifier          = value("notifier"),
@@ -479,6 +484,8 @@ trait Extract {
     tryo(value(name)(args, sp).map(_.toLong)).getOrElse(None)
   }
 
+  def instance[T <: AnyRef](name: String)(implicit m: ClassTag[T]): Option[T] =
+    Classes.create[T](name, getClass.getClassLoader).right.toOption
 }
 
 private[specs2]

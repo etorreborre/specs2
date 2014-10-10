@@ -1,9 +1,6 @@
-package org.specs2
-package matcher
+package org.specs2.execute
 
-import org.specs2.execute.{Result, AsResult}
-
-import data.HopcroftKarp._
+import org.specs2.data.HopcroftKarp._
 
 /**
  * Use of the Hopcroft-Karp (https://en.wikipedia.org/wiki/Hopcroft%E2%80%93Karp_algorithm) algorithm for

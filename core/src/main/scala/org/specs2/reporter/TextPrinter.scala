@@ -163,7 +163,7 @@ trait TextPrinter {
 
     def printFailureDetails(d: Details)(implicit args: Arguments, out: ResultOutput) = {
       d match {
-        case FailureDetails(expected, actual) if args.diffs.show(expected, actual) => {
+        case FailureDetails(expected, actual) if args.diffs.show(expected, actual) =>
           val (expectedDiff, actualDiff) = args.diffs.showDiffs(expected, actual)
           out.printFailure("Expected: " + expectedDiff)
           out.printFailure("Actual:   " + actualDiff)
@@ -172,10 +172,21 @@ trait TextPrinter {
             out.printFailure("Actual (full):   " + actual)
           }
           out.printLine("")
-        }
+
+        case details @ FailureSeqDetails(expected, actual) if args.diffs.show(expected, actual, ordered = true) =>
+          val (added, missing) = args.diffs.showDiffs(expected, actual, ordered = true)
+          if (added.nonEmpty)   out.printLines(added)
+          if (missing.nonEmpty) out.printLines(missing)
+
+        case details @ FailureUnorderedSeqDetails(expected, actual) if args.diffs.show(expected, actual, ordered = false) =>
+          val (added, missing) = args.diffs.showDiffs(expected, actual, ordered = false)
+          if (added.nonEmpty)   out.printLines(added)
+          if (missing.nonEmpty) out.printLines(missing)
+
         case _ => ()
       }
     }
+
     def printError(desc: String, f: Result with ResultStackTrace,
                    timer: SimpleTimer, isDataTable: Boolean = false)(implicit args: Arguments, out: ResultOutput) = {
       val description = statusAndDescription(desc, f, timer, isDataTable)(args, out)

@@ -34,45 +34,16 @@ class BeEqualToMatcherSpec extends Specification with ResultMatchers { def is = 
   ${ Array(Array(1, 2)) must be_===(Array(Array(1, 2))) }
   ${ Array(1, 3) must not be_===(Array(1, 2)) }
   ${ (Array(1, 3) must not be_===(Array(1, 2))) returns
-     """|Array(1, 3) is not equal to Array(1, 2)
-        |
-        |Missing values
-        |2
-        |
-        |Additional values
-        |3""".stripMargin }
+     """Array(1, 3) is not equal to Array(1, 2)""" }
 
-  Unordered collections (sets and maps) equality uses the BestMatching algorithm
+  Unordered collections (sets and maps) equality
   ${ (Set(1, 2) must be_==(Set(2, 3))) returns
-      """|Set(1, 2) is not equal to Set(2, 3)
-         |
-         |Missing values
-         |3
-         |
-         |Additional values
-         |1""".stripMargin
-   }
-
-  ${ (Map("cnt" -> 1, "people" -> List(Map("friend" -> Map("name" -> "Bob"), "age" -> 45, "name" -> "Bill")), "city" -> "Montreal") ===
-        Map("people" -> List(Map("name" -> "Bill", "friend" -> Map("name" -> "Bob"), "age" -> 45)), "city" -> "Montrea", "cnt" -> 1)) returns
-  """|Missing values
-     |city -> Montrea
-     |
-     |Additional values
-     |city -> Montreal""".stripMargin
-   }
+      """Set(1, 2) is not equal to Set(2, 3)""" }
 
   Other collections use normal equality but display missing elements
   ${ Seq(1, 2) must be_==(Seq(1, 2)) }
   ${ (Seq(1, 2) must be_==(Seq(2, 3))) returns
-  """|List(1, 2) is not equal to List(2, 3)
-     |
-     |Missing values
-     |3
-     |
-     |Additional values
-     |1""".stripMargin
-  }
+     """List(1, 2) is not equal to List(2, 3)""" }
 
   Expected values are kept in the failure details
   ${ (1 must_== 2).toResult must beLike { case Failure(_,_,_,FailureDetails(e, a)) => e must_== "2" } }

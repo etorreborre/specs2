@@ -101,6 +101,12 @@ trait JUnitReporter extends ExecutionOrigin with DefaultReporter with Exporters 
     case Failure(m, e, st, NoDetails) =>
       new SpecFailureAssertionFailedError(Throwablex.exception(AnsiColors.removeColors(m), args.traceFilter(st)))
 
+    case Failure(m, e, st, FromNotImplementedError) =>
+      new SpecFailureAssertionFailedError(Throwablex.exception(AnsiColors.removeColors(m), args.traceFilter(st)))
+
+    case Failure(m, e, st, FromJUnitAssertionError) =>
+      new SpecFailureAssertionFailedError(Throwablex.exception(AnsiColors.removeColors(m), args.traceFilter(st)))
+
     case Failure(m, e, st, FailureDetails(expected, actual)) => new ComparisonFailure(AnsiColors.removeColors(m), expected, actual) {
       private val e = args.traceFilter(f.exception)
       override def getStackTrace = e.getStackTrace
@@ -109,6 +115,38 @@ trait JUnitReporter extends ExecutionOrigin with DefaultReporter with Exporters 
       override def printStackTrace(w: java.io.PrintStream) { e.printStackTrace(w) }
       override def printStackTrace(w: java.io.PrintWriter) { e.printStackTrace(w) }
     }
+
+    case Failure(m, e, st, FailureSeqDetails(expected, actual)) =>
+      val details =
+        if (args.diffs.show(expected, actual, ordered = true)) {
+          val (added, missing) = args.diffs.showDiffs(expected, actual, ordered = true)
+          "\n"+added+"\n"+missing
+        } else ""
+
+      new ComparisonFailure(AnsiColors.removeColors(m+details), expected.mkString("\n"), actual.mkString("\n")) {
+        private val e = args.traceFilter(f.exception)
+        override def getStackTrace = e.getStackTrace
+        override def getCause = e.getCause
+        override def printStackTrace() { e.printStackTrace() }
+        override def printStackTrace(w: java.io.PrintStream) { e.printStackTrace(w) }
+        override def printStackTrace(w: java.io.PrintWriter) { e.printStackTrace(w) }
+      }
+
+    case Failure(m, e, st, details @ FailureUnorderedSeqDetails(expected, actual)) =>
+      val details =
+        if (args.diffs.show(expected, actual, ordered = false)) {
+          val (added, missing) = args.diffs.showDiffs(expected, actual, ordered = false)
+          "\n"+added+"\n"+missing
+        } else ""
+
+      new ComparisonFailure(AnsiColors.removeColors(m+details), expected.mkString("\n"), actual.mkString("\n")) {
+        private val e = args.traceFilter(f.exception)
+        override def getStackTrace = e.getStackTrace
+        override def getCause = e.getCause
+        override def printStackTrace() { e.printStackTrace() }
+        override def printStackTrace(w: java.io.PrintStream) { e.printStackTrace(w) }
+        override def printStackTrace(w: java.io.PrintWriter) { e.printStackTrace(w) }
+      }
   }
 }
 

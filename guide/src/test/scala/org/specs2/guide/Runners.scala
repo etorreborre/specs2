@@ -176,12 +176,14 @@ You can also specify your own enhanced algorithm for displaying difference by pr
 
 ```
 trait Diffs {
-  /** @return true if the differences must be shown */
-  def show: Boolean
-  /** @return true if the differences must be shown for 2 different strings */
-  def show(expected: String, actual: String): Boolean
+  /** @return true if the differences must be shown for 2 different values */
+  def show(expected: Any, actual: Any): Boolean
+  /** @return true if the differences must be shown for 2 different sequences of values */
+  def show(expected: Seq[Any], actual: Seq[Any], ordered: Boolean): Boolean
   /** @return the diffs */
-  def showDiffs(expected: String, actual: String): (String, String)
+  def showDiffs(expected: Any, actual: Any): (String, String)
+  /** @return the diffs for sequences */
+  def showDiffs(expected: Seq[Any], actual: Seq[Any], ordered: Boolean): (String, String)
   /** @return true if the full strings must also be shown */
   def showFull: Boolean
 }

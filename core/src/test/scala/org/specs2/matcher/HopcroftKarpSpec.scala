@@ -2,6 +2,7 @@ package org.specs2
 package matcher
 
 import data.HopcroftKarp._
+import org.specs2.execute.BestMatching
 import BestMatching._
 
 class HopcroftKarpSpec extends Specification { def is = s2"""

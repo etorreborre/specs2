@@ -12,8 +12,8 @@ import collection.Seqx._
 import text.Message.concat
 import text.Sentences._
 import text.NotNullStrings._
-import execute.ResultExecution._
-import org.specs2.reflect.ClassName._
+import ResultExecution._
+import reflect.ClassName._
 /**
  * The result of an execution, either:
  *
@@ -311,6 +311,8 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
  */
 sealed trait Details
 case class FailureDetails(expected: String, actual: String) extends Details
+case class FailureSeqDetails(expected: Seq[Any], actual: Seq[Any]) extends Details
+case class FailureUnorderedSeqDetails(expected: Seq[Any], actual: Seq[Any]) extends Details
 case object NoDetails extends Details
 case object FromNotImplementedError extends Details
 case object FromJUnitAssertionError extends Details

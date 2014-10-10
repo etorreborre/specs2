@@ -58,32 +58,29 @@ class BeTypedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1
   }
 
   private def unorderedSeqEquality[S <: T](actualSeq: Seq[Any], expectedSeq: Seq[Any], expectable: Expectable[S], expectedValue: Any): MatchResult[S] = {
-    val (isEqual, missing) = missingElements(actualSeq, expectedSeq)
-    val (haveDifferentClasses, qa, db) = describe(expectedValue, expectable, isEqual)
-    val additionalInfo = if (haveDifferentClasses) "" else missing
+    val isEqual = actualSeq == expectedSeq
+    val (qa, db) = describe(expectedValue, expectable, isEqual)
 
-    result(isEqual, ok(print(qa, " is equal to ", db)), ko(print(qa, " is not equal to ", db) ++ additionalInfo), expectable)
+    result(isEqual, ok(print(qa, " is equal to ", db)), ko(print(qa, " is not equal to ", db)), expectable, FailureUnorderedSeqDetails(expectedSeq, actualSeq))
   }
 
   private def arrayEquality[S <: T](actual: Array[_], expected: Array[_], expectable: Expectable[S], expectedValue: Any): MatchResult[S] = {
     val isEqual = actual.deep == expected.deep
-    val (haveDifferentClasses, qa, db) = describe(expected, expectable, isEqual)
-    val missing = if (isEqual || haveDifferentClasses) "" else missingElements(actual, expected)._2
+    val (qa, db) = describe(expected, expectable, isEqual)
 
-    result(isEqual, ok(print(qa, " is equal to ", db)), ko(print(qa, " is not equal to ", db) ++ missing), expectable)
+    result(isEqual, ok(print(qa, " is equal to ", db)), ko(print(qa, " is not equal to ", db)), expectable, FailureSeqDetails(expected.toSeq, actual.toSeq))
   }
 
   private def traversableEquality[S <: T](actualSeq: Seq[Any], expectedSeq: Seq[Any], expectable: Expectable[S], expectedValue: Any): MatchResult[S] = {
     val isEqual = actualSeq == expectedSeq
-    val (haveDifferentClasses, qa, db) = describe(expectedValue, expectable, isEqual)
-    val missing = if (isEqual || haveDifferentClasses) "" else missingElements(actualSeq, expectedSeq)._2
+    val (qa, db) = describe(expectedValue, expectable, isEqual)
 
-    result(isEqual, ok(print(qa, " is equal to ", db)), ko(print(qa, " is not equal to ", db) ++ missing), expectable)
+    result(isEqual, ok(print(qa, " is equal to ", db)), ko(print(qa, " is not equal to ", db)), expectable, FailureSeqDetails(expectedSeq, actualSeq))
   }
 
   private def untraversableEquality[S <: T](actualSeq: GenTraversableOnce[_], expectable: Expectable[S], expectedValue: Any): MatchResult[S] = {
     val isEqual = actualSeq == expectedValue
-    val (haveDifferentClasses, qa, db) = describe(expectedValue, expectable, isEqual)
+    val (qa, db) = describe(expectedValue, expectable, isEqual)
 
     result(isEqual, ok(print(qa, " is equal to ", db)), ko(print(qa, " is not equal to ", db)), expectable)
   }
@@ -97,47 +94,29 @@ class BeTypedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1
     val actual = b.value
 
     def isEqual = equality(actual, expected)
-    lazy val (haveDifferentClasses, qa, db) = describe(expected, b, isEqual)
+    lazy val (qa, db) = describe(expected, b, isEqual)
     result(isEqual, ok(print(qa, " is equal to ", db)), ko(print(qa, " is not equal to ", db)), b, expected.notNull, actual.notNull)
   }
 
   /**
    * @return a description of the (same string representation, actual value, expected value)
    */
-  private def describe(expected: Any, b: Expectable[_], isEqual: Boolean): (Boolean, String, String) = {
+  private def describe(expected: Any, b: Expectable[_], isEqual: Boolean): (String, String) = {
     val actual = b.value
 
     (b.description, q(expected)) match {
       case (x, y) if !isEqual && x == y =>
         val (actualWithClass, expectedWithClass) = (actual.notNullWithClass, expected.notNullWithClass)
-        if (actualWithClass == expectedWithClass) (true, b.describe(actual.notNullWithClass(showAll = true)), q(expected.notNullWithClass(showAll = true)))
-        else (true, b.describe(actualWithClass), q(expectedWithClass))
+        if (actualWithClass == expectedWithClass) (b.describe(actual.notNullWithClass(showAll = true)), q(expected.notNullWithClass(showAll = true)))
+        else (b.describe(actualWithClass), q(expectedWithClass))
 
-      case (x, y) => (false, x, y)
+      case (x, y) => (x, y)
     }
   }
 
   // print actual and expected values and a message relating them
   private def print(b: String, msg: String, a: String): String =
     Seq(b, msg, a).mkString("\n\n".unless(Seq(a, b).forall(_.size <= 40)))
-
-  private def missingElements(actual: Seq[Any], expected: Seq[Any]): (Boolean, String) = {
-    val (matched, missingFromActual) = BestMatching.findBestMatch(actual, expected, (t: Any, v: Any) => ===(t).apply(Expectable(v)), eachCheck = true)(MatchResult.matchResultAsSimpleResult)
-    val (okValues, koValues)         = matched.partition(_._3.isSuccess)
-    val missingFromExpected          = koValues.map(_._1)
-    val isEqual                      = missingFromActual.isEmpty && missingFromExpected.isEmpty
-    // display pairs nicely
-    val display = (a: Any) => a match {
-      case (k, v) => s"$k -> $v"
-      case _      => a.notNull
-    }
-
-    val missings = if (isEqual) "" else
-      (if (missingFromActual.nonEmpty) "\n\nMissing values"+missingFromActual.map(display).mkString("\n", "\n", "\n") else "") ++
-        (if (missingFromExpected.nonEmpty) "\nAdditional values"+missingFromExpected.map(display).mkString("\n", "\n", "\n\n") else "")
-
-    (isEqual, missings)
-  }
 
   def expected = t
 }
