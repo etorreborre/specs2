@@ -52,7 +52,7 @@ trait HtmlBodyPrinter {
             <li class="example success ok">{show(e)}</li>
 
           case f1 @ Failure(m, e1, st, details) =>
-            failureElement("example", f1, show(e), m, arguments.failtrace, arguments)
+            failureElement("example", f1, show(e), m, arguments.failtrace, details, arguments)
 
           case er @ Error(m, e1) =>
             errorElement("example", er, show(e), m, arguments)
@@ -76,7 +76,7 @@ trait HtmlBodyPrinter {
       case f if Fragment.isStepOrAction(f) =>
         f.executionResult match {
           case f1 @ Failure(m, e1, st, details) =>
-            failureElement("step", f1, <message class="failure">Failed step!</message>, m, arguments.failtrace, arguments)
+            failureElement("step", f1, <message class="failure">Failed step!</message>, m, arguments.failtrace, details, arguments)
 
           case er @ Error(m, e1) =>
             errorElement("step", er, <message class="error">Error in a step!</message>, m, arguments)
@@ -109,11 +109,27 @@ trait HtmlBodyPrinter {
       { arguments.traceFilter(st).map(t => <stacktrace-elt>{t.toString.replace("$", ".")}<br/></stacktrace-elt>).foldLeft(NodeSeq.Empty)(_ ++ _) }
     </stacktrace>
 
-  def failureElement(element: String, f: Result with ResultStackTrace, description: Any, m: String, showTrace: Boolean, arguments: Arguments) = {
+  def failureElement(element: String, f: Result with ResultStackTrace, description: Any, m: String, showTrace: Boolean, details: Details, arguments: Arguments) = {
+
     val message = <message class="failure">{m.notNull+" ("+f.location(arguments.traceFilter)+")"}</message>
+    val detailedFailure = details match {
+      case FailureDetails(expected, actual) if arguments.diffs.show(expected, actual) =>
+        <details class="failure">"\nExpected:\n"{expected}"\nActual:\n"{actual}</details>
+
+      case FailureSeqDetails(expected, actual) if arguments.diffs.show(expected, actual, ordered = true) =>
+        val (added, missing) = arguments.diffs.showDiffs(expected, actual, ordered = true)
+        <details class="failure">{"\n" + added + "\n" + missing}</details>
+
+      case FailureUnorderedSeqDetails(expected, actual) if arguments.diffs.show(expected, actual, ordered = false) =>
+        val (added, missing) = arguments.diffs.showDiffs(expected, actual, ordered = false)
+        <details class="failure">{"\n" + added + "\n" + missing}</details>
+
+      case other => NodeSeq.Empty
+    }
+
     val fullMessage =
-      if (showTrace) <li class ="failure toggle" onclick={toggleElement(f)}>{message}</li>
-      else           <li class ="failure notoggle">{message}</li>
+      if (showTrace) <li class ="failure toggle" onclick={toggleElement(f)}>{message}{detailedFailure}</li>
+      else           <li class ="failure notoggle">{message}{detailedFailure}</li>
 
     val trace =
       if (showTrace) showStacktrace(id(f), f.stackTrace, "failure", arguments)

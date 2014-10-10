@@ -11,14 +11,15 @@ trait AsResult[T] {
 }
 
 object AsResult {
-  /** implicit typeclass instance to create examples from Booleans */
+  /** implicit typeclass instance to create results from Booleans */
   implicit def booleanAsResult: AsResult[Boolean] = new AsResult[Boolean] {
     def asResult(t: =>Boolean): Result = Results.toResult(t)
   }
 
-  /** AsResult typeclass instance for boolean with no stacktraces */
+  /** implicit typeclass instance to create results from Booleans but without building location stacktraces */
   def booleanAsSimpleResult: AsResult[Boolean] = new AsResult[Boolean] {
-    def asResult(t: =>Boolean): Result = Results.booleanToSimpleResult(t)
+    def asResult(b: =>Boolean): Result =
+      if (b) Success("true") else Failure("false", "true", Nil)
   }
 
   /** typeclass instance for types which are convertible to Result */

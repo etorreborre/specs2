@@ -1,16 +1,20 @@
 package org.specs2
 package execute
 
-import org.specs2.control.Throwablex
-import org.specs2.control.Throwablex._
-import org.specs2.main.Arguments
-import org.specs2.reflect.ClassName._
-import org.specs2.text.Message.concat
-import org.specs2.text.NotNullStrings._
-import org.specs2.text.Sentences._
-
-import scalaz.{\&/, Monoid}
+import control.Throwablex
+import control.Throwablex._
+import text.NotNullStrings._
+import main.Arguments
 import scalaz.Scalaz._
+import scalaz.{Foldable, Monoid}
+import Foldable._
+import collection.Seqx._
+import text.Message.concat
+import text.Sentences._
+import text.NotNullStrings._
+import ResultExecution._
+import reflect.ClassName._
+import scalaz._
 /**
  * The result of an execution, either:
  *
@@ -319,6 +323,8 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
  */
 sealed trait Details
 case class FailureDetails(expected: String, actual: String) extends Details
+case class FailureSeqDetails(expected: Seq[Any], actual: Seq[Any]) extends Details
+case class FailureUnorderedSeqDetails(expected: Seq[Any], actual: Seq[Any]) extends Details
 case object NoDetails extends Details
 case object FromNotImplementedError extends Details
 case object FromJUnitAssertionError extends Details

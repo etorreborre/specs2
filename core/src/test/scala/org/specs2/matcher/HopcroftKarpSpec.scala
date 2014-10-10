@@ -2,6 +2,7 @@ package org.specs2
 package matcher
 
 import data.HopcroftKarp._
+import org.specs2.execute.BestMatching
 import BestMatching._
 import ValueChecks._
 import MatchResult._

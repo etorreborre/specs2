@@ -137,7 +137,6 @@ trait TextPrinter extends Printer {
         case other                            => printResult(other)
       }
     } else emitNone
-
   }
 
   def printError(show: String, err: execute.Error, args: Arguments) =
@@ -218,6 +217,18 @@ trait TextPrinter extends Printer {
         emit("Expected (full): " + expected).failure
         emit("Actual (full):   " + actual).failure
       } else emitNone) fby
+      emit("").info
+
+    case details @ FailureSeqDetails(expected, actual) if args.diffs.show(expected, actual, ordered = true) =>
+      val (added, missing) = args.diffs.showDiffs(expected, actual, ordered = true)
+      (if (added.nonEmpty)   emit(added).failure else emitNone) fby
+      (if (missing.nonEmpty) emit(missing).failure else emitNone) fby
+      emit("").info
+
+    case details @ FailureUnorderedSeqDetails(expected, actual) if args.diffs.show(expected, actual, ordered = false) =>
+      val (added, missing) = args.diffs.showDiffs(expected, actual, ordered = false)
+      (if (added.nonEmpty)   emit(added).failure else emitNone) fby
+      (if (missing.nonEmpty) emit(missing).failure else emitNone) fby
       emit("").info
 
     case _ => emitNone
