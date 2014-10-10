@@ -44,9 +44,9 @@ class BeTypedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1
     val (actual, expected) = (b.value, t)
 
     (actual, expected) match {
-      case (e1: Map[_,_], e2: Map[_,_])                           => unorderedSeqEquality(e1.toSeq, e2.toSeq, b, expected)
-      case (e1: Set[_],   e2: Set[_])                             => unorderedSeqEquality(e1.toSeq, e2.toSeq, b, expected)
-      case (e1: Array[_], e2: Array[_])                           => arrayEquality(e1, e2, b, expected)
+      case (e1: Map[_,_], e2: Map[_,_]) => unorderedSeqEquality(e1.toSeq, e2.toSeq, b, expected)
+      case (e1: Set[_],   e2: Set[_])   => unorderedSeqEquality(e1.toSeq, e2.toSeq, b, expected)
+      case (e1: Array[_], e2: Array[_]) => arrayEquality(e1, e2, b, expected)
 
       case (e1: GenTraversableOnce[_], e2: GenTraversableOnce[_]) if foreachIsDefined(e2) =>
         traversableEquality(e1.seq.toSeq, e2.seq.toSeq, b, expected)
@@ -57,11 +57,15 @@ class BeTypedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1
     }
   }
 
-  private def unorderedSeqEquality[S <: T](actualSeq: Seq[Any], expectedSeq: Seq[Any], expectable: Expectable[S], expectedValue: Any): MatchResult[S] = {
-    val isEqual = actualSeq == expectedSeq
+  private def unorderedSeqEquality[S <: T](actual: Seq[Any], expected: Seq[Any], expectable: Expectable[S], expectedValue: Any): MatchResult[S] = {
+    val (matched, added) = BestMatching.findBestMatch(actual, expected, (t: Any, v: Any) => v == t, eachCheck = true)(AsResult.booleanAsResult)
+    val (_, koValues)    = matched.partition(_._3.isSuccess)
+    val missing          = koValues.map(_._1)
+    val isEqual          = added.isEmpty && missing.isEmpty
+
     val (qa, db) = describe(expectedValue, expectable, isEqual)
 
-    result(isEqual, ok(print(qa, " is equal to ", db)), ko(print(qa, " is not equal to ", db)), expectable, FailureUnorderedSeqDetails(expectedSeq, actualSeq))
+    result(isEqual, ok(print(qa, " is equal to ", db)), ko(print(qa, " is not equal to ", db)), expectable, FailureUnorderedSeqDetails(expected, actual, missing, added))
   }
 
   private def arrayEquality[S <: T](actual: Array[_], expected: Array[_], expectable: Expectable[S], expectedValue: Any): MatchResult[S] = {

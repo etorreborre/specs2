@@ -39,6 +39,7 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
   Unordered collections (sets and maps) equality
   ${ (Set(1, 2) must be_==(Set(2, 3))) returns
       """Set(1, 2) is not equal to Set(2, 3)""" }
+  ${ (Map(1 -> 2, 3 -> 4) must be_==(Map(3 -> 4, 1 -> 2))) }
 
   Other collections use normal equality but display missing elements
   ${ Seq(1, 2) must be_==(Seq(1, 2)) }

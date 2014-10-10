@@ -172,9 +172,9 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
    */
   private def collectDetails[T](fq: FreqMap[Set[T]]): execute.Details = {
     fq.getRatios.flatMap(_._1.toList).collect {
-      case d @ execute.FailureDetails(_,_)             => d
-      case d @ execute.FailureSeqDetails(_,_)          => d
-      case d @ execute.FailureUnorderedSeqDetails(_,_) => d
+      case d : execute.FailureDetails             => d
+      case d : execute.FailureSeqDetails          => d
+      case d : execute.FailureUnorderedSeqDetails => d
     }.headOption.getOrElse(execute.NoDetails)
   }
 

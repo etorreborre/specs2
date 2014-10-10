@@ -19,7 +19,7 @@ trait NotNullStrings {
    * - if this is an Array or a collection => it tries the toString method of the collection or evaluate each element separately (because they could be null too)
    * - if this is another type of object   => calls the toString method
    */
-  implicit def anyToNotNull(a: Any) = new NotNullAny(a)
+  implicit def anyToNotNull(a: Any): NotNullAny = new NotNullAny(a)
   class NotNullAny(a: Any) {
     def notNull: String = {
       if (a == null) "null"
@@ -115,6 +115,12 @@ trait NotNullStrings {
     }
   }
 
+  // display pairs nicely
+  val notNullPair: Any => String = (a: Any) =>
+    a match {
+      case (k, v) => s"$k -> $v"
+      case _      => a.notNull
+    }
 }
 
 private[specs2]

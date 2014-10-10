@@ -4,6 +4,7 @@ package reporter
 import matcher.DataTable
 import specification.core._
 import specification.process._
+import text.NotNullStrings._
 import text.Trim
 import Trim._
 import data.Fold
@@ -193,6 +194,7 @@ trait TextPrinter extends Printer {
 
     val rest = textLines.drop(1).map(l => s"  $l")
     (decoratedFirstLine +: rest).mkString("\n")
+
   }
 
   def printMessage(args: Arguments, description: String, as: String => LogLine): Result with ResultStackTrace => Process[Task, LogLine] = { result: Result with ResultStackTrace =>
@@ -220,15 +222,17 @@ trait TextPrinter extends Printer {
       emit("").info
 
     case details @ FailureSeqDetails(expected, actual) if args.diffs.show(expected, actual, ordered = true) =>
-      val (added, missing) = args.diffs.showDiffs(expected, actual, ordered = true)
-      (if (added.nonEmpty)   emit(added).failure else emitNone) fby
+      val (missing, added) = args.diffs.showDiffs(expected, actual, ordered = true)
       (if (missing.nonEmpty) emit(missing).failure else emitNone) fby
+      (if (added.nonEmpty)   emit(added).failure else emitNone) fby
       emit("").info
 
-    case details @ FailureUnorderedSeqDetails(expected, actual) if args.diffs.show(expected, actual, ordered = false) =>
-      val (added, missing) = args.diffs.showDiffs(expected, actual, ordered = false)
-      (if (added.nonEmpty)   emit(added).failure else emitNone) fby
-      (if (missing.nonEmpty) emit(missing).failure else emitNone) fby
+    case details @ FailureUnorderedSeqDetails(expected, actual, missing, added) if args.diffs.show(expected, actual, ordered = false) =>
+      val missingValues = if (missing.nonEmpty) "\n\nMissing values"+missing.map(notNullPair).mkString("\n", "\n", "\n") else ""
+      val addedValues   = if (added.nonEmpty)   "\nAdditional values"+added.map(notNullPair).mkString("\n", "\n", "\n\n") else ""
+
+      (if (missing.nonEmpty) emit(missingValues).failure else emitNone) fby
+      (if (added.nonEmpty)   emit(addedValues).failure else emitNone) fby
       emit("").info
 
     case _ => emitNone

@@ -117,12 +117,14 @@ trait HtmlBodyPrinter {
         <details class="failure">"\nExpected:\n"{expected}"\nActual:\n"{actual}</details>
 
       case FailureSeqDetails(expected, actual) if arguments.diffs.show(expected, actual, ordered = true) =>
-        val (added, missing) = arguments.diffs.showDiffs(expected, actual, ordered = true)
-        <details class="failure">{"\n" + added + "\n" + missing}</details>
+        val (missing, added) = arguments.diffs.showDiffs(expected, actual, ordered = true)
+        <details class="failure">{"\n" + missing + "\n" + added}</details>
 
-      case FailureUnorderedSeqDetails(expected, actual) if arguments.diffs.show(expected, actual, ordered = false) =>
-        val (added, missing) = arguments.diffs.showDiffs(expected, actual, ordered = false)
-        <details class="failure">{"\n" + added + "\n" + missing}</details>
+      case FailureUnorderedSeqDetails(expected, actual, missing, added) if arguments.diffs.show(expected, actual, ordered = false) =>
+        val missingValues = if (missing.nonEmpty) "\n\nMissing values"+missing.map(notNullPair).mkString("\n", "\n", "\n") else ""
+        val addedValues   = if (added.nonEmpty)   "\nAdditional values"+added.map(notNullPair).mkString("\n", "\n", "\n\n") else ""
+        val details = missingValues+"\n"+addedValues
+        <details class="failure">{details}</details>
 
       case other => NodeSeq.Empty
     }

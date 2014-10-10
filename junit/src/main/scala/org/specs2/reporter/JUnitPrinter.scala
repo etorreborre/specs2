@@ -94,8 +94,8 @@ trait JUnitPrinter extends Printer { outer =>
     case Failure(m, e, st, FailureSeqDetails(expected, actual)) =>
       val details =
         if (args.diffs.show(expected, actual, ordered = true)) {
-          val (added, missing) = args.diffs.showDiffs(expected, actual, ordered = true)
-          "\n"+added+"\n"+missing
+          val (missing, added) = args.diffs.showDiffs(expected, actual, ordered = true)
+          "\n"+missing+"\n"+added
         } else ""
 
       new ComparisonFailure(AnsiColors.removeColors(m+details), expected.mkString("\n"), actual.mkString("\n")) {
@@ -107,12 +107,10 @@ trait JUnitPrinter extends Printer { outer =>
         override def printStackTrace(w: java.io.PrintWriter) { e.printStackTrace(w) }
       }
 
-    case Failure(m, e, st, details @ FailureUnorderedSeqDetails(expected, actual)) =>
-      val details =
-        if (args.diffs.show(expected, actual, ordered = false)) {
-          val (added, missing) = args.diffs.showDiffs(expected, actual, ordered = false)
-          "\n"+added+"\n"+missing
-        } else ""
+    case Failure(m, e, st, details @ FailureUnorderedSeqDetails(expected, actual, missing, added)) =>
+      val missingValues = if (missing.nonEmpty) "\n\nMissing values"+missing.map(notNullPair).mkString("\n", "\n", "\n") else ""
+      val addedValues   = if (added.nonEmpty)   "\nAdditional values"+added.map(notNullPair).mkString("\n", "\n", "\n\n") else ""
+      val details = missingValues+"/"+addedValues
 
       new ComparisonFailure(AnsiColors.removeColors(m+details), expected.mkString("\n"), actual.mkString("\n")) {
         private val e = args.traceFilter(f.exception)

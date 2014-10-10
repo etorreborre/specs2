@@ -324,7 +324,7 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
 sealed trait Details
 case class FailureDetails(expected: String, actual: String) extends Details
 case class FailureSeqDetails(expected: Seq[Any], actual: Seq[Any]) extends Details
-case class FailureUnorderedSeqDetails(expected: Seq[Any], actual: Seq[Any]) extends Details
+case class FailureUnorderedSeqDetails(expected: Seq[Any], actual: Seq[Any], missing: Seq[Any], added: Seq[Any]) extends Details
 case object NoDetails extends Details
 case object FromNotImplementedError extends Details
 case object FromJUnitAssertionError extends Details
