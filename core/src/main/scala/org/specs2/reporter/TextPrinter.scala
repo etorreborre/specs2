@@ -174,14 +174,13 @@ trait TextPrinter {
           out.printLine("")
 
         case details @ FailureSeqDetails(expected, actual) if args.diffs.show(expected, actual, ordered = true) =>
-          val (added, missing) = args.diffs.showDiffs(expected, actual, ordered = true)
-          if (added.nonEmpty)   out.printLines(added)
+          val (missing, added) = args.diffs.showDiffs(expected, actual, ordered = true)
           if (missing.nonEmpty) out.printLines(missing)
+          if (added.nonEmpty)   out.printLines(added)
 
-        case details @ FailureUnorderedSeqDetails(expected, actual) if args.diffs.show(expected, actual, ordered = false) =>
-          val (added, missing) = args.diffs.showDiffs(expected, actual, ordered = false)
-          if (added.nonEmpty)   out.printLines(added)
-          if (missing.nonEmpty) out.printLines(missing)
+        case details @ FailureUnorderedSeqDetails(expected, actual, missing, added) =>
+          if (missing.nonEmpty) out.printLines("\n\nMissing values"+missing.map(notNullPair).mkString("\n", "\n", "\n"))
+          if (added.nonEmpty)   out.printLines("\nAdditional values"+added.map(notNullPair).mkString("\n", "\n", "\n\n"))
 
         case _ => ()
       }

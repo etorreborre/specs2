@@ -19,7 +19,7 @@ trait Diffs {
   def show(expected: Seq[Any], actual: Seq[Any], ordered: Boolean): Boolean
   /** @return the diffs */
   def showDiffs(expected: Any, actual: Any): (String, String)
-  /** @return the diffs for sequences */
+  /** @return the diffs for sequences with missing / added values  */
   def showDiffs(expected: Seq[Any], actual: Seq[Any], ordered: Boolean): (String, String)
   /** @return true if the full strings must also be shown */
   def showFull: Boolean
@@ -56,26 +56,19 @@ case class SmartDiffs(show: Boolean       = true,
 
   /** @return the diffs for sequences */
   def showDiffs(expected: Seq[Any], actual: Seq[Any], ordered: Boolean): (String, String) = {
-    val (added, missing) = addedAndMissing(expected, actual)
-    if (added.isEmpty && missing.isEmpty) ("", "") else
-      (if (missing.nonEmpty) "\n\nMissing values"+missing.map(display).mkString("\n", "\n", "\n") else "",
-       if (added.nonEmpty) "\nAdditional values"+added.map(display).mkString("\n", "\n", "\n\n") else "")
+    val (missing, added) = missingAdded(expected, actual)
+    if (missing.isEmpty && added.isEmpty) ("", "") else
+      (if (missing.nonEmpty) "\n\nMissing values"+missing.map(notNullPair).mkString("\n", "\n", "\n") else "",
+       if (added.nonEmpty)  "\nAdditional values"+added.map(notNullPair).mkString("\n", "\n", "\n\n") else "")
   }
 
-  /** @return added and missing values between 2 sequences */
-  private def addedAndMissing(expected: Seq[Any], actual: Seq[Any]) = {
-    val (matched, missingFromActual) = BestMatching.findBestMatch(actual, expected, (t: Any, v: Any) => v == t, eachCheck = true)(AsResult.booleanAsResult)
-    val (_, koValues)                = matched.partition(_._3.isSuccess)
-    val missingFromExpected          = koValues.map(_._1)
-    val isEqual                      = missingFromActual.isEmpty && missingFromExpected.isEmpty
+  /** @return missing and added values between 2 sequences */
+  private def missingAdded(expected: Seq[Any], actual: Seq[Any]): (Seq[String], Seq[String]) = {
+    val (matched, added) = BestMatching.findBestMatch(actual, expected, (t: Any, v: Any) => v == t, eachCheck = true)(AsResult.booleanAsResult)
+    val (_, koValues)    = matched.partition(_._3.isSuccess)
+    val missing          = koValues.map(_._1)
 
-    (missingFromExpected.map(_.toString), missingFromActual.map(_.toString))
-  }
-
-  // display pairs nicely
-  private val display = (a: Any) => a match {
-    case (k, v) => s"$k -> $v"
-    case _      => a.notNull
+    (missing.map(_.toString), added.map(_.toString))
   }
 
 }

@@ -6,6 +6,7 @@ import control._
 import main.{ Arguments, Diffs }
 import text.Markdown._
 import text._
+import NotNullStrings._
 import io.Paths._
 import NotNullStrings._
 import text.Trim._
@@ -164,17 +165,18 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
           </div>)
 
       case FailureSeqDetails(expected, actual) if diffs.show(expected, actual, ordered = true) =>
-        val (added, missing) = diffs.showDiffs(expected, actual, ordered = true)
-        val details = added+"\n"+missing
+        val (missing, added) = diffs.showDiffs(expected, actual, ordered = true)
+        val details = missing+"\n"+added
 
         printKoStatus(div(<img src={baseDir+"images/collapsed.gif"}  onclick={toggleElement(details)}/> ++ t("details"), level) ++
           <div id={id(details)} style="display:none">
             <pre class="details">{details}</pre>
           </div>)
 
-      case FailureUnorderedSeqDetails(expected, actual) if diffs.show(expected, actual, ordered = false) =>
-        val (added, missing) = diffs.showDiffs(expected, actual, ordered = false)
-        val details = added+"\n"+missing
+      case FailureUnorderedSeqDetails(expected, actual, missing, added) =>
+        val missingValues = if (missing.nonEmpty) "\n\nMissing values"+missing.map(notNullPair).mkString("\n", "\n", "\n") else ""
+        val addedValues   = if (added.nonEmpty)   "\nAdditional values"+added.map(notNullPair).mkString("\n", "\n", "\n\n") else ""
+        val details = missingValues+"\n"+addedValues
 
         printKoStatus(div(<img src={baseDir+"images/collapsed.gif"}  onclick={toggleElement(details)}/> ++ t("details"), level) ++
           <div id={id(details)} style="display:none">

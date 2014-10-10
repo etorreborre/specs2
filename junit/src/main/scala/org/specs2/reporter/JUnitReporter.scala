@@ -9,7 +9,7 @@ import Scalaz._
 import main.{SystemProperties, Arguments}
 import execute._
 import specification._
-import text.AnsiColors
+  import text.AnsiColors
 import control.{ExecutionOrigin, Throwablex}
 import junit.framework.AssertionFailedError
 import text.NotNullStrings._
@@ -132,12 +132,10 @@ trait JUnitReporter extends ExecutionOrigin with DefaultReporter with Exporters 
         override def printStackTrace(w: java.io.PrintWriter) { e.printStackTrace(w) }
       }
 
-    case Failure(m, e, st, details @ FailureUnorderedSeqDetails(expected, actual)) =>
-      val details =
-        if (args.diffs.show(expected, actual, ordered = false)) {
-          val (added, missing) = args.diffs.showDiffs(expected, actual, ordered = false)
-          "\n"+added+"\n"+missing
-        } else ""
+    case Failure(m, e, st, details @ FailureUnorderedSeqDetails(expected, actual, missing, added)) =>
+      val missingValues = if (missing.nonEmpty) "\n\nMissing values"+missing.map(notNullPair).mkString("\n", "\n", "\n") else ""
+      val addedValues   = if (added.nonEmpty)   "\nAdditional values"+added.map(notNullPair).mkString("\n", "\n", "\n\n") else ""
+      val details = missingValues+"/"+addedValues
 
       new ComparisonFailure(AnsiColors.removeColors(m+details), expected.mkString("\n"), actual.mkString("\n")) {
         private val e = args.traceFilter(f.exception)
