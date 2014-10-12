@@ -20,10 +20,12 @@ trait MocksCreation extends TheMockitoMocker with ClassesOf {
    * create a mock object with a name: val m = mockAs[java.util.List[String]]("name")
    */
   def mockAs[T : ClassTag](name: String): T = Mocked[T]().as(name)
+
   /**
    * create a mock object with some specific settings: val m = mock[java.util.List[String]](settings)
    */
   def mock[T : ClassTag](settings: org.mockito.MockSettings): T = Mocked[T](settings).done
+
   /**
    * implicit allowing to define the mock settings with a nice syntax:
    *  - named mock: val m = mock[java.util.List[String]].as("name")
@@ -43,7 +45,7 @@ trait MocksCreation extends TheMockitoMocker with ClassesOf {
     def smart = Mocked[T](mockitoSettings.defaultAnswer(org.mockito.Mockito.RETURNS_SMART_NULLS)).done
     def defaultReturn(a: Any) = settings(defaultReturn = a)
     def defaultAnswer[S](answer: InvocationOnMock => S) = settings(defaultAnswer = (i: InvocationOnMock) => answer(i): Any)
-    def extraInterface = settings(extraInterface = implicitly[ClassTag[T]].runtimeClass)
+    def extraInterface[T1 : ClassTag] = settings(extraInterface = implicitly[ClassTag[T1]].runtimeClass)
     def extraInterfaces[T1 : ClassTag, T2: ClassTag] = settings(extraInterfaces = classesOf[T1, T2])
     def extraInterfaces[T1 : ClassTag, T2: ClassTag, T3: ClassTag] = settings(extraInterfaces = classesOf[T1, T2, T3])
     def extraInterfaces[T1 : ClassTag, T2: ClassTag, T3: ClassTag, T4: ClassTag] = settings(extraInterfaces = classesOf[T1, T2, T3, T4])
@@ -63,6 +65,7 @@ trait MocksCreation extends TheMockitoMocker with ClassesOf {
       update(extraInterface)(i => mockitoSettings.extraInterfaces(i)).
       update(extraInterfaces)(i => mockitoSettings.extraInterfaces(i:_*)).done
     }
+
     /**
      * @return the mock object
      */
