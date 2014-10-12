@@ -15,6 +15,7 @@ class ShouldExpectable[T] private[specs2] (tm: () => T) extends Expectable[T](tm
   def shouldEqual(other: =>Any)    = applyMatcher[Any](new BeEqualTo(other))
   def shouldNotEqual(other: =>Any) = applyMatcher[Any](new BeEqualTo(other).not)
   def should_==(other: =>Any)      = applyMatcher[Any](new BeEqualTo(other))
+  def should_===(other: =>T)       = applyMatcher(new BeTypedEqualTo(other))
   def should_!=(other: =>Any)      = applyMatcher[Any](new BeEqualTo(other).not)
 }
 object ShouldExpectable {

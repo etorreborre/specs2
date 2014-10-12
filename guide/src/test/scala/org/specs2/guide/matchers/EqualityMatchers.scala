@@ -26,6 +26,7 @@ There are also other notions of equality
  `beTypedEqualTo           `| typed equality. `a must beTypedEqualTo(b)` will not work if `a` and `b` don't have compatible types
  `be_===                   `| synonym for `beTypedEqualTo`
  `a ==== b                 `| synonym for `a must beTypedEqualTo(b)`
+ `a must_=== b             `| similar to `a must_== b` but will not typecheck if `a` and `b` don't have the same type
  `be_==~                   `| check if `(a: A) == conv(b: B)` when there is an implicit conversion `conv` from `B` to `A`
  `beTheSameAs              `| reference equality: check if `a eq b` (`a must be(b)` also works)
  `be                       `| `a must be(b)`: synonym for `beTheSameAs`
