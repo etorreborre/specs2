@@ -85,6 +85,7 @@ For some other types of equality:
  `beTheSameAs              `| checks if `a eq b` (`a must be(b)` also works)
  `beTrue, beFalse          `| shortcuts for Boolean equality
  `a ==== b                 `| similar to `a === b` but will not typecheck if `a` and `b` don't have the same type
+ `a must_=== b             `| similar to `a must_== b` but will not typecheck if `a` and `b` don't have the same type
 
 
 _Note_: the `beEqualTo` matcher is using the regular `==` Scala equality. However in the case of `Arrays`, Scala `==` is just using reference equality, `eq`. So the `beEqualTo` matcher has been adapted to use the `.deep` method on `Arrays`, transforming them to `IndexedSeqs` (possibly nested), before checking for equality, so that `Array(1, 2, 3) === Array(1, 2, 3)` (despite the fact that `Array(1, 2, 3) != Array(1, 2, 3)`).
