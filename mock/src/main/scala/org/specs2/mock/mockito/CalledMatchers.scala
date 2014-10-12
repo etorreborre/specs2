@@ -104,6 +104,8 @@ trait CalledMatchers extends NumberOfTimes with FunctionArguments with TheMockit
   def two[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.times(2))(anOrder)
   /** three calls only made to the mock */
   def three[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.times(3))(anOrder)
+  /** exactly n calls only made to the mock */
+  def exactly[T <: AnyRef](n: Int)(mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.times(n))(anOrder)
   /** at least n calls made to the mock */
   def atLeast[T <: AnyRef](i: Int)(mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.atLeast(i))(anOrder)
   /** at least 1 call made to the mock */
@@ -136,6 +138,8 @@ trait CalledMatchers extends NumberOfTimes with FunctionArguments with TheMockit
     def two[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.timeout(duration.inMillis.toInt).times(2))(anOrder)
     /** three calls only made to the mock */
     def three[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.timeout(duration.inMillis.toInt).times(3))(anOrder)
+    /** exactly n calls only made to the mock */
+    def exactly[T <: AnyRef](n: Int)(mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.timeout(duration.inMillis.toInt).times(n))(anOrder)
     /** at least n calls made to the mock */
     def atLeast[T <: AnyRef](i: Int)(mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.timeout(duration.inMillis.toInt).atLeast(i))(anOrder)
     /** at least 1 call made to the mock */

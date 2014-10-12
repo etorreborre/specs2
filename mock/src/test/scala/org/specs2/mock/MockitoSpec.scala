@@ -91,6 +91,7 @@ STUBS
  The number of calls to a mocked method can be checked
    + if the mocked method has been called once
    + if the mocked method has been called twice
+   + if the mocked method has been called exactly n times
    + if the mocked method has been called atLeast n times
    + if the mocked method has been called atMost n times
    + if the mocked method has never been called
@@ -327,6 +328,7 @@ STUBS
     eg := got { one(list).add("one") }  // equivalent to 'there was one(list).add("one")'
     eg := there were two(list).add("two")
     eg := there was atLeast(1)(list).add("two")
+    eg := there was exactly(2)(list).add("two")
     eg := there were atMost(2)(list).add("two")
     eg := there was no(list).add("four")
     eg := {
