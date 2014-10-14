@@ -30,7 +30,7 @@ trait BeforeAfter extends Before with After { outer =>
 }
 
 /**
- * The BeforeAfter trait allows to declare before, around and after actions
+ * The BeforeAfterAround trait allows to declare before, around and after actions
  * 
  * @see Before
  * @see After
