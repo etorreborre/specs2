@@ -11,7 +11,7 @@ private[specs2]
 trait Plural {
   
   /** @return a Noun object which can be pluralized */
-  implicit def noun(s: String) = Noun(s)
+  implicit def noun(s: String): Noun = Noun(s)
   case class Noun(s: String) {
     def plural(vs: Iterable[Any]): String = s.plural(vs.size)
     def plural(v: Int): String     = if (v > 1) s+"s" else s
@@ -22,8 +22,8 @@ trait Plural {
     def bePlural(v: Long) = s.plural(v) + " " + beVerbPlural(v)
   }
 
-  def beVerbPlural(v: Int)  = (if (v > 1) "are" else "is")
-  def beVerbPlural(v: Long) = (if (v > 1) "are" else "is")
+  def beVerbPlural(v: Int)  = if (v > 1) "are" else "is"
+  def beVerbPlural(v: Long) = if (v > 1) "are" else "is"
 
   /** @return a Quantity which can be applied to a string to pluralize it */
   implicit def quantity(i: Int) = Quantity(i)
@@ -44,7 +44,7 @@ trait Plural {
     def optInvariantQty(s: String): Option[String] = if (i > 0) Some(i.toString+" "+s) else None
   }
   /** @return an Ordinal which can have a rank in a sequence */
-  implicit def ordinal(i: Int) = Ordinal(i)
+  implicit def ordinal(i: Int): Ordinal = Ordinal(i)
   case class Ordinal(i: Int) {
     /**
      * @return the proper postfix for an ordinal number

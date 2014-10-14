@@ -61,7 +61,19 @@ types and more generally with Ordered types.
   ${ 2 must not beCloseTo(4 +/- 1) }
   and return a failure if the comparison fails                                                                     $e5
   and return a failure if the comparison fails - with aka                                                          $e5_1
-                                                                                                                        
+
+${section("significant")}
+  beCloseTo tests if 2 Numerics are close to each other, within some order of magnitude
+  ${ 1001.1232455 must beCloseTo(1003.12, 2.significantDigits) }
+  ${ 5.1 must beCloseTo(5.0 within 1.significantDigits) }
+  ${ 4.994 must beCloseTo(5.0 within 2.significantDigits) }
+  ${ 4.994 must not beCloseTo(5.0 within 3.significantDigits) }
+  ${ 4.995 must beCloseTo(5.0 within 3.significantDigits) }
+  ${ 1.4 must beCloseTo(2.0 within 0.significantDigits) }
+  ${ 0.00123 must not beCloseTo(0.00124 within 5.significantDigits) }
+  ${ 900 must not be closeTo(1000 within 2.significantDigits) }
+${section("significant")}
+
   beBetween tests if one value is between 2 other values                                                              
   ${ 5 must beBetween(3, 6) }
   ${ 5 must beBetween(3, 5) }
