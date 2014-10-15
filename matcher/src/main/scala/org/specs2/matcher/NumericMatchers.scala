@@ -55,12 +55,12 @@ trait NumericBaseMatchers {
   implicit def ToDelta[S : Numeric](n: S): CanHaveDelta[S] = CanHaveDelta(n)
   /** implicit definition to create significant figures for the beCloseTo matcher */
   implicit class SignificantFiguresSyntax(value: Int) {
-    def significantFigure = SignificantDigits(value)
-    def significantDigits = SignificantDigits(value)
+    def significantFigures = SignificantFigures(value)
+    def significantFigure = SignificantFigures(value)
   }
   /** implicit definition to create significant figures for the beCloseTo matcher */
   implicit class SignificantSyntax[N : Numeric](target: N) {
-    def within(significant: SignificantDigits): SignificantTarget[N] =
+    def within(significant: SignificantFigures): SignificantTarget[N] =
       SignificantTarget(target, significant)
   }
 
@@ -72,14 +72,14 @@ trait NumericBaseMatchers {
   def closeTo[S : Numeric](delta: Delta[S]): Matcher[S] = beCloseTo(delta)
 
   /** matches if target - actual < 10 pow (log x - significantDigits) */
-  def beCloseTo[S : Numeric](target: S, digits: SignificantDigits): Matcher[S] = 
-    new BeSignificantlyCloseTo[S](target, digits)
+  def beCloseTo[S : Numeric](target: S, figures: SignificantFigures): Matcher[S] = 
+    new BeSignificantlyCloseTo[S](target, figures)
 
   def beCloseTo[S : Numeric](target: SignificantTarget[S]): Matcher[S] =
-    new BeSignificantlyCloseTo[S](target.target, target.significantDigits)
+    new BeSignificantlyCloseTo[S](target.target, target.significantFigures)
 
-  def closeTo[S : Numeric](target: S, digits: SignificantDigits): Matcher[S] =
-    beCloseTo(target, digits)
+  def closeTo[S : Numeric](target: S, figures: SignificantFigures): Matcher[S] =
+    beCloseTo(target, figures)
 
   def closeTo[S : Numeric](target: SignificantTarget[S]): Matcher[S] =
     beCloseTo(target)
@@ -138,11 +138,11 @@ trait NumericBeHaveMatchers { outer: NumericBaseMatchers =>
   class NumericResultMatcher[S : Numeric](result: MatchResult[S]) {
     def beCloseTo(n: S, delta: S) = result(outer.beCloseTo(n, delta))
     def beCloseTo(delta: Delta[S]) = result(outer.beCloseTo(delta))
-    def beCloseTo(target: S, digits: SignificantDigits) = result(outer.beCloseTo(target, digits))
+    def beCloseTo(target: S, figures: SignificantFigures) = result(outer.beCloseTo(target, figures))
     def beCloseTo(target: SignificantTarget[S]) = result(outer.beCloseTo(target))
     def closeTo(n: S, delta: S) = result(outer.beCloseTo(n, delta))
     def closeTo(delta: Delta[S]) = result(outer.beCloseTo(delta))
-    def closeTo(target: S, digits: SignificantDigits) = result(outer.beCloseTo(target, digits))
+    def closeTo(target: S, figures: SignificantFigures) = result(outer.beCloseTo(target, figures))
     def closeTo(target: SignificantTarget[S]) = result(outer.beCloseTo(target))
     def ~(n: S, delta: S) = result(outer.beCloseTo(n, delta))
     def ~(delta: Delta[S]) = result(outer.beCloseTo(delta))
@@ -195,26 +195,31 @@ class BeCloseTo[T : Numeric](n: T, delta: T) extends Matcher[T] {
   }
 }
 
-class BeSignificantlyCloseTo[T : Numeric](target: T, sf: SignificantDigits) extends Matcher[T] {
+class BeSignificantlyCloseTo[T : Numeric](target: T, sf: SignificantFigures) extends Matcher[T] {
   def apply[S <: T](x: Expectable[S]) = {
     val num = implicitly[Numeric[T]]
     val actual = x.value
     if (target == 0)
       result(actual == 0,
              s"$actual is equal to $target",
-             s"${description(x)} is not equal to 0 (significant digits do not apply since the target is 0)", x)
+             s"${description(x)} is not equal to 0 (significant figures do not apply since the target is 0)", x)
     else {
-      val border: Double = 0.5 * Math.pow(10, -sf.number)
-
-      result((num.toDouble(num.minus(actual, target)) / num.toDouble(target)).abs < border,
+      // Calculate the order of the number
+      val o = order(num.toDouble(target))
+      // Calculate both actual and target as ints of just their significant figures
+      // e.g. 0.1234 to 2 sig figs as 12
+      val a = (num.toDouble(actual) * Math.pow(10, sf.number - o -1)).round.toInt
+      val t = (num.toDouble(target) * Math.pow(10, sf.number - o -1)).round.toInt
+      result(a == t,
              s"${description(x)} is close to $target with ${sf.number.qty("significant digit")}",
              s"${description(x)} is not close to $target with ${sf.number.qty("significant digit")}", x)
     }
   }
+  def order(n: Double):Int = Math.log10(n.abs).floor.toInt
 }
 
-case class SignificantTarget[T : Numeric](target: T, significantDigits: SignificantDigits)
-case class SignificantDigits(number: Int)
+case class SignificantTarget[T : Numeric](target: T, significantFigures: SignificantFigures)
+case class SignificantFigures(number: Int)
 
 case class BetweenMatcher[T <% Ordered[T]](t1: T, t2: T, includeStart: Boolean = true, includeEnd: Boolean = true) extends Matcher[T] {
   def apply[S <: T](s: Expectable[S]) = {
