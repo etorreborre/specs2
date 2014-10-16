@@ -35,6 +35,13 @@ object depends {
     if (scalaVersion.startsWith("2.11")) Nil
     else  Seq(compilerPlugin("org.scalamacros" %% "paradise"    % "2.0.0" cross CrossVersion.full),
                              "org.scalamacros" %% "quasiquotes" % "2.0.0")
+
+  lazy val resolvers = sbt.Keys.resolvers ++=
+    Seq(Resolver.sonatypeRepo("releases"),
+      Resolver.sonatypeRepo("snapshots"),
+      Resolver.typesafeIvyRepo("releases"),
+      "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases")
+
 }
 
 

@@ -52,12 +52,6 @@ object build extends Build {
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 
-  lazy val resolversSettings = resolvers ++=
-    Seq(Resolver.sonatypeRepo("releases"), 
-        Resolver.sonatypeRepo("snapshots"),
-        Resolver.typesafeIvyRepo("releases"),
-        "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases")
-
   lazy val buildSettings: Seq[Settings] =
     buildInfoSettings ++
       Seq(sourceGenerators in Compile <+= buildInfo,
@@ -71,9 +65,9 @@ object build extends Build {
 
   lazy val moduleSettings: Seq[Settings] =
       coreDefaultSettings  ++
+      depends.resolvers    ++
       buildSettings        ++
       specs2Settings       ++
-      resolversSettings    ++
       compilationSettings  ++
       testingSettings      ++
       publicationSettings
