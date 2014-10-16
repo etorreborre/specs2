@@ -43,7 +43,7 @@ trait MocksCreation extends TheMockitoMocker with ClassesOf {
     def smart = Mocked[T](mockitoSettings.defaultAnswer(org.mockito.Mockito.RETURNS_SMART_NULLS)).done
     def defaultReturn(a: Any) = settings(defaultReturn = a)
     def defaultAnswer[S](answer: InvocationOnMock => S) = settings(defaultAnswer = (i: InvocationOnMock) => answer(i): Any)
-    def extraInterface[T : ClassTag] = settings(extraInterface = implicitly[ClassTag[T]].runtimeClass)
+    def extraInterface[T1 : ClassTag] = settings(extraInterface = implicitly[ClassTag[T1]].runtimeClass)
     def extraInterfaces[T1 : ClassTag, T2: ClassTag] = settings(extraInterfaces = classesOf[T1, T2])
     def extraInterfaces[T1 : ClassTag, T2: ClassTag, T3: ClassTag] = settings(extraInterfaces = classesOf[T1, T2, T3])
     def extraInterfaces[T1 : ClassTag, T2: ClassTag, T3: ClassTag, T4: ClassTag] = settings(extraInterfaces = classesOf[T1, T2, T3, T4])
