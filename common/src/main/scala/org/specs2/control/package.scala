@@ -1,5 +1,8 @@
 package org.specs2
 
+import org.specs2.control.ActionT
+
+import scalaz.{WriterT, Monoid}
 import scalaz.std.anyVal._
 import scalaz.effect._
 import org.specs2.execute.{AsResult, Result}
@@ -9,6 +12,8 @@ import scalaz.stream.Process
 import scalaz.syntax.bind._
 
 package object control {
+  import StatusT._
+
   /**
    * Actions logging
    */
@@ -19,9 +24,26 @@ package object control {
   /**
    * Action type, using a logger as a reader and no writer
    */
-  type Action[A] = ActionT[IO, Unit, Logger, A]
+  type Action[A] = ActionT[IO, Logs, Logger, A]
+  type Logs = Vector[String]
 
-  object Actions extends ActionTSupport[IO, Unit, Logger]
+  implicit def LogsMonoid: Monoid[Logs] = new Monoid[Logs] {
+    def zero: Logs = Vector[String]()
+    def append(f1: Logs, f2: =>Logs): Logs = f1 ++ f2
+  }
+
+  object Actions extends ActionTSupport[IO, Logs, Logger]
+
+  /** warn the user about something that is probably wrong on his side, this is not a specs2 bug */
+  def warn(message: String): Action[Unit] =
+    ActionT.append(Vector(message))
+
+  /**
+   * warn the user about something that is probably wrong on his side,
+   * this is not a specs2 bug, then fail to stop all further computations
+   */
+  def warnAndFail[A](message: String, failureMessage: String): Action[A] =
+    warn(message) >> ActionT.fail[IO, Logs, Logger, A](failureMessage)
 
   /** log a value, using the logger coming from the Reader environment */
   def log[R](r: R): Action[Unit] =
@@ -71,14 +93,17 @@ package object control {
    * An Action[T] can be converted to a Task[T]
    */
   implicit class ioActionToTask[T](action: Action[T]) {
-    def toTask = Task.delay (
-      action.execute(noLogging).unsafePerformIO).flatMap(_.fold(
-      t => Task.now(t),
-      error => error.fold(
-        s => Task.fail(new Exception(s)),
-        t => Task.fail(t),
-        (s, t) => Task.fail(t)
-      )))
+    def toTask = Task.delay {
+      action.run(noLogging).unsafePerformIO
+     }.flatMap { case (warnings, result) =>
+        result.fold(
+          t => Task.now(t),
+          error => error.fold(
+            s      => Task.fail(ActionException(warnings, Some(s), None)),
+            t      => Task.fail(ActionException(warnings, None, Some(t))),
+            (s, t) => Task.fail(ActionException(warnings, Some(s), Some(t)))
+          ))
+    }
   }
 
   /**

@@ -2,7 +2,7 @@ package org.specs2
 package html
 
 import scala.util.parsing.combinator._
-import control.{Actions, Action}
+import control._
 import scalaz.std.anyVal._
 
 /**

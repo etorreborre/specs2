@@ -60,7 +60,7 @@ trait HtmlPrinter extends Printer {
     for {
       options  <- getHtmlOptions(env.arguments)
       _        <- copyResources(env, options.outDir)
-      template <- readFile(options.template)
+      template <- readFile(options.template) ||| warnAndFail("No template file found at "+options.template.path, RunAborted)
       content  <- makeHtml(template, spec, stats, options, env.arguments)
       _        <- writeFile(outputFilePath(options.outDir, spec), content)
     } yield ()
@@ -150,17 +150,17 @@ trait HtmlPrinter extends Printer {
   def copyResources(env: Env, outDir: DirectoryPath): Action[List[Unit]] =
     env.fileSystem.mkdirs(outDir) >> {
       List(DirectoryPath("css"),
-        DirectoryPath("javascript"),
-        DirectoryPath("images"),
-        DirectoryPath("templates")).
-        map(copySpecResourcesDir(env, "org" / "specs2" / "reporter", outDir, classOf[HtmlPrinter].getClassLoader)).sequenceU |||
-        Actions.fail("Cannot copy resources to "+outDir.path)
+           DirectoryPath("javascript"),
+           DirectoryPath("images"),
+           DirectoryPath("templates")).
+           map(copySpecResourcesDir(env, "org" / "specs2" / "reporter", outDir, classOf[HtmlPrinter].getClassLoader)).sequenceU |||
+        warnAndFail("Cannot copy resources to "+outDir.path, RunAborted)
     }
 
   def copySpecResourcesDir(env: Env, base: DirectoryPath, outputDir: DirectoryPath, loader: ClassLoader)(src: DirectoryPath): Action[Unit] = {
     Option(loader.getResource((base / src).path)) match {
       case None =>
-        Actions.fail(s"no resource found for url ${(base / src).path}")
+        warnAndFail(s"no resource found for url ${(base / src).path}", RunAborted)
 
       case Some(url) =>
         val fs = env.fileSystem
@@ -173,6 +173,8 @@ trait HtmlPrinter extends Printer {
 
   private def jarOf(url: URL): URL = url.openConnection.asInstanceOf[JarURLConnection].getJarFileURL
 
+  private val RunAborted =
+    "\nHtml run aborted!\n "
 }
 
 object HtmlPrinter extends HtmlPrinter

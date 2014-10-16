@@ -91,6 +91,9 @@ object ActionT extends ActionTLowPriority {
   def error[F[+_]: Monad, W: Monoid, R, A](message: String, t: Throwable): ActionT[F, W, R, A] =
     ActionT(_ => StatusT.error[({ type l[+a] = WriterT[F, W, a] })#l, A](message, t))
 
+  def append[F[+_]: Monad, W: Monoid, R](w: W): ActionT[F, W, R, Unit] =
+    ActionT((r: R) => StatusT[({ type l[+a] = WriterT[F, W, a] })#l, Unit](StatusT.safe[({ type l[+a] = WriterT[F, W, a] })#l, Unit](()).run :++> w))
+
   def these[F[+_]: Monad, W: Monoid, R, A](both: These[String, Throwable]): ActionT[F, W, R, A] =
     ActionT(_ => StatusT.these[({ type l[+a] = WriterT[F, W, a] })#l, A](both))
 
@@ -195,6 +198,9 @@ trait ActionTSupport[F[+_], W, R] {
 
   def error[A](t: Throwable)(implicit M: Monad[F], W: Monoid[W]): ActionT[F, W, R, A] =
     ActionT.error(t.getMessage, t)
+
+  def append(w: W)(implicit M: Monad[F], W: Monoid[W]): ActionT[F, W, R, Unit] =
+    ActionT.append(w)
 
   def these[A](both: These[String, Throwable])(implicit M: Monad[F], W: Monoid[W]): ActionT[F, W, R, A] =
     ActionT.these(both)

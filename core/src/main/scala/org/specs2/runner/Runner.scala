@@ -17,13 +17,14 @@ object Runner {
    * Execute some actions and exit with the proper code if 'exist' is true
    */
   def execute(actions: Action[Unit], arguments: Arguments, exit: Boolean) = {
-    actions.execute(consoleLogging).unsafePerformIO.fold(
-      ok => IO(exitSystem(0, exit)),
+    val (warnings, result) = actions.run(consoleLogging).unsafePerformIO
+    result.fold(
+      ok => logUserWarnings(warnings)(consoleLogging) >> IO(exitSystem(0, exit)),
       error => error.fold(
-        consoleLogging,
-        t => logThrowable(t, arguments)(consoleLogging),
-        (m, t) => consoleLogging(m) >> logThrowable(t, arguments)(consoleLogging) >> IO(exitSystem(100, exit))
-      )
+        m      => logUserWarnings(warnings)(consoleLogging) >> consoleLogging(m),
+        t      => logUserWarnings(warnings)(consoleLogging) >> logThrowable(t, arguments)(consoleLogging),
+        (m, t) => logUserWarnings(warnings)(consoleLogging) >> consoleLogging(m) >> logThrowable(t, arguments)(consoleLogging)
+      ) >> IO(exitSystem(100, exit))
     ).unsafePerformIO
   }
 
@@ -32,17 +33,34 @@ object Runner {
    */
   def logThrowable(t: Throwable, arguments: Arguments)(print: String => IO[Unit]): IO[Unit] = {
     if (!arguments.commandLine.boolOr("silent", false)) {
-      print("\n"+t.toString+"\n")    >>
-      t.chainedExceptions.traverse_(s => print("  caused by " + s.toString)) >>
-      print("\nSTACKTRACE") >>
-      t.getStackTrace.toList.traverse_(t => print("  "+t.toString)) >>
-      t.chainedExceptions.traverse_ { s =>
-        print("\n  CAUSED BY " + s.toString) >>
-          s.getStackTrace.toList.traverse_(t => print("  "+t.toString))
-      } >>
-      print("\n\nThis looks like a specs2 exception...\nPlease report it with the preceding stacktrace at http://github.com/etorreborre/specs2/issues") >>
-      print(" ")
+      t match {
+        case ActionException(warnings, message, _) =>
+          (if (warnings.nonEmpty) print("Warnings:") else IO(())) >>
+          warnings.traverseU(print) >>
+          message.traverseU(print).void
+
+        case other =>
+            print("\n"+t.toString+"\n")    >>
+              t.chainedExceptions.traverse_(s => print("  caused by " + s.toString)) >>
+              print("\nSTACKTRACE") >>
+              t.getStackTrace.toList.traverse_(t => print("  "+t.toString)) >>
+              t.chainedExceptions.traverse_ { s =>
+                print("\n  CAUSED BY " + s.toString) >>
+                  s.getStackTrace.toList.traverse_(t => print("  "+t.toString))
+              } >>
+              print("\n\nThis looks like a specs2 exception...\nPlease report it with the preceding stacktrace at http://github.com/etorreborre/specs2/issues") >>
+              print(" ")
+
+      }
     } else IO(())
+  }
+
+  /**
+   * Log the issues which might have been caused by the user
+   */
+  def logUserWarnings(warnings: Vector[String])(print: String => IO[Unit]): IO[Unit] = {
+    print("Warnings:\n") >>
+    warnings.traverseU(print).void
   }
 
   /**

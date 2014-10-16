@@ -2,7 +2,7 @@ package org.specs2
 package specification
 package process
 
-import control.{Actions, Action}
+import control._
 import execute.Result
 import io._
 import scalaz.std.anyVal._
@@ -48,15 +48,16 @@ case class StatisticsMemoryStore(statistics: HashMap[String, Stats] = new HashMa
     case SpecificationStatsKey(specClassName) => Actions.ok(statistics.get(specClassName))
     case SpecificationResultKey(specClassName, description) => Actions.ok(results.get((specClassName, description.hashCode)))
   }
+  
   def set[A](key: Key[A], a: A): Action[Unit] = key match {
     case SpecificationStatsKey(specClassName) => Actions.ok(statistics.put(specClassName, a))
     case SpecificationResultKey(specClassName, description) => Actions.ok(results.put((specClassName, description.hashCode), a))
   }
 
-  def reset: Action[Unit] = Actions.ok({
+  def reset: Action[Unit] = Actions.ok {
     statistics.clear
     results.clear
-  })
+  }
 
 }
 

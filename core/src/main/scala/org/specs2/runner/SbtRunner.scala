@@ -35,9 +35,13 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
           case f: SubclassFingerprint    =>
             if (f.superclassName.endsWith("SpecificationStructure")) {
               val action = specificationRun(aTaskDef, loader, handler, loggers, isModule = f.isModule)
-              action.execute(consoleLogging).unsafePerformIO.fold(
-                ok => ok,
-                e  => handleRunError(e, loggers, sbtEvents(taskDef, handler), commandLineArguments)
+              val (warnings, result) = action.run(consoleLogging).unsafePerformIO
+              result.fold(
+                ok => handleRunWarnings(warnings, loggers, commandLineArguments),
+                e  => {
+                  if (warnings.nonEmpty) handleRunWarnings(warnings, loggers, commandLineArguments)
+                  else                   handleRunError(e, loggers, sbtEvents(taskDef, handler), commandLineArguments)
+                }
               )
             }
             else ()
@@ -108,13 +112,22 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
       Runner.logThrowable(t, arguments)(m => IO(logger.errorLine(m))).unsafePerformIO
 
     e.fold(
-      m =>      { events.error; logger.errorLine(m) },
-      t =>      { events.error(t); if (t.getMessage != null) logger.errorLine(t.getMessage); logThrowable(t) },
-      (m, t) => { events.error(t); if (t.getMessage != null) logger.errorLine(t.getMessage); logThrowable(t) }
+      m =>      { events.error;    logger.errorLine(m) },
+      t =>      { events.error(t); logThrowable(t) },
+      (m, t) => { events.error(t); logThrowable(t) }
     )
+
     logger.close
   }
 
+  /**
+   * Notify sbt of warnings during the run
+   */
+  private def handleRunWarnings(warnings: Vector[String], loggers: Array[Logger], arguments: Arguments) {
+    val logger = SbtLineLogger(loggers)
+    Runner.logUserWarnings(warnings)(m => IO(logger.failureLine(m))).unsafePerformIO
+    logger.close
+  }
 }
 
 
