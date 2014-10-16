@@ -8,7 +8,7 @@ import Prop._
 import collection.SeqGenerators._
 import collection.Iterablex._
 import io.DirectoryPath
-import control.Actions
+import control._
 import specification._
 import scalaz.std.anyVal._
 
