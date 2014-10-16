@@ -59,7 +59,7 @@ object Runner {
    * Log the issues which might have been caused by the user
    */
   def logUserWarnings(warnings: Vector[String])(print: String => IO[Unit]): IO[Unit] = {
-    print("Warnings:\n") >>
+    (if (warnings.nonEmpty) print("Warnings:\n") else IO(())) >>
     warnings.traverseU(print).void
   }
 
