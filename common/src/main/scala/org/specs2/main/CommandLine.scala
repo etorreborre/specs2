@@ -46,7 +46,11 @@ object CommandLine extends Extract {
 
   val allValueNames = Select.allValueNames ++ Store.allValueNames ++ Execute.allValueNames ++ Report.allValueNames
 
-  def splitValues(arguments: String): Seq[String] = arguments.splitDashed(allValueNames)
+  def splitValues(arguments: String): Seq[String] = splitValues(arguments.split(" "))
+
+  def splitValues(arguments: Seq[String]): Seq[String] =
+    arguments.splitDashed(allValueNames)
+
 }
 
 

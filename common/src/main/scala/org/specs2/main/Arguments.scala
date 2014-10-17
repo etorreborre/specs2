@@ -104,7 +104,7 @@ object Arguments extends Extract {
   /** @return new arguments from command-line arguments */
   def apply(implicit arguments: String*): Arguments = {
     if (arguments.isEmpty) new Arguments()
-    else                   extract(CommandLine.splitValues(arguments.mkString(" ")), sysProperties)
+    else                   extract(CommandLine.splitValues(arguments), sysProperties)
   }
 
   private[specs2] def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Arguments = {

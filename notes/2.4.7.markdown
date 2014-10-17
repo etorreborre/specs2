@@ -1,0 +1,25 @@
+Maintenance version.
+
+Two reminders: 
+
+ - you should depend on `specs2-core` and other specific specs2 jars instead of depending on the full `specs2` jar
+ - if you depend on the full `specs2` jar or on `specs2-matcher-extra` then you need to add `"bintray" at "http://dl.bintray.com/scalaz/releases"` to your resolvers
+
+## Features
+ 
+ * added a `beCloseTo(100.13 within 2.significantFigures)` matcher (by @FrontierOtr) [#303](http://github.com/etorreborre/specs2/issues/303)
+
+
+## Improvements 
+ 
+ * check the difference of collections only at report time
+ * improve the speed of collection differences: added optimization in the n^2 loop of `findBestMatch` (by @mustajarvi) [#300](http://github.com/etorreborre/specs2/issues/300)
+
+## Fixes
+
+ * fixed a typo in Context.scala (by Artem Pyanykh) [#302](http://github.com/etorreborre/specs2/issues/302)
+ * fixed the passing of quoted arguments: `sbt> test-only -- ex "this example"` will only execute examples with description matching `.*this description.*`
+
+
+==========================
+
