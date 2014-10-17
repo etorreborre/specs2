@@ -76,7 +76,7 @@ class SelectionSpec extends Specification with Tags { def is = s2"""
         tag("x")
         "ex2" >> ok
       })
-      selection.select(Arguments("include x"))(spec).content.examples must have size(1)
+      selection.select(Arguments.split("include x"))(spec).content.examples must have size(1)
     }
   }
 

@@ -120,6 +120,10 @@ object Arguments extends Extract {
     else                   extract(CommandLine.splitValues(arguments), sysProperties)
   }
 
+  /** create Arguments from a string by splitting it on spaces */
+  def split(arguments: String): Arguments =
+    Arguments(arguments.split(" "):_*)
+
   private[specs2] def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Arguments = {
     new Arguments (
        select        = Select.extract,
