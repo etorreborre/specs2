@@ -17,7 +17,8 @@ Two reminders:
 
 ## Fixes
 
- * Fixed a typo in Context.scala (by Artem Pyanykh) [#302](http://github.com/etorreborre/specs2/issues/302)
+ * fixed a typo in Context.scala (by Artem Pyanykh) [#302](http://github.com/etorreborre/specs2/issues/302)
+ * fixed the passing of quoted arguments: `sbt> test-only -- ex "this example"` will only execute examples with description matching `.*this description.*`
 
 
 ==========================

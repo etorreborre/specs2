@@ -117,7 +117,7 @@ object Arguments extends Extract {
   /** @return new arguments from command-line arguments */
   def apply(implicit arguments: String*): Arguments = {
     if (arguments.isEmpty) new Arguments()
-    else                   extract(CommandLine.splitValues(arguments.mkString(" ")), sysProperties)
+    else                   extract(CommandLine.splitValues(arguments), sysProperties)
   }
 
   private[specs2] def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Arguments = {
@@ -448,7 +448,10 @@ object CommandLine extends Extract {
 
   val allValueNames = Select.allValueNames ++ Store.allValueNames ++ Execute.allValueNames ++ Report.allValueNames
 
-  def splitValues(arguments: String): Seq[String] = arguments.splitDashed(allValueNames)
+  def splitValues(arguments: String): Seq[String] = splitValues(arguments.split(" "))
+
+  def splitValues(arguments: Seq[String]): Seq[String] =
+    arguments.splitDashed(allValueNames)
 }
 
 import Memo._

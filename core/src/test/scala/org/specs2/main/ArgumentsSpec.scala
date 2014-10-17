@@ -32,6 +32,7 @@ Definition
     + but the name has to match exactly, 'exclude' must not be mistaken for 'ex'
 
   + Some boolean arguments have negated names, like nocolor, meaning !color
+  + Quoted arguments must be been properly passed
 
 Overriding
 ==========
@@ -76,6 +77,7 @@ Execution
     eg := Arguments("exclude", "spec").ex must_== Arguments().ex
 
     eg := Arguments("nocolor").color must beFalse
+    eg := Arguments("ex", "this test").select.ex must_== ".*this test.*"
    }
 
   "overriding" - new group {
