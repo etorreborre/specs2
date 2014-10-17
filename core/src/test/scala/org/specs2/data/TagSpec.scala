@@ -25,7 +25,7 @@ class TagSpec extends Specification with DataTables { def is = s2"""
 
   def zeroTag = allTags must contain { t: NamedTag =>
     allNames must contain { names: String =>
-      val arguments = Arguments("include "+names)
+      val arguments = Arguments.split("include "+names)
 
       ((t |+| zero) ==== (zero |+| t)) and
       ((t |+| zero).keep(arguments) ==== (zero |+| t).keep(arguments))
@@ -36,7 +36,7 @@ class TagSpec extends Specification with DataTables { def is = s2"""
     allTags must contain { t2: NamedTag =>
       allTags must contain { t3: NamedTag =>
         allNames must contain { names: String =>
-          val arguments = Arguments("include "+names)
+          val arguments = Arguments.split("include "+names)
           val values = (t1, t2, t3, names).toString
 
           (((t1 |+| t2) |+| t3)                             must_== (t1 |+| (t2 |+| t3))) and
@@ -53,7 +53,7 @@ class TagSpec extends Specification with DataTables { def is = s2"""
     tag1     ! tag1  ! "include 1&&2"   ! false    |
     tag1     ! tag2  ! "include 1&&2"   ! true     |
       { (t1: NamedTag, t2: NamedTag, args: String, result: Boolean) =>
-      (t1 |+| t2).keep(Arguments(args)) must_== result
+      (t1 |+| t2).keep(Arguments.split(args)) must_== result
     }
   }
 

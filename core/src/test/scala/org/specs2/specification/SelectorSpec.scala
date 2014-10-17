@@ -39,7 +39,7 @@ class SelectorSpec extends Spec with Groups with ResultMatchers with MustThrownE
   "by name" - new group {
     eg := {
       val fragments = Fragments(ex("e1"), ex("e2"))
-      val env = Env(arguments = Arguments("ex e1"))
+      val env = Env(arguments = Arguments.split("ex e1"))
       val executed = fragments |> DefaultSelector.select(env)
 
       executed.fragments must haveSize(1)
@@ -110,7 +110,7 @@ class SelectorSpec extends Spec with Groups with ResultMatchers with MustThrownE
   "by previous" - new group {
     eg := {
       val repo = StatisticsRepository.memory
-      val env = Env(arguments = Arguments("was x")).setStatisticRepository(repo)
+      val env = Env(arguments = Arguments.split("was x")).setStatisticRepository(repo)
 
       repo.storeResult(getClass.getName, Text("e1"), org.specs2.execute.Failure("failed")).runOption
 
@@ -147,7 +147,7 @@ class SelectorSpec extends Spec with Groups with ResultMatchers with MustThrownE
     checkSelection(fragments, List(tag), expected, unexpected)
 
   def includeContains(fragments: Fragments, tags: Seq[String], expected: Seq[String], unexpected: Seq[String]): Result = {
-    val env = Env(arguments = Arguments(s"include ${tags.mkString(",")}"))
+    val env = Env(arguments = Arguments.split(s"include ${tags.mkString(",")}"))
     val executed = (fragments.contents |> DefaultSelector.filterByMarker(env)).runLog.run
     val descriptions = executed.map(_.description.toString)
 
@@ -157,7 +157,7 @@ class SelectorSpec extends Spec with Groups with ResultMatchers with MustThrownE
   }
 
   def excludeContains(fragments: Fragments, tags: Seq[String], unexpected: Seq[String], expected: Seq[String]): Result = {
-    val env = Env(arguments = Arguments(s"exclude ${tags.mkString(",")}"))
+    val env = Env(arguments = Arguments.split(s"exclude ${tags.mkString(",")}"))
     val executed = fragments |> DefaultSelector.filterByMarker(env)
     val descriptions = executed.fragments.map(_.description.toString)
 
