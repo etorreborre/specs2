@@ -207,6 +207,8 @@ Less often you need to do comparisons on Numerical values:
  * `beCloseTo` checks if 2 Numerics are close to each other
    `1.0 must beCloseTo(1, 0.5)`
    `4 must be ~(5 +/- 2)`
+   `1001.1232455 must beCloseTo(1003.12, 2.significantFigures)`
+   `4.994 must beCloseTo(5.0 within 2.significantFigures)`
 
  * `beBetween` checks if a value is between 2 others
    `5 must beBetween(3, 6)`
