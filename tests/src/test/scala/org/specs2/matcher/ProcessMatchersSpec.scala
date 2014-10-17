@@ -16,6 +16,7 @@ class ProcessMatchersSpec extends Specification with ProcessMatchers with Result
  It is possible to check the execution of processes
    check the produced values
    ${ oneElement(1) must returnValues(Seq(1)) }
+   ${ oneElement(1) must returnValues { vs: Seq[Int] => vs must_== Seq(1) } }
    ${ (oneElement(1) must returnValues(IndexedSeq(2))) returns "Vector(1) is not equal to Vector(2)" }
 
    check the last value

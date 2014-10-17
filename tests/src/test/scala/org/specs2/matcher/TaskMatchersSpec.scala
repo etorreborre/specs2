@@ -12,6 +12,7 @@ class TaskMatchersSpec extends Specification with TaskMatchers with ResultMatche
    check the return value
    ${ Task(1) must returnValue(1) }
    ${ (Task(1) must returnValue(2)) returns "'1' is not equal to '2'" }
+   ${ Task(1) must returnValue { i: Int  => i must_== 1 } }
 
    check that the task finishes before a given time
    ${ Task(1) must returnBefore(10.millis) }
