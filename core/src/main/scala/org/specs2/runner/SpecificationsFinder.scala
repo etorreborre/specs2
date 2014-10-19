@@ -24,14 +24,14 @@ trait SpecificationsFinder {
    * @param filter a function to filter out unwanted specifications
    * @return specifications created from specification names
    */
-  def findSpecifications(glob: String              = "**/*.scala",
-                         pattern: String           = ".*Spec",
-                         filter: String => Boolean = { (name: String) => true },
-                         basePath: DirectoryPath   = DirectoryPath.unsafe(new java.io.File("src/test/scala").getAbsolutePath),
-                         verbose: Boolean          = false,
-                         classLoader: ClassLoader  = Thread.currentThread.getContextClassLoader,
-                         fileSystem: FileSystem    = FileSystem): Action[List[SpecificationStructure]] =
-    specificationNames(glob, pattern, basePath, fileSystem, verbose).flatMap { names =>
+  def findSpecifications(glob: String                   = "**/*.scala",
+                         pattern: String                = ".*Spec",
+                         filter: String => Boolean      = { (name: String) => true },
+                         basePath: DirectoryPath        = DirectoryPath.unsafe(new java.io.File("src/test/scala").getAbsolutePath),
+                         verbose: Boolean               = false,
+                         classLoader: ClassLoader       = Thread.currentThread.getContextClassLoader,
+                         filePathReader: FilePathReader = FileSystem): Action[List[SpecificationStructure]] =
+    specificationNames(glob, pattern, basePath, filePathReader, verbose).flatMap { names =>
       names.filter(filter).map(n => SpecificationStructure.create(n, classLoader)).toList.sequenceU
     }
 
@@ -41,14 +41,14 @@ trait SpecificationsFinder {
    * @param filter a function to filter out unwanted specifications
    * @return specifications created from specification names
    */
-  def specifications(glob: String              = "**/*.scala",
-                     pattern: String           = ".*Spec",
-                     filter: String => Boolean = { (name: String) => true },
-                     basePath: DirectoryPath   = DirectoryPath.unsafe(new java.io.File("src/test/scala").getAbsolutePath),
-                     verbose: Boolean          = false,
-                     classLoader: ClassLoader  = Thread.currentThread.getContextClassLoader,
-                     fileSystem: FileSystem    = FileSystem): Seq[SpecificationStructure] =
-    findSpecifications(glob, pattern, filter, basePath, verbose, classLoader, fileSystem)
+  def specifications(glob: String                   = "**/*.scala",
+                     pattern: String                = ".*Spec",
+                     filter: String => Boolean      = { (name: String) => true },
+                     basePath: DirectoryPath        = DirectoryPath.unsafe(new java.io.File("src/test/scala").getAbsolutePath),
+                     verbose: Boolean               = false,
+                     classLoader: ClassLoader       = Thread.currentThread.getContextClassLoader,
+                     filePathReader: FilePathReader = FileSystem): Seq[SpecificationStructure] =
+    findSpecifications(glob, pattern, filter, basePath, verbose, classLoader, filePathReader)
       .execute(if (verbose) consoleLogging else noLogging)
       .unsafePerformIO().toEither.fold(
         e   => { if (verbose) println(e); Seq() },
@@ -59,7 +59,7 @@ trait SpecificationsFinder {
    * @param pattern a regular expression which is supposed to match an object name extending a Specification
    * @return specification names by scanning files and trying to find specifications declarations
    */
-  def specificationNames(pathGlob: String, pattern: String, basePath: DirectoryPath, fileSystem: FileSystem, verbose: Boolean) : Action[List[String]] = {
+  def specificationNames(pathGlob: String, pattern: String, basePath: DirectoryPath, filePathReader: FilePathReader, verbose: Boolean) : Action[List[String]] = {
     lazy val specClassPattern = {
       val p = specPattern("class", pattern)
       log("\nthe pattern used to match specification classes is: "+p+"\n", verbose) >>
@@ -75,19 +75,19 @@ trait SpecificationsFinder {
     for {
       objectPattern <- specObjectPattern
       classPattern  <- specClassPattern
-      paths         <- fileSystem.filePaths(basePath, pathGlob, verbose)
-    } yield paths.toList.map(path => readClassNames(path, objectPattern, classPattern, fileSystem, verbose)).sequenceU.map(_.flatten)
+      paths         <- filePathReader.filePaths(basePath, pathGlob, verbose)
+    } yield paths.toList.map(path => readClassNames(path, objectPattern, classPattern, filePathReader, verbose)).sequenceU.map(_.flatten)
   }.flatMap[List[String]](identity)
 
   /**
    * Read the content of the file at 'path' and return all names matching the object pattern
    * or the class pattern
    */
-  def readClassNames(path: FilePath, objectPattern: Pattern, classPattern: Pattern, fileSystem: FileSystem, verbose: Boolean): Action[Seq[String]] = {
+  def readClassNames(path: FilePath, objectPattern: Pattern, classPattern: Pattern, filePathReader: FilePathReader, verbose: Boolean): Action[Seq[String]] = {
     for {
-      fileContent <- fileSystem.readFile(path)
-      packName = packageName(fileContent)
-      _  <- log("\nSearching for specifications in file: "+path, verbose)
+      fileContent <- filePathReader.readFile(path)
+      packName    =  packageName(fileContent)
+      _           <- log("\nSearching for specifications in file: "+path, verbose)
     } yield (classNames(packName, fileContent, objectPattern, "$", verbose) |@| classNames(packName, fileContent, classPattern, "", verbose))(_ ++ _)
   }.flatMap(identity)
 

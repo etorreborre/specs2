@@ -9,22 +9,7 @@ The most common way to run $specs2 specifications is to use [sbt](http://scala-s
 
 [Sbt](www.scala-sbt.org) recognizes $specs2 as a ["test framework"](http://www.scala-sbt.org/release/docs/Testing.html). This means that any class or object extending the `Specification` abstract class can be executed by sbt. The `test` command will run all the specifications in your project provided you put them in the `src/test/scala` directory:
 ```
-<<<<<<< HEAD
 sbt> test
-=======
-trait Diffs {
-  /** @return true if the differences must be shown for 2 different values */
-  def show(expected: Any, actual: Any): Boolean
-  /** @return true if the differences must be shown for 2 different sequences of values */
-  def show(expected: Seq[Any], actual: Seq[Any], ordered: Boolean): Boolean
-  /** @return the diffs */
-  def showDiffs(expected: Any, actual: Any): (String, String)
-  /** @return the diffs for sequences */
-  def showDiffs(expected: Seq[Any], actual: Seq[Any], ordered: Boolean): (String, String)
-  /** @return true if the full strings must also be shown */
-  def showFull: Boolean
-}
->>>>>>> b222c92... check the difference of collections only at report time
 ```
 
 Most of the time however you will use the `test-only` command, either because you want to run one specification only or because you want to pass arguments:

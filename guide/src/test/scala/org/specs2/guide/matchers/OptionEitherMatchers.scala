@@ -5,7 +5,7 @@ package matchers
 object OptionEitherMatchers extends UserGuideCard {
   def title = "Option/Either"
   def text = s2"""
-  There are several matchers to check Option and Either instances:
+  There are several matchers to check `Option` and `Either` instances:
 
  * `beSome` check if an element is `Some(_)`
  * `beSome(exp)` check if an element is `Some(exp)`

@@ -14,10 +14,10 @@ object Contexts extends UserGuidePage with FileMatchers with FileSystem { def is
 In a specification some examples are very straightforward. They just check that a function is returning expected values when given some inputs. However other examples can be more complex and require to execute in specific context:
 
  * with some state being setup before the example executes
- * with some clean up after the example is executed
+ * with some state being cleaned up after the example is executed
  * inside a database context, with or without the possibility to access the transaction context
  * with state being setup before *all* examples
- * with clean up being done after *all* the examples
+ * with state being cleaned up after *all* the examples
 
 For all those situations, there is a $specs2 trait which you can mix in your specification.
 
@@ -44,7 +44,7 @@ If you execute this specification you may see something like:
 [info] example1
 ```
 
-As you guess, defining a behaviour "after" is very similar:${snippet {
+As you can guess, defining a behaviour "after" is very similar:${snippet {
 class AfterSpecification extends mutable.Specification with AfterEach {
   // you need to define the "after" action
   def after = println("after")

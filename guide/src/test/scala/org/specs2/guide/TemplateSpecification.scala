@@ -22,7 +22,7 @@ override def map(fs: =>Fragments): Fragments =
   super.map(fs).prepend(fragmentFactory.step(beforeAll))
 ```
 
-The `map` method is indeed called everytime the specification returns the list of `Fragment` defining it. You can leverage this and define your own traits:
+The `map` method is indeed called every time the specification returns the list of `Fragment` defining it. You can leverage this and define your own traits:
 
  - adding some text before a Specification
  - filtering out some undesirable fragments

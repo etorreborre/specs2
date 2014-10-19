@@ -7,7 +7,7 @@ import form.Card
 object TryMatchers extends UserGuideCard {
   def title = "Try"
   def text = s2"""
-  There are several matchers to check Try instances:
+  There are several matchers to check `Try` instances:
 
  * `beSuccessfulTry` check if an element is `Success(_)`
  * `beSuccessfulTry.withValue(exp)` check if an element is `Success(_)`

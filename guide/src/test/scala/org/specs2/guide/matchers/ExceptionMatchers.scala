@@ -5,7 +5,7 @@ package matchers
 object ExceptionMatchers extends UserGuideCard {
   def title = "Exception"
   def text = s2"""
-$specs2 offers very compact ways of checking that some exceptions are thrown:
+ $specs2 offers very compact ways of checking that some exceptions are thrown:
 
  * `throwA[ExceptionType]` check if a block of code throws an exception of the given type
  * `throwA[ExceptionType](message = "boom")` additionally check if the exception message is as expected

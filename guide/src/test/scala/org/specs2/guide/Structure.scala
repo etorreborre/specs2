@@ -12,13 +12,14 @@ In a Specification you generally want to include 2 things:
 
 With $specs2 you have 2 main ways to do this:
 
- - you can create an *"Acceptance"* specification where all the informal text is written in one place and the code is written elsewhere. The name "acceptance" comes from the fact that it might be easier for a non-developer to read to text to validate your specification
+ - you can create an *"Acceptance"* specification where all the informal text is written in one place and the code is written somewhere else. The name "acceptance" comes from the fact that it might be easier for a non-developer to just read text to validate your specification
 
  - you can create a *"Unit"* specification where the code is interleaved with the text. The name "unit" comes from the fact that Unit specifications have a structure which is close to unit tests in "classical" frameworks such as JUnit
 
 Both ways of writing specifications have advantages and drawbacks:
 
- - Acceptance specifications are easier to read as a narrative but require navigation between the text and the code. You also need to define a `is` method holding the body of the specification
+ - Acceptance specifications are easier to read as a narrative but require navigation between the text and the code. You also need to define an `is` method holding the body of the specification
+
  - Unit specifications are easier to navigate but the text tends to be lost in a sea of code
 
 ### Acceptance specification
@@ -36,7 +37,7 @@ class MySpecification extends org.specs2.Specification { def is = s2"""
 }
 }}
 
-The `s2` string contains the text of your specification as well as some references to methods (`e1` and `e2`) defining *`Results`*. When the Specification is executed the `s2` string is analysed and 2 `Examples` are created then executed:
+The `s2` string contains the text of your specification as well as some references to methods (`e1` and `e2`) defining *`Results`*. When the Specification is executed, the `s2` string is analysed and 2 `Examples` are created then executed:
 
  - one `Example` with the description "where example 1 must be true" and the code `1 must_== 1`
  - another `Example` with the description "where example 2 must be true" and the code `2 must_== 2`
@@ -65,11 +66,11 @@ This specification creates one piece of `Text` and 2 `Examples` as before but:
 
 However once a specification is created with all its `Texts` and `Examples`, the execution will be the same, whether it is an Acceptance one or a Unit one.
 
-The `>>` blocks can be nested and this allows you to structure your specification so that the outermost blocks describe a general context while the innermost ones describe a more specific context. A similar effect can be achieved by simply indenting text in an acceptance specification.
+The `>>` blocks can be nested and this allows you to structure your specification so that the outermost blocks describe a general context while the innermost ones describe more specific contexts. A similar effect can be achieved by simply indenting text in an acceptance specification.
 
 ### Expectations
 
-There is another major difference between the acceptance specifications and unit specifications. The first style encourages you to write [one expectation per example](http://bit.ly/one_assertion_per_test) while the second allows to use several. One expectation per example is useful because when a specification fails, you know immediately what is wrong. However it is sometimes expensive to setup data for an example so having several expectations sharing the same setup might be preferable on occasions.
+There is another major difference between the acceptance specifications and unit specifications. The first style encourages you to write [one expectation per example](http://bit.ly/one_assertion_per_test) while the second allows to use several. One expectation per example is useful because when a specification fails, you know immediately what is wrong. However it is sometimes expensive to setup data for an example. In that case, having several expectations sharing the same setup might be preferable.
 
 The good news is that for each of the 2 main styles, acceptance and unit, you can choose exactly which mode you prefer if the default mode is not convenient.
 
