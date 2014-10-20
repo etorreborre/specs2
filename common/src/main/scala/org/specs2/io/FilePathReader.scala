@@ -19,7 +19,7 @@ trait FilePathReader {
    * @return the list of file paths accessible from dir
    */
   def filePaths(dir: DirectoryPath, glob: String, verbose: Boolean): Action[IndexedSeq[FilePath]] = {
-    processFilePaths(dir)
+    filePathsProcess(dir)
       .filter(filterWithPattern(globToPattern(glob)))
       .runLog.toAction
   }
@@ -49,11 +49,29 @@ trait FilePathReader {
    * @return the files accessible recursively from a directory
    */
   def listFilePaths(directory: DirectoryPath): Action[IndexedSeq[FilePath]] =
-    processFilePaths(directory).runLog.toAction
+    filePathsProcess(directory).runLog.toAction
 
-  private def processFilePaths(directory: DirectoryPath): Process[Task, FilePath] = {
+  /**
+   * @return the files directly accessible from a directory
+   */
+  def listDirectFilePaths(directory: DirectoryPath): Action[IndexedSeq[FilePath]] =
+    Actions.safe(Option(directory.toFile.listFiles)
+      .map(_.toIndexedSeq).getOrElse(IndexedSeq())
+      .filter(_.isFile)
+      .map(FilePath.unsafe))
+
+  /**
+   * @return the files directly accessible from a directory
+   */
+  def listDirectDirectoryPaths(directory: DirectoryPath): Action[IndexedSeq[DirectoryPath]] =
+    Actions.safe(Option(directory.toFile.listFiles)
+      .map(_.toIndexedSeq).getOrElse(IndexedSeq())
+      .filter(_.isDirectory)
+      .map(DirectoryPath.unsafe))
+
+  private def filePathsProcess(directory: DirectoryPath): Process[Task, FilePath] = {
     def go(dir: DirectoryPath): Process[Task, FilePath] = {
-      val (files, directories) = Option(dir.toFile.listFiles).map(_.toList).getOrElse(Nil).partition(_.isFile)
+      val (files, directories) = Option(dir.toFile.listFiles).map(_.toIndexedSeq).getOrElse(IndexedSeq()).partition(_.isFile)
       Process.emitAll(files.map(FilePath.unsafe)) fby Process.emitAll(directories.map(DirectoryPath.unsafe).map(go)).flatMap(identity)
     }
     go(directory)

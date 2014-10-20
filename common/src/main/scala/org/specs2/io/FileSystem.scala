@@ -113,8 +113,11 @@ trait FileSystem extends FilePathReader {
    */
   def copyDir(src: DirectoryPath, dest: DirectoryPath): Action[Unit] =
     mkdirs(dest) >>
-      listFilePaths(src).flatMap { files =>
+      listDirectFilePaths(src).flatMap { files =>
         files.toList.map(copyFile(dest)).sequenceU.void
+      } >>
+      listDirectDirectoryPaths(src).flatMap { directories: IndexedSeq[DirectoryPath] =>
+        directories.toList.map(dir => copyDir(dir, dest / dir.name)).sequenceU.void
       }
 
   /**
