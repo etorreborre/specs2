@@ -3,7 +3,7 @@ package guide
 
 import specification.BeforeAll
 
-object TemplateSpecification extends UserGuidePage { def is = s2"""
+object SpecificationTemplate extends UserGuidePage { def is = s2"""
 
 On the ${"Contexts" ~/ Contexts} page we saw that there is a way to define an action which will be executed before all examples with the `BeforeAll` trait. It is very likely that that you will actually make your own trait extending `BeforeAll` to reuse this action in more than one specification:${snippet{
 trait DatabaseSetup extends BeforeAll {

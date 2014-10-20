@@ -6,7 +6,7 @@ import execute.AsResult
 import org.specs2.specification.{Before, CommandLineArguments, CommandLineArgumentsInContext, ForEachWithCommandLineArguments}
 import specification.core.foreachInSequence
 
-object UseCommandLineArguments extends UserGuidePage { def is = s2"""
+object UseCommandLineArguments extends UserGuidePage { def is = "Use command-line arguments".title ^ s2"""
 
 Some specifications need to be fine-tuned and constantly modified. Sometimes to access a specific environment, or to disable some examples, or to execute more ScalaCheck properties. For all those situations it is desirable to modify the specification directly from the command-line without having to recompile it.
 

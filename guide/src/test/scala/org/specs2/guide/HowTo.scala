@@ -7,7 +7,7 @@ object HowTo extends UserGuidePage { def is = s2"""
 ---------------------------------------------------------------------------------------- | ------
 How to execute an action before all the examples?                                        | ${see(Contexts)}
 How to execute an action before each example?                                            | ${see(Contexts)}
-Can I create and reuse a Specification "template"?                                       | ${see(TemplateSpecification)}
+Can I create and reuse a Specification "template"?                                       | ${see(SpecificationTemplate)}
 How can I pass some data to each example?                                                | ${see(Contexts)}
 Can I add more information to my results for easier diagnostic?                          | ${see(ExpectationDescription)}
 Is it possible to execute a Specification sequentially?                                  | ${see(Execution)}
