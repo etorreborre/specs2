@@ -317,5 +317,8 @@ object MatchResult {
     def asResult(t: =>Seq[MatchResult[T]]): Result = t.foldLeft(StandardResults.success: Result)(_ and _.toResult)
   }
 
+  /** sequence a list of MatchResults into a MatchResult of a list */
+  def sequence[T](seq: Seq[MatchResult[T]]): MatchResult[Seq[T]] =
+    Matcher.result(AsResult(seq), MustExpectations.createExpectable(seq.map(_.expectable.value)))
 }
 
