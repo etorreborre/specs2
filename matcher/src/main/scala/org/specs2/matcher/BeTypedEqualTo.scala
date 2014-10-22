@@ -58,7 +58,7 @@ class BeTypedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1
   }
 
   private def unorderedSeqEquality[S <: T](actual: Seq[Any], expected: Seq[Any], expectable: Expectable[S], expectedValue: Any): MatchResult[S] = {
-    val (matched, added) = BestMatching.findBestMatch(actual, expected, (t: Any, v: Any) => v == t, eachCheck = true)(AsResult.booleanAsResult)
+    val (matched, added) = BestMatching.findBestMatch(actual, expected, (t: Any, v: Any) => v == t, eachCheck = true)(AsResult.booleanAsSimpleResult)
     val (_, koValues)    = matched.partition(_._3.isSuccess)
     val missing          = koValues.map(_._1)
     val isEqual          = added.isEmpty && missing.isEmpty
