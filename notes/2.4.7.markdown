@@ -2,7 +2,7 @@ Maintenance version.
 
 Two reminders: 
 
- - you should depend on `specs2-core` and other specific specs2 jars instead of depending on the full `specs2` jar
+ - you should depend on `specs2-core` and other specific specs2 jars instead of depending on the full `specs2` jar (see details [here](http://bit.ly/1nyDGwe))
  - if you depend on the full `specs2` jar or on `specs2-matcher-extra` then you need to add `"bintray" at "http://dl.bintray.com/scalaz/releases"` to your resolvers
 
 ## Features
@@ -19,6 +19,7 @@ Two reminders:
 
  * fixed a typo in Context.scala (by Artem Pyanykh) [#302](http://github.com/etorreborre/specs2/issues/302)
  * fixed the passing of quoted arguments: `sbt> test-only -- ex "this example"` will only execute examples with description matching `.*this description.*`
+ * fixed a compilation issue with `TaskMatchers`
 
 
 ==========================
