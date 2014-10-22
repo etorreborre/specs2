@@ -1,0 +1,17 @@
+Maintenance version.
+
+What's not to hate about regressions? After improving the collection differences checks in 2.4.7 I re-introduced the performance issue that was fixed in 2.4.6 (useless stacktrace filling) :-(
+
+## Improvements
+
+ * added a `MatchResult.sequence` combinator to transform a `Seq[MatchResult[T]]` into a `MatchResult[Seq[T]]`
+
+
+## Fixes
+
+ * regression: fixed the performance issue that was re-introduced in 2.4.7
+ * fixed a type-inference issue with ProcessMatchers when matching the last value
+
+
+==========================
+
