@@ -21,12 +21,14 @@ class ProcessMatchersSpec extends Specification with ProcessMatchers with Result
 
    check the last value
    ${ oneElement(1) must returnLast(1) }
+   ${ oneElement(1) must returnLast((i: Int) => i must_== 1) }
    ${ (oneElement(1) must returnLast(2)) returns "'1' is not equal to '2'" }
    ${ (oneElement(1).drop(1) must returnLast(1)) returns "Expected a value, got None" }
 
    check the last value as an option
    ${ oneElement(1).drop(1) must returnLastOption(None) }
    ${ oneElement(1) must returnLastOption(Some(1)) }
+   ${ oneElement(1) must returnLastOption((i: Option[Int]) => i must beSome(1)) }
    ${ (oneElement(1) must returnLastOption(Some(2))) returns "'Some(1)' is not equal to 'Some(2)'" }
 
    check that the process finishes before a given time
