@@ -254,7 +254,6 @@ class OrNotMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult
  *
  * A MatchResult is a Functor where the fmap function acts on the embedded Expectable value (which itself is a Functor)
  */
-private[specs2]
 object MatchResult {
   import Expectable._
 
