@@ -1,25 +1,27 @@
 package org.specs2
 package matcher
+import NumericMatchers._
 
 /**
- * Matchers for Numerical values
+  * Matchers for Numerical values
  */
 trait NumericMatchers extends NumericBaseMatchers with NumericBeHaveMatchers {
   /** implicit definition to create delta for the beCloseTo matcher */
   implicit def ToDelta[S : Numeric](n: S): CanHaveDelta[S] = CanHaveDelta(n)
-}
 
-object NumericMatchers extends NumericMatchers {
-  import text.NotNullStrings._
-
-  private[specs2] def description[S](e: Expectable[S]) = {
-    e.desc match {
-      case Some(d) => d(e.value.notNull)
-      case None    => e.value.notNull
-    }
+  /** implicit definition to create significant figures for the beCloseTo matcher */
+  implicit class SignificantFiguresSyntax(value: Int) {
+    def significantFigures = SignificantFigures(value)
+    def significantFigure = SignificantFigures(value)
   }
+  /** implicit definition to create significant figures for the beCloseTo matcher */
+  implicit class SignificantSyntax[N : Numeric](target: N) {
+    def within(significant: SignificantFigures): SignificantTarget[N] =
+    SignificantTarget(target, significant)
+  }
+
 }
-import NumericMatchers._
+
 
 private[specs2]
 trait NumericBaseMatchers {
@@ -64,6 +66,20 @@ trait NumericBaseMatchers {
   /** alias for beCloseTo */
   def ~[S : Numeric](delta: PlusOrMinus[S]): Matcher[S] = beCloseTo(delta)
 
+  /** matches if target - actual < 10 pow (log x - significantDigits) */
+  def beCloseTo[S : Numeric](target: S, figures: SignificantFigures): Matcher[S] =
+    new BeSignificantlyCloseTo[S](target, figures)
+
+  def beCloseTo[S : Numeric](target: SignificantTarget[S]): Matcher[S] =
+    new BeSignificantlyCloseTo[S](target.target, target.significantFigures)
+
+  def closeTo[S : Numeric](target: S, figures: SignificantFigures): Matcher[S] =
+    beCloseTo(target, figures)
+
+  def closeTo[S : Numeric](target: SignificantTarget[S]): Matcher[S] =
+    beCloseTo(target)
+
+
   /** matches if a value is between 2 others according to an Ordering */
   def beBetween[T <% Ordered[T]](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2)
   def between[T <% Ordered[T]](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2)
@@ -86,7 +102,8 @@ trait NumericBeHaveMatchers extends BeHaveMatchers { outer: NumericBaseMatchers 
   /** 
    * matcher aliases and implicits to use with be + matcher
    */
-  implicit def toOrderedResultMatcher[S <% Ordered[S]](result: MatchResult[S]) = new OrderedResultMatcher(result)
+
+  implicit def toOrderedResultMatcher[S <% Ordered[S]](result: MatchResult[S]): OrderedResultMatcher[S] = new OrderedResultMatcher(result)
   class OrderedResultMatcher[S <% Ordered[S]](result: MatchResult[S]) {
     def be_<=(n: S) = result(outer.beLessThanOrEqualTo(n))
     def <=(n: S) = result(outer.beLessThanOrEqualTo(n))
@@ -107,7 +124,8 @@ trait NumericBeHaveMatchers extends BeHaveMatchers { outer: NumericBaseMatchers 
     def beBetween(s1: S, s2: S) = result(outer.beBetween(s1, s2))
     def between(s1: S, s2: S) = result(outer.beBetween(s1, s2))
   }
-  implicit def toNumericResultMatcher[S : Numeric](result: MatchResult[S]) = new NumericResultMatcher(result)
+
+  implicit def toNumericResultMatcher[S : Numeric](result: MatchResult[S]): NumericResultMatcher[S] = new NumericResultMatcher(result)
   class NumericResultMatcher[S : Numeric](result: MatchResult[S]) {
     def beCloseTo(n: S, delta: S) = result(outer.beCloseTo(n, delta))
     def beCloseTo(delta: PlusOrMinus[S]) = result(outer.beCloseTo(delta))
@@ -115,6 +133,8 @@ trait NumericBeHaveMatchers extends BeHaveMatchers { outer: NumericBaseMatchers 
     def closeTo(delta: PlusOrMinus[S]) = result(outer.beCloseTo(delta))
     def ~(n: S, delta: S) = result(outer.beCloseTo(n, delta))
     def ~(delta: PlusOrMinus[S]) = result(outer.beCloseTo(delta))
+    def closeTo(target: S, figures: SignificantFigures) = result(outer.beCloseTo(target, figures))
+    def closeTo(target: SignificantTarget[S]) = result(outer.beCloseTo(target))
   }
   implicit def toNeutralMatcherOrdered(result: NeutralMatcher[Any]) : NeutralMatcherOrdered = 
     new NeutralMatcherOrdered(result)
@@ -130,6 +150,17 @@ trait NumericBeHaveMatchers extends BeHaveMatchers { outer: NumericBaseMatchers 
   class NeutralMatcherNumeric(result: NeutralMatcher[Any]) {
     def ~[S : Numeric](n: S, delta: S) = beCloseTo(n, delta)
     def ~[S : Numeric](delta: PlusOrMinus[S]) = beCloseTo(delta)
+  }
+}
+
+object NumericMatchers extends NumericMatchers {
+  import text.NotNullStrings._
+
+  private[specs2] def description[S](e: Expectable[S]) = {
+    e.desc match {
+      case Some(d) => d(e.value.notNull)
+      case None    => e.value.notNull
+    }
   }
 }
 
@@ -160,6 +191,32 @@ class BeCloseTo[T : Numeric](n: T, delta: T) extends Matcher[T] {
            description(x) + " is not close to " + n.toString + " +/- " + delta, x)
   }
 }
+
+class BeSignificantlyCloseTo[T : Numeric](target: T, sf: SignificantFigures) extends Matcher[T] {
+  def apply[S <: T](x: Expectable[S]) = {
+    val num = implicitly[Numeric[T]]
+    val actual = x.value
+    if (target == 0)
+      result(actual == 0,
+        s"$actual is equal to $target",
+        s"${description(x)} is not equal to 0 (significant figures do not apply since the target is 0)", x)
+    else {
+      // Calculate the order of the number
+      val o = order(num.toDouble(target))
+      // Calculate both actual and target as ints of just their significant figures
+      // e.g. 0.1234 to 2 sig figs as 12
+      val a = (num.toDouble(actual) * Math.pow(10, sf.number - o -1)).round.toInt
+      val t = (num.toDouble(target) * Math.pow(10, sf.number - o -1)).round.toInt
+      result(a == t,
+        s"${description(x)} is close to $target with ${sf.number.qty("significant digit")}",
+        s"${description(x)} is not close to $target with ${sf.number.qty("significant digit")}", x)
+    }
+  }
+  def order(n: Double):Int = Math.log10(n.abs).floor.toInt
+}
+
+case class SignificantTarget[T : Numeric](target: T, significantFigures: SignificantFigures)
+case class SignificantFigures(number: Int)
 
 case class BetweenMatcher[T <% Ordered[T]](t1: T, t2: T, includeStart: Boolean = true, includeEnd: Boolean = true) extends Matcher[T] {
   def apply[S <: T](s: Expectable[S]) = {
