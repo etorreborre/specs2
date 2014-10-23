@@ -10,9 +10,6 @@ import text.NotNullStrings._
  */
 trait TaskMatchers {
 
-  def returnValue[T](t: T): TaskMatcher[T] =
-    returnValue(valueIsTypedValueCheck(t))
-
   def returnValue[T](check: ValueCheck[T]): TaskMatcher[T] =
     attemptRun(check)
 

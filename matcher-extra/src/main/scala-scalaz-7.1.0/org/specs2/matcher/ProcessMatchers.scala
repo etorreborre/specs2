@@ -20,9 +20,6 @@ trait ProcessMatchers extends ExpectationsCreation {
   def returnValues[T](values: ValueCheck[Seq[T]]): ProcessMatcher[T] =
     ProcessMatcher(values, None)
 
-  def returnLast[T](value: T): ProcessLastMatcher[T] =
-    returnLast(typedValueCheck(value))
-
   def returnLast[T](check: ValueCheck[T]): ProcessLastMatcher[T] =
     ProcessLastMatcher(toOptionCheck(check), None)
 
