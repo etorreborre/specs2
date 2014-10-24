@@ -28,3 +28,9 @@ trait Output {
     override def println(s: String) = Output.this.println(s)
   })
 }
+
+object Output {
+  val NoOutput = new Output {
+    def printf(format: String, args: Any*) {}
+  }
+}

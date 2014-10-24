@@ -395,6 +395,17 @@ case class MyRandomGenerator() extends java.util.Random {
 
 By default, a successful example using a `Prop` will be reported as 1 success and 100 (or `minTestsOk`) expectations. If you don't want the number of expectations to appear in the specification statistics just mix-in your specification the `org.specs2.matcher.OneExpectationPerProp` trait.
 
+#### Collect values
+
+You can turn on value collection (and display) for all properties by simply adding an implicit ${snippet{
+  implicit val parameters = collectValues
+}}
+
+It is also possible to tweak the display of collected values with `collectValuesAnd` where you pass a function changing the values to be displayed ${snippet{
+  // drop the first value, it is too verbose
+  implicit val parameters = collectValuesAnd((values: Set[Any]) => values.drop(1))
+}}
+
   """
 
   val mockitoSection =

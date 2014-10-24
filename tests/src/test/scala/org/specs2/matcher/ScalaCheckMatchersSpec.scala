@@ -99,6 +99,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
    the labels that are set on properties                                                                 ${config().e3}
    the exceptions that happen on generation                                                              ${config().e4}
    the collected frequencies                                                                             ${config().e5}
+   collected data if the collect parameter is true                                                       ${config().e6}
                                                                                                          """
 
   
@@ -166,12 +167,13 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
     def before = clear()
     def executionMessages(prop: Prop) = { execute(prop); messages.mkString }
 
-    implicit def params = display(minTestsOk = 20)
+    implicit def params = display(minTestsOk = 20, collect = true)
     def e1 = execute(trueFunction.forAll).expectationsNb must_== 20
     def e2 = executionMessages(trueFunction.forAll) must contain("passed 20 tests")
     def e3 = executionMessages(falseFunction.forAll :| "my property") must contain("my property")
     def e4 = executionMessages(propertyWithGenerationException) must contain("boo")
     def e5 = executionMessages(propertyWithDataCollection) must contain("Collected test data")
+    def e6 = executionMessages(prop(trueFunction)) must contain("Collected test data")
   }
 }
 
