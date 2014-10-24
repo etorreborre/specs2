@@ -41,7 +41,7 @@ class ReporterSpec extends Specification with ForEachEnv with ThrownExpectations
 
   def a1 = { env: Env =>
     val logger = stringLogger
-    reported(env.setArguments(Arguments("ex ex3")).setLineLogger(logger))
+    reported(env.setArguments(Arguments.split("ex ex3")).setLineLogger(logger))
     logger.messages.mkString("\n") must contain("ex3")
     logger.messages.mkString("\n") must not contain("ex1")
   }
@@ -49,7 +49,7 @@ class ReporterSpec extends Specification with ForEachEnv with ThrownExpectations
   def a2 = { env: Env =>
     val logger = stringLogger
     reported(env.setLineLogger(logger), logger)
-    indexOf(logger.messages, "e3") must be_<(indexOf(logger.messages, "e1"))
+    indexOf(logger.messages.pp, "e3") must be_<(indexOf(logger.messages, "e1"))
   }
 
   def a3 = { env: Env =>
@@ -81,7 +81,7 @@ class ReporterSpec extends Specification with ForEachEnv with ThrownExpectations
   def b3 = { env: Env =>
     val logger = stringLogger
 
-    reported(env.setLineLogger(logger).setArguments(Arguments("console junit")),
+    reported(env.setLineLogger(logger).setArguments(Arguments.split("console junit")),
       printers = List(TextPrinter, new FakeJUnitPrinter(logger)))
 
     val messages = logger.messages

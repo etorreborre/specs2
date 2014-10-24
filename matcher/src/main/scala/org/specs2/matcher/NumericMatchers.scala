@@ -1,5 +1,7 @@
 package org.specs2
 package matcher
+
+import text.Plural._
 import NumericMatchers._
 
 /**
@@ -135,6 +137,8 @@ trait NumericBeHaveMatchers extends BeHaveMatchers { outer: NumericBaseMatchers 
     def ~(delta: PlusOrMinus[S]) = result(outer.beCloseTo(delta))
     def closeTo(target: S, figures: SignificantFigures) = result(outer.beCloseTo(target, figures))
     def closeTo(target: SignificantTarget[S]) = result(outer.beCloseTo(target))
+    def beCloseTo(target: S, figures: SignificantFigures) = result(outer.beCloseTo(target, figures))
+    def beCloseTo(target: SignificantTarget[S]) = result(outer.beCloseTo(target))
   }
   implicit def toNeutralMatcherOrdered(result: NeutralMatcher[Any]) : NeutralMatcherOrdered = 
     new NeutralMatcherOrdered(result)

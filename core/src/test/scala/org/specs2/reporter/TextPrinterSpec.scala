@@ -132,7 +132,7 @@ s2"""e1 ${1 must_== 2}""" contains
       """|[error] x e1
          |[error]  '1' is not equal to '2'"""
 
-  def d2 = Arguments("failtrace fullstacktrace") ^
+  def d2 = Arguments.split("failtrace fullstacktrace") ^
 s2"""e1 ${1 must_== 2}""" contains
      """|[error]_org.specs2.report"""
 
@@ -252,7 +252,7 @@ object TextPrinterSpec extends MustMatchers with FragmentsDsl {
       val logger = stringLogger
       lazy val env =
         optionalEnv.fold(Env(lineLogger = logger,
-          arguments = spec.arguments.overrideWith(Arguments("sequential fullstacktrace"))))(_.copy(lineLogger = logger))
+          arguments = spec.arguments.overrideWith(Arguments.split("sequential fullstacktrace"))))(_.copy(lineLogger = logger))
 
       TextPrinter.run(env)(spec.setFragments(spec.fragments
         .prepend(DefaultFragmentFactory.break) // add a newline after the title

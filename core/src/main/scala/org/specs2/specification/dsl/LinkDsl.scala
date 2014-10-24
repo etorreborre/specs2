@@ -44,11 +44,10 @@ trait LinkDsl extends LinkCreation {
  * Create links without any implicits
  */
 trait LinkCreation extends FragmentsFactory {
-  def link(s: SpecStructure): Fragment            = fragmentFactory.link(SpecificationLink(s.header, alias = s.header.show))
-  def link(s: =>SpecificationStructure): Fragment = fragmentFactory.link(SpecificationLink(s.is.header, alias = s.is.header.show))
+  def link(s: SpecStructure): Fragment            = fragmentFactory.link(SpecificationLink(s.header, alias = s.header.showWords))
+  def link(s: =>SpecificationStructure): Fragment = fragmentFactory.link(SpecificationLink(s.is.header, alias = s.is.header.showWords))
 
-  def see(s: SpecStructure): Fragment            = fragmentFactory.see(SpecificationLink(s.header, alias = s.header.show))
-  def see(s: =>SpecificationStructure): Fragment = fragmentFactory.see(SpecificationLink(s.is.header, alias = s.is.header.show))
-
+  def see(s: SpecStructure): Fragment            = fragmentFactory.see(SpecificationLink(s.header, alias = s.header.showWords))
+  def see(s: =>SpecificationStructure): Fragment = fragmentFactory.see(SpecificationLink(s.is.header, alias = s.is.header.showWords))
 }
 

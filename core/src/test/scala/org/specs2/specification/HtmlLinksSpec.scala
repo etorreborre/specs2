@@ -4,6 +4,7 @@ package specification
 import core._
 import matcher._
 import dsl.LinkDsl
+import org.specs2.control.Debug
 
 class HtmlLinksSpec extends Spec with TypedEqual with LinkDsl { def is = s2"""
 
@@ -11,7 +12,7 @@ class HtmlLinksSpec extends Spec with TypedEqual with LinkDsl { def is = s2"""
 
   for a specification
   ${ a(link(userGuide))                             === "<a href='org.specs2.specification.UserGuideSpecification.html'>User guide</a>" }
-  ${ a(link(howTo))                                 === "<a href='org.specs2.specification.HowTo.html'>HowTo</a>" }
+  ${ a(link(howTo))                                 === "<a href='org.specs2.specification.HowTo.html'>How to</a>" }
 
   with a specific alias
   ${ a("User Guide" ~ userGuide)                    === "<a href='org.specs2.specification.UserGuideSpecification.html'>User Guide</a>" }

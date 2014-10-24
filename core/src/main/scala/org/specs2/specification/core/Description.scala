@@ -49,10 +49,9 @@ case class SpecificationLink(header: SpecHeader, alias: String = "", tooltip: St
   def url = specClassName+".html"
 
   def linkText =
-    if (alias.nonEmpty) alias else header.show
+    if (alias.nonEmpty) alias else header.showWords
 
-  def show =
-    if (alias.nonEmpty) alias else header.show
+  def show = header.show
 }
 
 /**
