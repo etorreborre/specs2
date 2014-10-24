@@ -1,0 +1,14 @@
+Maintenance version.
+
+## Improvements
+
+ * added a `collectValues` method to create ScalaCheck parameters that will collect the distribution of values used in properties (Just add `implicit val params = collectValues` in your specification). 
+
+
+## Fixes
+
+ * made the `MatchResult` object public so that the `sequence[T](results: Seq[]MatchResult[T]]): MatchResult[Seq[T]]` is accessible
+
+
+==========================
+
