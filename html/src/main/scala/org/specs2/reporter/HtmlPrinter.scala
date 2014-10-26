@@ -44,9 +44,15 @@ trait HtmlPrinter extends Printer {
    */
   def finalize(env: Env, specifications: List[SpecificationStructure]): Action[Unit] = for {
     options   <- getHtmlOptions(env.arguments)
-    htmlPages <- Actions.ok(Indexing.createIndexedPages(env, specifications, options))
-    _         <- Fold.runFold(Process.emitAll(htmlPages), Indexing.indexFold(options.indexFile)).toAction
+    _         <- if (options.createIndex) createIndex(env, specifications, options)
+                 else                     Actions.unit
   } yield ()
+
+  def createIndex(env: Env, specifications: List[SpecificationStructure], options: HtmlOptions): Action[Unit] =
+    for {
+      htmlPages <- Actions.ok(Indexing.createIndexedPages(env, specifications, options))
+      _         <- Fold.runFold(Process.emitAll(htmlPages), Indexing.indexFold(options.indexFile)).toAction
+    } yield ()
 
   def fold(env: Env, spec: SpecStructure): Fold[Fragment] = new Fold[Fragment] {
     type S = Stats
@@ -96,11 +102,12 @@ trait HtmlPrinter extends Printer {
     import arguments.commandLine._
     val out = directoryOr("html.outdir", HtmlOptions.outDir)
     Actions.ok(HtmlOptions(
-      outDir    = out,
-      baseDir   = directoryOr("html.basedir",   HtmlOptions.baseDir),
-      template  = fileOr(     "html.template",  HtmlOptions.template(out)),
-      variables = mapOr(      "html.variables", HtmlOptions.variables),
-      noStats   = boolOr(     "html.nostats",   HtmlOptions.noStats)))
+      outDir      = out,
+      baseDir     = directoryOr("html.basedir",   HtmlOptions.baseDir),
+      template    = fileOr(     "html.template",  HtmlOptions.template(out)),
+      variables   = mapOr(      "html.variables", HtmlOptions.variables),
+      noStats     = boolOr(     "html.nostats",   HtmlOptions.noStats),
+      createIndex = boolOr(     "html.index",     HtmlOptions.createIndex)))
   }
 
 
