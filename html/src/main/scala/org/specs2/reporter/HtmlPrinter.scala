@@ -50,7 +50,7 @@ trait HtmlPrinter extends Printer {
 
   def createIndex(env: Env, specifications: List[SpecificationStructure], options: HtmlOptions): Action[Unit] =
     for {
-      htmlPages <- Actions.ok(Indexing.createIndexedPages(env, specifications, options))
+      htmlPages <- Actions.safe(Indexing.createIndexedPages(env, specifications, options))
       _         <- Fold.runFold(Process.emitAll(htmlPages), Indexing.indexFold(options.indexFile)).toAction
     } yield ()
 
