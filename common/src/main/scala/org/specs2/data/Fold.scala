@@ -100,14 +100,14 @@ object Fold {
   /**
    * Create a Fold from a Reducer and a last action
    */
-  def fromReducerAndLast[T, S1](reducer: Reducer[T, S1], last: S1 => Task[Unit]) = new Fold[T] {
+  def fromReducerAndLast[T, S1](reducer: Reducer[T, S1], lastTask: S1 => Task[Unit]) = new Fold[T] {
     type S = S1
     lazy val sink: Sink[Task, (T, S)] = unitSink[T, S]
 
     def prepare = Task.now(())
     def fold = reducer.cons
     def init = reducer.monoid.zero
-    def last(s: S) = last(s)
+    def last(s: S) = lastTask(s)
   }
 
   /**
