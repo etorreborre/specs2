@@ -51,7 +51,7 @@ object Index {
 
   def toJson(index: Index): String = {
     s"""
-       |var tipuesearch = {"pages": ${pages(index).mkString("[", ",\n", "]")}}
+       |var tipuesearch = {"pages": ${pages(index).mkString("[", ",\n", "]")}};
      """.stripMargin
   }
 
@@ -59,7 +59,7 @@ object Index {
     index.entries.map(page)
 
   def page(entry: IndexEntry): String =
-    s"""{"title":"${entry.title}", "text":"${entry.text.replace("\n", "")}", "tags":${entry.tags.mkString("\""," ", "\"")}, "loc":"${entry.path.path}"}"""
+    s"""{"title":"${entry.title}", "text":"${entry.text.replace("\"", "\\\"").replace("\n", "")}", "tags":${entry.tags.mkString("\""," ", "\"")}, "loc":"${entry.path.path}"}"""
 
   implicit def IndexMonoid: Monoid[Index] = new Monoid[Index] {
     def zero = Index(Vector())
