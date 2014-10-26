@@ -12,6 +12,9 @@ import ValueChecks._
  */
 trait TaskMatchers {
 
+  def returnOk[T]: TaskMatcher[T] =
+    attemptRun(ValueCheck.alwaysOk, None)
+
   def returnValue[T](check: ValueCheck[T]): TaskMatcher[T] =
     attemptRun(check, None)
 

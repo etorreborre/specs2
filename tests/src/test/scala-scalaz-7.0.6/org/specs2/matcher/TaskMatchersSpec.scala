@@ -11,6 +11,8 @@ class TaskMatchersSpec extends Spec with TaskMatchers with ResultMatchers with R
    ${ Task(1) must returnValue(1) }
    ${ (Task(1) must returnValue(2)) returns "'1' is not equal to '2'" }
    ${ Task(1) must returnValue { i: Int  => i must_== 1 } }
+   ${ Task(1) must returnOk }
+   ${ (Task(1) must returnOk) returns "" }
 
 """
 }

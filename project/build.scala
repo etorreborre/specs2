@@ -187,7 +187,8 @@ object build extends Build {
     // https://gist.github.com/djspiewak/976cd8ac65e20e136f05
     unmanagedSourceDirectories in Compile ++=
       Seq((sourceDirectory in Compile).value / s"scala-${scalaBinaryVersion.value}",
-          (sourceDirectory in Compile).value / s"scala-scalaz-${scalazVersion.value}"),
+          (sourceDirectory in Compile).value / s"scala-scalaz-${scalazVersion.value}",
+          (sourceDirectory in (Test, test)).value / s"scala-scalaz-${scalazVersion.value}"),
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
     maxErrors := 20,
     incOptions := incOptions.value.withNameHashing(true),
