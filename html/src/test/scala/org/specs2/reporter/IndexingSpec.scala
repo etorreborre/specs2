@@ -18,7 +18,7 @@ class IndexingSpec extends Specification { def is = s2"""
 
 """
 
-  def e1 = indexState(pages(0), reporter.Index.empty) must_==
+  def e1 = Index.reducer.cons(pages(0), reporter.Index.empty) must_==
            reporter.Index(Vector(IndexEntry(title = "page 1", text = "content1", tags = Vector(), path = FilePath("page1"))))
 
   def e2 = {

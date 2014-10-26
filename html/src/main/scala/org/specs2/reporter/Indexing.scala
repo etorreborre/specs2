@@ -5,6 +5,7 @@ import data.Fold
 import io.{FilePath, FileSystem}
 import specification.core.{Env, SpecificationStructure}
 
+import scalaz.{Reducer, Monoid}
 import scalaz.concurrent.Task
 import scalaz.stream._
 
@@ -13,20 +14,12 @@ import scalaz.stream._
  */
 object Indexing {
 
-  val indexState = { (page: IndexedPage, index: Index) =>
-    index.add(createEntries(page))
-  }
-
-  def indexFold(path: FilePath) = new Fold[IndexedPage] {
-    type S = Index
-
-    def prepare: Task[Unit] = Task.now(())
-    def sink: Sink[Task, (IndexedPage, Index)] = Fold.unitSink
-
-    def fold = indexState
-    def init = Index.empty
-    def last(index: Index): Task[Unit] = FileSystem.writeFileTask(path, Index.toJson(index))
-  }
+  /**
+   * An Index fold creates an Index page based on all pages to index and
+   * saves it to a given file path
+   */
+  def indexFold(path: FilePath) =
+    Fold.fromReducerAndLast(Index.reducer, (index: Index) => FileSystem.writeFileTask(path, Index.toJson(index)))
 
   def createIndexedPages(env: Env, specifications: List[SpecificationStructure], options: HtmlOptions): Seq[IndexedPage] = {
     specifications.map(createIndexedPage(env, options))
@@ -68,6 +61,12 @@ object Index {
   def page(entry: IndexEntry): String =
     s"""{"title":"${entry.title}", "text":"${entry.text.replace("\n", "")}", "tags":${entry.tags.mkString("\""," ", "\"")}, "loc":"${entry.path.path}"}"""
 
+  implicit def IndexMonoid: Monoid[Index] = new Monoid[Index] {
+    def zero = Index(Vector())
+    def append(a: Index, b: =>Index) = Index(a.entries ++ b.entries)
+  }
+
+  val reducer = Reducer.unitReducer((page: IndexedPage) => Index(Indexing.createEntries(page)))
 }
 
 case class IndexEntry(title: String, text: String, tags: Vector[String], path: FilePath)

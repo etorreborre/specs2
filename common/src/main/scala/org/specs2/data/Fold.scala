@@ -5,7 +5,7 @@ import scalaz.stream._
 import Process._
 import scalaz.concurrent.Task
 import Task._
-import scalaz.Monoid
+import scalaz.{Reducer, Monoid}
 import scalaz.std.list._
 import scalaz.syntax.foldable._
 import scalaz.syntax.bind._
@@ -83,6 +83,32 @@ object Fold {
    */
   def fromFunction[T](f: T => Task[Unit]) =
     fromSink(Process.constant(f))
+
+  /**
+   * Create a Fold from a Reducer
+   */
+  def fromReducer[T, S1](reducer: Reducer[T, S1]) = new Fold[T] {
+    type S = S1
+    lazy val sink: Sink[Task, (T, S)] = unitSink[T, S]
+
+    def prepare = Task.now(())
+    def fold = reducer.cons
+    def init = reducer.monoid.zero
+    def last(s: S) = Task.now(())
+  }
+
+  /**
+   * Create a Fold from a Reducer and a last action
+   */
+  def fromReducerAndLast[T, S1](reducer: Reducer[T, S1], last: S1 => Task[Unit]) = new Fold[T] {
+    type S = S1
+    lazy val sink: Sink[Task, (T, S)] = unitSink[T, S]
+
+    def prepare = Task.now(())
+    def fold = reducer.cons
+    def init = reducer.monoid.zero
+    def last(s: S) = last(s)
+  }
 
   /**
    * This Sink doesn't do anything
