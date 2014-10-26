@@ -8,6 +8,7 @@
     <link href="$baseDir$/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
     <link href="$baseDir$/css/prettify.css" rel="stylesheet" type="text/css"/>
     <link href="$baseDir$/css/tabber.css" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="$baseDir$/css/tipuesearch.css" rel="stylesheet" type="text/css" media="screen"/>
     <link href="$baseDir$/css/specs2.css" rel="stylesheet" type="text/css"/>
     <link href="$baseDir$/css/specs2-user.css" rel="stylesheet" type="text/css"/>
 
@@ -29,15 +30,14 @@
 
 <div class="container">
 
-<div class="col-md-3">
+<div class="col-md-2 search-box" >
 $toc$
-<form action="$path$">
+<form action="$search-page$">
   <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
 </form>
-<div id="tipue_search_content"></div>
 </div>
 
-<div class="col-md-9">
+<div class="col-md-10">
 $if(issues)$
 <h1>$title$
     <a href="#" onclick="hideByClass('ok');hideById('onlyIssuesLink');showById('allElementsLink')"><span id=onlyIssuesLink class="issues-toggle"> (issues only)</span></a>

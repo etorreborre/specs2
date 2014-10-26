@@ -243,3 +243,6 @@ pre {
 .formstacktrace {
   display: none;
 }
+.search-box {
+  margin-top: 15px;
+}
