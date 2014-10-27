@@ -14,8 +14,8 @@ object HtmlTemplate {
 
     parser.parse(template) match {
       case parser.Success(s, _) => Actions.ok(s)
-      case parser.Failure(e, _) => Actions.fail(e)
-      case parser.Error(e, _)   => Actions.fail(e)
+      case parser.Failure(e, _) => Actions.fail(e+" for template \n"+template)
+      case parser.Error(e, _)   => Actions.fail(e+" for template \n"+template)
     }
 
   }
@@ -29,8 +29,10 @@ object HtmlTemplate {
     lazy val template: Parser[String] =
       rep(conditional | block) ^^ (_.mkString)
 
-    lazy val block: Parser[String] = rep1(variable | text) ^^ (_.mkString)
+    lazy val block: Parser[String] = rep1(dollar | variable | text) ^^ (_.mkString)
 
+    lazy val dollar: Parser[String] = "$$"
+    
     lazy val variable: Parser[String] =
       ("$" ~> "[^\\$]+".r <~ "$").filter(v => !Seq("if(", "endif", "else").exists(v.startsWith)) ^^ { (v: String) => variables.getOrElse(v, "") }
 

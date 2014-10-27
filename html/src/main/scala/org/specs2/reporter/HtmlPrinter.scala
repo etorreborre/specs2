@@ -44,7 +44,7 @@ trait HtmlPrinter extends Printer {
    */
   def finalize(env: Env, specifications: List[SpecificationStructure]): Action[Unit] = for {
     options   <- getHtmlOptions(env.arguments)
-    _         <- if (options.createIndex) createIndex(env, specifications, options)
+    _         <- if (options.search) createIndex(env, specifications, options)
                  else                     Actions.unit
   } yield ()
 
@@ -52,6 +52,7 @@ trait HtmlPrinter extends Printer {
     for {
       htmlPages <- Actions.safe(Indexing.createIndexedPages(env, specifications, options))
       _         <- Fold.runFold(Process.emitAll(htmlPages), Indexing.indexFold(options.indexFile)).toAction
+      _         <- createSearchPage(env, options)
     } yield ()
 
   def fold(env: Env, spec: SpecStructure): Fold[Fragment] = new Fold[Fragment] {
@@ -59,7 +60,13 @@ trait HtmlPrinter extends Printer {
 
     lazy val sink = Fold.unitSink[Fragment, Stats]
 
-    def prepare = Task.now(())
+    def prepare = {
+      for {
+        options  <- getHtmlOptions(env.arguments)
+        _        <- copyResources(env, options)
+      } yield ()
+    }.toTask
+
     def fold = Statistics.fold
     def init = Stats.empty
 
@@ -88,10 +95,9 @@ trait HtmlPrinter extends Printer {
     import env.fileSystem._
     for {
       options  <- getHtmlOptions(env.arguments)
-      _        <- copyResources(env, options.outDir)
       template <- readFile(options.template) ||| warnAndFail("No template file found at "+options.template.path, RunAborted)
       content  <- makeHtml(template, spec, stats, options, env.arguments)
-      _        <- writeFile(outputFilePath(options.outDir, spec), content)
+      _        <- writeFile(outputFilePath(options, spec), content)
     } yield ()
   }
 
@@ -107,7 +113,7 @@ trait HtmlPrinter extends Printer {
       template    = fileOr(     "html.template",  HtmlOptions.template(out)),
       variables   = mapOr(      "html.variables", HtmlOptions.variables),
       noStats     = boolOr(     "html.nostats",   HtmlOptions.noStats),
-      createIndex = boolOr(     "html.index",     HtmlOptions.createIndex)))
+      search      = boolOr(     "html.search",    HtmlOptions.search)))
   }
 
 
@@ -123,7 +129,7 @@ trait HtmlPrinter extends Printer {
       options.variables
         .updated("body",    body)
         .updated("title",   spec.wordsTitle)
-        .updated("path",    outputFilePath(options.outDir, spec).path)
+        .updated("path",    outputFilePath(options, spec).path)
         .updated("baseDir", options.baseDir.path)
         .updated("outDir",  options.outDir.path)
         .updated("baseDir", options.baseDir.path)
@@ -146,7 +152,6 @@ trait HtmlPrinter extends Printer {
 
     for {
       options  <- getHtmlOptions(env.arguments)
-      _        <- copyResources(env, options.outDir)
       _        <- withEphemeralFile(options.outDir | options.template.name) {
                     copyFile(options.outDir)(options.template) >>
                     makePandocHtml(spec, stats, pandoc, options, env)
@@ -169,7 +174,7 @@ trait HtmlPrinter extends Printer {
     val bodyFile: FilePath =
       options.outDir | FileName.unsafe("body-"+spec.hashCode)
 
-    val pandocArguments = Pandoc.arguments(bodyFile, options.template, variables1, outputFilePath(options.outDir, spec), pandoc)
+    val pandocArguments = Pandoc.arguments(bodyFile, options.template, variables1, outputFilePath(options, spec), pandoc)
 
     withEphemeralFile(bodyFile) {
       writeFile(bodyFile, makeBody(spec, stats, options, env.arguments, pandoc = true)) >>
@@ -177,17 +182,45 @@ trait HtmlPrinter extends Printer {
     }
   }
 
-  def outputFilePath(directory: DirectoryPath, spec: SpecStructure): FilePath =
-    directory | FileName.unsafe(spec.specClassName+".html")
+  /**
+   * SEARCH PAGE
+   */
+  def createSearchPage(env: Env, options: HtmlOptions): Action[Unit] = {
+    import env.fileSystem._
+    for {
+      template <- readFile(options.template) ||| warnAndFail("No template file found at "+options.template.path, RunAborted)
+      content  <- makeSearchHtml(template, options)
+      _        <- writeFile(searchFilePath(options), content)
+    } yield ()
+  }
 
-  def copyResources(env: Env, outDir: DirectoryPath): Action[List[Unit]] =
-    env.fileSystem.mkdirs(outDir) >> {
+  /** create the html search page */
+  def makeSearchHtml(template: String, options: HtmlOptions): Action[String] = {
+    val variables1 =
+      options.variables
+        .updated("path",    searchFilePath(options).path)
+        .updated("baseDir", options.baseDir.path)
+        .updated("outDir",  options.outDir.path)
+        .updated("baseDir", options.baseDir.path)
+        .updated("outDir",  options.outDir.path)
+        .updated("search",  options.search.toString)
+    HtmlTemplate.runTemplate(template, variables1)
+  }
+
+  def outputFilePath(options: HtmlOptions, spec: SpecStructure): FilePath =
+    options.outDir | FileName.unsafe(spec.specClassName+".html")
+
+  def searchFilePath(options: HtmlOptions): FilePath =
+    options.outDir | "search.html"
+
+  def copyResources(env: Env, options: HtmlOptions): Action[List[Unit]] =
+    env.fileSystem.mkdirs(options.outDir) >> {
       List(DirectoryPath("css"),
            DirectoryPath("javascript"),
            DirectoryPath("images"),
            DirectoryPath("templates")).
-           map(copySpecResourcesDir(env, "org" / "specs2" / "reporter", outDir, classOf[HtmlPrinter].getClassLoader)).sequenceU |||
-        warnAndFail("Cannot copy resources to "+outDir.path, RunAborted)
+           map(copySpecResourcesDir(env, "org" / "specs2" / "reporter", options.outDir, classOf[HtmlPrinter].getClassLoader)).sequenceU |||
+        warnAndFail("Cannot copy resources to "+options.outDir.path, RunAborted)
     }
 
   def copySpecResourcesDir(env: Env, base: DirectoryPath, outputDir: DirectoryPath, loader: ClassLoader)(src: DirectoryPath): Action[Unit] = {

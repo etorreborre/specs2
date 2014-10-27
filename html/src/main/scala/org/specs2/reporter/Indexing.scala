@@ -28,7 +28,7 @@ object Indexing {
   def createIndexedPage(env: Env, options: HtmlOptions) = (specification: SpecificationStructure) => {
     val spec = specification.structure(env)
     IndexedPage(
-      path     = HtmlPrinter.outputFilePath(options.outDir, spec),
+      path     = HtmlPrinter.outputFilePath(options, spec),
       title    = spec.header.wordsTitle,
       contents = spec.texts.foldLeft(new StringBuilder)((res, cur) => res.append(cur.description.show)).toString)
   }
