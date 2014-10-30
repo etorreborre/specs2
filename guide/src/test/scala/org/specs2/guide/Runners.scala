@@ -23,11 +23,12 @@ There are many ways to execute ***specs2*** specifications:
 
  <table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info">`"org.scalaz" % "scalaz-core" % "7.1.0"`</td><td class="info">mandatory</td></tr><tr><td class="info">`"org.scalaz" % "scalaz-concurrent" % "7.1.0"`</td><td class="info">mandatory</td></tr><tr><td class="info">`"com.chuusai" % "shapeless" % "1.2.4"`</td><td class="info">if you use the GWT trait</td></tr><tr><td class="info"> `"org.scalacheck" %% "scalacheck" % "1.10.0"`</td><td class="info">if using ScalaCheck</td></tr><tr><td class="info">`"org.mockito" % "mockito-core" % "1.9.5"`</td><td class="info">if using Mockito. Note: specs2.jar must be placed before mockito.jar on the classpath</td></tr><tr><td class="info">`"org.hamcrest" % "hamcrest-core" % "1.3"`</td><td class="info">if using Hamcrest matchers with Mockito</td></tr><tr><td class="info">`"junit" % "junit" % "4.11"`</td><td class="info">if using JUnit</td></tr><tr><td class="info">`"org.scala-sbt" % "test-interface" % "1.0"`</td><td class="info">provided by sbt when using it</td></tr><tr><td class="info">`"org.pegdown" % "pegdown" % "1.2.1"`</td><td class="info">if using the html runner</td></tr><tr><td class="info">`"org.specs2" % "classycle" % "1.4.1"`</td><td class="info">if using the `org.specs2.specification.Analysis` trait</td></tr><tr><td class="info">`"org.scala-lang" % "scala-reflect" % "2.10.3"`</td><td class="info">if using interpolated specifications and/or macro matchers</td></tr><tr><td class="info">`"org.scala-lang.plugins" %% "macro-paradise" % "2.0.0"`</td><td class="info">if using macro matchers, add this macro plugin to sbt with `addCompilerPlugin("org.scala-lang.plugins" %% "macro-paradise" % "2.0.0")`</td></tr><tr><td class="info">`"org.scalaz.stream" %% "scalaz-stream" % "0.5a"`</td><td class="info">if using the scalaz-stream matchers for `Process` (add `"bintray" at "http://dl.bintray.com/scalaz/releases"` to your resolvers)</td></tr></table>
 
-#### Fine-grained jars
+#### specs2 jars
 
-***specs2*** can be downloaded from [Sonatype](https://oss.sonatype.org/content/repositories/releases/org/specs2/specs2_2.10/$VERSION) as a big jar containing all the specs2 classes but also as smaller jars, depending on the features you need:
+***specs2*** can be downloaded from [Sonatype](https://oss.sonatype.org/content/repositories/releases/org/specs2) as a set of small jars:
 
- - `specs2-core`: for simple specifications executable in the console or with sbt
+ - `specs2-core`: for simple specifications executable in the console or with sbt. This should be your starting point
+
  - `specs2-matcher`: to use specs2 matchers with JUnit
  - `specs2-matcher-extra`: for the optional specs2 matchers (add `"bintray" at "http://dl.bintray.com/scalaz/releases"` to your resolvers)
  - `specs2-scalacheck`: to use ScalaCheck properties in specifications
