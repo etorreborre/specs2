@@ -18,8 +18,8 @@ trait ResultLogicalCombinators extends Results {
   implicit def combineResult(r: =>Result)  : ResultLogicalCombinator = new ResultLogicalCombinator(r)
 
   class ResultLogicalCombinator(res: =>Result) {
-    private val result = ResultExecution.executeThrowable(res)
-    private val r = result match {
+    private lazy val result = ResultExecution.executeThrowable(res)
+    private lazy val r = result match {
       case Left(r1)  => r1
       case Right(r1) => r1
     }
