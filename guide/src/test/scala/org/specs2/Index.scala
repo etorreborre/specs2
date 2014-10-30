@@ -202,13 +202,13 @@ s"""
   <div class="level1"><img src="./images/collapsed.gif">Integration with <a href="http://scala-sbt.org/">sbt</a> and JUnit tools (maven, IDEs,...)</img></div>
 
     <h3><a name="Dependencies"></a>Dependencies</h3>
-    The <s2>specs2</s2> jar is available with both sbt and maven
+    The <s2>specs2</s2> jars are available with both sbt and maven
 
   <div class="tabber">
     <div class="tabbertab" title="sbt">
         <code class="prettyprint">
   libraryDependencies ++= Seq(
-    "org.specs2" %% "specs2" % "$VERSION" % "test"
+    "org.specs2" %% "specs2-core" % "$VERSION" % "test"
 
     // with Scala 2.9.3 (specs2 1.12.4.1 is the latest version for scala 2.9.3)
     // "org.specs2" %% "specs2" % "1.12.4.1" % "test",
@@ -216,7 +216,7 @@ s"""
 
   scalacOptions in Test ++= Seq("-Yrangepos")
 
-  // Read here for optional dependencies:
+  // Read here for optional jars and dependencies:
   // <a href="http://etorreborre.github.io/specs2/guide/org.specs2.guide.Runners.html#Dependencies">http://etorreborre.github.io/specs2/guide/org.specs2.guide.Runners.html#Dependencies</a>
 
   resolvers ++= Seq("snapshots", "releases").map(Resolver.sonatypeRepo)
@@ -225,7 +225,7 @@ s"""
     <div class="tabbertab" title="maven">
         <code class="prettyprint">  &lt;dependency>
    &lt;groupId>org.specs2&lt;/groupId>
-   &lt;artifactId>specs2_2.10&lt;/artifactId>
+   &lt;artifactId>specs2-core_2.11&lt;/artifactId>
    &lt;version>$VERSION&lt;/version>
    &lt;scope>test&lt;/scope>
  &lt;/dependency>
@@ -240,7 +240,7 @@ s"""
  -->
 
  &lt;!--
-  Read here for optional dependencies:
+  Read here for optional jars and dependencies:
   <a href="http://etorreborre.github.io/specs2/guide/org.specs2.guide.Runners.html#Dependencies">http://etorreborre.github.io/specs2/guide/org.specs2.guide.Runners.html#Dependencies</a>
  -->
 
@@ -274,9 +274,9 @@ s"""
     <tr>
         <td class="info">Snapshot</td>
         <td class="info">
-        binaries (<a href="http://oss.sonatype.org/content/repositories/snapshots/org/specs2/specs2_2.10/$SNAPSHOT_VERSION/">specs2 jar</a>,
-                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-core_2.10/7.0.4/">scalaz core jar</a>,
-                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-concurrent_2.10/7.0.4/">scalaz concurrent jar</a>)<br/>
+        binaries (<a href="http://oss.sonatype.org/content/repositories/snapshots/org/specs2/specs2-core_2.11/$SNAPSHOT_VERSION/">specs2-core jar</a>,
+                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-core_2.11/7.1.0/">scalaz core jar</a>,
+                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-concurrent_2.11/7.1.0/">scalaz concurrent jar</a>)<br/>
        project (<a href="http://github.com/etorreborre/specs2/zipball/master">zip</a>,
                 <a href="http://github.com/etorreborre/specs2/tarball/master">tar</a>)
       </td>
@@ -284,9 +284,9 @@ s"""
     <tr>
         <td class="info">Released</td>
         <td class="info">
-        binaries (<a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/specs2_2.10/$VERSION/">specs2 jar</a>,
-                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-core_2.10/7.0.4/">scalaz core jar</a>,
-                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-concurrent_2.10/7.0.4/">scalaz concurrent jar</a>)<br/>
+        binaries (<a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/specs2-core_2.11/$VERSION/">specs2 jar</a>,
+                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-core_2.11/7.1.0/">scalaz core jar</a>,
+                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-concurrent_2.11/7.1.0/">scalaz concurrent jar</a>)<br/>
         project (<a href="http://github.com/etorreborre/specs2/zipball/SPECS2-$VERSION">zip</a>,
                  <a href="http://github.com/etorreborre/specs2/tarball/SPECS2-$VERSION">tar</a>)
       </td>

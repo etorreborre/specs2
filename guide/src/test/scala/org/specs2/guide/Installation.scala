@@ -64,7 +64,6 @@ Depending on the $specs2 features you want to use you will need to add more depe
  `specs2-gwt`            | to write given/when/then specifications
  `specs2-form`           | html form-like specifications
  `specs2-html`           | to export specifications as html
- `specs2-markdown`       | to export specifications as markdown files
  `specs2-junit`          | to run specifications as JUnit tests
 
 Note: the `specs2-core` jar depends on 2 other $specs2 jars:
