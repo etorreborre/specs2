@@ -29,9 +29,9 @@ object HtmlTemplate {
     lazy val template: Parser[String] =
       rep(conditional | block) ^^ (_.mkString)
 
-    lazy val block: Parser[String] = rep1(dollar | variable | text) ^^ (_.mkString)
+    lazy val block: Parser[String] = rep1(dollar | variable | text) ^^ { _.mkString }
 
-    lazy val dollar: Parser[String] = "$$"
+    lazy val dollar: Parser[String] = "$$" ^^ { s => "$" }
     
     lazy val variable: Parser[String] =
       ("$" ~> "[^\\$]+".r <~ "$").filter(v => !Seq("if(", "endif", "else").exists(v.startsWith)) ^^ { (v: String) => variables.getOrElse(v, "") }

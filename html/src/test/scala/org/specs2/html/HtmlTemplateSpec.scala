@@ -13,7 +13,14 @@ class HtmlTemplateSpec extends Spec {
           "me"   -> "eric")) must
     beOkWithValue("hello you, I'm eric and this is not defined ")
   }
-  
+
+  "$$ is how $ is quoted and should be replaced by $" >> {
+    runTemplate(
+      "hello $$name",
+      Map("name" -> "eric")) must
+      beOkWithValue("hello $name")
+  }
+
   "use conditional in a template" >> {
     runTemplate(
       "hello $if(defined)$$name$$else$$me$ $endif$!",
