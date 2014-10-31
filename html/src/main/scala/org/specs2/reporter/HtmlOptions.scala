@@ -15,9 +15,17 @@ case class HtmlOptions(outDir: DirectoryPath, baseDir: DirectoryPath, template: 
       .updated("baseDir",  baseDir.path)
       .updated("outDir",   outDir.path)
       .updated("template", template.path)
-      .updated("nostats",  noStats.toString)
-      .updated("search",   search.toString)
+      .updateWhenTrue("nostats",  noStats)
+      .updateWhenTrue("search",   search)
 
+  implicit class Update(map: Map[String, String]) {
+    def updateWhenTrue(name: String, value: String, condition: Boolean): Map[String, String] =
+      if (condition) map.updated(name, value)
+      else map
+
+    def updateWhenTrue(name: String, value: Boolean): Map[String, String] =
+      map.updateWhenTrue(name, value.toString, value)
+  }
 }
 
 object HtmlOptions {
@@ -25,7 +33,7 @@ object HtmlOptions {
   val baseDir   = DirectoryPath.unsafe(".")
   val variables = Map[String, String]()
   val noStats   = false
-  val search = false
+  val search    = false
 
   def template(outDir: DirectoryPath): FilePath =
     outDir / "templates" | "specs2.html"
