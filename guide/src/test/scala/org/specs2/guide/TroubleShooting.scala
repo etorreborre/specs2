@@ -3,7 +3,7 @@ package guide
 
 import org.specs2.execute.{Success, ResultExecution, AsResult}
 
-object TroubleShooting extends UserGuidePage { def is = "Troubleshooting".title ^ s2"""
+object Troubleshooting extends UserGuidePage { def is = "Troubleshooting".title ^ s2"""
 
 This section presents some of the common pitfalls you might face when using $specs2 and Scala
 

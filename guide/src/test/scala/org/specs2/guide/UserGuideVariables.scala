@@ -6,3 +6,5 @@ trait UserGuideVariables extends Specs2Variables {
   val win = "<li class=\"example success\"/>"
   val triple = "\"\"\""
 }
+
+object UserGuideVariables extends UserGuideVariables

@@ -51,15 +51,16 @@ s2"""
 }}
 
 For a mutable specification we can use almost the same syntax but the `CommandLineArguments` trait must come from the `org.specs2.specification.mutable` package:${snippet{
-class SpecificationWithArgs extends mutable.Specification with specification.mutable.CommandLineArguments { def is(commandLine: CommandLine) =
-  if (commandLine.isDefined("small"))
-    "This is a small specification" should {
-      "with one example" in { 1 must_== 1 }
-    }
-  else
-    "This is a small specification" >> {
-      "with lots of examples" >> (1 to 1000).repeat(i => "ex"+i >> ok)
-    }
+class SpecificationWithArgs extends mutable.Specification with specification.mutable.CommandLineArguments {
+  def is(commandLine: CommandLine) =
+    if (commandLine.isDefined("small"))
+      "This is a small specification" should {
+        "with one example" in { 1 must_== 1 }
+      }
+    else
+      "This is a small specification" >> {
+        "with lots of examples" >> (1 to 1000).repeat(i => "ex"+i >> ok)
+      }
 }
 }}
 

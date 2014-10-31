@@ -28,8 +28,8 @@ object Indexing {
   def createIndexedPage(env: Env, options: HtmlOptions) = (specification: SpecificationStructure) => {
     val spec = specification.structure(env)
     IndexedPage(
-      path     = HtmlPrinter.outputFilePath(options, spec),
-      title    = spec.header.wordsTitle,
+      path     = HtmlPrinter.outputFilePath(options, spec).relativeTo(options.outDir),
+      title    = spec.header.showWords,
       contents = spec.texts.foldLeft(new StringBuilder)((res, cur) => res.append(cur.description.show)).toString)
   }
 
@@ -59,7 +59,26 @@ object Index {
     index.entries.map(page)
 
   def page(entry: IndexEntry): String =
-    s"""{"title":"${entry.title}", "text":"${entry.text.replace("\"", "\\\"").replace("\n", "")}", "tags":${entry.tags.mkString("\""," ", "\"")}, "loc":"${entry.path.path}"}"""
+    s"""{"title":"${entry.title}", "text":"${sanitizeEntry(entry)}", "tags":${entry.tags.mkString("\""," ", "\"")}, "loc":"${entry.path.path}"}"""
+
+  /**
+   * the text that is used for indexing must be sanitized:
+   * - no newlines
+   * - ^ (because tipue search doesn't like it)
+   * - no markdown characters
+   */
+  def sanitizeEntry(entry: IndexEntry): String =
+    entry.text.replace("\"", "\\\"")
+      .replace("\n", "")
+      .replace("^", "")
+      .replace("#####", "")
+      .replace("####", "")
+      .replace("###", "")
+      .replace("##", "")
+      .replace("  * ", "")
+      .replace("```", "")
+      .replace("<s2>", "")
+      .replace("</s2>", "")
 
   implicit def IndexMonoid: Monoid[Index] = new Monoid[Index] {
     def zero = Index(Vector())
