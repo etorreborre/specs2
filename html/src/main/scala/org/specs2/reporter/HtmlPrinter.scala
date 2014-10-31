@@ -126,14 +126,11 @@ trait HtmlPrinter extends Printer {
   def makeHtml(template: String, spec: SpecStructure, stats: Stats, options: HtmlOptions, arguments: Arguments): Action[String] = {
     val body = makeBody(spec, stats, options, arguments, pandoc = true)
     val variables1 =
-      options.variables
+      options.templateVariables
         .updated("body",    body)
         .updated("title",   spec.wordsTitle)
         .updated("path",    outputFilePath(options, spec).path)
-        .updated("baseDir", options.baseDir.path)
-        .updated("outDir",  options.outDir.path)
-        .updated("baseDir", options.baseDir.path)
-        .updated("outDir",  options.outDir.path)
+
     HtmlTemplate.runTemplate(template, variables1)
   }
 
@@ -166,10 +163,8 @@ trait HtmlPrinter extends Printer {
     import env.fileSystem._
 
     val variables1 =
-      options.variables
+      options.templateVariables
         .updated("title", spec.wordsTitle)
-        .updated("baseDir", options.baseDir.path)
-        .updated("outDir", options.outDir.path)
 
     val bodyFile: FilePath =
       options.outDir | FileName.unsafe("body-"+spec.hashCode)
@@ -197,13 +192,10 @@ trait HtmlPrinter extends Printer {
   /** create the html search page */
   def makeSearchHtml(template: String, options: HtmlOptions): Action[String] = {
     val variables1 =
-      options.variables
-        .updated("path",    searchFilePath(options).path)
-        .updated("baseDir", options.baseDir.path)
-        .updated("outDir",  options.outDir.path)
-        .updated("baseDir", options.baseDir.path)
-        .updated("outDir",  options.outDir.path)
-        .updated("search",  options.search.toString)
+      options.templateVariables
+        .updated("title", "Search")
+        .updated("path", searchFilePath(options).path)
+
     HtmlTemplate.runTemplate(template, variables1)
   }
 

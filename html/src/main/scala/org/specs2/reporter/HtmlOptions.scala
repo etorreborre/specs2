@@ -9,6 +9,15 @@ case class HtmlOptions(outDir: DirectoryPath, baseDir: DirectoryPath, template: 
   def javascriptDir = outDir / "javascript"
   def indexDir      = javascriptDir / "tipuesearch"
   def indexFile     = indexDir | "tipuesearch_contents.js"
+
+  def templateVariables =
+    variables
+      .updated("baseDir",  baseDir.path)
+      .updated("outDir",   outDir.path)
+      .updated("template", template.path)
+      .updated("nostats",  noStats.toString)
+      .updated("search",   search.toString)
+
 }
 
 object HtmlOptions {
