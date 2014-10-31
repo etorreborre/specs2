@@ -23,22 +23,23 @@
     <script src="$baseDir$/javascript/specs2-user.js" type="text/javascript"></script>
     <script src="$baseDir$/javascript/tipuesearch/tipuesearch_set.js" type="text/javascript"></script>
     <script src="$baseDir$/javascript/tipuesearch/tipuesearch_contents.js" type="text/javascript"></script>
-    <script src="$baseDir$/javascript/tipuesearch/tipuesearch-min.js" type="text/javascript"></script>
+    <script src="$baseDir$/javascript/tipuesearch/tipuesearch.min.js" type="text/javascript"></script>
 
 </head>
 <body>
 
 <div class="container">
 
-<div class="col-md-2 search-box" >
 $if(search)$
+<div class="col-md-2 search-box">
 <form action="search.html">
   <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
 </form>
+</div>
 $else$
+<div class="col-md-1 search-box"></div>
 $endif$
 $toc$
-</div>
 
 <div class="col-md-10">
 $if(issues)$
@@ -48,6 +49,7 @@ $if(issues)$
 </h1>
 $else$
 <h1>$title$</h1>
+<div id="tipue_search_content"></div>
 $endif$
 
 $body$
