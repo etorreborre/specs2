@@ -13,6 +13,7 @@ import scala.concurrent._
 import duration._
 import ExecutionContext.Implicits.global
 import MatchersImplicits._
+import ReturnsSyntax._
 
 class MockitoSpec extends script.Spec with Mockito with ResultMatchers with Groups {  def is = s2"""
 
