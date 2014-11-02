@@ -16,7 +16,7 @@ trait ArgumentsArgs extends ArgumentsCreation with ArgProperties
  */
 trait ArgumentsCreation {
 
-  lazy val args = new ArgumentsNamespace
+  lazy val args: ArgumentsNamespace = new ArgumentsNamespace
 
   /** shorthand method to create an Arguments object */
   def args(
@@ -32,7 +32,7 @@ trait ArgumentsCreation {
     isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
     xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
     showOnly:      ArgProperty[String]            = ArgProperty[String](),
-    color:         ArgProperty[Boolean]           = ArgProperty[Boolean]()) =
+    color:         ArgProperty[Boolean]           = ArgProperty[Boolean]()): Arguments =
 
      (new ArgumentsNamespace).select(
             ex         = ex,

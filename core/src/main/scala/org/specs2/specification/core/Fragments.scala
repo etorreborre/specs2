@@ -95,3 +95,13 @@ object Results {
   }
 }
 
+
+
+trait UnitPost extends org.specs2.mutable.Specification {
+  args.report(notoc=true)
+  override def map(fs: =>_root_.org.specs2.specification.core.Fragments) =
+      "8<--------------------------------------------------------------------------------------------------------------"^p^
+      fs^p^
+      "8<--------------------------------------------------------------------------------------------------------------"
+
+}
