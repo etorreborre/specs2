@@ -9,6 +9,7 @@ import specification.core._
 import reporter._
 import main.Arguments
 import reporter.Printer._
+import scala.reflect.ClassTag
 import scalaz._, Scalaz._
 import Runner._
 
@@ -53,9 +54,10 @@ trait ClassRunner {
     if (env.arguments.commandLine.contains("all")) {
       for {
         printers <- createPrinters(env.arguments, loader)
+        reporter <- createReporter(env.arguments, loader)
         ss       <- SpecificationStructure.linkedSpecifications(spec, env, loader)
         sorted   <- safe(SpecificationStructure.topologicalSort(env)(ss).getOrElse(ss) :+ spec)
-        _        <- Reporter.prepare(env, printers)(sorted.toList)
+        _        <- reporter.prepare(env, printers)(sorted.toList)
         _        =  sorted.toList.map(s => Reporter.report(env, printers)(s.structure(env))).sequenceU.void
         _        <- Reporter.finalize(env, printers)(sorted.toList)
       } yield ()
@@ -72,6 +74,11 @@ trait ClassRunner {
          createMarkdownPrinter(args, loader),
          createPrinter(args, loader),
          createNotifierPrinter(args, loader)).sequenceU.map(_.flatten)
+
+  /** custom or default reporter */
+  def createReporter(args: Arguments, loader: ClassLoader): Action[Reporter] =
+    createCustomInstance[Reporter](args, loader, "reporter", (m: String) => "a custom reporter can not be instantiated "+m, "no custom reporter defined, using the default one")
+      .map(_.getOrElse(Reporter))
 
 }
 

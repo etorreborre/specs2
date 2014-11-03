@@ -4,7 +4,9 @@ package runner
 import org.specs2.control.Throwablex._
 import org.specs2.control._
 import org.specs2.main.Arguments
+import org.specs2.reflect.Classes
 
+import scala.reflect.ClassTag
 import scalaz.effect.IO
 import scalaz._, Scalaz._
 
@@ -69,5 +71,40 @@ object Runner {
   def exitSystem(status: Int, exit: Boolean) {
     if (exit) System.exit(status)
   }
+
+  /** create a custom instance */
+  def createCustomInstance[T <: AnyRef](args: Arguments, loader: ClassLoader,
+                                        name: String, failureMessage: String => String, noRequiredMessage: String)(implicit m: ClassTag[T]): Action[Option[T]] =
+    args.commandLine.value(name) match {
+      case Some(className) =>
+        for {
+          instance <- Classes.createInstanceEither[T](className, loader)(m)
+          result   <- instance match {
+            case \/-(i) => Actions.ok(Some(i))
+            case -\/(t) => noInstance(failureMessage(className), t, args.verbose)
+          }
+        } yield result
+
+      case None => noInstance(noRequiredMessage, args.verbose)
+    }
+
+  /** print a message if a class can not be instantiated */
+  def noInstance[T](message: String, t: Throwable, verbose: Boolean): Action[Option[T]] =
+    log("", verbose)                 >>
+    log(message, verbose)            >>
+    log("", verbose)                 >>
+    control.logThrowable(t, verbose) >>
+    Actions.ok(None)
+
+  /** print a message if a class can not be instantiated */
+  def noInstance[T](message: String): Action[Option[T]] =
+    log(message)      >>
+      Actions.ok(None)
+
+  /** print a message if a class can not be instantiated */
+  def noInstance[T](message: String, verbose: Boolean): Action[Option[T]] =
+    log(message, verbose) >>
+      Actions.ok(None)
+
 }
 

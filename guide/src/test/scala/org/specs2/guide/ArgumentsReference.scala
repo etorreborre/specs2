@@ -88,6 +88,7 @@ See the $ConsoleOutput page for a more precise description of this options.
  `showtimes`             | `false`                        | show execution times for examples
  `notifier`              | `""`                           | name of a class extending the `org.specs2.reporter.Notifier` trait
  `printer`               | `""`                           | name of a class extending the `org.specs2.reporter.Printer` trait
+ `reporter`              | `""`                           | name of a class extending the `org.specs2.reporter.Reporter` trait
 
 For ${"the HTML output" ~/ HtmlOutput} the following options can be used:
 

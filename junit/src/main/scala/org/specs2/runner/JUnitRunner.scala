@@ -45,7 +45,8 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
 
     val actions = for {
       printers <- ClassRunner.createPrinters(env.arguments, Thread.currentThread.getContextClassLoader)
-      _        <- Reporter.report(env, printers)(specStructure)
+      reporter <- ClassRunner.createReporter(env.arguments, Thread.currentThread.getContextClassLoader)
+      _        <- reporter.report(env, printers)(specStructure)
       _        <- Actions.safe(env.shutdown)
     } yield ()
 

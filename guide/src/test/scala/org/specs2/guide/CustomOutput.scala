@@ -10,6 +10,7 @@ You can implement your own reporting of $specs2 specifications:
 
  - using the `Notifier` trait which acts like a listener
  - using a `Printer` which gives you more flexibility for reporting exactly what you want
+ - using a `Reporter` which allow you to even change the default flow for reporting specifications: selection -> execution -> printing
 
 ## Notifier
 
@@ -60,6 +61,25 @@ trait Fold[Fragment] {
 Once you've defined your `Printer` trait you can use the `printer` argument like so:
 ```
 sbt> testOnly *BinarySpec* -- printer org.acme.reporting.LatexPrinter
+```
+
+## Reporter
+
+The `${fullName[org.specs2.reporter.Reporter]}` trait defines the full lifecycle for running specifications:
+```
+// prepare the environment before any reporting
+def prepare(env: Env, printers: List[Printer]): List[SpecificationStructure] => Action[Unit]
+
+// finalize the reporting (to save overall statistics for example)
+def finalize(env: Env, printers: List[Printer]): List[SpecificationStructure] => Action[Unit]
+
+/**
+ * report a spec structure with the given printers
+ *
+ * The default implementation selects fragments to execute, executes them and uses the printers to
+ * display results
+ */
+def report(env: Env, printers: List[Printer]): SpecStructure => Action[Unit]
 ```
 
 ## Troubleshooting

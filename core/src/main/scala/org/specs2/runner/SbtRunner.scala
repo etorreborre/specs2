@@ -1,6 +1,8 @@
 package org.specs2
 package runner
 
+import org.specs2.control.logThrowable
+import org.specs2.runner.Runner._
 import sbt.testing._
 import Fingerprints._
 import main._
@@ -62,9 +64,10 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
       if (commandLineArguments.commandLine.contains("all")) {
         for {
           printers <- createPrinters(taskDef, handler, loggers, commandLineArguments)
+          reporter <- ClassRunner.createReporter(commandLineArguments, loader)
           ss       <- SpecificationStructure.linkedSpecifications(spec, env, loader)
           sorted   <- safe(SpecificationStructure.topologicalSort(env)(ss).getOrElse(ss))
-          _        <- Reporter.prepare(env, printers)(sorted.toList)
+          _        <- reporter.prepare(env, printers)(sorted.toList)
           rs       =  sorted.toList.map(s => Reporter.report(env, printers)(s.structure(env))).sequenceU
           _        <- Reporter.finalize(env, printers)(sorted.toList)
         } yield ()
@@ -94,9 +97,8 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
           lazy val loggers = ls
           lazy val events = e
       }})
-    else noPrinter("no console printer defined", arguments.verbose)
+    else noInstance("no console printer defined", arguments.verbose)
   }
-
 
   def sbtEvents(t: TaskDef, h: EventHandler) = new SbtEvents {
     lazy val taskDef = t
