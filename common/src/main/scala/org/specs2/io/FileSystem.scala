@@ -70,8 +70,9 @@ trait FileSystem extends FilePathReader {
         val matcher = regex.matcher(entry.getName)
         if (matcher.matches) {
           val target = matcher.replaceFirst(s"${quoteReplacement(dest.path)}$$1")
-          new File(target).mkdirs
           if (!entry.isDirectory) {
+            new File(target).getParentFile.mkdirs
+            new File(target).createNewFile
             val fos = new FileOutputStream(target)
             val dest = new BufferedOutputStream(fos, 2048)
             try {
