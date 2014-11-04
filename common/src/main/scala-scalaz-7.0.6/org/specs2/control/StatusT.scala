@@ -41,8 +41,11 @@ case class StatusT[F[+_], +A](run: F[Status[A]]) {
   def getOrElse[AA >: A](otherwise: =>AA)(implicit F: Functor[F]): F[AA] =
     toOption.map(_.getOrElse(otherwise))
 
+  def whenFailed[AA >: A](otherwise: String \&/ Throwable => StatusT[F, AA])(implicit F: Monad[F]): StatusT[F, AA] =
+    StatusT[F, AA](run.flatMap(status => status.fold(_ => F.point(status), e => otherwise(e).run)))
+
   def |||[AA >: A](otherwise: => StatusT[F, AA])(implicit F: Monad[F]): StatusT[F, AA] =
-    StatusT[F, A](run.flatMap(status => if (status.isOk) F.point(status) else otherwise.run))
+    StatusT[F, AA](run.flatMap(status => if (status.isOk) F.point(status) else otherwise.run))
 
   def andFinally(otherwise: =>StatusT[F, Unit])(implicit F: Monad[F]): StatusT[F, A] = {
     StatusT[F, A](run.flatMap { r =>

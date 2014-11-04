@@ -50,6 +50,9 @@ case class ActionT[F[+_], W, R, +A](runT: R => StatusT[({ type l[+a] = WriterT[F
   def executeT(r: R)(implicit F: Functor[F]): StatusT[F, A] =
     StatusT(execute(r))
 
+  def whenFailed[AA >: A](otherwise: String \&/ Throwable => ActionT[F, W, R, AA])(implicit W: Monoid[W], F: Monad[F]): ActionT[F, W, R, AA] =
+    ActionT[F, W, R, AA](r => runT(r) whenFailed ((e: String \&/ Throwable) => otherwise(e).runT(r)))
+
   def |||[AA >: A](otherwise: => ActionT[F, W, R, AA])(implicit W: Monoid[W], F: Monad[F]): ActionT[F, W, R, AA] =
     ActionT[F, W, R, AA](r => runT(r) ||| otherwise.runT(r))
 
