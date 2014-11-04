@@ -20,8 +20,6 @@ import process.{Executor, DefaultExecutor, StatisticsRepository, Selector, Defau
  *       to be shutdown at the end of the execution
  */
 case class Env(arguments: Arguments = Arguments(),
-          indentationSize: Int = 2,
-
           /** selector class */
           selectorInstance: Arguments => Selector = (arguments: Arguments) =>
             Arguments.instance(arguments.select.selector).getOrElse(DefaultSelector),
