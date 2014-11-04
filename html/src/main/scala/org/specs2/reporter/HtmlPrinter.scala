@@ -8,17 +8,16 @@ import data.Fold
 import specification.process.{Stats, Statistics}
 import io._
 import main.Arguments
-import scala.xml.NodeSeq
 import scalaz.stream.Process
-import scalaz.concurrent.Task
 import control._
 import java.util.regex.Pattern._
 import java.net.{JarURLConnection, URL}
+import scalaz.\&/
 import scalaz.std.list._
 import scalaz.std.anyVal._
-import scalaz.syntax.traverse._
+import scalaz.std.string._
 import scalaz.syntax.bind.ToBindOps
-import html.HtmlTemplate
+import scalaz.syntax.traverse._
 import HtmlBodyPrinter._
 import Pandoc._
 import ActionT._
@@ -26,7 +25,6 @@ import scalaz.syntax.bind._
 import Actions._
 import org.specs2.html.HtmlTemplate
 import text.Trim._
-import scala.sys.process.ProcessLogger
 import execute._
 import text.NotNullStrings._
 import Seqx._
@@ -211,8 +209,9 @@ trait HtmlPrinter extends Printer {
            DirectoryPath("javascript"),
            DirectoryPath("images"),
            DirectoryPath("templates")).
-           map(copySpecResourcesDir(env, "org" / "specs2" / "reporter", options.outDir, classOf[HtmlPrinter].getClassLoader)).sequenceU |||
-        warnAndFail("Cannot copy resources to "+options.outDir.path, RunAborted)
+           map(copySpecResourcesDir(env, "org" / "specs2" / "reporter", options.outDir, classOf[HtmlPrinter].getClassLoader))
+        .sequenceU
+        .whenFailed((e: String \&/ Throwable) => warnAndFail("Cannot copy resources to "+options.outDir.path+"\n"+Status.asString(e), RunAborted))
     }
 
   def copySpecResourcesDir(env: Env, base: DirectoryPath, outputDir: DirectoryPath, loader: ClassLoader)(src: DirectoryPath): Action[Unit] = {
