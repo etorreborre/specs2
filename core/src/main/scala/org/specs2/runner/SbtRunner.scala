@@ -88,9 +88,9 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
          createNotifierPrinter(args, loader)).map(_.map(_.toList)).sequenceU.map(_.flatten)
 
   def createSbtPrinter(h: EventHandler, ls: Array[Logger], e: SbtEvents) = {
-    val arguments = Arguments(args.mkString(" "))
+    val arguments = Arguments(args:_*)
 
-    if (!printerNames.map(_.name).exists(args.contains) || arguments.commandLine.isDefined(CONSOLE.name))
+    if (!printerNames.map(_.name).exists(args.contains) || arguments.commandLine.contains(CONSOLE.name))
       Actions.ok(Some {
         new SbtPrinter {
           lazy val handler = h
