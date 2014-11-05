@@ -21,6 +21,7 @@ class S2StringContextSpec extends Spec { def is = s2"""
   fragments from a specification                                                  ${exs.e6}
   2 examples                                                                      ${exs.e7}
   a method call                                                                   ${exs.e8}
+  consecutive strings must be compacted                                           ${exs.e9}
 
   when more than one lines are indented they are taken as the description
     when the last line is indented it is taken as the description                 ${desc.e1}
@@ -63,6 +64,8 @@ object exs extends MustMatchers with StandardResults with S2StringContext with T
     fragments must haveSize(1)
     fragments.head.description.show must_== "`a method call`"
   }
+
+  def e9 = s2"""this is ${"some text"} $ok""".fragments must haveSize(2)
 
   def `a method call` = ok
 

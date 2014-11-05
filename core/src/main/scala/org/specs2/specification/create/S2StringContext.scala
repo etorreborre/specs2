@@ -28,14 +28,14 @@ import scala.concurrent.ExecutionContext
 trait S2StringContext extends S2StringContext1 { outer =>
 
   implicit def descriptionToFragmentsIsInterpolatedFragment(fragments: String => Fragments): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) = {
+    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String): Fragments = {
       val (description, before) = descriptionAndBefore(text, start, end, expression)
       fs append before append fragments(description.show)
     }
   }
 
   implicit def specificationLinkIsInterpolatedFragment(link: SpecificationLink): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) = {
+    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String): Fragments = {
       fs append ff.text(text).setLocation(start) append fragmentFactory.link(link).setLocation(end)
     }
   }
@@ -66,7 +66,7 @@ trait S2StringContext extends S2StringContext1 { outer =>
     envFunctionIsInterpolatedFragment((env: Env) => f(env.executorService))
 
   implicit def anyAsResultIsInterpolatedFragment(r: =>Function0Result): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =
+    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String): Fragments =
       asResultIsInterpolatedFragment(AsResult(r)).append(fs, text, start, end, expression)
   }
 
@@ -76,12 +76,12 @@ trait S2StringContext extends S2StringContext1 { outer =>
   }
 
   implicit def specStructureIsInterpolatedFragment(s: SpecStructure): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =
+    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String): Fragments =
       (fs append ff.text(text).setLocation(start)) append s.fragments
   }
 
   implicit def stringIsInterpolatedFragment(s: =>String): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =  {
+    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String): Fragments =  {
       val s1 =
         try s
         catch { case e: Throwable => s"[${e.getMessage.notNull}]" }
@@ -90,7 +90,7 @@ trait S2StringContext extends S2StringContext1 { outer =>
   }
 
   implicit def fragmentsIsInterpolatedFragment(fragments: Fragments): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =
+    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String): Fragments =
       (fs append ff.text(text).setLocation(start)) append fragments
   }
 
@@ -103,7 +103,7 @@ private[specs2]
 trait S2StringContext1 extends S2StringContextCreation { outer =>
 
   implicit def fragmentIsInterpolatedFragment(f: =>Fragment): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =
+    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String): Fragments =
       fs append ff.text(text).setLocation(start) appendLazy f.setLocation(end)
   }
 
