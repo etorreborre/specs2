@@ -25,7 +25,10 @@ import sbtbuildinfo.Plugin._
 import depends._
 import scoverage.ScoverageSbtPlugin._
 import ScoverageKeys._
-
+import scoverage.ScoverageSbtPlugin.instrumentSettings
+import org.scoverage.coveralls.CoverallsPlugin.coverallsSettings
+import CoverallsPlugin.CoverallsKeys.coverallsTokenFile 
+    
 object build extends Build {
   type Settings = Def.Setting[_]
 
@@ -209,8 +212,9 @@ object build extends Build {
     fork in test := true,
     testOptions := Seq(Tests.Filter(s => Seq(".guide.").exists(s.contains) || Seq("Spec", "Guide", "Index").exists(s.endsWith) && Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))
   ) ++ instrumentSettings ++ Seq(
-    excludedPackages in ScoverageCompile := ".*create.AutoExamples.*;.*create.S2StringContext.*"
-  )
+    excludedPackages := ".*create.AutoExamples.*;.*create.S2StringContext.*",
+    coverallsTokenFile := Some("/Users/etorreborre/.coveralls.txt")
+  ) ++ coverallsSettings 
 
   /**
    * RELEASE PROCESS
