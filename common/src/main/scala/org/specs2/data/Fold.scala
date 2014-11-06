@@ -1,15 +1,22 @@
 package org.specs2
 package data
 
+import org.specs2.io.FilePath
+import scodec.bits.ByteVector
+
 import scalaz.stream._
 import Process._
 import scalaz.concurrent.Task
 import Task._
-import scalaz.{Reducer, Monoid}
-import scalaz.std.list._
+import scalaz.{Show, Reducer, Monoid}
+import scalaz.std.list.{intersperse =>_,_}
 import scalaz.syntax.foldable._
 import scalaz.syntax.bind._
-import scalaz.stream.io._
+import scalaz.stream._
+import io._
+import scalaz.stream.text._
+import Processes._
+import process1.{lift, intersperse}
 
 /**
  * A Fold[T] can be used to pass over a Process[Task, T].
@@ -120,6 +127,17 @@ object Fold {
    * Unit Fold with no side-effect or accumulation
    */
   def unit[T] = fromSink(channel((t: T) => Task.now(())))
+
+  /**
+   * Unit fold function
+   */
+  def unitFold[T]: (T, Unit) => Unit = (t: T, u: Unit) => u
+
+  /** create a fold sink to output lines to a file */
+  def showToFilePath[T : Show, S](path: FilePath): Sink[Task, (T, S)] = toFoldSink[T, S] {
+    io.fileChunkW(path.path).pipeIn(lift(Show[T].shows) |> utf8Encode)
+  }
+
 
   /**
    * Accumulate state on a Process[Task, T] using an accumulation action and
