@@ -191,13 +191,11 @@ trait TextPrinter extends Printer {
     val textLines = text.trimEnclosing("`").trimEnclosing("```").split("\n", -1) // trim markdown code marking
     val firstLine = textLines.headOption.getOrElse("")
     val (indentation, line) = firstLine.span(_ == ' ')
-
     val status = result.coloredStatus(args) + " "
-    val decoratedFirstLine = indentation + status + (if (Seq("*", "-").exists(line.startsWith)) line.drop(1) else line)
+    val decoratedFirstLine = indentation + status + (if (Seq("*", "-").exists(line.startsWith)) line.drop(2) else line)
 
     val rest = textLines.drop(1).map(l => s"  $l")
     (decoratedFirstLine +: rest).mkString("\n")
-
   }
 
   def printMessage(args: Arguments, description: String, as: String => LogLine): Result with ResultStackTrace => Process[Task, LogLine] = { result: Result with ResultStackTrace =>

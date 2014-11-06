@@ -100,10 +100,13 @@ case class SbtLineLogger(loggers: Array[Logger]) extends BufferedLineLogger {
   def infoLine(msg: String) = loggers.foreach { logger =>
     logger.info(removeColors(msg, !logger.ansiCodesSupported))
   }
-  def failureLine(msg: String) = loggers.foreach { logger =>
-    logger.error(removeColors(msg, !logger.ansiCodesSupported))
-  }
+  /** failures are represented as errors in sbt */
+  def failureLine(msg: String) = errorLine(msg)
+
   def errorLine(msg: String) = loggers.foreach { logger =>
-    logger.error(removeColors(msg, !logger.ansiCodesSupported))
+    // drop 1 if the first character is a space because [error] takes one more character than [info]
+    // and indentation is relative to that label
+    val msg1 = removeColors(msg, !logger.ansiCodesSupported)
+    logger.error(if (msg1 startsWith " ") msg1.drop(1) else msg1)
   }
 }
