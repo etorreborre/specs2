@@ -35,7 +35,7 @@ class WikipediaBddSpec extends Specification with Online { def is = s2"""
   def isActive(link: HtmlLink) =
     s2"""
   The page at ${link.getName}
-    must be active ${ link.getLinkedPage must beActive }"""
+    must be active ${ link must beActive }"""
 
   // implement this matcher
   def mention(name: String): Matcher[Page] = ???
