@@ -43,7 +43,18 @@ trait Levels {
     }
     go(Level())
   }
-  
+
+  def fold(fragment: Fragment, level: Level): Level = fragment match {
+    // level goes +1 when a new block starts
+    case f @ Fragment(Start,_ ,_) => level.copy(start = true, incrementNext = false)
+    case f if Fragment.isText(f)  => level.copy(start = true, incrementNext = true)
+    case f @ Fragment(End,_ ,_)   => level.copy(start = false, incrementNext = false, max(0, level.l - 1))
+    case f                        =>
+      if (level.incrementNext) level.copy(start = false, incrementNext = false, l = level.l + 1)
+      else                     level
+  }
+
+
   case class Level(start: Boolean = false, incrementNext: Boolean = false, l: Int = 0)
 
   def levelsToTreeLoc(mapper: Mapper): Process1[(Fragment, Int), TreeLoc[Fragment]] = {

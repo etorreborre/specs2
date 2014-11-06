@@ -3,11 +3,12 @@ package reporter
 
 import io.{FilePath, DirectoryPath}
 import main.Arguments
-import org.specs2.specification.core._
-import specification.process.Stats
+import data.Fold
+import specification.core._
+import specification.process._
 import execute._
 import text.NotNullStrings._
-
+import Levels._
 import scala.xml.NodeSeq
 
 /**
@@ -19,9 +20,17 @@ trait HtmlBodyPrinter {
    */
   def makeBody(spec: SpecStructure, stats: Stats, options: HtmlOptions, arguments: Arguments, pandoc: Boolean): String = {
     val title = spec.name
+    type HtmlState = (String, Level)
 
-    s"""${spec.fragments.fragments.map(printFragment(arguments, options.outDir, pandoc)).mkString("")}""" ++
-      s"""${printStatistics(title, stats, options)}"""
+    val htmlFold = Fold.fromState { (fragment: Fragment, state: HtmlState) =>
+      val (html, level) = state
+      (html + printFragment(arguments, level, options.outDir, pandoc)(fragment),
+       Levels.fold(fragment, level))
+    }(("", Level()))
+
+    val (html, _) = Fold.runFoldLast(spec.fragments.contents, htmlFold).run
+    html +
+    s"""${printStatistics(title, stats, options)}"""
   }
 
   /**
@@ -29,7 +38,7 @@ trait HtmlBodyPrinter {
    *
    * If pandoc is true we make sure that text is not parsed in order to be correctly rendered as Markdown
    */
-  def printFragment(arguments: Arguments, baseDir: DirectoryPath, pandoc: Boolean) = (fragment: Fragment) => {
+  def printFragment(arguments: Arguments, level: Level, baseDir: DirectoryPath, pandoc: Boolean) = (fragment: Fragment) => {
 
     fragment match {
       case t if Fragment.isText(t) =>
@@ -47,31 +56,35 @@ trait HtmlBodyPrinter {
         } else NodeSeq.Empty
 
       case e if Fragment.isExample(e) =>
-        e.executionResult match {
-          case r: Success =>
-            <li class="example success ok">{show(e)}</li>
+        val example =
+          e.executionResult match {
+            case r: Success =>
+              <li class="example success ok">{show(e)}</li>
 
-          case f1 @ Failure(m, e1, st, details) =>
-            failureElement("example", f1, show(e), m, arguments.failtrace, details, arguments)
+            case f1 @ Failure(m, e1, st, details) =>
+              failureElement("example", f1, show(e), m, arguments.failtrace, details, arguments)
 
-          case er @ Error(m, e1) =>
-            errorElement("example", er, show(e), m, arguments)
+            case er @ Error(m, e1) =>
+              errorElement("example", er, show(e), m, arguments)
 
-          case r: Skipped =>
-            <li class="example skipped ok">{show(e)}<br/>
-              <message class="skipped">{r.message}</message>
-            </li>
+            case r: Skipped =>
+              <li class="example skipped ok">{show(e)}<br/>
+                <message class="skipped">{r.message}</message>
+              </li>
 
-          case r: Pending =>
-            <li class="example pending ok">{show(e)}<br/>
-              <message class="pending">{r.message}</message>
-            </li>
+            case r: Pending =>
+              <li class="example pending ok">{show(e)}<br/>
+                <message class="pending">{r.message}</message>
+              </li>
 
-          case r =>
-            <li class="example info ok">{show(e)}<br/>
-              <message class="info">{r.message}</message>
-            </li>
-        }
+            case r =>
+              <li class="example info ok">{show(e)}<br/>
+                <message class="info">{r.message}</message>
+              </li>
+          }
+
+        if (level.incrementNext) <ul>{example}</ul>
+        else                     example
 
       case f if Fragment.isStepOrAction(f) =>
         f.executionResult match {
