@@ -54,9 +54,9 @@ trait HtmlPrinter extends Printer {
 
   /** @return a Fold for the Html output */
   def fold(env: Env, spec: SpecStructure): Fold[Fragment] = new Fold[Fragment] {
-    type S = Stats
+    type S = (Stats, Vector[Fragment])
 
-    lazy val sink = Fold.unitSink[Fragment, Stats]
+    lazy val sink = Fold.unitSink[Fragment, S]
 
     def prepare = {
       for {
@@ -65,14 +65,17 @@ trait HtmlPrinter extends Printer {
       } yield ()
     }.toTask
 
-    def fold = Statistics.fold
-    def init = Stats.empty
+    def fold = (f: Fragment, s: S) => (Statistics.fold(f, s._1), s._2 :+ f)
+    def init = (Stats.empty, Vector.empty)
 
-    def last(stats: Stats) = {
+    def last(s: S) = {
+      val (stats, fragments) = s
+      val expecutedSpec = spec.copy(lazyFragments = () => Fragments(fragments:_*))
+
       val action =
         getPandoc(env).flatMap {
-          case None         => printHtml(env, spec, stats)
-          case Some(pandoc) => printHtmlWithPandoc(env, spec, stats, pandoc)
+          case None         => printHtml(env, expecutedSpec, stats)
+          case Some(pandoc) => printHtmlWithPandoc(env, expecutedSpec, stats, pandoc)
         }
       action.toTask
     }
