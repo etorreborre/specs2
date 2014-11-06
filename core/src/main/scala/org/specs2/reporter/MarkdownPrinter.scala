@@ -29,7 +29,7 @@ trait MarkdownPrinter extends Printer {
     val options = MarkdownOptions.create(env.arguments)
 
     lazy val sink: Sink[Task, (Fragment, Unit)] =
-      Fold.showToFilePath(options.outDir / FilePath.unsafe(spec.header.className+".md"))(MarkdownFragmentShow(options))
+      Fold.showToFilePath(options.outDir / FilePath.unsafe(spec.header.className+"."+options.extension))(MarkdownFragmentShow(options))
 
     def prepare = Task.now(())
 
@@ -86,14 +86,19 @@ trait MarkdownPrinter extends Printer {
 object MarkdownPrinter extends MarkdownPrinter
 
 case class MarkdownOptions(
-  outDir: DirectoryPath)
+  outDir: DirectoryPath,
+  extension: String
+)
 
 object MarkdownOptions {
 
   /** create markdown options from arguments */
   def create(arguments: Arguments): MarkdownOptions =
     MarkdownOptions(
-      arguments.commandLine.directoryOr("markdown.outdir", outDir))
+      outDir    = arguments.commandLine.directoryOr("markdown.outdir", outDir),
+      extension = arguments.commandLine.valueOr("markdown.ext", extension)
+    )
 
-  val outDir = "target" / "specs2-reports"
+  val outDir    = "target" / "specs2-reports"
+  val extension = "md"
 }
