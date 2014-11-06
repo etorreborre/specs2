@@ -52,6 +52,45 @@ trait Processes {
       ps.pipe(process1.chunk(nb)).map(Nondeterminism[Task].gather).eval.flatMap(emitAll)
   }
 
+  implicit class SinkOps[T, F[_]](sink: Sink[F, T]) {
+    /**
+     * Transform a simple sink into a sink, where the written value doesn't depend on the
+     * current state to a sink for folds, where the current state is passed all the time
+     * (and actually ignored here)
+     */
+    def extend[S]: Sink[F, (T, S)] =
+      sink.map(f => (ts: (T, S)) => f(ts._1))
+  }
+
+  /**
+   * Accumulate state on a Process[Task, T] using an accumulation action and
+   * an initial state
+   */
+  def foldState1[S, T](action: (T, S) => S)(init: S): Process1[T, S] = {
+    def go(state: S): Process1[T, S] =
+      Process.receive1 { t: T =>
+        val newState = action(t, state)
+        emit(newState) fby go(newState)
+      }
+
+    go(init)
+  }
+
+  /**
+   * Accumulate state on a Process[Task, T] using an accumulation action and
+   * an initial state, but also keep the current element
+   */
+  def zipWithState1[S, T](action: (T, S) => S)(init: S): Process1[T, (T, S)] = {
+
+    def go(state: S): Process1[T, (T, S)] =
+      Process.receive1 { t: T =>
+        val newState = action(t, state)
+        emit((t, newState)) fby go(newState)
+      }
+
+    go(init)
+  }
+
   /** start an execution right away */
   def start[A](a: =>A)(executorService: ExecutorService) =
     new Task(Future(Task.Try(a))(executorService).start)

@@ -23,6 +23,14 @@ trait Functions {
   def untupled[a1,a2,a3,a4,a5,a6,a7,a8,a9,b](f: Tuple9 [a1,a2,a3,a4,a5,a6,a7,a8,a9] => b): (a1,a2,a3,a4,a5,a6,a7,a8,a9) => b = (x1,x2,x3,x4,x5,x6,x7,x8,x9) => f(Tuple9 (x1,x2,x3,x4,x5,x6,x7,x8,x9))
   def untupled[a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,b](f: Tuple10[a1,a2,a3,a4,a5,a6,a7,a8,a9,a10] => b): (a1,a2,a3,a4,a5,a6,a7,a8,a9,a10) => b = (x1,x2,x3,x4,x5,x6,x7,x8,x9,x10) => f(Tuple10(x1,x2,x3,x4,x5,x6,x7,x8,x9,x10))
 
+  /** zip 2 state-folding functions together */
+  implicit class zipFoldFunctions[T, S1](f1: (T, S1) => S1) {
+    def zip[S2](f2: (T, S2) => S2): (T, (S1, S2)) => (S1, S2) = { (t: T, s12: (S1, S2)) =>
+      val (s1, s2) = s12
+      (f1(t, s1), f2(t, s2))
+    }
+  }
+
 }
 
 object Functions extends Functions

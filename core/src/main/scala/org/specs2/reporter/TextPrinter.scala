@@ -17,6 +17,7 @@ import scalaz.stream.Process.{Env =>_,_}
 import scalaz.concurrent.Task
 import scalaz.concurrent.Task._
 import LogLine._
+import Functions._
 
 /**
  * Prints the result of a specification execution to the console (using the line logger provided by the environment)

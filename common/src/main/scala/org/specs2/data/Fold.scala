@@ -1,22 +1,22 @@
 package org.specs2
 package data
 
-import org.specs2.io.FilePath
-import scodec.bits.ByteVector
+import io.FilePath
 
 import scalaz.stream._
 import Process._
 import scalaz.concurrent.Task
 import Task._
 import scalaz.{Show, Reducer, Monoid}
-import scalaz.std.list.{intersperse =>_,_}
+import scalaz.std.list._
 import scalaz.syntax.foldable._
 import scalaz.syntax.bind._
 import scalaz.stream._
 import io._
 import scalaz.stream.text._
 import Processes._
-import process1.{lift, intersperse}
+import process1.lift
+import control.Functions._
 
 /**
  * A Fold[T] can be used to pass over a Process[Task, T].
@@ -41,6 +41,14 @@ trait Fold[T] {
   def init: S
   def last(s: S): Task[Unit]
 
+  /** create a Process1 returning the state values */
+  def foldState1: Process1[T, S] =
+    Processes.foldState1(fold)(init)
+
+  /** create a Process1 returning the folded elements and the state values */
+  def zipWithState1: Process1[T, (T, S)] =
+    Processes.zipWithState1(fold)(init)
+
 }
 
 /**
@@ -53,7 +61,7 @@ object Fold {
    */
   def fromSink[T](aSink: Sink[Task, T]) =  new Fold[T] {
     type S = Unit
-    lazy val sink: Sink[Task, (T, S)] = toFoldSink(aSink)
+    lazy val sink: Sink[Task, (T, S)] = aSink.extend[S]
 
     def prepare = Task.now(())
     def fold = (t: T, u: Unit) => u
@@ -78,23 +86,15 @@ object Fold {
   }
 
   /**
-   * Transform a simple sink into a sink, where the written value doesn't depend on the
-   * current state to a sink for folds, where the current state is passed all the time
-   * (and actually ignored here)
-   */
-  def toFoldSink[T, S](sink: Sink[Task, T]): Sink[Task, (T, S)] =
-    sink.map(f => (ts: (T, S)) => f(ts._1))
-
-  /**
    * Create a Fold from a side-effecting function
    */
-  def fromFunction[T](f: T => Task[Unit]) =
+  def fromFunction[T](f: T => Task[Unit]): Fold[T] =
     fromSink(Process.constant(f))
 
   /**
    * Create a Fold from a Reducer
    */
-  def fromReducer[T, S1](reducer: Reducer[T, S1]) = new Fold[T] {
+  def fromReducer[T, S1](reducer: Reducer[T, S1]): Fold[T] = new Fold[T] {
     type S = S1
     lazy val sink: Sink[Task, (T, S)] = unitSink[T, S]
 
@@ -107,7 +107,7 @@ object Fold {
   /**
    * Create a Fold from a Reducer and a last action
    */
-  def fromReducerAndLast[T, S1](reducer: Reducer[T, S1], lastTask: S1 => Task[Unit]) = new Fold[T] {
+  def fromReducerAndLast[T, S1](reducer: Reducer[T, S1], lastTask: S1 => Task[Unit]): Fold[T] = new Fold[T] {
     type S = S1
     lazy val sink: Sink[Task, (T, S)] = unitSink[T, S]
 
@@ -121,7 +121,8 @@ object Fold {
    * This Sink doesn't do anything
    * It can be used to build a Fold that does accumulation only
    */
-  def unitSink[T, S]: Sink[Task, (T, S)] = channel((tu: (T, S)) => Task.now(()))
+  def unitSink[T, S]: Sink[Task, (T, S)] =
+    channel((tu: (T, S)) => Task.now(()))
 
   /**
    * Unit Fold with no side-effect or accumulation
@@ -131,55 +132,14 @@ object Fold {
   /**
    * Unit fold function
    */
-  def unitFold[T]: (T, Unit) => Unit = (t: T, u: Unit) => u
+  def unitFoldFunction[T]: (T, Unit) => Unit = (t: T, u: Unit) => u
 
   /** create a fold sink to output lines to a file */
-  def showToFilePath[T : Show, S](path: FilePath): Sink[Task, (T, S)] = toFoldSink[T, S] {
-    io.fileChunkW(path.path).pipeIn(lift(Show[T].shows) |> utf8Encode)
+  def showToFilePath[T : Show, S](path: FilePath): Sink[Task, (T, S)] =
+    io.fileChunkW(path.path).pipeIn(lift(Show[T].shows) |> utf8Encode).extend[S]
+
+  implicit class FoldOps[T](val fold: Fold[T]) {
   }
-
-
-  /**
-   * Accumulate state on a Process[Task, T] using an accumulation action and
-   * an initial state
-   */
-  def foldState[S, T](action: (T, S) => S)(init: S): Process1[T, S] = {
-
-    def go(state: S): Process1[T, S] =
-      Process.receive1 { t: T =>
-        val newState = action(t, state)
-        emit(newState) fby go(newState)
-      }
-
-    go(init)
-  }
-
-  /**
-   * Accumulate state on a Process[Task, T] using a Fold
-   */
-  def foldState[T](fold: Fold[T]): Process1[T, fold.S] =
-    foldState(fold.fold)(fold.init)
-
-  /**
-   * Accumulate state on a Process[Task, T] using an accumulation action and
-   * an initial state, but also keep the current element
-   */
-  def zipWithFoldState[S, T](action: (T, S) => S)(init: S): Process1[T, (T, S)] = {
-
-    def go(state: S): Process1[T, (T, S)] =
-      Process.receive1 { t: T =>
-        val newState = action(t, state)
-        emit((t, newState)) fby go(newState)
-      }
-
-    go(init)
-  }
-
-  /**
-   * Accumulate state on a Process[Task, T] using a Fold
-   */
-  def zipWithFoldState[T](fold: Fold[T]): Process1[T, (T, fold.S)] =
-    zipWithFoldState(fold.fold)(fold.init)
 
   /**
    * Monoid for Folds, where effects are sequenced
@@ -187,14 +147,6 @@ object Fold {
   implicit def foldMonoid[T]: Monoid[Fold[T]] = new Monoid[Fold[T]] {
     def append(f1: Fold[T], f2: =>Fold[T]): Fold[T] = f1 >> f2
     lazy val zero = Fold.unit[T]
-  }
-
-  /** zip 2 state-folding functions together */
-  implicit class zipFoldFunctions[T, S1](f1: (T, S1) => S1) {
-    def zip[S2](f2: (T, S2) => S2): (T, (S1, S2)) => (S1, S2) = { (t: T, s12: (S1, S2)) =>
-      val (s1, s2) = s12
-      (f1(t, s1), f2(t, s2))
-    }
   }
 
   /**
@@ -224,7 +176,7 @@ object Fold {
    */
   def runFoldLast[T](process: Process[Task, T], fold: Fold[T]): Task[fold.S] =
     fold.prepare >>
-    logged(process |> zipWithFoldState(fold)).drainW(fold.sink).map(_._2).runLastOr(fold.init)
+    logged(process |> fold.zipWithState1).drainW(fold.sink).map(_._2).runLastOr(fold.init)
 
   /**
    * Run a Fold an let it perform a last action with the accumulated state

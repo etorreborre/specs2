@@ -33,7 +33,7 @@ trait MarkdownPrinter extends Printer {
 
     def prepare = Task.now(())
 
-    def fold = Fold.unitFold
+    def fold = Fold.unitFoldFunction
     def init = Task.now(())
 
     def last(u: Unit) =
