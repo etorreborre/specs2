@@ -34,7 +34,6 @@ import Seqx._
  */
 trait HtmlPrinter extends Printer {
 
-  /** @return a Fold for the Html output */
   def prepare(env: Env, specifications: List[SpecificationStructure]): Action[Unit]  = Actions.unit
 
   /**
@@ -53,6 +52,7 @@ trait HtmlPrinter extends Printer {
       _         <- createSearchPage(env, options)
     } yield ()
 
+  /** @return a Fold for the Html output */
   def fold(env: Env, spec: SpecStructure): Fold[Fragment] = new Fold[Fragment] {
     type S = Stats
 

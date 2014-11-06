@@ -193,7 +193,7 @@ trait TextPrinter extends Printer {
     val (indentation, line) = firstLine.span(_ == ' ')
 
     val status = result.coloredStatus(args) + " "
-    val decoratedFirstLine = indentation + status + line
+    val decoratedFirstLine = indentation + status + (if (Seq("*", "-").exists(line.startsWith)) line.drop(1) else line)
 
     val rest = textLines.drop(1).map(l => s"  $l")
     (decoratedFirstLine +: rest).mkString("\n")

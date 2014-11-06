@@ -100,7 +100,9 @@ trait HtmlBodyPrinter {
   def show(f: Fragment) =
     f.description match {
       case Code(text) => <code>{text}</code>
-      case other      => <text>{f.description.show}</text>
+      case other =>
+        val d = f.description.show
+        <text>{if (Seq("*", "-").exists(d.trim.startsWith)) d.trim.drop(1) else d}</text>
     }
 
 
