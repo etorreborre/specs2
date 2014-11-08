@@ -21,5 +21,6 @@ class HtmlOptionsSpec extends Specification { def is = s2"""
     , variables = Map()
     , noStats = true
     , search = false
+    , toc = false
   )
 }

@@ -114,7 +114,8 @@ trait HtmlPrinter extends Printer {
       template    = fileOr(     "html.template",  HtmlOptions.template(out)),
       variables   = mapOr(      "html.variables", HtmlOptions.variables),
       noStats     = boolOr(     "html.nostats",   HtmlOptions.noStats),
-      search      = boolOr(     "html.search",    HtmlOptions.search)))
+      search      = boolOr(     "html.search",    HtmlOptions.search),
+      toc         = boolOr(     "html.toc",       HtmlOptions.toc)))
   }
 
 

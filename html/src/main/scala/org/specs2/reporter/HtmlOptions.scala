@@ -5,18 +5,27 @@ import java.io.File
 import io._
 
 /** Options for the Html generation */
-case class HtmlOptions(outDir: DirectoryPath, baseDir: DirectoryPath, template: FilePath, variables: Map[String, String], noStats: Boolean, search: Boolean) {
+case class HtmlOptions(
+  outDir: DirectoryPath,
+  baseDir: DirectoryPath,
+  template: FilePath,
+  variables: Map[String, String],
+  noStats: Boolean,
+  search: Boolean,
+  toc: Boolean) {
+
   def javascriptDir = outDir / "javascript"
   def indexDir      = javascriptDir / "tipuesearch"
   def indexFile     = indexDir | "tipuesearch_contents.js"
 
   def templateVariables =
     variables
-      .updated("baseDir",  baseDir.path)
-      .updated("outDir",   outDir.path)
-      .updated("template", template.path)
-      .updateWhenTrue("nostats",  noStats)
-      .updateWhenTrue("search",   search)
+      .updated("baseDir",        baseDir.path)
+      .updated("outDir",         outDir.path)
+      .updated("template",       template.path)
+      .updateWhenTrue("nostats", noStats)
+      .updateWhenTrue("search",  search)
+      .updateWhenTrue("toc",     toc)
 
   implicit class Update(map: Map[String, String]) {
     def updateWhenTrue(name: String, value: String, condition: Boolean): Map[String, String] =
@@ -34,6 +43,7 @@ object HtmlOptions {
   val variables = Map[String, String]()
   val noStats   = false
   val search    = false
+  val toc       = false
 
   def template(outDir: DirectoryPath): FilePath =
     outDir / "templates" | "specs2.html"
