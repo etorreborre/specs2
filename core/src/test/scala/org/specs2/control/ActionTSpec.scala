@@ -4,13 +4,16 @@ package control
 import Actions._
 import scalaz.\&/.This
 import scalaz._, Scalaz._
-import matcher.MatchersImplicits._
+import matcher._
+import MatchersImplicits._
+import ExpectationsDescription._
 import StatusT._
 
 class ActionTSpec extends Spec { def is = s2"""
 
- Warnings can be accumulated with actions           $warning
- A warning can be emitted then fail the computation $warningAndFail
+ Warnings can be accumulated with actions                $warning
+ A warning can be emitted then fail the computation      $warningAndFail
+ An action can be executed only when a condition is true $when
 
 """
 
@@ -37,4 +40,11 @@ class ActionTSpec extends Spec { def is = s2"""
     { warnings must_== Vector("not sure") } and
     { result must_== Ko(This("Run aborted!")) }
   }
+
+  def when = {
+    var i = 0
+    Actions.safe { i = 1 }.when(false).run(noLogging).unsafePerformIO
+    "the action is not executed" ==> { i must_== 0 }
+  }
+
 }
