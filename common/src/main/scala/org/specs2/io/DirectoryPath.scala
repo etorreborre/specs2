@@ -74,10 +74,10 @@ case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean) {
    * @return the portion of a dir path that is relative to another
    */
   def relativeTo(other: DirectoryPath): DirectoryPath =
-    (dirs, other.dirs) match {
-      case (h +: t, h1 +: t1) if h == h1 => copy(dirs = t, absolute = false).relativeTo(other.copy(dirs = t1))
-      case _                             => this
-    }
+    if (dirs.take(other.dirs.size) == other.dirs)
+      copy(dirs = dirs.drop(other.dirs.size), absolute = false)
+    else
+      this
 
   /** @return the DirectoryPath starting from the root */
   def fromRoot: DirectoryPath = relativeTo(root)

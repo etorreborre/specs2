@@ -73,6 +73,7 @@ class DirectoryPathSpec extends Spec with TypedEqual { def is = s2"""
    get a portion of the path
    ${ ("test" / "hello" / "world" / "eric").relativeTo("test" / "hello")  === "world" / "eric" }
    ${ ("test" / "hello" / "world" / "eric").relativeTo("other" / "hello") === "test" / "hello" / "world" / "eric" }
+   ${ ("test" / "hello" / "world" / "eric").relativeTo("test" / "other") === "test" / "hello" / "world" / "eric" }
    ${ ("test" / "hello" / "world" / "eric").relativeTo("test" / "hello")  must beRelative }
    ${ ("test" / "hello" / "world" | "eric").relativeTo("test" / "hello")  must beRelative }
    ${ ("test" / "hello" / "world").fromRoot === "hello" / "world" }
