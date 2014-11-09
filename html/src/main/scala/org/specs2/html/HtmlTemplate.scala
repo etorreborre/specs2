@@ -1,6 +1,8 @@
 package org.specs2
 package html
 
+import org.specs2.io.FileName
+
 import scala.util.parsing.combinator._
 import control._
 import scalaz.std.anyVal._

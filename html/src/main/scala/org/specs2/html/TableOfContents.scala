@@ -1,6 +1,8 @@
 package org.specs2
 package html
 
+import control._
+import specification.core._
 import scala.xml._
 import io._
 import NodeSeq._
@@ -8,12 +10,51 @@ import xml.Nodex._
 import Htmlx._
 import data.Trees._
 
+import scalaz.Tree
+
 /**
  * This trait checks for the presence of a <toc/> tag at the beginning of a xml document and replaces it
  * by a list of links to the headers of the document
  */
-private[specs2]
-trait TableOfContents { outer =>
+trait TableOfContents {
+
+  /** create a table of contents for all the specifications */
+  def createToc(specifications: List[SpecificationStructure], outDir: DirectoryPath, fileSystem: FileSystem): Action[Unit] = for {
+    pages   <- readHtmlPages(specifications, outDir, fileSystem)
+    toc     =  createToc(pages)
+    _       <- saveHtmlPages(pages map addToc(toc), fileSystem)
+  } yield ()
+
+  def readHtmlPages(specifications: List[SpecificationStructure], outDir: DirectoryPath, fileSystem: FileSystem): Action[Tree[SpecHtmlPage]] = ???
+
+  /**
+   * @return add a toc to each HtmlFile where relevant
+   */
+  def addToc(toc: NodeSeq): SpecHtmlPage =>  SpecHtmlPage = ???
+
+  def createToc(pages: Tree[SpecHtmlPage]): NodeSeq = {
+    ???
+//    val root = htmlFiles.rootLabel
+//    def tocItems(tree: Tree[HtmlLinesFile]): NodeSeq = {
+//      val current = tree.rootLabel
+//      tocItemList(body    = current.printLines(output).xml,
+//        rootUrl = root.link.url,
+//        url     = current.link.url,
+//        id      = current.specId,
+//        subTocs = Map(tree.subForest.map(subSpec => (subSpec.rootLabel.specId, tocItems(subSpec))):_*))
+//    }
+//    // add a toc only where a parent file defines it
+//    // and propagate the same toc to the children
+//    if ((args <| root.args).report.hasToc) {
+//      val rootToc = TreeToc(root.specId, tocItems(htmlFiles))
+//      root.copy(toc = rootToc) +: htmlFiles.subForest.flatMap(_.flatten).map(_.copy(toc = rootToc)).toSeq
+//    }
+//    else
+//      root +: htmlFiles.subForest.flatMap(addToc).toSeq
+  }
+
+
+  def saveHtmlPages(pages: Tree[SpecHtmlPage], fileSystem: FileSystem): Action[Unit] = ???
 
   /**
    * Create a Table of contents by building a Tree of all the header elements contained into the "body" and mapping it to an <ul/> list
@@ -44,5 +85,4 @@ trait TableOfContents { outer =>
   }
 }
 
-private[specs2]
 object TableOfContents extends TableOfContents

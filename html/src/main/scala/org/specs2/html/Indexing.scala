@@ -1,13 +1,11 @@
 package org.specs2
-package reporter
+package html
 
-import data.Fold
-import io.{FilePath, FileSystem}
-import specification.core.{Env, SpecificationStructure}
+import org.specs2.data.Fold
+import org.specs2.io.{DirectoryPath, FilePath, FileSystem}
+import org.specs2.specification.core.{Env, SpecificationStructure}
 
-import scalaz.{Reducer, Monoid}
-import scalaz.concurrent.Task
-import scalaz.stream._
+import scalaz.{Monoid, Reducer}
 
 /**
  * Fold functions to create index files
@@ -21,14 +19,14 @@ object Indexing {
   def indexFold(path: FilePath) =
     Fold.fromReducerAndLast(Index.reducer, (index: Index) => FileSystem.writeFileTask(path, Index.toJson(index)))
 
-  def createIndexedPages(env: Env, specifications: List[SpecificationStructure], options: HtmlOptions): Seq[IndexedPage] = {
-    specifications.map(createIndexedPage(env, options))
+  def createIndexedPages(env: Env, specifications: List[SpecificationStructure], outDir: DirectoryPath): Seq[IndexedPage] = {
+    specifications.map(createIndexedPage(env, outDir))
   }
 
-  def createIndexedPage(env: Env, options: HtmlOptions) = (specification: SpecificationStructure) => {
+  def createIndexedPage(env: Env, outDir: DirectoryPath) = (specification: SpecificationStructure) => {
     val spec = specification.structure(env)
     IndexedPage(
-      path     = HtmlPrinter.outputFilePath(options, spec).relativeTo(options.outDir),
+      path     = SpecHtmlPage.outputPath(outDir, spec).relativeTo(outDir),
       title    = spec.header.showWords,
       contents = spec.texts.foldLeft(new StringBuilder)((res, cur) => res.append(cur.description.show)).toString)
   }

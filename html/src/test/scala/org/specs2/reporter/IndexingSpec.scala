@@ -4,7 +4,9 @@ package reporter
 import data.Fold._
 import io._
 import matcher.ControlMatchers._
-import reporter.Indexing._
+import org.specs2.html
+import org.specs2.html.{IndexEntry, IndexedPage, Indexing}
+import Indexing._
 
 import scalaz.Scalaz._
 import scalaz._
@@ -19,8 +21,8 @@ class IndexingSpec extends Specification { def is = s2"""
 
 """
 
-  def index = Index.reducer.cons(pages(0), reporter.Index.empty) must_==
-           reporter.Index(Vector(IndexEntry(title = "page 1", text = "content1", tags = Vector(), path = FilePath("page1"))))
+  def index = html.Index.reducer.cons(pages(0), html.Index.empty) must_==
+           html.Index(Vector(IndexEntry(title = "page 1", text = "content1", tags = Vector(), path = FilePath("page1"))))
 
   def save = {
     val path = "target" / "test" / "IndexingSpec" | "index.js"
@@ -34,7 +36,7 @@ class IndexingSpec extends Specification { def is = s2"""
   }
 
   def quoted =
-    Index.page(IndexEntry("title", "text \"here\"", Vector(), FilePath("path"))) must contain("text \\\"here\\\"")
+    html.Index.page(IndexEntry("title", "text \"here\"", Vector(), FilePath("path"))) must contain("text \\\"here\\\"")
 
   val pages = Vector(IndexedPage(FilePath("page1"), "page 1", "content1"),
                      IndexedPage(FilePath("page2"), "page 2", "content2"))

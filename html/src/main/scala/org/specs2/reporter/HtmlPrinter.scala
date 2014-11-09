@@ -8,11 +8,13 @@ import data.Fold
 import specification.process.{Stats, Statistics}
 import io._
 import main.Arguments
+import scala.xml.NodeSeq
 import scalaz.stream.Process
 import control._
 import java.util.regex.Pattern._
 import java.net.{JarURLConnection, URL}
 import scalaz.\&/
+import scalaz.Tree
 import scalaz.std.list._
 import scalaz.std.anyVal._
 import scalaz.std.string._
@@ -23,11 +25,14 @@ import Pandoc._
 import ActionT._
 import scalaz.syntax.bind._
 import Actions._
-import org.specs2.html.HtmlTemplate
+import html._
 import text.Trim._
 import execute._
 import text.NotNullStrings._
 import Seqx._
+import SearchPage._
+import html.TableOfContents._
+import SpecHtmlPage._
 
 /**
  * Printer for html files
@@ -36,21 +41,12 @@ trait HtmlPrinter extends Printer {
 
   def prepare(env: Env, specifications: List[SpecificationStructure]): Action[Unit]  = Actions.unit
 
-  /**
-   * create an index for all the specifications
-   */
-  def finalize(env: Env, specifications: List[SpecificationStructure]): Action[Unit] = for {
-    options   <- getHtmlOptions(env.arguments)
-    _         <- if (options.search) createIndex(env, specifications, options)
-                 else                     Actions.unit
-  } yield ()
-
-  def createIndex(env: Env, specifications: List[SpecificationStructure], options: HtmlOptions): Action[Unit] =
-    for {
-      htmlPages <- Actions.safe(Indexing.createIndexedPages(env, specifications, options))
-      _         <- Fold.runFold(Process.emitAll(htmlPages), Indexing.indexFold(options.indexFile)).toAction
-      _         <- createSearchPage(env, options)
-    } yield ()
+  /** create an index for all the specifications, if required */
+  def finalize(env: Env, specifications: List[SpecificationStructure]): Action[Unit] =
+    getHtmlOptions(env.arguments) >>= { options: HtmlOptions =>
+      createIndex(env, specifications, options).when(options.search) >>
+      createToc(specifications, options.outDir, env.fileSystem).when(options.toc)
+    }
 
   /** @return a Fold for the Html output */
   def fold(env: Env, spec: SpecStructure): Fold[Fragment] = new Fold[Fragment] {
@@ -98,7 +94,7 @@ trait HtmlPrinter extends Printer {
       options  <- getHtmlOptions(env.arguments)
       template <- readFile(options.template) ||| warnAndFail("No template file found at "+options.template.path, RunAborted)
       content  <- makeHtml(template, spec, stats, options, env.arguments)
-      _        <- writeFile(outputFilePath(options, spec), content)
+      _        <- writeFile(outputPath(options.outDir, spec), content)
     } yield ()
   }
 
@@ -131,7 +127,7 @@ trait HtmlPrinter extends Printer {
       options.templateVariables
         .updated("body",    body)
         .updated("title",   spec.wordsTitle)
-        .updated("path",    outputFilePath(options, spec).path)
+        .updated("path",    outputPath(options.outDir, spec).path)
 
     HtmlTemplate.runTemplate(template, variables1)
   }
@@ -171,41 +167,13 @@ trait HtmlPrinter extends Printer {
     val bodyFile: FilePath =
       options.outDir | FileName.unsafe("body-"+spec.hashCode)
 
-    val pandocArguments = Pandoc.arguments(bodyFile, options.template, variables1, outputFilePath(options, spec), pandoc)
+    val pandocArguments = Pandoc.arguments(bodyFile, options.template, variables1, outputPath(options.outDir, spec), pandoc)
 
     withEphemeralFile(bodyFile) {
       writeFile(bodyFile, makeBody(spec, stats, options, env.arguments, pandoc = true)) >>
       Executable.run(pandoc.executable, pandocArguments)
     }
   }
-
-  /**
-   * SEARCH PAGE
-   */
-  def createSearchPage(env: Env, options: HtmlOptions): Action[Unit] = {
-    import env.fileSystem._
-    for {
-      template <- readFile(options.template) ||| warnAndFail("No template file found at "+options.template.path, RunAborted)
-      content  <- makeSearchHtml(template, options)
-      _        <- writeFile(searchFilePath(options), content)
-    } yield ()
-  }
-
-  /** create the html search page */
-  def makeSearchHtml(template: String, options: HtmlOptions): Action[String] = {
-    val variables1 =
-      options.templateVariables
-        .updated("title", "Search")
-        .updated("path", searchFilePath(options).path)
-
-    HtmlTemplate.runTemplate(template, variables1)
-  }
-
-  def outputFilePath(options: HtmlOptions, spec: SpecStructure): FilePath =
-    options.outDir | FileName.unsafe(spec.specClassName+".html")
-
-  def searchFilePath(options: HtmlOptions): FilePath =
-    options.outDir | "search.html"
 
   def copyResources(env: Env, options: HtmlOptions): Action[List[Unit]] =
     env.fileSystem.mkdirs(options.outDir) >> {
@@ -234,7 +202,7 @@ trait HtmlPrinter extends Printer {
 
   private def jarOf(url: URL): URL = url.openConnection.asInstanceOf[JarURLConnection].getJarFileURL
 
-  private val RunAborted =
+  val RunAborted =
     "\nHtml run aborted!\n "
 }
 

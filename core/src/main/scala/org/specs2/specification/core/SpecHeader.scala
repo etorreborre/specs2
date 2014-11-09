@@ -17,3 +17,8 @@ case class SpecHeader(specClass: Class[_], title: Option[String] = None) {
   def simpleName = ClassName.simpleName(specClass)
   def wordsTitle = simpleName.camelCaseToWordsCapitalized
 }
+
+object SpecHeader {
+  def create(specClass: Class[_]): SpecHeader =
+    SpecHeader(specClass, title = None)
+}
