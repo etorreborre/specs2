@@ -65,7 +65,7 @@ case class SpecificationStatsKey(specClassName: String) extends Key[Stats]
 case class SpecificationResultKey(specClassName: String, description: Description) extends Key[Result]
 
 object StatisticsRepository {
-  val memory = StatisticsRepository(StatisticsStore.memory)
+  def memory = StatisticsRepository(StatisticsStore.memory)
   def file(dir: DirectoryPath) = StatisticsRepository(StatisticsStore.directory(dir))
 }
 
@@ -92,5 +92,5 @@ object StatisticsStore {
       baseDirectory / FilePath.unsafe(StoreKeys.resolve(key))
   }
 
-  val memory = StatisticsMemoryStore()
+  def memory = StatisticsMemoryStore()
 }
