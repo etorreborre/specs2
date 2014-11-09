@@ -22,15 +22,15 @@ class IndexingSpec extends Specification { def is = s2"""
 """
 
   def index = html.Index.reducer.cons(pages(0), html.Index.empty) must_==
-           html.Index(Vector(IndexEntry(title = "page 1", text = "content1", tags = Vector(), path = FilePath("page1"))))
+           html.Index(Vector(IndexEntry(title = "page 1", text = "content1", tags = Vector("tag1", "tag2"), path = FilePath("page1"))))
 
   def save = {
     val path = "target" / "test" / "IndexingSpec" | "index.js"
     runFold(Process.emitAll(pages), indexFold(path)).run
 
     val expected =
-    s"""|var tipuesearch = {"pages": [{"title":"page 2", "text":"content2", "tags":"", "loc":"page2"},
-        |{"title":"page 1", "text":"content1", "tags":"", "loc":"page1"}]};""".stripMargin
+    s"""|var tipuesearch = {"pages": [{"title":"page 2", "text":"content2", "tags":"tag3", "loc":"page2"},
+        |{"title":"page 1", "text":"content1", "tags":"tag1 tag2", "loc":"page1"}]};""".stripMargin
 
     FileSystem.readFile(path).map(_.trim) must beOk(===(expected))
   }
@@ -38,8 +38,8 @@ class IndexingSpec extends Specification { def is = s2"""
   def quoted =
     html.Index.page(IndexEntry("title", "text \"here\"", Vector(), FilePath("path"))) must contain("text \\\"here\\\"")
 
-  val pages = Vector(IndexedPage(FilePath("page1"), "page 1", "content1", Vector()),
-                     IndexedPage(FilePath("page2"), "page 2", "content2", Vector()))
+  val pages = Vector(IndexedPage(FilePath("page1"), "page 1", "content1", Vector("tag1", "tag2")),
+                     IndexedPage(FilePath("page2"), "page 2", "content2", Vector("tag3")))
 
 }
 
