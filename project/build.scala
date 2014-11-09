@@ -130,7 +130,9 @@ object build extends Build {
   ).dependsOn(core, matcherExtra, scalacheck)
 
   lazy val html = Project(id = "html", base = file("html"),
-    settings = moduleSettings ++
+    settings =
+      Seq(libraryDependencies += depends.tagsoup) ++
+      moduleSettings ++
       Seq(name := "specs2-html")
   ).dependsOn(form, mock % "test", matcherExtra % "test", scalacheck % "test")
 

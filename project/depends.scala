@@ -30,6 +30,7 @@ object depends {
 
   lazy val testInterface = Seq("org.scala-sbt"  % "test-interface" % "1.0")
 
+  lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2"
 
   def paradise(scalaVersion: String) =
     if (scalaVersion.startsWith("2.11")) Nil

@@ -1,4 +1,3 @@
-<!doctype html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -31,6 +30,7 @@
 <div class="container">
 
 $if(search)$
+<!-- search box -->
 <div class="col-md-2 search-box">
 <form action="search.html">
   <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
@@ -39,7 +39,12 @@ $if(search)$
 $else$
 <div class="col-md-1 search-box"></div>
 $endif$
-$toc$
+
+$if(toc)$
+<!-- table of contents -->
+<toc/>
+$else$
+$endif$
 
 <div class="col-md-10">
 $if(issues)$

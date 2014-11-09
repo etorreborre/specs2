@@ -38,7 +38,8 @@ trait TableOfContents {
   }
 
   def createToc(pages: List[SpecHtmlPage]): NodeSeq = {
-    ???
+    pages.map(_.createSubtoc).reduceNodes
+
 //    val root = htmlFiles.rootLabel
 //    def tocItems(tree: Tree[HtmlLinesFile]): NodeSeq = {
 //      val current = tree.rootLabel
