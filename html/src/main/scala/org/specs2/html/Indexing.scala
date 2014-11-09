@@ -3,7 +3,7 @@ package html
 
 import org.specs2.data.Fold
 import org.specs2.io.{DirectoryPath, FilePath, FileSystem}
-import org.specs2.specification.core.{Env, SpecificationStructure}
+import org.specs2.specification.core.{Marker, Fragment, Env, SpecificationStructure}
 
 import scalaz.{Monoid, Reducer}
 
@@ -28,15 +28,20 @@ object Indexing {
     IndexedPage(
       path     = SpecHtmlPage.outputPath(outDir, spec).relativeTo(outDir),
       title    = spec.header.showWords,
-      contents = spec.texts.foldLeft(new StringBuilder)((res, cur) => res.append(cur.description.show)).toString)
+      contents = spec.texts.foldLeft(new StringBuilder)((res, cur) => res.append(cur.description.show)).toString,
+      tags     = spec.fragments.fragments.collect { case Fragment(Marker(t,_,_), _, _) => t.names }.flatten.map(sanitize))
   }
 
   def createEntries(page: IndexedPage): Vector[IndexEntry] = {
-    Vector(IndexEntry(page.title, page.contents, Vector(), page.path))
+    Vector(IndexEntry(page.title, page.contents, page.tags, page.path))
   }
+
+  /** remove quotes from names in order to add as json values */
+  def sanitize(name: String): String =
+    name.replace("\"", "\\\"")
 }
 
-case class IndexedPage(path: FilePath, title: String, contents: String)
+case class IndexedPage(path: FilePath, title: String, contents: String, tags: IndexedSeq[String])
 
 case class Index(entries: Vector[IndexEntry]) {
   def add(entry: IndexEntry) = copy(entries :+ entry)
@@ -86,5 +91,5 @@ object Index {
   val reducer = Reducer.unitReducer((page: IndexedPage) => Index(Indexing.createEntries(page)))
 }
 
-case class IndexEntry(title: String, text: String, tags: Vector[String], path: FilePath)
+case class IndexEntry(title: String, text: String, tags: IndexedSeq[String], path: FilePath)
 

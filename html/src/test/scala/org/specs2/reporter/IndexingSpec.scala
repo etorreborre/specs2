@@ -38,8 +38,8 @@ class IndexingSpec extends Specification { def is = s2"""
   def quoted =
     html.Index.page(IndexEntry("title", "text \"here\"", Vector(), FilePath("path"))) must contain("text \\\"here\\\"")
 
-  val pages = Vector(IndexedPage(FilePath("page1"), "page 1", "content1"),
-                     IndexedPage(FilePath("page2"), "page 2", "content2"))
+  val pages = Vector(IndexedPage(FilePath("page1"), "page 1", "content1", Vector()),
+                     IndexedPage(FilePath("page2"), "page 2", "content2", Vector()))
 
 }
 
