@@ -4,8 +4,11 @@ package html
 import io._
 import specification.core._
 
-case class SpecHtmlPage() {
+import scala.xml.NodeSeq
 
+case class SpecHtmlPage(path: FilePath, content: String) {
+  def addToc(toc: NodeSeq): SpecHtmlPage =
+    this
 }
 
 object SpecHtmlPage {

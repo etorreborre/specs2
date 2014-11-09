@@ -9,7 +9,10 @@ import matcher.XmlMatchers
 
 class TableOfContentsSpec extends script.Specification with HtmlDocuments with Grouped with XmlMatchers { def is = s2"""
 
-  Creating a table of content for a html document                                               
+ The table of contents is created from the specifications and the generated html files
+
+
+ Creating a table of content for a html document
     creates an unordered list from the html headers                                             
       + as nested <li/> lists corresponding to the hierarchy of the document headers
       each <li/> element has

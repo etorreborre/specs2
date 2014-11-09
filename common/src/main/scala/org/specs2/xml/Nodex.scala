@@ -51,14 +51,17 @@ trait Nodex { outer =>
    * this implicit definition adds an 'unless' method to a NodeSeq so that it is only evaluated if a condition is true.
    * Otherwise NodeSeq.Empty is returned
    */
-  implicit class unless(ns: =>NodeSeq) {
-    def unless(b: Boolean) = if (b) NodeSeq.Empty else ns
+  implicit class NodeSeqOps(ns: =>NodeSeq) {
+    def unless(b: Boolean): NodeSeq = if (b) NodeSeq.Empty else ns
   }
 
-  /**
-   * @return an unprefixed attribute from pair
-   */
-  implicit def pairToUnprefixedAttribute(pair: Tuple2[Any, Any]) = new UnprefixedAttribute(pair._1.toString, pair._2.toString, Null)
+  implicit class NodeOps(n: =>Node) {
+    def unless(b: Boolean) = if (b) NodeSeq.Empty else n
+  }
+
+  /** @return an unprefixed attribute from pair */
+  implicit def pairToUnprefixedAttribute(pair: (Any, Any)): UnprefixedAttribute =
+    new UnprefixedAttribute(pair._1.toString, pair._2.toString, Null)
 
 }
 

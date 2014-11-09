@@ -9,6 +9,9 @@ import specification.core.{Env, SpecificationStructure}
 
 import scalaz.stream.Process
 
+/**
+ * Functions used to create an index and a search page for the generated html pages
+ */
 trait SearchPage {
 
   /** create an index for all the specifications */
@@ -19,6 +22,7 @@ trait SearchPage {
       _         <- createSearchPage(env, options)
     } yield ()
 
+  /** create a search page, based on the specs2.html template */
   def createSearchPage(env: Env, options: HtmlOptions): Action[Unit] = {
     import env.fileSystem._
     for {
@@ -28,7 +32,7 @@ trait SearchPage {
     } yield ()
   }
 
-  /** create the html search page */
+  /** create the html search page content */
   def makeSearchHtml(template: String, options: HtmlOptions): Action[String] = {
     val variables1 =
       options.templateVariables
@@ -38,6 +42,7 @@ trait SearchPage {
     HtmlTemplate.runTemplate(template, variables1)
   }
 
+  /** search page path */
   def searchFilePath(options: HtmlOptions): FilePath =
     options.outDir | "search.html"
 

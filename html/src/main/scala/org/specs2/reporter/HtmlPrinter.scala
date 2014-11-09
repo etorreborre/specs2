@@ -45,7 +45,7 @@ trait HtmlPrinter extends Printer {
   def finalize(env: Env, specifications: List[SpecificationStructure]): Action[Unit] =
     getHtmlOptions(env.arguments) >>= { options: HtmlOptions =>
       createIndex(env, specifications, options).when(options.search) >>
-      createToc(specifications, options.outDir, env.fileSystem).when(options.toc)
+      createToc(specifications.map(_.structure(env)), options.outDir, env.fileSystem).when(options.toc)
     }
 
   /** @return a Fold for the Html output */

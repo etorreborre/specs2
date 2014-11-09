@@ -13,7 +13,6 @@ import data.UniqueNames
 /**
  * This trait provide additional methods on a NodeSeq or a Node representing an html document
  */
-private[specs2]
 trait Htmlx { outer =>
 
   implicit class HtmlOps(ns: NodeSeq) {
@@ -22,7 +21,8 @@ trait Htmlx { outer =>
   }
 
   implicit class HtmlNodeOps(n: Node) {
-    def addHeadersAnchors = outer.headersAnchors.rewrite(n).headOption.getOrElse(NodeSeq.Empty)
+    def addHeadersAnchors: NodeSeq =
+      outer.headersAnchors.rewrite(n).headOption.getOrElse(NodeSeq.Empty)
   }
 
   implicit class HtmlSeqNodeOps(ns: Seq[Node]) {
@@ -87,10 +87,9 @@ trait Htmlx { outer =>
     }
   }
 
-  implicit def href(s: String) = HRef(s)
-  case class HRef(s: String) {
-    def sanitize = outer.sanitize(s)
-    def anchorName = outer.anchorName(s)
+  implicit class HRef(s: String) {
+    def sanitize: String = outer.sanitize(s)
+    def anchorName: String = outer.anchorName(s)
   }
 
   /** sanitize a string so that it can be used as a href */
@@ -137,7 +136,10 @@ trait Htmlx { outer =>
 
   /** @return a rewrite rule that will rewrite recursively each node based on a partial function */
   def rewriteRule(pf: PartialFunction[Node, Seq[Node]]) = new RewriteRule {
-    def applyTransformation(ns: Seq[Node]): Seq[Node] = if (ns.isEmpty) ns else (applyTransformation(ns.head) ++ applyTransformation(ns.tail))
+    def applyTransformation(ns: Seq[Node]): Seq[Node] =
+      if (ns.isEmpty) ns
+      else            applyTransformation(ns.head) ++ applyTransformation(ns.tail)
+
     def applyTransformation(n: Node): Seq[Node] = n match {
       case e: Node if pf.isDefinedAt(e) => pf(e)
       case Group(xs)              => Group(applyTransformation(xs))
@@ -147,11 +149,13 @@ trait Htmlx { outer =>
         if (ch eq nch) n
         else           Elem(n.prefix, n.label, n.attributes, n.scope, true, nch: _*)
     }
+
     def rewrite(n: NodeSeq) = applyTransformation(n)
   }
 
   /** @return a unique anchor name for that node, so that 2 nodes having the same name will not direct to the same anchor in the same page */
   private def createAnchorNameForNode(text: String, namer: UniqueNames) = namer.uniqueName(text)
+
   /** @return a unique namer adding + and an id if a name has already been used */
   private def uniqueNamer = UniqueNames()
 
@@ -171,5 +175,4 @@ trait Htmlx { outer =>
 /** string representing a toc id */
 case class SpecIdOps(s: String)
 
-private[specs2]
 object Htmlx extends Htmlx

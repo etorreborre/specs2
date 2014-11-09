@@ -3,14 +3,12 @@ package html
 
 import control._
 import specification.core._
-import scala.xml._
+import scala.xml.NodeSeq
 import io._
-import NodeSeq._
 import xml.Nodex._
 import Htmlx._
 import data.Trees._
-
-import scalaz.Tree
+import scalaz._, Scalaz._
 
 /**
  * This trait checks for the presence of a <toc/> tag at the beginning of a xml document and replaces it
@@ -19,20 +17,27 @@ import scalaz.Tree
 trait TableOfContents {
 
   /** create a table of contents for all the specifications */
-  def createToc(specifications: List[SpecificationStructure], outDir: DirectoryPath, fileSystem: FileSystem): Action[Unit] = for {
+  def createToc(specifications: List[SpecStructure], outDir: DirectoryPath, fileSystem: FileSystem): Action[Unit] = for {
     pages   <- readHtmlPages(specifications, outDir, fileSystem)
     toc     =  createToc(pages)
-    _       <- saveHtmlPages(pages map addToc(toc), fileSystem)
+    _       <- saveHtmlPages(pages.map(_.addToc(toc)), fileSystem)
   } yield ()
 
-  def readHtmlPages(specifications: List[SpecificationStructure], outDir: DirectoryPath, fileSystem: FileSystem): Action[Tree[SpecHtmlPage]] = ???
+  /** read the generated html pages and return them as a tree, based on the links relationships between them */
+  def readHtmlPages(specifications: List[SpecStructure], outDir: DirectoryPath, fileSystem: FileSystem): Action[List[SpecHtmlPage]] =
+    for {
+      paths <- fileSystem.listFilePaths(outDir)
+      pages <- createSpecPages(paths.toList, specifications, outDir, fileSystem)
+    } yield pages
 
-  /**
-   * @return add a toc to each HtmlFile where relevant
-   */
-  def addToc(toc: NodeSeq): SpecHtmlPage =>  SpecHtmlPage = ???
+  def createSpecPages(paths: List[FilePath], specifications: List[SpecStructure], outDir: DirectoryPath, fileSystem: FileSystem): Action[List[SpecHtmlPage]] = {
+    val expectedFiles = specifications.map(s => SpecHtmlPage.outputPath(outDir, s))
+    paths.filter(expectedFiles.contains).map { path =>
+      fileSystem.readFile(path).map(content => SpecHtmlPage(path, content))
+    }.sequenceU
+  }
 
-  def createToc(pages: Tree[SpecHtmlPage]): NodeSeq = {
+  def createToc(pages: List[SpecHtmlPage]): NodeSeq = {
     ???
 //    val root = htmlFiles.rootLabel
 //    def tocItems(tree: Tree[HtmlLinesFile]): NodeSeq = {
@@ -54,7 +59,8 @@ trait TableOfContents {
   }
 
 
-  def saveHtmlPages(pages: Tree[SpecHtmlPage], fileSystem: FileSystem): Action[Unit] = ???
+  def saveHtmlPages(pages: List[SpecHtmlPage], fileSystem: FileSystem): Action[Unit] =
+    pages.map(page => fileSystem.writeFile(page.path, page.content)).sequenceU.void
 
   /**
    * Create a Table of contents by building a Tree of all the header elements contained into the "body" and mapping it to an <ul/> list
@@ -76,7 +82,7 @@ trait TableOfContents {
       // 'id' is the name of the attribute expected by jstree to "open" the tree on a specific node
           s.reduceNodes.updateHeadAttribute("id", id.toString)
         else if (h.isSubtoc)
-          subTocs.getOrElse(h.specId, Empty) ++ s.reduceNodes
+          subTocs.getOrElse(h.specId, NodeSeq.Empty) ++ s.reduceNodes
         else
           <li id={h.specId.toString}><a href={FilePath.unsafe(h.anchorName(url)).relativeTo(rootUrl).path}>{h.name}</a>
             { <ul>{s.toSeq}</ul> unless s.toSeq.isEmpty }
