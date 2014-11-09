@@ -49,7 +49,7 @@ class ReporterSpec extends Specification with ForEachEnv with ThrownExpectations
   def a2 = { env: Env =>
     val logger = stringLogger
     reported(env.setLineLogger(logger), logger)
-    indexOf(logger.messages.pp, "e3") must be_<(indexOf(logger.messages, "e1"))
+    indexOf(logger.messages, " e3") must be_<(indexOf(logger.messages, " e1"))
   }
 
   def a3 = { env: Env =>
@@ -111,9 +111,9 @@ object reporterSpecSupport extends MustMatchers with StandardMatchResults with S
  ex3 ${ex3(logger)}
  """
 
-  def ex1(logger: LineLogger) = { Thread.sleep(100); logger.infoLog("e1\n"); ok}
-  def ex2(logger: LineLogger) = { logger.infoLog("e2\n"); ko }
-  def ex3(logger: LineLogger) = { logger.infoLog("e3\n"); ok }
+  def ex1(logger: LineLogger) = { Thread.sleep(100); logger.infoLog(" e1\n "); ok}
+  def ex2(logger: LineLogger) = { logger.infoLog("e2\n "); ko }
+  def ex3(logger: LineLogger) = { logger.infoLog("e3\n "); ok }
 
   def reported(env: Env, logger: LineLogger = NoLineLogger, printers: List[Printer] = List(TextPrinter)) =
     reporter.report(env, printers)(spec(logger)).runOption
