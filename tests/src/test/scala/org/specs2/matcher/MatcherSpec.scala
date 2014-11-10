@@ -4,7 +4,7 @@ package matcher
 import java.io.File
 import specification._
 import user.specification._
-import execute.Failure
+import execute._
 
 class MatcherSpec extends script.Spec with ResultMatchers with Groups with MustMatchers { def is = s2"""
 
@@ -33,6 +33,7 @@ Implicit conversions
   + a matcher can be defined by a function with 2 functions for the messages
   + a matcher can be muted and will output no message
   + a matcher can be defined by a function returning a MatchResult
+  + when a matcher is defined by a function returning a MatchResult, it must keep its failure details
 
 Collections
 ===========
@@ -117,6 +118,12 @@ Messages
       def beOdd: Matcher[Int] = (i: Int) => beEven.apply(theValue(i)).not
       (2 must beOdd) returns "2 is even"
     }
+
+    eg := {
+      def beOneTwoThreeList: Matcher[List[Int]] = (list: List[Int]) => list must be_==(List(1, 2, 3))
+      Matcher.details((List(1, 2) must beOneTwoThreeList).toResult) must_== FailureSeqDetails(List(1, 2, 3), List(1, 2))
+    }
+
   }
 
   "collections" - new group {
