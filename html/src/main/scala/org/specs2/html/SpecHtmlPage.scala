@@ -22,16 +22,19 @@ case class SpecHtmlPage(path: FilePath, content: String) {
       else content)
 
   def createSubtoc: NodeSeq = {
-    body.headersTree.
-      bottomUp { (h: Header, s: Stream[NodeSeq]) =>
-      if (h.isRoot)
-      // 'id' is the name of the attribute expected by jstree to "open" the tree on a specific node
-        s.reduceNodes.updateHeadAttribute("id", path.name.name)
-      else
-        <li id={h.specId.toString}><a href={path.path}>{h.name}</a>
-          { <ul>{s.toSeq}</ul> unless s.toSeq.isEmpty }
-        </li>
-    }.rootLabel
+    val items =
+      body.headersTree.
+        bottomUp { (h: Header, s: Stream[NodeSeq]) =>
+        if (h.isRoot)
+        // 'id' is the name of the attribute expected by jstree to "open" the tree on a specific node
+          s.reduceNodes.updateHeadAttribute("id", path.name.name)
+        else
+          <li id={h.specId.toString}><a href={path.path}>{h.name}</a>
+            { <ul>{s.toSeq}</ul> unless s.toSeq.isEmpty }
+          </li>
+      }.rootLabel
+
+    <ul>{items}</ul>
   }
 
   def body = {
