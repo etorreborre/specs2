@@ -1,0 +1,1385 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <style type="text/css" media="all">
+        @import url('./../../css/maven-base.css');
+        @import url('./../../css/maven-theme.css');
+      </style>
+      <link href="./../../css/prettify.css" type="text/css" rel="stylesheet" />
+      <script type="text/javascript" src="./../../css/prettify.js"></script>
+      <link rel="stylesheet" href="./../../css/print.css" type="text/css" media="print" />
+      <link href="./../../css/tooltip.css" rel="stylesheet" type="text/css" />
+      <link href="./../../css/specs2-user.css" type="text/css" rel="stylesheet" />
+
+      <script type="text/javascript" src="./../../css/jquery.js"></script>
+      <script type="text/javascript" src="./../../css/jquery.cookie.js"></script>
+      <script type="text/javascript" src="./../../css/jquery.hotkeys.js"></script>
+      <script type="text/javascript" src="./../../css/jquery.jstree.js"></script>
+      <script type="text/javascript" src="./../../css/tooltip.js"></script>
+      <script type="text/javascript" src="./../../js/specs2-user.js"></script>
+      <script language="javascript">$.getScript("./../../js/specs2-user.js", initUserScript(document));</script>
+      <script language="javascript">
+      function init() {  prettyPrint(); };
+      /* found on : http://www.tek-tips.com/faqs.cfm?fid=6620 */
+      String.prototype.endsWith = function(str) { return (this.match(str+'$') == str) };
+      function changeWidth(id,width) {  document.getElementById(id).style.width = width; };
+      function changeMarginLeft(id, margin) { document.getElementById(id).style.marginLeft = margin; };
+      function toggleImage(image) {
+        if (image.src.endsWith('images/expanded.gif')) 
+          image.src = image.src.replace('expanded', 'collapsed');
+        else 
+          image.src = image.src.replace('collapsed', 'expanded');
+      };
+      function showHide(id) {
+        element = document.getElementById(id);
+        element.style.display = (element.style.display == 'block')? 'none' : 'block';
+      };
+      function showHideByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = (elements[i].style.display == 'none') ? elements[i].style.display = '': 'none';
+        }
+      };
+      function showByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'block';
+        }
+      };
+      function hideByClass(name) {
+        var elements = document.getElementsByClassName(name);
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.display = 'none';
+        }
+      };
+      function showById(id) {
+        document.getElementById(id).style.display = ''
+      };
+      function hideById(id) {
+        document.getElementById(id).style.display = 'none'
+      };
+    </script>
+      <script language="javascript">window.onload=init;</script>
+      <!-- the tabber.js file must be loaded after the onload function has been set, in order to run the
+           tabber code, then the init code -->
+      <script type="text/javascript" src="./../../css/tabber.js"></script>
+      <link rel="stylesheet" href="./../../css/tabber.css" type="text/css" media="screen" />
+      <title>Runners</title>
+    </head><body><div id="breadcrumbs"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html">Runners</a></div><div class="colmask threecol">
+            <div class="colmid">
+              <div class="colleft">
+                <div class="col1"><div id="central"><html><title>Runners</title><a name="Runners"><h2 specId="1569901763">Runners</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Presentation"><h3>Presentation</h3></a><p>There are many ways to execute <strong><em>specs2</em></strong> specifications:</p>
+<ul>
+  <li>on the command line, with a console output, and the <code class="prettyprint">specs2.run</code> runner</li>
+  <li>on the command line, with a html output, and the <code class="prettyprint">specs2.html</code> runner</li>
+  <li>on the command line, with a console or a html output, and the <code class="prettyprint">specs2.files</code> runner</li>
+  <li>using <a href="http://confluence.jetbrains.net/display/SCA/Scala+Plugin+for+IntelliJ+IDEA">Intellij IDEA</a></li>
+  <li>using <a href="http://www.scala-sbt.org">sbt</a></li>
+  <li>using <a href="http://www.junit.org">JUnit</a></li>
+  <li>using <a href="http://maven.apache.org">Maven</a></li>
+  <li>using your own reporting tool implementing the <code class="prettyprint">Notifier</code> interface (simple) or the <code class="prettyprint">Exporter</code> interface (with a full access to the executed specification)</li>
+</ul><a name="Dependencies"><h3>Dependencies</h3></a><p><strong><em>specs2</em></strong> is available for Scala 2.10 onwards and uses the following libraries, as specified using the <a href="http://www.scala-sbt.org/release/docs/Getting-Started/Library-Dependencies.html">sbt dsl</a>:</p><p><table class="dataTable"><tr><th>Dependency</th><th>Comment</th></tr><tr><td class="info"><code class="prettyprint">&quot;org.scalaz&quot; % &quot;scalaz-core&quot; % &quot;7.1.0&quot;</code></td><td class="info">mandatory</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.scalaz&quot; % &quot;scalaz-concurrent&quot; % &quot;7.1.0&quot;</code></td><td class="info">mandatory</td></tr><tr><td class="info"><code class="prettyprint">&quot;com.chuusai&quot; % &quot;shapeless&quot; % &quot;1.2.4&quot;</code></td><td class="info">if you use the GWT trait</td></tr><tr><td class="info"> <code class="prettyprint">&quot;org.scalacheck&quot; %% &quot;scalacheck&quot; % &quot;1.10.0&quot;</code></td><td class="info">if using ScalaCheck</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.mockito&quot; % &quot;mockito-core&quot; % &quot;1.9.5&quot;</code></td><td class="info">if using Mockito. Note: specs2.jar must be placed before mockito.jar on the classpath</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.hamcrest&quot; % &quot;hamcrest-core&quot; % &quot;1.3&quot;</code></td><td class="info">if using Hamcrest matchers with Mockito</td></tr><tr><td class="info"><code class="prettyprint">&quot;junit&quot; % &quot;junit&quot; % &quot;4.11&quot;</code></td><td class="info">if using JUnit</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.scala-sbt&quot; % &quot;test-interface&quot; % &quot;1.0&quot;</code></td><td class="info">provided by sbt when using it</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.pegdown&quot; % &quot;pegdown&quot; % &quot;1.2.1&quot;</code></td><td class="info">if using the html runner</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.specs2&quot; % &quot;classycle&quot; % &quot;1.4.1&quot;</code></td><td class="info">if using the <code class="prettyprint">org.specs2.specification.Analysis</code> trait</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.scala-lang&quot; % &quot;scala-reflect&quot; % &quot;2.10.3&quot;</code></td><td class="info">if using interpolated specifications and/or macro matchers</td></tr><tr><td class="info"><code class="prettyprint">&quot;org.scala-lang.plugins&quot; %% &quot;macro-paradise&quot; % &quot;2.0.0&quot;</code></td><td class="info">if using macro matchers, add this macro plugin to sbt with <code class="prettyprint">addCompilerPlugin(&quot;org.scala-lang.plugins&quot; %% &quot;macro-paradise&quot; % &quot;2.0.0&quot;)</code></td></tr><tr><td class="info"><code class="prettyprint">&quot;org.scalaz.stream&quot; %% &quot;scalaz-stream&quot; % &quot;0.5a&quot;</code></td><td class="info">if using the scalaz-stream matchers for <code class="prettyprint">Process</code> (add <code class="prettyprint">&quot;bintray&quot; at &quot;http://dl.bintray.com/scalaz/releases&quot;</code> to your resolvers)</td></tr></table></p><a name="specs2+jars"><h4>specs2 jars</h4></a><p><strong><em>specs2</em></strong> can be downloaded from <a href="https://oss.sonatype.org/content/repositories/releases/org/specs2">Sonatype</a> as a set of small jars:</p>
+<ul>
+  <li><p><code class="prettyprint">specs2-core</code>: for simple specifications executable in the console or with sbt. This should be your starting point</p></li>
+  <li><p><code class="prettyprint">specs2-matcher</code>: to use specs2 matchers with JUnit</p></li>
+  <li><code class="prettyprint">specs2-matcher-extra</code>: for the optional specs2 matchers (add <code class="prettyprint">&quot;bintray&quot; at &quot;http://dl.bintray.com/scalaz/releases&quot;</code> to your resolvers)</li>
+  <li><code class="prettyprint">specs2-scalacheck</code>: to use ScalaCheck properties in specifications</li>
+  <li><code class="prettyprint">specs2-mock</code>: to use Mockito matchers</li>
+  <li><code class="prettyprint">specs2-analysis</code>: to use package dependencies matcher</li>
+  <li><code class="prettyprint">specs2-gwt</code>: to write given-when-then specifications</li>
+  <li><code class="prettyprint">specs2-form</code>: Fit-like forms</li>
+  <li><code class="prettyprint">specs2-html</code>: to export specifications as html</li>
+  <li><code class="prettyprint">specs2-junit</code>: to run specifications as JUnit tests</li>
+</ul><a name="Arguments"><h3>Arguments</h3></a><p>You can specify arguments which will control the execution and reporting. They can be passed on the command line, or declared inside the specification, using the <code class="prettyprint">args(name=value)</code> syntax: </p>
+<pre><code class="prettyprint">class MySpec extends Specification { def is = args(xonly=true) ^ s2&quot;&quot;&quot;
+  Clever spec title
+  And some intro text
+  brilliant expectation $success                                   &quot;&quot;&quot;
+}
+</code></pre><a name="API"><h4>API</h4></a><p>From inside a specification, the available arguments are the following:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Name </th>
+      <th>Default value </th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="3"><strong><em>Selection</em></strong> </td>
+    </tr>
+    <tr>
+      <td><em><code class="prettyprint">ex</code> </em> </td>
+      <td>.* </td>
+      <td>regular expression specifying the examples to execute. Use <code class="prettyprint">ex .*brilliant.*</code> on the command line</td>
+    </tr>
+    <tr>
+      <td><em><code class="prettyprint">include</code> </em> </td>
+      <td>&quot;&quot; </td>
+      <td>execute only the fragments tagged with any of the comma-separated list of tags: &quot;t1,t2,...&quot;</td>
+    </tr>
+    <tr>
+      <td><em><code class="prettyprint">exclude</code> </em> </td>
+      <td>&quot;&quot; </td>
+      <td>do not execute the fragments tagged with any of the comma-separated list of tags: &quot;t1,t2,...&quot;</td>
+    </tr>
+    <tr>
+      <td><em><code class="prettyprint">wasIssue</code> </em> </td>
+      <td>false </td>
+      <td>select only previously failed/error examples</td>
+    </tr>
+    <tr>
+      <td><em><code class="prettyprint">was</code> </em> </td>
+      <td>&quot;&quot; </td>
+      <td>select only some previously executed examples based on their status</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">specName</code> </td>
+      <td>&quot;.*Spec&quot; </td>
+      <td>regular expression to use when executing specifications with the FilesRunner</td>
+    </tr>
+    <tr>
+      <td colspan="3"><strong><em>Execution</em></strong> </td>
+    </tr>
+    <tr>
+      <td><em><code class="prettyprint">plan</code> </em> </td>
+      <td>false </td>
+      <td>only report the text of the specification without executing anything</td>
+    </tr>
+    <tr>
+      <td><em><code class="prettyprint">skipAll</code> </em> </td>
+      <td>false </td>
+      <td>skip all the examples</td>
+    </tr>
+    <tr>
+      <td><em><code class="prettyprint">stopOnFail</code></em> </td>
+      <td>false </td>
+      <td>skip all examples after the first failure or error</td>
+    </tr>
+    <tr>
+      <td><em><code class="prettyprint">stopOnSkip</code></em> </td>
+      <td>false </td>
+      <td>skip all examples after the first skipped result</td>
+    </tr>
+    <tr>
+      <td><em><code class="prettyprint">sequential</code></em> </td>
+      <td>false </td>
+      <td>don't execute examples concurrently</td>
+    </tr>
+    <tr>
+      <td><em><code class="prettyprint">isolated</code></em> </td>
+      <td>false </td>
+      <td>execute each example in its own specification to get &quot;fresh&quot; local variables</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">random</code> </td>
+      <td>false </td>
+      <td>execute each example sequentially but in random order</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">threadsNb</code> </td>
+      <td><code class="prettyprint">Runtime.getRuntime.availableProcessors</code> </td>
+      <td>number of threads to use for concurrent execution</td>
+    </tr>
+    <tr>
+      <td colspan="3"><strong><em>Storing</em></strong> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">never</code> </td>
+      <td>false </td>
+      <td>never store statistics</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">reset</code> </td>
+      <td>false </td>
+      <td>remove previously stored statistics</td>
+    </tr>
+    <tr>
+      <td colspan="3"><strong><em>Reporting</em></strong> </td>
+    </tr>
+    <tr>
+      <td><em><code class="prettyprint">xonly</code> </em> </td>
+      <td>false </td>
+      <td>only report failures and errors</td>
+    </tr>
+    <tr>
+      <td><em><code class="prettyprint">showOnly</code></em> </td>
+      <td>&quot;&quot; </td>
+      <td>only report some examples based on their status</td>
+    </tr>
+    <tr>
+      <td><em><code class="prettyprint">color</code> </em> </td>
+      <td>true </td>
+      <td>use colors in the output (<code class="prettyprint">nocolor</code> can also be used on the command line)</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">pegdownExtensions</code> </td>
+      <td><code class="prettyprint">org.pegdown.Extensions.ALL</code> </td>
+      <td>specifies the extensions used when processing Markdown content with the pegdown library; the value is an <code class="prettyprint">Int</code> that is determinded by combining the possible values from <code class="prettyprint">org.pegdown.Extensions</code> with a logical <code class="prettyprint">AND</code>; note that SMARTS and QUOTES are always disabled for now</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">pegdownTimeout</code> </td>
+      <td><code class="prettyprint">2000</code> </td>
+      <td>Timeout for parsing Markdown text with Pegdown in milliseconds</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">failtrace</code> </td>
+      <td>false </td>
+      <td>report the stacktrace for failures</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">colors</code> </td>
+      <td><code class="prettyprint">org.specs2.text.SmartColors</code> </td>
+      <td>define alternative colors (replace failureColor from being yellow to magenta for example)</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">showtimes</code> </td>
+      <td>false </td>
+      <td>show individual execution times</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">debugMarkdown</code> </td>
+      <td>false </td>
+      <td>print more information when Markdown formatting fails</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">diffs</code> </td>
+      <td><code class="prettyprint">SmartDiffs</code> </td>
+      <td>use a specific algorithm to display differences</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">fromSource</code> </td>
+      <td>true </td>
+      <td>true takes an AutoExample description from the file, false from the expectation ok message</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">traceFilter</code> </td>
+      <td><code class="prettyprint">DefaultStackTraceFilter</code> </td>
+      <td>use a StackTraceFilter instance for filtering the reported stacktrace elements</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">checkUrls</code> </td>
+      <td>false </td>
+      <td>if true, will parse the html files and check that local or http hrefs can be accessed</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">notoc</code> </td>
+      <td>false </td>
+      <td>if true, will not create a table of contents on the generated html page</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">notifier</code> </td>
+      <td>String </td>
+      <td>name of a class extending the <code class="prettyprint">org.specs2.reporter.Notifier</code> trait</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">exporter</code> </td>
+      <td>String </td>
+      <td>name of a class extending the <code class="prettyprint">org.specs2.reporter.Exporter</code> trait</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">reporter</code> </td>
+      <td>String </td>
+      <td>name of a class extending the <code class="prettyprint">org.specs2.reporter.Reporter</code> trait</td>
+    </tr>
+  </tbody>
+</table><a name="Most%2FLeast+frequently+used+arguments"><h5>Most/Least frequently used arguments</h5></a><p>Most of the arguments above can be set in a specification with <code class="prettyprint">args(name=value)</code>. However Scala would not allow the <code class="prettyprint">args</code> method to accept <em>all</em> the possible<br />arguments as parameters (because a method can only have up to 22 parameters). This is why the least frequently used arguments (not in italics) can be set with an object called <code class="prettyprint">args</code>, having separate methods for setting all the parameters, by &quot;category&quot;. For example: </p>
+<pre><code class="prettyprint">args.select(specName = &quot;.*Test&quot;, include=&quot;slow&quot;)
+args.execute(threadsNb = 2)
+args.report(showtimes = true, xonly = true)
+</code></pre><a name="Shortcuts"><h5>Shortcuts</h5></a><p>There are some available shortcuts for some arguments</p>
+<table>
+  <thead>
+    <tr>
+      <th>Name </th>
+      <th>Equivalent </th>
+      <th>Description </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="prettyprint">include(tags: String)</code> </td>
+      <td><code class="prettyprint">args(include=tags)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">exclude(tags: String)</code> </td>
+      <td><code class="prettyprint">args(exclude=tags)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">only(examples: String)</code> </td>
+      <td><code class="prettyprint">args(ex=examples)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">wasIssue</code> </td>
+      <td><code class="prettyprint">args(wasIssue=true)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">was(status: String)</code> </td>
+      <td><code class="prettyprint">args(was=status)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">plan</code> </td>
+      <td><code class="prettyprint">args(plan=true)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">skipAll</code> </td>
+      <td><code class="prettyprint">args(skipAll=true)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">stopOnFail</code> </td>
+      <td><code class="prettyprint">args(stopOnFail=true)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">stopOnSkip</code> </td>
+      <td><code class="prettyprint">args(stopOnSkip=true)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">sequential</code> </td>
+      <td><code class="prettyprint">args(sequential=true)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">isolated</code> </td>
+      <td><code class="prettyprint">args(isolated=true)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">xonly</code> </td>
+      <td><code class="prettyprint">args(xonly=true)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">showOnly(status: String)</code> </td>
+      <td><code class="prettyprint">args(showOnly=status)</code> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">descFromExpectations</code> </td>
+      <td><code class="prettyprint">args.report(fromSource=false)</code> </td>
+      <td>create the example description for the ok message of the expectation instead of the source file </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">fullStackTrace</code> </td>
+      <td><code class="prettyprint">args.report(traceFilter=NoStackTraceFilter)</code> </td>
+      <td>the stacktraces are not filtered </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">diffs(show, separators, triggerSize, shortenSize, diffRatio, full)</code> </td>
+      <td><code class="prettyprint">args.report(diffs=SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full))</code> </td>
+      <td>to display the differences when doing equality comparison </td>
+    </tr>
+  </tbody>
+</table><a name="Output+directory"><h5>Output directory</h5></a><p>All the files created during the execution of a specification will be created in the <code class="prettyprint">target/specs-report</code> directory. You can change that by setting the<br /><code class="prettyprint">-Dspecs2.outDir</code> system property.</p><a name="Storing+previous+results"><h5>Storing previous results</h5></a><p>When a specification has been executed its statistics and failed examples will be stored by default in a specific <code class="prettyprint">stats</code> directory created in the output directory. This data can be used on subsequent runs to:</p>
+<ul>
+  <li>display trends in statistics</li>
+  <li>compute the statuses of the links of an index page</li>
+  <li>select only previously failed examples for execution</li>
+</ul><p>You can either:</p>
+<ul>
+  <li>disable this functionality (for performance reasons for example) with the <code class="prettyprint">args.store(never=true)</code> argument (or <code class="prettyprint">neverstore</code> on the command line)</li>
+  <li>reset the previous statistics with the <code class="prettyprint">args.store(reset=true)</code> argument (or <code class="prettyprint">resetstore</code> on the command line)</li>
+</ul><p>The statistics directory can also be redefined independently of the output directory with the <code class="prettyprint">specs2.statsDir</code> system variable.</p><a name="Status+flags"><h5>Status flags</h5></a><p>The <code class="prettyprint">was</code> and <code class="prettyprint">showOnly</code> arguments expect a String made of &quot;status flags&quot;. For example, <code class="prettyprint">xonly</code> is equivalent to <code class="prettyprint">showOnly(&quot;x!&quot;)</code>. Here is the list of all the flags which you can use to control the selection of fragments before execution or their display:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Flag </th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="prettyprint">+</code> </td>
+      <td>successful example</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">x</code> </td>
+      <td>failed example</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">!</code> </td>
+      <td>error example</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">o</code> </td>
+      <td>skipped example</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">*</code> </td>
+      <td>pending example</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">-</code> </td>
+      <td>text</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">1</code> </td>
+      <td>statistics</td>
+    </tr>
+  </tbody>
+</table><a name="Diffs"><h5>Diffs</h5></a><p>For the diffs arguments the values you can specify are:</p>
+<ul>
+  <li><code class="prettyprint">show</code> will not show anything (default is true)</li>
+  <li><code class="prettyprint">separators</code> allows to change the separators used to show the differences (default is &quot;[]&quot;)</li>
+  <li><code class="prettyprint">triggerSize</code> controls the size above which the differences must be shown (default is 20)</li>
+  <li><code class="prettyprint">shortenSize</code> controls the number of characters to display around each difference (default is 5)</li>
+  <li><code class="prettyprint">diffRatio</code> percentage of differences above which the differences must not be shown (default is 30)</li>
+  <li><code class="prettyprint">full</code> displays the full original expected and actual strings</li>
+</ul><p>You can also specify your own enhanced algorithm for displaying difference by providing an instance of the <code class="prettyprint">org.specs2.main.Diffs</code> trait:</p>
+<pre><code class="prettyprint">trait Diffs {
+  /** @return true if the differences must be shown for 2 different values */
+  def show(expected: Any, actual: Any): Boolean
+  /** @return true if the differences must be shown for 2 different sequences of values */
+  def show(expected: Seq[Any], actual: Seq[Any], ordered: Boolean): Boolean
+  /** @return the diffs */
+  def showDiffs(expected: Any, actual: Any): (String, String)
+  /** @return the diffs for sequences */
+  def showDiffs(expected: Seq[Any], actual: Seq[Any], ordered: Boolean): (String, String)
+  /** @return true if the full strings must also be shown */
+  def showFull: Boolean
+}
+</code></pre><a name="StackTraceFilter"><h5>StackTraceFilter</h5></a><p>The <code class="prettyprint">traceFilter</code> argument takes an instance of the <code class="prettyprint">org.specs2.control.StackTraceFilter</code> trait to define how stacktraces should be filtered in a report. By default the <code class="prettyprint">DefaultStackTraceFilter</code> filter will exclude lines matching the following packages:</p>
+<ul>
+  <li><code class="prettyprint">org.specs2</code></li>
+  <li><code class="prettyprint">scalaz\\.</code></li>
+  <li><code class="prettyprint">scala\\.</code>, <code class="prettyprint">java\\.</code></li>
+  <li><code class="prettyprint">sbt\\.</code>, <code class="prettyprint">com.intellij</code>, <code class="prettyprint">org.eclipse.jdt</code>, <code class="prettyprint">org.junit</code></li>
+</ul><p>If this is not what you want, you can either:</p>
+<ul>
+  <li>use <code class="prettyprint">includeTrace(patterns: String*)</code> to create a new <code class="prettyprint">StackTraceFilter</code> which will include only the traces matching those patterns</li>
+  <li>use <code class="prettyprint">excludeTrace(patterns: String*)</code> to create a new <code class="prettyprint">StackTraceFilter</code> which will exclude only the traces matching those patterns</li>
+  <li>use <code class="prettyprint">includeAlsoTrace(patterns: String*)</code> to add new include patterns to the <code class="prettyprint">DefaultStackTraceFilter</code></li>
+  <li>use <code class="prettyprint">excludeAlsoTrace(patterns: String*)</code> to add new exclude patterns to the <code class="prettyprint">DefaultStackTraceFilter</code></li>
+  <li>use the <code class="prettyprint">org.specs2.control.IncludeExcludeStackTraceFilter</code> class to define both include and exclude patterns</li>
+  <li>define your own logic by extending the <code class="prettyprint">org.specs2.control.StackTraceFilter</code></li>
+</ul><p>Note that the default filter also truncates the stacktrace in the middle if it is bigger than 1000 lines to avoid reports being filled by out-of-control stacktraces. If you still want to see those lines you can re-run with the <code class="prettyprint">fullstacktrace</code> argument.</p><a name="Command+line"><h4>Command line</h4></a><p>On the command line you can pass the following arguments:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Name </th>
+      <th>Value format </th>
+      <th>Comments</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="3"><strong><em>Selection</em></strong> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">ex</code> </td>
+      <td>regexp </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">include</code> </td>
+      <td>csv </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">exclude</code> </td>
+      <td>csv </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">wasIssue</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">was</code> </td>
+      <td>String </td>
+      <td>see: Status flags </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">specname</code> </td>
+      <td>regexp </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td colspan="3"><strong><em>Execution</em></strong> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">plan</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">skipall</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">sequential</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">isolated</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">threadsnb</code> </td>
+      <td>int </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td colspan="3"><strong><em>Storing</em></strong> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">resetstore</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">neverstore</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td colspan="3"><strong><em>Reporting</em></strong> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">xonly</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">showonly</code> </td>
+      <td>String </td>
+      <td>see: Status flags </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">failtrace</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">color</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">colors</code> </td>
+      <td>map </td>
+      <td>e.g. text:be, failure:m (see the Colors section) </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">showtimes</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">debugmarkdown</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">pegdownExtensions</code> </td>
+      <td>int </td>
+      <td>flags from <code class="prettyprint">org.pegdown.Extensions</code> combined with logical <code class="prettyprint">AND</code> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">pegdownTimeout</code> </td>
+      <td>long </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">fromsource</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">fullstacktrace</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">checkurls</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">notoc</code> </td>
+      <td>boolean </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">tracefilter</code> </td>
+      <td>regexp-csv/regexp-csv </td>
+      <td>comma-separated include patterns separated by <code class="prettyprint">/</code> with exclude patterns </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">notifier</code> </td>
+      <td>String </td>
+      <td>name of a class extending the <code class="prettyprint">org.specs2.reporter.Notifier</code> trait </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">exporter</code> </td>
+      <td>String </td>
+      <td>name of a class extending the <code class="prettyprint">org.specs2.reporter.Exporter</code> trait </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">reporter</code> </td>
+      <td>String </td>
+      <td>name of a class extending the <code class="prettyprint">org.specs2.reporter.Reporter</code> trait </td>
+    </tr>
+  </tbody>
+</table><p><em>[<code class="prettyprint">regexp</code> is a Java regular expression, csv a list of comma-separated values, map is a list of csv pairs key:value]</em></p><p>Note that any argument accepting values (like <code class="prettyprint">include</code>) can be passed with a dash when those values contain spaces:</p>
+<pre><code class="prettyprint">&gt; testOnly TaggedSpec -- -include issue 123 -- other arguments
+</code></pre><p>And as you can see above, <code class="prettyprint">--</code> can be used to signal the end of some argument values</p><a name="System+properties"><h4>System properties</h4></a><p>You can pass any argument to <strong><em>specs2</em></strong> from system properties. This is particularly useful for passing arguments to JUnit runners:</p>
+<ul>
+  <li>for a boolean argument, you need to pass <code class="prettyprint">-Dspecs2.name</code> or <code class="prettyprint">-Dname</code></li>
+  <li>for a string argument, you need to pass <code class="prettyprint">-Dspecs2.name=value</code> or <code class="prettyprint">-Dname=value</code></li>
+</ul><p>While the format <code class="prettyprint">-Dname=value</code> can be convenient, <code class="prettyprint">-Dspecs2.name=value</code> is recommended to avoid conflicts with other libraries.</p><a name="In+the+shell"><h3>In the shell</h3></a><a name="Console+output"><h4>Console output</h4></a><p>Executing a specification <code class="prettyprint">com.company.SpecName</code> in the console is very easy:</p>
+<pre><code class="prettyprint">scala -cp ... specs2.run com.company.SpecName [argument1 argument2 ...]
+</code></pre><a name="Html+output"><h4>Html output</h4></a><p>If you want html pages to be produced for your specification you'll need to execute:</p>
+<pre><code class="prettyprint">scala -cp ... specs2.html com.company.SpecName [argument1 argument2 ...]
+</code></pre><a name="JUnit+XML+output"><h4>JUnit XML output</h4></a><p>Many Continuous Integration systems rely on JUnit XML reports to display build and test results. It is possible to produce<br />those result by using the <code class="prettyprint">specs2.junitxml</code> object:</p>
+<pre><code class="prettyprint">scala -cp ... specs2.junitxml com.company.SpecName [argument1 argument2 ...]
+</code></pre><a name="Files+Runner"><h4>Files Runner</h4></a><p>The <code class="prettyprint">specs2.files</code> object will, by default, select and execute Specifications found in the test source directory:</p>
+<ul>
+  <li>the source directory is defined as <code class="prettyprint">src/test/scala</code> but can be changed by adjusting the system property <code class="prettyprint">specs2.srcTestDir</code></li>
+  <li>the specifications files are selected as classes or object which names match <code class="prettyprint">.*Spec</code>. This value can be changed by<br />    passing a different <code class="prettyprint">specName</code> value as a command-line argument</li>
+  <li><code class="prettyprint">console</code>, <code class="prettyprint">html</code>, <code class="prettyprint">junitxml</code>, <code class="prettyprint">markdown</code> has to be passed on the command-line to specify which kind of output you want</li>
+</ul><p>You can also extend the <code class="prettyprint">org.specs2.runner.FilesRunner</code> trait and override its behavior to implement something more appropriate<br />to your environment if necessary.</p><p>Additionally you can use the following arguments to modify the behavior of the <code class="prettyprint">FilesRunner</code> object:</p>
+<ul>
+  <li><code class="prettyprint">filesrunner.verbose</code>: display information messages about which classes are found and being instantiated to be executed (false by default)</li>
+  <li><code class="prettyprint">filesrunner.basePath</code>: source directory containing the specifications (src/test/scala by default)</li>
+  <li><code class="prettyprint">filesrunner.path</code>: glob pattern used to find specification source files (*<em>/</em>.scala by default)</li>
+  <li><code class="prettyprint">filesrunner.pattern</code>: regular expression for locating specification names inside a source file (.*Spec by default)</li>
+</ul><a name="In+the+console"><h3>In the console</h3></a><p>The <code class="prettyprint">specs2.run</code> object has an <code class="prettyprint">apply</code> method to execute specifications from the Scala console:</p>
+<pre><code class="prettyprint">scala&gt; specs2.run(spec1, spec2)
+
+scala&gt; import specs2._  // same thing, importing the run object
+scala&gt; run(spec1, spec2)
+</code></pre><p>If you want to pass specific arguments you can import the <code class="prettyprint">specs2.arguments</code> object member functions:</p>
+<pre><code class="prettyprint">scala&gt; import specs2.arguments._
+
+scala&gt; specs2.run(spec1)(nocolor)
+</code></pre><p>Or you can set implicit arguments which will be used for any specification execution:</p>
+<pre><code class="prettyprint">scala&gt; import specs2.arguments._
+scala&gt; implicit val myargs = nocolor
+
+scala&gt; specs2.run(spec1)
+</code></pre><a name="Via+SBT"><h3>Via SBT</h3></a><p>SBT knows how to run <strong><em>specs2</em></strong> specifications without any specific configuration. However, there are a few useful options which you can set (see <a href="http://www.scala-sbt.org/release/docs/Detailed-Topics/Testing.html">here</a> for more information).</p><p>Exclude some specifications:</p>
+<pre><code class="prettyprint">// keep only specifications ending with Spec or Unit
+testOptions := Seq(Tests.Filter(s =&gt; Seq(&quot;Spec&quot;, &quot;Unit&quot;).exists(s.endsWith(_))))
+</code></pre><p>If you don't want the specifications to be executed in parallel:</p>
+<pre><code class="prettyprint">parallelExecution in Test := false
+</code></pre><p>If you want to pass some arguments to all specifications:</p>
+<pre><code class="prettyprint">// equivalent to `testOnly -- nocolor neverstore` on the command line
+testOptions in Test += Tests.Argument(&quot;nocolor&quot;, &quot;neverstore&quot;)
+
+// equivalent to `testOnly -- exclude integration` on the command line
+testOptions in Test += Tests.Argument(&quot;exclude&quot;, &quot;integration&quot;)
+</code></pre><p>If you want the examples results to be displayed as soon as they've been executed you need to add:</p>
+<pre><code class="prettyprint">logBuffered := false
+</code></pre><a name="testOnly+arguments"><h5>testOnly arguments</h5></a><p>When you execute one test only, you can pass the arguments on the command line:</p>
+<pre><code class="prettyprint">&gt; testOnly org.specs2.UserGuide -- xonly
+</code></pre><a name="Output+formats"><h5>Output formats</h5></a><a name="Html"><h6>Html</h6></a><p>The <code class="prettyprint">html</code> argument is available with sbt to allow the creation of the html report from the command line.</p>
+<pre><code class="prettyprint">&gt; testOnly org.specs2.UserGuide -- html
+
+// in your build.sbt file
+testOptions in Test += Tests.Argument(&quot;html&quot;)
+</code></pre><a name="Markdown"><h6>Markdown</h6></a><p>The <code class="prettyprint">markdown</code> argument can be used to create &quot;.md&quot; files (to use with websites like GitHub):</p>
+<pre><code class="prettyprint">&gt; testOnly org.specs2.UserGuide -- markdown
+</code></pre><p>In this case the markup text in the Specification is not interpreted.</p><a name="JUnit"><h6>JUnit</h6></a><p>Similarly, JUnit xml output files can be created by passing the <code class="prettyprint">junitxml</code> option:</p>
+<pre><code class="prettyprint">&gt; testOnly org.specs2.examples.HelloWorldUnitSpec -- junitxml
+
+// in your build.sbt file
+testOptions in Test += Tests.Argument(&quot;junitxml&quot;)
+</code></pre><a name="Console"><h6>Console</h6></a><p>If you want to get a console output as well, don't forget to add the <code class="prettyprint">console</code> argument:</p>
+<pre><code class="prettyprint">&gt; testOnly org.specs2.UserGuide -- html console
+
+// in your build.sbt file
+testOptions in Test += Tests.Argument(&quot;html&quot;, &quot;console&quot;)
+</code></pre><a name="Files+runner"><h5>Files runner</h5></a><p>Any <code class="prettyprint">FilesRunner</code> object can also be invoked by sbt, but you need to specify <code class="prettyprint">console</code>, <code class="prettyprint">html</code>, <code class="prettyprint">junitxml</code>, <code class="prettyprint">markdown</code> on the command line:</p>
+<pre><code class="prettyprint">&gt; testOnly allSpecs -- console
+</code></pre><a name="Colors"><h5>Colors</h5></a><p>By default, the reporting will output colors. If you're running on windows you might either:</p>
+<ul>
+  <li>use the <a href="http://www.marioawad.com/2010/11/16/ansi-command-line-colors-under-windows">following tip</a> to install colors in the DOS console</li>
+  <li>or pass <code class="prettyprint">nocolor</code> as a command line argument</li>
+</ul><p>Then, there are different ways to set-up the colors you want to use for the output</p><p><em>From system properties</em></p><p>The so-called &quot;SmartColors&quot; argument will check if there are colors defined as specs2 properties. If so, the colors used<br />to output text in the Console will be extracted from those properties:</p><p>e.g. <code class="prettyprint">-Dspecs2.color.failure=m</code> will use magenta for failures.</p><p>The property names and default values are:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Property </th>
+      <th>Default value </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="prettyprint">color.text</code> </td>
+      <td>white </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">color.success</code> </td>
+      <td>green </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">color.failure</code> </td>
+      <td>yellow </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">color.error</code> </td>
+      <td>red </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">color.pending</code> </td>
+      <td>cyan </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">color.skipped</code> </td>
+      <td>magenta </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">color.stats</code> </td>
+      <td>cyan </td>
+    </tr>
+  </tbody>
+</table><p>The default values above are provided for a black background. If you have a white background you can use the <code class="prettyprint">specs2.whitebg</code> property and then the default values will be:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Property </th>
+      <th>Default value </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="prettyprint">color.text</code> </td>
+      <td>black </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">color.success</code> </td>
+      <td>green </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">color.failure</code> </td>
+      <td>magenta </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">color.error</code> </td>
+      <td>red </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">color.pending</code> </td>
+      <td>blue </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">color.skipped</code> </td>
+      <td>cyan </td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">color.stats</code> </td>
+      <td>blue </td>
+    </tr>
+  </tbody>
+</table><p>All the available colors are listed here, with their corresponding abbreviation which you can use to refer to them as well:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Color </th>
+      <th>Abbreviation </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>white </td>
+      <td>w </td>
+    </tr>
+    <tr>
+      <td>green </td>
+      <td>g </td>
+    </tr>
+    <tr>
+      <td>yellow </td>
+      <td>y </td>
+    </tr>
+    <tr>
+      <td>red </td>
+      <td>r </td>
+    </tr>
+    <tr>
+      <td>blue </td>
+      <td>be </td>
+    </tr>
+    <tr>
+      <td>cyan </td>
+      <td>c </td>
+    </tr>
+    <tr>
+      <td>black </td>
+      <td>bk </td>
+    </tr>
+    <tr>
+      <td>magenta </td>
+      <td>m </td>
+    </tr>
+  </tbody>
+</table><p><em>From command-line arguments</em></p><p>It is also possible to set colors by passing the <code class="prettyprint">colors</code> argument. This argument must be a list of <code class="prettyprint">key:value</code> pairs (comma-separated) where keys are taken from the property names above without the <code class="prettyprint">color.</code> prefix and values from the abbreviated color names.</p><p>For example you can pass on the command line:</p><p><code class="prettyprint">colors text:blue,failure:magenta</code></p><p>to have the text colored in blue and the failures in Magenta.</p><p>If the <code class="prettyprint">colors</code> option contains <code class="prettyprint">whitebg</code> then the default colors are considered to be <a href="http://etorreborre.github.io/specs2/api/master/index.html#org.specs2.text.Colors"><code class="prettyprint">InvertedColors</code></a></p><p><em>Through the API</em></p><p>Finally you can change the color scheme that's being used on the console by implementing your own <a href="http://etorreborre.github.io/specs2/api/master/index.html#org.specs2.text.Colors"><code class="prettyprint">org.specs2.text.Colors</code></a> trait or override values in the existing <code class="prettyprint">ConsoleColors</code> class. For example if you want to output magenta everywhere yellow is used you can write:</p>
+<pre><code class="prettyprint">object MyColors = new org.specs2.text.ConsoleColors { override val failureColor = magenta }
+
+class MyColoredSpecification extends Specification { def is = colors(MyColors) ^
+  // the failure message will be magenta
+  &quot;this is a failing example&quot; ! failure
+}
+</code></pre><p>Note also that the the color support for sbt on Windows is a bit tricky. You need to follow the instructions <a href="http://www.marioawad.com/2010/11/16/ansi-command-line-colors-under-windows">here</a> then add to your script launching sbt:</p>
+<pre><code class="prettyprint">-Djline.terminal=jline.UnsupportedTerminal
+</code></pre><a name="Via+IDEA"><h3>Via IDEA</h3></a><p>IntelliJ offers a nice integration with <strong><em>specs2</em></strong>. You can:</p>
+<ul>
+  <li>Execute a specification by selecting its name and pressing CTRL+SHIFT+F10</li>
+  <li>Execute a single example by selecting its description and pressing CTRL+SHIFT+F10</li>
+</ul><p><img alt="specs2 in Intellij" src="../../images/intellij.png" /></p><p>But also:</p>
+<ul>
+  <li>Provide command-line arguments in the &quot;Test options&quot;</li>
+  <li>&quot;Jump to Test&quot; and &quot;Jump to Source&quot;</li>
+</ul><a name="Via+JUnit"><h3>Via JUnit</h3></a><p>It is possible to have <strong><em>specs2</em></strong> specifications executed as JUnit tests. This enables the integration of <strong><em>specs2</em></strong> with Maven and the JUnit runners of your IDE of choice.</p><p>There are 2 ways of enabling a Specification to be executed as a JUnit test: the verbose one and the simpler one. The simplest one is to extend <code class="prettyprint">SpecificationWithJUnit</code>:</p>
+<pre><code class="prettyprint">class MySpecification extends SpecificationWithJUnit {
+  def is = // as usual....
+}
+</code></pre><p>You can use the second one if your IDE doesn't work with the first one:</p>
+<pre><code class="prettyprint">import org.junit.runner._
+import runner._
+
+@RunWith(classOf[JUnitRunner])
+class MySpecification extends Specification {
+   def is = // as usual....
+}
+</code></pre><p>[<em>some <a href="http://code.google.com/p/specs/wiki/RunningSpecs#Run_your_specification_with_JUnit4_in_Eclipse">tricks</a> described on the specs website can still be useful there</em>]</p><a name="Arguments_1"><h4>Arguments</h4></a><p>You can pass arguments to the <code class="prettyprint">JUnitRunner</code> for generating the html files for the specifications or for displaying the console output. To do that, you can use the <code class="prettyprint">-Dspecs2.commandline</code> property and pass it the <code class="prettyprint">html</code> or <code class="prettyprint">console</code> values.</p><a name="Via+Eclipse"><h3>Via Eclipse</h3></a><p>There is unfortunately no specific Eclipse plugin at the moment and specifications have to be executed as [JUnit test cases](#Via JUnit).</p><a name="Via+Maven"><h3>Via Maven</h3></a><p>You can either:</p>
+<ul>
+  <li>execute specifications as [JUnit test cases](#Via JUnit).</li>
+  <li>use the <a href="https://github.com/mmakowski/maven-specs2-plugin">Maven specs2 plugin</a> to generate JUnit XML reports, HTML or Markdown reports</li>
+</ul><a name="With+your+own"><h3>With your own</h3></a><a name="Executor"><h4>Executor</h4></a><p>The <code class="prettyprint">org.specs2.reporter.Executor</code> trait can be used to change the execution a Specification. This trait defines different methods for the executing a Specification and you can override them:</p>
+<ul>
+  <li><code class="prettyprint">select</code> selects the fragments to execute, filtering out some examples based on tags for instance</li>
+  <li><code class="prettyprint">sequence</code> groups fragments which can be executed concurrently</li>
+  <li><code class="prettyprint">execute</code> executes the fragments</li>
+  <li><code class="prettyprint">store</code> stores the results</li>
+</ul><a name="In+sbt"><h5>In sbt</h5></a><p>You can use a custom <code class="prettyprint">Executor</code> from inside sbt by passing the <code class="prettyprint">executor</code> argument with a <code class="prettyprint">Executor</code> implementation class name:</p>
+<pre><code class="prettyprint">sbt&gt; testOnly *BinarySpec* -- executor com.mycompany.reporting.RandomExecutor
+</code></pre><a name="Notifier"><h4>Notifier</h4></a><p>The <code class="prettyprint">org.specs2.reporter.Notifier</code> trait can be used to report execution events. It notifies of the following:</p>
+<ul>
+  <li>specification start: the beginning of a specification, with its name</li>
+  <li>specification end: the end of a specification, with its name</li>
+  <li>context start: the beginning of a sub-level when the specification is seen as a tree or Fragments</li>
+  <li>context end: the end of a sub-level when the specification is seen as a tree or Fragments</li>
+  <li>text: any Text fragment that needs to be displayed</li>
+  <li>example start</li>
+  <li>example result: success / failure / error / skipped / pending</li>
+</ul><p>All those notifications come with a location (to trace back to the originating fragment in the Specification) and a duration when relevant (i.e. for examples and actions).</p><a name="NotifierRunner"><h5>NotifierRunner</h5></a><p>The <code class="prettyprint">NotifierRunner</code> class can be instantiated with a custom <code class="prettyprint">Notifier</code> and used from the command line.</p><a name="In+sbt_1"><h5>In sbt</h5></a><p>You can also use a custom <code class="prettyprint">Notifier</code> from inside sbt by passing the <code class="prettyprint">notifier</code> argument with a <code class="prettyprint">Notifier</code> implementation class name:</p>
+<pre><code class="prettyprint">sbt&gt; testOnly *BinarySpec* -- notifier com.mycompany.reporting.FtpNotifier
+</code></pre><a name="Exporter"><h4>Exporter</h4></a><p>The <code class="prettyprint">org.specs2.reporter.Exporter</code> trait can be used to collect <code class="prettyprint">ExecutedFragments</code> and report them as desired. The only method to implement is:</p>
+<pre><code class="prettyprint">def export(implicit args: Arguments): ExecutingSpecification =&gt; ExecutedSpecification
+</code></pre>
+<ul>
+  <li><code class="prettyprint">args</code> is an <code class="prettyprint">Arguments</code> object created from command line options</li>
+  <li><code class="prettyprint">ExecutingSpecification</code> is a list of fragments which might or might not have finished their execution</li>
+  <li><code class="prettyprint">ExecutedSpecification</code> must be a list of executed fragments</li>
+</ul><p>Please see the Scaladoc API of each trait to see how to use them.</p><a name="In+sbt_2"><h5>In sbt</h5></a><p>You can use a custom <code class="prettyprint">Exporter</code> from inside sbt by passing the <code class="prettyprint">exporter</code> argument with a <code class="prettyprint">Exporter</code> implementation class name:</p>
+<pre><code class="prettyprint">sbt&gt; testOnly *BinarySpec* -- exporter com.mycompany.reporting.FtpExporter
+</code></pre>
+<hr /></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
+        <tr><th colSpan="2">Total for specification Runners</th></tr>
+        <tr><td>Finished in</td><td class="info">8 ms</td></tr>
+        <tr><td>Results</td><td class="success">1 example, 0 failure, 0 error</td></tr>
+      </table></html></div></div>
+                <div class="col2"><div id="leftcolumn"><div id="tree">
+      <ul><li id="1362049972"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="997729433"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#Execution">Execution</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
+            
+          </li></ul>
+          </li><li id="1516625146"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Styles">Styles</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Acceptance+specification">Acceptance specification</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Multi-line+description">Multi-line description</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#API">API</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Unit+specification">Unit specification</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Results">Results</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Standard">Standard</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Matchers">Matchers</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Expectations">Expectations</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Functional">Functional</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Thrown">Thrown</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#All">All</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Short-circuit">Short-circuit</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Auto-Examples">Auto-Examples</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#G+%2F+W+%2FT">G / W /T</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#DataTables">DataTables</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Example+groups">Example groups</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Isolation">Isolation</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Tags">Tags</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Selection">Selection</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Formatting">Formatting</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Contexts">Contexts</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Isolation_1">Isolation</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Scope">Scope</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Isolated+variables">Isolated variables</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Case+classes">Case classes</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Contexts+inheritance">Contexts inheritance</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Before%2FAfter">Before/After</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#In+a+mutable+specification">In a mutable specification</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#In+an+acceptance+specification">In an acceptance specification</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Around">Around</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Outside">Outside</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#AroundOutside">AroundOutside</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Fixture">Fixture</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#BeforeExample">BeforeExample</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Composition">Composition</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Combinations">Combinations</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Composition_1">Composition</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Console+output">Console output</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Steps%2FActions">Steps/Actions</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Steps">Steps</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Actions">Actions</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Template">Template</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Global+setup%2Fteardown">Global setup/teardown</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#For+fragments">For fragments</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Links">Links</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Inclusion">Inclusion</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Inline">Inline</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Html+link">Html link</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Html+Link">Html Link</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Reference">Reference</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Markdown+url">Markdown url</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Execution">Execution</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Unit+specifications">Unit specifications</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Methods">Methods</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Structure.html#Full+example">Full example</a>
+            <ul><li id="681407291"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Presentation">Presentation</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Rules">Rules</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Formatting+fragments">Formatting fragments</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Separating+groups+of+examples">Separating groups of examples</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Reset+the+levels">Reset the levels</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Changing+the+indentation+level">Changing the indentation level</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Combinations">Combinations</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.FragmentsApi.html#Unit+specification">Unit specification</a>
+            
+          </li></ul>
+          </li><li id="2098867336"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then_1">Given When Then</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then">Given When Then</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Parsing">Parsing</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Delimited+parsers">Delimited parsers</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Regex+parsers">Regex parsers</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Standard+parsers">Standard parsers</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Scenario">Scenario</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.structure.GivenWhenThenPage.html#Tagging">Tagging</a>
+            
+          </li></ul>
+          </li></ul>
+          </li></ul>
+          </li></ul>
+          </li></ul>
+          </li><li id="1179339336"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Combinators">Combinators</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Match+results">Match results</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Out+of+the+box">Out of the box</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Optional">Optional</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#File+contents">File contents</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Directories+contents">Directories contents</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Lines+contents">Lines contents</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Custom">Custom</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#From+functions">From functions</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#From+Hamcrest">From Hamcrest</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#With+sequences">With sequences</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#ScalaCheck">ScalaCheck</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Arbitrary+instances">Arbitrary instances</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#With+Generators">With Generators</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Test+properties">Test properties</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Expectations">Expectations</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Collect+values">Collect values</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Mock+expectations">Mock expectations</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Creation+and+settings">Creation and settings</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Stubbing">Stubbing</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Mocking+and+Stubbing+at+the+same+time">Mocking and Stubbing at the same time</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#With+matchers">With matchers</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Callbacks">Callbacks</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Parameters+for+the+answers+function">Parameters for the answers function</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Verification">Verification</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Order+of+calls">Order of calls</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Ignoring+stubs">Ignoring stubs</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Spies">Spies</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Functions%2FPartialFunctions">Functions/PartialFunctions</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Auto-boxing">Auto-boxing</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Byname">Byname</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#DataTables">DataTables</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Implicit+%21">Implicit !</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
+            <ul><li id="1422519407"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Properties">Properties</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Styles">Styles</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Simple+form">Simple form</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Adding+several+rows+at+once">Adding several rows at once</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Nesting+into+another+Form">Nesting into another Form</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Nesting+into+an+Effect+or+a+Prop">Nesting into an Effect or a Prop</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Using+tabs">Using tabs</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Aggregating+forms">Aggregating forms</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Lazy+cells">Lazy cells</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Xml+cells">Xml cells</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#1-n+relationships">1-n relationships</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Subset">Subset</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Subsequence">Subsequence</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Set">Set</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Sequence">Sequence</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.FormsPage.html#Decision+tables">Decision tables</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Outside+specs2">Outside specs2</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Matchers.html#Without+any+dependency+on+specs2">Without any dependency on specs2</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id="1569901763"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#specs2+jars">specs2 jars</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Arguments">Arguments</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#API">API</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Most%2FLeast+frequently+used+arguments">Most/Least frequently used arguments</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Shortcuts">Shortcuts</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Output+directory">Output directory</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Storing+previous+results">Storing previous results</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Status+flags">Status flags</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Diffs">Diffs</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#StackTraceFilter">StackTraceFilter</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Command+line">Command line</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#System+properties">System properties</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#In+the+shell">In the shell</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Console+output">Console output</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Html+output">Html output</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#JUnit+XML+output">JUnit XML output</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Files+Runner">Files Runner</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#In+the+console">In the console</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Via+SBT">Via SBT</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#testOnly+arguments">testOnly arguments</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Output+formats">Output formats</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Html">Html</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Markdown">Markdown</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#JUnit">JUnit</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Console">Console</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Files+runner">Files runner</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Colors">Colors</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Via+IDEA">Via IDEA</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Via+JUnit">Via JUnit</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Arguments_1">Arguments</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Via+Eclipse">Via Eclipse</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Via+Maven">Via Maven</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#With+your+own">With your own</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Executor">Executor</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#In+sbt">In sbt</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Notifier">Notifier</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#NotifierRunner">NotifierRunner</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#In+sbt_1">In sbt</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#Exporter">Exporter</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Runners.html#In+sbt_2">In sbt</a>
+            
+          </li></ul>
+          </li></ul>
+          </li></ul>
+          </li><li id="503155380"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Add+a+title">Add a title</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Use+descriptions">Use descriptions</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Pending+until+fixed">Pending until fixed</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Mark+a+block+as+pending">Mark a block as pending</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Enhance+failures">Enhance failures</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Share+examples">Share examples</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Create+an+index">Create an index</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Tag+examples">Tag examples</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#In+a+unit+specification">In a unit specification</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Always+tag">Always tag</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Skip+examples">Skip examples</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Debug+statements">Debug statements</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Remove+implicits">Remove implicits</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Print+execution+data">Print execution data</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#With+example+description">With example description</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#Capture+snippets">Capture snippets</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#snippet">snippet</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#cuts">cuts</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#evaluation">evaluation</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#offsets">offsets</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#parameters">parameters</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#names">names</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.HowTo.html#outside+specs2">outside specs2</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id="794449251"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Conciseness">Conciseness</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Readability">Readability</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Extensibility">Extensibility</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Configuration">Configuration</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Clear+implementation">Clear implementation</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#User+support">User support</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#A+new+hope">A new hope</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Functional+%2F+immutable">Functional / immutable</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Chaining+everything">Chaining everything</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Arguments+have+to+be+supplied">Arguments have to be supplied</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Concurrency+is+a+breeze">Concurrency is a breeze</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#A+simple+structure">A simple structure</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Contexts">Contexts</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Indentation">Indentation</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Operators">Operators</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Forms">Forms</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#But+if+you+STILL+want+mutable+specifications">But if you STILL want mutable specifications</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Dependencies+control">Dependencies control</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Implicit+definitions+control">Implicit definitions control</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Philosophy.html#Enter+Scala+2.10">Enter Scala 2.10</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li id="633025752"><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Design">Design</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Structure">Structure</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Creation">Creation</a>
+            <ul><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Creating+Fragments">Creating Fragments</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Mutable+Specification">Mutable Specification</a>
+            
+          </li></ul>
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Execution">Execution</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Reporting">Reporting</a>
+            
+          </li><li id=""><a href="../../guide-SNAPSHOT/guide/org.specs2.guide.Design.html#Dependencies">Dependencies</a>
+            
+          </li></ul>
+          </li></ul>
+          </li></ul>
+      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['1362049972','1569901763'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+    </div></div></div>
+                <div class="col3"><div id="rightcolumn"></div></div>
+              </div>
+            </div>
+          </div></body></html>
