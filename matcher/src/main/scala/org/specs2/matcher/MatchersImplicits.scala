@@ -235,7 +235,7 @@ trait MatchersImplicits extends Expectations
   implicit def matchResultFunctionToMatcher[T, R : AsResult](f: T => R): Matcher[T] = new Matcher[T] {
     def apply[S <: T](s: Expectable[S]) = {
       val r = ResultExecution.execute(AsResult(f(s.value)))
-      result(r.isSuccess, r.message, r.message, s)
+      result(r, s)
     }
   }
 
