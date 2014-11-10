@@ -286,7 +286,7 @@ s"""
     <tr>
         <td class="info">Released</td>
         <td class="info">
-        binaries (<a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/specs2-core_2.11/$VERSION/">specs2 jar</a>,
+        binaries (<a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/specs2-core_2.11/$VERSION/">specs2-core jar</a>,
                   <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-core_2.11/7.1.0/">scalaz core jar</a>,
                   <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-concurrent_2.11/7.1.0/">scalaz concurrent jar</a>)<br/>
         project (<a href="http://github.com/etorreborre/specs2/zipball/SPECS2-$VERSION">zip</a>,
