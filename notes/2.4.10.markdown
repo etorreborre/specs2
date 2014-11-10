@@ -1,0 +1,14 @@
+Maintenance version.
+
+## Improvements
+
+ * made the when/unless combinators for Results lazy
+
+## Fixes
+
+ * removed mentions of the "fat" specs2 jar in the documentation [#266](http://github.com/etorreborre/specs2/issues/266)
+ * fixed the passing of `FailureDetails` when creating a `Matcher[T]` from a function `T => MatchResult[T]`
+
+
+==========================
+
