@@ -47,8 +47,8 @@ trait ValueChecks extends ValueChecksLowImplicits {
 
   /** a Matcher[T] can check a value */
   implicit def matcherIsValueCheck[T](m: Matcher[T]): ValueCheck[T] = new ValueCheck[T] {
-    def check    = (t: T) => AsResult(m(Expectable(t)))
-    def checkNot = (t: T) => AsResult(m.not(Expectable(t)))
+    def check    = (t: T) => matchResultAsSimpleResult.asResult(m(Expectable(t)))
+    def checkNot = (t: T) => matchResultAsSimpleResult.asResult(m.not(Expectable(t)))
   }
 
   /** a partial function returning an object having an AsResult instance can check a value */
