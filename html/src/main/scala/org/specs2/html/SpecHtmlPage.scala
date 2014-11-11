@@ -14,7 +14,17 @@ import Tree._
 import data.Trees._
 import xml.Nodex._
 
-case class SpecHtmlPage(path: FilePath, content: String) {
+case class SpecHtmlPage(specification: SpecStructure, path: FilePath, content: String) {
+
+  /** @return the class name of the specification */
+  def className = specification.header.className
+
+  /** @return the simple class name of the specification */
+  def simpleName = specification.header.simpleName
+
+  /** @return the title of the specification */
+  def showWords = specification.header.showWords
+
   def addToc(toc: NodeSeq): SpecHtmlPage =
     copy(content =
       if (content.contains("<toc/>")) content.replace("<toc/>", toc.toString)
@@ -34,7 +44,7 @@ case class SpecHtmlPage(path: FilePath, content: String) {
           </li>
       }.rootLabel
 
-    <ul>{items}</ul>
+    {items}
   }
 
   def body = {

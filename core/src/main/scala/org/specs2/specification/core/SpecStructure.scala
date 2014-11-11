@@ -3,6 +3,7 @@ package specification
 package core
 
 import main.Arguments
+import org.specs2.data.TopologicalSort
 import scalaz.concurrent.Task
 import scalaz.stream._
 
@@ -52,6 +53,9 @@ object SpecStructure {
 
   def create(header: SpecHeader, arguments: Arguments, fragments: =>Fragments): SpecStructure =
     new SpecStructure(header, arguments, () => fragments)
+
+  def topologicalSort(specifications: Seq[SpecStructure]) =
+    TopologicalSort.sort(specifications, dependsOn)
 
   /** return true if s1 depends on s2, i.e, s1 has a link to s2 */
   val dependsOn = (s1: SpecStructure, s2: SpecStructure) => {
