@@ -3,6 +3,8 @@ package matcher
 
 import execute._
 import text.Quote._
+import MatchResult._
+
 /**
  * Common interface for checks of a value of type T:
  *
@@ -85,8 +87,8 @@ object ValueChecks extends ValueChecks
 /** ValueCheck for a typed expected value. It uses the BeTypedEqualTo matcher */
 case class BeEqualTypedValueCheck[T](expected: T) extends ValueCheck[T] {
   private lazy val matcher = new BeTypedEqualTo(expected)
-  def check    = (t: T) => AsResult(matcher(Expectable(t)))
-  def checkNot = (t: T) => AsResult(matcher.not(Expectable(t)))
+  def check    = (t: T) => matchResultAsSimpleResult.asResult(matcher(Expectable(t)))
+  def checkNot = (t: T) => matchResultAsSimpleResult.asResult(matcher.not(Expectable(t)))
 
   def downcast[S] = new BeEqualValueCheck[S](expected)
 
@@ -95,8 +97,8 @@ case class BeEqualTypedValueCheck[T](expected: T) extends ValueCheck[T] {
 /** ValueCheck for an untyped expected value. It uses the BeEqualTo matcher */
 case class BeEqualValueCheck[T](expected: Any) extends ValueCheck[T] {
   private lazy val matcher = new BeEqualTo(expected)
-  def check    = (t: T) => AsResult(matcher(Expectable(t)))
-  def checkNot = (t: T) => AsResult(matcher.not(Expectable(t)))
+  def check    = (t: T) => matchResultAsSimpleResult.asResult(matcher(Expectable(t)))
+  def checkNot = (t: T) => matchResultAsSimpleResult.asResult(matcher.not(Expectable(t)))
 }
 
 
