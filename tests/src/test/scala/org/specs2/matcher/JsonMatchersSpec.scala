@@ -70,7 +70,25 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
  ${ "{'person' : [{'names':['e', 't']}]}" must /("person")./#(0)./("names").andHave(size(2)) }
  ${ "{'names': ['e', 't']}" must /("names").andHave(size(2)) }
  ${ "{'person' : ['names', ['e', 't']] }" must /("person")./#(1).andHave(size(2)) }
+
+ String, Int, Double and Traversable matchers can be used with the andHave method $andHave
+
                                                                                                                         """
+
+ def andHave = {
+   val json = """{"products":[{"name":"shirt","price":10},{"name":"shoe","price":5}]}"""
+
+   def aProductWith(name: Matcher[JsonType],  price: Matcher[JsonType]): Matcher[String] =
+    /("name").andHave(name) and /("price").andHave(price)
+
+   def haveProducts(products: Matcher[String]*): Matcher[String] =
+    /("products").andHave(eachOf(products:_*))
+
+   json must haveProducts(
+    aProductWith(name = "shirt", price = 10),
+    aProductWith(name = "shoe", price = 5)
+   )
+ }
 
   // this example is taken from the liftweb project
   val person = """

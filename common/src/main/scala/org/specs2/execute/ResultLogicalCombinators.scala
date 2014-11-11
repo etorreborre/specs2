@@ -12,9 +12,9 @@ import control.Exceptions._
  * with and/or/not
  */
 private[specs2]
-trait ResultLogicalCombinators extends Results {
+trait ResultLogicalCombinators {
 
-  implicit def combineBoolean(b: =>Boolean): ResultLogicalCombinator = new ResultLogicalCombinator(b)
+  implicit def combineBoolean(b: =>Boolean): ResultLogicalCombinator = new ResultLogicalCombinator(Results.toResult(b))
   implicit def combineResult(r: =>Result)  : ResultLogicalCombinator = new ResultLogicalCombinator(r)
 
   class ResultLogicalCombinator(res: =>Result) {

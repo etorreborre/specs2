@@ -47,7 +47,7 @@ trait AutoExamples extends AutoExamplesLowImplicits { this: FragmentsBuilder =>
 }
 
 private[specs2]
-trait AutoExamplesLowImplicits { this: FragmentsBuilder =>
+trait AutoExamplesLowImplicits extends Results { this: FragmentsBuilder =>
 
   /** this implicit def is necessary when the expression is at the start of the spec */
   implicit def matchFragmentsFragment(expression: =>MatchResult[_]): MatchResultFragment = {
