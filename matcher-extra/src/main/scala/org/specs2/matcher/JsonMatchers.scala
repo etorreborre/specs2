@@ -9,6 +9,15 @@ import Json._
 import org.specs2.text.NotNullStrings._
 
 import scala.util.matching.Regex
+import text.Quote._
+import text.NotNullStrings._
+import text.Regexes._
+import text.Trim._
+import json.Json._
+import util.matching.Regex
+import ValueChecks._
+import MatchersImplicits._
+import Results.negateWhen
 
 /**
  * Matchers for Json expressions (entered as strings)
@@ -36,10 +45,16 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
     protected def queries: Seq[JsonQuery]
     protected def check: Matcher[JsonType]
 
+    def anyValueToJsonType(value: Any): JsonType = value match {
+      case s: String      => JsonString(s)
+      case d: Double      => JsonNumber(d)
+      case (k: String, v) => JsonMap(Map(k -> v))
+    }
+
     private def find(json: Option[JSONType], queries: List[JsonQuery]): Result = {
       def checkRest(value: Any, rest: List[JsonQuery]) =
         (value, rest) match {
-          case (_, Nil)    => Success("found "+value.notNull)
+          case (_, Nil)         => check(Expectable(anyValueToJsonType(value))).toSimpleResult
           case ((k, v), q :: _) =>
             if (q.selector.select(Map((k.notNull, v))).isDefined) Success()
             else                                                  Failure(s"found '${value.notNull}' but no value to select for ${q.name}")
@@ -50,8 +65,8 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
 
       (json, queries) match {
         case (None,    Nil)             => Success("ok")
-        case (Some(JSONArray(a)), Nil)  => check(Expectable(JsonType.array(a))).toResult
-        case (Some(JSONObject(o)), Nil) => check(Expectable(JsonType.map(o))).toResult
+        case (Some(JSONArray(a)), Nil)  => check(Expectable(JsonType.array(a))).toSimpleResult
+        case (Some(JSONObject(o)), Nil) => check(Expectable(JsonType.map(o))).toSimpleResult
         case (None,    q :: _)          => Failure(q.selector.name + " not found")
 
         /**
@@ -67,7 +82,7 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
         case (Some(JSONObject(map)), JsonQuery(First, selector) :: rest) =>
           selector.select(map) match {
             case Some((k,v: JSONType)) => find(Some(v), rest)
-            case Some((k,v))           => checkRest(v, rest) or checkRest((k, v), rest)
+            case Some((k,v))           => val r = checkRest((k, v), rest); if (r.isSuccess) r else checkRest(v, rest)
             case None                  => selectorNotFound(selector, map)
           }
 
@@ -173,30 +188,51 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
  * abstract JSON types for specs2
  */
 sealed trait JsonType
-trait JsonArray extends JsonType {
-  def list: List[Any]
-}
-trait JsonMap extends JsonType {
-  def map: Map[String, Any]
-}
+case class JsonArray(list: List[Any]) extends JsonType
+case class JsonMap(map: Map[String, Any]) extends JsonType
+case class JsonString(s: String) extends JsonType
+case class JsonNumber(d: Double) extends JsonType
+case object JsonNull extends JsonType
 
 object JsonType {
-  def array(array: List[Any]) = new JsonArray {
-    def list = array
-  }
-  def map(o: Map[String, Any]) = new JsonMap {
-    def map = o
-  }
+  def array(array: List[Any]) = JsonArray(array)
+  def map(map: Map[String, Any]) = JsonMap(map)
+
   val anyMatch = new  Matcher[JsonType] {
     def apply[S <: JsonType](s: Expectable[S]) = result(true, "ok", "ko", s)
   }
 
   implicit def JsonTypeIsSized: Sized[JsonType] = new Sized[JsonType] {
     def size(json: JsonType) = json match {
-      case l: JsonArray => l.list.size
-      case m: JsonMap   => m.map.size
+      case JsonArray(list) => list.size
+      case JsonMap(map)    => map.size
+      case JsonString(_)   => 1
+      case JsonNumber(_)   => 1
+      case JsonNull        => 0
     }
   }
+
+  implicit def JsonTypeMatcherGenTraversable(m: ContainWithResultSeq[String]): Matcher[JsonType] =  (actual: JsonType) => actual match {
+    case JsonArray(list) => m(Expectable(list.map(_.toString)))
+    case other           => Matcher.result(false, s"$other is not an array", Expectable(other))
+  }
+
+  implicit def JsonTypeMatcherGenTraversable(m: ContainWithResult[String]): Matcher[JsonType] =  (actual: JsonType) => actual match {
+    case JsonArray(list) => m(Expectable(list.map(_.toString)))
+    case other           => Matcher.result(false, s"$other is not an array", Expectable(other))
+  }
+
+  implicit def JsonTypeMatcherInt(expected: Int): Matcher[JsonType] = (actual: JsonType) => actual match {
+    case JsonNumber(n) => (n.toDouble == expected.toDouble, s"$n is not equal to $expected")
+    case other         => (false, s"not a String: $other")
+  }
+
+  implicit def JsonTypeMatcherString(expected: String): Matcher[JsonType] = (actual: JsonType) => actual match {
+    case JsonString(a) => (a == expected, s"$a is not equal to $expected")
+    case other         => (false, s"not a String: $other")
+  }
+
+
 }
 
 /**
