@@ -1,0 +1,9 @@
+Maintenance version.
+
+## Fixes
+
+ * fixed a performance issue when using `list must contain(value)` (avoid filling in an intermediate stacktrace)
+
+
+==========================
+
