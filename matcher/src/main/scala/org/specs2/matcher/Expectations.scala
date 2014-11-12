@@ -6,7 +6,7 @@ import execute._
 /**
  * This trait provides implicit definitions to transform any value into an Expectable
  */
-trait Expectations extends CanBeEqual {
+trait Expectations extends CanBeEqual with MatchResultStackTrace {
   /** describe a value with the aka method */
   implicit def describe[T](t: =>T): Descriptible[T] = new Descriptible(t)
   class Descriptible[T](value: =>T) {
@@ -40,21 +40,30 @@ trait Expectations extends CanBeEqual {
   /** @return an Expectable with a function to show the element T */
   def createExpectableWithShowAs[T](t: =>T, showAs: =>String): Expectable[T] = Expectable.createWithShowAs(t, showAs)
 
-  /** this method can be overriden to throw exceptions when checking the match result */
+  /** this method can be overridden to throw exceptions when checking the match result */
   protected def checkFailure[T](m: MatchResult[T]): MatchResult[T] = {
     checkMatchResultFailure(mapMatchResult(setStacktrace(m)))
   }
-  /** this method can be avoid filling-in a stacktrace indicating the location of the result */
+  /** this method can be overridden to intercept a MatchResult and change its message before it is thrown */
+  protected def mapMatchResult[T](m: MatchResult[T]): MatchResult[T] = m
+  /** this method can be overridden to throw exceptions when checking the result */
+  protected def checkResultFailure(r: =>Result): Result = r
+  /** this method can be overridden to throw exceptions when checking the match result */
+  protected def checkMatchResultFailure[T](m: MatchResult[T]): MatchResult[T] = m
+}
+
+/** this trait allows to fill-in stack traces on match results for precise location */
+trait MatchResultStackTrace {
+  /** this method can be overridden to avoid filling-in a stacktrace indicating the location of the result */
   protected def setStacktrace[T](m: MatchResult[T]): MatchResult[T] = {
     m match {
       case f: MatchFailure[_] if f.trace.isEmpty => f.copy(trace = (new Exception).getStackTrace.toList)
       case other => other
     }
   }
-  /** this method can be overriden to intercept a MatchResult and change its message before it is thrown */
-  protected def mapMatchResult[T](m: MatchResult[T]): MatchResult[T] = m
-  /** this method can be overriden to throw exceptions when checking the result */
-  protected def checkResultFailure(r: =>Result): Result = r
-  /** this method can be overriden to throw exceptions when checking the match result */
-  protected def checkMatchResultFailure[T](m: MatchResult[T]): MatchResult[T] = m
+}
+
+/** this trait doesn't fill-in stack traces */
+trait NoMatchResultStackTrace extends MatchResultStackTrace {
+  override def setStacktrace[T](m: MatchResult[T]): MatchResult[T] = m
 }
