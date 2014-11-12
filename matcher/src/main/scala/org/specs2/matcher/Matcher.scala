@@ -79,10 +79,10 @@ trait Matcher[-T] { outer =>
    */
   protected def result[S <: T](other: MatchResult[_], value: Expectable[S]): MatchResult[S] = {
     other match {
-      case MatchSuccess(ok, ko, _)                                   => Matcher.result(true,  ok(), ko(), value)
-      case MatchFailure(ok, ko, _, FailureDetails(expected, actual)) => Matcher.result(false, ok(), ko(), value, expected, actual)
-      case MatchFailure(ok, ko, _, _)                                => Matcher.result(false, ok(), ko(), value)
-      case _                                                         => Matcher.result(other.isSuccess, other.message, value)
+      case MatchSuccess(ok, ko, _)                                      => Matcher.result(true,  ok(), ko(), value)
+      case MatchFailure(ok, ko, _, _, FailureDetails(expected, actual)) => Matcher.result(false, ok(), ko(), value, expected, actual)
+      case MatchFailure(ok, ko, _, _, _)                                => Matcher.result(false, ok(), ko(), value)
+      case _                                                            => Matcher.result(other.isSuccess, other.message, value)
     }
   }
 
@@ -162,7 +162,7 @@ trait Matcher[-T] { outer =>
   def orSkip(message: String => String): Matcher[T] = new Matcher[T] {
     def apply[U <: T](a: Expectable[U]) = {
       tryOr(outer(a)) { (e: Exception) => MatchSkip(message(e.getMessage.notNull), a) } match {
-        case MatchFailure(_,ko,_,_)    => MatchSkip(message(ko()), a)
+        case MatchFailure(_,ko,_,_,_)  => MatchSkip(message(ko()), a)
         case other                     => other
       }
     }
@@ -183,7 +183,7 @@ trait Matcher[-T] { outer =>
   def orPending(message: String => String): Matcher[T] = new Matcher[T] {
     def apply[U <: T](a: Expectable[U]) = {
       tryOr(outer(a)) { (e: Exception) => MatchPending(message(e.getMessage.notNull), a) } match {
-        case MatchFailure(_,ko,_,_)    => MatchPending(message(ko()), a)
+        case MatchFailure(_,ko,_,_,_)  => MatchPending(message(ko()), a)
         case other                     => other
       }
     }

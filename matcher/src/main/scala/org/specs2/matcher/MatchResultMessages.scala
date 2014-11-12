@@ -11,9 +11,9 @@ trait MatchResultMessages {
 
   implicit def MatchResultMessageReducer[T]: Reducer[MatchResult[T], MatchResultMessage] =
     Reducer.unitReducer { r: MatchResult[T] => r match {
-      case MatchSuccess(ok, ko, e)    => SuccessMessage.create(ok(), ko())
-      case MatchFailure(ok, ko, e, d) => FailureMessage.create(ok(), ko())
-      case _                          => NeutralMessage(r.message)
+      case MatchSuccess(ok, ko, e)       => SuccessMessage.create(ok(), ko())
+      case MatchFailure(ok, ko, e, t, d) => FailureMessage.create(ok(), ko())
+      case _                             => NeutralMessage(r.message)
     }}
 
   implicit val MatchResultMessageMonoid = new Monoid[MatchResultMessage] {

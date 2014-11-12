@@ -88,9 +88,6 @@ trait MatchResult[+T] extends ResultLike {
   def have(m: Matcher[T]) = apply(m)
   def toResult: Result = evaluate.toResult
 
-  /** @return a result with no detailed information like location */
-  def toSimpleResult: Result = evaluate.toResult
-
   def isSuccess = toResult.isSuccess
   def message = toResult.message
   def orThrow = this
@@ -126,30 +123,33 @@ object MatchSuccess {
   def apply[T](ok: =>String, ko: =>String, expectable: Expectable[T]) =
     new MatchSuccess(() => ok, () => ko, expectable)
 }
-case class MatchFailure[T] private[specs2](ok: () => String, ko: () => String, expectable: Expectable[T], details: Details = NoDetails) extends MatchResult[T] {
+case class MatchFailure[T] private[specs2](ok: () => String, ko: () => String, expectable: Expectable[T],
+                                           trace: List[StackTraceElement] = Nil, details: Details = NoDetails) extends MatchResult[T] {
   def okMessage = ok()
   def koMessage = ko()
 
   /** an exception having the same stacktrace */
   val exception = new Exception(koMessage)
 
-  override def toResult = Failure(koMessage, okMessage, exception.getStackTrace.toList, details)
-  override def toSimpleResult: Result = Failure(koMessage, okMessage, Nil, NoDetails)
+  override def toResult = Failure(koMessage, okMessage, trace, details)
 
   def negate: MatchResult[T] = MatchSuccess(koMessage, okMessage, expectable)
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
 
-  override def mute                               = MatchFailure.create("", "", expectable, details)
+  override def mute                               = copy(ok = () => "", ko = () => "")
   override def updateMessage(f: String => String) = copy(ok = () => f(okMessage), ko = () => f(koMessage))
   override def orThrow: MatchFailure[T]           = throw new FailureException(toResult)
   override def orSkip: MatchFailure[T]            = throw new SkipException(toResult)
 }
 object MatchFailure {
-  def create[T](ok: =>String, ko: =>String, expectable: Expectable[T], details: Details) =
-    new MatchFailure(() => ok, () => ko, expectable, details)
+  def create[T](ok: =>String, ko: =>String, expectable: Expectable[T], trace: List[StackTraceElement], details: Details): MatchFailure[T] =
+    new MatchFailure(() => ok, () => ko, expectable, trace, details)
 
-  def apply[T](ok: =>String, ko: =>String, expectable: Expectable[T]) =
-    new MatchFailure(() => ok, () => ko, expectable)
+  def create[T](ok: =>String, ko: =>String, expectable: Expectable[T], details: Details): MatchFailure[T] =
+    create(ok, ko, expectable, Nil, details)
+
+  def apply[T](ok: =>String, ko: =>String, expectable: Expectable[T]): MatchFailure[T] =
+    create(ok, ko, expectable, Nil, NoDetails)
 }
 
 case class MatchSkip[T] private[specs2](override val message: String, expectable: Expectable[T]) extends MatchResult[T] {
@@ -186,7 +186,7 @@ class AndMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T
   lazy val m2 = second
   override def evaluate[S >: T] = {
     m1 match {
-      case MatchFailure(_,_,_,_) => m1
+      case f: MatchFailure[_] => m1
       case _ =>
         (m1, m2) match {
           case (_, NeutralMatch(_))                              => new AndMatch(m1, MatchSkip("", expectable))
@@ -194,7 +194,7 @@ class AndMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T
           case (NotMatch(_), NotMatch(_))                        => new AndNotMatch(m1.evaluate, m2.evaluate)
           case (_, NotMatch(_))                                  => new AndNotMatch(m1, MatchSkip("", expectable))
           case (NotMatch(_), _)                                  => new AndMatch(m1.evaluate, m2).evaluate
-          case (MatchSuccess(_, _, _), MatchFailure(_, _, _, _)) => m2
+          case (s: MatchSuccess[_], f: MatchFailure[_])          => m2
           case (MatchSuccess(_, _, _), _)                        => m1
           case (_, MatchSuccess(_, _, _))                        => m2
           case (_, _)                                            => m1
@@ -225,13 +225,13 @@ class OrMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T]
       case MatchSuccess(_, _, _)             => new OrMatch(m1, MatchSkip("", expectable))
       case _ => {
         (m1, m2) match {
-          case (_, NeutralMatch(_))                                   => new OrMatch(m1, MatchSkip("", expectable))
-          case (NeutralMatch(_), _)                                   => new OrMatch(m2, MatchSkip("", expectable))
-          case (NotMatch(_), NotMatch(_))                             => new OrNotMatch(m1.evaluate, m2)
-          case (_, NotMatch(_))                                       => new OrNotMatch(m1, m2)
-          case (NotMatch(_), _)                                       => new OrMatch(m1.evaluate, m2).evaluate
-          case (_, MatchSuccess(_, _, _))                             => m2
-          case (MatchFailure(ok,ko,e,d), MatchFailure(ok2,ko2,e2,d2)) => MatchFailure.create(ok()+"; "+ok2(), ko()+"; "+ko2(), e, d)
+          case (_, NeutralMatch(_))                                        => new OrMatch(m1, MatchSkip("", expectable))
+          case (NeutralMatch(_), _)                                        => new OrMatch(m2, MatchSkip("", expectable))
+          case (NotMatch(_), NotMatch(_))                                  => new OrNotMatch(m1.evaluate, m2)
+          case (_, NotMatch(_))                                            => new OrNotMatch(m1, m2)
+          case (NotMatch(_), _)                                            => new OrMatch(m1.evaluate, m2).evaluate
+          case (_, MatchSuccess(_, _, _))                                  => m2
+          case (MatchFailure(ok,ko,e,t,d), MatchFailure(ok2,ko2,e2,t2,d2)) => MatchFailure.create(ok()+"; "+ok2(), ko()+"; "+ko2(), e, t, d)
           case (_, _) => m1
         }
       }
@@ -306,10 +306,6 @@ object MatchResult {
 
   implicit def matchResultAsResult[M[_] <: MatchResult[_], T]: AsResult[M[T]] = new AsResult[M[T]] {
     def asResult(t: =>M[T]): Result = AsResult(t.toResult)
-  }
-
-  def matchResultAsSimpleResult[M[_] <: MatchResult[_], T]: AsResult[M[T]] = new AsResult[M[T]] {
-    def asResult(t: =>M[T]): Result = AsResult(t.toSimpleResult)
   }
 
   /** implicit typeclass instance to create examples from a sequence of MatchResults */

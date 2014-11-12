@@ -51,7 +51,7 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
     private def find(json: Option[JSONType], queries: List[JsonQuery]): Result = {
       def checkRest(value: Any, rest: List[JsonQuery]) =
         (value, rest) match {
-          case (_, Nil)         => check(Expectable(anyValueToJsonType(value))).toSimpleResult
+          case (_, Nil)         => check(Expectable(anyValueToJsonType(value))).toResult
           case ((k, v), q :: _) =>
             if (q.selector.select(Map((k.notNull, v))).isDefined) Success()
             else                                                  Failure(s"found '${value.notNull}' but no value to select for ${q.name}")
@@ -62,8 +62,8 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
 
       (json, queries) match {
         case (None,    Nil)             => Success("ok")
-        case (Some(JSONArray(a)), Nil)  => check(Expectable(JsonType.array(a))).toSimpleResult
-        case (Some(JSONObject(o)), Nil) => check(Expectable(JsonType.map(o))).toSimpleResult
+        case (Some(JSONArray(a)), Nil)  => check(Expectable(JsonType.array(a))).toResult
+        case (Some(JSONObject(o)), Nil) => check(Expectable(JsonType.map(o))).toResult
         case (None,    q :: _)          => Failure(q.selector.name + " not found")
 
         /**
