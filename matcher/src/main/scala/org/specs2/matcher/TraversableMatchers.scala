@@ -341,10 +341,8 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
         case (true,  false) =>
           makeResult("at least",
             missingValues.isEmpty &&
-              (eachCheck && successes.size >= checks.size ||
-               !eachCheck && (seq.isEmpty && successes.size == 0 ||
-                 checks.nonEmpty && successes.size > 0 ||
-                 checks.isEmpty && successes.isEmpty)))
+            successes.size >= checks.size
+          )
 
         case (false, true)  =>
           makeResult("at most", failedValues.isEmpty && (!eachCheck || successes.size <= checks.size))

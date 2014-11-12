@@ -35,15 +35,19 @@ object BestMatching {
     // find the maximal matching
     val best = findMaximalMatching(0 until ts.size, (0 until vs.size).map(_ + ts.size), edges)
     val successfulIndices = best.map(_._1)
+    val successes =
+      if (!eachCheck) allResults.collect { case ((i, j), (t, v, r)) if best.exists(_._1 == i) && r.isSuccess => (t, v, r) }.toList
+      else best.sorted.map(allResults)
+
     // collect one failure per unmatched value
-    val successes = best.sorted.map(allResults)
     val failures = matches.collect { case (t, i, v, j, r) if !successfulIndices.contains(i) && !r.isSuccess =>
       (i, (t, v, r))
-    }.groupBy(_._1).mapValues(_.head._2).values.toList
+    }.groupBy(_._1).mapValues(_.reverse.head._2).values.toList
 
     def isUnchecked(j: Int) = {
       !best.exists(_._2 == j) && (eachCheck || !allResults.exists { case ((i, j1), (_, _, r)) => j1 == j && r.isSuccess })
     }
+
     val unchecked = vs.zipWithIndex.collect { case (v, j) if isUnchecked(j+ts.size)  => v }
 
     (successes ++ failures.reverse, unchecked)
