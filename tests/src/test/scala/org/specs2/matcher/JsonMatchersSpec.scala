@@ -82,7 +82,7 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
     /("name").andHave(name) and /("price").andHave(price)
 
    def haveProducts(products: Matcher[String]*): Matcher[String] =
-    /("products").andHave(eachOf(products:_*))
+    /("products").andHave(allOf(products:_*))
 
    json must haveProducts(
     aProductWith(name = "shirt", price = 10),

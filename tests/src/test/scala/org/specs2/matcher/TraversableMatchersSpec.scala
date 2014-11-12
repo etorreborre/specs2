@@ -48,7 +48,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Gro
    ${ Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(1), be_>=(2)).inOrder)                       }
    // this must be understood as allOf(2, 3)
    ${ Seq(1, 2, 3) must contain(2, 3) }
-   ${ Seq(1)       must contain(allOf(1, 1)) }
+   ${ Seq(1)       must contain(allOf(1, 1)) } $xtag
    ${ Seq(1)       must contain(allOf(List[Int]():_*)) }
    ${ Seq[Int]()   must contain(atMost(1)) }
    ${ (Seq(1)      must contain(eachOf(1, 1))) returns "List(1) is missing the value: 1" }
