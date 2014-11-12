@@ -260,7 +260,7 @@ class TextPrinterSpec extends Specification with DataTables with Tags { def is =
     def e9 = print(t1 ^ tableOk) must containMatch("\\+ a \\| b")
     def e10 = print(t1 ^ tableKo) must contain("x ")
     def e11 = print(t1 ^ br ^ tableOk) must contain(allOf(startWith("+ a | b"),
-                                                     startWith("  1 | 1")))
+                                                     startWith(" 1 | 1")))
     def e12 = print(t1 ^ br ^ tableKo) must contain(allOf(startWith("x "),
                                                      startWith("  | a | b |"),
                                                      startWith("x | 1 | 2 | '1' is not equal to '2'")))
