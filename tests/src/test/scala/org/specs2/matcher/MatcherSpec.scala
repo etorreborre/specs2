@@ -34,6 +34,7 @@ Implicit conversions
   + a matcher can be muted and will output no message
   + a matcher can be defined by a function returning a MatchResult
   + when a matcher is defined by a function returning a MatchResult, it must keep its failure details
+  + failure details can be collected when doing a forall check on a collection
 
 Collections
 ===========
@@ -122,6 +123,11 @@ Messages
     eg := {
       def beOneTwoThreeList: Matcher[List[Int]] = (list: List[Int]) => list must be_==(List(1, 2, 3))
       Matcher.details((List(1, 2) must beOneTwoThreeList).toResult) must_== FailureSeqDetails(List(1, 2, 3), List(1, 2))
+    }
+
+    eg := {
+      val result = forallWhen(List(1, 2)) { case i if i == 1 => List(1) must be_===(List(2)) }.toResult
+      Matcher.details(result) must_== FailureSeqDetails(List(2), List(1))
     }
 
   }
