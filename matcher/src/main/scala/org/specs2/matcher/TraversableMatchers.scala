@@ -341,8 +341,10 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
         case (true,  false) =>
           makeResult("at least",
             missingValues.isEmpty &&
-            successes.size >= checks.size
-          )
+              (eachCheck && successes.size >= checks.size ||
+               !eachCheck && (seq.isEmpty && successes.size == 0 ||
+                 checks.nonEmpty && successes.size > 0 ||
+                 checks.isEmpty && successes.isEmpty)))
 
         case (false, true)  =>
           makeResult("at most", failedValues.isEmpty && (!eachCheck || successes.size <= checks.size))
@@ -376,9 +378,12 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
         else             checkValuesInOrder(vs, checks, eachCheck, results :+ (v -> Seq(r)))
 
       case (v +: vs, cs @ (_ +: _)) =>
-        val (successes, failures) = cs.map(c => (c, c.check(v))).span(_._2.isSuccess)
-        if (successes.nonEmpty) checkValuesInOrder(vs, failures.map(_._1), eachCheck, results :+ (v -> successes.map(_._2)))
-        else                    checkValuesInOrder(vs, failures.map(_._1), eachCheck, results :+ (v -> failures.map(_._2)))
+        val checked = cs.map(c => (c, c.check(v)))
+        val (successes, failures) = checked.span(_._2.isSuccess)
+        val remainingChecks = checked.drop(successes.size).map(_._1)
+
+        if (successes.nonEmpty) checkValuesInOrder(vs, remainingChecks, eachCheck, results :+ (v -> successes.map(_._2)))
+        else                    checkValuesInOrder(vs, remainingChecks, eachCheck, results :+ (v -> failures.map(_._2)))
 
       case (v +: vs, nil) => (results :+ (v -> Seq(Failure("is unexpected", v.notNull))), checks)
       case _              => (results, checks)
