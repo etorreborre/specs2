@@ -234,11 +234,13 @@ case class ContainWithResult[T](check: ValueCheck[T], timesMin: Option[Times] = 
 
     failures.collect { case s: Skipped => MatchSkip(s.message, t) }.headOption.getOrElse {
       val (okMessage, koMessage) = messages(t.description, successes, failures)
+      val details: Details = failures.collect { case Failure(_,_,_,d) if d != NoDetails => d }.headOption.getOrElse(NoDetails)
+
       (timesMin, timesMax) match {
-        case (None,             None)             => Matcher.result(successes.size == seq.size,                     okMessage, koMessage, t)
-        case (Some(Times(min)), None)             => Matcher.result(successes.size >= min,                          okMessage, koMessage, t)
-        case (None,             Some(Times(max))) => Matcher.result(successes.size <= max,                          okMessage, koMessage, t)
-        case (Some(Times(min)), Some(Times(max))) => Matcher.result(successes.size >= min && successes.size <= max, okMessage, koMessage, t)
+        case (None,             None)             => Matcher.result(successes.size == seq.size,                     okMessage, koMessage, t, details)
+        case (Some(Times(min)), None)             => Matcher.result(successes.size >= min,                          okMessage, koMessage, t, details)
+        case (None,             Some(Times(max))) => Matcher.result(successes.size <= max,                          okMessage, koMessage, t, details)
+        case (Some(Times(min)), Some(Times(max))) => Matcher.result(successes.size >= min && successes.size <= max, okMessage, koMessage, t, details)
       }
     }
   }
@@ -274,7 +276,9 @@ case class ContainWithResult[T](check: ValueCheck[T], timesMin: Option[Times] = 
       else if (results.size <= 1) s"There is ${results.size} ${if (success) "success" else "failure"}"
       else                        s"There are ${results.size} ${if (success) "successes" else "failures"}"
 
-    def messages(results: Seq[Result]) = if (results.isEmpty) "" else results.map(_.message).mkString("\n", "\n", "\n")
+    def messages(results: Seq[Result]) =
+      if (results.isEmpty) ""
+      else                 results.map(_.message).mkString("\n", "\n", "\n")
 
     (elementsAre(successes, success = true) + messages(successes),
       elementsAre(failures, success = false) + messages(failures))
