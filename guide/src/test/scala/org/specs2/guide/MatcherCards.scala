@@ -2,7 +2,7 @@ package org.specs2
 package guide
 
 import form._
-import org.specs2.matcher.ScalaInterpreterMatchers
+import org.specs2.matcher.{JsonType, Matcher, ScalaInterpreterMatchers}
 import text.LinesContent
 import java.io.File
 import time.TimeConversions
@@ -447,11 +447,29 @@ person must /("p.*".r) */ ".*on".r /("age" -> (be_>(30) ^^ ((_:String).toInt)))
 
 }}
 
-Finally you can access some records by their index: ${snippet{
+You can also access some records by their index: ${snippet{
 
 person must /("person") /# 2 / "person"
 
 }}
+
+Finally you can use Json matchers to match elements in an array: ${snippet{
+val json = """{"products":[{"name":"shirt","price":10},{"name":"shoe","price":5}]}"""
+
+def aProductWith(name: Matcher[JsonType],  price: Matcher[JsonType]): Matcher[String] =
+  /("name").andHave(name) and /("price").andHave(price)
+
+def haveProducts(products: Matcher[String]*): Matcher[String] =
+  /("products").andHave(allOf(products:_*))
+
+json must haveProducts(
+  aProductWith(name = "shirt", price = 10),
+  aProductWith(name = "shoe", price = 5)
+)
+}}
+
+The `andHave` method accepts any `Matcher[JsonType]` where `JsonType` is either `JsonArray`, `JsonMap`, `JsonNumber`, `JsonString`, `JsonNull`. In the example above we pass directly `shirt` and `10` as `Matcher[JsonType]` because there are implicit conversions from `Int, `Double`, `String`, and `Traversable` matchers (like `allOf`) to a `Matcher[JsonType]`.
+
 """
   lazy val person = ""
 }

@@ -216,14 +216,17 @@ object JsonType {
     case other           => Matcher.result(false, s"$other is not an array", Expectable(other))
   }
 
-  implicit def JsonTypeMatcherInt(expected: Int): Matcher[JsonType] = (actual: JsonType) => actual match {
-    case JsonNumber(n) => (n.toDouble == expected.toDouble, s"$n is not equal to $expected")
-    case other         => (false, s"not a String: $other")
+  implicit def JsonTypeMatcherInt(expected: Int): Matcher[JsonType] =
+    JsonTypeMatcherDouble(expected.toDouble)
+
+  implicit def JsonTypeMatcherDouble(expected: Double): Matcher[JsonType] = (actual: JsonType) => actual match {
+    case JsonNumber(n) => (n == expected, s"$n is not equal to $expected")
+    case other         => (false, s"$other is not a String")
   }
 
   implicit def JsonTypeMatcherString(expected: String): Matcher[JsonType] = (actual: JsonType) => actual match {
     case JsonString(a) => (a == expected, s"$a is not equal to $expected")
-    case other         => (false, s"not a String: $other")
+    case other         => (false, s"$other is not a String")
   }
 
 
