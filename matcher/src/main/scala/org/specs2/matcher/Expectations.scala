@@ -25,9 +25,15 @@ trait ExpectationsCreation {
   def createExpectableWithShowAs[T](t: =>T, showAs: =>String): Expectable[T] = Expectable.createWithShowAs(t, showAs)
 
   /** this method can be overriden to throw exceptions when checking the match result */
-  protected def checkFailure[T](m: MatchResult[T]) = {
-    checkMatchResultFailure(mapMatchResult(m))
-    m
+  protected def checkFailure[T](m: MatchResult[T]): MatchResult[T] = {
+    checkMatchResultFailure(mapMatchResult(setStacktrace(m)))
+  }
+  /** this method can be avoid filling-in a stacktrace indicating the location of the result */
+  protected def setStacktrace[T](m: MatchResult[T]): MatchResult[T] = {
+    m match {
+      case f: MatchFailure[_] if f.trace.isEmpty => f.copy(trace = (new Exception).getStackTrace.toList)
+      case other => other
+    }
   }
   /** this method can be overriden to intercept a MatchResult and change its message before it is thrown */
   protected def mapMatchResult[T](m: MatchResult[T]): MatchResult[T] = m

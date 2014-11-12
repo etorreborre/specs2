@@ -17,7 +17,7 @@ import execute.FailureException
  *   trait ScalaTestExpectations extends ThrownExpectations {
  *     override protected def checkFailure[T](m: =>MatchResult[T]) = {
  *       m match {
- *         case f @ MatchFailure(ok, ko, _, _) => throw new TestFailedException(f.message, f.exception, 0)
+ *         case f @ MatchFailure(ok, ko, _, _, _) => throw new TestFailedException(f.message, f.exception, 0)
  *         case _ => ()
  *       }
  *       m
@@ -58,8 +58,8 @@ trait ThrownExpectationsCreation extends ExpectationsCreation with StandardResul
       }
     }
 
-  override protected def checkResultFailure(r: =>Result) = {
-    r match {
+  override protected def checkResultFailure(result: =>Result) = {
+    result match {
       case f @ Failure(_,_,_,_)      => throw new FailureException(f)
       case s @ Skipped(_,_)          => throw new SkipException(s)
       case s @ Pending(_)            => throw new PendingException(s)
@@ -67,7 +67,7 @@ trait ThrownExpectationsCreation extends ExpectationsCreation with StandardResul
       case d @ DecoratedResult(_, r) => if (!r.isSuccess) throw new DecoratedResultException(d) else ()
       case _                         => ()
     }
-    r
+    result
   }
   /** this method can be overriden to throw exceptions when checking the match result */
   override protected def checkMatchResultFailure[T](m: MatchResult[T]) = {

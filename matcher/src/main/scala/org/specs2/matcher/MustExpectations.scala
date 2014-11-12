@@ -27,6 +27,7 @@ private[specs2]
 trait MustExpectationsCreation extends ExpectationsCreation {
   protected def createMustExpectable[T](t: =>T) = new MustExpectable(() => t) {
     override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
+    override def checkResult(r: Result): Result = checkResultFailure(r)
   }
 }
 
