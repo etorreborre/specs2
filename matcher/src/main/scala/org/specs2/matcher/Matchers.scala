@@ -38,17 +38,17 @@ trait Matchers1 extends
 object Matchers extends Matchers
 
 trait MustMatchers extends Matchers with MustExpectations
-object MustMatchers extends MustMatchers
+object MustMatchers extends MustMatchers with NoMatchResultStackTrace
 
 private[specs2] trait MustMatchers1 extends Matchers1 with MustExpectations1
 private[specs2] trait MustThrownMatchers1 extends Matchers1 with MustThrownExpectations1
 
 trait ShouldMatchers extends Matchers with ShouldExpectations
-object ShouldMatchers extends ShouldMatchers
+object ShouldMatchers extends ShouldMatchers with NoMatchResultStackTrace
 
 trait MustThrownMatchers extends Matchers with MustThrownExpectations
-object MustThrownMatchers extends MustThrownMatchers
+object MustThrownMatchers extends MustThrownMatchers with NoMatchResultStackTrace
 
 trait ShouldThrownMatchers extends Matchers with ShouldThrownExpectations
-object ShouldThrownMatchers extends ShouldThrownMatchers
+object ShouldThrownMatchers extends ShouldThrownMatchers with NoMatchResultStackTrace
 
