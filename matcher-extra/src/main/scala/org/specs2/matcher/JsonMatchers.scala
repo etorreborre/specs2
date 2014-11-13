@@ -35,7 +35,7 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
   abstract class JsonMatcher extends Matcher[String] {
     def apply[S <: String](s: Expectable[S]) = {
       parse(s.value.notNull) match {
-        case None       => result(negated, "ok", "Could not parse\n" + s.value, s)
+        case None       => result(negated, "ok", "Could not parse\n" + s.value.notNull, s)
         case Some(json) => result(negateWhen(negated)(find(Some(json), queries.toList)), s)
       }
     }
@@ -46,8 +46,10 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
     protected def check: Matcher[JsonType]
 
     def anyValueToJsonType(value: Any): JsonType = value match {
+      case n if n == null => JsonNull
       case s: String      => JsonString(s)
       case d: Double      => JsonNumber(d)
+      case b: Boolean     => JsonBoolean(b)
       case (k: String, v) => JsonMap(Map(k -> v))
     }
 
@@ -182,6 +184,16 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
     def create(path: JsonQuery*)         = JsonSelectorMatcher(path)
     def create(check: Matcher[JsonType]) = JsonFinalMatcher(Nil, check)
   }
+
+  def beJsonNull: Matcher[JsonType] = new Matcher[JsonType] {
+    def apply[S <: JsonType](actual: Expectable[S]) = {
+      actual.value match {
+        case JsonNull => result(true, s"the value is null", s"the value is not null", actual)
+        case other    => result(false, s"$other is not a null value", s"$other is not a null value", actual)
+      }
+    }
+  }
+
 }
 
 /**
@@ -192,6 +204,7 @@ case class JsonArray(list: List[Any]) extends JsonType
 case class JsonMap(map: Map[String, Any]) extends JsonType
 case class JsonString(s: String) extends JsonType
 case class JsonNumber(d: Double) extends JsonType
+case class JsonBoolean(b: Boolean) extends JsonType
 case object JsonNull extends JsonType
 
 object JsonType {
@@ -208,17 +221,18 @@ object JsonType {
       case JsonMap(map)    => map.size
       case JsonString(_)   => 1
       case JsonNumber(_)   => 1
+      case JsonBoolean(_)  => 1
       case JsonNull        => 0
     }
   }
 
   implicit def JsonTypeMatcherGenTraversable(m: ContainWithResultSeq[String]): Matcher[JsonType] =  (actual: JsonType) => actual match {
-    case JsonArray(list) => m(Expectable(list.map(_.toString)))
+    case JsonArray(list) => m(Expectable(list.map(showJson)))
     case other           => Matcher.result(false, s"$other is not an array", Expectable(other))
   }
 
   implicit def JsonTypeMatcherGenTraversable(m: ContainWithResult[String]): Matcher[JsonType] =  (actual: JsonType) => actual match {
-    case JsonArray(list) => m(Expectable(list.map(_.toString)))
+    case JsonArray(list) => m(Expectable(list.map(showJson)))
     case other           => Matcher.result(false, s"$other is not an array", Expectable(other))
   }
 
@@ -227,11 +241,15 @@ object JsonType {
     case other         => (false, s"not a String: $other")
   }
 
+  implicit def JsonTypeMatcherBoolean(expected: Boolean): Matcher[JsonType] = (actual: JsonType) => actual match {
+    case JsonBoolean(b) => (b == expected, s"$b is not equal to $expected")
+    case other          => (false, s"$other is not a Boolean")
+  }
+
   implicit def JsonTypeMatcherString(expected: String): Matcher[JsonType] = (actual: JsonType) => actual match {
     case JsonString(a) => (a == expected, s"$a is not equal to $expected")
     case other         => (false, s"not a String: $other")
   }
-
 
 }
 
@@ -262,7 +280,7 @@ trait JsonSelectors {
   case class JsonRegexSelector(r: Regex) extends JsonValueSelector {
     def select(names: List[Any]) = names.find(_.notNull matches r.toString).map(_.notNull)
     def select(map: Map[String, Any]) = None
-    def name = s"'${r.toString}'"
+    def name = s"'$r'"
   }
   case class JsonMatcherSelector(m: Matcher[String]) extends JsonValueSelector {
     def select(names: List[Any])      = names.find(n => m(Expectable(n.notNull)).isSuccess)
