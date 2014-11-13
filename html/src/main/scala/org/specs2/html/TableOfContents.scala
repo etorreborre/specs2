@@ -9,6 +9,7 @@ import xml.Nodex._
 import Htmlx._
 import data.Trees._
 import scalaz._, Scalaz._
+import text.Trim._
 
 /**
  * This trait checks for the presence of a <toc/> tag at the beginning of a xml document and replaces it
@@ -41,7 +42,7 @@ trait TableOfContents {
   def createToc(pages: List[SpecHtmlPage]): NodeSeq = {
     val dependsOn = (p1: SpecHtmlPage, p2: SpecHtmlPage) => SpecStructure.dependsOn(p1.specification, p2.specification)
     def li(page: SpecHtmlPage) =
-      <li id={page.className}><a href={page.path.path}>{page.showWords}</a>
+      <li id={page.className}><a href={page.path.path} title={page.showWords}>{page.showWords.truncate(15)}</a>
         <ul>{page.createSubtoc}</ul>
       </li>
 

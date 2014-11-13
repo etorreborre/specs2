@@ -137,6 +137,10 @@ trait Trim {
     /** @return the string or empty if the condition is true */
     def unless(condition: Boolean) = if (condition) "" else s
 
+    /** truncate a string to a given number of characters and ellide the missing characters with ... */
+    def truncate(length: Int): String =
+      if (s.size > length) s.take(length - 3)+"..."
+      else s
   }
 
   implicit class offSettable(s: String) {

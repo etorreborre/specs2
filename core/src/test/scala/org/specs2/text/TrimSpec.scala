@@ -85,6 +85,9 @@ class TrimSpec extends Specification { def is = s2"""
           |world""".stripMargin
     }
 
+  Truncate a string
+  ${ "abcd".truncate(15) === "abcd" }
+  ${ "123456789012345678".truncate(15) === "123456789012..." }
 """
 
   def e1 = "<li><p>hello\ndear\nworld</p></li>".

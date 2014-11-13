@@ -13,6 +13,7 @@ import scalaz._, Scalaz._
 import Tree._
 import data.Trees._
 import xml.Nodex._
+import text.Trim._
 
 case class SpecHtmlPage(specification: SpecStructure, path: FilePath, content: String) {
 
@@ -38,10 +39,13 @@ case class SpecHtmlPage(specification: SpecStructure, path: FilePath, content: S
         if (h.isRoot)
         // 'id' is the name of the attribute expected by jstree to "open" the tree on a specific node
           s.reduceNodes.updateHeadAttribute("id", path.name.name)
-        else
-          <li id={h.specId.toString}><a href={path.path}>{h.name}</a>
+        else if (h.level > 1)
+          <li id={h.specId.toString}><a href={path.path} title={h.name}>{h.name.truncate(15)}</a>
             { <ul>{s.toSeq}</ul> unless s.toSeq.isEmpty }
           </li>
+        else
+          <ul>{s.toSeq}</ul> unless s.toSeq.isEmpty
+
       }.rootLabel
 
     {items}
