@@ -2,7 +2,8 @@ Maintenance version.
 
 ## Improvements
 
- * it is possible to use `Int`, `String` and `Traversable` matchers with JsonMatchers [#306](https://github.com/etorreborre/specs2/issues/306)
+ * it is possible to use `Int`, `Boolean`, `String` and `Traversable` matchers with JsonMatchers [#306](https://github.com/etorreborre/specs2/issues/306) and [#307](https://github.com/etorreborre/specs2/issues/307)
+
  * moved the setting of stacktraces on match results to the Expectations to a method. This means that now the `MustMatchers` *object* can be used outside `specs2` without filling-in stacktraces (which impacts performances). On the other hand, when you mix  `MustMatchers` *trait*, `MatchResults` will get a location (by generating a stacktrace). This behaviour can be deactivated by mixing-in the `org.specs2.matcher.NoExpectationStackTrace` trait
 
 ## Fixes
