@@ -151,11 +151,11 @@ trait CheckProperty {
 
   private [matcher] def counterExample(args: List[Arg[_]]) = {
     if (args.size == 1)
-      args.map(a => if (a.arg == null) "null" else a.arg.toString).mkString("'", "", "'")
-    else if (args.exists(_.arg.toString.isEmpty))
-      args.map(_.arg).mkString("['", "', '", "']")
+      args.map(a => a.arg.notNull).mkString("'", "", "'")
+    else if (args.exists(_.arg.notNull.isEmpty))
+      args.map(_.arg.notNull).mkString("['", "', '", "']")
     else
-      args.map(_.arg).mkString("[", ", ", "]")
+      args.map(_.arg.notNull).mkString("[", ", ", "]")
   }
   private [matcher] def failedLabels(labels: Set[String]) = {
     if (labels.isEmpty)  ""  
