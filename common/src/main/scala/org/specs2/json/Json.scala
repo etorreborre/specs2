@@ -91,6 +91,15 @@ trait Json {
     case other           => None
   }
 
+  /** show JSON objects with null values shown as 'null' */
+  def showJson(a: Any): String = a match {
+    case JSONObject(map) => map.map { case (key, value) => s""""$key":${showJson(value)}"""}.mkString("{", ",", "}")
+    case JSONArray(list) => list.map(showJson).mkString("[", ",", "]")
+    case null            => "null"
+    case s: String       => s""""$s""""
+    case other           => other.toString
+  }
+
   /**
    * generic collect operation to iterate through the JSON tree and get values and objects
    */

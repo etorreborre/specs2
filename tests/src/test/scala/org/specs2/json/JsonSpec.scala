@@ -6,6 +6,8 @@ import matcher._
 import util.parsing.json._
 import org.scalacheck._
 import JsonGen._
+import Json._
+import text.NotNullStrings._
 
 class JsonSpec extends Specification with ScalaCheck {
 
@@ -29,13 +31,17 @@ class JsonSpec extends Specification with ScalaCheck {
 
   "FindDeep methods".newp
   "The findDeep method returns Some(value) if a key is present somewhere in a document and points to a JSON object" ! prop { (json: JSONType) =>
-    Json.findDeep("a", json) must beSome.iff(json.toString.contains(""""a" : """))
+    Json.findDeep("a", json) must beSome.when(showJson(json).contains(""""a" : """))
   }
   "The findDeep method can use a Regex to find a key" ! prop { (json: JSONType) =>
-    Json.findDeep("(?i)A".r, json) must beSome.iff(json.toString.contains(""""a" : """))
+    Json.findDeep("(?i)A".r, json) must beSome.when(showJson(json).contains(""""a" : """))
   }
   "The parser must be threadsafe" >> prop { i: Int =>
     (1 to 100).par.map(j => Json.parse("hello world")) must not(throwAn[Exception])
+  }
+
+  "showJson must be robust against null values" >> prop { (json: JSONType) =>
+    parse(showJson(json)) must beSome
   }
 
   implicit lazy val jsonParams: Parameters = set(maxSize = 3)
@@ -77,6 +83,6 @@ trait JsonGen {
   def keys(n: Int) = listOfN(n, oneOf("a", "b", "c"))
   def values(n: Int, depth: Int) = listOfN(n, value(depth))
   def value(depth: Int) = if (depth == 0) terminalType else oneOf(jsonType(depth - 1), terminalType)
-  def terminalType = oneOf(1, 2, "m", "n", "o")
+  def terminalType = oneOf(1, 2, "m", "n", "o", null)
 }
 object JsonGen extends JsonGen
