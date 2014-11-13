@@ -24,6 +24,14 @@ trait Json {
     parser.parseRaw(s).orElse(if (s.contains("'")) parser.parseRaw(s.replace("'", "\"")) else None)
   }
 
+  /** show JSON objects with null values shown as 'null' */
+  def showJson(a: Any): String = a match {
+    case JSONObject(map) => map.map { case (key, value) => s""""$key":${showJson(value)}"""}.mkString("{", ",", "}")
+    case JSONArray(list) => list.map(showJson).mkString("[", ",", "]")
+    case null            => "null"
+    case s: String       => s""""$s""""
+    case other           => other.toString
+  }
 }
 private[specs2]
 object Json extends Json
