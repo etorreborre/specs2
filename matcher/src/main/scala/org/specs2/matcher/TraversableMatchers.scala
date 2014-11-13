@@ -312,10 +312,15 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
       val order = if (checkOrder) " in order" else ""
       if (equalChecks) {
         val missingValues = remainingChecks.collect(expectedValue).flatten
+        val addedValues   = seq.diff(successes.map(_._1))
         val failedValues  = failures.map(_._1)
         if (failedValues.isEmpty)
-          if (missingValues.isEmpty)
-            Matcher.result(success, s"${t.description} contains all expected values", t)
+          if (missingValues.isEmpty){
+            if (addedValues.isEmpty)
+              Matcher.result(success, s"${t.description} contains all expected values", t)
+            else
+              Matcher.result(success, s"${t.description} contains ${addedValues.mkString(",")}", t)
+          }
           else {
             if (eachCheck && seq.exists(missingValues.contains))
               Matcher.result(success, s"${t.description} is missing the ${"value".plural(missingValues)}: ${missingValues.mkString(", ")}", t)
@@ -356,13 +361,13 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
         case (true,  false) =>
           makeResult("at least",
             missingValues.isEmpty &&
-              (eachCheck && successes.size >= checks.size ||
+              (eachCheck  ||
                !eachCheck && (seq.isEmpty && successes.size == 0 ||
-                 checks.nonEmpty && successes.size > 0 ||
+                 checks.nonEmpty && results.map(_._2).flatten.count(_.isSuccess) >= checks.size ||
                  checks.isEmpty && successes.isEmpty)))
 
         case (false, true)  =>
-          makeResult("at most", failedValues.isEmpty && (!eachCheck || successes.size <= checks.size))
+          makeResult("at most", failedValues.isEmpty && (!eachCheck || successes.size <= checks.size && successes.size >= seq.size))
 
         case (true,  true)  =>
           makeResult("exactly", successes.size == checks.size && checks.size == seq.size)
