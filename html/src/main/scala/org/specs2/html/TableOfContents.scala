@@ -41,6 +41,7 @@ trait TableOfContents {
 
   def createToc(pages: List[SpecHtmlPage]): NodeSeq = {
     val dependsOn = (p1: SpecHtmlPage, p2: SpecHtmlPage) => SpecStructure.dependsOn(p1.specification, p2.specification)
+
     def li(page: SpecHtmlPage) =
       <li id={page.className}><a href={page.path.path} title={page.showWords}>{page.showWords.truncate(15)}</a>
         <ul>{page.createSubtoc}</ul>
@@ -53,7 +54,7 @@ trait TableOfContents {
         val highLevelItems: NodeSeq =
         <ul>
           {li(main)}
-          {dependents.map(li).reduceNodes}
+          {dependents.sortBy(linkIndexIn(main.specification.specificationLinks)).map(li).reduceNodes}
           <li><a>Others</a>
             <ul>{others.map(li).reduceNodes}</ul>
           </li>
@@ -66,6 +67,12 @@ trait TableOfContents {
         result
     }
   }
+
+  /** @return the index of a linked specification in 'main' */
+  def linkIndexIn(s1Links: Seq[SpecificationLink]): SpecHtmlPage => Int = { s2: SpecHtmlPage =>
+    s1Links.map(_.specClassName).indexOf(s2.className)
+  }
+
 
   def saveHtmlPages(pages: List[SpecHtmlPage], fileSystem: FileSystem): Action[Unit] =
     pages.map(page => fileSystem.writeFile(page.path, page.content)).sequenceU.void

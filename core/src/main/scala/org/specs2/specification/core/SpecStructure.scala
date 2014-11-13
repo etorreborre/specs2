@@ -36,6 +36,8 @@ case class SpecStructure(header: SpecHeader, arguments: Arguments, lazyFragments
 
   def texts = fragments.texts
   def examples = fragments.examples
+  def links = fragments.links
+  def specificationLinks = fragments.specificationLinks
 }
 
 /**

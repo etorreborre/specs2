@@ -3,8 +3,9 @@ package html
 
 import TableOfContents._
 import io._
-import scala.xml.NodeSeq
 import specification._
+import core.SpecStructure
+import scala.xml.NodeSeq
 import matcher.XmlMatchers
 
 class TableOfContentsSpec extends script.Specification with HtmlDocuments with Grouped with XmlMatchers { def is = s2"""
@@ -19,7 +20,6 @@ class TableOfContentsSpec extends script.Specification with HtmlDocuments with G
         + the header text as text
         + an url+anchor referencing the header name
         + an id attribute with the spec id. the id attribute is expected by jstree
-    + injects sub-table of contents where there are <subtoc/> tags in the original document
                                                                                                   """
 
   "toc" - new g1 {
@@ -29,17 +29,13 @@ class TableOfContentsSpec extends script.Specification with HtmlDocuments with G
     //      <ul><li><a href="http://specs2.org/#a+header_123456">a header</a></li>
     //      </ul>
     //    </li>
-    e2 := addToc(aBodyWithHeaders) must \\ ("li") \ ("a") \> "title"
-    e3 := addToc(aBodyWithHeaders) must \\ ("li") \ ("a", "href" -> "UserGuide.html#title.*")
+    e2 := addToc(aBodyWithHeaders) must \\ ("li") \ ("a") \> "Table of con..."
+    e3 := addToc(aBodyWithHeaders) must \\ ("li") \ ("a", "href" -> "guide/UserGuide.html")
     e4 := addToc(aBodyWithHeaders) must \\ ("li", "id")
-    e5 := {
-      val subtoc = <a href="http://specs2.org/#other" />
-      addToc(aBodyWithHeadersAndASubtoc, Map(SpecId("123") -> subtoc)) must \\ ("li") \\ ("a", "href" -> "http://specs2.org/#other")
-    }
 
   }
 
   def addToc(body: NodeSeq, subtocs: Map[SpecId, NodeSeq] = Map()) =
-    tocItemList(body, DirectoryPath.unsafe("guide"), "guide/UserGuide.html", SpecId("specName"), subtocs)
+    createToc(List(SpecHtmlPage(SpecStructure.empty(getClass), "guide" | "UserGuide.html", body.toString)))
 
 }

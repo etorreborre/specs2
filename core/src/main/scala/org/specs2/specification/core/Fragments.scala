@@ -49,10 +49,16 @@ case class Fragments(contents: Process[Task, Fragment]) {
   def fragments: IndexedSeq[Fragment] = contents.runLog.run
 
   /** run the process to get all texts */
-  def texts                           = fragments.filter(isText)
+  def texts = fragments.filter(isText)
 
   /** run the process to get all examples */
-  def examples                        = fragments.filter(isExample)
+  def examples = fragments.filter(isExample)
+
+  /** run the process to get all links */
+  def links = fragments.filter(isLink)
+
+  /** run the process to get all specification links */
+  def specificationLinks = fragments.collect(specificationLink)
 
   /** strip the margin of all examples */
   def stripMargin: Fragments = stripMargin('|')
