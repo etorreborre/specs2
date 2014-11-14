@@ -117,6 +117,7 @@ STUBS
  ============================
 
  + Answers can be created to control the returned a value
+ + Answers can use the method's parameters passed as an array
  + Answers can use the mock instance as the second parameter
  + Answers can use the mock instance, even when the method has 0 parameters
 
@@ -418,10 +419,17 @@ STUBS
       list.get(anyInt) answers { i => "The parameter is " + i.toString}
       list.get(2) must_== "The parameter is 2"
     }
+
+    eg := {
+      list.set(anyInt, anyString) answers { i => "The parameters are " + (i.asInstanceOf[Array[_]].mkString("(",",",")")) }
+      list.set(1,"foo") must_== "The parameters are (1,foo)"
+    }
+
     eg := {
       list.get(anyInt) answers { (i, m) => "The parameters are " + (i.asInstanceOf[Array[_]].mkString -> m)}
       list.get(1) must_== "The parameters are (1,list)"
     }
+
     eg := {
       list.size answers { m => m.toString.size}
       list.size must_== 4
