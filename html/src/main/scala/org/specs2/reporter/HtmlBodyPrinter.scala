@@ -131,17 +131,32 @@ trait HtmlBodyPrinter {
       case FailureDetails(expected, actual) if arguments.diffs.show(expected, actual) =>
         <details class="failure">"\nExpected:\n"{expected}"\nActual:\n"{actual}</details>
 
-      case FailureSeqDetails(expected, actual) if arguments.diffs.show(expected, actual, ordered = true) =>
-        val (missing, added) = arguments.diffs.showDiffs(expected, actual, ordered = true)
-        <details class="failure">{"\n" + missing + "\n" + added}</details>
+      case FailureSeqDetails(expected, actual) if arguments.diffs.showSeq(expected, actual, ordered = true) =>
+        val (added, missing) = arguments.diffs.showSeqDiffs(actual, expected, ordered = true)
+        val addedValues   = makeDifferencesMessage("Added", added)
+        val missingValues = makeDifferencesMessage("Missing", missing)
+        val details = List(addedValues, missingValues).mkString("\n")
 
-      case FailureUnorderedSeqDetails(expected, actual, missing, added) if arguments.diffs.show(expected, actual, ordered = false) =>
-        val missingValues = if (missing.nonEmpty) "\n\nMissing values"+missing.map(notNullPair).mkString("\n", "\n", "\n") else ""
-        val addedValues   = if (added.nonEmpty)   "\nAdditional values"+added.map(notNullPair).mkString("\n", "\n", "\n\n") else ""
-        val details = missingValues+"\n"+addedValues
+        <details class="failure">{"\n" + added + "\n" + missing}</details>
+
+      case FailureSetDetails(expected, actual) if arguments.diffs.showSeq(expected.toSeq, actual.toSeq, ordered = false) =>
+        val (added, missing) = arguments.diffs.showSeqDiffs(actual.toSeq, expected.toSeq, ordered = true)
+        val addedValues   = makeDifferencesMessage("Added", added.toSeq)
+        val missingValues = makeDifferencesMessage("Missing", missing.toSeq)
+        val details = List(addedValues, missingValues).mkString("\n")
+
         <details class="failure">{details}</details>
 
-      case other => NodeSeq.Empty
+      case FailureMapDetails(expected, actual) if arguments.diffs.showMap(actual, expected)=>
+        val (added, missing, different) = arguments.diffs.showMapDiffs(actual, expected)
+        val addedValues   = makeDifferencesMessage("Added", added)
+        val missingValues = makeDifferencesMessage("Missing", missing)
+        val differentValues = makeDifferencesMessage("Different", different)
+        val details = List(addedValues, missingValues, differentValues).mkString("\n")
+
+        <details class="failure">{details}</details>
+
+      case NoDetails | FromJUnitAssertionError | FromNotImplementedError => NodeSeq.Empty
     }
 
     val fullMessage =
@@ -165,6 +180,12 @@ trait HtmlBodyPrinter {
       {showStacktrace(id(er), er.stackTrace, "error", arguments)}
     </li>
   }
+
+  /**
+   * differences message
+   */
+  def makeDifferencesMessage(description: String, values: Seq[Any]): String =
+    if (values.nonEmpty) s"\n$description (${values.size})  ${values.map(notNullPair).mkString("\n", "\n", "\n")}" else ""
 
   def printStatistics(title: String, stats: Stats, options: HtmlOptions) =
     if (options.noStats) ""

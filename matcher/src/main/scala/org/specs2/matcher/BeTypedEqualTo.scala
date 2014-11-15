@@ -44,8 +44,8 @@ class BeTypedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1
     val (actual, expected) = (b.value, t)
 
     (actual, expected) match {
-      case (e1: Map[_,_], e2: Map[_,_]) => unorderedSeqEquality(e1.toSeq, e2.toSeq, b, expected)
-      case (e1: Set[_],   e2: Set[_])   => unorderedSeqEquality(e1.toSeq, e2.toSeq, b, expected)
+      case (e1: Map[_,_], e2: Map[_,_]) => mapEquality(e1, e2, b, expected)
+      case (e1: Set[_],   e2: Set[_])   => setEquality(e1, e2, b, expected)
       case (e1: Array[_], e2: Array[_]) => arrayEquality(e1, e2, b, expected)
 
       case (e1: GenTraversableOnce[_], e2: GenTraversableOnce[_]) if foreachIsDefined(e2) =>
@@ -53,40 +53,52 @@ class BeTypedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1
       case (e1: GenTraversableOnce[_], e2: GenTraversableOnce[_]) =>
         untraversableEquality(e1, b, expected)
 
-      case other                                                  => otherEquality(expected, b)
+      case other => otherEquality(expected, b)
     }
   }
 
-  private def unorderedSeqEquality[S <: T](actual: Seq[Any], expected: Seq[Any], expectable: Expectable[S], expectedValue: Any): MatchResult[S] = {
-    val (matched, added) = BestMatching.findBestMatch(actual, expected, (t: Any, v: Any) => v == t, eachCheck = true)(AsResult.booleanAsResult)
-    val (_, koValues)    = matched.partition(_._3.isSuccess)
-    val missing          = koValues.map(_._1)
-    val isEqual          = added.isEmpty && missing.isEmpty
-
+  private def mapEquality[S <: T](actual: Map[_,_], expected: Map[_,_], expectable: Expectable[S], expectedValue: Any): MatchResult[S] = {
+    val isEqual = actual == expected
     val (qa, db) = describe(expectedValue, expectable, isEqual)
 
-    result(isEqual, ok(print(qa, " is equal to ", db)), ko(print(qa, " is not equal to ", db)), expectable, FailureUnorderedSeqDetails(expected, actual, missing, added))
+    result(isEqual,
+      ok(print(qa, " is equal to ", db)),
+      ko(print(qa, " is not equal to ", db)), expectable, FailureMapDetails(actual.toMap[Any, Any], expected.toMap[Any, Any]))
+  }
+
+  private def setEquality[S <: T](actual: Set[_], expected: Set[_], expectable: Expectable[S], expectedValue: Any): MatchResult[S] = {
+    val isEqual = actual == expected
+    val (qa, db) = describe(expectedValue, expectable, isEqual)
+
+    result(isEqual,
+      ok(print(qa, " is equal to ", db)),
+      ko(print(qa, " is not equal to ", db)), expectable, FailureSetDetails(actual.toSet[Any], expected.toSet[Any]))
   }
 
   private def arrayEquality[S <: T](actual: Array[_], expected: Array[_], expectable: Expectable[S], expectedValue: Any): MatchResult[S] = {
     val isEqual = actual.deep == expected.deep
     val (qa, db) = describe(expected, expectable, isEqual)
 
-    result(isEqual, ok(print(qa, " is equal to ", db)), ko(print(qa, " is not equal to ", db)), expectable, FailureSeqDetails(expected.toSeq, actual.toSeq))
+    result(isEqual,
+      ok(print(qa, " is equal to ", db)),
+      ko(print(qa, " is not equal to ", db)), expectable, FailureSeqDetails(actual.toSeq, expected.toSeq))
   }
 
-  private def traversableEquality[S <: T](actualSeq: Seq[Any], expectedSeq: Seq[Any], expectable: Expectable[S], expectedValue: Any): MatchResult[S] = {
-    val isEqual = actualSeq == expectedSeq
+  private def traversableEquality[S <: T](actual: Seq[Any], expected: Seq[Any], expectable: Expectable[S], expectedValue: Any): MatchResult[S] = {
+    val isEqual = actual == expected
     val (qa, db) = describe(expectedValue, expectable, isEqual)
 
-    result(isEqual, ok(print(qa, " is equal to ", db)), ko(print(qa, " is not equal to ", db)), expectable, FailureSeqDetails(expectedSeq, actualSeq))
+    result(isEqual,
+      ok(print(qa, " is equal to ", db)),
+      ko(print(qa, " is not equal to ", db)), expectable, FailureSeqDetails(actual, expected))
   }
 
   private def untraversableEquality[S <: T](actualSeq: GenTraversableOnce[_], expectable: Expectable[S], expectedValue: Any): MatchResult[S] = {
     val isEqual = actualSeq == expectedValue
     val (qa, db) = describe(expectedValue, expectable, isEqual)
 
-    result(isEqual, ok(print(qa, " is equal to ", db)), ko(print(qa, " is not equal to ", db)), expectable)
+    result(isEqual,
+      ok(print(qa, " is equal to ", db)), ko(print(qa, " is not equal to ", db)), expectable)
   }
 
   /** @return true if foreach is not defined on a collection */

@@ -13,7 +13,7 @@ import execute._
 trait JUnitExpectations extends ThrownExpectations {
   override protected def checkFailure[T](m: MatchResult[T]) = {
     m match {
-      case f @ MatchFailure(ok, ko, _, _, FailureDetails(expected, actual)) => throw new ComparisonFailure(ko(), expected, actual) {
+      case f @ MatchFailure(ok, ko, _, _, FailureDetails(actual, expected)) => throw new ComparisonFailure(ko(), expected, actual) {
         override def getStackTrace = f.exception.getStackTrace
         override def getCause = f.exception.getCause
         override def printStackTrace = f.exception.printStackTrace

@@ -78,7 +78,7 @@ trait Matcher[-T] { outer =>
   protected def result[S <: T](other: MatchResult[_], value: Expectable[S]): MatchResult[S] = {
     other match {
       case MatchSuccess(ok, ko, _)                                      => Matcher.result(true,  ok(), ko(), value)
-      case MatchFailure(ok, ko, _, _, FailureDetails(expected, actual)) => Matcher.result(false, ok(), ko(), value, expected, actual)
+      case MatchFailure(ok, ko, _, _, FailureDetails(actual, expected)) => Matcher.result(false, ok(), ko(), value, expected, actual)
       case MatchFailure(ok, ko, _, _, _)                                => Matcher.result(false, ok(), ko(), value)
       case _                                                            => Matcher.result(other.isSuccess, other.message, value)
     }
@@ -255,7 +255,7 @@ object Matcher {
 
   /** @return a MatchResult[T] from a condition, 2 messages and expected/actual values */
   def result[T](test: Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T], expected: String, actual: String): MatchResult[T] =
-    result(test, okMessage, koMessage, value, FailureDetails(expected, actual))
+    result(test, okMessage, koMessage, value, FailureDetails(actual, expected))
 
   /** @return a MatchResult[T] from a result */
   def result[T](r: Result, value: Expectable[T]): MatchResult[T] =

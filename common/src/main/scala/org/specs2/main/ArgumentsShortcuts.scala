@@ -79,13 +79,11 @@ trait ArgumentsShortcuts { this: ArgumentsCreation =>
   /**
    * shortcut to display the differences with some specific parameters
    */
-  def diffs(show: Boolean      = true,
-            separators: String = "[]",
-            triggerSize: Int   = 20,
-            diffRatio: Int     = 30,
-            shortenSize: Int   = 5,
-            full: Boolean      = false): Arguments =
-    args.report(diffs = ArgProperty(SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full)))
+  def diffs(show: Boolean = true, separators: String = "[]",
+            triggerSize: Int = 20, diffRatio: Int = 30, shortenSize: Int = 5,
+            full: Boolean = false,
+             seqTriggerSize: Int = 0, seqMaxSize: Int = 1000000): Arguments =
+    args.report(diffs = ArgProperty(SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full, seqTriggerSize, seqMaxSize)))
   /**
    * shortcut to create a stackTrace filter to include only some elements
    */

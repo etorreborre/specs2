@@ -166,6 +166,7 @@ trait TextPrinter extends Printer {
 
     if (reason.trim.nonEmpty) emit(show+" "+reason).info
     else                      emit(show).info
+
   }
 
   def printSkipped(show: String, skipped: execute.Skipped, args: Arguments) = {
@@ -223,22 +224,46 @@ trait TextPrinter extends Printer {
       } else emitNone) fby
       emit("").info
 
-    case details @ FailureSeqDetails(expected, actual) if args.diffs.show(expected, actual, ordered = true) =>
-      val (missing, added) = args.diffs.showDiffs(expected, actual, ordered = true)
-      (if (missing.nonEmpty) emit(missing).failure else emitNone) fby
-      (if (added.nonEmpty)   emit(added).failure else emitNone) fby
-      emit("").info
+    case details @ FailureSeqDetails(actual, expected) if args.diffs.showSeq(actual, expected, ordered = true) =>
+      val (added, missing) = args.diffs.showSeqDiffs(actual, expected, ordered = true)
 
-    case details @ FailureUnorderedSeqDetails(expected, actual, missing, added) if args.diffs.show(expected, actual, ordered = false) =>
-      val missingValues = if (missing.nonEmpty) "\n\nMissing values"+missing.map(notNullPair).mkString("\n", "\n", "\n") else ""
-      val addedValues   = if (added.nonEmpty)   "\nAdditional values"+added.map(notNullPair).mkString("\n", "\n", "\n\n") else ""
+      printNewLine fby
+      printValues("Added", added) fby printNewLine fby
+      printValues("Missing", missing) fby printNewLine fby
+      printSummary(("Added", added), ("Missing", missing))
 
-      (if (missing.nonEmpty) emit(missingValues).failure else emitNone) fby
-      (if (added.nonEmpty)   emit(addedValues).failure else emitNone) fby
-      emit("").info
+
+    case details @ FailureSetDetails(actual, expected) if args.diffs.showSeq(actual.toSeq, expected.toSeq, ordered = false) =>
+      val (added, missing) = args.diffs.showSeqDiffs(actual.toSeq, expected.toSeq, ordered = false)
+      printNewLine fby
+      printValues("Added", added) fby printNewLine fby
+      printValues("Missing", missing) fby printNewLine fby
+      printSummary(("Added", added), ("Missing", missing))
+
+    case details @ FailureMapDetails(actual, expected) if args.diffs.showMap(actual, expected) =>
+      val (added, missing, different) = args.diffs.showMapDiffs(actual, expected)
+      printNewLine fby
+      printValues("Added", added) fby printNewLine fby
+      printValues("Missing", missing); printNewLine fby
+      printValues("Different", different) fby printNewLine fby
+      printSummary(("Added", added), ("Missing", missing), ("Different", different))
 
     case _ => emitNone
   }
+
+  def printNewLine =
+    emit("").info
+
+  /** show values as a string with a description */
+  def printValues(description: String, values: Seq[Any]) =
+    if (values.nonEmpty) emit(s"$description (${values.size})${values.map(notNullPair).mkString("\n", "\n", "\n\n")}").failure
+    else emitNone
+
+  /** print a short summary of differences between Seqs, Sets or Maps */
+  def printSummary(descriptions: (String, Seq[String])*) =
+    if (descriptions.flatMap(_._2).mkString("\n").split("\n").size >= 50)
+      emit(descriptions.map { case (name, values) => s"$name = ${values.size}" }.mkString(", ")).failure
+    else emitNone
 
   def location(r: ResultStackTrace, args: Arguments) = " ("+r.location(args.traceFilter)+")" unless r.location.isEmpty
 
