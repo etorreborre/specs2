@@ -1,6 +1,8 @@
 package org.specs2
 package matcher
 
+import execute.Result
+
 
 /**
  * This trait adds some implicits to create expectations with the `===` sign
@@ -10,16 +12,24 @@ trait CanBeEqual { this: Expectations =>
    * A value can be tested against another with the === operator.
    * It is equivalent to writing a must_== b
    */
-  implicit def canBeEqual[T](t: =>T) = new CanBeEqualExpectation(t)
+  implicit def canBeEqual[T](t: =>T): CanBeEqualExpectation[T] = new CanBeEqualExpectation(t)
+  
   class CanBeEqualExpectation[T](t: =>T) {
     /** equality matcher on Expectables */
-    def ===[S >: T](other: =>S) = createExpectable(t).applyMatcher(new BeEqualTo(other))
+    def ===[S >: T](other: =>S): MatchResult[S] =
+      createExpectable(t).applyMatcher(new BeEqualTo(other))
+
     /** ! equality matcher on Expectables */
-    def !==[S >: T](other: =>S) = createExpectable(t).applyMatcher(new BeEqualTo(other).not)
+    def !==[S >: T](other: =>S): MatchResult[S] =
+      checkFailure(createExpectable(t).applyMatcher(new BeEqualTo(other).not))
+
     /** typed equality matcher on Expectables */
-    def ====(other: =>T) = createExpectable(t).applyMatcher(new BeTypedEqualTo(other))
+    def ====(other: =>T): MatchResult[T] =
+      checkFailure(createExpectable(t).applyMatcher(new BeTypedEqualTo(other)))
+
     /** ! typed equality matcher on Expectables */
-    def !===(other: =>T) = createExpectable(t).applyMatcher(new BeTypedEqualTo(other).not)
+    def !===(other: =>T): MatchResult[T] =
+      checkFailure(createExpectable(t).applyMatcher(new BeTypedEqualTo(other).not))
   }
 }
 

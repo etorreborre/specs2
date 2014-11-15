@@ -36,9 +36,17 @@ trait Expectations extends CanBeEqual with MatchResultStackTrace {
   /** @return an Expectable with a description function */
   def createExpectable[T](t: =>T, alias: String => String): Expectable[T] = createExpectable(t, Some(alias))
   /** @return an Expectable with a description function */
-  def createExpectable[T](t: =>T, alias: Option[String => String]): Expectable[T] = Expectable(t, alias)
+  def createExpectable[T](t: =>T, alias: Option[String => String]): Expectable[T] = new Expectable(() => t) {
+    override val desc: Option[String => String] = alias
+    override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
+    override def checkResult(r: Result): Result = checkResultFailure(r)
+  }
   /** @return an Expectable with a function to show the element T */
-  def createExpectableWithShowAs[T](t: =>T, showAs: =>String): Expectable[T] = Expectable.createWithShowAs(t, showAs)
+  def createExpectableWithShowAs[T](t: =>T, showAs: =>String): Expectable[T] = new Expectable(() => t) {
+    override val showValueAs: Option[() => String] = Some(() => showAs)
+    override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
+    override def checkResult(r: Result): Result = checkResultFailure(r)
+  }
 
   /** this method can be overridden to throw exceptions when checking the match result */
   protected def checkFailure[T](m: MatchResult[T]): MatchResult[T] = {
