@@ -123,12 +123,12 @@ Messages
 
     eg := {
       def beOneTwoThreeList: Matcher[List[Int]] = (list: List[Int]) => list must be_==(List(1, 2, 3))
-      Matcher.details((List(1, 2) must beOneTwoThreeList).toResult) must_== FailureSeqDetails(List(1, 2, 3), List(1, 2))
+      Matcher.details((List(1, 2) must beOneTwoThreeList).toResult) must_== FailureSeqDetails(List(1, 2), List(1, 2, 3))
     }
 
     eg := {
       val result = forallWhen(List(1, 2)) { case i if i == 1 => List(1) must be_===(List(2)) }.toResult
-      Matcher.details(result) must_== FailureSeqDetails(List(2), List(1))
+      Matcher.details(result) must_== FailureSeqDetails(List(1), List(2))
     }
 
   }

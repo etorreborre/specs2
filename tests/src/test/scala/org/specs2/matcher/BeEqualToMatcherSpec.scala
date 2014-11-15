@@ -47,7 +47,7 @@ class BeEqualToMatcherSpec extends Specification with ResultMatchers { def is = 
      """List(1, 2) is not equal to List(2, 3)""" }
 
   Expected values are kept in the failure details
-  ${ (1 must_== 2).toResult must beLike { case Failure(_,_,_,FailureDetails(e, a)) => e must_== "2" } }
+  ${ (1 must_== 2).toResult must beLike { case Failure(_,_,_,FailureDetails(a, e)) => e must_== "2" } }
 
   the actual value must be evaluated before the expected one
   ${ var result = "";

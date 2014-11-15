@@ -153,10 +153,10 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
    */
   def printDetailedFailure(details: Details, level: Int, diffs: Diffs) = {
     details match {
-      case FailureDetails(expected, actual) if diffs.show(expected, actual) =>
-        val (expectedDiff, actualDiff) = diffs.showDiffs(expected, actual)
-        val (expectedMessage, actualMessage) = ("Expected: " + expectedDiff, "Actual:   " + actualDiff)
-        val (expectedFull, actualFull) = ("Expected (full): " + expected, "Actual (full):   " + actual)
+      case FailureDetails(actual, expected) if diffs.show(actual, expected) =>
+        val (actualDiff,    expectedDiff) = diffs.showDiffs(expected, actual)
+        val (actualMessage, expectedMessage) = ("Actual: " + expectedDiff,    "Expected:   " + actualDiff)
+        val (actualFull,    expectedFull)    = ("Actual (full): " + expected, "Expected (full):   " + actual)
 
         printKoStatus(div(<img src={baseDir+"images/collapsed.gif"}  onclick={toggleElement(details)}/> ++ t("details"), level) ++
           <div id={id(details)} style="display:none">
@@ -164,19 +164,34 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
             { <pre class="details">{expectedFull+"\n"+actualFull}</pre> unless diffs.showFull  }
           </div>)
 
-      case FailureSeqDetails(expected, actual) if diffs.show(expected, actual, ordered = true) =>
-        val (missing, added) = diffs.showDiffs(expected, actual, ordered = true)
-        val details = missing+"\n"+added
+      case FailureSeqDetails(expected, actual) if diffs.showSeq(expected, actual, ordered = true) =>
+        val (added, missing) = diffs.showSeqDiffs(actual, expected, ordered = true)
+        val addedValues   = makeDifferencesMessage("Added", added)
+        val missingValues = makeDifferencesMessage("Missing", missing)
+        val details = List(addedValues, missingValues).mkString("\n")
 
         printKoStatus(div(<img src={baseDir+"images/collapsed.gif"}  onclick={toggleElement(details)}/> ++ t("details"), level) ++
           <div id={id(details)} style="display:none">
             <pre class="details">{details}</pre>
           </div>)
 
-      case FailureUnorderedSeqDetails(expected, actual, missing, added) =>
-        val missingValues = if (missing.nonEmpty) "\n\nMissing values"+missing.map(notNullPair).mkString("\n", "\n", "\n") else ""
-        val addedValues   = if (added.nonEmpty)   "\nAdditional values"+added.map(notNullPair).mkString("\n", "\n", "\n\n") else ""
-        val details = missingValues+"\n"+addedValues
+      case FailureSetDetails(expected, actual) if diffs.showSeq(expected.toSeq, actual.toSeq, ordered = false) =>
+        val (added, missing) = diffs.showSeqDiffs(actual.toSeq, expected.toSeq, ordered = true)
+        val addedValues   = makeDifferencesMessage("Added", added.toSeq)
+        val missingValues = makeDifferencesMessage("Missing", missing.toSeq)
+        val details = List(addedValues, missingValues).mkString("\n")
+
+        printKoStatus(div(<img src={baseDir+"images/collapsed.gif"}  onclick={toggleElement(details)}/> ++ t("details"), level) ++
+          <div id={id(details)} style="display:none">
+            <pre class="details">{details}</pre>
+          </div>)
+
+      case FailureMapDetails(expected, actual) if diffs.showMap(actual, expected)=>
+        val (added, missing, different) = diffs.showMapDiffs(actual, expected)
+        val addedValues   = makeDifferencesMessage("Added", added)
+        val missingValues = makeDifferencesMessage("Missing", missing)
+        val differentValues = makeDifferencesMessage("Different", different)
+        val details = List(addedValues, missingValues, differentValues).mkString("\n")
 
         printKoStatus(div(<img src={baseDir+"images/collapsed.gif"}  onclick={toggleElement(details)}/> ++ t("details"), level) ++
           <div id={id(details)} style="display:none">
@@ -186,6 +201,12 @@ case class HtmlResultOutput(xml: NodeSeq = NodeSeq.Empty, filePath: String = "",
       case NoDetails | FromJUnitAssertionError | FromNotImplementedError => this
     }
   }
+
+  /**
+   * differences message
+   */
+  def makeDifferencesMessage(description: String, values: Seq[Any]): String =
+    if (values.nonEmpty) s"\n$description (${values.size})  ${values.map(notNullPair).mkString("\n", "\n", "\n")}" else ""
 
   /**
    * print a stacktrace for a failure or an exception

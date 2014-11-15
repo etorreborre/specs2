@@ -14,13 +14,17 @@ trait Diffs {
   /** @return true if the differences must be shown */
   def show: Boolean
   /** @return true if the differences must be shown for 2 different values */
-  def show(expected: Any, actual: Any): Boolean
+  def show(actual: Any, expected: Any): Boolean
   /** @return true if the differences must be shown for 2 different sequences of values */
-  def show(expected: Seq[Any], actual: Seq[Any], ordered: Boolean): Boolean
+  def showSeq(actual: Seq[Any], expected: Seq[Any], ordered: Boolean): Boolean
+  /** @return true if the differences must be shown for 2 different maps */
+  def showMap(actual: Map[Any, Any], expected: Map[Any, Any]): Boolean
   /** @return the diffs */
-  def showDiffs(expected: Any, actual: Any): (String, String)
+  def showDiffs(actual: Any, expected: Any): (String, String)
   /** @return the diffs for sequences with missing / added values  */
-  def showDiffs(expected: Seq[Any], actual: Seq[Any], ordered: Boolean): (String, String)
+  def showSeqDiffs(actual: Seq[Any], expected: Seq[Any], ordered: Boolean): (Seq[String], Seq[String])
+  /** @return the diffs for sequences with missing / added values  */
+  def showMapDiffs(actual: Map[Any, Any], expected: Map[Any, Any]): (Seq[String], Seq[String], Seq[String])
   /** @return true if the full strings must also be shown */
   def showFull: Boolean
 }
@@ -36,39 +40,44 @@ case class SmartDiffs(show: Boolean       = true,
                       diffRatio: Int      = 30,
                       showFull: Boolean   = false,
                       seqTriggerSize: Int = 0,    // Parameters for sequences
-                      seqMaxSize: Int     = 100
+                      seqMaxSize: Int     = 1000000
                        ) extends Diffs {
   import EditDistance._
 
-  def show(expected: Any, actual: Any): Boolean =
-    show && Seq(expected, actual).exists(_.toString.size >= triggerSize)
+  def show(actual: Any, expected: Any): Boolean =
+    show && Seq(actual, expected).exists(_.toString.size >= triggerSize)
 
-  def show(expected: Seq[Any], actual: Seq[Any], ordered: Boolean): Boolean =
+  def showSeq(actual: Seq[Any], expected: Seq[Any], ordered: Boolean): Boolean =
     show && (expected.size + actual.size) >= seqTriggerSize && (expected.size + actual.size) <= seqMaxSize
 
-  def showDiffs(expectedValue: Any, actualValue: Any) = {
-    val (expected, actual) = (expectedValue.toString, actualValue.toString)
-    if (editDistance(expected, actual).doubleValue / (expected.size + actual.size) < diffRatio.doubleValue / 100)
-      showDistance(expected, actual, separators, shortenSize)
+  def showMap(actual: Map[Any, Any], expected: Map[Any, Any]): Boolean =
+    showSeq(actual.toSeq, expected.toSeq, ordered = false)
+
+  def showDiffs(actualValue: Any, expectedValue: Any) = {
+    val (actual, expected) = (actualValue.toString, expectedValue.toString)
+    if (editDistance(actual, expected).doubleValue / (actual.size + expected.size) < diffRatio.doubleValue / 100)
+      showDistance(actual, expected, separators, shortenSize)
     else
-      (expected, actual)
+      (actual, expected)
   }
 
   /** @return the diffs for sequences */
-  def showDiffs(expected: Seq[Any], actual: Seq[Any], ordered: Boolean): (String, String) = {
-    val (missing, added) = missingAdded(expected, actual)
-    if (missing.isEmpty && added.isEmpty) ("", "") else
-      (if (missing.nonEmpty) "\n\nMissing values"+missing.map(notNullPair).mkString("\n", "\n", "\n") else "",
-       if (added.nonEmpty)  "\nAdditional values"+added.map(notNullPair).mkString("\n", "\n", "\n\n") else "")
-  }
-
-  /** @return missing and added values between 2 sequences */
-  private def missingAdded(expected: Seq[Any], actual: Seq[Any]): (Seq[String], Seq[String]) = {
+  def showSeqDiffs(actual: Seq[Any], expected: Seq[Any], ordered: Boolean): (Seq[String], Seq[String]) = {
     val (matched, added) = BestMatching.findBestMatch(actual, expected, (t: Any, v: Any) => v == t, eachCheck = true)(AsResult.booleanAsResult)
     val (_, koValues)    = matched.partition(_._3.isSuccess)
     val missing          = koValues.map(_._1)
 
-    (missing.map(_.toString), added.map(_.toString))
+    (added.map(_.toString), missing.map(_.toString))
+  }
+
+  /** @return the diffs for maps */
+  def showMapDiffs(actual: Map[Any, Any], expected: Map[Any, Any]): (Seq[String], Seq[String], Seq[String]) = {
+    val (added, missing) = (actual.keySet.diff(expected.keySet), expected.keySet.diff(actual.keySet))
+    val different        = actual.toSeq.collect { case (k,v) if expected.contains(k) && v != expected(k) =>
+      s"  x key = $k\n    actual value\n    $v\n    expected value\n    ${expected(k)}"
+    }
+
+    (added.map(k => (k, actual(k))).map(notNullPair).toSeq, missing.map(k => (k, expected(k))).map(notNullPair).toSeq, different.map(notNullPair))
   }
 
 }

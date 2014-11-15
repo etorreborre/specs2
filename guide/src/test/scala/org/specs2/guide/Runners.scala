@@ -125,7 +125,7 @@ There are some available shortcuts for some arguments
  `showOnly(status: String)`                                            | `args(showOnly=status)`                                                               |                                                                                                |
  `descFromExpectations`                                                | `args.report(fromSource=false)`                                                              | create the example description for the ok message of the expectation instead of the source file  |
  `fullStackTrace`                                                      | `args.report(traceFilter=NoStackTraceFilter)`                                                | the stacktraces are not filtered                                                                 |
- `diffs(show, separators, triggerSize, shortenSize, diffRatio, full)`  | `args.report(diffs=SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full))`  | to display the differences when doing equality comparison                                        |
+ `diffs(...)`  | `args.report(diffs=SmartDiffs(...))`  | to display the differences when doing equality comparison (see the Diffs section for details on parameters)                                       |
 
 ##### Output directory
 
@@ -172,19 +172,27 @@ For the diffs arguments the values you can specify are:
   * `shortenSize` controls the number of characters to display around each difference (default is 5)
   * `diffRatio` percentage of differences above which the differences must not be shown (default is 30)
   * `full` displays the full original expected and actual strings
+  * `seqTriggerSize` is the minimum size to compute differences on Seq, Set and Maps
+  * `seqMaxSize` is the maximum size to compute differences on Seq, Set and Maps
 
 You can also specify your own enhanced algorithm for displaying difference by providing an instance of the `${fullName[Diffs]}` trait:
 
 ```
 trait Diffs {
+  /** @return true if the differences must be shown */
+  def show: Boolean
   /** @return true if the differences must be shown for 2 different values */
-  def show(expected: Any, actual: Any): Boolean
+  def show(actual: Any, expected: Any): Boolean
   /** @return true if the differences must be shown for 2 different sequences of values */
-  def show(expected: Seq[Any], actual: Seq[Any], ordered: Boolean): Boolean
+  def showSeq(actual: Seq[Any], expected: Seq[Any], ordered: Boolean): Boolean
+  /** @return true if the differences must be shown for 2 different maps */
+  def showMap(actual: Map[Any, Any], expected: Map[Any, Any]): Boolean
   /** @return the diffs */
-  def showDiffs(expected: Any, actual: Any): (String, String)
-  /** @return the diffs for sequences */
-  def showDiffs(expected: Seq[Any], actual: Seq[Any], ordered: Boolean): (String, String)
+  def showDiffs(actual: Any, expected: Any): (String, String)
+  /** @return the diffs for sequences with missing / added values  */
+  def showSeqDiffs(actual: Seq[Any], expected: Seq[Any], ordered: Boolean): (Seq[String], Seq[String])
+  /** @return the diffs for sequences with missing / added values  */
+  def showMapDiffs(actual: Map[Any, Any], expected: Map[Any, Any]): (Seq[String], Seq[String], Seq[String])
   /** @return true if the full strings must also be shown */
   def showFull: Boolean
 }

@@ -163,28 +163,56 @@ trait TextPrinter {
 
     def printFailureDetails(d: Details)(implicit args: Arguments, out: ResultOutput) = {
       d match {
-        case FailureDetails(expected, actual) if args.diffs.show(expected, actual) =>
-          val (expectedDiff, actualDiff) = args.diffs.showDiffs(expected, actual)
+        case FailureDetails(actual, expected) if args.diffs.show(actual, expected) =>
+          val (actualDiff, expectedDiff) = args.diffs.showDiffs (actual, expected)
+          printNewLine
           out.printFailure("Expected: " + expectedDiff)
+          printNewLine
           out.printFailure("Actual:   " + actualDiff)
           if (args.diffs.showFull) {
             out.printFailure("Expected (full): " + expected)
             out.printFailure("Actual (full):   " + actual)
           }
-          out.printLine("")
+          printNewLine
 
-        case details @ FailureSeqDetails(expected, actual) if args.diffs.show(expected, actual, ordered = true) =>
-          val (missing, added) = args.diffs.showDiffs(expected, actual, ordered = true)
-          if (missing.nonEmpty) out.printLines(missing)
-          if (added.nonEmpty)   out.printLines(added)
+        case details @ FailureSeqDetails(actual, expected) if args.diffs.showSeq(actual, expected, ordered = true) =>
+          val (added, missing) = args.diffs.showSeqDiffs(actual, expected, ordered = true)
+          printNewLine
+          printValues("Added", added); printNewLine
+          printValues("Missing", missing); printNewLine
+          printSummary(("Added", added), ("Missing", missing))
 
-        case details @ FailureUnorderedSeqDetails(expected, actual, missing, added) =>
-          if (missing.nonEmpty) out.printLines("\n\nMissing values"+missing.map(notNullPair).mkString("\n", "\n", "\n"))
-          if (added.nonEmpty)   out.printLines("\nAdditional values"+added.map(notNullPair).mkString("\n", "\n", "\n\n"))
+        case details @ FailureSetDetails(actual, expected) if args.diffs.showSeq(actual.toSeq, expected.toSeq, ordered = false) =>
+          val (added, missing) = args.diffs.showSeqDiffs(actual.toSeq, expected.toSeq, ordered = false)
+          printNewLine
+          printValues("Added", added); printNewLine
+          printValues("Missing", missing); printNewLine
+          printSummary(("Added", added), ("Missing", missing))
+
+        case details @ FailureMapDetails(actual, expected) if args.diffs.showMap(actual, expected) =>
+          val (added, missing, different) = args.diffs.showMapDiffs(actual, expected)
+          printNewLine
+          printValues("Added", added); printNewLine
+          printValues("Missing", missing); printNewLine
+          printValues("Different", different); printNewLine
+          printSummary(("Added", added), ("Missing", missing), ("Different", different))
 
         case _ => ()
       }
     }
+
+    /** show values as a string with a description */
+    def printValues(description: String, values: Seq[Any])(implicit args: Arguments, out: ResultOutput) =
+      if (values.nonEmpty) out.printLines(s"$description (${values.size})${values.map(notNullPair).mkString("\n", "\n", "\n\n")}")
+
+    /** print a short summary of differences between Seqs, Sets or Maps */
+    def printSummary(descriptions: (String, Seq[String])*)(implicit args: Arguments, out: ResultOutput) =
+      if (descriptions.flatMap(_._2).mkString("\n").split("\n").size >= 50)
+        out.printLines(descriptions.map { case (name, values) => s"$name = ${values.size}" }.mkString(", "))
+
+    /** print a newline */
+    def printNewLine(implicit args: Arguments, out: ResultOutput) =
+      out.printLine(" ")
 
     def printError(desc: String, f: Result with ResultStackTrace,
                    timer: SimpleTimer, isDataTable: Boolean = false)(implicit args: Arguments, out: ResultOutput) = {
@@ -237,7 +265,7 @@ trait TextPrinter {
     }
     def printStats(stats: Stats)(implicit args: Arguments, out: ResultOutput) = {
       out.printStats(stats.display)
-      out.printLine("")
+      out.printLine(" ")
     }
   }
   case class PrintOther(fragment: ExecutedFragment) extends Print {

@@ -310,10 +310,12 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
  * Trait to model detailed information for failures so that smart differences can be computed
  */
 sealed trait Details
-case class FailureDetails(expected: String, actual: String) extends Details
-case class FailureSeqDetails(expected: Seq[Any], actual: Seq[Any]) extends Details
-case class FailureUnorderedSeqDetails(expected: Seq[Any], actual: Seq[Any], missing: Seq[Any], added: Seq[Any]) extends Details
+case class FailureDetails(actual: String, expected: String) extends Details
+case class FailureSeqDetails(actual: Seq[Any], expected: Seq[Any]) extends Details
+case class FailureSetDetails(actual: Set[Any], expected: Set[Any]) extends Details
+case class FailureMapDetails(actual: Map[Any, Any], expected: Map[Any, Any]) extends Details
 case object NoDetails extends Details
+
 case object FromNotImplementedError extends Details
 case object FromJUnitAssertionError extends Details
 
