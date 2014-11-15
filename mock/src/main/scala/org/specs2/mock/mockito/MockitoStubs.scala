@@ -89,8 +89,8 @@ trait MockitoStubs extends MocksCreation with MockitoStubsLowerImplicits {
                              case f: Function0[_]   => f().asInstanceOf[T]
                              case f: Function1[_,_] => f(invocation.getMock).asInstanceOf[T]
                            }
-       else if(args.size == 1) function(args(0)).asInstanceOf[T]
-       else function(args).asInstanceOf[T]
+       else if (args.size == 1) function(args(0)).asInstanceOf[T]
+       else                     function(args).asInstanceOf[T]
      }
   }
 
