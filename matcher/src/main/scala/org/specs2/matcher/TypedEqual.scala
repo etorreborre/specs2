@@ -1,6 +1,8 @@
 package org.specs2
 package matcher
 
+import execute.Result
+
 
 /**
  * This trait adds some implicits to create expectations with the `===` sign
@@ -19,9 +21,9 @@ trait TypedEqual { this: ExpectationsCreation =>
     /** ! equality matcher on Expectables */
     def !==[S >: T](other: =>S) = createExpectable(t).applyMatcher[S](new BeEqualTo(other).not)
     /** typed equality matcher on Expectables */
-    def ====(other: =>T) = createExpectable(t).applyMatcher(new BeTypedEqualTo(other))
+    def ====(other: =>T): MatchResult[T] = createExpectable(t).applyMatcher(new BeTypedEqualTo(other))
     /** ! typed equality matcher on Expectables */
-    def !===(other: =>T) = createExpectable(t).applyMatcher(new BeTypedEqualTo(other).not)
+    def !===(other: =>T): MatchResult[T] = createExpectable(t).applyMatcher(new BeTypedEqualTo(other).not)
   }
 }
 
