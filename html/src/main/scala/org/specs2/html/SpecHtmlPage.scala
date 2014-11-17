@@ -26,11 +26,14 @@ case class SpecHtmlPage(specification: SpecStructure, path: FilePath, content: S
   /** @return the title of the specification */
   def showWords = specification.header.showWords
 
-  def addToc(toc: NodeSeq): SpecHtmlPage =
-    copy(content =
-      if (content.contains("<toc/>")) content.replace("<toc/>", toc.toString)
-      else if (content.contains("<toc></toc>")) content.replace("<toc/>", toc.toString)
-      else content)
+  def addToc(toc: NodeSeq): SpecHtmlPage = {
+
+    val contentWithToc =
+      rewriteRule { case e: Elem if e.label == "toc" => toc }
+
+    val contentWithHeaderAnchors = headersAnchors.rewrite(contentWithToc.rewrite(body).reduceNodes).reduceNodes
+    copy(content = Xhtml.toXhtml(contentWithHeaderAnchors))
+  }
 
   def createSubtoc: NodeSeq = {
     val items =
@@ -40,7 +43,7 @@ case class SpecHtmlPage(specification: SpecStructure, path: FilePath, content: S
         // 'id' is the name of the attribute expected by jstree to "open" the tree on a specific node
           s.reduceNodes.updateHeadAttribute("id", path.name.name)
         else if (h.level > 1)
-          <li id={h.specId.toString}><a href={path.path} title={h.name}>{h.name.truncate(15)}</a>
+          <li id={h.specId.toString}><a href={path.path+h.anchorName} title={h.name}>{h.name.truncate(15)}</a>
             { <ul>{s.toSeq}</ul> unless s.toSeq.isEmpty }
           </li>
         else
@@ -51,10 +54,12 @@ case class SpecHtmlPage(specification: SpecStructure, path: FilePath, content: S
     {items}
   }
 
-  def body = {
+  def body: NodeSeq =
+    parse(content)
+
+  private def parse(string: String): NodeSeq =
     XML.withSAXParser((new org.ccil.cowan.tagsoup.jaxp.SAXFactoryImpl).newSAXParser)
-      .load(new scala.xml.InputSource(new StringReader(content)))
-  }
+      .load(new scala.xml.InputSource(new StringReader(string)))
 }
 
 object SpecHtmlPage {

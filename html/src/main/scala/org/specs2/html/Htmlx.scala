@@ -18,6 +18,8 @@ trait Htmlx { outer =>
   implicit class HtmlOps(ns: NodeSeq) {
     def headers = outer.headers(ns)
     def headersTree = outer.headersToTree(ns.headers).toTree
+    def addHeadersAnchors: NodeSeq =
+      outer.headersAnchors.rewrite(ns).reduceNodes
   }
 
   implicit class HtmlNodeOps(n: Node) {
