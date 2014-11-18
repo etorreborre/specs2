@@ -31,8 +31,8 @@ case class SpecHtmlPage(specification: SpecStructure, path: FilePath, content: S
     val contentWithToc =
       rewriteRule { case e: Elem if e.label == "toc" => toc }
 
-    val contentWithHeaderAnchors = headersAnchors.rewrite(contentWithToc.rewrite(body).reduceNodes).reduceNodes
-    copy(content = Xhtml.toXhtml(contentWithHeaderAnchors))
+    val contentWithHeaderAnchors = headersAnchors.rewrite(contentWithToc.rewrite(body)).reduceNodes
+    copy(content = content.replace("<toc/>", toc.toString))
   }
 
   def createSubtoc: NodeSeq = {
@@ -43,7 +43,7 @@ case class SpecHtmlPage(specification: SpecStructure, path: FilePath, content: S
         // 'id' is the name of the attribute expected by jstree to "open" the tree on a specific node
           s.reduceNodes.updateHeadAttribute("id", path.name.name)
         else if (h.level > 1)
-          <li id={h.specId.toString}><a href={path.path+h.anchorName} title={h.name}>{h.name.truncate(15)}</a>
+          <li><a href={path.path+h.anchorName} title={h.name}>{h.name.truncate(15)}</a>
             { <ul>{s.toSeq}</ul> unless s.toSeq.isEmpty }
           </li>
         else

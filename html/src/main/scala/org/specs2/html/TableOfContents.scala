@@ -43,7 +43,7 @@ trait TableOfContents {
     val dependsOn = (p1: SpecHtmlPage, p2: SpecHtmlPage) => SpecStructure.dependsOn(p1.specification, p2.specification)
 
     def li(page: SpecHtmlPage) =
-      <li id={page.className}><a href={page.path.path} title={page.showWords}>{page.showWords.truncate(15)}</a>
+      <li id={page.className.hashCode.toString}><a href={page.path.path} title={page.showWords}>{page.showWords.truncate(15)}</a>
         <ul>{page.createSubtoc}</ul>
       </li>
 
@@ -62,7 +62,7 @@ trait TableOfContents {
 
         val result: NodeSeq =
           <div id="tree">{highLevelItems}</div> ++
-          <script>{"$(function () { $('#tree').jstree({'core':{'initially_open':['206794297','740479'], 'animation':200}, 'plugins':['themes', 'html_data']}); });"}</script>
+          <script>{s"$$(function () { $$('#tree').jstree({'core':{'initially_open':['${main.className.hashCode}'], 'animation':200}, 'themes' : {'theme': 'default','url': './css/themes/default/style.css'}, 'plugins':['themes', 'html_data']}); });"}</script>
 
         result
     }
