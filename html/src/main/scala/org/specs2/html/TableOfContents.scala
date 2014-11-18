@@ -39,7 +39,7 @@ trait TableOfContents {
     }.flatten.sequenceU
   }
 
-  def createToc(pages: List[SpecHtmlPage]): NodeSeq = {
+  def createToc(pages: List[SpecHtmlPage]): SpecHtmlPage => NodeSeq = { page: SpecHtmlPage =>
     val dependsOn = (p1: SpecHtmlPage, p2: SpecHtmlPage) => SpecStructure.dependsOn(p1.specification, p2.specification)
 
     def li(page: SpecHtmlPage) =
@@ -62,7 +62,7 @@ trait TableOfContents {
 
         val result: NodeSeq =
           <div id="tree">{highLevelItems}</div> ++
-          <script>{s"$$(function () { $$('#tree').jstree({'core':{'initially_open':['${main.className.hashCode}'], 'animation':200}, 'themes' : {'theme': 'default','url': './css/themes/default/style.css'}, 'plugins':['themes', 'html_data']}); });"}</script>
+          <script>{s"$$(function () { $$('#tree').jstree({'core':{'initially_open':['${page.className.hashCode}'], 'animation':200}, 'themes' : {'theme': 'default','url': './css/themes/default/style.css'}, 'plugins':['themes', 'html_data']}); });"}</script>
 
         result
     }

@@ -26,13 +26,13 @@ case class SpecHtmlPage(specification: SpecStructure, path: FilePath, content: S
   /** @return the title of the specification */
   def showWords = specification.header.showWords
 
-  def addToc(toc: NodeSeq): SpecHtmlPage = {
+  def addToc(toc: SpecHtmlPage => NodeSeq): SpecHtmlPage = {
 
-    val contentWithToc =
-      rewriteRule { case e: Elem if e.label == "toc" => toc }
-
-    val contentWithHeaderAnchors = headersAnchors.rewrite(contentWithToc.rewrite(body)).reduceNodes
-    copy(content = content.replace("<toc/>", toc.toString))
+////    val contentWithToc =
+////      rewriteRule { case e: Elem if e.label == "toc" => toc }
+//
+//    val contentWithHeaderAnchors = headersAnchors.rewrite(contentWithToc.rewrite(body)).reduceNodes
+    copy(content = content.replace("<toc/>", toc(this).toString))
   }
 
   def createSubtoc: NodeSeq = {
