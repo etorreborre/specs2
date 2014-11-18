@@ -27,12 +27,8 @@ case class SpecHtmlPage(specification: SpecStructure, path: FilePath, content: S
   def showWords = specification.header.showWords
 
   def addToc(toc: SpecHtmlPage => NodeSeq): SpecHtmlPage = {
-
-////    val contentWithToc =
-////      rewriteRule { case e: Elem if e.label == "toc" => toc }
-//
-//    val contentWithHeaderAnchors = headersAnchors.rewrite(contentWithToc.rewrite(body)).reduceNodes
-    copy(content = content.replace("<toc/>", toc(this).toString))
+    val replacedToc = content.replace("<toc/>", toc(this).toString)
+    copy(content = replacedToc)
   }
 
   def createSubtoc: NodeSeq = {
@@ -43,7 +39,7 @@ case class SpecHtmlPage(specification: SpecStructure, path: FilePath, content: S
         // 'id' is the name of the attribute expected by jstree to "open" the tree on a specific node
           s.reduceNodes.updateHeadAttribute("id", path.name.name)
         else if (h.level > 1)
-          <li><a href={path.path+h.anchorName} title={h.name}>{h.name.truncate(15)}</a>
+          <li><a href={path.path+"#"+h.pandocName} title={h.name}>{h.name.truncate(15)}</a>
             { <ul>{s.toSeq}</ul> unless s.toSeq.isEmpty }
           </li>
         else

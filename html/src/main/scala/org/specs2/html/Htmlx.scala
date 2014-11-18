@@ -105,6 +105,7 @@ trait Htmlx { outer =>
     def isSubtoc = outer.isSubtoc(node)
 
     def specId: SpecId = SpecId(node.attributes.get("specId").map(_.toString).getOrElse(""))
+    def pandocName: String = name.toLowerCase.replace(" ", "-")
     def anchorName: String = name.anchorName
     def anchorName(baseUrl: String): String = createAnchorNameForNode(baseUrl + anchorName, namer)
   }

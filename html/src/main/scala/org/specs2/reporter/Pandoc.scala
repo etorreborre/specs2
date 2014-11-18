@@ -15,7 +15,7 @@ case class Pandoc(verbose: Boolean, executable: FilePath, inputFormat: String, o
 
 object Pandoc {
   val executable   = FilePath("pandoc")
-  val inputFormat  = "markdown+pipe_tables"
+  val inputFormat  = "markdown+pipe_tables+auto_identifiers"
   val outputFormat = "html"
 
   /** build command-line arguments for Pandoc */
