@@ -20,8 +20,8 @@ trait TableOfContents {
   /** create a table of contents for all the specifications */
   def createToc(specifications: List[SpecStructure], outDir: DirectoryPath, fileSystem: FileSystem): Action[Unit] = for {
     pages   <- readHtmlPages(specifications, outDir, fileSystem)
-    toc     =  createToc(pages)
-    _       <- saveHtmlPages(pages.map(_.addToc(toc)), fileSystem)
+    toc     =  createToc(pages, outDir)
+    _       <- saveHtmlPages(pages.map(page => page.addToc(toc(page))), fileSystem)
   } yield ()
 
   /** read the generated html pages and return them as a tree, based on the links relationships between them */
@@ -39,11 +39,11 @@ trait TableOfContents {
     }.flatten.sequenceU
   }
 
-  def createToc(pages: List[SpecHtmlPage]): SpecHtmlPage => NodeSeq = { page: SpecHtmlPage =>
+  def createToc(pages: List[SpecHtmlPage], outDir: DirectoryPath): SpecHtmlPage => NodeSeq = { page: SpecHtmlPage =>
     val dependsOn = (p1: SpecHtmlPage, p2: SpecHtmlPage) => SpecStructure.dependsOn(p1.specification, p2.specification)
 
     def li(page: SpecHtmlPage) =
-      <li id={page.className.hashCode.toString}><a href={page.path.path} title={page.showWords}>{page.showWords.truncate(15)}</a>
+      <li id={page.className.hashCode.toString}><a href={page.path.relativeTo(outDir).path} title={page.showWords}>{page.showWords.truncate(15)}</a>
         <ul>{page.createSubtoc}</ul>
       </li>
 

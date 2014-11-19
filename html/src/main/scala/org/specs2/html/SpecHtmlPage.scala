@@ -26,8 +26,8 @@ case class SpecHtmlPage(specification: SpecStructure, path: FilePath, outDir: Di
   /** @return the title of the specification */
   def showWords = specification.header.showWords
 
-  def addToc(toc: SpecHtmlPage => NodeSeq): SpecHtmlPage = {
-    val replacedToc = content.replace("<toc/>", toc(this).toString)
+  def addToc(toc: NodeSeq): SpecHtmlPage = {
+    val replacedToc = content.replace("<toc/>", toc.toString)
     copy(content = replacedToc)
   }
 

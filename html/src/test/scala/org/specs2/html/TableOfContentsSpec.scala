@@ -35,7 +35,10 @@ class TableOfContentsSpec extends script.Specification with HtmlDocuments with G
 
   }
 
-  def addToc(body: NodeSeq) =
-    createToc(List(SpecHtmlPage(SpecStructure.empty(getClass), "guide" | "UserGuide.html", body.toString)))
+  def addToc(body: NodeSeq) = {
+    val page = SpecHtmlPage(SpecStructure.empty(getClass), outDir | "UserGuide.html", outDir, body.toString)
+    createToc(List(page), outDir)(page)
+  }
 
+  val outDir = DirectoryPath.unsafe("guide")
 }

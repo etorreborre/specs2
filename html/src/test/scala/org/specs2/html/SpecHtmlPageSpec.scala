@@ -1,7 +1,7 @@
 package org.specs2
 package html
 
-import io.FilePath
+import io._
 import specification.core.SpecStructure
 
 class SpecHtmlPageSpec extends Spec { def is = s2"""
@@ -39,5 +39,5 @@ class SpecHtmlPageSpec extends Spec { def is = s2"""
   }
 
   def page(content: String): SpecHtmlPage =
-    SpecHtmlPage(SpecStructure.empty(getClass), FilePath.unsafe("here"), content)
+    SpecHtmlPage(SpecStructure.empty(getClass), FilePath.unsafe("here"), DirectoryPath.unsafe("out"), content)
 }
