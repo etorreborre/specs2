@@ -35,7 +35,7 @@ class TableOfContentsSpec extends script.Specification with HtmlDocuments with G
 
   }
 
-  def addToc(body: NodeSeq, subtocs: Map[SpecId, NodeSeq] = Map()) =
+  def addToc(body: NodeSeq) =
     createToc(List(SpecHtmlPage(SpecStructure.empty(getClass), "guide" | "UserGuide.html", body.toString)))
 
 }

@@ -49,7 +49,8 @@ trait Htmlx { outer =>
   /**
    * @return all the headers and all the subtoc elements of a document
    */
-  def headers(nodes: NodeSeq): NodeSeq = nodes.filterNodes((e: Node) => isHeader(e) || isSubtoc(e), !isNotoc(_))
+  def headers(nodes: NodeSeq): NodeSeq =
+    nodes.filterNodes(isHeader)
 
   /** collect all the headers as a Tree */
   def headersToTree(body: NodeSeq, headers: TreeLoc[Header] = leaf(Header()).loc): TreeLoc[Header] = {
@@ -77,7 +78,6 @@ trait Htmlx { outer =>
 
     body.toList match {
       case e :: rest if isHeader(e) => insertHeader(headerNumber(e), e, rest)
-      case e :: rest if isSubtoc(e) => insertHeader(currentLevel + 1, e, rest)
       case _                        => headers
     }
   }
@@ -101,10 +101,8 @@ trait Htmlx { outer =>
 
   case class Header(level: Int = 1, node: Node = new Atom("first level"), namer: UniqueNames = uniqueNamer) {
     def name = nodeText(node)
-    def isRoot = name.isEmpty && !isSubtoc
-    def isSubtoc = outer.isSubtoc(node)
+    def isRoot = name.isEmpty
 
-    def specId: SpecId = SpecId(node.attributes.get("specId").map(_.toString).getOrElse(""))
     def pandocName: String = name.toLowerCase.replace(" ", "-")
     def anchorName: String = name.anchorName
     def anchorName(baseUrl: String): String = createAnchorNameForNode(baseUrl + anchorName, namer)
@@ -114,20 +112,12 @@ trait Htmlx { outer =>
     override def show(h : Header) = h.name
   }
 
-  /** @return the text of the first child of a Node, removing notoc elements */
-  def nodeText(n: Node) = <a>{n.child.filterNot(_.label == NotocTag.toString)}</a>.text
+  /** @return the text of the first child of a Node */
+  def nodeText(n: Node) = <a>{n.child}</a>.text
   /** regular expression for a Header Tag */
   private val HeaderTag = "h(\\d)".r
-  /** regular expression for a notoc Tag */
-  private val NotocTag = "notoc".r
-  /** regular expression for a Subtoc Tag */
-  private val SubtocTag = "subtoc".r
   /** @return true if the element is a header */
   def isHeader(e: Node) = e.label.matches(HeaderTag.toString)
-  /** @return true if the element is a <notoc/> element */
-  def isNotoc(e: Node) = e.label.matches(NotocTag.toString)
-  /** @return true if the element is a subtoc element */
-  def isSubtoc(e: Node) = e.label.matches(SubtocTag.toString)
 
   /** This rule can be used to add anchors to header elements */
   def headersAnchors = {
@@ -174,8 +164,5 @@ trait Htmlx { outer =>
   }
 
 }
-
-/** string representing a toc id */
-case class SpecIdOps(s: String)
 
 object Htmlx extends Htmlx

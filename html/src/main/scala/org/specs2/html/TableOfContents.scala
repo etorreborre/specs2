@@ -34,7 +34,7 @@ trait TableOfContents {
   def createSpecPages(paths: List[FilePath], specifications: List[SpecStructure], outDir: DirectoryPath, fileSystem: FileSystem): Action[List[SpecHtmlPage]] = {
     specifications.map { spec =>
       val path = SpecHtmlPage.outputPath(outDir, spec)
-      if (paths contains path) Some(fileSystem.readFile(path).map(content => SpecHtmlPage(spec, path, content)))
+      if (paths contains path) Some(fileSystem.readFile(path).map(content => SpecHtmlPage(spec, path, outDir, content)))
       else None
     }.flatten.sequenceU
   }

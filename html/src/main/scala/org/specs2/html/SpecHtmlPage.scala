@@ -15,7 +15,7 @@ import data.Trees._
 import xml.Nodex._
 import text.Trim._
 
-case class SpecHtmlPage(specification: SpecStructure, path: FilePath, content: String) {
+case class SpecHtmlPage(specification: SpecStructure, path: FilePath, outDir: DirectoryPath, content: String) {
 
   /** @return the class name of the specification */
   def className = specification.header.className
@@ -31,6 +31,9 @@ case class SpecHtmlPage(specification: SpecStructure, path: FilePath, content: S
     copy(content = replacedToc)
   }
 
+  def relativePath: FilePath =
+    path.relativeTo(outDir)
+
   def createSubtoc: NodeSeq = {
     val items =
       body.headersTree.
@@ -39,7 +42,7 @@ case class SpecHtmlPage(specification: SpecStructure, path: FilePath, content: S
         // 'id' is the name of the attribute expected by jstree to "open" the tree on a specific node
           s.reduceNodes.updateHeadAttribute("id", path.name.name)
         else if (h.level > 1)
-          <li><a href={path.path+"#"+h.pandocName} title={h.name}>{h.name.truncate(15)}</a>
+          <li><a href={relativePath.path+"#"+h.pandocName} title={h.name}>{h.name.truncate(15)}</a>
             { <ul>{s.toSeq}</ul> unless s.toSeq.isEmpty }
           </li>
         else
