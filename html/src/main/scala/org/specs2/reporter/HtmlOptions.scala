@@ -17,12 +17,14 @@ case class HtmlOptions(
   def javascriptDir = outDir / "javascript"
   def indexDir      = javascriptDir / "tipuesearch"
   def indexFile     = indexDir | "tipuesearch_contents.js"
+  def sidebar       = toc || search
 
   def templateVariables =
     variables
       .updated("baseDir",        baseDir.path)
       .updated("outDir",         outDir.path)
       .updated("template",       template.path)
+      .updateWhenTrue("sidebar", sidebar)
       .updateWhenTrue("nostats", noStats)
       .updateWhenTrue("search",  search)
       .updateWhenTrue("toc",     toc)

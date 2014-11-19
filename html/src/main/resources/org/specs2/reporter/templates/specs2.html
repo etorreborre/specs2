@@ -27,14 +27,22 @@
 
 <div class="container">
 
+$if(sidebar)$
+<div class="col-md-2 sidebar-outer">
+<div class="col-md-2 fixed">
+$else$
+<div class="col-md-1"></div>
+$endif$
+
 $if(search)$
 <!-- search box -->
-<div class="col-md-2 search-box">
-<form action="search.html">
-  <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
-</form>
+<div class="search-box">
+  <form action="search.html">
+    <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
+  </form>
+</div>
 $else$
-<div class="col-md-1 search-box fixed"></div>
+<div class="col-md-1"></div>
 $endif$
 
 $if(toc)$
@@ -42,7 +50,13 @@ $if(toc)$
 <toc/>
 $else$
 $endif$
+
+$if(sidebar)$
 </div>
+</div>
+$else$
+$endif$
+
 
 <div class="col-md-10">
 $if(issues)$

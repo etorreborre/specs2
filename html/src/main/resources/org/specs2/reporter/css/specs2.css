@@ -5,6 +5,13 @@ body {
   font-weight: normal;
   color: #3D3B3B;	
 }
+.sidebar-outer {
+  position: relative;
+}
+.fixed {
+  margin-left: -20px;
+  position: fixed;
+}
 .spec {
   margin: 30px 5px 0 10px;
 }
