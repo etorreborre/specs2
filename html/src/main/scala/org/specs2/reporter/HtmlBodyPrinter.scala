@@ -98,7 +98,7 @@ trait HtmlBodyPrinter {
         }
 
       case Fragment(link: SpecificationLink,_,_) =>
-        <link class="ok"><a href={FilePath.unsafe(link.url).rebaseTo(baseDir).path} tooltip={link.tooltip} class="ok">{link.linkText}</a></link>
+        <link class="ok"><a href={FilePath.unsafe(link.url).relativeTo(baseDir).path} tooltip={link.tooltip} class="ok">{link.linkText}</a></link>
 
       case Fragment(form @ FormDescription(_),_,_) =>
         form.xml(arguments)
