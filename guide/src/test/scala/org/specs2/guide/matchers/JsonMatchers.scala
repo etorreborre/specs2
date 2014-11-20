@@ -2,7 +2,6 @@ package org.specs2
 package guide
 package matchers
 
-import JsonMatchers._
 import matcher._
 
 object JsonMatchers extends UserGuideCard with matcher.JsonMatchers {

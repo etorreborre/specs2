@@ -9,6 +9,8 @@ The $specs2 matchers are a well-delimited piece of functionality that you should
  * `${fullName[matcher.MustMatchers]}` (or `${fullName[matcher.ShouldMatchers]}`) to write anything like `1 must be_==(1)` and
    get a `Result` back
 
+ * **Important**: the `MustMatchers` *trait* will fill-in stacktraces on `MatchResults` while the `MustMatchers` object will not. This has some important consequences in terms of performances because creating stack traces is expensive
+
  * You can also use the side-effecting version of that trait called `${fullName[matcher.MustThrownMatchers]}` (or `${fullName[matcher.ShouldThrownMatchers]}`).
    It throws a `FailureException` as soon as an expectation is failing
 
