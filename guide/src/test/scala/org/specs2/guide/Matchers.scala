@@ -211,7 +211,7 @@ In the code above you have to:
    the optional description you setup using the `aka` method
 
 
-### Now learn how to...
+$NowLearnTo
 
  - use ${"standard results" ~/ StandardResults} (`failure`, `success`, `skipped`, `todo`...) instead of matchers
  - add ${"descriptions" ~/ ExpectationDescription} to your expectations to create even better failure messages
@@ -220,7 +220,9 @@ In the code above you have to:
  - use ${"Mockito " ~/ UseMockito} to mock the interactions with another system
  - use ${"Forms" ~/ UseForms} to display actual and expected values in html tables
 
-### And if you want to know more
+$vid
+
+$AndIfYouWantToKnowMore
 
  - read the ${"reference card" ~/ ReferenceCard} on all of $specs2 matchers
  - use ${"syntactic variations" ~/ SyntacticVariations} on the `value must matcher` form
@@ -229,6 +231,7 @@ In the code above you have to:
  - use the ${"dependencies matchers" ~/ DependencyMatchers} to specify dependencies between packages
  - use $specs2 matchers ${s"outside $specs2" ~/ OutsideSpecs2}
 
+$vid
 """
 
 }

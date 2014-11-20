@@ -147,11 +147,12 @@ Some setups are very expensive and can be shared across all examples. For exampl
  * `AfterAll` inserts a `Step` after all the examples
  * `BeforeAfterAll` inserts one `Step` before all the examples and one `Step` after all of them
 
-## If you want to know more
+$AndIfYouWantToKnowMore
 
  * use ${"`Context` objects" ~/ ContextObjects} to create contexts for just a few examples in the specification
  * use ${"traits and`Scopes`" ~/ Scopes} to create contexts in unit specifications where you can access state directly on variables
 
+$vid
 """
 }
 
@@ -274,10 +275,11 @@ Now you might wonder why the `trees` trait is extending the `org.specs2.specific
 
 It is also possible to extend Scopes with `Before` and `After` traits but they need to be `org.specs2.mutable.Before` and `org.specs2.mutable.After` traits. This is necessary because those traits extend the Scala `DelayedInit` trait allowing to insert code around the execution of the body of an object.
 
-### If you want to know more...
+$AndIfYouWantToKnowMore
 
  - print ${"execution data" ~/ PrintExecutionData}
 
+$vid
 """
 
   case class Tree[T](ts: T*) {

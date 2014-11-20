@@ -56,17 +56,21 @@ With the `test-only` command arguments can be passed on the command line for sel
  - the ${"arguments reference guide" ~/ ArgumentsReference} for a list of all arguments
 
 
-### Now learn to...
+$NowLearnTo
 
  * run specifications ${"in an IDE" ~/ RunInIDE}: [IntelliJ IDEA](http://www.jetbrains.com/idea/features/scala.html), [ScalaIDE](http://scala-ide.org)
  * output ${"JUnit XML files" ~/ JUnitXmlOutput} to run in a continuous integration server like [Jenkins](http://jenkins-ci.org)
  * ${"output HTML files" ~/ HtmlOutput}
 
-### And if you want to know more
+$vid
+
+$AndIfYouWantToKnowMore
 
  * run specifications with ${"another build tool" ~/ OtherBuildTools}: maven, gradle
  * run specifications ${"without a build tool" ~/ RunInShell}
  * output ${"Markdown files" ~/ MarkdownOutput}
  * use your ${"own reporting tool" ~/ CustomOutput} by implementing the `Notifier` interface (simple) or the `Printer` interface
-                                                                                                                        """
+
+$vid
+"""
 }

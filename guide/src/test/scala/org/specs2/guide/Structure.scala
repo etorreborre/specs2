@@ -111,14 +111,15 @@ class MySpecification extends org.specs2.mutable.Specification {
 
 It is also possible to use the "functional" expectation mode with a unit specification by mixing in the `org.specs2.execute.NoThrownExpectations` trait.
 
-### Now learn how to...
-
+$NowLearnTo
  - use ${"matchers" ~/ Matchers} to specify the body of your examples
  - set up ${"contexts" ~/ Contexts} for the examples
  - control the ${"execution" ~/ Execution} of a specification
  - ${"run" ~/ Runners} a specification
 
-### And if you want to know more
+$vid
+
+$AndIfYouWantToKnowMore
 
  - ${"skip" ~/ SkipExamples} examples
  - collect ${"*all* expectations" ~/ GetAllExpectations}
@@ -138,6 +139,8 @@ It is also possible to use the "functional" expectation mode with a unit specifi
  - add ${"debug statements" ~/ DebugStatements}
  - print ${"execution data" ~/ PrintExecutionData}
  - extend the specification by creating examples ${"_while it is executing_" ~/ CreateOnlineSpecifications}
+
+$vid
 
 """
 }

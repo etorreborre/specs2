@@ -81,16 +81,19 @@ class ActionSpec extends Specification { def is = s2"""
 """}
 }}
 
-### Now learn how to...
+$NowLearnTo
 
  - use ${"arguments and tags" ~/ Selection} to select the examples to execute
  - run each example in ${"its own instance of the specification" ~/ Isolation}
 
-### If you want to know more
+$vid
+
+$AndIfYouWantToKnowMore
 
  - add ${"random sequencing" ~/ RandomExecution} to your specification
  - consult the ${"arguments reference guide" ~/ ArgumentsReference} for a list of all arguments
 
+$vid
 """
 
 }

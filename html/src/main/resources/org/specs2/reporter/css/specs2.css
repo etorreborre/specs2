@@ -256,3 +256,90 @@ pre {
 .search-box {
   margin-top: 15px;
 }
+
+.ribbon, .ribbon:before, .ribbon:after {box-sizing:content-box;}
+
+
+.ribbon {  
+  height: 20px;
+  margin-top: 30px;
+  position: relative;
+  border: 1px solid rgba(0,0,0,.3);
+  box-shadow: 0px 1px 3px rgba(0,0,0,.2);
+  padding: 10px 15px;
+  clear: both;
+}
+ 
+.ribbon-content {
+  margin-top: -10px;
+  padding-top: 10px;
+  border: 1px solid rgba(0,0,0,.3);
+  box-shadow: 0px 1px 3px rgba(0,0,0,.2);  
+} 
+
+h3.left-ribbon {
+  color: #000;
+  margin-left: -10px;
+  float: left;
+}
+ 
+h3.left-ribbon::before {
+  display: block;
+  width: 10px;
+  height: 0px;
+  position: absolute;
+  bottom: -10px;
+  left: -11px;
+  content: "";
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid rgb(0, 80, 116);
+}
+ 
+h3.left-ribbon::after {
+  display: block;
+  width: 6px;
+  height: 40px;
+  position: absolute;
+  bottom: 3px;
+  right: -1px;
+  content: "";
+  border: 1px solid rgba(0,0,0,.3);
+  transform: skew(0deg,45deg);
+  -ms-transform: skew(0deg,45deg); /* IE 9 */
+  -webkit-transform: skew(0deg,45deg); /* Safari and Chrome */
+  -o-transform: skew(0deg,45deg); /* Opera */
+  -moz-transform: skew(0deg,45deg); /* Firefox */
+  background: rgb(0, 80, 116);
+}
+
+
+h3.both-ribbon {
+  text-align: left;
+  padding: 5px 9px 10px 10px;
+  width: 100%;
+  margin-left: -10px;
+}
+ 
+h3.both-ribbon::before {
+  display: block;
+  width: 10px;
+  height: 0px;
+  position: absolute;
+  bottom: -10px;
+  left: -11px;
+  content: "";
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid rgb(0, 80, 116);
+}
+ 
+h3.both-ribbon::after {
+  display: block;
+  width: 10px;
+  height: 0px;
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+  content: "";
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid rgb(0, 80, 116);
+}

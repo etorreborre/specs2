@@ -121,9 +121,11 @@ On the line above `x` is the status of the previous example. Here is a table of 
 
 This selection only works because $specs2 stores the state of each specification in a directory after a run (`target/specs2-reports/stats` by default). If you decide that this storing is useless and you want to skip it you can use the `neverstore` argument. Otherwise if you want to make sure that the `stats` directory doesn't become too big over time you can use the `resetstore` argument which will remove the current store before running the specification.
 
-### If you want to know more
+$AndIfYouWantToKnowMore
 
  - learn how to ${"display only some examples" ~/ ConsoleOutput}
  - consult the ${"arguments reference guide" ~/ ArgumentsReference} for a list of all arguments
+
+$vid
 """
 }

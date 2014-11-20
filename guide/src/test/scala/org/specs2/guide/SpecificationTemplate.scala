@@ -29,10 +29,11 @@ The `map` method is indeed called every time the specification returns the list 
  - reformatting all text
  - ...
 
-### If you want to know more
+$AndIfYouWantToKnowMore
 
 You will probably need to learn a bit more about $specs2 ${""""Fragments" API""" ~/ FragmentsApi} in order to modify, delete or add new "Fragments".
 
+$vid
 """
 }
 
