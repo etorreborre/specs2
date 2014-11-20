@@ -9,7 +9,7 @@ There are 3 preferred ways to install $specs2:
  - [maven](http://maven.apache.org)
  - [gradle](http://gradle.org)
 
-## SBT
+### SBT
 
 First you need to [install sbt itself](http://www.scala-sbt.org/release/tutorial/Setup.html) then you need to add the following dependency:
 ```
@@ -18,7 +18,7 @@ libraryDependencies += "org.specs2" %% "specs2-core" % $VERSION % "test"
 
 See [here](http://www.scala-sbt.org/release/tutorial/Library-Dependencies.html) to learn more about sbt dependencies.
 
-## Maven
+### Maven
 
 You can install Maven from [there](http://maven.apache.org/guides/getting-started/maven-in-five-minutes.html). Once installed, you need to create a `pom.xml` file with the [`maven-scala-plugin`](http://davidb.github.io/scala-maven-plugin/plugin-info.html). In the `pom.xml` file you can add the following dependency:
 ```
@@ -36,7 +36,7 @@ You can install Maven from [there](http://maven.apache.org/guides/getting-starte
 </project>
 ```
 
-## Gradle
+### Gradle
 
 Go to this [page](http://www.gradle.org/installation) to install Gradle. You then need to install the [Scala plugin](http://www.gradle.org/docs/current/userguide/scala_plugin.html) and add the following to your `build.gradle` file:
 ```
@@ -51,7 +51,7 @@ dependencies {
 }
 ```
 
-## Other dependencies
+### Other dependencies
 
 Depending on the $specs2 features you want to use you will need to add more dependencies to your build:
 

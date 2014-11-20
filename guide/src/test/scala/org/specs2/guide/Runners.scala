@@ -17,6 +17,13 @@ Most of the time however you will use the `test-only` command, either because yo
 sbt> test-only org.acme.secret.KillerAppSpec
 ```
 
+Only show failed tests:
+```
+sbt> test-only org.acme.secret.KillerAppSpec -- xonly
+```
+
+#### sbt options
+
 Various sbt options can apply to [test execution in sbt](http://www.scala-sbt.org/release/docs/Testing.html) but here are the ones which you are most likely to use:
 
  - exclude some specifications:
@@ -25,7 +32,7 @@ Various sbt options can apply to [test execution in sbt](http://www.scala-sbt.or
  - don't execute the specifications in parallel
    `parallelExecution in Test := false`
 
- - pass some arguments to all specifications
+ - pass $specs2 arguments to all specifications
    `testOptions in Test += Tests.Argument("exclude", "integration")`
 
  - display results as soon as they've been executed
