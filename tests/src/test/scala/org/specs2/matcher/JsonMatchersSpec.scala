@@ -78,7 +78,7 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
  def andHave = {
    val json =
      """|{"products":[
-        |{"name":"shirt","price":10,"visible":false},
+        |{"name":"shirt","price":10,"visible":false,"collectionIds":["coll1"]},
         |{"name":"shoe","price":5,"visible":null},
         |{"name":"shoe","price":5,"visible":true}]}""".stripMargin
 
@@ -89,7 +89,7 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
     /("products").andHave(allOf(products:_*))
 
    json must haveProducts(
-     aProductWith(name = "shirt", price = 10, visible = false),
+     aProductWith(name = "shirt", price = 10, visible = false) and /("collectionIds").andHave(exactly("coll1")),
      aProductWith(name = "shoe", price = 5, visible = beJsonNull),
      aProductWith(name = "shoe", price = 5, visible = true)
    )

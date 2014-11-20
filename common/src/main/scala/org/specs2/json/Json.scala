@@ -91,13 +91,32 @@ trait Json {
     case other           => None
   }
 
-  /** show JSON objects with null values shown as 'null' */
+  /**
+   * show JSON objects with null values shown as 'null'
+   *
+   * if this method is called with a string, the string must be left unquoted
+   * so that we can use a matcher for it
+   */
   def showJson(a: Any): String = a match {
-    case JSONObject(map) => map.map { case (key, value) => s""""$key":${showJson(value)}"""}.mkString("{", ",", "}")
-    case JSONArray(list) => list.map(showJson).mkString("[", ",", "]")
+    case JSONObject(map) => map.map { case (key, value) => s""""$key":${showJsonValue(value)}"""}.mkString("{", ",", "}")
+    case JSONArray(list) => list.map(showJsonValue).mkString("[", ",", "]")
     case null            => "null"
-    case s: String       => s""""$s""""
+    case s: String       => s
+    case d: Double       => d.toString
+    case b: Boolean      => b.toString
     case other           => other.toString
+  }
+
+  /**
+   * show JSON values in maps or lists
+   * if those values are other JSON objects, recurse with the showJson method
+   */
+  def showJsonValue(a: Any): String = a match {
+    case null            => "null"
+    case s: String       => "\""+s+"\""
+    case d: Double       => d.toString
+    case b: Boolean      => b.toString
+    case other           => showJson(other)
   }
 
   /**
