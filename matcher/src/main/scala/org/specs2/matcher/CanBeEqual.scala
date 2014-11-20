@@ -21,15 +21,15 @@ trait CanBeEqual { this: Expectations =>
 
     /** ! equality matcher on Expectables */
     def !==[S >: T](other: =>S): MatchResult[S] =
-      checkFailure(createExpectable(t).applyMatcher(new BeEqualTo(other).not))
+      createExpectable(t).applyMatcher(new BeEqualTo(other).not)
 
     /** typed equality matcher on Expectables */
     def ====(other: =>T): MatchResult[T] =
-      checkFailure(createExpectable(t).applyMatcher(new BeTypedEqualTo(other)))
+      createExpectable(t).applyMatcher(new BeTypedEqualTo(other))
 
     /** ! typed equality matcher on Expectables */
     def !===(other: =>T): MatchResult[T] =
-      checkFailure(createExpectable(t).applyMatcher(new BeTypedEqualTo(other).not))
+      createExpectable(t).applyMatcher(new BeTypedEqualTo(other).not)
   }
 }
 
