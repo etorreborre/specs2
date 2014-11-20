@@ -23,6 +23,9 @@ case class SpecHtmlPage(specification: SpecStructure, path: FilePath, outDir: Di
   /** @return the simple class name of the specification */
   def simpleName = specification.header.simpleName
 
+  /** @return a name that is transform in the same way Pandoc creates identifiers for headers */
+  def pandocName = className.toLowerCase.replace(".", "-")
+
   /** @return the title of the specification */
   def showWords = specification.header.showWords
 
