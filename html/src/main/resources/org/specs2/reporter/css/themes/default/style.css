@@ -6,4 +6,6 @@
 
 .jstree-default ins { background-image:url("../../../images/check.png"); background-color:white; }
 .jstree-default a .jstree-icon { background-position:-56px -19px; }
+.jstree-default .jstree-open > ins { background-position:-18px 0; }
+.jstree-default .jstree-leaf > ins { background-position:-36px 0; }
 
