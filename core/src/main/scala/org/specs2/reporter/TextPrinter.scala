@@ -214,13 +214,13 @@ trait TextPrinter extends Printer {
    * If the failure contains the expected and actual values, display them
    */
   def printFailureDetails(args: Arguments):  Details => Process[Task, LogLine] = {
-    case FailureDetails(expected, actual) if args.diffs.show(expected, actual) =>
-      val (expectedDiff, actualDiff) = args.diffs.showDiffs(expected, actual)
-      emit("Expected: " + expectedDiff).failure fby
+    case FailureDetails(actual, expected) if args.diffs.show(actual, expected) =>
+      val (actualDiff, expectedDiff) = args.diffs.showDiffs(actual, expected)
       emit("Actual:   " + actualDiff).failure fby
+      emit("Expected: " + expectedDiff).failure fby
       (if (args.diffs.showFull) {
+        emit("Actual (full):   " + actual).failure fby
         emit("Expected (full): " + expected).failure
-        emit("Actual (full):   " + actual).failure
       } else emitNone) fby
       emit("").info
 

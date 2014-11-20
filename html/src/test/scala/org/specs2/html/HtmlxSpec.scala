@@ -18,11 +18,9 @@ class HtmlxSpec extends Spec with HtmlDocuments with Grouped with TypedEqual { d
 
   the headers methods
     collects all headers of a document  ${g1.e1}
-    filters out notoc elements          ${g1.e2}
 
   nodeText extracts the text from a Node
   ${ nodeText(<h2>Hello</h2>) must_== "Hello"}
-  ${ nodeText(<h2>Hello<notoc>world</notoc></h2>) must_== "Hello" }
 
   urls extracts all urls from <a/> nodes
   ${ urls(<a href="www.google.com">hi</a>) must_== Seq("www.google.com") }
@@ -51,7 +49,6 @@ class HtmlxSpec extends Spec with HtmlDocuments with Grouped with TypedEqual { d
 
   "headers" - new g1 {
     e1 := headers(<body><h1>title1</h1>Some text <h2>title2</h2>Some other text</body>) must_== (<h1>title1</h1> ++ <h2>title2</h2>)
-    e2 := headers(<body><h1>title1</h1>Some text <notoc><h2>title2</h2></notoc>Some other text</body>) must_== (<h1>title1</h1> ++ NodeSeq.Empty)
   }
 
   "anchors" - new g2 {

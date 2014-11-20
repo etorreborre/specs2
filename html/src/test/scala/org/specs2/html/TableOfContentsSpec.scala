@@ -30,7 +30,7 @@ class TableOfContentsSpec extends script.Specification with HtmlDocuments with G
     //      </ul>
     //    </li>
     e2 := addToc(aBodyWithHeaders) must \\ ("li") \ ("a") \> "Table of con..."
-    e3 := addToc(aBodyWithHeaders) must \\ ("li") \ ("a", "href" -> "guide/UserGuide.html")
+    e3 := addToc(aBodyWithHeaders) must \\ ("li") \ ("a", "href" -> "UserGuide.html")
     e4 := addToc(aBodyWithHeaders) must \\ ("li", "id")
 
   }

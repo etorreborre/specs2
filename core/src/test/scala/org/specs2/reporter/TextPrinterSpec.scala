@@ -138,8 +138,8 @@ s2"""e1 ${1 must_== 2}""" contains
 
   def d3 =
 s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" contains
-    """|[error] Expected: a[d]cdea[d]cdea[d]cdea[d]cdea[d]cde
-       |[error] Actual:   a[b]cdea[b]cdea[b]cdea[b]cdea[b]cde"""
+    """|[error] Actual:   a[b]cdea[b]cdea[b]cdea[b]cdea[b]cde
+       |[error] Expected: a[d]cdea[d]cdea[d]cdea[d]cdea[d]cde"""
 
   def e1 = Arguments("fullstacktrace") ^
     s2"""e1 $error1""" contains

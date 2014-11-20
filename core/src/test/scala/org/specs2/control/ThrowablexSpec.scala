@@ -39,7 +39,7 @@ The Throwablex trait provides extensions to regular throwables:
     eg := TraceLocation(trace).path === "org/specs2/control/ThrowablexContext.scala"
   }
   "filter" - new group with ThrowablexContext {
-    eg := e.filter("org.specs2.control").getStackTrace.toList.map(_.toString) must containMatch("org.specs2.control")
+    eg := e.filter("org.specs2.specification.core").getStackTrace.toList.map(_.toString) must containMatch("org.specs2.specification.core")
     eg := e.filterNot("org.specs2.control").getStackTrace.toList.map(_.toString) must not (containMatch("org.specs2.control"))
   }
   "stack" - new group with ThrowablexContext {
