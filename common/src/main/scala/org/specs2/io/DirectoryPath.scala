@@ -119,7 +119,7 @@ object DirectoryPath {
 
   private def removeScheme(s: String): String = Seq("file:").foldLeft(s) { (res, cur) => res.replace(cur, "") }
 
-  val ROOT = DirectoryPath(dirs = Vector(), absolute = true)
+  val Root = DirectoryPath(dirs = Vector(), absolute = true)
   val EMPTY = DirectoryPath(dirs = Vector(), absolute = false)
 }
 
@@ -171,7 +171,7 @@ case class FilePath(dir: DirectoryPath, name: FileName) {
 }
 
 object FilePath {
-  def apply(n: FileName): FilePath = FilePath(DirectoryPath.ROOT, n)
+  def apply(n: FileName): FilePath = FilePath(DirectoryPath.Root, n)
   def apply(uuid: UUID): FilePath = apply(FileName(uuid))
 
   def unsafe(s: String): FilePath = DirectoryPath.unsafe(s).toFilePath

@@ -38,16 +38,21 @@ trait LinkDsl extends LinkCreation {
       fragmentFactory.see(SpecificationLink(s.is.header, alias = alias, tooltip = tooltip))
   }
 
+  implicit class HiddenSpecificationLink(specification: =>SpecificationStructure) {
+    def hide: Fragment =
+      fragmentFactory.link(SpecificationLink.create(specification).hide)
+  }
+
 }
 
 /**
  * Create links without any implicits
  */
 trait LinkCreation extends FragmentsFactory {
-  def link(s: SpecStructure): Fragment            = fragmentFactory.link(SpecificationLink(s.header, alias = s.header.showWords))
-  def link(s: =>SpecificationStructure): Fragment = fragmentFactory.link(SpecificationLink(s.is.header, alias = s.is.header.showWords))
+  def link(s: SpecStructure): Fragment            = fragmentFactory.link(SpecificationLink.create(s))
+  def link(s: =>SpecificationStructure): Fragment = fragmentFactory.link(SpecificationLink.create(s.is))
 
-  def see(s: SpecStructure): Fragment            = fragmentFactory.see(SpecificationLink(s.header, alias = s.header.showWords))
-  def see(s: =>SpecificationStructure): Fragment = fragmentFactory.see(SpecificationLink(s.is.header, alias = s.is.header.showWords))
+  def see(s: SpecStructure): Fragment            = fragmentFactory.see(SpecificationLink.create(s))
+  def see(s: =>SpecificationStructure): Fragment = fragmentFactory.see(SpecificationLink.create(s))
 }
 

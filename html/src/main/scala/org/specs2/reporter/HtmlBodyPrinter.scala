@@ -97,7 +97,7 @@ trait HtmlBodyPrinter {
           case other => NodeSeq.Empty
         }
 
-      case Fragment(link: SpecificationLink,_,_) =>
+      case Fragment(link: SpecificationLink,_,_) if !link.hidden =>
         <link class="ok"><a href={FilePath.unsafe(link.url).relativeTo(baseDir).path} tooltip={link.tooltip} class="ok">{link.linkText}</a></link>
 
       case Fragment(form @ FormDescription(_),_,_) =>

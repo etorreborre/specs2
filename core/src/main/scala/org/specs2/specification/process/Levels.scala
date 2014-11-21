@@ -55,8 +55,6 @@ trait Levels {
   }
 
 
-  case class Level(start: Boolean = false, incrementNext: Boolean = false, l: Int = 0)
-
   def levelsToTreeLoc(mapper: Mapper): Process1[(Fragment, Int), TreeLoc[Fragment]] = {
 
     def go(treeLoc: TreeLoc[(Fragment, Int)]): Process1[(Fragment, Int), TreeLoc[(Fragment, Int)]] = {
@@ -96,3 +94,10 @@ trait Levels {
 }
 
 object Levels extends Levels
+
+case class Level(start: Boolean = false, incrementNext: Boolean = false, l: Int = 0)
+
+object Level {
+  val Root = Level()
+}
+

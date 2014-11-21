@@ -1,6 +1,8 @@
 package org.specs2
 package guide
 
+import org.specs2.specification.core.{SpecificationLink, SpecificationStructure}
+
 object UserGuide extends UserGuidePage { def is = "User Guide".title ^ s2"""
 
  $specs2 is a library for writing executable software specifications in Scala.
@@ -17,5 +19,9 @@ object UserGuide extends UserGuidePage { def is = "User Guide".title ^ s2"""
  ${win}how to use ${"matchers" ~/ Matchers }
  ${win}how to ${"execute a specification" ~/ Runners }
  ${win}how to ${"how to troubleshoot errors" ~/ Troubleshooting }
-                                                                        """
+
+ ${UseScalaCheck.hide}
+
+"""
+
 }

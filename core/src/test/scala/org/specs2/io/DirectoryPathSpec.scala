@@ -35,7 +35,7 @@ class DirectoryPathSpec extends Spec with TypedEqual { def is = s2"""
    a string starting with a /
    ${ DirectoryPath.unsafe("/hello/world").isAbsolute }
    the DirectoryPath.Root object
-   ${ (DirectoryPath.ROOT / "world").isAbsolute }
+   ${ (DirectoryPath.Root / "world").isAbsolute }
 
  A relative dir path can be built from
    a string not starting with a /
@@ -47,9 +47,9 @@ class DirectoryPathSpec extends Spec with TypedEqual { def is = s2"""
 
  Basic operations can be executed on a DirectoryPath
    get the parent
-   ${ DirectoryPath.ROOT.parent must beNone }
+   ${ DirectoryPath.Root.parent must beNone }
    ${ DirectoryPath("test").parent must beSome(DirectoryPath.EMPTY) }
-   ${ DirectoryPath("test").asAbsolute.parent must beSome(DirectoryPath.ROOT) }
+   ${ DirectoryPath("test").asAbsolute.parent must beSome(DirectoryPath.Root) }
    ${ ("test" / "hello" / "world").parent must beSome("test" / "hello") }
 
    get the basename
@@ -59,14 +59,14 @@ class DirectoryPathSpec extends Spec with TypedEqual { def is = s2"""
    ${ ("test" / "hello" / "world").root must_== DirectoryPath("test") }
 
    get the path as a string
-   ${ DirectoryPath.ROOT.path must_== "/" }
+   ${ DirectoryPath.Root.path must_== "/" }
    ${ DirectoryPath.EMPTY.path must_== "" }
    ${ DirectoryPath("test").path must_== "test" }
    ${ DirectoryPath("test").asAbsolute.path must_== "/test" }
    ${ ("test" / "hello" / "world").path must_== "test/hello/world" }
 
    get the path as a string, with a last slash
-   ${ DirectoryPath.ROOT.dirPath must_== "/" }
+   ${ DirectoryPath.Root.dirPath must_== "/" }
    ${ DirectoryPath("test").dirPath must_== "test/" }
    ${ ("test" / "hello" / "world").dirPath must_== "test/hello/world/" }
 
