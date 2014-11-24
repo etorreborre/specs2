@@ -37,25 +37,6 @@ case class SpecHtmlPage(specification: SpecStructure, path: FilePath, outDir: Di
   def relativePath: FilePath =
     path.relativeTo(outDir)
 
-  def createSubtoc: NodeSeq = {
-    val items =
-      body.headersTree.
-        bottomUp { (h: Header, s: Stream[NodeSeq]) =>
-        if (h.isRoot)
-        // 'id' is the name of the attribute expected by jstree to "open" the tree on a specific node
-          s.reduceNodes.updateHeadAttribute("id", path.name.name)
-        else if (h.level > 1)
-          <li><a href={relativePath.path+"#"+h.pandocName} title={h.name}>{h.name.truncate(15)}</a>
-            { <ul>{s.toSeq}</ul> unless s.toSeq.isEmpty }
-          </li>
-        else
-          <ul>{s.toSeq}</ul> unless s.toSeq.isEmpty
-
-      }.rootLabel
-
-    {items}
-  }
-
   def body: NodeSeq =
     parse(content)
 
