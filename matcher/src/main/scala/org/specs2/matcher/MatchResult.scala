@@ -131,7 +131,7 @@ case class MatchFailure[T] private[specs2](ok: () => String, ko: () => String, e
   def koMessage = ko()
 
   /** an exception having the same stacktrace */
-  val exception = new Exception(koMessage)
+  lazy val exception = new Exception(koMessage)
 
   override def toResult = Failure(koMessage, okMessage, trace, details)
 
