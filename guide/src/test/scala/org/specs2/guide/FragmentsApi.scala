@@ -28,7 +28,7 @@ The `FragmentFactory` possesses different methods to create:
  - examples
  - steps / actions
  - tags
- - links
+ - references
  - "formatting" fragments (break, paragraph, tab...)
 
 Please have a look at the ScalaDoc to see the exact API for the factory and look at the source code for the default implementation in `DefaultFragmentFactory`.

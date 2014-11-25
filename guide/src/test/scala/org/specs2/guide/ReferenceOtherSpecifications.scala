@@ -1,7 +1,7 @@
 package org.specs2
 package guide
 
-object LinkOtherSpecifications extends UserGuidePage { def is = s2"""
+object ReferenceOtherSpecifications extends UserGuidePage { def is = s2"""
 
 For some large projects, or to write documentation, you will need to structure your specifications so that some of them will reference others. Those references will be of 2 types:
 
@@ -35,7 +35,7 @@ object ThirdSpecification extends Specification { def is = s2"""
 
 }}
 
-The syntax shown above to create links is using a string for the link alias and uses two operators:
+The syntax shown above to create references is using a string for the link alias and uses two operators:
 
  Opterator | Description
  --------- | -----------

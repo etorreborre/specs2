@@ -54,11 +54,18 @@ case class Fragments(contents: Process[Task, Fragment]) {
   /** run the process to get all examples */
   def examples = fragments.filter(isExample)
 
-  /** run the process to get all links */
-  def links = fragments.filter(isLink)
+  /** run the process to get all specification references as Fragments */
+  def referenced = fragments.filter(isSpecificationRef)
 
-  /** run the process to get all specification links */
-  def specificationLinks = fragments.collect(specificationLink)
+  /** run the process to get all specification references */
+  def specificationRefs = fragments.collect(specificationRef)
+
+  /** run the process to get all specification see references */
+  def seeReferences = fragments.collect(seeReference)
+
+  /** run the process to get all specification link references */
+  def linkReferences = fragments.collect(linkReference)
+
 
   /** strip the margin of all examples */
   def stripMargin: Fragments = stripMargin('|')

@@ -87,13 +87,21 @@ object Fragment {
     case _         => false
   }
 
-  def isLink(f: Fragment) = f.description match {
-    case l: SpecificationLink => true
-    case _                    => false
+  def isSpecificationRef(f: Fragment) = f.description match {
+    case l: SpecificationRef => true
+    case _                   => false
   }
 
-  def specificationLink: PartialFunction[Fragment, SpecificationLink] = {
-    case Fragment(l: SpecificationLink,_,_) => l
+  def specificationRef: PartialFunction[Fragment, SpecificationRef] = {
+    case Fragment(l: SpecificationRef,_,_) => l
+  }
+
+  def linkReference: PartialFunction[Fragment, SpecificationRef] = {
+    case f @ Fragment(l: SpecificationRef,_,_) if f.isExecutable => l
+  }
+
+  def seeReference: PartialFunction[Fragment, SpecificationRef] = {
+    case f @ Fragment(l: SpecificationRef,_,_) if !f.isExecutable => l
   }
 
   def isFormatting(f: Fragment) = f.description match {

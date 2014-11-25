@@ -13,7 +13,7 @@ import specification.{Before, Scope}
  *  - how to create Steps
  *  - how to create examples
  *  - how to use traits to provide vals to each example and set the context
- *  - how create links to other specifications or include them
+ *  - how create references to other specifications or include them
  *
  */
 class UnitSpec extends mutable.Specification {
@@ -61,7 +61,7 @@ class UnitSpec extends mutable.Specification {
       string must haveSize(7)
     }
   }
-  // you can add links to other specifications
+  // you can add references to other specifications
   "how" ~ (new IncludedSpec)
 
   // a step to execute after the specification must be declared at the end

@@ -66,8 +66,8 @@ trait MarkdownPrinter extends Printer {
           case other                            => ""
         }
 
-      case Fragment(link: SpecificationLink,_,_) => toMarkdown(link, options)
-      case other                                 => ""
+      case Fragment(ref: SpecificationRef,_,_) => toMarkdown(ref, options)
+      case other                               => ""
     }
   }
 
@@ -78,8 +78,8 @@ trait MarkdownPrinter extends Printer {
   }
 
 
-  def toMarkdown(link: SpecificationLink, options: MarkdownOptions) =
-    s"[${link.linkText}](${options.outDir / FilePath.unsafe(link.url)})"
+  def toMarkdown(ref: SpecificationRef, options: MarkdownOptions) =
+    s"[${ref.linkText}](${options.outDir / FilePath.unsafe(ref.url)})"
 
 }
 

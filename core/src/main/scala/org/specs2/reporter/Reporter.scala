@@ -29,9 +29,10 @@ trait Reporter {
   def finalize(env: Env, printers: List[Printer]): List[SpecificationStructure] => Action[Unit] = { specs =>
     printers.traverseU(_.finalize(env, specs)).void
   }
+
   /**
    * report 1 spec structure with the given printers
-   * first find and sort the linked specifications and report them
+   * first find and sort the referenced specifications and report them
    */
   def report(env: Env, printers: List[Printer]): SpecStructure => Action[Unit] = { spec =>
     val env1 = env.setArguments(env.arguments.overrideWith(spec.arguments))

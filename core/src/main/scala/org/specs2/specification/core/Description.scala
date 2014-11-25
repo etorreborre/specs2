@@ -42,9 +42,9 @@ case object NoText extends Description {
 }
 
 /**
- * Link to another specification
+ * Reference to another specification
  */
-case class SpecificationLink(header: SpecHeader, alias: String = "", tooltip: String = "", hidden: Boolean = false) extends Description {
+case class SpecificationRef(header: SpecHeader, alias: String = "", tooltip: String = "", hidden: Boolean = false) extends Description {
   def specClassName = header.className
 
   def url = specClassName+".html"
@@ -54,16 +54,16 @@ case class SpecificationLink(header: SpecHeader, alias: String = "", tooltip: St
 
   def show = header.show
 
-  def hide: SpecificationLink =
+  def hide: SpecificationRef =
     copy(hidden = true)
 }
 
-object SpecificationLink {
-  def create(specificationStructure: =>SpecificationStructure): SpecificationLink =
+object SpecificationRef {
+  def create(specificationStructure: =>SpecificationStructure): SpecificationRef =
     create(specificationStructure.is)
 
-  def create(specStructure: SpecStructure): SpecificationLink =
-    SpecificationLink(specStructure.header, alias = specStructure.header.showWords)
+  def create(specStructure: SpecStructure): SpecificationRef =
+    SpecificationRef(specStructure.header, alias = specStructure.header.showWords)
 }
 
 /**

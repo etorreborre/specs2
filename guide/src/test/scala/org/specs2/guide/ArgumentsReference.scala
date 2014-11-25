@@ -1,7 +1,7 @@
 package org.specs2
 package guide
 
-import org.specs2.specification.core.SpecificationLink
+import org.specs2.specification.core.SpecificationRef
 
 object ArgumentsReference extends UserGuidePage { def is = "Arguments reference".title ^ s2"""
 ## Presentation

@@ -10,7 +10,7 @@ trait AcceptanceDsl extends
   with SpecStructureDsl
   with TitleDsl
   with ExampleDsl
-  with LinkDsl
+  with ReferenceDsl
   with TagDsl
   with ActionDsl
 
@@ -24,7 +24,7 @@ trait AcceptanceDsl extends
 private[specs2]
 trait AcceptanceDsl1 extends 
        SpecStructureDsl1 
-  with LinkCreation 
+  with ReferenceCreation
   with TagDsl
   with ActionDsl
 

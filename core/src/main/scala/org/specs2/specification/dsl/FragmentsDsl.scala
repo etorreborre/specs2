@@ -35,6 +35,14 @@ trait FragmentsDsl extends FragmentsFactory with AcceptanceDsl1 { outer =>
     def ^(other: String)            : Fragments     = fs ^ fragmentFactory.text(other)
   }
 
+  implicit class HiddenFragment(fragment: Fragment) {
+    def hide: Fragment =
+      fragment.description match {
+        case r: SpecificationRef => fragment.copy(description = r.hide)
+        case other               => fragment.copy(description = NoText)
+      }
+  }
+
   /**
    * create a block of new fragments where each of them is separated
    * by a newline and there is a specific offset from the left margin

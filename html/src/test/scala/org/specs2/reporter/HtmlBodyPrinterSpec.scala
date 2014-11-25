@@ -8,7 +8,7 @@ import specification.core.Fragment
 
 object HtmlBodyPrinterSpec extends Specification { def is = s2"""
 
- A hidden link must not be printed $hidden
+ A hidden reference must not be printed $hidden
 
 """
 

@@ -3,10 +3,10 @@ package specification
 
 import core._
 import matcher._
-import dsl.LinkDsl
+import dsl.ReferenceDsl
 import org.specs2.control.Debug
 
-class HtmlLinksSpec extends Spec with TypedEqual with LinkDsl { def is = s2"""
+class HtmlLinksSpec extends Spec with TypedEqual with ReferenceDsl { def is = s2"""
 
   Html links referencing specifications can be introduced
 
@@ -23,7 +23,7 @@ class HtmlLinksSpec extends Spec with TypedEqual with LinkDsl { def is = s2"""
   """
 
   def a(f: Fragment) = f match {
-    case Fragment(link @ SpecificationLink(_,_,_,_), _, _) =>
+    case Fragment(link @ SpecificationRef(_,_,_,_), _, _) =>
       s"""<a href='${link.url}'${if (link.tooltip.isEmpty) "" else s" tip='${link.tooltip}'"}>${link.linkText}</a>""".trim
     case other => "not a link"
   }

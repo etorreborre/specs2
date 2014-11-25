@@ -36,8 +36,13 @@ case class SpecStructure(header: SpecHeader, arguments: Arguments, lazyFragments
 
   def texts = fragments.texts
   def examples = fragments.examples
-  def links = fragments.links
-  def specificationLinks = fragments.specificationLinks
+  
+  def references = fragments.referenced
+  def specificationRefs = fragments.specificationRefs
+
+  def seeReferences = fragments.seeReferences
+
+  def linkReferences = fragments.linkReferences
 
   def dependsOn(spec2: SpecStructure): Boolean =
     SpecStructure.dependsOn(this, spec2)
@@ -64,7 +69,7 @@ object SpecStructure {
 
   /** return true if s1 depends on s2, i.e, s1 has a link to s2 */
   val dependsOn = (s1: SpecStructure, s2: SpecStructure) => {
-    val s1Links = s1.fragments.fragments.collect { case Fragment(l: SpecificationLink, _, _) => l.specClassName }
+    val s1Links = s1.fragments.fragments.collect(Fragment.linkReference).map(_.specClassName)
     s1Links.contains(s2.specClassName)
   }
 

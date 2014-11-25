@@ -71,12 +71,12 @@ trait TableOfContents {
       val (p1: SpecHtmlPage, (remaining, visited)) = current
       val (dependents, others) = remaining.partition(p2 => p1.specification.dependsOn(p2.specification) && !visited.contains(p2))
       val visited1 = dependents ::: visited
-      ((p1, (others, visited1)), () => dependents.sortBy(linkIndexIn(p1.specification.specificationLinks)).toStream.map((_, (others, visited1))))
+      ((p1, (others, visited1)), () => dependents.sortBy(linkIndexIn(p1.specification.linkReferences)).toStream.map((_, (others, visited1))))
     }.loc.map(_._1)
 
   /** @return the index of a linked specification in 'main' */
-  def linkIndexIn(s1Links: Seq[SpecificationLink]): SpecHtmlPage => Int = { s2: SpecHtmlPage =>
-    s1Links.map(_.specClassName).indexOf(s2.className)
+  def linkIndexIn(s1Refs: Seq[SpecificationRef]): SpecHtmlPage => Int = { s2: SpecHtmlPage =>
+    s1Refs.map(_.specClassName).indexOf(s2.className)
   }
 
   def li(outDir: DirectoryPath)(page: SpecHtmlPage)(nested: NodeSeq): NodeSeq =

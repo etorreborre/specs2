@@ -42,32 +42,53 @@ object SpecificationStructure {
       (s1: SpecificationStructure, s2: SpecificationStructure) => SpecStructure.dependsOn(s1.structure(env), s2.structure(env)))
   }
 
+  /** @return all the referenced specifications */
+  def referencedSpecifications(spec: SpecificationStructure, env: Env, classLoader: ClassLoader): Action[Seq[SpecificationStructure]] =
+    specificationsRefs(spec, env, classLoader)(referencedSpecificationsClassnames)
+
   /** @return all the linked specifications */
-  def linkedSpecifications(spec: SpecificationStructure, env: Env, classLoader: ClassLoader): Action[Seq[SpecificationStructure]] = {
+  def linkedSpecifications(spec: SpecificationStructure, env: Env, classLoader: ClassLoader): Action[Seq[SpecificationStructure]] =
+    specificationsRefs(spec, env, classLoader)(linkedSpecificationsClassnames)
+
+  /** @return all the see specifications */
+  def seeSpecifications(spec: SpecificationStructure, env: Env, classLoader: ClassLoader): Action[Seq[SpecificationStructure]] =
+    specificationsRefs(spec, env, classLoader)(seeSpecificationsClassnames)
+
+  /** @return all the referenced specifications */
+  def specificationsRefs(spec: SpecificationStructure, env: Env, classLoader: ClassLoader)(refClassNames: (SpecificationStructure, Env) => List[String]): Action[Seq[SpecificationStructure]] = {
     val byName = (ss: List[SpecificationStructure]) => ss.groupBy(_.structure(env).specClassName).mapValues(_.head)
 
-    def getLinked(s: SpecificationStructure, visited: Map[String, SpecificationStructure]): Map[String, SpecificationStructure] =
-      linkedSpecificationsClassnames(s, env).map(name => create(name, classLoader)).sequenceU.map(byName).runOption.getOrElse(Map())
+    def getRefs(s: SpecificationStructure, visited: Map[String, SpecificationStructure]): Map[String, SpecificationStructure] =
+      refClassNames(s, env).map(name => create(name, classLoader)).sequenceU.map(byName).runOption.getOrElse(Map())
         .filterNot { case (n, _) => visited.keys.toSeq.contains(n) }
 
     Actions.safe {
       def getAll(seed: Seq[SpecificationStructure], visited: Map[String, SpecificationStructure]): Seq[SpecificationStructure] = {
         if (seed.isEmpty) visited.values.toSeq
         else {
-          val toVisit: Map[String, SpecificationStructure] = Map(seed.flatMap { s => getLinked(s, visited) }:_*)
+          val toVisit: Map[String, SpecificationStructure] = Map(seed.flatMap { s => getRefs(s, visited) }:_*)
           getAll(toVisit.values.toSeq, visited ++ toVisit)
         }
       }
       val name = spec.structure(env).specClassName
-      val linked = getLinked(spec, Map(name -> spec))
+      val linked = getRefs(spec, Map(name -> spec))
       getAll(linked.values.toSeq, Map(linked.toSeq :+ (name -> spec):_*))
     }
+  }
 
+  /** @return the class names of all the referenced specifications */
+  def referencedSpecificationsClassnames(spec: SpecificationStructure, env: Env): List[String] = {
+    spec.structure(env).fragments.fragments.collect(Fragment.specificationRef).map(_.header.specClass.getName).toList
   }
 
   /** @return the class names of all the linked specifications */
   def linkedSpecificationsClassnames(spec: SpecificationStructure, env: Env): List[String] = {
-    spec.structure(env).fragments.fragments.collect(Fragment.specificationLink).map(_.header.specClass.getName).toList
+    spec.structure(env).fragments.fragments.collect(Fragment.linkReference).map(_.header.specClass.getName).toList
+  }
+
+  /** @return the class names of all the see specifications */
+  def seeSpecificationsClassnames(spec: SpecificationStructure, env: Env): List[String] = {
+    spec.structure(env).fragments.fragments.collect(Fragment.seeReference).map(_.header.specClass.getName).toList
   }
 }
 

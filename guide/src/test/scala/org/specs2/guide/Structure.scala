@@ -124,7 +124,7 @@ $AndIfYouWantToKnowMore
  - ${"skip" ~/ SkipExamples} examples
  - collect ${"*all* expectations" ~/ GetAllExpectations}
  - mark examples as ${"pending until they are fixed" ~/ PendingUntilFixedExamples}
- - add ${"links to other specifications" ~/ LinkOtherSpecifications}
+ - add ${"references to other specifications" ~/ ReferenceOtherSpecifications}
  - create example descriptions spanning ${"several lines" ~/ MultilineDescriptions}
  - add ${"new lines and tabs" ~/ SpecificationFormatting} in unit specifications
  - create a trait which will ${"decorate or transform other specifications" ~/ SpecificationTemplate} when mixed-in

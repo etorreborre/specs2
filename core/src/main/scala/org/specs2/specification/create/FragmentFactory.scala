@@ -47,8 +47,8 @@ trait FragmentFactory {
   def backtab: Fragment
   def backtab(n: Int): Fragment
 
-  def link(link: SpecificationLink): Fragment
-  def see(link: SpecificationLink): Fragment
+  def link(link: SpecificationRef): Fragment
+  def see(link: SpecificationRef): Fragment
 }
 
 /**
@@ -89,8 +89,8 @@ trait DefaultFragmentFactory extends FragmentFactory {
   def backtab: Fragment         = backtab(1)
   def backtab(n: Int): Fragment = Fragment(Backtab(n), Execution.NoExecution)
 
-  def link(link: SpecificationLink)  = Fragment(link, Execution.SpecificationStats(link.specClassName))
-  def see(link: SpecificationLink)   = Fragment(link, Execution.NoExecution)
+  def link(link: SpecificationRef)  = Fragment(link, Execution.SpecificationStats(link.specClassName))
+  def see(link: SpecificationRef)   = Fragment(link, Execution.NoExecution)
 
 }
 
@@ -144,8 +144,8 @@ class ContextualFragmentFactory(factory: FragmentFactory, context: Env => Contex
   def tab(n: Int): Fragment                        = factory.tab(n)
   def backtab: Fragment                            = factory.backtab
   def backtab(n: Int): Fragment                    = factory.backtab(n)
-  def link(link: SpecificationLink): Fragment      = factory.link(link)
-  def see(link: SpecificationLink): Fragment       = factory.see(link)
+  def link(link: SpecificationRef): Fragment      = factory.link(link)
+  def see(link: SpecificationRef): Fragment       = factory.see(link)
 
 }
 
@@ -185,8 +185,8 @@ trait DelegatedFragmentFactory extends FragmentsFactory with FragmentFactory {
   def tab(n: Int): Fragment                     = factory.tab(n)
   def backtab: Fragment                         = factory.backtab
   def backtab(n: Int): Fragment                 = factory.backtab(n)
-  def link(link: SpecificationLink): Fragment   = factory.link(link)
-  def see(link: SpecificationLink)              = factory.see(link)
+  def link(link: SpecificationRef): Fragment   = factory.link(link)
+  def see(link: SpecificationRef)              = factory.see(link)
 
 }
 

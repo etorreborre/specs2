@@ -18,7 +18,7 @@ import scala.concurrent.ExecutionContext
  * These implicit methods declare which kind of object can be interpolated in a s2 string;
  *
  *  - a function using the previous text and returning Fragments
- *  - specification links
+ *  - specification references
  *  - examples using the Env, arguments, the statistics repository, the command line arguments
  *  - other specifications
  *  - strings
@@ -34,9 +34,9 @@ trait S2StringContext extends S2StringContext1 { outer =>
     }
   }
 
-  implicit def specificationLinkIsInterpolatedFragment(link: SpecificationLink): InterpolatedFragment = new InterpolatedFragment {
+  implicit def specificationRefIsInterpolatedFragment(ref: SpecificationRef): InterpolatedFragment = new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String): Fragments = {
-      fs append ff.text(text).setLocation(start) append fragmentFactory.link(link).setLocation(end)
+      fs append ff.text(text).setLocation(start) append fragmentFactory.link(ref).setLocation(end)
     }
   }
 
@@ -72,7 +72,7 @@ trait S2StringContext extends S2StringContext1 { outer =>
 
   implicit def specificationStructureIsInterpolatedFragment(s: SpecificationStructure): InterpolatedFragment = {
     lazy val specStructure = s.is
-    fragmentIsInterpolatedFragment(ff.see(SpecificationLink(specStructure.header, alias = specStructure.header.show)))
+    fragmentIsInterpolatedFragment(ff.see(SpecificationRef(specStructure.header, alias = specStructure.header.show)))
   }
 
   implicit def specStructureIsInterpolatedFragment(s: SpecStructure): InterpolatedFragment = new InterpolatedFragment {

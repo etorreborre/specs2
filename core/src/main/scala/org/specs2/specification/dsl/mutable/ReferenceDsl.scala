@@ -6,9 +6,9 @@ package mutable
 import core.{SpecificationStructure, SpecStructure}
 
 /**
- * Dsl for creating links in a mutable specification
+ * Dsl for creating references in a mutable specification
  */
-trait LinkDsl extends FragmentBuilder with dsl.LinkDsl {
+trait ReferenceDsl extends FragmentBuilder with dsl.ReferenceDsl {
 
   implicit class mutableLinkFragment(alias: String) extends linkFragment(alias) {
     override def ~(s: SpecStructure)                              = addFragment(super.~(s))
