@@ -63,9 +63,9 @@ case class SmartDiffs(show: Boolean       = true,
 
   /** @return the diffs for sequences */
   def showSeqDiffs(actual: Seq[Any], expected: Seq[Any], ordered: Boolean): (Seq[String], Seq[String]) = {
-    val (matched, added) = BestMatching.findBestMatch(actual, expected, (t: Any, v: Any) => v == t, eachCheck = true)(AsResult.booleanAsResult)
-    val (_, koValues)    = matched.partition(_._3.isSuccess)
-    val missing          = koValues.map(_._1)
+    val (matched, missing) = BestMatching.findBestMatch(actual, expected, (t: Any, v: Any) => v == t, eachCheck = true)(AsResult.booleanAsResult)
+    val (_, koValues)      = matched.partition(_._3.isSuccess)
+    val added              = koValues.map(_._1)
 
     (added.map(_.toString), missing.map(_.toString))
   }
