@@ -67,7 +67,7 @@
     </head><body><div id="breadcrumbs"><a href="../guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../guide/org.specs2.guide.Runners.html">Runners</a></div><div class="colmask threecol">
             <div class="colmid">
               <div class="colleft">
-                <div class="col1"><div id="central"><html><title>Runners</title><a name="Runners"><h2 specId="1219633379">Runners</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Presentation"><h3>Presentation</h3></a><p>There are many ways to execute <strong><em>specs2</em></strong> specifications:</p>
+                <div class="col1"><div id="central"><html><title>Runners</title><a name="Runners"><h2 specId="2028835027">Runners</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><a name="Presentation"><h3>Presentation</h3></a><p>There are many ways to execute <strong><em>specs2</em></strong> specifications:</p>
 <ul>
   <li>on the command line, with a console output, and the <code class="prettyprint">specs2.run</code> runner</li>
   <li>on the command line, with a html output, and the <code class="prettyprint">specs2.html</code> runner</li>
@@ -373,9 +373,9 @@ args.report(showtimes = true, xonly = true)
       <td>the stacktraces are not filtered </td>
     </tr>
     <tr>
-      <td><code class="prettyprint">diffs(show, separators, triggerSize, shortenSize, diffRatio, full)</code> </td>
-      <td><code class="prettyprint">args.report(diffs=SmartDiffs(show, separators, triggerSize, shortenSize, diffRatio, full))</code> </td>
-      <td>to display the differences when doing equality comparison </td>
+      <td><code class="prettyprint">diffs(...)</code> </td>
+      <td><code class="prettyprint">args.report(diffs=SmartDiffs(...))</code> </td>
+      <td>to display the differences when doing equality comparison (see the Diffs section for details on parameters) </td>
     </tr>
   </tbody>
 </table><a name="Output+directory"><h5>Output directory</h5></a><p>All the files created during the execution of a specification will be created in the <code class="prettyprint">target/specs-report</code> directory. You can change that by setting the<br /><code class="prettyprint">-Dspecs2.outDir</code> system property.</p><a name="Storing+previous+results"><h5>Storing previous results</h5></a><p>When a specification has been executed its statistics and failed examples will be stored by default in a specific <code class="prettyprint">stats</code> directory created in the output directory. This data can be used on subsequent runs to:</p>
@@ -433,16 +433,24 @@ args.report(showtimes = true, xonly = true)
   <li><code class="prettyprint">shortenSize</code> controls the number of characters to display around each difference (default is 5)</li>
   <li><code class="prettyprint">diffRatio</code> percentage of differences above which the differences must not be shown (default is 30)</li>
   <li><code class="prettyprint">full</code> displays the full original expected and actual strings</li>
+  <li><code class="prettyprint">seqTriggerSize</code> is the minimum size to compute differences on Seq, Set and Maps</li>
+  <li><code class="prettyprint">seqMaxSize</code> is the maximum size to compute differences on Seq, Set and Maps</li>
 </ul><p>You can also specify your own enhanced algorithm for displaying difference by providing an instance of the <code class="prettyprint">org.specs2.main.Diffs</code> trait:</p>
 <pre><code class="prettyprint">trait Diffs {
+  /** @return true if the differences must be shown */
+  def show: Boolean
   /** @return true if the differences must be shown for 2 different values */
-  def show(expected: Any, actual: Any): Boolean
+  def show(actual: Any, expected: Any): Boolean
   /** @return true if the differences must be shown for 2 different sequences of values */
-  def show(expected: Seq[Any], actual: Seq[Any], ordered: Boolean): Boolean
+  def showSeq(actual: Seq[Any], expected: Seq[Any], ordered: Boolean): Boolean
+  /** @return true if the differences must be shown for 2 different maps */
+  def showMap(actual: Map[Any, Any], expected: Map[Any, Any]): Boolean
   /** @return the diffs */
-  def showDiffs(expected: Any, actual: Any): (String, String)
-  /** @return the diffs for sequences */
-  def showDiffs(expected: Seq[Any], actual: Seq[Any], ordered: Boolean): (String, String)
+  def showDiffs(actual: Any, expected: Any): (String, String)
+  /** @return the diffs for sequences with missing / added values  */
+  def showSeqDiffs(actual: Seq[Any], expected: Seq[Any], ordered: Boolean): (Seq[String], Seq[String])
+  /** @return the diffs for sequences with missing / added values  */
+  def showMapDiffs(actual: Map[Any, Any], expected: Map[Any, Any]): (Seq[String], Seq[String], Seq[String])
   /** @return true if the full strings must also be shown */
   def showFull: Boolean
 }
@@ -826,7 +834,7 @@ testOptions in Test += Tests.Argument(&quot;html&quot;, &quot;console&quot;)
       <td>m </td>
     </tr>
   </tbody>
-</table><p><em>From command-line arguments</em></p><p>It is also possible to set colors by passing the <code class="prettyprint">colors</code> argument. This argument must be a list of <code class="prettyprint">key:value</code> pairs (comma-separated) where keys are taken from the property names above without the <code class="prettyprint">color.</code> prefix and values from the abbreviated color names.</p><p>For example you can pass on the command line:</p><p><code class="prettyprint">colors text:blue,failure:magenta</code></p><p>to have the text colored in blue and the failures in Magenta.</p><p>If the <code class="prettyprint">colors</code> option contains <code class="prettyprint">whitebg</code> then the default colors are considered to be <a href="http://etorreborre.github.io/specs2/api/SPECS2-2.4.11/index.html#org.specs2.text.Colors"><code class="prettyprint">InvertedColors</code></a></p><p><em>Through the API</em></p><p>Finally you can change the color scheme that's being used on the console by implementing your own <a href="http://etorreborre.github.io/specs2/api/SPECS2-2.4.11/index.html#org.specs2.text.Colors"><code class="prettyprint">org.specs2.text.Colors</code></a> trait or override values in the existing <code class="prettyprint">ConsoleColors</code> class. For example if you want to output magenta everywhere yellow is used you can write:</p>
+</table><p><em>From command-line arguments</em></p><p>It is also possible to set colors by passing the <code class="prettyprint">colors</code> argument. This argument must be a list of <code class="prettyprint">key:value</code> pairs (comma-separated) where keys are taken from the property names above without the <code class="prettyprint">color.</code> prefix and values from the abbreviated color names.</p><p>For example you can pass on the command line:</p><p><code class="prettyprint">colors text:blue,failure:magenta</code></p><p>to have the text colored in blue and the failures in Magenta.</p><p>If the <code class="prettyprint">colors</code> option contains <code class="prettyprint">whitebg</code> then the default colors are considered to be <a href="http://etorreborre.github.io/specs2/api/SPECS2-2.4.12/index.html#org.specs2.text.Colors"><code class="prettyprint">InvertedColors</code></a></p><p><em>Through the API</em></p><p>Finally you can change the color scheme that's being used on the console by implementing your own <a href="http://etorreborre.github.io/specs2/api/SPECS2-2.4.12/index.html#org.specs2.text.Colors"><code class="prettyprint">org.specs2.text.Colors</code></a> trait or override values in the existing <code class="prettyprint">ConsoleColors</code> class. For example if you want to output magenta everywhere yellow is used you can write:</p>
 <pre><code class="prettyprint">object MyColors = new org.specs2.text.ConsoleColors { override val failureColor = magenta }
 
 class MyColoredSpecification extends Specification { def is = colors(MyColors) ^
@@ -890,12 +898,12 @@ class MySpecification extends Specification {
 </code></pre>
 <hr /></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Runners</th></tr>
-        <tr><td>Finished in</td><td class="info">6 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">7 ms</td></tr>
         <tr><td>Results</td><td class="success">1 example, 0 failure, 0 error</td></tr>
       </table></html></div></div>
                 <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="1196953614"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="404526331"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1655071716"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="2135382049"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -905,7 +913,7 @@ class MySpecification extends Specification {
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="637336846"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="142121565"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -1020,7 +1028,7 @@ class MySpecification extends Specification {
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Methods">Methods</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Full+example">Full example</a>
-            <ul><li id="1578265674"><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
+            <ul><li id="1985080636"><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Rules">Rules</a>
@@ -1038,7 +1046,7 @@ class MySpecification extends Specification {
           </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Unit+specification">Unit specification</a>
             
           </li></ul>
-          </li><li id="2137181106"><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then_1">Given When Then</a>
+          </li><li id="94298977"><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then_1">Given When Then</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then">Given When Then</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Parsing">Parsing</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Delimited+parsers">Delimited parsers</a>
@@ -1057,7 +1065,7 @@ class MySpecification extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1199855382"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1607608911"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1129,14 +1137,8 @@ class MySpecification extends Specification {
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1488908438"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="703497265"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
-            
-          </li><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
-            
-          </li><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Properties">Properties</a>
-            
-          </li><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Styles">Styles</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Simple+form">Simple form</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Adding+several+rows+at+once">Adding several rows at once</a>
@@ -1173,7 +1175,7 @@ class MySpecification extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="1219633379"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="2028835027"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1259,7 +1261,7 @@ class MySpecification extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1403579405"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="579593236"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -1311,7 +1313,7 @@ class MySpecification extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="2124156803"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="300482496"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1357,7 +1359,7 @@ class MySpecification extends Specification {
             
           </li></ul>
           </li></ul>
-          </li><li id="388718180"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="1773063218"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1377,7 +1379,7 @@ class MySpecification extends Specification {
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['1196953614','1219633379'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['1655071716','2028835027'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                 <div class="col3"><div id="rightcolumn"></div></div>
               </div>

@@ -67,7 +67,7 @@
     </head><body><div id="breadcrumbs"><a href="../guide/org.specs2.guide.UserGuide.html">UserGuide</a><t> / </t><a href="../guide/org.specs2.guide.Matchers.html">Matchers</a></div><div class="colmask threecol">
             <div class="colmid">
               <div class="colleft">
-                <div class="col1"><div id="central"><html><title>Matchers</title><a name="Matchers"><h2 specId="1199855382">Matchers</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
+                <div class="col1"><div id="central"><html><title>Matchers</title><a name="Matchers"><h2 specId="1607608911">Matchers</h2></a><status class="ok"><div style="display: show; text-indent:0px;"><p>There are many ways to define expectations in <strong><em>specs2</em></strong>. You can define expectations with anything that returns a <code class="prettyprint">Result</code>:</p>
 <ul>
   <li>Boolean</li>
   <li>Standard result</li>
@@ -358,9 +358,22 @@ val person = &quot;&quot;&quot;{
 <pre><code class="prettyprint">person must /(&quot;p.*&quot;.r) */ &quot;.*on&quot;.r /(&quot;age&quot; -&gt; &quot;\\d+\\.\\d&quot;.r)
 person must /(&quot;p.*&quot;.r) */ &quot;.*on&quot;.r /(&quot;age&quot; -&gt; startWith(&quot;3&quot;))
 person must /(&quot;p.*&quot;.r) */ &quot;.*on&quot;.r /(&quot;age&quot; -&gt; (be_&gt;(30) ^^ ((_:String).toInt)))
-</code></pre><p>Finally you can access some records by their index: </p>
+</code></pre><p>You can also access some records by their index: </p>
 <pre><code class="prettyprint">person must /(&quot;person&quot;) /# 2 / &quot;person&quot;
-</code></pre></td></tr></table></form></div><div class="tabbertab" title="File"><form><table class="dataTable"><tr><td class="none" style="info"><p>The Java api for files is more or less mimicked as matchers which can operate on strings denoting paths or on Files (with the <code class="prettyprint">org.specs2.matcher.FileMatchers</code> trait)</p>
+</code></pre><p>Finally you can use Json matchers to match elements in an array: </p>
+<pre><code class="prettyprint">val json = &quot;&quot;&quot;{&quot;products&quot;:[{&quot;name&quot;:&quot;shirt&quot;,&quot;price&quot;:10},{&quot;name&quot;:&quot;shoe&quot;,&quot;price&quot;:5}]}&quot;&quot;&quot;
+
+def aProductWith(name: Matcher[JsonType],  price: Matcher[JsonType]): Matcher[String] =
+  /(&quot;name&quot;).andHave(name) and /(&quot;price&quot;).andHave(price)
+
+def haveProducts(products: Matcher[String]*): Matcher[String] =
+  /(&quot;products&quot;).andHave(allOf(products:_*))
+
+json must haveProducts(
+  aProductWith(name = &quot;shirt&quot;, price = 10),
+  aProductWith(name = &quot;shoe&quot;, price = 5)
+)
+</code></pre><p>The <code class="prettyprint">andHave</code> method accepts any <code class="prettyprint">Matcher[JsonType]</code> where <code class="prettyprint">JsonType</code> is either <code class="prettyprint">JsonArray</code>, <code class="prettyprint">JsonMap</code>, <code class="prettyprint">JsonNumber</code>, <code class="prettyprint">JsonString</code>, <code class="prettyprint">JsonNull</code>. In the example above we pass directly <code class="prettyprint">shirt</code> and <code class="prettyprint">10</code> as <code class="prettyprint">Matcher[JsonType]</code> because there are implicit conversions from <code class="prettyprint">Int</code>, <code class="prettyprint">Boolean</code>, <code class="prettyprint">Double</code>, <code class="prettyprint">String</code> and <code class="prettyprint">Traversable[String]</code> matchers (like <code class="prettyprint">allOf</code>) to a <code class="prettyprint">Matcher[JsonType]</code>.</p></td></tr></table></form></div><div class="tabbertab" title="File"><form><table class="dataTable"><tr><td class="none" style="info"><p>The Java api for files is more or less mimicked as matchers which can operate on strings denoting paths or on Files (with the <code class="prettyprint">org.specs2.matcher.FileMatchers</code> trait)</p>
 <ul>
   <li><code class="prettyprint">beEqualToIgnoringSep</code> checks if 2 paths are the same regardless of their separators<br />  <code class="prettyprint">&quot;c:\temp\hello&quot; must beEqualToIgnoringSep(&quot;c:/temp/hello&quot;)</code></li>
   <li><code class="prettyprint">beAnExistingPath</code> checks if a path exists</li>
@@ -540,7 +553,7 @@ org.specs2.main x-&gt; org.specs2.io because org.specs2.io.FileSystem -&gt; org.
 </code></pre><p><strong><em>Alternative implementation</em></strong></p><p>Another implementation of the same functionality is available through the <code class="prettyprint">org.specs2.analysis.CompilerDependencyFinder</code> trait. This implementation uses the compiler dependency analysis functionality but needs more time, since it recompiles the sources.</p><p>The source files are taken from the <code class="prettyprint">src/main/scala</code> directory by default but you can change this value by using the <code class="prettyprint">Layers.inSourceDir</code> method.</p><p>While this implementation is slower than the Classycle one, it might retrieve more dependencies, for example when constants are inlined in class files.</p><p>Note: since this functionality relies on the scala compiler library, so you need to add it to your build file:</p>
 <pre><code class="prettyprint">// use sbt's scalaVersion Setting to define the scala-compiler library version
 libraryDependencies &lt;&lt;= scalaVersion { scala_version =&gt; Seq(
-  &quot;org.specs2&quot; %% &quot;specs2&quot; % 2.4.11 % &quot;test&quot;,
+  &quot;org.specs2&quot; %% &quot;specs2&quot; % 2.4.12 % &quot;test&quot;,
   &quot;org.scala-lang&quot; % &quot;scala-compiler&quot; % scala_version % &quot;test&quot;)
 }
 </code></pre></td></tr></table></form></div></div></td></tr></table></form></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Custom"><h4>Custom</h4></a><p>There are many ways to create matchers for your specific usage. The simplest way is to reuse the existing ones:</p>
@@ -949,9 +962,10 @@ there was one(amount).show(anyFunction2)
 <ul>
   <li>with an acceptance specification: use the <code class="prettyprint">!!</code> operator to disambiguate (and <code class="prettyprint">||</code> in the header for good visual balance)</li>
   <li>with a unit specification: use the <code class="prettyprint">org.specs2.mutable.Tables</code> trait instead of <code class="prettyprint">org.specs2.matcher.DataTables</code> trait. This will &quot;deactivate&quot; the implicit used to create examples with <code class="prettyprint">!</code></li>
-</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="1488908438"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../images/icon_success_sml.gif" /> Here's <a href="../guide/org.specs2.guide.FormsPage.html" tooltip="">how to use Forms</a></div></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
+</ul><a name="Forms"><h3>Forms</h3></a><p>Forms are a way to represent domain objects or service, and declare expected values in a tabular format. They are supposed to be used with the HtmlRunner to get human-readable documentation.</p><p>Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p></div></status><subtoc specId="703497265"></subtoc><status class="ok"><div style="display: show; text-indent:0px;"><img src="./../images/icon_success_sml.gif" /> Here's <a href="../guide/org.specs2.guide.FormsPage.html" tooltip="">how to use Forms</a></div></status><status class="ok"><div style="display: show; text-indent:0px;"><a name="Outside+specs2"><h3>Outside specs2</h3></a><p>The <strong><em>specs2</em></strong> matchers are a well-delimited piece of functionality that you should be able to reuse in your own test framework. You can reuse the following traits:</p>
 <ul>
   <li><p><code class="prettyprint">org.specs2.matcher.MustMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldMatchers</code>) to write anything like <code class="prettyprint">1 must be_==(1)</code> and<br />    get a <code class="prettyprint">Result</code> back</p></li>
+  <li><p><strong>Important</strong>: the <code class="prettyprint">MustMatchers</code> <em>trait</em> will fill-in stacktraces on <code class="prettyprint">MatchResults</code> while the <code class="prettyprint">MustMatchers</code> object will not. This has some important consequences in terms of performances because creating stack traces is expensive</p></li>
   <li><p>You can also use the side-effecting version of that trait called <code class="prettyprint">org.specs2.matcher.MustThrownMatchers</code> (or <code class="prettyprint">org.specs2.matcher.ShouldThrownMatchers</code>).<br />    It throws a <code class="prettyprint">FailureException</code> as soon as an expectation is failing. Those traits can also be used in a regular<br />    Specification if you have several expectations per example and if you don't want to chain them with <code class="prettyprint">and</code>.</p></li>
   <li><p>Finally, in a JUnit-like library you can use the <code class="prettyprint">org.specs2.matcher.JUnitMustMatchers</code> trait which throws<br />    <code class="prettyprint">AssertionFailureError</code>s</p></li>
 </ul><a name="Without+any+dependency+on+specs2"><h4>Without any dependency on specs2</h4></a><p>The <a href="https://github.com/spray/spray/wiki/Testing">Testing</a> page of the <strong><em>spray</em></strong> project explains how you can define a testing trait in your library which can be used with specs2 or scalatest or any framework defining the following methods:</p>
@@ -966,12 +980,12 @@ there was one(amount).show(anyFunction2)
 </code></pre>
 <hr /></div></status><status class="ok"><p></p></status><status class="ok"><br /></status><table class="dataTable">
         <tr><th colSpan="2">Total for specification Matchers</th></tr>
-        <tr><td>Finished in</td><td class="info">526 ms</td></tr>
+        <tr><td>Finished in</td><td class="info">667 ms</td></tr>
         <tr><td>Results</td><td class="success">47 examples, 539 expectations, 0 failure, 0 error</td></tr>
       </table></html></div></div>
                 <div class="col2"><div id="leftcolumn"><div id="tree">
-      <ul><li id="1196953614"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
-            <ul><li id="404526331"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
+      <ul><li id="1655071716"><a href="../guide/org.specs2.guide.UserGuide.html#User+Guide">User Guide</a>
+            <ul><li id="2135382049"><a href="../guide/org.specs2.guide.QuickStart.html#Quick+Start">Quick Start</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Unit">Unit</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#Acceptance">Acceptance</a>
@@ -981,7 +995,7 @@ there was one(amount).show(anyFunction2)
           </li><li id=""><a href="../guide/org.specs2.guide.QuickStart.html#And+much+more%21">And much more!</a>
             
           </li></ul>
-          </li><li id="637336846"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
+          </li><li id="142121565"><a href="../guide/org.specs2.guide.Structure.html#Structure">Structure</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Declare+examples">Declare examples</a>
@@ -1096,7 +1110,7 @@ there was one(amount).show(anyFunction2)
             <ul><li id=""><a href="../guide/org.specs2.guide.Structure.html#Methods">Methods</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Structure.html#Full+example">Full example</a>
-            <ul><li id="1578265674"><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
+            <ul><li id="1985080636"><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Fragments+API">Fragments API</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Rules">Rules</a>
@@ -1114,7 +1128,7 @@ there was one(amount).show(anyFunction2)
           </li><li id=""><a href="../guide/org.specs2.guide.structure.FragmentsApi.html#Unit+specification">Unit specification</a>
             
           </li></ul>
-          </li><li id="2137181106"><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then_1">Given When Then</a>
+          </li><li id="94298977"><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then_1">Given When Then</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Given+When+Then">Given When Then</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Parsing">Parsing</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.structure.GivenWhenThenPage.html#Delimited+parsers">Delimited parsers</a>
@@ -1133,7 +1147,7 @@ there was one(amount).show(anyFunction2)
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1199855382"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
+          </li><li id="1607608911"><a href="../guide/org.specs2.guide.Matchers.html#Matchers">Matchers</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Boolean+results">Boolean results</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Standard+results">Standard results</a>
@@ -1205,14 +1219,8 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li><li id=""><a href="../guide/org.specs2.guide.Matchers.html#Forms">Forms</a>
-            <ul><li id="1488908438"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
+            <ul><li id="703497265"><a href="../guide/org.specs2.guide.FormsPage.html#FormsPage">FormsPage</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Fields">Fields</a>
-            
-          </li><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Effects">Effects</a>
-            
-          </li><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Properties">Properties</a>
-            
-          </li><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Styles">Styles</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Simple+form">Simple form</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.FormsPage.html#Adding+several+rows+at+once">Adding several rows at once</a>
@@ -1249,7 +1257,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li></ul>
-          </li><li id="1219633379"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
+          </li><li id="2028835027"><a href="../guide/org.specs2.guide.Runners.html#Runners">Runners</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Runners.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Runners.html#Dependencies">Dependencies</a>
@@ -1335,7 +1343,7 @@ there was one(amount).show(anyFunction2)
           </li></ul>
           </li></ul>
           </li></ul>
-          </li><li id="1403579405"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
+          </li><li id="579593236"><a href="../guide/org.specs2.guide.HowTo.html#HowTo">HowTo</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Declare+arguments">Declare arguments</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.HowTo.html#Use+command-line+arguments">Use command-line arguments</a>
@@ -1387,7 +1395,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li></ul>
-          </li><li id="2124156803"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
+          </li><li id="300482496"><a href="../guide/org.specs2.guide.Philosophy.html#Philosophy">Philosophy</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+origins">The origins</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Philosophy.html#The+score">The score</a>
@@ -1433,7 +1441,7 @@ there was one(amount).show(anyFunction2)
             
           </li></ul>
           </li></ul>
-          </li><li id="388718180"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
+          </li><li id="1773063218"><a href="../guide/org.specs2.guide.Design.html#Design">Design</a>
             <ul><li id=""><a href="../guide/org.specs2.guide.Design.html#Presentation">Presentation</a>
             
           </li><li id=""><a href="../guide/org.specs2.guide.Design.html#Structure">Structure</a>
@@ -1453,7 +1461,7 @@ there was one(amount).show(anyFunction2)
           </li></ul>
           </li></ul>
           </li></ul>
-      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['1196953614','1199855382'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
+      <script>$(function () {  $('#tree').jstree({'core':{'initially_open':['1655071716','1607608911'], 'animation':200}, 'plugins':['themes', 'html_data']}); });</script>
     </div></div></div>
                 <div class="col3"><div id="rightcolumn"></div></div>
               </div>
