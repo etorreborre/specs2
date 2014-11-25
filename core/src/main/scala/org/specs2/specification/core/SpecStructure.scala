@@ -38,6 +38,9 @@ case class SpecStructure(header: SpecHeader, arguments: Arguments, lazyFragments
   def examples = fragments.examples
   def links = fragments.links
   def specificationLinks = fragments.specificationLinks
+
+  def dependsOn(spec2: SpecStructure): Boolean =
+    SpecStructure.dependsOn(this, spec2)
 }
 
 /**

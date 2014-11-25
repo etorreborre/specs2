@@ -39,37 +39,39 @@ trait TableOfContents {
     }.flatten.sequenceU
   }
 
-  def createToc(pages: List[SpecHtmlPage], outDir: DirectoryPath): SpecHtmlPage => NodeSeq = { page: SpecHtmlPage =>
+  def createToc(pages: List[SpecHtmlPage], outDir: DirectoryPath): SpecHtmlPage => NodeSeq = {
     pages match {
-      case Nil => NodeSeq.Empty
+      case Nil => (page: SpecHtmlPage) => NodeSeq.Empty
       case main :: rest =>
         val treeLoc = pagesTree(main, pages)
-        val tocNodes =
+        val tocNodes: NodeSeq =
           treeLoc.cojoin.toTree.bottomUp { (pageTreeLoc: TreeLoc[SpecHtmlPage], subtocs: Stream[NodeSeq]) =>
             val page = pageTreeLoc.getLabel
-            <ul>
-              {li(outDir)(page)}
-              {subtocs.reduceNodes}
-              <ul>{createHeadersSubtoc(page)}</ul>
-            </ul>
-          }
+              <ul>
+                {li(outDir)(page)(
+                  <ul>
+                    {subtocs.reduceNodes}
+                  </ul>)}
+              </ul>: NodeSeq
+          }.rootLabel
 
-        def isPageNode = (loc: TreeLoc[SpecHtmlPage]) => loc.getLabel == page
-
-        val parentNames = treeLoc.find(isPageNode).map(_.parents.map(_._2.pandocName).map(name => "'"+name+"'").mkString(",")).getOrElse("")
-        val result =
-        <div id="tree">{tocNodes}</div> ++
-          <script>{s"$$(function () { $$('#tree').jstree({'core':{'initially_open':[$parentNames], 'animation':200}, 'themes' : {'theme': 'default','url': './css/themes/default/style.css'}, 'plugins':['themes', 'html_data']}); });"}</script>
-
-        result
+        (page: SpecHtmlPage) => {
+          def isPageNode = (loc: TreeLoc[SpecHtmlPage]) => loc.getLabel == page
+          val parentNames = treeLoc.find(isPageNode).map(n => (n.parents.map(_._2.pandocName) :+ page.pandocName).map(name => "'"+name+"'").mkString(",")).getOrElse(page.pandocName)
+          val result =
+            <div id="tree">{tocNodes}</div> ++
+              <script>{s"$$(function () { $$('#tree').jstree({'core':{'initially_open':[$parentNames], 'animation':200}, 'themes' : {'theme': 'default','url': './css/themes/default/style.css'}, 'plugins':['themes', 'html_data']}); });"}</script>
+          result
+        }
     }
   }
 
   def pagesTree(page: SpecHtmlPage, pages: List[SpecHtmlPage]): TreeLoc[SpecHtmlPage] =
-    Tree.unfoldTree((page, List[SpecHtmlPage]())) { current =>
-      val (p1: SpecHtmlPage, visited: List[SpecHtmlPage]) = current
-      val visited1 = p1 :: visited
-      ((p1, visited1), () => pages.filter(p2 => SpecStructure.dependsOn(p1.specification, p2.specification) && !visited1.contains(p2)).toStream.map((_, visited1)))
+    Tree.unfoldTree((page, (pages, List[SpecHtmlPage]()))) { current =>
+      val (p1: SpecHtmlPage, (remaining, visited)) = current
+      val (dependents, others) = remaining.partition(p2 => p1.specification.dependsOn(p2.specification) && !visited.contains(p2))
+      val visited1 = dependents ::: visited
+      ((p1, (others, visited1)), () => dependents.sortBy(linkIndexIn(p1.specification.specificationLinks)).toStream.map((_, (others, visited1))))
     }.loc.map(_._1)
 
   /** @return the index of a linked specification in 'main' */
@@ -77,9 +79,10 @@ trait TableOfContents {
     s1Links.map(_.specClassName).indexOf(s2.className)
   }
 
-  def li(outDir: DirectoryPath)(page: SpecHtmlPage) =
+  def li(outDir: DirectoryPath)(page: SpecHtmlPage)(nested: NodeSeq): NodeSeq =
     <li id={page.pandocName}><a href={page.path.relativeTo(outDir).path} title={page.showWords}>{page.showWords.truncate(15)}</a>
       <ul>{createHeadersSubtoc(page)}</ul>
+      {nested}
     </li>
 
 
