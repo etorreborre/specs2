@@ -8,22 +8,13 @@ import data.Fold
 import specification.process.{Stats, Statistics}
 import io._
 import main.Arguments
-import scala.xml.NodeSeq
-import scalaz.stream.Process
 import control._
 import java.util.regex.Pattern._
 import java.net.{JarURLConnection, URL}
-import scalaz.\&/
-import scalaz.Tree
-import scalaz.std.list._
-import scalaz.std.anyVal._
-import scalaz.std.string._
-import scalaz.syntax.bind.ToBindOps
-import scalaz.syntax.traverse._
+import scalaz._, Scalaz._
 import HtmlBodyPrinter._
 import Pandoc._
 import ActionT._
-import scalaz.syntax.bind._
 import Actions._
 import html._
 import text.Trim._
@@ -45,7 +36,8 @@ trait HtmlPrinter extends Printer {
   def finalize(env: Env, specifications: List[SpecificationStructure]): Action[Unit] =
     getHtmlOptions(env.arguments) >>= { options: HtmlOptions =>
       createIndex(env, specifications, options).when(options.search) >>
-      createToc(specifications.map(_.structure(env)), options.outDir, env.fileSystem).when(options.toc)
+      createToc(specifications.map(_.structure(env)), options.outDir, env.fileSystem).when(options.toc) >>
+      reportMissingSeeRefs(specifications.map(_.structure(env)), options.outDir).when(options.warnMissingSeeRefs)
     }
 
   /** @return a Fold for the Html output */
@@ -105,13 +97,15 @@ trait HtmlPrinter extends Printer {
     import arguments.commandLine._
     val out = directoryOr("html.outdir", HtmlOptions.outDir)
     Actions.ok(HtmlOptions(
-      outDir      = out,
-      baseDir     = directoryOr("html.basedir",   HtmlOptions.baseDir),
-      template    = fileOr(     "html.template",  HtmlOptions.template(out)),
-      variables   = mapOr(      "html.variables", HtmlOptions.variables),
-      noStats     = boolOr(     "html.nostats",   HtmlOptions.noStats),
-      search      = boolOr(     "html.search",    HtmlOptions.search),
-      toc         = boolOr(     "html.toc",       HtmlOptions.toc)))
+      outDir             = out,
+      baseDir            = directoryOr("html.basedir",             HtmlOptions.baseDir),
+      template           = fileOr(     "html.template",            HtmlOptions.template(out)),
+      variables          = mapOr(      "html.variables",           HtmlOptions.variables),
+      noStats            = boolOr(     "html.nostats",             HtmlOptions.noStats),
+      search             = boolOr(     "html.search",              HtmlOptions.search),
+      toc                = boolOr(     "html.toc",                 HtmlOptions.toc),
+      warnMissingSeeRefs = boolOr(     "html.warn.missingseerefs", HtmlOptions.warnMissingSeeRefs))
+    )
   }
 
 
@@ -199,6 +193,12 @@ trait HtmlPrinter extends Printer {
           fs.copyDir(DirectoryPath.unsafe(url.toURI), outputDir / src)
     }
   }
+
+  def reportMissingSeeRefs(specs: List[SpecStructure], outDir: DirectoryPath): Action[Unit] = for {
+    missingSeeRefs <- specs.flatMap(_.seeReferences).distinct.filterM(ref => FilePathReader.doesNotExist(SpecHtmlPage.outputPath(outDir, ref.specClassName)))
+    _              <- warn("The following specifications are being referenced but haven't been reported\n"+
+                           missingSeeRefs.map(_.specClassName).distinct.mkString("\n")).unless(missingSeeRefs.isEmpty)
+  } yield ()
 
   private def jarOf(url: URL): URL = url.openConnection.asInstanceOf[JarURLConnection].getJarFileURL
 

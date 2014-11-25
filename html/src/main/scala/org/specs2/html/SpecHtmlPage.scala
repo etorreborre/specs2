@@ -48,6 +48,9 @@ case class SpecHtmlPage(specification: SpecStructure, path: FilePath, outDir: Di
 object SpecHtmlPage {
   
   def outputPath(outDir: DirectoryPath, spec: SpecStructure): FilePath =
-    outDir | FileName.unsafe(spec.specClassName+".html")
+    outputPath(outDir, spec.specClassName)
+
+  def outputPath(outDir: DirectoryPath, specClassName: String): FilePath =
+    outDir | FileName.unsafe(specClassName+".html")
 
 }

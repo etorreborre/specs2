@@ -12,6 +12,7 @@ case class HtmlOptions(
   variables: Map[String, String],
   noStats: Boolean,
   search: Boolean,
+  warnMissingSeeRefs: Boolean,
   toc: Boolean) {
 
   def javascriptDir = outDir / "javascript"
@@ -40,12 +41,14 @@ case class HtmlOptions(
 }
 
 object HtmlOptions {
-  val outDir    = DirectoryPath.unsafe(new File("target/specs2-reports").getAbsoluteFile)
-  val baseDir   = DirectoryPath.unsafe(".")
-  val variables = Map[String, String]()
-  val noStats   = false
-  val search    = false
-  val toc       = false
+  val outDir             = DirectoryPath.unsafe(new File("target/specs2-reports").getAbsoluteFile)
+  val baseDir            = DirectoryPath.unsafe(".")
+  val variables          = Map[String, String]()
+  val noStats            = false
+  val search             = false
+  val toc                = false
+  val warnMissingSeeRefs = true
+
 
   def template(outDir: DirectoryPath): FilePath =
     outDir / "templates" | "specs2.html"

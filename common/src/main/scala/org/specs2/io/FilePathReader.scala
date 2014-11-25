@@ -100,9 +100,17 @@ trait FilePathReader {
   def exists(filePath: FilePath): Action[Boolean] =
     Actions.safe(filePath.toFile.exists)
 
+  /** @return true if the file doesn't exist */
+  def doesNotExist(filePath: FilePath): Action[Boolean] =
+    Actions.safe(!filePath.toFile.exists)
+
   /** @return true if the directory exists */
   def exists(directoryPath: DirectoryPath): Action[Boolean] =
     Actions.safe(directoryPath.toFile.exists)
+
+  /** @return true if the directory doesn't exist */
+  def doesNotExist(directoryPath: DirectoryPath): Action[Boolean] =
+    Actions.safe(!directoryPath.toFile.exists)
 
   /** succeeds if the file exists */
   def mustExist(file: File): Action[Unit] =
