@@ -62,7 +62,6 @@ trait ScalaCheckResult {
         case `Passed` | Proved(_)           => Success()
         case Failed(args, labels)           => Failure("Property failed with args: "+args.mkString(", ")+" and labels "+labels.mkString(", "))
         case PropException(args, e, labels) => Error(e).updateMessage("Property failed with args: "+args.mkString(", ")+" and labels "+labels.mkString(", "))
-        case GenException(e)                => Error(e)
         case `Exhausted`                    => Error("exhausted")
       }
     }

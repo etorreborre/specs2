@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import org.scalacheck.Prop._
-import org.scalacheck.Test.{Exhausted, Failed, GenException, Passed, PropException, Proved, Result}
+import org.scalacheck.Test.{Exhausted, Failed, Passed, PropException, Proved, Result}
 import org.scalacheck._
 import org.scalacheck.util.Pretty._
 import org.scalacheck.util.{FreqMap, Pretty}
@@ -136,10 +136,7 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
       case Result(Passed, succeeded, discarded, fq, _)     =>
         execute.Success(noCounterExample(succeeded), frequencies(fq)(defaultPrettyParams), succeeded)
 
-      case r @ Result(GenException(execute.FailureException(f)), n, _, fq, _) => f
-
-      case r @ Result(GenException(e), n, _, fq, _)        =>
-        execute.Failure(prettyTestRes(r)(defaultPrettyParams) + frequencies(fq), e.getMessage.notNull, e.getStackTrace.toList)
+      case r @ Result(PropException(_, execute.FailureException(f), _), n, _, fq, _) => f
 
       case r @ Result(Exhausted, n, _, fq, _)              =>
         execute.Failure(prettyTestRes(r)(defaultPrettyParams) + frequencies(fq))
