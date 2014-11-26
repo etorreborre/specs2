@@ -24,7 +24,8 @@ How can I easily print expressions to the console?                              
 Can $specs2 create a JUnit xml file for a continuous integration server?                 | ${link(JUnitXmlOutput)}
 Is it possible to reduce the number of implicits in scope and improve compilation times? | ${link(LightweightSpecs)}
 How can I collect execution data?                                                        | ${link(PrintExecutionData)}
-Can I create an example with just some code?                                             | ${link(AutoExamples)}
+Can I create an example description spanning several lines?                              | ${link(MultilineDescriptions)}
+How to isolate each example from another so that they don't share variables              | ${link(Isolation)}
 Help, I need to troubleshoot my issues!                                                  | ${link(Troubleshooting)}
 
 """

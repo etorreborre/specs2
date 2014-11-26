@@ -22,6 +22,9 @@ You can use the following arguments to change the HTML generation:
  `html.template`         | `target/specs2-reports/templates/specs2.html` | copied from the `resources/templates` directory
  `html.variables`        | `Map[String, String]()`                       | those variables will be replaced during template evaluation
  `html.nostats`          | `false`                                       | if true no stats are displayed
+ `html.search`           | `true`                                        | add a search box to the generated files
+ `html.toc`              | `true`                                        | add a table of contents to the generated files
+ `html.warn.missingrefs` | `true`                                        | report "see" references which do not correspond to any generated file
 
 
 ### Use Pandoc for Markdown

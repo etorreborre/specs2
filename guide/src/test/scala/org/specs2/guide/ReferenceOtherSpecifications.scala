@@ -5,8 +5,8 @@ object ReferenceOtherSpecifications extends UserGuidePage { def is = s2"""
 
 For some large projects, or to write documentation, you will need to structure your specifications so that some of them will reference others. Those references will be of 2 types:
 
- - the first type is a simple textual reference, with an html link to navigate to the other specification when you create an html report
- - the second type is as an "executed" reference where the second specification will be executed and its status reported in the first one
+ - "see" reference: a simple textual reference, with an html link to navigate to the other specification when you create an html report
+ - "link" reference: an "executed" reference where the second specification will be executed and its status reported in the first one
 
 Here is the DSL you will use for those 2 types of references:${snippet{
 object FirstSpecification extends Specification { def is = s2"""
@@ -37,7 +37,7 @@ object ThirdSpecification extends Specification { def is = s2"""
 
 The syntax shown above to create references is using a string for the link alias and uses two operators:
 
- Opterator | Description
+ Operator | Description
  --------- | -----------
  `~`       | a *`link` reference*. The referenced specification gets executed when the first one is
  `~/`      | a *`see` reference*. The referenced specification doesn't get executed (`"$$FirstSpecification"` creates a *see* link as well)

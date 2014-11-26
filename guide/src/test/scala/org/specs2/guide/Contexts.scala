@@ -149,8 +149,8 @@ Some setups are very expensive and can be shared across all examples. For exampl
 
 $AndIfYouWantToKnowMore
 
- * use ${"`Context` objects" ~/ ContextObjects} to create contexts for just a few examples in the specification
- * use ${"traits and`Scopes`" ~/ Scopes} to create contexts in unit specifications where you can access state directly on variables
+ * use ${"`Context` objects" ~ ContextObjects} to create contexts for just a few examples in the specification
+ * use ${"traits and`Scopes`" ~ Scopes} to create contexts in unit specifications where you can access state directly on variables
 
 $vid
 """
