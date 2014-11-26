@@ -1,0 +1,9 @@
+Quickfix version.
+
+## Fixes
+
+ * fixed a failure message for equality on `Set` and `Seq` where the labels for `Added` and `Missing` elements are inverted
+
+
+==========================
+
