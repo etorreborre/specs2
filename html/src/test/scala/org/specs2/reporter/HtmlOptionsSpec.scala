@@ -22,5 +22,7 @@ class HtmlOptionsSpec extends Specification { def is = s2"""
     , noStats = true
     , search = false
     , toc = false
+    , tocEntryMaxSize    = 18
+    , warnMissingSeeRefs = true
   )
 }

@@ -13,7 +13,7 @@ object HtmlBodyPrinterSpec extends Specification { def is = s2"""
 """
 
   def hidden = {
-    print(HtmlBodyPrinterSpec.hide) must beEmpty
+    print(link(HtmlBodyPrinterSpec).hide) must beEmpty
   }
 
   def print(f: Fragment) =
