@@ -8,11 +8,11 @@ object Structure extends UserGuidePage { def is = s2"""
 In a Specification you generally want to include 2 things:
 
  - some informal text describing what the system/application/function should do
- - some code specifying exactly what is expected when something is executed
+ - some Scala code specifying exactly inputs and expected outputs
 
 With $specs2 you have 2 main ways to do this:
 
- - you can create an *"Acceptance"* specification where all the informal text is written in one place and the code is written somewhere else. The name "acceptance" comes from the fact that it might be easier for a non-developer to just read text to validate your specification
+ - you can create an *"Acceptance"* specification where all the informal text is written in one place and the code is written somewhere else. The name "acceptance" comes from the fact that it might be easier for a non-developer to just read some text to validate your specification
 
  - you can create a *"Unit"* specification where the code is interleaved with the text. The name "unit" comes from the fact that Unit specifications have a structure which is close to unit tests in "classical" frameworks such as JUnit
 
@@ -72,7 +72,7 @@ The `>>` blocks can be nested and this allows you to structure your specificatio
 
 There is another major difference between the acceptance specifications and unit specifications. The first style encourages you to write [one expectation per example](http://bit.ly/one_assertion_per_test) while the second allows to use several. One expectation per example is useful because when a specification fails, you know immediately what is wrong. However it is sometimes expensive to setup data for an example. In that case, having several expectations sharing the same setup might be preferable.
 
-The good news is that for each of the 2 main styles, acceptance and unit, you can choose exactly which mode you prefer if the default mode is not convenient.
+The good news is that for each of the 2 main styles, acceptance and unit, you can choose exactly which "Expectation mode" you prefer if the default mode is not convenient.
 
 #### Functional expectations
 
@@ -96,11 +96,11 @@ s2"""
            ("hello" must startWith("hell"))
 }}
 
-This is a bit tedious and not very pleasing to read so you can see why this mode encourages one expectation per example only! If you need several expectations per example, you can need to mix-in the `org.specs2.execute.ThrownExpectations` trait to the specification which is the one used for unit specifications by default.
+This is a bit tedious and not very pleasing to read so you can see why this mode encourages one expectation per example only! If you want to declare several expectations per example, you can mix-in the `org.specs2.execute.ThrownExpectations` trait to the specification.
 
 #### Thrown expectations
 
-With a unit specification you get "thrown expectations". When an expectation fails, it throws an exception and the rest of the example is not executed: ${snippet {
+With a unit specification you get "thrown expectations" by default. When an expectation fails, it throws an exception and the rest of the example is not executed: ${snippet {
 class MySpecification extends org.specs2.mutable.Specification {
   "This is my example" >> {
     1 must_== 2 // this fails

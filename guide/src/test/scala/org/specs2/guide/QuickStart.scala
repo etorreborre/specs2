@@ -21,7 +21,7 @@ class HelloWorldSpec extends Specification { def is = s2"""
 }
 }}
 
-As you can see, a $specs2 software specification is nothing more than a Scala class extending `org.specs2.Specification` and declaring a special `is` method. This method contains some plain text describing what your application should do as well as some executable code specifying precisely what is expected.
+A $specs2 software specification is nothing more than a Scala class extending `org.specs2.Specification` and declaring a special `is` method. This method contains both plain text describing what the application should do but also some method calls containing a more formal specification of the expected behaviour.
 
 ### Execution
 
