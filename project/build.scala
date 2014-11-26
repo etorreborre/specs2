@@ -138,7 +138,7 @@ object build extends Build {
 
   lazy val junit = Project(id = "junit", base = file("junit"),
     settings = Seq(
-      libraryDependencies ++= depends.junit) ++
+      libraryDependencies ++= depends.junit ++ depends.mockito.map(_ % "test")) ++
       moduleSettings ++
       Seq(name := "specs2-junit")
   ).dependsOn(core, matcherExtra % "test", mock % "test")
