@@ -162,11 +162,14 @@ trait HtmlPrinter extends Printer {
     val bodyFile: FilePath =
       options.outDir | FileName.unsafe("body-"+spec.hashCode)
 
-    val pandocArguments = Pandoc.arguments(bodyFile, options.template, variables1, outputPath(options.outDir, spec), pandoc)
+    val outputFilePath = outputPath(options.outDir, spec)
+    val pandocArguments = Pandoc.arguments(bodyFile, options.template, variables1, outputFilePath, pandoc)
 
     withEphemeralFile(bodyFile) {
       writeFile(bodyFile, makeBody(spec, stats, options, env.arguments, pandoc = true)) >>
-      Executable.run(pandoc.executable, pandocArguments)
+      warn(pandoc.executable.path+" "+pandocArguments.mkString(" ")).when(pandoc.verbose) >>
+      Executable.run(pandoc.executable, pandocArguments) >>
+      readFile(outputPath(options.outDir, spec)).flatMap(s => writeFile(outputFilePath, s.replace("<code>", "<code class=\"prettyprint\">")))
     }
   }
 
