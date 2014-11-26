@@ -37,7 +37,7 @@ object ThirdSpecification extends Specification { def is = s2"""
 
 The syntax shown above to create references is using a string for the link alias and uses two operators:
 
- Operator | Description
+ Operator  | Description
  --------- | -----------
  `~`       | a *`link` reference*. The referenced specification gets executed when the first one is
  `~/`      | a *`see` reference*. The referenced specification doesn't get executed (`"$$FirstSpecification"` creates a *see* link as well)

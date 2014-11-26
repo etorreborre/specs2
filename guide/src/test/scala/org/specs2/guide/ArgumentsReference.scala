@@ -75,6 +75,7 @@ See the $ConsoleOutput page for a more precise description of this options.
 
  Name                    | Default value                  | Description
  ----------------------- | ------------------------------ | ------------------------------
+ `all`                   | `false`                        | execute and report linked specifications
  `xonly`                 | `false`                        | only report failures and errors
  `showonly`              | `""`                           | only report some examples based on their status
  `failtrace`             | `false`                        | show a stack trace for failures
@@ -94,10 +95,14 @@ For ${"the HTML output" ~/ HtmlOutput} the following options can be used:
 
  Name                    | Default value                                 | Description
  ----------------------- | --------------------------------------------- | ------------------------------
+ `all`                   | `false`                                       | execute and report linked specifications
  `html.outdir`           | `target/specs2-reports/`                      | output directory for the html files
  `html.template`         | `target/specs2-reports/templates/specs2.html` | copied from the `resources/templates` directory
  `html.variables`        | `Map[String, String]()`                       | passed to the template during the Pandoc evaluation
  `html.nostats`          | `false`                                       | if true no stats are displayed
+ `html.search`           | `true`                                        | add a search box to the generated files
+ `html.toc`              | `true`                                        | add a table of contents to the generated files
+ `html.warn.missingrefs` | `true`                                        | report "see" references which do not correspond to any generated file
 
 ## Arguments API
 

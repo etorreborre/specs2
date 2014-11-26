@@ -18,6 +18,7 @@ You can use the following arguments to change the HTML generation:
 
  Name                    | Default value                                 | Description
  ----------------------- | --------------------------------------------- | ------------------------------
+ `all`                   | `false`                                       | execute and report linked specifications
  `html.outdir`           | `target/specs2-reports`                       | output directory
  `html.template`         | `target/specs2-reports/templates/specs2.html` | copied from the `resources/templates` directory
  `html.variables`        | `Map[String, String]()`                       | those variables will be replaced during template evaluation
