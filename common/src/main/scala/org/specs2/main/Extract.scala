@@ -23,7 +23,7 @@ trait Extract {
   def boolSystemProperty(name: String)(implicit sp: SystemProperties): Option[Boolean] = booleanProperties(name -> sp)
 
   def bool(name: String, mappedValue: Boolean = true)(implicit args: Seq[String], sp: SystemProperties): Option[Boolean] = {
-    args.find(_.toLowerCase.contains(name.toLowerCase)).map(a => mappedValue).orElse(boolSystemProperty(name))
+    args.find(_.toLowerCase == name.toLowerCase).map(a => mappedValue).orElse(boolSystemProperty(name))
   }
 
   def bool(name: String, negatedName: String)(implicit args: Seq[String], sp: SystemProperties): Option[Boolean] = {
