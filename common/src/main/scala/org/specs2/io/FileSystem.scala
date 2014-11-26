@@ -32,6 +32,14 @@ trait FileSystem extends FilePathReader {
   def writeFile(filePath: FilePath, content: String): Action[Unit] =
     Actions.fromTask(writeFileTask(filePath, content))
 
+  /** modify the content of a file */
+  def updateFileContent(filePath: FilePath)(update: String => String): Action[Unit] =
+    readFile(filePath).flatMap(s => writeFile(filePath, update(s)))
+
+  /** replace a string in a file */
+  def replaceInFile(filePath: FilePath, source: String, target: String): Action[Unit] =
+    updateFileContent(filePath)(_.replace(source, target))
+
   /** write a string to a file as UTF-8 */
   def writeFileTask(filePath: FilePath, content: String): Task[Unit] =
     mkdirs(filePath).toTask >>

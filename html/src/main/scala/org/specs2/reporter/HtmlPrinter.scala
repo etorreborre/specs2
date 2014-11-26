@@ -169,7 +169,7 @@ trait HtmlPrinter extends Printer {
       writeFile(bodyFile, makeBody(spec, stats, options, env.arguments, pandoc = true)) >>
       warn(pandoc.executable.path+" "+pandocArguments.mkString(" ")).when(pandoc.verbose) >>
       Executable.run(pandoc.executable, pandocArguments) >>
-      readFile(outputPath(options.outDir, spec)).flatMap(s => writeFile(outputFilePath, s.replace("<code>", "<code class=\"prettyprint\">")))
+      replaceInFile(outputPath(options.outDir, spec), "<code>", "<code class=\"prettyprint\">")
     }
   }
 
