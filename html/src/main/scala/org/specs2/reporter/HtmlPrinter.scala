@@ -36,7 +36,7 @@ trait HtmlPrinter extends Printer {
   def finalize(env: Env, specifications: List[SpecificationStructure]): Action[Unit] =
     getHtmlOptions(env.arguments) >>= { options: HtmlOptions =>
       createIndex(env, specifications, options).when(options.search) >>
-      createToc(specifications.map(_.structure(env)), options.outDir, env.fileSystem).when(options.toc) >>
+      createToc(specifications.map(_.structure(env)), options.outDir, options.tocEntryMaxSize, env.fileSystem).when(options.toc) >>
       reportMissingSeeRefs(specifications.map(_.structure(env)), options.outDir).when(options.warnMissingSeeRefs)
     }
 
@@ -97,14 +97,15 @@ trait HtmlPrinter extends Printer {
     import arguments.commandLine._
     val out = directoryOr("html.outdir", HtmlOptions.outDir)
     Actions.ok(HtmlOptions(
-      outDir             = out,
-      baseDir            = directoryOr("html.basedir",             HtmlOptions.baseDir),
-      template           = fileOr(     "html.template",            HtmlOptions.template(out)),
-      variables          = mapOr(      "html.variables",           HtmlOptions.variables),
-      noStats            = boolOr(     "html.nostats",             HtmlOptions.noStats),
-      search             = boolOr(     "html.search",              HtmlOptions.search),
-      toc                = boolOr(     "html.toc",                 HtmlOptions.toc),
-      warnMissingSeeRefs = boolOr(     "html.warn.missingseerefs", HtmlOptions.warnMissingSeeRefs))
+      outDir               = out,
+      baseDir              = directoryOr("html.basedir",               HtmlOptions.baseDir),
+      template             = fileOr(     "html.template",              HtmlOptions.template(out)),
+      variables            = mapOr(      "html.variables",             HtmlOptions.variables),
+      noStats              = boolOr(     "html.nostats",               HtmlOptions.noStats),
+      search               = boolOr(     "html.search",                HtmlOptions.search),
+      toc                  = boolOr(     "html.toc",                   HtmlOptions.toc),
+      tocEntryMaxSize      = intOr(      "html.toc.entrymaxsize", HtmlOptions.tocEntryMaxSize),
+      warnMissingSeeRefs   = boolOr(     "html.warn.missingseerefs",   HtmlOptions.warnMissingSeeRefs))
     )
   }
 

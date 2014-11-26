@@ -13,6 +13,7 @@ case class HtmlOptions(
   noStats: Boolean,
   search: Boolean,
   warnMissingSeeRefs: Boolean,
+  tocEntryMaxSize: Int,
   toc: Boolean) {
 
   def javascriptDir = outDir / "javascript"
@@ -47,6 +48,7 @@ object HtmlOptions {
   val noStats            = false
   val search             = false
   val toc                = false
+  val tocEntryMaxSize    = 18
   val warnMissingSeeRefs = true
 
 

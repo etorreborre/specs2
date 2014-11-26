@@ -18,9 +18,9 @@ import text.Trim._
 trait TableOfContents {
 
   /** create a table of contents for all the specifications */
-  def createToc(specifications: List[SpecStructure], outDir: DirectoryPath, fileSystem: FileSystem): Action[Unit] = for {
+  def createToc(specifications: List[SpecStructure], outDir: DirectoryPath, entryMaxSize: Int, fileSystem: FileSystem): Action[Unit] = for {
     pages   <- readHtmlPages(specifications, outDir, fileSystem)
-    toc     =  createToc(pages, outDir)
+    toc     =  createToc(pages, outDir, entryMaxSize)
     _       <- saveHtmlPages(pages.map(page => page.addToc(toc(page))), fileSystem)
   } yield ()
 
@@ -39,7 +39,7 @@ trait TableOfContents {
     }.flatten.sequenceU
   }
 
-  def createToc(pages: List[SpecHtmlPage], outDir: DirectoryPath): SpecHtmlPage => NodeSeq = {
+  def createToc(pages: List[SpecHtmlPage], outDir: DirectoryPath, entryMaxSize: Int): SpecHtmlPage => NodeSeq = {
     pages match {
       case Nil => (page: SpecHtmlPage) => NodeSeq.Empty
       case main :: rest =>
@@ -48,7 +48,7 @@ trait TableOfContents {
           treeLoc.cojoin.toTree.bottomUp { (pageTreeLoc: TreeLoc[SpecHtmlPage], subtocs: Stream[NodeSeq]) =>
             val page = pageTreeLoc.getLabel
               <ul>
-                {li(outDir)(page)(
+                {li(outDir, entryMaxSize)(page)(
                   <ul>
                     {subtocs.reduceNodes}
                   </ul>)}
@@ -79,21 +79,21 @@ trait TableOfContents {
     s1Refs.map(_.specClassName).indexOf(s2.className)
   }
 
-  def li(outDir: DirectoryPath)(page: SpecHtmlPage)(nested: NodeSeq): NodeSeq =
-    <li id={page.pandocName}><a href={page.path.relativeTo(outDir).path} title={page.showWords}>{page.showWords.truncate(15)}</a>
-      <ul>{createHeadersSubtoc(page)}</ul>
+  def li(outDir: DirectoryPath, entryMaxSize: Int)(page: SpecHtmlPage)(nested: NodeSeq): NodeSeq =
+    <li id={page.pandocName}><a href={page.path.relativeTo(outDir).path} title={page.showWords}>{page.showWords.truncate(entryMaxSize)}</a>
+      <ul>{createHeadersSubtoc(page, entryMaxSize)}</ul>
       {nested}
     </li>
 
 
-  def createHeadersSubtoc(page: SpecHtmlPage): NodeSeq = {
+  def createHeadersSubtoc(page: SpecHtmlPage, entryMaxSize: Int): NodeSeq = {
     page.body.headersTree.
       bottomUp { (h: Header, s: Stream[NodeSeq]) =>
       if (h.isRoot)
         // 'id' is the name of the attribute expected by jstree to "open" the tree on a specific node
         s.reduceNodes.updateHeadAttribute("id", page.path.name.name)
       else if (h.level > 1)
-        <li><a href={page.relativePath.path+"#"+h.pandocName} title={h.name}>{h.name.truncate(15)}</a>
+        <li><a href={page.relativePath.path+"#"+h.pandocName} title={h.name}>{h.name.truncate(entryMaxSize)}</a>
           { <ul>{s.toSeq}</ul> unless s.isEmpty }
         </li>
       else
