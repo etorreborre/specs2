@@ -5,7 +5,7 @@ import matcher._
 import specification.Grouped
 import MatchersImplicits._
 
-class EditDistanceSpec extends Spec with EditDistance with DataTables with Grouped with TypedEqual { def is = s2"""
+class StringEditDistanceSpec extends Spec with StringEditDistance with DataTables with Grouped with TypedEqual { def is = s2"""
 
  The edit distance should
    return 0 if there's no insertions                                                                      ${g1.e1}
@@ -14,7 +14,7 @@ class EditDistanceSpec extends Spec with EditDistance with DataTables with Group
    work on substitutions                                                                                  ${g1.e4}
 
  The show distance should
-   work on insertions                                                                                     ${g2.e1}
+   work on insertions                                                                                     ${g2.e1} $xtag
    work on suppressions                                                                                   ${g2.e2}
    work on suppressions - 2                                                                               ${g2.e3}
    work on substitutions                                                                                  ${g2.e4}
@@ -79,10 +79,8 @@ class EditDistanceSpec extends Spec with EditDistance with DataTables with Group
         showDistance(a, b) must_== result
       }
 
-    e11 := {
-      new EditMatrix("abcd", "acbd").showMatrix
+    e11 :=
       showDistance("abcd", "acbd") === "a[bc]d" -> "a[cb]d"
-    }
   }
 
   "shorten diffs" - new g3 with DiffShortener {

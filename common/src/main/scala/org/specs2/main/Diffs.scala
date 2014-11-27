@@ -7,7 +7,7 @@ import execute.{AsResult, BestMatching}
 import control.Exceptions._
 import text._
 import NotNullStrings._
-import EditDistance._
+import StringEditDistance._
 
 /**
  * Define and compute the differences between strings (used by the printers)
@@ -44,7 +44,7 @@ case class SmartDiffs(show: Boolean       = true,
                       seqTriggerSize: Int = 0,    // Parameters for sequences
                       seqMaxSize: Int     = 1000000
                        ) extends Diffs {
-  import EditDistance._
+  import StringEditDistance._
 
   def show(actual: Any, expected: Any): Boolean =
     show && Seq(actual, expected).exists(_.toString.size >= triggerSize)
