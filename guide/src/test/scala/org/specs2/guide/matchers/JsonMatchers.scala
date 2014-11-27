@@ -56,7 +56,7 @@ person must /("person") /# 2 / "person"
 }}
 
 Finally you can use Json matchers to match elements in an array: ${snippet{
-val json = """{"products":[{"name":"shirt","price":10},{"name":"shoe","price":5}]}"""
+val json = """{"products":[{"name":"shirt","price":10, "ids":["1", "2", "3"]},{"name":"shoe","price":5}]}"""
 
 def aProductWith(name: Matcher[JsonType],  price: Matcher[JsonType]): Matcher[String] =
   /("name").andHave(name) and /("price").andHave(price)
@@ -65,7 +65,7 @@ def haveProducts(products: Matcher[String]*): Matcher[String] =
   /("products").andHave(allOf(products:_*))
 
 json must haveProducts(
-  aProductWith(name = "shirt", price = 10),
+  aProductWith(name = "shirt", price = 10) and /("ids").andHave(exactly("1", "2", "3")),
   aProductWith(name = "shoe", price = 5)
 )
 }}

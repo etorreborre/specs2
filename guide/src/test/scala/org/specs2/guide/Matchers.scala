@@ -142,7 +142,7 @@ Future(1 === 1).await(retries = 2, timeout = 100.millis)
 1 must be_==(2).orPending((ko:String) => "BAD "+ko) // prints "BAD '1' is not equal to '2'"
 }}
 
- * use `zip` operators for to match each value of a tuple ${snippet{
+ * use `zip` operators to match each value of a tuple ${snippet{
 
 type MyTuple = (String, String, String, Seq[(String, Double)])
 

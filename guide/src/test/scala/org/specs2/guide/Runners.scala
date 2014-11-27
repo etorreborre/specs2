@@ -40,7 +40,7 @@ Various sbt options can apply to [test execution in sbt](http://www.scala-sbt.or
 
 ### Output
 
-When you run a specification, whatever environment you are in: sbt, shell, IDE,... you can specify different outputs for the results. For example in sbt by default the results appear in the console but if you want JUnit XML files to be produced you can just add the `junitxml` argument. Adding any "output" argument will deactivate the console (you will see no output in the console) but you can enable it again by passing the `console` argument. You can of course specify several outputs like `html junitxml console`.
+When you run a specification, whatever environment you are in: sbt, shell, IDE,... you can specify different outputs for the results. For example, when you execute a specification with sbt, the results appear in the console. If you want JUnit XML files to be produced instead you need to pass the `junitxml` argument. Adding any "output" argument will deactivate the console (you will see no output in the console) but you can enable it again by passing the `console` argument. You can of course specify several outputs like `html junitxml console`.
 
 Here is a list of all the existing `Printers` in $specs2 with links to the corresponding section in the User Guide for more information.
 
