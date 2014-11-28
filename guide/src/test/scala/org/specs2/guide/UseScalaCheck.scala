@@ -24,22 +24,13 @@ s2"addition and multiplication are related ${ prop { (a: Int) => a + a must_== 2
 s2"addition and multiplication are related ${ prop { (a: Int) => (a > 0) ==> (a + a must_== 2 * a) } }"
 }}
 
-Note that if you pass functions using `MatchResult`s you will get better failure messages so you are encouraged to do so.
+Note that if you pass functions using `MatchResult`s you will get better failure messages than just using boolean expressions.
 
 By default the properties created with `prop` will be shrinking counter-examples. If you want to avoid this, you can use `propNoShrink` instead.
 
 ### Arbitrary instances
 
-By default ScalaCheck uses `Arbitrary` instances taken from the surrounding example scope. However you'll certainly need to generate your own data from time to time. In that case you can create an `Arbitrary` instance and make sure it is in the scope of the function you're testing: ${snippet{
-// this arbitrary will be used for all the examples
-implicit def a = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
-
-"a simple property" ! ex1
-
-def ex1 = check((s: String) => s must contain("a") or contain("b"))
-}}
-
-You can also be very specific if you want to use an `Arbitrary` instance only on one example. In that case, just replace the `check` method with the name of your `Arbitrary` instance: ${snippet{
+ScalaCheck requires an implicit `Arbitrary[T]` instance for each parameter of type `T` used in a property. If you rather want to pick up a specific `Arbitrary[T]` you can replace the `prop` method with the name of your `Arbitrary` instance: ${snippet{
 s2"""
   a simple property       $ex1
   a more complex property $ex2
@@ -51,7 +42,7 @@ implicit def abStrings = Arbitrary {
   } yield a+b
 }
 
-def ex1 = abStrings((s: String) => s must contain("a") or contain("b"))
+def ex1 = abStrings.apply((s: String) => s must contain("a") or contain("b"))
 
 // use a tuple if there are several parameters to your function
 def ex2 = (abStrings, abStrings)((s1: String, s2: String) => (s1+s2) must contain("a") or contain("b"))
@@ -71,7 +62,7 @@ def ex1 = Prop.forAll(abStrings) { s: String =>
 }
 
 def ex2 = Prop.forAll(abStrings, abStrings) { (s1: String, s2: String) =>
-    (s1+s2) must contain("a") or contain("b")
+  (s1+s2) must contain("a") or contain("b")
 }
 }}
 
@@ -99,8 +90,8 @@ The parameters you can modify are:
  `maxSize`         | maximum size for the "sized" data generators (default = 100)
  `workers`         | number of threads checking the property (default = 1)
  `rng`             | the random number generator (default = `new java.util.Random`)
- `callback`        | a ScalaCheck TestCallback (see the ScalaCheck documentation)
- `loader`          | a custom classloader (see the ScalaCheck documentation)
+ `callback`        | a ScalaCheck TestCallback (see the [ScalaCheck documentation](http://www.scalacheck.org))
+ `loader`          | a custom classloader (see the [ScalaCheck documentation](http://www.scalacheck.org))
 
 You can also set the random generator that is used in all the ScalaCheck generators: ${snippet{
 case class MyRandomGenerator() extends java.util.Random {

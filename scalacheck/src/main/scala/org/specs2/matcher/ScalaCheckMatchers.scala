@@ -317,7 +317,6 @@ trait ResultPropertyImplicits {
  * This trait enables some syntactic sugar when it is necessary to pass several arbitrary instances
  */
 trait ApplicableArbitraries { this: ScalaCheckMatchers =>
-
   implicit def applicableArbitrary[T](a: Arbitrary[T]): ApplicableArbitrary[T] = ApplicableArbitrary(a)
   case class ApplicableArbitrary[T](a: Arbitrary[T]) {
     def apply[R](f: T => R)(implicit toProp: (=>R) => Prop, s: Shrink[T]) = prop(f)(toProp, a, s)
