@@ -7,14 +7,14 @@ import org.specs2.specification.core.Fragments
 object Selection extends UserGuidePage { def is = s2"""
 ### Select an example to execute
 
-Many specifications are written incrementally. You specify a little bit then you implement the application. When you go through this Specify-Implement-Execute cycle it is useful to be able to focus on just one example, the one you are currently working on. The `ex` argument is what you need (`ex` stands for "example"):
+Many specifications are written incrementally. You specify a little bit then you implement the application. When you go through this "Specify-Implement-Execute" cycle it is useful to be able to focus on just one example, the one you are currently working on. The `ex` argument is what you need (`ex` stands for "example"):
 ```
 sbt> test-only *MySpecification* -- ex contains
 ```
 
-The command above will execute any example which description matches the regular expression `.*contains.*` (which means that you can pass regular expressions in general). If you want to match a few words you will need to delimit those words with `-ex` (and `--` if there are other arguments):
+The command above will execute any example which description matches the regular expression `.*contains.*` (which means that you can pass regular expressions in general). If you want to match a few words you will need to use double quotes:
 ```
-sbt> test-only *MySpecification* -- -ex contains hello -- sequential
+sbt> test-only *MySpecification* -- ex "contains hello" sequential
 ```
 
 ### Use tags
@@ -33,10 +33,10 @@ class TaggedSpecification extends Specification { def is = s2"""
   }
 }}
 
-In that specification we're defining several tags and sections:
+In that specification we are defining several tags and sections:
 
-* `feature 1` is a tag that's applied to `example1` (the _preceding_ Fragment)
-* `feature 2` is a tag that's applied to `example2` (the _preceding_ Fragment)
+* `feature 1` is a tag that is applied to `example1` (the _preceding_ Fragment)
+* `feature 2` is a tag that is applied to `example2` (the _preceding_ Fragment)
 * `checkin` marks a section which goes from the Text `and the second group of examples` to `example 4`
 
 Armed with this, it is now easy to include or exclude portions of the specification at execution time:
@@ -91,12 +91,12 @@ For that specification above:
 
 #### `Always` tag
 
-Some specifications need to have `Steps` which will always be included whatever tags are specified on the command line. This is the case when defining a "template" specification with setup/teardown steps: ${snippet{
+Some specifications need to have `Steps` which will always be included whatever tags are specified on the command line. This is the case when defining a ${""""template" specification""" ~/ SpecificationTemplate} with setup/teardown steps: ${snippet{
 trait DatabaseSpec extends Specification {
   override def map(fs: =>Fragments) =
-    tag(AlwaysTag) ^ step("startDb") ^
+    step("startDb") ^ tag(AlwaysTag) ^
     fs ^
-    tag(AlwaysTag) ^ step("cleanDb")
+    step("cleanDb") ^ tag(AlwaysTag)
 }
 }}
 
@@ -119,7 +119,7 @@ On the line above `x` is the status of the previous example. Here is a table of 
   `-`  | text
   `1`  | statistics
 
-This selection only works because $specs2 stores the state of each specification in a directory after a run (`target/specs2-reports/stats` by default). If you decide that this storing is useless and you want to skip it you can use the `neverstore` argument. Otherwise if you want to make sure that the `stats` directory doesn't become too big over time you can use the `resetstore` argument which will remove the current store before running the specification.
+This selection works because $specs2 stores the state of each specification in a directory after a run (`target/specs2-reports/stats` by default). If you decide that this storing is useless and you want to skip it you can use the `neverstore` argument. Otherwise if you want to make sure that the `stats` directory doesn't become too big over time you can use the `resetstore` argument which will remove the current store before running the specification.
 
 $AndIfYouWantToKnowMore
 

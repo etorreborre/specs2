@@ -9,7 +9,7 @@ The $specs2 matchers are a well-delimited piece of functionality that you should
  * `${fullName[matcher.MustMatchers]}` (or `${fullName[matcher.ShouldMatchers]}`) to write anything like `1 must be_==(1)` and
    get a `Result` back
 
- * **Important**: the `MustMatchers` *trait* will fill-in stacktraces on `MatchResults` while the `MustMatchers` object will not. This has some important consequences in terms of performances because creating stack traces is expensive
+ * **Important**: the `MustMatchers` *trait* will fill-in stacktraces on `MatchResults` to mark the location of a result while the `MustMatchers` object will not. This has some important consequences in terms of performances because creating stack traces is expensive
 
  * You can also use the side-effecting version of that trait called `${fullName[matcher.MustThrownMatchers]}` (or `${fullName[matcher.ShouldThrownMatchers]}`).
    It throws a `FailureException` as soon as an expectation is failing
@@ -18,7 +18,7 @@ The $specs2 matchers are a well-delimited piece of functionality that you should
 
 #### Without any dependency on specs2
 
-It is possible to add testing features to you library without depending on a specific testing library, like $specs2 or ScalaTest. Define the following trait:${snippet{
+It is possible to add testing features to your library without depending on a specific testing library, like $specs2 or ScalaTest. You will let clients of your library decide which one they want with the following trait:${snippet{
 trait TestInterface {
   def fail(msg: String): Nothing
   def skip(msg: String): Nothing
@@ -32,7 +32,7 @@ trait TestKit extends TestInterface {
 }
 }}
 
-When there is a failure or an error the library will call the `TestKit` methods. Finally you can use both the library and $specs2 by mixing in the `${fullName[matcher.ThrownMessages]}` trait:
+When there is a failure or an error the library will call the `TestKit` methods. Then the library client can use both the library and $specs2 by mixing in the `${fullName[matcher.ThrownMessages]}` trait:
 ```
 trait ThrownMessages { this: ThrownExpectations =>
   def fail(m: String): Nothing = failure(m)

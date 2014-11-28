@@ -23,14 +23,15 @@ class StepSpec extends Specification { def is = s2"""
 
   this is example 3 $ok
   this is example 4 $ok
-"""}
+"""
+}
 }}
 
 Then the specification will:
 
-  - execute examples 1 and 2 in parallel
-  - execute the step
-  - execute examples 3 and 4 in parallel
+  1. execute examples 1 and 2 in parallel
+  2. execute the step
+  3. execute examples 3 and 4 in parallel
 
 There is no "result" for a step but if it throws an Exception an `Error` will be reported. This will not however stop the execution of the rest of the specification.
 
@@ -44,14 +45,15 @@ class StepWithStopOnErrorSpec extends Specification { def is = s2"""
 
   this is example 3 $ok
   this is example 4 $ok
-"""}
+"""
+}
 }}
 
 When this specification is executed examples 3 and 4 will be skipped because the step returns an `Error`. An `Error` is likely to be a fatal condition but you can use other methods to stop the execution:
 
  - `stopOnFail` stop if there is a failure in the previous examples or in the step
  - `stopOnSkipped` stop if there is a skipped result in the previous examples or in the step
- - `stopWhen(Result => Boolean)` stop if the `and`-ed result of the previous examples and the step verify a given condition
+ - `stopWhen(Result => Boolean)` stop if the `and`-ed result of the previous examples and the step verifies a given condition
 
 ### Sequential
 
@@ -61,7 +63,8 @@ class SequentialSpec extends Specification { def is = sequential ^ s2"""
   this is example 2 $ok
   this is example 3 $ok
   this is example 4 $ok
-"""}
+"""
+}
 }}
 
 Thanks to the `sequential` argument the 4 examples above will execute one after the other.
@@ -78,7 +81,8 @@ class ActionSpec extends Specification { def is = s2"""
 
   this is example 3 $ok
   this is example 4 $ok
-"""}
+"""
+}
 }}
 
 $NowLearnTo

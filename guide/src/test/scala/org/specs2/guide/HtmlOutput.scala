@@ -33,11 +33,11 @@ You can use the following arguments to change the HTML generation:
 
 [Markdown](http://commonmark.org) text is supported if [Pandoc](http://johnmacfarlane.net/pandoc) is available on the command line.
 
- Name                    | Default value                                | Description
- ----------------------- | -------------------------------------------- | ------------------------------
- `pandoc.exec`           | `pandoc`                                     | path to the Pandoc executable
- `pandoc.inputformat`    | `markdown+pipe_tables`                       | pandoc arguments (see the Pandoc [user guide](http://johnmacfarlane.net/pandoc/README.html))
- `pandoc.outputformat`   | `html`                                       |
+ Name                    | Default value                                                                     | Description
+ ----------------------- | --------------------------------------------------------------------------------- | ------------------------------
+ `pandoc.exec`           | `pandoc`                                                                          | path to the Pandoc executable
+ `pandoc.inputformat`    | `markdown+pipe_tables+auto_identifiers+header_attributes+inline_code_attributes`  | pandoc arguments (see the Pandoc [user guide](http://johnmacfarlane.net/pandoc/README.html))
+ `pandoc.outputformat`   | `html`                                                                            |
 
 ### Use a different template
 
@@ -68,7 +68,7 @@ Custom CSS and JavaScript files can be used without changing the template. In or
 
 ## Create an index
 
-Here's something you can do to automatically create an index page for your specifications: ${snippet{
+Here is something you can do to automatically create an index page for your specifications: ${snippet{
 
 import org.specs2._
 import specification.core._

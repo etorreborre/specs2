@@ -18,7 +18,7 @@ trait EachContext extends FragmentsFactory { outer =>
 /**
  * For each created example use a context using the command line arguments
  */
-trait CommandLineArgumentsInContext extends FragmentsFactory { outer =>
+trait ContextWithCommandLineArguments extends FragmentsFactory { outer =>
   protected def context: CommandLine => Context
   override protected def fragmentFactory = new ContextualFragmentFactory(super.fragmentFactory, (env: Env) => context(env.arguments.commandLine))
 }

@@ -36,5 +36,12 @@ cat must matchA[Cat]
   .kitten((_:Seq[Cat]) must haveSize(2))
 
 }}
+
+$AndIfYouWantToKnowMore
+
+ - learn about all available ${"specs2 modules" ~/ Installation}
+
+$vid
+
 """
 }

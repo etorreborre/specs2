@@ -31,7 +31,7 @@ A `Field` is simply a label and a value. It is used in forms to display regular 
   * `field(label, value)` creates a field with a label and a value
   * `field(label, field1, field2, ...)` creates a field with a label and values coming from other fields, concatenated as strings
 
-When the form is displayed, here's how the fields are displayed:
+When the form is displayed, here is how the fields are displayed:
 
   ${form("Fields").
   tr(field("code").bold.center, field("is displayed as").bold.center).

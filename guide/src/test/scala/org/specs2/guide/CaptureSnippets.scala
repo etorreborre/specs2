@@ -33,7 +33,7 @@ factorial(3) == 6
 
 #### Cuts
 
-Since snippets are compiled code, you might have to include many declarations, like imports or variables definitions, so that the code compiles but this can make your documentation more verbose than necessary. You can hide those definitions by delimiting the code to show with some comments of the form `// 8<--`:
+Since snippets are compiled code, you might have to include many declarations, like imports or variables definitions to make the code compile. This can make your documentation more verbose than necessary so you can hide those definitions by delimiting the code to show with some comments of the form `// 8<--`:
 
 ```
 s2$triple

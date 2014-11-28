@@ -63,8 +63,7 @@ Depending on the $specs2 features you want to use you will need to add more depe
  `specs2-analysis`       | to use the package dependencies matcher
  `specs2-gwt`            | to write given/when/then specifications
  `specs2-html`           | to export specifications as html
- `specs2-form`           | html form-like specifications
- `specs2-markdown`       | used by `specs2-form' to display Markdown text as html
+ `specs2-form`           | to create html form-like specifications
  `specs2-junit`          | to run specifications as JUnit tests
 
 Note: the `specs2-core` jar depends on 2 other $specs2 jars:

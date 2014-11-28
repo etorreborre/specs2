@@ -6,7 +6,7 @@ import org.specs2.specification.core.{Fragments, foreachInSequence}
 import specification.dsl.Online
 
 object CreateOnlineSpecifications extends UserGuidePage { def is = s2"""
- Most of the specifications we write are known up front because this is precisely what guides the construction of our systems. However in some systems data comes first and drives what we can do with the system. For example we want to check that:
+ Most of the specifications we write are known up front because this is precisely what guides the construction of our systems. But sometimes data comes first and drives what we can do with the system. For example we want to check that:
 
   1. all the Wikipedia pages mentioning the term "BDD" are referencing $specs2
   2. if there is a $specs2 link on the page, the linked page must exist

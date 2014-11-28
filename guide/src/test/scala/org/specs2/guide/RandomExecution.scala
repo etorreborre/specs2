@@ -50,7 +50,7 @@ With such a specification you might see in the console:
 
 ### Using ScalaCheck
 
-The `RandomSequentialExecution` trait is actually a very naive way to test random commands on a system. A much better approach is to use ScalaCheck and its notion of stateful property-based testing.
+The `RandomSequentialExecution` trait is actually a very naive way to test random commands on a system. A much better approach is to use ScalaCheck and its notion of [stateful property-based testing](http://www.scalacheck.org/files/scaladays2014/index.html).
 
 """
 }

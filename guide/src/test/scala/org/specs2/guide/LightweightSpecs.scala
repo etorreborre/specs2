@@ -51,7 +51,7 @@ class HelloWorldSpec extends mutable.Spec {
 
 If you compare those 2 specifications with the "HelloWorldSpec" examples using `Specification` you will notice some differences:
 
- - you cannot write `"Hello world" must haveSize(11)`
+ - you cannot write `"Hello world" must have size(11)`
  - you cannot write `"This is a specification to check the 'Hello world' string".txt` to add some text to a mutable spec
 
 But not all is lost! For each functionality you might want to use there is a trait which you can mix-in to get it.

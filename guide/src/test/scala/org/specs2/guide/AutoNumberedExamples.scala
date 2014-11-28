@@ -3,11 +3,11 @@ package guide
 
 import specification._
 
-object AutoNumberedExamples extends UserGuidePage { def is = "Auto-numbered examples" ^ s2"""
+object AutoNumberedExamples extends UserGuidePage { def is = "Auto-numbered examples".title ^ s2"""
 
-## Auto numbered examples
+In the ${"named examples" ~/ NamedExamples} section we can see that there is a way to create groups of examples with standard names and use these names in the specification text (via the `s2` interpolated string). Here we go a step further.
 
-In the ${"named examples" ~/ NamedExamples} section we can see that there is a way to create groups of examples with standard names and use these names in the specification text (via the `s2` interpolated string). Here we go a step further. The specification text is going to be some pure text, the examples will be described as examples groups and the numbers will be created automatically. What does it look like? ${snippet{
+The specification text is going to be some pure text, the examples will be described as example groups and the numbers will be created automatically. What does it look like? ${snippet{
 class BulletedExamplesSpec extends script.Specification with Groups { def is = """
   This is an introduction
 
@@ -42,7 +42,7 @@ This style of specification uses the `org.specs2.specification.script.Specificat
 
  - Nothing is interpolated in the text that defines the `is` method
  - groups are anonymous, just called `group`
- - examples are anonymous, just called `eg` (_examplae gratia_ in latin, meaning "for example")
+ - examples are anonymous, just called `eg` ([_exampli gratia_](http://en.wikipedia.org/wiki/List_of_Latin_phrases_(E)#exempli_gratia) in latin, meaning "for example")
 
 At runtime, the text gets parsed and:
 

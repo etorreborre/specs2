@@ -3,7 +3,7 @@ package guide
 
 import main._
 import execute.AsResult
-import org.specs2.specification.{Before, CommandLineArguments, CommandLineArgumentsInContext, ForEachWithCommandLineArguments}
+import org.specs2.specification.{Before, CommandLineArguments, ContextWithCommandLineArguments, ForEachWithCommandLineArguments}
 import specification.core.foreachInSequence
 
 object UseCommandLineArguments extends UserGuidePage { def is = "Use command-line arguments".title ^ s2"""
@@ -66,8 +66,8 @@ class SpecificationWithArgs extends mutable.Specification with specification.mut
 
 ### Control a context
 
-The next thing you might want to control is contexts. Instead of using the `BeforeEach` / `AfterEach` / `AroundEach` traits directly you will need to implement the `CommandLineArgumentsInContext` trait and provide the appropriate context object:${snippet{
-class SpecificationWithArgs extends Specification with CommandLineArgumentsInContext { def is = s2"""
+The next thing you might want to control is contexts. Instead of using the `BeforeEach` / `AfterEach` / `AroundEach` traits directly you will need to implement the `ContextWithCommandLineArguments` trait and provide the appropriate context object:${snippet{
+class SpecificationWithArgs extends Specification with ContextWithCommandLineArguments { def is = s2"""
  This is a specification with a context depending on command line arguments
   with one example $ok
 """

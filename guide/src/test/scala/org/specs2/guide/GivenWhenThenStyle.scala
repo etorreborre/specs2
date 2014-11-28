@@ -15,7 +15,7 @@ The Given/When/Then style structures the specification with 3 main elements:
  - When steps:  command which your are currently specifying
  - Then steps:  expectations about the end state of the system
 
-In $specs2 the support for Given/When/Then can be more or less complex depending on the features you with to use:
+In $specs2 the support for Given/When/Then can be more or less complex depending on the features you wish to use:
 
  - basic support: given and when steps are just commands on a system, returning no value
  - intermediate support: given/when/then steps can parse part of the text to create their commands
@@ -67,7 +67,7 @@ class GWTSpec extends mutable.Specification {
 
 ## Intermediate support
 
-Given/When/Then specifications are often written as block of texts where part of the text contains values to use during the execution. For example:
+Given/When/Then specifications are often written as blocks of text where part of the text contains values to use during the execution. For example:
 ```
 This is a specification for a bank transfer
 
@@ -294,7 +294,7 @@ More precisely, the functions passed to a `when` step must be of the form
  * `when(aStepParser) { case p1 :: p2 :: .. :: _ => w1 }`, where `p1` has the type extracted from `aStepParser` and `p2 .. pn` have the types of the values extracted by the previous `given` steps
  * `when(aStepParser).collect { case (p1, p2n: Seq[LUB]) => w1 }`, where `p1` has the type extracted from `aStepParser` and `p2n` is a `Seq[LUB]` where `LUB` is the least upper bound of the types of all the values extracted by the previous `given` steps
 
-`::` is the [Shapeless](https://github.com/milessabin/shapeless) `HCons` operator so don't forget at add the Shapeless dependency to your project if you are using the `GWT` trait!
+`::` is the [Shapeless](https://github.com/milessabin/shapeless) `HCons` operator so don't forget to add the Shapeless dependency to your project if you are using the `GWT` trait!
 
 And similarly for `andThen` steps
 
@@ -304,6 +304,13 @@ And similarly for `andThen` steps
 The type `R` of the value `r` must be such that there is an `AsResult` type class instance in scope to transform it to a `Result`. In other words r is: a `Boolean`, a `MatchResult[_]`, a ScalaCheck `Prop`,...
 
 You will also note that the `Scenario` class restricts the order of methods which you can call. It always has to be `given* -> when* -> andThen*`.
+
+$AndIfYouWantToKnowMore
+
+ - read about the ${"dependencies for the GWT trait" ~/ RunInShell}
+
+$vid
+
 
 """
 }

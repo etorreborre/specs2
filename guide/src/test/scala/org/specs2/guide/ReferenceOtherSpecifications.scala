@@ -10,11 +10,11 @@ For some large projects, or to write documentation, you will need to structure y
 
 Here is the DSL you will use for those 2 types of references:${snippet{
 object FirstSpecification extends Specification { def is = s2"""
- Then we can consider one example
+ We can consider one example
   ${ 1 must_== 1 }
 
   And all these examples are also important so we need to know if they all pass
-  ${"important specification" ~/ SecondSpecification}
+  ${"important specification" ~ SecondSpecification}
 
   Finally it is worth having a look at ${"this specification" ~/ ThirdSpecification}.
 """

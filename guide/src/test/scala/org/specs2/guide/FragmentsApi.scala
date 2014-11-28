@@ -22,7 +22,7 @@ The role of the various DSLs in acceptance and unit specifications is to create 
 
 ### The `FragmentFactory` API
 
-The `FragmentFactory` possesses different methods to create:
+The `org.specs2.specification.create.FragmentFactory` trait possesses different methods to create:
 
  - texts
  - examples
@@ -31,7 +31,7 @@ The `FragmentFactory` possesses different methods to create:
  - references
  - "formatting" fragments (break, paragraph, tab...)
 
-Please have a look at the ScalaDoc to see the exact API for the factory and look at the source code for the default implementation in `DefaultFragmentFactory`.
+Please have a look at the ScalaDoc to see the exact API for the factory and look at the source code for the default implementation in `org.specs2.specification.create.DefaultFragmentFactory`.
 
 ### The `Fragments` API
 
@@ -42,7 +42,7 @@ Fragments(ff.text("introduction"), ff.example("first example", success), ff.brea
 }}
 
 
-Then you can use the methods of the `Fragments` class to add more fragments or to modify existing ones:
+Then you can use the methods of the `org.specs2.specification.core.Fragments` class to add more fragments or to modify existing ones:
 
  Method                                          | Description
  ----------------------------------------------- | -----------
@@ -56,7 +56,7 @@ Then you can use the methods of the `Fragments` class to add more fragments or t
 
 ### The `Fragments` DSL
 
-The `FragmentsDsl` trait provides a very versatile `^` operator to append fragments together, so you can write:${snippet{
+The `org.specs2.specification.dsl.FragmentsDsl` trait provides a very versatile `^` operator to append fragments together, so you can write:${snippet{
 val ff = fragmentFactory
 
 val fs = Fragments(ff.text("introduction"), ff.example("first example", success), ff.break)
