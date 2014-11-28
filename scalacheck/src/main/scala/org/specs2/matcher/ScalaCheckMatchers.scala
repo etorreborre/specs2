@@ -136,8 +136,6 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
       case Result(Passed, succeeded, discarded, fq, _)     =>
         execute.Success(noCounterExample(succeeded), frequencies(fq)(defaultPrettyParams), succeeded)
 
-      case r @ Result(PropException(_, execute.FailureException(f), _), n, _, fq, _) => f
-
       case r @ Result(Exhausted, n, _, fq, _)              =>
         execute.Failure(prettyTestRes(r)(defaultPrettyParams) + frequencies(fq))
 

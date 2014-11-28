@@ -145,7 +145,7 @@ object build extends Build {
 
   lazy val markdown = Project(id = "markdown", base = file("markdown"),
     settings = Seq(
-     libraryDependencies ++= depends.pegdown) ++
+     libraryDependencies ++= depends.pegdown ++ depends.shapeless(scalaVersion.value)) ++
       moduleSettings ++
       Seq(name := "specs2-markdown")
   ).dependsOn(common, core % "compile->test")
