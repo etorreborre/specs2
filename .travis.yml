@@ -10,4 +10,4 @@ jdk:
 branches:
     - specs2-three
 
-script: sbt -sbt-version 0.13.7-RC2 -scala-version $TRAVIS_SCALA_VERSION 'test-only -- -exclude unstable -xonly; coveralls'
+script: sbt -sbt-version 0.13.7-RC2 -scala-version $TRAVIS_SCALA_VERSION 'test-only -- xonly exclude unstable'
