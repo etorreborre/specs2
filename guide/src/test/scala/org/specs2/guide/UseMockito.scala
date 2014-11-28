@@ -8,7 +8,7 @@ import scala.concurrent.duration._
 
 object UseMockito extends UserGuidePage with Mockito { def is = "Mockito".title ^ s2"""
 
-[Mockito](https://code.google.com/p/mockito) allows to specify stubbed values and to verify that some calls are expected on your objects. In order to use those functionalities, you need to extend the `org.specs2.mock.Mockito` trait:${snippet{
+[Mockito](https://code.google.com/p/mockito) allows to specify stubbed values and to verify that some calls have been made to your objects. In order to use those features, you need to extend the `org.specs2.mock.Mockito` trait:${snippet{
 
 class MockitoSpec extends Specification with Mockito { def is = s2"""
 
@@ -16,7 +16,9 @@ A java list can be mocked
   You can make it return a stubbed value        ${c().stub}
   You can verify that a method was called       ${c().verify}
   You can verify that a method was not called   ${c().verify2}
+
 """
+
   case class c() {
     val m = mock[java.util.List[String]] // a concrete class would be mocked with: mock[new java.util.LinkedList[String]]
     def stub = {
@@ -37,15 +39,15 @@ A java list can be mocked
 
 Mockito offers the possibility to provide specific settings for the mock being created:
 
- * its name
+ * a name
 
 ${snippet{ val m = mock[List[String]].as("list1") }}
 
- * "smart" return values
+ * ["smart" return values](https://code.google.com/p/specs/wiki/UsingMockito#Smart_mocks)
 
 ${snippet{ val m = mock[List[String]].smart }}
 
- * "verbose" enables Mockito's verbose logging
+ * `verbose` to enable Mockito's verbose logging
 
 `val m = mock[List[String]].verbose`
 
@@ -73,7 +75,7 @@ val m2 = mock[List[String]].settings(smart = true,
   extraInterface = classOf[Cloneable])
 }}
 
-Finally, in case the Mockito library gets new settings, you can declare the following: ${snippet{
+Finally, you can pass a `org.mockito.MockSettings` object directly to the `mock` method: ${snippet{
 val settings = org.mockito.Mockito.withSettings
 val m = mock[List[String]](settings)
 }}
@@ -85,7 +87,7 @@ m.get(1) returns "one"
 m.get(2) throws new RuntimeException("forbidden")
 }}
 
-You can specify different consecutive returned values by appending thenReturns or thenThrows: ${snippet{
+You can specify different consecutive returned values by appending `thenReturns` or `thenThrows`: ${snippet{
 m.get(1) returns "one" thenReturns "two"
 m.get(2) throws new RuntimeException("forbidden") thenReturns "999"
 }}
@@ -140,7 +142,7 @@ In any other cases, if `f` is a function of 1 parameter, the array of the method
 
 ### Verification
 
-By default Mockito doesn't expect any method to be called. However if your writing interaction-based specifications you want to specify that some methods are indeed called: ${snippet{
+By default Mockito doesn't expect any method to be called. However if you are writing interaction-based specifications you want to specify that some methods are indeed called: ${snippet{
 there was one(m).get(0)              // one call only to get(0)
 there was no(m).get(0)               // no calls to get(0)
 
@@ -205,6 +207,7 @@ there were noMoreCallsTo(ignoreStubs(stub1, stub2))
 }}
 
 This method is also available with the `inOrder` method: ${snippet{
+// 8<--
 val (list1, list2) = ("", "")
 // 8<--
 implicit val order = inOrder(ignoreStubs(list1, list2))
@@ -214,7 +217,7 @@ For more documentation about this Mockito functionality, please read [here](http
 
 #### Spies
 
-Spies can be used in order to do some "partial mocking" of real objects: ${snippet{
+Spies can be used to do "partial mocking" of real objects: ${snippet{
 val spiedList = spy(new LinkedList[String])
 
 // methods can be stubbed on a spy
@@ -236,7 +239,7 @@ val spiedList = spy(new LinkedList[String])
 spiedList.get(0) returns "one"
 }}
 
-As advised in the Mockito documentation, doReturn must be used in that case: ${snippet{
+As advised in the Mockito documentation, `doReturn` must be used in that case: ${snippet{
 // 8<--
 val spiedList = spy(new LinkedList[String])
 // 8<--
