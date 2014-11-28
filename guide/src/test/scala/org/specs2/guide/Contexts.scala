@@ -11,7 +11,7 @@ import execute._
 
 object Contexts extends UserGuidePage with FileMatchers with FileSystem { def is = s2"""
 
-In a specification some examples are very straightforward. They just check that a function is returning expected values when given some inputs. However other examples can be more complex and require to execute in specific context:
+In a specification some examples are very straightforward. They just check that a function is returning expected values when given some inputs. However other examples can be more complex and require to execute in a specific context:
 
  * with some state being setup before the example executes
  * with some state being cleaned up after the example is executed
@@ -60,9 +60,9 @@ class AfterSpecification extends mutable.Specification with AfterEach {
 
 You might also want to mix the two:${snippet {
 class BeforeAfterSpecification extends mutable.Specification with BeforeAfterEach {
-  def before = println("before")
 
-  def after = println("after")
+  def before = println("before")
+  def after  = println("after")
 
   "example 1" >> {
     println("example1"); ok
@@ -87,6 +87,7 @@ trait DatabaseContext extends AroundEach {
   def openDatabaseTransaction = ???
   def closeDatabaseTransaction = ???
 }
+
 class AroundSpecification extends mutable.Specification with DatabaseContext {
   "example 1" >> {
     println("using the database"); ok
@@ -109,7 +110,7 @@ There is however one thing you cannot do with `AroundExample`. You can't pass th
 
 ### ForEach
 
-Sometimes you need to create a specific context for each example but also make it accessible to each example. Here is a specification having examples using an active database transaction:${snippet {
+Sometimes you need to create a specific context for each example but you also want to make it accessible to each example. Here is a specification having examples using an active database transaction:${snippet {
 // a transaction with the database
 trait Transaction
 
@@ -149,145 +150,12 @@ Some setups are very expensive and can be shared across all examples. For exampl
 
 $AndIfYouWantToKnowMore
 
+ * read about $specs2 ${"execution model" ~/ Execution} to understand how `Examples` and `Steps` are being executed
  * use ${"`Context` objects" ~ ContextObjects} to create contexts for just a few examples in the specification
  * use ${"traits and`Scopes`" ~ Scopes} to create contexts in unit specifications where you can access state directly on variables
 
 $vid
 """
 }
-
-object ContextObjects extends UserGuidePage { def is = s2"""
-
-In the ${see(Contexts)} section we have seen how to create contexts for each example in a specification. Whilst you generally want to group all the examples having the same kind of setup in the same specification, this is not always the case. So if you have a situation where you just need to create a "local" context for just a few examples here is what you can do.
-
-### Use case classes
-
-In an acceptance specification you can simply use case classes to get a "fresh" context on some examples: ${snippet{
-class ContextSpec extends Specification { def is = s2"""
-  this is the first example                          ${trees().e1}
-  this is the second example                         ${trees().e2}
-  """
-
-  case class trees() {
-    val tree = createATreeWith4Nodes
-
-    // each example has access to a brand new tree object
-    def e1 = tree.removeNodes(2, 3) must have size(2)
-    def e2 = tree.removeNodes(2, 3, 4) must have size(1)
-  }
-}
-}}
-
-If you also want to include some setup/cleanup behavior you can use the `Before` or `After` traits (or `BeforeAfter` or `Around`): ${snippet{
-class ContextSpec extends Specification { def is = s2"""
-  this is the first example                          ${trees().e1}
-  this is the second example                         ${trees().e2}
-"""
-
-  case class trees() extends specification.After {
-    lazy val tree = getATreeWith4NodesFromTheDatabase
-
-    // you need to define the "after" method
-    def after = cleanupDB()
-
-    // this is equivalent to: def e1 = this.apply { ... }
-    def e1 = this { tree.removeNodes(2, 3) must have size(2) }
-    def e2 = this { tree.removeNodes(2, 3, 4) must have size(1) }
-  }
-}
-}}
-
-As you can see the `Before`, `After`,... traits are very similar to their `BeforeEach`, `AfterEach`,... counterparts. One good thing about this technique is that each example has access to the current state being set (a bit like when using the `ForEach` trait).
-
-### Context object
-
-A slightly different technique consists in creating objects extending `Before`, `After`, `BeforeAfter` or `Around` so that you can reuse them independently of examples:${snippet{
-object http extends Around {
-  def around[T : AsResult](t: =>T) = openHttpSession("test") {
-     AsResult(t)  // execute t inside a http session
-  }
-}
-
-s2"""
-  this is a first example where the code executes inside a http session" ! http(e1)
-  and another one                                                        ! http(e2)
-"""
-
-  def e1 = ok // do something
-  def e2 = ok // here too
-
-}}
-
-This works because each "context" object has an `apply` method taking `R : AsResult` and returning `Result`.
-
-Finally a last kind of "context" object, a `Fixture` can be used to inject some state:${snippet{
-val evenNumbers = new Fixture[Int] {
-  def apply[R : AsResult](f: Int => R) = {
-    // test f with 1, 2, 3
-    Seq(1, 2, 3).foldLeft(Success(): Result) { (res, i) =>
-      res and AsResult(f(i))
-    }
-  }
-}
-
-s2"even numbers can be divided by 2  $e1"
-
-def e1 = evenNumbers { i: Int => i % 2 === 0 }
-}}
-
-"""
-
-  case class Tree[T](ts: T*) {
-    def removeNodes(n: Int*) = Seq[Int]()
-  }
-  def cleanupDB() = ()
-  def createATreeWith4Nodes = new Tree()
-  def getATreeWith4NodesFromTheDatabase = new Tree()
-  def openHttpSession[R : AsResult](name: String)(r: =>Result) = r
-
-}
-
-object Scopes extends UserGuidePage { def is = s2"""
-
-### Scope
-
-The techniques described in ${"`Context` objects" ~/ ContextObjects} are not always applicable to unit specifications where we want examples to be a "block" of code described by some text. Instead of creating a case class we can instantiate a trait which will hold a "fresh" state:${snippet{
-class ContextSpec extends mutable.Specification {
-  "this is the first example" in new trees {
-    tree.removeNodes(2, 3) must have size(2)
-  }
-  "this is the first example" in new trees {
-    tree.removeNodes(2, 3, 4) must have size(1)
-  }
-}
-
-/** the `trees` context */
-trait trees extends Scope {
-  val tree = new Tree(1, 2, 3, 4)
-}
-}}
-
-Each example of that specification gets a new instance of the `trees` trait. So it will have a brand new `tree` variable and even if this data is mutated by an example, other examples will be isolated from these changes.
-
-Now you might wonder why the `trees` trait is extending the `org.specs2.specification.Scope` trait? The reason is that the body of an Example only accepts objects which are convertible to a `Result`. By extending `Scope` we can take advantage of an implicit conversion provided by the `Specification` trait to convert our context object to a `Result`.
-
-### Before / After
-
-It is also possible to extend Scopes with `Before` and `After` traits but they need to be `org.specs2.mutable.Before` and `org.specs2.mutable.After` traits. This is necessary because those traits extend the Scala `DelayedInit` trait allowing to insert code around the execution of the body of an object.
-
-$AndIfYouWantToKnowMore
-
- - print ${"execution data" ~/ PrintExecutionData}
-
-$vid
-"""
-
-  case class Tree[T](ts: T*) {
-    def removeNodes(n: Int*) = Seq[Int]()
-  }
-
-}
-
-
 
 

@@ -1,0 +1,50 @@
+package org.specs2
+package guide
+
+import matcher.Scope
+
+
+object Scopes extends UserGuidePage { def is = s2"""
+
+### Scope
+
+The techniques described in ${"Context objects" ~/ ContextObjects} are not always applicable to unit specifications where we want examples to be a "block" of code described by some text. Instead of creating a case class we can instantiate a trait which will hold a "fresh" state:${snippet{
+class ContextSpec extends mutable.Specification {
+  "this is the first example" in new trees {
+    tree.removeNodes(2, 3) must have size(2)
+  }
+  "this is the first example" in new trees {
+    tree.removeNodes(2, 3, 4) must have size(1)
+  }
+}
+
+/** the `trees` context */
+trait trees extends Scope {
+  val tree = new Tree(1, 2, 3, 4)
+}
+}}
+
+Each example of that specification gets a new instance of the `trees` trait. So it will have a brand new `tree` variable and even if this data is mutated by an example, other examples will be isolated from these changes.
+
+Now you might wonder why the `trees` trait is extending the `org.specs2.specification.Scope` trait? The reason is that the body of an Example only accepts objects which are convertible to a `Result`. By extending `Scope` we can take advantage of an implicit conversion provided by the `Specification` trait to convert our context object to a `Result`.
+
+### Before / After
+
+It is also possible to extend Scopes with `Before` and `After` traits but they need to be `org.specs2.mutable.Before` and `org.specs2.mutable.After` traits. This is necessary because those traits extend the Scala `DelayedInit` trait allowing to insert code around the execution of the body of an object.
+
+$AndIfYouWantToKnowMore
+
+ - "isolate" examples using the ${"`isolated` argument" ~/ Isolation}
+ - print ${"execution data" ~/ PrintExecutionData}
+
+$vid
+"""
+
+  case class Tree[T](ts: T*) {
+    def removeNodes(n: Int*) = Seq[Int]()
+  }
+
+}
+
+
+
