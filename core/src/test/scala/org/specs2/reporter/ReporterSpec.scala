@@ -23,17 +23,17 @@ class ReporterSpec extends Specification with ForEachEnv with ThrownExpectations
    - saving the specification state
 
  A specification is
-   filtered                       $a1
-   executed                       $a2
+   filtered                       $$a1
+   executed                       $$a2
 
  And at the end of the reporting
    the spec stats are saved       $a3
-   the example stats are saved    $a4
+   the example stats are saved    $$a4
 
  Different printers can be used with the reporter
-   by default the text printer is used       $b1
-   other printers (then printer is not used) $b2
-   unless console is in the arguments        $b3
+   by default the text printer is used       $$b1
+   other printers (then printer is not used) $$b2
+   unless console is in the arguments        $$b3
 
 """
 
