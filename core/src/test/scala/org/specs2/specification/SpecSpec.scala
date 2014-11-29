@@ -1,10 +1,11 @@
 package org.specs2
+package specification
 
-class SpecSpec extends Spec { def is = sequential ^ s2"""
+class SpecSpec extends Spec { def is = sequential ^ tag("unstable") ^ s2"""
   A Spec specification contains very few implicits $e1
   Many matchers can be used in a simple spec       $e2
 """
-
+  // there seems to be a concurrency issue with this example when executed on Travis
   def e1 = {
     import scala.reflect.runtime.universe._
     typeOf[Spec].members.filter(m => m.isImplicit && m.isMethod).map(_.name.toString).toSet must
