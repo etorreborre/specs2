@@ -1,22 +1,24 @@
-package org.specs2.specification
+package org.specs2
+package specification
 package mutable
 
 import core._
 import create.DefaultFragmentFactory
 import DefaultFragmentFactory._
-import core.{Env, Results}
+import execute._
 import dsl.mutable.{MutableDsl, MutableFragmentBuilder}
-import org.specs2.matcher._
+import matcher._
+import scalaz._, Scalaz._
 
 class MutableFragmentsDslSpec extends org.specs2.Spec with TypedEqual with TraversableMatchers { def is = s2"""
 
   create examples
-    with a string and a result $e1
+    with a string and a result   $e1
     with a string and a for loop $e2
 
   create blocks
     with simple examples $e3
-    with a for loop $e4
+    with a for loop      $e4
 
   set a title on the specification $e5
 
@@ -26,7 +28,7 @@ class MutableFragmentsDslSpec extends org.specs2.Spec with TypedEqual with Trave
 
   def e1 = fragments(new dsl { "e1" in ok }) must contain(exactly(break, example("e1", ok), break))
 
-  def e2 = fragments(new dsl { "e1" in Results.foreach(1 to 2)(i => i === i) }) must
+  def e2 = fragments(new dsl { "e1" in Result.foreach(1 to 2)(i => i === i) }) must
     contain(exactly(break, example("e1", ok), break))
 
   def e3 = fragments(new dsl {
@@ -45,7 +47,7 @@ class MutableFragmentsDslSpec extends org.specs2.Spec with TypedEqual with Trave
 
   def e4 = fragments(new dsl {
     "this" should {
-      (1 to 2).repeat { i => "e"+i in ok }
+      Fragment.foreach(1 to 2) { i => "e"+i in ok }
     }
   }).map(_.description) must
     contain(exactly(Seq(

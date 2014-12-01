@@ -237,6 +237,11 @@ object Result {
 
   implicit def theseToResult(these: String \&/ Throwable): Result =
     these.fold(s => Error(s), t => Error(Error.ThrowableException(t)), (s, t) => new Error(s, Error.ThrowableException(t)))
+
+  /** this allows the creation of expectations with a for loop */
+  def foreach[T, R : AsResult](seq: Seq[T])(f: T => R): Result = {
+    seq.foldMap(t => AsResult(f(t)))
+  }
 }
 
 trait Results {

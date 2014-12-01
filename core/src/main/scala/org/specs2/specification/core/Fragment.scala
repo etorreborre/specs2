@@ -118,6 +118,11 @@ object Fragment {
     else if (isText(f)) "Text"
     else if (isTag(f))  "Tag"
     else                "Other"
+
+  /** iterate over elements to create a Fragments object */
+  def foreach[T](seq: Seq[T])(f: T => Fragment): Fragments =
+    seq.foldLeft(Fragments.empty) { (res, cur) => res.append(f(cur)) }
+
 }
 
 

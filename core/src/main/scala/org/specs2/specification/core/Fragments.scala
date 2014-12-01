@@ -2,6 +2,7 @@ package org.specs2
 package specification
 package core
 
+import scalaz.Monoid
 import scalaz.concurrent.Task
 import execute.{AsResult, Result}
 import shapeless._
@@ -96,25 +97,22 @@ case class Fragments(contents: Process[Task, Fragment]) {
 object Fragments {
   val contentsLens = lens[Fragments] >> 'contents
 
-  def apply(fragments: Fragment*): Fragments = Fragments(emitAll(fragments).toSource)
-}
+  /** empty sequence of fragments */
+  val empty = Fragments()
 
+  /** create fragments from a sequence of individual fragments */
+  def apply(fragments: Fragment*): Fragments =
+    Fragments(emitAll(fragments).toSource)
 
-object Results {
-  /** this allows the creation of expectations with a for loop */
-  def foreach[T, R : AsResult](seq: Seq[T])(f: T => R): Result = {
-    seq foreach f
-    org.specs2.execute.Success()
+  implicit def FragmentsMonoid: Monoid[Fragments] = new Monoid[Fragments] {
+    def zero : Fragments = Fragments.empty
+
+    def append(fs1: Fragments, fs2: =>Fragments): Fragments =
+      fs1.append(fs2)
   }
+
+  /** iterate over elements to create a Fragments object */
+  def foreach[T](seq: Seq[T])(f: T => Fragments): Fragments =
+    seq.foldLeft(Fragments.empty)((res, cur) => res.append(f(cur)))
 }
 
-
-
-trait UnitPost extends org.specs2.mutable.Specification {
-  args.report(notoc=true)
-  override def map(fs: =>_root_.org.specs2.specification.core.Fragments) =
-      "8<--------------------------------------------------------------------------------------------------------------"^p^
-      fs^p^
-      "8<--------------------------------------------------------------------------------------------------------------"
-
-}

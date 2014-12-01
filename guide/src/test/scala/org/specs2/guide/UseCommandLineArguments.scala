@@ -4,7 +4,7 @@ package guide
 import main._
 import execute.AsResult
 import org.specs2.specification.{Before, CommandLineArguments, ContextWithCommandLineArguments, ForEachWithCommandLineArguments}
-import specification.core.foreachInSequence
+import specification.core._
 
 object UseCommandLineArguments extends UserGuidePage { def is = "Use command-line arguments".title ^ s2"""
 
@@ -44,7 +44,7 @@ s2"""
   else
 s2"""
  This is a BIG specification
-  with many examples ${ (1 to 1000).repeat(i => "ex"+i ! ok) }
+  with many examples ${ Fragment.foreach(1 to 1000)(i => "ex"+i ! ok) }
 """
   def e1 = ok
 }
@@ -59,7 +59,7 @@ class SpecificationWithArgs extends mutable.Specification with specification.mut
       }
     else
       "This is a small specification" >> {
-        "with lots of examples" >> (1 to 1000).repeat(i => "ex"+i >> ok)
+        "with lots of examples" >> Fragment.foreach(1 to 1000)(i => "ex"+i >> ok)
       }
 }
 }}

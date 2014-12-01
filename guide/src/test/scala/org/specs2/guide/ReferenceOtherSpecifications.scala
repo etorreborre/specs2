@@ -24,7 +24,7 @@ import org.specs2.specification.core._
 
 object SecondSpecification extends Specification { def is = s2"""
  This spec contains lots of examples
-   ${ (1 to 100).repeat { i => "example "+i ! ok } }
+   ${ Fragment.foreach(1 to 100) { i => "example "+i ! ok } }
 """
 }
 object ThirdSpecification extends Specification { def is = s2"""

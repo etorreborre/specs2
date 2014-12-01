@@ -50,7 +50,7 @@ class WikipediaBddSpec extends Specification with Online { def is = s2"""
     s2"""
 
  The specs2 links must all contain a reference to the author of specs2
- ${specs2Links.repeat(authorExample)}
+ ${Fragments.foreach(specs2Links)(authorExample)}
     """
   }
 

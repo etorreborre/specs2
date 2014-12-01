@@ -28,7 +28,7 @@ class WikipediaBddSpec extends Specification with Online { def is = s2"""
 
     s2"""
      The specs2 links must all be active
-     ${ specs2Links repeat isActive }
+     ${ Fragments.foreach(specs2Links)(isActive) }
     """
   }
 
