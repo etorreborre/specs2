@@ -12,7 +12,7 @@ import specification.core.Fragment
 trait ActionDsl extends FragmentBuilder with org.specs2.specification.dsl.ActionDsl {
   override def action(a: =>Any) = addFragment(super.action(a))
   override def step(a: =>Any) = addFragment(super.step(a))
-  override def step(a: =>Any, global: Boolean = false) = addFragment(super.step(a).makeGlobal(global))
+  override def step(a: =>Any, global: Boolean) = addFragment(super.step(a).makeGlobal(global))
 
   def stopWhen(r: Result): Fragment = addFragment(fragmentFactory.step(()).stopOn(r))
   def stopWhen(f: Result => Boolean): Fragment = addFragment(fragmentFactory.step(()).stopWhen(f))
