@@ -26,62 +26,69 @@ trait ContextWithCommandLineArguments extends FragmentsFactory { outer =>
 /**
  * For each created example use a given before action
  */
-trait BeforeEach extends EachContext { outer =>
+trait BeforeEach extends FragmentsFactory { outer =>
   protected def before: Any
-  protected def context = (env: Env) => new Before { def before = outer.before }
+  protected def beforeContext: Env => Context = (env: Env) => new Before { def before = outer.before }
+  override protected def fragmentFactory = new ContextualFragmentFactory(super.fragmentFactory, beforeContext)
 }
 
 /**
  * For each created example use a given after action
  */
-trait AfterEach extends EachContext { outer =>
+trait AfterEach extends FragmentsFactory { outer =>
   protected def after: Any
-  protected def context = (env: Env) => new After { def after = outer.after }
+  protected def afterContext: Env => Context = (env: Env) => new After { def after = outer.after }
+  override protected def fragmentFactory = new ContextualFragmentFactory(super.fragmentFactory, afterContext)
 }
 
 /**
  * For each created example use a given before action
  */
-trait BeforeAfterEach extends EachContext { outer =>
+trait BeforeAfterEach extends FragmentsFactory { outer =>
   protected def before: Any
   protected def after: Any
 
-  protected def context = (env: Env) => new BeforeAfter {
+  protected def beforeAfterContext: Env => Context = (env: Env) => new BeforeAfter {
     def before = outer.before
     def after = outer.after
   }
+
+  override protected def fragmentFactory = new ContextualFragmentFactory(super.fragmentFactory, beforeAfterContext)
 }
 
 /**
  * For each created example use a given around action
  */
-trait AroundEach extends EachContext { outer =>
+trait AroundEach extends FragmentsFactory { outer =>
   protected def around[R : AsResult](r: =>R): Result
-  protected def context = (env: Env) => new Around { def around[R : AsResult](r: =>R) = outer.around(r) }
+  protected def aroundContext: Env => Context = (env: Env) => new Around { def around[R : AsResult](r: =>R) = outer.around(r) }
+  override protected def fragmentFactory = new ContextualFragmentFactory(super.fragmentFactory, aroundContext)
 }
 
 /**
  * For each created example use a given fixture object
  */
-trait ForEach[T] extends EachContext { outer =>
+trait ForEach[T] extends FragmentsFactory { outer =>
   protected def foreach[R : AsResult](f: T => R): Result
 
-  protected def context: Env => Context = (env: Env) => new Around {
+  protected def foreachContext: Env => Context = (env: Env) => new Around {
     def around[R : AsResult](r: =>R) = AsResult(r)
   }
 
   implicit def foreachFunctionToResult[R : AsResult]: AsResult[T => R] = new AsResult[T => R] {
     def asResult(f: =>(T => R)) = foreach(f)
   }
+
+  override protected def fragmentFactory = new ContextualFragmentFactory(super.fragmentFactory, foreachContext)
 }
 
 /**
  * For each example but inject data depending on command line arguments
  */
-trait ForEachWithCommandLineArguments[T] extends EachContext { outer: S2StringContext =>
+trait ForEachWithCommandLineArguments[T] extends FragmentsFactory { outer: S2StringContext =>
   protected def foreach[R : AsResult](commandLine: CommandLine)(f: T => R): Result
 
-  protected def context: Env => Context = (env: Env) => new Around {
+  protected def foreachWithCommandLineContext: Env => Context = (env: Env) => new Around {
     def around[R : AsResult](r: =>R) = AsResult(r)
   }
 
@@ -94,6 +101,9 @@ trait ForEachWithCommandLineArguments[T] extends EachContext { outer: S2StringCo
       fs append before append ff.example(description, foreachFunctionToExecution(f)).setLocation(end)
     }
   }
+
+  override protected def fragmentFactory = new ContextualFragmentFactory(super.fragmentFactory, foreachWithCommandLineContext)
+
 }
 
 /**

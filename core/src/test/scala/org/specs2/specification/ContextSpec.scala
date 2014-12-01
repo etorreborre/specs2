@@ -11,6 +11,7 @@ import sys._
 import execute._
 import matcher._
 import _root_.org.specs2.mutable.{Around => MAround, Before => MBefore, After => MAfter, Specification => Spec}
+import ExecutionVar._
 
 class ContextSpec extends org.specs2.Spec with ResultMatchers with Groups { def is = s2"""
 
@@ -68,6 +69,10 @@ class ContextSpec extends org.specs2.Spec with ResultMatchers with Groups { def 
  The Around trait can be used to
    execute the example inside a user provided context                                                      ${g2().e6}
 
+
+ Two traits can be mixed together and their effects combined
+   BeforeAfter and Around                                                                                  ${g3().e1}
+
  An Action can be used to create Step fragments containing an action to execute:
    val beforeSpec = new Action
    def is = beforeSpec(c.println('beforeSpec')) ^ ex1
@@ -109,6 +114,18 @@ class ContextSpec extends org.specs2.Spec with ResultMatchers with Groups { def 
     e6  := executing(ex1Around).prints("around", "e1")
   }
 
+  "combination" - new g3 with FragmentsExecution {
+    e1  := withEnv { env: Env =>
+      abstract class ParentSpec extends Specification with BeforeAfterEach { def before = println("before"); def after = println("after") }
+      abstract class ChildSpec extends ParentSpec with AroundEach { def around[R : AsResult](r: =>R) = { println("around"); AsResult(r) } }
+      val child = new ChildSpec { def is =
+        "e1" ! {println("e1"); ok}
+      }
+
+      executing(child.fragments(env)).prints("before", "around", "e1", "after")
+    }
+  }
+
   "other context" - new g4 with FragmentsExecution {
     e1 := executing(firstThenEx1).prints("first", "e1")
     e2 := executeBodies(silentFirstThenEx1).map(_.message) must_== List("", "success")
@@ -138,6 +155,7 @@ class ContextSpec extends org.specs2.Spec with ResultMatchers with Groups { def 
     }
   }
 }
+
 trait ContextData extends StandardResults with FragmentsFactory with ContextsForFragments with AcceptanceDsl {
   val factory = fragmentFactory
 

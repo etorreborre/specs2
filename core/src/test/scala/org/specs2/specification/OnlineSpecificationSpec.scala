@@ -2,11 +2,11 @@ package org.specs2
 package specification
 
 import execute._
-import org.specs2.matcher.Matcher
-import org.specs2.specification.dsl.Online
+import core._
+import matcher.Matcher
+import specification.dsl.Online
 import scalaz.stream.Process
 import reporter.TextPrinterSpec._
-import org.specs2.specification.core.{Fragments, FragmentsContinuation, Execution, Text}
 
 class OnlineSpecificationSpec extends Specification { def is = s2"""
 
