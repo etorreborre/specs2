@@ -29,11 +29,9 @@ trait ExampleDsl1 extends BlockDsl {
   implicit def blockExample(d: String) = new BlockExample(d)
 
   class BlockExample(d: String) {
+    def >>[R : AsResult](r: =>R): Fragment = >>(Execution.result(r))
     def >>(f: =>Fragment): Fragment = describe(d) >> f
     def >>(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments = describe(d).>>(fs)(p1)
-
-    def >>[R : AsResult](r: =>R): Fragment =
-      >>(Execution.result(r))
 
     def >>[R](f: CommandLine => R)(implicit asResult: AsResult[R], p: ImplicitParam): Fragment =
       >>(Execution.withEnv((env: Env) => asResult.asResult(f(env.arguments.commandLine))))
@@ -47,6 +45,9 @@ trait ExampleDsl1 extends BlockDsl {
     }
 
     def in[R : AsResult](r: =>R): Fragment = d >> r
+    def in(f: =>Fragment): Fragment = describe(d) >> f
+    def in(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments = describe(d).>>(fs)(p1)
+
     def in[R](f: CommandLine => R)(implicit asResult: AsResult[R], p: ImplicitParam): Fragment = d.>>(f)(asResult, p)
     def in[R](f: Env => R)(implicit asResult: AsResult[R], p1: ImplicitParam1): Fragment = d.>>(f)(asResult, p1)
     def in(execution: Execution): Fragment = d >> execution
