@@ -7,7 +7,7 @@ import scala.concurrent._
 import scala.concurrent.duration._
 import ExecutionContext.Implicits.global
 
-class EventuallyMatchersSpec extends Specification with FutureMatchers with ExpectationsDescription {
+class EventuallyMatchersSpec extends Specification with FutureMatchers with ExpectationsDescription { section("travis")
 addParagraph { """
 `eventually` can be used to retry any matcher until a maximum number of times is reached
 or until it succeeds.

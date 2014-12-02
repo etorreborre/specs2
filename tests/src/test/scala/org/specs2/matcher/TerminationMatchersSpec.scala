@@ -6,7 +6,7 @@ import java.util.concurrent._
 import specification._
 import scala.concurrent.duration._
 
-class TerminationMatchersSpec extends script.Specification with TerminationMatchers with Grouped { def is = sequential^ section("travis") ^ s2"""
+class TerminationMatchersSpec extends script.Specification with TerminationMatchers with Grouped { def is = sequential ^ s2""" ${section("travis")}
                                                                                                    
  It is possible to check if a block of code terminates
    with a default number of retries and default sleep time
