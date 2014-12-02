@@ -77,44 +77,52 @@ trait DefaultExecutor extends Executor {
     receive1 { fragment: Fragment =>
       val arguments = env.arguments
 
-      // if we need to wait, we do, an get the result
-      val barrierResult =
-        if (fragment.execution.mustJoin) barrier.attemptRun.fold(t => org.specs2.execute.Error(t), r => r)
-        else                             Success("no barrier result")
+      if (arguments.skipAll) {
+        val skipped =
+          if (fragment.isExecutable) emit(Task.now(fragment.skip))
+          else                       emit(Task.now(fragment))
 
-      // depending on the result we decide if we should go on executing fragments
-      val barrierStop =
-        mustStop ||
-        arguments.stopOnFail && barrierResult.isFailure ||
-        arguments.stopOnSkip && barrierResult.isSkipped ||
-        fragment.execution.nextMustStopIf(barrierResult)
+        skipped fby sequencedExecution(env, barrier, mustStop)
+      } else {
+        // if we need to wait, we do, an get the result
+        val barrierResult =
+          if (fragment.execution.mustJoin) barrier.attemptRun.fold(t => org.specs2.execute.Error(t), r => r)
+          else                             Success("no barrier result")
 
-      // if the previous fragments decided that we should stop the execution
-      // skip the execution
-      // otherwise execute synchronously or asynchronously
+        // depending on the result we decide if we should go on executing fragments
+        val barrierStop =
+          mustStop ||
+            arguments.stopOnFail && barrierResult.isFailure ||
+            arguments.stopOnSkip && barrierResult.isSkipped ||
+            fragment.execution.nextMustStopIf(barrierResult)
 
-      // make sure the fragment is only executed once
-      lazy val executedFragment = executeFragment(env)(fragment)
-      val executeNow = env.arguments.sequential || fragment.execution.mustJoin
+        // if the previous fragments decided that we should stop the execution
+        // skip the execution
+        // otherwise execute synchronously or asynchronously
 
-      val executingFragment = timedout(fragment, env) {
-        if (mustStop)             Task.now(fragment.skip)
-        else if (executeNow)      Task.now(executedFragment)
-        else                      start(executedFragment)(env.executorService)
-      }(env.executionEnv.timeOut.orElse(fragment.execution.timeout))
+        // make sure the fragment is only executed once
+        lazy val executedFragment = executeFragment(env)(fragment)
+        val executeNow = env.arguments.sequential || fragment.execution.mustJoin
 
-      // if this fragment is a join point, start a new sequence
-      // and check if the execution needs to be stopped in case of a step error
-      val (nextBarrier, stepStop) =
-        if (fragment.execution.mustJoin) {
-          val stepResult = executedFragment.executionResult
-          (Task.now(stepResult), fragment.execution.nextMustStopIf(stepResult))
-        }
-        // otherwise add the current execution to the sequence of current executions
-        else
-          (barrier.map { case r => Result.ResultFailureMonoid.append(r, executedFragment.execution.result) }, false)
+        val executingFragment = timedout(fragment, env) {
+          if (mustStop)             Task.now(fragment.skip)
+          else if (executeNow)      Task.now(executedFragment)
+          else                      start(executedFragment)(env.executorService)
+        }(env.executionEnv.timeOut.orElse(fragment.execution.timeout))
 
-      emit(executingFragment) fby sequencedExecution(env, nextBarrier, barrierStop || stepStop)
+        // if this fragment is a join point, start a new sequence
+        // and check if the execution needs to be stopped in case of a step error
+        val (nextBarrier, stepStop) =
+          if (fragment.execution.mustJoin) {
+            val stepResult = executedFragment.executionResult
+            (Task.now(stepResult), fragment.execution.nextMustStopIf(stepResult))
+          }
+          // otherwise add the current execution to the sequence of current executions
+          else
+            (barrier.map { case r => Result.ResultFailureMonoid.append(r, executedFragment.execution.result) }, false)
+
+        emit(executingFragment) fby sequencedExecution(env, nextBarrier, barrierStop || stepStop)
+      }
     }
 
   /** execute one fragment */
@@ -142,7 +150,7 @@ trait DefaultExecutor extends Executor {
       case None    => task
       case Some(d) =>
         new Task(env.timeout.withTimeout(task.get, d.toMillis).map {
-          case -\/(t)  => \/-(fragment.setExecution(fragment.execution.setResult(Skipped("timeout after "+duration))))
+          case -\/(t)  => \/-(fragment.setExecution(fragment.execution.setResult(Skipped("timeout after "+d))))
           case \/-(r)  => r
         })
     }

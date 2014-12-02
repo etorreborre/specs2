@@ -11,14 +11,14 @@ import main.Arguments
 import specification.core._
 import specification.process.DefaultExecutor
 
-class ExecutorSpec extends Spec with Groups with ResultMatchers with ThrownExpectations { def is = s2"""
+class ExecutorSpec extends Specification with Groups with ResultMatchers with ThrownExpectations { def is = s2"""
 
  Steps
  =====
   + by step
   + stop on failed specified on a step
   + stop on skip specified in arguments
-  skipAll from arguments
+  + skipAll from arguments
 
  Execute
  =======
@@ -61,9 +61,19 @@ class ExecutorSpec extends Spec with Groups with ResultMatchers with ThrownExpec
         step(step1),
         example("fast", fast))
 
-      execute(fragments, Env(arguments = Arguments("stopOnSkipped"))) must contain(beSkipped[Result])
+      execute(fragments, Env(arguments = Arguments("stopOnSkip"))) must contain(beSkipped[Result])
 
       messages.toList must_== Seq("medium", "slow", "step")
+    }
+
+    eg := {
+      val fragments = Seq(
+        example("ex1", fast),
+        example("ex2", fast))
+
+      execute(fragments, Env(arguments = Arguments("skipAll"))) must contain(beSkipped[Result])
+
+      messages.toList must beEmpty
     }
 
   }
