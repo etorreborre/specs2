@@ -83,10 +83,10 @@ trait TextPrinter extends Printer {
     if ((args.xonly && stats.hasFailuresOrErrors || !args.xonly) && args.canShow("1")) {
       val title = if (header.show.isEmpty) "" else " "+header.show.trim
 
-      emit(" \n").info fby
+      printNewLine fby
       emit(s"Total for specification$title\n").info fby
         emit(stats.display(args)).info fby
-        emit("\n ").info
+        printNewLine
     } else emitNone
   }
 
@@ -108,7 +108,7 @@ trait TextPrinter extends Printer {
           printRunnable(d.show, e, args, indentation)
 
         case Fragment(Br, e, l) =>
-          if (args.canShow("-")) emit(" \n").info
+          if (args.canShow("-")) printNewLine
           else emitNone
 
         case Fragment(Code(text), e, l) =>
@@ -252,7 +252,7 @@ trait TextPrinter extends Printer {
   }
 
   def printNewLine =
-    emit("").info
+    emit(EmptyLine)
 
   /** show values as a string with a description */
   def printValues(description: String, values: Seq[Any]) =

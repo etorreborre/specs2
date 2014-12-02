@@ -172,7 +172,7 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
 
   def i1 = SpecStructure.create(SpecHeader(getClass), Arguments(), "e1" ! ok ^ break ^ break ^ "e2" ! ok) contains
     """|[info] + e1
-       |[info]_
+       |[info]
        |[info] + e2"""
 
   def j1 = s2"""the ${SpecificationRef(SpecHeader(classOf[String]))} spec""" contains

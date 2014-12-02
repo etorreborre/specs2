@@ -12,14 +12,15 @@ import text.AnsiColors
  * Then there will be only 2 lines displayed and not 3 (2 for the first infoLog, 1 for the second one)
  */
 trait BufferedLineLogger extends LineLogger {
-  def infoLog(msg: String)    = { val rest = flushText(); add(rest+msg) }
-  def errorLog(msg: String)   = { val rest = flushText(); errorLine(rest+msg)  }
-  def failureLog(msg: String) = { val rest = flushText(); failureLine(rest+msg) }
-  def close = flushText(force = true)
+  def infoLog(msg: String)   : Unit = { val rest = flushText(); add(rest+msg) }
+  def errorLog(msg: String)  : Unit = { val rest = flushText(); errorLine(rest+msg)  }
+  def failureLog(msg: String): Unit = { val rest = flushText(); failureLine(rest+msg) }
+  def newline                : Unit = { infoLine(buffer.toString); buffer.clear }
+  def close: Unit = flushText(force = true)
 
-  protected def infoLine(msg: String)
-  protected def errorLine(msg: String)
-  protected def failureLine(msg: String)
+  protected def infoLine(msg: String): Unit
+  protected def errorLine(msg: String): Unit
+  protected def failureLine(msg: String): Unit
 
   private val buffer = new StringBuilder
   private def add(msg: String) { buffer.append(msg) }

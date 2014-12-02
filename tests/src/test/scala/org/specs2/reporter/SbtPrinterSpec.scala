@@ -51,11 +51,10 @@ class SbtPrinterSpec extends Spec with ForEachEnv { def is = s2"""
          |   + contain 11 characters
          |   + start with 'Hello'
          |   + end with 'world'
-         |_
+         |
          |Total for specification HelloWorldSpec
          |Finished in 0 ms
-         |3 examples, 0 failure, 0 error
-         |_""".stripMargin.replaceAll(" ", "_")
+         |3 examples, 0 failure, 0 error""".stripMargin.replaceAll(" ", "_")
     }
 
     def print(spec: SpecStructure) = {

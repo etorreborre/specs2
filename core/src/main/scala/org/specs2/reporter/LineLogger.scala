@@ -11,6 +11,7 @@ trait LineLogger {
   def infoLog(msg: String)
   def failureLog(msg: String)
   def errorLog(msg: String)
+  def newline
   def close()
 }
 
@@ -28,6 +29,7 @@ object LineLogger {
     def failureLog(msg: String) = ()
     def errorLog(msg: String)   = ()
     def close()                 = ()
+    def newline                 = ()
   }
 
   /** this logger can be used for tests */
@@ -35,6 +37,7 @@ object LineLogger {
     def infoLine(msg: String)    = msg.split("\n").foreach(m => append("[info] " + m))
     def errorLine(msg: String)   = msg.split("\n").foreach(m => append("[error] " + m))
     def failureLine(msg: String) = msg.split("\n").foreach(m => append("[error] " + m))
+
     override def append(m: String) = super.append(AnsiColors.removeColors(m))
   }
 }
