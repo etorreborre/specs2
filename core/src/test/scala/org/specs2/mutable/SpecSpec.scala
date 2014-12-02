@@ -1,9 +1,13 @@
-package org.specs2.mutable
+package org.specs2
+package mutable
 
-class SpecSpec extends Spec {
+import specification.dsl.mutable.TagDsl
+
+class SpecSpec extends Spec with TagDsl {
   sequential
+  section("travis")
 
-  "A Spec specification contains very few implicits" >> {
+  "A mutable Spec specification contains very few implicits" >> {
     import scala.reflect.runtime.universe._
     typeOf[Spec].members.filter(m => m.isImplicit && m.isMethod).map(_.name.toString).toSet must
       beEqualTo(Set(
