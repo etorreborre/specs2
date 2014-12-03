@@ -1,0 +1,9 @@
+Maintenance version.
+
+## Improvements
+
+ * upgrade to ScalaCheck 1.12.1 (with better distribution for `Floats` and `Doubles`) [#311](https://github.com/etorreborre/specs2/pull/311). Thanks @2rs2ts for this.
+
+
+==========================
+
