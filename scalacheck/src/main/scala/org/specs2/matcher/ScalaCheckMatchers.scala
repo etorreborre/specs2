@@ -77,11 +77,6 @@ trait CheckProperty {
       case Result(Passed, succeeded, discarded, fq, _)     =>
         execute.Success(noCounterExample(succeeded), frequencies(fq), succeeded)
 
-      case r @ Result(GenException(execute.FailureException(f)), n, _, fq, _) => f
-
-      case r @ Result(GenException(e), n, _, fq, _)        =>
-        execute.Failure(prettyTestRes(r)(defaultPrettyParams) + frequencies(fq), e.getMessage.notNull, e.getStackTrace.toList)
-
       case r @ Result(Exhausted, n, _, fq, _)              =>
         execute.Failure(prettyTestRes(r)(defaultPrettyParams) + frequencies(fq))
 
