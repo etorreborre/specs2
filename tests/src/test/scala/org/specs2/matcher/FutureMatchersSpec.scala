@@ -1,12 +1,8 @@
 package org.specs2
 package matcher
 
-import specification._
-import script._
 import concurrent._
 import duration._
-import ExecutionContext.Implicits.global
-import java.util.concurrent.{Executors, ThreadPoolExecutor, ForkJoinPool, Executor}
 
 class FutureMatchersSpec extends Specification with ResultMatchers with Retries { def is = sequential ^ s2"""
 
