@@ -1,6 +1,7 @@
 package examples
 
 import org.specs2._
+import specification.core._
 
 /**
  * This specification shows how to reuse examples and data.
@@ -40,7 +41,7 @@ class StackSpec extends Specification { def is =  "Specification for a Stack wit
       throw an exception when sent #push                                   ${fullStack().e1}
                                                                            """
   /** examples for a non-empty stack */
-  def nonEmptyStack(stack: =>SizedStack) =                                 t^s2"""
+  def nonEmptyStack(stack: =>SizedStack): Fragments =                      s2"""
     have a size > 0                                                        ${nonEmpty(stack).size}
     return the top item when sent #top                                     ${nonEmpty(stack).top1}
     not remove the top item when sent #top                                 ${nonEmpty(stack).top2}
