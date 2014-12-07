@@ -107,6 +107,10 @@ case class Backtab(n: Int = 1) extends Description {
  */
 case class Marker(tag: NamedTag, isSection: Boolean = false, appliesToNext: Boolean = true) extends Description {
   def show = ""
+
+  override def toString =
+    s"Marker($tag, isSection = $isSection, appliesToNext = $appliesToNext)"
+
 }
 
 /**

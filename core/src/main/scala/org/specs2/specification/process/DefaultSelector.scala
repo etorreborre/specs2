@@ -2,14 +2,15 @@ package org.specs2
 package specification
 package process
 
+import text.Regexes._
 import scalaz.stream._
 import scalaz.stream.Process.{Env =>_,_}
-import process1.zipWithPreviousAndNext
+import process1.{zipWithNext, zipWithPreviousAndNext}
 import data._
 import scalaz.syntax.foldable._
 import scalaz.std.list._
 import specification.core._
-import org.specs2.text.Regexes._
+import Fragment._
 
 /**
  * Selection function for Fragment processes
@@ -57,68 +58,127 @@ trait DefaultSelector extends Selector {
   def filterByMarker(env: Env): Process1[Fragment, Fragment] = {
     val arguments = env.arguments
 
-    def go(sections: List[NamedTag] = Nil): Process1[(Option[Fragment], Fragment, Option[Fragment]), Fragment] = {
-
-      def updateSections(tag: NamedTag) = {
-        val endTags     = sections.filter(_.names.exists(tag.names.contains))
-        val startTags   = sections.map(t => t.removeNames(tag.names)).filterNot(_.names.isEmpty)
-        if (endTags.isEmpty) startTags :+ tag else startTags
-      }
-
-      def filter(fragment: Fragment, tags: List[NamedTag] = sections, tag: NamedTag = AlwaysWhenNoIncludeTag): Process1[(Option[Fragment], Fragment, Option[Fragment]), Fragment] = {
-        val apply = (tags :+ tag).sumr
-        emit(fragment).filter(_ => apply.keep(arguments, apply.names)) fby go(tags)
-      }
-
-      def skip(fragment: Fragment) =
-        emit(fragment).filter(_ => false) fby go(sections)
-
+    def go(sections: List[NamedTag] = Nil): Process1[Fragment, Fragment] = {
       receive1 {
-        // 1. tag for the next fragment, after some blank text
-        case (Some(Fragment(Marker(t, false, true),_,_)), Fragment(Text(tx), _, _), Some(fragment)) if tx.trim.isEmpty =>
-          filter(fragment, tag = t)
+        case Fragment(m @ Marker(t, _, _),_,_)  =>
+          go(updateSections(sections, t))
 
-        // 2. don't emit the fragment twice if it has already been emitted with condition 1.
-        case (Some(Fragment(Text(tx), _, _)), fragment, _) if tx.trim.isEmpty =>
-          skip(fragment)
-
-        // 3. otherwise if the tag is for the next fragment
-        case (Some(Fragment(Marker(t, false, true),_,_)), fragment, _) =>
-          filter(fragment, tag = t)
-
-        // 4. tag for the previous fragment with one blank in between
-        case (Some(fragment), Fragment(Text(tx), _, _), Some(Fragment(Marker(t, false, false),_,_))) if tx.trim.isEmpty =>
-          filter(fragment, tag = t)
-
-        // 5. tag for the previous fragment
-        case (_, fragment, Some(Fragment(Marker(t, false, false),_,_))) =>
-          filter(fragment, tag = t)
-
-        // 6. no tag after a fragment and blank text, emit it
-        case (Some(fragment), Fragment(Text(tx), _, _), _) if tx.trim.isEmpty =>
-          filter(fragment)
-
-        // 7. if the next fragment is some empty text, don't emit the tag right away, wait for condition 4.
-        case (_, fragment, Some(Fragment(Text(tx), _, _))) if tx.trim.isEmpty =>
-          skip(fragment)
-
-        // 8. start or end of a new section
-        case (Some(Fragment(Marker(tag, true, true), _, _)), fragment, _) =>
-          filter(fragment, updateSections(tag))
-
-        // 9. start or end of a new section impacting the current fragment
-        case (_, fragment, Some(Fragment(Marker(tag, true, false), _, _))) =>
-          filter(fragment, updateSections(tag), tag)
-
-        // 10. filter fragments in between tags according to sections
-        case (_, fragment, _) =>
-          filter(fragment)
+        case fragment =>
+          val apply = sections.sumr
+          val keep = apply.keep(arguments, apply.names)
+          emit(fragment).filter(_ => keep) fby go(sections)
       }
     }
 
-    if ((arguments.include + arguments.exclude).nonEmpty) zipWithPreviousAndNext[Fragment] |> go()
+    if ((arguments.include + arguments.exclude).nonEmpty) normalize |> go()
     else process1.id[Fragment]
   }
+
+  def normalize: Process1[Fragment, Fragment] =
+    swapBeforeMarkerAndEmptyText         |>
+    swapAfterMarkerAndEmptyText          |>
+    transformBeforeMarkersToAfterMarkers |>
+    transformTagsToSections
+
+  /**
+   * All the "appliesToNext = false" markers must be transformed into "appliesToNext = true"
+   * except when they are the end of a section.
+   *
+   * This is because we want to visually include all of e2, e3, e4 in the following acceptance spec
+   *
+   * e1
+   * e2 ${section("x")}
+   * e3
+   * e4 ${section("x")}
+   * e5
+   */
+  def transformBeforeMarkersToAfterMarkers: Process1[Fragment, Fragment] = {
+    def go(previous: Option[Fragment] = None, sections: List[NamedTag] = Nil): Process1[(Fragment, Option[Fragment]), Fragment] = {
+      receive1 {
+        // section for before if this is the start of a section, do a swap
+        case (f @ Fragment(m @ Marker(t, true, false),_,_), _) if !isEndTag(sections, t) =>
+          emitAll(f.copy(description = m.copy(appliesToNext = true)) +: previous.toSeq) fby go(sections = updateSections(sections, t))
+
+        // section for before if this is the end of a section, don't swap
+        case (m @ Fragment(Marker(t, true, false),_,_), _) if isEndTag(sections, t) =>
+          emitAll(previous.toSeq :+ m) fby go(sections = updateSections(sections, t))
+
+        // tag for before
+        case (f @ Fragment(m @ Marker(t, false, false),_,_), _)  =>
+          emitAll(f.copy(description = m.copy(appliesToNext = true)) +: previous.toSeq) fby go(None, sections)
+
+        case (f, Some(_)) =>
+          emitAll(previous.toSeq) fby go(Some(f), sections)
+
+        case (f, None) =>
+          emitAll(previous.toSeq :+ f)
+      }
+    }
+    zipWithNext |> go()
+  }
+
+  def updateSections(sections: List[NamedTag], tag: NamedTag): List[NamedTag] = {
+    val endTags     = sections.filter(_.names.exists(tag.names.contains))
+    val startTags   = sections.map(t => t.removeNames(tag.names)).filterNot(_.names.isEmpty)
+    if (endTags.isEmpty) startTags :+ tag else startTags
+  }
+
+  def isEndTag(sections: List[NamedTag], tag: NamedTag): Boolean =
+    sections.filter(_.names.exists(tag.names.contains)).nonEmpty
+
+  def swapBeforeMarkerAndEmptyText: Process1[Fragment, Fragment] = {
+    def go(previous: Option[Fragment] = None): Process1[(Fragment, Option[Fragment]), Fragment] = {
+      receive1 {
+        // tag or section for before
+        case (m @ Fragment(Marker(t, _, false),_,_), _)  =>
+          if (previous.exists(isEmptyText))
+            emitAll(m +: previous.toSeq) fby go()
+          else
+            emitAll(previous.toSeq :+ m) fby go()
+
+        case (f, Some(_)) =>
+          emitAll(previous.toSeq) fby go(Some(f))
+
+        case (f, None) =>
+          emitAll(previous.toSeq :+ f)
+      }
+    }
+    zipWithNext |> go()
+  }
+
+  def swapAfterMarkerAndEmptyText: Process1[Fragment, Fragment] = {
+    def go(previous: Option[Fragment] = None): Process1[(Fragment, Option[Fragment]), Fragment] = {
+      receive1 {
+        // tag or section for after
+        case (m @ Fragment(Marker(t, _, true),_,_), _) =>
+         emitAll(previous.toSeq) fby go(Some(m))
+
+        case (f, Some(_)) if isEmptyText(f) =>
+          emit(f) fby go(previous)
+
+        case (f, Some(_)) =>
+          emitAll(previous.toSeq :+ f) fby go()
+
+        case (f, None) =>
+          emitAll(previous.toSeq :+ f)
+      }
+    }
+    zipWithNext |> go()
+  }
+
+  def transformTagsToSections: Process1[Fragment, Fragment] = {
+    def go(previous: List[Fragment] = Nil): Process1[Fragment, Fragment] = {
+      receive1 {
+        case f @ Fragment(m @ Marker(t, false, _),_,_) =>
+          go(previous :+ f.copy(description = m.copy(isSection = true)))
+
+        case f =>
+          emitAll(previous ++ Seq(f) ++ previous) fby go()
+      }
+    }
+    go()
+  }
+
 
   /**
    * filter fragments by previous execution and required status

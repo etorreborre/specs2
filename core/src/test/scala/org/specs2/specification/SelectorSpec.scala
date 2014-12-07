@@ -1,10 +1,6 @@
 package org.specs2
 package specification
 
-import create.DefaultFragmentFactory
-import DefaultFragmentFactory._
-import reporter.Reporter
-import script.Specification
 import core._
 import process._
 import execute.Result
@@ -12,9 +8,9 @@ import matcher._
 import control._
 import scalaz.{Tag =>_, _}, Scalaz._
 import main.Arguments
-import MatchersImplicits._
+import DefaultSelector._
 
-class SelectorSpec extends Spec with Groups with ResultMatchers with MustThrownExpectations with Expectations { def is = s2"""
+class SelectorSpec extends script.Specification with Groups with ResultMatchers { def is = s2"""
 
  Selection by name
  =================
@@ -28,13 +24,22 @@ class SelectorSpec extends Spec with Groups with ResultMatchers with MustThrownE
   + tagging the previous fragment before an empty text
   + tagging a section of fragments, starting with the next one
   + tagging a section of fragments, starting with the previous one
+  + tagging a section of fragments, starting with the previous one and a blank text
   + with overlapping sections
+  + with non-overlapping sections
 
  Selection by previous
  =====================
   + previous
 
+
+ Support Functions
+ =================
+  + swap empty text and before marker
+  + transform before markers to after markers
+  + transform tags to sections
 """
+  import ff._
 
   "by name" - new group {
     eg := {
@@ -48,12 +53,12 @@ class SelectorSpec extends Spec with Groups with ResultMatchers with MustThrownE
 
   "by tag" - new group {
     eg := {
-      val fragments = Fragments(tag("x"), ex("e1"), ex("e2"))
+      val fragments = Fragments(ff.tag("x"), ex("e1"), ex("e2"))
       checkSelection(fragments, "x", expected = Seq("e1"), unexpected = Seq("e2"))
     }
 
     eg := {
-      val fragments = Fragments(tag("x"), text(" "), ex("e1"), ex("e2"))
+      val fragments = Fragments(ff.tag("x"), text(" "), ex("e1"), ex("e2"))
       checkSelection(fragments, "x", expected = Seq("e1"), unexpected = Seq("e2"))
     }
 
@@ -68,12 +73,12 @@ class SelectorSpec extends Spec with Groups with ResultMatchers with MustThrownE
     }
 
     eg := {
-      val fragments = Fragments(ex("e1"), 
-                                section("x"), 
+      val fragments = Fragments(ex("e1"),
+                                ff.section("x"),
                                 ex("e2"),
                                 ex("e3"),
                                 ex("e4"),
-                                section("x"),
+                                ff.section("x"),
                                 ex("e5")
       )
       checkSelection(fragments, "x", expected = Seq("e2", "e3", "e4"), unexpected = Seq("e1", "e5"))
@@ -91,6 +96,16 @@ class SelectorSpec extends Spec with Groups with ResultMatchers with MustThrownE
 
     eg := {
       val fragments = Fragments(
+        asSection("x"),
+        ff.text(" "),
+        ex("e1"), asSection("x"),
+        ex("e2")
+      )
+      checkSelection(fragments, "x", expected = Seq("e1"), unexpected = Seq("e2"))
+    }
+
+    eg := {
+      val fragments = Fragments(
         ex("e1"),
         ex("e2"), asSection("x"),
         ex("e3"),
@@ -101,9 +116,28 @@ class SelectorSpec extends Spec with Groups with ResultMatchers with MustThrownE
         ex("e8"), asSection("y"),
         ex("e9")
       )
-      checkSelection(fragments, "x",           expected = Seq("e2", "e3", "e4", "e5", "e6"), unexpected = Seq("e1", "e7", "e8", "e9"))
-      checkSelection(fragments, "x&&y",        expected = Seq("e4", "e5", "e6"),             unexpected = Seq("e1", "e2", "e3", "e7", "e8", "e9"))
+      checkSelection(fragments, "x",           expected = Seq("e2", "e3", "e4", "e5", "e6"), unexpected = Seq("e1", "e7", "e8", "e9")) and
+      checkSelection(fragments, "x&&y",        expected = Seq("e4", "e5", "e6"),             unexpected = Seq("e1", "e2", "e3", "e7", "e8", "e9")) and
       checkSelection(fragments, Seq("x", "y"), expected = (2 to 8).map("e"+_).toSeq,         unexpected = Seq("e1", "e9"))
+    }
+
+    eg := {
+      val fragments = Fragments(
+        ex("e1"),
+        ff.section("x"),
+        ex("e2"),
+        ex("e3"),
+        ff.section("x"),
+        ff.section("y"),
+        ex("e4"),
+        ex("e5"),
+        ff.section("y"),
+        ex("e6")
+      )
+
+      checkSelection(fragments, "x",           expected = Seq("e2", "e3"),             unexpected = Seq("e1", "e4", "e5", "e6")) and
+      checkSelection(fragments, "x&&y",        expected = Seq(),                       unexpected = Seq("e1", "e2", "e3", "e4", "e5", "e6")) and
+      checkSelection(fragments, Seq("x", "y"), expected = Seq("e2", "e3", "e4", "e5"), unexpected = Seq("e1", "e6"))
     }
   }
 
@@ -134,12 +168,33 @@ class SelectorSpec extends Spec with Groups with ResultMatchers with MustThrownE
 
   }
 
+  "support" - new group {
+    eg := {
+      val original = Fragments(ex("e1"), ex("e2"), text(" "), taggedAs("t1"))
+      val swapped = original |> DefaultSelector.swapBeforeMarkerAndEmptyText
+      swapped.fragments.map(_.description.show) must_== Fragments(ex("e1"), ex("e2"),
+        ff.tag("t1"), text(" ")).fragments.map(_.description.show)
+    }
+    eg := {
+      val original = Fragments(ex("e1"), ex("e2"), taggedAs("t1"))
+      val swapped = original |> DefaultSelector.transformBeforeMarkersToAfterMarkers
+      swapped.fragments.map(_.description.show) must_==
+        Fragments(ex("e1"), ff.tag("t1"), ex("e2")).fragments.map(_.description.show)
+    }
+    eg := {
+      val original = Fragments(ex("e1"), tag("t1"), ex("e2"))
+      val swapped = original |> DefaultSelector.transformTagsToSections
+      swapped.fragments.map(_.description.show) must_==
+        Fragments(ex("e1"), ff.section("t1"), ex("e2"), ff.section("t1")).fragments.map(_.description.show)
+    }
+  }
+
   // test methods
   def ex(desc: String) = example(desc, success)
 
   // expected / unexpected is in the point of view of including the tag
   def checkSelection(fragments: Fragments, tags: Seq[String], expected: Seq[String], unexpected: Seq[String]): Result = {
-    includeContains(fragments, tags, expected, unexpected)
+    includeContains(fragments, tags, expected, unexpected) and
     excludeContains(fragments, tags, expected, unexpected)
   }
 
@@ -151,18 +206,23 @@ class SelectorSpec extends Spec with Groups with ResultMatchers with MustThrownE
     val executed = (fragments.contents |> DefaultSelector.filterByMarker(env)).runLog.run
     val descriptions = executed.map(_.description.toString)
 
-    expected.foreach(e => descriptions aka "expected for include" must contain(beMatching(".*"+e+".*")))
-    unexpected.foreach(e => descriptions aka "unexpected for include" must not(contain(beMatching(".*"+e+".*"))))
-    ok
+    s"${descriptions.mkString(",")} contains ${expected.mkString(",")} but not ${unexpected.mkString(",")} for tags ${tags.mkString(",")}" ==> {
+      Result.foreach(expected)  (e => descriptions aka "expected for include" must contain(beMatching(".*"+e+".*"))) and
+      Result.foreach(unexpected)(e => descriptions aka "unexpected for include" must not(contain(beMatching(".*"+e+".*"))))
+    }
   }
 
   def excludeContains(fragments: Fragments, tags: Seq[String], unexpected: Seq[String], expected: Seq[String]): Result = {
     val env = Env(arguments = Arguments.split(s"exclude ${tags.mkString(",")}"))
     val executed = fragments |> DefaultSelector.filterByMarker(env)
-    val descriptions = executed.fragments.map(_.description.toString)
+    val descriptions = executed.fragments.map(_.description.show)
 
-    expected.foreach(e => descriptions aka "expected for exclude" must contain(beMatching(".*"+e+".*")))
-    unexpected.foreach(e => descriptions aka "unexpected for exclude"  must not(contain(beMatching(".*"+e+".*"))))
-    ok
+    s"${descriptions.mkString(",")} does not contain ${unexpected.mkString(",")} but contains ${expected.mkString(",")} for tags ${tags.mkString(",")}" ==> {
+      Result.foreach(expected)  (e => descriptions aka "expected for exclude" must contain(beMatching(".*"+e+".*"))) and
+      Result.foreach(unexpected)(e => descriptions aka "unexpected for exclude"  must not(contain(beMatching(".*"+e+".*"))))
+    }
   }
+
+  def show(fs: Fragments): String =
+    fs.fragments.map(_.description).mkString("\n")
 }

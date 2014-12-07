@@ -92,7 +92,7 @@ case class GroupsScript(title: String = "groups", isStart: Boolean = true, group
 
   private def group(i: Int) = groups.createExamplesGroup(i)
 
-  private def exampleTagsFor(g: Int, e: Int) = Seq(factory.taggedAs(exampleName(g, e)))
+  private def exampleTagsFor(g: Int, e: Int) = Seq(factory.tag(exampleName(g, e)))
 
   private def groupTagsFor(i: Int) = {
     val name = group(i).groupName

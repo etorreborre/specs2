@@ -67,6 +67,9 @@ object Fragment {
     case _       => false
   }) && !f.isExecutable
 
+  def isEmptyText(f: Fragment): Boolean =
+    isText(f) && f.description.show.trim.isEmpty
+
   def isExample(f: Fragment) = (f.description match {
     case t: Text => true
     case t: Code => true
@@ -82,7 +85,7 @@ object Fragment {
   def isAction(f: Fragment) =
     isStepOrAction(f) && !f.execution.mustJoin
 
-  def isTag(f: Fragment) = f.description match {
+  def isMarker(f: Fragment) = f.description match {
     case m: Marker => true
     case _         => false
   }
@@ -114,10 +117,10 @@ object Fragment {
   }
 
   def fragmentType(f: Fragment) =
-    if (isExample(f))   "Example"
-    else if (isText(f)) "Text"
-    else if (isTag(f))  "Tag"
-    else                "Other"
+    if (isExample(f))     "Example"
+    else if (isText(f))   "Text"
+    else if (isMarker(f)) "Marker"
+    else                  "Other"
 
   /** iterate over elements to create a Fragments object */
   def foreach[T](seq: Seq[T])(f: T => Fragment): Fragments =

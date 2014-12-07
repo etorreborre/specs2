@@ -3,6 +3,7 @@ package specification
 package script
 
 import main.Arguments
+import org.specs2.specification.process.DefaultSelector
 import runner.TextRunner
 import specification.create.{S2StringContext, FragmentsFactory}
 import matcher.MatchersImplicits._
@@ -71,15 +72,16 @@ class SpecificationSpec extends script.Spec with Grouped { def is = s2"""
     }
   }
 
-  def run(text1: String, groups: ExamplesGroup*)(implicit arguments: Arguments = Arguments()): Seq[String] =
-    TextRunner.run {
-      new script.Specification with Grouped { outer =>
-        def is = arguments ^ nocolor ^ s2"""$text1"""
-        (0 until groups.size) foreach { i =>
-          (0 until 22).foreach(j => outer.createExamplesGroup(i).createExample(j) := groups(i).createExample(j))
-        }
+  def run(text1: String, groups: ExamplesGroup*)(implicit arguments: Arguments = Arguments()): Seq[String] = {
+    val spec = new script.Specification with Grouped { outer =>
+      def is = arguments ^ nocolor ^ s2"""$text1"""
+      (0 until groups.size) foreach { i =>
+        (0 until 22).foreach(j => outer.createExamplesGroup(i).createExample(j) := groups(i).createExample(j))
       }
-    }.messages
+    }
+    TextRunner.run(spec).messages
+  }
+
 
   trait sampleGroups extends Groups with S2StringContext with FragmentsFactory {
     val (g1ok, g2ok) = (new g1 { e1 := ok; e2 := ok }, new g2 { e1 := ok; e2 := ok })
