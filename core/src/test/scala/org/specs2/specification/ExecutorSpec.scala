@@ -2,7 +2,6 @@ package org.specs2
 package specification
 
 import execute._
-import script.Specification
 import scala.collection.mutable.ListBuffer
 import matcher.{ThrownExpectations, ResultMatchers}
 import scala.concurrent.duration._
@@ -10,7 +9,7 @@ import main.Arguments
 import specification.core._
 import specification.process.DefaultExecutor
 
-class ExecutorSpec extends Specification with Groups with ResultMatchers with ThrownExpectations { def is = s2"""
+class ExecutorSpec extends script.Specification with Groups with ResultMatchers with ThrownExpectations { def is = s2"""
 
  Steps
  =====
