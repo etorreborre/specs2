@@ -17,9 +17,10 @@ trait SpecStructureDsl extends SpecStructureDsl1 with SpecStructureDslLowImplici
     def ^(structure: SpecStructure) : SpecStructure = structure.map(_.prepend(fragmentFactory.text(s)))
   }
 
-  implicit class appendSpecStructureToFragment(f: =>Fragment) {
+  implicit class appendSpecStructureToFragment(f: Fragment) {
     def ^(s: SpecificationStructure): SpecStructure = ^(s.is)
     def ^(structure: SpecStructure) : SpecStructure  = structure.map(_.prepend(f))
+    def ^(arguments: Arguments) : SpecStructure  = fragmentAsSpecStructure(f) ^ arguments
   }
 
   implicit class appendSpecStructureToSpecHeader(header: SpecHeader) {
@@ -39,7 +40,8 @@ trait SpecStructureDsl extends SpecStructureDsl1 with SpecStructureDslLowImplici
     def ^(other: Fragment)      : SpecStructure = structure ^ Fragments(other)
     /** warning: if other contains arguments or a title they will be lost! */
     def ^(s: SpecificationStructure): SpecStructure = ^(s.is)
-    def ^(other: SpecStructure): SpecStructure     = structure ^ other.fragments
+    def ^(other: SpecStructure): SpecStructure     = structure.copy(arguments = structure.arguments.overrideWith(other.arguments)) ^ other.fragments
+    def ^(arguments: Arguments): SpecStructure     = structure.copy(arguments = structure.arguments.overrideWith(arguments))
   }
 
   // allow writing: def is = "my spec".title
