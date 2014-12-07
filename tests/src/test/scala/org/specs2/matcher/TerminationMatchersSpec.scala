@@ -4,9 +4,10 @@ package matcher
 import io.StringOutput
 import java.util.concurrent._
 import specification._
+import core._
 import scala.concurrent.duration._
 
-class TerminationMatchersSpec extends script.Specification with TerminationMatchers with Grouped { def is = sequential ^ s2""" ${section("travis")}
+class TerminationMatchersSpec extends script.Specification with TerminationMatchers with Grouped { def is = Fragments(section("travis")) ^ s2"""
                                                                                                    
  It is possible to check if a block of code terminates
    with a default number of retries and default sleep time
@@ -31,8 +32,6 @@ class TerminationMatchersSpec extends script.Specification with TerminationMatch
   We should not overflow the stack
     + when a very large number of retries is provided
                                                                                                 """
-
-  sequential  // time-sensitive tests
 
   "termination" - new group {
     eg := { implicit es: ES => Thread.sleep(50) must terminate(sleep = 200.millis) }

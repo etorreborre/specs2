@@ -1,7 +1,6 @@
 package org.specs2
 package specification
 
-import create.DefaultFragmentFactory
 import execute._
 import script.Specification
 import scala.collection.mutable.ListBuffer

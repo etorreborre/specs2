@@ -13,7 +13,7 @@ import matcher._
 import _root_.org.specs2.mutable.{Around => MAround, Before => MBefore, After => MAfter, Specification => Spec}
 import ExecutionVar._
 
-class ContextSpec extends org.specs2.Spec with ResultMatchers with Groups { def is = s2"""
+class ContextSpec extends script.Spec with ResultMatchers with Groups { def is = s2"""
 
  It is sometimes necessary to provide functions to "prepare" the specification before executing the Fragments
  and clean it up afterwards. This may be for example:
