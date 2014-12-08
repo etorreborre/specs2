@@ -28,48 +28,48 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
 
   "steps" - new group with results {
 
-    eg := {
+    eg := { env: Env =>
       val fragments = Seq(
         example("slow", slow),
         example("medium", medium),
         step(step1),
         example("fast", fast))
 
-      execute(fragments) must not(contain(beSkipped[Result]))
+      execute(fragments, env) must not(contain(beSkipped[Result]))
 
       messages.toList must_== Seq("medium", "slow", "step", "fast")
     }
 
-    eg := {
+    eg := { env: Env =>
       val fragments = Seq(
         example("slow", slow),
         example("medium", mediumFail),
         step(step1).stopOnFail,
         example("fast", fast))
 
-      execute(fragments) must contain(beSkipped[Result])
+      execute(fragments, env) must contain(beSkipped[Result])
 
       messages.toList must_== Seq("medium", "slow", "step")
     }
 
-    eg := {
+    eg := { env: Env =>
       val fragments = Seq(
         example("slow", slow),
         example("medium", mediumSkipped),
         step(step1),
         example("fast", fast))
 
-      execute(fragments, Env(arguments = Arguments("stopOnSkip"))) must contain(beSkipped[Result])
+      execute(fragments, env.setArguments(Arguments("stopOnSkip"))) must contain(beSkipped[Result])
 
       messages.toList must_== Seq("medium", "slow", "step")
     }
 
-    eg := {
+    eg := { env: Env =>
       val fragments = Seq(
         example("ex1", fast),
         example("ex2", fast))
 
-      execute(fragments, Env(arguments = Arguments("skipAll"))) must contain(beSkipped[Result])
+      execute(fragments, env.setArguments(Arguments("skipAll"))) must contain(beSkipped[Result])
 
       messages.toList must beEmpty
     }
@@ -78,42 +78,43 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
 
   "execute" - new group with results {
 
-    eg := {
+    eg := { env: Env =>
       val fragments = Seq(
         example("slow", slow),
         example("medium", medium),
         step(step1),
         example("fast", fast))
 
-      execute(fragments, Env(arguments = Arguments("sequential"))) must not(contain(beSkipped[Result]))
+      execute(fragments, env.setArguments(Arguments("sequential"))) must not(contain(beSkipped[Result]))
 
       messages.toList must_== Seq("slow", "medium", "step", "fast")
     }
 
-    eg := {
+    eg := { env: Env =>
       val fragments = Seq(
         example("slow", slow),
         example("medium", medium),
         step(step1),
         example("fast", fast))
 
-      execute(fragments, Env(arguments = Arguments("sequential")))
+      execute(fragments, env.setArguments(Arguments("sequential")))
 
       messages.toList must_== Seq("slow", "medium", "step", "fast")
     }
 
-    eg := {
+    eg := { env: Env =>
       val fragments = Seq(example("very slow", verySlow))
-      val env = Env(ExecutionEnv(timeOut = Some(100.millis)))
+      val env1 = env.copy(executionEnv = env.executionEnv.setTimeout(100.millis))
 
-      execute(fragments, env) must contain(beSkipped[Result]("timeout after 100 milliseconds"))
+      execute(fragments, env1) must contain(beSkipped[Result]("timeout after 100 milliseconds"))
     }
 
   }
 
   val factory = fragmentFactory
-  def execute(fragments: Seq[Fragment], env: Env = Env()): IndexedSeq[Result] =
-    DefaultExecutor.executeSeq(fragments)(env).map(_.executionResult)
+
+  def execute(fragments: Seq[Fragment], env: Env): IndexedSeq[Result] =
+    DefaultExecutor.execute1(env)(Fragments(fragments:_*).contents).runLog.run.map(_.executionResult)
 
   trait results {
     val messages = new ListBuffer[String]
@@ -125,7 +126,7 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
     def mediumFail    = { Thread.sleep(10);  messages.append("medium"); failure }
     def mediumSkipped = { Thread.sleep(10);  messages.append("medium"); skipped }
     def slow          = { Thread.sleep(200); messages.append("slow");   success }
-    def verySlow      = { Thread.sleep(500); messages.append("very slow"); success }
+    def verySlow      = { Thread.sleep(600); messages.append("very slow"); success }
     def step1         = { Thread.sleep(0);  messages.append("step");   success }
   }
 

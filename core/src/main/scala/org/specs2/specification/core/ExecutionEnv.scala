@@ -18,8 +18,11 @@ case class ExecutionEnv(timeOut:  Option[FiniteDuration] = None,
   /**
    * fragments must not be created as "isolated"
    */
-  def setWithoutIsolation =
+  def setWithoutIsolation: ExecutionEnv =
     copy(withoutIsolation = true)
+
+  def setTimeout(duration: FiniteDuration): ExecutionEnv =
+    copy(timeOut = Some(duration))
 }
 
 object ExecutionEnv {

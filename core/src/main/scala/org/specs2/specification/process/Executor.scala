@@ -53,7 +53,7 @@ trait DefaultExecutor extends Executor {
   /**
    * execute fragments possibly with a recursive call to execute1.
    *
-   * The difference with `execute` is that `executes` shuts down the environment when the process is finished
+   * The difference with `execute` is that `execute` shuts down the environment when the process is finished
    */
   def execute1(env: Env): Process[Task, Fragment] => Process[Task, Fragment] = { contents: Process[Task, Fragment] =>
     (contents |> sequencedExecution(env)).sequence(Runtime.getRuntime.availableProcessors).flatMap(executeOnline(env))
