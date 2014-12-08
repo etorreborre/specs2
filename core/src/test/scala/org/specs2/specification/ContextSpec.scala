@@ -115,7 +115,7 @@ class ContextSpec extends script.Spec with ResultMatchers with Groups { def is =
   }
 
   "combination" - new g3 with FragmentsExecution {
-    e1  := withEnv { env: Env =>
+    e1  := { env: Env =>
       abstract class ParentSpec extends Specification with BeforeAfterEach { def before = println("before"); def after = println("after") }
       abstract class ChildSpec extends ParentSpec with AroundEach { def around[R : AsResult](r: =>R) = { println("around"); AsResult(r) } }
       val child = new ChildSpec { def is =

@@ -356,6 +356,11 @@ class ExecutionVar(var execution: () => Execution = () => Execution.result(new e
     this
   }
 
+  def :=[R : AsResult](f: Env => R) = {
+    execution = () => Execution.withEnv(f)
+    this
+  }
+
   def :=(other: ExecutionVar) = {
     execution = () => other.execution()
     this
