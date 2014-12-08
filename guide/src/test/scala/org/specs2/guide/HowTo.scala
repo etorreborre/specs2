@@ -14,6 +14,7 @@ Is it possible to execute a Specification sequentially?                         
 How to mark an example as `pending` until it is fixed?                                   | ${link(PendingUntilFixedExamples)}
 Can I simply mark a block of code as `pending`?                                          | ${link(StandardResults)}
 Is there a way to run only one example?                                                  | ${link(Selection)}
+I would like to display the execution time of each example                               | ${link(ConsoleOutput)}
 Can I use a for loop to create examples or results?                                      | ${link(ForLoops)}
 How can I tag examples?                                                                  | ${link(Selection)}
 Can I skip examples?                                                                     | ${link(SkipExamples)}

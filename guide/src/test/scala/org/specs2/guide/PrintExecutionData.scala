@@ -4,15 +4,16 @@ package guide
 import execute.{ResultExecution, Result, AsResult}
 import specification.core.Fragment
 import specification.{AroundEach, Around}
-import org.specs2.specification.create.{DefaultFragmentFactory, FragmentFactory}
+import org.specs2.specification.create.{DefaultFragmentFactory}
 import time.SimpleTimer
 
 object PrintExecutionData extends UserGuidePage { def is = s2"""
 
 ###  Print execution time
 
-Knowing that an example succeeded is fine but sometimes you want to display more information, like the time spent executing the example for instance.
-This can be done by using the `AroundEach` trait and update the `Result` of the example execution with whatever you want to display: ${snippet{
+Knowing that an example succeeded is fine but sometimes you want to display more information, like the time spent executing the example for instance, or some other state before and after each example.
+
+This can be done by using the `AroundEach` trait and updating the `Result` of the example execution with whatever you want to display: ${snippet{
 
 trait Timed extends AroundEach {
   def around[T : AsResult](t: =>T): Result = {
@@ -42,6 +43,8 @@ When you execute a specification mixing the `Timed` trait you should see the tim
 [info] + example 2
 [info] Execution time: 11 ms
 ```
+
+Note that this is just an example. The same functionality is actually accessible with the [`showtimes` argument]($ConsoleOutput).
 
 ### With the example description
 
