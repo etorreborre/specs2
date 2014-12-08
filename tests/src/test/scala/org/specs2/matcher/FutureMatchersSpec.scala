@@ -4,7 +4,7 @@ package matcher
 import concurrent._
 import duration._
 
-class FutureMatchersSpec extends Specification with ResultMatchers with Retries { def is = sequential ^ s2"""
+class FutureMatchersSpec extends Specification with ResultMatchers with Retries { def is = exclude("travis") ^ sequential ^ s2"""
 
  Any `Matcher[T]` can be transformed into a `Matcher[Future[T]]` with the `await` method
  ${ implicit ec: EC => Future.apply(1) must be_>(0).await }

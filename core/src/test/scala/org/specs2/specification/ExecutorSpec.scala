@@ -22,8 +22,11 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
  =======
   + sequentially
   + with in-between steps
-  + with a timeout
+
+  with a timeout $timeOut ${tag("travis")}
+
 """
+
   import factory._
 
   "steps" - new group with results {
@@ -101,15 +104,18 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
 
       messages.toList must_== Seq("slow", "medium", "step", "fast")
     }
-
-    eg := { env: Env =>
-      val fragments = Seq(example("very slow", verySlow))
-      val env1 = env.copy(executionEnv = env.executionEnv.setTimeout(100.millis))
-
-      execute(fragments, env1) must contain(beSkipped[Result]("timeout after 100 milliseconds"))
-    }
-
   }
+
+  def timeOut = { env: Env =>
+    val messages = new ListBuffer[String]
+    def verySlow      = { Thread.sleep(600); messages.append("very slow"); success }
+
+    val fragments = Seq(example("very slow", verySlow))
+    val env1 = env.copy(executionEnv = env.executionEnv.setTimeout(100.millis))
+
+    execute(fragments, env1) must contain(beSkipped[Result]("timeout after 100 milliseconds"))
+  }
+
 
   val factory = fragmentFactory
 
