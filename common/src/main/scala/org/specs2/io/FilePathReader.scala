@@ -83,7 +83,7 @@ trait FilePathReader {
 
   /** @return the content of a file as UTF-8 lines by default */
   def readLines(filePath: FilePath)(implicit codec: Codec): Action[IndexedSeq[String]] =
-    Actions.fromTask(nio.file.linesR(filePath.path).runLog[Task, String])
+    Actions.fromTask(io.linesR(filePath.path).runLog[Task, String])
 
   /** read the content of a file as an Array of Bytes */
   def readBytes(filePath: FilePath): Action[Array[Byte]] = exists(filePath).map { exists =>

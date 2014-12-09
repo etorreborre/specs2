@@ -43,7 +43,7 @@ trait FileSystem extends FilePathReader {
   /** write a string to a file as UTF-8 */
   def writeFileTask(filePath: FilePath, content: String): Task[Unit] =
     mkdirs(filePath).toTask >>
-    Process(content).toSource.pipe(text.utf8Encode).to(nio.file.chunkW(filePath.path)).run
+    Process(content).toSource.pipe(text.utf8Encode).to(io.fileChunkW(filePath.path)).run
 
   /** execute an action with a File, then delete it */
   def withEphemeralFile(path: FilePath)(action: Action[Unit]): Action[Unit] =

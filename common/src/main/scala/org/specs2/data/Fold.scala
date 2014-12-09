@@ -136,7 +136,10 @@ object Fold {
 
   /** create a fold sink to output lines to a file */
   def showToFilePath[T : Show, S](path: FilePath): Sink[Task, (T, S)] =
-    nio.file.chunkW(path.path).pipeIn(lift(Show[T].shows) |> utf8Encode).extend[S]
+    io.fileChunkW(path.path).pipeIn(lift(Show[T].shows) |> utf8Encode).extend[S]
+
+  implicit class FoldOps[T](val fold: Fold[T]) {
+  }
 
   /**
    * Monoid for Folds, where effects are sequenced
