@@ -121,6 +121,7 @@ def sidebar = s"""
    <a class="sidelink" href="guide/org.specs2.guide.UserGuide.html">User Guide</a><br/>
    <a class="sidelink" href="$EXAMPLES_OFFICIAL_DIR">Examples</a><br/>
    <a class="sidelink" href="${API_OFFICIAL_DIR}index.html">Scaladoc</a><br/>
+   <a class="sidelink" href="http://notes.implicit.ly/tagged/specs2">Release notes</a><br/>      
    <h3 style="margin-bottom: 0;">Get involved!</h3>
    <div style="margin-top: 10px;"><a class="sidelink" href="http://github.com/etorreborre/specs2">Github project</a>
    </div>
