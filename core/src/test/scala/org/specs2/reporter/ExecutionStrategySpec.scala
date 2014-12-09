@@ -41,6 +41,33 @@ class ExecutionStrategySpec extends mutable.Specification {
         startWith("o ex4"),
         startWith("o ex5"))).inOrder
     }
+
+    "a sequential specification must print examples as soon as they have been executed" >> {
+      val reporter = newReporter
+
+      val spec4 = new Specification { def is = sequential ^ "spec4".title ^ s2"""
+        ex1  ${ print("e1") }
+        ex2  ${ print("e2") }
+        ex3  ${ print("e3") }
+        ex4  ${ print("e4") }
+        ex5  ${ print("e5") }
+      """
+        def print(s: String) = {
+          Thread.sleep((math.random*100).toLong)
+          reporter.textOutput.println(s); ok
+        }
+      }
+      val reported = {
+        reporter.report(spec4)(args())
+        reporter.textOutput.messages.flatMap(m => removeColors(m).split("\n")).map(_.trim).filter(_.nonEmpty)
+      }
+
+      // an example must be printed before one of the next values is executed
+      reported must contain(allOf(
+        "+ ex2",
+        "e5"
+      )).inOrder
+    }
   }
 
   def report(s: SpecificationStructure) = {
@@ -85,5 +112,7 @@ class ExecutionStrategySpec extends mutable.Specification {
       ex5 $ko
     """
   }
+
+
 
 }

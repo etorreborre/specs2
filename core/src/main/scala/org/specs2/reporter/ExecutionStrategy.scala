@@ -101,7 +101,7 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
   }
 
   def executeSequentially(fs: FragmentSeq, args: Arguments) =
-    fs.fragments.map(f => FinishedExecutingFragment(executeFragment(args)(f)))
+    fs.fragments.map(f => LazyExecutingFragment(() => executeFragment(args)(f), f))
 
   def executeRandomly(fs: FragmentSeq, args: Arguments) = {
     val fragments = fs.fragments

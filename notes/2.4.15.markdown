@@ -1,0 +1,13 @@
+Maintenance version.
+
+## Improvements
+
+ * added a link to the [release notes](http://notes.implicit.ly/tagged/specs2) from the specs2.org home page
+ 
+## Fixes
+
+ * display the text output as soon as examples have been executed in a sequential spec
+
+
+==========================
+
