@@ -27,10 +27,10 @@ trait ClassRunner {
   }
 
   /**
-   * run the specification
+   * run the specification, the first argument is expected to be the specification name
    */
   def run(args: Array[String], exit: Boolean) {
-    val arguments = Arguments(args.drop(1).mkString(" "))
+    val arguments = Arguments(args.drop(1):_*)
     val env = Env(arguments = arguments)
 
     val actions: Action[Unit] = args.toList match {

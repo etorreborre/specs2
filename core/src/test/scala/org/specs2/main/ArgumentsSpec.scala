@@ -3,6 +3,8 @@ package main
 
 import org.specs2.matcher.{TypedEqual, DataTables}
 import execute.Result
+import org.specs2.reporter.Notifier
+import org.specs2.runner.ClassRunner
 import org.specs2.text.MappedColors
 import specification._
 
@@ -38,7 +40,7 @@ Definition
 Overriding
 ==========
 
-  An Arguments instance can be overriden by another with the `<|` operator: `a <| b`
+  An Arguments instance can be overridden by another with the `<|` operator: `a <| b`
     + if there's no corresponding value in b, the value in a stays
     + there is a corresponding value in b, the value in a is overriden when there is one
     + there is a corresponding value in b, the value in b is kept
@@ -63,6 +65,13 @@ Execution
   Some values can be filtered from the command line
     + to include only some arguments
     + to exclude some arguments
+
+Creation
+========
+
+  Arguments can be created from a sequence of strings
+    + to declare a Notifier
+
                                                                                                                """
 
 
@@ -141,4 +150,9 @@ Execution
     eg := Arguments("this", "is", "cool").commandLineFilter("this", "cool").commandLine.arguments === Seq("this", "cool")
     eg := Arguments("this", "is", "cool").commandLineFilterNot("this", "cool").commandLine.arguments === Seq("is")
   }
+
+  "creation" - new group {
+    eg := Arguments("MySpec", "notifier", "IntelliJNotifier").report.notifier === "IntelliJNotifier"
+  }
 }
+
