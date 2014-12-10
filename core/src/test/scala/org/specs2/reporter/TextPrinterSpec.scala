@@ -8,14 +8,14 @@ import specification.create.{S2StringContext, DefaultFragmentFactory}
 import control._
 import text.Trim._
 import execute._
-import main.Arguments
+import org.specs2.main.{ArgumentsShortcuts, Arguments}
 import LineLogger._
 import core._
 import process.{Stats, DefaultExecutor, StatisticsRepository}
 import io.StringOutput
 import text.AnsiColors
 
-class TextPrinterSpec extends Specification with tp { def is = s2"""
+class TextPrinterSpec extends Specification { def is = s2"""
 
  The results of a specification can be printed as lines
 
@@ -57,10 +57,10 @@ class TextPrinterSpec extends Specification with tp { def is = s2"""
  Formatting fragments are displayed
    breaks as 1 newline                                        $i1
 
-  Specification links are displayed
-    with no title                                             $j1
-    with a title                                              $j2
-    with results                                              $j3
+ Specification links are displayed
+   with no title                                              $j1
+   with a title                                               $j2
+   with results                                               $j3
 
  Fragments can be hidden by changing args
     xonly only show issues                                    $k1
@@ -68,10 +68,8 @@ class TextPrinterSpec extends Specification with tp { def is = s2"""
 
  Fragments must be displayed in their creation order
     as soon as computed                                       $l1
+    as soon as computed, with sequential                      $l2
 """
-}
-
-trait tp extends MustMatchers with StandardMatchResults with StandardResults with S2StringContext with AcceptanceDsl {
   import TextPrinterSpec._
   val factory = fragmentFactory; import factory._
 
@@ -228,6 +226,36 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
       l1.size aka (l1, l2).toString must not be_==(l2.size)
     }
   }
+
+  def l2 = {
+    val logger = new TestLogger
+
+    val fragments = Fragments((1 to 100).flatMap(i => Seq(
+      "ex"+i+"\n " ! {
+        Thread.sleep(scala.util.Random.nextInt(100))
+        logger.infoLine("executed "+i)
+        ok
+      })):_*)
+
+    val spec = SpecStructure.create(SpecHeader(getClass, Some("title\n")), sequential, fragments)
+    val env = Env(lineLogger = logger).setArguments(sequential)
+    TextPrinter.run(env)(DefaultExecutor.executeSpec(spec, env))
+
+    val executed = logger.messages.filter(_.contains("executed")).map(_.replace("executed", "").trim.toInt)
+    val printed = logger.messages.filter(_.contains("+")).map(_.replace("+", "").replace("ex", "").trim.toInt)
+
+    "printed is sorted" ==> {
+      printed must_== printed.sorted
+    } and
+      "executed is sorted too" ==> {
+        executed must be_==(executed.sorted)
+      } and
+      "the execution is mixed with the printing" ==> {
+        val (l1, l2) = logger.messages.filter(s => s.contains("executed") || s.contains("+")).span(_.contains("executed"))
+        l1.size aka (l1, l2).toString must not be_==(l2.size)
+      }
+  }
+
   /**
    * TEST METHODS
    */

@@ -84,7 +84,7 @@ trait DefaultExecutor extends Executor {
 
         skipped fby sequencedExecution(env, barrier, mustStop)
       } else {
-        // if we need to wait, we do, an get the result
+        // if we need to wait, we do, and get the result
         val barrierResult =
           if (fragment.execution.mustJoin) barrier.attemptRun.fold(t => org.specs2.execute.Error(t), r => r)
           else                             Success("no barrier result")
@@ -106,7 +106,7 @@ trait DefaultExecutor extends Executor {
 
         val executingFragment = timedout(fragment, env) {
           if (mustStop)             Task.now(fragment.skip)
-          else if (executeNow)      Task.now(executedFragment)
+          else if (executeNow)      Task.delay(executedFragment)
           else                      start(executedFragment)(env.executorService)
         }(env.executionEnv.timeOut.orElse(fragment.execution.timeout))
 
