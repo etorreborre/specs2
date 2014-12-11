@@ -1,0 +1,199 @@
+body {
+  margin: 0px 5px 0px 5px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 20px;
+  font-weight: normal;
+  color: #3D3B3B;	
+}
+pre.prettyprint.prettyprinted {
+  margin-bottom: 10px;
+  padding: 2px; 
+  border: 0px;
+}
+
+s2 {
+  font-weight: bold;
+  font-style: italic;
+  font-family: "Helvetica";
+}
+
+.specs2-banner {
+  background-image: url("../images/banner.jpg");
+  padding: 10px 10px 10px 10px;
+  margin-top: 5px;
+  border-top: 0px solid transparent;
+  background-clip: border-box;
+  background-position: 0px 0px;
+}
+
+img.s2logolarge {
+  height: 70px;
+  width: 180px;
+  margin-left: 25px;
+}
+
+.s2sub {
+  font-size: 40px;
+  font-style: italic;
+  color: white;
+  text-transform: uppercase;
+  vertical-align: middle;
+  float: right;
+  margin-top: 5px;
+  margin-right: 25px;
+}
+
+.s2logosmall img {
+  text-align: left;
+  vertical-align: text-center;
+  margin-right: 10px;
+  margin-top:8px;
+  height: 35px;
+  width: 35px;
+}
+
+.search-icon {
+  height:20px;
+  width:20px;
+}
+.navbar-right {
+  float: right !important;
+  margin-right: -20px;
+}
+
+.carousel .carousel-control {
+  text-shadow: none;
+  background-image: none;
+}
+
+.glyphicon-chevron-left {
+  color: black;
+}
+
+.glyphicon-chevron-right {
+  color: black;
+}
+
+.carousel-inner .item {
+  margin-left: 150px;
+}
+
+.carousel-inner .item .caption {
+  text-shadow: none;
+  color: #485466;
+  background-color: #F2F7FD;
+  font-size: 25px;
+  text-align:center;
+  padding: 4px 0px 4px 0px;
+  margin: 15px 140px 10px 0px;
+}
+
+.carousel-inner .item img {
+  border: 1px solid #021a40;
+}
+
+.carousel-indicators li {
+  background-color: #999;
+  background-color: rgba(70,70,70,.25);
+}
+
+.carousel-indicators .active {
+  background-color: #444;
+}
+
+.carousel pre {
+  background-color:white;
+  margin-right:140px;
+  padding: 10px 10px 15px 10px;
+}
+
+.carousel .prettyprint {
+  font-size: 20px;
+}
+
+.prettyprint.carousel-code-smaller {
+  font-size:19px;
+}
+
+.prettyprint .str {
+ color: #2047CA;
+}
+
+.prettyprint .kwd {
+ font-weight: bold;
+}
+
+.carousel .prettyprint .kwd {
+ font-size: 19px
+}
+
+ol li {
+  margin-top: 20px;
+}
+
+pre {
+  background-color: white;
+  margin-top: 5px;
+}
+
+pre code a .com {
+  color: blue;
+}
+
+.prettyprint.tab-code .kwd {
+ font-weight: normal;
+ font-size: 15px
+}
+
+.console {
+  font-family: Courier;
+  font-size: 15px;
+  color: #F4EEEE;
+  background: #000000;
+  border: 1px #CCCCCC;
+  padding: 10px;
+  margin-top: 5px;
+}
+
+.console.results pre {
+  color: #F4EEEE;
+  background-color: black;
+  border: none;
+  padding: 0px;
+}
+
+.console.results pre .success {
+  color: rgb(24, 231, 24);
+}
+
+.console.results pre .stats {
+  color: cyan;
+}
+
+#learn li {
+  margin-top: 10px;
+}
+
+nav {
+  margin-top: 5px;
+}
+
+.row {
+  display: table;
+}
+
+[class*="col-"] {
+    float: none;
+    display: table-cell;
+    vertical-align: top;
+}
+
+.panel {
+ vertical-align: middle;
+ text-align: center;
+ font-size: 22px;
+}
+
+.lower-row {
+  margin-top: 50px;
+}
