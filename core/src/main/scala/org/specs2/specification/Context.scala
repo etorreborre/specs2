@@ -55,6 +55,12 @@ trait Before extends Context { outer =>
 
 }
 
+object Before {
+  def create(action: =>Any) = new Before {
+    def before: Any = action
+  }
+}
+
 /**
  * The After trait can be inherited by classes representing a context
  * where an action must be executing after the main executable action
@@ -86,6 +92,12 @@ trait After extends Context { outer =>
 
 }
 
+object After {
+  def create(action: =>Any) = new After {
+    def after: Any = action
+  }
+}
+
 trait BeforeAfter extends Before with After { outer =>
   override def apply[T : AsResult](a: =>T): Result = {
     lazy val result = super[Before].apply(a)
@@ -102,6 +114,13 @@ trait BeforeAfter extends Before with After { outer =>
   def andThen(b: BeforeAfter): BeforeAfter = new BeforeAfter {
     def before = { outer.before; b.before }
     def after = { outer.after; b.after}
+  }
+}
+
+object BeforeAfter {
+  def create(beforeAction: =>Any, afterAction: =>Any) = new BeforeAfter {
+    def before: Any = beforeAction
+    def after: Any = afterAction
   }
 }
 
@@ -133,6 +152,11 @@ trait Around extends Context { outer =>
   }
 }
 
+object Around {
+  def create(aroundAction: Result => Result) = new Around {
+    def around[T : AsResult](t: =>T): Result = aroundAction(AsResult(t))
+  }
+}
 /**
  * A Fixture can be implicitly passed to a set of examples taking a function as an input.
  *

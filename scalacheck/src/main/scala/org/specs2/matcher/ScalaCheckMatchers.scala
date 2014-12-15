@@ -16,7 +16,7 @@ import org.specs2.text.NotNullStrings._
  * @see the <a href="https://github.com/rickynils/scalacheck">ScalaCheck project</a>
  */
 trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
-   with FunctionPropertyImplicits
+   with FunctionAsProperty
    with ResultPropertyImplicits
    with ResultLogicalCombinators
    with ApplicableArbitraries
@@ -99,9 +99,10 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
   def propNoShrink[T, S](f: PartialFunction[T, S])(implicit toProp: S => Prop, a: Arbitrary[T]): Prop = checkPartialNoShrink(f)
 
   implicit def checkPartial[T, S](f: PartialFunction[T, S])(implicit toProp: S => Prop, a: Arbitrary[T], s: Shrink[T]): Prop =
-    PartialFunctionPropertyImplicits.partialFunctionToProp(f).forAll
+    PartialFunctionAsProp.PartialFunctionForAll(f).forAll
+
   implicit def checkPartialNoShrink[T, S](f: PartialFunction[T, S])(implicit toProp: S => Prop, a: Arbitrary[T]): Prop =
-    PartialFunctionPropertyImplicits.partialFunctionToProp(f).forAllNoShrink
+    PartialFunctionAsProp.PartialFunctionForAll(f).forAllNoShrink
 
   /** execute a ScalaCheck property */
   def check(prop: Prop)(implicit p: Parameters): execute.Result = checkProp(prop)(p)
@@ -115,7 +116,7 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
    * generation parameters `p`. `p` is transformed into a scalacheck parameters
    */
   private[specs2] def checkProperty(prop: Prop)(implicit p: Parameters): execute.Result = {
-    checkScalaCheckProperty(prop)(p.toScalaCheckParameters(defaultPrettyParams))
+    checkScalaCheckProperty(prop)(p.toScalaCheckParameters)
   }
 
   /**
@@ -223,250 +224,6 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
   }
 }
 object ScalaCheckMatchers extends ScalaCheckMatchers
-/**
- * This trait adds some syntactic sugar to transform function
- * to properties by appending forAll
- */
-trait FunctionPropertyImplicits {
-  /** transform a function returning a boolean to a property by appending forAll */
-  implicit def functionToProp[T](f: T => Boolean)(implicit a: Arbitrary[T], s: Shrink[T]): Prop = functionToForAll(f).forAll
-  implicit def functionToForAll[T](f: T => Boolean)(implicit a: Arbitrary[T], s: Shrink[T]): FunctionForAll[T] = new FunctionForAll(f)(a, s)
-  class FunctionForAll[T](f: T => Boolean)(implicit a: Arbitrary[T], s: Shrink[T]) {
-    def forAll: Prop = Prop.forAll(f)
-  }
-  /** transform a function returning a boolean to a property by appending forAll */
-  implicit def functionToProp2[T1, T2](f: (T1, T2) => Boolean): FunctionForAll2[T1, T2] = new FunctionForAll2(f)
-  class FunctionForAll2[T1, T2](f: (T1, T2) => Boolean) {
-    def forAll(implicit
-      a1: Arbitrary[T1], s1: Shrink[T1],
-      a2: Arbitrary[T2], s2: Shrink[T2]
-      ): Prop = Prop.forAll(f)
-  }
-  /** transform a function returning a boolean to a property by appending forAll */
-  implicit def functionToProp3[T1, T2, T3](f: (T1, T2, T3) => Boolean): FunctionForAll3[T1, T2, T3] = new FunctionForAll3(f)
-  class FunctionForAll3[T1, T2, T3](f: (T1, T2, T3) => Boolean) {
-    def forAll(implicit
-      a1: Arbitrary[T1], s1: Shrink[T1],
-      a2: Arbitrary[T2], s2: Shrink[T2],
-      a3: Arbitrary[T3], s3: Shrink[T3]
-      ): Prop = Prop.forAll(f)
-  }
-}
-/**
- * This trait adds some syntactic sugar to transform partial functions to properties by appending forAll
- */
-trait PartialFunctionPropertyImplicits {
-  /** transform a partial function returning a boolean to a property by appending forAll */
-  implicit def partialFunctionToProp[T, S](f: PartialFunction[T, S]): PartialFunctionForAll[T, S] = new PartialFunctionForAll(f)
-  class PartialFunctionForAll[T, S](f: PartialFunction[T, S]) {
-    def forAll(implicit toProp: S => Prop, a: Arbitrary[T], s: Shrink[T]): Prop = Prop.forAll(f)
-    def forAllNoShrink(implicit toProp: S => Prop, a: Arbitrary[T]): Prop = Prop.forAllNoShrink(a.arbitrary)(f)
-  }
-}
-object PartialFunctionPropertyImplicits extends PartialFunctionPropertyImplicits
 
-trait ResultPropertyImplicits {
 
-  implicit def unitToProp(u: =>Unit): Prop = booleanToProp({u; true})
 
-  /** @return a Prop that will not throw an exception when evaluated */
-  implicit def propToProp(p: =>Prop): Prop = new Prop {
-    def apply(params: Gen.Parameters) = {
-      try p(params)
-      catch {
-        case execute.FailureException(f) if f.details != execute.NoDetails =>
-          (Prop.falsified :| (f.message+" ("+f.location+")"))(params).collect(f.details)
-
-        case execute.FailureException(f) =>
-          (Prop.falsified :| (f.message+" ("+f.location+")"))(params)
-
-        case e: Throwable => Prop.exception(e)(params)
-      }
-    }
-  }
-
-  implicit def booleanToProp(b: =>Boolean): Prop = resultProp(if (b) execute.Success() else execute.Failure())
-  implicit def callByNameMatchResultToProp[T](m: =>MatchResult[T]): Prop = resultProp(m.toResult)
-  implicit def matchResultToProp[T](m: MatchResult[T]): Prop = resultProp(m.toResult)
-
-  implicit def resultProp(r: =>execute.Result): Prop = {
-    new Prop {
-      def apply(params: Gen.Parameters) = {
-        lazy val result = execute.ResultExecution.execute(r)
-        val prop = 
-        result match {
-          case f : execute.Failure => Prop.falsified :| (f.message+" ("+f.location+")")
-          case s : execute.Skipped => Prop.exception(new execute.SkipException(s))
-          case p : execute.Pending => Prop.exception(new execute.PendingException(p))
-          case e : execute.Error   => Prop.exception(e.exception)
-          case other               => Prop.passed
-        }
-        result match {
-          case f: execute.Failure if f.details != execute.NoDetails =>
-            prop.apply(params).collect(f.details)
-
-          case _ =>
-            prop.apply(params)
-        }
-      }
-    }
-  }
-}
-
-/**
- * This trait enables some syntactic sugar when it is necessary to pass several arbitrary instances
- */
-trait ApplicableArbitraries { this: ScalaCheckMatchers =>
-  implicit def applicableArbitrary[T](a: Arbitrary[T]): ApplicableArbitrary[T] = ApplicableArbitrary(a)
-  case class ApplicableArbitrary[T](a: Arbitrary[T]) {
-    def apply[R](f: T => R)(implicit toProp: (=>R) => Prop, s: Shrink[T]) = prop(f)(toProp, a, s)
-  }
-  implicit def applicableArbitrary2[T1, T2](a: (Arbitrary[T1], Arbitrary[T2])) = ApplicableArbitrary2(a._1, a._2)
-  case class ApplicableArbitrary2[T1, T2](a1: Arbitrary[T1], a2: Arbitrary[T2]) {
-    def apply[R](f: (T1, T2) => R)(implicit toProp: (=>R) => Prop, s1: Shrink[T1], s2: Shrink[T2]) = prop(f)(toProp, a1, s1, a2, s2)
-  }
-  implicit def applicableArbitrary3[T1, T2, T3](a: (Arbitrary[T1], Arbitrary[T2], Arbitrary[T3])) = ApplicableArbitrary3(a._1, a._2, a._3)
-  case class ApplicableArbitrary3[T1, T2, T3](a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3]) {
-    def apply[R](f: (T1, T2, T3) => R)(implicit toProp: (=>R) => Prop, s1: Shrink[T1], s2: Shrink[T2], s3: Shrink[T3]) = prop(f)(toProp, a1, s1, a2, s2, a3, s3)
-  }
-  implicit def applicableArbitrary4[T1, T2, T3, T4](a: (Arbitrary[T1], Arbitrary[T2], Arbitrary[T3], Arbitrary[T4])) = ApplicableArbitrary4(a._1, a._2, a._3, a._4)
-  case class ApplicableArbitrary4[T1, T2, T3, T4](a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4]) {
-    def apply[R](f: (T1, T2, T3, T4) => R)(implicit toProp: (=>R) => Prop, s1: Shrink[T1], s2: Shrink[T2], s3: Shrink[T3], s4: Shrink[T4]) = prop(f)(toProp, a1, s1, a2, s2, a3, s3, a4, s4)
-  }
-  implicit def applicableArbitrary5[T1, T2, T3, T4, T5](a: (Arbitrary[T1], Arbitrary[T2], Arbitrary[T3], Arbitrary[T4], Arbitrary[T5])) = ApplicableArbitrary5(a._1, a._2, a._3, a._4, a._5)
-  case class ApplicableArbitrary5[T1, T2, T3, T4, T5](a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4], a5: Arbitrary[T5]) {
-    def apply[R](f: (T1, T2, T3, T4, T5) => R)(implicit toProp: (=>R) => Prop, s1: Shrink[T1], s2: Shrink[T2], s3: Shrink[T3], s4: Shrink[T4], s5: Shrink[T5]) = prop(f)(toProp, a1, s1, a2, s2, a3, s3, a4, s4, a5, s5)
-  }
-  implicit def applicableArbitrary6[T1, T2, T3, T4, T5, T6](a: (Arbitrary[T1], Arbitrary[T2], Arbitrary[T3], Arbitrary[T4], Arbitrary[T5], Arbitrary[T6])) = ApplicableArbitrary6(a._1, a._2, a._3, a._4, a._5, a._6)
-  case class ApplicableArbitrary6[T1, T2, T3, T4, T5, T6](a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4], a5: Arbitrary[T5], a6: Arbitrary[T6]) {
-    def apply[R](f: (T1, T2, T3, T4, T5, T6) => R)(implicit toProp: (=>R) => Prop, s1: Shrink[T1], s2: Shrink[T2], s3: Shrink[T3], s4: Shrink[T4], s5: Shrink[T5], s6: Shrink[T6]) = prop(f)(toProp, a1, s1, a2, s2, a3, s3, a4, s4, a5, s5, a6, s6)
-  }
-  implicit def applicableArbitrary7[T1, T2, T3, T4, T5, T6, T7](a: (Arbitrary[T1], Arbitrary[T2], Arbitrary[T3], Arbitrary[T4], Arbitrary[T5], Arbitrary[T6], Arbitrary[T7])) = ApplicableArbitrary7(a._1, a._2, a._3, a._4, a._5, a._6, a._7)
-  case class ApplicableArbitrary7[T1, T2, T3, T4, T5, T6, T7](a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4], a5: Arbitrary[T5], a6: Arbitrary[T6], a7: Arbitrary[T7]) {
-    def apply[R](f: (T1, T2, T3, T4, T5, T6, T7) => R)(implicit toProp: (=>R) => Prop, s1: Shrink[T1], s2: Shrink[T2], s3: Shrink[T3], s4: Shrink[T4], s5: Shrink[T5], s6: Shrink[T6], s7: Shrink[T7]) = prop(f)(toProp, a1, s1, a2, s2, a3, s3, a4, s4, a5, s5, a6, s6, a7, s7)
-  }
-  implicit def applicableArbitrary8[T1, T2, T3, T4, T5, T6, T7, T8](a: (Arbitrary[T1], Arbitrary[T2], Arbitrary[T3], Arbitrary[T4], Arbitrary[T5], Arbitrary[T6], Arbitrary[T7], Arbitrary[T8])) = ApplicableArbitrary8(a._1, a._2, a._3, a._4, a._5, a._6, a._7, a._8)
-  case class ApplicableArbitrary8[T1, T2, T3, T4, T5, T6, T7, T8](a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4], a5: Arbitrary[T5], a6: Arbitrary[T6], a7: Arbitrary[T7], a8: Arbitrary[T8]) {
-    def apply[R](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R)(implicit toProp: (=>R) => Prop, s1: Shrink[T1], s2: Shrink[T2], s3: Shrink[T3], s4: Shrink[T4], s5: Shrink[T5], s6: Shrink[T6], s7: Shrink[T7], s8: Shrink[T8]) = prop(f)(toProp, a1, s1, a2, s2, a3, s3, a4, s4, a5, s5, a6, s6, a7, s7, a8, s8)
-  }
-
-}
-/**
- * This trait provides generation parameters to use with the `ScalaCheckMatchers`
- */
-trait ScalaCheckParameters { outer: ScalaCheckMatchers with Output =>
-  /**
-   * default parameters. Uses ScalaCheck default values and doesn't print anything to the console
-   */
-  implicit def defaultParameters = new Parameters()
-  /** default parameters to display pretty messages */
-  implicit def defaultPrettyParams = Pretty.defaultParams
-
-  /** set specific execution parameters on a Property */
-  implicit def setProperty(p: Prop) = new SetProperty(p)
-  class SetProperty(prop: Prop) {
-    /** create parameters with verbose = false */
-    def set(minTestsOk: Int             = defaultParameters.minTestsOk,
-            minSize: Int                = defaultParameters.minSize,
-            maxDiscardRatio: Float      = defaultParameters.maxDiscardRatio,
-            maxSize: Int                = defaultParameters.maxSize,
-            workers: Int                = defaultParameters.workers,
-            rng: scala.util.Random      = defaultParameters.rng,
-            callback: Test.TestCallback = defaultParameters.callback,
-            loader: Option[ClassLoader] = defaultParameters.loader): execute.Result =
-      check(prop)(new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = false, outer))
-  }
-
-  /** set specific execution parameters on a Property */
-  implicit def displayProperty(p: Prop) = new DisplayProperty(p)
-  class DisplayProperty(prop: Prop) {
-    /** create parameters with verbose = true */
-    def display(minTestsOk: Int             = defaultParameters.minTestsOk,
-                minSize: Int                = defaultParameters.minSize,
-                maxDiscardRatio: Float      = defaultParameters.maxDiscardRatio,
-                maxSize: Int                = defaultParameters.maxSize,
-                workers: Int                = defaultParameters.workers,
-                rng: scala.util.Random      = defaultParameters.rng,
-                callback: Test.TestCallback = defaultParameters.callback,
-                loader: Option[ClassLoader] = defaultParameters.loader): execute.Result =
-      check(prop)(new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = true, outer))
-  }
-
-  /** create parameters with verbose = false */
-  def set(minTestsOk: Int             = defaultParameters.minTestsOk,
-          minSize: Int                = defaultParameters.minSize,
-          maxDiscardRatio: Float      = defaultParameters.maxDiscardRatio,
-          maxSize: Int                = defaultParameters.maxSize,
-          workers: Int                = defaultParameters.workers,
-          rng: scala.util.Random      = defaultParameters.rng,
-          callback: Test.TestCallback = defaultParameters.callback,
-          loader: Option[ClassLoader] = defaultParameters.loader): Parameters =
-    new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = false, outer)
-
-  /** create parameters with verbose = true */
-  def display(minTestsOk: Int             = defaultParameters.minTestsOk,
-              minSize: Int                = defaultParameters.minSize,
-              maxDiscardRatio: Float      = defaultParameters.maxDiscardRatio,
-              maxSize: Int                = defaultParameters.maxSize,
-              workers: Int                = defaultParameters.workers,
-              rng: scala.util.Random      = defaultParameters.rng,
-              callback: Test.TestCallback = defaultParameters.callback,
-              loader: Option[ClassLoader] = defaultParameters.loader): Parameters =
-    new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = true, outer)
-
-}
-
-/**
-* This class is the base class for the display and set case classes.<br>
-* It contains a Map of generation parameters and indicates if the generation
-* must be verbose.
-*/
-case class Parameters(minTestsOk: Int             = Test.Parameters.default.minSuccessfulTests,
-                      minSize: Int                = Test.Parameters.default.minSize,
-                      maxDiscardRatio: Float      = Test.Parameters.default.maxDiscardRatio,
-                      maxSize: Int                = Test.Parameters.default.maxSize,
-                      workers: Int                = Test.Parameters.default.workers,
-                      rng: scala.util.Random      = Test.Parameters.default.rng,
-                      callback: Test.TestCallback = Test.Parameters.default.testCallback,
-                      loader: Option[ClassLoader] = Test.Parameters.default.customClassLoader,
-                      verbose: Boolean            = false,
-                      output: Output              = ConsoleOutput) { outer =>
-
-  def testCallback(implicit pretty: Pretty.Params) = if (verbose) verboseCallback.chain(callback) else callback
-
-  def toScalaCheckParameters(implicit pretty: Pretty.Params): Test.Parameters =
-    new Test.Parameters {
-      val minSuccessfulTests = outer.minTestsOk
-      val maxDiscardRatio    = outer.maxDiscardRatio
-      val maxSize            = outer.maxSize
-      val minSize            = outer.minSize
-      val workers            = outer.workers
-      val rng                = outer.rng
-      val testCallback       = outer.testCallback
-      val customClassLoader  = outer.loader
-    }
-
-  def verboseCallback(implicit pretty: Pretty.Params) = new Test.TestCallback {
-    override def onPropEval(name: String, threadXdx: Int, succeeded: Int, discarded: Int): Unit = {
-      if (discarded == 0) output.printf("\rPassed %d tests", succeeded)
-      else                output.printf("\rPassed %d tests; %d discarded", succeeded, discarded)
-    }
-    override def onTestResult(name: String, result: Test.Result) = {
-      val s = prettyTestRes(result)(pretty)
-      output.printf("\r%s %s%s\n", if (result.passed) "+" else "!", s, List.fill(70 - s.length)(" ").mkString(""))
-    }
-  }
-
-}
-
-/**
- * This trait can be mixed in a Specification to avoid counting the number of times that a property was executed as the
- * number of expectations. With this trait we just count 1 for each result
- */
-trait OneExpectationPerProp extends ScalaCheckMatchers {
-  private def superPropAsResult[P <: Prop] = super.propAsResult[P]
-
-  override implicit def propAsResult[P <: Prop](implicit p: Parameters): AsResult[P] = new AsResult[P] {
-    def asResult(prop: =>P) = superPropAsResult.asResult(prop).setExpectationsNb(1)
-  }
-}

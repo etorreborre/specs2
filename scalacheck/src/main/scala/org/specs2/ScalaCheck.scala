@@ -6,5 +6,5 @@ import create._
 /**
  * The ScalaCheck trait can be used to access ScalaCheck matchers
  */
-trait ScalaCheck extends matcher.ScalaCheckMatchers with AutoExamples { this: FragmentsFactory =>
+trait ScalaCheck extends matcher.ScalaCheckMatchers { this: FragmentsFactory =>
 }
