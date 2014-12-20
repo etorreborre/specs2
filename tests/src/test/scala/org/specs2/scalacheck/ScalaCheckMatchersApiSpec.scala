@@ -6,7 +6,7 @@ import org.scalacheck.util.Pretty
 import org.scalacheck.{Arbitrary, Gen, Shrink}
 import org.specs2.Specification
 
-class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck2 { def is = s2"""
+class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck { def is = s2"""
  There are various ways to use a property in specs2
 
  A ScalaCheck property can be used in the body of an Example
@@ -95,7 +95,4 @@ class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck2 { def is 
 
 }
 
-trait ScalaCheck2 extends ScalaCheckPropertyCreation with ScalaCheckPropertyCheck with ScalaCheckParameters2 with AsResultProp with GenInstances {
-
-}
 

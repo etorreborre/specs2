@@ -12,7 +12,7 @@ import control._
 import specification._
 import scalaz.std.anyVal._
 
-class LayersAnalysisSpec extends script.Specification with DataLayers with Grouped { def is = s2"""
+class LayersAnalysisSpec extends script.Specification with DataLayers with Grouped with ScalaCheck { def is = s2"""
 
 
  It is possible to specify dependencies between packages as 'layers'. A `Layers` object is an ordered sequence of other `Layer`s.

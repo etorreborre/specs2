@@ -10,7 +10,7 @@ import scalaz.std.anyVal.intInstance
 import scalaz.syntax.tag._
 import BrokenEqualInstances._
 
-class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck2 with ResultMatchers with ReturnsSyntax { def is = s2"""
+class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with ResultMatchers with ReturnsSyntax { def is = s2"""
 
  Reporting for Props
 
@@ -42,10 +42,10 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck2 with 
  ${ check(complexProp) must beFailing(".*result sum.*") }
 
  Nested ScalaCheck properties must be labelled
- ${ check(equal.laws[Int @@ BrokenEqual]) must beFailing(".*equal.commutativity.*") }
+ ${ check(equal.laws[Int @@ BrokenEqual]) must beFailing("(\\s|.)*equal(\\s|.)*") }
 
  Collected data is reported
- ${ check(prop { i: Int => true }.collect.verbose) returns "OK, passed 100 tests." }
+ ${ check(prop((i: Int) => true)) returns "OK, passed 100 tests." }
 
 
 

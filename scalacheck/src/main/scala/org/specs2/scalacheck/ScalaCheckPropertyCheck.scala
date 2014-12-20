@@ -11,11 +11,6 @@ import text.NotNullStrings._
 
 trait ScalaCheckPropertyCheck {
 
-  implicit def scalaCheckPropertyAsResult[T, R]: AsResult[ScalaCheckProp[T, R]] = new AsResult[ScalaCheckProp[T, R]] {
-    def asResult(scalaCheckProperty: =>ScalaCheckProp[T, R]): Result =
-      check(scalaCheckProperty.prop, scalaCheckProperty.parameters)
-  }
-
   /**
    * checks if the property is true for each generated value, and with the specified
    * scalacheck parameters. If verbose is true, then print the results on the console

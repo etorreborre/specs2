@@ -12,7 +12,7 @@ import specification.dsl.ExampleDsl
 import specification.process._
 
 import scala.sys.error
-
+/*
 class ScalaCheckMatchersSpec extends Spec with ScalaCheckProperties { def is = s2"""
 
  A ScalaCheck property can be used in the body of an Example
@@ -227,3 +227,4 @@ class MutableSpecWithContextAndScalaCheck extends org.specs2.mutable.Specificati
     def before { println("before") }
   }
 }
+        */

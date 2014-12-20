@@ -34,7 +34,7 @@ trait ResultBaseMatchers {
              description + " is a failure",
              description + " is not a failure",
              value) and
-      message.map(m => result(r.message matchesSafely m,
+      message.map(m => result(r.message matches m.regexPart,
                               r.message + " matches " + m,
                               r.message + " doesn't match " + m,
                               value)).getOrElse(result(true, "ok", "ko", value))
@@ -51,7 +51,7 @@ trait ResultBaseMatchers {
              description + " is an error",
              description + " is not an error",
              value) and
-      message.map(m => result(r.message matchesSafely m,
+      message.map(m => result(r.message matches m.regexPart,
                               r.message + " matches " + m,
                               r.message + " doesn't match " + m,
                               value)).getOrElse(result(true, "ok", "ko", value))
@@ -68,7 +68,7 @@ trait ResultBaseMatchers {
              description + " is skipped",
              description + " is not skipped",
              value) and
-      message.map(m => result(r.message matchesSafely m,
+      message.map(m => result(r.message matches m.regexPart,
                               r.message + " matches " + m,
                               r.message + " doesn't match " + m,
                               value)).getOrElse(result(true, "ok", "ko", value))
@@ -85,7 +85,7 @@ trait ResultBaseMatchers {
         description + " is pending",
         description + " is not pending",
         value) and
-        message.map(m => result(r.message matchesSafely m,
+        message.map(m => result(r.message matches m.regexPart,
           r.message + " matches " + m,
           r.message + " doesn't match " + m,
           value)).getOrElse(result(true, "ok", "ko", value))

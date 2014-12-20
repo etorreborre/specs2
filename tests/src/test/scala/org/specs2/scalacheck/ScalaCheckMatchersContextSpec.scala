@@ -3,7 +3,7 @@ package scalacheck
 
 import execute.AsResult
 
-class ScalaCheckMatchersContextSpec extends Specification with ScalaCheck2 { def is = s2"""
+class ScalaCheckMatchersContextSpec extends Specification with ScalaCheck { def is = s2"""
 
  Contexts can be used to setup/teardown state when executing a Prop
    A before context
