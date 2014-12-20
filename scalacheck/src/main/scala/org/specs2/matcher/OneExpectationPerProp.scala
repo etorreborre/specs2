@@ -3,6 +3,7 @@ package matcher
 
 import org.scalacheck.Prop
 import execute.AsResult
+import org.specs2.scalacheck.Parameters
 
 
 /**

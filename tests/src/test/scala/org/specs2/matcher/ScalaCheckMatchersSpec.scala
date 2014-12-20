@@ -120,7 +120,7 @@ class ScalaCheckMatchersSpec extends Spec with ScalaCheckProperties { def is = s
   def prop4_3 = execute(exceptionProp()) must beLike { case org.specs2.execute.Error(m, ex) => ex.getStackTrace must not be empty }
 
   def prop5 = execute(check(proved)) must beSuccessful
-  def prop6 = execute(failureExceptionProp).toString must startWith("A counter-example is")
+  def prop6 = execute(failureExceptionProp).toString must startWith("xA counter-example is")
 
   def prop7 = DefaultExecutor.runSpecification(new MutableSpecWithContextAndScalaCheck).map(_.executionResult).reduce(_ and _).isFailure
   def prop8 = execute(check(pendingProp)) must bePending

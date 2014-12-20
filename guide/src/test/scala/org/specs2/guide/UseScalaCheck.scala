@@ -2,8 +2,8 @@ package org.specs2
 package guide
 
 import org.scalacheck.{Prop, Gen, Arbitrary}
-import matcher.Parameters
 import matcher.ScalaCheckMatchers._
+import org.specs2.scalacheck.Parameters
 
 object UseScalaCheck extends UserGuidePage { def is = "ScalaCheck".title ^ s2"""
 

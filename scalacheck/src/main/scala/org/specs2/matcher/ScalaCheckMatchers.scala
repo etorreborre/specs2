@@ -8,6 +8,7 @@ import org.scalacheck.util.Pretty._
 import org.scalacheck.util.{FreqMap, Pretty}
 import org.specs2.execute.{AsResult, ResultLogicalCombinators}
 import org.specs2.io.{ConsoleOutput, Output}
+import org.specs2.scalacheck.Parameters
 import org.specs2.text.NotNullStrings._
 
 /**
@@ -116,7 +117,7 @@ trait ScalaCheckMatchers extends ConsoleOutput with ScalaCheckParameters
    * generation parameters `p`. `p` is transformed into a scalacheck parameters
    */
   private[specs2] def checkProperty(prop: Prop)(implicit p: Parameters): execute.Result = {
-    checkScalaCheckProperty(prop)(p.toScalaCheckParameters)
+    checkScalaCheckProperty(prop)(p.testParameters)
   }
 
   /**

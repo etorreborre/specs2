@@ -4,11 +4,12 @@ package matcher
 import org.scalacheck.{Test, Prop}
 import org.scalacheck.util.Pretty
 import org.specs2.io.Output
+import org.specs2.scalacheck.Parameters
 
 /**
  * This trait provides generation parameters to use with the `ScalaCheckMatchers`
  */
-trait ScalaCheckParameters { outer: ScalaCheckMatchers with Output =>
+trait ScalaCheckParameters { outer: ScalaCheckMatchers =>
   /**
    * default parameters. Uses ScalaCheck default values and doesn't print anything to the console
    */
@@ -26,9 +27,9 @@ trait ScalaCheckParameters { outer: ScalaCheckMatchers with Output =>
             maxSize: Int                = defaultParameters.maxSize,
             workers: Int                = defaultParameters.workers,
             rng: scala.util.Random      = defaultParameters.rng,
-            callback: Test.TestCallback = defaultParameters.callback,
+            callback: Test.TestCallback = defaultParameters.testCallback,
             loader: Option[ClassLoader] = defaultParameters.loader): execute.Result =
-      check(prop)(new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = false, outer))
+      check(prop)(new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader))
   }
 
   /** set specific execution parameters on a Property */
@@ -41,9 +42,9 @@ trait ScalaCheckParameters { outer: ScalaCheckMatchers with Output =>
                 maxSize: Int                = defaultParameters.maxSize,
                 workers: Int                = defaultParameters.workers,
                 rng: scala.util.Random      = defaultParameters.rng,
-                callback: Test.TestCallback = defaultParameters.callback,
+                callback: Test.TestCallback = defaultParameters.testCallback,
                 loader: Option[ClassLoader] = defaultParameters.loader): execute.Result =
-      check(prop)(new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = true, outer))
+      check(prop)(new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader))
   }
 
   /** create parameters with verbose = false */
@@ -53,9 +54,9 @@ trait ScalaCheckParameters { outer: ScalaCheckMatchers with Output =>
           maxSize: Int                = defaultParameters.maxSize,
           workers: Int                = defaultParameters.workers,
           rng: scala.util.Random      = defaultParameters.rng,
-          callback: Test.TestCallback = defaultParameters.callback,
+          callback: Test.TestCallback = defaultParameters.testCallback,
           loader: Option[ClassLoader] = defaultParameters.loader): Parameters =
-    new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = false, outer)
+    new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader)
 
   /** create parameters with verbose = true */
   def display(minTestsOk: Int             = defaultParameters.minTestsOk,
@@ -64,8 +65,8 @@ trait ScalaCheckParameters { outer: ScalaCheckMatchers with Output =>
               maxSize: Int                = defaultParameters.maxSize,
               workers: Int                = defaultParameters.workers,
               rng: scala.util.Random      = defaultParameters.rng,
-              callback: Test.TestCallback = defaultParameters.callback,
+              callback: Test.TestCallback = defaultParameters.testCallback,
               loader: Option[ClassLoader] = defaultParameters.loader): Parameters =
-    new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader, verbose = true, outer)
+    new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader)
 
 }
