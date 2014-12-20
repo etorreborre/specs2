@@ -76,6 +76,15 @@ trait ScalaCheckProperty {
 
   def setVerbosity(v: Int): SelfType
 
+  protected def executeInContext[R : AsResult](result: =>R) = {
+    lazy val executed = result
+    context.foreach(_(executed))
+    val prop = executed match {
+      case p: Prop => p
+      case other   => AsResultProp.asResultToProp(other)
+    }
+  }
+
 }
 
 case class ScalaCheckProp[T, R](execute: T => R,
@@ -95,11 +104,7 @@ case class ScalaCheckProp[T, R](execute: T => R,
 
   lazy val propFunction = (t: T) => {
     lazy val executed = execute(t)
-    context.foreach(_(executed))
-    val prop = executed match {
-      case p: Prop => p
-      case r       => AsResultProp.asResultToProp(r)
-    }
+    executeInContext(executed)
     collectValue(t, collector)(prop)
   }
 
@@ -123,7 +128,10 @@ case class ScalaCheckProp[T, R](execute: T => R,
   def setParameters(ps: Parameters): SelfType =
     copy(parameters = ps)
 
-  def collect(f: T => Any): SelfType =
+  def collect: SelfType =
+    collectArg(_.toString)
+
+  def collectArg(f: T => Any): SelfType =
     copy(collector = Some(f))
 
   def prepare(action: T => T): SelfType =
@@ -156,11 +164,7 @@ case class ScalaCheckProp2[T1, T2, R](
 
   lazy val propFunction = (t1: T1, t2: T2) => {
     lazy val executed = execute(t1, t2)
-    context.foreach(_(executed))
-    val prop = executed match {
-      case p: Prop => p
-      case r       => AsResultProp.asResultToProp(r)
-    }
+    executeInContext(executed)
     collectValue(t1, collector1)(collectValue(t2, collector2)(prop))
   }
 
@@ -193,10 +197,12 @@ case class ScalaCheckProp2[T1, T2, R](
   def pretties(p1: T1 => String, p2: T2 => String): SelfType =
     pretty1(p1).pretty2(p2)
 
-  def collect1(f: T1 => Any): SelfType = copy(collector1 = Some(f))
-  def collect2(f: T2 => Any): SelfType = copy(collector2 = Some(f))
-  def collectAll(f1: T1 => Any, f2: T2 => Any): SelfType =
-    collect1(f1).collect2(f2)
+  def collectArg1(f: T1 => Any): SelfType = copy(collector1 = Some(f))
+  def collectArg2(f: T2 => Any): SelfType = copy(collector2 = Some(f))
+  def collect1: SelfType = collectArg1(_.toString)
+  def collect2: SelfType = collectArg2(_.toString)
+  def collectAllArgs(f1: T1 => Any, f2: T2 => Any): SelfType = collectArg1(f1).collectArg2(f2)
+  def collectAll: SelfType = collect1.collect2
 
   def prepare(action: (T1, T2) => (T1, T2)): SelfType =
     copy(execute = (t1: T1, t2: T2) => execute.tupled(action(t1, t2)))

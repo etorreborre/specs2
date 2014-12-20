@@ -4,7 +4,7 @@ package scalacheck
 import org.scalacheck.Prop.Arg
 import org.scalacheck.util.Pretty._
 import org.scalacheck.util.{FreqMap, Pretty}
-import org.scalacheck.{Prop, Test}
+import org.scalacheck.{Gen, Properties, Prop, Test}
 import execute._
 import matcher._
 import text.NotNullStrings._
@@ -22,7 +22,16 @@ trait ScalaCheckPropertyCheck {
    */
   def check(prop: Prop, parameters: Parameters): Result = {
     // check the property with ScalaCheck
-    val result = Test.check(parameters.testParameters, prop)
+    // first add labels if this Prop is a composite one
+    val prop1 = prop match {
+      case ps: Properties =>
+        new Prop {
+          override def apply(params: Gen.Parameters): Prop.Result =
+            Prop.all(ps.properties.map { case (n, p) => p :| n }:_*)(params)
+        }
+      case _ => prop
+    }
+    val result = Test.check(parameters.testParameters, prop1)
     val prettyTestResult = prettyTestRes(result)(parameters.prettyParams)
     val testResult = if (parameters.prettyParams.verbosity == 0) "" else prettyTestResult
 

@@ -55,11 +55,14 @@ class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck2 { def is 
 
    Collect
    to specify a specific collect function for a parameter
-   ${ prop { (i: Int) =>  i === i }.collect((i:Int) => math.abs(i)) }
+   ${ prop { (i: Int) =>  i === i }.collect }
+   ${ prop { (i: Int) =>  i === i }.collectArg((i:Int) => math.abs(i)) }
    to specify a specific collect function for any parameter
-   ${ prop { (s: String, j: Int) => true }.collect2(math.abs) }
+   ${ prop { (s: String, j: Int) => true }.collect2 }
+   ${ prop { (s: String, j: Int) => true }.collectArg2(math.abs) }
    to specify all the collect functions
-   ${ prop { (i: Int, j: Int) =>  i === i }.collectAll(math.abs, math.abs) }
+   ${ prop { (i: Int, j: Int) =>  i === i }.collectAll }
+   ${ prop { (i: Int, j: Int) =>  i === i }.collectAllArgs(math.abs, math.abs) }
 
 
  Test parameters can also be specified

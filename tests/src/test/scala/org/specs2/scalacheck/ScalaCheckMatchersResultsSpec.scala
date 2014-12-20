@@ -1,11 +1,14 @@
 package org.specs2
 package scalacheck
 
-import org.scalacheck.Prop
+import org.scalacheck.{Gen, Properties, Arbitrary, Prop}
 import matcher._
 import execute._
-import org.scalacheck.Prop._
-import org.specs2.execute.Result
+import org.scalacheck.Prop.{forAll}
+import scalaz.{Tag, Order, @@, Equal}
+import scalaz.std.anyVal.intInstance
+import scalaz.syntax.tag._
+import BrokenEqualInstances._
 
 class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck2 with ResultMatchers with ReturnsSyntax { def is = s2"""
 
@@ -35,8 +38,14 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck2 with 
  the stacktrace must be displayed
  ${ check(exceptionProp()) must beLike { case Error(m, ex) => ex.getStackTrace must not be empty } }
 
-   Labelled properties are reported
-   Collected data is reported
+ Labelled properties are reported
+ ${ check(complexProp) must beFailing(".*result sum.*") }
+
+ Nested ScalaCheck properties must be labelled
+ ${ check(equal.laws[Int @@ BrokenEqual]) must beFailing(".*equal.commutativity.*") }
+
+ Collected data is reported
+ ${ check(prop { i: Int => true }.collect.verbose) returns "OK, passed 100 tests." }
 
 
 
@@ -53,4 +62,33 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck2 with 
   def pendingProp = forAll((b: Boolean) => b must beTrue.orPending)
   def skippedProp = forAll((b: Boolean) => b must beTrue.orSkip)
 
+  val complexProp = forAll { (m: Int, n: Int) =>
+      (m == m)     :| "result #1"    &&
+      (n == n)     :| "result #2"    &&
+      (m == n + m) :| "result sum"
+  }
+
+}
+
+object equal {
+  def commutativity[A](implicit A: Equal[A], arb: Arbitrary[A]) = forAll(A.equalLaw.commutative _)
+  def reflexive[A](implicit A: Equal[A], arb: Arbitrary[A])     = forAll(A.equalLaw.reflexive _)
+  def transitive[A](implicit A: Equal[A], arb: Arbitrary[A])    = forAll(A.equalLaw.transitive _)
+  def naturality[A](implicit A: Equal[A], arb: Arbitrary[A])    = forAll(A.equalLaw.naturality _)
+
+  def laws[A](implicit A: Equal[A], arb: Arbitrary[A]) = new Properties("equal") {
+    property("commutativity") = commutativity[A]
+    property("reflexive")     = reflexive[A]
+    property("transitive")    = transitive[A]
+    property("naturality")    = naturality[A]
+  }
+}
+
+
+sealed trait BrokenEqual
+object BrokenEqualInstances {
+  implicit def brokenEqual[A](implicit ordA: Order[A]): Equal[A @@ BrokenEqual] =
+    Equal.equal((a1, a2) => ordA.lessThan(a1.unwrap, a2.unwrap))
+  implicit def arbitrary[A](implicit arbA: Arbitrary[A]): Arbitrary[A @@ BrokenEqual] =
+    Arbitrary(arbA.arbitrary.map(Tag.apply))
 }
