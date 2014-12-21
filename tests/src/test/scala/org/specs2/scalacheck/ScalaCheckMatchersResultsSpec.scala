@@ -9,6 +9,7 @@ import scalaz.{Tag, Order, @@, Equal}
 import scalaz.std.anyVal.intInstance
 import scalaz.syntax.tag._
 import BrokenEqualInstances._
+import ScalaCheckProperty._
 
 class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with ResultMatchers with ReturnsSyntax { def is = s2"""
 
@@ -45,7 +46,7 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
  ${ check(equal.laws[Int @@ BrokenEqual]) must beFailing("(\\s|.)*equal(\\s|.)*") }
 
  Collected data is reported
- ${ check(prop((i: Int) => true)) returns "OK, passed 100 tests." }
+ ${ check(prop((i: Int) => true).collect.verbose).expected must beMatching("xxxOK, passed 100 tests.") }
 
 
 

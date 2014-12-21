@@ -86,10 +86,10 @@ class ExceptionMatchersSpec extends script.Specification with ResultMatchers wit
 
   "regular expression" - new group {
     eg := (theBlock(error("boom")) must throwA[RuntimeException](message = "boo")).message must startWith(
-      "Got the exception java.lang.RuntimeException: boom and 'boom' matches '\\s*.*\\s*boo\\s*.*\\s*'")
+      "Got the exception java.lang.RuntimeException: boom and 'boom' matches '(\\s|.)*boo(\\s|.)*'")
 
     eg := (theBlock(error("boom\nbang\nbong")) must throwA[RuntimeException](message = "bang")).message must startWith(
-      "Got the exception java.lang.RuntimeException: boom\nbang\nbong and 'boom\nbang\nbong' matches '\\s*.*\\s*bang\\s*.*\\s*'")
+      "Got the exception java.lang.RuntimeException: boom\nbang\nbong and 'boom\nbang\nbong' matches '(\\s|.)*bang(\\s|.)*'")
   }
 
   "specific exception" - new group {

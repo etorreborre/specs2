@@ -40,7 +40,7 @@ trait AsResultProp extends ScalaCheckPropertyCheck with ScalaCheckParameters2 {
   implicit def scalaCheckPropertyAsResult[S <: ScalaCheckProperty]: AsResult[S] = new AsResult[S] {
     def asResult(prop: =>S): Result = check(prop.prop, prop.parameters)
   }
-  
+
   /** implicit typeclass instance to create examples from Props */
   implicit def propAsResult[P <: Prop](implicit p: Parameters): AsResult[P] = new AsResult[P] {
     def asResult(prop: =>P): Result =
