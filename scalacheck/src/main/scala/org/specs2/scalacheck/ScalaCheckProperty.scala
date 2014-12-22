@@ -12,24 +12,16 @@ import AsResultProp._
 import scalaz.{Failure => _, Success => _}
 
 /**
- * A ScalaCheckProperty encapsulate a function to test with ScalaCheck
- *
- * Various typeclass instances are required:
- *
- *  - Arbitrary to generate values
- *  - Shrink to shrink counter-examples
- *  - Show to display arguments in case of a counter-example
- *  - Collector to collect values and provide a summary as string (to show frequencies for example)
- *
- *  A Context can be added to setup/teardown state before/after/around each property execution
+ * A ScalaCheckProperty encapsulates a ScalaCheck Prop and its parameters
  */
-
 trait ScalaCheckProperty {
   type SelfType <: ScalaCheckProperty
 
   def prop: Prop
 
   def parameters: Parameters
+
+  def prettyFreqMap: FreqMap[Set[Any]] => Pretty
 
   def setParameters(ps: Parameters): SelfType
 
@@ -83,12 +75,20 @@ trait ScalaCheckProperty {
 
   def setPrettyFreqMap(f: FreqMap[Set[Any]] => Pretty): SelfType
 
-  def prettyFreqMap: FreqMap[Set[Any]] => Pretty
-
   def prettyFreqMap(f: FreqMap[Set[Any]] => String): SelfType =
     setPrettyFreqMap((fq: FreqMap[Set[Any]]) => Pretty(_ => f(fq)))
 }
 
+/**
+ * A ScalaCheckFunction adds the possibility to select various typeclass instances for a given property:
+ *
+ *  - Arbitrary to generate values
+ *  - Shrink to shrink counter-examples
+ *  - Show to display arguments in case of a counter-example
+ *  - Collector to collect values and provide a summary as string (to show frequencies for example)
+ *
+ *  A Context can be added to setup/teardown state before/after/around each property execution
+ */
 trait ScalaCheckFunction extends ScalaCheckProperty {
   def noShrink: SelfType
 
