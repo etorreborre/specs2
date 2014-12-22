@@ -8,7 +8,7 @@ import execute._
 /**
  * Implicits to convert Prop to AsResult and AsResult to Prop
  */
-trait AsResultProp extends ScalaCheckPropertyCheck with ScalaCheckParameters2 {
+trait AsResultProp extends ScalaCheckPropertyCheck with ScalaCheckParameters {
 
   implicit def asResultToProp[R : AsResult](r: R): Prop = {
     r match {

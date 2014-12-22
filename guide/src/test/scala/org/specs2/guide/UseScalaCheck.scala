@@ -2,14 +2,14 @@ package org.specs2
 package guide
 
 import org.scalacheck.{Prop, Gen, Arbitrary}
-import matcher.ScalaCheckMatchers._
 import org.specs2.scalacheck.Parameters
+import scalaz._, Scalaz._
 
-object UseScalaCheck extends UserGuidePage { def is = "ScalaCheck".title ^ s2"""
+object UseScalaCheck extends UserGuidePage with ScalaCheck { def is = "ScalaCheck".title ^ s2"""
 
 A clever way of creating expectations in $specs2 is to use the [ScalaCheck](https://github.com/rickynils/scalacheck) library.
 
-To declare ScalaCheck properties you first need to extend the `org.specs2.ScalaCheck` trait. Then you can pass functions returning any kind of `Result` (`Boolean`, `Result`, `MatchResult`) to the `prop` method and use the resulting `Prop` as your example body: ${snippet{
+To declare ScalaCheck properties you first need to extend the `org.specs2.ScalaCheck` trait. Then you can pass functions returning any kind of `Result` (`Boolean`, `Result`, `MatchResult` or a ScalaCheck `Prop`) to the `prop` method and use the resulting `Prop` as your example body: ${snippet{
 s2"addition and multiplication are related ${ prop { (a: Int) => a + a == 2 * a } }"
 }}
 
@@ -26,30 +26,30 @@ s2"addition and multiplication are related ${ prop { (a: Int) => (a > 0) ==> (a 
 
 Note that if you pass functions using `MatchResult`s you will get better failure messages than just using boolean expressions.
 
-By default the properties created with `prop` will be shrinking counter-examples. If you want to avoid this, you can use `propNoShrink` instead.
+By default the properties created with `prop` will be shrinking counter-examples. But as you will see below there lots of different ways to parameterize ScalaCheck properties in specs2, including if shrinking must be done.
 
 ### Arbitrary instances
 
-ScalaCheck requires an implicit `Arbitrary[T]` instance for each parameter of type `T` used in a property. If you rather want to pick up a specific `Arbitrary[T]` you can replace the `prop` method with the name of your `Arbitrary` instance: ${snippet{
+ScalaCheck requires an implicit `Arbitrary[T]` instance for each parameter of type `T` used in a property. If you rather want to pick up a specific `Arbitrary[T]` for a given property argument you can modify the `prop` with  another `Arbitrary` instance: ${snippet{
 s2"""
   a simple property       $ex1
   a more complex property $ex2
 """
-implicit def abStrings = Arbitrary {
-  for {
-    a <- Gen.oneOf("a", "b")
-    b <- Gen.oneOf("a", "b")
-  } yield a+b
-}
+  val abStringGen = (Gen.oneOf("a", "b") |@| Gen.oneOf("a", "b"))(_+_)
 
-def ex1 = abStrings.apply((s: String) => s must contain("a") or contain("b"))
+  implicit def abStrings: Arbitrary =
+    Arbitrary(abStringGen)
 
-// use a tuple if there are several parameters to your function
-def ex2 = (abStrings, abStrings)((s1: String, s2: String) => (s1+s2) must contain("a") or contain("b"))
+  def ex1 = prop((s: String) => s must contain("a") or contain("b")).setArbitrary(abStrings)
+
+  // use the setArbitrary<n> method for the nth argument
+  def ex2 = prop((s1: String, s2: String) => (s1+s2) must contain("a") or contain("b")).
+              setArbitrary1(abStrings).setArbitrary2(abStrings)
 }}
 
 ### With Generators
 
+What you can do with arbitraries can also be done with generators
 ScalaCheck also allows to create `Prop`s directly with the `Prop.forAll` method accepting `Gen` instances: ${snippet{
 s2"""
   a simple property       $ex1
@@ -105,7 +105,7 @@ case class MyRandomGenerator() extends java.util.Random {
 
 #### Expectations
 
-By default, a successful example using a `Prop` will be reported as 1 success and 100 (or `minTestsOk`) expectations. If you don't want the number of expectations to appear in the specification statistics just mix-in your specification the `org.specs2.matcher.OneExpectationPerProp` trait.
+By default, a successful example using a `Prop` will be reported as 1 success and 100 (or `minTestsOk`) expectations. If you don't want the number of expectations to appear in the specification statistics just mix-in your specification the `org.specs2.scalacheck.OneExpectationPerProp` trait.
 
 """
 }

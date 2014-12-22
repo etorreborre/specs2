@@ -10,7 +10,7 @@ import AnyMatchers._
  * This trait provides matchers for some Scalaz (http://github/scalaz/scalaz) datatypes.
  */
 private[specs2]
-trait InternalScalazMatchers extends ScalaCheckMatchers with ExpectationsCreation { outer =>
+trait InternalScalazMatchers extends ScalaCheck { outer =>
 
   implicit def semigroupProperty[T](implicit s: Semigroup[T]): SemigroupProperty[T] = new SemigroupProperty[T]()(s)
   class SemigroupProperty[T]()(implicit sg: Semigroup[T]) {

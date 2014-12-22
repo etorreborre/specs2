@@ -81,22 +81,7 @@ class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck { def is =
    ${ prop { (i:Int) => (i > 0) ==> (i > 0) }.set(minTestsOk = 50) }
    the verbosity of a property can be turned on and off
    ${ prop { (i:Int) => (i > 0) ==> (i > 0) }.set(minTestsOk = 50).verbose }
-
-
- Features
-   AsResult can be used to define properties
-   shrink can be turned on / off
-   data collection can be turned on / off for any of the argument
-   a Pretty instance can be set for any argument
-   data can be cleaned up before/after execution
-   parameters can be passed from the command line
-
- Reporting
-   Labelled properties are reported
-   Collected data is reported
-
 """
-
 
   val positiveInts = Arbitrary(Gen.choose(1, 5))
 

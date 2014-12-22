@@ -4,7 +4,7 @@ package data
 import data.TopologicalSort._
 import matcher._
 
-class TopologicalSortSpec extends Spec with ScalaCheckMatchers { def is = s2"""
+class TopologicalSortSpec extends Spec with ScalaCheck{ def is = s2"""
 
   elements are sorted topologically
     simple example                                   $a1

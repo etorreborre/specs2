@@ -3,7 +3,7 @@ package scalacheck
 
 import org.scalacheck.util._
 
-trait ScalaCheckParameters2 {
+trait ScalaCheckParameters {
   /**
    * default parameters. Uses ScalaCheck default values and doesn't print anything to the console
    */
