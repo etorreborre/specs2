@@ -2,7 +2,7 @@ package org.specs2
 package scalacheck
 
 import org.scalacheck.Prop._
-import org.scalacheck.util.Pretty
+import org.scalacheck.util.{FreqMap, Pretty}
 import org.scalacheck.{Arbitrary, Gen, Shrink}
 import org.specs2.Specification
 
@@ -34,6 +34,14 @@ class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck { def is =
    to specify all the arbitrary instances
    ${ prop { (i:Int, j: Int) => i+j must be_>(0) }.setArbitraries(positiveInts, positiveInts) }
 
+   Gen
+   to specify a specific generator for a parameter
+   ${ prop { (i: Int) => i must be_>(0) }.setGen(positiveInts.arbitrary) }
+   to specify a specific generator for any parameter
+   ${ prop { (s: String, j: Int) => j must be_>(0) }.setGen2(positiveInts.arbitrary) }
+   to specify all the generators
+   ${ prop { (i:Int, j: Int) => i+j must be_>(0) }.setGens(positiveInts.arbitrary, positiveInts.arbitrary) }
+
    Shrink
    to specify a specific shrink instance for a parameter
    ${ prop { (i: Int) =>  i === i }.setShrink(shrinkInts) }
@@ -52,6 +60,9 @@ class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck { def is =
    to specify all the pretty instances
    ${ prop { (i: String, j: Int) => i === i }.setPretties(prettyStrings, prettyInts) }
    ${ prop { (i: String, j: Int) => i === i }.pretties(_.toString, _.toString) }
+   to specify the pretty for collected data
+   ${ prop { (i: String, j: Int) => i === i }.collectAll.prettyFreqMap((fq: FreqMap[Set[Any]]) => fq.total.toString) }
+   ${ prop { (i: String, j: Int) => i === i }.collectAll.prettyFreqMap(_.toString) }
 
    Collect
    to specify a specific collect function for a parameter
@@ -85,6 +96,7 @@ class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck { def is =
    Collected data is reported
 
 """
+
 
   val positiveInts = Arbitrary(Gen.choose(1, 5))
 

@@ -15,7 +15,7 @@ trait ScalaCheckPropertyCheck {
    * checks if the property is true for each generated value, and with the specified
    * scalacheck parameters. If verbose is true, then print the results on the console
    */
-  def check(prop: Prop, parameters: Parameters): Result = {
+  def check(prop: Prop, parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty): Result = {
     // check the property with ScalaCheck
     // first add labels if this Prop is a composite one
     val prop1 = prop match {
@@ -32,16 +32,16 @@ trait ScalaCheckPropertyCheck {
 
     result match {
       case Test.Result(Test.Passed, succeeded, discarded, fq, _)     =>
-        Success(prettyTestResult, testResult + frequencies(fq, parameters), succeeded)
+        Success(prettyTestResult, testResult + frequencies(fq, parameters, prettyFreqMap), succeeded)
 
       case Test.Result(Test.Proved(as), succeeded, discarded, fq, _) =>
-        Success(prettyTestResult, testResult + frequencies(fq, parameters), succeeded)
+        Success(prettyTestResult, testResult + frequencies(fq, parameters, prettyFreqMap), succeeded)
 
       case Test.Result(Test.Exhausted, n, _, fq, _)              =>
-        Failure(prettyTestResult + frequencies(fq, parameters))
+        Failure(prettyTestResult + frequencies(fq, parameters, prettyFreqMap))
 
       case Test.Result(Test.Failed(args, labels), n, _, fq, _) =>
-        new Failure(prettyTestResult + frequencies(fq, parameters), details = collectDetails(fq)) {
+        new Failure(prettyTestResult + frequencies(fq, parameters, prettyFreqMap), details = collectDetails(fq)) {
           // the location is already included in the failure message
           override def location = ""
         }
@@ -51,11 +51,11 @@ trait ScalaCheckPropertyCheck {
           case FailureException(f) =>
             // in that case we want to represent a normal failure
             val failedResult = prettyTestRes(result.copy(status = Test.Failed(args, labels)))(parameters.prettyParams)
-            new Failure(failedResult + "\n> " + f.message + frequencies(fq, parameters), details = f.details) { override def location = f.location }
+            new Failure(failedResult + "\n> " + f.message + frequencies(fq, parameters, prettyFreqMap), details = f.details) { override def location = f.location }
           case SkipException(s)    => s
           case PendingException(p) => p
           case e: java.lang.Exception      =>
-            Error(prettyTestResult + showCause(e) + frequencies(fq, parameters), e)
+            Error(prettyTestResult + showCause(e) + frequencies(fq, parameters, prettyFreqMap), e)
           case throwable    => throw ex
         }
     }
@@ -125,11 +125,11 @@ trait ScalaCheckPropertyCheck {
     else labels.mkString("\n", ", ", "\n")
   }
 
-  def frequencies(fq: FreqMap[Set[Any]], parameters: Parameters) = {
+  def frequencies(fq: FreqMap[Set[Any]], parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty) = {
     val noCollectedValues = parameters.prettyParams.verbosity <= 0 || fq.getRatios.map(_._1).forall(_.toSet == Set(()))
 
     if (noCollectedValues) ""
-    else "\n" ++ Pretty.prettyFreqMap(fq)(parameters.prettyParams)
+    else "\n" ++ prettyFreqMap(fq)(parameters.prettyParams)
   }
 
 }

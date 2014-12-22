@@ -2,6 +2,7 @@ package org.specs2
 package scalacheck
 
 import org.scalacheck.{Gen, Prop}
+import org.scalacheck.util._
 import execute._
 
 /**
@@ -38,13 +39,13 @@ trait AsResultProp extends ScalaCheckPropertyCheck with ScalaCheckParameters2 {
   }
 
   implicit def scalaCheckPropertyAsResult[S <: ScalaCheckProperty]: AsResult[S] = new AsResult[S] {
-    def asResult(prop: =>S): Result = check(prop.prop, prop.parameters)
+    def asResult(prop: =>S): Result = check(prop.prop, prop.parameters, prop.prettyFreqMap)
   }
 
   /** implicit typeclass instance to create examples from Props */
-  implicit def propAsResult[P <: Prop](implicit p: Parameters): AsResult[P] = new AsResult[P] {
+  implicit def propAsResult[P <: Prop](implicit p: Parameters, pfq: FreqMap[Set[Any]] => Pretty): AsResult[P] = new AsResult[P] {
     def asResult(prop: =>P): Result =
-      check(prop, p)
+      check(prop, p, pfq)
   }
 
 }

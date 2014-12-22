@@ -16,44 +16,51 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
  Reporting for Props
 
  ${ check(Prop.passed) returns "OK, passed 100 tests." }
- ${ check(Prop.falsified) must beFailing("Falsified after 0 passed tests.") }
- ${ check(Prop.undecided) must beFailing(".*Gave up after only 0 passed tests. 101 tests were discarded.*") }
+ ${ check(Prop.falsified) must beFailing(withMessage("Falsified after 0 passed tests.")) }
+ ${ check(Prop.undecided) must beFailing(withMessage("Gave up after only 0 passed tests. 101 tests were discarded")) }
  when there is a conversion exception
- ${ check(exceptionPropOnConversion) must beFailing(".*failure.*") }
+ ${ check(exceptionPropOnConversion) must beFailing(withMessage("failure")) }
 
  Pending or skipped results in a Prop make the result pending or skipped
- ${ check(pendingProp) must bePending("the value is false") }
- ${ check(skippedProp) must beSkipped("the value is false") }
+ ${ check(pendingProp) must bePending(withMessage("the value is false")) }
+ ${ check(skippedProp) must beSkipped(withMessage("the value is false")) }
 
  A FailureException makes a Failure
- ${ check(failureExceptionProp) must beFailing(".*failure.*") }
+ ${ check(failureExceptionProp) must beFailing(withMessage("failure")) }
 
  Other exceptions are reported as errors
 
  normal exception
- ${ check(exceptionProp()) must beError(".*Exception raised on property evaluation.*") }
+ ${ check(exceptionProp()) must beError(withMessage("Exception raised on property evaluation")) }
  the exception class must be displayed
- ${ check(exceptionProp()) must beError(".*java.lang.IllegalArgumentException.*") }
+ ${ check(exceptionProp()) must beError(withMessage("java.lang.IllegalArgumentException")) }
  if the message is null the exception cause must be displayed
- ${ check(exceptionProp("null")) must beError(".*caused by java.lang.Exception: cause.*") }
+ ${ check(exceptionProp("null")) must beError(withMessage("caused by java.lang.Exception: cause")) }
  the stacktrace must be displayed
  ${ check(exceptionProp()) must beLike { case Error(m, ex) => ex.getStackTrace must not be empty } }
 
  Labelled properties are reported
- ${ check(complexProp) must beFailing(".*result sum.*") }
+ ${ check(complexProp) must beFailing(withMessage("result sum")) }
 
  Nested ScalaCheck properties must be labelled
- ${ check(equal.laws[Int @@ BrokenEqual]) must beFailing("(\\s|.)*equal(\\s|.)*") }
+ ${ check(equal.laws[Int @@ BrokenEqual]) must beFailing(withMessage("equal")) }
 
  Collected data is reported
- ${ check(prop((i: Int) => true).collect.verbose).expected must beMatching("xxxOK, passed 100 tests.") }
+ ${ check(prop((i: Int) => true).collect.verbose).expected must haveMessage("Collected test data") }
 
+ The freqmap instance is used to  report frequencies
+ ${ check(prop((i: Int) => true).prettyFreqMap(_ => "histogram").collect.verbose).expected must haveMessage("histogram") }
 
+ Status is reported when parameters are set with display
+ ${ check(prop((i: Int) => true).display(minTestsOk = 10)).expected must haveMessage("OK, passed 10 tests") }
 
 """
 
+  def check(prop: ScalaCheckProperty): Result =
+    check(prop.prop, prop.parameters, prop.prettyFreqMap)
+
   def check(prop: Prop): Result =
-    check(prop, Parameters())
+    check(prop, defaultParameters, defaultFreqMapPretty)
 
   def exceptionWithCause(msg: String = "boom") = new java.lang.IllegalArgumentException(msg, new java.lang.Exception("cause"))
   def exceptionProp(msg: String = "boom") = forAll((b: Boolean) => {throw exceptionWithCause(msg); true})
@@ -69,6 +76,10 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
       (m == n + m) :| "result sum"
   }
 
+  def haveMessage(m: String) = withMessage(m)
+
+  def withMessage(m: String) =
+    beMatching(s".*$m.*") ^^ ((_:String).replace("\n", ""))
 }
 
 object equal {
