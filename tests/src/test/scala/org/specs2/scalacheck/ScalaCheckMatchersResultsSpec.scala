@@ -55,6 +55,8 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
  ${ check(prop((i: Int) => true).display(minTestsOk = 10)).expected must haveMessage("OK, passed 10 tests") }
 
 """
+//  ScalaCheckPropertyCreation.allPropMethods(8).pp
+//  ScalaCheckProperty.allScalaCheckFunctionN(8).pp
 
   def check(prop: ScalaCheckProperty): Result =
     check(prop.prop, prop.parameters, prop.prettyFreqMap)
