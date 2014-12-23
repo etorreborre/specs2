@@ -11,7 +11,7 @@ import text.{Trim, Interpolated}
 import Trim._
 import text.NotNullStrings._
 import text.Trim._
-import main.{CommandLine, Arguments}
+import org.specs2.main.{CommandLineAsResult, CommandLine, Arguments}
 import scala.concurrent.ExecutionContext
 
 /**
@@ -54,6 +54,9 @@ trait S2StringContext extends S2StringContext1 { outer =>
 
   implicit def executionIsInterpolatedFragment(execution: Execution): InterpolatedFragment =
     createExecutionInterpolatedFragment(execution)
+
+  implicit def commandLineAsResultIsInterpolatedFragment[R : CommandLineAsResult](r: R): InterpolatedFragment =
+    envFunctionIsInterpolatedFragment((env: Env) => implicitly[CommandLineAsResult[R]].asResult(env.arguments.commandLine, r))
 
   implicit def commandLineFunctionIsInterpolatedFragment[R : AsResult](f: CommandLine => R): InterpolatedFragment =
     envFunctionIsInterpolatedFragment((env: Env) => f(env.arguments.commandLine))

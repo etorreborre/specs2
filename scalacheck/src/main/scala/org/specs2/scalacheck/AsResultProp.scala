@@ -4,11 +4,12 @@ package scalacheck
 import org.scalacheck.{Gen, Prop}
 import org.scalacheck.util._
 import execute._
+import org.specs2.main.{CommandLine, CommandLineAsResult}
 
 /**
  * Implicits to convert Prop to AsResult and AsResult to Prop
  */
-trait AsResultProp extends ScalaCheckPropertyCheck with ScalaCheckParameters {
+trait AsResultProp extends ScalaCheckPropertyCheck with ScalaCheckParameters with AsResultPropLowImplicits {
 
   implicit def asResultToProp[R : AsResult](r: R): Prop = {
     r match {
@@ -38,8 +39,8 @@ trait AsResultProp extends ScalaCheckPropertyCheck with ScalaCheckParameters {
     }
   }
 
-  implicit def scalaCheckPropertyAsResult[S <: ScalaCheckProperty]: AsResult[S] = new AsResult[S] {
-    def asResult(prop: =>S): Result = check(prop.prop, prop.parameters, prop.prettyFreqMap)
+  implicit def scalaCheckPropertyCommandLineAsResult[S <: ScalaCheckProperty]: CommandLineAsResult[S] = new CommandLineAsResult[S] {
+    def asResult(commandLine: CommandLine, prop: =>S): Result = check(prop.prop, prop.parameters.overrideWith(commandLine), prop.prettyFreqMap)
   }
 
   /** implicit typeclass instance to create examples from Props */
@@ -48,6 +49,12 @@ trait AsResultProp extends ScalaCheckPropertyCheck with ScalaCheckParameters {
       check(prop, p, pfq)
   }
 
+}
+
+trait AsResultPropLowImplicits extends ScalaCheckPropertyCheck {
+  implicit def scalaCheckPropertyAsResult[S <: ScalaCheckProperty]: AsResult[S] = new AsResult[S] {
+    def asResult(prop: =>S): Result = check(prop.prop, prop.parameters, prop.prettyFreqMap)
+  }
 }
 
 object AsResultProp extends AsResultProp

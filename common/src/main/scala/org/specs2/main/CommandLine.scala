@@ -30,6 +30,15 @@ case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs {
   def int(name: String) = Arguments.int(name)(_arguments, SystemProperties)
   def intOr(name: String, defaultValue: Int) = int(name).getOrElse(defaultValue)
 
+  def long(name: String) = Arguments.long(name)(_arguments, SystemProperties)
+  def longOr(name: String, defaultValue: Long) = long(name).getOrElse(defaultValue)
+
+  def double(name: String) = Arguments.double(name)(_arguments, SystemProperties)
+  def doubleOr(name: String, defaultValue: Double) = double(name).getOrElse(defaultValue)
+
+  def float(name: String) = Arguments.float(name)(_arguments, SystemProperties)
+  def floatOr(name: String, defaultValue: Float) = float(name).getOrElse(defaultValue)
+
   def bool(name: String) = Arguments.bool(name)(_arguments, SystemProperties)
   def boolOr(name: String, defaultValue: Boolean) = bool(name).getOrElse(defaultValue)
 
@@ -41,6 +50,9 @@ case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs {
 }
 
 object CommandLine extends Extract {
+  def create(values: String*): CommandLine =
+    new CommandLine(values)
+
   def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): CommandLine =
     new CommandLine(_arguments = value("commandline").map(splitValues).getOrElse(Seq()) ++ arguments)
 
@@ -52,5 +64,4 @@ object CommandLine extends Extract {
     arguments.splitDashed(allValueNames)
 
 }
-
 

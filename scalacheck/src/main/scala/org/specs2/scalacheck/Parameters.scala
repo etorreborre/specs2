@@ -3,6 +3,7 @@ package scalacheck
 
 import org.scalacheck.Test
 import org.scalacheck.util.Pretty
+import main.CommandLine
 
 /**
  * This class encapsulates ScalaCheck parameters + any additional parameters
@@ -34,4 +35,18 @@ case class Parameters(minTestsOk: Int                 = Test.Parameters.default.
       val testCallback       = outer.testCallback
       val customClassLoader  = outer.loader
     }
+
+  def overrideWith(commandLine: CommandLine): Parameters = {
+    val updated =
+      copy(
+        minTestsOk      = commandLine.intOr  ("scalacheck.mintestsok",      minTestsOk),
+        minSize         = commandLine.intOr  ("scalacheck.minsize",         minSize),
+        maxDiscardRatio = commandLine.floatOr("scalacheck.maxdiscardratio", maxDiscardRatio),
+        maxSize         = commandLine.intOr  ("scalacheck.maxsize",         maxSize),
+        workers         = commandLine.intOr  ("scalacheck.workers",         workers)
+      ).setVerbosity(     commandLine.intOr  ("scalacheck.verbosity",       prettyParams.verbosity))
+
+    if (commandLine.boolOr("scalacheck.verbose", false)) updated.verbose
+    else                                                 updated
+  }
 }

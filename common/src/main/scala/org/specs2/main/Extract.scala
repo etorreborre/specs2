@@ -39,13 +39,18 @@ trait Extract {
 
   def value[T](name: String)(implicit args: Seq[String], sp: SystemProperties): Option[String] = value(name, identity)
 
-  def int(name: String)(implicit args: Seq[String], sp: SystemProperties): Option[Int] = {
+  def int(name: String)(implicit args: Seq[String], sp: SystemProperties): Option[Int] =
     tryo(value(name)(args, sp).map(_.toInt)).getOrElse(None)
-  }
 
-  def long(name: String)(implicit args: Seq[String], sp: SystemProperties): Option[Long] = {
+  def long(name: String)(implicit args: Seq[String], sp: SystemProperties): Option[Long] =
     tryo(value(name)(args, sp).map(_.toLong)).getOrElse(None)
-  }
+
+  def double(name: String)(implicit args: Seq[String], sp: SystemProperties): Option[Double] =
+    tryo(value(name)(args, sp).map(_.toDouble)).getOrElse(None)
+
+  def float(name: String)(implicit args: Seq[String], sp: SystemProperties): Option[Float] =
+    tryo(value(name)(args, sp).map(_.toFloat)).getOrElse(None)
+
 
   def instance[T <: AnyRef](name: String)(implicit m: ClassTag[T]): Option[T] =
     Classes.createInstance[T](name, getClass.getClassLoader).runOption

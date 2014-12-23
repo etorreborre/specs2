@@ -5,6 +5,7 @@ import org.scalacheck.Prop._
 import org.scalacheck.util.{FreqMap, Pretty}
 import org.scalacheck.{Arbitrary, Gen, Shrink}
 import org.specs2.Specification
+import org.specs2.main.CommandLine
 
 class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck { def is = s2"""
  There are various ways to use a property in specs2
@@ -74,7 +75,6 @@ class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck { def is =
    to specify all the collect functions
    ${ prop { (i: Int, j: Int) =>  i === i }.collectAll }
    ${ prop { (i: Int, j: Int) =>  i === i }.collectAllArgs(math.abs, math.abs) }
-
 
  Test parameters can also be specified
    the minimum number of ok tests

@@ -5,6 +5,7 @@ import org.scalacheck.{Gen, Properties, Arbitrary, Prop}
 import matcher._
 import execute._
 import org.scalacheck.Prop.{forAll}
+import org.specs2.main.CommandLine
 import scalaz.{Tag, Order, @@, Equal}
 import scalaz.std.anyVal.intInstance
 import scalaz.syntax.tag._
@@ -53,6 +54,10 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
 
  Status is reported when parameters are set with display
  ${ check(prop((i: Int) => true).display(minTestsOk = 10)).expected must haveMessage("OK, passed 10 tests") }
+
+
+ Parameters can be passed from the command line
+   ${ check(prop { (i: Int, j: Int) =>  i === i }.setParameters(defaultParameters.overrideWith(CommandLine.create("scalacheck.mintestsok", "10")))) returns "OK, passed 10 tests" }
 
 """
 //  ScalaCheckPropertyCreation.allPropMethods(8).pp
@@ -105,4 +110,10 @@ object BrokenEqualInstances {
     Equal.equal((a1, a2) => ordA.lessThan(a1.unwrap, a2.unwrap))
   implicit def arbitrary[A](implicit arbA: Arbitrary[A]): Arbitrary[A @@ BrokenEqual] =
     Arbitrary(arbA.arbitrary.map(Tag.apply))
+}
+
+class TSpec extends mutable.Specification with ScalaCheck {
+  "a prop" >> prop { i: Int =>
+    true
+  }
 }
