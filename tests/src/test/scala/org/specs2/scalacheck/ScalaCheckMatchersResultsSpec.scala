@@ -1,6 +1,7 @@
 package org.specs2
 package scalacheck
 
+import org.scalacheck.util.Pretty
 import org.scalacheck.{Gen, Properties, Arbitrary, Prop}
 import matcher._
 import execute._
@@ -59,6 +60,9 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
  Parameters can be passed from the command line
    ${ check(prop { (i: Int, j: Int) =>  i === i }.setParameters(defaultParameters.overrideWith(CommandLine.create("scalacheck.mintestsok", "10")))) returns "OK, passed 10 tests" }
 
+ PrettyProduct better render case classes to replay examples
+   ${ check(prop((i: MyInt) => false)) returns """MyInt(1, "hey")""" }
+
 """
 //  ScalaCheckPropertyCreation.allPropMethods(8).pp
 //  ScalaCheckProperty.allScalaCheckFunctionN(8).pp
@@ -87,6 +91,13 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
 
   def withMessage(m: String) =
     beMatching(s".*$m.*") ^^ ((_:String).replace("\n", ""))
+
+
+  case class MyInt(i: Int, s: String = "hey")
+  object MyInt {
+    implicit def ArbInt: Arbitrary[MyInt] = Arbitrary(Gen.const(MyInt(1)))
+    implicit def pretty: MyInt => Pretty = PrettyProduct[MyInt]
+  }
 }
 
 object equal {

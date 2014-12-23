@@ -81,7 +81,8 @@ class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck { def is =
    ${ prop { (i:Int) => (i > 0) ==> (i > 0) }.set(minTestsOk = 50) }
    the verbosity of a property can be turned on and off
    ${ prop { (i:Int) => (i > 0) ==> (i > 0) }.set(minTestsOk = 50).verbose }
-"""
+
+  """
 
   val positiveInts = Arbitrary(Gen.choose(1, 5))
 
@@ -91,5 +92,4 @@ class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck { def is =
   val prettyStrings = (s: String) => Pretty(_ => s)
 
 }
-
 
