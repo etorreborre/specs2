@@ -25,7 +25,7 @@ import scala.concurrent.ExecutionContext
  *  - fragments
  *
  */
-trait S2StringContext extends S2StringContext1 { outer =>
+trait S2StringContext extends S2StringContextImplicitsControl { outer =>
 
   implicit def descriptionToFragmentsIsInterpolatedFragment(fragments: String => Fragments): InterpolatedFragment = new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String): Fragments = {
@@ -54,9 +54,6 @@ trait S2StringContext extends S2StringContext1 { outer =>
 
   implicit def executionIsInterpolatedFragment(execution: Execution): InterpolatedFragment =
     createExecutionInterpolatedFragment(execution)
-
-  implicit def commandLineAsResultIsInterpolatedFragment[R : CommandLineAsResult](r: =>R): InterpolatedFragment =
-    envFunctionIsInterpolatedFragment((env: Env) => implicitly[CommandLineAsResult[R]].asResult(env.arguments.commandLine, r))
 
   implicit def commandLineFunctionIsInterpolatedFragment[R : AsResult](f: CommandLine => R): InterpolatedFragment =
     envFunctionIsInterpolatedFragment((env: Env) => f(env.arguments.commandLine))
