@@ -1,7 +1,8 @@
 package org.specs2
 package guide
 
-import org.scalacheck.{Prop, Gen, Arbitrary}
+import org.scalacheck.util.Pretty
+import org.scalacheck.{Shrink, Prop, Gen, Arbitrary}
 import org.specs2.scalacheck.Parameters
 import scalaz._, Scalaz._
 
@@ -26,11 +27,11 @@ s2"addition and multiplication are related ${ prop { (a: Int) => (a > 0) ==> (a 
 
 Note that if you pass functions using `MatchResult`s you will get better failure messages than just using boolean expressions.
 
-By default the properties created with `prop` will be shrinking counter-examples. But as you will see below there lots of different ways to parameterize ScalaCheck properties in specs2, including if shrinking must be done.
+By default the properties created with `prop` will be shrinking counter-examples. But as you will see below there lots of different ways to parameterize ScalaCheck properties in specs2, including declaring if shrinking must be done.
 
 ### Arbitrary instances
 
-ScalaCheck requires an implicit `Arbitrary[T]` instance for each parameter of type `T` used in a property. If you rather want to pick up a specific `Arbitrary[T]` for a given property argument you can modify the `prop` with  another `Arbitrary` instance: ${snippet{
+ScalaCheck requires an implicit `Arbitrary[T]` instance for each parameter of type `T` used in a property. If you rather want to pick up a specific `Arbitrary[T]` for a given property argument you can modify the `prop` with to use another `Arbitrary` instance: ${snippet{
 s2"""
   a simple property       $ex1
   a more complex property $ex2
@@ -47,30 +48,50 @@ s2"""
               setArbitrary1(abStrings).setArbitrary2(abStrings)
 }}
 
-### With Generators
+It is also possible to pass a `Gen[T]` instance instead of an `Arbitrary[T]`: ${snippet{
+  val abStringGen = (Gen.oneOf("a", "b") |@| Gen.oneOf("a", "b"))(_+_)
 
-What you can do with arbitraries can also be done with generators
-ScalaCheck also allows to create `Prop`s directly with the `Prop.forAll` method accepting `Gen` instances: ${snippet{
-s2"""
-  a simple property       $ex1
-  a more complex property $ex2
-"""
-def abStrings = for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b
+  def ex1 = prop((s: String) => s must contain("a") or contain("b")).setGen(abStringGen)
+}}
 
-def ex1 = Prop.forAll(abStrings) { s: String =>
-  s must contain("a") or contain("b")
-}
+### With Shrink / Pretty
 
-def ex2 = Prop.forAll(abStrings, abStrings) { (s1: String, s2: String) =>
-  (s1+s2) must contain("a") or contain("b")
-}
+Specific Shrink and Pretty instances can also be specified at the property level: ${snippet{
+  val shrinkString: Shrink[String] = ???
+
+  // set a specific shrink instance on the second parameter
+  prop((s1: String, s2: String) => s1.nonEmpty or s2.nonEmpty).setShrink2(shrinkString)
+
+  // set a specific pretty instance
+  prop((s: String) => s must contain("a") or contain("b")).setPretty((s: String) => Pretty((prms: Pretty.Params) => if (prms.verbosity >= 1) s.toUpperCase))
+
+  // or simply if you don't use the Pretty parameters
+  prop((s: String) => s must contain("a") or contain("b")).pretty((_: String).toUpperCase)
 }}
 
 ### Test properties
 
+#### Default values
+
 ScalaCheck test generation can be tuned with a few properties. If you want to change the default settings, you have to use implicit values: ${snippet{
-  implicit val params = Parameters(minTestsOk = 20) // add "verbose = true" to get additional console printing
+  implicit val params = Parameters(minTestsOk = 20) // add ".verbose" to get additional console printing
 }}
+
+The parameters you can modify are:
+
+ Parameter         | Default                | Description
+ ----------------- | ---------------------- | ------------
+ `minTestsOk`      | `100`                  | minimum of tests which must be ok before the property is ok
+ `maxDiscardRatio` | `5.0f`                 | if the data generation discards too many values, then the property can't be proven
+ `minSize`         | `0`                    | minimum size for the "sized" data generators, like list generators
+ `maxSize`         | `100                   | maximum size for the "sized" data generators
+ `workers`         | `1`                    | number of threads checking the property
+ `rng`             | `new java.util.Random` | the random number generator
+ `callback`        |                        | a ScalaCheck TestCallback (see the [ScalaCheck documentation](http://www.scalacheck.org))
+ `loader`          |                        | a custom classloader (see the [ScalaCheck documentation](http://www.scalacheck.org))
+ `prettyParams`    |                        | a `Pretty.Params` instance to set the verbosity level when displaying `Pretty` instances
+
+#### Property level
 
 It is also possible to specifically set the execution parameters on a given property: ${snippet{
 class ScalaCheckSpec extends mutable.Specification with ScalaCheck {
@@ -79,19 +100,6 @@ class ScalaCheckSpec extends mutable.Specification with ScalaCheck {
   }.set(minTestsOk = 200, workers = 3) // use "display" instead of "set" for additional console printing
 }
 }}
-
-The parameters you can modify are:
-
- Parameter         | Description
- ----------------- | ------------
- `minTestsOk`      | minimum of tests which must be ok before the property is ok (default = 100)
- `maxDiscardRatio` | if the data generation discards too many values, then the property can't be proven (default = 5)
- `minSize`         | minimum size for the "sized" data generators, like list generators (default = 0)
- `maxSize`         | maximum size for the "sized" data generators (default = 100)
- `workers`         | number of threads checking the property (default = 1)
- `rng`             | the random number generator (default = `new java.util.Random`)
- `callback`        | a ScalaCheck TestCallback (see the [ScalaCheck documentation](http://www.scalacheck.org))
- `loader`          | a custom classloader (see the [ScalaCheck documentation](http://www.scalacheck.org))
 
 You can also set the random generator that is used in all the ScalaCheck generators: ${snippet{
 case class MyRandomGenerator() extends java.util.Random {
@@ -103,9 +111,43 @@ case class MyRandomGenerator() extends java.util.Random {
 }.set(rng = MyRandomGenerator(), minTestsOk = 200, workers = 3)
 }}
 
+#### Command-line
+
+Some properties can be overridden from the command line
+
+ Parameter         | Command line
+ ----------------- | ------------
+ `minTestsOk`      | `scalacheck.mintestsok`
+ `maxDiscardRatio` | `scalacheck.maxdiscardratio`
+ `minSize`         | `scalacheck.minsize`
+ `maxSize`         | `scalacheck.maxsize`
+ `workers`         | `scalacheck.workers`
+ `verbose`         | `scalacheck.verbose`
+
 #### Expectations
 
 By default, a successful example using a `Prop` will be reported as 1 success and 100 (or `minTestsOk`) expectations. If you don't want the number of expectations to appear in the specification statistics just mix-in your specification the `org.specs2.scalacheck.OneExpectationPerProp` trait.
+
+### Collect values
+
+It is important to validate that generated values are meaningful. In order to do this you can use `collect` to collect values: ${snippet{
+  // for a property with just one argument
+  prop((i: Int) => i % 2 == 0).collect
+
+  // for a property with just 2 arguments
+    // collect the second value only
+  prop((i: Int, j: Int) => i > 0 && j % 2 == 0).collect2
+    // collect the second value but map it to something else
+    prop((i: Int, j: Int) => i > 0 && j % 2 == 0).collectArg2((n: Int) => "the value "+n)
+    // collect all values and display
+  prop((i: Int, j: Int) => i > 0 && j % 2 == 0).collectAll.verbose
+}}
+
+Note that, by default, nothing will be printed on screen unless you set the reporting to `verbose` by either:
+
+ - changing the default `Parameters`
+ - setting `.verbose` at the property level
+ - passing `scalacheck.verbose` on the command-line
 
 """
 }
