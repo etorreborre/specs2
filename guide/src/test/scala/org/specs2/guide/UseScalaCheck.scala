@@ -1,6 +1,8 @@
 package org.specs2
 package guide
 
+import java.io.File
+
 import org.scalacheck.util.Pretty
 import org.scalacheck.{Shrink, Prop, Gen, Arbitrary}
 import org.specs2.scalacheck.Parameters
@@ -68,6 +70,34 @@ Specific Shrink and Pretty instances can also be specified at the property level
   // or simply if you don't use the Pretty parameters
   prop((s: String) => s must contain("a") or contain("b")).pretty((_: String).toUpperCase)
 }}
+
+### Contexts
+
+ScalaCheck properties are sometimes used to test stateful applications rather than pure functions. For example you want to test that a function is writing files somewhere and you would like those files to be deleted after each property execution: ${snippet{
+
+  def createFile(f: File): Unit = ???
+  def deleteTmpDir: Unit = ???
+
+  prop { f: File =>
+    createFile(f)
+    f.exists
+  }.after(deleteTempDir) // before and beforeAfter can also be used there
+
+}}
+
+You can also "prepare" the property to be tested based on the generated arguments: ${snippet {
+
+  def createFile(directory: File, f: File): Unit = ???
+  def setupDirectoryAndFile(directory: File, file: File): Unit = ???
+
+  prop { (directory: File, f: File) =>
+    createFile(directory, f)
+    f.exists
+  }.prepare(setupDirectoryAndFile)
+
+}}
+
+Note that there is a way to [model stateful systems](https://github.com/rickynils/scalacheck/wiki/User-Guide#stateful-testing) with ScalaCheck which goes beyond the simple setup/teardown testing done here.
 
 ### Test properties
 
