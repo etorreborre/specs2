@@ -3,8 +3,8 @@ package guide
 
 import main._
 import execute.AsResult
-import org.specs2.specification.{Before, CommandLineArguments, ContextWithCommandLineArguments, ForEachWithCommandLineArguments}
-import specification.core._
+import org.specs2.specification.core.Fragment
+import org.specs2.specification.{Before, ForEachWithCommandLineArguments, ContextWithCommandLineArguments, CommandLineArguments}
 
 object UseCommandLineArguments extends UserGuidePage { def is = "Use command-line arguments".title ^ s2"""
 

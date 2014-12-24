@@ -2,7 +2,7 @@ package org.specs2
 package guide
 
 import matcher.Matcher
-import org.specs2.specification.core.{Fragments, foreachInSequence}
+import specification.core._
 import specification.dsl.Online
 
 object CreateOnlineSpecifications extends UserGuidePage { def is = s2"""

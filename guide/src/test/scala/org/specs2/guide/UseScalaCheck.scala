@@ -5,7 +5,7 @@ import java.io.File
 
 import org.scalacheck.util.Pretty
 import org.scalacheck.{Shrink, Prop, Gen, Arbitrary}
-import org.specs2.scalacheck.Parameters
+import scalacheck._
 import scalaz._, Scalaz._
 
 object UseScalaCheck extends UserGuidePage with ScalaCheck { def is = "ScalaCheck".title ^ s2"""
@@ -38,9 +38,9 @@ s2"""
   a simple property       $ex1
   a more complex property $ex2
 """
-  val abStringGen = (Gen.oneOf("a", "b") |@| Gen.oneOf("a", "b"))(_+_)
+  def abStringGen = (Gen.oneOf("a", "b") |@| Gen.oneOf("a", "b"))(_+_)
 
-  implicit def abStrings: Arbitrary =
+  implicit def abStrings: Arbitrary[String] =
     Arbitrary(abStringGen)
 
   def ex1 = prop((s: String) => s must contain("a") or contain("b")).setArbitrary(abStrings)
@@ -65,7 +65,8 @@ Specific Shrink and Pretty instances can also be specified at the property level
   prop((s1: String, s2: String) => s1.nonEmpty or s2.nonEmpty).setShrink2(shrinkString)
 
   // set a specific pretty instance
-  prop((s: String) => s must contain("a") or contain("b")).setPretty((s: String) => Pretty((prms: Pretty.Params) => if (prms.verbosity >= 1) s.toUpperCase))
+  prop((s: String) => s must contain("a") or contain("b")).setPretty((s: String) =>
+    Pretty((prms: Pretty.Params) => if (prms.verbosity >= 1) s.toUpperCase else s))
 
   // or simply if you don't use the Pretty parameters
   prop((s: String) => s must contain("a") or contain("b")).pretty((_: String).toUpperCase)
@@ -74,21 +75,28 @@ Specific Shrink and Pretty instances can also be specified at the property level
 ### Contexts
 
 ScalaCheck properties are sometimes used to test stateful applications rather than pure functions. For example you want to test that a function is writing files somewhere and you would like those files to be deleted after each property execution: ${snippet{
-
+  // 8<---
+  implicit val arbitraryFile: Arbitrary[File] = ???
+  // 8<---
   def createFile(f: File): Unit = ???
   def deleteTmpDir: Unit = ???
 
   prop { f: File =>
     createFile(f)
     f.exists
-  }.after(deleteTempDir) // before and beforeAfter can also be used there
+  }.after(deleteTmpDir) // before and beforeAfter can also be used there
 
 }}
 
 You can also "prepare" the property to be tested based on the generated arguments: ${snippet {
+  // 8<---
+  implicit val arbitraryFile: Arbitrary[File] = ???
+  // 8<---
 
   def createFile(directory: File, f: File): Unit = ???
-  def setupDirectoryAndFile(directory: File, file: File): Unit = ???
+  // this method will keep the arguments intact but can
+  // have a side-effect to prepare the system
+  def setupDirectoryAndFile = (directory: File, file: File) => (directory, file)
 
   prop { (directory: File, f: File) =>
     createFile(directory, f)
@@ -114,7 +122,7 @@ The parameters you can modify are:
  `minTestsOk`      | `100`                  | minimum of tests which must be ok before the property is ok
  `maxDiscardRatio` | `5.0f`                 | if the data generation discards too many values, then the property can't be proven
  `minSize`         | `0`                    | minimum size for the "sized" data generators, like list generators
- `maxSize`         | `100                   | maximum size for the "sized" data generators
+ `maxSize`         | `100`                  | maximum size for the "sized" data generators
  `workers`         | `1`                    | number of threads checking the property
  `rng`             | `new java.util.Random` | the random number generator
  `callback`        |                        | a ScalaCheck TestCallback (see the [ScalaCheck documentation](http://www.scalacheck.org))

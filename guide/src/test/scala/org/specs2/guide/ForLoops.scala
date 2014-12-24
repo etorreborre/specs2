@@ -1,8 +1,8 @@
 package org.specs2
 package guide
 
-import specification.core._
-import specification.execute._
+import specification.core.{Fragment, Fragments}
+import execute._
 import scalaz._, Scalaz._
 
 object ForLoops extends UserGuidePage { def is = s2"""
@@ -21,7 +21,7 @@ When we want to create a list of examples we need to return a `Fragments` object
 
 Or, a bit fancier with Scalaz:${snippet{
   // Fragments has a Monoid so you can use the foldMap method
-  (1 to 3).toSeq.foldMap(i => Fragments("example "+i ! { i must_== i }))
+  (1 to 3).toList.foldMap(i => Fragments("example "+i ! { i must_== i }))
 }}
 
 Because this is a recurring pattern there are two methods encapsulating it:${snippet{
@@ -37,11 +37,10 @@ Because this is a recurring pattern there are two methods encapsulating it:${sni
 }}
 
 Now you can create a list of examples inside a "should" block in a mutable specification:${snippet{
-import Fragment._
 
 class MySpec extends mutable.Specification {
   "this block should have lots of examples" >> {
-    foreach(1 to 1000) { i =>
+    Fragment.foreach(1 to 1000) { i =>
       "example "+i ! { i must_== i }
     }
   }
