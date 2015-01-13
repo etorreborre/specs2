@@ -1,0 +1,10 @@
+Maintenance version.
+ 
+## Fixes
+
+ * fixed the use of matchers with contain(allOf(...)) and an empty seq [#319](http://github.com/etorreborre/specs2/issues/319)
+
+
+
+==========================
+
