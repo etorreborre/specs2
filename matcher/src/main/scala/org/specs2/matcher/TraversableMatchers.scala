@@ -362,7 +362,7 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
           makeResult("at least",
             missingValues.isEmpty &&
               (eachCheck  ||
-               !eachCheck && (seq.isEmpty && successes.size == 0 ||
+               !eachCheck && (seq.isEmpty && checks.size == 0 ||
                  checks.nonEmpty && results.map(_._2).flatten.count(_.isSuccess) >= checks.size ||
                  checks.isEmpty && successes.isEmpty)))
 
