@@ -152,8 +152,10 @@ object build extends Build {
 
   lazy val gwt = Project(id = "gwt", base = file("gwt"),
     settings = Seq(
-      libraryDependencies ++= 
-        Seq("com.chuusai" %% "shapeless" % "2.0.0")
+      libraryDependencies <+= (scalaVersion) { sv =>
+        if (sv.contains("2.11")) "com.chuusai" %% "shapeless" % "2.0.0"
+        else                     "com.chuusai" % "shapeless_2.10.4" % "2.0.0"
+      }
     ) ++ moduleSettings ++
       Seq(name := "specs2-gwt")
   ).dependsOn(core, matcherExtra, scalacheck)
