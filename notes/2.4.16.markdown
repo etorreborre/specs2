@@ -3,7 +3,7 @@ Maintenance version.
 ## Fixes
 
  * fixed the use of matchers with contain(allOf(...)) and an empty seq [#319](http://github.com/etorreborre/specs2/issues/319)
-
+ * control expectations effects when combining match results [#320](http://github.com/etorreborre/specs2/issues/320)
 
 
 ==========================
