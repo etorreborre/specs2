@@ -20,17 +20,6 @@ import main._
  */
 trait AllExpectations extends StoredExpectations with ExamplesFactory with SpecificationStructure with ArgumentsArgs {
   /**
-   * @return a Result having its location as part of its message
-   */
-  override protected def mapMatchResult[T](m: MatchResult[T]): MatchResult[T] = {
-    def addLocation(message: String, location: String) = message + " [" + location + "]"
-    m match {
-      case f @ MatchFailure(_,_,_,_,_) => f.copy(ok = () => addLocation(f.okMessage, f.toResult.location), ko = () => addLocation(f.koMessage, f.toResult.location))
-      case other                       => other
-    }
-  }
-
-  /**
    * @return an example factory which will take the stored results and make them the example result
    */
   implicit override def exampleFactory: ExampleFactory = new DecoratedExampleFactory(super.exampleFactory, resultsContext(storedResults))

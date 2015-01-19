@@ -3,6 +3,7 @@ package matcher
 
 import execute._
 import io.StringOutput
+import specification.AllExpectations
 
 /**
  * all these examples works in a mutable specification which means that FailureExceptions are caught before being
@@ -72,4 +73,13 @@ class MatchResultCombinatorsSpec extends mutable.Specification with ResultMatche
     ({ throw new IllegalArgumentException; 1} must matcher) must beSuccessful
   }
 
+  "MatchResult combinators work with the AllExpectations trait" >> {
+    val expectations = new MustMatchers with AllExpectations { def is = ""
+      val mr = "hello world" must haveSize(10) and startWith("bell")
+    }
+    val stored = expectations.storedResults
+
+    "there is only one stored expectation (see #320)" ==> { stored must haveSize(1) }
+    stored.map(_.message).head must_== "'hello world' doesn't have size 10 but size 11"
+  }
 }
