@@ -100,6 +100,17 @@ trait ThrownExpectationsCreation extends ExpectationsCreation with StandardResul
 
   override lazy val ko: MatchResult[Any] =
     checkMatchResultFailure(throw new MatchFailureException(MatchFailure("ok", "ko", createExpectable(None))))
+
+  /** @return the value without any side-effects for expectations */
+  override def sandboxMatchResult[T](mr: =>MatchResult[T]): MatchResult[T] =
+    try mr
+    catch {
+      case MatchFailureException(e)    => e.asInstanceOf[MatchResult[T]]
+      case MatchSkipException(e)       => e.asInstanceOf[MatchResult[T]]
+      case MatchPendingException(e)    => e.asInstanceOf[MatchResult[T]]
+      case other: Throwable            => throw other
+    }
+
 }
 private [specs2]
 object ThrownExpectations extends ThrownExpectations

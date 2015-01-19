@@ -38,10 +38,15 @@ trait ExpectationsCreation extends MatchResultStackTrace {
   }
   /** this method can be overridden to intercept a MatchResult and change its message before it is thrown */
   protected def mapMatchResult[T](m: MatchResult[T]): MatchResult[T] = m
+
   /** this method can be overridden to throw exceptions when checking the result */
   protected def checkResultFailure(r: =>Result): Result = r
+
   /** this method can be overridden to throw exceptions when checking the match result */
   protected def checkMatchResultFailure[T](m: MatchResult[T]): MatchResult[T] = m
+
+  /** @return the match result without any side-effects */
+  protected def sandboxMatchResult[T](mr: =>MatchResult[T]): MatchResult[T] = mr
 }
 
 /** this trait allows to fill-in stack traces on match results for precise location */
