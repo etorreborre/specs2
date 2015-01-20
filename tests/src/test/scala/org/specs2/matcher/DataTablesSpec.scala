@@ -3,10 +3,9 @@ package matcher
 
 import sys._
 import execute._
-import Expectations._
 import MatchResultCombinators._
 
-class DataTablesSpec extends Spec with DataTables with ResultMatchers { def is = s2"""
+class DataTablesSpec extends Specification with DataTables with ResultMatchers { def is = s2"""
 
   DataTables are useful to specify lots of examples varying just by a few values.
 

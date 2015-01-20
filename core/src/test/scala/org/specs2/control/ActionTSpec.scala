@@ -9,7 +9,7 @@ import MatchersImplicits._
 import ExpectationsDescription._
 import StatusT._
 
-class ActionTSpec extends Spec { def is = s2"""
+class ActionTSpec extends Specification { def is = s2"""
 
  Warnings can be accumulated with actions                $warning
  A warning can be emitted then fail the computation      $warningAndFail
