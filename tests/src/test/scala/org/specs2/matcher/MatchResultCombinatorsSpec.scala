@@ -76,7 +76,7 @@ class MatchResultCombinatorsSpec extends mutable.Spec with ResultMatchers with M
   }
 
   "MatchResult combinators work with the AllExpectations trait" >> {
-    val expectations = new MustMatchers with AllExpectations { def is = SpecStructure.empty(getClass)
+    val expectations = new Specification with AllExpectations { def is = SpecStructure.empty(getClass)
       val mr = "hello world" must haveSize(10) and startWith("bell")
     }
     val stored = expectations.storedResults

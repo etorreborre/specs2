@@ -19,8 +19,10 @@ trait ContextualSpecificationStructure {
 trait SpecificationStructure extends ContextualSpecificationStructure {
   def is: SpecStructure
   def structure = (env: Env) => decorate(is, env)
-  def decorate(is: SpecStructure, env: Env) = is.map(fs => map(map(fs, env)))
+  def decorate(is: SpecStructure, env: Env) = map(is.map(fs => map(map(fs, env))))
 
+  /** modify the specification structure */
+  def map(structure: SpecStructure): SpecStructure = structure
   /** modify the fragments */
   def map(fs: =>Fragments): Fragments = fs
   /** modify the fragments, using the current environment */

@@ -38,11 +38,11 @@ trait AllExpectations extends StoredExpectations with FragmentsFactory with Spec
    * we force the specification to be isolated if it's not sequential or already isolated.
    * this is important because when an example runs, its results are being stored into a shared list
    */
-  abstract override def is = {
-    val parent = super.is
-    val arguments = parent.arguments
-    if (arguments.isolated || arguments.sequential) parent
-    else parent.copy(arguments = args(isolated = ArgProperty(true)))
+  /** modify the specification structure */
+  override def map(structure: SpecStructure): SpecStructure = {
+    val arguments = structure.arguments
+    if (arguments.isolated || arguments.sequential) structure
+    else structure.setArguments(arguments <| args(isolated = ArgProperty(true)))
   }
 }
 
