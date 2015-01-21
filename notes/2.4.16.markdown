@@ -4,7 +4,7 @@ Maintenance version.
 
  * fixed the use of matchers with contain(allOf(...)) and an empty seq [#319](http://github.com/etorreborre/specs2/issues/319)
  * control expectations effects when combining match results [#320](http://github.com/etorreborre/specs2/issues/320)
-
+ * changed the signature of `EventuallyMatchers.eventually` to avoid overloading conflicts with `EventuallyResults.eventually` [#323](http://github.com/etorreborre/specs2/issues/323)
 
 ==========================
 
