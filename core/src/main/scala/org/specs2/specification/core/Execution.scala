@@ -51,6 +51,7 @@ case class Execution(run:            Option[Env => Result],
   def skip = setResult(Skipped())
   def makeGlobal: Execution = makeGlobal(when = true)
   def makeGlobal(when: Boolean): Execution = copy(isolable = !when)
+  def setTimeout(timeout: FiniteDuration) = copy(timeout = Some(timeout))
 
   def updateRun(newRun: (Env => Result) => (Env => Result)) = copy(run = run.map(r => newRun(r)))
 

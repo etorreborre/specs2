@@ -3,6 +3,7 @@ package specification
 package core
 
 import execute.Result
+import scala.concurrent.duration.{FiniteDuration, Duration}
 import scalaz.Show
 import scalaz.syntax.show._
 
@@ -34,7 +35,9 @@ case class Fragment(description: Description, execution: Execution, location: Lo
   /** various methods to stop the execution of the next fragment */
   def join              = updateExecution(_.join)
   def isolate           = updateExecution(_.makeGlobal)
+
   def makeGlobal(when: Boolean)           = updateExecution(_.makeGlobal(when))
+  def setTimeout(timeout: FiniteDuration) = updateExecution(_.setTimeout(timeout))
 
   /** skip this fragment */
   def skip              = updateExecution(_.skip)
