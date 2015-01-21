@@ -124,14 +124,16 @@ trait NoThrownExpectations extends Expectations {
 /**
  * This trait represents any Scope that is used to enclose expectations which might be thrown
  */
-trait Scope
+trait Scope {
+  protected def `*** If you see this message this means that you have mixed in the MustExpectations trait instead of the MustThrownExpectations trait ***`: Expectations = ???
+}
 
 object Scope {
-  /** typeclass to transform a Scope to a Result */
+  /** typeclass instance to transform a Scope to a Result */
   implicit def scopeAsResult[S <: Scope]: AsResult[S] = new AsResult[S] {
     def asResult(t: =>S): Result = { t; Success() }
   }
-  /** typeclass to transform a Scope to a Result */
+  /** implicit definition to transform a Scope to a Result */
   implicit def scopeToResult(t: =>Scope): Result = AsResult(t)
 }
 

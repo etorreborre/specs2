@@ -21,6 +21,8 @@ trait MustExpectations extends Expectations {
     override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
     override def checkResult(r: Result): Result = checkResultFailure(r)
   }
+
+  protected def `*** If you see this message this means that you have mixed in the MustExpectations trait instead of the MustThrownExpectations trait ***`: Expectations = ???
 }
 
 /**
