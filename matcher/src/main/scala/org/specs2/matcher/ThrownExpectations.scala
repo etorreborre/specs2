@@ -5,7 +5,6 @@ import execute._
 import execute.Skipped
 import execute.Pending
 import execute.Failure
-import scala.Some
 import execute.PendingException
 import execute.SkipException
 import execute.FailureException
@@ -124,7 +123,10 @@ trait NoThrownExpectations extends Expectations {
 /**
  * This trait represents any Scope that is used to enclose expectations which might be thrown
  */
-trait Scope
+trait Scope {
+  if (this.isInstanceOf[MustExpectations] && !this.isInstanceOf[MustThrownExpectations])
+    throw new RuntimeException("You shouldn't mixin `org.specs2.matcher.MustExpectations` with Scope, use `org.specs2.matcher.MustThrownExpectations` Instead.")
+}
 
 object Scope {
   /** typeclass to transform a Scope to a Result */
