@@ -124,7 +124,10 @@ trait NoThrownExpectations extends Expectations {
 /**
  * This trait represents any Scope that is used to enclose expectations which might be thrown
  */
-trait Scope
+trait Scope {
+  if (this.isInstanceOf[Expectations] && !this.isInstanceOf[ThrownExpectations])
+    throw new RuntimeException("You shouldn't mixin `org.specs2.matcher.MustExpectations` or `org.specs2.matcher.ShouldExpectations` with `Scope`, use `org.specs2.matcher.MustThrownExpectations` or `org.specs2.matcher.ShouldThrownExpectations` instead.")
+}
 
 object Scope {
   /** typeclass to transform a Scope to a Result */
