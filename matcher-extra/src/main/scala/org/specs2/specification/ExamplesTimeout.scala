@@ -9,7 +9,7 @@ import specification.core._
 import time._
 
 import scala.concurrent.duration._
-
+import TerminationMatchers._
 /**
  * This trait can be used to add a global time out to each example or for a specific one:
  *
@@ -18,7 +18,7 @@ import scala.concurrent.duration._
  *
  *   my example must terminate in a reasonable amount of time ${upTo(3.seconds)(e1)}
  */
-trait ExamplesTimeout extends EachContext with MustMatchers with TerminationMatchers {
+trait ExamplesTimeout extends EachContext {
 
   def context: Env => Context = { env: Env =>
     val timeout = env.arguments.commandLine.intOr("timeout", 1000 * 60).millis
@@ -28,7 +28,7 @@ trait ExamplesTimeout extends EachContext with MustMatchers with TerminationMatc
   def upTo(to: Duration)(implicit es: ExecutorService) = new Around {
     def around[T : AsResult](t: =>T) = {
       lazy val result = t
-      val termination = result must terminate(retries = 10, sleep = (to.toMillis / 10).millis).orSkip((ko: String) => "TIMEOUT: "+to)
+      val termination = terminate(retries = 10, sleep = (to.toMillis / 10).millis).orSkip(_ => "TIMEOUT: "+to)(Expectable(result))
 
       if (!termination.toResult.isSkipped) AsResult(result)
       else termination.toResult
