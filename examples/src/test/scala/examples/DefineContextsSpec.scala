@@ -213,25 +213,6 @@ class DefineContextsSpec extends Specification {
 
   }
 
-  /**
-   * This shows how to create a context which will timeout any example that takes too long to execute
-   * It uses the `CommandLineArguments` trait to be able to set the timeout value from the command-line
-   */
-  trait ExamplesTimeout extends AroundExample with MustMatchers with TerminationMatchers with CommandLineArguments {
-
-    lazy val commandLineTimeOut = arguments.commandLine.int("timeout").map(_.millis)
-
-    def timeout = commandLineTimeOut.getOrElse(100.millis)
-
-    def around[T : AsResult](t: =>T) = {
-      lazy val result = t
-      val termination = result must terminate[T](sleep = timeout).orSkip((ko: String) => "TIMEOUT: "+timeout)
-      termination.toResult and AsResult(result)
-    }
-
-  }
-
-
   def println(s: String) = s // change this definition to see messages in the console
 
   def is = sequential^

@@ -13,6 +13,7 @@ import Promise._
  * This trait provides matchers to check if a block of code is terminating or not
  */
 trait TerminationMatchers extends TerminationBaseMatchers with TerminationNotMatchers
+object TerminationMatchers extends TerminationMatchers
 
 private[specs2]
 trait TerminationBaseMatchers {
