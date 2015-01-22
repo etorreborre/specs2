@@ -8,7 +8,7 @@ import org.specs2.execute.Result
  * This trait provides implicit definitions to transform any value into a MustExpectable
  */
 trait MustExpectations extends MustExpectations1 with ExpectationsDescription with TypedEqual {
-  implicit def akaMust[T](tm: Expectable[T]) = new MustExpectable(() => tm.valueDefinition()) {
+  implicit def akaMust[T](tm: Expectable[T]): MustExpectable[T] = new MustExpectable(() => tm.valueDefinition()) {
     override private[specs2] val desc = tm.desc
     override private[specs2] val showValueAs = tm.showValueAs
     override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
@@ -47,7 +47,7 @@ object MustExpectations extends MustExpectations
  * a match fails
  */
 trait MustThrownExpectations extends MustExpectations with MustThrownExpectations1 {
-  override implicit def akaMust[T](tm: Expectable[T]) = new MustExpectable(() => tm.valueDefinition()) {
+  override implicit def akaMust[T](tm: Expectable[T]): MustExpectable[T] = new MustExpectable(() => tm.valueDefinition()) {
     override private[specs2] val desc = tm.desc
     override private[specs2] val showValueAs = tm.showValueAs
     override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)

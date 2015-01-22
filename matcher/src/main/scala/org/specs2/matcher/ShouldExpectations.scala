@@ -8,7 +8,7 @@ import org.specs2.execute.Result
  * This trait provides implicit definitions to transform any value into a ShouldExpectable
  */
 trait ShouldExpectations extends Expectations {
-  implicit def akaShould[T](tm: Expectable[T]) = new ShouldExpectable(() => tm.valueDefinition()) {
+  implicit def akaShould[T](tm: Expectable[T]): ShouldExpectable[T] = new ShouldExpectable(() => tm.valueDefinition()) {
     override private[specs2] val desc = tm.desc
     override private[specs2] val showValueAs = tm.showValueAs
     // overriding this method is necessary to include the ThrownExpectation trait into the stacktrace of the created match result
@@ -41,7 +41,7 @@ object ShouldExpectations extends ShouldExpectations
  * a match fails
  */
 trait ShouldThrownExpectations extends ThrownExpectations with ShouldExpectations {
-  override implicit def akaShould[T](tm: Expectable[T]) = new ShouldExpectable(() => tm.valueDefinition()) {
+  override implicit def akaShould[T](tm: Expectable[T]): ShouldExpectable[T] = new ShouldExpectable(() => tm.valueDefinition()) {
     override private[specs2] val desc = tm.desc
     override private[specs2] val showValueAs = tm.showValueAs
     // overriding this method is necessary to include the ThrownExpectation trait into the stacktrace of the created match result
