@@ -1,6 +1,8 @@
 package org.specs2
 package mutable
 
-trait BeforeAfter extends org.specs2.specification.BeforeAfter with DelayedInit {
+import matcher.Scope
+
+trait BeforeAfter extends org.specs2.specification.BeforeAfter with DelayedInit with Scope {
   override def delayedInit(x: => Unit): Unit = try { before; x } finally { after }
 }

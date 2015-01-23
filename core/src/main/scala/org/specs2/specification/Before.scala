@@ -6,7 +6,7 @@ import execute._
 /**
  * generic trait for Before, After, Around
  */
-trait Context extends Scope {
+trait Context {
   def apply[T : AsResult](a: =>T): Result
 }
 
