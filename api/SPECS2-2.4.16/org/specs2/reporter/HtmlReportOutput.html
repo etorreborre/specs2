@@ -1,0 +1,1186 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>HtmlReportOutput - org.specs2.reporter.HtmlReportOutput</title>
+          <meta name="description" content="HtmlReportOutput - org.specs2.reporter.HtmlReportOutput" />
+          <meta name="keywords" content="HtmlReportOutput org.specs2.reporter.HtmlReportOutput" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'org.specs2.reporter.HtmlReportOutput';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <img src="../../../lib/trait_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a>.<a href="package.html" class="extype" name="org.specs2.reporter">reporter</a></p>
+        <h1>HtmlReportOutput</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="org.specs2.reporter">package reporter</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">HtmlReportOutput</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>This trait defines how the specification elements should be translated as xhtml
+An implementation of that trait must accumulate the results and return the created xhmtl
+with the xml method
+</p></div><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="org.specs2.reporter.HtmlReportOutput"><span>HtmlReportOutput</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="org.specs2.reporter.HtmlReportOutput#clear" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="clear:org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="clear:HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clear</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@clear:org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">clear the current xml content</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#filePathIs" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="filePathIs(path:String):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="filePathIs(String):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">filePathIs</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@filePathIs(path:String):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">set the file path for the current output</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#print" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="print(xml:scala.xml.Elem):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="print(Elem):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">print</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.Elem">Elem</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@print(xml:scala.xml.Elem):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print an Elem</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#print" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="print(xml:scala.xml.NodeSeq):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="print(NodeSeq):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">print</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@print(xml:scala.xml.NodeSeq):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print a NodeSeq</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printBody" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printBody(n:scala.xml.NodeSeq):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printBody(NodeSeq):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printBody</span><span class="params">(<span name="n">n: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printBody(n:scala.xml.NodeSeq):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">enclose the nodes inside &lt;body/&gt; tags</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printBr" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printBr:org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printBr:HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printBr</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printBr:org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print a Br fragment</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printCollapsibleExceptionMessage" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printCollapsibleExceptionMessage(e:org.specs2.execute.Resultwithorg.specs2.execute.ResultStackTrace,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printCollapsibleExceptionMessage(ResultwithResultStackTrace,Int):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printCollapsibleExceptionMessage</span><span class="params">(<span name="e">e: <a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a> with <a href="../execute/ResultStackTrace.html" class="extype" name="org.specs2.execute.ResultStackTrace">ResultStackTrace</a></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printCollapsibleExceptionMessage(e:org.specs2.execute.Resultwithorg.specs2.execute.ResultStackTrace,indent:Int):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print an exception message which can be expended/collapsed</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printDetailedFailure" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="printDetailedFailure(details:org.specs2.execute.Details,indent:Int,diffs:org.specs2.main.Diffs):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printDetailedFailure(Details,Int,Diffs):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printDetailedFailure</span><span class="params">(<span name="details">details: <a href="../execute/Details.html" class="extype" name="org.specs2.execute.Details">Details</a></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span></span>, <span name="diffs">diffs: <a href="../main/Diffs.html" class="extype" name="org.specs2.main.Diffs">Diffs</a></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printDetailedFailure(details:org.specs2.execute.Details,indent:Int,diffs:org.specs2.main.Diffs):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print the details of a failure.</p><div class="fullcomment"><div class="comment cmt"><p>print the details of a failure. The diffs arguments provides the way to expose the differences between expected and actual values</p></div></div>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printExceptionMessage" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printExceptionMessage(e:org.specs2.execute.Resultwithorg.specs2.execute.ResultStackTrace,indent:Int,filter:org.specs2.control.StackTraceFilter):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printExceptionMessage(ResultwithResultStackTrace,Int,StackTraceFilter):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printExceptionMessage</span><span class="params">(<span name="e">e: <a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a> with <a href="../execute/ResultStackTrace.html" class="extype" name="org.specs2.execute.ResultStackTrace">ResultStackTrace</a></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span></span>, <span name="filter">filter: <a href="../control/StackTraceFilter.html" class="extype" name="org.specs2.control.StackTraceFilter">StackTraceFilter</a></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printExceptionMessage(e:org.specs2.execute.Resultwithorg.specs2.execute.ResultStackTrace,indent:Int,filter:org.specs2.control.StackTraceFilter):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print an exception message</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printFile" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printFile(specName:org.specs2.specification.SpecName,breadcrumbs:scala.xml.NodeSeq,lines:org.specs2.reporter.HtmlReportOutput,toc:org.specs2.reporter.TreeToc):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printFile(SpecName,NodeSeq,HtmlReportOutput,TreeToc):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printFile</span><span class="params">(<span name="specName">specName: <a href="../specification/SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a></span>, <span name="breadcrumbs">breadcrumbs: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>, <span name="lines">lines: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>, <span name="toc">toc: <a href="TreeToc.html" class="extype" name="org.specs2.reporter.TreeToc">TreeToc</a></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printFile(specName:org.specs2.specification.SpecName,breadcrumbs:scala.xml.NodeSeq,lines:org.specs2.reporter.HtmlReportOutput,toc:org.specs2.reporter.TreeToc):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print the whole file content</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printHead" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printHead(title:String):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printHead(String):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printHead</span><span class="params">(<span name="title">title: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printHead(title:String):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">provide the &lt;head/&gt; section</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printHtml" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printHtml(n:scala.xml.NodeSeq):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printHtml(NodeSeq):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printHtml</span><span class="params">(<span name="n">n: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printHtml(n:scala.xml.NodeSeq):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">enclose the nodes inside &lt;html/&gt; tags</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printIssueWithIcon" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printIssueWithIcon(message:org.specs2.specification.FormattedString,iconName:String,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printIssueWithIcon(FormattedString,String,Int):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printIssueWithIcon</span><span class="params">(<span name="message">message: <a href="../specification/FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>, <span name="iconName">iconName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printIssueWithIcon(message:org.specs2.specification.FormattedString,iconName:String,indent:Int):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print an issue with an icon</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printKoForm" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printKoForm(form:scala.xml.NodeSeq):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printKoForm(NodeSeq):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printKoForm</span><span class="params">(<span name="form">form: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printKoForm(form:scala.xml.NodeSeq):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print the html for a Form that failed</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printKoXmlWithIcon" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printKoXmlWithIcon(xml:scala.xml.NodeSeq,iconName:String,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printKoXmlWithIcon(NodeSeq,String,Int):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printKoXmlWithIcon</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>, <span name="iconName">iconName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printKoXmlWithIcon(xml:scala.xml.NodeSeq,iconName:String,indent:Int):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print some ok xml with an icon</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printLink" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printLink(link:org.specs2.specification.HtmlLink):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printLink(HtmlLink):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printLink</span><span class="params">(<span name="link">link: <a href="../specification/HtmlLink.html" class="extype" name="org.specs2.specification.HtmlLink">HtmlLink</a></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printLink(link:org.specs2.specification.HtmlLink):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print a single link</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printLink" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printLink(link:org.specs2.specification.HtmlLink,indent:Int,stats:org.specs2.specification.Stats,hidden:Boolean):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printLink(HtmlLink,Int,Stats,Boolean):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printLink</span><span class="params">(<span name="link">link: <a href="../specification/HtmlLink.html" class="extype" name="org.specs2.specification.HtmlLink">HtmlLink</a></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span></span>, <span name="stats">stats: <a href="../specification/Stats.html" class="extype" name="org.specs2.specification.Stats">Stats</a> = <span class="symbol"><span class="name"><a href="../specification/package.html">Stats()</a></span></span></span>, <span name="hidden">hidden: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printLink(link:org.specs2.specification.HtmlLink,indent:Int,stats:org.specs2.specification.Stats,hidden:Boolean):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print a link to another specification</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printOkForm" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printOkForm(form:scala.xml.NodeSeq):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printOkForm(NodeSeq):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printOkForm</span><span class="params">(<span name="form">form: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printOkForm(form:scala.xml.NodeSeq):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print the html for a Form that succeeded</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printOkXmlWithIcon" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printOkXmlWithIcon(xml:scala.xml.NodeSeq,iconName:String,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printOkXmlWithIcon(NodeSeq,String,Int):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printOkXmlWithIcon</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>, <span name="iconName">iconName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printOkXmlWithIcon(xml:scala.xml.NodeSeq,iconName:String,indent:Int):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print some ok xml with an icon</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printPar" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printPar(text:String):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printPar(String):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printPar</span><span class="params">(<span name="text">text: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printPar(text:String):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print a Text fragment inside a paragraph</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printSpecStart" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printSpecStart(name:org.specs2.specification.SpecName,stats:org.specs2.specification.Stats):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printSpecStart(SpecName,Stats):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printSpecStart</span><span class="params">(<span name="name">name: <a href="../specification/SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a></span>, <span name="stats">stats: <a href="../specification/Stats.html" class="extype" name="org.specs2.specification.Stats">Stats</a></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printSpecStart(name:org.specs2.specification.SpecName,stats:org.specs2.specification.Stats):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print the specification start fragment</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printStack" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printStack(e:org.specs2.execute.ResultStackTrace,indent:Int,traceFilter:org.specs2.control.StackTraceFilter):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printStack(ResultStackTrace,Int,StackTraceFilter):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printStack</span><span class="params">(<span name="e">e: <a href="../execute/ResultStackTrace.html" class="extype" name="org.specs2.execute.ResultStackTrace">ResultStackTrace</a></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span></span>, <span name="traceFilter">traceFilter: <a href="../control/StackTraceFilter.html" class="extype" name="org.specs2.control.StackTraceFilter">StackTraceFilter</a></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printStack(e:org.specs2.execute.ResultStackTrace,indent:Int,traceFilter:org.specs2.control.StackTraceFilter):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print a stacktrace of a failure or an exception</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printStats" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printStats(name:org.specs2.specification.SpecName,stats:org.specs2.specification.Stats):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printStats(SpecName,Stats):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printStats</span><span class="params">(<span name="name">name: <a href="../specification/SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a></span>, <span name="stats">stats: <a href="../specification/Stats.html" class="extype" name="org.specs2.specification.Stats">Stats</a></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printStats(name:org.specs2.specification.SpecName,stats:org.specs2.specification.Stats):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print the statistics of a specification</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printText" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printText(text:String,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printText(String,Int):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printText</span><span class="params">(<span name="text">text: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printText(text:String,indent:Int):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print a Text fragment with a given indent of indentation</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printText" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printText(text:org.specs2.specification.FormattedString,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printText(FormattedString,Int):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printText</span><span class="params">(<span name="text">text: <a href="../specification/FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printText(text:org.specs2.specification.FormattedString,indent:Int):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print a Text fragment with a given indent of indentation</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printTextPar" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printTextPar(text:String,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printTextPar(String,Int):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printTextPar</span><span class="params">(<span name="text">text: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printTextPar(text:String,indent:Int):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print a Text fragment with a given indent of indentation, in a paragraph</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printTextWithIcon" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="printTextWithIcon(message:org.specs2.specification.FormattedString,iconName:String,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printTextWithIcon(FormattedString,String,Int):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printTextWithIcon</span><span class="params">(<span name="message">message: <a href="../specification/FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>, <span name="iconName">iconName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printTextWithIcon(message:org.specs2.specification.FormattedString,iconName:String,indent:Int):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print some text with an icon</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#show" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="show:String"></a>
+      <a id="show:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">show</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@show:String" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">show as a string</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#xml" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="xml:scala.xml.NodeSeq"></a>
+      <a id="xml:NodeSeq"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">xml</span><span class="result">: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@xml:scala.xml.NodeSeq" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the build html code</p></dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@##():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@clone():Object" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#print" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="print(text:String):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="print(String):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">print</span><span class="params">(<span name="text">text: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@print(text:String):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print a Text Node</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="printError(message:org.specs2.specification.FormattedString,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printError(FormattedString,Int):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printError</span><span class="params">(<span name="message">message: <a href="../specification/FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printError(message:org.specs2.specification.FormattedString,indent:Int):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print an error with an icon</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printErrorXml" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="printErrorXml(xml:scala.xml.NodeSeq,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printErrorXml(NodeSeq,Int):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printErrorXml</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printErrorXml(xml:scala.xml.NodeSeq,indent:Int):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print an error with an icon</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printFailure" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="printFailure(message:org.specs2.specification.FormattedString,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printFailure(FormattedString,Int):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printFailure</span><span class="params">(<span name="message">message: <a href="../specification/FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printFailure(message:org.specs2.specification.FormattedString,indent:Int):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print a failure with an icon</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printFailureXml" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="printFailureXml(xml:scala.xml.NodeSeq,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printFailureXml(NodeSeq,Int):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printFailureXml</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printFailureXml(xml:scala.xml.NodeSeq,indent:Int):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print a failure with an icon</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printPending" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="printPending(message:org.specs2.specification.FormattedString,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printPending(FormattedString,Int):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printPending</span><span class="params">(<span name="message">message: <a href="../specification/FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printPending(message:org.specs2.specification.FormattedString,indent:Int):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print a pending fragment with an icon</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printPendingXml" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="printPendingXml(xml:scala.xml.NodeSeq,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printPendingXml(NodeSeq,Int):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printPendingXml</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printPendingXml(xml:scala.xml.NodeSeq,indent:Int):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print a pending fragment with an icon</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printSkipped" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="printSkipped(message:org.specs2.specification.FormattedString,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printSkipped(FormattedString,Int):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printSkipped</span><span class="params">(<span name="message">message: <a href="../specification/FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printSkipped(message:org.specs2.specification.FormattedString,indent:Int):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print a skipped fragment with an icon</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printSkippedXml" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="printSkippedXml(xml:scala.xml.NodeSeq,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printSkippedXml(NodeSeq,Int):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printSkippedXml</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printSkippedXml(xml:scala.xml.NodeSeq,indent:Int):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print a skipped fragment with an icon</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printSuccess" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="printSuccess(message:org.specs2.specification.FormattedString,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printSuccess(FormattedString,Int):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printSuccess</span><span class="params">(<span name="message">message: <a href="../specification/FormattedString.html" class="extype" name="org.specs2.specification.FormattedString">FormattedString</a></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printSuccess(message:org.specs2.specification.FormattedString,indent:Int):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print a success with an icon</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#printSuccessXml" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="printSuccessXml(xml:scala.xml.NodeSeq,indent:Int):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="printSuccessXml(NodeSeq,Int):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printSuccessXml</span><span class="params">(<span name="xml">xml: <span class="extype" name="scala.xml.NodeSeq">NodeSeq</span></span>, <span name="indent">indent: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@printSuccessXml(xml:scala.xml.NodeSeq,indent:Int):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print a success with an icon</p>
+    </li><li name="org.specs2.reporter.HtmlReportOutput#println" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="println(text:String):org.specs2.reporter.HtmlReportOutput"></a>
+      <a id="println(String):HtmlReportOutput"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">println</span><span class="params">(<span name="text">text: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <a href="" class="extype" name="org.specs2.reporter.HtmlReportOutput">HtmlReportOutput</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@println(text:String):org.specs2.reporter.HtmlReportOutput" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">print a Text Node with a new line</p>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@toString():String" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.HtmlReportOutput@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

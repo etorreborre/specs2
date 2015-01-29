@@ -1,0 +1,919 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>JUnitRunner - org.specs2.runner.JUnitRunner</title>
+          <meta name="description" content="JUnitRunner - org.specs2.runner.JUnitRunner" />
+          <meta name="keywords" content="JUnitRunner org.specs2.runner.JUnitRunner" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'org.specs2.runner.JUnitRunner';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <a href="JUnitRunner$.html" title="Go to companion"><img src="../../../lib/class_to_object_big.png" /></a>
+        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a>.<a href="package.html" class="extype" name="org.specs2.runner">runner</a></p>
+        <h1><a href="JUnitRunner$.html" title="Go to companion">JUnitRunner</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="JUnitRunner$.html" title="See companion">object JUnitRunner</a>
+            | <a href="package.html" class="extype" name="org.specs2.runner">package runner</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">JUnitRunner</span><span class="result"> extends <span class="extype" name="org.junit.runner.Runner">Runner</span> with <span class="extype" name="org.junit.runner.manipulation.Filterable">Filterable</span> with <a href="../reporter/DefaultSelection.html" class="extype" name="org.specs2.reporter.DefaultSelection">DefaultSelection</a></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The JUnitRunner class is a JUnit Runner class meant to be used with the RunWith annotation
+to execute a specification as a JUnit suite.</p><p>The implementation is using a description Fold to fold the fragments into a tree
+of Description objects and a Map relating each Description to a Fragment to execute.</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="org.specs2.runner.JUnitRunner">JUnitRunner</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="../reporter/DefaultSelection.html" class="extype" name="org.specs2.reporter.DefaultSelection">DefaultSelection</a>, <a href="../reporter/Selection.html" class="extype" name="org.specs2.reporter.Selection">Selection</a>, <a href="../reporter/ExamplesSelection.html" class="extype" name="org.specs2.reporter.ExamplesSelection">ExamplesSelection</a>, <a href="../reporter/StatusSelection.html" class="extype" name="org.specs2.reporter.StatusSelection">StatusSelection</a>, <span class="extype" name="org.specs2.reporter.WithDefaultStatisticsRepository">WithDefaultStatisticsRepository</span>, <span class="extype" name="org.specs2.reporter.WithStatisticsRepository">WithStatisticsRepository</span>, <a href="../reporter/TagSelection.html" class="extype" name="org.specs2.reporter.TagSelection">TagSelection</a>, <a href="../specification/TagsAssociation.html" class="extype" name="org.specs2.specification.TagsAssociation">TagsAssociation</a>, <a href="../reporter/ExamplesIsolation.html" class="extype" name="org.specs2.reporter.ExamplesIsolation">ExamplesIsolation</a>, <span class="extype" name="org.junit.runner.manipulation.Filterable">Filterable</span>, <span class="extype" name="org.junit.runner.Runner">Runner</span>, <span class="extype" name="org.junit.runner.Describable">Describable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="org.specs2.runner.JUnitRunner"><span>JUnitRunner</span></li><li class="in" name="org.specs2.reporter.DefaultSelection"><span>DefaultSelection</span></li><li class="in" name="org.specs2.reporter.Selection"><span>Selection</span></li><li class="in" name="org.specs2.reporter.ExamplesSelection"><span>ExamplesSelection</span></li><li class="in" name="org.specs2.reporter.StatusSelection"><span>StatusSelection</span></li><li class="in" name="org.specs2.reporter.WithDefaultStatisticsRepository"><span>WithDefaultStatisticsRepository</span></li><li class="in" name="org.specs2.reporter.WithStatisticsRepository"><span>WithStatisticsRepository</span></li><li class="in" name="org.specs2.reporter.TagSelection"><span>TagSelection</span></li><li class="in" name="org.specs2.specification.TagsAssociation"><span>TagsAssociation</span></li><li class="in" name="org.specs2.reporter.ExamplesIsolation"><span>ExamplesIsolation</span></li><li class="in" name="org.junit.runner.manipulation.Filterable"><span>Filterable</span></li><li class="in" name="org.junit.runner.Runner"><span>Runner</span></li><li class="in" name="org.junit.runner.Describable"><span>Describable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="org.specs2.runner.JUnitRunner#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(klass:Class[_]):org.specs2.runner.JUnitRunner"></a>
+      <a id="&lt;init&gt;:JUnitRunner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">JUnitRunner</span><span class="params">(<span name="klass">klass: <span class="extype" name="scala.Predef.Class">Class</span>[_]</span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@&lt;init&gt;(klass:Class[_]):org.specs2.runner.JUnitRunner" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@##():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.specs2.runner.JUnitRunner#args" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="args:org.specs2.main.Arguments"></a>
+      <a id="args:Arguments"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">args</span><span class="result">: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@args:org.specs2.main.Arguments" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">arguments for this specification</p>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@clone():Object" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="org.specs2.reporter.ExamplesIsolation#copyBody" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="copyBody(name:org.specs2.specification.SpecName,f:org.specs2.specification.Fragment,body:=&gt;org.specs2.execute.Result)(implicitarguments:org.specs2.main.Arguments):org.specs2.execute.Result"></a>
+      <a id="copyBody(SpecName,Fragment,⇒Result)(Arguments):Result"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">copyBody</span><span class="params">(<span name="name">name: <a href="../specification/SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a></span>, <span name="f">f: <a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a></span>, <span name="body">body: ⇒ <a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <a href="../execute/Result.html" class="extype" name="org.specs2.execute.Result">Result</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@copyBody(name:org.specs2.specification.SpecName,f:org.specs2.specification.Fragment,body:=&gt;org.specs2.execute.Result)(implicitarguments:org.specs2.main.Arguments):org.specs2.execute.Result" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an Example which body comes from the execution of that example in a brand new instance of the Specification
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../reporter/ExamplesIsolation.html" class="extype" name="org.specs2.reporter.ExamplesIsolation">ExamplesIsolation</a></dd></dl></div>
+    </li><li name="org.specs2.runner.JUnitRunner#desc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="desc:org.junit.runner.Description"></a>
+      <a id="desc:Description"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">desc</span><span class="result">: <span class="extype" name="org.junit.runner.Description">Description</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@desc:org.junit.runner.Description" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">extract the root Description object and the examples to execute</p>
+    </li><li name="org.specs2.runner.JUnitRunner#descriptions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="descriptions:org.specs2.reporter.JUnitDescriptionsFragments"></a>
+      <a id="descriptions:JUnitDescriptionsFragments"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">descriptions</span><span class="result">: <a href="../reporter/JUnitDescriptionsFragments.html" class="extype" name="org.specs2.reporter.JUnitDescriptionsFragments">JUnitDescriptionsFragments</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@descriptions:org.specs2.reporter.JUnitDescriptionsFragments" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">descriptions for this specification</p>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.specs2.runner.JUnitRunner#filter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="filter(filter:org.junit.runner.manipulation.Filter):Unit"></a>
+      <a id="filter(Filter):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">filter</span><span class="params">(<span name="filter">filter: <span class="extype" name="org.junit.runner.manipulation.Filter">Filter</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@filter(filter:org.junit.runner.manipulation.Filter):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Remove tests that don't pass the parameter <code>filter</code>.</code></p><div class="fullcomment"><div class="comment cmt"><p>Remove tests that don't pass the parameter <code>filter</code>.
+</p></div><dl class="paramcmts block"><dt class="param">filter</dt><dd class="cmt"><p>the { @link Filter} to apply</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.runner.JUnitRunner">JUnitRunner</a> → Filterable</dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="NoTestsRemainException"><code>NoTestsRemainException</code></span> if all tests are filtered out
+</p></span></dd></dl></div>
+    </li><li name="org.specs2.reporter.DefaultSelection#filter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="filter(implicitcommandLineArgs:org.specs2.main.Arguments):Seq[(org.specs2.specification.Fragment,org.specs2.main.Arguments,org.specs2.specification.SpecName)]=&gt;Seq[org.specs2.specification.Fragment]"></a>
+      <a id="filter(Arguments):(Seq[(Fragment,Arguments,SpecName)])⇒Seq[Fragment]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">filter</span><span class="params">(<span class="implicit">implicit </span><span name="commandLineArgs">commandLineArgs: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: (<span class="extype" name="scala.Seq">Seq</span>[(<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>, <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a>, <a href="../specification/SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a>)]) ⇒ <span class="extype" name="scala.collection.Seq">Seq</span>[<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@filter(implicitcommandLineArgs:org.specs2.main.Arguments):Seq[(org.specs2.specification.Fragment,org.specs2.main.Arguments,org.specs2.specification.SpecName)]=&gt;Seq[org.specs2.specification.Fragment]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>filter fragments depending on the command line arguments and the current arguments in the specification
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../reporter/DefaultSelection.html" class="extype" name="org.specs2.reporter.DefaultSelection">DefaultSelection</a></dd></dl></div>
+    </li><li name="org.specs2.reporter.ExamplesSelection#filterExamples" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="filterExamples(implicitcommandLineArgs:org.specs2.main.Arguments):Seq[(org.specs2.specification.Fragment,org.specs2.main.Arguments,org.specs2.specification.SpecName)]=&gt;Seq[org.specs2.specification.Fragment]"></a>
+      <a id="filterExamples(Arguments):(Seq[(Fragment,Arguments,SpecName)])⇒Seq[Fragment]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">filterExamples</span><span class="params">(<span class="implicit">implicit </span><span name="commandLineArgs">commandLineArgs: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: (<span class="extype" name="scala.Seq">Seq</span>[(<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>, <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a>, <a href="../specification/SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a>)]) ⇒ <span class="extype" name="scala.collection.Seq">Seq</span>[<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@filterExamples(implicitcommandLineArgs:org.specs2.main.Arguments):Seq[(org.specs2.specification.Fragment,org.specs2.main.Arguments,org.specs2.specification.SpecName)]=&gt;Seq[org.specs2.specification.Fragment]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">the filter method filters examples based on their description,
+keeping only the ones matching the ex attribute of the arguments object
+</p><div class="fullcomment"><div class="comment cmt"><p>the filter method filters examples based on their description,
+keeping only the ones matching the ex attribute of the arguments object
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../reporter/ExamplesSelection.html" class="extype" name="org.specs2.reporter.ExamplesSelection">ExamplesSelection</a></dd></dl></div>
+    </li><li name="org.specs2.reporter.StatusSelection#filterPrevious" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="filterPrevious(implicitcommandLineArgs:org.specs2.main.Arguments):Seq[(org.specs2.specification.Fragment,org.specs2.main.Arguments,org.specs2.specification.SpecName)]=&gt;Seq[(org.specs2.specification.Fragment,org.specs2.main.Arguments,org.specs2.specification.SpecName)]"></a>
+      <a id="filterPrevious(Arguments):(Seq[(Fragment,Arguments,SpecName)])⇒Seq[(Fragment,Arguments,SpecName)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">filterPrevious</span><span class="params">(<span class="implicit">implicit </span><span name="commandLineArgs">commandLineArgs: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: (<span class="extype" name="scala.Seq">Seq</span>[(<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>, <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a>, <a href="../specification/SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a>)]) ⇒ <span class="extype" name="scala.Seq">Seq</span>[(<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>, <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a>, <a href="../specification/SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@filterPrevious(implicitcommandLineArgs:org.specs2.main.Arguments):Seq[(org.specs2.specification.Fragment,org.specs2.main.Arguments,org.specs2.specification.SpecName)]=&gt;Seq[(org.specs2.specification.Fragment,org.specs2.main.Arguments,org.specs2.specification.SpecName)]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>fragments according to their previous execution state
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../reporter/StatusSelection.html" class="extype" name="org.specs2.reporter.StatusSelection">StatusSelection</a></dd></dl></div>
+    </li><li name="org.specs2.reporter.TagSelection#filterTags" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="filterTags(implicitcommandLineArgs:org.specs2.main.Arguments):Seq[(org.specs2.specification.Fragment,org.specs2.main.Arguments,org.specs2.specification.SpecName)]=&gt;Seq[(org.specs2.specification.Fragment,org.specs2.main.Arguments,org.specs2.specification.SpecName)]"></a>
+      <a id="filterTags(Arguments):(Seq[(Fragment,Arguments,SpecName)])⇒Seq[(Fragment,Arguments,SpecName)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">filterTags</span><span class="params">(<span class="implicit">implicit </span><span name="commandLineArgs">commandLineArgs: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: (<span class="extype" name="scala.Seq">Seq</span>[(<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>, <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a>, <a href="../specification/SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a>)]) ⇒ <span class="extype" name="scala.collection.Seq">Seq</span>[(<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>, <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a>, <a href="../specification/SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@filterTags(implicitcommandLineArgs:org.specs2.main.Arguments):Seq[(org.specs2.specification.Fragment,org.specs2.main.Arguments,org.specs2.specification.SpecName)]=&gt;Seq[(org.specs2.specification.Fragment,org.specs2.main.Arguments,org.specs2.specification.SpecName)]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>filter fragments according to tags by collecting tags as applicable to each fragment and applying them
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../reporter/TagSelection.html" class="extype" name="org.specs2.reporter.TagSelection">TagSelection</a></dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="org.specs2.runner.JUnitRunner#fragmentsDescriptions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fragmentsDescriptions:Map[org.specs2.specification.Fragment,org.junit.runner.Description]"></a>
+      <a id="fragmentsDescriptions:Map[Fragment,Description]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fragmentsDescriptions</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>, <span class="extype" name="org.junit.runner.Description">Description</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@fragmentsDescriptions:Map[org.specs2.specification.Fragment,org.junit.runner.Description]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">extract the root Description object and the examples to execute</p>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.specs2.runner.JUnitRunner#getDescription" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getDescription():org.junit.runner.Description"></a>
+      <a id="getDescription():Description"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getDescription</span><span class="params">()</span><span class="result">: <span class="extype" name="org.junit.runner.Description">Description</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@getDescription():org.junit.runner.Description" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a Description for the TestSuite</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.runner.JUnitRunner">JUnitRunner</a> → Runner → Describable</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.specs2.reporter.StatusSelection#includePrevious" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="includePrevious(specName:org.specs2.specification.SpecName,e:org.specs2.specification.Example,args:org.specs2.main.Arguments):Boolean"></a>
+      <a id="includePrevious(SpecName,Example,Arguments):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">includePrevious</span><span class="params">(<span name="specName">specName: <a href="../specification/SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a></span>, <span name="e">e: <a href="../specification/Example.html" class="extype" name="org.specs2.specification.Example">Example</a></span>, <span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@includePrevious(specName:org.specs2.specification.SpecName,e:org.specs2.specification.Example,args:org.specs2.main.Arguments):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../reporter/StatusSelection.html" class="extype" name="org.specs2.reporter.StatusSelection">StatusSelection</a></dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.specs2.reporter.ExamplesIsolation#isolateExamples" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isolateExamples(implicitarguments:org.specs2.main.Arguments):Seq[(org.specs2.specification.Fragment,org.specs2.main.Arguments,org.specs2.specification.SpecName)]=&gt;Seq[org.specs2.specification.Fragment]"></a>
+      <a id="isolateExamples(Arguments):(Seq[(Fragment,Arguments,SpecName)])⇒Seq[Fragment]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isolateExamples</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: (<span class="extype" name="scala.Seq">Seq</span>[(<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>, <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a>, <a href="../specification/SpecName.html" class="extype" name="org.specs2.specification.SpecName">SpecName</a>)]) ⇒ <span class="extype" name="scala.collection.Seq">Seq</span>[<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@isolateExamples(implicitarguments:org.specs2.main.Arguments):Seq[(org.specs2.specification.Fragment,org.specs2.main.Arguments,org.specs2.specification.SpecName)]=&gt;Seq[org.specs2.specification.Fragment]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This function &quot;clones&quot; the body of each example if the applicable arguments indicate that the specification should
+be isolated
+</p><div class="fullcomment"><div class="comment cmt"><p>This function &quot;clones&quot; the body of each example if the applicable arguments indicate that the specification should
+be isolated
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../reporter/ExamplesIsolation.html" class="extype" name="org.specs2.reporter.ExamplesIsolation">ExamplesIsolation</a></dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.specs2.runner.JUnitRunner#properties" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="properties:org.specs2.main.SystemProperties"></a>
+      <a id="properties:SystemProperties"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">properties</span><span class="result">: <a href="../main/SystemProperties.html" class="extype" name="org.specs2.main.SystemProperties">SystemProperties</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@properties:org.specs2.main.SystemProperties" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">system properties</p>
+    </li><li name="org.specs2.runner.JUnitRunner#propertiesArgs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="propertiesArgs:org.specs2.main.Arguments"></a>
+      <a id="propertiesArgs:Arguments"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">propertiesArgs</span><span class="result">: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@propertiesArgs:org.specs2.main.Arguments" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">command line arguments, extracted from the system properties</p>
+    </li><li name="org.specs2.reporter.WithDefaultStatisticsRepository#repository" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="repository:org.specs2.reporter.StatisticsRepository"></a>
+      <a id="repository:StatisticsRepository"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">repository</span><span class="result">: <a href="../reporter/StatisticsRepository.html" class="extype" name="org.specs2.reporter.StatisticsRepository">StatisticsRepository</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@repository:org.specs2.reporter.StatisticsRepository" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>WithDefaultStatisticsRepository → WithStatisticsRepository</dd></dl></div>
+    </li><li name="org.specs2.runner.JUnitRunner#run" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="run(n:org.junit.runner.notification.RunNotifier):Unit"></a>
+      <a id="run(RunNotifier):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">run</span><span class="params">(<span name="n">n: <span class="extype" name="org.junit.runner.notification.RunNotifier">RunNotifier</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@run(n:org.junit.runner.notification.RunNotifier):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.specs2.runner.JUnitRunner">JUnitRunner</a> → Runner</dd></dl></div>
+    </li><li name="org.specs2.reporter.DefaultSelection#select" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="select(fragments:Seq[org.specs2.specification.Fragment])(implicitarguments:org.specs2.main.Arguments):Seq[org.specs2.specification.Fragment]"></a>
+      <a id="select(Seq[Fragment])(Arguments):Seq[Fragment]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">select</span><span class="params">(<span name="fragments">fragments: <span class="extype" name="scala.Seq">Seq</span>[<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a> = <span class="symbol"><span class="name"><a href="../main/package.html">Arguments()</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="../specification/Fragment.html" class="extype" name="org.specs2.specification.Fragment">Fragment</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@select(fragments:Seq[org.specs2.specification.Fragment])(implicitarguments:org.specs2.main.Arguments):Seq[org.specs2.specification.Fragment]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">select function returning a filtered seq of Fragments</p><div class="fullcomment"><div class="comment cmt"><p>select function returning a filtered seq of Fragments</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../reporter/DefaultSelection.html" class="extype" name="org.specs2.reporter.DefaultSelection">DefaultSelection</a></dd></dl></div>
+    </li><li name="org.specs2.reporter.DefaultSelection#select" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="select(implicitarguments:org.specs2.main.Arguments):org.specs2.specification.SpecificationStructure=&gt;org.specs2.specification.SpecificationStructure"></a>
+      <a id="select(Arguments):(SpecificationStructure)⇒SpecificationStructure"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">select</span><span class="params">(<span class="implicit">implicit </span><span name="arguments">arguments: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: (<a href="../specification/SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a>) ⇒ <a href="../specification/SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@select(implicitarguments:org.specs2.main.Arguments):org.specs2.specification.SpecificationStructure=&gt;org.specs2.specification.SpecificationStructure" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">select function returning a filtered seq of Fragments</p><div class="fullcomment"><div class="comment cmt"><p>select function returning a filtered seq of Fragments</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../reporter/DefaultSelection.html" class="extype" name="org.specs2.reporter.DefaultSelection">DefaultSelection</a> → <a href="../reporter/Selection.html" class="extype" name="org.specs2.reporter.Selection">Selection</a></dd></dl></div>
+    </li><li name="org.specs2.runner.JUnitRunner#selected" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="selected:org.specs2.specification.SpecificationStructure"></a>
+      <a id="selected:SpecificationStructure"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">selected</span><span class="result">: <a href="../specification/SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@selected:org.specs2.specification.SpecificationStructure" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">selected fragments to execute</p>
+    </li><li name="org.specs2.runner.JUnitRunner#specification" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="specification:org.specs2.specification.SpecificationStructure"></a>
+      <a id="specification:SpecificationStructure"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">specification</span><span class="result">: <a href="../specification/SpecificationStructure.html" class="extype" name="org.specs2.specification.SpecificationStructure">SpecificationStructure</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@specification:org.specs2.specification.SpecificationStructure" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">specification to execute</p>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.junit.runner.Runner#testCount" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="testCount():Int"></a>
+      <a id="testCount():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">testCount</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@testCount():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Runner</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@toString():String" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.JUnitRunner@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="org.specs2.reporter.DefaultSelection">
+              <h3>Inherited from <a href="../reporter/DefaultSelection.html" class="extype" name="org.specs2.reporter.DefaultSelection">DefaultSelection</a></h3>
+            </div><div class="parent" name="org.specs2.reporter.Selection">
+              <h3>Inherited from <a href="../reporter/Selection.html" class="extype" name="org.specs2.reporter.Selection">Selection</a></h3>
+            </div><div class="parent" name="org.specs2.reporter.ExamplesSelection">
+              <h3>Inherited from <a href="../reporter/ExamplesSelection.html" class="extype" name="org.specs2.reporter.ExamplesSelection">ExamplesSelection</a></h3>
+            </div><div class="parent" name="org.specs2.reporter.StatusSelection">
+              <h3>Inherited from <a href="../reporter/StatusSelection.html" class="extype" name="org.specs2.reporter.StatusSelection">StatusSelection</a></h3>
+            </div><div class="parent" name="org.specs2.reporter.WithDefaultStatisticsRepository">
+              <h3>Inherited from <span class="extype" name="org.specs2.reporter.WithDefaultStatisticsRepository">WithDefaultStatisticsRepository</span></h3>
+            </div><div class="parent" name="org.specs2.reporter.WithStatisticsRepository">
+              <h3>Inherited from <span class="extype" name="org.specs2.reporter.WithStatisticsRepository">WithStatisticsRepository</span></h3>
+            </div><div class="parent" name="org.specs2.reporter.TagSelection">
+              <h3>Inherited from <a href="../reporter/TagSelection.html" class="extype" name="org.specs2.reporter.TagSelection">TagSelection</a></h3>
+            </div><div class="parent" name="org.specs2.specification.TagsAssociation">
+              <h3>Inherited from <a href="../specification/TagsAssociation.html" class="extype" name="org.specs2.specification.TagsAssociation">TagsAssociation</a></h3>
+            </div><div class="parent" name="org.specs2.reporter.ExamplesIsolation">
+              <h3>Inherited from <a href="../reporter/ExamplesIsolation.html" class="extype" name="org.specs2.reporter.ExamplesIsolation">ExamplesIsolation</a></h3>
+            </div><div class="parent" name="org.junit.runner.manipulation.Filterable">
+              <h3>Inherited from <span class="extype" name="org.junit.runner.manipulation.Filterable">Filterable</span></h3>
+            </div><div class="parent" name="org.junit.runner.Runner">
+              <h3>Inherited from <span class="extype" name="org.junit.runner.Runner">Runner</span></h3>
+            </div><div class="parent" name="org.junit.runner.Describable">
+              <h3>Inherited from <span class="extype" name="org.junit.runner.Describable">Describable</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
