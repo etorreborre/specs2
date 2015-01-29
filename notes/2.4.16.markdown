@@ -1,10 +1,17 @@
 Maintenance version.
+
+## Improvements
+
+ * added the `ExamplesTimeout` trait to the library [#322](http://github.com/etorreborre/specs2/issues/322)
+ * only mutable versions of the `Context` traits now extend the `Scope` trait (to avoid possible missed expectations in acceptance specifications)
  
 ## Fixes
 
  * fixed the use of matchers with contain(allOf(...)) and an empty seq [#319](http://github.com/etorreborre/specs2/issues/319)
  * control expectations effects when combining match results [#320](http://github.com/etorreborre/specs2/issues/320)
  * changed the signature of `EventuallyMatchers.eventually` to avoid overloading conflicts with `EventuallyResults.eventually` [#323](http://github.com/etorreborre/specs2/issues/323)
+ * added a check for the use of Expectations with Scope - thanks to @maximn for the PR! [#321](http://github.com/etorreborre/specs2/issues/321)
+ * used a `s2` string for the datatable example in the guide to get a better display
 
 ==========================
 
