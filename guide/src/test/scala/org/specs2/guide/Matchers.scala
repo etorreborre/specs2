@@ -705,8 +705,9 @@ Byname parameters can be verified but this will not work if the specs2 jar is no
 
 DataTables are a very effective way of grouping several similar examples into one. For example, here is how to specify the addition of integers by providing one example on each row of a table: ${snippet{
 
-class DataTableSpec extends Specification with matcher.DataTables { def is =
-  "adding integers should just work in scala"  ! e1
+class DataTableSpec extends Specification with matcher.DataTables { def is = s2"""
+  adding integers should just work in scala $e1
+"""
 
   def e1 =
     "a"   | "b" | "c" |                                   // the header of the table, with `|` separated strings
@@ -881,9 +882,9 @@ In specs2, those 2 methods are defined by the `${fullName[matcher.ThrownMessages
    }
 
   import matcher._
-  class DataTableSpecification extends Specification with DataTables { def is =
-    "adding integers should just work in scala"  ! e1
-
+  class DataTableSpecification extends Specification with DataTables { def is = s2"""
+    adding integers should just work in scala $e1
+    """
     def e1 =
       "a"   | "b" | "c" |
        2    !  2  !  4  |
