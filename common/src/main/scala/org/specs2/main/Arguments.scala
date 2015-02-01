@@ -49,6 +49,7 @@ Arguments (
   def stopOnFail: Boolean             = execute.stopOnFail
   def stopOnSkip: Boolean             = execute.stopOnSkip
   def sequential: Boolean             = execute.sequential
+  def asap: Boolean                   = execute.asap
   def isolated: Boolean               = execute.isolated
   def random: Boolean                 = execute.random
   def threadsNb: Int                  = execute.threadsNb
@@ -214,6 +215,7 @@ case class Execute(
   _stopOnFail:    Option[Boolean]          = None,
   _stopOnSkip:    Option[Boolean]          = None,
   _sequential:    Option[Boolean]          = None,
+  _asap:          Option[Boolean]          = None,
   _isolated:      Option[Boolean]          = None,
   _random:        Option[Boolean]          = None,
   _threadsNb:     Option[Int]              = None,
@@ -224,6 +226,7 @@ case class Execute(
   def stopOnFail: Boolean           = _stopOnFail.getOrElse(false)
   def stopOnSkip: Boolean           = _stopOnSkip.getOrElse(false)
   def sequential: Boolean           = _sequential.getOrElse(false)
+  def asap: Boolean                 = _asap.getOrElse(false)
   def isolated: Boolean             = _isolated.getOrElse(false)
   def random: Boolean               = _random.getOrElse(false)
   def threadsNb: Int                = _threadsNb.getOrElse(Runtime.getRuntime.availableProcessors)
@@ -236,6 +239,7 @@ case class Execute(
       other._stopOnFail      .orElse(_stopOnFail),
       other._stopOnSkip      .orElse(_stopOnSkip),
       other._sequential      .orElse(_sequential),
+      other._asap            .orElse(_asap),
       other._isolated        .orElse(_isolated),
       other._random          .orElse(_random),
       other._threadsNb       .orElse(_threadsNb),
@@ -250,6 +254,7 @@ case class Execute(
     "stopOnFail"     -> _stopOnFail   ,
     "stopOnSkip"     -> _stopOnSkip   ,
     "sequential"     -> _sequential   ,
+    "asap"           -> _asap         ,
     "isolated"       -> _isolated     ,
     "threadsNb"      -> _threadsNb    ,
     "executor"       -> _executor     ).flatMap(showArg).mkString("Execute(", ", ", ")")
@@ -264,13 +269,14 @@ object Execute extends Extract {
       _stopOnFail    = bool("stopOnFail"),
       _stopOnSkip    = bool("stopOnSkip"),
       _sequential    = bool("sequential"),
+      _asap          = bool("asap"),
       _isolated      = bool("isolated"),
       _random        = bool("random"),
       _threadsNb     = int("threadsNb"),
       _executor      = value("executor")
     )
   }
-  val allValueNames = Seq("plan", "skipAll", "stopOnFail", "stopOnSkip", "sequential", "isolated", "random", "threadsNb", "executor")
+  val allValueNames = Seq("plan", "skipAll", "stopOnFail", "stopOnSkip", "sequential", "asap", "isolated", "random", "threadsNb", "executor")
 }
 
 /**
@@ -278,23 +284,23 @@ object Execute extends Extract {
  */
 private[specs2]
 case class Store(
-  _reset:         Option[Boolean]          = None,
-  _never:         Option[Boolean]          = None) extends ShowArgs {
+  _reset: Option[Boolean] = None,
+  _never: Option[Boolean] = None) extends ShowArgs {
 
-  def reset: Boolean              = _reset.getOrElse(false)
-  def never: Boolean              = _never.getOrElse(false)
+  def reset: Boolean = _reset.getOrElse(false)
+  def never: Boolean = _never.getOrElse(false)
 
   def overrideWith(other: Store) = {
     new Store(
-      other._reset         .orElse(_reset),
-      other._never         .orElse(_never)
+      other._reset.orElse(_reset),
+      other._never.orElse(_never)
     )
   }
 
   override def toString =
     List(
-    "reset"        -> _reset      ,
-    "never"        -> _never      ).flatMap(showArg).mkString("Store(", ", ", ")")
+    "reset" -> _reset,
+    "never" -> _never).flatMap(showArg).mkString("Store(", ", ", ")")
 
 }
 
@@ -302,8 +308,8 @@ private[specs2]
 object Store extends Extract {
   def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Store = {
     new Store (
-      _reset       = bool("resetStore"),
-      _never       = bool("neverStore")
+      _reset = bool("resetStore"),
+      _never = bool("neverStore")
     )
   }
 

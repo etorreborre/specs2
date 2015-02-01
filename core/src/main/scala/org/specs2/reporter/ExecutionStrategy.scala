@@ -38,12 +38,15 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
   def execute(implicit arguments: Arguments) = (spec: ExecutableSpecification) => {
     implicit val executor = Executors.newFixedThreadPool(spec.arguments.threadsNb, new NamedThreadFactory("specs2.DefaultExecutionStrategy"))
     try {
-      val executing = spec.fs.foldLeft(ExecutingFragments()) { (res, fs) =>
+      val executingFragments = spec.fs.foldLeft(ExecutingFragments()) { (res, fs) =>
         val fsArgs = arguments <| fs.arguments
         val executing = executeSequence(fs, res.barrier())(executionArgs(fsArgs, res.nextMustSkip), Executor(executor))
         res.addExecutingFragments(executing, res.lastSequence, fsArgs)
       }
-      ExecutingSpecification(spec.name, spec.arguments, executing.fragments, executor)
+      if (arguments.asap)
+        ExecutingSpecification(spec.name, spec.arguments, executingFragments.fragments.map(executeAsap), executor)
+      else
+        ExecutingSpecification(spec.name, spec.arguments, executingFragments.fragments, executor)
     } catch {
       // just in case something bad happens, or if there's an InterruptedException, shutdown the executor
       case e: Throwable => executor.shutdown; throw e
@@ -123,5 +126,11 @@ trait DefaultExecutionStrategy extends ExecutionStrategy with FragmentExecution 
       case f: SpecEnd => FinishedExecutingFragment(executeWithBarrier(f))
       case f          => FinishedExecutingFragment(executeFragment(args)(f))
     }
+  }
+
+  def executeAsap(executing: ExecutingFragment) = executing match {
+    case PromisedExecutingFragment(promised, _) => FinishedExecutingFragment(promised.get)
+    case FinishedExecutingFragment(f)           => FinishedExecutingFragment(f)
+    case LazyExecutingFragment(f, _)            => FinishedExecutingFragment(f())
   }
 }

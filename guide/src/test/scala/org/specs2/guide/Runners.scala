@@ -69,6 +69,7 @@ From inside a specification, the available arguments are the following:
  *`stopOnFail`*      | false                                    | skip all examples after the first failure or error
  *`stopOnSkip`*      | false                                    | skip all examples after the first skipped result
  *`sequential`*      | false                                    | don't execute examples concurrently
+ *`asap`*            | false                                    | execute the full specification before reporting it
  *`isolated`*        | false                                    | execute each example in its own specification to get "fresh" local variables
  `random`            | false                                    | execute each example sequentially but in random order
  `threadsNb`         | `Runtime.getRuntime.availableProcessors` | number of threads to use for concurrent execution
