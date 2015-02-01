@@ -184,7 +184,7 @@ case class NeverMatcher[T]() extends Matcher[T] {
  *  `1 must be equalTo(1)`
  */
 trait AnyBeHaveMatchers extends BeHaveMatchers { outer: AnyMatchers =>
-  implicit def anyBeHaveMatcher[T](result: MatchResult[T]) = new AnyBeHaveMatchers(result)
+  implicit def anyBeHaveMatcher[T](result: MatchResult[T]): AnyBeHaveMatchers[T] = new AnyBeHaveMatchers(result)
   class AnyBeHaveMatchers[T](result: MatchResult[T]) {
     def be_==(t: T) = result(outer.be_==(t))
     def be_!=(t: T) = result(outer.be_!=(t))
@@ -192,7 +192,7 @@ trait AnyBeHaveMatchers extends BeHaveMatchers { outer: AnyMatchers =>
     def be_!==(t: T) = result(outer.be_!==(t))
     def be_==~[S](s: =>S)(implicit convert: S => T) = result(outer.be_==~[T, S](s))
     def equalTo(t: T) = result(outer.be_==(t))
-    def asNullAs[T](a: =>T) = result(outer.beAsNullAs(a))
+    def asNullAs(a: =>T) = result(outer.beAsNullAs(a))
     def beAnyOf(t: T*) = result(outer.beAnyOf(t:_*))
     def beOneOf(t: T*) = result(outer.beOneOf(t:_*))
     def anyOf(t: T*) = result(outer.beAnyOf(t:_*))
@@ -201,29 +201,29 @@ trait AnyBeHaveMatchers extends BeHaveMatchers { outer: AnyMatchers =>
     def anInstanceOf[T : ClassTag] = result(beAnInstanceOf[T])
   }
 
-  implicit def toAnyRefMatcherResult[T <: AnyRef](result: MatchResult[T]) = new AnyRefMatcherResult(result)
+  implicit def toAnyRefMatcherResult[T <: AnyRef](result: MatchResult[T]): AnyRefMatcherResult[T] = new AnyRefMatcherResult(result)
   class AnyRefMatcherResult[T <: AnyRef](result: MatchResult[T]) {
     def beTheSameAs(t: T) = result(outer.beTheSameAs(t))
   }
 
-  implicit def toAnyMatcherResult(result: MatchResult[Any]) = new AnyMatcherResult(result)
+  implicit def toAnyMatcherResult(result: MatchResult[Any]): AnyMatcherResult = new AnyMatcherResult(result)
   class AnyMatcherResult(result: MatchResult[Any]) {
     def haveClass[T : ClassTag] = result(outer.haveClass[T])
   }
 
-  implicit def toClassMatcherResult(result: MatchResult[Class[_]]) = new ClassMatcherResult(result)
+  implicit def toClassMatcherResult(result: MatchResult[Class[_]]): ClassMatcherResult = new ClassMatcherResult(result)
   class ClassMatcherResult(result: MatchResult[Class[_]]) {
     def assignableFrom = result(outer.beAssignableFrom)
   }
   
-  implicit def anyWithEmpty[T <% Any { def isEmpty: Boolean }](result: MatchResult[T]) = 
+  implicit def anyWithEmpty[T <% Any { def isEmpty: Boolean }](result: MatchResult[T]): AnyWithEmptyMatchers[T] =
     new AnyWithEmptyMatchers(result)
 
   class AnyWithEmptyMatchers[T <% Any { def isEmpty: Boolean }](result: MatchResult[T]) {
     def empty = result(outer.beEmpty[T])
     def beEmpty = result(outer.beEmpty[T])
   }
-  implicit def toBeLikeResultMatcher[T](result: MatchResult[T]) = new BeLikeResultMatcher(result)
+  implicit def toBeLikeResultMatcher[T](result: MatchResult[T]): BeLikeResultMatcher[T] = new BeLikeResultMatcher(result)
   class BeLikeResultMatcher[T](result: MatchResult[T]) {
     def like(pattern: =>PartialFunction[T, MatchResult[_]]) = result(outer.beLike(pattern))
     def likeA(pattern: =>PartialFunction[T, MatchResult[_]]) = result(outer.beLike(pattern))
@@ -241,12 +241,14 @@ trait AnyBeHaveMatchers extends BeHaveMatchers { outer: AnyMatchers =>
   def assignableFrom[T : ClassTag] = outer.beAssignableFrom[T]
   def anInstanceOf[T : ClassTag] = outer.beAnInstanceOf[T]
 }
+
 class BeTheSameAs[T <: AnyRef](t: =>T) extends Matcher[T] {
   def apply[S <: T](a: Expectable[S]) = {
     val b = t
     result(a.value eq b, a.description + " is the same as " + q(b), a.description + " is not the same as " + q(b), a)
   }
 }
+
 class BeNull[T] extends Matcher[T] {
   def apply[S <: T](value: Expectable[S]) = {
     result(value.value == null,
@@ -254,6 +256,7 @@ class BeNull[T] extends Matcher[T] {
            value.description + " is not null", value)
   }
 }
+
 case class BeOneOf[T](t: Seq[T]) extends Matcher[T] {
   def apply[S <: T](y: Expectable[S]) = {
     val x = t
