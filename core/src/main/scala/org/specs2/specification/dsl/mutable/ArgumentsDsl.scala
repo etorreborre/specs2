@@ -32,6 +32,7 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
                      stopOnFail:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
                      stopOnSkip:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
                      sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
+                     asap:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
                      isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
                      xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
                      showOnly:      ArgProperty[String]            = ArgProperty[String](),
@@ -47,6 +48,7 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
       stopOnFail,
       stopOnSkip,
       sequential,
+      asap,
       isolated,
       xonly,
       showOnly,
@@ -74,6 +76,7 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
                           stopOnFail:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
                           stopOnSkip:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
                           sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
+                          asap:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
                           isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
                           threadsNb:     ArgProperty[Int]               = ArgProperty[Int](),
                           executor:      ArgProperty[String]            = ArgProperty[String]()
@@ -83,6 +86,7 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
       stopOnFail,
       stopOnSkip,
       sequential,
+      asap,
       isolated,
       threadsNb,
       executor))

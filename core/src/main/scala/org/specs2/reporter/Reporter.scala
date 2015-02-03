@@ -37,8 +37,14 @@ trait Reporter {
   def report(env: Env, printers: List[Printer]): SpecStructure => Action[Unit] = { spec =>
     val env1 = env.setArguments(env.arguments.overrideWith(spec.arguments))
     val executing = readStats(spec, env1) |> env1.selector.select(env1) |> env1.executor.execute(env1)
+    
+    val contents =
+      // evaluate all fragments before reporting if required
+      if (env.arguments.execute.asap) Process.eval(executing.contents.runLog).flatMap(Process.emitAll)
+      else                            executing.contents
+
     val folds = printers.map(_.fold(env1, spec)) :+ statsStoreFold(env1, spec)
-    Actions.fromTask(runFolds(executing.contents, folds))
+    Actions.fromTask(runFolds(contents, folds))
   }
 
   /**

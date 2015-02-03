@@ -56,6 +56,7 @@ This reference guide for arguments is divided in several sections:
  `stopOnFail`            | `false`                                  | skip all examples after the first failure or error
  `stopOnSkip`            | `false`                                  | skip all examples after the first skipped result
  `sequential`            | `false`                                  | don't execute examples concurrently
+ `asap`                  | `false`                                  | execute all the examples before reporting them
  `isolated`              | `false`                                  | execute each example in its own specification to get "fresh" local variables
  `threadsNb`             | `Runtime.getRuntime.availableProcessors` | number of threads to use for concurrent execution
  `executor`              | `""`                                     | implementation of the `org.specs2.specification.process.Executor` trait

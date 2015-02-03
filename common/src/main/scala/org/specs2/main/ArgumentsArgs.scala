@@ -29,6 +29,7 @@ trait ArgumentsCreation {
     stopOnFail:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     stopOnSkip:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
     sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
+    asap:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
     isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
     xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
     showOnly:      ArgProperty[String]            = ArgProperty[String](),
@@ -45,6 +46,7 @@ trait ArgumentsCreation {
               stopOnFail = stopOnFail,
               stopOnSkip = stopOnSkip,
               sequential = sequential,
+              asap = asap,
               isolated   = isolated) <|
      (new ArgumentsNamespace).report(
               xonly      = xonly,
@@ -74,6 +76,7 @@ trait ArgumentsCreation {
       stopOnFail:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       stopOnSkip:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
       sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
+      asap:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
       isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
       threadsNb:     ArgProperty[Int]               = ArgProperty[Int](),
       executor:      ArgProperty[String]            = ArgProperty[String]()
@@ -83,6 +86,7 @@ trait ArgumentsCreation {
                stopOnFail.toOption,
                stopOnSkip.toOption,
                sequential.toOption,
+               asap.toOption,
                isolated.toOption,
                threadsNb.toOption,
                executor.toOption))
