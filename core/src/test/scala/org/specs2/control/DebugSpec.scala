@@ -4,7 +4,7 @@ package control
 import io.StringOutput
 import specification.Scope
 import scala.collection.mutable.ListBuffer
-import org.specs2.matcher.MustMatchers
+import org.specs2.matcher.MustThrownMatchers
 import control.Debug.Debuggable
 
 class DebugSpec extends Specification { def is = s2"""
@@ -32,7 +32,7 @@ class DebugSpec extends Specification { def is = s2"""
   case class Value(i: Int)
 }
 
-trait output extends Scope with MustMatchers {
+trait output extends Scope with MustThrownMatchers {
   private var msgs = ListBuffer[String]()
   private def messages = msgs.toSeq
 
