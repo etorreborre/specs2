@@ -46,7 +46,7 @@ trait ClassRunner {
 
   /** create the specification from the class name */
   def createSpecification(className: String): Action[SpecificationStructure] =
-    Classes.createInstance[SpecificationStructure](className, Thread.currentThread.getContextClassLoader)
+    SpecificationStructure.create(className)
 
   /** report the specification */
   def report(env: Env): SpecificationStructure => Action[Unit] = { spec: SpecificationStructure =>
