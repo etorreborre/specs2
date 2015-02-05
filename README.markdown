@@ -3,6 +3,8 @@
 Installation instructions
 =========================
 
+[![Join the chat at https://gitter.im/etorreborre/specs2](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/etorreborre/specs2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 You need to download and install sbt. Then execute the following command:
 
     sbt update publishLocal
