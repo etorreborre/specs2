@@ -1,10 +1,10 @@
 [![Build Status](https://travis-ci.org/etorreborre/specs2.png?branch=master)](https://travis-ci.org/etorreborre/specs2)
+[![Join the chat at https://gitter.im/etorreborre/specs2](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/etorreborre/specs2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Installation instructions
 =========================
 
-You need to download and install sbt (simple build tool)
-Then execute the following command:
+You need to download and install sbt. Then execute the following command:
 
 > sbt update publish-local
 
