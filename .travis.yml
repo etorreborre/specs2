@@ -8,3 +8,12 @@ jdk:
   - oraclejdk7
 
 script: sbt -sbt-version 0.13.5 -scala-version $TRAVIS_SCALA_VERSION 'test-only -- -exclude unstable -xonly'
+
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/6f43e8d682579a80ef5f
+    on_success: always
+    on_failure: always
+    on_start: false
+
