@@ -27,11 +27,10 @@ trait Plural {
     def qty(s: String) = i.toString + " " + s.plural(i)
     /** @return a pluralized string describing this quantity with the be verb */
     def beQty(s: String) = i.toString + " " + s.bePlural(i)
-    /**
-     * @return a Option with a pluralized string describing this quantity if it is 
-     * greater than 0 
-     */
+    /** @return a Option with a pluralized string describing this quantity if it is greater than 0 */
     def optQty(s: String): Option[String] = if (i > 0) Some(qty(s)) else None
+    /** @return a pluralized string describing this quantity if it is greater than 0 or an empty string */
+    def strictlyPositiveOrEmpty(s: String): String = if (i > 0) qty(s) else ""
     /**
      * @return a Option with a non-pluralized string describing this quantity if it is
      * greater than 0
