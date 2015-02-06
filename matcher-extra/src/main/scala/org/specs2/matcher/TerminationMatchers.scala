@@ -84,8 +84,9 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
   /**
    * use a variable to determine if the future has finished executing
    */
-  private var terminated = new AtomicBoolean(false)
-  private var cancelled = new AtomicBoolean(false)
+  private val terminated = new AtomicBoolean(false)
+  private val cancelled = new AtomicBoolean(false)
+
   private def createFuture[A](a: =>A)(implicit es: ExecutorService): Future[A] = {
     val future = Future(a)
     future.runAsyncInterruptibly(_ => terminated.set(true), cancelled)
