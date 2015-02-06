@@ -64,9 +64,9 @@ trait HmsTimer[T <: HmsTimer[T]] {
    */
   def hms: String = {
     val (hours, minutes, seconds, millis) = hourMinutesSecondsMillis
-    val hoursTime   = if (hours > 0) hours + " hour".plural(hours) + " " else ""
-    val minutesTime = hoursTime + (if (minutes > 0)  hoursTime + minutes + " minute".plural(minutes) + " ")
-    minutesTime + seconds + " second".plural(seconds)
+    List(hours.toInt.strictlyPositiveOrEmpty("hour"),
+         minutes.toInt.strictlyPositiveOrEmpty("minute"),
+         seconds.toInt.qty("second")).filter(_.nonEmpty).mkString(" ")
   }
 
   /**
