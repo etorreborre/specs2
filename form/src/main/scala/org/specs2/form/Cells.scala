@@ -103,6 +103,8 @@ case class TextCell(s: String, result: Option[Result] = None, decorator: Decorat
     }
   }
 
+  override def hashCode =
+    s.hashCode
 }
 
 object TextCell {

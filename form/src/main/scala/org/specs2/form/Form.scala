@@ -151,6 +151,9 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
     case f: Form => f.title == title && rows == f.rows
     case _       => false
   }
+
+  override def hashCode =
+    title.hashCode
 }
 
 /**
