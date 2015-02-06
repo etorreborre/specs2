@@ -96,6 +96,13 @@ case class Execution(run:            Option[Env => Result],
 
     case _ => false
   }
+
+  override def hashCode =
+    run.hashCode +
+    executed.hashCode +
+    timeout.hashCode +
+    mustJoin.hashCode +
+    isolable.hashCode
 }
 
 object Execution {

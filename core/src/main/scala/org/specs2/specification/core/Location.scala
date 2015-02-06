@@ -45,5 +45,8 @@ case class StacktraceLocation(trace: Seq[StackTraceElement] = (new Exception).ge
     case other                => false
   }
 
+  override def hashCode =
+    trace.map(_.toString).hashCode
+
   override def toString = s"${getClass.getSimpleName}(${traceLocation(NoStackTraceFilter)}})"
 }

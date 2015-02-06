@@ -38,6 +38,9 @@ trait NamedTag { outer =>
       case _           => false
     }
 
+  override def hashCode =
+    names.hashCode
+
   override def toString = s"Tag(${names.mkString(",")})"
 }
 

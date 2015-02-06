@@ -99,6 +99,9 @@ class SimpleTimer extends HmsTimer[SimpleTimer] {
     case s: SimpleTimer => true
     case other          => false
   }
+
+  override def hashCode =
+    elapsedTimes.hashCode
 }
 
 object SimpleTimer {
