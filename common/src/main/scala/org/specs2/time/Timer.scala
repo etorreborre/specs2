@@ -64,18 +64,16 @@ trait HmsTimer[T <: HmsTimer[T]] {
    */
   def hms: String = {
     val (hours, minutes, seconds, millis) = hourMinutesSecondsMillis
-    var result = ""
-    if (hours > 0) { result += hours + " hour".plural(hours) + " " }
-    if (minutes > 0) { result += minutes + " minute".plural(minutes) + " " }
-    result += (seconds + " second".plural(seconds))
-    result
+    val hoursTime   = if (hours > 0) hours + " hour".plural(hours) + " " else ""
+    val minutesTime = hoursTime + (if (minutes > 0)  hoursTime + minutes + " minute".plural(minutes) + " ")
+    minutesTime + seconds + " second".plural(seconds)
   }
 
   /**
    * @return a formatted string showing the hours, minutes, seconds and millis
    */
   def time: String = {
-    val (hours, minutes, seconds, millis) = hourMinutesSecondsMillis
+    val (_, _, _, millis) = hourMinutesSecondsMillis
     (if (hms != "0 second") hms + ", " else "") +
     millis + " ms"
   }
