@@ -48,6 +48,10 @@ The Exceptions trait provides functional ways to catch exceptions and deal with 
   tryOr executes an expression and returns the result or a default value. It returns
     + the result if the expression doesn't throw an exception
     + a default value if the expression throws an exception
+
+  tryCollect uses a partial function to evaluate a value
+    + tryCollect returns a boolean
+    + tryCollectOr returns any value
                                                                                                   """
     
   "tryo" - new group {
@@ -74,6 +78,10 @@ The Exceptions trait provides functional ways to catch exceptions and deal with 
 
     eg := catchAllOr("a")((e:Throwable) => e.getMessage) must_== "a"
     eg := catchAllOr({throw new Error("boom"); "a"})((e:Throwable) => "bang") must_== "bang"
+
+    eg := tryCollect("a") { case x => x == "a" }
+    eg := tryCollectOr("x", 100) { case x => x.toInt } must_== 100
+
   }
 
   def boom = { error("boom"); "a" }

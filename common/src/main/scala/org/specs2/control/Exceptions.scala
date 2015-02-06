@@ -97,6 +97,13 @@ trait Exceptions {
     catch { case e: Exception => -\/(f(e)) }
   }
 
+  /** try to apply a partial function to a value */
+  def tryCollect[T](a: =>T)(partialFunction: PartialFunction[T, Boolean]): Boolean =
+    tryCollectOr(a, false)(partialFunction)
+
+  /** try to apply a partial function to a value, with a default value if something goes wrong */
+  def tryCollectOr[T, S](a: =>T, or: S)(partialFunction: PartialFunction[T, S]): S =
+    tryOrElse { partialFunction.applyOrElse(a, (_: T) => or) }(or)
 
   /**
    * try to evaluate an expression, returning Either
