@@ -159,7 +159,7 @@ trait Matcher[-T] { outer =>
    */
   def orSkip(message: String => String): Matcher[T] = new Matcher[T] {
     def apply[U <: T](a: Expectable[U]) = {
-      tryOr(outer(a)) { e: Exception => MatchSkip(message(e.getMessage.notNull), a) } match {
+      tryOr(outer(a)) { t => MatchSkip(message(t.getMessage.notNull), a) } match {
         case f: MatchFailure[_]      => MatchSkip(message(f.koMessage), a)
         case other                   => other
       }
@@ -180,7 +180,7 @@ trait Matcher[-T] { outer =>
    */
   def orPending(message: String => String): Matcher[T] = new Matcher[T] {
     def apply[U <: T](a: Expectable[U]) = {
-      tryOr(outer(a)) { (e: Exception) => MatchPending(message(e.getMessage.notNull), a) } match {
+      tryOr(outer(a)) { t => MatchPending(message(t.getMessage.notNull), a) } match {
         case f: MatchFailure[_]        => MatchPending(message(f.koMessage), a)
         case other                     => other
       }

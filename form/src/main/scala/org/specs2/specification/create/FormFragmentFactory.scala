@@ -7,6 +7,7 @@ import core._
 import form._
 import text.NotNullStrings._
 import execute._
+import control.Exceptions._
 
 /**
  * Factory for creating Form fragments
@@ -26,10 +27,10 @@ trait DefaultFormFragmentFactory extends FormFragmentFactory {
 
   private def addForm(aForm: =>Form): Fragment = {
     lazy val form: Form =
-      try aForm.executeForm
-      catch { case e: Exception =>
-        Form("Initialisation error").tr(PropCell(Prop("", e.getMessage.notNull, (s: String, t: String) => Error(e))("message")))
+      tryOr(aForm.executeForm){ t =>
+        Form("Initialisation error").tr(PropCell(Prop("", t.getMessage.notNull, (_: String, _: String) => Error(t))("message")))
       }
+
     Fragment(FormDescription(() => form), Execution.result(form.result.getOrElse(Success(""))))
   }
 }

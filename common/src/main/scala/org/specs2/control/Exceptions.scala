@@ -1,6 +1,7 @@
 package org.specs2
 package control
 
+import scala.util.control.NonFatal
 import scalaz.{-\/, \/-, \/}
 
 /**
@@ -23,7 +24,7 @@ trait Exceptions {
    */
   def tryo[T](a: =>T): Option[T] = {
     try Some(a)
-    catch { case e: Exception => None }
+    catch { case NonFatal(e) => None }
   }
 
   /**
@@ -32,7 +33,7 @@ trait Exceptions {
    * If the expression throws an Exception a function f is used to return a value
    * of the expected type.
    */
-  def tryOr[T](a: =>T)(f: Exception => T): T =
+  def tryOr[T](a: =>T)(f: Throwable => T): T =
     trye(a)(f).fold(identity, identity)
 
   /**
@@ -81,9 +82,9 @@ trait Exceptions {
    * If the expression throws an Exception a function f is used to return the left value
    * of the Either returned value.
    */
-  def trye[T, S](a: =>T)(f: Exception => S): Either[S, T] = {
+  def trye[T, S](a: =>T)(f: Throwable => S): Either[S, T] = {
     try Right(a)
-    catch { case e: Exception => Left(f(e)) }
+    catch { case NonFatal(e) => Left(f(e)) }
   }
 
   /**
@@ -92,9 +93,9 @@ trait Exceptions {
    * If the expression throws an Exception a function f is used to return the left value
    * of the Either returned value.
    */
-  def try_\/[T, S](a: =>T)(f: Exception => S): \/[S, T] = {
+  def try_\/[T, S](a: =>T)(f: Throwable => S): \/[S, T] = {
     try \/-(a)
-    catch { case e: Exception => -\/(f(e)) }
+    catch { case NonFatal(e) => -\/(f(e)) }
   }
 
   /** try to apply a partial function to a value */

@@ -7,6 +7,7 @@ import ClassName._
 import scala.reflect.ClassTag
 import ClassName._
 import control._
+import scala.util.control.NonFatal
 import scalaz.{\/-, -\/, \/}
 import scalaz.std.anyVal._
 import scalaz.syntax.std.option._
@@ -131,7 +132,7 @@ trait Classes {
    */
   def loadClassEither[T <: AnyRef](className: String, loader: ClassLoader): Action[Throwable \/ Class[T]] = Actions.safe {
     try \/-(loader.loadClass(className).asInstanceOf[Class[T]])
-    catch { case t: Throwable => -\/(t) }
+    catch { case NonFatal(t) => -\/(t) }
   }
 
   def loadClass[T <: AnyRef](className: String, loader: ClassLoader): Action[Class[T]] =

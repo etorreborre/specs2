@@ -1,8 +1,8 @@
 package org.specs2
 package matcher
 
+import scala.util.control.NonFatal
 import sys._
-import execute.ResultExecution
 import specification._
 import text.Regexes._
  
@@ -71,17 +71,15 @@ class ExceptionMatchersSpec extends script.Specification with ResultMatchers wit
 
     eg := ({sys.error("boom"); 1} must not throwA).toResult must beFailing
 
-    eg := {
-      ResultExecution.execute(({throw new StackOverflowError("play again"); 1} must not(throwAn[Exception])).toResult) must beError
-    }
+    eg := { throw new StackOverflowError("play again"); 1 } must throwAn[Error]
 
   }
 
   "Partial function" - new group {
-    eg := (theBlock(error("boom")) must throwA[RuntimeException].like { case e => e.getMessage()(0) === 'b' }).message must startWith(
+    eg := (theBlock(error("boom")) must throwA[RuntimeException].like { case NonFatal(e) => e.getMessage()(0) === 'b' }).message must startWith(
       "Got the exception java.lang.RuntimeException: boom and 'b' is equal to 'b'")
 
-    eg := (theBlock(error("boom")) must throwA[RuntimeException].like { case e => e.getMessage()(0) === 'a' }).message must startWith(
+    eg := (theBlock(error("boom")) must throwA[RuntimeException].like { case NonFatal(e) => e.getMessage()(0) === 'a' }).message must startWith(
       "Expected: java.lang.RuntimeException. Got: java.lang.RuntimeException: boom and 'b' is not equal to 'a'")
   }
 

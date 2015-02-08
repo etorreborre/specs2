@@ -86,7 +86,7 @@ case class SmartDiffs(show: Boolean       = true,
 
 
 object SmartDiffs {
-  def fromString(s: String): Either[Exception, Diffs] = trye {
+  def fromString(s: String): Either[Throwable, Diffs] = trye {
     val values = s.split(",")
     SmartDiffs(
       show           = boolean(values(0)),

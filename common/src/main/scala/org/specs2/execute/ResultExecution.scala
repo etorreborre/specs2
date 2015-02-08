@@ -7,12 +7,14 @@ import reflect.ClassName._
 import text.NotNullStrings._
 import java.util.regex.Pattern
 
+import scala.util.control.NonFatal
+
 /**
 * This trait executes a Result and returns an appropriate value when a specs2 exception is thrown
 */
 trait ResultExecution { outer =>
   /** this implicit allows the execution of a Result with an `execute` method */
-  implicit def resultIsExecutable(r: =>Result) = new ExecutableResult(r)
+  implicit def resultIsExecutable(r: =>Result): ExecutableResult = new ExecutableResult(r)
   class ExecutableResult(r: =>Result) {
     def execute = outer.execute(r)
   }
@@ -27,10 +29,10 @@ trait ResultExecution { outer =>
       case PendingException(f)                                               => f
       case ErrorException(f)                                                 => f
       case DecoratedResultException(f)                                       => f
-      case e: Exception                                                      => Error(e)
       case e: AssertionError if fromJUnit(e)                                 => Failure(e.getMessage.notNull, "", e.getStackTrace.toList, details = FromNotImplementedError)
+      case e: AssertionError                                                 => Error(e)
       case e: java.lang.Error if simpleClassName(e) == "NotImplementedError" => Failure(e.getMessage.notNull, "", e.getStackTrace.toList, details = FromJUnitAssertionError)
-      case e: Throwable                                                      => Error(e)
+      case t: Exception                                                      => Error(t)
     }
 
   /** execute a Result and rethrow any exception or throws an exception if it is not a success */
@@ -53,10 +55,10 @@ trait ResultExecution { outer =>
       case e: PendingException                                               => throw e
       case e: ErrorException                                                 => throw e
       case e: DecoratedResultException                                       => throw e
-      case e: Exception                                                      => throw ErrorException(Error(e))
       case e: AssertionError if fromJUnit(e)                                 => throw FailureException(Failure(e.getMessage.notNull, "", e.getStackTrace.toList, details = FromNotImplementedError))
+      case e: AssertionError                                                 => throw ErrorException(Error(e))
       case e: java.lang.Error if simpleClassName(e) == "NotImplementedError" => throw FailureException(Failure(e.getMessage.notNull, "", e.getStackTrace.toList, details = FromJUnitAssertionError))
-      case e: Throwable                                                      => throw ErrorException(Error(e))
+      case t: Exception                                                      => throw ErrorException(Error(t))
     }
 
   /**
@@ -93,7 +95,7 @@ trait ResultExecution { outer =>
    * execute a result and return either as a Left(result) if something was thrown or a Right(result)
    */
   def executeThrowable(res: =>Result): Either[Result, Result] =
-    trye(res) { (e: Exception) => e match {
+    trye(res) { (e: Throwable) => e match {
       case FailureException(f) => f
       case SkipException(f)    => f
       case PendingException(f) => f

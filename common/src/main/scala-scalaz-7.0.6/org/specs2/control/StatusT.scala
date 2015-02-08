@@ -1,6 +1,7 @@
 package org.specs2
 package control
 
+import scala.util.control.NonFatal
 import scalaz.{\/, \&/, Equal, Monad, Functor}, \&/._
 import scalaz.syntax.monad._
 import scalaz.effect._
@@ -50,7 +51,7 @@ case class StatusT[F[+_], +A](run: F[Status[A]]) {
   def andFinally(otherwise: =>StatusT[F, Unit])(implicit F: Monad[F]): StatusT[F, A] = {
     StatusT[F, A](run.flatMap { r =>
       try otherwise.run.map(_ => r)
-      catch { case t: Throwable => StatusT.exception[F, A](t).run }
+      catch { case NonFatal(t) => StatusT.exception[F, A](t).run }
     })
   }
 

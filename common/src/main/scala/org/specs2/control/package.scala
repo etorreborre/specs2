@@ -7,7 +7,6 @@ import scalaz.{Monad, Monoid}
 import scalaz.std.anyVal._
 import scalaz.effect._
 import org.specs2.execute.{AsResult, Result}
-import org.specs2.execute.Error.ThrowableException
 import scalaz.concurrent.Task
 import scalaz.stream.Process
 import scalaz.syntax.bind._
@@ -89,7 +88,7 @@ package object control {
         ok        => AsResult(ok),
         fail      => org.specs2.execute.Failure(fail),
         throwable => org.specs2.execute.Error(throwable),
-        (m, t)    => org.specs2.execute.Error(m, new ThrowableException(t))
+        (m, t)    => org.specs2.execute.Error(m, t)
       )
   }
 

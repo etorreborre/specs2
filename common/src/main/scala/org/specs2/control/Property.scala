@@ -55,7 +55,7 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
     tryCollect(other) { case o: Property[_] => o.optionalValue == optionalValue }
 
   override def hashCode =
-    tryOr(optionalValue.hashCode)((_:Exception).hashCode)
+    tryOr(optionalValue.hashCode)((_:Throwable).hashCode)
 
   override def toString = optionalValue.fold("")(_.toString)
 }

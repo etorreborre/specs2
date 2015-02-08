@@ -236,7 +236,7 @@ object Result {
   }
 
   implicit def theseToResult(these: String \&/ Throwable): Result =
-    these.fold(s => Error(s), t => Error(Error.ThrowableException(t)), (s, t) => new Error(s, Error.ThrowableException(t)))
+    these.fold(s => Error(s), t => Error(t), (s, t) => new Error(s, t))
 
   /** this allows the creation of expectations with a for loop */
   def foreach[T, R : AsResult](seq: Seq[T])(f: T => R): Result = {
@@ -339,24 +339,21 @@ case object FromJUnitAssertionError extends Details
 /** 
  * This class represents an exception occurring during an execution.
  */
-case class Error(m: String, e: Exception) extends Result(m) with ResultStackTrace { outer =>
+case class Error(m: String, t: Throwable) extends Result(m) with ResultStackTrace { outer =>
   type SelfType = Error
 
   /** @return an exception created from the message and the stackTraceElements */
-  def exception = e match {
-    case Error.ThrowableException(t) => t
-    case other                       => other
-  }
-  def stackTrace = e.getFullStackTrace.toList
+  def exception = t
+  def stackTrace = t.getFullStackTrace.toList
 
   override def equals(o: Any) = {
     o match {
-      case Error(m2, e2) => m == m2 && e.getMessage.notNull == e2.getMessage.notNull
+      case Error(m2, t2) => m == m2 && t.getMessage.notNull == t2.getMessage.notNull
       case _ => false
     }
   }
 
-  def setExpectationsNb(n: Int) = new Error(m, e) {
+  def setExpectationsNb(n: Int) = new Error(m, t) {
     override val expectationsNb = n
   }
   def mute = copy(m = "")
@@ -368,9 +365,7 @@ case class Error(m: String, e: Exception) extends Result(m) with ResultStackTrac
  * This object allows to create an Error from an exception
  */
 case object Error {
-  def apply(e: Exception) = new Error(e.getMessage.notNull, e)
-  def apply(t: Throwable) = new Error(t.getMessage.notNull, new ThrowableException(t))
-  case class ThrowableException(t: Throwable) extends Exception(t.getClass.simpleName+": "+t.getMessage, t)
+  def apply(t: Throwable) = new Error(t.getMessage.notNull, t)
   def apply(m: String = "") = new Error(m, new Exception(m))
 }
 /** 
