@@ -102,7 +102,7 @@ object RegexExtractor {
   private def tryWithRegex[T](text: String, regex: =>Regex)(code: =>T): T =
     Exceptions.tryOr(code) {
       case f: FailureException => throw f
-      case e: MatchError => throw e
-      case other         => throw new ErrorException(new Error(s"could not extract the regex from $text: ${other.getMessage}", other))
+      case e: MatchError       => throw e
+      case other               => throw new ErrorException(new Error(s"could not extract the regex from $text: ${other.getMessage}", other))
     }
 }

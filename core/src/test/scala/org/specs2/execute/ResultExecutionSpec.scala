@@ -32,8 +32,8 @@ Executing a Result
  a NotImplementedError must return a Failure
  ${ execute { throw NotImplementedError("???"); success } must_== Failure("???") }
 
- any other Throwable must return an Error
- ${ execute { throw new OutOfMemoryError("oome"); success } must_== Error(new OutOfMemoryError("oome")) }
+ fatal exceptions must not be caught
+ ${ execute { throw new OutOfMemoryError("oome"); success } must throwAn[OutOfMemoryError] }
 
  any other type of Result must return itself
  ${ execute(success) must_== success }

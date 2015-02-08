@@ -58,8 +58,8 @@ The Exceptions trait provides functional ways to catch exceptions and deal with 
     eg := tryo("a") must_== Some("a")
     eg := tryo(boom) must_== None
 
-    eg := tryOr("a")((e:Exception) => e.getMessage) must_== "a"
-    eg := tryOr(boom)((e:Exception) => "bang") must_== "bang"
+    eg := tryOr("a")(_.getMessage) must_== "a"
+    eg := tryOr(boom)(_ => "bang") must_== "bang"
 
     eg := tryOrElse("a")("b") must_== "a"
     eg := tryOrElse(boom)("bang") must_== "bang"
@@ -70,14 +70,14 @@ The Exceptions trait provides functional ways to catch exceptions and deal with 
     eg := tryOk("a") must_== true
     eg := tryOk(boom) must_== false
 
-    eg := trye("a")((e:Exception) => e.getMessage) must_== Right("a")
-    eg := trye(boom)((e:Exception) => e.getMessage) must_== Left("boom")
+    eg := trye("a")(_.getMessage) must_== Right("a")
+    eg := trye(boom)(_.getMessage) must_== Left("boom")
 
-    eg := catchAll("a")((e:Throwable) => e.getMessage) must_== Right("a")
-    eg := catchAll({throw new Error("boom"); "a"})((e:Throwable) => e.getMessage) must_== Left("boom")
+    eg := catchAll("a")(_.getMessage) must_== Right("a")
+    eg := catchAll({throw new Error("boom"); "a"})(_.getMessage) must_== Left("boom")
 
-    eg := catchAllOr("a")((e:Throwable) => e.getMessage) must_== "a"
-    eg := catchAllOr({throw new Error("boom"); "a"})((e:Throwable) => "bang") must_== "bang"
+    eg := catchAllOr("a")(_.getMessage) must_== "a"
+    eg := catchAllOr({throw new Error("boom"); "a"})(_ => "bang") must_== "bang"
 
     eg := tryCollect("a") { case x => x == "a" }
     eg := tryCollectOr("x", 100) { case x => x.toInt } must_== 100

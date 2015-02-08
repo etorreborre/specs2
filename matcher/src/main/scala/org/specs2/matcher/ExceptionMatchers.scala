@@ -27,7 +27,7 @@ trait ExceptionBaseMatchers extends ExpectationsCreation {
    * @return a matcher checking the type of an Exception and its message (as a regexp)
    */
   def throwA[E <: Throwable](message: String = ".*")(implicit m: ClassTag[E]): Matcher[Any] = {
-    throwA(m).like { case e => createExpectable(e.getMessage.notNull).applyMatcher(BeMatching.withPart(message)) }
+    throwA(m).like { case e: Throwable => createExpectable(e.getMessage.notNull).applyMatcher(BeMatching.withPart(message)) }
   }
   /**
    * @return a matcher checking the value of an Exception
