@@ -10,16 +10,16 @@ When you use a build tool you generally only need to specify the main dependenci
 
  Dependency                                                                             | Comment
  -------------------------------------------------------------------------------------- | ---------------------------
- `"org.scalaz" %% "scalaz-core" % "7.1.0"`                                              | mandatory
- `"org.scalaz" %% "scalaz-concurrent" % "7.1.0"`                                        | mandatory
- `"org.scalaz.stream" %% "scalaz-stream" % "0.5a"`                                      | mandatory
+ `"org.scalaz" %% "scalaz-core" % "7.1.1"`                                              | mandatory
+ `"org.scalaz" %% "scalaz-concurrent" % "7.1.1"`                                        | mandatory
+ `"org.scalaz.stream" %% "scalaz-stream" % "0.6a"`                                      | mandatory
  `"com.chuusai" %% "shapeless" % "2.0.0"`                                               | if you use the GWT trait
- `"org.scalacheck" %% "scalacheck" % "1.11.3"`                                          | if using ScalaCheck
+ `"org.scalacheck" %% "scalacheck" % "1.12.1"`                                          | if using ScalaCheck
  `"org.mockito" % "mockito-core" % "1.9.5"`                                             | if using Mockito. Note: specs2.jar must be placed before mockito.jar on the classpath
  `"org.hamcrest" % "hamcrest-core" % "1.3"`                                             | if using Hamcrest matchers with Mockito
  `"junit" % "junit" % "4.11"`                                                           | if using JUnit
  `"org.specs2" % "classycle" % "1.4.1"`                                                 | if using the `org.specs2.specification.Analysis` trait
- `"org.scala-lang" % "scala-reflect" % "2.10.3"`                                        | if using interpolated specifications and/or macro matchers
+ `"org.scala-lang" % "scala-reflect" % "2.10.4"`                                        | if using interpolated specifications and/or macro matchers
  `compilerPlugin("org.scalamacros" %% "paradise" % "2.0.0" cross CrossVersion.full)`    | if using macro matchers and Scala 2.10
  `"org.scalamacros" %% "quasiquotes" % "2.0.0"`                                         | if using macro matchers and Scala 2.10
 
