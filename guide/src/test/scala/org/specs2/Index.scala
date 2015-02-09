@@ -275,8 +275,8 @@ s"""
         <td class="info">Snapshot</td>
         <td class="info">
         binaries (<a href="http://oss.sonatype.org/content/repositories/snapshots/org/specs2/specs2-core_2.11/$SNAPSHOT_VERSION/">specs2-core jar</a>,
-                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-core_2.11/7.1.0/">scalaz core jar</a>,
-                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-concurrent_2.11/7.1.0/">scalaz concurrent jar</a>)<br/>
+                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-core_2.11/7.1.1/">scalaz core jar</a>,
+                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-concurrent_2.11/7.1.1/">scalaz concurrent jar</a>)<br/>
        project (<a href="http://github.com/etorreborre/specs2/zipball/master">zip</a>,
                 <a href="http://github.com/etorreborre/specs2/tarball/master">tar</a>)
       </td>
@@ -285,8 +285,8 @@ s"""
         <td class="info">Released</td>
         <td class="info">
         binaries (<a href="http://oss.sonatype.org/content/repositories/releases/org/specs2/specs2-core_2.11/$VERSION/">specs2 jar</a>,
-                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-core_2.11/7.1.0/">scalaz core jar</a>,
-                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-concurrent_2.11/7.1.0/">scalaz concurrent jar</a>)<br/>
+                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-core_2.11/7.1.1/">scalaz core jar</a>,
+                  <a href="http://oss.sonatype.org/content/repositories/releases/org/scalaz/scalaz-concurrent_2.11/7.1.1/">scalaz concurrent jar</a>)<br/>
         project (<a href="http://github.com/etorreborre/specs2/zipball/SPECS2-$VERSION">zip</a>,
                  <a href="http://github.com/etorreborre/specs2/tarball/SPECS2-$VERSION">tar</a>)
       </td>
