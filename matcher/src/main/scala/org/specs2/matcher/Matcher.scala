@@ -245,8 +245,8 @@ trait Matcher[-T] { outer =>
 object Matcher {
   /** @return a MatchResult[T] from a condition, 2 messages and details */
   def result[T](test: Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T], details: Details): MatchResult[T] = {
-    if (test) MatchSuccess(okMessage, koMessage, value)
-    else      MatchFailure.create(okMessage, koMessage, value, details)
+    if (test) MatchSuccess(okMessage.notNull, koMessage.notNull, value)
+    else      MatchFailure.create(okMessage.notNull, koMessage.notNull, value, details)
   }
 
   /** @return a MatchResult[T] from a condition and 2 messages */
