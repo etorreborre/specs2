@@ -2,6 +2,7 @@ package org.specs2
 package matcher
 
 import MatchersCreation._
+import execute._
 
 class OptionMatchersSpec extends Spec with ResultMatchers with OptionMatchers { def is = s2"""
 
@@ -31,7 +32,10 @@ class OptionMatchersSpec extends Spec with ResultMatchers with OptionMatchers { 
   beAsNoneAs checks if 2 values are None at the same time
   ${ None must beAsNoneAs(None) }
   ${ Some(1) must beAsNoneAs(Some(2)) }
-  """
+
+  Failure details from value checks must be kept
+  ${ AsResult(Some("abc") must beSome(be_==("bca"))) must beLike { case Failure(_,_,_,FailureDetails(_,_)) =>ok } }
+"""
 
   def positive: Matcher[Int] = (i: Int) => (i > 0, s"$i is not positive")
 }
