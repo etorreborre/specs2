@@ -73,11 +73,15 @@ class OptionLikeMatcher[F[_], T, U](typeName: String, toOption: F[T] => Option[U
 class OptionLikeCheckedMatcher[F[_], T, U](typeName: String, toOption: F[T] => Option[U], check: ValueCheck[U]) extends Matcher[F[T]] {
   def apply[S <: F[T]](value: Expectable[S]) = {
     toOption(value.value) match {
-      case Some(v) => {
+      case Some(v) =>
         val r = check.check(v)
-        result(r.isSuccess, s"${value.description} is $typeName and ${r.message}", s"${value.description} is $typeName but ${r.message}", value)
-      }
-      case None    => result(false, s"${value.description} is $typeName", s"${value.description} is not $typeName", value)
+        val (okMessage, koMessage) = (s"${value.description} is $typeName and ${r.message}", s"${value.description} is $typeName but ${r.message}")
+        r match {
+          case f @ Failure(_,_,_,details) => result(r.isSuccess, okMessage, koMessage, value, details)
+          case _ =>                          result(r.isSuccess, okMessage, koMessage, value)
+        }
+
+      case None => result(false, s"${value.description} is $typeName", s"${value.description} is not $typeName", value)
     }
   }
 }

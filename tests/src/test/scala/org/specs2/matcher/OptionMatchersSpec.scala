@@ -1,6 +1,8 @@
 package org.specs2
 package matcher
 
+import execute._
+
 class OptionMatchersSpec extends Specification with ResultMatchers { def is = s2"""
 
  The OptionMatchers trait provides matchers to check Option instances.
@@ -29,7 +31,10 @@ class OptionMatchersSpec extends Specification with ResultMatchers { def is = s2
   beAsNoneAs checks if 2 values are None at the same time
   ${ None must beAsNoneAs(None) }
   ${ Some(1) must beAsNoneAs(Some(2)) }
-  """
+
+  Failure details from value checks must be kept
+  ${ AsResult(Some("abc") must beSome(be_==("bca"))) must beLike { case Failure(_,_,_,FailureDetails(_,_)) =>ok } }
+"""
 
   def positive: Matcher[Int] = (i: Int) => (i > 0, s"$i is not positive")
 }
