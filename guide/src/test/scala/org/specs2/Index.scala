@@ -190,7 +190,7 @@ s"""
 
   The features of <s2>specs2</s2> are:<p/>
   <div class="level1"><img src="./images/collapsed.gif">Concurrent execution of examples by default</img></div>
-  <div class="level1"><img src="./images/collapsed.gif"><a href="http://code.google.com/p/scalacheck/">ScalaCheck</a> properties</img></div>
+  <div class="level1"><img src="./images/collapsed.gif"><a href="http://scalacheck.org/">ScalaCheck</a> properties</img></div>
   <div class="level1"><img src="./images/collapsed.gif">Mocks with <a href="http://mockito.org/">Mockito</a></img></div>
   <div class="level1"><img src="./images/collapsed.gif">Data tables</img></div>
   <div class="level1"><img src="./images/collapsed.gif">AutoExamples, where the source code is extracted to describe the example</img></div>
