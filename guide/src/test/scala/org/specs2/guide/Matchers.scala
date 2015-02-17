@@ -296,7 +296,7 @@ atLeastOnceWhen(Seq(3, 4, 10)) { case a if a > 3 => a must be_>(5) }
 s2"""
 ### ScalaCheck
 
-A clever way of creating expectations in ***specs2*** is to use the [ScalaCheck](http://code.google.com/p/scalacheck) library.
+A clever way of creating expectations in ***specs2*** is to use the [ScalaCheck](http://scalacheck.org) library.
 
 To declare ScalaCheck properties you first need to extend the `ScalaCheck` trait. Then you can pass functions returning any kind of `Result` (`Boolean`, `Result`, `MatchResult`) to the `prop` method and use the resulting `Prop` as your example body: ${snippet{
 
