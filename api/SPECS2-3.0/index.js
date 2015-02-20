@@ -1,0 +1,1 @@
+Index.PACKAGES = {"org" : [], "org.specs2" : [], "org.specs2.info" : [{"object" : "org\/specs2\/info\/BuildInfo$.html", "name" : "org.specs2.info.BuildInfo"}]};
