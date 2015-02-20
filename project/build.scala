@@ -21,14 +21,9 @@ import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 import com.typesafe.tools.mima.plugin.MimaKeys.previousArtifact
 import xerial.sbt.Sonatype._
 import SonatypeKeys._
-import sbtbuildinfo.Plugin._
 import depends._
-import scoverage.ScoverageSbtPlugin._
-import ScoverageKeys._
-import scoverage.ScoverageSbtPlugin.instrumentSettings
-import org.scoverage.coveralls.CoverallsPlugin.coverallsSettings
-import CoverallsPlugin.CoverallsKeys.coverallsTokenFile 
-    
+import com.ambiata.promulgate.project.ProjectPlugin._
+
 object build extends Build {
   type Settings = Def.Setting[_]
 
@@ -37,7 +32,7 @@ object build extends Build {
     id = "specs2",
     base = file("."),
     settings = 
-      moduleSettings           ++
+      moduleSettings("")       ++
       siteSettings             ++
       releaseSettings          ++
       compatibilitySettings    ++
@@ -55,21 +50,10 @@ object build extends Build {
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 
-  lazy val buildSettings: Seq[Settings] =
-    buildInfoSettings ++
-      Seq(sourceGenerators in Compile <+= buildInfo,
-          buildInfoObject <<= name (n => n.replace("specs2-", "").replace("-", "").capitalize +"BuildInfo"),
-          buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, "commit" -> commit, "datetime" -> datetime),
-          buildInfoPackage := "org.specs2")
-
-  def commit = Process(s"git log --pretty=format:%h -n 1").lines.head
-
-  def datetime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss Z").format(new Date)
-
-  lazy val moduleSettings: Seq[Settings] =
+  def moduleSettings(name: String): Seq[Settings] =
       coreDefaultSettings  ++
       depends.resolvers    ++
-      buildSettings        ++
+      promulgate.library("org.specs2.info"+(if (name.nonEmpty)s".$name" else ""), "specs2") ++
       specs2Settings       ++
       compilationSettings  ++
       testingSettings      ++
@@ -79,12 +63,12 @@ object build extends Build {
   lazy val analysis = Project(id = "analysis", base = file("analysis"),
     settings = Seq(
       libraryDependencies ++= depends.classycle ++ depends.compiler(scalaVersion.value)) ++
-    moduleSettings ++
+    moduleSettings("analysis") ++
     Seq(name := "specs2-analysis")
   ).dependsOn(common % "test->test", core, matcher, scalacheck % "test")
 
   lazy val common = Project(id = "common", base = file("common"),
-    settings = moduleSettings ++
+    settings = moduleSettings("common") ++
       Seq(conflictWarning ~= { _.copy(failOnConflict = false) }, // lame
           libraryDependencies ++=
             depends.scalaz(scalazVersion.value) ++
@@ -103,60 +87,60 @@ object build extends Build {
         depends.testInterface.map(_ % "optional") ++
         depends.mockito.map(_ % "test") ++
         depends.junit.map(_ % "test")) ++
-      moduleSettings ++
+      moduleSettings("core") ++
       Seq(name := "specs2-core")
   ).dependsOn(matcher, common % "test->test")
 
   lazy val examples = Project(id = "examples", base = file("examples"),
-    settings = moduleSettings ++
+    settings = moduleSettings("examples") ++
       Seq(name := "specs2-examples")
   ).dependsOn(common, matcher, matcherExtra, core, analysis, form, html, markdown, gwt, junit, scalacheck, mock)
 
   lazy val form = Project(id = "form", base = file("form"),
-    settings = moduleSettings ++
+    settings = moduleSettings("form") ++
       Seq(name := "specs2-form")
   ).dependsOn(core, markdown, matcherExtra, scalacheck % "test->test")
 
   lazy val guide = Project(id = "guide", base = file("guide"),
-    settings = moduleSettings ++
+    settings = moduleSettings("guide") ++
       Seq(name := "specs2-guide")
   ).dependsOn(examples % "compile->compile;test->test")
 
   lazy val gwt = Project(id = "gwt", base = file("gwt"),
     settings = Seq(
       libraryDependencies ++= depends.shapeless(scalaVersion.value)) ++
-      moduleSettings ++
+      moduleSettings("gwt") ++
       Seq(name := "specs2-gwt")
   ).dependsOn(core, matcherExtra, scalacheck)
 
   lazy val html = Project(id = "html", base = file("html"),
     settings =
       Seq(libraryDependencies += depends.tagsoup) ++
-      moduleSettings ++
+      moduleSettings("html") ++
       Seq(name := "specs2-html")
   ).dependsOn(form, mock % "test", matcherExtra % "test", scalacheck % "test")
 
   lazy val junit = Project(id = "junit", base = file("junit"),
     settings = Seq(
       libraryDependencies ++= depends.junit ++ depends.mockito.map(_ % "test")) ++
-      moduleSettings ++
+      moduleSettings("junit") ++
       Seq(name := "specs2-junit")
   ).dependsOn(core, matcherExtra % "test", mock % "test")
 
   lazy val markdown = Project(id = "markdown", base = file("markdown"),
     settings = Seq(
      libraryDependencies ++= depends.pegdown ++ depends.shapeless(scalaVersion.value)) ++
-      moduleSettings ++
+      moduleSettings("markdown") ++
       Seq(name := "specs2-markdown")
   ).dependsOn(common, core % "compile->test")
 
   lazy val matcher = Project(id = "matcher", base = file("matcher"),
-    settings = moduleSettings ++
+    settings = moduleSettings("matcher") ++
       Seq(name := "specs2-matcher")
   ).dependsOn(common)
 
   lazy val matcherExtra = Project(id = "matcher-extra", base = file("matcher-extra"),
-    settings = moduleSettings ++ Seq(
+    settings = moduleSettings("matcherextra") ++ Seq(
       name := "specs2-matcher-extra",
       libraryDependencies ++= depends.paradise(scalaVersion.value)
     )
@@ -167,19 +151,19 @@ object build extends Build {
       libraryDependencies ++=
         depends.hamcrest ++
         depends.mockito) ++
-      moduleSettings ++
+      moduleSettings("mock") ++
       Seq(name := "specs2-mock")
   ).dependsOn(core)
 
   lazy val scalacheck = Project(id = "scalacheck", base = file("scalacheck"),
     settings = Seq(
       libraryDependencies ++= depends.scalacheck) ++
-      moduleSettings ++
+      moduleSettings("scalacheck") ++
       Seq(name := "specs2-scalacheck")
   ).dependsOn(core)
 
   lazy val tests = Project(id = "tests", base = file("tests"),
-    settings = moduleSettings ++
+    settings = moduleSettings("tests") ++
       Seq(name := "specs2-tests")
   ).dependsOn(core % "compile->compile;test->test", matcherExtra, junit % "test->test", examples % "test->test")
 
@@ -213,10 +197,7 @@ object build extends Build {
     javaOptions ++= Seq("-Xmx3G", "-Xss4M"),
     fork in test := true,
     testOptions := Seq(Tests.Filter(s => Seq(".guide.").exists(s.contains) || Seq("Spec", "Guide", "Index").exists(s.endsWith) && Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))
-  ) ++ instrumentSettings ++ Seq(
-    excludedPackages := ".*create.AutoExamples.*;.*create.S2StringContext.*",
-    coverallsTokenFile := Some("/Users/etorreborre/.coveralls.txt")
-  ) ++ coverallsSettings 
+  )
 
   /**
    * RELEASE PROCESS
