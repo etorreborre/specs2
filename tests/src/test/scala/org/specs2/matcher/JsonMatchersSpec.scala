@@ -7,6 +7,10 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
  ${ "{'name' : 'Joe'}" must /("name" -> "Joe") }
  ${ "{'name' : 'Joe'}" must /("name" -> contain("o")) }
  ${ "{'age'  : '33' }" must /("age" -> (be_>(30) ^^ ((_:String).toInt))) }
+ ${ "{'name' : 5.0}"   must /("name" -> 5.0) }
+ ${ "{'name' : 5}"     must /("name" -> 5.0) }
+ ${ "{'name' : 5.0}"   must /("name" -> 5) }
+ ${ "{'name' : 5}"     must /("name" -> 5) }
  ${ "{'name' : 'Joe'}" must not /("name2" -> "Joe") }
  ${ ("['name', 'Joe']" must /("name" -> "initial")) returns "[name, Joe] doesn't contain 'name':'initial'" }
  ${ "{'name' : 'Joe'}" must /("n.*".r -> "j.*".r) returns "{name:Joe} doesn't contain 'n.*':'j.*'" }
