@@ -5,8 +5,10 @@ import execute._
 import ResultLogicalCombinators._
 import MatchResultLogicalCombinators._
 import org.specs2.data.Sized
-
 import scala.util.parsing.json._
+import org.specs2.json._
+import Json._
+import control.Exceptions._
 import text.Quote._
 import text.NotNullStrings._
 import text.Regexes._
@@ -220,12 +222,12 @@ object JsonType {
     }
   }
 
-  implicit def JsonTypeMatcherGenTraversable(m: ContainWithResultSeq[String]): Matcher[JsonType] =  (actual: JsonType) => actual match {
+  implicit def JsonTypeMatcherGenTraversable(m: ContainWithResultSeq[String]): Matcher[JsonType] = (actual: JsonType) => actual match {
     case JsonArray(list) => m(Expectable(list.map(showJson)))
     case other           => Matcher.result(false, s"$other is not an array", Expectable(other))
   }
 
-  implicit def JsonTypeMatcherGenTraversable(m: ContainWithResult[String]): Matcher[JsonType] =  (actual: JsonType) => actual match {
+  implicit def JsonTypeMatcherGenTraversable(m: ContainWithResult[String]): Matcher[JsonType] = (actual: JsonType) => actual match {
     case JsonArray(list) => m(Expectable(list.map(showJson)))
     case other           => Matcher.result(false, s"$other is not an array", Expectable(other))
   }
@@ -268,6 +270,27 @@ trait JsonSelectors {
     def select(names: List[Any]) = names.find(_.notNull == v.notNull)
     def select(map: Map[String, Any]) = None
     def name = s"'${v.notNull}'"
+  }
+  case class JsonIntSelector(n: Int) extends JsonValueSelector {
+    def select(values: List[Any]) =
+      values.find {
+        case d: Double => d.toInt == n
+        case i: Int    => i == n
+        case other     => false
+      }
+    def select(map: Map[String, Any]) = None
+    def name = n.toString
+  }
+  case class JsonDoubleSelector(d: Double) extends JsonValueSelector {
+    def select(values: List[Any]) =
+      values.find {
+        case db: Double => db == d
+        case i: Int     => i == d
+        case other     => false
+      }
+
+    def select(map: Map[String, Any]) = None
+    def name = d.toString
   }
   case class JsonIndexSelector(n: Int) extends JsonSelector {
     def select(names: List[Any]) = names.zipWithIndex.find { case (_, i) => i == n }.map(_._1)
@@ -316,8 +339,8 @@ trait JsonMatchersImplicits extends JsonMatchersLowImplicits { this: JsonBaseMat
   implicit def toJsonValueSelectorStringMatcher[M <: Matcher[String]](m: M): JsonSelector = JsonMatcherSelector(m)
   implicit def toJsonValueSelectorStringValue(s: String): JsonSelector                    = JsonEqualValueSelector(s)
   implicit def toJsonValueSelectorRegex(r: Regex): JsonSelector                           = JsonRegexSelector(r)
-  implicit def toJsonValueSelectorDoubleValue(d: Double): JsonSelector                    = JsonEqualValueSelector(d.toString)
-  implicit def toJsonValueSelectorIntValue(i: Int): JsonSelector                          = JsonEqualValueSelector(i.toString)
+  implicit def toJsonValueSelectorDoubleValue(d: Double): JsonSelector                    = JsonDoubleSelector(d)
+  implicit def toJsonValueSelectorIntValue(i: Int): JsonSelector                          = JsonIntSelector(i)
   implicit def toJsonValueSelectorBooleanValue(b: Boolean): JsonSelector                  = JsonEqualValueSelector(b.toString)
 
   implicit def regexToJsonSelector: ToJsonSelector[Regex] = new ToJsonSelector[Regex] {
@@ -347,10 +370,10 @@ trait JsonMatchersLowImplicits extends JsonSelectors { this: JsonBaseMatchers =>
     def toJsonSelector(a: String): JsonSelector = JsonEqualValueSelector(a)
   }
   implicit def doubleToJsonSelector: ToJsonSelector[Double] = new ToJsonSelector[Double] {
-    def toJsonSelector(a: Double): JsonSelector = JsonEqualValueSelector(a.toString)
+    def toJsonSelector(a: Double): JsonSelector = JsonDoubleSelector(a)
   }
   implicit def intToJsonSelector: ToJsonSelector[Int] = new ToJsonSelector[Int] {
-    def toJsonSelector(a: Int): JsonSelector = JsonEqualValueSelector(a.toString)
+    def toJsonSelector(a: Int): JsonSelector = JsonIntSelector(a)
   }
   implicit def booleanToJsonSelector: ToJsonSelector[Boolean] = new ToJsonSelector[Boolean] {
     def toJsonSelector(a: Boolean): JsonSelector = JsonEqualValueSelector(a.toString)
