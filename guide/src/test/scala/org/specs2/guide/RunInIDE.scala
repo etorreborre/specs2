@@ -10,7 +10,7 @@ object RunInIDE extends UserGuidePage { def is = "Run in IDE".title ^ s2"""
  * execute a specification by selecting its name and pressing `CTRL+SHIFT+F10`
  * execute a single example by selecting its description and pressing `CTRL+SHIFT+F10`
 
- ![specs2 in Intellij](${IMAGES_DIR}intellij.png)
+ ![specs2 in Intellij](${GUIDE_DIR}/imagesintellij.png)
 
 However passing arguments needs to be done through system properties for now. So if you need to use the `xonly` argument you need to pass `-Dspecs2.xonly`.
 

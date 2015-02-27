@@ -1,0 +1,48 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Learn</title>
+    <link href="$DOC_DIR$/css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="$DOC_DIR$/css/bootstrap.css"                               type="text/css" rel="stylesheet" />
+    <link href="$DOC_DIR$/css/bootstrap-theme.min.css"                     type="text/css" rel="stylesheet" />
+    <link href="$DOC_DIR$/css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="$DOC_DIR$/css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="$DOC_DIR$/css/home.css"                                    type="text/css" rel="stylesheet" />
+
+    <script src="$DOC_DIR$/javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="$DOC_DIR$/javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="$DOC_DIR$/javascript/bootstrap.js"                        type="text/javascript"></script>
+    <script src="$DOC_DIR$/javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="$DOC_DIR$/javascript/analytics.js"                        type="text/javascript"></script>
+</head>
+<body onload="prettyPrint()">
+
+<div class="container">
+  <div id="navigation"></div>
+There are various sources you can use to learn about <s2>specs2</s2>
+  <div id="learn">
+  <ul>
+      <li>the <a href="$GUIDE_DIR$/org.specs2.guide.UserGuide.html">User Guide</a>. In particular you can start by learning how to <a href="$GUIDE_DIR$/org.specs2.guide.Structure.html">structure</a> your specification
+      </li>
+      <li>the <a href="$EXAMPLES_DIR$">examples</a> directory on Github
+      </li>
+      <li>the <a href="$API_DIR$/index.html#package">ScalaDoc</a></li>
+      <li>the <a href="http://notes.implicit.ly/tagged/specs2">release notes</a>
+      </li>
+      <li><s2>specs2</s2> presentations on Slideshare
+      </li>
+      <iframe src="http://www.slideshare.net/specs2/slideshelf" width="615px" height="470px" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:none;" ></iframe>
+
+  </ul>
+  </div>
+</div>
+
+</body>
+
+<script>
+ $$("#navigation").load("$DOC_DIR$/nav.html", function(){
+    $$("nav a:contains('Learn')").tab('show');
+ });
+</script>
+
+</html>

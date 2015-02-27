@@ -35,9 +35,9 @@ HelloWorldSpec
 This is a specification to check the 'Hello world' string
 
 The 'Hello world' string should
-+ contain 11 characters
-+ start with 'Hello'
-+ end with 'world'
+  + contain 11 characters
+  + start with 'Hello'
+  + end with 'world'
 
 Total for specification HelloWorldSpec
 Finished in 0 second, 58 ms

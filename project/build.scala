@@ -196,7 +196,7 @@ object build extends Build {
     cancelable := true,
     javaOptions ++= Seq("-Xmx3G", "-Xss4M"),
     fork in test := true,
-    testOptions := Seq(Tests.Filter(s => Seq(".guide.").exists(s.contains) || Seq("Spec", "Guide", "Index").exists(s.endsWith) && Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))
+    testOptions := Seq(Tests.Filter(s => Seq(".guide.").exists(s.contains) || Seq("Spec", "Guide", "Website").exists(s.endsWith) && Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))
   )
 
   /**
@@ -212,7 +212,7 @@ object build extends Build {
       setReleaseVersion,
       commitReleaseVersion,
       generateUserGuide,
-      generateIndexPage,
+      generateWebsite,
       publishSite,
       ReleaseStep(publishSignedArtifacts, check = identity, enableCrossBuild = true),
       releaseToSonatype,
@@ -221,37 +221,10 @@ object build extends Build {
       setNextVersion,
       commitNextVersion,
       pushChanges
-    ),
-    releaseSnapshotProcess := Seq[ReleaseStep](
-      generateUserGuide,
-      publishSite,
-      ReleaseStep(publishSignedArtifacts, check = identity, enableCrossBuild = true)
-      ),
-    commands += releaseSnapshotCommand
+    )
     ) ++
   Seq(publishUserGuideTask <<= pushSite.dependsOn(makeSite).dependsOn(generateUserGuideTask)) ++
   documentationSettings
-
-  lazy val releaseSnapshotProcess = SettingKey[Seq[ReleaseStep]]("release-snapshot-process")
-  private lazy val releaseSnapshotCommandKey = "release-snapshot"
-  private val WithDefaults = "with-defaults"
-  private val SkipTests = "skip-tests"
-  private val releaseSnapshotParser = (Space ~> WithDefaults | Space ~> SkipTests).*
-
-  val releaseSnapshotCommand: Command = Command(releaseSnapshotCommandKey)(_ => releaseSnapshotParser) { (st, args) =>
-    val extracted = Project.extract(st)
-    val releaseParts = extracted.get(releaseSnapshotProcess)
-
-    val startState = st
-      .put(useDefaults, args.contains(WithDefaults))
-      .put(skipTests, args.contains(SkipTests))
-
-    val initialChecks = releaseParts.map(_.check)
-    val process = releaseParts.map(_.action)
-
-    initialChecks.foreach(_(startState))
-    Function.chain(process)(startState)
-  }
 
   /**
    * DOCUMENTATION
@@ -260,7 +233,7 @@ object build extends Build {
     siteSourceDirectory <<= target (_ / "specs2-reports"),
     // depending on the version, copy the api files to a different directory
     siteMappings <++= (mappings in packageDoc in Compile, version) map { (m, v) =>
-      for((f, d) <- m) yield (f, if (v.trim.endsWith("SNAPSHOT")) ("api/master/" + d) else ("api/SPECS2-"+v+"/"+d))
+      for((f, d) <- m) yield (f, "api/SPECS2-"+v+"/"+d)
     },
     // override the synchLocal task to avoid removing the existing files
     synchLocal <<= (privateMappings, updatedRepository, gitRunner, streams) map { (mappings, repo, git, s) =>
@@ -273,7 +246,7 @@ object build extends Build {
 
   lazy val documentationSettings =
     testTaskDefinition(generateUserGuideTask, Seq(Tests.Filter(_.endsWith("UserGuide")), Tests.Argument("html"))) ++
-    testTaskDefinition(generateIndexPageTask, Seq(Tests.Filter(_.endsWith("Index")), Tests.Argument("html")))
+    testTaskDefinition(generateWebsiteTask, Seq(Tests.Filter(_.endsWith("Website"))))
 
   lazy val generateUserGuideTask = TaskKey[Tests.Output]("generate-user-guide", "generate the user guide")
   lazy val generateUserGuide     = ReleaseStep { st: State =>
@@ -281,8 +254,8 @@ object build extends Build {
     commitCurrent("updated the UserGuide")(st2)
   }
 
-  lazy val generateIndexPageTask = TaskKey[Tests.Output]("generate-index-page", "generate the index page")
-  lazy val generateIndexPage     = executeStepTask(generateIndexPageTask, "Generating the Index page", Test)
+  lazy val generateWebsiteTask = TaskKey[Tests.Output]("generate-website", "generate the website")
+  lazy val generateWebsite     = executeStepTask(generateWebsiteTask, "Generating the website", Test)
 
   lazy val publishUserGuideTask = TaskKey[Unit]("publish-user-guide", "publish the user guide")
 
@@ -312,8 +285,7 @@ object build extends Build {
   lazy val publicationSettings: Seq[Settings] = Seq(
     publishTo in Global <<= version { v: String =>
       val nexus = "https://oss.sonatype.org/"
-      if (v.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus + "content/repositories/snapshots")
-      else                             Some("staging" at nexus + "service/local/staging/deploy/maven2")
+      Some("staging" at nexus + "service/local/staging/deploy/maven2")
     },
     publishMavenStyle := true,
     publishArtifact in Test := false,
