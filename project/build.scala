@@ -334,7 +334,7 @@ object build extends Build {
    * COMPATIBILITY
    */
   lazy val compatibilitySettings = mimaDefaultSettings ++
-    Seq(previousArtifact := Some("org.specs2" % "specs2_2.10" % "2.3.7"))
+    Seq(previousArtifact := Some("org.specs2" %% "specs2" % "3.0"))
 
   /**
    * UTILITIES
