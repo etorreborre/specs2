@@ -208,9 +208,6 @@ object build extends Build {
     crossBuild := true,
     releaseProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
-      inquireVersions,
-      setReleaseVersion,
-      commitReleaseVersion,
       generateUserGuide,
       generateWebsite,
       publishSite,
@@ -218,8 +215,6 @@ object build extends Build {
       releaseToSonatype,
       notifyHerald,
       tagRelease,
-      setNextVersion,
-      commitNextVersion,
       pushChanges
     )
     ) ++
