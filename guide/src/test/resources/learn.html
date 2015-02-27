@@ -2,18 +2,18 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Learn</title>
-    <link href="./css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
-    <link href="./css/bootstrap.css"                               type="text/css" rel="stylesheet" />
-    <link href="./css/bootstrap-theme.min.css"                     type="text/css" rel="stylesheet" />
-    <link href="./css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
-    <link href="./css/prettify.css"                                type="text/css" rel="stylesheet" />
-    <link href="./css/home.css"                                    type="text/css" rel="stylesheet" />
+    <link href="$DOC_DIR$/css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="$DOC_DIR$/css/bootstrap.css"                               type="text/css" rel="stylesheet" />
+    <link href="$DOC_DIR$/css/bootstrap-theme.min.css"                     type="text/css" rel="stylesheet" />
+    <link href="$DOC_DIR$/css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="$DOC_DIR$/css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="$DOC_DIR$/css/home.css"                                    type="text/css" rel="stylesheet" />
 
-    <script src="./javascript/jquery.js"                           type="text/javascript"></script>
-    <script src="./javascript/jquery.jstree.js"                    type="text/javascript"></script>
-    <script src="./javascript/bootstrap.js"                        type="text/javascript"></script>
-    <script src="./javascript/prettify.js"                         type="text/javascript"></script>
-    <script src="./javascript/analytics.js"                        type="text/javascript"></script>
+    <script src="$DOC_DIR$/javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="$DOC_DIR$/javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="$DOC_DIR$/javascript/bootstrap.js"                        type="text/javascript"></script>
+    <script src="$DOC_DIR$/javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="$DOC_DIR$/javascript/analytics.js"                        type="text/javascript"></script>
 </head>
 <body onload="prettyPrint()">
 
@@ -22,11 +22,11 @@
 There are various sources you can use to learn about <s2>specs2</s2>
   <div id="learn">
   <ul>
-      <li>the <a href="http://etorreborre.github.io/specs2/guide-specs2-three/org.specs2.guide.UserGuide.html">User Guide</a>. In particular you can start by learning how to <a href="http://etorreborre.github.io/specs2/guide-specs2-three/org.specs2.guide.Structure.html">structure</a> your specification
+      <li>the <a href="$GUIDE_DIR$/org.specs2.guide.UserGuide.html">User Guide</a>. In particular you can start by learning how to <a href="$GUIDE_DIR$/org.specs2.guide.Structure.html">structure</a> your specification
       </li>
-      <li>the <a href="https://github.com/etorreborre/specs2/blob/master/examples/src/test/scala/examples">examples</a> directory on Github
+      <li>the <a href="$EXAMPLES_DIR$">examples</a> directory on Github
       </li>
-      <li>the <a href="http://etorreborre.github.io/specs2/api/SPECS2-2.4.15/index.html#package">ScalaDoc</a></li>
+      <li>the <a href="$API_DIR$/index.html#package">ScalaDoc</a></li>
       <li>the <a href="http://notes.implicit.ly/tagged/specs2">release notes</a>
       </li>
       <li><s2>specs2</s2> presentations on Slideshare
@@ -40,8 +40,8 @@ There are various sources you can use to learn about <s2>specs2</s2>
 </body>
 
 <script>
- $("#navigation").load("nav.html", function(){
-    $("nav a:contains('Learn')").tab('show');
+ $$("#navigation").load("$DOC_DIR$/nav.html", function(){
+    $$("nav a:contains('Learn')").tab('show');
  });
 </script>
 

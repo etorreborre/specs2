@@ -2,18 +2,18 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>specs2.org</title>
-    <link href="./css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
-    <link href="./css/bootstrap.css"                               type="text/css" rel="stylesheet" />
-    <link href="./css/bootstrap-theme.min.css"                     type="text/css" rel="stylesheet" />
-    <link href="./css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
-    <link href="./css/prettify.css"                                type="text/css" rel="stylesheet" />
-    <link href="./css/home.css"                                    type="text/css" rel="stylesheet" />
+    <link href="$DOC_DIR$/css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="$DOC_DIR$/css/bootstrap.css"                               type="text/css" rel="stylesheet" />
+    <link href="$DOC_DIR$/css/bootstrap-theme.min.css"                     type="text/css" rel="stylesheet" />
+    <link href="$DOC_DIR$/css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="$DOC_DIR$/css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="$DOC_DIR$/css/home.css"                                    type="text/css" rel="stylesheet" />
 
-    <script src="./javascript/jquery.js"                           type="text/javascript"></script>
-    <script src="./javascript/jquery.jstree.js"                    type="text/javascript"></script>
-    <script src="./javascript/bootstrap.js"                        type="text/javascript"></script>
-    <script src="./javascript/prettify.js"                         type="text/javascript"></script>
-    <script src="./javascript/analytics.js"                        type="text/javascript"></script>
+    <script src="$DOC_DIR$/javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="$DOC_DIR$/javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="$DOC_DIR$/javascript/bootstrap.js"                        type="text/javascript"></script>
+    <script src="$DOC_DIR$/javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="$DOC_DIR$/javascript/analytics.js"                        type="text/javascript"></script>
 </head>
 <body onload="prettyPrint()">
 
@@ -37,9 +37,9 @@
   This is a specification for the 'Hello world' string
 
   The 'Hello world' string should
-    contain 11 characters                             $e1
-    start with 'Hello'                                $e2
-    end with 'world'                                  $e3
+    contain 11 characters                             $$e1
+    start with 'Hello'                                $$e2
+    end with 'world'                                  $$e3
                                                       """
   def e1 = "Hello world" must haveSize(11)
   def e2 = "Hello world" must startWith("Hello")
@@ -71,9 +71,9 @@ class HelloWorldSpec extends Specification {
                 <pre><code class="prettyprint carousel-code-smaller">class IntSumSpec extends Specification with ScalaCheck { def is = s2"""
 
   The IntSum Monoid must respect Monoid laws
-    left identity                                     $leftid
-    right identity                                    $rightid
-    associativity                                     $associativity
+    left identity                                     $$leftid
+    right identity                                    $$rightid
+    associativity                                     $$associativity
                                                       """
   import scalaz._, Scalaz._
   import IntSumMonoid._
@@ -92,13 +92,13 @@ class HelloWorldSpec extends Specification {
                 <pre><code class="prettyprint carousel-code">class PluralSpec extends Specification { def is = s2"""
 
   Names can be pluralized depending on a quantity
-  ${ "apple".plural(1) === "apple"  }
-  ${ "apple".plural(2) === "apples" }
-  ${ "foot".plural(2)  === "feet"   }
+  $${ "apple".plural(1) === "apple"  }
+  $${ "apple".plural(2) === "apples" }
+  $${ "foot".plural(2)  === "feet"   }
 
-  ${ 1.qty("apple") === "1 apple"  }
-  ${ 2.qty("apple") === "2 apples" }
-  ${ 2.qty("foot")  === "2 feet"   }
+  $${ 1.qty("apple") === "1 apple"  }
+  $${ 2.qty("apple") === "2 apples" }
+  $${ 2.qty("foot")  === "2 feet"   }
   """
 }</code></pre>
             </div>
@@ -108,8 +108,8 @@ class HelloWorldSpec extends Specification {
   def is = sequential ^ s2"""
 
   We can create in the database
-    create a user                                    $create
-    list all users                                   $list
+    create a user                                    $$create
+    list all users                                   $$list
                                                      """
   import DB._
 
@@ -150,6 +150,6 @@ class HelloWorldSpec extends Specification {
 </body>
 
 <script>
-    $("#navigation").load("nav.html");
+    $$("#navigation").load("$DOC_DIR$/nav.html");
 </script>
 </html>
