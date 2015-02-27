@@ -2,18 +2,18 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>specs2.org</title>
-    <link href="$DOC_DIR$/css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
-    <link href="$DOC_DIR$/css/bootstrap.css"                               type="text/css" rel="stylesheet" />
-    <link href="$DOC_DIR$/css/bootstrap-theme.min.css"                     type="text/css" rel="stylesheet" />
-    <link href="$DOC_DIR$/css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
-    <link href="$DOC_DIR$/css/prettify.css"                                type="text/css" rel="stylesheet" />
-    <link href="$DOC_DIR$/css/home.css"                                    type="text/css" rel="stylesheet" />
+    <link href="$SITE_DIR$/css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="$SITE_DIR$/css/bootstrap.css"                               type="text/css" rel="stylesheet" />
+    <link href="$SITE_DIR$/css/bootstrap-theme.css"                         type="text/css" rel="stylesheet" />
+    <link href="$SITE_DIR$/css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="$SITE_DIR$/css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="$SITE_DIR$/css/home.css"                                    type="text/css" rel="stylesheet" />
 
-    <script src="$DOC_DIR$/javascript/jquery.js"                           type="text/javascript"></script>
-    <script src="$DOC_DIR$/javascript/jquery.jstree.js"                    type="text/javascript"></script>
-    <script src="$DOC_DIR$/javascript/bootstrap.js"                        type="text/javascript"></script>
-    <script src="$DOC_DIR$/javascript/prettify.js"                         type="text/javascript"></script>
-    <script src="$DOC_DIR$/javascript/analytics.js"                        type="text/javascript"></script>
+    <script src="$SITE_DIR$/javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="$SITE_DIR$/javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="$SITE_DIR$/javascript/bootstrap.js"                        type="text/javascript"></script>
+    <script src="$SITE_DIR$/javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="$SITE_DIR$/javascript/analytics.js"                        type="text/javascript"></script>
 </head>
 <body onload="prettyPrint()">
 
@@ -68,7 +68,7 @@ class HelloWorldSpec extends Specification {
           </div>
             <div class="item">
                 <div class="caption">Test your code with <a href="http://www.scalacheck.org">ScalaCheck</a></div>
-                <pre><code class="prettyprint carousel-code-smaller">class IntSumSpec extends Specification with ScalaCheck { def is = s2"""
+                <pre><code class="prettyprint carousel-code">class IntSumSpec extends Specification with ScalaCheck { def is = s2"""
 
   The IntSum Monoid must respect Monoid laws
     left identity                                     $$leftid
@@ -104,7 +104,7 @@ class HelloWorldSpec extends Specification {
             </div>
             <div class="item">
                 <div class="caption">Manage contexts for integration testing</div>
-                <pre><code class="prettyprint carousel-code-smaller">class UsersSpec extends Specification with BeforeAll with Before {
+                <pre><code class="prettyprint carousel-code">class UsersSpec extends Specification with BeforeAll with Before {
   def is = sequential ^ s2"""
 
   We can create in the database
@@ -150,6 +150,6 @@ class HelloWorldSpec extends Specification {
 </body>
 
 <script>
-    $$("#navigation").load("$DOC_DIR$/nav.html");
+    $$("#navigation").load("$SITE_DIR$/nav.html");
 </script>
 </html>

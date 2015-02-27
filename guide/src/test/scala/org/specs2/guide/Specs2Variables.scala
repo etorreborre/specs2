@@ -8,16 +8,16 @@ object Specs2Variables extends Specs2Variables
 trait Specs2Variables {
 
   lazy val VERSION        = BuildInfo.version
-  lazy val DOC_DIR        = s"http://etorreborre.github.io/specs2/SPECS2-$VERSION"
+  lazy val GUIDE_DIR      = s"http://etorreborre.github.io/specs2/guide/SPECS2-$VERSION"
+  lazy val SITE_DIR       = s"http://etorreborre.github.io/specs2/website/SPECS2-$VERSION"
+  lazy val API_DIR        = s"http://etorreborre.github.io/specs2/api/SPECS2-$VERSION"
   lazy val PROJECT_DIR    = s"https://github.com/etorreborre/specs2/tree/SPECS2-$VERSION"
-  lazy val GUIDE_DIR      = s"$DOC_DIR/guide"
   lazy val EXAMPLES_DIR   = s"$PROJECT_DIR/examples/src/test/scala/examples"
-  lazy val API_DIR        = s"$DOC_DIR/api"
 
   lazy val specs2Variables: Map[String, String] =
     Map(
       "VERSION"           -> VERSION,
-      "DOC_DIR"           -> DOC_DIR,
+      "SITE_DIR"          -> SITE_DIR,
       "PROJECT_DIR"       -> PROJECT_DIR,
       "GUIDE_DIR"         -> GUIDE_DIR,
       "EXAMPLES_DIR"      -> EXAMPLES_DIR,

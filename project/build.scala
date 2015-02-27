@@ -33,9 +33,9 @@ object build extends Build {
     base = file("."),
     settings = 
       moduleSettings("")       ++
-      siteSettings             ++
-      releaseSettings          ++
       compatibilitySettings    ++
+      releaseSettings          ++
+      siteSettings             ++
       Seq(name := "specs2")
   ).aggregate(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, tests)
   
@@ -103,7 +103,8 @@ object build extends Build {
 
   lazy val guide = Project(id = "guide", base = file("guide"),
     settings = moduleSettings("guide") ++
-      Seq(name := "specs2-guide")
+      Seq(name := "specs2-guide") ++
+      documentationSettings
   ).dependsOn(examples % "compile->compile;test->test")
 
   lazy val gwt = Project(id = "gwt", base = file("gwt"),
@@ -196,7 +197,9 @@ object build extends Build {
     cancelable := true,
     javaOptions ++= Seq("-Xmx3G", "-Xss4M"),
     fork in test := true,
-    testOptions := Seq(Tests.Filter(s => Seq(".guide.").exists(s.contains) || Seq("Spec", "Guide", "Website").exists(s.endsWith) && Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))
+    testOptions := Seq(Tests.Filter(s =>
+      (Seq(".guide.").exists(s.contains) || Seq("Spec", "Guide", "Website").exists(s.endsWith)) &&
+        Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))
   )
 
   /**
@@ -208,33 +211,77 @@ object build extends Build {
     crossBuild := true,
     releaseProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
+      generateWebsite,
+      executeStepTask(makeSite, "make the site", Compile),
+      publishSite,
+      ReleaseStep(publishSignedArtifacts, check = identity, enableCrossBuild = true),
+      releaseToSonatype,
+      tagRelease,
+      pushChanges
+    ),
+    releaseOfficialProcess := Seq[ReleaseStep](
+      checkSnapshotDependencies,
       inquireVersions,
       setReleaseVersion,
-      commitReleaseVersion,
-      generateUserGuide,
       generateWebsite,
+      executeStepTask(makeSite, "make the site", Compile),
       publishSite,
       ReleaseStep(publishSignedArtifacts, check = identity, enableCrossBuild = true),
       releaseToSonatype,
       notifyHerald,
       tagRelease,
-      setNextVersion,
-      commitNextVersion,
       pushChanges
-    )
+    ),
+    commands += releaseOfficialCommand
     ) ++
-  Seq(publishUserGuideTask <<= pushSite.dependsOn(makeSite).dependsOn(generateUserGuideTask)) ++
-  documentationSettings
+  documentationSettings ++
+  apiSettings               ++
+  Seq(scalacOptions in (Compile, doc) += "-Ymacro-no-expand")
+
+  lazy val apiSettings: Seq[Settings] = Seq(
+    sources                      in (Compile, doc) := sources.all(aggregateCompile).value.flatten,
+    unmanagedSources             in (Compile, doc) := unmanagedSources.all(aggregateCompile).value.flatten,
+    unmanagedSourceDirectories   in (Compile, doc) := unmanagedSourceDirectories.all(aggregateCompile).value.flatten,
+    unmanagedResourceDirectories in (Compile, doc) := unmanagedResourceDirectories.all(aggregateCompile).value.flatten,
+    libraryDependencies                            := libraryDependencies.all(aggregateTest).value.flatten.map(maybeMarkProvided)
+  )
+
+  lazy val aggregateCompile = ScopeFilter(
+    inProjects(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock),
+    inConfigurations(Compile))
+
+  lazy val aggregateTest = ScopeFilter(
+    inProjects(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, guide, examples),
+    inConfigurations(Test))
+
+  lazy val releaseOfficialProcess = SettingKey[Seq[ReleaseStep]]("release-official-process")
+  private lazy val releaseOfficialCommandKey = "release-official"
+  private val WithDefaults = "with-defaults"
+  private val releaseOfficialParser = (Space ~> WithDefaults).*
+
+  val releaseOfficialCommand: Command = Command(releaseOfficialCommandKey)(_ => releaseOfficialParser) { (st, args) =>
+    val extracted = Project.extract(st)
+    val releaseParts = extracted.get(releaseOfficialProcess)
+
+    val startState = st
+      .put(useDefaults, args.contains(WithDefaults))
+
+    val initialChecks = releaseParts.map(_.check)
+    val process = releaseParts.map(_.action)
+
+    initialChecks.foreach(_(startState))
+    Function.chain(process)(startState)
+  }
 
   /**
    * DOCUMENTATION
    */
-  lazy val siteSettings: Seq[Settings] = ghpages.settings ++ SbtSite.site.settings ++ Seq(
-    siteSourceDirectory <<= target (_ / "specs2-reports"),
-    // depending on the version, copy the api files to a different directory
-    siteMappings <++= (mappings in packageDoc in Compile, version) map { (m, v) =>
-      for((f, d) <- m) yield (f, "api/SPECS2-"+v+"/"+d)
-    },
+  lazy val siteSettings: Seq[Settings] = ghpages.settings ++ SbtSite.site.settings ++
+    Seq(
+    siteSourceDirectory <<= target (_ / "specs2-reports" / "site"),
+    // copy the api files to a versioned directory
+    siteMappings <++= (mappings in packageDoc in Compile, version) map { (m, v) => m.map { case (f, d) => (f, s"api/SPECS2-$v/$d") } },
+    includeFilter in makeSite := AllPassFilter,
     // override the synchLocal task to avoid removing the existing files
     synchLocal <<= (privateMappings, updatedRepository, gitRunner, streams) map { (mappings, repo, git, s) =>
       val betterMappings = mappings map { case (file, target) => (file, repo / target) }
@@ -245,19 +292,10 @@ object build extends Build {
   )
 
   lazy val documentationSettings =
-    testTaskDefinition(generateUserGuideTask, Seq(Tests.Filter(_.endsWith("UserGuide")), Tests.Argument("html"))) ++
     testTaskDefinition(generateWebsiteTask, Seq(Tests.Filter(_.endsWith("Website"))))
 
-  lazy val generateUserGuideTask = TaskKey[Tests.Output]("generate-user-guide", "generate the user guide")
-  lazy val generateUserGuide     = ReleaseStep { st: State =>
-    val st2 = executeStepTask(generateUserGuideTask, "Generating the User Guide", Test)(st)
-    commitCurrent("updated the UserGuide")(st2)
-  }
-
   lazy val generateWebsiteTask = TaskKey[Tests.Output]("generate-website", "generate the website")
-  lazy val generateWebsite     = executeStepTask(generateWebsiteTask, "Generating the website", Test)
-
-  lazy val publishUserGuideTask = TaskKey[Unit]("publish-user-guide", "publish the user guide")
+  lazy val generateWebsite     = executeStepTask(generateWebsiteTask in guide, "Generating the website", Test)
 
   lazy val publishSite = ReleaseStep { st: State =>
     val st2 = executeStepTask(makeSite, "Making the site")(st)
@@ -321,7 +359,7 @@ object build extends Build {
   lazy val notifyHerald = ReleaseStep (
     action = (st: State) => {
       Process("herald &").lines; st.log.info("Starting herald to publish the release notes")
-      commitCurrent("Updated the release notes")(st)
+      st
     },
     check  = (st: State) => {
       st.log.info("Checking if herald is installed")
@@ -374,7 +412,7 @@ object build extends Build {
     st.log.info(info)
     val extracted = Project.extract(st)
     val ref: ProjectRef = extracted.get(thisProjectRef)
-    extracted.runTask(task in configuration in ref, st)._1
+    extracted.runTask(task in configuration, st)._1
   }
 
   private def commitCurrent(commitMessage: String): State => State = { st: State =>

@@ -57,7 +57,7 @@ trait TableOfContents {
 
         (page: SpecHtmlPage) => {
           def isPageNode = (loc: TreeLoc[SpecHtmlPage]) => loc.getLabel == page
-          val parentNames = treeLoc.find(isPageNode).map(n => (n.parents.map(_._2.pandocName) :+ page.pandocName).map(name => "'"+name+"'").mkString(",")).getOrElse(page.pandocName)
+          val parentNames = treeLoc.find(isPageNode).map(n => (n.parents.map(_._2.pandocName) :+ page.pandocName).map(name => "'"+name+"'").mkString(",")).getOrElse("'"+page.pandocName+"'")
           val result =
             <div id="tree">{tocNodes}</div> ++
               <script>{s"$$(function () { $$('#tree').jstree({'core':{'initially_open':[$parentNames], 'animation':200}, 'themes' : {'theme': 'default','url': './css/themes/default/style.css'}, 'plugins':['themes', 'html_data']}); });"}</script>

@@ -4,8 +4,6 @@ package core
 
 import scalaz.Monoid
 import scalaz.concurrent.Task
-import execute.{AsResult, Result}
-import shapeless._
 import Fragments._
 import scalaz.stream._
 import Process._
@@ -34,17 +32,17 @@ case class Fragments(contents: Process[Task, Fragment]) {
 
   /** filter, map or flatMap the fragments */
 
-  def when(condition: =>Boolean) = contentsLens.modify(this)(_  when emit(condition))
+  def when(condition: =>Boolean) = copy(contents = contents when emit(condition))
 
-  def map(f: Fragment => Fragment)                                  = contentsLens.modify(this)(_ map f)
+  def map(f: Fragment => Fragment)                                  = copy(contents = contents map f)
   def mapDescription(f: Description => Description)                 = map(_.updateDescription(f))
-  def filter(predicate: Fragment => Boolean)                        = contentsLens.modify(this)(_ filter predicate)
+  def filter(predicate: Fragment => Boolean)                        = copy(contents = contents filter predicate)
 
-  def update(f: Process[Task, Fragment] => Process[Task, Fragment]) = contentsLens.modify(this)(f)
-  def flatMap(f: Fragment => Process[Task, Fragment])               = contentsLens.modify(this)(_ flatMap f)
-  def |> (other: Process1[Fragment, Fragment])                      = contentsLens.modify(this)(_ |> other)
-  def append(other: Process[Task, Fragment]): Fragments             = contentsLens.modify(this)(_ fby other)
-  def prepend(other: Process[Task, Fragment]): Fragments            = contentsLens.modify(this)(other fby _)
+  def update(f: Process[Task, Fragment] => Process[Task, Fragment]) = copy(contents = f(contents))
+  def flatMap(f: Fragment => Process[Task, Fragment])               = copy(contents = contents flatMap f)
+  def |> (other: Process1[Fragment, Fragment])                      = copy(contents = contents |> other)
+  def append(other: Process[Task, Fragment]): Fragments             = copy(contents = contents fby other)
+  def prepend(other: Process[Task, Fragment]): Fragments            = copy(contents = other fby contents)
 
   /** run the process to get all fragments */
   def fragments: IndexedSeq[Fragment] = contents.runLog.run
@@ -95,8 +93,6 @@ case class Fragments(contents: Process[Task, Fragment]) {
 }
 
 object Fragments {
-  val contentsLens = lens[Fragments] >> 'contents
-
   /** empty sequence of fragments */
   val empty = Fragments()
 

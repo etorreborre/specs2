@@ -1,7 +1,7 @@
 body {
   margin: 0px 5px 0px 5px;
   font-family: 'Open Sans', sans-serif;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: normal;
   color: #3D3B3B;	
 }
@@ -82,7 +82,7 @@ img.s2logolarge {
   text-shadow: none;
   color: #485466;
   background-color: #F2F7FD;
-  font-size: 25px;
+  font-size: 18px;
   text-align:center;
   padding: 4px 0px 4px 0px;
   margin: 15px 140px 10px 0px;
@@ -108,11 +108,7 @@ img.s2logolarge {
 }
 
 .carousel .prettyprint {
-  font-size: 20px;
-}
-
-.prettyprint.carousel-code-smaller {
-  font-size:19px;
+  font-size: 16px;
 }
 
 .prettyprint .str {
@@ -124,7 +120,7 @@ img.s2logolarge {
 }
 
 .carousel .prettyprint .kwd {
- font-size: 19px
+ font-size: 15px
 }
 
 ol li {
@@ -142,12 +138,12 @@ pre code a .com {
 
 .prettyprint.tab-code .kwd {
  font-weight: normal;
- font-size: 15px
+ font-size: 13px
 }
 
 .console {
   font-family: Courier;
-  font-size: 15px;
+  font-size: 13px;
   color: #F4EEEE;
   background: #000000;
   border: 1px #CCCCCC;
@@ -191,7 +187,7 @@ nav {
 .panel {
  vertical-align: middle;
  text-align: center;
- font-size: 22px;
+ font-size: 20px;
 }
 
 .lower-row {

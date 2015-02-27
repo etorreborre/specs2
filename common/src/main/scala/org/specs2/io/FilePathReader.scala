@@ -77,13 +77,21 @@ trait FilePathReader {
     go(directory)
   }
 
-  /** @return the content of a file as a UTF-8 string by default */
-  def readFile(path: FilePath)(implicit codec: Codec): Action[String] =
+  /** @return the content of a file encoded as UTF8 */
+  def readFile(path: FilePath): Action[String] =
     readLines(path).map(_.mkString("\n"))
 
-  /** @return the content of a file as UTF-8 lines by default */
-  def readLines(filePath: FilePath)(implicit codec: Codec): Action[IndexedSeq[String]] =
-    Actions.fromTask(io.linesR(filePath.path).runLog[Task, String])
+  /** @return the content of a file as UTF-8 lines */
+  def readLines(filePath: FilePath): Action[IndexedSeq[String]] =
+    readLinesWithCodec(filePath, Codec.UTF8)
+
+  /** @return the content of a file with a specific codec */
+  def readFileWithCodec(path: FilePath, codec: Codec): Action[String] =
+    readLinesWithCodec(path, codec).map(_.mkString("\n"))
+
+  /** @return the content of a file with a specific codec */
+  def readLinesWithCodec(filePath: FilePath, codec: Codec): Action[IndexedSeq[String]] =
+    Actions.fromTask(io.linesR(filePath.path)(codec).runLog[Task, String])
 
   /** read the content of a file as an Array of Bytes */
   def readBytes(filePath: FilePath): Action[Array[Byte]] = exists(filePath).map { exists =>
