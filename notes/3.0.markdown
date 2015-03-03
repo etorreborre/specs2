@@ -1,0 +1,25 @@
+Major release!
+
+This release contains numerous changes. Please read the [blog post](http://bit.ly/specs2-three-blog-post) to learn more about those changes.
+
+## Improvements
+
+ * new User Guide (with lots more pages and a search box)
+ * reworked reporting framework
+ * lightweight `Spec` trait to import less implicits in scope and get better compilation times
+ * brand new Html printer based on [Pandoc](http://johnmacfarlane.net/pandoc)
+ * more ScalaCheck functionalities (set parameters from the command line, set `Gen/Arbitrary/Pretty` instances at the property level)
+ * examples can now access the "Environment" (the command line arguments, the file system, the execution context, ...)
+ * "online" specifications (examples can create examples)
+ * new website
+ 
+## Main API changes
+
+ * new packaging for `Specification` concepts: `org.specs2.specification.{core, create, dsl, process}` 
+ * new `Fragment` implementation
+ * `Runner/Reporter/Printer/Fold` api for executing and reporting specifications
+ * `BeforeAll, BeforeEach, ForEach, AfterEach, AfterAll` name changes for executing actions before all examples, before one example, with some specific data for each example... (previous names, like `FixtureExample`, now replaced with `ForEach` are deprecated)
+ * deprecated the `TimeConversions` trait in favor of `scala.concurrent.duration._`
+
+==========================
+
