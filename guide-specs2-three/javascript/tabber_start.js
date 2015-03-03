@@ -1,1 +1,0 @@
-var tabberOptions = {'manualStartup':true,'addLinkId': true};
