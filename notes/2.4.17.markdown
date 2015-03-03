@@ -1,0 +1,15 @@
+Maintenance version.
+
+## Improvements
+
+ * added an `asap` argument to execute the full specification before reporting it (`asap = false` in that case) [#326](http://github.com/etorreborre/specs2/issues/326)
+ * added `notNull` checks on the messages used to create results in matchers
+ 
+## Fixes
+
+ * updated the ScalaCheck url thanks to @xuwei-k [#331](http://github.com/etorreborre/specs2/issues/331)
+ * fixed the [matching of ints and doubles](https://groups.google.com/forum/#!topic/specs2-users/7z1_UaDMRGA) in `JsonMatchers`
+ * keep [failure details](https://groups.google.com/forum/#!topic/specs2-users/UEqui_Q2i-c) for `Option/Either/Try` matchers
+
+==========================
+
