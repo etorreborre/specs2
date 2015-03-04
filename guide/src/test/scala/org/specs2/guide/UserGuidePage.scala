@@ -7,8 +7,8 @@ import specification._
 /**
  * base class for creating specs2 user guide pages.
  */
-abstract class UserGuidePage extends Specification with UserGuideVariables with Snippets {
+abstract class UserGuidePage extends Specification with UserGuideVariables with Snippets with Forms {
   override def map(fs: =>Fragments) = super.map(fs.compact)
 }
 
-abstract class UserGuideCard extends Card with UserGuideVariables
+abstract class UserGuideCard extends Card with UserGuideVariables with Forms
