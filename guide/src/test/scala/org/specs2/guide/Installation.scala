@@ -13,7 +13,7 @@ There are 3 preferred ways to install $specs2:
 
 First you need to [install sbt itself](http://www.scala-sbt.org/release/tutorial/Setup.html) then you need to add the following dependency:
 ```
-libraryDependencies += "org.specs2" %% "specs2-core" % $VERSION % "test"
+libraryDependencies += "org.specs2" %% "specs2-core" % "$VERSION" % "test"
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
