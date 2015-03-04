@@ -33,6 +33,8 @@ You can use the following arguments to change the HTML generation:
 
 [Markdown](http://commonmark.org) text is supported if [Pandoc](http://johnmacfarlane.net/pandoc) is available on the command line.
 
+_NOTE!!!_: the currently supported version of Pandoc is 1.12.4.2. More recent versions of Pandoc will not work properly.
+
  Name                    | Default value                                                                     | Description
  ----------------------- | --------------------------------------------------------------------------------- | ------------------------------
  `pandoc.exec`           | `pandoc`                                                                          | path to the Pandoc executable
