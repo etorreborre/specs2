@@ -98,6 +98,14 @@ Check all elem...</a>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#optional" title="Optional">Optional</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#
+file-contents
+" title="
+File contents
+">
+File contents
+</a>
+          
+        </li><li><a href="org.specs2.guide.Matchers.html#
 directories-contents
 " title="
 Directories contents
@@ -119,6 +127,13 @@ and-if-you-want-to-know-more-{.ribbon-.both-ribbon}
 And if you want to know more {.ribbon .both-ribbon}
 ">
 And if you wan...</a>
+          
+        </li><li><a href="org.specs2.guide.Matchers.html#
+layers-definition
+" title="
+Layers definition
+">
+Layers definit...</a>
           
         </li><li><a href="org.specs2.guide.Matchers.html#
 inclusion/exclusion
@@ -898,6 +913,14 @@ Check all elem...</a>
         </li></ul>
         </li><li><a href="org.specs2.guide.matchers.ReferenceCard.html#optional" title="Optional">Optional</a>
           <ul><li><a href="org.specs2.guide.matchers.ReferenceCard.html#
+file-contents
+" title="
+File contents
+">
+File contents
+</a>
+          
+        </li><li><a href="org.specs2.guide.matchers.ReferenceCard.html#
 directories-contents
 " title="
 Directories contents
@@ -919,6 +942,13 @@ and-if-you-want-to-know-more-{.ribbon-.both-ribbon}
 And if you want to know more {.ribbon .both-ribbon}
 ">
 And if you wan...</a>
+          
+        </li><li><a href="org.specs2.guide.matchers.ReferenceCard.html#
+layers-definition
+" title="
+Layers definition
+">
+Layers definit...</a>
           
         </li><li><a href="org.specs2.guide.matchers.ReferenceCard.html#
 inclusion/exclusion
@@ -1005,7 +1035,11 @@ Layers as an E...</a>
 </ul>
 <h3 id="sbt">SBT</h3>
 <p>First you need to <a href="http://www.scala-sbt.org/release/tutorial/Setup.html">install sbt itself</a> then you need to add the following dependency:</p>
-<pre><code class="prettyprint">libraryDependencies += &quot;org.specs2&quot; %% &quot;specs2-core&quot; % 3.0 % &quot;test&quot;</code></pre>
+<pre><code class="prettyprint">libraryDependencies += &quot;org.specs2&quot; %% &quot;specs2-core&quot; % &quot;3.0&quot; % &quot;test&quot;
+
+resolvers += &quot;scalaz-bintray&quot; at &quot;http://dl.bintray.com/scalaz/releases&quot;
+
+scalacOptions in Test ++= Seq(&quot;-Yrangepos&quot;)</code></pre>
 <p>See <a href="http://www.scala-sbt.org/release/tutorial/Library-Dependencies.html">here</a> to learn more about sbt dependencies.</p>
 <h3 id="maven">Maven</h3>
 <p>You can install Maven from <a href="http://maven.apache.org/guides/getting-started/maven-in-five-minutes.html">there</a>. Once installed, you need to create a <code class="prettyprint">pom.xml</code> file with the <a href="http://davidb.github.io/scala-maven-plugin/plugin-info.html"><code class="prettyprint">maven-scala-plugin</code></a>. In the <code class="prettyprint">pom.xml</code> file you can add the following dependency:</p>
@@ -1021,6 +1055,36 @@ Layers as an E...</a>
 &lt;/dependencies&gt;
   ...
 &lt;/project&gt;</code></pre>
+<p>You will also need to add the <code class="prettyprint">bintray</code> repository to your <code class="prettyprint">settings.xml</code> file:</p>
+<pre><code class="prettyprint">&lt;profiles&gt;
+  &lt;profile&gt;
+   &lt;repositories&gt;
+    &lt;repository&gt;
+      &lt;snapshots&gt;
+        &lt;enabled&gt;false&lt;/enabled&gt;
+      &lt;/snapshots&gt;
+      &lt;id&gt;central&lt;/id&gt;
+      &lt;name&gt;bintray&lt;/name&gt;
+      &lt;url&gt;http://dl.bintray.com/pchiusano/maven&lt;/url&gt;
+    &lt;/repository&gt;
+   &lt;/repositories&gt;
+   &lt;pluginRepositories&gt;
+     &lt;pluginRepository&gt;
+       &lt;snapshots&gt;
+         &lt;enabled&gt;false&lt;/enabled&gt;
+       &lt;/snapshots&gt;
+       &lt;id&gt;central&lt;/id&gt;
+       &lt;name&gt;bintray-plugins&lt;/name&gt;
+       &lt;url&gt;http://dl.bintray.com/pchiusano/maven&lt;/url&gt;
+     &lt;/pluginRepository&gt;
+   &lt;/pluginRepositories&gt;
+   &lt;id&gt;bintray&lt;/id&gt;
+  &lt;/profile&gt;
+&lt;/profiles&gt;
+
+&lt;activeProfiles&gt;
+  &lt;activeProfile&gt;bintray&lt;/activeProfile&gt;
+&lt;/activeProfiles&gt;|</code></pre>
 <h3 id="gradle">Gradle</h3>
 <p>Go to this <a href="http://www.gradle.org/installation">page</a> to install Gradle. You then need to install the <a href="http://www.gradle.org/docs/current/userguide/scala_plugin.html">Scala plugin</a> and add the following to your <code class="prettyprint">build.gradle</code> file:</p>
 <pre><code class="prettyprint">repositories {
@@ -1032,6 +1096,7 @@ Layers as an E...</a>
 dependencies {
   testCompile &quot;org.specs2:specs2-core_2.11:3.0&quot;
 }</code></pre>
+<p>Also, don’t forget to add the <code class="prettyprint">bintray</code> repository to your Maven <code class="prettyprint">settings.xml</code> file as described in the Maven section above.</p>
 <h3 id="other-dependencies">Other dependencies</h3>
 <p>Depending on the <s2>specs2</s2> features you want to use you will need to add more dependencies to your build:</p>
 <table>

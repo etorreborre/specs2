@@ -98,6 +98,14 @@ Check all elem...</a>
         </li></ul>
         </li><li><a href="org.specs2.guide.Matchers.html#optional" title="Optional">Optional</a>
           <ul><li><a href="org.specs2.guide.Matchers.html#
+file-contents
+" title="
+File contents
+">
+File contents
+</a>
+          
+        </li><li><a href="org.specs2.guide.Matchers.html#
 directories-contents
 " title="
 Directories contents
@@ -119,6 +127,13 @@ and-if-you-want-to-know-more-{.ribbon-.both-ribbon}
 And if you want to know more {.ribbon .both-ribbon}
 ">
 And if you wan...</a>
+          
+        </li><li><a href="org.specs2.guide.Matchers.html#
+layers-definition
+" title="
+Layers definition
+">
+Layers definit...</a>
           
         </li><li><a href="org.specs2.guide.Matchers.html#
 inclusion/exclusion
@@ -898,6 +913,14 @@ Check all elem...</a>
         </li></ul>
         </li><li><a href="org.specs2.guide.matchers.ReferenceCard.html#optional" title="Optional">Optional</a>
           <ul><li><a href="org.specs2.guide.matchers.ReferenceCard.html#
+file-contents
+" title="
+File contents
+">
+File contents
+</a>
+          
+        </li><li><a href="org.specs2.guide.matchers.ReferenceCard.html#
 directories-contents
 " title="
 Directories contents
@@ -919,6 +942,13 @@ and-if-you-want-to-know-more-{.ribbon-.both-ribbon}
 And if you want to know more {.ribbon .both-ribbon}
 ">
 And if you wan...</a>
+          
+        </li><li><a href="org.specs2.guide.matchers.ReferenceCard.html#
+layers-definition
+" title="
+Layers definition
+">
+Layers definit...</a>
           
         </li><li><a href="org.specs2.guide.matchers.ReferenceCard.html#
 inclusion/exclusion
@@ -1018,9 +1048,31 @@ Layers as an E...</a>
 <li><code class="prettyprint">field(label, field1, field2, ...)</code> creates a field with a label and values coming from other fields, concatenated as strings</li>
 </ul>
 <p>When the form is displayed, here is how the fields are displayed:</p>
-<td class="info">
-<form>
-<pre class="prettyprint"><code class="prettyprint">&lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;7&quot;&gt;Fields&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;text-align:center&quot;&gt;&lt;b&gt;code&lt;/b&gt;&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;text-align:center&quot;&gt;&lt;b&gt;is displayed as&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;field(&amp;quot;value&amp;quot;)&lt;/code&gt;&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;&quot;&gt;value&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;field(&amp;quot;label&amp;quot;, &amp;quot;value&amp;quot;)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;label&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;&quot;&gt;value&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;field(&amp;quot;label&amp;quot;, field(&amp;quot;value1&amp;quot;), field(&amp;quot;value2&amp;quot;))&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;label&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;&quot;&gt;value1/value2&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;&lt;/td&gt;</code></pre>
+<td class="info"><form>
+    <table><tr><th colspan="7">
+Fields
+</th></tr><tr><td class="info" style="text-align:center">
+<b>code</b>
+</td><td colspan="5" class="info" style="text-align:center">
+<b>is displayed as</b>
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">field(“value”)</code>
+</td><td colspan="5" class="info" style="">
+value
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">field(“label”, “value”)</code>
+</td><td style="background-color:#EEEEEE">
+label
+</td><td colspan="5" class="info" style="">
+value
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">field(“label”, field(“value1”), field(“value2”))</code>
+</td><td style="background-color:#EEEEEE">
+label
+</td><td colspan="5" class="info" style="">
+value1/value2
+</td></tr></table></form></td>
+
 <p>In terms of execution, the value is only evaluated when the <code class="prettyprint">Field</code> is executed (when executing the parent Form for example). If an exception is thrown during that evaluation, the exception message will be displayed in place of the value.</p>
 <h3 id="effects">Effects</h3>
 <p>An <code class="prettyprint">Effect</code> is almost like a <code class="prettyprint">Field</code> but it never shows its value. The value of an <code class="prettyprint">Effect</code> is supposed to have some kind of side-effect, like clicking on a webpage, and only the effect label will be displayed (except when there is an exception, in that case the exception message is added). You can create an <code class="prettyprint">Effect</code> with these methods:</p>
@@ -1077,28 +1129,205 @@ prop1.apply(&quot;expected&quot;)
 prop1(&quot;expected&quot;)</code></pre>
 <p>Let’s look at a few examples:</p>
 <form>
-<pre class="prettyprint"><code class="prettyprint">&lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;7&quot;&gt;Properties&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;text-align:center&quot;&gt;&lt;b&gt;code&lt;/b&gt;&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;text-align:center&quot;&gt;&lt;b&gt;is displayed as&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;prop(&amp;quot;expected&amp;quot;)(&amp;quot;expected&amp;quot;)&lt;/code&gt;&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;success&quot;&gt;expected&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;prop(&amp;quot;label&amp;quot;, &amp;quot;expected&amp;quot;, &amp;quot;expected&amp;quot;)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;label&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;success&quot;&gt;expected&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;prop(&amp;quot;label&amp;quot;, &amp;quot;expected&amp;quot;)(&amp;quot;expected&amp;quot;)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;label&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;success&quot;&gt;expected&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;prop(&amp;quot;label&amp;quot;, &amp;quot;actual&amp;quot;)(&amp;quot;expected&amp;quot;)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;label&lt;/td&gt;&lt;td class=&quot;failure&quot;&gt;expected&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;failure&quot; onclick=&quot;showHide(1141599331)&quot;&gt;&#39;actual&#39; is not equal to &#39;expected&#39;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;prop(&amp;quot;label&amp;quot;, { error(&amp;quot;but got an error&amp;quot;); &amp;quot;actual&amp;quot; })(&amp;quot;expected&amp;quot;)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;label&lt;/td&gt;&lt;td class=&quot;error&quot;&gt;expected&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;error&quot; onclick=&quot;showHide(1241053819)&quot;&gt;but got an error&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;prop(&amp;quot;label&amp;quot;, &amp;quot;actual&amp;quot;, (a: String, b: String) =&amp;gt; (a === b).toResult)(&amp;quot;expected&amp;quot;)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;label&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;success&quot;&gt;expected&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;prop(&amp;quot;label&amp;quot;, &amp;quot;actual&amp;quot;, (s: String) =&amp;gt; beEqualTo(s))(&amp;quot;expected&amp;quot;)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;label&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;success&quot;&gt;expected&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;prop(&amp;quot;label&amp;quot;, &amp;quot;actual&amp;quot;, beEqualTo(&amp;quot;expected&amp;quot;))&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;label&lt;/td&gt;&lt;td class=&quot;failure&quot;&gt;actual&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;failure&quot; onclick=&quot;showHide(2030356269)&quot;&gt;&#39;actual&#39; is not equal to &#39;expected&#39;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;prop(&amp;quot;label&amp;quot;, &amp;quot;actual&amp;quot;, beEqualTo(&amp;quot;expected&amp;quot;).mute)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;label&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;failure&quot;&gt;actual&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;pre&gt;&lt;i&gt;[click on failed cells to see the stacktraces]&lt;/i&gt;&lt;div class=&quot;formstacktrace details&quot; id=&quot;1141599331&quot;&gt;
-  &#39;actual&#39; is not equal to &#39;expected&#39; (file:1)
-  
-&lt;/div&gt;&lt;div class=&quot;formstacktrace details&quot; id=&quot;1241053819&quot;&gt;
-  but got an error (file:1)
-  &lt;div&gt;scala.sys.package$.error(package.scala:27)&lt;/div&gt;&lt;div&gt;org.specs2.guide.UseForms$$anonfun$is$1$$anonfun$apply$34$$anonfun$29.apply(UseForms.scala:85)&lt;/div&gt;&lt;div&gt;org.specs2.guide.UseForms$$anonfun$is$1$$anonfun$apply$34$$anonfun$29.apply(UseForms.scala:85)&lt;/div&gt;&lt;div&gt;org.specs2.control.Property$$anonfun$apply$2.apply(Property.scala:67)&lt;/div&gt;&lt;div&gt;org.specs2.control.Property$$anonfun$apply$2.apply(Property.scala:67)&lt;/div&gt;&lt;div&gt;org.specs2.control.Property.execute(Property.scala:51)&lt;/div&gt;&lt;div&gt;org.specs2.control.Property.optionalValue(Property.scala:17)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution$$anonfun$2.apply(ResultExecution.scala:109)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution$$anonfun$2.apply(ResultExecution.scala:109)&lt;/div&gt;&lt;div&gt;org.specs2.control.Exceptions$class.trye(Exceptions.scala:86)&lt;/div&gt;&lt;div&gt;org.specs2.control.Exceptions$.trye(Exceptions.scala:132)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution$class.executeEither(ResultExecution.scala:80)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution$.executeEither(ResultExecution.scala:120)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution$class.executeProperty(ResultExecution.scala:109)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution$.executeProperty(ResultExecution.scala:120)&lt;/div&gt;&lt;div&gt;org.specs2.form.Prop.actualValue$lzycompute(Prop.scala:48)&lt;/div&gt;&lt;div&gt;org.specs2.form.Prop.actualValue(Prop.scala:48)&lt;/div&gt;&lt;div&gt;org.specs2.form.Prop.execute(Prop.scala:55)&lt;/div&gt;&lt;div&gt;org.specs2.form.PropCell$$anonfun$executeCell$3.apply(Cells.scala:176)&lt;/div&gt;&lt;div&gt;org.specs2.form.PropCell$$anonfun$executeCell$3.apply(Cells.scala:176)&lt;/div&gt;&lt;div&gt;scala.Option.orElse(Option.scala:289)&lt;/div&gt;&lt;div&gt;org.specs2.form.PropCell.executeCell(Cells.scala:176)&lt;/div&gt;&lt;div&gt;org.specs2.form.PropCell.executeCell(Cells.scala:172)&lt;/div&gt;&lt;div&gt;org.specs2.form.Row$$anonfun$executeRow$1.apply(Row.scala:38)&lt;/div&gt;&lt;div&gt;org.specs2.form.Row$$anonfun$executeRow$1.apply(Row.scala:38)&lt;/div&gt;&lt;div&gt;scala.collection.immutable.List.map(List.scala:273)&lt;/div&gt;&lt;div&gt;scalaz.NonEmptyList.map(NonEmptyList.scala:20)&lt;/div&gt;&lt;div&gt;org.specs2.form.Row.executeRow(Row.scala:38)&lt;/div&gt;&lt;div&gt;org.specs2.form.Form$$anonfun$executeRows$1.apply(Form.scala:73)&lt;/div&gt;&lt;div&gt;org.specs2.form.Form$$anonfun$executeRows$1.apply(Form.scala:73)&lt;/div&gt;&lt;div&gt;scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:245)&lt;/div&gt;&lt;div&gt;scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:245)&lt;/div&gt;&lt;div&gt;scala.collection.Iterator$class.foreach(Iterator.scala:750)&lt;/div&gt;&lt;div&gt;scala.collection.AbstractIterator.foreach(Iterator.scala:1202)&lt;/div&gt;&lt;div&gt;scala.collection.IterableLike$class.foreach(IterableLike.scala:72)&lt;/div&gt;&lt;div&gt;scala.collection.AbstractIterable.foreach(Iterable.scala:54)&lt;/div&gt;&lt;div&gt;scala.collection.TraversableLike$class.map(TraversableLike.scala:245)&lt;/div&gt;&lt;div&gt;scala.collection.AbstractTraversable.map(Traversable.scala:104)&lt;/div&gt;&lt;div&gt;org.specs2.form.Form.executeRows(Form.scala:73)&lt;/div&gt;&lt;div&gt;org.specs2.form.Form.executeForm(Form.scala:81)&lt;/div&gt;&lt;div&gt;org.specs2.guide.UseForms$$anonfun$is$1$$anonfun$apply$34.apply(UseForms.scala:89)&lt;/div&gt;&lt;div&gt;org.specs2.guide.UseForms$$anonfun$is$1$$anonfun$apply$34.apply(UseForms.scala:89)&lt;/div&gt;&lt;div&gt;org.specs2.specification.create.S2StringContext$$anon$5.append(S2StringContext.scala:86)&lt;/div&gt;&lt;div&gt;org.specs2.specification.create.S2StringContextCreation$$anonfun$9.apply(S2StringContext.scala:189)&lt;/div&gt;&lt;div&gt;org.specs2.specification.create.S2StringContextCreation$$anonfun$9.apply(S2StringContext.scala:187)&lt;/div&gt;&lt;div&gt;scala.collection.LinearSeqOptimized$class.foldLeft(LinearSeqOptimized.scala:124)&lt;/div&gt;&lt;div&gt;scala.collection.immutable.List.foldLeft(List.scala:84)&lt;/div&gt;&lt;div&gt;org.specs2.specification.create.S2StringContextCreation$class.s2(S2StringContext.scala:187)&lt;/div&gt;&lt;div&gt;org.specs2.Specification.s2(Specification.scala:19)&lt;/div&gt;&lt;div&gt;org.specs2.guide.UseForms$$anonfun$is$1.apply(UseForms.scala:9)&lt;/div&gt;&lt;div&gt;org.specs2.guide.UseForms$$anonfun$is$1.apply(UseForms.scala:9)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$$anonfun$1.apply(SpecStructure.scala:24)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$$anonfun$1.apply(SpecStructure.scala:24)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$$anonfun$2.apply(SpecStructure.scala:25)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$$anonfun$2.apply(SpecStructure.scala:25)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$$anonfun$3.apply(SpecStructure.scala:26)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$$anonfun$3.apply(SpecStructure.scala:26)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.contents(SpecStructure.scala:23)&lt;/div&gt;&lt;div&gt;org.specs2.reporter.Reporter$$anonfun$report$1.apply(Reporter.scala:44)&lt;/div&gt;&lt;div&gt;org.specs2.reporter.Reporter$$anonfun$report$1.apply(Reporter.scala:37)&lt;/div&gt;&lt;div&gt;org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8$$anonfun$2.apply(ClassRunner.scala:61)&lt;/div&gt;&lt;div&gt;org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8$$anonfun$2.apply(ClassRunner.scala:61)&lt;/div&gt;&lt;div&gt;scala.collection.immutable.List.map(List.scala:277)&lt;/div&gt;&lt;div&gt;org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8.apply(ClassRunner.scala:61)&lt;/div&gt;&lt;div&gt;org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8.apply(ClassRunner.scala:60)&lt;/div&gt;&lt;div&gt;scala.Function1$$anonfun$andThen$1.apply(Function1.scala:55)&lt;/div&gt;&lt;div&gt;org.specs2.control.Status$class.fold(Status.scala:30)&lt;/div&gt;&lt;div&gt;org.specs2.control.Ok.fold(Status.scala:95)&lt;/div&gt;&lt;div&gt;org.specs2.control.Status$class.flatMap(Status.scala:48)&lt;/div&gt;&lt;div&gt;org.specs2.control.Ok.flatMap(Status.scala:95)&lt;/div&gt;&lt;div&gt;org.specs2.control.Status$class.map(Status.scala:45)&lt;/div&gt;&lt;div&gt;org.specs2.control.Ok.map(Status.scala:95)&lt;/div&gt;&lt;div&gt;org.specs2.control.StatusT$$anonfun$map$1.apply(StatusT.scala:16)&lt;/div&gt;&lt;div&gt;org.specs2.control.StatusT$$anonfun$map$1.apply(StatusT.scala:16)&lt;/div&gt;&lt;div&gt;scalaz.WriterT$$anonfun$map$1.apply(WriterT.scala:46)&lt;/div&gt;&lt;div&gt;scalaz.WriterT$$anonfun$map$1.apply(WriterT.scala:46)&lt;/div&gt;&lt;div&gt;scalaz.effect.IO$$anonfun$map$1$$anonfun$apply$8.apply(IO.scala:56)&lt;/div&gt;&lt;div&gt;scalaz.effect.IO$$anonfun$map$1$$anonfun$apply$8.apply(IO.scala:55)&lt;/div&gt;&lt;div&gt;scalaz.Free$$anonfun$map$1.apply(Free.scala:52)&lt;/div&gt;&lt;div&gt;scalaz.Free$$anonfun$map$1.apply(Free.scala:52)&lt;/div&gt;&lt;div&gt;scalaz.Free$$anonfun$flatMap$1$$anonfun$apply$1.apply(Free.scala:60)&lt;/div&gt;&lt;div&gt;scalaz.Free$$anonfun$flatMap$1$$anonfun$apply$1.apply(Free.scala:60)&lt;/div&gt;&lt;div&gt;scalaz.Free.resume(Free.scala:72)&lt;/div&gt;&lt;div&gt;scalaz.Free.go2$1(Free.scala:118)&lt;/div&gt;&lt;div&gt;scalaz.Free.go(Free.scala:122)&lt;/div&gt;&lt;div&gt;scalaz.Free.run(Free.scala:172)&lt;/div&gt;&lt;div&gt;scalaz.effect.IO$class.unsafePerformIO(IO.scala:22)&lt;/div&gt;&lt;div&gt;scalaz.effect.IOFunctions$$anon$6.unsafePerformIO(IO.scala:227)&lt;/div&gt;&lt;div&gt;org.specs2.control.package$$anon$3.asResult(package.scala:87)&lt;/div&gt;&lt;div&gt;org.specs2.execute.AsResult$.apply(AsResult.scala:25)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution$$anonfun$withEnv$1.apply(Execution.scala:118)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution$$anonfun$withEnv$1.apply(Execution.scala:118)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution$$anonfun$execute$2$$anonfun$apply$2.apply(Execution.scala:68)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution$$anonfun$execute$2$$anonfun$apply$2.apply(Execution.scala:68)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution.setResult(Execution.scala:74)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution$$anonfun$execute$2.apply(Execution.scala:68)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution$$anonfun$execute$2.apply(Execution.scala:68)&lt;/div&gt;&lt;div&gt;scala.Option.fold(Option.scala:158)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution.execute(Execution.scala:68)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1$$anonfun$apply$6.apply(Executor.scala:132)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1$$anonfun$apply$6.apply(Executor.scala:130)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Fragment.updateExecution(Fragment.scala:44)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1.apply(Executor.scala:130)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1.apply(Executor.scala:129)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1.executedFragment$lzycompute$1(Executor.scala:104)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1.org$specs2$specification$process$DefaultExecutor$class$$anonfun$$executedFragment$1(Executor.scala:104)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1$$anonfun$4.apply(Executor.scala:110)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1$$anonfun$4.apply(Executor.scala:110)&lt;/div&gt;&lt;div&gt;scalaz.concurrent.Task$.Try(Task.scala:385)&lt;/div&gt;&lt;div&gt;org.specs2.data.Processes$$anonfun$start$1.apply(Processes.scala:96)&lt;/div&gt;&lt;div&gt;org.specs2.data.Processes$$anonfun$start$1.apply(Processes.scala:96)&lt;/div&gt;&lt;div&gt;scalaz.concurrent.Future$$anonfun$apply$15$$anon$3.call(Future.scala:367)&lt;/div&gt;&lt;div&gt;scalaz.concurrent.Future$$anonfun$apply$15$$anon$3.call(Future.scala:367)&lt;/div&gt;&lt;div&gt;java.util.concurrent.FutureTask.run(FutureTask.java:262)&lt;/div&gt;&lt;div&gt;java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)&lt;/div&gt;&lt;div&gt;java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)&lt;/div&gt;&lt;div&gt;java.lang.Thread.run(Thread.java:744)&lt;/div&gt;
-&lt;/div&gt;&lt;div class=&quot;formstacktrace details&quot; id=&quot;2030356269&quot;&gt;
-  &#39;actual&#39; is not equal to &#39;expected&#39; (file:1)
-  
-&lt;/div&gt;&lt;div class=&quot;formstacktrace details&quot; id=&quot;682662253&quot;&gt;
-   (file:1)
-  
-&lt;/div&gt;&lt;/pre&gt;&lt;/form&gt;</code></pre>
+    <table><tr><th colspan="7">
+Properties
+</th></tr><tr><td class="info" style="text-align:center">
+<b>code</b>
+</td><td colspan="5" class="info" style="text-align:center">
+<b>is displayed as</b>
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">prop(“expected”)(“expected”)</code>
+</td><td colspan="5" class="success">
+expected
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">prop(“label”, “expected”, “expected”)</code>
+</td><td style="background-color:#EEEEEE">
+label
+</td><td colspan="5" class="success">
+expected
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">prop(“label”, “expected”)(“expected”)</code>
+</td><td style="background-color:#EEEEEE">
+label
+</td><td colspan="5" class="success">
+expected
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">prop(“label”, “actual”)(“expected”)</code>
+</td><td style="background-color:#EEEEEE">
+label
+</td><td class="failure">
+expected
+</td><td colspan="5" class="failure" onclick="showHide(1387057744)">
+‘actual’ is not equal to ‘expected’
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">prop(“label”, { error(“but got an error”); “actual” })(“expected”)</code>
+</td><td style="background-color:#EEEEEE">
+label
+</td><td class="error">
+expected
+</td><td colspan="5" class="error" onclick="showHide(1344515223)">
+but got an error
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">prop(“label”, “actual”, (a: String, b: String) =&gt; (a === b).toResult)(“expected”)</code>
+</td><td style="background-color:#EEEEEE">
+label
+</td><td colspan="5" class="success">
+expected
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">prop(“label”, “actual”, (s: String) =&gt; beEqualTo(s))(“expected”)</code>
+</td><td style="background-color:#EEEEEE">
+label
+</td><td colspan="5" class="success">
+expected
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">prop(“label”, “actual”, beEqualTo(“expected”))</code>
+</td><td style="background-color:#EEEEEE">
+label
+</td><td class="failure">
+actual
+</td><td colspan="5" class="failure" onclick="showHide(1444419227)">
+‘actual’ is not equal to ‘expected’
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">prop(“label”, “actual”, beEqualTo(“expected”).mute)</code>
+</td><td style="background-color:#EEEEEE">
+label
+</td><td colspan="5" class="failure">
+actual
+</td></tr></table><pre><i>[click on failed cells to see the stacktraces]</i><div class="formstacktrace details" id="1387057744">
+      'actual' is not equal to 'expected' (file:1)
+      
+    </div><div class="formstacktrace details" id="1344515223">
+      but got an error (file:1)
+      <div>scala.sys.package$.error(package.scala:27)</div><div>org.specs2.guide.UseForms$$anonfun$is$1$$anonfun$apply$34$$anonfun$29.apply(UseForms.scala:85)</div><div>org.specs2.guide.UseForms$$anonfun$is$1$$anonfun$apply$34$$anonfun$29.apply(UseForms.scala:85)</div><div>org.specs2.control.Property$$anonfun$apply$2.apply(Property.scala:67)</div><div>org.specs2.control.Property$$anonfun$apply$2.apply(Property.scala:67)</div><div>org.specs2.control.Property.execute(Property.scala:51)</div><div>org.specs2.control.Property.optionalValue(Property.scala:17)</div><div>org.specs2.execute.ResultExecution$$anonfun$2.apply(ResultExecution.scala:109)</div><div>org.specs2.execute.ResultExecution$$anonfun$2.apply(ResultExecution.scala:109)</div><div>org.specs2.control.Exceptions$class.trye(Exceptions.scala:86)</div><div>org.specs2.control.Exceptions$.trye(Exceptions.scala:132)</div><div>org.specs2.execute.ResultExecution$class.executeEither(ResultExecution.scala:80)</div><div>org.specs2.execute.ResultExecution$.executeEither(ResultExecution.scala:120)</div><div>org.specs2.execute.ResultExecution$class.executeProperty(ResultExecution.scala:109)</div><div>org.specs2.execute.ResultExecution$.executeProperty(ResultExecution.scala:120)</div><div>org.specs2.form.Prop.actualValue$lzycompute(Prop.scala:48)</div><div>org.specs2.form.Prop.actualValue(Prop.scala:48)</div><div>org.specs2.form.Prop.execute(Prop.scala:55)</div><div>org.specs2.form.PropCell$$anonfun$executeCell$3.apply(Cells.scala:176)</div><div>org.specs2.form.PropCell$$anonfun$executeCell$3.apply(Cells.scala:176)</div><div>scala.Option.orElse(Option.scala:289)</div><div>org.specs2.form.PropCell.executeCell(Cells.scala:176)</div><div>org.specs2.form.PropCell.executeCell(Cells.scala:172)</div><div>org.specs2.form.Row$$anonfun$executeRow$1.apply(Row.scala:38)</div><div>org.specs2.form.Row$$anonfun$executeRow$1.apply(Row.scala:38)</div><div>scala.collection.immutable.List.map(List.scala:273)</div><div>scalaz.NonEmptyList.map(NonEmptyList.scala:20)</div><div>org.specs2.form.Row.executeRow(Row.scala:38)</div><div>org.specs2.form.Form$$anonfun$executeRows$1.apply(Form.scala:73)</div><div>org.specs2.form.Form$$anonfun$executeRows$1.apply(Form.scala:73)</div><div>scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:245)</div><div>scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:245)</div><div>scala.collection.Iterator$class.foreach(Iterator.scala:750)</div><div>scala.collection.AbstractIterator.foreach(Iterator.scala:1202)</div><div>scala.collection.IterableLike$class.foreach(IterableLike.scala:72)</div><div>scala.collection.AbstractIterable.foreach(Iterable.scala:54)</div><div>scala.collection.TraversableLike$class.map(TraversableLike.scala:245)</div><div>scala.collection.AbstractTraversable.map(Traversable.scala:104)</div><div>org.specs2.form.Form.executeRows(Form.scala:73)</div><div>org.specs2.form.Form.executeForm(Form.scala:81)</div><div>org.specs2.guide.UseForms$$anonfun$is$1$$anonfun$apply$34.apply(UseForms.scala:89)</div><div>org.specs2.guide.UseForms$$anonfun$is$1$$anonfun$apply$34.apply(UseForms.scala:89)</div><div>org.specs2.specification.create.S2StringContext$$anon$5.append(S2StringContext.scala:86)</div><div>org.specs2.specification.create.S2StringContextCreation$$anonfun$9.apply(S2StringContext.scala:189)</div><div>org.specs2.specification.create.S2StringContextCreation$$anonfun$9.apply(S2StringContext.scala:187)</div><div>scala.collection.LinearSeqOptimized$class.foldLeft(LinearSeqOptimized.scala:124)</div><div>scala.collection.immutable.List.foldLeft(List.scala:84)</div><div>org.specs2.specification.create.S2StringContextCreation$class.s2(S2StringContext.scala:187)</div><div>org.specs2.Specification.s2(Specification.scala:19)</div><div>org.specs2.guide.UseForms$$anonfun$is$1.apply(UseForms.scala:9)</div><div>org.specs2.guide.UseForms$$anonfun$is$1.apply(UseForms.scala:9)</div><div>org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure$$anonfun$1.apply(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure$$anonfun$1.apply(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure$$anonfun$2.apply(SpecStructure.scala:25)</div><div>org.specs2.specification.core.SpecStructure$$anonfun$2.apply(SpecStructure.scala:25)</div><div>org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure$$anonfun$3.apply(SpecStructure.scala:26)</div><div>org.specs2.specification.core.SpecStructure$$anonfun$3.apply(SpecStructure.scala:26)</div><div>org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure.contents(SpecStructure.scala:23)</div><div>org.specs2.reporter.Reporter$$anonfun$report$1.apply(Reporter.scala:44)</div><div>org.specs2.reporter.Reporter$$anonfun$report$1.apply(Reporter.scala:37)</div><div>org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8$$anonfun$2.apply(ClassRunner.scala:61)</div><div>org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8$$anonfun$2.apply(ClassRunner.scala:61)</div><div>scala.collection.immutable.List.map(List.scala:277)</div><div>org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8.apply(ClassRunner.scala:61)</div><div>org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8.apply(ClassRunner.scala:60)</div><div>scala.Function1$$anonfun$andThen$1.apply(Function1.scala:55)</div><div>org.specs2.control.Status$class.fold(Status.scala:30)</div><div>org.specs2.control.Ok.fold(Status.scala:95)</div><div>org.specs2.control.Status$class.flatMap(Status.scala:48)</div><div>org.specs2.control.Ok.flatMap(Status.scala:95)</div><div>org.specs2.control.Status$class.map(Status.scala:45)</div><div>org.specs2.control.Ok.map(Status.scala:95)</div><div>org.specs2.control.StatusT$$anonfun$map$1.apply(StatusT.scala:16)</div><div>org.specs2.control.StatusT$$anonfun$map$1.apply(StatusT.scala:16)</div><div>scalaz.WriterT$$anonfun$map$1.apply(WriterT.scala:46)</div><div>scalaz.WriterT$$anonfun$map$1.apply(WriterT.scala:46)</div><div>scalaz.effect.IO$$anonfun$map$1$$anonfun$apply$8.apply(IO.scala:56)</div><div>scalaz.effect.IO$$anonfun$map$1$$anonfun$apply$8.apply(IO.scala:55)</div><div>scalaz.Free$$anonfun$map$1.apply(Free.scala:52)</div><div>scalaz.Free$$anonfun$map$1.apply(Free.scala:52)</div><div>scalaz.Free$$anonfun$flatMap$1$$anonfun$apply$1.apply(Free.scala:60)</div><div>scalaz.Free$$anonfun$flatMap$1$$anonfun$apply$1.apply(Free.scala:60)</div><div>scalaz.Free.resume(Free.scala:72)</div><div>scalaz.Free.go2$1(Free.scala:118)</div><div>scalaz.Free.go(Free.scala:122)</div><div>scalaz.Free.run(Free.scala:172)</div><div>scalaz.effect.IO$class.unsafePerformIO(IO.scala:22)</div><div>scalaz.effect.IOFunctions$$anon$6.unsafePerformIO(IO.scala:227)</div><div>org.specs2.control.package$$anon$3.asResult(package.scala:87)</div><div>org.specs2.execute.AsResult$.apply(AsResult.scala:25)</div><div>org.specs2.specification.core.Execution$$anonfun$withEnv$1.apply(Execution.scala:118)</div><div>org.specs2.specification.core.Execution$$anonfun$withEnv$1.apply(Execution.scala:118)</div><div>org.specs2.specification.core.Execution$$anonfun$execute$2$$anonfun$apply$2.apply(Execution.scala:68)</div><div>org.specs2.specification.core.Execution$$anonfun$execute$2$$anonfun$apply$2.apply(Execution.scala:68)</div><div>org.specs2.specification.core.Execution.setResult(Execution.scala:74)</div><div>org.specs2.specification.core.Execution$$anonfun$execute$2.apply(Execution.scala:68)</div><div>org.specs2.specification.core.Execution$$anonfun$execute$2.apply(Execution.scala:68)</div><div>scala.Option.fold(Option.scala:158)</div><div>org.specs2.specification.core.Execution.execute(Execution.scala:68)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1$$anonfun$apply$6.apply(Executor.scala:132)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1$$anonfun$apply$6.apply(Executor.scala:130)</div><div>org.specs2.specification.core.Fragment.updateExecution(Fragment.scala:44)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1.apply(Executor.scala:130)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1.apply(Executor.scala:129)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1.executedFragment$lzycompute$1(Executor.scala:104)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1.org$specs2$specification$process$DefaultExecutor$class$$anonfun$$executedFragment$1(Executor.scala:104)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1$$anonfun$4.apply(Executor.scala:110)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1$$anonfun$4.apply(Executor.scala:110)</div><div>scalaz.concurrent.Task$.Try(Task.scala:385)</div><div>org.specs2.data.Processes$$anonfun$start$1.apply(Processes.scala:96)</div><div>org.specs2.data.Processes$$anonfun$start$1.apply(Processes.scala:96)</div><div>scalaz.concurrent.Future$$anonfun$apply$15$$anon$3.call(Future.scala:367)</div><div>scalaz.concurrent.Future$$anonfun$apply$15$$anon$3.call(Future.scala:367)</div><div>java.util.concurrent.FutureTask.run(FutureTask.java:262)</div><div>java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)</div><div>java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)</div><div>java.lang.Thread.run(Thread.java:744)</div>
+    </div><div class="formstacktrace details" id="1444419227">
+      'actual' is not equal to 'expected' (file:1)
+      
+    </div><div class="formstacktrace details" id="1198802501">
+       (file:1)
+      
+    </div></pre></form>
+
 <h3 id="styles">Styles</h3>
 <p>Most of the time, the display of Fields and Properties can be left as it is but sometimes you want to style the output of labels and values. You can do this by using <code class="prettyprint">decorateWith</code> and <code class="prettyprint">styleWith</code> methods, or some equivalent shortcuts:</p>
-<td class="info">
-<form>
-<pre class="prettyprint"><code class="prettyprint">&lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;7&quot;&gt;Style&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;text-align:center&quot;&gt;&lt;b&gt;code&lt;/b&gt;&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;text-align:center&quot;&gt;&lt;b&gt;is displayed as&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;6&quot; class=&quot;info&quot; style=&quot;background-color:#EEEEEE&quot;&gt;&lt;b&gt;decorate with&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;field(&amp;quot;label&amp;quot;, &amp;quot;value&amp;quot;).decorateWith(f: Any =&amp;gt; &amp;lt;em&amp;gt;{f}&amp;lt;/em&amp;gt;)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;&lt;em&gt;label&lt;/em&gt;&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;&quot;&gt;&lt;em&gt;value&lt;/em&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;field(&amp;quot;label&amp;quot;, &amp;quot;value&amp;quot;).bold&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;&lt;b&gt;label&lt;/b&gt;&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;&quot;&gt;&lt;b&gt;value&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;field(&amp;quot;label&amp;quot;, &amp;quot;value&amp;quot;).boldLabel&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;&lt;b&gt;label&lt;/b&gt;&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;&quot;&gt;value&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;field(&amp;quot;label&amp;quot;, &amp;quot;value&amp;quot;).boldValue&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;label&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;&quot;&gt;&lt;b&gt;value&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;field(&amp;quot;label&amp;quot;, &amp;quot;value&amp;quot;).italics&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;&lt;i&gt;label&lt;/i&gt;&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;&quot;&gt;&lt;i&gt;value&lt;/i&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;field(&amp;quot;label&amp;quot;, &amp;quot;value&amp;quot;).italics.bold&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;&lt;b&gt;&lt;i&gt;label&lt;/i&gt;&lt;/b&gt;&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;&quot;&gt;&lt;b&gt;&lt;i&gt;value&lt;/i&gt;&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;field(&amp;quot;1 must_== 1&amp;quot;).code&lt;/code&gt;&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;1 must_== 1&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;6&quot; class=&quot;info&quot; style=&quot;background-color:#EEEEEE&quot;&gt;&lt;b&gt;style with&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;field(&amp;quot;label&amp;quot;, &amp;quot;value&amp;quot;).styleWith(&amp;quot;color&amp;quot;-&amp;gt;&amp;quot;#FF1493&amp;quot;)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;background-color:#EEEEEE; color:#FF1493&quot;&gt;label&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;color:#FF1493&quot;&gt;value&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;field(&amp;quot;label&amp;quot;, &amp;quot;value&amp;quot;).color(&amp;quot;#FF1493&amp;quot;)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;background-color:#EEEEEE; color:#FF1493&quot;&gt;label&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;color:#FF1493&quot;&gt;value&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;field(&amp;quot;label&amp;quot;, &amp;quot;value&amp;quot;).bkColor(&amp;quot;#FF1493&amp;quot;)&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;background-color:#EEEEEE; background-color:#FF1493&quot;&gt;label&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;background-color:#FF1493&quot;&gt;value&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;field(&amp;quot;label&amp;quot;, &amp;quot;value&amp;quot;).green&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;background-color:#EEEEEE; color:#CCFFCC&quot;&gt;label&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;color:#CCFFCC&quot;&gt;value&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;field(&amp;quot;label&amp;quot;, &amp;quot;value&amp;quot;).bkGreen&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;background-color:#EEEEEE; background-color:#CCFFCC&quot;&gt;label&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;background-color:#CCFFCC&quot;&gt;value&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;&lt;/td&gt;</code></pre>
+<td class="info"><form>
+    <table><tr><th colspan="7">
+Style
+</th></tr><tr><td class="info" style="text-align:center">
+<b>code</b>
+</td><td colspan="5" class="info" style="text-align:center">
+<b>is displayed as</b>
+</td></tr><tr><td colspan="6" class="info" style="background-color:#EEEEEE">
+<b>decorate with</b>
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">field(“label”, “value”).decorateWith(f: Any =&gt; &lt;em&gt;{f}&lt;/em&gt;)</code>
+</td><td style="background-color:#EEEEEE">
+<em>label</em>
+</td><td colspan="5" class="info" style="">
+<em>value</em>
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">field(“label”, “value”).bold</code>
+</td><td style="background-color:#EEEEEE">
+<b>label</b>
+</td><td colspan="5" class="info" style="">
+<b>value</b>
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">field(“label”, “value”).boldLabel</code>
+</td><td style="background-color:#EEEEEE">
+<b>label</b>
+</td><td colspan="5" class="info" style="">
+value
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">field(“label”, “value”).boldValue</code>
+</td><td style="background-color:#EEEEEE">
+label
+</td><td colspan="5" class="info" style="">
+<b>value</b>
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">field(“label”, “value”).italics</code>
+</td><td style="background-color:#EEEEEE">
+<i>label</i>
+</td><td colspan="5" class="info" style="">
+<i>value</i>
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">field(“label”, “value”).italics.bold</code>
+</td><td style="background-color:#EEEEEE">
+<b><i>label</i></b>
+</td><td colspan="5" class="info" style="">
+<b><i>value</i></b>
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">field(“1 must_== 1”).code</code>
+</td><td colspan="5" class="info" style="">
+<code class="prettyprint">1 must_== 1</code>
+</td></tr><tr><td colspan="6" class="info" style="background-color:#EEEEEE">
+<b>style with</b>
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">field(“label”, “value”).styleWith(“color”-&gt;“#FF1493”)</code>
+</td><td style="background-color:#EEEEEE; color:#FF1493">
+label
+</td><td colspan="5" class="info" style="color:#FF1493">
+value
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">field(“label”, “value”).color(“#FF1493”)</code>
+</td><td style="background-color:#EEEEEE; color:#FF1493">
+label
+</td><td colspan="5" class="info" style="color:#FF1493">
+value
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">field(“label”, “value”).bkColor(“#FF1493”)</code>
+</td><td style="background-color:#EEEEEE; background-color:#FF1493">
+label
+</td><td colspan="5" class="info" style="background-color:#FF1493">
+value
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">field(“label”, “value”).green</code>
+</td><td style="background-color:#EEEEEE; color:#CCFFCC">
+label
+</td><td colspan="5" class="info" style="color:#CCFFCC">
+value
+</td></tr><tr><td class="info" style="">
+<code class="prettyprint">field(“label”, “value”).bkGreen</code>
+</td><td style="background-color:#EEEEEE; background-color:#CCFFCC">
+label
+</td><td colspan="5" class="info" style="background-color:#CCFFCC">
+value
+</td></tr></table></form></td>
+
 <p>All the methods above, when named <code class="prettyprint">xxx</code> are available as <code class="prettyprint">xxxLabel</code> and <code class="prettyprint">xxxValue</code> to do the formatting for the label or the value only. The available colors are:</p>
-<td class="info">
-<form>
-<pre class="prettyprint"><code class="prettyprint">&lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;10&quot;&gt;Colors&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;text-align:center&quot;&gt;&lt;b&gt;name&lt;/b&gt;&lt;/td&gt;&lt;td class=&quot;info&quot; style=&quot;text-align:center&quot;&gt;&lt;b&gt;code&lt;/b&gt;&lt;/td&gt;&lt;td colspan=&quot;7&quot; class=&quot;info&quot; style=&quot;text-align:center&quot;&gt;&lt;b&gt;color&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;white&lt;/td&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;#FFFFFF&lt;/td&gt;&lt;td colspan=&quot;7&quot; class=&quot;info&quot; style=&quot;background-color:#FFFFFF&quot;&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;blue&lt;/td&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;#1E90FF&lt;/td&gt;&lt;td colspan=&quot;7&quot; class=&quot;info&quot; style=&quot;background-color:#1E90FF&quot;&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;red&lt;/td&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;#FF9999&lt;/td&gt;&lt;td colspan=&quot;7&quot; class=&quot;info&quot; style=&quot;background-color:#FF9999&quot;&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;green&lt;/td&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;#CCFFCC&lt;/td&gt;&lt;td colspan=&quot;7&quot; class=&quot;info&quot; style=&quot;background-color:#CCFFCC&quot;&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;yellow&lt;/td&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;#FFFF99&lt;/td&gt;&lt;td colspan=&quot;7&quot; class=&quot;info&quot; style=&quot;background-color:#FFFF99&quot;&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;grey&lt;/td&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;#EEEEEE&lt;/td&gt;&lt;td colspan=&quot;7&quot; class=&quot;info&quot; style=&quot;background-color:#EEEEEE&quot;&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;&lt;/td&gt;</code></pre>
+<td class="info"><form>
+    <table><tr><th colspan="10">
+Colors
+</th></tr><tr><td class="info" style="text-align:center">
+<b>name</b>
+</td><td class="info" style="text-align:center">
+<b>code</b>
+</td><td colspan="7" class="info" style="text-align:center">
+<b>color</b>
+</td></tr><tr><td class="info" style="">
+white
+</td><td class="info" style="">
+#FFFFFF
+</td><td colspan="7" class="info" style="background-color:#FFFFFF"></td></tr><tr><td class="info" style="">
+blue
+</td><td class="info" style="">
+#1E90FF
+</td><td colspan="7" class="info" style="background-color:#1E90FF"></td></tr><tr><td class="info" style="">
+red
+</td><td class="info" style="">
+#FF9999
+</td><td colspan="7" class="info" style="background-color:#FF9999"></td></tr><tr><td class="info" style="">
+green
+</td><td class="info" style="">
+#CCFFCC
+</td><td colspan="7" class="info" style="background-color:#CCFFCC"></td></tr><tr><td class="info" style="">
+yellow
+</td><td class="info" style="">
+#FFFF99
+</td><td colspan="7" class="info" style="background-color:#FFFF99"></td></tr><tr><td class="info" style="">
+grey
+</td><td class="info" style="">
+#EEEEEE
+</td><td colspan="7" class="info" style="background-color:#EEEEEE"></td></tr></table></form></td>
+
 <h3 id="simple-form">Simple form</h3>
 <p>Now that we know how to create Fields and Properties, creating a <code class="prettyprint">Form</code> is as easy as putting them on separate lines:</p>
 <pre class="prettyprint"><code class="prettyprint">Form(&quot;Address&quot;).
@@ -1138,9 +1367,19 @@ The address must be retrieved from the database with the proper street and numbe
 <h5 id="adding-several-rows-at-once">Adding several rows at once</h5>
 <p>A very practical way to add rows programatically is to start from a list of values and have a function creating a Row object for each value:</p>
 <pre class="prettyprint"><code class="prettyprint">Form(&quot;a new Form&quot;).trs(addresses) { a: Address =&gt; Row.tr(field(a.number), field(a.street)) }</code></pre>
-<td class="info">
-<form>
-<pre class="prettyprint"><code class="prettyprint">&lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;7&quot;&gt;a new Form&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;3&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;&quot;&gt;Rose Crescent&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;4&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;&quot;&gt;Oxfort St&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;&lt;/td&gt;</code></pre>
+<td class="info"><form>
+    <table><tr><th colspan="7">
+a new Form
+</th></tr><tr><td class="info" style="">
+3
+</td><td colspan="5" class="info" style="">
+Rose Crescent
+</td></tr><tr><td class="info" style="">
+4
+</td><td colspan="5" class="info" style="">
+Oxfort St
+</td></tr></table></form></td>
+
 <h4 id="nesting-into-another-form">Nesting into another Form</h4>
 <p>Forms can be composed of other Forms to display composite information:</p>
 <pre class="prettyprint"><code class="prettyprint">val address = Form(&quot;Address&quot;).
@@ -1150,17 +1389,43 @@ The address must be retrieved from the database with the proper street and numbe
 val person = Form(&quot;Person&quot;).
   tr(field(&quot;name&quot;, &quot;Eric&quot;)).
   tr(address)</code></pre>
-<td class="info">
-<form>
-<pre class="prettyprint"><code class="prettyprint">&lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;Person&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;name&lt;/td&gt;&lt;td colspan=&quot;3&quot; class=&quot;info&quot; style=&quot;&quot;&gt;Eric&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;&lt;/td&gt;</code></pre>
+<td class="info"><form>
+    <table><tr><th colspan="4">
+Person
+</th></tr><tr><td style="background-color:#EEEEEE">
+name
+</td><td colspan="3" class="info" style="">
+Eric
+</td></tr></table></form></td>
+
 <p>This will be displayed with the address as a nested table inside the main one on the last row. However in some case, it’s preferable to have the rows of that Form to be included directly in the outer table. This can be done by <em>inlining</em> the nesting Form:</p>
 <pre class="prettyprint"><code class="prettyprint">val person = Form(&quot;Person&quot;).
     tr(field(&quot;name&quot;, &quot;Eric&quot;)).
     tr(address.inline)            // address is inlined</code></pre>
 <p>And the result is:</p>
-<td class="info">
-<form>
-<pre class="prettyprint"><code class="prettyprint">&lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;Person&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;name&lt;/td&gt;&lt;td colspan=&quot;3&quot; class=&quot;info&quot; style=&quot;&quot;&gt;Eric&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;div colspan=&quot;3&quot;&gt;&lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;Address&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;street&lt;/td&gt;&lt;td colspan=&quot;3&quot; class=&quot;info&quot; style=&quot;&quot;&gt;Rose Crescent&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;number&lt;/td&gt;&lt;td colspan=&quot;3&quot; class=&quot;info&quot; style=&quot;&quot;&gt;3&lt;/td&gt;&lt;/tr&gt;&lt;/div&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;&lt;/td&gt;</code></pre>
+<td class="info"><form>
+    <table><tr><th colspan="4">
+Person
+</th></tr><tr><td style="background-color:#EEEEEE">
+name
+</td><td colspan="3" class="info" style="">
+Eric
+</td></tr><tr>
+<div colspan="3">
+<tr><th colspan="4">
+Address
+</th></tr><tr><td style="background-color:#EEEEEE">
+street
+</td><td colspan="3" class="info" style="">
+Rose Crescent
+</td></tr><tr><td style="background-color:#EEEEEE">
+number
+</td><td colspan="3" class="info" style="">
+3
+</td></tr>
+</div>
+</tr></table></form></td>
+
 <h4 id="nesting-into-an-effect-or-a-prop">Nesting into an Effect or a Prop</h4>
 <p>When using Forms in specifications we can describe different levels of abstraction. If we consider the specification of a website for example, we want to be able to use a Form having 2 rows and describing the exact actions to do on the Login page:</p>
 <pre class="prettyprint"><code class="prettyprint">val loginForm = Form(&quot;login&quot;).
@@ -1168,32 +1433,73 @@ val person = Form(&quot;Person&quot;).
   tr(effect(&quot;enter name&quot;,     enter(&quot;name&quot;, &quot;me&quot;))).
   tr(effect(&quot;enter password&quot;, enter(&quot;password&quot;, &quot;pw&quot;))).
   tr(effect(&quot;submit&quot;,         submit()))</code></pre>
-<td class="info">
-<form>
-<pre class="prettyprint"><code class="prettyprint">&lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;3&quot;&gt;login&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;2&quot; style=&quot;&quot; class=&quot;info&quot;&gt;click on login&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;2&quot; style=&quot;&quot; class=&quot;info&quot;&gt;enter name&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;2&quot; style=&quot;&quot; class=&quot;info&quot;&gt;enter password&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;2&quot; style=&quot;&quot; class=&quot;info&quot;&gt;submit&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;&lt;/td&gt;</code></pre>
+<td class="info"><form>
+    <table><tr><th colspan="3">
+login
+</th></tr><tr><td colspan="2" style="" class="info">
+click on login
+</td></tr><tr><td colspan="2" style="" class="info">
+enter name
+</td></tr><tr><td colspan="2" style="" class="info">
+enter password
+</td></tr><tr><td colspan="2" style="" class="info">
+submit
+</td></tr></table></form></td>
+
 <p>However in a “purchase” scenario we want all the steps above to represent the login actions as just one step. One way to do this is to transform the login Form to an Effect or a Prop:</p>
 <pre class="prettyprint"><code class="prettyprint">Form(&quot;purchase&quot;).
   tr(loginForm.toEffect(&quot;login&quot;)).
   tr(selectForm.toEffect(&quot;select goods&quot;)).
   tr(checkTotalForm.toProp(&quot;the total must be computed ok&quot;).bkWhiteLabel)</code></pre>
 <p>If everything goes fine, the detailed nested form is not shown:</p>
-<td class="info">
-<form>
-<pre class="prettyprint"><code class="prettyprint">&lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;purchase&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot; style=&quot;&quot; class=&quot;info&quot;&gt;login&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot; style=&quot;&quot; class=&quot;info&quot;&gt;select goods&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;background-color:#EEEEEE; background-color:#FFFFFF&quot;&gt;the total must be computed ok&lt;/td&gt;&lt;td colspan=&quot;3&quot; class=&quot;success&quot;&gt;success&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;&lt;/td&gt;</code></pre>
+<td class="info"><form>
+    <table><tr><th colspan="4">
+purchase
+</th></tr><tr><td colspan="3" style="" class="info">
+login
+</td></tr><tr><td colspan="3" style="" class="info">
+select goods
+</td></tr><tr><td style="background-color:#EEEEEE; background-color:#FFFFFF">
+the total must be computed ok
+</td><td colspan="3" class="success">
+success
+</td></tr></table></form></td>
+
 <p>Otherwise:</p>
 <ul>
 <li>if the Form is embedded into an Effect, Errors will be reported</li>
 <li>if the Form is embedded into a Prop, Failures will be reported, like that</li>
 </ul>
 <form>
-<pre class="prettyprint"><code class="prettyprint">&lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;purchase&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot; style=&quot;&quot; class=&quot;info&quot;&gt;login&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot; style=&quot;&quot; class=&quot;info&quot;&gt;select goods&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;background-color:#EEEEEE; background-color:#FFFFFF&quot;&gt;the total must be computed ok&lt;/td&gt;&lt;td class=&quot;failure&quot;&gt;&lt;form&gt;
-&lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;Check Total&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot; style=&quot;&quot; class=&quot;info&quot;&gt;Compute total&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;Total&lt;/td&gt;&lt;td class=&quot;failure&quot;&gt;200&lt;/td&gt;&lt;td colspan=&quot;3&quot; class=&quot;failure&quot; onclick=&quot;showHide(1646843897)&quot;&gt;&#39;100&#39; is not equal to &#39;200&#39;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;pre&gt;&lt;i&gt;[click on failed cells to see the stacktraces]&lt;/i&gt;&lt;div class=&quot;formstacktrace details&quot; id=&quot;1646843897&quot;&gt;
-  &#39;100&#39; is not equal to &#39;200&#39; (file:1)
-  
-&lt;/div&gt;&lt;/pre&gt;&lt;/form&gt;&lt;/td&gt;&lt;td colspan=&quot;3&quot; class=&quot;failure&quot; onclick=&quot;showHide(1736134343)&quot;&gt;failed&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;pre&gt;&lt;i&gt;[click on failed cells to see the stacktraces]&lt;/i&gt;&lt;div class=&quot;formstacktrace details&quot; id=&quot;1736134343&quot;&gt;
-  failed (file:1)
-  &lt;div&gt;org.specs2.execute.Failure$.apply$default$3(Result.scala:298)&lt;/div&gt;&lt;div&gt;org.specs2.form.Form.executedResult$lzycompute$1(Form.scala:131)&lt;/div&gt;&lt;div&gt;org.specs2.form.Form.org$specs2$form$Form$$executedResult$1(Form.scala:129)&lt;/div&gt;&lt;div&gt;org.specs2.form.Form$$anonfun$toProp$3.apply(Form.scala:136)&lt;/div&gt;&lt;div&gt;org.specs2.control.Property$$anonfun$apply$2.apply(Property.scala:67)&lt;/div&gt;&lt;div&gt;org.specs2.control.Property$$anonfun$apply$2.apply(Property.scala:67)&lt;/div&gt;&lt;div&gt;org.specs2.control.Property.execute(Property.scala:51)&lt;/div&gt;&lt;div&gt;org.specs2.control.Property.optionalValue(Property.scala:17)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution$$anonfun$2.apply(ResultExecution.scala:109)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution$$anonfun$2.apply(ResultExecution.scala:109)&lt;/div&gt;&lt;div&gt;org.specs2.control.Exceptions$class.trye(Exceptions.scala:86)&lt;/div&gt;&lt;div&gt;org.specs2.control.Exceptions$.trye(Exceptions.scala:132)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution$class.executeEither(ResultExecution.scala:80)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution$.executeEither(ResultExecution.scala:120)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution$class.executeProperty(ResultExecution.scala:109)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution$.executeProperty(ResultExecution.scala:120)&lt;/div&gt;&lt;div&gt;org.specs2.form.Prop.expectedValue$lzycompute(Prop.scala:50)&lt;/div&gt;&lt;div&gt;org.specs2.form.Prop.expectedValue(Prop.scala:50)&lt;/div&gt;&lt;div&gt;org.specs2.form.Prop$$anonfun$1.apply(Prop.scala:56)&lt;/div&gt;&lt;div&gt;org.specs2.form.Prop$$anonfun$1.apply(Prop.scala:55)&lt;/div&gt;&lt;div&gt;scala.Option.flatMap(Option.scala:171)&lt;/div&gt;&lt;div&gt;org.specs2.form.Prop.execute(Prop.scala:55)&lt;/div&gt;&lt;div&gt;org.specs2.form.PropCell$$anonfun$executeCell$3.apply(Cells.scala:176)&lt;/div&gt;&lt;div&gt;org.specs2.form.PropCell$$anonfun$executeCell$3.apply(Cells.scala:176)&lt;/div&gt;&lt;div&gt;scala.Option.orElse(Option.scala:289)&lt;/div&gt;&lt;div&gt;org.specs2.form.PropCell.executeCell(Cells.scala:176)&lt;/div&gt;&lt;div&gt;org.specs2.form.PropCell.executeCell(Cells.scala:172)&lt;/div&gt;&lt;div&gt;org.specs2.form.Row$$anonfun$executeRow$1.apply(Row.scala:38)&lt;/div&gt;&lt;div&gt;org.specs2.form.Row$$anonfun$executeRow$1.apply(Row.scala:38)&lt;/div&gt;&lt;div&gt;scalaz.NonEmptyList.map(NonEmptyList.scala:20)&lt;/div&gt;&lt;div&gt;org.specs2.form.Row.executeRow(Row.scala:38)&lt;/div&gt;&lt;div&gt;org.specs2.form.Form$$anonfun$executeRows$1.apply(Form.scala:73)&lt;/div&gt;&lt;div&gt;org.specs2.form.Form$$anonfun$executeRows$1.apply(Form.scala:73)&lt;/div&gt;&lt;div&gt;scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:245)&lt;/div&gt;&lt;div&gt;scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:245)&lt;/div&gt;&lt;div&gt;scala.collection.Iterator$class.foreach(Iterator.scala:750)&lt;/div&gt;&lt;div&gt;scala.collection.AbstractIterator.foreach(Iterator.scala:1202)&lt;/div&gt;&lt;div&gt;scala.collection.IterableLike$class.foreach(IterableLike.scala:72)&lt;/div&gt;&lt;div&gt;scala.collection.AbstractIterable.foreach(Iterable.scala:54)&lt;/div&gt;&lt;div&gt;scala.collection.TraversableLike$class.map(TraversableLike.scala:245)&lt;/div&gt;&lt;div&gt;scala.collection.AbstractTraversable.map(Traversable.scala:104)&lt;/div&gt;&lt;div&gt;org.specs2.form.Form.executeRows(Form.scala:73)&lt;/div&gt;&lt;div&gt;org.specs2.form.Form.executeForm(Form.scala:81)&lt;/div&gt;&lt;div&gt;org.specs2.guide.UseForms$$anonfun$is$1$$anonfun$apply$110.apply(UseForms.scala:244)&lt;/div&gt;&lt;div&gt;org.specs2.guide.UseForms$$anonfun$is$1$$anonfun$apply$110.apply(UseForms.scala:244)&lt;/div&gt;&lt;div&gt;org.specs2.specification.create.S2StringContext$$anon$5.append(S2StringContext.scala:86)&lt;/div&gt;&lt;div&gt;org.specs2.specification.create.S2StringContextCreation$$anonfun$9.apply(S2StringContext.scala:189)&lt;/div&gt;&lt;div&gt;org.specs2.specification.create.S2StringContextCreation$$anonfun$9.apply(S2StringContext.scala:187)&lt;/div&gt;&lt;div&gt;scala.collection.LinearSeqOptimized$class.foldLeft(LinearSeqOptimized.scala:124)&lt;/div&gt;&lt;div&gt;scala.collection.immutable.List.foldLeft(List.scala:84)&lt;/div&gt;&lt;div&gt;org.specs2.specification.create.S2StringContextCreation$class.s2(S2StringContext.scala:187)&lt;/div&gt;&lt;div&gt;org.specs2.Specification.s2(Specification.scala:19)&lt;/div&gt;&lt;div&gt;org.specs2.guide.UseForms$$anonfun$is$1.apply(UseForms.scala:9)&lt;/div&gt;&lt;div&gt;org.specs2.guide.UseForms$$anonfun$is$1.apply(UseForms.scala:9)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$$anonfun$1.apply(SpecStructure.scala:24)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$$anonfun$1.apply(SpecStructure.scala:24)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$$anonfun$2.apply(SpecStructure.scala:25)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$$anonfun$2.apply(SpecStructure.scala:25)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$$anonfun$3.apply(SpecStructure.scala:26)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$$anonfun$3.apply(SpecStructure.scala:26)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.contents(SpecStructure.scala:23)&lt;/div&gt;&lt;div&gt;org.specs2.reporter.Reporter$$anonfun$report$1.apply(Reporter.scala:44)&lt;/div&gt;&lt;div&gt;org.specs2.reporter.Reporter$$anonfun$report$1.apply(Reporter.scala:37)&lt;/div&gt;&lt;div&gt;org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8$$anonfun$2.apply(ClassRunner.scala:61)&lt;/div&gt;&lt;div&gt;org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8$$anonfun$2.apply(ClassRunner.scala:61)&lt;/div&gt;&lt;div&gt;scala.collection.immutable.List.map(List.scala:277)&lt;/div&gt;&lt;div&gt;org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8.apply(ClassRunner.scala:61)&lt;/div&gt;&lt;div&gt;org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8.apply(ClassRunner.scala:60)&lt;/div&gt;&lt;div&gt;scala.Function1$$anonfun$andThen$1.apply(Function1.scala:55)&lt;/div&gt;&lt;div&gt;org.specs2.control.Status$class.fold(Status.scala:30)&lt;/div&gt;&lt;div&gt;org.specs2.control.Ok.fold(Status.scala:95)&lt;/div&gt;&lt;div&gt;org.specs2.control.Status$class.flatMap(Status.scala:48)&lt;/div&gt;&lt;div&gt;org.specs2.control.Ok.flatMap(Status.scala:95)&lt;/div&gt;&lt;div&gt;org.specs2.control.Status$class.map(Status.scala:45)&lt;/div&gt;&lt;div&gt;org.specs2.control.Ok.map(Status.scala:95)&lt;/div&gt;&lt;div&gt;org.specs2.control.StatusT$$anonfun$map$1.apply(StatusT.scala:16)&lt;/div&gt;&lt;div&gt;org.specs2.control.StatusT$$anonfun$map$1.apply(StatusT.scala:16)&lt;/div&gt;&lt;div&gt;scalaz.WriterT$$anonfun$map$1.apply(WriterT.scala:46)&lt;/div&gt;&lt;div&gt;scalaz.WriterT$$anonfun$map$1.apply(WriterT.scala:46)&lt;/div&gt;&lt;div&gt;scalaz.effect.IO$$anonfun$map$1$$anonfun$apply$8.apply(IO.scala:56)&lt;/div&gt;&lt;div&gt;scalaz.effect.IO$$anonfun$map$1$$anonfun$apply$8.apply(IO.scala:55)&lt;/div&gt;&lt;div&gt;scalaz.Free$$anonfun$map$1.apply(Free.scala:52)&lt;/div&gt;&lt;div&gt;scalaz.Free$$anonfun$map$1.apply(Free.scala:52)&lt;/div&gt;&lt;div&gt;scalaz.Free$$anonfun$flatMap$1$$anonfun$apply$1.apply(Free.scala:60)&lt;/div&gt;&lt;div&gt;scalaz.Free$$anonfun$flatMap$1$$anonfun$apply$1.apply(Free.scala:60)&lt;/div&gt;&lt;div&gt;scalaz.Free.resume(Free.scala:72)&lt;/div&gt;&lt;div&gt;scalaz.Free.go2$1(Free.scala:118)&lt;/div&gt;&lt;div&gt;scalaz.Free.go(Free.scala:122)&lt;/div&gt;&lt;div&gt;scalaz.Free.run(Free.scala:172)&lt;/div&gt;&lt;div&gt;scalaz.effect.IO$class.unsafePerformIO(IO.scala:22)&lt;/div&gt;&lt;div&gt;scalaz.effect.IOFunctions$$anon$6.unsafePerformIO(IO.scala:227)&lt;/div&gt;&lt;div&gt;org.specs2.control.package$$anon$3.asResult(package.scala:87)&lt;/div&gt;&lt;div&gt;org.specs2.execute.AsResult$.apply(AsResult.scala:25)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution$$anonfun$withEnv$1.apply(Execution.scala:118)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution$$anonfun$withEnv$1.apply(Execution.scala:118)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution$$anonfun$execute$2$$anonfun$apply$2.apply(Execution.scala:68)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution$$anonfun$execute$2$$anonfun$apply$2.apply(Execution.scala:68)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution.setResult(Execution.scala:74)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution$$anonfun$execute$2.apply(Execution.scala:68)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution$$anonfun$execute$2.apply(Execution.scala:68)&lt;/div&gt;&lt;div&gt;scala.Option.fold(Option.scala:158)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution.execute(Execution.scala:68)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1$$anonfun$apply$6.apply(Executor.scala:132)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1$$anonfun$apply$6.apply(Executor.scala:130)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Fragment.updateExecution(Fragment.scala:44)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1.apply(Executor.scala:130)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1.apply(Executor.scala:129)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1.executedFragment$lzycompute$1(Executor.scala:104)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1.org$specs2$specification$process$DefaultExecutor$class$$anonfun$$executedFragment$1(Executor.scala:104)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1$$anonfun$4.apply(Executor.scala:110)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1$$anonfun$4.apply(Executor.scala:110)&lt;/div&gt;&lt;div&gt;scalaz.concurrent.Task$.Try(Task.scala:385)&lt;/div&gt;&lt;div&gt;org.specs2.data.Processes$$anonfun$start$1.apply(Processes.scala:96)&lt;/div&gt;&lt;div&gt;org.specs2.data.Processes$$anonfun$start$1.apply(Processes.scala:96)&lt;/div&gt;&lt;div&gt;scalaz.concurrent.Future$$anonfun$apply$15$$anon$3.call(Future.scala:367)&lt;/div&gt;&lt;div&gt;scalaz.concurrent.Future$$anonfun$apply$15$$anon$3.call(Future.scala:367)&lt;/div&gt;&lt;div&gt;java.util.concurrent.FutureTask.run(FutureTask.java:262)&lt;/div&gt;&lt;div&gt;java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)&lt;/div&gt;&lt;div&gt;java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)&lt;/div&gt;&lt;div&gt;java.lang.Thread.run(Thread.java:744)&lt;/div&gt;
-&lt;/div&gt;&lt;/pre&gt;&lt;/form&gt;</code></pre>
+    <table><tr><th colspan="4">
+purchase
+</th></tr><tr><td colspan="3" style="" class="info">
+login
+</td></tr><tr><td colspan="3" style="" class="info">
+select goods
+</td></tr><tr><td style="background-color:#EEEEEE; background-color:#FFFFFF">
+the total must be computed ok
+</td><td class="failure"><form>
+    <table><tr><th colspan="4">
+Check Total
+</th></tr><tr><td colspan="3" style="" class="info">
+Compute total
+</td></tr><tr><td style="background-color:#EEEEEE">
+Total
+</td><td class="failure">
+200
+</td><td colspan="3" class="failure" onclick="showHide(582058153)">
+‘100’ is not equal to ‘200’
+</td></tr></table><pre><i>[click on failed cells to see the stacktraces]</i><div class="formstacktrace details" id="582058153">
+      '100' is not equal to '200' (file:1)
+      
+    </div></pre></form></td><td colspan="3" class="failure" onclick="showHide(863365386)">
+failed
+</td></tr></table><pre><i>[click on failed cells to see the stacktraces]</i><div class="formstacktrace details" id="863365386">
+      failed (file:1)
+      <div>org.specs2.execute.Failure$.apply$default$3(Result.scala:298)</div><div>org.specs2.form.Form.executedResult$lzycompute$1(Form.scala:131)</div><div>org.specs2.form.Form.org$specs2$form$Form$$executedResult$1(Form.scala:129)</div><div>org.specs2.form.Form$$anonfun$toProp$3.apply(Form.scala:136)</div><div>org.specs2.control.Property$$anonfun$apply$2.apply(Property.scala:67)</div><div>org.specs2.control.Property$$anonfun$apply$2.apply(Property.scala:67)</div><div>org.specs2.control.Property.execute(Property.scala:51)</div><div>org.specs2.control.Property.optionalValue(Property.scala:17)</div><div>org.specs2.execute.ResultExecution$$anonfun$2.apply(ResultExecution.scala:109)</div><div>org.specs2.execute.ResultExecution$$anonfun$2.apply(ResultExecution.scala:109)</div><div>org.specs2.control.Exceptions$class.trye(Exceptions.scala:86)</div><div>org.specs2.control.Exceptions$.trye(Exceptions.scala:132)</div><div>org.specs2.execute.ResultExecution$class.executeEither(ResultExecution.scala:80)</div><div>org.specs2.execute.ResultExecution$.executeEither(ResultExecution.scala:120)</div><div>org.specs2.execute.ResultExecution$class.executeProperty(ResultExecution.scala:109)</div><div>org.specs2.execute.ResultExecution$.executeProperty(ResultExecution.scala:120)</div><div>org.specs2.form.Prop.expectedValue$lzycompute(Prop.scala:50)</div><div>org.specs2.form.Prop.expectedValue(Prop.scala:50)</div><div>org.specs2.form.Prop$$anonfun$1.apply(Prop.scala:56)</div><div>org.specs2.form.Prop$$anonfun$1.apply(Prop.scala:55)</div><div>scala.Option.flatMap(Option.scala:171)</div><div>org.specs2.form.Prop.execute(Prop.scala:55)</div><div>org.specs2.form.PropCell$$anonfun$executeCell$3.apply(Cells.scala:176)</div><div>org.specs2.form.PropCell$$anonfun$executeCell$3.apply(Cells.scala:176)</div><div>scala.Option.orElse(Option.scala:289)</div><div>org.specs2.form.PropCell.executeCell(Cells.scala:176)</div><div>org.specs2.form.PropCell.executeCell(Cells.scala:172)</div><div>org.specs2.form.Row$$anonfun$executeRow$1.apply(Row.scala:38)</div><div>org.specs2.form.Row$$anonfun$executeRow$1.apply(Row.scala:38)</div><div>scalaz.NonEmptyList.map(NonEmptyList.scala:20)</div><div>org.specs2.form.Row.executeRow(Row.scala:38)</div><div>org.specs2.form.Form$$anonfun$executeRows$1.apply(Form.scala:73)</div><div>org.specs2.form.Form$$anonfun$executeRows$1.apply(Form.scala:73)</div><div>scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:245)</div><div>scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:245)</div><div>scala.collection.Iterator$class.foreach(Iterator.scala:750)</div><div>scala.collection.AbstractIterator.foreach(Iterator.scala:1202)</div><div>scala.collection.IterableLike$class.foreach(IterableLike.scala:72)</div><div>scala.collection.AbstractIterable.foreach(Iterable.scala:54)</div><div>scala.collection.TraversableLike$class.map(TraversableLike.scala:245)</div><div>scala.collection.AbstractTraversable.map(Traversable.scala:104)</div><div>org.specs2.form.Form.executeRows(Form.scala:73)</div><div>org.specs2.form.Form.executeForm(Form.scala:81)</div><div>org.specs2.guide.UseForms$$anonfun$is$1$$anonfun$apply$110.apply(UseForms.scala:244)</div><div>org.specs2.guide.UseForms$$anonfun$is$1$$anonfun$apply$110.apply(UseForms.scala:244)</div><div>org.specs2.specification.create.S2StringContext$$anon$5.append(S2StringContext.scala:86)</div><div>org.specs2.specification.create.S2StringContextCreation$$anonfun$9.apply(S2StringContext.scala:189)</div><div>org.specs2.specification.create.S2StringContextCreation$$anonfun$9.apply(S2StringContext.scala:187)</div><div>scala.collection.LinearSeqOptimized$class.foldLeft(LinearSeqOptimized.scala:124)</div><div>scala.collection.immutable.List.foldLeft(List.scala:84)</div><div>org.specs2.specification.create.S2StringContextCreation$class.s2(S2StringContext.scala:187)</div><div>org.specs2.Specification.s2(Specification.scala:19)</div><div>org.specs2.guide.UseForms$$anonfun$is$1.apply(UseForms.scala:9)</div><div>org.specs2.guide.UseForms$$anonfun$is$1.apply(UseForms.scala:9)</div><div>org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure$$anonfun$1.apply(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure$$anonfun$1.apply(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure$$anonfun$2.apply(SpecStructure.scala:25)</div><div>org.specs2.specification.core.SpecStructure$$anonfun$2.apply(SpecStructure.scala:25)</div><div>org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure$$anonfun$3.apply(SpecStructure.scala:26)</div><div>org.specs2.specification.core.SpecStructure$$anonfun$3.apply(SpecStructure.scala:26)</div><div>org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure.contents(SpecStructure.scala:23)</div><div>org.specs2.reporter.Reporter$$anonfun$report$1.apply(Reporter.scala:44)</div><div>org.specs2.reporter.Reporter$$anonfun$report$1.apply(Reporter.scala:37)</div><div>org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8$$anonfun$2.apply(ClassRunner.scala:61)</div><div>org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8$$anonfun$2.apply(ClassRunner.scala:61)</div><div>scala.collection.immutable.List.map(List.scala:277)</div><div>org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8.apply(ClassRunner.scala:61)</div><div>org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8.apply(ClassRunner.scala:60)</div><div>scala.Function1$$anonfun$andThen$1.apply(Function1.scala:55)</div><div>org.specs2.control.Status$class.fold(Status.scala:30)</div><div>org.specs2.control.Ok.fold(Status.scala:95)</div><div>org.specs2.control.Status$class.flatMap(Status.scala:48)</div><div>org.specs2.control.Ok.flatMap(Status.scala:95)</div><div>org.specs2.control.Status$class.map(Status.scala:45)</div><div>org.specs2.control.Ok.map(Status.scala:95)</div><div>org.specs2.control.StatusT$$anonfun$map$1.apply(StatusT.scala:16)</div><div>org.specs2.control.StatusT$$anonfun$map$1.apply(StatusT.scala:16)</div><div>scalaz.WriterT$$anonfun$map$1.apply(WriterT.scala:46)</div><div>scalaz.WriterT$$anonfun$map$1.apply(WriterT.scala:46)</div><div>scalaz.effect.IO$$anonfun$map$1$$anonfun$apply$8.apply(IO.scala:56)</div><div>scalaz.effect.IO$$anonfun$map$1$$anonfun$apply$8.apply(IO.scala:55)</div><div>scalaz.Free$$anonfun$map$1.apply(Free.scala:52)</div><div>scalaz.Free$$anonfun$map$1.apply(Free.scala:52)</div><div>scalaz.Free$$anonfun$flatMap$1$$anonfun$apply$1.apply(Free.scala:60)</div><div>scalaz.Free$$anonfun$flatMap$1$$anonfun$apply$1.apply(Free.scala:60)</div><div>scalaz.Free.resume(Free.scala:72)</div><div>scalaz.Free.go2$1(Free.scala:118)</div><div>scalaz.Free.go(Free.scala:122)</div><div>scalaz.Free.run(Free.scala:172)</div><div>scalaz.effect.IO$class.unsafePerformIO(IO.scala:22)</div><div>scalaz.effect.IOFunctions$$anon$6.unsafePerformIO(IO.scala:227)</div><div>org.specs2.control.package$$anon$3.asResult(package.scala:87)</div><div>org.specs2.execute.AsResult$.apply(AsResult.scala:25)</div><div>org.specs2.specification.core.Execution$$anonfun$withEnv$1.apply(Execution.scala:118)</div><div>org.specs2.specification.core.Execution$$anonfun$withEnv$1.apply(Execution.scala:118)</div><div>org.specs2.specification.core.Execution$$anonfun$execute$2$$anonfun$apply$2.apply(Execution.scala:68)</div><div>org.specs2.specification.core.Execution$$anonfun$execute$2$$anonfun$apply$2.apply(Execution.scala:68)</div><div>org.specs2.specification.core.Execution.setResult(Execution.scala:74)</div><div>org.specs2.specification.core.Execution$$anonfun$execute$2.apply(Execution.scala:68)</div><div>org.specs2.specification.core.Execution$$anonfun$execute$2.apply(Execution.scala:68)</div><div>scala.Option.fold(Option.scala:158)</div><div>org.specs2.specification.core.Execution.execute(Execution.scala:68)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1$$anonfun$apply$6.apply(Executor.scala:132)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1$$anonfun$apply$6.apply(Executor.scala:130)</div><div>org.specs2.specification.core.Fragment.updateExecution(Fragment.scala:44)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1.apply(Executor.scala:130)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1.apply(Executor.scala:129)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1.executedFragment$lzycompute$1(Executor.scala:104)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1.org$specs2$specification$process$DefaultExecutor$class$$anonfun$$executedFragment$1(Executor.scala:104)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1$$anonfun$4.apply(Executor.scala:110)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1$$anonfun$4.apply(Executor.scala:110)</div><div>scalaz.concurrent.Task$.Try(Task.scala:385)</div><div>org.specs2.data.Processes$$anonfun$start$1.apply(Processes.scala:96)</div><div>org.specs2.data.Processes$$anonfun$start$1.apply(Processes.scala:96)</div><div>scalaz.concurrent.Future$$anonfun$apply$15$$anon$3.call(Future.scala:367)</div><div>scalaz.concurrent.Future$$anonfun$apply$15$$anon$3.call(Future.scala:367)</div><div>java.util.concurrent.FutureTask.run(FutureTask.java:262)</div><div>java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)</div><div>java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)</div><div>java.lang.Thread.run(Thread.java:744)</div>
+    </div></pre></form>
+
 <h4 id="using-tabs">Using tabs</h4>
 <p>If there are too many fields to be displayed on a Form you can use tabs:</p>
 <pre class="prettyprint"><code class="prettyprint">s2&quot;&quot;&quot;
@@ -1209,11 +1515,42 @@ A person can have 2 addresses ${
 }
 &quot;&quot;&quot;</code></pre>
 <p>The first <code class="prettyprint">tab</code> call will create a <code class="prettyprint">Tabs</code> object containing the a first tab with “home” as the title and an Address form as its content. Then every subsequent <code class="prettyprint">tab</code> calls on the <code class="prettyprint">Tabs</code> object will create new tabs:</p>
-<td class="info">
+<td class="info"><form>
+    <table><tr><th colspan="101">
+Addresses
+</th></tr><tr><td colspan="100" class="info">
+<div class="tabber">
+<div class="tabbertab" title="home">
 <form>
-<pre class="prettyprint"><code class="prettyprint">&lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;101&quot;&gt;Addresses&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;100&quot; class=&quot;info&quot;&gt;&lt;div class=&quot;tabber&quot;&gt;&lt;div class=&quot;tabbertab&quot; title=&quot;home&quot;&gt;&lt;form&gt;
-&lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;Address&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;street&lt;/td&gt;&lt;td colspan=&quot;3&quot; class=&quot;success&quot;&gt;Oxford St&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;number&lt;/td&gt;&lt;td colspan=&quot;3&quot; class=&quot;success&quot;&gt;12&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;&lt;/div&gt;&lt;div class=&quot;tabbertab&quot; title=&quot;work&quot;&gt;&lt;form&gt;
-&lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;Address&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;street&lt;/td&gt;&lt;td colspan=&quot;3&quot; class=&quot;success&quot;&gt;Rose Cr.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;number&lt;/td&gt;&lt;td colspan=&quot;3&quot; class=&quot;success&quot;&gt;2&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;&lt;/td&gt;</code></pre>
+    <table><tr><th colspan="4">
+Address
+</th></tr><tr><td style="background-color:#EEEEEE">
+street
+</td><td colspan="3" class="success">
+Oxford St
+</td></tr><tr><td style="background-color:#EEEEEE">
+number
+</td><td colspan="3" class="success">
+12
+</td></tr></table></form>
+</div>
+<div class="tabbertab" title="work">
+<form>
+    <table><tr><th colspan="4">
+Address
+</th></tr><tr><td style="background-color:#EEEEEE">
+street
+</td><td colspan="3" class="success">
+Rose Cr.
+</td></tr><tr><td style="background-color:#EEEEEE">
+number
+</td><td colspan="3" class="success">
+2
+</td></tr></table></form>
+</div>
+</div>
+</td></tr></table></form></td>
+
 <p>Tabs can also be created from a seq of values. Let’s pretend we have a list of <code class="prettyprint">Address</code> objects with a name and a Form displaying the <code class="prettyprint">Address</code> values. You can write:</p>
 <pre class="prettyprint"><code class="prettyprint">Form(&quot;Addresses&quot;).tabs(addresses) { address: Address =&gt; tab(address.street, address.form) }</code></pre>
 <h3 id="aggregating-forms">Aggregating forms</h3>
@@ -1307,7 +1644,34 @@ case class OrderLine(name: String, quantity: Int) {
   OrderLine(&quot;TDGL&quot;, 5))</code></pre>
 <p>This form returns:</p>
 <form>
-<pre class="prettyprint"><code class="prettyprint">&lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;7&quot;&gt;Order&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;name&lt;/b&gt;&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;qty&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;success&quot; style=&quot;&quot;&gt;PIS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;success&quot; style=&quot;&quot;&gt;1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;PS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;&quot;&gt;2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;success&quot; style=&quot;&quot;&gt;BS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;success&quot; style=&quot;&quot;&gt;3&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;SIS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;&quot;&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;failure&quot; style=&quot;&quot;&gt;TDGL&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;failure&quot; style=&quot;&quot;&gt;5&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;</code></pre>
+    <table><tr><th colspan="7">
+Order
+</th></tr><tr><td class="info" style="text-align:center; background-color:#EEEEEE">
+<b>name</b>
+</td><td colspan="5" class="info" style="text-align:center; background-color:#EEEEEE">
+<b>qty</b>
+</td></tr><tr><td class="success" style="">
+PIS
+</td><td colspan="5" class="success" style="">
+1
+</td></tr><tr><td class="info" style="">
+PS
+</td><td colspan="5" class="info" style="">
+2
+</td></tr><tr><td class="success" style="">
+BS
+</td><td colspan="5" class="success" style="">
+3
+</td></tr><tr><td class="info" style="">
+SIS
+</td><td colspan="5" class="info" style="">
+4
+</td></tr><tr><td class="failure" style="">
+TDGL
+</td><td colspan="5" class="failure" style="">
+5
+</td></tr></table></form>
+
 <h4 id="subsequence">Subsequence</h4>
 <p><code class="prettyprint">Form.subsequence</code> uses the <code class="prettyprint">FormDiffs.subsequence(a, b)</code> method to calculate the differences and add them to the Form:</p>
 <ul>
@@ -1323,7 +1687,34 @@ case class OrderLine(name: String, quantity: Int) {
   OrderLine(&quot;TDGL&quot;, 5))</code></pre>
 <p>This form returns:</p>
 <form>
-<pre class="prettyprint"><code class="prettyprint">&lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;7&quot;&gt;Order&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;name&lt;/b&gt;&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;qty&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;failure&quot; style=&quot;&quot;&gt;PIS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;failure&quot; style=&quot;&quot;&gt;1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;success&quot; style=&quot;&quot;&gt;PS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;success&quot; style=&quot;&quot;&gt;2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;success&quot; style=&quot;&quot;&gt;BS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;success&quot; style=&quot;&quot;&gt;3&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;SIS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;&quot;&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;failure&quot; style=&quot;&quot;&gt;TDGL&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;failure&quot; style=&quot;&quot;&gt;5&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;</code></pre>
+    <table><tr><th colspan="7">
+Order
+</th></tr><tr><td class="info" style="text-align:center; background-color:#EEEEEE">
+<b>name</b>
+</td><td colspan="5" class="info" style="text-align:center; background-color:#EEEEEE">
+<b>qty</b>
+</td></tr><tr><td class="failure" style="">
+PIS
+</td><td colspan="5" class="failure" style="">
+1
+</td></tr><tr><td class="success" style="">
+PS
+</td><td colspan="5" class="success" style="">
+2
+</td></tr><tr><td class="success" style="">
+BS
+</td><td colspan="5" class="success" style="">
+3
+</td></tr><tr><td class="info" style="">
+SIS
+</td><td colspan="5" class="info" style="">
+4
+</td></tr><tr><td class="failure" style="">
+TDGL
+</td><td colspan="5" class="failure" style="">
+5
+</td></tr></table></form>
+
 <h4 id="set">Set</h4>
 <p><code class="prettyprint">Form.set</code> uses the <code class="prettyprint">FormDiffs.set(a, b)</code> method to calculate the differences between the lines of <code class="prettyprint">a</code> and <code class="prettyprint">b</code>:</p>
 <ul>
@@ -1337,7 +1728,34 @@ case class OrderLine(name: String, quantity: Int) {
   OrderLine(&quot;TDGL&quot;, 5))</code></pre>
 <p>This form returns:</p>
 <form>
-<pre class="prettyprint"><code class="prettyprint">&lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;7&quot;&gt;Order&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;name&lt;/b&gt;&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;qty&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;success&quot; style=&quot;&quot;&gt;PIS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;success&quot; style=&quot;&quot;&gt;1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;failure&quot; style=&quot;&quot;&gt;PS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;failure&quot; style=&quot;&quot;&gt;2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;success&quot; style=&quot;&quot;&gt;BS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;success&quot; style=&quot;&quot;&gt;3&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;failure&quot; style=&quot;&quot;&gt;SIS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;failure&quot; style=&quot;&quot;&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;failure&quot; style=&quot;&quot;&gt;TDGL&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;failure&quot; style=&quot;&quot;&gt;5&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;</code></pre>
+    <table><tr><th colspan="7">
+Order
+</th></tr><tr><td class="info" style="text-align:center; background-color:#EEEEEE">
+<b>name</b>
+</td><td colspan="5" class="info" style="text-align:center; background-color:#EEEEEE">
+<b>qty</b>
+</td></tr><tr><td class="success" style="">
+PIS
+</td><td colspan="5" class="success" style="">
+1
+</td></tr><tr><td class="failure" style="">
+PS
+</td><td colspan="5" class="failure" style="">
+2
+</td></tr><tr><td class="success" style="">
+BS
+</td><td colspan="5" class="success" style="">
+3
+</td></tr><tr><td class="failure" style="">
+SIS
+</td><td colspan="5" class="failure" style="">
+4
+</td></tr><tr><td class="failure" style="">
+TDGL
+</td><td colspan="5" class="failure" style="">
+5
+</td></tr></table></form>
+
 <h4 id="sequence">Sequence</h4>
 <p><code class="prettyprint">Form.sequence</code> uses the <code class="prettyprint">FormDiffs.sequence(a, b)</code> method to calculate the differences between the lines of <code class="prettyprint">a</code> and <code class="prettyprint">b</code>:</p>
 <ul>
@@ -1352,7 +1770,34 @@ case class OrderLine(name: String, quantity: Int) {
     OrderLine(&quot;TDGL&quot;, 5))</code></pre>
 <p>This form returns:</p>
 <form>
-<pre class="prettyprint"><code class="prettyprint">&lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;7&quot;&gt;Order&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;name&lt;/b&gt;&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;qty&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;failure&quot; style=&quot;&quot;&gt;PIS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;failure&quot; style=&quot;&quot;&gt;1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;success&quot; style=&quot;&quot;&gt;PS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;success&quot; style=&quot;&quot;&gt;2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;success&quot; style=&quot;&quot;&gt;BS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;success&quot; style=&quot;&quot;&gt;3&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;failure&quot; style=&quot;&quot;&gt;SIS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;failure&quot; style=&quot;&quot;&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;failure&quot; style=&quot;&quot;&gt;TDGL&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;failure&quot; style=&quot;&quot;&gt;5&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;</code></pre>
+    <table><tr><th colspan="7">
+Order
+</th></tr><tr><td class="info" style="text-align:center; background-color:#EEEEEE">
+<b>name</b>
+</td><td colspan="5" class="info" style="text-align:center; background-color:#EEEEEE">
+<b>qty</b>
+</td></tr><tr><td class="failure" style="">
+PIS
+</td><td colspan="5" class="failure" style="">
+1
+</td></tr><tr><td class="success" style="">
+PS
+</td><td colspan="5" class="success" style="">
+2
+</td></tr><tr><td class="success" style="">
+BS
+</td><td colspan="5" class="success" style="">
+3
+</td></tr><tr><td class="failure" style="">
+SIS
+</td><td colspan="5" class="failure" style="">
+4
+</td></tr><tr><td class="failure" style="">
+TDGL
+</td><td colspan="5" class="failure" style="">
+5
+</td></tr></table></form>
+
 <h3 id="decision-tables">Decision tables</h3>
 <p>One very popular type of Forms are <em>decision tables</em>. A decision table is a Form where, on each row, several values are used for a computation and the result must be equal to other values on the same row. A very simple example of this is a calculator:</p>
 <pre class="prettyprint"><code class="prettyprint">case class Calculator(form: Form = Form()) {
@@ -1387,21 +1832,99 @@ def th(title1: String, titles: String*) = Calculator(Form.th(title1, titles:_*))
  }&quot;&quot;&quot;
 }</code></pre>
 <p>Here is the output:</p>
-<td class="info">
-<form>
-<pre class="prettyprint"><code class="prettyprint">&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;a&lt;/b&gt;&lt;/td&gt;&lt;td class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;b&lt;/b&gt;&lt;/td&gt;&lt;td class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;a + b&lt;/b&gt;&lt;/td&gt;&lt;td colspan=&quot;9&quot; class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;a - b&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;1&lt;/td&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;2&lt;/td&gt;&lt;td class=&quot;success&quot;&gt;3&lt;/td&gt;&lt;td colspan=&quot;9&quot; class=&quot;success&quot;&gt;-1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;2&lt;/td&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;2&lt;/td&gt;&lt;td class=&quot;success&quot;&gt;4&lt;/td&gt;&lt;td colspan=&quot;9&quot; class=&quot;success&quot;&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;&lt;/td&gt;</code></pre>
+<td class="info"><form>
+    <table><tr><td class="info" style="text-align:center; background-color:#EEEEEE">
+<b>a</b>
+</td><td class="info" style="text-align:center; background-color:#EEEEEE">
+<b>b</b>
+</td><td class="info" style="text-align:center; background-color:#EEEEEE">
+<b>a + b</b>
+</td><td colspan="9" class="info" style="text-align:center; background-color:#EEEEEE">
+<b>a - b</b>
+</td></tr><tr><td class="info" style="">
+1
+</td><td class="info" style="">
+2
+</td><td class="success">
+3
+</td><td colspan="9" class="success">
+-1
+</td></tr><tr><td class="info" style="">
+2
+</td><td class="info" style="">
+2
+</td><td class="success">
+4
+</td><td colspan="9" class="success">
+0
+</td></tr></table></form></td>
+
 <p>And if something goes wrong:</p>
 <form>
-<pre class="prettyprint"><code class="prettyprint">&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;a&lt;/b&gt;&lt;/td&gt;&lt;td class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;b&lt;/b&gt;&lt;/td&gt;&lt;td class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;a + b&lt;/b&gt;&lt;/td&gt;&lt;td colspan=&quot;9&quot; class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;a - b&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;1&lt;/td&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;2&lt;/td&gt;&lt;td class=&quot;success&quot;&gt;3&lt;/td&gt;&lt;td colspan=&quot;9&quot; class=&quot;success&quot;&gt;-1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;2&lt;/td&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;2&lt;/td&gt;&lt;td class=&quot;success&quot;&gt;4&lt;/td&gt;&lt;td class=&quot;failure&quot;&gt;2&lt;/td&gt;&lt;td colspan=&quot;9&quot; class=&quot;failure&quot; onclick=&quot;showHide(1349591012)&quot;&gt;&#39;0&#39; is not equal to &#39;2&#39;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;pre&gt;&lt;i&gt;[click on failed cells to see the stacktraces]&lt;/i&gt;&lt;div class=&quot;formstacktrace details&quot; id=&quot;1349591012&quot;&gt;
-  &#39;0&#39; is not equal to &#39;2&#39; (file:1)
-  
-&lt;/div&gt;&lt;/pre&gt;&lt;/form&gt;</code></pre>
+    <table><tr><td class="info" style="text-align:center; background-color:#EEEEEE">
+<b>a</b>
+</td><td class="info" style="text-align:center; background-color:#EEEEEE">
+<b>b</b>
+</td><td class="info" style="text-align:center; background-color:#EEEEEE">
+<b>a + b</b>
+</td><td colspan="9" class="info" style="text-align:center; background-color:#EEEEEE">
+<b>a - b</b>
+</td></tr><tr><td class="info" style="">
+1
+</td><td class="info" style="">
+2
+</td><td class="success">
+3
+</td><td colspan="9" class="success">
+-1
+</td></tr><tr><td class="info" style="">
+2
+</td><td class="info" style="">
+2
+</td><td class="success">
+4
+</td><td class="failure">
+2
+</td><td colspan="9" class="failure" onclick="showHide(35039723)">
+‘0’ is not equal to ‘2’
+</td></tr></table><pre><i>[click on failed cells to see the stacktraces]</i><div class="formstacktrace details" id="35039723">
+      '0' is not equal to '2' (file:1)
+      
+    </div></pre></form>
+
 <p>And when it goes <em>very</em> wrong (like throwing an <code class="prettyprint">error(&quot;very wrong&quot;)</code>), there will be red cells and stacktraces:</p>
 <form>
-<pre class="prettyprint"><code class="prettyprint">&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;a&lt;/b&gt;&lt;/td&gt;&lt;td class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;b&lt;/b&gt;&lt;/td&gt;&lt;td class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;a + b&lt;/b&gt;&lt;/td&gt;&lt;td colspan=&quot;9&quot; class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;a - b&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;1&lt;/td&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;2&lt;/td&gt;&lt;td class=&quot;success&quot;&gt;3&lt;/td&gt;&lt;td colspan=&quot;9&quot; class=&quot;success&quot;&gt;-1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;2&lt;/td&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;2&lt;/td&gt;&lt;td class=&quot;success&quot;&gt;4&lt;/td&gt;&lt;td class=&quot;error&quot;&gt;2&lt;/td&gt;&lt;td colspan=&quot;9&quot; class=&quot;error&quot; onclick=&quot;showHide(853859070)&quot;&gt;very wrong&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;pre&gt;&lt;i&gt;[click on failed cells to see the stacktraces]&lt;/i&gt;&lt;div class=&quot;formstacktrace details&quot; id=&quot;853859070&quot;&gt;
-  very wrong (file:1)
-  &lt;div&gt;scala.sys.package$.error(package.scala:27)&lt;/div&gt;&lt;div&gt;org.specs2.guide.UseForms$WrongCalculator$$anonfun$minus$3$3.apply$mcI$sp(UseForms.scala:574)&lt;/div&gt;&lt;div&gt;org.specs2.guide.UseForms$WrongCalculator$$anonfun$minus$3$3.apply(UseForms.scala:574)&lt;/div&gt;&lt;div&gt;org.specs2.guide.UseForms$WrongCalculator$$anonfun$minus$3$3.apply(UseForms.scala:574)&lt;/div&gt;&lt;div&gt;org.specs2.control.Property$$anonfun$apply$2.apply(Property.scala:67)&lt;/div&gt;&lt;div&gt;org.specs2.control.Property$$anonfun$apply$2.apply(Property.scala:67)&lt;/div&gt;&lt;div&gt;org.specs2.control.Property.execute(Property.scala:51)&lt;/div&gt;&lt;div&gt;org.specs2.control.Property.optionalValue(Property.scala:17)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution$$anonfun$2.apply(ResultExecution.scala:109)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution$$anonfun$2.apply(ResultExecution.scala:109)&lt;/div&gt;&lt;div&gt;org.specs2.control.Exceptions$class.trye(Exceptions.scala:86)&lt;/div&gt;&lt;div&gt;org.specs2.control.Exceptions$.trye(Exceptions.scala:132)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution$class.executeEither(ResultExecution.scala:80)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution$.executeEither(ResultExecution.scala:120)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution$class.executeProperty(ResultExecution.scala:109)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution$.executeProperty(ResultExecution.scala:120)&lt;/div&gt;&lt;div&gt;org.specs2.form.Prop.actualValue$lzycompute(Prop.scala:48)&lt;/div&gt;&lt;div&gt;org.specs2.form.Prop.actualValue(Prop.scala:48)&lt;/div&gt;&lt;div&gt;org.specs2.form.Prop.execute(Prop.scala:55)&lt;/div&gt;&lt;div&gt;org.specs2.form.PropCell$$anonfun$executeCell$3.apply(Cells.scala:176)&lt;/div&gt;&lt;div&gt;org.specs2.form.PropCell$$anonfun$executeCell$3.apply(Cells.scala:176)&lt;/div&gt;&lt;div&gt;scala.Option.orElse(Option.scala:289)&lt;/div&gt;&lt;div&gt;org.specs2.form.PropCell.executeCell(Cells.scala:176)&lt;/div&gt;&lt;div&gt;org.specs2.form.PropCell.executeCell(Cells.scala:172)&lt;/div&gt;&lt;div&gt;org.specs2.form.Row$$anonfun$executeRow$1.apply(Row.scala:38)&lt;/div&gt;&lt;div&gt;org.specs2.form.Row$$anonfun$executeRow$1.apply(Row.scala:38)&lt;/div&gt;&lt;div&gt;scala.collection.immutable.List.map(List.scala:277)&lt;/div&gt;&lt;div&gt;scalaz.NonEmptyList.map(NonEmptyList.scala:20)&lt;/div&gt;&lt;div&gt;org.specs2.form.Row.executeRow(Row.scala:38)&lt;/div&gt;&lt;div&gt;org.specs2.form.Form$$anonfun$executeRows$1.apply(Form.scala:73)&lt;/div&gt;&lt;div&gt;org.specs2.form.Form$$anonfun$executeRows$1.apply(Form.scala:73)&lt;/div&gt;&lt;div&gt;scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:245)&lt;/div&gt;&lt;div&gt;scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:245)&lt;/div&gt;&lt;div&gt;scala.collection.Iterator$class.foreach(Iterator.scala:750)&lt;/div&gt;&lt;div&gt;scala.collection.AbstractIterator.foreach(Iterator.scala:1202)&lt;/div&gt;&lt;div&gt;scala.collection.IterableLike$class.foreach(IterableLike.scala:72)&lt;/div&gt;&lt;div&gt;scala.collection.AbstractIterable.foreach(Iterable.scala:54)&lt;/div&gt;&lt;div&gt;scala.collection.TraversableLike$class.map(TraversableLike.scala:245)&lt;/div&gt;&lt;div&gt;scala.collection.AbstractTraversable.map(Traversable.scala:104)&lt;/div&gt;&lt;div&gt;org.specs2.form.Form.executeRows(Form.scala:73)&lt;/div&gt;&lt;div&gt;org.specs2.form.Form.executeForm(Form.scala:81)&lt;/div&gt;&lt;div&gt;org.specs2.guide.UseForms$$anonfun$is$1$$anonfun$apply$139.apply(UseForms.scala:527)&lt;/div&gt;&lt;div&gt;org.specs2.guide.UseForms$$anonfun$is$1$$anonfun$apply$139.apply(UseForms.scala:527)&lt;/div&gt;&lt;div&gt;org.specs2.specification.create.S2StringContext$$anon$5.append(S2StringContext.scala:86)&lt;/div&gt;&lt;div&gt;org.specs2.specification.create.S2StringContextCreation$$anonfun$9.apply(S2StringContext.scala:189)&lt;/div&gt;&lt;div&gt;org.specs2.specification.create.S2StringContextCreation$$anonfun$9.apply(S2StringContext.scala:187)&lt;/div&gt;&lt;div&gt;scala.collection.LinearSeqOptimized$class.foldLeft(LinearSeqOptimized.scala:124)&lt;/div&gt;&lt;div&gt;scala.collection.immutable.List.foldLeft(List.scala:84)&lt;/div&gt;&lt;div&gt;org.specs2.specification.create.S2StringContextCreation$class.s2(S2StringContext.scala:187)&lt;/div&gt;&lt;div&gt;org.specs2.Specification.s2(Specification.scala:19)&lt;/div&gt;&lt;div&gt;org.specs2.guide.UseForms$$anonfun$is$1.apply(UseForms.scala:9)&lt;/div&gt;&lt;div&gt;org.specs2.guide.UseForms$$anonfun$is$1.apply(UseForms.scala:9)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$$anonfun$1.apply(SpecStructure.scala:24)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$$anonfun$1.apply(SpecStructure.scala:24)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$$anonfun$2.apply(SpecStructure.scala:25)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$$anonfun$2.apply(SpecStructure.scala:25)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$$anonfun$3.apply(SpecStructure.scala:26)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$$anonfun$3.apply(SpecStructure.scala:26)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.contents(SpecStructure.scala:23)&lt;/div&gt;&lt;div&gt;org.specs2.reporter.Reporter$$anonfun$report$1.apply(Reporter.scala:44)&lt;/div&gt;&lt;div&gt;org.specs2.reporter.Reporter$$anonfun$report$1.apply(Reporter.scala:37)&lt;/div&gt;&lt;div&gt;org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8$$anonfun$2.apply(ClassRunner.scala:61)&lt;/div&gt;&lt;div&gt;org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8$$anonfun$2.apply(ClassRunner.scala:61)&lt;/div&gt;&lt;div&gt;scala.collection.immutable.List.map(List.scala:277)&lt;/div&gt;&lt;div&gt;org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8.apply(ClassRunner.scala:61)&lt;/div&gt;&lt;div&gt;org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8.apply(ClassRunner.scala:60)&lt;/div&gt;&lt;div&gt;scala.Function1$$anonfun$andThen$1.apply(Function1.scala:55)&lt;/div&gt;&lt;div&gt;org.specs2.control.Status$class.fold(Status.scala:30)&lt;/div&gt;&lt;div&gt;org.specs2.control.Ok.fold(Status.scala:95)&lt;/div&gt;&lt;div&gt;org.specs2.control.Status$class.flatMap(Status.scala:48)&lt;/div&gt;&lt;div&gt;org.specs2.control.Ok.flatMap(Status.scala:95)&lt;/div&gt;&lt;div&gt;org.specs2.control.Status$class.map(Status.scala:45)&lt;/div&gt;&lt;div&gt;org.specs2.control.Ok.map(Status.scala:95)&lt;/div&gt;&lt;div&gt;org.specs2.control.StatusT$$anonfun$map$1.apply(StatusT.scala:16)&lt;/div&gt;&lt;div&gt;org.specs2.control.StatusT$$anonfun$map$1.apply(StatusT.scala:16)&lt;/div&gt;&lt;div&gt;scalaz.WriterT$$anonfun$map$1.apply(WriterT.scala:46)&lt;/div&gt;&lt;div&gt;scalaz.WriterT$$anonfun$map$1.apply(WriterT.scala:46)&lt;/div&gt;&lt;div&gt;scalaz.effect.IO$$anonfun$map$1$$anonfun$apply$8.apply(IO.scala:56)&lt;/div&gt;&lt;div&gt;scalaz.effect.IO$$anonfun$map$1$$anonfun$apply$8.apply(IO.scala:55)&lt;/div&gt;&lt;div&gt;scalaz.Free$$anonfun$map$1.apply(Free.scala:52)&lt;/div&gt;&lt;div&gt;scalaz.Free$$anonfun$map$1.apply(Free.scala:52)&lt;/div&gt;&lt;div&gt;scalaz.Free$$anonfun$flatMap$1$$anonfun$apply$1.apply(Free.scala:60)&lt;/div&gt;&lt;div&gt;scalaz.Free$$anonfun$flatMap$1$$anonfun$apply$1.apply(Free.scala:60)&lt;/div&gt;&lt;div&gt;scalaz.Free.resume(Free.scala:72)&lt;/div&gt;&lt;div&gt;scalaz.Free.go2$1(Free.scala:118)&lt;/div&gt;&lt;div&gt;scalaz.Free.go(Free.scala:122)&lt;/div&gt;&lt;div&gt;scalaz.Free.run(Free.scala:172)&lt;/div&gt;&lt;div&gt;scalaz.effect.IO$class.unsafePerformIO(IO.scala:22)&lt;/div&gt;&lt;div&gt;scalaz.effect.IOFunctions$$anon$6.unsafePerformIO(IO.scala:227)&lt;/div&gt;&lt;div&gt;org.specs2.control.package$$anon$3.asResult(package.scala:87)&lt;/div&gt;&lt;div&gt;org.specs2.execute.AsResult$.apply(AsResult.scala:25)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution$$anonfun$withEnv$1.apply(Execution.scala:118)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution$$anonfun$withEnv$1.apply(Execution.scala:118)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution$$anonfun$execute$2$$anonfun$apply$2.apply(Execution.scala:68)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution$$anonfun$execute$2$$anonfun$apply$2.apply(Execution.scala:68)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution.setResult(Execution.scala:74)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution$$anonfun$execute$2.apply(Execution.scala:68)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution$$anonfun$execute$2.apply(Execution.scala:68)&lt;/div&gt;&lt;div&gt;scala.Option.fold(Option.scala:158)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Execution.execute(Execution.scala:68)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1$$anonfun$apply$6.apply(Executor.scala:132)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1$$anonfun$apply$6.apply(Executor.scala:130)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Fragment.updateExecution(Fragment.scala:44)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1.apply(Executor.scala:130)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1.apply(Executor.scala:129)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1.executedFragment$lzycompute$1(Executor.scala:104)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1.org$specs2$specification$process$DefaultExecutor$class$$anonfun$$executedFragment$1(Executor.scala:104)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1$$anonfun$4.apply(Executor.scala:110)&lt;/div&gt;&lt;div&gt;org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1$$anonfun$4.apply(Executor.scala:110)&lt;/div&gt;&lt;div&gt;scalaz.concurrent.Task$.Try(Task.scala:385)&lt;/div&gt;&lt;div&gt;org.specs2.data.Processes$$anonfun$start$1.apply(Processes.scala:96)&lt;/div&gt;&lt;div&gt;org.specs2.data.Processes$$anonfun$start$1.apply(Processes.scala:96)&lt;/div&gt;&lt;div&gt;scalaz.concurrent.Future$$anonfun$apply$15$$anon$3.call(Future.scala:367)&lt;/div&gt;&lt;div&gt;scalaz.concurrent.Future$$anonfun$apply$15$$anon$3.call(Future.scala:367)&lt;/div&gt;&lt;div&gt;java.util.concurrent.FutureTask.run(FutureTask.java:262)&lt;/div&gt;&lt;div&gt;java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)&lt;/div&gt;&lt;div&gt;java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)&lt;/div&gt;&lt;div&gt;java.lang.Thread.run(Thread.java:744)&lt;/div&gt;
-&lt;/div&gt;&lt;/pre&gt;&lt;/form&gt;</code></pre>
+    <table><tr><td class="info" style="text-align:center; background-color:#EEEEEE">
+<b>a</b>
+</td><td class="info" style="text-align:center; background-color:#EEEEEE">
+<b>b</b>
+</td><td class="info" style="text-align:center; background-color:#EEEEEE">
+<b>a + b</b>
+</td><td colspan="9" class="info" style="text-align:center; background-color:#EEEEEE">
+<b>a - b</b>
+</td></tr><tr><td class="info" style="">
+1
+</td><td class="info" style="">
+2
+</td><td class="success">
+3
+</td><td colspan="9" class="success">
+-1
+</td></tr><tr><td class="info" style="">
+2
+</td><td class="info" style="">
+2
+</td><td class="success">
+4
+</td><td class="error">
+2
+</td><td colspan="9" class="error" onclick="showHide(502105183)">
+very wrong
+</td></tr></table><pre><i>[click on failed cells to see the stacktraces]</i><div class="formstacktrace details" id="502105183">
+      very wrong (file:1)
+      <div>scala.sys.package$.error(package.scala:27)</div><div>org.specs2.guide.UseForms$WrongCalculator$$anonfun$minus$3$3.apply$mcI$sp(UseForms.scala:574)</div><div>org.specs2.guide.UseForms$WrongCalculator$$anonfun$minus$3$3.apply(UseForms.scala:574)</div><div>org.specs2.guide.UseForms$WrongCalculator$$anonfun$minus$3$3.apply(UseForms.scala:574)</div><div>org.specs2.control.Property$$anonfun$apply$2.apply(Property.scala:67)</div><div>org.specs2.control.Property$$anonfun$apply$2.apply(Property.scala:67)</div><div>org.specs2.control.Property.execute(Property.scala:51)</div><div>org.specs2.control.Property.optionalValue(Property.scala:17)</div><div>org.specs2.execute.ResultExecution$$anonfun$2.apply(ResultExecution.scala:109)</div><div>org.specs2.execute.ResultExecution$$anonfun$2.apply(ResultExecution.scala:109)</div><div>org.specs2.control.Exceptions$class.trye(Exceptions.scala:86)</div><div>org.specs2.control.Exceptions$.trye(Exceptions.scala:132)</div><div>org.specs2.execute.ResultExecution$class.executeEither(ResultExecution.scala:80)</div><div>org.specs2.execute.ResultExecution$.executeEither(ResultExecution.scala:120)</div><div>org.specs2.execute.ResultExecution$class.executeProperty(ResultExecution.scala:109)</div><div>org.specs2.execute.ResultExecution$.executeProperty(ResultExecution.scala:120)</div><div>org.specs2.form.Prop.actualValue$lzycompute(Prop.scala:48)</div><div>org.specs2.form.Prop.actualValue(Prop.scala:48)</div><div>org.specs2.form.Prop.execute(Prop.scala:55)</div><div>org.specs2.form.PropCell$$anonfun$executeCell$3.apply(Cells.scala:176)</div><div>org.specs2.form.PropCell$$anonfun$executeCell$3.apply(Cells.scala:176)</div><div>scala.Option.orElse(Option.scala:289)</div><div>org.specs2.form.PropCell.executeCell(Cells.scala:176)</div><div>org.specs2.form.PropCell.executeCell(Cells.scala:172)</div><div>org.specs2.form.Row$$anonfun$executeRow$1.apply(Row.scala:38)</div><div>org.specs2.form.Row$$anonfun$executeRow$1.apply(Row.scala:38)</div><div>scala.collection.immutable.List.map(List.scala:277)</div><div>scalaz.NonEmptyList.map(NonEmptyList.scala:20)</div><div>org.specs2.form.Row.executeRow(Row.scala:38)</div><div>org.specs2.form.Form$$anonfun$executeRows$1.apply(Form.scala:73)</div><div>org.specs2.form.Form$$anonfun$executeRows$1.apply(Form.scala:73)</div><div>scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:245)</div><div>scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:245)</div><div>scala.collection.Iterator$class.foreach(Iterator.scala:750)</div><div>scala.collection.AbstractIterator.foreach(Iterator.scala:1202)</div><div>scala.collection.IterableLike$class.foreach(IterableLike.scala:72)</div><div>scala.collection.AbstractIterable.foreach(Iterable.scala:54)</div><div>scala.collection.TraversableLike$class.map(TraversableLike.scala:245)</div><div>scala.collection.AbstractTraversable.map(Traversable.scala:104)</div><div>org.specs2.form.Form.executeRows(Form.scala:73)</div><div>org.specs2.form.Form.executeForm(Form.scala:81)</div><div>org.specs2.guide.UseForms$$anonfun$is$1$$anonfun$apply$139.apply(UseForms.scala:527)</div><div>org.specs2.guide.UseForms$$anonfun$is$1$$anonfun$apply$139.apply(UseForms.scala:527)</div><div>org.specs2.specification.create.S2StringContext$$anon$5.append(S2StringContext.scala:86)</div><div>org.specs2.specification.create.S2StringContextCreation$$anonfun$9.apply(S2StringContext.scala:189)</div><div>org.specs2.specification.create.S2StringContextCreation$$anonfun$9.apply(S2StringContext.scala:187)</div><div>scala.collection.LinearSeqOptimized$class.foldLeft(LinearSeqOptimized.scala:124)</div><div>scala.collection.immutable.List.foldLeft(List.scala:84)</div><div>org.specs2.specification.create.S2StringContextCreation$class.s2(S2StringContext.scala:187)</div><div>org.specs2.Specification.s2(Specification.scala:19)</div><div>org.specs2.guide.UseForms$$anonfun$is$1.apply(UseForms.scala:9)</div><div>org.specs2.guide.UseForms$$anonfun$is$1.apply(UseForms.scala:9)</div><div>org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure$$anonfun$1.apply(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure$$anonfun$1.apply(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure$$anonfun$2.apply(SpecStructure.scala:25)</div><div>org.specs2.specification.core.SpecStructure$$anonfun$2.apply(SpecStructure.scala:25)</div><div>org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure$$anonfun$3.apply(SpecStructure.scala:26)</div><div>org.specs2.specification.core.SpecStructure$$anonfun$3.apply(SpecStructure.scala:26)</div><div>org.specs2.specification.core.SpecStructure.fragments$lzycompute(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:21)</div><div>org.specs2.specification.core.SpecStructure.contents(SpecStructure.scala:23)</div><div>org.specs2.reporter.Reporter$$anonfun$report$1.apply(Reporter.scala:44)</div><div>org.specs2.reporter.Reporter$$anonfun$report$1.apply(Reporter.scala:37)</div><div>org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8$$anonfun$2.apply(ClassRunner.scala:61)</div><div>org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8$$anonfun$2.apply(ClassRunner.scala:61)</div><div>scala.collection.immutable.List.map(List.scala:277)</div><div>org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8.apply(ClassRunner.scala:61)</div><div>org.specs2.runner.ClassRunner$$anonfun$report$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$apply$4$$anonfun$apply$7$$anonfun$apply$8.apply(ClassRunner.scala:60)</div><div>scala.Function1$$anonfun$andThen$1.apply(Function1.scala:55)</div><div>org.specs2.control.Status$class.fold(Status.scala:30)</div><div>org.specs2.control.Ok.fold(Status.scala:95)</div><div>org.specs2.control.Status$class.flatMap(Status.scala:48)</div><div>org.specs2.control.Ok.flatMap(Status.scala:95)</div><div>org.specs2.control.Status$class.map(Status.scala:45)</div><div>org.specs2.control.Ok.map(Status.scala:95)</div><div>org.specs2.control.StatusT$$anonfun$map$1.apply(StatusT.scala:16)</div><div>org.specs2.control.StatusT$$anonfun$map$1.apply(StatusT.scala:16)</div><div>scalaz.WriterT$$anonfun$map$1.apply(WriterT.scala:46)</div><div>scalaz.WriterT$$anonfun$map$1.apply(WriterT.scala:46)</div><div>scalaz.effect.IO$$anonfun$map$1$$anonfun$apply$8.apply(IO.scala:56)</div><div>scalaz.effect.IO$$anonfun$map$1$$anonfun$apply$8.apply(IO.scala:55)</div><div>scalaz.Free$$anonfun$map$1.apply(Free.scala:52)</div><div>scalaz.Free$$anonfun$map$1.apply(Free.scala:52)</div><div>scalaz.Free$$anonfun$flatMap$1$$anonfun$apply$1.apply(Free.scala:60)</div><div>scalaz.Free$$anonfun$flatMap$1$$anonfun$apply$1.apply(Free.scala:60)</div><div>scalaz.Free.resume(Free.scala:72)</div><div>scalaz.Free.go2$1(Free.scala:118)</div><div>scalaz.Free.go(Free.scala:122)</div><div>scalaz.Free.run(Free.scala:172)</div><div>scalaz.effect.IO$class.unsafePerformIO(IO.scala:22)</div><div>scalaz.effect.IOFunctions$$anon$6.unsafePerformIO(IO.scala:227)</div><div>org.specs2.control.package$$anon$3.asResult(package.scala:87)</div><div>org.specs2.execute.AsResult$.apply(AsResult.scala:25)</div><div>org.specs2.specification.core.Execution$$anonfun$withEnv$1.apply(Execution.scala:118)</div><div>org.specs2.specification.core.Execution$$anonfun$withEnv$1.apply(Execution.scala:118)</div><div>org.specs2.specification.core.Execution$$anonfun$execute$2$$anonfun$apply$2.apply(Execution.scala:68)</div><div>org.specs2.specification.core.Execution$$anonfun$execute$2$$anonfun$apply$2.apply(Execution.scala:68)</div><div>org.specs2.specification.core.Execution.setResult(Execution.scala:74)</div><div>org.specs2.specification.core.Execution$$anonfun$execute$2.apply(Execution.scala:68)</div><div>org.specs2.specification.core.Execution$$anonfun$execute$2.apply(Execution.scala:68)</div><div>scala.Option.fold(Option.scala:158)</div><div>org.specs2.specification.core.Execution.execute(Execution.scala:68)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1$$anonfun$apply$6.apply(Executor.scala:132)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1$$anonfun$apply$6.apply(Executor.scala:130)</div><div>org.specs2.specification.core.Fragment.updateExecution(Fragment.scala:44)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1.apply(Executor.scala:130)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$executeFragment$1.apply(Executor.scala:129)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1.executedFragment$lzycompute$1(Executor.scala:104)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1.org$specs2$specification$process$DefaultExecutor$class$$anonfun$$executedFragment$1(Executor.scala:104)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1$$anonfun$4.apply(Executor.scala:110)</div><div>org.specs2.specification.process.DefaultExecutor$$anonfun$sequencedExecution$1$$anonfun$4.apply(Executor.scala:110)</div><div>scalaz.concurrent.Task$.Try(Task.scala:385)</div><div>org.specs2.data.Processes$$anonfun$start$1.apply(Processes.scala:96)</div><div>org.specs2.data.Processes$$anonfun$start$1.apply(Processes.scala:96)</div><div>scalaz.concurrent.Future$$anonfun$apply$15$$anon$3.call(Future.scala:367)</div><div>scalaz.concurrent.Future$$anonfun$apply$15$$anon$3.call(Future.scala:367)</div><div>java.util.concurrent.FutureTask.run(FutureTask.java:262)</div><div>java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)</div><div>java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)</div><div>java.lang.Thread.run(Thread.java:744)</div>
+    </div></pre></form>
+
 <p>Note that the Calculator class is not, in itself an Example. But there is an implicit definition automatically transforming <code class="prettyprint">Any { def form: Form }</code> to <code class="prettyprint">Example</code> so that an explicit call to <code class="prettyprint">.form</code> is not necessary in order to include the Form in the specification.</p>
 </div>
 
