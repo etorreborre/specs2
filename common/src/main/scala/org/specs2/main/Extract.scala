@@ -22,13 +22,16 @@ trait Extract {
 
   def boolSystemProperty(name: String)(implicit sp: SystemProperties): Option[Boolean] = booleanProperties(name -> sp)
 
-  def bool(name: String, mappedValue: Boolean = true)(implicit args: Seq[String], sp: SystemProperties): Option[Boolean] = {
+  def boolValue(name: String, mappedValue: Boolean = true)(implicit args: Seq[String], sp: SystemProperties): Option[Boolean] = {
     args.find(_.toLowerCase == name.toLowerCase).map(a => mappedValue).orElse(boolSystemProperty(name))
   }
 
-  def bool(name: String, negatedName: String)(implicit args: Seq[String], sp: SystemProperties): Option[Boolean] = {
-    bool(negatedName, false) orElse bool(name)
-  }
+  def bool(name: String)(implicit args: Seq[String], sp: SystemProperties): Option[Boolean] =
+    bool(name, "!"+name)
+
+  def bool(name: String, negatedName: String)(implicit args: Seq[String], sp: SystemProperties): Option[Boolean] =
+    boolValue(negatedName, false) orElse boolValue(name, true)
+
   def value[T](name: String, f: String => T)(implicit args: Seq[String], sp: SystemProperties): Option[T] = {
     args.zip(args.drop(1)).find(_._1.toLowerCase == name.toLowerCase).map(s => f(s._2)).orElse(valueSystemProperty(name, f))
   }

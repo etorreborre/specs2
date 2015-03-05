@@ -23,6 +23,8 @@ Definition
 
   If an argument is specified, its value is returned                                                                  
     + for a boolean argument like xonly the value is true
+    + a boolean argument can be negated by adding ! in front of it.
+      ex: `Arguments("!pandoc").commandLine.boolOr("pandoc", true) is false`
     + for a string argument, it is the 'next' value
 
   If an argument is not specified, its default value is returned
@@ -42,7 +44,7 @@ Overriding
 
   An Arguments instance can be overridden by another with the `<|` operator: `a <| b`
     + if there's no corresponding value in b, the value in a stays
-    + there is a corresponding value in b, the value in a is overriden when there is one
+    + there is a corresponding value in b, the value in a is overridden when there is one
     + there is a corresponding value in b, the value in b is kept
 
 System props
@@ -77,6 +79,7 @@ Creation
 
   "values" - new group {
     eg := Arguments("xonly").xonly must beTrue
+    eg := Arguments("!pandoc").commandLine.boolOr("pandoc", true) must beFalse
     eg := Arguments("ex", "Hello").ex must_== ".*Hello.*"
 
     eg := Arguments("").xonly must beFalse

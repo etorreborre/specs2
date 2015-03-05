@@ -31,12 +31,13 @@ You can use the following arguments to change the HTML generation:
 
 ### Use Pandoc for Markdown
 
-[Markdown](http://commonmark.org) text is supported if [Pandoc](http://johnmacfarlane.net/pandoc) is available on the command line.
+[Markdown](http://commonmark.org) text is supported if [Pandoc](http://johnmacfarlane.net/pandoc) is available on the command line and if the `!pandoc` boolean flag is not set.
 
 _NOTE!!!_: the currently supported version of Pandoc is 1.13.2.
 
  Name                    | Default value                                                                     | Description
  ----------------------- | --------------------------------------------------------------------------------- | ------------------------------
+ `pandoc`                | `true`                                                                            | set to `false` by passing `!pandoc`
  `pandoc.exec`           | `pandoc`                                                                          | path to the Pandoc executable
  `pandoc.inputformat`    | `markdown+pipe_tables+auto_identifiers+header_attributes+inline_code_attributes`  | pandoc arguments (see the Pandoc [user guide](http://johnmacfarlane.net/pandoc/README.html))
  `pandoc.outputformat`   | `html`                                                                            |

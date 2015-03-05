@@ -1,8 +1,6 @@
 package org.specs2
 package guide
 
-import org.specs2.specification.core.SpecificationRef
-
 object ArgumentsReference extends UserGuidePage { def is = "Arguments reference".title ^ s2"""
 
 Arguments can be passed on the command line, or declared inside a specification, using the `args(name=value)` syntax:${snippet {
