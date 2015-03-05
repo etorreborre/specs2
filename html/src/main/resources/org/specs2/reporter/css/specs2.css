@@ -88,11 +88,9 @@ text {
   white-space: pre-wrap;
 }
 .success_icon {
-  
 }
 .example {
 }
-
 .success {
 }
 .failure {
@@ -101,9 +99,16 @@ text {
 }
 .skipped {
 }
+
 ul {
   list-style-type: disc;
 }
+
+ul, ol {
+  margin-top: 0;
+  margin-bottom: 0px;
+}
+
 li.example.success {
   list-style-image: url(../images/icon_success_sml.gif);
   padding-left: 5px;
@@ -138,6 +143,7 @@ li.notoggle {
   padding-left: 12px;
   padding-right: 0px
 }
+
 message.failure {
   padding: 1px 3px 2px 3px;
   background-color: rgba(255, 255, 153, 0.75);
