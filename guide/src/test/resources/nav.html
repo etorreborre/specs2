@@ -23,7 +23,15 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="$SITE_DIR$/index.html" data-target="#index.html">Home</a></li>
                 <li><a href="$SITE_DIR$/quickstart.html" data-target="#quickstart.html">Quick Start</a></li>
-                <li><a href="$SITE_DIR$/learn.html" data-target="#learn.html">Learn</a></li>
+                <li class="dropdown">
+                    <a href="$SITE_DIR$/learn.html" data-target="#learn.html" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Learn <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="$GUIDE_DIR$/org.specs2.guide.UserGuide.html">User Guide</a></li>
+                        <li><a href="$EXAMPLES_DIR$">Examples</a></li>
+                        <li><a href="$API_DIR$/index.html#package">ScalaDoc</a></li>
+                        <li><a href="http://notes.implicit.ly/tagged/specs2">Release notes</a></li>
+                    </ul>
+                </li>
                 <li><a href="$SITE_DIR$/project.html" data-target="#project.html">Project</a></li>
             </ul>
             <form class="navbar-form navbar-right" role="search" action="$GUIDE_DIR$/search.html" method="get">
