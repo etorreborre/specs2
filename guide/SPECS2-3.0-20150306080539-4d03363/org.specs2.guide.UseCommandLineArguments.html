@@ -1,0 +1,142 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Use command-line arguments</title>
+    <link href="./css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="./css/bootstrap.min.css"                           type="text/css" rel="stylesheet" />
+    <link href="./css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="./css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="./css/tabber.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/tipuesearch.css"                             type="text/css" rel="stylesheet" />
+    <link href="./css/specs2.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/specs2-user.css"                             type="text/css" rel="stylesheet" />
+
+    <script src="./javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="./javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="./javascript/tabber.js"                           type="text/javascript"></script>
+    <script src="./javascript/tabber_start.js"                     type="text/javascript"></script>
+    <script src="./javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="./javascript/specs2.js"                           type="text/javascript"></script>
+    <script src="./javascript/specs2-user.js"                      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_set.js"      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_contents.js" type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch.min.js"      type="text/javascript"></script>
+
+</head>
+<body onload="prettyPrint()">
+
+<div class="container">
+
+<div class="col-md-2 sidebar-outer">
+<div class="col-md-2 fixed">
+
+<!-- search box -->
+<div class="search-box">
+  <form action="search.html">
+    <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
+  </form>
+</div>
+
+<!-- table of contents -->
+<toc/>
+
+</div>
+</div>
+
+
+<div class="col-md-10">
+<h1>Use command-line arguments</h1>
+<div id="tipue_search_content"></div>
+
+<p>Some specifications need to be fine-tuned and constantly modified. Sometimes to access a specific environment, or to disable some examples, or to execute more ScalaCheck properties. For all those situations it is desirable to modify the specification directly from the command-line without having to recompile it.</p>
+<h3 id="control-an-example">Control an example</h3>
+<p>Let’s see first how to use the command line to modify the outcome of just one example:</p>
+<pre class="prettyprint"><code class="prettyprint">class SpecificationWithArgs extends Specification { def is = s2&quot;&quot;&quot;
+ This example is controlled from the command line $e1
+&quot;&quot;&quot;
+
+  def e1 = (commandLine: CommandLine) =&gt;
+    if (commandLine.isDefined(&quot;isOk&quot;)) 1 must_== 1
+    else                               1 must_== 2
+}</code></pre>
+<p>With a mutable specification the code is similar:</p>
+<pre class="prettyprint"><code class="prettyprint">class SpecificationWithArgs extends mutable.Specification {
+ &quot;This example is controlled from the command line&quot; in { commandLine: CommandLine =&gt;
+   if (commandLine.isDefined(&quot;isOk&quot;)) 1 must_== 1
+   else                               1 must_== 2
+ }
+}</code></pre>
+<h3 id="control-a-specification">Control a specification</h3>
+<p>You can also drive the creation of the full specification with command line arguments:</p>
+<pre class="prettyprint"><code class="prettyprint">class SpecificationWithArgs extends Specification with CommandLineArguments { def is(commandLine: CommandLine) =
+  if (commandLine.isDefined(&quot;small&quot;))
+s2&quot;&quot;&quot;
+ This is a small specification
+  with one example $e1
+&quot;&quot;&quot;
+  else
+s2&quot;&quot;&quot;
+ This is a BIG specification
+  with many examples ${ Fragment.foreach(1 to 1000)(i =&gt; &quot;ex&quot;+i ! ok) }
+&quot;&quot;&quot;
+  def e1 = ok
+}</code></pre>
+<p>For a mutable specification we can use almost the same syntax but the <code class="prettyprint">CommandLineArguments</code> trait must come from the <code class="prettyprint">org.specs2.specification.mutable</code> package:</p>
+<pre class="prettyprint"><code class="prettyprint">class SpecificationWithArgs extends mutable.Specification with specification.mutable.CommandLineArguments {
+  def is(commandLine: CommandLine) =
+    if (commandLine.isDefined(&quot;small&quot;))
+      &quot;This is a small specification&quot; should {
+        &quot;with one example&quot; in { 1 must_== 1 }
+      }
+    else
+      &quot;This is a small specification&quot; &gt;&gt; {
+        &quot;with lots of examples&quot; &gt;&gt; Fragment.foreach(1 to 1000)(i =&gt; &quot;ex&quot;+i &gt;&gt; ok)
+      }
+}</code></pre>
+<h3 id="control-a-context">Control a context</h3>
+<p>The next thing you might want to control is contexts. Instead of using the <code class="prettyprint">BeforeEach</code> / <code class="prettyprint">AfterEach</code> / <code class="prettyprint">AroundEach</code> traits directly you will need to implement the <code class="prettyprint">ContextWithCommandLineArguments</code> trait and provide the appropriate context object:</p>
+<pre class="prettyprint"><code class="prettyprint">class SpecificationWithArgs extends Specification with ContextWithCommandLineArguments { def is = s2&quot;&quot;&quot;
+ This is a specification with a context depending on command line arguments
+  with one example $ok
+&quot;&quot;&quot;
+  /** you need to define this method */
+  def context = (commandLine: CommandLine) =&gt;
+    new Before {
+      def before = if (commandLine.isDefined(&quot;dobefore&quot;)) println(&quot;before!&quot;)
+    }
+}</code></pre>
+<h3 id="control-data-injection">Control data injection</h3>
+<p>The final situation where you would need to use command-line arguments is with a <code class="prettyprint">ForEach</code> trait. If you want to influence the injection of data with the command line, the <code class="prettyprint">ForEachWithCommandLineArguments</code> trait needs to be mixed in:</p>
+<pre class="prettyprint"><code class="prettyprint">class SpecificationWithArgs extends Specification with ForEachWithCommandLineArguments[Int] { def is = s2&quot;&quot;&quot;
+ This is a specification
+  with one example using injected data ${ (i: Int) =&gt; i must_== i }
+&quot;&quot;&quot;
+  /** you need to define this method */
+  def foreach[R : AsResult](commandLine: CommandLine)(f: Int =&gt; R) =
+    AsResult(f(commandLine.int(&quot;value&quot;).getOrElse(0)))
+}</code></pre>
+<p>And for a mutable specification:</p>
+<pre class="prettyprint"><code class="prettyprint">class SpecificationWithArgs extends mutable.Specification with specification.mutable.ForEachWithCommandLine[Int] {
+  &quot;This is a specification&quot; &gt;&gt; {
+    &quot;with one example using injected data&quot; &gt;&gt; { (i: Int) =&gt;
+      i must_== i
+    }
+   }
+
+   /** you need to define this method */
+   def foreach[R : AsResult](commandLine: CommandLine)(f: Int =&gt; R) =
+     AsResult(f(commandLine.int(&quot;value&quot;).getOrElse(0)))
+}</code></pre>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('#tipue_search_input').tipuesearch({
+    'show': 6
+  });
+});
+</script>
+</div>
+
+</body>
+</html>

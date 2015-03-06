@@ -1,0 +1,74 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Skip examples</title>
+    <link href="./css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="./css/bootstrap.min.css"                           type="text/css" rel="stylesheet" />
+    <link href="./css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="./css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="./css/tabber.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/tipuesearch.css"                             type="text/css" rel="stylesheet" />
+    <link href="./css/specs2.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/specs2-user.css"                             type="text/css" rel="stylesheet" />
+
+    <script src="./javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="./javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="./javascript/tabber.js"                           type="text/javascript"></script>
+    <script src="./javascript/tabber_start.js"                     type="text/javascript"></script>
+    <script src="./javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="./javascript/specs2.js"                           type="text/javascript"></script>
+    <script src="./javascript/specs2-user.js"                      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_set.js"      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_contents.js" type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch.min.js"      type="text/javascript"></script>
+
+</head>
+<body onload="prettyPrint()">
+
+<div class="container">
+
+<div class="col-md-2 sidebar-outer">
+<div class="col-md-2 fixed">
+
+<!-- search box -->
+<div class="search-box">
+  <form action="search.html">
+    <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
+  </form>
+</div>
+
+<!-- table of contents -->
+<toc/>
+
+</div>
+</div>
+
+
+<div class="col-md-10">
+<h1>Skip examples</h1>
+<div id="tipue_search_content"></div>
+
+<p>The section on <link class="ok"><a href="org.specs2.guide.StandardResults.html" tooltip="" class="ok">standard results</a></link> already presents two methods for skipping examples. But this works for individual examples only. In some circumstances you might want to skip a whole specification. For example, your specification needs to access a web service in order to work and this service might not be available on all testing machines. You can skip this specification conditionally with the <code class="prettyprint">skipAllIf</code> argument:</p>
+<pre class="prettyprint"><code class="prettyprint">class InactiveSpec extends Specification { def is = skipAllIf(databaseIsDown) ^ s2&quot;&quot;&quot;
+  There is a list of customers in the database $e1
+  One of them is called Eric                   $e2
+&quot;&quot;&quot;
+
+  def e1 = database.getCustomers must not beEmpty
+  def e2 = database.getCustomers must contain((_:Customer).name === &quot;Eric&quot;)
+
+}</code></pre>
+<p>There also is a version of <code class="prettyprint">skipAllIf</code> which reads better for some conditions: <code class="prettyprint">skipAllUnless</code>.</p>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('#tipue_search_input').tipuesearch({
+    'show': 6
+  });
+});
+</script>
+</div>
+
+</body>
+</html>
