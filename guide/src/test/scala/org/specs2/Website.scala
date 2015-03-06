@@ -35,7 +35,7 @@ class Website extends Specification with Specs2Variables { def is = s2"""
           fs.writeFile(siteOutputDir | page.name, replacedVersion) >> {
             // copy the index page at the root of the site
             // it will then re-direct to a specific version
-            if (page.path.contains("index.html")) fs.writeFile(outputDir | page.name, replacedVersion)
+            if (page.path.contains("index.html") && isOfficial(VERSION)) fs.writeFile(outputDir | page.name, replacedVersion)
             else Actions.ok(())
           }
       } yield ()

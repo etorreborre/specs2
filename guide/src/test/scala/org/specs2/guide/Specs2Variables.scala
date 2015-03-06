@@ -24,4 +24,8 @@ trait Specs2Variables {
       "API_DIR"           -> API_DIR
     )
 
+
+  /** @return true if the version is not timestamped */
+  def isOfficial(version: String): Boolean =
+    !version.contains(BuildInfo.date)
 }
