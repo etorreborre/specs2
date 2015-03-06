@@ -129,6 +129,7 @@ package object control {
    */
   implicit class taskToAction[T](task: Task[T]) {
     def toAction = Actions.fromTask(task)
+    def runOption = task.get.run.toOption
   }
 
 }

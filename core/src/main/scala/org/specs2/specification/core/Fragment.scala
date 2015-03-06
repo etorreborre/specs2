@@ -93,6 +93,16 @@ object Fragment {
     case _         => false
   }
 
+  def isTab(f: Fragment) = f.description match {
+    case Tab(_) => true
+    case _      => false
+  }
+
+  def isBacktab(f: Fragment) = f.description match {
+    case Backtab(_) => true
+    case _          => false
+  }
+
   def isSpecificationRef(f: Fragment) = f.description match {
     case l: SpecificationRef => true
     case _                   => false
