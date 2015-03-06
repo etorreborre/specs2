@@ -89,11 +89,10 @@ trait TextPrinter extends Printer {
         printNewLine
     } else emitNone
   }
-
+import scalaz._, Scalaz._
   /** transform a stream of fragments into a stream of strings for printing */
   def printFragment(args: Arguments): ((Fragment, (Stats, Int))) => Process[Task, LogLine] = {
     case (fragment, (stats, indentation)) =>
-      val indentationSize = args.commandLine.int("indentation").getOrElse(0)
       fragment match {
         case Fragment(Text(t), e, l) if e.isExecutable =>
           printRunnable(t, e, args, indentation)
@@ -112,11 +111,11 @@ trait TextPrinter extends Printer {
           else emitNone
 
         case Fragment(Code(text), e, l) =>
-          if (args.canShow("-")) emit(indentText(text, indentation, indentationSize)).info
+          if (args.canShow("-")) emit(indentText(text, indentation, indentationSize(args))).info
           else emitNone
 
         case Fragment(d, e, l) =>
-          if (args.canShow("-")) emit(indentText(d.show, indentation, indentationSize)).info
+          if (args.canShow("-")) emit(indentText(d.show, indentation, indentationSize(args))).info
           else emitNone
       }
   }
@@ -125,8 +124,7 @@ trait TextPrinter extends Printer {
   def printRunnable(text: String, execution: Execution, args: Arguments, indentation: Int): Process[Task, LogLine] = {
 
     if (args.canShow(execution.result.status)) {
-      val indentationSize = args.commandLine.int("indentation").getOrElse(0)
-      val show = indentText(showTime(statusAndDescription(text, execution.result)(args), execution, args), indentation, indentationSize)
+      val show = indentText(showTime(statusAndDescription(text, execution.result)(args), execution, args), indentation, indentationSize(args))
 
       def printResult(r: Result) =
         r match {
@@ -200,6 +198,9 @@ trait TextPrinter extends Printer {
     (decoratedFirstLine +: rest).mkString("\n")
   }
 
+  def indentationSize(args: Arguments): Int =
+    args.commandLine.int("indentation").getOrElse(2)
+
   def printMessage(args: Arguments, description: String, as: String => LogLine): Result with ResultStackTrace => Process[Task, LogLine] = { result: Result with ResultStackTrace =>
     val margin = description.takeWhile(_ == ' ')+" "
     emit(as(result.message.split("\n").mkString(margin, "\n"+margin, "") + location(result, args)))
@@ -267,8 +268,11 @@ trait TextPrinter extends Printer {
 
   def location(r: ResultStackTrace, args: Arguments) = " ("+r.location(args.traceFilter)+")" unless r.location.isEmpty
 
-  def indentText(text: String, indentation: Int, indentationSize: Int) =
-    text.split("\n").map((" " * (indentation * indentationSize)) + _).mkString("\n")
+  def indentText(text: String, indentation: Int, indentationSize: Int) = {
+    if (text.isEmpty) text
+    else text.split("\n").map((" " * (indentation * indentationSize)) + _).mkString("\n")
+  }
+
 
   def emitNone: Process[Task, LogLine] = Process()
 }

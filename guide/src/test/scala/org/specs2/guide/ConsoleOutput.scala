@@ -20,6 +20,7 @@ You will get a "console" output whenever you run a specification from ${"sbt" ~/
  `colors`            | map                     | use different colors
  `colorsclass`       | class name              | use a specific instance of the `Colors` trait
  `showtimes`         | boolean                 | show execution times for examples
+ `indentation`       | int                     | number of spaces to use to indent nested examples (default = 2)
 
 Some of these arguments deserve further explanations.
 
