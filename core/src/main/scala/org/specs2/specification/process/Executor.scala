@@ -178,6 +178,7 @@ object DefaultExecutor extends DefaultExecutor {
   }
 
   /** only to be used in tests */
+  def executeFragments(fs: Fragments)(implicit env: Env = Env()) = executeAll(fs.fragments:_*)
   def executeAll(seq: Fragment*)(implicit env: Env = Env()) = executeSeq(seq)(env)
   def execute(f: Fragment)(implicit env: Env = Env()) = executeAll(f)(env).head
 

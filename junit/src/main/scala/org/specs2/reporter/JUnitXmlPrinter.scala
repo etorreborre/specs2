@@ -14,6 +14,7 @@ import scala.collection.JavaConversions._
 import Exceptions._
 import specification.core._
 import specification.process._
+import text.NotNullStrings._
 
 /**
  * The JUnitXmlPrinter creates an xml file with the specification execution results
@@ -37,50 +38,56 @@ trait JUnitXmlPrinter extends Printer {
     def last(stats: Stats) = {
       val start = TestSuite(description, spec.specClassName, stats.errors, stats.failures, stats.skipped, stats.timer.totalMillis)
       val suite = descriptions.foldLeft(start) { case (res, (f, d)) =>
-        res.addTest(new TestCase(d, f.executionResult, f.execution.executionTime.totalMillis)(env.arguments))
+        if (Fragment.isExample(f)) res.addTest(new TestCase(d, f.executionResult, f.execution.executionTime.totalMillis)(env.arguments))
+        else                       res
       }
-      val outputDirectory = env.arguments.commandLine.directoryOr("junit.outdir", "target" / "test-reports")
-      env.fileSystem.writeFileTask(outputDirectory | FileName.unsafe(spec.specClassName+".xml"), suite.xml)
+      env.fileSystem.writeFileTask(outputDirectory(env) | FileName.unsafe(spec.specClassName+".xml"), suite.xml)
     }
-
   }
+
+  def outputDirectory(env: Env): DirectoryPath =
+    env.arguments.commandLine.directoryOr("junit.outdir", "target" / "test-reports")
 
   case class TestSuite(description: Description, className: String, errors: Int, failures: Int, skipped: Int, time: Long = 0, tests: Seq[TestCase] = Seq()) {
     def addTest(t: TestCase) = copy(tests = tests :+ t)
 
     def xml =
-      s"""<testsuite hostname=${tryo(InetAddress.getLocalHost.getHostName).getOrElse("no host detected")}
-                     name=$className
-                     tests=${tests.size.toString}
-                     errors=${errors.toString}
-                     failures=${failures.toString}
-                     skipped=${skipped.toString}
-                     time=${formatTime(time)}>
+      s"""<testsuite hostname="${tryo(InetAddress.getLocalHost.getHostName).getOrElse("no host detected")}"
+                     name="$className"
+                     tests="${tests.size.toString}"
+                     errors="${errors.toString}"
+                     failures="${failures.toString}"
+                     skipped="${skipped.toString}"
+                     time="${formatTime(time)}">
         $properties
         ${tests.map(_.xml).mkString("\n")}
         <system-out><![CDATA[]]></system-out>
         <system-err><![CDATA[]]></system-err>
       </testsuite>"""
 
+    /**
+     * output properties. Note the single quotes for value
+     * becas
+     */
     def properties =
       s"""<properties>
-            ${System.getProperties.entrySet.toSeq.map(p => s"""<property name={p.getKey.toString} value={p.getValue.toString}/>""").mkString("\n")}
+            ${System.getProperties.entrySet.toSeq.map(p => s"""<property name="${escape(p.getKey.toString)}" value="${escape(p.getValue.toString)}" ></property>""").mkString("\n")}
           </properties>"""
   }
 
   case class TestCase(desc: Description, result: Result, time: Long)(implicit args: Arguments) {
     def xml =
-      s"""<testcase name=${desc.getMethodName} classname=${desc.getClassName} time=${formatTime(time)}>
-           ${testError}${testFailure}${testSkipped}$testPending
+      s"""<testcase name="${escape(desc.getMethodName)}" classname="${desc.getClassName}" time="${formatTime(time)}">
+           $testError$testFailure$testSkipped$testPending
          </testcase>"""
 
     def testError = result match {
-      case er @ Error(m, e) => s"""<error message=s{m} type=${e.getClass.getName}>${args.traceFilter(er.stackTrace).mkString("\n")}</error>"""
+      case er @ Error(m, e) => s"""<error message="${escape(m)}" type="${e.getClass.getName}">${args.traceFilter(er.stackTrace).mkString("\n")}</error>"""
       case _ => ""
     }
 
     def testFailure = result match {
-      case Failure(m, e, st, d) => s"""<failure message=$m type=${e.getClass.getName}>${args.traceFilter(st).mkString("\n")}</failure>"""
+      case f @ Failure(m, e, st, d) => s"""<failure message="${escape(m)}" type="${f.exception.getClass.getName}">${args.traceFilter(st).mkString("\n")}</failure>"""
       case _ => ""
     }
 
@@ -94,6 +101,9 @@ trait JUnitXmlPrinter extends Printer {
       case _ => ""
     }
   }
+
+  private def escape(s: String): String =
+    s.notNull.replace("\"", "&quot;")
 
   private def formatTime(t: Long) = "%.3f" format (t / 1000.0)
 }
