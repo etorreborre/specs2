@@ -24,12 +24,17 @@ class MutableFragmentsDslSpec extends org.specs2.Spec with TypedEqual with Trave
 
   set arguments on the specification $e6
 
+  Breaks
+    there must be 2 breaks after the specification title      $breaks1
+    there must be 1 break after the "should" text of a block  $breaks2
+    there must be 1 break after an example in a block         $breaks3
+
 """
 
-  def e1 = fragments(new dsl { "e1" in ok }) must contain(exactly(break, example("e1", ok), break))
+  def e1 = fragments(new dsl { "e1" in ok }) must contain(exactly(break, break, example("e1", ok), break))
 
   def e2 = fragments(new dsl { "e1" in Result.foreach(1 to 2)(i => i === i) }) must
-    contain(exactly(break, example("e1", ok), break))
+    contain(exactly(break, break, example("e1", ok), break))
 
   def e3 = fragments(new dsl {
     "this" should {
@@ -67,6 +72,20 @@ class MutableFragmentsDslSpec extends org.specs2.Spec with TypedEqual with Trave
     args(plan = true)
     "this" should { "have an example" in ok }
   }).arguments.plan must beTrue
+
+
+  def breaks1 = fragments(new dsl { "spec".title }).map(_.description) must
+    contain(exactly(Seq(
+      break, break).map(_.description):_*))
+
+  def breaks2 = fragments(new dsl { "this" should { "be ok" in ok } }).map(_.description) must
+    contain(allOf(Seq(
+      start,
+      text("this should"), tab, break).map(_.description):_*)).inOrder
+
+  def breaks3 = fragments(new dsl { "this" should { "be ok" in ok } }).map(_.description) must
+    contain(allOf(Seq(
+      example("be ok", ok), break).map(_.description):_*)).inOrder
 
   def fragments(dsl1: dsl) = structure(dsl1).fragments.fragments
 
