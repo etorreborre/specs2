@@ -61,6 +61,10 @@ img.s2logolarge {
   margin-right: -20px;
 }
 
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
 .carousel .carousel-control {
   text-shadow: none;
   background-image: none;
