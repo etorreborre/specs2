@@ -46,3 +46,5 @@ test/specs/fitnesse_debug.*
 test/specs/FitNesseRoot/files/testResults/
 /log_errors.log
 /log_info.log
+*.sw?
+tags
