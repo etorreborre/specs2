@@ -65,7 +65,7 @@ is formatted for JUnit reporting tools.
   case class suite() {
     def xml(env: Env) =
       print(env)("t1" ^ br ^
-      "e1<>&\"" ! success^ br^    // for testing, this name includes special characters '<' and '>' that are escaped in xml
+      "e1<>&\"" ! success^ br^    // for testing, this name includes special characters that are escaped in xml
       "e2"   ! anError^ br^
       "e3"   ! failure^ br^
       "e4"   ! skipped)
