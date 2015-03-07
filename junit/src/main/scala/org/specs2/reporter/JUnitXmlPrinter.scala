@@ -85,17 +85,17 @@ trait JUnitXmlPrinter extends Printer {
 
   case class TestCase(desc: Description, result: Result, time: Long)(implicit args: Arguments) {
     def xml =
-      s"""<testcase name="${escape(desc.getMethodName)}" classname="${desc.getClassName}" time="${formatTime(time)}">
+      s"""<testcase name="${escape(desc.getMethodName)}" classname="${escape(desc.getClassName)}" time="${escape(formatTime(time))}">
             $testError$testFailure$testSkipped$testPending
           </testcase>"""
 
     def testError = result match {
-      case er @ Error(m, e) => s"""<error message="${escape(m)}" type="${e.getClass.getName}">${args.traceFilter(er.stackTrace).mkString("\n")}</error>"""
+      case er @ Error(m, e) => s"""<error message="${escape(m)}" type="${escape(e.getClass.getName)}">${escape(args.traceFilter(er.stackTrace).mkString("\n"))}</error>"""
       case _ => ""
     }
 
     def testFailure = result match {
-      case f @ Failure(m, e, st, d) => s"""<failure message="${escape(m)}" type="${f.exception.getClass.getName}">${args.traceFilter(st).mkString("\n")}</failure>"""
+      case f @ Failure(m, e, st, d) => s"""<failure message="${escape(m)}" type="${escape(f.exception.getClass.getName)}">${escape(args.traceFilter(st).mkString("\n"))}</failure>"""
       case _ => ""
     }
 
