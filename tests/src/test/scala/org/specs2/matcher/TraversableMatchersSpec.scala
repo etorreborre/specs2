@@ -48,7 +48,13 @@ class TraversableMatchersSpec extends Spec with ResultMatchers with Grouped with
    ${ Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(1), be_>=(2)).inOrder)                       }
    // this must be understood as allOf(2, 3)
    ${ Seq(1, 2, 3) must contain(2, 3) }
+   ${ Seq(1)       must contain(allOf(1)) }
+   ${ Seq(2)       must not(contain(allOf(1))) }
    ${ Seq(1)       must contain(allOf(1, 1)) }
+   ${ Seq(1)       must contain(eachOf(1)) }
+   ${ Seq(2)       must not(contain(eachOf(1))) }
+   ${ Seq(1)       must not(contain(eachOf(1, 1))) }
+   ${ Seq(1, 1)    must contain(eachOf(1, 1)) }
    ${ Seq(1, 1, 2) must contain(allOf(1, 1)).inOrder } $xtag
    ${ Seq(1)       must contain(allOf(List[Int]():_*)) }
    ${ Seq[Int]()   must contain(atMost(1)) }

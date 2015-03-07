@@ -146,14 +146,18 @@ trait TraversableBaseMatchersLowImplicits extends ValueChecksLowImplicits { this
 private[specs2]
 trait TraversableBeHaveMatchers extends LazyParameters with BeHaveMatchers  { outer: TraversableMatchers =>
 
-  implicit def traversable[T](s: MatchResult[Traversable[T]]) = new TraversableBeHaveMatchers(s)
+  implicit def traversable[T](s: MatchResult[Traversable[T]]): TraversableBeHaveMatchers[T] =
+    new TraversableBeHaveMatchers(s)
+
   class TraversableBeHaveMatchers[T](s: MatchResult[Traversable[T]]) {
     def contain(check: ValueCheck[T]) = s(outer.contain(check))
     def containPattern(t: =>String) = s(outer.containPattern(t))
     def containMatch(t: =>String) = containPattern(t.regexPart)
   }
 
-  implicit def sized[T : Sized](s: MatchResult[T]) = new HasSize(s)
+  implicit def sized[T : Sized](s: MatchResult[T]): HasSize[T] =
+    new HasSize(s)
+
   class HasSize[T : Sized](s: MatchResult[T]) {
     def size(n: Int) : MatchResult[T] = s(outer.haveSize[T](n))
     def length(n: Int) : MatchResult[T] = size(n)
@@ -161,7 +165,9 @@ trait TraversableBeHaveMatchers extends LazyParameters with BeHaveMatchers  { ou
     def length(check: ValueCheck[Int]) : MatchResult[T] = size(check)
   }
 
-  implicit def orderedSeqMatchResult[T : Ordering](result: MatchResult[Seq[T]]) = new OrderedSeqMatchResult(result)
+  implicit def orderedSeqMatchResult[T : Ordering](result: MatchResult[Seq[T]]): OrderedSeqMatchResult[T] =
+    new OrderedSeqMatchResult(result)
+
   class OrderedSeqMatchResult[T : Ordering](result: MatchResult[Seq[T]]) {
     def sorted = result(outer.beSorted[T])
     def beSorted = result(outer.beSorted[T])
@@ -346,10 +352,11 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
         case (true,  false) =>
           makeResult("at least",
             missingValues.isEmpty &&
-              (eachCheck  ||
-               !eachCheck && (seq.isEmpty && checks.size == 0 ||
-                 checks.nonEmpty && results.map(_._2).flatten.count(_.isSuccess) >= checks.size ||
-                 checks.isEmpty && successes.isEmpty)))
+              !eachCheck && results.map(_._2).flatten.count(_.isSuccess) >= checks.size ||
+               eachCheck && (
+                  seq.isEmpty && checks.size == 0 ||
+                  checks.nonEmpty && results.map(_._2).flatten.count(_.isSuccess) >= checks.size ||
+                  checks.isEmpty && successes.isEmpty))
 
         case (false, true)  =>
           makeResult("at most", failedValues.isEmpty && (!eachCheck || successes.size <= checks.size && successes.size >= seq.size))
