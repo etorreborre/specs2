@@ -65,7 +65,7 @@ is formatted for JUnit reporting tools.
   case class suite() {
     def xml(env: Env) =
       print(env)("t1" ^ br ^
-      "e1<>" ! success^ br^    // for testing, this name includes special characters '<' and '>' that are escaped in xml
+      "e1<>&\"" ! success^ br^    // for testing, this name includes special characters '<' and '>' that are escaped in xml
       "e2"   ! anError^ br^
       "e3"   ! failure^ br^
       "e4"   ! skipped)
@@ -83,9 +83,9 @@ is formatted for JUnit reporting tools.
   }
 
   case class test() {
-    def e1 = { (env: Env) => print(env)("t1" ^ br ^ "e1<>" ! success) must \\("testcase", "classname" -> "org.specs2.reporter.JUnitXmlPrinterSpec") }
-    def e2 = { (env: Env) => print(env)("t1" ^ br ^ "e1<>" ! success) must \\("testcase", "name" -> scala.xml.Utility.escape("t1::e1<>")) }
-    def e3 = { (env: Env) => print(env)("t1" ^ br ^ "e1<>" ! success) must \\("testcase", "time") }
+    def e1 = { (env: Env) => print(env)("t1" ^ br ^ "e1<>&\"" ! success) must \\("testcase", "classname" -> "org.specs2.reporter.JUnitXmlPrinterSpec") }
+    def e2 = { (env: Env) => print(env)("t1" ^ br ^ "e1<>&\"" ! success) must \\("testcase", "name" -> scala.xml.Utility.escape("t1::e1<>&\"")) }
+    def e3 = { (env: Env) => print(env)("t1" ^ br ^ "e1<>&\"" ! success) must \\("testcase", "time") }
   }
 
   case class message()  {
