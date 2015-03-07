@@ -59,18 +59,19 @@ trait JUnitXmlPrinter extends Printer {
     def addTest(t: TestCase) = copy(tests = tests :+ t)
 
     def xml =
-      s"""<testsuite hostname="${tryo(InetAddress.getLocalHost.getHostName).getOrElse("no host detected")}"
-                         name="$className"
-                         tests="${tests.size.toString}"
-                         errors="${errors.toString}"
-                         failures="${failures.toString}"
-                         skipped="${skipped.toString}"
-                         time="${formatTime(time)}">
-            $properties
-            ${tests.map(_.xml).mkString("\n")}
-            <system-out><![CDATA[]]></system-out>
-            <system-err><![CDATA[]]></system-err>
-          </testsuite>"""
+      s"""|<?xml version='1.0' encoding='utf-8'?>
+          |<testsuite hostname="${tryo(InetAddress.getLocalHost.getHostName).getOrElse("no host detected")}"
+          |           name="$className"
+          |           tests="${tests.size.toString}"
+          |           errors="${errors.toString}"
+          |           failures="${failures.toString}"
+          |           skipped="${skipped.toString}"
+          |           time="${formatTime(time)}">
+          |  $properties
+          |  ${tests.map(_.xml).mkString("\n")}
+          |  <system-out><![CDATA[]]></system-out>
+          |  <system-err><![CDATA[]]></system-err>
+          |</testsuite>""".stripMargin
 
     /**
      * output properties. Note the single quotes for value
@@ -85,7 +86,7 @@ trait JUnitXmlPrinter extends Printer {
   case class TestCase(desc: Description, result: Result, time: Long)(implicit args: Arguments) {
     def xml =
       s"""<testcase name="${escape(desc.getMethodName)}" classname="${desc.getClassName}" time="${formatTime(time)}">
-           $testError$testFailure$testSkipped$testPending
+            $testError$testFailure$testSkipped$testPending
           </testcase>"""
 
     def testError = result match {
