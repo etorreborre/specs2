@@ -24,20 +24,27 @@ trait JUnitXmlPrinter extends Printer {
   def finalize(env: Env, specs: List[SpecificationStructure]): Action[Unit] = Actions.unit
 
   def fold(env: Env, spec: SpecStructure): Fold[Fragment] = new Fold[Fragment] {
-    type S = Stats
+    type S = (Vector[Fragment], Stats)
 
-    private val description = JUnitDescriptions.specDescription(spec)
-    private val descriptions = JUnitDescriptions.fragmentDescriptions(spec)
+    private val specDescription = JUnitDescriptions.specDescription(spec)
 
-    lazy val sink = Fold.unitSink[Fragment, Stats]
+    private def descriptions(fragments: Vector[Fragment]) =
+      JUnitDescriptions.fragmentDescriptions(spec.setFragments(Fragments(fragments:_*)))
+
+    lazy val sink = Fold.unitSink[Fragment, S]
 
     def prepare = Task.now(())
-    def fold = Statistics.fold
-    def init = Stats.empty
 
-    def last(stats: Stats) = {
-      val start = TestSuite(description, spec.specClassName, stats.errors, stats.failures, stats.skipped, stats.timer.totalMillis)
-      val suite = descriptions.foldLeft(start) { case (res, (f, d)) =>
+    def fold: (Fragment, S) => S = {
+      case (f, (fs, stats)) => (fs :+ f, Statistics.fold(f, stats))
+    }
+
+    def init = (Vector.empty[Fragment], Stats.empty)
+
+    def last(s: S) = {
+      val (fs, stats) = s
+      val start = TestSuite(specDescription, spec.specClassName, stats.errors, stats.failures, stats.skipped, stats.timer.totalMillis)
+      val suite = descriptions(fs).foldLeft(start) { case (res, (f, d)) =>
         if (Fragment.isExample(f)) res.addTest(new TestCase(d, f.executionResult, f.execution.executionTime.totalMillis)(env.arguments))
         else                       res
       }

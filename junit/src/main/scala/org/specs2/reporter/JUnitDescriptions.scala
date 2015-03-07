@@ -44,7 +44,7 @@ trait JUnitDescriptions extends ExecutionOrigin {
       current: TreeLoc[Fragment] =>
         val description =
         current.getLabel match {
-          case f @ Fragment(d, e, _) if !e.isExecutable   => createDescription(className, suiteName = testName(d.show))
+          case f @ Fragment(d, e, _) if !e.isExecutable => createDescription(className, suiteName = testName(d.show))
           case f @ Fragment(NoText, e, _) if e.mustJoin => createDescription(className, label = current.size.toString, suiteName = "step")
           case f @ Fragment(NoText, e, _)               => createDescription(className, label = current.size.toString, suiteName = "action")
           case f @ Fragment(d, e, _)                    => createDescription(className, label = current.size.toString, testName = testName(d.show, parentPath(current.parents.map(_._2))))

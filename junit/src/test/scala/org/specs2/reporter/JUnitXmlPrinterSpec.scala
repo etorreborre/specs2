@@ -105,9 +105,7 @@ is formatted for JUnit reporting tools.
         Task.now(out = content)
     }
     val env = env1.copy(fileSystem = mockFs)
-    val executed = Fragments(DefaultExecutor.executeFragments(fs):_*)
-    JUnitXmlPrinter.print(env)(SpecStructure(SpecHeader(getClass)).setFragments(executed)).run
-
+    Reporter.report(env, List(JUnitXmlPrinter))(SpecStructure(SpecHeader(getClass)).setFragments(fs)).runOption
     scala.xml.XML.loadString(mockFs.out)
   }
 }
