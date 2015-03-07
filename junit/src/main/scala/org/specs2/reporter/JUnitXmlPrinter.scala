@@ -60,17 +60,17 @@ trait JUnitXmlPrinter extends Printer {
 
     def xml =
       s"""<testsuite hostname="${tryo(InetAddress.getLocalHost.getHostName).getOrElse("no host detected")}"
-                     name="$className"
-                     tests="${tests.size.toString}"
-                     errors="${errors.toString}"
-                     failures="${failures.toString}"
-                     skipped="${skipped.toString}"
-                     time="${formatTime(time)}">
-        $properties
-        ${tests.map(_.xml).mkString("\n")}
-        <system-out><![CDATA[]]></system-out>
-        <system-err><![CDATA[]]></system-err>
-      </testsuite>"""
+                         name="$className"
+                         tests="${tests.size.toString}"
+                         errors="${errors.toString}"
+                         failures="${failures.toString}"
+                         skipped="${skipped.toString}"
+                         time="${formatTime(time)}">
+            $properties
+            ${tests.map(_.xml).mkString("\n")}
+            <system-out><![CDATA[]]></system-out>
+            <system-err><![CDATA[]]></system-err>
+          </testsuite>"""
 
     /**
      * output properties. Note the single quotes for value
@@ -86,7 +86,7 @@ trait JUnitXmlPrinter extends Printer {
     def xml =
       s"""<testcase name="${escape(desc.getMethodName)}" classname="${desc.getClassName}" time="${formatTime(time)}">
            $testError$testFailure$testSkipped$testPending
-         </testcase>"""
+          </testcase>"""
 
     def testError = result match {
       case er @ Error(m, e) => s"""<error message="${escape(m)}" type="${e.getClass.getName}">${args.traceFilter(er.stackTrace).mkString("\n")}</error>"""
@@ -110,7 +110,7 @@ trait JUnitXmlPrinter extends Printer {
   }
 
   private def escape(s: String): String =
-    s.notNull.replace("\"", "&quot;")
+    scala.xml.Utility.escape(s)
 
   private def formatTime(t: Long) = "%.3f" format (t / 1000.0)
 }
