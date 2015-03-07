@@ -65,6 +65,45 @@ img.s2logolarge {
   display: block;
 }
 
+.versions-panel {
+ margin-top: 40px;
+}
+
+.versions {
+ margin: 15 5 10 5;
+}
+
+div.versions .versions-label {
+  font-size: small;
+}
+
+div.versions select {
+ margin-left: 30px;
+ padding-left: 30px;
+ width: 210px;
+}
+
+.select2-container--default {
+  font-size: small;
+}
+
+.select2-selection__placeholder {
+  font-style: italic;
+}
+
+#learn .panel {
+ vertical-align: top;
+}
+
+#learn .left-panel {
+ text-align: left;
+}
+
+#learn .right-panel {
+ text-align: right;
+ font-size: small;
+}
+
 .carousel .carousel-control {
   text-shadow: none;
   background-image: none;

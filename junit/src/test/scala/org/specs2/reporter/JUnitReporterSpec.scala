@@ -8,7 +8,7 @@ import io._
 import main.Arguments
 import mock.Mockito
 import specification.core._
-import matcher.ControlMatchers._
+import matcher.ActionMatchers._
 
 import scala.collection.mutable.ListBuffer
 

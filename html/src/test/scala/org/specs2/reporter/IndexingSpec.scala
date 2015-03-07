@@ -3,7 +3,7 @@ package reporter
 
 import data.Fold._
 import io._
-import matcher.ControlMatchers._
+import matcher.ActionMatchers._
 import org.specs2.html
 import org.specs2.html.{IndexEntry, IndexedPage, Indexing}
 import Indexing._

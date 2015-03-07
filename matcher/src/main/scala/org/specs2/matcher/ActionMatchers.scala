@@ -9,7 +9,7 @@ import MatchersCreation._
 /**
  * Matchers for Action values
  */
-trait ControlMatchers extends ValueChecks {
+trait ActionMatchers extends ValueChecks {
 
   def beOk[T]: Matcher[Action[T]] = (action: Action[T]) =>
     AsResult(action.map(_ => execute.Success()))
@@ -25,4 +25,4 @@ trait ControlMatchers extends ValueChecks {
 
 }
 
-object ControlMatchers extends ControlMatchers
+object ActionMatchers extends ActionMatchers

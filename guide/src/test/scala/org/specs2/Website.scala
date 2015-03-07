@@ -9,7 +9,7 @@ import html._
 import runner._
 import main._
 
-class Website extends Specification with Specs2Variables { def is = s2"""
+class Website extends Specification with Specs2Variables with Specs2Tags { def is = s2"""
 
  create the website    $createWebsite
  create the user guide $createUserGuide
@@ -39,7 +39,7 @@ class Website extends Specification with Specs2Variables { def is = s2"""
             else Actions.ok(())
           }
       } yield ()
-    }.sequenceU.as(true)
+    }.sequenceU >> writeVersionsFile(fs, siteOutputDir, vars("GUIDE_DIR"), vars("API_DIR")).as(true)
   }
 
   def createUserGuide = { env1: Env =>
@@ -47,6 +47,20 @@ class Website extends Specification with Specs2Variables { def is = s2"""
     val env = env1.copy(arguments = Arguments.split(s"all html console html.search html.toc html.nostats html.outdir ${guideOutputDir.dirPath}"))
     ClassRunner.report(env)(UserGuide).as(true)
   }
+
+  def writeVersionsFile(fs: FileSystem, siteOutputDir: DirectoryPath, guideDir: String, apiDir: String): Action[Unit] =
+    publishedTags >>= (tags => fs.writeFile(siteOutputDir / "javascript" | "versions.js", versionsJavaScript(tags, guideDir, apiDir)))
+
+  def versionsJavaScript(tags: List[String], guideDir: String, apiDir: String): String = {
+    def makeVersionVar(name: String) =
+      s"""|var ${name}Versions = [
+          | ${tags.map(tag => s"""{id:"$name/$tag", text:"${tag.replace("SPECS2-", "")}"}""").mkString(",\n")}
+          |];""".stripMargin
+
+    makeVersionVar("guide")+"\n"+
+    makeVersionVar("api")
+  }
+
 
   def variables(env: Env): Map[String, String] =
     specs2Variables.map { case (key, value) =>

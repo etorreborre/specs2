@@ -9,6 +9,7 @@ import scala.sys.process.ProcessLogger
  * Execute external commands
  */
 object Executable {
+
   /**
    * Run an external program
    */
@@ -18,6 +19,21 @@ object Executable {
 
       val code = sys.process.Process(executable.path, arguments).!(logger)
       if (code == 0) Actions.ok(())
+      else           Actions.fail(logger.lines)
+    } catch { case t: Throwable =>
+      Actions.fail(t.getMessage+"\n"+logger.lines)
+    }
+  }
+
+  /**
+   * Execute an external program and return the output
+   */
+  def execute(executable: FilePath, arguments: Seq[String] = Seq()): Action[String] = {
+    val logger = new StringProcessLogger
+    try {
+
+      val code = sys.process.Process(executable.path, arguments).!(logger)
+      if (code == 0) Actions.ok(logger.lines)
       else           Actions.fail(logger.lines)
     } catch { case t: Throwable =>
       Actions.fail(t.getMessage+"\n"+logger.lines)

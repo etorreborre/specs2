@@ -2,6 +2,8 @@ package org.specs2
 package guide
 
 import info.guide.BuildInfo
+import control._
+import io._
 
 object Specs2Variables extends Specs2Variables
 
@@ -28,4 +30,16 @@ trait Specs2Variables {
   /** @return true if the version is not timestamped */
   def isOfficial(version: String): Boolean =
     !version.contains(BuildInfo.date)
+}
+
+trait Specs2Tags {
+  def allTags: Action[List[String]] =
+    Executable.execute(FilePath("git"), Seq("tag")).map(_.trim.split("\n").map(_.trim).toList)
+
+  def publishedTags: Action[List[String]] =
+    allTags.map(_.filter { tag =>
+      (tag == "SPECS2-2.4.17" ||
+       tag.startsWith("SPECS2-3.")) &&
+      !tag.contains("M")
+    })
 }

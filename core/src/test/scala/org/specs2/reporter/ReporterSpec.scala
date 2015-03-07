@@ -11,7 +11,7 @@ import specification.create.S2StringContext
 import specification.dsl.FragmentsDsl
 import specification.core._
 import specification.process._
-import ControlMatchers._
+import ActionMatchers._
 import scalaz.concurrent.Task
 
 class ReporterSpec extends Specification with ForEachEnv with ThrownExpectations { def is = s2"""
