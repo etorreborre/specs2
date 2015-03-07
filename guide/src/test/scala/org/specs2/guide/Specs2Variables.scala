@@ -32,14 +32,3 @@ trait Specs2Variables {
     !version.contains(BuildInfo.date)
 }
 
-trait Specs2Tags {
-  def allTags: Action[List[String]] =
-    Executable.execute(FilePath("git"), Seq("tag")).map(_.trim.split("\n").map(_.trim).toList)
-
-  def publishedTags: Action[List[String]] =
-    allTags.map(_.filter { tag =>
-      (tag == "SPECS2-2.4.17" ||
-       tag.startsWith("SPECS2-3.")) &&
-      !tag.contains("M")
-    })
-}

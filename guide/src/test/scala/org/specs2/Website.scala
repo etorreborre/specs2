@@ -51,10 +51,10 @@ class Website extends Specification with Specs2Variables with Specs2Tags { def i
   def writeVersionsFile(fs: FileSystem, siteOutputDir: DirectoryPath, guideDir: String, apiDir: String): Action[Unit] =
     publishedTags >>= (tags => fs.writeFile(siteOutputDir / "javascript" | "versions.js", versionsJavaScript(tags, guideDir, apiDir)))
 
-  def versionsJavaScript(tags: List[String], guideDir: String, apiDir: String): String = {
+  def versionsJavaScript(tags: List[VersionTag], guideDir: String, apiDir: String): String = {
     def makeVersionVar(name: String) =
       s"""|var ${name}Versions = [
-          | ${tags.map(tag => s"""{id:"$name/$tag", text:"${tag.replace("SPECS2-", "")}"}""").mkString(",\n")}
+          | ${tags.map(_.render).map(tag => s"""{id:"$name/$tag", text:"${tag.replace("SPECS2-", "")}"}""").mkString(",\n")}
           |];""".stripMargin
 
     makeVersionVar("guide")+"\n"+
