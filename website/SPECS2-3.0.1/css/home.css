@@ -66,11 +66,11 @@ img.s2logolarge {
 }
 
 .versions-panel {
- margin-top: 40px;
+ margin-top: 35px;
 }
 
 .versions {
- margin: 15 5 10 5;
+ margin: 0 5 10 5;
 }
 
 div.versions .versions-label {
@@ -93,6 +93,7 @@ div.versions select {
 
 #learn .panel {
  vertical-align: top;
+ font-size: 16px;
 }
 
 #learn .left-panel {
@@ -102,6 +103,10 @@ div.versions select {
 #learn .right-panel {
  text-align: right;
  font-size: small;
+}
+
+#learn li {
+  margin-top: 10px;
 }
 
 .carousel .carousel-control {
@@ -207,10 +212,6 @@ pre code a .com {
 
 .console.results pre .stats {
   color: cyan;
-}
-
-#learn li {
-  margin-top: 10px;
 }
 
 nav {
