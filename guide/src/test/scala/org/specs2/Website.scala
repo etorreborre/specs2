@@ -52,13 +52,13 @@ class Website extends Specification with Specs2Variables with Specs2Tags { def i
     publishedTags >>= (tags => fs.writeFile(siteOutputDir / "javascript" | "versions.js", versionsJavaScript(tags, guideDir, apiDir)))
 
   def versionsJavaScript(tags: List[VersionTag], guideDir: String, apiDir: String): String = {
-    def makeVersionVar(name: String) =
+    def makeVersionVar(name: String, file: String) =
       s"""|var ${name}Versions = [
-          | ${tags.map(_.render).map(tag => s"""{id:"$name/$tag", text:"${tag.replace("SPECS2-", "")}"}""").mkString(",\n")}
+          | ${tags.map(_.render).map(tag => s"""{id:"../../$name/$tag/$file", text:"${tag.replace("SPECS2-", "")}"}""").mkString(",\n")}
           |];""".stripMargin
 
-    makeVersionVar("guide")+"\n"+
-    makeVersionVar("api")
+    makeVersionVar("guide", "org.specs2.guide.UserGuide.html")+"\n "+
+    makeVersionVar("api",   "index.html")
   }
 
 

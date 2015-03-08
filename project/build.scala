@@ -211,25 +211,25 @@ object build extends Build {
     crossBuild := true,
     releaseProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
+      tagRelease,
       generateWebsite,
       executeStepTask(makeSite, "make the site", Compile),
       publishSite,
       ReleaseStep(publishSignedArtifacts, check = identity, enableCrossBuild = true),
       releaseToSonatype,
-      tagRelease,
       pushChanges
     ),
     releaseOfficialProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
       inquireVersions,
       setReleaseVersion,
+      tagRelease,
       generateWebsite,
       executeStepTask(makeSite, "make the site", Compile),
       publishSite,
       ReleaseStep(publishSignedArtifacts, check = identity, enableCrossBuild = true),
       releaseToSonatype,
       notifyHerald,
-      tagRelease,
       pushChanges
     ),
     commands += releaseOfficialCommand
