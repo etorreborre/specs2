@@ -19,9 +19,8 @@ trait Specs2Tags {
   def filterPublished(tags: List[VersionTag]): List[VersionTag] = {
     val lastBefore3     = tags.filter(!isGreaterThanEqualVersion3).sorted.lastOption.toList
     val officialsAfter3 = tags.filter(isGreaterThanEqualVersion3 && !isTimestamped)
-    val latest          = latestTag(tags).toList
 
-    (lastBefore3 ++ officialsAfter3 ++ latest).sorted
+    (lastBefore3 ++ officialsAfter3).sorted
   }
 
   def isGreaterThanEqualVersion3 = (tag: VersionTag) =>
@@ -55,8 +54,7 @@ class Specs2TagsSpec extends Specification { def is = s2"""
            "SPECS2-3.0.1-20150307223251-cdafed1a").map(VersionTag.fromString).flatten) ====
       List("SPECS2-2.4.17",
            "SPECS2-3.0",
-           "SPECS2-3.0.1",
-           "SPECS2-3.0.1-20150307223251-cdafed1a").map(VersionTag.fromString).flatten
+           "SPECS2-3.0.1").map(VersionTag.fromString).flatten
   }
 """
 }
