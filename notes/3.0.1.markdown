@@ -1,0 +1,14 @@
+Maintenance release
+
+The paint was still very fresh on 3.0. This release contains some important fixes. 
+ 
+## Fixes
+
+ * fixed the `JUnitXmlPrinter` with the help of @alissapajer [#339](https://github.com/etorreborre/specs2/issues/339) [#340](https://github.com/etorreborre/specs2/issues/340) 
+ * `TraversableMatchers`: fixed the `Seq(1) must contain(eachOf(2))` case [#338](https://github.com/etorreborre/specs2/issues/338)
+ * formatting fragments `p`, `br`... were not added to a mutable specification [#336](https://github.com/etorreborre/specs2/issues/336) 
+ * indentation in mutable specifications [#336](https://github.com/etorreborre/specs2/issues/336) 
+ * specified the Pandoc version for using the HTML reporting: 1.13.2 (1.12.4.2 can still be used but the `markdown_attributes` extension must be removed: `pandoc.inputformat markdown+pipe_tables+auto_identifiers+header_attributes+inline_code_attributes`)
+
+==========================
+
