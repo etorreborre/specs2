@@ -94,17 +94,12 @@ import scalaz._, Scalaz._
   def printFragment(args: Arguments): ((Fragment, (Stats, Int))) => Process[Task, LogLine] = {
     case (fragment, (stats, indentation)) =>
       fragment match {
-        case Fragment(Text(t), e, l) if e.isExecutable =>
-          printRunnable(t, e, args, indentation)
+        // only print steps and actions if there are issues
+        case Fragment(NoText, e, l) if e.isExecutable && !e.result.isSuccess =>
+          printExecutable(NoText.show, e, args, indentation)
 
-        case Fragment(Code(t), e, l) if e.isExecutable =>
-          printRunnable(t, e, args, indentation)
-
-        case Fragment(Code(text), e, l) if e.isExecutable && !e.result.isSuccess =>
-          printRunnable(text, e, args, indentation)
-
-        case Fragment(d, e, l) if e.isExecutable && !e.result.isSuccess =>
-          printRunnable(d.show, e, args, indentation)
+        case Fragment(d, e, l) if e.isExecutable =>
+          printExecutable(d.show, e, args, indentation)
 
         case Fragment(Br, e, l) =>
           if (args.canShow("-")) printNewLine
@@ -121,7 +116,7 @@ import scalaz._, Scalaz._
   }
 
   /** print an executed fragment: example, step, action */
-  def printRunnable(text: String, execution: Execution, args: Arguments, indentation: Int): Process[Task, LogLine] = {
+  def printExecutable(text: String, execution: Execution, args: Arguments, indentation: Int): Process[Task, LogLine] = {
 
     if (args.canShow(execution.result.status)) {
       val show = indentText(showTime(statusAndDescription(text, execution.result)(args), execution, args), indentation, indentationSize(args))
