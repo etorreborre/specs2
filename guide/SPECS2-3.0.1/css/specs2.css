@@ -351,3 +351,7 @@ h3.both-ribbon::after {
   border-bottom: 10px solid transparent;
   border-left: 10px solid rgb(0, 80, 116);
 }
+
+.col-md-10 {
+  margin-bottom: 30px;
+}
