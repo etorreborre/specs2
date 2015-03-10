@@ -219,6 +219,12 @@ object build extends Build {
       releaseToSonatype,
       pushChanges
     ),
+    releaseJarsProcess := Seq[ReleaseStep](
+      inquireVersions,
+      setReleaseVersion,
+      ReleaseStep(publishSignedArtifacts, check = identity, enableCrossBuild = true),
+      releaseToSonatype
+    ),
     releaseOfficialProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
       inquireVersions,
@@ -232,7 +238,7 @@ object build extends Build {
       notifyHerald,
       pushChanges
     ),
-    commands += releaseOfficialCommand
+    commands ++= Seq(releaseOfficialCommand, releaseJarsCommand)
     ) ++
   documentationSettings ++
   apiSettings               ++
@@ -262,6 +268,24 @@ object build extends Build {
   val releaseOfficialCommand: Command = Command(releaseOfficialCommandKey)(_ => releaseOfficialParser) { (st, args) =>
     val extracted = Project.extract(st)
     val releaseParts = extracted.get(releaseOfficialProcess)
+
+    val startState = st
+      .put(useDefaults, args.contains(WithDefaults))
+
+    val initialChecks = releaseParts.map(_.check)
+    val process = releaseParts.map(_.action)
+
+    initialChecks.foreach(_(startState))
+    Function.chain(process)(startState)
+  }
+
+  lazy val releaseJarsProcess = SettingKey[Seq[ReleaseStep]]("release-jars")
+  private lazy val releaseJarsCommandKey = "release-jars"
+  private val releaseJarsParser = (Space ~> WithDefaults).*
+
+  val releaseJarsCommand: Command = Command(releaseJarsCommandKey)(_ => releaseJarsParser) { (st, args) =>
+    val extracted = Project.extract(st)
+    val releaseParts = extracted.get(releaseJarsProcess)
 
     val startState = st
       .put(useDefaults, args.contains(WithDefaults))
