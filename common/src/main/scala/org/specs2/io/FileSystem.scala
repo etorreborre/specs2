@@ -136,11 +136,13 @@ trait FileSystem extends FilePathReader {
    * @param filePath path of the file to copy
    * @param dest destination directory path
    */
-  def copyFile(dest: DirectoryPath)(filePath: FilePath): Action[Unit] = Actions.safe {
-    import java.nio.file._
-    Files.copy(Paths.get(filePath.path),
-               Paths.get(dest.path).resolve(Paths.get(filePath.name.name)), StandardCopyOption.REPLACE_EXISTING)
-  }
+  def copyFile(dest: DirectoryPath)(filePath: FilePath): Action[Unit] =
+    mkdirs(dest) >>
+    Actions.safe {
+      import java.nio.file._
+      Files.copy(Paths.get(filePath.path),
+                 Paths.get(dest.path).resolve(Paths.get(filePath.name.name)), StandardCopyOption.REPLACE_EXISTING)
+    }
 
   /** create a new file */
   def createFile(filePath: FilePath): Action[Boolean] =
