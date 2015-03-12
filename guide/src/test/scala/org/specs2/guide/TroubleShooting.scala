@@ -88,6 +88,10 @@ The possible fixes are:
 
 The `Yrangepos` scalac option (see ${see(QuickStart)}) is necessary to get proper Fragment locations when using `s2` interpolated strings. However this option sometimes breaks some macros with messages like [`[info] Unpositioned tree #931`](https://github.com/non/kind-projector/issues/7). In that case you should remove that option from your build. You will still be able to use `s2` interpolation strings but fragment locations will be less precise.
 
+### Custom output
+
+You created a custom `Notifier` or another class for reporting and when you use it nothing happens. In that case add the `verbose` argument to the command line and you will get more messages including exceptions and stacktraces about what is going on.
+
 """
 }
 
