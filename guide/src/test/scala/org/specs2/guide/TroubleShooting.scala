@@ -83,6 +83,11 @@ The possible fixes are:
 
  - use parentheses around `beNull`, like this: `not(beNull)`
  - use a semi-column after the first line
+
+### Yrangepos
+
+The `Yrangepos` scalac option (see ${see(QuickStart)}) is necessary to get proper Fragment locations when using `s2` interpolated strings. However this option sometimes breaks some macros with messages like [`[info] Unpositioned tree #931`](https://github.com/non/kind-projector/issues/7). In that case you should remove that option from your build. You will still be able to use `s2` interpolation strings but fragment locations will be less precise.
+
 """
 }
 
