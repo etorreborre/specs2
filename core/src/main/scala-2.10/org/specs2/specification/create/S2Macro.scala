@@ -23,7 +23,11 @@ object S2Macro {
       Seq(pos.source.path, pos.source.file.name, pos.line).mkString("|")
 
     val textStartPositions = texts.map(t => q"${traceLocation(t.pos)}")
-    val textEndPositions = texts.map(t => q"${traceLocation(t.pos.focus.withPoint(t.pos.end))}")
+
+    // if we don't have the range positions we just position start and end on the same line
+    val textEndPositions =
+      if (Yrangepos) texts.map(t => q"${traceLocation(t.pos.focus.withPoint(t.pos.end))}")
+      else           textStartPositions
 
     val result =
       c.Expr(methodCall(c)("s2",
