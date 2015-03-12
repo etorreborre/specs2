@@ -175,9 +175,13 @@ trait S2StringContextCreation extends FragmentsFactory { outer =>
    *
    * if the Yrangepos scalac option is not set then we use an approximated method to find the expressions texts
    */
-  def s2(content: String, Yrangepos: Boolean, texts: Seq[String], 
-         textsStartPositions: Seq[String], textsEndPositions: Seq[String],
-         variables: Seq[InterpolatedFragment], rangeExpressions: Seq[String]): Fragments =  {
+  def s2(content: String,
+         Yrangepos: Boolean,
+         texts: Seq[String],
+         textsStartPositions: Seq[String],
+         textsEndPositions: Seq[String],
+         variables: Seq[InterpolatedFragment],
+         rangeExpressions: Seq[String]): Fragments =  {
 
     val expressions = if (Yrangepos) rangeExpressions else new Interpolated(content, texts).expressions
 
