@@ -1,6 +1,8 @@
 package org.specs2
 package matcher
 
+import text.Sentences._
+
 /**
  * This trait can be used in conjonction with Pattern matchers:
  *
@@ -9,16 +11,16 @@ package matcher
  */
 trait StandardMatchResults extends ExpectationsCreation {
   def ok(m: String): MatchResult[Any] =
-    MatchSuccess(m, "ko", createExpectable(None))
+    checkFailure(Matcher.result(true, m, negateSentence(m), createExpectable(None)))
 
   def ko(m: String): MatchResult[Any] =
-    MatchFailure("ok", m, createExpectable(None))
+    checkFailure(Matcher.result(false, negateSentence(m), m, createExpectable(None)))
 
   lazy val ok: MatchResult[Any] =
-    MatchSuccess("ok", "ko", createExpectable(None))
+    checkFailure(Matcher.result(true, "ok", "ko", createExpectable(None)))
 
   lazy val ko: MatchResult[Any] =
-    MatchFailure("ok", "ko", createExpectable(None))
+    checkFailure(Matcher.result(false, "ok", "ko", createExpectable(None)))
 }
 
 object StandardMatchResults extends StandardMatchResults
