@@ -1,0 +1,79 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Quick Start</title>
+    <link href="./css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="./css/bootstrap.css"                               type="text/css" rel="stylesheet" />
+    <link href="./css/bootstrap-theme.css"                         type="text/css" rel="stylesheet" />
+    <link href="./css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="./css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="./css/home.css"                                    type="text/css" rel="stylesheet" />
+    <link href="./css/tabber.css"                                  type="text/css" rel="stylesheet" />
+
+    <script src="./javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="./javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="./javascript/bootstrap.js"                        type="text/javascript"></script>
+    <script src="./javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="./javascript/tabber.js"                           type="text/javascript"></script>
+    <script src="./javascript/analytics.js"                        type="text/javascript"></script>
+</head>
+<body onload="prettyPrint()">
+
+<div class="container">
+  <div id="navigation"></div>
+
+    <ol>
+        <li>Install <a href="http://scala-sbt.org">sbt</a></li>
+
+        <li>Add specs2 dependencies to your build file
+                    <pre><code class="prettyprint tab-code">// Read <a href="https://etorreborre.github.io/specs2/guide/SPECS2-3.0.1-20150311022622-c2661cd/org.specs2.guide.Installation.html#other-dependencies">here</a> for optional jars and dependencies
+libraryDependencies ++= Seq("org.specs2" %% "specs2-core" % "3.0.1-20150311022622-c2661cd" % "test")
+
+resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
+
+scalacOptions in Test ++= Seq("-Yrangepos")</code></pre>
+        </li>
+
+        <li>Write your first specification
+<pre><code class="prettyprint">import org.specs2._
+
+class QuickStartSpec extends Specification { def is = s2"""
+
+ This is my first specification
+   it is working                 $ok
+   really working!               $ok
+                                 """
+}</code></pre>
+        </li>
+
+        <li>Execute
+           <div class="console">
+sbt> test-only QuickStartSpec</div>
+<div class="console results"><pre>
+[info] QuickStartSpec
+[info]
+[info]  This is my first specification
+[info]    <span class="success">+</span> it is working
+[info]    <span class="success">+</span> really working!
+[info]
+[info] Total for specification QuickStartSpec
+[info] <span class="stats">Finished in 23 ms</span>
+[info] <span class="stats">2 examples, 0 failure, 0 error</span>
+</pre>
+</div>
+        </li>
+
+        <li>Follow the rest of the User Guide to <a href="https://etorreborre.github.io/specs2/guide/SPECS2-3.0.1-20150311022622-c2661cd/org.specs2.guide.QuickStart.html#learn-more!">learn much more!</a>
+        </li>
+    </ol>
+</div>
+
+</body>
+
+<script>
+ $("#navigation").load("./nav.html", function(){
+    $("nav a:contains('Quick')").tab('show');
+ });
+</script>
+
+</html>
