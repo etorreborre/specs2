@@ -15,6 +15,7 @@ class SelectorSpec extends script.Specification with Groups with ResultMatchers 
  Selection by name
  =================
   + by example name
+  + when the name is some code
 
  Selection by tag
  ================
@@ -44,6 +45,13 @@ class SelectorSpec extends script.Specification with Groups with ResultMatchers 
   "by name" - new group {
     eg := {
       val fragments = Fragments(ex("e1"), ex("e2"))
+      val env = Env(arguments = Arguments.split("ex e1"))
+      val executed = fragments |> DefaultSelector.select(env)
+
+      executed.fragments must haveSize(1)
+    }
+    eg := {
+      val fragments = Fragments(code("e1"), code("e2"))
       val env = Env(arguments = Arguments.split("ex e1"))
       val executed = fragments |> DefaultSelector.select(env)
 
@@ -191,6 +199,7 @@ class SelectorSpec extends script.Specification with Groups with ResultMatchers 
 
   // test methods
   def ex(desc: String) = example(desc, success)
+  def code(desc: String) = example(Code(desc), success)
 
   // expected / unexpected is in the point of view of including the tag
   def checkSelection(fragments: Fragments, tags: Seq[String], expected: Seq[String], unexpected: Seq[String]): Result = {

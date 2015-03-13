@@ -41,7 +41,8 @@ trait DefaultSelector extends Selector {
     if (regex !=".*")
       process1.filter {
         case Fragment(Text(t),e,_) if e.isExecutable => t matchesSafely regex
-        case other                                    => true
+        case Fragment(Code(t),e,_) if e.isExecutable => t matchesSafely regex
+        case other                                   => true
       }
     else process1.id
   }
