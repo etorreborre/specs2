@@ -11,8 +11,9 @@ object MatcherCards extends Cards {
     TraversableMatchers,
     NumericMatchers,
     OptionEitherMatchers,
-    ExceptionMatchers,
     TryMatchers,
+    FutureMatchers,
+    ExceptionMatchers,
     MapMatchers,
     AnyMatchers)
 }

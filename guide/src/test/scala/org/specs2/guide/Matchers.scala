@@ -2,6 +2,7 @@ package org.specs2
 package guide
 
 import java.io.File
+import java.util.concurrent.ExecutorService
 
 import matcher._
 import guide.matchers._
@@ -101,14 +102,13 @@ Future(1) must be_>(0).await
 Future { Thread.sleep(100); 1 } must be_>(0).await(retries = 2, timeout = 100.millis)
 }}
 
- * use `await` to wait on a `Future[Matcher[T]]`: ${snippet{
+ * use `attempt` to create a matcher that will match on `Matcher[scalaz.concurrent.Future[T]]`: ${snippet{
   // 8<--
-  import scala.concurrent.ExecutionContext.Implicits.global
-  import scala.concurrent._
   import scala.concurrent.duration._
+  implicit val es: ExecutorService = null
   // 8<--
-Future(1 === 1).await
-Future(1 === 1).await(retries = 2, timeout = 100.millis)
+scalaz.concurrent.Future(1) must be_>(0).attempt
+scalaz.concurrent.Future { Thread.sleep(100); 1 } must be_>(0).attempt(retries = 2, timeout = 100.millis)
 }}
 
  * use `when` or `unless` to apply a matcher only if a condition is satisfied: ${snippet{

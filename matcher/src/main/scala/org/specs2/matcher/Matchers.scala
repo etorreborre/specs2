@@ -18,6 +18,7 @@ trait Matchers extends AnyMatchers
                   with TryMatchers
                   with EventuallyMatchers
                   with FutureMatchers
+                  with FuturezMatchers
                   with MatchersImplicits
                   with ValueChecks
                   with LanguageFeatures
