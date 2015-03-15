@@ -5,7 +5,7 @@ import scala.concurrent.duration._
 import scalaz.concurrent._
 import java.util.concurrent.ExecutorService
 
-class FuturezMatchersSpec extends Specification with ResultMatchers { def is = exclude("travis") ^ sequential ^ s2"""
+class FuturezMatchersSpec extends Specification with ResultMatchers { def is = section("travis") ^ sequential ^ s2"""
 
  In this specification `Future` means `scalaz.concurrent.Future`
 

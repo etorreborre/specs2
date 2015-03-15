@@ -4,7 +4,7 @@ package matcher
 import concurrent._
 import duration._
 
-class FutureMatchersSpec extends Specification with ResultMatchers with Retries { def is = exclude("travis") ^ sequential ^ s2"""
+class FutureMatchersSpec extends Specification with ResultMatchers with Retries { def is = section("travis") ^ sequential ^ s2"""
 
  In this specification `Future` means `scala.concurrent.Future`
 
