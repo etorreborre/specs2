@@ -22,6 +22,7 @@ object LineLogger {
     protected def infoLine(msg: String)    = println("[info] " + msg)
     protected def errorLine(msg: String)   = println("[error] " + msg)
     protected def failureLine(msg: String) = println("[error] " + msg)
+    override def toString = "consoleLogger"
   }
 
   lazy val NoLineLogger = new LineLogger {
@@ -30,6 +31,7 @@ object LineLogger {
     def errorLog(msg: String)   = ()
     def close()                 = ()
     def newline                 = ()
+    override def toString = "NoLineLogger"
   }
 
   /** this logger can be used for tests */
@@ -39,6 +41,7 @@ object LineLogger {
     def failureLine(msg: String) = msg.split("\n").foreach(m => append("[error] " + m))
 
     override def append(m: String) = super.append(AnsiColors.removeColors(m))
+    override def toString = "stringLogger"
   }
 }
 

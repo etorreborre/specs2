@@ -4,14 +4,13 @@ package runner
 import control._
 import Actions._
 import io.StringOutput
-import reflect.Classes
 import specification.core._
 import reporter._
 import main.Arguments
 import reporter.Printer._
-import scala.reflect.ClassTag
 import scalaz._, Scalaz._
 import Runner._
+import reporter.LineLogger._
 
 /**
  * The class runner expects the first command-line argument to be the class name of
@@ -31,7 +30,7 @@ trait ClassRunner {
    */
   def run(args: Array[String], exit: Boolean) {
     val arguments = Arguments(args.drop(1):_*)
-    val env = Env(arguments = arguments)
+    val env = Env(arguments = arguments, lineLogger = consoleLogger)
 
     val actions: Action[Unit] = args.toList match {
       case Nil =>
