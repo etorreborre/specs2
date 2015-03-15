@@ -26,5 +26,13 @@ Finally there are some shortcuts for the equality matcher:${snippet{
 1 mustNotEqual 1
 1 !=== 1
 }}
+
+### Postfix operations
+
+The notation `Seq() must be empty` is being parsed as `(Seq() must be) empty` where `empty` is a ["Postfix operator"](http://www.scala-lang.org/api/2.11.5/index.html#scala.language$$). By default Scala disallows postfix operators but they are enabled in specs2 specifications thanks to the `org.spec2.control.LanguageFeatures` trait providing the `language.postfixOps` implicit definition.
+
+If that implicit definition conflicts with your own import of `language.postfixOps` you can use the `org.spec2.control.NoLanguageFeatures` trait to deactivate it.
+
+
 """
 }
