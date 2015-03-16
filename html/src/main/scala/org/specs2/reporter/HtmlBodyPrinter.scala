@@ -43,9 +43,9 @@ trait HtmlBodyPrinter {
     fragment match {
       case t if Fragment.isText(t) =>
         val text = t.description.show
-
         if (text.trim.nonEmpty) {
-          if (pandoc) scala.xml.Unparsed(text)
+          if (pandoc)
+            <span class="text-flow">{scala.xml.Unparsed(text)}</span>
           else {
             // remove additional newlines and replace with just one when there is no markdown formatting
             val brStart = if (text.filterNot(_ == ' ').startsWith("\n")) <br/> else NodeSeq.Empty
@@ -102,6 +102,8 @@ trait HtmlBodyPrinter {
 
       case Fragment(form @ FormDescription(_),_,_) =>
         form.xml(arguments)
+
+      case Fragment(Br,_,_) => <br/>
 
       case other => NodeSeq.Empty
     }
