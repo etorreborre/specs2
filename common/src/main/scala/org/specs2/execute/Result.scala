@@ -278,6 +278,15 @@ case class Success(m: String = "", exp: String = "")  extends Result(m, exp) {
   def setExpectationsNb(n: Int) = Success(m, expected, n)
 
   def mute = Success()
+
+  override def toString = m
+  override def equals(o: Any) = {
+    o match {
+      case Success(m2, e2) => m == m2 && exp == e2
+      case _ => false
+    }
+  }
+  override def hashCode = m.hashCode + exp.hashCode
 }
 /**
  * Companion object to the Success class providing 

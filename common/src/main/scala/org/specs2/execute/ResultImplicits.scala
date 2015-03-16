@@ -11,7 +11,8 @@ import Scalaz._
  */
 trait ResultImplicits {
 
-  implicit def verifyResultFunction[T, R : AsResult](t: T => R) = new ResultFunctionVerification(t)
+  implicit def verifyResultFunction[T, R : AsResult](t: T => R): ResultFunctionVerification[T, R] =
+    new ResultFunctionVerification(t)
 
   class ResultFunctionVerification[T, R : AsResult](t: T => R) {
 
@@ -47,6 +48,19 @@ trait ResultImplicits {
     def atLeastOnce[S <: Traversable[T]](seq: S) = {
       if (seq.isEmpty) Failure("no result")
       else seq.drop(1).foldLeft(apply(seq.head)) { (res, cur) => if (res.isSuccess) res else apply(cur) }
+    }
+  }
+
+  /**
+   * Two results r1 and r2 are equivalent if
+   * r1.isSuccess == r2.isSuccess
+   */
+  implicit class resultsEquivalence[R1 : AsResult](r1: =>R1) {
+    def <==>[R2 : AsResult](r2: =>R2): Result = {
+      val (result1, result2) = (AsResult(r1), AsResult(r2))
+      ResultLogicalCombinators.combineResult(Success()).iff(result1.isSuccess == result2.isSuccess).mapMessage { _ =>
+        result1.message+"\nis not equivalent to\n"+result2.message
+      }
     }
   }
 
