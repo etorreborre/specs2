@@ -9,7 +9,7 @@ import main.Arguments
 import specification.core._
 import specification.process.DefaultExecutor
 
-class ExecutorSpec extends script.Specification with Groups with ResultMatchers with ThrownExpectations { def is = s2"""
+class ExecutorSpec extends script.Specification with Groups with ResultMatchers with ThrownExpectations { def is = section("travis") ^ s2"""
 
  Steps
  =====
@@ -23,7 +23,7 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
   + sequentially
   + with in-between steps
 
-  with a timeout $timeOut ${tag("travis")}
+  with a timeout $timeOut
 
 """
 
