@@ -3,6 +3,7 @@ package scalacheck
 
 import org.scalacheck.util._
 import org.scalacheck.Test
+import PrettyDetails._
 
 trait ScalaCheckParameters {
   /**
@@ -10,8 +11,8 @@ trait ScalaCheckParameters {
    */
   implicit def defaultParameters: Parameters = new Parameters()
 
-  implicit def defaultFreqMapPretty: FreqMap[Set[Any]] => Pretty =
-    Pretty.prettyFreqMap
+  implicit def defaultFreqMapPretty: FreqMap[Set[Any]] => Pretty = (fq: FreqMap[Set[Any]]) =>
+    Pretty.prettyFreqMap(removeDetails(fq))
 
   /** create parameters with verbose = false */
   def set(minTestsOk: Int                              = defaultParameters.minTestsOk,

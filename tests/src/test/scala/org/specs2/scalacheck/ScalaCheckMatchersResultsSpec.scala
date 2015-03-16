@@ -64,8 +64,6 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
    ${ check(prop((i: MyInt) => false)) returns """MyInt(1, "hey")""" }
 
 """
-//  ScalaCheckPropertyCreation.allPropMethods(8).pp
-//  ScalaCheckProperty.allScalaCheckFunctionN(8).pp
 
   def check(prop: ScalaCheckProperty): Result =
     check(prop.prop, prop.parameters, prop.prettyFreqMap)
