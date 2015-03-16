@@ -27,6 +27,8 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
   2 tables results can be and-ed together                                                                    $e12
   a cell can have null values                                                                                $e13
 
+ ${section("travis")}
+
  Applicative style
  =================
 
