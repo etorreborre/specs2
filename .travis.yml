@@ -1,3 +1,5 @@
+sudo: false
+
 language: scala
 
 scala:
@@ -10,7 +12,16 @@ jdk:
 branches:
     - specs2-three
 
-script: sbt -sbt-version 0.13.7 -scala-version $TRAVIS_SCALA_VERSION 'test-only -- xonly exclude travis'
+# These directories are cached to S3 at the end of the build
+cache:
+  directories:
+    - $HOME/.ivy2/cache
+    - $HOME/.sbt/boot/
+
+script: 
+  - sbt -sbt-version 0.13.7 -scala-version $TRAVIS_SCALA_VERSION 'test-only -- xonly exclude travis'
+  - find $HOME/.sbt -name "*.lock" | xargs rm
+  - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
 
 notifications:
   webhooks:
