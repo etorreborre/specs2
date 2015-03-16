@@ -1,7 +1,7 @@
 package org.specs2
 package specification
 
-import matcher.DataTables
+import matcher._
 import dsl.NoBangExamples
 
 /**
@@ -10,4 +10,6 @@ import dsl.NoBangExamples
  * and a ! is deactivated
  */
 trait Tables extends DataTables with NoBangExamples
+
+object Tables extends Tables with Expectations
 

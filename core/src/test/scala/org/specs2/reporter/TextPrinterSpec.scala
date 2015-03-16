@@ -69,6 +69,8 @@ class TextPrinterSpec extends Specification { def is = s2"""
  Fragments must be displayed in their creation order
     as soon as computed                                       $l1
     as soon as computed, with sequential                      $l2
+
+ Datatable must be properly indented                          $m1
 """
   import TextPrinterSpec._
   val factory = fragmentFactory; import factory._
@@ -255,6 +257,22 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
         l1.size aka (l1, l2).toString must not be_==(l2.size)
       }
   }
+
+  import specification.Tables._
+
+  def m1 =
+    s2"""
+table ${
+ "a" | "b" |>
+   1 ! 1   |
+   1 ! 2   |
+   1 ! 1   | { (i, j) => i === j}
+  }""".stripMargin contains
+    """|[error]_x_table
+       |[error]____|_a_|_b_|_______________________
+       |[error]__+_|_1_|_1_|_______________________
+       |[error]__x_|_1_|_2_|_'1'_is_not_equal_to_'2'
+       |[error]__+_|_1_|_1_|________________________"""
 
   /**
    * TEST METHODS
