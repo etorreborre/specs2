@@ -156,7 +156,7 @@ trait HtmlBodyPrinter {
 
         <details class="failure">{details}</details>
 
-      case NoDetails | FromJUnitAssertionError | FromNotImplementedError => NodeSeq.Empty
+      case _ => NodeSeq.Empty
     }
 
     val fullMessage =
