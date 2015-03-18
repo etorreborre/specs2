@@ -1,0 +1,20 @@
+Maintenance release with a few new features
+
+## Improvements
+
+ * report exceptions stacktraces in the `NotifierRunner`
+ * added locations on `ok` and `ko` results
+ * added `scalaz.concurrent.Future` matchers
+ * added the `|*` operator to execute `DataTables` concurrently (see the User Guide)
+ * added a User Guide section to explain the use of the `LanguageFeatures` trait for postfixOps [#343](https://github.com/etorreborre/specs2/issues/343)
+ 
+## Fixes
+
+ * fixed the indentation for forms in the console
+ * make directories before copying a file
+ * don't get the end position of expressions when `-Yrangepos` is not specified
+ * fixed the selection of examples where the description is some code
+ * use the console logger with `specs2.run` (the output was missing before)
+
+==========================
+
