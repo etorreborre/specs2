@@ -1,12 +1,15 @@
+[*fixed notes for 3.1*]
+
 Maintenance release with a few new features
 
 ## Improvements
 
- * report exceptions stacktraces in the `NotifierRunner`
- * added locations on `ok` and `ko` results
- * added `scalaz.concurrent.Future` matchers
- * added the `|*` operator to execute `DataTables` concurrently (see the User Guide)
- * added a User Guide section to explain the use of the `LanguageFeatures` trait for postfixOps [#343](https://github.com/etorreborre/specs2/issues/343)
+ - report exceptions stacktraces in the `NotifierRunner`
+ - added locations on `ok` and `ko` results
+ - added `scalaz.concurrent.Future` matchers
+ - added the `|*` operator to execute `DataTables` concurrently (see the User Guide)
+ - added a User Guide section to explain the use of the `LanguageFeatures` trait for postfixOps [#343](https://github.com/etorreborre/specs2/issues/343)
+ - added the `<==>` operator to declare the equivalence of 2 results (this is useful when testing with ScalaCheck)
  
 ## Fixes
 
