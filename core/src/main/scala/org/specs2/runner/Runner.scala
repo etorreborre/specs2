@@ -86,13 +86,13 @@ object Runner {
   def createJUnitXmlPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] =
     createPrinterInstance(args, loader,
       JUNITXML, "org.specs2.reporter.JUnitXmlPrinter$",
-      "cannot create a JUnit XML printer. Please check that specs2-junit is on the classpath",
+      "cannot create a JUnit XML printer. Please check that specs2-junit.jar is on the classpath",
       "no JUnit XML printer defined")
 
   def createHtmlPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] =
     createPrinterInstance(args, loader,
       HTML, "org.specs2.reporter.HtmlPrinter$",
-      "cannot create a HTML printer. Please check that specs2-html is on the classpath",
+      "cannot create a HTML printer. Please check that specs2-html.jar is on the classpath",
       "no HTML printer defined")
 
   def createMarkdownPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] =
@@ -123,7 +123,7 @@ object Runner {
         result   <-
         instance match {
           case \/-(i) => Actions.ok(Some(i))
-          case -\/(t) => noInstance(failureMessage, t, args.verbose)
+          case -\/(t) => noInstance(failureMessage, t, verbose = true)
         }
       } yield result
     else noInstance(noRequiredMessage, args.verbose)
@@ -137,7 +137,7 @@ object Runner {
           instance <- Classes.createInstanceEither[T](className, loader)(m)
           result   <- instance match {
             case \/-(i) => Actions.ok(Some(i))
-            case -\/(t) => noInstance(failureMessage(className), t, args.verbose)
+            case -\/(t) => noInstance(failureMessage(className), t, verbose = true)
           }
         } yield result
 
