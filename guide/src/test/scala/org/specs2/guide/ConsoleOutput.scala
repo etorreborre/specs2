@@ -9,6 +9,7 @@ You will get a "console" output whenever you run a specification from ${"sbt" ~/
 
   Name               | Value format            | Comments
  ------------------- | ----------------------- | ------------------------------------------------------------------------
+ `all`               | boolean                 | execute and report linked specifications (default = `false`)
  `xonly`             | boolean                 | only report failures and errors
  `showonly`          | String                  | only report some examples based on their status
  `failtrace`         | boolean                 | show a stack trace for failures

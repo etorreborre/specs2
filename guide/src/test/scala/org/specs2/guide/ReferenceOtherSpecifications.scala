@@ -54,5 +54,9 @@ class s extends Specification { def is = s2""" // 8<--
 
 Finally I'm also drawing your attention to the fact that you don't have to create your specifications as Scala classes but you can use simple objects as shown above.
 
+### Execution
+
+When you execute a given specification you can pass the `all` argument to execute all the referenced specifications. They will be collected and executed in (topological sort)[http://en.wikipedia.org/wiki/Topological_sorting] order and any cycle in the reference graph will be broken. Only the "link" references will be executed, not the "see" references.
+
 """
 }

@@ -44,14 +44,16 @@ When you run a specification, whatever environment you are in: sbt, shell, IDE,.
 
 Here is a list of all the existing `Printers` in $specs2 with links to the corresponding section in the User Guide for more information.
 
+<div markdown='1'>
  Argument   | Section
- ---------- | --------
+ ---------- | -----------------------
  `console`  | ${link(ConsoleOutput)}
  `junitxml` | ${link(JUnitXmlOutput)}
  `html`     | ${link(HtmlOutput)}
  `markdown` | ${link(MarkdownOutput)}
  `notifier` | ${link(CustomOutput)}
  `printer`  | ${link(CustomOutput)}
+</div>
 
 ### Arguments
 
@@ -77,6 +79,7 @@ $AndIfYouWantToKnowMore
  * run specifications ${"without a build tool" ~ RunInShell}
  * output ${"Markdown files" ~/ MarkdownOutput}
  * use your ${"own reporting tool" ~/ CustomOutput} by implementing the `Notifier` interface (simple) or the `Printer` interface
+ * execute ${"referenced specifications" ~/ ReferenceOtherSpecifications} with the `all` argument
 
 $vid
 """
