@@ -967,8 +967,8 @@
 <h3 id="concurrent-execution">Concurrent execution</h3>
 <p>By default the execution of a datatable is sequential, one row after another. This might not be very practical if you have long-running computations on each row. If this is the case you can use the <code class="prettyprint">|*</code> operator (instead of just <code class="prettyprint">|</code>) to define your execution function:</p>
 <pre class="prettyprint"><code class="prettyprint">&quot;a&quot;   | &quot;b&quot; | &quot;c&quot; |&gt;
-   2    !  2  !  4  |
-   1    !  1  !  2  |* { (a, b, c) =&gt; a + b must_== c }</code></pre>
+  2    !  2  !  4  |
+  1    !  1  !  2  |* { (a, b, c) =&gt; a + b must_== c }</code></pre>
 <p>This returns a function <code class="prettyprint">ExecutorService =&gt; Result</code> which can be used directly as the body of an example. You can also pass it your own thread pool by creating, for example, <code class="prettyprint">java.util.concurrent.Executors.newFixedThreadPool(4)</code>.</p>
 <p>More generally, you can use the “Applicative” operator <code class="prettyprint">|@</code> to pass anything having a <code class="prettyprint">scalaz.Applicative</code> instance, like a <code class="prettyprint">scala.concurrent.Future</code>:</p>
 <pre class="prettyprint"><code class="prettyprint">// this table uses the global execution context implicitly
