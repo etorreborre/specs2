@@ -15,12 +15,12 @@ DataTables are used to pack several expectations inside one example using a tabu
 class DataTableSpec extends Specification with org.specs2.specification.Tables { def is = s2"""
 
  adding integers should just work in scala ${
-  // the header of the table, with `|` separated strings (`>` executes the table)
-  "a"   | "b" | "c" |>
-   2    !  2  !  4  |                   // an example row
-   1    !  1  !  2  |                   // another example row
-  { (a, b, c) => a + b must_== c }      // the expectation to check on each row
- }
+// the header of the table, with `|` separated strings (`>` executes the table)
+"a" | "b" | "c" |>
+2   !  2  !  4  |                   // an example row
+1   !  1  !  2  |                   // another example row
+  { (a, b, c) => a + b must_== c }  // the expectation to check on each row
+}
 """
 }
 }}
