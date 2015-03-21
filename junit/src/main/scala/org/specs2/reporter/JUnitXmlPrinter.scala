@@ -110,8 +110,8 @@ trait JUnitXmlPrinter extends Printer {
     }
   }
 
-  private def escape(s: String): String =
-    scala.xml.Utility.escape(s)
+  private def escape(s: =>String): String =
+    scala.xml.Utility.escape(s.notNull)
 
   private def formatTime(t: Long) = "%.3f" format (t / 1000.0)
 }
