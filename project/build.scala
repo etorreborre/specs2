@@ -263,14 +263,16 @@ object build extends Build {
   lazy val releaseOfficialProcess = SettingKey[Seq[ReleaseStep]]("release-official-process")
   private lazy val releaseOfficialCommandKey = "release-official"
   private val WithDefaults = "with-defaults"
-  private val releaseOfficialParser = (Space ~> WithDefaults).*
+  private val CrossBuild = "cross"
+  private val releaseOfficialParser = (Space ~> WithDefaults | Space ~> CrossBuild).*
 
   val releaseOfficialCommand: Command = Command(releaseOfficialCommandKey)(_ => releaseOfficialParser) { (st, args) =>
     val extracted = Project.extract(st)
     val releaseParts = extracted.get(releaseOfficialProcess)
-
+    val crossEnabled = extracted.get(crossBuild) || args.contains(CrossBuild)
     val startState = st
       .put(useDefaults, args.contains(WithDefaults))
+      .put(ReleaseKeys.cross, crossEnabled)
 
     val initialChecks = releaseParts.map(_.check)
     val process = releaseParts.map(_.action)
@@ -281,14 +283,16 @@ object build extends Build {
 
   lazy val releaseJarsProcess = SettingKey[Seq[ReleaseStep]]("release-jars")
   private lazy val releaseJarsCommandKey = "release-jars"
-  private val releaseJarsParser = (Space ~> WithDefaults).*
+  private val releaseJarsParser = (Space ~> WithDefaults | Space ~> CrossBuild).*
 
   val releaseJarsCommand: Command = Command(releaseJarsCommandKey)(_ => releaseJarsParser) { (st, args) =>
     val extracted = Project.extract(st)
     val releaseParts = extracted.get(releaseJarsProcess)
+    val crossEnabled = extracted.get(crossBuild) || args.contains(CrossBuild)
 
     val startState = st
       .put(useDefaults, args.contains(WithDefaults))
+      .put(ReleaseKeys.cross, crossEnabled)
 
     val initialChecks = releaseParts.map(_.check)
     val process = releaseParts.map(_.action)
