@@ -24,7 +24,7 @@ trait FilesRunner {
    * Run the specifications found in files based on command-line arguments
    */
   def run(args: Array[String], exit: Boolean = false) {
-    val env = Env(arguments = Arguments(args.mkString(" ")),
+    val env = Env(arguments = Arguments(args:_*),
                   lineLogger = consoleLogger)
 
     val actions: Action[Unit] =
