@@ -14,6 +14,8 @@ case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs {
   def arguments: Seq[String] = _arguments
   def contains(a: String) = arguments contains a
   def isDefined(name: String) = value(name).isDefined
+  /** @return true if a switch is present or a flag is defined */
+  def isSet(name: String) = contains(name) || isDefined(name)
 
   def value(name: String) = Arguments.value(name)(_arguments, SystemProperties)
   def valueOr(name: String, defaultValue: String) = value(name).getOrElse(defaultValue)

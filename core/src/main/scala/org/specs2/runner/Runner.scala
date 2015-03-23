@@ -79,9 +79,10 @@ object Runner {
     if (exit) System.exit(status)
   }
 
-  def createTextPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] =
-    if (!printerNames.map(_.name).exists(args.contains) || args.commandLine.contains(CONSOLE.name)) Actions.ok(Some(TextPrinter))
+  def createTextPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] = {
+    if (!printerNames.map(_.name).exists(args.isSet) || args.isSet(CONSOLE.name)) Actions.ok(Some(TextPrinter))
     else noInstance("no console printer defined", args.verbose)
+  }
 
   def createJUnitXmlPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] =
     createPrinterInstance(args, loader,
@@ -117,7 +118,7 @@ object Runner {
 
   /** create a built-in specs2 printer */
   def createPrinterInstance(args: Arguments, loader: ClassLoader, name: PrinterName, className: String, failureMessage: String, noRequiredMessage: String): Action[Option[Printer]] =
-    if (args.commandLine.contains(name.name))
+    if (args.isSet(name.name))
       for {
         instance <- Classes.createInstanceEither[Printer](className, loader)
         result   <-

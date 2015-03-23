@@ -18,16 +18,16 @@ class SpecificationWithArgs extends Specification { def is = s2"""
 """
 
   def e1 = (commandLine: CommandLine) =>
-    if (commandLine.isDefined("isOk")) 1 must_== 1
-    else                               1 must_== 2
+    if (commandLine.isSet("isOk")) 1 must_== 1
+    else                           1 must_== 2
 }
 }}
 
 With a mutable specification the code is similar:${snippet{
 class SpecificationWithArgs extends mutable.Specification {
  "This example is controlled from the command line" in { commandLine: CommandLine =>
-   if (commandLine.isDefined("isOk")) 1 must_== 1
-   else                               1 must_== 2
+   if (commandLine.isSet("isOk")) 1 must_== 1
+   else                           1 must_== 2
  }
 }
 }}
@@ -36,7 +36,7 @@ class SpecificationWithArgs extends mutable.Specification {
 
 You can also drive the creation of the full specification with command line arguments:${snippet{
 class SpecificationWithArgs extends Specification with CommandLineArguments { def is(commandLine: CommandLine) =
-  if (commandLine.isDefined("small"))
+  if (commandLine.isSet("small"))
 s2"""
  This is a small specification
   with one example $e1
@@ -53,7 +53,7 @@ s2"""
 For a mutable specification we can use almost the same syntax but the `CommandLineArguments` trait must come from the `org.specs2.specification.mutable` package:${snippet{
 class SpecificationWithArgs extends mutable.Specification with specification.mutable.CommandLineArguments {
   def is(commandLine: CommandLine) =
-    if (commandLine.isDefined("small"))
+    if (commandLine.isSet("small"))
       "This is a small specification" should {
         "with one example" in { 1 must_== 1 }
       }
@@ -74,7 +74,7 @@ class SpecificationWithArgs extends Specification with ContextWithCommandLineArg
   /** you need to define this method */
   def context = (commandLine: CommandLine) =>
     new Before {
-      def before = if (commandLine.isDefined("dobefore")) println("before!")
+      def before = if (commandLine.isSet("dobefore")) println("before!")
     }
 }
 }}

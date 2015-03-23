@@ -23,7 +23,7 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
   /** command line arguments, extracted from the system properties */
   lazy val arguments: Arguments = Arguments("junit")
   /** specification environment */
-  lazy val env: Env = Env(arguments = arguments)
+  lazy val env: Env = Env(arguments = arguments, lineLogger = LineLogger.consoleLogger)
 
   /** specification structure for the environment */
   lazy val specStructure: SpecStructure = specification.structure(env)

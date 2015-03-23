@@ -59,7 +59,7 @@ trait FilesRunner {
   }
 
   /** @return true if the output must be verbose for debugging */
-  def isVerbose(args: Arguments) = args.commandLine.contains("filesrunner.verbose")
+  def isVerbose(args: Arguments) = args.isSet("filesrunner.verbose")
 
   /** print a message before the execution */
   protected def beforeExecution(args: Arguments, verbose: Boolean): Action[Unit] = for {

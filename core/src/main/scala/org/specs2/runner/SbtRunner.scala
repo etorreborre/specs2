@@ -61,7 +61,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
     Classes.createInstance[SpecificationStructure](taskDef.fullyQualifiedName+(if (isModule) "$" else ""), loader).flatMap { spec =>
       val env = Env(arguments = commandLineArguments)
       val report: Action[Unit] =
-      if (commandLineArguments.commandLine.contains("all")) {
+      if (commandLineArguments.isSet("all")) {
         for {
           printers <- createPrinters(taskDef, handler, loggers, commandLineArguments)
           reporter <- ClassRunner.createReporter(commandLineArguments, loader)
@@ -90,7 +90,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
   def createSbtPrinter(h: EventHandler, ls: Array[Logger], e: SbtEvents) = {
     val arguments = Arguments(args:_*)
 
-    if (!printerNames.map(_.name).exists(args.contains) || arguments.commandLine.contains(CONSOLE.name))
+    if (!printerNames.map(_.name).exists(arguments.isSet) || arguments.isSet(CONSOLE.name))
       Actions.ok(Some {
         new SbtPrinter {
           lazy val handler = h

@@ -54,8 +54,8 @@ case class Arguments (
   def diffs: Diffs                    = report.diffs
   def traceFilter: StackTraceFilter   = report.traceFilter
 
-  /** @return true if the command line contains a given string */
-  def contains(a: String) = commandLine contains a
+  /** @return true if a switch is present or a flag is set */
+  def isSet(a: String) = commandLine isSet a
   /** alias for overrideWith */
   def <|(other: Arguments) = overrideWith(other)
   
