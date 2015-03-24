@@ -193,7 +193,7 @@ object Snippet {
     else                              singleLineQuotes(cut)
   }
 
-  def defaultMultilineMarkdownQuotes = (s: String) => s"```prettyprint\n$s\n```"
+  def defaultMultilineMarkdownQuotes = (s: String) => s"```\n$s\n```"
   def githubMultilineMarkdownQuotes = (s: String) => s"```scala\n$s\n```"
   def defaultSingleLineQuotes = (s: String) => s"`$s`"
 
