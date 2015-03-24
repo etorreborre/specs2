@@ -44,7 +44,7 @@ trait SbtPrinter extends Printer {
     Fold.fromSink(eventSink(env, spec))
 
   def eventSink(env: Env, spec: SpecStructure): Sink[Task, Fragment] =
-    channel(notify(env.arguments))
+    channel.lift(notify(env.arguments))
 
   def notify(args: Arguments): Fragment => Task[Unit] = { fragment =>
     import org.specs2._

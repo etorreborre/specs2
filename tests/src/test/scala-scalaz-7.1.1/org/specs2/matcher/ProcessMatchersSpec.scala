@@ -45,7 +45,7 @@ class ProcessMatchersSpec extends mutable.Specification with ProcessMatchers wit
     Process.eval(Task.delay(t))
 
   def oneElementAfter[T](t: =>T, duration: FiniteDuration) =
-    Process.sleep(duration) fby oneElement(t)
+    scalaz.stream.time.sleep(duration) fby oneElement(t)
 
   implicit val scheduledExecutorService: ScheduledExecutorService =
     Executors.newScheduledThreadPool(1)

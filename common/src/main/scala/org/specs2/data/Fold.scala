@@ -122,12 +122,12 @@ object Fold {
    * It can be used to build a Fold that does accumulation only
    */
   def unitSink[T, S]: Sink[Task, (T, S)] =
-    channel((tu: (T, S)) => Task.now(()))
+    channel.lift((tu: (T, S)) => Task.now(()))
 
   /**
    * Unit Fold with no side-effect or accumulation
    */
-  def unit[T] = fromSink(channel((t: T) => Task.now(())))
+  def unit[T] = fromSink(channel.lift((t: T) => Task.now(())))
 
   /**
    * Unit fold function
@@ -176,7 +176,7 @@ object Fold {
    */
   def runFoldLast[T](process: Process[Task, T], fold: Fold[T]): Task[fold.S] =
     fold.prepare >>
-    logged(process |> fold.zipWithState1).drainW(fold.sink).map(_._2).runLastOr(fold.init)
+    writer.logged(process |> fold.zipWithState1).drainW(fold.sink).map(_._2).runLastOr(fold.init)
 
   /**
    * Run a Fold an let it perform a last action with the accumulated state

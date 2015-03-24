@@ -61,7 +61,7 @@ trait Reporter {
       else            Task.now(())
 
     lazy val sink: Sink[Task, (Fragment, Stats)] =
-      io.channel {  case (fragment, stats) =>
+      channel.lift {  case (fragment, stats) =>
         if (neverStore) Task.delay(())
         else            env.statisticsRepository.storeResult(spec.specClassName, fragment.description, fragment.executionResult).toTask
       }

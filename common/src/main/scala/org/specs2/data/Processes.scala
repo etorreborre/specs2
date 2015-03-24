@@ -40,7 +40,7 @@ trait Processes {
    * additional operations for generic processes
    */
   implicit class AsLogged[F[_], A](process: Process[F, A]) {
-    def logged: Writer[F, A, A] = Process.logged(process)
+    def logged: Writer[F, A, A] = writer.logged(process)
     def W: Writer[F, A, Nothing] = process.map(left)
   }
 
