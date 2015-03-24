@@ -183,7 +183,7 @@ object build extends Build {
     maxErrors := 20,
     incOptions := incOptions.value.withNameHashing(true),
     scalacOptions in GlobalScope ++=
-      (if (scalaVersion.value == "2.11") Seq("-Ywarn-unused-import", "-Xcheckinit", "-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_")
+      (if (scalaVersion.value == "2.11") Seq("-Xfatal-warnings", "-Xlint", "-Ywarn-unused-import", "-Xcheckinit", "-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_")
        else                              Seq("-Xcheckinit", "-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_")),
     scalacOptions in Test ++= Seq("-Yrangepos"),
     scalacOptions in (Compile, console) ++= Seq("-Yrangepos", "-feature", "-language:_"),
