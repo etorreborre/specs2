@@ -4,7 +4,7 @@ language: scala
 
 scala:
   - 2.10.4
-  - 2.11.4
+  - 2.11.6
 
 jdk:
   - oraclejdk7
@@ -19,7 +19,7 @@ cache:
     - $HOME/.sbt/boot/
 
 script: 
-  - sbt -sbt-version 0.13.7 -scala-version $TRAVIS_SCALA_VERSION 'test-only -- xonly exclude travis'
+  - sbt -sbt-version 0.13.8 -scala-version $TRAVIS_SCALA_VERSION 'test-only -- xonly exclude travis'
   - find $HOME/.sbt -name "*.lock" | xargs rm
   - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
 
