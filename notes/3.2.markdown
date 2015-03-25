@@ -1,0 +1,10 @@
+Maintenance release
+
+## Upgrades
+
+ * Scala 2.11.6
+ * Scalaz-stream 0.7/0.7a
+ * ScalaCheck 1.12.2
+
+==========================
+
