@@ -51,12 +51,13 @@ trait SbtPrinter extends Printer {
     Task.now {
       if (fragment.isExecutable) {
         def handleResult(res: execute.Result) {
+          val name = fragment.description.show
           res match {
-            case execute.Success(text,_)             => events.succeeded()
-            case r @ execute.Failure(text, e, st, d) => events.failure(args.traceFilter(r.exception))
-            case r @ execute.Error(text, e)          => events.error(args.traceFilter(r.exception))
-            case execute.Skipped(text, _)            => events.skipped()
-            case execute.Pending(text)               => events.pending()
+            case execute.Success(text,_)             => events.succeeded(name)
+            case r @ execute.Failure(text, e, st, d) => events.failure(name, args.traceFilter(r.exception))
+            case r @ execute.Error(text, e)          => events.error(name, args.traceFilter(r.exception))
+            case execute.Skipped(text, _)            => events.skipped(name)
+            case execute.Pending(text)               => events.pending(name)
             case execute.DecoratedResult(t, r)       => handleResult(r)
           }
         }
@@ -76,19 +77,28 @@ trait SbtEvents {
   /** sbt task definition for this run */
   def taskDef: TaskDef
 
-  def error()                        = handler.handle(SpecEvent(Status.Error))
-  def error(exception: Throwable)    = handler.handle(SpecEvent(Status.Error, new OptionalThrowable(exception)))
-  def failure(exception: Throwable)  = handler.handle(SpecEvent(Status.Failure, new OptionalThrowable(exception)))
-  def succeeded()                    = handler.handle(SpecEvent(Status.Success))
-  def skipped  ()                    = handler.handle(SpecEvent(Status.Skipped))
-  def pending  ()                    = handler.handle(SpecEvent(Status.Pending))
-  def ignored  ()                    = handler.handle(SpecEvent(Status.Ignored))
-  def canceled ()                    = handler.handle(SpecEvent(Status.Canceled))
+  def suiteError()                                = handler.handle(SpecSuiteEvent(Status.Error))
+  def suiteError(exception: Throwable)            = handler.handle(SpecSuiteEvent(Status.Error, new OptionalThrowable(exception)))
+  def error(name: String)                         = handler.handle(SpecTestEvent(name, Status.Error))
+  def error(name: String, exception: Throwable)   = handler.handle(SpecTestEvent(name, Status.Error, new OptionalThrowable(exception)))
+  def failure(name: String, exception: Throwable) = handler.handle(SpecTestEvent(name, Status.Failure, new OptionalThrowable(exception)))
+  def succeeded(name: String)                     = handler.handle(SpecTestEvent(name, Status.Success))
+  def skipped  (name: String)                     = handler.handle(SpecTestEvent(name, Status.Skipped))
+  def pending  (name: String)                     = handler.handle(SpecTestEvent(name, Status.Pending))
+  def ignored  (name: String)                     = handler.handle(SpecTestEvent(name, Status.Ignored))
+  def canceled (name: String)                     = handler.handle(SpecTestEvent(name, Status.Canceled))
 
-  case class SpecEvent(status: Status, throwable: OptionalThrowable = new OptionalThrowable) extends Event {
+  case class SpecTestEvent(name: String, status: Status, throwable: OptionalThrowable = new OptionalThrowable) extends Event {
     val fullyQualifiedName = taskDef.fullyQualifiedName
     val fingerprint        = taskDef.fingerprint
-    val selector           = taskDef.selectors.headOption.getOrElse(new SuiteSelector)
+    val selector           = new TestSelector(name)
+    val duration           = 10000L
+  }
+
+  case class SpecSuiteEvent(status: Status, throwable: OptionalThrowable = new OptionalThrowable) extends Event {
+    val fullyQualifiedName = taskDef.fullyQualifiedName
+    val fingerprint        = taskDef.fingerprint
+    val selector           = new SuiteSelector
     val duration           = 10000L
   }
 }

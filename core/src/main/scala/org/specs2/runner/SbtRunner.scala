@@ -115,9 +115,9 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
       Runner.logThrowable(t, arguments)(m => IO(logger.errorLine(m))).unsafePerformIO
 
     e.fold(
-      m =>      { events.error;    logger.errorLine(m) },
-      t =>      { events.error(t); logThrowable(t) },
-      (m, t) => { events.error(t); logThrowable(t) }
+      m =>      { events.suiteError;    logger.errorLine(m) },
+      t =>      { events.suiteError(t); logThrowable(t) },
+      (m, t) => { events.suiteError(t); logThrowable(t) }
     )
 
     logger.close
