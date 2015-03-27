@@ -38,6 +38,7 @@ object build extends Build {
       siteSettings             ++
       Seq(name := "specs2")
   ).aggregate(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, tests)
+   .enablePlugins(GitBranchPrompt)
   
   /** COMMON SETTINGS */
   lazy val specs2Settings: Seq[Settings] = Seq(
@@ -53,7 +54,7 @@ object build extends Build {
   def moduleSettings(name: String): Seq[Settings] =
       coreDefaultSettings  ++
       depends.resolvers    ++
-      promulgate.library("org.specs2.info"+(if (name.nonEmpty)s".$name" else ""), "specs2") ++
+      promulgate.library("org.specs2.info"+(if (name.nonEmpty) s".$name" else ""), "specs2") ++
       specs2Settings       ++
       compilationSettings  ++
       testingSettings      ++
