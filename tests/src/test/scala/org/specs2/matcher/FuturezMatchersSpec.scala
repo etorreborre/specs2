@@ -1,11 +1,17 @@
 package org.specs2
 package matcher
 
+import specification.Environment
+import specification.core.Env
+
 import scala.concurrent.duration._
 import scalaz.concurrent._
 import java.util.concurrent.ExecutorService
 
-class FuturezMatchersSpec extends Specification with ResultMatchers { def is = s2"""
+class FuturezMatchersSpec extends Specification with ResultMatchers with Environment { def is (env: Env) = {
+val timeFactor = env.arguments.execute.timeFactor
+val sleep = 100 * timeFactor
+s2"""
 
  In this specification `Future` means `scalaz.concurrent.Future`
 
@@ -33,6 +39,7 @@ class FuturezMatchersSpec extends Specification with ResultMatchers { def is = s
  ${ implicit es: ES => { Future.delay{ throw new RuntimeException; 1 } must be_===(1).attempt } must throwA[RuntimeException] }
 
 """
+}
 
   type ES = ExecutorService
 }

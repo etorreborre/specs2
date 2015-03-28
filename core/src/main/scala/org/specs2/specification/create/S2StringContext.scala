@@ -59,8 +59,7 @@ trait S2StringContext extends S2StringContextImplicitsControl { outer =>
     envFunctionIsInterpolatedFragment((env: Env) => f(env.arguments.commandLine))
 
   implicit def executionContextFunctionIsInterpolatedFragment[R : AsResult](f: ExecutionContext => R): InterpolatedFragment =
-    envFunctionIsInterpolatedFragment((env: Env) => f(ExecutionContext.fromExecutorService(env.executorService,
-      (t: Throwable) => control.logThrowable(t, env.arguments.verbose).execute(env.systemLogger).unsafePerformIO)))
+    envFunctionIsInterpolatedFragment((env: Env) => f(env.executionContext))
 
   implicit def executorServiceFunctionIsInterpolatedFragment[R : AsResult](f: ExecutorService => R): InterpolatedFragment =
     envFunctionIsInterpolatedFragment((env: Env) => f(env.executorService))

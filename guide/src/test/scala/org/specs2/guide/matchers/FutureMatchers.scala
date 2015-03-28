@@ -1,7 +1,12 @@
-package org.specs2.guide
+package org.specs2
+package guide
 package matchers
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import execute.ExecutionTimeFactor
+import org.specs2.specification.Environment
+import org.specs2.specification.core.Env
+
+import scala.concurrent.ExecutionContext._
 import scala.concurrent._
 import scala.concurrent.duration._
 
@@ -30,6 +35,25 @@ Future(1 === 1).await(retries = 2, timeout = 100.millis)
 #### Scalaz Futures
 
 All of the above is applicable to `scalaz.concurrent.Future` by using the method `attempt` instead of `await`.
+
+#### Time factor
+
+Some actions can be a lot slower when executed on a continuous integration server rather than a developer machine and some timeouts will fail.
+You can avoid this by setting the `timeFactor` argument which will multiply the durations used when `awaiting / attempting` by a constant factor.
+
+```
+sbt> test-only *MyFuturesSpec* -- timeFactor 3
+```
+
+***Note***: if you are using the global execution context `scala.concurrent.ExecutionContext.Implicits.global` you need to "decorate" it first with the `timeFactor` value: ${snippet{
+class MyFuturesSpec extends Specification with Environment { def is(env: Env) = {
+  implicit val context = env.setTimeFactor(Implicits.global)
+  s2"""
+    check future ${ Future(1) must be_==(1).await }
+  """
+}}
+}}
+
 
 """
 }

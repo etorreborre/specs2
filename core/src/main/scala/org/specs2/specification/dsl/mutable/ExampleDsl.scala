@@ -3,12 +3,16 @@ package specification
 package dsl
 package mutable
 
+import java.util.concurrent.ExecutorService
+
 import execute.AsResult
 import control.ImplicitParameters
 import ImplicitParameters._
 import org.specs2.main.{CommandLineAsResult, CommandLine}
 import org.specs2.specification.core._
 import specification.dsl
+
+import scala.concurrent.ExecutionContext
 
 /**
  * Dsl for creating examples in a mutable specification
@@ -41,6 +45,12 @@ trait ExampleDsl1 extends BlockDsl {
     def >>[R](f: Env => R)(implicit asResult: AsResult[R], p1: ImplicitParam1): Fragment =
       >>(Execution.withEnv((env: Env) => asResult.asResult(f(env))))
 
+    def >>[R](f: ExecutionContext => R)(implicit asResult: AsResult[R], p2: ImplicitParam2): Fragment =
+      >>(Execution.withExecutionContext(f))
+
+    def >>[R](f: ExecutorService => R)(implicit asResult: AsResult[R], p3: ImplicitParam3): Fragment =
+      >>(Execution.withExecutorService(f))
+
     def >>(execution: Execution): Fragment = {
       addFragment(fragmentFactory.example(Text(d), execution))
       addFragment(fragmentFactory.break)
@@ -52,6 +62,8 @@ trait ExampleDsl1 extends BlockDsl {
 
     def in[R](f: CommandLine => R)(implicit asResult: AsResult[R], p: ImplicitParam): Fragment = >>(f)(asResult, p)
     def in[R](f: Env => R)(implicit asResult: AsResult[R], p1: ImplicitParam1): Fragment = d.>>(f)(asResult, p1)
+    def in[R](f: ExecutionContext => R)(implicit asResult: AsResult[R], p2: ImplicitParam2): Fragment = d.>>(f)(asResult, p2)
+    def in[R](f: ExecutorService => R)(implicit asResult: AsResult[R], p3: ImplicitParam3): Fragment = d.>>(f)(asResult, p3)
     def in(execution: Execution): Fragment = d >> execution
   }
 }

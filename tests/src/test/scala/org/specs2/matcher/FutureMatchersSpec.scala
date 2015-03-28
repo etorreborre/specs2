@@ -1,12 +1,16 @@
 package org.specs2
 package matcher
 
-import org.specs2.main.Arguments
+import org.specs2.specification.Environment
+import org.specs2.specification.core.Env
 
 import concurrent._
 import duration._
 
-class FutureMatchersSpec extends Specification with ResultMatchers with Retries { def is = s2"""
+class FutureMatchersSpec extends Specification with ResultMatchers with Retries with Environment { def is(env: Env) = {
+ val timeFactor = env.arguments.execute.timeFactor
+ val sleep = 100 * timeFactor
+ s2"""
 
  In this specification `Future` means `scala.concurrent.Future`
 
@@ -14,14 +18,14 @@ class FutureMatchersSpec extends Specification with ResultMatchers with Retries 
  ${ implicit ec: EC => Future.apply(1) must be_>(0).await }
 
  with a retries number and timeout
- ${ implicit ec: EC => Future { Thread.sleep(100); 1 } must be_>(0).await(retries = 2, timeout = 100.millis) }
- ${ implicit ec: EC => (Future { Thread.sleep(100); 1 } must be_>(0).await(retries = 4, timeout = 10.millis)) returns "Timeout" }
+ ${ implicit ec: EC => Future { Thread.sleep(sleep); 1 } must be_>(0).await(retries = 2, timeout = 100.millis) }
+ ${ implicit ec: EC => (Future { Thread.sleep(sleep); 1 } must be_>(0).await(retries = 4, timeout = 10.millis)) returns "Timeout" }
 
  with a retries number only
- ${ implicit ec: EC => Future { Thread.sleep(100); 1 } must be_>(0).retryAwait(2) }
+ ${ implicit ec: EC => Future { Thread.sleep(sleep); 1 } must be_>(0).retryAwait(2) }
 
  with a timeout only
- ${ implicit ec: EC => Future { Thread.sleep(100); 1 } must be_>(0).awaitFor(200.millis) }
+ ${ implicit ec: EC => Future { Thread.sleep(sleep); 1 } must be_>(0).awaitFor(200.millis) }
 
  A `Future` returning a `Matcher[T]` can be transformed into a `Result`
  ${ implicit ec: EC => Future(1 === 1).await }
@@ -31,6 +35,7 @@ class FutureMatchersSpec extends Specification with ResultMatchers with Retries 
  ${ implicit ec: EC => { Future.failed[Int](new RuntimeException) must be_===(1).await } must throwA[RuntimeException] }
 
 """
+}
 
   type EC = ExecutionContext
 }
