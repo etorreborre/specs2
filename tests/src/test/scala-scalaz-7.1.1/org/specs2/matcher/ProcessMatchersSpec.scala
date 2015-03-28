@@ -14,7 +14,6 @@ class ProcessMatchersSpec extends mutable.Specification with ProcessMatchers wit
       { (oneElement(1) must returnValues(IndexedSeq(2))) returns "Vector(1) is not equal to Vector(2)" }
     }
 
-
     "check the last value" >> {
       { oneElement(1) must returnLast(1) }
       { (oneElement(1) must returnLast(2)) returns "'1' is not equal to '2'" }

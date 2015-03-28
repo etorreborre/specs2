@@ -1,19 +1,27 @@
 package org.specs2
 package matcher
 
+import org.specs2.main.Arguments
+
 import concurrent._
 import duration._
 
-class FutureMatchersSpec extends Specification with ResultMatchers with Retries { def is = section("travis") ^ sequential ^ s2"""
+class FutureMatchersSpec extends Specification with ResultMatchers with Retries { def is = s2"""
 
  In this specification `Future` means `scala.concurrent.Future`
 
  Any `Matcher[T]` can be transformed into a `Matcher[Future[T]]` with the `await` method
  ${ implicit ec: EC => Future.apply(1) must be_>(0).await }
 
- with a retries number
+ with a retries number and timeout
  ${ implicit ec: EC => Future { Thread.sleep(100); 1 } must be_>(0).await(retries = 2, timeout = 100.millis) }
- ${ implicit ec: EC => (Future { Thread.sleep(100); 1 } must be_>(0).await(retries = 4, timeout = 10.millis)) returns "Timeout after 50 milliseconds" }
+ ${ implicit ec: EC => (Future { Thread.sleep(100); 1 } must be_>(0).await(retries = 4, timeout = 10.millis)) returns "Timeout" }
+
+ with a retries number only
+ ${ implicit ec: EC => Future { Thread.sleep(100); 1 } must be_>(0).retryAwait(2) }
+
+ with a timeout only
+ ${ implicit ec: EC => Future { Thread.sleep(100); 1 } must be_>(0).awaitFor(200.millis) }
 
  A `Future` returning a `Matcher[T]` can be transformed into a `Result`
  ${ implicit ec: EC => Future(1 === 1).await }

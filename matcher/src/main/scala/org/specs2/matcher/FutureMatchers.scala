@@ -14,8 +14,10 @@ trait FutureMatchers extends FutureBaseMatchers {
    * add an `await` method to any matcher `Matcher[T]` so that it can be transformed into a `Matcher[Future[T]]`
    */
   implicit class FutureMatchable[T](m: Matcher[T])(implicit ec: ExecutionContext) {
-    def await: Matcher[Future[T]]                                                        = await()
-    def await(retries: Int = 0, timeout: FiniteDuration = 1.seconds): Matcher[Future[T]] = awaitFor(m)(retries, timeout)
+    def await: Matcher[Future[T]]                                        = awaitMatcher(m)(retries = 0, timeout = 1.second)
+    def await(retries: Int, timeout: FiniteDuration): Matcher[Future[T]] = awaitMatcher(m)(retries, timeout)
+    def retryAwait(retries: Int): Matcher[Future[T]]                     = awaitMatcher(m)(retries, timeout = 1.second)
+    def awaitFor(timeout: FiniteDuration): Matcher[Future[T]]            = awaitMatcher(m)(retries = 0, timeout)
   }
 
   /**
@@ -27,27 +29,32 @@ trait FutureMatchers extends FutureBaseMatchers {
 private[specs2]
 trait FutureBaseMatchers extends ExpectationsCreation {
 
-  def await[T](m: Matcher[T])(implicit ec: ExecutionContext): Matcher[Future[T]] = awaitFor(m)()
-  def await[T](m: Matcher[T])(retries: Int = 0, timeout: FiniteDuration = 1.seconds)(implicit ec: ExecutionContext): Matcher[Future[T]] = awaitFor(m)(retries, timeout)
+  def await[T](m: Matcher[T])(implicit ec: ExecutionContext): Matcher[Future[T]] = awaitMatcher(m)(retries = 0, timeout = 1.second)
+  def await[T](m: Matcher[T])(retries: Int, timeout: FiniteDuration)(implicit ec: ExecutionContext): Matcher[Future[T]] = awaitMatcher(m)(retries, timeout)
+  def awaitFor[T](m: Matcher[T])(timeout: FiniteDuration)(implicit ec: ExecutionContext): Matcher[Future[T]] = awaitMatcher(m)(retries = 0, timeout)
+  def retry[T](m: Matcher[T])(retries: Int)(implicit ec: ExecutionContext): Matcher[Future[T]] = awaitMatcher(m)(retries, timeout = 1.second)
 
   private[specs2]
   class FutureAsResult[T](f: Future[T])(implicit ec: ExecutionContext, asResult: AsResult[T]) {
-    def await: Result = await()
-    def await(retries: Int = 0, timeout: FiniteDuration = 1.seconds): Result = {
-      def awaitFor(retries: Int, totalDuration: FiniteDuration = 0.seconds): Result = {
+    def await: Result = await(retries = 0, timeout = 1.second)
+    def retry(retries: Int): Result = await(retries, timeout = 1.second)
+    def awaitFor(timeout: FiniteDuration): Result = await(retries = 0, timeout)
+
+    def await(retries: Int, timeout: FiniteDuration): Result = {
+      def awaitFuture(retries: Int, totalDuration: FiniteDuration): Result = {
         try Await.result(f.map(value => AsResult(value)), timeout)
         catch {
           case e: TimeoutException =>
             if (retries <= 0) Failure(s"Timeout after ${totalDuration + timeout}")
-            else awaitFor(retries - 1, totalDuration + timeout)
+            else awaitFuture(retries - 1, totalDuration + timeout)
           case other: Throwable    => throw other
         }
       }
-      awaitFor(retries)
+      awaitFuture(retries, 0.second)
     }
   }
 
-  private[specs2] def awaitFor[T](m: Matcher[T])(retries: Int = 0, timeout: FiniteDuration = 1.seconds)(implicit ec: ExecutionContext): Matcher[Future[T]] = new Matcher[Future[T]] {
+  private[specs2] def awaitMatcher[T](m: Matcher[T])(retries: Int, timeout: FiniteDuration)(implicit ec: ExecutionContext): Matcher[Future[T]] = new Matcher[Future[T]] {
     def apply[S <: Future[T]](a: Expectable[S]) = {
       try {
         val r = new FutureAsResult(a.value.map(v => createExpectable(v).applyMatcher(m).toResult)).await(retries, timeout)

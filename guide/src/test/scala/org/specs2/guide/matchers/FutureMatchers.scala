@@ -9,11 +9,17 @@ object FutureMatchers extends UserGuideCard {
   def title = "Future"
   def text = s2"""
 Testing `Futures` is quite easy with $specs2. You can transform any `Matcher[T]` into a `Matcher[Future[T]` with the `await` method ${snippet{
-  Future(1) must be_>(0).await
+Future(1) must be_>(0).await
 }}
 
 You can also specify a timeout value and a number of retries ${snippet{
-  Future { Thread.sleep(100); 1 } must be_>(0).await(retries = 2, timeout = 100.millis)
+Future { Thread.sleep(100); 1 } must be_>(0).await(retries = 2, timeout = 100.millis)
+
+// only retries, timeout is 1.second
+Future { Thread.sleep(100); 1 } must be_>(0).retryAwait(retries = 2)
+
+// only timeout, retries = 0
+Future { Thread.sleep(100); 1 } must be_>(0).awaitFor(100.millis)
 }}
 
 Another possibility is for you to obtain a `Future[MatchResult[T]]` (or any `Future[R]` where `R` has an `AsResult typeclass instance). In that case you can use `await` directly on the `Future` to get a `Result`${snippet{

@@ -17,8 +17,10 @@ trait FuturezMatchers extends FuturezBaseMatchers { outer =>
    * add an `attempt` method to any matcher `Matcher[T]` so that it can be transformed into a `Matcher[scalaz.concurrent.Future[T]]`
    */
   implicit class FuturezMatchable[T](m: Matcher[T])(implicit es: ExecutorService) {
-    def attempt: Matcher[Future[T]]                                                        = attempt()
-    def attempt(retries: Int = 0, timeout: FiniteDuration = 1.seconds): Matcher[Future[T]] = outer.attemptFor(m)(retries, timeout)(es)
+    def attempt: Matcher[Future[T]]                                        = attemptMatcher(m)(retries = 0, timeout = 1.second)(es)
+    def attempt(retries: Int, timeout: FiniteDuration): Matcher[Future[T]] = attemptMatcher(m)(retries, timeout)(es)
+    def retryAttempt(retries: Int): Matcher[Future[T]]                     = attemptMatcher(m)(retries, timeout = 1.second)(es)
+    def attemptFor(timeout: FiniteDuration): Matcher[Future[T]]            = attemptMatcher(m)(retries = 0, timeout)(es)
   }
 
   /**
@@ -30,30 +32,36 @@ trait FuturezMatchers extends FuturezBaseMatchers { outer =>
 private[specs2]
 trait FuturezBaseMatchers extends ExpectationsCreation {
 
-  def attempt[T](m: Matcher[T])(implicit es: ExecutorService): Matcher[Future[T]] = attemptFor(m)()
-  def attempt[T](m: Matcher[T])(retries: Int = 0, timeout: FiniteDuration = 1.seconds)(implicit es: ExecutorService): Matcher[Future[T]] = attemptFor(m)(retries, timeout)
+  def attempt[T](m: Matcher[T])(implicit es: ExecutorService): Matcher[Future[T]] = attemptMatcher(m)(retries = 0, timeout = 1.second)
+  def attempt[T](m: Matcher[T])(retries: Int, timeout: FiniteDuration)(implicit es: ExecutorService): Matcher[Future[T]] = attemptMatcher(m)(retries, timeout)
+  def attempt[T](m: Matcher[T])(retries: Int)(implicit es: ExecutorService): Matcher[Future[T]] = attemptMatcher(m)(retries, timeout = 1.second)
+  def attempt[T](m: Matcher[T])(timeout: FiniteDuration)(implicit es: ExecutorService): Matcher[Future[T]] = attemptMatcher(m)(0, timeout)
 
   private[specs2]
   class FuturezAsResult[T](f: Future[T])(implicit es: ExecutorService, asResult: AsResult[T]) {
-    def attempt: Result = attempt()
+    def attempt: Result =
+      attempt(retries = 0, timeout = 1.second)
 
-    def attempt(retries: Int = 0, timeout: FiniteDuration = 1.seconds): Result = {
-      def attemptFor(retries: Int, totalDuration: FiniteDuration = 0.seconds): Result = {
+    def attemptFor(timeout: FiniteDuration): Result =
+      attempt(retries = 0, timeout)
+
+    def attempt(retries: Int, timeout: FiniteDuration): Result = {
+      def attemptFuture(retries: Int, totalDuration: FiniteDuration): Result = {
         f.map(AsResult(_)).timed(timeout).run.fold({
             case e: TimeoutException =>
               if (retries <= 0) Failure(s"Timeout after ${totalDuration + timeout}")
-              else              attemptFor(retries - 1, totalDuration + timeout)
+              else              attemptFuture(retries - 1, totalDuration + timeout)
 
             case other: Throwable    => throw other
           },
           r => r
         )
       }
-      attemptFor(retries)
+      attemptFuture(retries, 0.second)
     }
   }
 
-  private[specs2] def attemptFor[T](m: Matcher[T])(retries: Int = 0, timeout: FiniteDuration = 1.seconds)(implicit es: ExecutorService): Matcher[Future[T]] = new Matcher[Future[T]] {
+  private[specs2] def attemptMatcher[T](m: Matcher[T])(retries: Int, timeout: FiniteDuration)(implicit es: ExecutorService): Matcher[Future[T]] = new Matcher[Future[T]] {
     def apply[S <: Future[T]](a: Expectable[S]) = {
       try {
         val r = new FuturezAsResult(a.value.map(v => createExpectable(v).applyMatcher(m).toResult)).attempt(retries, timeout)
