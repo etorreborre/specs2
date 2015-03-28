@@ -74,8 +74,7 @@ trait JUnitXmlPrinter extends Printer {
           |</testsuite>""".stripMargin
 
     /**
-     * output properties. Note the single quotes for value
-     * becas
+     * output properties
      */
     def properties =
       s"""<properties>

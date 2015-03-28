@@ -3,6 +3,7 @@ package reporter
 
 import data.Fold
 import org.specs2.control.{Actions, Action}
+import org.specs2.execute.Details
 import scalaz.concurrent.Task
 import scalaz.stream._
 import sbt.testing._
@@ -11,6 +12,7 @@ import org.specs2.text.AnsiColors._
 import scalaz.stream.io._
 import main.Arguments
 import specification.core._
+import SbtPrinter._
 
 /**
  * Text printer for Sbt
@@ -19,15 +21,20 @@ import specification.core._
  * It also publishes events (success, error, skipped, pending) to Sbt
  */
 trait SbtPrinter extends Printer {
-  def prepare(env: Env, specifications: List[SpecificationStructure]): Action[Unit]  = Actions.unit
+  def prepare(env: Env, specifications: List[SpecificationStructure]): Action[Unit] = Actions.unit
+
   def finalize(env: Env, specifications: List[SpecificationStructure]): Action[Unit] = Actions.unit
 
   /** sbt loggers to display text */
   def loggers: Array[Logger]
+
   /** events handler to notify Sbt of successes/failures */
   def events: SbtEvents
 
   lazy val textPrinter = TextPrinter
+
+  def sbtNotifierPrinter(args: Arguments): Printer =
+    NotifierPrinter.printer(sbtNotifier(events, args))
 
   /**
    * use 2 Folds:
@@ -41,31 +48,44 @@ trait SbtPrinter extends Printer {
     textPrinter.fold(env.setLineLogger(SbtLineLogger(loggers)), spec)
 
   def eventFold(env: Env, spec: SpecStructure) =
-    Fold.fromSink(eventSink(env, spec))
+    sbtNotifierPrinter(env.arguments).fold(env, spec)
+}
 
-  def eventSink(env: Env, spec: SpecStructure): Sink[Task, Fragment] =
-    channel.lift(notify(env.arguments))
+object SbtPrinter {
+  def sbtNotifier(events: SbtEvents, args: Arguments) = new Notifier {
+    private val context: scala.collection.mutable.Stack[String] =
+      new scala.collection.mutable.Stack[String]
 
-  def notify(args: Arguments): Fragment => Task[Unit] = { fragment =>
-    import org.specs2._
-    Task.now {
-      if (fragment.isExecutable) {
-        def handleResult(res: execute.Result) {
-          val name = fragment.description.show
-          res match {
-            case execute.Success(text,_)             => events.succeeded(name)
-            case r @ execute.Failure(text, e, st, d) => events.failure(name, args.traceFilter(r.exception))
-            case r @ execute.Error(text, e)          => events.error(name, args.traceFilter(r.exception))
-            case execute.Skipped(text, _)            => events.skipped(name)
-            case execute.Pending(text)               => events.pending(name)
-            case execute.DecoratedResult(t, r)       => handleResult(r)
-          }
-        }
-        handleResult(fragment.executionResult)
-      }
-    }
+    private def inContext(name: String): String =
+      (context.toVector :+ name).mkString("::")
+
+    def specStart(title: String, location: String): Unit = ()
+    def specEnd(title: String, location: String): Unit = ()
+
+    def contextStart(text: String, location: String): Unit =
+    { context.push(text); Unit }
+
+    def contextEnd(text: String, location: String): Unit =
+    { if (!context.isEmpty) context.pop; () }
+
+    def text(text: String, location: String): Unit = ()
+    def exampleStarted(name: String, location: String): Unit = ()
+
+    def exampleSuccess(name: String, duration: Long): Unit =
+      events.succeeded(inContext(name), duration)
+
+    def exampleFailure(name: String, message: String, location: String, f: Throwable, details: Details, duration: Long): Unit =
+      events.failure(inContext(name), duration, args.traceFilter(f))
+
+    def exampleError(name: String, message: String, location: String, f: Throwable, duration: Long): Unit =
+      events.error(inContext(name), duration, args.traceFilter(f))
+
+    def exampleSkipped(name: String, message: String, location: String, duration: Long): Unit =
+      events.skipped(inContext(name), duration)
+
+    def examplePending(name: String, message: String, location: String, duration: Long): Unit =
+      events.pending(inContext(name), duration)
   }
-
 }
 
 /**
@@ -79,27 +99,27 @@ trait SbtEvents {
 
   def suiteError()                                = handler.handle(SpecSuiteEvent(Status.Error))
   def suiteError(exception: Throwable)            = handler.handle(SpecSuiteEvent(Status.Error, new OptionalThrowable(exception)))
-  def error(name: String)                         = handler.handle(SpecTestEvent(name, Status.Error))
-  def error(name: String, exception: Throwable)   = handler.handle(SpecTestEvent(name, Status.Error, new OptionalThrowable(exception)))
-  def failure(name: String, exception: Throwable) = handler.handle(SpecTestEvent(name, Status.Failure, new OptionalThrowable(exception)))
-  def succeeded(name: String)                     = handler.handle(SpecTestEvent(name, Status.Success))
-  def skipped  (name: String)                     = handler.handle(SpecTestEvent(name, Status.Skipped))
-  def pending  (name: String)                     = handler.handle(SpecTestEvent(name, Status.Pending))
-  def ignored  (name: String)                     = handler.handle(SpecTestEvent(name, Status.Ignored))
-  def canceled (name: String)                     = handler.handle(SpecTestEvent(name, Status.Canceled))
 
-  case class SpecTestEvent(name: String, status: Status, throwable: OptionalThrowable = new OptionalThrowable) extends Event {
+  def error    (name: String, durationInMillis: Long, exception: Throwable) = handler.handle(SpecTestEvent(name, Status.Error   , Some(durationInMillis), new OptionalThrowable(exception)))
+  def failure  (name: String, durationInMillis: Long, exception: Throwable) = handler.handle(SpecTestEvent(name, Status.Failure , Some(durationInMillis), new OptionalThrowable(exception)))
+  def succeeded(name: String, durationInMillis: Long)                       = handler.handle(SpecTestEvent(name, Status.Success , Some(durationInMillis)))
+  def skipped  (name: String, durationInMillis: Long)                       = handler.handle(SpecTestEvent(name, Status.Skipped , Some(durationInMillis)))
+  def pending  (name: String, durationInMillis: Long)                       = handler.handle(SpecTestEvent(name, Status.Pending , Some(durationInMillis)))
+  def ignored  (name: String, durationInMillis: Long)                       = handler.handle(SpecTestEvent(name, Status.Ignored , Some(durationInMillis)))
+  def canceled (name: String)                                               = handler.handle(SpecTestEvent(name, Status.Canceled, None))
+
+  case class SpecTestEvent(name: String, status: Status, durationInMillis: Option[Long], throwable: OptionalThrowable = new OptionalThrowable) extends Event {
     val fullyQualifiedName = taskDef.fullyQualifiedName
     val fingerprint        = taskDef.fingerprint
     val selector           = new TestSelector(name)
-    val duration           = 10000L
+    val duration           = durationInMillis.getOrElse(0L)
   }
 
   case class SpecSuiteEvent(status: Status, throwable: OptionalThrowable = new OptionalThrowable) extends Event {
     val fullyQualifiedName = taskDef.fullyQualifiedName
     val fingerprint        = taskDef.fingerprint
     val selector           = new SuiteSelector
-    val duration           = 10000L
+    val duration           = 0L
   }
 }
 
