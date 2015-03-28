@@ -79,6 +79,7 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
                           asap:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
                           isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
                           threadsNb:     ArgProperty[Int]               = ArgProperty[Int](),
+                          timeFactor:    ArgProperty[Int]               = ArgProperty[Int](),
                           executor:      ArgProperty[String]            = ArgProperty[String]()
                           ) = setArguments(super.execute(
       plan,
@@ -89,6 +90,7 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
       asap,
       isolated,
       threadsNb,
+      timeFactor,
       executor))
 
     /** shorthand method to create an Arguments object */

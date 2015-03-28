@@ -79,6 +79,7 @@ trait ArgumentsCreation {
       asap:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
       isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
       threadsNb:     ArgProperty[Int]               = ArgProperty[Int](),
+      timeFactor:    ArgProperty[Int]               = ArgProperty[Int](),
       executor:      ArgProperty[String]            = ArgProperty[String]()
     ) = new Arguments(
        execute = Execute(plan.toOption,
@@ -89,6 +90,7 @@ trait ArgumentsCreation {
                asap.toOption,
                isolated.toOption,
                threadsNb.toOption,
+               timeFactor.toOption,
                executor.toOption))
 
     /** shorthand method to create an Arguments object */

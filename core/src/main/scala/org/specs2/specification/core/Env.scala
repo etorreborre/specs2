@@ -3,12 +3,14 @@ package specification
 package core
 
 import main.Arguments
-import org.specs2.execute.AsResult
+import org.specs2.execute.{ExecutionTimeFactor, AsResult}
 import reporter.LineLogger
 import LineLogger._
 import io._
 import control._
 import process.{Executor, DefaultExecutor, StatisticsRepository, Selector, DefaultSelector}
+
+import scala.concurrent.ExecutionContext
 
 /**
  * Whole creation / execution / reporting environment for a specification
@@ -51,9 +53,22 @@ case class Env(arguments: Arguments = Arguments(),
     statsRepository(arguments)
 
   lazy val selector = selectorInstance(arguments)
+
   lazy val executor = executorInstance(arguments)
 
-  lazy val executorService = ExecutionEnv.executor(arguments.threadsNb, "env"+hashCode.toString)
+  lazy val executorService =
+    ExecutionTimeFactor.decorateExecutorService(
+      ExecutionEnv.executor(arguments.threadsNb, "env"+hashCode.toString),
+      arguments.execute.timeFactor)
+
+  lazy val executionContext =
+    setTimeFactor(ExecutionContext.fromExecutorService(executorService,
+    (t: Throwable) => control.logThrowable(t, arguments.verbose).execute(systemLogger).unsafePerformIO))
+
+  def setTimeFactor(context: ExecutionContext): ExecutionContext =
+    ExecutionTimeFactor.decorateExecutionContext(context, arguments.execute.timeFactor)
+
+
   lazy val timeout = (new Timeout).start
 
   def shutdown(): Unit = {

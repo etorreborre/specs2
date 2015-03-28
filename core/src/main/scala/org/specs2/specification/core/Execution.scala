@@ -5,6 +5,7 @@ package core
 import java.util.concurrent.ExecutorService
 
 import execute._
+import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scalaz.Show
 import scalaz.std.anyVal._
@@ -120,6 +121,10 @@ object Execution {
   /** create an execution using the executor service */
   def withExecutorService[T : AsResult](f: ExecutorService => T) =
     withEnv((env: Env) => f(env.executorService))
+
+  /** create an execution using the execution context */
+  def withExecutionContext[T : AsResult](f: ExecutionContext => T) =
+    withEnv((env: Env) => f(env.executionContext))
 
   /** create an execution which will not execute but directly return a value */
   def executed[T : AsResult](r: T): Execution = {

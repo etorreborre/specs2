@@ -13,6 +13,7 @@ case class Execute(
                     _asap:          Option[Boolean]          = None,
                     _isolated:      Option[Boolean]          = None,
                     _threadsNb:     Option[Int]              = None,
+                    _timeFactor:    Option[Int]              = None,
                     _executor:      Option[String]           = None) extends ShowArgs {
 
   def plan: Boolean                 = _plan.getOrElse(false)
@@ -23,6 +24,7 @@ case class Execute(
   def asap: Boolean                 = _asap.getOrElse(false)
   def isolated: Boolean             = _isolated.getOrElse(false)
   def threadsNb: Int                = _threadsNb.getOrElse(Runtime.getRuntime.availableProcessors)
+  def timeFactor: Int               = _timeFactor.getOrElse(1)
   def executor: String              = _executor.getOrElse("")
 
   def overrideWith(other: Execute) = {
@@ -35,6 +37,7 @@ case class Execute(
       other._asap            .orElse(_asap),
       other._isolated        .orElse(_isolated),
       other._threadsNb       .orElse(_threadsNb),
+      other._timeFactor      .orElse(_timeFactor),
       other._executor        .orElse(_executor)
     )
   }
@@ -49,6 +52,7 @@ case class Execute(
       "asap"           -> _asap         ,
       "isolated"       -> _isolated     ,
       "threadsNb"      -> _threadsNb    ,
+      "timeFactor"     -> _timeFactor   ,
       "executor"       -> _executor     ).flatMap(showArg).mkString("Execute(", ", ", ")")
 
 }
@@ -64,8 +68,9 @@ object Execute extends Extract {
       _asap          = bool("asap"),
       _isolated      = bool("isolated"),
       _threadsNb     = int("threadsNb"),
+      _timeFactor    = int("timeFactor"),
       _executor      = value("executor")
     )
   }
-  val allValueNames = Seq("plan", "skipAll", "stopOnFail", "stopOnSkip", "sequential", "asap", "isolated", "threadsNb", "executor")
+  val allValueNames = Seq("plan", "skipAll", "stopOnFail", "stopOnSkip", "sequential", "asap", "isolated", "threadsNb", "timeFactor", "executor")
 }

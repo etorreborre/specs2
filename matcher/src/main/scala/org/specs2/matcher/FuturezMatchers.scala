@@ -3,7 +3,7 @@ package matcher
 
 import java.util.concurrent.{ExecutorService, TimeoutException}
 
-import execute.{Failure, Result, AsResult}
+import execute.{ExecutionTimeFactor, Failure, Result, AsResult}
 
 import scala.concurrent.duration._
 import scala.concurrent.{Future =>_,_}
@@ -30,7 +30,7 @@ trait FuturezMatchers extends FuturezBaseMatchers { outer =>
 }
 
 private[specs2]
-trait FuturezBaseMatchers extends ExpectationsCreation {
+trait FuturezBaseMatchers extends ExpectationsCreation with ExecutionTimeFactor {
 
   def attempt[T](m: Matcher[T])(implicit es: ExecutorService): Matcher[Future[T]] = attemptMatcher(m)(retries = 0, timeout = 1.second)
   def attempt[T](m: Matcher[T])(retries: Int, timeout: FiniteDuration)(implicit es: ExecutorService): Matcher[Future[T]] = attemptMatcher(m)(retries, timeout)
@@ -46,11 +46,14 @@ trait FuturezBaseMatchers extends ExpectationsCreation {
       attempt(retries = 0, timeout)
 
     def attempt(retries: Int, timeout: FiniteDuration): Result = {
+      val tf = timeFactor(es)
+      val appliedTimeout = timeout * tf
+
       def attemptFuture(retries: Int, totalDuration: FiniteDuration): Result = {
         f.map(AsResult(_)).timed(timeout).run.fold({
             case e: TimeoutException =>
-              if (retries <= 0) Failure(s"Timeout after ${totalDuration + timeout}")
-              else              attemptFuture(retries - 1, totalDuration + timeout)
+              if (retries <= 0) Failure(s"Timeout after ${totalDuration + appliedTimeout}")
+              else              attemptFuture(retries - 1, totalDuration + appliedTimeout)
 
             case other: Throwable    => throw other
           },

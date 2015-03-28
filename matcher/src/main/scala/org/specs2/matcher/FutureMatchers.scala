@@ -5,6 +5,7 @@ import concurrent.duration._
 import scala.concurrent.{ExecutionContext, Await, Future}
 import java.util.concurrent.TimeoutException
 import execute.{AsResult, Failure, Result}
+import execute.ExecutionTimeFactor
 
 /**
  * This trait is for transforming matchers of values to matchers of Futures
@@ -27,7 +28,7 @@ trait FutureMatchers extends FutureBaseMatchers {
 }
 
 private[specs2]
-trait FutureBaseMatchers extends ExpectationsCreation {
+trait FutureBaseMatchers extends ExpectationsCreation with ExecutionTimeFactor {
 
   def await[T](m: Matcher[T])(implicit ec: ExecutionContext): Matcher[Future[T]] = awaitMatcher(m)(retries = 0, timeout = 1.second)
   def await[T](m: Matcher[T])(retries: Int, timeout: FiniteDuration)(implicit ec: ExecutionContext): Matcher[Future[T]] = awaitMatcher(m)(retries, timeout)
@@ -41,12 +42,15 @@ trait FutureBaseMatchers extends ExpectationsCreation {
     def awaitFor(timeout: FiniteDuration): Result = await(retries = 0, timeout)
 
     def await(retries: Int, timeout: FiniteDuration): Result = {
+      val tf = timeFactor(ec)
+      val appliedTimeout = timeout * tf
+
       def awaitFuture(retries: Int, totalDuration: FiniteDuration): Result = {
-        try Await.result(f.map(value => AsResult(value)), timeout)
+        try Await.result(f.map(value => AsResult(value)), appliedTimeout)
         catch {
           case e: TimeoutException =>
-            if (retries <= 0) Failure(s"Timeout after ${totalDuration + timeout}")
-            else awaitFuture(retries - 1, totalDuration + timeout)
+            if (retries <= 0) Failure(s"Timeout after ${totalDuration + appliedTimeout}")
+            else awaitFuture(retries - 1, totalDuration + appliedTimeout)
           case other: Throwable    => throw other
         }
       }
@@ -71,4 +75,3 @@ trait FutureBaseMatchers extends ExpectationsCreation {
 }
 
 object FutureMatchers extends FutureMatchers
-
