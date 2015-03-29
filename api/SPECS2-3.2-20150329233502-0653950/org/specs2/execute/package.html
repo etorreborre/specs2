@@ -1,0 +1,1114 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>execute - org.specs2.execute</title>
+          <meta name="description" content="execute - org.specs2.execute" />
+          <meta name="keywords" content="execute org.specs2.execute" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'org.specs2.execute.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../lib/package_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a></p>
+        <h1>execute</h1><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">execute</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="org.specs2.execute.AnyValueAsResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AnyValueAsResult[T]extendsAsResult[T]"></a>
+      <a id="AnyValueAsResult[T]:AnyValueAsResult[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AnyValueAsResult.html"><span class="name">AnyValueAsResult</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="AsResult.html" class="extype" name="org.specs2.execute.AsResult">AsResult</a>[<span class="extype" name="org.specs2.execute.AnyValueAsResult.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@AnyValueAsResult[T]extendsAsResult[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Type class to transform any value to a Result
+</p>
+    </li><li name="org.specs2.execute.AsResult" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AsResult[T]extendsAnyRef"></a>
+      <a id="AsResult[T]:AsResult[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="AsResult.html"><span class="name">AsResult</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@AsResult[T]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Typeclass trait for anything that can be transformed to a Result
+</p>
+    </li><li name="org.specs2.execute.DecoratedResult" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DecoratedResult[+T]extendsResultwithProductwithSerializable"></a>
+      <a id="DecoratedResult[+T]:DecoratedResult[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="DecoratedResult.html"><span class="name">DecoratedResult</span></a><span class="tparams">[<span name="T">+T</span>]</span><span class="params">(<span name="decorator">decorator: <span class="extype" name="org.specs2.execute.DecoratedResult.T">T</span></span>, <span name="result">result: <a href="Result.html" class="extype" name="org.specs2.execute.Result">Result</a></span>)</span><span class="result"> extends <a href="Result.html" class="extype" name="org.specs2.execute.Result">Result</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@DecoratedResult[+T]extendsResultwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This result allows to embed additional data with a given result for further display</p><div class="fullcomment"><div class="comment cmt"><p>This result allows to embed additional data with a given result for further display</p><p>Is is used to provide a way to display properly the data tables in the HtmlExporter
+</p></div></div>
+    </li><li name="org.specs2.execute.DecoratedResultException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DecoratedResultExceptionextendsExceptionwithProductwithSerializable"></a>
+      <a id="DecoratedResultException:DecoratedResultException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="DecoratedResultException.html"><span class="name">DecoratedResultException</span></a><span class="params">(<span name="result">result: <a href="DecoratedResult.html" class="extype" name="org.specs2.execute.DecoratedResult">DecoratedResult</a>[_]</span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@DecoratedResultExceptionextendsExceptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">this class allows to throw a result that's decorated with additional information in an Exception</p>
+    </li><li name="org.specs2.execute.Details" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DetailsextendsAnyRef"></a>
+      <a id="Details:Details"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Details.html"><span class="name">Details</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@DetailsextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Trait to model detailed information for failures so that smart differences can be computed
+</p>
+    </li><li name="org.specs2.execute.Error" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ErrorextendsResultwithResultStackTracewithProductwithSerializable"></a>
+      <a id="Error:Error"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Error.html"><span class="name">Error</span></a><span class="params">(<span name="m">m: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="t">t: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result"> extends <a href="Result.html" class="extype" name="org.specs2.execute.Result">Result</a> with <a href="ResultStackTrace.html" class="extype" name="org.specs2.execute.ResultStackTrace">ResultStackTrace</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@ErrorextendsResultwithResultStackTracewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This class represents an exception occurring during an execution.</p>
+    </li><li name="org.specs2.execute.ErrorException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ErrorExceptionextendsExceptionwithProductwithSerializable"></a>
+      <a id="ErrorException:ErrorException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ErrorException.html"><span class="name">ErrorException</span></a><span class="params">(<span name="f">f: <a href="Error.html" class="extype" name="org.specs2.execute.Error">Error</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@ErrorExceptionextendsExceptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">this class allows to throw an Error result in an Exception</p>
+    </li><li name="org.specs2.execute.EventuallyResults" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="EventuallyResultsextendsAnyRef"></a>
+      <a id="EventuallyResults:EventuallyResults"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="EventuallyResults.html"><span class="name">EventuallyResults</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@EventuallyResultsextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait adds the possibility to retry a given value, convertible to a result, until it succeeds.</p><div class="fullcomment"><div class="comment cmt"><p>This trait adds the possibility to retry a given value, convertible to a result, until it succeeds.</p><p>This was adapted from a contribution by @robey (http://robey.lag.net)
+</p></div></div>
+    </li><li name="org.specs2.execute.Executable" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ExecutableextendsAnyRef"></a>
+      <a id="Executable:Executable"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Executable.html"><span class="name">Executable</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@ExecutableextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Trait for anything that can be executed to return a Result
+</p>
+    </li><li name="org.specs2.execute.ExecutionTimeFactor" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ExecutionTimeFactorextendsAnyRef"></a>
+      <a id="ExecutionTimeFactor:ExecutionTimeFactor"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ExecutionTimeFactor.html"><span class="name">ExecutionTimeFactor</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@ExecutionTimeFactorextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Get the time factor from an ExecutionContext or an ExecutorService
+</p>
+    </li><li name="org.specs2.execute.Failure" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="FailureextendsResultwithResultStackTracewithProductwithSerializable"></a>
+      <a id="Failure:Failure"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Failure.html"><span class="name">Failure</span></a><span class="params">(<span name="m">m: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="e">e: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="stackTrace">stackTrace: <span class="extype" name="scala.List">List</span>[<span class="extype" name="java.lang.StackTraceElement">StackTraceElement</span>] = <span class="defval" name="new Exception().getStackTrace.toList">...</span></span>, <span name="details">details: <a href="Details.html" class="extype" name="org.specs2.execute.Details">Details</a> = <span class="symbol"><span class="name"><a href="NoDetails$.html">NoDetails</a></span></span></span>)</span><span class="result"> extends <a href="Result.html" class="extype" name="org.specs2.execute.Result">Result</a> with <a href="ResultStackTrace.html" class="extype" name="org.specs2.execute.ResultStackTrace">ResultStackTrace</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@FailureextendsResultwithResultStackTracewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This class represents the failure of an execution.</p><div class="fullcomment"><div class="comment cmt"><p>This class represents the failure of an execution.
+It has a message and a stacktrace
+</p></div></div>
+    </li><li name="org.specs2.execute.FailureDetails" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FailureDetailsextendsDetailswithProductwithSerializable"></a>
+      <a id="FailureDetails:FailureDetails"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="FailureDetails.html"><span class="name">FailureDetails</span></a><span class="params">(<span name="actual">actual: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="expected">expected: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="Details.html" class="extype" name="org.specs2.execute.Details">Details</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@FailureDetailsextendsDetailswithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.execute.FailureException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FailureExceptionextendsExceptionwithProductwithSerializable"></a>
+      <a id="FailureException:FailureException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="FailureException.html"><span class="name">FailureException</span></a><span class="params">(<span name="f">f: <a href="Failure.html" class="extype" name="org.specs2.execute.Failure">Failure</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@FailureExceptionextendsExceptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">this class allows to throw a failure result in an Exception</p>
+    </li><li name="org.specs2.execute.FailureMapDetails" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FailureMapDetailsextendsDetailswithProductwithSerializable"></a>
+      <a id="FailureMapDetails:FailureMapDetails"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="FailureMapDetails.html"><span class="name">FailureMapDetails</span></a><span class="params">(<span name="actual">actual: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Any">Any</span>, <span class="extype" name="scala.Any">Any</span>]</span>, <span name="expected">expected: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Any">Any</span>, <span class="extype" name="scala.Any">Any</span>]</span>)</span><span class="result"> extends <a href="Details.html" class="extype" name="org.specs2.execute.Details">Details</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@FailureMapDetailsextendsDetailswithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.execute.FailureSeqDetails" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FailureSeqDetailsextendsDetailswithProductwithSerializable"></a>
+      <a id="FailureSeqDetails:FailureSeqDetails"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="FailureSeqDetails.html"><span class="name">FailureSeqDetails</span></a><span class="params">(<span name="actual">actual: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Any">Any</span>]</span>, <span name="expected">expected: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Any">Any</span>]</span>)</span><span class="result"> extends <a href="Details.html" class="extype" name="org.specs2.execute.Details">Details</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@FailureSeqDetailsextendsDetailswithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.execute.FailureSetDetails" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FailureSetDetailsextendsDetailswithProductwithSerializable"></a>
+      <a id="FailureSetDetails:FailureSetDetails"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="FailureSetDetails.html"><span class="name">FailureSetDetails</span></a><span class="params">(<span name="actual">actual: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Any">Any</span>]</span>, <span name="expected">expected: <span class="extype" name="scala.Predef.Set">Set</span>[<span class="extype" name="scala.Any">Any</span>]</span>)</span><span class="result"> extends <a href="Details.html" class="extype" name="org.specs2.execute.Details">Details</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@FailureSetDetailsextendsDetailswithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.execute.Function0Result" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Function0ResultextendsAnyRef"></a>
+      <a id="Function0Result:Function0Result"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Function0Result.html"><span class="name">Function0Result</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@Function0ResultextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This class is used to delay the execution of a result
+</p>
+    </li><li name="org.specs2.execute.Isolable" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="IsolableextendsAnyRef"></a>
+      <a id="Isolable:Isolable"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Isolable.html"><span class="name">Isolable</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@IsolableextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait models elements which can be executed in a brand new context with new local variables
+It is used to execute examples in a new specification when needed
+</p>
+    </li><li name="org.specs2.execute.NoPendingUntilFixed" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NoPendingUntilFixedextendsPendingUntilFixed"></a>
+      <a id="NoPendingUntilFixed:NoPendingUntilFixed"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NoPendingUntilFixed.html"><span class="name">NoPendingUntilFixed</span></a><span class="result"> extends <a href="PendingUntilFixed.html" class="extype" name="org.specs2.execute.PendingUntilFixed">PendingUntilFixed</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@NoPendingUntilFixedextendsPendingUntilFixed" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">use this trait to remove the pending until fixed implicit conversion
+</p>
+    </li><li name="org.specs2.execute.Pending" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="PendingextendsResultwithProductwithSerializable"></a>
+      <a id="Pending:Pending"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Pending.html"><span class="name">Pending</span></a><span class="params">(<span name="m">m: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result"> extends <a href="Result.html" class="extype" name="org.specs2.execute.Result">Result</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@PendingextendsResultwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Pending result</p><div class="fullcomment"><div class="comment cmt"><p>Pending result</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>Result for description
+</p></span></dd></dl></div>
+    </li><li name="org.specs2.execute.PendingException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PendingExceptionextendsExceptionwithProductwithSerializable"></a>
+      <a id="PendingException:PendingException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="PendingException.html"><span class="name">PendingException</span></a><span class="params">(<span name="f">f: <a href="Pending.html" class="extype" name="org.specs2.execute.Pending">Pending</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@PendingExceptionextendsExceptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">this class allows to throw a pending result in an Exception</p>
+    </li><li name="org.specs2.execute.PendingUntilFixed" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="PendingUntilFixedextendsAnyRef"></a>
+      <a id="PendingUntilFixed:PendingUntilFixed"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="PendingUntilFixed.html"><span class="name">PendingUntilFixed</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@PendingUntilFixedextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This function allows to mark the body of an example as pending until it is fixed.</p><div class="fullcomment"><div class="comment cmt"><p>This function allows to mark the body of an example as pending until it is fixed.</p><p>If the result becomes a success then it is reported as a Failure so that the user thinks of
+removing the marker
+</p></div></div>
+    </li><li name="org.specs2.execute.Result" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ResultextendsAnyRef"></a>
+      <a id="Result:Result"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Result.html"><span class="name">Result</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@ResultextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The result of an execution, either:</p><div class="fullcomment"><div class="comment cmt"><p>The result of an execution, either:</p><ul><li>a success: the execution is ok</li><li>a failure: an expectation is not met</li><li>an error: an exception occurred</li><li>a pending execution: the user has decided that execution must not be performed</li><li>a skipped execution: based on dynamic conditions (a database not available for instance)
+   the execution is not performed</li></ul><p>A Result has:</p><ul><li>a message describing the outcome</li><li>a message describing the expectation</li><li>possibly a number of expectations
+   when it is the outcome of several checks (this is used for the reporting of ScalaCheck properties).</li></ul></div></div>
+    </li><li name="org.specs2.execute.ResultExecution" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ResultExecutionextendsAnyRef"></a>
+      <a id="ResultExecution:ResultExecution"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ResultExecution.html"><span class="name">ResultExecution</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@ResultExecutionextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait executes a Result and returns an appropriate value when a specs2 exception is thrown</p>
+    </li><li name="org.specs2.execute.ResultImplicits" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ResultImplicitsextendsAnyRef"></a>
+      <a id="ResultImplicits:ResultImplicits"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ResultImplicits.html"><span class="name">ResultImplicits</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@ResultImplicitsextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait adds some implicits to easily fold sequences of results
+</p>
+    </li><li name="org.specs2.execute.ResultLike" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ResultLikeextendsAnyRef"></a>
+      <a id="ResultLike:ResultLike"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ResultLike.html"><span class="name">ResultLike</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@ResultLikeextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait can be used for anything that can be converted to a Result.</p><div class="fullcomment"><div class="comment cmt"><p>This trait can be used for anything that can be converted to a Result.</p><p>It is used by the MatchResult class so it can be executed as any other kind of Result by the <code>ResultExecution</code> class without introducing
+a dependency between the <code>execute</code> and the <code>matcher</code> package
+</p></div></div>
+    </li><li name="org.specs2.execute.ResultLogicalCombinators" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ResultLogicalCombinatorsextendsResults"></a>
+      <a id="ResultLogicalCombinators:ResultLogicalCombinators"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ResultLogicalCombinators.html"><span class="name">ResultLogicalCombinators</span></a><span class="result"> extends <a href="Results.html" class="extype" name="org.specs2.execute.Results">Results</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@ResultLogicalCombinatorsextendsResults" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait provides logical combinators to Results: and, or, not</p><div class="fullcomment"><div class="comment cmt"><p>This trait provides logical combinators to Results: and, or, not</p><p>A Result expression can throw an exception which will be changed into a failure or an error before being used
+with and/or/not
+</p></div></div>
+    </li><li name="org.specs2.execute.ResultStackTrace" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ResultStackTraceextendsHasStackTrace"></a>
+      <a id="ResultStackTrace:ResultStackTrace"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ResultStackTrace.html"><span class="name">ResultStackTrace</span></a><span class="result"> extends <a href="../control/HasStackTrace.html" class="extype" name="org.specs2.control.HasStackTrace">HasStackTrace</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@ResultStackTraceextendsHasStackTrace" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The stacktrace for a Result
+</p>
+    </li><li name="org.specs2.execute.Results" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ResultsextendsAnyRef"></a>
+      <a id="Results:Results"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Results.html"><span class="name">Results</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@ResultsextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.execute.ScissorsCutter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ScissorsCutterextendsString=&gt;StringwithProductwithSerializable"></a>
+      <a id="ScissorsCutter:ScissorsCutter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ScissorsCutter.html"><span class="name">ScissorsCutter</span></a><span class="params">(<span name="cutMarker">cutMarker: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol"><span class="name"><a href="Snippet$.html">scissorsMarker</a></span></span></span>, <span name="cutMarkerFormat">cutMarkerFormat: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol"><span class="name"><a href="Snippet$.html">scissorsMarkerFormat</a></span></span></span>)</span><span class="result"> extends (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@ScissorsCutterextendsString=&gt;StringwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Implementation of a function to cut pieces of code by using some comments as markers
+</p>
+    </li><li name="org.specs2.execute.SkipException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SkipExceptionextendsExceptionwithProductwithSerializable"></a>
+      <a id="SkipException:SkipException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SkipException.html"><span class="name">SkipException</span></a><span class="params">(<span name="f">f: <a href="Skipped.html" class="extype" name="org.specs2.execute.Skipped">Skipped</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@SkipExceptionextendsExceptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">this class allows to throw a skipped result in an Exception</p>
+    </li><li name="org.specs2.execute.Skipped" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SkippedextendsResultwithProductwithSerializable"></a>
+      <a id="Skipped:Skipped"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Skipped.html"><span class="name">Skipped</span></a><span class="params">(<span name="m">m: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="e">e: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result"> extends <a href="Result.html" class="extype" name="org.specs2.execute.Result">Result</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@SkippedextendsResultwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Skipped result</p><div class="fullcomment"><div class="comment cmt"><p>Skipped result</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>Result for description
+</p></span></dd></dl></div>
+    </li><li name="org.specs2.execute.Snippet" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Snippet[T]extendsProductwithSerializable"></a>
+      <a id="Snippet[T]:Snippet[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Snippet.html"><span class="name">Snippet</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="code">code: () ⇒ <span class="extype" name="org.specs2.execute.Snippet.T">T</span></span>, <span name="codeExpression">codeExpression: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>, <span name="params">params: <a href="SnippetParams.html" class="extype" name="org.specs2.execute.SnippetParams">SnippetParams</a>[<span class="extype" name="org.specs2.execute.Snippet.T">T</span>] = <span class="symbol">SnippetParams[T]()</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@Snippet[T]extendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Captured snippet of code with: a value of type T, a string representing the expression, captured by a macro,
+some evaluation and display parameters
+</p>
+    </li><li name="org.specs2.execute.SnippetParams" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SnippetParams[T]extendsProductwithSerializable"></a>
+      <a id="SnippetParams[T]:SnippetParams[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SnippetParams.html"><span class="name">SnippetParams</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="trimExpression">trimExpression: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol"><span class="name"><a href="Snippet$.html">trimApproximatedSnippet</a></span></span></span>, <span name="cutter">cutter: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">ScissorsCutter()</span></span>, <span name="asCode">asCode: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol"><span class="name"><a href="Snippet$.html">markdownCode(offset = 0)</a></span></span></span>, <span name="prompt">prompt: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol"><span class="name"><a href="Snippet$.html">greaterThanPrompt</a></span></span></span>, <span name="evalCode">evalCode: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="verify">verify: <span class="extype" name="scala.Option">Option</span>[(<span class="extype" name="org.specs2.execute.SnippetParams.T">T</span>) ⇒ <a href="Result.html" class="extype" name="org.specs2.execute.Result">Result</a>] = <span class="symbol">None</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@SnippetParams[T]extendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Evaluation and display parameters for a Snippet.</p><div class="fullcomment"><div class="comment cmt"><p>Evaluation and display parameters for a Snippet.</p><p>It is possible to change:</p><ul><li>the function that's trimming the expression from newlines or accolades</li><li>the <code>cutter</code> function to remove part which must not be shown</li><li>the <code>asCode</code> function to render the resulting text</li><li>the <code>prompt</code> function to possibly display the evaluated result with a prompt</li><li>the <code>eval</code> boolean indicating if a snippet must be evaluated</li><li>the <code>verify</code> function checking the result
+</li></ul></div></div>
+    </li><li name="org.specs2.execute.Snippets" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="SnippetsextendsAnyRef"></a>
+      <a id="Snippets:Snippets"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Snippets.html"><span class="name">Snippets</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@SnippetsextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Snippets of code can be extracted from interpolated specification strings.</p><div class="fullcomment"><div class="comment cmt"><p>Snippets of code can be extracted from interpolated specification strings.</p><p>When you want to specify that a piece of code must be included in the specification output, you can use the <code>snippet</code>
+method to execute a this code and use the text in the output. If you just want to output part of the code you need to
+delimit it with some comments <code>// 8&lt;-------</code> (with as many dashes &gt;= 2 as you want)</p><p>Generally the value of a snippet will not be evaluated nor displayed but it is possible to show it using the <code>eval</code>
+method on a Snippet.</p><p>It is also possible to check that the result value is correct by using the <code>check</code> method.</p></div></div>
+    </li><li name="org.specs2.execute.StandardResults" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StandardResultsextendsAnyRef"></a>
+      <a id="StandardResults:StandardResults"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="StandardResults.html"><span class="name">StandardResults</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@StandardResultsextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait provides standard results which can be used in Fragments bodies
+</p>
+    </li><li name="org.specs2.execute.Success" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SuccessextendsResultwithProductwithSerializable"></a>
+      <a id="Success:Success"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Success.html"><span class="name">Success</span></a><span class="params">(<span name="m">m: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="exp">exp: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result"> extends <a href="Result.html" class="extype" name="org.specs2.execute.Result">Result</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@SuccessextendsResultwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This class represents the success of an execution
+</p>
+    </li><li name="org.specs2.execute.TimeFactor" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="TimeFactorextendsAnyRef"></a>
+      <a id="TimeFactor:TimeFactor"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="TimeFactor.html"><span class="name">TimeFactor</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@TimeFactorextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">trait for setting a time factor on an ExecutionContext or an ExecutorService
+</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="org.specs2.execute.AsResult" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AsResult"></a>
+      <a id="AsResult:AsResult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AsResult$.html"><span class="name">AsResult</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@AsResult" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.execute.BestMatching" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BestMatching"></a>
+      <a id="BestMatching:BestMatching"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BestMatching$.html"><span class="name">BestMatching</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@BestMatching" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Use of the Hopcroft-Karp (https://en.wikipedia.org/wiki/Hopcroft%E2%80%93Karp_algorithm) algorithm for
+specs2, to the minimum set of mismatched elements, and corresponding failures
+</p>
+    </li><li name="org.specs2.execute.Error" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Error"></a>
+      <a id="Error:Error"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Error$.html"><span class="name">Error</span></a><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@Error" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This object allows to create an Error from an exception
+</p>
+    </li><li name="org.specs2.execute.EventuallyResults" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EventuallyResults"></a>
+      <a id="EventuallyResults:EventuallyResults"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="EventuallyResults$.html"><span class="name">EventuallyResults</span></a><span class="result"> extends <a href="EventuallyResults.html" class="extype" name="org.specs2.execute.EventuallyResults">EventuallyResults</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@EventuallyResults" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.execute.ExecutionTimeFactor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ExecutionTimeFactor"></a>
+      <a id="ExecutionTimeFactor:ExecutionTimeFactor"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ExecutionTimeFactor$.html"><span class="name">ExecutionTimeFactor</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@ExecutionTimeFactor" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Set a time factor on an ExecutionContext or an ExecutorService by decorating it with the TimeFactor trait
+</p>
+    </li><li name="org.specs2.execute.FromJUnitAssertionError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FromJUnitAssertionError"></a>
+      <a id="FromJUnitAssertionError:FromJUnitAssertionError"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FromJUnitAssertionError$.html"><span class="name">FromJUnitAssertionError</span></a><span class="result"> extends <a href="Details.html" class="extype" name="org.specs2.execute.Details">Details</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@FromJUnitAssertionError" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.execute.FromNotImplementedError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FromNotImplementedError"></a>
+      <a id="FromNotImplementedError:FromNotImplementedError"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FromNotImplementedError$.html"><span class="name">FromNotImplementedError</span></a><span class="result"> extends <a href="Details.html" class="extype" name="org.specs2.execute.Details">Details</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@FromNotImplementedError" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.execute.Function0Result" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Function0Result"></a>
+      <a id="Function0Result:Function0Result"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Function0Result$.html"><span class="name">Function0Result</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@Function0Result" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.execute.NoDetails" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NoDetails"></a>
+      <a id="NoDetails:NoDetails"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NoDetails$.html"><span class="name">NoDetails</span></a><span class="result"> extends <a href="Details.html" class="extype" name="org.specs2.execute.Details">Details</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@NoDetails" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.execute.PendingUntilFixed" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PendingUntilFixed"></a>
+      <a id="PendingUntilFixed:PendingUntilFixed"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="PendingUntilFixed$.html"><span class="name">PendingUntilFixed</span></a><span class="result"> extends <a href="PendingUntilFixed.html" class="extype" name="org.specs2.execute.PendingUntilFixed">PendingUntilFixed</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@PendingUntilFixed" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.execute.Result" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Result"></a>
+      <a id="Result:Result"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Result$.html"><span class="name">Result</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@Result" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.execute.ResultExecution" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ResultExecution"></a>
+      <a id="ResultExecution:ResultExecution"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ResultExecution$.html"><span class="name">ResultExecution</span></a><span class="result"> extends <a href="ResultExecution.html" class="extype" name="org.specs2.execute.ResultExecution">ResultExecution</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@ResultExecution" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.execute.ResultImplicits" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ResultImplicits"></a>
+      <a id="ResultImplicits:ResultImplicits"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ResultImplicits$.html"><span class="name">ResultImplicits</span></a><span class="result"> extends <a href="ResultImplicits.html" class="extype" name="org.specs2.execute.ResultImplicits">ResultImplicits</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@ResultImplicits" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.execute.ResultLogicalCombinators" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ResultLogicalCombinators"></a>
+      <a id="ResultLogicalCombinators:ResultLogicalCombinators"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ResultLogicalCombinators$.html"><span class="name">ResultLogicalCombinators</span></a><span class="result"> extends <a href="ResultLogicalCombinators.html" class="extype" name="org.specs2.execute.ResultLogicalCombinators">ResultLogicalCombinators</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@ResultLogicalCombinators" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.execute.Results" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Results"></a>
+      <a id="Results:Results"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Results$.html"><span class="name">Results</span></a><span class="result"> extends <a href="Results.html" class="extype" name="org.specs2.execute.Results">Results</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@Results" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.execute.Snippet" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Snippet"></a>
+      <a id="Snippet:Snippet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Snippet$.html"><span class="name">Snippet</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@Snippet" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.execute.Snippets" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Snippets"></a>
+      <a id="Snippets:Snippets"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Snippets$.html"><span class="name">Snippets</span></a><span class="result"> extends <a href="Snippets.html" class="extype" name="org.specs2.execute.Snippets">Snippets</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@Snippets" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.execute.StandardResults" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StandardResults"></a>
+      <a id="StandardResults:StandardResults"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="StandardResults$.html"><span class="name">StandardResults</span></a><span class="result"> extends <a href="StandardResults.html" class="extype" name="org.specs2.execute.StandardResults">StandardResults</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@StandardResults" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.execute.Success" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Success"></a>
+      <a id="Success:Success"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Success$.html"><span class="name">Success</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.execute.package@Success" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Companion object to the Success class providing
+a method to set the expectations number
+</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
