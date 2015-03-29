@@ -47,7 +47,7 @@ case class SmartDiffs(show: Boolean       = true,
   import StringEditDistance._
 
   def show(actual: Any, expected: Any): Boolean =
-    show && Seq(actual, expected).exists(_.toString.size >= triggerSize)
+    show && Seq(actual, expected).exists(_.notNull.size >= triggerSize)
 
   def showSeq(actual: Seq[Any], expected: Seq[Any], ordered: Boolean): Boolean =
     show && (expected.size + actual.size) >= seqTriggerSize && (expected.size + actual.size) <= seqMaxSize
@@ -56,7 +56,7 @@ case class SmartDiffs(show: Boolean       = true,
     showSeq(actual.toSeq, expected.toSeq, ordered = false)
 
   def showDiffs(actualValue: Any, expectedValue: Any) = {
-    val (actual, expected) = (actualValue.toString, expectedValue.toString)
+    val (actual, expected) = (actualValue.notNull, expectedValue.notNull)
     if (editDistance(actual, expected).doubleValue / (actual.size + expected.size) < diffRatio.doubleValue / 100)
       showDistance(actual, expected, separators, shortenSize)
     else
@@ -69,7 +69,7 @@ case class SmartDiffs(show: Boolean       = true,
     val (_, koValues)      = matched.partition(_._3.isSuccess)
     val added              = koValues.map(_._1)
 
-    (added.map(_.toString), missing.map(_.toString))
+    (added.map(_.notNull), missing.map(_.notNull))
   }
 
   /** @return the diffs for maps */
