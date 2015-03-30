@@ -18,7 +18,7 @@ class FutureMatchersSpec extends Specification with ResultMatchers with Retries 
  ${ implicit ec: EC => Future.apply(1) must be_>(0).await }
 
  with a retries number and timeout
- ${ implicit ec: EC => Future { Thread.sleep(sleep); 1 } must be_>(0).await(retries = 2, timeout = 100.millis) }
+ ${ implicit ec: EC => Future { Thread.sleep(sleep); 1 } must be_>(0).await(retries = 3, timeout = 100.millis) }
  ${ implicit ec: EC => (Future { Thread.sleep(sleep); 1 } must be_>(0).await(retries = 4, timeout = 10.millis)) returns "Timeout" }
 
  with a retries number only

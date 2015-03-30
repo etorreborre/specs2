@@ -49,13 +49,13 @@ trait FuturezBaseMatchers extends ExpectationsCreation with ExecutionTimeFactor 
       val tf = timeFactor(es)
       val appliedTimeout = timeout * tf
 
-      def attemptFuture(retries: Int, totalDuration: FiniteDuration): Result = {
-        f.map(AsResult(_)).timed(timeout).run.fold({
+      def attemptFuture(remainingRetries: Int, totalDuration: FiniteDuration): Result = {
+        f.map(AsResult(_)).timed(appliedTimeout).run.fold({
             case e: TimeoutException =>
-              if (retries <= 0) Failure(s"Timeout after ${totalDuration + appliedTimeout}")
-              else              attemptFuture(retries - 1, totalDuration + appliedTimeout)
+              if (remainingRetries <= 0) Failure(s"Timeout after ${totalDuration + appliedTimeout} (retries = $retries, timeout = $timeout)")
+              else                       attemptFuture(remainingRetries - 1, totalDuration + appliedTimeout)
 
-            case other: Throwable    => throw other
+            case other: Throwable => throw other
           },
           r => r
         )

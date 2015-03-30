@@ -19,17 +19,15 @@ s2"""
  ${ implicit es: ES => Future.delay(1) must be_>(0).attempt }
 
  with a retries number and timeout
- ${ implicit es: ES => Future.delay { Thread.sleep(100); 1 } must be_>(0).attempt(retries = 2, timeout = 100.millis) }
+ ${ implicit es: ES => Future.delay { Thread.sleep(sleep); 1 } must be_>(0).attempt(retries = 3, timeout = 100.millis) }
+ ${ implicit es: ES => Future.delay { Thread.sleep(sleep); 1} must be_>(0).attempt(retries = 4, timeout = 10.millis) returns "Timeout" }
 
  with a retries number only
- ${ implicit es: ES => Future.delay { Thread.sleep(100); 1 } must be_>(0).retryAttempt(retries = 2) }
+ ${ implicit es: ES => Future.delay { Thread.sleep(sleep); 1 } must be_>(0).retryAttempt(retries = 2) }
 
  with a timeout only
- ${ implicit es: ES => Future.delay { Thread.sleep(100); 1 } must be_>(0).attemptFor(200.millis) }
+ ${ implicit es: ES => Future.delay { Thread.sleep(sleep); 1 } must be_>(0).attemptFor(200.millis) }
 
- ${ implicit es: ES =>
-   Future.delay { Thread.sleep(300); 1} must be_>(0).attempt(retries = 4, timeout = 10.millis) returns "Timeout"
-  }
 
  A `Future` returning a `Matcher[T]` can be transformed into a `Result`
  ${ implicit es: ES => Future.delay(1 === 1).attempt }

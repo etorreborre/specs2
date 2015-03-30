@@ -45,12 +45,12 @@ trait FutureBaseMatchers extends ExpectationsCreation with ExecutionTimeFactor {
       val tf = timeFactor(ec)
       val appliedTimeout = timeout * tf
 
-      def awaitFuture(retries: Int, totalDuration: FiniteDuration): Result = {
+      def awaitFuture(remainingRetries: Int, totalDuration: FiniteDuration): Result = {
         try Await.result(f.map(value => AsResult(value)), appliedTimeout)
         catch {
           case e: TimeoutException =>
-            if (retries <= 0) Failure(s"Timeout after ${totalDuration + appliedTimeout}")
-            else awaitFuture(retries - 1, totalDuration + appliedTimeout)
+            if (remainingRetries <= 0) Failure(s"Timeout after ${totalDuration + appliedTimeout} (retries = $retries, timeout = $timeout)")
+            else                       awaitFuture(remainingRetries - 1, totalDuration + appliedTimeout)
           case other: Throwable    => throw other
         }
       }
