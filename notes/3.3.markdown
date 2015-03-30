@@ -1,0 +1,19 @@
+Maintenance release
+
+## Improvements
+
+ - added a `timefactor` argument to multiply all durations by a constant when awaiting Futures [#348](https://github.com/etorreborre/specs2/issues/348)
+ - removed the overloaded `await` method to create `Future[Matcher[T]]` from `Matcher[T]` and introduced `awaitFor(timeout)`, `retryAwait(retries)` when only using a timeout or a number of retries [#349](https://github.com/etorreborre/specs2/issues/349)
+ 
+## Fixes
+
+ * added duration and context to `SbtEvents` [#283](https://github.com/etorreborre/specs2/issues/283)
+ * use proper selectors `TestSelector` and `SuiteSelector` with `SbtEvents` [#283](https://github.com/etorreborre/specs2/issues/283)
+ * fixed a NPE when displaying the diff of null values [#350](https://github.com/etorreborre/specs2/issues/350)
+ * don't display hidden links in the console
+ * fixed the order of the topological sort for linked specifications in the runners so that dependent specifications are executed first
+ * better display of links for the index example
+ * added an icon to executable links in html reports
+
+==========================
+
