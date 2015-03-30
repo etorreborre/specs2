@@ -83,7 +83,8 @@ class index extends Specification { def is =
 
   // see the SpecificationsFinder trait for the parameters of the 'specifications' method
   def examplesLinks(t: String) =
-    t.title ^ specifications().map(s => link(s))
+    t.title ^
+    Fragments.foreach(specifications())(s => link(s) ^ br)
 }
 }}
 

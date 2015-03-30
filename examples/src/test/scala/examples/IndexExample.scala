@@ -1,6 +1,7 @@
 package examples
 
 import org.specs2._
+import specification.core.Fragments
 import runner.SpecificationsFinder._
 
 /**
@@ -17,6 +18,7 @@ class IndexExample extends Specification { def is =
    * if it has already been executed
    */
   def examplesLinks(t: String) =
-    t.title ^ specifications().map(s => link(s))
+    t.title ^
+    Fragments.foreach(specifications())(s => link(s) ^ br)
 
 }
