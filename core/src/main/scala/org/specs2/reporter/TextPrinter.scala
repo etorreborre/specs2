@@ -98,7 +98,11 @@ import scalaz._, Scalaz._
         case Fragment(NoText, e, l) if e.isExecutable && !e.result.isSuccess =>
           printExecutable(NoText.show, e, args, indentation)
 
-        case Fragment(d, e, l) if e.isExecutable =>
+        case Fragment(d @ SpecificationRef(_, _, _, hidden), e, l)  =>
+          if (!hidden) printExecutable(d.show, e, args, indentation)
+          else emitNone
+
+        case Fragment(d, e, l) if e.isExecutable && d != NoText =>
           printExecutable(d.show, e, args, indentation)
 
         case Fragment(Br, e, l) =>
