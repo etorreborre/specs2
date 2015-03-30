@@ -32,11 +32,13 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
   "steps" - new group with results {
 
     eg := { env: Env =>
+      val tf = env.arguments.execute.timeFactor
+
       val fragments = Seq(
-        example("slow", slow),
-        example("medium", medium),
+        example("slow", slow(tf)),
+        example("medium", medium(tf)),
         step(step1),
-        example("fast", fast))
+        example("fast", fast(tf)))
 
       execute(fragments, env) must not(contain(beSkipped[Result]))
 
@@ -44,11 +46,13 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
     }
 
     eg := { env: Env =>
+      val tf = env.arguments.execute.timeFactor
+
       val fragments = Seq(
-        example("slow", slow),
-        example("medium", mediumFail),
+        example("slow", slow(tf)),
+        example("medium", mediumFail(tf)),
         step(step1).stopOnFail,
-        example("fast", fast))
+        example("fast", fast(tf)))
 
       execute(fragments, env) must contain(beSkipped[Result])
 
@@ -56,11 +60,13 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
     }
 
     eg := { env: Env =>
+      val tf = env.arguments.execute.timeFactor
+
       val fragments = Seq(
-        example("slow", slow),
-        example("medium", mediumSkipped),
+        example("slow", slow(tf)),
+        example("medium", mediumSkipped(tf)),
         step(step1),
-        example("fast", fast))
+        example("fast", fast(tf)))
 
       execute(fragments, env.setArguments(Arguments("stopOnSkip"))) must contain(beSkipped[Result])
 
@@ -68,9 +74,11 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
     }
 
     eg := { env: Env =>
+      val tf = env.arguments.execute.timeFactor
+
       val fragments = Seq(
-        example("ex1", fast),
-        example("ex2", fast))
+        example("ex1", fast(tf)),
+        example("ex2", fast(tf)))
 
       execute(fragments, env.setArguments(Arguments("skipAll"))) must contain(beSkipped[Result])
 
@@ -82,11 +90,13 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
   "execute" - new group with results {
 
     eg := { env: Env =>
+      val tf = env.arguments.execute.timeFactor
+
       val fragments = Seq(
-        example("slow", slow),
-        example("medium", medium),
+        example("slow", slow(tf)),
+        example("medium", medium(tf)),
         step(step1),
-        example("fast", fast))
+        example("fast", fast(tf)))
 
       execute(fragments, env.setArguments(Arguments("sequential"))) must not(contain(beSkipped[Result]))
 
@@ -94,11 +104,13 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
     }
 
     eg := { env: Env =>
+      val tf = env.arguments.execute.timeFactor
+
       val fragments = Seq(
-        example("slow", slow),
-        example("medium", medium),
+        example("slow", slow(tf)),
+        example("medium", medium(tf)),
         step(step1),
-        example("fast", fast))
+        example("fast", fast(tf)))
 
       execute(fragments, env.setArguments(Arguments("sequential")))
 
@@ -107,13 +119,15 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
   }
 
   def timeOut = { env: Env =>
+    val timeFactor = env.arguments.execute.timeFactor
+
     val messages = new ListBuffer[String]
-    def verySlow      = { Thread.sleep(600); messages.append("very slow"); success }
+    def verySlow      = { Thread.sleep(600 * timeFactor); messages.append("very slow"); success }
 
     val fragments = Seq(example("very slow", verySlow))
-    val env1 = env.copy(executionEnv = env.executionEnv.setTimeout(100.millis))
+    val env1 = env.copy(executionEnv = env.executionEnv.setTimeout(100.millis * timeFactor))
 
-    execute(fragments, env1) must contain(beSkipped[Result]("timeout after 100 milliseconds"))
+    execute(fragments, env1) must contain(beSkipped[Result]("timeout after "+100*timeFactor+" milliseconds"))
   }
 
 
@@ -126,14 +140,14 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
     val messages = new ListBuffer[String]
 
     // this cannot be made lazy vals otherwise this will block on 'slow'
-    def fast          = {                    messages.append("fast"); success }
-    def medium        = { Thread.sleep(10);  messages.append("medium"); success }
-    def ex(s: String) = { messages.append(s); success }
-    def mediumFail    = { Thread.sleep(10);  messages.append("medium"); failure }
-    def mediumSkipped = { Thread.sleep(10);  messages.append("medium"); skipped }
-    def slow          = { Thread.sleep(200); messages.append("slow");   success }
-    def verySlow      = { Thread.sleep(600); messages.append("very slow"); success }
-    def step1         = { Thread.sleep(0);  messages.append("step");   success }
+    def fast(timeFactor: Int)         = {                    messages.append("fast"); success }
+    def medium(timeFactor: Int)       = { Thread.sleep(10 * timeFactor);  messages.append("medium"); success }
+    def ex(s: String)                 = { messages.append(s); success }
+    def mediumFail(timeFactor: Int)   = { Thread.sleep(10 * timeFactor);  messages.append("medium"); failure }
+    def mediumSkipped(timeFactor: Int)= { Thread.sleep(10 * timeFactor);  messages.append("medium"); skipped }
+    def slow(timeFactor: Int)         = { Thread.sleep(200 * timeFactor); messages.append("slow");   success }
+    def verySlow(timeFactor: Int)     = { Thread.sleep(600 * timeFactor); messages.append("very slow"); success }
+    def step1                         = { messages.append("step");   success }
   }
 
 

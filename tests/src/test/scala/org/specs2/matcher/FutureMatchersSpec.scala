@@ -9,7 +9,7 @@ import duration._
 
 class FutureMatchersSpec extends Specification with ResultMatchers with Retries with Environment { def is(env: Env) = {
  val timeFactor = env.arguments.execute.timeFactor
- val sleep = 100 * timeFactor
+ val sleep = 50 * timeFactor
  s2"""
 
  In this specification `Future` means `scala.concurrent.Future`
@@ -19,7 +19,7 @@ class FutureMatchersSpec extends Specification with ResultMatchers with Retries 
 
  with a retries number and timeout
  ${ implicit ec: EC => Future { Thread.sleep(sleep); 1 } must be_>(0).await(retries = 3, timeout = 100.millis) }
- ${ implicit ec: EC => (Future { Thread.sleep(sleep); 1 } must be_>(0).await(retries = 4, timeout = 10.millis)) returns "Timeout" }
+ ${ implicit ec: EC => (Future { Thread.sleep(sleep * 3); 1 } must be_>(0).await(retries = 4, timeout = 10.millis)) returns "Timeout" }
 
  with a retries number only
  ${ implicit ec: EC => Future { Thread.sleep(sleep); 1 } must be_>(0).retryAwait(2) }

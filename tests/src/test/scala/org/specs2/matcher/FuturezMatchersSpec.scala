@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutorService
 
 class FuturezMatchersSpec extends Specification with ResultMatchers with Environment { def is (env: Env) = {
 val timeFactor = env.arguments.execute.timeFactor
-val sleep = 100 * timeFactor
+val sleep = 50 * timeFactor
 s2"""
 
  In this specification `Future` means `scalaz.concurrent.Future`
@@ -20,7 +20,7 @@ s2"""
 
  with a retries number and timeout
  ${ implicit es: ES => Future.delay { Thread.sleep(sleep); 1 } must be_>(0).attempt(retries = 3, timeout = 100.millis) }
- ${ implicit es: ES => Future.delay { Thread.sleep(sleep); 1} must be_>(0).attempt(retries = 4, timeout = 10.millis) returns "Timeout" }
+ ${ implicit es: ES => Future.delay { Thread.sleep(sleep * 3); 1} must be_>(0).attempt(retries = 3, timeout = 10.millis) returns "Timeout" }
 
  with a retries number only
  ${ implicit es: ES => Future.delay { Thread.sleep(sleep); 1 } must be_>(0).retryAttempt(retries = 2) }
