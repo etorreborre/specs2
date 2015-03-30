@@ -97,8 +97,10 @@ trait HtmlBodyPrinter {
           case other => NodeSeq.Empty
         }
 
-      case Fragment(ref: SpecificationRef,_,_) if !ref.hidden =>
-        <link class="ok"><a href={FilePath.unsafe(ref.url).relativeTo(baseDir).path} tooltip={ref.tooltip} class="ok">{ref.linkText}</a></link>
+      case Fragment(ref: SpecificationRef,x,_) if !ref.hidden =>
+        val status = fragment.executionResult.statusName(arguments)+" ok"
+        val image = if (fragment.isExecutable) <span class={status}> </span> else NodeSeq.Empty
+          <link class="ok">{image}  <a href={FilePath.unsafe(ref.url).relativeTo(baseDir).path} tooltip={ref.tooltip} class="ok">{ref.linkText}</a></link>
 
       case Fragment(form @ FormDescription(_),_,_) =>
         form.xml(arguments)

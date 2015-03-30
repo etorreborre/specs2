@@ -157,6 +157,32 @@ li.step.error {
   padding-left: 5px;
 }
 
+span.success {
+  content: url(../images/icon_success_sml.gif);
+  padding-right: 5px;
+}
+span.failure {
+  content: url(../images/icon_failure_sml.gif);
+  padding-right: 5px;
+}
+span.error {
+  content: url(../images/icon_error_sml.gif);
+  padding-right: 5px;
+}
+span.skipped {
+  content: url(../images/icon_skipped_sml.gif);
+  padding-right: 5px;
+}
+span.pending {
+  content: url(../images/icon_pending_sml.gif);
+  padding-right: 5px;
+}
+span.info {
+  content: url(../images/icon_info_sml.gif);
+  padding-right: 5px;
+}
+
+
 stacktrace.failure {
   margin-left:10px;
   padding: 1px 3px 1px 3px;
