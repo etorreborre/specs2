@@ -53,7 +53,7 @@ trait FilesRunner {
     } yield ()
   }
 
-  /** sort the specifications in topological order where specification i doesn't depend on specification j if i < j */
+  /** sort the specifications in topological order where specification i doesn't depend on specification j if i > j == dependents first */
   def sort(env: Env) = { specifications: Seq[SpecificationStructure] =>
     SpecificationStructure.topologicalSort(env)(specifications).getOrElse(specifications)
   }

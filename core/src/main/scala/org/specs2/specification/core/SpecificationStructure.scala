@@ -38,11 +38,23 @@ object SpecificationStructure {
       .orElse(createInstance[SpecificationStructure](className+"$", classLoader))
   }
 
-  /** sort the specifications in topological order where specification i doesn't depend on specification j if i < j */
-  def topologicalSort(env: Env) = { specifications: Seq[SpecificationStructure] =>
-    TopologicalSort.sort(specifications,
-      (s1: SpecificationStructure, s2: SpecificationStructure) => SpecStructure.dependsOn(s1.structure(env), s2.structure(env)))
-  }
+  /**
+   * sort the specifications in topological order where specification i doesn't depend on specification j if i > j
+   *
+   * == dependents first!
+   */
+  def topologicalSort(env: Env) = (specifications: Seq[SpecificationStructure]) =>
+    TopologicalSort.sort(specifications, (s1: SpecificationStructure, s2: SpecificationStructure) =>
+      SpecStructure.dependsOn(s2.structure(env), s1.structure(env)))
+
+  /**
+   * sort the specifications in topological order where specification i doesn't depend on specification j if i < j
+   *
+   *  == dependents last!
+   */
+  def reverseTopologicalSort(env: Env) = (specifications: Seq[SpecificationStructure]) =>
+    TopologicalSort.sort(specifications, (s1: SpecificationStructure, s2: SpecificationStructure) =>
+        SpecStructure.dependsOn(s1.structure(env), s2.structure(env)))
 
   /** @return all the referenced specifications */
   def referencedSpecifications(spec: SpecificationStructure, env: Env, classLoader: ClassLoader): Action[Seq[SpecificationStructure]] =
@@ -57,24 +69,31 @@ object SpecificationStructure {
     specificationsRefs(spec, env, classLoader)(seeSpecificationsClassnames)
 
   /** @return all the referenced specifications */
-  def specificationsRefs(spec: SpecificationStructure, env: Env, classLoader: ClassLoader)(refClassNames: (SpecificationStructure, Env) => List[String]): Action[Seq[SpecificationStructure]] = {
-    val byName = (ss: List[SpecificationStructure]) => ss.groupBy(_.structure(env).specClassName).mapValues(_.head)
+  def specificationsRefs(spec: SpecificationStructure,
+                         env: Env,
+                         classLoader: ClassLoader)(refClassNames: (SpecificationStructure, Env) => List[String]): Action[Seq[SpecificationStructure]] = {
 
-    def getRefs(s: SpecificationStructure, visited: Map[String, SpecificationStructure]): Map[String, SpecificationStructure] =
-      refClassNames(s, env).map(name => create(name, classLoader)).sequenceU.map(byName).runOption.getOrElse(Map())
-        .filterNot { case (n, _) => visited.keys.toSeq.contains(n) }
+    val byName = (ss: List[SpecificationStructure]) => ss.foldLeft(Vector[(String, SpecificationStructure)]()) { (res, cur) =>
+      val name = cur.structure(env).specClassName
+      if (res.map(_._1).contains(name)) res
+      (name, cur) +: res
+    }
+
+    def getRefs(s: SpecificationStructure, visited: Vector[(String, SpecificationStructure)]): Vector[(String, SpecificationStructure)] =
+      refClassNames(s, env).map(name => create(name, classLoader)).sequenceU.map(byName).runOption.getOrElse(Vector())
+        .filterNot { case (n, _) => visited.map(_._1).contains(n) }
 
     Actions.safe {
-      def getAll(seed: Seq[SpecificationStructure], visited: Map[String, SpecificationStructure]): Seq[SpecificationStructure] = {
-        if (seed.isEmpty) visited.values.toSeq
+      def getAll(seed: Vector[SpecificationStructure], visited: Vector[(String, SpecificationStructure)]): Vector[SpecificationStructure] = {
+        if (seed.isEmpty) visited.map(_._2)
         else {
-          val toVisit: Map[String, SpecificationStructure] = Map(seed.flatMap { s => getRefs(s, visited) }:_*)
-          getAll(toVisit.values.toSeq, visited ++ toVisit)
+          val toVisit: Vector[(String, SpecificationStructure)] = seed.flatMap(s => getRefs(s, visited))
+          getAll(toVisit.map(_._2), visited ++ toVisit)
         }
       }
       val name = spec.structure(env).specClassName
-      val linked = getRefs(spec, Map(name -> spec))
-      getAll(linked.values.toSeq, Map(linked.toSeq :+ (name -> spec):_*))
+      val linked = getRefs(spec, Vector((name, spec)))
+      getAll(linked.map(_._2), linked :+ ((name, spec)))
     }
   }
 

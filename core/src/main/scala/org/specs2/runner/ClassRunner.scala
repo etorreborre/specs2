@@ -55,7 +55,7 @@ trait ClassRunner {
         printers <- createPrinters(env.arguments, loader)
         reporter <- createReporter(env.arguments, loader)
         ss       <- SpecificationStructure.linkedSpecifications(spec, env, loader)
-        sorted   <- safe(SpecificationStructure.topologicalSort(env)(ss).getOrElse(ss) :+ spec)
+        sorted   <- safe(SpecificationStructure.topologicalSort(env)(ss).getOrElse(ss))
         _        <- reporter.prepare(env, printers)(sorted.toList)
         _        =  sorted.toList.map(s => Reporter.report(env, printers)(s.structure(env))).sequenceU.void
         _        <- Reporter.finalize(env, printers)(sorted.toList)
