@@ -11,6 +11,8 @@ import java.util.concurrent.ExecutorService
 class FuturezMatchersSpec extends Specification with ResultMatchers with Environment { def is (env: Env) = {
 val timeFactor = env.arguments.execute.timeFactor
 val sleep = 50 * timeFactor
+
+section("travis") ^
 s2"""
 
  In this specification `Future` means `scalaz.concurrent.Future`

@@ -10,6 +10,8 @@ import duration._
 class FutureMatchersSpec extends Specification with ResultMatchers with Retries with Environment { def is(env: Env) = {
  val timeFactor = env.arguments.execute.timeFactor
  val sleep = 50 * timeFactor
+
+ section("travis") ^
  s2"""
 
  In this specification `Future` means `scala.concurrent.Future`
