@@ -18,11 +18,15 @@ import text.Trim._
 trait TableOfContents {
 
   /** create a table of contents for all the specifications */
-  def createToc(specifications: List[SpecStructure], outDir: DirectoryPath, entryMaxSize: Int, fileSystem: FileSystem): Action[Unit] = for {
-    pages   <- readHtmlPages(specifications, outDir, fileSystem)
-    toc     =  createToc(pages, outDir, entryMaxSize)
-    _       <- saveHtmlPages(pages.map(page => page.addToc(toc(page))), fileSystem)
-  } yield ()
+  def createToc(specifications: List[SpecStructure], outDir: DirectoryPath, entryMaxSize: Int, fileSystem: FileSystem): Action[Unit] = {
+    // sort specifications a, b, c so that a depends on b and c
+    val sorted = SpecStructure.topologicalSort(specifications).map(_.toList).getOrElse(List())
+    for {
+      pages   <- readHtmlPages(sorted, outDir, fileSystem)
+      toc     =  createToc(pages, outDir, entryMaxSize)
+      _       <- saveHtmlPages(pages.map(page => page.addToc(toc(page))), fileSystem)
+    } yield ()
+  }
 
   /** read the generated html pages and return them as a tree, based on the links relationships between them */
   def readHtmlPages(specifications: List[SpecStructure], outDir: DirectoryPath, fileSystem: FileSystem): Action[List[SpecHtmlPage]] =

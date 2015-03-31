@@ -12,13 +12,17 @@ object UserGuide extends UserGuidePage { def is = "User Guide".title ^ s2"""
 
   In this user guide, you will find:
 
- ${win}a ${ "quick start guide" ~ QuickStart }
- ${win}how to ${"structure your specification" ~ Structure}
- ${win}how to use ${"matchers" ~ Matchers }
- ${win}how to ${"execute a specification" ~ Runners }
+ ${win}a ${ "quick start guide" ~/ QuickStart }
+ ${win}how to ${"structure your specification" ~/ Structure}
+ ${win}how to use ${"matchers" ~/ Matchers }
+ ${win}how to ${"execute a specification" ~/ Runners }
 
  And much more!
 
+ ${link(QuickStart).hide}
+ ${link(Structure).hide}
+ ${link(Matchers).hide}
+ ${link(Runners).hide}
  ${link(Contexts).hide}
  ${link(UseScalaCheck).hide}
  ${link(UseMockito).hide}

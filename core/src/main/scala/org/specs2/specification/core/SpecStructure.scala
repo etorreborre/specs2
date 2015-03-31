@@ -64,7 +64,7 @@ object SpecStructure {
   def create(header: SpecHeader, arguments: Arguments, fragments: =>Fragments): SpecStructure =
     new SpecStructure(header, arguments, () => fragments)
 
-  def topologicalSort(specifications: Seq[SpecStructure]) =
+  def topologicalSort(specifications: Seq[SpecStructure]): Option[Vector[SpecStructure]] =
     TopologicalSort.sort(specifications, dependsOn)
 
   /** return true if s1 depends on s2, i.e, s1 has a link to s2 */
