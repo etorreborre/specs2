@@ -1,0 +1,13 @@
+Maintenance release
+
+## Dependencies
+
+ - updated Scala 2.10 from 2.10.4 to 2.10.5
+ - updated Shapeless to 2.1.0
+ 
+## Fixes
+
+ * fixed the order of specifications used to build the table of contents
+
+==========================
+
