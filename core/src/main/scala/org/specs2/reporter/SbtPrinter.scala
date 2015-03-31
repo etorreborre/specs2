@@ -112,14 +112,14 @@ trait SbtEvents {
     val fullyQualifiedName = taskDef.fullyQualifiedName
     val fingerprint        = taskDef.fingerprint
     val selector           = new TestSelector(name)
-    val duration           = durationInMillis.getOrElse(0L)
+    val duration           = durationInMillis.getOrElse(-1L)
   }
 
   case class SpecSuiteEvent(status: Status, throwable: OptionalThrowable = new OptionalThrowable) extends Event {
     val fullyQualifiedName = taskDef.fullyQualifiedName
     val fingerprint        = taskDef.fingerprint
     val selector           = new SuiteSelector
-    val duration           = 0L
+    val duration           = -1L
   }
 }
 

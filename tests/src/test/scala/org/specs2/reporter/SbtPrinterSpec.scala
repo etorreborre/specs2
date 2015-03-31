@@ -48,7 +48,7 @@ class SbtPrinterSpec extends Spec with ForEachEnv { def is = s2"""
 
     def e3 = { env: Env =>
       executeAndPrintHelloWorldUnitSpec(env)
-      there was atLeastOne(handler).handle(eventWithDurationGreaterThan(0))
+      there was atLeastOne(handler).handle(eventWithDurationGreaterThanOrEqualTo(0))
     }
 
     def e4 = { env: Env =>
@@ -59,8 +59,8 @@ class SbtPrinterSpec extends Spec with ForEachEnv { def is = s2"""
     def eventWithStatus(s: Status): Matcher[Event] =
       beTypedEqualTo(s) ^^ ((_: Event).status())
 
-    def eventWithDurationGreaterThan(d: Long): Matcher[Event] =
-      beGreaterThan(d) ^^ ((_: Event).duration())
+    def eventWithDurationGreaterThanOrEqualTo(d: Long): Matcher[Event] =
+      beGreaterThanOrEqualTo(d) ^^ ((_: Event).duration())
 
     def eventWithNameMatching(n: String): Matcher[Event] =
       beLike[Selector] { case ts: TestSelector => ts.testName must beMatching(n) } ^^ ((_: Event).selector())
