@@ -5,7 +5,7 @@ package script
 import core.{Env, Fragment, Fragments}
 import create.{FragmentFactory, FragmentsFactory}
 import shapeless.{HList, HNil, ::}
-import shapeless.ops.hlist.ToList
+import shapeless.ops.hlist.{ToTraversable, ToList}
 import execute._
 import ResultLogicalCombinators._
 import scalaz.syntax.std.list._
@@ -254,13 +254,8 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
 
   }
 
-  private implicit def toListAny[H <: HList]: ToList[H, Any] = new ToList[H, Any] {
-    def apply(l: H) = l match {
-      case head :: HNil => List(head)
-      case head :: tail => head :: tail.toList(toListAny)
-      case _            => List[Any]()
-    }
-  }
+  private implicit def toListAny[H <: HList]: ToList[H, Any] =
+    implicitly[ToTraversable.Aux[H, List, Any]]
 
   private def value(r: Result) = r match {
     case DecoratedResult(v, _) => v

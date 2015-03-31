@@ -47,7 +47,7 @@ object build extends Build {
     specs2ShellPrompt,
     scalaVersion := "2.11.6",
     scalazVersion := "7.1.1",
-    crossScalaVersions := Seq(scalaVersion.value, "2.10.4"))
+    crossScalaVersions := Seq(scalaVersion.value, "2.10.5"))
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 
@@ -82,7 +82,6 @@ object build extends Build {
   lazy val core = Project(id = "core", base = file("core"),
     settings = Seq(
       libraryDependencies ++=
-        depends.shapeless(scalaVersion.value) ++
         depends.reflect(scalaVersion.value) ++
         depends.paradise(scalaVersion.value) ++
         depends.testInterface.map(_ % "optional") ++
