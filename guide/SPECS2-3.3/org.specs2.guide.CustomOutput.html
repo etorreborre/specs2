@@ -1,0 +1,166 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Custom output</title>
+    <link href="./css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="./css/bootstrap.min.css"                           type="text/css" rel="stylesheet" />
+    <link href="./css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="./css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="./css/tabber.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/tipuesearch.css"                             type="text/css" rel="stylesheet" />
+    <link href="./css/specs2.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/specs2-user.css"                             type="text/css" rel="stylesheet" />
+
+    <script src="./javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="./javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="./javascript/tabber.js"                           type="text/javascript"></script>
+    <script src="./javascript/tabber_start.js"                     type="text/javascript"></script>
+    <script src="./javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="./javascript/specs2.js"                           type="text/javascript"></script>
+    <script src="./javascript/specs2-user.js"                      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_set.js"      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_contents.js" type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch.min.js"      type="text/javascript"></script>
+
+</head>
+<body onload="prettyPrint()">
+
+<div class="container">
+
+<div class="col-md-2 sidebar-outer">
+<div class="col-md-2 fixed">
+
+<!-- search box -->
+<div class="search-box">
+  <form action="search.html">
+    <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
+  </form>
+</div>
+
+<!-- table of contents -->
+<div id="tree"><ul>
+                <li id="org-specs2-guide-consoleoutput"><a href="org.specs2.guide.ConsoleOutput.html" title="Console output">Console output</a>
+      <ul><ul><li><a href="org.specs2.guide.ConsoleOutput.html#show-only" title="Show only">Show only</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#stacktracefilter" title="StackTraceFilter">StackTraceFilter</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#diffs" title="Diffs">Diffs</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#colors" title="Colors">Colors</a>
+          
+        </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul></div><script>$(function () { $('#tree').jstree({'core':{'initially_open':['org-specs2-guide-customoutput'], 'animation':200}, 'themes' : {'theme': 'default','url': './css/themes/default/style.css'}, 'plugins':['themes', 'html_data']}); });</script>
+
+</div>
+</div>
+
+
+<div class="col-md-10">
+<h1>Custom output</h1>
+<div id="tipue_search_content"></div>
+
+<p>You can implement your own reporting of <s2>specs2</s2> specifications:</p>
+<ul>
+<li>using the <code class="prettyprint">Notifier</code> trait which acts like a listener</li>
+<li>using a <code class="prettyprint">Printer</code> which gives you more flexibility for reporting exactly what you want</li>
+<li>using a <code class="prettyprint">Reporter</code> which allow you to even change the default flow for reporting specifications: selection -&gt; execution -&gt; printing</li>
+</ul>
+<h2 id="notifier">Notifier</h2>
+<p>The <code class="prettyprint">org.specs2.reporter.Notifier</code> trait can be used to report execution events. It notifies of the following:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Event</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">specification start</td>
+<td align="left">the beginning of a specification, with its name</td>
+</tr>
+<tr class="even">
+<td align="left">specification end</td>
+<td align="left">the end of a specification, with its name</td>
+</tr>
+<tr class="odd">
+<td align="left">context start</td>
+<td align="left">the beginning of a sub-level when the specification is seen as a tree or Fragments</td>
+</tr>
+<tr class="even">
+<td align="left">context end</td>
+<td align="left">the end of a sub-level when the specification is seen as a tree or Fragments</td>
+</tr>
+<tr class="odd">
+<td align="left">text</td>
+<td align="left">any Text fragment that needs to be displayed</td>
+</tr>
+<tr class="even">
+<td align="left">example start</td>
+<td align="left">the beginning of an example</td>
+</tr>
+<tr class="odd">
+<td align="left">example result</td>
+<td align="left"><code class="prettyprint">success / failure / error / skipped / pending</code></td>
+</tr>
+</tbody>
+</table>
+<p>All those notifications come with a location (to trace back to the originating fragment in the Specification) and a duration when relevant (i.e. for examples).</p>
+<p>You can then using the <code class="prettyprint">notifier</code> argument to pass the name of your custom notifier:</p>
+<pre><code class="prettyprint">sbt&gt; testOnly *BinarySpec* -- notifier org.acme.reporting.FtpNotifier</code></pre>
+<h2 id="printer">Printer</h2>
+<p>The <code class="prettyprint">org.specs2.reporter.Printer</code> trait defines how to output each fragment of the specification. The only method to implement is:</p>
+<pre><code class="prettyprint">def fold(env: Env, spec: SpecStructure): Fold[Fragment]</code></pre>
+<p>So what you need to create is a <code class="prettyprint">Fold</code> over the executing specification. What is it? A <code class="prettyprint">Fold</code> is composed of 5 operations:</p>
+<pre><code class="prettyprint">trait Fold[Fragment] {
+  type S
+
+  def prepare: Task[Unit]
+  def init: S
+  def sink: Sink[Task, (Fragment, S)]
+  def fold: (Fragment, S) =&gt; S
+  def last(s: S): Task[Unit]
+}</code></pre>
+<ul>
+<li><code class="prettyprint">prepare</code> is a <code class="prettyprint">Task</code> which can “prepare” the reporting, like creating a directory</li>
+<li><code class="prettyprint">init</code> is an initial state of type <code class="prettyprint">S</code>. By using some state you can accumulate information about the execution of the whole specification</li>
+<li><code class="prettyprint">sink</code> is a scalaz-stream <code class="prettyprint">Sink</code> which can output each <code class="prettyprint">Fragment</code> and possibly the current state</li>
+<li><code class="prettyprint">fold</code> is the function calculating the next state based on the current <code class="prettyprint">Fragment</code> and the previous state</li>
+<li><code class="prettyprint">last</code> take the last state and returns a <code class="prettyprint">Task</code> doing the last action like reporting the final statistics</li>
+</ul>
+<p>Once you’ve defined your <code class="prettyprint">Printer</code> trait you can use the <code class="prettyprint">printer</code> argument like so:</p>
+<pre><code class="prettyprint">sbt&gt; testOnly *BinarySpec* -- printer org.acme.reporting.LatexPrinter</code></pre>
+<h2 id="reporter">Reporter</h2>
+<p>The <code class="prettyprint">org.specs2.reporter.Reporter</code> trait defines the full lifecycle for running specifications:</p>
+<pre><code class="prettyprint">// prepare the environment before any reporting
+def prepare(env: Env, printers: List[Printer]): List[SpecificationStructure] =&gt; Action[Unit]
+
+// finalize the reporting (to save overall statistics for example)
+def finalize(env: Env, printers: List[Printer]): List[SpecificationStructure] =&gt; Action[Unit]
+
+/**
+ * report a spec structure with the given printers
+ *
+ * The default implementation selects fragments to execute, executes them and uses the printers to
+ * display results
+ */
+def report(env: Env, printers: List[Printer]): SpecStructure =&gt; Action[Unit]</code></pre>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>If your custom <code class="prettyprint">Notifier</code> or <code class="prettyprint">Printer</code> fails to be instantiated you can re-run the execution with the <code class="prettyprint">verbose</code> argument in order to get an error message and a stack trace.</p>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('#tipue_search_input').tipuesearch({
+    'show': 6
+  });
+});
+</script>
+</div>
+
+</body>
+</html>

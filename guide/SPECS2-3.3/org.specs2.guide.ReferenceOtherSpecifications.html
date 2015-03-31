@@ -1,0 +1,131 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Reference other specifications</title>
+    <link href="./css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="./css/bootstrap.min.css"                           type="text/css" rel="stylesheet" />
+    <link href="./css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="./css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="./css/tabber.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/tipuesearch.css"                             type="text/css" rel="stylesheet" />
+    <link href="./css/specs2.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/specs2-user.css"                             type="text/css" rel="stylesheet" />
+
+    <script src="./javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="./javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="./javascript/tabber.js"                           type="text/javascript"></script>
+    <script src="./javascript/tabber_start.js"                     type="text/javascript"></script>
+    <script src="./javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="./javascript/specs2.js"                           type="text/javascript"></script>
+    <script src="./javascript/specs2-user.js"                      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_set.js"      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_contents.js" type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch.min.js"      type="text/javascript"></script>
+
+</head>
+<body onload="prettyPrint()">
+
+<div class="container">
+
+<div class="col-md-2 sidebar-outer">
+<div class="col-md-2 fixed">
+
+<!-- search box -->
+<div class="search-box">
+  <form action="search.html">
+    <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
+  </form>
+</div>
+
+<!-- table of contents -->
+<div id="tree"><ul>
+                <li id="org-specs2-guide-consoleoutput"><a href="org.specs2.guide.ConsoleOutput.html" title="Console output">Console output</a>
+      <ul><ul><li><a href="org.specs2.guide.ConsoleOutput.html#show-only" title="Show only">Show only</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#stacktracefilter" title="StackTraceFilter">StackTraceFilter</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#diffs" title="Diffs">Diffs</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#colors" title="Colors">Colors</a>
+          
+        </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul></div><script>$(function () { $('#tree').jstree({'core':{'initially_open':['org-specs2-guide-referenceotherspecifications'], 'animation':200}, 'themes' : {'theme': 'default','url': './css/themes/default/style.css'}, 'plugins':['themes', 'html_data']}); });</script>
+
+</div>
+</div>
+
+
+<div class="col-md-10">
+<h1>Reference other specifications</h1>
+<div id="tipue_search_content"></div>
+
+<p>For some large projects, or to write documentation, you will need to structure your specifications so that some of them will reference others. Those references will be of 2 types:</p>
+<ul>
+<li>“see” reference: a simple textual reference, with an html link to navigate to the other specification when you create an html report</li>
+<li>“link” reference: an “executed” reference where the second specification will be executed and its status reported in the first one</li>
+</ul>
+<p>Here is the DSL you will use for those 2 types of references:</p>
+<pre><code class="prettyprint">object FirstSpecification extends Specification { def is = s2&quot;&quot;&quot;
+ We can consider one example
+  ${ 1 must_== 1 }
+
+  And all these examples are also important so we need to know if they all pass
+  ${&quot;important specification&quot; ~ SecondSpecification}
+
+  Finally it is worth having a look at ${&quot;this specification&quot; ~/ ThirdSpecification}.
+&quot;&quot;&quot;
+}
+
+import org.specs2.specification.core._
+
+object SecondSpecification extends Specification { def is = s2&quot;&quot;&quot;
+ This spec contains lots of examples
+   ${ Fragment.foreach(1 to 100) { i =&gt; &quot;example &quot;+i ! ok } }
+&quot;&quot;&quot;
+}
+object ThirdSpecification extends Specification { def is = s2&quot;&quot;&quot;
+ This is the third specification with a simple example
+   this should pass $ok
+&quot;&quot;&quot;
+}</code></pre>
+<p>The syntax shown above to create references is using a string for the link alias and uses two operators:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Operator</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code class="prettyprint">~</code></td>
+<td align="left">a <em><code class="prettyprint">link</code> reference</em>. The referenced specification gets executed when the first one is</td>
+</tr>
+<tr class="even">
+<td align="left"><code class="prettyprint">~/</code></td>
+<td align="left">a <em><code class="prettyprint">see</code> reference</em>. The referenced specification doesn’t get executed (<code class="prettyprint">&quot;$FirstSpecification&quot;</code> creates a <em>see</em> link as well)</td>
+</tr>
+</tbody>
+</table>
+<p>Also, for better html rendering, you can add a tooltip:</p>
+<pre><code class="prettyprint">  ${ &quot;alias&quot; ~/ (OtherSpec, &quot;tooltip&quot;) }</code></pre>
+<p>Finally I’m also drawing your attention to the fact that you don’t have to create your specifications as Scala classes but you can use simple objects as shown above.</p>
+<h3 id="execution">Execution</h3>
+<p>When you execute a given specification you can pass the <code class="prettyprint">all</code> argument to execute all the referenced specifications. They will be collected and executed in (topological sort)[http://en.wikipedia.org/wiki/Topological_sorting] order and any cycle in the reference graph will be broken. Only the “link” references will be executed, not the “see” references.</p>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('#tipue_search_input').tipuesearch({
+    'show': 6
+  });
+});
+</script>
+</div>
+
+</body>
+</html>

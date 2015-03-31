@@ -1,0 +1,141 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Context objects</title>
+    <link href="./css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="./css/bootstrap.min.css"                           type="text/css" rel="stylesheet" />
+    <link href="./css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="./css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="./css/tabber.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/tipuesearch.css"                             type="text/css" rel="stylesheet" />
+    <link href="./css/specs2.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/specs2-user.css"                             type="text/css" rel="stylesheet" />
+
+    <script src="./javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="./javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="./javascript/tabber.js"                           type="text/javascript"></script>
+    <script src="./javascript/tabber_start.js"                     type="text/javascript"></script>
+    <script src="./javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="./javascript/specs2.js"                           type="text/javascript"></script>
+    <script src="./javascript/specs2-user.js"                      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_set.js"      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_contents.js" type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch.min.js"      type="text/javascript"></script>
+
+</head>
+<body onload="prettyPrint()">
+
+<div class="container">
+
+<div class="col-md-2 sidebar-outer">
+<div class="col-md-2 fixed">
+
+<!-- search box -->
+<div class="search-box">
+  <form action="search.html">
+    <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
+  </form>
+</div>
+
+<!-- table of contents -->
+<div id="tree"><ul>
+                <li id="org-specs2-guide-consoleoutput"><a href="org.specs2.guide.ConsoleOutput.html" title="Console output">Console output</a>
+      <ul><ul><li><a href="org.specs2.guide.ConsoleOutput.html#show-only" title="Show only">Show only</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#stacktracefilter" title="StackTraceFilter">StackTraceFilter</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#diffs" title="Diffs">Diffs</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#colors" title="Colors">Colors</a>
+          
+        </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul></div><script>$(function () { $('#tree').jstree({'core':{'initially_open':['org-specs2-guide-contextobjects'], 'animation':200}, 'themes' : {'theme': 'default','url': './css/themes/default/style.css'}, 'plugins':['themes', 'html_data']}); });</script>
+
+</div>
+</div>
+
+
+<div class="col-md-10">
+<h1>Context objects</h1>
+<div id="tipue_search_content"></div>
+
+<p>In the <link class="ok"> <a href="org.specs2.guide.Contexts.html" tooltip="" class="ok">Contexts</a></link> section we have seen how to create contexts for each example in a specification. Whilst you generally want to group all the examples having the same kind of setup in the same specification, this is not always the case. So if you have a situation where you just need to create a “local” context for just a few examples here is what you can do.</p>
+<h3 id="use-case-classes">Use case classes</h3>
+<p>In an acceptance specification you can simply use case classes to get a “fresh” context on some examples:</p>
+<pre><code class="prettyprint">class ContextSpec extends Specification { def is = s2&quot;&quot;&quot;
+  this is the first example                          ${trees().e1}
+  this is the second example                         ${trees().e2}
+&quot;&quot;&quot;
+
+  case class trees() {
+    val tree = createATreeWith4Nodes
+
+    // each example has access to a brand new tree object
+    def e1 = tree.removeNodes(2, 3) must have size(2)
+    def e2 = tree.removeNodes(2, 3, 4) must have size(1)
+  }
+}</code></pre>
+<p>If you also want to include some setup/cleanup behavior you can use the <code class="prettyprint">Before</code> or <code class="prettyprint">After</code> traits (or <code class="prettyprint">BeforeAfter</code> or <code class="prettyprint">Around</code>):</p>
+<pre><code class="prettyprint">class ContextSpec extends Specification { def is = s2&quot;&quot;&quot;
+  this is the first example                          ${trees().e1}
+  this is the second example                         ${trees().e2}
+&quot;&quot;&quot;
+
+  case class trees() extends specification.After {
+    lazy val tree = getATreeWith4NodesFromTheDatabase
+
+    // you need to define the &quot;after&quot; method
+    def after = cleanupDB()
+
+    // this is equivalent to: def e1 = this.apply { ... }
+    def e1 = this { tree.removeNodes(2, 3) must have size(2) }
+    def e2 = this { tree.removeNodes(2, 3, 4) must have size(1) }
+  }
+}</code></pre>
+<p>As you can see the <code class="prettyprint">Before</code>, <code class="prettyprint">After</code>,… traits are very similar to their <code class="prettyprint">BeforeEach</code>, <code class="prettyprint">AfterEach</code>,… counterparts. One good thing about this technique is that each example has access to the current state being set (a bit like when using the <code class="prettyprint">ForEach</code> trait).</p>
+<h3 id="context-object">Context object</h3>
+<p>A slightly different technique consists in creating an object extending <code class="prettyprint">Before</code>, <code class="prettyprint">After</code>, <code class="prettyprint">BeforeAfter</code> or <code class="prettyprint">Around</code> so that you can reuse it independently of examples:</p>
+<pre><code class="prettyprint">object http extends Around {
+  def around[T : AsResult](t: =&gt;T) = openHttpSession(&quot;test&quot;) {
+    AsResult(t)  // execute t inside a http session
+  }
+}
+
+s2&quot;&quot;&quot;
+this is a first example where the code executes inside a http session ${http(e1)}
+and another one                                                       ${http(e2)}
+&quot;&quot;&quot;
+
+def e1 = ok // do something
+def e2 = ok // here too</code></pre>
+<p>This works because each “context” object has an <code class="prettyprint">apply</code> method taking <code class="prettyprint">R : AsResult</code> and returning <code class="prettyprint">Result</code>.</p>
+<p>Finally a last kind of “context” object, a <code class="prettyprint">Fixture</code> can be used to inject some state:</p>
+<pre><code class="prettyprint">val evenNumbers = new Fixture[Int] {
+  def apply[R : AsResult](f: Int =&gt; R) = {
+    // test f with 1, 2, 3
+    Seq(1, 2, 3).foldLeft(Success(): Result) { (res, i) =&gt;
+      res and AsResult(f(i))
+    }
+  }
+}
+
+s2&quot;even numbers can be divided by 2  $e1&quot;
+
+def e1 = evenNumbers { i: Int =&gt; i % 2 === 0 }</code></pre>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('#tipue_search_input').tipuesearch({
+    'show': 6
+  });
+});
+</script>
+</div>
+
+</body>
+</html>

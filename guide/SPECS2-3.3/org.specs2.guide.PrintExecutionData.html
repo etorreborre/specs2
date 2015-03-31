@@ -1,0 +1,137 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Print execution data</title>
+    <link href="./css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="./css/bootstrap.min.css"                           type="text/css" rel="stylesheet" />
+    <link href="./css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="./css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="./css/tabber.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/tipuesearch.css"                             type="text/css" rel="stylesheet" />
+    <link href="./css/specs2.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/specs2-user.css"                             type="text/css" rel="stylesheet" />
+
+    <script src="./javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="./javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="./javascript/tabber.js"                           type="text/javascript"></script>
+    <script src="./javascript/tabber_start.js"                     type="text/javascript"></script>
+    <script src="./javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="./javascript/specs2.js"                           type="text/javascript"></script>
+    <script src="./javascript/specs2-user.js"                      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_set.js"      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_contents.js" type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch.min.js"      type="text/javascript"></script>
+
+</head>
+<body onload="prettyPrint()">
+
+<div class="container">
+
+<div class="col-md-2 sidebar-outer">
+<div class="col-md-2 fixed">
+
+<!-- search box -->
+<div class="search-box">
+  <form action="search.html">
+    <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
+  </form>
+</div>
+
+<!-- table of contents -->
+<div id="tree"><ul>
+                <li id="org-specs2-guide-consoleoutput"><a href="org.specs2.guide.ConsoleOutput.html" title="Console output">Console output</a>
+      <ul><ul><li><a href="org.specs2.guide.ConsoleOutput.html#show-only" title="Show only">Show only</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#stacktracefilter" title="StackTraceFilter">StackTraceFilter</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#diffs" title="Diffs">Diffs</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#colors" title="Colors">Colors</a>
+          
+        </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul></div><script>$(function () { $('#tree').jstree({'core':{'initially_open':['org-specs2-guide-printexecutiondata'], 'animation':200}, 'themes' : {'theme': 'default','url': './css/themes/default/style.css'}, 'plugins':['themes', 'html_data']}); });</script>
+
+</div>
+</div>
+
+
+<div class="col-md-10">
+<h1>Print execution data</h1>
+<div id="tipue_search_content"></div>
+
+<h3 id="print-execution-time">Print execution time</h3>
+<p>Knowing that an example succeeded is fine but sometimes you want to display more information, like the time spent executing the example for instance, or some other state before and after each example.</p>
+<p>This can be done by using the <code class="prettyprint">AroundEach</code> trait and updating the <code class="prettyprint">Result</code> of the example execution with whatever you want to display:</p>
+<pre><code class="prettyprint">trait Timed extends AroundEach {
+  def around[T : AsResult](t: =&gt;T): Result = {
+    // use `ResultExecution.execute` to catch possible exceptions
+    val (result, timer) = withTimer(ResultExecution.execute(AsResult(t)))
+
+    // update the result with a piece of text which will be displayed in the console
+    result.updateExpected(&quot;Execution time: &quot;+timer.time)
+  }
+
+  /** mesure the execution time of a piece of code */
+  def withTimer[T](t: =&gt;T): (T, SimpleTimer) = {
+    val timer = (new SimpleTimer).start
+    val result = t
+    (result, timer.stop)
+  }
+}</code></pre>
+<p>When you execute a specification mixing the <code class="prettyprint">Timed</code> trait you should see the timing of each example displayed in the console:</p>
+<pre><code class="prettyprint">[info] TimedExecutionSpecification
+[info]
+[info] + example 1
+[info] Execution time: 94 ms
+[info] + example 2
+[info] Execution time: 11 ms</code></pre>
+<p>Note that this is just an example. The same functionality is actually accessible with the [<code class="prettyprint">showtimes</code> argument](<link class="ok"> <a href="org.specs2.guide.ConsoleOutput.html" tooltip="" class="ok">Console output</a></link>).</p>
+<h3 id="with-the-example-description">With the example description</h3>
+<p>More generally, you can both use the example description and the example body to display custom messages. To do this you need to intercept the creation of examples by creating a new <code class="prettyprint">FragmentFactory</code>:</p>
+<pre><code class="prettyprint">// a trait to create an Around context using the example description
+trait TimedContext {
+  def context(exampleDescription: String) = new Timed(exampleDescription)
+
+  case class Timed(exampleDescription: String) extends Around {
+    def around[T : AsResult](t: =&gt;T): Result = {
+      val (result, timer) = withTimer(ResultExecution.execute(AsResult(t)))
+      result.updateExpected(s&quot;Execution time for example $$exampleDescription: $${timer.time}&quot;)
+    }
+
+    def withTimer[T](t: =&gt;T): (T, SimpleTimer) = {
+      val timer = (new SimpleTimer).start
+      val result = t
+      (result, timer.stop)
+    }
+  }
+}
+
+class TimedSpecification extends Specification with TimedContext { def is = s2&quot;&quot;&quot;
+ Example 1 $ok
+ Example 2 $ok
+&quot;&quot;&quot;
+
+  // create a new DefaultFragmentFactory where the body of the example uses
+  // the current example description
+  override lazy val fragmentFactory = new DefaultFragmentFactory {
+    override def example[T : AsResult](description: String, t: =&gt;T): Fragment =
+      super.example(description, context(description)(AsResult(t)))
+  }
+}</code></pre>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('#tipue_search_input').tipuesearch({
+    'show': 6
+  });
+});
+</script>
+</div>
+
+</body>
+</html>

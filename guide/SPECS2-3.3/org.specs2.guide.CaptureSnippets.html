@@ -1,0 +1,177 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Capture snippets</title>
+    <link href="./css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="./css/bootstrap.min.css"                           type="text/css" rel="stylesheet" />
+    <link href="./css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="./css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="./css/tabber.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/tipuesearch.css"                             type="text/css" rel="stylesheet" />
+    <link href="./css/specs2.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/specs2-user.css"                             type="text/css" rel="stylesheet" />
+
+    <script src="./javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="./javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="./javascript/tabber.js"                           type="text/javascript"></script>
+    <script src="./javascript/tabber_start.js"                     type="text/javascript"></script>
+    <script src="./javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="./javascript/specs2.js"                           type="text/javascript"></script>
+    <script src="./javascript/specs2-user.js"                      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_set.js"      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_contents.js" type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch.min.js"      type="text/javascript"></script>
+
+</head>
+<body onload="prettyPrint()">
+
+<div class="container">
+
+<div class="col-md-2 sidebar-outer">
+<div class="col-md-2 fixed">
+
+<!-- search box -->
+<div class="search-box">
+  <form action="search.html">
+    <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
+  </form>
+</div>
+
+<!-- table of contents -->
+<div id="tree"><ul>
+                <li id="org-specs2-guide-consoleoutput"><a href="org.specs2.guide.ConsoleOutput.html" title="Console output">Console output</a>
+      <ul><ul><li><a href="org.specs2.guide.ConsoleOutput.html#show-only" title="Show only">Show only</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#stacktracefilter" title="StackTraceFilter">StackTraceFilter</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#diffs" title="Diffs">Diffs</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#colors" title="Colors">Colors</a>
+          
+        </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul></div><script>$(function () { $('#tree').jstree({'core':{'initially_open':['org-specs2-guide-capturesnippets'], 'animation':200}, 'themes' : {'theme': 'default','url': './css/themes/default/style.css'}, 'plugins':['themes', 'html_data']}); });</script>
+
+</div>
+</div>
+
+
+<div class="col-md-10">
+<h1>Capture snippets</h1>
+<div id="tipue_search_content"></div>
+
+<p>It is possible to include pieces of code in your documentation with the <code class="prettyprint">org.specs2.specification.Snippets</code> trait using the <code class="prettyprint">snippet</code> method to capture a block code with marker comments to delimit the parts you want to show.</p>
+<p>What does this look like?</p>
+<h4 id="snippet">Snippet</h4>
+<p>Here is an example of using the <code class="prettyprint">snippet</code> method:</p>
+<pre><code class="prettyprint">s2&quot;&quot;&quot;
+This is a multi-line string with a code snippet: ${ snippet {
+def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
+factorial(3) == 6
+}}
+&quot;&quot;&quot;</code></pre>
+<p>When you use the <code class="prettyprint">snippet</code> method, the reports will show:</p>
+<p>This is a multi-line string with a code snippet:</p>
+<pre><code class="prettyprint">def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
+factorial(3) == 6</code></pre>
+<h4 id="cuts">Cuts</h4>
+<p>Since snippets are compiled code, you might have to include many declarations, like imports or variables definitions to make the code compile. This can make your documentation more verbose than necessary so you can hide those definitions by delimiting the code to show with some comments of the form <code class="prettyprint">// 8&lt;--</code>:</p>
+<pre><code class="prettyprint">s2&quot;&quot;&quot;
+This is a snippet of code with one relevant line: ${ snippet {
+// 8&lt;--
+def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
+// 8&lt;--
+factorial(3) == 6
+// 8&lt;--
+}}
+&quot;&quot;&quot;</code></pre>
+<p>The snippet above will only show <code class="prettyprint">factorial(3) == 6</code>. You can repeat this pattern several times:</p>
+<pre><code class="prettyprint">s2&quot;&quot;&quot;
+This is a snippet of code with 2 relevant lines: ${ snippet {
+// 8&lt;--
+def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
+// 8&lt;--
+factorial(3) == 6
+// 8&lt;--
+val n = 4
+// 8&lt;--
+factorial(n) == 24
+}}
+&quot;&quot;&quot;</code></pre>
+<p>This just displays:</p>
+<pre><code class="prettyprint">factorial(3) == 6
+factorial(n) == 24</code></pre>
+<h4 id="evaluation">Evaluation</h4>
+<p>By default the last value of a Snippet is not shown but you can display it with the <code class="prettyprint">eval</code> method:</p>
+<pre><code class="prettyprint">s2&quot;&quot;&quot;
+This is a snippet of code with a result: ${ snippet {
+factorial(3)
+}.eval}
+&quot;&quot;&quot;</code></pre>
+<p>This displays:</p>
+<pre><code class="prettyprint">factorial(3)</code></pre>
+<pre><code class="prettyprint">&gt; 6</code></pre>
+<h4 id="offsets">Offsets</h4>
+<p>It is possible to adjust the margin of captured source code by adding or removing whitespace:</p>
+<pre><code class="prettyprint">s2&quot;&quot;&quot;
+This is a snippet of code with a negative offset to align the code to the border of the screen: ${ snippet {
+   def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
+   factorial(3)
+}.offsetIs(-3)}
+&quot;&quot;&quot;</code></pre>
+<p>This displays:</p>
+<pre><code class="prettyprint">factorial(3)</code></pre>
+<h4 id="parameters">Parameters</h4>
+<p>All of the settings above: cuts, offset,… are coming from an implicit <code class="prettyprint">SnippetParams</code> object that is changing the behavior of the created Snippets. You can choose, for a given scope, to replace these parameters with other ones and simply shadow the default parameters with your own, for example to always evaluate the snippets results:</p>
+<pre><code class="prettyprint">implicit snippetParams = SnippetParams(eval = true)</code></pre>
+<p>The parameters you can set are:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code class="prettyprint">trimExpression</code></td>
+<td align="left">function that is trimming the expression from newlines or accolades</td>
+</tr>
+<tr class="even">
+<td align="left"><code class="prettyprint">cutter</code></td>
+<td align="left">function to remove parts which must not be shown</td>
+</tr>
+<tr class="odd">
+<td align="left"><code class="prettyprint">asCode</code></td>
+<td align="left">function to render the resulting text (as Markdown for example)</td>
+</tr>
+<tr class="even">
+<td align="left"><code class="prettyprint">prompt</code></td>
+<td align="left">function to display the evaluated result with a prompt</td>
+</tr>
+<tr class="odd">
+<td align="left"><code class="prettyprint">eval</code></td>
+<td align="left">boolean indicating if a snippet must be evaluated</td>
+</tr>
+<tr class="even">
+<td align="left"><code class="prettyprint">verify</code></td>
+<td align="left">function checking the snippet value</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('#tipue_search_input').tipuesearch({
+    'show': 6
+  });
+});
+</script>
+</div>
+
+</body>
+</html>

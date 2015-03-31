@@ -1,0 +1,127 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Dependency matchers</title>
+    <link href="./css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="./css/bootstrap.min.css"                           type="text/css" rel="stylesheet" />
+    <link href="./css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="./css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="./css/tabber.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/tipuesearch.css"                             type="text/css" rel="stylesheet" />
+    <link href="./css/specs2.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/specs2-user.css"                             type="text/css" rel="stylesheet" />
+
+    <script src="./javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="./javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="./javascript/tabber.js"                           type="text/javascript"></script>
+    <script src="./javascript/tabber_start.js"                     type="text/javascript"></script>
+    <script src="./javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="./javascript/specs2.js"                           type="text/javascript"></script>
+    <script src="./javascript/specs2-user.js"                      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_set.js"      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_contents.js" type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch.min.js"      type="text/javascript"></script>
+
+</head>
+<body onload="prettyPrint()">
+
+<div class="container">
+
+<div class="col-md-2 sidebar-outer">
+<div class="col-md-2 fixed">
+
+<!-- search box -->
+<div class="search-box">
+  <form action="search.html">
+    <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
+  </form>
+</div>
+
+<!-- table of contents -->
+<div id="tree"><ul>
+                <li id="org-specs2-guide-consoleoutput"><a href="org.specs2.guide.ConsoleOutput.html" title="Console output">Console output</a>
+      <ul><ul><li><a href="org.specs2.guide.ConsoleOutput.html#show-only" title="Show only">Show only</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#stacktracefilter" title="StackTraceFilter">StackTraceFilter</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#diffs" title="Diffs">Diffs</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#colors" title="Colors">Colors</a>
+          
+        </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul></div><script>$(function () { $('#tree').jstree({'core':{'initially_open':['org-specs2-guide-matchers-dependencymatchers'], 'animation':200}, 'themes' : {'theme': 'default','url': './css/themes/default/style.css'}, 'plugins':['themes', 'html_data']}); });</script>
+
+</div>
+</div>
+
+
+<div class="col-md-10">
+<h1>Dependency matchers</h1>
+<div id="tipue_search_content"></div>
+
+<p>It is highly desirable to have acyclic dependencies between the packages of a project. This often leads to describing the packages structure as “layered”: each package on a layer can only depend on a package on a lower layer. <s2>specs2</s2> helps you enforce this design property with specific matchers.</p>
+<h3 id="layers-definition">Layers definition</h3>
+<p>First you need to define the packages and their expected dependencies. Mix-in the <code class="prettyprint">org.specs2.specification.Analysis</code> trait and define layers (taking <s2>specs2</s2> as an example):</p>
+<pre><code class="prettyprint">layers (
+  &quot;runner&quot;,
+  &quot;reporter&quot;,
+  &quot;specification mutable&quot;,
+  &quot;mock      form&quot;,
+  &quot;matcher&quot;,
+  &quot;execute&quot;,
+  &quot;reflect    xml  time html&quot;,
+  &quot;collection control io text main data&quot;).withPrefix(&quot;org.specs2&quot;)</code></pre>
+<p>The above expression defines layers as an ordered list of <code class="prettyprint">String</code>s containing space-separated package names. It is supplemented by a <code class="prettyprint">withPrefix</code> declaration to factor out the common package prefix between all these packages.</p>
+<p>By default, the packages are supposed to correspond to directories in the <code class="prettyprint">src/target/scala-&lt;version&gt;/classes</code> directory. If your project has a different layout you can declare another target directory:</p>
+<pre><code class="prettyprint">layers(&quot;...&quot;).inTargetDir(&quot;out&quot; / &quot;classes&quot;)</code></pre>
+<h3 id="inclusionexclusion">Inclusion/Exclusion</h3>
+<p>Every rule has exceptions :-). In some rare cases, it might be desirable to exclude a class from being checked on a given layer. To do this, you can use the <code class="prettyprint">include/exclude</code> methods on the <code class="prettyprint">Layer</code> class:</p>
+<pre><code class="prettyprint">layers (
+  &quot;runner&quot;,
+  &quot;reporter&quot;,
+  &quot;specification mutable&quot;.exclude(&quot;mutable.SpecificationWithJUnit&quot;),
+  &quot;mock      form&quot;,
+  &quot;matcher&quot;,
+  &quot;execute&quot;,
+  &quot;reflect  xml  time html&quot;,
+  &quot;collection control io text main data&quot;).withPrefix(&quot;org.specs2&quot;)</code></pre>
+<p>The <code class="prettyprint">include/exclude</code> methods accept a list of regular expressions to:</p>
+<ul>
+<li>exclude fully qualified class names (generally, only <code class="prettyprint">exclude</code> will be necessary)</li>
+<li>re-include fully qualified class names if the exclusion list is to big</li>
+</ul>
+<h3 id="verification">Verification</h3>
+<p>Now you’ve defined layers, you can use the <code class="prettyprint">beRespected</code> matcher to check if all the dependencies are verified:</p>
+<pre><code class="prettyprint">val design = layers(&quot;...&quot;)
+design must beRespected</code></pre>
+<p>If some dependencies are not respected:</p>
+<pre><code class="prettyprint">[error] those dependencies are not satisfied:
+[error] org.specs2.main x-&gt; org.specs2.io because org.specs2.io.FileSystem -&gt; org.specs2.main.Arguments
+[error] org.specs2.main x-&gt; org.specs2.io because org.specs2.io.FileSystem -&gt; org.specs2.main.ArgumentsArgs</code></pre>
+<h3 id="layers-as-an-example">Layers as an Example</h3>
+<p>The <code class="prettyprint">org.specs2.specification.Analysis</code> trait allows to directly embed the layers definition in a <code class="prettyprint">Specification</code> and turn it into an <code class="prettyprint">Example</code>:</p>
+<pre><code class="prettyprint">class DependenciesSpec extends Specification with specification.Analysis { def is =
+  &quot;this is the application design&quot; ^
+    layers(
+      &quot;gui commandline&quot;,
+      &quot;controller&quot;,
+      &quot;backend&quot;
+    )
+}</code></pre>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('#tipue_search_input').tipuesearch({
+    'show': 6
+  });
+});
+</script>
+</div>
+
+</body>
+</html>

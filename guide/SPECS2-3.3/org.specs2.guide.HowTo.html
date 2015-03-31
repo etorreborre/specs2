@@ -1,0 +1,184 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>How to</title>
+    <link href="./css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="./css/bootstrap.min.css"                           type="text/css" rel="stylesheet" />
+    <link href="./css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="./css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="./css/tabber.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/tipuesearch.css"                             type="text/css" rel="stylesheet" />
+    <link href="./css/specs2.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/specs2-user.css"                             type="text/css" rel="stylesheet" />
+
+    <script src="./javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="./javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="./javascript/tabber.js"                           type="text/javascript"></script>
+    <script src="./javascript/tabber_start.js"                     type="text/javascript"></script>
+    <script src="./javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="./javascript/specs2.js"                           type="text/javascript"></script>
+    <script src="./javascript/specs2-user.js"                      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_set.js"      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_contents.js" type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch.min.js"      type="text/javascript"></script>
+
+</head>
+<body onload="prettyPrint()">
+
+<div class="container">
+
+<div class="col-md-2 sidebar-outer">
+<div class="col-md-2 fixed">
+
+<!-- search box -->
+<div class="search-box">
+  <form action="search.html">
+    <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
+  </form>
+</div>
+
+<!-- table of contents -->
+<div id="tree"><ul>
+                <li id="org-specs2-guide-consoleoutput"><a href="org.specs2.guide.ConsoleOutput.html" title="Console output">Console output</a>
+      <ul><ul><li><a href="org.specs2.guide.ConsoleOutput.html#show-only" title="Show only">Show only</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#stacktracefilter" title="StackTraceFilter">StackTraceFilter</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#diffs" title="Diffs">Diffs</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#colors" title="Colors">Colors</a>
+          
+        </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul></div><script>$(function () { $('#tree').jstree({'core':{'initially_open':['org-specs2-guide-howto'], 'animation':200}, 'themes' : {'theme': 'default','url': './css/themes/default/style.css'}, 'plugins':['themes', 'html_data']}); });</script>
+
+</div>
+</div>
+
+
+<div class="col-md-10">
+<h1>How to</h1>
+<div id="tipue_search_content"></div>
+
+<table>
+<thead>
+<tr class="header">
+<th align="left">Question</th>
+<th align="left">See</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">How to execute an action before all the examples?</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.Contexts.html" tooltip="" class="ok">Contexts</a></link></td>
+</tr>
+<tr class="even">
+<td align="left">How to execute an action before each example?</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.Contexts.html" tooltip="" class="ok">Contexts</a></link></td>
+</tr>
+<tr class="odd">
+<td align="left">Can I create and reuse a Specification “template”?</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.SpecificationTemplate.html" tooltip="" class="ok">Specification template</a></link></td>
+</tr>
+<tr class="even">
+<td align="left">How can I pass some data to each example?</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.Contexts.html" tooltip="" class="ok">Contexts</a></link></td>
+</tr>
+<tr class="odd">
+<td align="left">Can I add more information to my results for easier diagnostic?</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.ExpectationDescription.html" tooltip="" class="ok">Expectation description</a></link></td>
+</tr>
+<tr class="even">
+<td align="left">Is it possible to execute a Specification sequentially?</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.Execution.html" tooltip="" class="ok">Execution</a></link></td>
+</tr>
+<tr class="odd">
+<td align="left">How to mark an example as <code class="prettyprint">pending</code> until it is fixed?</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.PendingUntilFixedExamples.html" tooltip="" class="ok">Pending until fixed</a></link></td>
+</tr>
+<tr class="even">
+<td align="left">Can I simply mark a block of code as <code class="prettyprint">pending</code>?</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.StandardResults.html" tooltip="" class="ok">Standard results</a></link></td>
+</tr>
+<tr class="odd">
+<td align="left">Is there a way to run only one example?</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.Selection.html" tooltip="" class="ok">Selection</a></link></td>
+</tr>
+<tr class="even">
+<td align="left">I would like to display the execution time of each example</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.ConsoleOutput.html" tooltip="" class="ok">Console output</a></link></td>
+</tr>
+<tr class="odd">
+<td align="left">Can I use a for loop to create examples or results?</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.ForLoops.html" tooltip="" class="ok">For loops</a></link></td>
+</tr>
+<tr class="even">
+<td align="left">How can I tag examples?</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.Selection.html" tooltip="" class="ok">Selection</a></link></td>
+</tr>
+<tr class="odd">
+<td align="left">Can I skip examples?</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.SkipExamples.html" tooltip="" class="ok">Skip examples</a></link></td>
+</tr>
+<tr class="even">
+<td align="left">Is it possible to modify the behaviour of a Specification with command-line arguments?</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.UseCommandLineArguments.html" tooltip="" class="ok">Use command-line arguments</a></link></td>
+</tr>
+<tr class="odd">
+<td align="left">How to capture snippets of code and add them to my Specification?</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.CaptureSnippets.html" tooltip="" class="ok">Capture snippets</a></link></td>
+</tr>
+<tr class="even">
+<td align="left">Can I create an HTML index of all the specifications?</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.HtmlOutput.html" tooltip="" class="ok">Html output</a></link></td>
+</tr>
+<tr class="odd">
+<td align="left">Is it possible to execute a Specification in a random order?</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.RandomExecution.html" tooltip="" class="ok">Random execution</a></link></td>
+</tr>
+<tr class="even">
+<td align="left">How can I easily print expressions to the console?</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.DebugStatements.html" tooltip="" class="ok">Debug statements</a></link></td>
+</tr>
+<tr class="odd">
+<td align="left">Can <s2>specs2</s2> create a JUnit xml file for a continuous integration server?</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.JUnitXmlOutput.html" tooltip="" class="ok">JUnit XML output</a></link></td>
+</tr>
+<tr class="even">
+<td align="left">Is it possible to reduce the number of implicits in scope and improve compilation times?</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.LightweightSpecs.html" tooltip="" class="ok">Lightweight specs</a></link></td>
+</tr>
+<tr class="odd">
+<td align="left">How can I collect execution data?</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.PrintExecutionData.html" tooltip="" class="ok">Print execution data</a></link></td>
+</tr>
+<tr class="even">
+<td align="left">Can I create an example description spanning several lines?</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.MultilineDescriptions.html" tooltip="" class="ok">Multiline descriptions</a></link></td>
+</tr>
+<tr class="odd">
+<td align="left">How to isolate each example from another so that they don’t share variables</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.Isolation.html" tooltip="" class="ok">Isolation</a></link></td>
+</tr>
+<tr class="even">
+<td align="left">Help, I need to troubleshoot my issues!</td>
+<td align="left"><link class="ok"><span class="pending ok"> </span> <a href="org.specs2.guide.Troubleshooting.html" tooltip="" class="ok">Troubleshooting</a></link></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('#tipue_search_input').tipuesearch({
+    'show': 6
+  });
+});
+</script>
+</div>
+
+</body>
+</html>

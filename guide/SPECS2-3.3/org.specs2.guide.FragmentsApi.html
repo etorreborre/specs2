@@ -1,0 +1,161 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Fragments API</title>
+    <link href="./css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="./css/bootstrap.min.css"                           type="text/css" rel="stylesheet" />
+    <link href="./css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="./css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="./css/tabber.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/tipuesearch.css"                             type="text/css" rel="stylesheet" />
+    <link href="./css/specs2.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/specs2-user.css"                             type="text/css" rel="stylesheet" />
+
+    <script src="./javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="./javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="./javascript/tabber.js"                           type="text/javascript"></script>
+    <script src="./javascript/tabber_start.js"                     type="text/javascript"></script>
+    <script src="./javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="./javascript/specs2.js"                           type="text/javascript"></script>
+    <script src="./javascript/specs2-user.js"                      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_set.js"      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_contents.js" type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch.min.js"      type="text/javascript"></script>
+
+</head>
+<body onload="prettyPrint()">
+
+<div class="container">
+
+<div class="col-md-2 sidebar-outer">
+<div class="col-md-2 fixed">
+
+<!-- search box -->
+<div class="search-box">
+  <form action="search.html">
+    <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
+  </form>
+</div>
+
+<!-- table of contents -->
+<div id="tree"><ul>
+                <li id="org-specs2-guide-consoleoutput"><a href="org.specs2.guide.ConsoleOutput.html" title="Console output">Console output</a>
+      <ul><ul><li><a href="org.specs2.guide.ConsoleOutput.html#show-only" title="Show only">Show only</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#stacktracefilter" title="StackTraceFilter">StackTraceFilter</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#diffs" title="Diffs">Diffs</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#colors" title="Colors">Colors</a>
+          
+        </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul></div><script>$(function () { $('#tree').jstree({'core':{'initially_open':['org-specs2-guide-fragmentsapi'], 'animation':200}, 'themes' : {'theme': 'default','url': './css/themes/default/style.css'}, 'plugins':['themes', 'html_data']}); });</script>
+
+</div>
+</div>
+
+
+<div class="col-md-10">
+<h1>Fragments API</h1>
+<div id="tipue_search_content"></div>
+
+<p>In <s2>specs2</s2> a specification can simply be viewed as a sequence of “Fragments”. A <code class="prettyprint">Fragment</code> is something which has:</p>
+<ul>
+<li>a <code class="prettyprint">Description</code></li>
+<li>an <code class="prettyprint">Execution</code></li>
+</ul>
+<p>All the elements encountered in this User Guide fall under this representation:</p>
+<ul>
+<li>an <code class="prettyprint">Example</code> is a <code class="prettyprint">Fragment</code> with a <code class="prettyprint">Text</code> description and an <code class="prettyprint">Execution</code> returning a <code class="prettyprint">Result</code></li>
+<li>a <code class="prettyprint">Step</code> is a <code class="prettyprint">Fragment</code> with no description and a special <code class="prettyprint">Execution</code> declaring that everything before the step must be executed before the <code class="prettyprint">Step</code> is executed</li>
+<li>a <code class="prettyprint">Text</code> is a <code class="prettyprint">Fragment</code> with a <code class="prettyprint">Text</code> description and no <code class="prettyprint">Execution</code></li>
+</ul>
+<p>The role of the various DSLs in acceptance and unit specifications is to create those fragments and assemble them into a bigger <code class="prettyprint">Fragments</code> object. They do this using:</p>
+<ul>
+<li>the <code class="prettyprint">FragmentFactory</code> API to create individual fragments</li>
+<li>the <code class="prettyprint">Fragments</code> API to assemble them</li>
+</ul>
+<h3 id="the-fragmentfactory-api">The <code class="prettyprint">FragmentFactory</code> API</h3>
+<p>The <code class="prettyprint">org.specs2.specification.create.FragmentFactory</code> trait possesses different methods to create:</p>
+<ul>
+<li>texts</li>
+<li>examples</li>
+<li>steps / actions</li>
+<li>tags</li>
+<li>references</li>
+<li>“formatting” fragments (break, paragraph, tab…)</li>
+</ul>
+<p>Please have a look at the ScalaDoc to see the exact API for the factory and look at the source code for the default implementation in <code class="prettyprint">org.specs2.specification.create.DefaultFragmentFactory</code>.</p>
+<h3 id="the-fragments-api">The <code class="prettyprint">Fragments</code> API</h3>
+<p>If you know how to create examples, texts and steps you will need to append them together as <code class="prettyprint">Fragments</code>. You can create a <code class="prettyprint">Fragments</code> object by using <code class="prettyprint">Fragments.apply</code>:</p>
+<pre><code class="prettyprint">val ff = fragmentFactory
+
+Fragments(ff.text(&quot;introduction&quot;), ff.example(&quot;first example&quot;, success), ff.break)</code></pre>
+<p>Then you can use the methods of the <code class="prettyprint">org.specs2.specification.core.Fragments</code> class to add more fragments or to modify existing ones:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Method</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code class="prettyprint">append(f: Fragment)</code></td>
+<td align="left">to append a single fragment</td>
+</tr>
+<tr class="even">
+<td align="left"><code class="prettyprint">append(fs: Fragments)</code></td>
+<td align="left">to append another <code class="prettyprint">Fragments</code> object</td>
+</tr>
+<tr class="odd">
+<td align="left"><code class="prettyprint">prepend(...)</code></td>
+<td align="left">to do the same as above but prepending instead of appending</td>
+</tr>
+<tr class="even">
+<td align="left"><code class="prettyprint">append(fs: Seq[Fragment])</code></td>
+<td align="left">to append a sequence</td>
+</tr>
+<tr class="odd">
+<td align="left"><code class="prettyprint">filter(f: Fragment =&gt; Boolean)</code></td>
+<td align="left">to filter out some fragments</td>
+</tr>
+<tr class="even">
+<td align="left"><code class="prettyprint">map(f: Fragment =&gt; Fragment)</code></td>
+<td align="left">to modify each fragment</td>
+</tr>
+<tr class="odd">
+<td align="left"><code class="prettyprint">mapDescription(f: Description =&gt; Description)</code></td>
+<td align="left">to just modify the descriptions</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-fragments-dsl">The <code class="prettyprint">Fragments</code> DSL</h3>
+<p>The <code class="prettyprint">org.specs2.specification.dsl.FragmentsDsl</code> trait provides a very versatile <code class="prettyprint">^</code> operator to append fragments together, so you can write:</p>
+<pre><code class="prettyprint">val ff = fragmentFactory
+
+val fs = Fragments(ff.text(&quot;introduction&quot;), ff.example(&quot;first example&quot;, success), ff.break)
+val f1 = ff.text(&quot;f1&quot;)
+
+// all those combinations are possible and return a `Fragment` object
+fs ^ f1
+f1 ^ fs
+fs ^ fs
+f1 ^ f1</code></pre>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('#tipue_search_input').tipuesearch({
+    'show': 6
+  });
+});
+</script>
+</div>
+
+</body>
+</html>

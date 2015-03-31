@@ -1,0 +1,125 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Auto-numbered examples</title>
+    <link href="./css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="./css/bootstrap.min.css"                           type="text/css" rel="stylesheet" />
+    <link href="./css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="./css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="./css/tabber.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/tipuesearch.css"                             type="text/css" rel="stylesheet" />
+    <link href="./css/specs2.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/specs2-user.css"                             type="text/css" rel="stylesheet" />
+
+    <script src="./javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="./javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="./javascript/tabber.js"                           type="text/javascript"></script>
+    <script src="./javascript/tabber_start.js"                     type="text/javascript"></script>
+    <script src="./javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="./javascript/specs2.js"                           type="text/javascript"></script>
+    <script src="./javascript/specs2-user.js"                      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_set.js"      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_contents.js" type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch.min.js"      type="text/javascript"></script>
+
+</head>
+<body onload="prettyPrint()">
+
+<div class="container">
+
+<div class="col-md-2 sidebar-outer">
+<div class="col-md-2 fixed">
+
+<!-- search box -->
+<div class="search-box">
+  <form action="search.html">
+    <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
+  </form>
+</div>
+
+<!-- table of contents -->
+<div id="tree"><ul>
+                <li id="org-specs2-guide-consoleoutput"><a href="org.specs2.guide.ConsoleOutput.html" title="Console output">Console output</a>
+      <ul><ul><li><a href="org.specs2.guide.ConsoleOutput.html#show-only" title="Show only">Show only</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#stacktracefilter" title="StackTraceFilter">StackTraceFilter</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#diffs" title="Diffs">Diffs</a>
+          
+        </li><li><a href="org.specs2.guide.ConsoleOutput.html#colors" title="Colors">Colors</a>
+          
+        </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul></div><script>$(function () { $('#tree').jstree({'core':{'initially_open':['org-specs2-guide-autonumberedexamples'], 'animation':200}, 'themes' : {'theme': 'default','url': './css/themes/default/style.css'}, 'plugins':['themes', 'html_data']}); });</script>
+
+</div>
+</div>
+
+
+<div class="col-md-10">
+<h1>Auto-numbered examples</h1>
+<div id="tipue_search_content"></div>
+
+<p>In the <link class="ok"> <a href="org.specs2.guide.NamedExamples.html" tooltip="" class="ok">named examples</a></link> section we can see that there is a way to create groups of examples with standard names and use these names in the specification text (via the <code class="prettyprint">s2</code> interpolated string). Here we go a step further.</p>
+<p>The specification text is going to be some pure text, the examples will be described as example groups and the numbers will be created automatically. What does it look like?</p>
+<pre><code class="prettyprint">class BulletedExamplesSpec extends script.Specification with Groups { def is = &quot;&quot;&quot;
+  This is an introduction
+
+  First section
+  =============
+
+  A bit more text there.
+   + and the first example
+   + and the second example
+
+  Second section
+  =============
+
+  Then another section
+   + and the third example
+   + and the fourth example
+
+&quot;&quot;&quot;
+
+  &quot;first section&quot; - new group {
+    eg := 1 must_== 1
+    eg := 1 must_== 1
+  }
+
+  &quot;second section&quot; - new group {
+    eg := 1 must_== 1
+  }
+}</code></pre>
+<p>This style of specification uses the <code class="prettyprint">org.specs2.specification.script.Specification</code> class and mixes-in the <code class="prettyprint">Groups</code> trait to create example groups. You can notice that:</p>
+<ul>
+<li>Nothing is interpolated in the text that defines the <code class="prettyprint">is</code> method</li>
+<li>groups are anonymous, just called <code class="prettyprint">group</code></li>
+<li>examples are anonymous, just called <code class="prettyprint">eg</code> (<a href="http://en.wikipedia.org/wiki/List_of_Latin_phrases_(E)#exempli_gratia"><em>exampli gratia</em></a> in latin, meaning “for example”)</li>
+</ul>
+<p>At runtime, the text gets parsed and:</p>
+<ul>
+<li>each Markdown header (underlined with <code class="prettyprint">=====</code> or starting with <code class="prettyprint">#</code>, <code class="prettyprint">##</code>, <code class="prettyprint">###</code>,… as per the markdown convention) marks the creation of a new example group</li>
+<li>each text starting with <code class="prettyprint">+</code> marks the creation of an example</li>
+<li>groups and examples in the text are coupled with their counterpart in the code</li>
+<li>if groups or examples are missing in the code, they are still created in the final specification but marked as <code class="prettyprint">pending</code></li>
+<li>each group is enclosed in a <code class="prettyprint">section</code> with the group name (automatically numbered, starting from <code class="prettyprint">g1</code>)</li>
+<li>each example is tagged with its group name, and its number (automatically numbered, starting from <code class="prettyprint">e1</code>)</li>
+</ul>
+<p>So, in the specification above the fourth example will be marked as <code class="prettyprint">pending (g2.e2)</code> where <code class="prettyprint">g2</code> is the group name and <code class="prettyprint">e2</code> is the example name. As you can guess, sections and tags make it easy to just re-run parts of the specification without having to create those sections and tags yourself.</p>
+<p>The major issue with this style of specification is that you cannot use your IDE to navigate from a piece of text to the corresponding code. You have to count the groups and count the number of examples to find the right one.</p>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('#tipue_search_input').tipuesearch({
+    'show': 6
+  });
+});
+</script>
+</div>
+
+</body>
+</html>
