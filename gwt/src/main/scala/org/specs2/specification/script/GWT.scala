@@ -8,6 +8,7 @@ import shapeless.{HList, HNil, ::}
 import shapeless.ops.hlist.{ToTraversable, ToList}
 import execute._
 import ResultLogicalCombinators._
+import scala.collection.mutable
 import scalaz.syntax.std.list._
 
 /**
@@ -254,8 +255,19 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
 
   }
 
-  private implicit def toListAny[H <: HList]: ToList[H, Any] =
-    implicitly[ToTraversable.Aux[H, List, Any]]
+  private implicit def toListAny[H <: HList]: ToList[H, Any] = new ToTraversable[H, List] {
+    type Lub = Any
+    def builder(): mutable.Builder[Lub, List[Lub]] = new scala.collection.mutable.ListBuffer[Lub]
+    def append[LLub](list: H, b: mutable.Builder[LLub, List[LLub]], f: Lub => LLub): Unit = {
+      def add[T <: HList](list: T): Unit =
+        list match {
+          case head :: HNil => b.+=(f(head))
+          case head :: tail => b.+=(f(head)); add(tail)
+          case _            => ()
+        }
+      add(list)
+    }
+  }
 
   private def value(r: Result) = r match {
     case DecoratedResult(v, _) => v
