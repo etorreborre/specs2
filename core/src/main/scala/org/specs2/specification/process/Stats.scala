@@ -15,6 +15,9 @@ import scala.xml._
 
 /**
  * The Stats class store results for the number of:
+ *
+ * - linked specifications
+ * - examples (including linked examples)
  * - successes
  * - expectations
  * - failures
@@ -22,10 +25,9 @@ import scala.xml._
  * - pending
  * - skipped
  *
- *  for each example
- *
  */
-case class Stats(examples:     Int = 0,
+case class Stats(specs:        Int = 0,
+                 examples:     Int = 0,
                  successes:    Int = 0,
                  expectations: Int = 0,
                  failures:     Int = 0,
@@ -68,6 +70,7 @@ case class Stats(examples:     Int = 0,
   def toXml: Elem = {
     val stats = <stats>{trend.map(t => <trend>{t.toXml}</trend>).getOrElse(NodeSeq.Empty)}</stats>
     val attributes = Map(
+      "specs"        -> specs.toString,
       "examples"     -> examples.toString,
       "successes"    -> successes.toString,
       "expectations" -> expectations.toString,
@@ -83,7 +86,9 @@ case class Stats(examples:     Int = 0,
   }
 
   override def toString =
-    "Stats(examples = "     + examples         +", "+
+    "Stats("+
+      "specs = "       + specs            +", "+
+      "examples = "    + examples         +", "+
       "successes = "   + successes        +", "+
       "expectations = "+ expectations     +", "+
       "failures = "    + failures         +", "+
@@ -97,6 +102,7 @@ case class Stats(examples:     Int = 0,
    */
   def negate =
     copy(
+      specs        = -specs,
       examples     = -examples,
       successes    = -successes,
       expectations = -expectations,
@@ -149,7 +155,9 @@ case class Stats(examples:     Int = 0,
     }
 
     args.colors.stats(
-      Seq(displayValue((_:Stats).examples, "example"),
+      Seq(
+        displayValue((_:Stats).specs, "specification", optional = true),
+        displayValue((_:Stats).examples, "example"),
         if (expectations != examples || trendIsDefined((_:Stats).expectations))
           displayValue((_:Stats).expectations, "expectation")
         else
@@ -183,6 +191,7 @@ case object Stats {
   implicit object StatsMonoid extends Monoid[Stats] {
     def append(s1: Stats, s2: =>Stats) = {
       s1.copy(
+        specs        = s1.specs           + s2.specs,
         examples     = s1.examples        + s2.examples,
         successes    = s1.successes       + s2.successes,
         expectations = s1.expectations    + s2.expectations,
@@ -200,12 +209,13 @@ case object Stats {
 
   def apply(result: Result): Stats =
     result match {
-      case s @ Success(_,_)      => Stats(examples = 1, expectations = result.expectationsNb, successes = 1)
-      case f @ Failure(_,_,_,_)  => Stats(examples = 1, expectations = result.expectationsNb, failures = 1)
-      case e @ Error(_,_)        => Stats(examples = 1, expectations = result.expectationsNb, errors = 1)
-      case Pending(_)            => Stats(examples = 1, expectations = result.expectationsNb, pending = 1)
-      case Skipped(_, _)         => Stats(examples = 1, expectations = result.expectationsNb, skipped = 1)
-      case DecoratedResult(t, r) => Stats(r)
+      case s @ Success(_,_)             => Stats(examples = 1, expectations = result.expectationsNb, successes = 1)
+      case f @ Failure(_,_,_,_)         => Stats(examples = 1, expectations = result.expectationsNb, failures = 1)
+      case e @ Error(_,_)               => Stats(examples = 1, expectations = result.expectationsNb, errors = 1)
+      case Pending(_)                   => Stats(examples = 1, expectations = result.expectationsNb, pending = 1)
+      case Skipped(_, _)                => Stats(examples = 1, expectations = result.expectationsNb, skipped = 1)
+      case DecoratedResult(t: Stats, _) => t
+      case DecoratedResult(_, r)        => Stats(r)
     }
 
   def fromXml(stats: scala.xml.Node): Option[Stats] = {
@@ -215,7 +225,9 @@ case object Stats {
       val map = stats.attributes.asAttrMap
       def asInt(key: String, defaultValue: Int = 0) = tryOrElse(Integer.parseInt(map(key)))(defaultValue)
 
-      Some(Stats(asInt("examples"   ),
+      Some(Stats(
+        asInt("specs"       ),
+        asInt("examples"    ),
         asInt("successes"   ),
         asInt("expectations", 1),
         asInt("failures"    ),

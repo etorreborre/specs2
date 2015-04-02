@@ -62,7 +62,7 @@ class UnitSpec extends mutable.Specification {
     }
   }
   // you can add references to other specifications
-  "how" ~ (new IncludedSpec)
+  "how" ~ (new IncludedSpecification)
 
   // a step to execute after the specification must be declared at the end
   step {
@@ -79,6 +79,6 @@ class UnitSpec extends mutable.Specification {
     val string = "Hey you"
   }
 
-  class IncludedSpec extends Specification { def is = "introduction" ^ "example" ! success }
+  class IncludedSpecification extends Specification { def is = "introduction" ^ "example" ! success }
 }
 

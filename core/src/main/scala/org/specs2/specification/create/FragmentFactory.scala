@@ -89,7 +89,7 @@ trait DefaultFragmentFactory extends FragmentFactory {
   def backtab: Fragment         = backtab(1)
   def backtab(n: Int): Fragment = Fragment(Backtab(n), Execution.NoExecution)
 
-  def link(link: SpecificationRef)  = Fragment(link, Execution.SpecificationStats(link.specClassName))
+  def link(link: SpecificationRef)  = Fragment(link, Execution.specificationStats(link.specClassName))
   def see(link: SpecificationRef)   = Fragment(link, Execution.NoExecution)
 
 }

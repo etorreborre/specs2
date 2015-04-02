@@ -46,13 +46,13 @@ object StoreKeys {
 
   private def statsToString(s: Stats) = {
     import s._
-    s"examples=$examples,successes=$successes,expectations=$expectations,failures=$failures,errors=$errors,pending=$pending,skipped=$skipped,time=${timer.totalMillis}"
+    s"specs=$specs,examples=$examples,successes=$successes,expectations=$expectations,failures=$failures,errors=$errors,pending=$pending,skipped=$skipped,time=${timer.totalMillis}"
   }
 
   private def statsFromString(s: String): Option[Stats] = Try {
     s.split(",").map(_.split("=")(1)).toList match {
-      case List(examples,successes,expectations,failures,errors,pending,skipped,time) =>
-        Stats(examples.toInt, successes.toInt, expectations.toInt, failures.toInt, errors.toInt, pending.toInt, skipped.toInt, trend = None, SimpleTimer.fromString(time))
+      case List(specs,examples,successes,expectations,failures,errors,pending,skipped,time) =>
+        Stats(specs.toInt, examples.toInt, successes.toInt, expectations.toInt, failures.toInt, errors.toInt, pending.toInt, skipped.toInt, trend = None, SimpleTimer.fromString(time))
     }
   }.toOption
 

@@ -74,7 +74,7 @@ class TextPrinterSpec extends Specification { def is = s2"""
 
  Datatable must be properly indented                          $m1
 """
-  import TextPrinterSpec._
+  import TextPrinterSpecification._
   val factory = fragmentFactory; import factory._
 
   def a1 =
@@ -289,7 +289,7 @@ table ${
   def error1 = { sys.error("boom"); ok }
 }
 
-object TextPrinterSpec extends MustMatchers with FragmentsDsl {
+object TextPrinterSpecification extends MustMatchers with FragmentsDsl {
 
   implicit class fragmentOutputContains(fragment: Fragment) {
     def contains(contained: String, f: String => String = identity) = Fragments(fragment).contains(contained, f)

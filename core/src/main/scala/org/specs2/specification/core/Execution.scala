@@ -141,14 +141,14 @@ object Execution {
   val NoExecution = Execution(run = None)
 
   /** insert the specification statistics for a given specification */
-  def SpecificationStats(specClassName: String): Execution =
+  def specificationStats(specClassName: String): Execution =
     withEnv((env: Env) => getStatistics(env, specClassName))
 
   /** get the execution statistics of a specification as a Decorated result */
   def getStatistics(env: Env, specClassName: String): Result =
     AsResult(env.statisticsRepository.getStatisticsOr(specClassName, Stats.empty).map { s =>
       if (s.examples == 0) Pending(" ") // use a space to avoid PENDING to be appended after the spec name
-      else                 DecoratedResult(s, s.result)
+      else                 DecoratedResult(s.copy(specs = s.specs + 1), s.result)
     })
 
 }
