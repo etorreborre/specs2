@@ -10,7 +10,7 @@ import io._
  */
 class ModulesSpec extends Specification { def is =
  br ^
- Fragments.foreach(specs)(s => link(s) ^ br)
+ Fragments.foreach(specs)(s => link(showOnly("x!") ^ s) ^ br)
 
  def specs =
    List(Core, JUnit, Examples)
