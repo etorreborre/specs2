@@ -176,22 +176,22 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
        |[info]
        |[info] + e2"""
 
-  def j1 = s2"""the ${SpecificationRef(SpecHeader(classOf[String]))} spec""" contains
+  def j1 = s2"""the ${SpecificationRef(SpecHeader(classOf[String]), Arguments())} spec""" contains
     """|[info] the * String spec"""
 
-  def j2 = s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")))} spec""" contains
+  def j2 = s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments())} spec""" contains
     """|[info] the * STRING spec"""
 
   def j3 = {
     val repository = StatisticsRepository.memory
     repository.storeStatistics(classOf[String].getName, Stats(examples = 1, failures = 1)).runOption
     val env = Env().setStatisticRepository(repository)
-    (s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")))} spec""", env) contains
+    (s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments())} spec""", env) contains
     """|[info] the x STRING spec"""
 
   }
 
-  def j4 = s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), hidden = true)} spec""" contains
+  def j4 = s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments(), hidden = true)} spec""" contains
     """|[info] the  spec"""
 
   def k1 = Arguments("xonly") ^ "title\n".title ^

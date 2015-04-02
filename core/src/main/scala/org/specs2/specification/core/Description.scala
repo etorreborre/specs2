@@ -2,6 +2,8 @@ package org.specs2
 package specification
 package core
 
+import org.specs2.main.Arguments
+
 import scalaz.Show
 import org.specs2.data.{NamedTag, Tag}
 import text.Regexes._
@@ -44,7 +46,7 @@ case object NoText extends Description {
 /**
  * Reference to another specification
  */
-case class SpecificationRef(header: SpecHeader, alias: String = "", tooltip: String = "", hidden: Boolean = false) extends Description {
+case class SpecificationRef(header: SpecHeader, arguments: Arguments, alias: String = "", tooltip: String = "", hidden: Boolean = false) extends Description {
   def specClassName = header.className
 
   def url = specClassName+".html"
@@ -63,7 +65,7 @@ object SpecificationRef {
     create(specificationStructure.is)
 
   def create(specStructure: SpecStructure): SpecificationRef =
-    SpecificationRef(specStructure.header, alias = specStructure.header.showWords)
+    SpecificationRef(specStructure.header, arguments = specStructure.arguments, alias = specStructure.header.showWords)
 }
 
 /**

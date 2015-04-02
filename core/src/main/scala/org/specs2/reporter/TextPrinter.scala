@@ -37,7 +37,7 @@ trait TextPrinter extends Printer {
     lazy val args   = env.arguments <| spec.arguments
     
     lazy val logSink       = loggerSink(logger)
-    lazy val lineStartSink = fragmentsSink(logger, spec.header)
+    lazy val lineStartSink = fragmentsSink(logger, spec.header, args)
 
     lazy val sink =
       lineStartSink.map { write: (LogLine => Task[Unit]) =>
@@ -61,8 +61,8 @@ trait TextPrinter extends Printer {
   def shutdown = (ll: LineLogger) =>
     Task.delay(ll.close)
 
-  def fragmentsSink(logger: LineLogger, header: SpecHeader): Sink[Task, LogLine] =
-    io.resource(start(logger, header))(shutdown)(
+  def fragmentsSink(logger: LineLogger, header: SpecHeader, args: Arguments): Sink[Task, LogLine] =
+    io.resource(start(logger, header, args))(shutdown)(
       logger => Task.delay{ (line: LogLine) =>
         Task.now(line.log(logger))
       }
@@ -99,7 +99,7 @@ import scalaz._, Scalaz._
         case Fragment(NoText, e, l) if e.isExecutable && !e.result.isSuccess =>
           printExecutable(NoText.show, e, args, indentation)
 
-        case Fragment(d @ SpecificationRef(_, _, _, hidden), e, l)  =>
+        case Fragment(d @ SpecificationRef(_, _, _, _, hidden), e, l)  =>
           if (!hidden) printExecutable(d.show, e, args, indentation)
           else emitNone
 

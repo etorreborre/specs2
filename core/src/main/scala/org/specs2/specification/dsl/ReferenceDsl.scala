@@ -12,30 +12,38 @@ trait ReferenceDsl extends ReferenceCreation {
 
   implicit class linkFragment(alias: String) {
     def ~(s: SpecStructure): Fragment =
-      fragmentFactory.link(SpecificationRef(s.header, alias = alias))
+      fragmentFactory.link(SpecificationRef(s.header, s.arguments, alias = alias))
 
     def ~(s: SpecStructure, tooltip: String): Fragment =
-      fragmentFactory.link(SpecificationRef(s.header, alias = alias, tooltip = tooltip))
+      fragmentFactory.link(SpecificationRef(s.header, s.arguments, alias = alias, tooltip = tooltip))
 
-    def ~(s: => SpecificationStructure): Fragment =
-      fragmentFactory.link(SpecificationRef(s.is.header, alias = alias))
+    def ~(s: => SpecificationStructure): Fragment = {
+      lazy val spec = s.is
+      fragmentFactory.link(SpecificationRef(spec.header, spec.arguments, alias = alias))
+    }
 
-    def ~(s: => SpecificationStructure, tooltip: String): Fragment =
-      fragmentFactory.link(SpecificationRef(s.is.header, alias = alias, tooltip = tooltip))
+    def ~(s: => SpecificationStructure, tooltip: String): Fragment =  {
+      lazy val spec = s.is
+      fragmentFactory.link(SpecificationRef(spec.header, spec.arguments, alias = alias, tooltip = tooltip))
+    }
   }
 
   implicit class seeFragment(alias: String) {
     def ~/(s: SpecStructure): Fragment =
-      fragmentFactory.see(SpecificationRef(s.header, alias = alias))
+      fragmentFactory.see(SpecificationRef(s.header, s.arguments, alias = alias))
 
     def ~/(s: SpecStructure, tooltip: String): Fragment =
-      fragmentFactory.see(SpecificationRef(s.header, alias = alias, tooltip = tooltip))
+      fragmentFactory.see(SpecificationRef(s.header, s.arguments, alias = alias, tooltip = tooltip))
 
-    def ~/(s: => SpecificationStructure): Fragment =
-      fragmentFactory.see(SpecificationRef(s.is.header, alias = alias))
+    def ~/(s: => SpecificationStructure): Fragment = {
+      lazy val spec = s.is
+      fragmentFactory.see(SpecificationRef(spec.header, spec.arguments, alias = alias))
+    }
 
-    def ~/(s: => SpecificationStructure, tooltip: String): Fragment =
-      fragmentFactory.see(SpecificationRef(s.is.header, alias = alias, tooltip = tooltip))
+    def ~/(s: => SpecificationStructure, tooltip: String): Fragment =  {
+      lazy val spec = s.is
+      fragmentFactory.see(SpecificationRef(spec.header, spec.arguments, alias = alias, tooltip = tooltip))
+    }
   }
 }
 
