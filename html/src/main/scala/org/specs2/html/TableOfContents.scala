@@ -20,7 +20,7 @@ trait TableOfContents {
   /** create a table of contents for all the specifications */
   def createToc(specifications: List[SpecStructure], outDir: DirectoryPath, entryMaxSize: Int, fileSystem: FileSystem): Action[Unit] = {
     // sort specifications a, b, c so that a depends on b and c
-    val sorted = SpecStructure.topologicalSort(specifications).map(_.toList).getOrElse(List())
+    val sorted = SpecStructure.reverseTopologicalSort(specifications).map(_.toList).getOrElse(List())
     for {
       pages   <- readHtmlPages(sorted, outDir, fileSystem)
       toc     =  createToc(pages, outDir, entryMaxSize)
