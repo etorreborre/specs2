@@ -73,11 +73,12 @@ trait TextPrinter extends Printer {
       logger => Task.delay((line: LogLine) => Task.now(line.log(logger)))
     )
 
-  def start(logger: LineLogger, header: SpecHeader): Task[LineLogger] =
-    printHeader(header).map(_.log(logger)).run.map(_ => logger)
+  def start(logger: LineLogger, header: SpecHeader, args: Arguments): Task[LineLogger] =
+    printHeader(args)(header).map(_.log(logger)).run.map(_ => logger)
 
-  def printHeader: SpecHeader => Process[Task, LogLine] = { header: SpecHeader =>
-    emit(header.show).info
+  def printHeader(args: Arguments): SpecHeader => Process[Task, LogLine] = { header: SpecHeader =>
+    if (args.canShow("#")) emit(header.show).info
+    else emitNone
   }
 
   def printStats(header: SpecHeader, args: Arguments): Stats => Process[Task, LogLine] = { stats: Stats =>
@@ -87,10 +88,11 @@ trait TextPrinter extends Printer {
       printNewLine fby
       emit(s"Total for specification$title\n").info fby
         emit(stats.display(args)).info fby
+        printNewLine fby
         printNewLine
     } else emitNone
   }
-import scalaz._, Scalaz._
+
   /** transform a stream of fragments into a stream of strings for printing */
   def printFragment(args: Arguments): ((Fragment, (Stats, Int))) => Process[Task, LogLine] = {
     case (fragment, (stats, indentation)) =>

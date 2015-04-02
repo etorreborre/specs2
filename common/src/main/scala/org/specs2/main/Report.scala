@@ -23,7 +23,7 @@ case class Report(
 
   import Arguments._
 
-  def xonly: Boolean                 = canShow("x") && canShow("!") && !canShow("o*+")
+  def xonly: Boolean                 = Report.xonlyFlags.forall(c => canShow(c.toString)) && !canShow("o*+")
   def canShow(s: String)             = hasFlags(s, _showOnly)
   def failtrace: Boolean             = _failtrace.getOrElse(false)
   def color: Boolean                 = _color.getOrElse(true)
@@ -74,7 +74,7 @@ case class Report(
 object Report extends Extract {
   def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Report = {
     new Report (
-      _showOnly          = value("showOnly").orElse(bool("xOnly").map(v => "x!")),
+      _showOnly          = value("showOnly").orElse(bool("xOnly").map(_ => xonlyFlags)),
       _failtrace         = bool("failTrace"),
       _color             = bool("color", "noColor"),
       _colors            = value("colors").map(MappedColors.fromArgs).orElse(value("colorsclass").flatMap(instance[Colors])),
@@ -90,6 +90,9 @@ object Report extends Extract {
       _exporter          = value("exporter")
     )
   }
+
+  val xonlyFlags = "#x!"
+  val allFlags = "#1x!+-o*"
 
   val allValueNames = Seq("showOnly", "xOnly", "failTrace", "color", "noColor", "colors", "offset", "showTimes",
     "fullStackTrace", "traceFilter", "checkUrls", "noToc", "notifier", "exporter")

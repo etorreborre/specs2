@@ -116,7 +116,7 @@ trait ArgumentsCreation {
       notoc:             ArgProperty[Boolean]           = ArgProperty[Boolean](),
       notifier:          ArgProperty[String]            = ArgProperty[String](),
       exporter:          ArgProperty[String]            = ArgProperty[String]()) = new Arguments(
-       report = Report(xonly.toOption.map(v => if (v) "x!" else "x!+-o*").orElse(showOnly.toOption),
+       report = Report(xonly.toOption.map(v => if (v) Report.xonlyFlags else Report.allFlags).orElse(showOnly.toOption),
                        failtrace.toOption,
                        color.toOption,
                        colors.toOption,

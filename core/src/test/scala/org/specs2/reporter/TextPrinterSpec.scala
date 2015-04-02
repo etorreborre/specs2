@@ -20,7 +20,8 @@ class TextPrinterSpec extends Specification { def is = s2"""
  The results of a specification can be printed as lines
 
    the title of the specification must be printed first       $a1
-   regular text must have no status                           $a2
+   the title is not displayed if # can not be shown           $a2
+   regular text must have no status                           $a3
 
    a successful example must be displayed with a +            $b1
    a failed example must be displayed with a x                $b2
@@ -64,7 +65,7 @@ class TextPrinterSpec extends Specification { def is = s2"""
    not if hidden                                              $j4
 
  Fragments can be hidden by changing args
-    xonly only show issues                                    $k1
+    xonly only shows title and issues                         $k1
     stats are not displayed with xonly when successful        $k2
 
  Fragments must be displayed in their creation order
@@ -80,12 +81,16 @@ class TextPrinterSpec extends Specification { def is = s2"""
     "title".title ^ "" contains
       """|[info] title"""
 
-  def a2 = "title".title ^ s2"""
+  def a2 =
+    showOnly("!") ^ "title".title ^ "" doesntContain
+    """|[info] title"""
+
+  def a3 = "title".title ^ s2"""
 presentation
 """ contains
     """|[info] title
-       |[info]
-       |[info] presentation"""
+      |[info]
+      |[info] presentation"""
 
   def b1 = s2"""
 presentation
@@ -311,6 +316,9 @@ object TextPrinterSpec extends MustMatchers with FragmentsDsl {
       val messages = logger.messages
       messages.map(_.removeEnd(" ")).mkString("\n").replace(" ", "_")
     }
+
+    def doesntContain(contained: String, f: String => String = identity) =
+      not(contains(contained, f))
 
     def contains(contained: String, f: String => String = identity) =
       f(printed) must contain(contained.stripMargin.replace(" ", "_"))

@@ -42,7 +42,7 @@ class HtmlPrinterSpec extends Specification with TaskMatchers with ThrownExpecta
     for {
       options <- printer.getHtmlOptions(env.arguments)
       _       <- printer.copyResources(env, options)
-      _       <- printer.finalize(env, List(spec))
+      _       <- printer.finalize(env, List(spec.structure(env)))
     } yield ()
 
 

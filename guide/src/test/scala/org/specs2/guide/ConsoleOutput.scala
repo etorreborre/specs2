@@ -36,9 +36,10 @@ You can decide what you want to _show_ in the console by using the `showonly` ar
   `o`  | skipped example
   `*`  | pending example
   `-`  | text
+  `#`  | title
   `1`  | statistics
 
-For example if you just want to show text and failures you can use `showonly -x`. And the `xonly` argument is actually a shortcut for `showonly x!`.
+For example if you just want to show text and failures you can use `showonly -x`. And the `xonly` argument is actually a shortcut for `showonly #x!`.
 
 ### StackTraceFilter
 
