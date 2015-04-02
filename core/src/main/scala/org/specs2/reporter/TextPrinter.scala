@@ -18,6 +18,7 @@ import scalaz.concurrent.Task
 import scalaz.concurrent.Task._
 import LogLine._
 import Functions._
+import scalaz._, Scalaz._
 
 /**
  * Prints the result of a specification execution to the console (using the line logger provided by the environment)
@@ -25,8 +26,8 @@ import Functions._
  * At the end of the run the specification statistics are displayed as well.
  */
 trait TextPrinter extends Printer {
-  def prepare(env: Env, specifications: List[SpecificationStructure]): Action[Unit]  = Actions.unit
-  def finalize(env: Env, specifications: List[SpecificationStructure]): Action[Unit] = Actions.unit
+  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit]  = Actions.unit
+  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
 
   def fold(env: Env, spec: SpecStructure) = new Fold[Fragment] {
     // statistics and indentation

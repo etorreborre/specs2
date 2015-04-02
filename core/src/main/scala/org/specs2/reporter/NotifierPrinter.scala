@@ -18,8 +18,8 @@ object NotifierPrinter {
    * create a printer from a notifier
    */
   def printer(notifier: Notifier) = new Printer {
-    def prepare(env: Env, specifications: List[SpecificationStructure]): Action[Unit]  = Actions.unit
-    def finalize(env: Env, specifications: List[SpecificationStructure]): Action[Unit] = Actions.unit
+    def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit]  = Actions.unit
+    def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
 
     def fold(env: Env, spec: SpecStructure) = new Fold[Fragment] {
       val args = env.arguments

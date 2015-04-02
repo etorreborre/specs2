@@ -5,7 +5,7 @@ import control._
 import data.Fold
 import html.{HtmlTemplate, Indexing}
 import io._
-import specification.core.{Env, SpecificationStructure}
+import org.specs2.specification.core.{SpecStructure, Env, SpecificationStructure}
 
 import scalaz.stream.Process
 
@@ -15,7 +15,7 @@ import scalaz.stream.Process
 trait SearchPage {
 
   /** create an index for all the specifications */
-  def createIndex(env: Env, specifications: List[SpecificationStructure], options: HtmlOptions): Action[Unit] =
+  def createIndex(env: Env, specifications: List[SpecStructure], options: HtmlOptions): Action[Unit] =
     for {
       htmlPages <- Actions.safe(Indexing.createIndexedPages(env, specifications, options.outDir))
       _         <- Fold.runFold(Process.emitAll(htmlPages), Indexing.indexFold(options.indexFile)).toAction

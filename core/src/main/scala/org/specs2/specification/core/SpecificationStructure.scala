@@ -4,7 +4,6 @@ package core
 
 import data.TopologicalSort
 import control._
-import org.specs2.main.{CommandLine, Arguments}
 import reflect.Classes
 import Classes._
 import scalaz.std.anyVal._
@@ -58,20 +57,20 @@ object SpecificationStructure {
 
   /** @return all the referenced specifications */
   def referencedSpecifications(spec: SpecificationStructure, env: Env, classLoader: ClassLoader): Action[Seq[SpecificationStructure]] =
-    specificationsRefs(spec, env, classLoader)(referencedSpecificationsClassnames)
+    specificationsRefs(spec, env, classLoader)(referencedSpecificationsRefs)
 
   /** @return all the linked specifications */
   def linkedSpecifications(spec: SpecificationStructure, env: Env, classLoader: ClassLoader): Action[Seq[SpecificationStructure]] =
-    specificationsRefs(spec, env, classLoader)(linkedSpecificationsClassnames)
+    specificationsRefs(spec, env, classLoader)(linkedSpecificationsRefs)
 
   /** @return all the see specifications */
   def seeSpecifications(spec: SpecificationStructure, env: Env, classLoader: ClassLoader): Action[Seq[SpecificationStructure]] =
-    specificationsRefs(spec, env, classLoader)(seeSpecificationsClassnames)
+    specificationsRefs(spec, env, classLoader)(seeSpecificationsRefs)
 
   /** @return all the referenced specifications */
   def specificationsRefs(spec: SpecificationStructure,
                          env: Env,
-                         classLoader: ClassLoader)(refClassNames: (SpecificationStructure, Env) => List[String]): Action[Seq[SpecificationStructure]] = {
+                         classLoader: ClassLoader)(refs: (SpecificationStructure, Env) => List[SpecificationRef]): Action[Seq[SpecificationStructure]] = {
 
     val byName = (ss: List[SpecificationStructure]) => ss.foldLeft(Vector[(String, SpecificationStructure)]()) { (res, cur) =>
       val name = cur.structure(env).specClassName
@@ -80,7 +79,7 @@ object SpecificationStructure {
     }
 
     def getRefs(s: SpecificationStructure, visited: Vector[(String, SpecificationStructure)]): Vector[(String, SpecificationStructure)] =
-      refClassNames(s, env).map(name => create(name, classLoader)).sequenceU.map(byName).runOption.getOrElse(Vector())
+      refs(s, env).map(ref => create(ref.header.specClass.getName, classLoader)).sequenceU.map(byName).runOption.getOrElse(Vector())
         .filterNot { case (n, _) => visited.map(_._1).contains(n) }
 
     Actions.safe {
@@ -98,18 +97,15 @@ object SpecificationStructure {
   }
 
   /** @return the class names of all the referenced specifications */
-  def referencedSpecificationsClassnames(spec: SpecificationStructure, env: Env): List[String] = {
-    spec.structure(env).fragments.fragments.collect(Fragment.specificationRef).map(_.header.specClass.getName).toList
-  }
+  def referencedSpecificationsRefs(spec: SpecificationStructure, env: Env): List[SpecificationRef] =
+    SpecStructure.referencedSpecStructuresRefs(spec.structure(env))
 
   /** @return the class names of all the linked specifications */
-  def linkedSpecificationsClassnames(spec: SpecificationStructure, env: Env): List[String] = {
-    spec.structure(env).fragments.fragments.collect(Fragment.linkReference).map(_.header.specClass.getName).toList
-  }
+  def linkedSpecificationsRefs(spec: SpecificationStructure, env: Env): List[SpecificationRef] =
+    SpecStructure.linkedSpecStructuresRefs(spec.structure(env))
 
   /** @return the class names of all the see specifications */
-  def seeSpecificationsClassnames(spec: SpecificationStructure, env: Env): List[String] = {
-    spec.structure(env).fragments.fragments.collect(Fragment.seeReference).map(_.header.specClass.getName).toList
-  }
+  def seeSpecificationsRefs(spec: SpecificationStructure, env: Env): List[SpecificationRef] =
+    SpecStructure.seeSpecStructuresRefs(spec.structure(env))
 }
 

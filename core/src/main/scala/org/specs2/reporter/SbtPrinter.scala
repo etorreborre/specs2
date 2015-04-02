@@ -21,9 +21,8 @@ import SbtPrinter._
  * It also publishes events (success, error, skipped, pending) to Sbt
  */
 trait SbtPrinter extends Printer {
-  def prepare(env: Env, specifications: List[SpecificationStructure]): Action[Unit] = Actions.unit
-
-  def finalize(env: Env, specifications: List[SpecificationStructure]): Action[Unit] = Actions.unit
+  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
+  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
 
   /** sbt loggers to display text */
   def loggers: Array[Logger]

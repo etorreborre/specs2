@@ -16,10 +16,10 @@ import scalaz.Show
  */
 trait MarkdownPrinter extends Printer {
 
-  def prepare(env: Env, specifications: List[SpecificationStructure]): Action[Unit] =
+  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit] =
     env.fileSystem.mkdirs(MarkdownOptions.create(env.arguments).outDir)
 
-  def finalize(env: Env, specifications: List[SpecificationStructure]): Action[Unit] =
+  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] =
     Actions.unit
 
   /** @return a Fold for the markdown output */

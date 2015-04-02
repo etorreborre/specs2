@@ -21,8 +21,8 @@ import data.Fold
  * The JUnitPrinter sends notifications to JUnit's RunNotifier
  */
 trait JUnitPrinter extends Printer { outer =>
-  def prepare(env: Env, specifications: List[SpecificationStructure]): Action[Unit] = Actions.unit
-  def finalize(env: Env, specifications: List[SpecificationStructure]): Action[Unit] = Actions.unit
+  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
+  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
 
   /** the junit notifier to use */
   def notifier: RunNotifier

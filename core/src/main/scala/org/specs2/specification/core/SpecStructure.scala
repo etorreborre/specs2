@@ -3,9 +3,14 @@ package specification
 package core
 
 import main.Arguments
+import org.specs2.control._
 import org.specs2.data.TopologicalSort
 import scalaz.concurrent.Task
 import scalaz.stream._
+import control._
+import scalaz.std.anyVal._
+import scalaz.syntax.traverse._
+import scalaz.std.list._
 
 /**
  * Structure of a Specification:
@@ -64,7 +69,20 @@ object SpecStructure {
   def create(header: SpecHeader, arguments: Arguments, fragments: =>Fragments): SpecStructure =
     new SpecStructure(header, arguments, () => fragments)
 
+  /**
+   * sort the specifications in topological order where specification i doesn't depend on specification j if i > j
+   *
+   * == dependents first!
+   */
   def topologicalSort(specifications: Seq[SpecStructure]): Option[Vector[SpecStructure]] =
+    TopologicalSort.sort(specifications, (s1: SpecStructure, s2: SpecStructure) => dependsOn(s2, s1))
+
+  /**
+   * sort the specifications in topological order where specification i doesn't depend on specification j if i ><j
+   *
+   * == dependents last!
+   */
+  def reverseTopologicalSort(specifications: Seq[SpecStructure]): Option[Vector[SpecStructure]] =
     TopologicalSort.sort(specifications, dependsOn)
 
   /** return true if s1 depends on s2, i.e, s1 has a link to s2 */
@@ -76,4 +94,57 @@ object SpecStructure {
   def empty(klass: Class[_]) =
     SpecStructure(SpecHeader(klass))
 
+  /** @return all the referenced specifications */
+  def referencedSpecStructures(spec: SpecStructure, env: Env, classLoader: ClassLoader): Action[Seq[SpecStructure]] =
+    specStructuresRefs(spec, env, classLoader)(referencedSpecStructuresRefs)
+
+  /** @return all the linked specifications */
+  def linkedSpecifications(spec: SpecStructure, env: Env, classLoader: ClassLoader): Action[Seq[SpecStructure]] =
+    specStructuresRefs(spec, env, classLoader)(linkedSpecStructuresRefs)
+
+  /** @return all the see specifications */
+  def seeSpecifications(spec: SpecStructure, env: Env, classLoader: ClassLoader): Action[Seq[SpecStructure]] =
+    specStructuresRefs(spec, env, classLoader)(seeSpecStructuresRefs)
+
+  /** @return all the referenced spec structures */
+  def specStructuresRefs(spec: SpecStructure, env: Env,
+                         classLoader: ClassLoader)(refs: SpecStructure => List[SpecificationRef]): Action[Seq[SpecStructure]] = {
+
+    val byName = (ss: List[SpecStructure]) => ss.foldLeft(Vector[(String, SpecStructure)]()) { (res, cur) =>
+      val name = cur.specClassName
+      if (res.map(_._1).contains(name)) res
+      (name, cur) +: res
+    }
+
+    def getRefs(s: SpecStructure, visited: Vector[(String, SpecStructure)]): Vector[(String, SpecStructure)] =
+      refs(s).map { ref =>
+        SpecificationStructure.create(ref.header.specClass.getName, classLoader).map(_.structure(env).setArguments(ref.arguments))
+      }.sequenceU.map(byName).runOption.getOrElse(Vector())
+       .filterNot { case (n, _) => visited.map(_._1).contains(n) }
+
+    Actions.safe {
+      def getAll(seed: Vector[SpecStructure], visited: Vector[(String, SpecStructure)]): Vector[SpecStructure] = {
+        if (seed.isEmpty) visited.map(_._2)
+        else {
+          val toVisit: Vector[(String, SpecStructure)] = seed.flatMap(s => getRefs(s, visited))
+          getAll(toVisit.map(_._2), visited ++ toVisit)
+        }
+      }
+      val name = spec.specClassName
+      val linked = getRefs(spec, Vector((name, spec)))
+      getAll(linked.map(_._2), linked :+ ((name, spec)))
+    }
+  }
+
+  /** @return the class names of all the referenced specifications */
+  def referencedSpecStructuresRefs(spec: SpecStructure): List[SpecificationRef] =
+    spec.fragments.fragments.collect(Fragment.specificationRef).toList
+
+  /** @return the class names of all the linked specifications */
+  def linkedSpecStructuresRefs(spec: SpecStructure): List[SpecificationRef] =
+    spec.fragments.fragments.collect(Fragment.linkReference).toList
+
+  /** @return the class names of all the see specifications */
+  def seeSpecStructuresRefs(spec: SpecStructure): List[SpecificationRef] =
+    spec.fragments.fragments.collect(Fragment.seeReference).toList
 }

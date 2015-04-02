@@ -13,8 +13,8 @@ import specification.core._
  *  - accumulates state for final reporting
  */
 trait Printer {
-  def prepare(env: Env, specifications: List[SpecificationStructure]): Action[Unit]
-  def finalize(env: Env, specifications: List[SpecificationStructure]): Action[Unit]
+  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit]
+  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit]
 
   def fold(env: Env, spec: SpecStructure): Fold[Fragment]
 

@@ -68,10 +68,10 @@ sbt> testOnly *BinarySpec* -- printer org.acme.reporting.LatexPrinter
 The `${fullName[org.specs2.reporter.Reporter]}` trait defines the full lifecycle for running specifications:
 ```
 // prepare the environment before any reporting
-def prepare(env: Env, printers: List[Printer]): List[SpecificationStructure] => Action[Unit]
+def prepare(env: Env, printers: List[Printer]): List[SpecStructure] => Action[Unit]
 
 // finalize the reporting (to save overall statistics for example)
-def finalize(env: Env, printers: List[Printer]): List[SpecificationStructure] => Action[Unit]
+def finalize(env: Env, printers: List[Printer]): List[SpecStructure] => Action[Unit]
 
 /**
  * report a spec structure with the given printers

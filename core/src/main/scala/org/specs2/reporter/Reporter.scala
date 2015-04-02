@@ -22,11 +22,11 @@ import Statistics._
  */
 trait Reporter {
 
-  def prepare(env: Env, printers: List[Printer]): List[SpecificationStructure] => Action[Unit] = { specs =>
+  def prepare(env: Env, printers: List[Printer]): List[SpecStructure] => Action[Unit] = { specs =>
     printers.traverseU(_.prepare(env, specs)).void
   }
 
-  def finalize(env: Env, printers: List[Printer]): List[SpecificationStructure] => Action[Unit] = { specs =>
+  def finalize(env: Env, printers: List[Printer]): List[SpecStructure] => Action[Unit] = { specs =>
     printers.traverseU(_.finalize(env, specs)).void
   }
 

@@ -30,14 +30,14 @@ import SpecHtmlPage._
  */
 trait HtmlPrinter extends Printer {
 
-  def prepare(env: Env, specifications: List[SpecificationStructure]): Action[Unit]  = Actions.unit
+  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit]  = Actions.unit
 
   /** create an index for all the specifications, if required */
-  def finalize(env: Env, specifications: List[SpecificationStructure]): Action[Unit] =
+  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] =
     getHtmlOptions(env.arguments) >>= { options: HtmlOptions =>
       createIndex(env, specifications, options).when(options.search) >>
-      createToc(specifications.map(_.structure(env)), options.outDir, options.tocEntryMaxSize, env.fileSystem).when(options.toc) >>
-      reportMissingSeeRefs(specifications.map(_.structure(env)), options.outDir).when(options.warnMissingSeeRefs)
+      createToc(specifications, options.outDir, options.tocEntryMaxSize, env.fileSystem).when(options.toc) >>
+      reportMissingSeeRefs(specifications, options.outDir).when(options.warnMissingSeeRefs)
     }
 
   /** @return a Fold for the Html output */

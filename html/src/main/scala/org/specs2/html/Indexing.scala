@@ -3,7 +3,7 @@ package html
 
 import org.specs2.data.Fold
 import org.specs2.io.{DirectoryPath, FilePath, FileSystem}
-import org.specs2.specification.core.{Marker, Fragment, Env, SpecificationStructure}
+import org.specs2.specification.core._
 
 import scalaz.{Monoid, Reducer}
 
@@ -19,12 +19,11 @@ object Indexing {
   def indexFold(path: FilePath) =
     Fold.fromReducerAndLast(Index.reducer, (index: Index) => FileSystem.writeFileTask(path, Index.toJson(index)))
 
-  def createIndexedPages(env: Env, specifications: List[SpecificationStructure], outDir: DirectoryPath): Seq[IndexedPage] = {
+  def createIndexedPages(env: Env, specifications: List[SpecStructure], outDir: DirectoryPath): Seq[IndexedPage] = {
     specifications.map(createIndexedPage(env, outDir))
   }
 
-  def createIndexedPage(env: Env, outDir: DirectoryPath) = (specification: SpecificationStructure) => {
-    val spec = specification.structure(env)
+  def createIndexedPage(env: Env, outDir: DirectoryPath) = (spec: SpecStructure) => {
     IndexedPage(
       path     = SpecHtmlPage.outputPath(outDir, spec).relativeTo(outDir),
       title    = spec.header.showWords,

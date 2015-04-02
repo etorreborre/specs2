@@ -92,8 +92,8 @@ class ReporterSpec extends Specification with ForEachEnv with ThrownExpectations
 }
 
 class FakeJUnitPrinter(logger: LineLogger) extends Printer {
-  def prepare(env: Env, specifications: List[SpecificationStructure]): Action[Unit] = Actions.unit
-  def finalize(env: Env, specifications: List[SpecificationStructure]): Action[Unit] = Actions.unit
+  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
+  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
 
   def fold(env: Env, spec: SpecStructure) =
     Fold.fromFunction((f: Fragment) => Task.now(logger.infoLog("junit\n")))
