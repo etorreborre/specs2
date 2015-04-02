@@ -3,14 +3,10 @@ package runner
 
 import java.util.regex._
 import control._
-import reflect.Classes
 import specification.core._
 import text.SourceFile._
 import io._
-import scalaz.std.anyVal._
-import scalaz.syntax.bind._
-import scalaz.syntax.traverse._
-import scalaz.std.list._
+import scalaz._, Scalaz._
 
 /**
  * This trait loads specifications found on a given source directory based
@@ -32,7 +28,10 @@ trait SpecificationsFinder {
                          classLoader: ClassLoader       = Thread.currentThread.getContextClassLoader,
                          filePathReader: FilePathReader = FileSystem): Action[List[SpecificationStructure]] =
     specificationNames(glob, pattern, basePath, filePathReader, verbose).flatMap { names =>
-      names.filter(filter).map(n => SpecificationStructure.create(n, classLoader)).toList.sequenceU
+      names.toList.filter(filter).map { name =>
+        SpecificationStructure.create(name, classLoader).map(s => Option(s)).
+          orElse(warn("[warn] cannot create specification "+name).as(none[SpecificationStructure]))
+      }.sequenceU.map(_.flatten)
     }
 
   /**
@@ -62,13 +61,13 @@ trait SpecificationsFinder {
   def specificationNames(pathGlob: String, pattern: String, basePath: DirectoryPath, filePathReader: FilePathReader, verbose: Boolean) : Action[List[String]] = {
     lazy val specClassPattern = {
       val p = specPattern("class", pattern)
-      log("\nthe pattern used to match specification classes is: "+p+"\n", verbose) >>
+      log("  the pattern used to match specification classes is: "+p, verbose) >>
         Actions.safe(Pattern.compile(p))
     }
 
     lazy val specObjectPattern = {
       val p = specPattern("object", pattern)
-      log("\nthe pattern used to match specification objects is: "+p+"\n", verbose) >>
+      log("  the pattern used to match specification objects is: "+p, verbose) >>
         Actions.safe(Pattern.compile(p))
     }
 
@@ -87,7 +86,7 @@ trait SpecificationsFinder {
     for {
       fileContent <- filePathReader.readFile(path)
       packName    =  packageName(fileContent)
-      _           <- log("\nSearching for specifications in file: "+path, verbose)
+      _           <- log("Searching for specifications in file: "+path.path, verbose)
     } yield (classNames(packName, fileContent, objectPattern, "$", verbose) |@| classNames(packName, fileContent, classPattern, "", verbose))(_ ++ _)
   }.flatMap(identity)
 

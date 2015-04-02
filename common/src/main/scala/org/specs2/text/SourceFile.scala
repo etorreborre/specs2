@@ -28,7 +28,7 @@ trait SourceFile {
       } else Stream.empty
 
     val found = result(pattern.matcher(content)).toList
-    log("found the following classes: "+found.mkString(", "), verbose && found.nonEmpty) >>
+    log("  found classes: "+found.mkString(", "), verbose && found.nonEmpty) >>
       Actions.safe(found.filter(c => CLASSNAME_REGEX.pattern.matcher(c).matches))
   }
 
