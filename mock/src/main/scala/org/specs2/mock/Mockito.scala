@@ -14,4 +14,5 @@ trait Mockito extends MocksCreation
   with MockitoMatchers
   with ArgThat
   with Expectations
+  with MockitoFunctions
 
