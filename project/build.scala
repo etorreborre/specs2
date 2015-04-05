@@ -1,5 +1,3 @@
-import java.text.SimpleDateFormat
-import java.util.Date
 import sbt._
 import complete.DefaultParsers._
 import Keys._
@@ -36,7 +34,7 @@ object build extends Build {
       compatibilitySettings    ++
       releaseSettings          ++
       siteSettings             ++
-      Seq(name := "specs2")
+      Seq(name := "specs2", packagedArtifacts := Map.empty)
   ).aggregate(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, tests)
    .enablePlugins(GitBranchPrompt)
   
