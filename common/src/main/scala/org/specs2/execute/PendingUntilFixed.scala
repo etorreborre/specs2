@@ -11,7 +11,8 @@ import text.Quote._
  */
 trait PendingUntilFixed {
 
-  implicit def toPendingUntilFixed[T : AsResult](t: =>T) = new PendingUntilFixed(t)
+  implicit def toPendingUntilFixed[T : AsResult](t: =>T): PendingUntilFixed[T] =
+    new PendingUntilFixed(t)
 
   class PendingUntilFixed[T : AsResult](t: =>T) {
     /** @return Pending unless the result is a success */

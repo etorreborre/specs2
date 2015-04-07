@@ -14,6 +14,7 @@ object OptionalMatcherCards extends Cards {
     TerminationMatchers,
     CaseClassMatchers,
     ParserMatchers,
+    TypecheckMatchers,
     InterpreterMatchers,
     ResultMatchers,
     DependencyMatchers)
