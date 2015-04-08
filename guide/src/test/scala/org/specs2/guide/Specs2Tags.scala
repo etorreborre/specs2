@@ -20,7 +20,7 @@ trait Specs2Tags {
     val lastBefore3     = tags.filter(!isGreaterThanEqualVersion3).sorted.lastOption.toList
     val officialsAfter3 = tags.filter(isGreaterThanEqualVersion3 && !isTimestamped)
 
-    (lastBefore3 ++ officialsAfter3).sorted
+    (lastBefore3 ++ officialsAfter3).sorted.reverse
   }
 
   def isGreaterThanEqualVersion3 = (tag: VersionTag) =>
