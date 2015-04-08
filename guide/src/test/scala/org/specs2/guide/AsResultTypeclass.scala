@@ -52,6 +52,11 @@ case class DecoratedResult[+T](decorator: T, result: Result) extends Result(resu
 
 A `DecoratedResult[T]` decorates an ordinary result with an additional value of type `T`. If you want to take advantage of this custom value in your reports you will need to build a custom `org.specs2.reporter.Printer`, probably extending an existing one.
 
+$AndIfYouWantToKnowMore
+
+ - mark any object having an `AsResult` instance as ${"\"pending until fixed\"" ~/ PendingUntilFixedExamples}
+
+$vid
 """
   class Result(val message: String, val expected: String)
   case class Success() extends Result("ok", "")

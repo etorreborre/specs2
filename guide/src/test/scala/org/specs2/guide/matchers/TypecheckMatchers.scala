@@ -9,7 +9,7 @@ import specification.core._
 object TypecheckMatchers extends UserGuideCard with matcher.TypecheckMatchers {
   def title = "Typecheck"
   def text =  s2"""
-Some behaviours can be encoded with the type system and you just want to check that a given expression will compile: ${snippet{
+Some behaviours can be encoded with the type system and you just want to check that a given expression will typecheck: ${snippet{
 import org.specs2.execute._, Typecheck._
 
 typecheck {
@@ -20,7 +20,7 @@ typecheck {
 } must succeed
 }}
 
-You might also want to check that other expression fail to compile: ${snippet{
+You might also want to check that another expression will fail to typecheck: ${snippet{
 import org.specs2.execute._, Typecheck._
 
 typecheck {
@@ -38,7 +38,16 @@ Monoid[Plane].zero
 } must failWith("could not find implicit value for .* scalaz.Monoid")
 }}
 
-Finally you can indicate that some blocks of code must be marked as `Pending` until they typecheck: ${snippet{
+Note that you actually don't have to use the `succeed` matcher because `typecheck` returns a `Typechecked` object which has an `AsResult` instance: ${snippet {
+"this should typecheck ok" ! typecheck {
+"""
+// there must be not a Monoid instance for Plane
+Monoid[Plane].zero
+"""
+}
+}}
+
+This is also why you can indicate that a block of code must be marked as `Pending` until it typechecks: ${snippet{
 typecheck {
   """
 // there must be not a Monoid instance for Plane
