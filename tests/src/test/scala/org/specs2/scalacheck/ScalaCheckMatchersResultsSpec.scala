@@ -7,9 +7,9 @@ import matcher._
 import execute._
 import org.scalacheck.Prop.{forAll}
 import org.specs2.main.CommandLine
-import scalaz.{Tag, Order, @@, Equal}
+import scalaz.{Tag, Order, @@, Equal, Id}
+import Id._
 import scalaz.std.anyVal.intInstance
-import scalaz.syntax.tag._
 import BrokenEqualInstances._
 import ScalaCheckProperty._
 
@@ -116,7 +116,7 @@ object equal {
 sealed trait BrokenEqual
 object BrokenEqualInstances {
   implicit def brokenEqual[A](implicit ordA: Order[A]): Equal[A @@ BrokenEqual] =
-    Equal.equal((a1, a2) => ordA.lessThan(a1.unwrap, a2.unwrap))
+    Equal.equal((a1, a2) => ordA.lessThan(Tag.unsubst[A, Id, BrokenEqual](a1), Tag.unsubst[A, Id, BrokenEqual](a2)))
   implicit def arbitrary[A](implicit arbA: Arbitrary[A]): Arbitrary[A @@ BrokenEqual] =
     Arbitrary(arbA.arbitrary.map(Tag.apply))
 }

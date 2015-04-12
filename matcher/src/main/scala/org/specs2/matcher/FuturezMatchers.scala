@@ -1,13 +1,11 @@
 package org.specs2
 package matcher
 
-import java.util.concurrent.{ExecutorService, TimeoutException}
-
-import execute.{ExecutionTimeFactor, Failure, Result, AsResult}
-
+import java.util.concurrent._
+import execute._
 import scala.concurrent.duration._
 import scala.concurrent.{Future =>_,_}
-import scalaz.concurrent.Future
+import scalaz.concurrent.{Strategy, Future}
 
 /**
  * This trait is for transforming matchers of values to matchers of scalaz.concurrent.Future
@@ -50,7 +48,8 @@ trait FuturezBaseMatchers extends ExpectationsCreation with ExecutionTimeFactor 
       val appliedTimeout = timeout * tf
 
       def attemptFuture(remainingRetries: Int, totalDuration: FiniteDuration): Result = {
-        f.map(AsResult(_)).timed(appliedTimeout).run.fold({
+        implicit val ses = ee.scheduledExecutorService
+        f.map(AsResult(_)).timed(appliedTimeout.toMillis).run.fold({
             case e: TimeoutException =>
               if (remainingRetries <= 0) Failure(s"Timeout after ${totalDuration + appliedTimeout} (retries = $retries, timeout = $timeout)")
               else                       attemptFuture(remainingRetries - 1, totalDuration + appliedTimeout)
@@ -64,7 +63,7 @@ trait FuturezBaseMatchers extends ExpectationsCreation with ExecutionTimeFactor 
     }
   }
 
-  private[specs2] def attemptMatcher[T](m: Matcher[T])(retries: Int, timeout: FiniteDuration)(implicit es: ExecutorService): Matcher[Future[T]] = new Matcher[Future[T]] {
+  private[specs2] def attemptMatcher[T](m: Matcher[T])(retries: Int, timeout: FiniteDuration)(implicit ee: ExecutionEnv): Matcher[Future[T]] = new Matcher[Future[T]] {
     def apply[S <: Future[T]](a: Expectable[S]) = {
       try {
         val r = new FuturezAsResult(a.value.map(v => createExpectable(v).applyMatcher(m).toResult)).attempt(retries, timeout)
