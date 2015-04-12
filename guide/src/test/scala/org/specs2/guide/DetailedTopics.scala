@@ -15,6 +15,8 @@ Create HTML tables to specify examples                                          
 Create examples "on the fly" as the specification executes                               | ${link(CreateOnlineSpecifications)}
 Create an example with different data displayed in a table                               | ${link(UseDatatables)}
 Fragments API                                                                            | ${link(FragmentsApi)}
+Create an example with different data displayed in a table                               | ${link(UseDatatables)}
+Execution environment for Futures                                                        | ${link(ExecutionEnvironment)}
 Create a new type of Result                                                              | ${link(AsResultTypeclass)}
 Other build tools                                                                        | ${link(OtherBuildTools)}
 Syntax variations with matchers                                                          | ${link(matchers.SyntacticVariations)}

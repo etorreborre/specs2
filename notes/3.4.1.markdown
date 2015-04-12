@@ -1,0 +1,13 @@
+Maintenance version with some important fixes for Futures execution
+
+## Fixes
+
+ * added back the `MockitoFunctions` trait to `Mockito` [#353](https://github.com/etorreborre/specs2/issues/353)
+ * added `anyBoolean` to the list of Mockito matchers
+ * don't publish the specs2 jar [#354](https://github.com/etorreborre/specs2/issues/354)
+ * fixed the `MatchResult.mute` to remove details for `MatchFailure`
+ * fixed the `ToList` instance for the `GWT` spec
+ * the `Printer` trait only deals with `SpecStructure` (and not `SpecificationStructure` which depends on the environment)
+
+==========================
+

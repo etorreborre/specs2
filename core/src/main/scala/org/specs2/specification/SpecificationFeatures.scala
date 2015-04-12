@@ -2,7 +2,7 @@ package org.specs2
 package specification
 
 import matcher.{StandardMatchResults, ShouldMatchers, MustMatchers}
-import execute.{PendingUntilFixed, StandardResults}
+import execute.{ImplicitExecutionContexts, PendingUntilFixed, StandardResults}
 import control.Debug
 import control.ImplicitParameters
 
@@ -24,4 +24,5 @@ trait SpecificationFeatures extends
   with PendingUntilFixed
   with ImplicitParameters
   with Debug
+  with ImplicitExecutionContexts
 

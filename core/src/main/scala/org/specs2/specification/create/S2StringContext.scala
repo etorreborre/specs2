@@ -11,7 +11,7 @@ import text.{Trim, Interpolated}
 import Trim._
 import text.NotNullStrings._
 import text.Trim._
-import org.specs2.main.{CommandLineAsResult, CommandLine, Arguments}
+import org.specs2.main.{CommandLine, Arguments}
 import scala.concurrent.ExecutionContext
 
 /**
@@ -60,6 +60,9 @@ trait S2StringContext extends S2StringContextImplicitsControl { outer =>
 
   implicit def executionContextFunctionIsInterpolatedFragment[R : AsResult](f: ExecutionContext => R): InterpolatedFragment =
     envFunctionIsInterpolatedFragment((env: Env) => f(env.executionContext))
+
+  implicit def executionEnvFunctionIsInterpolatedFragment[R : AsResult](f: ExecutionEnv => R): InterpolatedFragment =
+    envFunctionIsInterpolatedFragment((env: Env) => f(env.executionEnv))
 
   implicit def executorServiceFunctionIsInterpolatedFragment[R : AsResult](f: ExecutorService => R): InterpolatedFragment =
     envFunctionIsInterpolatedFragment((env: Env) => f(env.executorService))

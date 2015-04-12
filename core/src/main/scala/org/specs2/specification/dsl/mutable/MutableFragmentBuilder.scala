@@ -89,10 +89,10 @@ trait MutableFragmentBuilder extends FragmentBuilder
       fragment
 
   private def mustBeIsolated(fragment: Fragment) = {
-    fragment.isExecutable               &&
-    fragment.execution.isolable       &&
-    arguments.isolated                &&
-    !env.executionEnv.withoutIsolation
+    fragment.isExecutable                     &&
+    fragment.execution.isolable               &&
+    arguments.isolated                        &&
+    !env.executionParameters.withoutIsolation
   }
 
   private def duplicateExecution(effectPath: EffectPath) = {

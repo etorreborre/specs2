@@ -108,7 +108,7 @@ trait DefaultExecutor extends Executor {
           if (mustStop)             Task.now(fragment.skip)
           else if (executeNow)      Task.delay(executedFragment)
           else                      start(executedFragment)(env.executorService)
-        }(env.executionEnv.timeOut.orElse(fragment.execution.timeout))
+        }(env.timeout.orElse(fragment.execution.timeout))
 
         // if this fragment is a join point, start a new sequence
         // and check if the execution needs to be stopped in case of a step error
@@ -149,7 +149,7 @@ trait DefaultExecutor extends Executor {
     duration match {
       case None    => task
       case Some(d) =>
-        new Task(env.timeout.withTimeout(task.get, d.toMillis).map {
+        new Task(env.executionEnv.withTimeout(task.get, d.toMillis).map {
           case -\/(t)  => \/-(fragment.setExecution(fragment.execution.setResult(Skipped("timeout after "+d))))
           case \/-(r)  => r
         })

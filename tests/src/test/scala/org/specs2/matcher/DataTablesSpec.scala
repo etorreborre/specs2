@@ -43,7 +43,7 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
                                                                                                              """
 
   def boom = error("boom")
-  
+
   def e1 =
     "a"   | "b" | "c" |>
      2    !  2  !  4  |
@@ -54,12 +54,12 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
      2    !  2  !  4  |
      1    !  1  !  2  | { (a, b, c) => boom; a + b must_== c }
 
-  def e3 = 
+  def e3 =
    ("a"   | "b" | "c" |
      2    !  2  !  4  |
      1    !  1  !  3  |> { (a, b, c) => a + b must_== c }) must beFailing
 
-  def e4 = 
+  def e4 =
    ("a"   | "b" | "c" |
      2    !  2  !  4  |
      1    !  1  !  3  |> { (a, b, c) => boom; a + b must_== c }) must beError
@@ -154,13 +154,13 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
   }
 
 
-  def applicative3 = { implicit es: ExecutorService =>
+  def applicative3 = { implicit ee: ExecutionEnv =>
     "a" | "b" |>
     1   ! "1" |
     2   ! "2" |@ { (a: Int, b: String) => Future.delay(a ==== b.toInt) } attempt
   }
 
-  def applicative4 = { implicit es: ExecutorService =>
+  def applicative4 = { implicit ee: ExecutionEnv =>
     "a" | "b" |
     1   ! "1" |
     2   ! "2" |@> { (a: Int, b: String) => Future.delay(a ==== b.toInt) } attempt

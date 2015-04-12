@@ -21,8 +21,10 @@ trait ImmutableSpecificationStructure extends SpecificationStructure {
     val specStructure = super.structure(env)
     val arguments = env.arguments <| specStructure.arguments
 
-    if (!arguments.isolated || env.executionEnv.withoutIsolation) specStructure
-    else                                                          specStructure.map(isolateExamples(env))
+    if (!arguments.isolated || env.executionParameters.withoutIsolation)
+      specStructure
+    else
+      specStructure.map(isolateExamples(env))
   }
 
   /**

@@ -21,7 +21,7 @@ class HtmlPrinterSpec extends Specification with TaskMatchers with ThrownExpecta
 
   def index = { env: Env =>
     val spec = new Specification { def is = s2""" one example $ok """}
-    val env1 = env.copy(arguments = searchArguments)
+    val env1 = env.setArguments(searchArguments)
 
     printer.getHtmlOptions(env1.arguments).map(_.search).toTask must returnValue(true)
 
@@ -32,7 +32,7 @@ class HtmlPrinterSpec extends Specification with TaskMatchers with ThrownExpecta
 
   def searchPage = { env: Env =>
     val spec = new Specification { def is = s2""" one example $ok """}
-    val env1 = env.copy(arguments = searchArguments)
+    val env1 = env.setArguments(searchArguments)
 
     finalize(env1, spec).toTask must returnOk
     FilePathReader.exists(outDir | "search.html")

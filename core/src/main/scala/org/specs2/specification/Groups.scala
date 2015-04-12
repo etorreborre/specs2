@@ -4,9 +4,9 @@ package specification
 import java.util.concurrent.ExecutorService
 
 import execute._
-import org.specs2.control.ImplicitParameters.ImplicitParam
-import org.specs2.specification.core.{Env, Execution}
-import org.specs2.specification.create.{S2StringContextCreation, S2StringContext, InterpolatedFragment}
+import control.ImplicitParameters._
+import specification.core._
+import specification.create._
 
 /**
  * This trait can be used to standardize names for groups of examples in an acceptance specification.
@@ -304,7 +304,11 @@ trait GroupsLike { this: S2StringContextCreation =>
       autoNumberedExamples = autoNumberedExamples :+ ExecutionVar.withEnv(f)
     }
 
-    def :=[R](f: ExecutorService => R)(implicit p: ImplicitParam, asResult: AsResult[R]) {
+    def :=[R](f: ExecutionEnv => R)(implicit p: ImplicitParam, asResult: AsResult[R]) {
+      autoNumberedExamples = autoNumberedExamples :+ ExecutionVar.withExecutionEnv(f)
+    }
+
+    def :=[R](f: ExecutorService => R)(implicit p1: ImplicitParam1, asResult: AsResult[R]) {
       autoNumberedExamples = autoNumberedExamples :+ ExecutionVar.withExecutorService(f)
     }
   }
@@ -372,6 +376,9 @@ object ExecutionVar {
   
   def withEnv[R : AsResult](f: Env => R) =
     new ExecutionVar(() => Execution.withEnv(f))
+
+  def withExecutionEnv[R : AsResult](f: ExecutionEnv => R) =
+    new ExecutionVar(() => Execution.withExecutionEnv(f))
 
   def withExecutorService[R : AsResult](f: ExecutorService => R) =
     new ExecutionVar(() => Execution.withExecutorService(f))

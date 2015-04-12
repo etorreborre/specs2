@@ -68,16 +68,19 @@ If this is the case you can use the `|*` operator (instead of just `|`) to defin
 This returns a function `ExecutorService => Result` which can be used directly as the body of an example. You can also pass it your own thread pool by creating, for example, `java.util.concurrent.Executors.newFixedThreadPool(4)`.
 
 More generally, you can use the "Applicative" operator `|@` to pass anything having a `scalaz.Applicative` instance, like a `scala.concurrent.Future`:${snippet {
-  // this table uses the global execution context implicitly
+  // this table uses the global execution context implicitly to create futures
   // scala.concurrent.ExecutionContext.Implicits.global
   val result: scala.concurrent.Future[DecoratedResult[DataTable]] =
     "a" | "b" | "c" |>
      2  !  2  ! 4   |
      1  !  1  ! 2   |@ { (a, b, c) => Future(a + b must_== c) }
 
-  // then you need to await on the Future result
+  // then you need to get an implicit execution environment and
+  // await on the Future result
+  implicit val ee: ExecutionEnv = ???
   result.await
 }}
+
 
 """
 }

@@ -2,7 +2,7 @@ package org.specs2
 package specification
 package core
 
-import java.util.concurrent.ExecutorService
+import java.util.concurrent.{ScheduledExecutorService, ExecutorService}
 
 import execute._
 import scala.concurrent.ExecutionContext
@@ -121,6 +121,14 @@ object Execution {
   /** create an execution using the executor service */
   def withExecutorService[T : AsResult](f: ExecutorService => T) =
     withEnv((env: Env) => f(env.executorService))
+
+  /** create an execution using the scheduled executor service */
+  def withScheduledExecutorService[T : AsResult](f: ScheduledExecutorService => T) =
+    withEnv((env: Env) => f(env.scheduledExecutorService))
+
+  /** create an execution using the execution environment */
+  def withExecutionEnv[T : AsResult](f: ExecutionEnv => T) =
+    withEnv((env: Env) => f(env.executionEnv))
 
   /** create an execution using the execution context */
   def withExecutionContext[T : AsResult](f: ExecutionContext => T) =

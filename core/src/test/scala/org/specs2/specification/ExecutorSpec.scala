@@ -125,7 +125,7 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
     def verySlow      = { Thread.sleep(600 * timeFactor); messages.append("very slow"); success }
 
     val fragments = Seq(example("very slow", verySlow))
-    val env1 = env.copy(executionEnv = env.executionEnv.setTimeout(100.millis * timeFactor))
+    val env1 = env.setTimeout(100.millis * timeFactor)
 
     execute(fragments, env1) must contain(beSkipped[Result]("timeout after "+100*timeFactor+" milliseconds"))
   }

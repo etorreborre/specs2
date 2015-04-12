@@ -115,6 +115,8 @@ object equal {
 
 sealed trait BrokenEqual
 object BrokenEqualInstances {
+  import scalaz.Id._
+
   implicit def brokenEqual[A](implicit ordA: Order[A]): Equal[A @@ BrokenEqual] =
     Equal.equal((a1, a2) => ordA.lessThan(Tag.unsubst[A, Id, BrokenEqual](a1), Tag.unsubst[A, Id, BrokenEqual](a2)))
   implicit def arbitrary[A](implicit arbA: Arbitrary[A]): Arbitrary[A @@ BrokenEqual] =

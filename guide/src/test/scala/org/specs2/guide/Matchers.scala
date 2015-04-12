@@ -6,7 +6,9 @@ import java.util.concurrent.ExecutorService
 
 import matcher._
 import guide.matchers._
+import org.specs2.execute.ExecutionEnv
 import org.specs2.specification.Forms
+import org.specs2.specification.core.Env
 
 object Matchers extends UserGuidePage with Forms { def is = s2"""
 
@@ -92,22 +94,24 @@ val iterator = List(1, 2, 3).iterator
 iterator.next must be_==(3).eventually
 }}
 
- * use `await` to create a matcher that will match on `Matcher[Future[T]]`: ${snippet{
+ * use `await` to create a matcher that will match on `Matcher[Future[T]]` (this requires an ${"execution environment" ~/ ExecutionEnvironment}): ${snippet{
   // 8<--
-  import scala.concurrent.ExecutionContext.Implicits.global
   import scala.concurrent._
   import scala.concurrent.duration._
+  implicit lazy val ee: ExecutionEnv = ???
   // 8<--
 Future(1) must be_>(0).await
 Future { Thread.sleep(100); 1 } must be_>(0).await(retries = 2, timeout = 100.millis)
 }}
 
- * use `attempt` to create a matcher that will match on `Matcher[scalaz.concurrent.Future[T]]`: ${snippet{
+ * use `attempt` to create a matcher that will match on `Matcher[scalaz.concurrent.Future[T]]` (this requires an ${"execution environment" ~/ ExecutionEnvironment}): ${snippet{
   // 8<--
   import scala.concurrent.duration._
-  implicit val es: ExecutorService = null
   // 8<--
-scalaz.concurrent.Future(1) must be_>(0).attempt
+// see the Matchers-Futures reference card on how to get an ExecutionEnv
+implicit val ee: ExecutionEnv = ???
+
+  scalaz.concurrent.Future(1) must be_>(0).attempt
 scalaz.concurrent.Future { Thread.sleep(100); 1 } must be_>(0).attempt(retries = 2, timeout = 100.millis)
 }}
 

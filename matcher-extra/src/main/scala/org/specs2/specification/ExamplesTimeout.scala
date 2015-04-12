@@ -10,6 +10,7 @@ import time._
 
 import scala.concurrent.duration._
 import TerminationMatchers._
+
 /**
  * This trait can be used to add a global time out to each example or for a specific one:
  *

@@ -3,14 +3,14 @@ package specification
 package core
 
 import main.Arguments
-import org.specs2.execute.{ExecutionTimeFactor, AsResult}
+import execute._
 import reporter.LineLogger
 import LineLogger._
 import io._
 import control._
 import process.{Executor, DefaultExecutor, StatisticsRepository, Selector, DefaultSelector}
-
 import scala.concurrent.ExecutionContext
+import scala.concurrent.duration.FiniteDuration
 
 /**
  * Whole creation / execution / reporting environment for a specification
@@ -37,9 +37,6 @@ case class Env(arguments: Arguments = Arguments(),
           statsRepository: Arguments => StatisticsRepository = (arguments: Arguments) =>
              StatisticsRepository.file(arguments.commandLine.directoryOr("stats.outdir", "target" / "specs2-reports" / "stats")),
 
-          /** execution environment */
-          executionEnv: ExecutionEnv = ExecutionEnv(),
-
           /** logger for issues */
           systemLogger: Logger = noLogging,
 
@@ -47,7 +44,10 @@ case class Env(arguments: Arguments = Arguments(),
           random: scala.util.Random = new scala.util.Random,
 
           /** file system interface */
-          fileSystem: FileSystem = FileSystem) {
+          fileSystem: FileSystem = FileSystem,
+
+          /** parameters for fragments execution */
+          executionParameters: ExecutionParameters = ExecutionParameters()) {
 
   lazy val statisticsRepository: StatisticsRepository =
     statsRepository(arguments)
@@ -56,25 +56,27 @@ case class Env(arguments: Arguments = Arguments(),
 
   lazy val executor = executorInstance(arguments)
 
+  /** execution environment */
+  lazy val executionEnv: ExecutionEnv =
+    ExecutionEnv.create(arguments, systemLogger, "env"+hashCode)
+
   lazy val executorService =
-    ExecutionTimeFactor.decorateExecutorService(
-      ExecutionEnv.executor(arguments.threadsNb, "env"+hashCode.toString),
-      arguments.execute.timeFactor)
+    executionEnv.executorService
 
   lazy val executionContext =
-    setTimeFactor(ExecutionContext.fromExecutorService(executorService,
-    (t: Throwable) => control.logThrowable(t, arguments.verbose).execute(systemLogger).unsafePerformIO))
+    executionEnv.executionContext
 
-  def setTimeFactor(context: ExecutionContext): ExecutionContext =
-    ExecutionTimeFactor.decorateExecutionContext(context, arguments.execute.timeFactor)
+  lazy val scheduledExecutorService =
+    executionEnv.scheduledExecutorService
 
+  lazy val timeout =
+    executionParameters.timeout
 
-  lazy val timeout = (new Timeout).start
+  def setTimeout(duration: FiniteDuration): Env =
+    copy(executionParameters = executionParameters.setTimeout(duration))
 
-  def shutdown(): Unit = {
-    try     executorService.shutdownNow
-    finally timeout.stop()
-  }
+  def shutdown(): Unit =
+    executionEnv.shutdown()
 
   /** set new LineLogger */
   def setLineLogger(logger: LineLogger) =
@@ -86,23 +88,29 @@ case class Env(arguments: Arguments = Arguments(),
 
   /** @return an isolated env */
   def setWithoutIsolation =
-    copy(executionEnv = executionEnv.setWithoutIsolation)
+    copy(executionParameters = executionParameters.setWithoutIsolation)
 
   /** set a new statistic repository */
   def setStatisticRepository(repository: StatisticsRepository) =
     copy(statsRepository = (args: Arguments) => repository)
-
-  /** set a new execution environment */
-  def setExecutionEnv(env: ExecutionEnv) =
-    copy(executionEnv = env)
 }
 
 object Env {
-  def apply(execEnv: ExecutionEnv) =
-    new Env().setExecutionEnv(execEnv)
-
   def executeResult[R: AsResult](r: Env => R) = {
     val env = Env()
     AsResult(r(env))
   }
+}
+
+case class ExecutionParameters(
+  timeout:  Option[FiniteDuration] = None,
+  withoutIsolation: Boolean = false) {
+  /**
+   * fragments must not be created as "isolated"
+   */
+  def setWithoutIsolation: ExecutionParameters =
+    copy(withoutIsolation = true)
+
+  def setTimeout(duration: FiniteDuration): ExecutionParameters =
+    copy(timeout = Some(duration))
 }

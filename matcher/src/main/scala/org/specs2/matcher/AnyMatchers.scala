@@ -198,7 +198,7 @@ trait AnyBeHaveMatchers extends BeHaveMatchers { outer: AnyMatchers =>
     def anyOf(t: T*) = result(outer.beAnyOf(t:_*))
     def oneOf(t: T*) = result(outer.beOneOf(t:_*))
     def beNull = result(outer.beNull)
-    def anInstanceOf[T : ClassTag] = result(beAnInstanceOf[T])
+    def anInstanceOf(implicit ct: ClassTag[T]) = result(beAnInstanceOf[T])
   }
 
   implicit def toAnyRefMatcherResult[T <: AnyRef](result: MatchResult[T]): AnyRefMatcherResult[T] = new AnyRefMatcherResult(result)

@@ -39,7 +39,6 @@ class ProcessMatchersSpec extends mutable.Specification with ProcessMatchers wit
 
   step(scheduledExecutorService.shutdown)
 
-
   def oneElement[T](t: =>T) =
     Process.eval(Task.delay(t))
 
