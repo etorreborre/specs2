@@ -13,5 +13,6 @@ trait ArgThat {
   /** allows to use a hamcrest matchers to match parameters. */
   def anArgThat[T, U <: T](m: org.hamcrest.Matcher[U]): T = org.mockito.Matchers.argThat(m)
 
-
 }
+
+object ArgThat extends ArgThat

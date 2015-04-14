@@ -107,6 +107,8 @@ trait MocksCreation extends TheMockitoMocker with ClassesOf {
   def ignoreStubs(mocks: AnyRef*): IgnoreStubs = IgnoreStubs(mocker.ignoreStubs(mocks:_*))
 }
 
+object MocksCreation extends MocksCreation
+
 /**
  * This class encapsulate mocks which must have their stubbed methods ignored in verification methods
  */

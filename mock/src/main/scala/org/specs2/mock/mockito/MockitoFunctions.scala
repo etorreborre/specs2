@@ -17,3 +17,5 @@ trait MockitoFunctions extends TheMockitoMocker {
   /** delegate to MockitoMocker doNothing. */
   def doNothing = mocker.doNothing
 }
+
+object MockitoFunctions extends MockitoFunctions

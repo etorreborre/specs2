@@ -26,6 +26,7 @@ trait ClassesOf {
         implicitly[ClassTag[T3]].runtimeClass,
         implicitly[ClassTag[T4]].runtimeClass,
         implicitly[ClassTag[T5]].runtimeClass)
-
 }
+
+object ClassesOf extends ClassesOf
 

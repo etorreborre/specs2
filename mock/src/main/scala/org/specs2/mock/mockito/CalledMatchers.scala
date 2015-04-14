@@ -163,3 +163,4 @@ trait CalledMatchers extends NumberOfTimes with FunctionArguments with TheMockit
   }
 }
 
+object CalledMatchers extends CalledMatchers

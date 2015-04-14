@@ -17,6 +17,8 @@ trait CapturedArgument {
   implicit def captured[T](c: ArgumentCapture[T]): T = c.capture
 }
 
+object CapturedArgument extends CapturedArgument
+
 /** This class encapsulates an ArgumentCaptor */
 class ArgumentCapture[T](implicit m: ClassTag[T]) {
   lazy private val captor: ArgumentCaptor[T] = ArgumentCaptor.forClass(m.runtimeClass).asInstanceOf[ArgumentCaptor[T]]

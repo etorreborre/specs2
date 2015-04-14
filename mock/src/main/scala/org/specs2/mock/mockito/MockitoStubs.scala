@@ -102,6 +102,8 @@ trait MockitoStubs extends MocksCreation with MockitoStubsLowerImplicits {
   }
 }
 
+object MockitoStubs extends MockitoStubs
+
 trait MockitoStubsLowerImplicits {
   implicit def ongoingStubbing[M](stubbing: =>OngoingStubbing[_]): M = stubbing.getMock[M]
 }

@@ -147,6 +147,8 @@ trait FunctionArguments extends FunctionArgumentsLowImplicits {
 
 }
 
+object FunctionArguments extends FunctionArguments
+
 /**
  * GENERATION CODE
  */

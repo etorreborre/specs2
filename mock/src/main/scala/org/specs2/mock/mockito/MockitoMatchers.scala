@@ -50,6 +50,8 @@ trait MockitoMatchers extends ArgThat {
 
 }
 
+object MockitoMatchers extends MockitoMatchers
+
 /**
  * GENERATION code
  */
