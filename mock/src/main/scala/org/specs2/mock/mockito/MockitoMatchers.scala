@@ -2,6 +2,8 @@ package org.specs2
 package mock
 package mockito
 
+import java.util
+
 import org.mockito.Matchers
 import org.hamcrest.core.IsAnything
 import scala.reflect.ClassTag
@@ -20,6 +22,27 @@ trait MockitoMatchers extends ArgThat {
   def anyLong    = Matchers.anyLong
   def anyDouble  = Matchers.anyDouble
   def anyFloat   = Matchers.anyFloat
+
+  def anyVarArg[T]      = Matchers.anyVararg[T]()
+  def anyJavaList       = Matchers.anyList
+  def anyJavaSet        = Matchers.anySet
+  def anyJavaCollection = Matchers.anyCollection()
+  def anyJavaMap        = Matchers.anyMap()
+
+  def anyJavaListOf[T : ClassTag]              = Matchers.anyListOf(implicitly[ClassTag[T]].runtimeClass)
+  def anyJavaSetOf[T : ClassTag]               = Matchers.anySetOf(implicitly[ClassTag[T]].runtimeClass)
+  def anyJavaCollectionOf[T : ClassTag]        = Matchers.anyCollectionOf(implicitly[ClassTag[T]].runtimeClass)
+  def anyJavaMapOf[K : ClassTag, V : ClassTag] = Matchers.anyMapOf(implicitly[ClassTag[K]].runtimeClass, implicitly[ClassTag[V]].runtimeClass)
+
+  def anyList        = Matchers.any(classOf[List[_]])
+  def anySet         = Matchers.any(classOf[Set[_]])
+  def anyTraversable = Matchers.any(classOf[Traversable[_]])
+  def anyMap         = Matchers.any(classOf[Map[_,_]])
+
+  def anyListOf[T : ClassTag]              = Matchers.any(implicitly[ClassTag[List[T]]].runtimeClass).asInstanceOf[List[T]]
+  def anySetOf[T : ClassTag]               = Matchers.any(implicitly[ClassTag[Set[T]]].runtimeClass).asInstanceOf[Set[T]]
+  def anyTraversableOf[T : ClassTag]       = Matchers.any(implicitly[ClassTag[Traversable[T]]].runtimeClass).asInstanceOf[Traversable[T]]
+  def anyMapOf[K : ClassTag, V : ClassTag] = Matchers.any(implicitly[ClassTag[Map[K, V]]].runtimeClass).asInstanceOf[Map[K, V]]
 
   def any[T : ClassTag]: T = org.mockito.Matchers.any(implicitly[ClassTag[T]].runtimeClass).asInstanceOf[T]
 

@@ -1,6 +1,8 @@
 package org.specs2
 package mock
 
+import java.util
+
 import specification.core.{Env, Fragment}
 import specification.process.DefaultExecutor
 import specification._
@@ -130,6 +132,12 @@ STUBS
  The Mockito trait is reusable in other contexts
    + in mutable specs
    + with an in order call
+
+ MATCHERS
+ ========
+
+ + Various mockito matchers can be used
+
                                                                                                                         """
     
   "creation" - new group {
@@ -475,7 +483,64 @@ STUBS
       }
       DefaultExecutor.runSpec(s.is, Env()).filter(Fragment.isExample).map(_.executionResult.isSuccess) must contain (false)
     }
+  }
 
+  "mockito matchers" - new group with Mockito with ThrownExpectations {
+    trait M {
+      def javaList[T](a: java.util.List[T])
+      def javaSet[T](a: java.util.Set[T])
+      def javaCollection[T](a: java.util.Collection[T])
+      def javaMap[K, V](a: java.util.Map[K, V])
+
+      def List[T](a: List[T])
+      def Set[T](a: Set[T])
+      def Traversable[T](a: Traversable[T])
+      def Map[K, V](a: Map[K, V])
+
+      def varargs[T](ts: T*)
+    }
+    val m = mock[M]
+
+    eg := {
+      m.javaList(new util.ArrayList[Int])
+      m.javaSet(new util.HashSet[Int])
+      m.javaCollection(new util.ArrayList[Int])
+      m.javaMap(new util.HashMap[Int, String])
+
+      m.List(List[Int]())
+      m.Set(Set[Int]())
+      m.Traversable(List[Int]())
+      m.Map(Map[Int, String]())
+
+      m.varargs(1, 2)
+
+      there was one(m).javaList(anyJavaList)
+      there was one(m).javaList(anyJavaListOf[Int])
+
+      there was one(m).javaSet(anyJavaSet)
+      there was one(m).javaSet(anyJavaSetOf[Int])
+
+      there was one(m).javaCollection(anyJavaCollection)
+      there was one(m).javaCollection(anyJavaCollectionOf[Int])
+
+      there was one(m).javaMap(anyJavaMap)
+      there was one(m).javaMap(anyJavaMapOf[Int, String])
+
+      there was one(m).List(anyList)
+      there was one(m).List(anyListOf[Int])
+
+      there was one(m).Set(anySet)
+      there was one(m).Set(anySetOf[Int])
+
+      there was one(m).Traversable(anyTraversable)
+      there was one(m).Traversable(anyTraversableOf[Int])
+
+      there was one(m).Map(anyMap)
+      there was one(m).Map(anyMapOf[Int, String])
+
+      there was one(m).varargs(anyVarArg[Int])
+
+    }
   }
 
   trait list {
