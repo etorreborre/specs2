@@ -1,6 +1,6 @@
 package org.specs2.guide
 
-object DetailedTopics extends UserGuidePage { def is = s2"""
+object DetailedTopics extends UserGuidePage { def is = sortedLinks ^ s2"""
 
  Topic                                                                                   | See
 ---------------------------------------------------------------------------------------- | ------
@@ -26,5 +26,28 @@ Use $specs2 matchers outside of $specs2                                         
 Matchers reference card                                                                  | ${link(matchers.ReferenceCard).mute}
 Arguments reference card                                                                 | ${link(ArgumentsReference).mute}
 """
+
+ def sortedLinks =
+  link(AsResultTypeclass).hide ^
+  link(ArgumentsReference).hide ^
+  link(AutoExamples).hide ^
+  link(AutoNumberedExamples).hide ^
+  link(matchers.CaseClassMatchers).hide ^
+  link(UseDatatables).hide ^
+  link(matchers.DependencyMatchers).hide ^
+  link(UseForms).hide ^
+  link(CreateOnlineSpecifications).hide ^
+  link(ExecutionEnvironment).hide ^
+  link(FragmentsApi).hide ^
+  link(GetAllExpectations).hide ^
+  link(GivenWhenThenStyle).hide ^
+  link(NamedExamples).hide ^
+  link(OtherBuildTools).hide ^
+  link(matchers.OutsideSpecs2).hide ^
+  link(matchers.ReferenceCard).hide ^
+  link(SpecificationFormatting).hide ^
+  link(matchers.SyntacticVariations).hide ^
+  link(ReferenceOtherSpecifications).hide
+
 
 }

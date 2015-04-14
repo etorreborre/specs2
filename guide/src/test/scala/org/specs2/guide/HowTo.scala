@@ -1,7 +1,7 @@
 package org.specs2
 package guide
 
-object HowTo extends UserGuidePage { def is = s2"""
+object HowTo extends UserGuidePage { def is = sortedLinks ^ s2"""
 
  Question                                                                                | See
 ---------------------------------------------------------------------------------------- | ------
@@ -31,4 +31,27 @@ How to isolate each example from another so that they don't share variables     
 Help, I need to troubleshoot my issues!                                                  | ${link(Troubleshooting).mute}
 
 """
+
+ def sortedLinks =
+    link(CaptureSnippets).hide ^
+    link(Contexts).hide ^
+    link(ConsoleOutput).hide ^
+    link(DebugStatements).hide ^
+    link(Execution).hide ^
+    link(ExpectationDescription).hide ^
+    link(ForLoops).hide ^
+    link(HtmlOutput).hide ^
+    link(Isolation).hide ^
+    link(JUnitXmlOutput).hide ^
+    link(LightweightSpecs).hide ^
+    link(MultilineDescriptions).hide ^
+    link(PendingUntilFixedExamples).hide ^
+    link(PrintExecutionData).hide
+    link(RandomExecution).hide ^
+    link(Selection).hide ^
+    link(SpecificationTemplate).hide ^
+    link(SkipExamples).hide ^
+    link(StandardResults).hide ^
+    link(Troubleshooting).hide ^
+    link(UseCommandLineArguments).hide
 }
