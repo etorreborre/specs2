@@ -94,7 +94,7 @@ val iterator = List(1, 2, 3).iterator
 iterator.next must be_==(3).eventually
 }}
 
- * use `await` to create a matcher that will match on `Matcher[Future[T]]` (this requires an ${"execution environment" ~/ ExecutionEnvironment}): ${snippet{
+ * use `await` to create a matcher that will match on `Matcher[Future[T]]` (this requires an ${"execution environment" ~/ ExecutionEnvironments}): ${snippet{
   // 8<--
   import scala.concurrent._
   import scala.concurrent.duration._
@@ -104,7 +104,7 @@ Future(1) must be_>(0).await
 Future { Thread.sleep(100); 1 } must be_>(0).await(retries = 2, timeout = 100.millis)
 }}
 
- * use `attempt` to create a matcher that will match on `Matcher[scalaz.concurrent.Future[T]]` (this requires an ${"execution environment" ~/ ExecutionEnvironment}): ${snippet{
+ * use `attempt` to create a matcher that will match on `Matcher[scalaz.concurrent.Future[T]]` (this requires an ${"execution environment" ~/ ExecutionEnvironments}): ${snippet{
   // 8<--
   import scala.concurrent.duration._
   // 8<--

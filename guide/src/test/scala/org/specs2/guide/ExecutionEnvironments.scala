@@ -1,14 +1,14 @@
 package org.specs2
 package guide
 
-import java.util.concurrent.{ScheduledExecutorService, ExecutorService}
-
+import java.util.concurrent.ExecutorService
+import specification.ExecutionEnvironment
 import execute._
-import org.specs2.concurrent.ExecutionEnv
+import concurrent.ExecutionEnv
 import scala.concurrent._
 import duration._
 
-object ExecutionEnvironment extends UserGuidePage { def is = "Execution environment".title ^ s2"""
+object ExecutionEnvironments extends UserGuidePage { def is = "Execution environment".title ^ s2"""
 
 When you run a specification, a `java.util.concurrent.ExecutorService` is used to execute examples concurrently. You can access this `ExecutorService` to execute `scalaz.concurrent.Futures` and it can also be wrapped into a `scala.concurrent.ExecutionContext` to create `scala.concurrent.Futures`.
 
@@ -43,7 +43,7 @@ This works thanks to an implicit conversion between `ExecutionEnv` and `Executio
 
 ### Scalaz Future
 
-A Scalaz `Future` needs an implicit `ExecutorService` if you want to evaluate values asynchronously. You can require an `ExecutorService` in your examples like this: ${snippet{
+A Scalaz `Future` needs an implicit `ExecutorService` to evaluate values asynchronously. You can require an `ExecutorService` in your examples like this: ${snippet{
 class MyFutureSpec extends Specification { def is = s2"""
  Let's check this scalaz future ${ implicit es: ExecutorService =>
    scalaz.concurrent.Future(1).run must_== 1
@@ -70,6 +70,30 @@ class MyFutureSpec extends Specification { def is = s2"""
 """
 }
 }}
+
+### Implicit ExecutionEnv
+
+Passing an implicit `ExecutionEnv` for each example can be tedious. Another possibility is to mix-in the `org.specs2.specification.ExecutionEnvironment` trait to your specification: ${snippet{
+class MyFutureSpec extends Specification with ExecutionEnvironment { def is(implicit ee: ExecutionEnv) = s2"""
+ Let's check this scala future ${
+   Future(1) must be_==(1).await
+ }
+"""
+}
+
+// in a mutable specification
+class MyMutableFutureSpec extends mutable.Specification with specification.mutable.ExecutionEnvironment { def is(implicit ee: ExecutionEnv) = {
+  "Let's check this scala future" >> {
+    Future(1) must be_==(1).await
+  }
+}}
+}}
+
+$AndIfYouWantToKnowMore
+
+ - use $specs2 ${"environment" ~/ Environment } in a Specification
+
+$vid
 
 
 """

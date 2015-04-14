@@ -16,7 +16,8 @@ Create examples "on the fly" as the specification executes                      
 Create an example with different data displayed in a table                               | ${link(UseDatatables).mute}
 Fragments API                                                                            | ${link(FragmentsApi).mute}
 Create an example with different data displayed in a table                               | ${link(UseDatatables).mute}
-Execution environment for Futures                                                        | ${link(ExecutionEnvironment).mute}
+Use $specs2 environment (command-line args, file system...)                              | ${link(Environment).mute}
+Execution environment for Futures                                                        | ${link(ExecutionEnvironments).mute}
 Create a new type of Result                                                              | ${link(AsResultTypeclass).mute}
 Other build tools                                                                        | ${link(OtherBuildTools).mute}
 Syntax variations with matchers                                                          | ${link(matchers.SyntacticVariations).mute}
@@ -37,7 +38,8 @@ Arguments reference card                                                        
   link(matchers.DependencyMatchers).hide ^
   link(UseForms).hide ^
   link(CreateOnlineSpecifications).hide ^
-  link(ExecutionEnvironment).hide ^
+  link(Environment).hide ^
+  link(ExecutionEnvironments).hide ^
   link(FragmentsApi).hide ^
   link(GetAllExpectations).hide ^
   link(GivenWhenThenStyle).hide ^

@@ -17,9 +17,9 @@ import scalaz.concurrent.Future
  * if withoutIsolation is true then fragments are executed right away because they are
  * already in their own copy of the specification
  */
-case class ExecutionEnv(executorService: ExecutorService,
-                        scheduledExecutorService: ScheduledExecutorService,
-                        executionContext: ExecutionContext,
+case class ExecutionEnv(executor:          () => ExecutorService,
+                        scheduledExecutor: () => ScheduledExecutorService,
+                        exContext:         () => ExecutionContext,
                         timeFactor: Int) {
 
   lazy val timeout = (new Timeout).start
@@ -27,14 +27,22 @@ case class ExecutionEnv(executorService: ExecutorService,
   def withTimeout[T](future: Future[T], timeoutInMillis: Long): Future[SomeTimeout \/ T] =
     timeout.withTimeout(future, timeoutInMillis)
 
+  /** note: shutdown only shuts down the executor services */
   def shutdown(): Unit = {
-    try     executorService.shutdownNow
+    try     {
+      try executorService.shutdownNow
+      finally scheduledExecutorService.shutdownNow
+    }
     finally timeout.stop()
   }
 
-  implicit val es  = executorService
-  implicit val ses = scheduledExecutorService
-  implicit val ec  = executionContext
+  lazy val executorService = executor()
+  lazy val scheduledExecutorService = scheduledExecutor()
+  lazy val executionContext = exContext()
+
+  implicit lazy val es  = executorService
+  implicit lazy val ses = scheduledExecutorService
+  implicit lazy val ec  = executionContext
 }
 
 object ExecutionEnv {
@@ -47,9 +55,9 @@ object ExecutionEnv {
   def create(arguments: Arguments, systemLogger: Logger, threadFactoryName: String): ExecutionEnv = {
     val executorService = executor(arguments.threadsNb, threadFactoryName)
     ExecutionEnv(
-      executorService,
-      scheduledExecutor(arguments.scheduledThreadsNb, threadFactoryName),
-      createExecutionContext(executorService, arguments.verbose, systemLogger),
+      () => executorService,
+      () => scheduledExecutor(arguments.scheduledThreadsNb, threadFactoryName),
+      () => createExecutionContext(executorService, arguments.verbose, systemLogger),
       arguments.execute.timeFactor
     )
   }
@@ -71,4 +79,14 @@ object ExecutionEnv {
    */
   def scheduledExecutor(scheduledThreadsNb: Int, name: String): ScheduledExecutorService =
     Executors.newScheduledThreadPool(scheduledThreadsNb, new NamedThreadFactory("specs2.scheduled."+name))
+
+
+  /** create an ExecutionEnv from an execution context only */
+  def fromExecutionContext(ec: ExecutionContext): ExecutionEnv =
+    ExecutionEnv(() => executor(1, "unused"), () => scheduledExecutor(1, "unused"), () => ec, timeFactor = 1)
+
+  /** create an ExecutionEnv from Scala global execution context */
+  def fromGlobalExecutionContext: ExecutionEnv =
+    fromExecutionContext(scala.concurrent.ExecutionContext.global)
+
 }

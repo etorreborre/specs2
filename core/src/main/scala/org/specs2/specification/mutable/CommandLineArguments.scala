@@ -2,6 +2,7 @@ package org.specs2
 package specification.mutable
 
 import main.CommandLine
+import org.specs2.concurrent.ExecutionEnv
 import org.specs2.specification.core._
 import specification.core.mutable.SpecificationStructure
 
@@ -31,6 +32,20 @@ trait Environment extends SpecificationStructure {
   override def structure = (env: Env) => {
     // trigger the creation of the spec structure through side-effects
     is(env)
+    // use what the is method returns
+    decorate(is, env)
+  }
+}
+
+/**
+ * Syntax for building a mutable specifications based on the current environment
+ */
+trait ExecutionEnvironment extends SpecificationStructure {
+  def is(implicit executionEnv: ExecutionEnv): Any
+
+  override def structure = (env: Env) => {
+    // trigger the creation of the spec structure through side-effects
+    is(env.executionEnv)
     // use what the is method returns
     decorate(is, env)
   }
