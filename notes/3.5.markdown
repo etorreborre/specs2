@@ -1,0 +1,35 @@
+Maintenance version with some *important fixes* for Futures execution
+
+## Improvements
+
+* sorted some toc entries for better display
+* added the possibility to mute specification links (i.e not display their status)
+
+## Fixes
+
+The ***specs2*** execution environment (`org.specs2.execute.ExecutionEnv`) must now be used when matching Scala `Future` or Scalaz `Future` with the `await/attempt` methods. There are 2 reasons for this:
+
+ - we can control exactly how Scalaz futures are being "timed", because the `scalaz.concurrent.Future.timed` method in Scalaz 7.1.1 requires an implicit `ScheduledExecutorService`. Previously in `specs2-3.4`, a default scheduled executor service was selected which did not allow to set the number of threads for that service
+ 
+ - the design for passing the `timeFactor` to apply when measuring timeouts is a lot cleaner
+ 
+When using this version your code might break if you use `await / attempt` to match `Futures`. The work-around is to require an implicit `ExecutionEnv` instead of an implicit `ExecutionContext` (or `ExecutorService` for scalaz Futures). For example:
+
+```
+import org.specs2.concurrent.ExecutionEnv
+
+class MySpec extends mutable.Specification {
+  "test of a Scala Future" >> { implicit ee: ExecutionEnv =>
+    Future(1) must be_>(0).await
+  }
+}
+```
+
+ * compile for both scalaz-7.1.1 and scalaz-7.0.6 [#359](https://github.com/etorreborre/specs2/issues/359)
+ * added more Mockito matchers to the MockitoMatchers trait [#355](https://github.com/etorreborre/specs2/issues/355)
+ * added companion objects for Mockito traits [#358](https://github.com/etorreborre/specs2/issues/358)
+ * the `NoLanguageFeature` trait must *not* define implicits [#343](https://github.com/etorreborre/specs2/issues/343)
+ * de-duplicate links in the toc
+
+==========================
+
