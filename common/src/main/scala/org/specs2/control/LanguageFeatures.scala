@@ -11,6 +11,6 @@ trait LanguageFeatures {
 }
 
 trait NoLanguageFeatures extends LanguageFeatures {
-  override implicit lazy val implicitsAreAllowed = language.implicitConversions
-  override implicit lazy val postfixOpsAreAllowed = language.postfixOps
+  override lazy val implicitsAreAllowed = language.implicitConversions
+  override lazy val postfixOpsAreAllowed = language.postfixOps
 }
