@@ -7,3 +7,6 @@ class TestSpec extends Specification with ScalaCheck { def is = s2"""
 
 """
 }
+
+class TestMutableSpec extends mutable.Specification {
+}
