@@ -5,6 +5,7 @@ import java.util.concurrent.ExecutorService
 
 import execute._
 import control.ImplicitParameters._
+import org.specs2.concurrent.ExecutionEnv
 import specification.core._
 import specification.create._
 

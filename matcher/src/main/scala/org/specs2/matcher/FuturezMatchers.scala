@@ -3,6 +3,7 @@ package matcher
 
 import java.util.concurrent._
 import execute._
+import org.specs2.concurrent.ExecutionEnv
 import scala.concurrent.duration._
 import scala.concurrent.{Future =>_,_}
 import scalaz.concurrent.{Strategy, Future}

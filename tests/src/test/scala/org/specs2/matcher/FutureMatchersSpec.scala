@@ -1,11 +1,11 @@
 package org.specs2
 package matcher
 
-import execute.ExecutionEnv
 import specification.Environment
 import specification.core.Env
 
-import concurrent._
+import org.specs2.concurrent._
+import scala.concurrent._
 import duration._
 
 class FutureMatchersSpec extends Specification with ResultMatchers with Retries with Environment { def is(env: Env) = {

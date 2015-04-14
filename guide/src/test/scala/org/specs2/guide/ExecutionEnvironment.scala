@@ -4,6 +4,7 @@ package guide
 import java.util.concurrent.{ScheduledExecutorService, ExecutorService}
 
 import execute._
+import org.specs2.concurrent.ExecutionEnv
 import scala.concurrent._
 import duration._
 

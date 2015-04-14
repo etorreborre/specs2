@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutorService
 
 import matcher._
 import guide.matchers._
-import org.specs2.execute.ExecutionEnv
+import org.specs2.concurrent.ExecutionEnv
 import org.specs2.specification.Forms
 import org.specs2.specification.core.Env
 

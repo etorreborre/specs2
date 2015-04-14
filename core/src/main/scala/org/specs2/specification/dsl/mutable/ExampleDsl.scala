@@ -5,7 +5,8 @@ package mutable
 
 import java.util.concurrent.ExecutorService
 
-import org.specs2.execute.{ExecutionEnv, AsResult}
+import org.specs2.concurrent.ExecutionEnv
+import org.specs2.execute.AsResult
 import control.ImplicitParameters
 import ImplicitParameters._
 import org.specs2.main.{CommandLineAsResult, CommandLine}

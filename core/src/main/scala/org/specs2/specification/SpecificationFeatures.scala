@@ -2,9 +2,10 @@ package org.specs2
 package specification
 
 import matcher.{StandardMatchResults, ShouldMatchers, MustMatchers}
-import execute.{ImplicitExecutionContexts, PendingUntilFixed, StandardResults}
+import execute.{PendingUntilFixed, StandardResults}
 import control.Debug
 import control.ImplicitParameters
+import org.specs2.concurrent.ImplicitExecutionContexts
 
 /**
  * List of all the features which are being included the default Specification class:

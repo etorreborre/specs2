@@ -3,6 +3,7 @@ package matcher
 
 import mutable._
 import execute._
+import org.specs2.concurrent.ExecutionEnv
 import scala.concurrent._
 import scala.concurrent.duration._
 

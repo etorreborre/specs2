@@ -3,6 +3,8 @@ package matcher
 
 import java.util.concurrent.{Executors, ExecutorService}
 
+import org.specs2.concurrent.ExecutionEnv
+
 import scalaz.concurrent.Future
 import sys._
 import execute._

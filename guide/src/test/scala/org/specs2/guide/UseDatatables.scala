@@ -1,6 +1,7 @@
 package org.specs2
 package guide
 
+import org.specs2.concurrent.ExecutionEnv
 import specification.Tables
 import execute._
 import scala.concurrent.Future

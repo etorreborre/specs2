@@ -4,6 +4,7 @@ package core
 
 import main.Arguments
 import execute._
+import org.specs2.concurrent.ExecutionEnv
 import reporter.LineLogger
 import LineLogger._
 import io._

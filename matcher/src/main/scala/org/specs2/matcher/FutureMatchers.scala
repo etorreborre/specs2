@@ -1,9 +1,10 @@
 package org.specs2
 package matcher
 
-import concurrent.duration._
+import org.specs2.concurrent.ExecutionEnv
+import scala.concurrent.duration._
 import scala.concurrent._
-import java.util.concurrent.{ScheduledExecutorService, ExecutorService, TimeoutException}
+import java.util.concurrent.TimeoutException
 import org.specs2.execute._
 
 /**

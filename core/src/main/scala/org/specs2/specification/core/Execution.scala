@@ -5,6 +5,7 @@ package core
 import java.util.concurrent.{ScheduledExecutorService, ExecutorService}
 
 import execute._
+import org.specs2.concurrent.ExecutionEnv
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scalaz.Show

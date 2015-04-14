@@ -1,6 +1,7 @@
 package org.specs2
 package matcher
 
+import org.specs2.concurrent.ExecutionEnv
 import specification.Environment
 import specification.core.Env
 import execute._

@@ -3,6 +3,7 @@ package guide
 package matchers
 
 import execute._
+import org.specs2.concurrent.ExecutionEnv
 import specification.core.Env
 import scala.concurrent._
 import scala.concurrent.duration._
@@ -38,7 +39,7 @@ All of the above is applicable to `scalaz.concurrent.Future` by using the method
 
 #### Execution
 
-The `await`/`attempt` methods require an implicit `org.specs2.execute.ExecutionEnv` (see [here](org.specs2.guide.ExecutionEnvironment.html) for more details). You can pass one in the body of your examples:${snippet{
+The `await`/`attempt` methods require an implicit `org.specs2.concurrent.ExecutionEnv` (see [here](org.specs2.guide.ExecutionEnvironment.html) for more details). You can pass one in the body of your examples:${snippet{
 class MyFutureSpec extends Specification { def is = s2"""
 
  Let's check this scala future ${ implicit ee: EE =>
