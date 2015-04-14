@@ -54,6 +54,13 @@ class s extends Specification { def is = s2""" // 8<--
 
 Finally I'm also drawing your attention to the fact that you don't have to create your specifications as Scala classes but you can use simple objects as shown above.
 
+### Reporting
+
+By default specification links are reported with a status icon in HTML pages. You can change this by using the following methods:
+
+ - `link(MySpec).hide` doesn't show the link at all. This is useful when you want a children specification to be executed from a parent one without having to mention it
+ - `link(MySpec).mute` doesn't show the link status. This is useful when you want a children specification to be executed from a parent one but just display its html link
+
 ### Execution
 
 When you execute a given specification you can pass the `all` argument to execute all the referenced specifications. They will be collected and executed in (topological sort)[http://en.wikipedia.org/wiki/Topological_sorting] order and any cycle in the reference graph will be broken. Only the "link" references will be executed, not the "see" references.

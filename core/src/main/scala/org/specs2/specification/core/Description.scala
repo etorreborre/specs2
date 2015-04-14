@@ -46,7 +46,7 @@ case object NoText extends Description {
 /**
  * Reference to another specification
  */
-case class SpecificationRef(header: SpecHeader, arguments: Arguments, alias: String = "", tooltip: String = "", hidden: Boolean = false) extends Description {
+case class SpecificationRef(header: SpecHeader, arguments: Arguments, alias: String = "", tooltip: String = "", hidden: Boolean = false, muted: Boolean = false) extends Description {
   def specClassName = header.className
 
   def url = specClassName+".html"
@@ -58,6 +58,9 @@ case class SpecificationRef(header: SpecHeader, arguments: Arguments, alias: Str
 
   def hide: SpecificationRef =
     copy(hidden = true)
+
+  def mute: SpecificationRef =
+    copy(muted = true)
 }
 
 object SpecificationRef {

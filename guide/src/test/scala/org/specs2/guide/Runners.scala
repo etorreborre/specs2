@@ -47,12 +47,12 @@ Here is a list of all the existing `Printers` in $specs2 with links to the corre
 <div markdown='1'>
  Argument   | Section
  ---------- | -----------------------
- `console`  | ${link(ConsoleOutput)}
- `junitxml` | ${link(JUnitXmlOutput)}
- `html`     | ${link(HtmlOutput)}
- `markdown` | ${link(MarkdownOutput)}
- `notifier` | ${link(CustomOutput)}
- `printer`  | ${link(CustomOutput)}
+ `console`  | ${link(ConsoleOutput).mute}
+ `junitxml` | ${link(JUnitXmlOutput).mute}
+ `html`     | ${link(HtmlOutput).mute}
+ `markdown` | ${link(MarkdownOutput).mute}
+ `notifier` | ${link(CustomOutput).mute}
+ `printer`  | ${link(CustomOutput).mute}
 </div>
 
 ### Arguments

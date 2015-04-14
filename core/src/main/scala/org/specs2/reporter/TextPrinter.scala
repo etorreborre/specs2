@@ -101,10 +101,10 @@ trait TextPrinter extends Printer {
         case Fragment(NoText, e, l) if e.isExecutable && !e.result.isSuccess =>
           printExecutable(NoText.show, e, args, indentation)
 
-        case Fragment(d @ SpecificationRef(_, _, _, _, hidden), e, l)  =>
+        case Fragment(d @ SpecificationRef(_, _, _, _, hidden, muted), e, l)  =>
           if (!hidden)
-            if (e.isExecutable) printExecutable(d.show, e, args, indentation)
-            else                emit(d.show).info
+            if (e.isExecutable && !muted) printExecutable(d.show, e, args, indentation)
+            else                          emit(d.show).info
           else emitNone
 
         case Fragment(d, e, l) if e.isExecutable && d != NoText =>
