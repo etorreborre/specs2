@@ -15,6 +15,8 @@ trait TypecheckMatchers extends TypecheckBeHaveMatchers {
     FailTypecheckMatcher(message)
 }
 
+object TypecheckMatchers extends TypecheckMatchers
+
 trait TypecheckBeHaveMatchers { outer: TypecheckMatchers =>
   implicit class ToTypecheckResultMatcher(result: MatchResult[Typechecked]) {
     def succeed = result(outer.succeed)
