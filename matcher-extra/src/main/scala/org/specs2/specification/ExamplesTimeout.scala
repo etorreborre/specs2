@@ -1,10 +1,9 @@
 package org.specs2
 package specification
 
-import java.util.concurrent.ExecutorService
-
 import execute._
 import matcher._
+import org.specs2.concurrent.ExecutionEnv
 import specification.core._
 import time._
 
@@ -23,10 +22,10 @@ trait ExamplesTimeout extends EachContext {
 
   def context: Env => Context = { env: Env =>
     val timeout = env.arguments.commandLine.intOr("timeout", 1000 * 60).millis
-    upTo(timeout)(env.executorService)
+    upTo(timeout)(env.executionEnv)
   }
 
-  def upTo(to: Duration)(implicit es: ExecutorService) = new Around {
+  def upTo(to: Duration)(implicit ee: ExecutionEnv) = new Around {
     def around[T : AsResult](t: =>T) = {
       lazy val result = t
       val termination = terminate(retries = 10, sleep = (to.toMillis / 10).millis).orSkip(_ => "TIMEOUT: "+to)(Expectable(result))

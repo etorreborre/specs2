@@ -3,6 +3,8 @@ package matcher
 
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.atomic.AtomicBoolean
+import org.specs2.concurrent.ExecutionEnv
+
 import scala.annotation.tailrec
 import scala.concurrent.duration._
 import scalaz.concurrent.Future
@@ -19,18 +21,18 @@ trait TerminationBaseMatchers {
   /**
    * this matchers will check if a block of code terminates within a given duration, after just one try
    */
-  def terminate[T](implicit es: ExecutorService): TerminationMatcher[T] = terminate()(es)
+  def terminate[T](implicit ee: ExecutionEnv): TerminationMatcher[T] = terminate()(ee)
 
   /**
    * this matchers will check if a block of code terminates within a given duration, and a given number of retries
    */
-  def terminate[T](retries: Int = 1, sleep: Duration = 100.millis)(implicit es: ExecutorService) = new TerminationMatcher[T](retries, sleep)
+  def terminate[T](retries: Int = 1, sleep: Duration = 100.millis)(implicit ee: ExecutionEnv) = new TerminationMatcher[T](retries, sleep)(ee)
 }
 
-class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[() => Any] = None, whenDesc: Option[String] = None, onlyWhen: Boolean = false)(implicit es: ExecutorService) extends Matcher[T] {
+class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[() => Any] = None, whenDesc: Option[String] = None, onlyWhen: Boolean = false)(implicit ee: ExecutionEnv) extends Matcher[T] {
 
   def apply[S <: T](a: Expectable[S]) =
-    retry(retries, retries, sleep, a, createFuture(a.value))
+    retry(retries, retries, sleep * ee.timeFactor, a, createFuture(a.value))
 
   @tailrec
   private final def retry[S <: T](originalRetries: Int, retries: Int, sleep: Duration, a: Expectable[S], future: Future[S], whenActionExecuted: Boolean = false): MatchResult[S] = {
@@ -87,7 +89,8 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
   private val terminated = new AtomicBoolean(false)
   private val cancelled = new AtomicBoolean(false)
 
-  private def createFuture[A](a: =>A)(implicit es: ExecutorService): Future[A] = {
+  private def createFuture[A](a: =>A)(implicit ee: ExecutionEnv): Future[A] = {
+    implicit val executorService = ee.executorService
     val future = Future(a)
     future.runAsyncInterruptibly(_ => terminated.set(true), cancelled)
     future
@@ -113,7 +116,7 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
 private[specs2]
 trait TerminationNotMatchers { outer: TerminationBaseMatchers =>
 
-   implicit class TerminationResultMatcher[T](result: MatchResult[T])(implicit es: ExecutorService) {
+   implicit class TerminationResultMatcher[T](result: MatchResult[T])(implicit ee: ExecutionEnv) {
      def terminate = result(outer.terminate)
      def terminate(retries: Int = 0, sleep: Duration = 100.millis) = result(outer.terminate(retries, sleep))
    }

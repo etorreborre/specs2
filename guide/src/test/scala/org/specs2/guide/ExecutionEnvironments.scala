@@ -2,13 +2,14 @@ package org.specs2
 package guide
 
 import java.util.concurrent.ExecutorService
+import org.specs2.matcher.TerminationMatchers
 import specification.ExecutionEnvironment
 import execute._
 import concurrent.ExecutionEnv
 import scala.concurrent._
 import duration._
 
-object ExecutionEnvironments extends UserGuidePage { def is = "Execution environment".title ^ s2"""
+object ExecutionEnvironments extends UserGuidePage with TerminationMatchers { def is = "Execution environment".title ^ s2"""
 
 When you run a specification, a `java.util.concurrent.ExecutorService` is used to execute examples concurrently. You can access this `ExecutorService` to execute `scalaz.concurrent.Futures` and it can also be wrapped into a `scala.concurrent.ExecutionContext` to create `scala.concurrent.Futures`.
 
@@ -30,7 +31,7 @@ class MyMutableFutureSpec extends mutable.Specification {
 }
 }}
 
-You can also use $specs2 execution environment directly (from now on code examples are provided for immutable specifications only but are transposable to mutable ones): ${snippet{
+You can also use $specs2's execution environment directly (from now on code examples are provided for immutable specifications only but are transposable to mutable ones): ${snippet{
 class MyFutureSpec extends Specification { def is = s2"""
  Let's check this scala future ${ implicit ee: ExecutionEnv =>
    Await.result(Future(1), Duration.Inf) must_== 1
@@ -69,6 +70,21 @@ class MyFutureSpec extends Specification { def is = s2"""
   }
 """
 }
+}}
+
+### With matchers
+
+Future $Matchers (see the "Future" tab) require an implicit `ExecutionEnv`. This environment is used to access:
+
+ - the `timeFactor` when awaiting for Scala Futures
+ - a `scheduledExecutorService` and the `timeFactor when attempting Scalaz Futures
+
+The `terminate` matcher (see the "Termination" tab in the optional $Matchers section) also needs an `ExecutionEnv` to run a piece of code and periodically check if it has terminated or not: ${snippet{
+  s2"""
+  this code must be fast enough ${ implicit ee: ExecutionEnv =>
+    Thread.sleep(100) must terminate(retries = 1, sleep = 60.millis)
+  }
+"""
 }}
 
 ### Implicit ExecutionEnv
