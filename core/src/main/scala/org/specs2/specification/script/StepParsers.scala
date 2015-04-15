@@ -52,8 +52,9 @@ trait StepParsers extends ImplicitParameters {
 
     trait ReadAsParser[T] extends StepParser[T] {
       def parse(text: String) = trye((text, parse1(text)))(identity)
+      def run(text: String) = trye(parse1(text))(identity)
       def strip(text: String) = text
-      protected def parse1(text: String): T
+      def parse1(text: String): T
     }
 
     def and[T](f: String => T) = new ReadAsParser [T] {
@@ -90,6 +91,8 @@ trait StepParsers extends ImplicitParameters {
       def parse1(text: String) = f(extractAll(text, regex, groups))
     }
   }
+
+  val extract = StepParser
 }
 
 object StepParsers extends StepParsers
@@ -97,7 +100,8 @@ object StepParsers extends StepParsers
 /**
  * a few delimited parsers (with `{}`) to extract ints, doubles and strings
  */
-trait StandardDelimitedStepParsers extends StepParsers {
+trait StandardDelimitedStepParsers {
+  import StepParsers._
 
   def anInt     = StepParser((_: String).trim.toInt)
   def twoInts   = StepParser((s1: String, s2: String) => (s1.trim.toInt, s2.trim.toInt))
@@ -115,7 +119,9 @@ object StandardDelimitedStepParsers extends StandardDelimitedStepParsers
 /**
  * a few regular expression parsers to extract ints, doubles and strings (strings are delimited with `"`)
  */
-trait StandardRegexStepParsers extends StepParsers {
+trait StandardRegexStepParsers {
+  import StepParsers._
+
   // definitions taken from the JavaTokenParsers trait
   private val wholeNumber = """-?\d+"""
   private val decimalNumber = """(\d+(\.\d*)?|\d*\.\d+)"""

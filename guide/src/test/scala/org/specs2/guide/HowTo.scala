@@ -28,6 +28,7 @@ Is it possible to reduce the number of implicits in scope and improve compilatio
 How can I collect execution data?                                                        | ${link(PrintExecutionData).mute}
 Can I create an example description spanning several lines?                              | ${link(MultilineDescriptions).mute}
 How to isolate each example from another so that they don't share variables              | ${link(Isolation).mute}
+Can I use parts of an example description in the example itself?                         | ${link(ExampleDescription).mute}
 Help, I need to troubleshoot my issues!                                                  | ${link(Troubleshooting).mute}
 
 """
@@ -39,6 +40,7 @@ Help, I need to troubleshoot my issues!                                         
     link(DebugStatements).hide ^
     link(Execution).hide ^
     link(ExpectationDescription).hide ^
+    link(ExampleDescription).hide ^
     link(ForLoops).hide ^
     link(HtmlOutput).hide ^
     link(Isolation).hide ^

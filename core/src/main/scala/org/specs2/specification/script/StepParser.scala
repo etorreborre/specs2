@@ -10,13 +10,27 @@ import text._
  * A StepParser is a function to extract a value of type `T` from a piece of text
  * It can also strip the text from delimiters if any
  */
-trait StepParser[T] {
+trait StepParser[T] { outer =>
   /** 
    * parse some text and extract some well-type value T
    * if the original text contains delimiters to indicate the values to extract, remove them
+   *
+   * this is equivalent to running strip and run at the same time so it might be more efficient
    */
   def parse(text: String): Either[Throwable, (String, T)]
+  def run(text: String): Either[Throwable, T]
   def strip(text: String): String
+
+  def map[S](f: T => S): StepParser[S] = new StepParser[S] {
+    def parse(text: String): Either[Throwable, (String, S)] =
+      outer.parse(text).fold(Left.apply, { case (s, t) => Right((s, f(t))) })
+
+    def run(text: String): Either[Throwable, S] =
+      outer.run(text).fold(Left.apply, t => Right(f(t)))
+
+    def strip(text: String): String =
+      outer.strip(text)
+  }
 }
 
 /**
@@ -25,6 +39,7 @@ trait StepParser[T] {
 abstract class DelimitedStepParser[T](regex: Regex) extends StepParser[T] {
   def parse(text: String) = trye((strip(text), parse1(text)))(identity)
   def strip(text: String) = RegexExtractor.strip(text, "".r, regex)
+  def run(text: String) = trye(parse1(text))(identity)
 
   /** use another regex with this parser */
   def withRegex(r: Regex): DelimitedStepParser[T]

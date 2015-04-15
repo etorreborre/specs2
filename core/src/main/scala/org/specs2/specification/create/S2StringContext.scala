@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutorService
 import execute._
 import control.TraceLocation
 import org.specs2.concurrent.ExecutionEnv
+import org.specs2.specification.script.StepParser
 import specification.process._
 import specification.core._
 import text.{Trim, Interpolated}
@@ -43,6 +44,12 @@ trait S2StringContext extends S2StringContextImplicitsControl { outer =>
 
   implicit def stringFunctionIsInterpolatedFragment[R : AsResult](f: String => R): InterpolatedFragment =
     stringAndEnvFunctionIsInterpolatedFragment((s: String) => (e: Env) => f(s))
+
+  implicit def stepParserIsInterpolatedFragment[R : AsResult](f: StepParser[R]): InterpolatedFragment =
+    stringAndUpdatedDescriptionAndEnvFunctionIsInterpolatedFragment { s: String =>
+      val parsed: Either[Throwable, (String, R)] = f.parse(s)
+      (parsed.fold(_ => None, sr => Some(sr._1)), (e: Env) => parsed.fold(t => Error(t), sr => AsResult(sr._2)))
+    }
 
   implicit def envFunctionIsInterpolatedFragment[R : AsResult](f: Env => R): InterpolatedFragment =
     stringAndEnvFunctionIsInterpolatedFragment(_ => f)
@@ -128,17 +135,29 @@ trait S2StringContextCreation extends FragmentsFactory { outer =>
     }
   }
 
-  private[specs2] def stringAndEnvFunctionIsInterpolatedFragment[R : AsResult](f: String => Env => R): InterpolatedFragment = new InterpolatedFragment {
+  private[specs2] def stringAndEnvFunctionIsInterpolatedFragment[R : AsResult](f: String => Env => R): InterpolatedFragment =
+    stringAndUpdatedDescriptionAndEnvFunctionIsInterpolatedFragment((s: String) => (None, (e: Env) => f(s)(e)))
+
+  private[specs2] def stringAndUpdatedDescriptionAndEnvFunctionIsInterpolatedFragment[R : AsResult](f: String => (Option[String], Env => R)): InterpolatedFragment =
+    new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) =  {
       val (description, before) = descriptionAndBefore(text, start, end, expression)
 
       val result =
         implicitly[AsResult[R]] match {
-          case v : AnyValueAsResult[_] => (Env.executeResult(f(description.show)): @unchecked) match {
-            case DecoratedResult(t, e: Error) => before :+ ff.example(description, e).setLocation(end)
-            case DecoratedResult(t, _)        => Vector(ff.text(text), ff.text(t.notNull)).map(_.setLocation(end))
-          }
-          case other                          => before :+ ff.example(description, Execution.withEnv(f(description.show))).setLocation(end)
+          case v : AnyValueAsResult[_] =>
+            val (newDescription, executionFunction) = f(description.show)
+            val (updatedDescription, r) = (newDescription.fold(description)(Text.apply), Env.executeResult(executionFunction))
+            (r : @unchecked) match {
+              case DecoratedResult(t, e: Error) => before :+ ff.example(updatedDescription, e).setLocation(end)
+              case DecoratedResult(t, _)        => Vector(ff.text(text), ff.text(t.notNull)).map(_.setLocation(end))
+            }
+
+          case other =>
+            val (newDescription, executionFunction) = f(description.show)
+            val updatedDescription = newDescription.fold(description)(Text.apply)
+
+            before :+ ff.example(updatedDescription, Execution.withEnv(executionFunction)).setLocation(end)
         }
 
       fs append result

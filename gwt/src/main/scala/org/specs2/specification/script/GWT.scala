@@ -32,6 +32,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
 
   private lazy val allAsString = new StepParser[String] {
     def parse(text: String) = Right((text, text))
+    def run(text: String) = Right(text)
     def strip(text: String) = text
   }
 

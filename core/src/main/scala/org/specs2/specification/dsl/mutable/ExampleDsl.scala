@@ -11,6 +11,7 @@ import control.ImplicitParameters
 import ImplicitParameters._
 import org.specs2.main.{CommandLineAsResult, CommandLine}
 import org.specs2.specification.core._
+import org.specs2.specification.script.StepParser
 import specification.dsl
 
 import scala.concurrent.ExecutionContext
@@ -60,6 +61,12 @@ trait ExampleDsl1 extends BlockDsl {
       addFragment(fragmentFactory.break)
     }
 
+    def >>[R: AsResult](parser: StepParser[R]): Fragment = {
+      addFragment(
+        fragmentFactory.example(Text(parser.strip(d)),
+                                Execution.executed(parser.run(d).fold(execute.Error.apply, AsResult(_)))))
+      addFragment(fragmentFactory.break)
+    }
     def in[R : CommandLineAsResult](r: =>R): Fragment = >>(r)
     def in(f: =>Fragment): Fragment = describe(d) >> f
     def in(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments = describe(d).>>(fs)(p1)
@@ -69,6 +76,7 @@ trait ExampleDsl1 extends BlockDsl {
     def in[R](f: ExecutionContext => R)(implicit asResult: AsResult[R], p2: ImplicitParam2): Fragment = d.>>(f)(asResult, p2)
     def in[R](f: ExecutionEnv => R)(implicit asResult: AsResult[R], p3: ImplicitParam3): Fragment = d.>>(f)(asResult, p3)
     def in[R](f: ExecutorService => R)(implicit asResult: AsResult[R], p4: ImplicitParam4): Fragment = d.>>(f)(asResult, p4)
+    def in[R: AsResult](parser: StepParser[R]): Fragment = d.>>(parser)
     def in(execution: Execution): Fragment = d >> execution
   }
 }
