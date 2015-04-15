@@ -2,8 +2,20 @@ Maintenance version with some *important fixes* for Futures execution
 
 ## Improvements
 
-* sorted some toc entries for better display
-* added the possibility to mute specification links (i.e not display their status)
+ * sorted some toc entries for better display of the User Guide
+ * added the possibility to mute specification links (i.e not display their status)
+ * added a `tc` interpolator to typecheck code and report failures at runtime (thanks to @jrdesjardins)
+ * the `typecheck` method now fails at compile-time if there is a parse error (use the `parseAndTypecheck` method if you prefer otherwise)
+ * added the possibility to use `StepParsers` in specifications (search for "Example Description" in the User Guide to get more variations on that theme)    
+
+        s2"""
+         {1} plus {1} is {2}    $addition
+        """
+        
+        def addition = extract { (a: String, b: String, c: String) =>
+          a.toInt + b.toInt must_== c.toInt
+        }
+
 
 ## Fixes
 
@@ -15,15 +27,14 @@ The ***specs2*** execution environment (`org.specs2.execute.ExecutionEnv`) must 
  
 When using this version your code might break if you use `await / attempt` to match `Futures`. The work-around is to require an implicit `ExecutionEnv` instead of an implicit `ExecutionContext` (or `ExecutorService` for scalaz Futures). For example:
 
-```
-import org.specs2.concurrent.ExecutionEnv
 
-class MySpec extends mutable.Specification {
-  "test of a Scala Future" >> { implicit ee: ExecutionEnv =>
-    Future(1) must be_>(0).await
-  }
-}
-```
+    import org.specs2.concurrent.ExecutionEnv
+    
+    class MySpec extends mutable.Specification {
+      "test of a Scala Future" >> { implicit ee: ExecutionEnv =>
+        Future(1) must be_>(0).await
+      }
+    }
 
  * compile for both scalaz-7.1.1 and scalaz-7.0.6 [#359](https://github.com/etorreborre/specs2/issues/359)
  * added more Mockito matchers to the MockitoMatchers trait [#355](https://github.com/etorreborre/specs2/issues/355)
