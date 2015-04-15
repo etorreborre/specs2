@@ -64,6 +64,7 @@ s2"""
     a + b must_== c
   }
 }}
+
 The other parsers are:
 
  parser        | description
