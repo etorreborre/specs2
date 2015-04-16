@@ -1,0 +1,96 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Expectation description</title>
+    <link href="./css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="./css/bootstrap.min.css"                           type="text/css" rel="stylesheet" />
+    <link href="./css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="./css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="./css/tabber.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/tipuesearch.css"                             type="text/css" rel="stylesheet" />
+    <link href="./css/specs2.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/specs2-user.css"                             type="text/css" rel="stylesheet" />
+
+    <script src="./javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="./javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="./javascript/tabber.js"                           type="text/javascript"></script>
+    <script src="./javascript/tabber_start.js"                     type="text/javascript"></script>
+    <script src="./javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="./javascript/specs2.js"                           type="text/javascript"></script>
+    <script src="./javascript/specs2-user.js"                      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_set.js"      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_contents.js" type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch.min.js"      type="text/javascript"></script>
+
+</head>
+<body onload="prettyPrint()">
+
+<div class="container">
+
+<div class="col-md-2 sidebar-outer">
+<div class="col-md-2 fixed">
+
+<!-- search box -->
+<div class="search-box">
+  <form action="search.html">
+    <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
+  </form>
+</div>
+
+<!-- table of contents -->
+<toc/>
+
+</div>
+</div>
+
+
+<div class="col-md-10">
+<h1>Expectation description</h1>
+<div id="tipue_search_content"></div>
+
+<h4 id="enhance-failures-messages">Enhance failures messages</h4>
+<p>Some expressions using matchers might not produce very useful messages. For example:</p>
+<pre><code class="prettyprint">val ticketsNumber = 5
+
+// will fail with &#39;5&#39; is not equal to &#39;3&#39;
+ticketsNumber must be_==(3)</code></pre>
+<p>You can improve this failure message by describing what <code class="prettyprint">ticketsNumber</code> represents:</p>
+<pre><code class="prettyprint">val ticketsNumber = 5
+
+// will fail with &quot;the number of tickets &#39;5&#39; is not equal to &#39;3&#39;&quot;
+ticketsNumber aka &quot;the number of tickets&quot; must be_==(3)</code></pre>
+<p>The <code class="prettyprint">aka</code> (<em>also known as</em>) method has a few variations:</p>
+<ul>
+<li><code class="prettyprint">value.aka</code> is a shortcut for <code class="prettyprint">value aka value.toString</code></li>
+<li><code class="prettyprint">&quot;a&quot; post &quot;is the first letter&quot;</code> prints <code class="prettyprint">a is the first letter</code></li>
+<li><code class="prettyprint">&quot;b&quot; as ((s:String) =&gt; &quot;a&quot;+s+&quot;c&quot;)</code> prints <code class="prettyprint">abc</code></li>
+<li><code class="prettyprint">Seq(1, 2, 3, 4).showAs((_:Seq[Int]).filter(isEven).mkString(&quot;|&quot;))</code> prints <code class="prettyprint">2|4</code>. This one is especially useful to filter out big data structures (lists, maps, xml…) before the displaying the failure message</li>
+</ul>
+<h4 id="update-the-failure-message">Update the failure message</h4>
+<p>On a <code class="prettyprint">Matcher</code>, a <code class="prettyprint">MatchResult</code> or a <code class="prettyprint">Result</code> you can use <code class="prettyprint">updateMessage(f: String =&gt; String)</code> or <code class="prettyprint">setMessage(m: String)</code> to change the failure message.</p>
+<h4 id="describe-an-expectation">Describe an expectation</h4>
+<p>Another way to provide a description for an expectation is to use the <code class="prettyprint">==&gt;</code> (or <code class="prettyprint">&lt;==&gt;</code>) operator:</p>
+<pre><code class="prettyprint">s2&quot;&quot;&quot;A byname function can be transformed into a strict one $e1&quot;&quot;&quot;
+
+def e1 = {
+  def byNameFunction(u: =&gt;Unit) {}
+  var parameter = &quot;not evaluated&quot;
+  toStrictFunction1(byNameFunction){ parameter = &quot;evaluated&quot; }
+
+  &quot;The byname function has become a strict one&quot; ==&gt; (parameter === &quot;evaluated&quot;)
+}</code></pre>
+<p>In the example above, testing if <code class="prettyprint">parameter == &quot;evaluated&quot;</code> is just a way to observe what we wanted to achieve. If that doesn’t work, the failure message will be</p>
+<pre><code class="prettyprint">[error] x The byname function has not become a strict one because &#39;evaluated&#39; is not equal to &#39;not evaluated&#39;</code></pre>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('#tipue_search_input').tipuesearch({
+    'show': 6
+  });
+});
+</script>
+</div>
+
+</body>
+</html>

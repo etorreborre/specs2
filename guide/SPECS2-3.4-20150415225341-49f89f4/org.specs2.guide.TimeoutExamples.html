@@ -1,0 +1,96 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Timeout examples</title>
+    <link href="./css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="./css/bootstrap.min.css"                           type="text/css" rel="stylesheet" />
+    <link href="./css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="./css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="./css/tabber.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/tipuesearch.css"                             type="text/css" rel="stylesheet" />
+    <link href="./css/specs2.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/specs2-user.css"                             type="text/css" rel="stylesheet" />
+
+    <script src="./javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="./javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="./javascript/tabber.js"                           type="text/javascript"></script>
+    <script src="./javascript/tabber_start.js"                     type="text/javascript"></script>
+    <script src="./javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="./javascript/specs2.js"                           type="text/javascript"></script>
+    <script src="./javascript/specs2-user.js"                      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_set.js"      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_contents.js" type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch.min.js"      type="text/javascript"></script>
+
+</head>
+<body onload="prettyPrint()">
+
+<div class="container">
+
+<div class="col-md-2 sidebar-outer">
+<div class="col-md-2 fixed">
+
+<!-- search box -->
+<div class="search-box">
+  <form action="search.html">
+    <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
+  </form>
+</div>
+
+<!-- table of contents -->
+<toc/>
+
+</div>
+</div>
+
+
+<div class="col-md-10">
+<h1>Timeout examples</h1>
+<div id="tipue_search_content"></div>
+
+<h3 id="one-example">One example</h3>
+<p>Some examples take too long to run and it is desirable to interrupt them if they do. This is the purpose of the <code class="prettyprint">org.specs2.specification.AroundTimeout</code> trait:</p>
+<pre><code class="prettyprint">import org.specs2.specification.AroundTimeout
+import scala.concurrent.duration._
+
+class MySpec extends Specification with AroundTimeout
+                                   with ExecutionEnvironment {
+def is(implicit ee: ExecutionEnv) = s2&quot;&quot;&quot;
+
+  this should not take too long ${upTo(1.second)(e1)}
+
+&quot;&quot;&quot;
+
+  def e1 = { 1 + 1 === 2 }
+}</code></pre>
+<p>Note that you need to extend the <code class="prettyprint">org.specs2.specification.ExecutionEnvironment</code> trait to get an implicit <code class="prettyprint">ExecutionEnv</code> in order to use this functionality (read more on the <link class="ok"> <a href="org.specs2.guide.ExecutionEnvironments.html" tooltip="" class="ok">Execution environment</a></link>).</p>
+<h3 id="the-whole-specification">The whole specification</h3>
+<p>You can also declare a timeout for all the examples of a given specification with the <code class="prettyprint">org.specs2.specification.ExamplesTimeout</code> trait:</p>
+<pre><code class="prettyprint">import org.specs2.specification.ExamplesTimeout
+
+class MySpec extends Specification with ExamplesTimeout
+                                   with ExecutionEnvironment {
+def is(implicit ee: ExecutionEnv) = s2&quot;&quot;&quot;
+
+  this should not take too long $e1
+  this one too                  $e2
+
+&quot;&quot;&quot;
+
+  def e1 = { 1 + 1 === 2 }
+  def e2 = { 2 + 2 === 4 }
+}</code></pre>
+<p>With the <code class="prettyprint">ExamplesTimeout</code> trait you can control the duration of the time out by passing the <code class="prettyprint">timeout</code> argument on the command-line (in milliseconds).</p>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('#tipue_search_input').tipuesearch({
+    'show': 6
+  });
+});
+</script>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,685 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Reference card</title>
+    <link href="./css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="./css/bootstrap.min.css"                           type="text/css" rel="stylesheet" />
+    <link href="./css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="./css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="./css/tabber.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/tipuesearch.css"                             type="text/css" rel="stylesheet" />
+    <link href="./css/specs2.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/specs2-user.css"                             type="text/css" rel="stylesheet" />
+
+    <script src="./javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="./javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="./javascript/tabber.js"                           type="text/javascript"></script>
+    <script src="./javascript/tabber_start.js"                     type="text/javascript"></script>
+    <script src="./javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="./javascript/specs2.js"                           type="text/javascript"></script>
+    <script src="./javascript/specs2-user.js"                      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_set.js"      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_contents.js" type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch.min.js"      type="text/javascript"></script>
+
+</head>
+<body onload="prettyPrint()">
+
+<div class="container">
+
+<div class="col-md-2 sidebar-outer">
+<div class="col-md-2 fixed">
+
+<!-- search box -->
+<div class="search-box">
+  <form action="search.html">
+    <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
+  </form>
+</div>
+
+<!-- table of contents -->
+<toc/>
+
+</div>
+</div>
+
+
+<div class="col-md-10">
+<h1>Reference card</h1>
+<div id="tipue_search_content"></div>
+
+<h3 id="equality">Equality</h3>
+<p>The most common type of matcher is <code class="prettyprint">beEqualTo</code> to test the equality of 2 values. Several syntaxes can be used, according to your own taste</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Matcher</th>
+<th align="left">Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code class="prettyprint">1 must beEqualTo(1)</code></td>
+<td align="left">the normal way</td>
+</tr>
+<tr class="even">
+<td align="left"><code class="prettyprint">1 must be_==(1)</code></td>
+<td align="left">with a symbol</td>
+</tr>
+<tr class="odd">
+<td align="left"><code class="prettyprint">1 must_== 1</code></td>
+<td align="left">my favorite!</td>
+</tr>
+<tr class="even">
+<td align="left"><code class="prettyprint">1 mustEqual 1</code></td>
+<td align="left">if you dislike underscores</td>
+</tr>
+<tr class="odd">
+<td align="left"><code class="prettyprint">1 should_== 1</code></td>
+<td align="left">for <code class="prettyprint">should</code> lovers</td>
+</tr>
+<tr class="even">
+<td align="left"><code class="prettyprint">1 === 1</code></td>
+<td align="left">the ultimate shortcut</td>
+</tr>
+<tr class="odd">
+<td align="left"><code class="prettyprint">1 must be equalTo(1)</code></td>
+<td align="left">with a literate style</td>
+</tr>
+</tbody>
+</table>
+<p>There are also other notions of equality</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Matcher</th>
+<th align="left">Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code class="prettyprint">beTypedEqualTo</code></td>
+<td align="left">typed equality. <code class="prettyprint">a must beTypedEqualTo(b)</code> will not work if <code class="prettyprint">a</code> and <code class="prettyprint">b</code> don’t have compatible types</td>
+</tr>
+<tr class="even">
+<td align="left"><code class="prettyprint">be_===</code></td>
+<td align="left">synonym for <code class="prettyprint">beTypedEqualTo</code></td>
+</tr>
+<tr class="odd">
+<td align="left"><code class="prettyprint">a ==== b</code></td>
+<td align="left">synonym for <code class="prettyprint">a must beTypedEqualTo(b)</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code class="prettyprint">a must_=== b</code></td>
+<td align="left">similar to <code class="prettyprint">a must_== b</code> but will not typecheck if <code class="prettyprint">a</code> and <code class="prettyprint">b</code> don’t have the same type</td>
+</tr>
+<tr class="odd">
+<td align="left"><code class="prettyprint">be_==~</code></td>
+<td align="left">check if <code class="prettyprint">(a: A) == conv(b: B)</code> when there is an implicit conversion <code class="prettyprint">conv</code> from <code class="prettyprint">B</code> to <code class="prettyprint">A</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code class="prettyprint">beTheSameAs</code></td>
+<td align="left">reference equality: check if <code class="prettyprint">a eq b</code> (<code class="prettyprint">a must be(b)</code> also works)</td>
+</tr>
+<tr class="odd">
+<td align="left"><code class="prettyprint">be</code></td>
+<td align="left"><code class="prettyprint">a must be(b)</code>: synonym for <code class="prettyprint">beTheSameAs</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code class="prettyprint">beTrue, beFalse</code></td>
+<td align="left">shortcuts for Boolean equality</td>
+</tr>
+</tbody>
+</table>
+<p><em>Note</em>: the <code class="prettyprint">beEqualTo</code> matcher is using the regular <code class="prettyprint">==</code> Scala equality. However in the case of <code class="prettyprint">Arrays</code>, Scala <code class="prettyprint">==</code> is just using reference equality, <code class="prettyprint">eq</code>. So the <code class="prettyprint">beEqualTo</code> matcher has been adapted to use the <code class="prettyprint">.deep</code> method on <code class="prettyprint">Arrays</code>, transforming them to <code class="prettyprint">IndexedSeqs</code> (possibly nested), before checking for equality, so that <code class="prettyprint">Array(1, 2, 3) === Array(1, 2, 3)</code> (despite the fact that <code class="prettyprint">Array(1, 2, 3) != Array(1, 2, 3)</code>).</p>
+<h3 id="out-of-the-box">Out of the box</h3>
+<p>These are the all the available matchers when you extend <code class="prettyprint">Specification</code></p>
+<td class="info"><form>
+    <table><tr><th colspan="101">Specification Matchers</th></tr><tr><td colspan="100" class="info"><div class="tabber"><div class="tabbertab" title="String"><form>
+    <table><tr><td class="none" style="info"><p>Matching on strings is very common. Here are the matchers which can help you:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Matcher </th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="prettyprint">beMatching</code> or <code class="prettyprint">be matching</code> </td>
+      <td>check if a string matches a regular expression</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">=~(s)</code> </td>
+      <td>shortcut for <code class="prettyprint">beMatching(&quot;(.|\\s)*&quot;+s+&quot;(.|\\s)*&quot;)</code></td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">find(exp).withGroups(a, b, c)</code> </td>
+      <td>check if some groups are found in a string</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">have length</code> </td>
+      <td>check the length of a string</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">have size</code> </td>
+      <td>check the size of a string (seen as an <code class="prettyprint">Iterable[Char]</code>)</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">be empty</code> </td>
+      <td>check if a string is empty</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">beEqualTo(b).ignoreCase</code> </td>
+      <td>check if 2 strings are equal regardless of casing</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">beEqualTo(b).ignoreSpace</code> </td>
+      <td>check if 2 strings are equal when you <code class="prettyprint">replaceAll(&quot;\\s&quot;, &quot;&quot;)</code></td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">beEqualTo(b).trimmed</code> </td>
+      <td>check if 2 strings are equal when trimmed</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">beEqualTo(b).ignoreSpace.ignoreCase</code> </td>
+      <td>you can compose them</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">contain(b)</code> </td>
+      <td>check if a string contains another one</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">startWith(b)</code> </td>
+      <td>check if a string starts with another one</td>
+    </tr>
+    <tr>
+      <td><code class="prettyprint">endWith(b)</code> </td>
+      <td>check if a string ends with another one</td>
+    </tr>
+  </tbody>
+</table></td></tr></table></form></div><div class="tabbertab" title="Traversable"><form>
+    <table><tr><td class="none" style="info"><p>Traversables can be checked with several matchers. If you want to check the size of a <code class="prettyprint">Traversable</code></p>
+<ul>
+  <li><p>check if it is empty<br/>  <code class="prettyprint">Seq() must be empty</code><br/>  <code class="prettyprint">Seq(1, 2, 3) must not be empty</code></p></li>
+  <li><p>check its size<br/>  <code class="prettyprint">Seq(1, 2) must have size(2)</code><br/>  <code class="prettyprint">Seq(1, 2) must have length(2)</code> // equivalent to size<br/>  <code class="prettyprint">Seq(1, 2) must have size(be_&gt;=(1))</code> // with a matcher</p></li>
+</ul><p><em>note</em>: you might have to annotate the <code class="prettyprint">haveSize</code> matcher when using some combinators. For example: <code class="prettyprint">(futures: Future[Seq[Int]]) must haveSize[Seq[Int]](1).await</code></p>
+<ul>
+  <li>check its ordering (works with any type <code class="prettyprint">T</code> which has an <code class="prettyprint">Ordering</code>)<br/>  <code class="prettyprint">Seq(1, 2, 3) must beSorted</code></li>
+</ul><h4>Check each element individually</h4><p>Then you can check the elements which are contained in the Traversable</p>
+<ul>
+  <li><p>if a simple value is contained<br/>  <code class="prettyprint">Seq(1, 2, 3) must contain(2)</code></p></li>
+  <li><p>if a value matching a specific matcher is contained<br/>  <code class="prettyprint">Seq(1, 2, 3) must contain(be_&gt;=(2))</code></p></li>
+  <li><p>if a value passing a function returning a <code class="prettyprint">Result</code> is contained (<code class="prettyprint">MatchResult</code>, ScalaCheck <code class="prettyprint">Prop</code>,...)<br/>  <code class="prettyprint">Seq(1, 2, 3) must contain((i: Int) =&gt; i must be_&gt;=(2))</code></p></li>
+  <li><p>note that a <code class="prettyprint">Seq[A]</code> is also a function <code class="prettyprint">Int =&gt; A</code> so if you want to check that a sequence is contained in another you need to use a matcher<br/>  <code class="prettyprint">Seq(Seq(1)) must contain(===(Seq(1)))</code></p></li>
+  <li><p>there are also 2 specialized matchers to check the string representation of the elements<br/>  <code class="prettyprint">Seq(1234, 6237) must containMatch(&quot;23&quot;)</code> <code class="prettyprint">// matches with &quot;.*23.*&quot;</code><br/>  <code class="prettyprint">Seq(1234, 6234) must containPattern(&quot;.*234&quot;)</code> <code class="prettyprint">// matches with !.*234&quot;</code></p></li>
+</ul><p>For each of the check above you can indicate how many times the check should be satisfied:</p>
+<ul>
+  <li><code class="prettyprint">Seq(1, 2, 3) must contain(be_&gt;(0)).forall</code> // this will stop after the first failure</li>
+  <li><code class="prettyprint">Seq(1, 2, 3) must contain(be_&gt;(0)).foreach</code> // this will report all failures</li>
+  <li><code class="prettyprint">Seq(1, 2, 3) must contain(be_&gt;(0)).atLeastOnce</code></li>
+  <li><code class="prettyprint">Seq(1, 2, 3) must contain(be_&gt;(2)).atMostOnce</code></li>
+  <li><code class="prettyprint">Seq(1, 2, 3) must contain(be_&gt;(2)).exactly(1.times)</code></li>
+  <li><code class="prettyprint">Seq(1, 2, 3) must contain(be_&gt;(2)).exactly(1)</code></li>
+  <li><code class="prettyprint">Seq(1, 2, 3) must contain(be_&gt;(1)).between(1.times, 2.times)</code></li>
+  <li><code class="prettyprint">Seq(1, 2, 3) must contain(be_&gt;(1)).between(1, 2)</code></li>
+</ul><h4>Check all elements</h4><p>The other types of checks involve comparing the Traversable elements to other elements (values, matchers, function returning a <code class="prettyprint">Result</code>)</p>
+<ul>
+  <li><p>with a set of values<br/>  <code class="prettyprint">Seq(1, 2, 3, 4) must contain(2, 4)</code><br/>  which is the same thing as<br/>  <code class="prettyprint">Seq(1, 2, 3, 4) must contain(allOf(2, 4))</code></p></li>
+  <li><p>with a set of matchers<br/>  <code class="prettyprint">Seq(1, 2, 3, 4) must contain(allOf(be_&gt;(0), be_&gt;(1)))</code></p></li>
+  <li><p>checking that the order is satisfied<br/>  <code class="prettyprint">Seq(1, 2, 3, 4) must contain(allOf(be_&gt;(0), be_&gt;(1)).inOrder)</code></p></li>
+</ul><p>Note that <code class="prettyprint">allOf</code> tries to make each check be successful at least once, even if it is on the same value. On the other hand, if you want to specify that each check must succeed on a <em>different</em> value you should use <code class="prettyprint">onDistinctValues</code>. For example this will fail:<br/><code class="prettyprint">Seq(1) must contain(allOf(1, 1)).onDistinctValues</code></p><p>The <code class="prettyprint">eachOf</code> method does the same thing (and this example will fail as well):<br/><code class="prettyprint">Seq(1) must contain(eachOf(1, 1))</code></p><p>Another frequent use of Traversable matchers is to check if the Traversable have the right number of elements. For this you can use:</p>
+<ul>
+  <li><p><code class="prettyprint">atLeast</code>, which is actually another name for <code class="prettyprint">allOf</code>, where the traversable can contain more elements than required<br/>  <code class="prettyprint">Seq(1, 2, 3, 4) must contain(atLeast(2, 4))</code></p></li>
+  <li><p><code class="prettyprint">atMost</code> where the traversable can not contain more elements than required<br/>  <code class="prettyprint">Seq(2, 3) must contain(atMost(2, 3, 4))</code></p></li>
+  <li><p><code class="prettyprint">exactly</code> where the traversable must contain exactly the specified number of elements<br/>  <code class="prettyprint">Seq(1, 2) must contain(exactly(2, 1))</code></p></li>
+</ul><p>The <code class="prettyprint">atLeast/atMost/exactly</code> operators work on distinct values by default (because this is easier for counting the correspondence between actual values and expected ones). However you can use <code class="prettyprint">onDistinctValues(false)</code> if you don't care.</p><p>Finally, if you want to get the differences between 2 traversables:</p><p><code class="prettyprint">Seq(2, 4, 1) must containTheSameElementsAs(Seq(1, 4, 2))</code></p></td></tr></table></form></div><div class="tabbertab" title="Numeric"><form>
+    <table><tr><td class="none" style="info"><p>Numerical values can be compared with the following matchers</p>
+<ul>
+  <li><p><code class="prettyprint">beLessThanOrEqualTo</code> compares any <code class="prettyprint">Ordered</code> type with <code class="prettyprint">&lt;=</code><br/>    <code class="prettyprint">1 must be_&lt;=(2)</code><br/>    <code class="prettyprint">1 must beLessThanOrEqualTo(2)</code></p></li>
+  <li><p><code class="prettyprint">beLessThan</code> compares any <code class="prettyprint">Ordered</code> type with <code class="prettyprint">&lt;</code><br/>    <code class="prettyprint">1 must be_&lt;(2)</code><br/>    <code class="prettyprint">1 must beLessThan(2)</code></p></li>
+  <li><p><code class="prettyprint">beGreaterThanOrEqualTo</code> compares any <code class="prettyprint">Ordered</code> type with <code class="prettyprint">&gt;=</code><br/>    <code class="prettyprint">2 must be_&gt;=(1)</code><br/>    <code class="prettyprint">2 must beGreaterThanOrEqualTo(1)</code></p></li>
+  <li><p><code class="prettyprint">beGreaterThan</code> compares any <code class="prettyprint">Ordered</code> type with <code class="prettyprint">&gt;</code><br/>    <code class="prettyprint">2 must be_&gt;(1)</code><br/>    <code class="prettyprint">2 must beGreaterThan(1)</code></p></li>
+  <li><p><code class="prettyprint">beCloseTo</code> check if 2 Numerics are close to each other<br/>    <code class="prettyprint">1.0 must beCloseTo(1, 0.5)</code><br/>    <code class="prettyprint">4 must be ~(5 +/- 2)</code><br/>    <code class="prettyprint">4.994 must beCloseTo(5.0 within 2.significantFigures)</code></p></li>
+  <li><p><code class="prettyprint">beBetween</code> check if a value is between 2 others<br/>    <code class="prettyprint">5 must beBetween(3, 6)</code><br/>    <code class="prettyprint">5 must beBetween(3, 6).excludingEnd</code><br/>    <code class="prettyprint">5 must beBetween(4, 6).excludingStart</code><br/>    <code class="prettyprint">5 must beBetween(4, 6).excludingBounds</code><br/>    <code class="prettyprint">// with brackets notation</code><br/>    5 must (<code class="prettyprint">be[</code>(4, 7)<code class="prettyprint">]</code>)<br/>    5 must (<code class="prettyprint">be[</code>(4, 6)<code class="prettyprint">[</code>)<br/>                                                                                                               .</p></li>
+</ul></td></tr></table></form></div><div class="tabbertab" title="Option/Either"><form>
+    <table><tr><td class="none" style="info"><p>There are several matchers to check <code class="prettyprint">Option</code> and <code class="prettyprint">Either</code> instances:</p>
+<ul>
+  <li><code class="prettyprint">beSome</code> check if an element is <code class="prettyprint">Some(_)</code></li>
+  <li><code class="prettyprint">beSome(exp)</code> check if an element is <code class="prettyprint">Some(exp)</code></li>
+  <li><code class="prettyprint">beSome(matcher)</code> check if an element is <code class="prettyprint">Some(a)</code> where <code class="prettyprint">a</code> satisfies the matcher</li>
+  <li><code class="prettyprint">beSome(function: A =&gt; AsResult[B])</code> check if an element is <code class="prettyprint">Some(a)</code> where <code class="prettyprint">function(a)</code> returns a successful <code class="prettyprint">Result</code><br/>(note that a <code class="prettyprint">Seq[A]</code> is also a function <code class="prettyprint">Int =&gt; A</code> so if you want to check that a sequence is contained in <code class="prettyprint">Some</code> you need to use a matcher: <code class="prettyprint">beSome(===(Seq(1))</code>)</li>
+  <li><code class="prettyprint">beSome.which(function)</code> check if an element is <code class="prettyprint">Some(_</code>) and satisfies a function returning a boolean</li>
+  <li><code class="prettyprint">beSome.like(partial function)</code> check if an element is <code class="prettyprint">Some(_)</code> and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
+  <li><code class="prettyprint">beNone</code> check if an element is <code class="prettyprint">None</code></li>
+  <li><code class="prettyprint">beAsNoneAs</code> check if 2 values are equal to <code class="prettyprint">None</code> at the same time</li>
+  <li><p><code class="prettyprint">beRight</code> check if an element is <code class="prettyprint">Right(_)</code></p></li>
+  <li><code class="prettyprint">beRight(exp)</code> check if an element is `Right(exp)</li>
+  <li><code class="prettyprint">beRight(matcher)</code> check if an element is <code class="prettyprint">Right(a)</code> where <code class="prettyprint">a</code> satisfies the matcher</li>
+  <li><code class="prettyprint">beRight(function: A =&gt; AsResult[B])</code> check if an element is <code class="prettyprint">Right(a)</code> where <code class="prettyprint">function(a)</code> returns a successful <code class="prettyprint">Result</code><br/>(note that a <code class="prettyprint">Seq[A]</code> is also a function <code class="prettyprint">Int =&gt; A</code> so if you want to check that a sequence is contained in <code class="prettyprint">Right</code> you need to use a matcher: <code class="prettyprint">beRight(===(Seq(1))</code>)</li>
+  <li><code class="prettyprint">beRight.like(partial function)</code> check if an element is <code class="prettyprint">Right(_)</code> and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
+  <li><p><code class="prettyprint">beLeft</code> check if an element is <code class="prettyprint">Left(_)</code></p></li>
+  <li><code class="prettyprint">beLeft(exp)</code> check if an element is <code class="prettyprint">Left(exp)</code></li>
+  <li><code class="prettyprint">beLeft(matcher)</code> check if an element is <code class="prettyprint">Left(a)</code> where <code class="prettyprint">a</code> satisfies the matcher</li>
+  <li><code class="prettyprint">beLeft(function: A =&gt; AsResult[B])</code> check if an element is <code class="prettyprint">Left(a)</code> where <code class="prettyprint">function(a)</code> returns a successful <code class="prettyprint">Result</code><br/>(note that a <code class="prettyprint">Seq[A]</code> is also a function <code class="prettyprint">Int =&gt; A</code> so if you want to check that a sequence is contained in <code class="prettyprint">Left</code> you need to use a matcher: <code class="prettyprint">beLeft(===(Seq(1))</code>)</li>
+  <li><code class="prettyprint">beLeft.like(partial function)</code> check if an element is <code class="prettyprint">Left(_)</code> and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
+</ul></td></tr></table></form></div><div class="tabbertab" title="Try"><form>
+    <table><tr><td class="none" style="info"><p>There are several matchers to check <code class="prettyprint">Try</code> instances:</p>
+<ul>
+  <li><code class="prettyprint">beSuccessfulTry</code> check if an element is <code class="prettyprint">Success(_)</code></li>
+  <li><code class="prettyprint">beSuccessfulTry.withValue(exp)</code> check if an element is <code class="prettyprint">Success(_)</code></li>
+  <li><code class="prettyprint">beSuccessfulTry.withValue(matcher)</code> check if an element is <code class="prettyprint">Success(a)</code> where <code class="prettyprint">a</code> satisfies the matcher</li>
+  <li><code class="prettyprint">beSuccessfulTry.withValue(function: A =&gt; AsResult[B])</code> check if an element is <code class="prettyprint">Success(a)</code> where <code class="prettyprint">function(a)</code> returns a successful <code class="prettyprint">Result</code><br/>(note that a <code class="prettyprint">Seq[A]</code> is also a function <code class="prettyprint">Int =&gt; A</code> so if you want to check that a sequence is contained in <code class="prettyprint">Success</code> you need to use a matcher: <code class="prettyprint">beSuccessfulTry.withValue(===(Seq(1))</code>)</li>
+  <li><code class="prettyprint">beSuccessfulTry.which(function)</code> check if an element is <code class="prettyprint">Success(_)</code> and satisfies a function returning a boolean</li>
+  <li><code class="prettyprint">beSuccessfulTry.like(partial function)</code> check if an element is <code class="prettyprint">Success(_)</code> and satisfies a partial function returning a <code class="prettyprint">MatchResult</code></li>
+  <li><code class="prettyprint">beFailedTry</code> check if an element is <code class="prettyprint">Failure(_)</code></li>
+  <li><code class="prettyprint">beFailedTry.withThrowable[T]</code> check if an element is <code class="prettyprint">Failure(t: T)</code></li>
+  <li><code class="prettyprint">beFailedTry.withThrowable[T](pattern)</code> check if an element is <code class="prettyprint">Failure(t: T)</code> and <code class="prettyprint">t.getMessage</code> matches <code class="prettyprint">pattern</code></li>
+</ul></td></tr></table></form></div><div class="tabbertab" title="Future"><form>
+    <table><tr><td class="none" style="info"><p>Testing <code class="prettyprint">Futures</code> is quite easy with specs2. You can transform any <code class="prettyprint">Matcher[T]</code> into a <code class="prettyprint">Matcher[Future[T]</code> with the <code class="prettyprint">await</code> method </p>
+<pre><code class="prettyprint">Future(1) must be_&gt;(0).await
+</code></pre><p>You can also specify a timeout value and a number of retries </p>
+<pre><code class="prettyprint">Future { Thread.sleep(100); 1 } must be_&gt;(0).await(retries = 2, timeout = 100.millis)
+
+// only retries, timeout is 1.second
+Future { Thread.sleep(100); 1 } must be_&gt;(0).retryAwait(retries = 2)
+
+// only timeout, retries = 0
+Future { Thread.sleep(100); 1 } must be_&gt;(0).awaitFor(100.millis)
+</code></pre><p>Another possibility is for you to obtain a <code class="prettyprint">Future[MatchResult[T]]</code> (or any <code class="prettyprint">Future[R]</code> where <code class="prettyprint">R</code> has an <code class="prettyprint">AsResult</code> typeclass instance). In that case you can use <code class="prettyprint">await</code> directly on the <code class="prettyprint">Future</code> to get a <code class="prettyprint">Result</code></p>
+<pre><code class="prettyprint">Future(1 === 1).await
+Future(1 === 1).await(retries = 2, timeout = 100.millis)
+</code></pre><h4>Scalaz Futures</h4><p>All of the above is applicable to <code class="prettyprint">scalaz.concurrent.Future</code> by using the method <code class="prettyprint">attempt</code> instead of <code class="prettyprint">await</code>.</p><h4>Execution</h4><p>The <code class="prettyprint">await</code>/<code class="prettyprint">attempt</code> methods require an implicit <code class="prettyprint">org.specs2.concurrent.ExecutionEnv</code> (see <a href="org.specs2.guide.ExecutionEnvironment.html">here</a> for more details). You can pass one in the body of your examples:</p>
+<pre><code class="prettyprint">class MyFutureSpec extends Specification { def is = s2&quot;&quot;&quot;
+
+ Let's check this scala future ${ implicit ee: EE =&gt;
+   Future(1) must be_&gt;(0).await
+ }
+
+ Let's check this scalaz future ${ implicit ee: EE =&gt;
+   scalaz.concurrent.Future(1) must be_&gt;(0).attempt
+ }
+
+&quot;&quot;&quot;
+  type EE = ExecutionEnv
+}
+
+// in a mutable specification
+class MyMutableFutureSpec extends mutable.Specification {
+
+  &quot;Let's check this scala future&quot; &gt;&gt; { implicit ee: EE =&gt;
+    Future(1) must be_&gt;(0).await
+  }
+
+  &quot;Let's check this scalaz future&quot; &gt;&gt; { implicit ee: EE =&gt;
+    scalaz.concurrent.Future(1) must be_&gt;(0).attempt
+  }
+
+  type EE = ExecutionEnv
+}
+</code></pre><h4>Time factor</h4><p>Some actions can be a lot slower when executed on a continuous integration server rather than a developer machine and some timeouts will fail.<br/>You can avoid this by setting the <code class="prettyprint">timeFactor</code> argument which will multiply the durations used when <code class="prettyprint">awaiting / attempting</code> by a constant factor.</p>
+<pre><code class="prettyprint">sbt&gt; test-only *MyFuturesSpec* -- timeFactor 3
+</code></pre><h3>Now learn how to... {.ribbon .both-ribbon}</h3></td></tr></table></form></div><div class="tabbertab" title="Exception"><form>
+    <table><tr><td class="none" style="info"><p>specs2 offers very compact ways of checking that some exceptions are thrown:</p>
+<ul>
+  <li><code class="prettyprint">throwA[ExceptionType]</code> check if a block of code throws an exception of the given type</li>
+  <li><code class="prettyprint">throwA[ExceptionType](message = &quot;boom&quot;)</code> additionally check if the exception message is as expected</li>
+  <li><code class="prettyprint">throwA(exception)</code> or <code class="prettyprint">throwAn(exception)</code> check if a block of code throws an exception of the same type, with the<br/>  same message</li>
+  <li><code class="prettyprint">throwA[ExceptionType].like { case e =&gt; e must matchSomething }</code> or<br/>  <code class="prettyprint">throwA(exception).like { case e =&gt; e must matchSomething }</code> check that the thrown exception satisfies a property</li>
+  <li><code class="prettyprint">throwA[ExceptionType](me.like { case e =&gt; e must matchSomething }</code> or<br/>  <code class="prettyprint">throwA(exception).like { case e =&gt; e must matchSomething }</code> check that the thrown exception satisfies a property</li>
+</ul><p>For all the above matchers you can use <code class="prettyprint">throwAn</code> instead of <code class="prettyprint">throwA</code> if the exception name starts with a vowel for better<br/>readability.</p></td></tr></table></form></div><div class="tabbertab" title="Map"><form>
+    <table><tr><td class="none" style="info"><p>Maps have their own matchers as well, to check keys and values:</p>
+<ul>
+  <li><p><code class="prettyprint">haveKey</code> check if a Map has a given key<br/>    <code class="prettyprint">Map(1 -&gt; &quot;1&quot;) must haveKey(1)</code></p></li>
+  <li><p><code class="prettyprint">haveKeys</code> check if a Map has several keys<br/>    <code class="prettyprint">Map(1 -&gt; &quot;1&quot;, 2 -&gt; &quot;2&quot;) must haveKeys(1, 2)</code></p></li>
+  <li><p><code class="prettyprint">haveValue</code> check if a Map has a given value<br/>    <code class="prettyprint">Map(1 -&gt; &quot;1&quot;) must haveValue(&quot;1&quot;)</code></p></li>
+  <li><p><code class="prettyprint">haveValues</code> check if a Map has several values<br/>    <code class="prettyprint">Map(1 -&gt; &quot;1&quot;, 2 -&gt; &quot;2&quot;) must haveValue(&quot;1&quot;, &quot;2&quot;)</code></p></li>
+  <li><p><code class="prettyprint">havePair</code> check if a Map has a given pair of values<br/>    <code class="prettyprint">Map(1 -&gt; &quot;1&quot;) must havePair(1 -&gt; &quot;1&quot;)</code></p></li>
+  <li><p><code class="prettyprint">havePairs</code> check if a Map has some pairs of values<br/>    <code class="prettyprint">Map(1-&gt;&quot;1&quot;, 2-&gt;&quot;2&quot;, 3-&gt;&quot;3&quot;) must havePairs(1-&gt;&quot;1&quot;, 2-&gt;&quot;2&quot;)</code></p></li>
+</ul><p>But Maps are also Partial Functions, so:</p>
+<ul>
+  <li><p><code class="prettyprint">beDefinedAt</code> check if a PartialFunction is defined for a given value<br/>    <code class="prettyprint">partial must beDefinedAt(1)</code></p></li>
+  <li><p><code class="prettyprint">beDefinedBy</code> check if a PartialFunction is defined for a given value<br/>  and returns another one<br/>    <code class="prettyprint">partial must beDefinedBy(1 -&gt; true)</code></p></li>
+</ul></td></tr></table></form></div><div class="tabbertab" title="Any"><form>
+    <table><tr><td class="none" style="info"><p>These matchers can be used with any object, regardless of its type:</p>
+<ul>
+  <li><code class="prettyprint">beLike { case exp =&gt; result }</code> check if an object is like a given pattern. <code class="prettyprint">result</code> can be any expression using a matcher</li>
+  <li><code class="prettyprint">beLike { case exp =&gt; exp must beXXX }</code> check if an object is like a given pattern, and verifies a condition</li>
+  <li><code class="prettyprint">beNull</code> check if an object is null</li>
+  <li><code class="prettyprint">beAsNullAs</code> when 2 objects must be null at the same time if one of them is null</li>
+  <li><code class="prettyprint">beOneOf(a, b, c)</code> check if an object is one of a given list</li>
+  <li><code class="prettyprint">haveClass</code> check the class of an object</li>
+  <li><code class="prettyprint">haveSuperclass</code> check if the class of an object as another class as one of its ancestors</li>
+  <li><code class="prettyprint">haveInterface</code> check if an object is implementing a given interface</li>
+  <li><code class="prettyprint">beAssignableFrom</code> check if a class is assignable from another</li>
+  <li><code class="prettyprint">beAnInstanceOf[T]</code> check if an object is an instance of type <code class="prettyprint">T</code></li>
+</ul></td></tr></table></form></div></div></td></tr></table></form></td>
+<h3 id="optional">Optional</h3>
+<p>Those matchers are optional. To use them, you need to add a new trait to your specification:</p>
+<td class="info"><form>
+    <table><tr><th colspan="101">Optional Matchers</th></tr><tr><td colspan="100" class="info"><div class="tabber"><div class="tabbertab" title="Xml"><form>
+    <table><tr><td class="none" style="info"><p>It is very useful to have literal Xml in Scala, it is even more useful to have matchers for it! If you want to use those matchers you need to extend the <code class="prettyprint">org.specs2.matcher.XmlMatchers</code> trait:</p>
+<ul>
+  <li><p><code class="prettyprint">beEqualToIgnoringSpace</code> compares 2 Nodes, without considering spaces<br/>  <code class="prettyprint">&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must ==/(&lt;a&gt; &lt;b/&gt;&lt;/a&gt;)</code><br/>  <code class="prettyprint">&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must beEqualToIgnoringSpace(&lt;a&gt; &lt;b/&gt;&lt;/a&gt;)</code></p></li>
+  <li><p><code class="prettyprint">beEqualToIgnoringSpace</code> can also do an ordered comparison<br/>  <code class="prettyprint">&lt;a&gt;&lt;c/&gt; &lt;b/&gt;&lt;/a&gt; must ==/(&lt;a&gt; &lt;c/&gt;&lt;b/&gt;&lt;/a&gt;).ordered</code></p></li>
+  <li><p>on the other hand <code class="prettyprint">beEqualToIgnoringSpace</code> will not check attributes order<br/>  <code class="prettyprint">&lt;n a=&quot;1&quot; b=&quot;2&quot;/&gt; must ==/(&lt;n b=&quot;2&quot; a=&quot;1&quot;/&gt;)</code></p></li>
+  <li><p>the <code class="prettyprint">\\</code> matcher is an XPath-like matcher matching if a node is a direct child of another<br/>  <code class="prettyprint">&lt;a&gt;&lt;b/&gt;&lt;/a&gt; must \\\\(&quot;b&quot;)</code></p></li>
+  <li><p>You can also check attribute names<br/>    <code class="prettyprint">&lt;a&gt;&lt;b name=&quot;value&quot;&gt;&lt;/b&gt;&lt;/a&gt; must \\(&quot;b&quot;, &quot;name&quot;)</code></p></li>
+  <li><p>And attribute names and values as well (values are checked using a regular expression, use the quote method if you want an exact match)<br/>  <code class="prettyprint">&lt;a&gt;&lt;b n=&quot;v&quot; n2=&quot;v2&quot; n3=&quot;v3&quot;&gt;&lt;/b&gt;&lt;/a&gt; must \\(&quot;b&quot;, &quot;n&quot;-&gt;&quot;v&quot;, &quot;n2&quot;-&gt;&quot;v\\d&quot;)</code></p></li>
+  <li><p>Or the content of a <code class="prettyprint">Text</code> node<br/>  <code class="prettyprint">&lt;a&gt;hello&lt;/a&gt; must \\(&quot;a&quot;) \\&gt; &quot;hello&quot;</code> (alias <code class="prettyprint">textIs</code>)<br/>  <code class="prettyprint">&lt;a&gt;hello&lt;/a&gt; must \\(&quot;a&quot;) \\&gt;~ &quot;h.*&quot;</code> (alias <code class="prettyprint">textMatches</code>)</p></li>
+  <li><p>The equivalent of <code class="prettyprint">\\</code> for a &quot;deep&quot; match is simply <code class="prettyprint">\\\\</code><br/>  <code class="prettyprint">&lt;a&gt;&lt;s&gt;&lt;c&gt;&lt;/c&gt;&lt;/s&gt;&lt;/a&gt; must \\\\(&quot;c&quot;)</code></p></li>
+</ul></td></tr></table></form></div><div class="tabbertab" title="Json"><form>
+    <table><tr><td class="none" style="info"><p><a href="http://www.json.org">Json</a> is a simple data format essentially modeling recursive key-values. There are 2 matchers which can be used to verify the presence of appropriate values in Strings representing Json documents:</p>
+<ul>
+  <li><p><code class="prettyprint">/(value)</code> checks if a value is present at the root of the document. This can only be the case if that document is an Array</p></li>
+  <li><p><code class="prettyprint">/(regex)</code> checks if a value matching the regex is present at the root of the document. This can only be the case if that document is an Array</p></li>
+  <li><p><code class="prettyprint">/(key -&gt; value)</code> checks if a pair is present at the root of the document. This can only be the case if that document is a Map</p></li>
+  <li><p><code class="prettyprint">*/(value)</code> checks if a value is present anywhere in the document, either as an entry in an Array, or as the value for a key in a Map</p></li>
+  <li><p><code class="prettyprint">*/(key -&gt; value)</code> checks if a pair is present anywhere in a Map of the document</p></li>
+  <li><p><code class="prettyprint">/#(i)</code> selects the ith element in a 0-based indexed Array or a Map and allow further checks on that element</p></li>
+</ul><p>Now the interesting part comes from the fact that those matchers can be chained to search specific paths in the Json document. For example, for the following document: </p>
+<pre><code class="prettyprint">// taken from an example in the Lift project
+val person = &quot;&quot;&quot;{
+  &quot;person&quot;: {
+    &quot;name&quot;: &quot;Joe&quot;,
+    &quot;age&quot;: 35,
+    &quot;spouse&quot;: {
+      &quot;person&quot;: {
+        &quot;name&quot;: &quot;Marilyn&quot;,
+        &quot;age&quot;: 33
+      }
+    }
+  }
+}
+&quot;&quot;&quot;
+</code></pre><p>You can use these combinations: </p>
+<pre><code class="prettyprint">person must /(&quot;person&quot;) */(&quot;person&quot;) /(&quot;age&quot; -&gt; 33.0) // by default numbers are parsed as Doubles
+</code></pre><p>You can as well use regular expressions or String matchers instead of values to verify the presence of keys or elements. For example: </p>
+<pre><code class="prettyprint">person must /(&quot;p.*&quot;.r) */ &quot;.*on&quot;.r /(&quot;age&quot; -&gt; &quot;\\d+\\.\\d&quot;.r)
+person must /(&quot;p.*&quot;.r) */ &quot;.*on&quot;.r /(&quot;age&quot; -&gt; startWith(&quot;3&quot;))
+person must /(&quot;p.*&quot;.r) */ &quot;.*on&quot;.r /(&quot;age&quot; -&gt; (be_&gt;(30) ^^ ((_:String).toInt)))
+</code></pre><p>You can also access some records by their index: </p>
+<pre><code class="prettyprint">person must /(&quot;person&quot;) /# 2 / &quot;person&quot;
+</code></pre><p>Finally you can use Json matchers to match elements in an array: </p>
+<pre><code class="prettyprint">val json = &quot;&quot;&quot;{&quot;products&quot;:[{&quot;name&quot;:&quot;shirt&quot;,&quot;price&quot;:10, &quot;ids&quot;:[&quot;1&quot;, &quot;2&quot;, &quot;3&quot;]},{&quot;name&quot;:&quot;shoe&quot;,&quot;price&quot;:5}]}&quot;&quot;&quot;
+
+def aProductWith(name: Matcher[JsonType],  price: Matcher[JsonType]): Matcher[String] =
+  /(&quot;name&quot;).andHave(name) and /(&quot;price&quot;).andHave(price)
+
+def haveProducts(products: Matcher[String]*): Matcher[String] =
+  /(&quot;products&quot;).andHave(allOf(products:_*))
+
+json must haveProducts(
+  aProductWith(name = &quot;shirt&quot;, price = 10) and /(&quot;ids&quot;).andHave(exactly(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;)),
+  aProductWith(name = &quot;shoe&quot;, price = 5)
+)
+</code></pre><p>The <code class="prettyprint">andHave</code> method accepts any <code class="prettyprint">Matcher[JsonType]</code> where <code class="prettyprint">JsonType</code> is either <code class="prettyprint">JsonArray</code>, <code class="prettyprint">JsonMap</code>, <code class="prettyprint">JsonNumber</code>, <code class="prettyprint">JsonString</code>, <code class="prettyprint">JsonNull</code>. In the example above we pass directly <code class="prettyprint">shirt</code> and <code class="prettyprint">10</code> as <code class="prettyprint">Matcher[JsonType]</code> because there are implicit conversions from <code class="prettyprint">Int</code>, <code class="prettyprint">Boolean</code>, <code class="prettyprint">Double</code>, <code class="prettyprint">String</code> and <code class="prettyprint">Traversable[String]</code> matchers (like <code class="prettyprint">allOf</code>) to a <code class="prettyprint">Matcher[JsonType]</code>.</p></td></tr></table></form></div><div class="tabbertab" title="File"><form>
+    <table><tr><td class="none" style="info"><p>The Java api for files is more or less mimicked as matchers which can operate on strings denoting paths or on Files (with the <code class="prettyprint">org.specs2.matcher.FileMatchers</code> trait)</p>
+<ul>
+  <li><code class="prettyprint">beEqualToIgnoringSep</code> check if 2 paths are the same regardless of their separators<br/>  <code class="prettyprint">&quot;c:\temp\hello&quot; must beEqualToIgnoringSep(&quot;c:/temp/hello&quot;)</code></li>
+  <li><code class="prettyprint">beAnExistingPath</code> check if a path exists</li>
+  <li><code class="prettyprint">beAReadablePath</code> check if a path is readable</li>
+  <li><code class="prettyprint">beAWritablePath</code> check if a path is writable</li>
+  <li><code class="prettyprint">beAnAbsolutePath</code> check if a path is absolute</li>
+  <li><code class="prettyprint">beAHiddenPath</code> check if a path is hidden</li>
+  <li><code class="prettyprint">beAFilePath</code> check if a path is a file</li>
+  <li><code class="prettyprint">beADirectoryPath</code> check if a path is a directory</li>
+  <li><code class="prettyprint">havePathName</code> check if a path has a given name</li>
+  <li><code class="prettyprint">haveAsAbsolutePath</code> check if a path has a given absolute path</li>
+  <li><code class="prettyprint">haveAsCanonicalPath</code> check if a path has a given canonical path</li>
+  <li><code class="prettyprint">haveParentPath</code> check if a path has a given parent path</li>
+  <li><code class="prettyprint">listPaths</code> check if a path has a given list of children</li>
+  <li><code class="prettyprint">exist</code> check if a file exists</li>
+  <li><p><code class="prettyprint">beReadable</code> check if a file is readable</p></li>
+  <li><code class="prettyprint">beWritable</code> check if a file is writable</li>
+  <li><code class="prettyprint">beAbsolute</code> check if a file is absolute</li>
+  <li><code class="prettyprint">beHidden</code> check if a file is hidden</li>
+  <li><code class="prettyprint">beAFile</code> check if a file is a file</li>
+  <li><code class="prettyprint">beADirectory</code> check if a file is a directory</li>
+  <li><code class="prettyprint">haveName</code> check if a file has a given name</li>
+  <li><code class="prettyprint">haveAbsolutePath</code> check if a file has a given absolute path</li>
+  <li><code class="prettyprint">haveCanonicalPath</code> check if afile has a given canonical path</li>
+  <li><code class="prettyprint">haveParent</code> check if a file has a given parent path</li>
+  <li><code class="prettyprint">haveList</code> check if a file has a given list of children</li>
+</ul></td></tr></table></form></div><div class="tabbertab" title="Content"><form>
+    <table><tr><td class="none" style="info"><h5>File contents</h5><p>The matchers from the <code class="prettyprint">org.specs2.matcher.ContentMatchers</code> trait can help us check the contents of files. For example we can check that 2 text files have the same lines: </p>
+<pre><code class="prettyprint">(file1, file2) must haveSameLines
+file1 must haveSameLinesAs(file2)
+</code></pre><p>We can check that the content of one file is contained in another one: </p>
+<pre><code class="prettyprint">file1 must containLines(file2)
+</code></pre><p>If the files are binary files we can also check that they have the same MD5 hash: </p>
+<pre><code class="prettyprint">(file1, file2) must haveSameMD5
+ file1 must haveSameMD5As(file2)
+</code></pre><p><strong><em>Order</em></strong></p><p>It is possible to relax the constraint by requiring the equality or containment to be true regardless of the order of lines: </p>
+<pre><code class="prettyprint">(file1, file2) must haveSameLines.unordered
+ file1 must haveSameLinesAs(file2).unordered
+ file1 must containLines(file2).unordered
+</code></pre><p><strong><em>Missing only</em></strong></p><p>By default, <code class="prettyprint">(file1, file2) must haveSameLines</code> will report misplaced lines if any, that is, lines of <code class="prettyprint">f1</code> which appear in <code class="prettyprint">f2</code> but not at the right position. However if <code class="prettyprint">file2</code> is big, this search might degrade the performances. In that case you can turn it off with <code class="prettyprint">missingOnly</code>: </p>
+<pre><code class="prettyprint">(file1, file2) must haveSameLines.missingOnly
+</code></pre><p><strong><em>Show less differences</em></strong></p><p>If there are too many differences, you can specify that you only want the first 10: </p>
+<pre><code class="prettyprint">(file1, file2) must haveSameLines.showOnly(10.differences).unordered
+</code></pre><p>In the code above <code class="prettyprint">10.differences</code> builds a <code class="prettyprint">DifferenceFilter</code> which is merely a filtering function: <code class="prettyprint">(lines1: Seq[String], lines2: Seq[String]) =&gt; (Seq[String], Seq[String])</code>. The parameter <code class="prettyprint">lines1</code> is the sequence of lines not found in the second content while <code class="prettyprint">lines2</code> is the sequence of lines not found in the first content.</p><h5>Directories contents</h5><p>We can compare the contents of 2 directories. We can for example check if no files are missing and none has been added: </p>
+<pre><code class="prettyprint">actualDir must haveSamePathsAs(expectedDir)
+// with a file filter applied to both the actual and expected directories
+actualDir must haveSamePathsAs(expectedDir).withFilter((file: File) =&gt; !file.isHidden)
+</code></pre><p>Once we know that all files are present we can check their content: </p>
+<pre><code class="prettyprint">// the default comparison expects that files are text files and that comparison must be done line by line
+actualDir must haveSameFilesAs(expectedDir)
+
+// with a file filter applied to both the actual and expected directories
+actualDir must haveSameFilesAs(expectedDir).withFilter((file: File) =&gt; !file.isHidden)
+
+// with a MD5 matcher for binary files
+actualDir must haveSameFilesAs(expectedDir).withMatcher(haveSameMD5)
+
+// it is also possible to only check the content of actual files when they exist in the expected directory
+actualDir must haveSameFilesContentAs(expectedDir)
+</code></pre><h5>Lines contents</h5><p>Files are not the only possible source of lines and it is useful to be able to check the content of a <code class="prettyprint">File</code> with a <code class="prettyprint">Seq[String]</code>: </p>
+<pre><code class="prettyprint">file1 must haveSameLinesAs(Seq(line1, line2, line3))
+</code></pre><p>This is because those 2 types implement the <code class="prettyprint">org.specs2.text.LinesContent</code> trait, defining:</p>
+<ul>
+  <li>a name for the overall content</li>
+  <li>a method for returning the lines</li>
+  <li>a default method for computing the differences of 2 sequences of lines (in case you need to override this logic)</li>
+</ul><p>So if you have a specific type <code class="prettyprint">T</code> which you can represent as a <code class="prettyprint">Seq[String]</code>, you can create an implicit <code class="prettyprint">LinesContent</code> and then you'll be able to use the <code class="prettyprint">ContentMatchers</code>: </p>
+<pre><code class="prettyprint">implicit def linesforMyType[T]: LinesContent[T] = new LinesContent[T] {
+  def name(t: T) = &quot;My list of lines&quot;
+  def lines(t: T): Seq[String] = Seq()// your implementation goes here
+}
+</code></pre></td></tr></table></form></div><div class="tabbertab" title="Termination"><form>
+    <table><tr><td class="none" style="info"><p>Sometimes you just want to specify that a block of code is going to terminate. The <code class="prettyprint">org.specs2.matcher.TerminationMatchers</code> trait is here to help. If you mix in that trait, you can write: </p>
+<pre><code class="prettyprint">Thread.sleep(100) must terminate
+
+// the default is retries = 0, sleep = 100.millis
+Thread.sleep(100) must terminate(retries = 1, sleep = 60.millis)
+</code></pre><p>Note that the behaviour of this matcher is a bit different from the <code class="prettyprint">eventually</code> operator. In this case, we let the current Thread sleep during the given <code class="prettyprint">sleep</code> time and then we check if the computation is finished, then, we retry for the given number of <code class="prettyprint">retries</code>.</p><p>In a further scenario, we might want to check that triggering another action is able to unblock the first one: </p>
+<pre><code class="prettyprint">action1 must terminate.when(action2)
+action1 must terminate.when(&quot;starting the second action&quot;, action2)
+action1 must terminate(retries=3, sleep=100.millis).when(action2)
+</code></pre><p>When a second action is specified like that, <code class="prettyprint">action1</code> will be started and <code class="prettyprint">action2</code> will be started on the first retry. Otherwise, if you want to specify that <code class="prettyprint">action1</code> can <em>only</em> terminate when <code class="prettyprint">action2</code> is started, you write: </p>
+<pre><code class="prettyprint">action1 must terminate.onlyWhen(action2)
+</code></pre><h4>ExecutionEnv</h4><p>The <code class="prettyprint">terminate</code> matcher needs an implicit <code class="prettyprint">ExecutionEnv</code> to be used. See the page to learn how to get one.</p></td></tr></table></form></div><div class="tabbertab" title="Case class"><form>
+    <table><tr><td class="none" style="info"><p>There is a special support for matching case classes, using a matcher macro. To use it you need to add the <code class="prettyprint">specs2-matcher-extra</code> jar to your project and add the <code class="prettyprint">org.specs2.matcher.MatcherMacros</code> trait to your specification.</p><p>Then, with the <code class="prettyprint">matchA</code> matcher you can check the values of case class attributes:</p>
+<pre><code class="prettyprint">// case class for a Cat
+case class Cat(name: String = &quot;&quot;, age: Int = 0, kitten: Seq[Cat] = Seq())
+// a given cat
+val cat = Cat(name = &quot;Kitty&quot;, age = 6, kitten = Seq(Cat(&quot;Oreo&quot;, 1), Cat(&quot;Ella&quot;, 2)))
+
+// this cat must be a Cat
+cat must matchA[Cat]
+
+// check the value of &quot;name&quot;
+cat must matchA[Cat].name(&quot;Kitty&quot;)
+
+// check the value of &quot;age&quot; using a matcher
+def is[A](a: A) = be_==(a)
+cat must matchA[Cat].age(is(6))
+
+// check the value of &quot;kitten&quot; using a function returning a Result
+cat must matchA[Cat].kitten((_:Seq[Cat]) must haveSize(2))
+
+// matchers can be chained
+cat must matchA[Cat]
+  .name(&quot;Kitty&quot;)
+  .age(is(6))
+  .kitten((_:Seq[Cat]) must haveSize(2))
+</code></pre><h3>And if you want to know more {.ribbon .both-ribbon}</h3></td></tr></table></form></div><div class="tabbertab" title="Parser"><form>
+    <table><tr><td class="none" style="info"><p>Scala provides a parsing library using <a href="http://www.scala-lang.org/api/current/scala/util/parsing/combinator/Parsers.html">parser combinators</a>.</p><p>To specify your own parsers you need to:</p>
+<ul>
+  <li>extend the <code class="prettyprint">org.specs2.matcher.ParserMatchers</code> trait</li>
+  <li>associate the <code class="prettyprint">val parsers</code> variable with your parsers definition</li>
+  <li>use the <code class="prettyprint">beASuccess</code>, <code class="prettyprint">beAFailure</code>, <code class="prettyprint">succeedOn</code>, <code class="prettyprint">failOn</code>, <code class="prettyprint">errorOn</code> matchers to specify the results of parsing input<br/>  strings. <code class="prettyprint">beAPartialSuccess</code>, <code class="prettyprint">be aPartialSuccess</code>, <code class="prettyprint">succeedOn.partially</code> will allow a successful match only on part of the input</li>
+  <li>use <code class="prettyprint">haveSuccessResult</code> and <code class="prettyprint">haveFailureMsg</code> to specify what happens <em>only</em> on success or failure. Those matchers accept<br/>  a String or a matcher so that<br/>  . <code class="prettyprint">haveSuccessResult(&quot;r&quot;) &lt;==&gt; haveSuccessResult(beMatching(&quot;.*r.*&quot;) ^^ ((_:Any).toString)</code><br/>  . <code class="prettyprint">haveFailingMsg(&quot;m&quot;) &lt;==&gt; haveFailingMsg(beMatching(&quot;.*r.*&quot;))</code></li>
+</ul><p>For example, specifying a Parser for numbers could look like this: </p>
+<pre><code class="prettyprint">import NumberParsers.{error, number}
+
+import scala.util.parsing.combinator.RegexParsers
+
+class ParserSpec extends Specification with matcher.ParserMatchers {  def is = s2&quot;&quot;&quot;
+  Parsers for numbers
+
+    beASuccess and succeedOn check if the parse succeeds
+    ${ number(&quot;1&quot;) must beASuccess }
+    ${ number(&quot;1i&quot;) must beAPartialSuccess }
+    ${ number must succeedOn(&quot;12&quot;) }
+    ${ number must succeedOn(&quot;12ab&quot;).partially }
+    ${ number must succeedOn(&quot;12&quot;).withResult(12) }
+    ${ number must succeedOn(&quot;12&quot;).withResult(equalTo(12)) }
+    ${ number(&quot;1&quot;) must haveSuccessResult(&quot;1&quot;) }
+
+    beAFailure and failOn check if the parse fails
+    ${ number must failOn(&quot;abc&quot;) }
+    ${ number must failOn(&quot;abc&quot;).withMsg(&quot;string matching regex.*expected&quot;) }
+    ${ number must failOn(&quot;abc&quot;).withMsg(matching(&quot;.*string matching regex.*expected.*&quot;)) }
+    ${ number(&quot;i&quot;) must beAFailure }
+    ${ number(&quot;i&quot;) must haveFailureMsg(&quot;i' found&quot;) }
+
+    beAnError and errorOn check if the parser errors out completely
+    ${ error must errorOn(&quot;&quot;) }
+    ${ error(&quot;&quot;) must beAnError }
+                                                                                &quot;&quot;&quot;
+
+  val parsers = NumberParsers
+}
+</code></pre></td></tr></table></form></div><div class="tabbertab" title="Typecheck"><form>
+    <table><tr><td class="none" style="info"><h3>Typecheck matchers</h3><p>Some behaviours can be encoded with the type system and you just want to check that a given expression will typecheck: </p>
+<pre><code class="prettyprint">import org.specs2.execute._, Typecheck._
+import org.specs2.matcher.TypecheckMatchers._
+
+typecheck {
+    &quot;&quot;&quot;
+  // there must be a Monoid instance for Text
+  Monoid[Text].zero
+    &quot;&quot;&quot;
+} must succeed
+</code></pre><p>You might also want to check that another expression will fail to typecheck: </p>
+<pre><code class="prettyprint">typecheck {
+  &quot;&quot;&quot;
+// there must be not a Monoid instance for Plane
+Monoid[Plane].zero
+  &quot;&quot;&quot;
+} must not succeed
+
+typecheck {
+  &quot;&quot;&quot;
+// there must be not a Monoid instance for Plane
+Monoid[Plane].zero
+  &quot;&quot;&quot;
+} must failWith(&quot;could not find implicit value for .* scalaz.Monoid&quot;)
+</code></pre><h4>Typechecked</h4><p>Note that you actually don't have to use the <code class="prettyprint">succeed</code> matcher because <code class="prettyprint">typecheck</code> returns a <code class="prettyprint">Typechecked</code> object which has an <code class="prettyprint">AsResult</code> instance: </p>
+<pre><code class="prettyprint">&quot;this should typecheck ok&quot; ! typecheck {
+&quot;&quot;&quot;
+// there must be not a Monoid instance for Plane
+Monoid[Plane].zero
+&quot;&quot;&quot;
+}
+</code></pre><p>This is also why you can indicate that a block of code must be marked as <code class="prettyprint">Pending</code> until it typechecks: </p>
+<pre><code class="prettyprint">typecheck {
+  &quot;&quot;&quot;
+// there must be not a Monoid instance for Plane
+Monoid[Plane].zero
+  &quot;&quot;&quot;
+}.pendingUntilFixed(&quot;find a way to make this typecheck!&quot;)
+</code></pre><h4>Interpolated string</h4><p>Another way of checking if a piece of code typechecks is to use the <code class="prettyprint">tc</code> string interpolator: </p>
+<pre><code class="prettyprint">tc&quot; 1 must_== 1&quot;
+</code></pre><p>The code above uses a macros which will</p>
+<ul>
+  <li>typecheck the expression</li>
+  <li>replace it with the corresponding code if the expression typechecks ok</li>
+  <li>otherwise it will create a <code class="prettyprint">Typechecked</code> object containing the reason for the failure</li>
+</ul><p>Note that this interpolator can <em>not</em> take variables at the moment (so it doesn't interpolate much :-))</p><h4>Typechecking vs parsing</h4><p>With either the <code class="prettyprint">typecheck</code> method or the <code class="prettyprint">tc</code> string interpolator, there might be parse errors. If that's the case they will be raised at compile time because it is likely to be something which you want to fix right way. If you want parse errors to be raised during runtime only you need to use the <code class="prettyprint">parseAndTypecheck</code> method and the <code class="prettyprint">ptc</code> string interpolator.</p></td></tr></table></form></div><div class="tabbertab" title="Scala Interpreter"><form>
+    <table><tr><td class="none" style="info"><p>In the rare case where you want to use the Scala interpreter and execute a script: </p>
+<pre><code class="prettyprint">class ScalaInterpreterMatchersSpec extends mutable.Specification with ScalaInterpreterMatchers {
+  def interpret(s: String): String = &quot;&quot; // you have to provide your own Scala interpreter here
+
+  &quot;A script&quot; can {
+    &quot;be interpreted&quot; in {
+      &quot;1 + 1&quot; &gt;| &quot;2&quot;
+    }
+  }
+}
+</code></pre></td></tr></table></form></div><div class="tabbertab" title="Result"><form>
+    <table><tr><td class="none" style="info"><p>That's only if you want to check the result of other matchers! </p>
+<pre><code class="prettyprint">// you need to extend the ResultMatchers trait
+class MatchersSpec extends Specification with matcher.ResultMatchers { def is =
+  &quot;beMatching is using a regexp&quot; ! {
+    (&quot;Hello&quot; must beMatching(&quot;h.*&quot;)) must beSuccessful
+  }
+}
+</code></pre></td></tr></table></form></div><div class="tabbertab" title="Dependency Matchers"><form>
+    <table><tr><td class="none" style="info"><p>It is highly desirable to have acyclic dependencies between the packages of a project. This often leads to describing the packages structure as &quot;layered&quot;: each package on a layer can only depend on a package on a lower layer. specs2 helps you enforce this design property with specific matchers.</p><h3>Layers definition</h3><p>First you need to define the packages and their expected dependencies. Mix-in the <code class="prettyprint">org.specs2.specification.Analysis</code> trait and define layers (taking specs2 as an example): </p>
+<pre><code class="prettyprint">layers (
+  &quot;runner&quot;,
+  &quot;reporter&quot;,
+  &quot;specification mutable&quot;,
+  &quot;mock      form&quot;,
+  &quot;matcher&quot;,
+  &quot;execute&quot;,
+  &quot;reflect    xml  time html&quot;,
+  &quot;collection control io text main data&quot;).withPrefix(&quot;org.specs2&quot;)
+</code></pre><p>The above expression defines layers as an ordered list of <code class="prettyprint">String</code>s containing space-separated package names. It is supplemented by a <code class="prettyprint">withPrefix</code> declaration to factor out the common package prefix between all these packages.</p><p>By default, the packages are supposed to correspond to directories in the <code class="prettyprint">src/target/scala-&lt;version&gt;/classes</code> directory. If your project has a different layout you can declare another target directory: </p>
+<pre><code class="prettyprint">layers(&quot;...&quot;).inTargetDir(&quot;out&quot; / &quot;classes&quot;)
+</code></pre><h3>Inclusion/Exclusion</h3><p>Every rule has exceptions :-). In some rare cases, it might be desirable to exclude a class from being checked on a given layer. To do this, you can use the <code class="prettyprint">include/exclude</code> methods on the <code class="prettyprint">Layer</code> class: </p>
+<pre><code class="prettyprint">layers (
+  &quot;runner&quot;,
+  &quot;reporter&quot;,
+  &quot;specification mutable&quot;.exclude(&quot;mutable.SpecificationWithJUnit&quot;),
+  &quot;mock      form&quot;,
+  &quot;matcher&quot;,
+  &quot;execute&quot;,
+  &quot;reflect  xml  time html&quot;,
+  &quot;collection control io text main data&quot;).withPrefix(&quot;org.specs2&quot;)
+</code></pre><p>The <code class="prettyprint">include/exclude</code> methods accept a list of regular expressions to:</p>
+<ul>
+  <li>exclude fully qualified class names (generally, only <code class="prettyprint">exclude</code> will be necessary)</li>
+  <li>re-include fully qualified class names if the exclusion list is to big</li>
+</ul><h3>Verification</h3><p>Now you've defined layers, you can use the <code class="prettyprint">beRespected</code> matcher to check if all the dependencies are verified: </p>
+<pre><code class="prettyprint">val design = layers(&quot;...&quot;)
+design must beRespected
+</code></pre><p>If some dependencies are not respected:</p>
+<pre><code class="prettyprint">[error] those dependencies are not satisfied:
+[error] org.specs2.main x-&gt; org.specs2.io because org.specs2.io.FileSystem -&gt; org.specs2.main.Arguments
+[error] org.specs2.main x-&gt; org.specs2.io because org.specs2.io.FileSystem -&gt; org.specs2.main.ArgumentsArgs
+</code></pre><h3>Layers as an Example</h3><p>The <code class="prettyprint">org.specs2.specification.Analysis</code> trait allows to directly embed the layers definition in a <code class="prettyprint">Specification</code> and turn it into an <code class="prettyprint">Example</code>: </p>
+<pre><code class="prettyprint">class DependenciesSpec extends Specification with specification.Analysis { def is =
+  &quot;this is the application design&quot; ^
+    layers(
+      &quot;gui commandline&quot;,
+      &quot;controller&quot;,
+      &quot;backend&quot;
+    )
+}
+</code></pre></td></tr></table></form></div></div></td></tr></table></form></td>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('#tipue_search_input').tipuesearch({
+    'show': 6
+  });
+});
+</script>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Random execution</title>
+    <link href="./css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="./css/bootstrap.min.css"                           type="text/css" rel="stylesheet" />
+    <link href="./css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="./css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="./css/tabber.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/tipuesearch.css"                             type="text/css" rel="stylesheet" />
+    <link href="./css/specs2.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/specs2-user.css"                             type="text/css" rel="stylesheet" />
+
+    <script src="./javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="./javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="./javascript/tabber.js"                           type="text/javascript"></script>
+    <script src="./javascript/tabber_start.js"                     type="text/javascript"></script>
+    <script src="./javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="./javascript/specs2.js"                           type="text/javascript"></script>
+    <script src="./javascript/specs2-user.js"                      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_set.js"      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_contents.js" type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch.min.js"      type="text/javascript"></script>
+
+</head>
+<body onload="prettyPrint()">
+
+<div class="container">
+
+<div class="col-md-2 sidebar-outer">
+<div class="col-md-2 fixed">
+
+<!-- search box -->
+<div class="search-box">
+  <form action="search.html">
+    <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
+  </form>
+</div>
+
+<!-- table of contents -->
+<toc/>
+
+</div>
+</div>
+
+
+<div class="col-md-10">
+<h1>Random execution</h1>
+<div id="tipue_search_content"></div>
+
+<p>The <link class="ok"> <a href="org.specs2.guide.Execution.html" tooltip="" class="ok">execution</a></link> page describes the most frequent modes of execution:</p>
+<ul>
+<li>fully concurrent</li>
+<li>concurrent with steps</li>
+<li>fully sequential</li>
+</ul>
+<p>Executing the specification concurrently in particular can be a good way to test the stability of the system in presence of random commands. However it is sometimes not possible to overlap examples executions because that could break the external state.</p>
+<h3 id="random-sequential-execution">Random sequential execution</h3>
+<p>In this case you can use another mode of execution. By mixing-in the <code class="prettyprint">org.specs2.specification.process.RandomSequentialExecution</code> trait some execution constraints will be randomly added to your examples so that they will force your examples to execute in a random order, one after the other. This randomization is only being done for examples in between steps so if you have steps inside the specification guaranteeing some kind of checkpoints during the execution, they will be preserved.</p>
+<p>Let’s see this on an example:</p>
+<pre><code class="prettyprint">class RandomSequentialSpec extends Specification with RandomSequentialExecution { def is = s2&quot;&quot;&quot;
+ example1 $e1
+ example2 $e2
+ example3 $e3
+ ${step(&quot;here&quot;.pp)}
+ example4 $e4
+ example5 $e5
+ example6 $e6
+&quot;&quot;&quot;
+
+  def e1 = { &quot;e1&quot;.pp; ok }
+  def e2 = { &quot;e2&quot;.pp; ok }
+  def e3 = { &quot;e3&quot;.pp; ok }
+
+  def e4 = { &quot;e4&quot;.pp; ok }
+  def e5 = { &quot;e5&quot;.pp; ok }
+  def e6 = { &quot;e6&quot;.pp; ok }
+}</code></pre>
+<p>With such a specification you might see in the console:</p>
+<pre><code class="prettyprint">[info] e3
+[info] e2
+[info] e1
+[info] here
+[info] e5
+[info] e6
+[info] e4</code></pre>
+<h3 id="using-scalacheck">Using ScalaCheck</h3>
+<p>The <code class="prettyprint">RandomSequentialExecution</code> trait is actually a very naive way to test random commands on a system. A much better approach is to use ScalaCheck and its notion of <a href="http://www.scalacheck.org/files/scaladays2014/index.html">stateful property-based testing</a>.</p>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('#tipue_search_input').tipuesearch({
+    'show': 6
+  });
+});
+</script>
+</div>
+
+</body>
+</html>

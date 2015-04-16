@@ -1,0 +1,75 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Pending until fixed</title>
+    <link href="./css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="./css/bootstrap.min.css"                           type="text/css" rel="stylesheet" />
+    <link href="./css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="./css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="./css/tabber.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/tipuesearch.css"                             type="text/css" rel="stylesheet" />
+    <link href="./css/specs2.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/specs2-user.css"                             type="text/css" rel="stylesheet" />
+
+    <script src="./javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="./javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="./javascript/tabber.js"                           type="text/javascript"></script>
+    <script src="./javascript/tabber_start.js"                     type="text/javascript"></script>
+    <script src="./javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="./javascript/specs2.js"                           type="text/javascript"></script>
+    <script src="./javascript/specs2-user.js"                      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_set.js"      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_contents.js" type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch.min.js"      type="text/javascript"></script>
+
+</head>
+<body onload="prettyPrint()">
+
+<div class="container">
+
+<div class="col-md-2 sidebar-outer">
+<div class="col-md-2 fixed">
+
+<!-- search box -->
+<div class="search-box">
+  <form action="search.html">
+    <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
+  </form>
+</div>
+
+<!-- table of contents -->
+<toc/>
+
+</div>
+</div>
+
+
+<div class="col-md-10">
+<h1>Pending until fixed</h1>
+<div id="tipue_search_content"></div>
+
+<p>Some examples may be temporarily failing but you may not want the entire test suite to fail just for those examples. Instead of commenting them out and then forgetting about those examples when the code is fixed, you can append <code class="prettyprint">pendingUntilFixed</code> to the example:</p>
+<pre><code class="prettyprint">class SpecificationWithPendingExamples extends mutable.Specification {
+  &quot;this example fails for now&quot; in {
+    1 must_== 2
+  }.pendingUntilFixed
+
+  // or, with a more specific message
+  &quot;this example fails for now&quot; in {
+    1 must_== 2
+  }.pendingUntilFixed(&quot;ISSUE-123&quot;)
+}</code></pre>
+<p>The example above will be reported as <code class="prettyprint">Pending</code> until it succeeds. Then it is marked as a failure so that you can remember to remove the <code class="prettyprint">pendingUntilFixed</code> marker.</p>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('#tipue_search_input').tipuesearch({
+    'show': 6
+  });
+});
+</script>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,105 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>AsResult typeclass</title>
+    <link href="./css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="./css/bootstrap.min.css"                           type="text/css" rel="stylesheet" />
+    <link href="./css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="./css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="./css/tabber.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/tipuesearch.css"                             type="text/css" rel="stylesheet" />
+    <link href="./css/specs2.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/specs2-user.css"                             type="text/css" rel="stylesheet" />
+
+    <script src="./javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="./javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="./javascript/tabber.js"                           type="text/javascript"></script>
+    <script src="./javascript/tabber_start.js"                     type="text/javascript"></script>
+    <script src="./javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="./javascript/specs2.js"                           type="text/javascript"></script>
+    <script src="./javascript/specs2-user.js"                      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_set.js"      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_contents.js" type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch.min.js"      type="text/javascript"></script>
+
+</head>
+<body onload="prettyPrint()">
+
+<div class="container">
+
+<div class="col-md-2 sidebar-outer">
+<div class="col-md-2 fixed">
+
+<!-- search box -->
+<div class="search-box">
+  <form action="search.html">
+    <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
+  </form>
+</div>
+
+<!-- table of contents -->
+<toc/>
+
+</div>
+</div>
+
+
+<div class="col-md-10">
+<h1>AsResult typeclass</h1>
+<div id="tipue_search_content"></div>
+
+<p>There are many ways to define expectations in <s2>specs2</s2>:</p>
+<ul>
+<li>Boolean (<code class="prettyprint">true, false</code>)</li>
+<li>Standard result (<code class="prettyprint">success, failure</code>)</li>
+<li>Matcher result (<code class="prettyprint">1 must_== 1</code>)</li>
+<li>Scalacheck property</li>
+<li>DataTable</li>
+<li>Forms</li>
+</ul>
+<p>All of these types implement the <code class="prettyprint">org.specs2.execute.AsResult</code> typeclass, meaning that they can be transformed into a <code class="prettyprint">Result</code>:</p>
+<pre><code class="prettyprint">trait AsResult[T] {
+  def asResult(t: =&gt;T): Result
+}</code></pre>
+<p>This gives some flexibility in integrating any kind of custom definition of a “result” into <s2>specs2</s2> and this is why you find this typeclass as a requirement to build examples or to declare contexts. You can take advantage of this type class by defining your own kind of result and providing a typeclass instance for it:</p>
+<pre><code class="prettyprint">// A new type of results for cluster execution
+trait ClusterExecution {
+  def succeeded: Boolean
+  def errorMessage: String
+}
+
+object ClusterExecution {
+  implicit def clusterExecutionAsResult: AsResult[ClusterExecution] =
+    new AsResult[ClusterExecution] {
+      def asResult(t: =&gt;ClusterExecution): Result = {
+        try {
+          val result = t
+          if (result.succeeded) Success()
+          else                  Failure(t.errorMessage)
+        } catch { case e: Throwable =&gt; Error(e) }
+      }
+   }
+}</code></pre>
+<h4 id="decorated-results">Decorated results</h4>
+<p>You can also embed custom data in a special kind of <code class="prettyprint">Result</code>, a <code class="prettyprint">DecoratedResult</code>:</p>
+<pre><code class="prettyprint">case class DecoratedResult[+T](decorator: T, result: Result) extends Result(result.message, result.expected)</code></pre>
+<p>A <code class="prettyprint">DecoratedResult[T]</code> decorates an ordinary result with an additional value of type <code class="prettyprint">T</code>. If you want to take advantage of this custom value in your reports you will need to build a custom <code class="prettyprint">org.specs2.reporter.Printer</code>, probably extending an existing one.</p>
+<h3 id="and-if-you-want-to-know-more" class="ribbon both-ribbon">And if you want to know more</h3>
+<div class="ribbon-content">
+<ul>
+<li>mark any object having an <code class="prettyprint">AsResult</code> instance as <link class="ok"> <a href="org.specs2.guide.PendingUntilFixedExamples.html" tooltip="" class="ok">“pending until fixed”</a></link></li>
+</ul>
+</div>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('#tipue_search_input').tipuesearch({
+    'show': 6
+  });
+});
+</script>
+</div>
+
+</body>
+</html>

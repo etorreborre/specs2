@@ -1,0 +1,94 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Case class matchers</title>
+    <link href="./css/opensans-fonts.css"                          type="text/css" rel="stylesheet" />
+    <link href="./css/bootstrap.min.css"                           type="text/css" rel="stylesheet" />
+    <link href="./css/font-awesome.min.css"                        type="text/css" rel="stylesheet" />
+    <link href="./css/prettify.css"                                type="text/css" rel="stylesheet" />
+    <link href="./css/tabber.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/tipuesearch.css"                             type="text/css" rel="stylesheet" />
+    <link href="./css/specs2.css"                                  type="text/css" rel="stylesheet" />
+    <link href="./css/specs2-user.css"                             type="text/css" rel="stylesheet" />
+
+    <script src="./javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="./javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="./javascript/tabber.js"                           type="text/javascript"></script>
+    <script src="./javascript/tabber_start.js"                     type="text/javascript"></script>
+    <script src="./javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="./javascript/specs2.js"                           type="text/javascript"></script>
+    <script src="./javascript/specs2-user.js"                      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_set.js"      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_contents.js" type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch.min.js"      type="text/javascript"></script>
+
+</head>
+<body onload="prettyPrint()">
+
+<div class="container">
+
+<div class="col-md-2 sidebar-outer">
+<div class="col-md-2 fixed">
+
+<!-- search box -->
+<div class="search-box">
+  <form action="search.html">
+    <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
+  </form>
+</div>
+
+<!-- table of contents -->
+<toc/>
+
+</div>
+</div>
+
+
+<div class="col-md-10">
+<h1>Case class matchers</h1>
+<div id="tipue_search_content"></div>
+
+<p>There is a special support for matching case classes, using a matcher macro. To use it you need to add the <code class="prettyprint">specs2-matcher-extra</code> jar to your project and add the <code class="prettyprint">org.specs2.matcher.MatcherMacros</code> trait to your specification.</p>
+<p>Then, with the <code class="prettyprint">matchA</code> matcher you can check the values of case class attributes:</p>
+<pre><code class="prettyprint">// case class for a Cat
+case class Cat(name: String = &quot;&quot;, age: Int = 0, kitten: Seq[Cat] = Seq())
+// a given cat
+val cat = Cat(name = &quot;Kitty&quot;, age = 6, kitten = Seq(Cat(&quot;Oreo&quot;, 1), Cat(&quot;Ella&quot;, 2)))
+
+// this cat must be a Cat
+cat must matchA[Cat]
+
+// check the value of &quot;name&quot;
+cat must matchA[Cat].name(&quot;Kitty&quot;)
+
+// check the value of &quot;age&quot; using a matcher
+def is[A](a: A) = be_==(a)
+cat must matchA[Cat].age(is(6))
+
+// check the value of &quot;kitten&quot; using a function returning a Result
+cat must matchA[Cat].kitten((_:Seq[Cat]) must haveSize(2))
+
+// matchers can be chained
+cat must matchA[Cat]
+  .name(&quot;Kitty&quot;)
+  .age(is(6))
+  .kitten((_:Seq[Cat]) must haveSize(2))</code></pre>
+<h3 id="and-if-you-want-to-know-more" class="ribbon both-ribbon">And if you want to know more</h3>
+<div class="ribbon-content">
+<ul>
+<li>learn about all available <link class="ok"> <a href="org.specs2.guide.Installation.html" tooltip="" class="ok">specs2 modules</a></link></li>
+</ul>
+</div>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('#tipue_search_input').tipuesearch({
+    'show': 6
+  });
+});
+</script>
+</div>
+
+</body>
+</html>
