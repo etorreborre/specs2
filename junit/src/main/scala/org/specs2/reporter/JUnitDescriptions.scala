@@ -1,9 +1,12 @@
 package org.specs2
 package reporter
 
+import java.lang.annotation.Annotation
+
 import org.junit.runner.Description
 import scalaz.{Tree, TreeLoc}
 import data.Trees._
+import control.Exceptions._
 import Tree._
 import data.Trees
 import Trees._
@@ -38,24 +41,27 @@ trait JUnitDescriptions extends ExecutionOrigin {
 
   def createDescriptionTree(spec: SpecStructure): TreeLoc[(Fragment, Description)] = {
     val className = spec.specClassName
+    val annotations = tryOrElse(getClass.getClassLoader.loadClass(spec.specClassName).getAnnotations)(Array())
     val rootFragment = DefaultFragmentFactory.text(spec.header.simpleName)
 
     Levels.treeLocMap(spec.fragments)(keep).getOrElse(leaf(rootFragment).loc).root.setLabel(rootFragment).cojoin.map {
       current: TreeLoc[Fragment] =>
         val description =
         current.getLabel match {
-          case f @ Fragment(d, e, _) if !e.isExecutable => createDescription(className, suiteName = testName(d.show))
-          case f @ Fragment(NoText, e, _) if e.mustJoin => createDescription(className, label = current.size.toString, suiteName = "step")
-          case f @ Fragment(NoText, e, _)               => createDescription(className, label = current.size.toString, suiteName = "action")
-          case f @ Fragment(d, e, _)                    => createDescription(className, label = current.size.toString, testName = testName(d.show, parentPath(current.parents.map(_._2))))
+          case f @ Fragment(d, e, _) if !e.isExecutable => createDescription(className, suiteName = testName(d.show), annotations = annotations)
+          case f @ Fragment(NoText, e, _) if e.mustJoin => createDescription(className, label = current.size.toString, suiteName = "step", annotations = annotations)
+          case f @ Fragment(NoText, e, _)               => createDescription(className, label = current.size.toString, suiteName = "action", annotations = annotations)
+          case f @ Fragment(d, e, _)                    => createDescription(className, label = current.size.toString, testName = testName(d.show, parentPath(current.parents.map(_._2))), annotations = annotations)
         }
         (current.getLabel, description)
     }
   }
 
   /** description for the beginning of the specification */
-  def specDescription(spec: SpecStructure) =
-    createDescription(spec.specClassName, suiteName = testName(spec.name))
+  def specDescription(spec: SpecStructure) = {
+    val annotations = tryOrElse(getClass.getClassLoader.loadClass(spec.specClassName).getAnnotations)(Array())
+    createDescription(spec.specClassName, suiteName = testName(spec.name), annotations = annotations)
+  }
 
   /** Map of each fragment to its description */
   def fragmentDescriptions(spec: SpecStructure): Map[Fragment, Description] =
@@ -68,7 +74,7 @@ trait JUnitDescriptions extends ExecutionOrigin {
     case f                                                => Some(f)
   }
 
-  def createDescription(className: String, suiteName: String = "", testName: String = "", label: String = ""): Description = {
+  def createDescription(className: String, suiteName: String = "", testName: String = "", label: String = "", annotations: Array[Annotation] = Array()): Description = {
     val origin =
       if (isExecutedFromAnIDE && !label.isEmpty) label
       else className
@@ -77,7 +83,7 @@ trait JUnitDescriptions extends ExecutionOrigin {
       if (testName.isEmpty) (if (suiteName.isEmpty) className else suiteName)
       else sanitize(testName) + "(" + origin + ")"
 
-    Description.createSuiteDescription(description)
+    Description.createSuiteDescription(description, annotations:_*)
   }
 
   import text.Trim._
