@@ -44,7 +44,7 @@ object depends {
         Resolver.sonatypeRepo("releases"),
         Resolver.sonatypeRepo("snapshots"),
         Resolver.typesafeIvyRepo("releases"),
-        "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases")
+        "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases")
     }
 
 }

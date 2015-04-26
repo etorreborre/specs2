@@ -15,7 +15,7 @@ First you need to [install sbt itself](http://www.scala-sbt.org/release/tutorial
 ```
 libraryDependencies += "org.specs2" %% "specs2-core" % "$VERSION" % "test"
 
-resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
+resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
 
 scalacOptions in Test ++= Seq("-Yrangepos")
 ```
