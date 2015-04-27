@@ -30,7 +30,10 @@ Now you might wonder why the `trees` trait is extending the `org.specs2.specific
 
 ### Before / After
 
-It is also possible to extend Scopes with `Before` and `After` traits but they need to be `org.specs2.mutable.Before` and `org.specs2.mutable.After` traits. This is necessary because those traits extend the Scala `DelayedInit` trait allowing to insert code around the execution of the body of an object.
+It is also possible to extend Scopes with `Before`, `After`, `BeforeAfter` traits but they need to be `org.specs2.mutable.Before`, `org.specs2.mutable.After` and `org.specs2.mutable.BeforeAfter` traits. This is necessary because those traits extend the Scala `DelayedInit` trait allowing to insert code around the execution of the body of an object.
+
+$warn Do not use an abstract class instead of a trait when using `Before`, `After` or `BeforeAfter`. This will lead to the [execution of a the "delayed init" code twice](http://stackoverflow.com/questions/21154941/specs2-after-method-runs-before-the-example)!
+
 
 $AndIfYouWantToKnowMore
 
