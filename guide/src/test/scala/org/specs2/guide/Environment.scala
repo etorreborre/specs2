@@ -19,7 +19,7 @@ The execution of a Specification depends on various parts, among which:
  - a "Logger" to log results to the console
  - an interface for the file system
 
-All of this is bundled into one object `org.specs2.specification.core.Env`. The `Env` is accessible to your Specification by either:
+<p/>All of this is bundled into one object `org.specs2.specification.core.Env`. The `Env` is accessible to your Specification by either:
 
  - having it injected as a Specification member
  - extending a trait
@@ -32,10 +32,10 @@ The following objects can be injected in your specification if you declare a 1-p
   - the `Arguments` object
   - the `CommandLine` object
   - the `ExecutionEnv` object (can be implicit)
-  - the `ExecutionContext` object
-  - the `ExecutorService` object
+  - the `ExecutionContext` object (can be implicit)
+  - the `ExecutorService` object (can be implicit)
 
-For example: ${snippet{
+<p/>For example: ${snippet{
 class MySpec(env: Env) extends Specification { def is =
 s2"""
   Use the environment fileSystem
@@ -55,7 +55,7 @@ s2"""
 
 ### Environment traits
 
-The `Env` object can be access by mixing-in the `org.specs2.specification.Environment` trait ${snippet{
+The `Env` object can also be accessed by mixing-in the `org.specs2.specification.Environment` trait ${snippet{
 class MySpec extends Specification with Environment { def is(env: Env) =
 s2"""
   Use the environment fileSystem
@@ -65,7 +65,7 @@ s2"""
 }}
 
 As you can see, instead of defining the `is` method you now need to defined the `is(env: Env)` method. Then you can access any attribute of the current `Env`.
-There are also some specialised traits giving access to specific parts of the environment
+There are also other specialised traits giving access to specific parts of the environment
 
 #### Command-line arguments
 
@@ -87,7 +87,7 @@ When you just want to access the execution environment can use the `org.specs2.s
   }
 }}
 
-As you can see the `ExecutionEnv` parameter is defined as an implicit parameter because this is what is required when creating futures or using ${"Future matchers" ~/ ExecutionEnvironments}
+As you can see the `ExecutionEnv` parameter is defined as an implicit parameter because this is what is required when creating futures or using ${"Future matchers" ~/ ExecutionEnvironments}.
 
 """
 

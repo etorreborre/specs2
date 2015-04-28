@@ -31,7 +31,7 @@ trait SpecificationStructure extends ContextualSpecificationStructure {
 object SpecificationStructure {
 
   def create(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader, env: Option[Env] = None): Action[SpecificationStructure] = {
-    val defaultInstances = env.toList.flatMap(e => List(e, e.arguments, e.arguments.commandLine))
+    val defaultInstances = env.toList.flatMap(_.defaultInstances)
     // try to create the specification from a class name, without displaying possible errors
     createInstance[SpecificationStructure](className, classLoader, defaultInstances)
       // try to create the specification from an object class name
