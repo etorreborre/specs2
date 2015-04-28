@@ -4,7 +4,7 @@ package guide
 import main._
 import execute.AsResult
 import org.specs2.specification.core.Fragment
-import org.specs2.specification.{Before, ForEachWithCommandLineArguments, ContextWithCommandLineArguments, CommandLineArguments}
+import org.specs2.specification.{BeforeAfterAll, CommandLineArguments, ContextWithCommandLineArguments, ForEachWithCommandLineArguments, Before}
 
 object UseCommandLineArguments extends UserGuidePage { def is = "Use command-line arguments".title ^ s2"""
 
@@ -34,7 +34,11 @@ class SpecificationWithArgs extends mutable.Specification {
 
 ### Control a specification
 
-You can also drive the creation of the full specification with command line arguments:${snippet{
+There are 2 ways to drive the creation of the full specification with command line arguments.
+
+#### CommandLineArguments trait
+
+Mixing-in the `CommandLineArguments` trait allow you to pass the command line arguments in the `is` method: ${snippet{
 class SpecificationWithArgs extends Specification with CommandLineArguments { def is(commandLine: CommandLine) =
   if (commandLine.isSet("small"))
 s2"""
@@ -63,6 +67,46 @@ class SpecificationWithArgs extends mutable.Specification with specification.mut
       }
 }
 }}
+
+#### Dependency injection
+
+Any specification with a 1-parameter constructor can be instantiated provided that:
+
+ - the parameter has itself a constructor with no parameters or a 1-parameter constructor which we can instantiate
+ - the paramater is of type `Env`, `Arguments`, `CommandLine`
+
+In particular this means that you can define a `Specification` with a constructor using a `CommandLine` argument and when the specification will be created it will be passed the command line arguments: ${snippet{
+case class MyDbSpec(commandLine: CommandLine) extends Specification with DbSpec { def is = s2"""
+
+  create a user $createUser
+
+"""
+  // the database client is created from the command line
+  // arguments and can be used in the examples
+  def createUser = client.createUser("xxx") must beSome
+}
+
+// Template trait for accessing the database
+// this trait can be controlled from command line arguments
+// and it takes care of the setup of the database before and after all
+// the examples
+trait DbSpec extends Specification with BeforeAfterAll {
+  def commandLine: CommandLine
+
+  def beforeAll = println("start db here")
+  def afterAll  = println("stop db here")
+
+  lazy val client = {
+    if (commandLine.contains("prod")) DbClient("production")
+    else                              DbClient("test")
+  }
+
+  case class DbClient(env: String) {
+    def createUser(name: String): Option[String] = ???
+  }
+}
+}}
+
 
 ### Control a context
 

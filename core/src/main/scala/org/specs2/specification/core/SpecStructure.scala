@@ -118,7 +118,7 @@ object SpecStructure {
 
     def getRefs(s: SpecStructure, visited: Vector[(String, SpecStructure)]): Vector[(String, SpecStructure)] =
       refs(s).map { ref =>
-        SpecificationStructure.create(ref.header.specClass.getName, classLoader).map(_.structure(env).setArguments(ref.arguments))
+        SpecificationStructure.create(ref.header.specClass.getName, classLoader, Some(env)).map(_.structure(env).setArguments(ref.arguments))
       }.sequenceU.map(byName).runOption.getOrElse(Vector())
        .filterNot { case (n, _) => visited.map(_._1).contains(n) }
 

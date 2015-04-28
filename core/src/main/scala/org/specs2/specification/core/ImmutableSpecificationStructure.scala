@@ -44,9 +44,10 @@ trait ImmutableSpecificationStructure extends SpecificationStructure {
   private def isolate(fs: Fragments, f: Fragment, position: Int, env: Env): Fragment = {
     val isolated =
       Execution.result {
-        val instance = Classes.createInstance[ImmutableSpecificationStructure](
+        val instance = Classes.createInstanceFromClass[ImmutableSpecificationStructure](
           getClass.asInstanceOf[Class[ImmutableSpecificationStructure]],
-          getClass.getClassLoader).execute(env.systemLogger).unsafePerformIO
+          getClass.getClassLoader,
+          List(env, env.arguments, env.arguments.commandLine)).execute(env.systemLogger).unsafePerformIO
 
         instance.toDisjunction.fold(
           e => org.specs2.execute.Error(Status.asException(e)),

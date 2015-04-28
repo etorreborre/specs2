@@ -37,15 +37,15 @@ trait ClassRunner {
         Actions.fail("there must be at least one argument, the fully qualified class name")
 
       case className :: rest =>
-        createSpecification(className).flatMap[Unit](report(env)) >>
+        createSpecification(className, Thread.currentThread.getContextClassLoader, Some(env)).flatMap[Unit](report(env)) >>
         Actions.safe(env.shutdown)
     }
     execute(actions, arguments, exit)
   }
 
   /** create the specification from the class name */
-  def createSpecification(className: String): Action[SpecificationStructure] =
-    SpecificationStructure.create(className)
+  def createSpecification(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader, env: Option[Env] = None): Action[SpecificationStructure] =
+    SpecificationStructure.create(className, classLoader, env)
 
   /** report the specification */
   def report(env: Env): SpecificationStructure => Action[Unit] = { spec: SpecificationStructure =>

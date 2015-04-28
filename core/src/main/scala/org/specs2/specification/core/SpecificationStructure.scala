@@ -30,11 +30,12 @@ trait SpecificationStructure extends ContextualSpecificationStructure {
 
 object SpecificationStructure {
 
-  def create(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader): Action[SpecificationStructure] = {
+  def create(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader, env: Option[Env] = None): Action[SpecificationStructure] = {
+    val defaultInstances = env.toList.flatMap(e => List(e, e.arguments, e.arguments.commandLine))
     // try to create the specification from a class name, without displaying possible errors
-    createInstance[SpecificationStructure](className, classLoader)
+    createInstance[SpecificationStructure](className, classLoader, defaultInstances)
       // try to create the specification from an object class name
-      .orElse(createInstance[SpecificationStructure](className+"$", classLoader))
+      .orElse(createInstance[SpecificationStructure](className+"$", classLoader, defaultInstances))
   }
 
   /**
@@ -79,7 +80,7 @@ object SpecificationStructure {
     }
 
     def getRefs(s: SpecificationStructure, visited: Vector[(String, SpecificationStructure)]): Vector[(String, SpecificationStructure)] =
-      refs(s, env).map(ref => create(ref.header.specClass.getName, classLoader)).sequenceU.map(byName).runOption.getOrElse(Vector())
+      refs(s, env).map(ref => create(ref.header.specClass.getName, classLoader, Some(env))).sequenceU.map(byName).runOption.getOrElse(Vector())
         .filterNot { case (n, _) => visited.map(_._1).contains(n) }
 
     Actions.safe {

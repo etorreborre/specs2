@@ -98,9 +98,11 @@ trait MutableFragmentBuilder extends FragmentBuilder
   private def duplicateExecution(effectPath: EffectPath) = {
     Execution.withEnv { env: Env =>
 
-      def instance =
-        Classes.createInstance[MutableFragmentBuilder](getClass.asInstanceOf[Class[MutableFragmentBuilder]], getClass.getClassLoader)
+      def instance = {
+        val defaultInstances = List(env, env.arguments, env.arguments.commandLine)
+        Classes.createInstanceFromClass[MutableFragmentBuilder](getClass.asInstanceOf[Class[MutableFragmentBuilder]], getClass.getClassLoader, defaultInstances)
           .execute(env.systemLogger).unsafePerformIO
+      }
 
       instance.toDisjunction.fold(
         e => org.specs2.execute.Error(Status.asException(e)),
