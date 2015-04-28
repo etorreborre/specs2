@@ -58,7 +58,7 @@ Note also that the default filter also truncates the stacktrace in the middle if
 
 When using the equality matcher $specs2 tries to display the difference between the expected and the actual values using a class: `org.specs2.main.SmartDiffs`. There are several parameters for that class which you can specify from the command line as:
 ```
-sbt> test-only -- smartdiffs show,separators,triggerSize,shortenSize,diffRatio,full
+sbt> testOnly -- smartdiffs show,separators,triggerSize,shortenSize,diffRatio,full
 ```
 
  Parameter          | Description

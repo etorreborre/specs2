@@ -8,12 +8,12 @@ object Selection extends UserGuidePage { def is = s2"""
 
 Many specifications are written incrementally. You specify a little bit then you implement the application. When you go through this "Specify-Implement-Execute" cycle it is useful to be able to focus on just one example, the one you are currently working on. The `ex` argument is what you need (`ex` stands for "example"):
 ```
-sbt> test-only *MySpecification* -- ex contains
+sbt> testOnly *MySpecification* -- ex contains
 ```
 
 The command above will execute any example which description matches the regular expression `.*contains.*` (which means that you can pass regular expressions in general). If you want to match a few words you will need to use double quotes:
 ```
-sbt> test-only *MySpecification* -- ex "contains hello" sequential
+sbt> testOnly *MySpecification* -- ex "contains hello" sequential
 ```
 
 ### Use tags
@@ -103,7 +103,7 @@ trait DatabaseSpec extends Specification {
 
 Another frequent mode of selection is the selection based on previous execution. Generally we want to re-execute only what was broken before. For this, using the `was` argument on the command-line:
 ```
-sbt> test-only *MyFailedSpecification* -- was x
+sbt> testOnly *MyFailedSpecification* -- was x
 ```
 
 On the line above `x` is the status of the previous example. Here is a table of all the flags you can use:

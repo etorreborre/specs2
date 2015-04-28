@@ -14,12 +14,12 @@ sbt> test
 
 Most of the time however you will use the `test-only` command, either because you want to run one specification only or because you want to pass arguments:
 ```
-sbt> test-only org.acme.secret.KillerAppSpec
+sbt> testOnly org.acme.secret.KillerAppSpec
 ```
 
 Only show failed tests:
 ```
-sbt> test-only org.acme.secret.KillerAppSpec -- xonly
+sbt> testOnly org.acme.secret.KillerAppSpec -- xonly
 ```
 
 #### sbt options

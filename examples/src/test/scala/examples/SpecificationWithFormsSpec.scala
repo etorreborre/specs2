@@ -13,7 +13,7 @@ class SpecificationWithFormsSpec extends Specification with Forms { def is = s2"
  You can run this specification by executing
 
  * `specs2.html org.specs2.examples.UseFormSpec` or
- * `sbt> test-only org.specs2.examples.UseFormSpec -- html`
+ * `sbt> testOnly org.specs2.examples.UseFormSpec -- html`
 
  This will create a html file in the target/specs2-reports directory
 

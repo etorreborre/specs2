@@ -75,7 +75,7 @@ Some actions can be a lot slower when executed on a continuous integration serve
 You can avoid this by setting the `timeFactor` argument which will multiply the durations used when `awaiting / attempting` by a constant factor.
 
 ```
-sbt> test-only *MyFuturesSpec* -- timeFactor 3
+sbt> testOnly *MyFuturesSpec* -- timeFactor 3
 ```
 
 $NowLearnTo
