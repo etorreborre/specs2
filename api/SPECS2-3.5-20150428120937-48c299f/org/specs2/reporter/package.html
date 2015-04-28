@@ -1,0 +1,1037 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>reporter - org.specs2.reporter</title>
+          <meta name="description" content="reporter - org.specs2.reporter" />
+          <meta name="keywords" content="reporter org.specs2.reporter" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'org.specs2.reporter.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../lib/package_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a></p>
+        <h1>reporter</h1><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reporter</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="org.specs2.reporter.BufferedLineLogger" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="BufferedLineLoggerextendsLineLogger"></a>
+      <a id="BufferedLineLogger:BufferedLineLogger"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="BufferedLineLogger.html"><span class="name">BufferedLineLogger</span></a><span class="result"> extends <a href="LineLogger.html" class="extype" name="org.specs2.reporter.LineLogger">LineLogger</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@BufferedLineLoggerextendsLineLogger" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This line logger tries to respect line breaks in the original text.</p><div class="fullcomment"><div class="comment cmt"><p>This line logger tries to respect line breaks in the original text.</p><p>So if the original text is: Hello world\nHow are you?
+and we call infoLog(&quot;Hello world\n&quot;); infoLog(&quot;How are you?&quot;)</p><p>Then there will be only 2 lines displayed and not 3 (2 for the first infoLog, 1 for the second one)
+</p></div></div>
+    </li><li name="org.specs2.reporter.ConsoleNotifier" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ConsoleNotifierextendsNotifier"></a>
+      <a id="ConsoleNotifier:ConsoleNotifier"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ConsoleNotifier.html"><span class="name">ConsoleNotifier</span></a><span class="result"> extends <a href="Notifier.html" class="extype" name="org.specs2.reporter.Notifier">Notifier</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@ConsoleNotifierextendsNotifier" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Notifier that prints out to the console
+</p>
+    </li><li name="org.specs2.reporter.ErrorLine" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ErrorLineextendsLogLinewithProductwithSerializable"></a>
+      <a id="ErrorLine:ErrorLine"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ErrorLine.html"><span class="name">ErrorLine</span></a><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="LogLine.html" class="extype" name="org.specs2.reporter.LogLine">LogLine</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@ErrorLineextendsLogLinewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.FailureLine" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FailureLineextendsLogLinewithProductwithSerializable"></a>
+      <a id="FailureLine:FailureLine"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="FailureLine.html"><span class="name">FailureLine</span></a><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="LogLine.html" class="extype" name="org.specs2.reporter.LogLine">LogLine</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@FailureLineextendsLogLinewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.HtmlBodyPrinter" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="HtmlBodyPrinterextendsAnyRef"></a>
+      <a id="HtmlBodyPrinter:HtmlBodyPrinter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="HtmlBodyPrinter.html"><span class="name">HtmlBodyPrinter</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@HtmlBodyPrinterextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Create the body of an html file reporting a specification execution
+</p>
+    </li><li name="org.specs2.reporter.HtmlOptions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="HtmlOptionsextendsProductwithSerializable"></a>
+      <a id="HtmlOptions:HtmlOptions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="HtmlOptions.html"><span class="name">HtmlOptions</span></a><span class="params">(<span name="outDir">outDir: <a href="../io/DirectoryPath.html" class="extype" name="org.specs2.io.DirectoryPath">DirectoryPath</a></span>, <span name="baseDir">baseDir: <a href="../io/DirectoryPath.html" class="extype" name="org.specs2.io.DirectoryPath">DirectoryPath</a></span>, <span name="template">template: <a href="../io/FilePath.html" class="extype" name="org.specs2.io.FilePath">FilePath</a></span>, <span name="variables">variables: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="noStats">noStats: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="search">search: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="warnMissingSeeRefs">warnMissingSeeRefs: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="tocEntryMaxSize">tocEntryMaxSize: <span class="extype" name="scala.Int">Int</span></span>, <span name="toc">toc: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@HtmlOptionsextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Options for the Html generation</p>
+    </li><li name="org.specs2.reporter.HtmlPrinter" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="HtmlPrinterextendsPrinter"></a>
+      <a id="HtmlPrinter:HtmlPrinter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="HtmlPrinter.html"><span class="name">HtmlPrinter</span></a><span class="result"> extends <a href="Printer.html" class="extype" name="org.specs2.reporter.Printer">Printer</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@HtmlPrinterextendsPrinter" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Printer for html files
+</p>
+    </li><li name="org.specs2.reporter.HtmlUrls" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="HtmlUrlsextendsAnyRef"></a>
+      <a id="HtmlUrls:HtmlUrls"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="HtmlUrls.html"><span class="name">HtmlUrls</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@HtmlUrlsextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.InfoLine" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="InfoLineextendsLogLinewithProductwithSerializable"></a>
+      <a id="InfoLine:InfoLine"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="InfoLine.html"><span class="name">InfoLine</span></a><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="LogLine.html" class="extype" name="org.specs2.reporter.LogLine">LogLine</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@InfoLineextendsLogLinewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.JUnitDescriptions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="JUnitDescriptionsextendsExecutionOrigin"></a>
+      <a id="JUnitDescriptions:JUnitDescriptions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="JUnitDescriptions.html"><span class="name">JUnitDescriptions</span></a><span class="result"> extends <a href="../control/ExecutionOrigin.html" class="extype" name="org.specs2.control.ExecutionOrigin">ExecutionOrigin</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@JUnitDescriptionsextendsExecutionOrigin" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Create Description objects from the specification fragments
+and arrange them as a tree
+</p>
+    </li><li name="org.specs2.reporter.JUnitPrinter" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="JUnitPrinterextendsPrinter"></a>
+      <a id="JUnitPrinter:JUnitPrinter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="JUnitPrinter.html"><span class="name">JUnitPrinter</span></a><span class="result"> extends <a href="Printer.html" class="extype" name="org.specs2.reporter.Printer">Printer</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@JUnitPrinterextendsPrinter" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The JUnitPrinter sends notifications to JUnit's RunNotifier
+</p>
+    </li><li name="org.specs2.reporter.JUnitXmlPrinter" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="JUnitXmlPrinterextendsPrinter"></a>
+      <a id="JUnitXmlPrinter:JUnitXmlPrinter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="JUnitXmlPrinter.html"><span class="name">JUnitXmlPrinter</span></a><span class="result"> extends <a href="Printer.html" class="extype" name="org.specs2.reporter.Printer">Printer</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@JUnitXmlPrinterextendsPrinter" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The JUnitXmlPrinter creates an xml file with the specification execution results
+</p>
+    </li><li name="org.specs2.reporter.LineLogger" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LineLoggerextendsAnyRef"></a>
+      <a id="LineLogger:LineLogger"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LineLogger.html"><span class="name">LineLogger</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@LineLoggerextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Logger with info, failure, error where each new message is displayed on a new line
+</p>
+    </li><li name="org.specs2.reporter.LogLine" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LogLineextendsAnyRef"></a>
+      <a id="LogLine:LogLine"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LogLine.html"><span class="name">LogLine</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@LogLineextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">ADT for logging strings as info, warning or errors
+</p>
+    </li><li name="org.specs2.reporter.MarkdownOptions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MarkdownOptionsextendsProductwithSerializable"></a>
+      <a id="MarkdownOptions:MarkdownOptions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="MarkdownOptions.html"><span class="name">MarkdownOptions</span></a><span class="params">(<span name="outDir">outDir: <a href="../io/DirectoryPath.html" class="extype" name="org.specs2.io.DirectoryPath">DirectoryPath</a></span>, <span name="extension">extension: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@MarkdownOptionsextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.MarkdownPrinter" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="MarkdownPrinterextendsPrinter"></a>
+      <a id="MarkdownPrinter:MarkdownPrinter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="MarkdownPrinter.html"><span class="name">MarkdownPrinter</span></a><span class="result"> extends <a href="Printer.html" class="extype" name="org.specs2.reporter.Printer">Printer</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@MarkdownPrinterextendsPrinter" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait is not a full fledged markdown printer yet
+</p>
+    </li><li name="org.specs2.reporter.NoStdOut" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="NoStdOutextendsAround"></a>
+      <a id="NoStdOut:NoStdOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NoStdOut.html"><span class="name">NoStdOut</span></a><span class="result"> extends <a href="../specification/Around.html" class="extype" name="org.specs2.specification.Around">Around</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@NoStdOutextendsAround" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait allows to remove any console display during the execution of an example</p><div class="fullcomment"><div class="comment cmt"><p>This trait allows to remove any console display during the execution of an example</p><p>Of course it needs to be understood that the output might be completely messed up when
+executing specifications and examples concurrently</p></div></div>
+    </li><li name="org.specs2.reporter.NoStdOutAroundEach" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NoStdOutAroundEachextendsAroundEach"></a>
+      <a id="NoStdOutAroundEach:NoStdOutAroundEach"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NoStdOutAroundEach.html"><span class="name">NoStdOutAroundEach</span></a><span class="result"> extends <a href="../specification/AroundEach.html" class="extype" name="org.specs2.specification.AroundEach">AroundEach</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@NoStdOutAroundEachextendsAroundEach" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait allows to remove any console display during the execution of the examples
+of a Specification
+</p>
+    </li><li name="org.specs2.reporter.Notifier" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="NotifierextendsAnyRef"></a>
+      <a id="Notifier:Notifier"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Notifier.html"><span class="name">Notifier</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@NotifierextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait can be used for any event concerning the execution of examples
+seen as a Tree of Fragments.</p><div class="fullcomment"><div class="comment cmt"><p>This trait can be used for any event concerning the execution of examples
+seen as a Tree of Fragments.</p><p>A pair of contextStart/contextEnd calls delimits a sequence of children in that tree.
+</p></div></div>
+    </li><li name="org.specs2.reporter.Pandoc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PandocextendsProductwithSerializable"></a>
+      <a id="Pandoc:Pandoc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Pandoc.html"><span class="name">Pandoc</span></a><span class="params">(<span name="verbose">verbose: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="executable">executable: <a href="../io/FilePath.html" class="extype" name="org.specs2.io.FilePath">FilePath</a></span>, <span name="inputFormat">inputFormat: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="outputFormat">outputFormat: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@PandocextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Representation of the Pandoc executable</p>
+    </li><li name="org.specs2.reporter.Printer" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="PrinterextendsAnyRef"></a>
+      <a id="Printer:Printer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Printer.html"><span class="name">Printer</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@PrinterextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A Printer is essentially defined by a Fold that:</p><div class="fullcomment"><div class="comment cmt"><p>A Printer is essentially defined by a Fold that:</p><ul><li>can run a Process[Task, Fragment]</li><li>uses a Sink for side-effects and</li><li>accumulates state for final reporting
+</li></ul></div></div>
+    </li><li name="org.specs2.reporter.Reporter" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ReporterextendsAnyRef"></a>
+      <a id="Reporter:Reporter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Reporter.html"><span class="name">Reporter</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@ReporterextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A reporter is responsible for</p><div class="fullcomment"><div class="comment cmt"><p>A reporter is responsible for</p><ul><li>selecting printers based on the command-line arguments</li><li>executing the specification</li><li>passing it to each printer for printing</li></ul><p>It is also responsible for saving the specification state at the end of the run
+</p></div></div>
+    </li><li name="org.specs2.reporter.SbtEvents" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SbtEventsextendsAnyRef"></a>
+      <a id="SbtEvents:SbtEvents"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SbtEvents.html"><span class="name">SbtEvents</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@SbtEventsextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Sbt events for a given TaskDef and event handler
+</p>
+    </li><li name="org.specs2.reporter.SbtLineLogger" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SbtLineLoggerextendsBufferedLineLoggerwithProductwithSerializable"></a>
+      <a id="SbtLineLogger:SbtLineLogger"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SbtLineLogger.html"><span class="name">SbtLineLogger</span></a><span class="params">(<span name="loggers">loggers: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="sbt.testing.Logger">Logger</span>]</span>)</span><span class="result"> extends <a href="BufferedLineLogger.html" class="extype" name="org.specs2.reporter.BufferedLineLogger">BufferedLineLogger</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@SbtLineLoggerextendsBufferedLineLoggerwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Line logger using sbt's loggers
+</p>
+    </li><li name="org.specs2.reporter.SbtPrinter" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="SbtPrinterextendsPrinter"></a>
+      <a id="SbtPrinter:SbtPrinter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SbtPrinter.html"><span class="name">SbtPrinter</span></a><span class="result"> extends <a href="Printer.html" class="extype" name="org.specs2.reporter.Printer">Printer</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@SbtPrinterextendsPrinter" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Text printer for Sbt</p><div class="fullcomment"><div class="comment cmt"><p>Text printer for Sbt</p><p>It delegates the console printing to a normal text printer but using the Sbt loggers
+It also publishes events (success, error, skipped, pending) to Sbt
+</p></div></div>
+    </li><li name="org.specs2.reporter.SearchPage" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SearchPageextendsAnyRef"></a>
+      <a id="SearchPage:SearchPage"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SearchPage.html"><span class="name">SearchPage</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@SearchPageextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Functions used to create an index and a search page for the generated html pages
+</p>
+    </li><li name="org.specs2.reporter.ShowDescription" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ShowDescriptionextendsAnyRef"></a>
+      <a id="ShowDescription:ShowDescription"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ShowDescription.html"><span class="name">ShowDescription</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@ShowDescriptionextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Implementation of the Show trait to allow the drawing of Tree[Description] with scalaz
+</p>
+    </li><li name="org.specs2.reporter.SilentNotifier" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="SilentNotifierextendsNotifier"></a>
+      <a id="SilentNotifier:SilentNotifier"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SilentNotifier.html"><span class="name">SilentNotifier</span></a><span class="result"> extends <a href="Notifier.html" class="extype" name="org.specs2.reporter.Notifier">Notifier</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@SilentNotifierextendsNotifier" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Notifier which does not notify at all</p><div class="fullcomment"><div class="comment cmt"><p>Notifier which does not notify at all</p><p>It can be subclassed so that just one method is overridden
+</p></div></div>
+    </li><li name="org.specs2.reporter.SpecFailureAssertionFailedError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SpecFailureAssertionFailedErrorextendsAssertionFailedError"></a>
+      <a id="SpecFailureAssertionFailedError:SpecFailureAssertionFailedError"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SpecFailureAssertionFailedError.html"><span class="name">SpecFailureAssertionFailedError</span></a><span class="result"> extends <span class="extype" name="junit.framework.AssertionFailedError">AssertionFailedError</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@SpecFailureAssertionFailedErrorextendsAssertionFailedError" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This class refines the <code>AssertionFailedError</code> from junit
+and provides the stackTrace of an exception which occurred during the specification execution
+</p>
+    </li><li name="org.specs2.reporter.TextPrinter" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="TextPrinterextendsPrinter"></a>
+      <a id="TextPrinter:TextPrinter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="TextPrinter.html"><span class="name">TextPrinter</span></a><span class="result"> extends <a href="Printer.html" class="extype" name="org.specs2.reporter.Printer">Printer</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@TextPrinterextendsPrinter" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Prints the result of a specification execution to the console (using the line logger provided by the environment)</p><div class="fullcomment"><div class="comment cmt"><p>Prints the result of a specification execution to the console (using the line logger provided by the environment)</p><p>At the end of the run the specification statistics are displayed as well.
+</p></div></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="org.specs2.reporter.EmptyLine" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EmptyLine"></a>
+      <a id="EmptyLine:EmptyLine"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="EmptyLine$.html"><span class="name">EmptyLine</span></a><span class="result"> extends <a href="LogLine.html" class="extype" name="org.specs2.reporter.LogLine">LogLine</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@EmptyLine" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.HtmlBodyPrinter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="HtmlBodyPrinter"></a>
+      <a id="HtmlBodyPrinter:HtmlBodyPrinter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="HtmlBodyPrinter$.html"><span class="name">HtmlBodyPrinter</span></a><span class="result"> extends <a href="HtmlBodyPrinter.html" class="extype" name="org.specs2.reporter.HtmlBodyPrinter">HtmlBodyPrinter</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@HtmlBodyPrinter" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.HtmlOptions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="HtmlOptions"></a>
+      <a id="HtmlOptions:HtmlOptions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="HtmlOptions$.html"><span class="name">HtmlOptions</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@HtmlOptions" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.HtmlPrinter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="HtmlPrinter"></a>
+      <a id="HtmlPrinter:HtmlPrinter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="HtmlPrinter$.html"><span class="name">HtmlPrinter</span></a><span class="result"> extends <a href="HtmlPrinter.html" class="extype" name="org.specs2.reporter.HtmlPrinter">HtmlPrinter</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@HtmlPrinter" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.HtmlUrls" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="HtmlUrls"></a>
+      <a id="HtmlUrls:HtmlUrls"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="HtmlUrls$.html"><span class="name">HtmlUrls</span></a><span class="result"> extends <a href="HtmlUrls.html" class="extype" name="org.specs2.reporter.HtmlUrls">HtmlUrls</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@HtmlUrls" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.JUnitDescriptions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="JUnitDescriptions"></a>
+      <a id="JUnitDescriptions:JUnitDescriptions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="JUnitDescriptions$.html"><span class="name">JUnitDescriptions</span></a><span class="result"> extends <a href="JUnitDescriptions.html" class="extype" name="org.specs2.reporter.JUnitDescriptions">JUnitDescriptions</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@JUnitDescriptions" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.JUnitXmlPrinter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="JUnitXmlPrinter"></a>
+      <a id="JUnitXmlPrinter:JUnitXmlPrinter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="JUnitXmlPrinter$.html"><span class="name">JUnitXmlPrinter</span></a><span class="result"> extends <a href="JUnitXmlPrinter.html" class="extype" name="org.specs2.reporter.JUnitXmlPrinter">JUnitXmlPrinter</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@JUnitXmlPrinter" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.LineLogger" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LineLogger"></a>
+      <a id="LineLogger:LineLogger"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LineLogger$.html"><span class="name">LineLogger</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@LineLogger" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.LogLine" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LogLine"></a>
+      <a id="LogLine:LogLine"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LogLine$.html"><span class="name">LogLine</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@LogLine" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.MarkdownOptions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MarkdownOptions"></a>
+      <a id="MarkdownOptions:MarkdownOptions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="MarkdownOptions$.html"><span class="name">MarkdownOptions</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@MarkdownOptions" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.MarkdownPrinter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MarkdownPrinter"></a>
+      <a id="MarkdownPrinter:MarkdownPrinter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="MarkdownPrinter$.html"><span class="name">MarkdownPrinter</span></a><span class="result"> extends <a href="MarkdownPrinter.html" class="extype" name="org.specs2.reporter.MarkdownPrinter">MarkdownPrinter</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@MarkdownPrinter" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.NoStdOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NoStdOut"></a>
+      <a id="NoStdOut:NoStdOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NoStdOut$.html"><span class="name">NoStdOut</span></a><span class="result"> extends <a href="NoStdOut.html" class="extype" name="org.specs2.reporter.NoStdOut">NoStdOut</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@NoStdOut" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.NotifierPrinter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NotifierPrinter"></a>
+      <a id="NotifierPrinter:NotifierPrinter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NotifierPrinter$.html"><span class="name">NotifierPrinter</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@NotifierPrinter" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A Printer can be created from a Notifier implementation
+</p>
+    </li><li name="org.specs2.reporter.NullOutputStream" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NullOutputStream"></a>
+      <a id="NullOutputStream:NullOutputStream"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NullOutputStream$.html"><span class="name">NullOutputStream</span></a><span class="result"> extends <span class="extype" name="java.io.OutputStream">OutputStream</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@NullOutputStream" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.Pandoc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Pandoc"></a>
+      <a id="Pandoc:Pandoc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Pandoc$.html"><span class="name">Pandoc</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@Pandoc" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.Printer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Printer"></a>
+      <a id="Printer:Printer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Printer$.html"><span class="name">Printer</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@Printer" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">specs2 built-in printers and creation methods based on the command line arguments
+</p>
+    </li><li name="org.specs2.reporter.Reporter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Reporter"></a>
+      <a id="Reporter:Reporter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Reporter$.html"><span class="name">Reporter</span></a><span class="result"> extends <a href="Reporter.html" class="extype" name="org.specs2.reporter.Reporter">Reporter</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@Reporter" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.SbtPrinter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SbtPrinter"></a>
+      <a id="SbtPrinter:SbtPrinter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SbtPrinter$.html"><span class="name">SbtPrinter</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@SbtPrinter" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.SearchPage" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SearchPage"></a>
+      <a id="SearchPage:SearchPage"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SearchPage$.html"><span class="name">SearchPage</span></a><span class="result"> extends <a href="SearchPage.html" class="extype" name="org.specs2.reporter.SearchPage">SearchPage</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@SearchPage" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.ShowDescription" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ShowDescription"></a>
+      <a id="ShowDescription:ShowDescription"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ShowDescription$.html"><span class="name">ShowDescription</span></a><span class="result"> extends <a href="ShowDescription.html" class="extype" name="org.specs2.reporter.ShowDescription">ShowDescription</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@ShowDescription" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.TextPrinter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TextPrinter"></a>
+      <a id="TextPrinter:TextPrinter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="TextPrinter$.html"><span class="name">TextPrinter</span></a><span class="result"> extends <a href="TextPrinter.html" class="extype" name="org.specs2.reporter.TextPrinter">TextPrinter</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@TextPrinter" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.noOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="noOut"></a>
+      <a id="noOut:noOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="noOut$.html"><span class="name">noOut</span></a><span class="result"> extends <span class="extype" name="java.io.PrintStream">PrintStream</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@noOut" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.reporter.stdOut" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="stdOut"></a>
+      <a id="stdOut:stdOut"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="stdOut$.html"><span class="name">stdOut</span></a><span class="result"> extends <span class="extype" name="java.io.PrintStream">PrintStream</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.reporter.package@stdOut" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
