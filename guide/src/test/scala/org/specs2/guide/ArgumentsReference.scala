@@ -71,7 +71,7 @@ This reference guide for arguments is divided in several sections:
 
 ## Reporting
 
-See the $ConsoleOutput page for a more precise description of this options.
+See the $ConsoleOutput page for a more precise description of these options.
 
  Name                    | Default value                  | Description
  ----------------------- | ------------------------------ | ------------------------------
@@ -83,7 +83,7 @@ See the $ConsoleOutput page for a more precise description of this options.
  `tracefilter`           | `""`                           | comma-separated include patterns separated by `/` with exclude patterns
  `smartdiffs`            | `""`                           | define the parameters for the `SmartDiffs` instance for differences
  `diffsclass`            | `""`                           | use a specific instance of the `Diffs` trait
- `nocolor`               | `false`                        | do not use colors
+ `color`                 | `true`                         | use colors
  `colors`                | `""`                           | use different colors
  `colorsclass`           | `""`                           | use a specific instance of the `Colors` trait
  `showtimes`             | `false`                        | show execution times for examples

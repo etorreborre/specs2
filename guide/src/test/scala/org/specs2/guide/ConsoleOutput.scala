@@ -17,7 +17,7 @@ You will get a "console" output whenever you run a specification from ${"sbt" ~/
  `tracefilter`       | regexp-csv/regexp-csv   | comma-separated include patterns separated by `/` with exclude patterns
  `smartdiffs`        | see below               | define the parameters for the `SmartDiffs` instance for differences
  `diffsclass`        | class name              | use a specific instance of the `Diffs` trait
- `nocolor`           | boolean                 | do not use colors
+ `color`             | boolean                 | use colors
  `colors`            | map                     | use different colors
  `colorsclass`       | class name              | use a specific instance of the `Colors` trait
  `showtimes`         | boolean                 | show execution times for examples
