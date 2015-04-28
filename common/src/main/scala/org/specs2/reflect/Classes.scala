@@ -101,12 +101,11 @@ trait Classes {
   private def createInstanceForConstructor[T <: AnyRef : ClassTag](c: Class[_], constructor: Constructor[_],
                                                                    loader: ClassLoader, defaultInstances: List[AnyRef] = Nil): Action[T] = Actions.safe {
     constructor.setAccessible(true)
-
     if (constructor.getParameterTypes.isEmpty)
       Actions.safe(constructor.newInstance().asInstanceOf[T])
 
     else if (constructor.getParameterTypes.size == 1) {
-      defaultInstances.find(_.getClass.getName == constructor.getParameterTypes.apply(0).getName) match {
+      defaultInstances.find(i => constructor.getParameterTypes.apply(0) isAssignableFrom i.getClass) match {
         case None =>
           // if the specification has a constructor with one parameter, it is either because
           // it is a nested class

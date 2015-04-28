@@ -99,8 +99,8 @@ trait MutableFragmentBuilder extends FragmentBuilder
     Execution.withEnv { env: Env =>
 
       def instance = {
-        val defaultInstances = List(env, env.arguments, env.arguments.commandLine)
-        Classes.createInstanceFromClass[MutableFragmentBuilder](getClass.asInstanceOf[Class[MutableFragmentBuilder]], getClass.getClassLoader, defaultInstances)
+        Classes.createInstanceFromClass[MutableFragmentBuilder](getClass.asInstanceOf[Class[MutableFragmentBuilder]],
+          getClass.getClassLoader, env.defaultInstances)
           .execute(env.systemLogger).unsafePerformIO
       }
 

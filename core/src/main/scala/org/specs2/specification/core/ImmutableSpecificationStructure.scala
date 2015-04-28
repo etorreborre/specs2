@@ -47,7 +47,7 @@ trait ImmutableSpecificationStructure extends SpecificationStructure {
         val instance = Classes.createInstanceFromClass[ImmutableSpecificationStructure](
           getClass.asInstanceOf[Class[ImmutableSpecificationStructure]],
           getClass.getClassLoader,
-          List(env, env.arguments, env.arguments.commandLine)).execute(env.systemLogger).unsafePerformIO
+          env.defaultInstances).execute(env.systemLogger).unsafePerformIO
 
         instance.toDisjunction.fold(
           e => org.specs2.execute.Error(Status.asException(e)),

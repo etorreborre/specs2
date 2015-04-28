@@ -89,7 +89,16 @@ The `terminate` matcher (see the "Termination" tab in the optional $Matchers sec
 
 ### Implicit ExecutionEnv
 
-Passing an implicit `ExecutionEnv` for each example can be tedious. Another possibility is to mix-in the `org.specs2.specification.ExecutionEnvironment` trait to your specification: ${snippet{
+Passing an implicit `ExecutionEnv` for each example can be tedious. An `ExecutionEnv` can be injected to the specification to make it available to all examples at once: ${snippet{
+case class MyFutureSpec(implicit ee: ExecutionEnv) extends Specification { def is = s2"""
+ Let's check this scala future ${
+    Future(1) must be_==(1).await
+  }
+"""
+  }
+}}
+
+Another possibility is to mix-in the `org.specs2.specification.ExecutionEnvironment` trait to your specification: ${snippet{
 class MyFutureSpec extends Specification with ExecutionEnvironment { def is(implicit ee: ExecutionEnv) = s2"""
  Let's check this scala future ${
    Future(1) must be_==(1).await

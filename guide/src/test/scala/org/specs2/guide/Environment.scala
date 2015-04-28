@@ -3,7 +3,7 @@ package guide
 
 import main.CommandLine
 import concurrent.ExecutionEnv
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future, duration, Await}, duration._
 import specification._
 import specification.core.Env
 import io._
@@ -19,7 +19,43 @@ The execution of a Specification depends on various parts, among which:
  - a "Logger" to log results to the console
  - an interface for the file system
 
-All of this is bundled into one object `org.specs2.specification.core.Env`. The `Env` is accessible to your Specification by mixing-in the `org.specs2.specification.Environment` trait ${snippet{
+All of this is bundled into one object `org.specs2.specification.core.Env`. The `Env` is accessible to your Specification by either:
+
+ - having it injected as a Specification member
+ - extending a trait
+
+### Dependency injection
+
+The following objects can be injected in your specification if you declare a 1-parameter constructor:
+
+  - the `Env` itself
+  - the `Arguments` object
+  - the `CommandLine` object
+  - the `ExecutionEnv` object (can be implicit)
+  - the `ExecutionContext` object
+  - the `ExecutorService` object
+
+For example: ${snippet{
+class MySpec(env: Env) extends Specification { def is =
+s2"""
+  Use the environment fileSystem
+  ${ env.fileSystem.mkdirs("tmp" / "test").runOption; ok }
+"""
+}
+}}
+
+Or if you want to access an `ExecutionContext`:${snippet{
+class MySpec(implicit ec: ExecutionContext) extends Specification { def is =
+s2"""
+  Use a future
+  ${ Await.result(Future(1), 1.seconds) must_== 1 }
+"""
+  }
+}}
+
+### Environment traits
+
+The `Env` object can be access by mixing-in the `org.specs2.specification.Environment` trait ${snippet{
 class MySpec extends Specification with Environment { def is(env: Env) =
 s2"""
   Use the environment fileSystem
@@ -31,7 +67,7 @@ s2"""
 As you can see, instead of defining the `is` method you now need to defined the `is(env: Env)` method. Then you can access any attribute of the current `Env`.
 There are also some specialised traits giving access to specific parts of the environment
 
-### Command-line arguments
+#### Command-line arguments
 
 When you just want to access the command-line arguments you can use the `org.specs2.specification.CommandLineArguments` trait${snippet {
 class MySpec extends Specification with CommandLineArguments { def is(args: CommandLine) = s2"""
@@ -41,7 +77,7 @@ class MySpec extends Specification with CommandLineArguments { def is(args: Comm
 }
 }}
 
-### Execution environment
+#### Execution environment
 
 When you just want to access the execution environment can use the `org.specs2.specification.ExecutionEnvironment` trait${snippet {
   class MySpec extends Specification with ExecutionEnvironment { def is(implicit ee: ExecutionEnv) = s2"""

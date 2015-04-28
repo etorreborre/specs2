@@ -73,6 +73,9 @@ case class Env(arguments: Arguments = Arguments(),
   lazy val timeout =
     executionParameters.timeout
 
+  def defaultInstances =
+    List(arguments.commandLine, executionEnv, executionContext, executorService, arguments, this)
+
   def setTimeout(duration: FiniteDuration): Env =
     copy(executionParameters = executionParameters.setTimeout(duration))
 

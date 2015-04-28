@@ -59,7 +59,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
 
   def specificationRun(taskDef: TaskDef, loader: ClassLoader, handler: EventHandler, loggers: Array[Logger], isModule: Boolean): Action[Unit] = {
     val env = Env(arguments = commandLineArguments)
-    Classes.createInstance[SpecificationStructure](taskDef.fullyQualifiedName+(if (isModule) "$" else ""), loader, List(env, env.arguments, env.arguments.commandLine)).flatMap { spec =>
+    Classes.createInstance[SpecificationStructure](taskDef.fullyQualifiedName+(if (isModule) "$" else ""), loader, env.defaultInstances).flatMap { spec =>
       val report: Action[Unit] =
       if (commandLineArguments.isSet("all")) {
         for {
