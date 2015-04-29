@@ -5,17 +5,19 @@ import main._
 import control._
 import execute._
 import io.StringOutput
+import org.specs2.specification.Tables
 import specification.core.{ForEachEnv, Env}
 import runner._
 
-class NotifierSpec extends Specification with ForEachEnv { def is = s2"""
+class NotifierSpec(env: Env) extends Specification { def is = s2"""
 
- Run a mutable spec with a Notifier      $a1
- Run an acceptance spec with a Notifier  $a2
+ Run a mutable spec with a Notifier         $a1
+ Run an acceptance spec with a Notifier     $a2
+ Run a specification with decorated results $a3
 
 """
 
-  def a1 = { env: Env =>
+  def a1 = {
     val spec = new NotifierSpec1
     val env1 = env.setArguments(Arguments("notifier"))
     val notifier = new TestNotifier
@@ -38,15 +40,33 @@ class NotifierSpec extends Specification with ForEachEnv { def is = s2"""
       "[end    ] NotifierSpec1").mkString("\n")
   }
 
-  def a2 = { env: Env =>
+  def a2 = {
     val spec = new NotifierSpec1
     NotifierRunner(new GlobalNotifier).main(Array(spec.getClass.getName))
 
     "the notifier is called" ==> GlobalNotifier.called
   }
 
+  def a3 = {
+    val spec = new NotifierSpecWithTables
+    val env1 = env.setArguments(Arguments("notifier"))
+    val notifier = new TestNotifier
+    Reporter.report(env1, List(NotifierPrinter.printer(notifier)))(spec.structure(env)).runOption
+
+    "there is a failure for the table" ==> {
+      notifier.messages must contain((m: String) => m must contain("failure"))
+    }
+  }
+
 }
 
+class NotifierSpecWithTables extends Specification with Tables {def is = s2"""
+  a table ${
+    "a" | "b" | "e"  |>
+    "a" ! "b" ! "AB" | { (a, b, e) => a + b must_== e }
+  }
+  """
+}
 class NotifierSpec1 extends org.specs2.mutable.Specification {
   "group1" >> {
     "ex1" >> ok

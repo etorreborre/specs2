@@ -2,6 +2,7 @@ package org.specs2
 package reporter
 
 import org.specs2.control._
+import org.specs2.execute.Result
 import specification._
 import data.Fold
 import scalaz.concurrent.Task
@@ -64,24 +65,29 @@ object NotifierPrinter {
           else {
             if (Fragment.isExample(f)) {
               n.exampleStarted(description, location)
-              f.executionResult match {
-                case r: execute.Success =>
-                  n.exampleSuccess(description, duration(f))
 
-                case r: execute.Failure =>
-                  n.exampleFailure(description, r.message, location, r.exception, r.details, duration(f))
+              def notifyResult(result: Result): Unit =
+                result match {
+                  case r: execute.Success =>
+                    n.exampleSuccess(description, duration(f))
 
-                case r: execute.Error =>
-                  n.exampleError(description, r.message, location, r.exception, duration(f))
+                  case r: execute.Failure =>
+                    n.exampleFailure(description, r.message, location, r.exception, r.details, duration(f))
 
-                case r: execute.Skipped =>
-                  n.exampleSkipped(description, r.message, location, duration(f))
+                  case r: execute.Error =>
+                    n.exampleError(description, r.message, location, r.exception, duration(f))
 
-                case r: execute.Pending =>
-                  n.examplePending(description, r.message, location, duration(f))
+                  case r: execute.Skipped =>
+                    n.exampleSkipped(description, r.message, location, duration(f))
 
-                case _ => ()
-              }
+                  case r: execute.Pending =>
+                    n.examplePending(description, r.message, location, duration(f))
+
+                  case execute.DecoratedResult(_, r2) =>
+                    notifyResult(r2)
+                }
+
+              notifyResult(f.executionResult)
             } else if (Fragment.isText(f)) n.text(description, location)
           }
         } else if (notified.close) n.contextEnd(notified.context.trim, location)
