@@ -14,6 +14,16 @@ class MySpec extends Specification { def is = args(xonly=true) ^ s2"""
 
 They can also be passed as system properties: `-Dspecs2.name=value` (`-Dname=value` also works but you might have collisions with other properties).
 
+Note that boolean properties like `color` can be defined in several ways:
+
+ - not defined => the default value, `true`, is used
+ - `color`     => use colors
+ - `color true` => use colors
+ - `color false` => don't use colors (`nocolor` is an alias)
+ - `-Dspecs2.color`     => use colors
+ - `-Dspecs2.color=true` => use colors
+ - `-Dspecs2.color=false` => don't use colors (`-Dspecs2.nocolor` is an alias)
+
 This reference guide for arguments is divided in several sections:
 
  - "path" arguments defining where $specs2 should read or write files

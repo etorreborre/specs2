@@ -18,6 +18,7 @@ You will get a "console" output whenever you run a specification from ${"sbt" ~/
  `smartdiffs`        | see below               | define the parameters for the `SmartDiffs` instance for differences
  `diffsclass`        | class name              | use a specific instance of the `Diffs` trait
  `color`             | boolean                 | use colors
+ `nocolor`           | boolean                 | don't use colors
  `colors`            | map                     | use different colors
  `colorsclass`       | class name              | use a specific instance of the `Colors` trait
  `showtimes`         | boolean                 | show execution times for examples

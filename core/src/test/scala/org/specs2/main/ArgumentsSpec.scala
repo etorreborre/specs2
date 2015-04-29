@@ -36,8 +36,8 @@ Definition
     + for a string argument like colorsclass, colorsClass is admissible
     + but the name has to match exactly, 'exclude' must not be mistaken for 'ex'
 
-  + Some boolean arguments have negated names, like nocolor, meaning !color
-  + Quoted arguments must be been properly passed
+    + Quoted arguments must be been properly passed
+    + Some boolean arguments have negated names, like nocolor, meaning !color
 
 Overriding
 ==========
@@ -56,6 +56,7 @@ System props
     + a boolean value can be -Dname=false
     + a string value will be -Dname=value
     + properties can also be passed as -Dspecs2.name to avoid conflicts with other properties
+    + with the color/nocolor property
 
 Execution
 =========
@@ -89,8 +90,11 @@ Creation
     eg := Arguments("colorClass", classOf[MappedColors].getName).colors must_== MappedColors()
     eg := Arguments("exclude", "spec").ex must_== Arguments().ex
 
-    eg := Arguments("nocolor").color must beFalse
     eg := Arguments("ex", "this test").select.ex must_== ".*this test.*"
+    eg := {
+      List("nocolor", "color", "nocolor true", "nocolor false", "color true", "color false").map(a => Arguments.split(a).color) must_==
+      List(false, true, false, true, true, false)
+    }
    }
 
   "overriding" - new group {
@@ -109,7 +113,15 @@ Creation
     eg := Arguments.extract(Seq(""), properties("plan" -> "false")).plan must_== false
     eg := Arguments.extract(Seq(""), properties("ex"   -> "spec")).ex must_== ".*spec.*"
     eg := Arguments.extract(Seq(""), properties("specs2.ex" -> "spec")).ex must_== ".*spec.*"
-   }
+
+    eg := {
+      List(("nocolor", ""), ("color", ""), ("nocolor", "true"), ("nocolor", "false"), ("color", "true"), ("color", "false")).map { case (k, v) =>
+        Arguments.extract(Seq(""), properties(k -> v)).color
+      } must_==
+        List(false, true, false, true, true, false)
+    }
+
+  }
 
   "execution" - new group {
     eg := "args"                      | "status" | "canShow"    |>

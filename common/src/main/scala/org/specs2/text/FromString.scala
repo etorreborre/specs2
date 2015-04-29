@@ -14,15 +14,17 @@ trait FromString[T] {
 
 object FromString {
 
-  implicit def StringFromString = new FromString[String] {
+  def apply[T](implicit fs: FromString[T]): FromString[T] = fs
+
+  implicit def StringFromString: FromString[String] = new FromString[String] {
     def fromString(s: String): Option[String] = Option(s)
   }
 
-  implicit def IntFromString = new FromString[Int] {
+  implicit def IntFromString: FromString[Int] = new FromString[Int] {
     def fromString(s: String): Option[Int] = tryo(s.toInt)
   }
 
-  implicit def BooleanFromString = new FromString[Boolean] {
+  implicit def BooleanFromString: FromString[Boolean] = new FromString[Boolean] {
     def fromString(s: String): Option[Boolean] =
       if ("false".equals(s))     Some(false)
       else if ("true".equals(s)) Some(true)

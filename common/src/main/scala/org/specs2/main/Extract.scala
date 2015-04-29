@@ -2,6 +2,7 @@ package org.specs2
 package main
 
 import control.Exceptions._
+import org.specs2.text.FromString
 import reflect.Classes
 
 import scala.reflect.ClassTag
@@ -22,15 +23,21 @@ trait Extract {
 
   def boolSystemProperty(name: String)(implicit sp: SystemProperties): Option[Boolean] = booleanProperties(name -> sp)
 
-  def boolValue(name: String, mappedValue: Boolean = true)(implicit args: Seq[String], sp: SystemProperties): Option[Boolean] = {
-    args.find(_.toLowerCase == name.toLowerCase).map(a => mappedValue).orElse(boolSystemProperty(name))
+  def boolValue(name: String, negate: Boolean = false)(implicit args: Seq[String], sp: SystemProperties): Option[Boolean] = {
+    val booleanValue =
+      value(name).flatMap(FromString[Boolean].fromString)         orElse // if the flag is defined with a value
+      args.find(_.toLowerCase == name.toLowerCase).map(_ => true) orElse // if the flag is defined as a switch on the commandline
+      boolSystemProperty(name).map(_ => true)                            // if the flag is defined as a switch in sys. properties
+
+    if (negate) booleanValue.map(b => !b)
+    else        booleanValue
   }
 
   def bool(name: String)(implicit args: Seq[String], sp: SystemProperties): Option[Boolean] =
     bool(name, "!"+name)
 
   def bool(name: String, negatedName: String)(implicit args: Seq[String], sp: SystemProperties): Option[Boolean] =
-    boolValue(negatedName, false) orElse boolValue(name, true)
+    boolValue(negatedName, negate = true) orElse boolValue(name)
 
   def value[T](name: String, f: String => T)(implicit args: Seq[String], sp: SystemProperties): Option[T] = {
     args.zip(args.drop(1)).find(_._1.toLowerCase == name.toLowerCase).map(s => f(s._2)).orElse(valueSystemProperty(name, f))
