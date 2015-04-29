@@ -810,10 +810,14 @@
     </li>
               </ul><ul>
                 <li id="org-specs2-guide-environment"><a href="org.specs2.guide.Environment.html" title="Environment">Environment</a>
-      <ul><ul><li><a href="org.specs2.guide.Environment.html#command-line-arguments" title="Command-line arguments">Command-line ar...</a>
+      <ul><ul><li><a href="org.specs2.guide.Environment.html#dependency-injection" title="Dependency injection">Dependency inje...</a>
+          
+        </li><li><a href="org.specs2.guide.Environment.html#environment-traits" title="Environment traits">Environment traits</a>
+          <ul><li><a href="org.specs2.guide.Environment.html#command-line-arguments" title="Command-line arguments">Command-line ar...</a>
           
         </li><li><a href="org.specs2.guide.Environment.html#execution-environment" title="Execution environment">Execution envir...</a>
           
+        </li></ul>
         </li></ul></ul>
       <ul>
                     
@@ -1039,7 +1043,37 @@
 <li>a “Logger” to log results to the console</li>
 <li>an interface for the file system</li>
 </ul>
-<p>All of this is bundled into one object <code class="prettyprint">org.specs2.specification.core.Env</code>. The <code class="prettyprint">Env</code> is accessible to your Specification by mixing-in the <code class="prettyprint">org.specs2.specification.Environment</code> trait</p>
+<p>All of this is bundled into one object <code class="prettyprint">org.specs2.specification.core.Env</code>. The <code class="prettyprint">Env</code> is accessible to your Specification by either:</p>
+<ul>
+<li>having it injected as a Specification member</li>
+<li>extending a trait</li>
+</ul>
+<h3 id="dependency-injection">Dependency injection</h3>
+<p>The following objects can be injected in your specification if you declare a 1-parameter constructor:</p>
+<ul>
+<li>the <code class="prettyprint">Env</code> itself</li>
+<li>the <code class="prettyprint">Arguments</code> object</li>
+<li>the <code class="prettyprint">CommandLine</code> object</li>
+<li>the <code class="prettyprint">ExecutionEnv</code> object (can be implicit)</li>
+<li>the <code class="prettyprint">ExecutionContext</code> object</li>
+<li>the <code class="prettyprint">ExecutorService</code> object</li>
+</ul>
+<p>For example:</p>
+<pre><code class="prettyprint">class MySpec(env: Env) extends Specification { def is =
+s2&quot;&quot;&quot;
+  Use the environment fileSystem
+  ${ env.fileSystem.mkdirs(&quot;tmp&quot; / &quot;test&quot;).runOption; ok }
+&quot;&quot;&quot;
+}</code></pre>
+<p>Or if you want to access an <code class="prettyprint">ExecutionContext</code>:</p>
+<pre><code class="prettyprint">class MySpec(implicit ec: ExecutionContext) extends Specification { def is =
+s2&quot;&quot;&quot;
+  Use a future
+  ${ Await.result(Future(1), 1.seconds) must_== 1 }
+&quot;&quot;&quot;
+  }</code></pre>
+<h3 id="environment-traits">Environment traits</h3>
+<p>The <code class="prettyprint">Env</code> object can be access by mixing-in the <code class="prettyprint">org.specs2.specification.Environment</code> trait</p>
 <pre><code class="prettyprint">class MySpec extends Specification with Environment { def is(env: Env) =
 s2&quot;&quot;&quot;
   Use the environment fileSystem
@@ -1047,14 +1081,14 @@ s2&quot;&quot;&quot;
 &quot;&quot;&quot;
 }</code></pre>
 <p>As you can see, instead of defining the <code class="prettyprint">is</code> method you now need to defined the <code class="prettyprint">is(env: Env)</code> method. Then you can access any attribute of the current <code class="prettyprint">Env</code>. There are also some specialised traits giving access to specific parts of the environment</p>
-<h3 id="command-line-arguments">Command-line arguments</h3>
+<h4 id="command-line-arguments">Command-line arguments</h4>
 <p>When you just want to access the command-line arguments you can use the <code class="prettyprint">org.specs2.specification.CommandLineArguments</code> trait</p>
 <pre><code class="prettyprint">class MySpec extends Specification with CommandLineArguments { def is(args: CommandLine) = s2&quot;&quot;&quot;
   Use the command line arguments
   ${ if (args.isSet(&quot;pass&quot;)) ok else ko }
 &quot;&quot;&quot;
 }</code></pre>
-<h3 id="execution-environment">Execution environment</h3>
+<h4 id="execution-environment">Execution environment</h4>
 <p>When you just want to access the execution environment can use the <code class="prettyprint">org.specs2.specification.ExecutionEnvironment</code> trait</p>
 <pre><code class="prettyprint">class MySpec extends Specification with ExecutionEnvironment { def is(implicit ee: ExecutionEnv) = s2&quot;&quot;&quot;
   Use the implicit execution environment

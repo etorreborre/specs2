@@ -810,10 +810,14 @@
     </li>
               </ul><ul>
                 <li id="org-specs2-guide-environment"><a href="org.specs2.guide.Environment.html" title="Environment">Environment</a>
-      <ul><ul><li><a href="org.specs2.guide.Environment.html#command-line-arguments" title="Command-line arguments">Command-line ar...</a>
+      <ul><ul><li><a href="org.specs2.guide.Environment.html#dependency-injection" title="Dependency injection">Dependency inje...</a>
+          
+        </li><li><a href="org.specs2.guide.Environment.html#environment-traits" title="Environment traits">Environment traits</a>
+          <ul><li><a href="org.specs2.guide.Environment.html#command-line-arguments" title="Command-line arguments">Command-line ar...</a>
           
         </li><li><a href="org.specs2.guide.Environment.html#execution-environment" title="Execution environment">Execution envir...</a>
           
+        </li></ul>
         </li></ul></ul>
       <ul>
                     
@@ -1162,7 +1166,7 @@
 <p>Note also that the default filter also truncates the stacktrace in the middle if it is bigger than 1000 lines to avoid reports being filled by out-of-control stacktraces. If you still want to see those lines you can re-run with the <code class="prettyprint">fullstacktrace</code> argument.</p>
 <h3 id="diffs">Diffs</h3>
 <p>When using the equality matcher <s2>specs2</s2> tries to display the difference between the expected and the actual values using a class: <code class="prettyprint">org.specs2.main.SmartDiffs</code>. There are several parameters for that class which you can specify from the command line as:</p>
-<pre><code class="prettyprint">sbt&gt; test-only -- smartdiffs show,separators,triggerSize,shortenSize,diffRatio,full</code></pre>
+<pre><code class="prettyprint">sbt&gt; testOnly -- smartdiffs show,separators,triggerSize,shortenSize,diffRatio,full</code></pre>
 <table>
 <thead>
 <tr class="header">
