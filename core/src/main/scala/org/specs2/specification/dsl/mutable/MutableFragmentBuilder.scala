@@ -140,5 +140,6 @@ trait MutableHeaderBuilder {
 
 trait MutableArgumentsBuilder {
   private[specs2] var arguments = Arguments()
+  def updateArguments(a: Arguments): Arguments = { arguments = arguments <| a; a }
   def setArguments(a: Arguments): Arguments = { arguments = a; a }
 }

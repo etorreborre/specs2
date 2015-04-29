@@ -6,9 +6,11 @@ import core._
 import create.DefaultFragmentFactory
 import DefaultFragmentFactory._
 import execute._
-import dsl.mutable.{MutableDsl, MutableFragmentBuilder}
+import org.specs2.specification.dsl.mutable.{ArgumentsCreation, MutableDsl, MutableFragmentBuilder}
 import matcher._
+import org.specs2.main.ArgumentsShortcuts
 import scalaz._, Scalaz._
+import MatchResultCombinators._
 
 class MutableFragmentsDslSpec extends org.specs2.Spec with TypedEqual with TraversableMatchers { def is = s2"""
 
@@ -23,6 +25,7 @@ class MutableFragmentsDslSpec extends org.specs2.Spec with TypedEqual with Trave
   set a title on the specification $e5
 
   set arguments on the specification $e6
+  set arguments twice on the specification $e7
 
   Breaks
     there must be 2 breaks after the specification title      $breaks1
@@ -73,6 +76,16 @@ class MutableFragmentsDslSpec extends org.specs2.Spec with TypedEqual with Trave
     "this" should { "have an example" in ok }
   }).arguments.plan must beTrue
 
+  def e7 = {
+    val arguments = structure(new dsl with ArgumentsShortcuts with ArgumentsCreation {
+      sequential
+      isolated
+      "this" should { "have an example" in ok }
+    }).arguments
+
+    (arguments.sequential must beTrue) and
+    (arguments.isolated must beTrue)
+  }
 
   def breaks1 = fragments(new dsl { "spec".title }).map(_.description) must
     contain(exactly(Seq(

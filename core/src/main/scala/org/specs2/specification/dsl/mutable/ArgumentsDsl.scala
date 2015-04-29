@@ -38,7 +38,7 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
                      showOnly:      ArgProperty[String]            = ArgProperty[String](),
                      color:         ArgProperty[Boolean]           = ArgProperty[Boolean]()): Arguments =
 
-    setArguments(super.args(
+    updateArguments(super.args(
       ex,
       include,
       exclude,
@@ -62,7 +62,7 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
                          include:       ArgProperty[String]            = ArgProperty[String](),
                          exclude:       ArgProperty[String]            = ArgProperty[String](),
                          was:           ArgProperty[String]            = ArgProperty[String](),
-                         selector:      ArgProperty[String]            = ArgProperty[String]()) = setArguments(super.select(
+                         selector:      ArgProperty[String]            = ArgProperty[String]()) = updateArguments(super.select(
       ex,
       include,
       exclude,
@@ -82,7 +82,7 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
                           scheduledThreadsNb:   ArgProperty[Int]               = ArgProperty[Int](),
                           timeFactor:           ArgProperty[Int]               = ArgProperty[Int](),
                           executor:             ArgProperty[String]            = ArgProperty[String]()
-                          ) = setArguments(super.execute(
+                          ) = updateArguments(super.execute(
       plan,
       skipAll,
       stopOnFail,
@@ -99,7 +99,7 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
     override def store(
                         reset:       ArgProperty[Boolean]           = ArgProperty[Boolean](),
                         never:       ArgProperty[Boolean]           = ArgProperty[Boolean]()
-                        ) = setArguments(super.store(
+                        ) = updateArguments(super.store(
       reset,
       never))
 
@@ -117,7 +117,7 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
                          checkUrls:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
                          notoc:             ArgProperty[Boolean]           = ArgProperty[Boolean](),
                          notifier:          ArgProperty[String]            = ArgProperty[String](),
-                         exporter:          ArgProperty[String]            = ArgProperty[String]()) = setArguments(super.report(
+                         exporter:          ArgProperty[String]            = ArgProperty[String]()) = updateArguments(super.report(
       xonly,
       showOnly,
       failtrace,
