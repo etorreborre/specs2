@@ -7,7 +7,7 @@ import specification._
 import SequenceMatchersCreation._
 import ResultImplicits._
 
-class AnyMatchersSpec extends script.Specification with Groups with ResultMatchers with AnyMatchers with ValueChecks { def is = s2"""
+class AnyMatchersSpec extends script.Specification with Groups with ResultMatchers with AnyMatchers with ValueChecks with TypecheckMatchers { def is = s2"""
 
   beTheSameAs checks if a value is eq to another one
   ${ aValue must beTheSameAs(aValue) }
@@ -80,16 +80,16 @@ class AnyMatchersSpec extends script.Specification with Groups with ResultMatche
   ${ 4 must not be oneOf(1, 2, 3) }
 
   haveClass checks if a value has a given class as its type
-  ${ 1 must haveClass[java.lang.Integer] }
-  ${ 1 must not have klass[String] }
+  ${ (1: java.lang.Integer) must haveClass[java.lang.Integer] }
+  ${ BigInt(1) must not have klass[String] }
 
   haveSuperclass checks if a value has a given class as one of its ancestors
   ${ new BufferedInputStream(null) must haveSuperclass[InputStream] }
-  ${ 1 must not have superClass[String] }
+  ${ BigInt(1) must not have superClass[String] }
 
   haveInterface checks if a value has a given interface in the list of its interfaces
   ${ AsResult(new java.util.ArrayList() must haveInterface[java.util.List[_]]) }
-  ${ AsResult(1 must not have interface[java.util.List[_]]) }
+  ${ AsResult(BigInt(1) must not have interface[java.util.List[_]]) }
 
   beAssignableFrom checks if a class is assignable from another
   ${ classOf[OutputStream] must beAssignableFrom[FileOutputStream] }
@@ -98,6 +98,8 @@ class AnyMatchersSpec extends script.Specification with Groups with ResultMatche
   ${ type1 must beAnInstanceOf[Type1] }
   ${ type1 must not be anInstanceOf[Type2] }
   ${ (type1 must beAnInstanceOf[Type2]).message must_== s"'type1: ${type1.getClass.getName}' is not an instance of 'org.specs2.matcher.Type2'" }
+  // doesn't typecheck with AnyVals
+  ${ Typecheck.typecheck("false must beAnInstanceOf[Boolean]") must not succeed }
 
 Implicits
 =========

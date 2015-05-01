@@ -94,10 +94,10 @@ trait AnyBaseMatchers {
     }
   }
   /** matches if v.getClass == c */
-  def haveClass[T : ClassTag] = new Matcher[Any] {
-    def apply[S <: Any](x: Expectable[S]) = {
+  def haveClass[T : ClassTag] = new Matcher[AnyRef] {
+    def apply[S <: AnyRef](x: Expectable[S]) = {
       val c = implicitly[ClassTag[T]].runtimeClass
-      val xClass = x.value.asInstanceOf[java.lang.Object].getClass
+      val xClass = x.value.getClass
       result(xClass == c,
              x.description + " has class " + q(c.getName),
              x.description + " doesn't have class " + q(c.getName) + ". It has class " + q(xClass.getName),
@@ -105,10 +105,10 @@ trait AnyBaseMatchers {
     }
   }
   /** matches if c.isAssignableFrom(v.getClass.getSuperclass) */
-  def haveSuperclass[T : ClassTag] = new Matcher[Any] {
-    def apply[S <: Any](x: Expectable[S]) = {
+  def haveSuperclass[T : ClassTag] = new Matcher[AnyRef] {
+    def apply[S <: AnyRef](x: Expectable[S]) = {
       val c = implicitly[ClassTag[T]].runtimeClass
-      val xClass = x.value.asInstanceOf[java.lang.Object].getClass
+      val xClass = x.value.getClass
       result(c.isAssignableFrom(xClass.getSuperclass),
              x.description + " has super class " + q(c.getName),
              x.description + " doesn't have super class " + q(c.getName) + ". It has super class " + q(xClass.getSuperclass.getName),
@@ -117,10 +117,10 @@ trait AnyBaseMatchers {
   }
 
   /** matches if x.getClass.getInterfaces.contains(T) */
-  def haveInterface[T : ClassTag] = new Matcher[Any] {
-    def apply[S <: Any](x: Expectable[S]) = {
+  def haveInterface[T : ClassTag] = new Matcher[AnyRef] {
+    def apply[S <: AnyRef](x: Expectable[S]) = {
       val c = implicitly[ClassTag[T]].runtimeClass
-      val xClass = x.value.asInstanceOf[java.lang.Object].getClass
+      val xClass = x.value.getClass
       result(xClass.getInterfaces.contains(c),
              x.description + " has interface " + q(c.getName),
              x.description + " doesn't have interface " + q(c.getName) + ". It has interface " + xClass.getInterfaces.mkString(", "),
@@ -139,10 +139,10 @@ trait AnyBaseMatchers {
     }
   }
 
-  def beAnInstanceOf[T: ClassTag] = new Matcher[Any] {
-    def apply[S <: Any](x: Expectable[S]) = {
+  def beAnInstanceOf[T: ClassTag] = new Matcher[AnyRef] {
+    def apply[S <: AnyRef](x: Expectable[S]) = {
       val c = implicitly[ClassTag[T]].runtimeClass
-      val xClass = x.value.asInstanceOf[java.lang.Object].getClass
+      val xClass = x.value.getClass
       val xWithClass = x.mapDescription(d => s"'$d: ${xClass.getName}'")
       result(c.isAssignableFrom(xClass),
              xWithClass.description + " is an instance of " + q(c.getName),
@@ -198,7 +198,6 @@ trait AnyBeHaveMatchers extends BeHaveMatchers { outer: AnyMatchers =>
     def anyOf(t: T*) = result(outer.beAnyOf(t:_*))
     def oneOf(t: T*) = result(outer.beOneOf(t:_*))
     def beNull = result(outer.beNull)
-    def anInstanceOf(implicit ct: ClassTag[T]) = result(beAnInstanceOf[T])
   }
 
   implicit def toAnyRefMatcherResult[T <: AnyRef](result: MatchResult[T]): AnyRefMatcherResult[T] = new AnyRefMatcherResult(result)
@@ -206,9 +205,10 @@ trait AnyBeHaveMatchers extends BeHaveMatchers { outer: AnyMatchers =>
     def beTheSameAs(t: T) = result(outer.beTheSameAs(t))
   }
 
-  implicit def toAnyMatcherResult(result: MatchResult[Any]): AnyMatcherResult = new AnyMatcherResult(result)
-  class AnyMatcherResult(result: MatchResult[Any]) {
+  implicit def toAnyMatcherResult(result: MatchResult[AnyRef]): AnyMatcherResult = new AnyMatcherResult(result)
+  class AnyMatcherResult(result: MatchResult[AnyRef]) {
     def haveClass[T : ClassTag] = result(outer.haveClass[T])
+    def anInstanceOf[T : ClassTag] = result(beAnInstanceOf[T])
   }
 
   implicit def toClassMatcherResult(result: MatchResult[Class[_]]): ClassMatcherResult = new ClassMatcherResult(result)
@@ -235,9 +235,9 @@ trait AnyBeHaveMatchers extends BeHaveMatchers { outer: AnyMatchers =>
   def empty[T <: Any { def isEmpty: Boolean }] = beEmpty[T]
   def oneOf[T](t: T*) = beOneOf(t:_*)
   def anyOf[T](t: T*) = beAnyOf(t:_*)
-  def klass[T : ClassTag]: Matcher[Any] = outer.haveClass[T]
-  def superClass[T : ClassTag]: Matcher[Any] = outer.haveSuperclass[T]
-  def interface[T : ClassTag]: Matcher[Any] = outer.haveInterface[T]
+  def klass[T : ClassTag]: Matcher[AnyRef] = outer.haveClass[T]
+  def superClass[T : ClassTag]: Matcher[AnyRef] = outer.haveSuperclass[T]
+  def interface[T : ClassTag]: Matcher[AnyRef] = outer.haveInterface[T]
   def assignableFrom[T : ClassTag] = outer.beAssignableFrom[T]
   def anInstanceOf[T : ClassTag] = outer.beAnInstanceOf[T]
 }
