@@ -79,9 +79,32 @@ The code above uses a macros which will
 
 Note that this interpolator can *not* take variables at the moment (so it doesn't interpolate much :-))
 
-#### Typechecking vs parsing
+#### Typechecking parameters
 
-With either the `typecheck` method or the `tc` string interpolator, there might be parse errors. If that's the case they will be raised at compile time because it is likely to be something which you want to fix right way. If you want parse errors to be raised during runtime only you need to use the `parseAndTypecheck` method and the `ptc` string interpolator.
+It is possible to tweak the behaviour of the `typecheck` method to allow errors to be reported at compile-time instead of runtime:
+
+ - macro-expansion errors can be reported at compile-time (default behaviour is runtime)
+ - implicit errors can be reported at compile-time (default behaviour is runtime)
+ - parsing errors can be reported at runtime (default behaviour is compile-time)
+
+Here is how to do it:
+```
+// to get macro errors at compile time
+typecheckWith(macrosAtCompileTime)("badBadMacro")
+
+// to get macro errors at compile time
+typecheckWith(implicitsAtCompileTime)("Monoid[Plane]")
+
+// to get parsing errors at run-time
+typecheckWith(parsingAtRuntime)("#$$p6")
+
+// combine parameters
+typecheckWith(macrosAtCompileTime <| implicitsAtCompileTime)("Monoid[Plane]")
+```
+
+Finally you can also use a string interpolator and pass parameters: ${snippet{
+  tcw" 1 must_== 1"(parsingAtRuntime)
+}}
 
 """ ^ br ^ Fragments.foreach(Seq(tc1, tc2, tc3))(_ ^ br)
 
