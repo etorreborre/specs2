@@ -44,7 +44,7 @@ object build extends Build {
     specs2Version in GlobalScope <<= version,
     specs2ShellPrompt,
     scalaVersion := "2.11.6",
-    scalazVersion := "7.1.1",
+    scalazVersion := "7.1.2",
     crossScalaVersions := Seq(scalaVersion.value, "2.10.5"))
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
@@ -175,8 +175,10 @@ object build extends Build {
     // https://gist.github.com/djspiewak/976cd8ac65e20e136f05
     unmanagedSourceDirectories in Compile ++=
       Seq((sourceDirectory in Compile).value / s"scala-${scalaBinaryVersion.value}",
-          (sourceDirectory in Compile).value / s"scala-scalaz-${scalazVersion.value}",
-          (sourceDirectory in (Test, test)).value / s"scala-scalaz-${scalazVersion.value}"),
+          (if (scalazVersion.value.startsWith("7.0")) (sourceDirectory in Compile).value / s"scala-scalaz-7.0.x"
+           else                                       (sourceDirectory in Compile).value / s"scala-scalaz-7.1.x"),
+          (if (scalazVersion.value.startsWith("7.0")) (sourceDirectory in (Test, test)).value / s"scala-scalaz-7.0.x"
+           else                                       (sourceDirectory in (Test, test)).value / s"scala-scalaz-7.1.x")),
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
     maxErrors := 20,
     incOptions := incOptions.value.withNameHashing(true),
