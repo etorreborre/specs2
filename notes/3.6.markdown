@@ -1,0 +1,31 @@
+New version with dependency injection of command-line arguments and execution environment for easier access.
+
+## Improvements
+
+ * use the latest Scalaz version (thanks to @benmccann)
+ * describe the `color` flag instead of `nocolor` in the arguments reference
+ * added parameters to control the behaviour of the `typecheck` method (report macro-expansion or implicit errors at compile-time, report parsing errors at runtime). As a result, the `parseAndTypecheck` method and the `ptc` string interpolator have been removed in favor using "Typcheck parameters":
+         typecheckWith(macrosAtCompileTime)("produceCorrectCode")
+ * added the possibility to inject command-line arguments or execution environments as specification member for easier access:
+    
+        class MySpec(implicit ee: ExecutionEnv) extends Specification { def is = s2"""
+          use a Future   ${ Future(1) must be_==(1).await }
+          """
+        }
+        
+        class MySpec(cl: CommandLine) extends Specification { def is = s2"""
+          example  ${ if (cl.isSet("db")) testDb else testInMemory }
+          """
+        }
+
+## Fixes
+
+ * added a missing `mutable.BeforeAfter` trait
+ * added a warning for the use of abstract classes and delayed init in Scopes [#365](https://github.com/etorreborre/specs2/issues/365)
+ * fixed the `NotifierPrinter` when using `DecoratedResults` like `DataTable` results
+ * fixed the use of negated boolean arguments (like `nocolor`) as system properties
+ * fixed the multiple setting of arguments in a mutable specification [#366](https://github.com/etorreborre/specs2/issues/366)
+ * restricted the `beAnInstanceOf`, `haveClass`, `haveInterface` matchers to `AnyRef` [#367](https://github.com/etorreborre/specs2/issues/367)
+
+==========================
+
