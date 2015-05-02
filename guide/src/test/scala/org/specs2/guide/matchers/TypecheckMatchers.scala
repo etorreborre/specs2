@@ -88,19 +88,18 @@ It is possible to tweak the behaviour of the `typecheck` method to allow errors 
  - parsing errors can be reported at runtime (default behaviour is compile-time)
 
 Here is how to do it:
-```
-// to get macro errors at compile time
-typecheckWith(macrosAtCompileTime)("badBadMacro")
 
-// to get macro errors at compile time
-typecheckWith(implicitsAtCompileTime)("Monoid[Plane]")
+    // to get macro errors at compile time
+    typecheckWith(macrosAtCompileTime)("badBadMacro")
 
-// to get parsing errors at run-time
-typecheckWith(parsingAtRuntime)("#$$p6")
+    // to get macro errors at compile time
+    typecheckWith(implicitsAtCompileTime)("Monoid[Plane]")
 
-// combine parameters
-typecheckWith(macrosAtCompileTime <| implicitsAtCompileTime)("Monoid[Plane]")
-```
+    // to get parsing errors at run-time
+    typecheckWith(parsingAtRuntime)("#$$p6")
+
+    // combine parameters
+    typecheckWith(macrosAtCompileTime <| implicitsAtCompileTime)("Monoid[Plane]")
 
 Finally you can also use a string interpolator and pass parameters: ${snippet{
   tcw" 1 must_== 1"(parsingAtRuntime)
