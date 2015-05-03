@@ -17,7 +17,7 @@ class TypecheckMatcherSpec extends Specification with TypecheckMatchers with Res
  typechecking code with a quasiquote
  ${ tc" 1 must_== 1 " }
  ${ tc" 1 must_== 2 " must beFailing }
- ${ tcw" 1 must_== 2 "(parsingAtRuntime) must beFailing }
+ ${ tcw" 1 must_== 2 "(Typecheck.parsingAtRuntime) must beFailing }
 
  typechecking but error on missing implicits at compile-time
 
