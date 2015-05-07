@@ -1,11 +1,12 @@
 package org.specs2
 package html
 
-import org.specs2.data.Fold
-import org.specs2.io.{DirectoryPath, FilePath, FileSystem}
-import org.specs2.specification.core._
-
+import foldm._, FoldM._, stream._, FoldProcessM._
+import io.{DirectoryPath, FilePath, FileSystem}
+import specification.core._
+import scalaz.concurrent.Task
 import scalaz.{Monoid, Reducer}
+import scalaz.syntax.applicative._
 
 /**
  * Fold functions to create index files
@@ -17,11 +18,12 @@ object Indexing {
    * saves it to a given file path
    */
   def indexFold(path: FilePath) =
-    Fold.fromReducerAndLast(Index.reducer, (index: Index) => FileSystem.writeFileTask(path, Index.toJson(index)))
+    fromReducer(Index.reducer).into[Task].mapFlatten((index: Index) => 
+      Task.now(index) <* 
+      FileSystem.writeFileTask(path, Index.toJson(index)))
 
-  def createIndexedPages(env: Env, specifications: List[SpecStructure], outDir: DirectoryPath): Seq[IndexedPage] = {
+  def createIndexedPages(env: Env, specifications: List[SpecStructure], outDir: DirectoryPath): Seq[IndexedPage] =
     specifications.map(createIndexedPage(env, outDir))
-  }
 
   def createIndexedPage(env: Env, outDir: DirectoryPath) = (spec: SpecStructure) => {
     IndexedPage(
@@ -31,9 +33,8 @@ object Indexing {
       tags     = spec.fragments.fragments.collect { case Fragment(Marker(t,_,_), _, _) => t.names }.flatten.map(sanitize))
   }
 
-  def createEntries(page: IndexedPage): Vector[IndexEntry] = {
+  def createEntries(page: IndexedPage): Vector[IndexEntry] = 
     Vector(IndexEntry(page.title, page.contents, page.tags, page.path))
-  }
 
   /** remove quotes from names in order to add as json values */
   def sanitize(name: String): String =

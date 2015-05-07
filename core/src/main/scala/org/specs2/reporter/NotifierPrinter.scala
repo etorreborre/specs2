@@ -1,13 +1,17 @@
 package org.specs2
 package reporter
 
+import foldm._, FoldId._, FoldM._
+import stream.FoldProcessM._
+import main.Arguments
 import control._
-import text.NotNullStrings._
 import execute.Result
-import data.Fold
+import specification._
+import scalaz.Id, Id._
 import scalaz.concurrent.Task
 import scalaz.stream._
 import scalaz.syntax.show._
+import scalaz.syntax.functor._
 import specification.core._
 
 /**
@@ -22,87 +26,72 @@ object NotifierPrinter {
     def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit]  = Actions.unit
     def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
 
-    def fold(env: Env, spec: SpecStructure) = new Fold[Fragment] {
-      val args = env.arguments
-      type S = Notified
+    def sink(env: Env, spec: SpecStructure): SinkTask[Fragment] =
+      (notifyFold.into[Task] <<<* fromSink(notifySink(spec, notifier, env.arguments))).as(())
+  }
 
-      def prepare = Task.now(())
+  def notifyFold: FoldState[Fragment, Notified] = new FoldM[Fragment, Id, Notified] {
+    type S = Notified
 
-      def fold = (f: Fragment, notified: Notified) => {
-        // if the previous notified was defining the closing of a block
-        // the new notify must not define a close action
-        val n = if (notified.close) notified.copy(close = false)
-                else notified
+    def start = Notified(context = "start", start = false, close = false, hide = true)
 
-        f match {
-          // a block start. The next text is the "context" name
-          case Fragment(Start,_,_) =>
-            n.copy(start = true, close = false, hide = true)
+    def fold = (s: S, f: Fragment) => f match {
+      // a block start. The next text is the "context" name
+      case Fragment(Start,_,_) => s.copy(start = true, close = false, hide = true)
+      // a block start. The "context" name is the current block name
+      case Fragment(End,_ ,_) => s.copy(start = false, close = true, hide = true)
+          
+      case f1 if Fragment.isText(f1) =>
+        if (s.start) s.copy(context = f1.description.shows, start = true, hide = false)
+        else         s.copy(context = f1.description.shows, start = false, hide = false)
 
-          // a block start. The "context" name is the current block name
-          case Fragment(End,_ ,_) =>
-            n.copy(start = false, close = true, hide = true)
+      case f1 if Fragment.isExample(f1) => s.copy(start = false, hide = false)
+      case _                            => s.copy(hide = true)
+    }
 
-          case f1 if Fragment.isText(f1) =>
-            // if a block has just been opened the first text defines the block context
-            if (notified.start) n.copy(context = f1.description.shows, start = true, hide = false)
-            else                n.copy(context = f1.description.shows, start = false, hide = false)
+    def end(s: S) = s
+  }
 
-          case f1 if Fragment.isExample(f1) =>
-            n.copy(start = false, hide = false)
+  case class Notified(context: String, start: Boolean, close: Boolean, hide: Boolean)
 
-          case f1 if Fragment.isStep(f1) =>
-            n.copy(start = false, hide = false)
+  def notifySink(spec: SpecStructure, notifier: Notifier, args: Arguments): Sink[Task, (Notified, Fragment)] =
+    io.resource(Task.delay { notifier.specStart(spec.name, ""); notifier})(
+      (n: Notifier) => Task.delay(n.specEnd(spec.name, "")))(
+      (n: Notifier) => Task.delay { case (block: Notified, f: Fragment) => Task.now(printFragment(n, f, block, args)) })
 
-          case _ => n.copy(hide = true)
-        }
-      }
+  def printFragment(n: Notifier, f: Fragment, notified: Notified, args: Arguments) = {
+    val description = f.description.shows.trim
+    val location = f.location.fullLocation(args.traceFilter).getOrElse("no location")
+    def duration(f: Fragment) = f.execution.executionTime.totalMillis
 
-      lazy val init = Notified(context = "start", start = false, close = false, hide = true)
+    if (!notified.hide) {
+      if (notified.start) n.contextStart(notified.context.trim, location)
+      else {
+        if (Fragment.isExample(f)) {
+          n.exampleStarted(description, location)
 
-      def last(s: Notified): Task[Unit] = Task.now(())
+          def notifyResult(result: Result): Unit =
+            result match {
+              case r: execute.Success =>
+                n.exampleSuccess(description, duration(f))
 
-      lazy val sink: Sink[Task, (Fragment, Notified)] =
-        io.resource(Task.delay { notifier.specStart(spec.name, ""); notifier})(
-          (n: Notifier) => Task.delay(n.specEnd(spec.name, "")))(
-            (n: Notifier) => Task.delay {
-              case (f: Fragment, block: Notified) =>
-                Task.now(printFragment(n, f, block))
-            })
+              case r: execute.Failure =>
+                n.exampleFailure(description, r.message, location, r.exception, r.details, duration(f))
 
-      def printFragment(n: Notifier, f: Fragment, notified: Notified) = {
-        val description = f.description.shows.trim
+              case r: execute.Error =>
+                n.exampleError(description, r.message, location, r.exception, duration(f))
 
-        val location = f.location.fullLocation(args.traceFilter).getOrElse("no location")
-        def duration(f: Fragment) = f.execution.executionTime.totalMillis
+              case r: execute.Skipped =>
+                n.exampleSkipped(description, r.message, location, duration(f))
 
-        if (!notified.hide) {
-          if (notified.start) n.contextStart(notified.context.trim, location)
-          else {
-            if (Fragment.isExample(f)) {
-              n.exampleStarted(description, location)
+              case r: execute.Pending =>
+                n.examplePending(description, r.message, location, duration(f))
 
-              def notifyResult(result: Result): Unit =
-                result match {
-                  case r: execute.Success =>
-                    n.exampleSuccess(description, duration(f))
+              case execute.DecoratedResult(_, r2) =>
+                notifyResult(r2)
+            }
 
-                  case r: execute.Failure =>
-                    n.exampleFailure(description, r.message, location, r.exception, r.details, duration(f))
-
-                  case r: execute.Error =>
-                    n.exampleError(description, r.message, location, r.exception, duration(f))
-
-                  case r: execute.Skipped =>
-                    n.exampleSkipped(description, r.message, location, duration(f))
-
-                  case r: execute.Pending =>
-                    n.examplePending(description, r.message, location, duration(f))
-
-                  case execute.DecoratedResult(_, r2) =>
-                    notifyResult(r2)
-                }
-
+<<<<<<< HEAD
               notifyResult(f.executionResult)
             } else if (Fragment.isStep(f)) {
               try {
@@ -125,11 +114,14 @@ object NotifierPrinter {
             } else if (Fragment.isText(f)) n.text(description, location)
           }
         } else if (notified.close) n.contextEnd(notified.context.trim, location)
+=======
+          notifyResult(f.executionResult)
+        } else if (Fragment.isText(f)) n.text(description, location)
+>>>>>>> refactors printers using foldm
       }
-    }
-
-    case class Notified(context: String = "", start: Boolean = false, close: Boolean = false, hide: Boolean = false)
+    } else if (notified.close) n.contextEnd(notified.context.trim, location)
   }
+
 }
 
 

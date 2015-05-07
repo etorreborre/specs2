@@ -6,7 +6,7 @@ import main.Arguments
 import matcher._
 import execute._
 import LineLogger._
-import data.Fold
+import foldm._, FoldM._, stream._, FoldProcessM._
 import specification.create.S2StringContext
 import specification.dsl.FragmentsDsl
 import specification.core._
@@ -95,8 +95,8 @@ class FakeJUnitPrinter(logger: LineLogger) extends Printer {
   def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
   def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
 
-  def fold(env: Env, spec: SpecStructure) =
-    Fold.fromFunction((f: Fragment) => Task.now(logger.infoLog("junit\n")))
+  def sink(env: Env, spec: SpecStructure) =
+    FoldProcessM.lift((f: Fragment) => Task.now(logger.infoLog("junit\n")))
 }
 
 object reporterSpecSupport extends MustMatchers with StandardMatchResults with S2StringContext with FragmentsDsl {

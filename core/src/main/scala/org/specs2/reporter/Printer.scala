@@ -1,26 +1,29 @@
 package org.specs2
 package reporter
 
+import foldm._, FoldM._, stream._, FoldProcessM._, FoldableProcessM._
 import scalaz.concurrent.Task
-import data.Fold
-import org.specs2.control._
+import control._
 import specification.core._
+
 /**
- * A Printer is essentially defined by a Fold that:
+ * A Printer is essentially defined by a FoldM sink that:
  *
  *  - can run a Process[Task, Fragment]
- *  - uses a Sink for side-effects and
+ *  - uses a scalaz-stream Sink for side-effects and
  *  - accumulates state for final reporting
+ *
+ *  See TextPrinter for an example of such a Printer
  */
 trait Printer {
   def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit]
   def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit]
 
-  def fold(env: Env, spec: SpecStructure): Fold[Fragment]
+  def sink(env: Env, spec: SpecStructure): SinkTask[Fragment]
 
   /** convenience method to print a SpecStructure using the printer's Fold */
   def print(env: Env): SpecStructure => Task[Unit] = { spec: SpecStructure =>
-    Fold.runFold(spec.contents, fold(env, spec))
+    sink(env, spec).run[ProcessTask](spec.contents)
   }
 }
 

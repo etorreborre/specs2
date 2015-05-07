@@ -2,16 +2,16 @@ package org.specs2
 package reporter
 
 import specification.core._
-import org.specs2.collection.Seqx
-import org.specs2.specification.core._
-import data.Fold
 import specification.process.{Stats, Statistics}
+import collection.Seqx
+import foldm._, FoldM._, stream._, FoldProcessM._
 import io._
 import main.Arguments
 import control._
 import java.util.regex.Pattern._
 import java.net.{JarURLConnection, URL}
 import scalaz._, Scalaz._
+import scalaz.concurrent.Task
 import HtmlBodyPrinter._
 import Pandoc._
 import ActionT._
@@ -35,32 +35,15 @@ trait HtmlPrinter extends Printer {
       reportMissingSeeRefs(specifications, options.outDir).when(options.warnMissingSeeRefs)
     }
 
-  /** @return a Fold for the Html output */
-  def fold(env: Env, spec: SpecStructure): Fold[Fragment] = new Fold[Fragment] {
-    type S = (Stats, Vector[Fragment])
-
-    lazy val sink = Fold.unitSink[Fragment, S]
-
-    def prepare = {
-      for {
-        options  <- getHtmlOptions(env.arguments)
-        _        <- copyResources(env, options)
-      } yield ()
-    }.toTask
-
-    def fold = (f: Fragment, s: S) => (Statistics.fold(f, s._1), s._2 :+ f)
-    def init = (Stats.empty, Vector.empty)
-
-    def last(s: S) = {
-      val (stats, fragments) = s
+  /** @return a SinkTask for the Html output */
+  def sink(env: Env, spec: SpecStructure): SinkTask[Fragment] = {
+    ((Statistics.fold zip FoldId.list[Fragment]).into[Task] <*
+     fromStart((getHtmlOptions(env.arguments) >>= (options => copyResources(env, options))).toTask.void)).mapFlatten { case (stats, fragments) =>
       val expecutedSpec = spec.copy(lazyFragments = () => Fragments(fragments:_*))
-
-      val action =
-        getPandoc(env).flatMap {
+      getPandoc(env).flatMap {
           case None         => printHtml(env, expecutedSpec, stats)
           case Some(pandoc) => printHtmlWithPandoc(env, expecutedSpec, stats, pandoc)
-        }
-      action.toTask
+      }.toTask
     }
   }
 

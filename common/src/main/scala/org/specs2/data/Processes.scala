@@ -52,16 +52,6 @@ trait Processes {
       ps.pipe(process1.chunk(nb)).map(Nondeterminism[Task].gather).eval.flatMap(emitAll)
   }
 
-  implicit class SinkOps[T, F[_]](sink: Sink[F, T]) {
-    /**
-     * Transform a simple sink into a sink, where the written value doesn't depend on the
-     * current state to a sink for folds, where the current state is passed all the time
-     * (and actually ignored here)
-     */
-    def extend[S]: Sink[F, (T, S)] =
-      sink.map(f => (ts: (T, S)) => f(ts._1))
-  }
-
   /**
    * Accumulate state on a Process[Task, T] using an accumulation action and
    * an initial state

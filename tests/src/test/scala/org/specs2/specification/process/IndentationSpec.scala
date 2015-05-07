@@ -4,7 +4,14 @@ package process
 
 import core._
 import data._
+import org.scalacheck.util.{FreqMap, Pretty}
+import org.scalacheck.{Shrink, Arbitrary}
+import execute.AsResult
+import foldm._, FoldM._, stream._, FoldProcessM._, FoldableProcessM._
+import scalacheck.Parameters
 import scalaz._, Scalaz._
+import scalaz.concurrent.Task
+import control._
 import matcher._
 import Arbitraries._
 import Fragment._
@@ -38,5 +45,5 @@ class IndentationSpec extends Specification with ScalaCheck with TaskMatchers { 
   implicit val prettyFragments = Pretties.prettyFragments
 
   def indentation(fs: Fragments) =
-    Fold.runFoldLast(fs.contents, Fold.fromState(Indentation.fold)(0))
+    Indentation.fold.into[Task].run[ProcessTask](fs.contents)
 }

@@ -3,12 +3,12 @@ package reporter
 
 import matcher.DataTable
 import control._
+import foldm._, FoldM._, stream._, FoldProcessM._
 import specification.core._
 import specification.process._
 import text.NotNullStrings._
 import text.Trim
 import Trim._
-import data.Fold
 import execute._
 import main.Arguments
 import scalaz.stream._
@@ -28,27 +28,21 @@ trait TextPrinter extends Printer {
   def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit]  = Actions.unit
   def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
 
-  def fold(env: Env, spec: SpecStructure) = new Fold[Fragment] {
+  def sink(env: Env, spec: SpecStructure): SinkTask[Fragment] = {
     // statistics and indentation
     type S = (Stats, Int)
 
+    val values = Statistics.fold zip Indentation.fold
+
     lazy val logger = env.lineLogger
     lazy val args   = env.arguments <| spec.arguments
-    
-    lazy val logSink       = loggerSink(logger)
-    lazy val lineStartSink = fragmentsSink(logger, spec.header, args)
 
-    lazy val sink =
-      lineStartSink.map { write: (LogLine => Task[Unit]) =>
-        (current: (Fragment, S)) =>  printFragment(args)(current).map(write).eval.run
+    lazy val sink: Sink[Task, (S, Fragment)] =
+      fragmentsSink(logger, spec.header, args).map { write: (LogLine => Task[Unit]) =>
+        (current: (S, Fragment)) => printFragment(args)(current.swap).traverseU(write).void
       }
 
-    def prepare = Task.now(())
-    def fold = Statistics.fold zip Indentation.fold
-    def init = (Stats.empty, 0)
-
-    def last(state: S) =
-      printStats(spec.header, args)(state._1).to(logSink).run
+    (values.into[Task] <<* fromSink(sink)).mapFlatten(printFinalStats(spec, args, logger))
   }
 
   /** run and shutdown the environment */
@@ -73,27 +67,32 @@ trait TextPrinter extends Printer {
     )
 
   def start(logger: LineLogger, header: SpecHeader, args: Arguments): Task[LineLogger] =
-    printHeader(args)(header).map(_.log(logger)).run.map(_ => logger)
+    Task.delay(printHeader(args)(header).foreach(_.log(logger))).as(logger)
 
-  def printHeader(args: Arguments): SpecHeader => Process[Task, LogLine] = { header: SpecHeader =>
-    if (args.canShow("#")) emit(header.show).info
-    else emitNone
+  def printFinalStats(spec: SpecStructure, args: Arguments, logger: LineLogger): ((Stats, Int)) => Task[Unit] = { case (stats, _) =>
+    Task.delay(printStats(spec.header, args)(stats).foreach(_.log(logger)))
   }
 
-  def printStats(header: SpecHeader, args: Arguments): Stats => Process[Task, LogLine] = { stats: Stats =>
+  def printHeader(args: Arguments): SpecHeader => List[LogLine] = { header: SpecHeader =>
+    if (args.canShow("#")) List(header.show.info)
+    else Nil
+  }
+
+  def printStats(header: SpecHeader, args: Arguments): Stats => List[LogLine] = { stats: Stats =>
     if ((args.xonly && stats.hasFailuresOrErrors || !args.xonly) && args.canShow("1")) {
       val title = if (header.show.isEmpty) "" else " "+header.show.trim
 
-      printNewLine fby
-      emit(s"Total for specification$title\n").info fby
-        emit(stats.display(args)).info fby
-        printNewLine fby
-        printNewLine
-    } else emitNone
+      printNewLine ++
+      List(
+        s"Total for specification$title\n".info,
+        stats.display(args).info) ++
+      printNewLine ++
+      printNewLine
+    } else Nil
   }
 
   /** transform a stream of fragments into a stream of strings for printing */
-  def printFragment(args: Arguments): ((Fragment, (Stats, Int))) => Process[Task, LogLine] = {
+  def printFragment(args: Arguments): ((Fragment, (Stats, Int))) => List[LogLine] = {
     case (fragment, (stats, indentation)) =>
       fragment match {
         // only print steps and actions if there are issues
@@ -103,28 +102,28 @@ trait TextPrinter extends Printer {
         case Fragment(d @ SpecificationRef(_, _, _, _, hidden, muted), e, l)  =>
           if (!hidden)
             if (e.isExecutable && !muted) printExecutable(d.show, e, args, indentation)
-            else                          emit(d.show).info
-          else emitNone
+            else                          List(d.show.info)
+          else Nil
 
         case Fragment(d, e, l) if e.isExecutable && d != NoText =>
           printExecutable(d.show, e, args, indentation)
 
         case Fragment(Br, e, l) =>
           if (args.canShow("-")) printNewLine
-          else emitNone
+          else Nil
 
         case Fragment(Code(text), e, l) =>
-          if (args.canShow("-")) emit(indentText(text, indentation, indentationSize(args))).info
-          else emitNone
+          if (args.canShow("-")) List(indentText(text, indentation, indentationSize(args)).info)
+          else Nil
 
         case Fragment(d, e, l) =>
-          if (args.canShow("-")) emit(indentText(d.show, indentation, indentationSize(args))).info
-          else emitNone
+          if (args.canShow("-")) List(indentText(d.show, indentation, indentationSize(args)).info)
+          else Nil
       }
   }
 
   /** print an executed fragment: example, step, action */
-  def printExecutable(text: String, execution: Execution, args: Arguments, indentation: Int): Process[Task, LogLine] = {
+  def printExecutable(text: String, execution: Execution, args: Arguments, indentation: Int): List[LogLine] = {
 
     if (args.canShow(execution.result.status)) {
       val show = indentText(showTime(statusAndDescription(text, execution.result)(args), execution, args), indentation, indentationSize(args))
@@ -138,53 +137,53 @@ trait TextPrinter extends Printer {
           case skipped: execute.Skipped  => printSkipped(show, skipped, args)
           case other                     => printOther(show, other, args)
         }
+
       execution.result match {
         case DecoratedResult(t: DataTable, r) => printResult(r)
         case other                            => printResult(other)
       }
-    } else emitNone
+    } else Nil
   }
 
-  def printError(show: String, err: execute.Error, args: Arguments): Process[Task, LogLine] =
-    emit(show).error fby
-      printMessage(args, show, ErrorLine.apply)(err) fby
-      printStacktrace(args, print = true, ErrorLine.apply)(err) fby
-      (if (err.exception.getCause != null) printError("CAUSED BY", execute.Error(err.exception.getCause), args)
-       else emitNone)
+  def printError(show: String, err: execute.Error, args: Arguments): List[LogLine] =
+    List(show.error) ++
+    printMessage(args, show, ErrorLine.apply)(err) ++
+    printStacktrace(args, print = true, ErrorLine.apply)(err) ++
+    (if (err.exception.getCause != null) printError("CAUSED BY", execute.Error(err.exception.getCause), args)
+     else List())
 
-  def printFailure(show: String, failure: execute.Failure, args: Arguments) =
-    emit(show).failure fby
-      printMessage(args, show, FailureLine.apply)(failure) fby
-      printStacktrace(args, print = args.failtrace, FailureLine.apply)(failure) fby
-      printFailureDetails(args)(failure.details)
+  def printFailure(show: String, failure: execute.Failure, args: Arguments): List[LogLine] =
+    List(show.failure) ++
+    printMessage(args, show, FailureLine.apply)(failure) ++
+    printStacktrace(args, print = args.failtrace, FailureLine.apply)(failure) ++
+    printFailureDetails(args)(failure.details)
 
-  def printSuccess(show: String, success: execute.Success, args: Arguments) = {
+  def printSuccess(show: String, success: execute.Success, args: Arguments): List[LogLine] = {
     val expected = if (success.exp.nonEmpty) "\n"+success.exp else ""
-    if (expected.trim.nonEmpty) emit(show+expected).info
-    else                        emit(show).info
+    if (expected.trim.nonEmpty) List((show+expected).info)
+    else                        List(show.info)
   }
 
-  def printPending(show: String, pending: execute.Pending, args: Arguments) = {
+  def printPending(show: String, pending: execute.Pending, args: Arguments): List[LogLine] = {
     val reason = if (pending.message.isEmpty) "PENDING" else pending.message
 
-    if (reason.trim.nonEmpty) emit(show+" "+reason).info
-    else                      emit(show).info
+    if (reason.trim.nonEmpty) List((show+" "+reason).info)
+    else                      List(show.info)
 
   }
 
-  def printSkipped(show: String, skipped: execute.Skipped, args: Arguments) = {
+  def printSkipped(show: String, skipped: execute.Skipped, args: Arguments): List[LogLine] = {
     val reason =
       if (skipped.message != StandardResults.skipped.message)
         if (skipped.message.isEmpty) "SKIPPED" else skipped.message
       else skipped.message
 
-    if (reason.trim.nonEmpty) emit(show+"\n"+reason).info
-    else                      emit(show).info
+    if (reason.trim.nonEmpty) List((show+"\n"+reason).info)
+    else                      List(show.info)
   }
 
-  def printOther(show: String, other: execute.Result, args: Arguments) = {
-    emit(show).info
-  }
+  def printOther(show: String, other: execute.Result, args: Arguments): List[LogLine] =
+    List(show.info)
 
   /** show execution times if the showtimes argument is true */
   def showTime(description: String, execution: Execution, args: Arguments) = {
@@ -206,70 +205,72 @@ trait TextPrinter extends Printer {
   def indentationSize(args: Arguments): Int =
     args.commandLine.int("indentation").getOrElse(2)
 
-  def printMessage(args: Arguments, description: String, as: String => LogLine): Result with ResultStackTrace => Process[Task, LogLine] = { result: Result with ResultStackTrace =>
+  def printMessage(args: Arguments, description: String, as: String => LogLine): Result with ResultStackTrace => List[LogLine] = { result: Result with ResultStackTrace =>
     val margin = description.takeWhile(_ == ' ')+" "
-    emit(as(result.message.split("\n").mkString(margin, "\n"+margin, "") + location(result, args)))
+    List(as(result.message.split("\n").mkString(margin, "\n"+margin, "") + location(result, args)))
   }
 
-  def printStacktrace(args: Arguments, print: Boolean, as: String => LogLine): Result with ResultStackTrace => Process[Task, LogLine] = { result: Result with ResultStackTrace =>
-    if (print) Process(args.traceFilter(result.stackTrace).map(t => as(t.toString)):_*)
-    else emitNone
+  def printStacktrace(args: Arguments, print: Boolean, as: String => LogLine): Result with ResultStackTrace => List[LogLine] = { result: Result with ResultStackTrace =>
+    if (print) args.traceFilter(result.stackTrace).map(t => as(t.toString)).toList
+    else Nil
   }
 
   /**
    * If the failure contains the expected and actual values, display them
    */
-  def printFailureDetails(args: Arguments):  Details => Process[Task, LogLine] = {
+  def printFailureDetails(args: Arguments):  Details => List[LogLine] = {
     case FailureDetails(actual, expected) if args.diffs.show(actual, expected) =>
       val (actualDiff, expectedDiff) = args.diffs.showDiffs(actual, expected)
-      emit("Actual:   " + actualDiff).failure fby
-      emit("Expected: " + expectedDiff).failure fby
-      (if (args.diffs.showFull) {
-        emit("Actual (full):   " + actual).failure fby
-        emit("Expected (full): " + expected).failure
-      } else emitNone) fby
-      emit("").info
+      List(
+        ("Actual:   " + actualDiff).failure,
+        ("Expected: " + expectedDiff).failure) ++
+      (if (args.diffs.showFull)
+          List(
+            ("Actual (full):   " + actual).failure,
+            ("Expected (full): " + expected).failure)
+        else Nil) ++
+      List("".info)
 
     case details @ FailureSeqDetails(actual, expected) if args.diffs.showSeq(actual, expected, ordered = true) =>
       val (added, missing) = args.diffs.showSeqDiffs(actual, expected, ordered = true)
 
-      printNewLine fby
-      printValues("Added", added) fby printNewLine fby
-      printValues("Missing", missing) fby printNewLine fby
+      printNewLine ++
+      printValues("Added", added) ++ printNewLine ++
+      printValues("Missing", missing) ++ printNewLine ++
       printSummary(("Added", added), ("Missing", missing))
 
 
     case details @ FailureSetDetails(actual, expected) if args.diffs.showSeq(actual.toSeq, expected.toSeq, ordered = false) =>
       val (added, missing) = args.diffs.showSeqDiffs(actual.toSeq, expected.toSeq, ordered = false)
-      printNewLine fby
-      printValues("Added", added) fby printNewLine fby
-      printValues("Missing", missing) fby printNewLine fby
+      printNewLine ++
+      printValues("Added", added) ++ printNewLine ++
+      printValues("Missing", missing) ++ printNewLine ++
       printSummary(("Added", added), ("Missing", missing))
 
     case details @ FailureMapDetails(actual, expected) if args.diffs.showMap(actual, expected) =>
       val (added, missing, different) = args.diffs.showMapDiffs(actual, expected)
-      printNewLine fby
-      printValues("Added", added) fby printNewLine fby
-      printValues("Missing", missing); printNewLine fby
-      printValues("Different", different) fby printNewLine fby
+      printNewLine ++
+      printValues("Added", added) ++ printNewLine ++
+      printValues("Missing", missing); printNewLine ++
+      printValues("Different", different) ++ printNewLine ++
       printSummary(("Added", added), ("Missing", missing), ("Different", different))
 
-    case _ => emitNone
+    case _ => Nil
   }
 
   def printNewLine =
-    emit(EmptyLine)
+    List(EmptyLine)
 
   /** show values as a string with a description */
   def printValues(description: String, values: Seq[Any]) =
-    if (values.nonEmpty) emit(s"$description (${values.size})${values.map(notNullPair).mkString("\n", "\n", "\n\n")}").failure
-    else emitNone
+    if (values.nonEmpty) List((s"$description (${values.size})${values.map(notNullPair).mkString("\n", "\n", "\n\n")}").failure)
+    else Nil
 
   /** print a short summary of differences between Seqs, Sets or Maps */
   def printSummary(descriptions: (String, Seq[String])*) =
     if (descriptions.flatMap(_._2).mkString("\n").split("\n").size >= 50)
-      emit(descriptions.map { case (name, values) => s"$name = ${values.size}" }.mkString(", ")).failure
-    else emitNone
+      List((descriptions.map { case (name, values) => s"$name = ${values.size}" }.mkString(", ")).failure)
+    else Nil
 
   def location(r: ResultStackTrace, args: Arguments) = " ("+r.location(args.traceFilter)+")" unless r.location.isEmpty
 
@@ -278,8 +279,6 @@ trait TextPrinter extends Printer {
     else text.split("\n").map((" " * (indentation * indentationSize)) + _).mkString("\n")
   }
 
-
-  def emitNone: Process[Task, LogLine] = Process()
 }
 
 object TextPrinter extends TextPrinter

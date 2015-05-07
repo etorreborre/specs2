@@ -73,6 +73,7 @@ object build extends Build {
             depends.scalaz(scalazVersion.value) ++
             depends.reflect(scalaVersion.value) ++
             depends.paradise(scalaVersion.value) ++
+            depends.kindp ++
             depends.scalacheck.map(_ % "test"),
           name := "specs2-common")
   )
@@ -176,9 +177,9 @@ object build extends Build {
     unmanagedSourceDirectories in Compile ++=
       Seq((sourceDirectory in Compile).value / s"scala-${scalaBinaryVersion.value}",
           if (scalazVersion.value.startsWith("7.0")) (sourceDirectory in Compile).value / s"scala-scalaz-7.0.x"
-          else (sourceDirectory in Compile).value / s"scala-scalaz-7.1.x",
-          if (scalazVersion.value.startsWith("7.0")) (sourceDirectory in(Test, test)).value / s"scala-scalaz-7.0.x"
-          else (sourceDirectory in(Test, test)).value / s"scala-scalaz-7.1.x"),
+          else                                       (sourceDirectory in Compile).value / s"scala-scalaz-7.1.x",
+          if (scalazVersion.value.startsWith("7.0")) (sourceDirectory in (Test, test)).value / s"scala-scalaz-7.0.x"
+          else                                       (sourceDirectory in (Test, test)).value / s"scala-scalaz-7.1.x"),
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
     maxErrors := 20,
     incOptions := incOptions.value.withNameHashing(true),

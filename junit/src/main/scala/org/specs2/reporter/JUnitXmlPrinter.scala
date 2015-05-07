@@ -12,9 +12,13 @@ import control._
 import io._
 import scala.collection.JavaConversions._
 import Exceptions._
+import scalaz.Id, Id._
+import foldm._, FoldM._, FoldId._, FoldableM._, stream._, FoldProcessM._
+import scalaz.std.list._
 import specification.core._
 import specification.process._
 import text.NotNullStrings._
+import JUnitDescriptions._
 
 /**
  * The JUnitXmlPrinter creates an xml file with the specification execution results
@@ -23,34 +27,25 @@ trait JUnitXmlPrinter extends Printer {
   def prepare(env: Env, specs: List[SpecStructure]): Action[Unit]  = Actions.unit
   def finalize(env: Env, specs: List[SpecStructure]): Action[Unit] = Actions.unit
 
-  def fold(env: Env, spec: SpecStructure): Fold[Fragment] = new Fold[Fragment] {
-    type S = (Vector[Fragment], Stats)
+  def sink(env: Env, spec: SpecStructure): SinkTask[Fragment] =
+    (Statistics.fold zip FoldId.list[Fragment]).into[Task].
+      mapFlatten(saveResults(env, spec))
 
-    private val specDescription = JUnitDescriptions.specDescription(spec)
+  def saveResults(env: Env, spec: SpecStructure): ((Stats, List[Fragment])) =>  Task[Unit] = { case (stats, fs) =>
+    val suite = descriptionFold(spec, stats, env).run(descriptions(spec, fs).toList)
+    env.fileSystem.writeFileTask(outputDirectory(env) | FileName.unsafe(spec.specClassName+".xml"), suite.xml)
+  }
 
-    private def descriptions(fragments: Vector[Fragment]) =
-      JUnitDescriptions.fragmentDescriptions(spec.setFragments(Fragments(fragments:_*)))
-
-    lazy val sink = Fold.unitSink[Fragment, S]
-
-    def prepare = Task.now(())
-
-    def fold: (Fragment, S) => S = {
-      case (f, (fs, stats)) => (fs :+ f, Statistics.fold(f, stats))
-    }
-
-    def init = (Vector.empty[Fragment], Stats.empty)
-
-    def last(s: S) = {
-      val (fs, stats) = s
-      val start = TestSuite(specDescription, spec.specClassName, stats.errors, stats.failures, stats.skipped, stats.timer.totalMillis)
-      val suite = descriptions(fs).foldLeft(start) { case (res, (f, d)) =>
-        if (Fragment.isExample(f)) res.addTest(new TestCase(d, f.executionResult, f.execution.executionTime.totalMillis)(env.arguments))
-        else                       res
-      }
-      env.fileSystem.writeFileTask(outputDirectory(env) | FileName.unsafe(spec.specClassName+".xml"), suite.xml)
+  def descriptionFold(spec: SpecStructure, stats: Stats, env: Env): Fold[(Fragment, Description), TestSuite] = {
+    val suite = TestSuite(specDescription(spec), spec.specClassName, stats.errors, stats.failures, stats.skipped, stats.timer.totalMillis)
+    fromFoldLeft[(Fragment, Description), TestSuite](suite) { case (res, (f, d)) =>
+      if (Fragment.isExample(f)) res.addTest(new TestCase(d, f.executionResult, f.execution.executionTime.totalMillis)(env.arguments))
+      else                       res
     }
   }
+
+  def descriptions(spec: SpecStructure, fragments: List[Fragment]) =
+    JUnitDescriptions.fragmentDescriptions(spec.setFragments(Fragments(fragments:_*)))
 
   def outputDirectory(env: Env): DirectoryPath =
     env.arguments.commandLine.directoryOr("junit.outdir", "target" / "test-reports")

@@ -4,9 +4,12 @@ package reporter
 import control._
 import data.Fold
 import io._
-import org.specs2.execute._
-import org.specs2.main.Arguments
-import org.specs2.specification.core._
+import execute._
+import foldm.FoldM
+import foldm.FoldM._
+import foldm.stream.FoldProcessM._
+import main.Arguments
+import specification.core._
 import scalaz.concurrent.Task
 import scalaz.stream._
 import scalaz.Show
@@ -23,26 +26,9 @@ trait MarkdownPrinter extends Printer {
     Actions.unit
 
   /** @return a Fold for the markdown output */
-  def fold(env: Env, spec: SpecStructure): Fold[Fragment] = new Fold[Fragment] {
-    type S = Unit
-
+  def sink(env: Env, spec: SpecStructure): SinkTask[Fragment] = {
     val options = MarkdownOptions.create(env.arguments)
-
-    lazy val sink: Sink[Task, (Fragment, Unit)] =
-      Fold.showToFilePath(options.outDir / FilePath.unsafe(spec.header.className+"."+options.extension))(MarkdownFragmentShow(options))
-
-    def prepare = Task.now(())
-
-    def fold = Fold.unitFoldFunction
-    def init = ()
-
-    def last(u: Unit) =
-      Task.now(())
-
-    implicit def MarkdownFragmentShow(options: MarkdownOptions): Show[Fragment] = new Show[Fragment] {
-      override def shows(f: Fragment): String =
-        fragmentToLine(options)(f)
-    }
+    fromSink(Fold.showToFilePath(options.outDir / FilePath.unsafe(spec.header.className+"."+options.extension))(MarkdownFragmentShow(options)))
   }
 
   def fragmentToLine(options: MarkdownOptions) = { fragment: Fragment =>
@@ -81,6 +67,10 @@ trait MarkdownPrinter extends Printer {
   def toMarkdown(ref: SpecificationRef, options: MarkdownOptions) =
     s"[${ref.linkText}](${options.outDir / FilePath.unsafe(ref.url)})"
 
+  implicit def MarkdownFragmentShow(options: MarkdownOptions): Show[Fragment] = new Show[Fragment] {
+    override def shows(f: Fragment): String =
+      fragmentToLine(options)(f)
+  }
 }
 
 object MarkdownPrinter extends MarkdownPrinter

@@ -4,6 +4,8 @@ package reporter
 import io.{FilePath, DirectoryPath}
 import main.Arguments
 import data.Fold
+import foldm._, FoldM._, stream._, FoldProcessM._
+import scalaz.concurrent.Task
 import specification.core._
 import specification.process._
 import execute._
@@ -21,13 +23,12 @@ trait HtmlBodyPrinter {
     val title = spec.name
     type HtmlState = (String, Level)
 
-    val htmlFold = Fold.fromState { (fragment: Fragment, state: HtmlState) =>
-      val (html, level) = state
+    val htmlFold = fromFoldLeft[Fragment, HtmlState](("", Level())) { case ((html, level), fragment) =>
       (html + printFragment(arguments, level, options.outDir, pandoc)(fragment),
        Levels.fold(fragment, level))
-    }(("", Level()))
+    }
 
-    val (html, _) = Fold.runFoldLast(spec.fragments.contents, htmlFold).run
+    val (html, _) = Fold.runFold(spec.fragments.contents, htmlFold.into[Task]).run
     html +
     s"""${printStatistics(title, stats, options)}"""
   }

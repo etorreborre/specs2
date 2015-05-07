@@ -1,6 +1,8 @@
 package org.specs2
 package reporter
 
+import foldm._, FoldId._, FoldM._
+import stream.FoldProcessM._
 import specification._
 import specification.process._
 import core._
@@ -43,35 +45,32 @@ trait Reporter {
       if (env.arguments.execute.asap) Process.eval(executing.contents.runLog).flatMap(Process.emitAll)
       else                            executing.contents
 
-    val folds = printers.map(_.fold(env1, spec)) :+ statsStoreFold(env1, spec)
-    Actions.fromTask(runFolds(contents, folds))
+    val sinks = printers.map(_.sink(env1, spec)) :+ statsStoreSink(env1, spec)
+    Actions.fromTask(runSinks(contents, sinks))
   }
 
   /**
    * Use a Fold to store the stats of each example + the stats of the specification
    */
-  def statsStoreFold(env: Env, spec: SpecStructure) = new Fold[Fragment] {
-    type S = Stats
+  def statsStoreSink(env: Env, spec: SpecStructure): SinkTask[Fragment] = {
+    val neverStore = env.arguments.store.never
+    val resetStore = env.arguments.store.reset
 
-    private val neverStore = env.arguments.store.never
-    private val resetStore = env.arguments.store.reset
-
-    def prepare: Task[Unit] =
-      if (resetStore) env.statisticsRepository.resetStatistics.toTask
-      else            Task.now(())
-
-    lazy val sink: Sink[Task, (Fragment, Stats)] =
-      channel.lift {  case (fragment, stats) =>
+    lazy val sink: Sink[Task, Fragment] =
+      channel.lift {  case fragment =>
         if (neverStore) Task.delay(())
         else            env.statisticsRepository.storeResult(spec.specClassName, fragment.description, fragment.executionResult).toTask
       }
 
-    def fold = Statistics.fold
-    def init = Stats.empty
+    val prepare: Task[Unit] =
+      if (resetStore) env.statisticsRepository.resetStatistics.toTask
+      else            Task.now(())
 
-    def last(stats: Stats) =
+    val last = (stats: Stats) =>
       if (neverStore) Task.now(())
       else            env.statisticsRepository.storeStatistics(spec.specClassName, stats).toTask
+
+    (Statistics.fold.into[Task] <* fromStart(prepare) <* fromSink(sink)).mapFlatten(last)
   }
 
 }
