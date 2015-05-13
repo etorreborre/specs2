@@ -12,7 +12,7 @@ The most common way to run $specs2 specifications is to use [sbt](http://scala-s
 sbt> test
 ```
 
-Most of the time however you will use the `test-only` command, either because you want to run one specification only or because you want to pass arguments:
+Most of the time however you will use the `testOnly` command, either because you want to run one specification only or because you want to pass arguments:
 ```
 sbt> testOnly org.acme.secret.KillerAppSpec
 ```
@@ -57,7 +57,7 @@ Here is a list of all the existing `Printers` in $specs2 with links to the corre
 
 ### Arguments
 
-With the `test-only` command arguments can be passed on the command line for selecting, executing or reporting a specification. Please consult the following sections for more information:
+With the `testOnly` command arguments can be passed on the command line for selecting, executing or reporting a specification. Please consult the following sections for more information:
 
  - ${"Filtering" ~ Selection} to select only some example to run
  - ${"Execution" ~ Execution} to modify the execution parameters
