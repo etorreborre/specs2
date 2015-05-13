@@ -19,7 +19,7 @@ Maps have their own matchers as well, to check keys and values:
    `Map(1 -> "1") must haveValue("1")`
 
  * `haveValues` check if a Map has several values
-   `Map(1 -> "1", 2 -> "2") must haveValue("1", "2")`
+   `Map(1 -> "1", 2 -> "2") must haveValues("1", "2")`
 
  * `havePair` check if a Map has a given pair of values
    `Map(1 -> "1") must havePair(1 -> "1")`
