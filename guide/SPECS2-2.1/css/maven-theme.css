@@ -1,0 +1,417 @@
+body {
+  padding: 10px 20px 10px 20px;
+}
+body, td, select, input, li{
+  font-family: Verdana, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+}
+code{
+  font-family: Courier, monospace;
+  font-size: 13px;
+}
+a {
+  text-decoration: none;
+}
+a:link {
+  color:#36a;
+}
+a:visited  {
+  color:#47a;
+}
+a:active, a:hover {
+  color:#69c;
+}
+#legend li.externalLink {
+  background: url(../images/external.png) left top no-repeat;
+  padding-left: 18px;
+}
+a.externalLink, a.externalLink:link, a.externalLink:visited, a.externalLink:active, a.externalLink:hover {
+  background: url(../images/external.png) right center no-repeat;
+  padding-right: 18px;
+}
+#legend li.newWindow {
+  background: url(../images/newwindow.png) left top no-repeat;
+  padding-left: 18px;
+}
+a.newWindow, a.newWindow:link, a.newWindow:visited, a.newWindow:active, a.newWindow:hover {
+  background: url(../images/newwindow.png) right center no-repeat;
+  padding-right: 18px;
+}
+h2 {
+  padding: 4px 4px 4px 6px;
+  border: 1px solid #999;
+  color: #900;
+  background-color: #ddd;
+  font-weight:900;
+  font-size: x-large;
+}
+h3 {
+  padding: 4px 4px 4px 6px;
+  border: 1px solid #aaa;
+  color: #36a;
+  background-color: #eee;
+  font-weight: normal;
+  font-size: large;
+}
+h4 {
+  padding: 4px 4px 4px 6px;
+  border: 1px solid #bbb;
+  color: #36a;
+  background-color: #fff;
+  font-weight: normal;
+  font-size: large;
+}
+h5 {
+  margin: 0px 0px 5px 0px;
+  color: #36a;
+  font-size: medium;
+}
+h6 {
+  margin: 0px 0px 0px 10px;
+  font-style: italic;
+  color: #36a;
+  font-size: small;
+}
+p {
+  line-height: 1.3em;
+  font-size: small;
+}
+#leftColumn {
+  margin: 10px 0 0 5px;
+  border: 1px solid #999;
+  background-color: #eee;
+}
+#navcolumn h5 {
+  font-size: smaller;
+  border-bottom: 1px solid #aaaaaa;
+  padding-top: 2px;
+  color: #000;
+}
+
+
+table.dataTable {
+    table-layout: auto;
+	width: auto;
+	background: #EEEEEE;
+    border-collapse: collapse;
+    empty-cells: show;
+    margin: 8px 0px 8px 0px;
+	padding: 0px;
+	border: solid #AAAAAA;
+	border-width: 1px 0px 0px 1px;
+	font-size: 0.9em;
+}
+table.dataTable th {
+	border: solid #AAAAAA;
+	border-width: 0px 1px 1px 0px;
+	padding: 2px 6px 2px 6px;
+    text-indent: 0px;
+}
+table.dataTable td {
+	border: solid #AAAAAA;
+	border-width: 0px 1px 1px 0px;
+	padding: 1px 3px 1px 3px;
+    text-indent: 0px;
+}
+table.dataTable tr.success {
+  background-color: #CCFFCC;
+}
+table.dataTable tr.failure {
+  background-color: #FFFF99;
+}
+table.dataTable tr.error {
+  background-color: #FF9999;
+}
+table.dataTable tr.skipped {
+  background-color: #DDDDDD;
+}
+table.dataTable tr.none {
+  background-color: #FFFFFF;
+}
+table.dataTable th.success {
+  background-color: #CCFFCC;
+}
+table.dataTable th.failure {
+  background-color: #FFFF99;
+}
+table.dataTable th.error {
+  background-color: #FF9999;
+}
+table.dataTable th.skipped {
+  background-color: #DDDDDD;
+}
+table.dataTable tr.none {
+  background-color: #FFFFFF;
+}
+
+
+table.bodyTable th {
+  color: white;
+  background-color: #bbb;
+  text-align: left;
+  font-weight: bold;
+}
+
+table.bodyTable th, table.bodyTable td {
+  font-size: 1em;
+}
+
+table.bodyTable tr.success {
+  background-color: #CCFFCC;
+}
+table.bodyTable tr.failure {
+  background-color: #FFFF99;
+}
+table.bodyTable tr.error {
+  background-color: #FF9999;
+}
+table.bodyTable tr.skipped {
+  background-color: #DDDDDD;
+}
+table.dataTable td.info {
+  background-color: #FFFFFF;
+}
+table.dataTable td.success {
+  background-color: #CCFFCC;
+}
+table.dataTable td.failure {
+  background-color: #FFFF99;
+}
+table.dataTable td.error {
+  background-color: #FF9999;
+}
+table.dataTable td.skipped {
+  background-color: #DDDDDD;
+}
+table.dataTable td.none {
+  background-color: #FFFFFF;
+}
+
+table.bodyTable tr.a {
+  background-color: #ddd;
+}
+
+table.bodyTable tr.b {
+  background-color: #eee;
+}
+table.nested td {
+  border: 1px #666666 solid
+}
+table.nested td.noBorder {
+  border: 0px #666666 
+}
+table.nested td.failureMessage {
+  border: 1px #900 dashed;
+  color: #900;
+}
+table td.navTitle {
+  border: 0px #666666;
+  background-color: #fff;
+  color: #36a;
+  text-align: center;
+  font-size: large;
+}
+
+/* this style is used to display DataTables when they are used as examples */
+table.exampleTable  {
+  border: none;
+}
+table.exampleTable tr {
+  border: none;
+}
+.exampleTable td {
+  border: none;
+}
+
+.source {
+  border: 1px solid #999;
+}
+dl {
+  padding: 4px 4px 4px 6px;
+  border: 1px solid #aaa;
+  background-color: #ffc;
+}
+dt {
+  color: #900;
+}
+#organizationLogo img, #projectLogo img, #projectLogo span{
+  margin: 8px;
+}
+#banner {
+  border-bottom: 1px solid #fff;
+}
+.errormark, .warningmark, .donemark, .infomark {
+  background: url(../images/icon_error_sml.gif) no-repeat;
+}
+
+.warningmark {
+  background-image: url(../images/icon_warning_sml.gif);
+}
+
+.donemark {
+  background-image: url(../images/icon_success_sml.gif);
+}
+
+.infomark {
+  background-image: url(../images/icon_info_sml.gif);
+}
+ex.success {
+  background-color: #CCFFCC;
+}
+ex.failure {
+  background-color: #FFFF99;
+}
+ex.error {
+  background-color: #FF9999;
+}
+ex.skipped {
+  background-color: #DDDDDD;
+}
+
+.level1 {
+  text-indent: 15px;
+}
+.level2 {
+  text-indent: 35px;
+}
+.level3 {
+  text-indent: 55px;
+}
+.level4 {
+  text-indent: 75px;
+}
+.level5 {
+  text-indent: 95px;
+}
+.level6 {
+  text-indent: 115px;
+}
+.level7 {
+  text-indent: 135px;
+}
+.level8 {
+  text-indent: 155px;
+}
+.details {
+  font-family: Courier, monospace;
+  font-size: 13px;
+  border: 1px #900 dashed;
+  background-color: #FFFF99;
+  color: #900;
+  padding: 2px 2px 2px 2px;
+}
+ul {
+  margin-left: 10;
+  padding-left: 10;
+}
+li {
+  margin-left: 10;
+  padding-left: 0;
+}
+table {
+    table-layout: auto;
+	width: auto;
+    border-collapse: collapse;
+    empty-cells: show;
+    margin: 8px 0px 8px 0px;
+	padding: 0px;
+	border: solid #AAAAAA;
+	border-width: 1px 0px 0px 1px;
+	font-size: 0.9em;
+}
+table th {
+	border: solid #AAAAAA;
+	background: #EEEEEE;
+	border-width: 0px 1px 1px 0px;
+	padding: 2px 6px 2px 6px;
+}
+table td {
+	border: solid #AAAAAA;
+	border-width: 0px 1px 1px 0px;
+	padding: 1px 3px 1px 3px;
+}
+.formstacktrace {
+  display: none;
+}
+
+#breadcrumbs {
+  position: static;
+  display: none;
+  width: 83.7%;
+  border-top: 1px dashed #aaa;
+  border-bottom: 1px dashed #aaa;
+  margin-left: 5px;
+  background-color: #eee;
+  font-size: 12px;
+  font-style: italic;
+}
+
+#central {
+}
+
+#rightcolumn {
+}
+
+#leftcolumn {
+  border:0px;
+}
+#tree {
+  background-color: #ffffff;
+  border-color: #bbbbbb;
+  border-style: solid;
+  border-width: 1px;
+  overflow: scroll;
+}
+
+#tree a {
+ white-space:normal !important;
+ height: auto;
+}
+
+/* common column settings */
+.colright,
+.colmid,
+.colleft {
+  float:left;
+  width:100%;     /* width of page */
+  position:relative;
+}
+.col1,
+.col2,
+.col3 {
+  float:left;
+  position:relative;
+  padding:0 0 1em 0;  /* no left and right padding on columns, we just make them narrower instead
+          only padding top and bottom is included here, make it whatever value you need */
+  overflow:hidden;
+}
+/* 3 Column settings */
+.threecol {
+  background:#ffffff;    /* right column background colour */
+}
+.threecol .colmid {
+  right:25%;      /* width of the right column */
+  background:#ffffff;    /* center column background colour */
+}
+.threecol .colleft {
+  right:50%;      /* width of the middle column */
+  background:#ffffff /* left column background colour */
+}
+.threecol .col1 {
+  margin-top: -10px;
+  width:70%;      /* width of center column content (column width minus padding on either side) */
+  left:90%;      /* 100% plus left padding of center column */
+}
+.threecol .col2 {
+  position: fixed;
+  width:14%;      /* Width of left column content (column width minus padding on either side) */
+  left:1%;     /* width of (right column) plus (center column left and right padding) plus (left column left padding) */
+}
+.threecol .col3 {
+  width:18%;      /* Width of right column content (column width minus padding on either side) */
+  left:85%;     /* Please make note of the brackets here:
+          (100% - left column width) plus (center column left and right padding) plus (left column left and right padding) plus (right column left padding) */
+}
+code {
+  white-space: pre-wrap;
+}
