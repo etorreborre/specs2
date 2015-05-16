@@ -123,6 +123,10 @@ trait FoldM[T, M[_], U] { self =>
   def <*[V](f: SinkM[T, M])(implicit ap: Apply[M]) =
     zip(f).map(_._1)
 
+  /** zip on the right with another fold only for self side-effects */
+  def *>[V](f: FoldM[T, M, V])(implicit ap: Apply[M], ev: U <:< Unit) =
+    zip(f).map(_._2)
+
   /** alias for <* */
   def observe[V](f: SinkM[T, M])(implicit ap: Apply[M]) =
     zip(f).map(_._1)
