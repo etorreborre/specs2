@@ -51,26 +51,17 @@ trait TextPrinter extends Printer {
     finally env.shutdown
   }
 
-  def shutdown = (ll: LineLogger) =>
-    Task.delay(ll.close)
-
   def fragmentsSink(logger: LineLogger, header: SpecHeader, args: Arguments): Sink[Task, LogLine] =
-    io.resource(start(logger, header, args))(shutdown)(
-      logger => Task.delay{ (line: LogLine) =>
-        Task.now(line.log(logger))
-      }
-    )
-
-  def loggerSink(logger: LineLogger): Sink[Task, LogLine] =
-    io.resource(Task.delay(logger))(shutdown)(
-      logger => Task.delay((line: LogLine) => Task.now(line.log(logger)))
+    io.resource(start(logger, header, args))(_ => Task.now(()))(logger =>
+      Task.delay((line: LogLine) => Task.now(line.log(logger)))
     )
 
   def start(logger: LineLogger, header: SpecHeader, args: Arguments): Task[LineLogger] =
     Task.delay(printHeader(args)(header).foreach(_.log(logger))).as(logger)
 
   def printFinalStats(spec: SpecStructure, args: Arguments, logger: LineLogger): ((Stats, Int)) => Task[Unit] = { case (stats, _) =>
-    Task.delay(printStats(spec.header, args)(stats).foreach(_.log(logger)))
+    Task.delay(printStats(spec.header, args)(stats).foreach(_.log(logger))) >>
+    Task.delay(logger.close)
   }
 
   def printHeader(args: Arguments): SpecHeader => List[LogLine] = { header: SpecHeader =>
@@ -82,6 +73,7 @@ trait TextPrinter extends Printer {
     if ((args.xonly && stats.hasFailuresOrErrors || !args.xonly) && args.canShow("1")) {
       val title = if (header.show.isEmpty) "" else " "+header.show.trim
 
+      printNewLine ++
       printNewLine ++
       List(
         s"Total for specification$title\n".info,
