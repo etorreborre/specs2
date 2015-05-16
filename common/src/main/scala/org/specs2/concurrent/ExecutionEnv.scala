@@ -6,8 +6,8 @@ import java.util.concurrent._
 import org.specs2.control._
 import org.specs2.main.Arguments
 import scala.concurrent.ExecutionContext
-import scalaz._, Scalaz._
-import scalaz.concurrent.Future
+import scalaz.\/
+import scalaz.concurrent.{Strategy, Future}
 
 /**
  * Subset of the Env describing execution parameters
@@ -16,6 +16,7 @@ import scalaz.concurrent.Future
  * already in their own copy of the specification
  */
 case class ExecutionEnv(executor:          () => ExecutorService,
+                        executorStrategy:  () => Strategy,
                         scheduledExecutor: () => ScheduledExecutorService,
                         exContext:         () => ExecutionContext,
                         timeFactor: Int) {
@@ -35,6 +36,7 @@ case class ExecutionEnv(executor:          () => ExecutorService,
   }
 
   lazy val executorService = executor()
+  lazy val strategy = executorStrategy()
   lazy val scheduledExecutorService = scheduledExecutor()
   lazy val executionContext = exContext()
 
@@ -54,6 +56,7 @@ object ExecutionEnv {
     val executorService = executor(arguments.threadsNb, threadFactoryName)
     ExecutionEnv(
       () => executorService,
+      () => Strategy.Executor(executorService),
       () => scheduledExecutor(arguments.scheduledThreadsNb, threadFactoryName),
       () => createExecutionContext(executorService, arguments.verbose, systemLogger),
       arguments.execute.timeFactor
@@ -81,7 +84,12 @@ object ExecutionEnv {
 
   /** create an ExecutionEnv from an execution context only */
   def fromExecutionContext(ec: ExecutionContext): ExecutionEnv =
-    ExecutionEnv(() => executor(1, "unused"), () => scheduledExecutor(1, "unused"), () => ec, timeFactor = 1)
+    ExecutionEnv(
+      () => executor(1, "unused"),
+      () => Strategy.Executor(executor(1, "unused")),
+      () => scheduledExecutor(1, "unused"),
+      () => ec,
+      timeFactor = 1)
 
   /** create an ExecutionEnv from Scala global execution context */
   def fromGlobalExecutionContext: ExecutionEnv =

@@ -64,6 +64,9 @@ case class Env(arguments: Arguments = Arguments(),
   lazy val executorService =
     executionEnv.executorService
 
+  lazy val strategy =
+    executionEnv.strategy
+
   lazy val executionContext =
     executionEnv.executionContext
 
