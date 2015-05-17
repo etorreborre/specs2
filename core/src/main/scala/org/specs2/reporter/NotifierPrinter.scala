@@ -26,8 +26,10 @@ object NotifierPrinter {
     def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit]  = Actions.unit
     def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
 
-    def sink(env: Env, spec: SpecStructure): SinkTask[Fragment] =
-      (notifyFold.into[Task] <<<* fromSink(notifySink(spec, notifier, env.arguments))).as(())
+    def sink(env: Env, spec: SpecStructure): SinkTask[Fragment] = {
+      (notifyFold.into[Task]
+      	.startWith(Task.delay(notifier.specStart(spec.name, "")))
+      	.endWith(Task.delay(notifier.specEnd(spec.name, ""))) <<<* fromSink(notifySink(spec, notifier, env.arguments))).void}
   }
 
   def notifyFold: FoldState[Fragment, Notified] = new FoldM[Fragment, Id, Notified] {
@@ -55,8 +57,8 @@ object NotifierPrinter {
   case class Notified(context: String, start: Boolean, close: Boolean, hide: Boolean)
 
   def notifySink(spec: SpecStructure, notifier: Notifier, args: Arguments): Sink[Task, (Notified, Fragment)] =
-    io.resource(Task.delay { notifier.specStart(spec.name, ""); notifier})(
-      (n: Notifier) => Task.delay(n.specEnd(spec.name, "")))(
+    io.resource(Task.now(notifier))(
+      (n: Notifier) => Task.now(()))(
       (n: Notifier) => Task.delay { case (block: Notified, f: Fragment) => Task.now(printFragment(n, f, block, args)) })
 
   def printFragment(n: Notifier, f: Fragment, notified: Notified, args: Arguments) = {

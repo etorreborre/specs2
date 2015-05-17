@@ -155,6 +155,22 @@ trait FoldM[T, M[_], U] { self =>
   def <<<*[V](sink: SinkM[(S, T), M])(implicit ap: Apply[M]) =
     observeNextState(sink)
 
+  /** add an effectful action at the beginning of the fold */
+  def startWith(action: M[Unit])(implicit ap: Apply[M]) =  new FoldM[T, M, U] {
+     type S = self.S
+     def start = action *> self.start
+     def fold = self.fold
+     def end(s: S) = self.end(s)
+  }
+
+  /** add an effectful action at the end of the fold */
+  def endWith(action: M[Unit])(implicit ap: Apply[M]) = new FoldM[T, M, U] {
+     type S = self.S
+     def start = self.start
+     def fold = self.fold
+     def end(s: S) = self.end(s) <* action
+  }
+
   /** pipe the output of this fold into another fold */
   def compose[V](f2: FoldM[U, M, V])(implicit m: Monad[M]) = new FoldM[T, M, V] {
     type S = M[(self.S, f2.S)]
