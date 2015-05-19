@@ -26,6 +26,7 @@ How can I easily print expressions to the console?                              
 Can $specs2 create a JUnit xml file for a continuous integration server?                 | ${link(JUnitXmlOutput).mute}
 Is it possible to reduce the number of implicits in scope and improve compilation times? | ${link(LightweightSpecs).mute}
 How can I collect execution data?                                                        | ${link(PrintExecutionData).mute}
+Can I display some data when an example succeeds?                                        | ${link(PrintExecutionData).mute}
 Can I create an example description spanning several lines?                              | ${link(MultilineDescriptions).mute}
 How to isolate each example from another so that they don't share variables              | ${link(Isolation).mute}
 How to timeout examples?                                                                 | ${link(TimeoutExamples).mute}

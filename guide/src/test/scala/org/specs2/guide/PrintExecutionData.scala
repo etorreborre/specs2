@@ -9,7 +9,18 @@ import time.SimpleTimer
 
 object PrintExecutionData extends UserGuidePage { def is = s2"""
 
-###  Print execution time
+### Print success data
+
+If an example returns returns a `Success` we just print the example name on the console but it can be interesting to also get some information about the data the example was executed with. In order to do that you can use the `updateExpected` method and pass a non-empty string with your message: ${snippet{
+  "this is an obvious example" ! {
+    val i = 1
+    (i must_== 1).toResult.updateExpected("executed with "+i)
+  }
+}}
+
+Let's use this method now to display the execution time for each example.
+
+### Print execution time
 
 Knowing that an example succeeded is fine but sometimes you want to display more information, like the time spent executing the example for instance, or some other state before and after each example.
 
