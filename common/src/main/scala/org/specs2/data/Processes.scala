@@ -3,9 +3,10 @@ package data
 
 import java.util.concurrent.ExecutorService
 
+import scalaz.stream.Cause.EarlyCause
 import scalaz.stream._
 import Process._
-import scalaz.\/._
+import scalaz.{Monad, Catchable, OptionT, Scalaz, \/}, Scalaz._, \/._
 import scalaz.concurrent.{Future, Task}
 import Task._
 import scalaz.Nondeterminism
@@ -81,6 +82,33 @@ trait Processes {
     go(init)
   }
 
+  /** create a Stepper for a given Process[F, A] */
+  def step[A](p: Process[Task, A]): Stepper[Task, A] = new Stepper[Task, A] {
+    var state = p
+
+    def next: OptionT[Task, Seq[A]] = state.step match {
+
+      case Halt(_) => OptionT.none
+
+      case Step(Emit(as: Seq[A]), cont) =>
+        state = cont.continue
+        OptionT(as.point[Task] map some)
+
+      case Step(Await(req: Task[_], rcv), cont) =>
+        for {
+          tail <- (req.attempt map { r => rcv(EarlyCause fromTaskResult r).run +: cont }).liftM[OptionT]
+          _ = state = tail          // purity ftw!
+          back <- next
+        } yield back
+    }
+
+    def close =
+      Task.suspend {
+        Task.delay(state = state.kill) >>
+        state.run
+      }
+  }
+
   /** start an execution right away */
   def start[A](a: =>A)(executorService: ExecutorService) =
     new Task(Future(Task.Try(a))(executorService).start)
@@ -90,3 +118,9 @@ trait Processes {
 }
 
 object Processes extends Processes
+
+/** Helper trait to step through a Process[F, A] */
+trait Stepper[F[_], A] {
+  def next: OptionT[F, Seq[A]]
+  def close: F[Unit]
+}
