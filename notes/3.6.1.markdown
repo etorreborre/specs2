@@ -1,0 +1,12 @@
+Maintenance version.
+
+## Improvements
+
+ * updated Scalaz versions
+ * Add documentation surrounding junit xml output (thanks to @jedesah)
+ * fix typo of `haveValues` in Map Matcher (thanks to @taisukeoe)
+ * added a section on how to display data even for a successful example
+ * renamed some package protected variables in mutable specs to avoid clashes with client code (Scalatra in particular)
+
+==========================
+
