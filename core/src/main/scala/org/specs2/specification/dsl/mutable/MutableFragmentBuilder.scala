@@ -40,7 +40,7 @@ trait MutableFragmentBuilder extends FragmentBuilder
   }
 
   def specificationStructure = (env: Env) =>
-    SpecStructure.create(header, arguments, specificationFragments(env))
+    SpecStructure.create(headerVar, argumentsVar, specificationFragments(env))
 
   private def replayFragments(environment: Env) = {
     env = environment
@@ -91,7 +91,7 @@ trait MutableFragmentBuilder extends FragmentBuilder
   private def mustBeIsolated(fragment: Fragment) = {
     fragment.isExecutable                     &&
     fragment.execution.isolable               &&
-    arguments.isolated                        &&
+    argumentsVar.isolated                     &&
     !env.executionParameters.withoutIsolation
   }
 
@@ -131,15 +131,15 @@ trait FragmentBuilder {
 }
 
 trait MutableHeaderBuilder {
-  private[specs2] var header = new SpecHeader(specClass = getClass)
+  private[specs2] var headerVar = new SpecHeader(specClass = getClass)
   def setTitle(t: String) = {
-    header = header.copy(title = Some(t))
-    header
+    headerVar = headerVar.copy(title = Some(t))
+    headerVar
   }
 }
 
 trait MutableArgumentsBuilder {
-  private[specs2] var arguments = Arguments()
-  def updateArguments(a: Arguments): Arguments = { arguments = arguments <| a; a }
-  def setArguments(a: Arguments): Arguments = { arguments = a; a }
+  private[specs2] var argumentsVar = Arguments()
+  def updateArguments(a: Arguments): Arguments = { argumentsVar = argumentsVar <| a; a }
+  def setArguments(a: Arguments): Arguments = { argumentsVar = a; a }
 }
