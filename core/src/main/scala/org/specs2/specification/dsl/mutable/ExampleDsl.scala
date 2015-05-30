@@ -105,7 +105,8 @@ trait ExampleDsl0 extends BlockCreation {
   }
 }
 
-trait NoBlockExample extends ExampleDsl {
+/** deactivate the ExampleDsl implicits */
+trait NoExampleDsl extends ExampleDsl {
   override def blockExample(d: String) = super.blockExample(d)
 }
 

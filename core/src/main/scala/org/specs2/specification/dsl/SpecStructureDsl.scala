@@ -90,3 +90,18 @@ trait SpecStructureDsl1 extends FragmentsFactory { outer =>
   implicit def fragmentsAsSpecStructure(fs: =>Fragments): SpecStructure =
     SpecStructure.create(SpecHeader(getClass), fs)
 }
+
+/** deactivate the spec structure Dsl implicits */
+trait NoSpecStructureDsl extends SpecStructureDsl {
+  override def appendSpecStructureToString(s: String) =
+    super.appendSpecStructureToString(s)
+
+  override def appendSpecStructureToFragment(f: Fragment) =
+    super.appendSpecStructureToFragment(f)
+
+  override def appendSpecStructureToSpecHeader(header: SpecHeader) =
+    super.appendSpecStructureToSpecHeader(header)
+
+  override def appendSpecStructureToSpecStructure(structure: SpecStructure) =
+    super.appendSpecStructureToSpecStructure(structure)
+}

@@ -67,3 +67,20 @@ trait FragmentsDsl extends FragmentsFactory with AcceptanceDsl1 { outer =>
 
 object FragmentsDsl extends FragmentsDsl
 
+/** deactivate the FragmentsDsl implicits */
+trait NoFragmentsDsl extends FragmentsDsl {
+  override def appendToString(s: String) =
+    super.appendToString(s)
+
+  override def appendToFragment(f: Fragment) =
+    super.appendToFragment(f)
+
+  override def appendToFragments(fs: Fragments) =
+    super.appendToFragments(fs)
+
+  override def HiddenFragment(fragment: Fragment) =
+    super.HiddenFragment(fragment)
+
+  override def MutedFragment(fragment: Fragment) =
+    super.MutedFragment(fragment)
+}

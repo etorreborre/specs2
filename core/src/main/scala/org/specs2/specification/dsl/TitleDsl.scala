@@ -16,3 +16,9 @@ trait TitleDsl { outer =>
 
 }
 
+/** deactivate the TitleDsl implicits */
+trait NoTitleDsl extends TitleDsl {
+  override def title(s: String) =
+    super.title(s)
+}
+

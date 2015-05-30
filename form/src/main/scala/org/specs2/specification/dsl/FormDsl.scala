@@ -44,3 +44,24 @@ trait FormDsl extends FragmentsDsl with SpecStructureDsl with FormFragmentsFacto
     def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): SpecStructure = appendSpecStructureToSpecStructure(structure) ^ factory.FormFragment(aForm)(p)
   }
 }
+
+/** deactivate the FormDsl implicits */
+trait NoFormDsl extends FormDsl {
+  override def appendFormToString(s: String) =
+    super.appendFormToString(s)
+
+  override def appendFormToFragment(f: Fragment) =
+    super.appendFormToFragment(f)
+
+  override def appendFormToFragments(fs: Fragments) =
+    super.appendFormToFragments(fs)
+
+  override def appendFormToArguments(args: Arguments) =
+    super.appendFormToArguments(args)
+
+  override def appendFormToSpecHeader(header: SpecHeader) =
+    super.appendFormToSpecHeader(header)
+
+  override def appendFormToSpecStructure(structure: SpecStructure) =
+    super.appendFormToSpecStructure(structure)
+}
