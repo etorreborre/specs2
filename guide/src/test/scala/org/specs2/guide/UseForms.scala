@@ -60,7 +60,7 @@ A `Prop` is like a `Field`, it has a label. But you can give it 2 values, an "ac
  `prop(label, actual, expected)`                                          | a property with a label, an actual value and an expected one
  `prop(label, actual, constraint)`                                        | a property with a label, an actual value and a function taking the actual value, an expected one and returning a `Result`
  `prop("label", "actual", (a: String, b: String) => (a === b).toResult)`  | a property with a label, an actual value and a function taking the expected value, returning a Matcher that will be applied to the actual one
- `prop("label", "expected", (expected: String) => beEqualtTo(exepcted))`  | a property with a label, an actual value and function applying a matcher to that value
+ `prop("label", "expected", (expected: String) => beEqualTo(expected))`   | a property with a label, an actual value and function applying a matcher to that value
  `prop(label, actual, matcher)`                                           | a property with a label, an actual value and a matcher to apply to that value
 
     If the matcher is `mute`d then no message will be displayed in case of a failure.
