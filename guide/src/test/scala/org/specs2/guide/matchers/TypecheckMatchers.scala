@@ -101,9 +101,10 @@ Here is how to do it:
     // combine parameters
     typecheckWith(macrosAtCompileTime <| implicitsAtCompileTime)("Monoid[Plane]")
 
-Finally you can also use a string interpolator and pass parameters: ${snippet{
+Finally you can also use a string interpolator and pass parameters:
+```
   tcw" 1 must_== 1"(parsingAtRuntime)
-}}
+```
 
 """ ^ br ^ Fragments.foreach(Seq(tc1, tc2, tc3))(_ ^ br)
 
