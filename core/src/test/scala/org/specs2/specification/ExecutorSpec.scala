@@ -22,6 +22,7 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
  =======
   + sequentially
   + with in-between steps
+  + with a fatal execution error
 
   with a timeout $timeOut
 
@@ -116,6 +117,19 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
 
       messages.toList must_== Seq("slow", "medium", "step", "fast")
     }
+
+    eg := { env: Env =>
+      val tf = env.arguments.execute.timeFactor
+
+      val fragments = Seq(
+        example("fast1", ok("ok1")),
+        step(fatalStep),
+        example("fast2", ok("ok2")))
+
+      execute(fragments, env)
+
+      messages.toList must_== Seq("ok1", "fatal")
+    }
   }
 
   def timeOut = { env: Env =>
@@ -140,6 +154,7 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
     val messages = new ListBuffer[String]
 
     // this cannot be made lazy vals otherwise this will block on 'slow'
+    def ok(name: String)              = {                    messages.append(name); success }
     def fast(timeFactor: Int)         = {                    messages.append("fast"); success }
     def medium(timeFactor: Int)       = { Thread.sleep(10 * timeFactor);  messages.append("medium"); success }
     def ex(s: String)                 = { messages.append(s); success }
@@ -148,6 +163,7 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
     def slow(timeFactor: Int)         = { Thread.sleep(200 * timeFactor); messages.append("slow");   success }
     def verySlow(timeFactor: Int)     = { Thread.sleep(600 * timeFactor); messages.append("very slow"); success }
     def step1                         = { messages.append("step");   success }
+    def fatalStep                     = { messages.append("fatal");  if (true) throw new java.lang.Error("fatal error!"); success }
   }
 
 

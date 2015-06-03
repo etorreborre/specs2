@@ -73,7 +73,10 @@ trait DefaultExecutor extends Executor {
    *
    *  - the execution stops if one fragment indicates that the result of the previous executions is not correct
    */
-  def sequencedExecution(env: Env, barrier: Task[Result] = Task.now(Success("barrier")), mustStop: Boolean = false): Process1[Fragment, Task[Fragment]] =
+  def sequencedExecution(env: Env,
+                         barrier: Task[FatalExecution \/ Result] = Task.now(\/-(Success("barrier"))),
+                         mustStop: Boolean = false): Process1[Fragment, Task[Fragment]] =
+
     receive1 { fragment: Fragment =>
       val arguments = env.arguments
 
@@ -86,15 +89,19 @@ trait DefaultExecutor extends Executor {
       } else {
         // if we need to wait, we do, and get the result
         val barrierResult =
-          if (fragment.execution.mustJoin) barrier.attemptRun.fold(t => org.specs2.execute.Error(t), r => r)
-          else                             Success("no barrier result")
+          if (fragment.execution.mustJoin) barrier.attemptRun.fold(t => -\/(FatalExecution(t)), r => r)
+          else                             \/-(Success("no barrier result"))
 
         // depending on the result we decide if we should go on executing fragments
         val barrierStop =
           mustStop ||
-            arguments.stopOnFail && barrierResult.isFailure ||
-            arguments.stopOnSkip && barrierResult.isSkipped ||
-            fragment.execution.nextMustStopIf(barrierResult)
+            (barrierResult match {
+              case \/-(r) =>
+                arguments.stopOnFail && r.isFailure ||
+                arguments.stopOnSkip && r.isSkipped ||
+                fragment.execution.nextMustStopIf(r)
+              case -\/(f) => true
+            })
 
         // if the previous fragments decided that we should stop the execution
         // skip the execution
@@ -114,12 +121,21 @@ trait DefaultExecutor extends Executor {
         // and check if the execution needs to be stopped in case of a step error
         val (nextBarrier, stepStop) =
           if (fragment.execution.mustJoin) {
-            val stepResult = executedFragment.executionResult
-            (Task.now(stepResult), fragment.execution.nextMustStopIf(stepResult))
+            val stepResult = executedFragment.executionFatalOrResult
+            (Task.now(stepResult), stepResult.fold(_ => true, r => fragment.execution.nextMustStopIf(r)))
           }
           // otherwise add the current execution to the sequence of current executions
-          else
-            (barrier.map { case r => Result.ResultFailureMonoid.append(r, executedFragment.execution.result) }, false)
+          else {
+            val barrierResult = barrier.map {
+              case \/-(result) =>
+                executedFragment.executionFatalOrResult.fold(
+                  f => -\/(f),
+                  r => \/-(Result.ResultFailureMonoid.append(result, r))
+                )
+              case f => f
+            }
+            (barrierResult, false)
+          }
 
         emit(executingFragment) fby sequencedExecution(env, nextBarrier, barrierStop || stepStop)
       }

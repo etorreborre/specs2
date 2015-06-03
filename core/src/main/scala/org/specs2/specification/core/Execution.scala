@@ -13,6 +13,7 @@ import scalaz.std.anyVal._
 import specification.process.Stats
 import time.SimpleTimer
 import control._
+import text.NotNullStrings._
 
 /**
  * Execution of a Fragment
@@ -36,10 +37,12 @@ case class Execution(run:            Option[Env => Result],
                      nextMustStopIf: Result => Boolean             = (r: Result) => false,
                      isolable:       Boolean                       = true,
                      previousResult: Option[Result]                = None,
+                     fatal:          Option[FatalExecution]        = None,
                      executionTime:  SimpleTimer                   = new SimpleTimer,
                      continuation:   Option[FragmentsContinuation] = None) {
 
-  lazy val executedResult = executed
+  lazy val executedResult = fatal.map(_.toError).orElse(executed)
+
   /** if the execution hasn't been executed, the result is Success */
   lazy val result = executedResult.getOrElse(org.specs2.execute.Success("no execution yet defined"))
 
@@ -67,13 +70,23 @@ case class Execution(run:            Option[Env => Result],
   def was(statusCheck: String => Boolean) = previousResult.exists(r => statusCheck(r.status))
 
   /** run the execution */
-  def execute(env: Env) = run.fold(this)(r => setResult(r(env)))
+  def execute(env: Env) = run.fold(this) { r =>
+    try   setResult(r(env))
+    catch { case t: Throwable => setFatal(t) }
+  }
 
   /** @return true if something can be run */
   def isExecutable = run.isDefined
 
   /** @return set an execution result */
   def setResult(r: =>Result) = copy(executed = Some(r))
+
+  /** @return set a fatal execution error */
+  def setFatal(f: Throwable) = copy(fatal = Some(FatalExecution(f)))
+
+  /** @return true if there was a fatal error */
+  def isFatal: Boolean =
+    fatal.isDefined
 
   /** @return set an execution time */
   def setExecutionTime(timer: SimpleTimer) = copy(executionTime = timer)
@@ -162,3 +175,7 @@ object Execution {
 
 }
 
+case class FatalExecution(t: Throwable) extends Exception(t) {
+  def toError: Result =
+    Error("Fatal execution error, caused by "+t.getMessage.notNull, t)
+}

@@ -4,6 +4,7 @@ package core
 
 import execute.Result
 import scala.concurrent.duration.{FiniteDuration, Duration}
+import scalaz._
 import scalaz.Show
 import scalaz.syntax.show._
 
@@ -14,6 +15,10 @@ import scalaz.syntax.show._
  * It has an execution which might do or don't do anything (for examples it runs some code)
  */
 case class Fragment(description: Description, execution: Execution, location: Location = StacktraceLocation()) {
+  /** @return a fatal error or a result */
+  def executionFatalOrResult: FatalExecution \/ Result =
+    execution.fatal.map(-\/(_)).getOrElse(\/-(execution.result))
+
   /** @return the result of this fragment if it has been executed, Success otherwise */
   def executionResult = execution.result
   /** @return true if this fragment has been executed */
