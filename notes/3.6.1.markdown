@@ -8,5 +8,10 @@ Maintenance version.
  * added a section on how to display data even for a successful example
  * renamed some package protected variables in mutable specs to avoid clashes with client code (Scalatra in particular)
 
+## Fixes 
+
+ * handle fatal errors [#384](http://github.com/etorreborre/specs2/issues/384)
+ * added more NoxxxDsl traits to remove Dsl implicit operators [#220](http://github.com/etorreborre/specs2/issues/220)
+
 ==========================
 
