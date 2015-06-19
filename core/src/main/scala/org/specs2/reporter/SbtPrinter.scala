@@ -84,6 +84,12 @@ object SbtPrinter {
 
     def examplePending(name: String, message: String, location: String, duration: Long): Unit =
       events.pending(inContext(name), duration)
+
+    def stepStarted(location: String) = ()
+    def stepSuccess(duration: Long) = ()
+    def stepError(message: String, location: String, f: Throwable, duration: Long) =
+      events.error("step", duration, args.traceFilter(f))
+
   }
 }
 

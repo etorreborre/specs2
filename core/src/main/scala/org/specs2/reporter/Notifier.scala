@@ -21,6 +21,10 @@ trait Notifier {
   def exampleError  (name: String, message: String, location: String, f: Throwable, duration: Long)
   def exampleSkipped(name: String, message: String, location: String, duration: Long)
   def examplePending(name: String, message: String, location: String, duration: Long)
+
+  def stepStarted(location: String)
+  def stepSuccess(duration: Long)
+  def stepError(message: String, location: String, f: Throwable, duration: Long)
 }
 
 /**
@@ -38,6 +42,9 @@ class ConsoleNotifier extends Notifier {
   def exampleError  (name: String, message: String, location: String, f: Throwable, duration: Long)                   = Console.println(s"[error]   $name $message")
   def exampleSkipped(name: String, message: String, location: String, duration: Long)                                 = Console.println(s"[skipped] $name $message")
   def examplePending(name: String, message: String, location: String, duration: Long)                                 = Console.println(s"[pending] $name $message")
+  def stepStarted(location: String)                                                                                   = Console.println(s"[step]")
+  def stepSuccess(duration: Long)                                                                                     = Console.println(s"[success]")
+  def stepError  (message: String, location: String, f: Throwable, duration: Long)                                    = Console.println(s"[error]   $message")
 }
 
 /**
@@ -57,5 +64,8 @@ trait SilentNotifier extends Notifier {
   def exampleError  (name: String, message: String, location: String, f: Throwable, duration: Long)                   = ()
   def exampleSkipped(name: String, message: String, location: String, duration: Long)                                 = ()
   def examplePending(name: String, message: String, location: String, duration: Long)                                 = ()
+  def stepStarted(location: String)                                                                                   = ()
+  def stepSuccess(duration: Long)                                                                                     = ()
+  def stepError(message: String, location: String, f: Throwable, duration: Long)                                      = ()
 }
 

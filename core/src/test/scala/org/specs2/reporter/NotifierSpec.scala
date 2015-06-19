@@ -25,6 +25,8 @@ class NotifierSpec(env: Env) extends Specification { def is = s2"""
     notifier.messages.mkString("\n") must_==
     List(
       "[start  ] NotifierSpec1",
+      "[step   ]",
+      "[success]",
       "[open   ] group1",
       "[example] ex1",
       "[success] ex1",
@@ -68,6 +70,7 @@ class NotifierSpecWithTables extends Specification with Tables {def is = s2"""
   """
 }
 class NotifierSpec1 extends org.specs2.mutable.Specification {
+  step("a step")
   "group1" >> {
     "ex1" >> ok
     "ex2" >> ok
@@ -90,6 +93,9 @@ class TestNotifier extends Notifier with StringOutput {
   def exampleError  (name: String, message: String, location: String, f: Throwable, duration: Long) = append(s"[error  ] $name $message")
   def exampleSkipped(name: String, message: String, location: String, duration: Long) = append(s"[skipped] $name $message")
   def examplePending(name: String, message: String, location: String, duration: Long) = append(s"[pending] $name $message")
+  def stepStarted(location: String) = append(s"[step   ]")
+  def stepSuccess(duration: Long) = append(s"[success]")
+  def stepError(message: String, location: String, f: Throwable, duration: Long) = append(s"[error   ] $message")
 }
 
 class GlobalNotifier extends SilentNotifier {

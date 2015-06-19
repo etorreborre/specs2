@@ -38,8 +38,14 @@ object NotifierPrinter {
           if (notified.start) notified.copy(context = f1.description.shows, start = true, hide = false)
           else                notified.copy(context = f1.description.shows, start = false, hide = false)
 
-        case f1 if Fragment.isExample(f1) => notified.copy(start = false, hide = false)
-        case _                            => notified.copy(hide = true)
+        case f1 if Fragment.isExample(f1) =>
+          notified.copy(start = false, hide = false)
+
+        case f1 if Fragment.isStep(f1) =>
+          notified.copy(start = false, hide = false)
+
+        case _ =>
+          notified.copy(hide = true)
       }
 
       lazy val init = Notified(context = "start", start = false, close = false, hide = true)
@@ -88,6 +94,18 @@ object NotifierPrinter {
                 }
 
               notifyResult(f.executionResult)
+            } else if (Fragment.isStep(f)) {
+              n.stepStarted(location)
+
+              def notifyResult(result: Result): Unit =
+                result match {
+                  case r: execute.Success => n.stepSuccess(duration(f))
+                  case r: execute.Error   => n.stepError(r.message, location, r.exception, duration(f))
+                  case _ => ()
+                }
+
+              notifyResult(f.executionResult)
+
             } else if (Fragment.isText(f)) n.text(description, location)
           }
         } else if (notified.close) n.contextEnd(notified.context.trim, location)
