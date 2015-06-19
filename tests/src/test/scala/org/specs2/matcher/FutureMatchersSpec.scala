@@ -1,6 +1,7 @@
 package org.specs2
 package matcher
 
+import org.specs2.execute.FailureException
 import specification.Environment
 import specification.core.Env
 
@@ -8,13 +9,13 @@ import org.specs2.concurrent._
 import scala.concurrent._
 import duration._
 
-class FutureMatchersSpec extends Specification with ResultMatchers with Retries with Environment { def is(env: Env) = {
+class FutureMatchersSpec(env: Env) extends Specification with ResultMatchers with Retries {
  val timeFactor = env.arguments.execute.timeFactor
- val sleep = 50 * timeFactor
+ val sleepTime = 50 * timeFactor
  implicit val ee = env.executionEnv
+ implicit val ec = env.executionContext
 
- section("travis") ^
- s2"""
+ def is = section("travis") ^ s2"""
 
  In this specification `Future` means `scala.concurrent.Future`
 
@@ -22,14 +23,14 @@ class FutureMatchersSpec extends Specification with ResultMatchers with Retries 
  ${ Future.apply(1) must be_>(0).await }
 
  with a retries number and timeout
- ${ Future { Thread.sleep(sleep); 1 } must be_>(0).await(retries = 3, timeout = 100.millis) }
- ${ (Future { Thread.sleep(sleep * 3); 1 } must be_>(0).await(retries = 4, timeout = 10.millis)) returns "Timeout" }
+ ${ Future { Thread.sleep(sleepTime); 1 } must be_>(0).await(retries = 3, timeout = 100.millis) }
+ ${ (Future { Thread.sleep(sleepTime * 3); 1 } must be_>(0).await(retries = 4, timeout = 10.millis)) returns "Timeout" }
 
  with a retries number only
- ${ Future { Thread.sleep(sleep); 1 } must be_>(0).retryAwait(2) }
+ ${ Future { Thread.sleep(sleepTime); 1 } must be_>(0).retryAwait(2) }
 
  with a timeout only
- ${ Future { Thread.sleep(sleep); 1 } must be_>(0).awaitFor(200.millis) }
+ ${ Future { Thread.sleep(sleepTime); 1 } must be_>(0).awaitFor(200.millis) }
 
  A `Future` returning a `Matcher[T]` can be transformed into a `Result`
  ${ Future(1 === 1).await }
@@ -38,6 +39,14 @@ class FutureMatchersSpec extends Specification with ResultMatchers with Retries 
  ${ Future.failed[Int](new RuntimeException) must throwA[RuntimeException].await }
  ${ { Future.failed[Int](new RuntimeException) must be_===(1).await } must throwA[RuntimeException] }
 
+ In a mutable spec with a negated matcher $e1
+
 """
-}
+
+  def e1 = {
+    val thrown = new FutureMatchers with MustThrownExpectations {
+      def result = Future(true) must beFalse.awaitFor(1 second)
+    }
+   thrown.result must throwA[FailureException]
+  }
 }

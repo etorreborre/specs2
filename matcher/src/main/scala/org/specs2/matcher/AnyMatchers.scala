@@ -16,7 +16,7 @@ trait AnyBaseMatchers {
   /** matches if a == true */
   def beTrue = new BeTrueMatcher
   /** matches if a == false */
-  def beFalse = beTrue.not
+  def beFalse = (new BeTrueMatcher).not
 
   /** matches if a eq b */
   def beTheSameAs[T <: AnyRef](t: =>T) = new BeTheSameAs(t)

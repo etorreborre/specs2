@@ -61,7 +61,7 @@ trait FutureBaseMatchers extends ExpectationsCreation {
   private[specs2] def awaitMatcher[T](m: Matcher[T])(retries: Int, timeout: FiniteDuration)(implicit ee: ExecutionEnv): Matcher[Future[T]] = new Matcher[Future[T]] {
     def apply[S <: Future[T]](a: Expectable[S]) = {
       try {
-        val r = new FutureAsResult(a.value.map(v => createExpectable(v).applyMatcher(m).toResult)(ee.executionContext)).await(retries, timeout)
+        val r = new FutureAsResult(a.value.map(v => AsResult(createExpectable(v).applyMatcher(m)))(ee.executionContext)).await(retries, timeout)
         result(r.isSuccess, r.message, r.message, a)
       } catch {
         // if awaiting on the future throws an exception because it was a failed future
