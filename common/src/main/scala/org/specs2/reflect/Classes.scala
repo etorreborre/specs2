@@ -8,11 +8,12 @@ import scala.reflect.ClassTag
 import ClassName._
 import control._
 import scala.util.control.NonFatal
-import scalaz.stream.Process.Env
+import scalaz.\&/._
 import scalaz.{\/-, -\/, \/}
 import scalaz.std.anyVal._
 import scalaz.syntax.std.option._
 import java.lang.reflect.Constructor
+import text.NotNullStrings._
 
 /**
  * This trait provides functions to instantiate classes
@@ -99,10 +100,10 @@ trait Classes {
    * Given a class, a zero or one-parameter constructor, return an instance of that class
    */
   private def createInstanceForConstructor[T <: AnyRef : ClassTag](c: Class[_], constructor: Constructor[_],
-                                                                   loader: ClassLoader, defaultInstances: List[AnyRef] = Nil): Action[T] = Actions.safe {
+                                                                   loader: ClassLoader, defaultInstances: List[AnyRef] = Nil): Action[T] = {
     constructor.setAccessible(true)
     if (constructor.getParameterTypes.isEmpty)
-      Actions.safe(constructor.newInstance().asInstanceOf[T])
+      newInstance(c)(constructor.newInstance().asInstanceOf[T])
 
     else if (constructor.getParameterTypes.size == 1) {
       defaultInstances.find(i => constructor.getParameterTypes.apply(0) isAssignableFrom i.getClass) match {
@@ -114,24 +115,33 @@ trait Classes {
             createInstance[T](getOuterClassName(c), loader, defaultInstances)
               .orElse(createInstance[T](constructor.getParameterTypes.toSeq(0).getName, loader, defaultInstances))
 
-          constructorParameter.map(constructor.newInstance(_).asInstanceOf[T])
+          constructorParameter.flatMap(p => newInstance(c)(constructor.newInstance(p).asInstanceOf[T]))
 
         case Some(instance) =>
-          Actions.safe(constructor.newInstance(instance).asInstanceOf[T])
+          newInstance(c)(constructor.newInstance(instance).asInstanceOf[T])
       }
     } else Actions.fail[T]("Can't find a suitable constructor for class "+c.getName)
-  }.flatMap[T](identity)
+  }
 
   /**
    * @return an instance of a given class, checking that the created instance typechecks as expected
    */
-  def createInstanceFor[T <: AnyRef](klass: Class[T])(implicit m: ClassTag[T]): Action[T] = Actions.safe {
+  def createInstanceFor[T <: AnyRef](klass: Class[T])(implicit m: ClassTag[T]): Action[T] = {
     val constructor = klass.getDeclaredConstructors()(0)
     constructor.setAccessible(true)
-    val instance: AnyRef = constructor.newInstance().asInstanceOf[AnyRef]
-    if (!m.runtimeClass.isInstance(instance)) Actions.fail[T](instance + " is not an instance of " + m.runtimeClass.getName)
-    else Actions.safe(instance.asInstanceOf[T])
-  }.flatMap[T](identity)
+    newInstance(klass)(constructor.newInstance().asInstanceOf[AnyRef]).flatMap { instance =>
+      if (!m.runtimeClass.isInstance(instance)) Actions.fail[T](instance + " is not an instance of " + m.runtimeClass.getName)
+      else Actions.safe(instance.asInstanceOf[T])
+    }
+  }
+
+  /** create a new instance for a given class and return a proper error if this fails */
+  private def newInstance[T](klass: Class[_])(creation: =>T): Action[T] =
+    Actions.safe(creation).whenFailed {
+      case This(m)    => Actions.fail ("cannot create an instance for class " + klass.getName + ": " + m)
+      case That(e)    => Actions.error(UserException("cannot create an instance for class " + klass.getName, e))
+      case Both(m, e) => Actions.error(UserException("cannot create an instance for class " + klass.getName, e))
+    }
 
   /**
    * Load a class, given the class name

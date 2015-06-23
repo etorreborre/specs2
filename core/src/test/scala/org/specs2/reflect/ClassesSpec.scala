@@ -7,6 +7,9 @@ import Classes._
 import control._
 import matcher.MatchersImplicits._
 
+import scalaz.\&/
+import scalaz.\&/._
+
 class ClassesSpec extends Spec with Grouped { def is = s2"""
 
   it is possible to instantiate a Specification 
@@ -14,6 +17,8 @@ class ClassesSpec extends Spec with Grouped { def is = s2"""
     from a class having a parameter having at least a no-args constructor that's instantiable ${g1.e2}
     from a nested class ${g1.e3}
     from an object name ${g1.e4}
+
+  if a class can not be instantiated a UserException must be created ${g2.e1}
                                                                                                                         """
 
   "instantiations" - new g1 {
@@ -22,10 +27,18 @@ class ClassesSpec extends Spec with Grouped { def is = s2"""
     e2 := createInstance[Specification]("org.specs2.reflect.FromClassNameWithArg", getClass.getClassLoader) must beOk
     e3 := createInstance[Specification]("org.specs2.reflect.ClassesSpec$FromNestedClass", getClass.getClassLoader) must beOk
     e4 := createInstance[Specification]("org.specs2.reflect.FromObjectName$", getClass.getClassLoader) must beOk
-
-    def beOk[T]: Matcher[Action[T]] = (action: Action[T]) =>
-      action.execute(noLogging).unsafePerformIO.toOption must beSome
   }
+
+  "exceptions" - new g2 {
+    e1 := createInstance[Specification]("org.specs2.reflect.UserErrorSpecification", getClass.getClassLoader) must
+      failWith("cannot create an instance for class org.specs2.reflect.UserErrorSpecification")
+  }
+
+  def beOk[T]: Matcher[Action[T]] = (action: Action[T]) =>
+    action.execute(noLogging).unsafePerformIO.toOption must beSome
+
+  def failWith[T](message: String): Matcher[Action[T]] = (action: Action[T]) =>
+    action.execute(noLogging).unsafePerformIO.toOptionErrorMessage must beSome((_: String) must startWith(message))
 
   class FromNestedClass extends Specification  { def is = ok }
 }
@@ -34,6 +47,8 @@ class FromClassName extends Specification { def is = ok }
 
 class System2
 trait System
+
+class UserErrorSpecification extends Specification { sys.error("boom"); def is = ok }
 
 /** this trait cannot be instantiated directly */
 trait System3 extends System

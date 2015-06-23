@@ -10,4 +10,9 @@ case class ActionException(warnings: Vector[String], message: Option[String], th
     message.getOrElse("")
 }
 
+/**
+ * This exception class is used to notify the user of instantiation errors
+ */
+case class UserException(message: String, throwable: Throwable) extends Exception(message, throwable)
+
 

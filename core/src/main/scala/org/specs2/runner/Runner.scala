@@ -41,24 +41,30 @@ object Runner {
    * Use the console logging to log exceptions
    */
   def logThrowable(t: Throwable, arguments: Arguments)(print: String => IO[Unit]): IO[Unit] = {
+    def logStack(exception: Throwable) =
+      exception.chainedExceptions.traverse_(s => print("  caused by " + s.toString)) >>
+      print("\nSTACKTRACE") >>
+      exception.getStackTrace.toList.traverse_(e => print("  "+e.toString)) >>
+      exception.chainedExceptions.traverse_ { s =>
+        print("\n  CAUSED BY " + s.toString) >> s.getStackTrace.toList.traverse_(e => print("  "+e.toString))
+      }
+
     if (!arguments.commandLine.boolOr("silent", false)) {
       t match {
+        case UserException(m, throwable) =>
+          print("\n"+m+"\n") >>
+          logStack(throwable) >>
+          print(" ")
+
         case ActionException(warnings, message, _) =>
-          (if (warnings.nonEmpty) print("Warnings:") else IO(())) >>
-          warnings.traverseU(print) >>
+          if (warnings.nonEmpty) print("Warnings:\n") >> print(warnings.mkString("", "\n", "\n")) else IO(()) >>
           message.traverseU(print).void
 
         case other =>
-            print("\n"+t.toString+"\n")    >>
-              t.chainedExceptions.traverse_(s => print("  caused by " + s.toString)) >>
-              print("\nSTACKTRACE") >>
-              t.getStackTrace.toList.traverse_(t => print("  "+t.toString)) >>
-              t.chainedExceptions.traverse_ { s =>
-                print("\n  CAUSED BY " + s.toString) >>
-                  s.getStackTrace.toList.traverse_(t => print("  "+t.toString))
-              } >>
-              print("\n\nThis looks like a specs2 exception...\nPlease report it with the preceding stacktrace at http://github.com/etorreborre/specs2/issues") >>
-              print(" ")
+          print("\n"+t.toString+"\n") >>
+          logStack(t)
+          print("\n\nThis looks like a specs2 exception...\nPlease report it with the preceding stacktrace at http://github.com/etorreborre/specs2/issues") >>
+          print(" ")
 
       }
     } else IO(())
