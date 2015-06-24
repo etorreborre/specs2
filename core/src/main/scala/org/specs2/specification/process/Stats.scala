@@ -64,6 +64,19 @@ case class Stats(specs:        Int = 0,
   def time = timer.time
   /** @return the same stats but with a started timer */
   def startTimer = copy(timer = timer.start)
+
+  /** set a specific result on this Stats object */
+  def withResult(result: Result): Stats =
+    result match {
+      case s @ Success(_,_)             => copy(expectations = result.expectationsNb, successes = 1)
+      case f @ Failure(_,_,_,_)         => copy(expectations = result.expectationsNb, failures = 1)
+      case e @ Error(_,_)               => copy(expectations = result.expectationsNb, errors = 1)
+      case Pending(_)                   => copy(expectations = result.expectationsNb, pending = 1)
+      case Skipped(_, _)                => copy(expectations = result.expectationsNb, skipped = 1)
+      case DecoratedResult(t: Stats, _) => t
+      case DecoratedResult(_, r)        => withResult(r)
+    }
+
   /**
    * @return the xml representation of the statistics. Omit the attributes with 0 as a value for conciseness
    */
@@ -209,11 +222,11 @@ case object Stats {
 
   def apply(result: Result): Stats =
     result match {
-      case s @ Success(_,_)             => Stats(examples = 1, expectations = result.expectationsNb, successes = 1)
-      case f @ Failure(_,_,_,_)         => Stats(examples = 1, expectations = result.expectationsNb, failures = 1)
-      case e @ Error(_,_)               => Stats(examples = 1, expectations = result.expectationsNb, errors = 1)
-      case Pending(_)                   => Stats(examples = 1, expectations = result.expectationsNb, pending = 1)
-      case Skipped(_, _)                => Stats(examples = 1, expectations = result.expectationsNb, skipped = 1)
+      case s @ Success(_,_)             => Stats(examples = 1).withResult(result)
+      case f @ Failure(_,_,_,_)         => Stats(examples = 1).withResult(result)
+      case e @ Error(_,_)               => Stats(examples = 1).withResult(result)
+      case Pending(_)                   => Stats(examples = 1).withResult(result)
+      case Skipped(_, _)                => Stats(examples = 1).withResult(result)
       case DecoratedResult(t: Stats, _) => t
       case DecoratedResult(_, r)        => Stats(r)
     }

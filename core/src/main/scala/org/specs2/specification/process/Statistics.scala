@@ -22,7 +22,7 @@ trait Statistics {
 
   def fold = (fragment: Fragment, stats: Stats) =>
     stats |+| fragment.execution.executedResult.fold(defaultStats(fragment)) { result =>
-      Stats(result).copy(timer = fragment.execution.executionTime)
+      defaultStats(fragment).withResult(result).copy(timer = fragment.execution.executionTime)
     }
 
   def defaultStats(fragment: Fragment) =
