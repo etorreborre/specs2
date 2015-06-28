@@ -125,11 +125,11 @@ m.get(0)    // returns "The parameter is 0"
 m.get(1)    // the second call returns a different value: "The parameter is 1"
 }}
 
-To use specific type of arguments: ${snippet{
+To use specific a type of argument: ${snippet{
 m.get(anyInt) answers { _ match { case i: Int => (i + 1).toString } }
 }}
 
-Or more concise: ${snippet{
+Or more concisely: ${snippet{
 m.get(anyInt) responds { case i: Int => (i + 1).toString }
 }}
 
