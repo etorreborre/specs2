@@ -429,6 +429,12 @@ STUBS
     }
 
     eg := {
+      list.get(anyInt) responds { case i: Int => (i + 1).toString }
+      list.get(1) must_== "2"
+      list.get(5) must_== "6"
+    }
+
+    eg := {
       list.set(anyInt, anyString) answers { i => "The parameters are " + (i.asInstanceOf[Array[_]].mkString("(",",",")")) }
       list.set(1,"foo") must_== "The parameters are (1,foo)"
     }
