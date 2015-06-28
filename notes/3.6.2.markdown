@@ -1,0 +1,15 @@
+Maintenance version.
+
+## Improvements
+
+ * notify steps to the `Notifier` interface
+ * better reporting of instantiation errors [#387](http://github.com/etorreborre/specs2/issues/387)
+ * added a `responds` method mocks on that allows the use of anonymous case functions, thanks to @dkomanov [#388](http://github.com/etorreborre/specs2/issues/388)
+
+## Fixes 
+
+ * don't count steps as examples in statistics
+ * 5d522f8 - fixed the case of negated matchers with futures [#386](http://github.com/etorreborre/specs2/issues/386)
+
+==========================
+
