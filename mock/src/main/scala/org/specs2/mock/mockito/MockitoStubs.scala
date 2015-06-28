@@ -15,6 +15,7 @@ import org.mockito.stubbing.{ OngoingStubbing, Stubber }
  * mockedList.get(0) returns ("one", "two")
  * mockedList.get(0) throws new Exception("unexpected")
  * mockedList.get(0) answers ( i => "value " + i.toString )
+ * mockedList.get(any) responds { case i: Int => (i + 1).toString }
  * }}}
  * 
  * It is also possible to chain stubs like this:
@@ -43,6 +44,7 @@ trait MockitoStubs extends MocksCreation with MockitoStubsLowerImplicits {
     }
     def answers(function: Any => T) = mocker.when(c).thenAnswer(new MockAnswer(function))
     def answers(function: (Any, Any) => T) = mocker.when(c).thenAnswer(new MockAnswer2(function))
+    def responds(function: Any => T) = answers(function)
     def throws[E <: Throwable](e: E*): OngoingStubbing[T] = {
       if (e.isEmpty) throw new java.lang.IllegalArgumentException("The parameter passed to throws must not be empty")
       e.drop(1).foldLeft(mocker.when(c).thenThrow(e.head)) { (res, cur) => res.thenThrow(cur) }

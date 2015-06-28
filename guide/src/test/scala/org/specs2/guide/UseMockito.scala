@@ -125,6 +125,14 @@ m.get(0)    // returns "The parameter is 0"
 m.get(1)    // the second call returns a different value: "The parameter is 1"
 }}
 
+To use specific type of arguments: ${snippet{
+m.get(anyInt) answers { _ match { case i: Int => (i + 1).toString } }
+}}
+
+Or more concise: ${snippet{
+m.get(anyInt) responds { case i: Int => (i + 1).toString }
+}}
+
 #### Parameters for the `answers` function
 
 Because of the use of reflection the function passed to answers will receive only instances of the `java.lang.Object` type.
