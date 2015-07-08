@@ -192,10 +192,18 @@ object build extends Build {
     (if (name == "specs2") "" else name) + "> "
   }
 
+  def scalaSourceVersion(scalaBinaryVersion: String) =
+    if (scalaBinaryVersion.startsWith("2.10"))
+      "2.10"
+    else if (scalaBinaryVersion.startsWith("2.11"))
+      "2.11"
+    else
+      "2.12.0-RC1"
+
   lazy val compilationSettings: Seq[Settings] = Seq(
     // https://gist.github.com/djspiewak/976cd8ac65e20e136f05
     unmanagedSourceDirectories in Compile ++=
-      Seq((sourceDirectory in Compile).value / s"scala-${scalaBinaryVersion.value}",
+      Seq((sourceDirectory in Compile).value / s"scala-${scalaSourceVersion(scalaBinaryVersion.value)}",
           if (scalazVersion.value.startsWith("7.0")) (sourceDirectory in Compile).value / s"scala-scalaz-7.0.x"
           else                                       (sourceDirectory in Compile).value / s"scala-scalaz-7.1.x",
           if (scalazVersion.value.startsWith("7.0")) (sourceDirectory in (Test, test)).value / s"scala-scalaz-7.0.x"
