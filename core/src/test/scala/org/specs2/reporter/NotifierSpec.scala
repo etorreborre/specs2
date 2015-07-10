@@ -11,9 +11,10 @@ import runner._
 
 class NotifierSpec(env: Env) extends Specification { def is = s2"""
 
- Run a mutable spec with a Notifier         $a1
- Run an acceptance spec with a Notifier     $a2
- Run a specification with decorated results $a3
+ Run a mutable spec with a Notifier                     $a1
+ Run an acceptance spec with a Notifier                 $a2
+ Run a specification with decorated results             $a3
+ Blocks must only be closed once even when separated    $a4
 
 """
 
@@ -60,6 +61,25 @@ class NotifierSpec(env: Env) extends Specification { def is = s2"""
     }
   }
 
+  def a4 = {
+    val spec = new NotifierSpec2
+    val env1 = env.setArguments(Arguments("notifier"))
+    val notifier = new TestNotifier
+    Reporter.report(env1, List(NotifierPrinter.printer(notifier)))(spec.structure(env)).runOption
+    notifier.messages.mkString("\n") must_==
+      List(
+        "[start  ] NotifierSpec2",
+        "[open   ] group1",
+        "[example] ex1",
+        "[success] ex1",
+        "[close  ] group1",
+        "[open   ] group2",
+        "[example] ex2",
+        "[success] ex2",
+        "[close  ] group2",
+        "[end    ] NotifierSpec2").mkString("\n")
+  }
+
 }
 
 class NotifierSpecWithTables extends Specification with Tables {def is = s2"""
@@ -78,6 +98,16 @@ class NotifierSpec1 extends org.specs2.mutable.Specification {
   "group2" >> {
     "ex3" >> ok
     "ex4" >> ko
+  }
+}
+
+class NotifierSpec2 extends org.specs2.mutable.Specification {
+  "group1" >> {
+    "ex1" >> ok
+  }
+  br
+  "group2" >> {
+    "ex2" >> ok
   }
 }
 

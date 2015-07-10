@@ -28,24 +28,34 @@ object NotifierPrinter {
 
       def prepare = Task.now(())
 
-      def fold = (f: Fragment, notified: Notified) => f match {
-        // a block start. The next text is the "context" name
-        case Fragment(Start,_,_) => notified.copy(start = true, close = false, hide = true)
-        // a block start. The "context" name is the current block name
-        case Fragment(End,_ ,_) => notified.copy(start = false, close = true, hide = true)
-          
-        case f1 if Fragment.isText(f1) =>
-          if (notified.start) notified.copy(context = f1.description.shows, start = true, hide = false)
-          else                notified.copy(context = f1.description.shows, start = false, hide = false)
+      def fold = (f: Fragment, notified: Notified) => {
+        // if the previous notified was defining the closing of a block
+        // the new notify must not define a close action
+        val n = if (notified.close) notified.copy(close = false)
+                else notified
 
-        case f1 if Fragment.isExample(f1) =>
-          notified.copy(start = false, hide = false)
+        f match {
+          // a block start. The next text is the "context" name
+          case Fragment(Start,_,_) =>
+            n.copy(start = true, close = false, hide = true)
 
-        case f1 if Fragment.isStep(f1) =>
-          notified.copy(start = false, hide = false)
+          // a block start. The "context" name is the current block name
+          case Fragment(End,_ ,_) =>
+            n.copy(start = false, close = true, hide = true)
 
-        case _ =>
-          notified.copy(hide = true)
+          case f1 if Fragment.isText(f1) =>
+            // if a block has just been opened the first text defines the block context
+            if (notified.start) n.copy(context = f1.description.shows, start = true, hide = false)
+            else                n.copy(context = f1.description.shows, start = false, hide = false)
+
+          case f1 if Fragment.isExample(f1) =>
+            n.copy(start = false, hide = false)
+
+          case f1 if Fragment.isStep(f1) =>
+            n.copy(start = false, hide = false)
+
+          case _ => n.copy(hide = true)
+        }
       }
 
       lazy val init = Notified(context = "start", start = false, close = false, hide = true)
