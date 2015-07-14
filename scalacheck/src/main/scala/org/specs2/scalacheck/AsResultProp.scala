@@ -40,7 +40,10 @@ trait AsResultProp extends ScalaCheckPropertyCheck with ScalaCheckParameters wit
   }
 
   implicit def scalaCheckPropertyCommandLineAsResult[S <: ScalaCheckProperty]: CommandLineAsResult[S] = new CommandLineAsResult[S] {
-    def asResult(commandLine: CommandLine, prop: =>S): Result = check(prop.prop, prop.parameters.overrideWith(commandLine), prop.prettyFreqMap)
+    def asResult(commandLine: CommandLine, prop: =>S): Result = {
+      lazy val p = prop
+      check(p.prop, p.parameters.overrideWith(commandLine), p.prettyFreqMap)
+    }
   }
 
   /** implicit typeclass instance to create examples from Props */
@@ -53,7 +56,10 @@ trait AsResultProp extends ScalaCheckPropertyCheck with ScalaCheckParameters wit
 
 trait AsResultPropLowImplicits extends ScalaCheckPropertyCheck {
   implicit def scalaCheckPropertyAsResult[S <: ScalaCheckProperty]: AsResult[S] = new AsResult[S] {
-    def asResult(prop: =>S): Result = check(prop.prop, prop.parameters, prop.prettyFreqMap)
+    def asResult(prop: =>S): Result = {
+      lazy val p = prop
+      check(p.prop, p.parameters, p.prettyFreqMap)
+    }
   }
 }
 
