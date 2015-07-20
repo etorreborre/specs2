@@ -43,7 +43,7 @@ object build extends Build {
     organization := "org.specs2",
     specs2Version in GlobalScope <<= version,
     specs2ShellPrompt,
-    scalaVersion := "2.10.5",
+    scalaVersion := "2.11.7",
     scalazVersion := "7.1.2",
     crossScalaVersions := Seq(scalaVersion.value, "2.10.5"))
 
