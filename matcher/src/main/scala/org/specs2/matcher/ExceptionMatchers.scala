@@ -2,6 +2,7 @@ package org.specs2
 package matcher
 
 import control.Exceptions._
+import org.specs2.execute.Result
 import scala.reflect.ClassTag
 import reflect.ClassName._
 import text.NotNullStrings._
@@ -45,42 +46,52 @@ trait ExceptionBaseMatchers extends ExpectationsCreation {
    * alias for throwA
    */
   def throwAn[E <: Throwable](e: E) = throwA(e)
+
   /**
    * Exception matcher checking the type of a thrown exception.
    */
   class ExceptionClassMatcher(klass: Class[_]) extends Matcher[Any] { outer =>
-    def apply[S <: Any](value: Expectable[S]) = checkBoolean(value, (e: Throwable) => classType(e))
+
+    def apply[S <: Any](value: Expectable[S]) =
+      checkBoolean(value, checkClassType, andFinally = dropException)
 
     def like[T](f: PartialFunction[Throwable, MatchResult[Any]]) = new Matcher[T] {
-      def apply[S <: T](value: Expectable[S]) = {
-        checkMatchResult(value, (e: Throwable) => classType(e), f)
-      }
-    }
-    private val classType =
-      (e: Throwable) => {
-        errorMustBeThrownIfExceptionIsExpected(e, klass)
-        klass.isAssignableFrom(e.getClass)
-      }
+      def apply[S <: T](value: Expectable[S]) =
+        checkMatchResult(value, checkClassType, f, dropException)
 
-    private def checkBoolean[T, R](expectable: Expectable[T], f: Throwable => Boolean) = {
-      checkExceptionValue(expectable, f, asString(klass))
+      override def not = new Matcher[T] {
+        def apply[S <: Any](value: Expectable[S]) =
+          checkMatchResult(value, checkClassType, f, rethrowException).negate
+      }
     }
-    private def checkMatchResult[T](expectable: Expectable[T], e: Throwable => Boolean, f: PartialFunction[Throwable, MatchResult[Any]]) = {
-      checkExceptionValueWithMatcher(expectable, e, f, asString(klass))
+
+    private val checkClassType = (e: Throwable) => {
+      errorMustBeThrownIfExceptionIsExpected(e, klass)
+      klass.isAssignableFrom(e.getClass)
     }
-    private def asString(exception: Any) = {
+
+    private def checkBoolean[T, R](expectable: Expectable[T], f: Throwable => Boolean, andFinally: Throwable => Unit) =
+      checkExceptionValue(expectable, f, asString(klass), andFinally)
+
+    private def checkMatchResult[T](expectable: Expectable[T], e: Throwable => Boolean, f: PartialFunction[Throwable, MatchResult[Any]], andFinally: Throwable => Unit) =
+      checkExceptionValueWithMatcher(expectable, e, f, asString(klass), andFinally)
+
+    private def asString(exception: Any) =
       exception match {
         case e: Class[_]   => e.getName
         case ex: Throwable => ex.getClass.getName + ": " + ex.getMessage.notNull
         case other         => other.toString
       }
+
+    override def not = new Matcher[Any] {
+      def apply[S <: Any](value: Expectable[S]) =
+        checkBoolean(value, checkClassType, rethrowException).negate
     }
   }
 
   /** re-throw an Error if an Exception was expected */
-  private def errorMustBeThrownIfExceptionIsExpected(e: Throwable, klass: Class[_]) {
+  private def errorMustBeThrownIfExceptionIsExpected(e: Throwable, klass: Class[_]) =
     if (classOf[Exception].isAssignableFrom(klass) && classOf[Error].isAssignableFrom(e.getClass)) throw e
-  }
 
   /**
    * This matchers matches exception instances.
@@ -88,64 +99,113 @@ trait ExceptionBaseMatchers extends ExpectationsCreation {
    */
   class ExceptionMatcher[E <: Throwable](exception: E) extends Matcher[Any] { outer =>
     def apply[S <: Any](value: Expectable[S]) = {
-      checkBoolean(value, (e: Throwable) => classAndMessage(e))
+      checkBoolean(value, checkClassTypeAndMessage, dropException)
     }
+
     def like(f: PartialFunction[E, MatchResult[Any]]) = new Matcher[Any] {
       def apply[S <: Any](value: Expectable[S]) =
-        checkMatchResult(value, (e: Throwable) => classAndMessage(e), f)
+        checkMatchResult(value, checkClassTypeAndMessage, f, dropException)
+
+      override def not = new Matcher[Any] {
+        def apply[S <: Any](value: Expectable[S]) =
+          checkMatchResult(value, checkClassTypeAndMessage, f, rethrowException).negate
+      }
     }
-    private val classAndMessage = (e: Throwable) => {
+
+    private val checkClassTypeAndMessage = (e: Throwable) => {
       errorMustBeThrownIfExceptionIsExpected(e, exception.getClass)
       exception.getClass == e.getClass && exception.getMessage.notNull == e.getMessage.notNull
     }
 
-    private def checkBoolean[T](expectable: Expectable[T], f: Throwable => Boolean) = {
-      checkExceptionValue(expectable, f, exception.toString)
+    private def checkBoolean[T](expectable: Expectable[T], f: Throwable => Boolean, andFinally: Throwable => Unit) =
+      checkExceptionValue(expectable, f, exception.toString, dropException)
+
+    private def checkMatchResult[T](expectable: Expectable[T], e: Throwable => Boolean, f: PartialFunction[E, MatchResult[Any]], andFinally: Throwable => Unit) =
+      checkExceptionValueWithMatcher(expectable, e, f, exception.toString, dropException)
+
+    override def not = new Matcher[Any] {
+      def apply[S <: Any](value: Expectable[S]) =
+        checkBoolean(value, checkClassTypeAndMessage, rethrowException).negate
     }
-    private def checkMatchResult[T](expectable: Expectable[T], e: Throwable => Boolean, f: PartialFunction[E, MatchResult[Any]]) = {
-      checkExceptionValueWithMatcher(expectable, e, f, exception.toString)
-    }
+
   }
-  private def checkExceptionValue[T](expectable: Expectable[T], f: Throwable => Boolean, expectedAsString: String) = {
+
+  private val dropException = (e: Throwable) => ()
+
+  private val rethrowException = (e: Throwable) => throw e
+
+  /**
+   * use the andFinally continuation when a result is not succesfull in order to
+   * know what to do of unexpected exceptions for the case
+   * expr must not(throw[ExceptionX])
+    */
+  private def rethrowFinally[T](e: Throwable, andFinally: Throwable => Unit)(r: MatchResult[T]): MatchResult[T] = {
+    if (!r.isSuccess) andFinally(e)
+    r
+  }
+
+  private def checkExceptionValue[T](expectable: Expectable[T], f: Throwable => Boolean, expectedAsString: String, andFinally: Throwable => Unit) = {
     checkException(expectable,
                    f,
                    (e: Throwable) => s"Got the exception $e",
                    (e: Throwable) => s"Expected: $expectedAsString. Got: $e instead \n\n The  ${e.getClass.simpleName} stacktrace is\n\n${e.getStackTrace.mkString("\n")}",
                    "Got the exception " + expectedAsString,
-                    "Expected: "+ expectedAsString + ". Got nothing")
+                   "Expected: "+ expectedAsString + ". Got nothing",
+                   andFinally)
   }
-  private def checkExceptionValueWithMatcher[T, E <: Throwable](expectable: Expectable[T], e: Throwable => Boolean, f: PartialFunction[E, MatchResult[Any]], expectedAsString: String) = {
+
+  private def checkExceptionValueWithMatcher[T, E <: Throwable](
+    expectable: Expectable[T],
+    e: Throwable => Boolean,
+    f: PartialFunction[E, MatchResult[Any]],
+    expectedAsString: String,
+    andFinally: Throwable => Unit) = {
+
     checkExceptionWithMatcher(expectable,
                    e, f,
                    (e: Throwable) => "Got the exception " + e,
                    (e: Throwable) => s"Expected: $expectedAsString. Got: $e",
-                    "Got the exception " + expectedAsString,
-                    "Expected: "+ expectedAsString + ". Got nothing",
-                   (e: Throwable) => e.getStackTrace.toSeq)
+                   "Got the exception " + expectedAsString,
+                   "Expected: "+ expectedAsString + ". Got nothing",
+                   (e: Throwable) => e.getStackTrace.toSeq,
+                   andFinally)
   }
+
   private def checkException[T](expectable: Expectable[T], f: Throwable => Boolean,
       someOk: Throwable => String, someKo: Throwable => String,
-      noneOk: String, noneKo: String) = {
-
-    getException(expectable.value) match {
-      case Some(e) => Matcher.result(f(e), someOk(e), someKo(e), expectable)
-      case None    => Matcher.result(false, noneOk, noneKo, expectable)
-    }
-  }
-  private def checkExceptionWithMatcher[T, E <: Throwable](expectable: Expectable[T], ef: Throwable => Boolean, f: PartialFunction[E, MatchResult[Any]],
-      someOk: Throwable => String, someKo: Throwable => String,
-      noneOk: String, noneKo: String, stacktrace: Throwable => Seq[StackTraceElement]) = {
+      noneOk: String, noneKo: String,
+      andFinally: Throwable => Unit) = {
 
     getException(expectable.value) match {
       case Some(e) =>
-        if (ef(e)) {
-          val result = f(e.asInstanceOf[E])
-          Matcher.result(ef(e) && result.isSuccess, s"${someOk(e)} and ${result.message}", s"""${someKo(e)} and ${result.message}\n\n The ${e.getClass.simpleName} stacktrace is\n\n${stacktrace(e).mkString("\n")}""", expectable)
+        rethrowFinally(e, andFinally) {
+          Matcher.result(f(e), someOk(e), someKo(e), expectable)
         }
-        else
-          Matcher.result(false, someOk(e), someKo(e), expectable)
 
-      case None    => Matcher.result(false, noneOk, noneKo, expectable)
+      case None =>
+        Matcher.result(false, noneOk, noneKo, expectable)
+    }
+  }
+
+  private def checkExceptionWithMatcher[T, E <: Throwable](expectable: Expectable[T], ef: Throwable => Boolean, f: PartialFunction[E, MatchResult[Any]],
+      someOk: Throwable => String, someKo: Throwable => String,
+      noneOk: String, noneKo: String, stacktrace: Throwable => Seq[StackTraceElement],
+      andFinally: Throwable => Unit) = {
+
+    getException(expectable.value) match {
+      case Some(e) =>
+        rethrowFinally(e, andFinally) {
+          if (ef(e)) {
+            val likeResult = f(e.asInstanceOf[E])
+            Matcher.result(ef(e) && likeResult.isSuccess,
+                           s"""${someOk(e)} and ${likeResult.message}""",
+                           s"""${someKo(e)} and ${likeResult.message}\n\n The ${e.getClass.simpleName} stacktrace is\n\n${stacktrace(e).mkString("\n")}""", expectable)
+          }
+          else Matcher.result(false, someOk(e), someKo(e), expectable)
+        }
+
+      case None =>
+        Matcher.result(false, noneOk, noneKo, expectable)
     }
   }
 
@@ -166,8 +226,7 @@ trait ExceptionBaseMatchers extends ExpectationsCreation {
 
 private[specs2]
 trait ExceptionBeHaveMatchers extends BeHaveMatchers { outer: ExceptionBaseMatchers =>
-  implicit def toExceptionMatcher[T](result: MatchResult[T]) = new ExceptionMatcherResult(result)
-  class ExceptionMatcherResult[T](result: MatchResult[T]) {
+  implicit class ExceptionMatcherResult[T](result: MatchResult[T]) {
     def throwA[E <: Throwable](implicit m: ClassTag[E]) = result(outer.throwA(m))
     def throwA[E <: Throwable](message: String = ".*")(implicit m: ClassTag[E]) = result(outer.throwA(message)(m))
     def throwA[E <: Throwable](e: E) = result(outer.throwA(e))

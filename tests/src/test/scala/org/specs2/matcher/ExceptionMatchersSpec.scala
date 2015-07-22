@@ -1,6 +1,8 @@
 package org.specs2
 package matcher
 
+import org.specs2.execute.AsResult
+
 import scala.util.control.NonFatal
 import sys._
 import specification._
@@ -21,12 +23,23 @@ class ExceptionMatchersSpec extends script.Specification with ResultMatchers wit
    + it must not fail when the exception type is not specified
    + it must return an Error when an Exception is expected and a java.lang.Error is thrown
 
+ negated matcher: when we specify not(throw[A])
+   + it must return an Error if B is thrown
+   + it must return a Failure if A is thrown
+   + it must return a Success if no exception
+
  With a PartialFunction
  ======================
 
  it is also possible to specify that the thrown exception is ok according to a PartialFunction
    + 'error(boom) must throwA[RuntimeException].like(e => e.getMessage(0) === 'b')
    + 'error(boom) must throwA[RuntimeException].like(e => e.getMessage(0) === 'a') will fail
+
+ negated matcher: when we specify not(throw[A].like(f))
+   + it must return an Error if B is thrown
+   + it must return a Failure if A is thrown like f
+   + it must return an Error if A is thrown not like f
+   + it must return a Success if no exception like f
 
  With a regular expression
  =========================
@@ -57,6 +70,7 @@ class ExceptionMatchersSpec extends script.Specification with ResultMatchers wit
 
  + the stacktrace of the caught exception must be displayed
                                                                                                                """
+  type IAE = IllegalArgumentException
 
   "exception types" - new group {
     eg := ("hello" must throwAn[Error]).message must_== "Expected: java.lang.Error. Got nothing"
@@ -64,7 +78,7 @@ class ExceptionMatchersSpec extends script.Specification with ResultMatchers wit
     eg  := (theBlock(error("boom")) must throwA[RuntimeException]).message must_==
       "Got the exception java.lang.RuntimeException: boom"
 
-    eg := (theBlock(error("boom")) must throwAn[IllegalArgumentException]).message must startWith(
+    eg := (theBlock(error("boom")) must throwAn[IAE]).message must startWith(
       "Expected: java.lang.IllegalArgumentException. Got: java.lang.RuntimeException: boom instead")
 
     eg := (1 must not throwA(new Exception)).toResult must beSuccessful
@@ -73,6 +87,11 @@ class ExceptionMatchersSpec extends script.Specification with ResultMatchers wit
 
     eg := { throw new StackOverflowError("play again"); 1 } must throwAn[Error]
 
+    eg := AsResult {{throw new NullPointerException; 1 } must not(throwAn[IAE]) } must beError
+
+    eg := AsResult {{throw new IAE; 1 } must not(throwAn[IAE]) } must beFailing
+
+    eg := AsResult { 1  must not(throwAn[IAE]) } must beSuccessful
   }
 
   "Partial function" - new group {
@@ -81,6 +100,14 @@ class ExceptionMatchersSpec extends script.Specification with ResultMatchers wit
 
     eg := (theBlock(error("boom")) must throwA[RuntimeException].like { case NonFatal(e) => e.getMessage()(0) === 'a' }).message must startWith(
       "Expected: java.lang.RuntimeException. Got: java.lang.RuntimeException: boom and 'b' is not equal to 'a'")
+
+    eg := AsResult { {throw new NullPointerException; 1 } must not(throwAn[IAE].like { case _ => ok }) } must beError
+
+    eg := AsResult { {throw new IAE; 1 } must not(throwAn[IAE].like { case _ => ok }) } must beFailing
+
+    eg := AsResult { {throw new IAE; 1 } must not(throwAn[IAE].like { case _ => ko }) } must beError
+
+    eg := AsResult { 1  must not(throwAn[IAE].like { case _ => ok }) } must beSuccessful
   }
 
   "regular expression" - new group {
@@ -98,7 +125,7 @@ class ExceptionMatchersSpec extends script.Specification with ResultMatchers wit
     eg := (theBlock(error("boom")) must throwAn(new RuntimeException("boom"))).message must startWith(
       "Got the exception java.lang.RuntimeException: boom")
 
-    eg := (theBlock(error("boom")) must throwAn(new IllegalArgumentException("boom"))).message must startWith(
+    eg := (theBlock(error("boom")) must throwAn(new IAE("boom"))).message must startWith(
       "Expected: java.lang.IllegalArgumentException: boom. Got: java.lang.RuntimeException: boom instead")
 
     eg := (theBlock(error("boom")) must throwAn(new RuntimeException("bang"))).message must startWith(
