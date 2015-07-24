@@ -26,7 +26,6 @@ When you use a build tool you generally only need to specify the main dependenci
 
  Resolvers                                                                              | Comment
  -------------------------------------------------------------------------------------- | ---------------------------
- `"Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases"`                     | for `scalaz-stream`
  `Resolver.sonatypeRepo("releases")`                                                    | for other Scala libraries
 
 ### From the shell

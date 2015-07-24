@@ -15,8 +15,6 @@ First you need to [install sbt itself](http://www.scala-sbt.org/release/tutorial
 ```
 libraryDependencies += "org.specs2" %% "specs2-core" % "$VERSION" % "test"
 
-resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
-
 scalacOptions in Test ++= Seq("-Yrangepos")
 ```
 
@@ -40,39 +38,6 @@ You can install Maven from [there](http://maven.apache.org/guides/getting-starte
 </project>
 ```
 
-You will also need to add the `bintray` repository to your `settings.xml` file:
-```
-<profiles>
-  <profile>
-   <repositories>
-    <repository>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <id>central</id>
-      <name>bintray</name>
-      <url>http://dl.bintray.com/pchiusano/maven</url>
-    </repository>
-   </repositories>
-   <pluginRepositories>
-     <pluginRepository>
-       <snapshots>
-         <enabled>false</enabled>
-       </snapshots>
-       <id>central</id>
-       <name>bintray-plugins</name>
-       <url>http://dl.bintray.com/pchiusano/maven</url>
-     </pluginRepository>
-   </pluginRepositories>
-   <id>bintray</id>
-  </profile>
-</profiles>
-
-<activeProfiles>
-  <activeProfile>bintray</activeProfile>
-</activeProfiles>|
-```
-
 ### Gradle
 
 Go to this [page](http://www.gradle.org/installation) to install Gradle. You then need to install the [Scala plugin](http://www.gradle.org/docs/current/userguide/scala_plugin.html) and add the following to your `build.gradle` file:
@@ -87,8 +52,6 @@ dependencies {
   testCompile "org.specs2:specs2-core_2.11:$VERSION"
 }
 ```
-
-Also, don't forget to add the `bintray` repository to your Maven `settings.xml` file as described in the Maven section above.
 
 ### Other dependencies
 

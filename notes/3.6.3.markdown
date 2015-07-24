@@ -1,0 +1,15 @@
+Maintenance version.
+
+## Improvements
+
+ * updated scalaz-stream - it is not necessary to add bintray as a resolver anymore
+ * updated to Scala 2.11.7
+ 
+## Fixes 
+
+ * rethrow unexpected exceptions when using `not(throwA[X])` [#395](http://github.com/etorreborre/specs2/issues/3895)
+ * evaluate ScalaCheckProperty properties only once
+ * fixed a Notifier bug where `close` can be called several times for the same block (this creates an Exception with IntelliJ)
+
+==========================
+
