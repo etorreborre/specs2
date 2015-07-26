@@ -1,5 +1,5 @@
 addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.0.0")
-    
+
 addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "0.6.2")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.5.1")
@@ -16,7 +16,7 @@ addSbtPlugin("com.orrsella" % "sbt-stats" % "1.0.5")
 
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.6.0")
 
-addSbtPlugin("com.ambiata" % "promulgate" % "0.11.0-20141014013725-80c129f")
+addSbtPlugin("com.ambiata" % "promulgate" % "0.11.0-20150726223811-fae9f8c")
 
 resolvers += Resolver.url("ambiata-oss", new URL("https://ambiata-oss.s3.amazonaws.com"))(Resolver.ivyStylePatterns)
 
