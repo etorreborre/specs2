@@ -29,7 +29,7 @@ object build extends Build {
   lazy val specs2 = Project(
     id = "specs2",
     base = file("."),
-    settings = 
+    settings =
       moduleSettings("")       ++
       compatibilitySettings    ++
       releaseSettings          ++
@@ -37,14 +37,14 @@ object build extends Build {
       Seq(name := "specs2", packagedArtifacts := Map.empty)
   ).aggregate(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, tests)
    .enablePlugins(GitBranchPrompt)
-  
+
   /** COMMON SETTINGS */
   lazy val specs2Settings: Seq[Settings] = Seq(
     organization := "org.specs2",
     specs2Version in GlobalScope <<= version,
     specs2ShellPrompt,
-    scalaVersion := "2.11.7",
-    scalazVersion := "7.1.2",
+    scalaVersion := "2.12.0-M2",
+    scalazVersion := "7.1.3",
     crossScalaVersions := Seq(scalaVersion.value, "2.10.5"))
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
@@ -183,7 +183,7 @@ object build extends Build {
     maxErrors := 20,
     incOptions := incOptions.value.withNameHashing(true),
     scalacOptions in GlobalScope ++=
-      (if (scalaVersion.value startsWith "2.11")
+      (if (scalaVersion.value startsWith "2.11" || scalaVersion.value startsWith "2.12")
         Seq("-Xfatal-warnings",
             "-Xlint",
             "-Ywarn-unused-import",
@@ -202,6 +202,7 @@ object build extends Build {
     initialCommands in console in test := "import org.specs2._",
     logBuffered := false,
     cancelable := true,
+    testFrameworks := Seq(TestFramework("org.specs2.runner.Specs2Framework")),
     javaOptions ++= Seq("-Xmx3G", "-Xss4M"),
     fork in test := true,
     testOptions := Seq(Tests.Filter(s =>
