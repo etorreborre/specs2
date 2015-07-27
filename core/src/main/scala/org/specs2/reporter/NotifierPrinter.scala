@@ -1,8 +1,10 @@
 package org.specs2
 package reporter
 
-import org.specs2.control._
-import org.specs2.execute.Result
+import control._
+import Exceptions._
+import text.NotNullStrings._
+import execute.Result
 import specification._
 import data.Fold
 import scalaz.concurrent.Task
@@ -105,16 +107,22 @@ object NotifierPrinter {
 
               notifyResult(f.executionResult)
             } else if (Fragment.isStep(f)) {
-              n.stepStarted(location)
+              try {
+                n.stepStarted(location)
 
-              def notifyResult(result: Result): Unit =
-                result match {
-                  case r: execute.Success => n.stepSuccess(duration(f))
-                  case r: execute.Error   => n.stepError(r.message, location, r.exception, duration(f))
-                  case _ => ()
-                }
-
-              notifyResult(f.executionResult)
+                def notifyResult(result: Result): Unit =
+                  result match {
+                    case r: execute.Success => n.stepSuccess(duration(f))
+                    case r: execute.Error   => n.stepError(r.message, location, r.exception, duration(f))
+                    case _ => ()
+                  }
+                notifyResult(f.executionResult)
+              // catch AbstractMethod errors coming from Intellij since adding
+              // calling new "step" methods on the Notifier interface is not supported yet
+              } catch {
+                case e: AbstractMethodError if e.getMessage.notNull.contains("JavaSpecs2Notifier") => ()
+                case other: Throwable => throw other
+              }
 
             } else if (Fragment.isText(f)) n.text(description, location)
           }
